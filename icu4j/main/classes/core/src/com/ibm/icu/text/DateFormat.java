@@ -31,13 +31,13 @@ import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DateFormat}.{@icu _usage_}
- * 
+ *
  * <p>
  * DateFormat is an abstract class for date/time formatting subclasses which formats and parses dates or time in a
  * language-independent manner. The date/time formatting subclass, such as SimpleDateFormat, allows for formatting
  * (i.e., date -> text), parsing (text -> date), and normalization. The date is represented as a <code>Date</code>
  * object or as the milliseconds since January 1, 1970, 00:00:00 GMT.
- * 
+ *
  * <p>
  * DateFormat helps you to format and parse dates for any locale. Your code can be completely independent of the locale
  * conventions for months, days of the week, or even the calendar format: lunar vs. solar. It provides many class
@@ -52,10 +52,10 @@ import com.ibm.icu.util.ULocale.Category;
  * common pre-defined skeletons, such as {@link #MINUTE_SECOND} for something like "13:45" or {@link #YEAR_ABBR_MONTH}
  * for something like "Sept 2012".
  * </ol>
- * 
+ *
  * <p>
  * To format a date for the current Locale, use one of the static factory methods:
- * 
+ *
  * <pre>
  * myString = DateFormat.getDateInstance().format(myDate);
  * myString = DateFormat.getPatternInstance(DateFormat.YEAR_ABBR_MONTH).format(myDate);
@@ -63,7 +63,7 @@ import com.ibm.icu.util.ULocale.Category;
  * <p>
  * If you are formatting multiple numbers, it is more efficient to get the format and use it multiple times so that the
  * system doesn't have to fetch the information about the local language and country conventions multiple times.
- * 
+ *
  * <pre>
  * DateFormat df = DateFormat.getDateInstance();
  * for (int i = 0; i &lt; a.length; ++i) {
@@ -72,13 +72,13 @@ import com.ibm.icu.util.ULocale.Category;
  * </pre>
  * <p>
  * To format a date for a different Locale, specify it in the call to getDateInstance().
- * 
+ *
  * <pre>
  * DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
  * </pre>
  * <p>
  * You can use a DateFormat to parse also.
- * 
+ *
  * <pre>
  * myDate = df.parse(myString);
  * </pre>
@@ -93,7 +93,7 @@ import com.ibm.icu.util.ULocale.Category;
  * <li>LONG is longer, such as January 12, 1952 or 3:30:32pm
  * <li>FULL is pretty completely specified, such as Tuesday, April 12, 1952 AD or 3:30:42pm PST.
  * </ul>
- * 
+ *
  * <p>
  * Use getPatternInstance to format with a skeleton. Typically this is with a predefined skeleton, like
  * {@link #YEAR_ABBR_MONTH} for something like "Sept 2012". If you don't want to use one of the predefined skeletons,
@@ -111,25 +111,25 @@ import com.ibm.icu.util.ULocale.Category;
  * skeleton.
  * </ol>
  * </ol>
- * 
+ *
  * <p>
  * You can also set the time zone on the format if you wish. If you want even more control over the format or parsing,
  * (or want to give your users more control), you can try casting the DateFormat you get from the factory methods to a
  * SimpleDateFormat. This will work for the majority of countries; just remember to put it in a try block in case you
  * encounter an unusual one.
- * 
+ *
  * <p>
  * You can also use forms of the parse and format methods with ParsePosition and FieldPosition to allow you to
  * <ul>
  * <li>progressively parse through pieces of a string.
  * <li>align any particular field, or find out where it is for selection on the screen.
  * </ul>
- * 
+ *
  * <h4>Synchronization</h4>
- * 
+ *
  * Date formats are not synchronized. It is recommended to create separate format instances for each thread. If multiple
  * threads access a format concurrently, it must be synchronized externally.
- * 
+ *
  * @see UFormat
  * @see NumberFormat
  * @see SimpleDateFormat
@@ -450,13 +450,31 @@ public abstract class DateFormat extends UFormat {
     final static int RELATED_YEAR = 34;
 
     /**
+     * {@icu} FieldPosition selector for 'b' field alignment.
+     * No related Calendar field.
+     * This displays the fixed day period (am/pm/midnight/noon).
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    final static int AM_PM_MIDNIGHT_NOON_FIELD = 35;
+
+    /**
+     * {@icu} FieldPosition selector for 'B' field alignment.
+     * No related Calendar field.
+     * This displays the flexible day period.
+     * @draft ICU 57
+     * @provisional This API might change or be removed in a future release.
+     */
+    final static int FLEXIBLE_DAY_PERIOD_FIELD = 36;
+
+    /**
      * {@icu} FieldPosition selector time separator,
      * no related Calendar field. No pattern character is currently
      * defined for this.
      * @draft ICU 55
      * @provisional This API might change or be removed in a future release.
      */
-    public final static int TIME_SEPARATOR = 35;
+    public final static int TIME_SEPARATOR = 37;
 
     /**
      * {@icu} Number of FieldPosition selectors for DateFormat.
@@ -464,7 +482,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 3.0
      */
 
-    public final static int FIELD_COUNT = 36;
+    public final static int FIELD_COUNT = 38;
     // A previous comment for the above stated that we must have
     // DateFormat.FIELD_COUNT == DateFormatSymbols.patternChars.length()
     // but that does not seem to be the case, and in fact since there is
@@ -472,31 +490,31 @@ public abstract class DateFormat extends UFormat {
     // currently the case that
     // DateFormat.FIELD_COUNT == DateFormatSymbols.patternChars.length() + 1
 
-    
+
     /**
      * boolean attributes
-     * 
+     *
      * @stable ICU 53
      */
-    public enum BooleanAttribute { 
-        /** 
-         * indicates whitespace tolerance. Also included is trailing dot tolerance. 
+    public enum BooleanAttribute {
+        /**
+         * indicates whitespace tolerance. Also included is trailing dot tolerance.
          * @stable ICU 53
          */
         PARSE_ALLOW_WHITESPACE,
-        /** 
-         * indicates tolerance of numeric data when String data may be assumed. 
-         * e.g. YEAR_NAME_FIELD 
+        /**
+         * indicates tolerance of numeric data when String data may be assumed.
+         * e.g. YEAR_NAME_FIELD
          * @stable ICU 53
          */
-        PARSE_ALLOW_NUMERIC, 
-        /** 
+        PARSE_ALLOW_NUMERIC,
+        /**
          * indicates tolerance of pattern mismatch between input data and specified format pattern.
-         * e.g. accepting "September" for a month pattern of MMM ("Sep")  
+         * e.g. accepting "September" for a month pattern of MMM ("Sep")
          * @draft ICU 56
          * @provisional This API might change or be removed in a future release.
          */
-        PARSE_MULTIPLE_PATTERNS_FOR_MATCH, 
+        PARSE_MULTIPLE_PATTERNS_FOR_MATCH,
         /**
          * indicates tolerance of a partial literal match
          * e.g. accepting "--mon-02-march-2011" for a pattern of "'--: 'EEE-WW-MMMM-yyyy"
@@ -512,11 +530,11 @@ public abstract class DateFormat extends UFormat {
         @Deprecated
         PARSE_PARTIAL_MATCH
     };
-    
+
     /**
      * boolean attributes for this instance. Inclusion in this is indicates a true condition.
      */
-    private EnumSet<BooleanAttribute> booleanAttributes = EnumSet.allOf(BooleanAttribute.class); 
+    private EnumSet<BooleanAttribute> booleanAttributes = EnumSet.allOf(BooleanAttribute.class);
 
     /*
      * Capitalization setting, hoisted to DateFormat ICU 53
@@ -1054,7 +1072,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 4.0
      */
     public static final String NUM_MONTH_WEEKDAY_DAY = "MEd";
-    
+
     /**
      * List of all of the date skeleton constants for iteration.
      * Note that this is fragile; be sure to add any values that are added above.
@@ -1154,7 +1172,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 4.0
      */
     public static final String MINUTE_SECOND = "ms";
-    
+
     /**
      * List of all of the time skeleton constants for iteration.
      * Note that this is fragile; be sure to add any values that are added above.
@@ -1172,7 +1190,7 @@ public abstract class DateFormat extends UFormat {
             HOUR_MINUTE_SECOND,
             HOUR24_MINUTE_SECOND,
             MINUTE_SECOND);
-    
+
     /*
      * TIMEZONES
      */
@@ -1185,7 +1203,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 50
      */
     public static final String LOCATION_TZ = "VVVV";
-    
+
     /**
      * {@icu} Constant for <i>generic non-location format</i>, such as Pacific Time;
      * used in combinations date + time + zone, or time + zone.
@@ -1194,7 +1212,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 50
      */
     public static final String GENERIC_TZ = "vvvv";
-    
+
     /**
      * {@icu} Constant for <i>generic non-location format</i>, abbreviated if possible, such as PT;
      * used in combinations date + time + zone, or time + zone.
@@ -1203,7 +1221,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 50
      */
     public static final String ABBR_GENERIC_TZ = "v";
-    
+
     /**
      * {@icu} Constant for <i>specific non-location format</i>, such as Pacific Daylight Time;
      * used in combinations date + time + zone, or time + zone.
@@ -1212,7 +1230,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 50
      */
     public static final String SPECIFIC_TZ = "zzzz";
-    
+
     /**
      * {@icu} Constant for <i>specific non-location format</i>, abbreviated if possible, such as PDT;
      * used in combinations date + time + zone, or time + zone.
@@ -1221,7 +1239,7 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 50
      */
     public static final String ABBR_SPECIFIC_TZ = "z";
-    
+
     /**
      * {@icu} Constant for <i>localized GMT/UTC format</i>, such as GMT+8:00 or HPG-8:00;
      * used in combinations date + time + zone, or time + zone.
@@ -1595,15 +1613,15 @@ public abstract class DateFormat extends UFormat {
      * lenient parsing, the parser may use heuristics to interpret inputs that
      * do not precisely match this object's format.  Without lenient parsing,
      * inputs must match this object's format more closely.
-     * <br/><br/> 
-     * <b>Note:</b> ICU 53 introduced finer grained control of leniency (and added 
-     * new control points) making the preferred method a combination of 
-     * setCalendarLenient() & setBooleanAttribute() calls. 
-     * This method supports prior functionality but may not support all 
-     * future leniency control & behavior of DateFormat. For control of pre 53 leniency,  
-     * Calendar and DateFormat whitespace & numeric tolerance, this method is safe to 
-     * use. However, mixing leniency control via this method and modification of the 
-     * newer attributes via setBooleanAttribute() may produce undesirable 
+     * <br/><br/>
+     * <b>Note:</b> ICU 53 introduced finer grained control of leniency (and added
+     * new control points) making the preferred method a combination of
+     * setCalendarLenient() & setBooleanAttribute() calls.
+     * This method supports prior functionality but may not support all
+     * future leniency control & behavior of DateFormat. For control of pre 53 leniency,
+     * Calendar and DateFormat whitespace & numeric tolerance, this method is safe to
+     * use. However, mixing leniency control via this method and modification of the
+     * newer attributes via setBooleanAttribute() may produce undesirable
      * results.
      *
      * @param lenient True specifies date/time interpretation to be lenient.
@@ -1626,43 +1644,43 @@ public abstract class DateFormat extends UFormat {
      */
     public boolean isLenient()
     {
-        return calendar.isLenient() 
+        return calendar.isLenient()
                 && getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC)
                 && getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE);
     }
 
-    /** 
-     * Specifies whether date/time parsing in the encapsulated Calendar object should be lenient.  
+    /**
+     * Specifies whether date/time parsing in the encapsulated Calendar object should be lenient.
      * With lenient parsing, the parser may use heuristics to interpret inputs that
      * do not precisely match this object's format.  Without lenient parsing,
      * inputs must match this object's format more closely.
-     * @param lenient when true, Calendar parsing is lenient 
-     * @see com.ibm.icu.util.Calendar#setLenient 
+     * @param lenient when true, Calendar parsing is lenient
+     * @see com.ibm.icu.util.Calendar#setLenient
      * @stable ICU 53
-     */ 
+     */
     public void setCalendarLenient(boolean lenient)
     {
         calendar.setLenient(lenient);
     }
 
-    
-    /** 
-     * Returns whether date/time parsing in the encapsulated Calendar object is lenient. 
+
+    /**
+     * Returns whether date/time parsing in the encapsulated Calendar object is lenient.
      * @stable ICU 53
-     */ 
+     */
     public boolean isCalendarLenient()
     {
         return calendar.isLenient();
     }
-    
-    /** 
+
+    /**
      * Sets a boolean attribute for this instance. Aspects of DateFormat leniency are controlled by
-     * boolean attributes. 
-     * 
+     * boolean attributes.
+     *
      * @see BooleanAttribute
      * @stable ICU 53
      */
-    public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value) 
+    public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value)
     {
         if(key.equals(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH)) {
             key = DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH;
@@ -1675,32 +1693,32 @@ public abstract class DateFormat extends UFormat {
         {
             booleanAttributes.remove(key);
         }
-        
+
         return this;
     }
-    
+
     /**
      * Returns the current value for the specified BooleanAttribute for this instance
      *
      * if attribute is missing false is returned.
-     * 
+     *
      * @see BooleanAttribute
      * @stable ICU 53
      */
-    public boolean getBooleanAttribute(BooleanAttribute key) 
+    public boolean getBooleanAttribute(BooleanAttribute key)
     {
         if(key == DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH) {
             key = DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH;
         }
         return booleanAttributes.contains(key);
     }
-    
-    
+
+
     /**
      * {@icu} Set a particular DisplayContext value in the formatter,
-     * such as CAPITALIZATION_FOR_STANDALONE. 
-     * 
-     * @param context The DisplayContext value to set. 
+     * such as CAPITALIZATION_FOR_STANDALONE.
+     *
+     * @param context The DisplayContext value to set.
      * @stable ICU 53
      */
     public void setContext(DisplayContext context) {
@@ -1712,7 +1730,7 @@ public abstract class DateFormat extends UFormat {
     /**
      * {@icu} Get the formatter's DisplayContext value for the specified DisplayContext.Type,
      * such as CAPITALIZATION.
-     * 
+     *
      * @param type the DisplayContext.Type whose value to return
      * @return the current DisplayContext setting for the specified type
      * @stable ICU 53
@@ -1821,7 +1839,7 @@ public abstract class DateFormat extends UFormat {
             // Didn't have capitalizationSetting, set it to default
             capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
         }
-        
+
         // if deserialized from a release that didn't have booleanAttributes, add them all
         if(booleanAttributes == null) {
             booleanAttributes = EnumSet.allOf(BooleanAttribute.class);
@@ -1971,9 +1989,9 @@ public abstract class DateFormat extends UFormat {
     /**
      * Returns a date/time formatter that uses the SHORT style
      * for both the date and the time.
-     * 
+     *
      * @param cal   The calendar system for which a date/time format is desired.
-     * @param locale The locale for which the date/time format is desired. 
+     * @param locale The locale for which the date/time format is desired.
      * @stable ICU 2.0
      */
     static final public DateFormat getInstance(Calendar cal, Locale locale) {
@@ -1983,9 +2001,9 @@ public abstract class DateFormat extends UFormat {
     /**
      * Returns a date/time formatter that uses the SHORT style
      * for both the date and the time.
-     * 
+     *
      * @param cal   The calendar system for which a date/time format is desired.
-     * @param locale The locale for which the date/time format is desired. 
+     * @param locale The locale for which the date/time format is desired.
      * @stable ICU 3.2
      * @provisional This API might change or be removed in a future release.
      */
@@ -1996,7 +2014,7 @@ public abstract class DateFormat extends UFormat {
     /**
      * Returns a default date/time formatter that uses the SHORT style for both the
      * date and the time.
-     * 
+     *
      * @param cal   The calendar system for which a date/time format is desired.
      * @stable ICU 2.0
      */
@@ -2054,7 +2072,7 @@ public abstract class DateFormat extends UFormat {
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
         return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault(Category.FORMAT));
     }
-    
+
     /**
      * {@icu} Returns a {@link DateFormat} object that can be used to format dates and times in
      * the default locale.
@@ -2392,7 +2410,7 @@ public abstract class DateFormat extends UFormat {
          * Constant identifying the extended year field.
          * @stable ICU 3.8
          */
-        public static final Field EXTENDED_YEAR = new Field("extended year", 
+        public static final Field EXTENDED_YEAR = new Field("extended year",
                                                             Calendar.EXTENDED_YEAR);
 
         /**
@@ -2427,6 +2445,20 @@ public abstract class DateFormat extends UFormat {
          */
         @Deprecated
         public static final Field RELATED_YEAR = new Field("related year", -1);
+
+        /**
+         * {@icu} Constant identifying the am/pm/midnight/noon field.
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field AM_PM_MIDNIGHT_NOON = new Field("am/pm/midnight/noon", -1);
+
+        /**
+         * {@icu} Constant identifying the flexible day period field.
+         * @draft ICU 57
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field FLEXIBLE_DAY_PERIOD = new Field("flexible day period", -1);
 
         /**
          * Constant identifying the time separator field.

@@ -592,7 +592,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
      * All locales use the same unlocalized pattern characters.
      */
-    static final String patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxr";
+    static final String patternChars = "GyMdkHmsSEDFwWahKzYeugAZvcLQqVUOXxrbB";
 
     /**
      * Localized date-time pattern characters. For example, a locale may
@@ -605,6 +605,42 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @serial
      */
     String localPatternChars = null;
+
+    /**
+     * Localized names for abbreviated (== short) day periods.
+     * An array of strings, in the order of DayPeriod constants.
+     */
+    String abbreviatedDayPeriods[] = null;
+
+    /**
+     * Localized names for wide day periods.
+     * An array of strings, in the order of DayPeriod constants.
+     */
+    String wideDayPeriods[] = null;
+
+    /**
+     * Localized names for narrow day periods.
+     * An array of strings, in the order of DayPeriod constants.
+     */
+    String narrowDayPeriods[] = null;
+
+    /**
+     * Localized names for standalone abbreviated (== short) day periods.
+     * An array of strings, in the order of DayPeriod constants.
+     */
+    String standaloneAbbreviatedDayPeriods[] = null;
+
+    /**
+     * Localized names for standalone wide day periods.
+     * An array of strings, in the order of DayPeriod constants.
+     */
+    String standaloneWideDayPeriods[] = null;
+
+    /**
+     * Localized names for standalone narrow day periods.
+     * An array of strings, in the order of DayPeriod constants.
+     */
+    String standaloneNarrowDayPeriods[] = null;
 
     /* use serialVersionUID from JDK 1.1.4 for interoperability */
     private static final long serialVersionUID = -5987973545549424702L;
@@ -629,19 +665,19 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @internal
      */
     enum CapitalizationContextUsage {
-        OTHER, 
-        MONTH_FORMAT,     /* except narrow */ 
-        MONTH_STANDALONE, /* except narrow */ 
-        MONTH_NARROW, 
-        DAY_FORMAT,     /* except narrow */ 
-        DAY_STANDALONE, /* except narrow */ 
-        DAY_NARROW, 
-        ERA_WIDE, 
-        ERA_ABBREV, 
-        ERA_NARROW, 
-        ZONE_LONG, 
-        ZONE_SHORT, 
-        METAZONE_LONG, 
+        OTHER,
+        MONTH_FORMAT,     /* except narrow */
+        MONTH_STANDALONE, /* except narrow */
+        MONTH_NARROW,
+        DAY_FORMAT,     /* except narrow */
+        DAY_STANDALONE, /* except narrow */
+        DAY_NARROW,
+        ERA_WIDE,
+        ERA_ABBREV,
+        ERA_NARROW,
+        ZONE_LONG,
+        ZONE_SHORT,
+        METAZONE_LONG,
         METAZONE_SHORT
     }
 
@@ -954,7 +990,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Returns abbreviated weekday strings; for example: "Sun", "Mon", etc.
      * (Note: the method name is misleading; it does not get the CLDR-style
-     * "short" weekday strings, e.g. "Su", "Mo", etc.) 
+     * "short" weekday strings, e.g. "Su", "Mo", etc.)
      * @return the abbreviated weekday strings. Use <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc. to index the result array.
      * @stable ICU 2.0
@@ -966,7 +1002,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Sets abbreviated weekday strings; for example: "Sun", "Mon", etc.
      * (Note: the method name is misleading; it does not set the CLDR-style
-     * "short" weekday strings, e.g. "Su", "Mo", etc.) 
+     * "short" weekday strings, e.g. "Su", "Mo", etc.)
      * @param newAbbrevWeekdays the new abbreviated weekday strings. The array should
      * be indexed by <code>Calendar.SUNDAY</code>,
      * <code>Calendar.MONDAY</code>, etc.
@@ -1295,7 +1331,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * {@link java.text.DateFormatSymbols#getZoneStrings()}. For accessing the full
      * set of time zone string data used by ICU implementation, you should use
      * {@link TimeZoneNames} APIs instead.
-     * 
+     *
      * @return the time zone strings.
      * @stable ICU 2.0
      */
@@ -1339,7 +1375,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * you should customize {@link TimeZoneFormat} and set the
      * instance by {@link SimpleDateFormat#setTimeZoneFormat(TimeZoneFormat)}
      * instead.
-     * 
+     *
      * @param newZoneStrings the new time zone strings.
      * @stable ICU 2.0
      */
@@ -1423,6 +1459,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 && Utility.arrayEquals(standaloneNarrowWeekdays, that.standaloneNarrowWeekdays)
                 && Utility.arrayEquals(ampms, that.ampms)
                 && Utility.arrayEquals(ampmsNarrow, that.ampmsNarrow)
+                && Utility.arrayEquals(abbreviatedDayPeriods, that.abbreviatedDayPeriods)
+                && Utility.arrayEquals(wideDayPeriods, that.wideDayPeriods)
+                && Utility.arrayEquals(narrowDayPeriods, that.narrowDayPeriods)
+                && Utility.arrayEquals(standaloneAbbreviatedDayPeriods, that.standaloneAbbreviatedDayPeriods)
+                && Utility.arrayEquals(standaloneWideDayPeriods, that.standaloneWideDayPeriods)
+                && Utility.arrayEquals(standaloneNarrowDayPeriods, that.standaloneNarrowDayPeriods)
                 && Utility.arrayEquals(timeSeparator, that.timeSeparator)
                 && arrayOfArrayEquals(zoneStrings, that.zoneStrings)
                 // getDiplayName maps deprecated country and language codes to the current ones
@@ -1507,10 +1549,16 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         this.leapMonthPatterns = dfs.leapMonthPatterns;
         this.shortYearNames = dfs.shortYearNames;
         this.shortZodiacNames = dfs.shortZodiacNames;
+        this.abbreviatedDayPeriods = dfs.abbreviatedDayPeriods;
+        this.wideDayPeriods = dfs.wideDayPeriods;
+        this.narrowDayPeriods = dfs.narrowDayPeriods;
+        this.standaloneAbbreviatedDayPeriods = dfs.standaloneAbbreviatedDayPeriods;
+        this.standaloneWideDayPeriods = dfs.standaloneWideDayPeriods;
+        this.standaloneNarrowDayPeriods = dfs.standaloneNarrowDayPeriods;
 
         this.zoneStrings = dfs.zoneStrings; // always null at initialization time for now
         this.localPatternChars = dfs.localPatternChars;
-        
+
         this.capitalization = dfs.capitalization;
 
         this.actualLocale = dfs.actualLocale;
@@ -1541,7 +1589,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         months = calData.getStringArray("monthNames", "wide");
         shortMonths = calData.getStringArray("monthNames", "abbreviated");
         narrowMonths = calData.getStringArray("monthNames", "narrow");
-        
+
         standaloneMonths = calData.getStringArray("monthNames", "stand-alone", "wide");
         standaloneShortMonths = calData.getStringArray("monthNames", "stand-alone", "abbreviated");
         standaloneNarrowMonths = calData.getStringArray("monthNames", "stand-alone", "narrow");
@@ -1610,6 +1658,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         standaloneQuarters = calData.getStringArray("quarters", "stand-alone", "wide");
         standaloneShortQuarters = calData.getStringArray("quarters", "stand-alone", "abbreviated");
 
+        abbreviatedDayPeriods = loadDayPeriodStrings(calData, false, "abbreviated");
+        wideDayPeriods = loadDayPeriodStrings(calData, false, "wide");
+        narrowDayPeriods = loadDayPeriodStrings(calData, false, "narrow");
+        standaloneAbbreviatedDayPeriods = loadDayPeriodStrings(calData, true, "abbreviated");
+        standaloneWideDayPeriods = loadDayPeriodStrings(calData, true, "wide");
+        standaloneNarrowDayPeriods = loadDayPeriodStrings(calData, true, "narrow");
+
         // The code for getting individual symbols in the leapMonthSymbols array is here
         // rather than in CalendarData because it depends on DateFormatSymbols constants...
         ICUResourceBundle monthPatternsBundle = null;
@@ -1629,7 +1684,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             leapMonthPatterns[DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW] = calData.get("monthPatterns", "stand-alone", "narrow").get("leap").getString();
             leapMonthPatterns[DT_LEAP_MONTH_PATTERN_NUMERIC] = calData.get("monthPatterns", "numeric", "all").get("leap").getString();
         }
-        
+
         ICUResourceBundle cyclicNameSetsBundle = null;
         try {
            cyclicNameSetsBundle = calData.get("cyclicNameSets");
@@ -1641,7 +1696,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             shortYearNames = calData.get("cyclicNameSets", "years", "format", "abbreviated").getStringArray();
             shortZodiacNames = calData.get("cyclicNameSets", "zodiacs", "format", "abbreviated").getStringArray();
         }
- 
+
         requestedLocale = desiredLocale;
 
         ICUResourceBundle rb =
@@ -1658,7 +1713,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         // TODO: obtain correct actual/valid locale later
         ULocale uloc = rb.getULocale();
         setLocale(uloc, uloc);
-        
+
         capitalization = new HashMap<CapitalizationContextUsage,boolean[]>();
         boolean[] noTransforms = new boolean[2];
         noTransforms[0] = false;
@@ -1720,6 +1775,36 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             }
         }
         return equal;
+    }
+
+    /**
+     * Loads localized names for day periods in the requested format.
+     * @param calData where the strings come from
+     * @param standalone whether the standalone version is requested
+     * @param width "abbreviated", "wide", or "narrow".
+     */
+    private String[] loadDayPeriodStrings(CalendarData calData, boolean standalone, String width) {
+        String[] dayPeriodKeys = {"midnight", "noon",
+                "morning1", "afternoon1", "evening1", "night1",
+                "morning2", "afternoon2", "evening2", "night2"};
+
+        ICUResourceBundle b;
+        String strings[] = new String[10];
+        try {
+            if (standalone) {
+                b = calData.get("dayPeriod", "standalone", width);
+            } else {
+                b = calData.get("dayPeriod", "format", width);
+            }
+        } catch (MissingResourceException e) {
+            return strings;  // Array of null's.
+        }
+
+        for (int i = 0; i < 10; ++i) {
+            strings[i] = b.findStringWithFallback(dayPeriodKeys[i]);  // Null if string doesn't exist.
+        }
+
+        return strings;
     }
 
     /*
