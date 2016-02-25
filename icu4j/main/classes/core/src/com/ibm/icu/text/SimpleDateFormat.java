@@ -1930,15 +1930,19 @@ public class SimpleDateFormat extends DateFormat {
             // Get localized string.
             assert(periodType != null);
             String toAppend = null;
+            int index;
 
-            int index = periodType.ordinal();
-            if (count <= 3) {
-                toAppend = formatData.abbreviatedDayPeriods[index];  // i.e. short
-            } else if (count == 4 || count > 5) {
-                toAppend = formatData.wideDayPeriods[index];
-            } else {  // count == 5
-                toAppend = formatData.narrowDayPeriods[index];
+            if (periodType != DayPeriodRules.DayPeriod.AM && periodType != DayPeriodRules.DayPeriod.PM) {
+                index = periodType.ordinal();
+                if (count <= 3) {
+                    toAppend = formatData.abbreviatedDayPeriods[index];  // i.e. short
+                } else if (count == 4 || count > 5) {
+                    toAppend = formatData.wideDayPeriods[index];
+                } else {  // count == 5
+                    toAppend = formatData.narrowDayPeriods[index];
+                }
             }
+
 
             // Fallback schedule:
             // Midnight/Noon -> General Periods -> AM/PM.
@@ -1960,7 +1964,9 @@ public class SimpleDateFormat extends DateFormat {
             }
 
             // General Periods -> AM/PM.
-            if (toAppend == null) {
+            if (periodType == DayPeriodRules.DayPeriod.AM ||
+                    periodType == DayPeriodRules.DayPeriod.PM ||
+                    toAppend == null) {
                 subFormat(buf, 'a', count, beginOffset, fieldNum, capitalizationContext, pos, cal);
             }
             else {
