@@ -3,7 +3,7 @@
 * Copyright (C) 2001-2016, International Business Machines
 *                Corporation and others. All Rights Reserved.
 ******************************************************************************
-*   file name:  ucln_cmn.h
+*   file name:  ucln_in.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -42,6 +42,7 @@ typedef enum ECleanupI18NType {
     UCLN_I18N_TIMEZONE,
     UCLN_I18N_DECFMT,
     UCLN_I18N_NUMFMT,
+    UCLN_I18N_DAYPERIODRULES,
     UCLN_I18N_SMPDTFMT,
     UCLN_I18N_USEARCH,
     UCLN_I18N_COLLATOR,
