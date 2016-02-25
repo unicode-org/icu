@@ -614,11 +614,11 @@ struct RelDateTimeFmtDataSink : public ResourceTableSink {
 };
 
 // Virtual destructors must be defined out of line.
-RelDateTimeFmtDataSink::RelDateTimeDetailSink::~RelDateTimeDetailSink() {};
-RelDateTimeFmtDataSink::RelativeTimeSink::~RelativeTimeSink() {};
-RelDateTimeFmtDataSink::RelativeSink::~RelativeSink() {};
-RelDateTimeFmtDataSink::UnitSink::~UnitSink() {};
-RelDateTimeFmtDataSink::~RelDateTimeFmtDataSink() {};
+RelDateTimeFmtDataSink::RelDateTimeDetailSink::~RelDateTimeDetailSink() {}
+RelDateTimeFmtDataSink::RelativeTimeSink::~RelativeTimeSink() {}
+RelDateTimeFmtDataSink::RelativeSink::~RelativeSink() {}
+RelDateTimeFmtDataSink::UnitSink::~UnitSink() {}
+RelDateTimeFmtDataSink::~RelDateTimeFmtDataSink() {}
 
 } // namespace
 
