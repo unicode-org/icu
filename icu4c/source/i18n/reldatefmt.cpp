@@ -637,7 +637,7 @@ static void loadWeekdayNames(UnicodeString absoluteUnits[UDAT_STYLE_COUNT]
         DateFormatSymbols::DtWidthType dtfmtWidth = styleToDateFormatSymbolWidth[style];
         int32_t count;
         const UnicodeString* weekdayNames =
-            dfSym.getWeekdays(count, DateFormatSymbols::DtContextType::STANDALONE, dtfmtWidth);
+            dfSym.getWeekdays(count, DateFormatSymbols::STANDALONE, dtfmtWidth);
         for (int32_t dayIndex = UDAT_ABSOLUTE_SUNDAY;
                 dayIndex <= UDAT_ABSOLUTE_SATURDAY; ++ dayIndex) {
             int32_t dateSymbolIndex = (dayIndex - UDAT_ABSOLUTE_SUNDAY) + UCAL_SUNDAY;
