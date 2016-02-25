@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014-2015, International Business Machines Corporation and
+ * Copyright (C) 2014-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -199,7 +199,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
         /**
          * filter set to store all exceptions
          */
-        private HashSet<String> filterSet;
+        private HashSet<String> filterSet = new HashSet<String>();
 
         static final int PARTIAL = (1 << 0); // < partial - need to run through forward trie
         static final int MATCH = (1 << 1); // < exact match - skip this one.
@@ -214,16 +214,17 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
             ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
                     ICUResourceBundle.ICU_BRKITR_BASE_NAME, loc);
             ICUResourceBundle exceptions = rb.findWithFallback("exceptions");
-            ICUResourceBundle breaks = exceptions.findWithFallback("SentenceBreak");
-
-            filterSet = new HashSet<String>();
-            if (breaks != null) {
-                for (int index = 0, size = breaks.getSize(); index < size; ++index) {
-                    ICUResourceBundle b = (ICUResourceBundle) breaks.get(index);
-                    String br = b.getString();
-                    filterSet.add(br);
+            if (exceptions != null) {
+                ICUResourceBundle breaks = exceptions.findWithFallback("SentenceBreak");
+    
+                if (breaks != null) {
+                    for (int index = 0, size = breaks.getSize(); index < size; ++index) {
+                        ICUResourceBundle b = (ICUResourceBundle) breaks.get(index);
+                        String br = b.getString();
+                        filterSet.add(br);
+                    }
                 }
-            }
+            } // else - no exceptions.
         }
 
         /**
@@ -252,6 +253,11 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
 
         @Override
         public BreakIterator build(BreakIterator adoptBreakIterator) {
+            if( filterSet.isEmpty() ) {
+                // Short circuit - nothing to except.
+                return adoptBreakIterator;
+            }
+            
             CharsTrieBuilder builder = new CharsTrieBuilder();
             CharsTrieBuilder builder2 = new CharsTrieBuilder();
 
