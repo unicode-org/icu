@@ -1879,21 +1879,25 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         // Get localized string.
         U_ASSERT(periodType != DayPeriodRules::DAYPERIOD_UNKNOWN);
         UnicodeString *toAppend = NULL;
+        int32_t index;
 
-        int32_t index = (int32_t)periodType;
-        if (count <= 3) {
-            toAppend = &fSymbols->fAbbreviatedDayPeriods[index];  // i.e. short
-        } else if (count == 4 || count > 5) {
-            toAppend = &fSymbols->fWideDayPeriods[index];
-        } else {  // count == 5
-            toAppend = &fSymbols->fNarrowDayPeriods[index];
+        if (periodType != DayPeriodRules::DAYPERIOD_AM &&
+                periodType != DayPeriodRules::DAYPERIOD_PM) {
+            index = (int32_t)periodType;
+            if (count <= 3) {
+                toAppend = &fSymbols->fAbbreviatedDayPeriods[index];  // i.e. short
+            } else if (count == 4 || count > 5) {
+                toAppend = &fSymbols->fWideDayPeriods[index];
+            } else {  // count == 5
+                toAppend = &fSymbols->fNarrowDayPeriods[index];
+            }
         }
 
         // Fallback schedule:
         // Midnight/Noon -> General Periods -> AM/PM.
 
         // Midnight/Noon -> General Periods.
-        if (toAppend->isBogus() &&
+        if ((toAppend == NULL || toAppend->isBogus()) &&
                 (periodType == DayPeriodRules::DAYPERIOD_MIDNIGHT ||
                  periodType == DayPeriodRules::DAYPERIOD_NOON)) {
             periodType = ruleSet->getDayPeriodForHour(hour);
