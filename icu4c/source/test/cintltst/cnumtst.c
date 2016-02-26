@@ -2555,11 +2555,11 @@ static void TestCurrencyUsage(void) {
          * format result using CURRENCYSTYLE with CASH purpose,-
          * Note that as of CLDR 26:-
          * - TWD switches from 0 decimals to 2; PKR still has 0, so change test to that
-         * - CAD and all other currencies that rounded to .05 no longer do
+         * - CAD rounds to .05
          */
 
         {"PKR", "PKR124"},
-        {"CAD", "CA$123.57"},
+        {"CAD", "CA$123.55"},
         {"USD", "$123.57"}
     };
 
