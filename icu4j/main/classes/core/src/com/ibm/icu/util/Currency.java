@@ -640,7 +640,7 @@ public class Currency extends MeasureUnit {
      * @param text the text to parse
      * @param type parse against currency type: LONG_NAME only or not
      * @param pos input-output position; on input, the position within
-     * text to match; must have 0 <= pos.getIndex() < text.length();
+     * text to match; must have 0 &lt;= pos.getIndex() &lt; text.length();
      * on output, the position after the last matched character. If
      * the parse fails, the position in unchanged upon output.
      * @return the ISO 4217 code, as a string, of the best match, or

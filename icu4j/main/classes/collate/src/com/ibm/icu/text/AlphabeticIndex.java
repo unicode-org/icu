@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2014, Google Inc, International Business Machines Corporation
+ * Copyright (C) 2008-2016, Google Inc, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -41,16 +41,16 @@ import com.ibm.icu.util.ULocale;
  * (bucket) of a larger "target" list. That is, each label corresponds to a bucket in
  * the target list, where everything in the bucket is greater than or equal to the character
  * (according to the locale's collation). Strings can be added to the index;
- * they will be in sorted order in the right bucket.</p>
+ * they will be in sorted order in the right bucket.
  * <p>
  * The class also supports having buckets for strings before the first (underflow),
  * after the last (overflow), and between scripts (inflow). For example, if the index
  * is constructed with labels for Russian and English, Greek characters would fall
- * into an inflow bucket between the other two scripts.</p>
+ * into an inflow bucket between the other two scripts.
  *
  * <p><em>Note:</em> If you expect to have a lot of ASCII or Latin characters
  * as well as characters from the user's language,
- * then it is a good idea to call addLabels(ULocale.English).</p>
+ * then it is a good idea to call addLabels(ULocale.English).
  *
  * <h2>Direct Use</h2>
  * <p>The following shows an example of building an index directly.
@@ -733,7 +733,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * Return the number of records in the index: that is, the total number of distinct <name,data> pairs added with addRecord(...), over all the buckets.
+     * Return the number of records in the index: that is, the total number of distinct &lt;name,data&gt; pairs added with addRecord(...), over all the buckets.
      * 
      * @return total number of records in buckets
      * @stable ICU 4.8

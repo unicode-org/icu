@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014-2015, International Business Machines Corporation and
+ * Copyright (C) 2014-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -14,7 +14,7 @@ import com.ibm.icu.util.OutputInt;
  * An instance is immutable (and thus thread-safe) iff the source UnicodeSet is frozen.
  * <p><b>Note:</b> The counting, deletion, and replacement depend on alternating a {@link SpanCondition} with
  * its inverse. That is, the code spans, then spans for the inverse, then spans, and so on.
- * For the inverse, the following mapping is used:</p>
+ * For the inverse, the following mapping is used:
  * <ul>
  * <li>{@link UnicodeSet.SpanCondition#SIMPLE} → {@link UnicodeSet.SpanCondition#NOT_CONTAINED}</li>
  * <li>{@link UnicodeSet.SpanCondition#CONTAINED} → {@link UnicodeSet.SpanCondition#NOT_CONTAINED}</li>
@@ -22,21 +22,21 @@ import com.ibm.icu.util.OutputInt;
  * </ul>
  * These are actually not complete inverses. However, the alternating works because there are no gaps.
  * For example, with [a{ab}{bc}], you get the following behavior when scanning forward:
- * <p>
+ *
  * <table border="1">
  * <tr><th>SIMPLE</th><td>xxx[ab]cyyy</td></tr>
  * <tr><th>CONTAINED</th><td>xxx[abc]yyy</td></tr>
  * <tr><th>NOT_CONTAINED</th><td>[xxx]ab[cyyy]</td></tr>
  * </table>
  * <p>So here is what happens when you alternate:
- * <p>
+ *
  * <table border="1">
  * <tr><th>start</th><td>|xxxabcyyy</td></tr>
  * <tr><th>NOT_CONTAINED</th><td>xxx|abcyyy</td></tr>
  * <tr><th>CONTAINED</th><td>xxxabc|yyy</td></tr>
  * <tr><th>NOT_CONTAINED</th><td>xxxabcyyy|</td></tr>
  * </table>
- * </p>The entire string is traversed.
+ * <p>The entire string is traversed.
  * 
  * @stable ICU 54
  */

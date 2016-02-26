@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -55,7 +55,7 @@ package com.ibm.icu.text;
 *    // update the no. of chars written
 *    totalCharsWritten += charsWritten;
 *
-*  } while(totalBytesDecompressed < len);
+*  } while(totalBytesDecompressed &lt; len);
 *
 *  myDecompressor.reset(); // reuse decompressor
 * </PRE>

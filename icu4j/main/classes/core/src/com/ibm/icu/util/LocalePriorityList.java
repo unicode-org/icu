@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010-2014, Google, Inc.; International Business Machines      *
+ * Copyright (C) 2010-2016, Google, Inc.; International Business Machines      *
  * Corporation and others. All Rights Reserved.                                *
  *******************************************************************************
  */
@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 /**
  * Provides an immutable list of languages (locales) in priority order.
  * The string format is based on the Accept-Language format 
- * {@link "http://www.ietf.org/rfc/rfc2616.txt"}, such as 
+ * <a href="http://www.ietf.org/rfc/rfc2616.txt">http://www.ietf.org/rfc/rfc2616.txt</a>, such as
  * "af, en, fr;q=0.9". Syntactically it is slightly
  * more lenient, in allowing extra whitespace between elements, extra commas,
  * and more than 3 decimals (on input), and pins between 0 and 1.

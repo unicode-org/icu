@@ -573,6 +573,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * <li><code>zoneStrings[i][5]</code> - location name of zone</li>
      * <li><code>zoneStrings[i][6]</code> - long generic name of zone</li>
      * <li><code>zoneStrings[i][7]</code> - short generic of zone</li>
+    *  </ul>
      * The zone ID is <em>not</em> localized; it corresponds to the ID
      * value associated with a system time zone object.  All other entries
      * are localized names.  If a zone does not implement daylight savings

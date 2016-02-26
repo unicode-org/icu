@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and   *
+* Copyright (C) 1996-2016, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -8,16 +8,16 @@
 package com.ibm.icu.util;
 
 /**
- * <p>Interface for enabling iteration over sets of &lt;int, Object>, where
+ * <p>Interface for enabling iteration over sets of &lt;int, Object&gt;, where
  * int is the sorted integer index in ascending order, and Object its
- * associated value.</p>
+ * associated value.
  * <p>The ValueIterator allows iterations over integer indexes in the range
  * of Integer.MIN_VALUE to Integer.MAX_VALUE inclusive. Implementations of
  * ValueIterator should specify their own maximum subrange within the above
- * range that is meaningful to its applications.</p>
+ * range that is meaningful to its applications.
  * <p>Most implementations will be created by factory methods, such as the
  * character name iterator in UCharacter.getNameIterator. See example below.
- * </p>
+ *
  * Example of use:<br>
  * <pre>
  * ValueIterator iterator = UCharacter.getNameIterator();
@@ -38,7 +38,7 @@ public interface ValueIterator
 
     /**
     * <p>The return result container of each iteration. Stores the next
-    * integer index and its associated value Object.</p>
+    * integer index and its associated value Object.
     * @stable ICU 2.6
     */
     public static final class Element
@@ -71,9 +71,9 @@ public interface ValueIterator
 
     /**
     * <p>Returns the next result for this iteration and returns
-    * true if we are not at the end of the iteration, false otherwise.</p>
+    * true if we are not at the end of the iteration, false otherwise.
     * <p>If this returns a false, the contents of elements will not
-    * be updated.</p>
+    * be updated.
     * @param element for storing the result index and value
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element
@@ -84,25 +84,25 @@ public interface ValueIterator
     /**
     * <p>Resets the iterator to start iterating from the integer index
     * Integer.MIN_VALUE or X if a setRange(X, Y) has been called previously.
-    * </p>
+    *
     * @stable ICU 2.6
     */
     public void reset();
 
     /**
      * <p>Restricts the range of integers to iterate and resets the iteration
-     * to begin at the index argument start.</p>
+     * to begin at the index argument start.
      * <p>If setRange(start, end) is not performed before next(element) is
      * called, the iteration will start from the integer index
-     * Integer.MIN_VALUE and end at Integer.MAX_VALUE.</p>
+     * Integer.MIN_VALUE and end at Integer.MAX_VALUE.
      * <p>
      * If this range is set outside the meaningful range specified by the
      * implementation, next(element) will always return false.
-     * </p>
+     *
      * @param start first integer in the range to iterate
      * @param limit one more than the last integer in the range
      * @exception IllegalArgumentException thrown when attempting to set an
-     *            illegal range. E.g limit <= start
+     *            illegal range. E.g limit &lt;= start
      * @stable ICU 2.6
      */
     public void setRange(int start, int limit);

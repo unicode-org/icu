@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2012, International Business Machines Corporation and    *
+* Copyright (C) 2005-2016, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -18,9 +18,9 @@ import java.io.Reader;
  * as a possible encoding for a set of input data.  From an instance of this
  * class, you can ask for a confidence level in the charset identification,
  * or for Java Reader or String to access the original byte data in Unicode form.
- * <p/>
+ * <p>
  * Instances of this class are created only by CharsetDetectors.
- * <p/>
+ * <p>
  * Note:  this class has a natural ordering that is inconsistent with equals.
  *        The natural ordering is based on the match confidence value.
  *
@@ -32,7 +32,7 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
     /**
      * Create a java.io.Reader for reading the Unicode character data corresponding
      * to the original byte data supplied to the Charset detect operation.
-     * <p/>
+     * <p>
      * CAUTION:  if the source of the byte data was an InputStream, a Reader
      * can be created for only one matching char set using this method.  If more 
      * than one charset needs to be tried, the caller will need to reset

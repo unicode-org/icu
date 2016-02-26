@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2015 International Business Machines Corporation and
+ * Copyright (C) 2001-2016 International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1153,7 +1153,7 @@ public final class UScript {
      * </ul>
      * In other words, if the return value is non-negative, it is c's single Script code
      * and the set contains exactly this Script code.
-     * If the return value is -n, then the set contains c's n>=2 Script_Extensions script codes.
+     * If the return value is -n, then the set contains c's n&gt;=2 Script_Extensions script codes.
      *
      * <p>Some characters are commonly used in multiple scripts.
      * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.

@@ -9,7 +9,7 @@ import com.ibm.icu.lang.UCharacter;
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1996-2011.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1996-2016.  All Rights Reserved.       */
 /*                                                                    */
 /* The BigDecimal class provides immutable arbitrary-precision        */
 /* floating point (including integer) decimal numbers.                */
@@ -209,7 +209,7 @@ import com.ibm.icu.lang.UCharacter;
  * results in <code>3.33333333E-11</code> instead of <code>0.0000000000333333333</code>.
  * <p>
  * The form of the exponential notation (scientific or engineering) is determined by the <code>form</code> setting.
- * <eul>
+ * </ul>
  * <p>
  * The names of methods in this class follow the conventions established by <code>java.lang.Number</code>,
  * <code>java.math.BigInteger</code>, and <code>java.math.BigDecimal</code> in Java 1.1 and Java 1.2.
@@ -385,7 +385,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Once constructed, this may become shared between several BigDecimal objects, so must not be altered.
      * <p>
-     * For efficiency (speed), this is a byte array, with each byte taking a value of 0 -> 9.
+     * For efficiency (speed), this is a byte array, with each byte taking a value of 0 -&gt; 9.
      * <p>
      * If the first byte is 0 then the value of the number is zero (and mant.length=1, except when constructed from a
      * plain number, for example, 0.000).
@@ -904,7 +904,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * </pre>
      * <p>
      * (Exponential notation means that the number includes an optional sign and a power of ten following an
-     * '</code>E</code>' that indicates how the decimal point will be shifted. Thus the <code>"4E+9"</code> above is
+     * '<code>E</code>' that indicates how the decimal point will be shifted. Thus the <code>"4E+9"</code> above is
      * just a short way of writing <code>4000000000</code>, and the <code>"0.73e-7"</code> is short for <code>
      * 0.000000073</code>.)
      * <p>
@@ -916,7 +916,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * the single digit 0, and if non-zero it will have an exponent unless that exponent would be 0. The exponent must
      * fit in nine digits both before and after it is expressed in scientific notation.
      * <p>
-     * Any digits in the parameter must be decimal; that is, <code>Character.digit(c, 10)</code> (where </code>c</code>
+     * Any digits in the parameter must be decimal; that is, <code>Character.digit(c, 10)</code> (where <code>c</code>
      * is the character in question) would not return -1.
      * 
      * @param string The <code>String</code> to be converted.
@@ -1533,7 +1533,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     /**
      * Returns a <code>BigDecimal</code> whose value is <code>this*rhs</code>.
      * <p>
-     * Implements the multiplication (<b><code> </code></b>) operator (as defined in the decimal documentation, see
+     * Implements the multiplication (<b><code>&#42;</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
      * 
      * @param rhs The <code>BigDecimal</code> for the right hand side of the multiplication.
@@ -1742,7 +1742,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     /**
      * Returns a <code>BigDecimal</code> whose value is <code>this**rhs</code>.
      * <p>
-     * Implements the power (<b><code> </code></b>) operator (as defined in the decimal documentation, see
+     * Implements the power (<b><code>^</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
      * <p>
      * The first parameter is the power to which the <code>this</code> will be raised; it must be in the range
@@ -2094,8 +2094,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <code>explaces</code> must be a positive number; it sets the number of places (digits after the sign of the
      * exponent) to be used for any exponent part, the default (when <code>explaces</code> is -1) being to use as many
      * as are needed. If <code>explaces</code> is not -1, space is always reserved for an exponent; if one is not needed
-     * (for example, if the exponent will be 0) then <code>explaces</code>+2 blanks are appended to the result. <!--
-     * (This preserves vertical alignment of similarly formatted numbers in a monospace font.) --> If <code>explaces
+     * (for example, if the exponent will be 0) then <code>explaces</code>+2 blanks are appended to the result.
+     * (This preserves vertical alignment of similarly formatted numbers in a monospace font.) If <code>explaces
      * </code> is not -1 and is not large enough to contain the exponent, an exception is thrown.
      * <p>
      * <code>exdigits</code> sets the trigger point for use of exponential notation. If, before any rounding, the number

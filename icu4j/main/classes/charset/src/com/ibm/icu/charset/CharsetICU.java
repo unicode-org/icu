@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2015, International Business Machines Corporation and
+* Copyright (C) 2006-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */ 
@@ -20,7 +20,7 @@ import com.ibm.icu.text.UnicodeSet;
  * <p>A subclass of java.nio.Charset for providing implementation of ICU's charset converters.
  * This API is used to convert codepage or character encoded data to and
  * from UTF-16. You can open a converter with {@link Charset#forName} and {@link #forNameICU}. With that
- * converter, you can get its properties, set options, convert your data.</p>
+ * converter, you can get its properties, set options, convert your data.
  *
  * <p>Since many software programs recognize different converter names for
  * different types of converters, there are other functions in this API to
@@ -376,13 +376,14 @@ public abstract class CharsetICU extends Charset{
     abstract void getUnicodeSetImpl(UnicodeSet setFillIn, int which);
     
     /**
-    * <p>Returns the set of Unicode code points that can be converted by an ICU Converter. 
-    * <p>
-    * The current implementation returns only one kind of set (UCNV_ROUNDTRIP_SET): The set of all Unicode code points that can be 
+    * Returns the set of Unicode code points that can be converted by an ICU Converter.
+    *
+    * <p>The current implementation returns only one kind of set (UCNV_ROUNDTRIP_SET): The set of all Unicode code points that can be
     * roundtrip-converted (converted without any data loss) with the converter This set will not include code points that have fallback 
     * mappings or are only the result of reverse fallback mappings.  See UTR #22 "Character Mapping Markup Language" at  <a href="http://www.unicode.org/reports/tr22/">http://www.unicode.org/reports/tr22/</a>
-    * <p>* In the future, there may be more UConverterUnicodeSet choices to select sets with different properties.
-    * <p>
+    * 
+    * <p>In the future, there may be more UConverterUnicodeSet choices to select sets with different properties.
+    *
     * <p>This is useful for example for
     * <ul><li>checking that a string or document can be roundtrip-converted with a converter,
     *   without/before actually performing the conversion</li>

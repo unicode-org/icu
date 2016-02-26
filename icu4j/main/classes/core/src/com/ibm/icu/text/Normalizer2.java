@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2009-2015, International Business Machines
+ *   Copyright (C) 2009-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -314,7 +314,7 @@ public abstract class Normalizer2 {
     public String getRawDecomposition(int c) { return null; }
 
     /**
-     * Performs pairwise composition of a & b and returns the composite if there is one.
+     * Performs pairwise composition of a &amp; b and returns the composite if there is one.
      *
      * <p>Returns a composite code point c only if c has a two-way mapping to a+b.
      * In standard Unicode normalization, this means that

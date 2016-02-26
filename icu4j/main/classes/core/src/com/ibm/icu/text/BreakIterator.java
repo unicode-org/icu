@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -181,7 +181,7 @@ import com.ibm.icu.util.ULocale;
  *     int last = wb.following(pos);
  *     int current = wb.next();
  *     while (current != BreakIterator.DONE) {
- *         for (int p = last; p < current; p++) {
+ *         for (int p = last; p &lt; current; p++) {
  *             if (Character.isLetter(text.charAt(p)))
  *                 return last;
  *         }

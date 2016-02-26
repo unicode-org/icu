@@ -879,7 +879,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * includes the given ID.  An equivalency group contains zones
      * that have the same GMT offset and rules.
      *
-     * <p>The returned count includes the given ID; it is always >= 1
+     * <p>The returned count includes the given ID; it is always &gt;= 1
      * for valid IDs.  The given ID must be a system time zone.  If it
      * is not, returns zero.
      * @param id a system time zone ID
@@ -1134,7 +1134,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * method returns <code>null</code>.
      * 
      * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
-     * Zone-Tzid mapping data<a>. The mapping data is updated time to time. To get the latest changes,
+     * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
      * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
      * Updating the Time Zone Data</a>.
      * 
@@ -1194,7 +1194,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * method returns <code>null</code>.
      *
      * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
-     * Zone-Tzid mapping data<a>. The mapping data is updated time to time. To get the latest changes,
+     * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
      * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
      * Updating the Time Zone Data</a>.
      *

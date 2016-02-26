@@ -21,15 +21,14 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
- * <p>
  * <code>PluralFormat</code> supports the creation of internationalized
  * messages with plural inflection. It is based on <i>plural
  * selection</i>, i.e. the caller specifies messages for each
  * plural case that can appear in the user's language and the
  * <code>PluralFormat</code> selects the appropriate message based on
  * the number.
- * </p>
- * <h4>The Problem of Plural Forms in Internationalized Messages</h4>
+ *
+ * <h3>The Problem of Plural Forms in Internationalized Messages</h3>
  * <p>
  * Different languages have different ways to inflect
  * plurals. Creating internationalized messages that include plural
@@ -42,7 +41,7 @@ import com.ibm.icu.util.ULocale.Category;
  * applies to infinitely many intervals (e.g., the paucal case applies to
  * numbers ending with 2, 3, or 4 except those ending with 12, 13, or
  * 14). Thus <code>ChoiceFormat</code> is not adequate.
- * </p><p>
+ * <p>
  * <code>PluralFormat</code> deals with this by breaking the problem
  * into two parts:
  * <ul>
@@ -58,12 +57,12 @@ import com.ibm.icu.util.ULocale.Category;
  *     rules, see the CLDR <i>Language Plural Rules</i> page at
  *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html 
  * </ul>
- * </p>
+ *
  * <h4>Usage of <code>PluralFormat</code></h4>
  * <p>Note: Typically, plural formatting is done via <code>MessageFormat</code>
  * with a <code>plural</code> argument type,
  * rather than using a stand-alone <code>PluralFormat</code>.
- * </p><p>
+ * <p>
  * This discussion assumes that you use <code>PluralFormat</code> with
  * a predefined set of plural rules. You can create one using one of
  * the constructors that takes a <code>ULocale</code> object. To
@@ -72,7 +71,7 @@ import com.ibm.icu.util.ULocale.Category;
  * <code>applyPattern()</code> method. The <code>format()</code>
  * method takes a number object and selects the message of the
  * matching plural case. This message will be returned.
- * </p>
+ *
  * <h5>Patterns and Their Interpretation</h5>
  * <p>
  * The pattern text defines the message output for each plural case of the
@@ -88,21 +87,20 @@ import com.ibm.icu.util.ULocale.Category;
  * Pattern_White_Space between syntax elements is ignored, except
  * between the {curly braces} and their sub-message,
  * and between the '=' and the number of an explicitValue.
- *
- * </p><p>
+ * <p>
  * There are 6 predefined case keywords in CLDR/ICU - 'zero', 'one', 'two', 'few', 'many' and 
  * 'other'. You always have to define a message text for the default plural case 
  * "<code>other</code>" which is contained in every rule set.
  * If you do not specify a message text for a particular plural case, the
  * message text of the plural case "<code>other</code>" gets assigned to this
  * plural case.
- * </p><p>
+ * <p>
  * When formatting, the input number is first matched against the explicitValue clauses.
  * If there is no exact-number match, then a keyword is selected by calling
  * the <code>PluralRules</code> with the input number <em>minus the offset</em>.
  * (The offset defaults to 0 if it is omitted from the pattern string.)
  * If there is no clause with that keyword, then the "other" clauses is returned.
- * </p><p>
+ * <p>
  * An unquoted pound sign (<code>#</code>) in the selected sub-message
  * itself (i.e., outside of arguments nested in the sub-message)
  * is replaced by the input number minus the offset.
@@ -113,8 +111,8 @@ import com.ibm.icu.util.ULocale.Category;
  * <strong>Note:</strong> That argument is formatting without subtracting the offset!
  * If you need a custom format and have a non-zero offset, then you need to pass the
  * number-minus-offset value as a separate parameter.
- * </p>
- * For a usage example, see the {@link MessageFormat} class documentation.
+ *
+ * <p>For a usage example, see the {@link MessageFormat} class documentation.
  *
  * <h4>Defining Custom Plural Rules</h4>
  * <p>If you need to use <code>PluralFormat</code> with custom rules, you can
@@ -122,10 +120,9 @@ import com.ibm.icu.util.ULocale.Category;
  * <code>PluralFormat</code>'s constructor. If you also specify a locale in this
  * constructor, this locale will be used to format the number in the message
  * texts.
- * </p><p>
+ * <p>
  * For more information about <code>PluralRules</code>, see
  * {@link PluralRules}.
- * </p>
  *
  * @author tschumann (Tim Schumann)
  * @stable ICU 3.8

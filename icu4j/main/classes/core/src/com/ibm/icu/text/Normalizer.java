@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2015, International Business Machines Corporation and
+ * Copyright (C) 2000-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -523,7 +523,7 @@ public final class Normalizer implements Cloneable {
      * The most significant bits, however, are shifted down and passed on
      * to the normalization implementation.
      * (That is, from compare(..., options, ...),
-     * options>>COMPARE_NORM_OPTIONS_SHIFT will be passed on to the
+     * options&gt;&gt;COMPARE_NORM_OPTIONS_SHIFT will be passed on to the
      * internal normalization functions.)
      *
      * @see #compare
@@ -1134,7 +1134,7 @@ public final class Normalizer implements Cloneable {
      *     If set, then the following case folding options are used.
      *
      *
-     * @return <0 or 0 or >0 as usual for string comparisons
+     * @return &lt;0 or 0 or &gt;0 as usual for string comparisons
      *
      * @see #normalize
      * @see #FCD
@@ -1195,7 +1195,7 @@ public final class Normalizer implements Cloneable {
      *     instead of case-sensitively.
      *     If set, then the following case folding options are used.
      *
-     * @return <0 or 0 or >0 as usual for string comparisons
+     * @return &lt;0 or 0 or &gt;0 as usual for string comparisons
      *
      * @see #normalize
      * @see #FCD
@@ -1232,7 +1232,7 @@ public final class Normalizer implements Cloneable {
      *     instead of case-sensitively.
      *     If set, then the following case folding options are used.
      *
-     * @return <0 or 0 or >0 as usual for string comparisons
+     * @return &lt;0 or 0 or &gt;0 as usual for string comparisons
      *
      * @see #normalize
      * @see #FCD
@@ -1726,11 +1726,11 @@ public final class Normalizer implements Cloneable {
      * that is being performed , but they control whether
      * certain optional portions of the operation are done.
      * Currently the only available option is:
-     * <p>
+     *
      * <ul>
      *   <li>{@link #UNICODE_3_2} - Use Normalization conforming to Unicode version 3.2.
      * </ul>
-     * <p>
+     *
      * @param   option  the option whose value is to be set.
      * @param   value   the new setting for the option.  Use <tt>true</tt> to
      *                  turn the option on and <tt>false</tt> to turn it off.

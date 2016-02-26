@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternTokenizer;
@@ -93,7 +94,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Construct a flexible generator according to data for a given locale.
-     * @param locale The {@link java.text.Locale} to pass.
+     * @param locale The {@link java.util.Locale} to pass.
      * @stable ICU 54
      */
     public static DateTimePatternGenerator getInstance(Locale locale) {
