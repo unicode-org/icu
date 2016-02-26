@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2014, International Business Machines
+*   Copyright (C) 2000-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -1619,7 +1619,7 @@ void TransliteratorRoundTripTest::TestDebug(const char* name,const char fromSet[
 
 void TransliteratorRoundTripTest::TestInterIndic() {
     //TestDebug("Latin-Gurmukhi", latinForIndic, "[:Gurmukhi:]","[\\u0965\\u0a02\\u0a72\\u0a73\\u0a74]",TRUE);
-    int32_t num = (int32_t)(sizeof(interIndicArray)/(INTER_INDIC_ARRAY_WIDTH*sizeof(char*)));
+    int32_t num = UPRV_LENGTHOF(interIndicArray)/INTER_INDIC_ARRAY_WIDTH;
     if(quick){
         logln("Testing only 5 of %i. Skipping rest (use -e for exhaustive)",num);
         num = 5;
