@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2012, International Business Machines Corporation 
+* Copyright (C) 1998-2016, International Business Machines Corporation 
 * and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -16,30 +16,23 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include "intltest.h"
 #include "itrbbi.h"
 #include "rbbiapts.h"
 #include "rbbitst.h"
-
-#define TESTCLASS(n,classname)        \
-    case n:                           \
-        name = #classname;            \
-        if (exec) {                   \
-            logln(#classname "---");  \
-            logln("");                \
-            classname t;              \
-            callTest(t, par);         \
-        }                             \
-        break
+#include "rbbimonkeytest.h"
 
 
 void IntlTestRBBI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
-    if (exec) logln("TestSuite RuleBasedBreakIterator: ");
-    switch (index) {
-        TESTCLASS(0, RBBIAPITest);
-        TESTCLASS(1, RBBITest);
-        default: name=""; break;
+    if (exec) {
+        logln("TestSuite RuleBasedBreakIterator: ");
     }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO_CLASS(RBBIAPITest);
+    TESTCASE_AUTO_CLASS(RBBITest);
+    TESTCASE_AUTO_CLASS(RBBIMonkeyTest);
+    TESTCASE_AUTO_END;
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

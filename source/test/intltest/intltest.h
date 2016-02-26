@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * COPYRIGHT:
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -18,7 +18,7 @@
 
 #if U_NO_DEFAULT_INCLUDE_UTF_HEADERS
 /* deprecated  - make tests pass with U_NO_DEFAULT_INCLUDE_UTF_HEADERS */
-#include "unicode/utf_old.h" 
+#include "unicode/utf_old.h"
 #endif
 
 U_NAMESPACE_USE
@@ -166,7 +166,7 @@ public:
     /**
      * Replaces isICUVersionAtLeast and isICUVersionBefore
      * log that an issue is known.
-     * Usually used this way:   
+     * Usually used this way:
      * <code>if( ... && logKnownIssue("12345", "some bug")) continue; </code>
      * @param ticket ticket string, "12345" or "cldrbug:1234"
      * @param message optional message string
@@ -230,11 +230,11 @@ public:
     void errcheckln(UErrorCode status, const char *fmt, ...);
 
     // Print ALL named errors encountered so far
-    void printErrors(); 
+    void printErrors();
 
     // print known issues. return TRUE if there were any.
     UBool printKnownIssues();
-        
+
     virtual void usage( void ) ;
 
     /**
@@ -252,6 +252,30 @@ public:
      * Convenience method using a global seed.
      */
     static float random();
+
+
+    /**
+     *   Integer random numbers, similar to C++ std::minstd_rand, with the same algorithm
+     *   and constants.  Allow additional access to internal state, for use by monkey tests,
+     *   which need to recreate previous random sequences beginning near a failure point.
+     */
+    class icu_rand {
+      public:
+        icu_rand(uint32_t seed = 1);
+        ~icu_rand();
+        void seed(uint32_t seed);
+        uint32_t operator()();
+        /**
+          * Get a seed corresponding to the current state of the generator.
+          * Seeding any generator with this value will cause it to produce the
+          * same sequence as this one will from this point forward.
+          */
+        uint32_t getSeed();
+      private:
+        uint32_t fLast;
+    };
+
+
 
     enum { kMaxProps = 16 };
 
@@ -320,7 +344,7 @@ private:
     int32_t     dataErrorCount;
     IntlTest*   caller;
     char*       testPath;           // specifies subtests
-    
+
     char basePath[1024];
     char currName[1024]; // current test name
 
