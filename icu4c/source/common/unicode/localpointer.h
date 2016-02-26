@@ -185,6 +185,8 @@ private:
 template<typename T>
 class LocalPointer : public LocalPointerBase<T> {
 public:
+    using LocalPointerBase<T>::operator*;
+    using LocalPointerBase<T>::operator->;
     /**
      * Constructor takes ownership.
      * @param p simple pointer to an object that is adopted
@@ -335,6 +337,8 @@ public:
 template<typename T>
 class LocalArray : public LocalPointerBase<T> {
 public:
+    using LocalPointerBase<T>::operator*;
+    using LocalPointerBase<T>::operator->;
     /**
      * Constructor takes ownership.
      * @param p simple pointer to an array of T objects that is adopted
@@ -501,6 +505,8 @@ public:
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
     class LocalPointerClassName : public LocalPointerBase<Type> { \
     public: \
+        using LocalPointerBase<Type>::operator*; \
+        using LocalPointerBase<Type>::operator->; \
         explicit LocalPointerClassName(Type *p=NULL) : LocalPointerBase<Type>(p) {} \
         LocalPointerClassName(LocalPointerClassName &&src) U_NOEXCEPT \
                 : LocalPointerBase<Type>(src.ptr) { \
@@ -533,6 +539,8 @@ public:
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
     class LocalPointerClassName : public LocalPointerBase<Type> { \
     public: \
+        using LocalPointerBase<Type>::operator*; \
+        using LocalPointerBase<Type>::operator->; \
         explicit LocalPointerClassName(Type *p=NULL) : LocalPointerBase<Type>(p) {} \
         ~LocalPointerClassName() { closeFunction(ptr); } \
         LocalPointerClassName &moveFrom(LocalPointerClassName &src) U_NOEXCEPT { \
