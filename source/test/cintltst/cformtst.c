@@ -46,7 +46,9 @@ void addFormatTest(TestNode** root)
     addDateForTest(root);
     addDateTimePatternGeneratorTest(root);
     addDateIntervalFormatTest(root);
+#if !UCONFIG_NO_BREAK_ITERATION
     addRelativeDateFormatTest(root);
+#endif /* !UCONFIG_NO_BREAK_ITERATION */
     addNumForTest(root);
     addNumFrDepTest(root);
     addMsgForTest(root);

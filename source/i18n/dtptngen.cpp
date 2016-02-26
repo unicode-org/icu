@@ -399,6 +399,16 @@ DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status) {
 } // DateTimePatternGenerator::initData
 
 UnicodeString
+DateTimePatternGenerator::getSkeleton(const UnicodeString& pattern, UErrorCode&
+/*status*/) {
+    FormatParser fp;
+    DateTimeMatcher matcher;
+    PtnSkeleton localSkeleton;
+    matcher.set(pattern, &fp, localSkeleton);
+    return localSkeleton.getSkeleton();
+}
+
+UnicodeString
 DateTimePatternGenerator::staticGetSkeleton(
         const UnicodeString& pattern, UErrorCode& /*status*/) {
     FormatParser fp;
@@ -406,6 +416,15 @@ DateTimePatternGenerator::staticGetSkeleton(
     PtnSkeleton localSkeleton;
     matcher.set(pattern, &fp, localSkeleton);
     return localSkeleton.getSkeleton();
+}
+
+UnicodeString
+DateTimePatternGenerator::getBaseSkeleton(const UnicodeString& pattern, UErrorCode& /*status*/) {
+    FormatParser fp;
+    DateTimeMatcher matcher;
+    PtnSkeleton localSkeleton;
+    matcher.set(pattern, &fp, localSkeleton);
+    return localSkeleton.getBaseSkeleton();
 }
 
 UnicodeString
