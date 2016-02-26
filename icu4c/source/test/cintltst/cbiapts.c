@@ -543,7 +543,7 @@ static void TestBreakIteratorRules() {
      *             keep together 'abc', but only when followed by 'def', OTHERWISE
      *             just return one char at a time.
      */
-    char         rules[]  = "abc{666}/def;\n   [\\p{L} - [a]]* {2};  . {1};";
+    char         rules[]  = "abc/def{666};\n   [\\p{L} - [a]]* {2};  . {1};";
     /*                        0123456789012345678 */
     char         data[]   =  "abcdex abcdefgh-def";     /* the test data string                     */
     char         breaks[] =  "**    **  *    **  *";    /*  * the expected break positions          */

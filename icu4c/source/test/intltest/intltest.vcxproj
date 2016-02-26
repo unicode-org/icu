@@ -238,6 +238,7 @@
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <ClCompile Include="rbbitst.cpp" />
+    <ClCompile Include="rbbimonkeytest.cpp" />
     <ClCompile Include="itspoof.cpp" />
     <ClCompile Include="allcoll.cpp" />
     <ClCompile Include="alphaindextst.cpp" />
@@ -434,6 +435,7 @@
     <ClInclude Include="itrbbi.h" />
     <ClInclude Include="rbbiapts.h" />
     <ClInclude Include="rbbitst.h" />
+    <ClInclude Include="rbbimonkeytest.h" />
     <ClInclude Include="itspoof.h" />
     <ClInclude Include="allcoll.h" />
     <ClInclude Include="alphaindextst.h" />

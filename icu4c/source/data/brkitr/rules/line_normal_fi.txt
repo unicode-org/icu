@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2015  International Business Machines Corporation and
+# Copyright (c) 2002-2016  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line_normal_fi.txt
@@ -269,7 +269,7 @@ $GLcm $CANT_CM;
 #            [^SP BA HY] x GL
 #
 [[$LB8NonBreaks] - [$SP $BA $HH $HY]] $CM* $GLcm;
-$CM+ GLcm;
+$CM+ $GLcm;
 
 
 

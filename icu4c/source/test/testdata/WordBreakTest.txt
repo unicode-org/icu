@@ -1,5 +1,7 @@
 ﻿# WordBreakTest-8.0.0.txt
 # Date: 2015-05-02, 14:48:55 GMT [MD]
+
+# Hand Patched for Emoji breaking proposal L2/16-011R3
 #
 # Unicode Character Database
 # Copyright (c) 1991-2015 Unicode, Inc.
@@ -1392,13 +1394,13 @@
 ÷ 2060 ÷ 0043 × 2060 × 002E × 2060 × 0044 × 2060 × 2060 ÷	#  ÷ [0.2] WORD JOINER (Format_FE) ÷ [999.0] LATIN CAPITAL LETTER C (ALetter) × [4.0] WORD JOINER (Format_FE) × [6.0] FULL STOP (MidNumLet) × [4.0] WORD JOINER (Format_FE) × [7.0] LATIN CAPITAL LETTER D (ALetter) × [4.0] WORD JOINER (Format_FE) × [4.0] WORD JOINER (Format_FE) ÷ [0.3]
 ÷ 0061 ÷ 1F1E6 ÷ 0062 ÷	#  ÷ [0.2] LATIN SMALL LETTER A (ALetter) ÷ [999.0] REGIONAL INDICATOR SYMBOL LETTER A (Regional_Indicator) ÷ [999.0] LATIN SMALL LETTER B (ALetter) ÷ [0.3]
 ÷ 1F1F7 × 1F1FA ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER R (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER U (Regional_Indicator) ÷ [0.3]
-÷ 1F1F7 × 1F1FA × 1F1F8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER R (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER U (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER S (Regional_Indicator) ÷ [0.3]
-÷ 1F1F7 × 1F1FA × 1F1F8 × 1F1EA ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER R (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER U (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER S (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER E (Regional_Indicator) ÷ [0.3]
+÷ 1F1F7 × 1F1FA ÷ 1F1F8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER R (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER U (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER S (Regional_Indicator) ÷ [0.3]
+÷ 1F1F7 × 1F1FA ÷ 1F1F8 × 1F1EA ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER R (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER U (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER S (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER E (Regional_Indicator) ÷ [0.3]
 ÷ 1F1F7 × 1F1FA ÷ 200B ÷ 1F1F8 × 1F1EA ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER R (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER U (Regional_Indicator) ÷ [999.0] ZERO WIDTH SPACE (Other) ÷ [999.0] REGIONAL INDICATOR SYMBOL LETTER S (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER E (Regional_Indicator) ÷ [0.3]
 ÷ 05D0 × 0022 × 05D0 ÷	#  ÷ [0.2] HEBREW LETTER ALEF (Hebrew_Letter) × [7.2] QUOTATION MARK (Double_Quote) × [7.3] HEBREW LETTER ALEF (Hebrew_Letter) ÷ [0.3]
-÷ 1F1E6 × 1F1E7 × 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER B (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER C (Regional_Indicator) ÷ [0.3]
-÷ 1F1E6 × 200D × 1F1E7 × 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Regional_Indicator) × [4.0] ZERO WIDTH JOINER (Extend_FE) × [13.3] REGIONAL INDICATOR SYMBOL LETTER B (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER C (Regional_Indicator) ÷ [0.3]
-÷ 1F1E6 × 1F1E7 × 200D × 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER B (Regional_Indicator) × [4.0] ZERO WIDTH JOINER (Extend_FE) × [13.3] REGIONAL INDICATOR SYMBOL LETTER C (Regional_Indicator) ÷ [0.3]
+÷ 1F1E6 × 1F1E7 ÷ 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER B (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER C (Regional_Indicator) ÷ [0.3]
+÷ 1F1E6 × 200D × 1F1E7 ÷ 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Regional_Indicator) × [4.0] ZERO WIDTH JOINER (Extend_FE) × [13.3] REGIONAL INDICATOR SYMBOL LETTER B (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER C (Regional_Indicator) ÷ [0.3]
+÷ 1F1E6 × 1F1E7 × 200D ÷ 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Regional_Indicator) × [13.3] REGIONAL INDICATOR SYMBOL LETTER B (Regional_Indicator) × [4.0] ZERO WIDTH JOINER (Extend_FE) × [13.3] REGIONAL INDICATOR SYMBOL LETTER C (Regional_Indicator) ÷ [0.3]
 ÷ 0020 × 200D ÷ 0646 ÷	#  ÷ [0.2] SPACE (Other) × [4.0] ZERO WIDTH JOINER (Extend_FE) ÷ [999.0] ARABIC LETTER NOON (ALetter) ÷ [0.3]
 ÷ 0646 × 200D ÷ 0020 ÷	#  ÷ [0.2] ARABIC LETTER NOON (ALetter) × [4.0] ZERO WIDTH JOINER (Extend_FE) ÷ [999.0] SPACE (Other) ÷ [0.3]
 ÷ 0031 ÷ 003A ÷ 003A ÷ 0031 ÷	#  ÷ [0.2] DIGIT ONE (Numeric) ÷ [999.0] COLON (MidLetter) ÷ [999.0] COLON (MidLetter) ÷ [999.0] DIGIT ONE (Numeric) ÷ [0.3]

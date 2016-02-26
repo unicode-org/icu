@@ -3645,6 +3645,16 @@ icu4c/source/test/testdata/NumberFormatTestCases.txt svneol=native#text/plain%3B
 icu4c/source/test/testdata/SentenceBreakTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/WordBreakTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/test/testdata/break_rules/grapheme.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/line.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/line_loose.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/line_loose_cj.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/line_normal.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/line_normal_cj.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/readme.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/sentence.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/word.txt svneol=native#text/plain
+icu4c/source/test/testdata/break_rules/word_POSIX.txt svneol=native#text/plain
 icu4c/source/test/testdata/calendar.txt svneol=native#text/plain
 icu4c/source/test/testdata/casing.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/collationtest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
