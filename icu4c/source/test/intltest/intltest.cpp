@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2015, International Business Machines Corporation and
+ * Copyright (c) 1997-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1789,6 +1789,39 @@ float IntlTest::random(int32_t* seedp) {
 float IntlTest::random() {
     return random(&RAND_SEED);
 }
+
+
+/*
+ * Integer random number class implementation.
+ * Similar to C++ std::minstd_rand, with the same algorithm & constants.
+ */
+IntlTest::icu_rand::icu_rand(uint32_t seed) {
+    seed = seed % 2147483647UL;
+    if (seed == 0) {
+        seed = 1;
+    }
+    fLast = seed;
+}
+
+IntlTest::icu_rand::~icu_rand() {};
+
+void IntlTest::icu_rand::seed(uint32_t seed) {
+    if (seed == 0) {
+        seed = 1;
+    }
+    fLast = seed;
+}
+
+uint32_t IntlTest::icu_rand::operator() () {
+    fLast = ((uint64_t)fLast * 48271UL) % 2147483647UL;
+    return fLast;
+}
+
+uint32_t IntlTest::icu_rand::getSeed() {
+    return (uint32_t) fLast;
+}
+
+
 
 static inline UChar toHex(int32_t i) {
     return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10)));

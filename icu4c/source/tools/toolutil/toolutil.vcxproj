@@ -271,7 +271,7 @@
     <ClCompile Include="toolutil.cpp">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
-    <ClCompile Include="ucbuf.c" />
+    <ClCompile Include="ucbuf.cpp" />
     <ClCompile Include="ucm.c" />
     <ClCompile Include="ucmstate.c" />
     <ClCompile Include="unewdata.c" />

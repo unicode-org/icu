@@ -52,6 +52,7 @@ public:
     struct RBBIRuleChar {
         UChar32             fChar;
         UBool               fEscaped;
+        RBBIRuleChar() : fChar(0), fEscaped(FALSE) {};
     };
 
     RBBIRuleScanner(RBBIRuleBuilder  *rb);
@@ -126,6 +127,8 @@ private:
 
     UBool                          fLookAheadRule;   // True if the rule includes a '/'
                                                      //   somewhere within it.
+
+    UBool                          fNoChainInRule;   // True if the current rule starts with a '^'.
 
     RBBISymbolTable               *fSymbolTable;     // symbol table, holds definitions of
                                                      //   $variable symbols.
