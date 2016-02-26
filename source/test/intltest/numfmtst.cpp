@@ -8104,7 +8104,7 @@ void NumberFormatTest::TestCurrencyUsage() {
     // compare the Currency and Currency Cash Digits
     // Note that as of CLDR 26:
     // * TWD switches from 0 decimals to 2; PKR still has 0, so change test to that
-    // * CAD and all other currencies that rounded to .05 no longer do
+    // * CAD rounds to .05 in cash mode only
     // 1st time for getter/setter, 2nd time for factory method
     Locale enUS_PKR("en_US@currency=PKR");
 
@@ -8166,7 +8166,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString cash_rounding_currency;
         fmt->format(agent, cash_rounding_currency);
-        assertEquals("Test Currency Usage 4", UnicodeString("CA$123.57"), cash_rounding_currency);
+        assertEquals("Test Currency Usage 4", UnicodeString("CA$123.55"), cash_rounding_currency);
         delete fmt;
     }
 
@@ -8189,6 +8189,7 @@ void NumberFormatTest::TestCurrencyUsage() {
         }
 
         UnicodeString cur_original;
+        fmt->setCurrencyUsage(UCURR_USAGE_STANDARD, &status);
         fmt->format(agent, cur_original);
         assertEquals("Test Currency Usage 5", UnicodeString("CA$123.57"), cur_original);
 
