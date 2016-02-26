@@ -4138,7 +4138,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // compare the Currency and Currency Cash Digits
         // Note that as of CLDR 26:
         // * TWD switches from 0 decimals to 2; PKR still has 0, so change test to that
-        // * CAD and all other currencies that rounded to .05 no longer do
+        // * CAD rounds to .05 in the cash style only.
         for (int i = 0; i < 2; i++) {
             String original_expected = "PKR124";
             DecimalFormat custom = null;
@@ -4186,7 +4186,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
 
             String cash_rounding_currency = fmt.format(123.567);
-            String cash__rounding_currency_expected = "CA$123.57";
+            String cash__rounding_currency_expected = "CA$123.55";
             assertEquals("Test Currency Context", cash__rounding_currency_expected, cash_rounding_currency);
         }
 
