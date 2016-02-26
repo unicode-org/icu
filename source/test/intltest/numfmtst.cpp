@@ -8734,6 +8734,25 @@ void NumberFormatTest::verifyFieldPositionIterator(
     }
 }
 
+void NumberFormatTest::checkExceptionIssue11735() {
+    UErrorCode status;
+    Locale enLocale("en");
+    DecimalFormatSymbols symbols(enLocale, status);
 
+    if (U_FAILURE(status)) {
+      errln((UnicodeString)
+            "Fail: Construct DecimalFormatSymbols");
+    }
+
+    DecimalFormat fmt("0", symbols, status);
+    if (U_FAILURE(status)) {
+      errln((UnicodeString)
+            "Fail: Construct DecimalFormat formatter");
+    }
+
+    ParsePosition ppos(0);
+    fmt.parseCurrency("53.45", ppos);  // NPE thrown here in ICU4J.
+    assertEquals("Issue11735 ppos", 0, ppos.getIndex());
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
