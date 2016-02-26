@@ -498,6 +498,7 @@ void SimpleFormatterTest::TestFormatReplaceNoOptimizationNoOffsets() {
 }
 
 void SimpleFormatterTest::TestQuotingLikeMessageFormat() {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern = "{0} don't can''t '{5}''}{a' again '}'{1} to the '{end";
     SimpleFormatter spf(pattern, status);
@@ -509,6 +510,7 @@ void SimpleFormatterTest::TestQuotingLikeMessageFormat() {
     FieldPosition ignore(FieldPosition::DONT_CARE);
     assertEquals("MessageFormat", expected, mf.format(values, 2, result, ignore, status));
     assertEquals("SimpleFormatter", expected, spf.format(x, y, result.remove(), status));
+#endif /* !UCONFIG_NO_FORMATTING */
 }
 
 void SimpleFormatterTest::verifyOffsets(
