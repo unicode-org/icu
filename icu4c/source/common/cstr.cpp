@@ -15,11 +15,11 @@ U_NAMESPACE_BEGIN
 
 CStr::CStr(const UnicodeString &in) {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t length = in.extract(0, in.length(), NULL, (uint32_t)0, US_INV);
+    int32_t length = in.extract(0, in.length(), NULL, (uint32_t)0);
     int32_t resultCapacity = 0;
     char *buf = s.getAppendBuffer(length, length, resultCapacity, status);
     if (U_SUCCESS(status)) {
-        in.extract(0, in.length(), buf, resultCapacity, US_INV);
+        in.extract(0, in.length(), buf, resultCapacity);
         s.append(buf, length, status);
     }
 }
