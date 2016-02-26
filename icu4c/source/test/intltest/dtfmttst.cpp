@@ -5064,11 +5064,11 @@ void DateFormatTest::TestDayPeriodWithLocales() {
 
     sdf.applyPattern(UnicodeString("hh:mm:ss BBBB"));
 
-    assertEquals("hh:mm:ss BBBB | 22:00:00 | ee", "10:00:00 zã",
+    assertEquals("hh:mm:ss BBBB | 22:00:00 | ee", UnicodeString("10:00:00 z\\u00E3").unescape(),
         sdf.format(k220000, out.remove()));
-    assertEquals("hh:mm:ss BBBB | 00:00:00 | ee", "12:00:00 zã",
+    assertEquals("hh:mm:ss BBBB | 00:00:00 | ee", UnicodeString("12:00:00 z\\u00E3").unescape(),
         sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm:ss BBBB | 01:00:00 | ee", "01:00:00 zã",
+    assertEquals("hh:mm:ss BBBB | 01:00:00 | ee", UnicodeString("01:00:00 z\\u00E3").unescape(),
         sdf.format(k010000, out.remove()));
 
     // Locale root has rules for AM/PM only.
@@ -5108,12 +5108,12 @@ void DateFormatTest::TestDayPeriodWithLocales() {
 
     // Locale es_CO should not fall back to es and should have a
     // different string for 1 in the morning.
-    // (es_CO: "de la mañana" vs. es: "de la madrugada")
+    // (es_CO: "de la manana" (first n has a tilde) vs. es: "de la madrugada")
     sdf = SimpleDateFormat(UnicodeString(), Locale("es_CO"), errorCode);
     sdf.setTimeZone(*tz);
 
     sdf.applyPattern(UnicodeString("hh:mm:ss BBBB"));
-    assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", "01:00:00 de la mañana",
+    assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", UnicodeString("01:00:00 de la ma\\u00F1ana").unescape(),
         sdf.format(k010000, out.remove()));
 
     sdf = SimpleDateFormat(UnicodeString(), Locale("es"), errorCode);
