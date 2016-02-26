@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2015, International Business Machines Corporation and
+* Copyright (C) 2007-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -142,9 +142,12 @@ public:
      * @return skeleton such as "MMMdd"
      * @stable ICU 3.8
      */
-    UnicodeString getSkeleton(const UnicodeString& pattern, UErrorCode& status) {
+    UnicodeString getSkeleton(const UnicodeString& pattern, UErrorCode& status); /* {
+        The function is commented out because it is a stable API calling a draft API.
+        After staticGetSkeleton becomes stable, staticGetSkeleton can be used and
+        these comments and the definition of getSkeleton in dtptngen.cpp should be removed.
         return staticGetSkeleton(pattern, status);
-    }
+    }*/
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -178,9 +181,12 @@ public:
      * @return base skeleton, such as "MMMd"
      * @stable ICU 3.8
      */
-    UnicodeString getBaseSkeleton(const UnicodeString& pattern, UErrorCode& status) {
+    UnicodeString getBaseSkeleton(const UnicodeString& pattern, UErrorCode& status); /* {
+        The function is commented out because it is a stable API calling a draft API.
+        After staticGetBaseSkeleton becomes stable, staticGetBaseSkeleton can be used and
+        these comments and the definition of getBaseSkeleton in dtptngen.cpp should be removed.
         return staticGetBaseSkeleton(pattern, status);
-    }
+    }*/
 
     /**
      * Adds a pattern to the generator. If the pattern has the same skeleton as
