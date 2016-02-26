@@ -19,10 +19,13 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.format.IntlTestDecimalFormatAPIC.FieldContainer;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
@@ -4377,5 +4380,123 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ParsePosition ppos = new ParsePosition(0);
         assertEquals("Currency symbol missing in parse. Expect null result.",
                 fmt.parseCurrency("53.45", ppos), null);
+    }
+
+    // Testing for Issue 11914, missing FieldPositions for some field types.
+    public void TestNPEIssue11914() {
+        List<FieldContainer> v1 = new ArrayList<FieldContainer>(7);
+        v1.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
+        v1.add(new FieldContainer(3, 4, NumberFormat.Field.GROUPING_SEPARATOR));
+        v1.add(new FieldContainer(4, 7, NumberFormat.Field.INTEGER));
+        v1.add(new FieldContainer(7, 8, NumberFormat.Field.GROUPING_SEPARATOR));
+        v1.add(new FieldContainer(8, 11, NumberFormat.Field.INTEGER));
+        v1.add(new FieldContainer(11, 12, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v1.add(new FieldContainer(12, 15, NumberFormat.Field.FRACTION));
+        
+        List<FieldContainer> result = new ArrayList<FieldContainer>();
+
+        Number number = new Double(123456789.9753);
+        ULocale usLoc = new ULocale("en-US");
+        DecimalFormatSymbols US = new DecimalFormatSymbols(usLoc);
+
+        DecimalFormat outFmt = new DecimalFormat();
+        String numFmtted = outFmt.format(number);
+        AttributedCharacterIterator iterator =
+                outFmt.formatToCharacterIterator(number);
+        while (iterator.getIndex() != iterator.getEndIndex()) {
+            int start = iterator.getRunStart();
+            int end = iterator.getRunLimit();
+            Iterator it = iterator.getAttributes().keySet().iterator();
+            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
+            Object value = iterator.getAttribute(attribute);
+            result.add(new FieldContainer(start, end, attribute, value));
+            iterator.setIndex(end);
+        }
+        assertTrue("Comparing vector results", v1.size() == result.size() && v1.containsAll(result));
+        Set<AttributedCharacterIterator.Attribute> resultUS  = iterator.getAllAttributeKeys();
+        assertEquals("comparing vector sizes", 4, resultUS.size());
+        
+        List<FieldContainer> v2 = new ArrayList<FieldContainer>(7);
+        v2.add(new FieldContainer(0, 1, NumberFormat.Field.INTEGER));
+        v2.add(new FieldContainer(1, 2, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v2.add(new FieldContainer(2, 5, NumberFormat.Field.FRACTION));
+        v2.add(new FieldContainer(5, 6, NumberFormat.Field.EXPONENT_SYMBOL));
+        v2.add(new FieldContainer(6, 7, NumberFormat.Field.EXPONENT_SIGN));
+        v2.add(new FieldContainer(7, 8, NumberFormat.Field.EXPONENT));
+        DecimalFormat fmt2 = new DecimalFormat("0.###E+0", US);
+        
+        List<FieldContainer> result2 = new ArrayList<FieldContainer>();
+
+        numFmtted = fmt2.format(number);
+        iterator = fmt2.formatToCharacterIterator(number);
+        while (iterator.getIndex() != iterator.getEndIndex()) {
+            int start = iterator.getRunStart();
+            int end = iterator.getRunLimit();
+            Iterator it = iterator.getAttributes().keySet().iterator();
+            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
+            Object value = iterator.getAttribute(attribute);
+            result2.add(new FieldContainer(start, end, attribute, value));
+            iterator.setIndex(end);
+        }
+        assertTrue("Comparing vector results", v2.size() == result2.size() && v2.containsAll(result2));
+        
+        List<FieldContainer> v3 = new ArrayList<FieldContainer>(7);
+        v3.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
+        v3.add(new FieldContainer(1, 2, NumberFormat.Field.INTEGER));
+        v3.add(new FieldContainer(2, 3, NumberFormat.Field.GROUPING_SEPARATOR));
+        v3.add(new FieldContainer(3, 6, NumberFormat.Field.INTEGER));
+        v3.add(new FieldContainer(6, 7, NumberFormat.Field.GROUPING_SEPARATOR));
+        v3.add(new FieldContainer(7, 10, NumberFormat.Field.INTEGER));
+        v3.add(new FieldContainer(10, 11, NumberFormat.Field.GROUPING_SEPARATOR));
+        v3.add(new FieldContainer(11, 14, NumberFormat.Field.INTEGER));
+        v3.add(new FieldContainer(14, 15, NumberFormat.Field.GROUPING_SEPARATOR));
+        v3.add(new FieldContainer(15, 18, NumberFormat.Field.INTEGER));
+        v3.add(new FieldContainer(18, 19, NumberFormat.Field.GROUPING_SEPARATOR));
+        v3.add(new FieldContainer(19, 22, NumberFormat.Field.INTEGER));
+        v3.add(new FieldContainer(22, 23, NumberFormat.Field.GROUPING_SEPARATOR));
+        v3.add(new FieldContainer(23, 26, NumberFormat.Field.INTEGER));
+        BigInteger bigNumberInt = new BigInteger("-1234567890246813579");
+        String fmtNumberBigIntExp = fmt2.format(bigNumberInt);
+        String fmtNumberBigInt = outFmt.format(bigNumberInt);
+
+        List<FieldContainer> result3 = new ArrayList<FieldContainer>();
+        iterator = outFmt.formatToCharacterIterator(bigNumberInt);
+        while (iterator.getIndex() != iterator.getEndIndex()) {
+            int start = iterator.getRunStart();
+            int end = iterator.getRunLimit();
+            Iterator it = iterator.getAttributes().keySet().iterator();
+            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
+            Object value = iterator.getAttribute(attribute);
+            result3.add(new FieldContainer(start, end, attribute, value));
+            iterator.setIndex(end);
+        }
+       assertTrue("Comparing vector results for " + fmtNumberBigInt, v3.size() == result3.size() && v3.containsAll(result3));
+   
+        List<FieldContainer> v4 = new ArrayList<FieldContainer>(7);
+        v4.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
+        v4.add(new FieldContainer(1, 2, NumberFormat.Field.INTEGER));
+        v4.add(new FieldContainer(2, 3, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v4.add(new FieldContainer(3, 6, NumberFormat.Field.FRACTION));
+        v4.add(new FieldContainer(6, 7, NumberFormat.Field.EXPONENT_SYMBOL));
+        v4.add(new FieldContainer(7, 8, NumberFormat.Field.EXPONENT_SIGN));
+        v4.add(new FieldContainer(8, 9, NumberFormat.Field.EXPONENT));
+        
+        java.math.BigDecimal numberBigD = new java.math.BigDecimal(-123456789);
+        String fmtNumberBigDExp = fmt2.format(numberBigD);
+        String fmtNumberBigD = outFmt.format(numberBigD);
+
+        List<FieldContainer> result4 = new ArrayList<FieldContainer>();
+        iterator = fmt2.formatToCharacterIterator(numberBigD);
+        while (iterator.getIndex() != iterator.getEndIndex()) {
+            int start = iterator.getRunStart();
+            int end = iterator.getRunLimit();
+            Iterator it = iterator.getAttributes().keySet().iterator();
+            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
+            Object value = iterator.getAttribute(attribute);
+            result4.add(new FieldContainer(start, end, attribute, value));
+            iterator.setIndex(end);
+        }
+        assertTrue("Comparing vector results for " + fmtNumberBigDExp,
+                v4.size() == result4.size() && v4.containsAll(result4));
     }
 }
