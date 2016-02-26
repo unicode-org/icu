@@ -4377,5 +4377,5 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ParsePosition ppos = new ParsePosition(0);
         assertEquals("Currency symbol missing in parse. Expect null result.",
                 fmt.parseCurrency("53.45", ppos), null);
-  }
+    }
 }
