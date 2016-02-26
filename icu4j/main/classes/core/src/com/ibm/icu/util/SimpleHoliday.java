@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -94,8 +94,8 @@ public class SimpleHoliday extends Holiday {
      * @param dayOfWeek The day of the week on which this holiday occurs.
      *      The following values are legal: <ul>
      *      <li>dayOfWeek == 0 - use dayOfMonth only
-     *      <li>dayOfWeek < 0  - use last -dayOfWeek before or on dayOfMonth
-     *      <li>dayOfWeek > 0  - use first dayOfWeek after or on dayOfMonth
+     *      <li>dayOfWeek &lt; 0  - use last -dayOfWeek before or on dayOfMonth
+     *      <li>dayOfWeek &gt; 0  - use first dayOfWeek after or on dayOfMonth
      *      </ul>
      *
      * @param name  The name of this holiday.  This string is used as a key

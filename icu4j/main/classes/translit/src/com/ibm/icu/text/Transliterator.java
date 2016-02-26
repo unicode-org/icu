@@ -123,7 +123,7 @@ import com.ibm.icu.util.UResourceBundle;
  * 
  * <p>
  * Pairs of transliterators may be inverses of one another. For example, if transliterator <b>A</b> transliterates
- * characters by incrementing their Unicode value (so "abc" -> "def"), and transliterator <b>B</b> decrements character
+ * characters by incrementing their Unicode value (so "abc" -&gt; "def"), and transliterator <b>B</b> decrements character
  * values, then <b>A</b> is an inverse of <b>B</b> and vice versa. If we compose <b>A</b> with <b>B</b> in a compound
  * transliterator, the result is the indentity transliterator, that is, a transliterator that does not change its input
  * text.
@@ -134,13 +134,13 @@ import com.ibm.icu.util.UResourceBundle;
  * two transliterators: <b>AB</b>, which transliterates the character 'A' to 'B', and <b>BA</b>, which transliterates
  * 'B' to 'A'. It might seem that these are exact inverses, since
  * 
- * <blockquote>"A" x <b>AB</b> -> "B"<br>
- * "B" x <b>BA</b> -> "A"</blockquote>
+ * <blockquote>"A" x <b>AB</b> -&gt; "B"<br>
+ * "B" x <b>BA</b> -&gt; "A"</blockquote>
  * 
  * where 'x' represents transliteration. However,
  * 
- * <blockquote>"ABCD" x <b>AB</b> -> "BBCD"<br>
- * "BBCD" x <b>BA</b> -> "AACD"</blockquote>
+ * <blockquote>"ABCD" x <b>AB</b> -&gt; "BBCD"<br>
+ * "BBCD" x <b>BA</b> -&gt; "AACD"</blockquote>
  * 
  * so <b>AB</b> composed with <b>BA</b> is not the identity. Nonetheless, <b>BA</b> may be usefully considered to be
  * <b>AB</b>'s inverse, and it is on this basis that <b>AB</b><code>.getInverse()</code> could legitimately return
@@ -256,7 +256,7 @@ public abstract class Transliterator implements StringTransform  {
      * structure will be modified.  See the field descriptions for
      * details.
      *
-     * <p>contextStart <= start <= limit <= contextLimit
+     * <p>contextStart &lt;= start &lt;= limit &lt;= contextLimit
      *
      * <p>Note: All index values in this structure must be at code point
      * boundaries.  That is, none of them may occur between two code units
@@ -509,10 +509,10 @@ public abstract class Transliterator implements StringTransform  {
      * Transliterates a segment of a string, with optional filtering.
      *
      * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
+     * @param start the beginning index, inclusive; <code>0 &lt;= start
+     * &lt;= limit</code>.
+     * @param limit the ending index, exclusive; <code>start &lt;= limit
+     * &lt;= text.length()</code>.
      * @return The new limit index.  The text previously occupying <code>[start,
      * limit)</code> has been transliterated, possibly to a string of a different
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
@@ -1480,7 +1480,7 @@ public abstract class Transliterator implements StringTransform  {
      * Returns a rule string for this transliterator.  This is
      * a non-overrideable base class implementation that subclasses
      * may call.  It simply munges the ID into the correct format,
-     * that is, "foo" => "::foo".
+     * that is, "foo" =&gt; "::foo".
      * @param escapeUnprintable if true, then unprintable characters
      * will be converted to escape form backslash-'u' or
      * backslash-'U'.
@@ -1582,12 +1582,12 @@ public abstract class Transliterator implements StringTransform  {
      * <p>Warning. You might expect an empty filter to always produce an empty target.
      * However, consider the following:
      * <pre>
-     * [Pp]{}[\u03A3\u03C2\u03C3\u03F7\u03F8\u03FA\u03FB] > \';
+     * [Pp]{}[\u03A3\u03C2\u03C3\u03F7\u03F8\u03FA\u03FB] &gt; \';
      * </pre>
      * With a filter of [], you still get some elements in the target set, because this rule will still match. It could
      * be recast to the following if it were important.
      * <pre>
-     * [Pp]{([\u03A3\u03C2\u03C3\u03F7\u03F8\u03FA\u03FB])} > \' | $1;
+     * [Pp]{([\u03A3\u03C2\u03C3\u03F7\u03F8\u03FA\u03FB])} &gt; \' | $1;
      * </pre>
      * @see #getTargetSet
      * @stable ICU 2.2
@@ -1609,10 +1609,10 @@ public abstract class Transliterator implements StringTransform  {
      * For example, suppose we have:
      * <pre>
      * Global FILTER = [ax]
-     * a > b;
+     * a &gt; b;
      * :: NULL;
-     * b > c;
-     * x > d;
+     * b &gt; c;
+     * x &gt; d;
      * </pre>
      * While the filter just allows a and x, b is an intermediate result, which could produce c. So the source and target sets
      * cannot be gathered independently. What we have to do is filter the sources for the first transliterator according to
@@ -1621,8 +1621,8 @@ public abstract class Transliterator implements StringTransform  {
      * <p>There is another complication:
      * <pre>
      * Global FILTER = [ax]
-     * a > |b;
-     * b > c;
+     * a &gt;|b;
+     * b &gt;c;
      * </pre>
      * Even though b would be filtered from the input, whenever we have a backup, it could be part of the input. So ideally we will
      * change the global filter as we go.
@@ -1744,13 +1744,12 @@ public abstract class Transliterator implements StringTransform  {
     }
 
     /**
-     * Register a Transliterator object with the given ID.
+     * Register a Transliterator object.
      * 
      * <p>Because ICU may choose to cache Transliterator objects internally, this must
      * be called at application startup, prior to any calls to
      * Transliterator.getInstance to avoid undefined behavior.
      * 
-     * @param ID the ID of this transliterator
      * @param trans the Transliterator object
      */
     static void registerInstance(Transliterator trans, boolean visible) {
@@ -1779,10 +1778,10 @@ public abstract class Transliterator implements StringTransform  {
      * example, calling registerSpecialInverse("NFC", "NFD", true) causes
      * Transliterator to form the following inverse relationships:
      *
-     * <pre>NFC => NFD
-     * Any-NFC => Any-NFD
-     * NFD => NFC
-     * Any-NFD => Any-NFC</pre>
+     * <pre>NFC =&gt; NFD
+     * Any-NFC =&gt; Any-NFD
+     * NFD =&gt; NFC
+     * Any-NFD =&gt; Any-NFC</pre>
      *
      * (Without the special inverse registration, the inverse of NFC
      * would be NFC-Any.)  Note that NFD is shorthand for Any-NFD, but
@@ -1795,16 +1794,16 @@ public abstract class Transliterator implements StringTransform  {
      * factories or classes.
      *
      * <p>Only the targets are specified.  Special inverses always
-     * have the form Any-Target1 <=> Any-Target2.  The target should
+     * have the form Any-Target1 &lt;=&gt; Any-Target2.  The target should
      * have canonical casing (the casing desired to be produced when
      * an inverse is formed) and should contain no whitespace or other
      * extraneous characters.
      *
      * @param target the target against which to register the inverse
      * @param inverseTarget the inverse of target, that is
-     * Any-target.getInverse() => Any-inverseTarget
+     * Any-target.getInverse() =&gt; Any-inverseTarget
      * @param bidirectional if true, register the reverse relation
-     * as well, that is, Any-inverseTarget.getInverse() => Any-target
+     * as well, that is, Any-inverseTarget.getInverse() =&gt; Any-target
      */
     static void registerSpecialInverse(String target,
                                        String inverseTarget,

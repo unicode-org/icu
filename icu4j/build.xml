@@ -788,8 +788,9 @@
     </target>
 
     <!-- doclint in V8 is too strict to handle existing html in javadoc -->
+	<!-- doclint options are: html, accessibiltiy, missing, reference, syntax -->
     <target name="_setLintV8" unless="is.pre.java8">
-        <property name="lintParam" value="-Xdoclint:-html"/>
+        <property name="lintParam" value=""/>
     </target>
     <target name="_setLintPreV8" if="is.pre.java8">
         <property name="lintParam" value=""/>
@@ -799,6 +800,7 @@
         <echo message="JCite library path:             ${jcite.libs}"/>
         <echo message="JCite additional source path:   ${jcite.addl.src}"/>
         <echo message="Custom stylesheet:              ${docs.style.sheet}"/>
+    	<echo message="lintParam:                      ${lintParam}"/>
         <javadoc
                 destdir="${doc.dir}"
                 nodeprecatedlist="true"
@@ -832,7 +834,8 @@
         </javadoc>
     </target>
 
-    <target name="_docsWithoutJCite" unless="jcite.libs">
+    <target name="_docsWithoutJCite" unless="jcite.libs, _setLintV8, _setLintPreV8">
+        <echo message="lintParam:                      ${lintParam}"/>
         <javadoc
                 destdir="${doc.dir}"
                 nodeprecatedlist="true"
@@ -843,7 +846,7 @@
                 docencoding="UTF-8"
                 charset="UTF-8"
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
-                additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
+                additionalparam="${lintParam} -breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
                 link="${icu4j.api.doc.jdk.link}"
                 source="1.6"
                 bootclasspath="${java6.bootclasspath}">

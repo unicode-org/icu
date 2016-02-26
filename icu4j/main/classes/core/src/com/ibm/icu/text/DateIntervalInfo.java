@@ -81,7 +81,7 @@ import com.ibm.icu.util.UResourceBundle;
  * second (though we do not currently have specific intervalFormat data for
  * skeletons with seconds).
  * Those calendar fields can be defined in the following order:
- * year >  month > date > am-pm > hour >  minute > second
+ * year &gt; month &gt; date &gt; am-pm &gt; hour &gt;  minute &gt; second
  *
  * The largest different calendar fields between 2 calendars is the
  * first different calendar field in above order.

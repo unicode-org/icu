@@ -1,6 +1,6 @@
 /*
  ***************************************************************************
- * Copyright (C) 2008-2015, Google, International Business Machines Corporation
+ * Copyright (C) 2008-2016, Google, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***************************************************************************
  */
@@ -285,7 +285,7 @@ public class IdentifierInfo {
      *         to be of a script that already appears elsewhere in the identifier
      *         when possible.
      *         The alternate script computation may not be perfect. The distinction
-     *         between 0, 1 and > 1 scripts will be valid, however.
+     *         between 0, 1 and &gt; 1 scripts will be valid, however.
      * @return the number of scripts.
      * @internal
      * @deprecated This API is ICU internal only.

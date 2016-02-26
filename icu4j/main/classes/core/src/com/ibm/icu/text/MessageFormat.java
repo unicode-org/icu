@@ -96,7 +96,7 @@ import com.ibm.icu.util.ULocale.Category;
  * A numbered pattern argument is matched with a map key that contains that number
  * as an ASCII-decimal-digit string (without leading zero).
  *
- * <h4><a name="patterns">Patterns and Their Interpretation</a></h4>
+ * <h3><a name="patterns">Patterns and Their Interpretation</a></h3>
  *
  * <code>MessageFormat</code> uses patterns of the following form:
  * <blockquote><pre>
@@ -152,7 +152,7 @@ import com.ibm.icu.util.ULocale.Category;
  * shown in the table are illegal. Any <code>argStyleText</code> must
  * be a valid pattern string for the Format subclass used.
  *
- * <p><table border=1>
+ * <table border=1>
  *    <tr>
  *       <th>argType
  *       <th>argStyle
@@ -194,7 +194,7 @@ import com.ibm.icu.util.ULocale.Category;
  *       <td><code>DateFormat.getDateInstance(DateFormat.FULL, getLocale())</code>
  *    <tr>
  *       <td><i>argStyleText</i>
- *       <td><code>new SimpleDateFormat(argStyleText, getLocale())
+ *       <td><code>new SimpleDateFormat(argStyleText, getLocale())</code>
  *    <tr>
  *       <td rowspan=6><code>time</code>
  *       <td><i>(none)</i>
@@ -213,24 +213,23 @@ import com.ibm.icu.util.ULocale.Category;
  *       <td><code>DateFormat.getTimeInstance(DateFormat.FULL, getLocale())</code>
  *    <tr>
  *       <td><i>argStyleText</i>
- *       <td><code>new SimpleDateFormat(argStyleText, getLocale())
+ *       <td><code>new SimpleDateFormat(argStyleText, getLocale())</code>
  *    <tr>
  *       <td><code>spellout</code>
  *       <td><i>argStyleText (optional)</i>
  *       <td><code>new RuleBasedNumberFormat(getLocale(), RuleBasedNumberFormat.SPELLOUT)
- *           <br/>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(argStyleText);</code>
+ *           <br>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(argStyleText);</code>
  *    <tr>
  *       <td><code>ordinal</code>
  *       <td><i>argStyleText (optional)</i>
  *       <td><code>new RuleBasedNumberFormat(getLocale(), RuleBasedNumberFormat.ORDINAL)
- *           <br/>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(argStyleText);</code>
+ *           <br>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(argStyleText);</code>
  *    <tr>
  *       <td><code>duration</code>
  *       <td><i>argStyleText (optional)</i>
  *       <td><code>new RuleBasedNumberFormat(getLocale(), RuleBasedNumberFormat.DURATION)
- *           <br/>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(argStyleText);</code>
+ *           <br>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(argStyleText);</code>
  * </table>
- * <p>
  *
  * <h4><a name="diffsjdk">Differences from java.text.MessageFormat</a></h4>
  *
@@ -878,7 +877,7 @@ public class MessageFormat extends UFormat {
      * argument is <i>unavailable</i> if <code>arguments</code> is
      * <code>null</code> or has fewer than argumentIndex+1 elements.  When
      * an argument is unavailable no substitution is performed.
-     * <p>
+     *
      * <table border=1>
      *    <tr>
      *       <th>argType or Format
@@ -1048,7 +1047,7 @@ public class MessageFormat extends UFormat {
      * @throws IllegalArgumentException if an argument in
      *         <code>arguments</code> is not of the type
      *         expected by the format element(s) that use it
-     * @throws IllegalArgumentException if <code>arguments<code> is
+     * @throws IllegalArgumentException if <code>arguments</code> is
      *         an array of Object and this format uses named arguments
      * @stable ICU 3.0
      */

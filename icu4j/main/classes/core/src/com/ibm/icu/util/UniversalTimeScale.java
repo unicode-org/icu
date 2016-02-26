@@ -1,6 +1,6 @@
 /*
  *********************************************************************************
- * Copyright (C) 2004-2014, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                  *
  *********************************************************************************
  *
@@ -22,30 +22,30 @@ import com.ibm.icu.math.BigDecimal;
  * conversion back and forth between different systems.
  *
  * <p>Binary datetimes differ in a number of ways: the datatype, the unit,
- * and the epoch (origin). We refer to these as time scales.</p>
+ * and the epoch (origin). We refer to these as time scales.
  *
  * <p>ICU implements a universal time scale that is similar to the
  * .NET framework's System.DateTime. The universal time scale is a
  * 64-bit integer that holds ticks since midnight, January 1st, 0001.
  * (One tick is 100 nanoseconds.)
  * Negative values are supported. This has enough range to guarantee that
- * calculations involving dates around the present are safe.</p>
+ * calculations involving dates around the present are safe.
  *
  * <p>The universal time scale always measures time according to the
  * proleptic Gregorian calendar. That is, the Gregorian calendar's
  * leap year rules are used for all times, even before 1582 when it was
  * introduced. (This is different from the default ICU calendar which
  * switches from the Julian to the Gregorian calendar in 1582.
- * See GregorianCalendar.setGregorianChange() and ucal_setGregorianChange().)</p>
+ * See GregorianCalendar.setGregorianChange() and ucal_setGregorianChange().)
  *
  * ICU provides conversion functions to and from all other major time
  * scales, allowing datetimes in any time scale to be converted to the
  * universal time scale, safely manipulated, and converted back to any other
- * datetime time scale.</p>
+ * datetime time scale.
  *
  * <p>For more details and background, see the
  * <a href="http://www.icu-project.org/userguide/universalTimeScale.html">Universal Time Scale</a>
- * chapter in the ICU User Guide.</p>
+ * chapter in the ICU User Guide.
  *
  * @stable ICU 3.2
  */

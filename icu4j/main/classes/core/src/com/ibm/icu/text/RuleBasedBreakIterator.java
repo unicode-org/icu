@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2015 International Business Machines Corporation and
+ * Copyright (C) 2005-2016 International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -885,7 +885,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     }
 
     /**
-     * Throw IllegalArgumentException unless begin <= offset < end.
+     * Throw IllegalArgumentException unless begin &lt;= offset &lt; end.
      * @stable ICU 2.0
      */
     protected static final void checkOffset(int offset, CharacterIterator text) {
@@ -976,7 +976,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * that contain alphabetic letters, "words" that appear to be numbers,
      * punctuation and spaces, words containing ideographic characters, and
      * more.  Call <code>getRuleStatus</code> after obtaining a boundary
-     * position from <code>next()<code>, <code>previous()</code>, or 
+     * position from <code>next()</code>, <code>previous()</code>, or
      * any other break iterator functions that returns a boundary position.
      * <p>
      * @return the status from the break rule that determined the most recently

@@ -67,9 +67,9 @@ import com.ibm.icu.util.ULocale.Category;
  * Locale[] locales = NumberFormat.getAvailableLocales();
  * double myNumber = -1234.56;
  * NumberFormat format;
- * for (int j=0; j<3; ++j) {
+ * for (int j=0; j&lt;3; ++j) {
  *     System.out.println("FORMAT");
- *     for (int i = 0; i < locales.length; ++i) {
+ *     for (int i = 0; i &lt; locales.length; ++i) {
  *         if (locales[i].getCountry().length() == 0) {
  *            // Skip language-only locales
  *            continue;
@@ -86,34 +86,34 @@ import com.ibm.icu.util.ULocale.Category;
  *         try {
  *             // Assume format is a DecimalFormat
  *             System.out.print(": " + ((DecimalFormat) format).toPattern()
- *                              + " -> " + form.format(myNumber));
+ *                              + " -&gt; " + form.format(myNumber));
  *         } catch (Exception e) {}
  *         try {
- *             System.out.println(" -> " + format.parse(form.format(myNumber)));
+ *             System.out.println(" -&gt; " + format.parse(form.format(myNumber)));
  *         } catch (ParseException e) {}
  *     }
  * }</pre></blockquote>
  *
- * <p>Another example use getInstance(style).<br/>
+ * <p>Another example use getInstance(style).<br>
  * Print out a number using the localized number, currency, percent,
  * scientific, integer, iso currency, and plural currency format for each locale.
  *
  * <blockquote><pre>
  * ULocale locale = new ULocale("en_US");
  * double myNumber = 1234.56;
- * for (int j=NumberFormat.NUMBERSTYLE; j<=NumberFormat.PLURALCURRENCYSTYLE; ++j) {
+ * for (int j=NumberFormat.NUMBERSTYLE; j&lt;=NumberFormat.PLURALCURRENCYSTYLE; ++j) {
  *     NumberFormat format = NumberFormat.getInstance(locale, j);
  *     try {
  *         // Assume format is a DecimalFormat
  *         System.out.print(": " + ((DecimalFormat) format).toPattern()
- *                          + " -> " + form.format(myNumber));
+ *                          + " -&gt; " + form.format(myNumber));
  *     } catch (Exception e) {}
  *     try {
- *         System.out.println(" -> " + format.parse(form.format(myNumber)));
+ *         System.out.println(" -&gt; " + format.parse(form.format(myNumber)));
  *     } catch (ParseException e) {}
  * }</pre></blockquote>
  *
- * <h4>Patterns</h4>
+ * <h3>Patterns</h3>
  *
  * <p>A <code>DecimalFormat</code> consists of a <em>pattern</em> and a set of
  * <em>symbols</em>.  The pattern may be set directly using {@link #applyPattern}, or
@@ -146,74 +146,74 @@ import com.ibm.icu.util.ULocale.Category;
  * <blockquote>
  * <table border=0 cellspacing=3 cellpadding=0 summary="Chart showing symbol,
  *  location, localized, and meaning.">
- *   <tr bgcolor="#ccccff">
+ *   <tr style="background-color: #ccccff">
  *     <th align=left>Symbol
  *     <th align=left>Location
  *     <th align=left>Localized?
  *     <th align=left>Meaning
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>0</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Digit
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>1-9</code>
  *     <td>Number
  *     <td>Yes
  *     <td>'1' through '9' indicate rounding.
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>@</code>
  *     <td>Number
  *     <td>No
  *     <td>Significant digit
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>#</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Digit, zero shows as absent
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>.</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Decimal separator or monetary decimal separator
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>-</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Minus sign
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>,</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Grouping separator
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>E</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Separates mantissa and exponent in scientific notation.
  *         <em>Need not be quoted in prefix or suffix.</em>
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>+</code>
  *     <td>Exponent
  *     <td>Yes
  *     <td>Prefix positive exponents with localized plus sign.
  *         <em>Need not be quoted in prefix or suffix.</em>
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>;</code>
  *     <td>Subpattern boundary
  *     <td>Yes
  *     <td>Separates positive and negative subpatterns
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>%</code>
  *     <td>Prefix or suffix
  *     <td>Yes
  *     <td>Multiply by 100 and show as percentage
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>&#92;u2030</code>
  *     <td>Prefix or suffix
  *     <td>Yes
  *     <td>Multiply by 1000 and show as per mille
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>&#164;</code> (<code>&#92;u00A4</code>)
  *     <td>Prefix or suffix
  *     <td>No
@@ -223,7 +223,7 @@ import com.ibm.icu.util.ULocale.Category;
  *         "US dollar" or "US dollars" for America.
  *         If present in a pattern, the monetary decimal separator
  *         is used instead of the decimal separator.
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>'</code>
  *     <td>Prefix or suffix
  *     <td>No
@@ -231,7 +231,7 @@ import com.ibm.icu.util.ULocale.Category;
  *         for example, <code>"'#'#"</code> formats 123 to
  *         <code>"#123"</code>.  To create a single quote
  *         itself, use two in a row: <code>"# o''clock"</code>.
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>*</code>
  *     <td>Prefix or suffix boundary
  *     <td>Yes
@@ -390,7 +390,7 @@ import com.ibm.icu.util.ULocale.Category;
  * with the positive or negative prefixes and suffixes applied.  The infinity character is
  * determined by the {@link DecimalFormatSymbols} object.
  *
- * <a name="sci"><h4>Scientific Notation</h4></a>
+ * <h4><a name="sci">Scientific Notation</a></h4>
  *
  * <p>Numbers in scientific notation are expressed as the product of a mantissa and a
  * power of ten, for example, 1234 can be expressed as 1.234 x 10<sup>3</sup>. The
@@ -440,7 +440,7 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * </ul>
  *
- * <a name="sigdig"><h4>Significant Digits</h4></a>
+ * <h4><a name="sigdig">Significant Digits</a></h4>
  *
  * <code>DecimalFormat</code> has two ways of controlling how many digits are shows: (a)
  * significant digits counts, or (b) integer and fraction digit counts.  Integer and
@@ -452,31 +452,31 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * <blockquote>
  * <table border=0 cellspacing=3 cellpadding=0>
- *   <tr bgcolor="#ccccff">
+ *   <tr style="background-color: #ccccff">
  *     <th align=left>Pattern
  *     <th align=left>Minimum significant digits
  *     <th align=left>Maximum significant digits
  *     <th align=left>Number
  *     <th align=left>Output of format()
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>@@@</code>
  *     <td>3
  *     <td>3
  *     <td>12345
  *     <td><code>12300</code>
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>@@@</code>
  *     <td>3
  *     <td>3
  *     <td>0.12345
  *     <td><code>0.123</code>
- *   <tr valign=top>
+ *   <tr style="vertical-align: top;">
  *     <td><code>@@##</code>
  *     <td>2
  *     <td>4
  *     <td>3.14159
  *     <td><code>3.142</code>
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr style="vertical-align: top; background-color: #eeeeff;">
  *     <td><code>@@##</code>
  *     <td>2
  *     <td>4
@@ -1900,7 +1900,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @param text the text to parse
      * @param pos input-output position; on input, the position within text to match; must
-     *  have 0 <= pos.getIndex() < text.length(); on output, the position after the last
+     *  have 0 &lt;= pos.getIndex() &lt; text.length(); on output, the position after the last
      *  matched character. If the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
      * @stable ICU 49
@@ -3298,7 +3298,7 @@ public class DecimalFormat extends NumberFormat {
      * symbol). For a permill, set the suffixes to have "\u2031" and the multiplier to be
      * 1000.
      *
-     * <p>Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * <p>Examples: with 100, 1.23 -&gt; "123", and "123" -&gt; 1.23
      *
      * @return the multiplier
      * @stable ICU 2.0
@@ -3313,7 +3313,7 @@ public class DecimalFormat extends NumberFormat {
      * symbol). For a permill, set the suffixes to have "\u2031" and the multiplier to be
      * 1000.
      *
-     * <p>Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * <p>Examples: with 100, 1.23 -&gt; "123", and "123" -&gt; 1.23
      *
      * @param newValue the multiplier
      * @stable ICU 2.0
@@ -3347,7 +3347,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @param newValue A positive rounding increment, or <code>null</code> or
      * <code>BigDecimal(0.0)</code> to use the default rounding increment.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+     * @throws IllegalArgumentException if <code>newValue</code> is &lt; 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -3367,7 +3367,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @param newValue A positive rounding increment, or <code>null</code> or
      * <code>BigDecimal(0.0)</code> to use the default rounding increment.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+     * @throws IllegalArgumentException if <code>newValue</code> is &lt; 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -3392,7 +3392,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @param newValue A positive rounding increment, or 0.0 to use the default
      * rounding increment.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+     * @throws IllegalArgumentException if <code>newValue</code> is &lt; 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -3474,7 +3474,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @param width the width to which to pad the result of
      * <code>format()</code>, or zero to disable padding
-     * @exception IllegalArgumentException if <code>width</code> is < 0
+     * @exception IllegalArgumentException if <code>width</code> is &lt; 0
      * @see #getFormatWidth
      * @see #getPadCharacter
      * @see #setPadCharacter
@@ -3587,7 +3587,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * {@icu} Sets whether or not scientific notation is used. When scientific notation is
-     * used, the effective maximum number of integer digits is <= 8. If the maximum number
+     * used, the effective maximum number of integer digits is &lt;= 8. If the maximum number
      * of integer digits is set to more than 8, the effective maximum will be 1. This
      * allows this call to generate a 'default' scientific number format without
      * additional changes.
@@ -3623,9 +3623,9 @@ public class DecimalFormat extends NumberFormat {
      * {@icu} Sets the minimum exponent digits that will be shown. This has no effect
      * unless scientific notation is in use.
      *
-     * @param minExpDig a value >= 1 indicating the fewest exponent
+     * @param minExpDig a value &gt;= 1 indicating the fewest exponent
      * digits that will be shown
-     * @exception IllegalArgumentException if <code>minExpDig</code> < 1
+     * @exception IllegalArgumentException if <code>minExpDig</code> &lt; 1
      * @see #setScientificNotation
      * @see #isScientificNotation
      * @see #getMinimumExponentDigits
@@ -3789,8 +3789,8 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the behavior of the decimal separator with integers. (The decimal
-     * separator will always appear with decimals.)  <p> Example: Decimal ON: 12345 ->
-     * 12345.; OFF: 12345 -> 12345
+     * separator will always appear with decimals.)  <p> Example: Decimal ON: 12345 -&gt;
+     * 12345.; OFF: 12345 -&gt; 12345
      *
      * @stable ICU 2.0
      */
@@ -3826,12 +3826,12 @@ public class DecimalFormat extends NumberFormat {
      * will always appear with decimals.)
      *
      * <p>This only affects formatting, and only where there might be no digits after the
-     * decimal point, e.g., if true, 3456.00 -> "3,456." if false, 3456.00 -> "3456" This
+     * decimal point, e.g., if true, 3456.00 -&gt; "3,456." if false, 3456.00 -&gt; "3456" This
      * is independent of parsing. If you want parsing to stop at the decimal point, use
      * setParseIntegerOnly.
      *
      * <p>
-     * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
+     * Example: Decimal ON: 12345 -&gt; 12345.; OFF: 12345 -&gt; 12345
      *
      * @stable ICU 2.0
      */
@@ -4561,7 +4561,7 @@ public class DecimalFormat extends NumberFormat {
      * typical end-user desire; use setMaximumInteger if you want to set a real value. For
      * negative numbers, use a second pattern, separated by a semicolon
      *
-     * <p>Example "#,#00.0#" -> 1,234.56
+     * <p>Example "#,#00.0#" -&gt; 1,234.56
      *
      * <p>This means a minimum of 2 integer digits, 1 fraction digit, and a maximum of 2
      * fraction digits.
@@ -4587,7 +4587,7 @@ public class DecimalFormat extends NumberFormat {
      * typical end-user desire; use setMaximumInteger if you want to set a real value. For
      * negative numbers, use a second pattern, separated by a semicolon
      *
-     * <p>Example "#,#00.0#" -> 1,234.56
+     * <p>Example "#,#00.0#" -&gt; 1,234.56
      *
      * <p>This means a minimum of 2 integer digits, 1 fraction digit, and a maximum of 2
      * fraction digits.
@@ -5631,7 +5631,7 @@ public class DecimalFormat extends NumberFormat {
     private boolean useSignificantDigits = false;
 
     /**
-     * The minimum number of significant digits to show. Must be >= 1 and <=
+     * The minimum number of significant digits to show. Must be &gt;= 1 and &lt;=
      * maxSignificantDigits. Ignored unless useSignificantDigits == true.
      *
      * @serial
@@ -5640,7 +5640,7 @@ public class DecimalFormat extends NumberFormat {
     private int minSignificantDigits = 1;
 
     /**
-     * The maximum number of significant digits to show. Must be >=
+     * The maximum number of significant digits to show. Must be &gt;=
      * minSignficantDigits. Ignored unless useSignificantDigits == true.
      *
      * @serial
@@ -5733,7 +5733,7 @@ public class DecimalFormat extends NumberFormat {
     private MathContext mathContext = new MathContext(0, MathContext.PLAIN);
 
     /**
-     * The padded format width, or zero if there is no padding. Must be >= 0. Default
+     * The padded format width, or zero if there is no padding. Must be &gt;= 0. Default
      * value zero.
      *
      * @serial

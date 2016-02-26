@@ -248,7 +248,7 @@ public class PluralRules implements Serializable {
 
         /**
          * Returns the 'functionally equivalent' locale with respect to plural rules. Calling PluralRules.forLocale with
-         * the functionally equivalent locale, and with the provided locale, returns rules that behave the same. <br/>
+         * the functionally equivalent locale, and with the provided locale, returns rules that behave the same. <br>
          * All locales with the same functionally equivalent locale have plural rules that behave the same. This is not
          * exaustive; there may be other locales whose plural rules behave the same that do not have the same equivalent
          * locale.
@@ -256,7 +256,7 @@ public class PluralRules implements Serializable {
          * @param locale
          *            the locale to check
          * @param isAvailable
-         *            if not null and of length > 0, this will hold 'true' at index 0 if locale is directly defined
+         *            if not null and of length &gt; 0, this will hold 'true' at index 0 if locale is directly defined
          *            (without fallback) as having plural rules
          * @return the functionally-equivalent locale
          * @internal
@@ -2141,14 +2141,14 @@ public class PluralRules implements Serializable {
      * Returns the 'functionally equivalent' locale with respect to
      * plural rules.  Calling PluralRules.forLocale with the functionally equivalent
      * locale, and with the provided locale, returns rules that behave the same.
-     * <br/>
+     * <br>
      * All locales with the same functionally equivalent locale have
      * plural rules that behave the same.  This is not exaustive;
      * there may be other locales whose plural rules behave the same
      * that do not have the same equivalent locale.
      *
      * @param locale the locale to check
-     * @param isAvailable if not null and of length > 0, this will hold 'true' at
+     * @param isAvailable if not null and of length &gt; 0, this will hold 'true' at
      * index 0 if locale is directly defined (without fallback) as having plural rules
      * @return the functionally-equivalent locale
      * @draft ICU 4.2 (retain)

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2009, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -116,9 +116,9 @@ public class ReplaceableString implements Replaceable {
      * <code>dstStart + (srcLimit-srcStart) - 1</code>.
      *
      * @param srcStart the beginning index to copy, inclusive; <code>0
-     * <= start <= limit</code>.
+     * &lt;= start &lt;= limit</code>.
      * @param srcLimit the ending index to copy, exclusive;
-     * <code>start <= limit <= length()</code>.
+     * <code>start &lt;= limit &lt;= length()</code>.
      * @param dst the destination array.
      * @param dstStart the start offset in the destination array.
      * @stable ICU 2.0
@@ -132,10 +132,10 @@ public class ReplaceableString implements Replaceable {
     /**
      * Replace zero or more characters with new characters.
      * <code>Replaceable</code> API.
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= length()</code>.
+     * @param start the beginning index, inclusive; <code>0 &lt;= start
+     * &lt;= limit</code>.
+     * @param limit the ending index, exclusive; <code>start &lt;= limit
+     * &lt;= length()</code>.
      * @param text new text to replace characters <code>start</code> to
      * <code>limit - 1</code>
      * @stable ICU 2.0
@@ -146,14 +146,14 @@ public class ReplaceableString implements Replaceable {
 
     /**
      * Replace a substring of this object with the given text.
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= length()</code>.
+     * @param start the beginning index, inclusive; <code>0 &lt;= start
+     * &lt;= limit</code>.
+     * @param limit the ending index, exclusive; <code>start &lt;= limit
+     * &lt;= length()</code>.
      * @param chars the text to replace characters <code>start</code>
      * to <code>limit - 1</code>
      * @param charsStart the beginning index into <code>chars</code>,
-     * inclusive; <code>0 <= start <= limit</code>.
+     * inclusive; <code>0 &lt;= start &lt;= limit</code>.
      * @param charsLen the number of characters of <code>chars</code>.
      * @stable ICU 2.0
      */
@@ -168,14 +168,14 @@ public class ReplaceableString implements Replaceable {
      * information.  This method is used to duplicate or reorder substrings.
      * The destination index must not overlap the source range.
      * 
-     * @param start the beginning index, inclusive; <code>0 <= start <=
+     * @param start the beginning index, inclusive; <code>0 &lt;= start &lt;=
      * limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit <=
+     * @param limit the ending index, exclusive; <code>start &lt;= limit &lt;=
      * length()</code>.
      * @param dest the destination index.  The characters from
      * <code>start..limit-1</code> will be copied to <code>dest</code>.
-     * Implementations of this method may assume that <code>dest <= start ||
-     * dest >= limit</code>.
+     * Implementations of this method may assume that <code>dest &lt;= start ||
+     * dest &gt;= limit</code>.
      * @stable ICU 2.0
      */
     public void copy(int start, int limit, int dest) {

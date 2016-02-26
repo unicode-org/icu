@@ -85,7 +85,7 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
  * All ULocale constructors automatically normalize the locale id.  To handle
  * POSIX ids, <code>canonicalize</code> can be called to convert the id
  * to canonical form, or the <code>canonicalInstance</code> factory method
- * can be called.</p>
+ * can be called.
  *
  * <p>This class provides selectors {@link #VALID_LOCALE} and {@link
  * #ACTUAL_LOCALE} intended for use in methods named
@@ -93,10 +93,10 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
  * including {@link com.ibm.icu.util.Calendar}, {@link
  * com.ibm.icu.util.Currency}, {@link com.ibm.icu.text.UFormat},
  * {@link com.ibm.icu.text.BreakIterator},
- * <a href="../text/Collator.html" title="class in com.ibm.icu.text"><code>Collator</code></a>,
+ * {@link com.ibm.icu.text.Collator},
  * {@link com.ibm.icu.text.DateFormatSymbols}, and {@link
  * com.ibm.icu.text.DecimalFormatSymbols} and their subclasses, if
- * any.  Once an object of one of these classes has been created,
+ * any. Once an object of one of these classes has been created,
  * <tt>getLocale()</tt> may be called on it to determine the valid and
  * actual locale arrived at during the object's construction.
  *
@@ -804,7 +804,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * Compares two ULocale for ordering.
-     * <p><b>Note:</b> The order might change in future.</p>
+     * <p><b>Note:</b> The order might change in future.
      * 
      * @param other the ULocale to be compared.
      * @return a negative integer, zero, or a positive integer as this ULocale is less than, equal to, or greater
@@ -3324,7 +3324,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * to {@link ULocale.Builder#setLanguageTag} which throws an exception
      * in this case.
      *
-     * <p>The following <b>conversions</b> are performed:<ul>
+     * <p>The following <b>conversions</b> are performed:
+     * <ul>
      *
      * <li>The language code "und" is mapped to language "".
      *
@@ -3356,6 +3357,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * <li>Case is normalized. Language is normalized to lower case,
      * script to title case, country to upper case, variant to upper case,
      * and extensions to lower case.
+     *
+     * </ul>
      *
      * <p>This implements the 'Language-Tag' production of BCP47, and
      * so supports grandfathered (regular and irregular) as well as

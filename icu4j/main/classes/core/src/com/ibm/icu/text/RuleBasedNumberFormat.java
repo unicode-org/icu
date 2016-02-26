@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -120,34 +120,34 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <table border="0" width="630">
  *   <tr>
- *     <td width="21"></td>
- *     <td width="257" valign="top"><strong>&lt;&lt; thousand &gt;&gt;</strong></td>
- *     <td width="340" valign="top">[the rule whose base value is 1,000 is applicable to 25,340]</td>
+ *     <td style="width: 21;"></td>
+ *     <td style="width: 257; vertical-align: top;"><strong>&lt;&lt; thousand &gt;&gt;</strong></td>
+ *     <td style="width: 340; vertical-align: top;">[the rule whose base value is 1,000 is applicable to 25,340]</td>
  *   </tr>
  *   <tr>
- *     <td width="21"></td>
- *     <td width="257" valign="top"><strong>twenty-&gt;&gt;</strong> thousand &gt;&gt;</td>
- *     <td width="340" valign="top">[25,340 over 1,000 is 25. The rule for 20 applies.]</td>
+ *     <td style="width: 21;"></td>
+ *     <td style="width: 257; vertical-align: top;"><strong>twenty-&gt;&gt;</strong> thousand &gt;&gt;</td>
+ *     <td style="width: 340; vertical-align: top;">[25,340 over 1,000 is 25. The rule for 20 applies.]</td>
  *   </tr>
  *   <tr>
- *     <td width="21"></td>
- *     <td width="257" valign="top">twenty-<strong>five</strong> thousand &gt;&gt;</td>
- *     <td width="340" valign="top">[25 mod 10 is 5. The rule for 5 is &quot;five.&quot;</td>
+ *     <td style="width: 21;"></td>
+ *     <td style="width: 257; vertical-align: top;">twenty-<strong>five</strong> thousand &gt;&gt;</td>
+ *     <td style="width: 340; vertical-align: top;">[25 mod 10 is 5. The rule for 5 is &quot;five.&quot;</td>
  *   </tr>
  *   <tr>
- *     <td width="21"></td>
- *     <td width="257" valign="top">twenty-five thousand <strong>&lt;&lt; hundred &gt;&gt;</strong></td>
- *     <td width="340" valign="top">[25,340 mod 1,000 is 340. The rule for 100 applies.]</td>
+ *     <td style="width: 21;"></td>
+ *     <td style="width: 257; vertical-align: top;">twenty-five thousand <strong>&lt;&lt; hundred &gt;&gt;</strong></td>
+ *     <td style="width: 340; vertical-align: top;">[25,340 mod 1,000 is 340. The rule for 100 applies.]</td>
  *   </tr>
  *   <tr>
- *     <td width="21"></td>
- *     <td width="257" valign="top">twenty-five thousand <strong>three</strong> hundred &gt;&gt;</td>
- *     <td width="340" valign="top">[340 over 100 is 3. The rule for 3 is &quot;three.&quot;]</td>
+ *     <td style="width: 21;"></td>
+ *     <td style="width: 257; vertical-align: top;">twenty-five thousand <strong>three</strong> hundred &gt;&gt;</td>
+ *     <td style="width: 340; vertical-align: top;">[340 over 100 is 3. The rule for 3 is &quot;three.&quot;]</td>
  *   </tr>
  *   <tr>
- *     <td width="21"></td>
- *     <td width="257" valign="top">twenty-five thousand three hundred <strong>forty</strong></td>
- *     <td width="340" valign="top">[340 mod 100 is 40. The rule for 40 applies. Since 40 divides
+ *     <td style="width: 21;"></td>
+ *     <td style="width: 257; vertical-align: top;">twenty-five thousand three hundred <strong>forty</strong></td>
+ *     <td style="width: 340; vertical-align: top;">[340 mod 100 is 40. The rule for 40 applies. Since 40 divides
  *     evenly by 10, the hyphen and substitution in the brackets are omitted.]</td>
  *   </tr>
  * </table>
@@ -209,22 +209,22 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <table border="0" width="100%">
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top"><em>bv</em>:</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;"><em>bv</em>:</td>
  *     <td valign="top"><em>bv</em> specifies the rule's base value. <em>bv</em> is a decimal
  *     number expressed using ASCII digits. <em>bv</em> may contain spaces, period, and commas,
  *     which are ignored. The rule's divisor is the highest power of 10 less than or equal to
  *     the base value.</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top"><em>bv</em>/<em>rad</em>:</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;"><em>bv</em>/<em>rad</em>:</td>
  *     <td valign="top"><em>bv</em> specifies the rule's base value. The rule's divisor is the
  *     highest power of <em>rad</em> less than or equal to the base value.</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top"><em>bv</em>&gt;:</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;"><em>bv</em>&gt;:</td>
  *     <td valign="top"><em>bv</em> specifies the rule's base value. To calculate the divisor,
  *     let the radix be 10, and the exponent be the highest exponent of the radix that yields a
  *     result less than or equal to the base value. Every &gt; character after the base value
@@ -232,8 +232,8 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     raised to the power of the exponent; otherwise, the divisor is 1.</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top"><em>bv</em>/<em>rad</em>&gt;:</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;"><em>bv</em>/<em>rad</em>&gt;:</td>
  *     <td valign="top"><em>bv</em> specifies the rule's base value. To calculate the divisor,
  *     let the radix be <em>rad</em>, and the exponent be the highest exponent of the radix that
  *     yields a result less than or equal to the base value. Every &gt; character after the radix
@@ -241,13 +241,13 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     raised to the power of the exponent; otherwise, the divisor is 1.</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top">-x:</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;">-x:</td>
  *     <td valign="top">The rule is a negative-number rule.</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top">x.x:</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;">x.x:</td>
  *     <td valign="top">The rule is an <em>improper fraction rule</em>. If the full stop in
  *     the middle of the rule name is replaced with the decimal point
  *     that is used in the language or DecimalFormatSymbols, then that rule will
@@ -258,8 +258,8 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     the punctuation of either the full stop or comma.</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top">0.x:</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;">0.x:</td>
  *     <td valign="top">The rule is a <em>proper fraction rule</em>. If the full stop in
  *     the middle of the rule name is replaced with the decimal point
  *     that is used in the language or DecimalFormatSymbols, then that rule will
@@ -270,8 +270,8 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     the punctuation of either the full stop or comma</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top">x.0:</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;">x.0:</td>
  *     <td valign="top">The rule is a <em>master rule</em>. If the full stop in
  *     the middle of the rule name is replaced with the decimal point
  *     that is used in the language or DecimalFormatSymbols, then that rule will
@@ -282,19 +282,19 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *     the punctuation of either the full stop or comma</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top">Inf:</td>
- *     <td valign="top">The rule for infinity.</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;">Inf:</td>
+ *     <td style="vertical-align: top;">The rule for infinity.</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top">NaN:</td>
- *     <td valign="top">The rule for an IEEE 754 NaN (not a number).</td>
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;">NaN:</td>
+ *     <td style="vertical-align: top;">The rule for an IEEE 754 NaN (not a number).</td>
  *   </tr>
  *   <tr>
- *     <td width="5%" valign="top"></td>
- *     <td width="8%" valign="top"><em>nothing</em></td>
- *     <td valign="top">If the rule's rule descriptor is left out, the base value is one plus the
+ *     <td style="width: 5%; vertical-align: top;"></td>
+ *     <td style="width: 8%; vertical-align: top;"><em>nothing</em></td>
+ *     <td style="vertical-align: top;">If the rule's rule descriptor is left out, the base value is one plus the
  *     preceding rule's base value (or zero if this is the first rule in the list) in a normal
  *     rule set.&nbsp; In a fraction rule set, the base value is the same as the preceding rule's
  *     base value.</td>
@@ -360,124 +360,124 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <table border="0" width="100%">
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23">&gt;&gt;</td>
- *     <td width="165" valign="top">in normal rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;">&gt;&gt;</td>
+ *     <td style="width: 165; vertical-align: top;">in normal rule</td>
  *     <td>Divide the number by the rule's divisor and format the remainder</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in negative-number rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in negative-number rule</td>
  *     <td>Find the absolute value of the number and format the result</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in fraction or master rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in fraction or master rule</td>
  *     <td>Isolate the number's fractional part and format it.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in rule in fraction rule set</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in rule in fraction rule set</td>
  *     <td>Not allowed.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23">&gt;&gt;&gt;</td>
- *     <td width="165" valign="top">in normal rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;">&gt;&gt;&gt;</td>
+ *     <td style="width: 165; vertical-align: top;">in normal rule</td>
  *     <td>Divide the number by the rule's divisor and format the remainder,
  *       but bypass the normal rule-selection process and just use the
  *       rule that precedes this one in this rule list.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in all other rules</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in all other rules</td>
  *     <td>Not allowed.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23">&lt;&lt;</td>
- *     <td width="165" valign="top">in normal rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;">&lt;&lt;</td>
+ *     <td style="width: 165; vertical-align: top;">in normal rule</td>
  *     <td>Divide the number by the rule's divisor and format the quotient</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in negative-number rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in negative-number rule</td>
  *     <td>Not allowed.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in fraction or master rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in fraction or master rule</td>
  *     <td>Isolate the number's integral part and format it.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in rule in fraction rule set</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in rule in fraction rule set</td>
  *     <td>Multiply the number by the rule's base value and format the result.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23">==</td>
- *     <td width="165" valign="top">in all rule sets</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;">==</td>
+ *     <td style="width: 165; vertical-align: top;">in all rule sets</td>
  *     <td>Format the number unchanged</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23">[]</td>
- *     <td width="165" valign="top">in normal rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;">[]</td>
+ *     <td style="width: 165; vertical-align: top;">in normal rule</td>
  *     <td>Omit the optional text if the number is an even multiple of the rule's divisor</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in negative-number rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in negative-number rule</td>
  *     <td>Not allowed.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in improper-fraction rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in improper-fraction rule</td>
  *     <td>Omit the optional text if the number is between 0 and 1 (same as specifying both an
  *     x.x rule and a 0.x rule)</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in master rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in master rule</td>
  *     <td>Omit the optional text if the number is an integer (same as specifying both an x.x
  *     rule and an x.0 rule)</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in proper-fraction rule</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in proper-fraction rule</td>
  *     <td>Not allowed.</td>
  *   </tr>
  *   <tr>
- *     <td width="37"></td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in rule in fraction rule set</td>
+ *     <td style="width: 37;"></td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in rule in fraction rule set</td>
  *     <td>Omit the optional text if multiplying the number by the rule's base value yields 1.</td>
  *   </tr>
  *   <tr>
- *     <td width="37">$(cardinal,<i>plural syntax</i>)$</td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in all rule sets</td>
+ *     <td style="width: 37;">$(cardinal,<i>plural syntax</i>)$</td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in all rule sets</td>
  *     <td>This provides the ability to choose a word based on the number divided by the radix to the power of the
  *     exponent of the base value for the specified locale, which is normally equivalent to the &lt;&lt; value.
  *     This uses the cardinal plural rules from PluralFormat. All strings used in the plural format are treated
  *     as the same base value for parsing.</td>
  *   </tr>
  *   <tr>
- *     <td width="37">$(ordinal,<i>plural syntax</i>)$</td>
- *     <td width="23"></td>
- *     <td width="165" valign="top">in all rule sets</td>
+ *     <td style="width: 37;">$(ordinal,<i>plural syntax</i>)$</td>
+ *     <td style="width: 23;"></td>
+ *     <td style="width: 165; vertical-align: top;">in all rule sets</td>
  *     <td>This provides the ability to choose a word based on the number divided by the radix to the power of the
  *     exponent of the base value for the specified locale, which is normally equivalent to the &lt;&lt; value.
  *     This uses the ordinal plural rules from PluralFormat. All strings used in the plural format are treated
@@ -490,20 +490,20 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *
  * <table border="0" width="100%">
  *   <tr>
- *     <td width="42"></td>
- *     <td width="166" valign="top">a rule set name</td>
+ *     <td style="width: 42;"></td>
+ *     <td style="width: 166; vertical-align: top;">a rule set name</td>
  *     <td>Perform the mathematical operation on the number, and format the result using the
  *     named rule set.</td>
  *   </tr>
  *   <tr>
- *     <td width="42"></td>
- *     <td width="166" valign="top">a DecimalFormat pattern</td>
+ *     <td style="width: 42;"></td>
+ *     <td style="width: 166; vertical-align: top;">a DecimalFormat pattern</td>
  *     <td>Perform the mathematical operation on the number, and format the result using a
  *     DecimalFormat with the specified pattern.&nbsp; The pattern must begin with 0 or #.</td>
  *   </tr>
  *   <tr>
- *     <td width="42"></td>
- *     <td width="166" valign="top">nothing</td>
+ *     <td style="width: 42;"></td>
+ *     <td style="width: 166; vertical-align: top;">nothing</td>
  *     <td>Perform the mathematical operation on the number, and format the result using the rule
  *     set containing the current rule, except:<ul>
  *       <li>You can't have an empty substitution descriptor with a == substitution.</li>
@@ -1220,7 +1220,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * <strong style="font-family: helvetica; color: red;">NEW</strong>
      * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigInteger.
      * @stable ICU 2.0
@@ -1232,7 +1232,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * <strong style="font-family: helvetica; color: red;">NEW</strong>
      * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigDecimal.
      * @stable ICU 2.0
@@ -1244,7 +1244,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * <strong style="font-family: helvetica; color: red;">NEW</strong>
      * Implement com.ibm.icu.text.NumberFormat:
      * Format a BigDecimal.
      * @stable ICU 2.0

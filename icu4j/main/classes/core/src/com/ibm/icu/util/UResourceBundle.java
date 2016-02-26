@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2015, International Business Machines Corporation and
+ * Copyright (C) 2004-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -83,11 +83,11 @@ import com.ibm.icu.impl.SimpleCache;
  *          UResourceBundle.getBundleInstance("com.mycompany.resources.LocaleElements", 
  *                                            "en_US", myClassLoader);
  * </pre>
- * <note>
- * Please use pass a class loader for loading non-ICU resources. Java security does not
+ *
+ * <p>Note: Please use pass a class loader for loading non-ICU resources. Java security does not
  * allow loading of resources across jar files. You must provide your class loader
  * to load the resources
- * </note>
+
  * @stable ICU 3.0
  * @author ram
  */

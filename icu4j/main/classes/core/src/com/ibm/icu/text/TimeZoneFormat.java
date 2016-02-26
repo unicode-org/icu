@@ -491,7 +491,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Returns a frozen instance of <code>TimeZoneFormat</code> for the given
-     * {@link java.text.Locale}.
+     * {@link java.util.Locale}.
      * <p><b>Note</b>: The instance returned by this method is frozen. If you want to
      * customize a TimeZoneFormat, you must use {@link #cloneAsThawed()} to get a
      * thawed copy first.
@@ -718,7 +718,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Sets the default parse options.
      * <p>
-     * <b>Note:</b> By default, an instance of <code>TimeZoneFormat></code>
+     * <b>Note:</b> By default, an instance of <code>TimeZoneFormat</code>
      * created by {#link {@link #getInstance(ULocale)} has no parse options set.
      * 
      * @param options the default parse options.
@@ -3120,7 +3120,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * @serialField _locale ULocale The locale of this TimeZoneFormat object.
      * @serialField _tznames TimeZoneNames The time zone name data.
      * @serialField _gmtPattern String The pattern string for localized GMT format.
-     * @serialField _gmtOffsetPatterns Stirng[] The array of GMT offset patterns used by localized GMT format
+     * @serialField _gmtOffsetPatterns String[] The array of GMT offset patterns used by localized GMT format
      *              (positive hour-min, positive hour-min-sec, negative hour-min, negative hour-min-sec).
      * @serialField _gmtOffsetDigits String[] The array of decimal digits used by localized GMT format
      *              (the size of array is 10).

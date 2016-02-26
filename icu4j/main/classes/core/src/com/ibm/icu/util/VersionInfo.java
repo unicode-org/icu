@@ -218,7 +218,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @param version version String in the format of "major.minor.milli.micro"
      *                or "major.minor.milli" or "major.minor" or "major",
      *                where major, minor, milli, micro are non-negative numbers
-     *                <= 255. If the trailing version numbers are
+     *                &lt;= 255. If the trailing version numbers are
      *                not specified they are taken as 0s. E.g. Version "3.1" is
      *                equivalent to "3.1.0.0".
      * @return an instance of VersionInfo with the argument version.
@@ -263,11 +263,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
 
     /**
      * Returns an instance of VersionInfo with the argument version.
-     * @param major major version, non-negative number <= 255.
-     * @param minor minor version, non-negative number <= 255.
-     * @param milli milli version, non-negative number <= 255.
-     * @param micro micro version, non-negative number <= 255.
-     * @exception IllegalArgumentException when either arguments are negative or > 255
+     * @param major major version, non-negative number &lt;= 255.
+     * @param minor minor version, non-negative number &lt;= 255.
+     * @param milli milli version, non-negative number &lt;= 255.
+     * @param micro micro version, non-negative number &lt;= 255.
+     * @exception IllegalArgumentException when either arguments are negative or &gt; 255
      * @stable ICU 2.6
      */
     public static VersionInfo getInstance(int major, int minor, int milli,
@@ -295,11 +295,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Returns an instance of VersionInfo with the argument version.
      * Equivalent to getInstance(major, minor, milli, 0).
-     * @param major major version, non-negative number <= 255.
-     * @param minor minor version, non-negative number <= 255.
-     * @param milli milli version, non-negative number <= 255.
+     * @param major major version, non-negative number &lt;= 255.
+     * @param minor minor version, non-negative number &lt;= 255.
+     * @param milli milli version, non-negative number &lt;= 255.
      * @exception IllegalArgumentException when either arguments are
-     *                                     negative or > 255
+     *                                     negative or &gt; 255
      * @stable ICU 2.6
      */
     public static VersionInfo getInstance(int major, int minor, int milli)
@@ -310,10 +310,10 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Returns an instance of VersionInfo with the argument version.
      * Equivalent to getInstance(major, minor, 0, 0).
-     * @param major major version, non-negative number <= 255.
-     * @param minor minor version, non-negative number <= 255.
+     * @param major major version, non-negative number &lt;= 255.
+     * @param minor minor version, non-negative number &lt;= 255.
      * @exception IllegalArgumentException when either arguments are
-     *                                     negative or > 255
+     *                                     negative or &gt; 255
      * @stable ICU 2.6
      */
     public static VersionInfo getInstance(int major, int minor)
@@ -324,9 +324,9 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Returns an instance of VersionInfo with the argument version.
      * Equivalent to getInstance(major, 0, 0, 0).
-     * @param major major version, non-negative number <= 255.
+     * @param major major version, non-negative number &lt;= 255.
      * @exception IllegalArgumentException when either arguments are
-     *                                     negative or > 255
+     *                                     negative or &gt; 255
      * @stable ICU 2.6
      */
     public static VersionInfo getInstance(int major)

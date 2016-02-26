@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -44,59 +44,49 @@ import com.ibm.icu.util.VersionInfo;
  * RuleBasedCollator is a concrete subclass of Collator. It allows customization of the Collator via user-specified rule
  * sets. RuleBasedCollator is designed to be fully compliant to the <a
  * href="http://www.unicode.org/unicode/reports/tr10/">Unicode Collation Algorithm (UCA)</a> and conforms to ISO 14651.
- * </p>
  *
  * <p>A Collator is thread-safe only when frozen. See {{@link #isFrozen()} and {@link com.ibm.icu.util.Freezable}.
  *
  * <p>
  * Users are strongly encouraged to read the <a href="http://userguide.icu-project.org/collation">User
  * Guide</a> for more information about the collation service before using this class.
- * </p>
- * 
+ *
  * <p>
  * Create a RuleBasedCollator from a locale by calling the getInstance(Locale) factory method in the base class
  * Collator. Collator.getInstance(Locale) creates a RuleBasedCollator object based on the collation rules defined by the
  * argument locale. If a customized collation ordering or attributes is required, use the RuleBasedCollator(String)
  * constructor with the appropriate rules. The customized RuleBasedCollator will base its ordering on the CLDR root collation, while
  * re-adjusting the attributes and orders of the characters in the specified rule accordingly.
- * </p>
- * 
+ *
  * <p>
  * RuleBasedCollator provides correct collation orders for most locales supported in ICU. If specific data for a locale
  * is not available, the orders eventually falls back to the
  * <a href="http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Collation">CLDR root sort order</a>.
- * </p>
- * 
+ *
  * <p>
  * For information about the collation rule syntax and details about customization, please refer to the <a
  * href="http://userguide.icu-project.org/collation/customization">Collation customization</a> section of the
  * User Guide.
- * </p>
- * 
+ *
  * <p>
  * <strong>Note</strong> that there are some differences between the Collation rule syntax used in Java and ICU4J:
  * 
  * <ul>
- * <li>According to the JDK documentation: <i>
- * <p>
- * Modifier '!' : Turns on Thai/Lao vowel-consonant swapping. If this rule is in force when a Thai vowel of the range
+ * <li>According to the JDK documentation: <br>
+ * <i>Modifier '!' : Turns on Thai/Lao vowel-consonant swapping. If this rule is in force when a Thai vowel of the range
  * &#92;U0E40-&#92;U0E44 precedes a Thai consonant of the range &#92;U0E01-&#92;U0E2E OR a Lao vowel of the range
  * &#92;U0EC0-&#92;U0EC4 precedes a Lao consonant of the range &#92;U0E81-&#92;U0EAE then the vowel is placed after the
  * consonant for collation purposes.
- * </p>
- * <p>
+ * <br>
  * If a rule is without the modifier '!', the Thai/Lao vowel-consonant swapping is not turned on.
- * </p>
  * </i>
- * <p>
+ * <br>
  * ICU4J's RuleBasedCollator does not support turning off the Thai/Lao vowel-consonant swapping, since the UCA clearly
- * states that it has to be supported to ensure a correct sorting order. If a '!' is encountered, it is ignored.
- * </p>
- * <li>As mentioned in the documentation of the base class Collator, compatibility decomposition mode is not supported.
+ * states that it has to be supported to ensure a correct sorting order. If a '!' is encountered, it is ignored.</li>
+ * <li>As mentioned in the documentation of the base class Collator, compatibility decomposition mode is not supported.</li>
  * </ul>
  * <p>
  * <strong>Examples</strong>
- * </p>
  * <p>
  * Creating Customized RuleBasedCollators: <blockquote>
  * 
@@ -107,7 +97,7 @@ import com.ibm.icu.util.VersionInfo;
  * String norwegian = "&amp; a , A &lt; b , B &lt; c , C &lt; d , D &lt; e , E "
  *                    + "&lt; f , F &lt; g , G &lt; h , H &lt; i , I &lt; j , "
  *                    + "J &lt; k , K &lt; l , L &lt; m , M &lt; n , N &lt; "
- *                    + "o , O &lt; p , P &lt; q , Q &lt r , R &lt s , S &lt; "
+ *                    + "o , O &lt; p , P &lt; q , Q &lt;r , R &lt;s , S &lt; "
  *                    + "t , T &lt; u , U &lt; v , V &lt; w , W &lt; x , X "
  *                    + "&lt; y , Y &lt; z , Z &lt; &#92;u00E5 = a&#92;u030A "
  *                    + ", &#92;u00C5 = A&#92;u030A ; aa , AA &lt; &#92;u00E6 "
@@ -179,18 +169,16 @@ import com.ibm.icu.util.VersionInfo;
  * // add a few Japanese characters to sort before English characters
  * // suppose the last character before the first base letter 'a' in
  * // the English collation rule is &#92;u2212
- * String jaString = "& &#92;u2212 &lt &#92;u3041, &#92;u3042 &lt &#92;u3043, "
+ * String jaString = "&amp; &#92;u2212 &lt;&#92;u3041, &#92;u3042 &lt;&#92;u3043, "
  *                   + "&#92;u3044";
  * RuleBasedCollator myJapaneseCollator
  *              = new RuleBasedCollator(en_USCollator.getRules() + jaString);
  * </pre>
  * 
  * </blockquote>
- * </p>
  * <p>
  * This class is not subclassable
- * </p>
- * 
+ *
  * @author Syn Wee Quek
  * @stable ICU 2.8
  */
@@ -202,12 +190,10 @@ public final class RuleBasedCollator extends Collator {
      * Constructor that takes the argument rules for customization.
      * The collator will be based on the CLDR root collation, with the
      * attributes and re-ordering of the characters specified in the argument rules.
-     * </p>
      * <p>
      * See the User Guide's section on <a href="http://userguide.icu-project.org/collation/customization">
      * Collation Customization</a> for details on the rule syntax.
-     * </p>
-     * 
+     *
      * @param rules
      *            the collation rules to build the collation table from.
      * @exception ParseException
@@ -630,12 +616,10 @@ public final class RuleBasedCollator extends Collator {
      * is false, which means the case level is not generated. The contents of the case level are affected by the case
      * first mode. A simple way to ignore accent differences in a string is to set the strength to PRIMARY and enable
      * case level.
-     * </p>
      * <p>
      * See the section on <a href="http://userguide.icu-project.org/collation/architecture">case
      * level</a> for more information.
-     * </p>
-     * 
+     *
      * @param flag
      *            true if case level sorting is required, false otherwise
      * @stable ICU 2.8
@@ -659,18 +643,18 @@ public final class RuleBasedCollator extends Collator {
      * insure that all text is already in the appropriate form before
      * a comparison or before getting a CollationKey. Adjusting
      * decomposition mode allows the user to select between faster and
-     * more complete collation behavior.</p>
+     * more complete collation behavior.
      *
      * <p>Since a great many of the world's languages do not require
      * text normalization, most locales set NO_DECOMPOSITION as the
-     * default decomposition mode.</p>
+     * default decomposition mode.
      *
      * The default decompositon mode for the Collator is
      * NO_DECOMPOSITON, unless specified otherwise by the locale used
-     * to create the Collator.</p>
+     * to create the Collator.
      *
      * <p>See getDecomposition for a description of decomposition
-     * mode.</p>
+     * mode.
      *
      * @param decomposition the new decomposition mode
      * @see #getDecomposition
@@ -1048,18 +1032,15 @@ public final class RuleBasedCollator extends Collator {
     /**
      * <p>
      * Get a Collation key for the argument String source from this RuleBasedCollator.
-     * </p>
      * <p>
      * General recommendation: <br>
      * If comparison are to be done to the same String multiple times, it would be more efficient to generate
      * CollationKeys for the Strings and use CollationKey.compareTo(CollationKey) for the comparisons. If the each
      * Strings are compared to only once, using the method RuleBasedCollator.compare(String, String) will have a better
      * performance.
-     * </p>
      * <p>
      * See the class documentation for an explanation about CollationKeys.
-     * </p>
-     * 
+     *
      * @param source
      *            the text String to be transformed into a collation key.
      * @return the CollationKey for the given String based on this RuleBasedCollator's collation rules. If the source
@@ -1213,7 +1194,7 @@ public final class RuleBasedCollator extends Collator {
     /**
      * Returns the CEs for the string.
      * @param str the string
-     * @internal for tests & tools
+     * @internal for tests &amp; tools
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -1473,7 +1454,7 @@ public final class RuleBasedCollator extends Collator {
      * Compares the source text String to the target text String according to the collation rules, strength and
      * decomposition mode for this RuleBasedCollator. Returns an integer less than, equal to or greater than zero
      * depending on whether the source String is less than, equal to or greater than the target String. See the Collator
-     * class description for an example of use. </p>
+     * class description for an example of use.
      * <p>
      * General recommendation: <br>
      * If comparison are to be done to the same String multiple times, it would be more efficient to generate
@@ -1484,8 +1465,7 @@ public final class RuleBasedCollator extends Collator {
      * and stored for future use. Like CollationKey, RawCollationKey provides a method RawCollationKey.compareTo for key
      * comparisons. If the each Strings are compared to only once, using the method RuleBasedCollator.compare(String,
      * String) will have a better performance.
-     * </p>
-     * 
+     *
      * @param source
      *            the source text String.
      * @param target

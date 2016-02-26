@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2010, International Business Machines Corporation and   *
+* Copyright (C) 1996-2016, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -8,12 +8,12 @@
 package com.ibm.icu.util;
 
 /**
- * <p>Interface for enabling iteration over sets of &lt;int index, int value>,
+ * <p>Interface for enabling iteration over sets of &lt;int index, int value&gt;,
  * where index is the sorted integer index in ascending order and value, its
- * associated integer value.</p>
+ * associated integer value.
  * <p>The result for each iteration is the consecutive range of
- * &lt;int index, int value> with the same value. Result is represented by
- * &lt;start, limit, value> where</p>
+ * &lt;int index, int value&gt; with the same value. Result is represented by
+ * &lt;start, limit, value&gt; where
  * <ul>
  * <li> start is the starting integer of the result range
  * <li> limit is 1 after the maximum integer that follows start, such that
@@ -26,11 +26,11 @@ package com.ibm.icu.util;
  * Hence value(start) = value(start + 1) = .... = value(start + n) = .... =
  * value(limit - 1). However value(start -1) != value(start) and
  * value(limit) != value(start).
- * </p>
+ * 
  * <p>Most implementations will be created by factory methods, such as the
  * character type iterator in UCharacter.getTypeIterator. See example below.
- * </p>
- * Example of use:<br>
+ * 
+ * <p>Example of use:<br>
  * <pre>
  * RangeValueIterator iterator = UCharacter.getTypeIterator();
  * RangeValueIterator.Element result = new RangeValueIterator.Element();
@@ -92,9 +92,9 @@ public interface RangeValueIterator
 
     /**
     * <p>Returns the next maximal result range with a common value and returns
-    * true if we are not at the end of the iteration, false otherwise.</p>
+    * true if we are not at the end of the iteration, false otherwise.
     * <p>If this returns a false, the contents of elements will not
-    * be updated.</p>
+    * be updated.
     * @param element for storing the result range and value
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element

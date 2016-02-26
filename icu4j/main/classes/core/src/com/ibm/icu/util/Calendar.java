@@ -3799,9 +3799,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Returns the week number of a day, within a period. This may be the week number in
-     * a year or the week number in a month. Usually this will be a value >= 1, but if
+     * a year or the week number in a month. Usually this will be a value &gt;= 1, but if
      * some initial days of the period are excluded from week 1, because
-     * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is > 1, then
+     * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is &gt; 1, then
      * the week number will be zero for those
      * initial days. This method requires the day number and day of week for some
      * known date in the period in order to determine the day of week
@@ -3862,9 +3862,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Returns the week number of a day, within a period. This may be the week number in
-     * a year, or the week number in a month. Usually this will be a value >= 1, but if
+     * a year, or the week number in a month. Usually this will be a value &gt;= 1, but if
      * some initial days of the period are excluded from week 1, because
-     * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is > 1,
+     * {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek} is &gt; 1,
      * then the week number will be zero for those
      * initial days. This method requires the day of week for the given date in order to
      * determine the result.
@@ -3941,7 +3941,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * int m2 = cal.fieldDifference(date1, Calendar.MONTH);
      * int d2 = cal.fieldDifference(date1, Calendar.DATE);</pre>
      *
-     * one might expect that <code>m1 == -m2 && d1 == -d2</code>.
+     * one might expect that <code>m1 == -m2 &amp;&amp; d1 == -d2</code>.
      * However, this is not generally the case, because of
      * irregularities in the underlying calendar system (e.g., the
      * Gregorian calendar has a varying number of days per month).
@@ -4319,7 +4319,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Returns a limit for a field.
-     * @param field the field, from 0..</code>getFieldCount()-1</code>
+     * @param field the field, from 0..<code>getFieldCount()-1</code>
      * @param limitType the type specifier for the limit
      * @see #MINIMUM
      * @see #GREATEST_MINIMUM
@@ -5007,8 +5007,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * Julian day.  These values are not stored in fields, but in member
      * variables gregorianXxx.  They are used for time zone computations and by
      * subclasses that are Gregorian derivatives.  Subclasses may call this
-     * method to perform a Gregorian calendar millis->fields computation.
-     * To perform a Gregorian calendar fields->millis computation, call
+     * method to perform a Gregorian calendar millis-&gt;fields computation.
+     * To perform a Gregorian calendar fields-&gt;millis computation, call
      * computeGregorianMonthStart().
      * @see #computeGregorianMonthStart
      * @stable ICU 2.0
@@ -5913,8 +5913,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * Compute the Julian day of a month of the Gregorian calendar.
      * Subclasses may call this method to perform a Gregorian calendar
-     * fields->millis computation.  To perform a Gregorian calendar
-     * millis->fields computation, call computeGregorianFields().
+     * fields-&gt;millis computation.  To perform a Gregorian calendar
+     * millis-&gt;fields computation, call computeGregorianFields().
      * @param year extended Gregorian year
      * @param month zero-based Gregorian month
      * @return the Julian day number of the day before the first
@@ -6128,10 +6128,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * Divide two long integers, returning the floor of the quotient.
      * <p>
      * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0
-     * but <code>floorDivide(-1,4)</code> => -1.
+     * E.g., <code>-1/4</code> =&gt; 0
+     * but <code>floorDivide(-1,4)</code> =&gt; -1.
      * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
+     * @param denominator a divisor which must be &gt; 0
      * @return the floor of the quotient.
      * @stable ICU 2.0
      */
@@ -6147,10 +6147,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * Divide two integers, returning the floor of the quotient.
      * <p>
      * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0
-     * but <code>floorDivide(-1,4)</code> => -1.
+     * E.g., <code>-1/4</code> =&gt; 0
+     * but <code>floorDivide(-1,4)</code> =&gt; -1.
      * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
+     * @param denominator a divisor which must be &gt; 0
      * @return the floor of the quotient.
      * @stable ICU 2.0
      */
@@ -6167,10 +6167,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * the modulus remainder.
      * <p>
      * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
-     * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder[0]</code> => 3.
+     * E.g., <code>-1/4</code> =&gt; 0 and <code>-1%4</code> =&gt; -1,
+     * but <code>floorDivide(-1,4)</code> =&gt; -1 with <code>remainder[0]</code> =&gt; 3.
      * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
+     * @param denominator a divisor which must be &gt; 0
      * @param remainder an array of at least one element in which the value
      * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
      * % denominator</code>, this will always be non-negative.
@@ -6192,10 +6192,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * the modulus remainder.
      * <p>
      * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
-     * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder[0]</code> => 3.
+     * E.g., <code>-1/4</code> =&gt; 0 and <code>-1%4</code> =&gt; -1,
+     * but <code>floorDivide(-1,4)</code> =&gt; -1 with <code>remainder[0]</code> =&gt; 3.
      * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
+     * @param denominator a divisor which must be &gt; 0
      * @param remainder an array of at least one element in which the value
      * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
      * % denominator</code>, this will always be non-negative.
@@ -6292,12 +6292,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Returns if two digit representation of year in this calendar type
-     * customarily implies a default century (i.e. 03 -> 2003).
+     * customarily implies a default century (i.e. 03 -&gt; 2003).
      * The default implementation returns <code>true</code>. A subclass may
      * return <code>false</code> if such practice is not applicable (for example,
      * Chinese calendar and Japanese calendar).
      * 
-     * @return <code>true<code> if this calendar has a default century.
+     * @return <code>true</code> if this calendar has a default century.
      * @internal
      * @deprecated This API is ICU internal only.
      */

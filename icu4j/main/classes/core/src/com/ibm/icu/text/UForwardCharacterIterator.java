@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -27,13 +27,13 @@ package com.ibm.icu.text;
  * Some processes may be designed to work with sequences of code units,
  * or it may be known that all characters that are important to an
  * algorithm can be represented with single code units.
- * Other processes will need to use the code point access functions.</p>
+ * Other processes will need to use the code point access functions.
  *
  * <p>ForwardCharacterIterator provides next() to access
  * a code unit and advance an internal position into the text object,
  * similar to a <code>return text[position++]</code>.<br>
  * It provides nextCodePoint() to access a code point and advance an internal
- * position.</p>
+ * position.
  *
  * <p>nextCodePoint() assumes that the current position is that of
  * the beginning of a code point, i.e., of its first code unit.
@@ -41,7 +41,7 @@ package com.ibm.icu.text;
  * In general, access to code units and code points in the same
  * iteration loop should not be mixed. In UTF-16, if the current position
  * is on a second code unit (Low Surrogate), then only that code unit
- * is returned even by nextCodePoint().</p>
+ * is returned even by nextCodePoint().
  *
  * Usage:
  * <code> 
@@ -52,7 +52,6 @@ package com.ibm.icu.text;
  *      }
  *  }
  * </code>
- * </p>
  * @stable ICU 2.4
  *
  */
@@ -79,7 +78,7 @@ public interface UForwardCharacterIterator {
      * Returns the code point at index, and increments to the next code
      * point (post-increment semantics).  If index does not point to a
      * valid surrogate pair, the behavior is the same as
-     * <code>next()<code>.  Otherwise the iterator is incremented past
+     * <code>next()</code>.  Otherwise the iterator is incremented past
      * the surrogate pair, and the code point represented by the pair
      * is returned.
      * @return the next codepoint in text, or DONE if the index is at

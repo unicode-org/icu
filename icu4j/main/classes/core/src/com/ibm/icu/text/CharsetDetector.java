@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2014, International Business Machines Corporation and    *
+* Copyright (C) 2005-2016, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -22,17 +22,17 @@ import java.util.List;
  * The result of the detection operation is a list of possibly matching
  * charsets, or, for simple use, you can just ask for a Java Reader that
  * will will work over the input data.
- * <p/>
+ * <p>
  * Character set detection is at best an imprecise operation.  The detection
  * process will attempt to identify the charset that best matches the characteristics
  * of the byte data, but the process is partly statistical in nature, and
  * the results can not be guaranteed to always be correct.
- * <p/>
+ * <p>
  * For best accuracy in charset detection, the input data should be primarily
  * in a single language, and a minimum of a few hundred bytes worth of plain text
  * in the language are needed.  The detection process will attempt to
  * ignore html or xml style markup that could otherwise obscure the content.
- * <p/>
+ * <p>
  * @stable ICU 3.4
  */
 public class CharsetDetector {
@@ -63,7 +63,7 @@ public class CharsetDetector {
      *  A match between a declared encoding and a possible detected encoding
      *  will raise the quality of that detected encoding by a small delta,
      *  and will also appear as a "reason" for the match.
-     * <p/>
+     * <p>
      * A declared encoding that is incompatible with the input data being
      * analyzed will not be added to the list of possible encodings.
      * 
@@ -96,7 +96,7 @@ public class CharsetDetector {
 
     /**
      * Set the input text (byte) data whose charset is to be detected.
-     *  <p/>
+     *  <p>
      *   The input stream that supplies the character data must have markSupported()
      *   == true; the charset detection process will read a small amount of data,
      *   then return the stream to its original position via
@@ -140,7 +140,7 @@ public class CharsetDetector {
      * only looks at the start of the input data,
      * there is a possibility that the returned charset will fail to handle
      * the full set of input data.
-     * <p/>
+     * <p>
      * Raise an exception if 
      *  <ul>
      *    <li>no charset appears to match the data.</li>
@@ -170,7 +170,7 @@ public class CharsetDetector {
      *  Return an array of all charsets that appear to be plausible
      *  matches with the input data.  The array is ordered with the
      *  best quality match first.
-     * <p/>
+     * <p>
      * Raise an exception if 
      *  <ul>
      *    <li>no charsets appear to match the input data.</li>
@@ -209,16 +209,16 @@ public class CharsetDetector {
     /**
      * Autodetect the charset of an inputStream, and return a Java Reader
      * to access the converted input data.
-     * <p/>
+     * <p>
      * This is a convenience method that is equivalent to
      *   <code>this.setDeclaredEncoding(declaredEncoding).setText(in).detect().getReader();</code>
-     * <p/>
+     * <p>
      *   For the input stream that supplies the character data, markSupported()
      *   must be true; the  charset detection will read a small amount of data,
      *   then return the stream to its original position via
      *   the InputStream.reset() operation.  The exact amount that will
      *    be read depends on the characteristics of the data itself.
-     *<p/>
+     *<p>
      * Raise an exception if no charsets appear to match the input data.
      * 
      * @param in The source of the byte data in the unknown charset.
@@ -249,10 +249,10 @@ public class CharsetDetector {
     /**
      * Autodetect the charset of an inputStream, and return a String
      * containing the converted input data.
-     * <p/>
+     * <p>
      * This is a convenience method that is equivalent to
      *   <code>this.setDeclaredEncoding(declaredEncoding).setText(in).detect().getString();</code>
-     *<p/>
+     *<p>
      * Raise an exception if no charsets appear to match the input data.
      * 
      * @param in The source of the byte data in the unknown charset.
@@ -321,7 +321,7 @@ public class CharsetDetector {
     
     /**
      * Enable filtering of input text. If filtering is enabled,
-     * text within angle brackets ("<" and ">") will be removed
+     * text within angle brackets ("&lt;" and "&gt;") will be removed
      * before detection.
      * 
      * @param filter <code>true</code> to enable input text filtering.

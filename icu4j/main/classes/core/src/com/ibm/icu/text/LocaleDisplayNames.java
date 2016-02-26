@@ -373,7 +373,7 @@ public abstract class LocaleDisplayNames {
          * Return a comparator that compares the locale names for the display locale or the in-self names,
          * depending on an input parameter.
          * @param inSelf if true, compares the nameInSelf, otherwise the nameInDisplayLocale
-         * @param comparator (meant for strings, but because Java Collator doesn't have &lt;String>...)
+         * @param comparator (meant for strings, but because Java Collator doesn't have &lt;String&gt;...)
          * @return UiListItem comparator
          * @draft ICU 55
          * @provisional This API might change or be removed in a future release.

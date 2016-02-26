@@ -297,7 +297,7 @@ public class MeasureFormat extends UFormat {
      * <code>formatMeasures</code> method is preferred over calling
      * this method as they give better performance.
      * 
-     * @param obj must be a Collection<? extends Measure>, Measure[], or Measure object.
+     * @param obj must be a Collection&lt;? extends Measure&gt;, Measure[], or Measure object.
      * @param toAppendTo Formatted string appended here.
      * @param pos Identifies a field in the formatted text.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
