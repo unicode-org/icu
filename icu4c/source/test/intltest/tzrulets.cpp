@@ -2104,7 +2104,7 @@ TimeZoneRuleTest::TestT6216(void) {
     int32_t i, j;
 
     // Get test times
-    UDate times[sizeof(TestDates) / (3 * sizeof(int32_t))];
+    UDate times[UPRV_LENGTHOF(TestDates)];
     int32_t numTimes;
 
     UErrorCode status = U_ZERO_ERROR;

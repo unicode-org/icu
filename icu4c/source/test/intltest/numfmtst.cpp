@@ -1209,7 +1209,7 @@ NumberFormatTest::TestCurrency(void)
     if (U_FAILURE(status))
         errln((UnicodeString)"FAIL: Status " + (int32_t)status);
 
-    for(int i=0; i < (int)(sizeof(testCases)/sizeof(testCases[i])); i++){
+    for(int i=0; i < UPRV_LENGTHOF(testCases); i++){
         status = U_ZERO_ERROR;
         const char *localeID = testCases[i][0];
         UnicodeString expected(testCases[i][1], -1, US_INV);
@@ -6738,7 +6738,7 @@ void NumberFormatTest::TestFormatAttributes() {
       UNUM_DECIMAL_SEPARATOR_FIELD, 7, 8,
       UNUM_FRACTION_FIELD, 8, 10,
     };
-    int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
+    int32_t tupleCount = UPRV_LENGTHOF(expected)/3;
 
     FieldPositionIterator posIter;
     UnicodeString result;
@@ -6771,7 +6771,7 @@ void NumberFormatTest::TestFormatAttributes() {
       UNUM_EXPONENT_SIGN_FIELD, 6, 7,
       UNUM_EXPONENT_FIELD, 7, 8
     };
-    int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
+    int32_t tupleCount = UPRV_LENGTHOF(expected)/3;
 
     FieldPositionIterator posIter;
     UnicodeString result;
@@ -7048,7 +7048,7 @@ void NumberFormatTest::TestExplicitParents() {
 
     UnicodeString s;
 
-    for(int i=0; i < (int)(sizeof(parentLocaleTests)/sizeof(parentLocaleTests[i])); i++){
+    for(int i=0; i < UPRV_LENGTHOF(parentLocaleTests); i++){
         UErrorCode status = U_ZERO_ERROR;
         const char *localeID = parentLocaleTests[i][0];
         UnicodeString expected(parentLocaleTests[i][1], -1, US_INV);

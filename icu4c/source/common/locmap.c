@@ -113,7 +113,7 @@ static const ILcidPosixElement locmap_ ## id [] =
  * @param _posixID the full POSIX ID for this entry.
  */
 #define ILCID_POSIX_MAP(_posixID) \
-    {sizeof(locmap_ ## _posixID)/sizeof(ILcidPosixElement), locmap_ ## _posixID}
+    {UPRV_LENGTHOF(locmap_ ## _posixID), locmap_ ## _posixID}
 
 /*
 ////////////////////////////////////////////
