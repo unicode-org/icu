@@ -1225,7 +1225,7 @@ void CollationRegressionTest::TestT7189() {
         return;
     }
 
-    for (i = 0; i < sizeof(text1) / (CollationRegressionTest::MAX_TOKEN_LEN * sizeof(UChar)); i++) {
+    for (i = 0; i < UPRV_LENGTHOF(text1); i++) {
         uint8_t key1[100], key2[100];
         int32_t len1, len2;
 
