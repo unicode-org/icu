@@ -1,7 +1,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2015 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2016 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -71,6 +71,7 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) :
     fMatchOpenParen   = -1;
     fMatchCloseParen  = -1;
     fCaptureName      = NULL;
+    fLastSetLiteral   = U_SENTINEL;
 
     if (U_SUCCESS(status) && U_FAILURE(rxp->fDeferredStatus)) {
         status = rxp->fDeferredStatus;
@@ -1757,7 +1758,7 @@ UBool RegexCompile::doParseActions(int32_t action)
         //        and ICU UnicodeSet behavior.
         {
             UChar32  c = scanNamedChar();
-            if (U_SUCCESS(*fStatus) && fLastSetLiteral > c) {
+            if (U_SUCCESS(*fStatus) && (fLastSetLiteral == U_SENTINEL || fLastSetLiteral > c)) {
                 error(U_REGEX_INVALID_RANGE);
             }
             UnicodeSet *s = (UnicodeSet *)fSetStack.peek();
@@ -1826,7 +1827,8 @@ UBool RegexCompile::doParseActions(int32_t action)
         // Lower Limit > Upper limit being an error matches both Java
         //        and ICU UnicodeSet behavior.
         {
-        if (fLastSetLiteral > fC.fChar) {
+
+        if (fLastSetLiteral == U_SENTINEL || fLastSetLiteral > fC.fChar) {
             error(U_REGEX_INVALID_RANGE);
         }
         UnicodeSet *s = (UnicodeSet *)fSetStack.peek();
