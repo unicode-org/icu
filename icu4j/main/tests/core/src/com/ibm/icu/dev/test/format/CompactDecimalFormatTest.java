@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, Google, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, Google, International Business Machines Corporation and
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,6 +20,8 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
 public class CompactDecimalFormatTest extends TestFmwk {
@@ -123,6 +125,52 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {1234567890123f, "1.2兆"},
             {12345678901234f, "12兆"},
             {123456789012345f, "120兆"},
+    };
+
+    Object[][] ChineseCurrencyTestData = {
+            // The first one should really have a ￥ in front, but the CLDR data is 
+            // incorrect.  See http://unicode.org/cldr/trac/ticket/9298 and update
+            // this test case when the CLDR ticket is fixed.
+            {new CurrencyAmount(1234f, Currency.getInstance("CNY")), "1200"},
+            {new CurrencyAmount(12345f, Currency.getInstance("CNY")), "￥1.2万"},
+            {new CurrencyAmount(123456f, Currency.getInstance("CNY")), "￥12万"},
+            {new CurrencyAmount(1234567f, Currency.getInstance("CNY")), "￥120万"},
+            {new CurrencyAmount(12345678f, Currency.getInstance("CNY")), "￥1200万"},
+            {new CurrencyAmount(123456789f, Currency.getInstance("CNY")), "￥1.2亿"},
+            {new CurrencyAmount(1234567890f, Currency.getInstance("CNY")), "￥12亿"},
+            {new CurrencyAmount(12345678901f, Currency.getInstance("CNY")), "￥120亿"},
+            {new CurrencyAmount(123456789012f, Currency.getInstance("CNY")), "￥1200亿"},
+            {new CurrencyAmount(1234567890123f, Currency.getInstance("CNY")), "￥1.2兆"},
+            {new CurrencyAmount(12345678901234f, Currency.getInstance("CNY")), "￥12兆"},
+            {new CurrencyAmount(123456789012345f, Currency.getInstance("CNY")), "￥120兆"},
+    };
+    Object[][] GermanCurrencyTestData = {
+            {new CurrencyAmount(1234f, Currency.getInstance("EUR")), "1,2 Tsd. €"},
+            {new CurrencyAmount(12345f, Currency.getInstance("EUR")), "12 Tsd. €"},
+            {new CurrencyAmount(123456f, Currency.getInstance("EUR")), "120 Tsd. €"},
+            {new CurrencyAmount(1234567f, Currency.getInstance("EUR")), "1,2 Mio. €"},
+            {new CurrencyAmount(12345678f, Currency.getInstance("EUR")), "12 Mio. €"},
+            {new CurrencyAmount(123456789f, Currency.getInstance("EUR")), "120 Mio. €"},
+            {new CurrencyAmount(1234567890f, Currency.getInstance("EUR")), "1,2 Mrd. €"},
+            {new CurrencyAmount(12345678901f, Currency.getInstance("EUR")), "12 Mrd. €"},
+            {new CurrencyAmount(123456789012f, Currency.getInstance("EUR")), "120 Mrd. €"},
+            {new CurrencyAmount(1234567890123f, Currency.getInstance("EUR")), "1,2 Bio. €"},
+            {new CurrencyAmount(12345678901234f, Currency.getInstance("EUR")), "12 Bio. €"},
+            {new CurrencyAmount(123456789012345f, Currency.getInstance("EUR")), "120 Bio. €"},
+    };
+    Object[][] EnglishCurrencyTestData = {
+            {new CurrencyAmount(1234f, Currency.getInstance("USD")), "$1.2K"},
+            {new CurrencyAmount(12345f, Currency.getInstance("USD")), "$12K"},
+            {new CurrencyAmount(123456f, Currency.getInstance("USD")), "$120K"},
+            {new CurrencyAmount(1234567f, Currency.getInstance("USD")), "$1.2M"},
+            {new CurrencyAmount(12345678f, Currency.getInstance("USD")), "$12M"},
+            {new CurrencyAmount(123456789f, Currency.getInstance("USD")), "$120M"},
+            {new CurrencyAmount(1234567890f, Currency.getInstance("USD")), "$1.2B"},
+            {new CurrencyAmount(12345678901f, Currency.getInstance("USD")), "$12B"},
+            {new CurrencyAmount(123456789012f, Currency.getInstance("USD")), "$120B"},
+            {new CurrencyAmount(1234567890123f, Currency.getInstance("USD")), "$1.2T"},
+            {new CurrencyAmount(12345678901234f, Currency.getInstance("USD")), "$12T"},
+            {new CurrencyAmount(123456789012345f, Currency.getInstance("USD")), "$120T"},
     };
 
     Object[][] SwahiliTestData = {
@@ -266,7 +314,15 @@ public class CompactDecimalFormatTest extends TestFmwk {
         checkLocale(ULocale.ENGLISH, CompactStyle.SHORT, EnglishTestData);
     }
 
+// JCE: 2016-02-26: This test is logKnownIssue because CompactDecimalFormat cannot properly format
+// negative quantities until we implement support for positive/negative subpatterns within CDF.
+// So, in the meantime, we are making any format of a negative throw an UnsupportedOperationException
+// as the original JavaDoc states.
+//
     public void TestArabicLongStyle() {
+        if (logKnownIssue("12181","No support for negative numbers in CDF")) {
+            return;
+        }
         NumberFormat cdf =
                 CompactDecimalFormat.getInstance(
                         ULocale.forLanguageTag("ar"), CompactStyle.LONG);
@@ -289,7 +345,15 @@ public class CompactDecimalFormatTest extends TestFmwk {
         checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.LONG, SerbianTestDataLong);
     }
 
+// JCE: 2016-02-26: This test is logKnownIssue because CompactDecimalFormat cannot properly format
+// negative quantities until we implement support for positive/negative subpatterns within CDF.
+// So, in the meantime, we are making any format of a negative throw an UnsupportedOperationException
+// as the original JavaDoc states.
+//
     public void TestSerbianLongNegative() {
+        if (logKnownIssue("12181","No support for negative numbers in CDF")) {
+            return;
+        }
         checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.LONG, SerbianTestDataLongNegative);
     }
 
@@ -300,9 +364,26 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void TestSwahiliShort() {
         checkLocale(ULocale.forLanguageTag("sw"), CompactStyle.SHORT, SwahiliTestData);
     }
-
+// JCE: 2016-02-26: This test is logKnownIssue because CompactDecimalFormat cannot properly format
+// negative quantities until we implement support for positive/negative subpatterns within CDF.
+// So, in the meantime, we are making any format of a negative throw an UnsupportedOperationException
+// as the original JavaDoc states.
+//
     public void TestSwahiliShortNegative() {
+        if (logKnownIssue("12181","No support for negative numbers in CDF")) {
+            return;
+        }
         checkLocale(ULocale.forLanguageTag("sw"), CompactStyle.SHORT, SwahiliTestDataNegative);
+    }
+
+    public void TestEnglishCurrency() {
+        checkLocale(ULocale.ENGLISH, CompactStyle.SHORT, EnglishCurrencyTestData);
+    }
+    public void TestGermanCurrency() {
+        checkLocale(ULocale.GERMAN, CompactStyle.SHORT, GermanCurrencyTestData);
+    }
+    public void TestChineseCurrency() {
+        checkLocale(ULocale.CHINESE, CompactStyle.SHORT, ChineseCurrencyTestData);
     }
 
     public void TestFieldPosition() {
