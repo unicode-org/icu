@@ -23,7 +23,7 @@
   <licenses>
     <license>
       <name>ICU License</name>
-      <url>http://source.icu-project.org/repos/icu/icu/trunk/license.html</url>
+      <url>http://source.icu-project.org/repos/icu/icu/trunk/LICENSE.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
