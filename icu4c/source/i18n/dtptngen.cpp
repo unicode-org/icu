@@ -396,7 +396,55 @@ DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status) {
     addCLDRData(locale, status);
     setDateTimeFromCalendar(locale, status);
     setDecimalSymbols(locale, status);
+    getPreferredHourFormats(locale, status);
 } // DateTimePatternGenerator::initData
+
+void DateTimePatternGenerator::getPreferredHourFormats(const Locale &locale, UErrorCode &status) {
+    if (U_FAILURE(status)) { return; }
+
+    const char *localeID = locale.getName();
+    char maxLocaleID[ULOC_FULLNAME_CAPACITY];
+    uloc_addLikelySubtags(localeID, maxLocaleID, ULOC_FULLNAME_CAPACITY, &status);
+    if (U_FAILURE(status)) { return; }
+    Locale maxLocale = Locale(maxLocaleID);
+
+    const char *country = maxLocale.getCountry();
+    if (*country == '\0') { country = "001"; }
+    const char *language = maxLocale.getLanguage();
+
+    char langCountry[ULOC_FULLNAME_CAPACITY];
+    langCountry[0] = '\0';
+    strcat(langCountry, language);
+    strcat(langCountry, "_");
+    strcat(langCountry, country);
+
+    UResourceBundle *rb = ures_openDirect(NULL, "supplementalData", &status);  // TODO: local pointer
+    ures_getByKey(rb, "timeData", rb, &status);
+    UResourceBundle *countryData = ures_getByKey(rb, langCountry, NULL, &status);
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        countryData = ures_getByKey(rb, country, NULL, &status);
+    }
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        fAllowedHourFormats[0] = UnicodeString(CAP_H);
+        fAllowedHourFormatsLength = 1;
+        return;
+    }
+
+    ures_getByKey(countryData, "allowed", rb, &status);
+    if (ures_getType(rb) == URES_STRING) {
+        fAllowedHourFormats[0] = ures_getUnicodeString(rb, &status);
+        fAllowedHourFormatsLength = 1;
+    } else if (ures_getType(rb) == URES_ARRAY) {
+        fAllowedHourFormatsLength = ures_getSize(rb);
+        for (int32_t i = 0; i < fAllowedHourFormatsLength; ++i) {
+            fAllowedHourFormats[i] = ures_getUnicodeStringByIndex(rb, i, &status);
+        }
+    } else {
+        status = U_INVALID_FORMAT_ERROR;
+    }
+}
 
 UnicodeString
 DateTimePatternGenerator::getSkeleton(const UnicodeString& pattern, UErrorCode&
@@ -539,7 +587,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
     UnicodeString defaultItemFormat(TRUE, UDATPG_ItemFormat, UPRV_LENGTHOF(UDATPG_ItemFormat)-1);  // Read-only alias.
 
     err = U_ZERO_ERROR;
-    
+
     fDefaultHourFormatChar = 0;
     for (i=0; i<UDATPG_FIELD_COUNT; ++i ) {
         appendItemNames[i]=CAP_F;
@@ -738,7 +786,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
             }
         }
         // Go to the top of the loop to process contents of calTypeBundle
-    }    
+    }
 
     if (hackPattern.length()>0) {
         hackTimes(hackPattern, err);
@@ -803,7 +851,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     int32_t dateMask=(1<<UDATPG_DAYPERIOD_FIELD) - 1;
     int32_t timeMask=(1<<UDATPG_FIELD_COUNT) - 1 - dateMask;
 
-    // Replace hour metacharacters 'j' and 'J', set flags as necessary
+    // Replace hour metacharacters 'j', 'C' and 'J', set flags as necessary
     UnicodeString patternFormCopy = UnicodeString(patternForm);
     int32_t patPos, patLen = patternFormCopy.length();
     UBool inQuoted = FALSE;
@@ -814,6 +862,21 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
         } else if (!inQuoted) {
             if (patChr == LOW_J) {
                 patternFormCopy.setCharAt(patPos, fDefaultHourFormatChar);
+            } else if (patChr == CAP_C) {
+                UnicodeString preferred;
+                if (fAllowedHourFormatsLength > 0) {
+                    preferred = fAllowedHourFormats[0];
+                } else {
+                    status = U_INVALID_FORMAT_ERROR;
+                    return UnicodeString();
+                }
+                patternFormCopy.setCharAt(patPos, preferred.charAt(0));
+                UChar lastChar = preferred.charAt(preferred.length()-1);
+                if (lastChar == CAP_B) {
+                    flags |= kDTPGSkeletonUsesCapB;
+                } else if (lastChar == LOW_B) {
+                    flags |= kDTPGSkeletonUsesLowB;
+                }
             } else if (patChr == CAP_J) {
                 // Get pattern for skeleton with H, then replace H or k
                 // with fDefaultHourFormatChar (if different)
@@ -1097,6 +1160,19 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
             }
             const dtTypeElem *row = &dtTypes[canonicalIndex];
             int32_t typeValue = row->field;
+
+            // Handle special day periods.
+            if (typeValue == UDATPG_DAYPERIOD_FIELD && flags != 0) {
+                UChar c = NONE;  // '0'
+                if (flags & kDTPGSkeletonUsesCapB) { c = CAP_B; }
+                if (flags & kDTPGSkeletonUsesLowB) { c = LOW_B; }
+
+                if (c != NONE) {
+                    for (int32_t i = 0; i < field.length(); ++i)
+                    field.setCharAt(i, c);
+                }
+            }
+
             if ((flags & kDTPGFixFractionalSeconds) != 0 && typeValue == UDATPG_SECOND_FIELD) {
                 UnicodeString newField=dtMatcher->skeleton.original[UDATPG_FRACTIONAL_SECOND_FIELD];
                 field = field + decimal + newField;
