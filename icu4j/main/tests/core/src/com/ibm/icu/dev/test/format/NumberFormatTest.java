@@ -4414,6 +4414,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         assertEquals("Comparing vector length for " + numFmtted,
             v1.size(), result.size());
+        if (!v1.containsAll(result)) {
+          // Print information on the differences.
+          for (int i = 0; i < v1.size(); i++) {
+            System.out.println("     v1[" + i + "] =" + v1.get(i));
+            System.out.println(" result[" + i + "] =" + result.get(i));
+          }
+        }
         assertTrue("Comparing vector results for " + numFmtted,
             v1.containsAll(result));
 
@@ -4476,6 +4483,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             iterator.setIndex(end);
         }
         assertEquals("Comparing vector results for " + fmtNumberBigInt, v3.size() ,result3.size());
+        if (!v3.containsAll(result)) {
+          // Print information on the differences.
+          for (int i = 0; i < v1.size(); i++) {
+            System.out.println("     v1[" + i + "] =" + v3.get(i));
+            System.out.println(" result[" + i + "] =" + result3.get(i));
+          }
+        }
         assertTrue("Comparing vector results for " + fmtNumberBigInt, v3.containsAll(result3));
 
         List<FieldContainer> v4 = new ArrayList<FieldContainer>(7);
