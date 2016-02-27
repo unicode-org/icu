@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2013, International Business Machines Corporation and    *
+ * Copyright (C) 2012-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -25,9 +25,11 @@ class CompactDecimalDataCache {
 
     private static final String SHORT_STYLE = "short";
     private static final String LONG_STYLE = "long";
+    private static final String SHORT_CURRENCY_STYLE = "shortCurrency";
     private static final String NUMBER_ELEMENTS = "NumberElements";
     private static final String PATTERN_LONG_PATH = "patternsLong/decimalFormat";
     private static final String PATTERNS_SHORT_PATH = "patternsShort/decimalFormat";
+    private static final String PATTERNS_SHORT_CURRENCY_PATH = "patternsShort/currencyFormat";
 
     static final String OTHER = "other";
 
@@ -65,7 +67,8 @@ class CompactDecimalDataCache {
         long[] divisors;
         Map<String, DecimalFormat.Unit[]> units;
 
-        Data(long[] divisors, Map<String, DecimalFormat.Unit[]> units) {
+        Data(long[] divisors, Map<String, DecimalFormat.Unit[]> units)
+        {
             this.divisors = divisors;
             this.units = units;
         }
@@ -73,31 +76,22 @@ class CompactDecimalDataCache {
 
     /**
      * DataBundle contains compact decimal data for all the styles in a particular
-     * locale. Currently available styles are short and long.
+     * locale. Currently available styles are short and long for decimals, and
+     * short only for currencies.
      *
      * @author Travis Keep
      */
     static class DataBundle {
         Data shortData;
         Data longData;
+        Data shortCurrencyData;
 
-        DataBundle(Data shortData, Data longData) {
+        DataBundle(Data shortData, Data longData, Data shortCurrencyData) {
             this.shortData = shortData;
             this.longData = longData;
+            this.shortCurrencyData = shortCurrencyData;
         }
     }
-
-    private static enum QuoteState {
-        OUTSIDE,   // Outside single quote
-        INSIDE_EMPTY,  // Just inside single quote
-        INSIDE_FULL   // Inside single quote along with characters
-    }
-
-//    private static enum DataLocation { // Don't change order
-//        LOCAL,  // In local numbering system
-//        LATIN,  // In latin numbering system
-//        ROOT    // In root locale
-//    }
 
     private static enum UResFlags {
         ANY,  // Any locale will do.
@@ -140,10 +134,12 @@ class CompactDecimalDataCache {
 
         ICUResourceBundle shortDataBundle = null;
         ICUResourceBundle longDataBundle = null;
+        ICUResourceBundle shortCurrencyDataBundle = null;
         if (!LATIN_NUMBERING_SYSTEM.equals(numberingSystemName)) {
             ICUResourceBundle bundle = findWithFallback(r, numberingSystemName, UResFlags.NOT_ROOT);
             shortDataBundle = findWithFallback(bundle, PATTERNS_SHORT_PATH, UResFlags.NOT_ROOT);
             longDataBundle = findWithFallback(bundle, PATTERN_LONG_PATH, UResFlags.NOT_ROOT);
+            shortCurrencyDataBundle = findWithFallback(bundle, PATTERNS_SHORT_CURRENCY_PATH, UResFlags.NOT_ROOT);
         }
 
         // If we haven't found, look in latin numbering system.
@@ -157,6 +153,10 @@ class CompactDecimalDataCache {
                 }
             }
         }
+        if (shortCurrencyDataBundle == null) {
+            ICUResourceBundle bundle = getWithFallback(r, LATIN_NUMBERING_SYSTEM, UResFlags.ANY);
+            shortCurrencyDataBundle = getWithFallback(bundle, PATTERNS_SHORT_CURRENCY_PATH, UResFlags.ANY);
+        }
         Data shortData = loadStyle(shortDataBundle, ulocale, SHORT_STYLE);
         Data longData;
         if (longDataBundle == null) {
@@ -164,7 +164,8 @@ class CompactDecimalDataCache {
         } else {
             longData = loadStyle(longDataBundle, ulocale, LONG_STYLE);
         }
-        return new DataBundle(shortData, longData);
+        Data shortCurrencyData = loadStyle(shortCurrencyDataBundle, ulocale, SHORT_CURRENCY_STYLE);
+        return new DataBundle(shortData, longData, shortCurrencyData);
     }
 
     /**
@@ -348,8 +349,8 @@ class CompactDecimalDataCache {
                 "' for variant '" +pluralVariant + "' for 10^" + idx +
                 " in " + localeAndStyle(locale, style));
         }
-        String prefix = fixQuotes(template.substring(0, firstIdx));
-        String suffix = fixQuotes(template.substring(lastIdx + 1));
+        String prefix = template.substring(0, firstIdx);
+        String suffix = template.substring(lastIdx + 1);
         saveUnit(new DecimalFormat.Unit(prefix, suffix), pluralVariant, idx, result.units);
 
         // If there is effectively no prefix or suffix, ignore the actual
@@ -367,35 +368,6 @@ class CompactDecimalDataCache {
         return i - firstIdx;
     }
 
-    private static String fixQuotes(String prefixOrSuffix) {
-        StringBuilder result = new StringBuilder();
-        int len = prefixOrSuffix.length();
-        QuoteState state = QuoteState.OUTSIDE;
-        for (int idx = 0; idx < len; idx++) {
-            char ch = prefixOrSuffix.charAt(idx);
-            if (ch == '\'') {
-                if (state == QuoteState.INSIDE_EMPTY) {
-                    result.append('\'');
-                }
-            } else {
-                result.append(ch);
-            }
-
-            // Update state
-            switch (state) {
-            case OUTSIDE:
-                state = ch == '\'' ? QuoteState.INSIDE_EMPTY : QuoteState.OUTSIDE;
-                break;
-            case INSIDE_EMPTY:
-            case INSIDE_FULL:
-                state = ch == '\'' ? QuoteState.OUTSIDE : QuoteState.INSIDE_FULL;
-                break;
-            default:
-                throw new IllegalStateException();
-            }
-        }
-        return result.toString();
-    }
 
     /**
      * Returns locale and style. Used to form useful messages in thrown
