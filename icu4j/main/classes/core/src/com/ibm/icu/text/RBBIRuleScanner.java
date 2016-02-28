@@ -1,9 +1,9 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2011, International Business Machines Corporation and others. All Rights Reserved.
+ * Copyright (C) 2003-2016, International Business Machines Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
- 
+
 package com.ibm.icu.text;
 
 import java.text.ParsePosition;
@@ -19,12 +19,12 @@ import com.ibm.icu.lang.UCharacter;
   *  There is no public API here.
   */
 class RBBIRuleScanner {
-    
+
     private final static int    kStackSize = 100;               // The size of the state stack for
     //   rules parsing.  Corresponds roughly
     //   to the depth of parentheses nesting
     //   that is allowed in the rules.
-    
+
     static class RBBIRuleChar {
         int             fChar;
         boolean         fEscaped;
@@ -33,7 +33,7 @@ class RBBIRuleScanner {
 
 
     RBBIRuleBuilder               fRB;              // The rule builder that we are part of.
-    
+
     int                       fScanIndex;        // Index of current character being processed
                                                      //   in the rule input string.
     int                       fNextIndex;        // Index of the next character, which
@@ -43,49 +43,52 @@ class RBBIRuleScanner {
     int                       fCharNum;          // Char position within the line.
     int                       fLastChar;         // Previous char, needed to count CR-LF
                                                      //   as a single line, not two.
-    
+
     RBBIRuleChar              fC = new RBBIRuleChar();    // Current char for parse state machine
                                                      //   processing.
     String                    fVarName;          // $variableName, valid when we've just
                                                      //   scanned one.
-    
-    
+
+
     short  fStack[] = new short[kStackSize];  // State stack, holds state pushes
     int                       fStackPtr;           //  and pops as specified in the state
                                                        //  transition rules.
-    
+
     RBBINode  fNodeStack[] = new RBBINode[kStackSize]; // Node stack, holds nodes created
                                                            //  during the parse of a rule
     int                        fNodeStackPtr;
-    
-    
-    boolean                          fReverseRule;     // True if the rule currently being scanned
+
+
+    boolean                    fReverseRule;         // True if the rule currently being scanned
                                                      //  is a reverse direction rule (if it
                                                      //  starts with a '!')
-    
-    boolean                          fLookAheadRule;   // True if the rule includes a '/'
+
+    boolean                    fLookAheadRule;       // True if the rule includes a '/'
                                                      //   somewhere within it.
-    
-    RBBISymbolTable              fSymbolTable;     // symbol table, holds definitions of
+
+    boolean                    fNoChainInRule;       // True if the current rule starts with a '^'.
+
+
+    RBBISymbolTable            fSymbolTable;         // symbol table, holds definitions of
                                                      //   $variable symbols.
-    
+
     HashMap<String, RBBISetTableEl> fSetTable = new HashMap<String, RBBISetTableEl>(); // UnicocodeSet hash table, holds indexes to
                                                                                        //   the sets created while parsing rules.
                                                                                        //   The key is the string used for creating
                                                                                        //   the set.
-    
+
     UnicodeSet      fRuleSets[] = new UnicodeSet[10];    // Unicode Sets that are needed during
                                                      //  the scanning of RBBI rules.  The
                                                      //  indicies for these are assigned by the
                                                      //  perl script that builds the state tables.
                                                      //  See rbbirpt.h.
-    
+
     int                        fRuleNum;         // Counts each rule as it is scanned.
-    
+
     int                        fOptionStart;     // Input index of start of a !!option
                                                  //   keyword, while being scanned.
 
-    
+
 
    static private String gRuleSet_rule_char_pattern       = "[^[\\p{Z}\\u0020-\\u007f]-[\\p{L}]-[\\p{N}]]";
    static private String gRuleSet_name_char_pattern       = "[_\\p{L}\\p{N}]";
@@ -94,8 +97,8 @@ class RBBIRuleScanner {
    static private String gRuleSet_white_space_pattern     = "[\\p{Pattern_White_Space}]";
    static private String kAny =  "any";
 
-    
- 
+
+
 
     //----------------------------------------------------------------------------------------
     //
@@ -138,6 +141,12 @@ class RBBIRuleScanner {
             pushNewNode(RBBINode.opStart);
             fRuleNum++;
             break;
+
+        case RBBIRuleParseTable.doNoChain:
+            // Scanned a '^' while on the rule start state.
+            fNoChainInRule = true;
+            break;
+
 
         case RBBIRuleParseTable.doExprOrOperator: {
             fixOpStack(RBBINode.precOpCat);
@@ -241,11 +250,11 @@ class RBBIRuleScanner {
                 printNodeStack("end of rule");
             }
             Assert.assrt(fNodeStackPtr == 1);
+            RBBINode thisRule = fNodeStack[fNodeStackPtr];
 
             // If this rule includes a look-ahead '/', add a endMark node to the
             //   expression tree.
             if (fLookAheadRule) {
-                RBBINode thisRule = fNodeStack[fNodeStackPtr];
                 RBBINode endNode = pushNewNode(RBBINode.endMark);
                 RBBINode catNode = pushNewNode(RBBINode.opCat);
                 fNodeStackPtr -= 2;
@@ -254,7 +263,23 @@ class RBBIRuleScanner {
                 fNodeStack[fNodeStackPtr] = catNode;
                 endNode.fVal = fRuleNum;
                 endNode.fLookAheadEnd = true;
+                thisRule = catNode;
+
+                // TODO: Disable chaining out of look-ahead (hard break) rules.
+                //   The break on rule match is forced, so there is no point in building up
+                //   the state table to chain into another rule for a longer match.
             }
+
+            // Mark this node as being the root of a rule.
+            thisRule.fRuleRoot = true;
+
+            // Flag if chaining into this rule is wanted.
+            //
+            if (fRB.fChainRules &&          // If rule chaining is enabled globally via !!chain
+                    !fNoChainInRule) {      //     and no '^' chain-in inhibit was on this rule
+                thisRule.fChainIn = true;
+            }
+
 
             // All rule expressions are ORed together.
             // The ';' that terminates an expression really just functions as a
@@ -269,12 +294,12 @@ class RBBIRuleScanner {
             int destRules = (fReverseRule ? RBBIRuleBuilder.fReverseTree : fRB.fDefaultTree);
 
             if (fRB.fTreeRoots[destRules] != null) {
-                // This is not the first rule encounted.
+                // This is not the first rule encountered.
                 // OR previous stuff (from *destRules)
                 // with the current rule expression (on the Node Stack)
                 //  with the resulting OR expression going to *destRules
                 //
-                RBBINode thisRule = fNodeStack[fNodeStackPtr];
+                thisRule = fNodeStack[fNodeStackPtr];
                 RBBINode prevRules = fRB.fTreeRoots[destRules];
                 RBBINode orNode = pushNewNode(RBBINode.opOr);
                 orNode.fLeftChild = prevRules;
@@ -289,6 +314,7 @@ class RBBIRuleScanner {
             }
             fReverseRule = false; // in preparation for the next rule.
             fLookAheadRule = false;
+            fNoChainInRule = false;
             fNodeStackPtr = 0;
         }
             break;

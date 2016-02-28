@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2009, International Business Machines
+*   Copyright (c) 2002-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -28,9 +28,9 @@ import com.ibm.icu.lang.UProperty;
 //                         There is no user-visible public API here.
 //
 class RBBITableBuilder {
-    
-    
-    
+
+
+
     //
     //  RBBIStateDescriptor - The DFA is initially constructed as a set of these descriptors,
     //                        one for each state.
@@ -58,8 +58,8 @@ class RBBITableBuilder {
                                                     //   symbol.
         }
     }
-    
-    
+
+
     private  RBBIRuleBuilder  fRB;
     private  int             fRootIx;             // The array index into RBBIRuleBuilder.fTreeRoots
                                                    //   for the parse tree to operate on.
@@ -84,7 +84,7 @@ class RBBITableBuilder {
 
 
 
- 
+
        //-----------------------------------------------------------------------------
        //
        //   RBBITableBuilder::build  -  This is the main function for building the DFA state transtion
@@ -109,11 +109,11 @@ class RBBITableBuilder {
            }
 
            //
-           // If the rules contained any references to {bof} 
+           // If the rules contained any references to {bof}
            //   add a {bof} <cat> <former root of tree> to the
-           //   tree.  Means that all matches must start out with the 
+           //   tree.  Means that all matches must start out with the
            //   {bof} fake character.
-           // 
+           //
            if (fRB.fSetBuilder.sawBOF()) {
                RBBINode bofTop    = new RBBINode(RBBINode.opCat);
                RBBINode bofLeaf   = new RBBINode(RBBINode.leafChar);
@@ -361,6 +361,25 @@ class RBBITableBuilder {
            }
        }
 
+       //-----------------------------------------------------------------------------
+       //
+       //           addRuleRootNodes    Recursively walk a parse tree, adding all nodes flagged
+       //                               as roots of a rule to a destination vector.
+       //
+       //-----------------------------------------------------------------------------
+       void addRuleRootNodes(List<RBBINode> dest, RBBINode node) {
+           if (node == null) {
+               return;
+           }
+           if (node.fRuleRoot) {
+               dest.add(node);
+               // Note: rules cannot nest. If we found a rule start node,
+               //       no child node can also be a start node.
+               return;
+           }
+           addRuleRootNodes(dest, node.fLeftChild);
+           addRuleRootNodes(dest, node.fRightChild);
+       }
 
        //-----------------------------------------------------------------------------
        //
@@ -379,17 +398,21 @@ class RBBITableBuilder {
            // get a list all leaf nodes
            tree.findNodes(leafNodes, RBBINode.leafChar);
 
-           // Get all nodes that can be the start a match, which is FirstPosition()
-           // of the portion of the tree corresponding to user-written rules.
-           // See the tree description in bofFixup().
-           RBBINode userRuleRoot = tree;
-           if (fRB.fSetBuilder.sawBOF()) {
-               userRuleRoot = tree.fLeftChild.fRightChild;
-           }
-           Assert.assrt(userRuleRoot != null);
-           Set<RBBINode> matchStartNodes = userRuleRoot.fFirstPosSet;
+           // Collect all leaf nodes that can start matches for rules
+           // with inbound chaining enabled, which is the union of the
+           // firstPosition sets from each of the rule root nodes.
 
-           // Iteratate over all leaf nodes,
+           List<RBBINode> ruleRootNodes = new ArrayList<RBBINode>();
+           addRuleRootNodes(ruleRootNodes, tree);
+
+           Set<RBBINode> matchStartNodes = new HashSet<RBBINode>();
+           for (RBBINode node: ruleRootNodes) {
+               if (node.fChainIn) {
+                   matchStartNodes.addAll(node.fFirstPosSet);
+               }
+           }
+
+           // Iterate over all leaf nodes,
            //
            for (RBBINode tNode : leafNodes) {
                RBBINode endNode = null;
@@ -461,9 +484,9 @@ class RBBITableBuilder {
            //
            //   The parse tree looks like this ...
            //         fTree root  --.       <cat>
-           //                               /     \   
+           //                               /     \
            //                            <cat>   <#end node>
-           //                           /     \   
+           //                           /     \
            //                     <bofNode>   rest
            //                               of tree
            //
@@ -477,7 +500,7 @@ class RBBITableBuilder {
            //  (excluding the fake bofNode)
            //  We want the nodes that can start a match in the
            //     part labeled "rest of tree"
-           // 
+           //
            Set<RBBINode> matchStartNodes = fRB.fTreeRoots[fRootIx].fLeftChild.fRightChild.fFirstPosSet;
            for (RBBINode startNode : matchStartNodes) {
                if (startNode.fType != RBBINode.leafChar) {
@@ -489,7 +512,7 @@ class RBBITableBuilder {
                    //    explicitly written into a rule.
                    //  Add everything from the followPos set of this node to the
                    //    followPos set of the fake bofNode at the start of the tree.
-                   //  
+                   //
                    bofNode.fFollowPos.addAll(startNode.fFollowPos);
                }
            }
@@ -705,7 +728,7 @@ class RBBITableBuilder {
        //      The RBBI runtime uses an array of {sets of status values} that can
        //      be returned for boundaries.  Each accepting state that has non-zero
        //      status includes an index into this array.  The format of the array
-       //      is 
+       //      is
        //           Num of status values in group 1
        //              status val
        //              status val
@@ -718,7 +741,7 @@ class RBBITableBuilder {
        //
        //
        //-----------------------------------------------------------------------------
-       
+
        void  mergeRuleStatusVals() {
            //
            //  The basic outline of what happens here is this...
@@ -731,14 +754,14 @@ class RBBITableBuilder {
            //           add the tag list for this state to the global list.
            //
            int n;
-           
+
            // Pre-load a single tag of {0} into the table.
            //   We will need this as a default, for rule sets with no explicit tagging,
            //   or with explicit tagging of {0}.
            if (fRB.fRuleStatusVals.size() == 0) {
                fRB.fRuleStatusVals.add(Integer.valueOf(1));    // Num of statuses in group
                fRB.fRuleStatusVals.add(Integer.valueOf(0));    //   and our single status of zero
-               
+
                SortedSet<Integer> s0 = new TreeSet<Integer>();
                Integer izero = Integer.valueOf(0);
                fRB.fStatusSets.put(s0, izero);
@@ -756,17 +779,17 @@ class RBBITableBuilder {
                if (arrayIndexI == null) {
                    // This is the first encounter of this set of status values.
                    //   Add them to the statusSets map, This map associates
-                   //   the set of status values with an index in the runtime status 
+                   //   the set of status values with an index in the runtime status
                    //   values array.
                    arrayIndexI = Integer.valueOf(fRB.fRuleStatusVals.size());
                    fRB.fStatusSets.put(statusVals, arrayIndexI);
-                   
+
                    // Add the new set of status values to the vector of values that
                    //   will eventually become the array used by the runtime engine.
                    fRB.fRuleStatusVals.add(Integer.valueOf(statusVals.size()));
                    fRB.fRuleStatusVals.addAll(statusVals);
                }
-               
+
                // Save the runtime array index back into the state descriptor.
                sd.fTagsIdx = arrayIndexI.intValue();
            }
@@ -784,7 +807,7 @@ class RBBITableBuilder {
        //                 for each node in the tree.
        //
        //-----------------------------------------------------------------------------
-       
+
        void printPosSets(RBBINode n) {
            if (n==null) {
                return;
@@ -804,7 +827,7 @@ class RBBITableBuilder {
            printPosSets(n.fLeftChild);
            printPosSets(n.fRightChild);
        }
-       
+
 
 
 
@@ -860,7 +883,7 @@ class RBBITableBuilder {
        //                    See struct RBBIStateTable in ICU4C, common/rbbidata.h
        //
        //-----------------------------------------------------------------------------
-       
+
        short [] exportTable() {
            int                state;
            int                col;
@@ -870,18 +893,18 @@ class RBBITableBuilder {
            }
 
            Assert.assrt(fRB.fSetBuilder.getNumCharCategories() < 0x7fff &&
-               fDStates.size() < 0x7fff); 
+               fDStates.size() < 0x7fff);
 
            int numStates = fDStates.size();
-    
+
            // Size of table size in shorts.
            //  the "4" is the size of struct RBBIStateTableRow, the row header part only.
            int rowLen = 4 + fRB.fSetBuilder.getNumCharCategories();
            int tableSize = getTableSize() / 2;
 
-           
+
            short [] table = new short[tableSize];
-           
+
            //
            // Fill in the header fields.
            //      Annoying because they really want to be ints, not shorts.
@@ -893,7 +916,7 @@ class RBBITableBuilder {
            // RBBIStateTable.fRowLen
            table[RBBIDataWrapper.ROWLEN]   = (short)(rowLen >>> 16);
            table[RBBIDataWrapper.ROWLEN+1] = (short)(rowLen & 0x0000ffff);
-           
+
            // RBBIStateTable.fFlags
            int flags = 0;
            if (fRB.fLookAheadHardBreak) {
@@ -904,7 +927,7 @@ class RBBITableBuilder {
            }
            table[RBBIDataWrapper.FLAGS]   = (short)(flags >>> 16);
            table[RBBIDataWrapper.FLAGS+1] = (short)(flags & 0x0000ffff);
-           
+
            int numCharCategories = fRB.fSetBuilder.getNumCharCategories();
            for (state=0; state<numStates; state++) {
                RBBIStateDescriptor sd = fDStates.get(state);
@@ -928,14 +951,14 @@ class RBBITableBuilder {
        //   printSet    Debug function.   Print the contents of a set of Nodes
        //
        //-----------------------------------------------------------------------------
-       
+
        void printSet(Collection<RBBINode> s) {
            for (RBBINode n : s) {
                RBBINode.printInt(n.fSerialNum, 8);
            }
            System.out.println();
        }
-       
+
 
 
        //-----------------------------------------------------------------------------
@@ -943,7 +966,7 @@ class RBBITableBuilder {
        //   printStates    Debug Function.  Dump the fully constructed state transition table.
        //
        //-----------------------------------------------------------------------------
-       
+
        void printStates() {
            int     c;    // input "character"
            int     n;    // state number
@@ -964,7 +987,7 @@ class RBBITableBuilder {
                RBBIStateDescriptor sd = fDStates.get(n);
                RBBINode.printInt(n, 5);
                System.out.print(" | ");
-               
+
                RBBINode.printInt(sd.fAccepting, 3);
                RBBINode.printInt(sd.fLookAhead, 4);
                RBBINode.printInt(sd.fTagsIdx, 6);
@@ -976,7 +999,7 @@ class RBBITableBuilder {
            }
            System.out.print("\n\n");
        }
-       
+
 
 
 
@@ -985,7 +1008,7 @@ class RBBITableBuilder {
        //   printRuleStatusTable    Debug Function.  Dump the common rule status table
        //
        //-----------------------------------------------------------------------------
-       
+
        void printRuleStatusTable() {
            int  thisRecord = 0;
            int  nextRecord = 0;
@@ -1007,7 +1030,7 @@ class RBBITableBuilder {
            }
            System.out.print("\n\n");
        }
-       
+
 
 
 }
