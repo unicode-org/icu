@@ -752,6 +752,21 @@ public class ULocaleTest extends TestFmwk {
         }
     }
 
+    public void TestUldnWithGarbage(){
+        LocaleDisplayNames ldn = LocaleDisplayNames.getInstance(Locale.US, DisplayContext.DIALECT_NAMES);
+        String badLocaleID = "english (United States) [w";
+        String expectedResult = "english [united states] [w"; // case changed from input
+        String result = ldn.localeDisplayName(badLocaleID);
+        if (result.compareTo(expectedResult) != 0) {
+            errln("FAIL: LocaleDisplayNames.localeDisplayName(String) for bad locale ID \"" + badLocaleID + "\", expected \"" + expectedResult + "\", got \"" + result + "\"");
+        }
+        ULocale badLocale = new ULocale(badLocaleID);
+        result = ldn.localeDisplayName(badLocale);
+        if (result.compareTo(expectedResult) != 0) {
+            errln("FAIL: LocaleDisplayNames.localeDisplayName(ULocale) for bad locale ID \"" + badLocaleID + "\", expected \"" + expectedResult + "\", got \"" + result + "\"");
+        }
+    }
+
     public void TestObsoleteNames(){
         final String[][] tests = new String[][]{
                 /* locale, language3, language2, Country3, country2 */
