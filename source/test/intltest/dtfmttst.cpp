@@ -4945,6 +4945,10 @@ void DateFormatTest::TestAmPmMidnightNoon() {
 
     UErrorCode errorCode = U_ZERO_ERROR;
     SimpleDateFormat sdf(UnicodeString(), errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln("Error creating SimpleDateFormat - %s", u_errorName(errorCode));
+        return;
+    }
     const TimeZone *tz = TimeZone::getGMT();
     sdf.setTimeZone(*tz);
     UnicodeString out;
@@ -5027,6 +5031,10 @@ void DateFormatTest::TestFlexibleDayPeriod() {
 
     UErrorCode errorCode = U_ZERO_ERROR;
     SimpleDateFormat sdf(UnicodeString(), errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln("Error creating SimpleDateFormat - %s", u_errorName(errorCode));
+        return;
+    }
     const TimeZone *tz = TimeZone::getGMT();
     sdf.setTimeZone(*tz);
     UnicodeString out;
@@ -5111,6 +5119,10 @@ void DateFormatTest::TestDayPeriodWithLocales() {
 
     // Locale de has a word for midnight, but not noon.
     SimpleDateFormat sdf(UnicodeString(), Locale::getGermany(), errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln("Error creating SimpleDateFormat - %s", u_errorName(errorCode));
+        return;
+    }
     sdf.setTimeZone(*tz);
 
     sdf.applyPattern(UnicodeString("hh:mm:ss bbbb"));
@@ -5202,6 +5214,10 @@ void DateFormatTest::TestMinuteSecondFieldsInOddPlaces() {
 
     // Apply pattern through constructor to make sure parsePattern() is called during initialization.
     SimpleDateFormat sdf(UnicodeString("hh:mm 'ss' bbbb"), errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln("Error creating SimpleDateFormat - %s", u_errorName(errorCode));
+        return;
+    }
     sdf.setTimeZone(*tz);
 
     assertEquals("hh:mm 'ss' bbbb | 00:00:30", "12:00 ss midnight",
@@ -5283,6 +5299,10 @@ void DateFormatTest::TestDayPeriodParsing() {
 
     UErrorCode errorCode = U_ZERO_ERROR;
     SimpleDateFormat sdf(UnicodeString(), errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln("Error creating SimpleDateFormat - %s", u_errorName(errorCode));
+        return;
+    }
     const TimeZone *tz = TimeZone::getGMT();
     sdf.setTimeZone(*tz);
     UnicodeString out;

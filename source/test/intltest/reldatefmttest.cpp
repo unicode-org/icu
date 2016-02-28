@@ -906,6 +906,10 @@ void RelativeDateTimeFormatterTest::TestSidewaysDataLoading(void) {
 
     RelativeDateTimeFormatter fmt(enGbLocale, NULL, UDAT_STYLE_NARROW,
                                   UDISPCTX_CAPITALIZATION_NONE, status);
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create RelativeDateTimeFormatter - %s", u_errorName(status));
+        return;
+    }
 
     status = U_ZERO_ERROR;
     actual = "";
