@@ -274,7 +274,7 @@ public class ULocaleTest extends TestFmwk {
         if (!JAVA7_OR_LATER && !Locale.getDefault().equals(noNONY)) {
             errln("FAIL: ULocale#setDefault failed to set Java Locale no_NO_NY /actual: " + Locale.getDefault());
         }
-        Locale.setDefault(backupDefault);        
+        Locale.setDefault(backupDefault);
 
         // We also want to map ICU locale nn to Java no_NO_NY
         ULocale.setDefault(new ULocale("nn"));
@@ -1056,6 +1056,10 @@ public class ULocaleTest extends TestFmwk {
                     new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en",    "Engelsk" ),
                     new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en",    "Engelsk" ),
                     new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en",    "engelsk" ),
+                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en@calendar=buddhist", "engelsk (buddhistisk kalender)" ),
+                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en@calendar=buddhist", "Engelsk (buddhistisk kalender)" ),
+                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en@calendar=buddhist", "Engelsk (buddhistisk kalender)" ),
+                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en@calendar=buddhist", "engelsk (buddhistisk kalender)" ),
                     new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en_GB", "engelsk (Storbritannien)" ),
                     new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en_GB", "Engelsk (Storbritannien)" ),
                     new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en_GB", "Engelsk (Storbritannien)" ),
@@ -1084,6 +1088,10 @@ public class ULocaleTest extends TestFmwk {
                     new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s brit\u00E1nico" ),
                     new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s brit\u00E1nico" ),
                     new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s brit\u00E1nico" ),
+                    new TestContextItem( "ru", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "uz_Latn", "\u0443\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)" ),
+                    new TestContextItem( "ru", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)" ),
+                    new TestContextItem( "ru", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)" ),
+                    new TestContextItem( "ru", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)" ),
                     new TestContextItem( "en", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "ur@numbers=latn",    "Urdu (Western Digits)" ),
                     new TestContextItem( "en", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "ur@numbers=arabext", "Urdu (Extended Arabic-Indic Digits)" ),
                     new TestContextItem( "en", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_SHORT, "ur@numbers=arabext", "Urdu (X Arabic-Indic Digits)" ),
@@ -1104,7 +1112,7 @@ public class ULocaleTest extends TestFmwk {
                         errln("FAIL: displayLoc: " + item.displayLocale + ", dialectNam?: " + item.dialectHandling +
                                 ", capitalize: " + item.capitalization + ", nameLen: " + item.nameLength + ", locToName: " + item.localeToBeNamed +
                                 ", => expected result: " + item.result + ", got: " + result);
-                    } 
+                    }
                 }
             }
         }
@@ -1410,13 +1418,13 @@ public class ULocaleTest extends TestFmwk {
         /*1*/ { "en", "false" },
         /*2*/ { "en", "true" }, // fell back from en-zzz to en
         /*3*/ { null, "true" },
-        /*4*/ { "es", "false" }, 
+        /*4*/ { "es", "false" },
         /*5*/ { "de", "false" },
         /*6*/ { "zh_TW", "false" },
         /*7*/ { "zh", "true" },
     };
 
-    private static final String ACCEPT_LANGUAGE_HTTP[] = { 
+    private static final String ACCEPT_LANGUAGE_HTTP[] = {
         /*0*/ "mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53, th-th-traditional;q=.01",
         /*1*/ "ja;q=0.5, en;q=0.8, tlh",
         /*2*/ "en-zzz, de-lx;q=0.8",
@@ -1465,7 +1473,7 @@ public class ULocaleTest extends TestFmwk {
     }
 
     private ULocale[] StringToULocaleArray(String acceptLanguageList){
-        //following code is copied from 
+        //following code is copied from
         //ULocale.acceptLanguage(String acceptLanguageList, ULocale[] availableLocales, boolean[] fallback)
         class ULocaleAcceptLanguageQ implements Comparable {
             private double q;
@@ -1541,7 +1549,7 @@ public class ULocaleTest extends TestFmwk {
             n = itemEnd; // get next item. (n++ will skip over delimiter)
         }
 
-        // 2. pull out the map 
+        // 2. pull out the map
         ULocale acceptList[] = (ULocale[])map.values().toArray(new ULocale[map.size()]);
         return acceptList;
     }
@@ -1606,32 +1614,32 @@ public class ULocaleTest extends TestFmwk {
         }
     }
 
-    public void TestMinimize() { 
-        String[][] data = { 
-                // source, favorRegion, favorScript 
-                {"zh-Hans-CN", "zh", "zh"}, 
-                {"zh-Hant-TW", "zh-TW", "zh-Hant"}, 
-                {"zh-Hant-SG", "zh-Hant-SG", "zh-Hant-SG"}, 
-                {"zh-Hans-SG", "zh-SG", "zh-SG"}, 
-                {"zh-Hant-HK", "zh-HK", "zh-HK"}, 
-                {"en_Latn_US", "en", "en"}, 
-                {"en_Cyrl-US", "en-Cyrl", "en-Cyrl"}, 
-                {"en_Cyrl-RU", "en-Cyrl-RU", "en-Cyrl-RU"}, 
-                {"en_Latn-RU", "en-RU", "en-RU"}, 
-                {"sr_Cyrl-US", "sr-US", "sr-US"}, 
-                {"sr_Cyrl-RU", "sr-Cyrl-RU", "sr-Cyrl-RU"}, 
-                {"sr_Latn-RU", "sr-RU", "sr-RU"}, 
-        }; 
-        for (String[] test : data) { 
-            ULocale source = new ULocale(test[0]); 
-            ULocale expectedFavorRegion = new ULocale(test[1]); 
-            ULocale expectedFavorScript = new ULocale(test[2]); 
-            assertEquals("favor region:\t" + Arrays.asList(test).toString(), expectedFavorRegion,  
-                    ULocale.minimizeSubtags(source, Minimize.FAVOR_REGION)); 
-            assertEquals("favor script:\t" + Arrays.asList(test).toString(), expectedFavorScript,  
-                    ULocale.minimizeSubtags(source, Minimize.FAVOR_SCRIPT)); 
-        } 
-    } 
+    public void TestMinimize() {
+        String[][] data = {
+                // source, favorRegion, favorScript
+                {"zh-Hans-CN", "zh", "zh"},
+                {"zh-Hant-TW", "zh-TW", "zh-Hant"},
+                {"zh-Hant-SG", "zh-Hant-SG", "zh-Hant-SG"},
+                {"zh-Hans-SG", "zh-SG", "zh-SG"},
+                {"zh-Hant-HK", "zh-HK", "zh-HK"},
+                {"en_Latn_US", "en", "en"},
+                {"en_Cyrl-US", "en-Cyrl", "en-Cyrl"},
+                {"en_Cyrl-RU", "en-Cyrl-RU", "en-Cyrl-RU"},
+                {"en_Latn-RU", "en-RU", "en-RU"},
+                {"sr_Cyrl-US", "sr-US", "sr-US"},
+                {"sr_Cyrl-RU", "sr-Cyrl-RU", "sr-Cyrl-RU"},
+                {"sr_Latn-RU", "sr-RU", "sr-RU"},
+        };
+        for (String[] test : data) {
+            ULocale source = new ULocale(test[0]);
+            ULocale expectedFavorRegion = new ULocale(test[1]);
+            ULocale expectedFavorScript = new ULocale(test[2]);
+            assertEquals("favor region:\t" + Arrays.asList(test).toString(), expectedFavorRegion,
+                    ULocale.minimizeSubtags(source, Minimize.FAVOR_REGION));
+            assertEquals("favor script:\t" + Arrays.asList(test).toString(), expectedFavorScript,
+                    ULocale.minimizeSubtags(source, Minimize.FAVOR_SCRIPT));
+        }
+    }
 
     public void TestAddLikelySubtags() {
         String[][] data = {
@@ -3879,7 +3887,7 @@ public class ULocaleTest extends TestFmwk {
         testCurrent = VersionInfo.getInstance(bundle.getString("CurrentCLDRVersion"));
 
 
-        logln("(data) ExpectCLDRVersionAtLeast { "+testExpect+""); 
+        logln("(data) ExpectCLDRVersionAtLeast { "+testExpect+"");
         if(cldrVersion.compareTo(testExpect)<0) {
             errln("CLDR version is too old, expect at least "+testExpect+".");
         }
@@ -4050,7 +4058,7 @@ public class ULocaleTest extends TestFmwk {
             new ULocale("en").getDisplayKeywordValue("calendar",ULocale.GERMAN);
         } catch (Exception e) {
             errln("Unexpected exception: " + e.getMessage());
-        }  
+        }
     }
 
     public void TestGetFallback() {
@@ -4073,7 +4081,7 @@ public class ULocaleTest extends TestFmwk {
         }
 
         // Testing ULocale getFallback()
-        final ULocale[][] TESTLOCALES = 
+        final ULocale[][] TESTLOCALES =
             {
                 {new ULocale("en_US"), new ULocale("en"), ULocale.ROOT, null},
                 {new ULocale("en__POSIX"), new ULocale("en"), ULocale.ROOT, null},
@@ -4116,7 +4124,7 @@ public class ULocaleTest extends TestFmwk {
                 String kstr = testcase[i/2 + 1];
                 String ext = loc.getExtension(Character.valueOf(kstr.charAt(0)));
                 if (ext == null || !ext.equals(testcase[i/2 + 2])) {
-                    errln("Incorrect extension value: key=" 
+                    errln("Incorrect extension value: key="
                             + kstr + ", returned=" + ext + ", expected=" + testcase[i/2 + 2]
                                     + ", locale=" + testcase[0]);
                 }
@@ -4168,7 +4176,7 @@ public class ULocaleTest extends TestFmwk {
             // Check attributes
             Set<String> attributes = loc.getUnicodeLocaleAttributes();
             if (attributes.size() != expectedAttributes.size()) {
-                errln("Incorrect number for Unicode locale attributes: returned=" 
+                errln("Incorrect number for Unicode locale attributes: returned="
                         + attributes.size() + ", expected=" + expectedAttributes.size()
                         + ", locale=" + testcase[0]);
             }
@@ -4180,7 +4188,7 @@ public class ULocaleTest extends TestFmwk {
             Set<String> keys = loc.getUnicodeLocaleKeys();
             Set<String> expectedKeys = expectedKeywords.keySet();
             if (keys.size() != expectedKeys.size()) {
-                errln("Incorrect number for Unicode locale keys: returned=" 
+                errln("Incorrect number for Unicode locale keys: returned="
                         + keys.size() + ", expected=" + expectedKeys.size()
                         + ", locale=" + testcase[0]);
             }
@@ -4190,7 +4198,7 @@ public class ULocaleTest extends TestFmwk {
                 String expType = expectedKeywords.get(expKey);
 
                 if (type == null || !expType.equals(type)) {
-                    errln("Incorrect Unicode locale type: key=" 
+                    errln("Incorrect Unicode locale type: key="
                             + expKey + ", returned=" + type + ", expected=" + expType
                             + ", locale=" + testcase[0]);
                 }

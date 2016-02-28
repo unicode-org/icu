@@ -54,12 +54,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
      * Capitalization context usage types for locale display names
      */
     private enum CapitalizationContextUsage {
-        LANGUAGE, 
-        SCRIPT, 
+        LANGUAGE,
+        SCRIPT,
         TERRITORY,
-        VARIANT, 
-        KEY, 
-        KEYVALUE 
+        VARIANT,
+        KEY,
+        KEYVALUE
     }
     /**
      * Capitalization transforms. For each usage type, indicates whether to titlecase for
@@ -338,17 +338,17 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         StringBuilder buf = new StringBuilder();
         if (hasScript) {
             // first element, don't need appendWithSep
-            buf.append(scriptDisplayNameInContext(script)
+            buf.append(scriptDisplayNameInContext(script, true)
                     .replace(formatOpenParen, formatReplaceOpenParen)
                     .replace(formatCloseParen, formatReplaceCloseParen));
         }
         if (hasCountry) {
-            appendWithSep(regionDisplayName(country)
+            appendWithSep(regionDisplayName(country, true)
                     .replace(formatOpenParen, formatReplaceOpenParen)
                     .replace(formatCloseParen, formatReplaceCloseParen), buf);
         }
         if (hasVariant) {
-            appendWithSep(variantDisplayName(variant)
+            appendWithSep(variantDisplayName(variant, true)
                     .replace(formatOpenParen, formatReplaceOpenParen)
                     .replace(formatCloseParen, formatReplaceCloseParen), buf);
         }
@@ -358,10 +358,10 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             while (keys.hasNext()) {
                 String key = keys.next();
                 String value = locale.getKeywordValue(key);
-                String keyDisplayName = keyDisplayName(key)
+                String keyDisplayName = keyDisplayName(key, true)
                         .replace(formatOpenParen, formatReplaceOpenParen)
                         .replace(formatCloseParen, formatReplaceCloseParen);
-                String valueDisplayName = keyValueDisplayName(key, value)
+                String valueDisplayName = keyValueDisplayName(key, value, true)
                         .replace(formatOpenParen, formatReplaceOpenParen)
                         .replace(formatCloseParen, formatReplaceCloseParen);
                 if (!valueDisplayName.equals(value)) {
@@ -431,15 +431,20 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, str);
     }
 
-    @Override
-    public String scriptDisplayNameInContext(String script) {
+    private String scriptDisplayNameInContext(String script, boolean skipAdjust) {
         if (nameLength == DisplayContext.LENGTH_SHORT) {
             String scriptName = langData.get("Scripts%short", script);
             if (!scriptName.equals(script)) {
-                return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, scriptName);
+                return skipAdjust? scriptName: adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, scriptName);
             }
         }
-        return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, langData.get("Scripts", script));
+        String scriptName = langData.get("Scripts", script);
+        return skipAdjust? scriptName: adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, scriptName);
+    }
+
+    @Override
+    public String scriptDisplayNameInContext(String script) {
+        return scriptDisplayNameInContext(script, false);
     }
 
     @Override
@@ -447,31 +452,45 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         return scriptDisplayName(UScript.getShortName(scriptCode));
     }
 
-    @Override
-    public String regionDisplayName(String region) {
+    private String regionDisplayName(String region, boolean skipAdjust) {
         if (nameLength == DisplayContext.LENGTH_SHORT) {
             String regionName = regionData.get("Countries%short", region);
             if (!regionName.equals(region)) {
-                return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionName);
+                return skipAdjust? regionName: adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionName);
             }
         }
-        return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionData.get("Countries", region));
+        String regionName = regionData.get("Countries", region);
+        return skipAdjust? regionName: adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionName);
+    }
+
+    @Override
+    public String regionDisplayName(String region) {
+        return regionDisplayName(region, false);
+    }
+
+    private String variantDisplayName(String variant, boolean skipAdjust) {
+        // don't have a resource for short variant names
+        String variantName = langData.get("Variants", variant);
+        return skipAdjust? variantName: adjustForUsageAndContext(CapitalizationContextUsage.VARIANT, variantName);
     }
 
     @Override
     public String variantDisplayName(String variant) {
-        // don't have a resource for short variant names
-        return adjustForUsageAndContext(CapitalizationContextUsage.VARIANT, langData.get("Variants", variant));
+        return variantDisplayName(variant, false);
+    }
+
+    private String keyDisplayName(String key, boolean skipAdjust) {
+        // don't have a resource for short key names
+        String keyName = langData.get("Keys", key);
+        return skipAdjust? keyName: adjustForUsageAndContext(CapitalizationContextUsage.KEY, keyName);
     }
 
     @Override
     public String keyDisplayName(String key) {
-        // don't have a resource for short key names
-        return adjustForUsageAndContext(CapitalizationContextUsage.KEY, langData.get("Keys", key));
+        return keyDisplayName(key, false);
     }
 
-    @Override
-    public String keyValueDisplayName(String key, String value) {
+    private String keyValueDisplayName(String key, String value, boolean skipAdjust) {
         String keyValueName = null;
 
         if (key.equals("currency")) {
@@ -491,7 +510,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             }
         }
 
-        return adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, keyValueName);
+        return skipAdjust? keyValueName: adjustForUsageAndContext(CapitalizationContextUsage.KEYVALUE, keyValueName);
+    }
+
+    @Override
+    public String keyValueDisplayName(String key, String value) {
+        return keyValueDisplayName(key, value, false);
     }
 
     @Override
@@ -547,7 +571,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     }
 
     private UiListItem newRow(ULocale modified, DisplayContext capContext) {
-        ULocale minimized = ULocale.minimizeSubtags(modified, ULocale.Minimize.FAVOR_SCRIPT); 
+        ULocale minimized = ULocale.minimizeSubtags(modified, ULocale.Minimize.FAVOR_SCRIPT);
         String tempName = modified.getDisplayName(locale);
         boolean titlecase = capContext == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU;
         String nameInDisplayLocale =  titlecase ? UCharacter.toTitleFirst(locale, tempName) : tempName;
@@ -640,7 +664,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     private StringBuilder appendWithSep(String s, StringBuilder b) {
         if (b.length() == 0) {
-            b.append(s); 
+            b.append(s);
         } else {
             SimpleFormatterImpl.formatAndReplace(separatorFormat, b, null, b, s);
         }
