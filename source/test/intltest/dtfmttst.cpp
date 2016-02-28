@@ -94,6 +94,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestMonthPatterns);
     TESTCASE_AUTO(TestContext);
     TESTCASE_AUTO(TestNonGregoFmtParse);
+    TESTCASE_AUTO(TestFormatsWithNumberSystems);
     /*
     TESTCASE_AUTO(TestRelativeError);
     TESTCASE_AUTO(TestRelativeOther);
@@ -4352,6 +4353,67 @@ void DateFormatTest::TestNonGregoFmtParse()
                 delete cal;
             }
             delete dfmt;
+        }
+    }
+}
+
+typedef struct {
+    const char*         localeID;
+    DateFormat::EStyle  style;
+    UnicodeString       expectPattern;
+    UnicodeString       expectFormat;
+} TestFmtWithNumSysItem;
+enum { kBBufMax = 128 };
+void DateFormatTest::TestFormatsWithNumberSystems()
+{
+    LocalPointer<TimeZone> zone(TimeZone::createTimeZone(UnicodeString("UTC")));
+    const UDate date = 1451556000000.0; // for UTC: grego 31-Dec-2015 10 AM, hebrew 19 tevet 5776, chinese yi-wei 11mo 21day
+    const TestFmtWithNumSysItem items[] = {
+        { "haw@calendar=gregorian", DateFormat::kShort, UnicodeString("d/M/yy"),               UnicodeString("31/xii/15") },
+        { "he@calendar=hebrew",     DateFormat::kLong, CharsToUnicodeString("d \\u05D1MMMM y"), CharsToUnicodeString("\\u05D9\\u05F4\\u05D8 \\u05D1\\u05D8\\u05D1\\u05EA \\u05EA\\u05E9\\u05E2\\u05F4\\u05D5") }, // "י״ט בטבת תשע״ו"
+        { "zh@calendar=chinese",      DateFormat::kLong, CharsToUnicodeString("rU\\u5E74MMMd"), CharsToUnicodeString("2015\\u4E59\\u672A\\u5E74\\u51AC\\u6708\\u5EFF\\u4E00") }, // "2015乙未年冬月廿一"
+        { "zh_Hant@calendar=chinese", DateFormat::kLong, CharsToUnicodeString("rU\\u5E74MMMd"), CharsToUnicodeString("2015\\u4E59\\u672A\\u5E74\\u51AC\\u6708\\u5EFF\\u4E00") }, // "2015乙未年冬月廿一"
+        { "ja@calendar=chinese", DateFormat::kLong, CharsToUnicodeString("U\\u5E74MMMd\\u65E5"), CharsToUnicodeString("\\u4E59\\u672A\\u5E74\\u5341\\u4E00\\u6708\\u4E8C\\u4E00\\u65E5") }, // "乙未年十一月二一日"
+        { NULL, DateFormat::kNone, UnicodeString(""), UnicodeString("") },
+    };
+    const TestFmtWithNumSysItem * itemPtr;
+    for (itemPtr = items; itemPtr->localeID != NULL; itemPtr++) {
+        char bExpected[kBBufMax];
+        char bResult[kBBufMax];
+        UErrorCode status = U_ZERO_ERROR;
+        Locale locale = Locale::createFromName(itemPtr->localeID);
+        LocalPointer<Calendar> cal(Calendar::createInstance(zone.orphan(), locale, status));
+        if (U_FAILURE(status)) {
+            dataerrln("Calendar::createInstance fails for locale %s, status %s", itemPtr->localeID, u_errorName(status));
+            continue;
+        }
+        cal->setTime(date, status);
+        if (U_FAILURE(status)) {
+            dataerrln("Calendar::setTime fails for locale %s, date %.1f, status %s", itemPtr->localeID, date, u_errorName(status));
+            continue;
+        }
+        LocalPointer<SimpleDateFormat> sdfmt(static_cast<SimpleDateFormat *>(DateFormat::createDateInstance(itemPtr->style, locale)));
+        if (sdfmt.isNull()) {
+            dataerrln("DateFormat::createDateInstance fails for locale %s", itemPtr->localeID);
+            continue;
+        }
+        UnicodeString getFormat;
+        sdfmt->format(*(cal.getAlias()), getFormat, NULL, status);
+        if (U_FAILURE(status)) {
+            errln("DateFormat::format fails for locale %s, status %s", itemPtr->localeID, u_errorName(status));
+            continue;
+        }
+        if (getFormat.compare(itemPtr->expectFormat) != 0) {
+            itemPtr->expectFormat.extract(0, itemPtr->expectFormat.length(), bExpected, kBBufMax);
+            getFormat.extract(0, getFormat.length(), bResult, kBBufMax);
+            errln("DateFormat::format for locale %s, expected \"%s\", got \"%s\"", itemPtr->localeID, bExpected, bResult);
+        }
+        UnicodeString getPattern;
+        sdfmt->toPattern(getPattern);
+        if (getPattern.compare(itemPtr->expectPattern) != 0) {
+            itemPtr->expectPattern.extract(0, itemPtr->expectPattern.length(), bExpected, kBBufMax);
+            getPattern.extract(0, getPattern.length(), bResult, kBBufMax);
+            errln("DateFormat::toPattern() for locale %s, expected \"%s\", got \"%s\"", itemPtr->localeID, bExpected, bResult);
         }
     }
 }
