@@ -4338,6 +4338,48 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void TestFormatsWithNumberSystems() {
+        TimeZone zone = TimeZone.getFrozenTimeZone("UTC");
+        long date = 1451556000000L; // for UTC: grego 31-Dec-2015 10 AM, hebrew 19 tevet 5776, chinese yi-wei 11mo 21day
+        class TestFmtWithNumSysItem {
+            public String localeID;
+            public int style;
+            public String expectPattern;
+            public String expectFormat;
+             // Simple constructor
+            public TestFmtWithNumSysItem(String loc, int styl, String pat, String exp) {
+                localeID = loc;
+                style = styl;
+                expectPattern = pat;
+                expectFormat = exp;
+            }
+        };
+        final TestFmtWithNumSysItem[] items = {
+            new TestFmtWithNumSysItem( "haw@calendar=gregorian", DateFormat.SHORT,  "d/M/yy",       "31/xii/15" ),
+            new TestFmtWithNumSysItem( "he@calendar=hebrew",     DateFormat.LONG, "d \u05D1MMMM y", "\u05D9\u05F4\u05D8 \u05D1\u05D8\u05D1\u05EA \u05EA\u05E9\u05E2\u05F4\u05D5" ),
+            new TestFmtWithNumSysItem( "zh@calendar=chinese",      DateFormat.LONG, "rU\u5E74MMMd", "2015\u4E59\u672A\u5E74\u51AC\u6708\u5EFF\u4E00" ), // "2015乙未年冬月廿一"
+            new TestFmtWithNumSysItem( "zh_Hant@calendar=chinese", DateFormat.LONG, "rU\u5E74MMMd", "2015\u4E59\u672A\u5E74\u51AC\u6708\u5EFF\u4E00" ), // "2015乙未年冬月廿一"
+            new TestFmtWithNumSysItem( "ja@calendar=chinese", DateFormat.LONG, "U\u5E74MMMd\u65E5", "\u4E59\u672A\u5E74\u5341\u4E00\u6708\u4E8C\u4E00\u65E5" ), // "乙未年十一月二一日"
+        };
+        for (TestFmtWithNumSysItem item: items) {
+            ULocale locale = new ULocale(item.localeID);
+            Calendar cal = Calendar.getInstance(zone, locale);
+            cal.setTimeInMillis(date);
+            SimpleDateFormat sdfmt = (SimpleDateFormat) DateFormat.getDateInstance(item.style, locale);
+            StringBuffer getFormat = new StringBuffer();
+            FieldPosition fp = new FieldPosition(0);
+            sdfmt.format(cal, getFormat, fp);
+            if (getFormat.toString().compareTo(item.expectFormat) != 0) {
+                errln("FAIL: date format for locale " + item.localeID + ", expected \"" + item.expectFormat + "\", got \"" + getFormat.toString() + "\"");
+            }
+            String getPattern = sdfmt.toPattern();
+            if (getPattern.compareTo(item.expectPattern) != 0) {
+                errln("FAIL: date pattern for locale " + item.localeID + ", expected \"" + item.expectPattern + "\", got \"" + getPattern + "\"");
+            }
+        }
+
+    }
+
     public void TestTwoDigitWOY() { // See ICU Ticket #8514
         String dateText = new String("98MON01");
 
