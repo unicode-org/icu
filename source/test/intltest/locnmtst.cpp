@@ -78,6 +78,7 @@ void LocaleDisplayNamesTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE(10, TestUntranslatedKeywords);
         TESTCASE(11, TestPrivateUse);
         TESTCASE(12, TestUldnDisplayContext);
+        TESTCASE(13, TestUldnWithGarbage);
 #endif
         default:
             name = "";
@@ -186,6 +187,16 @@ void LocaleDisplayNamesTest::TestUldnOpenDialect() {
 
   UnicodeString str(result, len, kMaxResultSize);
   test_assert_equal("British English", str);
+}
+
+void LocaleDisplayNamesTest::TestUldnWithGarbage() {
+  UErrorCode status = U_ZERO_ERROR;
+  const int32_t kMaxResultSize = 150;  // long enough
+  UChar result[150];
+  ULocaleDisplayNames *ldn = uldn_open(Locale::getUS().getName(), ULDN_DIALECT_NAMES, &status);
+  int32_t len = uldn_localeDisplayName(ldn, "english (United States) [w", result, kMaxResultSize, &status);
+  uldn_close(ldn);
+  test_assert(U_FAILURE(status));
 }
 
 void LocaleDisplayNamesTest::TestUldnWithKeywordsAndEverything() {
