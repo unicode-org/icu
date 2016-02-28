@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 2010-2014, International Business Machines Corporation
+ * COPYRIGHT:
+ * Copyright (c) 2010-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 
@@ -14,7 +14,7 @@ class LocaleDisplayNamesTest: public IntlTest {
 public:
     LocaleDisplayNamesTest();
     virtual ~LocaleDisplayNamesTest();
-    
+
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
 
 #if !UCONFIG_NO_FORMATTING
@@ -34,5 +34,6 @@ public:
     void TestUntranslatedKeywords(void);
     void TestPrivateUse(void);
     void TestUldnDisplayContext(void);
+    void TestUldnWithGarbage(void);
 #endif
 };

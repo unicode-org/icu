@@ -540,6 +540,10 @@ LocaleDisplayNamesImpl::adjustForUsageAndContext(CapContextUsage usage,
 UnicodeString&
 LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
                                           UnicodeString& result) const {
+  if (locale.isBogus()) {
+    result.setToBogus();
+    return result;
+  }
   UnicodeString resultName;
 
   const char* lang = locale.getLanguage();
@@ -902,6 +906,10 @@ uldn_localeDisplayName(const ULocaleDisplayNames *ldn,
   }
   UnicodeString temp(result, 0, maxResultSize);
   ((const LocaleDisplayNames *)ldn)->localeDisplayName(locale, temp);
+  if (temp.isBogus()) {
+    *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
   return temp.extract(result, maxResultSize, *pErrorCode);
 }
 
