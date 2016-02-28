@@ -12,7 +12,7 @@
 #include "unicode/locdspnm.h"
 #include "unicode/simpleformatter.h"
 #include "unicode/ures.h"
-#include "unicode/udisplaycontext.h" 
+#include "unicode/udisplaycontext.h"
 #include "unicode/brkiter.h"
 #include "unicode/ucurr.h"
 #include "cmemory.h"
@@ -278,7 +278,7 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
     SimpleFormatter format;
     SimpleFormatter keyTypeFormat;
     UDisplayContext capitalizationContext;
-    BreakIterator* capitalizationBrkIter; 
+    BreakIterator* capitalizationBrkIter;
     static UMutex  capitalizationBrkIterLock;
     UnicodeString formatOpenParen;
     UnicodeString formatReplaceOpenParen;
@@ -334,6 +334,12 @@ private:
                                 UnicodeString& result) const;
     UnicodeString& appendWithSep(UnicodeString& buffer, const UnicodeString& src) const;
     UnicodeString& adjustForUsageAndContext(CapContextUsage usage, UnicodeString& result) const;
+    UnicodeString& scriptDisplayName(const char* script, UnicodeString& result, UBool skipAdjust) const;
+    UnicodeString& regionDisplayName(const char* region, UnicodeString& result, UBool skipAdjust) const;
+    UnicodeString& variantDisplayName(const char* variant, UnicodeString& result, UBool skipAdjust) const;
+    UnicodeString& keyDisplayName(const char* key, UnicodeString& result, UBool skipAdjust) const;
+    UnicodeString& keyValueDisplayName(const char* key, const char* value,
+                                        UnicodeString& result, UBool skipAdjust) const;
     void initialize(void);
 };
 
@@ -587,13 +593,13 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
   UErrorCode status = U_ZERO_ERROR;
 
   if (hasScript) {
-    resultRemainder.append(scriptDisplayName(script, temp));
+    resultRemainder.append(scriptDisplayName(script, temp, TRUE));
   }
   if (hasCountry) {
-    appendWithSep(resultRemainder, regionDisplayName(country, temp));
+    appendWithSep(resultRemainder, regionDisplayName(country, temp, TRUE));
   }
   if (hasVariant) {
-    appendWithSep(resultRemainder, variantDisplayName(variant, temp));
+    appendWithSep(resultRemainder, variantDisplayName(variant, temp, TRUE));
   }
   resultRemainder.findAndReplace(formatOpenParen, formatReplaceOpenParen);
   resultRemainder.findAndReplace(formatCloseParen, formatReplaceCloseParen);
@@ -608,10 +614,10 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
       if (U_FAILURE(status)) {
         return result;
       }
-      keyDisplayName(key, temp);
+      keyDisplayName(key, temp, TRUE);
       temp.findAndReplace(formatOpenParen, formatReplaceOpenParen);
       temp.findAndReplace(formatCloseParen, formatReplaceCloseParen);
-      keyValueDisplayName(key, value, temp2);
+      keyValueDisplayName(key, value, temp2, TRUE);
       temp2.findAndReplace(formatOpenParen, formatReplaceOpenParen);
       temp2.findAndReplace(formatCloseParen, formatReplaceCloseParen);
       if (temp2 != UnicodeString(value, -1, US_INV)) {
@@ -686,56 +692,86 @@ LocaleDisplayNamesImpl::languageDisplayName(const char* lang,
 
 UnicodeString&
 LocaleDisplayNamesImpl::scriptDisplayName(const char* script,
-                                          UnicodeString& result) const {
+                                          UnicodeString& result,
+                                          UBool skipAdjust) const {
     if (nameLength == UDISPCTX_LENGTH_SHORT) {
         langData.get("Scripts%short", script, result);
         if (!result.isBogus()) {
-            return adjustForUsageAndContext(kCapContextUsageScript, result);
+            return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageScript, result);
         }
     }
     langData.get("Scripts", script, result);
-    return adjustForUsageAndContext(kCapContextUsageScript, result);
+    return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageScript, result);
+}
+
+UnicodeString&
+LocaleDisplayNamesImpl::scriptDisplayName(const char* script,
+                                          UnicodeString& result) const {
+    return scriptDisplayName(script, result, FALSE);
 }
 
 UnicodeString&
 LocaleDisplayNamesImpl::scriptDisplayName(UScriptCode scriptCode,
                                           UnicodeString& result) const {
-    return scriptDisplayName(uscript_getName(scriptCode), result);
+    return scriptDisplayName(uscript_getName(scriptCode), result, FALSE);
+}
+
+UnicodeString&
+LocaleDisplayNamesImpl::regionDisplayName(const char* region,
+                                          UnicodeString& result,
+                                          UBool skipAdjust) const {
+    if (nameLength == UDISPCTX_LENGTH_SHORT) {
+        regionData.get("Countries%short", region, result);
+        if (!result.isBogus()) {
+            return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageTerritory, result);
+        }
+    }
+    regionData.get("Countries", region, result);
+    return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageTerritory, result);
 }
 
 UnicodeString&
 LocaleDisplayNamesImpl::regionDisplayName(const char* region,
                                           UnicodeString& result) const {
-    if (nameLength == UDISPCTX_LENGTH_SHORT) {
-        regionData.get("Countries%short", region, result);
-        if (!result.isBogus()) {
-            return adjustForUsageAndContext(kCapContextUsageTerritory, result);
-        }
-    }
-    regionData.get("Countries", region, result);
-    return adjustForUsageAndContext(kCapContextUsageTerritory, result);
+    return regionDisplayName(region, result, FALSE);
+}
+
+
+UnicodeString&
+LocaleDisplayNamesImpl::variantDisplayName(const char* variant,
+                                           UnicodeString& result,
+                                           UBool skipAdjust) const {
+    // don't have a resource for short variant names
+    langData.get("Variants", variant, result);
+    return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageVariant, result);
 }
 
 UnicodeString&
 LocaleDisplayNamesImpl::variantDisplayName(const char* variant,
                                            UnicodeString& result) const {
-    // don't have a resource for short variant names
-    langData.get("Variants", variant, result);
-    return adjustForUsageAndContext(kCapContextUsageVariant, result);
+    return variantDisplayName(variant, result, FALSE);
+}
+
+UnicodeString&
+LocaleDisplayNamesImpl::keyDisplayName(const char* key,
+                                       UnicodeString& result,
+                                       UBool skipAdjust) const {
+    // don't have a resource for short key names
+    langData.get("Keys", key, result);
+    return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageKey, result);
 }
 
 UnicodeString&
 LocaleDisplayNamesImpl::keyDisplayName(const char* key,
                                        UnicodeString& result) const {
-    // don't have a resource for short key names
-    langData.get("Keys", key, result);
-    return adjustForUsageAndContext(kCapContextUsageKey, result);
+    return keyDisplayName(key, result, FALSE);
 }
 
 UnicodeString&
 LocaleDisplayNamesImpl::keyValueDisplayName(const char* key,
                                             const char* value,
-                                            UnicodeString& result) const {
+                                            UnicodeString& result,
+                                            UBool skipAdjust) const {
     if (uprv_strcmp(key, "currency") == 0) {
         // ICU4C does not have ICU4J CurrencyDisplayInfo equivalent for now.
         UErrorCode sts = U_ZERO_ERROR;
@@ -750,17 +786,24 @@ LocaleDisplayNamesImpl::keyValueDisplayName(const char* key,
             return result;
         }
         result.setTo(currencyName, len);
-        return adjustForUsageAndContext(kCapContextUsageKeyValue, result);
+        return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageKeyValue, result);
     }
 
     if (nameLength == UDISPCTX_LENGTH_SHORT) {
         langData.get("Types%short", key, value, result);
         if (!result.isBogus()) {
-            return adjustForUsageAndContext(kCapContextUsageKeyValue, result);
+            return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageKeyValue, result);
         }
     }
     langData.get("Types", key, value, result);
-    return adjustForUsageAndContext(kCapContextUsageKeyValue, result);
+    return skipAdjust? result: adjustForUsageAndContext(kCapContextUsageKeyValue, result);
+}
+
+UnicodeString&
+LocaleDisplayNamesImpl::keyValueDisplayName(const char* key,
+                                            const char* value,
+                                            UnicodeString& result) const {
+    return keyValueDisplayName(key, value, result, FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
