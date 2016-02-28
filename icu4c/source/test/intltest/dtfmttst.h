@@ -188,6 +188,8 @@ public: // package
 
     void TestNonGregoFmtParse(void);
 
+    void TestFormatsWithNumberSystems(void);
+
 public:
     /**
      * Test host-specific formatting.
