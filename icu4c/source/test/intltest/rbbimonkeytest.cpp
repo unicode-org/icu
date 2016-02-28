@@ -651,6 +651,10 @@ void RBBIMonkeyImpl::runTest() {
     for (int64_t loopCount = 0; fLoopCount < 0 || loopCount < fLoopCount; loopCount++) {
         status = U_ZERO_ERROR;
         fTestData->set(fRuleSet.getAlias(), fRandomGenerator, status);
+        if (fBI.isNull()) {
+            IntlTest::gTest->dataerrln("Unable to run test because fBI is null.");
+            return;
+        }
         // fTestData->dump();
         testForwards(status);
         testPrevious(status);
@@ -911,7 +915,7 @@ void RBBIMonkeyTest::testMonkey() {
     }
 
     if (U_FAILURE(status)) {
-        errln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
+        dataerrln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
     }
 
     for (i=0; i<startedTests.size(); ++i) {
