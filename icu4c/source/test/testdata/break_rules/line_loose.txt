@@ -1,4 +1,4 @@
-#
+﻿#
 # Copyright (c) 2016, International Business Machines Corporation and others. All Rights Reserved.
 #
 #  file:  line_loose.txt
