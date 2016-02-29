@@ -138,7 +138,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     if (expected.doubleValue() != (actual.doubleValue())) {
                         return "Expected: " + expected + ", got: " + actual;
                     }
-                
+
                     if (!tuple.outputCurrency.equals(currAmt.getCurrency().toString())) {
                         return "Expected currency: " + tuple.outputCurrency + ", got: " + currAmt.getCurrency();
                     }
@@ -150,7 +150,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                  * @return
                  */
                 private DecimalFormat newDecimalFormat(NumberFormatTestTuple tuple) {
-             
+
                     DecimalFormat fmt = new DecimalFormat(
                             tuple.pattern == null ? "0" : tuple.pattern,
                             new DecimalFormatSymbols(tuple.locale == null ? EN : tuple.locale));
@@ -4382,27 +4382,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 fmt.parseCurrency("53.45", ppos), null);
     }
 
-    // Testing for Issue 11914, missing FieldPositions for some field types.
-    public void TestNPEIssue11914() {
-        List<FieldContainer> v1 = new ArrayList<FieldContainer>(7);
-        v1.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
-        v1.add(new FieldContainer(3, 4, NumberFormat.Field.GROUPING_SEPARATOR));
-        v1.add(new FieldContainer(4, 7, NumberFormat.Field.INTEGER));
-        v1.add(new FieldContainer(7, 8, NumberFormat.Field.GROUPING_SEPARATOR));
-        v1.add(new FieldContainer(8, 11, NumberFormat.Field.INTEGER));
-        v1.add(new FieldContainer(11, 12, NumberFormat.Field.DECIMAL_SEPARATOR));
-        v1.add(new FieldContainer(12, 15, NumberFormat.Field.FRACTION));
-        
+    private void CompareAttributedCharacterFormatOutput(AttributedCharacterIterator iterator,
+        List<FieldContainer> expected, String formattedOutput) {
+
         List<FieldContainer> result = new ArrayList<FieldContainer>();
-
-        Number number = new Double(123456789.9753);
-        ULocale usLoc = new ULocale("en-US");
-        DecimalFormatSymbols US = new DecimalFormatSymbols(usLoc);
-
-        DecimalFormat outFmt = new DecimalFormat();
-        String numFmtted = outFmt.format(number);
-        AttributedCharacterIterator iterator =
-                outFmt.formatToCharacterIterator(number);
         while (iterator.getIndex() != iterator.getEndIndex()) {
             int start = iterator.getRunStart();
             int end = iterator.getRunLimit();
@@ -4412,17 +4395,18 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             result.add(new FieldContainer(start, end, attribute, value));
             iterator.setIndex(end);
         }
-        assertEquals("Comparing vector length for " + numFmtted,
-            v1.size(), result.size());
-        if (!v1.containsAll(result)) {
+        assertEquals("Comparing vector length for " + formattedOutput,
+            expected.size(), result.size());
+
+        if (!expected.containsAll(result)) {
           // Print information on the differences.
-          for (int i = 0; i < v1.size(); i++) {
-            System.out.println("     v1[" + i + "] =" + 
-                v1.get(i).start + " " +
-                v1.get(i).end + " " +
-                v1.get(i).attribute + " " +
-                v1.get(i).value);
-            System.out.println(" result[" + i + "] =" + 
+          for (int i = 0; i < expected.size(); i++) {
+            System.out.println("     expected[" + i + "] =" +
+                expected.get(i).start + " " +
+                expected.get(i).end + " " +
+                expected.get(i).attribute + " " +
+                expected.get(i).value);
+            System.out.println(" result[" + i + "] =" +
                 result.get(i).start + " " +
                 result.get(i).end + " " +
                 result.get(i).attribute + " " +
@@ -4430,15 +4414,33 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
           }
         }
         // TODO: restore when #11914 is fixed.
-        /*
-          assertTrue("Comparing vector results for " + numFmtted,
-          v1.containsAll(result));
-        */
+        assertTrue("Comparing vector results for " + formattedOutput,
+          expected.containsAll(result));
+    }
 
-        Set<AttributedCharacterIterator.Attribute> resultUS = iterator.getAllAttributeKeys();
-        assertEquals("comparing vector sizes for " + numFmtted,
-            4, resultUS.size());
+    // Testing for Issue 11914, missing FieldPositions for some field types.
+    public void TestNPEIssue11914() {
+        // First test: Double value with grouping separators.
+        List<FieldContainer> v1 = new ArrayList<FieldContainer>(7);
+        v1.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
+        v1.add(new FieldContainer(3, 4, NumberFormat.Field.GROUPING_SEPARATOR));
+        v1.add(new FieldContainer(4, 7, NumberFormat.Field.INTEGER));
+        v1.add(new FieldContainer(7, 8, NumberFormat.Field.GROUPING_SEPARATOR));
+        v1.add(new FieldContainer(8, 11, NumberFormat.Field.INTEGER));
+        v1.add(new FieldContainer(11, 12, NumberFormat.Field.DECIMAL_SEPARATOR));
+        v1.add(new FieldContainer(12, 15, NumberFormat.Field.FRACTION));
 
+        Number number = new Double(123456789.9753);
+        ULocale usLoc = new ULocale("en-US");
+        DecimalFormatSymbols US = new DecimalFormatSymbols(usLoc);
+
+        NumberFormat outFmt = NumberFormat.getNumberInstance(usLoc);
+        String numFmtted = outFmt.format(number);
+        AttributedCharacterIterator iterator =
+                outFmt.formatToCharacterIterator(number);
+        CompareAttributedCharacterFormatOutput(iterator, v1, numFmtted);
+
+        // Second test: Double with scientific notation formatting.
         List<FieldContainer> v2 = new ArrayList<FieldContainer>(7);
         v2.add(new FieldContainer(0, 1, NumberFormat.Field.INTEGER));
         v2.add(new FieldContainer(1, 2, NumberFormat.Field.DECIMAL_SEPARATOR));
@@ -4448,21 +4450,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         v2.add(new FieldContainer(7, 8, NumberFormat.Field.EXPONENT));
         DecimalFormat fmt2 = new DecimalFormat("0.###E+0", US);
 
-        List<FieldContainer> result2 = new ArrayList<FieldContainer>();
-
         numFmtted = fmt2.format(number);
         iterator = fmt2.formatToCharacterIterator(number);
-        while (iterator.getIndex() != iterator.getEndIndex()) {
-            int start = iterator.getRunStart();
-            int end = iterator.getRunLimit();
-            Iterator it = iterator.getAttributes().keySet().iterator();
-            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
-            Object value = iterator.getAttribute(attribute);
-            result2.add(new FieldContainer(start, end, attribute, value));
-            iterator.setIndex(end);
-        }
-        assertTrue("Comparing vector results", v2.size() == result2.size() && v2.containsAll(result2));
+        CompareAttributedCharacterFormatOutput(iterator, v2, numFmtted);
 
+        // Third test. BigInteger with grouping separators.
         List<FieldContainer> v3 = new ArrayList<FieldContainer>(7);
         v3.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
         v3.add(new FieldContainer(1, 2, NumberFormat.Field.INTEGER));
@@ -4479,41 +4471,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         v3.add(new FieldContainer(22, 23, NumberFormat.Field.GROUPING_SEPARATOR));
         v3.add(new FieldContainer(23, 26, NumberFormat.Field.INTEGER));
         BigInteger bigNumberInt = new BigInteger("-1234567890246813579");
-        String fmtNumberBigIntExp = fmt2.format(bigNumberInt);
         String fmtNumberBigInt = outFmt.format(bigNumberInt);
 
-        List<FieldContainer> result3 = new ArrayList<FieldContainer>();
         iterator = outFmt.formatToCharacterIterator(bigNumberInt);
-        while (iterator.getIndex() != iterator.getEndIndex()) {
-            int start = iterator.getRunStart();
-            int end = iterator.getRunLimit();
-            Iterator it = iterator.getAttributes().keySet().iterator();
-            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
-            Object value = iterator.getAttribute(attribute);
-            result3.add(new FieldContainer(start, end, attribute, value));
-            iterator.setIndex(end);
-        }
-        assertEquals("Comparing vector results for " + fmtNumberBigInt, v3.size() ,result3.size());
-        if (!v3.containsAll(result)) {
-          // Print information on the differences.
-          for (int i = 0; i < v1.size(); i++) {
-            System.out.println("     v3[" + i + "] =" + 
-                v3.get(i).start + " " +
-                v3.get(i).end + " " +
-                v3.get(i).attribute + " " +
-                v3.get(i).value);
-            System.out.println(" result3[" + i + "] =" + 
-                result3.get(i).start + " " +
-                result3.get(i).end + " " +
-                result3.get(i).attribute + " " +
-                result3.get(i).value);
-          }
-        }
-        // TODO: restore when #11914 is fixed.
-        /*
-          assertTrue("Comparing vector results for " + fmtNumberBigInt, v3.containsAll(result3));
-        */
+        CompareAttributedCharacterFormatOutput(iterator, v3, fmtNumberBigInt);
 
+        // Fourth test: BigDecimal with exponential formatting.
         List<FieldContainer> v4 = new ArrayList<FieldContainer>(7);
         v4.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
         v4.add(new FieldContainer(1, 2, NumberFormat.Field.INTEGER));
@@ -4525,20 +4488,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         java.math.BigDecimal numberBigD = new java.math.BigDecimal(-123456789);
         String fmtNumberBigDExp = fmt2.format(numberBigD);
-        String fmtNumberBigD = outFmt.format(numberBigD);
 
-        List<FieldContainer> result4 = new ArrayList<FieldContainer>();
         iterator = fmt2.formatToCharacterIterator(numberBigD);
-        while (iterator.getIndex() != iterator.getEndIndex()) {
-            int start = iterator.getRunStart();
-            int end = iterator.getRunLimit();
-            Iterator it = iterator.getAttributes().keySet().iterator();
-            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
-            Object value = iterator.getAttribute(attribute);
-            result4.add(new FieldContainer(start, end, attribute, value));
-            iterator.setIndex(end);
-        }
-        assertTrue("Comparing vector results for " + fmtNumberBigDExp,
-                v4.size() == result4.size() && v4.containsAll(result4));
+        CompareAttributedCharacterFormatOutput(iterator, v4, fmtNumberBigDExp);
+
     }
 }
