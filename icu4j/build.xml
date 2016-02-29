@@ -790,7 +790,7 @@
     <!-- doclint in V8 is too strict to handle existing html in javadoc -->
 	<!-- doclint options are: html, accessibiltiy, missing, reference, syntax -->
     <target name="_setLintV8" unless="is.pre.java8">
-        <property name="lintParam" value=""/>
+        <property name="lintParam" value="-Xdoclint:-html"/>
     </target>
     <target name="_setLintPreV8" if="is.pre.java8">
         <property name="lintParam" value=""/>
