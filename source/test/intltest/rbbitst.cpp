@@ -3689,6 +3689,7 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fID;
     delete fRI;
     delete fSG;
+    delete fXX;
     delete fEB;
     delete fEM;
     delete fZJ;
