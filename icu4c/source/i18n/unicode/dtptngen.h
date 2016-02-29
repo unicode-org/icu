@@ -531,7 +531,7 @@ private:
         kDTPGFixFractionalSeconds = 1,
         kDTPGSkeletonUsesCapJ = 2,
         kDTPGSkeletonUsesLowB = 3,
-        kDTPGSkeletonUsesCapB = 4,
+        kDTPGSkeletonUsesCapB = 4
     };
 
     void initData(const Locale &locale, UErrorCode &status);
