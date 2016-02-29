@@ -99,7 +99,6 @@ icu4c/source/samples/uresb/resources.vcxproj -text
 icu4c/source/samples/uresb/uresb.vcxproj -text
 icu4c/source/samples/ustring/ustring.vcxproj -text
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
-icu4c/source/test/intltest/caltestdata.h -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/letest/cletest.vcxproj -text
 icu4c/source/test/letest/gendata.vcxproj -text
