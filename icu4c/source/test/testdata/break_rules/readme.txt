@@ -1,5 +1,5 @@
-file: testdata/break_rules/readme.txt
-Copyright (c) 2015, International Business Machines Corporation and others. All Rights Reserved.
+﻿file: testdata/break_rules/readme.txt
+Copyright (c) 2015-2016, International Business Machines Corporation and others. All Rights Reserved.
 
 This directory contains the break iterator reference rule files used by intltest rbbi/RBBIMonkeyTest/testMonkey.
 The rules in this directory track the boundary rules from Unicode UAX 14 and 29. They are interpretted
