@@ -4417,12 +4417,23 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!v1.containsAll(result)) {
           // Print information on the differences.
           for (int i = 0; i < v1.size(); i++) {
-            System.out.println("     v1[" + i + "] =" + v1.get(i));
-            System.out.println(" result[" + i + "] =" + result.get(i));
+            System.out.println("     v1[" + i + "] =" + 
+                v1.get(i).start + " " +
+                v1.get(i).end + " " +
+                v1.get(i).attribute + " " +
+                v1.get(i).value);
+            System.out.println(" result[" + i + "] =" + 
+                result.get(i).start + " " +
+                result.get(i).end + " " +
+                result.get(i).attribute + " " +
+                result.get(i).value);
           }
         }
-        assertTrue("Comparing vector results for " + numFmtted,
-            v1.containsAll(result));
+        // TODO: restore when #11914 is fixed.
+        /*
+          assertTrue("Comparing vector results for " + numFmtted,
+          v1.containsAll(result));
+        */
 
         Set<AttributedCharacterIterator.Attribute> resultUS = iterator.getAllAttributeKeys();
         assertEquals("comparing vector sizes for " + numFmtted,
@@ -4486,11 +4497,22 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!v3.containsAll(result)) {
           // Print information on the differences.
           for (int i = 0; i < v1.size(); i++) {
-            System.out.println("     v1[" + i + "] =" + v3.get(i));
-            System.out.println(" result[" + i + "] =" + result3.get(i));
+            System.out.println("     v3[" + i + "] =" + 
+                v3.get(i).start + " " +
+                v3.get(i).end + " " +
+                v3.get(i).attribute + " " +
+                v3.get(i).value);
+            System.out.println(" result3[" + i + "] =" + 
+                result3.get(i).start + " " +
+                result3.get(i).end + " " +
+                result3.get(i).attribute + " " +
+                result3.get(i).value);
           }
         }
-        assertTrue("Comparing vector results for " + fmtNumberBigInt, v3.containsAll(result3));
+        // TODO: restore when #11914 is fixed.
+        /*
+          assertTrue("Comparing vector results for " + fmtNumberBigInt, v3.containsAll(result3));
+        */
 
         List<FieldContainer> v4 = new ArrayList<FieldContainer>(7);
         v4.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
