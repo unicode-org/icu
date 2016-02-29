@@ -775,14 +775,15 @@ typedef enum UDateFormatField {
      */
     UDAT_FLEXIBLE_DAY_PERIOD_FIELD = 36,
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * FieldPosition and UFieldPosition selector for time separator,
      * no corresponding UCAL_ field. No pattern character is currently
      * defined for this.
-     * @stable ICU 55
+     * @internal
      */
     UDAT_TIME_SEPARATOR_FIELD = 37,
-
+#endif  /* U_HIDE_INTERNAL_API */
 
    /**
      * Number of FieldPosition and UFieldPosition selectors for
