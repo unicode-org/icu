@@ -1284,7 +1284,7 @@ static void UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *ar
             /* look at the pre-context and perform special processing */
             switch (sourceChar) {
             case ISCII_INV:
-            case EXT: /*falls through*/
+            case EXT:
             case ATR:
                 *contextCharToUnicode = (UChar)sourceChar;
 
@@ -1322,7 +1322,6 @@ static void UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *ar
                 }
                 break;
             case 0x0A:
-                /* fall through */
             case 0x0D:
                 data->resetToDefaultToUnicode = TRUE;
                 GET_MAPPING(sourceChar,targetUniChar,data)
@@ -1420,6 +1419,7 @@ static void UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *ar
                         /* else fall through to default */
                     }
                     /* else fall through to default */
+                    U_FALLTHROUGH;
                 }
             default:GET_MAPPING(sourceChar,targetUniChar,data)
                 ;

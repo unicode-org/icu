@@ -2896,6 +2896,7 @@ void   RegexCompile::matchStartType() {
 
         case URX_JMPX:
             loc++;             // Except for extra operand on URX_JMPX, same as URX_JMP.
+            U_FALLTHROUGH;
         case URX_JMP:
             {
                 int32_t  jmpDest = URX_VAL(op);
@@ -3258,6 +3259,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_JMPX:
             loc++;              // URX_JMPX has an extra operand, ignored here,
                                 //   otherwise processed identically to URX_JMP.
+            U_FALLTHROUGH;
         case URX_JMP:
             {
                 int32_t  jmpDest = URX_VAL(op);
