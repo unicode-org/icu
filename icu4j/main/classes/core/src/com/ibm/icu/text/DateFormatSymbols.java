@@ -1293,9 +1293,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Returns the time separator string. For example: ":".
      * @return the time separator string.
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public String getTimeSeparatorString() {
         return timeSeparator;
     }
@@ -1303,9 +1304,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Sets the time separator string. For example: ":".
      * @param newTimeSeparator the new time separator string.
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public void setTimeSeparatorString(String newTimeSeparator) {
         timeSeparator = newTimeSeparator;
     }
