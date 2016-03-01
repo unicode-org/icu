@@ -1104,6 +1104,7 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
         strcat(message, "/");
         strcat(message, tests[i][1]);
         assertEquals(message, expectedPattern, pattern);
+        delete gen;
     }
 }
 
