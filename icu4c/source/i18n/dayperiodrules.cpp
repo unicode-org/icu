@@ -37,7 +37,7 @@ enum CutoffType {
     CUTOFF_TYPE_BEFORE,
     CUTOFF_TYPE_AFTER,  // TODO: AFTER is deprecated in CLDR 29. Remove.
     CUTOFF_TYPE_FROM,
-    CUTOFF_TYPE_AT,
+    CUTOFF_TYPE_AT
 };
 
 } // namespace
