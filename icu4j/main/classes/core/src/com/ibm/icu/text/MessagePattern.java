@@ -481,7 +481,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
      * @stable ICU 4.8
      */
     public boolean partSubstringMatches(Part part, String s) {
-        return msg.regionMatches(part.index, s, 0, part.length);
+        return part.length == s.length() && msg.regionMatches(part.index, s, 0, part.length);
     }
 
     /**
