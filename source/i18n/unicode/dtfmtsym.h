@@ -421,22 +421,22 @@ public:
      * @internal
      */
     static const UChar ALTERNATE_TIME_SEPARATOR = 0x002e;  // '.'
-#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Gets the time separator string. For example: ":".
      * @param result Output param which will receive the time separator string.
      * @return       A reference to 'result'.
-     * @stable ICU 55
+     * @internal
      */
     UnicodeString& getTimeSeparatorString(UnicodeString& result) const;
 
     /**
      * Sets the time separator string. For example: ":".
      * @param newTimeSeparator the new time separator string.
-     * @stable ICU 55
+     * @internal
      */
     void setTimeSeparatorString(const UnicodeString& newTimeSeparator);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Gets cyclic year name strings if the calendar has them, by width and context.
