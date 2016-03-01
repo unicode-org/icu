@@ -67,6 +67,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestTrimArgumentName);
     TESTCASE_AUTO(TestSelectOrdinal);
     TESTCASE_AUTO(TestDecimals);
+    TESTCASE_AUTO(TestArgIsPrefixOfAnother);
     TESTCASE_AUTO_END;
 }
 
@@ -1959,6 +1960,33 @@ void TestMessageFormat::TestDecimals() {
     assertEquals("offset-decimals format(1)", "2.5 meters",
             m2.format(args, 1, result, ignore, errorCode), TRUE);
     errorCode.reset();
+}
+
+void TestMessageFormat::TestArgIsPrefixOfAnother() {
+    IcuTestErrorCode errorCode(*this, "TestArgIsPrefixOfAnother");
+    // Ticket #11952
+    MessageFormat mf1("{0,select,a{A}ab{AB}abc{ABC}other{?}}", Locale::getEnglish(), errorCode);
+    Formattable args[3];
+    FieldPosition ignore;
+    UnicodeString result;
+    args[0].setString("a");
+    assertEquals("a", "A", mf1.format(args, 1, result, ignore, errorCode));
+    args[0].setString("ab");
+    assertEquals("ab", "AB", mf1.format(args, 1, result.remove(), ignore, errorCode));
+    args[0].setString("abc");
+    assertEquals("abc", "ABC", mf1.format(args, 1, result.remove(), ignore, errorCode));
+
+    // Ticket #12172
+    MessageFormat mf2("{a} {aa} {aaa}", Locale::getEnglish(), errorCode);
+    UnicodeString argNames[3] = { "a", "aa", "aaa" };
+    args[0].setString("A");
+    args[1].setString("AB");
+    args[2].setString("ABC");
+    assertEquals("a aa aaa", "A AB ABC", mf2.format(argNames, args, 3, result.remove(), errorCode));
+
+    // Ticket #12172
+    MessageFormat mf3("{aa} {aaa}", Locale::getEnglish(), errorCode);
+    assertEquals("aa aaa", "AB ABC", mf3.format(argNames + 1, args + 1, 2, result.remove(), errorCode));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
