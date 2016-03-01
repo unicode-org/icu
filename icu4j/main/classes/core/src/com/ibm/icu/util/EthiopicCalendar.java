@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2014, International Business Machines Corporation and
+ * Copyright (C) 2005-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -29,79 +29,79 @@ public final class EthiopicCalendar extends CECalendar
     private static final long serialVersionUID = -2438495771339315608L;
 
     /** 
-     * Constant for &#x1218;&#x1235;&#x12a8;&#x1228;&#x121d;, the 1st month of the Ethiopic year.
+     * Constant for መስከረም, the 1st month of the Ethiopic year.
      * @stable ICU 3.4
      */
     public static final int MESKEREM = 0;
 
     /** 
-     * Constant for &#x1325;&#x1245;&#x121d;&#x1275;, the 2nd month of the Ethiopic year. 
+     * Constant for ጥቅምት, the 2nd month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int TEKEMT = 1;
 
     /** 
-     * Constant for &#x1285;&#x12f3;&#x122d;, the 3rd month of the Ethiopic year. 
+     * Constant for ኅዳር, the 3rd month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int HEDAR = 2;
 
     /** 
-     * Constant for &#x1273;&#x1285;&#x1223;&#x1225;, the 4th month of the Ethiopic year. 
+     * Constant for ታኅሣሥ, the 4th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int TAHSAS = 3;
 
     /** 
-     * Constant for &#x1325;&#x122d;, the 5th month of the Ethiopic year. 
+     * Constant for ጥር, the 5th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int TER = 4;
 
     /** 
-     * Constant for &#x12e8;&#x12ab;&#x1272;&#x1275;, the 6th month of the Ethiopic year. 
+     * Constant for የካቲት, the 6th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int YEKATIT = 5;
 
     /** 
-     * Constant for &#x1218;&#x130b;&#x1262;&#x1275;, the 7th month of the Ethiopic year. 
+     * Constant for መጋቢት, the 7th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int MEGABIT = 6;
 
     /** 
-     * Constant for &#x121a;&#x12eb;&#x12dd;&#x12eb;, the 8th month of the Ethiopic year. 
+     * Constant for ሚያዝያ, the 8th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int MIAZIA = 7;
 
     /** 
-     * Constant for &#x130d;&#x1295;&#x1266;&#x1275;, the 9th month of the Ethiopic year. 
+     * Constant for ግንቦት, the 9th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int GENBOT = 8;
 
     /** 
-     * Constant for &#x1230;&#x1294;, the 10th month of the Ethiopic year. 
+     * Constant for ሰኔ, the 10th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int SENE = 9;
 
     /** 
-     * Constant for &#x1210;&#x121d;&#x120c;, the 11th month of the Ethiopic year. 
+     * Constant for ሐምሌ, the 11th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int HAMLE = 10;
 
     /** 
-     * Constant for &#x1290;&#x1210;&#x1234;, the 12th month of the Ethiopic year. 
+     * Constant for ነሐሴ, the 12th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int NEHASSE = 11;
 
     /** 
-     * Constant for &#x1333;&#x1309;&#x121c;&#x1295;, the 13th month of the Ethiopic year. 
+     * Constant for ጳጉሜን, the 13th month of the Ethiopic year. 
      * @stable ICU 3.4
      */
     public static final int PAGUMEN = 12;
