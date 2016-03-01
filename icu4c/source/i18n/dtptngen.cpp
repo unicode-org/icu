@@ -444,6 +444,7 @@ void DateTimePatternGenerator::getPreferredHourFormats(const Locale &locale, UEr
     } else {
         status = U_INVALID_FORMAT_ERROR;
     }
+    ures_close(countryData);
     ures_close(rb);
 }
 
