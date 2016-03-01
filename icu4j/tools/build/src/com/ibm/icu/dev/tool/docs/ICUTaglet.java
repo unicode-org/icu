@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2011, 2015 International Business Machines Corporation   *
+* Copyright (C) 2002-2016 International Business Machines Corporation   *
 * and others. All Rights Reserved.                                            *
 *******************************************************************************
 */
@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.sun.javadoc.Tag;
-import com.sun.tools.doclets.internal.toolkit.taglets.Taglet; 
+import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 
 public abstract class ICUTaglet extends ICUTagletAdapter implements Taglet {
     protected final String name;
@@ -40,6 +40,7 @@ public abstract class ICUTaglet extends ICUTagletAdapter implements Taglet {
         ICUNewTaglet.register(taglets);
         ICUNoteTaglet.register(taglets);
         ICUEnhancedTaglet.register(taglets);
+        ICUDiscouragedTaglet.register(taglets);
     }
 
     protected ICUTaglet(String name, int mask) {
@@ -84,6 +85,7 @@ public abstract class ICUTaglet extends ICUTagletAdapter implements Taglet {
     }
 
     public String toString(Tag[] tags) {
+      
       if (!isInlineTag() && tags != null) {
             if (tags.length > 1) {
                 String msg = "Should not have more than one ICU tag per element:\n";
@@ -99,6 +101,26 @@ public abstract class ICUTaglet extends ICUTagletAdapter implements Taglet {
     }
 
     protected static final String STATUS = "<dt><b>Status:</b></dt>";
+
+    public static class ICUDiscouragedTaglet extends ICUTaglet {
+        private static final String NAME = "discouraged";
+
+        public static void register(Map taglets) {
+            taglets.put(NAME, new ICUDiscouragedTaglet());
+        }
+
+        private ICUDiscouragedTaglet() {
+            super(NAME, MASK_DEFAULT);
+        }
+
+        public String toString(Tag tag) {
+            String text = tag.text();
+            if (text.length() == 0) {
+                System.err.println("Error: empty discouraged tag ");
+            } 
+            return "<dt><b><font color=red>Discouraged:</font></b></dt><dd>" + text + "</dd>";
+        }
+    }
 
     public static class ICUInternalTaglet extends ICUTaglet {
         private static final String NAME = "internal";
