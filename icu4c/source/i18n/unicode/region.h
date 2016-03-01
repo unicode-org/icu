@@ -151,15 +151,13 @@ public:
      */
     UBool contains(const Region &other) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * For deprecated regions, return an enumeration over the IDs of the regions that are the preferred replacement
      * regions for this region.  Returns null for a non-deprecated region.  For example, calling this method with region
      * "SU" (Soviet Union) would return a list of the regions containing "RU" (Russia), "AM" (Armenia), "AZ" (Azerbaijan), etc...
-     * @draft ICU 55 
+     * @stable ICU 55 
      */
     StringEnumeration* getPreferredValues(UErrorCode &status) const;
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Return this region's canonical region code.
