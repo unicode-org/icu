@@ -449,7 +449,8 @@ UBool RTTest::isCamel(const UnicodeString& a) {
             break;
         case U_TITLECASE_LETTER:
             if (haveLower) return TRUE;
-            // drop through, since second letter is lower.
+            // fall through, since second letter is lower.
+            U_FALLTHROUGH;
         case U_LOWERCASE_LETTER:
             haveLower = TRUE;
             break;

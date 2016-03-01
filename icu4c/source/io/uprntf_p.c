@@ -1508,6 +1508,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
                     /* set the spec's width to the # of chars written */
                     info->fWidth = *written;
                     /* fall through to set the pointer */
+                    U_FALLTHROUGH;
                 case ufmt_string:
                 case ufmt_ustring:
                 case ufmt_pointer:
@@ -1535,6 +1536,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
                     /* set the spec's width to the # of chars written */
                     info->fWidth = *written;
                     /* fall through to set the pointer */
+                    U_FALLTHROUGH;
                 case ufmt_string:
                 case ufmt_ustring:
                 case ufmt_pointer:
