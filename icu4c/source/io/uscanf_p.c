@@ -1352,7 +1352,7 @@ u_scanf_parse(UFILE     *f,
                 case ufmt_count:
                     /* set the spec's width to the # of items converted */
                     spec.fInfo.fWidth = cpConsumed;
-                    /* fall through to next case */
+                    U_FALLTHROUGH;
                 case ufmt_char:
                 case ufmt_uchar:
                 case ufmt_int:

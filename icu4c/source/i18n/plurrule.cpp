@@ -492,6 +492,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
 
         case tNotEqual:
             curAndConstraint->negated=TRUE;
+            U_FALLTHROUGH;
         case tIn:
         case tWithin:
         case tEqual:

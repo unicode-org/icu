@@ -263,18 +263,25 @@ IntlTest::appendHex(uint32_t number,
     {
     case 8:
         target += digitString[(number >> 28) & 0xF];
+        U_FALLTHROUGH;
     case 7:
         target += digitString[(number >> 24) & 0xF];
+        U_FALLTHROUGH;
     case 6:
         target += digitString[(number >> 20) & 0xF];
+        U_FALLTHROUGH;
     case 5:
         target += digitString[(number >> 16) & 0xF];
+        U_FALLTHROUGH;
     case 4:
         target += digitString[(number >> 12) & 0xF];
+        U_FALLTHROUGH;
     case 3:
         target += digitString[(number >>  8) & 0xF];
+        U_FALLTHROUGH;
     case 2:
         target += digitString[(number >>  4) & 0xF];
+        U_FALLTHROUGH;
     case 1:
         target += digitString[(number >>  0) & 0xF];
         break;

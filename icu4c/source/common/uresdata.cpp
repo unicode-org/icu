@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1999-2015, International Business Machines Corporation
+* Copyright (C) 1999-2016, International Business Machines Corporation
 *               and others. All Rights Reserved.
 *******************************************************************************
 *   file name:  uresdata.cpp
@@ -1050,6 +1050,7 @@ ures_swapResource(const UDataSwapper *ds,
     switch(RES_GET_TYPE(res)) {
     case URES_ALIAS:
         /* physically same value layout as string, fall through */
+        U_FALLTHROUGH;
     case URES_STRING:
         count=udata_readInt32(ds, (int32_t)*p);
         /* swap length */

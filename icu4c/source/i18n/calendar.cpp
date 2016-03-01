@@ -2125,6 +2125,7 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
         }
       }
       // Fall through into normal handling
+      U_FALLTHROUGH;
     case UCAL_EXTENDED_YEAR:
     case UCAL_MONTH:
       {
@@ -2601,6 +2602,7 @@ Calendar::isWeekend(void) const
                             (millisInDay <  transitionMillis);
                     }
                     // else fall through, return FALSE
+                    U_FALLTHROUGH;
                 }
             default:
                 break;
@@ -3639,7 +3641,7 @@ void Calendar::prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErr
 
     case UCAL_YEAR_WOY:
         set(UCAL_WEEK_OF_YEAR, getGreatestMinimum(UCAL_WEEK_OF_YEAR));
-
+        U_FALLTHROUGH;
     case UCAL_MONTH:
         set(UCAL_DATE, getGreatestMinimum(UCAL_DATE));
         break;
