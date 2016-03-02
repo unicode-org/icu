@@ -1,6 +1,6 @@
 * text=auto !eol
 icu4c/APIChangeReport.html svneol=native#text/html%3Bcharset%3Dutf-8
-icu4c/LICENSE.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/LICENSE svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/icu4c.css -text svneol=unset#text/css
 icu4c/license.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/readme.html svneol=native#text/html
