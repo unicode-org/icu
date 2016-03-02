@@ -6,9 +6,6 @@
 // * Source File: <path>/icu-locale-deprecates.xml & build.xml
 // *
 // ***************************************************************************
-/**
- * generated alias target
- */
 zh_Hant_HK{
-    ___{""}
+    "%%ALIAS"{"yue"}
 }
