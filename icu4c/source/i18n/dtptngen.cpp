@@ -27,13 +27,17 @@
 #include "unicode/rep.h"
 #include "cpputils.h"
 #include "mutex.h"
+#include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "locbased.h"
 #include "gregoimp.h"
 #include "hash.h"
+#include "uhash.h"
 #include "uresimp.h"
 #include "dtptngen_impl.h"
+#include "ucln_in.h"
+#include "charstr.h"
 
 #if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
 /**
@@ -382,6 +386,34 @@ DateTimePatternGenerator::~DateTimePatternGenerator() {
     if (skipMatcher != NULL) delete skipMatcher;
 }
 
+namespace {
+
+UInitOnce initOnce = U_INITONCE_INITIALIZER;
+UHashtable *localeToAllowedHourFormatsMap = NULL;
+
+// Value deleter for hashmap.
+void deleteAllowedHourFormats(void *ptr) {
+    delete[] (int32_t *)ptr;
+}
+
+// Close hashmap at cleanup.
+UBool allowedHourFormatsCleanup() {
+    uhash_close(localeToAllowedHourFormatsMap);
+    return TRUE;
+}
+
+enum AllowedHourFormat{
+    ALLOWED_HOUR_FORMAT_UNKNOWN = -1,
+    ALLOWED_HOUR_FORMAT_h,
+    ALLOWED_HOUR_FORMAT_H,
+    ALLOWED_HOUR_FORMAT_hb,
+    ALLOWED_HOUR_FORMAT_Hb,
+    ALLOWED_HOUR_FORMAT_hB,
+    ALLOWED_HOUR_FORMAT_HB
+};
+
+}  // namespace
+
 void
 DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status) {
     //const char *baseLangName = locale.getBaseName(); // unused
@@ -396,56 +428,173 @@ DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status) {
     addCLDRData(locale, status);
     setDateTimeFromCalendar(locale, status);
     setDecimalSymbols(locale, status);
-    getPreferredHourFormats(locale, status);
+    umtx_initOnce(initOnce, loadAllowedHourFormatsData, status);
+    getAllowedHourFormats(locale, status);
 } // DateTimePatternGenerator::initData
 
-void DateTimePatternGenerator::getPreferredHourFormats(const Locale &locale, UErrorCode &status) {
+namespace {
+
+struct AllowedHourFormatsSink : public ResourceTableSink {
+    // Initialize sub-sinks.
+    AllowedHourFormatsSink() : localeSink(*this), allowedListSink(*this) {}
+    virtual ~AllowedHourFormatsSink();
+
+    // Entry point.
+    virtual ResourceTableSink *getOrCreateTableSink(const char *key, int32_t, UErrorCode &status) {
+        if (U_FAILURE(status)) { return NULL; }
+
+        locale = key;
+        return &localeSink;
+    }
+
+    struct LocaleSink : public ResourceTableSink {
+        AllowedHourFormatsSink &outer;
+        LocaleSink(AllowedHourFormatsSink &outer) : outer(outer) {}
+        virtual ~LocaleSink();
+
+        virtual void put(const char *key, const ResourceValue &value, UErrorCode &status) {
+            if (U_FAILURE(status)) { return; }
+
+            if (uprv_strcmp(key, "allowed") == 0) {
+                outer.allowedFormats = new int32_t[2];
+                if (outer.allowedFormats == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    return;
+                }
+                outer.allowedFormats[0] = outer.getHourFormatFromUnicodeString(
+                    value.getUnicodeString(status));
+                outer.allowedFormats[1] = ALLOWED_HOUR_FORMAT_UNKNOWN;
+            }
+        }
+
+        virtual ResourceArraySink *getOrCreateArraySink(const char *key, int32_t size, UErrorCode &status) {
+            if (U_FAILURE(status)) { return NULL; }
+
+            if (uprv_strcmp(key, "allowed") == 0) {
+                outer.allowedFormats = new int32_t[size + 1];
+                outer.allowedFormatsLength = size;
+                if (outer.allowedFormats == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    return NULL;
+                } else {
+                    return &outer.allowedListSink;
+                }
+            }
+            return NULL;
+        }
+
+        virtual void leave(UErrorCode &status) {
+            if (U_FAILURE(status) || outer.allowedFormats == NULL) { return; }
+
+            outer.allowedFormats[outer.allowedFormatsLength] = ALLOWED_HOUR_FORMAT_UNKNOWN;
+            uhash_put(localeToAllowedHourFormatsMap, const_cast<char *>(outer.locale), outer.allowedFormats, &status);
+            outer.allowedFormats = NULL;
+        }
+    } localeSink;
+
+    struct AllowedListSink : public ResourceArraySink {
+        AllowedHourFormatsSink &outer;
+        AllowedListSink(AllowedHourFormatsSink &outer) : outer(outer) {}
+        virtual ~AllowedListSink();
+
+        virtual void put(int32_t index, const ResourceValue &value, UErrorCode &status) {
+            if (U_FAILURE(status)) { return; }
+
+            outer.allowedFormats[index] = outer.getHourFormatFromUnicodeString(
+                value.getUnicodeString(status));
+        }
+    } allowedListSink;
+
+    const char *locale;
+    int32_t *allowedFormats;
+    int32_t allowedFormatsLength;
+
+    AllowedHourFormat getHourFormatFromUnicodeString(UnicodeString s) {
+        if (s.length() == 1) {
+            if (s[0] == LOW_H) { return ALLOWED_HOUR_FORMAT_h; }
+            if (s[0] == CAP_H) { return ALLOWED_HOUR_FORMAT_H; }
+        } else if (s.length() == 2) {
+            if (s[0] == LOW_H && s[1] == LOW_B) { return ALLOWED_HOUR_FORMAT_hb; }
+            if (s[0] == CAP_H && s[1] == LOW_B) { return ALLOWED_HOUR_FORMAT_Hb; }
+            if (s[0] == LOW_H && s[1] == CAP_B) { return ALLOWED_HOUR_FORMAT_hB; }
+            if (s[0] == CAP_H && s[1] == CAP_B) { return ALLOWED_HOUR_FORMAT_HB; }
+        }
+
+        return ALLOWED_HOUR_FORMAT_UNKNOWN;
+    }
+};
+
+}  // namespace
+
+AllowedHourFormatsSink::~AllowedHourFormatsSink() {}
+AllowedHourFormatsSink::LocaleSink::~LocaleSink() {}
+AllowedHourFormatsSink::AllowedListSink::~AllowedListSink() {}
+
+void DateTimePatternGenerator::loadAllowedHourFormatsData(UErrorCode &status) {
+    if (U_FAILURE(status)) { return; }
+    localeToAllowedHourFormatsMap = uhash_open(
+        uhash_hashChars, uhash_compareChars, NULL, &status);
+    uhash_setValueDeleter(localeToAllowedHourFormatsMap, deleteAllowedHourFormats);
+    LocalUResourceBundlePointer rb(ures_openDirect(NULL, "supplementalData", &status));
+
+    AllowedHourFormatsSink sink;
+    // TODO: Currently in the enumeration each table allocates a new array.
+    // Try to reduce the number of memory allocations. Consider storing a
+    // UVector32 with the concatenation of all of the sub-arrays, put the start index
+    // into the hashmap, store 6 single-value sub-arrays right at the beginning of the
+    // vector (at index enum*2) for easy data sharing, copy sub-arrays into runtime
+    // object. Remember to clean up the vector, too.
+    ures_getAllTableItemsWithFallback(rb.getAlias(), "timeData", sink, status);
+
+    ucln_i18n_registerCleanup(UCLN_I18N_ALLOWED_HOUR_FORMATS, allowedHourFormatsCleanup);
+}
+
+void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErrorCode &status) {
     if (U_FAILURE(status)) { return; }
 
     const char *localeID = locale.getName();
     char maxLocaleID[ULOC_FULLNAME_CAPACITY];
-    uloc_addLikelySubtags(localeID, maxLocaleID, ULOC_FULLNAME_CAPACITY, &status);
-    if (U_FAILURE(status)) { return; }
+    int32_t length = uloc_addLikelySubtags(localeID, maxLocaleID, ULOC_FULLNAME_CAPACITY, &status);
+    if (U_FAILURE(status)) {
+        return;
+    } else if (length == ULOC_FULLNAME_CAPACITY) {  // no room for NUL
+        status = U_BUFFER_OVERFLOW_ERROR;
+        return;
+    }
     Locale maxLocale = Locale(maxLocaleID);
 
     const char *country = maxLocale.getCountry();
     if (*country == '\0') { country = "001"; }
     const char *language = maxLocale.getLanguage();
 
-    char langCountry[ULOC_FULLNAME_CAPACITY];
-    langCountry[0] = '\0';
-    strcat(langCountry, language);
-    strcat(langCountry, "_");
-    strcat(langCountry, country);
+    CharString langCountry;
+    langCountry.append(language, uprv_strlen(language), status);
+    langCountry.append('_', status);
+    langCountry.append(country, uprv_strlen(country), status);
 
-    UResourceBundle *rb = ures_openDirect(NULL, "supplementalData", &status);  // TODO: local pointer
-    ures_getByKey(rb, "timeData", rb, &status);
-    UResourceBundle *countryData = ures_getByKey(rb, langCountry, NULL, &status);
-    if (status == U_MISSING_RESOURCE_ERROR) {
-        status = U_ZERO_ERROR;
-        countryData = ures_getByKey(rb, country, NULL, &status);
-    }
-    if (status == U_MISSING_RESOURCE_ERROR) {
-        status = U_ZERO_ERROR;
-        fAllowedHourFormats[0] = UnicodeString(CAP_H);
-        fAllowedHourFormatsLength = 1;
-        return;
+    int32_t *allowedFormats;
+    allowedFormats = (int32_t *)uhash_get(localeToAllowedHourFormatsMap, langCountry.data());
+    if (allowedFormats == NULL) {
+        allowedFormats = (int32_t *)uhash_get(localeToAllowedHourFormatsMap, const_cast<char *>(country));
     }
 
-    ures_getByKey(countryData, "allowed", rb, &status);
-    if (ures_getType(rb) == URES_STRING) {
-        fAllowedHourFormats[0] = ures_getUnicodeString(rb, &status);
-        fAllowedHourFormatsLength = 1;
-    } else if (ures_getType(rb) == URES_ARRAY) {
-        fAllowedHourFormatsLength = ures_getSize(rb);
-        for (int32_t i = 0; i < fAllowedHourFormatsLength; ++i) {
-            fAllowedHourFormats[i] = ures_getUnicodeStringByIndex(rb, i, &status);
+    if (allowedFormats != NULL) {  // Lookup is successful
+        for (int32_t i = 0; i < UPRV_LENGTHOF(fAllowedHourFormats); ++i) {
+            fAllowedHourFormats[i] = allowedFormats[i];
+            if (allowedFormats[i] == ALLOWED_HOUR_FORMAT_UNKNOWN) {
+                break;
+            }
         }
-    } else {
-        status = U_INVALID_FORMAT_ERROR;
+    } else {  // Lookup failed, twice
+        fAllowedHourFormats[0] = ALLOWED_HOUR_FORMAT_H;
+        fAllowedHourFormats[1] = ALLOWED_HOUR_FORMAT_UNKNOWN;
     }
+<<<<<<< .mine
+
+=======
     ures_close(countryData);
     ures_close(rb);
+>>>>>>> .r38464
 }
 
 UnicodeString
@@ -865,18 +1014,23 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
             if (patChr == LOW_J) {
                 patternFormCopy.setCharAt(patPos, fDefaultHourFormatChar);
             } else if (patChr == CAP_C) {
-                UnicodeString preferred;
-                if (fAllowedHourFormatsLength > 0) {
-                    preferred = fAllowedHourFormats[0];
+                AllowedHourFormat preferred;
+                if (fAllowedHourFormats != NULL && fAllowedHourFormats[0] != ALLOWED_HOUR_FORMAT_UNKNOWN) {
+                    preferred = (AllowedHourFormat)fAllowedHourFormats[0];
                 } else {
                     status = U_INVALID_FORMAT_ERROR;
                     return UnicodeString();
                 }
-                patternFormCopy.setCharAt(patPos, preferred.charAt(0));
-                UChar lastChar = preferred.charAt(preferred.length()-1);
-                if (lastChar == CAP_B) {
+
+                if (preferred == ALLOWED_HOUR_FORMAT_H || preferred == ALLOWED_HOUR_FORMAT_HB || preferred == ALLOWED_HOUR_FORMAT_Hb) {
+                    patternFormCopy.setCharAt(patPos, CAP_H);
+                } else {
+                    patternFormCopy.setCharAt(patPos, LOW_H);
+                }
+
+                if (preferred == ALLOWED_HOUR_FORMAT_HB || preferred == ALLOWED_HOUR_FORMAT_hB) {
                     flags |= kDTPGSkeletonUsesCapB;
-                } else if (lastChar == LOW_B) {
+                } else if (preferred == ALLOWED_HOUR_FORMAT_Hb || preferred == ALLOWED_HOUR_FORMAT_hb) {
                     flags |= kDTPGSkeletonUsesLowB;
                 }
             } else if (patChr == CAP_J) {

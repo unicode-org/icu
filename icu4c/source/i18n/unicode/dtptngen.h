@@ -522,8 +522,7 @@ private:
     UnicodeString emptyString;
     UChar fDefaultHourFormatChar;
 
-    UnicodeString fAllowedHourFormats[6];  // At most six types of format allowed.
-    int32_t fAllowedHourFormatsLength;
+    int32_t fAllowedHourFormats[7];  // Actually an array of AllowedHourFormat enum type, ending with UNKNOWN.
 
     /* internal flags masks for adjustFieldTypes etc. */
     enum {
@@ -555,7 +554,8 @@ private:
     UBool isAvailableFormatSet(const UnicodeString &key) const;
     void copyHashtable(Hashtable *other, UErrorCode &status);
     UBool isCanonicalItem(const UnicodeString& item) const;
-    void getPreferredHourFormats(const Locale &locale, UErrorCode &status);
+    static void loadAllowedHourFormatsData(UErrorCode &status);
+    void getAllowedHourFormats(const Locale &locale, UErrorCode &status);
 } ;// end class DateTimePatternGenerator
 
 U_NAMESPACE_END
