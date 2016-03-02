@@ -1810,7 +1810,7 @@ IntlTest::icu_rand::icu_rand(uint32_t seed) {
     fLast = seed;
 }
 
-IntlTest::icu_rand::~icu_rand() {};
+IntlTest::icu_rand::~icu_rand() {}
 
 void IntlTest::icu_rand::seed(uint32_t seed) {
     if (seed == 0) {
