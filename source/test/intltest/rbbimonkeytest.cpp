@@ -43,7 +43,7 @@ BreakRule::BreakRule()      // :  all field default initialized.
 {
 }
 
-BreakRule::~BreakRule() {};
+BreakRule::~BreakRule() {}
 
 
 //---------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ BreakRules::BreakRules(RBBIMonkeyImpl *monkeyImpl, UErrorCode &status)  :
 }
 
 
-BreakRules::~BreakRules() {};
+BreakRules::~BreakRules() {}
 
 
 CharClass *BreakRules::addCharClass(const UnicodeString &name, const UnicodeString &definition, UErrorCode &status) {
