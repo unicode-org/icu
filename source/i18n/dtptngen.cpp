@@ -457,13 +457,13 @@ struct AllowedHourFormatsSink : public ResourceTableSink {
 
             if (uprv_strcmp(key, "allowed") == 0) {
                 outer.allowedFormats = new int32_t[2];
+                outer.allowedFormatsLength = 1;
                 if (outer.allowedFormats == NULL) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
                 outer.allowedFormats[0] = outer.getHourFormatFromUnicodeString(
                     value.getUnicodeString(status));
-                outer.allowedFormats[1] = ALLOWED_HOUR_FORMAT_UNKNOWN;
             }
         }
 
