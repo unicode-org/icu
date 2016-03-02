@@ -589,12 +589,6 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
         fAllowedHourFormats[0] = ALLOWED_HOUR_FORMAT_H;
         fAllowedHourFormats[1] = ALLOWED_HOUR_FORMAT_UNKNOWN;
     }
-<<<<<<< .mine
-
-=======
-    ures_close(countryData);
-    ures_close(rb);
->>>>>>> .r38464
 }
 
 UnicodeString
