@@ -8,7 +8,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_BREAK_ITERATION
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FORMATTING
 
 #include "intltest.h"
 
@@ -207,6 +207,6 @@ class RBBIMonkeyImpl: public UObject {
 
 };
 
-#endif /* !UCONFIG_NO_BREAK_ITERATION */
+#endif /* !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FORMATTING */
 
 #endif  //  RBBIMONKEYTEST_H
