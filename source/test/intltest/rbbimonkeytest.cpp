@@ -6,6 +6,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "rbbimonkeytest.h"
 #include "unicode/utypes.h"
 #include "unicode/brkiter.h"
@@ -978,3 +980,4 @@ UBool RBBIMonkeyTest::getBoolParam(UnicodeString name, UnicodeString &params, UB
     return FALSE;
 }
 
+#endif /* !UCONFIG_NO_BREAK_ITERATION */
