@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternTokenizer;
@@ -36,9 +35,9 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 /**
  * This class provides flexible generation of date format patterns, like
