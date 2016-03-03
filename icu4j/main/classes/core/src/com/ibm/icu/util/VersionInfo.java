@@ -532,8 +532,8 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_7_0   = getInstance(7, 0, 0, 0);
         UNICODE_8_0   = getInstance(8, 0, 0, 0);
 
-        ICU_VERSION   = getInstance(57, 0, 1, 0);
-        ICU_DATA_VERSION = getInstance(57, 0, 1, 0);
+        ICU_VERSION   = getInstance(57, 1, 0, 0);
+        ICU_DATA_VERSION = getInstance(57, 1, 0, 0);
         UNICODE_VERSION = UNICODE_8_0;
 
         UCOL_RUNTIME_VERSION = getInstance(9);
