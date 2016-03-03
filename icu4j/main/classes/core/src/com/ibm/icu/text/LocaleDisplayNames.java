@@ -278,8 +278,7 @@ public abstract class LocaleDisplayNames {
      * @param localeSet a list of locales to present in a UI list. The casing uses the settings in the LocaleDisplayNames instance.
      * @return an ordered list of UiListItems.
      * @throws IllformedLocaleException if any of the locales in localeSet are malformed.
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 55
      */
     public List<UiListItem> getUiList(Set<ULocale> localeSet, boolean inSelf, Comparator<Object> collator) {
         return getUiListCompareWholeItems(localeSet, UiListItem.getComparator(collator, inSelf));
@@ -292,39 +291,33 @@ public abstract class LocaleDisplayNames {
      * @param localeSet a list of locales to present in a UI list. The casing uses the settings in the LocaleDisplayNames instance.
      * @return an ordered list of UiListItems.
      * @throws IllformedLocaleException if any of the locales in localeSet are malformed.
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 55
      */
     public abstract List<UiListItem> getUiListCompareWholeItems(Set<ULocale> localeSet, Comparator<UiListItem> comparator);
 
     /**
      * Struct-like class used to return information for constructing a UI list, each corresponding to a locale.
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 55
      */
     public static class UiListItem {
         /**
          * Returns the minimized locale for an input locale, such as sr-Cyrl → sr
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         public final ULocale minimized;
         /**
          * Returns the modified locale for an input locale, such as sr → sr-Cyrl, where there is also an sr-Latn in the list
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         public final ULocale modified;
         /**
          * Returns the name of the modified locale in the display locale, such as "Englisch (VS)" (for 'en-US', where the display locale is 'de').
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         public final String nameInDisplayLocale;
         /**
          * Returns the name of the modified locale in itself, such as "English (US)" (for 'en-US').
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         public final String nameInSelf;
 
@@ -334,8 +327,7 @@ public abstract class LocaleDisplayNames {
          * @param modified modified for an input locale
          * @param nameInDisplayLocale name of the modified locale in the display locale
          * @param nameInSelf name of the modified locale in itself
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         public UiListItem(ULocale minimized, ULocale modified, String nameInDisplayLocale, String nameInSelf) {
             this.minimized = minimized;
@@ -347,8 +339,7 @@ public abstract class LocaleDisplayNames {
         /**
          * {@inheritDoc}
          *
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         @Override
         public boolean equals(Object obj) {
@@ -362,8 +353,7 @@ public abstract class LocaleDisplayNames {
         /**
          * {@inheritDoc}
          *
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         @Override
         public int hashCode() {
@@ -373,8 +363,7 @@ public abstract class LocaleDisplayNames {
         /**
          * {@inheritDoc}
          *
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         @Override
         public String toString() {
@@ -387,8 +376,7 @@ public abstract class LocaleDisplayNames {
          * @param inSelf if true, compares the nameInSelf, otherwise the nameInDisplayLocale
          * @param comparator (meant for strings, but because Java Collator doesn't have &lt;String&gt;...)
          * @return UiListItem comparator
-         * @draft ICU 55
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 55
          */
         public static Comparator<UiListItem> getComparator(Comparator<Object> comparator, boolean inSelf) {
             return new UiListItemComparator(comparator, inSelf);

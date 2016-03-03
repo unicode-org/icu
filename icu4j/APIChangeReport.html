@@ -2,30 +2,71 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4J API Comparison: ICU4J 56.1 with ICU4J 57.0.1</title>
+<title>ICU4J API Comparison: ICU4J 56.1 with ICU4J 57.1</title>
 <!-- Copyright 2016, IBM, All Rights Reserved. -->
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 56.1 with ICU4J 57.0.1</h1>
+<h1>ICU4J API Comparison: ICU4J 56.1 with ICU4J 57.1</h1>
 
 <hr/>
 <h2>Removed from ICU4J 56.1</h2>
-<p>(no API removed)</p>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+DateFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int TIME_SEPARATOR</li>
+</ul>
+DateFormat.Field
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final DateFormat.Field TIME_SEPARATOR</li>
+</ul>
+DateFormatSymbols
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getTimeSeparatorString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setTimeSeparatorString</i>(java.lang.String)</li>
+</ul>
+</ul>
+
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 57.0.1</h2>
+<h2>Deprecated or Obsoleted in ICU4J 57.1</h2>
 <p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 57.0.1 (old, new)</h2>
+<h2>Changed in ICU4J 57.1 (old, new)</h2>
 <p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 57.0.1</h2>
-<p>(no API promoted to stable)</p>
+<h2>Promoted to stable in ICU4J 57.1</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:green'>(stable)</span> public static class <i>LocaleDisplayNames.UiListItem</i></li>
+<li><span style='color:green'>(stable)</span> public final class <i>ScientificNumberFormatter</i></li>
+LocaleDisplayNames
+<ul>
+<li><span style='color:green'>(stable)</span> public java.util.List&lt;LocaleDisplayNames.UiListItem&gt; <i>getUiList</i>(java.util.Set&lt;ULocale&gt;, boolean, java.util.Comparator&lt;java.lang.Object&gt;)</li>
+<li><span style='color:green'>(stable)</span> public abstract java.util.List&lt;LocaleDisplayNames.UiListItem&gt; <i>getUiListCompareWholeItems</i>(java.util.Set&lt;ULocale&gt;, java.util.Comparator&lt;LocaleDisplayNames.UiListItem&gt;)</li>
+</ul>
+MeasureFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.StringBuilder <i>formatMeasurePerUnit</i>(Measure, MeasureUnit, java.lang.StringBuilder, java.text.FieldPosition)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+IslamicCalendar
+<ul>
+<li><span style='color:green'>(stable)</span> public IslamicCalendar.CalculationType <i>getCalculationType</i>()</li>
+<li><span style='color:green'>(stable)</span> public void <i>setCalculationType</i>(IslamicCalendar.CalculationType)</li>
+</ul>
+</ul>
+
 
 <hr/>
-<h2>Added in ICU4J 57.0.1</h2>
+<h2>Added in ICU4J 57.1</h2>
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
@@ -41,9 +82,54 @@ UProperty
 <h3>Package com.ibm.icu.text</h3>
 <ul>
 <li><span style='color:orange'>(draft)</span> public final class <i>SimpleFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>RelativeDateTimeFormatter.RelativeDateTimeUnit</i></li>
+DateFormat.Field
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final DateFormat.Field AM_PM_MIDNIGHT_NOON</li>
+<li><span style='color:orange'>(draft)</span> public static final DateFormat.Field FLEXIBLE_DAY_PERIOD</li>
+</ul>
+RelativeDateTimeFormatter
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>format</i>(double, RelativeDateTimeFormatter.RelativeDateTimeUnit)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>formatNumeric</i>(double, RelativeDateTimeFormatter.RelativeDateTimeUnit)</li>
+</ul>
+RelativeDateTimeFormatter.RelativeDateTimeUnit
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit DAY</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit FRIDAY</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit HOUR</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MINUTE</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MONDAY</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MONTH</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit QUARTER</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SATURDAY</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SECOND</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SUNDAY</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit THURSDAY</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit TUESDAY</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit WEDNESDAY</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit WEEK</li>
+<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit YEAR</li>
+</ul>
+SimpleDateFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> protected int <i>matchDayPeriodString</i>(java.lang.String, int, java.lang.String[], int, Output&lt;DayPeriodRules.DayPeriod&gt;)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+MeasureUnit
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit GALLON_IMPERIAL</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit MILE_PER_GALLON_IMPERIAL</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit MILLIGRAM_PER_DECILITER</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit MILLIMOLE_PER_LITER</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PART_PER_MILLION</li>
+</ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Sat Jan 30 01:35:42 EST 2016<br/>Copyright (C) 2016, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Mar 02 22:57:30 EST 2016<br/>Copyright (C) 2016, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>
