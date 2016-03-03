@@ -8,6 +8,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "intltest.h"
 
 #include "unicode/rbbi.h"
@@ -204,5 +206,7 @@ class RBBIMonkeyImpl: public UObject {
     RBBIMonkeyThread fThread;
 
 };
+
+#endif /* !UCONFIG_NO_BREAK_ITERATION */
 
 #endif  //  RBBIMONKEYTEST_H
