@@ -533,12 +533,17 @@
  * http://clang.llvm.org/docs/AttributeReference.html#fallthrough-clang-fallthrough
  * @internal
  */
-#if __has_cpp_attribute(clang::fallthrough) || \
-        (__has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough"))
-#   define U_FALLTHROUGH [[clang::fallthrough]]
+#ifdef __cplusplus
+#   if __has_cpp_attribute(clang::fallthrough) || \
+            (__has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough"))
+#       define U_FALLTHROUGH [[clang::fallthrough]]
+#   else
+#       define U_FALLTHROUGH
+#   endif
 #else
 #   define U_FALLTHROUGH
 #endif
+
 
 /** @} */
 
