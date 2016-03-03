@@ -393,7 +393,7 @@ UHashtable *localeToAllowedHourFormatsMap = NULL;
 
 // Value deleter for hashmap.
 void deleteAllowedHourFormats(void *ptr) {
-    delete[] (int32_t *)ptr;
+    uprv_free(ptr);
 }
 
 // Close hashmap at cleanup.
@@ -456,7 +456,7 @@ struct AllowedHourFormatsSink : public ResourceTableSink {
             if (U_FAILURE(status)) { return; }
 
             if (uprv_strcmp(key, "allowed") == 0) {
-                outer.allowedFormats = new int32_t[2];
+                outer.allowedFormats = static_cast<int32_t *>(uprv_malloc(2 * sizeof(int32_t)));
                 outer.allowedFormatsLength = 1;
                 if (outer.allowedFormats == NULL) {
                     status = U_MEMORY_ALLOCATION_ERROR;
@@ -471,7 +471,7 @@ struct AllowedHourFormatsSink : public ResourceTableSink {
             if (U_FAILURE(status)) { return NULL; }
 
             if (uprv_strcmp(key, "allowed") == 0) {
-                outer.allowedFormats = new int32_t[size + 1];
+                outer.allowedFormats = static_cast<int32_t *>(uprv_malloc((size + 1) * sizeof(int32_t)));
                 outer.allowedFormatsLength = size;
                 if (outer.allowedFormats == NULL) {
                     status = U_MEMORY_ALLOCATION_ERROR;

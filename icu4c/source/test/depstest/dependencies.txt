@@ -769,6 +769,7 @@ library: i18n
   deps
     region localedata genderinfo charset_detector spoof_detection
     alphabetic_index collation collation_builder string_search
+    dayperiodrules
     formatting formattable_cnv regex regex_cnv translit
     universal_time_scale
     uclean_i18n
@@ -839,6 +840,11 @@ group: string_search
   deps
     breakiterator collation
 
+group: dayperiodrules
+    dayperiodrules.o
+  deps
+    resourcebundle uclean_i18n
+
 group: formatting
     # TODO: Try to subdivide this ball of wax.
     # currencyformat
@@ -872,7 +878,7 @@ group: formatting
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
     digitlist formattable format
-    pluralrules
+    dayperiodrules pluralrules
     collation collation_builder  # for rbnf
     common
     floating_point  # sqrt() for astro.o
