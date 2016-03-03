@@ -30,8 +30,7 @@ import com.ibm.icu.util.ULocale;
  * System.out.println(fmt.format(1.23456e-78));
  * </pre>
  *
- * @draft ICU 55
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 55
  *
  */
 public final class ScientificNumberFormatter {
@@ -46,8 +45,7 @@ public final class ScientificNumberFormatter {
      * @param locale The locale
      * @return The ScientificNumberFormatter instance.
      * 
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 55
      */
     public static ScientificNumberFormatter getSuperscriptInstance(ULocale locale) {
         return getInstanceForLocale(locale, SUPER_SCRIPT); 
@@ -61,8 +59,7 @@ public final class ScientificNumberFormatter {
      *   clones it when creating the ScientificNumberFormatter.
      * @return the ScientificNumberFormatter instance.
      * 
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 55
      */ 
      public static ScientificNumberFormatter getSuperscriptInstance(
              DecimalFormat df) {
@@ -77,8 +74,7 @@ public final class ScientificNumberFormatter {
       * @param endMarkup the markup to end superscript e.g {@code </sup>}
       * @return The ScientificNumberFormatter instance.
       * 
-      * @draft ICU 55
-      * @provisional This API might change or be removed in a future release.
+      * @stable ICU 55
       */
      public static ScientificNumberFormatter getMarkupInstance(
              ULocale locale,
@@ -98,8 +94,7 @@ public final class ScientificNumberFormatter {
       * @param endMarkup the markup to end superscript e.g {@code </sup>}
       * @return The ScientificNumberFormatter instance.
       * 
-      * @draft ICU 55
-      * @provisional This API might change or be removed in a future release.
+      * @stable ICU 55
       */
      public static ScientificNumberFormatter getMarkupInstance(
              DecimalFormat df,
@@ -115,8 +110,7 @@ public final class ScientificNumberFormatter {
       *  anything that DecimalFormat#format(Object) accepts.
       * @return the formatted string.
       *
-      * @draft ICU 55
-      * @provisional This API might change or be removed in a future release.
+      * @stable ICU 55
       */
      public String format(Object number) {
          synchronized (fmt) {

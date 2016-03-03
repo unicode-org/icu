@@ -491,8 +491,7 @@ public class MeasureFormat extends UFormat {
      * @param appendTo formatted string appended here.
      * @param pos      The field position.
      * @return appendTo.
-     * @draft ICU 55
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 55
      */
     public StringBuilder formatMeasurePerUnit(
             Measure measure,
