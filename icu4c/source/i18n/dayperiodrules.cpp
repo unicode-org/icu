@@ -12,7 +12,7 @@
 #include "dayperiodrules.h"
 
 #include "unicode/ures.h"
-#include "cstr.h"
+#include "charstr.h"
 #include "cstring.h"
 #include "ucln_in.h"
 #include "uhash.h"
@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
-struct DayPeriodRulesData {
+struct DayPeriodRulesData : public UMemory {
     DayPeriodRulesData() : localeToRuleSetNumMap(NULL), rules(NULL), maxRuleSetNum(0) {}
 
     UHashtable *localeToRuleSetNumMap;
@@ -176,7 +176,9 @@ struct DayPeriodRulesDataSink : public ResourceTableSink {
 
     // Helpers.
     static int32_t parseSetNum(const UnicodeString &setNumStr, UErrorCode &errorCode) {
-        return parseSetNum(CStr(setNumStr)(), errorCode);
+        CharString cs;
+        cs.appendInvariantChars(setNumStr, errorCode);
+        return parseSetNum(cs.data(), errorCode);
     }
 
     static int32_t parseSetNum(const char *setNumStr, UErrorCode &errorCode) {
@@ -315,6 +317,7 @@ struct DayPeriodRulesDataSink : public ResourceTableSink {
 };  // struct DayPeriodRulesDataSink
 
 struct DayPeriodRulesCountSink : public ResourceTableSink {
+    virtual ~DayPeriodRulesCountSink();
     virtual ResourceTableSink *getOrCreateTableSink(const char *key, int32_t, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) { return NULL; }
 
@@ -334,6 +337,8 @@ DayPeriodRulesDataSink::PeriodSink::~PeriodSink() {}
 DayPeriodRulesDataSink::RuleSetSink::~RuleSetSink() {}
 DayPeriodRulesDataSink::RulesSink::~RulesSink() {}
 DayPeriodRulesDataSink::~DayPeriodRulesDataSink() {}
+
+DayPeriodRulesCountSink::~DayPeriodRulesCountSink() {}
 
 namespace {
 
