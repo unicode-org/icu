@@ -194,7 +194,7 @@ void LocaleDisplayNamesTest::TestUldnWithGarbage() {
   const int32_t kMaxResultSize = 150;  // long enough
   UChar result[150];
   ULocaleDisplayNames *ldn = uldn_open(Locale::getUS().getName(), ULDN_DIALECT_NAMES, &status);
-  int32_t len = uldn_localeDisplayName(ldn, "english (United States) [w", result, kMaxResultSize, &status);
+  (void)uldn_localeDisplayName(ldn, "english (United States) [w", result, kMaxResultSize, &status);
   uldn_close(ldn);
   test_assert(U_FAILURE(status));
 }
