@@ -1179,7 +1179,7 @@ ureldatefmt_combineDateAndTime( const URelativeDateTimeFormatter* reldatefmt,
     }
     UnicodeString relDateStr((UBool)(relativeDateStringLen == -1), relativeDateString, relativeDateStringLen);
     UnicodeString timeStr((UBool)(timeStringLen == -1), timeString, timeStringLen);
-    UnicodeString res;
+    UnicodeString res(result, 0, resultCapacity);
     ((RelativeDateTimeFormatter*)reldatefmt)->combineDateAndTime(relDateStr, timeStr, res, *status);
     if (U_FAILURE(*status)) {
         return 0;
