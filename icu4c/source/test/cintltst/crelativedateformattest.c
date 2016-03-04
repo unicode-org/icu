@@ -169,7 +169,7 @@ static void TestRelDateFmt()
             UChar ubufget[kUBufMax];
             int32_t ulenget;
 
-            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY && (offsets[iOffset] != -1.0 || offsets[iOffset] != 0.0 || offsets[iOffset] != 1.0)) {
+            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY && offsets[iOffset] != -1.0 && offsets[iOffset] != 0.0 && offsets[iOffset] != 1.0) {
                 continue; /* we do not currently have data for this */
             }
 
