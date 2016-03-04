@@ -4953,10 +4953,14 @@ void DateFormatTest::TestAmPmMidnightNoon() {
     sdf.setTimeZone(*tz);
     UnicodeString out;
 
+    // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
+    // For ICU 57 output of "midnight" is temporarily suppressed.
+
     // Short.
     sdf.applyPattern(UnicodeString("hh:mm:ss bbb"));
 
-    assertEquals("hh:mm:ss bbb | 00:00:00", "12:00:00 midnight", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm:ss bbb | 00:00:00", "12:00:00 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm:ss bbb | 00:00:00", "12:00:00 AM", sdf.format(k000000, out.remove()));
     assertEquals("hh:mm:ss bbb | 00:00:30", "12:00:30 AM", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm:ss bbb | 00:30:00", "12:30:00 AM", sdf.format(k003000, out.remove()));
     assertEquals("hh:mm:ss bbb | 06:00:00", "06:00:00 AM", sdf.format(k060000, out.remove()));
@@ -4965,20 +4969,26 @@ void DateFormatTest::TestAmPmMidnightNoon() {
 
     sdf.applyPattern(UnicodeString("hh:mm bbb"));
 
-    assertEquals("hh:mm bbb | 00:00:00", "12:00 midnight", sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm bbb | 00:00:30", "12:00 midnight", sdf.format(k000030, out.remove()));
+    // assertEquals("hh:mm bbb | 00:00:00", "12:00 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm bbb | 00:00:00", "12:00 AM", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm bbb | 00:00:30", "12:00 midnight", sdf.format(k000030, out.remove()));
+    assertEquals("hh:mm bbb | 00:00:30", "12:00 AM", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm bbb | 00:30:00", "12:30 AM", sdf.format(k003000, out.remove()));
 
     sdf.applyPattern(UnicodeString("hh bbb"));
 
-    assertEquals("hh bbb | 00:00:00", "12 midnight", sdf.format(k000000, out.remove()));
-    assertEquals("hh bbb | 00:00:30", "12 midnight", sdf.format(k000030, out.remove()));
-    assertEquals("hh bbb | 00:30:00", "12 midnight", sdf.format(k003000, out.remove()));
+    // assertEquals("hh bbb | 00:00:00", "12 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh bbb | 00:00:00", "12 AM", sdf.format(k000000, out.remove()));
+    // assertEquals("hh bbb | 00:00:30", "12 midnight", sdf.format(k000030, out.remove()));
+    assertEquals("hh bbb | 00:00:30", "12 AM", sdf.format(k000030, out.remove()));
+    // assertEquals("hh bbb | 00:30:00", "12 midnight", sdf.format(k003000, out.remove()));
+    assertEquals("hh bbb | 00:30:00", "12 AM", sdf.format(k003000, out.remove()));
 
     // Wide.
     sdf.applyPattern(UnicodeString("hh:mm:ss bbbb"));
 
-    assertEquals("hh:mm:ss bbbb | 00:00:00", "12:00:00 midnight", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm:ss bbbb | 00:00:00", "12:00:00 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm:ss bbbb | 00:00:00", "12:00:00 AM", sdf.format(k000000, out.remove()));
     assertEquals("hh:mm:ss bbbb | 00:00:30", "12:00:30 AM", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm:ss bbbb | 00:30:00", "12:30:00 AM", sdf.format(k003000, out.remove()));
     assertEquals("hh:mm:ss bbbb | 06:00:00", "06:00:00 AM", sdf.format(k060000, out.remove()));
@@ -4987,20 +4997,26 @@ void DateFormatTest::TestAmPmMidnightNoon() {
 
     sdf.applyPattern(UnicodeString("hh:mm bbbb"));
 
-    assertEquals("hh:mm bbbb | 00:00:00", "12:00 midnight", sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm bbbb | 00:00:30", "12:00 midnight", sdf.format(k000030, out.remove()));
+    // assertEquals("hh:mm bbbb | 00:00:00", "12:00 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm bbbb | 00:00:00", "12:00 AM", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm bbbb | 00:00:30", "12:00 midnight", sdf.format(k000030, out.remove()));
+    assertEquals("hh:mm bbbb | 00:00:30", "12:00 AM", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm bbbb | 00:30:00", "12:30 AM", sdf.format(k003000, out.remove()));
 
     sdf.applyPattern(UnicodeString("hh bbbb"));
 
-    assertEquals("hh bbbb | 00:00:00", "12 midnight", sdf.format(k000000, out.remove()));
-    assertEquals("hh bbbb | 00:00:30", "12 midnight", sdf.format(k000030, out.remove()));
-    assertEquals("hh bbbb | 00:30:00", "12 midnight", sdf.format(k003000, out.remove()));
+    // assertEquals("hh bbbb | 00:00:00", "12 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh bbbb | 00:00:00", "12 AM", sdf.format(k000000, out.remove()));
+    // assertEquals("hh bbbb | 00:00:30", "12 midnight", sdf.format(k000030, out.remove()));
+    assertEquals("hh bbbb | 00:00:30", "12 AM", sdf.format(k000030, out.remove()));
+    // assertEquals("hh bbbb | 00:30:00", "12 midnight", sdf.format(k003000, out.remove()));
+    assertEquals("hh bbbb | 00:30:00", "12 AM", sdf.format(k003000, out.remove()));
 
     // Narrow.
     sdf.applyPattern(UnicodeString("hh:mm:ss bbbbb"));
 
-    assertEquals("hh:mm:ss bbbbb | 00:00:00", "12:00:00 mi", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm:ss bbbbb | 00:00:00", "12:00:00 mi", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm:ss bbbbb | 00:00:00", "12:00:00 a", sdf.format(k000000, out.remove()));
     assertEquals("hh:mm:ss bbbbb | 00:00:30", "12:00:30 a", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm:ss bbbbb | 00:30:00", "12:30:00 a", sdf.format(k003000, out.remove()));
     assertEquals("hh:mm:ss bbbbb | 06:00:00", "06:00:00 a", sdf.format(k060000, out.remove()));
@@ -5009,15 +5025,20 @@ void DateFormatTest::TestAmPmMidnightNoon() {
 
     sdf.applyPattern(UnicodeString("hh:mm bbbbb"));
 
-    assertEquals("hh:mm bbbbb | 00:00:00", "12:00 mi", sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm bbbbb | 00:00:30", "12:00 mi", sdf.format(k000030, out.remove()));
+    // assertEquals("hh:mm bbbbb | 00:00:00", "12:00 mi", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm bbbbb | 00:00:00", "12:00 a", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm bbbbb | 00:00:30", "12:00 mi", sdf.format(k000030, out.remove()));
+    assertEquals("hh:mm bbbbb | 00:00:30", "12:00 a", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm bbbbb | 00:30:00", "12:30 a", sdf.format(k003000, out.remove()));
 
     sdf.applyPattern(UnicodeString("hh bbbbb"));
 
-    assertEquals("hh bbbbb | 00:00:00", "12 mi", sdf.format(k000000, out.remove()));
-    assertEquals("hh bbbbb | 00:00:30", "12 mi", sdf.format(k000030, out.remove()));
-    assertEquals("hh bbbbb | 00:30:00", "12 mi", sdf.format(k003000, out.remove()));
+    // assertEquals("hh bbbbb | 00:00:00", "12 mi", sdf.format(k000000, out.remove()));
+    assertEquals("hh bbbbb | 00:00:00", "12 a", sdf.format(k000000, out.remove()));
+    // assertEquals("hh bbbbb | 00:00:30", "12 mi", sdf.format(k000030, out.remove()));
+    assertEquals("hh bbbbb | 00:00:30", "12 a", sdf.format(k000030, out.remove()));
+    // assertEquals("hh bbbbb | 00:30:00", "12 mi", sdf.format(k003000, out.remove()));
+    assertEquals("hh bbbbb | 00:30:00", "12 a", sdf.format(k003000, out.remove()));
 }
 
 void DateFormatTest::TestFlexibleDayPeriod() {
@@ -5039,10 +5060,14 @@ void DateFormatTest::TestFlexibleDayPeriod() {
     sdf.setTimeZone(*tz);
     UnicodeString out;
 
+    // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
+    // For ICU 57 output of "midnight" is temporarily suppressed.
+
     // Short.
     sdf.applyPattern(UnicodeString("hh:mm:ss BBB"));
 
-    assertEquals("hh:mm:ss BBB | 00:00:00", "12:00:00 midnight", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm:ss BBB | 00:00:00", "12:00:00 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm:ss BBB | 00:00:00", "12:00:00 at night", sdf.format(k000000, out.remove()));
     assertEquals("hh:mm:ss BBB | 00:00:30", "12:00:30 at night", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm:ss BBB | 00:30:00", "12:30:00 at night", sdf.format(k003000, out.remove()));
     assertEquals("hh:mm:ss BBB | 06:00:00", "06:00:00 in the morning", sdf.format(k060000, out.remove()));
@@ -5051,20 +5076,26 @@ void DateFormatTest::TestFlexibleDayPeriod() {
 
     sdf.applyPattern(UnicodeString("hh:mm BBB"));
 
-    assertEquals("hh:mm BBB | 00:00:00", "12:00 midnight", sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm BBB | 00:00:30", "12:00 midnight", sdf.format(k000030, out.remove()));
+    // assertEquals("hh:mm BBB | 00:00:00", "12:00 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm BBB | 00:00:00", "12:00 at night", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm BBB | 00:00:30", "12:00 midnight", sdf.format(k000030, out.remove()));
+    assertEquals("hh:mm BBB | 00:00:00", "12:00 at night", sdf.format(k000000, out.remove()));
     assertEquals("hh:mm BBB | 00:30:00", "12:30 at night", sdf.format(k003000, out.remove()));
 
     sdf.applyPattern(UnicodeString("hh BBB"));
 
-    assertEquals("hh BBB | 00:00:00", "12 midnight", sdf.format(k000000, out.remove()));
-    assertEquals("hh BBB | 00:00:30", "12 midnight", sdf.format(k000030, out.remove()));
-    assertEquals("hh BBB | 00:30:00", "12 midnight", sdf.format(k003000, out.remove()));
+    // assertEquals("hh BBB | 00:00:00", "12 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh BBB | 00:00:30", "12 at night", sdf.format(k000030, out.remove()));
+    // assertEquals("hh BBB | 00:00:30", "12 midnight", sdf.format(k000030, out.remove()));
+    assertEquals("hh BBB | 00:00:30", "12 at night", sdf.format(k000030, out.remove()));
+    // assertEquals("hh BBB | 00:30:00", "12 midnight", sdf.format(k003000, out.remove()));
+    assertEquals("hh BBB | 00:30:00", "12 at night", sdf.format(k003000, out.remove()));
 
     // Wide.
     sdf.applyPattern(UnicodeString("hh:mm:ss BBBB"));
 
-    assertEquals("hh:mm:ss BBBB | 00:00:00", "12:00:00 midnight", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm:ss BBBB | 00:00:00", "12:00:00 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm:ss BBBB | 00:00:00", "12:00:00 at night", sdf.format(k000000, out.remove()));
     assertEquals("hh:mm:ss BBBB | 00:00:30", "12:00:30 at night", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm:ss BBBB | 00:30:00", "12:30:00 at night", sdf.format(k003000, out.remove()));
     assertEquals("hh:mm:ss BBBB | 06:00:00", "06:00:00 in the morning", sdf.format(k060000, out.remove()));
@@ -5073,20 +5104,26 @@ void DateFormatTest::TestFlexibleDayPeriod() {
 
     sdf.applyPattern(UnicodeString("hh:mm BBBB"));
 
-    assertEquals("hh:mm BBBB | 00:00:00", "12:00 midnight", sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm BBBB | 00:00:30", "12:00 midnight", sdf.format(k000030, out.remove()));
+    // assertEquals("hh:mm BBBB | 00:00:00", "12:00 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm BBBB | 00:00:00", "12:00 at night", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm BBBB | 00:00:30", "12:00 midnight", sdf.format(k000030, out.remove()));
+    assertEquals("hh:mm BBBB | 00:00:30", "12:00 at night", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm BBBB | 00:30:00", "12:30 at night", sdf.format(k003000, out.remove()));
 
     sdf.applyPattern(UnicodeString("hh BBBB"));
 
-    assertEquals("hh BBBB | 00:00:00", "12 midnight", sdf.format(k000000, out.remove()));
-    assertEquals("hh BBBB | 00:00:30", "12 midnight", sdf.format(k000030, out.remove()));
-    assertEquals("hh BBBB | 00:80:00", "12 midnight", sdf.format(k003000, out.remove()));
+    // assertEquals("hh BBBB | 00:00:00", "12 midnight", sdf.format(k000000, out.remove()));
+    assertEquals("hh BBBB | 00:00:00", "12 at night", sdf.format(k000000, out.remove()));
+    // assertEquals("hh BBBB | 00:00:30", "12 midnight", sdf.format(k000030, out.remove()));
+    assertEquals("hh BBBB | 00:00:00", "12 at night", sdf.format(k000000, out.remove()));
+    // assertEquals("hh BBBB | 00:80:00", "12 midnight", sdf.format(k003000, out.remove()));
+    assertEquals("hh BBBB | 00:00:00", "12 at night", sdf.format(k000000, out.remove()));
 
     // Narrow.
     sdf.applyPattern(UnicodeString("hh:mm:ss BBBBB"));
 
-    assertEquals("hh:mm:ss BBBBB | 00:00:00", "12:00:00 mi", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm:ss BBBBB | 00:00:00", "12:00:00 mi", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm:ss BBBBB | 00:00:00", "12:00:00 at night", sdf.format(k000000, out.remove()));
     assertEquals("hh:mm:ss BBBBB | 00:00:30", "12:00:30 at night", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm:ss BBBBB | 00:30:00", "12:30:00 at night", sdf.format(k003000, out.remove()));
     assertEquals("hh:mm:ss BBBBB | 06:00:00", "06:00:00 in the morning", sdf.format(k060000, out.remove()));
@@ -5095,15 +5132,20 @@ void DateFormatTest::TestFlexibleDayPeriod() {
 
     sdf.applyPattern(UnicodeString("hh:mm BBBBB"));
 
-    assertEquals("hh:mm BBBBB | 00:00:00", "12:00 mi", sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm BBBBB | 00:00:30", "12:00 mi", sdf.format(k000030, out.remove()));
+    // assertEquals("hh:mm BBBBB | 00:00:00", "12:00 mi", sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm BBBBB | 00:00:00", "12:00 at night", sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm BBBBB | 00:00:30", "12:00 mi", sdf.format(k000030, out.remove()));
+    assertEquals("hh:mm BBBBB | 00:00:30", "12:00 at night", sdf.format(k000030, out.remove()));
     assertEquals("hh:mm BBBBB | 00:30:00", "12:30 at night", sdf.format(k003000, out.remove()));
 
     sdf.applyPattern(UnicodeString("hh BBBBB"));
 
-    assertEquals("hh BBBBB | 00:00:00", "12 mi", sdf.format(k000000, out.remove()));
-    assertEquals("hh BBBBB | 00:00:30", "12 mi", sdf.format(k000030, out.remove()));
-    assertEquals("hh BBBBB | 00:30:00", "12 mi", sdf.format(k003000, out.remove()));
+    // assertEquals("hh BBBBB | 00:00:00", "12 mi", sdf.format(k000000, out.remove()));
+    assertEquals("hh BBBBB | 00:00:00", "12 at night", sdf.format(k000000, out.remove()));
+    // assertEquals("hh BBBBB | 00:00:30", "12 mi", sdf.format(k000030, out.remove()));
+    assertEquals("hh BBBBB | 00:00:30", "12 at night", sdf.format(k000030, out.remove()));
+    // assertEquals("hh BBBBB | 00:30:00", "12 mi", sdf.format(k003000, out.remove()));
+    assertEquals("hh BBBBB | 00:30:00", "12 at night", sdf.format(k003000, out.remove()));
 }
 
 void DateFormatTest::TestDayPeriodWithLocales() {
@@ -5117,6 +5159,9 @@ void DateFormatTest::TestDayPeriodWithLocales() {
     const TimeZone *tz = TimeZone::getGMT();
     UnicodeString out;
 
+    // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
+    // For ICU 57 output of "midnight" and its localized equivalentns is temporarily suppressed.
+
     // Locale de has a word for midnight, but not noon.
     SimpleDateFormat sdf(UnicodeString(), Locale::getGermany(), errorCode);
     if (U_FAILURE(errorCode)) {
@@ -5127,7 +5172,9 @@ void DateFormatTest::TestDayPeriodWithLocales() {
 
     sdf.applyPattern(UnicodeString("hh:mm:ss bbbb"));
 
-    assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 Mitternacht",
+    // assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 Mitternacht",
+    //     sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 vorm.",
         sdf.format(k000000, out.remove()));
     assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 nachm.",
         sdf.format(k120000, out.remove()));
@@ -5173,8 +5220,10 @@ void DateFormatTest::TestDayPeriodWithLocales() {
 
     sdf.applyPattern(UnicodeString("hh:mm:ss BBBB"));
 
-    assertEquals("hh:mm:ss BBBB | 00:00:00 | en_US", "12:00:00 midnight",
-        sdf.format(k000000, out.remove()));
+    // assertEquals("hh:mm:ss BBBB | 00:00:00 | en_US", "12:00:00 midnight",
+    //     sdf.format(k000000, out.remove()));
+    assertEquals("hh:mm:ss BBBB | 00:00:00 | en_US", "12:00:00 at night",
+         sdf.format(k000000, out.remove()));
     assertEquals("hh:mm:ss BBBB | 01:00:00 | en_US", "01:00:00 at night",
         sdf.format(k010000, out.remove()));
     assertEquals("hh:mm:ss BBBB | 12:00:00 | en_US", "12:00:00 noon",
@@ -5210,6 +5259,9 @@ void DateFormatTest::TestMinuteSecondFieldsInOddPlaces() {
     const TimeZone *tz = TimeZone::getGMT();
     UnicodeString out;
 
+    // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
+    // For ICU 57 output of "midnight" is temporarily suppressed.
+
     // Seconds field is not present.
 
     // Apply pattern through constructor to make sure parsePattern() is called during initialization.
@@ -5220,14 +5272,18 @@ void DateFormatTest::TestMinuteSecondFieldsInOddPlaces() {
     }
     sdf.setTimeZone(*tz);
 
-    assertEquals("hh:mm 'ss' bbbb | 00:00:30", "12:00 ss midnight",
+    // assertEquals("hh:mm 'ss' bbbb | 00:00:30", "12:00 ss midnight",
+    //     sdf.format(k000030, out.remove()));
+    assertEquals("hh:mm 'ss' bbbb | 00:00:30", "12:00 ss AM",
         sdf.format(k000030, out.remove()));
     assertEquals("hh:mm 'ss' bbbb | 06:00:30", "06:00 ss AM",
         sdf.format(k060030, out.remove()));
 
     sdf.applyPattern(UnicodeString("hh:mm 'ss' BBBB"));
 
-    assertEquals("hh:mm 'ss' BBBB | 00:00:30", "12:00 ss midnight",
+    // assertEquals("hh:mm 'ss' BBBB | 00:00:30", "12:00 ss midnight",
+    //     sdf.format(k000030, out.remove()));
+    assertEquals("hh:mm 'ss' BBBB | 00:00:30", "12:00 ss at night",
         sdf.format(k000030, out.remove()));
     assertEquals("hh:mm 'ss' BBBB | 06:00:30", "06:00 ss in the morning",
         sdf.format(k060030, out.remove()));
@@ -5235,14 +5291,18 @@ void DateFormatTest::TestMinuteSecondFieldsInOddPlaces() {
     // Minutes field is not present.
     sdf.applyPattern(UnicodeString("hh 'mm ss' bbbb"));
 
-    assertEquals("hh 'mm ss' bbbb | 00:30:00", "12 mm ss midnight",
+    // assertEquals("hh 'mm ss' bbbb | 00:30:00", "12 mm ss midnight",
+    //     sdf.format(k003000, out.remove()));
+    assertEquals("hh 'mm ss' bbbb | 00:30:00", "12 mm ss AM",
         sdf.format(k003000, out.remove()));
     assertEquals("hh 'mm ss' bbbb | 06:30:00", "06 mm ss AM",
         sdf.format(k063000, out.remove()));
 
     sdf.applyPattern(UnicodeString("hh 'mm ss' BBBB"));
 
-    assertEquals("hh 'mm ss' BBBB | 00:30:00", "12 mm ss midnight",
+    // assertEquals("hh 'mm ss' BBBB | 00:30:00", "12 mm ss midnight",
+    //     sdf.format(k003000, out.remove()));
+    assertEquals("hh 'mm ss' BBBB | 00:30:00", "12 mm ss at night",
         sdf.format(k003000, out.remove()));
     assertEquals("hh 'mm ss' BBBB | 06:30:00", "06 mm ss in the morning",
         sdf.format(k063000, out.remove()));
@@ -5250,7 +5310,9 @@ void DateFormatTest::TestMinuteSecondFieldsInOddPlaces() {
     // Minutes and seconds fields appear after day periods.
     sdf.applyPattern(UnicodeString("bbbb hh:mm:ss"));
 
-    assertEquals("bbbb hh:mm:ss | 00:00:00", "midnight 12:00:00",
+    // assertEquals("bbbb hh:mm:ss | 00:00:00", "midnight 12:00:00",
+    //     sdf.format(k000000, out.remove()));
+    assertEquals("bbbb hh:mm:ss | 00:00:00", "AM 12:00:00",
         sdf.format(k000000, out.remove()));
     assertEquals("bbbb hh:mm:ss | 00:00:30", "AM 12:00:30",
         sdf.format(k000030, out.remove()));
@@ -5259,7 +5321,9 @@ void DateFormatTest::TestMinuteSecondFieldsInOddPlaces() {
 
     sdf.applyPattern(UnicodeString("BBBB hh:mm:ss"));
 
-    assertEquals("BBBB hh:mm:ss | 00:00:00", "midnight 12:00:00",
+    // assertEquals("BBBB hh:mm:ss | 00:00:00", "midnight 12:00:00",
+    //     sdf.format(k000000, out.remove()));
+    assertEquals("BBBB hh:mm:ss | 00:00:00", "at night 12:00:00",
         sdf.format(k000000, out.remove()));
     assertEquals("BBBB hh:mm:ss | 00:00:30", "at night 12:00:30",
         sdf.format(k000030, out.remove()));
@@ -5268,11 +5332,15 @@ void DateFormatTest::TestMinuteSecondFieldsInOddPlaces() {
 
     // Confirm applyPattern() reparses the pattern string.
     sdf.applyPattern(UnicodeString("BBBB hh"));
-    assertEquals("BBBB hh | 00:00:30", "midnight 12",
-        sdf.format(k000030, out.remove()));
+    // assertEquals("BBBB hh | 00:00:30", "midnight 12",
+    //     sdf.format(k000030, out.remove()));
+    assertEquals("BBBB hh | 00:00:30", "at night 12",
+         sdf.format(k000030, out.remove()));
 
     sdf.applyPattern(UnicodeString("BBBB hh:mm:'ss'"));
-    assertEquals("BBBB hh:mm:'ss' | 00:00:30", "midnight 12:00:ss",
+    // assertEquals("BBBB hh:mm:'ss' | 00:00:30", "midnight 12:00:ss",
+    //     sdf.format(k000030, out.remove()));
+    assertEquals("BBBB hh | 00:00:30", "at night 12:00:ss",
         sdf.format(k000030, out.remove()));
 
     sdf.applyPattern(UnicodeString("BBBB hh:mm:ss"));
