@@ -1077,6 +1077,7 @@
 #define ulocdata_setNoSubstitute U_ICU_ENTRY_POINT_RENAME(ulocdata_setNoSubstitute)
 #define ulocimp_getCountry U_ICU_ENTRY_POINT_RENAME(ulocimp_getCountry)
 #define ulocimp_getLanguage U_ICU_ENTRY_POINT_RENAME(ulocimp_getLanguage)
+#define ulocimp_getRegionForSupplementalData U_ICU_ENTRY_POINT_RENAME(ulocimp_getRegionForSupplementalData)
 #define ulocimp_getScript U_ICU_ENTRY_POINT_RENAME(ulocimp_getScript)
 #define ulocimp_toBcpKey U_ICU_ENTRY_POINT_RENAME(ulocimp_toBcpKey)
 #define ulocimp_toBcpType U_ICU_ENTRY_POINT_RENAME(ulocimp_toBcpType)
