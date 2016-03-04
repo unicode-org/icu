@@ -4,16 +4,20 @@
 #  file:  line_normal_fi.txt
 #
 #         Line Breaking Rules
-#         Implement default line breaking as defined by 
-#         Unicode Standard Annex #14 Revision 34 for Unicode 8.0
+#         Implement default line breaking as defined by
+#         Unicode Standard Annex #14 Revision 35 for Unicode 8.0
 #         http://www.unicode.org/reports/tr14/
-#         tailored as noted in 2nd paragraph below..
+#
+#         Includes the Emoji breaking proposals from Unicode L2/16-011R3.
+#         http://www.unicode.org/L2/L2016/16011r3-break-prop-emoji.pdf
+#
+#         Tailored as noted in 2nd paragraph below.
 #
 #         TODO:  Rule LB 8 remains as it was in Unicode 5.2
 #         This is only because of a limitation of ICU break engine implementation,
 #         not because the older behavior is desirable.
 #
-#         This tailors the line break behavior both for Finnish and to correpond to CSS
+#         This tailors the line break behavior for Finnish, and to correspond to CSS
 #         line-break=normal (BCP47 -u-lb-normal) as defined for languages other than 
 #         Chinese & Japanese.
 #         It sets characters of class CJ to behave like ID.
@@ -23,8 +27,6 @@
 #
 
 !!chain;
-!!LBCMNoChain;
-
 
 !!lookAheadHardBreak;
 #
@@ -62,9 +64,14 @@
 #           See rule LB 19 for an example.
 #
 
+# Temporary definitions of Emoji Base and Emoji Modifiers, until properties are available.
+
+$EB = [\u261D\u26F9\u270A-\u270D\U0001F385\U0001F3C3-\U0001F3C4\U0001F3CA-\U0001F3CB\U0001F442-\U0001F443\U0001F446-\U0001F450\U0001F466-\U0001F469\U0001F46E\U0001F470-\U0001F478\U0001F47C\U0001F481-\U0001F483\U0001F485-\U0001F487\U0001F4AA\U0001F575\U0001F590\U0001F595-\U0001F596\U0001F645-\U0001F647\U0001F64B-\U0001F64F\U0001F6A3\U0001F6B4-\U0001F6B6\U0001F6C0\U0001F918];
+$EM = [\U0001F3FB-\U0001F3FF];
+
 $AI = [:LineBreak =  Ambiguous:];
-$AL = [:LineBreak =  Alphabetic:];
-$BA = [[:LineBreak =  Break_After:] - [\u2010]];
+$AL = [[:LineBreak =  Alphabetic:] - [$EM\u2764]];
+$BA = [[:LineBreak =  Break_After:]-[\u2010]];
 $HH = [\u2010];
 $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
@@ -72,7 +79,7 @@ $B2 = [:LineBreak =  Break_Both:];
 $CB = [:LineBreak =  Contingent_Break:];
 $CJ = [:LineBreak =  Conditional_Japanese_Starter:];
 $CL = [:LineBreak =  Close_Punctuation:];
-$CM = [:LineBreak =  Combining_Mark:];
+$CM = [[:LineBreak =  Combining_Mark:] \u200d];
 $CP = [:LineBreak =  Close_Parenthesis:];
 $CR = [:LineBreak =  Carriage_Return:];
 $EX = [:LineBreak =  Exclamation:];
@@ -81,7 +88,7 @@ $HL = [:LineBreak =  Hebrew_Letter:];
 $HY = [:LineBreak =  Hyphen:];
 $H2 = [:LineBreak =  H2:];
 $H3 = [:LineBreak =  H3:];
-$ID = [[:LineBreak =  Ideographic:] $CJ];
+$ID = [[:LineBreak =  Ideographic:] $CJ [\u2764] - $EB];
 $IN = [:LineBreak =  Inseperable:];
 $IS = [:LineBreak =  Infix_Numeric:];
 $JL = [:LineBreak =  JL:];
@@ -103,6 +110,7 @@ $SY = [:LineBreak =  Break_Symbols:];
 $WJ = [:LineBreak =  Word_Joiner:];
 $XX = [:LineBreak =  Unknown:];
 $ZW = [:LineBreak =  ZWSpace:];
+$ZWJ = [\u200d];
 
 #   Dictionary character set, for triggering language-based break engines. Currently
 #   limited to LineBreak=Complex_Context. Note that this set only works in Unicode
@@ -136,7 +144,6 @@ $HLcm = $HL $CM*;
 $HYcm = $HY $CM*;
 $H2cm = $H2 $CM*;
 $H3cm = $H3 $CM*;
-$IDcm = $ID $CM*;
 $INcm = $IN $CM*;
 $IScm = $IS $CM*;
 $JLcm = $JL $CM*;
@@ -166,6 +173,8 @@ $BB $CM+;
 $B2 $CM+;
 $CL $CM+;
 $CP $CM+;
+$EB $CM+;
+$EM $CM+;
 $EX $CM+;
 $GL $CM+;
 $HL $CM+;
@@ -214,7 +223,7 @@ $AL_FOLLOW      = [$AL_FOLLOW_NOCM $AL_FOLLOW_CM];
 #  Rule LB 4, 5    Mandatory (Hard) breaks.
 #
 $LB4Breaks    = [$BK $CR $LF $NL];
-$LB4NonBreaks = [^$BK $CR $LF $NL];
+$LB4NonBreaks = [^$BK $CR $LF $NL $CM];
 $CR $LF {100};
 
 #
@@ -222,13 +231,13 @@ $CR $LF {100};
 #
 $LB4NonBreaks?  $LB4Breaks {100};    # LB 5  do not break before hard breaks.
 $CAN_CM $CM*    $LB4Breaks {100};
-$CM+            $LB4Breaks {100};
+^$CM+           $LB4Breaks {100};
 
 # LB 7         x SP
 #              x ZW
 $LB4NonBreaks [$SP $ZW];
 $CAN_CM $CM*  [$SP $ZW];
-$CM+          [$SP $ZW];
+^$CM+         [$SP $ZW];
 
 #
 # LB 8         Break after zero width space
@@ -239,20 +248,23 @@ $CM+          [$SP $ZW];
 $LB8Breaks    = [$LB4Breaks $ZW];
 $LB8NonBreaks = [[$LB4NonBreaks] - [$ZW]];
 
+# LB 8a        ZWJ x ID    Emoji proposal.
+#
+$ZWJ ($ID | $EB | $EM);
 
-# LB 9     Combining marks.      X   $CM needs to behave like X, where X is not $SP, $BK $CR $LF $NL 
-#                                $CM not covered by the above needs to behave like $AL   
+# LB 9     Combining marks.      X   $CM needs to behave like X, where X is not $SP, $BK $CR $LF $NL
+#                                $CM not covered by the above needs to behave like $AL
 #                                See definition of $CAN_CM.
 
 $CAN_CM $CM+;                   #  Stick together any combining sequences that don't match other rules.
-$CM+;
+^$CM+;
 
 #
 # LB 11  Do not break before or after WORD JOINER & related characters.
 #
 $CAN_CM $CM*  $WJcm;
 $LB8NonBreaks $WJcm;
-$CM+          $WJcm;
+^$CM+         $WJcm;
 
 $WJcm $CANT_CM;
 $WJcm $CAN_CM $CM*;
@@ -263,13 +275,13 @@ $WJcm $CAN_CM $CM*;
 #
 $GLcm $CAN_CM $CM*;
 $GLcm $CANT_CM;
- 
+
 #
 # LB 12a  Do not break before NBSP and related characters ...
 #            [^SP BA HY] x GL
 #
 [[$LB8NonBreaks] - [$SP $BA $HH $HY]] $CM* $GLcm;
-$CM+ $GLcm;
+^$CM+ $GLcm;
 
 
 
@@ -278,23 +290,23 @@ $CM+ $GLcm;
 #
 $LB8NonBreaks $CL;
 $CAN_CM $CM*  $CL;
-$CM+          $CL;              # by rule 10, stand-alone CM behaves as AL
+^$CM+         $CL;              # by rule 10, stand-alone CM behaves as AL
 
 $LB8NonBreaks $CP;
 $CAN_CM $CM*  $CP;
-$CM+          $CP;              # by rule 10, stand-alone CM behaves as AL
+^$CM+         $CP;              # by rule 10, stand-alone CM behaves as AL
 
 $LB8NonBreaks $EX;
 $CAN_CM $CM*  $EX;
-$CM+          $EX;              # by rule 10, stand-alone CM behaves as AL
+^$CM+         $EX;              # by rule 10, stand-alone CM behaves as AL
 
 $LB8NonBreaks $IS;
 $CAN_CM $CM*  $IS;
-$CM+          $IS;              # by rule 10, stand-alone CM behaves as AL
+^$CM+         $IS;              # by rule 10, stand-alone CM behaves as AL
 
 $LB8NonBreaks $SY;
 $CAN_CM $CM*  $SY;
-$CM+          $SY;              # by rule 10, stand-alone CM behaves as AL
+^$CM+         $SY;              # by rule 10, stand-alone CM behaves as AL
 
 
 #
@@ -324,12 +336,10 @@ $LB18Breaks    = [$LB8Breaks $SP];
 # LB 19
 #         x QU
 $LB18NonBreaks $CM* $QUcm;
-$CM+                $QUcm;
+^$CM+               $QUcm;
 
 #         QU  x
 $QUcm .?;
-$QUcm $LB18NonBreaks $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
-                              #  TODO:  I don't think this rule is needed.
 
 
 # LB 20
@@ -342,16 +352,17 @@ $LB20NonBreaks = [$LB18NonBreaks - $CB];
 # LB 21        x   (BA | HY | NS)
 #           BB x
 #
-$LB20NonBreaks $CM* ($BAcm | $HHcm | $HYcm | $NScm) / $AL; 
-$LB20NonBreaks $CM* ($BAcm | $HHcm | $HYcm | $NScm); 
+$LB20NonBreaks $CM* ($BAcm | $HHcm | $HYcm | $NScm) / $AL;
+$LB20NonBreaks $CM* ($BAcm | $HHcm | $HYcm | $NScm);
 ($HY | $HH) $AL;
+^$CM+ ($BAcm | $HHcm | $HYcm | $NScm);
 
 $BBcm [^$CB];                                  #  $BB  x
 $BBcm $LB20NonBreaks $CM*;
 
 # LB 21a Don't break after Hebrew + Hyphen
 #   HL (HY | BA) x
-#  
+#
 $HLcm ($HYcm | $BAcm | $HHcm) [^$CB]?;
 
 # LB 21b (forward) Don't break between SY and HL
@@ -360,25 +371,25 @@ $SYcm $HLcm;
 
 # LB 22
 ($ALcm | $HLcm) $INcm;
-$CM+     $INcm;     #  by rule 10, any otherwise unattached CM behaves as AL
+^$CM+    $INcm;     #  by rule 10, any otherwise unattached CM behaves as AL
 $EXcm    $INcm;
-$IDcm    $INcm;
+($ID | $EB | $EM) $CM*  $INcm;
 $INcm    $INcm;
 $NUcm    $INcm;
 
 
 # $LB 23
-$IDcm  $POcm;
+($ID | $EB | $EM) $CM*  $POcm;
 $ALcm  $NUcm;       # includes $LB19
 $HLcm  $NUcm;
-$CM+   $NUcm;       # Rule 10, any otherwise unattached CM behaves as AL
+^$CM+  $NUcm;       # Rule 10, any otherwise unattached CM behaves as AL
 $NUcm  $ALcm;
 $NUcm  $HLcm;
 
 #
 # LB 24
 #
-$PRcm $IDcm;
+$PRcm ($ID | $EB | $EM);
 $PRcm ($ALcm | $HLcm);
 $POcm ($ALcm | $HLcm);
 
@@ -402,18 +413,27 @@ $PRcm ($JLcm | $JVcm | $JTcm | $H2cm | $H3cm);
 # LB 28   Do not break between alphabetics
 #
 ($ALcm | $HLcm) ($ALcm | $HLcm);
-$CM+ ($ALcm | $HLcm);      # The $CM+ is from rule 10, an unattached CM is treated as AL
+^$CM+ ($ALcm | $HLcm);      # The $CM+ is from rule 10, an unattached CM is treated as AL
 
 # LB 29
 $IScm ($ALcm | $HLcm);
 
 # LB 30
 ($ALcm | $HLcm | $NUcm) $OPcm;
-$CM+ $OPcm;         # The $CM+ is from rule 10, an unattached CM is treated as AL.          
+^$CM+ $OPcm;         # The $CM+ is from rule 10, an unattached CM is treated as AL.
 $CPcm ($ALcm | $HLcm | $NUcm);
 
-# LB 30a  Do not break between regional indicators.
-$RIcm $RIcm;
+# LB 30a  Do not break between regional indicators. Break after pairs of them.
+#         Tricky interaction with LB8a: ZWJ x ID
+$RIcm $RI                / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HH $HY $NS $CM] {eof}];
+$RIcm $RI $CM*  $ZWJ     / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HH $HY $NS $CM $ID $EB $EM] {eof}];
+$RIcm $RI $CM* [$CM-$ZWJ] / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HH $HY $NS $CM] {eof}];
+
+$RIcm $RIcm [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HH $HY $NS {eof}];
+$RIcm $RIcm $ZWJ ($ID | $EB | $EM);
+
+# LB 30b Do not break between an Emoji Base and an Emoji Modifier
+$EB $CM* $EM;
 
 #
 #  Reverse Rules.
@@ -422,35 +442,37 @@ $RIcm $RIcm;
 
 !!reverse;
 
-$CM+ $ALPlus;
-$CM+ $BA;
-$CM+ $HH;
-$CM+ $BB;
-$CM+ $B2;
-$CM+ $CL;
-$CM+ $CP;
-$CM+ $EX;
-$CM+ $GL;
-$CM+ $HL;
-$CM+ $HY;
-$CM+ $H2;
-$CM+ $H3;
-$CM+ $ID;
-$CM+ $IN;
-$CM+ $IS;
-$CM+ $JL;
-$CM+ $JV;
-$CM+ $JT;
-$CM+ $NS;
-$CM+ $NU;
-$CM+ $OP;
-$CM+ $PO;
-$CM+ $PR;
-$CM+ $QU;
-$CM+ $RI;
-$CM+ $SY;
-$CM+ $WJ;
-$CM+;
+^$CM+ $ALPlus;
+^$CM+ $BA;
+^$CM+ $HH;
+^$CM+ $BB;
+^$CM+ $B2;
+^$CM+ $CL;
+^$CM+ $CP;
+^$CM+ $EB;
+^$CM+ $EM;
+^$CM+ $EX;
+^$CM+ $GL;
+^$CM+ $HL;
+^$CM+ $HY;
+^$CM+ $H2;
+^$CM+ $H3;
+^$CM+ $ID;
+^$CM+ $IN;
+^$CM+ $IS;
+^$CM+ $JL;
+^$CM+ $JV;
+^$CM+ $JT;
+^$CM+ $NS;
+^$CM+ $NU;
+^$CM+ $OP;
+^$CM+ $PO;
+^$CM+ $PR;
+^$CM+ $QU;
+^$CM+ $RI;
+^$CM+ $SY;
+^$CM+ $WJ;
+^$CM+;
 
 
 #
@@ -462,14 +484,14 @@ $AL_FOLLOW $CM+ / (
           [$BK $CR $LF $NL $ZW {eof}] |
           $SP+ $CM+ $SP |
           $SP+ $CM* ([^$OP $CM $SP] | [$AL {eof}]));   # if LB 14 will match, need to surpress this break.
-                                               #  LB14 says    OP SP* x .        
+                                               #  LB14 says    OP SP* x .
                                                #    becomes    OP SP* x AL
                                                #    becomes    OP SP* x CM+ AL_FOLLOW
                                                #
                                                # Further note:  the $AL in [$AL {eof}] is only to work around
                                                #                a rule compiler bug which complains about
                                                #                empty sets otherwise.
-          
+
 #
 #  Sequences of the form  (shown forwards)
 #      [CANT_CM]  <break> [CM]  <break>  [PR]
@@ -481,7 +503,7 @@ $AL_FOLLOW $CM+ / (
 
 
 
-# LB 4, 5, 5
+# LB 4, 5, 6
 
 $LB4Breaks [$LB4NonBreaks-$CM];
 $LB4Breaks $CM+ $CAN_CM;
@@ -498,30 +520,37 @@ $LF $CR;
 #           Requires an engine enhancement.
 #   / $SP* $ZW
 
+# LB 8a        ZWJ x ID    Unicode Emoji proposal L2/16-011R3
+#                          The ZWJ will look like a CM to whatever precedes it.
+#
+($ID | $EB | $EM) $ZWJ $CM* $CAN_CM?;
+
+
 # LB 9,10  Combining marks.
 #    X   $CM needs to behave like X, where X is not $SP or controls.
 #    $CM not covered by the above needs to behave like $AL
 # Stick together any combining sequences that don't match other rules.
-$CM+ $CAN_CM;
+^$CM+ $CAN_CM;
 
 
 # LB 11
-$CM* $WJ $CM* $CAN_CM;
-$CM* $WJ      [$LB8NonBreaks-$CM];
+#
+$WJ $CM* $CAN_CM;
+$WJ      [$LB8NonBreaks-$CM];
 
      $CANT_CM $CM* $WJ;
-$CM* $CAN_CM  $CM* $WJ;
+$CAN_CM  $CM* $WJ;
 
 # LB 12a
 #      [^SP BA HY] x GL
 #
-$CM* $GL $CM* [$LB8NonBreaks-[$CM $SP $BA $HH $HY]];
+$GL $CM* [$LB8NonBreaks-[$CM $SP $BA $HH $HY]];
 
 # LB 12
 #     GL  x
 #
 $CANT_CM $CM* $GL;
-$CM* $CAN_CM $CM* $GL;
+$CAN_CM $CM* $GL;
 
 
 # LB 13
@@ -542,28 +571,26 @@ $SY [$LB8NonBreaks-$CM];
 #     OP SP+  ($CM+ behaving as $AL) (CL | CP | EX | IS | IY)
 #   This really wants to chain at the $CM+ (which is acting as an $AL)
 #   except for $CM chaining being disabled.
-[$CL $CP $EX $IS $SY] $CM+ $SP+ $CM* $OP;  
+[$CL $CP $EX $IS $SY] $CM+ $SP+ $CM* $OP;
 
 # LB 14    OP SP* x
 #
-$CM* $CAN_CM    $SP* $CM* $OP;
+$CAN_CM    $SP* $CM* $OP;
      $CANT_CM   $SP* $CM* $OP;
 $AL_FOLLOW? $CM+  $SP $SP* $CM* $OP;     #  by LB 10, behaves like $AL_FOLLOW? $AL $SP* $CM* $OP
-     
-     $AL_FOLLOW_NOCM $CM+ $SP+ $CM* $OP;
-$CM* $AL_FOLLOW_CM   $CM+ $SP+ $CM* $OP;
-$SY $CM $SP+ $OP;   # TODO:  Experiment.  Remove.
 
+     $AL_FOLLOW_NOCM $CM+ $SP+ $CM* $OP;
+$AL_FOLLOW_CM   $CM+ $SP+ $CM* $OP;
 
 
 # LB 15
-$CM* $OP $SP* $CM* $QU;
+$OP $SP* $CM* $QU;
 
 # LB 16
-$CM* $NS $SP* $CM* ($CL | $CP);
+$NS $SP* $CM* ($CL | $CP);
 
 # LB 17
-$CM* $B2 $SP* $CM* $B2;
+$B2 $SP* $CM* $B2;
 
 # LB 18  break after spaces
 #        Nothing explicit needed here.
@@ -572,13 +599,13 @@ $CM* $B2 $SP* $CM* $B2;
 #
 # LB 19
 #
-$CM* $QU $CM* $CAN_CM;                                #   . x QU
-$CM* $QU      $LB18NonBreaks;
+$QU $CM* $CAN_CM;                                #   . x QU
+$QU      $LB18NonBreaks;
 
 
-$CM* $CAN_CM  $CM* $QU;                               #   QU x .
+$CAN_CM  $CM* $QU;                               #   QU x .
      $CANT_CM $CM* $QU;
-     
+
 #
 #  LB 20  Break before and after CB.
 #         nothing needed here.
@@ -588,69 +615,87 @@ $CM* $CAN_CM  $CM* $QU;                               #   QU x .
 $AL ($HY | $HH) / $SP;
 
 # LB 21
-$CM* ($BA | $HH | $HY | $NS) $CM* [$LB20NonBreaks-$CM];     #  . x (BA | HY | NS)
+($BA | $HH | $HY | $NS) $CM* [$LB20NonBreaks-$CM];     #  . x (BA | HY | NS)
 
-$CM* [$LB20NonBreaks-$CM] $CM* $BB;                   #  BB x .
-[^$CB] $CM* $BB;                                      # 
+[$LB20NonBreaks-$CM] $CM* $BB;                   #  BB x .
+[^$CB] $CM* $BB;                                      #
 
 # LB21a
 [^$CB] $CM* ($HY | $BA | $HH) $CM* $HL;
 
 # LB21b (reverse)
-$CM* $HL $CM* $SY;
+$HL $CM* $SY;
 
 # LB 22
-$CM* $IN $CM* ($ALPlus | $HL);
-$CM* $IN $CM* $EX;
-$CM* $IN $CM* $ID;
-$CM* $IN $CM* $IN;
-$CM* $IN $CM* $NU;
+$IN $CM* ($ALPlus | $HL);
+$IN $CM* $EX;
+$IN $CM* ($ID | $EB | $EM);
+$IN $CM* $IN;
+$IN $CM* $NU;
 
 # LB 23
-$CM* $PO $CM* $ID;
-$CM* $NU $CM* ($ALPlus | $HL);
-$CM* ($ALPlus | $HL) $CM* $NU;
+$PO $CM* ($ID | $EB | $EM);
+$NU $CM* ($ALPlus | $HL);
+($ALPlus | $HL) $CM* $NU;
 
 # LB 24
-$CM* $ID $CM* $PR;
-$CM* ($ALPlus | $HL) $CM* $PR;
-$CM* ($ALPlus | $HL) $CM* $PO;
+($ID | $EB | $EM) $CM* $PR;
+($ALPlus | $HL) $CM* $PR;
+($ALPlus | $HL) $CM* $PO;
 
 
 # LB 25
 ($CM* ($PR | $PO))? ($CM* ($CL | $CP))? ($CM* ($NU | $IS | $SY))* $CM* $NU ($CM* ($OP | $HY))? ($CM* ($PR | $PO))?;
 
 # LB 26
-$CM* ($H3 | $H2 | $JV | $JL) $CM* $JL;
-$CM* ($JT | $JV) $CM* ($H2 | $JV);
-$CM* $JT $CM* ($H3 | $JT);
+($H3 | $H2 | $JV | $JL) $CM* $JL;
+($JT | $JV) $CM* ($H2 | $JV);
+$JT $CM* ($H3 | $JT);
 
 # LB 27
-$CM* $IN $CM* ($H3 | $H2 | $JT | $JV | $JL);
-$CM* $PO $CM* ($H3 | $H2 | $JT | $JV | $JL);
-$CM* ($H3 | $H2 | $JT | $JV | $JL) $CM* $PR;
+$IN $CM* ($H3 | $H2 | $JT | $JV | $JL);
+$PO $CM* ($H3 | $H2 | $JT | $JV | $JL);
+ ($H3 | $H2 | $JT | $JV | $JL) $CM* $PR;
 
 # LB 28
-$CM* ($ALPlus | $HL) $CM* ($ALPlus | $HL);
+($ALPlus | $HL) $CM* ($ALPlus | $HL);
 
 
 # LB 29
-$CM* ($ALPlus | $HL) $CM* $IS;
+($ALPlus | $HL) $CM* $IS;
 
 # LB 30
-$CM* $OP $CM* ($ALPlus | $HL | $NU);
-$CM* ($ALPlus | $HL | $NU) $CM* $CP;
+$OP $CM* ($ALPlus | $HL | $NU);
+($ALPlus | $HL | $NU) $CM* $CP;
 
 # LB 30a
-$CM* $RI $CM* $RI;
+#    Pairs of Regional Indicators.
+#    The following two rules are nearly identical. The first matches only sequences with an odd number of adjacent RIs,
+#    the second with an even number. Stripping away the cruft they look like
+#         [^RI] RI / (RI RI)+ ^RI;
+#         [^RI] RI RI / (RI RI)+ ^RI;
+#
+[{bof} $NS $HY $BA $HH $QU $CL $CP $EX $IS $SY $WJ $GL $ZW $SP $BK $CR $LF $NL $ZWJ] $CM* $RI / ($CM* $RI $CM* $RI)+ $CM* [{eof}[^$RI $CM]];
+[{bof} $NS $HY $BA $HH $QU $CL $CP $EX $IS $SY $WJ $GL $ZW $SP $BK $CR $LF $NL $ZWJ] $CM* $RI $CM* $RI / ($CM* $RI $CM* $RI)+ $CM* [{eof}[^$RI $CM]];
+
+# In general, adjacent RIs stay together. The hard-break rules, above, overide this, forcing in the boundaries between pairs.
+$RI $CM* $RI;
+
+#    WJ, GL, QU, etc. are classes with rules like "WJ x "   which includes "WJ x RI".
+$RI $CM* ([$WJ $GL $QU $BB] |  (($HY | $BA | $HH)$CM* $HL));
+
+
+# LB 30b Do not break between an Emoji Base and an Emoji Modifier
+$EM $CM* $EB;
+
 
 ## -------------------------------------------------
 
 !!safe_reverse;
 
 # LB 9
-$CM+ [^$CM $BK $CR $LF $NL $ZW $SP];
-$CM+ $SP / .;
+^$CM+ [^$CM $BK $CR $LF $NL $ZW $SP];
+^$CM+ $SP / .;
 
 # LB 14
 $SP+ $CM* $OP;
@@ -671,6 +716,9 @@ $CM* ($HY | $BA | $HH) $CM* $HL;
 ($CM* ($IS | $SY))+ $CM* $NU;
 ($CL | $CP) $CM* ($NU | $IS | $SY);
 
+#  LB 30
+($CM* $RI)+;
+
 # For dictionary-based break
 $dictionary $dictionary;
 
@@ -687,6 +735,6 @@ $dictionary $dictionary;
 #  turn off rule chaining.  We don't want to move more
 #  than necessary.
 #
-[$CM $OP $QU $CL $CP $B2 $PR $HY $BA $SP $dictionary]+ [^$CM $OP $QU $CL $CP $B2 $PR $HY $BA $dictionary];
+^[$CM $OP $QU $CL $CP $B2 $PR $HY $BA $HH $SP $RI $ZWJ $dictionary]+ [^$CM $OP $QU $CL $CP $B2 $PR $HY $BA $HH $RI $ZWJ $dictionary];
 $dictionary $dictionary;
 
