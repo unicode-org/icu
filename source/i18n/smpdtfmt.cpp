@@ -1806,10 +1806,13 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         const UnicodeString *toAppend = NULL;
         int32_t hour = cal.get(UCAL_HOUR_OF_DAY, status);
 
+        // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
+        // For ICU 57 output of "midnight" is temporarily suppressed.
+
         // For "midnight" and "noon":
         // Time, as displayed, must be exactly noon or midnight.
         // This means minutes and seconds, if present, must be zero.
-        if ((hour == 0 || hour == 12) &&
+        if ((/*hour == 0 ||*/ hour == 12) &&
                 (!fHasMinute || cal.get(UCAL_MINUTE, status) == 0) &&
                 (!fHasSecond || cal.get(UCAL_SECOND, status) == 0)) {
             // Stealing am/pm value to use as our array index.
@@ -1884,8 +1887,12 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         UnicodeString *toAppend = NULL;
         int32_t index;
 
+        // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
+        // For ICU 57 output of "midnight" is temporarily suppressed.
+
         if (periodType != DayPeriodRules::DAYPERIOD_AM &&
-                periodType != DayPeriodRules::DAYPERIOD_PM) {
+                periodType != DayPeriodRules::DAYPERIOD_PM &&
+                periodType != DayPeriodRules::DAYPERIOD_MIDNIGHT) {
             index = (int32_t)periodType;
             if (count <= 3) {
                 toAppend = &fSymbols->fAbbreviatedDayPeriods[index];  // i.e. short
