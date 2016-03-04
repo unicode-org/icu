@@ -1864,13 +1864,16 @@ public class SimpleDateFormat extends DateFormat {
             break;
         case 35: // 'b' - am/pm/noon/midnight
         {
+            // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
+            // For ICU 57 output of "midnight" is temporarily suppressed.
+
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             String toAppend = null;
 
             // For "midnight" and "noon":
             // Time, as displayed, must be exactly noon or midnight.
             // This means minutes and seconds, if present, must be zero.
-            if ((hour == 0 || hour == 12) &&
+            if ((/*hour == 0 ||*/ hour == 12) &&
                     (!hasMinute || cal.get(Calendar.MINUTE) == 0) &&
                     (!hasSecond || cal.get(Calendar.SECOND) == 0)) {
                 // Stealing am/pm value to use as our array index.
@@ -1926,13 +1929,17 @@ public class SimpleDateFormat extends DateFormat {
                 periodType = ruleSet.getDayPeriodForHour(hour);
             }
 
+            // Note: "midnight" can be ambiguous as to whether it refers to beginning of day or end of day.
+            // For ICU 57 output of "midnight" is temporarily suppressed.
+
             // Rule set exists, therefore periodType can't be null.
             // Get localized string.
             assert(periodType != null);
             String toAppend = null;
             int index;
 
-            if (periodType != DayPeriodRules.DayPeriod.AM && periodType != DayPeriodRules.DayPeriod.PM) {
+            if (periodType != DayPeriodRules.DayPeriod.AM && periodType != DayPeriodRules.DayPeriod.PM &&
+                    periodType != DayPeriodRules.DayPeriod.MIDNIGHT) {
                 index = periodType.ordinal();
                 if (count <= 3) {
                     toAppend = formatData.abbreviatedDayPeriods[index];  // i.e. short
