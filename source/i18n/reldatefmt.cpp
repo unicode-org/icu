@@ -905,7 +905,7 @@ UnicodeString& RelativeDateTimeFormatter::formatNumeric(
         case UDAT_REL_UNIT_MINUTE:  relunit = UDAT_RELATIVE_MINUTES; break;
         case UDAT_REL_UNIT_SECOND:  relunit = UDAT_RELATIVE_SECONDS; break;
         default: // a unit that the above method does not handle
-            status = U_MISSING_RESOURCE_ERROR;
+            status = U_UNSUPPORTED_ERROR;
             return appendTo;
     }
     UDateDirection direction = UDAT_DIRECTION_NEXT;
@@ -951,14 +951,18 @@ UnicodeString& RelativeDateTimeFormatter::format(
     // rewrite this to use it directly, and rewrite the old format method to call this
     // new one; that is covered by http://bugs.icu-project.org/trac/ticket/12171.
     UDateDirection direction = UDAT_DIRECTION_COUNT;
-    int32_t intoffset = (offset < 0)? (int32_t)(offset-0.5) : (int32_t)(offset+0.5);
-    switch (intoffset) {
-        case -2: direction = UDAT_DIRECTION_LAST_2; break;
-        case -1: direction = UDAT_DIRECTION_LAST; break;
-        case  0: direction = UDAT_DIRECTION_THIS; break;
-        case  1: direction = UDAT_DIRECTION_NEXT; break;
-        case  2: direction = UDAT_DIRECTION_NEXT_2; break;
-        default: break;
+    if (offset > -2.1 && offset < 2.1) {
+        // Allow a 1% epsilon, so offsets in -1.01..-0.99 map to LAST
+        double offsetx100 = offset * 100.0;
+        int32_t intoffset = (offsetx100 < 0)? (int32_t)(offsetx100-0.5) : (int32_t)(offsetx100+0.5);
+        switch (intoffset) {
+            case -200/*-2*/: direction = UDAT_DIRECTION_LAST_2; break;
+            case -100/*-1*/: direction = UDAT_DIRECTION_LAST; break;
+            case    0/* 0*/: direction = UDAT_DIRECTION_THIS; break;
+            case  100/* 1*/: direction = UDAT_DIRECTION_NEXT; break;
+            case  200/* 2*/: direction = UDAT_DIRECTION_NEXT_2; break;
+            default: break;
+    	}
     }
     UDateAbsoluteUnit absunit = UDAT_ABSOLUTE_UNIT_COUNT;
     switch (unit) {
@@ -966,7 +970,6 @@ UnicodeString& RelativeDateTimeFormatter::format(
         case UDAT_REL_UNIT_MONTH:   absunit = UDAT_ABSOLUTE_MONTH; break;
         case UDAT_REL_UNIT_WEEK:    absunit = UDAT_ABSOLUTE_WEEK; break;
         case UDAT_REL_UNIT_DAY:     absunit = UDAT_ABSOLUTE_DAY; break;
-        case UDAT_REL_UNIT_MINUTE:
         case UDAT_REL_UNIT_SECOND:
             if (direction == UDAT_DIRECTION_THIS) {
                 absunit = UDAT_ABSOLUTE_NOW;
@@ -1086,7 +1089,7 @@ ureldatefmt_open( const char*          locale,
     }
     LocalPointer<RelativeDateTimeFormatter> formatter(new RelativeDateTimeFormatter(Locale(locale),
                                                               (NumberFormat*)nfToAdopt, width,
-                                                              capitalizationContext, *status));
+                                                              capitalizationContext, *status), *status);
     if (U_FAILURE(*status)) {
         return NULL;
     }
@@ -1169,19 +1172,14 @@ ureldatefmt_combineDateAndTime( const URelativeDateTimeFormatter* reldatefmt,
         return 0;
     }
     if (result == NULL ? resultCapacity != 0 : resultCapacity < 0 ||
-            relativeDateString == NULL || relativeDateStringLen < 1 ||
-            timeString == NULL || timeStringLen < -1) {
+            (relativeDateString == NULL ? relativeDateStringLen != 0 : relativeDateStringLen < -1) ||
+            (timeString == NULL ? timeStringLen != 0 : timeStringLen < -1)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString relDateStr((UBool)(relativeDateStringLen == -1), relativeDateString, relativeDateStringLen);
     UnicodeString timeStr((UBool)(timeStringLen == -1), timeString, timeStringLen);
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
-        // otherwise, alias the destination buffer (copied from udat_format)
-        res.setTo(result, 0, resultCapacity);
-    }
     ((RelativeDateTimeFormatter*)reldatefmt)->combineDateAndTime(relDateStr, timeStr, res, *status);
     if (U_FAILURE(*status)) {
         return 0;

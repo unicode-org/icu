@@ -28,19 +28,20 @@ void addRelativeDateFormatTest(TestNode** root)
     TESTCASE(TestCombineDateTime);
 }
 
-static const double offsets[] = { -5.0, -2.2, -1.0, -0.7, 0.0, 0.7, 1.0, 2.2, 5.0 };
+static const double offsets[] = { -5.0, -2.2, -2.0, -1.0, -0.7, 0.0, 0.7, 1.0, 2.0, 5.0 };
 enum { kNumOffsets = UPRV_LENGTHOF(offsets) };
 
 static const char* en_decDef_long_midSent_week[kNumOffsets*2] = {
 /*  text                    numeric */
     "5 weeks ago",          "5 weeks ago",        /* -5   */
     "2.2 weeks ago",        "2.2 weeks ago",      /* -2.2 */
+    "2 weeks ago",          "2 weeks ago",        /* -2   */
     "last week",            "1 week ago",         /* -1   */
-    "last week",            "0.7 weeks ago",      /* -0.7 */
+    "0.7 weeks ago",        "0.7 weeks ago",      /* -0.7 */
     "this week",            "in 0 weeks",         /*  0   */
-    "next week",            "in 0.7 weeks",       /*  0.7 */
+    "in 0.7 weeks",         "in 0.7 weeks",       /*  0.7 */
     "next week",            "in 1 week",          /*  1   */
-    "in 2.2 weeks",         "in 2.2 weeks",       /*  2.2 */
+    "in 2 weeks",           "in 2 weeks",         /*  2   */
     "in 5 weeks",           "in 5 weeks"          /*  5   */
 };
 
@@ -48,12 +49,13 @@ static const char* en_dec0_long_midSent_week[kNumOffsets*2] = {
 /*  text                    numeric */
     "5 weeks ago",          "5 weeks ago",        /* -5   */
     "2 weeks ago",          "2 weeks ago",        /* -2.2 */
+    "2 weeks ago",          "2 weeks ago",        /* -2  */
     "last week",            "1 week ago",         /* -1   */
-    "last week",            "0 weeks ago",        /* -0.7 */
+    "0 weeks ago",          "0 weeks ago",        /* -0.7 */
     "this week",            "in 0 weeks",         /*  0   */
-    "next week",            "in 0 weeks",         /*  0.7 */
+    "in 0 weeks",           "in 0 weeks",         /*  0.7 */
     "next week",            "in 1 week",          /*  1   */
-    "in 2 weeks",           "in 2 weeks",         /*  2.2 */
+    "in 2 weeks",           "in 2 weeks",         /*  2   */
     "in 5 weeks",           "in 5 weeks"          /*  5   */
 };
 
@@ -61,12 +63,13 @@ static const char* en_decDef_short_midSent_week[kNumOffsets*2] = {
 /*  text                    numeric */
     "5 wk. ago",            "5 wk. ago",          /* -5   */
     "2.2 wk. ago",          "2.2 wk. ago",        /* -2.2 */
+    "2 wk. ago",            "2 wk. ago",          /* -2   */
     "last wk.",             "1 wk. ago",          /* -1   */
-    "last wk.",             "0.7 wk. ago",        /* -0.7 */
+    "0.7 wk. ago",          "0.7 wk. ago",        /* -0.7 */
     "this wk.",             "in 0 wk.",           /*  0   */
-    "next wk.",             "in 0.7 wk.",         /*  0.7 */
+    "in 0.7 wk.",           "in 0.7 wk.",         /*  0.7 */
     "next wk.",             "in 1 wk.",           /*  1   */
-    "in 2.2 wk.",           "in 2.2 wk.",         /*  2.2 */
+    "in 2 wk.",             "in 2 wk.",           /*  2   */
     "in 5 wk.",             "in 5 wk."            /*  5   */
 };
 
@@ -74,12 +77,13 @@ static const char* en_decDef_long_midSent_min[kNumOffsets*2] = {
 /*  text                    numeric */
     "5 minutes ago",        "5 minutes ago",      /* -5   */
     "2.2 minutes ago",      "2.2 minutes ago",    /* -2.2 */
+    "2 minutes ago",        "2 minutes ago",      /* -2   */
     "1 minute ago",         "1 minute ago",       /* -1   */
     "0.7 minutes ago",      "0.7 minutes ago",    /* -0.7 */
-    "now",                  "in 0 minutes",       /*  0   */
+    "in 0 minutes",         "in 0 minutes",       /*  0   */
     "in 0.7 minutes",       "in 0.7 minutes",     /*  0.7 */
     "in 1 minute",          "in 1 minute",        /*  1   */
-    "in 2.2 minutes",       "in 2.2 minutes",     /*  2.2 */
+    "in 2 minutes",         "in 2 minutes",       /*  2   */
     "in 5 minutes",         "in 5 minutes"        /*  5   */
 };
 
@@ -87,25 +91,27 @@ static const char* en_dec0_long_midSent_tues[kNumOffsets*2] = {
 /*  text                    numeric */
     ""/*no data */,         ""/*no data */,       /* -5   */
     ""/*no data */,         ""/*no data */,       /* -2.2 */
+    ""/*no data */,         ""/*no data */,       /* -2   */
     "last Tuesday",         ""/*no data */,       /* -1   */
-    "last Tuesday",         ""/*no data */,       /* -0.7 */
+    ""/*no data */,         ""/*no data */,       /* -0.7 */
     "this Tuesday",         ""/*no data */,       /*  0   */
-    "next Tuesday",         ""/*no data */,       /*  0.7 */
+    ""/*no data */,         ""/*no data */,       /*  0.7 */
     "next Tuesday",         ""/*no data */,       /*  1   */
-    ""/*no data */,         ""/*no data */,       /*  2.2 */
+    ""/*no data */,         ""/*no data */,       /*  2   */
     ""/*no data */,         ""/*no data */,       /*  5   */
 };
 
 static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
 /*  text                    numeric */
     "il y a 5 jours",       "il y a 5 jours",     /* -5   */
-    "avant-hier",           "il y a 2,2 jours",   /* -2.2 */
+    "il y a 2,2 jours",     "il y a 2,2 jours",   /* -2.2 */
+    "avant-hier",           "il y a 2 jours",     /* -2   */
     "hier",                 "il y a 1 jour",      /* -1   */
-    "hier",                 "il y a 0,7 jour",    /* -0.7 */
+    "il y a 0,7 jour",      "il y a 0,7 jour",    /* -0.7 */
     "aujourd\\u2019hui",    "dans 0 jour",        /*  0   */
-    "demain",               "dans 0,7 jour",      /*  0.7 */
+    "dans 0,7 jour",        "dans 0,7 jour",      /*  0.7 */
     "demain",               "dans 1 jour",        /*  1   */
-    "apr\\u00E8s-demain",   "dans 2,2 jours",     /*  2.2 */
+    "apr\\u00E8s-demain",   "dans 2 jours",       /*  2   */
     "dans 5 jours",         "dans 5 jours"        /*  5   */
 };
 
@@ -162,8 +168,8 @@ static void TestRelDateFmt()
         for (iOffset = 0; iOffset < kNumOffsets; iOffset++) {
             UChar ubufget[kUBufMax];
             int32_t ulenget;
-            
-            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY && (offsets[iOffset] < -1.0 || offsets[iOffset] > 1.0)) {
+
+            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY && (offsets[iOffset] != -1.0 || offsets[iOffset] != 0.0 || offsets[iOffset] != 1.0)) {
                 continue; /* we do not currently have data for this */
             }
 
@@ -207,7 +213,7 @@ static void TestRelDateFmt()
                 }
             }
         }
-        
+
         ureldatefmt_close(reldatefmt);
     }
 }
@@ -259,6 +265,20 @@ static void TestCombineDateTime()
                 u_austrncpy(bbufget, ubufget, kUBufMax);
                 log_err("ERROR: ureldatefmt_combineDateAndTime() for locale %s, width %d, capContext %d;\n      expected %s\n      get      %s\n",
                     itemPtr->locale, (int)itemPtr->width, (int)itemPtr->capContext, itemPtr->expectedResult, bbufget );
+            }
+        }
+        // preflight test
+        status = U_ZERO_ERROR;
+        ulenget = ureldatefmt_combineDateAndTime(reldatefmt, ubufreldate, ulenreldate, ubuftime, ulentime, NULL, 0, &status);
+        if ( status != U_BUFFER_OVERFLOW_ERROR) {
+            log_err("FAIL: ureldatefmt_combineDateAndTime() preflight for locale %s, width %d, capContext %d: expected U_BUFFER_OVERFLOW_ERROR, got %s\n",
+                itemPtr->locale, (int)itemPtr->width, (int)itemPtr->capContext, myErrorName(status) );
+        } else {
+            UChar ubufexp[kUBufMax];
+            int32_t ulenexp = u_unescape(itemPtr->expectedResult, ubufexp, kUBufMax);
+            if (ulenget != ulenexp) {
+                log_err("ERROR: ureldatefmt_combineDateAndTime() preflight for locale %s, width %d, capContext %d;\n      expected len %d, get len %d\n",
+                    itemPtr->locale, (int)itemPtr->width, (int)itemPtr->capContext, ulenexp, ulenget );
             }
         }
 
