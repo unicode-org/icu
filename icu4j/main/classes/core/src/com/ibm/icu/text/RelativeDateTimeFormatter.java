@@ -639,15 +639,15 @@ public final class RelativeDateTimeFormatter {
         if (offset > -2.1 && offset < 2.1) {
             // Allow a 1% epsilon, so offsets in -1.01..-0.99 map to LAST
             double offsetx100 = offset * 100.0;
-            int intoffset = (offsetx100 < 0)? (int)(offsetx100-0.5) : (int)(offsetx100+0.5);
-			switch (intoffset) {
-				case -200/*-2*/: direction = Direction.LAST_2; useNumeric = false; break;
-				case -100/*-1*/: direction = Direction.LAST;   useNumeric = false; break;
-				case    0/* 0*/: useNumeric = false; break; // direction = Direction.THIS was set above
-				case  100/* 1*/: direction = Direction.NEXT;   useNumeric = false; break;
-				case  200/* 2*/: direction = Direction.NEXT_2; useNumeric = false; break;
-				default: break;
-			}
+            int intoffsetx100 = (offsetx100 < 0)? (int)(offsetx100-0.5) : (int)(offsetx100+0.5);
+            switch (intoffsetx100) {
+                case -200/*-2*/: direction = Direction.LAST_2; useNumeric = false; break;
+                case -100/*-1*/: direction = Direction.LAST;   useNumeric = false; break;
+                case    0/* 0*/: useNumeric = false; break; // direction = Direction.THIS was set above
+                case  100/* 1*/: direction = Direction.NEXT;   useNumeric = false; break;
+                case  200/* 2*/: direction = Direction.NEXT_2; useNumeric = false; break;
+                default: break;
+            }
         }
         AbsoluteUnit absunit = AbsoluteUnit.NOW;
         switch (unit) {
