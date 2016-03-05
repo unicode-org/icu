@@ -17,6 +17,8 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
+#ifndef U_HIDE_DRAFT_API
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -287,5 +289,7 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif /* U_HIDE_DRAFT_API */
 
 #endif  // __SIMPLEFORMATTER_H__
