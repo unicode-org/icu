@@ -615,7 +615,7 @@ private:
 
     /**
      * default constructor
-     * @internal ICU 4.0
+     * @internal (private)
      */
     DateIntervalFormat();
 
@@ -705,7 +705,7 @@ private:
      *                          On output: the offsets of the alignment field.
      * @param status            output param set to success/failure code on exit
      * @return                  Reference to 'appendTo' parameter.
-     * @internal
+     * @internal (private)
      */
     UnicodeString& fallbackFormat(Calendar& fromCalendar,
                                   Calendar& toCalendar,
@@ -984,7 +984,7 @@ private:
      *                          Caller needs to make sure it is SUCCESS
      *                          at the function entrance
      * @return                  Reference to 'appendTo' parameter.
-     * @internal
+     * @internal (private)
      */
     UnicodeString& formatImpl(Calendar& fromCalendar,
                               Calendar& toCalendar,
