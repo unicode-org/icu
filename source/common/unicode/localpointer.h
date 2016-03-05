@@ -268,6 +268,7 @@ public:
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
     }
+#endif  /* U_HIDE_DRAFT_API */
     /**
      * Non-member LocalPointer swap function.
      * @param p1 will get p2's pointer
@@ -277,7 +278,6 @@ public:
     friend inline void swap(LocalPointer<T> &p1, LocalPointer<T> &p2) U_NOEXCEPT {
         p1.swap(p2);
     }
-#endif  /* U_HIDE_DRAFT_API */
     /**
      * Deletes the object it owns,
      * and adopts (takes ownership of) the one passed in.
@@ -420,6 +420,7 @@ public:
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
     }
+#endif  /* U_HIDE_DRAFT_API */
     /**
      * Non-member LocalArray swap function.
      * @param p1 will get p2's pointer
@@ -429,7 +430,6 @@ public:
     friend inline void swap(LocalArray<T> &p1, LocalArray<T> &p2) U_NOEXCEPT {
         p1.swap(p2);
     }
-#endif  /* U_HIDE_DRAFT_API */
     /**
      * Deletes the array it owns,
      * and adopts (takes ownership of) the one passed in.
