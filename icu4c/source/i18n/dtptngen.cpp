@@ -1009,7 +1009,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
                 patternFormCopy.setCharAt(patPos, fDefaultHourFormatChar);
             } else if (patChr == CAP_C) {
                 AllowedHourFormat preferred;
-                if (fAllowedHourFormats != NULL && fAllowedHourFormats[0] != ALLOWED_HOUR_FORMAT_UNKNOWN) {
+                if (fAllowedHourFormats[0] != ALLOWED_HOUR_FORMAT_UNKNOWN) {
                     preferred = (AllowedHourFormat)fAllowedHourFormats[0];
                 } else {
                     status = U_INVALID_FORMAT_ERROR;
