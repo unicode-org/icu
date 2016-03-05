@@ -61,6 +61,7 @@ public class LocaleValidityChecker {
 
     static Pattern SEPARATOR = Pattern.compile("[-_]");
 
+    @SuppressWarnings("unused")
     private static final Pattern VALID_X = Pattern.compile("[a-zA-Z0-9]{2,8}(-[a-zA-Z0-9]{2,8})*");
 
     public boolean isValid(ULocale locale, Where where) {

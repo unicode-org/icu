@@ -15,6 +15,7 @@ package com.ibm.icu.text;
  * transformation.
  * @stable ICU 2.0
  */
+@SuppressWarnings("javadoc")    // com.imb.icu.text.Transliterator is in another project
 public abstract class UnicodeFilter implements UnicodeMatcher {
 
     /**
