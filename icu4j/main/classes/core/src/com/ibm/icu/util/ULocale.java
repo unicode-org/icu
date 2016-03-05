@@ -109,6 +109,7 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
  * @author Ram Viswanadha
  * @stable ICU 2.8
  */
+@SuppressWarnings("javadoc")    // com.ibm.icu.text.Collator is in another project
 public final class ULocale implements Serializable, Comparable<ULocale> {
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = 3715177670352309217L;

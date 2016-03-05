@@ -605,6 +605,7 @@ public class Currency extends MeasureUnit {
      * @see #getName(Locale, int, boolean[])
      * @stable ICU 49
      */
+    @SuppressWarnings("javadoc")    // java.util.Currency#getDisplayName() is introduced in Java 7
     public String getDisplayName() {
         return getName(Locale.getDefault(), LONG_NAME, null);
     }
@@ -624,6 +625,7 @@ public class Currency extends MeasureUnit {
      * @see #getName(Locale, int, boolean[])
      * @stable ICU 49
      */
+    @SuppressWarnings("javadoc")    // java.util.Currency#getDisplayName() is introduced in Java 7
     public String getDisplayName(Locale locale) {
         return getName(locale, LONG_NAME, null);
     }

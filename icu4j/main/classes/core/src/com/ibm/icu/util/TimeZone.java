@@ -673,6 +673,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @see #useDaylightTime
      * @stable ICU 49
      */
+    @SuppressWarnings("javadoc")    // java.util.TimeZone#observesDaylightTime() is introduced in Java 7
     public boolean observesDaylightTime() {
         return useDaylightTime() || inDaylightTime(new Date());
     }

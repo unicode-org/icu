@@ -329,7 +329,7 @@ public class TestUtilities extends TestFmwk {
         logln("Comparing next");
         mi.reset();
         localMap = new TreeMap();
-        String lastValue = null;
+//        String lastValue = null;
         while (mi.next()) {
 //            if (!UnicodeMap.areEqual(lastValue, mi.value)) {
 //                // System.out.println("Change: " + Utility.hex(mi.codepoint) + " => " + mi.value);

@@ -158,7 +158,7 @@ public class RBBITestMonkey extends TestFmwk {
     }
 
     int next(int prevPos) {
-        int    p0, p1, p2, p3;    // Indices of the significant code points around the
+        int    /*p0,*/ p1, p2, p3;    // Indices of the significant code points around the
                                   //   break position being tested.  The candidate break
                                   //   location is before p2.
 
@@ -170,14 +170,14 @@ public class RBBITestMonkey extends TestFmwk {
         if (prevPos >= fText.length()) {
             return -1;
         }
-        p0 = p1 = p2 = p3 = prevPos;
+        /* p0 = */ p1 = p2 = p3 = prevPos;
         c3 =  UTF16.charAt(fText, prevPos);
         c0 = c1 = c2 = 0;
 
         // Loop runs once per "significant" character position in the input text.
         for (;;) {
             // Move all of the positions forward in the input string.
-            p0 = p1;  c0 = c1;
+            /* p0 = p1;*/  c0 = c1;
             p1 = p2;  c1 = c2;
             p2 = p3;  c2 = c3;
 
@@ -708,6 +708,7 @@ public class RBBITestMonkey extends TestFmwk {
             // Remove dictionary characters.
             // The monkey test reference implementation of line break does not replicate the dictionary behavior,
             // so dictionary characters are omitted from the monkey test data.
+            @SuppressWarnings("unused")
             UnicodeSet dictionarySet = new UnicodeSet(
                     "[[:LineBreak = Complex_Context:] & [[:Script = Thai:][:Script = Lao:][:Script = Khmer:] [:script = Myanmar:]]]");
 
