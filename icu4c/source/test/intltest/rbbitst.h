@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 1999-2014, International Business Machines
+ * Copyright (c) 1999-2016, International Business Machines
  * Corporation and others. All Rights Reserved.
  *************************************************************************
  *   Date        Name        Description
@@ -17,7 +17,7 @@
 
 #include "intltest.h"
 #include "unicode/brkiter.h"
-
+#include "unicode/rbbi.h"
 
 class  Enumeration;
 class  BITestData;

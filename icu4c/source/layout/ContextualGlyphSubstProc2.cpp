@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp.  and others 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp.  and others 1998-2016 - All Rights Reserved
  *
  */
 
@@ -77,7 +77,7 @@ TTGlyphID ContextualGlyphSubstitutionProcessor2::lookup(le_uint32 offset, LEGlyp
 {
     TTGlyphID newGlyph = 0xFFFF;
     if(LE_FAILURE(success))  return newGlyph;
-    LEReferenceTo<LookupTable> lookupTable(perGlyphTable, success, offset);
+    LEReferenceTo<LookupTableBase> lookupTable(perGlyphTable, success, offset);
     if(LE_FAILURE(success))  return newGlyph;
     le_int16 format = SWAPW(lookupTable->format);
 
