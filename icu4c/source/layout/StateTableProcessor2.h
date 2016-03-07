@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp.  and others 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp.  and others 1998-2016 - All Rights Reserved
  *
  */
 
@@ -46,7 +46,7 @@ protected:
     le_uint32 stateArrayOffset;
     le_uint32 entryTableOffset;
 
-    LEReferenceTo<LookupTable> classTable;
+    LEReferenceTo<LookupTableBase> classTable;
     LEReferenceToArrayOf<EntryTableIndex2> stateArray;
     LEReferenceTo<MorphStateTableHeader2> stateTableHeader;
     LEReferenceTo<StateTableHeader2> stHeader; // for convenience

@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2013 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2016 - All Rights Reserved 
  *
  * Developed at DIT - Government of Bhutan
  *
@@ -16,20 +16,20 @@
 #ifndef __TIBETANLAYOUTENGINE_H
 #define __TIBETANLAYOUTENGINE_H
 
-// #include "LETypes.h"
-// #include "LEFontInstance.h"
-// #include "LEGlyphFilter.h"
-// #include "LayoutEngine.h"
-// #include "OpenTypeLayoutEngine.h"
+#include "LETypes.h"
+#include "LEFontInstance.h"
+#include "LEGlyphFilter.h"
+#include "LayoutEngine.h"
+#include "OpenTypeLayoutEngine.h"
 
-// #include "GlyphSubstitutionTables.h"
-// #include "GlyphDefinitionTables.h"
-// #include "GlyphPositioningTables.h"
+#include "GlyphSubstitutionTables.h"
+#include "GlyphDefinitionTables.h"
+#include "GlyphPositioningTables.h"
 
 U_NAMESPACE_BEGIN
 
-// class MPreFixups;
-// class LEGlyphStorage;
+class MPreFixups;
+class LEGlyphStorage;
 
 /**
  * This class implements OpenType layout for Dzongkha and Tibetan OpenType fonts
@@ -128,4 +128,3 @@ protected:
 
 U_NAMESPACE_END
 #endif
-
