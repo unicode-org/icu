@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2013 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2016 - All Rights Reserved 
  *
  * Developed at DIT - Government of Bhutan
  *
@@ -21,8 +21,8 @@
  * \internal
  */
 
-// #include "LETypes.h"
-// #include "OpenTypeTables.h"
+#include "LETypes.h"
+#include "OpenTypeTables.h"
 
 U_NAMESPACE_BEGIN
 

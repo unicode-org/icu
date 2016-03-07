@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2016 - All Rights Reserved
  *
  */
 
@@ -15,6 +15,7 @@
 #include "LETypes.h"
 #include "LayoutTables.h"
 #include "LETableReference.h"
+#include "Lookups.h"
 
 U_NAMESPACE_BEGIN
 
@@ -29,7 +30,8 @@ enum LookupTableFormat
 
 typedef le_int16 LookupValue;
 
-struct LookupTable
+// Different from struct LookupTable in Lookups.h.
+struct LookupTableBase
 {
     le_int16 format;
 };
@@ -47,7 +49,7 @@ struct LookupSingle
     LookupValue value;
 };
 
-struct BinarySearchLookupTable : LookupTable
+struct BinarySearchLookupTable : LookupTableBase
 {
     le_int16 unitSize;
     le_int16 nUnits;
@@ -60,7 +62,7 @@ struct BinarySearchLookupTable : LookupTable
     const LookupSingle *lookupSingle(const LETableReference &base, const LookupSingle *entries, LEGlyphID glyph, LEErrorCode &success) const;
 };
 
-struct SimpleArrayLookupTable : LookupTable
+struct SimpleArrayLookupTable : LookupTableBase
 {
     LookupValue valueArray[ANY_NUMBER];
 };
@@ -84,7 +86,7 @@ struct SingleTableLookupTable : BinarySearchLookupTable
 };
 LE_VAR_ARRAY(SingleTableLookupTable, entries)
 
-struct TrimmedArrayLookupTable : LookupTable
+struct TrimmedArrayLookupTable : LookupTableBase
 {
     TTGlyphID   firstGlyph;
     TTGlyphID   glyphCount;

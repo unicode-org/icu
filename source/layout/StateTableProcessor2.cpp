@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp.  and others 1998-2014 - All Rights Reserved
+ * (C) Copyright IBM Corp.  and others 1998-2016 - All Rights Reserved
  *
  */
 
@@ -41,7 +41,7 @@ StateTableProcessor2::StateTableProcessor2(const LEReferenceTo<MorphSubtableHead
   stateArrayOffset = SWAPL(stHeader->stateArrayOffset);
   entryTableOffset = SWAPL(stHeader->entryTableOffset);
   
-  classTable = LEReferenceTo<LookupTable>(stHeader, success, classTableOffset);
+  classTable = LEReferenceTo<LookupTableBase>(stHeader, success, classTableOffset);
   format = SWAPW(classTable->format);
   
   stateArray = LEReferenceToArrayOf<EntryTableIndex2>(stHeader, success, stateArrayOffset, LE_UNBOUNDED_ARRAY);

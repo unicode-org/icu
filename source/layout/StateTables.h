@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. and others 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp. and others 1998-2016 - All Rights Reserved
  *
  */
 
@@ -14,6 +14,7 @@
 
 #include "LETypes.h"
 #include "LayoutTables.h"
+#include "LETableReference.h"
 
 U_NAMESPACE_BEGIN
 
