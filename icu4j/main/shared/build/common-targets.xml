@@ -81,7 +81,7 @@
         <jar jarfile="${jar.dir}/${jar.name}" manifest="${out.dir}/manifest.stub" compress="true">
             <fileset dir="${bin.dir}" includes="**/*"/>
             <fileset dir="${shared.dir}/licenses">
-                <include name="LICENSE.txt"/>
+                <include name="LICENSE"/>
             </fileset>
         </jar>
     </target>
@@ -91,7 +91,7 @@
         <jar jarfile="${jar.dir}/${src.jar.name}" compress="true">
             <fileset dir="${src.dir}" includes="**/*.java"/>
             <fileset dir="${shared.dir}/licenses">
-                <include name="LICENSE.txt"/>
+                <include name="LICENSE"/>
             </fileset>
         </jar>
     </target>
