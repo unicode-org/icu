@@ -306,6 +306,7 @@ public class CompactDecimalFormat extends DecimalFormat {
      * @deprecated This API might change or be removed in a future release.
      */
     @Override
+    @Deprecated
     public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
         return format(currAmt.getNumber().doubleValue(), currAmt.getCurrency(), toAppendTo, pos);
     }
