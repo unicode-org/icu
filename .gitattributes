@@ -5122,6 +5122,7 @@ icu4j/tools/build/icu4j53.api3.gz -text
 icu4j/tools/build/icu4j54.api3.gz -text
 icu4j/tools/build/icu4j55.api3.gz -text
 icu4j/tools/build/icu4j56.api3.gz -text
+icu4j/tools/build/icu4j57.api3.gz -text
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/APIData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/APIInfo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckAPI.java svneol=native#text/plain%3Bcharset%3Dutf-8
