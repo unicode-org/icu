@@ -269,7 +269,7 @@
     </copy>
 
     <!-- license -->
-    <copy file="${shared.dir}/licenses/LICENSE.txt"
+    <copy file="${shared.dir}/licenses/LICENSE"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
 
     <!-- about -->
@@ -327,7 +327,7 @@
     </copy>
 
     <!-- license -->
-    <copy file="${shared.dir}/licenses/LICENSE.txt"
+    <copy file="${shared.dir}/licenses/LICENSE"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests/about_files" />
 
     <!-- about -->
@@ -357,7 +357,7 @@
     </copy>
 
     <!-- license -->
-    <copy file="${shared.dir}/licenses/LICENSE.txt"
+    <copy file="${shared.dir}/licenses/LICENSE"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about_files" />
 
     <!-- about -->
@@ -396,7 +396,7 @@
     </copy>
 
     <!-- license -->
-    <copy file="${shared.dir}/licenses/LICENSE.txt"
+    <copy file="${shared.dir}/licenses/LICENSE"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base.tests/about_files" />
 
     <!-- about -->
