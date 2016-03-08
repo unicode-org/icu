@@ -2983,11 +2983,8 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Similar to matchQuarterString but customized for day periods.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    protected int matchDayPeriodString(String text, int start, String[] data, int dataLength,
+    private int matchDayPeriodString(String text, int start, String[] data, int dataLength,
             Output<DayPeriodRules.DayPeriod> dayPeriod)
     {
         int bestMatchLength = 0, bestMatch = -1;
