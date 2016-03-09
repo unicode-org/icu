@@ -1,0 +1,13 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2016, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: hy_am.txt
+# Generated from CLDR 
+#
+
+::hy-hy_FONIPA;
+::am_FONIPA-am;
+

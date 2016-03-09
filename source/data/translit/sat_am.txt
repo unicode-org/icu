@@ -1,0 +1,15 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2016, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: sat_am.txt
+# Generated from CLDR 
+#
+
+# TODO: Add other scripts (eg. sat-Beng) once we can transcribe them to IPA.
+# Do this in a separate rule for "sat-sat_FONIPA", so it can be reused.
+::sat_Olck-sat_FONIPA;
+::am_FONIPA-am;
+
