@@ -9,18 +9,9 @@
 sv{
     Version{"2.1.23.66"}
     durationUnits{
-        hm{
-            "h:mm",
-            "h.mm",
-        }
-        hms{
-            "h:mm:ss",
-            "h.mm.ss",
-        }
-        ms{
-            "m:ss",
-            "m.ss",
-        }
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
     }
     units{
         acceleration{
