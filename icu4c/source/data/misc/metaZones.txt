@@ -2637,6 +2637,11 @@ metaZones:table(nofallback){
             {
                 "Magadan",
                 "2010-03-27 14:00",
+                "2014-10-25 14:00",
+            }
+            {
+                "Anadyr",
+                "2014-10-25 14:00",
                 "9999-12-31 23:59",
             }
         }
@@ -3447,6 +3452,13 @@ metaZones:table(nofallback){
                 "Europe_Central",
             }
         }
+        "Europe:Astrakhan"{
+            {
+                "Moscow",
+                "1992-03-28 22:00",
+                "2016-03-26 23:00",
+            }
+        }
         "Europe:Athens"{
             {
                 "Europe_Eastern",
@@ -3765,13 +3777,8 @@ metaZones:table(nofallback){
                 "1991-09-29 00:00",
             }
             {
-                "Kuybyshev",
-                "1991-09-29 00:00",
-                "1991-10-20 00:00",
-            }
-            {
                 "Samara",
-                "1991-10-20 00:00",
+                "1991-09-29 00:00",
                 "9999-12-31 23:59",
             }
         }
@@ -3842,6 +3849,13 @@ metaZones:table(nofallback){
         "Europe:Tirane"{
             {
                 "Europe_Central",
+            }
+        }
+        "Europe:Ulyanovsk"{
+            {
+                "Moscow",
+                "1992-01-19 00:00",
+                "2016-03-26 23:00",
             }
         }
         "Europe:Uzhgorod"{
