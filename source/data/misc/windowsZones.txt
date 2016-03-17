@@ -223,7 +223,6 @@ windowsZones:table(nofallback){
                 "rica/Pangnirtung America/Thunder_Bay"
             }
             CU{"America/Havana"}
-            HT{"America/Port-au-Prince"}
             US{
                 "America/New_York America/Detroit America/Indiana/Petersburg America/"
                 "Indiana/Vincennes America/Indiana/Winamac America/Kentucky/Monticell"
@@ -406,7 +405,7 @@ windowsZones:table(nofallback){
         }
         "North Asia Standard Time"{
             001{"Asia/Krasnoyarsk"}
-            RU{"Asia/Krasnoyarsk Asia/Novokuznetsk"}
+            RU{"Asia/Krasnoyarsk Asia/Barnaul Asia/Novokuznetsk"}
         }
         "North Korea Standard Time"{
             001{"Asia/Pyongyang"}
@@ -441,7 +440,7 @@ windowsZones:table(nofallback){
         }
         "Russia Time Zone 10"{
             001{"Asia/Srednekolymsk"}
-            RU{"Asia/Srednekolymsk"}
+            RU{"Asia/Srednekolymsk Asia/Sakhalin"}
         }
         "Russia Time Zone 11"{
             001{"Asia/Kamchatka"}
@@ -449,7 +448,7 @@ windowsZones:table(nofallback){
         }
         "Russia Time Zone 3"{
             001{"Europe/Samara"}
-            RU{"Europe/Samara"}
+            RU{"Europe/Samara Europe/Astrakhan Europe/Ulyanovsk"}
         }
         "Russian Standard Time"{
             001{"Europe/Moscow"}
@@ -474,6 +473,7 @@ windowsZones:table(nofallback){
             CL{"Pacific/Easter"}
             CO{"America/Bogota"}
             EC{"America/Guayaquil"}
+            HT{"America/Port-au-Prince"}
             JM{"America/Jamaica"}
             KY{"America/Cayman"}
             PA{"America/Panama"}
@@ -634,7 +634,7 @@ windowsZones:table(nofallback){
         }
         "Vladivostok Standard Time"{
             001{"Asia/Vladivostok"}
-            RU{"Asia/Vladivostok Asia/Sakhalin Asia/Ust-Nera"}
+            RU{"Asia/Vladivostok Asia/Ust-Nera"}
         }
         "W. Australia Standard Time"{
             001{"Australia/Perth"}

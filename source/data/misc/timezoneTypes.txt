@@ -375,6 +375,7 @@ timezoneTypes:table(nofallback){
             "Asia:Bahrain"{"bhbah"}
             "Asia:Baku"{"azbak"}
             "Asia:Bangkok"{"thbkk"}
+            "Asia:Barnaul"{"rubax"}
             "Asia:Beirut"{"lbbey"}
             "Asia:Bishkek"{"kgfru"}
             "Asia:Brunei"{"bnbwn"}
@@ -494,6 +495,7 @@ timezoneTypes:table(nofallback){
             "Etc:Unknown"{"unk"}
             "Europe:Amsterdam"{"nlams"}
             "Europe:Andorra"{"adalv"}
+            "Europe:Astrakhan"{"ruasf"}
             "Europe:Athens"{"grath"}
             "Europe:Belgrade"{"rsbeg"}
             "Europe:Berlin"{"deber"}
@@ -538,6 +540,7 @@ timezoneTypes:table(nofallback){
             "Europe:Stockholm"{"sesto"}
             "Europe:Tallinn"{"eetll"}
             "Europe:Tirane"{"altia"}
+            "Europe:Ulyanovsk"{"ruuly"}
             "Europe:Uzhgorod"{"uauzh"}
             "Europe:Vaduz"{"livdz"}
             "Europe:Vatican"{"vavat"}
