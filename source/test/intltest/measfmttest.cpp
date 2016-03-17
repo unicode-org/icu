@@ -53,6 +53,7 @@ private:
     void TestSimplePer();
     void TestNumeratorPlurals();
     void TestMultiples();
+    void TestManyLocaleDurations();
     void TestGram();
     void TestCurrencies();
     void TestFieldPosition();
@@ -102,6 +103,12 @@ private:
         const Locale &locale,
         UMeasureFormatWidth width,
         const char *expected);
+    void helperTestManyLocaleDurations(
+        const char *localeID,
+        UMeasureFormatWidth width,
+        const Measure *measures,
+        int32_t measureCount,
+        const char *expected);
     void verifyFieldPosition(
         const char *description,
         const MeasureFormat &fmt,
@@ -135,6 +142,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestSimplePer);
     TESTCASE_AUTO(TestNumeratorPlurals);
     TESTCASE_AUTO(TestMultiples);
+    TESTCASE_AUTO(TestManyLocaleDurations);
     TESTCASE_AUTO(TestGram);
     TESTCASE_AUTO(TestCurrencies);
     TESTCASE_AUTO(TestFieldPosition);
@@ -983,7 +991,7 @@ void MeasureFormatTest::TestFormatPeriodEn() {
     if (!assertSuccess("Error creating Measure objects", status)) {
         return;
     }
-    
+
     ExpectedResult fullData[] = {
             {t_1m_59_9996s, UPRV_LENGTHOF(t_1m_59_9996s), "1 minute, 59.9996 seconds"},
             {t_19m, UPRV_LENGTHOF(t_19m), "19 minutes"},
@@ -1084,7 +1092,7 @@ void MeasureFormatTest::TestFormatPeriodEn() {
         return;
     }
     verifyFormat("en NUMERIC", mf, numericData, UPRV_LENGTHOF(numericData));
-    
+
     Locale de(Locale::getGerman());
     nf.adoptInstead(NumberFormat::createInstance(de, status));
     if (!assertSuccess("Error creating number format de object", status)) {
@@ -1131,7 +1139,7 @@ void MeasureFormatTest::Test10219FractionalPlurals() {
                 return;
             }
             verifyFormat("Test10219", mf, &measure, 1, expected[j][i]);
-        }   
+        }
     }
 }
 
@@ -1465,6 +1473,66 @@ void MeasureFormatTest::helperTestMultiples(
         return;
     }
     assertEquals("TestMultiples", UnicodeString(expected).unescape(), buffer);
+}
+
+void MeasureFormatTest::TestManyLocaleDurations() {
+    UErrorCode status = U_ZERO_ERROR;
+    Measure measures[] = {
+            Measure(5, MeasureUnit::createHour(status), status),
+            Measure(37, MeasureUnit::createMinute(status), status)};
+    if (!assertSuccess("Error creating measures", status)) {
+        return;
+    }
+    helperTestManyLocaleDurations("da", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 t og 37 min");
+    helperTestManyLocaleDurations("da", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5.37");
+    helperTestManyLocaleDurations("de", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 Std., 37 Min.");
+    helperTestManyLocaleDurations("de", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
+    helperTestManyLocaleDurations("en", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h 37m");
+    helperTestManyLocaleDurations("en", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
+    helperTestManyLocaleDurations("es", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h 37min");
+    helperTestManyLocaleDurations("es", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
+    helperTestManyLocaleDurations("fi", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5t 37min");
+    helperTestManyLocaleDurations("fi", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5.37");
+    helperTestManyLocaleDurations("fr", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h 37m");
+    helperTestManyLocaleDurations("fr", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "05:37");
+    helperTestManyLocaleDurations("is", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 klst. og 37 m\\u00EDn.");
+    helperTestManyLocaleDurations("is", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
+    helperTestManyLocaleDurations("ja", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5\\u6642\\u959337\\u5206");
+    helperTestManyLocaleDurations("ja", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
+    helperTestManyLocaleDurations("nb", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5t, 37m");
+    helperTestManyLocaleDurations("nb", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5.37");
+    helperTestManyLocaleDurations("nl", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 u, 37 m");
+    helperTestManyLocaleDurations("nl", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
+    helperTestManyLocaleDurations("nn", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 h og 37 min");
+    helperTestManyLocaleDurations("nn", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5.37");
+    helperTestManyLocaleDurations("sv", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h 37m");
+    helperTestManyLocaleDurations("sv", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
+    helperTestManyLocaleDurations("zh", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5\\u5C0F\\u65F637\\u5206\\u949F");
+    helperTestManyLocaleDurations("zh", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
+}
+
+void MeasureFormatTest::helperTestManyLocaleDurations( const char *localeID,
+                                                       UMeasureFormatWidth width,
+                                                       const Measure *measures,
+                                                       int32_t measureCount,
+                                                       const char *expected) {
+    UErrorCode status = U_ZERO_ERROR;
+    MeasureFormat fmt(Locale(localeID), width, status);
+    if (U_FAILURE(status)) {
+        errln("Could not create MeasureFormat for locale %s, width %d, status: %s", localeID, (int)width, u_errorName(status));
+        return;
+    }
+    UnicodeString buffer;
+    FieldPosition pos(0);
+    fmt.formatMeasures(measures, measureCount, buffer, pos, status);
+    if (U_FAILURE(status)) {
+        errln("MeasureFormat::formatMeasures failed for locale %s, width %d, status: %s", localeID, (int)width, u_errorName(status));
+        return;
+    }
+    UnicodeString expStr(UnicodeString(expected).unescape());
+    if (buffer != expStr) {
+        errln("MeasureFormat::formatMeasures for locale " + UnicodeString(localeID) + ", width " + width + ", expected \"" + expStr + "\", got \"" + buffer + "\"");
+    }
 }
 
 void MeasureFormatTest::TestGram() {
