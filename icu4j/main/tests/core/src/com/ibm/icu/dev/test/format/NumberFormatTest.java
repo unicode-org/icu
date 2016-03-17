@@ -555,7 +555,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+   
     public void Test10419RoundingWith0FractionDigits() {
         Object[][] data = new Object[][]{
                 {BigDecimal.ROUND_CEILING, 1.488, "2"},
@@ -4527,4 +4527,20 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("End index:  ", 11, iterator.getEndIndex());
     }
 
+    // Test that the decimal is shown even when there are no fractional digits
+    public void Test11621() throws Exception {
+        String pat = "0.##E0";
+
+        DecimalFormatSymbols icuSym = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat icuFmt = new DecimalFormat(pat, icuSym);
+        icuFmt.setDecimalSeparatorAlwaysShown(true);
+        String icu = ((NumberFormat)icuFmt).format(299792458);
+
+        java.text.DecimalFormatSymbols jdkSym = new java.text.DecimalFormatSymbols(Locale.US);
+        java.text.DecimalFormat jdkFmt = new java.text.DecimalFormat(pat,jdkSym);
+        jdkFmt.setDecimalSeparatorAlwaysShown(true);
+        String jdk = ((java.text.NumberFormat)jdkFmt).format(299792458);
+
+        assertEquals("ICU and JDK placement of decimal in exponent", jdk, icu);
+    }
 }
