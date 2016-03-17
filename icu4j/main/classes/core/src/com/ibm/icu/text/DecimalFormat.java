@@ -1718,12 +1718,12 @@ public class DecimalFormat extends NumberFormat {
                 }
                 result.append(decimal);
                 // [Spark/CDL] Add attribute for decimal separator
+                fracBegin = result.length();
                 if (parseAttr) {
                     // Length of decimal separator is 1.
                     int decimalSeparatorBegin = result.length() - 1;
                     addAttribute(Field.DECIMAL_SEPARATOR, decimalSeparatorBegin,
                                  result.length());
-                    fracBegin = result.length();
                 }
                 // Record field information for caller.
                 if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
@@ -1748,6 +1748,11 @@ public class DecimalFormat extends NumberFormat {
             result.append(digits[0]);
         }
 
+        // http://bugs.icu-project.org/trac/ticket/11621
+        if ((fracBegin == -1) && this.decimalSeparatorAlwaysShown) {
+            result.append(decimal);
+        }
+        
         // Record field information
         if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
             if (fieldPosition.getEndIndex() < 0) {
