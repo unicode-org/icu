@@ -520,6 +520,8 @@
  */
 #ifdef U_NOEXCEPT
     /* Use the predefined value. */
+#elif defined(_HAS_EXCEPTIONS) && !_HAS_EXCEPTIONS  /* Visual Studio */
+#   define U_NOEXCEPT
 #elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_noexcept) || __has_extension(cxx_noexcept) \
         || (defined(_MSC_VER) && _MSC_VER >= 1900)  /* Visual Studio 2015 */
 #   define U_NOEXCEPT noexcept
