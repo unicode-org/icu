@@ -14,29 +14,13 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J 57  Release Candidate</h2>
-(Last Update: 2016-March-4)
+<h2>Read Me for ICU4J 57.1</h2>
+(Last Update: 2016-March-21)
 <hr size="2" width="100%">
 
 <p>
-<!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality. -->
-<!-- <b>Note:</b> This is a development release of ICU4J 57.
-The contents of this document may not reflect the recent changes done
-for ICU 57 development. This milestone is intended for those wishing
-to get an early look at ICU4J 57 new features and API changes. It is not
-recommended for production use. -->
-<b>Note:</b> This is a release candidate of ICU4J 57.
-The contents of this document may not reflect the recent changes done
-for ICU 57 development. This release candidate is intended for those
-wishing to verify ICU 57 integration before final release. It is not
-recommended for production use.
-<!-- <b>Note:</b> This is a development release of ICU4J 57.
-The contents of this document may not reflect the recent changes done
-for ICU 57 development. This milestone is intended for those
-wishing to verify ICU 57 integration before final release. It is not
-recommended for production use.
-</p> -->
+<b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality.
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
 download site</a>. </p>
@@ -144,12 +128,13 @@ found in ICU4J.</p>
 <p>See the <a href="https://sites.google.com/site/icusite/download/57">ICU 57 download page</a>
 about new features in this release.
 The list of API changes since the previous ICU4J release is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-57-rc/APIChangeReport.html">here</a>.</p>
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-57-1/APIChangeReport.html">here</a>.</p>
 
-    <!-- ICU 57 items -->
-    <!-- <h3>[Subject]</h3> -->
-
-    <!-- end ICU 57 items -->
+<!-- ICU 57 items -->
+<h3>Minimum JRE version</h3>
+Starting 57, the class file version used in ICU4J was updated to Java SE 6.0.
+ICU4J 57 no longer supports Java runtime environment 5.
+<!-- end ICU 57 items -->
 
 <h2 class="doc"><a name="license"></a>License Information</h2>
 <p>
@@ -178,159 +163,76 @@ package.
 </p>
 <h2 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h2>
 <p>
-ICU4J 57 depends on J2SE 5.0 functionality.  Therefore, ICU4J only runs on
-JRE version 5.0 or later.
+ICU4J 57 depends on Java 6 SE functionality.  Therefore, ICU4J only runs on
+JRE version 6.0 or later.
 The table below shows the operating systems and JRE/VM versions currently
 used by the ICU development team to test ICU4J.
 </p>
 <table border="1">
 <tr>
-  <th rowspan="2">Operating System</th>
-  <th colspan="2">JRE 8</th>
-  <th colspan="2">JRE 7</th>
-  <th colspan="2">JRE 6</th>
-  <th colspan="2">JRE 5</th>
-</tr>
-<tr>
-  <th>32bit</th>
-  <th>64bit</th>
-  <th>32bit</th>
-  <th>64bit</th>
-  <th>32bit</th>
-  <th>64bit</th>
-  <th>32bit</th>
-  <th>64bit</th>
+  <th>Operating System</th>
+  <th>JRE 8</th>
+  <th>JRE 7</th>
+  <th>JRE 6</th>
 </tr>
 <tr>
   <th>AIX 6.1</th>
   <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
   <th>AIX 7.1</th>
   <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
   <th>HP-UX 11 (IA64)</th>
   <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
-  <th>Mac OS X 10.6</th>
-  <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center">-</td>
+  <th>Mac OS X 10</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
   <th>Redhat Enterprise Linux 6 (x86)</th>
   <td align="center">-</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
 </tr>
 <tr>
   <th>Redhat Enterprise Linux 6 (x86_64)</th>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
 <th>Solaris 10 (SPARC)</th>
-  <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
   <th>Solaris 11 (SPARC)</th>
-  <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-</tr>
-<tr>
-  <th>Windows XP</th>
-  <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-</tr>
-<tr>
-  <th>Windows Vista</th>
-  <td align="center">-</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
 </tr>
 <tr>
   <th>Windows 7</th>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
 </tr>
 <tr>
   <th>Windows 2008 Server</th>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 </table>
@@ -650,8 +552,7 @@ on your Java CLASSPATH. If you need Charset API support please also place
 <strong>icu4j-charset.jar</strong> on your class path along with <strong>icu4j.jar</strong>.
 </p>
 <p>
-To build ICU4J, you will need J2SE SDK 5.0 or later (ICU4J locale SPI
-provider sub-components require J2SE SDK 6.0 or later) and the Ant build system
+To build ICU4J, you will need J2SE SDK 6.0 or later and the Ant build system
 version 1.7 or later. It's recommended to install both the J2SE SDK and Ant 
 somewhere <em>outside</em>the ICU4J directory. For example, on Linux you might install
 these in <code>/usr/local</code>.</p>
@@ -662,7 +563,7 @@ these in <code>/usr/local</code>.</p>
   make. ICU4J uses Ant because it introduces no other dependencies, it's
   portable, and it's easier to manage than a collection of makefiles. We
   currently build ICU4J using a single makefile on all platforms Ant.
-  The build system requires Ant 1.7 or later.
+  The build system requires Ant 1.9.0 or later.
     <p>Installing Ant is straightforward. Download it (see <a
  href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a>),
 extract it onto your system, set some environment variables, and add
@@ -700,20 +601,19 @@ core:
 
 @compile:
      [echo] build-local:     ../../shared/../../build-local.properties
-     [echo] ${java5.bootclasspath}
      [echo] --- java compiler arguments ------------------------
      [echo] source dir:     C:\icu4j\main\classes\core/src
      [echo] output dir:     C:\icu4j\main\classes\core/out/bin
      [echo] bootclasspath:  
      [echo] classpath:      
-     [echo] source:         1.5
-     [echo] target:         1.5
+     [echo] source:         1.6
+     [echo] target:         1.6
      [echo] debug:          on
      [echo] encoding:       UTF-8
-     [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann,-options
+     [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann,-options,-overrides
      [echo] ----------------------------------------------------
     [mkdir] Created dir: C:\icu4j\main\classes\core\out\bin
-    [javac] Compiling 365 source files to C:\icu4j\main\classes\core\out\bin
+    [javac] Compiling 368 source files to C:\icu4j\main\classes\core\out\bin
     [javac] Note: Some input files use or override a deprecated API.
     [javac] Note: Recompile with -Xlint:deprecation for details.
 
@@ -847,9 +747,6 @@ how to configure Eclipse</a> to build and develop ICU4J on Eclipse IDE.</p>
 <p><b>Note:</b> To install and configure ICU4J Locale Service Provider, please refer the user guide
 page <a href="http://userguide.icu-project.org/icu4j-locale-service-provider">ICU4J Locale
 Service Provider</a>.</p>
-
-<!--  <p><b>Note:</b> ICU4J 57 does not support JDK 8 javadoc tool yet. The build targets "doc" and
-"docs" will fail when JDK 8 javadoc tool is used.</p>  -->
 
 <h2 class="doc"><a name="HowToModularize"></a>How to modularize ICU4J</h2>
 <p>Some clients may not wish to ship all of ICU4J with their
@@ -1040,8 +937,8 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
     <li>Checkout or download CLDR version 'release-29'</li>
-    <li>Checkout ICU4C with tag 'release-57-rc'</li>
-    <li>Checkout ICU4J with tag 'release-57-rc'</li>
+    <li>Checkout ICU4C with tag 'release-57-1'</li>
+    <li>Checkout ICU4J with tag 'release-57-1'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
