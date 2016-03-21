@@ -10,7 +10,7 @@
     "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;" />
     <meta name="DESCRIPTION" content=
     "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU." />
-    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link type="text/css" href="./icu4c.css" rel="stylesheet"/>
   </head>
 
@@ -22,8 +22,7 @@
 -->
 
   <!-- <body class="rc"> -->
-  <body class="rc">
-  <!-- <body> -->
+  <body>
     <p class="only-draft"><b>Note:</b> This is a draft readme.</p>
 
     <h1>
@@ -43,7 +42,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2016-Mar-05<br />
+    <p>Last updated: 2016-Mar-21<br />
       Copyright &copy; 1997-2016 International Business Machines Corporation and
       others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -227,7 +226,7 @@
     </table>
 
     <p><strong>Important:</strong> Please make sure you understand the <a href=
-    "./LICENSE">Copyright and License Information</a>.</p>
+    "http://source.icu-project.org/repos/icu/icu/trunk/LICENSE">Copyright and License Information</a>.</p>
 
     <h2><a name="News" href="#News" id="News">What is new in this
     release?</a></h2>
@@ -235,6 +234,17 @@
     <h3>API Changes</h3>
     <p>See the <a href="APIChangeReport.html">API Change Report</a> for a complete
       list of APIs added, removed, or changed in this release.</p>
+
+    <!-- ICU 57 items -->
+    <h3>ICU 57: Changes related to new CLDR data and specifications</h3>
+    <ul>
+    	<li>Time formats may include the new day period characters b, B, and
+    	these may produced in response to the new skeleton character C used
+    	with DateTimePatternGenerator.</li>
+    	<li>In day period rules, the use of "after" has been deprecated.</li>
+    	<li>The measurement unit "proportion-karat" has been renamed to
+    	"concentr-karat".</li>
+    </ul>
 
     <!-- ICU 56 items -->
     <h3>ICU 56: COLON withdrawn as date/time pattern character</h3>
@@ -329,7 +339,7 @@
     <p>The previous list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>.
     For more news about this release, as well as late-breaking news, see the
-    <a href="http://site.icu-project.org/download/54">ICU download page</a>.</p>
+    <a href="http://site.icu-project.org/download/57">ICU download page</a>.</p>
 
     <!-- end of What's New items -->
 
