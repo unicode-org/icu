@@ -1760,9 +1760,14 @@ public class DecimalFormat extends NumberFormat {
             result.append(digits[0]);
         }
 
-        // http://bugs.icu-project.org/trac/ticket/11621
+        // add the decimal separator if it is to be always shown AND there are no decimal digits
         if ((fracBegin == -1) && this.decimalSeparatorAlwaysShown) {
             result.append(decimal);
+            if (parseAttr) {
+                // Length of decimal separator is 1.
+                int decimalSeparatorBegin = result.length() - 1;
+                addAttribute(Field.DECIMAL_SEPARATOR, decimalSeparatorBegin, result.length());
+            }
         }
         
         // Record field information
