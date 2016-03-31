@@ -1762,7 +1762,13 @@ public class DecimalFormat extends NumberFormat {
 
         // add the decimal separator if it is to be always shown AND there are no decimal digits
         if ((fracBegin == -1) && this.decimalSeparatorAlwaysShown) {
+            if (fieldPosition.getFieldAttribute() == Field.DECIMAL_SEPARATOR) {
+                fieldPosition.setBeginIndex(result.length());
+            }
             result.append(decimal);
+            if (fieldPosition.getFieldAttribute() == Field.DECIMAL_SEPARATOR) {
+                fieldPosition.setEndIndex(result.length());
+            }
             if (parseAttr) {
                 // Length of decimal separator is 1.
                 int decimalSeparatorBegin = result.length() - 1;
