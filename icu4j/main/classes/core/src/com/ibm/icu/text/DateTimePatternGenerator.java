@@ -30,6 +30,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternTokenizer;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
@@ -37,7 +38,6 @@ import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceBundleIterator;
 
 /**
  * This class provides flexible generation of date format patterns, like
@@ -249,7 +249,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         result.setDecimal(String.valueOf(dfs.getDecimalSeparator()));
 
         // List of allowed hour formats
-        result.allowedHourFormats = getPreferredHourFormats(uLocale); // already frozen
+        result.allowedHourFormats = getAllowedHourFormats(uLocale); // already frozen
 
         // freeze and cache
         result.freeze();
@@ -257,7 +257,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return result;
     }
 
-    private static List<String> getPreferredHourFormats(ULocale uLocale) {
+    private static final String[] LAST_RESORT_ALLOWED_HOUR_FORMAT = {"H"};
+
+    private static String[] getAllowedHourFormats(ULocale uLocale) {
         // key can be either region or locale (lang_region)
         //        ZW{
         //            allowed{
@@ -282,11 +284,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             country = "001";
         }
         String langCountry = max.getLanguage() + "_" + country;
-        List<String> list = LOCALE_TO_PREFERED_HOUR.get(langCountry);
+        String[] list = LOCALE_TO_ALLOWED_HOUR.get(langCountry);
         if (list == null) {
-            list = LOCALE_TO_PREFERED_HOUR.get(country);
+            list = LOCALE_TO_ALLOWED_HOUR.get(country);
             if (list == null) {
-                list = Collections.singletonList("H");
+                list = LAST_RESORT_ALLOWED_HOUR_FORMAT;
             }
         }
         return list;
@@ -422,7 +424,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Return the best pattern matching the input skeleton. It is guaranteed to
      * have all of the fields in the skeleton.
-     * 
+     *
      * @param skeleton The skeleton is a pattern containing only the variable fields.
      *            For example, "MMMdd" and "mmhh" are skeletons.
      * @param options MATCH_xxx options for forcing the length of specified fields in
@@ -435,26 +437,63 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return getBestPattern(skeleton, null, options);
     }
 
+    private static class DayPeriodAllowedHoursSink extends UResource.TableSink {
+        HashMap<String, String[]> tempMap;
+        String regionOrLocale;
+        String[] formatList;
+
+        private DayPeriodAllowedHoursSink(HashMap<String, String[]> tempMap) {
+            this.tempMap = tempMap;
+        }
+
+        @Override
+        public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+            regionOrLocale = key.toString();
+
+            return formatListSink;
+        }
+
+        private class FormatListSink extends UResource.TableSink {
+            @Override
+            public UResource.ArraySink getOrCreateArraySink(UResource.Key key, int initialSize) {
+                if (key.contentEquals("allowed")) {  // Ignore "preferred" list.
+                    formatList = new String[initialSize];
+                    return allowedFormatListSink;
+                }
+
+                return null;
+            }
+        }
+        private FormatListSink formatListSink = new FormatListSink();
+
+        private class AllowedFormatListSink extends UResource.ArraySink {
+            @Override
+            public void put(int index, UResource.Value value) {
+                formatList[index] = value.getString();
+            }
+
+            @Override
+            public void leave() {
+                tempMap.put(regionOrLocale, formatList);
+                formatList = null;  // For good measure.
+            }
+        }
+        private AllowedFormatListSink allowedFormatListSink = new AllowedFormatListSink();
+    }
+
     // get the data for dayperiod C.
-    static final Map<String,List<String>> LOCALE_TO_PREFERED_HOUR;
+    static final Map<String, String[]> LOCALE_TO_ALLOWED_HOUR;
     static {
-        HashMap<String, List<String>> temp = new HashMap<String,List<String>>();
-        UResourceBundle suppData = UResourceBundle.getBundleInstance(
+        HashMap<String, String[]> temp = new HashMap<String, String[]>();
+        ICUResourceBundle suppData = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(
                 ICUResourceBundle.ICU_BASE_NAME,
                 "supplementalData",
                 ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        UResourceBundle suppTimeData = suppData.get("timeData");
-        for(UResourceBundleIterator iter = suppTimeData.getIterator(); iter.hasNext();) {
-            ICUResourceBundle subBndle = (ICUResourceBundle) iter.next();
-            final String regionOrLocale = subBndle.getKey();
-            // final List<String> list = Arrays.asList(subBndle.getStringArray()); Didn't work, so doing it the long way.
-            UResourceBundle allowedBundle = subBndle.get("allowed");
-            List<String> list = allowedBundle.getType() == UResourceBundle.STRING // getStringArray API should do this automatically!
-                    ? Collections.singletonList(allowedBundle.getString()) 
-                            : Arrays.asList(allowedBundle.getStringArray());
-                    temp.put(regionOrLocale, list);
-        }
-        LOCALE_TO_PREFERED_HOUR = Collections.unmodifiableMap(temp);
+
+        DayPeriodAllowedHoursSink allowedHoursSink = new DayPeriodAllowedHoursSink(temp);
+        suppData.getAllTableItemsWithFallback("timeData", allowedHoursSink);
+
+        LOCALE_TO_ALLOWED_HOUR = Collections.unmodifiableMap(temp);
     }
 
     /*
@@ -473,7 +512,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 if (patChr == 'j') {
                     skeletonCopy.setCharAt(patPos, defaultHourFormatChar);
                 } else if (patChr == 'C') {
-                    String preferred = allowedHourFormats.get(0);
+                    String preferred = allowedHourFormats[0];
                     skeletonCopy.setCharAt(patPos, preferred.charAt(0));
                     final DTPGflags alt = DTPGflags.getFlag(preferred);
                     if (alt != null) {
@@ -513,7 +552,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * PatternInfo supplies output parameters for addPattern(...). It is used because
      * Java doesn't have real output parameters. It is treated like a struct (eg
      * Point), so all fields are public.
-     * 
+     *
      * @stable ICU 3.6
      */
     public static final class PatternInfo { // struct for return information
@@ -632,7 +671,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Utility to return a unique skeleton from a given pattern. For example,
      * both "MMM-dd" and "dd/MMM" produce the skeleton "MMMdd".
-     * 
+     *
      * @param pattern Input pattern, such as "dd/MMM"
      * @return skeleton, such as "MMMdd"
      * @stable ICU 3.6
@@ -646,7 +685,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Same as getSkeleton, but allows duplicates
-     * 
+     *
      * @param pattern Input pattern, such as "dd/MMM"
      * @return skeleton, such as "MMMdd"
      * @internal
@@ -663,7 +702,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Same as getSkeleton, but allows duplicates
      * and returns a string using canonical pattern chars
-     * 
+     *
      * @param pattern Input pattern, such as "ccc, d LLL"
      * @return skeleton, such as "MMMEd"
      * @internal
@@ -683,7 +722,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * so as to only preserve the difference between string and numeric form. So
      * for example, both "MMM-dd" and "d/MMM" produce the skeleton "MMMd"
      * (notice the single d).
-     * 
+     *
      * @param pattern Input pattern, such as "dd/MMM"
      * @return skeleton, such as "MMMdd"
      * @stable ICU 3.6
@@ -698,7 +737,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Return a list of all the skeletons (in canonical form) from this class,
      * and the patterns that they map to.
-     * 
+     *
      * @param result an output Map in which to place the mapping from skeleton to
      *            pattern. If you want to see the internal order being used,
      *            supply a LinkedHashMap. If the input value is null, then a
@@ -759,7 +798,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * skeleton of "MMMMddhhmm", then the input pattern is adjusted to be
      * "dd-MMMM hh:mm". This is used internally to get the best match for the
      * input skeleton, but can also be used externally.
-     * 
+     *
      * @param pattern input pattern
      * @param skeleton For the pattern to match to.
      * @param options MATCH_xxx options for forcing the length of specified fields in
@@ -788,7 +827,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * broken up into two components "MMMd" and "hmm". There are close matches
      * for those two skeletons, so the result is put together with this pattern,
      * resulting in "d-MMM h:mm".
-     * 
+     *
      * @param dateTimeFormat message format pattern, where {1} will be replaced by the date
      *            pattern and {0} will be replaced by the time pattern.
      * @stable ICU 3.6
@@ -800,7 +839,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Getter corresponding to setDateTimeFormat.
-     * 
+     *
      * @return pattern
      * @stable ICU 3.6
      */
@@ -815,7 +854,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * "hhmmssSSSS", and the best matching pattern internally is "H:mm:ss", and
      * the decimal string is ",". Then the resulting pattern is modified to be
      * "H:mm:ss,SSSS"
-     * 
+     *
      * @param decimal The decimal to set to.
      * @stable ICU 3.6
      */
@@ -837,7 +876,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * Redundant patterns are those which if removed, make no difference in the
      * resulting getBestPattern values. This method returns a list of them, to
      * help check the consistency of the patterns used to build this generator.
-     * 
+     *
      * @param output stores the redundant patterns that are removed. To get these
      *            in internal order, supply a LinkedHashSet. If null, a
      *            collection is allocated.
@@ -897,12 +936,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * @stable ICU 3.6
      */
-    static final public int YEAR = 1; 
+    static final public int YEAR = 1;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int QUARTER = 2; 
+    static final public int QUARTER = 2;
 
     /**
      * @stable ICU 3.6
@@ -912,17 +951,17 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * @stable ICU 3.6
      */
-    static final public int WEEK_OF_YEAR = 4; 
+    static final public int WEEK_OF_YEAR = 4;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int WEEK_OF_MONTH = 5; 
+    static final public int WEEK_OF_MONTH = 5;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int WEEKDAY = 6; 
+    static final public int WEEKDAY = 6;
 
     /**
      * @stable ICU 3.6
@@ -932,12 +971,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * @stable ICU 3.6
      */
-    static final public int DAY_OF_YEAR = 8; 
+    static final public int DAY_OF_YEAR = 8;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int DAY_OF_WEEK_IN_MONTH = 9; 
+    static final public int DAY_OF_WEEK_IN_MONTH = 9;
 
     /**
      * @stable ICU 3.6
@@ -947,17 +986,17 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * @stable ICU 3.6
      */
-    static final public int HOUR = 11; 
+    static final public int HOUR = 11;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int MINUTE = 12; 
+    static final public int MINUTE = 12;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int SECOND = 13; 
+    static final public int SECOND = 13;
 
     /**
      * @stable ICU 3.6
@@ -967,7 +1006,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * @stable ICU 3.6
      */
-    static final public int ZONE = 15; 
+    static final public int ZONE = 15;
 
     /**
      * @stable ICU 3.6
@@ -1030,7 +1069,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * {1} is the element we are adding, and {2} is the name of the element.
      * <p>
      * This reflects the way that the CLDR data is organized.
-     * 
+     *
      * @param field such as ERA
      * @param value pattern, such as "{0}, {1}"
      * @stable ICU 3.6
@@ -1043,7 +1082,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Getter corresponding to setAppendItemFormats. Values below 0 or at or
      * above TYPE_LIMIT are illegal arguments.
-     * 
+     *
      * @param field The index to retrieve the append item formats.
      * @return append pattern for field
      * @stable ICU 3.6
@@ -1058,7 +1097,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * {2} variable.
      * <p>
      * This reflects the way that the CLDR data is organized.
-     * 
+     *
      * @param field Index of the append item names.
      * @param value The value to set the item to.
      * @stable ICU 3.6
@@ -1071,7 +1110,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Getter corresponding to setAppendItemNames. Values below 0 or at or above
      * TYPE_LIMIT are illegal arguments.
-     * 
+     *
      * @param field The index to get the append item name.
      * @return name for field
      * @stable ICU 3.6
@@ -1082,7 +1121,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Determines whether a skeleton contains a single field
-     * 
+     *
      * @param skeleton The skeleton to determine if it contains a single field.
      * @return true or not
      * @internal
@@ -1099,7 +1138,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Add key to HashSet cldrAvailableFormatKeys.
-     * 
+     *
      * @param key of the availableFormats in CLDR
      * @stable ICU 3.6
      */
@@ -1113,7 +1152,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * has been added to DateTimePatternGenerator.
      * The function is to avoid the duplicate availableFomats added to
      * the pattern map from parent locales.
-     * 
+     *
      * @param key of the availableFormatMask in CLDR
      * @return TRUE if the corresponding slot of CLDR_AVAIL_FORMAT_KEY[]
      * has been added to DateTimePatternGenerator.
@@ -1182,7 +1221,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * variable field must consist of 1 to n variable characters, representing
      * date format fields. For example, "VVVV" is valid while "V4" is not, nor
      * is "44".
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1222,7 +1261,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         /**
          * Get the main type of this variable. These types are ERA, QUARTER,
          * MONTH, DAY, WEEK_OF_YEAR, WEEK_OF_MONTH, WEEKDAY, DAY, DAYPERIOD
-         * (am/pm), HOUR, MINUTE, SECOND,FRACTIONAL_SECOND, ZONE. 
+         * (am/pm), HOUR, MINUTE, SECOND,FRACTIONAL_SECOND, ZONE.
          * @return main type.
          * @internal
          * @deprecated This API is ICU internal only.
@@ -1468,7 +1507,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             for (Object item : items) {
                 if (item instanceof VariableField) {
                     int type = ((VariableField)item).getType();
-                    foundMask |= 1 << type;    
+                    foundMask |= 1 << type;
                 }
             }
             boolean isDate = (foundMask & DATE_MASK) != 0;
@@ -1494,7 +1533,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         //                        int type = ((VariableField)item).getType();
         //                        if (minField > type) minField = type;
         //                        if (maxField < type) maxField = type;
-        //                        if (type == ZONE || type == DAYPERIOD || type == WEEKDAY) return result; // skip anything with zones                    
+        //                        if (type == ZONE || type == DAYPERIOD || type == WEEKDAY) return result; // skip anything with zones
         //                        fieldCount++;
         //                    } catch (Exception e) {
         //                        return result; // if there are any funny fields, return
@@ -1511,7 +1550,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         //                if (item instanceof VariableField) {
         //                    int type = ((VariableField)item).getType();
         //                    if (type != minField && type != maxField) break;
-        //                    
+        //
         //                    if (i > 0) {
         //                        Object previousItem = items.get(0);
         //                        if (alpha.containsSome(previousItem.toString())) break;
@@ -1677,7 +1716,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private transient FormatParser fp = new FormatParser();
     private transient DistanceInfo _distanceInfo = new DistanceInfo();
 
-    private List<String> allowedHourFormats;
+    private String[] allowedHourFormats;
 
     private static final int FRACTIONAL_MASK = 1<<FRACTIONAL_SECOND;
     private static final int SECOND_AND_FRACTIONAL_MASK = (1<<SECOND) | (1<<FRACTIONAL_SECOND);
@@ -1703,7 +1742,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
             while (distInfo.missingFieldMask != 0) { // precondition: EVERY single field must work!
 
-                // special hack for SSS. If we are missing SSS, and we had ss but found it, replace the s field according to the 
+                // special hack for SSS. If we are missing SSS, and we had ss but found it, replace the s field according to the
                 // number separator
                 if ((distInfo.missingFieldMask & SECOND_AND_FRACTIONAL_MASK) == FRACTIONAL_MASK
                         && (missingFields & SECOND_AND_FRACTIONAL_MASK) == SECOND_AND_FRACTIONAL_MASK) {
@@ -1756,7 +1795,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * 
+     *
      */
     private void complete() {
         PatternInfo patternInfo = new PatternInfo();
@@ -1772,10 +1811,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * 
+     *
      */
     private PatternWithMatcher getBestRaw(DateTimeMatcher source, int includeMask, DistanceInfo missingFields, DateTimeMatcher skipMatcher) {
-        //      if (SHOW_DISTANCE) System.out.println("Searching for: " + source.pattern 
+        //      if (SHOW_DISTANCE) System.out.println("Searching for: " + source.pattern
         //      + ", mask: " + showMask(includeMask));
         int bestDistance = Integer.MAX_VALUE;
         PatternWithMatcher bestPatternWithMatcher = new PatternWithMatcher("", null);
@@ -1785,7 +1824,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 continue;
             }
             int distance = source.getDistance(trial, includeMask, tempInfo);
-            //          if (SHOW_DISTANCE) System.out.println("\tDistance: " + trial.pattern + ":\t" 
+            //          if (SHOW_DISTANCE) System.out.println("\tDistance: " + trial.pattern + ":\t"
             //          + distance + ",\tmissing fields: " + tempInfo);
             if (distance < bestDistance) {
                 bestDistance = distance;
@@ -1811,8 +1850,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @param fixFractionalSeconds TODO
      */
     // flags values
-    private enum DTPGflags { 
-        FIX_FRACTIONAL_SECONDS, 
+    private enum DTPGflags {
+        FIX_FRACTIONAL_SECONDS,
         SKELETON_USES_CAP_J,
         SKELETON_USES_b,
         SKELETON_USES_B,
@@ -1836,7 +1875,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 newPattern.append(fp.quoteLiteral((String)item));
             } else {
                 final VariableField variableField = (VariableField) item;
-                
+
                 StringBuilder fieldBuilder = new StringBuilder(variableField.toString());
                 //                int canonicalIndex = getCanonicalIndex(field, true);
                 //                if (canonicalIndex < 0) {
@@ -1844,9 +1883,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 //                }
                 //                int type = types[canonicalIndex][1];
                 int type = variableField.getType();
-                
+
                 // handle special day periods
-                if (type == DAYPERIOD 
+                if (type == DAYPERIOD
                         && !flags.isEmpty()) {
                     char c = flags.contains(DTPGflags.SKELETON_USES_b) ? 'b' : flags.contains(DTPGflags.SKELETON_USES_B) ? 'B' : '0';
                     if (c != '0') {
@@ -1857,7 +1896,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                         }
                     }
                 }
-                
+
                 if (flags.contains(DTPGflags.FIX_FRACTIONAL_SECONDS) && type == SECOND) {
                     String newField = inputRequest.original[FRACTIONAL_SECOND];
                     fieldBuilder.append(decimal);
@@ -1965,34 +2004,34 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     private static final String[] CLDR_FIELD_APPEND = {
-        "Era", "Year", "Quarter", "Month", "Week", "*", "Day-Of-Week", 
-        "Day", "*", "*", "*", 
+        "Era", "Year", "Quarter", "Month", "Week", "*", "Day-Of-Week",
+        "Day", "*", "*", "*",
         "Hour", "Minute", "Second", "*", "Timezone"
     };
 
     private static final String[] CLDR_FIELD_NAME = {
-        "era", "year", "*", "month", "week", "*", "weekday", 
-        "day", "*", "*", "dayperiod", 
+        "era", "year", "*", "month", "week", "*", "weekday",
+        "day", "*", "*", "dayperiod",
         "hour", "minute", "second", "*", "zone"
     };
 
     private static final String[] FIELD_NAME = {
-        "Era", "Year", "Quarter", "Month", "Week_in_Year", "Week_in_Month", "Weekday", 
-        "Day", "Day_Of_Year", "Day_of_Week_in_Month", "Dayperiod", 
+        "Era", "Year", "Quarter", "Month", "Week_in_Year", "Week_in_Month", "Weekday",
+        "Day", "Day_Of_Year", "Day_of_Week_in_Month", "Dayperiod",
         "Hour", "Minute", "Second", "Fractional_Second", "Zone"
     };
 
 
     private static final String[] CANONICAL_ITEMS = {
-        "G", "y", "Q", "M", "w", "W", "E", 
-        "d", "D", "F", 
+        "G", "y", "Q", "M", "w", "W", "E",
+        "d", "D", "F",
         "H", "m", "s", "S", "v"
     };
 
     private static final Set<String> CANONICAL_SET = new HashSet<String>(Arrays.asList(CANONICAL_ITEMS));
     private Set<String> cldrAvailableFormatKeys = new HashSet<String>(20);
 
-    private static final int 
+    private static final int
     DATE_MASK = (1<<DAYPERIOD) - 1,
     TIME_MASK = (1<<TYPE_LIMIT) - 1 - DATE_MASK;
 
@@ -2032,7 +2071,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         //      verify that all are the same character
         for (int i = 1; i < len; ++i) {
             if (s.charAt(i) != ch) {
-                return -1; 
+                return -1;
             }
         }
         int bestRow = -1;
@@ -2232,7 +2271,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         /**
-         * 
+         *
          */
         int getFieldMask() {
             int result = 0;
@@ -2243,7 +2282,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         /**
-         * 
+         *
          */
         @SuppressWarnings("unused")
         void extractFrom(DateTimeMatcher source, int fieldMask) {
@@ -2295,7 +2334,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 if (!original[i].equals(that.original[i])) return false;
             }
             return true;
-        }       
+        }
         public int hashCode() {
             int result = 0;
             for (int i = 0; i < original.length; ++i) {
@@ -2312,7 +2351,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             missingFieldMask = extraFieldMask = 0;
         }
         /**
-         * 
+         *
          */
         void setTo(DistanceInfo other) {
             missingFieldMask = other.missingFieldMask;
