@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2010, International Business Machines
+ *   Copyright (C) 1996-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.ULocale;
 
 public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
 {
@@ -40,6 +41,13 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         }
 
         // just do some VERY basic tests to make sure that get/set work
+        
+        if(!en.getLocale().equals(Locale.ENGLISH)) {
+            errln("ERROR: getLocale failed");
+        }
+        if(!en.getULocale().equals(ULocale.ENGLISH)) {
+            errln("ERROR: getULocale failed");
+        }
 
         char zero = en.getZeroDigit();
         fr.setZeroDigit(zero);
@@ -143,6 +151,12 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         fr.setExponentSeparator(exponential);
         if(fr.getExponentSeparator() != en.getExponentSeparator()) {
             errln("ERROR: get/set Exponential failed");
+        }
+        
+        String exponentMultiplicationSign = en.getExponentMultiplicationSign();
+        fr.setExponentMultiplicationSign(exponentMultiplicationSign);
+        if(fr.getExponentMultiplicationSign() != en.getExponentMultiplicationSign()) {
+            errln("ERROR: get/set ExponentMultiplicationSign failed");
         }
         
         // Test CurrencySpacing.

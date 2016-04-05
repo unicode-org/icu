@@ -33,6 +33,7 @@ import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DisplayContext;
@@ -40,6 +41,8 @@ import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
+import com.ibm.icu.text.NumberingSystem;
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -1954,6 +1957,50 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    // Coverage tests for methods not being called otherwise.
+    public void TestNumberingSystemCoverage() {
+        // Test getAvaliableNames
+        String[] availableNames = NumberingSystem.getAvailableNames();
+        if (availableNames == null || availableNames.length <= 0) {
+            errln("ERROR: NumberingSystem.getAvailableNames() returned a null or empty array.");
+        } else {
+            boolean latnFound = false;
+            for (String name : availableNames){
+                if ("latn".equals(name)) {
+                    latnFound = true;
+                    break;
+                }
+            }
+            
+            if (!latnFound) {
+                errln("ERROR: 'latn' numbering system not found on NumberingSystem.getAvailableNames().");
+            }
+        }
+        
+        // Test NumberingSystem.getInstance()
+        NumberingSystem ns1 = NumberingSystem.getInstance();
+        if (ns1 == null || ns1.isAlgorithmic()) {
+            errln("ERROR: NumberingSystem.getInstance() returned a null or invalid NumberingSystem");
+        }
+        
+        // Test NumberingSystem.getInstance(int,boolean,String)
+        /* Parameters used: the ones used in the default constructor
+         * radix = 10;
+         * algorithmic = false;
+         * desc = "0123456789";
+         */
+        NumberingSystem ns2 = NumberingSystem.getInstance(10, false, "0123456789");
+        if (ns2 == null || ns2.isAlgorithmic()) {
+            errln("ERROR: NumberingSystem.getInstance(int,boolean,String) returned a null or invalid NumberingSystem");
+        }
+        
+        // Test NumberingSystem.getInstance(Locale)
+        NumberingSystem ns3 = NumberingSystem.getInstance(Locale.ENGLISH);
+        if (ns3 == null || ns3.isAlgorithmic()) {
+            errln("ERROR: NumberingSystem.getInstance(Locale) returned a null or invalid NumberingSystem");
+        }
+    }
 
     public void Test6816() {
         Currency cur1 = Currency.getInstance(new Locale("und", "PH"));
@@ -3244,6 +3291,36 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     /*
+     * Coverage tests for the implementation of abstract format methods not being called otherwise
+     */
+    public void TestFormatAbstractImplCoverage() {
+        NumberFormat df = DecimalFormat.getInstance(Locale.ENGLISH);
+        NumberFormat cdf = CompactDecimalFormat.getInstance(Locale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
+        NumberFormat rbf = new RuleBasedNumberFormat(ULocale.ENGLISH, RuleBasedNumberFormat.SPELLOUT);
+
+        /*
+         *  Test  NumberFormat.format(BigDecimal,StringBuffer,FieldPosition)
+         */
+        StringBuffer sb = new StringBuffer();
+        String result = df.format(new BigDecimal(2000.43), sb, new FieldPosition(0)).toString();
+        if (!"2,000.43".equals(result)) {
+            errln("DecimalFormat failed. Expected: 2,000.43 - Actual: " + result);
+        }
+
+        sb.delete(0, sb.length());
+        result = cdf.format(new BigDecimal(2000.43), sb, new FieldPosition(0)).toString();
+        if (!"2K".equals(result)) {
+            errln("DecimalFormat failed. Expected: 2K - Actual: " + result);
+        }
+
+        sb.delete(0, sb.length());
+        result = rbf.format(new BigDecimal(2000.43), sb, new FieldPosition(0)).toString();
+        if (!"two thousand point four three".equals(result)) {
+            errln("DecimalFormat failed. Expected: 'two thousand point four three' - Actual: '" + result + "'");
+        }  
+    }
+
+    /*
      * Tests the method public final static NumberFormat getInstance(int style) public static NumberFormat
      * getInstance(Locale inLocale, int style) public static NumberFormat getInstance(ULocale desiredLocale, int choice)
      */
@@ -3341,21 +3418,21 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
          * Tests the method public boolean visible()
          */
         if (tf.visible() != true) {
-            errln("NumberFormatFactor.visible() was suppose to return true.");
+            errln("NumberFormatFactory.visible() was suppose to return true.");
         }
 
         /*
          * Tests the method public NumberFormat createFormat(Locale loc, int formatType)
          */
         if (tf.createFormat(new Locale(""), 0) != null) {
-            errln("NumberFormatFactor.createFormat(Locale loc, int formatType) " + "was suppose to return null");
+            errln("NumberFormatFactory.createFormat(Locale loc, int formatType) " + "was suppose to return null");
         }
 
         /*
          * Tests the method public NumberFormat createFormat(ULocale loc, int formatType)
          */
         if (tf1.createFormat(new ULocale(""), 0) != null) {
-            errln("NumberFormatFactor.createFormat(ULocale loc, int formatType) " + "was suppose to return null");
+            errln("NumberFormatFactory.createFormat(ULocale loc, int formatType) " + "was suppose to return null");
         }
     }
 

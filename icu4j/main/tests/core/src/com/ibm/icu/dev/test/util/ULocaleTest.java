@@ -1115,6 +1115,9 @@ public class ULocaleTest extends TestFmwk {
                 ULocale locale = new ULocale(item.displayLocale);
                 LocaleDisplayNames ldn = LocaleDisplayNames.getInstance(locale, item.dialectHandling, item.capitalization, item.nameLength);
                 DisplayContext dialectHandling = ldn.getContext(DisplayContext.Type.DIALECT_HANDLING);
+                assertEquals("consistent dialect handling",
+                        dialectHandling == DisplayContext.DIALECT_NAMES,
+                        ldn.getDialectHandling() == LocaleDisplayNames.DialectHandling.DIALECT_NAMES);
                 DisplayContext capitalization = ldn.getContext(DisplayContext.Type.CAPITALIZATION);
                 DisplayContext nameLength = ldn.getContext(DisplayContext.Type.DISPLAY_LENGTH);
                 if (dialectHandling != item.dialectHandling || capitalization != item.capitalization || nameLength != item.nameLength) {
@@ -1131,6 +1134,43 @@ public class ULocaleTest extends TestFmwk {
                 }
             }
         }
+    }
+
+    public void TestDisplayLanguageWithDialectCoverage() {
+        // Coverage test. Implementation is in class LocaleDisplayNames.
+        assertFalse("en in system default locale: anything but empty",
+                ULocale.ENGLISH.getDisplayLanguageWithDialect().isEmpty());
+        assertEquals("en in de", "Englisch",
+                ULocale.ENGLISH.getDisplayLanguageWithDialect(ULocale.GERMAN));
+        assertEquals("en (string) in de", "Englisch",
+                ULocale.getDisplayLanguageWithDialect("en", ULocale.GERMAN));
+        assertEquals("en (string) in de (string)", "Englisch",
+                ULocale.getDisplayLanguageWithDialect("en", "de"));
+    }
+
+    public void TestDisplayNameWithDialectCoverage() {
+        // Coverage test. Implementation is in class LocaleDisplayNames.
+        assertFalse("en-GB in system default locale: anything but empty",
+                ULocale.UK.getDisplayNameWithDialect().isEmpty());
+        assertEquals("en-GB in de", "Britisches Englisch",
+                ULocale.UK.getDisplayNameWithDialect(ULocale.GERMAN));
+        assertEquals("en-GB (string) in de", "Britisches Englisch",
+                ULocale.getDisplayNameWithDialect("en-GB", ULocale.GERMAN));
+        assertEquals("en-GB (string) in de (string)", "Britisches Englisch",
+                ULocale.getDisplayNameWithDialect("en-GB", "de"));
+    }
+
+    public void TestDisplayScriptCoverage() {
+        // Coverage test. Implementation is in class LocaleDisplayNames.
+        assertFalse("zh-Hans in system default locale: anything but empty",
+                ULocale.SIMPLIFIED_CHINESE.getDisplayScript().isEmpty());
+        // Stand-alone script name, so not just "Vereinfacht".
+        assertEquals("zh-Hans in de", "Vereinfachtes Chinesisch",
+                ULocale.SIMPLIFIED_CHINESE.getDisplayScript(ULocale.GERMAN));
+        assertEquals("zh-Hans (string) in de", "Vereinfachtes Chinesisch",
+                ULocale.getDisplayScript("zh-Hans", ULocale.GERMAN));
+        assertEquals("zh-Hans (string) in de (string)", "Vereinfachtes Chinesisch",
+                ULocale.getDisplayScript("zh-Hans", "de"));
     }
 
     private boolean checkName(String name, String language, String script, String country, String variant, ULocale dl) {

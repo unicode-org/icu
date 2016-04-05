@@ -1,12 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2015, International Business Machines Corporation and
+ * Copyright (C) 2007-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.test.format;
 
+import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -70,13 +71,29 @@ public class PluralFormatUnitTest extends TestFmwk {
             }
         }
         // Test some bigger numbers.
+        // Coverage: Use the format(Object, ...) version.
+        StringBuffer sb = new StringBuffer();
+        FieldPosition ignore = new FieldPosition(-1);
         for (int n = 100; n < 113; n++) {
             String result = numberFmt.format(n*n);
             for (int k = 0; k < plFmts.length; ++k) {
-                this.assertEquals("PluralFormat's output is not as expected",
-                        result, plFmts[k].format(n*n));
+                sb.delete(0, sb.length());
+                String pfResult = plFmts[k].format(Long.valueOf(n*n), sb, ignore).toString();
+                this.assertEquals("PluralFormat's output is not as expected", result, pfResult);
             }
         }
+    }
+
+    public void TestEquals() {
+        // There is neither clone() nor a copy constructor.
+        PluralFormat de_fee_1 = new PluralFormat(ULocale.GERMAN, PluralType.CARDINAL, "other{fee}");
+        PluralFormat de_fee_2 = new PluralFormat(ULocale.GERMAN, PluralType.CARDINAL, "other{fee}");
+        PluralFormat de_fi = new PluralFormat(ULocale.GERMAN, PluralType.CARDINAL, "other{fi}");
+        PluralFormat fr_fee = new PluralFormat(ULocale.FRENCH, PluralType.CARDINAL, "other{fee}");
+        assertTrue("different de_fee objects", de_fee_1 != de_fee_2);
+        assertTrue("equal de_fee objects", de_fee_1.equals(de_fee_2));
+        assertFalse("different pattern strings", de_fee_1.equals(de_fi));
+        assertFalse("different locales", de_fee_1.equals(fr_fee));
     }
 
     public void TestApplyPatternAndFormat() {
@@ -351,6 +368,12 @@ public class PluralFormatUnitTest extends TestFmwk {
 
         // Code coverage: Use the other new-for-PluralType constructor as well.
         pf = new PluralFormat(ULocale.ENGLISH, PluralType.ORDINAL);
+        pf.applyPattern(pattern);
+        assertEquals("PluralFormat.format(456)", "456th file", pf.format(456));
+        assertEquals("PluralFormat.format(111)", "111th file", pf.format(111));
+
+        // Code coverage: Use Locale not ULocale.
+        pf = new PluralFormat(Locale.ENGLISH, PluralType.ORDINAL);
         pf.applyPattern(pattern);
         assertEquals("PluralFormat.format(456)", "456th file", pf.format(456));
         assertEquals("PluralFormat.format(111)", "111th file", pf.format(111));

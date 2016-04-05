@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1720,7 +1720,12 @@ public class BasicTest extends TestFmwk {
             options|=Normalizer.INPUT_IS_FCD;
         }
 
-        return Normalizer.compare(s1, s2, options);
+        int cmpStrings = Normalizer.compare(s1, s2, options);
+        int cmpArrays = Normalizer.compare(
+                s1.toCharArray(), 0, s1.length(),
+                s2.toCharArray(), 0, s2.length(), options);
+        assertEquals("compare strings == compare char arrays", cmpStrings, cmpArrays);
+        return cmpStrings;
     }
 
     // reference implementation of UnicodeString::caseCompare
@@ -2649,6 +2654,13 @@ public class BasicTest extends TestFmwk {
                     ")==filtered NFC.getCC()",
                     expectedCC, cc);
         }
+
+        // More coverage.
+        StringBuilder sb=new StringBuilder();
+        assertEquals("filtered normalize()", "ää\u0304",
+                fn2.normalize("a\u0308ä\u0304", (Appendable)sb).toString());
+        assertTrue("filtered hasBoundaryAfter()", fn2.hasBoundaryAfter('ä'));
+        assertTrue("filtered isInert()", fn2.isInert(0x0313));
     }
 
     public void TestFilteredAppend() {
@@ -2710,5 +2722,51 @@ public class BasicTest extends TestFmwk {
                 "getNFKCCasefoldInstance() did not return an NFKC_Casefold instance " +
                 "(normalizes to " + prettify(out) + ')',
                 " \u1E09", out);
+    }
+
+    public void TestNFC() {
+        // Coverage tests.
+        Normalizer2 nfc = Normalizer2.getNFCInstance();
+        assertTrue("nfc.hasBoundaryAfter(space)", nfc.hasBoundaryAfter(' '));
+        assertFalse("nfc.hasBoundaryAfter(ä)", nfc.hasBoundaryAfter('ä'));
+    }
+
+    public void TestNFD() {
+        // Coverage tests.
+        Normalizer2 nfd = Normalizer2.getNFDInstance();
+        assertTrue("nfd.hasBoundaryAfter(space)", nfd.hasBoundaryAfter(' '));
+        assertFalse("nfd.hasBoundaryAfter(ä)", nfd.hasBoundaryAfter('ä'));
+    }
+
+    public void TestFCD() {
+        // Coverage tests.
+        Normalizer2 fcd = Normalizer2.getInstance(null, "nfc", Normalizer2.Mode.FCD);
+        assertTrue("fcd.hasBoundaryAfter(space)", fcd.hasBoundaryAfter(' '));
+        assertFalse("fcd.hasBoundaryAfter(ä)", fcd.hasBoundaryAfter('ä'));
+        assertTrue("fcd.isInert(space)", fcd.isInert(' '));
+        assertFalse("fcd.isInert(ä)", fcd.isInert('ä'));
+
+        // This implementation method is unreachable via public API.
+        Norm2AllModes.FCDNormalizer2 impl = (Norm2AllModes.FCDNormalizer2)fcd;
+        assertEquals("fcd impl.getQuickCheck(space)", 1, impl.getQuickCheck(' '));
+        assertEquals("fcd impl.getQuickCheck(ä)", 0, impl.getQuickCheck('ä'));
+    }
+
+    public void TestNoneNormalizer() {
+        // Use the deprecated Mode Normalizer.NONE for coverage of the internal NoopNormalizer2
+        // as far as its methods are reachable that way.
+        assertEquals("NONE.concatenate()", "ä\u0327",
+                Normalizer.concatenate("ä", "\u0327", Normalizer.NONE, 0));
+        assertTrue("NONE.isNormalized()", Normalizer.isNormalized("ä\u0327", Normalizer.NONE, 0));
+    }
+
+    public void TestNoopNormalizer2() {
+        // Use the internal class directly for coverage of methods that are not publicly reachable.
+        Normalizer2 noop = Norm2AllModes.NOOP_NORMALIZER2;
+        assertEquals("noop.normalizeSecondAndAppend()", "ä\u0327",
+                noop.normalizeSecondAndAppend(new StringBuilder("ä"), "\u0327").toString());
+        assertEquals("noop.getDecomposition()", null, noop.getDecomposition('ä'));
+        assertTrue("noop.hasBoundaryAfter()", noop.hasBoundaryAfter(0x0308));
+        assertTrue("noop.isInert()", noop.isInert(0x0308));
     }
 }

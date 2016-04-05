@@ -1,12 +1,13 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2015, Google, International Business Machines Corporation *
- * and others. All Rights Reserved.                                             *
+ * Copyright (C) 2007-2016, Google, International Business Machines Corporation
+ * and others. All Rights Reserved.
  ********************************************************************************
  */
 
 package com.ibm.icu.dev.test.format;
 
+import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -23,8 +24,10 @@ import java.util.regex.Pattern;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.TimeZoneFormat;
+import com.ibm.icu.text.TimeZoneFormat.GMTOffsetPatternType;
 import com.ibm.icu.text.TimeZoneFormat.ParseOption;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
@@ -656,6 +659,48 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    // Coverage tests for other versions of the parse() method. All of them end up
+    // calling the full parse() method tested on the TestParse() test.
+    public void TestParseCoverage() {
+        TimeZone expectedTZ = TimeZone.getTimeZone("America/Los_Angeles");       
+        TimeZoneFormat fmt = TimeZoneFormat.getInstance(ULocale.ENGLISH);
+        
+        // Test parse(String)
+        try {
+            TimeZone tz1 = fmt.parse("America/Los_Angeles");
+            if (tz1 == null) {
+                errln("Parse failure using parse(String) - expected: " + expectedTZ.getID());
+            } else if (!expectedTZ.equals(tz1)) {
+                errln("Parsed TimeZone: '" + tz1.getID()  + "' using parse(String) - expected: "
+                        + expectedTZ.getID());
+            } 
+        } catch (ParseException e) {
+            errln("Parse failure using parse(String) - expected: " + expectedTZ.getID()
+                    + " exception: " + e.getMessage());
+        }
+        
+        // Test parse(String, ParsePosition)
+        TimeZone tz2 = fmt.parse("++America/Los_Angeles", new ParsePosition(2));
+        if (tz2 == null) {
+            errln("Parse failure using parse(String, ParsePosition) - expected: " 
+                    + expectedTZ.getID());
+        } else if (!expectedTZ.equals(tz2)) {
+            errln("Parsed TimeZone: '" + tz2.getID()  + "' using parse(String, ParsePosition) - expected: "
+                    + expectedTZ.getID());
+        }
+        
+        // Test parseObject(String, ParsePosition)
+        Object tz3 = fmt.parseObject("++America/Los_Angeles", new ParsePosition(2));
+        if (tz3 == null) {
+            errln("Parse failure using parseObject(String, ParsePosition) - expected: " 
+                    + expectedTZ.getID());
+        } else if (!expectedTZ.equals(tz3)) {
+            errln("Parsed TimeZone: '" + ((TimeZone)tz3).getID()
+                    + "' using parseObject(String, ParsePosition) - expected: "
+                    + expectedTZ.getID());
+        }
+    }
 
     public void TestISOFormat() {
         final int[] OFFSET = {
@@ -984,6 +1029,41 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    // Tests format(Object, StringBuffer, FieldPosition):StringBuffer method
+    // inherited from Format class
+    public void TestInheritedFormat() {
+        TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+        Calendar cal = Calendar.getInstance(tz);
+        cal.setTimeInMillis(1459187377690L); // Mar 28, 2016
+        
+        StringBuffer sb = new StringBuffer();
+        FieldPosition fp = new FieldPosition(DateFormat.Field.TIME_ZONE);
+        
+        TimeZoneFormat fmt = TimeZoneFormat.getInstance(ULocale.ENGLISH);
+        
+        // Test formatting a non-timezone related object
+        try {
+            fmt.format(new Object(), sb, fp);
+            errln("ERROR: format non-timezone related object failed");
+        } catch (IllegalArgumentException e) { /* Expected */ }
+        
+        // Test formatting a TimeZone object
+        sb = new StringBuffer();
+        fmt.format(tz, sb, fp);
+        // When formatting a TimeZone object the formatter uses the current date.
+        String fmtOutput = tz.inDaylightTime(new Date()) ? "GMT-07:00" : "GMT-08:00";
+        if (!sb.toString().equals(fmtOutput)) {
+            errln("ERROR: format TimerZone object failed. Expected: " + fmtOutput + ", actual: " + sb);
+        }
+        
+        // Test formatting a Calendar object
+        sb = new StringBuffer();
+        fmt.format(cal, sb, fp);
+        if (!sb.toString().equals("GMT-07:00")) {
+            errln("ERROR: format Calendar object failed. Expected: GMT-07:00, actual: " + sb);
+        }
+    }
+    
     // This is a test case of Ticket#11487.
     // Because the problem is reproduced for the very first time,
     // the reported problem cannot be reproduced with regular test
@@ -1019,6 +1099,30 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         if (found.intValue() != numIteration) {
             errln("Incorrect count: " + found.toString() + ", expected: " + numIteration);
+        }
+    }
+    
+    // Basic get/set test for methods not being called otherwise.
+    public void TestAPI() {
+        TimeZoneFormat tzfmtEn = TimeZoneFormat.getInstance(ULocale.ENGLISH);
+        TimeZoneFormat tzfmtAr = TimeZoneFormat.getInstance(new ULocale("ar")).cloneAsThawed();
+        
+        String digits = tzfmtEn.getGMTOffsetDigits();
+        tzfmtAr.setGMTOffsetDigits(digits);
+        if (!digits.equals(tzfmtAr.getGMTOffsetDigits())) {
+            errln("ERROR: get/set GMTOffsetDigits failed");
+        }
+        
+        String pattern = tzfmtEn.getGMTOffsetPattern(GMTOffsetPatternType.POSITIVE_H);
+        tzfmtAr.setGMTOffsetPattern(GMTOffsetPatternType.POSITIVE_H, pattern);
+        if (!pattern.equals(tzfmtAr.getGMTOffsetPattern(GMTOffsetPatternType.POSITIVE_H))) {
+            errln("ERROR: get/set GMTOffsetPattern failed");
+        }
+        
+        String zeroFmt = tzfmtEn.getGMTZeroFormat();
+        tzfmtAr.setGMTZeroFormat(zeroFmt);
+        if (!zeroFmt.equals(tzfmtAr.getGMTZeroFormat())) {
+            errln("ERROR: get/set GMTZeroFormat failed");
         }
     }
 }
