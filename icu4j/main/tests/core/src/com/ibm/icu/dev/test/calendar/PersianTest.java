@@ -1,13 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2012-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.PersianCalendar;
 import com.ibm.icu.util.ULocale;
 
 public class PersianTest extends CalendarTest {
@@ -122,5 +123,20 @@ public class PersianTest extends CalendarTest {
                 errln("Fail: " + buf.toString() + ", expected " + dexp);
             }
         }
+    }
+
+    public void TestCoverage12424() {
+        class StubCalendar extends PersianCalendar {   
+            private static final long serialVersionUID = 1L;
+            public StubCalendar() {
+                assertEquals("Persian month 0 length", 31, handleGetMonthLength(1000, 0));
+                assertEquals("Persian month 7 length", 30, handleGetMonthLength(1000, 7));
+                
+                int leastWeeks = handleGetLimit(Calendar.WEEK_OF_YEAR, Calendar.LEAST_MAXIMUM);
+                assertEquals("Persian Week of Year least maximum", 52, leastWeeks);             
+             }
+        }
+        
+        new StubCalendar();
     }
 }

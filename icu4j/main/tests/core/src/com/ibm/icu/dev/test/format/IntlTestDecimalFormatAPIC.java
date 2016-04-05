@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2015, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2001-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -21,9 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.ULocale;
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
@@ -48,6 +50,9 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         DecimalFormat def = new DecimalFormat();
 
         final String pattern = new String("#,##0.# FF");
+        final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.FRENCH);
+        final CurrencyPluralInfo infoInput = new CurrencyPluralInfo(ULocale.FRENCH);
+        
         DecimalFormat pat = null;
         try {
             pat = new DecimalFormat(pattern);
@@ -55,9 +60,20 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
             errln("ERROR: Could not create DecimalFormat (pattern)");
         }
 
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.FRENCH);
+        DecimalFormat cust1 = null;
+        try {
+            cust1 = new DecimalFormat(pattern, symbols);
+        } catch (IllegalArgumentException e) {
+            errln("ERROR: Could not create DecimalFormat (pattern, symbols)");
+        }
+        
+        DecimalFormat cust2 = null;
+        try {
+            cust2 = new DecimalFormat(pattern, symbols, infoInput, NumberFormat.PLURALCURRENCYSTYLE);
+        } catch (IllegalArgumentException e) {
+            errln("ERROR: Could not create DecimalFormat (pattern, symbols, infoInput, style)");
+        }
 
-        DecimalFormat cust1 = new DecimalFormat(pattern, symbols);
 
         // ======= Test clone(), assignment, and equality
 
@@ -187,6 +203,11 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         String locPat;
         locPat = pat.toLocalizedPattern();
         logln("Localized pattern is " + locPat);
+        
+        pat.setCurrencyPluralInfo(infoInput);
+        if(!infoInput.equals(pat.getCurrencyPluralInfo())) {
+            errln("ERROR: set/get CurrencyPluralInfo() failed");
+        }
 
         // ======= Test applyPattern()
 
