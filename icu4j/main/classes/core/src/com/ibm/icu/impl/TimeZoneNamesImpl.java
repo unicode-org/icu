@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2015, International Business Machines Corporation and
+ * Copyright (C) 2011-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -325,7 +325,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
         }
 
         @Override
-        public TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+        public TableSink getOrCreateTableSink(UResource.Key key) {
             ZNamesLoader loader = keyToLoader.get(key);
             if (loader != null) {
                 if (loader == ZNamesLoader.DUMMY_LOADER) {

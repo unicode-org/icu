@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2015, International Business Machines Corporation and
+ * Copyright (C) 2015-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -321,6 +321,16 @@ public final class UResource {
      */
     public static class ArraySink {
         /**
+         * "Enters" the array.
+         * Called just before enumerating the array's resource items.
+         * The size can be used to allocate storage for the items.
+         * It may differ between child and parent bundles.
+         *
+         * @param size number of table items
+         */
+        public void enter(int size) {}
+
+        /**
          * Adds a value from a resource array.
          *
          * @param index of the resource array item
@@ -335,10 +345,9 @@ public final class UResource {
          * The default implementation always returns null.
          *
          * @param index of the resource array item
-         * @param size number of array items
          * @return nested-array sink, or null
          */
-        public ArraySink getOrCreateArraySink(int index, int size) {
+        public ArraySink getOrCreateArraySink(int index) {
             return null;
         }
 
@@ -349,10 +358,9 @@ public final class UResource {
          * The default implementation always returns null.
          *
          * @param index of the resource array item
-         * @param initialSize size hint for creating the sink if necessary
          * @return nested-table sink, or null
          */
-        public TableSink getOrCreateTableSink(int index, int initialSize) {
+        public TableSink getOrCreateTableSink(int index) {
             return null;
         }
 
@@ -372,6 +380,16 @@ public final class UResource {
      * never put() as {@link Value} items.
      */
     public static class TableSink {
+        /**
+         * "Enters" the table.
+         * Called just before enumerating the table's resource items.
+         * The size can be used to allocate storage for the items.
+         * It usually differs between child and parent bundles.
+         *
+         * @param size number of table items
+         */
+        public void enter(int size) {}
+
         /**
          * Adds a key-value pair from a resource table.
          *
@@ -398,10 +416,9 @@ public final class UResource {
          * The default implementation always returns null.
          *
          * @param key resource key string
-         * @param size number of array items
          * @return nested-array sink, or null
          */
-        public ArraySink getOrCreateArraySink(Key key, int size) {
+        public ArraySink getOrCreateArraySink(Key key) {
             return null;
         }
 
@@ -412,10 +429,9 @@ public final class UResource {
          * The default implementation always returns null.
          *
          * @param key resource key string
-         * @param initialSize size hint for creating the sink if necessary
          * @return nested-table sink, or null
          */
-        public TableSink getOrCreateTableSink(Key key, int initialSize) {
+        public TableSink getOrCreateTableSink(Key key) {
             return null;
         }
 

@@ -447,7 +447,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         @Override
-        public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+        public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
             regionOrLocale = key.toString();
 
             return formatListSink;
@@ -455,9 +455,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         private class FormatListSink extends UResource.TableSink {
             @Override
-            public UResource.ArraySink getOrCreateArraySink(UResource.Key key, int initialSize) {
+            public UResource.ArraySink getOrCreateArraySink(UResource.Key key) {
                 if (key.contentEquals("allowed")) {  // Ignore "preferred" list.
-                    formatList = new String[initialSize];
                     return allowedFormatListSink;
                 }
 
@@ -467,6 +466,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         private FormatListSink formatListSink = new FormatListSink();
 
         private class AllowedFormatListSink extends UResource.ArraySink {
+            @Override
+            public void enter(int size) {
+                formatList = new String[size];
+            }
+
             @Override
             public void put(int index, UResource.Value value) {
                 formatList[index] = value.getString();

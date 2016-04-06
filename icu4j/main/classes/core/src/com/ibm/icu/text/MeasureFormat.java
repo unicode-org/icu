@@ -794,7 +794,7 @@ public class MeasureFormat extends UFormat {
          */
         class UnitSubtypeSink extends UResource.TableSink {
             @Override
-            public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+            public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
                 // Should we ignore or reject unknown units?
                 unit = MeasureUnit.internalGetInstance(type, key.toString());  // never null
                 // Trigger a fresh lookup of the patterns for this unit+width.
@@ -827,7 +827,7 @@ public class MeasureFormat extends UFormat {
          */
         class UnitTypeSink extends UResource.TableSink {
             @Override
-            public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+            public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
                 if (key.contentEquals("currency")) {
                     // Skip.
                 } else if (key.contentEquals("compound")) {
@@ -871,7 +871,7 @@ public class MeasureFormat extends UFormat {
             cacheData.widthFallback[sourceWidth.ordinal()] = targetWidth;
         }
         @Override
-        public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+        public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
             if ((width = widthFromKey(key)) != null) {
                 return typeSink;
             }
