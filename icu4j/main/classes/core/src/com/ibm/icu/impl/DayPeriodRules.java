@@ -76,7 +76,7 @@ public final class DayPeriodRules {
 
         // Entry point.
         @Override
-        public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+        public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
             if (key.contentEquals("locales")) {
                 return localesSink;
             } else if (key.contentEquals("rules")) {
@@ -99,7 +99,7 @@ public final class DayPeriodRules {
         // Rules.
         private class RulesSink extends UResource.TableSink {
             @Override
-            public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+            public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
                 ruleSetNum = parseSetNum(key.toString());
                 data.rules[ruleSetNum] = new DayPeriodRules();
                 return ruleSetSink;
@@ -110,7 +110,7 @@ public final class DayPeriodRules {
         // Rules -> "set10", e.g.
         private class RuleSetSink extends UResource.TableSink {
             @Override
-            public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+            public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
                 period = DayPeriod.fromStringOrNull(key);
                 if (period == null) { throw new ICUException("Unknown day period in data."); }
                 return periodSink;
@@ -138,7 +138,7 @@ public final class DayPeriodRules {
             }
 
             @Override
-            public UResource.ArraySink getOrCreateArraySink(UResource.Key key, int initialSize) {
+            public UResource.ArraySink getOrCreateArraySink(UResource.Key key) {
                 cutoffType = CutoffType.fromStringOrNull(key);
                 return cutoffSink;
             }
@@ -241,7 +241,7 @@ public final class DayPeriodRules {
         }
 
         @Override
-        public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+        public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
             int setNum = parseSetNum(key.toString());
             if (setNum > data.maxRuleSetNum) {
                 data.maxRuleSetNum = setNum;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2015, International Business Machines Corporation and
+ * Copyright (C) 2004-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -723,22 +723,6 @@ public final class ICUResourceBundleReader {
         }
     }
 
-    private int getArrayLength(int res) {
-        int offset = RES_GET_OFFSET(res);
-        if(offset == 0) {
-            return 0;
-        }
-        int type = RES_GET_TYPE(res);
-        if(type == UResourceBundle.ARRAY) {
-            offset = getResourceByteOffset(offset);
-            return getInt(offset);
-        } else if(type == ICUResourceBundle.ARRAY16) {
-            return b16BitUnits.charAt(offset);
-        } else {
-            return 0;
-        }
-    }
-
     Array getArray(int res) {
         int type=RES_GET_TYPE(res);
         if(!URES_IS_ARRAY(type)) {
@@ -755,25 +739,6 @@ public final class ICUResourceBundleReader {
         Array array = (type == UResourceBundle.ARRAY) ?
                 new Array32(this, offset) : new Array16(this, offset);
         return (Array)resourceCache.putIfAbsent(res, array, 0);
-    }
-
-    private int getTableLength(int res) {
-        int offset = RES_GET_OFFSET(res);
-        if(offset == 0) {
-            return 0;
-        }
-        int type = RES_GET_TYPE(res);
-        if(type == UResourceBundle.TABLE) {
-            offset = getResourceByteOffset(offset);
-            return bytes.getChar(offset);
-        } else if(type == ICUResourceBundle.TABLE16) {
-            return b16BitUnits.charAt(offset);
-        } else if(type == ICUResourceBundle.TABLE32) {
-            offset = getResourceByteOffset(offset);
-            return getInt(offset);
-        } else {
-            return 0;
-        }
     }
 
     Table getTable(int res) {
@@ -935,23 +900,20 @@ public final class ICUResourceBundleReader {
         Array() {}
         void getAllItems(ICUResourceBundleReader reader,
                 UResource.Key key, ReaderValue value, ArraySink sink) {
+            sink.enter(size);
             for (int i = 0; i < size; ++i) {
                 int res = getContainerResource(reader, i);
                 int type = RES_GET_TYPE(res);
                 if (URES_IS_ARRAY(type)) {
-                    int numItems = reader.getArrayLength(res);
-                    ArraySink subSink = sink.getOrCreateArraySink(i, numItems);
+                    ArraySink subSink = sink.getOrCreateArraySink(i);
                     if (subSink != null) {
                         Array array = reader.getArray(res);
-                        assert(array.size == numItems);
                         array.getAllItems(reader, key, value, subSink);
                     }
                 } else if (URES_IS_TABLE(type)) {
-                    int numItems = reader.getTableLength(res);
-                    TableSink subSink = sink.getOrCreateTableSink(i, numItems);
+                    TableSink subSink = sink.getOrCreateTableSink(i);
                     if (subSink != null) {
                         Table table = reader.getTable(res);
-                        assert(table.size == numItems);
                         table.getAllItems(reader, key, value, subSink);
                     }
                 /* TODO: settle on how to deal with aliases, port to C++
@@ -1031,6 +993,7 @@ public final class ICUResourceBundleReader {
         }
         void getAllItems(ICUResourceBundleReader reader,
                 UResource.Key key, ReaderValue value, TableSink sink) {
+            sink.enter(size);
             for (int i = 0; i < size; ++i) {
                 if (keyOffsets != null) {
                     reader.setKeyFromKey16(keyOffsets[i], key);
@@ -1040,19 +1003,15 @@ public final class ICUResourceBundleReader {
                 int res = getContainerResource(reader, i);
                 int type = RES_GET_TYPE(res);
                 if (URES_IS_ARRAY(type)) {
-                    int numItems = reader.getArrayLength(res);
-                    ArraySink subSink = sink.getOrCreateArraySink(key, numItems);
+                    ArraySink subSink = sink.getOrCreateArraySink(key);
                     if (subSink != null) {
                         Array array = reader.getArray(res);
-                        assert(array.size == numItems);
                         array.getAllItems(reader, key, value, subSink);
                     }
                 } else if (URES_IS_TABLE(type)) {
-                    int numItems = reader.getTableLength(res);
-                    TableSink subSink = sink.getOrCreateTableSink(key, numItems);
+                    TableSink subSink = sink.getOrCreateTableSink(key);
                     if (subSink != null) {
                         Table table = reader.getTable(res);
-                        assert(table.size == numItems);
                         table.getAllItems(reader, key, value, subSink);
                     }
                 /* TODO: settle on how to deal with aliases, port to C++

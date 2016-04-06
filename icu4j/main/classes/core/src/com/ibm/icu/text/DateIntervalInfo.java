@@ -435,7 +435,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
          */
         class SkeletonSink extends UResource.TableSink {
             @Override
-            public TableSink getOrCreateTableSink(Key key, int initialSize) {
+            public TableSink getOrCreateTableSink(Key key) {
                 currentSkeleton = key.toString();
                 return patternSink;
             }
@@ -534,7 +534,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         }
 
         @Override
-        public TableSink getOrCreateTableSink(Key key, int initialSize) {
+        public TableSink getOrCreateTableSink(Key key) {
             // Check if it's the intervalFormats table
             if (key.contentEquals(INTERVAL_FORMATS_KEY)) {
                 return skeletonSink;

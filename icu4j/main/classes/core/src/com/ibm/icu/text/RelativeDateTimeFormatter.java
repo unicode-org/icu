@@ -1063,7 +1063,7 @@ public final class RelativeDateTimeFormatter {
         }
 
         @Override
-        public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+        public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
             // Get base unit and style from the key value.
             style = styleFromKey(key);
             int limit = key.length() - styleSuffixLength(style);
@@ -1112,7 +1112,7 @@ public final class RelativeDateTimeFormatter {
         // Handles "relativeTime" entries, e.g., under "day", "hour", "minute", "minute-short", etc.
         class RelativeTimeSink extends UResource.TableSink {
             @Override
-            public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+            public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
                 if (key.contentEquals("past")) {
                     pastFutureIndex = 0;
                 } else if (key.contentEquals("future")) {
@@ -1208,7 +1208,7 @@ public final class RelativeDateTimeFormatter {
             }
 
             @Override
-            public UResource.TableSink getOrCreateTableSink(UResource.Key key, int initialSize) {
+            public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
                 if (key.contentEquals("relative")) {
                     return relativeSink;
                 } else if (key.contentEquals("relativeTime")) {
