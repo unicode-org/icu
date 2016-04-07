@@ -326,7 +326,7 @@ public final class UResource {
          * The size can be used to allocate storage for the items.
          * It may differ between child and parent bundles.
          *
-         * @param size number of table items
+         * @param size number of array items
          */
         public void enter(int size) {}
 
