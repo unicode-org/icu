@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2015, International Business Machines
+* Copyright (C) 2015-2016, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * resource.h
@@ -121,6 +121,16 @@ public:
     virtual ~ResourceArraySink();
 
     /**
+     * "Enters" the array.
+     * Called just before enumerating the array's resource items.
+     * The size can be used to allocate storage for the items.
+     * It may differ between child and parent bundles.
+     *
+     * @param size number of array items
+     */
+    virtual void enter(int32_t size, UErrorCode &errorCode);
+
+    /**
      * Adds a value from a resource array.
      *
      * @param index of the resource array item
@@ -137,11 +147,9 @@ public:
      * This sink (not the caller) owns the nested sink.
      *
      * @param index of the resource array item
-     * @param size number of array items
      * @return nested-array sink, or NULL
      */
-    virtual ResourceArraySink *getOrCreateArraySink(
-            int32_t index, int32_t size, UErrorCode &errorCode);
+    virtual ResourceArraySink *getOrCreateArraySink(int32_t index, UErrorCode &errorCode);
 
     /**
      * Returns a nested resource table at the array index as another sink.
@@ -152,11 +160,9 @@ public:
      * This sink (not the caller) owns the nested sink.
      *
      * @param index of the resource array item
-     * @param initialSize size hint for creating the sink if necessary
      * @return nested-table sink, or NULL
      */
-    virtual ResourceTableSink *getOrCreateTableSink(
-            int32_t index, int32_t initialSize, UErrorCode &errorCode);
+    virtual ResourceTableSink *getOrCreateTableSink(int32_t index, UErrorCode &errorCode);
 
     /**
      * "Leaves" the array.
@@ -181,6 +187,16 @@ class U_COMMON_API ResourceTableSink : public UObject {
 public:
     ResourceTableSink() {}
     virtual ~ResourceTableSink();
+
+    /**
+     * "Enters" the table.
+     * Called just before enumerating the table's resource items.
+     * The size can be used to allocate storage for the items.
+     * It usually differs between child and parent bundles.
+     *
+     * @param size number of table items
+     */
+    virtual void enter(int32_t size, UErrorCode &errorCode);
 
     /**
      * Adds a key-value pair from a resource table.
@@ -210,11 +226,9 @@ public:
      * This sink (not the caller) owns the nested sink.
      *
      * @param key resource key string
-     * @param size number of array items
      * @return nested-array sink, or NULL
      */
-    virtual ResourceArraySink *getOrCreateArraySink(
-            const char *key, int32_t size, UErrorCode &errorCode);
+    virtual ResourceArraySink *getOrCreateArraySink(const char *key, UErrorCode &errorCode);
 
     /**
      * Returns a nested resource table for the key as another sink.
@@ -225,11 +239,9 @@ public:
      * This sink (not the caller) owns the nested sink.
      *
      * @param key resource key string
-     * @param initialSize size hint for creating the sink if necessary
      * @return nested-table sink, or NULL
      */
-    virtual ResourceTableSink *getOrCreateTableSink(
-            const char *key, int32_t initialSize, UErrorCode &errorCode);
+    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode);
 
     /**
      * "Leaves" the table.
