@@ -344,8 +344,7 @@ struct RelDateTimeFmtDataSink : public ResourceTableSink {
         RelativeTimeSink(RelDateTimeFmtDataSink &sink) : outer(sink) {}
         ~RelativeTimeSink();
 
-        virtual ResourceTableSink *getOrCreateTableSink(
-                const char *key, int32_t /* initialSize */, UErrorCode& errorCode) {
+        virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode& errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
             outer.relUnitIndex = relUnitFromGeneric(outer.genericUnit);
             if (outer.relUnitIndex < 0) {
@@ -442,8 +441,7 @@ struct RelDateTimeFmtDataSink : public ResourceTableSink {
             }
         }
 
-        virtual ResourceTableSink *getOrCreateTableSink(
-              const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
+        virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
             if (uprv_strcmp(key, "relative") == 0) {
                 return &outer.relativeSink;
@@ -601,8 +599,7 @@ struct RelDateTimeFmtDataSink : public ResourceTableSink {
     }
 
     // Top level sink
-    virtual ResourceTableSink *getOrCreateTableSink(
-        const char *key, int32_t /* initialSize */, UErrorCode& /* errorCode */) {
+    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode& /* errorCode */) {
       style= styleFromString(key);
       int32_t unitSize = uprv_strlen(key) - styleSuffixLength(style);
       genericUnit = unitOrNegativeFromString(key, unitSize);

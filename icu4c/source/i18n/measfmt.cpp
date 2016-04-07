@@ -260,8 +260,7 @@ struct UnitDataSink : public ResourceTableSink {
     struct UnitSubtypeSink : public ResourceTableSink {
         UnitSubtypeSink(UnitDataSink &sink) : outer(sink) {}
         ~UnitSubtypeSink();
-        virtual ResourceTableSink *getOrCreateTableSink(
-                const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
+        virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
             outer.unitIndex = MeasureUnit::internalGetIndexForTypeAndSubtype(outer.type, key);
             if (outer.unitIndex >= 0) {
@@ -296,8 +295,7 @@ struct UnitDataSink : public ResourceTableSink {
     struct UnitTypeSink : public ResourceTableSink {
         UnitTypeSink(UnitDataSink &sink) : outer(sink) {}
         ~UnitTypeSink();
-        virtual ResourceTableSink *getOrCreateTableSink(
-                const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
+        virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
             if (uprv_strcmp(key, "currency") == 0) {
                 // Skip.
@@ -342,8 +340,7 @@ struct UnitDataSink : public ResourceTableSink {
         }
         cacheData.widthFallback[sourceWidth] = targetWidth;
     }
-    virtual ResourceTableSink *getOrCreateTableSink(
-            const char *key, int32_t /* initialSize */, UErrorCode &errorCode) {
+    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
         if (U_SUCCESS(errorCode) && (width = widthFromKey(key)) != UMEASFMT_WIDTH_COUNT) {
             return &typeSink;
         }

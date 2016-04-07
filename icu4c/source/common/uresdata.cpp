@@ -463,42 +463,6 @@ res_countArrayItems(const ResourceData *pResData, Resource res) {
     }
 }
 
-namespace {
-
-int32_t getArrayLength(const ResourceData *pResData, Resource res) {
-    uint32_t offset=RES_GET_OFFSET(res);
-    if(offset == 0) {
-        return 0;
-    }
-    int32_t type = RES_GET_TYPE(res);
-    if(type == URES_ARRAY) {
-        return *(pResData->pRoot+offset);
-    } else if(type == URES_ARRAY16) {
-        return pResData->p16BitUnits[offset];
-    } else {
-        return 0;
-    }
-}
-
-int32_t getTableLength(const ResourceData *pResData, Resource res) {
-    uint32_t offset=RES_GET_OFFSET(res);
-    if(offset == 0) {
-        return 0;
-    }
-    int32_t type = RES_GET_TYPE(res);
-    if(type == URES_TABLE) {
-        return *((const uint16_t *)(pResData->pRoot+offset));
-    } else if(type == URES_TABLE16) {
-        return pResData->p16BitUnits[offset];
-    } else if(type == URES_TABLE32) {
-        return *(pResData->pRoot+offset);
-    } else {
-        return 0;
-    }
-}
-
-}  // namespace
-
 U_NAMESPACE_BEGIN
 
 ResourceDataValue::~ResourceDataValue() {}
@@ -735,6 +699,8 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
         errorCode = U_RESOURCE_TYPE_MISMATCH;
         return;
     }
+    sink.enter(length, errorCode);
+    if(U_FAILURE(errorCode)) { return; }
 
     for (int32_t i = 0; i < length; ++i) {
         const char *key;
@@ -751,14 +717,12 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
         }
         int32_t type = RES_GET_TYPE(res);
         if (URES_IS_ARRAY(type)) {
-            int32_t numItems = getArrayLength(pResData, res);
-            icu::ResourceArraySink *subSink = sink.getOrCreateArraySink(key, numItems, errorCode);
+            icu::ResourceArraySink *subSink = sink.getOrCreateArraySink(key, errorCode);
             if (subSink != NULL) {
                 ures_getAllArrayItems(pResData, res, value, *subSink, errorCode);
             }
         } else if (URES_IS_TABLE(type)) {
-            int32_t numItems = getTableLength(pResData, res);
-            icu::ResourceTableSink *subSink = sink.getOrCreateTableSink(key, numItems, errorCode);
+            icu::ResourceTableSink *subSink = sink.getOrCreateTableSink(key, errorCode);
             if (subSink != NULL) {
                 ures_getAllTableItems(pResData, res, value, *subSink, errorCode);
             }
@@ -831,6 +795,8 @@ ures_getAllArrayItems(const ResourceData *pResData, Resource array,
         errorCode = U_RESOURCE_TYPE_MISMATCH;
         return;
     }
+    sink.enter(length, errorCode);
+    if(U_FAILURE(errorCode)) { return; }
 
     for (int32_t i = 0; i < length; ++i) {
         Resource res;
@@ -841,14 +807,12 @@ ures_getAllArrayItems(const ResourceData *pResData, Resource array,
         }
         int32_t type = RES_GET_TYPE(res);
         if (URES_IS_ARRAY(type)) {
-            int32_t numItems = getArrayLength(pResData, res);
-            icu::ResourceArraySink *subSink = sink.getOrCreateArraySink(i, numItems, errorCode);
+            icu::ResourceArraySink *subSink = sink.getOrCreateArraySink(i, errorCode);
             if (subSink != NULL) {
                 ures_getAllArrayItems(pResData, res, value, *subSink, errorCode);
             }
         } else if (URES_IS_TABLE(type)) {
-            int32_t numItems = getTableLength(pResData, res);
-            icu::ResourceTableSink *subSink = sink.getOrCreateTableSink(i, numItems, errorCode);
+            icu::ResourceTableSink *subSink = sink.getOrCreateTableSink(i, errorCode);
             if (subSink != NULL) {
                 ures_getAllTableItems(pResData, res, value, *subSink, errorCode);
             }

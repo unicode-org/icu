@@ -440,7 +440,7 @@ struct AllowedHourFormatsSink : public ResourceTableSink {
     virtual ~AllowedHourFormatsSink();
 
     // Entry point.
-    virtual ResourceTableSink *getOrCreateTableSink(const char *key, int32_t, UErrorCode &status) {
+    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &status) {
         if (U_FAILURE(status)) { return NULL; }
 
         locale = key;
@@ -467,18 +467,9 @@ struct AllowedHourFormatsSink : public ResourceTableSink {
             }
         }
 
-        virtual ResourceArraySink *getOrCreateArraySink(const char *key, int32_t size, UErrorCode &status) {
-            if (U_FAILURE(status)) { return NULL; }
-
-            if (uprv_strcmp(key, "allowed") == 0) {
-                outer.allowedFormats = static_cast<int32_t *>(uprv_malloc((size + 1) * sizeof(int32_t)));
-                outer.allowedFormatsLength = size;
-                if (outer.allowedFormats == NULL) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                    return NULL;
-                } else {
-                    return &outer.allowedListSink;
-                }
+        virtual ResourceArraySink *getOrCreateArraySink(const char *key, UErrorCode &status) {
+            if (U_SUCCESS(status) && uprv_strcmp(key, "allowed") == 0) {
+                return &outer.allowedListSink;
             }
             return NULL;
         }
@@ -497,6 +488,14 @@ struct AllowedHourFormatsSink : public ResourceTableSink {
         AllowedListSink(AllowedHourFormatsSink &outer) : outer(outer) {}
         virtual ~AllowedListSink();
 
+        virtual void enter(int32_t size, UErrorCode &status) {
+            if (U_FAILURE(status)) { return; }
+            outer.allowedFormats = static_cast<int32_t *>(uprv_malloc((size + 1) * sizeof(int32_t)));
+            outer.allowedFormatsLength = size;
+            if (outer.allowedFormats == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+        }
         virtual void put(int32_t index, const ResourceValue &value, UErrorCode &status) {
             if (U_FAILURE(status)) { return; }
 
