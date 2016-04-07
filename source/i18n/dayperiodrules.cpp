@@ -51,7 +51,7 @@ struct DayPeriodRulesDataSink : public ResourceTableSink {
     virtual ~DayPeriodRulesDataSink();
 
     // Entry point.
-    virtual ResourceTableSink *getOrCreateTableSink(const char *key, int32_t, UErrorCode &errorCode) {
+    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) { return NULL; }
 
         if (uprv_strcmp(key, "locales") == 0) {
@@ -88,7 +88,7 @@ struct DayPeriodRulesDataSink : public ResourceTableSink {
         RulesSink(DayPeriodRulesDataSink &outer) : outer(outer) {}
         virtual ~RulesSink();
 
-        virtual ResourceTableSink *getOrCreateTableSink(const char *key, int32_t, UErrorCode &errorCode) {
+        virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
 
             outer.ruleSetNum = parseSetNum(key, errorCode);
@@ -102,7 +102,7 @@ struct DayPeriodRulesDataSink : public ResourceTableSink {
         RuleSetSink(DayPeriodRulesDataSink &outer) : outer(outer) {}
         virtual ~RuleSetSink();
 
-        virtual ResourceTableSink *getOrCreateTableSink(const char *key, int32_t, UErrorCode &errorCode) {
+        virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
 
             outer.period = DayPeriodRules::getDayPeriodFromString(key);
@@ -138,7 +138,7 @@ struct DayPeriodRulesDataSink : public ResourceTableSink {
             outer.addCutoff(type, value.getUnicodeString(errorCode), errorCode);
         }
 
-        virtual ResourceArraySink *getOrCreateArraySink(const char *key, int32_t, UErrorCode &errorCode) {
+        virtual ResourceArraySink *getOrCreateArraySink(const char *key, UErrorCode &errorCode) {
             if (U_FAILURE(errorCode)) { return NULL; }
             outer.cutoffType = getCutoffTypeFromString(key);
             return &outer.cutoffSink;
@@ -318,7 +318,7 @@ struct DayPeriodRulesDataSink : public ResourceTableSink {
 
 struct DayPeriodRulesCountSink : public ResourceTableSink {
     virtual ~DayPeriodRulesCountSink();
-    virtual ResourceTableSink *getOrCreateTableSink(const char *key, int32_t, UErrorCode &errorCode) {
+    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) { return NULL; }
 
         int32_t setNum = DayPeriodRulesDataSink::parseSetNum(key, errorCode);

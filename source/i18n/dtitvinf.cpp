@@ -234,8 +234,7 @@ struct DateIntervalSink : public ResourceTableSink {
         SkeletonSink(DateIntervalSink &sink) : outer(sink) {}
         virtual ~SkeletonSink();
 
-        virtual ResourceTableSink *getOrCreateTableSink(
-                const char *key, int32_t, UErrorCode &errorCode) {
+        virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
             if (U_SUCCESS(errorCode)) {
                 outer.currentSkeleton = key;
                 return &outer.patternSink;
@@ -340,8 +339,7 @@ struct DateIntervalSink : public ResourceTableSink {
         }
     }
 
-    virtual ResourceTableSink *getOrCreateTableSink(
-            const char *key, int32_t, UErrorCode &errorCode) {
+    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode) {
         // Check if it's the intervalFormat table
         if (U_SUCCESS(errorCode) && uprv_strcmp(key, gIntervalDateTimePatternTag) == 0) {
             return &skeletonSink;
