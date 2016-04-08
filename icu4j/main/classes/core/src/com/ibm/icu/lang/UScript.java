@@ -23,13 +23,13 @@ import com.ibm.icu.util.ULocale;
  * See UAX #24 Unicode Script Property (http://www.unicode.org/reports/tr24/)
  * and http://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt .
  *
- * <p>Starting with ICU 3.6, constants for most ISO 15924 script codes
+ * <p>In addition, constants for many ISO 15924 script codes
  * are included, for use with language tags, CLDR data, and similar.
  * Some of those codes are not used in the Unicode Character Database (UCD).
  * For example, there are no characters that have a UCD script property value of
  * Hans or Hant. All Han ideographs have the Hani script property value in Unicode.
  *
- * <p>Private-use codes Qaaa..Qabx are not included.
+ * <p>Private-use codes Qaaa..Qabx are not included, except as used in the UCD or in CLDR.
  *
  * <p>Starting with ICU 55, script codes are only added when their scripts
  * have been or will certainly be encoded in Unicode,
@@ -954,17 +954,54 @@ public final class UScript {
     public static final int SIDDHAM = 166; /* Sidd */
 
     /**
+     * ISO 15924 script code
+     * @stable ICU 58
+     */
+    public static final int ADLAM = 167; /* Adlm */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 58
+     */
+    public static final int BHAIKSUKI = 168; /* Bhks */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 58
+     */
+    public static final int MARCHEN = 169; /* Marc */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 58
+     */
+    public static final int NEWA = 170; /* Newa */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 58
+     */
+    public static final int OSAGE = 171; /* Osge */
+
+    /**
+     * ISO 15924 script code
+     * @stable ICU 58
+     */
+    public static final int HAN_WITH_BOPOMOFO = 172; /* Hanb */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 58
+     */
+    public static final int JAMO = 173; /* Jamo */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 58
+     */
+    public static final int SYMBOLS_EMOJI = 174; /* Zsye */
+
+    /**
      * <p>One higher than the last script code constant.
      * This value increases as constants for script codes are added.
      *
-     * <p>There are constants for Unicode 7 script property values.
-     * There are constants for ISO 15924 script codes assigned on or before 2013-10-12.
-     * There are no constants for private use codes from Qaaa - Qabx
-     * except as used in the UCD.
-     *
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 167;
+    public static final int CODE_LIMIT   = 175;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
