@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2015, International Business Machines
+*   Copyright (C) 2004-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1122,9 +1122,7 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
     }
-    fputs("#ifndef INCLUDED_FROM_UCASE_CPP\n"
-          "#   error This file must be #included from ucase.cpp only.\n"
-          "#endif\n\n", f);
+    fputs("#ifdef INCLUDED_FROM_UCASE_CPP\n\n", f);
     usrc_writeArray(f,
         "static const UVersionInfo ucase_props_dataVersion={",
         dataInfo.dataVersion, 8, 4,
@@ -1157,7 +1155,8 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         pTrie, "ucase_props_trieIndex", NULL,
         "  },\n");
     usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, " }\n");
-    fputs("};\n", f);
+    fputs("};\n\n"
+          "#endif  // INCLUDED_FROM_UCASE_CPP\n", f);
     fclose(f);
 }
 

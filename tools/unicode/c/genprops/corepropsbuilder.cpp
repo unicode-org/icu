@@ -771,9 +771,7 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
     }
-    fputs("#ifndef INCLUDED_FROM_UCHAR_C\n"
-          "#   error This file must be #included from uchar.c only.\n"
-          "#endif\n\n", f);
+    fputs("#ifdef INCLUDED_FROM_UCHAR_C\n\n", f);
     usrc_writeArray(f,
         "static const UVersionInfo dataVersion={",
         dataInfo.dataVersion, 8, 4,
@@ -812,6 +810,7 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         "static const int32_t indexes[UPROPS_INDEX_COUNT]={",
         indexes, 32, UPROPS_INDEX_COUNT,
         "};\n\n");
+    fputs("#endif  // INCLUDED_FROM_UCHAR_C\n", f);
     fclose(f);
 }
 

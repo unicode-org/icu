@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2012, International Business Machines
+*   Copyright (C) 2002-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -494,11 +494,8 @@ PNamesBuilderImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         return;
     }
 
-    fputs("#ifndef INCLUDED_FROM_PROPNAME_CPP\n"
-          "#   error This file must be #included from propname.cpp only.\n"
-          "#endif\n\n", f);
-
-    fputs("U_NAMESPACE_BEGIN\n\n", f);
+    fputs("#ifdef INCLUDED_FROM_PROPNAME_CPP\n\n"
+          "U_NAMESPACE_BEGIN\n\n", f);
 
     usrc_writeArray(f, "const int32_t PropNameData::indexes[%ld]={",
                     indexes, 32, PropNameData::IX_COUNT,
@@ -514,7 +511,8 @@ PNamesBuilderImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         nameGroups.data(), nameGroups.length(),
         "\n};\n\n");
 
-    fputs("U_NAMESPACE_END\n", f);
+    fputs("U_NAMESPACE_END\n\n"
+          "#endif  // INCLUDED_FROM_PROPNAME_CPP\n", f);
 
     fclose(f);
 }
