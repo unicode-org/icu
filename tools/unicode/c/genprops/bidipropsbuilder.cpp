@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2014, International Business Machines
+*   Copyright (C) 2004-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -504,9 +504,7 @@ BiDiPropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
     }
-    fputs("#ifndef INCLUDED_FROM_UBIDI_PROPS_C\n"
-          "#   error This file must be #included from ubidi_props.c only.\n"
-          "#endif\n\n", f);
+    fputs("#ifdef INCLUDED_FROM_UBIDI_PROPS_C\n\n", f);
     usrc_writeArray(f,
         "static const UVersionInfo ubidi_props_dataVersion={",
         dataInfo.dataVersion, 8, 4,
@@ -548,7 +546,8 @@ BiDiPropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         pTrie, "ubidi_props_trieIndex", NULL,
         "  },\n");
     usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, " }\n");
-    fputs("};\n", f);
+    fputs("};\n\n"
+          "#endif  // INCLUDED_FROM_UBIDI_PROPS_C\n", f);
     fclose(f);
 }
 
