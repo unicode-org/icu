@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2015, International Business Machines
+ *   Copyright (C) 1997-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -32,13 +32,13 @@
  * See UAX #24 Unicode Script Property (http://www.unicode.org/reports/tr24/)
  * and http://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt .
  *
- * Starting with ICU 3.6, constants for most ISO 15924 script codes
+ * In addition, constants for many ISO 15924 script codes
  * are included, for use with language tags, CLDR data, and similar.
  * Some of those codes are not used in the Unicode Character Database (UCD).
  * For example, there are no characters that have a UCD script property value of
  * Hans or Hant. All Han ideographs have the Hani script property value in Unicode.
  *
- * Private-use codes Qaaa..Qabx are not included.
+ * Private-use codes Qaaa..Qabx are not included, except as used in the UCD or in CLDR.
  *
  * Starting with ICU 55, script codes are only added when their scripts
  * have been or will certainly be encoded in Unicode,
@@ -424,18 +424,31 @@ typedef enum UScriptCode {
       /** @stable ICU 54 */
       USCRIPT_SIDDHAM                       = 166,/* Sidd */
 
+      /** @stable ICU 58 */
+      USCRIPT_ADLAM                         = 167,/* Adlm */
+      /** @stable ICU 58 */
+      USCRIPT_BHAIKSUKI                     = 168,/* Bhks */
+      /** @stable ICU 58 */
+      USCRIPT_MARCHEN                       = 169,/* Marc */
+      /** @stable ICU 58 */
+      USCRIPT_NEWA                          = 170,/* Newa */
+      /** @stable ICU 58 */
+      USCRIPT_OSAGE                         = 171,/* Osge */
+
+      /** @stable ICU 58 */
+      USCRIPT_HAN_WITH_BOPOMOFO             = 172,/* Hanb */
+      /** @stable ICU 58 */
+      USCRIPT_JAMO                          = 173,/* Jamo */
+      /** @stable ICU 58 */
+      USCRIPT_SYMBOLS_EMOJI                 = 174,/* Zsye */
+
       /**
        * One higher than the last script code constant.
        * This value increases as constants for script codes are added.
        *
-       * There are constants for Unicode 7 script property values.
-       * There are constants for ISO 15924 script codes assigned on or before 2013-10-12.
-       * There are no constants for private use codes from Qaaa - Qabx
-       * except as used in the UCD.
-       *
        * @stable ICU 2.2
        */
-      USCRIPT_CODE_LIMIT    = 167
+      USCRIPT_CODE_LIMIT    = 175
 } UScriptCode;
 
 /**

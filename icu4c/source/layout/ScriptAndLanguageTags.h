@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2015. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2016. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 04/27/2015 10:39:37 AM PDT
+ * Generated on: 04/08/2016 02:00:11 PM PDT
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -196,6 +196,14 @@ const LETag modiScriptTag = 0x6D6F6469; /* 'modi' (MODI) */
 const LETag multScriptTag = 0x6D756C74; /* 'mult' (MULTANI) */
 const LETag paucScriptTag = 0x70617563; /* 'pauc' (PAU_CIN_HAU) */
 const LETag siddScriptTag = 0x73696464; /* 'sidd' (SIDDHAM) */
+const LETag adlmScriptTag = 0x61646C6D; /* 'adlm' (ADLAM) */
+const LETag bhksScriptTag = 0x62686B73; /* 'bhks' (BHAIKSUKI) */
+const LETag marcScriptTag = 0x6D617263; /* 'marc' (MARCHEN) */
+const LETag newaScriptTag = 0x6E657761; /* 'newa' (NEWA) */
+const LETag osgeScriptTag = 0x6F736765; /* 'osge' (OSAGE) */
+const LETag hanbScriptTag = 0x68616E62; /* 'hanb' (HANB) */
+const LETag jamoScriptTag = 0x6A616D6F; /* 'jamo' (JAMO) */
+const LETag zsyeScriptTag = 0x7A737965; /* 'zsye' (ZSYE) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 
