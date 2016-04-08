@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2015. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2016. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 04/27/2015 10:39:37 AM PDT
+ * Generated on: 04/08/2016 02:00:11 PM PDT
  */
 
 #ifndef __LESCRIPTS_H
@@ -196,8 +196,16 @@ enum ScriptCodes {
     multScriptCode = 164,
     paucScriptCode = 165,
     siddScriptCode = 166,
+    adlmScriptCode = 167,
+    bhksScriptCode = 168,
+    marcScriptCode = 169,
+    newaScriptCode = 170,
+    osgeScriptCode = 171,
+    hanbScriptCode = 172,
+    jamoScriptCode = 173,
+    zsyeScriptCode = 174,
 
-    scriptCodeCount = 167
+    scriptCodeCount = 175
 };
 
 U_NAMESPACE_END

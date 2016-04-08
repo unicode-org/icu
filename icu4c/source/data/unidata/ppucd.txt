@@ -864,6 +864,7 @@ value;SB;SP;Sp
 value;SB;ST;STerm
 value;SB;UP;Upper
 value;SB;XX;Other
+value;sc;Adlm;Adlam
 value;sc;Afak;Afak
 value;sc;Aghb;Caucasian_Albanian
 value;sc;Ahom;Ahom
@@ -876,6 +877,7 @@ value;sc;Bamu;Bamum
 value;sc;Bass;Bassa_Vah
 value;sc;Batk;Batak
 value;sc;Beng;Bengali
+value;sc;Bhks;Bhaiksuki
 value;sc;Blis;Blis
 value;sc;Bopo;Bopomofo
 value;sc;Brah;Brahmi
@@ -908,6 +910,7 @@ value;sc;Gran;Grantha
 value;sc;Grek;Greek
 value;sc;Gujr;Gujarati
 value;sc;Guru;Gurmukhi
+value;sc;Hanb;Hanb
 value;sc;Hang;Hangul
 value;sc;Hani;Han
 value;sc;Hano;Hanunoo
@@ -922,6 +925,7 @@ value;sc;Hrkt;Katakana_Or_Hiragana
 value;sc;Hung;Old_Hungarian
 value;sc;Inds;Inds
 value;sc;Ital;Old_Italic
+value;sc;Jamo;Jamo
 value;sc;Java;Javanese
 value;sc;Jpan;Jpan
 value;sc;Jurc;Jurc
@@ -950,6 +954,7 @@ value;sc;Lydi;Lydian
 value;sc;Mahj;Mahajani
 value;sc;Mand;Mandaic
 value;sc;Mani;Manichaean
+value;sc;Marc;Marchen
 value;sc;Maya;Maya
 value;sc;Mend;Mende_Kikakui
 value;sc;Merc;Meroitic_Cursive
@@ -964,6 +969,7 @@ value;sc;Mult;Multani
 value;sc;Mymr;Myanmar
 value;sc;Narb;Old_North_Arabian
 value;sc;Nbat;Nabataean
+value;sc;Newa;Newa
 value;sc;Nkgb;Nkgb
 value;sc;Nkoo;Nko
 value;sc;Nshu;Nshu
@@ -971,6 +977,7 @@ value;sc;Ogam;Ogham
 value;sc;Olck;Ol_Chiki
 value;sc;Orkh;Old_Turkic
 value;sc;Orya;Oriya
+value;sc;Osge;Osage
 value;sc;Osma;Osmanya
 value;sc;Palm;Palmyrene
 value;sc;Pauc;Pau_Cin_Hau
@@ -1027,6 +1034,7 @@ value;sc;Xsux;Cuneiform
 value;sc;Yiii;Yi
 value;sc;Zinh;Inherited;Qaai
 value;sc;Zmth;Zmth
+value;sc;Zsye;Zsye
 value;sc;Zsym;Zsym
 value;sc;Zxxx;Zxxx
 value;sc;Zyyy;Common
