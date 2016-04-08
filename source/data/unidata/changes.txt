@@ -15,33 +15,85 @@
 
 * New ISO 15924 script codes
 
-Starting with ICU 55, we do not add UScriptCode constants any more until their scripts
-are encoded in Unicode, or can be assumed to be encoded in the next Unicode version.
+Starting with ICU 55, we do not add UScriptCode constants for new scripts any more
+until they are encoded in Unicode,
+or can be assumed to be encoded in the next Unicode version.
 Script enum constant names want to follow the Unicode script property value aliases,
 which are assigned only when the scripts are encoded.
 When we encode scripts early and guess wrong, then we have confusing enum constants
 and have sometimes added aliases.
 
-Exception: Script codes like Latf and Aran that are not subject to separate encoding
+Variant script codes like Latf and Aran that are not subject to separate encoding
 can be added at any time.
+(For example, Aran could be added as USCRIPT_ARABIC_NASTALIQ.)
 
-Script codes not yet in ICU: http://www.unicode.org/iso15924/codechanges.html
+We add script codes used in CLDR or in the spoof checker.
+This includes combination/alias codes like Hanb and Jamo.
+See http://unicode.org/reports/tr35/#unicode_script_subtag_validity
+and look for "alias" on http://unicode.org/iso15924/iso15924-codes.html
 
-Added 2014-11-15, see http://bugs.icu-project.org/trac/ticket/11561
-- Adlm  166     Adlam
-- Aran  161     Arabic (Nastaliq variant)
-- Kitl  505     Khitan large script
-- Kits  288     Khitan small script
-- Marc  332     Marchen
-- Osge  219     Osage
+We add special Z* script codes like Zsye.
 
-Aran can be added as USCRIPT_ARABIC_NASTALIQ at any time.
+For new script codes see http://www.unicode.org/iso15924/codechanges.html
 
-Adlam, Marchen, and Osage are expected to go into Unicode 9;
-we should assign Unicode script property value aliases for them
-soon after Unicode 8 is released, and add them in ICU 56.
+---------------------------------------------------------------------------- ***
 
-Khitan scripts will be encoded later.
+New script codes early in ICU 58: http://bugs.icu-project.org/trac/ticket/11764
+
+Adding
+- new scripts in Unicode 9: Adlm, Bhks, Marc, Newa, Osge
+- new combination/alias codes: Hanb, Jamo
+  - used in CLDR 29 and in spoof checker
+- new Z* code: Zsye
+
+Add new codes to uscript.h & UScript.java, see Unicode update logs.
+  -> com.ibm.icu.lang.UScript
+    find     USCRIPT_([^ ]+) *= ([0-9]+),(.+)
+    replace  public static final int \1 = \2; \3
+
+Manually edit ppucd.txt and icutools:unicode/c/genprops/pnames_data.h,
+add new script codes.
+"Long" script names only where established in Unicode 9 PropertyValueAliases.txt.
+
+Note: If we have to run preparseucd.py again before the Unicode 9 update,
+then we need to manually keep/restore the new script codes.
+
+ICU_ROOT=~/svn.icu/trunk
+ICU_SRC_DIR=$ICU_ROOT/src
+ICUDT=icudt57b
+export LD_LIBRARY_PATH=$ICU_ROOT/dbg/lib
+SRC_DATA_IN=$ICU_SRC_DIR/source/data/in
+UNIDATA=$ICU_SRC_DIR/source/data/unidata
+
+Adjust unicode/c/genprops/*builder.cpp for #ifndef/#ifdef changes in _data.h files,
+see http://bugs.icu-project.org/trac/ticket/12141
+
+make install, then icutools cmake & make, then
+~/svn.icutools/trunk/dbg/unicode/c$ make && genprops/genprops $ICU_SRC_DIR
+
+Generate Java data as usual, only update pnames.icu & uprops.icu.
+
+*** LayoutEngine script information
+
+* Run icu4j-tools: com.ibm.icu.dev.tool.layout.ScriptNameBuilder.
+  This generates LEScripts.h, LELanguages.h, ScriptAndLanguageTags.h and ScriptAndLanguageTags.cpp
+  in the working directory.
+
+  (It also generates ScriptRunData.cpp, which is no longer needed.)
+
+  It also reads and regenerates tools/misc/src/com/ibm/icu/dev/tool/layout/ScriptAndLanguages
+  (a plain text file)
+  which maps ICU versions to the numbers of script/language constants
+  that were added then.
+  (This mapping is probably obsolete since we do not print "@stable ICU xy" any more.)
+
+  The generated files have a current copyright date and "@deprecated" statement.
+
+* Review changes, fix Java tool if necessary, and copy to ICU4C
+  cd ~/svn.icu4j/trunk/src
+  meld $ICU_SRC_DIR/source/layout tools/misc/src/com/ibm/icu/dev/tool/layout
+  cp tools/misc/src/com/ibm/icu/dev/tool/layout/*.h $ICU_SRC_DIR/source/layout
+  cp tools/misc/src/com/ibm/icu/dev/tool/layout/ScriptAndLanguageTags.cpp $ICU_SRC_DIR/source/layout
 
 ---------------------------------------------------------------------------- ***
 
