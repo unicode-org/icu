@@ -5149,7 +5149,6 @@ icu4j/tools/misc/src/com/ibm/icu/dev/tool/charsetdet/sbcs/InputFile.java svneol=
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/charsetdet/sbcs/NGramList.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/charsetdet/sbcs/NGramParser.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/charsetdet/sbcs/StatisticsTool.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/tools/misc/src/com/ibm/icu/dev/tool/cldr/CheckSystemFonts.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/compression/CompressionTableGenerator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/ime/IMETest.java svneol=native#text/plain%3Bcharset%3Dutf-8
