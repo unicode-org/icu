@@ -4994,9 +4994,7 @@ icu4j/main/tests/framework/src/com/ibm/icu/dev/util/DataOutputCompressor.java sv
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ElapsedTimer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/IcuUnicodeNormalizerFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ImmutableEntry.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Pick.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/PrettyPrinter.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Quoter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/SortedBag.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Tabber.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Timer.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5041,15 +5039,12 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/UnicodeMapTest.java 
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/WriteCharts.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/langtagRegex.txt svneol=native#text/plain
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
-icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/TestBNF.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/TestBagFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/TestUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/BNF.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/util/BagFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/util/CaseIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/util/FileUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/util/ICUPropertyFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/Tokenizer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/util/TransliteratorUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/util/UnicodeProperty.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/util/UnicodePropertySymbolTable.java svneol=native#text/plain%3Bcharset%3Dutf-8
