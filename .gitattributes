@@ -4994,7 +4994,6 @@ icu4j/main/tests/framework/src/com/ibm/icu/dev/util/DataOutputCompressor.java sv
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ElapsedTimer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/IcuUnicodeNormalizerFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ImmutableEntry.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/framework/src/com/ibm/icu/dev/util/PrettyPrinter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/SortedBag.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Tabber.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Timer.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5026,7 +5025,6 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/AnyScriptTest.java s
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/CompoundTransliteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ErrorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/JamoTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/PrettyPrinterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/RegexUtilitiesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/RoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
