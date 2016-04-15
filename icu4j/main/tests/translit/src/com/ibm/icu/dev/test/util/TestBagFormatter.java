@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.util.BagFormatter;
+import com.ibm.icu.dev.util.FileUtilities;
 import com.ibm.icu.dev.util.ICUPropertyFactory;
 import com.ibm.icu.dev.util.UnicodeMap;
 import com.ibm.icu.dev.util.UnicodeProperty;
@@ -91,21 +92,21 @@ public class TestBagFormatter {
             BagFormatter bf = new BagFormatter();
 
             UnicodeSet us = new UnicodeSet("[:gc=nd:]");  
-            BagFormatter.CONSOLE.println("[:gc=nd:]");
-            bf.showSetNames(BagFormatter.CONSOLE,us);
+            FileUtilities.CONSOLE.println("[:gc=nd:]");
+            bf.showSetNames(FileUtilities.CONSOLE,us);
 
             us = new UnicodeSet("[:numeric_value=2:]");  
-            BagFormatter.CONSOLE.println("[:numeric_value=2:]");
-            bf.showSetNames(BagFormatter.CONSOLE,us);
+            FileUtilities.CONSOLE.println("[:numeric_value=2:]");
+            bf.showSetNames(FileUtilities.CONSOLE,us);
             
             us = new UnicodeSet("[:numeric_type=numeric:]");   
-            BagFormatter.CONSOLE.println("[:numeric_type=numeric:]");
-            bf.showSetNames(BagFormatter.CONSOLE,us);
+            FileUtilities.CONSOLE.println("[:numeric_type=numeric:]");
+            bf.showSetNames(FileUtilities.CONSOLE,us);
             
             UnicodeProperty.Factory ups = ICUPropertyFactory.make();
             us = ups.getSet("gc=mn", null, null); 
-            BagFormatter.CONSOLE.println("gc=mn");
-            bf.showSetNames(BagFormatter.CONSOLE, us);
+            FileUtilities.CONSOLE.println("gc=mn");
+            bf.showSetNames(FileUtilities.CONSOLE, us);
             
             if (true) return;
             //showNames("Name", ".*MARK.*");
@@ -162,7 +163,7 @@ public class TestBagFormatter {
             );
         }
         //CollectionFormatter cf = new CollectionFormatter();
-        PrintWriter pw = BagFormatter.openUTF8Writer("", "countries.txt");
+        PrintWriter pw = FileUtilities.openUTF8Writer("", "countries.txt");
         Iterator it = s.iterator();
         while (it.hasNext()) {
             pw.println(it.next());
