@@ -4380,7 +4380,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestDataElements_en_US.
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestDataElements_fr_Latn_FR.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestDataElements_te.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestMessages.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiCharacterTest.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiTest.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/CompositionExclusions.txt svneol=native#text/plain
@@ -5200,8 +5199,6 @@ icu4j/tools/misc/src/com/ibm/icu/dev/tool/layout/ThaiStateTransition.java svneol
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/layout/TreeWalker.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/tools/misc/src/com/ibm/icu/dev/tool/rbbi/BuildDictionaryFile.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/tools/misc/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/serializable/SerializableChecker.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/timescale/CalculateLimits.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/timescale/EpochOffsets.java svneol=native#text/plain%3Bcharset%3Dutf-8
