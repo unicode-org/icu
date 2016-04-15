@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.util;
@@ -57,7 +57,7 @@ public class TransliteratorUtilities {
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //##        BufferedReader br = TestUtil.openUTF8Reader(dir, filename);
 //#else
-        BufferedReader br = BagFormatter.openUTF8Reader(dir, filename);
+        BufferedReader br = FileUtilities.openUTF8Reader(dir, filename);
 //#endif 
         StringBuffer buffer = new StringBuffer();
         while (true) {

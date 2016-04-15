@@ -1,19 +1,11 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.MessageFormat;
@@ -31,20 +23,6 @@ import com.ibm.icu.text.UnicodeSet;
 
 public class BagFormatter {
     static final boolean DEBUG = false;
-    public static final boolean SHOW_FILES;
-    static {
-    boolean showFiles = false;
-    try {
-        showFiles = System.getProperty("SHOW_FILES") != null;
-    }
-    catch (SecurityException e) {
-    }
-    SHOW_FILES = showFiles;
-    }
-
-    public static final PrintWriter CONSOLE = new PrintWriter(System.out,true);
-
-    private static PrintWriter log = CONSOLE;
 
     private boolean abbreviated = false;
     private String separator = ",";
@@ -120,7 +98,7 @@ public class BagFormatter {
         UnicodeSet set2,
         int flags) 
     {
-        if (pw == null) pw = CONSOLE;
+        if (pw == null) pw = FileUtilities.CONSOLE;
         String[] names = { name1, name2 };
 
         UnicodeSet temp;
@@ -158,7 +136,7 @@ public class BagFormatter {
         String name2,
         Collection set2) {
 
-        if (pw == null) pw = CONSOLE;
+        if (pw == null) pw = FileUtilities.CONSOLE;
         String[] names = { name1, name2 };
         // damn'd collection doesn't have a clone, so
         // we go with Set, even though that
@@ -206,20 +184,6 @@ public class BagFormatter {
     public void showSetNames(PrintWriter output, Object c) {
         mainVisitor.doAt(c, output);
         output.flush();
-    }
-
-    /**
-     * Returns a list of items in the collection, with each separated by the separator.
-     * Each item must not be null; its toString() is called for a printable representation
-     * @param filename destination to which to write names
-     * @param c source collection
-     */
-    public void showSetNames(String filename, Object c) throws IOException {
-        PrintWriter pw = new PrintWriter(
-            new OutputStreamWriter(
-                new FileOutputStream(filename),"utf-8"));
-        showSetNames(log,c);
-        pw.close();
     }
 
     public String getAbbreviatedName(
@@ -850,52 +814,6 @@ public class BagFormatter {
     public static final Transliterator hex = Transliterator.getInstance(
         "[^\\u0009\\u0020-\\u007E\\u00A0-\\u00FF] hex");
 
-    public static BufferedReader openUTF8Reader(String dir, String filename) throws IOException {
-        return openReader(dir,filename,"UTF-8");
-    }
-
-    public static BufferedReader openReader(String dir, String filename, String encoding) throws IOException {
-        File file = dir.length() == 0 ? new File(filename) : new File(dir, filename);
-        if (SHOW_FILES && log != null) {
-            log.println("Opening File: "
-                + file.getCanonicalPath());
-        }
-        return new BufferedReader(
-            new InputStreamReader(
-                new FileInputStream(file),
-                encoding),
-            4*1024);
-    }
-
-    public static PrintWriter openUTF8Writer(String dir, String filename) throws IOException {
-        return openWriter(dir,filename,"UTF-8");
-    }
-
-    public static PrintWriter openWriter(String dir, String filename, String encoding) throws IOException {
-        File file = new File(dir, filename);
-        if (SHOW_FILES && log != null) {
-            log.println("Creating File: "
-                + file.getCanonicalPath());
-        }
-        String parentName = file.getParent();
-        if (parentName != null) {
-            File parent = new File(parentName);
-            parent.mkdirs();
-        }
-        return new PrintWriter(
-            new BufferedWriter(
-                new OutputStreamWriter(
-                    new FileOutputStream(file),
-                    encoding),
-                4*1024));
-    }
-    public static PrintWriter getLog() {
-        return log;
-    }
-    public BagFormatter setLog(PrintWriter writer) {
-        log = writer;
-        return this;
-    }
     public String getSeparator() {
         return separator;
     }
