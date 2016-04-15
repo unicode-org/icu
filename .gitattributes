@@ -4372,8 +4372,6 @@ icu4j/main/tests/collate/src/com/ibm/icu/dev/test/util/ULocaleCollationTest.java
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/IDNATestInput.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/TestDataElements_testtypes.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/numberformattestspecification.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/words.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestDataElements.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestDataElements_en_Latn_US.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestDataElements_en_US.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4570,7 +4568,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBIAPITest.java svneol=nati
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITestExtended.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITestMonkey.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/SimpleBITest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt svneol=native#text/plain%3Bcharset%3Dutf-8
