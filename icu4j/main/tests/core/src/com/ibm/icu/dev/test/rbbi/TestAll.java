@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,8 +20,6 @@ public class TestAll extends TestGroup {
     public TestAll() {
         super(
               new String[] {
-                  // Disabled for now; see comment in SimpleBITest for details
-                  // "SimpleBITest",
                   "BreakIteratorTest",
                   "RBBITest",
                   "RBBIAPITest",

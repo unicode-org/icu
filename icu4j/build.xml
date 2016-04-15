@@ -567,7 +567,6 @@
             <exclude name="**/out/**/*"/>
             <exclude name="**/*.jar"/>
             <exclude name="**/build-local.properties"/>
-            <exclude name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
             <exclude name="tools/build/icu4j*.api*.gz"/>
@@ -578,7 +577,6 @@
             <fileset dir="${src.release.wrk.dir}" includes="**/*"/>
             <fileset dir="${basedir}">
                 <include name="main/shared/data/*.jar"/>
-                <include name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
                 <include name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
                 <include name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
                 <include name="tools/build/icu4j*.api*.gz"/>
@@ -611,7 +609,6 @@
             <exclude name="**/out/**/*"/>
             <exclude name="**/*.jar"/>
             <exclude name="**/build-local.properties"/>
-            <exclude name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
             <exclude name="tools/build/icu4j*.api*.gz"/>
@@ -623,7 +620,6 @@
             <fileset dir="${src.release.wrk.dir}" includes="**/*"/>
             <fileset dir="${basedir}">
                 <include name="main/shared/data/*.jar"/>
-                <include name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
                 <include name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
                 <include name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
                 <include name="tools/build/icu4j*.api*.gz"/>
