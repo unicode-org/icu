@@ -5025,7 +5025,6 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/RegexUtilitiesTest.j
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/RoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TestUnicodeProperty.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TestUtility.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ThreadTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5033,15 +5032,7 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/UnicodeMapTest.java 
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/WriteCharts.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/langtagRegex.txt svneol=native#text/plain
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
-icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/TestBagFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/TestUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/BagFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/CaseIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/FileUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/ICUPropertyFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/TransliteratorUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/UnicodeProperty.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/translit/src/com/ibm/icu/dev/util/UnicodePropertySymbolTable.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/README.txt svneol=native#text/plain
 icu4j/perf-tests/data/collation/TestNames_Asian.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/data/collation/TestNames_Chinese.txt svneol=native#text/plain%3Bcharset%3Dutf-8
