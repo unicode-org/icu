@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.Differ;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.CanonicalIterator;
@@ -92,9 +91,6 @@ public class Demo extends Frame {
     CheckboxMenuItem noTranslitItem;
 
     static final String NO_TRANSLITERATOR = "None";
-
-    //private static final String COPYRIGHT =
-    //    "\u00A9 IBM Corporation 1999. All rights reserved.";
 
     public static void main(String[] args) {
         Frame f = new Demo(600, 200);
@@ -834,39 +830,51 @@ public class Demo extends Frame {
         out.println("<tr><td></td></tr>");
         
     }
-    
+
     static String showDifference(String as, String bs) {
-        Differ differ = new Differ(300, 3);
-        StringBuffer out = new StringBuffer();
-        int max = as.length();
-        if (max < bs.length()) max = bs.length();
-        for (int j = 0; j <= max; ++j) {
-            if (j < as.length()) differ.addA(as.substring(j, j+1));
-            if (j < bs.length()) differ.addB(bs.substring(j, j+1));
-            differ.checkMatch(j == max);
+        IntDiffer differ = new IntDiffer(300, 3);
+        StringBuilder out = new StringBuilder();
+        int ia = 0;
+        int ib = 0;
+        boolean done;
+        do {
+            done = true;
+            if (ia < as.length()) {
+                int ca = as.codePointAt(ia);
+                ia += Character.charCount(ca);
+                differ.addA(ca);
+                done = false;
+            }
+            if (ib < bs.length()) {
+                int cb = bs.codePointAt(ib);
+                ib += Character.charCount(cb);
+                differ.addB(cb);
+                done = false;
+            }
+            differ.checkMatch(done);
 
             if (differ.getACount() != 0 || differ.getBCount() != 0) {
                 out.append("...");
                 if (differ.getACount() != 0) {
                     out.append("<span class='r'>");
                     for (int i = 0; i < differ.getACount(); ++i) {
-                        out.append(differ.getA(i));
+                        out.appendCodePoint(differ.getA(i));
                     }
                     out.append("</span>");
                 }
                 if (differ.getBCount() != 0) {
                     out.append("<span class='d'>");
                     for (int i = 0; i < differ.getBCount(); ++i) {
-                        out.append(differ.getB(i));
+                        out.appendCodePoint(differ.getB(i));
                     }
                     out.append("</span>");
                 }
                 out.append("...");
             }
-        }
+        } while (!done);
         return out.toString();
     }
-    
+
     static void showSets(PrintWriter out, Transliterator translit, Transliterator inverse,
       UnicodeSet sourceSuper, UnicodeSet targetSuper, int options) {
         out.println("<li>Source Set:<ul><li>" +         toPattern(closeUnicodeSet(translit.getSourceSet(), options), sourceSuper) + "</li></ul></li>");
