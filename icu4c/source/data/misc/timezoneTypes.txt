@@ -435,6 +435,7 @@ timezoneTypes:table(nofallback){
             "Asia:Tehran"{"irthr"}
             "Asia:Thimphu"{"btthi"}
             "Asia:Tokyo"{"jptyo"}
+            "Asia:Tomsk"{"rutof"}
             "Asia:Ulaanbaatar"{"mnuln"}
             "Asia:Urumqi"{"cnurc"}
             "Asia:Ust-Nera"{"ruunera"}
@@ -515,6 +516,7 @@ timezoneTypes:table(nofallback){
             "Europe:Jersey"{"jesth"}
             "Europe:Kaliningrad"{"rukgd"}
             "Europe:Kiev"{"uaiev"}
+            "Europe:Kirov"{"rukvx"}
             "Europe:Lisbon"{"ptlis"}
             "Europe:Ljubljana"{"silju"}
             "Europe:London"{"gblon"}
