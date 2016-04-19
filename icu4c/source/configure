@@ -4343,6 +4343,9 @@ $as_echo "$ac_use_strict_options" >&6; }
         if test "$GCC" = yes
         then
             case "${host}" in
+            *-*-solaris*)
+                # Don't use -std=c99 on Solaris because of timezone check fails
+                ;;
             *)
                 # Do not use -ansi. It limits us to C90, and it breaks some platforms.
                 # We use -std=c99 to disable the gnu99 defaults and its associated warnings
@@ -5949,6 +5952,11 @@ $as_echo "$as_me: Adding CXXFLAGS option --std=c++0x" >&6;}
         else
             CXXFLAGS="$OLD_CXXFLAGS"
         fi
+        case "${host}" in
+        *-*-solaris*)
+            CXXFLAGS="$OLD_CXXFLAGS"
+            ;;
+        esac
     fi
 fi
 
