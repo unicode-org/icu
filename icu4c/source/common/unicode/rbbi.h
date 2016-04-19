@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2014 International Business Machines Corporation   *
+*   Copyright (C) 1999-2016 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 
@@ -30,6 +30,7 @@
 #include "unicode/uchriter.h"
 
 
+class RBBIAPITest;
 struct UTrie;
 
 U_NAMESPACE_BEGIN
@@ -56,13 +57,10 @@ struct RBBIStateTable;
  *
  * <p>See the ICU User Guide for information on Break Iterator Rules.</p>
  *
- * <p>This class is not intended to be subclassed.  (Class DictionaryBasedBreakIterator
- *    is a subclass, but that relationship is effectively internal to the ICU
- *    implementation.  The subclassing interface to RulesBasedBreakIterator is
- *    not part of the ICU API, and may not remain stable.</p>
+ * <p>This class is not intended to be subclassed.</p>
  *
  */
-class U_COMMON_API RuleBasedBreakIterator /*U_FINAL*/ : public BreakIterator {
+class U_COMMON_API RuleBasedBreakIterator U_FINAL : public BreakIterator {
 
 protected:
     /**
@@ -139,7 +137,7 @@ protected:
      * @internal
      */
     int32_t             fPositionInCache;
-    
+
     /**
      *
      * If present, UStack of LanguageBreakEngine objects that might handle
@@ -148,7 +146,7 @@ protected:
      * @internal
      */
     UStack              *fLanguageBreakEngines;
-    
+
     /**
      *
      * If present, the special LanguageBreakEngine used for handling
@@ -157,14 +155,14 @@ protected:
      * @internal
      */
     UnhandledEngine     *fUnhandledBreakEngine;
-    
+
     /**
      *
      * The type of the break iterator, or -1 if it has not been set.
      * @internal
      */
     int32_t             fBreakType;
-    
+
 protected:
     //=======================================================================
     // constructors
@@ -248,7 +246,7 @@ public:
      * constuction from source rules.
      *
      * Ownership of the storage containing the compiled rules remains with the
-     * caller of this function.  The compiled rules must not be  modified or 
+     * caller of this function.  The compiled rules must not be  modified or
      * deleted during the life of the break iterator.
      *
      * The compiled rules are not compatible across different major versions of ICU.
@@ -763,6 +761,7 @@ private:
      */
     void makeRuleStatusValid();
 
+    friend class ::RBBIAPITest; // for access to ctors
 };
 
 //------------------------------------------------------------------------------
