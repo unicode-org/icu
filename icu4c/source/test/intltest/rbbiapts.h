@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT:
+ * COPYRIGHT: 
  * Copyright (c) 1999-2016 International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -25,15 +25,15 @@
  */
 class RBBIAPITest: public IntlTest {
 public:
-
-
+   
+    
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
     /**
      * Tests Constructor behaviour of RuleBasedBreakIterator
      **/
-   // void TestConstruction(void);
+   // void TestConstruction(void);   
     /**
-     * Tests clone() and equals() methods of RuleBasedBreakIterator
+     * Tests clone() and equals() methods of RuleBasedBreakIterator         
      **/
     void TestCloneEquals();
     /**
@@ -92,13 +92,25 @@ public:
     /**
      *Internal subroutines
      **/
-    /* Internal subroutine used by TestIsBoundary() */
+    /* Internal subroutine used by TestIsBoundary() */ 
     void doBoundaryTest(BreakIterator& bi, UnicodeString& text, int32_t *boundaries);
 
     /*Internal subroutine used for comparision of expected and acquired results */
     void doTest(UnicodeString& testString, int32_t start, int32_t gotoffset, int32_t expectedOffset, const char* expected);
 
 
+};
+
+/**
+ * Special class to enable testing of protected functions in RuleBasedBreakIterator
+ */
+class RBBIWithProtectedFunctions: public RuleBasedBreakIterator {
+public:
+    enum EDontAdopt {
+        kDontAdopt
+    };
+    RBBIWithProtectedFunctions(RBBIDataHeader* data, UErrorCode &status);
+    RBBIWithProtectedFunctions(const RBBIDataHeader* data, enum EDontAdopt dontAdopt, UErrorCode &status);
 };
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
