@@ -1058,7 +1058,8 @@ void RBBIAPITest::TestRoundtripRules() {
     }
 }
 
-// Try out the RuleBasedBreakIterator constructors that take RBBIDataHeader*.
+// Try out the RuleBasedBreakIterator constructors that take RBBIDataHeader*
+// (these are protected so we access them via a local class RBBIWithProtectedFunctions).
 // This is just a sanity check, not a thorough test (e.g. we don't check that the
 // first delete actually frees rulesCopy).
 void RBBIAPITest::TestCreateFromRBBIData() {
@@ -1069,14 +1070,14 @@ void RBBIAPITest::TestCreateFromRBBIData() {
     if ( U_SUCCESS(status) ) {
         const RBBIDataHeader * builtRules = (const RBBIDataHeader *)udata_getMemory(data.getAlias());
         uint32_t length = builtRules->fLength;
-        RuleBasedBreakIterator * brkItr;
+        RBBIWithProtectedFunctions * brkItr;
 
         // Try the memory-adopting constructor, need to copy the data first
         RBBIDataHeader * rulesCopy = (RBBIDataHeader *) uprv_malloc(length);
         if ( rulesCopy ) {
             uprv_memcpy( rulesCopy, builtRules, length );
 
-            brkItr = new RuleBasedBreakIterator(rulesCopy, status);
+            brkItr = new RBBIWithProtectedFunctions(rulesCopy, status);
             if ( U_SUCCESS(status) ) {
                 delete brkItr; // this should free rulesCopy
             } else {
@@ -1087,7 +1088,7 @@ void RBBIAPITest::TestCreateFromRBBIData() {
         }
 
         // Now try the non-adopting constructor
-        brkItr = new RuleBasedBreakIterator(builtRules, RuleBasedBreakIterator::kDontAdopt, status);
+        brkItr = new RBBIWithProtectedFunctions(builtRules, RBBIWithProtectedFunctions::kDontAdopt, status);
         if ( U_SUCCESS(status) ) {
             delete brkItr; // this should NOT attempt to free builtRules
             if (builtRules->fLength != length) { // sanity check
@@ -1501,6 +1502,20 @@ void RBBIAPITest::doTest(UnicodeString& testString, int32_t start, int32_t gotof
          errln(prettify((UnicodeString)"ERROR:****selected \"" + selected + "\" instead of \"" + expected + "\""));
     else
         logln(prettify("****selected \"" + selected + "\""));
+}
+
+//---------------------------------------------
+//RBBIWithProtectedFunctions class functions
+//---------------------------------------------
+
+RBBIWithProtectedFunctions::RBBIWithProtectedFunctions(RBBIDataHeader* data, UErrorCode &status)
+    : RuleBasedBreakIterator(data, status)
+{
+}
+
+RBBIWithProtectedFunctions::RBBIWithProtectedFunctions(const RBBIDataHeader* data, enum EDontAdopt, UErrorCode &status)
+    : RuleBasedBreakIterator(data, RuleBasedBreakIterator::kDontAdopt, status)
+{
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
