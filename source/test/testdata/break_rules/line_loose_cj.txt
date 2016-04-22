@@ -181,13 +181,14 @@ LB22.3:       (ID | EB | EM) CM* IN;
 # LB22.4:       IN CM* IN;  # delete this rule for CSS loose.
 LB22.5:       NU CM* IN;
 
-LB23.1:      (ID | EB | EM) CM* PO;
-LB23.2:      (AL | HL | CM) CM* NU;
-LB23.3:      NU CM* (AL | HL);
+LB23.1:      (AL | HL | CM) CM* NU;
+LB23.2:      NU CM* (AL | HL);
 
-LB24.1:      PR CM* (ID | EB | EM);
-LB24.2:      PR CM* (AL | HL);
-LB24.3:      (PO | POX) CM* (AL | HL);
+LB23a.1:     PR CM* (ID | EB | EM);
+LB23a.2:     (ID | EB | EM) CM* PO;
+
+LB24.2:      (PR | PO | POX) CM* (AL | HL);
+LB24.3:      (AL | HL | CM) CM* (PR | PO | POX);
 
 # Numbers. Equivalent to Tailoring example 8 from UAx 14.
 #          Loose_cj tailoring: do not include $PRX at the beginning or $POX at the end.
