@@ -3515,25 +3515,36 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
 
-        // LB 23    ID x PO
-        //          AL x NU
-        //          HL x NU
-        //          NU x AL
-        if ((fID->contains(prevChar) && fPO->contains(thisChar)) ||
-            (fAL->contains(prevChar) && fNU->contains(thisChar)) ||
-            (fHL->contains(prevChar) && fNU->contains(thisChar)) ||
-            (fNU->contains(prevChar) && fAL->contains(thisChar)) ||
-            (fNU->contains(prevChar) && fHL->contains(thisChar)) )   {
+        // LB 23    (AL | HL) x NU
+        //          NU x (AL | HL)
+        if ((fAL->contains(prevChar) || fHL->contains(prevChar)) && fNU->contains(thisChar)) {
+            continue;
+        }
+        if (fNU->contains(prevChar) && (fAL->contains(thisChar) || fHL->contains(thisChar))) {
+            continue;
+        }
+
+        // LB 23a Do not break between numeric prefixes and ideographs, or between ideographs and numeric postfixes.
+        //      PR x (ID | EB | EM)
+        //     (ID | EB | EM) x PO
+        if (fPR->contains(prevChar) && 
+                (fID->contains(thisChar) || fEB->contains(thisChar) || fEM->contains(thisChar)))  {
+            continue;
+        }
+        if ((fID->contains(prevChar) || fEB->contains(prevChar) || fEM->contains(prevChar)) && 
+                fPO->contains(thisChar)) {
             continue;
         }
 
         // LB 24  Do not break between prefix and letters or ideographs.
-        //        PR x ID
-        //        PR x (AL | HL)
-        //        PO x (AL | HL)
-        if ((fPR->contains(prevChar) && fID->contains(thisChar)) ||
-            (fPR->contains(prevChar) && (fAL->contains(thisChar) || fHL->contains(thisChar))) ||
-            (fPO->contains(prevChar) && (fAL->contains(thisChar) || fHL->contains(thisChar))))  {
+        //         (PR | PO) x (AL | HL)
+        //         (AL | HL) x (PR | PO)
+        if ((fPR->contains(prevChar) || fPO->contains(prevChar)) &&
+                (fAL->contains(thisChar) || fHL->contains(thisChar))) {
+            continue;
+        }
+        if ((fAL->contains(prevChar) || fHL->contains(prevChar)) &&
+                (fPR->contains(thisChar) || fPO->contains(thisChar))) {
             continue;
         }
 

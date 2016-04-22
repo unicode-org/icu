@@ -153,13 +153,14 @@ LB22.3:       (ID | EB | EM) CM* IN;
 LB22.4:       IN CM* IN;
 LB22.5:       NU CM* IN;
 
-LB23.1:      (ID | EB | EM) CM* PO;
-LB23.2:      (AL | HL | CM) CM* NU;
-LB23.3:      NU CM* (AL | HL);
+LB23.1:      (AL | HL | CM) CM* NU;
+LB23.2:      NU CM* (AL | HL);
 
-LB24.1:      PR CM* (ID | EB | EM);
-LB24.2:      PR CM* (AL | HL);
-LB24.3:      PO CM* (AL | HL);
+LB23a.1:     PR CM* (ID | EB | EM);
+LB23a.2:     (ID | EB | EM) CM* PO;
+
+LB24.2:      (PR | PO) CM* (AL | HL);
+LB24.3:      (AL | HL | CM) CM* (PR | PO);
 
 # Numbers. Equivalent to Tailoring example 8 from UAX 14.
 LB25:        ((PR | PO)CM*)? ((OP | HY)CM*)? NU (CM*(NU | SY | IS))* (CM*(CL | CP))? (CM*(PR | PO))?;
