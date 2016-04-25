@@ -47,7 +47,7 @@
 
 ## END FILTERED BREAK TESTS
 
-<locale>
+<locale en>
 
 #   Temp debugging tests
 <sent>
