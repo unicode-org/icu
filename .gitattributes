@@ -4984,8 +4984,6 @@ icu4j/main/tests/framework/src/com/ibm/icu/dev/test/sample/ModuleTestSample.java
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/sample/ModuleTestSampleData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ArrayComparator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/CollectionUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/framework/src/com/ibm/icu/dev/util/DataInputCompressor.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/framework/src/com/ibm/icu/dev/util/DataOutputCompressor.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ElapsedTimer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/IcuUnicodeNormalizerFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ImmutableEntry.java svneol=native#text/plain%3Bcharset%3Dutf-8
