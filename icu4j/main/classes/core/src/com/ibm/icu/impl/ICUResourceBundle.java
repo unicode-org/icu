@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2005-2015, International Business Machines Corporation and
+ * Copyright (C) 2005-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  * *****************************************************************************
  */
@@ -447,18 +447,24 @@ public  class ICUResourceBundle extends UResourceBundle {
         return result;
     }
 
+    public void getAllItemsWithFallback(String path, UResource.Sink sink)
+            throws MissingResourceException {
+        getAllItemsWithFallback(path, sink, null, null);
+    }
+
     public void getAllArrayItemsWithFallback(String path, UResource.ArraySink sink)
             throws MissingResourceException {
-        getAllContainerItemsWithFallback(path, sink, null);
+        getAllItemsWithFallback(path, null, sink, null);
     }
 
     public void getAllTableItemsWithFallback(String path, UResource.TableSink sink)
             throws MissingResourceException {
-        getAllContainerItemsWithFallback(path, null, sink);
+        getAllItemsWithFallback(path, null, null, sink);
     }
 
-    private void getAllContainerItemsWithFallback(
-            String path, UResource.ArraySink arraySink, UResource.TableSink tableSink)
+    private void getAllItemsWithFallback(
+            String path, UResource.Sink sink,
+            UResource.ArraySink arraySink, UResource.TableSink tableSink)
             throws MissingResourceException {
         // Collect existing and parsed key objects into an array of keys,
         // rather than assembling and parsing paths.
@@ -479,35 +485,46 @@ public  class ICUResourceBundle extends UResourceBundle {
                     path, getKey());
             }
         }
-        int expectedType = arraySink != null ? ARRAY : TABLE;
-        if (rb.getType() != expectedType) {
-            throw new UResourceTypeMismatchException("");
+        if (sink == null) {
+            int expectedType = arraySink != null ? ARRAY : TABLE;
+            if (rb.getType() != expectedType) {
+                throw new UResourceTypeMismatchException("");
+            }
         }
-        // Get all table items with fallback.
         UResource.Key key = new UResource.Key();
         ReaderValue readerValue = new ReaderValue();
-        rb.getAllContainerItemsWithFallback(key, readerValue, arraySink, tableSink);
+        rb.getAllItemsWithFallback(key, readerValue, sink, arraySink, tableSink);
     }
 
-    private void getAllContainerItemsWithFallback(
+    private void getAllItemsWithFallback(
             UResource.Key key, ReaderValue readerValue,
+            UResource.Sink sink,
             UResource.ArraySink arraySink, UResource.TableSink tableSink) {
         // We recursively enumerate child-first,
         // only storing parent items in the absence of child items.
-        // We store a placeholder value for the no-fallback/no-inheritance marker
+        // The sink needs to store a placeholder value for the no-fallback/no-inheritance marker
         // to prevent a parent item from being stored.
         //
         // It would be possible to recursively enumerate parent-first,
         // overriding parent items with child items.
-        // When we see the no-fallback/no-inheritance marker,
-        // then we would remove the parent's item.
+        // When the sink sees the no-fallback/no-inheritance marker,
+        // then it would remove the parent's item.
         // We would deserialize parent values even though they are overridden in a child bundle.
-        int expectedType = arraySink != null ? ARRAY : TABLE;
-        if (getType() == expectedType) {
-            if (arraySink != null) {
-                ((ICUResourceBundleImpl.ResourceArray)this).getAllItems(key, readerValue, arraySink);
-            } else /* tableSink != null */ {
-                ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
+        int expectedType;
+        if (sink != null) {
+            expectedType = NONE;
+            ICUResourceBundleImpl impl = (ICUResourceBundleImpl)this;
+            readerValue.reader = impl.wholeBundle.reader;
+            readerValue.res = impl.getResource();
+            sink.put(key, readerValue, parent == null);
+        } else {
+            expectedType = arraySink != null ? ARRAY : TABLE;
+            if (getType() == expectedType) {
+                if (arraySink != null) {
+                    ((ICUResourceBundleImpl.ResourceArray)this).getAllItems(key, readerValue, arraySink);
+                } else /* tableSink != null */ {
+                    ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
+                }
             }
         }
         if (parent != null) {
@@ -525,8 +542,8 @@ public  class ICUResourceBundle extends UResourceBundle {
                 getResPathKeys(pathKeys, depth);
                 rb = findResourceWithFallback(pathKeys, 0, parentBundle, null);
             }
-            if (rb != null && rb.getType() == expectedType) {
-                rb.getAllContainerItemsWithFallback(key, readerValue, arraySink, tableSink);
+            if (rb != null && (expectedType == NONE || rb.getType() == expectedType)) {
+                rb.getAllItemsWithFallback(key, readerValue, sink, arraySink, tableSink);
             }
         }
     }

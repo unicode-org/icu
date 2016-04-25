@@ -798,7 +798,7 @@ public final class ICUResourceBundleReader {
 
     static class ReaderValue extends UResource.Value {
         ICUResourceBundleReader reader;
-        private int res;
+        int res;
 
         @Override
         public int getType() {
@@ -856,6 +856,81 @@ public final class ICUResourceBundleReader {
             }
             return bb;
         }
+
+        @Override
+        public com.ibm.icu.impl.UResource.Array getArray() {
+            Array array = reader.getArray(res);
+            if (array == null) {
+                throw new UResourceTypeMismatchException("");
+            }
+            return array;
+        }
+
+        @Override
+        public com.ibm.icu.impl.UResource.Table getTable() {
+            Table table = reader.getTable(res);
+            if (table == null) {
+                throw new UResourceTypeMismatchException("");
+            }
+            return table;
+        }
+
+        @Override
+        public boolean isNoInheritanceMarker() {
+            return reader.isNoInheritanceMarker(res);
+        }
+
+        @Override
+        public String[] getStringArray() {
+            Array array = reader.getArray(res);
+            if (array == null) {
+                throw new UResourceTypeMismatchException("");
+            }
+            return getStringArray(array);
+        }
+
+        @Override
+        public String[] getStringArrayOrStringAsArray() {
+            Array array = reader.getArray(res);
+            if (array != null) {
+                return getStringArray(array);
+            }
+            String s = reader.getString(res);
+            if (s != null) {
+                return new String[] { s };
+            }
+            throw new UResourceTypeMismatchException("");
+        }
+
+        @Override
+        public String getStringOrFirstOfArray() {
+            String s = reader.getString(res);
+            if (s != null) {
+                return s;
+            }
+            Array array = reader.getArray(res);
+            if (array != null && array.size > 0) {
+                int r = array.getContainerResource(reader, 0);
+                s = reader.getString(r);
+                if (s != null) {
+                    return s;
+                }
+            }
+            throw new UResourceTypeMismatchException("");
+        }
+
+        private String[] getStringArray(Array array) {
+            String[] result = new String[array.size];
+            for (int i = 0; i < array.size; ++i) {
+                int r = array.getContainerResource(reader, i);
+                String s = reader.getString(r);
+                if (s == null) {
+                    throw new UResourceTypeMismatchException("");
+                }
+                result[i] = s;
+            }
+            return result;
+        }
     }
 
     // Container value classes --------------------------------------------- ***
@@ -864,7 +939,7 @@ public final class ICUResourceBundleReader {
         protected int size;
         protected int itemsOffset;
 
-        final int getSize() {
+        public final int getSize() {
             return size;
         }
         int getContainerResource(ICUResourceBundleReader reader, int index) {
@@ -896,7 +971,7 @@ public final class ICUResourceBundleReader {
         Container() {
         }
     }
-    static class Array extends Container {
+    static class Array extends Container implements UResource.Array {
         Array() {}
         void getAllItems(ICUResourceBundleReader reader,
                 UResource.Key key, ReaderValue value, ArraySink sink) {
@@ -927,6 +1002,15 @@ public final class ICUResourceBundleReader {
             }
             sink.leave();
         }
+        @Override
+        public boolean getValue(int i, UResource.Value value) {
+            if (0 <= i && i < size) {
+                ReaderValue readerValue = (ReaderValue)value;
+                readerValue.res = getContainerResource(readerValue.reader, i);
+                return true;
+            }
+            return false;
+        }
     }
     private static final class Array32 extends Array {
         @Override
@@ -949,10 +1033,12 @@ public final class ICUResourceBundleReader {
             itemsOffset = offset + 1;
         }
     }
-    static class Table extends Container {
+    static class Table extends Container implements UResource.Table {
         protected char[] keyOffsets;
         protected int[] key32Offsets;
 
+        Table() {
+        }
         String getKey(ICUResourceBundleReader reader, int index) {
             if (index < 0 || size <= index) {
                 return null;
@@ -1027,7 +1113,19 @@ public final class ICUResourceBundleReader {
             }
             sink.leave();
         }
-        Table() {
+        @Override
+        public boolean getKeyAndValue(int i, UResource.Key key, UResource.Value value) {
+            if (0 <= i && i < size) {
+                ReaderValue readerValue = (ReaderValue)value;
+                if (keyOffsets != null) {
+                    readerValue.reader.setKeyFromKey16(keyOffsets[i], key);
+                } else {
+                    readerValue.reader.setKeyFromKey32(key32Offsets[i], key);
+                }
+                readerValue.res = getContainerResource(readerValue.reader, i);
+                return true;
+            }
+            return false;
         }
     }
     private static final class Table1632 extends Table {
