@@ -437,55 +437,29 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return getBestPattern(skeleton, null, options);
     }
 
-    private static class DayPeriodAllowedHoursSink extends UResource.TableSink {
+    private static class DayPeriodAllowedHoursSink extends UResource.Sink {
         HashMap<String, String[]> tempMap;
-        String regionOrLocale;
-        String[] formatList;
 
         private DayPeriodAllowedHoursSink(HashMap<String, String[]> tempMap) {
             this.tempMap = tempMap;
         }
 
         @Override
-        public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
-            regionOrLocale = key.toString();
-
-            return formatListSink;
-        }
-
-        private class FormatListSink extends UResource.TableSink {
-            @Override
-            public UResource.ArraySink getOrCreateArraySink(UResource.Key key) {
-                if (key.contentEquals("allowed")) {  // Ignore "preferred" list.
-                    return allowedFormatListSink;
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table timeData = value.getTable();
+            for (int i = 0; timeData.getKeyAndValue(i, key, value); ++i) {
+                String regionOrLocale = key.toString();
+                UResource.Table formatList = value.getTable();
+                for (int j = 0; formatList.getKeyAndValue(j, key, value); ++j) {
+                    if (key.contentEquals("allowed")) {  // Ignore "preferred" list.
+                        tempMap.put(regionOrLocale, value.getStringArrayOrStringAsArray());
+                    }
                 }
-
-                return null;
             }
         }
-        private FormatListSink formatListSink = new FormatListSink();
-
-        private class AllowedFormatListSink extends UResource.ArraySink {
-            @Override
-            public void enter(int size) {
-                formatList = new String[size];
-            }
-
-            @Override
-            public void put(int index, UResource.Value value) {
-                formatList[index] = value.getString();
-            }
-
-            @Override
-            public void leave() {
-                tempMap.put(regionOrLocale, formatList);
-                formatList = null;  // For good measure.
-            }
-        }
-        private AllowedFormatListSink allowedFormatListSink = new AllowedFormatListSink();
     }
 
-    // get the data for dayperiod C.
+    // Get the data for dayperiod C.
     static final Map<String, String[]> LOCALE_TO_ALLOWED_HOUR;
     static {
         HashMap<String, String[]> temp = new HashMap<String, String[]>();
@@ -495,7 +469,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 ICUResourceBundle.ICU_DATA_CLASS_LOADER);
 
         DayPeriodAllowedHoursSink allowedHoursSink = new DayPeriodAllowedHoursSink(temp);
-        suppData.getAllTableItemsWithFallback("timeData", allowedHoursSink);
+        suppData.getAllItemsWithFallback("timeData", allowedHoursSink);
 
         LOCALE_TO_ALLOWED_HOUR = Collections.unmodifiableMap(temp);
     }

@@ -231,6 +231,41 @@ public final class UResource {
     }
 
     /**
+     * Interface for iterating over a resource bundle array resource.
+     * Does not use Java Iterator to reduce object creations.
+     */
+    public interface Array {
+        /**
+         * @return The number of items in the array resource.
+         */
+        public int getSize();
+        /**
+         * @param i Array item index.
+         * @param value Output-only, receives the value of the i'th item.
+         * @return true if i is non-negative and less than getSize().
+         */
+        public boolean getValue(int i, Value value);
+    }
+
+    /**
+     * Interface for iterating over a resource bundle table resource.
+     * Does not use Java Iterator to reduce object creations.
+     */
+    public interface Table {
+        /**
+         * @return The number of items in the array resource.
+         */
+        public int getSize();
+        /**
+         * @param i Array item index.
+         * @param key Output-only, receives the key of the i'th item.
+         * @param value Output-only, receives the value of the i'th item.
+         * @return true if i is non-negative and less than getSize().
+         */
+        public boolean getKeyAndValue(int i, Key key, Value value);
+    }
+
+    /**
      * Represents a resource bundle item's value.
      * Avoids object creations as much as possible.
      * Mutable, not thread-safe.
@@ -280,6 +315,67 @@ public final class UResource {
         public abstract ByteBuffer getBinary();
 
         /**
+         * @throws UResourceTypeMismatchException if this is not an array resource
+         */
+        public abstract Array getArray();
+
+        /**
+         * @throws UResourceTypeMismatchException if this is not a table resource
+         */
+        public abstract Table getTable();
+
+        /**
+         * Is this a no-fallback/no-inheritance marker string?
+         * Such a marker is used for CLDR no-fallback data values of "∅∅∅"
+         * when enumerating tables with fallback from the specific resource bundle to root.
+         *
+         * @return true if this is a no-inheritance marker string
+         */
+        public abstract boolean isNoInheritanceMarker();
+
+        /**
+         * @return the array of strings in this array resource.
+         * @see UResourceBundle#getStringArray()
+         * @throws UResourceTypeMismatchException if this is not an array resource
+         *     or if any of the array items is not a string
+         */
+        public abstract String[] getStringArray();
+
+        /**
+         * Same as
+         * <pre>
+         * if (getType() == STRING) {
+         *     return new String[] { getString(); }
+         * } else {
+         *     return getStringArray();
+         * }
+         * </pre>
+         *
+         * @see #getString()
+         * @see #getStringArray()
+         * @throws UResourceTypeMismatchException if this is
+         *     neither a string resource nor an array resource containing strings
+         */
+        public abstract String[] getStringArrayOrStringAsArray();
+
+        /**
+         * Same as
+         * <pre>
+         * if (getType() == STRING) {
+         *     return getString();
+         * } else {
+         *     return getStringArray()[0];
+         * }
+         * </pre>
+         *
+         * @see #getString()
+         * @see #getStringArray()
+         * @throws UResourceTypeMismatchException if this is
+         *     neither a string resource nor an array resource containing strings
+         */
+        public abstract String getStringOrFirstOfArray();
+
+        /**
          * Only for debugging.
          */
         @Override
@@ -302,14 +398,35 @@ public final class UResource {
                 return sb.append('}').toString();
             case UResourceBundle.BINARY:
                 return "(binary blob)";
-            case UResourceBundle.ARRAY:  // should not occur
+            case UResourceBundle.ARRAY:
                 return "(array)";
-            case UResourceBundle.TABLE:  // should not occur
+            case UResourceBundle.TABLE:
                 return "(table)";
             default:  // should not occur
                 return "???";
             }
         }
+    }
+
+    /**
+     * Sink for ICU resource bundle contents.
+     */
+    public static abstract class Sink {
+        /**
+         * Called once for each bundle (child-parent-...-root).
+         * The value is normally an array or table resource,
+         * and implementations of this method normally iterate over the
+         * tree of resource items stored there.
+         *
+         * @param key No defined contents.
+         *     To be used for output values from Array and Table getters.
+         * @param value Call getArray() or getTable() as appropriate.
+         *     Then reuse for output values from Array and Table getters.
+         * @param noFallback true if the bundle has no parent;
+         *     that is, its top-level table has the nofallback attribute,
+         *     or it is the root bundle of a locale tree.
+         */
+        public abstract void put(Key key, Value value, boolean noFallback);
     }
 
     /**
