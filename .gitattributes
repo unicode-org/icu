@@ -4985,7 +4985,6 @@ icu4j/main/tests/framework/src/com/ibm/icu/dev/test/sample/ModuleTestSampleData.
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ArrayComparator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/CollectionUtilities.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ElapsedTimer.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/framework/src/com/ibm/icu/dev/util/IcuUnicodeNormalizerFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/ImmutableEntry.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/SortedBag.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Tabber.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4993,7 +4992,6 @@ icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Timer.java svneol=native#tex
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/UnicodeMap.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/UnicodeMapIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/UnicodePropertySource.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/framework/src/com/ibm/icu/dev/util/UnicodeTransform.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/VariableReplacer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/Visitor.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/util/XEquivalenceClass.java svneol=native#text/plain%3Bcharset%3Dutf-8
