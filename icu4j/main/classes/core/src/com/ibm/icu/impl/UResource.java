@@ -38,7 +38,16 @@ public final class UResource {
         /**
          * Constructs an empty resource key string object.
          */
-        public Key() {}
+        public Key() {
+            s = "";
+        }
+
+        /**
+         * Constructs a resource key object equal to the given string.
+         */
+        public Key(String s) {
+            setString(s);
+        }
 
         private Key(byte[] keyBytes, int keyOffset, int keyLength) {
             bytes = keyBytes;
@@ -69,7 +78,29 @@ public final class UResource {
         public void setToEmpty() {
             bytes = null;
             offset = length = 0;
-            s = null;
+            s = "";
+        }
+
+        /**
+         * Mutates this key to be equal to the given string.
+         */
+        public void setString(String s) {
+            if (s.isEmpty()) {
+                setToEmpty();
+            } else {
+                bytes = new byte[s.length()];
+                offset = 0;
+                length = s.length();
+                for (int i = 0; i < length; ++i) {
+                    char c = s.charAt(i);
+                    if (c <= 0x7f) {
+                        bytes[i] = (byte)c;
+                    } else {
+                        throw new IllegalArgumentException('\"' + s + "\" is not an ASCII string");
+                    }
+                }
+                this.s = s;
+            }
         }
 
         /**
@@ -85,18 +116,18 @@ public final class UResource {
             }
         }
 
-        // TODO: Java 6: @Override
+        @Override
         public char charAt(int i) {
             assert(0 <= i && i < length);
             return (char)bytes[offset + i];
         }
 
-        // TODO: Java 6: @Override
+        @Override
         public int length() {
             return length;
         }
 
-        // TODO: Java 6: @Override
+        @Override
         public Key subSequence(int start, int end) {
             assert(0 <= start && start < length);
             assert(start <= end && end <= length);
@@ -212,7 +243,7 @@ public final class UResource {
             return h;
         }
 
-        // TODO: Java 6: @Override
+        @Override
         public int compareTo(Key other) {
             return compareTo((CharSequence)other);
         }
@@ -418,8 +449,9 @@ public final class UResource {
          * and implementations of this method normally iterate over the
          * tree of resource items stored there.
          *
-         * @param key No defined contents.
-         *     To be used for output values from Array and Table getters.
+         * @param key Initially the key string of the enumeration-start resource.
+         *     Empty if the enumeration starts at the top level of the bundle.
+         *     Reuse for output values from Array and Table getters.
          * @param value Call getArray() or getTable() as appropriate.
          *     Then reuse for output values from Array and Table getters.
          * @param noFallback true if the bundle has no parent;
