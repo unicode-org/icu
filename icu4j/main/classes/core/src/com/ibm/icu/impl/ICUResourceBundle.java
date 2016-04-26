@@ -510,9 +510,21 @@ public  class ICUResourceBundle extends UResourceBundle {
         // When the sink sees the no-fallback/no-inheritance marker,
         // then it would remove the parent's item.
         // We would deserialize parent values even though they are overridden in a child bundle.
+
+        // Re-fetch the path keys: They may differ from the original ones
+        // if we had followed an alias.
+        int depth = getResDepth();
+        String[] pathKeys = new String[depth];
+        getResPathKeys(pathKeys, depth);
+
         int expectedType;
         if (sink != null) {
             expectedType = NONE;
+            if (depth == 0) {
+                key.setToEmpty();
+            } else {
+                key.setString(pathKeys[depth - 1]);
+            }
             ICUResourceBundleImpl impl = (ICUResourceBundleImpl)this;
             readerValue.reader = impl.wholeBundle.reader;
             readerValue.res = impl.getResource();
@@ -532,14 +544,9 @@ public  class ICUResourceBundle extends UResourceBundle {
             // any fallback from the parent bundle is still possible.
             ICUResourceBundle parentBundle = (ICUResourceBundle)parent;
             ICUResourceBundle rb;
-            int depth = getResDepth();
             if (depth == 0) {
                 rb = parentBundle;
             } else {
-                // Re-fetch the path keys: They may differ from the original ones
-                // if we had followed an alias.
-                String[] pathKeys = new String[depth];
-                getResPathKeys(pathKeys, depth);
                 rb = findResourceWithFallback(pathKeys, 0, parentBundle, null);
             }
             if (rb != null && (expectedType == NONE || rb.getType() == expectedType)) {
