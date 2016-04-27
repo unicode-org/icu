@@ -1945,13 +1945,14 @@ void getAllItemsWithFallback(
         UResourceBundle containerBundle;
         ures_initStackObject(&containerBundle);
         const UResourceBundle *rb;
+        UErrorCode pathErrorCode = U_ZERO_ERROR;  // Ignore if parents up to root do not have this path.
         if (bundle->fResPath == NULL || *bundle->fResPath == 0) {
             rb = &parentBundle;
         } else {
             rb = ures_getByKeyWithFallback(&parentBundle, bundle->fResPath,
-                                           &containerBundle, &errorCode);
+                                           &containerBundle, &pathErrorCode);
         }
-        if (U_SUCCESS(errorCode) && (expectedType == URES_NONE || ures_getType(rb) == expectedType)) {
+        if (U_SUCCESS(pathErrorCode) && (expectedType == URES_NONE || ures_getType(rb) == expectedType)) {
             getAllItemsWithFallback(rb, value, sink, arraySink, tableSink, errorCode);
         }
         ures_close(&containerBundle);
