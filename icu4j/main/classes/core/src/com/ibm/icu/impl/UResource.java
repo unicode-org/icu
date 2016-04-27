@@ -65,26 +65,28 @@ public final class UResource {
          * @param keyBytes new key string byte array
          * @param keyOffset new key string offset
          */
-        public void setBytes(byte[] keyBytes, int keyOffset) {
+        public Key setBytes(byte[] keyBytes, int keyOffset) {
             bytes = keyBytes;
             offset = keyOffset;
             for (length = 0; keyBytes[keyOffset + length] != 0; ++length) {}
             s = null;
+            return this;
         }
 
         /**
          * Mutates this key to an empty resource key string.
          */
-        public void setToEmpty() {
+        public Key setToEmpty() {
             bytes = null;
             offset = length = 0;
             s = "";
+            return this;
         }
 
         /**
          * Mutates this key to be equal to the given string.
          */
-        public void setString(String s) {
+        public Key setString(String s) {
             if (s.isEmpty()) {
                 setToEmpty();
             } else {
@@ -101,6 +103,7 @@ public final class UResource {
                 }
                 this.s = s;
             }
+            return this;
         }
 
         /**
