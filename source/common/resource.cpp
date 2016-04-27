@@ -19,6 +19,7 @@ U_NAMESPACE_BEGIN
 
 ResourceValue::~ResourceValue() {}
 
+ResourceSink::~ResourceSink() {}
 
 ResourceArraySink::~ResourceArraySink() {}
 

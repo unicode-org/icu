@@ -434,79 +434,48 @@ DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status) {
 
 namespace {
 
-struct AllowedHourFormatsSink : public ResourceTableSink {
+struct AllowedHourFormatsSink : public ResourceSink {
     // Initialize sub-sinks.
-    AllowedHourFormatsSink() : localeSink(*this), allowedListSink(*this) {}
+    AllowedHourFormatsSink() {}
     virtual ~AllowedHourFormatsSink();
 
-    // Entry point.
-    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &status) {
-        if (U_FAILURE(status)) { return NULL; }
-
-        locale = key;
-        return &localeSink;
-    }
-
-    struct LocaleSink : public ResourceTableSink {
-        AllowedHourFormatsSink &outer;
-        LocaleSink(AllowedHourFormatsSink &outer) : outer(outer) {}
-        virtual ~LocaleSink();
-
-        virtual void put(const char *key, const ResourceValue &value, UErrorCode &status) {
-            if (U_FAILURE(status)) { return; }
-
-            if (uprv_strcmp(key, "allowed") == 0) {
-                outer.allowedFormats = static_cast<int32_t *>(uprv_malloc(2 * sizeof(int32_t)));
-                outer.allowedFormatsLength = 1;
-                if (outer.allowedFormats == NULL) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                    return;
+    virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
+                     UErrorCode &errorCode) {
+        ResourceTable timeData = value.getTable(errorCode);
+        if (U_FAILURE(errorCode)) { return; }
+        for (int32_t i = 0; timeData.getKeyAndValue(i, key, value); ++i) {
+            const char *regionOrLocale = key;
+            ResourceTable formatList = value.getTable(errorCode);
+            if (U_FAILURE(errorCode)) { return; }
+            for (int32_t j = 0; formatList.getKeyAndValue(j, key, value); ++j) {
+                if (uprv_strcmp(key, "allowed") == 0) {  // Ignore "preferred" list.
+                    LocalArray<int32_t> list;
+                    int32_t length;
+                    if (value.getType() == URES_STRING) {
+                        list.adoptInsteadAndCheckErrorCode(
+                            static_cast<int32_t *>(uprv_malloc(2 * sizeof(int32_t))), errorCode);
+                        if (U_FAILURE(errorCode)) { return; }
+                        list[0] = getHourFormatFromUnicodeString(value.getUnicodeString(errorCode));
+                        length = 1;
+                    } else {
+                        ResourceArray allowedFormats = value.getArray(errorCode);
+                        length = allowedFormats.getSize();
+                        list.adoptInsteadAndCheckErrorCode(
+                            static_cast<int32_t *>(uprv_malloc((length + 1) * sizeof(int32_t))), errorCode);
+                        if (U_FAILURE(errorCode)) { return; }
+                        for (int32_t k = 0; k < length; ++k) {
+                            allowedFormats.getValue(k, value);
+                            list[k] = getHourFormatFromUnicodeString(value.getUnicodeString(errorCode));
+                        }
+                    }
+                    list[length] = ALLOWED_HOUR_FORMAT_UNKNOWN;
+                    uhash_put(localeToAllowedHourFormatsMap,
+                              const_cast<char *>(regionOrLocale), list.orphan(), &errorCode);
+                    if (U_FAILURE(errorCode)) { return; }
                 }
-                outer.allowedFormats[0] = outer.getHourFormatFromUnicodeString(
-                    value.getUnicodeString(status));
             }
         }
-
-        virtual ResourceArraySink *getOrCreateArraySink(const char *key, UErrorCode &status) {
-            if (U_SUCCESS(status) && uprv_strcmp(key, "allowed") == 0) {
-                return &outer.allowedListSink;
-            }
-            return NULL;
-        }
-
-        virtual void leave(UErrorCode &status) {
-            if (U_FAILURE(status) || outer.allowedFormats == NULL) { return; }
-
-            outer.allowedFormats[outer.allowedFormatsLength] = ALLOWED_HOUR_FORMAT_UNKNOWN;
-            uhash_put(localeToAllowedHourFormatsMap, const_cast<char *>(outer.locale), outer.allowedFormats, &status);
-            outer.allowedFormats = NULL;
-        }
-    } localeSink;
-
-    struct AllowedListSink : public ResourceArraySink {
-        AllowedHourFormatsSink &outer;
-        AllowedListSink(AllowedHourFormatsSink &outer) : outer(outer) {}
-        virtual ~AllowedListSink();
-
-        virtual void enter(int32_t size, UErrorCode &status) {
-            if (U_FAILURE(status)) { return; }
-            outer.allowedFormats = static_cast<int32_t *>(uprv_malloc((size + 1) * sizeof(int32_t)));
-            outer.allowedFormatsLength = size;
-            if (outer.allowedFormats == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-            }
-        }
-        virtual void put(int32_t index, const ResourceValue &value, UErrorCode &status) {
-            if (U_FAILURE(status)) { return; }
-
-            outer.allowedFormats[index] = outer.getHourFormatFromUnicodeString(
-                value.getUnicodeString(status));
-        }
-    } allowedListSink;
-
-    const char *locale;
-    int32_t *allowedFormats;
-    int32_t allowedFormatsLength;
+    }
 
     AllowedHourFormat getHourFormatFromUnicodeString(UnicodeString s) {
         if (s.length() == 1) {
@@ -526,8 +495,6 @@ struct AllowedHourFormatsSink : public ResourceTableSink {
 }  // namespace
 
 AllowedHourFormatsSink::~AllowedHourFormatsSink() {}
-AllowedHourFormatsSink::LocaleSink::~LocaleSink() {}
-AllowedHourFormatsSink::AllowedListSink::~AllowedListSink() {}
 
 void DateTimePatternGenerator::loadAllowedHourFormatsData(UErrorCode &status) {
     if (U_FAILURE(status)) { return; }
@@ -543,7 +510,7 @@ void DateTimePatternGenerator::loadAllowedHourFormatsData(UErrorCode &status) {
     // into the hashmap, store 6 single-value sub-arrays right at the beginning of the
     // vector (at index enum*2) for easy data sharing, copy sub-arrays into runtime
     // object. Remember to clean up the vector, too.
-    ures_getAllTableItemsWithFallback(rb.getAlias(), "timeData", sink, status);
+    ures_getAllItemsWithFallback(rb.getAlias(), "timeData", sink, status);
 
     ucln_i18n_registerCleanup(UCLN_I18N_ALLOWED_HOUR_FORMATS, allowedHourFormatsCleanup);
 }

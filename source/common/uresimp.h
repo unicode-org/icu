@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2015, International Business Machines
+*   Copyright (C) 2000-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -223,6 +223,10 @@ ures_getStringByKeyWithFallback(const UResourceBundle *resB,
                           UErrorCode *status);
 
 #ifdef __cplusplus
+
+U_CAPI void U_EXPORT2
+ures_getAllItemsWithFallback(const UResourceBundle *bundle, const char *path,
+                             icu::ResourceSink &sink, UErrorCode &errorCode);
 
 U_CAPI void U_EXPORT2
 ures_getAllArrayItemsWithFallback(const UResourceBundle *bundle, const char *path,
