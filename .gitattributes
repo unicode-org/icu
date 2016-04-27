@@ -3932,7 +3932,6 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/LocaleDisplayNamesImpl.java svneol=
 icu4j/main/classes/core/src/com/ibm/icu/impl/LocaleIDParser.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/LocaleIDs.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/LocaleUtility.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/MultiComparator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Norm2AllModes.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Normalizer2Impl.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/OlsonTimeZone.java svneol=native#text/plain%3Bcharset%3Dutf-8
