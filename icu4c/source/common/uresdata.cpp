@@ -380,6 +380,36 @@ UBool isNoInheritanceMarker(const ResourceData *pResData, Resource res) {
     return FALSE;
 }
 
+int32_t getStringArray(const ResourceData *pResData, const icu::ResourceArray &array,
+                       icu::UnicodeString *dest, int32_t capacity,
+                       UErrorCode &errorCode) {
+    if(U_FAILURE(errorCode)) {
+        return 0;
+    }
+    if(dest == NULL ? capacity != 0 : capacity < 0) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    int32_t length = array.getSize();
+    if(length == 0) {
+        return 0;
+    }
+    if(length > capacity) {
+        errorCode = U_BUFFER_OVERFLOW_ERROR;
+        return length;
+    }
+    for(int32_t i = 0; i < length; ++i) {
+        int32_t sLength;
+        const UChar *s = res_getString(pResData, array.internalGetResource(pResData, i), &sLength);
+        if(s == NULL) {
+            errorCode = U_RESOURCE_TYPE_MISMATCH;
+            return 0;
+        }
+        dest[i].setTo(TRUE, s, sLength);
+    }
+    return length;
+}
+
 }  // namespace
 
 U_CAPI const UChar * U_EXPORT2
@@ -535,6 +565,130 @@ const uint8_t *ResourceDataValue::getBinary(int32_t &length, UErrorCode &errorCo
     return b;
 }
 
+ResourceArray ResourceDataValue::getArray(UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode)) {
+        return ResourceArray();
+    }
+    const uint16_t *items16 = NULL;
+    const Resource *items32 = NULL;
+    uint32_t offset=RES_GET_OFFSET(res);
+    int32_t length = 0;
+    switch(RES_GET_TYPE(res)) {
+    case URES_ARRAY:
+        if (offset!=0) {  // empty if offset==0
+            items32 = (const Resource *)pResData->pRoot+offset;
+            length = *items32++;
+        }
+        break;
+    case URES_ARRAY16:
+        items16 = pResData->p16BitUnits+offset;
+        length = *items16++;
+        break;
+    default:
+        errorCode = U_RESOURCE_TYPE_MISMATCH;
+        return ResourceArray();
+    }
+    return ResourceArray(items16, items32, length);
+}
+
+ResourceTable ResourceDataValue::getTable(UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode)) {
+        return ResourceTable();
+    }
+    const uint16_t *keys16 = NULL;
+    const int32_t *keys32 = NULL;
+    const uint16_t *items16 = NULL;
+    const Resource *items32 = NULL;
+    uint32_t offset = RES_GET_OFFSET(res);
+    int32_t length = 0;
+    switch(RES_GET_TYPE(res)) {
+    case URES_TABLE:
+        if (offset != 0) {  // empty if offset==0
+            keys16 = (const uint16_t *)(pResData->pRoot+offset);
+            length = *keys16++;
+            items32 = (const Resource *)(keys16+length+(~length&1));
+        }
+        break;
+    case URES_TABLE16:
+        keys16 = pResData->p16BitUnits+offset;
+        length = *keys16++;
+        items16 = keys16 + length;
+        break;
+    case URES_TABLE32:
+        if (offset != 0) {  // empty if offset==0
+            keys32 = pResData->pRoot+offset;
+            length = *keys32++;
+            items32 = (const Resource *)keys32 + length;
+        }
+        break;
+    default:
+        errorCode = U_RESOURCE_TYPE_MISMATCH;
+        return ResourceTable();
+    }
+    return ResourceTable(keys16, keys32, items16, items32, length);
+}
+
+UBool ResourceDataValue::isNoInheritanceMarker() const {
+    return ::isNoInheritanceMarker(pResData, res);
+}
+
+int32_t ResourceDataValue::getStringArray(UnicodeString *dest, int32_t capacity,
+                                          UErrorCode &errorCode) const {
+    return ::getStringArray(pResData, getArray(errorCode), dest, capacity, errorCode);
+}
+
+int32_t ResourceDataValue::getStringArrayOrStringAsArray(UnicodeString *dest, int32_t capacity,
+                                                         UErrorCode &errorCode) const {
+    if(URES_IS_ARRAY(res)) {
+        return ::getStringArray(pResData, getArray(errorCode), dest, capacity, errorCode);
+    }
+    if(U_FAILURE(errorCode)) {
+        return 0;
+    }
+    if(dest == NULL ? capacity != 0 : capacity < 0) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if(capacity < 1) {
+        errorCode = U_BUFFER_OVERFLOW_ERROR;
+        return 1;
+    }
+    int32_t sLength;
+    const UChar *s = res_getString(pResData, res, &sLength);
+    if(s != NULL) {
+        dest[0].setTo(TRUE, s, sLength);
+        return 1;
+    }
+    errorCode = U_RESOURCE_TYPE_MISMATCH;
+    return 0;
+}
+
+UnicodeString ResourceDataValue::getStringOrFirstOfArray(UErrorCode &errorCode) const {
+    UnicodeString us;
+    if(U_FAILURE(errorCode)) {
+        return us;
+    }
+    int32_t sLength;
+    const UChar *s = res_getString(pResData, res, &sLength);
+    if(s != NULL) {
+        us.setTo(TRUE, s, sLength);
+        return us;
+    }
+    ResourceArray array = getArray(errorCode);
+    if(U_FAILURE(errorCode)) {
+        return us;
+    }
+    if(array.getSize() > 0) {
+        s = res_getString(pResData, array.internalGetResource(pResData, 0), &sLength);
+        if(s != NULL) {
+            us.setTo(TRUE, s, sLength);
+            return us;
+        }
+    }
+    errorCode = U_RESOURCE_TYPE_MISMATCH;
+    return us;
+}
+
 U_NAMESPACE_END
 
 static Resource
@@ -673,28 +827,25 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
     uint32_t offset = RES_GET_OFFSET(table);
     int32_t length = 0;
     switch(RES_GET_TYPE(table)) {
-    case URES_TABLE: {
-        if (offset != 0) { /* empty if offset==0 */
+    case URES_TABLE:
+        if (offset != 0) {  // empty if offset==0
             keys16 = (const uint16_t *)(pResData->pRoot+offset);
             length = *keys16++;
             items32 = (const Resource *)(keys16+length+(~length&1));
         }
         break;
-    }
-    case URES_TABLE16: {
+    case URES_TABLE16:
         keys16 = pResData->p16BitUnits+offset;
         length = *keys16++;
         items16 = keys16 + length;
         break;
-    }
-    case URES_TABLE32: {
-        if (offset != 0) { /* empty if offset==0 */
+    case URES_TABLE32:
+        if (offset != 0) {  // empty if offset==0
             keys32 = pResData->pRoot+offset;
             length = *keys32++;
             items32 = (const Resource *)keys32 + length;
         }
         break;
-    }
     default:
         errorCode = U_RESOURCE_TYPE_MISMATCH;
         return;
@@ -742,6 +893,27 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
     sink.leave(errorCode);
 }
 
+UBool icu::ResourceTable::getKeyAndValue(int32_t i,
+                                         const char *&key, icu::ResourceValue &value) const {
+    if(0 <= i && i < length) {
+        icu::ResourceDataValue &rdValue = static_cast<icu::ResourceDataValue &>(value);
+        if (keys16 != NULL) {
+            key = RES_GET_KEY16(rdValue.pResData, keys16[i]);
+        } else {
+            key = RES_GET_KEY32(rdValue.pResData, keys32[i]);
+        }
+        Resource res;
+        if (items16 != NULL) {
+            res = makeResourceFrom16(rdValue.pResData, items16[i]);
+        } else {
+            res = items32[i];
+        }
+        rdValue.setResource(res);
+        return TRUE;
+    }
+    return FALSE;
+}
+
 U_CAPI Resource U_EXPORT2
 res_getArrayItem(const ResourceData *pResData, Resource array, int32_t indexR) {
     uint32_t offset=RES_GET_OFFSET(array);
@@ -779,18 +951,16 @@ ures_getAllArrayItems(const ResourceData *pResData, Resource array,
     uint32_t offset=RES_GET_OFFSET(array);
     int32_t length = 0;
     switch(RES_GET_TYPE(array)) {
-    case URES_ARRAY: {
-        if (offset!=0) { /* empty if offset==0 */
+    case URES_ARRAY:
+        if (offset!=0) {  // empty if offset==0
             items32 = (const Resource *)pResData->pRoot+offset;
             length = *items32++;
         }
         break;
-    }
-    case URES_ARRAY16: {
+    case URES_ARRAY16:
         items16 = pResData->p16BitUnits+offset;
         length = *items16++;
         break;
-    }
     default:
         errorCode = U_RESOURCE_TYPE_MISMATCH;
         return;
@@ -828,6 +998,23 @@ ures_getAllArrayItems(const ResourceData *pResData, Resource array,
         if(U_FAILURE(errorCode)) { return; }
     }
     sink.leave(errorCode);
+}
+
+uint32_t icu::ResourceArray::internalGetResource(const ResourceData *pResData, int32_t i) const {
+    if (items16 != NULL) {
+        return makeResourceFrom16(pResData, items16[i]);
+    } else {
+        return items32[i];
+    }
+}
+
+UBool icu::ResourceArray::getValue(int32_t i, icu::ResourceValue &value) const {
+    if(0 <= i && i < length) {
+        icu::ResourceDataValue &rdValue = static_cast<icu::ResourceDataValue &>(value);
+        rdValue.setResource(internalGetResource(rdValue.pResData, i));
+        return TRUE;
+    }
+    return FALSE;
 }
 
 U_CFUNC Resource

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2015, International Business Machines
+* Copyright (C) 1999-2016, International Business Machines
 *                Corporation and others. All Rights Reserved.
 ******************************************************************************
 *   file name:  uresdata.h
@@ -379,7 +379,7 @@ enum {
 /*
  * Structure for a single, memory-mapped ResourceBundle.
  */
-typedef struct {
+typedef struct ResourceData {
     UDataMemory *data;
     const int32_t *pRoot;
     const uint16_t *p16BitUnits;
@@ -486,6 +486,14 @@ public:
     virtual uint32_t getUInt(UErrorCode &errorCode) const;
     virtual const int32_t *getIntVector(int32_t &length, UErrorCode &errorCode) const;
     virtual const uint8_t *getBinary(int32_t &length, UErrorCode &errorCode) const;
+    virtual ResourceArray getArray(UErrorCode &errorCode) const;
+    virtual ResourceTable getTable(UErrorCode &errorCode) const;
+    virtual UBool isNoInheritanceMarker() const;
+    virtual int32_t getStringArray(UnicodeString *dest, int32_t capacity,
+                                   UErrorCode &errorCode) const;
+    virtual int32_t getStringArrayOrStringAsArray(UnicodeString *dest, int32_t capacity,
+                                                  UErrorCode &errorCode) const;
+    virtual UnicodeString getStringOrFirstOfArray(UErrorCode &errorCode) const;
 
     const ResourceData *pResData;
 
