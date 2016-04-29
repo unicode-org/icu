@@ -72,21 +72,6 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
     }
 }
 
-/**
- * Same as above but does not adopt memory
- */
-RuleBasedBreakIterator::RuleBasedBreakIterator(const RBBIDataHeader* data, enum EDontAdopt, UErrorCode &status)
-{
-    init();
-    fData = new RBBIDataWrapper(data, RBBIDataWrapper::kDontAdopt, status); // status checked in constructor
-    if (U_FAILURE(status)) {return;}
-    if(fData == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-}
-
-
 //
 //  Construct from precompiled binary rules (tables).  This constructor is public API,
 //  taking the rules as a (const uint8_t *) to match the type produced by getBinaryRules().

@@ -1058,75 +1058,47 @@ void RBBIAPITest::TestRoundtripRules() {
     }
 }
 
-// Try out the RuleBasedBreakIterator constructors that take RBBIDataHeader*
-// (these are protected so we access them via a local class RBBIWithProtectedFunctions).
-// This is just a sanity check, not a thorough test (e.g. we don't check that the
-// first delete actually frees rulesCopy).
-void RBBIAPITest::TestCreateFromRBBIData() {
-    // Get some handy RBBIData
-    const char *brkName = "word"; // or "sent", "line", "char", etc.
-    UErrorCode status = U_ZERO_ERROR;
-    LocalUDataMemoryPointer data(udata_open(U_ICUDATA_BRKITR, "brk", brkName, &status));
-    if ( U_SUCCESS(status) ) {
-        const RBBIDataHeader * builtRules = (const RBBIDataHeader *)udata_getMemory(data.getAlias());
-        uint32_t length = builtRules->fLength;
-        RBBIWithProtectedFunctions * brkItr;
 
-        // Try the memory-adopting constructor, need to copy the data first
-        RBBIDataHeader * rulesCopy = (RBBIDataHeader *) uprv_malloc(length);
-        if ( rulesCopy ) {
-            uprv_memcpy( rulesCopy, builtRules, length );
+// Check getBinaryRules() and construction of a break iterator from those rules.
 
-            brkItr = new RBBIWithProtectedFunctions(rulesCopy, status);
-            if ( U_SUCCESS(status) ) {
-                delete brkItr; // this should free rulesCopy
-            } else {
-                errln("create RuleBasedBreakIterator from RBBIData (adopted): ICU Error \"%s\"\n", u_errorName(status) );
-                status = U_ZERO_ERROR;// reset for the next test
-                uprv_free( rulesCopy );
-            }
-        }
+void RBBIAPITest::TestGetBinaryRules() {
+    UErrorCode status=U_ZERO_ERROR;
+    LocalPointer<BreakIterator> bi(BreakIterator::createLineInstance(Locale::getEnglish(), status));
+    TEST_ASSERT_SUCCESS(status);
+    RuleBasedBreakIterator *rbbi = dynamic_cast<RuleBasedBreakIterator *>(bi.getAlias());
+    TEST_ASSERT(rbbi != NULL);
 
-        // Now try the non-adopting constructor
-        brkItr = new RBBIWithProtectedFunctions(builtRules, RBBIWithProtectedFunctions::kDontAdopt, status);
-        if ( U_SUCCESS(status) ) {
-            delete brkItr; // this should NOT attempt to free builtRules
-            if (builtRules->fLength != length) { // sanity check
-                errln("create RuleBasedBreakIterator from RBBIData (non-adopted): delete affects data\n" );
-            }
-        } else {
-            errln("create RuleBasedBreakIterator from RBBIData (non-adopted): ICU Error \"%s\"\n", u_errorName(status) );
-        }
+    // Check that the new line break iterator is nominally functional.
+    UnicodeString helloWorld("Hello, World!");
+    rbbi->setText(helloWorld);
+    int n = 0;
+    while (bi->next() != UBRK_DONE) {
+        ++n;
     }
+    TEST_ASSERT(n == 2);
 
-    // getBinaryRules() and RuleBasedBreakIterator(uint8_t binaryRules, ...)
-    //
-    status = U_ZERO_ERROR;
-    RuleBasedBreakIterator *rb = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
-    if (rb == NULL || U_FAILURE(status)) {
-        dataerrln("Unable to create BreakIterator::createWordInstance (Locale::getEnglish) - %s", u_errorName(status));
-    } else {
-        uint32_t length;
-        const uint8_t *rules = rb->getBinaryRules(length);
-        RuleBasedBreakIterator *rb2 = new RuleBasedBreakIterator(rules, length, status);
-        TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT(*rb == *rb2);
-        UnicodeString words = "one two three ";
-        rb2->setText(words);
-        int wordCounter = 0;
-        while (rb2->next() != UBRK_DONE) {
-            wordCounter++;
-        }
-        TEST_ASSERT(wordCounter == 6);
+    // Extract the binary rules as a uint8_t blob.
+    uint32_t ruleLength;
+    const uint8_t *binRules = rbbi->getBinaryRules(ruleLength);
+    TEST_ASSERT(ruleLength > 0);
+    TEST_ASSERT(binRules != NULL);
 
-        status = U_ZERO_ERROR;
-        RuleBasedBreakIterator *rb3 = new RuleBasedBreakIterator(rules, length-1, status);
-        TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
-
-        delete rb;
-        delete rb2;
-        delete rb3;
+    // Clone the binary rules, and create a break iterator from that.
+    // The break iterator does not adopt the rules; we must delete when we are finished with the iterator.
+    uint8_t *clonedRules = new uint8_t[ruleLength];
+    memcpy(clonedRules, binRules, ruleLength);
+    RuleBasedBreakIterator clonedBI(clonedRules, ruleLength, status);
+    TEST_ASSERT_SUCCESS(status);
+    
+    // Check that the cloned line break iterator is nominally alive.
+    clonedBI.setText(helloWorld);
+    n = 0;
+    while (clonedBI.next() != UBRK_DONE) {
+        ++n;
     }
+    TEST_ASSERT(n == 2);
+
+    delete[] clonedRules;
 }
 
 
@@ -1428,40 +1400,32 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
 void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln((UnicodeString)"TestSuite RuleBasedBreakIterator API ");
-    switch (index) {
-     //   case 0: name = "TestConstruction"; if (exec) TestConstruction(); break;
+    TESTCASE_AUTO_BEGIN;
 #if !UCONFIG_NO_FILE_IO
-        case  0: name = "TestCloneEquals"; if (exec) TestCloneEquals(); break;
-        case  1: name = "TestgetRules"; if (exec) TestgetRules(); break;
-        case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
-        case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
-        case  4: name = "TestIteration"; if (exec) TestIteration(); break;
-#else
-        case  0: case  1: case  2: case  3: case  4: name = "skip"; break;
+    TESTCASE_AUTO(TestCloneEquals);
+    TESTCASE_AUTO(TestgetRules);
+    TESTCASE_AUTO(TestHashCode);
+    TESTCASE_AUTO(TestGetSetAdoptText);
+    TESTCASE_AUTO(TestIteration);
 #endif
-        case  5: name = "TestBuilder"; if (exec) TestBuilder(); break;
-        case  6: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
-        case  7: name = "TestRuleStatusVec"; if (exec) TestRuleStatusVec(); break;
-        case  8: name = "TestBug2190"; if (exec) TestBug2190(); break;
+    TESTCASE_AUTO(TestBuilder);
+    TESTCASE_AUTO(TestQuoteGrouping);
+    TESTCASE_AUTO(TestRuleStatusVec);
+    TESTCASE_AUTO(TestBug2190);
 #if !UCONFIG_NO_FILE_IO
-        case  9: name = "TestRegistration"; if (exec) TestRegistration(); break;
-        case 10: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
-        case 11: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
-        case 12: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
-        case 13: name = "TestCreateFromRBBIData"; if (exec) TestCreateFromRBBIData(); break;
-#else
-        case  9: case 10: case 11: case 12: case 13: name = "skip"; break;
+    TESTCASE_AUTO(TestRegistration);
+    TESTCASE_AUTO(TestBoilerPlate);
+    TESTCASE_AUTO(TestRuleStatus);
+    TESTCASE_AUTO(TestRoundtripRules);
+    TESTCASE_AUTO(TestGetBinaryRules);
 #endif
-        case 14: name = "TestRefreshInputText"; if (exec) TestRefreshInputText(); break;
-
+    TESTCASE_AUTO(TestRefreshInputText);
 #if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
-    case 15: name = "TestFilteredBreakIteratorBuilder"; if(exec) TestFilteredBreakIteratorBuilder(); break;
-#else
-    case 15: name="skip"; break;
+    TESTCASE_AUTO(TestFilteredBreakIteratorBuilder);
 #endif
-        default: name = ""; break; // needed to end loop
-    }
+    TESTCASE_AUTO_END;
 }
+
 
 //---------------------------------------------
 //Internal subroutines
@@ -1502,20 +1466,6 @@ void RBBIAPITest::doTest(UnicodeString& testString, int32_t start, int32_t gotof
          errln(prettify((UnicodeString)"ERROR:****selected \"" + selected + "\" instead of \"" + expected + "\""));
     else
         logln(prettify("****selected \"" + selected + "\""));
-}
-
-//---------------------------------------------
-//RBBIWithProtectedFunctions class functions
-//---------------------------------------------
-
-RBBIWithProtectedFunctions::RBBIWithProtectedFunctions(RBBIDataHeader* data, UErrorCode &status)
-    : RuleBasedBreakIterator(data, status)
-{
-}
-
-RBBIWithProtectedFunctions::RBBIWithProtectedFunctions(const RBBIDataHeader* data, enum EDontAdopt, UErrorCode &status)
-    : RuleBasedBreakIterator(data, RuleBasedBreakIterator::kDontAdopt, status)
-{
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
