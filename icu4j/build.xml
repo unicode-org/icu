@@ -873,12 +873,13 @@
         <classpath path="${env.JACOCO_DIR}/lib/jacocoant.jar"/>
     </taskdef>
 
-    <target name="coverageJaCoCo" depends="jar, tests" description="Run the ICU4J unit tests and generate code coverage report">
+    <target name="coverageJaCoCo" depends="build-tools, jar, tests" description="Run the ICU4J unit tests and generate code coverage report">
         <property name="jacoco.out.dir" value="${out.dir}/jacoco"/>
         <property name="jacoco.exec.data.file" value="${jacoco.out.dir}/jacoco.exec"/>
         <property name="jacoco.report.html.zip" value="${jacoco.out.dir}/report_html.zip"/>
         <property name="jacoco.report.xml" value="${jacoco.out.dir}/report.xml"/>
         <property name="jacoco.report.csv" value="${jacoco.out.dir}/report.csv"/>
+        <property name="jacoco.exclusion.txt" value="coverage-exclusion.txt"/>
 
         <delete dir="${jacoco.out.dir}"/>
         <mkdir dir="${jacoco.out.dir}"/>
@@ -927,6 +928,14 @@
             <xml destfile="${jacoco.report.xml}"/>
             <csv destfile="${jacoco.report.csv}"/>
         </jacoco:report>
+
+        <java classname="com.ibm.icu.dev.tool.coverage.JacocoReportCheck" failonerror="true">
+            <arg line="${jacoco.report.xml}  ${jacoco.exclusion.txt}"/>
+            <classpath>
+                <pathelement location="${icu4j.build-tools.jar}"/>
+            </classpath>
+        </java>
+
     </target>
 
     <!-- Clover code coverage target -->
