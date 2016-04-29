@@ -7,8 +7,6 @@
 package com.ibm.icu.text;
 
 import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -16,6 +14,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.coll.CollationData;
 import com.ibm.icu.impl.coll.CollationRoot;
 import com.ibm.icu.lang.UCharacter;
@@ -983,46 +982,45 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      */
     public static final String[] getKeywordValuesForLocale(String key, ULocale locale, 
                                                            boolean commonlyUsed) {
-        // Note: The parameter commonlyUsed is actually not used.
+        // Note: The parameter commonlyUsed is not used.
         // The switch is in the method signature for consistency
         // with other locale services.
 
-        // Read available collation values from collation bundles
-        String baseLoc = locale.getBaseName();
+        // Read available collation values from collation bundles.
+        ICUResourceBundle bundle = (ICUResourceBundle)
+                UResourceBundle.getBundleInstance(
+                        ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
+        KeywordsSink sink = new KeywordsSink();
+        bundle.getAllItemsWithFallback("collations", sink);
+        return sink.values.toArray(new String[sink.values.size()]);
+    }
+
+    private static final class KeywordsSink extends UResource.Sink {
         LinkedList<String> values = new LinkedList<String>();
+        boolean hasDefault = false;
 
-        UResourceBundle bundle = UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_COLLATION_BASE_NAME, baseLoc);
-
-        String defcoll = null;
-        while (bundle != null) {
-            UResourceBundle collations = bundle.get("collations");
-            Enumeration<String> collEnum = collations.getKeys();
-            while (collEnum.hasMoreElements()) {
-                String collkey = collEnum.nextElement();
-                if (collkey.equals("default")) {
-                    if (defcoll == null) {
-                        // Keep the default
-                        defcoll = collations.getString("default");
+        @Override
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table collations = value.getTable();
+            for (int i = 0; collations.getKeyAndValue(i, key, value); ++i) {
+                int type = value.getType();
+                if (type == UResourceBundle.STRING) {
+                    if (!hasDefault && key.contentEquals("default")) {
+                        String defcoll = value.getString();
+                        if (!defcoll.isEmpty()) {
+                            values.remove(defcoll);
+                            values.addFirst(defcoll);
+                            hasDefault = true;
+                        }
                     }
-                } else if (!collkey.startsWith("private-") && !values.contains(collkey)) {
-                    values.add(collkey);
+                } else if (type == UResourceBundle.TABLE && !key.startsWith("private-")) {
+                    String collkey = key.toString();
+                    if (!values.contains(collkey)) {
+                        values.add(collkey);
+                    }
                 }
             }
-            bundle = ((ICUResourceBundle)bundle).getParent();
         }
-        // Reordering
-        Iterator<String> itr = values.iterator();
-        String[] result = new String[values.size()];
-        result[0] = defcoll;
-        int idx = 1;
-        while (itr.hasNext()) {
-            String collKey = itr.next();
-            if (!collKey.equals(defcoll)) {
-                result[idx++] = collKey;
-            }
-        }
-        return result;
     }
 
     /**
