@@ -1306,7 +1306,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
                              //       The NULL parameter is the ignored code unit lengths.
 
         // if there are no single character matches found in the dictionary 
-        // starting with this charcter, treat character as a 1-character word 
+        // starting with this character, treat character as a 1-character word 
         // with the highest value possible, i.e. the least likely to occur.
         // Exclude Korean characters from this treatment, as they should be left
         // together by default.
