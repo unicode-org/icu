@@ -122,7 +122,7 @@ public class JacocoReportCheck {
 
         if (coveredButExcludedSet.size() > 0) {
             System.out.println("//");
-            System.out.println("// Methods coverved by tests, but included in the exclusion set");
+            System.out.println("// Methods covered by tests, but included in the exclusion set");
             System.out.println("//");
             for (String key : coveredButExcludedSet) {
                 System.out.println(key);
