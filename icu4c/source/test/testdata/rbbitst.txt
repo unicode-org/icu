@@ -274,6 +274,16 @@
 <word>
 <data>•ジョージア<400> •</data>
 
+# Ticket #11999
+#   Unhandled Break Engine was consuming all characters, not just unhandled.
+#   \U00011700 is AHOM LETTER KA. There is no dictionary for AHOM, triggering the unhandled engine,
+#       which then incorrectly also consumed the following Japanese text. (ICU4J only)
+<word>
+<locale en>
+<data>•ロ<400>から<400>売却<400>完了<400>時<400>の<400>時価<400>が<400>提示<400>さ<400>れ<400>て<400>いる<400></data>
+<data>•\U00011700<200>ロ<400>から<400>売却<400>完了<400>時<400>の<400>時価<400>が<400>提示<400>さ<400>れ<400>て<400>いる<400></data>
+
+
 ########################################################################################
 #
 #
