@@ -274,6 +274,13 @@
 <word>
 <data>•ジョージア<400> •</data>
 
+# Ticket #11996
+<locale en>
+<word>
+<data>•栃木<400>県<400>足利<400>市<400>で<400>の<400>撮影<400>が<400>公開<400></data>
+<data>•栃木<400>県<400>足利<400>市<400>で<400>の<400>撮影<400>が<400>公開<400>さ<400>れ<400>た<400></data>
+
+
 # Ticket #11999
 #   Unhandled Break Engine was consuming all characters, not just unhandled.
 #   \U00011700 is AHOM LETTER KA. There is no dictionary for AHOM, triggering the unhandled engine,
