@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2014, International Business Machines Corporation and         *
+ * Copyright (C) 2012-2016, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -158,6 +158,7 @@ class CjkBreakEngine extends DictionaryBreakEngine {
             // with the highest value possible (i.e. the least likely to occur).
             // Exclude Korean characters from this treatment, as they should be 
             // left together by default.
+            text.setIndex(i);  // fDictionary.matches() advances the text position; undo that.
             if ((count == 0 || lengths[0] != 1) && current32(text) != DONE32 && !fHangulWordSet.contains(current32(text))) {
                 values[count] = maxSnlp;
                 lengths[count] = 1;
@@ -177,7 +178,6 @@ class CjkBreakEngine extends DictionaryBreakEngine {
             // run of Katakana characters is considered a candidate word with
             // a default cost specified in the katakanaCost table according 
             // to its length.
-            text.setIndex(i);
             boolean is_katakana = isKatakana(current32(text));
             if (!is_prev_katakana && is_katakana) {
                 int j = i + 1;
