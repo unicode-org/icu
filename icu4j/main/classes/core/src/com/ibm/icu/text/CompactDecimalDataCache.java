@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2016, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2012-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.ULocale;
@@ -128,7 +129,7 @@ class CompactDecimalDataCache {
     private static DataBundle load(ULocale ulocale) {
         NumberingSystem ns = NumberingSystem.getInstance(ulocale);
         ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
-                getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
+                getBundleInstance(ICUData.ICU_BASE_NAME, ulocale);
         r = r.getWithFallback(NUMBER_ELEMENTS);
         String numberingSystemName = ns.getName();
 

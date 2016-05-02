@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2014, International Business Machines Corporation and
+ * Copyright (C) 2009-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -27,7 +27,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
 
     public CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback) {
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_CURR_BASE_NAME, locale);
+                ICUData.ICU_CURR_BASE_NAME, locale);
         if (!withFallback) {
             int status = rb.getLoadingStatus();
             if (status == ICUResourceBundle.FROM_DEFAULT || status == ICUResourceBundle.FROM_ROOT) {
@@ -141,7 +141,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             ULocale locale = rb.getULocale();
             for (;locale != null; locale = locale.getFallback()) {
                 ICUResourceBundle r = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                        ICUResourceBundle.ICU_CURR_BASE_NAME, locale);
+                        ICUData.ICU_CURR_BASE_NAME, locale);
                 if (r == null) {
                     continue;
                 }
@@ -206,7 +206,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
 
             for (ULocale locale = rb.getULocale(); locale != null; locale = locale.getFallback()) {
                 ICUResourceBundle bundle = (ICUResourceBundle)
-                    UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME, locale);
+                    UResourceBundle.getBundleInstance(ICUData.ICU_CURR_BASE_NAME, locale);
                 ICUResourceBundle curr = bundle.findTopLevel("Currencies");
                 if (curr == null) {
                     continue;
@@ -235,7 +235,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             Map<String, Set<String>> visitedPlurals = new HashMap<String, Set<String>>();
             for (ULocale locale = rb.getULocale(); locale != null; locale = locale.getFallback()) {
                 ICUResourceBundle bundle = (ICUResourceBundle)
-                    UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_CURR_BASE_NAME, locale);
+                    UResourceBundle.getBundleInstance(ICUData.ICU_CURR_BASE_NAME, locale);
                 ICUResourceBundle curr = bundle.findTopLevel("Currencies");
                 if (curr != null) {
                     for (int i = 0; i < curr.getSize(); ++i) {

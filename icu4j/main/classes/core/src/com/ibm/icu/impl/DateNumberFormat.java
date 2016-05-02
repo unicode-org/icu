@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007-2014, International Business Machines
+*   Copyright (C) 2007-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -59,7 +59,7 @@ public final class DateNumberFormat extends NumberFormat {
         if (elems == null) {
             // Missed cache
             String minusString;
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, loc);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, loc);
             try {
                 minusString = rb.getStringWithFallback("NumberElements/"+nsName+"/symbols/minusSign");
             } catch (MissingResourceException ex) {

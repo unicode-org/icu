@@ -17,6 +17,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.UResourceBundle;
@@ -203,7 +204,7 @@ public class KeyTypeData {
 
     private static void initFromResourceBundle() {
         UResourceBundle keyTypeDataRes = UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME,
+                ICUData.ICU_BASE_NAME,
                 "keyTypeData",
                 ICUResourceBundle.ICU_DATA_CLASS_LOADER);
 

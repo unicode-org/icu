@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2016, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternProps;
@@ -826,7 +827,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         this.locale = locale;
 
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.
-            getBundleInstance(ICUResourceBundle.ICU_RBNF_BASE_NAME, locale);
+            getBundleInstance(ICUData.ICU_RBNF_BASE_NAME, locale);
 
         // TODO: determine correct actual/valid locale.  Note ambiguity
         // here -- do actual/valid refer to pattern, DecimalFormatSymbols,
@@ -1843,7 +1844,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Set capitalizationForListOrMenu, capitalizationForStandAlone 
      */
     private void initCapitalizationContextInfo(ULocale theLocale) {
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, theLocale);
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, theLocale);
         try {
             ICUResourceBundle rdb = rb.getWithFallback("contextTransforms/number-spellout");
             int[] intVector = rdb.getIntVector();

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2016, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2011-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
@@ -423,7 +424,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
         try {
             ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
-                    ICUResourceBundle.ICU_ZONE_BASE_NAME, locale);
+                    ICUData.ICU_ZONE_BASE_NAME, locale);
             try {
                 gmtPattern = bundle.getStringWithFallback("zoneStrings/gmtFormat");
             } catch (MissingResourceException e) {

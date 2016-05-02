@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2009-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
@@ -9,6 +9,7 @@ package com.ibm.icu.dev.test.util;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
@@ -70,7 +71,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
        };
 
        logln("Testing functional equivalents for collation...");
-       getFunctionalEquivalentTestCases(ICUResourceBundle.ICU_COLLATION_BASE_NAME,
+       getFunctionalEquivalentTestCases(ICUData.ICU_COLLATION_BASE_NAME,
                                         Collator.class.getClassLoader(),
                COLLATION_RESNAME, COLLATION_KEYWORD, true, collCases);
     }
@@ -90,7 +91,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
         ICUResourceBundle bundle = null;
         String key = null;
         try{
-            bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
+            bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
 
             if(!bundle.getULocale().getName().equals("de")){
                 errln("did not get the expected bundle");
@@ -105,7 +106,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
         }
 
 
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,"fr_FR");
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_COLLATION_BASE_NAME,"fr_FR");
         key = bundle.getStringWithFallback("collations/default");
         if(!key.equals("standard")){
             errln("Did not get the expected result from getStringWithFallback method.");
@@ -118,7 +119,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
         int n;
 
         logln("Testing getting collation values:");
-        kwVals = ICUResourceBundle.getKeywordValues(ICUResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME);
+        kwVals = ICUResourceBundle.getKeywordValues(ICUData.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME);
         for(n=0;n<kwVals.length;n++) {
             logln(new Integer(n).toString() + ": " + kwVals[n]);
             if(DEFAULT_NAME.equals(kwVals[n])) {
@@ -141,7 +142,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
     }
 
     public void TestOpen(){
-        UResourceBundle bundle = (UResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
+        UResourceBundle bundle = (UResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
         if(bundle==null){
             errln("could not load the stream");
         }

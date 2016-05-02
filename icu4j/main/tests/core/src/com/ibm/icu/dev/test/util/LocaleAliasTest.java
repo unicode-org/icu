@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2009, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2005-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -14,7 +14,7 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.HashMap;
 
-import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
@@ -197,8 +197,8 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
             UResourceBundle urb1 = null;
             UResourceBundle urb2 = null;
             
-            urb1 = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, oldLoc);
-            urb2 = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, newLoc);
+            urb1 = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, oldLoc);
+            urb2 = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, newLoc);
             ULocale l1 = urb1.getULocale();
             ULocale l2 = urb2.getULocale();        
             if (!newLoc.equals(l1)) {

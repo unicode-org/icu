@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009,2016 International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009,2016 International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -65,7 +65,7 @@ public class CalendarUtil {
         // the locale's region
         try {
             UResourceBundle rb = UResourceBundle.getBundleInstance(
-                                    ICUResourceBundle.ICU_BASE_NAME,
+                                    ICUData.ICU_BASE_NAME,
                                     "supplementalData",
                                     ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle calPref = rb.get("calendarPreferenceData");

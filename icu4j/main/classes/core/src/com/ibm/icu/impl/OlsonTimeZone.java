@@ -1,7 +1,7 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005-2014, International Business Machines Corporation and    *
-  * others. All Rights Reserved.                                                *
+  * Copyright (C) 2005-2016, International Business Machines Corporation and
+  * others. All Rights Reserved.
   *******************************************************************************
   */
 package com.ibm.icu.impl;
@@ -633,7 +633,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     // This constructor is used for testing purpose only
     public OlsonTimeZone(String id){
         super(id);
-        UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+        UResourceBundle top = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
                 ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle res = ZoneMeta.openOlsonResource(top, id);
         construct(top, res);
@@ -1238,7 +1238,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             String tzid = getID();
             if (tzid != null) {
                 try {
-                    UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                    UResourceBundle top = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
                             ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                     UResourceBundle res = ZoneMeta.openOlsonResource(top, tzid);
                     construct(top, res);

@@ -18,6 +18,7 @@ import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencySpacingInfo;
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.Currency;
@@ -963,7 +964,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         // Open the resource bundle and get the locale IDs
         // TODO: Is there a better way to get the locale than making an ICUResourceBundle instance?
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
-            getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            getBundleInstance(ICUData.ICU_BASE_NAME, locale);
         // TODO: Determine actual and valid locale correctly.
         ULocale uloc = rb.getULocale();
         setLocale(uloc, uloc);

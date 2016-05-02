@@ -18,6 +18,7 @@ import java.util.MissingResourceException;
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
@@ -1932,7 +1933,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         ArrayList<String> values = new ArrayList<String>();
 
         UResourceBundle rb = UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME,
+                ICUData.ICU_BASE_NAME,
                 "supplementalData",
                 ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle calPref = rb.get("calendarPreferenceData");
@@ -4811,7 +4812,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
 
         UResourceBundle rb = UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME,
+                ICUData.ICU_BASE_NAME,
                 "supplementalData",
                 ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle weekDataInfo = rb.get("weekData");

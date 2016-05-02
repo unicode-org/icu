@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2011, International Business Machines
+*   Copyright (c) 2001-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.lang.UScript;
@@ -120,7 +121,7 @@ class TransliteratorRegistry {
                 // If 'top' is not a script name, try a locale lookup
                 if (script == UScript.INVALID_CODE) {
                     Locale toploc = LocaleUtility.getLocaleFromName(top);
-                    res  = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME,toploc);
+                    res  = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_TRANSLIT_BASE_NAME,toploc);
                     // Make sure we got the bundle we wanted; otherwise, don't use it
                     if (res!=null && LocaleUtility.isFallbackOf(res.getULocale().toString(), top)) {
                         isSpecLocale = true;

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2016, Google Inc, International Business Machines        *
- * Corporation and others. All Rights Reserved.                                *
+ * Copyright (C) 2004-2016, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.util;
@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.text.UnicodeSet;
@@ -274,7 +275,7 @@ public class MeasureUnit implements Serializable {
         if (cacheIsPopulated) {
             return;
         }
-        ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "en");
+        ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "en");
         for (String key : unitKeys) {
             try {
                 ICUResourceBundle unitsTypeRes = resource.getWithFallback(key);
@@ -300,7 +301,7 @@ public class MeasureUnit implements Serializable {
         // preallocate currencies
         try {
             UResourceBundle bundle = UResourceBundle.getBundleInstance(
-                    ICUResourceBundle.ICU_BASE_NAME,
+                    ICUData.ICU_BASE_NAME,
                     "currencyNumericCodes",
                     ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle codeMap = bundle.get("codeMap");

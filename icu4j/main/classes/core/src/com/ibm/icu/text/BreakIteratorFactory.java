@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2015, International Business Machines Corporation and
+ * Copyright (C) 2002-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -114,7 +114,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 
         RuleBasedBreakIterator    iter = null;
         ICUResourceBundle rb           = (ICUResourceBundle)ICUResourceBundle.
-                getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale,
+                getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME, locale,
                         ICUResourceBundle.OpenType.LOCALE_ROOT);
 
         //

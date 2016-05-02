@@ -1,7 +1,7 @@
 /*
  ****************************************************************************************
- * Copyright (C) 2009-2016, Google, Inc.; International Business Machines Corporation   *
- * and others. All Rights Reserved.                                                     *
+ * Copyright (C) 2009-2016, Google, Inc.; International Business Machines Corporation
+ * and others. All Rights Reserved.
  ****************************************************************************************
  */
 package com.ibm.icu.util;
@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Row;
@@ -836,7 +837,7 @@ public class LocaleMatcher {
     @Deprecated
     public static ICUResourceBundle getICUSupplementalData() {
         ICUResourceBundle suppData = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-            ICUResourceBundle.ICU_BASE_NAME,
+            ICUData.ICU_BASE_NAME,
             "supplementalData",
             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         return suppData;

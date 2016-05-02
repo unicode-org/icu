@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.Utility;
@@ -1704,7 +1705,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         ICUResourceBundle rb =
             (ICUResourceBundle)UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME, desiredLocale);
+                ICUData.ICU_BASE_NAME, desiredLocale);
 
         // Because localized date/time pattern characters will be obsolete in CLDR,
         // we decided not to maintain localized pattern characters in ICU any more.

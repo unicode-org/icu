@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.lang.UCharacter;
@@ -153,7 +154,7 @@ public class NumberingSystem {
         String resolvedNumberingSystem = null;
         while (!nsResolved) {           
             try {
-                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,locale);
                 rb = rb.getWithFallback("NumberElements");
                 resolvedNumberingSystem = rb.getStringWithFallback(numbersKeyword);
                 nsResolved = true;
@@ -212,7 +213,7 @@ public class NumberingSystem {
         }        
         
         try {
-            UResourceBundle numberingSystemsInfo = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "numberingSystems");
+            UResourceBundle numberingSystemsInfo = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "numberingSystems");
             UResourceBundle nsCurrent = numberingSystemsInfo.get("numberingSystems");
             UResourceBundle nsTop = nsCurrent.get(name);
 
@@ -240,7 +241,7 @@ public class NumberingSystem {
      */
     public static String [] getAvailableNames() {
     
-            UResourceBundle numberingSystemsInfo = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "numberingSystems");
+            UResourceBundle numberingSystemsInfo = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "numberingSystems");
             UResourceBundle nsCurrent = numberingSystemsInfo.get("numberingSystems");
             UResourceBundle temp;
 

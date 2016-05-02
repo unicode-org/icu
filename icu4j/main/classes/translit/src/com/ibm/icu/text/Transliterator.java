@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2016, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
@@ -1226,7 +1227,7 @@ public abstract class Transliterator implements StringTransform  {
         // root will change to sun.text.resources.LocaleElements
 
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.
-            getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME, inLocale);
+            getBundleInstance(ICUData.ICU_TRANSLIT_BASE_NAME, inLocale);
 
         // Normalize the ID
         String stv[] = TransliteratorIDParser.IDtoSTV(id);
@@ -1913,7 +1914,7 @@ public abstract class Transliterator implements StringTransform  {
          * The extra blank field on "alias" lines is to make the array square.
          */
         UResourceBundle bundle, transIDs, colBund;
-        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME, ROOT);
+        bundle = UResourceBundle.getBundleInstance(ICUData.ICU_TRANSLIT_BASE_NAME, ROOT);
         transIDs = bundle.get(RB_RULE_BASED_IDS);
 
         int row, maxRows;

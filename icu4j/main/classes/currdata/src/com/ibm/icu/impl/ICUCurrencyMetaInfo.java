@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2009-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -24,7 +24,7 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
 
     public ICUCurrencyMetaInfo() {
         ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
-            ICUResourceBundle.ICU_CURR_BASE_NAME, "supplementalData",
+            ICUData.ICU_CURR_BASE_NAME, "supplementalData",
             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         regionInfo = bundle.findTopLevel("CurrencyMap");
         digitInfo = bundle.findTopLevel("CurrencyMeta");

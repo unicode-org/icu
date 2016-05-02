@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2015, International Business Machines Corporation and
+ * Copyright (C) 2001-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -21,6 +21,7 @@ import java.util.TreeSet;
 import java.util.jar.JarEntry;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.BreakIterator;
@@ -92,7 +93,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("Did not get the expected output for Weekend data");
         }
 
-        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "bogus");
+        bundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "bogus");
         if(bundle instanceof UResourceBundle && bundle.getULocale().getName().equals("en_US")){
             logln("wrapper mechanism works for bogus locale");
         }else{
@@ -124,7 +125,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
     public void TestOpen(){
-        UResourceBundle bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "en_US_POSIX");
+        UResourceBundle bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "en_US_POSIX");
 
         if(bundle==null){
             errln("could not create the resource bundle");
@@ -168,7 +169,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("could not create the resource bundle");
         }
 
-        bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zzz_ZZ_very_very_very_long_bogus_bundle");
+        bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "zzz_ZZ_very_very_very_long_bogus_bundle");
         if(!bundle.getULocale().equals(ULocale.getDefault())){
             errln("UResourceBundle did not load the default bundle when bundle was not found. Default: " + ULocale.getDefault() + 
                         ", Bundle locale: " + bundle.getULocale());
@@ -584,7 +585,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
     public void TestAlias(){
         logln("Testing %%ALIAS");
-        UResourceBundle rb = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"iw_IL");
+        UResourceBundle rb = (UResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,"iw_IL");
         UResourceBundle b = rb.get("NumberElements");
         if(b != null){
             if(b.getSize()>0){
@@ -660,7 +661,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         */
         ICUResourceBundle bundle = null;
 
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"fr_FR");
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,"fr_FR");
         ICUResourceBundle b1 = bundle.getWithFallback("calendar");
         String defaultCal = b1.getStringWithFallback("default");
         if(!defaultCal.equals("gregorian")){
@@ -728,14 +729,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
        };
 
        logln("Testing functional equivalents for calendar...");
-       getFunctionalEquivalentTestCases(ICUResourceBundle.ICU_BASE_NAME,
+       getFunctionalEquivalentTestCases(ICUData.ICU_BASE_NAME,
                                         Calendar.class.getClassLoader(),
                CALENDAR_RESNAME, CALENDAR_KEYWORD, false, calCases);
 
        logln("Testing error conditions:");
        try {
            ClassLoader cl = BreakIterator.class.getClassLoader();
-           ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_BRKITR_BASE_NAME, cl, "calendar",
+           ICUResourceBundle.getFunctionalEquivalent(ICUData.ICU_BRKITR_BASE_NAME, cl, "calendar",
               "calendar", new ULocale("ar_EG@calendar=islamic"), new boolean[1], true);
            errln("Err: expected MissingResourceException");
        } catch ( MissingResourceException t ) {
@@ -771,7 +772,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
     public void TestNorwegian(){
         try{
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_REGION_BASE_NAME, "no_NO_NY");
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUData.ICU_REGION_BASE_NAME, "no_NO_NY");
             UResourceBundle sub = rb.get("Countries");
             String s1 = sub.getString("NO");
             if(s1.equals("Noreg")){
@@ -785,7 +786,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
     public void TestJB4102(){
         try {
-            ICUResourceBundle root =(ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "root");
+            ICUResourceBundle root =(ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "root");
             ICUResourceBundle t = null;    
 // AmPmMarkers now exist in root/islamic calendar, so this test is rendered useless.
 //          try{
@@ -868,14 +869,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
    
     public void TestLoadingStatus(){
-        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "yi_IL");
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "yi_IL");
         assertFallbackLoadingStatus("base/yi_IL", bundle.getLoadingStatus());
 
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "eo_DE");
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "eo_DE");
         assertFallbackLoadingStatus("base/eo_DE", bundle.getLoadingStatus());
         
         logln("Test to verify loading status of get(String)");
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_LANG_BASE_NAME, "zh_Hant_TW");
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_LANG_BASE_NAME, "zh_Hant_TW");
         ICUResourceBundle countries = (ICUResourceBundle) bundle.get("Languages");
         assertFallbackLoadingStatus("lang/Languages/zh_Hant_TW", countries.getLoadingStatus());
 
@@ -889,7 +890,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         */
         
         logln("Test to verify root loading status of get()");
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "te_IN");
+        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "te_IN");
         ICUResourceBundle ms = (ICUResourceBundle) bundle.get("layout");
         assertRootLoadingStatus("base/layout/te_IN", ms.getLoadingStatus());
                 
@@ -907,7 +908,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     
     public void TestCoverage(){
         UResourceBundle bundle;
-        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME);
+        bundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME);
         if (bundle == null){
             errln("UResourceBundle.getBundleInstance(String baseName) failed");
         }
@@ -1003,7 +1004,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestAliasFallback(){
         try{
             ULocale loc = new ULocale("en_US");
-            ICUResourceBundle b = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, loc);
+            ICUResourceBundle b = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, loc);
             ICUResourceBundle b1 = (ICUResourceBundle)b.getWithFallback("calendar/hebrew/monthNames/format/abbreviated");
             if(b1!=null){
                 logln("loaded data for abbreviated month names: "+ b1.getKey()); 
