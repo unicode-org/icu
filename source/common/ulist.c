@@ -156,7 +156,8 @@ U_CAPI void U_EXPORT2 ulist_addItemBeginList(UList *list, const void *data, UBoo
 
 U_CAPI UBool U_EXPORT2 ulist_containsString(const UList *list, const char *data, int32_t length) {
     if (list != NULL) {
-        for (const UListNode *pointer = list->head; pointer != NULL; pointer = pointer->next) {
+        const UListNode *pointer;
+        for (pointer = list->head; pointer != NULL; pointer = pointer->next) {
             if (length == uprv_strlen(pointer->data)) {
                 if (uprv_memcmp(data, pointer->data, length) == 0) {
                     return TRUE;
@@ -169,7 +170,8 @@ U_CAPI UBool U_EXPORT2 ulist_containsString(const UList *list, const char *data,
 
 U_CAPI UBool U_EXPORT2 ulist_removeString(UList *list, const char *data) {
     if (list != NULL) {
-        for (UListNode *pointer = list->head; pointer != NULL; pointer = pointer->next) {
+        UListNode *pointer;
+        for (pointer = list->head; pointer != NULL; pointer = pointer->next) {
             if (uprv_strcmp(data, pointer->data) == 0) {
                 ulist_removeItem(list, pointer);
                 // Remove only the first occurrence, like Java LinkedList.remove(Object).
