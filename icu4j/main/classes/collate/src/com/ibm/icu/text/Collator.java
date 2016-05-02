@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
@@ -897,7 +898,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         // TODO make this wrap getAvailableULocales later
         if (shim == null) {
             return ICUResourceBundle.getAvailableLocales(
-                ICUResourceBundle.ICU_COLLATION_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                ICUData.ICU_COLLATION_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         }
         return shim.getAvailableLocales();
     }
@@ -913,7 +914,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     public static final ULocale[] getAvailableULocales() {
         if (shim == null) {
             return ICUResourceBundle.getAvailableULocales(
-                ICUResourceBundle.ICU_COLLATION_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                ICUData.ICU_COLLATION_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         }
         return shim.getAvailableULocales();
     }
@@ -937,7 +938,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * *since ICU 3.0
      */
     
-    private static final String BASE = ICUResourceBundle.ICU_COLLATION_BASE_NAME;
+    private static final String BASE = ICUData.ICU_COLLATION_BASE_NAME;
 
     /**
      * {@icu} Returns an array of all possible keywords that are relevant to
@@ -989,7 +990,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         // Read available collation values from collation bundles.
         ICUResourceBundle bundle = (ICUResourceBundle)
                 UResourceBundle.getBundleInstance(
-                        ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
+                        ICUData.ICU_COLLATION_BASE_NAME, locale);
         KeywordsSink sink = new KeywordsSink();
         bundle.getAllItemsWithFallback("collations", sink);
         return sink.values.toArray(new String[sink.values.size()]);

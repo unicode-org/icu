@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 import com.ibm.icu.impl.Grego;
 import com.ibm.icu.impl.ICUConfig;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
@@ -1156,7 +1157,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         }
 
         UResourceBundle top = UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME, "windowsZones", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                ICUData.ICU_BASE_NAME, "windowsZones", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle mapTimezones = top.get("mapTimezones");
 
         UResourceBundleIterator resitr = mapTimezones.getIterator();
@@ -1211,7 +1212,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         String id = null;
 
         UResourceBundle top = UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME, "windowsZones", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                ICUData.ICU_BASE_NAME, "windowsZones", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle mapTimezones = top.get("mapTimezones");
 
         try {

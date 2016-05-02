@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2007-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -246,7 +246,7 @@ public class RelativeDateFormat extends DateFormat {
      * Load the Date string array
      */
     private synchronized void loadDates() {
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, fLocale);
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, fLocale);
         ICUResourceBundle rdb = rb.getWithFallback("fields/day/relative");
         
         Set<URelativeString> datesSet = new TreeSet<URelativeString>(new Comparator<URelativeString>() { 
@@ -277,7 +277,7 @@ public class RelativeDateFormat extends DateFormat {
      * Set capitalizationOfRelativeUnitsForListOrMenu, capitalizationOfRelativeUnitsForStandAlone 
      */
     private void initCapitalizationContextInfo(ULocale locale) {
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
         try {
             ICUResourceBundle rdb = rb.getWithFallback("contextTransforms/relative");
             int[] intVector = rdb.getIntVector();

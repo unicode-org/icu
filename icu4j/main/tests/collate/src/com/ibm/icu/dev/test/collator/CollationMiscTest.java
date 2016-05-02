@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2015, International Business Machines Corporation and
+ * Copyright (C) 2002-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UScript;
@@ -52,7 +53,7 @@ public class CollationMiscTest extends TestFmwk {
 
     private static final boolean hasCollationElements(Locale locale)
     {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,locale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_COLLATION_BASE_NAME,locale);
         if (rb != null) {
             try {
                 String collkey = rb.getStringWithFallback("collations/default");
@@ -1578,7 +1579,7 @@ public class CollationMiscTest extends TestFmwk {
         for (int i = 0; i < locale.length; i ++) {
             Locale l = locale[i];
             try {
-                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,l);
+                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_COLLATION_BASE_NAME,l);
                 String collkey = rb.getStringWithFallback("collations/default");
                 ICUResourceBundle elements = rb.getWithFallback("collations/" + collkey);
                 if (elements == null) {

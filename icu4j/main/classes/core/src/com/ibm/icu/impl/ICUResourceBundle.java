@@ -32,75 +32,6 @@ import com.ibm.icu.util.UResourceTypeMismatchException;
 
 public  class ICUResourceBundle extends UResourceBundle {
     /**
-     * The data path to be used with getBundleInstance API
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    protected static final String ICU_DATA_PATH = ICUData.ICU_DATA_PATH;
-    /**
-     * The data path to be used with getBundleInstance API
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_BUNDLE = ICUData.ICU_BUNDLE;
-
-    /**
-     * The base name of ICU data to be used with getBundleInstance API
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_BASE_NAME = ICUData.ICU_BASE_NAME;
-
-    /**
-     * The base name of collation data to be used with getBundleInstance API
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_COLLATION_BASE_NAME = ICUData.ICU_COLLATION_BASE_NAME;
-
-    /**
-     * The base name of rbbi data to be used with getBundleInstance API
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_BRKITR_BASE_NAME = ICUData.ICU_BRKITR_BASE_NAME;
-
-    /**
-     * The base name of rbnf data to be used with getBundleInstance API
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_RBNF_BASE_NAME = ICUData.ICU_RBNF_BASE_NAME;
-
-    /**
-     * The base name of transliterator data to be used with getBundleInstance API
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_TRANSLIT_BASE_NAME = ICUData.ICU_TRANSLIT_BASE_NAME;
-
-    /**
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_LANG_BASE_NAME = ICUData.ICU_LANG_BASE_NAME;
-    /**
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_CURR_BASE_NAME = ICUData.ICU_CURR_BASE_NAME;
-    /**
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_REGION_BASE_NAME = ICUData.ICU_REGION_BASE_NAME;
-    /**
-     * @deprecated because not specific to resource bundles; use the ICUData constants instead
-     */
-    @Deprecated
-    public static final String ICU_ZONE_BASE_NAME = ICUData.ICU_ZONE_BASE_NAME;
-
-    /**
      * CLDR string value "∅∅∅" prevents fallback to the parent bundle.
      */
     private static final String NO_INHERITANCE_MARKER = "\u2205\u2205\u2205";
@@ -563,7 +494,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * resource bundles.
      */
     public static Set<String> getFullLocaleNameSet() {
-        return getFullLocaleNameSet(ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
+        return getFullLocaleNameSet(ICUData.ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
     }
 
     /**
@@ -581,7 +512,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * bundles.
      */
     public static Set<String> getAvailableLocaleNameSet() {
-        return getAvailableLocaleNameSet(ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
+        return getAvailableLocaleNameSet(ICUData.ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
     }
 
     /**
@@ -597,7 +528,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @return the list of available locales
      */
     public static final ULocale[] getAvailableULocales() {
-        return getAvailableULocales(ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
+        return getAvailableULocales(ICUData.ICU_BASE_NAME, ICU_DATA_CLASS_LOADER);
     }
 
     /**
@@ -613,7 +544,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @return the list of available locales
      */
     public static final Locale[] getAvailableLocales() {
-        return getAvailEntry(ICU_BASE_NAME, ICU_DATA_CLASS_LOADER).getLocaleList();
+        return getAvailEntry(ICUData.ICU_BASE_NAME, ICU_DATA_CLASS_LOADER).getLocaleList();
     }
 
     /**
@@ -1513,12 +1444,12 @@ public  class ICUResourceBundle extends UResourceBundle {
             }
             //there is a path included
             if (bundleName.equals(ICUDATA)) {
-                bundleName = ICU_BASE_NAME;
+                bundleName = ICUData.ICU_BASE_NAME;
                 loaderToUse = ICU_DATA_CLASS_LOADER;
             }else if(bundleName.indexOf(ICUDATA)>-1){
                 int idx = bundleName.indexOf(HYPHEN);
                 if(idx>-1){
-                    bundleName = ICU_BASE_NAME+RES_PATH_SEP_STR+bundleName.substring(idx+1,bundleName.length());
+                    bundleName = ICUData.ICU_BASE_NAME+RES_PATH_SEP_STR+bundleName.substring(idx+1,bundleName.length());
                     loaderToUse = ICU_DATA_CLASS_LOADER;
                 }
             }

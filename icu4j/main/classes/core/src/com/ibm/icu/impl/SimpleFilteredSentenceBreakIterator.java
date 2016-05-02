@@ -212,7 +212,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
          */
         public Builder(ULocale loc) {
             ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                    ICUResourceBundle.ICU_BRKITR_BASE_NAME, loc);
+                    ICUData.ICU_BRKITR_BASE_NAME, loc);
             ICUResourceBundle exceptions = rb.findWithFallback("exceptions");
             if (exceptions != null) {
                 ICUResourceBundle breaks = exceptions.findWithFallback("SentenceBreak");

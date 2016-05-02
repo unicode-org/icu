@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2016, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2000-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
@@ -403,8 +403,8 @@ public class TimeZoneTest extends TestFmwk
 
         // in icu4j 2.1 we know we have the zh_CN locale data, though it's incomplete
 //    /"DateFormatZoneData", 
-        UResourceBundle enRB = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,Locale.ENGLISH);
-        UResourceBundle mtRB = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, mt_MT);
+        UResourceBundle enRB = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,Locale.ENGLISH);
+        UResourceBundle mtRB = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, mt_MT);
         boolean noZH = enRB == mtRB;
 
         if (noZH) {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2015, International Business Machines Corporation and
+ * Copyright (C) 2012-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -42,7 +42,7 @@ final class DictionaryData {
     private static final int DATA_FORMAT_ID = 0x44696374;
 
     public static DictionaryMatcher loadDictionaryFor(String dictType) throws IOException {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME);
         String dictFileName = rb.getStringWithFallback("dictionaries/" + dictType);
         dictFileName = ICUData.ICU_BRKITR_NAME + '/' + dictFileName;
         ByteBuffer bytes = ICUBinary.getRequiredData(dictFileName);

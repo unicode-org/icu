@@ -172,7 +172,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         if (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU ||
                 capitalization == DisplayContext.CAPITALIZATION_FOR_STANDALONE) {
             capitalizationUsage = new boolean[CapitalizationContextUsage.values().length]; // initialized to all false
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
             UResourceBundle contextTransformsBundle = null;
             try {
                 contextTransformsBundle = (UResourceBundle)rb.getWithFallback("contextTransforms");

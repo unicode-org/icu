@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternTokenizer;
 import com.ibm.icu.impl.SimpleCache;
@@ -149,7 +150,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             }
         }
 
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, uLocale);
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, uLocale);
         // Get the correct calendar type
         String calendarTypeToUse = uLocale.getKeywordValue("calendar");
         if ( calendarTypeToUse == null ) {
@@ -464,7 +465,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     static {
         HashMap<String, String[]> temp = new HashMap<String, String[]>();
         ICUResourceBundle suppData = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_BASE_NAME,
+                ICUData.ICU_BASE_NAME,
                 "supplementalData",
                 ICUResourceBundle.ICU_DATA_CLASS_LOADER);
 

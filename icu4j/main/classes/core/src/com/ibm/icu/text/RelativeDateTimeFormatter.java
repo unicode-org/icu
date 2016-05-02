@@ -12,6 +12,7 @@ import java.util.Locale;
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
@@ -1231,7 +1232,7 @@ public final class RelativeDateTimeFormatter {
             // Sink for traversing data.
             RelDateTimeFmtDataSink sink = new RelDateTimeFmtDataSink(ulocale);
             ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
-                    getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
+                    getBundleInstance(ICUData.ICU_BASE_NAME, ulocale);
 
             // Use sink mechanism to traverse data structure.
             r.getAllTableItemsWithFallback("fields", sink);

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2014-2015, International Business Machines Corporation and
+ * Copyright (C) 2014-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -46,7 +46,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
     private static final ICUResourceBundle ZONESTRINGS;
     static {
         UResourceBundle bundle = ICUResourceBundle
-                .getBundleInstance(ICUResourceBundle.ICU_ZONE_BASE_NAME, "tzdbNames");
+                .getBundleInstance(ICUData.ICU_ZONE_BASE_NAME, "tzdbNames");
         ZONESTRINGS = (ICUResourceBundle)bundle.get("zoneStrings");
     }
 

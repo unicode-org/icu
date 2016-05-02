@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2004-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -25,7 +25,7 @@ public class CalendarData {
      * No default lookup is done.
      */
     public CalendarData(ULocale loc, String type) {
-        this((ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, loc), type);
+        this((ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, loc), type);
     }
     
     public CalendarData(ICUResourceBundle b, String type) {

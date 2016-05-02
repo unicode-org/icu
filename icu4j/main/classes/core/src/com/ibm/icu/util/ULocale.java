@@ -25,6 +25,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceTableAccess;
 import com.ibm.icu.impl.LocaleIDParser;
@@ -1964,7 +1965,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 4.0
      */
     public String getCharacterOrientation() {
-        return ICUResourceTableAccess.getTableString(ICUResourceBundle.ICU_BASE_NAME, this,
+        return ICUResourceTableAccess.getTableString(ICUData.ICU_BASE_NAME, this,
                 "layout", "characters");
     }
 
@@ -1976,7 +1977,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 4.0
      */
     public String getLineOrientation() {
-        return ICUResourceTableAccess.getTableString(ICUResourceBundle.ICU_BASE_NAME, this,
+        return ICUResourceTableAccess.getTableString(ICUData.ICU_BASE_NAME, this,
                 "layout", "lines");
     }
 
@@ -2955,7 +2956,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     private static String lookupLikelySubtags(String localeId) {
         UResourceBundle bundle =
                 UResourceBundle.getBundleInstance(
-                        ICUResourceBundle.ICU_BASE_NAME, "likelySubtags");
+                        ICUData.ICU_BASE_NAME, "likelySubtags");
         try {
             return bundle.getString(localeId);
         }

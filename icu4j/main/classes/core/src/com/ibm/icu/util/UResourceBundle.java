@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
@@ -166,7 +167,7 @@ public abstract class UResourceBundle extends ResourceBundle {
         if (locale==null) {
             locale = ULocale.getDefault();
         }
-        return getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale.toString(), 
+        return getBundleInstance(ICUData.ICU_BASE_NAME, locale.toString(), 
                                  ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
 
@@ -180,7 +181,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      */
     public static UResourceBundle getBundleInstance(String baseName) {
         if (baseName == null) {
-            baseName = ICUResourceBundle.ICU_BASE_NAME;
+            baseName = ICUData.ICU_BASE_NAME;
         }
         ULocale uloc = ULocale.getDefault();
         return getBundleInstance(baseName, uloc.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, 
@@ -200,7 +201,7 @@ public abstract class UResourceBundle extends ResourceBundle {
 
     public static UResourceBundle getBundleInstance(String baseName, Locale locale) {
         if (baseName == null) {
-            baseName = ICUResourceBundle.ICU_BASE_NAME;
+            baseName = ICUData.ICU_BASE_NAME;
         }
         ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
 
@@ -220,7 +221,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      */
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale) {
         if (baseName == null) {
-            baseName = ICUResourceBundle.ICU_BASE_NAME;
+            baseName = ICUData.ICU_BASE_NAME;
         }
         if (locale == null) {
             locale = ULocale.getDefault();
@@ -243,7 +244,7 @@ public abstract class UResourceBundle extends ResourceBundle {
     public static UResourceBundle getBundleInstance(String baseName, Locale locale, 
                                                     ClassLoader loader) {
         if (baseName == null) {
-            baseName = ICUResourceBundle.ICU_BASE_NAME;
+            baseName = ICUData.ICU_BASE_NAME;
         }
         ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
         return getBundleInstance(baseName, uloc.toString(), loader, false);
@@ -266,7 +267,7 @@ public abstract class UResourceBundle extends ResourceBundle {
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale, 
                                                     ClassLoader loader) {
         if (baseName == null) {
-            baseName = ICUResourceBundle.ICU_BASE_NAME;
+            baseName = ICUData.ICU_BASE_NAME;
         }
         if (locale == null) {
             locale = ULocale.getDefault();

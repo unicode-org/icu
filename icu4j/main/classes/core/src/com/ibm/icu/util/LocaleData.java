@@ -1,13 +1,14 @@
 /*
  **************************************************************************************
- * Copyright (C) 2009-2016, International Business Machines Corporation,              *
- * Google, Inc. and others. All Rights Reserved.                                      *
+ * Copyright (C) 2009-2016, International Business Machines Corporation,
+ * Google, Inc. and others. All Rights Reserved.
  **************************************************************************************
  */
 package com.ibm.icu.util;
 
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale.Category;
@@ -219,8 +220,8 @@ public final class LocaleData {
      */
     public static final LocaleData getInstance(ULocale locale) {
         LocaleData ld = new LocaleData();
-        ld.bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-        ld.langBundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_LANG_BASE_NAME, locale);
+        ld.bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+        ld.langBundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_LANG_BASE_NAME, locale);
         ld.noSubstitute = false;
         return ld;
     }
@@ -298,7 +299,7 @@ public final class LocaleData {
         String region = ULocale.getRegionForSupplementalData(locale, true);
         try {
             UResourceBundle rb = UResourceBundle.getBundleInstance(
-                    ICUResourceBundle.ICU_BASE_NAME,
+                    ICUData.ICU_BASE_NAME,
                     "supplementalData",
                     ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle measurementData = rb.get("measurementData");
@@ -460,7 +461,7 @@ public final class LocaleData {
         // fetching this data should be idempotent.
         if(gCLDRVersion == null) {
             // from ZoneMeta.java
-            UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle cldrVersionBundle = supplementalDataBundle.get("cldrVersion");
             gCLDRVersion = VersionInfo.getInstance(cldrVersionBundle.getString());
         }

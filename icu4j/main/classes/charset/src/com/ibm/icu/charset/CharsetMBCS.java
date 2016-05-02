@@ -1,9 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2015, International Business Machines Corporation and
+ * Copyright (C) 2006-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
- *******************************************************************************
- *
  *******************************************************************************
  */
 
@@ -24,7 +22,6 @@ import java.util.Locale;
 import com.ibm.icu.charset.UConverterSharedData.UConverterType;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
@@ -196,7 +193,7 @@ class CharsetMBCS extends CharsetICU {
 
     public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases)
             throws InvalidFormatException {
-        this(icuCanonicalName, javaCanonicalName, aliases, ICUResourceBundle.ICU_BUNDLE, null);
+        this(icuCanonicalName, javaCanonicalName, aliases, ICUData.ICU_BUNDLE, null);
     }
 
     private UConverterSharedData loadConverter(int nestedLoads, String myName, String classPath, ClassLoader loader)

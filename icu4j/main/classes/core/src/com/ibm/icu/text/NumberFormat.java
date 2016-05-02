@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2016, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -1523,7 +1524,7 @@ public abstract class NumberFormat extends UFormat {
         }
 
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
-        getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
+        getBundleInstance(ICUData.ICU_BASE_NAME, forLocale);
         NumberingSystem ns = NumberingSystem.getInstance(forLocale);
 
         String result = null;

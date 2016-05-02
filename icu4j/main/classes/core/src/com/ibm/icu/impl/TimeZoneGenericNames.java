@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2014, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2011-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -448,7 +448,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
             String patText;
             try {
                 ICUResourceBundle bundle = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
-                    ICUResourceBundle.ICU_ZONE_BASE_NAME, _locale);
+                    ICUData.ICU_ZONE_BASE_NAME, _locale);
                 patText = bundle.getStringWithFallback("zoneStrings/" + pat.key());
             } catch (MissingResourceException e) {
                 patText = pat.defaultValue();

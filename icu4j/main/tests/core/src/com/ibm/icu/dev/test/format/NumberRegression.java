@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- * Copyright (C) 1996-2014, International Business Machines
+ * Copyright (C) 1996-2016, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **/
 
@@ -37,6 +37,7 @@ import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
@@ -961,7 +962,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         Locale[] locales = NumberFormat.getAvailableLocales();
         
         for (int i = 0; i < locales.length; i++) {
-            ICUResourceBundle rb = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locales[i]);
+            ICUResourceBundle rb = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,locales[i]);
 
             //
             // Get the currency pattern for this locale.  We have to fish it
