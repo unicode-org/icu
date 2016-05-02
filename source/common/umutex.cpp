@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2015, International Business Machines
+*   Copyright (C) 1997-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -68,10 +68,8 @@ U_NAMESPACE_BEGIN
 U_COMMON_API UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &uio) {
     for (;;) {
         int32_t previousState = InterlockedCompareExchange(
-#if (U_PLATFORM == U_PF_MINGW) || (U_PLATFORM == U_PF_CYGWIN) || defined(__clang__)
-           (LONG volatile *) // this is the type given in the API doc for this function.
-#endif
-            &uio.fState,  //  Destination
+            (LONG volatile *) // this is the type given in the API doc for this function.
+                &uio.fState,  //  Destination
             1,            //  Exchange Value
             0);           //  Compare value
 
