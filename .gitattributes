@@ -4235,7 +4235,6 @@ icu4j/main/classes/core/src/com/ibm/icu/util/Measure.java svneol=native#text/pla
 icu4j/main/classes/core/src/com/ibm/icu/util/MeasureUnit.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/Output.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/OutputInt.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/util/OverlayBundle.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/PersianCalendar.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/RangeDateRule.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/RangeValueIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
