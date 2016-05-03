@@ -274,6 +274,11 @@
 <word>
 <data>•ジョージア<400> •</data>
 
+# Test for #11723
+<word>
+<data>•アレルギー性<400>結膜炎<400></data>
+<data>•アテ<400>ローム<400>性<400>動脈硬化<400></data>
+
 # Ticket #11996
 <locale en>
 <word>
