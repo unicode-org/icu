@@ -4307,7 +4307,6 @@ icu4j/main/classes/translit/src/com/ibm/icu/text/SourceTargetUtility.java svneol
 icu4j/main/classes/translit/src/com/ibm/icu/text/StringMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/translit/src/com/ibm/icu/text/StringReplacer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/translit/src/com/ibm/icu/text/TitlecaseTransliterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/translit/src/com/ibm/icu/text/TransformTransliterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/translit/src/com/ibm/icu/text/TransliterationRule.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/translit/src/com/ibm/icu/text/TransliterationRuleSet.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/translit/src/com/ibm/icu/text/Transliterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
