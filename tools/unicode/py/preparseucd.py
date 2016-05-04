@@ -49,11 +49,11 @@ _current_year = datetime.date.today().strftime("%Y")
 _scripts_only_in_iso15924 = (
     "Afak", "Blis", "Cirt", "Cyrs",
     "Egyd", "Egyh", "Geok",
-    "Hans", "Hant",
-    "Inds", "Jpan", "Jurc", "Kore", "Kpel", "Latf", "Latg", "Loma",
+    "Hanb", "Hans", "Hant",
+    "Inds", "Jamo", "Jpan", "Jurc", "Kore", "Kpel", "Latf", "Latg", "Loma",
     "Maya", "Moon", "Nkgb", "Nshu", "Phlv", "Roro",
     "Sara", "Syre", "Syrj", "Syrn",
-    "Tang", "Teng", "Visp", "Wole", "Zmth", "Zsym", "Zxxx"
+    "Teng", "Visp", "Wole", "Zmth", "Zsye", "Zsym", "Zxxx"
 )
 
 # Properties --------------------------------------------------------------- ***
@@ -654,7 +654,9 @@ def ParseUnicodeData(in_file):
         range_first = -1
         # Remember algorithmic name ranges.
         if "Ideograph" in name:
-          _alg_names_ranges.append([c, end, "han", "CJK UNIFIED IDEOGRAPH-"])
+          prefix = "CJK UNIFIED IDEOGRAPH-"
+          if c == 0x17000: prefix = "TANGUT IDEOGRAPH-"
+          _alg_names_ranges.append([c, end, "han", prefix])
         elif name == "Hangul Syllable":
           _alg_names_ranges.append([c, end, "hangul"])
         name = ""
