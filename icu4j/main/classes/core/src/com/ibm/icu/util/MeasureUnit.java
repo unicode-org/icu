@@ -13,17 +13,16 @@ import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.impl.UResource;
 
 /**
  * A unit such as length, mass, volume, currency, etc.  A unit is
@@ -37,9 +36,6 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class MeasureUnit implements Serializable {
     private static final long serialVersionUID = -1839973855554750484L;
-    
-    // Used to pre-fill the cache. These same constants appear in MeasureFormat too.
-    private static final String[] unitKeys = new String[]{"units", "unitsShort", "unitsNarrow"};
     
     // Cache of MeasureUnits.
     // All access to the cache or cacheIsPopulated flag must be synchronized on class MeasureUnit,
@@ -249,6 +245,53 @@ public class MeasureUnit implements Serializable {
     };
 
     /**
+     * Sink for enumerating the available measure units.
+     */
+    private static final class MeasureUnitSink extends UResource.Sink {
+        @Override
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table unitFormatsTable = value.getTable();
+            for (int i1 = 0; unitFormatsTable.getKeyAndValue(i1, key, value); ++i1) {
+
+                // Only consume the tables related to units, defined as those beginning with "units".
+                if (!key.startsWith("units")) {
+                    continue;
+                }
+
+                UResource.Table unitTypesTable = value.getTable();
+                for (int i2 = 0; unitTypesTable.getKeyAndValue(i2, key, value); ++i2) {
+
+                    // Special case: "compound" does not have plural variants.
+                    if (key.contentEquals("compound")) {
+                        continue;
+                    }
+
+                    String unitType = key.toString();
+
+                    UResource.Table unitNamesTable = value.getTable();
+                    for (int i3 = 0; unitNamesTable.getKeyAndValue(i3, key, value); ++i3) {
+                        String unitName = key.toString();
+                        internalGetInstance(unitType, unitName);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Sink for enumerating the currency numeric codes.
+     */
+    private static final class CurrencyNumericCodeSink extends UResource.Sink {
+        @Override
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table codesTable = value.getTable();
+            for (int i1 = 0; codesTable.getKeyAndValue(i1, key, value); ++i1) {
+                internalGetInstance("currency", key.toString());
+            }
+        }
+    }
+
+    /**
      * Populate the MeasureUnit cache with all types from the data.
      * Population is done lazily, in response to MeasureUnit.getAvailable()
      * or other API that expects to see all of the MeasureUnits.
@@ -263,55 +306,33 @@ public class MeasureUnit implements Serializable {
      * @internal
      */
     static private void populateCache() {
-        // load all of the units for English, since we know that that is a superset.
-        /**
-         *     units{
-         *            duration{
-         *                day{
-         *                    one{"{0} ден"}
-         *                    other{"{0} дена"}
-         *                }
-         */
         if (cacheIsPopulated) {
             return;
         }
-        ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "en");
-        for (String key : unitKeys) {
-            try {
-                ICUResourceBundle unitsTypeRes = resource.getWithFallback(key);
-                int size = unitsTypeRes.getSize();
-                for ( int index = 0; index < size; ++index) {
-                    UResourceBundle unitsRes = unitsTypeRes.get(index);
-                    String type = unitsRes.getKey();
-                    if (type.equals("compound")) {
-                        continue; // special type, does not have any unit plurals
-                    }
-                    int unitsSize = unitsRes.getSize();
-                    for ( int index2 = 0; index2 < unitsSize; ++index2) {
-                        ICUResourceBundle unitNameRes = (ICUResourceBundle)unitsRes.get(index2);
-                        if (unitNameRes.get("other") != null) {
-                            internalGetInstance(type, unitNameRes.getKey());
-                        }
-                    }
-                }
-            } catch ( MissingResourceException e ) {
-                continue;
-            }
-        }
-        // preallocate currencies
-        try {
-            UResourceBundle bundle = UResourceBundle.getBundleInstance(
-                    ICUData.ICU_BASE_NAME,
-                    "currencyNumericCodes",
-                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            UResourceBundle codeMap = bundle.get("codeMap");
-            for (Enumeration<String> it = codeMap.getKeys(); it.hasMoreElements();) {
-                MeasureUnit.internalGetInstance("currency", it.nextElement());
-            }
-        } catch (MissingResourceException e) {
-            // fall through
-        }
         cacheIsPopulated = true;
+
+        /*  Schema:
+         *
+         *  units{
+         *    duration{
+         *      day{
+         *        one{"{0} ден"}
+         *        other{"{0} дена"}
+         *      }
+         */
+
+        // Load the unit types.  Use English, since we know that that is a superset.
+        ICUResourceBundle rb1 = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+                ICUData.ICU_BASE_NAME,
+                "en");
+        rb1.getAllItemsWithFallback("", new MeasureUnitSink());
+
+        // Load the currencies
+        ICUResourceBundle rb2 = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+                ICUData.ICU_BASE_NAME,
+                "currencyNumericCodes",
+                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        rb2.getAllItemsWithFallback("codeMap", new CurrencyNumericCodeSink());
     }
 
     /**

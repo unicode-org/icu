@@ -447,7 +447,8 @@ public  class ICUResourceBundle extends UResourceBundle {
             ICUResourceBundleImpl impl = (ICUResourceBundleImpl)this;
             readerValue.reader = impl.wholeBundle.reader;
             readerValue.res = impl.getResource();
-            sink.put(key.setString(this.key), readerValue, parent == null);
+            key.setString(this.key != null ? this.key : "");
+            sink.put(key, readerValue, parent == null);
         } else {
             expectedType = arraySink != null ? ARRAY : TABLE;
             if (getType() == expectedType) {
@@ -1023,7 +1024,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     private static int countPathKeys(String path) {
-        if (path.length() == 0) {
+        if (path.isEmpty()) {
             return 0;
         }
         int num = 1;
