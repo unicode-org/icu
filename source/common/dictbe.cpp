@@ -1293,6 +1293,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     //                ix is the corresponding string (code unit) index.
     //    They differ when the string contains supplementary characters.
     int32_t ix = 0;
+    bool is_prev_katakana = false;
     for (int32_t i = 0;  i < numCodePts;  ++i, ix = inString.moveIndex32(ix, 1)) {
         if ((uint32_t)bestSnlp.elementAti(i) == kuint32max) {
             continue;
@@ -1331,7 +1332,6 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         // characters is considered a candidate word with a default cost
         // specified in the katakanaCost table according to its length.
 
-        bool is_prev_katakana = false;
         bool is_katakana = isKatakana(inString.char32At(ix));
         int32_t katakanaRunLength = 1;
         if (!is_prev_katakana && is_katakana) {
