@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -34,7 +35,9 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public abstract class TestBoilerplate<T> extends TestFmwk {
 
-    public final void TestMain() throws Exception {
+    protected static Random random = new Random(12345);
+
+    protected final void _test() throws Exception {
         List<T> list = new LinkedList<T>();
         while (_addTestObject(list)) {
         }
