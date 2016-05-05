@@ -1053,7 +1053,7 @@ static int32_t indexes[UCASE_IX_TOP]={
     0, 0, 0, 0
 };
 
-static uint8_t trieBlock[40000];
+static uint8_t trieBlock[100000];
 static int32_t trieSize;
 
 void
@@ -1083,15 +1083,20 @@ CasePropsBuilder::build(UErrorCode &errorCode) {
         }
     }
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: unable to set UCASE_SENSITIVE: %s\n",
+        fprintf(stderr, "genprops/case error: unable to set UCASE_SENSITIVE: %s\n",
                 u_errorName(errorCode));
         return;
     }
 
     utrie2_freeze(pTrie, UTRIE2_16_VALUE_BITS, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops/case error: utrie2_freeze() failed: %s\n",
+                u_errorName(errorCode));
+        return;
+    }
     trieSize=utrie2_serialize(pTrie, trieBlock, sizeof(trieBlock), &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: utrie2_freeze()+utrie2_serialize() failed: %s (length %ld)\n",
+        fprintf(stderr, "genprops/case error: utrie2_serialize() failed: %s (length %ld)\n",
                 u_errorName(errorCode), (long)trieSize);
         return;
     }

@@ -58,6 +58,8 @@ _scripts_only_in_iso15924 = (
 
 # Properties --------------------------------------------------------------- ***
 
+# Properties that we do not want to store in ppucd.txt.
+# Not a frozenset so that we can add aliases for simpler subsequent testing.
 _ignored_properties = set((
   # Other_Xyz only contribute to Xyz, store only the latter.
   "OAlpha",
@@ -93,6 +95,16 @@ _ignored_properties = set((
   "cjkIRG_USource",
   "cjkIRG_VSource",
   "cjkRSUnicode"
+))
+
+# These properties (short names) map code points to
+# strings or other unusual values (property types String or Miscellaneous)
+# that cannot be block-compressed (or would be confusing).
+_uncompressible_props = frozenset((
+  "bmg", "bpb", "cf", "Conditional_Case_Mappings", "dm", "FC_NFKC",
+  "isc", "lc", "na", "na1", "Name_Alias", "NFKC_CF",
+  # scx is block-compressible.
+  "scf", "slc", "stc", "suc", "tc", "Turkic_Case_Folding", "uc"
 ))
 
 # Dictionary of properties.
@@ -985,7 +997,12 @@ def CompactBlock(b, i):
       if count == 1: num_unique += 1
     if max_value != _null_or_defaults[pname]:
       # Avoid picking randomly among several unique values.
-      if (max_count > 1 or num_unique == 1):
+      # Do not compress uncompressible properties,
+      # with an exception for many empty-string values in a block
+      # (NFCK_CF='' for tags and variation selectors).
+      if ((max_count > 1 or num_unique == 1) and
+          ((pname not in _uncompressible_props) or
+            (max_value == '' and max_count >= 12))):
         b_props[pname] = max_value
   # For each range and property, remove the default+block value
   # but set the default value if that property was not set
