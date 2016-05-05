@@ -45,7 +45,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 7.2 .
+The following is a description of format version 7.3 .
 
 Data contents:
 
@@ -146,8 +146,7 @@ Encoding of numeric type and value in the 10-bit ntv field:
     0               U_NT_NONE       0
     1..10           U_NT_DECIMAL    0..9
     11..20          U_NT_DIGIT      0..9
-    21..0x2ff       U_NT_NUMERIC    see below
-    0x300..0x3ff    reserved
+    21..0x3ff       U_NT_NUMERIC    see below
 
     For U_NT_NUMERIC:
     ntv             value
@@ -157,6 +156,11 @@ Encoding of numeric type and value in the 10-bit ntv field:
                     (only one significant decimal digit)
     0x300..0x323    base-60 (sexagesimal) integer (new in format version 7.1)
                                 ((ntv>>2)-0xbf) * 60^((ntv&3)+1) = (1..9)*(60^1..60^4)
+    0x324..0x34b    fraction-20 (new in format version 7.3)
+                                frac20 = ntv-0x324 = 0..0x17 -> 1|3|5|7 / 20|40|80|160|320|640
+                                numerator: num = 2*(frac20&3)+1
+                                denominator: den = 20<<(frac20>>2)
+    0x34c..0x3ff    reserved
 
 --- Additional properties (new in format version 2.1) ---
 
@@ -250,6 +254,10 @@ ICU 57 adds 4 Emoji properties to vector word 2.
 http://bugs.icu-project.org/trac/ticket/11802
 http://www.unicode.org/reports/tr51/#Emoji_Properties
 
+--- Changes in format version 7.3 ---
+
+ICU 58 adds fraction-20 numeric values for new Unicode 9 Malayalam fraction characters.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -265,7 +273,7 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 7, 2, 0, 0 },                             /* formatVersion */
+    { 7, 3, 0, 0 },                             /* formatVersion */
     { 8, 0, 0, 0 }                              /* dataVersion */
 };
 
@@ -314,10 +322,29 @@ CorePropsBuilder::setUnicodeVersion(const UVersionInfo version) {
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 }
 
+static int32_t encodeFractional20(int32_t value, int32_t den) {
+    if(den<20 || 640<den) { return -1; }
+    int32_t frac20;
+    if(value==1 || value==3 || value==5 || value==7) {
+        frac20=value/2;
+    } else {
+        return -1;
+    }
+    // Denominator: 20 times which power of 2: 0..5 into bits 4..2
+    do {
+        if(den==20) {
+            return UPROPS_NTV_FRACTION20_START+frac20;
+        }
+        den/=2;
+        frac20+=4;
+    } while(den>=20);
+    return -1;
+}
+
 // For nt=U_NT_NUMERIC.
 static int32_t
 encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
-    const char *original;
+    const char *original=s;
     /* get a possible minus sign */
     UBool isNegative;
     if(*s=='-') {
@@ -407,6 +434,8 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     } else if(exp==0 && value==-1 && den==0) {
         /* -1 parsed with den=0, encoded as pseudo-fraction -1/1 */
         ntv=((value+12)<<4);
+    } else if(exp==0 && (ntv=encodeFractional20(value, den))>=0) {
+        // fits into fractional-20 format
     } else {
         ntv=-1;
     }
@@ -669,7 +698,7 @@ static int32_t indexes[UPROPS_INDEX_COUNT]={
     0, 0, 0, 0
 };
 
-static uint8_t trieBlock[40000];
+static uint8_t trieBlock[100000];
 static int32_t trieSize;
 static uint8_t props2TrieBlock[100000];
 static int32_t props2TrieSize;
@@ -681,18 +710,23 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
 
     utrie2_freeze(pTrie, UTRIE2_16_VALUE_BITS, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "genprops/core error: utrie2_freeze(main trie) failed: %s\n",
+                u_errorName(errorCode));
+        return;
+    }
     trieSize=utrie2_serialize(pTrie, trieBlock, sizeof(trieBlock), &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr,
-                "genprops error: utrie2_freeze(main trie)+utrie2_serialize() "
-                "failed: %s (length %ld)\n",
+                "genprops/core error: utrie2_serialize(main trie) failed: %s (length %ld)\n",
                 u_errorName(errorCode), (long)trieSize);
         return;
     }
 
     props2Trie=upvec_compactToUTrie2WithRowIndexes(pv, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n",
+        fprintf(stderr, "genprops/core error: unable to build trie for additional properties: %s\n",
                 u_errorName(errorCode));
         return;
     }
@@ -702,7 +736,8 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
                                     &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr,
-                "genprops error: utrie2_freeze(additional properties)+utrie2_serialize() failed: %s\n",
+                "genprops/core error: utrie2_freeze(additional properties)+utrie2_serialize() "
+                "failed: %s\n",
                 u_errorName(errorCode));
         return;
     }

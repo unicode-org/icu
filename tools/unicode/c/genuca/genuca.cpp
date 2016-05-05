@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2015, International Business Machines
+*   Copyright (C) 2000-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -656,6 +656,13 @@ readAnElement(FILE *data,
       buffer[--buflen] = 0;
     }
 
+    if(buflen >= 3 && buffer[0] == (char)0xef &&
+            buffer[1] == (char)0xbb && buffer[2] == (char)0xbf) {
+        // U+FEFF UTF-8 signature byte sequence.
+        // Ignore, assuming it is at the start of the file.
+        buflen -= 3;
+        uprv_memmove(buffer, buffer + 3, buflen + 1);  // +1: including NUL terminator
+    }
     if(buffer[0] == 0 || buffer[0] == '#') {
         return FALSE; // just a comment, skip whole line
     }
