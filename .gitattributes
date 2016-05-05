@@ -5007,11 +5007,14 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/JamoTest.java svneol
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/RegexUtilitiesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/RoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/StringBoilerplateTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TestUtility.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ThreadTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/UnicodeMapBoilerplateTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/UnicodeMapTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/UnicodeSetBoilerplateTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/WriteCharts.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/langtagRegex.txt svneol=native#text/plain
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html

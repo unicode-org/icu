@@ -9,11 +9,9 @@ package com.ibm.icu.dev.test.translit;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
@@ -25,8 +23,8 @@ import com.ibm.icu.dev.test.TestBoilerplate;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.dev.util.UnicodeMap;
-import com.ibm.icu.dev.util.UnicodeMapIterator;
 import com.ibm.icu.dev.util.UnicodeMap.EntryRange;
+import com.ibm.icu.dev.util.UnicodeMapIterator;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -374,18 +372,6 @@ public class UnicodeMapTest extends TestFmwk {
         }
     }
 
-    public void testBoilerplate() {
-        // check boilerplate
-        List argList = new ArrayList();
-        argList.add("TestMain");
-        if (params.verbose) argList.add("-verbose");
-        String[] args = new String[argList.size()];
-        argList.toArray(args);
-        new UnicodeMapBoilerplate().run(args);
-         // TODO: the following is not being reached
-        new UnicodeSetBoilerplate().run(args);
-    }
-
     public void TestAUnicodeMap2() {
         UnicodeMap foo = new UnicodeMap();
         @SuppressWarnings("unused")
@@ -488,80 +474,6 @@ public class UnicodeMapTest extends TestFmwk {
             if (limit-- < 0) return;
             buffer.append(entry.getKey()).append(" => ")
              .append(entry.getValue()).append("\r\n");
-        }
-    }
-
-    static class UnicodeMapBoilerplate extends TestBoilerplate {
-
-        /* 
-         * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
-         */
-        protected boolean _hasSameBehavior(Object a, Object b) {
-            // we are pretty confident in the equals method, so won't bother with this right now.
-            return true;
-        }
-
-        /*
-         * @see com.ibm.icu.dev.test.TestBoilerplate#_createTestObject()
-         */
-        protected boolean _addTestObject(List list) {
-            if (list.size() > 30) return false;
-            UnicodeMap result = new UnicodeMap();
-            for (int i = 0; i < 50; ++i) {
-                int start = random.nextInt(25);
-                String value = TEST_VALUES[random.nextInt(TEST_VALUES.length)];
-                result.put(start, value);
-            }
-            list.add(result);
-            return true;
-        }
-    }
-
-    static class StringBoilerplate extends TestBoilerplate {
-
-        /* 
-         * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
-         */
-        protected boolean _hasSameBehavior(Object a, Object b) {
-            // we are pretty confident in the equals method, so won't bother with this right now.
-            return true;
-        }
-
-        /*
-         * @see com.ibm.icu.dev.test.TestBoilerplate#_createTestObject()
-         */
-        protected boolean _addTestObject(List list) {
-            if (list.size() > 31) return false;
-            StringBuilder result = new StringBuilder();
-            for (int i = 0; i < 10; ++i) {
-                result.append((char)random.nextInt(0xFF));
-            }
-            list.add(result.toString());
-            return true;
-        }
-    }
-
-    static class UnicodeSetBoilerplate extends TestBoilerplate {
-
-        /*
-         * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
-         */
-        protected boolean _hasSameBehavior(Object a, Object b) {
-            // we are pretty confident in the equals method, so won't bother with this right now.
-            return true;
-        }
-
-        /*
-         * @see com.ibm.icu.dev.test.TestBoilerplate#_createTestObject()
-         */
-        protected boolean _addTestObject(List list) {
-            if (list.size() > 32) return false;
-            UnicodeSet result = new UnicodeSet();
-            for (int i = 0; i < 50; ++i) {
-                result.add(random.nextInt(100));
-            }
-            list.add(result.toString());
-            return true;
         }
     }
 }
