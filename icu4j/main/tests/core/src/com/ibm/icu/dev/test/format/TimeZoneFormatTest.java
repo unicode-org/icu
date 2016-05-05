@@ -417,6 +417,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     long t = START_TIME;
                     TimeZoneTransition tzt = null;
                     boolean middle = true;
+                    boolean last = false;
                     while (t < END_TIME) {
                         if (tzt == null) {
                             testTimes[0] = t;
@@ -483,11 +484,16 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             }
                             times[patidx] += System.currentTimeMillis() - timer;
                         }
-                        tzt = btz.getNextTransition(t, false);
-                        if (tzt == null) {
+
+                        if (last) {
                             break;
                         }
-                        if (middle) {
+
+                        tzt = btz.getNextTransition(t, false);
+                        if (tzt == null) {
+                            last = true;
+                            t = END_TIME - 1;
+                        } else if (middle) {
                             // Test the date in the middle of two transitions.
                             t += (tzt.getTime() - t)/2;
                             middle = false;
