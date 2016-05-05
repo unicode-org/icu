@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2013 International Business Machines
+# Copyright (c) 2013-2016 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # parsescriptmetadata.py
@@ -49,9 +49,10 @@ def main():
   # and put the data (as strings) into the icu_data list.
   with open(smd_path, "r") as smd_file:
     for line in smd_file:
+      comment_start = line.find("#")
+      if comment_start >= 0: line = line[0:comment_start]
       line = line.strip()
       if not line: continue
-      if line.startswith("#"): continue  # whole-line comment
 
       fields = line.split(";")
       if not fields or len(fields) < 11: continue
