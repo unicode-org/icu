@@ -217,10 +217,12 @@ struct DecFmtSymDataSink : public ResourceSink {
     DecimalFormatSymbols& dfs;
     // Boolean array of whether or not we have seen a particular symbol yet.
     // Can't simpy check fSymbols because it is pre-populated with defaults.
-    UBool seenSymbol[DecimalFormatSymbols::kFormatSymbolCount] = { FALSE };
+    UBool seenSymbol[DecimalFormatSymbols::kFormatSymbolCount];
 
     // Constructor/Destructor
-    DecFmtSymDataSink(DecimalFormatSymbols& _dfs) : dfs(_dfs) {}
+    DecFmtSymDataSink(DecimalFormatSymbols& _dfs) : dfs(_dfs) {
+        uprv_memset(seenSymbol, FALSE, sizeof(seenSymbol));
+    }
     virtual ~DecFmtSymDataSink();
 
     virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
