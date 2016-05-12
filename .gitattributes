@@ -3895,6 +3895,7 @@ icu4j/main/classes/core/findbugs-exclude.xml svneol=native#text/xml
 icu4j/main/classes/core/src/com/ibm/icu/impl/Assert.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/BMPSet.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CacheBase.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/CacheValue.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CalendarAstronomer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CalendarCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CalendarData.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4524,6 +4525,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeZoneAliases.txt svneol
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeZoneFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/WriteNumberFormatSerialTestData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/plurals.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/CacheTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/iterator/TestUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8

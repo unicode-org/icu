@@ -17,18 +17,12 @@ public class TestAll extends TestGroup {
     }
 
     public TestAll() {
-        super("com.ibm.icu.dev.test.util",
-              new String[] {
-                  "ICUServiceTest",
-                  "ICUServiceThreadTest",
-                  "ICUBinaryTest",
-                  "SimpleFormatterTest",
-                  "TextTrieMapTest"
-              },
-              "Test miscellaneous implementation utilities");
+        super(
+            new String[] {
+                "CacheTest"
+            },
+            "Test miscellaneous implementation classes");
     }
 
     public static final String CLASS_TARGET_NAME = "Impl";
 }
-
-
