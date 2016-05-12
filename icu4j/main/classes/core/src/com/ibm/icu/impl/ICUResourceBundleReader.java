@@ -1182,7 +1182,7 @@ public final class ICUResourceBundleReader {
      * <p>This cache uses int[] and Object[] arrays to minimize object creation
      * and avoid auto-boxing.
      *
-     * <p>Large resource objects are stored in SoftReferences.
+     * <p>Large resource objects are usually stored in SoftReferences.
      *
      * <p>For few resources, a small table is used with binary search.
      * When more resources are cached, then the data structure changes to be faster
@@ -1210,11 +1210,18 @@ public final class ICUResourceBundleReader {
         private int levelBitsList;
         private Level rootLevel;
 
+        private static boolean storeDirectly(int size) {
+            return size < LARGE_SIZE || CacheValue.futureInstancesWillBeStrong();
+        }
+
         @SuppressWarnings("unchecked")
         private static final Object putIfCleared(Object[] values, int index, Object item, int size) {
             Object value = values[index];
             if(!(value instanceof SoftReference)) {
-                assert size < LARGE_SIZE;  // Caller should be consistent for each resource.
+                // The caller should be consistent for each resource,
+                // that is, create equivalent objects of equal size every time,
+                // but the CacheValue "strength" may change over time.
+                // assert size < LARGE_SIZE;
                 return value;
             }
             assert size >= LARGE_SIZE;
@@ -1222,7 +1229,8 @@ public final class ICUResourceBundleReader {
             if(value != null) {
                 return value;
             }
-            values[index] = new SoftReference<Object>(item);
+            values[index] = CacheValue.futureInstancesWillBeStrong() ?
+                    item : new SoftReference<Object>(item);
             return item;
         }
 
@@ -1271,7 +1279,7 @@ public final class ICUResourceBundleReader {
                         return level.putIfAbsent(key, item, size);
                     }
                     keys[index] = key;
-                    values[index] = (size >= LARGE_SIZE) ? new SoftReference<Object>(item) : item;
+                    values[index] = storeDirectly(size) ? item : new SoftReference<Object>(item);
                     return item;
                 }
                 // Collision: Add a child level, move the old item there,
@@ -1403,7 +1411,7 @@ public final class ICUResourceBundleReader {
                     }
                     ++length;
                     keys[index] = res;
-                    values[index] = (size >= LARGE_SIZE) ? new SoftReference<Object>(item) : item;
+                    values[index] = storeDirectly(size) ? item : new SoftReference<Object>(item);
                     return item;
                 } else /* not found && length == SIMPLE_LENGTH */ {
                     // Grow to become trie-like.
