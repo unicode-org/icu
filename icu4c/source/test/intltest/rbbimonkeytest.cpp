@@ -904,20 +904,25 @@ void RBBIMonkeyTest::testMonkey() {
     for (i=0; tests[i] != NULL; ++i) {
         logln("beginning testing of %s", tests[i]);
         RBBIMonkeyImpl *test = new RBBIMonkeyImpl(status);
+        if (U_FAILURE(status)) {
+            errln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
+            break;
+        }
         test->fDumpExpansions = dumpExpansions;
         test->fVerbose = verbose;
         test->fRandomGenerator.seed((uint32_t)seed);
         test->fLoopCount = loopCount;
         test->setup(tests[i], status);
+        if (U_FAILURE(status)) {
+            errln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
+            break;
+        }
         test->startTest();
         startedTests.addElement(test, status);
         if (U_FAILURE(status)) {
+            errln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
             break;
         }
-    }
-
-    if (U_FAILURE(status)) {
-        dataerrln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
     }
 
     for (i=0; i<startedTests.size(); ++i) {
