@@ -6,7 +6,9 @@
  */
 package com.ibm.icu.impl;
 
+import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.TreeMap;
 
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -21,10 +23,7 @@ import com.ibm.icu.util.UResourceBundle;
  * package for sharing some calendar internal code for calendar
  * and date format.
  */
-public class CalendarUtil {
-
-    private static ICUCache<String, String> CALTYPE_CACHE = new SimpleCache<String, String>();
-
+public final class CalendarUtil {
     private static final String CALKEY = "calendar";
     private static final String DEFCAL = "gregorian";
 
@@ -37,9 +36,7 @@ public class CalendarUtil {
      * @return Calendar type string, such as "gregorian"
      */
     public static String getCalendarType(ULocale loc) {
-        String calType = null;
-
-        calType = loc.getKeywordValue(CALKEY);
+        String calType = loc.getKeywordValue(CALKEY);
         if (calType != null) {
             return calType;
         }
@@ -54,42 +51,42 @@ public class CalendarUtil {
         // When calendar keyword is not available, use the locale's
         // region to get the default calendar type
         String region = ULocale.getRegionForSupplementalData(canonical, true);
+        return CalendarPreferences.INSTANCE.getCalendarTypeForRegion(region);
+    }
 
-        // Check the cache (now we cache by region, not base locale)
-        calType = CALTYPE_CACHE.get(region);
-        if (calType != null) {
-            return calType;
-        }
+    private static final class CalendarPreferences extends UResource.Sink {
+        private static final CalendarPreferences INSTANCE = new CalendarPreferences();
+        // A TreeMap should be good because we expect very few entries.
+        Map<String, String> prefs = new TreeMap<String, String>();
 
-        // Read supplementalData to get the default calendar type for
-        // the locale's region
-        try {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(
-                                    ICUData.ICU_BASE_NAME,
-                                    "supplementalData",
-                                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            UResourceBundle calPref = rb.get("calendarPreferenceData");
-            UResourceBundle order = null;
+        CalendarPreferences() {
             try {
-                order = calPref.get(region);
+                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(
+                        ICUData.ICU_BASE_NAME, "supplementalData");
+                rb.getAllItemsWithFallback("calendarPreferenceData", this);
             } catch (MissingResourceException mre) {
-                // use "001" as fallback
-                order = calPref.get("001");
+                // Always use "gregorian".
             }
-            // the first calendar type is the default for the region
-            calType = order.getString(0);
-        } catch (MissingResourceException mre) {
-            // fall through
         }
 
-        if (calType == null) {
-            // Use "gregorian" as the last resort fallback.
-            calType = DEFCAL;
+        String getCalendarTypeForRegion(String region) {
+            String type = prefs.get(region);
+            return type == null ? DEFCAL : type;
         }
 
-        // Cache the resolved value for the next time
-        CALTYPE_CACHE.put(region, calType);
-
-        return calType;
+        @Override
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table calendarPreferenceData = value.getTable();
+            for (int i = 0; calendarPreferenceData.getKeyAndValue(i, key, value); ++i) {
+                UResource.Array types = value.getArray();
+                // The first calendar type is the default for the region.
+                if (types.getValue(0, value)) {
+                    String type = value.getString();
+                    if (!type.equals(DEFCAL)) {
+                        prefs.put(key.toString(), type);
+                    }
+                }
+            }
+        }
     }
 }
