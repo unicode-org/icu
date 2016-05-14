@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -690,7 +690,7 @@ public class RBBITest extends TestFmwk {
 
     /* Tests the method public Object clone() */
     public void TestClone() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator(".;");
         try {
             rbbi.setText((CharacterIterator) null);
             if (((RuleBasedBreakIterator) rbbi.clone()).getText() != null)
@@ -705,8 +705,8 @@ public class RBBITest extends TestFmwk {
      * Tests the method public boolean equals(Object that)
      */
     public void TestEquals() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
-        RuleBasedBreakIterator rbbi1 = new RuleBasedBreakIterator("");
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator(".;");
+        RuleBasedBreakIterator rbbi1 = new RuleBasedBreakIterator(".;");
 
         // TODO: Tests when "if (fRData != other.fRData && (fRData == null || other.fRData == null))" is true
 
@@ -736,38 +736,26 @@ public class RBBITest extends TestFmwk {
                     + "false when comparing to string '0'.");
         }
     }
-
-    /*
-     * Tests the method public void dump()
-     */
-    public void TestDump() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
-        try {
-            rbbi.dump();
-            errln("RuleBasedBreakIterator.dump() was suppose to return "
-                    + "an exception for a blank RuleBasedBreakIterator object.");
-        } catch (Exception e) {
-        }
-    }
-    
+   
     /*
      * Tests the method public int first()
      */
     public void TestFirst() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator(".;");
         // Tests when "if (fText == null)" is true
         rbbi.setText((CharacterIterator) null);
-        if (rbbi.first() != BreakIterator.DONE) {
-            errln("RuleBasedBreakIterator.first() was suppose to return "
-                    + "BreakIterator.DONE when the object has a null fText.");
-        }
+        assertEquals("RuleBasedBreakIterator.first()", BreakIterator.DONE, rbbi.first());
+        
+        rbbi.setText("abc");
+        assertEquals("RuleBasedBreakIterator.first()", 0, rbbi.first());
+        assertEquals("RuleBasedBreakIterator.next()", 1, rbbi.next());
     }
     
     /*
      * Tests the method public int last()
      */
     public void TestLast() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator(".;");
         // Tests when "if (fText == null)" is true
         rbbi.setText((CharacterIterator) null);
         if (rbbi.last() != BreakIterator.DONE) {
@@ -780,7 +768,7 @@ public class RBBITest extends TestFmwk {
      * Tests the method public int following(int offset)
      */
     public void TestFollowing() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator(".;");
         // Tests when "else if (offset < fText.getBeginIndex())" is true
         rbbi.setText("dummy");
         if (rbbi.following(-1) != 0) {
@@ -793,7 +781,7 @@ public class RBBITest extends TestFmwk {
      * Tests the method public int preceding(int offset)
      */
     public void TestPreceding() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator(".;");
         // Tests when "if (fText == null || offset > fText.getEndIndex())" is true
         rbbi.setText((CharacterIterator)null);
         if (rbbi.preceding(-1) != BreakIterator.DONE) {
@@ -811,7 +799,7 @@ public class RBBITest extends TestFmwk {
     
     /* Tests the method public int current() */
     public void TestCurrent(){
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator(".;");
         // Tests when "(fText != null) ? fText.getIndex() : BreakIterator.DONE" is true and false
         rbbi.setText((CharacterIterator)null);
         if(rbbi.current() != BreakIterator.DONE){
@@ -822,6 +810,19 @@ public class RBBITest extends TestFmwk {
         if(rbbi.current() != 0){
             errln("RuleBasedBreakIterator.current() was suppose to return "
                     + "0 when the object has a fText of dummy.");
+        }
+    }
+    
+    public void TestBug7547() {
+        try {
+            new RuleBasedBreakIterator("");
+            fail("TestBug7547: RuleBasedBreakIterator constructor failed to throw an exception with empty rules.");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with empty rules.
+        }
+        catch (Exception e) {
+            fail("TestBug7547: Unexpected exception while creating RuleBasedBreakIterator: " + e);
         }
     }
 }
