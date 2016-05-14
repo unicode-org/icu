@@ -1103,6 +1103,17 @@ void RBBIRuleScanner::parse() {
 
     }
 
+    if (U_FAILURE(*fRB->fStatus)) {
+        return;
+    }
+    
+    // If there are no forward rules set an error.
+    //
+    if (fRB->fForwardTree == NULL) {
+        error(U_BRK_RULE_SYNTAX);
+        return;
+    }
+
     //
     // If there were NO user specified reverse rules, set up the equivalent of ".*;"
     //

@@ -53,7 +53,7 @@ public:
     void TestThaiLineBreak();
     void TestMixedThaiLineBreak();
     void TestMaiyamok();
-    void TestMonkey(char *params);
+    void TestMonkey();
 
     void TestExtended();
     UChar *ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status);
@@ -72,6 +72,7 @@ public:
     void TestDictRules();
     void TestBug5532();
     void TestBug9983();
+    void TestBug7547();
 
     void TestDebug();
     void TestProperties();
@@ -140,6 +141,9 @@ private:
      *  @return FALSE if the test case should be run, TRUE if it should be skipped.
      */
     UBool testCaseIsKnownIssue(const UnicodeString &testCase, const char *fileName);
+
+    // Test parameters, from the test framework and test invocation.
+    const char* fTestParams;
 };
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
