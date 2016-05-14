@@ -957,6 +957,12 @@ class RBBIRuleScanner {
             }
 
         }
+        
+        // If there are no forward rules throw an error.
+        //
+        if (fRB.fTreeRoots[RBBIRuleBuilder.fForwardTree] == null) {
+            error(RBBIRuleBuilder.U_BRK_RULE_SYNTAX);
+        }
 
         //
         // If there were NO user specified reverse rules, set up the equivalent of ".*;"
