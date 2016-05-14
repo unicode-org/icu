@@ -65,96 +65,42 @@
 void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* params )
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
+    fTestParams = params;
 
-    switch (index) {
+    TESTCASE_AUTO_BEGIN;
 #if !UCONFIG_NO_FILE_IO
-        case 0: name = "TestBug4153072";
-            if(exec) TestBug4153072();                         break;
-#else
-        case 0: name = "skip";
-            break;
+    TESTCASE_AUTO(TestBug4153072);
 #endif
-
-        case 1: name = "skip";
-            break;
-        case 2: name = "TestStatusReturn";
-            if(exec) TestStatusReturn();                       break;
-
+    TESTCASE_AUTO(TestStatusReturn);
 #if !UCONFIG_NO_FILE_IO
-        case 3: name = "TestUnicodeFiles";
-            if(exec) TestUnicodeFiles();                       break;
-        case 4: name = "TestEmptyString";
-            if(exec) TestEmptyString();                        break;
-#else
-        case 3: case 4: name = "skip";
-            break;
+    TESTCASE_AUTO(TestUnicodeFiles);
+    TESTCASE_AUTO(TestEmptyString);
 #endif
-
-        case 5: name = "TestGetAvailableLocales";
-            if(exec) TestGetAvailableLocales();                break;
-
-        case 6: name = "TestGetDisplayName";
-            if(exec) TestGetDisplayName();                     break;
-
+    TESTCASE_AUTO(TestGetAvailableLocales);
+    TESTCASE_AUTO(TestGetDisplayName);
 #if !UCONFIG_NO_FILE_IO
-        case 7: name = "TestEndBehaviour";
-            if(exec) TestEndBehaviour();                       break;
-        case 8: case 9: case 10: name = "skip";
-             break;
-        case 11: name = "TestWordBreaks";
-             if(exec) TestWordBreaks();                        break;
-        case 12: name = "TestWordBoundary";
-             if(exec) TestWordBoundary();                      break;
-        case 13: name = "TestLineBreaks";
-             if(exec) TestLineBreaks();                        break;
-        case 14: name = "TestSentBreaks";
-             if(exec) TestSentBreaks();                        break;
-        case 15: name = "TestExtended";
-             if(exec) TestExtended();                          break;
-#else
-        case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: name = "skip";
-             break;
+    TESTCASE_AUTO(TestEndBehaviour);
+    TESTCASE_AUTO(TestWordBreaks);
+    TESTCASE_AUTO(TestWordBoundary);
+    TESTCASE_AUTO(TestLineBreaks);
+    TESTCASE_AUTO(TestSentBreaks);
+    TESTCASE_AUTO(TestExtended);
 #endif
-
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FILE_IO
-        case 16:
-            name = "TestMonkey"; if(exec)  TestMonkey(params); break;
-#else
-        case 16:
-             name = "skip";                                    break;
+    TESTCASE_AUTO(TestMonkey);
 #endif
-
 #if !UCONFIG_NO_FILE_IO
-        case 17: name = "TestBug3818";
-            if(exec) TestBug3818();                            break;
-#else
-        case 17: name = "skip";
-            break;
+    TESTCASE_AUTO(TestBug3818);
 #endif
-
-        case 18: name = "skip";
-            break;
-        case 19: name = "TestDebug";
-            if(exec) TestDebug();                              break;
-        case 20: name = "skip";
-            break;
-
+    TESTCASE_AUTO(TestDebug);
 #if !UCONFIG_NO_FILE_IO
-        case 21: name = "TestBug5775";
-            if (exec) TestBug5775();                           break;
-#else
-        case 21: name = "skip";
-            break;
+    TESTCASE_AUTO(TestBug5775);
 #endif
-
-        case 22: name = "TestBug9983";
-            if (exec) TestBug9983();                           break;
-        case 23: name = "TestDictRules";
-            if (exec) TestDictRules();                         break;
-        case 24: name = "TestBug5532";
-            if (exec) TestBug5532();                           break;
-        default: name = ""; break; //needed to end loop
-    }
+    TESTCASE_AUTO(TestBug9983);
+    TESTCASE_AUTO(TestDictRules);
+    TESTCASE_AUTO(TestBug5532);
+    TESTCASE_AUTO(TestBug7547);
+    TESTCASE_AUTO_END;
 }
 
 
@@ -306,6 +252,7 @@ void BITestData::clearResults() {
 //--------------------------------------------------------------------------------------
 
 RBBITest::RBBITest() {
+    fTestParams = NULL;
 }
 
 
@@ -4137,7 +4084,7 @@ void RBBITest::TestSentBreaks(void)
 #endif
 }
 
-void RBBITest::TestMonkey(char *params) {
+void RBBITest::TestMonkey() {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
     UErrorCode     status    = U_ZERO_ERROR;
@@ -4151,8 +4098,8 @@ void RBBITest::TestMonkey(char *params) {
         loopCount = 10000;
     }
 
-    if (params) {
-        UnicodeString p(params);
+    if (fTestParams) {
+        UnicodeString p(fTestParams);
         loopCount = getIntParam("loop", p, loopCount);
         seed      = getIntParam("seed", p, seed);
 
@@ -4632,6 +4579,21 @@ void RBBITest::TestBug9983(void)  {
         }
     }
     TEST_ASSERT(iterationCount == 6);
+}
+
+// Bug 7547 - verify that building a break itereator from empty rules produces an error.
+//
+void RBBITest::TestBug7547() {
+    UnicodeString rules;
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    RuleBasedBreakIterator breakIterator(rules, parseError, status);
+    if (status != U_BRK_RULE_SYNTAX) {
+        errln("%s:%d Expected U_BRK_RULE_SYNTAX, got %s", __FILE__, __LINE__, u_errorName(status));
+    }
+    if (parseError.line != 1 || parseError.offset != 0) {
+        errln("parseError (line, offset) expected (1, 0), got (%d, %d)", parseError.line, parseError.offset);
+    }
 }
 
 
