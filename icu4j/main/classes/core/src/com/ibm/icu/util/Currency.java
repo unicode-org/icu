@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUDebug;
@@ -229,7 +230,7 @@ public class Currency extends MeasureUnit {
     }
 
     private static final String EUR_STR = "EUR";
-    private static final SoftCache<String, Currency, Void> regionCurrencyCache =
+    private static final CacheBase<String, Currency, Void> regionCurrencyCache =
             new SoftCache<String, Currency, Void>() {
         @Override
         protected Currency createInstance(String key, Void unused) {
