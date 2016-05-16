@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015, International Business Machines
+ * Copyright (C) 2016, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *
  * file name: visibledigits.cpp
@@ -84,8 +84,11 @@ double VisibleDigits::computeAbsDoubleValue() const {
     }
 
     // stack allocate a decNumber to hold MAX_DBL_DIGITS+3 significant digits
-    char rawNumber[sizeof(decNumber) + MAX_DBL_DIGITS+3];
-    decNumber *numberPtr = (decNumber *) rawNumber;
+    struct {
+        decNumber  decNum;
+        char       digits[MAX_DBL_DIGITS+3];
+    } decNumberWithStorage;
+    decNumber *numberPtr = &decNumberWithStorage.decNum;
 
     int32_t mostSig = fInterval.getMostSignificantExclusive();
     int32_t mostSigNonZero = fExponent + fDigits.length();
