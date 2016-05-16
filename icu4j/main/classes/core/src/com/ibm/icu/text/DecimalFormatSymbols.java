@@ -13,14 +13,14 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencySpacingInfo;
-import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
@@ -212,6 +212,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     public void setZeroDigit(char zeroDigit) {
         if ( digits != null ) {
+            digits = digits.clone();  // Do not change cached digits.
             this.digits[0] = zeroDigit;
             if (Character.digit(zeroDigit,10) == 0) {
                 for ( int i = 1 ; i < 10 ; i++ ) {
@@ -921,102 +922,15 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * Initializes the symbols from the LocaleElements resource bundle.
-     * Note: The organization of LocaleElements badly needs to be
-     * cleaned up.
+     * Initializes the symbols from the locale data.
      */
     private void initialize( ULocale locale ) {
         this.requestedLocale = locale.toLocale();
         this.ulocale = locale;
-
-        String nsName;
-        // Attempt to set the zero digit based on the numbering system for the locale requested
-        NumberingSystem ns = NumberingSystem.getInstance(locale);
-        digits = new char[10];
-        if ( ns != null && ns.getRadix() == 10 && !ns.isAlgorithmic() &&
-             NumberingSystem.isValidDigitString(ns.getDescription())) {
-            String digitString = ns.getDescription();
-            digits[0] = digitString.charAt(0);
-            digits[1] = digitString.charAt(1);
-            digits[2] = digitString.charAt(2);
-            digits[3] = digitString.charAt(3);
-            digits[4] = digitString.charAt(4);
-            digits[5] = digitString.charAt(5);
-            digits[6] = digitString.charAt(6);
-            digits[7] = digitString.charAt(7);
-            digits[8] = digitString.charAt(8);
-            digits[9] = digitString.charAt(9);
-            nsName = ns.getName();
-        } else {
-            digits[0] = DecimalFormat.PATTERN_ZERO_DIGIT;
-            digits[1] = DecimalFormat.PATTERN_ONE_DIGIT;
-            digits[2] = DecimalFormat.PATTERN_TWO_DIGIT;
-            digits[3] = DecimalFormat.PATTERN_THREE_DIGIT;
-            digits[4] = DecimalFormat.PATTERN_FOUR_DIGIT;
-            digits[5] = DecimalFormat.PATTERN_FIVE_DIGIT;
-            digits[6] = DecimalFormat.PATTERN_SIX_DIGIT;
-            digits[7] = DecimalFormat.PATTERN_SEVEN_DIGIT;
-            digits[8] = DecimalFormat.PATTERN_EIGHT_DIGIT;
-            digits[9] = DecimalFormat.PATTERN_NINE_DIGIT;
-            nsName = LATIN_NUMBERING_SYSTEM; // Default numbering system
-        }
-
-        // Open the resource bundle and get the locale IDs
-        // TODO: Is there a better way to get the locale than making an ICUResourceBundle instance?
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
-            getBundleInstance(ICUData.ICU_BASE_NAME, locale);
-        // TODO: Determine actual and valid locale correctly.
-        ULocale uloc = rb.getULocale();
-        setLocale(uloc, uloc);
-
-        // Try loading from the cache
-        String[][] data = cachedLocaleData.get(locale);
-        if (data == null) {
-            // Cache miss!
-            // TODO: There does not appear to be a good reason why the "data" array is 2-D.
-            data = new String[1][SYMBOL_KEYS.length];
-
-            // Load using a data sink
-            DecFmtDataSink sink = new DecFmtDataSink(data[0]);
-            try {
-                rb.getAllItemsWithFallback(NUMBER_ELEMENTS + "/" + nsName + "/" + SYMBOLS, sink);
-            } catch (MissingResourceException e) {
-                // The symbols don't exist for the given nsName and resource bundle.
-                // Silently ignore and fall back to Latin.
-            }
-
-            // Load the Latin fallback if necessary
-            boolean hasNull = false;
-            for (String entry : data[0]) {
-                if (entry == null) {
-                    hasNull = true;
-                    break;
-                }
-            }
-            if (hasNull && !nsName.equals(LATIN_NUMBERING_SYSTEM)) {
-                rb.getAllItemsWithFallback(NUMBER_ELEMENTS + "/" + LATIN_NUMBERING_SYSTEM + "/" + SYMBOLS, sink);
-            }
-
-            // If monetary decimal or grouping were not explicitly set, then set them to be the same as
-            // their non-monetary counterparts.
-            if (data[0][10] == null) {
-                data[0][10] = data[0][0];
-            }
-            if (data[0][11] == null) {
-                data[0][11] = data[0][1];
-            }
-
-            // Fill in any remaining missing values
-            for (int i = 0; i < SYMBOL_KEYS.length; i++) {
-                if (data[0][i] == null) {
-                    data[0][i] = SYMBOL_DEFAULTS[i];
-                }
-            }
-
-            // Save in cache
-            cachedLocaleData.put(locale, data);
-        }
-        String[] numberElements = data[0];
+        CacheData data = cachedLocaleData.getInstance(locale, null /* unused */);
+        setLocale(data.validLocale, data.validLocale);
+        digits = data.digits;
+        String[] numberElements = data.numberElements;
 
         // Copy data from the numberElements map into instance fields
         decimalSeparator = numberElements[0].charAt(0);
@@ -1065,6 +979,88 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         currencySpcBeforeSym = new String[3];
         currencySpcAfterSym = new String[3];
         initSpacingInfo(info.getSpacingInfo());
+    }
+
+    private static CacheData loadData(ULocale locale) {
+        String nsName;
+        // Attempt to set the decimal digits based on the numbering system for the requested locale.
+        NumberingSystem ns = NumberingSystem.getInstance(locale);
+        char[] digits = new char[10];
+        if (ns != null && ns.getRadix() == 10 && !ns.isAlgorithmic() &&
+                NumberingSystem.isValidDigitString(ns.getDescription())) {
+            String digitString = ns.getDescription();
+            digits[0] = digitString.charAt(0);
+            digits[1] = digitString.charAt(1);
+            digits[2] = digitString.charAt(2);
+            digits[3] = digitString.charAt(3);
+            digits[4] = digitString.charAt(4);
+            digits[5] = digitString.charAt(5);
+            digits[6] = digitString.charAt(6);
+            digits[7] = digitString.charAt(7);
+            digits[8] = digitString.charAt(8);
+            digits[9] = digitString.charAt(9);
+            nsName = ns.getName();
+        } else {
+            digits[0] = DecimalFormat.PATTERN_ZERO_DIGIT;
+            digits[1] = DecimalFormat.PATTERN_ONE_DIGIT;
+            digits[2] = DecimalFormat.PATTERN_TWO_DIGIT;
+            digits[3] = DecimalFormat.PATTERN_THREE_DIGIT;
+            digits[4] = DecimalFormat.PATTERN_FOUR_DIGIT;
+            digits[5] = DecimalFormat.PATTERN_FIVE_DIGIT;
+            digits[6] = DecimalFormat.PATTERN_SIX_DIGIT;
+            digits[7] = DecimalFormat.PATTERN_SEVEN_DIGIT;
+            digits[8] = DecimalFormat.PATTERN_EIGHT_DIGIT;
+            digits[9] = DecimalFormat.PATTERN_NINE_DIGIT;
+            nsName = "latn"; // Default numbering system
+        }
+
+        // Open the resource bundle and get the locale IDs.
+        // TODO: Is there a better way to get the locale than making an ICUResourceBundle instance?
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
+                getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+        // TODO: Determine actual and valid locale correctly.
+        ULocale validLocale = rb.getULocale();
+
+        String[] numberElements = new String[SYMBOL_KEYS.length];
+
+        // Load using a data sink
+        DecFmtDataSink sink = new DecFmtDataSink(numberElements);
+        try {
+            rb.getAllItemsWithFallback(NUMBER_ELEMENTS + "/" + nsName + "/" + SYMBOLS, sink);
+        } catch (MissingResourceException e) {
+            // The symbols don't exist for the given nsName and resource bundle.
+            // Silently ignore and fall back to Latin.
+        }
+
+        // Load the Latin fallback if necessary
+        boolean hasNull = false;
+        for (String entry : numberElements) {
+            if (entry == null) {
+                hasNull = true;
+                break;
+            }
+        }
+        if (hasNull && !nsName.equals(LATIN_NUMBERING_SYSTEM)) {
+            rb.getAllItemsWithFallback(NUMBER_ELEMENTS + "/" + LATIN_NUMBERING_SYSTEM + "/" + SYMBOLS, sink);
+        }
+
+        // If monetary decimal or grouping were not explicitly set, then set them to be the same as
+        // their non-monetary counterparts.
+        if (numberElements[10] == null) {
+            numberElements[10] = numberElements[0];
+        }
+        if (numberElements[11] == null) {
+            numberElements[11] = numberElements[1];
+        }
+
+        // Fill in any remaining missing values
+        for (int i = 0; i < SYMBOL_KEYS.length; i++) {
+            if (numberElements[i] == null) {
+                numberElements[i] = SYMBOL_DEFAULTS[i];
+            }
+        }
+
+        return new CacheData(validLocale, digits, numberElements);
     }
 
     private void initSpacingInfo(CurrencySpacingInfo spcInfo) {
@@ -1387,8 +1383,13 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * cache to hold the NumberElements of a Locale.
      */
-    private static final ICUCache<ULocale, String[][]> cachedLocaleData =
-        new SimpleCache<ULocale, String[][]>();
+    private static final CacheBase<ULocale, CacheData, Void> cachedLocaleData =
+        new SoftCache<ULocale, CacheData, Void>() {
+            @Override
+            protected CacheData createInstance(ULocale locale, Void unused) {
+                return DecimalFormatSymbols.loadData(locale);
+            }
+        };
 
     /**
      *
@@ -1470,4 +1471,16 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private transient Currency currency;
 
     // -------- END ULocale boilerplate --------
+
+    private static class CacheData {
+        final ULocale validLocale;
+        final char[] digits;
+        final String[] numberElements;
+
+        public CacheData(ULocale loc, char[] digits, String[] numberElements) {
+            validLocale = loc;
+            this.digits = digits;
+            this.numberElements = numberElements;
+        }
+    }
 }
