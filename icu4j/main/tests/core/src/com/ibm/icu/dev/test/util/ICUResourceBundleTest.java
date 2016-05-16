@@ -1100,9 +1100,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
         
         rb7 = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestDataElements", Locale.getDefault(), testLoader);
-        
-        UResourceBundle.resetBundleCache();
-        
+
         try {
             rb1.getBinary();
             errln("getBinary() call should have thrown UResourceTypeMismatchException.");

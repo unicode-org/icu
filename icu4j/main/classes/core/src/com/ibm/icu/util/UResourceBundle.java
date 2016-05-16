@@ -7,12 +7,12 @@
 
 package com.ibm.icu.util;
 
-import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -322,26 +322,6 @@ public abstract class UResourceBundle extends ResourceBundle {
         new SimpleCache<ResourceCacheKey, UResourceBundle>();
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static void resetBundleCache() {
-        /*
-         * A HACK!!!!!
-         * Currently if a resourcebundle with fallback turned ON is added to the cache
-         * and then a getBundleInstance() is called for a bundle with fallback turned OFF
-         * it will actually search the cache for any bundle of the same locale
-         * regaurdless of fallback status. This method has been created so that if
-         * The calling method KNOWS that instances of the other fallback state may be in the
-         * cache, the calling method may call this method to clear out the cache.
-         *
-         */
-        //TODO figure a way around this method(see method comment)
-        BUNDLE_CACHE = new SimpleCache<ResourceCacheKey, UResourceBundle>();
-    }
-
-    /**
      * Method used by subclasses to add a resource bundle object to the managed
      * cache.  Works like a putIfAbsent(): If the cache already contains a matching
      * bundle, that one will be retained and returned.
@@ -376,10 +356,10 @@ public abstract class UResourceBundle extends ResourceBundle {
 
     /**
      * Key used for cached resource bundles.  The key checks
-     * the resource name, the class root, and the default
+     * the resource name and the default
      * locale to determine if the resource is a match to the
-     * requested one. The root may be null, but the
-     * searchName and the default locale must have a non-null value.
+     * requested one. The default locale may be null, but the
+     * searchName must have a non-null value.
      * Note that the default locale may change over time, and
      * lookup should always be based on the current default
      * locale (if at all).
@@ -453,68 +433,36 @@ public abstract class UResourceBundle extends ResourceBundle {
 
     private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
 
-    private static final int ROOT_MISSING = 0;
-    private static final int ROOT_ICU = 1;
-    private static final int ROOT_JAVA = 2;
+    private enum RootType { MISSING, ICU, JAVA }
 
-    private static SoftReference<ConcurrentHashMap<String, Integer>> ROOT_CACHE =
-            new SoftReference<ConcurrentHashMap<String, Integer>>(new ConcurrentHashMap<String, Integer>());
+    private static Map<String, RootType> ROOT_CACHE = new ConcurrentHashMap<String, RootType>();
 
-    private static int getRootType(String baseName, ClassLoader root) {
-        ConcurrentHashMap<String, Integer> m = null;
-        Integer rootType;
-
-        m = ROOT_CACHE.get();
-        if (m == null) {
-            synchronized(UResourceBundle.class) {
-                m = ROOT_CACHE.get();
-                if (m == null) {
-                    m = new ConcurrentHashMap<String, Integer>();
-                    ROOT_CACHE = new SoftReference<ConcurrentHashMap<String, Integer>>(m);
-                }
-            }
-        }
-
-        rootType = m.get(baseName);
+    private static RootType getRootType(String baseName, ClassLoader root) {
+        RootType rootType = ROOT_CACHE.get(baseName);
 
         if (rootType == null) {
             String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
-            int rt = ROOT_MISSING; // value set on success
             try{
                 ICUResourceBundle.getBundleInstance(baseName, rootLocale, root, true);
-                rt = ROOT_ICU;
+                rootType = RootType.ICU;
             }catch(MissingResourceException ex){
                 try{
                     ResourceBundleWrapper.getBundleInstance(baseName, rootLocale, root, true);
-                    rt = ROOT_JAVA;
+                    rootType = RootType.JAVA;
                 }catch(MissingResourceException e){
                     //throw away the exception
+                    rootType = RootType.MISSING;
                 }
             }
 
-            rootType = Integer.valueOf(rt);
-            m.putIfAbsent(baseName, rootType);
+            ROOT_CACHE.put(baseName, rootType);
         }
 
-        return rootType.intValue();
+        return rootType;
     }
 
-    private static void setRootType(String baseName, int rootType) {
-        Integer rt = Integer.valueOf(rootType);
-        ConcurrentHashMap<String, Integer> m = null;
-
-        m = ROOT_CACHE.get();
-        if (m == null) {
-            synchronized(UResourceBundle.class) {
-                m = ROOT_CACHE.get();
-                if (m == null) {
-                    m = new ConcurrentHashMap<String, Integer>();
-                    ROOT_CACHE = new SoftReference<ConcurrentHashMap<String, Integer>>(m);
-                }
-            }
-        }
-
-        m.put(baseName, rt);
+    private static void setRootType(String baseName, RootType rootType) {
+        ROOT_CACHE.put(baseName, rootType);
     }
 
     /**
@@ -532,13 +480,12 @@ public abstract class UResourceBundle extends ResourceBundle {
     protected static UResourceBundle instantiateBundle(String baseName, String localeName,
                                                        ClassLoader root, boolean disableFallback) {
         UResourceBundle b = null;
-        int rootType = getRootType(baseName, root);
+        RootType rootType = getRootType(baseName, root);
 
         ULocale defaultLocale = ULocale.getDefault();
 
-        switch (rootType)
-        {
-        case ROOT_ICU:
+        switch (rootType) {
+        case ICU:
             if(disableFallback) {
                 String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
                 b = loadFromCache(fullName, defaultLocale);
@@ -553,19 +500,20 @@ public abstract class UResourceBundle extends ResourceBundle {
 
             return b;
 
-        case ROOT_JAVA:
+        case JAVA:
             return ResourceBundleWrapper.getBundleInstance(baseName, localeName, root, 
                                                            disableFallback);
 
+        case MISSING:
         default:
             try{
                 b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, 
                                                         disableFallback);
-                setRootType(baseName, ROOT_ICU);
+                setRootType(baseName, RootType.ICU);
             }catch(MissingResourceException ex){
                 b = ResourceBundleWrapper.getBundleInstance(baseName, localeName, root, 
                                                             disableFallback);
-                setRootType(baseName, ROOT_JAVA);
+                setRootType(baseName, RootType.JAVA);
             }
             return b;
         }
