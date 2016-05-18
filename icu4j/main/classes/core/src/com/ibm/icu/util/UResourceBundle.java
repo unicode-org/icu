@@ -659,7 +659,6 @@ public abstract class UResourceBundle extends ResourceBundle {
         for (UResourceBundle res = this; res != null; res = res.getParent()) {
             UResourceBundle obj = res.handleGet(aKey, null, this);
             if (obj != null) {
-                ((ICUResourceBundle) obj).setLoadingStatus(getLocaleID());
                 return obj;
             }
         }
@@ -705,7 +704,6 @@ public abstract class UResourceBundle extends ResourceBundle {
                                 + this.getClass().getName() + ", key "
                                 + getKey(), this.getClass().getName(), getKey());
         }
-        ((ICUResourceBundle)obj).setLoadingStatus(getLocaleID());
         return obj;
     }
 
@@ -730,7 +728,6 @@ public abstract class UResourceBundle extends ResourceBundle {
         for (UResourceBundle res = this; res != null; res = res.getParent()) {
             UResourceBundle obj = res.handleGet(index, null, this);
             if (obj != null) {
-                ((ICUResourceBundle) obj).setLoadingStatus(getLocaleID());
                 return obj;
             }
         }
@@ -1023,15 +1020,6 @@ public abstract class UResourceBundle extends ResourceBundle {
         }
         return obj;
     }
-
-    /**
-     * This method is for setting the loading status of the resource.
-     * The status is analogous to the warning status in ICU4C.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected abstract void setLoadingStatus(int newStatus);
 
     /**
      * Is this a top-level resource, that is, a whole bundle?

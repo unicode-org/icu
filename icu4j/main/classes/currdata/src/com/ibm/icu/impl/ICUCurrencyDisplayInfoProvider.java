@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -18,6 +19,7 @@ import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfoProvider;
 import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
 import com.ibm.icu.impl.CurrencyData.CurrencySpacingInfo;
+import com.ibm.icu.impl.ICUResourceBundle.OpenType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -26,11 +28,15 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
     }
 
     public CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback) {
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                ICUData.ICU_CURR_BASE_NAME, locale);
-        if (!withFallback) {
-            int status = rb.getLoadingStatus();
-            if (status == ICUResourceBundle.FROM_DEFAULT || status == ICUResourceBundle.FROM_ROOT) {
+        ICUResourceBundle rb;
+        if (withFallback) {
+            rb = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
+                    ICUData.ICU_CURR_BASE_NAME, locale, OpenType.LOCALE_DEFAULT_ROOT);
+        } else {
+            try {
+                rb = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
+                        ICUData.ICU_CURR_BASE_NAME, locale, OpenType.LOCALE_ONLY);
+            } catch (MissingResourceException e) {
                 return null;
             }
         }
@@ -75,12 +81,8 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             if (currencies != null) {
                 ICUResourceBundle result = currencies.findWithFallback(isoCode);
                 if (result != null) {
-                    if (!fallback) {
-                        int status = result.getLoadingStatus();
-                        if (status == ICUResourceBundle.FROM_DEFAULT ||
-                                status == ICUResourceBundle.FROM_ROOT) {
-                            return null;
-                        }
+                    if (!fallback && !rb.isRoot() && result.isRoot()) {
+                        return null;
                     }
                     return result.getString(symbolName ? 0 : 1);
                 }
