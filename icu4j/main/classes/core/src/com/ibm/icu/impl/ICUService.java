@@ -1,12 +1,11 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2001-2016, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -399,19 +399,12 @@ public class ICUService extends ICUNotifier {
                 // The cache has to stay in synch with the factory list.
                 factoryLock.acquireRead();
 
-                Map<String, CacheEntry> cache = null;
-                SoftReference<Map<String, CacheEntry>> cref = cacheref; // copy so we don't need to sync on this
-                if (cref != null) {
-                    if (DEBUG) System.out.println("Service " + name + " ref exists");
-                    cache = cref.get();
-                }
+                Map<String, CacheEntry> cache = this.cache; // copy so we don't need to sync on this
                 if (cache == null) {
                     if (DEBUG) System.out.println("Service " + name + " cache was empty");
                     // synchronized since additions and queries on the cache must be atomic
                     // they can be interleaved, though
-                    cache = Collections.synchronizedMap(new HashMap<String, CacheEntry>());
-//                  hardRef = cache; // debug
-                    cref = new SoftReference<Map<String, CacheEntry>>(cache);
+                    cache = new ConcurrentHashMap<String, CacheEntry>();
                 }
 
                 String currentDescriptor = null;
@@ -495,7 +488,7 @@ public class ICUService extends ICUNotifier {
                         // so we know our cache is consistent with the factory list.
                         // We might stomp over a cache that some other thread
                         // rebuilt, but that's the breaks.  They're both good.
-                        cacheref = cref;
+                        this.cache = cache;
                     }
 
                     if (actualReturn != null) {
@@ -521,7 +514,7 @@ public class ICUService extends ICUNotifier {
 
         return handleDefault(key, actualReturn);
     }
-    private SoftReference<Map<String, CacheEntry>> cacheref;
+    private Map<String, CacheEntry> cache;
 
     // Record the actual id for this service in the cache, so we can return it
     // even if we succeed later with a different id.
@@ -583,43 +576,26 @@ public class ICUService extends ICUNotifier {
      * Return a map from visible ids to factories.
      */
     private Map<String, Factory> getVisibleIDMap() {
-        Map<String, Factory> idcache = null;
-        SoftReference<Map<String, Factory>> ref = idref;
-        if (ref != null) {
-            idcache = ref.get();
-        }
-        while (idcache == null) {
-            synchronized (this) { // or idref-only lock?
-                if (ref == idref || idref == null) {
-                    // no other thread updated idref before we got the lock, so
-                    // grab the factory list and update it ourselves
-                    try {
-                        factoryLock.acquireRead();
-                        idcache = new HashMap<String, Factory>();
-                        ListIterator<Factory> lIter = factories.listIterator(factories.size());
-                        while (lIter.hasPrevious()) {
-                            Factory f = lIter.previous();
-                            f.updateVisibleIDs(idcache);
-                        }
-                        idcache = Collections.unmodifiableMap(idcache);
-                        idref = new SoftReference<Map<String, Factory>>(idcache);
+        Map<String, Factory> idcache = this.idcache;
+        synchronized (this) { // or idcache-only lock?
+            if (idcache == null) {
+                try {
+                    factoryLock.acquireRead();
+                    Map<String, Factory> mutableMap = new HashMap<String, Factory>();
+                    ListIterator<Factory> lIter = factories.listIterator(factories.size());
+                    while (lIter.hasPrevious()) {
+                        Factory f = lIter.previous();
+                        f.updateVisibleIDs(mutableMap);
                     }
-                    finally {
-                        factoryLock.releaseRead();
-                    }
-                } else {
-                    // another thread updated idref, but gc may have stepped
-                    // in and undone its work, leaving idcache null.  If so,
-                    // retry.
-                    ref = idref;
-                    idcache = ref.get();
+                    this.idcache = idcache = Collections.unmodifiableMap(mutableMap);
+                } finally {
+                    factoryLock.releaseRead();
                 }
             }
         }
-
         return idcache;
     }
-    private SoftReference<Map<String, Factory>> idref;
+    private Map<String, Factory> idcache;
 
     /**
      * Convenience override for getDisplayName(String, ULocale) that
@@ -747,18 +723,18 @@ public class ICUService extends ICUNotifier {
     // locale, comparator, and corresponding map.
     private static class LocaleRef {
         private final ULocale locale;
-        private SoftReference<SortedMap<String, String>> ref;
+        private SortedMap<String, String> dnCache;
         private Comparator<Object> com;
 
         LocaleRef(SortedMap<String, String> dnCache, ULocale locale, Comparator<Object> com) {
             this.locale = locale;
             this.com = com;
-            this.ref = new SoftReference<SortedMap<String, String>>(dnCache);
+            this.dnCache = dnCache;
         }
 
 
         SortedMap<String, String> get(ULocale loc, Comparator<Object> comp) {
-            SortedMap<String, String> m = ref.get();
+            SortedMap<String, String> m = dnCache;
             if (m != null &&
                 this.locale.equals(loc) &&
                 (this.com == comp || (this.com != null && this.com.equals(comp)))) {
@@ -915,8 +891,8 @@ public class ICUService extends ICUNotifier {
         // we don't synchronize on these because methods that use them
         // copy before use, and check for changes if they modify the
         // caches.
-        cacheref = null;
-        idref = null;
+        cache = null;
+        idcache = null;
         dnref = null;
     }
 
@@ -927,7 +903,7 @@ public class ICUService extends ICUNotifier {
      * the resolution of ids changes, but not the visible ids themselves.
      */
     protected void clearServiceCache() {
-        cacheref = null;
+        cache = null;
     }
 
     /**
