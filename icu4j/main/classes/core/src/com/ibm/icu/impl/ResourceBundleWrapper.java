@@ -24,11 +24,24 @@ import com.ibm.icu.util.UResourceBundle;
  * @author ram
  *
  */
-public class ResourceBundleWrapper extends UResourceBundle {
+public final class ResourceBundleWrapper extends UResourceBundle {
     private ResourceBundle bundle = null;
     private String localeID = null;
     private String baseName = null;
     private List<String> keys = null;
+
+    /** Loader for bundle instances, for caching. */
+    private static abstract class Loader {
+        abstract ResourceBundleWrapper load();
+    }
+
+    private static CacheBase<String, ResourceBundleWrapper, Loader> BUNDLE_CACHE =
+            new SoftCache<String, ResourceBundleWrapper, Loader>() {
+        @Override
+        protected ResourceBundleWrapper createInstance(String unusedKey, Loader loader) {
+            return loader.load();
+        }
+    };
 
     private ResourceBundleWrapper(ResourceBundle bundle){
         this.bundle=bundle;
@@ -93,9 +106,18 @@ public class ResourceBundleWrapper extends UResourceBundle {
     private static final boolean DEBUG = ICUDebug.enabled("resourceBundleWrapper");
     
     // This method is for super class's instantiateBundle method
-    public static UResourceBundle getBundleInstance(String baseName, String localeID, 
-                                                    ClassLoader root, boolean disableFallback){
-        UResourceBundle b = instantiateBundle(baseName, localeID, root, disableFallback);
+    public static ResourceBundleWrapper getBundleInstance(String baseName, String localeID,
+            ClassLoader root, boolean disableFallback) {
+        if (root == null) {
+            root = ClassLoaderUtil.getClassLoader();
+        }
+        ResourceBundleWrapper b;
+        if (disableFallback) {
+            b = instantiateBundle(baseName, localeID, null, root, disableFallback);
+        } else {
+            b = instantiateBundle(baseName, localeID, ULocale.getDefault().getBaseName(),
+                    root, disableFallback);
+        }
         if(b==null){
             String separator ="_";
             if(baseName.indexOf('/')>=0){
@@ -105,47 +127,43 @@ public class ResourceBundleWrapper extends UResourceBundle {
         }
         return b;
     }
-    // recursively build bundle and override the super-class method
-     protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeID,
-                                                                    ClassLoader root, boolean disableFallback) {
-        if (root == null) {
-            root = ClassLoaderUtil.getClassLoader();
-        }
-        final ClassLoader cl = root;
-        String name = baseName;
-        ULocale defaultLocale = ULocale.getDefault();
-        if (localeID.length() != 0) {
-            name = name + "_" + localeID;
-        }
 
-        ResourceBundleWrapper b = (ResourceBundleWrapper)loadFromCache(name, defaultLocale);
-        if(b==null){
+    private static boolean localeIDStartsWithLangSubtag(String localeID, String lang) {
+        return localeID.startsWith(lang) &&
+                (localeID.length() == lang.length() || localeID.charAt(lang.length()) == '_');
+    }
+
+    private static ResourceBundleWrapper instantiateBundle(
+             final String baseName, final String localeID, final String defaultID,
+             final ClassLoader root, final boolean disableFallback) {
+        final String name = localeID.isEmpty() ? baseName : baseName + '_' + localeID;
+        String cacheKey = disableFallback ? name : name + '#' + defaultID;
+        return BUNDLE_CACHE.getInstance(cacheKey, new Loader() {
+                @Override
+                public ResourceBundleWrapper load() {
             ResourceBundleWrapper parent = null;
             int i = localeID.lastIndexOf('_');
-    
+
             boolean loadFromProperties = false;
+            boolean parentIsRoot = false;
             if (i != -1) {
                 String locName = localeID.substring(0, i);
-                parent = (ResourceBundleWrapper)loadFromCache(baseName+"_"+locName,defaultLocale);
-                if(parent == null){
-                    parent = (ResourceBundleWrapper)instantiateBundle(baseName, locName , cl, disableFallback);
-                }
-            }else if(localeID.length()>0){
-                parent = (ResourceBundleWrapper)loadFromCache(baseName,defaultLocale);
-                if(parent==null){
-                    parent = (ResourceBundleWrapper)instantiateBundle(baseName, "", cl, disableFallback);
-                }
+                parent = instantiateBundle(baseName, locName, defaultID, root, disableFallback);
+            }else if(!localeID.isEmpty()){
+                parent = instantiateBundle(baseName, "", defaultID, root, disableFallback);
+                parentIsRoot = true;
             }
+            ResourceBundleWrapper b = null;
             try {
-                Class<? extends ResourceBundle> cls = cl.loadClass(name).asSubclass(ResourceBundle.class);
+                Class<? extends ResourceBundle> cls =
+                        root.loadClass(name).asSubclass(ResourceBundle.class);
                 ResourceBundle bx = cls.newInstance();
                 b = new ResourceBundleWrapper(bx);
                 if (parent != null) {
                     b.setParent(parent);
                 }
                 b.baseName=baseName;
-                b.localeID = localeID;            
-    
+                b.localeID = localeID;
             } catch (ClassNotFoundException e) {
                 loadFromProperties = true;
             } catch (NoClassDefFoundError e) {
@@ -163,11 +181,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
                     InputStream stream = java.security.AccessController.doPrivileged(
                         new java.security.PrivilegedAction<InputStream>() {
                             public InputStream run() {
-                                if (cl != null) {
-                                    return cl.getResourceAsStream(resName);
-                                } else {
-                                    return ClassLoader.getSystemResourceAsStream(resName);
-                                }
+                                return root.getResourceAsStream(resName);
                             }
                         }
                     );
@@ -191,22 +205,19 @@ public class ResourceBundleWrapper extends UResourceBundle {
                             }
                         }
                     }
-        
+
                     // if a bogus locale is passed then the parent should be
                     // the default locale not the root locale!
-                    if (b==null) {
-                        String defaultName = defaultLocale.toString();
-                        if (localeID.length()>0 && localeID.indexOf('_')< 0 && defaultName.indexOf(localeID) == -1) {
-                            b = (ResourceBundleWrapper)loadFromCache(baseName+"_"+defaultName, defaultLocale);
-                            if(b==null){
-                                b = (ResourceBundleWrapper)instantiateBundle(baseName , defaultName, cl, disableFallback);
-                            }
-                        }
+                    if (b == null && !disableFallback &&
+                            !localeID.isEmpty() && localeID.indexOf('_') < 0 &&
+                            !localeIDStartsWithLangSubtag(defaultID, localeID)) {
+                        // localeID is only a language subtag, different from the default language.
+                        b = instantiateBundle(baseName, defaultID, defaultID, root, disableFallback);
                     }
                     // if still could not find the bundle then return the parent
-                    if(b==null){
+                    if(b==null && (!parentIsRoot || !disableFallback)){
                         b=parent;
-                    }                
+                    }
                 } catch (Exception e) {
                     if (DEBUG)
                         System.out.println("failure");
@@ -214,15 +225,12 @@ public class ResourceBundleWrapper extends UResourceBundle {
                         System.out.println(e);
                 }
             }
-            b = (ResourceBundleWrapper)addToCache(name, defaultLocale, b);
-        }
-
-        if(b!=null){
-            b.initKeysVector();
-        }else{
-            if(DEBUG)System.out.println("Returning null for "+baseName+"_"+localeID);
-        }
-        
-        return b;
+            if(b!=null){
+                b.initKeysVector();
+            }else{
+                if(DEBUG)System.out.println("Returning null for "+baseName+"_"+localeID);
+            }
+            return b;
+        }});
     }
 }

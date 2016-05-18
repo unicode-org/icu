@@ -19,12 +19,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
-import com.ibm.icu.impl.SimpleCache;
 
 /**
  * {@icuenhanced java.util.ResourceBundle}.{@icu _usage_}
@@ -98,7 +96,8 @@ public abstract class UResourceBundle extends ResourceBundle {
     /**
      * {@icu} Creates a resource bundle using the specified base name and locale.
      * ICU_DATA_CLASS is used as the default root.
-     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @param baseName string containing the name of the data package.
+     *                    If null the default ICU package name is used.
      * @param localeName the locale for which a resource bundle is desired
      * @throws MissingResourceException If no resource bundle for the specified base name
      * can be found
@@ -113,7 +112,8 @@ public abstract class UResourceBundle extends ResourceBundle {
     /**
      * {@icu} Creates a resource bundle using the specified base name, locale, and class root.
      *
-     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @param baseName string containing the name of the data package.
+     *                    If null the default ICU package name is used.
      * @param localeName the locale for which a resource bundle is desired
      * @param root the class object from which to load the resource bundle
      * @throws MissingResourceException If no resource bundle for the specified base name
@@ -130,7 +130,8 @@ public abstract class UResourceBundle extends ResourceBundle {
      * {@icu} Creates a resource bundle using the specified base name, locale, and class
      * root.
      *
-     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @param baseName string containing the name of the data package.
+     *                    If null the default ICU package name is used.
      * @param localeName the locale for which a resource bundle is desired
      * @param root the class object from which to load the resource bundle
      * @param disableFallback Option to disable locale inheritence.
@@ -167,15 +168,15 @@ public abstract class UResourceBundle extends ResourceBundle {
         if (locale==null) {
             locale = ULocale.getDefault();
         }
-        return getBundleInstance(ICUData.ICU_BASE_NAME, locale.toString(), 
+        return getBundleInstance(ICUData.ICU_BASE_NAME, locale.getBaseName(),
                                  ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
 
     /**
      * {@icu} Creates a UResourceBundle for the default locale and specified base name,
      * from which users can extract resources by using their corresponding keys.
-     * @param baseName  specifies the locale for which we want to open the resource.
-     *                If null the bundle for default locale is opened.
+     * @param baseName string containing the name of the data package.
+     *                    If null the default ICU package name is used.
      * @return a resource bundle for the given base name and default locale
      * @stable ICU 3.0
      */
@@ -184,15 +185,15 @@ public abstract class UResourceBundle extends ResourceBundle {
             baseName = ICUData.ICU_BASE_NAME;
         }
         ULocale uloc = ULocale.getDefault();
-        return getBundleInstance(baseName, uloc.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, 
+        return getBundleInstance(baseName, uloc.getBaseName(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, 
                                  false);
     }
 
     /**
      * {@icu} Creates a UResourceBundle for the specified locale and specified base name,
      * from which users can extract resources by using their corresponding keys.
-     * @param baseName  specifies the locale for which we want to open the resource.
-     *                If null the bundle for default locale is opened.
+     * @param baseName string containing the name of the data package.
+     *                    If null the default ICU package name is used.
      * @param locale  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.
      * @return a resource bundle for the given base name and locale
@@ -205,8 +206,8 @@ public abstract class UResourceBundle extends ResourceBundle {
         }
         ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
 
-        return getBundleInstance(baseName, uloc.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, 
-                                 false);
+        return getBundleInstance(baseName, uloc.getBaseName(),
+                                 ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
 
     /**
@@ -226,15 +227,15 @@ public abstract class UResourceBundle extends ResourceBundle {
         if (locale == null) {
             locale = ULocale.getDefault();
         }
-        return getBundleInstance(baseName, locale.toString(), 
+        return getBundleInstance(baseName, locale.getBaseName(),
                                  ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
 
     /**
      * {@icu} Creates a UResourceBundle for the specified locale and specified base name,
      * from which users can extract resources by using their corresponding keys.
-     * @param baseName  specifies the locale for which we want to open the resource.
-     *                If null the bundle for default locale is opened.
+     * @param baseName string containing the name of the data package.
+     *                    If null the default ICU package name is used.
      * @param locale  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.
      * @param loader  the loader to use
@@ -247,7 +248,7 @@ public abstract class UResourceBundle extends ResourceBundle {
             baseName = ICUData.ICU_BASE_NAME;
         }
         ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
-        return getBundleInstance(baseName, uloc.toString(), loader, false);
+        return getBundleInstance(baseName, uloc.getBaseName(), loader, false);
     }
 
     /**
@@ -272,7 +273,7 @@ public abstract class UResourceBundle extends ResourceBundle {
         if (locale == null) {
             locale = ULocale.getDefault();
         }
-        return getBundleInstance(baseName, locale.toString(), loader, false);
+        return getBundleInstance(baseName, locale.getBaseName(), loader, false);
     }
 
     /**
@@ -317,122 +318,6 @@ public abstract class UResourceBundle extends ResourceBundle {
         return getULocale().toLocale();
     }
 
-    // Cache for ResourceBundle instantiation
-    private static ICUCache<ResourceCacheKey, UResourceBundle> BUNDLE_CACHE =
-        new SimpleCache<ResourceCacheKey, UResourceBundle>();
-
-    /**
-     * Method used by subclasses to add a resource bundle object to the managed
-     * cache.  Works like a putIfAbsent(): If the cache already contains a matching
-     * bundle, that one will be retained and returned.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected static UResourceBundle addToCache(String fullName, ULocale defaultLocale, UResourceBundle b) {
-        synchronized(cacheKey){
-            cacheKey.setKeyValues(fullName, defaultLocale);
-            UResourceBundle cachedBundle = BUNDLE_CACHE.get(cacheKey);
-            if (cachedBundle != null) {
-                return cachedBundle;
-            }
-            BUNDLE_CACHE.put((ResourceCacheKey)cacheKey.clone(), b);
-            return b;
-        }
-    }
-
-    /**
-     * Method used by sub classes to load a resource bundle object from the managed cache
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected static UResourceBundle loadFromCache(String fullName, ULocale defaultLocale) {
-        synchronized(cacheKey){
-            cacheKey.setKeyValues(fullName, defaultLocale);
-            return BUNDLE_CACHE.get(cacheKey);
-        }
-    }
-
-    /**
-     * Key used for cached resource bundles.  The key checks
-     * the resource name and the default
-     * locale to determine if the resource is a match to the
-     * requested one. The default locale may be null, but the
-     * searchName must have a non-null value.
-     * Note that the default locale may change over time, and
-     * lookup should always be based on the current default
-     * locale (if at all).
-     */
-    private static final class ResourceCacheKey implements Cloneable {
-        private String searchName;
-        private ULocale defaultLocale;
-        private int hashCodeCache;
-        ///CLOVER:OFF
-        public boolean equals(Object other) {
-            if (other == null) {
-                return false;
-            }
-            if (this == other) {
-                return true;
-            }
-            try {
-                final ResourceCacheKey otherEntry = (ResourceCacheKey) other;
-                //quick check to see if they are not equal
-                if (hashCodeCache != otherEntry.hashCodeCache) {
-                    return false;
-                }
-                //are the names the same?
-                if (!searchName.equals(otherEntry.searchName)) {
-                    return false;
-                }
-                // are the default locales the same?
-                if (defaultLocale == null) {
-                    if (otherEntry.defaultLocale != null) {
-                        return false;
-                    }
-                } else {
-                    if (!defaultLocale.equals(otherEntry.defaultLocale)) {
-                        return false;
-                    }
-                }
-                return true;
-            } catch (NullPointerException e) {
-                return false;
-            } catch (ClassCastException e) {
-                return false;
-            }
-        }
-
-        public int hashCode() {
-            return hashCodeCache;
-        }
-
-        public Object clone() {
-            try {
-                return super.clone();
-            } catch (CloneNotSupportedException e) {
-                //this should never happen
-                throw new ICUCloneNotSupportedException(e);
-            }
-        }
-
-        ///CLOVER:ON
-        private synchronized void setKeyValues(String searchName, ULocale defaultLocale) {
-            this.searchName = searchName;
-            hashCodeCache = searchName.hashCode();
-            this.defaultLocale = defaultLocale;
-            if (defaultLocale != null) {
-                hashCodeCache ^= defaultLocale.hashCode();
-            }
-        }
-        /*private void clear() {
-            setKeyValues(null, "", null);
-        }*/
-    }
-
-    private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
-
     private enum RootType { MISSING, ICU, JAVA }
 
     private static Map<String, RootType> ROOT_CACHE = new ConcurrentHashMap<String, RootType>();
@@ -468,7 +353,8 @@ public abstract class UResourceBundle extends ResourceBundle {
     /**
      * {@icu} Loads a new resource bundle for the given base name, locale and class loader.
      * Optionally will disable loading of fallback bundles.
-     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @param baseName string containing the name of the data package.
+     *                    If null the default ICU package name is used.
      * @param localeName the locale for which a resource bundle is desired
      * @param root the class object from which to load the resource bundle
      * @param disableFallback disables loading of fallback lookup chain
@@ -479,26 +365,11 @@ public abstract class UResourceBundle extends ResourceBundle {
      */
     protected static UResourceBundle instantiateBundle(String baseName, String localeName,
                                                        ClassLoader root, boolean disableFallback) {
-        UResourceBundle b = null;
         RootType rootType = getRootType(baseName, root);
-
-        ULocale defaultLocale = ULocale.getDefault();
 
         switch (rootType) {
         case ICU:
-            if(disableFallback) {
-                String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
-                b = loadFromCache(fullName, defaultLocale);
-                if (b == null) {
-                    b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, 
-                                                            disableFallback);
-                }
-            } else {
-                b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, 
-                                                        disableFallback);
-            }
-
-            return b;
+            return ICUResourceBundle.getBundleInstance(baseName, localeName, root, disableFallback);
 
         case JAVA:
             return ResourceBundleWrapper.getBundleInstance(baseName, localeName, root, 
@@ -506,6 +377,7 @@ public abstract class UResourceBundle extends ResourceBundle {
 
         case MISSING:
         default:
+            UResourceBundle b;
             try{
                 b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, 
                                                         disableFallback);
