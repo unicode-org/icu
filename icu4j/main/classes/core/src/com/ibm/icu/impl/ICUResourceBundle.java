@@ -46,35 +46,6 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     protected static final String INSTALLED_LOCALES = "InstalledLocales";
 
-    public static final int FROM_FALLBACK = 1, FROM_ROOT = 2, FROM_DEFAULT = 3, FROM_LOCALE = 4;
-
-    private int loadingStatus = -1;
-
-    public void setLoadingStatus(int newStatus) {
-        loadingStatus = newStatus;
-    }
-    /**
-     * Returns the loading status of a particular resource.
-     *
-     * @return FROM_FALLBACK if the resource is fetched from fallback bundle
-     *         FROM_ROOT if the resource is fetched from root bundle.
-     *         FROM_DEFAULT if the resource is fetched from the default locale.
-     */
-    public int getLoadingStatus() {
-        return loadingStatus;
-    }
-
-    public void setLoadingStatus(String requestedLocale){
-        String locale = getLocaleID();
-        if(locale.equals("root")) {
-            setLoadingStatus(FROM_ROOT);
-        } else if(locale.equals(requestedLocale)) {
-            setLoadingStatus(FROM_LOCALE);
-        } else {
-            setLoadingStatus(FROM_FALLBACK);
-        }
-     }
-
     /**
      * Fields for a whole bundle, rather than any specific resource in the bundle.
      * Corresponds roughly to ICU4C/source/common/uresimp.h struct UResourceDataEntry.
@@ -872,7 +843,6 @@ public  class ICUResourceBundle extends UResourceBundle {
                 }
                 if (depth == keys.length) {
                     // We found it.
-                    sub.setLoadingStatus(((ICUResourceBundle)requested).getLocaleID());
                     return sub;
                 }
                 base = sub;
@@ -1110,6 +1080,17 @@ public  class ICUResourceBundle extends UResourceBundle {
          */
         LOCALE_ROOT,
         /**
+         * Open a resource bundle for the locale;
+         * if there is not even a base language bundle, then fail;
+         * never fall back to the default locale nor to the root locale.
+         *
+         * <p>This is used when fallback to another language is not desired
+         * and the root locale is not generally useful.
+         * For example, {@link com.ibm.icu.util.LocaleData#setNoSubstitute(boolean)}
+         * or currency display names for {@link com.ibm.icu.text.LocaleDisplayNames}.
+         */
+        LOCALE_ONLY,
+        /**
          * Open a resource bundle for the exact bundle name as requested;
          * no fallbacks, do not load parent bundles.
          *
@@ -1205,23 +1186,18 @@ public  class ICUResourceBundle extends UResourceBundle {
             if(b == null){
                 int i = localeName.lastIndexOf('_');
                 if (i != -1) {
+                    // Chop off the last underscore and the subtag after that.
                     String temp = localeName.substring(0, i);
                     b = (ICUResourceBundle)instantiateBundle(baseName, temp, root, openType);
-                    if(b!=null && b.getULocale().getName().equals(temp)){
-                        b.setLoadingStatus(ICUResourceBundle.FROM_FALLBACK);
-                    }
                 }else{
+                    // No underscore, only a base language subtag.
                     if(openType == OpenType.LOCALE_DEFAULT_ROOT &&
                             !defaultLocale.getLanguage().equals(localeName)) {
+                        // Go to the default locale before root.
                         b = (ICUResourceBundle)instantiateBundle(baseName, defaultID, root, openType);
-                        if(b!=null){
-                            b.setLoadingStatus(ICUResourceBundle.FROM_DEFAULT);
-                        }
-                    }else if(rootLocale.length()!=0){
+                    } else if(openType != OpenType.LOCALE_ONLY && !rootLocale.isEmpty()) {
+                        // Ultimately go to root.
                         b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
-                        if(b!=null){
-                            b.setLoadingStatus(ICUResourceBundle.FROM_ROOT);
-                        }
                     }
                 }
             }else{
@@ -1263,7 +1239,6 @@ public  class ICUResourceBundle extends UResourceBundle {
                                 + aKey, this.getClass().getName(), aKey);
             }
         }
-        obj.setLoadingStatus(((ICUResourceBundle)requested).getLocaleID());
         return obj;
     }
 
@@ -1335,6 +1310,13 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     public ULocale getULocale() {
         return wholeBundle.ulocale;
+    }
+
+    /**
+     * Returns true if this is the root bundle, or an item in the root bundle.
+     */
+    public boolean isRoot() {
+        return wholeBundle.localeID.isEmpty() || wholeBundle.localeID.equals("root");
     }
 
     public UResourceBundle getParent() {

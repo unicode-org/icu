@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004-2015, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
+* Copyright (C) 2004-2016, International Business Machines Corporation and
+* others. All Rights Reserved.
 ******************************************************************************
 */
 
@@ -29,16 +29,11 @@ public class ResourceBundleWrapper extends UResourceBundle {
     private String localeID = null;
     private String baseName = null;
     private List<String> keys = null;
-//    private int loadingStatus = -1;    
-    
+
     private ResourceBundleWrapper(ResourceBundle bundle){
         this.bundle=bundle;
     }
 
-    protected void setLoadingStatus(int newStatus){
-//        loadingStatus = newStatus;
-    }
-    
     protected Object handleGetObject(String aKey){
         ResourceBundleWrapper current = this;
         Object obj = null;

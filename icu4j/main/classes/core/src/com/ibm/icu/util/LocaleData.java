@@ -199,7 +199,7 @@ public final class LocaleData {
             final String aKey = exemplarSetTypes[extype]; // will throw an out-of-bounds exception
             ICUResourceBundle stringBundle = (ICUResourceBundle) bundle.get(aKey);
 
-            if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) ) {
+            if (noSubstitute && !bundle.isRoot() && stringBundle.isRoot()) {
                 return null;
             }
             String unicodeSetPattern = stringBundle.getString();
@@ -284,9 +284,9 @@ public final class LocaleData {
         // Only some of the quotation marks may be here. So we make sure that we do a multilevel fallback.
         ICUResourceBundle stringBundle = delimitersBundle.getWithFallback(DELIMITER_TYPES[type]);
 
-        if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) )
+        if (noSubstitute && !bundle.isRoot() && stringBundle.isRoot()) {
             return null;
-
+        }
         return stringBundle.getString();
     }
 

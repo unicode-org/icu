@@ -829,83 +829,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
 
     }
-    private String getLSString(int status){
-        switch(status){
-            case ICUResourceBundle.FROM_FALLBACK:
-                return "FROM_FALLBACK";
-            case ICUResourceBundle.FROM_DEFAULT:
-                return "FROM_DEFAULT";
-            case ICUResourceBundle.FROM_ROOT: 
-                return "FROM_ROOT";
-            case ICUResourceBundle.FROM_LOCALE: 
-                return "FROM_LOCALE";
-            default:
-                return "UNKNOWN";
-        }
-    }
-    
-    private void assertEqualLoadingStatus(String msg, int target, int result) {
-        if (result != target) {
-            errln(msg + " expected: "+ getLSString(target) 
-                    + " got: " + getLSString(result));
-        }        
-    }
-    
-    @SuppressWarnings("unused")
-    private void assertDefaultLoadingStatus(String msg, int result) {
-        assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_DEFAULT, result);
-    }
-    
-    private void assertFallbackLoadingStatus(String msg, int result) {
-        assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_FALLBACK, result);
-    }
-    
-    private void assertRootLoadingStatus(String msg, int result) {
-        assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_ROOT, result);
-    }
-    
-    private void assertLocaleLoadingStatus(String msg, int result) {
-        assertEqualLoadingStatus(msg, ICUResourceBundle.FROM_LOCALE, result);
-    }
-   
-    public void TestLoadingStatus(){
-        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "yi_IL");
-        assertFallbackLoadingStatus("base/yi_IL", bundle.getLoadingStatus());
 
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "eo_DE");
-        assertFallbackLoadingStatus("base/eo_DE", bundle.getLoadingStatus());
-        
-        logln("Test to verify loading status of get(String)");
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_LANG_BASE_NAME, "zh_Hant_TW");
-        ICUResourceBundle countries = (ICUResourceBundle) bundle.get("Languages");
-        assertFallbackLoadingStatus("lang/Languages/zh_Hant_TW", countries.getLoadingStatus());
-
-        /*
-        UResourceBundle auxExemplar = bundle.get("AuxExemplarCharacters");
-        status = auxExemplar.getLoadingStatus();
-        if(status != UResourceBundle.FROM_ROOT){
-            errln("Did not get the expected value for loading status. Expected "+ getLSString(UResourceBundle.FROM_ROOT) 
-                    + " Got: " + getLSString(status));
-        } 
-        */
-        
-        logln("Test to verify root loading status of get()");
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "te_IN");
-        ICUResourceBundle ms = (ICUResourceBundle) bundle.get("layout");
-        assertRootLoadingStatus("base/layout/te_IN", ms.getLoadingStatus());
-                
-        logln("Test to verify loading status of getwithFallback");
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "sh_YU", testLoader);
-        ICUResourceBundle temp = (ICUResourceBundle) bundle.getWithFallback("a/a2");
-        assertLocaleLoadingStatus("testdata/a/a2/sh_YU", temp.getLoadingStatus());
-
-        temp = bundle.getWithFallback("a/a1");
-        assertFallbackLoadingStatus("testdata/a/a1/sh_YU", temp.getLoadingStatus());
-
-        temp = bundle.getWithFallback("a/a4");
-        assertRootLoadingStatus("testdata/a/a4/sh_YU", temp.getLoadingStatus());
-    }
-    
     public void TestCoverage(){
         UResourceBundle bundle;
         bundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME);
@@ -926,7 +850,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
             protected String getLocaleID() {return null;}
             protected String getBaseName() {return null;}
             protected UResourceBundle getParent() {return null;}
-            protected void setLoadingStatus(int newStatus) {}
             public Enumeration getKeys() {return null;}
             protected Object handleGetObject(String aKey) {return null;}
         }
