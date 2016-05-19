@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "8.0"
+#define U_UNICODE_VERSION "9.0"
 
 /**
  * \file
@@ -1572,8 +1572,33 @@ enum UBlockCode {
     /** @stable ICU 56 */
     UBLOCK_SUTTON_SIGNWRITING = 262, /*[1D800]*/
 
+    /* New blocks in Unicode 9.0 */
+
+    /** @stable ICU 58 */
+    UBLOCK_ADLAM = 263, /*[1E900]*/
+    /** @stable ICU 58 */
+    UBLOCK_BHAIKSUKI = 264, /*[11C00]*/
+    /** @stable ICU 58 */
+    UBLOCK_CYRILLIC_EXTENDED_C = 265, /*[1C80]*/
+    /** @stable ICU 58 */
+    UBLOCK_GLAGOLITIC_SUPPLEMENT = 266, /*[1E000]*/
+    /** @stable ICU 58 */
+    UBLOCK_IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION = 267, /*[16FE0]*/
+    /** @stable ICU 58 */
+    UBLOCK_MARCHEN = 268, /*[11C70]*/
+    /** @stable ICU 58 */
+    UBLOCK_MONGOLIAN_SUPPLEMENT = 269, /*[11660]*/
+    /** @stable ICU 58 */
+    UBLOCK_NEWA = 270, /*[11400]*/
+    /** @stable ICU 58 */
+    UBLOCK_OSAGE = 271, /*[104B0]*/
+    /** @stable ICU 58 */
+    UBLOCK_TANGUT = 272, /*[17000]*/
+    /** @stable ICU 58 */
+    UBLOCK_TANGUT_COMPONENTS = 273, /*[18800]*/
+
     /** @stable ICU 2.0 */
-    UBLOCK_COUNT = 263,
+    UBLOCK_COUNT = 274,
 
     /** @stable ICU 2.0 */
     UBLOCK_INVALID_CODE=-1
@@ -1810,6 +1835,9 @@ typedef enum UJoiningGroup {
     U_JG_MANICHAEAN_YODH,  /**< @stable ICU 54 */
     U_JG_MANICHAEAN_ZAYIN,  /**< @stable ICU 54 */
     U_JG_STRAIGHT_WAW,  /**< @stable ICU 54 */
+    U_JG_AFRICAN_FEH,  /**< @stable ICU 58 */
+    U_JG_AFRICAN_NOON,  /**< @stable ICU 58 */
+    U_JG_AFRICAN_QAF,  /**< @stable ICU 58 */
     U_JG_COUNT
 } UJoiningGroup;
 
@@ -1836,10 +1864,23 @@ typedef enum UGraphemeClusterBreak {
     U_GCB_LVT = 7,              /*[LVT]*/
     U_GCB_T = 8,                /*[T]*/
     U_GCB_V = 9,                /*[V]*/
+    /** @stable ICU 4.0 */
     U_GCB_SPACING_MARK = 10,    /*[SM]*/ /* from here on: new in Unicode 5.1/ICU 4.0 */
+    /** @stable ICU 4.0 */
     U_GCB_PREPEND = 11,         /*[PP]*/
+    /** @stable ICU 50 */
     U_GCB_REGIONAL_INDICATOR = 12,  /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
-    U_GCB_COUNT = 13
+    /** @stable ICU 58 */
+    U_GCB_E_BASE = 13,          /*[EB]*/ /* from here on: new in Unicode 9.0/ICU 58 */
+    /** @stable ICU 58 */
+    U_GCB_E_BASE_GAZ = 14,      /*[EBG]*/
+    /** @stable ICU 58 */
+    U_GCB_E_MODIFIER = 15,      /*[EM]*/
+    /** @stable ICU 58 */
+    U_GCB_GLUE_AFTER_ZWJ = 16,  /*[GAZ]*/
+    /** @stable ICU 58 */
+    U_GCB_ZWJ = 17,             /*[ZWJ]*/
+    U_GCB_COUNT = 18
 } UGraphemeClusterBreak;
 
 /**
@@ -1864,16 +1905,35 @@ typedef enum UWordBreakValues {
     U_WB_MIDNUM = 5,            /*[MN]*/
     U_WB_NUMERIC = 6,           /*[NU]*/
     U_WB_EXTENDNUMLET = 7,      /*[EX]*/
+    /** @stable ICU 4.0 */
     U_WB_CR = 8,                /*[CR]*/ /* from here on: new in Unicode 5.1/ICU 4.0 */
+    /** @stable ICU 4.0 */
     U_WB_EXTEND = 9,            /*[Extend]*/
+    /** @stable ICU 4.0 */
     U_WB_LF = 10,               /*[LF]*/
+    /** @stable ICU 4.0 */
     U_WB_MIDNUMLET =11,         /*[MB]*/
+    /** @stable ICU 4.0 */
     U_WB_NEWLINE =12,           /*[NL]*/
+    /** @stable ICU 50 */
     U_WB_REGIONAL_INDICATOR = 13,   /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
+    /** @stable ICU 52 */
     U_WB_HEBREW_LETTER = 14,    /*[HL]*/ /* from here on: new in Unicode 6.3/ICU 52 */
+    /** @stable ICU 52 */
     U_WB_SINGLE_QUOTE = 15,     /*[SQ]*/
+    /** @stable ICU 52 */
     U_WB_DOUBLE_QUOTE = 16,     /*[DQ]*/
-    U_WB_COUNT = 17
+    /** @stable ICU 58 */
+    U_WB_E_BASE = 17,           /*[EB]*/ /* from here on: new in Unicode 9.0/ICU 58 */
+    /** @stable ICU 58 */
+    U_WB_E_BASE_GAZ = 18,       /*[EBG]*/
+    /** @stable ICU 58 */
+    U_WB_E_MODIFIER = 19,       /*[EM]*/
+    /** @stable ICU 58 */
+    U_WB_GLUE_AFTER_ZWJ = 20,   /*[GAZ]*/
+    /** @stable ICU 58 */
+    U_WB_ZWJ = 21,              /*[ZWJ]*/
+    U_WB_COUNT = 22
 } UWordBreakValues;
 
 /**
@@ -1951,18 +2011,35 @@ typedef enum ULineBreak {
     U_LB_SPACE = 26,             /*[SP]*/
     U_LB_BREAK_SYMBOLS = 27,     /*[SY]*/
     U_LB_ZWSPACE = 28,           /*[ZW]*/
+    /** @stable ICU 2.6 */
     U_LB_NEXT_LINE = 29,         /*[NL]*/ /* from here on: new in Unicode 4/ICU 2.6 */
+    /** @stable ICU 2.6 */
     U_LB_WORD_JOINER = 30,       /*[WJ]*/
+    /** @stable ICU 3.4 */
     U_LB_H2 = 31,                /*[H2]*/ /* from here on: new in Unicode 4.1/ICU 3.4 */
+    /** @stable ICU 3.4 */
     U_LB_H3 = 32,                /*[H3]*/
+    /** @stable ICU 3.4 */
     U_LB_JL = 33,                /*[JL]*/
+    /** @stable ICU 3.4 */
     U_LB_JT = 34,                /*[JT]*/
+    /** @stable ICU 3.4 */
     U_LB_JV = 35,                /*[JV]*/
+    /** @stable ICU 4.4 */
     U_LB_CLOSE_PARENTHESIS = 36, /*[CP]*/ /* new in Unicode 5.2/ICU 4.4 */
+    /** @stable ICU 49 */
     U_LB_CONDITIONAL_JAPANESE_STARTER = 37,/*[CJ]*/ /* new in Unicode 6.1/ICU 49 */
+    /** @stable ICU 49 */
     U_LB_HEBREW_LETTER = 38,     /*[HL]*/ /* new in Unicode 6.1/ICU 49 */
+    /** @stable ICU 50 */
     U_LB_REGIONAL_INDICATOR = 39,/*[RI]*/ /* new in Unicode 6.2/ICU 50 */
-    U_LB_COUNT = 40
+    /** @stable ICU 58 */
+    U_LB_E_BASE = 40,            /*[EB]*/ /* from here on: new in Unicode 9.0/ICU 58 */
+    /** @stable ICU 58 */
+    U_LB_E_MODIFIER = 41,        /*[EM]*/
+    /** @stable ICU 58 */
+    U_LB_ZWJ = 42,               /*[ZWJ]*/
+    U_LB_COUNT = 43
 } ULineBreak;
 
 /**

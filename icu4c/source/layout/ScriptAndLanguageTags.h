@@ -5,7 +5,7 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 04/08/2016 02:00:11 PM PDT
+ * Generated on: 05/10/2016 11:13:24 AM PDT
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -183,7 +183,7 @@ const LETag nshuScriptTag = 0x6E736875; /* 'nshu' (NSHU) */
 const LETag shrdScriptTag = 0x73687264; /* 'shrd' (SHARADA) */
 const LETag soraScriptTag = 0x736F7261; /* 'sora' (SORA_SOMPENG) */
 const LETag takrScriptTag = 0x74616B72; /* 'takr' (TAKRI) */
-const LETag tangScriptTag = 0x74616E67; /* 'tang' (TANG) */
+const LETag tangScriptTag = 0x74616E67; /* 'tang' (TANGUT) */
 const LETag woleScriptTag = 0x776F6C65; /* 'wole' (WOLE) */
 const LETag hluwScriptTag = 0x686C7577; /* 'hluw' (ANATOLIAN_HIEROGLYPHS) */
 const LETag khojScriptTag = 0x6B686F6A; /* 'khoj' (KHOJKI) */
