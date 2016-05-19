@@ -5,7 +5,7 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 04/08/2016 02:00:11 PM PDT
+ * Generated on: 05/10/2016 11:13:24 AM PDT
  */
 
 #include "LETypes.h"
@@ -169,7 +169,7 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     shrdScriptTag, /* 'shrd' (SHARADA) */
     soraScriptTag, /* 'sora' (SORA_SOMPENG) */
     takrScriptTag, /* 'takr' (TAKRI) */
-    tangScriptTag, /* 'tang' (TANG) */
+    tangScriptTag, /* 'tang' (TANGUT) */
     woleScriptTag, /* 'wole' (WOLE) */
     hluwScriptTag, /* 'hluw' (ANATOLIAN_HIEROGLYPHS) */
     khojScriptTag, /* 'khoj' (KHOJKI) */

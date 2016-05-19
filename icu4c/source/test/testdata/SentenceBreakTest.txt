@@ -1,10 +1,11 @@
-﻿# SentenceBreakTest-8.0.0.txt
-# Date: 2015-04-30, 09:40:15 GMT [MD]
+﻿# SentenceBreakTest-9.0.0.txt
+# Date: 2016-03-03, 12:44:04 GMT
+# © 2016 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
 #
 # Unicode Character Database
-# Copyright (c) 1991-2015 Unicode, Inc.
-# For terms of use, see http://www.unicode.org/terms_of_use.html
-# For documentation, see http://www.unicode.org/reports/tr44/
+#   For documentation, see http://www.unicode.org/reports/tr44/
 #
 # Default Sentence Break Test
 #
@@ -470,6 +471,10 @@
 ÷ 0300 × 0308 × 00AD ÷	#  ÷ [0.2] COMBINING GRAVE ACCENT (Extend_FE) × [5.0] COMBINING DIAERESIS (Extend_FE) × [5.0] SOFT HYPHEN (Format_FE) ÷ [0.3]
 ÷ 0300 × 0300 ÷	#  ÷ [0.2] COMBINING GRAVE ACCENT (Extend_FE) × [5.0] COMBINING GRAVE ACCENT (Extend_FE) ÷ [0.3]
 ÷ 0300 × 0308 × 0300 ÷	#  ÷ [0.2] COMBINING GRAVE ACCENT (Extend_FE) × [5.0] COMBINING DIAERESIS (Extend_FE) × [5.0] COMBINING GRAVE ACCENT (Extend_FE) ÷ [0.3]
+÷ 000D × 000A ÷ 0061 × 000A ÷ 0308 ÷	#  ÷ [0.2] <CARRIAGE RETURN (CR)> (CR) × [3.0] <LINE FEED (LF)> (LF) ÷ [4.0] LATIN SMALL LETTER A (Lower) × [12.0] <LINE FEED (LF)> (LF) ÷ [4.0] COMBINING DIAERESIS (Extend_FE) ÷ [0.3]
+÷ 0061 × 0308 ÷	#  ÷ [0.2] LATIN SMALL LETTER A (Lower) × [5.0] COMBINING DIAERESIS (Extend_FE) ÷ [0.3]
+÷ 0020 × 200D × 0646 ÷	#  ÷ [0.2] SPACE (Sp) × [5.0] ZERO WIDTH JOINER (Extend_FE) × [12.0] ARABIC LETTER NOON (OLetter) ÷ [0.3]
+÷ 0646 × 200D × 0020 ÷	#  ÷ [0.2] ARABIC LETTER NOON (OLetter) × [5.0] ZERO WIDTH JOINER (Extend_FE) × [12.0] SPACE (Sp) ÷ [0.3]
 ÷ 0028 × 0022 × 0047 × 006F × 002E × 0022 × 0029 × 0020 ÷ 0028 × 0048 × 0065 × 0020 × 0064 × 0069 × 0064 × 002E × 0029 ÷	#  ÷ [0.2] LEFT PARENTHESIS (Close) × [12.0] QUOTATION MARK (Close) × [12.0] LATIN CAPITAL LETTER G (Upper) × [12.0] LATIN SMALL LETTER O (Lower) × [12.0] FULL STOP (ATerm) × [9.0] QUOTATION MARK (Close) × [9.0] RIGHT PARENTHESIS (Close) × [9.0] SPACE (Sp) ÷ [11.0] LEFT PARENTHESIS (Close) × [12.0] LATIN CAPITAL LETTER H (Upper) × [12.0] LATIN SMALL LETTER E (Lower) × [12.0] SPACE (Sp) × [12.0] LATIN SMALL LETTER D (Lower) × [12.0] LATIN SMALL LETTER I (Lower) × [12.0] LATIN SMALL LETTER D (Lower) × [12.0] FULL STOP (ATerm) × [9.0] RIGHT PARENTHESIS (Close) ÷ [0.3]
 ÷ 0028 × 201C × 0047 × 006F × 003F × 201D × 0029 × 0020 ÷ 0028 × 0048 × 0065 × 0020 × 0064 × 0069 × 0064 × 002E × 0029 ÷	#  ÷ [0.2] LEFT PARENTHESIS (Close) × [12.0] LEFT DOUBLE QUOTATION MARK (Close) × [12.0] LATIN CAPITAL LETTER G (Upper) × [12.0] LATIN SMALL LETTER O (Lower) × [12.0] QUESTION MARK (STerm) × [9.0] RIGHT DOUBLE QUOTATION MARK (Close) × [9.0] RIGHT PARENTHESIS (Close) × [9.0] SPACE (Sp) ÷ [11.0] LEFT PARENTHESIS (Close) × [12.0] LATIN CAPITAL LETTER H (Upper) × [12.0] LATIN SMALL LETTER E (Lower) × [12.0] SPACE (Sp) × [12.0] LATIN SMALL LETTER D (Lower) × [12.0] LATIN SMALL LETTER I (Lower) × [12.0] LATIN SMALL LETTER D (Lower) × [12.0] FULL STOP (ATerm) × [9.0] RIGHT PARENTHESIS (Close) ÷ [0.3]
 ÷ 0055 × 002E × 0053 × 002E × 0041 × 0300 × 002E × 0020 × 0069 × 0073 ÷	#  ÷ [0.2] LATIN CAPITAL LETTER U (Upper) × [12.0] FULL STOP (ATerm) × [7.0] LATIN CAPITAL LETTER S (Upper) × [12.0] FULL STOP (ATerm) × [7.0] LATIN CAPITAL LETTER A (Upper) × [5.0] COMBINING GRAVE ACCENT (Extend_FE) × [12.0] FULL STOP (ATerm) × [8.0] SPACE (Sp) × [8.0] LATIN SMALL LETTER I (Lower) × [12.0] LATIN SMALL LETTER S (Lower) ÷ [0.3]
@@ -518,12 +523,7 @@
 ÷ 2060 × 0065 × 2060 × 0074 × 2060 × 0063 × 2060 × 002E × 2060 × 3002 × 2060 × 2060 ÷	#  ÷ [0.2] WORD JOINER (Format_FE) × [12.0] LATIN SMALL LETTER E (Lower) × [5.0] WORD JOINER (Format_FE) × [12.0] LATIN SMALL LETTER T (Lower) × [5.0] WORD JOINER (Format_FE) × [12.0] LATIN SMALL LETTER C (Lower) × [5.0] WORD JOINER (Format_FE) × [12.0] FULL STOP (ATerm) × [5.0] WORD JOINER (Format_FE) × [8.1] IDEOGRAPHIC FULL STOP (STerm) × [5.0] WORD JOINER (Format_FE) × [5.0] WORD JOINER (Format_FE) ÷ [0.3]
 ÷ 2060 × 5B57 × 2060 × 3002 × 2060 ÷ 5B83 × 2060 × 2060 ÷	#  ÷ [0.2] WORD JOINER (Format_FE) × [12.0] CJK UNIFIED IDEOGRAPH-5B57 (OLetter) × [5.0] WORD JOINER (Format_FE) × [12.0] IDEOGRAPHIC FULL STOP (STerm) × [5.0] WORD JOINER (Format_FE) ÷ [11.0] CJK UNIFIED IDEOGRAPH-5B83 (OLetter) × [5.0] WORD JOINER (Format_FE) × [5.0] WORD JOINER (Format_FE) ÷ [0.3]
 ÷ 2060 × 0021 × 2060 × 0020 × 2060 × 0020 × 2060 × 2060 ÷	#  ÷ [0.2] WORD JOINER (Format_FE) × [12.0] EXCLAMATION MARK (STerm) × [5.0] WORD JOINER (Format_FE) × [9.0] SPACE (Sp) × [5.0] WORD JOINER (Format_FE) × [10.0] SPACE (Sp) × [5.0] WORD JOINER (Format_FE) × [5.0] WORD JOINER (Format_FE) ÷ [0.3]
-÷ 1F1E6 × 1F1E7 × 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Other) × [12.0] REGIONAL INDICATOR SYMBOL LETTER B (Other) × [12.0] REGIONAL INDICATOR SYMBOL LETTER C (Other) ÷ [0.3]
-÷ 1F1E6 × 200D × 1F1E7 × 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Other) × [5.0] ZERO WIDTH JOINER (Extend_FE) × [12.0] REGIONAL INDICATOR SYMBOL LETTER B (Other) × [12.0] REGIONAL INDICATOR SYMBOL LETTER C (Other) ÷ [0.3]
-÷ 1F1E6 × 1F1E7 × 200D × 1F1E8 ÷	#  ÷ [0.2] REGIONAL INDICATOR SYMBOL LETTER A (Other) × [12.0] REGIONAL INDICATOR SYMBOL LETTER B (Other) × [5.0] ZERO WIDTH JOINER (Extend_FE) × [12.0] REGIONAL INDICATOR SYMBOL LETTER C (Other) ÷ [0.3]
-÷ 0020 × 200D × 0646 ÷	#  ÷ [0.2] SPACE (Sp) × [5.0] ZERO WIDTH JOINER (Extend_FE) × [12.0] ARABIC LETTER NOON (OLetter) ÷ [0.3]
-÷ 0646 × 200D × 0020 ÷	#  ÷ [0.2] ARABIC LETTER NOON (OLetter) × [5.0] ZERO WIDTH JOINER (Extend_FE) × [12.0] SPACE (Sp) ÷ [0.3]
 #
-# Lines: 503
+# Lines: 502
 #
 # EOF
