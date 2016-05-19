@@ -817,7 +817,7 @@ public final class UCharacterProperty
             } else {
                 return -2;
             }
-        } else if(ntv<NTV_RESERVED_START_) {
+        } else if(ntv<NTV_FRACTION20_START_) {
             /* sexagesimal (base 60) integer */
             int numValue=(ntv>>2)-0xbf;
             int exp=(ntv&3)+1;
@@ -841,6 +841,9 @@ public final class UCharacterProperty
             }
 
             return numValue;
+        } else if(ntv<NTV_RESERVED_START_) {
+            // fraction-20 e.g. 3/80
+            return -2;
         } else {
             /* reserved */
             return -2;
@@ -895,7 +898,7 @@ public final class UCharacterProperty
             }
 
             return numValue;
-        } else if(ntv<NTV_RESERVED_START_) {
+        } else if(ntv<NTV_FRACTION20_START_) {
             /* sexagesimal (base 60) integer */
             int numValue=(ntv>>2)-0xbf;
             int exp=(ntv&3)+1;
@@ -919,6 +922,12 @@ public final class UCharacterProperty
             }
 
             return numValue;
+        } else if(ntv<NTV_RESERVED_START_) {
+            // fraction-20 e.g. 3/80
+            int frac20=ntv-NTV_FRACTION20_START_;  // 0..0x17
+            int numerator=2*(frac20&3)+1;
+            int denominator=20<<(frac20>>2);
+            return (double)numerator/denominator;
         } else {
             /* reserved */
             return UCharacter.NO_NUMERIC_VALUE;
@@ -994,8 +1003,15 @@ public final class UCharacterProperty
      * ((ntv>>2)-0xbf) * 60^((ntv&3)+1) = (1..9)*(60^1..60^4)
      */
     private static final int NTV_BASE60_START_=0x300;
+    /**
+     * Fraction-20 values:
+     * frac20 = ntv-0x324 = 0..0x17 -> 1|3|5|7 / 20|40|80|160|320|640
+     * numerator: num = 2*(frac20&3)+1
+     * denominator: den = 20<<(frac20>>2)
+     */
+    private static final int NTV_FRACTION20_START_ = NTV_BASE60_START_ + 36;  // 0x300+9*4=0x324
     /** No numeric value (yet). */
-    private static final int NTV_RESERVED_START_ = NTV_BASE60_START_ + 36;  // 0x300+9*4=0x324
+    private static final int NTV_RESERVED_START_ = NTV_FRACTION20_START_ + 24;  // 0x324+6*4=0x34c
 
     private static final int ntvGetType(int ntv) {
         return

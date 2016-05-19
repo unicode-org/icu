@@ -1132,10 +1132,35 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 56 */
         public static final int SUTTON_SIGNWRITING_ID = 262; /*[1D800]*/
 
+        /* New blocks in Unicode 9.0 */
+
+        /** @stable ICU 58 */
+        public static final int ADLAM_ID = 263; /*[1E900]*/
+        /** @stable ICU 58 */
+        public static final int BHAIKSUKI_ID = 264; /*[11C00]*/
+        /** @stable ICU 58 */
+        public static final int CYRILLIC_EXTENDED_C_ID = 265; /*[1C80]*/
+        /** @stable ICU 58 */
+        public static final int GLAGOLITIC_SUPPLEMENT_ID = 266; /*[1E000]*/
+        /** @stable ICU 58 */
+        public static final int IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION_ID = 267; /*[16FE0]*/
+        /** @stable ICU 58 */
+        public static final int MARCHEN_ID = 268; /*[11C70]*/
+        /** @stable ICU 58 */
+        public static final int MONGOLIAN_SUPPLEMENT_ID = 269; /*[11660]*/
+        /** @stable ICU 58 */
+        public static final int NEWA_ID = 270; /*[11400]*/
+        /** @stable ICU 58 */
+        public static final int OSAGE_ID = 271; /*[104B0]*/
+        /** @stable ICU 58 */
+        public static final int TANGUT_ID = 272; /*[17000]*/
+        /** @stable ICU 58 */
+        public static final int TANGUT_COMPONENTS_ID = 273; /*[18800]*/
+
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 263;
+        public static final int COUNT = 274;
 
         // blocks objects ---------------------------------------------------
 
@@ -2363,6 +2388,36 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock SUTTON_SIGNWRITING =
                 new UnicodeBlock("SUTTON_SIGNWRITING", SUTTON_SIGNWRITING_ID); /*[1D800]*/
 
+        /* New blocks in Unicode 9.0 */
+
+        /** @stable ICU 58 */
+        public static final UnicodeBlock ADLAM = new UnicodeBlock("ADLAM", ADLAM_ID); /*[1E900]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock BHAIKSUKI = new UnicodeBlock("BHAIKSUKI", BHAIKSUKI_ID); /*[11C00]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock CYRILLIC_EXTENDED_C =
+                new UnicodeBlock("CYRILLIC_EXTENDED_C", CYRILLIC_EXTENDED_C_ID); /*[1C80]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock GLAGOLITIC_SUPPLEMENT =
+                new UnicodeBlock("GLAGOLITIC_SUPPLEMENT", GLAGOLITIC_SUPPLEMENT_ID); /*[1E000]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION =
+                new UnicodeBlock("IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION", IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION_ID); /*[16FE0]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock MARCHEN = new UnicodeBlock("MARCHEN", MARCHEN_ID); /*[11C70]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock MONGOLIAN_SUPPLEMENT =
+                new UnicodeBlock("MONGOLIAN_SUPPLEMENT", MONGOLIAN_SUPPLEMENT_ID); /*[11660]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock NEWA = new UnicodeBlock("NEWA", NEWA_ID); /*[11400]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock OSAGE = new UnicodeBlock("OSAGE", OSAGE_ID); /*[104B0]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock TANGUT = new UnicodeBlock("TANGUT", TANGUT_ID); /*[17000]*/
+        /** @stable ICU 58 */
+        public static final UnicodeBlock TANGUT_COMPONENTS =
+                new UnicodeBlock("TANGUT_COMPONENTS", TANGUT_COMPONENTS_ID); /*[18800]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -2949,10 +3004,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 54 */
         public static final int STRAIGHT_WAW = 85;
 
+        /** @stable ICU 58 */
+        public static final int AFRICAN_FEH = 86;
+        /** @stable ICU 58 */
+        public static final int AFRICAN_NOON = 87;
+        /** @stable ICU 58 */
+        public static final int AFRICAN_QAF = 88;
+
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 86;
+        public static final int COUNT = 89;
     }
 
     /**
@@ -3011,10 +3073,20 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int PREPEND = 11;
         /** @stable ICU 50 */
         public static final int REGIONAL_INDICATOR = 12;  /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
+        /** @stable ICU 58 */
+        public static final int E_BASE = 13;          /*[EB]*/ /* from here on: new in Unicode 9.0/ICU 58 */
+        /** @stable ICU 58 */
+        public static final int E_BASE_GAZ = 14;      /*[EBG]*/
+        /** @stable ICU 58 */
+        public static final int E_MODIFIER = 15;      /*[EM]*/
+        /** @stable ICU 58 */
+        public static final int GLUE_AFTER_ZWJ = 16;  /*[GAZ]*/
+        /** @stable ICU 58 */
+        public static final int ZWJ = 17;             /*[ZWJ]*/
         /**
          * @stable ICU 3.4
          */
-        public static final int COUNT = 13;
+        public static final int COUNT = 18;
     }
 
     /**
@@ -3083,10 +3155,20 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int SINGLE_QUOTE = 15;     /*[SQ]*/
         /** @stable ICU 52 */
         public static final int DOUBLE_QUOTE = 16;     /*[DQ]*/
+        /** @stable ICU 58 */
+        public static final int E_BASE = 17;           /*[EB]*/ /* from here on: new in Unicode 9.0/ICU 58 */
+        /** @stable ICU 58 */
+        public static final int E_BASE_GAZ = 18;       /*[EBG]*/
+        /** @stable ICU 58 */
+        public static final int E_MODIFIER = 19;       /*[EM]*/
+        /** @stable ICU 58 */
+        public static final int GLUE_AFTER_ZWJ = 20;   /*[GAZ]*/
+        /** @stable ICU 58 */
+        public static final int ZWJ = 21;              /*[ZWJ]*/
         /**
          * @stable ICU 4.0
          */
-        public static final int COUNT = 17;
+        public static final int COUNT = 22;
     }
 
     /**
@@ -3326,10 +3408,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int HEBREW_LETTER = 38;  /*[HL]*/ /* new in Unicode 6.1/ICU 49 */
         /** @stable ICU 50 */
         public static final int REGIONAL_INDICATOR = 39;  /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
+        /** @stable ICU 58 */
+        public static final int E_BASE = 40;  /*[EB]*/ /* from here on: new in Unicode 9.0/ICU 58 */
+        /** @stable ICU 58 */
+        public static final int E_MODIFIER = 41;  /*[EM]*/
+        /** @stable ICU 58 */
+        public static final int ZWJ = 42;  /*[ZWJ]*/
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 40;
+        public static final int COUNT = 43;
     }
 
     /**
