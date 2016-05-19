@@ -13,7 +13,7 @@
 U_ICUDATA_NAME=icudt58
 ##############################################################################
 U_ICUDATA_ENDIAN_SUFFIX=l
-UNICODE_VERSION=8.0
+UNICODE_VERSION=9.0
 ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 
 #  ICUMAKE

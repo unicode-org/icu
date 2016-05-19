@@ -1966,6 +1966,7 @@ private:
     UnicodeSet  *fCRLFSet;
     UnicodeSet  *fControlSet;
     UnicodeSet  *fExtendSet;
+    UnicodeSet  *fZWJSet;
     UnicodeSet  *fRegionalIndicatorSet;
     UnicodeSet  *fPrependSet;
     UnicodeSet  *fSpacingSet;
@@ -1975,11 +1976,11 @@ private:
     UnicodeSet  *fLVSet;
     UnicodeSet  *fLVTSet;
     UnicodeSet  *fHangulSet;
-    UnicodeSet  *fAnySet;
-    UnicodeSet  *fEmojiModifierSet;
     UnicodeSet  *fEmojiBaseSet;
-    UnicodeSet  *fZWJSet;
+    UnicodeSet  *fEmojiModifierSet;
     UnicodeSet  *fGAZSet;
+    UnicodeSet  *fEBGSet;        // ***new
+    UnicodeSet  *fAnySet;
 
     const UnicodeString *fText;
 };
@@ -1991,9 +1992,11 @@ RBBICharMonkey::RBBICharMonkey() {
     fText = NULL;
 
     fCRLFSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\r\\n]"), status);
-    fControlSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Grapheme_Cluster_Break = Control}]-[:Block=Tags:]]"), status);
-    fExtendSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Grapheme_Cluster_Break = Extend}][:Block=Tags:]]"), status);
-    fRegionalIndicatorSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Regional_Indicator}]"), status);
+    fControlSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Grapheme_Cluster_Break = Control}]]"), status);
+    fExtendSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Grapheme_Cluster_Break = Extend}]]"), status);
+    fZWJSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = ZWJ}]"), status);
+    fRegionalIndicatorSet = 
+                  new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Regional_Indicator}]"), status);
     fPrependSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Prepend}]"), status);
     fSpacingSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = SpacingMark}]"), status);
     fLSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = L}]"), status);
@@ -2007,21 +2010,14 @@ RBBICharMonkey::RBBICharMonkey() {
     fHangulSet->addAll(*fTSet);
     fHangulSet->addAll(*fLVSet);
     fHangulSet->addAll(*fLVTSet);
-    fAnySet     = new UnicodeSet(0, 0x10ffff);
 
+    fEmojiBaseSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EB}]"), status);
+    fEmojiModifierSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EM}]"), status);
+    fGAZSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = GAZ}]"), status);
+    fEBGSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EBG}]"), status);
+    fAnySet           = new UnicodeSet(0, 0x10ffff);
 
-
-    fEmojiBaseSet = new UnicodeSet(UnicodeString(
-                "[\\u261D\\u26F9\\u270A-\\u270D\\U0001F385\\U0001F3C3-\\U0001F3C4\\U0001F3CA-\\U0001F3CB\\U0001F442-\\U0001F443"
-                "\\U0001F446-\\U0001F450\\U0001F466-\\U0001F469\\U0001F46E\\U0001F470-\\U0001F478\\U0001F47C\\U0001F481-\\U0001F483"
-                "\\U0001F485-\\U0001F487\\U0001F4AA\\U0001F575\\U0001F590\\U0001F595-\\U0001F596\\U0001F645-\\U0001F647"
-                "\\U0001F64B-\\U0001F64F\\U0001F6A3\\U0001F6B4-\\U0001F6B6\\U0001F6C0\\U0001F918]"), status);
-
-    fEmojiModifierSet = new UnicodeSet(0x0001F3FB, 0x0001F3FF);
-    fZWJSet           = new UnicodeSet(0x200D, 0x200D);
-    fGAZSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\U0001F466-\\U0001F469\\U0001F48B\\U0001F5E8\\u2764]"), status);
-
-    fSets       = new UVector(status);
+    fSets             = new UVector(status);
     fSets->addElement(fCRLFSet,    status);
     fSets->addElement(fControlSet, status);
     fSets->addElement(fExtendSet,  status);
@@ -2036,6 +2032,7 @@ RBBICharMonkey::RBBICharMonkey() {
     fSets->addElement(fEmojiModifierSet, status);
     fSets->addElement(fZWJSet,     status);
     fSets->addElement(fGAZSet,     status);
+    fSets->addElement(fEBGSet,     status);
     if (U_FAILURE(status)) {
         deferredStatus = status;
     }
@@ -2149,7 +2146,7 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // Rule (GB9)    x Extend
+        // Rule (GB9)    x (Extend | ZWJ)
         if (fExtendSet->contains(c2) || fZWJSet->contains(c2))  {
             continue;
         }
@@ -2164,17 +2161,17 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // Rule (GB9c)   Emoji_Base x Emoji_Modifier
-        if ((fEmojiBaseSet->contains(c1) || fGAZSet->contains(c1)) && fEmojiModifierSet->contains(c2)) {
+        // Rule (GB10)   (Emoji_Base | EBG) x Emoji_Modifier
+        if ((fEmojiBaseSet->contains(c1) || fEBGSet->contains(c1)) && fEmojiModifierSet->contains(c2)) {
             continue;
         }
 
-        // Rule (GB9d)   ZWJ x Glue_After_Zwj
-        if (fZWJSet->contains(c1) && fGAZSet->contains(c2)) {
+        // Rule (GB11)   ZWJ x (Glue_After_ZWJ | EBG)
+        if (fZWJSet->contains(c1) && (fGAZSet->contains(c2) || fEBGSet->contains(c2))) {
             continue;
         }
 
-        // Rule (GB10)  Any  <break>  Any
+        // Rule (GB999)  Any  <break>  Any
         break;
     }
 
@@ -2208,6 +2205,7 @@ RBBICharMonkey::~RBBICharMonkey() {
     delete fEmojiModifierSet;
     delete fZWJSet;
     delete fGAZSet;
+    delete fEBGSet;
 }
 
 //------------------------------------------------------------------------------------------
@@ -2233,8 +2231,6 @@ private:
     UnicodeSet  *fKatakanaSet;
     UnicodeSet  *fHebrew_LetterSet;
     UnicodeSet  *fALetterSet;
-    // TODO(jungshik): Do we still need this change?
-    // UnicodeSet  *fALetterSet; // matches ALetterPlus in word.txt
     UnicodeSet  *fSingle_QuoteSet;
     UnicodeSet  *fDouble_QuoteSet;
     UnicodeSet  *fMidNumLetSet;
@@ -2245,10 +2241,11 @@ private:
     UnicodeSet  *fOtherSet;
     UnicodeSet  *fExtendSet;
     UnicodeSet  *fExtendNumLetSet;
-    UnicodeSet  *fDictionaryCjkSet;
+    UnicodeSet  *fDictionarySet;
     UnicodeSet  *fEBaseSet;
+    UnicodeSet  *fEBGSet;
     UnicodeSet  *fEModifierSet;
-    UnicodeSet  *fZWSSet;
+    UnicodeSet  *fZWJSet;
     UnicodeSet  *fGAZSet;
 
     const UnicodeString  *fText;
@@ -2261,48 +2258,34 @@ RBBIWordMonkey::RBBIWordMonkey()
 
     fSets            = new UVector(status);
 
-    fCRSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = CR}]"),           status);
-    fLFSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = LF}]"),           status);
-    fNewlineSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Newline}]"),      status);
-    fDictionaryCjkSet= new UnicodeSet("[[\\uac00-\\ud7a3][:Han:][:Hiragana:][:Katakana:]]", status);
-    // Exclude Hangul syllables from ALetterSet during testing.
-    // Leave CJK dictionary characters out from the monkey tests!
-#if 0
-    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}"
-                                      "[\\p{Line_Break = Complex_Context}"
-                                      "-\\p{Grapheme_Cluster_Break = Extend}"
-                                      "-\\p{Grapheme_Cluster_Break = Control}"
-                                      "]]",
-                                      status);
-#endif
-    fRegionalIndicatorSet =  new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Regional_Indicator}]"), status);
+    fCRSet            = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = CR}]"),           status);
+    fLFSet            = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = LF}]"),           status);
+    fNewlineSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Newline}]"),      status);
     fKatakanaSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Katakana}]"),     status);
+    fRegionalIndicatorSet =  new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Regional_Indicator}]"), status);
     fHebrew_LetterSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Hebrew_Letter}]"), status);
     fALetterSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ALetter}]"), status);
-    fALetterSet->removeAll(*fDictionaryCjkSet);
     fSingle_QuoteSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Single_Quote}]"),    status);
     fDouble_QuoteSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Double_Quote}]"),    status);
     fMidNumLetSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidNumLet}]"),    status);
     fMidLetterSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidLetter}]"),    status);
     fMidNumSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidNum}]"),       status);
-    // TODO: this set used to contain [\\uff10-\\uff19] (fullwidth digits), but this breaks the test
-    // we should figure out why
     fNumericSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Numeric}]"),      status);
     fFormatSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Format}]"),       status);
     fExtendNumLetSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ExtendNumLet}]"), status);
     fExtendSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Extend}]"),       status);
 
-    fEBaseSet         = new UnicodeSet(UnicodeString(
-                "[\\u261D\\u26F9\\u270A-\\u270D\\U0001F385\\U0001F3C3-\\U0001F3C4\\U0001F3CA-\\U0001F3CB\\U0001F442-\\U0001F443"
-                "\\U0001F446-\\U0001F450\\U0001F466-\\U0001F469\\U0001F46E\\U0001F470-\\U0001F478\\U0001F47C\\U0001F481-\\U0001F483"
-                "\\U0001F485-\\U0001F487\\U0001F4AA\\U0001F575\\U0001F590\\U0001F595-\\U0001F596\\U0001F645-\\U0001F647"
-                "\\U0001F64B-\\U0001F64F\\U0001F6A3\\U0001F6B4-\\U0001F6B6\\U0001F6C0\\U0001F918]"), status);
+    fEBaseSet         = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = EB}]"),           status);
+    fEBGSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = EBG}]"),          status);
+    fEModifierSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = EM}]"),           status);
+    fZWJSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ZWJ}]"),          status);
+    fGAZSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = GAZ}]"),          status);
 
-    fEModifierSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\U0001F3FB-\\U0001F3FF]"), status);
-    fZWSSet          = new UnicodeSet((UChar32)0x200D, (UChar32)0x200D);;
-    fGAZSet          = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\U0001F466-\\U0001F469\\U0001F48B\\U0001F5E8\\u2764]"), status);
-    fExtendSet->removeAll(*fZWSSet);
+    fDictionarySet = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]"), status);
+    fDictionarySet->addAll(*fKatakanaSet);
+    fDictionarySet->addAll(UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{LineBreak = Complex_Context}]"), status));
 
+    fALetterSet->removeAll(*fDictionarySet);
 
     fOtherSet        = new UnicodeSet();
     if(U_FAILURE(status)) {
@@ -2327,13 +2310,13 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fExtendSet);
     fOtherSet->removeAll(*fRegionalIndicatorSet);
     fOtherSet->removeAll(*fEBaseSet);
+    fOtherSet->removeAll(*fEBGSet);
     fOtherSet->removeAll(*fEModifierSet);
-    fOtherSet->removeAll(*fZWSSet);
+    fOtherSet->removeAll(*fZWJSet);
     fOtherSet->removeAll(*fGAZSet);
     
     // Inhibit dictionary characters from being tested at all.
-    fOtherSet->removeAll(*fDictionaryCjkSet);
-    fOtherSet->removeAll(UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{LineBreak = Complex_Context}]"), status));
+    fOtherSet->removeAll(*fDictionarySet);
 
     fSets->addElement(fCRSet,                status);
     fSets->addElement(fLFSet,                status);
@@ -2343,7 +2326,9 @@ RBBIWordMonkey::RBBIWordMonkey()
     fSets->addElement(fALetterSet,           status);
     fSets->addElement(fSingle_QuoteSet,      status);
     fSets->addElement(fDouble_QuoteSet,      status);
-    //fSets->addElement(fKatakanaSet,          status); //TODO: work out how to test katakana
+    //fSets->addElement(fKatakanaSet,          status); // Omit Katakana from fSets, which omits Katakana characters
+                                                        // from the test data. They are all in the dictionary set,
+                                                        // which this (old, to be retired) monkey test cannot handle.
     fSets->addElement(fMidLetterSet,         status);
     fSets->addElement(fMidNumLetSet,         status);
     fSets->addElement(fMidNumSet,            status);
@@ -2354,8 +2339,9 @@ RBBIWordMonkey::RBBIWordMonkey()
     fSets->addElement(fExtendNumLetSet,      status);
 
     fSets->addElement(fEBaseSet,             status);
+    fSets->addElement(fEBGSet,               status);
     fSets->addElement(fEModifierSet,         status);
-    fSets->addElement(fZWSSet,               status);
+    fSets->addElement(fZWJSet,               status);
     fSets->addElement(fGAZSet,               status);
 
     if (U_FAILURE(status)) {
@@ -2406,7 +2392,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
                break;
             };
         }
-        while (fFormatSet->contains(c3) || fExtendSet->contains(c3) || fZWSSet->contains(c3));
+        while (fFormatSet->contains(c3) || fExtendSet->contains(c3) || fZWJSet->contains(c3));
 
 
         if (p1 == p2) {
@@ -2435,12 +2421,12 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             break;
         };
 
-        // Rule (3c)    ZWJ x GAZ (Glue after ZWJ).
+        // Rule (3c)    ZWJ x (Glue_after_ZWJ | EBG).
         //              Not ignoring extend chars, so peek into input text to
         //              get the potential ZWJ, the character immediately preceding c2.
         //              Sloppy UChar32 indexing: p2-1 may reference trail half
         //              but char32At will get the full code point.
-        if (fZWSSet->contains(fText->char32At(p2-1)) && fGAZSet->contains(c2)) {
+        if (fZWJSet->contains(fText->char32At(p2-1)) && (fGAZSet->contains(c2) || fEBGSet->contains(c2))) {
             continue;
         }
 
@@ -2513,6 +2499,8 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         }
 
         // Rule (13)  Katakana x Katakana
+        //            Note: matches UAX 29 rules, but doesn't come into play for ICU because
+        //                  all Katakana are handled by the dictionary breaker.
         if (fKatakanaSet->contains(c1) &&
             fKatakanaSet->contains(c2))  {
             continue;
@@ -2532,7 +2520,12 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // Rule 13c
+        // WB 14  (E_Base | EBG) x E_Modifier
+        if ((fEBaseSet->contains(c1)  || fEBGSet->contains(c1)) && fEModifierSet->contains(c2)) {
+            continue;
+        }
+
+        // Rule 15 - 17   Group pairs of Regional Indicators.
         if (fRegionalIndicatorSet->contains(c0) && fRegionalIndicatorSet->contains(c1)) {
             break;
         }
@@ -2540,12 +2533,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // Rule 13d
-        if ((fEBaseSet->contains(c1)  || fGAZSet->contains(c1)) && fEModifierSet->contains(c2)) {
-            continue;
-        }
-
-        // Rule 14.  Break found here.
+        // Rule 999.  Break found here.
         break;
     }
 
@@ -2577,11 +2565,12 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fExtendSet;
     delete fExtendNumLetSet;
     delete fRegionalIndicatorSet;
-    delete fDictionaryCjkSet;
+    delete fDictionarySet;
     delete fOtherSet;
     delete fEBaseSet;
+    delete fEBGSet;
     delete fEModifierSet;
-    delete fZWSSet;
+    delete fZWJSet;
     delete fGAZSet;
 }
 
@@ -3034,13 +3023,9 @@ RBBILineMonkey::RBBILineMonkey() :
     fRI    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=RI}]"), status);
     fSG    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\ud800-\\udfff]"), status);
     fXX    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=XX}]"), status);
-    fEB    = new UnicodeSet(UnicodeString(
-                "[\\u261D\\u26F9\\u270A-\\u270D\\U0001F385\\U0001F3C3-\\U0001F3C4\\U0001F3CA-\\U0001F3CB\\U0001F442-\\U0001F443"
-                "\\U0001F446-\\U0001F450\\U0001F466-\\U0001F469\\U0001F46E\\U0001F470-\\U0001F478\\U0001F47C\\U0001F481-\\U0001F483"
-                "\\U0001F485-\\U0001F487\\U0001F4AA\\U0001F575\\U0001F590\\U0001F595-\\U0001F596\\U0001F645-\\U0001F647"
-                "\\U0001F64B-\\U0001F64F\\U0001F6A3\\U0001F6B4-\\U0001F6B6\\U0001F6C0\\U0001F918]"), status);
-    fEM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\U0001F3FB-\\U0001F3FF]"), status);
-    fZJ    = new UnicodeSet((UChar32)0x200D, (UChar32)0x200D);
+    fEB    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EB}]"), status);
+    fEM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EM}]"), status);
+    fZJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -3055,11 +3040,8 @@ RBBILineMonkey::RBBILineMonkey() :
 
     fID->addAll(*fEB);     // Emoji Base and Emoji Modifier behave as ID.
     fID->addAll(*fEM);
-    fAL->removeAll(*fEM);
 
-
-    fAL->remove((UChar32)0x2764);   // Emoji Proposal: move u2764 from Al to Id
-    fID->add((UChar32)0x2764);
+    fCM->addAll(*fZJ);     // ZWJ behaves as a CM.
 
     fSets->addElement(fBK, status);
     fSets->addElement(fCR, status);
@@ -3104,12 +3086,12 @@ RBBILineMonkey::RBBILineMonkey() :
     fSets->addElement(fZJ, status);
 
     const char *rules =
-            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?"
-            "((\\p{Line_Break=OP}|\\p{Line_Break=HY})\\p{Line_Break=CM}*)?"
-            "\\p{Line_Break=NU}\\p{Line_Break=CM}*"
-            "((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})\\p{Line_Break=CM}*)*"
-            "((\\p{Line_Break=CL}|\\p{Line_Break=CP})\\p{Line_Break=CM}*)?"
-            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?";
+            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})(\\p{Line_Break=CM}|\\u200d)*)?"
+            "((\\p{Line_Break=OP}|\\p{Line_Break=HY})(\\p{Line_Break=CM}|\\u200d)*)?"
+            "\\p{Line_Break=NU}(\\p{Line_Break=CM}|\\u200d)*"
+            "((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})(\\p{Line_Break=CM}|\\u200d)*)*"
+            "((\\p{Line_Break=CL}|\\p{Line_Break=CP})(\\p{Line_Break=CM}|\\u200d)*)?"
+            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})(\\p{Line_Break=CM}|\\u200d)*)?";
 
     fNumberMatcher = new RegexMatcher(
         UnicodeString(rules, -1, US_INV), 0, status);
