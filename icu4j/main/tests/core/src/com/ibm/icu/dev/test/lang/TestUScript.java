@@ -511,13 +511,17 @@ public class TestUScript extends TestFmwk {
      */
     private static final int getCharScript(int script) {
         switch(script) {
+        case UScript.HAN_WITH_BOPOMOFO:
         case UScript.SIMPLIFIED_HAN:
         case UScript.TRADITIONAL_HAN:
             return UScript.HAN;
         case UScript.JAPANESE:
             return UScript.HIRAGANA;
+        case UScript.JAMO:
         case UScript.KOREAN:
             return UScript.HANGUL;
+        case UScript.SYMBOLS_EMOJI:
+            return UScript.SYMBOLS;
         default:
             return script;
         }
@@ -629,7 +633,7 @@ public class TestUScript extends TestFmwk {
             "Loma", "Mende_Kikakui", "Meroitic_Cursive",
             "Old_North_Arabian", "Nabataean", "Palmyrene", "Khudawadi", "Warang_Citi",
             /* new in ICU 4.8 */
-            "Afak", "Jurc", "Mro", "Nshu", "Sharada", "Sora_Sompeng", "Takri", "Tang", "Wole",
+            "Afak", "Jurc", "Mro", "Nshu", "Sharada", "Sora_Sompeng", "Takri", "Tangut", "Wole",
             /* new in ICU 49 */
             "Anatolian_Hieroglyphs", "Khojki", "Tirhuta",
             /* new in ICU 52 */
