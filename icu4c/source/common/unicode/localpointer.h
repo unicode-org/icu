@@ -485,9 +485,6 @@ public:
  * like LocalPointer<Type> except that this subclass will use the closeFunction
  * rather than the C++ delete operator.
  *
- * Requirement: The closeFunction must tolerate a NULL pointer.
- * (We could add a NULL check here but it is normally redundant.)
- *
  * Usage example:
  * \code
  * LocalUCaseMapPointer csm(ucasemap_open(localeID, options, &errorCode));
@@ -512,12 +509,12 @@ public:
                 : LocalPointerBase<Type>(src.ptr) { \
             src.ptr=NULL; \
         } \
-        ~LocalPointerClassName() { closeFunction(ptr); } \
+        ~LocalPointerClassName() { if (ptr != NULL) { closeFunction(ptr); } } \
         LocalPointerClassName &operator=(LocalPointerClassName &&src) U_NOEXCEPT { \
             return moveFrom(src); \
         } \
         LocalPointerClassName &moveFrom(LocalPointerClassName &src) U_NOEXCEPT { \
-            closeFunction(ptr); \
+            if (ptr != NULL) { closeFunction(ptr); } \
             LocalPointerBase<Type>::ptr=src.ptr; \
             src.ptr=NULL; \
             return *this; \
@@ -531,7 +528,7 @@ public:
             p1.swap(p2); \
         } \
         void adoptInstead(Type *p) { \
-            closeFunction(ptr); \
+            if (ptr != NULL) { closeFunction(ptr); } \
             ptr=p; \
         } \
     }
@@ -544,7 +541,7 @@ public:
         explicit LocalPointerClassName(Type *p=NULL) : LocalPointerBase<Type>(p) {} \
         ~LocalPointerClassName() { closeFunction(ptr); } \
         LocalPointerClassName &moveFrom(LocalPointerClassName &src) U_NOEXCEPT { \
-            closeFunction(ptr); \
+            if (ptr != NULL) { closeFunction(ptr); } \
             LocalPointerBase<Type>::ptr=src.ptr; \
             src.ptr=NULL; \
             return *this; \
@@ -558,7 +555,7 @@ public:
             p1.swap(p2); \
         } \
         void adoptInstead(Type *p) { \
-            closeFunction(ptr); \
+            if (ptr != NULL) { closeFunction(ptr); } \
             ptr=p; \
         } \
     }
