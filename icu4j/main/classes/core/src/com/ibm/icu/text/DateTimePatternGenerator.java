@@ -32,7 +32,6 @@ import com.ibm.icu.impl.PatternTokenizer;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.UResource;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
@@ -1877,9 +1876,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 }
 
                 if (flags.contains(DTPGflags.FIX_FRACTIONAL_SECONDS) && type == SECOND) {
-                    String newField = inputRequest.original[FRACTIONAL_SECOND];
                     fieldBuilder.append(decimal);
-                    fieldBuilder.append(newField);
+                    inputRequest.original.appendFieldTo(FRACTIONAL_SECOND, fieldBuilder);
                 } else if (inputRequest.type[type] != 0) {
                     // Here:
                     // - "reqField" is the field from the originally requested skeleton, with length
@@ -1905,9 +1903,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     // Old behavior was:
                     // normally we just replace the field. However HOUR is special; we only change the length
 
-                    String reqField = inputRequest.original[type];
-                    int reqFieldLen = reqField.length();
-                    if ( reqField.charAt(0) == 'E' && reqFieldLen < 3 ) {
+                    char reqFieldChar = inputRequest.original.getFieldChar(type);
+                    int reqFieldLen = inputRequest.original.getFieldLength(type);
+                    if ( reqFieldChar == 'E' && reqFieldLen < 3 ) {
                         reqFieldLen = 3; // 1-3 for E are equivalent to 3 for c,e
                     }
                     int adjFieldLen = reqFieldLen;
@@ -1917,16 +1915,22 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                             (type == SECOND && (options & MATCH_SECOND_FIELD_LENGTH)==0) ) {
                         adjFieldLen = fieldBuilder.length();
                     } else if (matcherWithSkeleton != null) {
-                        String skelField = matcherWithSkeleton.origStringForField(type);
-                        int skelFieldLen = skelField.length();
+                        int skelFieldLen = matcherWithSkeleton.original.getFieldLength(type);
                         boolean patFieldIsNumeric = variableField.isNumeric();
                         boolean skelFieldIsNumeric = matcherWithSkeleton.fieldIsNumeric(type);
-                        if (skelFieldLen == reqFieldLen || (patFieldIsNumeric && !skelFieldIsNumeric) || (skelFieldIsNumeric && !patFieldIsNumeric)) {
+                        if (skelFieldLen == reqFieldLen
+                                || (patFieldIsNumeric && !skelFieldIsNumeric)
+                                || (skelFieldIsNumeric && !patFieldIsNumeric)) {
                             // don't adjust the field length in the found pattern
                             adjFieldLen = fieldBuilder.length();
                         }
                     }
-                    char c = (type != HOUR && type != MONTH && type != WEEKDAY && (type != YEAR || reqField.charAt(0)=='Y')) ? reqField.charAt(0) : fieldBuilder.charAt(0);
+                    char c = (type != HOUR
+                            && type != MONTH
+                            && type != WEEKDAY
+                            && (type != YEAR || reqFieldChar=='Y'))
+                            ? reqFieldChar
+                            : fieldBuilder.charAt(0);
                     if (type == HOUR && flags.contains(DTPGflags.SKELETON_USES_CAP_J)) {
                         c = defaultHourFormatChar;
                     }
@@ -2065,6 +2069,25 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return strict ? -1 : bestRow;
     }
 
+    /**
+     * Gets the canonical character associated with the specified field (ERA, YEAR, etc).
+     */
+    private static char getCanonicalChar(int field, char reference) {
+        // Special case: distinguish between 12-hour and 24-hour
+        if (reference == 'h' || reference == 'K') {
+            return 'h';
+        }
+
+        // Linear search over types (return the top entry for each field)
+        for (int i = 0; i < types.length; ++i) {
+            int[] row = types[i];
+            if (row[1] == field) {
+                return (char) row[0];
+            }
+        }
+        throw new IllegalArgumentException("Could not find field " + field);
+    }
+
     private static final int[][] types = {
         // the order here makes a difference only when searching for single field.
         // format is:
@@ -2151,107 +2174,199 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         {'x', ZONE, LONG - DELTA, 4},
     };
 
+
+    /**
+     * A compact storage mechanism for skeleton field strings.  Several dozen of these will be created
+     * for a typical DateTimePatternGenerator instance.
+     * @author sffc
+     */
+    private static class SkeletonFields {
+        private byte[] chars = new byte[TYPE_LIMIT];
+        private byte[] lengths = new byte[TYPE_LIMIT];
+        private static final byte DEFAULT_CHAR = '\0';
+        private static final byte DEFAULT_LENGTH = 0;
+
+        public void clear() {
+            Arrays.fill(chars, DEFAULT_CHAR);
+            Arrays.fill(lengths, DEFAULT_LENGTH);
+        }
+
+        void copyFieldFrom(SkeletonFields other, int field) {
+            chars[field] = other.chars[field];
+            lengths[field] = other.lengths[field];
+        }
+
+        void clearField(int field) {
+            chars[field] = DEFAULT_CHAR;
+            lengths[field] = DEFAULT_LENGTH;
+        }
+
+        char getFieldChar(int field) {
+            return (char) chars[field];
+        }
+
+        int getFieldLength(int field) {
+            return (int) lengths[field];
+        }
+
+        void populate(int field, String value) {
+            // Ensure no loss in character data
+            for (char ch : value.toCharArray()) {
+                assert ch == value.charAt(0);
+            }
+
+            populate(field, value.charAt(0), value.length());
+        }
+
+        void populate(int field, char ch, int length) {
+            assert ch <= Byte.MAX_VALUE;
+            assert length <= Byte.MAX_VALUE;
+
+            chars[field] = (byte) ch;
+            lengths[field] = (byte) length;
+        }
+
+        public boolean isFieldEmpty(int field) {
+            return lengths[field] == DEFAULT_LENGTH;
+        }
+
+        public String toString() {
+            return appendTo(new StringBuilder()).toString();
+        }
+
+        public String toCanonicalString() {
+            return appendTo(new StringBuilder(), true).toString();
+        }
+
+        public StringBuilder appendTo(StringBuilder sb) {
+            return appendTo(sb, false);
+        }
+
+        private StringBuilder appendTo(StringBuilder sb, boolean canonical) {
+            for (int i=0; i<TYPE_LIMIT; ++i) {
+                appendFieldTo(i, sb, canonical);
+            }
+            return sb;
+        }
+
+        public StringBuilder appendFieldTo(int field, StringBuilder sb) {
+            return appendFieldTo(field, sb, false);
+        }
+
+        private StringBuilder appendFieldTo(int field, StringBuilder sb, boolean canonical) {
+            char ch = (char) chars[field];
+            int length = (int) lengths[field];
+
+            if (canonical) {
+                ch = getCanonicalChar(field, ch);
+            }
+
+            for (int i=0; i<length; i++) {
+                sb.append(ch);
+            }
+            return sb;
+        }
+
+        public int compareTo(SkeletonFields other) {
+            for (int i = 0; i < TYPE_LIMIT; ++i) {
+                int charDiff = chars[i] - other.chars[i];
+                if (charDiff != 0) {
+                    return charDiff;
+                }
+                int lengthDiff = lengths[i] - other.lengths[i];
+                if (lengthDiff != 0) {
+                    return lengthDiff;
+                }
+            }
+            return 0;
+        }
+
+        public boolean equals(Object other) {
+            if (this == other) { return true; }
+            if (other == null) { return false; }
+            SkeletonFields _other = (SkeletonFields) other;
+            return Arrays.equals(chars, _other.chars) && Arrays.equals(lengths, _other.lengths);
+        }
+
+        public int hashCode() {
+            return Arrays.hashCode(chars) ^ Arrays.hashCode(lengths);
+        }
+    }
+
+
     private static class DateTimeMatcher implements Comparable<DateTimeMatcher> {
         //private String pattern = null;
         private int[] type = new int[TYPE_LIMIT];
-        private String[] original = new String[TYPE_LIMIT];
-        private String[] baseOriginal = new String[TYPE_LIMIT];
+        private SkeletonFields original = new SkeletonFields();
+        private SkeletonFields baseOriginal = new SkeletonFields();
 
         // just for testing; fix to make multi-threaded later
         // private static FormatParser fp = new FormatParser();
-
-        public String origStringForField(int field) {
-            return original[field];
-        }
 
         public boolean fieldIsNumeric(int field) {
             return type[field] > 0;
         }
 
         public String toString() {
-            StringBuilder result = new StringBuilder();
-            for (int i = 0; i < TYPE_LIMIT; ++i) {
-                if (original[i].length() != 0) result.append(original[i]);
-            }
-            return result.toString();
+            return original.toString();
         }
 
         // returns a string like toString but using the canonical character for most types,
         // e.g. M for M or L, E for E or c, y for y or U, etc. The hour field is canonicalized
         // to 'H' (for 24-hour types) or 'h' (for 12-hour types)
         public String toCanonicalString() {
-            StringBuilder result = new StringBuilder();
-            for (int i = 0; i < TYPE_LIMIT; ++i) {
-                if (original[i].length() != 0) {
-                    // append a string of the same length using the canonical character
-                    for (int j = 0; j < types.length; ++j) {
-                        int[] row = types[j];
-                        if (row[1] == i) {
-                            char originalChar = original[i].charAt(0);
-                            char repeatChar = (originalChar=='h' || originalChar=='K')? 'h': (char)row[0];
-                            result.append(Utility.repeat(String.valueOf(repeatChar), original[i].length()));
-                            break;
-                        }
-                    }
-                }
-            }
-            return result.toString();
+            return original.toCanonicalString();
         }
 
         String getBasePattern() {
-            StringBuilder result = new StringBuilder();
-            for (int i = 0; i < TYPE_LIMIT; ++i) {
-                if (baseOriginal[i].length() != 0) result.append(baseOriginal[i]);
-            }
-            return result.toString();
+            return baseOriginal.toString();
         }
 
         DateTimeMatcher set(String pattern, FormatParser fp, boolean allowDuplicateFields) {
-            for (int i = 0; i < TYPE_LIMIT; ++i) {
-                type[i] = NONE;
-                original[i] = "";
-                baseOriginal[i] = "";
-            }
+            // Reset any data stored in this instance
+            Arrays.fill(type, NONE);
+            original.clear();
+            baseOriginal.clear();
+
             fp.set(pattern);
             for (Object obj : fp.getItems()) {
                 if (!(obj instanceof VariableField)) {
                     continue;
                 }
                 VariableField item = (VariableField)obj;
-                String field = item.toString();
-                if (field.charAt(0) == 'a') continue; // skip day period, special case
+                String value = item.toString();
+                if (value.charAt(0) == 'a') continue; // skip day period, special case
                 int canonicalIndex = item.getCanonicalIndex();
                 //                if (canonicalIndex < 0) {
                 //                    throw new IllegalArgumentException("Illegal field:\t"
                 //                            + field + "\t in " + pattern);
                 //                }
                 int[] row = types[canonicalIndex];
-                int typeValue = row[1];
-                if (original[typeValue].length() != 0) {
+                int field = row[1];
+                if (!original.isFieldEmpty(field)) {
+                    char ch1 = original.getFieldChar(field);
+                    char ch2 = value.charAt(0);
                     if ( allowDuplicateFields ||
-                            (original[typeValue].charAt(0) == 'r' && field.charAt(0) == 'U') ||
-                            (original[typeValue].charAt(0) == 'U' && field.charAt(0) == 'r') ) {
+                            (ch1 == 'r' && ch2 == 'U') ||
+                            (ch1 == 'U' && ch2 == 'r') ) {
                         continue;
                     }
                     throw new IllegalArgumentException("Conflicting fields:\t"
-                            + original[typeValue] + ", " + field + "\t in " + pattern);
+                            + ch1 + ", " + value + "\t in " + pattern);
                 }
-                original[typeValue] = field;
+                original.populate(field, value);
                 char repeatChar = (char)row[0];
                 int repeatCount = row[3];
                 // #7930 removes hack to cap repeatCount at 3
                 if ("GEzvQ".indexOf(repeatChar) >= 0) repeatCount = 1;
-                baseOriginal[typeValue] = Utility.repeat(String.valueOf(repeatChar),repeatCount);
-                int subTypeValue = row[2];
-                if (subTypeValue > 0) subTypeValue += field.length();
-                type[typeValue] = subTypeValue;
+                baseOriginal.populate(field, repeatChar, repeatCount);
+                int subField = row[2];
+                if (subField > 0) subField += value.length();
+                type[field] = subField;
             }
             return this;
         }
 
-        /**
-         *
-         */
         int getFieldMask() {
             int result = 0;
             for (int i = 0; i < type.length; ++i) {
@@ -2260,18 +2375,15 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return result;
         }
 
-        /**
-         *
-         */
         @SuppressWarnings("unused")
         void extractFrom(DateTimeMatcher source, int fieldMask) {
             for (int i = 0; i < type.length; ++i) {
                 if ((fieldMask & (1<<i)) != 0) {
                     type[i] = source.type[i];
-                    original[i] = source.original[i];
+                    original.copyFieldFrom(source.original, i);
                 } else {
                     type[i] = NONE;
-                    original[i] = "";
+                    original.clearField(i);
                 }
             }
         }
@@ -2279,7 +2391,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         int getDistance(DateTimeMatcher other, int includeMask, DistanceInfo distanceInfo) {
             int result = 0;
             distanceInfo.clear();
-            for (int i = 0; i < type.length; ++i) {
+            for (int i = 0; i < TYPE_LIMIT; ++i) {
                 int myType = (includeMask & (1<<i)) == 0 ? 0 : type[i];
                 int otherType = other.type[i];
                 if (myType == otherType) continue; // identical (maybe both zero) add 0
@@ -2297,29 +2409,18 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         public int compareTo(DateTimeMatcher that) {
-            for (int i = 0; i < original.length; ++i) {
-                int comp = original[i].compareTo(that.original[i]);
-                if (comp != 0) return -comp;
-            }
-            return 0;
+            return -original.compareTo(that.original);
         }
 
         public boolean equals(Object other) {
-            if (!(other instanceof DateTimeMatcher)) {
-                return false;
-            }
-            DateTimeMatcher that = (DateTimeMatcher) other;
-            for (int i = 0; i < original.length; ++i) {
-                if (!original[i].equals(that.original[i])) return false;
-            }
-            return true;
+            if (this == other) { return true; }
+            if (other == null) { return false; }
+            DateTimeMatcher _other = (DateTimeMatcher) other;
+            return original.equals(_other.original);
         }
+
         public int hashCode() {
-            int result = 0;
-            for (int i = 0; i < original.length; ++i) {
-                result ^= original[i].hashCode();
-            }
-            return result;
+            return original.hashCode();
         }
     }
 
@@ -2329,9 +2430,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         void clear() {
             missingFieldMask = extraFieldMask = 0;
         }
-        /**
-         *
-         */
         void setTo(DistanceInfo other) {
             missingFieldMask = other.missingFieldMask;
             extraFieldMask = other.extraFieldMask;
