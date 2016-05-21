@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp.  and others 1998-2015 - All Rights Reserved
+ * (C) Copyright IBM Corp.  and others 1998-2016 - All Rights Reserved
  *
  */
 
@@ -91,7 +91,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         ia = glyphStorage.getCharIndex(firstGlyph, success);
         x = firstGlyph + 1;
 
-        while (x <= lastGlyph) {
+        while (x <= (int32_t)lastGlyph) {
             glyphStorage[x - 1] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x - 1, ix, success);
@@ -112,7 +112,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         id = glyphStorage.getCharIndex(lastGlyph, success);
         x = lastGlyph - 1;
 
-        while (x >= firstGlyph) {
+        while (x >= (int32_t)firstGlyph) {
             glyphStorage[x + 1] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x + 1, ix, success);
@@ -147,7 +147,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         ib = glyphStorage.getCharIndex(firstGlyph + 1, success);
         x = firstGlyph + 2;
 
-        while (x <= lastGlyph) {
+        while (x <= (int32_t)lastGlyph) {
             glyphStorage[x - 2] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x - 2, ix, success);
@@ -173,7 +173,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         ib = glyphStorage.getCharIndex(firstGlyph + 1, success);
         x = firstGlyph + 2;
 
-        while (x <= lastGlyph) {
+        while (x <= (int32_t)lastGlyph) {
             glyphStorage[x - 2] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x - 2, ix, success);
@@ -199,7 +199,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         id = glyphStorage.getCharIndex(lastGlyph, success);
         x = lastGlyph - 2;
 
-        while (x >= firstGlyph) {
+        while (x >= (int32_t)firstGlyph) {
             glyphStorage[x + 2] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x + 2, ix, success);
@@ -225,7 +225,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         id = glyphStorage.getCharIndex(lastGlyph, success);
         x = lastGlyph - 2;
 
-        while (x >= firstGlyph) {
+        while (x >= (int32_t)firstGlyph) {
             glyphStorage[x + 2] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x + 2, ix, success);
@@ -253,7 +253,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         id = glyphStorage.getCharIndex(lastGlyph, success);
         x = lastGlyph - 2;
 
-        while (x > firstGlyph) {
+        while (x > (int32_t)firstGlyph) {
             glyphStorage[x + 1] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x + 1, ix, success);
@@ -283,7 +283,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         id = glyphStorage.getCharIndex(lastGlyph, success);
         x = lastGlyph - 2;
 
-        while (x > firstGlyph) {
+        while (x > (int32_t)firstGlyph) {
             glyphStorage[x + 1] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x + 1, ix, success);
@@ -313,7 +313,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         id = glyphStorage.getCharIndex(lastGlyph, success);
         x = firstGlyph + 2;
 
-        while (x < lastGlyph) {
+        while (x < (int32_t)lastGlyph) {
             glyphStorage[x - 2] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x - 2, ix, success);
@@ -343,7 +343,7 @@ void IndicRearrangementProcessor2::doRearrangementAction(LEGlyphStorage &glyphSt
         id = glyphStorage.getCharIndex(lastGlyph, success);
         x = firstGlyph + 2;
 
-        while (x < lastGlyph) {
+        while (x < (int32_t)lastGlyph) {
             glyphStorage[x - 2] = glyphStorage[x];
             ix = glyphStorage.getCharIndex(x, success);
             glyphStorage.setCharIndex(x - 2, ix, success);
