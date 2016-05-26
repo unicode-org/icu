@@ -1,7 +1,7 @@
 /*
 *****************************************************************************
-* Copyright (C) 2001-2016, International Business Machines orporation  
-* and others. All Rights Reserved.
+* Copyright (C) 2016 and later: Unicode, Inc. and others. orporation  
+* License & terms of use: http://www.unicode.org/copyright.html
 ****************************************************************************/
 
 #include "unicode/utypes.h"

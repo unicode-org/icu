@@ -1,5 +1,5 @@
-# Copyright (C) 2010-2014, International Business Machines Corporation and others.
-# All Rights Reserved.                  
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 #
 # Commands for regenerating ICU4C locale data (.txt files) from CLDR.
 #

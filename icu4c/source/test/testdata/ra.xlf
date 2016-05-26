@@ -38,9 +38,9 @@
                 <!--comments for TestInclude-->
                 <source>#--------------------------------------------------------------------
 
-# Copyright (c) 1999-2004, International Business Machines
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
 
-# Corporation and others. All Rights Reserved.
+# License & terms of use: http://www.unicode.org/copyright.html
 
 #--------------------------------------------------------------------
 

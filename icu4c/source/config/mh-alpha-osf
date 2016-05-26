@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Alpha-OSF-specific setup
-## Copyright (c) 1999-2006, International Business Machines Corporation and
-## others. All Rights Reserved.
+## Copyright (C) 2016 and later: Unicode, Inc. and others.
+## License & terms of use: http://www.unicode.org/copyright.html
 
 ## Commands to generate dependency files
 #GEN_DEPS.c=	$(CC) $(DEFS) $(CPPFLAGS) -MD -c -msg_quiet

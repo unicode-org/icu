@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-# Copyright (C) 2011 IBM Corporation and Others. All Rights Reserved.
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 #
 # run in icu/
 # will create file icu/as_is/bomlist.txt

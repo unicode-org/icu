@@ -1,4 +1,5 @@
-Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (C) 2016 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
 This example demonstrates running an instance of  ICU 1.8.1. together with a current version of ICU. It only tests u_getVersion and several collation APIs. 
 
 Generally, one should be able to simultaneously use one or more versions of ICU 2.0 or higher and one version of ICU 1.8.1 or lower. 

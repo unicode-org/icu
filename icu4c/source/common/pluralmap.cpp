@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015, International Business Machines Corporation and
+ * Copyright (C) 2016 and later: Unicode, Inc. and others. Corporation and
  * others. All Rights Reserved.
  */
 

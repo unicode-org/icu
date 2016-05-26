@@ -1,6 +1,6 @@
 ********************************************************************************
-* Copyright (C) 2008-2012, International Business Machines Corporation         *
-* and others. All Rights Reserved.                                             *
+* Copyright (C) 2016 and later: Unicode, Inc. and others.                      *
+* License & terms of use: http://www.unicode.org/copyright.html               *                                *                                                                              *
 *                                                                              *
 * 6/26/08 - Created by Brian Rower - heavy copying from ICU4J readme & others  *
 *                                                                              *

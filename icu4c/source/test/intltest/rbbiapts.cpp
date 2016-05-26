@@ -1,6 +1,6 @@
 /********************************************************************
- * Copyright (c) 1999-2016, International Business Machines
- * Corporation and others. All Rights Reserved.
+ * Copyright (C) 2016 and later: Unicode, Inc. and others.
+ * License & terms of use: http://www.unicode.org/copyright.html
  ********************************************************************
  *   Date        Name        Description
  *   12/14/99    Madhu        Creation.
