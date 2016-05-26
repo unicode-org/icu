@@ -2,8 +2,8 @@
 /*
  ****************************************************************************** *
  *
- *   Copyright (C) 1999-2007, International Business Machines
- *   Corporation and others.  All Rights Reserved.
+ * Copyright (C) 2016 and later: Unicode, Inc. and others.
+ * License & terms of use: http://www.unicode.org/copyright.html
  *
  ****************************************************************************** *
  *   file name:  gnomelayout.cpp
@@ -58,7 +58,7 @@ void showabout(GtkWidget */*widget*/, gpointer /*data*/)
 
     aboutBox = gnome_about_new("Gnome Layout Sample",
                                "0.1",
-                               "Copyright (C) 1998-2006 By International Business Machines Corporation and others. All Rights Reserved.",
+                               "Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html",
                                "A simple demo of the ICU LayoutEngine.",
                                writtenBy,
                                documentedBy,

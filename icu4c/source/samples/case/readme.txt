@@ -1,4 +1,5 @@
-Copyright (c) 2003-2005, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (C) 2016 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
 case: case mapping
 
 This sample demonstrates

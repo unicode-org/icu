@@ -1,6 +1,7 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2011 IBM and others. All rights reserved.
+*   Copyright (C) 2016 and later: Unicode, Inc. and others.
+*   License & terms of use: http://www.unicode.org/copyright.html
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.

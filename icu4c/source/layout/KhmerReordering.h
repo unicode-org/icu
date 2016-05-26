@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved 
+ * Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html 
  *
  * This file is a modification of the ICU file IndicReordering.h
  * by Jens Herden and Javier Sola for Khmer language 

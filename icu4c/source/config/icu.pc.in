@@ -1,4 +1,5 @@
-# Copyright (C) 2010-2013, International Business Machines Corporation. All Rights Reserved.
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 
 # CFLAGS contains only anything end users should set
 CFLAGS = @UCONFIG_CFLAGS@

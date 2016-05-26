@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011-2013, International Business Machines
-*   Corporation and others.  All Rights Reserved.
+*   Copyright (C) 2016 and later: Unicode, Inc. and others.
+*   License & terms of use: http://www.unicode.org/copyright.html
 *******************************************************************************
 *   file name:  messagepattern.h
 *   encoding:   US-ASCII

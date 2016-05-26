@@ -1,7 +1,7 @@
 //
 //  rbbirb.h
 //
-//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
+//  Copyright (C) 2016 and later: Unicode, Inc. and others. Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for several classes from the

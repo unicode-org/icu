@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Cygwin64-specific setup
-## Copyright (c) 2014, International Business Machines Corporation and
-## others. All Rights Reserved.
+## Copyright (C) 2016 and later: Unicode, Inc. and others.
+## License & terms of use: http://www.unicode.org/copyright.html
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)

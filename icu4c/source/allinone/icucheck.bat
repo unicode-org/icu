@@ -1,8 +1,8 @@
 @echo off
 REM  ********************************************************************
 REM  * COPYRIGHT:
-REM  * Copyright (c) 2010-2014, International Business Machines Corporation
-REM  * and others. All Rights Reserved.
+REM  * Copyright (C) 2016 and later: Unicode, Inc. and others.
+REM  * License & terms of use: http://www.unicode.org/copyright.html
 REM  ********************************************************************
 
 set ICU_ARCH=%1

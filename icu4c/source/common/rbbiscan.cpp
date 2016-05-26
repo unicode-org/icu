@@ -1,7 +1,7 @@
 //
 //  file:  rbbiscan.cpp
 //
-//  Copyright (C) 2002-2016, International Business Machines Corporation and others.
+//  Copyright (C) 2016 and later: Unicode, Inc. and others. Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the Rule Based Break Iterator Rule Builder functions for

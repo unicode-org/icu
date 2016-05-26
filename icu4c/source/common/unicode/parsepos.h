@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2005, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 2016 and later: Unicode, Inc. and others. Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File PARSEPOS.H

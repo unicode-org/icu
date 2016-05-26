@@ -1,4 +1,4 @@
-// Copyright (C) 2009-2012, International Business Machines
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2007 Google Inc. All Rights Reserved.

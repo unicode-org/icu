@@ -1,7 +1,7 @@
 /*
 **********************************************************************
-* Copyright (C) 2000-2004, International Business Machines Corporation 
-* and others.  All Rights Reserved.
+* Copyright (C) 2016 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
 **********************************************************************
 
 Get a message out of the default resource bundle, messageformat it,

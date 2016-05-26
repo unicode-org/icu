@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2016, International Business Machines Corporation
+* Copyright (C) 2016 and later: Unicode, Inc. and others. Corporation
 *               and others. All Rights Reserved.
 *******************************************************************************
 * File unorm.h
