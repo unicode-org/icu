@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## OS400-specific setup (for cross build)
-## Copyright (c) 1999-2013, International Business Machines Corporation and
-## others. All Rights Reserved.
+## Copyright (C) 2016 and later: Unicode, Inc. and others.
+## License & terms of use: http://www.unicode.org/copyright.html
 
 # This otherwise breaks on OS400 - can't find "shell"
 CURR_FULL_DIR=.

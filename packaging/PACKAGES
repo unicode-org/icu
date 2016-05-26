@@ -1,5 +1,6 @@
-Copyright (C) 2000-2003, International Business Machines
-Corporation and others.  All Rights Reserved.
+Copyright (C) 2016 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+
 ICU is packaged into a number of small, interdependent packages. This
 file describes what these packages are, what their name should be
 like, and what their contents are. It is useful as a reference and a

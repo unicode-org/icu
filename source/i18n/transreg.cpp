@@ -1,7 +1,7 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2014, International Business Machines
-*   Corporation and others.  All Rights Reserved.
+*   Copyright (C) 2016 and later: Unicode, Inc. and others.
+*   License & terms of use: http://www.unicode.org/copyright.html
 **********************************************************************
 *   Date        Name        Description
 *   08/10/2001  aliu        Creation.

@@ -4,7 +4,7 @@
 #
 # Report bugs to <http://icu-project.org/bugs>.
 #
-#  Copyright (c) 1999-2015, International Business Machines Corporation and others. All Rights Reserved.
+#  Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
 #
 #
 # Copyright (C) 1992-1996, 1998-2012 Free Software Foundation, Inc.
@@ -1568,7 +1568,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
- Copyright (c) 1999-2015, International Business Machines Corporation and others. All Rights Reserved.
+ Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
 _ACEOF
   exit
 fi

@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Cygwin/MinGW specific setup
-## Copyright (c) 2001-2014, International Business Machines Corporation and
-## others. All Rights Reserved.
+## Copyright (C) 2016 and later: Unicode, Inc. and others.
+## License & terms of use: http://www.unicode.org/copyright.html
 
 # TODO: Finish the rest of this port. This platform port is incomplete.
 

@@ -3,8 +3,8 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2016 International Business Machines Corporation
-*   and others. All rights reserved.
+*   Copyright (C) 2016 and later: Unicode, Inc. and others.
+*   License & terms of use: http://www.unicode.org/copyright.html
 ***************************************************************************
 */
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2012 IBM Corporation and Others. All Rights Reserved */
+/* Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html */
 
 #include <stdio.h>
 #include <demangle.h>

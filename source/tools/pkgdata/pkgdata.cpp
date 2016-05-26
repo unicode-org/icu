@@ -1,6 +1,6 @@
 /******************************************************************************
- *   Copyright (C) 2000-2016, International Business Machines
- *   Corporation and others.  All Rights Reserved.
+ *   Copyright (C) 2016 and later: Unicode, Inc. and others.
+ *   License & terms of use: http://www.unicode.org/copyright.html
  *******************************************************************************
  *   file name:  pkgdata.cpp
  *   encoding:   ANSI X3.4 (1968)

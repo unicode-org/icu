@@ -1,4 +1,5 @@
-Copyright (c) 2002-2011, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (C) 2016 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
 The genren.pl script is used to generate source/common/unicode/urename.h header file, which is needed for renaming the ICU exported names. 
 
 This script is intended to be used on Linux, although it should work on any platform that has Perl and nm command. Makefile may need to be updated, it's not 100% portable. 

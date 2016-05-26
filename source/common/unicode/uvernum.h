@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2016, International Business Machines
-*   Corporation and others.  All Rights Reserved.
+*   Copyright (C) 2016 and later: Unicode, Inc. and others.
+*   License & terms of use: http://www.unicode.org/copyright.html
 *******************************************************************************
 *
 *   file name:  uvernum.h
@@ -51,7 +51,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2016, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2016 and later: Unicode, Inc. and others. "
 
 /** The current ICU major version as an integer.
  *  This value will change in the subsequent releases of ICU

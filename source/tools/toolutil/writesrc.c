@@ -1,8 +1,8 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2012, International Business Machines
-*   Corporation and others.  All Rights Reserved.
+*   Copyright (C) 2016 and later: Unicode, Inc. and others.
+*   License & terms of use: http://www.unicode.org/copyright.html
 *
 *******************************************************************************
 *   file name:  writesrc.c
@@ -74,8 +74,8 @@ U_CAPI FILE * U_EXPORT2
 usrc_create(const char *path, const char *filename, const char *generator) {
     static const char *header=
         "/*\n"
-        " * Copyright (C) 1999-%s, International Business Machines\n"
-        " * Corporation and others.  All Rights Reserved.\n"
+        " * Copyright (C) 2016 and later: Unicode, Inc. and others.\n"
+        " * License & terms of use: http://www.unicode.org/copyright.html\n"
         " *\n"
         " * file name: %s\n"
         " *\n"
@@ -87,8 +87,8 @@ usrc_create(const char *path, const char *filename, const char *generator) {
 U_CAPI FILE * U_EXPORT2
 usrc_createTextData(const char *path, const char *filename, const char *generator) {
     static const char *header=
-        "# Copyright (C) 1999-%s, International Business Machines\n"
-        "# Corporation and others.  All Rights Reserved.\n"
+        "# Copyright (C) 2016 and later: Unicode, Inc. and others.\n"
+        "# License & terms of use: http://www.unicode.org/copyright.html\n"
         "#\n"
         "# file name: %s\n"
         "#\n"

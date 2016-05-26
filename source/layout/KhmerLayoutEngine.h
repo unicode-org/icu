@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2016 - All Rights Reserved 
+ * Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html 
  *
  * This file is a modification of the ICU file IndicLayoutEngine.h
  * by Jens Herden and Javier Sola for Khmer language 

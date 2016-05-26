@@ -2,7 +2,8 @@
 .\"
 .\" genbrk.1: manual page for the genbrk utility
 .\"
-.\" Copyright (C) 2005-2006 International Business Machines Corporation and others
+.\" Copyright (C) 2016 and later: Unicode, Inc. and others.
+.\" License & terms of use: http://www.unicode.org/copyright.html
 .\"
 .TH GENBRK 1 "2 December 2005" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME

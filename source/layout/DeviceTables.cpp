@@ -1,7 +1,7 @@
 /*
  * @(#)DeviceTables.cpp 1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998 - 2006 - All Rights Reserved
+ * Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
  *
  */
 

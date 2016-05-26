@@ -1,7 +1,7 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2014, International Business Machines
-* Corporation and others.  All Rights Reserved.
+* Copyright (C) 2016 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
 **********************************************************************
 * Author: Alan Liu
 * Created: April 20, 2004

@@ -1,6 +1,6 @@
 /********************************************************************
- * Copyright (c) 2001-2009, International Business Machines
- * Corporation and others. All Rights Reserved.
+ * Copyright (C) 2016 and later: Unicode, Inc. and others.
+ * License & terms of use: http://www.unicode.org/copyright.html
  *********************************************************************
  *   This test program is intended for testing error conditions of the 
  *   transliterator APIs to make sure the exceptions are raised where

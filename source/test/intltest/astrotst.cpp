@@ -1,7 +1,7 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2016, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (C) 2016 and later: Unicode, Inc. and others.
+ * License & terms of use: http://www.unicode.org/copyright.html
  ********************************************************************/
 
 /* Test CalendarAstronomer for C++ */
