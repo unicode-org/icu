@@ -98,6 +98,6 @@ Contains the list of code points whose normalization has changed since Unicode V
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000-2002 IBM, Inc. and others.
+Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
 .SH SEE ALSO
 .BR pkgdata (8)
