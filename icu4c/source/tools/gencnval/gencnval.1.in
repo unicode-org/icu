@@ -87,6 +87,6 @@ normally installed, and it is available as a part of ICU source code.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000-2004 IBM, Inc. and others.
+Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
 .SH SEE ALSO
 .BR pkgdata (1)
