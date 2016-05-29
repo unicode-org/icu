@@ -29,7 +29,6 @@ import com.ibm.icu.text.DisplayContext.Type;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceBundleIterator;
 
 public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final ULocale locale;
@@ -94,6 +93,30 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     public static LocaleDisplayNames getInstance(ULocale locale, DisplayContext... contexts) {
         synchronized (cache) {
             return cache.get(locale, contexts);
+        }
+    }
+
+    private final class CapitalizationContextSink extends UResource.Sink {
+        boolean hasCapitalizationUsage = false;
+
+        @Override
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table contextsTable = value.getTable();
+            for (int i = 0; contextsTable.getKeyAndValue(i, key, value); ++i) {
+
+                CapitalizationContextUsage usage = contextUsageTypeMap.get(key.toString());
+                if (usage == null) { continue; };
+
+                int[] intVector = value.getIntVector();
+                if (intVector.length < 2) { continue; }
+
+                int titlecaseInt = (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)
+                        ? intVector[0] : intVector[1];
+                if (titlecaseInt == 0) { continue; }
+
+                capitalizationUsage[usage.ordinal()] = true;
+                hasCapitalizationUsage = true;
+            }
         }
     }
 
@@ -173,32 +196,14 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                 capitalization == DisplayContext.CAPITALIZATION_FOR_STANDALONE) {
             capitalizationUsage = new boolean[CapitalizationContextUsage.values().length]; // initialized to all false
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
-            UResourceBundle contextTransformsBundle = null;
+            CapitalizationContextSink sink = new CapitalizationContextSink();
             try {
-                contextTransformsBundle = (UResourceBundle)rb.getWithFallback("contextTransforms");
+                rb.getAllItemsWithFallback("contextTransforms", sink);
             }
             catch (MissingResourceException e) {
-                contextTransformsBundle = null; // probably redundant
+                // Silently ignore.  Not every locale has contextTransforms.
             }
-            if (contextTransformsBundle != null) {
-                UResourceBundleIterator ctIterator = contextTransformsBundle.getIterator();
-                while ( ctIterator.hasNext() ) {
-                    UResourceBundle contextTransformUsage = ctIterator.next();
-                    int[] intVector = contextTransformUsage.getIntVector();
-                    if (intVector.length >= 2) {
-                        String usageKey = contextTransformUsage.getKey();
-                        CapitalizationContextUsage usage = contextUsageTypeMap.get(usageKey);
-                        if (usage != null) {
-                            int titlecaseInt = (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
-                                    intVector[0]: intVector[1];
-                                    if (titlecaseInt != 0) {
-                                        capitalizationUsage[usage.ordinal()] = true;
-                                        needBrkIter = true;
-                                    }
-                        }
-                    }
-                }
-            }
+            needBrkIter = sink.hasCapitalizationUsage;
         }
         // Get a sentence break iterator if we will need it
         if (needBrkIter || capitalization == DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE) {
