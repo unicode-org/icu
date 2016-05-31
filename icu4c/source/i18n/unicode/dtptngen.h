@@ -518,7 +518,6 @@ private:
     UnicodeString decimal;
     DateTimeMatcher *skipMatcher;
     Hashtable *fAvailableFormatKeyHash;
-    UnicodeString hackPattern;
     UnicodeString emptyString;
     UChar fDefaultHourFormatChar;
 
@@ -534,8 +533,8 @@ private:
     };
 
     void initData(const Locale &locale, UErrorCode &status);
-    void addCanonicalItems();
-    void addICUPatterns(const Locale& locale, UErrorCode& status);
+    void addCanonicalItems(UErrorCode &status);
+    UnicodeString addICUPatterns(const Locale& locale, UErrorCode& status);
     void hackTimes(const UnicodeString& hackPattern, UErrorCode& status);
     void addCLDRData(const Locale& locale, UErrorCode& status);
     UDateTimePatternConflict addPatternWithSkeleton(const UnicodeString& pattern, const UnicodeString * skeletonToUse, UBool override, UnicodeString& conflictingPattern, UErrorCode& status);
