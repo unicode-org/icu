@@ -662,20 +662,23 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Indicates the currency match pattern used in {@link #getPatternForCurrencySpacing}.
      * @stable ICU 4.2
      */
-    public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
+    public static final int CURRENCY_SPC_CURRENCY_MATCH =
+            CurrencySpacingInfo.SpacingPattern.CURRENCY_MATCH.ordinal();
 
     /**
      * {@icu} Indicates the surrounding match pattern used in {@link
      * #getPatternForCurrencySpacing}.
      * @stable ICU 4.2
      */
-    public static final int CURRENCY_SPC_SURROUNDING_MATCH = 1;
+    public static final int CURRENCY_SPC_SURROUNDING_MATCH =
+            CurrencySpacingInfo.SpacingPattern.SURROUNDING_MATCH.ordinal();
 
     /**
      * {@icu} Indicates the insertion value used in {@link #getPatternForCurrencySpacing}.
      * @stable ICU 4.4
      */
-    public static final int CURRENCY_SPC_INSERT = 2;
+    public static final int CURRENCY_SPC_INSERT =
+            CurrencySpacingInfo.SpacingPattern.INSERT_BETWEEN.ordinal();
 
     private String[] currencySpcBeforeSym;
     private String[] currencySpcAfterSym;
@@ -976,8 +979,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
 
         // Get currency spacing data.
-        currencySpcBeforeSym = new String[3];
-        currencySpcAfterSym = new String[3];
         initSpacingInfo(info.getSpacingInfo());
     }
 
@@ -1064,12 +1065,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     private void initSpacingInfo(CurrencySpacingInfo spcInfo) {
-        currencySpcBeforeSym[CURRENCY_SPC_CURRENCY_MATCH] = spcInfo.beforeCurrencyMatch;
-        currencySpcBeforeSym[CURRENCY_SPC_SURROUNDING_MATCH] = spcInfo.beforeContextMatch;
-        currencySpcBeforeSym[CURRENCY_SPC_INSERT] = spcInfo.beforeInsert;
-        currencySpcAfterSym[CURRENCY_SPC_CURRENCY_MATCH] = spcInfo.afterCurrencyMatch;
-        currencySpcAfterSym[CURRENCY_SPC_SURROUNDING_MATCH] = spcInfo.afterContextMatch;
-        currencySpcAfterSym[CURRENCY_SPC_INSERT] = spcInfo.afterInsert;
+        currencySpcBeforeSym = spcInfo.getBeforeSymbols();
+        currencySpcAfterSym = spcInfo.getAfterSymbols();
     }
 
     /**

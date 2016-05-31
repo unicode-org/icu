@@ -136,7 +136,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             return map;
         }
 
-       @Override
+        @Override
         public Map<String, String> getUnitPatterns() {
             Map<String, String> result = new HashMap<String, String>();
 
@@ -183,24 +183,72 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
 
         @Override
         public CurrencySpacingInfo getSpacingInfo() {
-            ICUResourceBundle srb = rb.findWithFallback("currencySpacing");
-            if (srb != null) {
-                ICUResourceBundle brb = srb.findWithFallback("beforeCurrency");
-                ICUResourceBundle arb = srb.findWithFallback("afterCurrency");
-                if (arb != null && brb != null) {
-                    String beforeCurrencyMatch = brb.findStringWithFallback("currencyMatch");
-                    String beforeContextMatch = brb.findStringWithFallback("surroundingMatch");
-                    String beforeInsert = brb.findStringWithFallback("insertBetween");
-                    String afterCurrencyMatch = arb.findStringWithFallback("currencyMatch");
-                    String afterContextMatch = arb.findStringWithFallback("surroundingMatch");
-                    String afterInsert = arb.findStringWithFallback("insertBetween");
+            SpacingInfoSink sink = new SpacingInfoSink();
+            rb.getAllItemsWithFallback("currencySpacing", sink);
+            return sink.getSpacingInfo(fallback);
+        }
 
-                    return new CurrencySpacingInfo(
-                            beforeCurrencyMatch, beforeContextMatch, beforeInsert,
-                            afterCurrencyMatch, afterContextMatch, afterInsert);
+        private final class SpacingInfoSink extends UResource.Sink {
+            CurrencySpacingInfo spacingInfo = new CurrencySpacingInfo();
+            boolean hasBeforeCurrency = false;
+            boolean hasAfterCurrency = false;
+
+            /*
+             *  currencySpacing{
+             *      afterCurrency{
+             *          currencyMatch{"[:^S:]"}
+             *          insertBetween{" "}
+             *          surroundingMatch{"[:digit:]"}
+             *      }
+             *      beforeCurrency{
+             *          currencyMatch{"[:^S:]"}
+             *          insertBetween{" "}
+             *          surroundingMatch{"[:digit:]"}
+             *      }
+             *  }
+             */
+            @Override
+            public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+                UResource.Table spacingTypesTable = value.getTable();
+                for (int i = 0; spacingTypesTable.getKeyAndValue(i, key, value); ++i) {
+                    CurrencySpacingInfo.SpacingType type;
+                    if (key.contentEquals("beforeCurrency")) {
+                        type = CurrencySpacingInfo.SpacingType.BEFORE;
+                        hasBeforeCurrency = true;
+                    } else if (key.contentEquals("afterCurrency")) {
+                        type = CurrencySpacingInfo.SpacingType.AFTER;
+                        hasAfterCurrency = true;
+                    } else {
+                        continue;
+                    }
+
+                    UResource.Table patternsTable = value.getTable();
+                    for (int j = 0; patternsTable.getKeyAndValue(j, key, value); ++j) {
+                        CurrencySpacingInfo.SpacingPattern pattern;
+                        if (key.contentEquals("currencyMatch")) {
+                            pattern = CurrencySpacingInfo.SpacingPattern.CURRENCY_MATCH;
+                        } else if (key.contentEquals("surroundingMatch")) {
+                            pattern = CurrencySpacingInfo.SpacingPattern.SURROUNDING_MATCH;
+                        } else if (key.contentEquals("insertBetween")) {
+                            pattern = CurrencySpacingInfo.SpacingPattern.INSERT_BETWEEN;
+                        } else {
+                            continue;
+                        }
+
+                        spacingInfo.setSymbolIfNull(type, pattern, value.getString());
+                    }
                 }
             }
-            return fallback ? CurrencySpacingInfo.DEFAULT : null;
+
+            CurrencySpacingInfo getSpacingInfo(boolean fallback) {
+                if (hasBeforeCurrency && hasAfterCurrency) {
+                    return spacingInfo;
+                } else if (fallback) {
+                    return CurrencySpacingInfo.DEFAULT;
+                } else {
+                    return null;
+                }
+            }
         }
 
         private Map<String, String> _createSymbolMap() {
