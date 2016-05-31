@@ -72,7 +72,7 @@ class CompactDecimalDataCache {
     static class Data {
         long[] divisors;
         Map<String, DecimalFormat.Unit[]> units;
-        boolean fromLatin;
+        boolean fromFallback;
 
         Data(long[] divisors, Map<String, DecimalFormat.Unit[]> units)
         {
@@ -123,6 +123,7 @@ class CompactDecimalDataCache {
         private DataBundle dataBundle; // Where to save values when they are read
         private ULocale locale; // The locale we are traversing (for exception messages)
         private boolean isLatin; // Whether or not we are traversing the Latin table
+        private boolean isFallback; // Whether or not we are traversing the Latin table as fallback
 
         /*
          * NumberElements{              <-- top (numbering system table)
@@ -140,8 +141,8 @@ class CompactDecimalDataCache {
 
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean isRoot) {
-            // SPECIAL CASE: Skip root data while loading non-latn so that we fall back to latn then root.
-            if (!isLatin && isRoot) return;
+            // SPECIAL CASE: Don't consume root in the non-Latin numbering system
+            if (isRoot && !isLatin) { return; }
 
             UResource.Table patternsTable = value.getTable();
             for (int i1 = 0; patternsTable.getKeyAndValue(i1, key, value); ++i1) {
@@ -191,30 +192,27 @@ class CompactDecimalDataCache {
                     }
 
                     // SPECIAL CASE: RULES FOR WHETHER OR NOT TO CONSUME THIS TABLE:
-                    //   1) Don't consume any data if we're in Latin and it was already
-                    //      populated from before
-                    //   2) Don't consume longData if shortData was consumed from the non-Latin
+                    //   1) Don't consume longData if shortData was consumed from the non-Latin
                     //      locale numbering system
-                    //   3) Don't consume longData if this is the root bundle in Latin
-                    //      and shortData is already populated, perhaps from deeper in Latin
-                    if (isLatin
-                            && !destination.isEmpty()) {
+                    //   2) Don't consume longData for the first time if this is the root bundle and
+                    //      shortData is already populated from a more specific locale. Note that if
+                    //      both longData and shortData are both only in root, longData will be
+                    //      consumed since it is alphabetically before shortData in the bundle.
+                    if (isFallback
+                            && style == LONG_STYLE
+                            && !dataBundle.shortData.isEmpty()
+                            && !dataBundle.shortData.fromFallback) {
                         continue;
                     }
-                    if (isLatin
+                    if (isRoot
                             && style == LONG_STYLE
-                            && dataBundle.shortData.fromLatin) {
-                        continue;
-                    }
-                    if (isLatin
-                            && style == LONG_STYLE
-                            && isRoot
+                            && dataBundle.longData.isEmpty()
                             && !dataBundle.shortData.isEmpty()) {
                         continue;
                     }
 
-                    // Set the "fromLatin" flag on the data object
-                    destination.fromLatin = isLatin;
+                    // Set the "fromFallback" flag on the data object
+                    destination.fromFallback = isFallback;
 
                     // traverse into the table of powers of ten
                     UResource.Table powersOfTenTable = value.getTable();
@@ -284,11 +282,20 @@ class CompactDecimalDataCache {
         ICUResourceBundle r = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
                 ulocale);
         CompactDecimalDataSink sink = new CompactDecimalDataSink(dataBundle, ulocale);
+        sink.isFallback = false;
 
         // First load the number elements data from nsName if nsName is not Latin.
         if (!nsName.equals(LATIN_NUMBERING_SYSTEM)) {
             sink.isLatin = false;
-            r.getAllItemsWithFallback(NUMBER_ELEMENTS + "/" + nsName, sink);
+
+            try {
+                r.getAllItemsWithFallback(NUMBER_ELEMENTS + "/" + nsName, sink);
+            } catch (MissingResourceException e) {
+                // Silently ignore and use Latin
+            }
+
+            // Set the "isFallback" flag for when we read Latin
+            sink.isFallback = true;
         }
 
         // Now load Latin, which will fill in things that were left out from above.
