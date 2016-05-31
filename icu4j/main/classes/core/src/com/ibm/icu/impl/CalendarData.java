@@ -100,45 +100,7 @@ public class CalendarData {
             
         }       
     }
-    
-     /**
-     * Load data for calendar. Note, this object owns the resources...
-     * data is located in:   "calendar/key/set/contextKey/subKey"
-     * for example,  calendar/cyclicNameSets/years/format/abbreviated
-     *
-     * @param key Resource key to data
-     * @param set Resource key to data
-     * @param contextKey Resource key to data
-     * @param subKey Resource key to data
-     * @internal
-     */
-    public ICUResourceBundle get(String key, String set, String contextKey, String subKey) {
-        try {
-            return fBundle.getWithFallback("calendar/" + fMainType + "/" + key + "/" + set + "/" + contextKey + "/" + subKey);
-        } catch(MissingResourceException m) {
-            if(fFallbackType != null) {
-                return fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key + "/" + set + "/" + contextKey + "/" + subKey);
-            }
-            throw m;
-            
-        }       
-    }
-    
-   public String[] getStringArray(String key) {
-        return get(key).getStringArray();
-    }
 
-    public String[] getStringArray(String key, String subKey) {
-        return get(key, subKey).getStringArray();
-    }
-
-    public String[] getStringArray(String key, String contextKey, String subKey) {
-        return get(key, contextKey, subKey).getStringArray();
-    }
-    public String[] getEras(String subkey){
-        ICUResourceBundle bundle = get("eras/"+subkey);
-        return bundle.getStringArray();
-    }
     public String[] getDateTimePatterns(){
         ICUResourceBundle bundle = get("DateTimePatterns");
         ArrayList<String> list = new ArrayList<String>();
@@ -167,20 +129,6 @@ public class CalendarData {
     public String getDateTimePattern() {
         // this is a hack to get offset 8 from the dateTimePatterns array.
         return _getDateTimePattern(-1);
-    }
-    
-    /**
-     * Returns the date-time pattern by style where style is one of the style fields defined
-     * in DateFormat. If date-time patterns by style are not available, it returns what
-     * {@link #getDateTimePattern()} would return.
-     * @param style the style e.g DateFormat.LONG.
-     * @return the pattern, e.g {1}, {0}.
-     */
-    public String getDateTimePattern(int style) {
-        // mask away high order bits such as the DateFormat.RELATIVE bit.
-        // We do it this way to avoid making this class depend on DateFormat. It makes this
-        // code more brittle, but it is no more brittle than how we access patterns by style.
-        return _getDateTimePattern(style & 7);
     }
     
     private String _getDateTimePattern(int offset) {
@@ -221,10 +169,6 @@ public class CalendarData {
             }
         }
         return list.toArray(new String[list.size()]);
-    }
-
-    public ULocale getULocale() {
-        return fBundle.getULocale();
     }
 
     private ICUResourceBundle fBundle;
