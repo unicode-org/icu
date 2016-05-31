@@ -1,8 +1,8 @@
 /*
  *******************************************************************************
  *
- * Copyright (C) 2016 and later: Unicode, Inc. and others.
- * License & terms of use: http://www.unicode.org/copyright.html
+ *   Copyright (C) 1999-2007, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
  *   file name:  Layout.cpp
@@ -321,7 +321,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case IDM_HELP_ABOUTLAYOUTSAMPLE:
             MessageBox(hwnd, TEXT("Windows Layout Sample 0.1\n")
-                             TEXT("Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html\n")
+                             TEXT("Copyright (C) 1998-2005 By International Business Machines Corporation and others.\n")
                              TEXT("Author: Eric Mader"),
                        szAppName, MB_ICONINFORMATION | MB_OK);
             return 0;

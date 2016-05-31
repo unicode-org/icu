@@ -1,5 +1,5 @@
-Copyright (C) 2016 and later: Unicode, Inc. and others.
-License & terms of use: http://www.unicode.org/copyright.html
+Copyright (c) 2002-2010, International Business Machines Corporation and others. All Rights Reserved.
+
 IMPORTANT:
 
 This sample was originally intended as an exercise for the ICU Workshop (September 2000).

@@ -1,5 +1,4 @@
-Copyright (C) 2016 and later: Unicode, Inc. and others.
-License & terms of use: http://www.unicode.org/copyright.html
+Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
 
 The uconv command is an iconv(1)-like conversion / transcoding
 program. Please check its manual page, or run uconv -h, for help.

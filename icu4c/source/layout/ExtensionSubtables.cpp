@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
+ * (C) Copyright IBM Corp. 2008-2013 - All Rights Reserved
  *
  */
 

@@ -1,7 +1,7 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2016 and later: Unicode, Inc. and others.
- * License & terms of use: http://www.unicode.org/copyright.html
+ * Copyright (c) 2008-2011, International Business Machines Corporation and
+ * others. All Rights Reserved.
  ********************************************************************/
 //
 //  file:  regextxt.cpp

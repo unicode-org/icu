@@ -3,7 +3,7 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2016 and later: Unicode, Inc. and others. Corporation   *
+*   Copyright (C) 2002-2008 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */

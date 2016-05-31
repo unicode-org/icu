@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for Visual Age 5+)
-## Copyright (C) 2016 and later: Unicode, Inc. and others.
-## License & terms of use: http://www.unicode.org/copyright.html
+## Copyright (c) 1999-2010, International Business Machines Corporation and
+## others. All Rights Reserved.
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)

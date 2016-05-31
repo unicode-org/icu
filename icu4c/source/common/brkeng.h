@@ -1,6 +1,6 @@
 /**
  ************************************************************************************
- * Copyright (C) 2016 and later: Unicode, Inc. and others. Corporation and others. *
+ * Copyright (C) 2006-2012, International Business Machines Corporation and others. *
  * All Rights Reserved.                                                             *
  ************************************************************************************
  */

@@ -2,8 +2,7 @@
 .\"
 .\" gensprep.8: manual page for the gensprep utility
 .\"
-.\" Copyright (C) 2016 and later: Unicode, Inc. and others.
-.\" License & terms of use: http://www.unicode.org/copyright.html
+.\" Copyright (C) 2003 IBM, Inc. and others.
 .\"
 .TH gensprep 8 "18 March 2003" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
@@ -98,6 +97,6 @@ Contains the list of code points whose normalization has changed since Unicode V
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
+Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
 .BR pkgdata (8)

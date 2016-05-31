@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## MSYS with Microsoft Visual C++ compiler specific setup
-## Copyright (C) 2016 and later: Unicode, Inc. and others.
-## License & terms of use: http://www.unicode.org/copyright.html
+## Copyright (c) 2014, International Business Machines Corporation and
+## others. All Rights Reserved.
 
 # We install sbin tools into the same bin directory because
 # pkgdata needs some of the tools in sbin, and we can't always depend on

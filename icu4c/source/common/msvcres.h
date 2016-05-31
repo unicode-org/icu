@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// Copyright (c) 2003-2010 International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Used by common.rc and other .rc files.

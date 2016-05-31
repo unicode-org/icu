@@ -1,7 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html
+*   Copyright (C) 1999-2006,2013 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
