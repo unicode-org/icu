@@ -1,8 +1,7 @@
 /*
  * -*- c++ -*-
  *
- * Copyright (C) 2016 and later: Unicode, Inc. and others.
- * License & terms of use: http://www.unicode.org/copyright.html
+ * (C) Copyright IBM Corp. and others 2015 - All Rights Reserved
  *
  * Range checking
  *

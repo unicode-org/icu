@@ -1,8 +1,8 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2016 and later: Unicode, Inc. and others. and others.
-//  License & terms of use: http://www.unicode.org/copyright.html
+//  Copyright (C) 2002-2016 International Business Machines Corporation and others.
+//  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
 //  for processing a regular expression pattern into the compiled form that

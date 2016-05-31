@@ -1,8 +1,8 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html
+*   Copyright (C) 2000-2015, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
 *
@@ -39,8 +39,8 @@ static const char copyRight[] =
     "/* \n"
     " *******************************************************************************\n"
     " *\n"
-    " *   Copyright (C) 2016 and later: Unicode, Inc. and others.\n"
-    " *   License & terms of use: http://www.unicode.org/copyright.html\n"
+    " *   Copyright (C) International Business Machines\n"
+    " *   Corporation and others.  All Rights Reserved.\n"
     " *\n"
     " *******************************************************************************\n"
     " * $" "Source:  $ \n"

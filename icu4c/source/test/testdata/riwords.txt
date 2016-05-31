@@ -1,6 +1,6 @@
 ﻿#*******************************************************************************
-#* Copyright (C) 2016 and later: Unicode, Inc. and others.
-#* License & terms of use: http://www.unicode.org/copyright.html
+#* Copyright (C) 2003-2012, International Business Machines Corporation and    *
+#* others. All Rights Reserved.                                                *
 #*******************************************************************************
 # Sorted Thai word list used for testing the ThaiCollator class.
 # This list was taken from the Web: <http://www.links.nectec.or.th/itech/download.html>
@@ -16,7 +16,7 @@
 # COPYRIGHT AND PERMISSION NOTICE
 # 
 # Copyright (c) 2003 National Electronics and Computer Technology Center and others
-# License & terms of use: http://www.unicode.org/copyright.html
+# All rights reserved.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the

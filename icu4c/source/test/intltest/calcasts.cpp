@@ -1,7 +1,7 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (C) 2016 and later: Unicode, Inc. and others. 
- * License & terms of use: http://www.unicode.org/copyright.html
+ * Copyright (c) 2003-2013, International Business Machines Corporation 
+ * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
  * behavior of a calendar to a certain set of 'test cases', involving

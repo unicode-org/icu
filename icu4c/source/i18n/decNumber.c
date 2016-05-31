@@ -1,8 +1,7 @@
 /* ------------------------------------------------------------------ */
 /* Decimal Number arithmetic module                                   */
 /* ------------------------------------------------------------------ */
-/* Copyright (C) 2016 and later: Unicode, Inc. and others.            */
-/* License & terms of use: http://www.unicode.org/copyright.html      */
+/* Copyright (c) IBM Corporation, 2000-2014.  All rights reserved.    */
 /*                                                                    */
 /* This software is made available under the terms of the             */
 /* ICU License -- ICU 1.8.1 and later.                                */

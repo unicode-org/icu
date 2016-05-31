@@ -1,8 +1,8 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html
+*   Copyright (C) 2004-2007, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
 *   file name:  uset_imp.h

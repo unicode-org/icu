@@ -1,6 +1,6 @@
 ######################################################################
-# Copyright (C) 2016 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html
+# Copyright (C) 2007-2014, International Business Machines
+# Corporation and others.  All Rights Reserved.
 ######################################################################
 # This is an ICU-specific file with the same format as regular
 # tzdata time zone files, for consistent parsing by the tools that

@@ -2,8 +2,7 @@
 .\"
 .\" makeconv.1: manual page for the makeconv utility
 .\"
-.\" Copyright (C) 2016 and later: Unicode, Inc. and others.
-.\" License & terms of use: http://www.unicode.org/copyright.html
+.\" Copyright (C) 2000-2002 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
@@ -105,7 +104,7 @@ is set.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2016 and later: Unicode, Inc. and others.
+Copyright (C) 2000 IBM, Inc. and others.
 .SH SEE ALSO
 .BR convrtrs.txt (5) 
 .br

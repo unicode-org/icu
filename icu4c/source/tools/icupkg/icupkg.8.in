@@ -2,8 +2,7 @@
 .\"
 .\" icupkg.8: manual page for the icupkg utility
 .\"
-.\" Copyright (C) 2016 and later: Unicode, Inc. and others.
-.\" License & terms of use: http://www.unicode.org/copyright.html
+.\" Copyright (C) 2000-2006 IBM, Inc. and others.
 .\"
 .TH ICUPKG 8 "18 August 2006" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
@@ -198,7 +197,7 @@ George Rhoten
 .SH VERSION
 1.0
 .SH COPYRIGHT
-Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
+Copyright (C) 2006 IBM, Inc. and others.
 .SH SEE ALSO
 .BR pkgdata (1)
 .BR genrb (1)

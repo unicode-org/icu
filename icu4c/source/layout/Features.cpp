@@ -1,7 +1,7 @@
 /*
  * @(#)Features.cpp 1.4 00/03/15
  *
- * Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
+ * (C) Copyright IBM Corp. 1998-2015 - All Rights Reserved
  *
  */
 

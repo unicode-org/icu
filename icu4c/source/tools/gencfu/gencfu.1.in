@@ -2,8 +2,7 @@
 .\"
 .\" gencfu.1: manual page for the gencfu utility
 .\"
-.\" Copyright (C) 2016 and later: Unicode, Inc. and others.
-.\" License & terms of use: http://www.unicode.org/copyright.html
+.\" Copyright (C) 2012 International Business Machines Corporation and others
 .\"
 .TH GENCFU 1 "24 May 2009" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
@@ -89,4 +88,4 @@ The output data file to write.
 .SH VERSION
 1.0
 .SH COPYRIGHT
-Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
+Copyright (C) 2009 International Business Machines Corporation and others

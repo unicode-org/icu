@@ -1,6 +1,6 @@
 #**********************************************************************
-#* Copyright (C) 2016 and later: Unicode, Inc. and others. Corporation
-#* License & terms of use: http://www.unicode.org/copyright.html
+#* Copyright (C) 1999-2015, International Business Machines Corporation
+#* and others.  All Rights Reserved.
 #**********************************************************************
 #
 #   03/19/2001  weiv, schererm  Created

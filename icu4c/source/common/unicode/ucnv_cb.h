@@ -1,7 +1,7 @@
 /*
 **********************************************************************
-*   Copyright (C) 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html
+*   Copyright (C) 2000-2004, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv_cb.h:
  *  External APIs for the ICU's codeset conversion library

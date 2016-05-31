@@ -1,8 +1,8 @@
 
 /*
 **********************************************************************
-* Copyright (C) 2016 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html
+* Copyright (c) 2003-2014, International Business Machines
+* Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
 * Created: July 10 2003
@@ -1713,8 +1713,12 @@ int main(int argc, char *argv[]) {
     ofstream file(filename.c_str());
     if (file) {
         file << "//---------------------------------------------------------" << endl
-             << "// Copyright (C) 2016 and later: Unicode, Inc. and others." << endl
-             << "// License & terms of use: http://www.unicode.org/copyright.html" << endl
+             << "// Copyright (C) 2003";
+        if (thisYear > 2003) {
+            file << "-" << thisYear;
+        }
+        file << ", International Business Machines" << endl
+             << "// Corporation and others.  All Rights Reserved." << endl
              << "//---------------------------------------------------------" << endl
              << "// Build tool:  tz2icu" << endl
              << "// Build date:  " << asctime(now) /* << endl -- asctime emits CR */

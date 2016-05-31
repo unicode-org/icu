@@ -1,5 +1,5 @@
-Copyright (C) 2016 and later: Unicode, Inc. and others.
-License & terms of use: http://www.unicode.org/copyright.htmlustring: Unicode String Manipulation
+Copyright (c) 2002-2005, International Business Machines Corporation and others. All Rights Reserved.
+ustring: Unicode String Manipulation
 
 This sample demonstrates
          Using ICU to manipulate UnicodeString objects

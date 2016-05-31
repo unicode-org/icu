@@ -2,7 +2,7 @@
 /*
  * HanLayoutEngine.h: OpenType processing for Han fonts.
  *
- * Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html.
+ * (C) Copyright IBM Corp. 1998-2014 - All Rights Reserved.
  */
 
 #ifndef __HANLAYOUTENGINE_H
