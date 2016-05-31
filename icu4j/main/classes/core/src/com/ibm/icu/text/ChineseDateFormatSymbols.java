@@ -8,7 +8,7 @@ package com.ibm.icu.text;
 
 import java.util.Locale;
 
-import com.ibm.icu.impl.CalendarData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.ULocale;
@@ -103,8 +103,9 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      * @deprecated ICU 50
      */
     @Deprecated
-    protected void initializeData(ULocale loc, CalendarData calData) {
-        super.initializeData(loc, calData);
+    @Override
+    protected void initializeData(ULocale loc, ICUResourceBundle b, String calendarType) {
+        super.initializeData(loc, b, calendarType);
         initializeIsLeapMonth();
     }
 
