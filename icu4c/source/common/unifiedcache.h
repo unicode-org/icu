@@ -140,7 +140,7 @@ class LocaleCacheKey : public CacheKey<T> {
            : CacheKey<T>(other), fLoc(other.fLoc) { }
    virtual ~LocaleCacheKey() { }
    virtual int32_t hashCode() const {
-       return 37 *CacheKey<T>::hashCode() + fLoc.hashCode();
+       return (int32_t)(37u * (uint32_t)CacheKey<T>::hashCode() + (uint32_t)fLoc.hashCode());
    }
    virtual UBool operator == (const CacheKeyBase &other) const {
        // reflexive
