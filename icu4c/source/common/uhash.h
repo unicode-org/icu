@@ -680,8 +680,8 @@ uhash_equals(const UHashtable* hash1, const UHashtable* hash2);
 U_NAMESPACE_BEGIN
 
 /**
- * \class LocalUResourceBundlePointer
- * "Smart pointer" class, closes a UResourceBundle via ures_close().
+ * \class LocalUHashtablePointer
+ * "Smart pointer" class, closes a UHashtable via uhash_close().
  * For most methods see the LocalPointerBase base class.
  *
  * @see LocalPointerBase
