@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.dev.test.stringprep;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.StringPrepParseException;
@@ -15,10 +17,6 @@ import com.ibm.icu.text.StringPrepParseException;
  *
  */
 public class TestStringPrepProfiles extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new TestStringPrepProfiles().run(args);
-    }
-    
     /*
      * The format of the test cases should be the following:
      * {
@@ -135,6 +133,7 @@ public class TestStringPrepProfiles extends TestFmwk {
         return -1;
     }
     
+    @Test
     public void TestProfiles() {
         String profileName = null;
         StringPrep sprep = null;

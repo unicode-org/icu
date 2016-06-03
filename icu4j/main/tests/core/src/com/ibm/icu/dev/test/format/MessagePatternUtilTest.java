@@ -14,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.MessagePatternUtil;
 import com.ibm.icu.text.MessagePatternUtil.ArgNode;
@@ -28,10 +30,6 @@ import com.ibm.icu.text.MessagePatternUtil.VariantNode;
  * by building parallel trees of nodes and verifying that they match.
  */
 public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new MessagePatternUtilTest().run(args);
-    }
-
     // The following nested "Expect..." classes are used to build
     // a tree structure parallel to what the MessagePatternUtil class builds.
     // These nested test classes are not static so that they have access to TestFmwk methods.
@@ -272,6 +270,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
     // The actual tests start here. ---------------------------------------- ***
     // Sample message strings are mostly from the MessagePatternUtilDemo.
 
+    @Test
     public void TestHello() {
         // No syntax.
         MessageNode msg = MessagePatternUtil.buildMessageNode("Hello!");
@@ -279,6 +278,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         expect.checkMatches(msg);
     }
 
+    @Test
     public void TestHelloWithApos() {
         // Literal ASCII apostrophe.
         MessageNode msg = MessagePatternUtil.buildMessageNode("Hel'lo!");
@@ -286,6 +286,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         expect.checkMatches(msg);
     }
 
+    @Test
     public void TestHelloWithQuote() {
         // Apostrophe starts quoted literal text.
         MessageNode msg = MessagePatternUtil.buildMessageNode("Hel'{o!");
@@ -300,6 +301,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         expect.checkMatches(msg);
     }
 
+    @Test
     public void TestNoneArg() {
         // Numbered argument.
         MessageNode msg = MessagePatternUtil.buildMessageNode("abc{0}def");
@@ -319,6 +321,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         expect.checkMatches(msg);
     }
 
+    @Test
     public void TestSimpleArg() {
         MessageNode msg = MessagePatternUtil.buildMessageNode("a'{bc''de'f{0,number,g'hi''jk'l#}");
         ExpectMessageNode expect = new ExpectMessageNode().
@@ -326,6 +329,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         expect.checkMatches(msg);
     }
 
+    @Test
     public void TestSelectArg() {
         MessageNode msg = MessagePatternUtil.buildMessageNode(
                 "abc{2, number}ghi{3, select, xx {xxx} other {ooo}} xyz");
@@ -340,6 +344,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         expect.checkMatches(msg);
     }
 
+    @Test
     public void TestPluralArg() {
         // Plural with only keywords.
         MessageNode msg = MessagePatternUtil.buildMessageNode(
@@ -397,6 +402,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
     }
 
 
+    @Test
     public void TestSelectOrdinalArg() {
         MessageNode msg = MessagePatternUtil.buildMessageNode(
                 "abc{num, selectordinal, offset:17 =0{null} few{fff} other {oooo}}xyz");
@@ -412,6 +418,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         expect.checkMatches(msg);
     }
 
+    @Test
     public void TestChoiceArg() {
         MessageNode msg = MessagePatternUtil.buildMessageNode(
                 "a_{0,choice,-∞ #-inf|  5≤ five | 99 # ninety'|'nine  }_z");
@@ -427,6 +434,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         expect.checkMatches(msg);
     }
 
+    @Test
     public void TestComplexArgs() {
         MessageNode msg = MessagePatternUtil.buildMessageNode(
                 "I don't {a,plural,other{w'{'on't #'#'}} and "+
@@ -461,6 +469,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         return ((TextNode)v.getMessage().getContents().get(0)).getText();
     }
 
+    @Test
     public void TestPluralVariantsByType() {
         MessageNode msg = MessagePatternUtil.buildMessageNode(
                 "{p,plural,a{A}other{O}=4{iv}b{B}other{U}=2{ii}}");
@@ -505,6 +514,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         assertEquals("keywordVariants[1] text", "B", variantText(v));
     }
 
+    @Test
     public void TestSelectVariantsByType() {
         MessageNode msg = MessagePatternUtil.buildMessageNode(
                 "{s,select,a{A}other{O}b{B}other{U}}");

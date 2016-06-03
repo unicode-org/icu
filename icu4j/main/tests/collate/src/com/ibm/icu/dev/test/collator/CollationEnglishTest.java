@@ -14,15 +14,14 @@ package com.ibm.icu.dev.test.collator;
  
 import java.util.Locale;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
  
 public class CollationEnglishTest extends TestFmwk{
-    public static void main(String[] args) throws Exception{
-        new CollationEnglishTest().run(args);
-    }
-    
     private static char[][] testSourceCases = {
         {0x0061 /* 'a' */, 0x0062 /* 'b' */},
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x002D /* '-' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},
@@ -242,11 +241,14 @@ public class CollationEnglishTest extends TestFmwk{
     
     public CollationEnglishTest() {
     }
-    protected void init()throws Exception{
+    
+    @Before
+    public void init()throws Exception {
         myCollation = Collator.getInstance(Locale.ENGLISH);
     }
     
     //performs test with strength PRIMARY
+    @Test
     public void TestPrimary() {
         int i;
         myCollation.setStrength(Collator.PRIMARY);
@@ -256,6 +258,7 @@ public class CollationEnglishTest extends TestFmwk{
     }
     
     //perform test with strength SECONDARY
+    @Test
     public void TestSecondary() {
         int i;
         myCollation.setStrength(Collator.SECONDARY);
@@ -281,6 +284,7 @@ public class CollationEnglishTest extends TestFmwk{
     }
     
     //perform test with strength TERTIARY
+    @Test
     public void TestTertiary() {
         int i = 0;
         myCollation.setStrength(Collator.TERTIARY);

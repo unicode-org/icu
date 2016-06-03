@@ -8,8 +8,12 @@
 
 package com.ibm.icu.dev.test.serializable;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -18,11 +22,13 @@ import com.ibm.icu.util.VersionInfo;
  * a CoverageTest w/ a non-null path, which tells it to write the data.
  * 
  */
-public class SerializableWriter extends CoverageTest
+public class SerializableWriter
 {
+    String path;
+    
     public SerializableWriter(String path)
     {
-        super(path);
+        this.path = path;
     }
     
     private static String folderName()
@@ -50,7 +56,7 @@ public class SerializableWriter extends CoverageTest
         return result.toString();
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
         String outDir = null;
         if (args.length == 0) {
@@ -59,9 +65,27 @@ public class SerializableWriter extends CoverageTest
         } else {
             outDir = args[0] + "/" + folderName();
         }
-        CoverageTest test = new SerializableWriter(outDir);
+        SerializableWriter writer = new SerializableWriter(outDir);
         
-        test.run(args);
-        
+        writer.serialize();
+    }
+    
+    public void serialize() throws IOException {
+        File outDir = new File(this.path);
+        if (!outDir.exists()) {
+            outDir.mkdirs();
+        }
+
+        List<String> classList = SerializableTestUtility.getSerializationClassList(this);
+        for (String className : classList) {
+            Handler classHandler = SerializableTestUtility.getHandler(className);
+            if (classHandler == null) {
+                System.out.println("No Handler - Skipping Class: " + className);
+                continue;
+            }
+            Object[] testObjects = classHandler.getTestObjects();
+            File oof = new File(this.path, className + ".dat");
+            SerializableTestUtility.serializeObjects(oof, testObjects);
+        }
     }
 }

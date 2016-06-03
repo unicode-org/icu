@@ -16,6 +16,8 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.util.ULocale;
@@ -24,14 +26,10 @@ import com.ibm.icu.util.ULocale;
  * API Test the RuleBasedBreakIterator class
  */
 public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
-    
-    public static void main(String[] args) throws Exception {
-        new RBBIAPITest().run(args);
-    }
-    
     /**
      * Tests clone() and equals() methods of RuleBasedBreakIterator         
      **/
+    @Test
     public void TestCloneEquals() {
         RuleBasedBreakIterator bi1 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault()); 
         RuleBasedBreakIterator biequal = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault()); 
@@ -74,6 +72,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Tests toString() method of RuleBasedBreakIterator
      **/
+    @Test
     public void TestToString() {
         RuleBasedBreakIterator bi1 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault()); 
         RuleBasedBreakIterator bi2 = (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.getDefault());
@@ -90,6 +89,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Tests the method hashCode() of RuleBasedBreakIterator
      **/
+    @Test
     public void TestHashCode() {
         RuleBasedBreakIterator bi1 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault()); 
         RuleBasedBreakIterator bi3 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault()); 
@@ -116,6 +116,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     /**
       * Tests the methods getText() and setText() of RuleBasedBreakIterator
       **/
+    @Test
     public void TestGetSetText() {
         logln("Testing getText setText ");
         String str1 = "first string.";
@@ -159,6 +160,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
       *   TODO:  Most of this test should be retired, rule behavior is much better covered by
       *          TestExtended, which is also easier to understand and maintain.
       **/
+    @Test
     public void TestFirstNextFollowing() {
         int p, q;
         String testString = "This is a word break. Isn't it? 2.25";
@@ -291,6 +293,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Testing the methods lastt(), previous(), and preceding() of RuleBasedBreakIterator
      **/
+    @Test
     public void TestLastPreviousPreceding() {
         int p, q;
         String testString = "This is a word break. Isn't it? 2.25 dollars";
@@ -366,6 +369,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Tests the method IsBoundary() of RuleBasedBreakIterator
      **/
+    @Test
     public void TestIsBoundary() {
         String testString1 = "Write here. \u092d\u0301\u0930\u0924 \u0938\u0941\u0902\u0926\u0930 a\u0301u";
         RuleBasedBreakIterator charIter1 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault());
@@ -381,6 +385,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      *  Tests the rule status return value constants
      */
+    @Test
     public void TestRuleStatus() {
         BreakIterator bi = BreakIterator.getWordInstance(ULocale.ENGLISH);
         
@@ -418,7 +423,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     //---------------------------------------------
     
     /* Internal subroutine used by TestIsBoundary() */ 
-    public void doBoundaryTest(BreakIterator bi, String text, int[] boundaries) {
+    private void doBoundaryTest(BreakIterator bi, String text, int[] boundaries) {
         logln("testIsBoundary():");
         int p = 0;
         boolean isB;
@@ -437,7 +442,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     }
     
     /*Internal subroutine used for comparision of expected and acquired results */
-    public void doTest(String testString, int start, int gotoffset, int expectedOffset, String expectedString) {
+    private void doTest(String testString, int start, int gotoffset, int expectedOffset, String expectedString) {
         String selected;
         String expected = expectedString;
         if (gotoffset != expectedOffset)

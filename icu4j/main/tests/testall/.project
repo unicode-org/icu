@@ -3,6 +3,13 @@
 	<name>icu4j-testall</name>
 	<comment></comment>
 	<projects>
+		<project>icu4j-charset-tests</project>
+		<project>icu4j-collate-tests</project>
+		<project>icu4j-core-tests</project>
+		<project>icu4j-localespi-tests</project>
+		<project>icu4j-packaging-tests</project>
+		<project>icu4j-test-framework</project>
+		<project>icu4j-translit-tests</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

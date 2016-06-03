@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.TrieMap.Style;
 import com.ibm.icu.dev.util.Timer;
@@ -37,22 +40,21 @@ public class TrieMapTest extends TestFmwk {
     private Map<String, Integer> unicodeTestMap = new HashMap<String, Integer>();
     private boolean useSmallList = true;
 
-    private Timer t = new Timer();
-    private DecimalFormat nf = t.getNumberFormat();
-    private DecimalFormat pf = t.getPercentFormat();
+    private static Timer t = new Timer();
+    private static DecimalFormat nf = t.getNumberFormat();
+    private static DecimalFormat pf = t.getPercentFormat();
     {
         pf.setMaximumFractionDigits(0);
     }
 
-    @Override
-    protected void init() throws Exception {
-        super.init();
+    @Before
+    public void init() throws Exception {
         if (unicodeTestMap.size() == 0) {
-            if (getInclusion() < 5) {
+            if (TestFmwk.getExhaustiveness() < 5) {
                 logln("\tShort version, timing for 1s:\t to get more accurate figures and test for reasonable times, use -e5 or more");
                 t.setTimingPeriod(1*Timer.SECONDS);
             } else {
-                int seconds = getInclusion();
+                int seconds = TestFmwk.getExhaustiveness();
                 logln("\tExhaustive version, timing for " + seconds + "s");
                 t.setTimingPeriod(seconds*Timer.SECONDS);
                 useSmallList = false;
@@ -102,10 +104,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
-    public static void main(String[] args) {
-        new TrieMapTest().run(args);
-    }
-
+    @Test
     public void TestByteConversion() {
         byte bytes[] = new byte[200];
         for (Entry<String, Integer> entry : unicodeTestMap.entrySet()) {
@@ -119,6 +118,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestGet() {
         checkGet(unicodeTestMap, TrieMap.Style.BYTES);
         checkGet(unicodeTestMap, TrieMap.Style.CHARS);
@@ -143,6 +143,7 @@ public class TrieMapTest extends TestFmwk {
         }        
     }
 
+    @Test
     public void TestTimeIteration() {
         long comparisonTime = timeIteration(unicodeTestMap, 0, null, 0);
         timeIteration(unicodeTestMap, comparisonTime, null, 0);
@@ -195,6 +196,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestContents() {
         checkContents(unicodeTestMap, Style.BYTES);
         checkContents(unicodeTestMap, Style.CHARS);
@@ -231,6 +233,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSearch() {
         checkSearch(Style.BYTES);
         checkSearch(Style.CHARS);
@@ -278,6 +281,7 @@ public class TrieMapTest extends TestFmwk {
         //        );
     }
 
+    @Test
     public void TestTimeBuilding() {
         long comparisonTime = timeBuilding(unicodeTestMap, 0, null, Option.SMALL, 0);
         timeBuilding(unicodeTestMap, comparisonTime, null, Option.SMALL, 0);
@@ -330,6 +334,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSize() {
         int size = checkSize(0, null, Option.SMALL, 0);
         checkSize(size, Style.BYTES, Option.SMALL, 0.20);
@@ -366,6 +371,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestTimeGet() {
         HashSet<String> keySet = new HashSet<String>(unicodeTestMap.keySet());
         ULocale[] locales = ULocale.getAvailableLocales();

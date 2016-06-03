@@ -7,6 +7,9 @@
 
 package com.ibm.icu.dev.test.shaping;
 
+import org.junit.Ignore;
+import org.junit.Test;
+
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
 
@@ -14,11 +17,18 @@ import com.ibm.icu.text.ArabicShapingException;
  * Interactive test for Arabic shaping.
  * Invoke from a command line passing args and strings.  Use '-help' to see description of arguments.
  */
+// TODO(junit): wasn't running before - needs to be fixed
 public class ArabicShapingTest{
     private static final int COPY = 0;
     private static final int INPLACE = 1;
     private static final int STRING = 2;
 
+    // TODO(junit): marked with a test to keep from failing during ant run
+    @Ignore
+    @Test
+    public void dummyTest() {
+    }
+    
     public static final void main(String[] args) {
         int testtype = COPY;
         int options = 0;

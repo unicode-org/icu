@@ -43,20 +43,18 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 
 public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new MessageRegression().run(args);
-    }
-
     /* @bug 4074764
      * Null exception when formatting pattern with MessageFormat
      * with no parameters.
      */
+    @Test
     public void Test4074764() {
         String[] pattern = {"Message without param",
         "Message with param:{0}",
@@ -119,6 +117,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4031438
      * More robust message formats.
      */
+    @Test
     public void Test4031438() {
         String pattern1 = "Impossible {1} has occurred -- status code is {0} and message is {2}.";
         String pattern2 = "Double '' Quotes {0} test and quoted '{1}' test plus 'other {2} stuff'.";
@@ -161,6 +160,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
             warnln("Exception when formatting in bug 4031438. "+foo.getMessage());
         }
     }
+    @Test
     public void Test4052223()
     {
         ParsePosition pos = new ParsePosition(0);
@@ -198,6 +198,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4104976
      * ChoiceFormat.equals(null) throws NullPointerException
      */
+    @Test
     public void Test4104976()
     {
         double[] limits = {1, 20};
@@ -214,6 +215,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      * ChoiceFormat.ctor(double[], String[]) doesn't check
      * whether lengths of input arrays are equal.
      */
+    @Test
     public void Test4106659()
     {
         double[] limits = {1, 2, 3};
@@ -233,6 +235,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      * This is not a bug, added javadoc to emphasize the use of limit
      * array must be in ascending order.
      */
+    @Test
     public void Test4106660()
     {
         double[] limits = {3, 1, 2};
@@ -247,6 +250,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4111739
      * MessageFormat is incorrectly serialized/deserialized.
      */
+    @Test
     public void Test4111739()
     {
         MessageFormat format1 = null;
@@ -287,6 +291,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4114743
      * MessageFormat.applyPattern allows illegal patterns.
      */
+    @Test
     public void Test4114743()
     {
         String originalPattern = "initial pattern";
@@ -304,6 +309,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4116444
      * MessageFormat.parse has different behavior in case of null.
      */
+    @Test
     public void Test4116444()
     {
         String[] patterns = {"", "one", "{0,date,short}"};
@@ -340,6 +346,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4114739 (FIX and add javadoc)
      * MessageFormat.format has undocumented behavior about empty format objects.
      */
+    @Test
     public void Test4114739()
     {
 
@@ -363,6 +370,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4113018
      * MessageFormat.applyPattern works wrong with illegal patterns.
      */
+    @Test
     public void Test4113018()
     {
         String originalPattern = "initial pattern";
@@ -381,6 +389,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4106661
      * ChoiceFormat is silent about the pattern usage in javadoc.
      */
+    @Test
     public void Test4106661()
     {
         ChoiceFormat fmt = new ChoiceFormat(
@@ -401,6 +410,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4094906
      * ChoiceFormat should accept \u221E as eq. to INF.
      */
+    @Test
     public void Test4094906()
     {
         ChoiceFormat fmt = new ChoiceFormat(
@@ -420,6 +430,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4118592
      * MessageFormat.parse fails with ChoiceFormat.
      */
+    @Test
     public void Test4118592()
     {
         MessageFormat mf = new MessageFormat("");
@@ -439,6 +450,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4118594
      * MessageFormat.parse fails for some patterns.
      */
+    @Test
     public void Test4118594()
     {
         MessageFormat mf = new MessageFormat("{0}, {0}, {0}");
@@ -465,6 +477,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4105380
      * When using ChoiceFormat, MessageFormat is not good for I18n.
      */
+    @Test
     public void Test4105380()
     {
         String patternText1 = "The disk \"{1}\" contains {0}.";
@@ -483,6 +496,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4120552
      * MessageFormat.parse incorrectly sets errorIndex.
      */
+    @Test
     public void Test4120552()
     {
         MessageFormat mf = new MessageFormat("pattern");
@@ -508,6 +522,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      * This is actually a problem in ChoiceFormat; it doesn't
      * understand single quotes.
      */
+    @Test
     public void Test4142938() {
         String pat = "''Vous'' {0,choice,0#n''|1#}avez s\u00E9lectionne\u00E9 " + 
             "{0,choice,0#aucun|1#{0}} client{0,choice,0#s|1#|2#s} " + 
@@ -548,6 +563,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      * pattern characters '|', '#', '<', and '\u2264'.  Two quotes in a row
      * is a quote literal.
      */
+    @Test
     public void TestChoicePatternQuote() {
         String[] DATA = {
             // Pattern                  0 value           1 value
@@ -582,6 +598,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      * MessageFormat.equals(null) throws a NullPointerException.  The JLS states
      * that it should return false.
      */
+    @Test
     public void Test4112104() {
         MessageFormat format = new MessageFormat("");
         try {
@@ -600,6 +617,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      * @bug 4169959
      * MessageFormat does not format null objects. CANNOT REPRODUCE THIS BUG.
      */
+    @Test
     public void Test4169959() {
         // This works
         logln(MessageFormat.format("This will {0}", new Object[]{"work"}));
@@ -608,6 +626,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         logln(MessageFormat.format("This will {0}", new Object[]{ null }));
     }
 
+    @Test
     public void test4232154() {
         boolean gotException = false;
         try {
@@ -626,6 +645,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
+    @Test
     public void test4293229() {
         MessageFormat format = new MessageFormat("'''{'0}'' '''{0}'''");
         Object[] args = { null };
@@ -639,6 +659,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
      
     // This test basically ensures that the tests defined above also work with
     // valid named arguments.
+    @Test
     public void testBugTestsWithNamesArguments() {
         
       { // Taken from Test4031438().
@@ -858,6 +879,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestSerialization() {
         MessageFormat format1 = null;
         MessageFormat format2 = null;

@@ -48,7 +48,7 @@ import com.ibm.icu.util.ULocale;
  * 
  * @author rocketman
  */
-public class NumberFormatTestTuple {
+public class NumberFormatTestData {
     
     /**
      * The locale.

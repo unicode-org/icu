@@ -24,7 +24,7 @@ import com.ibm.icu.util.SimpleTimeZone;
  * A base class for classes that test individual Calendar subclasses.
  * Defines various useful utility methods and constants
  */
-public class CalendarTest extends TestFmwk {
+public class CalendarTestFmwk extends TestFmwk {
     
     // Constants for use by subclasses, solely to save typing
     public final static int SUN = Calendar.SUNDAY;
@@ -70,7 +70,7 @@ public class CalendarTest extends TestFmwk {
      * makes sure that the time-to-fields and fields-to-time calculations work
      * correnctly for the values in each test case.
      */
-    public void doTestCases(TestCase[] cases, Calendar cal)
+    protected void doTestCases(TestCase[] cases, Calendar cal)
     {
         cal.setTimeZone(UTC);
         
@@ -153,7 +153,7 @@ public class CalendarTest extends TestFmwk {
      * @param roll  <code>true</code> or <code>ROLL</code> to test the <code>roll</code> method;
      *              <code>false</code> or <code>ADD</code> to test the <code>add</code method
      */
-    public void doRollAdd(boolean roll, Calendar cal, int[][] tests)
+    protected void doRollAdd(boolean roll, Calendar cal, int[][] tests)
     {
         String name = roll ? "rolling" : "adding";
         
@@ -220,7 +220,7 @@ public class CalendarTest extends TestFmwk {
      * @param testDuration if positive, the number of days to be tested.
      * If negative, the number of seconds to run the test.
      */
-    public void doLimitsTest(Calendar cal, int[] fieldsToTest,
+    protected void doLimitsTest(Calendar cal, int[] fieldsToTest,
                                 Date startDate, int testDuration) {
         GregorianCalendar greg = new GregorianCalendar();
         greg.setTime(startDate);
@@ -340,8 +340,8 @@ public class CalendarTest extends TestFmwk {
     /**
      * doLimitsTest with default test duration
      */
-    public void doLimitsTest(Calendar cal, int[] fieldsToTest, Date startDate) {
-        int testTime = getInclusion() <= 5 ? -3 : -120; // in seconds
+    protected void doLimitsTest(Calendar cal, int[] fieldsToTest, Date startDate) {
+        int testTime = TestFmwk.getExhaustiveness() <= 5 ? -3 : -120; // in seconds
         doLimitsTest(cal, fieldsToTest, startDate, testTime);
     }
     
@@ -351,7 +351,7 @@ public class CalendarTest extends TestFmwk {
      * @param cal The calendar instance to be tested.
      * @param leapMonth true if the calendar system has leap months
      */
-    public void doTheoreticalLimitsTest(Calendar cal, boolean leapMonth) {
+    protected void doTheoreticalLimitsTest(Calendar cal, boolean leapMonth) {
         int nDOW = cal.getMaximum(Calendar.DAY_OF_WEEK);
         int maxDOY = cal.getMaximum(Calendar.DAY_OF_YEAR);
         int lmaxDOW = cal.getLeastMaximum(Calendar.DAY_OF_YEAR);

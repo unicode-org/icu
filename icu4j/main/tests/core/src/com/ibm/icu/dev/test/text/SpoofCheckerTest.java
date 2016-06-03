@@ -22,6 +22,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
@@ -36,11 +38,6 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
 public class SpoofCheckerTest extends TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new SpoofCheckerTest().run(args);
-    }
-
     /*
      * Identifiers for verifying that spoof checking is minimally alive and working.
      */
@@ -69,6 +66,7 @@ public class SpoofCheckerTest extends TestFmwk {
     /*
      * Test basic constructor.
      */
+    @Test
     public void TestUSpoof() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         if (sc == null) {
@@ -79,6 +77,7 @@ public class SpoofCheckerTest extends TestFmwk {
     /*
      * Test build from source rules.
      */
+    @Test
     public void TestOpenFromSourceRules() {
         if (TestUtil.getJavaVendor() == JavaVendor.IBM && TestUtil.getJavaVersion() == 5) {
             // Note: IBM Java 5 has a bug reading a large UTF-8 text contents
@@ -166,6 +165,7 @@ public class SpoofCheckerTest extends TestFmwk {
     /*
      * Set & Get Check Flags
      */
+    @Test
     public void TestGetSetChecks1() {
         SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.ALL_CHECKS).build();
         int t;
@@ -186,6 +186,7 @@ public class SpoofCheckerTest extends TestFmwk {
     /*
      * get & setAllowedChars
      */
+    @Test
     public void TestGetSetAllowedChars() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         UnicodeSet us;
@@ -201,6 +202,7 @@ public class SpoofCheckerTest extends TestFmwk {
     /*
      * get & set Checks
      */
+    @Test
     public void TestGetSetChecks() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         int checks;
@@ -226,6 +228,7 @@ public class SpoofCheckerTest extends TestFmwk {
     /*
      * AllowedLocales
      */
+    @Test
     public void TestAllowedLocales() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         Set<ULocale> allowedLocales = null;
@@ -284,6 +287,7 @@ public class SpoofCheckerTest extends TestFmwk {
     /*
      * AllowedChars set/get the UnicodeSet of allowed characters.
      */
+    @Test
     public void TestAllowedChars() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         UnicodeSet set;
@@ -313,6 +317,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", SpoofChecker.WHOLE_SCRIPT_CONFUSABLE, result.checks);
     }
 
+    @Test
     public void TestCheck() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
@@ -339,6 +344,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", 0, result.checks);
     }
 
+    @Test
     public void TestAreConfusable1() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         int checkResults;
@@ -352,6 +358,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", SpoofChecker.SINGLE_SCRIPT_CONFUSABLE, checkResults);
     }
 
+    @Test
     public void TestGetSkeleton() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         String dest;
@@ -368,6 +375,7 @@ public class SpoofCheckerTest extends TestFmwk {
     /**
      * IntlTestSpoof tests for USpoofDetector
      */
+    @Test
     public void TestSpoofAPI() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         String s = "xyz";  // Many latin ranges are whole-script confusable with other scripts.
@@ -390,6 +398,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", dest, "lllOO");
     }
 
+    @Test
     public void TestSkeleton() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         checkSkeleton(sc, "TestSkeleton");
@@ -468,6 +477,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals(testName + " test at line " + lineNumberOfTest + " :  Expected (escaped): " + expected, uExpected, actual);
     }
 
+    @Test
     public void TestAreConfusable() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         String s1 = "A long string that will overflow stack buffers.  A long string that will overflow stack buffers. "
@@ -477,6 +487,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", SpoofChecker.SINGLE_SCRIPT_CONFUSABLE, sc.areConfusable(s1, s2));
     }
 
+    @Test
     public void TestInvisible() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         String s = Utility.unescape("abcd\\u0301ef");
@@ -500,6 +511,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", 0, result.position);
     }
 
+    @Test
     public void TestRestrictionLevel() {
         Object[][] tests = {
                 {"aγ♥", RestrictionLevel.UNRESTRICTIVE},
@@ -536,6 +548,7 @@ public class SpoofCheckerTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestMixedNumbers() {
         Object[][] tests = {
                 {"1", "[0]"},
@@ -559,6 +572,7 @@ public class SpoofCheckerTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestIdentifierInfo() {
 //        contains(BitSet, BitSet)
         BitSet bitset12 = IdentifierInfo.set(new BitSet(), UScript.LATIN, UScript.HANGUL);
@@ -623,6 +637,7 @@ public class SpoofCheckerTest extends TestFmwk {
 //        setIdentifierProfile(UnicodeSet)
     }
     
+    @Test
     public void TestBug11635() {
         // The bug was an error in iterating through supplementary characters in IdentifierInfo.
         //  The three supplemental chars in the string are "123" from the mathematical bold digit range.
@@ -634,6 +649,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", RestrictionLevel.SINGLE_SCRIPT_RESTRICTIVE, idInfo.getRestrictionLevel());
     }
 
+    @Test
     public void TestComparator() {
         Random random = new Random(0);
         for (int i = 0; i < 100; ++i) {
@@ -716,6 +732,7 @@ public class SpoofCheckerTest extends TestFmwk {
 
     // Verify that each item from the Unicode confusables.txt file
     // transforms into the expected skeleton.
+    @Test
     public void testConfData() {
         if (TestUtil.getJavaVendor() == JavaVendor.IBM && TestUtil.getJavaVersion() == 5) {
             // Note: IBM Java 5 has a bug reading a large UTF-8 text contents
@@ -796,6 +813,7 @@ public class SpoofCheckerTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestCheckResultToString11447() {
         CheckResult checkResult = new CheckResult();
         SpoofChecker sc = new SpoofChecker.Builder()

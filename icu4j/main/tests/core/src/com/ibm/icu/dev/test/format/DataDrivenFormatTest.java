@@ -10,10 +10,17 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.ibm.icu.dev.test.ModuleTest;
+import com.ibm.icu.dev.test.ModuleTest.TestDataPair;
 import com.ibm.icu.dev.test.TestDataModule;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
+import com.ibm.icu.dev.test.TestDataModule.TestData;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CalendarFieldsSet;
 import com.ibm.icu.dev.test.util.DateTimeStyleSet;
 import com.ibm.icu.text.DateFormat;
@@ -22,48 +29,51 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+
 /**
  * @author srl
+ * @author sgill
  *
  */
-public class DataDrivenFormatTest extends ModuleTest {
+@RunWith(JUnitParamsRunner.class)
+public class DataDrivenFormatTest extends TestFmwk {
 
     /**
      * @param baseName
      * @param locName
      */
     public DataDrivenFormatTest() {
-        super("com/ibm/icu/dev/data/testdata/", "format");
+        //super("com/ibm/icu/dev/data/testdata/", "format");
+    }
+
+    @SuppressWarnings("unused")
+    private List<TestDataPair> getTestData() throws Exception { 
+        return ModuleTest.getTestData("com/ibm/icu/dev/data/testdata/", "format");
     }
 
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.ModuleTest#processModules()
      */
-    public void processModules() {
-        //String testName = t.getName().toString();
+    @Test
+    @Parameters(method="getTestData")
+    public void formatTest(TestDataPair pair) {
+        TestData td = pair.td;
+        DataMap settings = pair.dm;
 
-        for (Iterator siter = t.getSettingsIterator(); siter.hasNext();) {
-            // Iterate through and get each of the test case to process
-            DataMap settings = (DataMap) siter.next();
-            
-            String type = settings.getString("Type");
 
-            if(type.equals("date_format")) {
-                testConvertDate(t, settings, true);
-            } else if(type.equals("date_parse")) {
-                testConvertDate(t, settings, false);
-            } else {
-                errln("Unknown type: " + type);
-            }
+        String type = settings.getString("Type");
+
+        if(type.equals("date_format")) {
+            testConvertDate(td, settings, true);
+        } else if(type.equals("date_parse")) {
+            testConvertDate(td, settings, false);
+        } else {
+            errln("Unknown type: " + type);
         }
     }
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-         new DataDrivenFormatTest().run(args);
-    }
    
     private static final String kPATTERN = "PATTERN=";
     private static final String kMILLIS = "MILLIS=";

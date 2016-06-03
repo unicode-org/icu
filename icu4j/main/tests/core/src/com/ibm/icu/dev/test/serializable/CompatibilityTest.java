@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2016, International Business Machines Corporation and
+ * Copyright (C) 1996-2015, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  *
@@ -8,326 +8,116 @@
 
 package com.ibm.icu.dev.test.serializable;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.MissingResourceException;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility.Handler;
+
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
 /**
+ * @author sgill
  * @author emader
  */
+@RunWith(JUnitParamsRunner.class)
 public class CompatibilityTest extends TestFmwk
 {
-    public class FolderTarget extends Target
-    {
-        private Target head = new Target(null);
-        private Target tail = head;
+    //TODO(junit) - requires code to read the serialized classes from a jar
+    @Ignore
+    @Test
+    @Parameters(method="generateClassList")
+    public void testCompatibility(String testFileName) throws ClassNotFoundException, IOException {
+        File testFile = new File(testFileName);
+        Object[] oldObjects = SerializableTestUtility.getSerializedObjects(testFile);
+        int start = testFileName.lastIndexOf('/') + 1;
+        int end = testFileName.lastIndexOf('.');
+        String className = testFileName.substring(start, end);
+        Handler classHandler = SerializableTestUtility.getHandler(className);
         
-        public FolderTarget(String name)
-        {
-            super(name);
-        }
-        
-        public void add(String className, InputStream is)
-        {
-            HandlerTarget newTarget = new HandlerTarget(className, is);
-            
-            tail.setNext(newTarget);
-            tail = newTarget;
-        }
-        
-        protected boolean validate()
-        {
-            return true;
-        }
-        
-        protected void execute() throws Exception
-        {
-            params.indentLevel += 1;
-            
-            for (Target target = head.getNext(); target != null; target = target.getNext())
-            {
-                target.run();
-            }
-            
-            params.indentLevel -= 1;
+        Object[] testObjects = classHandler.getTestObjects();
+        for (int i = 0; i < testObjects.length; i++) {
+            if (!classHandler.hasSameBehavior(oldObjects[i], testObjects[i])) {
+                errln("Input object " + i + " failed behavior test.");
+            }            
         }
     }
+    
+    @SuppressWarnings("unused")
+    private List<String> generateClassList() {
+        List<String> classList = new ArrayList();
 
-    public class HandlerTarget extends Target
-    {
-        protected SerializableTest.Handler handler = null;
-        protected InputStream inputStream = null;
-        
-        public HandlerTarget(String name, InputStream is)
-        {
-            super(name);
-            inputStream = is;
+        URL dataURL = getClass().getResource("data");
+
+        File topDir = new File(dataURL.getPath());
+        File dataDirs[] = topDir.listFiles(new FileFilter() { 
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }});
+
+        File dataDirs2[] = topDir.listFiles();
+        System.out.println("topDir = " + topDir);
+        //System.out.println("dataDirs = " + dataDirs);
+        System.out.println("dataDirs2 = " + dataDirs2);
+        for (File dataDir : dataDirs2) {
+            System.out.println("\t" + dataDir);
         }
-        
-        protected boolean validate()
-        {
-            handler = SerializableTest.getHandler(name);
-            
-            return handler != null;
-        }
-        
-        protected void execute() throws Exception
-        {
-            try {
-                if (params.inDocMode()) {
-                    // nothing to execute
-                } else if (!params.stack.included) {
-                    ++params.invalidCount;
-                } else {
-                    params.testCount += 1;
+        for (File dataDir : dataDirs) {
+            File files[] = dataDir.listFiles(new FileFilter() { 
+                public boolean accept(File pathname) {
+                    return pathname.isFile() && pathname.getName().endsWith(".dat");
+                }});
 
-                    try {
-                        ObjectInputStream in = new ObjectInputStream(inputStream);
-                        Object inputObjects[] = (Object[]) in.readObject();
-                        Object testObjects[] = handler.getTestObjects();
+            String dataDirName = dataDir.getName();
 
-                        in.close();
-                        inputStream.close();
+            element_loop:
+            for (File file : files) {
+                String filename = file.getName();
+                String className = filename.substring(0, filename.lastIndexOf("."));
 
-                        // TODO: add equality test...
-                        // The commented out code below does that,
-                        // but some test objects don't define an equals() method,
-                        // and the default method is the same as the "==" operator...
-                        for (int i = 0; i < testObjects.length; i += 1) {
-                            // if (! inputObjects[i].equals(testObjects[i])) {
-                            // errln("Input object " + i + " failed equality test.");
-                            // }
-
-                            if (!handler.hasSameBehavior(inputObjects[i], testObjects[i])) {
-                                warnln("Input object " + i + " failed behavior test.");
-                            }
-                        }
-                    } catch (MissingResourceException e) {
-                        warnln("Could not load the data. " + e.getMessage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        errln("Exception: " + e.toString());
+                // Skip some cases which do not work well
+                for (int skip = 0; skip < SKIP_CASES.length; skip++) {
+                    if (dataDirName.equals(SKIP_CASES[skip][0]) && filename.equals(SKIP_CASES[skip][1])) {
+                        logln("Skipping test case - " + dataDirName + "/" + className);
+                        continue element_loop;
                     }
                 }
-            } finally {
-                inputStream.close();
-                inputStream = null;
+                classList.add(file.getAbsolutePath());
             }
         }
+        // TODO(junit): add randomization support on the list based on the params object
+        
+        return classList;
     }
 
     private static final String[][] SKIP_CASES = {
-        // ICU 52+ PluralRules/PluralFormat/CurrencyPluralInfo are not
-        // serialization-compatible with previous versions. 
-        {"ICU_50.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
-        {"ICU_51.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+            // ICU 52+ PluralRules/PluralFormat/CurrencyPluralInfo are not
+            // serialization-compatible with previous versions. 
+            {"ICU_50.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+            {"ICU_51.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
 
-        {"ICU_50.1", "com.ibm.icu.text.PluralFormat.dat"},
-        {"ICU_51.1", "com.ibm.icu.text.PluralFormat.dat"},
+            {"ICU_50.1", "com.ibm.icu.text.PluralFormat.dat"},
+            {"ICU_51.1", "com.ibm.icu.text.PluralFormat.dat"},
 
-        {"ICU_50.1", "com.ibm.icu.text.PluralRules.dat"},
-        {"ICU_51.1", "com.ibm.icu.text.PluralRules.dat"},
-        
-        // GeneralMeasureFormat was in technical preview, but is going away after ICU 52.1.
-        {"ICU_52.1", "com.ibm.icu.text.GeneralMeasureFormat.dat"},
+            {"ICU_50.1", "com.ibm.icu.text.PluralRules.dat"},
+            {"ICU_51.1", "com.ibm.icu.text.PluralRules.dat"},
 
-        // RuleBasedNumberFormat
-        {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
+            // GeneralMeasureFormat was in technical preview, but is going away after ICU 52.1.
+            {"ICU_52.1", "com.ibm.icu.text.GeneralMeasureFormat.dat"},
 
-        // ICU 4.8+ MessageFormat is not serialization-compatible with previous versions.
-        {"ICU_3.6",     "com.ibm.icu.text.MessageFormat.dat"},
+            // RuleBasedNumberFormat
+            {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
+
+            // ICU 4.8+ MessageFormat is not serialization-compatible with previous versions.
+            {"ICU_3.6",     "com.ibm.icu.text.MessageFormat.dat"},
     };
-
-    private Target getFileTargets(URL fileURL)
-    {
-        File topDir = new File(fileURL.getPath());
-        File dataDirs[] = topDir.listFiles();
-        FolderTarget target = null;
-        
-        for (int d = 0; d < dataDirs.length; d += 1) {
-            File dataDir = dataDirs[d];
-            
-            if (dataDir.isDirectory()) {
-                FolderTarget newTarget = new FolderTarget(dataDir.getName());
-                File files[] = dataDir.listFiles();
-
-                newTarget.setNext(target);
-                target = newTarget;
-
-                String dataDirName = dataDir.getName();
-
-                element_loop:
-                for (int i = 0; i < files.length; i += 1) {
-                    File file = files[i];
-                    String filename = file.getName();
-                    int ix = filename.indexOf(".dat");
-
-                    if (ix > 0) {
-                        String className = filename.substring(0, ix);
-
-                        // Skip some cases which do not work well
-                        for (int j = 0; j < SKIP_CASES.length; j++) {
-                            if (dataDirName.equals(SKIP_CASES[j][0]) && filename.equals(SKIP_CASES[j][1])) {
-                                logln("Skipping test case - " + dataDirName + "/" + className);
-                                continue element_loop;
-                            }
-                        }
-
-                        try {
-                            @SuppressWarnings("resource")  // Closed by HandlerTarget.execute().
-                            InputStream is = new FileInputStream(file);
-                            target.add(className, is);
-                        } catch (FileNotFoundException e) {
-                            errln("Exception: " + e.toString());
-                        }
-                        
-                    }
-                }
-            }
-        }
-            
-        return target;
-    }
-
-    private static InputStream copyInputStream(InputStream in) throws IOException {
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            byte[] buf = new byte[1024];
-            while (true) {
-                int r = in.read(buf);
-                if (r == -1) {
-                    break;
-                }
-                out.write(buf, 0, r);
-            }
-            return new ByteArrayInputStream(out.toByteArray());
-        } finally {
-            in.close();
-        }
-    }
-
-    private Target getJarTargets(URL jarURL)
-    {
-        String prefix = jarURL.getPath();
-        String currentDir = null;
-        int ix = prefix.indexOf("!/");
-        FolderTarget target = null;
-
-        if (ix >= 0) {
-            prefix = prefix.substring(ix + 2);
-        }
-
-        try {
-            // Need to trim the directory off the JAR entry before opening the connection otherwise
-            // it could fail as it will try and find the entry within the JAR which may not exist.
-            String urlAsString = jarURL.toExternalForm();
-            ix = urlAsString.indexOf("!/");
-            jarURL = new URL(urlAsString.substring(0, ix + 2));
-
-            JarURLConnection conn = (JarURLConnection) jarURL.openConnection();
-            JarFile jarFile = conn.getJarFile();
-            try {
-                Enumeration entries = jarFile.entries();
-element_loop:
-                while (entries.hasMoreElements()) {
-                    JarEntry entry = (JarEntry) entries.nextElement();
-                    String name = entry.getName();
-
-                    if (name.startsWith(prefix)) {
-                        name = name.substring(prefix.length());
-
-                        if (!entry.isDirectory()) {
-                            int dx = name.lastIndexOf("/");
-                            String dirName = name.substring(1, dx);
-                            String filename = name.substring(dx + 1);
-
-                            if (!dirName.equals(currentDir)) {
-                                currentDir = dirName;
-
-                                FolderTarget newTarget = new FolderTarget(currentDir);
-
-                                newTarget.setNext(target);
-                                target = newTarget;
-                            }
-
-                            int xx = filename.indexOf(".dat");
-
-                            if (xx > 0) {
-                                String className = filename.substring(0, xx);
-
-                                // Skip some cases which do not work well
-                                for (int i = 0; i < SKIP_CASES.length; i++) {
-                                    if (dirName.equals(SKIP_CASES[i][0]) && filename.equals(SKIP_CASES[i][1])) {
-                                        logln("Skipping test case - " + dirName + "/" + className);
-                                        continue element_loop;
-                                    }
-                                }
-
-                                // The InputStream object returned by JarFile.getInputStream() will
-                                // no longer be useable after JarFile.close() has been called. It's
-                                // therefore necessary to make a copy of it here.
-                                target.add(className, copyInputStream(jarFile.getInputStream(entry)));
-                            }
-                        }
-                    }
-                }
-            } finally {
-                jarFile.close();
-            }
-        } catch (Exception e) {
-            errln("jar error: " + e.getMessage());
-        }
-
-        return target;
-    }
-
-    /**
-     * The path to an actual data resource file in the JAR. This is needed because when the
-     * code is packaged for Android the resulting archive does not have entries for directories
-     * and so only actual resources can be found.
-     */
-    private static final String ACTUAL_RESOURCE = "/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat";
-
-    protected Target getTargets(String targetName)
-    {
-        // Get the URL to an actual resource and then compute the URL to the directory just in
-        // case the resources are in a JAR file that doesn't have entries for directories.
-        URL dataURL = getClass().getResource("data" + ACTUAL_RESOURCE);
-        try {
-            dataURL = new URL(dataURL.toExternalForm().replace(ACTUAL_RESOURCE, ""));
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-        String protocol = dataURL.getProtocol();
-        
-        if (protocol.equals("jar")) {
-            return getJarTargets(dataURL);
-        } else if (protocol.equals("file")) {
-            return getFileTargets(dataURL);
-        } else {
-            errln("Don't know how to test " + dataURL);
-            return null;
-        }
-    }
-
-    public static void main(String[] args)
-    {
-        CompatibilityTest test = new CompatibilityTest();
-        
-        test.run(args);
-    }
 }

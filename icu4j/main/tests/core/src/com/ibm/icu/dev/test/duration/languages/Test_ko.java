@@ -9,23 +9,12 @@
 
 package com.ibm.icu.dev.test.duration.languages;
 
-import com.ibm.icu.dev.test.duration.LanguageTestRoot;
+import com.ibm.icu.dev.test.duration.LanguageTestFmwk;
 
 /**
  * Test cases for ko
  */
-public class Test_ko extends LanguageTestRoot {
-
-  /**
-   * Invoke the tests.
-   */
-  public static void main(String[] args) {
-      new Test_ko().run(args);
-  }
-
-  /**
-   * Constructor.
-   */
+public class Test_ko extends LanguageTestFmwk {
   public Test_ko() {
     super("ko", false);
   }

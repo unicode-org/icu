@@ -11,14 +11,13 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 
 public class TestUtilities extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new TestUtilities().run(args);
-    }
-
+    @Test
     public void TestCollectionUtilitySpeed() {
         TreeSet ts1 = new TreeSet();
         TreeSet ts2 = new TreeSet();
@@ -89,6 +88,7 @@ public class TestUtilities extends TestFmwk {
         return utilityTime;
     }
 
+    @Test
     public void TestCollectionUtilities() {
         String[][] test = {{"a", "c", "e", "g", "h", "z"}, {"b", "d", "f", "h", "w"}, { "a", "b" }, { "a", "d" }, {"d"}, {}}; // 
         int resultMask = 0;

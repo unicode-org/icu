@@ -7,6 +7,8 @@
 
 package com.ibm.icu.dev.test.bidi;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.Bidi;
 import com.ibm.icu.text.BidiClassifier;
 
@@ -16,7 +18,7 @@ import com.ibm.icu.text.BidiClassifier;
  * @author Lina Kemmel, Matitiahu Allouche
  */
 
-public class TestClassOverride extends BidiTest {
+public class TestClassOverride extends BidiFmwk {
 
     private static final int DEF = TestData.DEF;
     private static final int L   = TestData.L;
@@ -108,6 +110,7 @@ public class TestClassOverride extends BidiTest {
 
     CustomClassifier classifier = null;
 
+    @Test
     public void testClassOverride()
     {
         Bidi bidi;
@@ -130,15 +133,5 @@ public class TestClassOverride extends BidiTest {
         assertEquals("Actual and expected output mismatch", textOut, out);
 
         logln("\nExiting TestClassOverride\n");
-    }
-
-
-    public static void main(String[] args) {
-        try {
-            new TestClassOverride().run(args);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
     }
 }

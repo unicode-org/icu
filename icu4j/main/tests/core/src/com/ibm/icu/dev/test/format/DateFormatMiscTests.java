@@ -17,6 +17,8 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
 
@@ -24,14 +26,10 @@ import com.ibm.icu.text.SimpleDateFormat;
  * Performs miscellaneous tests for DateFormat, SimpleDateFormat, DateFormatSymbols
  **/
 public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
-
-    public static void main(String[] args) throws Exception{
-        new DateFormatMiscTests().run(args);
-    }
-    
     /*
      * @bug 4097450
      */
+    @Test
     public void Test4097450() {
         //
         // Date parse requiring 4 digit year.
@@ -68,6 +66,7 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
      * SimpleDateFormat constructor SimpleDateFormat(String, DateFormatSymbols)
      * should clone the DateFormatSymbols parameter
      */
+    @Test
     public void Test4099975new() {
         Date d = new Date();
         //test SimpleDateFormat Constructor
@@ -118,6 +117,7 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
     /*
      * @bug 4117335
      */
+    @Test
     public void Test4117335() {
         final String bc = "\u7D00\u5143\u524D";
         final String ad = "\u897f\u66a6";

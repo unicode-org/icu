@@ -20,6 +20,8 @@ import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -31,14 +33,10 @@ import com.ibm.icu.util.ULocale;
  * Performs regression test for MessageFormat
  **/
 public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
-    
-    public static void main(String[] args) throws Exception{
-        new NumberFormatRegressionTest().run(args);
-    }
-    
     /**
      * alphaWorks upgrade
      */
+    @Test
     public void Test4161100() {
         NumberFormat nf = NumberFormat.getInstance(Locale.US);
         nf.setMinimumFractionDigits(1);
@@ -56,6 +54,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
      * DateFormat should call setIntegerParseOnly(TRUE) on adopted
      * NumberFormat objects.
      */
+    @Test
     public void TestJ691() {
         
         Locale loc = new Locale("fr", "CH");
@@ -98,6 +97,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Test getIntegerInstance();
      */
+    @Test
     public void Test4408066() {
         
         NumberFormat nf1 = NumberFormat.getIntegerInstance();
@@ -167,6 +167,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     }
     
     //Test New serialized DecimalFormat(2.0) read old serialized forms of DecimalFormat(1.3.1.1)
+    @Test
     public void TestSerialization() throws IOException{
         byte[][] contents = NumberFormatSerialTestData.getContent();
         double data = 1234.56;
@@ -191,6 +192,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     /*
      * Test case for JB#5509, strict parsing issue
      */
+    @Test
     public void TestJB5509() {
         String[] data = {
                 "1,2",
@@ -239,6 +241,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     /*
      * Test case for ticket#5698 - parsing extremely large/small values
      */
+    @Test
     public void TestT5698() {
         final String[] data = {
                 "12345679E66666666666666666",
@@ -285,6 +288,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    @Test
     public void TestSurrogatesParsing() { // Test parsing of numbers that use digits from the supplemental planes.
         final String[] data = {
                 "1\ud801\udca2,3\ud801\udca45.67", // 
@@ -337,6 +341,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         checkNBSPPatternRtNum(testcase, nf, -12345.);
     }
 
+    @Test
     public void TestNBSPInPattern() {
     NumberFormat nf = null;
     String testcase;
@@ -359,6 +364,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
      * Test case for #9293
      * Parsing currency in strict mode
      */
+    @Test
     public void TestT9293() {
         NumberFormat fmt = NumberFormat.getCurrencyInstance();
         fmt.setParseStrict(true);

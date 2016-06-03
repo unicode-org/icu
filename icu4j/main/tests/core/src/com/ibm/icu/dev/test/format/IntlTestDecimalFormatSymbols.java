@@ -19,17 +19,16 @@ package com.ibm.icu.dev.test.format;
 
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
 {
-    public static void main(String[] args) throws Exception {
-        new IntlTestDecimalFormatSymbols().run(args);
-    }
-
     // Test the API of DecimalFormatSymbols; primarily a simple get/set set.
+    @Test
     public void TestSymbols()
     {
         DecimalFormatSymbols fr = new DecimalFormatSymbols(Locale.FRENCH);
@@ -42,6 +41,13 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
 
         // just do some VERY basic tests to make sure that get/set work
         
+        if(!en.getLocale().equals(Locale.ENGLISH)) {
+            errln("ERROR: getLocale failed");
+        }
+        if(!en.getULocale().equals(ULocale.ENGLISH)) {
+            errln("ERROR: getULocale failed");
+        }
+
         if(!en.getLocale().equals(Locale.ENGLISH)) {
             errln("ERROR: getLocale failed");
         }
@@ -188,6 +194,7 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         }
     }
     
+    @Test
     public void testCoverage() {
         DecimalFormatSymbols df = new DecimalFormatSymbols();
         DecimalFormatSymbols df2 = (DecimalFormatSymbols)df.clone();

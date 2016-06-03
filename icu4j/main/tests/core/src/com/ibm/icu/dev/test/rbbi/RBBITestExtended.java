@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -28,12 +30,6 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class RBBITestExtended extends TestFmwk {
-
-    public static void main(String[] args)throws Exception {
-        new RBBITestExtended().run(args);
-    }
-
-
 public RBBITestExtended() {
     }
 
@@ -49,6 +45,7 @@ static class TestParams {
 }
 
 
+@Test
 public void TestExtended() {
     TestParams     tp = new TestParams();
 

@@ -10,6 +10,8 @@
 */
 package com.ibm.icu.dev.test.lang;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -18,13 +20,10 @@ public class UPropertyAliasesTest extends TestFmwk {
   
     public UPropertyAliasesTest() {}
     
-    public static void main(String[] args) throws Exception {
-        new UPropertyAliasesTest().run(args);
-    }
-
     /**
      * Test the property names and property value names API.
      */
+    @Test
     public void TestPropertyNames() {
         int p, v, choice, rev;
         for (p=0; ; ++p) {
@@ -126,6 +125,7 @@ public class UPropertyAliasesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestUnknownPropertyNames() {
         try {
             int p = UCharacter.getPropertyEnum("??");

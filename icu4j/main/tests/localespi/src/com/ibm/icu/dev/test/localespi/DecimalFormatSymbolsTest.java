@@ -10,17 +10,16 @@ import java.text.DecimalFormatSymbols;
 import java.util.Currency;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.ULocale;
 
 public class DecimalFormatSymbolsTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new DecimalFormatSymbolsTest().run(args);
-    }
-
     /*
      * Check if getInstance returns the ICU implementation.
      */
+    @Test
     public void TestGetInstance() {
         for (Locale loc : DecimalFormatSymbols.getAvailableLocales()) {
             if (TestUtil.isExcluded(loc)) {
@@ -60,6 +59,7 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
      * Testing the contents of DecimalFormatSymbols between ICU instance and its
      * equivalent created via the Locale SPI framework.
      */
+    @Test
     public void TestICUEquivalent() {
         Locale[] TEST_LOCALES = {
                 new Locale("en", "US"),
@@ -107,6 +107,7 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
     /*
      * Testing setters
      */
+    @Test
     public void TestSetSymbols() {
         // ICU's JDK DecimalFormatSymbols implementation for de_DE locale
         DecimalFormatSymbols decfs = DecimalFormatSymbols.getInstance(TestUtil.toICUExtendedLocale(new Locale("de", "DE")));
@@ -158,6 +159,7 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
         checkEquivalence(decfs.getZeroDigit(), decfsEnUS.getZeroDigit(), loc, "getZeroDigit");
     }
 
+    @Test
     public void TestKeywords() {
         // ICU provider variant is appended
         ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@numbers=Arab;currency=EUR");

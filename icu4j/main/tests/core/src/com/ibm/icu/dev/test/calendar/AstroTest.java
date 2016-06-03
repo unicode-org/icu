@@ -11,6 +11,8 @@ package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.CalendarAstronomer.Ecliptic;
@@ -24,12 +26,9 @@ import com.ibm.icu.util.TimeZone;
 // TODO: try finding next new moon after  07/28/1984 16:00 GMT
 
 public class AstroTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new AstroTest().run(args);
-    }
-
     static final double PI = Math.PI;
 
+    @Test
     public void TestSolarLongitude() {
         GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
         CalendarAstronomer astro = new CalendarAstronomer();
@@ -83,6 +82,7 @@ public class AstroTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestLunarPosition() {
         GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
         CalendarAstronomer astro = new CalendarAstronomer();
@@ -123,12 +123,14 @@ public class AstroTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestCoordinates() {
         CalendarAstronomer astro = new CalendarAstronomer();
         Equatorial result = astro.eclipticToEquatorial(139.686111 * PI/ 180.0, 4.875278* PI / 180.0);
         logln("result is " + result + ";  " + result.toHmsString());
     }
 
+    @Test
     public void TestCoverage() {
         GregorianCalendar cal = new GregorianCalendar(1958, Calendar.AUGUST, 15);
         Date then = cal.getTime();
@@ -179,6 +181,7 @@ public class AstroTest extends TestFmwk {
 
     static final long DAY_MS = 24*60*60*1000L;
 
+    @Test
     public void TestSunriseTimes() {
 
         //        logln("Sunrise/Sunset times for San Jose, California, USA");
@@ -316,6 +319,7 @@ public class AstroTest extends TestFmwk {
 //        long r = a.getSunRiseSet2(true);
     }
 
+    @Test
     public void TestBasics() {
         // Check that our JD computation is the same as the book's (p. 88)
         CalendarAstronomer astro = new CalendarAstronomer();
@@ -345,6 +349,7 @@ public class AstroTest extends TestFmwk {
 //        astro.foo();
     }
     
+    @Test
     public void TestMoonAge(){
         GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0,"GMT"));
         CalendarAstronomer calastro = new CalendarAstronomer();

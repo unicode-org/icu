@@ -8,15 +8,14 @@ package com.ibm.icu.dev.test.format;
 
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
 
 public class RBNFParseTest extends TestFmwk {
-    public static void main(String[] args) {
-        new RBNFParseTest().run(args);
-    }
-
+    @Test
     public void TestParse() {
 
         // these rules make no sense but behave rationally
@@ -122,6 +121,7 @@ public class RBNFParseTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestLenientParse() throws Exception {
         RuleBasedNumberFormat rbnf_en, rbnf_fr;
 

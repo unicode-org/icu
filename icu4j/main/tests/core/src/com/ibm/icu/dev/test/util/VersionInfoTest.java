@@ -11,6 +11,8 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.Arrays;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.VersionInfo;
 
@@ -33,19 +35,10 @@ public final class VersionInfoTest extends TestFmwk
 
     // public methods -----------------------------------------------
     
-    public static void main(String arg[]) 
-    {
-        VersionInfoTest test = new VersionInfoTest();
-        try {
-            test.run(arg);
-        } catch (Exception e) {
-            test.errln("Error testing VersionInfo");
-        }
-    }
-    
     /**
      * Test that the instantiation works
      */
+    @Test
     public void TestInstance()
     {
         for (int i = 0; i < INSTANCE_INVALID_STRING_.length; i ++) {
@@ -87,6 +80,7 @@ public final class VersionInfoTest extends TestFmwk
     /**
      * Test that the comparison works
      */
+    @Test
     public void TestCompare()
     {
         for (int i = 0; i < COMPARE_NOT_EQUAL_STRING_.length; i += 2) {
@@ -142,6 +136,7 @@ public final class VersionInfoTest extends TestFmwk
     /**
      * Test that the getter function works
      */
+    @Test
     public void TestGetter()
     {
         for (int i = 0; i < GET_STRING_.length; i ++) {
@@ -173,6 +168,7 @@ public final class VersionInfoTest extends TestFmwk
     /**
      * Test toString()
      */
+    @Test
     public void TesttoString() 
     {
         for (int i = 0; i < TOSTRING_STRING_.length; i ++) {
@@ -192,6 +188,7 @@ public final class VersionInfoTest extends TestFmwk
     /**
      * Test Comparable interface
      */
+    @Test
     public void TestComparable() {
         for (int i = 0; i < COMPARE_NOT_EQUAL_STRING_.length; i += 2) {
             VersionInfo v1 = VersionInfo.getInstance(COMPARE_NOT_EQUAL_STRING_[i]);
@@ -348,6 +345,7 @@ public final class VersionInfoTest extends TestFmwk
     /*
      * Test case for multi-threading problem reported by ticket#7880
      */
+    @Test
     public void TestMultiThread() {
         final int numThreads = 20;
         GetInstanceWorker[] workers = new GetInstanceWorker[numThreads];

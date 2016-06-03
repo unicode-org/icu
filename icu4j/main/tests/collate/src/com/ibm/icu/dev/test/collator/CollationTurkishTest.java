@@ -14,15 +14,14 @@ package com.ibm.icu.dev.test.collator;
  
 import java.util.Locale;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
  
 public class CollationTurkishTest extends TestFmwk{
-    public static void main(String[] args) throws Exception{
-        new CollationTurkishTest().run(args);
-    }
-    
     private static char[][] testSourceCases = {
         {0x73, 0x0327},
         {0x76, 0x00E4, 0x74},
@@ -71,10 +70,13 @@ public class CollationTurkishTest extends TestFmwk{
     public CollationTurkishTest() {
 
     }
-    protected void init()throws Exception{
+    
+    @Before
+    public void init()throws Exception{
         myCollation = Collator.getInstance(new Locale("tr", ""));
     }
     
+    @Test
     public void TestTertiary() {
         int i = 0;
         myCollation.setStrength(Collator.TERTIARY);
@@ -83,6 +85,7 @@ public class CollationTurkishTest extends TestFmwk{
         }
     }
     
+    @Test
     public void TestPrimary() {
         int i;
         myCollation.setStrength(Collator.PRIMARY);

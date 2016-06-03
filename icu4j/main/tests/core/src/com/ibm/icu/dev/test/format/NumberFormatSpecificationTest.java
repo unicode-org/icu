@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -18,11 +20,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class NumberFormatSpecificationTest extends TestFmwk {
-    
-    public static void main(String[] args) throws Exception {
-        new NumberFormatSpecificationTest().run(args);
-    }
-    
+    @Test
     public void TestBasicPatterns() {
         double num = 1234.567;
         assertEquals("", "1 234,57", formatFrWithPattern(num, "#,##0.##"));
@@ -35,6 +33,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "1 234,57 €", formatFrWithPattern(num, "#,##0.00 ¤"));  
     }
     
+    @Test
     public void TestNfSetters() {
         NumberFormat nf = nfWithPattern("#,##0.##");
         nf.setMaximumIntegerDigits(5);
@@ -44,6 +43,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         
     }
     
+    @Test
     public void TestRounding() {
         assertEquals("", "1,0", formatFrWithPattern(1.25, "0.5"));
         assertEquals("", "2,0", formatFrWithPattern(1.75, "0.5"));
@@ -57,6 +57,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "1 03,60", formatFrWithPattern(104.0, "#,#3.70"));
     }
     
+    @Test
     public void TestSignificantDigits() {
         assertEquals("", "1230", formatFrWithPattern(1234.0, "@@@"));
         assertEquals("", "1 234", formatFrWithPattern(1234.0, "@,@@@"));
@@ -70,6 +71,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "1 200", formatFrWithPattern(1234.0, "#,#@@"));       
     }
     
+    @Test
     public void TestScientificNotation() {
         assertEquals("", "1,23E4", formatFrWithPattern(12345.0, "0.00E0"));
         assertEquals("", "123,00E2", formatFrWithPattern(12300.0, "000.00E0"));
@@ -86,6 +88,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         }
     }
     
+    @Test
     public void TestPercent() {
         assertEquals("", "57,3%", formatFrWithPattern(0.573, "0.0%"));
         assertEquals("", "%57,3", formatFrWithPattern(0.573, "%0.0"));
@@ -97,6 +100,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "%16,3E3", formatFrWithPattern(162.55, "%##0.00E0"));  
     }
     
+    @Test
     public void TestPerMilli() {
         assertEquals("", "573,0‰", formatFrWithPattern(0.573, "0.0‰"));
         assertEquals("", "‰573,0", formatFrWithPattern(0.573, "‰0.0"));
@@ -108,6 +112,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "‰163E3", formatFrWithPattern(162.55, "‰##0.00E0"));
     }
     
+    @Test
     public void TestPadding() {
         assertEquals("", "$***1 234", formatFrWithPattern(1234, "$**####,##0"));
         assertEquals("", "xxx$1 234", formatFrWithPattern(1234, "*x$####,##0"));

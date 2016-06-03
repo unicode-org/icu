@@ -14,6 +14,9 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.HashMap;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
@@ -43,17 +46,18 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
     private HashMap availableMap = new HashMap();
     private static final ULocale _DEFAULT_LOCALE = ULocale.US;
     
-    public LocaleAliasTest(){
+    public LocaleAliasTest() {
     }
-    protected void init(){
+    
+    @Before
+    public void init() {
         available = ULocale.getAvailableLocales();
         for(int i=0; i<available.length;i++){
             availableMap.put(available[i].toString(),"");
         }
     }
-    public static void main(String[] args) {
-        new LocaleAliasTest().run(args);
-    }
+
+    @Test
     public void TestCalendar() {
         ULocale defLoc = ULocale.getDefault();
         ULocale.setDefault(_DEFAULT_LOCALE);
@@ -93,6 +97,7 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
         ULocale.setDefault(defLoc);
     }
     
+    @Test
     public void  TestDateFormat() {
         ULocale defLoc = ULocale.getDefault();
         ULocale.setDefault(_DEFAULT_LOCALE);
@@ -132,6 +137,7 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
         ULocale.setDefault(defLoc);
     }
     
+    @Test
     public void TestULocale() {
         ULocale defLoc = ULocale.getDefault();
         ULocale.setDefault(_DEFAULT_LOCALE);
@@ -155,6 +161,7 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
         ULocale.setDefault(defLoc);
     }
     
+    @Test
     public void TestDisplayName() {
         ULocale defLoc = ULocale.getDefault();
         ULocale.setDefault(_DEFAULT_LOCALE);
@@ -184,6 +191,8 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         ULocale.setDefault(defLoc);
     }
+
+    @Test
     public void TestUResourceBundle() {
         ULocale defLoc = ULocale.getDefault();
         ULocale.setDefault(_DEFAULT_LOCALE);

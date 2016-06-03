@@ -22,6 +22,8 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.DecimalFormat;
@@ -30,10 +32,6 @@ import com.ibm.icu.text.NumberFormat;
 
 public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {
-    public static void main(String[] args)  throws Exception {
-        new IntlTestDecimalFormatAPI().run(args);
-    }
-    
     /**
      * Problem 1: simply running 
      * decF4.setRoundingMode(java.math.BigDecimal.ROUND_HALF_UP) does not work 
@@ -49,6 +47,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
      * decimal places past 20 are not handled properly. A small ammount of work 
      * would make bring this up to snuff.
      */
+    @Test
     public void testJB1871()
     {
         // problem 2
@@ -94,6 +93,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
      * This test checks various generic API methods in DecimalFormat to achieve 
      * 100% API coverage.
      */
+    @Test
     public void TestAPI()
     {
         logln("DecimalFormat API test---"); logln("");
@@ -270,6 +270,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         }
     }
 
+    @Test
     public void testJB6134()
     {
         DecimalFormat decfmt = new DecimalFormat();
@@ -289,6 +290,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         }
     }
 
+    @Test
     public void testJB4971()
     {
         DecimalFormat decfmt = new DecimalFormat();
@@ -331,6 +333,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 
     }
 
+    @Test
     public void testJB6354()
     {
         DecimalFormat pat = new DecimalFormat("#,##0.00");
@@ -354,6 +357,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         }
     }
     
+    @Test
     public void testJB6648()
     {
         DecimalFormat df = new DecimalFormat();

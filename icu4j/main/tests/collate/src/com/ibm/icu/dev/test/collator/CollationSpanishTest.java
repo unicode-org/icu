@@ -14,15 +14,14 @@
  
  import java.util.Locale;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
  
  public class CollationSpanishTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new CollationSpanishTest().run(args);
-    }
-    
     private static char[][] testSourceCases = {
         {0x61, 0x6c, 0x69, 0x61, 0x73},
         {0x45, 0x6c, 0x6c, 0x69, 0x6f, 0x74},
@@ -65,11 +64,14 @@ import com.ibm.icu.text.Collator;
     private Collator myCollation = null;
     
     public CollationSpanishTest() {
-
     }
-    protected void init()throws Exception{
+    
+    @Before
+    public void init() throws Exception {
         myCollation = Collator.getInstance(new Locale("es", "ES"));
     }
+    
+    @Test
     public void TestTertiary(){
         int i = 0;
         myCollation.setStrength(Collator.TERTIARY);
@@ -78,6 +80,7 @@ import com.ibm.icu.text.Collator;
         }
     }
     
+    @Test
     public void TestPrimary(){
         int i;
         myCollation.setStrength(Collator.PRIMARY);

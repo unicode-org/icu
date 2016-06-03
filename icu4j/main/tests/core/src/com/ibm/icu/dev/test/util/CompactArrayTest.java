@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CompactByteArray;
@@ -16,11 +18,7 @@ import com.ibm.icu.util.CompactCharArray;
  */
 public final class CompactArrayTest extends TestFmwk 
 { 
-    public static void main(String[] args) throws Exception
-    {
-        new CompactArrayTest().run(args);
-    }
-    
+    @Test
     public void TestByteArrayCoverage() {
     CompactByteArray cba = new CompactByteArray();
     cba.setElementAt((char)0x5, (byte)0xdf);
@@ -82,6 +80,7 @@ public final class CompactArrayTest extends TestFmwk
     logln("double modified: " + cba3.equals(cba6));
     }
 
+    @Test
     public void TestCharArrayCoverage() {
     // v1.8 fails with extensive compaction, so set to false
     final boolean EXTENSIVE = false;

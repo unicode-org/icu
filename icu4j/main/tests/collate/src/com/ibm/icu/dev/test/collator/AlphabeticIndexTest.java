@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.ICUDebug;
@@ -161,9 +163,6 @@ public class AlphabeticIndexTest extends TestFmwk {
             //            /* Yoruba*/ {"yo", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
 
     };
-    public static void main(String[] args) throws Exception{
-        new AlphabeticIndexTest().run(args);
-    }
     
 //    public void TestAAKeyword() {
 //    ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
@@ -210,6 +209,7 @@ public class AlphabeticIndexTest extends TestFmwk {
 //    }
 
     
+    @Test
     public void TestA() {
         String[][] tests = {{"zh_Hant", "渡辺", "12劃"},
                 {"zh", "渡辺", "D"}
@@ -239,6 +239,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         return null;
     }
 
+    @Test
     public void TestFirstCharacters() {
 
         AlphabeticIndex alphabeticIndex = new AlphabeticIndex(Locale.ENGLISH);
@@ -294,6 +295,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         return UScript.UNKNOWN;
     }
 
+    @Test
     public void TestBuckets() {
         ULocale additionalLocale = ULocale.ENGLISH;
 
@@ -302,6 +304,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestEmpty() {
         // just verify that it doesn't blow up.
         Set<ULocale> locales = new LinkedHashSet<ULocale>();
@@ -322,6 +325,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestInflow() {
         Object[][] tests = {
                 {0, ULocale.ENGLISH},
@@ -505,6 +509,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         return keys;
     }
 
+    @Test
     public void TestIndexCharactersList() {
         for (String[] localeAndIndexCharacters : localeAndIndexCharactersLists) {
             ULocale locale = new ULocale(localeAndIndexCharacters[0]);
@@ -529,6 +534,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestBasics() {
         ULocale[] list = ULocale.getAvailableLocales();
         // get keywords combinations
@@ -577,6 +583,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestClientSupport() {
         for (String localeString : new String[] {"zh"}) { // KEY_LOCALES, new String[] {"zh"}
             ULocale ulocale = new ULocale(localeString);
@@ -655,6 +662,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestFirstScriptCharacters() {
         Collection<String> firstCharacters =
                 new AlphabeticIndex(ULocale.ENGLISH).getFirstCharactersInScripts();
@@ -729,6 +737,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 UScript.getScript(Character.codePointAt(s, 1)) == UScript.UNKNOWN;
     }
 
+    @Test
     public void TestZZZ() {
         //            int x = 3;
         //            AlphabeticIndex index = new AlphabeticIndex(ULocale.ENGLISH);
@@ -742,9 +751,12 @@ public class AlphabeticIndexTest extends TestFmwk {
         //            System.out.println("Bucket Count =" + index.getBucketCount());
     }
 
+    @Test
     public void TestSimplified() {
         checkBuckets("zh", simplifiedNames, ULocale.ENGLISH, "W", "\u897f");
     }
+
+    @Test
     public void TestTraditional() {
         checkBuckets("zh_Hant", traditionalNames, ULocale.ENGLISH, "\u4e9f", "\u5357\u9580");
     }
@@ -885,6 +897,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     /**
      * Test AlphabeticIndex vs. root with script reordering.
      */
+    @Test
     public void TestHaniFirst() {
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.ROOT);
         coll.setReorderCodes(UScript.HAN);
@@ -908,6 +921,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     /**
      * Test AlphabeticIndex vs. Pinyin with script reordering.
      */
+    @Test
     public void TestPinyinFirst() {
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.CHINESE);
         coll.setReorderCodes(UScript.HAN);
@@ -931,6 +945,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     /**
      * Test labels with multiple primary weights.
      */
+    @Test
     public void TestSchSt() {
         AlphabeticIndex index = new AlphabeticIndex(ULocale.GERMAN);
         index.addLabels(new UnicodeSet("[Æ{Sch*}{St*}]"));
@@ -972,6 +987,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     /**
      * With no real labels, there should be only the underflow label.
      */
+    @Test
     public void TestNoLabels() {
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.ROOT);
         AlphabeticIndex<Integer> index = new AlphabeticIndex<Integer>(coll);
@@ -987,6 +1003,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     /**
      * Test with the Bopomofo-phonetic tailoring.
      */
+    @Test
     public void TestChineseZhuyin() {
         AlphabeticIndex index = new AlphabeticIndex(ULocale.forLanguageTag("zh-u-co-zhuyin"));
         ImmutableIndex immIndex = index.buildImmutableIndex();
@@ -998,6 +1015,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         assertEquals("label 5", "ㄉ", immIndex.getBucket(5).getLabel());
     }
 
+    @Test
     public void TestJapaneseKanji() {
         AlphabeticIndex index = new AlphabeticIndex(ULocale.JAPANESE);
         AlphabeticIndex.ImmutableIndex immIndex = index.buildImmutableIndex();
@@ -1011,6 +1029,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestFrozenCollator() {
         // Ticket #9472
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(new ULocale("da"));
@@ -1024,6 +1043,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 Collator.IDENTICAL, index.getCollator().getStrength());
     }
 
+    @Test
     public void TestChineseUnihan() {
         AlphabeticIndex index = new AlphabeticIndex(new ULocale("zh-u-co-unihan"));
         index.setMaxLabelCount(500);  // ICU 54 default is 99.

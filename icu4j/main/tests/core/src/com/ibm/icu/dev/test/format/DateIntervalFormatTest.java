@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 
+import org.junit.Test;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateIntervalFormat;
@@ -42,14 +45,10 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     private static final ULocale LA_SPANISH = new ULocale("es-419");
 
-    public static void main(String[] args) throws Exception {
-        new DateIntervalFormatTest().run(args);
-    }
-
-
     /**
      * Test format
      */
+    @Test
     public void TestFormat() {
         // first item is date pattern
         // followed by a group of locale/from_data/to_data/skeleton/interval_data
@@ -720,6 +719,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* 
      * Test format using user defined DateIntervalInfo
      */
+    @Test
     public void TestFormatUserDII() {
         // first item is date pattern
         // followed by a group of locale/from_data/to_data/interval_data
@@ -816,6 +816,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* 
      * Test format using user defined DateIntervalInfo
      */
+    @Test
     public void TestFormatCLDR() {
         // first item is date pattern
         // followed by a group of locale/from_data/to_data/interval_data
@@ -901,8 +902,9 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Stress test
      */
+    @Test
     public void TestStress() {
-        if (getInclusion() <= 5) {
+        if (TestFmwk.getExhaustiveness() <= 5) {
             logln("INFO: Skipping test");
             return;
         }
@@ -1067,6 +1069,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /*
      * Ticket#6396 DateIntervalInfo of ICU4J 4.0d3 throw NullPointerException 
      */
+    @Test
     public void TestT6396() {
         DateIntervalInfo dii = new DateIntervalInfo(new ULocale("th_TH"));
         try {
@@ -1084,6 +1087,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestConstructor() {
         DateIntervalInfo diiJapan = new DateIntervalInfo(ULocale.JAPAN);
         DateIntervalInfo diiJapanJ = new DateIntervalInfo(Locale.JAPAN);
@@ -1094,6 +1098,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* Tests the method
      *      public boolean equals(Object a)
      */
+    @Test
     public void TestDateIntervalInfoEquals(){
         // Tests when "if ( a instanceof PatternInfo )" is false
         DateIntervalInfo diia = new DateIntervalInfo();
@@ -1118,6 +1123,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* Tests the method
      *      public Object cloneAsThawed()
      */
+    @Test
     public void TestCloseAsThawed(){
         DateIntervalInfo dii = new DateIntervalInfo();
         try{
@@ -1131,6 +1137,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* Tests the method
      *      public boolean isFrozen()
      */
+    @Test
     public void TestIsFrozen(){
         DateIntervalInfo dii = new DateIntervalInfo();
         if(dii.isFrozen() != false){
@@ -1146,6 +1153,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* Tests the method
      *      public boolean clone()
      */
+    @Test
     public void TestClone(){
         DateIntervalInfo dii = new DateIntervalInfo(new ULocale("en_US"));
         DateIntervalInfo dii_clone = (DateIntervalInfo) dii.clone();
@@ -1162,6 +1170,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* Tests the method
      *      public void setFallbackIntervalPattern(String fallbackPattern)
      */
+    @Test
     public void TestSetFallbackIntervalPattern(){
         DateIntervalInfo dii = new DateIntervalInfo(new ULocale("en_US"));
         // Tests when "if ( frozen )" is true
@@ -1197,6 +1206,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* Tests the method
      *      public PatternInfo getIntervalPattern(String skeleton, int field)
      */
+    @Test
     public void TestGetIntervalPattern(){
         // Tests when "if ( field > MINIMUM_SUPPORTED_CALENDAR_FIELD )" is true
         // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.SECOND;
@@ -1212,6 +1222,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* Tests the method
      *      public void setIntervalPattern(String skeleton, int lrgDiffCalUnit, String intervalPattern)
      */
+    @Test
     public void TestSetIntervalPattern(){
         DateIntervalInfo dii = new DateIntervalInfo();
         // Tests when "if ( frozen )" is true
@@ -1235,6 +1246,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch(Exception e){}
     }
 
+    @Test
     public void TestSetIntervalPatternNoSideEffect() {
         PatternInfo patternInfo = new DateIntervalInfo(ULocale.ENGLISH).getIntervalPattern("yMd", Calendar.DATE);
         String expectedPattern = patternInfo.getFirstPart() + patternInfo.getSecondPart();
@@ -1248,6 +1260,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 actualPattern);
     }
 
+    @Test
     public void TestGetSetTimeZone(){
         DateIntervalFormat dtitvfmt = DateIntervalFormat.getInstance("MMMdHHmm", Locale.ENGLISH);
         long date1 = 1299090600000L; // 2011-Mar-02 1030 in US/Pacific, 2011-Mar-03 0330 in Asia/Tokyo
@@ -1283,6 +1296,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     /* Tests the method
      *      public int hashCode()
      */
+    @Test
     public void TestHashCode(){
         // Tests when
         //      "int hash = fIntervalPatternFirstPart != null ? fIntervalPatternFirstPart.hashCode() : 0;"
@@ -1298,6 +1312,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      *      public boolean equals(Object a)
      * in PatternInfo
      */
+    @Test
     public void TestPattternInfoEquals(){
         // Tests when "if ( a instanceof PatternInfo )" is false
         PatternInfo pi = new PatternInfo("","", false);
@@ -1319,6 +1334,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestDateIntervalCoverage() {
         DateInterval di = new DateInterval(0, 1);
 
@@ -1335,6 +1351,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestTicket9919GetInstance() {
         // Creating a DateIntervalFormat with a custom DateIntervalInfo
         // object used to corrupt the cache.
@@ -1373,6 +1390,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     }
 
+    @Test
     public void TestTicket9919Setter() {
 
         // Creating a DateIntervalFormat with a custom DateIntervalInfo
@@ -1411,6 +1429,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 .toString()); 
     }
 
+    @Test
     public void TestTicket9914() {
         DateIntervalInfo dateIntervalInfo =
                 new DateIntervalInfo(ULocale.ENGLISH);
@@ -1444,6 +1463,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 .toString());
     }
 
+    @Test
     public void TestTicket11583 () {
         ULocale[] locales = {
                 ULocale.ENGLISH, 
@@ -1532,6 +1552,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         return false;
     }
 
+    @Test
     public void TestFPos_SkelWithSeconds () {
         
         final long[] deltas = {
@@ -1717,10 +1738,10 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     // TestTicket11669 - Check the thread safety of DateIntervalFormat.format().
     //                   This test failed with ICU 56.
-    
+    @Test
     public void TestTicket11669 () {
         // These final variables are accessed directly by the concurrent threads.
         final DateIntervalFormat formatter = DateIntervalFormat.getInstance(DateFormat.YEAR_MONTH_DAY, ULocale.US);
@@ -1785,6 +1806,4 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
-    
 }

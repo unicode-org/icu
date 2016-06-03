@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -37,24 +38,8 @@ import com.ibm.icu.text.CharsetMatch;
  */
 public class TestCharsetDetector extends TestFmwk
 {
-    
-    /**
-     * Constructor
-     */
     public TestCharsetDetector()
     {
-    }
-
-    public static void main(String[] args) {
-        try
-        {
-            TestCharsetDetector test = new TestCharsetDetector();
-            test.run(args);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     private void CheckAssert(boolean exp) {
@@ -91,6 +76,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
     
+    @Test
     public void TestConstruction() {
         int i;
         CharsetDetector  det = new CharsetDetector();
@@ -136,6 +122,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
 
+    @Test
     public void TestInputFilter() throws Exception
     {
         String s = "<a> <lot> <of> <English> <inside> <the> <markup> Un tr\u00E8s petit peu de Fran\u00E7ais. <to> <confuse> <the> <detector>";
@@ -164,6 +151,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
     
+    @Test
     public void TestUTF8() throws Exception {
         
         String  s = "This is a string with some non-ascii characters that will " +
@@ -187,6 +175,7 @@ public class TestCharsetDetector extends TestFmwk
         det.setDeclaredEncoding("UTF-8"); // Jitterbug 4451, for coverage
     }
     
+    @Test
     public void TestUTF16() throws Exception
     {
         String source = 
@@ -219,6 +208,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
     
+    @Test
     public void TestC1Bytes() throws Exception
     {
         String sISO =
@@ -249,6 +239,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
     
+    @Test
     public void TestShortInput() {
         // Test that detection with very short byte strings does not crash and burn.
         // The shortest input that should produce positive detection result is two bytes, 
@@ -273,6 +264,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
     
+    @Test
     public void TestBufferOverflow()
     {
         byte testStrings[][] = {
@@ -324,6 +316,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
 
+    @Test
     public void TestDetection()
     {
         //
@@ -491,6 +484,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
     
+    @Test
     public void TestJapanese() throws Exception {
         String s = "\u3000\u3001\u3002\u3003\u3005\u3006\u3007\u3008\u3009\u300A\u300B\u300C\u300D\u300E\u300F\u3010\u3011\u3012\u3013\u3014" + 
         "\u3015\u301C\u3041\u3042\u3043\u3044\u3045\u3046\u3047\u3048\u3049\u304A\u304B\u304C\u304D\u304E\u304F\u3050\u3051\u3052" + 
@@ -524,6 +518,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
 
+    @Test
     public void TestArabic() throws Exception {
         String  s = "\u0648\u0636\u0639\u062A \u0648\u0646\u0641\u0630\u062A \u0628\u0631\u0627" +
         "\u0645\u062C \u062A\u0623\u0645\u064A\u0646 \u0639\u062F\u064A\u062F\u0629 \u0641\u064A " + 
@@ -643,6 +638,7 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
 
+    @Test
     public void TestHebrew() throws Exception {
         String  s =  "\u05D4\u05E4\u05E8\u05E7\u05DC\u05D9\u05D8 \u05D4\u05E6\u05D1\u05D0\u05D9 \u05D4" +
             "\u05E8\u05D0\u05E9\u05D9, \u05EA\u05EA \u05D0\u05DC\u05D5\u05E3 \u05D0\u05D1\u05D9" + 
@@ -745,6 +741,7 @@ public class TestCharsetDetector extends TestFmwk
     /*
      * Test the method int match(CharsetDetector det) in CharsetRecog_UTF_16_LE
      */
+    @Test
     public void TestCharsetRecog_UTF_16_LE_Match() {
         byte[] in = { Byte.MIN_VALUE, Byte.MIN_VALUE, Byte.MIN_VALUE, Byte.MIN_VALUE };
         CharsetDetector cd = new CharsetDetector();
@@ -760,7 +757,8 @@ public class TestCharsetDetector extends TestFmwk
     //
     //  Bug #8309, test case submitted with original bug report.
     //
-      public void TestFreshDetectorEachTime() throws Exception
+    @Test
+    public void TestFreshDetectorEachTime() throws Exception
       {
           CharsetDetector detector1 = new CharsetDetector();
           byte[] data1 = createData1();
@@ -776,7 +774,8 @@ public class TestCharsetDetector extends TestFmwk
           assertEquals("Expected ISO-8859-1, even though that isn't strictly correct", "ISO-8859-1", match2.getName());
       }
   
-      public void TestReusingDetector() throws Exception
+    @Test
+    public void TestReusingDetector() throws Exception
       {
           CharsetDetector detector = new CharsetDetector();
  
@@ -1124,6 +1123,7 @@ public class TestCharsetDetector extends TestFmwk
       //
 
 
+    @Test
     public void TestBug9267() {
         // Test a long input of Lam Alef characters for CharsetRecog_IBM420_ar.
         // Bug 9267 was an array out of bounds problem in the unshaping code for these.
@@ -1137,6 +1137,7 @@ public class TestCharsetDetector extends TestFmwk
         det.detect();
     }
     
+    @Test
     public void TestBug6954 () throws Exception {
         // Ticket 6954 - trouble with the haveC1Bytes flag that is used to distinguish between
         //  similar Windows and non-Windows SBCS encodings. State was kept in the shared
@@ -1171,6 +1172,7 @@ public class TestCharsetDetector extends TestFmwk
         assertEquals("Wrong charset name after running a second charset detector", "windows-1252", name1);
     }
     
+    @Test
     public void TestBug6889() {
         // Verify that CharsetDetector.detectAll() does not return the same encoding multiple times.
         String text =
@@ -1195,6 +1197,7 @@ public class TestCharsetDetector extends TestFmwk
         }   
     }
     
+    @Test
     public void TestMultithreaded() {
         String  s = "This is some random plain text to run charset detection on.";
         final byte [] bytes;

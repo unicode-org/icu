@@ -7,6 +7,8 @@
 
 package com.ibm.icu.dev.test.bidi;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.Bidi;
 
 /**
@@ -15,8 +17,7 @@ import com.ibm.icu.text.Bidi;
  * @author Lina Kemmel, Matitiahu Allouche
  */
 
-public class TestReorderRunsOnly extends BidiTest {
-
+public class TestReorderRunsOnly extends BidiFmwk {
 
     static class TestCase {
         String textIn;
@@ -107,6 +108,8 @@ public class TestReorderRunsOnly extends BidiTest {
                      new int[] {0, 0})
     };
 
+
+    @Test
     public void testReorderRunsOnly() {
 
         Bidi bidi = new Bidi();
@@ -175,16 +178,5 @@ public class TestReorderRunsOnly extends BidiTest {
 
         logln("\nExiting TestReorderRunsOnly\n");
     }
-
-
-    public static void main(String[] args) {
-        try {
-            new TestReorderRunsOnly().run(args);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
 }
 

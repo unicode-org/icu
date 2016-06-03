@@ -8,6 +8,8 @@ package com.ibm.icu.dev.test.translit;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestBoilerplate;
 import com.ibm.icu.dev.util.UnicodeMap;
 
@@ -18,14 +20,14 @@ public class UnicodeMapBoilerplateTest extends TestBoilerplate<UnicodeMap> {
 
     private static String[] TEST_VALUES = {"A", "B", "C", "D", "E", "F"};
 
-    public static void main(String[] args) throws Exception {
-        new UnicodeMapBoilerplateTest().run(args);
+    public void TestUnicodeMapBoilerplate() throws Exception {
     }
 
-    public void TestUnicodeMapBoilerplate() throws Exception {
+    @Test
+    public void test() throws Exception {
         _test();
     }
-
+    
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
      */

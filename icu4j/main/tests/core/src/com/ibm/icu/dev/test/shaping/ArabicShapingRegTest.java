@@ -9,6 +9,8 @@ package com.ibm.icu.dev.test.shaping;
 
 import java.util.MissingResourceException;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
@@ -454,6 +456,7 @@ public class ArabicShapingRegTest extends TestFmwk {
                        IllegalArgumentException.class),
     };
 
+    @Test
     public void TestStandard() {
         for (int i = 0; i < standardTests.length; ++i) {
             TestData test = standardTests[i];
@@ -483,6 +486,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestPreflight() {
         for (int i = 0; i < preflightTests.length; ++i) {
             TestData test = preflightTests[i];
@@ -510,6 +514,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestError() {
         for (int i = 0; i < errorTests.length; ++i) {
             TestData test = errorTests[i];
@@ -538,6 +543,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestEquals()
     {
         ArabicShaping as1 = new ArabicShaping(LETTERS_SHAPE | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR);
@@ -557,8 +563,9 @@ public class ArabicShapingRegTest extends TestFmwk {
         }
     }
 
-    public void reportTestFailure(int index, TestData test, ArabicShaping shaper, String result, Exception error) {
-        if (noData() && error != null && error instanceof MissingResourceException ) {
+    // TODO(junit): remove this and convert callers to parameterized tests
+    private void reportTestFailure(int index, TestData test, ArabicShaping shaper, String result, Exception error) {
+        if (error != null && error instanceof MissingResourceException ) {
             warnln(error.getMessage());
         }
 
@@ -614,19 +621,11 @@ public class ArabicShapingRegTest extends TestFmwk {
         return buf.toString();
     }
 
-    public static void main(String[] args) {
-        try {
-            new ArabicShapingRegTest().run(args);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-    
     /* Tests the method
      *      public int shape(char[] source, int sourceStart, int sourceLength,
      *      char[] dest, int destStart, int destSize) throws ArabicShapingException)
      */
+    @Test
     public void TestShape(){
         // Tests when
         //      if (sourceStart < 0 || sourceLength < 0 || sourceStart + sourceLength > source.length)

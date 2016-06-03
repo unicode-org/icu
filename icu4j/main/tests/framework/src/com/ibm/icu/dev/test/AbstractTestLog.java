@@ -12,6 +12,8 @@ import java.util.GregorianCalendar;
 
 import com.ibm.icu.util.VersionInfo;
 
+import org.junit.Assert;
+
 public abstract class AbstractTestLog implements TestLog {
     /**
      * Returns true if ICU_Version < major.minor.
@@ -44,43 +46,57 @@ public abstract class AbstractTestLog implements TestLog {
     /**
      * Add a message.
      */
-    public final void log(String message) {
-        msg(message, LOG, true, false);
+    public static final void log(String message) {
+        // TODO(stuartg): turned off - causing OOM running under ant
+        // Probably temporary - must decide what to do with these
+        //System.out.print(message);
+        //msg(message, LOG, true, false);
     }
 
     /**
      * Add a message and newline.
      */
-    public final void logln(String message) {
-        msg(message, LOG, true, true);
+    public static final void logln(String message) {
+        // TODO(stuartg): turned off - causing OOM running under ant
+        // Probably temporary - must decide what to do with these
+        //System.out.println(message);
+        //msg(message, LOG, true, true);
     }
 
     /**
      * Report an error.
      */
-    public final void err(String message) {
-        msg(message, ERR, true, false);
+    public static final void err(String message) {
+        Assert.fail(message);
+        //msg(message, ERR, true, false);
     }
 
     /**
      * Report an error and newline.
      */
-    public final void errln(String message) {
-        msg(message, ERR, true, true);
+    public static final void errln(String message) {
+        Assert.fail(message);
+        //msg(message, ERR, true, true);
     }
 
     /**
      * Report a warning (generally missing tests or data).
      */
-    public final void warn(String message) {
-        msg(message, WARN, true, false);
+    public static final void warn(String message) {
+        Assert.fail(message);
+        // TODO(stuartg): turned off - causing OOM running under ant
+        //System.out.print(message);
+        //msg(message, WARN, true, false);
     }
 
     /**
      * Report a warning (generally missing tests or data) and newline.
      */
-    public final void warnln(String message) {
-        msg(message, WARN, true, true);
+    public static final void warnln(String message) {
+        Assert.fail(message);
+        // TODO(stuartg): turned off - causing OOM running under ant
+        //System.out.println(message);
+        //msg(message, WARN, true, true);
     }
 
     /**
@@ -92,7 +108,7 @@ public abstract class AbstractTestLog implements TestLog {
      * @param incCount if true, increments the warning or error count
      * @param newln if true, forces a newline after the message
      */
-    public abstract void msg(String message, int level, boolean incCount, boolean newln);
+    //public abstract void msg(String message, int level, boolean incCount, boolean newln);
 
     /**
      * Not sure if this class is useful.  This lets you log without first testing
@@ -108,7 +124,9 @@ public abstract class AbstractTestLog implements TestLog {
 
         public void msg(String message, int level, boolean incCount, boolean newln) {
             if (delegate != null) {
-                delegate.msg(message, level, incCount, newln);
+                // TODO(junit): figure out what to do with this message call
+                TestFmwk.msg(message, level, incCount, newln);
+                //delegate.msg(message, level, incCount, newln);
             }
         }
     }

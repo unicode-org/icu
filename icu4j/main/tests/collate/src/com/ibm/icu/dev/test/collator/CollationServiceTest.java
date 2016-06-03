@@ -17,16 +17,15 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Collator.CollatorFactory;
 import com.ibm.icu.util.ULocale;
 
 public class CollationServiceTest extends TestFmwk {
-    public static void main(String[] args) {
-        new CollationServiceTest().run(args);
-    }
-
+    @Test
     public void TestRegister() {
         // register a singleton
         Collator frcol = Collator.getInstance(ULocale.FRANCE);
@@ -121,6 +120,7 @@ public class CollationServiceTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestRegisterFactory() {
 
         class CollatorInfo {
@@ -334,6 +334,7 @@ public class CollationServiceTest extends TestFmwk {
         "stroke"
     };
 
+    @Test
     public void TestSeparateTrees() {
         String kw[] = Collator.getKeywords();
         if (!assertTrue("getKeywords != null", kw!=null)) return;
@@ -368,6 +369,7 @@ public class CollationServiceTest extends TestFmwk {
         }
     }
     
+    @Test
     public void TestGetFunctionalEquivalent() {
         String kw[] = Collator.getKeywords();
         final String DATA[] = { 
@@ -457,6 +459,7 @@ public class CollationServiceTest extends TestFmwk {
         return false;
     }
 
+    @Test
     public void TestGetKeywordValues(){
         final String[][] PREFERRED = {
             {"und",             "standard", "eor", "search"},

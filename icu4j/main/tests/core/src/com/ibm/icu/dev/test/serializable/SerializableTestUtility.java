@@ -8,16 +8,29 @@
 
 package com.ibm.icu.dev.test.serializable;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.MeasureUnitTest;
 import com.ibm.icu.dev.test.format.PluralRulesTest;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
+import com.ibm.icu.impl.URLHandler;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
@@ -45,8 +58,17 @@ import com.ibm.icu.util.VTimeZone;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class SerializableTest extends TestFmwk.TestGroup
-{
+public class SerializableTestUtility {
+    private static Class serializable;
+    static {
+        try {
+            serializable = Class.forName("java.io.Serializable");
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
     public interface Handler
     {
         public Object[] getTestObjects();
@@ -223,9 +245,7 @@ public class SerializableTest extends TestFmwk.TestGroup
                 new DateTimeRule(Calendar.MARCH, 8, Calendar.SUNDAY, true, 2*HOUR, DateTimeRule.WALL_TIME),
                 2007, AnnualTimeZoneRule.MAX_YEAR)
     };
-    
 
-    
     private static class RuleBasedTimeZoneHandler extends TimeZoneHandler
     {
         public Object[] getTestObjects()
@@ -406,7 +426,6 @@ public class SerializableTest extends TestFmwk.TestGroup
             return a.equals(b);
         }
     }
-
 
     private static class CurrencyHandler implements Handler
     {
@@ -711,62 +730,62 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.math.BigDecimal", new BigDecimalHandler());
         map.put("com.ibm.icu.math.MathContext", new MathContextHandler());
         
-        map.put("com.ibm.icu.text.NumberFormat", new FormatTests.NumberFormatHandler());
-        map.put("com.ibm.icu.text.DecimalFormat", new FormatTests.DecimalFormatHandler());
-        map.put("com.ibm.icu.text.CompactDecimalFormat", new FormatTests.CompactDecimalFormatHandler());
-        map.put("com.ibm.icu.text.RuleBasedNumberFormat", new FormatTests.RuleBasedNumberFormatHandler());
-        map.put("com.ibm.icu.text.CurrencyPluralInfo", new FormatTests.CurrencyPluralInfoHandler());
-        map.put("com.ibm.icu.text.DecimalFormatSymbols", new FormatTests.DecimalFormatSymbolsHandler());
-        map.put("com.ibm.icu.text.MessageFormat", new FormatTests.MessageFormatHandler());
-        map.put("com.ibm.icu.text.DateFormat", new FormatTests.DateFormatHandler());
-        map.put("com.ibm.icu.text.DateFormatSymbols", new FormatTests.DateFormatSymbolsHandler());
+        map.put("com.ibm.icu.text.NumberFormat", new FormatHandler.NumberFormatHandler());
+        map.put("com.ibm.icu.text.DecimalFormat", new FormatHandler.DecimalFormatHandler());
+        map.put("com.ibm.icu.text.CompactDecimalFormat", new FormatHandler.CompactDecimalFormatHandler());
+        map.put("com.ibm.icu.text.RuleBasedNumberFormat", new FormatHandler.RuleBasedNumberFormatHandler());
+        map.put("com.ibm.icu.text.CurrencyPluralInfo", new FormatHandler.CurrencyPluralInfoHandler());
+        map.put("com.ibm.icu.text.DecimalFormatSymbols", new FormatHandler.DecimalFormatSymbolsHandler());
+        map.put("com.ibm.icu.text.MessageFormat", new FormatHandler.MessageFormatHandler());
+        map.put("com.ibm.icu.text.DateFormat", new FormatHandler.DateFormatHandler());
+        map.put("com.ibm.icu.text.DateFormatSymbols", new FormatHandler.DateFormatSymbolsHandler());
         map.put("com.ibm.icu.util.DateInterval", new DateIntervalHandler());
-        map.put("com.ibm.icu.text.DateIntervalFormat", new FormatTests.DateIntervalFormatHandler());
-        map.put("com.ibm.icu.text.DateIntervalInfo", new FormatTests.DateIntervalInfoHandler());
-        map.put("com.ibm.icu.text.DateIntervalInfo$PatternInfo", new FormatTests.PatternInfoHandler());
-        map.put("com.ibm.icu.text.SimpleDateFormat", new FormatTests.SimpleDateFormatHandler());
-        map.put("com.ibm.icu.text.ChineseDateFormat", new FormatTests.ChineseDateFormatHandler());
-        map.put("com.ibm.icu.text.ChineseDateFormatSymbols", new FormatTests.ChineseDateFormatSymbolsHandler());
-        map.put("com.ibm.icu.impl.DateNumberFormat", new FormatTests.DateNumberFormatHandler());
-        map.put("com.ibm.icu.text.PluralFormat", new FormatTests.PluralFormatHandler());
-        map.put("com.ibm.icu.text.PluralRules", new FormatTests.PluralRulesHandler());
-        map.put("com.ibm.icu.text.PluralRulesSerialProxy", new FormatTests.PluralRulesSerialProxyHandler());
-        map.put("com.ibm.icu.text.TimeUnitFormat", new FormatTests.TimeUnitFormatHandler());
-        map.put("com.ibm.icu.text.SelectFormat", new FormatTests.SelectFormatHandler());
-        map.put("com.ibm.icu.impl.TimeZoneNamesImpl", new FormatTests.TimeZoneNamesHandler());
-        map.put("com.ibm.icu.text.TimeZoneFormat", new FormatTests.TimeZoneFormatHandler());
-        map.put("com.ibm.icu.impl.TimeZoneGenericNames", new FormatTests.TimeZoneGenericNamesHandler());
-        map.put("com.ibm.icu.impl.TZDBTimeZoneNames", new FormatTests.TZDBTimeZoneNamesHandler());
+        map.put("com.ibm.icu.text.DateIntervalFormat", new FormatHandler.DateIntervalFormatHandler());
+        map.put("com.ibm.icu.text.DateIntervalInfo", new FormatHandler.DateIntervalInfoHandler());
+        map.put("com.ibm.icu.text.DateIntervalInfo$PatternInfo", new FormatHandler.PatternInfoHandler());
+        map.put("com.ibm.icu.text.SimpleDateFormat", new FormatHandler.SimpleDateFormatHandler());
+        map.put("com.ibm.icu.text.ChineseDateFormat", new FormatHandler.ChineseDateFormatHandler());
+        map.put("com.ibm.icu.text.ChineseDateFormatSymbols", new FormatHandler.ChineseDateFormatSymbolsHandler());
+        map.put("com.ibm.icu.impl.DateNumberFormat", new FormatHandler.DateNumberFormatHandler());
+        map.put("com.ibm.icu.text.PluralFormat", new FormatHandler.PluralFormatHandler());
+        map.put("com.ibm.icu.text.PluralRules", new FormatHandler.PluralRulesHandler());
+        map.put("com.ibm.icu.text.PluralRulesSerialProxy", new FormatHandler.PluralRulesSerialProxyHandler());
+        map.put("com.ibm.icu.text.TimeUnitFormat", new FormatHandler.TimeUnitFormatHandler());
+        map.put("com.ibm.icu.text.SelectFormat", new FormatHandler.SelectFormatHandler());
+        map.put("com.ibm.icu.impl.TimeZoneNamesImpl", new FormatHandler.TimeZoneNamesHandler());
+        map.put("com.ibm.icu.text.TimeZoneFormat", new FormatHandler.TimeZoneFormatHandler());
+        map.put("com.ibm.icu.impl.TimeZoneGenericNames", new FormatHandler.TimeZoneGenericNamesHandler());
+        map.put("com.ibm.icu.impl.TZDBTimeZoneNames", new FormatHandler.TZDBTimeZoneNamesHandler());
 
-        map.put("com.ibm.icu.util.Calendar", new CalendarTests.CalendarHandler());
-        map.put("com.ibm.icu.util.BuddhistCalendar", new CalendarTests.BuddhistCalendarHandler());
-        map.put("com.ibm.icu.util.ChineseCalendar", new CalendarTests.ChineseCalendarHandler());
-        map.put("com.ibm.icu.util.CopticCalendar", new CalendarTests.CopticCalendarHandler());
-        map.put("com.ibm.icu.util.DangiCalendar", new CalendarTests.DangiCalendarHandler());
-        map.put("com.ibm.icu.util.EthiopicCalendar", new CalendarTests.EthiopicCalendarHandler());
-        map.put("com.ibm.icu.util.GregorianCalendar", new CalendarTests.GregorianCalendarHandler());
-        map.put("com.ibm.icu.util.HebrewCalendar", new CalendarTests.HebrewCalendarHandler());
-        map.put("com.ibm.icu.util.IndianCalendar", new CalendarTests.IndianCalendarHandler());
-        map.put("com.ibm.icu.util.IslamicCalendar", new CalendarTests.IslamicCalendarHandler());
-        map.put("com.ibm.icu.util.JapaneseCalendar", new CalendarTests.JapaneseCalendarHandler());
-        map.put("com.ibm.icu.util.PersianCalendar", new CalendarTests.PersianCalendarHandler());
-        map.put("com.ibm.icu.util.TaiwanCalendar", new CalendarTests.TaiwanCalendarHandler());
+        map.put("com.ibm.icu.util.Calendar", new CalendarHandler.BasicCalendarHandler());
+        map.put("com.ibm.icu.util.BuddhistCalendar", new CalendarHandler.BuddhistCalendarHandler());
+        map.put("com.ibm.icu.util.ChineseCalendar", new CalendarHandler.ChineseCalendarHandler());
+        map.put("com.ibm.icu.util.CopticCalendar", new CalendarHandler.CopticCalendarHandler());
+        map.put("com.ibm.icu.util.DangiCalendar", new CalendarHandler.DangiCalendarHandler());
+        map.put("com.ibm.icu.util.EthiopicCalendar", new CalendarHandler.EthiopicCalendarHandler());
+        map.put("com.ibm.icu.util.GregorianCalendar", new CalendarHandler.GregorianCalendarHandler());
+        map.put("com.ibm.icu.util.HebrewCalendar", new CalendarHandler.HebrewCalendarHandler());
+        map.put("com.ibm.icu.util.IndianCalendar", new CalendarHandler.IndianCalendarHandler());
+        map.put("com.ibm.icu.util.IslamicCalendar", new CalendarHandler.IslamicCalendarHandler());
+        map.put("com.ibm.icu.util.JapaneseCalendar", new CalendarHandler.JapaneseCalendarHandler());
+        map.put("com.ibm.icu.util.PersianCalendar", new CalendarHandler.PersianCalendarHandler());
+        map.put("com.ibm.icu.util.TaiwanCalendar", new CalendarHandler.TaiwanCalendarHandler());
         
-        map.put("com.ibm.icu.text.ArabicShapingException", new ExceptionTests.ArabicShapingExceptionHandler());
-        map.put("com.ibm.icu.text.StringPrepParseException", new ExceptionTests.StringPrepParseExceptionHandler());
-        map.put("com.ibm.icu.util.UResourceTypeMismatchException", new ExceptionTests.UResourceTypeMismatchExceptionHandler());
-        map.put("com.ibm.icu.impl.InvalidFormatException", new ExceptionTests.InvalidFormatExceptionHandler());
+        map.put("com.ibm.icu.text.ArabicShapingException", new ExceptionHandler.ArabicShapingExceptionHandler());
+        map.put("com.ibm.icu.text.StringPrepParseException", new ExceptionHandler.StringPrepParseExceptionHandler());
+        map.put("com.ibm.icu.util.UResourceTypeMismatchException", new ExceptionHandler.UResourceTypeMismatchExceptionHandler());
+        map.put("com.ibm.icu.impl.InvalidFormatException", new ExceptionHandler.InvalidFormatExceptionHandler());
 
-        map.put("com.ibm.icu.text.NumberFormat$Field", new FormatTests.NumberFormatFieldHandler());
-        map.put("com.ibm.icu.text.DateFormat$Field", new FormatTests.DateFormatFieldHandler());
-        map.put("com.ibm.icu.text.ChineseDateFormat$Field", new FormatTests.ChineseDateFormatFieldHandler());
-        map.put("com.ibm.icu.text.MessageFormat$Field", new FormatTests.MessageFormatFieldHandler());
+        map.put("com.ibm.icu.text.NumberFormat$Field", new FormatHandler.NumberFormatFieldHandler());
+        map.put("com.ibm.icu.text.DateFormat$Field", new FormatHandler.DateFormatFieldHandler());
+        map.put("com.ibm.icu.text.ChineseDateFormat$Field", new FormatHandler.ChineseDateFormatFieldHandler());
+        map.put("com.ibm.icu.text.MessageFormat$Field", new FormatHandler.MessageFormatFieldHandler());
 
-        map.put("com.ibm.icu.impl.duration.BasicDurationFormat", new FormatTests.BasicDurationFormatHandler());
-        map.put("com.ibm.icu.impl.RelativeDateFormat", new FormatTests.RelativeDateFormatHandler());
-        map.put("com.ibm.icu.util.IllformedLocaleException", new ExceptionTests.IllformedLocaleExceptionHandler());
-        map.put("com.ibm.icu.impl.locale.LocaleSyntaxException", new ExceptionTests.LocaleSyntaxExceptionHandler());
-        map.put("com.ibm.icu.impl.IllegalIcuArgumentException", new ExceptionTests.IllegalIcuArgumentExceptionHandler());
+        map.put("com.ibm.icu.impl.duration.BasicDurationFormat", new FormatHandler.BasicDurationFormatHandler());
+        map.put("com.ibm.icu.impl.RelativeDateFormat", new FormatHandler.RelativeDateFormatHandler());
+        map.put("com.ibm.icu.util.IllformedLocaleException", new ExceptionHandler.IllformedLocaleExceptionHandler());
+        map.put("com.ibm.icu.impl.locale.LocaleSyntaxException", new ExceptionHandler.LocaleSyntaxExceptionHandler());
+        map.put("com.ibm.icu.impl.IllegalIcuArgumentException", new ExceptionHandler.IllegalIcuArgumentExceptionHandler());
 
         map.put("com.ibm.icu.text.PluralRules$FixedDecimal", new PluralRulesTest.FixedDecimalHandler());
         map.put("com.ibm.icu.util.MeasureUnit", new MeasureUnitTest.MeasureUnitHandler());
@@ -778,23 +797,107 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.util.ICUCloneNotSupportedException", new ICUCloneNotSupportedExceptionHandler());
     }
     
-    public SerializableTest()
-    {
-        super(
-            new String[] {
-                "com.ibm.icu.dev.test.serializable.CoverageTest",
-                "com.ibm.icu.dev.test.serializable.CompatibilityTest"},
-            "All Serializable Tests"
-        );
+    /*
+     * Serialization Helpers
+     */
+    static Object[] getSerializedObjects(byte[] serializedBytes) throws ClassNotFoundException, IOException {
+        ByteArrayInputStream bis = new ByteArrayInputStream(serializedBytes);
+        ObjectInputStream ois = new ObjectInputStream(bis);
+        Object inputObjects[] = (Object[]) ois.readObject();
+
+        ois.close();
+        return inputObjects;
     }
 
-    public static final String CLASS_TARGET_NAME  = "Serializable";
+    static byte[] getSerializedBytes(Object[] objectsOut) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        oos.writeObject(objectsOut);
 
-    public static void main(String[] args)
-    {
-        SerializableTest test = new SerializableTest();
+        byte[] serializedBytes = bos.toByteArray();
+        oos.close();
+        return serializedBytes;
+    }
+
+    static Object[] getSerializedObjects(File testFile) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(testFile);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Object[] objects = (Object[]) ois.readObject();
+        fis.close();
+        return objects;
+    }
+
+    static List<String> getSerializationClassList(Object caller) throws IOException {
+        List<String> classList = new ArrayList();
+        Enumeration<URL> urlEnum = caller.getClass().getClassLoader().getResources("com/ibm/icu");
+        while (urlEnum.hasMoreElements()) {
+            URL url = urlEnum.nextElement();
+            URLHandler handler  = URLHandler.get(url);
+            if (handler == null) {
+                System.out.println("Unsupported URL: " + url);
+                continue;
+            }
+            CoverageClassVisitor visitor = new CoverageClassVisitor(classList);
+            handler.guide(visitor, true, false);
+        }
+        // TODO(junit): add randomization support on the list based on the params object
+
+        return classList;
+    }
+
+    private static class CoverageClassVisitor implements URLHandler.URLVisitor {
+        private List<String> classNames;
+
+        public CoverageClassVisitor(List<String> classNamesList) {
+            this.classNames = classNamesList;
+        }
         
-        test.run(args);
+        /* (non-Javadoc)
+         * @see com.ibm.icu.impl.URLHandler.URLVisitor#visit(java.lang.String)
+         */
+        @Override
+        public void visit(String classPath) {
+            int ix = classPath.lastIndexOf(".class");
+            if (ix < 0) {
+                return;
+            }
+            String className = "com.ibm.icu" + classPath.substring(0, ix).replace('/', '.');
+
+            // Skip things in com.ibm.icu.dev; they're not relevant.
+            if (className.startsWith("com.ibm.icu.dev.")) {
+                return;
+            }
+            Class c;
+            try {
+                c = Class.forName(className);
+            } catch (ClassNotFoundException e) {
+                return;
+            }
+            int m = c.getModifiers();
+
+            if (className.equals("com.ibm.icu.text.PluralRules$FixedDecimal")) {
+                // Known Issue: "10268", "Serializable interface is not implemented in PluralRules$FixedDecimal"
+                return;
+            }
+            
+            if (c.isEnum() || !serializable.isAssignableFrom(c)) {
+                //System.out.println("@@@ Skipping: " + className);
+                return;
+            }
+            if (!Modifier.isPublic(m) || Modifier.isInterface(m)) {
+                //System.out.println("@@@ Skipping: " + className);
+                return;
+            }
+
+            this.classNames.add(className);  
+        } 
+    }
+
+    public static void serializeObjects(File oof, Object[] objectsOut) throws IOException {
+        FileOutputStream fos = new FileOutputStream(oof);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(objectsOut);
+
+        oos.close();        
     }
 }
-//eof

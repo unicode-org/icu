@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.dev.test.bidi;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.Bidi;
 
 
@@ -15,7 +17,7 @@ import com.ibm.icu.text.Bidi;
  * Ported from C by Ramy Said
  */
 
-public class TestReorderArabicMathSymbols extends BidiTest {
+public class TestReorderArabicMathSymbols extends BidiFmwk {
 
     private static final String[] logicalOrder = {
         /* Arabic mathematical Symbols "\u1EE00 - "\u1EE1B */
@@ -103,6 +105,7 @@ public class TestReorderArabicMathSymbols extends BidiTest {
         "\uD83B\uDE4B\uD83B\uDE49\uD83B\uDE47\uD83B\uDE42"
     };
 
+    @Test
     public void testReorderArabicMathSymbols() {
         Bidi bidi = new Bidi();
         int testNumber;
@@ -135,14 +138,4 @@ public class TestReorderArabicMathSymbols extends BidiTest {
         
         logln("\nExiting TestReorderArabicMathSymbols\n");
     }
-    
-    public static void main(String[] args) {
-        try {
-            new TestReorderArabicMathSymbols().run(args);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
 }

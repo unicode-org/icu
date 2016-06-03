@@ -7,6 +7,8 @@
 
 package com.ibm.icu.dev.test.bidi;
 
+import org.junit.Test;
+
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Bidi;
 
@@ -16,7 +18,7 @@ import com.ibm.icu.text.Bidi;
  * @author Lina Kemmel, Matitiahu Allouche
  */
 
-public class TestStreaming extends BidiTest {
+public class TestStreaming extends BidiFmwk {
 
     static final int MAXPORTIONS = 10;
 
@@ -66,6 +68,7 @@ public class TestStreaming extends BidiTest {
     static final int MAXLOOPS = 20;
     static final byte[] paraLevels = { Bidi.LTR, Bidi.RTL };
 
+    @Test
     public void testStreaming()
     {
         String src, subsrc;
@@ -135,15 +138,4 @@ public class TestStreaming extends BidiTest {
         }
         logln("\nExiting TestStreaming\n");
     }
-
-
-    public static void main(String[] args) {
-        try {
-            new TestStreaming().run(args);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
 }

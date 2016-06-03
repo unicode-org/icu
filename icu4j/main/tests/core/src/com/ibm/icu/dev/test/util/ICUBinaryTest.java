@@ -10,6 +10,8 @@ package com.ibm.icu.dev.test.util;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUBinary;
 
@@ -33,19 +35,10 @@ public final class ICUBinaryTest extends TestFmwk
       
     // public methods -----------------------------------------------
     
-    public static void main(String arg[]) 
-    {
-        ICUBinaryTest test = new ICUBinaryTest();
-        try {
-            test.run(arg);
-        } catch (Exception e) {
-            test.errln("Error testing icubinarytest");
-        }
-    }
-    
     /**
      * Testing the constructors of the Tries
      */
+    @Test
     public void TestReadHeader()
     {
         int formatid = 0x01020304;

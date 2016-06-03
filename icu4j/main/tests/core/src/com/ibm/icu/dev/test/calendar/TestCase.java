@@ -191,20 +191,21 @@ public class TestCase {
         for (int i=0; i < c.getFieldCount(); i++) {
             if (isSet(i) && get(i) != c.get(i)) {
                 StringBuffer buf = new StringBuffer();
-                buf.append("Fail: " + CalendarTest.fieldName(i) + " = " + c.get(i) +
+                buf.append("Fail: " + CalendarTestFmwk.fieldName(i) + " = " + c.get(i) +
                           ", expected " + get(i));
                 for (int j=0; j<c.getFieldCount(); ++j) {
                     if (isSet(j)) {
                         if (get(j) == c.get(j)) {
-                            buf.append("\n  ok: " + CalendarTest.fieldName(j) + " = " +
+                            buf.append("\n  ok: " + CalendarTestFmwk.fieldName(j) + " = " +
                                       c.get(j));
                         } else {
-                            buf.append("\n  fail: " + CalendarTest.fieldName(j) + " = " +
+                            buf.append("\n  fail: " + CalendarTestFmwk.fieldName(j) + " = " +
                                       c.get(j) + ", expected " + get(j));
                         }
                     }
                 }
-                log.errln(buf.toString());
+                // TODO(junit): blanked out TestLog
+                //log.errln(buf.toString());
                 return false;
             }
         }

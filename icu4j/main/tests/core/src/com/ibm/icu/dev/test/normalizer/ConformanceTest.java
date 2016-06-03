@@ -11,6 +11,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.StringCharacterIterator;
 
+import org.junit.Ignore;
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Utility;
@@ -22,10 +25,6 @@ public class ConformanceTest extends TestFmwk {
 
     Normalizer normalizer;
 
-    public static void main(String[] args) throws Exception {
-        new ConformanceTest().run(args);
-    }
-    
     public ConformanceTest() {
         // Doesn't matter what the string and mode are; we'll change
         // them later as needed.
@@ -45,9 +44,11 @@ public class ConformanceTest extends TestFmwk {
      * http://www.unicode.org/unicode/reports/tr15/conformance/Draft-TestSuite.txt.* http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt
      * This file must be located at the path specified as TEST_SUITE_FILE.
      */
+    @Test
     public void TestConformance() throws Exception{
         runConformance("unicode/NormalizationTest.txt",0);
     }
+    @Test
     public void TestConformance_3_2() throws Exception{
         runConformance("unicode/NormalizationTest-3.2.0.txt",Normalizer.UNICODE_3_2);
     }
@@ -500,12 +501,13 @@ public class ConformanceTest extends TestFmwk {
     // taken from the conformance file, but culled out to make
     // debugging easier.  These can be eliminated without affecting
     // coverage.
-
-    public void _hideTestCase6(int options) throws Exception{
-        _testOneLine("0385;0385;00A8 0301;0020 0308 0301;0020 0308 0301;",options);
+    @Ignore
+    @Test
+    public void _hideTestCase6(/*int options*/) throws Exception{
+        _testOneLine("0385;0385;00A8 0301;0020 0308 0301;0020 0308 0301;", /*options*/ 0);
     }
 
-    public void _testOneLine(String line,int options) throws Exception{
+    private void _testOneLine(String line,int options) throws Exception{
         String[] fields = new String[5];
         StringBuffer buf = new StringBuffer();
         // Parse out the fields

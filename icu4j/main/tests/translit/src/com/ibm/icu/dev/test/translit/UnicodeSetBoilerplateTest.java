@@ -8,6 +8,8 @@ package com.ibm.icu.dev.test.translit;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestBoilerplate;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -16,14 +18,14 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class UnicodeSetBoilerplateTest extends TestBoilerplate<UnicodeSet> {
 
-    public static void main(String[] args) throws Exception {
-        new UnicodeSetBoilerplateTest().run(args);
-    }
-
     public void TestUnicodeSetBoilerplate() throws Exception {
-        _test();
     }
  
+    @Test
+    public void test() throws Exception {
+        _test();
+    }
+    
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
      */

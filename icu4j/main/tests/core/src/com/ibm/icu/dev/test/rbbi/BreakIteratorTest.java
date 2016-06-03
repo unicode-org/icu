@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.FilteredBreakIteratorBuilder;
@@ -24,14 +27,13 @@ public class BreakIteratorTest extends TestFmwk
     private BreakIterator sentenceBreak;
     private BreakIterator titleBreak;
 
-    public static void main(String[] args) throws Exception {
-        new BreakIteratorTest().run(args);
-    }
     public BreakIteratorTest()
     {
 
     }
-    protected void init(){
+    
+    @Before
+    public void init(){
         characterBreak = BreakIterator.getCharacterInstance();
         wordBreak = BreakIterator.getWordInstance();
         lineBreak = BreakIterator.getLineInstance();
@@ -59,14 +61,18 @@ public class BreakIteratorTest extends TestFmwk
         List<String> previousResults = _testLastAndPrevious(bi, text);
 
         logln("comparing forward and backward...");
-        int errs = getErrorCount();
+        //TODO(junit) - needs to be rewritten
+        //int errs = getErrorCount();
         compareFragmentLists("forward iteration", "backward iteration", nextResults,
                         previousResults);
-        if (getErrorCount() == errs) {
-            logln("comparing expected and actual...");
-            compareFragmentLists("expected result", "actual result", expectedResult,
+        //if (getErrorCount() == errs) {
+        logln("comparing expected and actual...");
+        compareFragmentLists("expected result", "actual result", expectedResult,
+                        nextResults);
+        logln("comparing expected and actual...");
+        compareFragmentLists("expected result", "actual result", expectedResult,
                             nextResults);
-        }
+        //}
 
         int[] boundaries = new int[expectedResult.size() + 3];
         boundaries[0] = BreakIterator.DONE;
@@ -356,6 +362,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4097779
      */
+    @Test
     public void TestBug4097779() {
         List<String> wordSelectionData = new ArrayList<String>(2);
 
@@ -368,6 +375,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4098467
      */
+    @Test
     public void TestBug4098467Words() {
         List<String> wordSelectionData = new ArrayList<String>();
 
@@ -401,6 +409,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4111338
      */
+    @Test
     public void TestBug4111338() {
         List<String> sentenceSelectionData = new ArrayList<String>();
 
@@ -424,6 +433,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4143071
      */
+    @Test
     public void TestBug4143071() {
         List<String> sentenceSelectionData = new ArrayList<String>(3);
 
@@ -438,6 +448,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4152416
      */
+    @Test
     public void TestBug4152416() {
         List<String> sentenceSelectionData = new ArrayList<String>(2);
 
@@ -453,6 +464,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4152117
      */
+    @Test
     public void TestBug4152117() {
         List<String> sentenceSelectionData = new ArrayList<String>(3);
 
@@ -471,6 +483,7 @@ public class BreakIteratorTest extends TestFmwk
         generalIteratorTest(sentenceBreak, sentenceSelectionData);
     }
 
+    @Test
     public void TestLineBreak() {
         List<String> lineSelectionData = new ArrayList<String>();
 
@@ -510,6 +523,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4068133
      */
+    @Test
     public void TestBug4068133() {
         List<String> lineSelectionData = new ArrayList<String>(9);
 
@@ -529,6 +543,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4086052
      */
+    @Test
     public void TestBug4086052() {
         List<String> lineSelectionData = new ArrayList<String>(1);
 
@@ -541,6 +556,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4097920
      */
+    @Test
     public void TestBug4097920() {
         List<String> lineSelectionData = new ArrayList<String>(3);
 
@@ -555,6 +571,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4117554
      */
+    @Test
     public void TestBug4117554Lines() {
         List<String> lineSelectionData = new ArrayList<String>(3);
 
@@ -566,6 +583,7 @@ public class BreakIteratorTest extends TestFmwk
         generalIteratorTest(lineBreak, lineSelectionData);
     }
 
+    @Test
     public void TestLettersAndDigits() {
         // a character sequence such as "X11" or "30F3" or "native2ascii" should
         // be kept together as a single word
@@ -585,6 +603,7 @@ public class BreakIteratorTest extends TestFmwk
     private static final String circumflexA = "a\u0302";
     private static final String tildeE = "e\u0303";
 
+    @Test
     public void TestCharacterBreak() {
         List<String> characterSelectionData = new ArrayList<String>();
 
@@ -619,6 +638,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4098467
      */
+    @Test
     public void TestBug4098467Characters() {
         List<String> characterSelectionData = new ArrayList<String>();
 
@@ -659,6 +679,7 @@ public class BreakIteratorTest extends TestFmwk
         generalIteratorTest(characterBreak, characterSelectionData);
     }
 
+    @Test
     public void TestTitleBreak()
     {
         List<String> titleData = new ArrayList<String>();
@@ -679,6 +700,7 @@ public class BreakIteratorTest extends TestFmwk
     /*
      * @bug 4153072
      */
+    @Test
     public void TestBug4153072() {
         BreakIterator iter = BreakIterator.getWordInstance();
         String str = "...Hello, World!...";
@@ -704,6 +726,7 @@ public class BreakIteratorTest extends TestFmwk
     }
 
 
+    @Test
     public void TestBug4146175Lines() {
         List<String> lineSelectionData = new ArrayList<String>(2);
 
@@ -722,12 +745,14 @@ public class BreakIteratorTest extends TestFmwk
         + "\u2001\u2002\u200c\u200d\u200e\u200f\u2010\u2011\u2012\u2028\u2029\u202a\u203e\u203f"
         + "\u2040\u20dd\u20de\u20df\u20e0\u2160\u2161\u2162\u2163\u2164";
 
+    @Test
     public void TestSentenceInvariants()
     {
         BreakIterator e = BreakIterator.getSentenceInstance();
         doOtherInvariantTest(e, cannedTestChars + ".,\u3001\u3002\u3041\u3042\u3043\ufeff");
     }
 
+    @Test
     public void TestEmptyString()
     {
         String text = "";
@@ -737,6 +762,7 @@ public class BreakIteratorTest extends TestFmwk
         generalIteratorTest(lineBreak, x);
     }
 
+    @Test
     public void TestGetAvailableLocales()
     {
         Locale[] locList = BreakIterator.getAvailableLocales();
@@ -757,6 +783,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * @bug 4068137
      */
+    @Test
     public void TestEndBehavior()
     {
         String testString = "boo.";
@@ -779,6 +806,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * test methods preceding, following and isBoundary
      **/
+    @Test
     public void TestPreceding() {
         String words3 = "aaa bbb ccc";
         BreakIterator e = BreakIterator.getWordInstance(Locale.getDefault());
@@ -812,6 +840,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * Bug 4450804
      */
+    @Test
     public void TestLineBreakContractions() {
         List<String> expected = new ArrayList<String>(7);
         expected.add("These ");
@@ -827,6 +856,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * Ticket#5615
      */
+    @Test
     public void TestT5615() {
         com.ibm.icu.util.ULocale[] ulocales = BreakIterator.getAvailableULocales();
         int type = 0;
@@ -850,6 +880,7 @@ public class BreakIteratorTest extends TestFmwk
      * At present, Japanese doesn't have exceptions.
      * However, this still should not fail.
      */
+    @Test
     public void TestFilteredJapanese() {
         ULocale loc = ULocale.JAPANESE;
         BreakIterator brk = FilteredBreakIteratorBuilder
@@ -865,6 +896,7 @@ public class BreakIteratorTest extends TestFmwk
      * Test case for Ticket#10721. BreakIterator factory method should throw NPE
      * when specified locale is null.
      */
+    @Test
     public void TestNullLocale() {
         Locale loc = null;
         ULocale uloc = null;
@@ -926,6 +958,7 @@ public class BreakIteratorTest extends TestFmwk
     /**
      * Test FilteredBreakIteratorBuilder newly introduced
      */
+    @Test
     public void TestFilteredBreakIteratorBuilder() {
         FilteredBreakIteratorBuilder builder;
         BreakIterator baseBI;

@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Test;
+
 import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.charset.CharsetSelector;
@@ -32,14 +34,10 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 public class TestSelection extends TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new TestSelection().run(args);
-    }
-
+    @Test
     public void TestConversionUTF16() {
         List<String> testEncodings;
-        if (getInclusion() < 6) {
+        if (TestFmwk.getExhaustiveness() < 6) {
             testEncodings = Arrays.asList(
                     "Big5",
                     "EUC-JP",
@@ -122,6 +120,7 @@ public class TestSelection extends TestFmwk {
     }
 
     /* This test is to provide better code coverage for CharsetSelector */
+    @Test
     public void TestCharsetSelectorCodeCoverage() {
         List emptyList = new ArrayList();
         UnicodeSet nonEmptySet = new UnicodeSet();

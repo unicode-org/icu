@@ -30,8 +30,10 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.serializable.SerializableTest;
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Utility;
@@ -55,10 +57,7 @@ public class PluralRulesTest extends TestFmwk {
 
     PluralRulesFactory factory = PluralRulesFactory.NORMAL;
 
-    public static void main(String[] args) throws Exception {
-        new PluralRulesTest().run(args);
-    }
-
+    @Test
     public void testOverUnderflow() {
         logln(String.valueOf(Long.MAX_VALUE + 1d));
         for (double[] testDouble : new double[][] {
@@ -89,6 +88,7 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void testSyntaxRestrictions() {
         Object[][] shouldFail = {
                 { "a:n in 3..10,13..19" },
@@ -159,6 +159,7 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void testSamples() {
         String description = "one: n is 3 or f is 5 @integer  3,19, @decimal 3.50 ~ 3.53,   …; other:  @decimal 99.0~99.2, 999.0, …";
         PluralRules test = PluralRules.createRules(description);
@@ -249,11 +250,13 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void testParseEmpty() throws ParseException {
         PluralRules rules = PluralRules.parseDescription("a:n");
         assertEquals("empty", "a", rules.select(0));
     }
 
+    @Test
     public void testParsing() {
         for (int i = 0; i < parseTestData.length; i += 2) {
             String pattern = parseTestData[i];
@@ -285,6 +288,7 @@ public class PluralRulesTest extends TestFmwk {
     // one → n is 1; few → n in 2..4;
     };
 
+    @Test
     public void testOperands() {
         for (String[] pair : operandTestData) {
             String pattern = pair[0].trim();
@@ -310,6 +314,7 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void testUniqueRules() {
         main: for (ULocale locale : factory.getAvailableULocales()) {
             PluralRules rules = factory.forLocale(locale);
@@ -445,14 +450,17 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void testEquality() {
         compareEqualityTestSets(equalityTestData, true);
     }
 
+    @Test
     public void testInequality() {
         compareEqualityTestSets(inequalityTestData, false);
     }
 
+    @Test
     public void testBuiltInRules() {
         // spot check
         PluralRules rules = factory.forLocale(ULocale.US);
@@ -471,6 +479,7 @@ public class PluralRulesTest extends TestFmwk {
         assertEquals("ru 2", PluralRules.KEYWORD_FEW, rules.select(2));
     }
 
+    @Test
     public void testFunctionalEquivalent() {
         // spot check
         ULocale unknown = ULocale.createCanonical("zz_ZZ");
@@ -492,6 +501,7 @@ public class PluralRulesTest extends TestFmwk {
         assertEquals("ru and ru_RU equivalent locales", ru_ru_equiv, ru_equiv);
     }
 
+    @Test
     public void testAvailableULocales() {
         ULocale[] locales = factory.getAvailableULocales();
         Set localeSet = new HashSet();
@@ -503,6 +513,7 @@ public class PluralRulesTest extends TestFmwk {
     /*
      * Test the method public static PluralRules parseDescription(String description)
      */
+    @Test
     public void TestParseDescription() {
         try {
             if (PluralRules.DEFAULT != PluralRules.parseDescription("")) {
@@ -517,6 +528,7 @@ public class PluralRulesTest extends TestFmwk {
     /*
      * Tests the method public static PluralRules createRules(String description)
      */
+    @Test
     public void TestCreateRules() {
         try {
             if (PluralRules.createRules(null) != null) {
@@ -530,6 +542,7 @@ public class PluralRulesTest extends TestFmwk {
     /*
      * Tests the method public int hashCode()
      */
+    @Test
     public void TestHashCode() {
         // Bad test, breaks whenever PluralRules implementation changes.
         // PluralRules pr = PluralRules.DEFAULT;
@@ -541,6 +554,7 @@ public class PluralRulesTest extends TestFmwk {
     /*
      * Tests the method public boolean equals(PluralRules rhs)
      */
+    @Test
     public void TestEquals() {
         PluralRules pr = PluralRules.DEFAULT;
 
@@ -561,6 +575,7 @@ public class PluralRulesTest extends TestFmwk {
     /*
      * Tests getUniqueKeywordValue()
      */
+    @Test
     public void TestGetUniqueKeywordValue() {
         assertRuleKeyValue("a: n is 1", "not_defined", PluralRules.NO_UNIQUE_VALUE); // key not defined
         assertRuleValue("n within 2..2", 2);
@@ -583,6 +598,7 @@ public class PluralRulesTest extends TestFmwk {
      * The version in PluralFormatUnitTest is not really a test, and it's in the wrong place anyway, so I'm putting a
      * variant of it here.
      */
+    @Test
     public void TestGetSamples() {
         Set<ULocale> uniqueRuleSet = new HashSet<ULocale>();
         for (ULocale locale : factory.getAvailableULocales()) {
@@ -648,6 +664,7 @@ public class PluralRulesTest extends TestFmwk {
      * Returns the empty set if the keyword is not defined, null if there are an unlimited number of values for the
      * keyword, or the set of values that trigger the keyword.
      */
+    @Test
     public void TestGetAllKeywordValues() {
         // data is pairs of strings, the rule, and the expected values as arguments
         String[] data = {
@@ -718,11 +735,13 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestOrdinal() {
         PluralRules pr = factory.forLocale(ULocale.ENGLISH, PluralType.ORDINAL);
         assertEquals("PluralRules(en-ordinal).select(2)", "two", pr.select(2));
     }
 
+    @Test
     public void TestBasicFraction() {
         String[][] tests = { { "en", "one: j is 1" }, { "1", "0", "1", "one" }, { "1", "2", "1.00", "other" }, };
         ULocale locale = null;
@@ -757,6 +776,7 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestLimitedAndSamplesConsistency() {
         for (ULocale locale : PluralRules.getAvailableULocales()) {
             ULocale loc2 = PluralRules.getFunctionalEquivalent(locale, null);
@@ -788,6 +808,7 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestKeywords() {
         Set<String> possibleKeywords = new LinkedHashSet(Arrays.asList("zero", "one", "two", "few", "many", "other"));
         Object[][][] tests = {
@@ -882,6 +903,7 @@ public class PluralRulesTest extends TestFmwk {
         };
     }
 
+    @Test
     public void TestLocales() {
         if (false) {
             generateLOCALE_SNAPSHOT();
@@ -1023,6 +1045,7 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSerialization() {
         Output<Integer> size = new Output<Integer>();
         int max = 0;
@@ -1040,7 +1063,7 @@ public class PluralRulesTest extends TestFmwk {
         logln("max \tsize:\t" + max);
     }
 
-    public static class FixedDecimalHandler implements SerializableTest.Handler {
+    public static class FixedDecimalHandler implements SerializableTestUtility.Handler {
         public Object[] getTestObjects() {
             FixedDecimal items[] = { new FixedDecimal(3d), new FixedDecimal(3d, 2), new FixedDecimal(3.1d, 1),
                     new FixedDecimal(3.1d, 2), };
@@ -1054,6 +1077,7 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSerial() {
         PluralRules s = PluralRules.forLocale(ULocale.ENGLISH);
         checkStreamingEquality(s);
@@ -1093,6 +1117,7 @@ public class PluralRulesTest extends TestFmwk {
         return b.append(']').toString();
     }
 
+    @Test
     public void testJavaLocaleFactory() {
         PluralRules rulesU0 = PluralRules.forLocale(ULocale.FRANCE);
         PluralRules rulesJ0 = PluralRules.forLocale(Locale.FRANCE);

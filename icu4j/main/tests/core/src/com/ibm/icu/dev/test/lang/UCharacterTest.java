@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Norm2AllModes;
@@ -60,22 +62,10 @@ public final class UCharacterTest extends TestFmwk
 
     // public methods ================================================
 
-    public static void main(String[] arg)
-    {
-        try
-        {
-            UCharacterTest test = new UCharacterTest();
-            test.run(arg);
-        }
-        catch (Exception e)
-        {
-        e.printStackTrace();
-        }
-    }
-
     /**
     * Testing the letter and number determination in UCharacter
     */
+    @Test
     public void TestLetterNumber()
     {
         for (int i = 0x0041; i < 0x005B; i ++)
@@ -140,6 +130,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Tests for space determination in UCharacter
     */
+    @Test
     public void TestSpaces()
     {
         int spaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
@@ -251,6 +242,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Test various implementations of Pattern_Syntax & Pattern_White_Space.
      */
+    @Test
     public void TestPatternProperties() {
         UnicodeSet syn_pp = new UnicodeSet();
         UnicodeSet syn_prop = new UnicodeSet("[:Pattern_Syntax:]");
@@ -291,6 +283,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Tests for defined and undefined characters
     */
+    @Test
     public void TestDefined()
     {
         int undefined[] = {0xfff1, 0xfff7, 0xfa6e};
@@ -316,6 +309,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Tests for base characters and their cellwidth
     */
+    @Test
     public void TestBase()
     {
         int base[] = {0x0061, 0x000031, 0x0003d2};
@@ -341,6 +335,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Tests for digit characters
     */
+    @Test
     public void TestDigits()
     {
         int digits[] = {0x0030, 0x000662, 0x000F23, 0x000ED5, 0x002160};
@@ -386,6 +381,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     *  Tests for numeric characters
     */
+    @Test
     public void TestNumeric()
     {
         if (UCharacter.getNumericValue(0x00BC) != -2) {
@@ -435,6 +431,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Tests for version
     */
+    @Test
     public void TestVersion()
     {
         if (!UCharacter.getUnicodeVersion().equals(VERSION_))
@@ -444,6 +441,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Tests for control characters
     */
+    @Test
     public void TestISOControl()
     {
         int control[] = {0x001b, 0x000097, 0x000082};
@@ -473,6 +471,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Test Supplementary
      */
+    @Test
     public void TestSupplementary()
     {
         for (int i = 0; i < 0x10000; i ++) {
@@ -492,6 +491,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Test mirroring
      */
+    @Test
     public void TestMirror()
     {
         if (!(UCharacter.isMirrored(0x28) && UCharacter.isMirrored(0xbb) &&
@@ -560,6 +560,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Tests for printable characters
     */
+    @Test
     public void TestPrint()
     {
         int printable[] = {0x0042, 0x00005f, 0x002014};
@@ -612,6 +613,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Testing for identifier characters
     */
+    @Test
     public void TestIdentifier()
     {
         int unicodeidstart[] = {0x0250, 0x0000e2, 0x000061};
@@ -678,6 +680,7 @@ public final class UCharacterTest extends TestFmwk
     * e.g. java -DUnicodeData="data_directory_path"
     * com.ibm.icu.dev.test.lang.UCharacterTest
     */
+    @Test
     public void TestUnicodeData()
     {
         // this is the 2 char category types used in the UnicodeData file
@@ -993,6 +996,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Test for the character names
     */
+    @Test
     public void TestNames()
     {
         try{
@@ -1113,7 +1117,7 @@ public final class UCharacterTest extends TestFmwk
                       + "U+0061");
             }
 
-            if (getInclusion() >= 5) {
+            if (TestFmwk.getExhaustiveness() >= 5) {
                 // extra testing different from icu
                 for (int i = UCharacter.MIN_VALUE; i < UCharacter.MAX_VALUE; i ++)
                 {
@@ -1128,7 +1132,7 @@ public final class UCharacterTest extends TestFmwk
             }
 
             // Test getCharNameCharacters
-            if (getInclusion() >= 10) {
+            if (TestFmwk.getExhaustiveness() >= 10) {
                 boolean map[] = new boolean[256];
 
                 UnicodeSet set = new UnicodeSet(1, 0); // empty set
@@ -1218,6 +1222,7 @@ public final class UCharacterTest extends TestFmwk
 
     }
 
+    @Test
     public void TestUCharFromNameUnderflow() {
         // Ticket #10889: Underflow crash when there is no dash.
         int c = UCharacter.getCharFromExtendedName("<NO BREAK SPACE>");
@@ -1249,6 +1254,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Testing name iteration
     */
+    @Test
     public void TestNameIteration()throws Exception
     {
         try {
@@ -1410,6 +1416,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * Testing the for illegal characters
     */
+    @Test
     public void TestIsLegal()
     {
         int illegal[] = {0xFFFE, 0x00FFFF, 0x005FFFE, 0x005FFFF, 0x0010FFFE,
@@ -1471,6 +1478,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Test getCodePoint
      */
+    @Test
     public void TestCodePoint()
     {
         int ch = 0x10000;
@@ -1515,6 +1523,7 @@ public final class UCharacterTest extends TestFmwk
     * This method is a little different from the type test in icu4c.
     * But combined with testUnicodeData, they basically do the same thing.
     */
+    @Test
     public void TestIteration()
     {
         int limit     = 0;
@@ -1663,6 +1672,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Testing getAge
      */
+    @Test
     public void TestGetAge()
     {
         int ages[] = {0x41,    1, 1, 0, 0,
@@ -1715,6 +1725,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Test binary non core properties
      */
+    @Test
     public void TestAdditionalProperties()
     {
         // test data for hasBinaryProperty()
@@ -2285,6 +2296,7 @@ public final class UCharacterTest extends TestFmwk
         }
     }
 
+    @Test
     public void TestNumericProperties()
     {
         // see UnicodeData.txt, DerivedNumericValues.txt
@@ -2396,6 +2408,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Test the property values API.  See JB#2410.
      */
+    @Test
     public void TestPropertyValues() {
         int i, p, min, max;
 
@@ -2455,6 +2468,7 @@ public final class UCharacterTest extends TestFmwk
         }
     }
 
+    @Test
     public void TestBidiPairedBracketType() {
         // BidiBrackets-6.3.0.txt says:
         //
@@ -2481,6 +2495,7 @@ public final class UCharacterTest extends TestFmwk
         assertTrue("bpt=Close is a subset of Pe", pe.containsAll(bpt_close));
     }
 
+    @Test
     public void TestEmojiProperties() {
         assertFalse("space is not Emoji", UCharacter.hasBinaryProperty(0x20, UProperty.EMOJI));
         assertTrue("shooting star is Emoji", UCharacter.hasBinaryProperty(0x1F320, UProperty.EMOJI));
@@ -2495,6 +2510,7 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.hasBinaryProperty(0x1F64B, UProperty.EMOJI_MODIFIER_BASE));
     }
 
+    @Test
     public void TestIsBMP()
     {
         int ch[] = {0x0, -1, 0xffff, 0x10ffff, 0xff, 0x1ffff};
@@ -2562,7 +2578,8 @@ public final class UCharacterTest extends TestFmwk
     }
 
    /* various tests for consistency of UCD data and API behavior */
-   public void TestConsistency() {
+    @Test
+    public void TestConsistency() {
        UnicodeSet set1, set2, set3, set4;
 
        int start, end;
@@ -2666,6 +2683,7 @@ public final class UCharacterTest extends TestFmwk
 
    }
 
+    @Test
     public void TestCoverage() {
         //cover forDigit
         char ch1 = UCharacter.forDigit(7, 11);
@@ -2691,6 +2709,7 @@ public final class UCharacterTest extends TestFmwk
         }
     }
 
+    @Test
     public void TestBlockData()
     {
         Class ubc = UCharacter.UnicodeBlock.class;
@@ -2719,6 +2738,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static UnicodeBlock getInstance(int id)
      */
+    @Test
     public void TestGetInstance(){
         // Testing values for invalid and valid ID
         int[] invalid_test = {-1,-10,-100};
@@ -2736,6 +2756,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static UnicodeBlock of(int ch)
      */
+    @Test
     public void TestOf(){
         if(UCharacter.UnicodeBlock.INVALID_CODE != UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1)){
             errln("UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1) was " +
@@ -2749,6 +2770,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static final UnicodeBlock forName(String blockName)
      */
+    @Test
     public void TestForName(){
         //UCharacter.UnicodeBlock.forName("");
         //Tests when "if (b == null)" is true
@@ -2758,6 +2780,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static int getNumericValue(int ch)
      */
+    @Test
     public void TestGetNumericValue(){
         // The following tests the else statement when
         //      if(numericType<NumericType.COUNT) is false
@@ -2805,6 +2828,7 @@ public final class UCharacterTest extends TestFmwk
      *      public static double getUnicodeNumericValue(int ch)
      */
     // The following tests covers if(mant==0), else if(mant > 9), and default
+    @Test
     public void TestGetUnicodeNumericValue(){
         /*  The code coverage for if(mant==0), else if(mant > 9), and default
          *  could not be covered even with input values from UTF16.CODEPOINT_MIN_VALUE
@@ -2818,6 +2842,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static String toString(int ch)
      */
+    @Test
     public void TestToString(){
         int[] valid_tests = {
                 UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
@@ -2847,6 +2872,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static int getCombiningClass(int ch)
      */
+    @Test
     public void TestGetCombiningClass(){
         int[] valid_tests = {
                 UCharacter.MIN_VALUE, UCharacter.MIN_VALUE+1,
@@ -2879,6 +2905,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static String getName(int ch)
      */
+    @Test
     public void TestGetName(){
         // Need to test on other "one characters" for the getName() method
         String[] data = {"a","z"};
@@ -2903,6 +2930,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static String getISOComment(int ch)
      */
+    @Test
     public void TestGetISOComment(){
         int[] invalid_tests = {
                 UCharacter.MIN_VALUE-1, UCharacter.MIN_VALUE-2,
@@ -2921,6 +2949,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public void setLimit(int lim)
      */
+    @Test
     public void TestSetLimit(){
         // TODO: Tests when "if(0<=lim && lim<=s.length())" is false
     }
@@ -2929,6 +2958,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public int nextCaseMapCP()
      */
+    @Test
     public void TestNextCaseMapCP(){
         // TODO: Tests when "if(UTF16.LEAD_SURROGATE_MIN_VALUE<=c || c<=UTF16.TRAIL_SURROGATE_MAX_VALUE)" is false
         /* TODO: Tests when "if( c<=UTF16.LEAD_SURROGATE_MAX_VALUE && cpLimit<limit &&
@@ -2940,6 +2970,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public void reset(int direction)
      */
+    @Test
     public void TestReset(){
         // The method reset() is never called by another function
         // TODO: Tests when "else if(direction<0)" is false
@@ -2949,6 +2980,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static String toTitleCase(Locale locale, String str, BreakIterator breakiter)
      */
+    @Test
     public void TestToTitleCaseCoverage(){
         //Calls the function "toTitleCase(Locale locale, String str, BreakIterator breakiter)"
         String[] locale={"en","fr","zh","ko","ja","it","de",""};
@@ -2972,6 +3004,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static String toUpperCase(ULocale locale, String str)
      */
+    @Test
     public void TestToUpperCase(){
         // TODO: Tests when "while((c=iter.nextCaseMapCP())>=0)" is false
     }
@@ -2980,6 +3013,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static String toLowerCase(ULocale locale, String str)
      */
+    @Test
     public void TestToLowerCase(){
         // Test when locale is null
         String[] cases = {"","a","A","z","Z","Dummy","DUMMY","dummy","a z","A Z",
@@ -2999,6 +3033,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static int getHanNumericValue(int ch)
      */
+    @Test
     public void TestGetHanNumericValue(){
         int[] valid = {
                 0x3007, //IDEOGRAPHIC_NUMBER_ZERO_
@@ -3064,6 +3099,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static boolean hasBinaryProperty(int ch, int property) 
      */
+    @Test
     public void TestHasBinaryProperty(){
         // Testing when "if (ch < MIN_VALUE || ch > MAX_VALUE)" is true
         int[] invalid = {
@@ -3102,6 +3138,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static int getIntPropertyValue(int ch, int type)
      */
+    @Test
     public void TestGetIntPropertyValue(){
         /* Testing UCharacter.getIntPropertyValue(ch, type) */
         // Testing when "if (type < UProperty.BINARY_START)" is true
@@ -3137,6 +3174,7 @@ public final class UCharacterTest extends TestFmwk
      * The following method tests
      *      public static int getIntPropertyMaxValue(int type)
      */
+    @Test
     public void TestGetIntPropertyMaxValue(){
         /* Testing UCharacter.getIntPropertyMaxValue(type) */
         // Testing when "else if (type < UProperty.INT_START)" is true
@@ -3159,6 +3197,7 @@ public final class UCharacterTest extends TestFmwk
      *      public static final int codePointAt(CharSequence seq, int index)
      *      public static final int codePointAt(char[] text, int index, int limit)
      */
+    @Test
     public void TestCodePointAt(){
         
         // {LEAD_SURROGATE_MIN_VALUE,
@@ -3238,6 +3277,7 @@ public final class UCharacterTest extends TestFmwk
      *      public static final int codePointBefore(char[] text, int index)
      *      public static final int codePointBefore(char[] text, int index, int limit)
      */
+    @Test
     public void TestCodePointBefore(){
         // {TRAIL_SURROGATE_MIN_VALUE,
         //  TRAIL_SURROGATE_MAX_VALUE, TRAIL_SURROGATE_MAX_VALUE -1
@@ -3297,6 +3337,7 @@ public final class UCharacterTest extends TestFmwk
      *      public static final int toChars(int cp, char[] dst, int dstIndex)
      *      public static final char[] toChars(int cp)
      */
+    @Test
     public void TestToChars(){
         int[] positive_cases = {1,2,5,10,100};
         char[] dst = {'a'};
@@ -3361,6 +3402,7 @@ public final class UCharacterTest extends TestFmwk
      *      public static int codePointCount(CharSequence text, int start, int limit)
      *      public static int codePointCount(char[] text, int start, int limit)
      */
+    @Test
     public void TestCodePointCount(){
         // The following tests the first if statement to make it true:
         //  if (start < 0 || limit < start || limit > text.length)
@@ -3423,6 +3465,7 @@ public final class UCharacterTest extends TestFmwk
      * The method needs to use the method "digit" in order to access the
      * getEuropeanDigit method.
      */
+    @Test
     public void TestGetEuropeanDigit(){
         //The number retrieved from 0xFF41 to 0xFF5A is due to
         //  exhaustive testing from UTF16.CODEPOINT_MIN_VALUE to
@@ -3461,6 +3504,7 @@ public final class UCharacterTest extends TestFmwk
      *      private static final int getProperty(int ch)
      * from public static int getType(int ch)
      */
+    @Test
     public void TestGetProperty(){
         int[] cases = {UTF16.CODEPOINT_MAX_VALUE+1, UTF16.CODEPOINT_MAX_VALUE+2};
         for(int i=0; i < cases.length; i++)
@@ -3473,6 +3517,7 @@ public final class UCharacterTest extends TestFmwk
     /* Tests the class
      *      abstract public static class XSymbolTable implements SymbolTable
      */
+    @Test
     public void TestXSymbolTable(){
         class MyXSymbolTable extends UnicodeSet.XSymbolTable {}
         MyXSymbolTable st = new MyXSymbolTable();
@@ -3497,6 +3542,7 @@ public final class UCharacterTest extends TestFmwk
     /* Tests the method
      *      public boolean isFrozen()
      */
+    @Test
     public void TestIsFrozen(){
         UnicodeSet us = new UnicodeSet();
         if(us.isFrozen() != false)
