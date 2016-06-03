@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
@@ -39,14 +41,10 @@ import com.ibm.icu.util.ULocale;
  * @summary General test of Currency
  */
 public class CurrencyTest extends TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new CurrencyTest().run(args);
-    }
-
     /**
      * Test of basic API.
      */
+    @Test
     public void TestAPI() {
         Currency usd = Currency.getInstance("USD");
         /*int hash = */usd.hashCode();
@@ -97,6 +95,7 @@ public class CurrencyTest extends TestFmwk {
     /**
      * Test registration.
      */
+    @Test
     public void TestRegistration() {
         final Currency jpy = Currency.getInstance("JPY");
         final Currency usd = Currency.getInstance(Locale.US);
@@ -181,6 +180,7 @@ public class CurrencyTest extends TestFmwk {
     /**
      * Test names.
      */
+    @Test
     public void TestNames() {
         // Do a basic check of getName()
         // USD { "US$", "US Dollar"            } // 04/04/1792-
@@ -189,27 +189,25 @@ public class CurrencyTest extends TestFmwk {
         Currency usd = Currency.getInstance("USD");
         // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK
         // THE LOCALE DATA before diving into the code.
-        if (!noData()) {
-            assertEquals("USD.getName(SYMBOL_NAME)",
-                         "$",
-                         usd.getName(en, Currency.SYMBOL_NAME, isChoiceFormat));
-            assertEquals("USD.getName(LONG_NAME)",
-                         "US Dollar",
-                         usd.getName(en, Currency.LONG_NAME, isChoiceFormat));
-        }
+        assertEquals("USD.getName(SYMBOL_NAME)",
+                "$",
+                usd.getName(en, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USD.getName(LONG_NAME)",
+                "US Dollar",
+                usd.getName(en, Currency.LONG_NAME, isChoiceFormat));
         // TODO add more tests later
     }
 
+    @Test
     public void TestCoverage() {
         Currency usd = Currency.getInstance("USD");
-        if (!noData()) {
         assertEquals("USD.getSymbol()",
                 "$",
                 usd.getSymbol());
-        }
     }
     
     // A real test of the CurrencyDisplayNames class.
+    @Test
     public void TestCurrencyDisplayNames() {
         if (!CurrencyDisplayNames.hasData()) {
             errln("hasData() should return true.");
@@ -272,6 +270,7 @@ public class CurrencyTest extends TestFmwk {
     }
     
     // Coverage-only test of CurrencyData
+    @Test
     public void TestCurrencyData() {
         CurrencyData.DefaultInfo info_fallback = (CurrencyData.DefaultInfo)CurrencyData.DefaultInfo.getWithFallback(true);
         if (info_fallback == null) {
@@ -333,6 +332,7 @@ public class CurrencyTest extends TestFmwk {
     }
     
     // A real test of CurrencyMetaInfo.
+    @Test
     public void testCurrencyMetaInfoRanges() {
         CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance(true);
         assertNotNull("have metainfo", metainfo);
@@ -386,6 +386,7 @@ public class CurrencyTest extends TestFmwk {
         assertEquals("millisecond is 0", 0, cal.get(GregorianCalendar.MILLISECOND));
     }
     
+    @Test
     public void testCurrencyMetaInfoRangesWithLongs() {
         CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance(true);
         assertNotNull("have metainfo", metainfo);
@@ -418,6 +419,7 @@ public class CurrencyTest extends TestFmwk {
         assertEquals("EUR not avilable before very start of first date", 1, metainfo.currencyInfo(filter.withDate(eurFirstDateMinus1ms)).size());
     }
     
+    @Test
     public void TestWithTender() {
         CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance();
         if (metainfo == null) {
@@ -435,6 +437,7 @@ public class CurrencyTest extends TestFmwk {
     }
    
     // Coverage-only test of the CurrencyMetaInfo class
+    @Test
     public void TestCurrencyMetaInfo() {
         CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance();
         if (metainfo == null) {
@@ -507,6 +510,7 @@ public class CurrencyTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestCurrencyKeyword() {
         ULocale locale = new ULocale("th_TH@collation=traditional;currency=QQQ");
         Currency currency = Currency.getInstance(locale);
@@ -516,6 +520,7 @@ public class CurrencyTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestAvailableCurrencyCodes() {
         String[][] tests = {
             { "eo_AM", "1950-01-05" },
@@ -603,6 +608,7 @@ public class CurrencyTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestDeprecatedCurrencyFormat() {
         // bug 5952
         Locale locale = new Locale("sr", "QQ");
@@ -619,6 +625,7 @@ public class CurrencyTest extends TestFmwk {
         }
     }
     
+    @Test
     public void TestGetKeywordValues(){
 
         final String[][] PREFERRED = {
@@ -663,6 +670,7 @@ public class CurrencyTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestIsAvailable() {
         Date d1995 = new Date(788918400000L);   // 1995-01-01 00:00 GMT
         Date d2000 = new Date(946684800000L);   // 2000-01-01 00:00 GMT
@@ -701,6 +709,7 @@ public class CurrencyTest extends TestFmwk {
     /**
      * Test case for getAvailableCurrencies()
      */
+    @Test
     public void TestGetAvailableCurrencies() {
         Set<Currency> avail1 = Currency.getAvailableCurrencies();
 
@@ -715,6 +724,7 @@ public class CurrencyTest extends TestFmwk {
     /**
      * Test case for getNumericCode()
      */
+    @Test
     public void TestGetNumericCode() {
         final Object[][] NUMCODE_TESTDATA = {
             {"USD", 840},
@@ -739,6 +749,7 @@ public class CurrencyTest extends TestFmwk {
     /**
      * Test case for getDisplayName()
      */
+    @Test
     public void TestGetDisplayName() {
         final String[][] DISPNAME_TESTDATA = {
             {"USD", "US Dollar"},
@@ -764,6 +775,7 @@ public class CurrencyTest extends TestFmwk {
         }
     }
     
+    @Test
     public void TestCurrencyInfoCtor() {
         new CurrencyMetaInfo.CurrencyInfo("region", "code", 0, 0, 1);
     }

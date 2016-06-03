@@ -14,16 +14,15 @@ package com.ibm.icu.dev.test.collator;
  
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
  
 public class CollationCurrencyTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new CollationCurrencyTest().run(args);
-    }
-    
+    @Test
     public void TestCurrency() {
         // All the currency symbols, in collation order
         char[][] currency = {

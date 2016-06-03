@@ -9,24 +9,13 @@
 
 package com.ibm.icu.dev.test.duration.languages;
 
-import com.ibm.icu.dev.test.duration.LanguageTestRoot;
+import com.ibm.icu.dev.test.duration.LanguageTestFmwk;
 
 
 /**
  * Test cases for ru
  */
-public class Test_ru extends LanguageTestRoot {
-
-  /**
-   * Invoke the tests.
-   */
-  public static void main(String[] args) {
-      new Test_ru().run(args);
-  }
-
-  /**
-   * Constructor.
-   */
+public class Test_ru extends LanguageTestFmwk {
   public Test_ru() {
     super("ru", false);
   }

@@ -16,6 +16,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -32,10 +34,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class PluralFormatUnitTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new PluralFormatUnitTest().run(args);
-    }
-
+    @Test
     public void TestConstructor() {
         // Test correct formatting of numbers.
         PluralFormat plFmts[] = new PluralFormat[10];
@@ -205,6 +204,7 @@ public class PluralFormatUnitTest extends TestFmwk {
     }
 
 
+    @Test
     public void TestSamples() {
         Map<ULocale,Set<ULocale>> same = new LinkedHashMap();
         for (ULocale locale : PluralRules.getAvailableULocales()) {
@@ -236,6 +236,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSetLocale() {
         // Create rules for testing.
         PluralRules oddAndEven = PluralRules.createRules("odd__: n mod 2 is 1");
@@ -262,6 +263,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestParse() {
         PluralFormat plFmt = new PluralFormat("other{test}");
         try {
@@ -280,6 +282,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestPattern() {
         Object[] args = { "acme", null };
 
@@ -307,6 +310,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertEquals("message formats are equal", pfmt, pfmt2);
     }
 
+    @Test
     public void TestExtendedPluralFormat() {
         String[] targets = {
                 "There are no widgets.",
@@ -341,6 +345,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertEquals("should find first matching *explicit* value", "vv", pf.format(1));
     }
 
+    @Test
     public void TestExtendedPluralFormatParsing() {
         String[] failures = {
                 "offset:1..0 =0 {Foo}",
@@ -359,6 +364,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestOrdinalFormat() {
         String pattern = "one{#st file}two{#nd file}few{#rd file}other{#th file}";
         PluralFormat pf = new PluralFormat(ULocale.ENGLISH, PluralType.ORDINAL, pattern);
@@ -379,6 +385,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertEquals("PluralFormat.format(111)", "111th file", pf.format(111));
     }
 
+    @Test
     public void TestDecimals() {
         // Simple number replacement.
         PluralFormat pf = new PluralFormat(ULocale.ENGLISH, "one{one meter}other{# meters}");
@@ -392,6 +399,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5));
     }
     
+    @Test
     public void TestNegative() {
         PluralFormat pluralFormat = new PluralFormat(ULocale.ENGLISH, "one{# foot}other{# feet}");
         String actual = pluralFormat.format(-3);

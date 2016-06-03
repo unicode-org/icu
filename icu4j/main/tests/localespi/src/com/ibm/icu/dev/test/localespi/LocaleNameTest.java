@@ -11,14 +11,12 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.ULocale;
 
 public class LocaleNameTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new LocaleNameTest().run(args);
-    }
-
     private static final Method GETDISPLAYSCRIPT_METHOD;
 
     static {
@@ -31,6 +29,7 @@ public class LocaleNameTest extends TestFmwk {
         GETDISPLAYSCRIPT_METHOD = mGetDisplayScript;
     }
 
+    @Test
     public void TestLanguageNames() {
         Locale[] locales = Locale.getAvailableLocales();
         StringBuffer icuid = new StringBuffer();
@@ -91,6 +90,7 @@ public class LocaleNameTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestScriptNames() {
         if (GETDISPLAYSCRIPT_METHOD == null) {
             logln("INFO: Locale#getDisplayScript(Locale) is not available.");
@@ -152,6 +152,7 @@ public class LocaleNameTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestCountryNames() {
         Locale[] locales = Locale.getAvailableLocales();
         for (Locale inLocale : locales) {
@@ -197,6 +198,7 @@ public class LocaleNameTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestVariantNames() {
         Set<Locale> locales = new HashSet<Locale>();
         for (Locale l : Locale.getAvailableLocales()) {

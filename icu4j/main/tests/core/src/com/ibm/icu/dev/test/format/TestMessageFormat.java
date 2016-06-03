@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -37,11 +39,7 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new TestMessageFormat().run(args);
-    }
-
+    @Test
     public void TestBug3()
     {
         double myNumber = -123456;
@@ -119,6 +117,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestBug1()
     {
         final double limit[] = {0.0, 1.0, 2.0};
@@ -129,6 +128,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("ChoiceFormat.format", formats[1], cf.format(1));
     }
 
+    @Test
     public void TestBug2()
     {
         // {sfb} use double format in pattern, so result will match (not strictly necessary)
@@ -142,6 +142,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestPattern() // aka PatternTest()
     {
         Object testArgs[] = {
@@ -241,6 +242,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestSample() // aka sample()
     {
         MessageFormat form = null;
@@ -258,6 +260,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                      form.format(testArgs1, buffer2, fieldpos).toString());
     }
 
+    @Test
     public void TestStaticFormat()
     {
         Object arguments[] = {
@@ -274,6 +277,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
     static final int FieldPosition_DONT_CARE = -1;
 
+    @Test
     public void TestSimpleFormat()
     {
         Object testArgs1[] = {new Integer(0), "MyDisk"};
@@ -303,6 +307,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                      string.toString());
     }
 
+    @Test
     public void TestMsgFormatChoice()
     {
         MessageFormat form = new MessageFormat("The disk \"{1}\" contains {0}.");
@@ -338,6 +343,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     //  API Tests
     //---------------------------------
 
+    @Test
     public void TestClone()
     {
         MessageFormat x = new MessageFormat("There are {0} files on {1}");
@@ -361,6 +367,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
     }
 
+    @Test
     public void TestEquals()
     {
         MessageFormat x = new MessageFormat("There are {0} files on {1}");
@@ -371,6 +378,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
     }
 
+    @Test
     public void TestNotEquals()
     {
         MessageFormat x = new MessageFormat("There are {0} files on {1}");
@@ -386,6 +394,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestHashCode()
     {
         ULocale save = ULocale.getDefault();
@@ -413,6 +422,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         ULocale.setDefault(save);
     }
 
+    @Test
     public void TestSetLocale()
     {
         Object arguments[] = {
@@ -480,6 +490,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     @SuppressWarnings("static-access")
+    @Test
     public void TestFormat()
     {
         final Object ft_arr[] =
@@ -520,6 +531,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestParse()
     {
         String msgFormatString = "{0} =sep= {1}";
@@ -585,6 +597,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
      * Of course, in Java there is no adopt, but we retain the same
      * method name. [alan]
      */
+    @Test
     public void TestAdopt()
     {
         String formatStr = "{0,date},{1},{2,number}";
@@ -783,6 +796,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
      * Verify that MessageFormat accomodates more than 10 arguments and
      * more than 10 subformats.
      */
+    @Test
     public void TestUnlimitedArgsAndSubformats() {
         final String pattern =
             "On {0,date} (aka {0,date,short}, aka {0,date,long}) "+
@@ -824,6 +838,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     // test RBNF extensions to message format
+    @Test
     public void TestRBNF() {
         // WARNING: this depends on the RBNF formats for en_US
         Locale locale = Locale.US;
@@ -874,6 +889,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestSetGetFormats()
     {
         Object arguments[] = {
@@ -949,6 +965,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     // Test the fix pattern api
+    @Test
     public void TestAutoQuoteApostrophe() {
         final String[] patterns = { // new pattern, expected pattern
             "'", "''",
@@ -972,6 +989,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
     
     // This tests passing named arguments instead of numbers to format(). 
+    @Test
     public void testFormatNamedArguments() {
         Map arguments = new HashMap();
         arguments.put("startDate", new Date(871068000000L));
@@ -1000,6 +1018,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     
     // This tests parsing formatted messages with named arguments instead of
     // numbers. 
+    @Test
     public void testParseNamedArguments() {
         String msgFormatString = "{foo} =sep= {bar}";
         MessageFormat msg = new MessageFormat(msgFormatString);
@@ -1048,6 +1067,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     // Ensure that methods designed for numeric arguments only, will throw
     // an exception when called on MessageFormat objects created with
     // named arguments.
+    @Test
     public void testNumericOnlyMethods() {
         MessageFormat msg = new MessageFormat("Number of files: {numfiles}");
         boolean gotException = false;
@@ -1143,6 +1163,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
+    @Test
     public void testNamedArguments() {
         // ICU 4.8 allows mixing named and numbered arguments.
         assertTrue(
@@ -1191,6 +1212,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         } catch (IllegalArgumentException e) {}        
     }
 
+    @Test
     public void testNumericFormatWithMap() {
         MessageFormat mf = new MessageFormat("X:{2} Y:{1}");
         if (mf.usesNamedArguments()) {
@@ -1251,6 +1273,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     // This tests nested Formats inside PluralFormat.
+    @Test
     public void testNestedFormatsInPluralFormat() {
         try {
             MessageFormat msgFmt = new MessageFormat(
@@ -1271,6 +1294,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     // This tests PluralFormats used inside MessageFormats.
+    @Test
     public void testPluralFormat() {
         {
             MessageFormat mfNum = new MessageFormat(
@@ -1318,6 +1342,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void testApostropheInPluralAndSelect() {
         MessageFormat fmt = new MessageFormat(
                 "abc_{0,plural,other{#'#'#'{'#''}}_def_{1,select,other{sel'}'ect''}}_xyz",
@@ -1332,6 +1357,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
   // Test toPattern when there is a PluralFormat
+    @Test
   public void testPluralFormatToPattern() {
     String[] patterns = {
       "Beware of vicious {0, plural, one {hamster} other {hamsters}}.",
@@ -1353,6 +1379,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * This tests SelectFormats used inside MessageFormats.
      */
+    @Test
     public void testSelectFormat() {
         String pattern = null; 
         MessageFormat msgFmt = null ;
@@ -1493,6 +1520,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     /**
      * Test toPattern when there is a SelectFormat
      */
+    @Test
     public void testSelectFormatToPattern() {
         String[] patterns = {
           //Pattern with some text at start and at end
@@ -1520,6 +1548,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
     // Test case for null arguments.
     // Ticket#6361
+    @Test
     public void TestNullArgs() {
         MessageFormat msgfmt = new MessageFormat("{0} - {1}");
         Object[][] TEST_CASES = {
@@ -1539,6 +1568,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
+    @Test
     public void TestSetFormat() {
         MessageFormat ms = new MessageFormat("{number} {date}", ULocale.ENGLISH);
         final DecimalFormat decimalFormat = new DecimalFormat("000.000", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
@@ -1558,6 +1588,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     // Test case for formatToCharacterIterator
+    @Test
     public void TestFormatToCharacterIterator() {
         MessageFormat[] msgfmts = {
                 new MessageFormat(
@@ -1705,6 +1736,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     /*
      * Tests the method public Format getFormatByArgumentName(String argumentName)
      */
+    @Test
     public void TestGetFormatByArgumentName() {
         MessageFormat mf = new MessageFormat("");
         if (mf.getFormatByArgumentName("") != null) {
@@ -1725,6 +1757,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         return sb.toString();
     }
 
+    @Test
     public void TestApostropheMode() {
         MessagePattern ado_mp = new MessagePattern(MessagePattern.ApostropheMode.DOUBLE_OPTIONAL);
         MessagePattern adr_mp = new MessagePattern(MessagePattern.ApostropheMode.DOUBLE_REQUIRED);
@@ -1763,6 +1796,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     // Compare behavior of JDK and ICU's DOUBLE_REQUIRED compatibility mode.
+    @Test
     public void TestCompatibleApostrophe() {
         // Message with choice argument which does not contain another argument.
         // The JDK performs only one apostrophe-quoting pass on this pattern.
@@ -1825,6 +1859,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                 choice.format(0));
     }
 
+    @Test
     public void TestTrimArgumentName() {
         // ICU 4.8 allows and ignores white space around argument names and numbers.
         MessageFormat m = new MessageFormat("a { 0 , number , '#,#'#.0 } z", Locale.ENGLISH);
@@ -1838,6 +1873,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                      m.format(map, result, new FieldPosition(0)).toString());
     }
 
+    @Test
     public void TestSelectOrdinal() {
         // Test plural & ordinal together,
         // to make sure that we get the correct cached PluralSelector for each.
@@ -1867,6 +1903,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                      m.format(args, result, ignore).toString());
     }
 
+    @Test
     public void TestDecimals() {
         // Simple number replacement.
         MessageFormat m = new MessageFormat(
@@ -1936,6 +1973,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                 m2.format(args, result, ignore).toString());
     }
 
+    @Test
     public void TestArgIsPrefixOfAnother() {
         // Ticket #11952
         MessageFormat mf1 = new MessageFormat(

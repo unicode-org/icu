@@ -18,7 +18,7 @@ import com.ibm.icu.impl.Utility;
 /**
  * A collection of methods to run the data driven number format test suite.
  */
-public class DataDrivenNumberFormatTestSuite extends TestFmwk {
+public class DataDrivenNumberFormatTestUtility {
     
     /**
      * Base class for code under test.
@@ -42,7 +42,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
          *  Subclasses should override.
          *  @param tuple contains the parameters of the format test.
          */
-        public String format(NumberFormatTestTuple tuple) {
+        public String format(NumberFormatTestData tuple) {
             return null;
         }
         
@@ -52,7 +52,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
          *  Subclasses should override.
          *  @param tuple contains the parameters of the format test.
          */
-        public String toPattern(NumberFormatTestTuple tuple) {
+        public String toPattern(NumberFormatTestData tuple) {
             return null;
         }
         
@@ -62,7 +62,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
          *  Subclasses should override.
          *  @param tuple contains the parameters of the format test.
          */
-        public String parse(NumberFormatTestTuple tuple) {
+        public String parse(NumberFormatTestData tuple) {
             return null;
         }
         
@@ -72,7 +72,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
          *  Subclasses should override.
          *  @param tuple contains the parameters of the format test.
          */
-        public String parseCurrency(NumberFormatTestTuple tuple) {
+        public String parseCurrency(NumberFormatTestData tuple) {
             return null;
         }
         
@@ -82,7 +82,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
          *  Subclasses should override.
          * @param tuple contains the parameters of the format test.
          */
-        public String select(NumberFormatTestTuple tuple) {
+        public String select(NumberFormatTestData tuple) {
             return null;
         }
     }
@@ -96,18 +96,18 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
     private String fileLine = null;
     private int fileLineNumber = 0;
     private String fileTestName = "";   
-    private NumberFormatTestTuple tuple = new NumberFormatTestTuple();
+    private NumberFormatTestData tuple = new NumberFormatTestData();
       
     /**
      * Runs all the tests in the data driven test suite against codeUnderTest.
-     * @param params this.params from TestFmwk.
      * @param fileName The name of the test file. A relative file name under
      *   com/ibm/icu/dev/data such as "data.txt"
      * @param codeUnderTest the code under test
      */
+    
     static void runSuite(
-            TestParams params, String fileName, CodeUnderTest codeUnderTest) {
-        new DataDrivenNumberFormatTestSuite(params, codeUnderTest)
+            String fileName, CodeUnderTest codeUnderTest) {
+        new DataDrivenNumberFormatTestUtility(codeUnderTest)
                 .run(fileName, RunMode.SKIP_KNOWN_FAILURES);
     }
     
@@ -115,20 +115,18 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
      * Runs every format test in data driven test suite including those
      * that are known to fail.
      * 
-     * @param params this.params from TestFmwk
      * @param fileName The name of the test file. A relative file name under
      *   com/ibm/icu/dev/data such as "data.txt"
      * @param codeUnderTest the code under test
      */
     static void runFormatSuiteIncludingKnownFailures(
-            TestParams params, String fileName, CodeUnderTest codeUnderTest) {
-        new DataDrivenNumberFormatTestSuite(params, codeUnderTest)
+            String fileName, CodeUnderTest codeUnderTest) {
+        new DataDrivenNumberFormatTestUtility(codeUnderTest)
                 .run(fileName, RunMode.INCLUDE_KNOWN_FAILURES);
     }
     
-    private DataDrivenNumberFormatTestSuite(
-            TestParams params, CodeUnderTest codeUnderTest) {
-        this.params = params;
+    private DataDrivenNumberFormatTestUtility(
+            CodeUnderTest codeUnderTest) {
         this.codeUnderTest = codeUnderTest;
     }
        
@@ -166,7 +164,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
                 if (state == 0) {
                     if (fileLine.startsWith("test ")) {
                         fileTestName = fileLine;
-                        tuple = new NumberFormatTestTuple();
+                        tuple = new NumberFormatTestData();
                     } else if (fileLine.startsWith("set ")) {
                         if (!setTupleField()) {
                             return;
@@ -259,7 +257,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
     }
     
     private void showError(String message) {
-        errln(String.format("line %d: %s\n%s\n%s", fileLineNumber, Utility.escape(message), fileTestName,fileLine));
+        TestFmwk.errln(String.format("line %d: %s\n%s\n%s", fileLineNumber, Utility.escape(message), fileTestName,fileLine));
     }
    
     private List<String> splitBy(char delimiter) {
@@ -302,7 +300,7 @@ public class DataDrivenNumberFormatTestSuite extends TestFmwk {
         return true;
     }
     
-    private String isPass(NumberFormatTestTuple tuple) {
+    private String isPass(NumberFormatTestData tuple) {
         StringBuilder result = new StringBuilder();
         if (tuple.format != null && tuple.output != null) {
             String errorMessage = codeUnderTest.format(tuple);

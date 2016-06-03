@@ -41,9 +41,6 @@ public class RoundTripTest extends TestFmwk {
     static final boolean EXTRA_TESTS = true;
     static final boolean PRINT_RULES = true;
 
-    public static void main(String[] args) throws Exception {
-        new RoundTripTest().run(args);
-    }
     /*
     public void TestSingle() throws IOException, ParseException {
         Transliterator t = Transliterator.getInstance("Latin-Greek");
@@ -119,6 +116,7 @@ public class RoundTripTest extends TestFmwk {
         logln(name + " took " + dur + " seconds");
     }
 
+    @org.junit.Test
     public void TestKana() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Katakana-Hiragana")
@@ -126,6 +124,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestKana");
     }
 
+    @org.junit.Test
     public void TestHiragana() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Hiragana")
@@ -133,6 +132,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestHiragana");
     }
 
+    @org.junit.Test
     public void TestKatakana() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Katakana")
@@ -140,6 +140,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestKatakana");
     }
 
+    @org.junit.Test
     public void TestJamo() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Jamo")
@@ -158,11 +159,12 @@ public class RoundTripTest extends TestFmwk {
         SLimit = SBase + SCount;    // D7A4
      */
 
+    @org.junit.Test
     public void TestHangul() throws IOException {
         long start = System.currentTimeMillis();
         Test t = new Test("Latin-Hangul", 5);
         boolean TEST_ALL = getBooleanProperty("HangulRoundTripAll", false); 
-        if (TEST_ALL && getInclusion() == 10) {
+        if (TEST_ALL && TestFmwk.getExhaustiveness() == 10) {
             t.setPairLimit(Integer.MAX_VALUE); // only go to the limit if we have TEST_ALL and getInclusion
         }
         t.test("[a-zA-Z]", "[\uAC00-\uD7A4]", "", this, new Legal());
@@ -173,6 +175,7 @@ public class RoundTripTest extends TestFmwk {
      * This is a shorter version of the test for doubles, that allows us to skip lots of cases, but
      * does check the ones that should cause problems (if any do).
      */
+    @org.junit.Test
     public void TestHangul2() {
         Transliterator lh = Transliterator.getInstance("Latin-Hangul");
         Transliterator hl = lh.getInverse();
@@ -277,6 +280,7 @@ public class RoundTripTest extends TestFmwk {
     }
 
 
+    @org.junit.Test
     public void TestHan() throws UnsupportedEncodingException, FileNotFoundException {
         try{
             UnicodeSet exemplars = LocaleData.getExemplarSet(new ULocale("zh"),0);
@@ -321,6 +325,7 @@ public class RoundTripTest extends TestFmwk {
         }
     }
 
+    @org.junit.Test
     public void TestSingle() {
         Transliterator t = Transliterator.getInstance("Latin-Greek");
         t.transliterate("\u0061\u0101\u0069");
@@ -336,14 +341,15 @@ public class RoundTripTest extends TestFmwk {
         }
 
         return 
-        "[\u003B\u00B7[[:Greek:]&[:Letter:]]-[" +
-        "\u1D26-\u1D2A" + // L&   [5] GREEK LETTER SMALL CAPITAL GAMMA..GREEK LETTER SMALL CAPITAL PSI
-        "\u1D5D-\u1D61" + // Lm   [5] MODIFIER LETTER SMALL BETA..MODIFIER LETTER SMALL CHI
-        "\u1D66-\u1D6A" + // L&   [5] GREEK SUBSCRIPT SMALL LETTER BETA..GREEK SUBSCRIPT SMALL LETTER CHI
-        "\u03D7-\u03EF" + // \N{GREEK KAI SYMBOL}..\N{COPTIC SMALL LETTER DEI}
-        "] & [:Age=4.0:]]";
+                "[\u003B\u00B7[[:Greek:]&[:Letter:]]-[" +
+                "\u1D26-\u1D2A" + // L&   [5] GREEK LETTER SMALL CAPITAL GAMMA..GREEK LETTER SMALL CAPITAL PSI
+                "\u1D5D-\u1D61" + // Lm   [5] MODIFIER LETTER SMALL BETA..MODIFIER LETTER SMALL CHI
+                "\u1D66-\u1D6A" + // L&   [5] GREEK SUBSCRIPT SMALL LETTER BETA..GREEK SUBSCRIPT SMALL LETTER CHI
+                "\u03D7-\u03EF" + // \N{GREEK KAI SYMBOL}..\N{COPTIC SMALL LETTER DEI}
+                "] & [:Age=4.0:]]";
     }
 
+    @org.junit.Test
     public void TestGreek() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek", 50)
@@ -353,6 +359,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestGreek");
     }
 
+    @org.junit.Test
     public void TestGreekUNGEGN() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek/UNGEGN")
@@ -362,6 +369,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestGreekUNGEGN");
     }
 
+    @org.junit.Test
     public void Testel() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-el")
@@ -371,6 +379,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "Testel");
     }
 
+    @org.junit.Test
     public void TestCyrillic() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Cyrillic")
@@ -380,6 +389,7 @@ public class RoundTripTest extends TestFmwk {
 
     static final String ARABIC = "[\u06A9\u060C\u061B\u061F\u0621\u0627-\u063A\u0641-\u0655\u0660-\u066C\u067E\u0686\u0698\u06A4\u06AD\u06AF\u06CB-\u06CC\u06F0-\u06F9]";
 
+    @org.junit.Test
     public void TestArabic() throws IOException {
         long start = System.currentTimeMillis();
         new Test("Latin-Arabic")
@@ -387,6 +397,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestArabic");
     }
 
+    @org.junit.Test
     public void TestHebrew() throws IOException {
         if (FIX_ME) {
             errln("TestHebrew needs to be updated to remove delete the [:Age=4.0:] filter ");
@@ -401,6 +412,7 @@ public class RoundTripTest extends TestFmwk {
         showElapsed(start, "TestHebrew");
     }
 
+    @org.junit.Test
     public void TestThai() throws IOException {
         long start = System.currentTimeMillis();
         if (FIX_ME) {
@@ -466,23 +478,24 @@ public class RoundTripTest extends TestFmwk {
         }
     }
     static String latinForIndic = "[['.0-9A-Za-z~\u00C0-\u00C5\u00C7-\u00CF\u00D1-\u00D6\u00D9-\u00DD"+
-    "\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F"+
-    "\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148"+
-    "\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0"+
-    "\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB"+
-    "\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0294\u0303-\u0304\u0306\u0314-\u0315"+
-    "\u0325\u040E\u0419\u0439\u045E\u04C1-\u04C2\u04D0-\u04D1\u04D6-\u04D7"+
-    "\u04E2-\u04E3\u04EE-\u04EF\u1E00-\u1E99\u1EA0-\u1EF9\u1F01\u1F03\u1F05"+
-    "\u1F07\u1F09\u1F0B\u1F0D\u1F0F\u1F11\u1F13\u1F15\u1F19\u1F1B\u1F1D\u1F21"+
-    "\u1F23\u1F25\u1F27\u1F29\u1F2B\u1F2D\u1F2F\u1F31\u1F33\u1F35\u1F37\u1F39"+
-    "\u1F3B\u1F3D\u1F3F\u1F41\u1F43\u1F45\u1F49\u1F4B\u1F4D\u1F51\u1F53\u1F55"+
-    "\u1F57\u1F59\u1F5B\u1F5D\u1F5F\u1F61\u1F63\u1F65\u1F67\u1F69\u1F6B\u1F6D"+
-    "\u1F6F\u1F81\u1F83\u1F85\u1F87\u1F89\u1F8B\u1F8D\u1F8F\u1F91\u1F93\u1F95"+
-    "\u1F97\u1F99\u1F9B\u1F9D\u1F9F\u1FA1\u1FA3\u1FA5\u1FA7\u1FA9\u1FAB\u1FAD"+
-    "\u1FAF-\u1FB1\u1FB8-\u1FB9\u1FD0-\u1FD1\u1FD8-\u1FD9\u1FE0-\u1FE1\u1FE5"+
-    "\u1FE8-\u1FE9\u1FEC\u212A-\u212B\uE04D\uE064]"+
-    "-[\uE000-\uE080 \u01E2\u01E3]& [[:latin:][:mark:]]]";
+            "\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F"+
+            "\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148"+
+            "\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0"+
+            "\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB"+
+            "\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0294\u0303-\u0304\u0306\u0314-\u0315"+
+            "\u0325\u040E\u0419\u0439\u045E\u04C1-\u04C2\u04D0-\u04D1\u04D6-\u04D7"+
+            "\u04E2-\u04E3\u04EE-\u04EF\u1E00-\u1E99\u1EA0-\u1EF9\u1F01\u1F03\u1F05"+
+            "\u1F07\u1F09\u1F0B\u1F0D\u1F0F\u1F11\u1F13\u1F15\u1F19\u1F1B\u1F1D\u1F21"+
+            "\u1F23\u1F25\u1F27\u1F29\u1F2B\u1F2D\u1F2F\u1F31\u1F33\u1F35\u1F37\u1F39"+
+            "\u1F3B\u1F3D\u1F3F\u1F41\u1F43\u1F45\u1F49\u1F4B\u1F4D\u1F51\u1F53\u1F55"+
+            "\u1F57\u1F59\u1F5B\u1F5D\u1F5F\u1F61\u1F63\u1F65\u1F67\u1F69\u1F6B\u1F6D"+
+            "\u1F6F\u1F81\u1F83\u1F85\u1F87\u1F89\u1F8B\u1F8D\u1F8F\u1F91\u1F93\u1F95"+
+            "\u1F97\u1F99\u1F9B\u1F9D\u1F9F\u1FA1\u1FA3\u1FA5\u1FA7\u1FA9\u1FAB\u1FAD"+
+            "\u1FAF-\u1FB1\u1FB8-\u1FB9\u1FD0-\u1FD1\u1FD8-\u1FD9\u1FE0-\u1FE1\u1FE5"+
+            "\u1FE8-\u1FE9\u1FEC\u212A-\u212B\uE04D\uE064]"+
+            "-[\uE000-\uE080 \u01E2\u01E3]& [[:latin:][:mark:]]]";
 
+    @org.junit.Test
     public void TestDevanagariLatin() throws IOException {
         long start = System.currentTimeMillis();
         if (FIX_ME) {
@@ -852,6 +865,7 @@ public class RoundTripTest extends TestFmwk {
         },
     };
 
+    @org.junit.Test
     public void TestInterIndic() throws Exception{
         long start = System.currentTimeMillis();
         int num = interIndicArray.length;
@@ -1015,8 +1029,8 @@ public class RoundTripTest extends TestFmwk {
                         char c = decomp.charAt(i);
                         // exclude all the accents
                         if (c == '\u0313' || c == '\u0314' || c == '\u0300' || c == '\u0302'
-                            || c == '\u0342' || c == '\u0345'
-                        ) return false;
+                                || c == '\u0342' || c == '\u0345'
+                                ) return false;
                     }
                     return true;
                 }
@@ -1153,9 +1167,10 @@ public class RoundTripTest extends TestFmwk {
         static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
         static final UnicodeSet neverOk = new UnicodeSet("[:Other:]");
 
+        @org.junit.Test
         public void test(String srcRange, String trgtRange,
                 String rdtripExclusions, RoundTripTest logger, Legal legalSrc)
-        throws java.io.IOException {
+                        throws java.io.IOException {
             test(srcRange, trgtRange, srcRange, rdtripExclusions, logger, legalSrc);
         }
 
@@ -1165,9 +1180,10 @@ public class RoundTripTest extends TestFmwk {
          * that everything in targetRange maps to backtoSourceRange
          * that everything roundtrips from target -> source -> target, except roundtripExceptions
          */
+        @org.junit.Test
         public void test(String srcRange, String trgtRange, String backtoSourceRange,
                 String rdtripExclusions, RoundTripTest logger, Legal legalSrc)
-        throws java.io.IOException {
+                        throws java.io.IOException {
 
             legalSource = legalSrc;
             sourceRange = new UnicodeSet(srcRange);
@@ -1271,6 +1287,7 @@ public class RoundTripTest extends TestFmwk {
         Transliterator sourceToTarget;
         Transliterator targetToSource;
 
+        @org.junit.Test
         public void test2() {
 
             sourceToTarget = Transliterator.getInstance(transliteratorID);
@@ -1421,7 +1438,7 @@ public class RoundTripTest extends TestFmwk {
             UnicodeSet sourceRangeMinusFailures = new UnicodeSet(sourceRange);
             sourceRangeMinusFailures.removeAll(failSourceTarg);
 
-            boolean quickRt = log.getInclusion() < 10;
+            boolean quickRt = TestFmwk.getExhaustiveness() < 10;
 
             usi.reset(sourceRangeMinusFailures, quickRt, density);
 
@@ -1529,7 +1546,7 @@ public class RoundTripTest extends TestFmwk {
                 if (TestUtility.isUnassigned(c) ||
                     !targetRange.contains(c)) continue;
              */
-            
+
             usi.reset(targetRangeMinusFailures, quickRt, density);
 
             while (usi.next()) {
@@ -1546,10 +1563,10 @@ public class RoundTripTest extends TestFmwk {
                 usi2.reset(targetRangeMinusFailures, quickRt, density);
 
                 while (usi2.next()) {
-                    
+
                     int d = usi2.codepoint;
                     if (d < 0) break;
-                    
+
                     if (++count > pairLimit) {
                         throw new TestTruncated("Test truncated at " + pairLimit);
                     }
@@ -1623,11 +1640,11 @@ public class RoundTripTest extends TestFmwk {
             String toD = Normalizer.normalize(to, Normalizer.NFD);
             UnicodeSet temp = new UnicodeSet().addAll(toD);
             UnicodeSet bad = new UnicodeSet(shouldNotContainAny).retainAll(temp)
-            .addAll(new UnicodeSet(temp).removeAll(shouldContainAll));
+                    .addAll(new UnicodeSet(temp).removeAll(shouldContainAll));
 
             out.println("<br>Fail " + label + ": " +
                     info(from) + " => " + info(to) + " " + bad
-            );
+                    );
         }
 
         final void logNotCanonical(String label, String from, String to, String fromCan, String toCan) {
@@ -1638,7 +1655,7 @@ public class RoundTripTest extends TestFmwk {
                     info(from) + " => " + info(to) +
                     " -- " +
                     info(fromCan) + " => " + info(toCan) + ")"
-            );
+                    );
         }
 
         final void logFails(String label) {
@@ -1654,7 +1671,7 @@ public class RoundTripTest extends TestFmwk {
             }
             out.println("<br>Fail " + label + ": " +
                     info(from) + " => " + info(to) + ", " + info(toCan)
-            );
+                    );
         }
 
         final void logRoundTripFailure(String from,String toID, String to,String backID, String back) {
@@ -1665,7 +1682,7 @@ public class RoundTripTest extends TestFmwk {
             }
             out.println("<br>Fail Roundtrip: " +
                     info(from) + " "+toID+" => " + info(to) + " " + backID+" => " + info(back)
-            );
+                    );
         }
 
         /*

@@ -8,21 +8,22 @@ package com.ibm.icu.dev.test.translit;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestBoilerplate;
 
 /**
  * Moved from UnicodeMapTest
  */
 public class StringBoilerplateTest extends TestBoilerplate<String> {
-
-    public static void main(String[] args) throws Exception {
-        new StringBoilerplateTest().run(args);
+    public void TestStringBoilerplate() throws Exception {
     }
 
-    public void TestStringBoilerplate() throws Exception {
+    @Test
+    public void test() throws Exception {
         _test();
     }
-
+    
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
      */

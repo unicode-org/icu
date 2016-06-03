@@ -12,16 +12,15 @@
  
 package com.ibm.icu.dev.test.collator;
  
+import org.junit.Before;
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
  
 public class CollationFinnishTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new CollationFinnishTest().run(args);
-    }
-    
     private static char[][] testSourceCases = {
         {0x77, 0x61, 0x74},
         {0x76, 0x61, 0x74},
@@ -51,12 +50,15 @@ public class CollationFinnishTest extends TestFmwk {
     
     public CollationFinnishTest() {
     }
-    protected void init()throws Exception{
+    
+    @Before
+    public void init()throws Exception{
         myCollation = Collator.getInstance(new ULocale("fi_FI@collation=standard"));
     }
      
     
     // perform tests with strength PRIMARY
+    @Test
     public void TestPrimary() {
         int i = 0;
         myCollation.setStrength(Collator.PRIMARY);
@@ -66,6 +68,7 @@ public class CollationFinnishTest extends TestFmwk {
     }
     
     // perform test with strength TERTIARY
+    @Test
     public void TestTertiary() {
         int i = 0;
         myCollation.setStrength(Collator.TERTIARY);

@@ -9,24 +9,13 @@
 
 package com.ibm.icu.dev.test.duration.languages;
 
-import com.ibm.icu.dev.test.duration.LanguageTestRoot;
+import com.ibm.icu.dev.test.duration.LanguageTestFmwk;
 
 
 /**
  * Test cases for ar_EG
  */
-public class Test_ar_EG extends LanguageTestRoot {
-
-  /**
-   * Invoke the tests.
-   */
-  public static void main(String[] args) {
-      new Test_ar_EG().run(args);
-  }
-
-  /**
-   * Constructor.
-   */
+public class Test_ar_EG extends LanguageTestFmwk {
   public Test_ar_EG() {
     super("ar_EG", false);
   }

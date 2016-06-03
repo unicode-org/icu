@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -37,10 +39,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     private int DEPTH = 5;
     private Random ran;
 
-    public static void main(String[] args) throws Exception {
-        new DateFormatRoundTripTest().run(args);
-    }
-    
+    @Test
     public void TestDateFormatRoundTrip() {
         dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
         getFieldCal = Calendar.getInstance();
@@ -87,7 +86,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
-    public void _test(Locale loc) {
+    private void _test(Locale loc) {
         if (!INFINITE) {
             logln("Locale: " + loc.getDisplayName());
         }
@@ -138,7 +137,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
-    public void _test(DateFormat fmt, boolean timeOnly) {
+    private void _test(DateFormat fmt, boolean timeOnly) {
     
         if (!(fmt instanceof SimpleDateFormat)) {
             errln("DateFormat wasn't a SimpleDateFormat");

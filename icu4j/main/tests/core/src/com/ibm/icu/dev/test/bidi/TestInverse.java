@@ -9,6 +9,8 @@ package com.ibm.icu.dev.test.bidi;
 
 import java.util.Arrays;
 
+import org.junit.Test;
+
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Bidi;
 
@@ -18,7 +20,7 @@ import com.ibm.icu.text.Bidi;
  * ported from C by Lina Kemmel, Matitiahu Allouche
  */
 
-public class TestInverse extends BidiTest {
+public class TestInverse extends BidiFmwk {
 
     private int countRoundtrips = 0;
     private int countNonRoundtrips = 0;
@@ -31,6 +33,7 @@ public class TestInverse extends BidiTest {
         "\u0061\u0062\u0020\u0061\u0062\u0020\u0661\u0662"
     };
 
+    @Test
     public void testInverse() {
         Bidi bidi;
         int i;
@@ -261,15 +264,4 @@ public class TestInverse extends BidiTest {
         assertEquals("\nInvalid output with RLM at both sides",
                      "\u200f   \u200f", out);
     }
-
-
-    public static void main(String[] args) {
-        try {
-            new TestInverse().run(args);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
 }

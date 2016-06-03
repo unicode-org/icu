@@ -9,23 +9,12 @@
 
 package com.ibm.icu.dev.test.duration.languages;
 
-import com.ibm.icu.dev.test.duration.LanguageTestRoot;
+import com.ibm.icu.dev.test.duration.LanguageTestFmwk;
 
 /**
  * Test cases for es
  */
-public class Test_es extends LanguageTestRoot {
-
-  /**
-   * Invoke the tests.
-   */
-  public static void main(String[] args) {
-      new Test_es().run(args);
-  }
-
-  /**
-   * Constructor.
-   */
+public class Test_es extends LanguageTestFmwk {
   public Test_es() {
     super("es", false);
   }

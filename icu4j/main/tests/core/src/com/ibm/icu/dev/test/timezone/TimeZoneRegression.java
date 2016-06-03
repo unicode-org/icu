@@ -21,6 +21,8 @@ import java.security.AccessControlException;
 import java.util.Date;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -31,11 +33,7 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 public class TimeZoneRegression extends TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new TimeZoneRegression().run(args);
-    }
-
+    @Test
     public void Test4052967() {
         logln("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");
         String id = TimeZone.getDefault().getID();
@@ -54,12 +52,14 @@ public class TimeZoneRegression extends TestFmwk {
         }
     }
 
+    @Test
     public void Test4073209() {
         TimeZone z1 = TimeZone.getTimeZone("PST");
         TimeZone z2 = TimeZone.getTimeZone("PST");
         if (z1 == z2) errln("Fail: TimeZone should return clones");
     }
 
+    @Test
     public void Test4073215() {
         SimpleTimeZone z = new SimpleTimeZone(0, "GMT");
         if (z.useDaylightTime())
@@ -98,6 +98,7 @@ public class TimeZoneRegression extends TestFmwk {
      *    day of end   0:59 AM STD  = display name 1:59 AM DT
      *                 1:00 AM STD  = display name 1:00 AM ST
      */
+    @Test
     public void Test4084933() {
         TimeZone tz = TimeZone.getTimeZone("PST");
 
@@ -135,6 +136,7 @@ public class TimeZoneRegression extends TestFmwk {
             warnln("Fail: TimeZone misbehaving");
     }
 
+    @Test
     public void Test4096952() {
         String[] ZONES = { "GMT", "MET", "IST" };
         boolean pass = true;
@@ -175,6 +177,7 @@ public class TimeZoneRegression extends TestFmwk {
         }
     }
 
+    @Test
     public void Test4109314() {
         GregorianCalendar testCal = (GregorianCalendar)Calendar.getInstance();
         TimeZone PST = TimeZone.getTimeZone("PST");
@@ -298,6 +301,7 @@ public class TimeZoneRegression extends TestFmwk {
      *     in the MILLIS field, instead of the STANDARD MILLIS IN DAY.
      * When you fix these two problems, the test passes, as expected.
      */
+    @Test
     public void Test4126678() {
     // Note: this test depends on the PST time zone.
     TimeZone initialZone = TimeZone.getDefault();
@@ -340,6 +344,7 @@ public class TimeZoneRegression extends TestFmwk {
      * TimeZone.getAvailableIDs(int) throws exception for certain values,
      * due to a faulty constant in TimeZone.java.
      */
+    @Test
     public void Test4151406() {
         int max = 0;
         for (int h=-28; h<=30; ++h) {
@@ -362,6 +367,7 @@ public class TimeZoneRegression extends TestFmwk {
         logln("Maximum zones per offset = " + max);
     }
 
+    @Test
     public void Test4151429() {
         try {
             TimeZone tz = TimeZone.getTimeZone("GMT");
@@ -377,6 +383,7 @@ public class TimeZoneRegression extends TestFmwk {
      * SimpleTimeZone accepts illegal DST savings values.  These values
      * must be non-zero.  There is no upper limit at this time.
      */
+    @Test
     public void Test4154525() {
         final int GOOD = 1, BAD = 0;
         int[] DATA = {
@@ -427,6 +434,7 @@ public class TimeZoneRegression extends TestFmwk {
      * SimpleTimeZone.hasSameRules() doesn't work for zones with no DST
      * and different DST parameters.
      */
+    @Test
     public void Test4154537() {
         // tz1 and tz2 have no DST and different rule parameters
         SimpleTimeZone tz1 = new SimpleTimeZone(0, "1", 0, 0, 0, 0, 2, 0, 0, 0);
@@ -455,6 +463,7 @@ public class TimeZoneRegression extends TestFmwk {
      * SimpleTimeZone constructors, setStartRule(), and setEndRule() don't
      * check for out-of-range arguments.
      */
+    @Test
     public void Test4154542() {
         final int GOOD = 1;
         final int BAD  = 0;
@@ -554,6 +563,7 @@ public class TimeZoneRegression extends TestFmwk {
     /**
      * SimpleTimeZone.getOffset accepts illegal arguments.
      */
+    @Test
     public void Test4154650() {
         final int GOOD=1, BAD=0;
         final int GOOD_ERA=GregorianCalendar.AD, GOOD_YEAR=1998, GOOD_MONTH=Calendar.AUGUST;
@@ -610,6 +620,7 @@ public class TimeZoneRegression extends TestFmwk {
     /**
      * TimeZone constructors allow null IDs.
      */
+    @Test
     public void Test4159922() {
         TimeZone z = null;
 
@@ -695,6 +706,7 @@ public class TimeZoneRegression extends TestFmwk {
      * TimeZone broken at midnight.  The TimeZone code fails to handle
      * transitions at midnight correctly.
      */
+    @Test
     public void Test4162593() {
         SimpleDateFormat fmt = new SimpleDateFormat("z", Locale.US);
         final int ONE_HOUR = 60*60*1000;
@@ -789,6 +801,7 @@ public class TimeZoneRegression extends TestFmwk {
     /**
      * TimeZone broken in last hour of year
      */
+    @Test
     public void Test4173604() {
         TimeZone pst = TimeZone.getTimeZone("PST");
         int o22 = pst.getOffset(1, 1998, 11, 31, Calendar.THURSDAY, 22*60*60*1000);
@@ -826,6 +839,7 @@ public class TimeZoneRegression extends TestFmwk {
     /**
      * getDisplayName doesn't work with unusual savings/offsets.
      */
+    @Test
     public void Test4176686() {
         // Construct a zone that does not observe DST but
         // that does have a DST savings (which should be ignored).
@@ -888,6 +902,7 @@ public class TimeZoneRegression extends TestFmwk {
     // Current orgnaization of data in zoneinfor.res allows negative
     // values from DOM so comment these tests out
     
+    @Test
     public void Test4184229() {
         SimpleTimeZone zone = null;
         try {
@@ -949,6 +964,7 @@ public class TimeZoneRegression extends TestFmwk {
      * SimpleTimeZone.getOffset() throws IllegalArgumentException when to get
      * of 2/29/1996 (leap day).
      */
+    @Test
     public void Test4208960 () {
     TimeZone tz = TimeZone.getTimeZone("PST");
     try {
@@ -976,6 +992,7 @@ public class TimeZoneRegression extends TestFmwk {
      * We use two known, zones that are equivalent, where one zone has
      * localized name data, and the other doesn't, in some locale.
      */
+    @Test
     public void TestJ449() {
         // not used String str;
 
@@ -1017,6 +1034,7 @@ public class TimeZoneRegression extends TestFmwk {
     /**
      * getOffset returns wrong offset for days in early 20th century
      */
+    @Test
     public void TestJ5134() {
         GregorianCalendar testCal = (GregorianCalendar)Calendar.getInstance();
         TimeZone icuEastern = TimeZone.getTimeZone("America/New_York");        
@@ -1063,6 +1081,7 @@ public class TimeZoneRegression extends TestFmwk {
     /**
      * Test setRawOffset works OK with system timezone
      */
+    @Test
     public void TestT5280() {
         boolean isJdkZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
         String[] tzids = TimeZone.getAvailableIDs();
@@ -1113,6 +1132,7 @@ public class TimeZoneRegression extends TestFmwk {
     /*
      * Zone ID is not set by a SimpleTimeZone constructor
      */
+    @Test
     public void TestT5432() {
         String tzid = "MyZone";
         SimpleTimeZone stz;
@@ -1148,6 +1168,7 @@ public class TimeZoneRegression extends TestFmwk {
     }
     
     // test bug #4265
+    @Test
     public void TestJohannesburg() {
         String j_id="Africa/Johannesburg";
         TimeZone johannesburg = TimeZone.getTimeZone(j_id);
@@ -1170,6 +1191,7 @@ public class TimeZoneRegression extends TestFmwk {
         }
     }
 
+    @Test
     public void TestT7107() {
         Thread[] workers = new Thread[20];
         for (int i = 0 ; i < workers.length; i++) {

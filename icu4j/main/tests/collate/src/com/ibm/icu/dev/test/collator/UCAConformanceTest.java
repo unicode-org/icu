@@ -14,6 +14,9 @@ package com.ibm.icu.dev.test.collator;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacter;
@@ -26,39 +29,36 @@ import com.ibm.icu.util.VersionInfo;
 
 public class UCAConformanceTest extends TestFmwk {
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new UCAConformanceTest().run(args);
-    }
-
     public UCAConformanceTest() {
     }
-    @Override
-    protected void init() throws Exception{
+    
+    @Before
+    public void init() throws Exception {
         UCA = (RuleBasedCollator)Collator.getInstance(ULocale.ROOT);
-
         comparer = new UTF16.StringComparator(true, false, UTF16.StringComparator.FOLD_CASE_DEFAULT);
     }
+    
     private RuleBasedCollator UCA;
     private RuleBasedCollator rbUCA;
     private UTF16.StringComparator comparer;
     private boolean isAtLeastUCA62 =
         UCharacter.getUnicodeVersion().compareTo(VersionInfo.UNICODE_6_2) >= 0;
 
+    @Test
     public void TestTableNonIgnorable() {
         setCollNonIgnorable(UCA);
         openTestFile("NON_IGNORABLE");
         conformanceTest(UCA);
     }
 
+    @Test
     public void TestTableShifted() {
         setCollShifted(UCA);
         openTestFile("SHIFTED");
         conformanceTest(UCA);
     }
 
+    @Test
     public void TestRulesNonIgnorable() {
         if(logKnownIssue("cldrbug:6745", "UCARules.txt has problems")) { return; }
         initRbUCA();
@@ -69,6 +69,7 @@ public class UCAConformanceTest extends TestFmwk {
         conformanceTest(rbUCA);
     }
 
+    @Test
     public void TestRulesShifted() {
         logln("This test is currently disabled, as it is impossible to "+
         "wholly represent fractional UCA using tailoring rules.");

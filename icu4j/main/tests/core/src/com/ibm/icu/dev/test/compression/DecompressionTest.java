@@ -6,14 +6,12 @@
  */
 package com.ibm.icu.dev.test.compression;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UnicodeDecompressor;
 
 public class DecompressionTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-        new DecompressionTest().run(args);
-    }
-
     /** Print out a segment of a character array, if in verbose mode */
     private void log(char [] chars, int start, int count) {
         log("|");
@@ -73,6 +71,7 @@ public class DecompressionTest extends TestFmwk {
     }
 
 
+    @Test
     public void TestDecompression() throws Exception {
         String result;
 
@@ -123,6 +122,7 @@ public class DecompressionTest extends TestFmwk {
     /* Testing the method
      *      public int decompress(*** 
      */
+    @Test
     public void TestDecompress(){
         char[] charBufferBlank = {};
         char[] charBuffer1 = {'a'};

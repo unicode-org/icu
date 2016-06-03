@@ -10,6 +10,8 @@ package com.ibm.icu.dev.test.util;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.LocaleMatcher;
 import com.ibm.icu.util.LocaleMatcher.LanguageMatcherData;
@@ -48,10 +50,7 @@ public class LocaleMatcherTest extends TestFmwk {
     // public LocaleMatcher(LocalePriorityList languagePriorityList,
     // LocaleMatcherData matcherData, double threshold)
 
-    public static void main(String[] args) throws Exception {
-        new LocaleMatcherTest().run(args);
-    }
-
+    @Test
     public void testParentLocales() {
         assertCloser("es_AR", "es_419", "es_ES");
         assertCloser("es_AR", "es_419", "es");
@@ -106,6 +105,7 @@ public class LocaleMatcherTest extends TestFmwk {
     //        }
     //    }
 
+    @Test
     public void testChinese() {
         LocaleMatcher matcher = newLocaleMatcher("zh_CN, zh_TW, iw");
         ULocale taiwanChinese = new ULocale("zh_TW");
@@ -119,6 +119,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("zh_CN, zh_TW, iw;", taiwanChinese, matcher.getBestMatch("zh_Hant_HK"));
     }
 
+    @Test
     public void testenGB() {
         final LocaleMatcher matcher = newLocaleMatcher("fr, en, en_GB, es_MX, es_419, es");
         assertEquals("en_GB", matcher.getBestMatch("en_NZ").toString());
@@ -127,12 +128,14 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("es_MX", matcher.getBestMatch("es_MX").toString());
     }
 
+    @Test
     public void testFallbacks() {
         LocalePriorityList lpl = LocalePriorityList.add("en, hi").build();
         final LocaleMatcher matcher = newLocaleMatcher(lpl, null, 0.09);
         assertEquals("hi", matcher.getBestMatch("sa").toString());
     }
 
+    @Test
     public void testOverrideData() {
         double threshold = 0.05;
         LanguageMatcherData localeMatcherData = new LanguageMatcherData()
@@ -153,6 +156,7 @@ public class LocaleMatcherTest extends TestFmwk {
         // way
     }
 
+    @Test
     public void testBasics() {
         final LocaleMatcher matcher = newLocaleMatcher(LocalePriorityList.add(ULocale.FRENCH).add(ULocale.UK)
             .add(ULocale.ENGLISH).build());
@@ -164,6 +168,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals(ULocale.FRENCH, matcher.getBestMatch(ULocale.JAPAN));
     }
 
+    @Test
     public void testFallback() {
         // check that script fallbacks are handled right
         final LocaleMatcher matcher = newLocaleMatcher("zh_CN, zh_TW, iw");
@@ -174,6 +179,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals(new ULocale("he"), matcher.getBestMatch("iw_IT"));
     }
 
+    @Test
     public void testSpecials() {
         // check that nearby languages are handled
         final LocaleMatcher matcher = newLocaleMatcher("en, fil, ro, nn");
@@ -184,6 +190,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals(new ULocale("en"), matcher.getBestMatch("ja"));
     }
 
+    @Test
     public void testRegionalSpecials() {
         // verify that en_AU is closer to en_GB than to en (which is en_US)
         final LocaleMatcher matcher = newLocaleMatcher("en, en_GB, es, es_419");
@@ -192,6 +199,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("es_ES in {en, en_GB, es, es_419}", new ULocale("es"), matcher.getBestMatch("es_ES"));
     }
 
+    @Test
     public void testHK() {
         // HK and MO are closer to each other for Hant than to TW
         final LocaleMatcher matcher = newLocaleMatcher("zh, zh_TW, zh_MO");
@@ -200,6 +208,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("zh_MO in {zh, zh_TW, zh_HK}", ZH_HK, matcher2.getBestMatch("zh_MO"));
     }
 
+    @Test
     public void TestLocaleMatcherCoverage() {
         // Add tests for better code coverage
         LocaleMatcher matcher = newLocaleMatcher(LocalePriorityList.add(null, 0).build(), null);
@@ -226,6 +235,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertNull("", bestMatch);
     }
 
+    @Test
     public void testEmpty() {
         final LocaleMatcher matcher = newLocaleMatcher("");
         assertNull(matcher.getBestMatch(ULocale.FRENCH));
@@ -233,11 +243,13 @@ public class LocaleMatcherTest extends TestFmwk {
 
     static final ULocale ENGLISH_CANADA = new ULocale("en_CA");
 
+    @Test
     public void testMatch_exact() {
         assertEquals(1.0,
             LocaleMatcher.match(ENGLISH_CANADA, ENGLISH_CANADA));
     }
 
+    @Test
     public void testMatch_none() {
         double match = LocaleMatcher.match(
             new ULocale("ar_MK"),
@@ -246,6 +258,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertTrue("Actual > 0.15 (~ language + script distance): " + match, 0.2 > match);
     }
 
+    @Test
     public void testMatch_matchOnMazimized() {
         ULocale undTw = new ULocale("und_TW");
         ULocale zhHant = new ULocale("zh_Hant");
@@ -264,17 +277,20 @@ public class LocaleMatcherTest extends TestFmwk {
             matchEnHantTw < matchZh);
     }
 
+    @Test
     public void testMatchGrandfatheredCode() {
         final LocaleMatcher matcher = newLocaleMatcher("fr, i_klingon, en_Latn_US");
         assertEquals("en_Latn_US", matcher.getBestMatch("en_GB_oed").toString());
         // assertEquals("tlh", matcher.getBestMatch("i_klingon").toString());
     }
 
+    @Test
     public void testGetBestMatchForList_exactMatch() {
         final LocaleMatcher matcher = newLocaleMatcher("fr, en_GB, ja, es_ES, es_MX");
         assertEquals("ja", matcher.getBestMatch("ja, de").toString());
     }
 
+    @Test
     public void testGetBestMatchForList_simpleVariantMatch() {
         final LocaleMatcher matcher = newLocaleMatcher("fr, en_GB, ja, es_ES, es_MX");
         // Intentionally avoiding a perfect_match or two candidates for variant
@@ -284,6 +300,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("fr", matcher.getBestMatch("de, zh").toString());
     }
 
+    @Test
     public void testGetBestMatchForList_matchOnMaximized() {
         final LocaleMatcher matcher = newLocaleMatcher("en, ja");
         // final LocaleMatcher matcher =
@@ -303,6 +320,7 @@ public class LocaleMatcherTest extends TestFmwk {
             "ja", matcher.getBestMatch("ja_Jpan_JP, en_US").toString());
     }
 
+    @Test
     public void testGetBestMatchForList_noMatchOnMaximized() {
         // Regression test for http://b/5714572 .
         final LocaleMatcher matcher = newLocaleMatcher("en, de, fr, ja");
@@ -311,6 +329,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("de", matcher.getBestMatch("de_CH, fr").toString());
     }
 
+    @Test
     public void testBestMatchForTraditionalChinese() {
         // Scenario: An application that only supports Simplified Chinese (and
         // some other languages),
@@ -340,6 +359,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("zh_Hans_CN", matcher.getBestMatch("zh_Hans, en").toString());
     }
 
+    @Test
     public void testUndefined() {
         // When the undefined language doesn't match anything in the list,
         // getBestMatch returns
@@ -375,6 +395,7 @@ public class LocaleMatcherTest extends TestFmwk {
     // assertNull(matcher.getBestMatch(ULocale.ENGLISH));
     // }
 
+    @Test
     public void testGetBestMatch_googlePseudoLocales() {
         // Google pseudo locales are primarily based on variant subtags.
         // See http://sites/intl_eng/pseudo_locales.
@@ -387,6 +408,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("pt", matcher.getBestMatch("pt_BR").toString());
     }
 
+    @Test
     public void testGetBestMatch_regionDistance() {
         LocaleMatcher matcher = newLocaleMatcher("es_AR, es");
         assertEquals("es_AR", matcher.getBestMatch("es_MX").toString());
@@ -418,6 +440,7 @@ public class LocaleMatcherTest extends TestFmwk {
      * If all the base languages are the same, then each sublocale matches
      * itself most closely
      */
+    @Test
     public void testExactMatches() {
         String lastBase = "";
         TreeSet<ULocale> sorted = new TreeSet<ULocale>();
@@ -460,6 +483,7 @@ public class LocaleMatcherTest extends TestFmwk {
         }
     }
 
+    @Test
     public void testAsymmetry() {
         LocaleMatcher matcher;
         matcher = new LocaleMatcher("mul, nl");
@@ -488,6 +512,7 @@ public class LocaleMatcherTest extends TestFmwk {
     // }
     // }
 
+    @Test
     public void testGetBestMatchForList_matchOnMaximized2() {
 //        if (logKnownIssue("Cldrbug:8811", "Problems with LocaleMatcher test")) {
 //            return;
@@ -502,6 +527,7 @@ public class LocaleMatcherTest extends TestFmwk {
             "ja", matcher.getBestMatch("ja-Jpan-JP, en-GB").toString());
     }
 
+    @Test
     public void testGetBestMatchForList_closeEnoughMatchOnMaximized() {
 //        if (logKnownIssue("Cldrbug:8811", "Problems with LocaleMatcher test")) {
 //            return;
@@ -511,6 +537,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("en", matcher.getBestMatch("en-US, ar, nl, de, ja").toString());
     }
 
+    @Test
     public void testGetBestMatchForPortuguese() {
 
 //        if (logKnownIssue("Cldrbug:8811", "Problems with LocaleMatcher test")) {
@@ -541,6 +568,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("pt", withPTImplicit.getBestMatch("pt_US, pt_PT").toString());
     }
 
+    @Test
     public void testVariantWithScriptMatch() {
 //        if (logKnownIssue("Cldrbug:8811", "Problems with LocaleMatcher test")) {
 //            return;
@@ -550,6 +578,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("en", matcher.getBestMatch("en-GB, sv").toString());
     }
 
+    @Test
     public void testVariantWithScriptMatch2() {
 //        if (logKnownIssue("Cldrbug:8811", "Problems with LocaleMatcher test")) {
 //            return;
@@ -558,6 +587,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("en", matcher.getBestMatch("en-GB, sv").toString());
     }
 
+    @Test
     public void testPerf() {
         if (LANGUAGE_MATCHER_DATA == null) {
             return; // skip except when testing data
@@ -598,6 +628,7 @@ public class LocaleMatcherTest extends TestFmwk {
         return delta;
     }
     
+    @Test
     public void Test8288() {
         final LocaleMatcher matcher = newLocaleMatcher("it, en");
         assertEquals("it", matcher.getBestMatch("und").toString());

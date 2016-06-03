@@ -9,6 +9,8 @@
 
 package com.ibm.icu.dev.test.duration;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
 import com.ibm.icu.impl.duration.Period;
@@ -25,13 +27,7 @@ public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConsta
       60*60*1000L, 60*1000L, 1000L, 1L
     };
     
-    /**
-     * Invoke the tests.
-     */
-    public static void main(String[] args) {
-        new PeriodBuilderFactoryTest().run(args);
-    }
-
+    @Test
     public void testSetAvailableUnitRange() {
         // sanity check, make sure by default all units are set
         pbf = BasicPeriodFormatterService.getInstance().newPeriodBuilderFactory();
@@ -69,6 +65,7 @@ public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConsta
         }
     }
 
+    @Test
     public void testSetUnitIsAvailable() {
         pbf = BasicPeriodFormatterService.getInstance().newPeriodBuilderFactory();
         pbf.setAvailableUnitRange(MONTH, MONTH);
@@ -88,6 +85,7 @@ public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConsta
         assertNotNull(null, pbf.getMultiUnitBuilder(2));
     }
     
+    @Test
     public void testBuilderFactoryPeriodConstruction() {
         // see ticket #8307
         pbf = BasicPeriodFormatterService.getInstance().newPeriodBuilderFactory();

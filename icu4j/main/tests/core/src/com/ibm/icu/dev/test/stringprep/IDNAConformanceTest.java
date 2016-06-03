@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.IDNA;
@@ -28,11 +30,7 @@ import com.ibm.icu.text.UTF16;
  * 
  */
 public class IDNAConformanceTest extends TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new IDNAConformanceTest().run(args);
-    }
-
+    @Test
     public void TestConformance() {
 
         TreeMap inputData = null;

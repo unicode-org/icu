@@ -10,6 +10,7 @@
     <import file="${shared.dir}/build/common-targets.xml"/>
 
     <path id="javac.classpathref">
+    	<path refid="junit.jars"/>
         <path refid="javac.classpathref.${ant.project.name}"/>
     </path>
     <property name="jar.name" value="icu4j-${ant.project.name}.jar"/>

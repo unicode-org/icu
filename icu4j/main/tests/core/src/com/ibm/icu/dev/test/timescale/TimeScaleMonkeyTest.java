@@ -10,6 +10,8 @@ package com.ibm.icu.dev.test.timescale;
 
 import java.util.Random;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.UniversalTimeScale;
@@ -76,6 +78,7 @@ public class TimeScaleMonkeyTest extends TestFmwk
         return value;
     }
     
+    @Test
     public void TestRoundTrip()
     {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
@@ -97,10 +100,5 @@ public class TimeScaleMonkeyTest extends TestFmwk
                 i += 1;
             }
         }
-    }
-
-    public static void main(String[] args)
-    {
-        new TimeScaleMonkeyTest().run(args);
     }
 }

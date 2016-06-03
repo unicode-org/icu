@@ -8,10 +8,17 @@ package com.ibm.icu.dev.test.calendar;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.ibm.icu.dev.test.ModuleTest;
+import com.ibm.icu.dev.test.ModuleTest.TestDataPair;
 import com.ibm.icu.dev.test.TestDataModule;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
+import com.ibm.icu.dev.test.TestDataModule.TestData;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.CalendarFieldsSet;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -19,46 +26,54 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+
 /**
  * @author srl
+ * @author sgill
  * 
  * analog of dadrcal.cpp
  *
  */
-public class DataDrivenCalendarTest extends ModuleTest {
+@RunWith(JUnitParamsRunner.class)
+public class DataDrivenCalendarTest extends TestFmwk {
 
     public DataDrivenCalendarTest() {
-        super("com/ibm/icu/dev/data/testdata/", "calendar");
+        //super("com/ibm/icu/dev/data/testdata/", "calendar");
     }
-        
+
+    @SuppressWarnings("unused")
+    private List<TestDataPair> getTestData() throws Exception { 
+        return ModuleTest.getTestData("com/ibm/icu/dev/data/testdata/", "calendar");
+    }
+
     /* (non-Javadoc)
      * @see com.ibm.icu.dev.test.ModuleTest#processModules()
      */
-    public void processModules() {
-        //String testName = t.getName().toString();
+    @Test
+    @Parameters(method="getTestData")
+    public void calendarTest(TestDataPair pair) {
+        TestData td = pair.td;
+        DataMap settings = pair.dm;
 
-        for (Iterator siter = t.getSettingsIterator(); siter.hasNext();) {
-            // Iterate through and get each of the test case to process
-            DataMap settings = (DataMap) siter.next();
-            
-            String type = settings.getString("Type");
-            
-            if(type.equals("convert_fwd")) {
-                testConvert(t, settings, true);
-            } else if(type.equals("convert_rev")) {
-                testConvert(t, settings, false);
-            } else if(type.equals("ops")) {
-                testOps(t, settings);
-            } else {
-                errln("Unknown type: " + type);
-            }
+        String type = settings.getString("Type");
+
+        if(type.equals("convert_fwd")) {
+            testConvert(td, settings, true);
+        } else if(type.equals("convert_rev")) {
+            testConvert(td, settings, false);
+        } else if(type.equals("ops")) {
+            testOps(td, settings);
+        } else {
+            errln("Unknown type: " + type);
         }
     }
-    
+
 
     void testConvert(String caseString,
-             CalendarFieldsSet fromSet, Calendar fromCalendar,
-             CalendarFieldsSet toSet, Calendar toCalendar, boolean forward) {
+            CalendarFieldsSet fromSet, Calendar fromCalendar,
+            CalendarFieldsSet toSet, Calendar toCalendar, boolean forward) {
         String thisString = caseString+(forward ? "forward"
                 : "reverse")+" "+fromCalendar.getType()+"->"+toCalendar.getType()+" ";
 
@@ -108,8 +123,6 @@ public class DataDrivenCalendarTest extends ModuleTest {
         }
     }
 
-
-    
     private void testConvert(TestDataModule.TestData testData, DataMap settings, boolean forward) {
         Calendar toCalendar= null;
         // build to calendar
@@ -123,12 +136,12 @@ public class DataDrivenCalendarTest extends ModuleTest {
         for (Iterator iter = testData.getDataIterator(); iter.hasNext();) {
             ++n;
             DataMap currentCase = (DataMap) iter.next();
-            
+
             String caseString = "["+testData.getName()+"#"+n+" "+"]";
-             String locale = testSetting = currentCase.getString("locale");
+            String locale = testSetting = currentCase.getString("locale");
             ULocale fromLoc = new ULocale(testSetting);
             Calendar fromCalendar = Calendar.getInstance(fromLoc);
-            
+
             fromSet.clear();
             toSet.clear();
 
@@ -149,26 +162,26 @@ public class DataDrivenCalendarTest extends ModuleTest {
             }
         }
     }
-    
+
     private static final String kADD = "add";
     private static final String kROLL = "roll";
     private static final String kMILLIS = "MILLIS=";
-    
+
     private void testOps(TestDataModule.TestData testData, DataMap settings) {
         // Get 'from' time 
         CalendarFieldsSet fromSet = new CalendarFieldsSet(), toSet = new CalendarFieldsSet(), paramsSet = new CalendarFieldsSet(), diffSet = new CalendarFieldsSet();
-//        DateFormat fmt = new SimpleDateFormat("EEE MMM dd yyyy / YYYY'-W'ww-ee");
+        //        DateFormat fmt = new SimpleDateFormat("EEE MMM dd yyyy / YYYY'-W'ww-ee");
         // Start the processing
         int n = 0;
         long fromDate = 0;
         long toDate = 0;
-        
+
         boolean useDate = false;
-        
+
         for (Iterator iter = testData.getDataIterator(); iter.hasNext();) {
             ++n;
             DataMap currentCase = (DataMap) iter.next();
-            
+
             String caseString = "[case "+n+"]";
             // build to calendar
             //             Headers { "locale","from","operation","params","to" }
@@ -206,12 +219,12 @@ public class DataDrivenCalendarTest extends ModuleTest {
             // #4 'to' info
             param = "to";
             String to = testSetting=currentCase.getString(param);
-           if(to.startsWith(kMILLIS)){
+            if(to.startsWith(kMILLIS)){
                 useDate = true;
                 toDate = Long.parseLong(to.substring(kMILLIS.length()));
             }else{ 
                 toSet.parseFrom(testSetting, fromSet);
-           }
+            }
             //toSet.parseFrom(testSetting, fromSet); // parse with inheritance.
 //            System.err.println("toSet: ["+testSetting+"] >> " + toSet);
 
@@ -228,11 +241,11 @@ public class DataDrivenCalendarTest extends ModuleTest {
             }else {
                 fromSet.setOnCalendar(fromCalendar);
             }
-            
+
             // from calendar:  'starting date'
-            
+
             diffSet.clear();
-            
+
             // Is the calendar sane after being set?
             if (!fromSet.matches(fromCalendar, diffSet)) {
                 String diffs = diffSet.diffFrom(fromSet);
@@ -241,7 +254,7 @@ public class DataDrivenCalendarTest extends ModuleTest {
             }  else {
                 logln(" "+caseString+" SET SOURCE calendar match."); // verifies that the requested fields were set.
             }
-            
+
             // to calendar - copy of from calendar
             Calendar toCalendar = (Calendar)fromCalendar.clone();
 
@@ -264,26 +277,26 @@ public class DataDrivenCalendarTest extends ModuleTest {
             diffSet.clear();
 
             // toset contains 'expected'
-            
+
             if(useDate) {
-                    if(toCalendar.getTimeInMillis()==toDate) {
-                        logln(caseString + " SUCCESS: got=expected="+toDate);
-                        logln("PASS: "+caseString+" matched! ");
-                    } else {
-                    	// Note: With JDK TimeZone implementation, tz offset on dates earlier than
-                    	// mid-1900 might be different from the TZDB. Following test cases are
-                    	// failing because of this.
-                        if ((caseString.equals("[case 31]") || caseString.equals("[case 36]")) 
-                        		&& TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK) {
-                            logln(caseString + " FAIL(expected): got " + 
-                                    toCalendar.getTimeInMillis() + "  expected " + 
-                                    toDate);
-                        } else {
-                            errln(caseString + " FAIL: got " + 
+                if(toCalendar.getTimeInMillis()==toDate) {
+                    logln(caseString + " SUCCESS: got=expected="+toDate);
+                    logln("PASS: "+caseString+" matched! ");
+                } else {
+                    // Note: With JDK TimeZone implementation, tz offset on dates earlier than
+                    // mid-1900 might be different from the TZDB. Following test cases are
+                    // failing because of this.
+                    if ((caseString.equals("[case 31]") || caseString.equals("[case 36]")) 
+                            && TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK) {
+                        logln(caseString + " FAIL(expected): got " + 
                                 toCalendar.getTimeInMillis() + "  expected " + 
                                 toDate);
-                        }
+                    } else {
+                        errln(caseString + " FAIL: got " + 
+                                toCalendar.getTimeInMillis() + "  expected " + 
+                                toDate);
                     }
+                }
             }else if (!toSet.matches(toCalendar, diffSet)) {
                 String diffs = diffSet.diffFrom(toSet);
                 errln((String)"FAIL: "+caseString+" - , "+caseContentsString
@@ -291,17 +304,7 @@ public class DataDrivenCalendarTest extends ModuleTest {
             } else{
                 logln("PASS: "+caseString+" matched! ");
             }
-            
+
         }
     }
-
-   
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) throws Exception {
-        new DataDrivenCalendarTest().run(args);
-    }
-
 }

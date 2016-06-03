@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Utility;
@@ -44,22 +46,10 @@ public final class UCharacterCaseTest extends TestFmwk
 
     // public methods --------------------------------------------------------
 
-    public static void main(String[] arg)
-    {
-        try
-        {
-            UCharacterCaseTest test = new UCharacterCaseTest();
-            test.run(arg);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Testing the uppercase and lowercase function of UCharacter
      */
+    @Test
     public void TestCharacter()
     {
         for (int i = 0; i < CHARACTER_LOWER_.length; i ++) {
@@ -106,6 +96,7 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
+    @Test
     public void TestFolding()
     {
         // test simple case folding
@@ -196,6 +187,7 @@ public final class UCharacterCaseTest extends TestFmwk
     /**
      * Testing the strings case mapping methods
      */
+    @Test
     public void TestUpper()
     {
         // uppercase with root locale and in the same buffer
@@ -252,6 +244,7 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
+    @Test
     public void TestLower()
     {
         if (!LOWER_ROOT_.equals(UCharacter.toLowerCase(LOWER_BEFORE_))) {
@@ -292,6 +285,7 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
+    @Test
     public void TestTitleRegression() throws java.io.IOException {
         boolean isIgnorable = UCharacter.hasBinaryProperty('\'', UProperty.CASE_IGNORABLE);
         assertTrue("Case Ignorable check of ASCII apostrophe", isIgnorable);
@@ -300,6 +294,7 @@ public final class UCharacterCaseTest extends TestFmwk
                 UCharacter.toTitleCase(ULocale.ENGLISH, "THE QUICK BROWN FOX CAN'T JUMP OVER THE LAZY DOGS.", null));
     }
 
+    @Test
     public void TestTitle()
     {
          try{ 
@@ -344,6 +339,7 @@ public final class UCharacterCaseTest extends TestFmwk
          }
     }
 
+    @Test
     public void TestDutchTitle() {
         ULocale LOC_DUTCH = new ULocale("nl");
         int options = 0;
@@ -374,6 +370,7 @@ public final class UCharacterCaseTest extends TestFmwk
                 UCharacter.toTitleCase(LOC_DUTCH, "ijssel igloo IjMUIdEN iPoD ijenough", iter, options));
     }
 
+    @Test
     public void TestSpecial()
     {
         for (int i = 0; i < SPECIAL_LOCALES_.length; i ++) {
@@ -475,6 +472,7 @@ public final class UCharacterCaseTest extends TestFmwk
      * could set a system property to change the directory path.<br>
      * e.g. java -DUnicodeData="data_dir_path" com.ibm.dev.test.lang.UCharacterTest
      */
+    @Test
     public void TestSpecialCasingTxt()
     {
         try
@@ -602,6 +600,7 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
+    @Test
     public void TestUpperLower()
     {
         int upper[] = {0x0041, 0x0042, 0x00b2, 0x01c4, 0x01c6, 0x01c9, 0x01c8,

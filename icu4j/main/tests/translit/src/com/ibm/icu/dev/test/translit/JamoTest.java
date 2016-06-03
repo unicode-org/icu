@@ -9,6 +9,9 @@ package com.ibm.icu.dev.test.translit;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Test;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Transliterator;
 
@@ -16,12 +19,8 @@ import com.ibm.icu.text.Transliterator;
  * @test
  * @summary Test the Latin-Jamo transliterator
  */
-public class JamoTest extends TransliteratorTest {
-
-    public static void main(String[] args) throws Exception {
-        new JamoTest().run(args);
-    }
-
+public class JamoTest extends TestFmwk {
+    @Test
     public void TestJamo() {
         Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
         Transliterator jamoLatin = latinJamo.getInverse();
@@ -79,11 +78,11 @@ public class JamoTest extends TransliteratorTest {
         for (int i=0; i<CASE.length; i+=3) {
             String jamo = nameToJamo(CASE[i+1]);
             if (CASE[i+2] == null) {
-                expect(latinJamo, CASE[i], jamo, jamoLatin);
+                TransliteratorTest.expect(latinJamo, CASE[i], jamo, jamoLatin);
             } else {
                 // Handle case where round-trip is expected to fail
-                expect(latinJamo, CASE[i], jamo);
-                expect(jamoLatin, jamo, CASE[i+2]);
+                TransliteratorTest.expect(latinJamo, CASE[i], jamo);
+                TransliteratorTest.expect(jamoLatin, jamo, CASE[i+2]);
             }
         }
     }
@@ -92,6 +91,7 @@ public class JamoTest extends TransliteratorTest {
      * These are problems turned up by the Hangul-Jamo;Jamo-Latin
      * round trip test.
      */
+    @Test
     public void TestRoundTrip() {
         String HANGUL[] = { "\uAC03\uC2F8",
                             "\uC544\uC5B4"};
@@ -126,6 +126,7 @@ public class JamoTest extends TransliteratorTest {
      * Test various step-at-a-time transformation of hangul to jamo to
      * latin and back.
      */
+    @Test
     public void TestPiecemeal() {
         String hangul = "\uBC0F";
         String jamo = nameToJamo("(Mi)(I)(Cf)");
@@ -135,33 +136,34 @@ public class JamoTest extends TransliteratorTest {
         Transliterator t = null;
 
         t = Transliterator.getInstance("NFD"); // was Hangul-Jamo
-        expect(t, hangul, jamo);
+        TransliteratorTest.expect(t, hangul, jamo);
 
         t = Transliterator.getInstance("NFC"); // was Jamo-Hangul
-        expect(t, jamo, hangul);
+        TransliteratorTest.expect(t, jamo, hangul);
 
         t = Transliterator.getInstance("Latin-Jamo");
-        expect(t, latin, jamo);
+        TransliteratorTest.expect(t, latin, jamo);
 
         t = Transliterator.getInstance("Jamo-Latin");
-        expect(t, jamo, latin2);
+        TransliteratorTest.expect(t, jamo, latin2);
 
         t = Transliterator.getInstance("Hangul-Latin");
-        expect(t, hangul, latin2);
+        TransliteratorTest.expect(t, hangul, latin2);
 
         t = Transliterator.getInstance("Latin-Hangul");
-        expect(t, latin, hangul);
+        TransliteratorTest.expect(t, latin, hangul);
 
         t = Transliterator.getInstance("Hangul-Latin; Latin-Jamo");
-        expect(t, hangul, jamo);
+        TransliteratorTest.expect(t, hangul, jamo);
 
         t = Transliterator.getInstance("Jamo-Latin; Latin-Hangul");
-        expect(t, jamo, hangul);
+        TransliteratorTest.expect(t, jamo, hangul);
 
         t = Transliterator.getInstance("Hangul-Latin; Latin-Hangul");
-        expect(t, hangul, hangul);
+        TransliteratorTest.expect(t, hangul, hangul);
     }
 
+    @Test
     public void TestRealText() {
         Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
         Transliterator jamoLatin = latinJamo.getInverse();
@@ -375,7 +377,7 @@ public class JamoTest extends TransliteratorTest {
     // TransliteratorTest override
     boolean expectAux(String tag, String summary, boolean pass,
                    String expectedResult) {
-        return super.expectAux(tag, jamoToName(summary),
+        return TransliteratorTest.expectAux(tag, jamoToName(summary),
                         pass, jamoToName(expectedResult));
     }
 

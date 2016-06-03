@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DisplayContext;
@@ -30,11 +32,7 @@ import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 
 public class ULocaleCollationTest extends TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new ULocaleCollationTest().run(args);
-    }
-
+    @Test
     public void TestCollator() {
         checkService("ja_JP_YOKOHAMA", new ServiceFacade() {
             public Object create(ULocale req) {
@@ -232,6 +230,7 @@ public class ULocaleCollationTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestNameList() { 
         String[][][] tests = { 
                 /* name in French, name in self, minimized, modified */
@@ -319,6 +318,7 @@ public class ULocaleCollationTest extends TestFmwk {
         } 
     } 
 
+    @Test
     public void TestIllformedLocale() {
         ULocale french = ULocale.FRENCH; 
         Collator collator = Collator.getInstance(french); 

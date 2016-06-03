@@ -24,26 +24,21 @@ import com.ibm.icu.util.UResourceTypeMismatchException;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ExceptionTests
+public abstract class ExceptionHandler implements SerializableTestUtility.Handler
 {
-    static abstract class ExceptionHandler implements SerializableTest.Handler
+    public boolean hasSameBehavior(Object a, Object b)
     {
-        abstract public Object[] getTestObjects();
-        
-        public boolean hasSameBehavior(Object a, Object b)
-        {
-            Exception ea = (Exception) a;
-            Exception eb = (Exception) b;
-            
-            return ea.toString().equals(eb.toString());
-        }
+        Exception ea = (Exception) a;
+        Exception eb = (Exception) b;
+
+        return ea.toString().equals(eb.toString());
     }
-    
+
     static class ArabicShapingExceptionHandler extends ExceptionHandler
     {
         public Object[] getTestObjects()
         {
-            Locale locales[] = SerializableTest.getLocales();
+            Locale locales[] = SerializableTestUtility.getLocales();
             ArabicShapingException exceptions[] = new ArabicShapingException[locales.length];
             
             for (int i = 0; i < locales.length; i += 1) {
@@ -58,7 +53,7 @@ public class ExceptionTests
     {
         public Object[] getTestObjects()
         {
-            Locale locales[] = SerializableTest.getLocales();
+            Locale locales[] = SerializableTestUtility.getLocales();
             String rules = "This is a very odd little set of rules, just for testing, you know...";
             StringPrepParseException exceptions[] = new StringPrepParseException[locales.length];
             
@@ -74,7 +69,7 @@ public class ExceptionTests
     {
         public Object[] getTestObjects()
         {
-            Locale locales[] = SerializableTest.getLocales();
+            Locale locales[] = SerializableTestUtility.getLocales();
             UResourceTypeMismatchException exceptions[] = new UResourceTypeMismatchException[locales.length];
             
             for (int i = 0; i < locales.length; i += 1) {
@@ -89,7 +84,7 @@ public class ExceptionTests
     {
         public Object[] getTestObjects()
         {
-            Locale locales[] = SerializableTest.getLocales();
+            Locale locales[] = SerializableTestUtility.getLocales();
             InvalidFormatException exceptions[] = new InvalidFormatException[locales.length];
             
             for (int i = 0; i < locales.length; i += 1) {
@@ -149,9 +144,5 @@ public class ExceptionTests
             };
             return exceptions;
         }
-    }
-
-    public static void main(String[] args)
-    {
     }
 }

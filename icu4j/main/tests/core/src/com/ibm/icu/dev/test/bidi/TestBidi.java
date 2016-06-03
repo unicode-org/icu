@@ -9,6 +9,8 @@ package com.ibm.icu.dev.test.bidi;
 
 import java.util.Arrays;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.Bidi;
 import com.ibm.icu.text.BidiRun;
 
@@ -18,11 +20,12 @@ import com.ibm.icu.text.BidiRun;
  * @author Lina Kemmel, Matitiahu Allouche
  */
 
-public class TestBidi extends BidiTest {
+public class TestBidi extends BidiFmwk {
 
     private static final int MAXLEN = 256;
     private static final String levelString = "............................";
 
+    @Test
     public void testBidi() {
         Bidi bidi;
         Bidi bidiLine;
@@ -568,15 +571,5 @@ public class TestBidi extends BidiTest {
         /* last R (Hebrew etc.) others are weak L (English Digits) */
         String lastHebrewOthersEnglishDigit = "\u0031\u0032\u0033\u05F1";
         assertEquals("\nWrong direction through fast detection #15", Bidi.RTL, Bidi.getBaseDirection(lastHebrewOthersEnglishDigit));
-    }
-
-
-    public static void main(String[] args) {
-        try {
-            new TestBidi().run(args);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
     }
 }

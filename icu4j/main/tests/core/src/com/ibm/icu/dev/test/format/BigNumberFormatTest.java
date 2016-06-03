@@ -9,6 +9,8 @@ package com.ibm.icu.dev.test.format;
 import java.text.ParseException;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DecimalFormat;
@@ -23,10 +25,7 @@ public class BigNumberFormatTest extends TestFmwk {
 
     static final int ILLEGAL = -1;
 
-    public static void main(String[] args) throws Exception {
-        new BigNumberFormatTest().run(args);
-    }
-        
+    @Test
     public void TestExponent() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat fmt1 = new DecimalFormat("0.###E0", US);
@@ -42,6 +41,7 @@ public class BigNumberFormatTest extends TestFmwk {
     /**
      * Test the functioning of the secondary grouping value.
      */
+    @Test
     public void TestSecondaryGrouping() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat f = new DecimalFormat("#,##,###", US);
@@ -90,6 +90,7 @@ public class BigNumberFormatTest extends TestFmwk {
 
     /**
      */
+    @Test
     public void TestPatterns() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat fmt = new DecimalFormat("#", US);
@@ -156,6 +157,7 @@ public class BigNumberFormatTest extends TestFmwk {
     /**
      * Test the handling of the AlphaWorks BigDecimal
      */
+    @Test
     public void TestAlphaBigDecimal() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         /*For ICU compatibility [Richard/GCL]*/
@@ -177,6 +179,7 @@ public class BigNumberFormatTest extends TestFmwk {
 
     /**
      */
+    @Test
     public void TestScientific() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         /*For ICU compatibility [Richard/GCL]*/
@@ -254,6 +257,7 @@ public class BigNumberFormatTest extends TestFmwk {
 
     /**
      */
+    @Test
     public void TestPad() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         expect(new DecimalFormat("*^##.##", US),
@@ -381,6 +385,7 @@ public class BigNumberFormatTest extends TestFmwk {
         return buf.toString();
     }
 
+    @Test
     public void Test4161100() {
         NumberFormat f = NumberFormat.getInstance();
         f.setMinimumFractionDigits(1);
@@ -395,6 +400,7 @@ public class BigNumberFormatTest extends TestFmwk {
         }
     }        
 
+    @Test
     public void TestBigDecimalJ28() {
         String[] DATA = {
             "1", "1E0",
@@ -419,6 +425,7 @@ public class BigNumberFormatTest extends TestFmwk {
             }
         }
     }
+    @Test
     public void TestBigDecimalRounding() {
         // jb 3657
         java.text.DecimalFormat jdkFormat=new java.text.DecimalFormat("###,###,###,##0");

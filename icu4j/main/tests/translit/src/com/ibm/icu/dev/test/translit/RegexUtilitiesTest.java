@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UnicodeRegex;
 import com.ibm.icu.lang.UCharacter;
@@ -24,14 +26,10 @@ import com.ibm.icu.text.UnicodeSet;
  * @author markdavis
  */
 public class RegexUtilitiesTest extends TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new RegexUtilitiesTest().run(args);
-    }
-
     /**
      * Check basic construction.
      */
+    @Test
     public void TestConstruction() {
         String[][] tests = {
                 {"a"},
@@ -58,9 +56,10 @@ public class RegexUtilitiesTest extends TestFmwk {
      * Perform an exhaustive test on all Unicode characters to make sure that the UnicodeSet with each
      * character works.
      */
+    @Test
     public void TestCharacters() {
         UnicodeSet requiresQuote = new UnicodeSet("[\\$\\&\\-\\:\\[\\\\\\]\\^\\{\\}[:pattern_whitespace:]]");
-        boolean skip = getInclusion() < 10;
+        boolean skip = TestFmwk.getExhaustiveness() < 10;
         for (int cp = 0; cp < 0x110000; ++cp) {
             if (cp > 0xFF && skip && (cp % 37 != 0)) {
                 continue;
@@ -90,8 +89,9 @@ public class RegexUtilitiesTest extends TestFmwk {
     /**
      * Check all integer Unicode properties to make sure they work.
      */
+    @Test
     public void TestUnicodeProperties() {
-        final boolean skip = getInclusion() < 10;
+        final boolean skip = TestFmwk.getExhaustiveness() < 10;
         UnicodeSet temp = new UnicodeSet();
         for (int propNum = UProperty.INT_START; propNum < UProperty.INT_LIMIT; ++propNum) {
             if (skip && (propNum % 5 != 0)) {
@@ -137,6 +137,7 @@ public class RegexUtilitiesTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestBnf() {
         UnicodeRegex regex = new UnicodeRegex();
         final String[][] tests = {

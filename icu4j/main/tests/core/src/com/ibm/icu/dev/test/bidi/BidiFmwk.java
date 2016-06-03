@@ -22,7 +22,7 @@ import com.ibm.icu.util.VersionInfo;
  * @author Lina Kemmel, Matitiahu Allouche
  */
 
-public class BidiTest extends TestFmwk {
+public class BidiFmwk extends TestFmwk {
 
     protected static final char[] charFromDirProp = {
          /* L      R    EN    ES    ET     AN    CS    B    S    WS    ON */

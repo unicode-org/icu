@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import org.junit.Test;
+
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
@@ -20,11 +22,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * Tests for the <code>HebrewCalendar</code> class.
  */
-public class HebrewTest extends CalendarTest {
-    public static void main(String args[]) throws Exception {
-        new HebrewTest().run(args);
-    }
-
+public class HebrewTest extends CalendarTestFmwk {
     // Constants to save typing.
     public static final int TISHRI  = HebrewCalendar.TISHRI;
     public static final int HESHVAN = HebrewCalendar.HESHVAN;
@@ -45,6 +43,7 @@ public class HebrewTest extends CalendarTest {
      * The only real nastiness with roll is the MONTH field, since a year can
      * have a variable number of months.
      */
+    @Test
     public void TestRoll() {
         int[][] tests = new int[][] {
             //       input                roll by          output
@@ -89,6 +88,7 @@ public class HebrewTest extends CalendarTest {
      * The only real nastiness with roll is the MONTH field, since a year can
      * have a variable number of months.
      */
+    @Test
     public void TestAdd() {
         int[][] tests = new int[][] {
             //       input                add by          output
@@ -126,6 +126,7 @@ public class HebrewTest extends CalendarTest {
      * A huge list of test cases to make sure that computeTime and computeFields
      * work properly for a wide range of data.
      */
+    @Test
     public void TestCases() {
         try{
             final TestCase[] testCases = {
@@ -232,6 +233,7 @@ public class HebrewTest extends CalendarTest {
      * Problem reported by Armand Bendanan in which setting of the MONTH
      * field in a Hebrew calendar causes the time fields to go negative.
      */
+    @Test
     public void TestTimeFields() {
         try{
             HebrewCalendar calendar = new HebrewCalendar(5761, 0, 11, 12, 28, 15);
@@ -251,6 +253,7 @@ public class HebrewTest extends CalendarTest {
      * in which setting of the MONTH field in a Hebrew calendar to
      * ELUL on non leap years causes the date to be set on TISHRI next year.
      */
+    @Test
     public void TestElulMonth() {
         try{
             HebrewCalendar cal = new HebrewCalendar();
@@ -284,6 +287,7 @@ public class HebrewTest extends CalendarTest {
      * handling in the Hebrew calendar because of the pattern of leap
      * years.
      */
+    @Test
     public void TestMonthMovement() {
         try{
             HebrewCalendar cal = new HebrewCalendar();
@@ -356,6 +360,7 @@ public class HebrewTest extends CalendarTest {
      * Test handling of ADAR_1.
      */
     /*
+    @Test
     public void TestAdar1() {
         HebrewCalendar cal = new HebrewCalendar();
         cal.clear();
@@ -375,6 +380,7 @@ public class HebrewTest extends CalendarTest {
     /**
      * With no fields set, the calendar should use default values.
      */
+    @Test
     public void TestDefaultFieldValues() {
         try{
             HebrewCalendar cal = new HebrewCalendar();
@@ -388,6 +394,7 @@ public class HebrewTest extends CalendarTest {
     /**
      * Test limits of the Hebrew calendar
      */
+    @Test
     public void TestLimits() {
         Calendar cal = Calendar.getInstance();
         cal.set(2007, Calendar.JANUARY, 1);
@@ -396,6 +403,7 @@ public class HebrewTest extends CalendarTest {
         doTheoreticalLimitsTest(hebrew, true);
     }
 
+    @Test
     public void TestCoverage() {
         try{
             {
@@ -459,6 +467,8 @@ public class HebrewTest extends CalendarTest {
             warnln("Could not load the locale data. "+ ex.getMessage());
         }
     }
+
+    @Test
     public void Test1624() {
 
         HebrewCalendar hc = new HebrewCalendar (5742, HebrewCalendar.AV, 22);
@@ -500,6 +510,7 @@ public class HebrewTest extends CalendarTest {
     // Test case for Ticket#10313. HebrewCalendar requires
     // special handling for validating month value, because
     // month Adar I is only available in leap years.
+    @Test
     public void TestMonthValidation() {
         HebrewCalendar cal = new HebrewCalendar();
         cal.setLenient(false);

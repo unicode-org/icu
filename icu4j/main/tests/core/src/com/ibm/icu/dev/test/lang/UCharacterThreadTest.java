@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
 
@@ -29,24 +31,11 @@ public class UCharacterThreadTest extends TestFmwk {
     
       // public methods --------------------------------------------------------
       
-    public static void main(String[] arg)  
-    {
-        try
-        {
-            UCharacterThreadTest test = new UCharacterThreadTest();
-            test.run(arg);
-        }
-        catch (Exception e)
-        {
-              e.printStackTrace();
-        }
-    }
-    
-    
     //
     //  Test multi-threaded parallel calls to UCharacter.getName(codePoint)
     //  Regression test for ticket 6264.
     //
+    @Test
     public void TestUCharactersGetName() throws InterruptedException {
         List threads = new LinkedList();
         for(int t=0; t<20; t++) {

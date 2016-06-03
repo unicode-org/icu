@@ -12,6 +12,8 @@ import java.awt.font.TextAttribute;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.Bidi;
 
 /**
@@ -20,7 +22,7 @@ import com.ibm.icu.text.Bidi;
  * @author Matitiahu Allouche
  */
 
-public class TestCompatibility extends BidiTest {
+public class TestCompatibility extends BidiFmwk {
 
     void compareBidi(Bidi bidi, java.text.Bidi jbidi)
     {
@@ -134,6 +136,7 @@ public class TestCompatibility extends BidiTest {
          */
     }
 
+    @Test
     public void testCompatibility()
     {
         // This test case does not work well on Java 1.4/1.4.1 environment,
@@ -283,14 +286,5 @@ public class TestCompatibility extends BidiTest {
         }
 
         logln("\nExiting TestCompatibility\n");
-    }
-
-    public static void main(String[] args) {
-        try {
-            new TestCompatibility().run(args);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
     }
 }

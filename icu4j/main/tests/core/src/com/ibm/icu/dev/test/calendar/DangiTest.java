@@ -7,6 +7,8 @@
 package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 
+import org.junit.Test;
+
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DangiCalendar;
@@ -14,15 +16,11 @@ import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
-public class DangiTest extends CalendarTest {
-
-    public static void main(String args[]) throws Exception {
-        new DangiTest().run(args);
-    }
-
+public class DangiTest extends CalendarTestFmwk {
     /**
      * Test basic mapping to and from Gregorian.
      */
+    @Test
     public void TestMapping() {
         final int[] DATA = {
             // (Note: months are 1-based)
@@ -128,6 +126,7 @@ public class DangiTest extends CalendarTest {
      * month zero.  This was a problem with some of the astronomical
      * new moon determinations.
      */
+    @Test
     public void TestZeroDOM() {
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         GregorianCalendar greg = new GregorianCalendar(1989, Calendar.SEPTEMBER, 1);
@@ -149,6 +148,7 @@ public class DangiTest extends CalendarTest {
     /**
      * Test minimum and maximum functions.
      */
+    @Test
     public void TestLimits() {
         // The number of days and the start date can be adjusted
         // arbitrarily to either speed up the test or make it more
@@ -168,6 +168,7 @@ public class DangiTest extends CalendarTest {
     /**
      * Make sure IS_LEAP_MONTH participates in field resolution.
      */
+    @Test
     public void TestResolution() {
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         DateFormat fmt = DateFormat.getDateInstance(cal, DateFormat.DEFAULT);
@@ -250,6 +251,7 @@ public class DangiTest extends CalendarTest {
     /**
      * Test the behavior of fields that are out of range.
      */
+    @Test
     public void TestOutOfRange() {
         int[] DATA = new int[] {
             // Input       Output
@@ -288,6 +290,7 @@ public class DangiTest extends CalendarTest {
      * Test the behavior of KoreanLunarCalendar.add().  The only real
      * nastiness with roll is the MONTH field around leap months.
      */
+    @Test
     public void TestAdd() {
         int[][] tests = new int[][] {
             // MONTHS ARE 1-BASED HERE
@@ -313,6 +316,7 @@ public class DangiTest extends CalendarTest {
      * Test the behavior of KoreanLunarCalendar.roll().  The only real
      * nastiness with roll is the MONTH field around leap months.
      */
+    @Test
     public void TestRoll() {
         int[][] tests = new int[][] {
             // MONTHS ARE 1-BASED HERE
@@ -376,6 +380,7 @@ public class DangiTest extends CalendarTest {
         return "" + year + "/" + (month + 1) + ((isLeapMonth != 0) ? "(leap)" : "") + "/" + day;
     }
 
+    @Test
     public void TestCoverage() {
         // DangiCalendar()
         // DangiCalendar(Date)
@@ -398,6 +403,7 @@ public class DangiTest extends CalendarTest {
         assertEquals("getType()", "dangi", type);
     }
 
+    @Test
     public void TestInitWithCurrentTime() {
         // If the chinese calendar current millis isn't called, the default year is wrong.
         // this test is assuming the 'year' is the current cycle

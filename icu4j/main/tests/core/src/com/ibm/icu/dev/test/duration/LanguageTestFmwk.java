@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
 import com.ibm.icu.impl.duration.Period;
@@ -33,7 +35,7 @@ import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
 /**
  * Test cases for en
  */
-public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
+public abstract class LanguageTestFmwk extends TestFmwk implements TimeUnitConstants {
 
     private static final TimeUnit[] units = {
         TimeUnit.YEAR, TimeUnit.MONTH, TimeUnit.WEEK, TimeUnit.DAY, TimeUnit.HOUR, 
@@ -75,7 +77,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         TestData data = (TestData) datacache.get(locale);
         if (data == null) {
             try {
-                InputStream is = LanguageTestRoot.class
+                InputStream is = LanguageTestFmwk.class
                         .getResourceAsStream("testdata/testdata_" + locale
                                 + ".txt");
                 // debug
@@ -97,11 +99,11 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         return data;
     }
 
-    public LanguageTestRoot(String locale, boolean ignore) {
+    public LanguageTestFmwk(String locale, boolean ignore) {
         this(getTestData(locale), locale);
     }
 
-    public LanguageTestRoot(TestData data, String locale) {
+    private LanguageTestFmwk(TestData data, String locale) {
         if (data == null) {
             data = DefaultData.getInstance();
         }
@@ -109,44 +111,44 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         this.locale = locale;
     }
 
-    public static void writeData(PrintWriter pw, String locale)
-            throws Exception {
-        LanguageTestRoot test = new LanguageTestRoot(DefaultData.getInstance(),
-                locale);
-        test.writeData(pw);
-    }
+//    public static void writeData(PrintWriter pw, String locale)
+//            throws Exception {
+//        LanguageTestRoot test = new LanguageTestRoot(DefaultData.getInstance(),
+//                locale);
+//        test.writeData(pw);
+//    }
 
-    private void writeData(PrintWriter writer) throws Exception {
-/*
-      pw = writer;
-      setUp();
-      testFullPluralizedForms();
-      tearDown();
-      setUp();
-      testMediumForms();
-      tearDown();
-      setUp();
-      testShortForms();
-      tearDown();
-      setUp();
-      testCustomMinutes();
-      tearDown();
-      setUp();
-      testLimitedUnits();
-      tearDown();
-      setUp();
-      testHalfUnits();
-      tearDown();
-      setUp();
-      testFractionalUnits();
-      tearDown();
-      setUp();
-      testMultipleUnits();
-      tearDown();
-      pw = null;
-      writer.flush();
-*/
-    }
+//    private void writeData(PrintWriter writer) throws Exception {
+///*
+//      pw = writer;
+//      setUp();
+//      testFullPluralizedForms();
+//      tearDown();
+//      setUp();
+//      testMediumForms();
+//      tearDown();
+//      setUp();
+//      testShortForms();
+//      tearDown();
+//      setUp();
+//      testCustomMinutes();
+//      tearDown();
+//      setUp();
+//      testLimitedUnits();
+//      tearDown();
+//      setUp();
+//      testHalfUnits();
+//      tearDown();
+//      setUp();
+//      testFractionalUnits();
+//      tearDown();
+//      setUp();
+//      testMultipleUnits();
+//      tearDown();
+//      pw = null;
+//      writer.flush();
+//*/
+//    }
 
     protected void xAssertEquals(String msg, String[] expected, int n,
             String actual) {
@@ -226,6 +228,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         pbFactory = pfs.newPeriodBuilderFactory().setLocale(locale);
     }
 
+    @Test
     public void testFullPluralizedForms() throws Exception {
         setUp();
         int[] counts = data.getFullPluralizedFormCounts();
@@ -255,6 +258,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         }
     }
 
+    @Test
     public void testMediumForms() throws Exception {
         setUp();
         String[] targets = data.getMediumFormTargets();
@@ -276,6 +280,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         }
     }
 
+    @Test
     public void testShortForms() throws Exception {
         setUp();
         String[] targets = data.getShortFormTargets();
@@ -297,6 +302,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         }
     }
 
+    @Test
     public void testCustomMinutes() throws Exception {
         setUp();
         String[] targets = data.getCustomMinuteTargets();
@@ -319,6 +325,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         }
     }
 
+    @Test
     public void testLimitedUnits() throws Exception {
         setUp();
         String[] targets = data.getLimitedUnitTargets();
@@ -409,6 +416,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         }
     }
 
+    @Test
     public void testHalfUnits() throws Exception {
         setUp();
         int[] counts = data.getHalfUnitCounts();
@@ -439,6 +447,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         }
     }
 
+    @Test
     public void testFractionalUnits() throws Exception {
         setUp();
         float[] counts = data.getFractionalUnitCounts();
@@ -469,6 +478,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
         }
     }
 
+    @Test
     public void testMultipleUnits() throws Exception {
         setUp();
         String[] targets = data.getMultipleUnitTargets();
@@ -511,7 +521,7 @@ public class LanguageTestRoot extends TestFmwk implements TimeUnitConstants {
 
 }
 
-class FileTestData extends LanguageTestRoot.TestData {
+class FileTestData extends LanguageTestFmwk.TestData {
     private int[] fullPluralizedFormCounts;
     private String[] fullPluralizedFormTargets;
     private String[] mediumFormTargets;
@@ -664,7 +674,7 @@ class FileTestData extends LanguageTestRoot.TestData {
     }
 }
 
-class DefaultData extends LanguageTestRoot.TestData {
+class DefaultData extends LanguageTestFmwk.TestData {
     private static final int[] fullPluralizedFormCounts = { -3, -2, -1, 0, 1,
             2, 3, 5, 10, 11, 12, 20, 21, 22, 23, 25 };
 

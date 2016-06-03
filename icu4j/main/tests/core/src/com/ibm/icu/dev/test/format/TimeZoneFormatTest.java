@@ -21,6 +21,9 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
+import org.junit.Test;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.lang.UCharacter;
@@ -46,10 +49,6 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     private static boolean JDKTZ = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
     private static final Pattern EXCL_TZ_PATTERN = Pattern.compile(".*/Riyadh8[7-9]");
-
-    public static void main(String[] args) throws Exception {
-        new TimeZoneFormatTest().run(args);
-    }
 
     private static final String[] PATTERNS = {
         "z",
@@ -81,6 +80,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * Test case for checking if a TimeZone is properly set in the result calendar
      * and if the result TimeZone has the expected behavior.
      */
+    @Test
     public void TestTimeZoneRoundTrip() {
         boolean TEST_ALL = getBooleanProperty("TimeZoneRoundTripAll", false);
 
@@ -117,7 +117,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         // Set up test locales
         ULocale[] LOCALES = null;
-        if (TEST_ALL || getInclusion() > 5) {
+        if (TEST_ALL || TestFmwk.getExhaustiveness() > 5) {
             LOCALES = ULocale.getAvailableLocales();
         } else {
             LOCALES = new ULocale[] {new ULocale("en"), new ULocale("en_CA"), new ULocale("fr"), new ULocale("zh_Hant")};
@@ -293,13 +293,14 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * rule transition since 1900 until 2020, then check if time around each transition can
      * round trip as expected.
      */
+    @Test
     public void TestTimeRoundTrip() {
 
         boolean TEST_ALL = getBooleanProperty("TimeZoneRoundTripAll", false);
 
         int startYear, endYear;
 
-        if (TEST_ALL || getInclusion() > 5) {
+        if (TEST_ALL || TestFmwk.getExhaustiveness() > 5) {
             startYear = 1900;
         } else {
             startYear = 1990;
@@ -337,7 +338,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (TEST_ALL) {
             // It may take about an hour for testing all locales
             LOCALES = ULocale.getAvailableLocales();
-        } else if (getInclusion() > 5) {
+        } else if (TestFmwk.getExhaustiveness() > 5) {
             LOCALES = new ULocale[] {
                 new ULocale("ar_EG"), new ULocale("bg_BG"), new ULocale("ca_ES"), new ULocale("da_DK"), new ULocale("de"),
                 new ULocale("de_DE"), new ULocale("el_GR"), new ULocale("en"), new ULocale("en_AU"), new ULocale("en_CA"),
@@ -541,6 +542,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         return isExcluded;
     }
 
+    @Test
     public void TestParse() {
         final Object[][] DATA = {
         //   text                   inpos       locale      style
@@ -708,6 +710,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestISOFormat() {
         final int[] OFFSET = {
             0,          // 0
@@ -856,6 +859,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestFormat() {
         final Date dateJan = new Date(1358208000000L);  // 2013-01-15T00:00:00Z
         final Date dateJul = new Date(1373846400000L);  // 2013-07-15T00:00:00Z
@@ -954,6 +958,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
     public void TestFormatTZDBNames() {
         final Date dateJan = new Date(1358208000000L);  // 2013-01-15T00:00:00Z
         final Date dateJul = new Date(1373846400000L);  // 2013-07-15T00:00:00Z
@@ -1075,6 +1080,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     // the reported problem cannot be reproduced with regular test
     // execution. Run this test alone reproduced the problem before
     // the fix was merged.
+    @Test
     public void TestTZDBNamesThreading() {
         final TZDBTimeZoneNames names = new TZDBTimeZoneNames(ULocale.ENGLISH);
         final AtomicInteger found = new AtomicInteger();

@@ -21,6 +21,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.SortedSetRelation;
@@ -50,10 +52,6 @@ public class UnicodeSetTest extends TestFmwk {
 
     static final String NOT = "%%%%";
 
-    public static void main(String[] args) throws Exception {
-        new UnicodeSetTest().run(args);
-    }
-
     private static final boolean isCccValue(int ccc) {
         switch (ccc) {
         case 0:
@@ -81,13 +79,14 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestPropertyAccess() {
         int count = 0; 
         // test to see that all of the names work
         for (int propNum = UProperty.BINARY_START; propNum < UProperty.INT_LIMIT; ++propNum) {
             count++;
             //Skipping tests in the non-exhaustive mode to shorten the test time ticket#6475
-            if(getInclusion()<=5 && count%5!=0){
+            if(TestFmwk.getExhaustiveness()<=5 && count%5!=0){
                 continue;
             }
             if (propNum >= UProperty.BINARY_LIMIT && propNum < UProperty.INT_START) { // skip the gap
@@ -167,6 +166,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test toPattern().
      */
+    @Test
     public void TestToPattern() throws Exception {
         // Test that toPattern() round trips with syntax characters
         // and whitespace.
@@ -424,6 +424,7 @@ public class UnicodeSetTest extends TestFmwk {
         return buf.toString();
     }
 
+    @Test
     public void TestPatterns() {
         UnicodeSet set = new UnicodeSet();
         expectPattern(set, "[[a-m]&[d-z]&[k-y]]",  "km");
@@ -439,6 +440,7 @@ public class UnicodeSetTest extends TestFmwk {
         expectPairs(set, exp);
     }
 
+    @Test
     public void TestCategories() {
         int failures = 0;
         UnicodeSet set = new UnicodeSet("[:Lu:]");
@@ -468,6 +470,7 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestAddRemove() {
         UnicodeSet set = new UnicodeSet();
         set.add('a', 'z');
@@ -510,6 +513,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Make sure minimal representation is maintained.
      */
+    @Test
     public void TestMinimalRep() {
         // This is pretty thoroughly tested by checkCanonicalRep()
         // run against the exhaustive operation results.  Use the code
@@ -537,6 +541,7 @@ public class UnicodeSetTest extends TestFmwk {
         expectPairs(set, "aw");
     }
 
+    @Test
     public void TestAPI() {
         // default ct
         UnicodeSet set = new UnicodeSet();
@@ -770,6 +775,7 @@ public class UnicodeSetTest extends TestFmwk {
 
     }
 
+    @Test
     public void TestStrings() {
         //  Object[][] testList = {
         //  {I_EQUALS,  UnicodeSet.fromAll("abc"),
@@ -820,6 +826,7 @@ public class UnicodeSetTest extends TestFmwk {
     I_NO_A = new Integer(SortedSetRelation.NO_A),
     I_NONE = new Integer(SortedSetRelation.NONE);
 
+    @Test
     public void TestSetRelation() {
 
         String[] choices = {"a", "b", "cd", "ef"};
@@ -837,6 +844,7 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSetSpeed() {
         // skip unless verbose
         if (!isVerbose()) return;
@@ -983,6 +991,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test the [:Latin:] syntax.
      */
+    @Test
     public void TestScriptSet() {
 
         expectContainment("[:Latin:]", "aA", CharsToUnicodeString("\\u0391\\u03B1"));
@@ -997,6 +1006,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test the [:Latin:] syntax.
      */
+    @Test
     public void TestPropertySet() {
         String[] DATA = {
                 // Pattern, Chars IN, Chars NOT in
@@ -1160,6 +1170,7 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestUnicodeSetStrings() {
         UnicodeSet uset = new UnicodeSet("[a{bc}{cd}pqr\u0000]");
         logln(uset + " ~ " + uset.getRegexEquivalent());
@@ -1197,6 +1208,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test cloning of UnicodeSet
      */
+    @Test
     public void TestClone() {
         UnicodeSet s = new UnicodeSet("[abcxyz]");
         UnicodeSet t = (UnicodeSet) s.clone();
@@ -1206,6 +1218,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test the indexOf() and charAt() methods.
      */
+    @Test
     public void TestIndexOf() {
         UnicodeSet set = new UnicodeSet("[a-cx-y3578]");
         for (int i=0; i<set.size(); ++i) {
@@ -1226,11 +1239,13 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestContainsString() {
         UnicodeSet x = new UnicodeSet("[a{bc}]");
         if (x.contains("abc")) errln("FAIL");
     }
 
+    @Test
     public void TestExhaustive() {
         // exhaustive tests. Simulate UnicodeSets with integers.
         // That gives us very solid tests (except for large memory tests).
@@ -1257,6 +1272,7 @@ public class UnicodeSetTest extends TestFmwk {
      * Make sure each script name and abbreviated name can be used
      * to construct a UnicodeSet.
      */
+    @Test
     public void TestScriptNames() {
         for (int i=0; i<UScript.CODE_LIMIT; ++i) {
             for (int j=0; j<2; ++j) {
@@ -1281,6 +1297,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test closure API.
      */
+    @Test
     public void TestCloseOver() {
         String CASE = String.valueOf(UnicodeSet.CASE);
         String[] DATA = {
@@ -1333,6 +1350,7 @@ public class UnicodeSetTest extends TestFmwk {
         expectContainment(s, "defDEF", "abcABC");
     }
 
+    @Test
     public void TestEscapePattern() {
         // The following pattern must contain at least one range "c-d"
         // where c or d is a Pattern_White_Space.
@@ -1394,6 +1412,7 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSymbolTable() {
         // Multiple test cases can be set up here.  Each test case
         // is terminated by null:
@@ -1451,6 +1470,7 @@ public class UnicodeSetTest extends TestFmwk {
      * Test that Posix style character classes [:digit:], etc.
      *   have the Unicode definitions from TR 18.
      */
+    @Test
     public void TestPosixClasses() {
         expectEqual("POSIX alpha", "[:alpha:]", "\\p{Alphabetic}");
         expectEqual("POSIX lower", "[:lower:]", "\\p{lowercase}");
@@ -1466,6 +1486,7 @@ public class UnicodeSetTest extends TestFmwk {
         expectEqual("POSIX print", "[:print:]", "[[:graph:][:blank:]-[\\p{Control}]]");
     }
 
+    @Test
     public void TestHangulSyllable() {
         final UnicodeSet lvt = new UnicodeSet("[:Hangul_Syllable_Type=LVT_Syllable:]");
         assertNotEquals("LVT count", new UnicodeSet(), lvt);
@@ -1478,6 +1499,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test that frozen classes disallow changes. For 4217
      */
+    @Test
     public void TestFrozen() {
         UnicodeSet test = new UnicodeSet("[[:whitespace:]A]");
         test.freeze();
@@ -1488,6 +1510,7 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test Generic support
      */
+    @Test
     public void TestGenerics() {
         UnicodeSet set1 = new UnicodeSet("[a-b d-g {ch} {zh}]").freeze();
         UnicodeSet set2 = new UnicodeSet("[e-f {ch}]").freeze();
@@ -1571,6 +1594,7 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("remove all", mod1, mod2);
     }
 
+    @Test
     public void TestComparison() {
         UnicodeSet set1 = new UnicodeSet("[a-b d-g {ch} {zh}]").freeze();
         UnicodeSet set2 = new UnicodeSet("[c-e {ch}]").freeze();
@@ -1665,6 +1689,7 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("compare iterable test", sortedTest1, sortedTest2);
     }
 
+    @Test
     public void TestRangeConstructor() {
         UnicodeSet w = new UnicodeSet().addAll(3,5);
         UnicodeSet s = new UnicodeSet(3,5);
@@ -1939,6 +1964,7 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSurrogate() {
         String DATA[] = {
                 // These should all behave identically
@@ -1959,6 +1985,7 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestContains() {
         int limit = 256; // combinations to test
         for (int i = 0; i < limit; ++i) {
@@ -2378,6 +2405,7 @@ public class UnicodeSetTest extends TestFmwk {
     }
 
     /* Test the method public UnicodeSet getSet() */
+    @Test
     public void TestGetSet() {
         UnicodeSetIterator us = new UnicodeSetIterator();
         try {
@@ -2388,6 +2416,7 @@ public class UnicodeSetTest extends TestFmwk {
     }
 
     /* Tests the method public UnicodeSet add(Collection<?> source) */
+    @Test
     public void TestAddCollection() {
         UnicodeSet us = new UnicodeSet();
         Collection<?> s = null;
@@ -2398,11 +2427,13 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestConstants() {
         assertEquals("Empty", new UnicodeSet(), UnicodeSet.EMPTY);
         assertEquals("All", new UnicodeSet(0,0x10FFFF), UnicodeSet.ALL_CODE_POINTS);
     }
 
+    @Test
     public void TestIteration() {
         UnicodeSet us1 = new UnicodeSet("[abcM{xy}]");
         assertEquals("", "M, a-c", CollectionUtilities.join(us1.ranges(), ", "));
@@ -2440,6 +2471,7 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestReplaceAndDelete() {
         UnicodeSetSpanner m;
 
@@ -2468,6 +2500,7 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("", "ababX", m.replaceFrom("ababc acb", "X", CountMethod.WHOLE_SPAN, SpanCondition.NOT_CONTAINED));
     }
 
+    @Test
     public void TestCodePoints() {
         // test supplemental code points and strings clusters
         checkCodePoints("x\u0308", "z\u0308", CountMethod.MIN_ELEMENTS, SpanCondition.SIMPLE, null, 1);
@@ -2491,6 +2524,7 @@ public class UnicodeSetTest extends TestFmwk {
                 expectedReplaced, m.replaceFrom(ab, "-", quantifier));
     }
 
+    @Test
     public void TestCountIn() {
         UnicodeSetSpanner m = new UnicodeSetSpanner(new UnicodeSet("[ab]"));
         checkCountIn(m, CountMethod.MIN_ELEMENTS, SpanCondition.SIMPLE, "abc", 2);
@@ -2509,6 +2543,7 @@ public class UnicodeSetTest extends TestFmwk {
                         : m.countIn(ab);
     }
 
+    @Test
     public void testForSpanGaps() {
         String[] items = {"a", "b", "c", "{ab}", "{bc}", "{cd}", "{abc}", "{bcd}"};
         final int limit = 1<<items.length;
@@ -2583,6 +2618,7 @@ public class UnicodeSetTest extends TestFmwk {
         return result.toString();
     }
 
+    @Test
     public void TestCharSequenceArgs() {
         // statics
         assertEquals("CharSequence from", new UnicodeSet("[{abc}]"), UnicodeSet.from(new StringBuilder("abc")));
@@ -2637,6 +2673,7 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("CharSequence add", "c", new UnicodeSet("[abA]"). stripFrom(new StringBuilder("abc"), true));
     }
 
+    @Test
     public void TestAStringRange() {
         String[][] tests = {
                 {"[{ax}-{bz}]", "[{ax}{ay}{az}{bx}{by}{bz}]"},

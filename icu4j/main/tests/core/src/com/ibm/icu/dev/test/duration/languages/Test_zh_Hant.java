@@ -9,24 +9,14 @@
 
 package com.ibm.icu.dev.test.duration.languages;
 
-import com.ibm.icu.dev.test.duration.LanguageTestRoot;
+
+import com.ibm.icu.dev.test.duration.LanguageTestFmwk;
 
 
 /**
  * Test cases for zh_Hant
  */
-public class Test_zh_Hant extends LanguageTestRoot {
-
-  /**
-   * Invoke the tests.
-   */
-  public static void main(String[] args) {
-      new Test_zh_Hant().run(args);
-  }
-
-  /**
-   * Constructor.
-   */
+public class Test_zh_Hant extends LanguageTestFmwk {
   public Test_zh_Hant() {
     super("zh_Hant", false);
   }

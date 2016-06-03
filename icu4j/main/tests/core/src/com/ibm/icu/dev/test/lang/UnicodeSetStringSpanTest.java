@@ -8,6 +8,8 @@ package com.ibm.icu.dev.test.lang;
 
 import java.util.Collection;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
@@ -20,12 +22,8 @@ import com.ibm.icu.util.OutputInt;
  * @summary General test of UnicodeSet string span.
  */
 public class UnicodeSetStringSpanTest extends TestFmwk {
-
-    public static void main(String[] args) throws Exception {
-        new UnicodeSetStringSpanTest().run(args);
-    }
-
     // Simple test first, easier to debug.
+    @Test
     public void TestSimpleStringSpan() {
         String pattern = "[a{ab}{bc}]";
         String string = "abc";
@@ -49,6 +47,7 @@ public class UnicodeSetStringSpanTest extends TestFmwk {
     }
 
     // test our slow implementation
+    @Test
     public void TestSimpleStringSpanSlow() {
         String pattern = "[a{ab}{bc}]";
         String string = "abc";
@@ -74,6 +73,7 @@ public class UnicodeSetStringSpanTest extends TestFmwk {
     }
 
     // Test select patterns and strings, and test SIMPLE.
+    @Test
     public void TestSimpleStringSpanAndFreeze() {
         String pattern = "[x{xy}{xya}{axy}{ax}]";
         final String string = "xx"
@@ -737,6 +737,7 @@ public class UnicodeSetStringSpanTest extends TestFmwk {
     static String interestingString = new String(interestingStringChars);
     static final String unicodeSet1 = "[[[:ID_Continue:]-[\\u30ab\\u30ad]]{\\u3000\\u30ab}{\\u3000\\u30ab\\u30ad}]";
 
+    @Test
     public void TestInterestingStringSpan() {
         UnicodeSet uset = new UnicodeSet(Utility.unescape(unicodeSet1));
         SpanCondition spanCondition = SpanCondition.NOT_CONTAINED;
@@ -808,6 +809,7 @@ public class UnicodeSetStringSpanTest extends TestFmwk {
     static final String longPattern =
         "[a{" + _64_a + _64_a + _64_a + _64_a + "b}" + "{a" + _64_b + _64_b + _64_b + _64_b + "}]";
 
+    @Test
     public void TestStringWithUnpairedSurrogateSpan() {
         String string = Utility.unescape(stringWithUnpairedSurrogate);
         UnicodeSet uset = new UnicodeSet(Utility.unescape(patternWithUnpairedSurrogate));
@@ -829,6 +831,7 @@ public class UnicodeSetStringSpanTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSpan() {
         // "[...]" is a UnicodeSet pattern.
         // "*" performs tests on all Unicode code points and on a selection of
@@ -1076,6 +1079,7 @@ public class UnicodeSetStringSpanTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestSpanAndCount() {
         // a set with no strings
         UnicodeSet abc = new UnicodeSet('a', 'c');

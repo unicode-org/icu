@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.dev.test.impl;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.CacheValue;
 import com.ibm.icu.impl.CacheValue.Strength;
@@ -13,11 +15,8 @@ import com.ibm.icu.impl.CacheValue.Strength;
 public class CacheTest extends TestFmwk {
     public CacheTest() {}
 
-    public static void main(String[] args) throws Exception {
-        new CacheTest().run(args);
-    }
-
     /** Code coverage for CacheValue. */
+    @Test
     public void testNullCacheValue() {
         CacheValue<Object> nv = CacheValue.getInstance(null);
         assertTrue("null CacheValue isNull()", nv.isNull());
@@ -32,6 +31,7 @@ public class CacheTest extends TestFmwk {
     }
 
     /** Code coverage for CacheValue. */
+    @Test
     public void testStrongCacheValue() {
         boolean wasStrong = CacheValue.futureInstancesWillBeStrong();
         CacheValue.setStrength(Strength.STRONG);
@@ -50,6 +50,7 @@ public class CacheTest extends TestFmwk {
     }
 
     /** Code coverage for CacheValue. */
+    @Test
     public void testSoftCacheValue() {
         boolean wasStrong = CacheValue.futureInstancesWillBeStrong();
         CacheValue.setStrength(Strength.SOFT);
