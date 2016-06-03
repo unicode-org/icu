@@ -137,6 +137,16 @@ then
     exit 1
 fi
 
+if ! fgrep -q -s noverify "${ICU_CONFIG}" ;
+then
+    rm -rf  "${ICU_CONFIG}".junk
+    grep -v '^sanity$' < "${ICU_CONFIG}" > "${ICU_CONFIG}".junk
+    chmod u+rwx  "${ICU_CONFIG}".junk
+    ICU_CONFIG="${ICU_CONFIG}.junk"
+else
+    SANITY_OPTS=--noverify
+fi
+
 if [ -d "${IN_SOURCE}" ];
 then
     echo "ICU workspace dir:" "${IN_SOURCE}"
@@ -158,8 +168,8 @@ then
         exit 1
     fi
     echo "ICU top level source dir:" "${top_srcdir}"
-
-    ICU_CONFIG_OPTS=--noverify
+    
+    ICU_CONFIG_OPTS=${SANITY_OPTS}
     LINKOPTS="--ldflags-libsonly --ldflags-system --ldflags-icuio"
     OURLIBPATH=${IN_SOURCE}/lib:${IN_SOURCE}/stubdata:${IN_SOURCE}/tools/ctestfw
     SRC_OPTS="-I${top_srcdir}/common -I${top_srcdir}/i18n  -I${top_srcdir}/io -I${top_srcdir}/tools/ctestfw -I${top_srcdir}/tools/toolutil -I${IN_SOURCE}/common -L${IN_SOURCE}/lib -L${IN_SOURCE}/stubdata -L${IN_SOURCE}/tools/ctestfw"
