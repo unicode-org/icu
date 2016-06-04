@@ -805,7 +805,7 @@
         <ant dir="${icu4j.translit.dir}" inheritAll="false"/>
     </target>
 
-    <target name="test-framework" depends="core" description="Build test framework classes">
+    <target name="test-framework" depends="core, init" description="Build test framework classes">
         <ant dir="${icu4j.test-framework.dir}" inheritAll="false">
         	<reference refid="junit.jars"/>
         </ant>
