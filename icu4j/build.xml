@@ -324,7 +324,11 @@
         <antcall target="_check"/>
         <fail message="test failed" if="icu-junit-failure" />
     </target>
-
+    
+	<target name="runTest" description="Run the standard ICU4J test suite without calling any other build targets">
+        <antcall target="_check"/>
+        <fail message="test failed" if="icu-junit-failure" />
+    </target>
 
     <target name="timeZoneCheck" description="Run the complete test for TimeZoneRoundTripAll">
     	<icu-junit 
