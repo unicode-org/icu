@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 public final class DayPeriodRules {
     public enum DayPeriod {
@@ -67,57 +68,62 @@ public final class DayPeriodRules {
         int maxRuleSetNum = -1;
     }
 
-    private static final class DayPeriodRulesDataSink extends UResource.TableSink {
+    private static final class DayPeriodRulesDataSink extends UResource.Sink {
         private DayPeriodRulesData data;
 
         private DayPeriodRulesDataSink(DayPeriodRulesData data) {
             this.data = data;
         }
 
-        // Entry point.
         @Override
-        public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
-            if (key.contentEquals("locales")) {
-                return localesSink;
-            } else if (key.contentEquals("rules")) {
-                return rulesSink;
-            }
-            return null;
-        }
-
-        // Locales.
-        private class LocalesSink extends UResource.TableSink {
-            @Override
-            public void put(UResource.Key key, UResource.Value value) {
-                int setNum = parseSetNum(value.getString());
-                data.localesToRuleSetNumMap.put(key.toString(), setNum);
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table dayPeriodData = value.getTable();
+            for (int i = 0; dayPeriodData.getKeyAndValue(i, key, value); ++i) {
+                if (key.contentEquals("locales")) {
+                    UResource.Table locales = value.getTable();
+                    for (int j = 0; locales.getKeyAndValue(j, key, value); ++j) {
+                        int setNum = parseSetNum(value.getString());
+                        data.localesToRuleSetNumMap.put(key.toString(), setNum);
+                    }
+                } else if (key.contentEquals("rules")) {
+                    UResource.Table rules = value.getTable();
+                    processRules(rules, key, value);
+                }
             }
         }
 
-        private LocalesSink localesSink = new LocalesSink();
-
-        // Rules.
-        private class RulesSink extends UResource.TableSink {
-            @Override
-            public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
+        private void processRules(UResource.Table rules, UResource.Key key, UResource.Value value) {
+            for (int i = 0; rules.getKeyAndValue(i, key, value); ++i) {
                 ruleSetNum = parseSetNum(key.toString());
                 data.rules[ruleSetNum] = new DayPeriodRules();
-                return ruleSetSink;
-            }
-        }
-        private RulesSink rulesSink = new RulesSink();
 
-        // Rules -> "set10", e.g.
-        private class RuleSetSink extends UResource.TableSink {
-            @Override
-            public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
-                period = DayPeriod.fromStringOrNull(key);
-                if (period == null) { throw new ICUException("Unknown day period in data."); }
-                return periodSink;
-            }
+                UResource.Table ruleSet = value.getTable();
+                for (int j = 0; ruleSet.getKeyAndValue(j, key, value); ++j) {
+                    period = DayPeriod.fromStringOrNull(key);
+                    if (period == null) { throw new ICUException("Unknown day period in data."); }
 
-            @Override
-            public void leave() {
+                    UResource.Table periodDefinition = value.getTable();
+                    for (int k = 0; periodDefinition.getKeyAndValue(k, key, value); ++k) {
+                        if (value.getType() == UResourceBundle.STRING) {
+                            // Key-value pairs (e.g. before{6:00})
+                            CutoffType type = CutoffType.fromStringOrNull(key);
+                            addCutoff(type, value.getString());
+                        } else {
+                            // Arrays (e.g. before{6:00, 24:00}
+                            cutoffType = CutoffType.fromStringOrNull(key);
+                            UResource.Array cutoffArray = value.getArray();
+                            int length = cutoffArray.getSize();
+                            for (int l = 0; l < length; ++l) {
+                                cutoffArray.getValue(l, value);
+                                addCutoff(cutoffType, value.getString());
+                            }
+                        }
+                    }
+                    setDayPeriodForHoursFromCutoffs();
+                    for (int k = 0; k < cutoffs.length; ++k) {
+                        cutoffs[k] = 0;
+                    }
+                }
                 for (DayPeriod period : data.rules[ruleSetNum].dayPeriodForHour) {
                     if (period == null) {
                         throw new ICUException("Rules in data don't cover all 24 hours (they should).");
@@ -125,43 +131,6 @@ public final class DayPeriodRules {
                 }
             }
         }
-        private RuleSetSink ruleSetSink = new RuleSetSink();
-
-        // Rules -> "set10" -> "morning1", e.g.
-        // If multiple times exist in a cutoff (such as before{6:00, 24:00})
-        // they'll be sent to the next sink.
-        private class PeriodSink extends UResource.TableSink {
-            @Override
-            public void put(UResource.Key key, UResource.Value value) {
-                cutoffType = CutoffType.fromStringOrNull(key);
-                addCutoff(cutoffType, value.getString());
-            }
-
-            @Override
-            public UResource.ArraySink getOrCreateArraySink(UResource.Key key) {
-                cutoffType = CutoffType.fromStringOrNull(key);
-                return cutoffSink;
-            }
-
-            @Override
-            public void leave() {
-                setDayPeriodForHoursFromCutoffs();
-                for (int i = 0; i < cutoffs.length; ++i) {
-                    cutoffs[i] = 0;
-                }
-            }
-        }
-        private PeriodSink periodSink = new PeriodSink();
-
-        // Rules -> "set10" -> "morning1" -> "before", e.g.
-        // Will only enter this sink if more than one time is present for this cutoff.
-        private class CutoffSink extends UResource.ArraySink {
-            @Override
-            public void put(int index, UResource.Value value) {
-                addCutoff(cutoffType, value.getString());
-            }
-        }
-        private CutoffSink cutoffSink = new CutoffSink();
 
         // Members.
         private int cutoffs[] = new int[25];  // [0] thru [24]; 24 is allowed is "before 24".
@@ -233,7 +202,7 @@ public final class DayPeriodRules {
         }
     }  // DayPeriodRulesDataSink
 
-    private static class DayPeriodRulesCountSink extends UResource.TableSink {
+    private static class DayPeriodRulesCountSink extends UResource.Sink {
         private DayPeriodRulesData data;
 
         private DayPeriodRulesCountSink(DayPeriodRulesData data) {
@@ -241,13 +210,14 @@ public final class DayPeriodRules {
         }
 
         @Override
-        public UResource.TableSink getOrCreateTableSink(UResource.Key key) {
-            int setNum = parseSetNum(key.toString());
-            if (setNum > data.maxRuleSetNum) {
-                data.maxRuleSetNum = setNum;
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table rules = value.getTable();
+            for (int i = 0; rules.getKeyAndValue(i, key, value); ++i) {
+                int setNum = parseSetNum(key.toString());
+                if (setNum > data.maxRuleSetNum) {
+                    data.maxRuleSetNum = setNum;
+                }
             }
-
-            return null;
         }
     }
 
@@ -322,11 +292,11 @@ public final class DayPeriodRules {
                 true);
 
         DayPeriodRulesCountSink countSink = new DayPeriodRulesCountSink(data);
-        rb.getAllTableItemsWithFallback("rules", countSink);
+        rb.getAllItemsWithFallback("rules", countSink);
 
         data.rules = new DayPeriodRules[data.maxRuleSetNum + 1];
         DayPeriodRulesDataSink sink = new DayPeriodRulesDataSink(data);
-        rb.getAllTableItemsWithFallback("", sink);
+        rb.getAllItemsWithFallback("", sink);
 
         return data;
     }
