@@ -818,7 +818,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 errln("DateTimePatternGenerator.getCanonicalSkeletonAllowingDuplicates(String) did " +
                         "return the expected result when passing " + cases[i] +
                         " and expected " + results[i] + " but got " +
-                        dtpg.getSkeleton(cases[i]));
+                        dtpg.getCanonicalSkeletonAllowingDuplicates(cases[i]));
             }
         }
     }
@@ -936,18 +936,35 @@ public class DateTimeGeneratorTest extends TestFmwk {
     }
 
     /* Tests the method
-     *        public String getAppendItemFormat(int field)
+     *        public String setAppendItemFormat(int field)
      */
     @Test
-    public void TestGetAppendItemFormat(){
+    public void TestSetAppendItemFormat(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
         String[] cases = {"d","u","m","m","y"};
         for(int i=0; i<cases.length; i++){
             dtpg.setAppendItemFormat(i, cases[i]);
             if(!dtpg.getAppendItemFormat(i).equals(cases[i])){
-                errln("DateTimePatternGeneratorgetAppendItemFormat(int field) " +
+                errln("DateTimePatternGenerator.getAppendItemFormat(int field) " +
                         "did not return as expected. Value set at " + i + " was " +
                         cases[i] + " but got back " + dtpg.getAppendItemFormat(i));
+            }
+        }
+    }
+
+    /* Tests the method
+     *        public String getAppendItemFormat(int field)
+     */
+    @Test
+    public void TestGetAppendItemFormat(){
+        DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(ULocale.ENGLISH);
+        int[] fields = {DateTimePatternGenerator.ERA,DateTimePatternGenerator.DAY,DateTimePatternGenerator.SECOND};
+        String[] results = {"{0} {1}","{0} ({2}: {1})","{0} ({2}: {1})"};
+        for(int i=0; i<fields.length; i++){
+            if(!dtpg.getAppendItemFormat(fields[i]).equals(results[i])){
+                errln("DateTimePatternGenerator.getAppendItemFormat(int field) " +
+                        "did not return as expected. For field " + fields[i] + ", was expecting " +
+                        results[i] + " but got back " + dtpg.getAppendItemFormat(fields[i]));
             }
         }
     }
@@ -989,7 +1006,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
         for (AppendItemName appendItemName: appendItemNames) {
             String name = dtpgfi.getAppendItemName(appendItemName.field);
             if (!name.equals(appendItemName.name)) {
-                errln("DateTimePatternGenerator.getAppendItemName returns invalid name for field " + appendItemName.field);
+                errln("DateTimePatternGenerator.getAppendItemName returns invalid name for field " + appendItemName.field
+                        + ": got " + name + " but expected " + appendItemName.name);
             }
         }
     }
