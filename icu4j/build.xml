@@ -225,10 +225,9 @@
 				<formatter type="xml"/>
 			
 				<batchtest todir="${junit.out.dir}/@{output}">
-					<multirootfileset>
-						<basedir file="@{testdir}/${bin.dir}" />
+					<fileset dir="@{testdir}/${bin.dir}">
 						<patternset refid="@{test-patternset}"/>
-					</multirootfileset>
+					</fileset>
 				</batchtest>
 
 			</junit>
