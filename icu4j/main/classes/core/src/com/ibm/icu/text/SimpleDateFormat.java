@@ -23,13 +23,14 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.UUID;
 
-import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.impl.DayPeriodRules;
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
@@ -41,6 +42,8 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
+
 
 
 /**
@@ -1187,17 +1190,30 @@ public class SimpleDateFormat extends DateFormat {
         if (!defaultLocale.equals(cachedDefaultLocale)) {
             cachedDefaultLocale = defaultLocale;
             Calendar cal = Calendar.getInstance(cachedDefaultLocale);
+
             try {
-                CalendarData calData = new CalendarData(cachedDefaultLocale, cal.getType());
-                String[] dateTimePatterns = calData.getDateTimePatterns();
-                int glueIndex = 8;
-                if (dateTimePatterns.length >= 13)
-                {
-                    glueIndex += (SHORT + 1);
+                // Load the calendar data directly.
+                ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+                        ICUData.ICU_BASE_NAME, cachedDefaultLocale);
+                String resourcePath = "calendar/" + cal.getType() + "/DateTimePatterns";
+                ICUResourceBundle patternsRb= rb.findWithFallback(resourcePath);
+
+                if (patternsRb == null) {
+                    patternsRb = rb.findWithFallback("calendar/gregorian/DateTimePatterns");
                 }
-                cachedDefaultPattern = SimpleFormatterImpl.formatRawPattern(
-                        dateTimePatterns[glueIndex], 2, 2,
-                        dateTimePatterns[SHORT], dateTimePatterns[SHORT + 4]);
+                if (patternsRb == null || patternsRb.getSize() < 9) {
+                    cachedDefaultPattern = FALLBACKPATTERN;
+                } else {
+                    int defaultIndex = 8;
+                    if (patternsRb.getSize() >= 13) {
+                        defaultIndex += (SHORT + 1);
+                    }
+                    String basePattern = patternsRb.getString(defaultIndex);
+
+                    cachedDefaultPattern = SimpleFormatterImpl.formatRawPattern(
+                            basePattern, 2, 2,
+                            patternsRb.getString(SHORT), patternsRb.getString(SHORT + 4));
+                }
             } catch (MissingResourceException e) {
                 cachedDefaultPattern = FALLBACKPATTERN;
             }
