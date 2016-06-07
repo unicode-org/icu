@@ -69,72 +69,22 @@
 
 void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    if (exec) logln("TestSuite spoof: ");
-    switch (index) {
-        case 0:
-            name = "TestSpoofAPI"; 
-            if (exec) {
-                testSpoofAPI();
-            }
-            break;
-        case 1:
-            name = "TestSkeleton"; 
-            if (exec) {
-                testSkeleton();
-            }
-            break;
-        case 2:
-            name = "TestAreConfusable";
-            if (exec) {
-                testAreConfusable();
-            }
-            break;
-        case 3:
-            name = "TestInvisible";
-            if (exec) {
-                testInvisible();
-            }
-            break;
-        case 4:
-            name = "testConfData";
-            if (exec) {
-                testConfData();
-            }
-            break;
-        case 5:
-            name = "testBug8654";
-            if (exec) {
-                testBug8654();
-            }
-            break;
-        case 6:
-            name = "testIdentifierInfo";
-            if (exec) {
-                testIdentifierInfo();
-            }
-            break;
-        case 7:
-            name = "testScriptSet";
-            if (exec) {
-                testScriptSet();
-            }
-            break;
-        case 8:
-            name = "testRestrictionLevel";
-            if (exec) {
-                testRestrictionLevel();
-            }
-            break;
-       case 9:
-            name = "testMixedNumbers";
-            if (exec) {
-                testMixedNumbers();
-            }
-            break;
-
-
-        default: name=""; break;
+    if (exec) {
+        logln("TestSuite spoof: ");
     }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testSpoofAPI);
+    TESTCASE_AUTO(testSkeleton);
+    TESTCASE_AUTO(testAreConfusable);
+    TESTCASE_AUTO(testInvisible);
+    TESTCASE_AUTO(testConfData);
+    TESTCASE_AUTO(testBug8654);
+    TESTCASE_AUTO(testIdentifierInfo);
+    TESTCASE_AUTO(testScriptSet);
+    TESTCASE_AUTO(testRestrictionLevel);
+    TESTCASE_AUTO(testMixedNumbers);
+    TESTCASE_AUTO(testBug12153);
+    TESTCASE_AUTO_END;
 }
 
 void IntlTestSpoof::testSpoofAPI() {
@@ -766,6 +716,25 @@ void IntlTestSpoof::testMixedNumbers() {
         TEST_ASSERT_MSG((expectedSet.size() > 1) == mixedNumberFailure, msgBuf);
         uspoof_close(sc);
     }
+}
+
+// Bug #12153 - uspoof_setRestrictionLevel() should enable restriction level testing.
+// 
+void IntlTestSpoof::testBug12153() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalUSpoofCheckerPointer sc(uspoof_open(&status));
+    TEST_ASSERT_SUCCESS(status);
+    int32_t checks = uspoof_getChecks(sc.getAlias(), &status);
+    TEST_ASSERT((checks & USPOOF_RESTRICTION_LEVEL) != 0);
+    checks &= ~USPOOF_RESTRICTION_LEVEL;
+    uspoof_setChecks(sc.getAlias(), checks, &status);
+    checks = uspoof_getChecks(sc.getAlias(), &status);
+    TEST_ASSERT((checks & USPOOF_RESTRICTION_LEVEL) == 0);
+
+    uspoof_setRestrictionLevel(sc.getAlias(), USPOOF_MODERATELY_RESTRICTIVE);
+    checks = uspoof_getChecks(sc.getAlias(), &status);
+    TEST_ASSERT((checks & USPOOF_RESTRICTION_LEVEL) != 0);
+    TEST_ASSERT_SUCCESS(status);
 }
 
 #endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_FILE_IO */
