@@ -250,6 +250,7 @@ uspoof_setRestrictionLevel(USpoofChecker *sc, URestrictionLevel restrictionLevel
     SpoofImpl *This = SpoofImpl::validateThis(sc, status);
     if (This != NULL) {
         This->fRestrictionLevel = restrictionLevel;
+        This->fChecks |= USPOOF_RESTRICTION_LEVEL;
     }
 }
 
