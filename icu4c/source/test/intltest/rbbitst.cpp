@@ -990,7 +990,7 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
                 expectedTagVal = 0;
             }
             int32_t line = t->getSrcLine(bp);
-            int32_t rs = ((RuleBasedBreakIterator *)t->bi)->getRuleStatus();
+            int32_t rs = t->bi->getRuleStatus();
             if (rs != expectedTagVal) {
                 errln("Incorrect status for forward break.  Pos=%4d  File line,col= %4d,%4d.\n"
                       "          Actual, Expected status = %4d, %4d",
