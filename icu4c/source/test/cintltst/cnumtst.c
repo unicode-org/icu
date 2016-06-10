@@ -1163,6 +1163,7 @@ static void TestSpelloutNumberParse()
             log_err_status(status, "unum_open fails for UNUM_SPELLOUT with locale %s, status %s\n", testPtr->locale, myErrorName(status));
             continue;
         }
+        status = U_ZERO_ERROR;
         value = unum_parse(nf, testPtr->source, -1, &position, &status);
         if ( value != testPtr->value || position != testPtr->endPos || status != testPtr->status ) {
             log_err("unum_parse SPELLOUT, locale %s, testname %s, startPos %d: for value / endPos / status, expected %d / %d / %s, got %d / %d / %s\n",
