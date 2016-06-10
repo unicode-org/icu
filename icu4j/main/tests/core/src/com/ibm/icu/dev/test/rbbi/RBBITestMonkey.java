@@ -159,6 +159,7 @@ public class RBBITestMonkey extends TestFmwk {
             int     breakPos = -1;
 
             int   c0, c1, c2, c3;     // The code points at p0, p1, p2 & p3.
+            int   cBase;              // for (X Extend*) patterns, the X character.
 
             // Previous break at end of string.  return DONE.
             if (prevPos >= fText.length()) {
@@ -166,7 +167,7 @@ public class RBBITestMonkey extends TestFmwk {
             }
             /* p0 = */ p1 = p2 = p3 = prevPos;
             c3 =  UTF16.charAt(fText, prevPos);
-            c0 = c1 = c2 = 0;
+            c0 = c1 = c2 = cBase = 0;
 
             // Loop runs once per "significant" character position in the input text.
             for (;;) {
@@ -233,22 +234,11 @@ public class RBBITestMonkey extends TestFmwk {
                     continue;
                 }
 
-                // Rule (GB8a)   Regional_Indicator x Regional_Indicator
-                //                Note: The first if condition is a little tricky. We only need to force
-                //                      a break if there are three or more contiguous RIs. If there are
-                //                      only two, a break following will occur via other rules, and will include
-                //                      any trailing extend characters, which is needed behavior.
-                if (fRegionalIndicatorSet.contains(c0) && fRegionalIndicatorSet.contains(c1)
-                        && fRegionalIndicatorSet.contains(c2)) {
-                    break;
-                }
-
-                if (fRegionalIndicatorSet.contains(c1) && fRegionalIndicatorSet.contains(c2)) {
-                    continue;
-                }
-
                 // Rule (GB9)    x (Extend | ZWJ)
                 if (fExtendSet.contains(c2) || fZWJSet.contains(c2))  {
+                    if (!fExtendSet.contains(c1)) {
+                        cBase = c1;
+                    }
                     continue;
                 }
 
@@ -261,13 +251,30 @@ public class RBBITestMonkey extends TestFmwk {
                 if (fPrependSet.contains(c1)) {
                     continue;
                 }
-                // Rule (GB10)   (Emoji_Base | EBG) x Emoji_Modifier
+                // Rule (GB10)   (Emoji_Base | EBG) Extend* x Emoji_Modifier
                 if ((fEmojiBaseSet.contains(c1) || fEBGSet.contains(c1)) && fEmojiModifierSet.contains(c2)) {
+                    continue;
+                }
+                if ((fEmojiBaseSet.contains(cBase) || fEBGSet.contains(cBase)) &&
+                        fExtendSet.contains(c1) && fEmojiModifierSet.contains(c2)) {
                     continue;
                 }
 
                 // Rule (GB11)   ZWJ x (Glue_After_Zwj | EBG)
                 if (fZWJSet.contains(c1) && (fGAZSet.contains(c2) || fEBGSet.contains(c2))) {
+                    continue;
+                }
+
+                // Rule (GB12-13)   Regional_Indicator x Regional_Indicator
+                //                  Note: The first if condition is a little tricky. We only need to force
+                //                      a break if there are three or more contiguous RIs. If there are
+                //                      only two, a break following will occur via other rules, and will include
+                //                      any trailing extend characters, which is needed behavior.
+                if (fRegionalIndicatorSet.contains(c0) && fRegionalIndicatorSet.contains(c1)
+                        && fRegionalIndicatorSet.contains(c2)) {
+                    break;
+                }
+                if (fRegionalIndicatorSet.contains(c1) && fRegionalIndicatorSet.contains(c2)) {
                     continue;
                 }
 
