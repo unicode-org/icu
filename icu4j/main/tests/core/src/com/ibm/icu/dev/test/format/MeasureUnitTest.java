@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.text.FieldPosition;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1637,6 +1638,7 @@ public class MeasureUnitTest extends TestFmwk {
         assertTrue("MeasureUnit: unexpectedly few currencies defined", MeasureUnit.getAvailable("currency").size() > 50);
     }
 
+    @Test
     public void testParseObject() {
         MeasureFormat mf = MeasureFormat.getInstance(Locale.GERMAN, FormatWidth.NARROW);
         try {
@@ -1644,6 +1646,48 @@ public class MeasureUnitTest extends TestFmwk {
             fail("MeasureFormat.parseObject(String, ParsePosition) " +
                     "should throw an UnsupportedOperationException");
         } catch (UnsupportedOperationException expected) {
+        }
+    }
+
+    @Test
+    public void testCLDRUnitAvailability() {
+        Set<MeasureUnit> knownUnits = new HashSet<MeasureUnit>();
+        Class cMeasureUnit, cTimeUnit;
+        try {
+            cMeasureUnit = Class.forName("com.ibm.icu.util.MeasureUnit");
+            cTimeUnit = Class.forName("com.ibm.icu.util.TimeUnit");
+        } catch (ClassNotFoundException e) {
+            fail("Count not load MeasureUnit or TimeUnit class: " + e.getMessage());
+            return;
+        }
+        for (Field field : cMeasureUnit.getFields()) {
+            if (field.getGenericType() == cMeasureUnit || field.getGenericType() == cTimeUnit) {
+                try {
+                    MeasureUnit unit = (MeasureUnit) field.get(cMeasureUnit);
+                    knownUnits.add(unit);
+                } catch (IllegalArgumentException e) {
+                    fail(e.getMessage());
+                    return;
+                } catch (IllegalAccessException e) {
+                    fail(e.getMessage());
+                    return;
+                }
+            }
+        }
+        for (String type : MeasureUnit.getAvailableTypes()) {
+            if (type.equals("currency") || type.equals("compound")) {
+                continue;
+            }
+            for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {
+                if (!knownUnits.contains(unit)) {
+                    String message = "Unit present in CLDR but not available via constant in MeasureUnit: " + unit;
+                    if (unit.getType().equals("coordinate")) {
+                        logKnownIssue("12573", message);
+                    } else {
+                        fail(message);
+                    }
+                }
+            }
         }
     }
 

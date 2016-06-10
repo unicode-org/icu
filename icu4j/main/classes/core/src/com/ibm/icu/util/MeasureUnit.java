@@ -250,29 +250,18 @@ public class MeasureUnit implements Serializable {
     private static final class MeasureUnitSink extends UResource.Sink {
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-            UResource.Table unitFormatsTable = value.getTable();
-            for (int i1 = 0; unitFormatsTable.getKeyAndValue(i1, key, value); ++i1) {
-
-                // Only consume the tables related to units, defined as those beginning with "units".
-                if (!key.startsWith("units")) {
+            UResource.Table unitTypesTable = value.getTable();
+            for (int i2 = 0; unitTypesTable.getKeyAndValue(i2, key, value); ++i2) {
+                // Skip "compound" since it is treated differently from the other units
+                if (key.contentEquals("compound")) {
                     continue;
                 }
 
-                UResource.Table unitTypesTable = value.getTable();
-                for (int i2 = 0; unitTypesTable.getKeyAndValue(i2, key, value); ++i2) {
-
-                    // Special case: "compound" does not have plural variants.
-                    if (key.contentEquals("compound")) {
-                        continue;
-                    }
-
-                    String unitType = key.toString();
-
-                    UResource.Table unitNamesTable = value.getTable();
-                    for (int i3 = 0; unitNamesTable.getKeyAndValue(i3, key, value); ++i3) {
-                        String unitName = key.toString();
-                        internalGetInstance(unitType, unitName);
-                    }
+                String unitType = key.toString();
+                UResource.Table unitNamesTable = value.getTable();
+                for (int i3 = 0; unitNamesTable.getKeyAndValue(i3, key, value); ++i3) {
+                    String unitName = key.toString();
+                    internalGetInstance(unitType, unitName);
                 }
             }
         }
@@ -323,9 +312,9 @@ public class MeasureUnit implements Serializable {
 
         // Load the unit types.  Use English, since we know that that is a superset.
         ICUResourceBundle rb1 = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                ICUData.ICU_BASE_NAME,
+                ICUData.ICU_UNIT_BASE_NAME,
                 "en");
-        rb1.getAllItemsWithFallback("", new MeasureUnitSink());
+        rb1.getAllItemsWithFallback("units", new MeasureUnitSink());
 
         // Load the currencies
         ICUResourceBundle rb2 = (ICUResourceBundle) UResourceBundle.getBundleInstance(
