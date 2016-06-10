@@ -271,8 +271,71 @@ struct DecFmtSymDataSink : public ResourceSink {
     }
 };
 
+struct CurrencySpacingSink : public ResourceSink {
+    DecimalFormatSymbols& dfs;
+    UBool hasBeforeCurrency;
+    UBool hasAfterCurrency;
+
+    CurrencySpacingSink(DecimalFormatSymbols& _dfs)
+        : dfs(_dfs), hasBeforeCurrency(FALSE), hasAfterCurrency(FALSE) {}
+    virtual ~CurrencySpacingSink();
+
+    virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
+            UErrorCode &errorCode) {
+        ResourceTable spacingTypesTable = value.getTable(errorCode);
+        for (int32_t i = 0; spacingTypesTable.getKeyAndValue(i, key, value); ++i) {
+            UBool beforeCurrency;
+            if (uprv_strcmp(key, gBeforeCurrencyTag) == 0) {
+                beforeCurrency = TRUE;
+                hasBeforeCurrency = TRUE;
+            } else if (uprv_strcmp(key, gAfterCurrencyTag) == 0) {
+                beforeCurrency = FALSE;
+                hasAfterCurrency = TRUE;
+            } else {
+                continue;
+            }
+
+            ResourceTable patternsTable = value.getTable(errorCode);
+            for (int32_t j = 0; patternsTable.getKeyAndValue(j, key, value); ++j) {
+                UCurrencySpacing pattern;
+                if (uprv_strcmp(key, gCurrencyMatchTag) == 0) {
+                    pattern = UNUM_CURRENCY_MATCH;
+                } else if (uprv_strcmp(key, gCurrencySudMatchTag) == 0) {
+                    pattern = UNUM_CURRENCY_SURROUNDING_MATCH;
+                } else if (uprv_strcmp(key, gCurrencyInsertBtnTag) == 0) {
+                    pattern = UNUM_CURRENCY_INSERT;
+                } else {
+                    continue;
+                }
+
+                const UnicodeString& current = dfs.getPatternForCurrencySpacing(
+                    pattern, beforeCurrency, errorCode);
+                if (current.isEmpty()) {
+                    dfs.setPatternForCurrencySpacing(
+                        pattern, beforeCurrency, value.getUnicodeString(errorCode));
+                }
+            }
+        }
+    }
+
+    void resolveMissing() {
+        // For consistency with Java, this method overwrites everything with the defaults unless
+        // both beforeCurrency and afterCurrency were found in CLDR.
+        static const char* defaults[] = { "[:letter:]", "[:digit:]", " " };
+        if (!hasBeforeCurrency || !hasAfterCurrency) {
+            for (UBool beforeCurrency = 0; beforeCurrency <= TRUE; beforeCurrency++) {
+                for (int32_t pattern = 0; pattern < UNUM_CURRENCY_SPACING_COUNT; pattern++) {
+                    dfs.setPatternForCurrencySpacing((UCurrencySpacing)pattern,
+                        beforeCurrency, UnicodeString(defaults[pattern], -1, US_INV));
+                }
+            }
+        }
+    }
+};
+
 // Virtual destructors must be defined out of line.
 DecFmtSymDataSink::~DecFmtSymDataSink() {}
+CurrencySpacingSink::~CurrencySpacingSink() {}
 
 } // namespace
 
@@ -414,38 +477,11 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
         // else ignore the error if no currency
 
     // Currency Spacing.
-    localStatus = U_ZERO_ERROR;
-    LocalUResourceBundlePointer currencyResource(ures_open(U_ICUDATA_CURR, locStr, &localStatus));
-    LocalUResourceBundlePointer currencySpcRes(
-        ures_getByKeyWithFallback(currencyResource.getAlias(),
-                                  gCurrencySpacingTag, NULL, &localStatus));
-
-    if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
-        const char* keywords[UNUM_CURRENCY_SPACING_COUNT] = {
-            gCurrencyMatchTag, gCurrencySudMatchTag, gCurrencyInsertBtnTag
-        };
-        localStatus = U_ZERO_ERROR;
-        LocalUResourceBundlePointer dataRes(
-            ures_getByKeyWithFallback(currencySpcRes.getAlias(),
-                                      gBeforeCurrencyTag, NULL, &localStatus));
-        if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
-            localStatus = U_ZERO_ERROR;
-            for (int32_t i = 0; i < UNUM_CURRENCY_SPACING_COUNT; i++) {
-                currencySpcBeforeSym[i] =
-                    ures_getUnicodeStringByKey(dataRes.getAlias(), keywords[i], &localStatus);
-            }
-        }
-        dataRes.adoptInstead(
-            ures_getByKeyWithFallback(currencySpcRes.getAlias(),
-                                      gAfterCurrencyTag, NULL, &localStatus));
-        if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
-            localStatus = U_ZERO_ERROR;
-            for (int32_t i = 0; i < UNUM_CURRENCY_SPACING_COUNT; i++) {
-                currencySpcAfterSym[i] =
-                    ures_getUnicodeStringByKey(dataRes.getAlias(), keywords[i], &localStatus);
-            }
-        }
-    }
+    LocalUResourceBundlePointer currencyResource(ures_open(U_ICUDATA_CURR, locStr, &status));
+    CurrencySpacingSink currencySink(*this);
+    ures_getAllItemsWithFallback(currencyResource.getAlias(), gCurrencySpacingTag, currencySink, status);
+    currencySink.resolveMissing();
+    if (U_FAILURE(status)) { return; }
 }
 
 void
