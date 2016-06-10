@@ -443,15 +443,15 @@ void IntlTestSpoof::testIdentifierInfo() {
         const char         *fCommonAlternates;
     } tests[] = {
             {"\\u0061\\u2665",                USPOOF_UNRESTRICTIVE,      "[]", "Latn", "", ""},
-            {"\\u0061\\u3006",                USPOOF_HIGHLY_RESTRICTIVE, "[]", "Latn", "Hani Hira Kana", "Hani Hira Kana"},
-            {"\\u0061\\u30FC\\u3006",         USPOOF_HIGHLY_RESTRICTIVE, "[]", "Latn", "Hira Kana", "Hira Kana"},
-            {"\\u0061\\u30FC\\u3006\\u30A2",  USPOOF_HIGHLY_RESTRICTIVE, "[]", "Latn Kana", "", ""},
-            {"\\u30A2\\u0061\\u30FC\\u3006",  USPOOF_HIGHLY_RESTRICTIVE, "[]", "Latn Kana", "", ""},
+            {"\\u0061\\u303C",                USPOOF_HIGHLY_RESTRICTIVE, "[]", "Latn", "Hani Hira Kana", "Hani Hira Kana"},
+            {"\\u0061\\u30FC\\u303C",         USPOOF_HIGHLY_RESTRICTIVE, "[]", "Latn", "Hira Kana", "Hira Kana"},
+            {"\\u0061\\u30FC\\u303C\\u30A2",  USPOOF_HIGHLY_RESTRICTIVE, "[]", "Latn Kana", "", ""},
+            {"\\u30A2\\u0061\\u30FC\\u303C",  USPOOF_HIGHLY_RESTRICTIVE, "[]", "Latn Kana", "", ""},
             {"\\u0061\\u0031\\u0661",         USPOOF_UNRESTRICTIVE,      "[\\u0030\\u0660]", "Latn", "Arab Thaa", "Arab Thaa"},
             {"\\u0061\\u0031\\u0661\\u06F1",  USPOOF_UNRESTRICTIVE,      "[\\u0030\\u0660\\u06F0]", "Latn Arab", "", ""},
-            {"\\u0661\\u30FC\\u3006\\u0061\\u30A2\\u0031\\u0967\\u06F1",  USPOOF_UNRESTRICTIVE, 
+            {"\\u0661\\u30FC\\u303C\\u0061\\u30A2\\u0031\\u0967\\u06F1",  USPOOF_UNRESTRICTIVE, 
                   "[\\u0030\\u0660\\u06F0\\u0966]", "Latn Kana Arab", "Deva Kthi Mahj", "Deva Kthi Mahj"},
-            {"\\u0061\\u30A2\\u30FC\\u3006\\u0031\\u0967\\u0661\\u06F1",  USPOOF_UNRESTRICTIVE, 
+            {"\\u0061\\u30A2\\u30FC\\u303C\\u0031\\u0967\\u0661\\u06F1",  USPOOF_UNRESTRICTIVE, 
                   "[\\u0030\\u0660\\u06F0\\u0966]", "Latn Kana Arab", "Deva Kthi Mahj", "Deva Kthi Mahj"}
     };
 
@@ -465,13 +465,17 @@ void IntlTestSpoof::testIdentifierInfo() {
         testString = testString.unescape();
         IdentifierInfo idInfo(status);
         TEST_ASSERT_SUCCESS(status);
-        idInfo.setIdentifierProfile(*uspoof_getRecommendedUnicodeSet(&status));
+        UnicodeSet allowedChars;
+        // Allowed Identifier Characters. In addition to the Recommended Set,
+        //    allow u303c, which has an interesting script extension of Hani Hira Kana.
+        allowedChars.addAll(*uspoof_getRecommendedUnicodeSet(&status)).add(0x303C);
+        idInfo.setIdentifierProfile(allowedChars);
         idInfo.setIdentifier(testString, status);
         TEST_ASSERT_MSG(*idInfo.getIdentifier() == testString, testNumStr);
 
         URestrictionLevel restrictionLevel = test.fRestrictionLevel;
         TEST_ASSERT_MSG(restrictionLevel == idInfo.getRestrictionLevel(status), testNumStr);
-        
+
         status = U_ZERO_ERROR;
         UnicodeSet numerics(UnicodeString(test.fNumerics).unescape(), status);
         TEST_ASSERT_SUCCESS(status);

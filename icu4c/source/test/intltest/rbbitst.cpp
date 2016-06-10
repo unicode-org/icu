@@ -2053,6 +2053,7 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
     int     breakPos = -1;
 
     UChar32 c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
+    UChar32 cBase;            // for (X Extend*) patterns, the X character.
 
     if (U_FAILURE(deferredStatus)) {
         return -1;
@@ -2064,7 +2065,7 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
     }
     p0 = p1 = p2 = p3 = prevPos;
     c3 =  fText->char32At(prevPos);
-    c0 = c1 = c2 = 0;
+    c0 = c1 = c2 = cBase = 0;
     (void)p0;   // suppress set but not used warning.
     (void)c0;
 
@@ -2133,21 +2134,11 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // Rule (GB8a)    Regional_Indicator x Regional_Indicator
-        //                Note: The first if condition is a little tricky. We only need to force
-        //                      a break if there are three or more contiguous RIs. If there are
-        //                      only two, a break following will occur via other rules, and will include
-        //                      any trailing extend characters, which is needed behavior.
-        if (fRegionalIndicatorSet->contains(c0) && fRegionalIndicatorSet->contains(c1) 
-                && fRegionalIndicatorSet->contains(c2)) {
-            break;
-        }
-        if (fRegionalIndicatorSet->contains(c1) && fRegionalIndicatorSet->contains(c2)) {
-            continue;
-        }
-
         // Rule (GB9)    x (Extend | ZWJ)
         if (fExtendSet->contains(c2) || fZWJSet->contains(c2))  {
+            if (!fExtendSet->contains(c1)) {
+                cBase = c1;
+            }
             continue;
         }
 
@@ -2161,13 +2152,30 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // Rule (GB10)   (Emoji_Base | EBG) x Emoji_Modifier
+        // Rule (GB10)   (Emoji_Base | EBG) Extend * x Emoji_Modifier
         if ((fEmojiBaseSet->contains(c1) || fEBGSet->contains(c1)) && fEmojiModifierSet->contains(c2)) {
+            continue;
+        }
+        if ((fEmojiBaseSet->contains(cBase) || fEBGSet->contains(cBase)) &&
+                fExtendSet->contains(c1) && fEmojiModifierSet->contains(c2)) {
             continue;
         }
 
         // Rule (GB11)   ZWJ x (Glue_After_ZWJ | EBG)
         if (fZWJSet->contains(c1) && (fGAZSet->contains(c2) || fEBGSet->contains(c2))) {
+            continue;
+        }
+
+        // Rule (GB12-13)    Regional_Indicator x Regional_Indicator
+        //                   Note: The first if condition is a little tricky. We only need to force
+        //                      a break if there are three or more contiguous RIs. If there are
+        //                      only two, a break following will occur via other rules, and will include
+        //                      any trailing extend characters, which is needed behavior.
+        if (fRegionalIndicatorSet->contains(c0) && fRegionalIndicatorSet->contains(c1) 
+                && fRegionalIndicatorSet->contains(c2)) {
+            break;
+        }
+        if (fRegionalIndicatorSet->contains(c1) && fRegionalIndicatorSet->contains(c2)) {
             continue;
         }
 

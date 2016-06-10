@@ -47,18 +47,18 @@ GB6:     L (L | V | LV | LVT);
 GB7:     (LV | V) (V | T);
 GB8:     (LVT | T) T;
 
-# Regional Indicators, split into pairs.
-#      Note that a pair of RIs that is not followed by a third RI will fall into
-#      the normal rules for Extend, etc.
-#
-GB8a.1:  Regional_Indicator Regional_Indicator ÷ Regional_Indicator;
-GB8a.2:  Regional_Indicator Regional_Indicator;
-
+GB10:    (E_Base | E_Base_GAZ) Extend* E_Modifier;
 GB9:     . (Extend | ZWJ);
 
 GB9a:    . SpacingMark;
 GB9b:    Prepend .;
-GB10:    (E_Base | E_Base_GAZ) E_Modifier;
 GB11:    ZWJ (GAZ | E_Base_GAZ);
+
+# Regional Indicators, split into pairs.
+#      Note that a pair of RIs that is not followed by a third RI will fall into
+#      the normal rules for Extend, etc.
+#
+GB12:  Regional_Indicator Regional_Indicator ÷ Regional_Indicator;
+GB13:  Regional_Indicator Regional_Indicator;
 
 GB999:     . ÷;
