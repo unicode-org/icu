@@ -13,9 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -23,11 +21,11 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.CalendarUtil;
-import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.TimeZoneNames.NameType;
@@ -1495,8 +1493,23 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     static final int millisPerHour = 60*60*1000;
 
     // DateFormatSymbols cache
-    private static ICUCache<String, DateFormatSymbols> DFSCACHE =
-        new SimpleCache<String, DateFormatSymbols>();
+    private static CacheBase<String, DateFormatSymbols, ULocale> DFSCACHE =
+        new SoftCache<String, DateFormatSymbols, ULocale>() {
+            @Override
+            protected DateFormatSymbols createInstance(String key, ULocale locale) {
+                // Extract the type string from the key.
+                // Otherwise we would have to create a pair object that
+                // carries both the locale and the type.
+                int typeStart = key.indexOf('+') + 1;
+                int typeLimit = key.indexOf('+', typeStart);
+                if (typeLimit < 0) {
+                    // no numbers keyword value
+                    typeLimit = key.length();
+                }
+                String type = key.substring(typeStart, typeLimit);
+                return new DateFormatSymbols(locale, null, type);
+            }
+        };
 
     /**
      * Initializes format symbols for the locale and calendar type
@@ -1508,23 +1521,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // We may need to deescalate this API to @internal.
     protected void initializeData(ULocale desiredLocale, String type)
     {
-        String key = desiredLocale.getBaseName() + "+" + type;
+        String key = desiredLocale.getBaseName() + '+' + type;
         String ns = desiredLocale.getKeywordValue("numbers");
         if (ns != null && ns.length() > 0) {
-            key += "+" + ns;
+            key += '+' + ns;
         }
-        DateFormatSymbols dfs = DFSCACHE.get(key);
-        if (dfs == null) {
-            // Initialize data from scratch put a clone of this instance into the cache
-            initializeData(desiredLocale, null, type);
-            // Do not cache subclass instances
-            if (this.getClass().getName().equals("com.ibm.icu.text.DateFormatSymbols")) {
-                dfs = (DateFormatSymbols)this.clone();
-                DFSCACHE.put(key, dfs);
-            }
-        } else {
-            initializeData(dfs);
-        }
+        DateFormatSymbols dfs = DFSCACHE.getInstance(key, desiredLocale);
+        initializeData(dfs);
     }
 
     /**
@@ -1824,6 +1827,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
     }
 
+    /** Private, for cache.getInstance(). */
+    private DateFormatSymbols(ULocale desiredLocale, ICUResourceBundle b, String calendarType) {
+        initializeData(desiredLocale, b, calendarType);
+    }
 
     /**
      * Initializes format symbols for the locale and calendar type
