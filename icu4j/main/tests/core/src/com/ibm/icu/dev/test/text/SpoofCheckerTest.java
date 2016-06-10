@@ -600,19 +600,23 @@ public class SpoofCheckerTest extends TestFmwk {
         String[][] tests = {
                 // String, restriction-level, numerics, scripts, alternates, common-alternates
                 {"a♥",  "UNRESTRICTIVE", "[]", "Latn", "", ""},
-                {"a〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Hani Hira Kana", "Hani Hira Kana"},
-                {"aー〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Hira Kana", "Hira Kana"},
-                {"aー〆ア",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
-                {"アaー〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
+                {"a\u303c",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Hani Hira Kana", "Hani Hira Kana"},
+                {"aー\u303c",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Hira Kana", "Hira Kana"},
+                {"aー\u303cア",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
+                { "アaー\u303c",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
                 {"a1١",  "UNRESTRICTIVE", "[0٠]", "Latn", "Arab Thaa", "Arab Thaa"},
                 {"a1١۱",  "UNRESTRICTIVE", "[0٠۰]", "Latn Arab", "", ""},
-                {"١ー〆aア1१۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab", "Deva Kthi Mahj", "Deva Kthi Mahj"},
-                {"aアー〆1१١۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab", "Deva Kthi Mahj", "Deva Kthi Mahj"},
+                {"١ー\u303caア1१۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab", "Deva Kthi Mahj", "Deva Kthi Mahj"},
+                {"aアー\u303c1१١۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab", "Deva Kthi Mahj", "Deva Kthi Mahj"},
         };
         for (String[] test : tests) {
             String testString = test[0];
             IdentifierInfo idInfo = new IdentifierInfo();
-            idInfo.setIdentifierProfile(SpoofChecker.RECOMMENDED);
+            UnicodeSet allowedChars = new UnicodeSet();
+            // Allowed Identifier Characters. In addition to the Recommended Set,
+            //    allow u303c, which has an interesting script extension of Hani Hira Kana. 
+            allowedChars.addAll(SpoofChecker.RECOMMENDED).add(0x303c);
+            idInfo.setIdentifierProfile(allowedChars);
             idInfo.setIdentifier(testString);
             assertEquals("Identifier " + testString, testString, idInfo.getIdentifier());
 
