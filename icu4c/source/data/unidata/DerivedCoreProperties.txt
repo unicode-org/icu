@@ -1,5 +1,5 @@
 # DerivedCoreProperties-9.0.0.txt
-# Date: 2016-03-02, 18:54:57 GMT
+# Date: 2016-06-01, 10:34:24 GMT
 # © 2016 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
@@ -1120,8 +1120,7 @@ FFDA..FFDC    ; Alphabetic
 11C0A..11C2E  ; Alphabetic
 11C2F         ; Alphabetic
 11C30..11C36  ; Alphabetic
-11C38..11C3B  ; Alphabetic
-11C3C..11C3D  ; Alphabetic
+11C38..11C3D  ; Alphabetic
 11C3E         ; Alphabetic
 11C40         ; Alphabetic
 11C72..11C8F  ; Alphabetic
@@ -3080,7 +3079,7 @@ FFF9..FFFB    ; Case_Ignorable
 11722..11725  ; Case_Ignorable
 11727..1172B  ; Case_Ignorable
 11C30..11C36  ; Case_Ignorable
-11C3C..11C3D  ; Case_Ignorable
+11C38..11C3D  ; Case_Ignorable
 11C3F         ; Case_Ignorable
 11C92..11CA7  ; Case_Ignorable
 11CAA..11CB0  ; Case_Ignorable
@@ -3118,7 +3117,7 @@ E0001         ; Case_Ignorable
 E0020..E007F  ; Case_Ignorable
 E0100..E01EF  ; Case_Ignorable
 
-# Total code points: 2236
+# Total code points: 2240
 
 # ================================================
 
@@ -7373,8 +7372,7 @@ FFDA..FFDC    ; ID_Continue
 11C0A..11C2E  ; ID_Continue
 11C2F         ; ID_Continue
 11C30..11C36  ; ID_Continue
-11C38..11C3B  ; ID_Continue
-11C3C..11C3D  ; ID_Continue
+11C38..11C3D  ; ID_Continue
 11C3E         ; ID_Continue
 11C3F         ; ID_Continue
 11C40         ; ID_Continue
@@ -9194,8 +9192,7 @@ FFDA..FFDC    ; XID_Continue
 11C0A..11C2E  ; XID_Continue
 11C2F         ; XID_Continue
 11C30..11C36  ; XID_Continue
-11C38..11C3B  ; XID_Continue
-11C3C..11C3D  ; XID_Continue
+11C38..11C3D  ; XID_Continue
 11C3E         ; XID_Continue
 11C3F         ; XID_Continue
 11C40         ; XID_Continue
@@ -9553,7 +9550,7 @@ E01F0..E0FFF  ; Default_Ignorable_Code_Point
 1CF8..1CF9    ; Grapheme_Extend
 1DC0..1DF5    ; Grapheme_Extend
 1DFB..1DFF    ; Grapheme_Extend
-200C..200D    ; Grapheme_Extend
+200C          ; Grapheme_Extend
 20D0..20DC    ; Grapheme_Extend
 20DD..20E0    ; Grapheme_Extend
 20E1          ; Grapheme_Extend
@@ -9662,7 +9659,7 @@ FF9E..FF9F    ; Grapheme_Extend
 11722..11725  ; Grapheme_Extend
 11727..1172B  ; Grapheme_Extend
 11C30..11C36  ; Grapheme_Extend
-11C3C..11C3D  ; Grapheme_Extend
+11C38..11C3D  ; Grapheme_Extend
 11C3F         ; Grapheme_Extend
 11C92..11CA7  ; Grapheme_Extend
 11CAA..11CB0  ; Grapheme_Extend
@@ -9692,9 +9689,10 @@ FF9E..FF9F    ; Grapheme_Extend
 1E026..1E02A  ; Grapheme_Extend
 1E8D0..1E8D6  ; Grapheme_Extend
 1E944..1E94A  ; Grapheme_Extend
+E0020..E007F  ; Grapheme_Extend
 E0100..E01EF  ; Grapheme_Extend
 
-# Total code points: 1729
+# Total code points: 1828
 
 # ================================================
 
@@ -11068,7 +11066,6 @@ FFFC..FFFD    ; Grapheme_Base
 11C00..11C08  ; Grapheme_Base
 11C0A..11C2E  ; Grapheme_Base
 11C2F         ; Grapheme_Base
-11C38..11C3B  ; Grapheme_Base
 11C3E         ; Grapheme_Base
 11C40         ; Grapheme_Base
 11C41..11C45  ; Grapheme_Base
@@ -11254,7 +11251,7 @@ FFFC..FFFD    ; Grapheme_Base
 2B820..2CEA1  ; Grapheme_Base
 2F800..2FA1D  ; Grapheme_Base
 
-# Total code points: 126292
+# Total code points: 126288
 
 # ================================================
 

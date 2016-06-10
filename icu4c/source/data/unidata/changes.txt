@@ -58,16 +58,15 @@ http://www.unicode.org/reports/tr44/tr44-17.html
 *** ICU Trac
 
 - ticket:12526: integrate Unicode 9
-- C++ ^/icu/branches/markus/uni90
-- Java ^/icu4j/branches/markus/uni90
+- C++ ^/icu/branches/markus/uni90, ^/icu/branches/markus/uni90b
+- Java ^/icu4j/branches/markus/uni90, ^/icu4j/branches/markus/uni90b
 
 *** CLDR Trac
 
 - cldrbug 9414: UCA 9
 - ^/branches/markus/uni90 at r11518 from trunk at r11517
 
-- TODO cldrbug 8109: Unicode 8.0 script metadata
-- TODO cldrbug 8418: Updated segmentation for Unicode 8.0
+- cldrbug 8745: Unicode 9.0 script metadata
 
 *** Unicode version numbers
 - makedata.mak
@@ -89,12 +88,12 @@ http://www.unicode.org/reports/tr44/tr44-17.html
   ~/unidata/uni70/20140403$ ../../desuffixucd.py .
   (see https://sites.google.com/site/unicodetools/inputdata)
 - only for manual diffs: extract Unihan.zip to "here" (.../ucd/Unihan/*.txt), delete Unihan.zip
-- ~/svn.icutools/trunk/src/unicode$ py/preparseucd.py ~/unidata/uni90/20160503 $ICU_SRC_DIR ~/svn.icutools/trunk/src
+- ~/svn.icutools/trunk/src/unicode$ py/preparseucd.py ~/unidata/uni90/20160603 $ICU_SRC_DIR ~/svn.icutools/trunk/src
 - This writes files (especially ppucd.txt) to the ICU4C unidata and testdata subfolders.
 
 - also: from http://unicode.org/Public/security/9.0.0/ download new confusables.txt
   and copy to $UNIDATA
-    cp ~/unidata/uni90/20160503/security/confusables.txt $UNIDATA
+    cp ~/unidata/uni90/20160603/security/confusables.txt $UNIDATA
 
 * preparseucd.py changes
 - remove or add new Unicode scripts from/to the
@@ -233,10 +232,11 @@ http://www.unicode.org/reports/tr44/tr44-17.html
 - UCA DUCET goes into Mark's Unicode tools, see
   https://sites.google.com/site/unicodetools/home#TOC-UCA
 - CLDR root data files are checked into (CLDR UCA branch)/common/uca/
-  cp (UCA generated)/CollationAuxiliary/* ~/svn.cldr/trunk/common/uca/
+    cp (UCA generated)/CollationAuxiliary/* ~/svn.cldr/trunk/common/uca/
+
 - cd (CLDR UCA branch)/common/uca/
 - update source/data/unidata/FractionalUCA.txt with FractionalUCA_SHORT.txt
-  cp FractionalUCA_SHORT.txt $ICU_SRC_DIR/source/data/unidata/FractionalUCA.txt
+    cp FractionalUCA_SHORT.txt $ICU_SRC_DIR/source/data/unidata/FractionalUCA.txt
 - update source/data/unidata/UCARules.txt with UCA_Rules_SHORT.txt
     cp $ICU_SRC_DIR/source/data/unidata/UCARules.txt /tmp/UCARules-old.txt
     (note removing the underscore before "Rules")
@@ -252,6 +252,7 @@ http://www.unicode.org/reports/tr44/tr44-17.html
 - if CLDR common/uca/unihan-index.txt changes, then update
   CLDR common/collation/root.xml <collation type="private-unihan">
   and regenerate (or update in parallel) $ICU_SRC_DIR/source/data/coll/root.txt
+
 - run genuca, see command line above;
   deal with
     Error: Unknown script for first-primary sample character U+104B5 on line 32599 of /home/mscherer/svn.icu/trunk/src/source/data/unidata/FractionalUCA.txt:
@@ -314,17 +315,17 @@ http://www.unicode.org/reports/tr44/tr44-17.html
 - ~/svn.icu/trunk/dbg$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
   output:
     ...
-    Unicode .icu files built to ./out/build/icudt57l
+    Unicode .icu files built to ./out/build/icudt58l
     echo timestamp > uni-core-data
-    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt57b
-    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt57b
+    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt58b
+    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt58b
     echo pnames.icu uprops.icu ucase.icu ubidi.icu nfc.nrm > ./out/icu4j/add.txt
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt57l.dat ./out/icu4j/icudt57b.dat -a ./out/icu4j/add.txt -s ./out/build/icudt57l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt57b
-    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt57b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt57b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt57b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt57b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt57b"
-    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt57b/
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt58l.dat ./out/icu4j/icudt58b.dat -a ./out/icu4j/add.txt -s ./out/build/icudt58l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt58b
+    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt58b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt58b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt58b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt58b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt58b"
+    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt58b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icudata.jar /tmp/icu4j/main/shared/data
-    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt57b/
+    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt58b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
     make[1]: Leaving directory `/home/mscherer/svn.icu/trunk/dbg/data'
@@ -359,7 +360,7 @@ or
     cp confusables.txt confusablesWholeScript.txt NormalizationCorrections.txt NormalizationTest.txt SpecialCasing.txt UnicodeData.txt ~/svn.icu4j/trunk/src/main/tests/core/src/com/ibm/icu/dev/data/unicode
     cd ../../test/testdata
     cp BidiCharacterTest.txt BidiTest.txt ~/svn.icu4j/trunk/src/main/tests/core/src/com/ibm/icu/dev/data/unicode
-    cp ~/unidata/uni90/20160503/ucd/CompositionExclusions.txt ~/svn.icu4j/trunk/src/main/tests/core/src/com/ibm/icu/dev/data/unicode
+    cp ~/unidata/uni90/20160603/ucd/CompositionExclusions.txt ~/svn.icu4j/trunk/src/main/tests/core/src/com/ibm/icu/dev/data/unicode
 
 * run & fix ICU4J tests
 
