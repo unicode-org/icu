@@ -209,7 +209,7 @@
 			<delete dir="${junit.out.dir}/@{output}"/>
 			<mkdir  dir="${junit.out.dir}/@{output}"/>
 		
-			<junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="@{failure-status}">
+			<junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="no" failureproperty="@{failure-status}">
 				<jvmarg value="-Xss4m"/>
 				<jvmarg value="-ea"/>
 				<jvmarg value="-Djava.awt.headless=true"/>
