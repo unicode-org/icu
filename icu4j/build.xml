@@ -333,7 +333,7 @@
     	<icu-junit 
     		testdir="${icu4j.core-tests.dir}" output="timeZoneCheck"
     		test-patternset="timeZoneCheck-patternset"
-    		jvm-options="-DICU.TimeZone.RoundTripAll=true"
+    		jvm-options="-DTimeZoneRoundTripAll=true"
     		failure-status="icu-junit-failure"
     	/>
         <fail message="test failed" if="icu-junit-failure" />
