@@ -1,3 +1,5 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 # CaseFolding-9.0.0.txt
 # Date: 2016-03-02, 18:54:54 GMT
 # © 2016 Unicode®, Inc.

@@ -1,3 +1,4 @@
+;; Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
 ;; Copyright (c) 2014 IBM Corporation and others, all rights reserved
 ;; Thx: http://www.ergoemacs.org/emacs/elisp_syntax_coloring.html
 ;; Thx: http://repo.or.cz/w/emacs.git/blob/HEAD:/lisp/progmodes/sh-script.el
