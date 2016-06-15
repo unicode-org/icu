@@ -385,7 +385,7 @@ main(int argc, char *argv[]) {
 
             ofstream* fout = new ofstream(path.str().c_str(), mode);
             if (fout->fail()) {
-                cerr << "Cannot open file " << path << endl;
+                cerr << "Cannot open file " << path.str() << endl;
                 delete fout;
                 delete tz;
                 break;

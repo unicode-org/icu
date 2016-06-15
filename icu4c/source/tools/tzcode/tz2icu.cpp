@@ -742,7 +742,7 @@ struct FinalZone {
                << " and rule ID " << ruleid;
             throw invalid_argument(os.str());
         }
-        if (year < 1900 || year >= 2050) {
+        if (year < 1900) {
             ostringstream os;
             os << "Invalid input year " << year
                << " with offset " << offset
