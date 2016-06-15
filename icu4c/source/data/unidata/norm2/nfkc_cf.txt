@@ -1,3 +1,5 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 # Unicode Character Database
 # Copyright (c) 1991-2016 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
