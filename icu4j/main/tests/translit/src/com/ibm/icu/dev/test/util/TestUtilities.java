@@ -11,12 +11,14 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 
 public class TestUtilities extends TestFmwk {
+    @Ignore
     @Test
     public void TestCollectionUtilitySpeed() {
         TreeSet ts1 = new TreeSet();
