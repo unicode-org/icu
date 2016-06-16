@@ -219,9 +219,7 @@ public class SimpleDateRule implements DateRule
 //        calendar = c;
 //    }
 
-    private static GregorianCalendar gCalendar = new GregorianCalendar();
-
-    private Calendar calendar = gCalendar;
+    private Calendar calendar = new GregorianCalendar();
 
     private int     month;
     private int     dayOfMonth;
