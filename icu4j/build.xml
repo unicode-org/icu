@@ -239,6 +239,8 @@
 				<report format="frames" todir="${junit.out.dir}/@{output}/html"/>
 			</junitreport>
 			
+	        <fail message="test failed: @{testdir}" if="@{failure-status}" />        
+
     	</sequential>
 	</macrodef>
 
@@ -443,7 +445,6 @@
 
     <target name="translitCheck" depends="info, core, translit, translit-tests" description="Run the ICU4J Translit test suite">
 		<antcall target="_translitCheck"/>
-		<echo>${icu-junit-failure}</echo>
         <fail message="test failed" if="icu-junit-failure" />
     </target>
 
