@@ -255,6 +255,8 @@ public: // package
     void TestAddAcrossZoneTransition(void);
 
     void TestChineseCalendarMapping(void);
+
+    void TestSettingHourOfDaySetsAmPm(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
