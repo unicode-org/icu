@@ -150,16 +150,28 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             addPattern(df.toPattern(), false, returnInfo);
 
             if (i == DateFormat.SHORT) {
-                consumeShortTimePattern(df, returnInfo);
+                consumeShortTimePattern(df.toPattern(), returnInfo);
             }
         }
     }
 
-    private void consumeShortTimePattern(SimpleDateFormat df, PatternInfo returnInfo) {
+    private String getCalendarTypeToUse(ULocale uLocale) {
+        // Get the correct calendar type
+        // TODO: C++ and Java are inconsistent (see #9952).
+        String calendarTypeToUse = uLocale.getKeywordValue("calendar");
+        if ( calendarTypeToUse == null ) {
+            String[] preferredCalendarTypes = Calendar.getKeywordValuesForLocale("calendar", uLocale, true);
+            calendarTypeToUse = preferredCalendarTypes[0]; // the most preferred calendar
+        }
+        if ( calendarTypeToUse == null ) {
+            calendarTypeToUse = "gregorian"; // fallback
+        }
+        return calendarTypeToUse;
+    }
+
+    private void consumeShortTimePattern(String shortTimePattern, PatternInfo returnInfo) {
         // keep this pattern to populate other time field
         // combination patterns by hackTimes later in this method.
-        String shortTimePattern = df.toPattern();
-
         // use hour style in SHORT time pattern as the default
         // hour style for the locale
         FormatParser fp = new FormatParser();
@@ -251,48 +263,41 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     private void addCLDRData(PatternInfo returnInfo, ULocale uLocale) {
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, uLocale);
-        // Get the correct calendar type
-        String calendarTypeToUse = uLocale.getKeywordValue("calendar");
-        if ( calendarTypeToUse == null ) {
-            String[] preferredCalendarTypes = Calendar.getKeywordValuesForLocale("calendar", uLocale, true);
-            calendarTypeToUse = preferredCalendarTypes[0]; // the most preferred calendar
-        }
-        if ( calendarTypeToUse == null ) {
-            calendarTypeToUse = "gregorian"; // fallback
-        }
+        String calendarTypeToUse = getCalendarTypeToUse(uLocale);
 
-        // Get data for that calendar
+        //      ICU4J getWithFallback does not work well when
+        //      1) A nested table is an alias to /LOCALE/...
+        //      2) getWithFallback is called multiple times for going down hierarchical resource path
+        //      #9987 resolved the issue of alias table when full path is specified in getWithFallback,
+        //      but there is no easy solution when the equivalent operation is done by multiple operations.
+        //      This issue is addressed in #9964.
+
+        // Load append item formats.
+        AppendItemFormatsSink appendItemFormatsSink = new AppendItemFormatsSink();
         try {
-            //      ICU4J getWithFallback does not work well when
-            //      1) A nested table is an alias to /LOCALE/...
-            //      2) getWithFallback is called multiple times for going down hierarchical resource path
-            //      #9987 resolved the issue of alias table when full path is specified in getWithFallback,
-            //      but there is no easy solution when the equivalent operation is done by multiple operations.
-            //      This issue is addressed in #9964.
-            AppendItemFormatsSink sink = new AppendItemFormatsSink();
-            rb.getAllItemsWithFallback("calendar/" + calendarTypeToUse + "/appendItems", sink);
-            sink.fillInMissing();
+            rb.getAllItemsWithFallback(
+                    "calendar/" + calendarTypeToUse + "/appendItems",
+                    appendItemFormatsSink);
         }catch(MissingResourceException e) {
         }
+        appendItemFormatsSink.fillInMissing();
 
-        // CLDR item names
+        // Load CLDR item names.
+        AppendItemNamesSink appendItemNamesSink = new AppendItemNamesSink();
         try {
-            AppendItemNamesSink sink = new AppendItemNamesSink();
-            rb.getAllItemsWithFallback("fields", sink);
-            sink.fillInMissing();
+            rb.getAllItemsWithFallback(
+                    "fields",
+                    appendItemNamesSink);
         }catch(MissingResourceException e) {
         }
+        appendItemNamesSink.fillInMissing();
 
-        // set the AvailableFormat in CLDR
+        // Load the available formats from CLDR.
+        AvailableFormatsSink availableFormatsSink = new AvailableFormatsSink(returnInfo);
         try {
-            //      ICU4J getWithFallback does not work well when
-            //      1) A nested table is an alias to /LOCALE/...
-            //      2) getWithFallback is called multiple times for going down hierarchical resource path
-            //      #9987 resolved the issue of alias table when full path is specified in getWithFallback,
-            //      but there is no easy solution when the equivalent operation is done by multiple operations.
-            //      This issue is addressed in #9964.
-            AvailableFormatsSink sink = new AvailableFormatsSink(returnInfo);
-            rb.getAllItemsWithFallback("calendar/" + calendarTypeToUse + "/availableFormats", sink);
+            rb.getAllItemsWithFallback(
+                    "calendar/" + calendarTypeToUse + "/availableFormats",
+                    availableFormatsSink);
         } catch (MissingResourceException e) {
         }
     }
