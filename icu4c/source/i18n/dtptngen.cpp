@@ -678,10 +678,9 @@ DateTimePatternGenerator::hackTimes(const UnicodeString& hackPattern, UErrorCode
 
 static const UChar hourFormatChars[] = { CAP_H, LOW_H, CAP_K, LOW_K, 0 }; // HhKk, the hour format characters
 
-const char*
-DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, UErrorCode& err) {
-    const char* calendarTypeToUse = DT_DateTimeGregorianTag; // initial default
-    char calendarType[ULOC_KEYWORDS_CAPACITY]; // to be filled in with the type to use, if all goes well
+void
+DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, CharString& destination, UErrorCode& err) {
+    destination.clear().append(DT_DateTimeGregorianTag, -1, err); // initial default
     if ( U_SUCCESS(err) ) {
         char localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY];
         // obtain a locale that always has the calendar key value that should be used
@@ -697,6 +696,7 @@ DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, UErrorCode&
             &err);
         localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY-1] = 0; // ensure null termination
         // now get the calendar key value from that locale
+        char calendarType[ULOC_KEYWORDS_CAPACITY];
         int32_t calendarTypeLen = uloc_getKeywordValue(
             localeWithCalendarKey,
             "calendar",
@@ -704,11 +704,11 @@ DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, UErrorCode&
             ULOC_KEYWORDS_CAPACITY,
             &err);
         if (U_SUCCESS(err) && calendarTypeLen < ULOC_KEYWORDS_CAPACITY) {
-            calendarTypeToUse = calendarType;
+            destination.clear().append(calendarType, -1, err);
+            if (U_FAILURE(err)) { return; }
         }
         err = U_ZERO_ERROR;
     }
-    return calendarTypeToUse;
 }
 
 void
@@ -858,7 +858,8 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& errorCod
     LocalUResourceBundlePointer rb(ures_open(NULL, locale.getName(), &errorCode));
     if (U_FAILURE(errorCode)) { return; }
 
-    const char* calendarTypeToUse = getCalendarTypeToUse(locale, errorCode);
+    CharString calendarTypeToUse; // to be filled in with the type to use, if all goes well
+    getCalendarTypeToUse(locale, calendarTypeToUse, errorCode);
     if (U_FAILURE(errorCode)) { return; }
 
     // Local err to ignore resource not found exceptions
