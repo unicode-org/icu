@@ -336,13 +336,6 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestChineseCalendarMapping();
           }
           break;
-        case 37:
-          name = "TestSettingHourOfDaySetsAmPm";
-          if(exec) {
-            logln("TestSettingHourOfDaySetsAmPm---"); logln("");
-            TestSettingHourOfDaySetsAmPm();
-          }
-        break;
         default: name = ""; break;
     }
 }
@@ -3714,44 +3707,6 @@ void CalendarTest::TestChineseCalendarMapping() {
             }
         }
     }
-}
-
-void CalendarTest::TestSettingHourOfDaySetsAmPm() {
-  // Fix ticket 7700.
-
-  UErrorCode status = U_ZERO_ERROR;
-  UDateFormat *fmt;
-  UCalendar *cal;
-  UChar pattern[2];
-  UChar input[3];
-  int32_t val;
-  int32_t parsepos = 0;
-
-  u_uastrcpy(pattern, "K");
-  u_uastrcpy(input, "10");
-
-  fmt = udat_open(UDAT_FULL, UDAT_FULL, NULL, NULL, 0, pattern, 1, &status);
-  udat_applyPattern(fmt, FALSE, pattern, 1);
-
-  cal = ucal_open(0, -1, "", UCAL_GREGORIAN, &status);
-
-  // Set time to PM.
-  ucal_set(cal, UCAL_AM_PM, 1);
-
-  // Set HOUR_OF_DAY to 0 -- this should reset AM_PM to 0.
-  ucal_set(cal, UCAL_HOUR_OF_DAY, 0);
-
-  // Parse "10" with "K" (hour 0-11).
-  udat_parseCalendar(fmt,
-                   cal,
-                   input,
-                   2,
-                   &parsepos,
-                   &status);
-
-  // Want 10. Don't want 22.
-  val = ucal_get(cal, UCAL_HOUR_OF_DAY, &status);
-  TEST_ASSERT(val == 10);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
