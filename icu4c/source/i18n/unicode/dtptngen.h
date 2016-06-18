@@ -538,7 +538,7 @@ private:
     void addCanonicalItems(UErrorCode &status);
     void addICUPatterns(const Locale& locale, UErrorCode& status);
     void hackTimes(const UnicodeString& hackPattern, UErrorCode& status);
-    const char* getCalendarTypeToUse(const Locale& locale, UErrorCode& status);
+    void getCalendarTypeToUse(const Locale& locale, CharString& destination, UErrorCode& err);
     void consumeShortTimePattern(const UnicodeString& shortTimePattern, UErrorCode& status);
     void addCLDRData(const Locale& locale, UErrorCode& status);
     UDateTimePatternConflict addPatternWithSkeleton(const UnicodeString& pattern, const UnicodeString * skeletonToUse, UBool override, UnicodeString& conflictingPattern, UErrorCode& status);
