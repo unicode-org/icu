@@ -23,8 +23,10 @@
 #include "uelement.h"
 #include "uhash.h"
 
-#include "iostream"
-#include "string"
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
 
 using namespace icu;
 
