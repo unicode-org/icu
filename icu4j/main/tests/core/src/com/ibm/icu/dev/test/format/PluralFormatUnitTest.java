@@ -65,7 +65,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         for (int n = 1; n < 13; n++) {
             String result = numberFmt.format(n);
             for (int k = 0; k < plFmts.length; ++k) {
-                this.assertEquals("PluralFormat's output is not as expected",
+                TestFmwk.assertEquals("PluralFormat's output is not as expected",
                         result, plFmts[k].format(n));
             }
         }
@@ -78,7 +78,7 @@ public class PluralFormatUnitTest extends TestFmwk {
             for (int k = 0; k < plFmts.length; ++k) {
                 sb.delete(0, sb.length());
                 String pfResult = plFmts[k].format(Long.valueOf(n*n), sb, ignore).toString();
-                this.assertEquals("PluralFormat's output is not as expected", result, pfResult);
+                TestFmwk.assertEquals("PluralFormat's output is not as expected", result, pfResult);
             }
         }
     }

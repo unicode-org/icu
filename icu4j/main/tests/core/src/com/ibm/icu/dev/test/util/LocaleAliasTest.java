@@ -17,13 +17,14 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
-public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
+public class LocaleAliasTest extends TestFmwk {
     private static final ULocale[][] _LOCALES = {
 
             {new ULocale("en", "RH"), new ULocale("en", "ZW")},
@@ -123,7 +124,7 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
             if (!df1.equals(df2)) {
                 errln("DateFormatTest: df1!=df2: newLoc= "+newLoc +" oldLoc= "+oldLoc);
             }
-            this.logln("DateFormat(getLocale) old:"+l1+"   new:"+l2);
+            TestFmwk.logln("DateFormat(getLocale) old:"+l1+"   new:"+l2);
             
             //Test function "format"
     //        Date d = new Date();
@@ -216,7 +217,7 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
             if (!l1.equals(l2)) {
                 errln("ResourceBundleTest: l1!=l2: l1= "+l1 +" l2= "+l2);
             }
-            this.logln("UResourceBundle old:"+l1+"   new:"+l2);
+            TestFmwk.logln("UResourceBundle old:"+l1+"   new:"+l2);
         }
         ULocale.setDefault(defLoc);
     }

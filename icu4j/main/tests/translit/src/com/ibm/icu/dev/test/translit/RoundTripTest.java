@@ -17,6 +17,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.MissingResourceException;
 
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -116,34 +118,34 @@ public class RoundTripTest extends TestFmwk {
         logln(name + " took " + dur + " seconds");
     }
 
-    @org.junit.Test
+    @Test
     public void TestKana() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Katakana-Hiragana")
+        new TransliterationTest("Katakana-Hiragana")
         .test(KATAKANA, "[" + HIRAGANA + LENGTH + "]", "[" + HALFWIDTH_KATAKANA + LENGTH + "]", this, new Legal());
         showElapsed(start, "TestKana");
     }
 
-    @org.junit.Test
+    @Test
     public void TestHiragana() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-Hiragana")
+        new TransliterationTest("Latin-Hiragana")
         .test("[a-zA-Z]", HIRAGANA, HIRAGANA_ITERATION, this, new Legal());
         showElapsed(start, "TestHiragana");
     }
 
-    @org.junit.Test
+    @Test
     public void TestKatakana() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-Katakana")
+        new TransliterationTest("Latin-Katakana")
         .test("[a-zA-Z]", KATAKANA, "[" + KATAKANA_ITERATION + HALFWIDTH_KATAKANA + "]", this, new Legal());
         showElapsed(start, "TestKatakana");
     }
 
-    @org.junit.Test
+    @Test
     public void TestJamo() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-Jamo")
+        new TransliterationTest("Latin-Jamo")
         .test("[a-zA-Z]", "[\u1100-\u1112 \u1161-\u1175 \u11A8-\u11C2]", "", this, new LegalJamo());
         showElapsed(start, "TestJamo");
     }
@@ -159,10 +161,10 @@ public class RoundTripTest extends TestFmwk {
         SLimit = SBase + SCount;    // D7A4
      */
 
-    @org.junit.Test
+    @Test
     public void TestHangul() throws IOException {
         long start = System.currentTimeMillis();
-        Test t = new Test("Latin-Hangul", 5);
+        TransliterationTest t = new TransliterationTest("Latin-Hangul", 5);
         boolean TEST_ALL = getBooleanProperty("HangulRoundTripAll", false); 
         if (TEST_ALL && TestFmwk.getExhaustiveness() == 10) {
             t.setPairLimit(Integer.MAX_VALUE); // only go to the limit if we have TEST_ALL and getInclusion
@@ -175,7 +177,7 @@ public class RoundTripTest extends TestFmwk {
      * This is a shorter version of the test for doubles, that allows us to skip lots of cases, but
      * does check the ones that should cause problems (if any do).
      */
-    @org.junit.Test
+    @Test
     public void TestHangul2() {
         Transliterator lh = Transliterator.getInstance("Latin-Hangul");
         Transliterator hl = lh.getInverse();
@@ -280,7 +282,7 @@ public class RoundTripTest extends TestFmwk {
     }
 
 
-    @org.junit.Test
+    @Test
     public void TestHan() throws UnsupportedEncodingException, FileNotFoundException {
         try{
             UnicodeSet exemplars = LocaleData.getExemplarSet(new ULocale("zh"),0);
@@ -325,7 +327,7 @@ public class RoundTripTest extends TestFmwk {
         }
     }
 
-    @org.junit.Test
+    @Test
     public void TestSingle() {
         Transliterator t = Transliterator.getInstance("Latin-Greek");
         t.transliterate("\u0061\u0101\u0069");
@@ -349,55 +351,55 @@ public class RoundTripTest extends TestFmwk {
                 "] & [:Age=4.0:]]";
     }
 
-    @org.junit.Test
+    @Test
     public void TestGreek() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-Greek", 50)
+        new TransliterationTest("Latin-Greek", 50)
         .test("[a-zA-Z]", getGreekSet(),
                 "[\u00B5\u037A\u03D0-\u03F5\u03F9]", /* roundtrip exclusions */
                 this, new LegalGreek(true));
         showElapsed(start, "TestGreek");
     }
 
-    @org.junit.Test
+    @Test
     public void TestGreekUNGEGN() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-Greek/UNGEGN")
+        new TransliterationTest("Latin-Greek/UNGEGN")
         .test("[a-zA-Z]", getGreekSet(),
                 "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
                 this, new LegalGreek(false));
         showElapsed(start, "TestGreekUNGEGN");
     }
 
-    @org.junit.Test
+    @Test
     public void Testel() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-el")
+        new TransliterationTest("Latin-el")
         .test("[a-zA-Z]", getGreekSet(),
                 "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
                 this, new LegalGreek(false));
         showElapsed(start, "Testel");
     }
 
-    @org.junit.Test
+    @Test
     public void TestCyrillic() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-Cyrillic")
+        new TransliterationTest("Latin-Cyrillic")
         .test("[a-zA-Z\u0110\u0111\u02BA\u02B9]", "[\u0400-\u045F]", null, this, new Legal());
         showElapsed(start, "TestCyrillic");
     }
 
     static final String ARABIC = "[\u06A9\u060C\u061B\u061F\u0621\u0627-\u063A\u0641-\u0655\u0660-\u066C\u067E\u0686\u0698\u06A4\u06AD\u06AF\u06CB-\u06CC\u06F0-\u06F9]";
 
-    @org.junit.Test
+    @Test
     public void TestArabic() throws IOException {
         long start = System.currentTimeMillis();
-        new Test("Latin-Arabic")
+        new TransliterationTest("Latin-Arabic")
         .test("[a-zA-Z\u02BE\u02BF]", ARABIC, "[a-zA-Z\u02BE\u02BF\u207F]", null, this, new Legal()); //
         showElapsed(start, "TestArabic");
     }
 
-    @org.junit.Test
+    @Test
     public void TestHebrew() throws IOException {
         if (FIX_ME) {
             errln("TestHebrew needs to be updated to remove delete the [:Age=4.0:] filter ");
@@ -407,22 +409,22 @@ public class RoundTripTest extends TestFmwk {
             logln("TestHebrew needs to be updated to remove delete the section marked [:Age=4.0:] filter");
         }
         long start = System.currentTimeMillis();
-        new Test("Latin-Hebrew")
+        new TransliterationTest("Latin-Hebrew")
         .test("[a-zA-Z\u02BC\u02BB]", "[[[:hebrew:]-[\u05BD\uFB00-\uFBFF]]& [:Age=4.0:]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
         showElapsed(start, "TestHebrew");
     }
 
-    @org.junit.Test
+    @Test
     public void TestThai() throws IOException {
         long start = System.currentTimeMillis();
         if (FIX_ME) {
-            new Test("Latin-Thai")
+            new TransliterationTest("Latin-Thai")
             .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
                     "[\u0E01-\u0E3A\u0E40-\u0E5B]", 
                     "[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02B9\u02CC]",
                     null, this, new LegalThai());
         } else {
-            new Test("Latin-Thai")
+            new TransliterationTest("Latin-Thai")
             .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
                     "[\u0E01-\u0E3A\u0E40-\u0E5B]", 
                     "[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02B9\u02CC]",
@@ -495,7 +497,7 @@ public class RoundTripTest extends TestFmwk {
             "\u1FE8-\u1FE9\u1FEC\u212A-\u212B\uE04D\uE064]"+
             "-[\uE000-\uE080 \u01E2\u01E3]& [[:latin:][:mark:]]]";
 
-    @org.junit.Test
+    @Test
     public void TestDevanagariLatin() throws IOException {
         long start = System.currentTimeMillis();
         if (FIX_ME) {
@@ -507,7 +509,7 @@ public class RoundTripTest extends TestFmwk {
         logln("Warning: TestDevanagariLatin needs to be updated to remove delete the section marked [:Age=4.1:] filter");
 
         String minusDevAbb = logKnownIssue("cldrbug:4375", null) ? "-[\u0970]" : "";
-        new Test("Latin-DEVANAGARI", 50)
+        new TransliterationTest("Latin-DEVANAGARI", 50)
         .test(latinForIndic, "[[[:Devanagari:][\u094d][\u0964\u0965]" + minusDevAbb + "]&[:Age=4.1:]]", "[\u0965\u0904]", this, new LegalIndic());
         showElapsed(start, "TestDevanagariLatin");
     }
@@ -865,7 +867,7 @@ public class RoundTripTest extends TestFmwk {
         },
     };
 
-    @org.junit.Test
+    @Test
     public void TestInterIndic() throws Exception{
         long start = System.currentTimeMillis();
         int num = interIndicArray.length;
@@ -895,7 +897,7 @@ public class RoundTripTest extends TestFmwk {
             // TODO(Mark): Fix ticket #8989, transliterate U+0970.
             String minusDevAbb = logKnownIssue("cldrbug:4375", null) ? "-[\u0970]" : "";
 
-            new Test(interIndicArray[i][0], 50)
+            new TransliterationTest(interIndicArray[i][0], 50)
             .test("[["+interIndicArray[i][1] + minusDevAbb + "] &[:Age=4.1:]]",
                     "[["+interIndicArray[i][2] + minusDevAbb + "] &[:Age=4.1:]]",
                     interIndicArray[i][3],
@@ -1077,7 +1079,7 @@ public class RoundTripTest extends TestFmwk {
         }
     }
 
-    static class Test {
+    static class TransliterationTest {
 
         PrintWriter out;
 
@@ -1099,11 +1101,11 @@ public class RoundTripTest extends TestFmwk {
         /*
          * create a test for the given script transliterator.
          */
-        Test(String transliteratorID) {
+        TransliterationTest(String transliteratorID) {
             this(transliteratorID, 100);
         }
 
-        Test(String transliteratorID, int dens) {
+        TransliterationTest(String transliteratorID, int dens) {
             this.transliteratorID = transliteratorID;
             this.density = dens;
         }
@@ -1167,7 +1169,7 @@ public class RoundTripTest extends TestFmwk {
         static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
         static final UnicodeSet neverOk = new UnicodeSet("[:Other:]");
 
-        @org.junit.Test
+        @Test
         public void test(String srcRange, String trgtRange,
                 String rdtripExclusions, RoundTripTest logger, Legal legalSrc)
                         throws java.io.IOException {
@@ -1180,7 +1182,7 @@ public class RoundTripTest extends TestFmwk {
          * that everything in targetRange maps to backtoSourceRange
          * that everything roundtrips from target -> source -> target, except roundtripExceptions
          */
-        @org.junit.Test
+        @Test
         public void test(String srcRange, String trgtRange, String backtoSourceRange,
                 String rdtripExclusions, RoundTripTest logger, Legal legalSrc)
                         throws java.io.IOException {
@@ -1206,10 +1208,10 @@ public class RoundTripTest extends TestFmwk {
 
             log = logger;
 
-            log.logln(Utility.escape("Source:  " + sourceRange));
-            log.logln(Utility.escape("Target:  " + targetRange));
-            log.logln(Utility.escape("Exclude: " + roundtripExclusions));
-            if (log.isQuick()) log.logln("Abbreviated Test");
+            TestFmwk.logln(Utility.escape("Source:  " + sourceRange));
+            TestFmwk.logln(Utility.escape("Target:  " + targetRange));
+            TestFmwk.logln(Utility.escape("Exclude: " + roundtripExclusions));
+            if (TestFmwk.isQuick()) TestFmwk.logln("Abbreviated Test");
 
             badCharacters = new UnicodeSet("[:other:]");
 
@@ -1251,21 +1253,21 @@ public class RoundTripTest extends TestFmwk {
                     }
                     String logFileName = "translitErrorLogs/test_" + transliteratorID.replace('/', '_') + ".html";
                     File lf = new File(logFileName);
-                    logger.logln("Creating log file " + lf.getAbsoluteFile());
+                    TestFmwk.logln("Creating log file " + lf.getAbsoluteFile());
                     FileOutputStream fos = new FileOutputStream(lf);
                     fos.write(bast.toByteArray());
                     fos.close();
-                    logger.errln(transliteratorID + " errors: "
+                    TestFmwk.errln(transliteratorID + " errors: "
                             + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
                             + ", see " + lf.getAbsoluteFile());
                 }
                 catch (SecurityException e) {
-                    logger.errln(transliteratorID + " errors: "
+                    TestFmwk.errln(transliteratorID + " errors: "
                             + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
                             + ", no log provided due to protected test domain");
                 }
             } else {
-                logger.logln(transliteratorID + " ok");
+                TestFmwk.logln(transliteratorID + " ok");
                 //                  new File(logFileName).delete();
             }
         }
@@ -1287,13 +1289,13 @@ public class RoundTripTest extends TestFmwk {
         Transliterator sourceToTarget;
         Transliterator targetToSource;
 
-        @org.junit.Test
+        @Test
         public void test2() {
 
             sourceToTarget = Transliterator.getInstance(transliteratorID);
             targetToSource = sourceToTarget.getInverse();
 
-            log.logln("Checking that at least one irrevant characters is not NFC'ed");
+            TestFmwk.logln("Checking that at least one irrevant characters is not NFC'ed");
             out.println("<h3>Checking that at least one irrevant characters is not NFC'ed</h3>");
 
             String irrelevants = "\u2000\u2001\u2126\u212A\u212B\u2329"; // string is from NFC_NO in the UCD
@@ -1306,7 +1308,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             if (EXTRA_TESTS) {
-                log.logln("Checking that toRules works");
+                TestFmwk.logln("Checking that toRules works");
                 String rules = "";
                 Transliterator sourceToTarget2;
                 Transliterator targetToSource2;
@@ -1356,7 +1358,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkSourceTargetSource(Transliterator sourceToTarget2) {
-            log.logln("Checking that source -> target -> source");
+            TestFmwk.logln("Checking that source -> target -> source");
             out.println("<h3>Checking that source -> target -> source</h3>");
 
             usi.reset(sourceRange);
@@ -1373,7 +1375,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkTargetSourceTarget(Transliterator targetToSource2) {
-            log.logln("Checking that target -> source -> target");
+            TestFmwk.logln("Checking that target -> source -> target");
             out.println("<h3>Checking that target -> source -> target</h3>");
             usi.reset(targetRange);
             while (usi.next()) {
@@ -1389,7 +1391,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkSourceTargetSingles(UnicodeSet failSourceTarg) {
-            log.logln("Checking that source characters convert to target - Singles");
+            TestFmwk.logln("Checking that source characters convert to target - Singles");
             out.println("<h3>Checking that source characters convert to target - Singles</h3>");
 
 
@@ -1423,7 +1425,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private boolean checkSourceTargetDoubles(UnicodeSet failSourceTarg) {
-            log.logln("Checking that source characters convert to target - Doubles");
+            TestFmwk.logln("Checking that source characters convert to target - Doubles");
             out.println("<h3>Checking that source characters convert to target - Doubles</h3>");
             long count = 0;
 
@@ -1451,7 +1453,7 @@ public class RoundTripTest extends TestFmwk {
                         !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
                  */
-                log.logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
+                TestFmwk.logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
                 usi2.reset(sourceRangeMinusFailures, quickRt, density);
 
                 while (usi2.next()) {
@@ -1480,7 +1482,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         void checkTargetSourceSingles(UnicodeSet failTargSource, UnicodeSet failRound) {
-            log.logln("Checking that target characters convert to source and back - Singles");
+            TestFmwk.logln("Checking that target characters convert to source and back - Singles");
             out.println("<h3>Checking that target characters convert to source and back - Singles</h3>");
 
 
@@ -1532,7 +1534,7 @@ public class RoundTripTest extends TestFmwk {
 
         private void checkTargetSourceDoubles(boolean quickRt, UnicodeSet failTargSource,
                 UnicodeSet failRound) {
-            log.logln("Checking that target characters convert to source and back - Doubles");
+            TestFmwk.logln("Checking that target characters convert to source and back - Doubles");
             out.println("<h3>Checking that target characters convert to source and back - Doubles</h3>");
             long count = 0;
 
@@ -1559,7 +1561,7 @@ public class RoundTripTest extends TestFmwk {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                  */
-                log.logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
+                TestFmwk.logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
                 usi2.reset(targetRangeMinusFailures, quickRt, density);
 
                 while (usi2.next()) {
@@ -1598,7 +1600,7 @@ public class RoundTripTest extends TestFmwk {
                     }
                 }
             }
-            log.logln("");
+            TestFmwk.logln("");
         }
 
         /**

@@ -3956,7 +3956,7 @@ public class ULocaleTest extends TestFmwk {
 
         cldrVersion = LocaleData.getCLDRVersion();
 
-        this.logln("uloc_getCLDRVersion() returned: '"+cldrVersion+"'");
+        TestFmwk.logln("uloc_getCLDRVersion() returned: '"+cldrVersion+"'");
 
         // why isn't this public for tests somewhere?
         final ClassLoader testLoader = ICUResourceBundleTest.class.getClassLoader();

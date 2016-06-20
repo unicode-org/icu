@@ -34,7 +34,7 @@ import com.ibm.icu.util.ULocale;
  * added to the log via the log and logln methods. These methods will add their
  * arguments to the log only if the test is being run in verbose mode.
  */
-public class TestFmwk extends AbstractTestLog {
+abstract public class TestFmwk extends AbstractTestLog {
     /**
      * The default time zone for all of our tests. Used in @Before
      */
@@ -66,28 +66,6 @@ public class TestFmwk extends AbstractTestLog {
         testParams = TestParams.create();
     }
 
-//    @BeforeClass
-//    public static void testFrameworkInitialize() {
-//        // TODO(junit): check that all methods in subclass of pattern [Tt]est.* | .*[Ttest] have annotation of @Test
-//        
-//        if (paramsReference.get() != null) {
-//            return;
-//        }
-//        synchronized (paramsReference) {
-//            if (paramsReference.get() != null) {
-//                return;
-//            }
-//            TestParams params = TestParams.create();
-//            paramsReference.set(params);
-//        }
-//    }
-
-    // use this instead of new random so we get a consistent seed
-    // for our tests
-    protected Random createRandom() {
-        return new Random(getParams().getSeed());
-    }
-
     protected TestFmwk() {
     }
 
@@ -113,19 +91,25 @@ public class TestFmwk extends AbstractTestLog {
         return testParams;
     }
     
-    public static boolean isVerbose() {
+    protected static boolean isVerbose() {
         return getParams().getLoggingLevel() >= LOGGING_INFO;
     }
 
     /**
      * 0 = fewest tests, 5 is normal build, 10 is most tests
      */
-    public static int getExhaustiveness() {
+    protected static int getExhaustiveness() {
         return getParams().inclusion;
     }
 
-    public static boolean isQuick() {
+    protected static boolean isQuick() {
         return getParams().getInclusion() == 0;
+    }
+
+    // use this instead of new random so we get a consistent seed
+    // for our tests
+    protected Random createRandom() {
+        return new Random(getParams().getSeed());
     }
 
     static final String ICU_TRAC_URL = "http://bugs.icu-project.org/trac/ticket/";
@@ -143,7 +127,7 @@ public class TestFmwk extends AbstractTestLog {
      * @param comment Additional comment, or null
      * @return true unless -prop:logKnownIssue=no is specified in the test command line argument.
      */
-    public boolean logKnownIssue(String ticket, String comment) {
+    protected static boolean logKnownIssue(String ticket, String comment) {
         if (!getBooleanProperty("logKnownIssue", true)) {
             return false;
         }
@@ -182,27 +166,27 @@ public class TestFmwk extends AbstractTestLog {
         return true;
     }
 
-    public static String getProperty(String key) {
+    protected static String getProperty(String key) {
         return getParams().getProperty(key);
     }
 
-    public static boolean getBooleanProperty(String key) {
+    protected static boolean getBooleanProperty(String key) {
         return getParams().getBooleanProperty(key);
     }
     
-    public static boolean getBooleanProperty(String key, boolean defVal) {
+    protected static boolean getBooleanProperty(String key, boolean defVal) {
         return getParams().getBooleanProperty(key, defVal);
     }
 
-    public static int getIntProperty(String key, int defVal) {
+    protected static int getIntProperty(String key, int defVal) {
         return getParams().getIntProperty(key, defVal);
     }
     
-    public static int getIntProperty(String key, int defVal, int maxVal) {
+    protected static int getIntProperty(String key, int defVal, int maxVal) {
         return getParams().getIntProperty(key, defVal, maxVal);
     }
     
-    protected TimeZone safeGetTimeZone(String id) {
+    protected static TimeZone safeGetTimeZone(String id) {
         TimeZone tz = TimeZone.getTimeZone(id);
         if (tz == null) {
             // should never happen
@@ -217,7 +201,7 @@ public class TestFmwk extends AbstractTestLog {
    
     // Utility Methods
     
-    public static String hex(char[] s){
+    protected static String hex(char[] s){
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < s.length; ++i) {
             if (i != 0) result.append(',');
@@ -226,7 +210,7 @@ public class TestFmwk extends AbstractTestLog {
         return result.toString();
     }
     
-    public static String hex(byte[] s){
+    protected static String hex(byte[] s){
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < s.length; ++i) {
             if (i != 0) result.append(',');
@@ -235,7 +219,7 @@ public class TestFmwk extends AbstractTestLog {
         return result.toString();
     }
     
-    public static String hex(char ch) {
+    protected static String hex(char ch) {
         StringBuffer result = new StringBuffer();
         String foo = Integer.toString(ch, 16).toUpperCase();
         for (int i = foo.length(); i < 4; ++i) {
@@ -244,7 +228,7 @@ public class TestFmwk extends AbstractTestLog {
         return result + foo;
     }
 
-    public static String hex(int ch) {
+    protected static String hex(int ch) {
         StringBuffer result = new StringBuffer();
         String foo = Integer.toString(ch, 16).toUpperCase();
         for (int i = foo.length(); i < 4; ++i) {
@@ -253,7 +237,7 @@ public class TestFmwk extends AbstractTestLog {
         return result + foo;
     }
 
-    public static String hex(CharSequence s) {
+    protected static String hex(CharSequence s) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < s.length(); ++i) {
             if (i != 0)
@@ -263,7 +247,7 @@ public class TestFmwk extends AbstractTestLog {
         return result.toString();
     }
 
-    public static String prettify(CharSequence s) {
+    protected static String prettify(CharSequence s) {
         StringBuilder result = new StringBuilder();
         int ch;
         for (int i = 0; i < s.length(); i += Character.charCount(ch)) {
@@ -421,7 +405,7 @@ public class TestFmwk extends AbstractTestLog {
      *            array of strings we expect to see, or null
      * @return the length of 'array', or -1 on error
      */
-    protected int checkArray(String msg, String array[], String expected[]) {
+    protected static int checkArray(String msg, String array[], String expected[]) {
         int explen = (expected != null) ? expected.length : 0;
         if (!(explen >= 0 && explen < 31)) { // [sic] 31 not 32
             errln("Internal error");
@@ -469,10 +453,11 @@ public class TestFmwk extends AbstractTestLog {
      *            array of locales names we expect to see, or null
      * @return the length of 'array'
      */
-    protected int checkArray(String msg, Locale array[], String expected[]) {
+    protected static int checkArray(String msg, Locale array[], String expected[]) {
         String strs[] = new String[array.length];
-        for (int i = 0; i < array.length; ++i)
+        for (int i = 0; i < array.length; ++i) {
             strs[i] = array[i].toString();
+        }
         return checkArray(msg, strs, expected);
     }
 
@@ -488,10 +473,11 @@ public class TestFmwk extends AbstractTestLog {
      *            array of locales names we expect to see, or null
      * @return the length of 'array'
      */
-    protected int checkArray(String msg, ULocale array[], String expected[]) {
+    protected static int checkArray(String msg, ULocale array[], String expected[]) {
         String strs[] = new String[array.length];
-        for (int i = 0; i < array.length; ++i)
+        for (int i = 0; i < array.length; ++i) {
             strs[i] = array[i].toString();
+        }
         return checkArray(msg, strs, expected);
     }
 
@@ -636,7 +622,7 @@ public class TestFmwk extends AbstractTestLog {
     }
 
     // Return the source code location of the caller located callDepth frames up the stack.
-    public static String sourceLocation() {
+    protected static String sourceLocation() {
         // Walk up the stack to the first call site outside this file
         for (StackTraceElement st : new Throwable().getStackTrace()) {
             String source = st.getFileName();
@@ -659,7 +645,7 @@ public class TestFmwk extends AbstractTestLog {
      * @see com.ibm.icu.dev.test.TestLog#msg(java.lang.String, int, boolean, boolean)
      */
     //@Override
-    public static void msg(String message, int level, boolean incCount, boolean newln) {
+    protected static void msg(String message, int level, boolean incCount, boolean newln) {
         if (level == TestLog.WARN || level == TestLog.ERR) {
             Assert.fail(message);
         }
