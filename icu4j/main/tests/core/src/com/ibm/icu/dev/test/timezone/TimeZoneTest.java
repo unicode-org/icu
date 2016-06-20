@@ -2212,7 +2212,7 @@ public class TimeZoneTest extends TestFmwk
     @Test
     public void Test11619_UnrecognizedTimeZoneID() {
         VTimeZone vzone = VTimeZone.create("ABadTimeZoneId");
-        this.assertNull("", vzone);
+        TestFmwk.assertNull("", vzone);
     }
 
     private static boolean isDaylightTimeAvailable(TimeZone tz, long start) {

@@ -132,7 +132,7 @@ public class CollationTest extends TestFmwk {
                         index --;
                     } 
                     if (o != orders[index]) {
-                        test.errln("Mismatch at index " + index + ": 0x" 
+                        TestFmwk.errln("Mismatch at index " + index + ": 0x" 
                             + Utility.hex(orders[index]) + " vs 0x" + Utility.hex(o));
                         break;
                     }
@@ -146,21 +146,21 @@ public class CollationTest extends TestFmwk {
     
         if (index != 0) {
             String msg = "Didn't get back to beginning - index is ";
-            test.errln(msg + index);
+            TestFmwk.errln(msg + index);
     
             iter.reset();
-            test.err("next: ");
+            TestFmwk.err("next: ");
             while ((o = iter.next()) != CollationElementIterator.NULLORDER) {
                 String hexString = "0x" + Utility.hex(o) + " ";
-                test.err(hexString);
+                TestFmwk.err(hexString);
             }
-            test.errln("");
-            test.err("prev: ");
+            TestFmwk.errln("");
+            TestFmwk.err("prev: ");
             while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
                 String hexString = "0x" + Utility.hex(o) + " ";
-                 test.err(hexString);
+                 TestFmwk.err(hexString);
             }
-            test.errln("");
+            TestFmwk.errln("");
         }
     }
     
@@ -214,7 +214,7 @@ public class CollationTest extends TestFmwk {
             // would it work to have the 'verbose' flag let you 
             // suppress warnings?  Are there ever some warnings you
             // want to suppress, and others you don't?
-            test.errln("Comparing \"" + Utility.hex(source) + "\" with \""
+            TestFmwk.errln("Comparing \"" + Utility.hex(source) + "\" with \""
                     + Utility.hex(target) + "\" expected " + result
                     + " but got " + compareResult);
         }
@@ -222,7 +222,7 @@ public class CollationTest extends TestFmwk {
         CollationKey tsk = myCollation.getCollationKey(target);
         compareResult = ssk.compareTo(tsk);
         if (compareResult != result) {
-            test.errln("Comparing CollationKeys of \"" + Utility.hex(source) 
+            TestFmwk.errln("Comparing CollationKeys of \"" + Utility.hex(source) 
             + "\" with \"" + Utility.hex(target) 
             + "\" expected " + result + " but got " 
             + compareResult);
@@ -233,7 +233,7 @@ public class CollationTest extends TestFmwk {
         myCollation.getRawCollationKey(target, trsk);
         compareResult = ssk.compareTo(tsk);
         if (compareResult != result) {
-            test.errln("Comparing RawCollationKeys of \"" 
+            TestFmwk.errln("Comparing RawCollationKeys of \"" 
                     + Utility.hex(source) 
                     + "\" with \"" + Utility.hex(target) 
                     + "\" expected " + result + " but got " 
