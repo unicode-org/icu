@@ -460,4 +460,14 @@ public class CompactDecimalFormatTest extends TestFmwk {
         result.setMaximumSignificantDigits(2);
         return result;
     }
+
+    @Test
+    public void TestNordic() {
+        if (logKnownIssue("cldrbug:9465","CDF(12,000) for no_NO shouldn't be 12 (12K or similar)")) {
+            return;
+        }
+        String result = CompactDecimalFormat.getInstance( new ULocale("no_NO"),
+                CompactDecimalFormat.CompactStyle.SHORT ).format(12000);
+        assertNotEquals("CDF(12,000) for no_NO shouldn't be 12 (12K or similar)", "12", result);
+    }
 }
