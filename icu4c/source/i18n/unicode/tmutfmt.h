@@ -52,6 +52,8 @@ U_NAMESPACE_BEGIN
 class Hashtable;
 class UVector;
 
+struct TimeUnitFormatReadSink;
+
 /**
  * Format or parse a TimeUnitAmount, using plural rules for the units where available.
  *
@@ -229,6 +231,7 @@ private:
     // UTIMEUNIT_YEAR.
     static const char* getTimeUnitName(TimeUnit::UTimeUnitFields field, UErrorCode& status);
 
+    friend TimeUnitFormatReadSink;
 };
 
 inline UBool
