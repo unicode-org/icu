@@ -231,7 +231,7 @@ private:
     // UTIMEUNIT_YEAR.
     static const char* getTimeUnitName(TimeUnit::UTimeUnitFields field, UErrorCode& status);
 
-    friend TimeUnitFormatReadSink;
+    friend struct TimeUnitFormatReadSink;
 };
 
 inline UBool
