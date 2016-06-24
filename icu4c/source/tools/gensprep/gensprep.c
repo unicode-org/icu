@@ -203,7 +203,7 @@ main(int argc, char* argv[]) {
 #else
 
     setUnicodeVersion(options[UNICODE_VERSION].value);
-    filename = (char* ) uprv_malloc(uprv_strlen(srcDir) + 300); /* hopefully this should be enough */
+    filename = (char* ) uprv_malloc(uprv_strlen(srcDir) + uprv_strlen(inputFileName) + 20); /* hopefully this should be enough */
    
     /* prepare the filename beginning with the source dir */
     if(uprv_strchr(srcDir,U_FILE_SEP_CHAR) == NULL && uprv_strchr(srcDir,U_FILE_ALT_SEP_CHAR) == NULL){
