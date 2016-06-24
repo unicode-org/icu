@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -106,6 +107,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Ignore
     @Test
     public void TestByteConversion() {
         byte bytes[] = new byte[200];
@@ -120,6 +122,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Ignore
     @Test
     public void TestGet() {
         checkGet(unicodeTestMap, TrieMap.Style.BYTES);
@@ -145,6 +148,7 @@ public class TrieMapTest extends TestFmwk {
         }        
     }
 
+    @Ignore
     @Test
     public void TestTimeIteration() {
         long comparisonTime = timeIteration(unicodeTestMap, 0, null, 0);
@@ -198,6 +202,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Ignore
     @Test
     public void TestContents() {
         checkContents(unicodeTestMap, Style.BYTES);
@@ -235,6 +240,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Ignore
     @Test
     public void TestSearch() {
         checkSearch(Style.BYTES);
@@ -283,6 +289,7 @@ public class TrieMapTest extends TestFmwk {
         //        );
     }
 
+    @Ignore
     @Test
     public void TestTimeBuilding() {
         long comparisonTime = timeBuilding(unicodeTestMap, 0, null, Option.SMALL, 0);
@@ -336,6 +343,7 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
+    @Ignore
     @Test
     public void TestSize() {
         int size = checkSize(0, null, Option.SMALL, 0);
@@ -373,7 +381,8 @@ public class TrieMapTest extends TestFmwk {
         }
     }
 
-    @Test
+    @Ignore
+	@Test
     public void TestTimeGet() {
         HashSet<String> keySet = new HashSet<String>(unicodeTestMap.keySet());
         ULocale[] locales = ULocale.getAvailableLocales();
