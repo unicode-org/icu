@@ -1,3 +1,5 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 # Copyright (C) 2009-2013 IBM and Others. All Rights Reserved
 
 API Change Report:
@@ -17,7 +19,7 @@ Requirements:
 To use the utility:
  1. Put both old and new ICU source trees on your system
  2. Run "configure" in both old and new (you can use any mixture of in-source and out-of-source builds). Doxygen must be found during the configure phase, but you do not need to build the standard API docs.
- 3. create a Makefile.local in this readme's directory (tools/release/java/) 
+ 3. create a Makefile.local in this readme's directory (tools/trunk/release/java/) 
             with just these two lines:
 			OLD_ICU=/xsrl/E/icu-1.0
 			NEW_ICU=/xsrl/E/icu-6.8
