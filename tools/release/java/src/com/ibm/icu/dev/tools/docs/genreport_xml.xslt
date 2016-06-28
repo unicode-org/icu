@@ -2,6 +2,8 @@
 <!--
 /*
 *******************************************************************************
+* Copyright (C) 2016 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
 * Copyright (C) 2008-2010, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
@@ -23,7 +25,8 @@
 
   <xsl:template match="/">
     <xsl:comment>
-      Copyright (C)  <xsl:value-of select="$ourYear" />, International Business Machines Corporation, All Rights Reserved. 
+      Copyright (C)  <xsl:value-of select="$ourYear" />: Unicode, Inc. and others.
+      License &amp; terms of use: http://www.unicode.org/copyright.html
     </xsl:comment>
     <changeReport>
       <identity>
