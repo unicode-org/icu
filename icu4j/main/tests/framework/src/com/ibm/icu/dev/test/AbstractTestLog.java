@@ -12,9 +12,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.ibm.icu.util.VersionInfo;
-
 import org.junit.Assert;
+
+import com.ibm.icu.util.VersionInfo;
 
 public abstract class AbstractTestLog implements TestLog {
     /**

@@ -23,11 +23,11 @@ import com.ibm.icu.impl.CurrencyData.CurrencySpacingInfo;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SoftCache;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
-import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
