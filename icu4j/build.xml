@@ -198,16 +198,16 @@
     <!-- Junit Targets -->
     <macrodef name="icu-junit">
         <attribute name="testdir"/>
-           <attribute name="output"/>
-           <attribute name="jvm-options" default=""/>
-           <attribute name="test-patternset" default="test-classes-patternset"/>
-           <attribute name="classpath" default="junit.icu.jars"/>
-           <attribute name="failure-status" default="ignore"/>
-           <element name="junit-parameters" optional="true"/>
-           <sequential>
-               <!--set the property - if it was set before it won't override-->
-               <property name="user-jvm-options" value=""/>
-               <property name="internal-jvm-options" value=""/>
+        <attribute name="output"/>
+        <attribute name="jvm-options" default=""/>
+        <attribute name="test-patternset" default="test-classes-patternset"/>
+        <attribute name="classpath" default="junit.icu.jars"/>
+        <attribute name="failure-status" default="ignore"/>
+        <element name="junit-parameters" optional="true"/>
+        <sequential>
+            <!--set the property - if it was set before it won't override-->
+            <property name="user-jvm-options" value=""/>
+            <property name="internal-jvm-options" value=""/>
             <delete dir="${junit.out.dir}/@{output}"/>
             <mkdir  dir="${junit.out.dir}/@{output}"/>
 
@@ -231,7 +231,6 @@
                         <patternset refid="@{test-patternset}"/>
                     </fileset>
                 </batchtest>
-
             </junit>
 
             <junitreport tofile="@{output}-TestSuite.xml" todir="${junit.out.dir}/@{output}">
@@ -1003,20 +1002,76 @@
         <delete dir="${jacoco.out.dir}"/>
         <mkdir dir="${jacoco.out.dir}"/>
 
+        <!-- core -->
         <jacoco:coverage destfile="${jacoco.exec.data.file}">
-            <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-                <jvmarg line="${jvm_options} -ea -Djava.awt.headless=true"/>
+            <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="no">
+                <jvmarg value="-ea"/>
+                <jvmarg value="-Djava.awt.headless=true"/>
                 <classpath>
-                    <pathelement location="${icu4j.jar.file}"/>
-                    <pathelement location="${icu4j-charset.jar.file}"/>
-                    <pathelement location="${icu4j.test-framework.jar}"/>
-                    <pathelement location="${icu4j.core-tests.jar}"/>
-                    <pathelement location="${icu4j.collate-tests.jar}"/>
-                    <pathelement location="${icu4j.charset-tests.jar}"/>
-                    <pathelement location="${icu4j.translit-tests.jar}"/>
-                    <pathelement location="${icu4j.testall.jar}"/>
-            </classpath>
-        </java>
+                    <path refid="junit.jars"/>
+                    <path refid="junit.icu.jars"/>
+                </classpath>
+
+                <batchtest todir="${junit.out.dir}/core">
+                    <fileset dir="${icu4j.core-tests.dir}/${bin.dir}">
+                        <patternset refid="test-classes-patternset"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+        </jacoco:coverage>
+
+        <!-- charset -->
+        <jacoco:coverage destfile="${jacoco.exec.data.file}">
+            <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="no">
+                <jvmarg value="-ea"/>
+                <jvmarg value="-Djava.awt.headless=true"/>
+                <classpath>
+                    <path refid="junit.jars"/>
+                    <path refid="junit.icu.jars"/>
+                </classpath>
+
+                <batchtest todir="${junit.out.dir}/charset">
+                    <fileset dir="${icu4j.charset-tests.dir}/${bin.dir}">
+                        <patternset refid="test-classes-patternset"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+        </jacoco:coverage>
+
+        <!-- collate -->
+        <jacoco:coverage destfile="${jacoco.exec.data.file}">
+            <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="no">
+                <jvmarg value="-ea"/>
+                <jvmarg value="-Djava.awt.headless=true"/>
+                <classpath>
+                    <path refid="junit.jars"/>
+                    <path refid="junit.icu.jars"/>
+                </classpath>
+
+                <batchtest todir="${junit.out.dir}/collate">
+                    <fileset dir="${icu4j.collate-tests.dir}/${bin.dir}">
+                        <patternset refid="test-classes-patternset"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+        </jacoco:coverage>
+
+        <!-- translit -->
+        <jacoco:coverage destfile="${jacoco.exec.data.file}">
+            <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="no">
+                <jvmarg value="-ea"/>
+                <jvmarg value="-Djava.awt.headless=true"/>
+                <classpath>
+                    <path refid="junit.jars"/>
+                    <path refid="junit.icu.jars"/>
+                </classpath>
+
+                <batchtest todir="${junit.out.dir}/translit">
+                    <fileset dir="${icu4j.translit-tests.dir}/${bin.dir}">
+                        <patternset refid="test-classes-patternset"/>
+                    </fileset>
+                </batchtest>
+            </junit>
         </jacoco:coverage>
 
         <jacoco:report>
