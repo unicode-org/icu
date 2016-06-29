@@ -23,8 +23,8 @@ import java.util.Set;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Pair;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * A unit such as length, mass, volume, currency, etc.  A unit is

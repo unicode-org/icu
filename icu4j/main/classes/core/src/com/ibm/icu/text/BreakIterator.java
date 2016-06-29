@@ -14,8 +14,8 @@ import java.text.StringCharacterIterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.CacheValue;
+import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ULocale;
 
