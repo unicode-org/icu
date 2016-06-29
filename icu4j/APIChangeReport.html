@@ -2,130 +2,125 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4J API Comparison: ICU4J 56.1 with ICU4J 57.1</title>
-<!-- Copyright 2016, IBM, All Rights Reserved. -->
+<!-- © 2016 and later: Unicode, Inc. and others. -->
+<!-- License & terms of use: http://www.unicode.org/copyright.html#License -->
+<title>ICU4J API Comparison: ICU4J 57.1 with ICU4J 58.0.1</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 56.1 with ICU4J 57.1</h1>
+<h1>ICU4J API Comparison: ICU4J 57.1 with ICU4J 58.0.1</h1>
 
 <hr/>
-<h2>Removed from ICU4J 56.1</h2>
+<h2>Removed from ICU4J 57.1</h2>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-DateFormat
+ChineseDateFormatSymbols
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final int TIME_SEPARATOR</li>
-</ul>
-DateFormat.Field
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final DateFormat.Field TIME_SEPARATOR</li>
-</ul>
-DateFormatSymbols
-<ul>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getTimeSeparatorString</i>()</li>
-<li><span style='color:orange'>(draft)</span> public void <i>setTimeSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:gray'>(deprecated)</span> protected void <i>initializeData</i>(ULocale, CalendarData)</li>
 </ul>
 </ul>
 
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 57.1</h2>
+<h2>Deprecated or Obsoleted in ICU4J 58.0.1</h2>
 <p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 57.1 (old, new)</h2>
+<h2>Changed in ICU4J 58.0.1 (old, new)</h2>
 <p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 57.1</h2>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-<li><span style='color:green'>(stable)</span> public static class <i>LocaleDisplayNames.UiListItem</i></li>
-<li><span style='color:green'>(stable)</span> public final class <i>ScientificNumberFormatter</i></li>
-LocaleDisplayNames
-<ul>
-<li><span style='color:green'>(stable)</span> public java.util.List&lt;LocaleDisplayNames.UiListItem&gt; <i>getUiList</i>(java.util.Set&lt;ULocale&gt;, boolean, java.util.Comparator&lt;java.lang.Object&gt;)</li>
-<li><span style='color:green'>(stable)</span> public abstract java.util.List&lt;LocaleDisplayNames.UiListItem&gt; <i>getUiListCompareWholeItems</i>(java.util.Set&lt;ULocale&gt;, java.util.Comparator&lt;LocaleDisplayNames.UiListItem&gt;)</li>
-</ul>
-MeasureFormat
-<ul>
-<li><span style='color:green'>(stable)</span> public java.lang.StringBuilder <i>formatMeasurePerUnit</i>(Measure, MeasureUnit, java.lang.StringBuilder, java.text.FieldPosition)</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-IslamicCalendar
-<ul>
-<li><span style='color:green'>(stable)</span> public IslamicCalendar.CalculationType <i>getCalculationType</i>()</li>
-<li><span style='color:green'>(stable)</span> public void <i>setCalculationType</i>(IslamicCalendar.CalculationType)</li>
-</ul>
-</ul>
-
+<h2>Promoted to stable in ICU4J 58.0.1</h2>
+<p>(no API promoted to stable)</p>
 
 <hr/>
-<h2>Added in ICU4J 57.1</h2>
+<h2>Added in ICU4J 58.0.1</h2>
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
-UProperty
+UCharacter.GraphemeClusterBreak
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final int EMOJI</li>
-<li><span style='color:orange'>(draft)</span> public static final int EMOJI_MODIFIER</li>
-<li><span style='color:orange'>(draft)</span> public static final int EMOJI_MODIFIER_BASE</li>
-<li><span style='color:orange'>(draft)</span> public static final int EMOJI_PRESENTATION</li>
+<li><span style='color:green'>(stable)</span> public static final int E_BASE</li>
+<li><span style='color:green'>(stable)</span> public static final int E_BASE_GAZ</li>
+<li><span style='color:green'>(stable)</span> public static final int E_MODIFIER</li>
+<li><span style='color:green'>(stable)</span> public static final int GLUE_AFTER_ZWJ</li>
+<li><span style='color:green'>(stable)</span> public static final int ZWJ</li>
+</ul>
+UCharacter.JoiningGroup
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int AFRICAN_FEH</li>
+<li><span style='color:green'>(stable)</span> public static final int AFRICAN_NOON</li>
+<li><span style='color:green'>(stable)</span> public static final int AFRICAN_QAF</li>
+</ul>
+UCharacter.LineBreak
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int E_BASE</li>
+<li><span style='color:green'>(stable)</span> public static final int E_MODIFIER</li>
+<li><span style='color:green'>(stable)</span> public static final int ZWJ</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock ADLAM</li>
+<li><span style='color:green'>(stable)</span> public static final int ADLAM_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock BHAIKSUKI</li>
+<li><span style='color:green'>(stable)</span> public static final int BHAIKSUKI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock CYRILLIC_EXTENDED_C</li>
+<li><span style='color:green'>(stable)</span> public static final int CYRILLIC_EXTENDED_C_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock GLAGOLITIC_SUPPLEMENT</li>
+<li><span style='color:green'>(stable)</span> public static final int GLAGOLITIC_SUPPLEMENT_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION</li>
+<li><span style='color:green'>(stable)</span> public static final int IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MARCHEN</li>
+<li><span style='color:green'>(stable)</span> public static final int MARCHEN_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MONGOLIAN_SUPPLEMENT</li>
+<li><span style='color:green'>(stable)</span> public static final int MONGOLIAN_SUPPLEMENT_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock NEWA</li>
+<li><span style='color:green'>(stable)</span> public static final int NEWA_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock OSAGE</li>
+<li><span style='color:green'>(stable)</span> public static final int OSAGE_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock TANGUT</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock TANGUT_COMPONENTS</li>
+<li><span style='color:green'>(stable)</span> public static final int TANGUT_COMPONENTS_ID</li>
+<li><span style='color:green'>(stable)</span> public static final int TANGUT_ID</li>
+</ul>
+UCharacter.WordBreak
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int E_BASE</li>
+<li><span style='color:green'>(stable)</span> public static final int E_BASE_GAZ</li>
+<li><span style='color:green'>(stable)</span> public static final int E_MODIFIER</li>
+<li><span style='color:green'>(stable)</span> public static final int GLUE_AFTER_ZWJ</li>
+<li><span style='color:green'>(stable)</span> public static final int ZWJ</li>
+</ul>
+UScript
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int ADLAM</li>
+<li><span style='color:green'>(stable)</span> public static final int BHAIKSUKI</li>
+<li><span style='color:green'>(stable)</span> public static final int HAN_WITH_BOPOMOFO</li>
+<li><span style='color:green'>(stable)</span> public static final int JAMO</li>
+<li><span style='color:green'>(stable)</span> public static final int MARCHEN</li>
+<li><span style='color:green'>(stable)</span> public static final int NEWA</li>
+<li><span style='color:green'>(stable)</span> public static final int OSAGE</li>
+<li><span style='color:green'>(stable)</span> public static final int SYMBOLS_EMOJI</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-<li><span style='color:orange'>(draft)</span> public final class <i>SimpleFormatter</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>RelativeDateTimeFormatter.RelativeDateTimeUnit</i></li>
-DateFormat.Field
+ChineseDateFormatSymbols
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final DateFormat.Field AM_PM_MIDNIGHT_NOON</li>
-<li><span style='color:orange'>(draft)</span> public static final DateFormat.Field FLEXIBLE_DAY_PERIOD</li>
-</ul>
-RelativeDateTimeFormatter
-<ul>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>format</i>(double, RelativeDateTimeFormatter.RelativeDateTimeUnit)</li>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>formatNumeric</i>(double, RelativeDateTimeFormatter.RelativeDateTimeUnit)</li>
-</ul>
-RelativeDateTimeFormatter.RelativeDateTimeUnit
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit DAY</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit FRIDAY</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit HOUR</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MINUTE</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MONDAY</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MONTH</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit QUARTER</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SATURDAY</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SECOND</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SUNDAY</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit THURSDAY</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit TUESDAY</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit WEDNESDAY</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit WEEK</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit YEAR</li>
+<li><span style='color:gray'>(deprecated)</span> protected void <i>initializeData</i>(ULocale, ICUResourceBundle, java.lang.String)</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-MeasureUnit
+VersionInfo
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit GALLON_IMPERIAL</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit MILE_PER_GALLON_IMPERIAL</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit MILLIGRAM_PER_DECILITER</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit MILLIMOLE_PER_LITER</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PART_PER_MILLION</li>
+<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_9_0</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Mar 07 18:43:09 EST 2016<br/>Copyright (C) 2016, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Jun 29 12:47:00 EDT 2016<br/>© 2016 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
 </body>
 </html>
