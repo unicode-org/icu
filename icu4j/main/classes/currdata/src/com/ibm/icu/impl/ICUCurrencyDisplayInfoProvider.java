@@ -29,14 +29,15 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
     public ICUCurrencyDisplayInfoProvider() {
     }
 
+    @Override
     public CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback) {
         ICUResourceBundle rb;
         if (withFallback) {
-            rb = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
+            rb = ICUResourceBundle.getBundleInstance(
                     ICUData.ICU_CURR_BASE_NAME, locale, OpenType.LOCALE_DEFAULT_ROOT);
         } else {
             try {
-                rb = (ICUResourceBundle) ICUResourceBundle.getBundleInstance(
+                rb = ICUResourceBundle.getBundleInstance(
                         ICUData.ICU_CURR_BASE_NAME, locale, OpenType.LOCALE_ONLY);
             } catch (MissingResourceException e) {
                 return null;
@@ -45,6 +46,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
         return new ICUCurrencyDisplayInfo(rb, withFallback);
     }
 
+    @Override
     public boolean hasData() {
         return true;
     }
