@@ -333,7 +333,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             errln("FAIL: Buddhist calendar is not returned for locale " + cal.toString());
         }
     }
-    
+
     /**
      * Verify that TaiwanCalendar shifts years to Minguo Era but otherwise
      * behaves like GregorianCalendar.
@@ -954,6 +954,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
              */
             private static final long serialVersionUID = -4558903444622684759L;
 
+            @Override
             protected int handleGetLimit(int field, int limitType) {
                 if (limitType == Calendar.LEAST_MAXIMUM) {
                     return 1;
@@ -962,6 +963,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 }
                return -1;
             }
+            @Override
             protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
                 if (useMonth) {
                     return eyear * 365 + month * 31;
@@ -969,6 +971,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                     return eyear * 365;
                 }
             }
+            @Override
             protected int handleGetExtendedYear() {return 2017;}
 
             public void run(){
@@ -990,18 +993,18 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 // Tests for complete coverage of Calendar functions.
                 int julianDay = Calendar.millisToJulianDay(millis - 1);
                 assertEquals("Julian max day -1", julianDay, Calendar.MAX_JULIAN - 1);
-                              
+
                 DateFormat df1 = handleGetDateFormat("GG yyyy-d:MM", "option=xyz", Locale.getDefault());
                 if (!df1.equals(handleGetDateFormat("GG yyyy-d:MM", "option=xyz", ULocale.getDefault()))){
-                    errln ("Calendar.handleGetDateFormat(String, Locale) should delegate to ( ,ULocale)");                  
+                    errln ("Calendar.handleGetDateFormat(String, Locale) should delegate to ( ,ULocale)");
                 }
-   
+
                 // Prove that the local overrides are used.
                 int leastMsInDay = handleGetLimit(Calendar.MILLISECONDS_IN_DAY, Calendar.LEAST_MAXIMUM);
                 assertEquals("getLimit test 1", leastMsInDay, 1);
                 int maxMsInDay = handleGetLimit(Calendar.WEEK_OF_MONTH, Calendar.GREATEST_MINIMUM);
                 assertEquals("getLimit test 2", 7, maxMsInDay);
-                
+
                 int febLeapLength = handleGetMonthLength(2020, Calendar.FEBRUARY);
                 assertEquals("handleMonthLength", 31, febLeapLength);
                 int exYear = handleGetExtendedYear();
@@ -1029,14 +1032,14 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         ULocale loc = new ULocale("en_US");
 
         // !!! Shouldn't we have an api like this?
-        // !!! Question: should this reflect those actually available in this copy of ICU, or 
+        // !!! Question: should this reflect those actually available in this copy of ICU, or
         // the list of types we assume is available?
         // String[] calTypes = Calendar.getAvailableTypes();
         final String[] calTypes = {
-            "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
+            "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew",
             "islamic", "islamic-civil", "japanese", "roc"
         };
-        
+
         // constructing a DateFormat with a locale indicating a calendar type should construct a
         // date format appropriate to that calendar
         final Date time = new Date();
@@ -1059,14 +1062,14 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         // dateFormat.setCalendar should throw exception if wrong format for calendar
         if (false) {
-            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL, 
-                                                           DateFormat.FULL, 
+            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL,
                                                            new ULocale("en_US@calendar=chinese"));
 
             logln("dateformat type: " + df.getClass().getName());
 
             Calendar cal = Calendar.getInstance(new ULocale("en_US@calendar=chinese"));
-                                                
+
             logln("calendar type: " + cal.getClass().getName());
         }
     }
@@ -1199,10 +1202,12 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             cal.set(Calendar.MILLISECOND, ms);
         }
 
+        @Override
         public String toString() {
             return String.format("%04d-%02d-%02d %02d:%02d:%02d.%03d", year, month, day, hour, min, sec, ms);
         }
 
+        @Override
         public boolean equals(Object other) {
             if (other instanceof CalFields) {
                 CalFields otr = (CalFields)other;
@@ -1216,7 +1221,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             }
             return false;
         }
- 
+
         boolean isEquivalentTo(Calendar cal) {
             return year == cal.get(Calendar.YEAR)
                     && month == cal.get(Calendar.MONTH) + 1
@@ -1602,7 +1607,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             String calType = ucalTest.getType();
             boolean era0YearsGoBackwards = (calType.equals("gregorian") || calType.equals("roc") || calType.equals("coptic"));
             int yrBefore, yrAfter, yrMax, eraAfter, eraMax, eraNow;
-            
+
             ucalTest.clear();
             ucalTest.set(Calendar.YEAR, 2);
             ucalTest.set(Calendar.ERA, 0);
@@ -1670,7 +1675,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 if ( yrAfter<yrBefore ) {
                     errln("Fail: era 1 add 1 year does not move forward in time for " + localeID);
                 }
-    
+
                 ucalTest.clear();
                 ucalTest.set(Calendar.YEAR, 2);
                 ucalTest.set(Calendar.ERA, 1);
@@ -1707,7 +1712,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                                 + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
                     }
                 }
-                
+
                 // if current era  > 1, try the same roll tests for current era
                 ucalTest.setTime(new Date());
                 eraNow = ucalTest.get(Calendar.ERA);
@@ -1957,14 +1962,16 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             }
         }
     }
-    
+
     public void TestSimpleDateFormatCoverage() {
 
         class StubSimpleDateFormat extends SimpleDateFormat {
+            private static final long serialVersionUID = 1L;
+
             public StubSimpleDateFormat(String pattern, Locale loc) {
                 new SimpleDateFormat(pattern, loc);
             }
-            
+
             public void run(){
                 Calendar cal = Calendar.getInstance(Locale.US);
                 cal.clear();
@@ -1973,17 +1980,17 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 DateFormatSymbols theseSymbols = this.getSymbols();
                 String shouldBeMonday = theseSymbols.getWeekdays()[Calendar.MONDAY];
                 assertEquals("Should be Monday", "Monday", shouldBeMonday);
-                
+
                 String [] matchData = {"16", "2016", "2016AD", "Monday", "lunes"};
                 int matchIndex =  matchString("Monday March 28, 2016", 0, Calendar.DAY_OF_WEEK, matchData, cal);
                 assertEquals("matchData for Monday", 6, matchIndex); // Position of the pointer after the matched string.
                 matchIndex =  matchString("Monday March 28, 2016 AD", 17, Calendar.YEAR, matchData, cal);
                 assertEquals("matchData for 2016", 21, matchIndex); // Position of the pointer after the matched string.
-      
+
                 char ch = 'y';
                 int count = 4;
                 int beginOffset = 0;
-                cal.set(Calendar.YEAR, 2000);  // Reset this 
+                cal.set(Calendar.YEAR, 2000);  // Reset this
                 assertEquals("calendar year reset", 2000, cal.get(Calendar.YEAR));
                 FieldPosition pos = new FieldPosition(java.text.DateFormat.YEAR_FIELD);
                 String subFormatResult = subFormat(ch, count, beginOffset,

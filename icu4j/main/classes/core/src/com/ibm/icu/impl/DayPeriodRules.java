@@ -287,7 +287,7 @@ public final class DayPeriodRules {
 
     private static DayPeriodRulesData loadData() {
         DayPeriodRulesData data = new DayPeriodRulesData();
-        ICUResourceBundle rb = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(
+        ICUResourceBundle rb = ICUResourceBundle.getBundleInstance(
                 ICUData.ICU_BASE_NAME,
                 "dayPeriods",
                 ICUResourceBundle.ICU_DATA_CLASS_LOADER,

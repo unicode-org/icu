@@ -33,11 +33,13 @@ import com.ibm.icu.util.ULocale;
  */
 final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim {
 
+    @Override
     public Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
         iter.setText(new java.text.StringCharacterIterator(""));
         return service.registerObject(iter, locale, kind);
     }
 
+    @Override
     public boolean unregister(Object key) {
         if (service.isDefault()) {
             return false;
@@ -45,6 +47,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         return service.unregisterFactory((Factory)key);
     }
 
+    @Override
     public Locale[] getAvailableLocales() {
         if (service == null) {
             return ICUResourceBundle.getAvailableLocales();
@@ -53,6 +56,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         }
     }
 
+    @Override
     public ULocale[] getAvailableULocales() {
         if (service == null) {
             return ICUResourceBundle.getAvailableULocales();
@@ -61,6 +65,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         }
     }
 
+    @Override
     public BreakIterator createBreakIterator(ULocale locale, int kind) {
     // TODO: convert to ULocale when service switches over
         if (service.isDefault()) {
@@ -77,6 +82,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             super("BreakIterator");
 
             class RBBreakIteratorFactory extends ICUResourceBundleFactory {
+                @Override
                 protected Object handleCreate(ULocale loc, int kind, ICUService srvc) {
                     return createBreakInstance(loc, kind);
                 }
@@ -115,7 +121,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     private static BreakIterator createBreakInstance(ULocale locale, int kind) {
 
         RuleBasedBreakIterator    iter = null;
-        ICUResourceBundle rb           = (ICUResourceBundle)ICUResourceBundle.
+        ICUResourceBundle rb           = ICUResourceBundle.
                 getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME, locale,
                         ICUResourceBundle.OpenType.LOCALE_ROOT);
 
