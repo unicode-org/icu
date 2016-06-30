@@ -1061,9 +1061,9 @@ public class NumberFormatTest extends TestFmwk {
                 // test locale without currency information 
                 {"root", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, 
                 {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers 
-                {"root@numbers=arab", "-1.23", "USD", "\u200F-US$ ١٫٢٣", "\u200F-USD ١٫٢٣", "\u200F-١٫٢٣ USD"}, // ensure that the root locale is still used with modifiers 
+                {"root@numbers=arab", "-1.23", "USD", "\u200F-\u0661\u066B\u0662\u0663\u00A0US$", "\u200F-\u0661\u066B\u0662\u0663\u00A0USD", "\u200F-\u0661\u066B\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
                 {"es_AR", "1", "INR", "INR\u00A01,00", "INR\u00A01,00", "1,00 rupia india"}, 
-                {"ar_EG", "1", "USD", "US$ ١٫٠٠", "USD ١٫٠٠", "١٫٠٠ دولار أمريكي"}, 
+                {"ar_EG", "1", "USD", "١٫٠٠\u00A0US$", "١٫٠٠\u00A0USD", "١٫٠٠ دولار أمريكي"}, 
         };
 
         for (int i=0; i<DATA.length; ++i) {
@@ -1091,7 +1091,7 @@ public class NumberFormatTest extends TestFmwk {
                 // using 'k' currency style.
                 String formatResult = DATA[i][resultDataIndex];
                 if (!strBuf.equals(formatResult)) {
-                    errln("FAIL: Expected " + formatResult + " actual: " + strBuf);
+                    errln("FAIL: localeID: " + localeString + ", expected(" + formatResult.length() + "): \"" + formatResult + "\", actual(" + strBuf.length() + "): \"" + strBuf + "\"");
                 }
                 try {
                     // test parsing, and test parsing for all currency formats.
@@ -1193,7 +1193,7 @@ public class NumberFormatTest extends TestFmwk {
                 new ParseCurrencyItem( "en_GB", "euros4",   "4,00\u00A0\u20AC", 0,  0,  0,  0,  ""    ),
                 new ParseCurrencyItem( "en_GB", "euros6",   "6\u00A0\u20AC",    0,  0,  0,  0,  ""    ),
                 new ParseCurrencyItem( "en_GB", "euros8",   "\u20AC8",          0,  0,  2,  8,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "dollars4", "$4",               0,  0,  2,  4,  "USD" ),
+                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  4,  4,  "USD" ),
 
                 new ParseCurrencyItem( "fr_FR", "euros4",   "4,00\u00A0\u20AC", 6,  4,  6,  4,  "EUR" ),
                 new ParseCurrencyItem( "fr_FR", "euros6",   "6\u00A0\u20AC",    3,  6,  3,  6,  "EUR" ),

@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 // Copyright (C) 2015-2016, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //
@@ -202,7 +204,7 @@ begin
 format	output	breaks
 // min grouping digits not supported in any existing implementation
 // but could be easily added to the new DecimalFormat C code.
-1000	1000	CJK
+1000	1000	JK
 10000	10,000
 100000	100,000
 1000000	1,000,000
@@ -359,7 +361,7 @@ output	grouping	breaks	grouping2	minGroupingDigits
 1,23,45,6789	4	K	2
 1,23,45,6789	4	K	2	2
 123,456789	6	K	6	3
-123456789	6	CJK	6	4
+123456789	6	JK	6	4
 
 test multiplier setters
 set locale en_US
@@ -531,12 +533,14 @@ NaN	afterPrefix	    NaN	K
 NaN	beforeSuffix	NaN    	K
 NaN	afterSuffix	NaN    	K
 
-test apply localized patterns
+test apply formerly localized patterns
 begin
-locale	localizedPattern	format	output	breaks
-en	0%	0.4376	44%
+// documentation says localizedPattern is not supported, change to pattern
+locale	pattern	format	output	breaks
+en	#0%	0.4376	44%
 // This next test breaks JDK. JDK doesn't multiply by 100.
-fa	\u06f0\u066a	0.4376	\u06f4\u06f4\u066a	K
+// It also is now broken in ICU4J until #10368 is fixed.
+fa	\u0025\u00a0\u0023\u0030	0.4376	\u200e\u066a\u00a0\u06f4\u06f4	JK
 
 test toPattern
 set locale en

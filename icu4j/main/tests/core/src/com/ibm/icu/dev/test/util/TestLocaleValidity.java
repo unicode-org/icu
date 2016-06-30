@@ -237,6 +237,8 @@ public class TestLocaleValidity extends TestFmwk {
         int count = 0;
         LocaleValidityChecker localeValidityChecker = new LocaleValidityChecker(datasubtypes);
         for (String[] test : tests) {
+            if (test[1].endsWith("-va-posix") && logKnownIssue("12615","Validity check wrong for -va-posix?"))
+                continue;
             check(++count, localeValidityChecker, test[0], test[1], keys);
         }
     }
