@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/lt.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 lt{
     Keys{
         calendar{"kalendorius"}
@@ -15,7 +7,6 @@ lt{
         colBackwards{"Atvirkštinis rikiavimas"}
         colCaseFirst{"Didžiųjų / mažųjų raidžių tvarka"}
         colCaseLevel{"Rikiavimas skiriant didžiąsias ir mažąsias raides"}
-        colHiraganaQuaternary{"Rikiavimas pagal kanos ženklus"}
         colNormalization{"Normalizuotas rikiavimas"}
         colNumeric{"Skaitinis rikiavimas"}
         colStrength{"Rikiavimo intensyvumas"}
@@ -27,7 +18,6 @@ lt{
         numbers{"skaičiai"}
         timezone{"Laiko juosta"}
         va{"Lokalės variantas"}
-        variableTop{"Rikiavimas simbolių principu"}
         x{"Naudoti privačiai"}
     }
     Languages{
@@ -706,6 +696,7 @@ lt{
         Hung{"senasis vengrų"}
         Inds{"indus"}
         Ital{"senasis italų"}
+        Jamo{"Jamo simboliai"}
         Java{"javiečių"}
         Jpan{"japonų"}
         Jurc{"Jurchen"}
@@ -860,10 +851,6 @@ lt{
             no{"Rikiuoti neskiriant didžiųjų ir mažųjų raidžių"}
             yes{"Rikiuoti skiriant didžiąsias ir mažąsias raides"}
         }
-        colHiraganaQuaternary{
-            no{"Rikiuoti kanos ženklus atskirai"}
-            yes{"Rikiuoti kanos ženklus kitaip"}
-        }
         colNormalization{
             no{"Rikiuoti nenormalizuojant"}
             yes{"Rikiuoti normalizuojant unikodą"}
@@ -901,6 +888,11 @@ lt{
             unihan{"Šaknies ženklų ir brūkšnių rūšiavimo tvarka"}
             zhuyin{"Zhuyin rikiavimo tvarka"}
         }
+        d0{
+            fwidth{"Viso pločio"}
+            hwidth{"Vidutinio pločio"}
+            npinyin{"Skaitinis"}
+        }
         hc{
             h11{"12 valandų sistema (0–11)"}
             h12{"12 valandų sistema (1–12)"}
@@ -911,6 +903,10 @@ lt{
             loose{"laisvas teksto laužymo stilius"}
             normal{"įprastas teksto laužymo stilius"}
             strict{"griežtas teksto laužymo stilius"}
+        }
+        m0{
+            bgn{"BGN simboliai"}
+            ungegn{"UNGEGN simboliai"}
         }
         ms{
             metric{"metrinė sistema"}
@@ -1015,7 +1011,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}

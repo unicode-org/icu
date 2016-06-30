@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zu.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 zu{
     Keys{
         calendar{"Ikhalenda"}
@@ -15,7 +7,6 @@ zu{
         colBackwards{"Ukuhlelwa Kwendlela Yokubiza Okuhlehlisiwe"}
         colCaseFirst{"Ukuhlelwa Ngokwezinhlamvu Ezinkulu/Ezincane"}
         colCaseLevel{"Ukuhlelwa Okuncike Ezinkinobhweni"}
-        colHiraganaQuaternary{"Ukuhlela ngokwe-Kana"}
         colNormalization{"Ukuhlelwa Okulinganisiwe"}
         colNumeric{"Ukuhlelwa Ngezinombolo"}
         colStrength{"Amandla Okuhlelwa"}
@@ -27,7 +18,6 @@ zu{
         numbers{"Izinombolo"}
         timezone{"Izoni yesikhathi:"}
         va{"Okokwehlukanisa Kwasendaweni"}
-        variableTop{"Hlela Njengezimpawu"}
         x{"i-Private-Use"}
     }
     Languages{
@@ -315,6 +305,7 @@ zu{
         Hant{"okosiko"}
         Hebr{"i-Hebrew"}
         Hira{"i-Hiragana"}
+        Jamo{"i-Jamo"}
         Jpan{"i-Japanese"}
         Kana{"i-Katakana"}
         Khmr{"i-Khmer"}
@@ -379,10 +370,6 @@ zu{
             no{"Hlela Okungancikile Ezinkinobhweni"}
             yes{"Hlela Okuncike Ekumeni Kwezinkinobho"}
         }
-        colHiraganaQuaternary{
-            no{"Hlela i-Kana Eceleni"}
-            yes{"Hlela i-Kana Ngendlela Ehlukile"}
-        }
         colNormalization{
             no{"Hlela Ngaphandle Kokulinganisa"}
             yes{"Ukuhlelwa Khekhodi Enye Kulinganisiwe"}
@@ -414,6 +401,11 @@ zu{
             traditional{"Ukuhlunga ngokisiko"}
             unihan{"Ukuhlunga kwe-Radical-Stroke"}
         }
+        d0{
+            fwidth{"i-Fullwidth"}
+            hwidth{"Ubude obuhhafu"}
+            npinyin{"Okwezinombolo"}
+        }
         hc{
             h11{"isistimu yamahora angu-12 (0-11)"}
             h12{"isistimu yamahora angu-12 (1-12)"}
@@ -424,6 +416,10 @@ zu{
             loose{"i-Line Break Style exegayo"}
             normal{"i-Line Break Style ekahle"}
             strict{"i-Line Break Style enomthetho oqinile"}
+        }
+        m0{
+            bgn{"I-BGN"}
+            ungegn{"I-UNGEGN"}
         }
         ms{
             metric{"isistimu ye-Metric"}
@@ -473,7 +469,7 @@ zu{
             vaii{"Izinhlazu Zezinombolo ze-Vai"}
         }
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/nb.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 nb{
     AuxExemplarCharacters{"[á ǎ ã č ç đ è ê í ń ñ ŋ š ŧ ú ü ž ä ö]"}
     Ellipsis{
@@ -240,7 +232,7 @@ nb{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.23.79"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             availableFormats{
@@ -2944,17 +2936,5 @@ nb{
         UK{"engelsk"}
         US{"amerikansk"}
         metric{"metrisk"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Numerisk"}
-        Tone{"Tonespråk"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Aksenter"}
-        x-Fullwidth{"Full bredde"}
-        x-Halfwidth{"Halv bredde"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"For publisering"}
     }
 }

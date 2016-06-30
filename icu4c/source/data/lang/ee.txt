@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ee.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ee{
     Keys{
         calendar{"kalenda"}
@@ -307,7 +299,7 @@ ee{
             tibt{"tibet digitwo"}
         }
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.25.97"}
     codePatterns{
         language{"gbegbɔgblɔ {0}"}
         script{"gbeŋɔŋlɔ {0}"}

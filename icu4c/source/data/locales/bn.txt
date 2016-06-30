@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/bn.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 bn{
     AuxExemplarCharacters{"[\u200C\u200D ৲ ৳ ৴ ৵ ৶ ৷ ৸ ৹ ৰ ৱ]"}
     Ellipsis{
@@ -219,7 +211,7 @@ bn{
         minimumGroupingDigits{"1"}
         native{"beng"}
     }
-    Version{"2.1.23.6"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1490,17 +1482,5 @@ bn{
         UK{"ইউকে"}
         US{"ইউ এস"}
         metric{"মেট্রিক"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"সাংখিক"}
-        Tone{"স্বরভঙ্গি"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"অ্যাসেন্টস"}
-        x-Fullwidth{"পূর্ণচওড়া"}
-        x-Halfwidth{"অর্ধচওড়া"}
-        x-Jamo{"জ্যামো"}
-        x-Pinyin{"পিনইন"}
-        x-Publishing{"প্রকাশনা"}
     }
 }

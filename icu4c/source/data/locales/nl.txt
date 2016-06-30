@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/nl.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 nl{
     AuxExemplarCharacters{"[à â å ã æ ç è ê î ñ ô ø œ ù û ÿ]"}
     Ellipsis{
@@ -214,7 +206,7 @@ nl{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.23.81"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2954,17 +2946,5 @@ nl{
         UK{"Brits"}
         US{"Amerikaans"}
         metric{"metriek"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Numeriek"}
-        Tone{"Toon"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Accenten"}
-        x-Fullwidth{"Volledige breedte"}
-        x-Halfwidth{"Halve breedte"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Publicatie"}
     }
 }

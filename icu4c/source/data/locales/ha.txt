@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ha.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ha{
     AuxExemplarCharacters{"[á à â é è ê í ì î ó ò ô p q {r\u0303} ú ù û v x ƴ]"}
     ExemplarCharacters{"[a b ɓ c d ɗ e f g h i j k ƙ l m n o r s {sh} t {ts} u w y {ʼy} z ʼ]"}
@@ -26,7 +18,7 @@ ha{
             }
         }
     }
-    Version{"2.1.21.28"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

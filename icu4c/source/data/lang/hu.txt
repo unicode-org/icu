@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/hu.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 hu{
     Keys{
         calendar{"Naptár"}
@@ -15,7 +7,6 @@ hu{
         colBackwards{"Ékezetek fordított rendezése"}
         colCaseFirst{"Rendezés nagy- vagy kisbetűk szerint"}
         colCaseLevel{"Kisbetű-nagybetű érzékeny rendezés"}
-        colHiraganaQuaternary{"Kanák szerinti rendezés"}
         colNormalization{"Normalizált rendezés"}
         colNumeric{"Numerikus rendezés"}
         colStrength{"Rendezés erőssége"}
@@ -27,7 +18,6 @@ hu{
         numbers{"Számok"}
         timezone{"Időzóna"}
         va{"Földrajzi helyvariáns"}
-        variableTop{"Rendezés szimbólumok szerint"}
         x{"Privát használatra"}
     }
     Languages{
@@ -606,6 +596,7 @@ hu{
         Hung{"Ómagyar"}
         Inds{"Indus"}
         Ital{"Régi olasz"}
+        Jamo{"Jamo"}
         Java{"Jávai"}
         Jpan{"Japán"}
         Kali{"Kajah li"}
@@ -731,10 +722,6 @@ hu{
             no{"Kis- és nagybetűket meg nem különböztető rendezés"}
             yes{"Rendezés kisbetű-nagybetű szerint"}
         }
-        colHiraganaQuaternary{
-            no{"Kanák rendezése külön"}
-            yes{"Kanák megkülönböztető rendezése"}
-        }
         colNormalization{
             no{"Rendezés normalizálás nélkül"}
             yes{"Unicode szerinti normalizált rendezés"}
@@ -766,6 +753,11 @@ hu{
             traditional{"Hagyományos"}
             unihan{"Szótővonás rendezési sorrend"}
         }
+        d0{
+            fwidth{"Teljes szélesség"}
+            hwidth{"Fél szélesség"}
+            npinyin{"Szám"}
+        }
         hc{
             h11{"12 órás rendszer (0–11)"}
             h12{"12 órás rendszer (0–12)"}
@@ -776,6 +768,10 @@ hu{
             loose{"Tág stílusú sortörés"}
             normal{"Normál stílusú sortörés"}
             strict{"Szűk stílusú sortörés"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"Méterrendszer"}
@@ -883,7 +879,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

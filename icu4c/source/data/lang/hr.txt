@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/hr.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 hr{
     Keys{
         calendar{"kalendar"}
@@ -15,7 +7,6 @@ hr{
         colBackwards{"Obrnuto poredavanje po naglasku"}
         colCaseFirst{"Poredavanje po velikim/malim slovima"}
         colCaseLevel{"Poredavanje u skladu s veličinom slova"}
-        colHiraganaQuaternary{"Poredavanje po pismu kana"}
         colNormalization{"Normalizirano poredavanje"}
         colNumeric{"Numeričko poredavanje"}
         colStrength{"Jačina poredavanja"}
@@ -27,7 +18,6 @@ hr{
         numbers{"brojevi"}
         timezone{"Vremenska zona"}
         va{"Varijanta zemlje/jezika"}
-        variableTop{"Poredaj kao simbole"}
         x{"Privatna upotreba"}
     }
     Languages{
@@ -616,6 +606,7 @@ hr{
         Hung{"staro mađarsko pismo"}
         Inds{"indijsko pismo"}
         Ital{"staro talijansko pismo"}
+        Jamo{"Jamo"}
         Java{"javansko pismo"}
         Jpan{"japansko pismo"}
         Jurc{"jurchen pismo"}
@@ -763,10 +754,6 @@ hr{
             no{"Poredaj zanemarujući veličinu"}
             yes{"Poredaj u skladu s veličinom slova"}
         }
-        colHiraganaQuaternary{
-            no{"Poredaj pismo kana zasebno"}
-            yes{"Poredaj pismo kana drugačije"}
-        }
         colNormalization{
             no{"Poredaj bez normalizacije"}
             yes{"Poredaj unikod normalizirano"}
@@ -799,6 +786,11 @@ hr{
             unihan{"razvrstavanje prema korijenu i potezu"}
             zhuyin{"zhuyin razvrstavanje"}
         }
+        d0{
+            fwidth{"Široki"}
+            hwidth{"Uski"}
+            npinyin{"Numerički"}
+        }
         hc{
             h11{"12-satni format (0-11)"}
             h12{"12-satni format (1-12)"}
@@ -809,6 +801,10 @@ hr{
             loose{"slobodni stil prijeloma retka"}
             normal{"normalni stil prijeloma retka"}
             strict{"strogi stil prijeloma retka"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"metrički sustav"}
@@ -899,7 +895,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sg.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sg{
     AuxExemplarCharacters{"[c q x]"}
     ExemplarCharacters{"[a â ä b d e ê ë f g h i î ï j k l m n o ô ö p r s t u ù û ü v w y z]"}
@@ -23,7 +15,7 @@ sg{
             }
         }
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

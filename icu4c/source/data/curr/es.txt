@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/es.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 es{
     Currencies{
         ADP{
@@ -712,11 +704,11 @@ es{
         }
         PEN{
             "PEN",
-            "nuevo sol peruano",
+            "sol peruano",
         }
         PES{
             "PES",
-            "sol peruano",
+            "sol peruano (1863–1965)",
         }
         PGK{
             "PGK",
@@ -1851,12 +1843,12 @@ es{
             other{"intis peruanos"}
         }
         PEN{
-            one{"nuevo sol peruano"}
-            other{"nuevos soles peruanos"}
-        }
-        PES{
             one{"sol peruano"}
             other{"soles peruanos"}
+        }
+        PES{
+            one{"sol peruano (1863–1965)"}
+            other{"soles peruanos (1863–1965)"}
         }
         PGK{
             one{"kina"}
@@ -2187,5 +2179,5 @@ es{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.23.18"}
+    Version{"2.1.26.52"}
 }

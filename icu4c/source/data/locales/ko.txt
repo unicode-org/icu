@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ko.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ko{
     AuxExemplarCharacters{
         "[ᄀ-ᄒ ᅡ-ᅵ ᆨ-ᇂ 丘 串 乃 久 乖 九 乞 乫 乾 亂 亘 交 京 仇 今 介 件 价 企 伋 伎 伽 佳 佶 侃 來 侊 供 係 俓 俱 個"
@@ -198,7 +190,7 @@ ko{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             eras{
@@ -2410,17 +2402,5 @@ ko{
         UK{"영국식"}
         US{"미국식"}
         metric{"미터법"}
-    }
-    transformNames{
-        BGN{"미국 지명위원회(BGN)"}
-        Numeric{"숫자"}
-        Tone{"성조"}
-        UNGEGN{"유엔지명전문가회의(UNGEGN)"}
-        x-Accents{"악센트"}
-        x-Fullwidth{"전각"}
-        x-Halfwidth{"반각"}
-        x-Jamo{"자모"}
-        x-Pinyin{"병음"}
-        x-Publishing{"게시"}
     }
 }

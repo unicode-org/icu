@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/de_AT.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 de_AT{
     ExemplarCharactersIndex{"[A Ä B C D E F G H I J K L M N O Ö P Q R S T U Ü V W X Y Z]"}
     NumberElements{
@@ -20,7 +12,7 @@ de_AT{
             }
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.25.97"}
     calendar{
         gregorian{
             monthNames{

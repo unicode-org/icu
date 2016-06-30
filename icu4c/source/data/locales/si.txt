@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/si.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 si{
     AuxExemplarCharacters{"[\u200B\u200C\u200D ඎ ඏ ඐ ඦ ෳ]"}
     Ellipsis{
@@ -26,6 +18,10 @@ si{
     ExemplarCharactersIndex{
         "[අ ආ ඇ ඈ ඉ ඊ උ ඌ ඍ එ ඒ ඓ ඔ ඕ ඖ ක ඛ ග ඝ ඞ ඟ ච ඡ ජ ඣ ඥ ඤ ට ඨ ඩ ඪ ණ ඬ ත ථ ද ධ න"
         " ඳ ප ඵ බ භ ම ඹ ය ර ල ව ශ ෂ ස හ ළ ෆ]"
+    }
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
+        "″]"
     }
     MoreInformation{"?"}
     NumberElements{
@@ -213,7 +209,7 @@ si{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.23.84"}
+    Version{"2.1.26.76"}
     calendar{
         generic{
             DateTimePatterns{

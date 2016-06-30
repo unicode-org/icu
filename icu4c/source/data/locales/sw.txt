@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sw.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sw{
     AuxExemplarCharacters{"[c q x]"}
     Ellipsis{
@@ -206,7 +198,7 @@ sw{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1351,17 +1343,5 @@ sw{
         UK{"Uingereza"}
         US{"Marekani"}
         metric{"Mfumo wa Mita"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Ya Nambari"}
-        Tone{"Sauti"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Rangi za Kuangaza"}
-        x-Fullwidth{"Upana kamili"}
-        x-Halfwidth{"Nusu upana"}
-        x-Jamo{"Kijamo"}
-        x-Pinyin{"Kipinyin"}
-        x-Publishing{"Inachapishwa"}
     }
 }

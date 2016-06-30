@@ -1,20 +1,9 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/es_CO.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 es_CO{
     %%Parent{"es_419"}
     NumberElements{
         latn{
-            miscPatterns{
-                range{"de {0} a {1}"}
-            }
             patterns{
                 currencyFormat{"¤ #,##0.00"}
                 percentFormat{"#,##0%"}
@@ -25,7 +14,7 @@ es_CO{
             }
         }
     }
-    Version{"2.1.22.17"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

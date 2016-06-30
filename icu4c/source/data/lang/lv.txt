@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/lv.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 lv{
     Keys{
         calendar{"Kalendārs"}
@@ -15,7 +7,6 @@ lv{
         colBackwards{"Diakritisko zīmju kārtošana apgrieztā secībā"}
         colCaseFirst{"Lielo/mazo burtu kārtošana"}
         colCaseLevel{"Reģistrjutīgo rakstzīmju kārtošana"}
-        colHiraganaQuaternary{"Kana rakstzīmju kārtošana"}
         colNormalization{"Normalizētā kārtošana"}
         colNumeric{"Kārtošana skaitliskā secībā"}
         colStrength{"Kārtošanas pakāpe"}
@@ -27,7 +18,6 @@ lv{
         numbers{"Cipari"}
         timezone{"Laika josla"}
         va{"Lokalizācijas variants"}
-        variableTop{"Kārtot kā simbolus"}
         x{"Personīgai lietošanai"}
     }
     Languages{
@@ -233,7 +223,7 @@ lv{
         ilo{"iloku"}
         inh{"ingušu"}
         io{"ido"}
-        is{"īslandiešu"}
+        is{"islandiešu"}
         it{"itāļu"}
         iu{"inuītu"}
         ja{"japāņu"}
@@ -590,6 +580,7 @@ lv{
         Hrkt{"katakana vai hiragana"}
         Hung{"senungāru"}
         Ital{"vecitāļu"}
+        Jamo{"Džamo"}
         Java{"javiešu"}
         Jpan{"japāņu"}
         Kana{"katakana"}
@@ -676,10 +667,6 @@ lv{
             no{"Kārtot reģistrnejutīgas rakstzīmes"}
             yes{"Kārtot reģistrjutīgās rakstzīmes"}
         }
-        colHiraganaQuaternary{
-            no{"Kārtot kana rakstzīmes atsevišķi"}
-            yes{"Kārtot kana rakstzīmes, norādot atšķirības"}
-        }
         colNormalization{
             no{"Kārtot bez normalizēšanas"}
             yes{"Kārtot unikodu normalizējot"}
@@ -717,6 +704,11 @@ lv{
             traditional{"tradicionālā kārtošanas secība"}
             unihan{"Radikālā kārtošanas secība pēc vilkumu skaita"}
         }
+        d0{
+            fwidth{"Pilna platuma"}
+            hwidth{"Pusplatuma"}
+            npinyin{"Ciparu"}
+        }
         hc{
             h11{"12 stundu sistēma (0–11)"}
             h12{"12 stundu sistēma (1–12)"}
@@ -727,6 +719,10 @@ lv{
             loose{"Brīvais rindiņas pārtraukuma stils"}
             normal{"Parastais rindiņas pārtraukuma stils"}
             strict{"Stingrais rindiņas pārtraukuma stils"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"metriskā sistēma"}
@@ -797,7 +793,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.29"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}

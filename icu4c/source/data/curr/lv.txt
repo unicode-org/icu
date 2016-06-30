@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/lv.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 lv{
     Currencies{
         AED{
@@ -316,7 +308,7 @@ lv{
         }
         ISK{
             "ISK",
-            "Īslandes krona",
+            "Islandes krona",
         }
         ITL{
             "ITL",
@@ -1236,9 +1228,9 @@ lv{
             zero{"Irānas riāli"}
         }
         ISK{
-            one{"Īslandes krona"}
-            other{"Īslandes kronas"}
-            zero{"Īslandes kronas"}
+            one{"Islandes krona"}
+            other{"Islandes kronas"}
+            zero{"Islandes kronas"}
         }
         JMD{
             one{"Jamaikas dolārs"}
@@ -1761,5 +1753,5 @@ lv{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.29"}
 }

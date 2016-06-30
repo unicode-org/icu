@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zh_Hant.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant{
     %%Parent{"root"}
     Countries{
@@ -314,5 +306,5 @@ zh_Hant{
         FK{"福克蘭群島（馬爾維納斯群島）"}
         MK{"前南斯拉夫馬其頓共和國"}
     }
-    Version{"2.1.23.90"}
+    Version{"2.1.26.0"}
 }

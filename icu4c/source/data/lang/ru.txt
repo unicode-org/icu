@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ru.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ru{
     Keys{
         calendar{"календарь"}
@@ -15,7 +7,6 @@ ru{
         colBackwards{"Обратная сортировка по акценту"}
         colCaseFirst{"Сортировка по верхнему или нижнему регистру"}
         colCaseLevel{"Сортировка с учетом регистра"}
-        colHiraganaQuaternary{"Сортировка каны"}
         colNormalization{"Нормализованная сортировка"}
         colNumeric{"Сортировка чисел"}
         colStrength{"Эффективность сортировки"}
@@ -27,7 +18,6 @@ ru{
         numbers{"цифры"}
         timezone{"Часовой пояс"}
         va{"Вариант региональных настроек"}
-        variableTop{"Сортировать как символьный массив"}
         x{"Частное"}
     }
     Languages{
@@ -613,6 +603,7 @@ ru{
         Hung{"старовенгерская"}
         Inds{"хараппская (письменность долины Инда)"}
         Ital{"староитальянская"}
+        Jamo{"Джамо"}
         Java{"яванская"}
         Jpan{"японская"}
         Jurc{"чжурчжэньская"}
@@ -763,10 +754,6 @@ ru{
             no{"Сортировка вне зависимости от регистра"}
             yes{"Сортировка с учетом регистра"}
         }
-        colHiraganaQuaternary{
-            no{"Отдельная сортировка каны"}
-            yes{"Сортировка каны другим способом"}
-        }
         colNormalization{
             no{"Сортировка без нормализации"}
             yes{"Сортировка нормализованных символов Unicode"}
@@ -800,6 +787,11 @@ ru{
             unihan{"сортировка по ключам, затем по чертам"}
             zhuyin{"чжуинь"}
         }
+        d0{
+            fwidth{"Широкие символы"}
+            hwidth{"Краткий формат"}
+            npinyin{"Числовая"}
+        }
         hc{
             h11{"12-часовая система (0-11)"}
             h12{"12-часовая система (1-12)"}
@@ -810,6 +802,10 @@ ru{
             loose{"мягкий перевод строки"}
             normal{"обычный перевод строки"}
             strict{"жесткий перевод строки"}
+        }
+        m0{
+            bgn{"Палата географических названий США"}
+            ungegn{"Группа экспертов ООН по географическим названиям"}
         }
         ms{
             metric{"метрическая система"}
@@ -900,7 +896,7 @@ ru{
         VALENCIA{"Валенсийский"}
         WADEGILE{"Система Уэйда – Джайлза"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Язык: {0}"}
         script{"Письменность: {0}"}

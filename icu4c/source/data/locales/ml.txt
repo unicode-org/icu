@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ml.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ml{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -229,7 +221,7 @@ ml{
         }
         native{"mlym"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1524,17 +1516,5 @@ ml{
         UK{"യുകെ"}
         US{"യുഎസ്"}
         metric{"മെട്രിക്ക്"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"സംഖ്യാപരമായ"}
-        Tone{"ശബ്ദം"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"ആൿസൻറുകൾ‌"}
-        x-Fullwidth{"പൂർണവീതി"}
-        x-Halfwidth{"ഹാഫ്‍വിഡ്ത്ത്"}
-        x-Jamo{"ജാമോ"}
-        x-Pinyin{"പിൻയിൻ"}
-        x-Publishing{"പ്രസിദ്ധീകരിക്കുന്നു"}
     }
 }

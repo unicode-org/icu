@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ms.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ms{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -23,6 +15,10 @@ ms{
         "sy} t {ts} u {ua} v w x y z]"
     }
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
+        "″]"
+    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}
@@ -174,7 +170,7 @@ ms{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.24.16"}
+    Version{"2.1.26.77"}
     calendar{
         buddhist{
             eras{
@@ -1457,17 +1453,5 @@ ms{
         UK{"UK"}
         US{"AS"}
         metric{"Metrik"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Bernombor"}
-        Tone{"Nada"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Aksen"}
-        x-Fullwidth{"Kelebaran penuh"}
-        x-Halfwidth{"Kelebaran separa"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Penerbitan"}
     }
 }

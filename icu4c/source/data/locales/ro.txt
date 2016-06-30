@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ro.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ro{
     AuxExemplarCharacters{"[á à å ä ç é è ê ë ñ ö q ş ţ ü w y]"}
     Ellipsis{
@@ -244,7 +236,7 @@ ro{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             eras{
@@ -1593,17 +1585,5 @@ ro{
         UK{"britanic"}
         US{"american"}
         metric{"metric"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Numeric"}
-        Tone{"Ton"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Accente"}
-        x-Fullwidth{"Cu lățime întreagă"}
-        x-Halfwidth{"Cu jumătate de lățime"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Publicare"}
     }
 }

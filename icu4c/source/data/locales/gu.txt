@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/gu.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 gu{
     AuxExemplarCharacters{"[\u200C\u200D ૰]"}
     Ellipsis{
@@ -223,7 +215,7 @@ gu{
         minimumGroupingDigits{"1"}
         native{"gujr"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1418,17 +1410,5 @@ gu{
         UK{"યુકે"}
         US{"અમેરિકા"}
         metric{"મેટ્રિક"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"સંખ્યા"}
-        Tone{"ધ્વની"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"સ્વરાઘાતો"}
-        x-Fullwidth{"પૂર્ણપહોળાઇ"}
-        x-Halfwidth{"અર્ધપહોળાઈ"}
-        x-Jamo{"જેમો"}
-        x-Pinyin{"પીનયીન"}
-        x-Publishing{"પ્રકાશન"}
     }
 }

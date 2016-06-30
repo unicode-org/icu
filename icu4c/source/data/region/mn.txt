@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/mn.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 mn{
     Countries{
         001{"Дэлхий"}
@@ -315,5 +307,5 @@ mn{
         MK{"Македон (Хуучин Югославын бүрэлдэхүүний Македон)"}
         TL{"Зүүн Тимор"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.25.97"}
 }

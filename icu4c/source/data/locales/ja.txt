@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ja.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ja{
     AuxExemplarCharacters{"[兌 拼 楔 錄 鳯]"}
     Ellipsis{
@@ -233,7 +225,7 @@ ja{
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -3286,17 +3278,5 @@ ja{
         UK{"英ヤード・ポンド法"}
         US{"米ヤード・ポンド法"}
         metric{"メートル法"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"数字"}
-        Tone{"声調"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"アクセント"}
-        x-Fullwidth{"全角"}
-        x-Halfwidth{"半角"}
-        x-Jamo{"字母"}
-        x-Pinyin{"ピンイン"}
-        x-Publishing{"出版"}
     }
 }

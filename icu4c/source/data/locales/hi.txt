@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/hi.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 hi{
     AuxExemplarCharacters{"[\u200C\u200D]"}
     Ellipsis{
@@ -215,7 +207,7 @@ hi{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         ethiopic{
             monthNames{
@@ -1760,17 +1752,5 @@ hi{
         UK{"यूके"}
         US{"यूएस"}
         metric{"मीट्रिक"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"सांख्यिक"}
-        Tone{"स्वर"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"स्वराघात"}
-        x-Fullwidth{"पूर्ण-चौड़ाई"}
-        x-Halfwidth{"आधी-चौड़ाई"}
-        x-Jamo{"जामो"}
-        x-Pinyin{"पिनयिन"}
-        x-Publishing{"प्रकाशन"}
     }
 }

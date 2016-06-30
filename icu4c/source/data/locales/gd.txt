@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/gd.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 gd{
     AuxExemplarCharacters{
         "[á ă â å ä ã ā æ ċ ç ḋ é ĕ ê ë ē ḟ ġ í ĭ î ï ī ı j k ł ṁ ñ ó ŏ ô ö ø ō œ ṗ q"
@@ -909,7 +901,7 @@ gd{
             }
         }
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             intervalFormats{
@@ -2221,17 +2213,5 @@ gd{
         UK{"RA"}
         US{"SA"}
         metric{"Meatrach"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Àireamhach"}
-        Tone{"Tòna"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Stràcan"}
-        x-Fullwidth{"Làn-Leud"}
-        x-Halfwidth{"Leth-Leud"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Foillseachadh"}
     }
 }

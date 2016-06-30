@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/plurals.xml, ordinals.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 plurals:table(nofallback){
     locales{
         af{"set8"}
@@ -208,6 +200,7 @@ plurals:table(nofallback){
         xog{"set8"}
         yi{"set3"}
         yo{"set0"}
+        yue{"set0"}
         zh{"set0"}
         zu{"set1"}
     }
@@ -296,6 +289,7 @@ plurals:table(nofallback){
         ur{"set36"}
         uz{"set36"}
         vi{"set38"}
+        yue{"set36"}
         zh{"set36"}
         zu{"set36"}
     }

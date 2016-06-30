@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sk.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sk{
     Keys{
         calendar{"kalendár"}
@@ -15,7 +7,6 @@ sk{
         colBackwards{"Obrátené radenie akcentov"}
         colCaseFirst{"Radenie veľkých a malých písmen"}
         colCaseLevel{"Rozlišovanie veľkých a malých písmen pri radení"}
-        colHiraganaQuaternary{"Radenie podľa slabičných písiem (kana)"}
         colNormalization{"Normalizované radenie"}
         colNumeric{"Číselné radenie"}
         colStrength{"Sila radenia"}
@@ -27,7 +18,6 @@ sk{
         numbers{"čísla"}
         timezone{"Časové pásmo"}
         va{"Variant miestneho nastavenia"}
-        variableTop{"Radiť ako symboly"}
         x{"Súkromné použitie"}
     }
     Languages{
@@ -581,6 +571,7 @@ sk{
         Hant{"tradičné"}
         Hebr{"hebrejské"}
         Hira{"hiragana"}
+        Jamo{"Jamo"}
         Jpan{"japonské"}
         Kana{"katakana"}
         Khmr{"khmérske"}
@@ -650,10 +641,6 @@ sk{
             no{"Pri radení nerozlišovať veľké a malé písmená"}
             yes{"Pri radení rozlišovať veľké a malé písmená"}
         }
-        colHiraganaQuaternary{
-            no{"Radiť slabičné písma (kana) samostatne"}
-            yes{"Radiť slabičné písma (kana) inak"}
-        }
         colNormalization{
             no{"Radiť bez normalizácie"}
             yes{"Radenie podľa normalizovaného kódovania Unicode"}
@@ -685,6 +672,11 @@ sk{
             traditional{"Tradičné"}
             unihan{"Usporiadanie podľa znakov radikál"}
         }
+        d0{
+            fwidth{"Celá šírka"}
+            hwidth{"Polovičná šírka"}
+            npinyin{"Číslice"}
+        }
         hc{
             h11{"12-hodinový cyklus (0 – 11)"}
             h12{"12-hodinový cyklus (1 – 12)"}
@@ -695,6 +687,10 @@ sk{
             loose{"voľný štýl koncov riadka"}
             normal{"bežný štýl koncov riadka"}
             strict{"presný štýl koncov riadka"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"metrická sústava"}
@@ -747,7 +743,7 @@ sk{
     Variants{
         SCOTLAND{"škótska štandardná angličtina"}
     }
-    Version{"2.1.24.11"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

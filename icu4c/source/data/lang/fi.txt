@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/fi.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 fi{
     Keys{
         calendar{"kalenteri"}
@@ -15,7 +7,6 @@ fi{
         colBackwards{"painomerkkien lajittelu"}
         colCaseFirst{"isojen ja pienten kirjainten järjestys"}
         colCaseLevel{"aakkoslajien lajittelu"}
-        colHiraganaQuaternary{"kana-merkkien lajittelu"}
         colNormalization{"lajittelun normalisointi"}
         colNumeric{"numeroiden lajittelu"}
         colStrength{"lajittelun taso"}
@@ -27,7 +18,6 @@ fi{
         numbers{"numerot"}
         timezone{"aikavyöhyke"}
         va{"maavalinnan muunnelma"}
-        variableTop{"lajittelu symboleina"}
         x{"yksityiskäyttö"}
     }
     Languages{
@@ -714,6 +704,7 @@ fi{
         Hung{"muinaisunkarilainen"}
         Inds{"induslainen"}
         Ital{"muinaisitalialainen"}
+        Jamo{"jamo"}
         Java{"jaavalainen"}
         Jpan{"japanilainen"}
         Jurc{"džurtšen"}
@@ -876,10 +867,6 @@ fi{
             no{"isojen ja pienten kirjainten lajittelu yhdessä"}
             yes{"isojen ja pienten kirjainten lajittelu erikseen"}
         }
-        colHiraganaQuaternary{
-            no{"kana-merkkien lajittelu erillisinä"}
-            yes{"kana-merkkien lajittelu tyypin mukaan"}
-        }
         colNormalization{
             no{"lajittelu ilman normalisoinrtia"}
             yes{"lajittelu Unicode-normalisoituna"}
@@ -918,6 +905,11 @@ fi{
             unihan{"radikaali- ja piirtojärjestys"}
             zhuyin{"zhuyin-järjestys"}
         }
+        d0{
+            fwidth{"ideogrammin levyinen"}
+            hwidth{"ideogrammin puolikkaan levyinen"}
+            npinyin{"numeerinen muunnos"}
+        }
         hc{
             h11{"12 tunnin järjestelmä (0–11)"}
             h12{"12 tunnin järjestelmä (1–12)"}
@@ -928,6 +920,10 @@ fi{
             loose{"väljä rivinvaihto"}
             normal{"normaali rivinvaihto"}
             strict{"tarkka rivinvaihto"}
+        }
+        m0{
+            bgn{"BGN-latinaistus"}
+            ungegn{"UNGEGN-latinaistus"}
         }
         ms{
             metric{"metrijärjestelmä"}
@@ -1073,7 +1069,7 @@ fi{
     Variants%secondary{
         FONUPA{"suomalais-ugrilainen tarkekirjoitus"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"kieli: {0}"}
         script{"kirjoitusjärjestelmä: {0}"}

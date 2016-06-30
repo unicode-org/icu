@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sr_Latn.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sr_Latn{
     %%Parent{"root"}
     Keys{
@@ -16,7 +8,6 @@ sr_Latn{
         colBackwards{"Sortiranje prema obrnutim akcentima"}
         colCaseFirst{"Ređanje prema malom/velikom slovu"}
         colCaseLevel{"Sortiranje prema malom/velikom slovu"}
-        colHiraganaQuaternary{"Sortiranje prema kana simbolima"}
         colNormalization{"Normalizovano sortiranje"}
         colNumeric{"Numeričko sortiranje"}
         colStrength{"Sortiranje prema jačini"}
@@ -26,7 +17,6 @@ sr_Latn{
         numbers{"brojevi"}
         timezone{"Vremenska zona"}
         va{"Varijanta lokaliteta"}
-        variableTop{"Sortiraj kao simbole"}
         x{"Privatna upotreba"}
     }
     Languages{
@@ -572,6 +562,7 @@ sr_Latn{
         Hung{"staromađarsko pismo"}
         Inds{"induško pismo"}
         Ital{"stari italik"}
+        Jamo{"Džamo"}
         Java{"javansko pismo"}
         Jpan{"japansko pismo"}
         Kali{"kajah-li pismo"}
@@ -697,10 +688,6 @@ sr_Latn{
             no{"Sortiraj bez obzira na velika i mala slova"}
             yes{"Sortiraj mala i velika slova"}
         }
-        colHiraganaQuaternary{
-            no{"Sortiraj kana simbole odvojeno"}
-            yes{"Sortiraj kana simbole drugačije"}
-        }
         colNormalization{
             no{"Sortiraj bez normalizacije"}
             yes{"Sortiraj Unicode normalizovano"}
@@ -731,6 +718,15 @@ sr_Latn{
             stroke{"Sortiranje po broju crta"}
             traditional{"Tradicionalno sortiranje"}
             unihan{"Redosled sortiranja radikalnim crticama"}
+        }
+        d0{
+            fwidth{"puna širina"}
+            hwidth{"pola širine"}
+            npinyin{"Numerička"}
+        }
+        m0{
+            bgn{"BGN (BGN)"}
+            ungegn{"UNGEGN (BGN)"}
         }
         numbers{
             arab{"arapsko-indijske cifre"}
@@ -804,7 +800,7 @@ sr_Latn{
         TARASK{"Taraskijevička ortografija"}
         VALENCIA{"Valencijska"}
     }
-    Version{"2.1.24.17"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"pismo: {0}"}

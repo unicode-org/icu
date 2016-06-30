@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/it_CH.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 it_CH{
     NumberElements{
         latn{
@@ -20,7 +12,7 @@ it_CH{
             }
         }
     }
-    Version{"2.1.24.15"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

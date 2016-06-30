@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/uk.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 uk{
     AuxExemplarCharacters{
         "[{а\u0301} {е\u0301} ё {є\u0301} {и\u0301} {і\u0301} {ї\u0301} {о\u0301} {у"
@@ -283,7 +275,7 @@ uk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         coptic{
             monthNames{
@@ -1847,17 +1839,5 @@ uk{
         UK{"Британська"}
         US{"Американська"}
         metric{"Метрична"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Цифри"}
-        Tone{"Тон"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Діактричні знаки"}
-        x-Fullwidth{"Повна ширина"}
-        x-Halfwidth{"Половинна ширина"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Піньїнь"}
-        x-Publishing{"Публікація"}
     }
 }

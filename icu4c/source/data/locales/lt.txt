@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/lt.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 lt{
     AuxExemplarCharacters{
         "[á à ã {ą\u0301} {ą\u0303} {ch} {dz} {dž} é è ẽ {ę\u0301} {ę\u0303} {ė\u0301"
@@ -286,7 +278,7 @@ lt{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             eras{
@@ -3129,17 +3121,5 @@ lt{
         UK{"JK"}
         US{"JAV"}
         metric{"metrinė"}
-    }
-    transformNames{
-        BGN{"BGN simboliai"}
-        Numeric{"Skaitinis"}
-        Tone{"Tonas"}
-        UNGEGN{"UNGEGN simboliai"}
-        x-Accents{"Kirčiai"}
-        x-Fullwidth{"Viso pločio"}
-        x-Halfwidth{"Vidutinio pločio"}
-        x-Jamo{"Jamo simboliai"}
-        x-Pinyin{"Pinjino simboliai"}
-        x-Publishing{"Skelbimas"}
     }
 }

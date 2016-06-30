@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/nn.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 nn{
     Keys{
         calendar{"kalender"}
@@ -662,7 +654,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"2.1.23.66"}
+    Version{"2.1.25.97"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

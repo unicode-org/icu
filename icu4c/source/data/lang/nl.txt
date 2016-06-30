@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/nl.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 nl{
     Keys{
         calendar{"kalender"}
@@ -15,7 +7,6 @@ nl{
         colBackwards{"Omgekeerd sorteren op accenten"}
         colCaseFirst{"Indelen op hoofdletters/kleine letters"}
         colCaseLevel{"Hoofdlettergevoelig sorteren"}
-        colHiraganaQuaternary{"Kana sorteren"}
         colNormalization{"Genormaliseerd sorteren"}
         colNumeric{"Numeriek sorteren"}
         colStrength{"Sorteervoorrang"}
@@ -27,7 +18,6 @@ nl{
         numbers{"cijfers"}
         timezone{"Tijdzone"}
         va{"Landvariant"}
-        variableTop{"Sorteren als symbolen"}
         x{"Privégebruik"}
     }
     Languages{
@@ -709,6 +699,7 @@ nl{
         Hung{"Oudhongaars"}
         Inds{"Indus"}
         Ital{"Oud-italisch"}
+        Jamo{"Jamo"}
         Java{"Javaans"}
         Jpan{"Japans"}
         Jurc{"Jurchen"}
@@ -912,10 +903,6 @@ nl{
             no{"Niet hoofdlettergevoelig sorteren"}
             yes{"Hoofdlettergevoelig sorteren"}
         }
-        colHiraganaQuaternary{
-            no{"Kana afzonderlijk sorteren"}
-            yes{"Kana anders sorteren"}
-        }
         colNormalization{
             no{"Zonder normalisatie sorteren"}
             yes{"Unicode genormaliseerd sorteren"}
@@ -951,6 +938,11 @@ nl{
             unihan{"Sorteervolgorde radicalen/strepen"}
             zhuyin{"Zhuyinvolgorde"}
         }
+        d0{
+            fwidth{"Volledige breedte"}
+            hwidth{"Halve breedte"}
+            npinyin{"Numeriek"}
+        }
         hc{
             h11{"12-uursysteem (0-11)"}
             h12{"12-uursysteem (1-12)"}
@@ -961,6 +953,10 @@ nl{
             loose{"losse stijl regelafbreking"}
             normal{"normale stijl regelafbreking"}
             strict{"strikte stijl regelafbreking"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"metriek stelsel"}
@@ -1103,7 +1099,7 @@ nl{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.23.81"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Schrift: {0}"}

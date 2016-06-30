@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/se.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 se{
     AuxExemplarCharacters{"[à ç é è í ń ñ ó ò q ú w x y ü ø æ å ä ã ö]"}
     ExemplarCharacters{"[a á b c č d đ e f g h i j k l m n ŋ o p r s š t ŧ u v z ž]"}
@@ -166,7 +158,7 @@ se{
             }
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.25.97"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/as.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 as{
     Countries{
         AQ{"এন্টাৰ্টিকা"}
@@ -28,5 +20,5 @@ as{
         US{"যুক্তৰাষ্ট্ৰ"}
         ZZ{"অজ্ঞাত বা অবৈধ অঞ্চল"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.25.97"}
 }

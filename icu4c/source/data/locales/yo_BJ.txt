@@ -1,19 +1,11 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/yo_BJ.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 yo_BJ{
     ExemplarCharacters{
         "[a á à b d e é è ɛ {ɛ\u0301} {ɛ\u0300} f g {gb} h i í ì j k l m n o ó ò ɔ {ɔ"
         "\u0301} {ɔ\u0300} p r s {sh} t u ú ù w y]"
     }
-    Version{"2.1.24.17"}
+    Version{"2.1.25.97"}
     calendar{
         gregorian{
             AmPmMarkers{

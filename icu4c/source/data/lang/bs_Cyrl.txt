@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/bs_Cyrl.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 bs_Cyrl{
     %%Parent{"root"}
     Keys{
@@ -515,6 +507,7 @@ bs_Cyrl{
         Hung{"старомађарско писмо"}
         Inds{"индушко писмо"}
         Ital{"стари италик"}
+        Jamo{"Џамо"}
         Java{"јаванско писмо"}
         Jpan{"јапанско писмо"}
         Kali{"кајах-ли писмо"}
@@ -633,6 +626,15 @@ bs_Cyrl{
             traditional{"Традиционално сортирање"}
             unihan{"Редослед сортирања радикалним цртицама"}
         }
+        d0{
+            fwidth{"пуна ширина"}
+            hwidth{"пола ширине"}
+            npinyin{"Нумеричка"}
+        }
+        m0{
+            bgn{"БГН (BGN)"}
+            ungegn{"УНГЕГН (BGN)"}
+        }
         numbers{
             arab{"арапско-индијске цифре"}
             arabext{"продужене арапско-индијске цифре"}
@@ -700,7 +702,7 @@ bs_Cyrl{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

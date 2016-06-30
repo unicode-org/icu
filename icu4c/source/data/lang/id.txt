@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/id.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 id{
     Keys{
         calendar{"Kalender"}
@@ -15,7 +7,6 @@ id{
         colBackwards{"Penyortiran Aksen Terbalik"}
         colCaseFirst{"Pengurutan Huruf Besar/Huruf Kecil"}
         colCaseLevel{"Penyortiran Peka Huruf Besar"}
-        colHiraganaQuaternary{"Penyortiran Kana"}
         colNormalization{"Penyortiran Dinormalisasi"}
         colNumeric{"Penyortiran Numerik"}
         colStrength{"Kekuatan Penyortiran"}
@@ -27,7 +18,6 @@ id{
         numbers{"Angka"}
         timezone{"Zona Waktu"}
         va{"Varian Lokal"}
-        variableTop{"Sortir Sebagai Simbol"}
         x{"Penggunaan Pribadi"}
     }
     Languages{
@@ -636,6 +626,7 @@ id{
         Hung{"Hungaria Kuno"}
         Inds{"Indus"}
         Ital{"Italia Lama"}
+        Jamo{"Jamo"}
         Java{"Jawa"}
         Jpan{"Jepang"}
         Jurc{"Jurchen"}
@@ -786,10 +777,6 @@ id{
             no{"Sortir Tidak Peka Huruf Besar"}
             yes{"Sortir Peka Huruf Besar"}
         }
-        colHiraganaQuaternary{
-            no{"Sortir Kana Secara Terpisah"}
-            yes{"Sortir Kana Secara Berbeda"}
-        }
         colNormalization{
             no{"Sortir Tanpa Normalisasi"}
             yes{"Sortir Unicode Dinormalisasi"}
@@ -822,6 +809,11 @@ id{
             traditional{"Urutan Sortir Tradisional"}
             unihan{"Urutan Sortir Guratan Radikal"}
         }
+        d0{
+            fwidth{"Lebar penuh"}
+            hwidth{"Lebar separuh"}
+            npinyin{"Angka"}
+        }
         hc{
             h11{"Sistem 12 Jam (0–11)"}
             h12{"Sistem 12 Jam (1–12)"}
@@ -832,6 +824,10 @@ id{
             loose{"Gaya Pemisah Baris Renggang"}
             normal{"Gaya Pemisah Baris Normal"}
             strict{"Gaya Pemisah Baris Rapat"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"Sistem Metrik"}
@@ -954,7 +950,7 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

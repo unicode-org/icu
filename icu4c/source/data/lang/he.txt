@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/he.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 he{
     Keys{
         calendar{"לוח שנה"}
@@ -15,7 +7,6 @@ he{
         colBackwards{"מיון לפי הטעמות בסדר הפוך"}
         colCaseFirst{"סידור לפי אותיות רישיות/קטנות"}
         colCaseLevel{"מיון תלוי רישיות"}
-        colHiraganaQuaternary{"מיון קאנה"}
         colNormalization{"מיון מנורמל"}
         colNumeric{"מיון לפי מספרים"}
         colStrength{"עוצמת המיון"}
@@ -27,7 +18,6 @@ he{
         numbers{"מספרים"}
         timezone{"אזור זמן"}
         va{"משתנה אזור"}
-        variableTop{"מיין כסמלים"}
         x{"שימוש פרטי"}
     }
     Languages{
@@ -589,6 +579,7 @@ he{
         Hung{"הונגרי עתיק"}
         Inds{"אינדוס"}
         Ital{"איטלקי עתיק"}
+        Jamo{"ג׳אמו"}
         Java{"ג׳אוונזי"}
         Jpan{"יפני"}
         Kana{"קטקאנה"}
@@ -667,10 +658,6 @@ he{
             no{"מיין באופן שאינו תלוי רישיות"}
             yes{"מיין באופן תלוי רישיות"}
         }
-        colHiraganaQuaternary{
-            no{"מיין קאנה בנפרד"}
-            yes{"מיין קאנה אחרת"}
-        }
         colNormalization{
             no{"מיין ללא נורמליזציה"}
             yes{"מיין לפי Unicode מנורמל"}
@@ -702,11 +689,20 @@ he{
             traditional{"מיון מסורתי"}
             unihan{"סדר מיון לפי ספירת תווים Radical-Stroke"}
         }
+        d0{
+            fwidth{"רוחב מלא"}
+            hwidth{"חצי רוחב"}
+            npinyin{"מספרי"}
+        }
         hc{
             h11{"מערכת של 12 שעות (0–11)"}
             h12{"מערכת של 12 שעות (1–12)"}
             h23{"מערכת של 24 שעות (0–23)"}
             h24{"מערכת של 24 שעות (1–24)"}
+        }
+        m0{
+            bgn{"מטבע BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"מערכת מטרית"}
@@ -764,7 +760,7 @@ he{
         POSIX{"מחשב"}
         SCOTLAND{"אנגלית סקוטית סטנדרטית"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"שפה:‏ {0}"}
         script{"כתב: {0}"}

@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/dz.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 dz{
     AuxExemplarCharacters{
         "[\u0F84 ཊ ཋ ཌ ཎ \u0F7E ཥ \u0F80 \u0F7B \u0F7D \u0F9A \u0F9B \u0F9C \u0F9E "
@@ -108,7 +100,7 @@ dz{
             }
         }
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

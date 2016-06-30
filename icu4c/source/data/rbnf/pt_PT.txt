@@ -1,29 +1,7 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/rbnf/pt_PT.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 pt_PT{
     RBNFRules{
-        OrdinalRules{
-            "%%dord-mascabbrev:",
-            "0: \u00BA;",
-            "%digits-ordinal-masculine:",
-            "-x: \u2212>>;",
-            "0: =#,##0==%%dord-mascabbrev=;",
-            "%%dord-femabbrev:",
-            "0: \u00AA;",
-            "%digits-ordinal-feminine:",
-            "-x: \u2212>>;",
-            "0: =#,##0==%%dord-femabbrev=;",
-            "%digits-ordinal:",
-            "0: =%digits-ordinal-masculine=;",
-        }
         SpelloutRules{
             "%%lenient-parse:",
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
@@ -206,5 +184,5 @@ pt_PT{
             "1000000000000000000: =#,##0=\u00AA;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.25.33"}
 }

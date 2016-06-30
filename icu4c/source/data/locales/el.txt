@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/el.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 el{
     AuxExemplarCharacters{
         "[ἀ ἄ ἂ ἆ ἁ ἅ ἃ ἇ ὰ ᾶ ἐ ἔ ἒ ἑ ἕ ἓ ὲ ἠ ἤ ἢ ἦ ἡ ἥ ἣ ἧ ὴ ῆ ἰ ἴ ἲ ἶ ἱ ἵ ἳ ἷ ὶ ῖ ῒ"
@@ -212,7 +204,7 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.17"}
     calendar{
         buddhist{
             eras{
@@ -1431,17 +1423,5 @@ el{
         UK{"Βρετανικό"}
         US{"Αγγλοσαξωνικό"}
         metric{"Μετρικό"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Αριθμητικό"}
-        Tone{"Τόνος"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Σημεία τονισμού"}
-        x-Fullwidth{"Πλήρους πλάτους"}
-        x-Halfwidth{"Μισού πλάτους"}
-        x-Jamo{"Τζάμο [Jamo]"}
-        x-Pinyin{"Πινγίν"}
-        x-Publishing{"Έκδοση"}
     }
 }

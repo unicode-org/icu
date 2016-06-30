@@ -533,12 +533,14 @@ NaN	afterPrefix	    NaN	K
 NaN	beforeSuffix	NaN    	K
 NaN	afterSuffix	NaN    	K
 
-test apply localized patterns
+test apply formerly localized patterns
 begin
-locale	localizedPattern	format	output	breaks
-en	0%	0.4376	44%
+// documentation says localizedPattern is not supported, change to pattern
+locale	pattern	format	output	breaks
+en	#0%	0.4376	44%
 // This next test breaks JDK. JDK doesn't multiply by 100.
-fa	\u06f0\u066a	0.4376	\u06f4\u06f4\u066a	K
+// It also is now broken in ICU4J until #10368 is fixed.
+fa	\u0025\u00a0\u0023\u0030	0.4376	\u200e\u066a\u00a0\u06f4\u06f4	JK
 
 test toPattern
 set locale en

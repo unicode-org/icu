@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/am.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 am{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -217,7 +209,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1853,17 +1845,5 @@ am{
         UK{"ዩኬ"}
         US{"ዩ ኤስ"}
         metric{"ሜትሪክ"}
-    }
-    transformNames{
-        BGN{"ቢ ጂ ኤን"}
-        Numeric{"አሃዛዊ"}
-        Tone{"የድምፅ ቃና"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"ትእምርት"}
-        x-Fullwidth{"ሙሉ ወርድ"}
-        x-Halfwidth{"ሃልፍዊድዝ"}
-        x-Jamo{"ጃሞ"}
-        x-Pinyin{"ፒንዪን"}
-        x-Publishing{"ማሳተም"}
     }
 }

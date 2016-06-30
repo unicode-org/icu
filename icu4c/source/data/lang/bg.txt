@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/bg.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 bg{
     Keys{
         calendar{"календар"}
@@ -15,7 +7,6 @@ bg{
         colBackwards{"Сортиране по диакритични знаци в обратен ред"}
         colCaseFirst{"Подреждане по горен/долен регистър"}
         colCaseLevel{"Сортиране с различаване на регистъра на буквите"}
-        colHiraganaQuaternary{"Сортиране на кана"}
         colNormalization{"Нормализирано сортиране"}
         colNumeric{"Сортиране на цифрите"}
         colStrength{"Сила на сортиране"}
@@ -27,7 +18,6 @@ bg{
         numbers{"цифри"}
         timezone{"Часова зона"}
         va{"Вариант на локала"}
-        variableTop{"Сортиране като символи"}
         x{"Собствена употреба"}
     }
     Languages{
@@ -570,6 +560,7 @@ bg{
         Hung{"Староунгарска"}
         Inds{"Харапска"}
         Ital{"Древно италийска"}
+        Jamo{"Джамо"}
         Java{"Яванска"}
         Jpan{"японска"}
         Kali{"Кая Ли"}
@@ -685,10 +676,6 @@ bg{
             no{"Сортиране без различаване на регистъра на буквите"}
             yes{"Сортиране с различаване на регистъра на буквите"}
         }
-        colHiraganaQuaternary{
-            no{"Сортиране на кана отделно"}
-            yes{"Сортиране на кана по различен начин"}
-        }
         colNormalization{
             no{"Сортиране без нормализиране"}
             yes{"Нормализирано сортиране в Уникод"}
@@ -720,6 +707,11 @@ bg{
             traditional{"Традиционно"}
             unihan{"Ред на сортиране по ключове и черти"}
         }
+        d0{
+            fwidth{"С пълна ширина"}
+            hwidth{"С половин ширина"}
+            npinyin{"Цифрови"}
+        }
         hc{
             h11{"12-часова система (0 – 11)"}
             h12{"12-часова система (1 – 12)"}
@@ -730,6 +722,10 @@ bg{
             loose{"Свободен стил за нов ред"}
             normal{"Нормален стил за нов ред"}
             strict{"Строг стил за нов ред"}
+        }
+        m0{
+            bgn{"АКГН (BGN)"}
+            ungegn{"ГЕСГИООН (UNGEGN)"}
         }
         ms{
             metric{"Метрична система"}
@@ -810,7 +806,7 @@ bg{
         VALENCIA{"Валенсиански"}
         WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Език: {0}"}
         script{"Писменост: {0}"}

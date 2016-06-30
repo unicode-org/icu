@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ta.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ta{
     Keys{
         calendar{"நாள்காட்டி"}
@@ -15,7 +7,6 @@ ta{
         colBackwards{"நேர்மறையான உச்சரிப்பு வரிசைபடுத்துதல்"}
         colCaseFirst{"பெரெழுத்து/சிற்றெழுத்து வரிசைமுறை"}
         colCaseLevel{"எழுத்து உணர்ந்து வரிசைபடுத்துதல்"}
-        colHiraganaQuaternary{"கானா வரிசைபடுத்துதல்"}
         colNormalization{"இயல்பாக்கப்பட்ட வரிசைபடுத்துதல்"}
         colNumeric{"எண்முறை வரிசைபடுத்துதல்"}
         colStrength{"வரிசைப்படுத்தல் வலிமை"}
@@ -27,7 +18,6 @@ ta{
         numbers{"எண்கள்"}
         timezone{"நேர மண்டலம்"}
         va{"மொழி மாறிலி"}
-        variableTop{"சின்னங்களாக வரிசைப்படுத்து"}
         x{"தனிப்பட்ட பயன்"}
     }
     Languages{
@@ -588,6 +578,7 @@ ta{
         Hung{"பழைய ஹங்கேரியன்"}
         Inds{"சிந்து"}
         Ital{"பழைய இத்தாலி"}
+        Jamo{"ஜமோ"}
         Java{"ஜாவனீஸ்"}
         Jpan{"ஜப்பானியம்"}
         Kali{"கயாஹ் லீ"}
@@ -713,10 +704,6 @@ ta{
             no{"எழுத்து உணர்வின்றி வரிசைபடுத்து"}
             yes{"எழுத்து உணர்வில் வரிசைபடுத்து"}
         }
-        colHiraganaQuaternary{
-            no{"கானாவை தனியாக வரிசைப்படுத்து"}
-            yes{"கானாவை வேறுபட்டதாக வரிசைப்படுத்து"}
-        }
         colNormalization{
             no{"இயல்பாக்கம் இல்லாமல் வரிசைபடுத்து"}
             yes{"இயல்பாக்கப்பட்ட யூனிகோடை வரிசைப்படுத்து"}
@@ -748,6 +735,11 @@ ta{
             traditional{"பாரம்பரிய வரிசை முறை"}
             unihan{"ரேடியன் ஸ்ட்ரோக் வரிசை முறை"}
         }
+        d0{
+            fwidth{"முழு அகலம்"}
+            hwidth{"அரை அகலம்"}
+            npinyin{"எண்"}
+        }
         hc{
             h11{"12 மணிநேர முறைமை (0–11)"}
             h12{"12 மணிநேர முறைமை (1–12)"}
@@ -758,6 +750,10 @@ ta{
             loose{"தளர்வான வரி முறிப்பு ஸ்டைல்"}
             normal{"சாதாரண வரி முறிப்பு ஸ்டைல்"}
             strict{"கண்டிப்பான வரி முறிப்பு ஸ்டைல்"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"மெட்ரிக் முறை"}
@@ -811,7 +807,7 @@ ta{
         PINYIN{"பின்யின் ரோமானைசெஷன்"}
         WADEGILE{"வேட்-கைல்ஸ் ரோமனைஷேசன்"}
     }
-    Version{"2.1.23.16"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"மொழி: {0}"}
         script{"எழுத்து: {0}"}

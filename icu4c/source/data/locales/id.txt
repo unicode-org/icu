@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/id.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 id{
     AuxExemplarCharacters{"[å]"}
     Ellipsis{
@@ -172,7 +164,7 @@ id{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2537,17 +2529,5 @@ id{
         UK{"BR"}
         US{"AS"}
         metric{"Metrik"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Angka"}
-        Tone{"Nada"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Aksen"}
-        x-Fullwidth{"Lebar penuh"}
-        x-Halfwidth{"Lebar separuh"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Penerbitan"}
     }
 }

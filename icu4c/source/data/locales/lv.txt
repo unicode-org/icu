@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/lv.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 lv{
     AuxExemplarCharacters{"[y ō q ŗ w x]"}
     Ellipsis{
@@ -247,7 +239,7 @@ lv{
         minimumGroupingDigits{"3"}
         native{"latn"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.29"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1474,17 +1466,5 @@ lv{
         UK{"angļu"}
         US{"amerikāņu"}
         metric{"metriskā"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Ciparu"}
-        Tone{"Intonācija"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Diakritiskās zīmes"}
-        x-Fullwidth{"Pilna platuma"}
-        x-Halfwidth{"Pusplatuma"}
-        x-Jamo{"Džamo"}
-        x-Pinyin{"Piņjiņ"}
-        x-Publishing{"Izdevējdarbība"}
     }
 }

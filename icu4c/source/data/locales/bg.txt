@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/bg.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 bg{
     AuxExemplarCharacters{"[{а\u0300} ѐ ё ѝ {о\u0300} {у\u0300} {ъ\u0300} ы ѣ э {ю\u0300} {я\u0300} ѫ]"}
     Ellipsis{
@@ -164,7 +156,7 @@ bg{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1473,17 +1465,5 @@ bg{
         UK{"имперска"}
         US{"американска"}
         metric{"метрична"}
-    }
-    transformNames{
-        BGN{"АКГН (BGN)"}
-        Numeric{"Цифрови"}
-        Tone{"Интонация"}
-        UNGEGN{"ГЕСГИООН (UNGEGN)"}
-        x-Accents{"Диакритични знаци"}
-        x-Fullwidth{"С пълна ширина"}
-        x-Halfwidth{"С половин ширина"}
-        x-Jamo{"Джамо"}
-        x-Pinyin{"Пинин"}
-        x-Publishing{"Типографски"}
     }
 }

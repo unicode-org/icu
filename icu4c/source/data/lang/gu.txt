@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/gu.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 gu{
     Keys{
         calendar{"કેલેન્ડર"}
@@ -15,7 +7,6 @@ gu{
         colBackwards{"વિપરીત એક્સેંટ સૉર્ટિંગ"}
         colCaseFirst{"અપરકેસ/લોઅરકેસ ક્રમાંકન"}
         colCaseLevel{"કેસ સંવેદી સૉર્ટિંગ"}
-        colHiraganaQuaternary{"કાના સૉર્ટિંગ"}
         colNormalization{"સામાન્ય સૉર્ટિંગ"}
         colNumeric{"આંકડાકીય સૉર્ટિંગ"}
         colStrength{"સૉર્ટિંગ શક્તિ"}
@@ -27,7 +18,6 @@ gu{
         numbers{"આંકડાઓ"}
         timezone{"સમય ઝોન"}
         va{"લોકેલ વેરિએન્ટ"}
-        variableTop{"પ્રતીકો તરીકે સૉર્ટ કરો"}
         x{"ખાનગી-ઉપયોગ"}
     }
     Languages{
@@ -596,6 +586,7 @@ gu{
         Hung{"ઓલ્ડ હંગેરિયન"}
         Inds{"સિન્ધુ"}
         Ital{"જૂનુ ઇટાલિક"}
+        Jamo{"જેમો"}
         Java{"જાવાનીસ"}
         Jpan{"જાપાની"}
         Kali{"કાયાહ લી"}
@@ -722,10 +713,6 @@ gu{
             no{"કેસ સંવેદીને સૉર્ટ કરો"}
             yes{"કેસ સંવેદી સૉર્ટ કરો"}
         }
-        colHiraganaQuaternary{
-            no{"કાનાને અલગ સૉર્ટ કરો"}
-            yes{"કાનાને અલગ રીતે સૉર્ટ કરો"}
-        }
         colNormalization{
             no{"સામાન્યકૃત વિના સૉર્ટ કરો"}
             yes{"યુનિકોડ સામાન્યકૃતને સૉર્ટ કરો"}
@@ -757,6 +744,11 @@ gu{
             traditional{"પરંપરાગત અનુક્મ"}
             unihan{"રેડિકલ-સ્ટ્રોક"}
         }
+        d0{
+            fwidth{"પૂર્ણપહોળાઇ"}
+            hwidth{"અર્ધપહોળાઈ"}
+            npinyin{"સંખ્યા"}
+        }
         hc{
             h11{"12 કલાકની સિસ્ટમ (0–11)"}
             h12{"12 કલાકની સિસ્ટમ (1–12)"}
@@ -767,6 +759,10 @@ gu{
             loose{"શિથિલ રેખા વિરામ પ્રકાર"}
             normal{"સામાન્ય રેખા વિરામ પ્રકાર"}
             strict{"ચુસ્ત રેખા વિરામ પ્રકાર"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"દશાંશ પદ્ધતિ"}
@@ -820,7 +816,7 @@ gu{
         PINYIN{"પિનયિન રોમનાઇઝેશન"}
         WADEGILE{"વેડ-ગિલ્સ રોમનાઇઝેશન"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"ભાષા: {0}"}
         script{"સ્ક્રિપ્ટ: {0}"}

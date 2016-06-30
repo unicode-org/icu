@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/fr.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 fr{
     Keys{
         calendar{"calendrier"}
@@ -15,7 +7,6 @@ fr{
         colBackwards{"Tri inversé des caractères accentués"}
         colCaseFirst{"Classement basé sur les majuscules et les minuscules"}
         colCaseLevel{"Tri sensible à la casse"}
-        colHiraganaQuaternary{"Tri des caractères Kana"}
         colNormalization{"Tri normalisé"}
         colNumeric{"Tri numérique"}
         colStrength{"Priorité du tri"}
@@ -27,7 +18,6 @@ fr{
         numbers{"nombres"}
         timezone{"Fuseau horaire"}
         va{"Variante locale"}
-        variableTop{"Trier en tant que symboles"}
         x{"Usage privé"}
     }
     Languages{
@@ -612,6 +602,7 @@ fr{
         Hung{"ancien hongrois"}
         Inds{"indus"}
         Ital{"ancien italique"}
+        Jamo{"Jamo"}
         Java{"javanais"}
         Jpan{"japonais"}
         Kali{"kayah li"}
@@ -738,10 +729,6 @@ fr{
             no{"Trier sans tenir compte de la casse"}
             yes{"Trier en tenant compte de la casse"}
         }
-        colHiraganaQuaternary{
-            no{"Trier les caractères Kana séparément"}
-            yes{"Trier les caractères Kana différemment"}
-        }
         colNormalization{
             no{"Trier sans normalisation"}
             yes{"Trier avec normalisation Unicode"}
@@ -780,6 +767,11 @@ fr{
             unihan{"Ordre de tri radical-traits"}
             zhuyin{"ordre zhuyin"}
         }
+        d0{
+            fwidth{"Pleine chasse"}
+            hwidth{"Demi-chasse"}
+            npinyin{"Numérique"}
+        }
         hc{
             h11{"système horaire de 12 heures (0–11)"}
             h12{"système horaire de 12 heures (1–12)"}
@@ -790,6 +782,10 @@ fr{
             loose{"style de saut de ligne permissif"}
             normal{"style de saut de ligne normal"}
             strict{"style de saut de ligne strict"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"système métrique"}
@@ -870,7 +866,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.23.79"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"langue : {0}"}
         script{"écriture : {0}"}

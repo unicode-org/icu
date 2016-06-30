@@ -1,20 +1,9 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/es_GT.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 es_GT{
     %%Parent{"es_419"}
     NumberElements{
         latn{
-            miscPatterns{
-                range{"{0} al {1}"}
-            }
             patternsShort{
                 currencyFormat{
                     1000{
@@ -69,7 +58,7 @@ es_GT{
             }
         }
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zu.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 zu{
     AuxExemplarCharacters{
         "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ"
@@ -214,7 +206,7 @@ zu{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1355,17 +1347,5 @@ zu{
         UK{"i-UK"}
         US{"i-US"}
         metric{"i-Metric"}
-    }
-    transformNames{
-        BGN{"I-BGN"}
-        Numeric{"Okwezinombolo"}
-        Tone{"Ithoni"}
-        UNGEGN{"I-UNGEGN"}
-        x-Accents{"Ama-Accent"}
-        x-Fullwidth{"i-Fullwidth"}
-        x-Halfwidth{"Ubude obuhhafu"}
-        x-Jamo{"i-Jamo"}
-        x-Pinyin{"i-Pinyin"}
-        x-Publishing{"Ukushicilela"}
     }
 }

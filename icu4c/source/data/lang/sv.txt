@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sv.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sv{
     Keys{
         calendar{"kalender"}
@@ -15,7 +7,6 @@ sv{
         colBackwards{"Sortera accenter omvänt"}
         colCaseFirst{"Ordna efter versaler/gemener"}
         colCaseLevel{"Skiftlägeskänslig sortering"}
-        colHiraganaQuaternary{"Sortering efter kana"}
         colNormalization{"Normaliserad sortering"}
         colNumeric{"Numerisk sortering"}
         colStrength{"Sorteringsstyrka"}
@@ -27,7 +18,6 @@ sv{
         numbers{"siffror"}
         timezone{"Tidszon"}
         va{"Språkvariant"}
-        variableTop{"Sortera som symboler"}
         x{"privat"}
     }
     Languages{
@@ -161,7 +151,7 @@ sv{
         dv{"divehi"}
         dyo{"jola-fonyi"}
         dyu{"dyula"}
-        dz{"bhutanesiska"}
+        dz{"dzongkha"}
         dzg{"dazaga"}
         ebu{"embu"}
         ee{"ewe"}
@@ -320,7 +310,7 @@ sv{
         krj{"kinaray-a"}
         krl{"karelska"}
         kru{"kurukh"}
-        ks{"kashmiriska"}
+        ks{"kashmiri"}
         ksb{"kisambaa"}
         ksf{"bafia"}
         ksh{"kölniska"}
@@ -378,7 +368,7 @@ sv{
         mga{"medeliriska"}
         mgh{"makhuwa-meetto"}
         mgo{"meta’"}
-        mh{"marshalliska"}
+        mh{"marshallesiska"}
         mi{"maori"}
         mic{"mi’kmaq"}
         min{"minangkabau"}
@@ -487,7 +477,7 @@ sv{
         rue{"rusyn"}
         rug{"rovianska"}
         rup{"arumänska"}
-        rw{"kinjarwanda"}
+        rw{"rwanda"}
         rwk{"rwa"}
         sa{"sanskrit"}
         sad{"sandawe"}
@@ -554,7 +544,7 @@ sv{
         szl{"silesiska"}
         ta{"tamil"}
         tcy{"tulu"}
-        te{"telugiska"}
+        te{"telugu"}
         tem{"temne"}
         teo{"teso"}
         ter{"tereno"}
@@ -710,6 +700,7 @@ sv{
         Hung{"fornungerska"}
         Inds{"indus"}
         Ital{"fornitaliska"}
+        Jamo{"Jamo"}
         Java{"javanska"}
         Jpan{"japanska"}
         Jurc{"jurchenska"}
@@ -862,10 +853,6 @@ sv{
             no{"Sortera oavsett skiftläge"}
             yes{"Sortera efter skiftläge"}
         }
-        colHiraganaQuaternary{
-            no{"Sortera kana separat"}
-            yes{"Sortera efter kana"}
-        }
         colNormalization{
             no{"sortera utan normalisering"}
             yes{"sortera med Unicode-normalisering"}
@@ -901,6 +888,11 @@ sv{
             unihan{"radikal-streck-sorteringsordning"}
             zhuyin{"zhuyin-sorteringsordning"}
         }
+        d0{
+            fwidth{"Helbreda"}
+            hwidth{"Halvbreda"}
+            npinyin{"Numerisk"}
+        }
         hc{
             h11{"12-timmarsklocka (0–11)"}
             h12{"12-timmarsklocka (1–12)"}
@@ -911,6 +903,10 @@ sv{
             loose{"fri radbrytning"}
             normal{"normal radbrytning"}
             strict{"strikt radbrytning"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"SI-enheter"}
@@ -1053,7 +1049,7 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.23.66"}
+    Version{"2.1.26.30"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}

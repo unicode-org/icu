@@ -992,6 +992,7 @@ static void TestParseZero(void)
 
 static const UChar dollars2Sym[] = { 0x24,0x32,0x2E,0x30,0x30,0 }; /* $2.00 */
 static const UChar dollars4Sym[] = { 0x24,0x34,0 }; /* $4 */
+static const UChar dollarsUS4Sym[] = { 0x55,0x53,0x24,0x34,0 }; /* US$4 */
 static const UChar dollars9Sym[] = { 0x39,0xA0,0x24,0 }; /* 9 $ */
 static const UChar pounds3Sym[]  = { 0xA3,0x33,0x2E,0x30,0x30,0 }; /* [POUND]3.00 */
 static const UChar pounds5Sym[]  = { 0xA3,0x35,0 }; /* [POUND]5 */
@@ -1032,8 +1033,8 @@ static const ParseCurrencyItem parseCurrencyItems[] = {
     { "en_GB", "pounds7",  pounds7Sym,  NULL,          U_PARSE_ERROR, 1, 0.0, U_PARSE_ERROR, 1, 0.0, ""    },
     { "en_GB", "euros4",   euros4Sym,   NULL,          U_PARSE_ERROR, 4, 0.0, U_PARSE_ERROR, 4, 0.0, ""    },
     { "en_GB", "euros6",   euros6Sym,   NULL,          U_PARSE_ERROR, 1, 0.0, U_PARSE_ERROR, 1, 0.0, ""    },
-    { "en_GB", "euros8",   euros8Sym,   euros8PluEn,   U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  2, 8.0, "EUR" },
-    { "en_GB", "dollars4", dollars4Sym, dollars4PluEn, U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  2, 4.0, "USD" },
+    { "en_GB", "euros8",   euros8Sym,     euros8PluEn,   U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  2, 8.0, "EUR" },
+    { "en_GB", "dollars4", dollarsUS4Sym, dollars4PluEn, U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  4, 4.0, "USD" },
 
     { "fr_FR", "euros4",   euros4Sym,   NULL,          U_ZERO_ERROR,  6, 4.0, U_ZERO_ERROR,  6, 4.0, "EUR" },
     { "fr_FR", "euros6",   euros6Sym,   euros6PluFr,   U_ZERO_ERROR,  3, 6.0, U_ZERO_ERROR,  3, 6.0, "EUR" },

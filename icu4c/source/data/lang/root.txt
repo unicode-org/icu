@@ -1,18 +1,21 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/root.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 /**
  * ICU <specials> source: <path>/common/main/root.xml
  */
 root{
-    Version{"2.1.22.93"}
+    Version{"2.1.26.65"}
+    characterLabelPattern{
+        all{"{0} — All"}
+        compatibility{"{0} — Compatibility"}
+        enclosed{"{0} — Enclosed"}
+        extended{"{0} — Extended"}
+        historic{"{0} — Historic"}
+        miscellaneous{"{0} — Miscellaneous"}
+        other{"{0} — Other"}
+        scripts{"Scripts — {0}"}
+        strokes{"{0} Strokes"}
+    }
     codePatterns{
         language{"{0}"}
         script{"{0}"}

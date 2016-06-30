@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/br.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 br{
     AuxExemplarCharacters{"[á à ă â å ä ã ā æ c ç é è ĕ ë ē í ì ĭ î ï ī ó ò ŏ ô ö ø ō œ q ú ŭ û ü ū ÿ]"}
     Ellipsis{
@@ -50,7 +42,7 @@ br{
         }
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.25.97"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/fy.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 fy{
     AuxExemplarCharacters{"[à â æ è ê ô ù û]"}
     Ellipsis{
@@ -160,7 +152,7 @@ fy{
             }
         }
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2065,17 +2057,5 @@ fy{
         UK{"Brits"}
         US{"Amerikaansk"}
         metric{"Metriek"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Numeriek"}
-        Tone{"Toon"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Accenten"}
-        x-Fullwidth{"Volledige breedte"}
-        x-Halfwidth{"Halve breedte"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Publicatie"}
     }
 }

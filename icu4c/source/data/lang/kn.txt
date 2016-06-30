@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/kn.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 kn{
     Keys{
         calendar{"ಕ್ಯಾಲೆಂಡರ್"}
@@ -15,7 +7,6 @@ kn{
         colBackwards{"ತಿರುಗು ಮುರುಗಾದ ಉಚ್ಛಾರಣೆಯ ವಿಂಗಡಣೆ"}
         colCaseFirst{"ದೊಡ್ಡಕ್ಷರ/ಸಣ್ಣಕ್ಷರ ಕ್ರಮಗೊಳಿಸುವಿಕೆ"}
         colCaseLevel{"ಕೇಸ್-ಸೆನ್ಸಿಟೀವ್ ವಿಂಗಡಣೆ"}
-        colHiraganaQuaternary{"ಕನಾ ವಿಂಗಡಣೆ"}
         colNormalization{"ಸಾಮಾನ್ಯ ವಿಂಗಡಣೆ"}
         colNumeric{"ಸಂಖ್ಯೆ ವಿಂಗಡಣೆ"}
         colStrength{"ವಿಂಗಡಣೆ ಸಾಮರ್ಥ್ಯ"}
@@ -27,7 +18,6 @@ kn{
         numbers{"ಸಂಖ್ಯೆಗಳು"}
         timezone{"ಸಮಯ ವಲಯ"}
         va{"ಸ್ಥಳೀಯ ಭಿನ್ನತೆ"}
-        variableTop{"ಚಿಹ್ನೆಗಳ ಪ್ರಕಾರವಾಗಿ ವಿಂಗಡಿಸಿ"}
         x{"ಖಾಸಗಿ ಬಳಕೆ"}
     }
     Languages{
@@ -581,6 +571,7 @@ kn{
         Hung{"ಪ್ರಾಚೀನ ಹಂಗೇರಿಯನ್"}
         Inds{"ಸಿಂಧೂ"}
         Ital{"ಪ್ರಾಚೀನ್ ಇಟಾಲಿಕ್"}
+        Jamo{"ಹಮೋ"}
         Java{"ಜಾವನೀಸ್"}
         Jpan{"ಜಾಪನೀಸ್"}
         Kali{"ಕೆಯಾ ಲಿ"}
@@ -706,10 +697,6 @@ kn{
             no{"ಕೇಸ್ ಇನ್‌ಸೆಂಟೀವ್ ಅನ್ನು ವಿಂಗಡಿಸಿ"}
             yes{"ಕೇಸ್‌ ಸೆನ್ಸಿಟೀವ್‌‌ ವಿಂಗಡಿಸಿ"}
         }
-        colHiraganaQuaternary{
-            no{"ಕಾನಾ ಅನ್ನು ಬೇರೆಯಾಗಿ ವಿಂಗಡಿಸಿ"}
-            yes{"ಕಾನಾ ಅನ್ನು ಬೇರೆಯಾಗಿ ವಿಂಗಡಿಸಿ"}
-        }
         colNormalization{
             no{"ಸಾಮಾನ್ಯ ಸ್ಥಿತಿಯನ್ನು ಹೊರತುಪಡಿಸಿ ವಿಂಗಡಿಸಿ"}
             yes{"ಸಾಮಾನ್ಯವಾದ ಯೂನಿಕೋಡ್ ಅನ್ನು ವಿಂಗಡಿಸಿ"}
@@ -741,6 +728,11 @@ kn{
             traditional{"ಸಾಂಪ್ರದಾಯಿಕ ವಿಂಗಡಣೆ ಕ್ರಮ"}
             unihan{"ರ್ಯಾಡಿಕಲ್-ಸ್ಟ್ರೋಕ್ ವಿಂಗಡಣೆ ಕ್ರಮ"}
         }
+        d0{
+            fwidth{"ಪೂರ್ಣಅಗಲ"}
+            hwidth{"ಅರೆಅಗಲ"}
+            npinyin{"ಸಂಖ್ಯೆ"}
+        }
         hc{
             h11{"12 ಗಂಟೆ ವ್ಯವಸ್ಥೆ (0–11)"}
             h12{"24 ಗಂಟೆ ವ್ಯವಸ್ಥೆ (0–23)"}
@@ -751,6 +743,10 @@ kn{
             loose{"ಲೂಸ್ ಲೈನ್ ಬ್ರೇಕ್ ಶೈಲಿ"}
             normal{"ಸಾಮಾನ್ಯ ಲೈನ್ ಬ್ರೇಕ್ ಶೈಲಿ"}
             strict{"ಕಡ್ಡಾಯ ಲೈನ್ ಬ್ರೇಕ್ ಶೈಲಿ"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"ಮೆಟ್ರಿಕ್ ವ್ಯವಸ್ಥೆ"}
@@ -800,7 +796,7 @@ kn{
             vaii{"ವಾಯ್ ಅಂಕೆಗಳು"}
         }
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"ಭಾಷೆ: {0}"}
         script{"ಲಿಪಿ : {0}"}

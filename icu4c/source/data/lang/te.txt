@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/te.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 te{
     Keys{
         calendar{"క్యాలెండర్"}
@@ -15,7 +7,6 @@ te{
         colBackwards{"వ్యతిరేక ఉచ్ఛారణ క్రమబద్ధీకరణ"}
         colCaseFirst{"అప్పర్‌కేస్‌/లోయర్ కేస్ క్రమం"}
         colCaseLevel{"కేస్ సెన్సిటివ్ క్రమబద్ధీకరణ"}
-        colHiraganaQuaternary{"కానా క్రమబద్ధీకరణ"}
         colNormalization{"సాధారణీకరించిన క్రమబద్ధీకరణ"}
         colNumeric{"సంఖ్యాత్మక క్రమబద్ధీకరణ"}
         colStrength{"క్రమబద్ధీకరణ సామర్థ్యం"}
@@ -27,7 +18,6 @@ te{
         numbers{"సంఖ్యలు"}
         timezone{"సమయ మండలి"}
         va{"లొకేల్ రూపాంతరం"}
-        variableTop{"చిహ్నాలుగా క్రమబద్ధీకరించు"}
         x{"ప్రైవేట్-ఉపయోగం"}
     }
     Languages{
@@ -585,6 +575,7 @@ te{
         Hung{"ప్రాచీన హంగేరియన్"}
         Inds{"సింధు"}
         Ital{"ప్రాచిన ఐటాలిక్"}
+        Jamo{"జమో"}
         Java{"జావనీస్"}
         Jpan{"జాపనీస్"}
         Kali{"కాయాహ్ లి"}
@@ -710,10 +701,6 @@ te{
             no{"కేస్ ఇన్‌సెన్సిటివ్‌ను క్రమబద్ధీకరించు"}
             yes{"కేస్ సెన్సిటివ్‌ని క్రమబద్ధీకరించు"}
         }
-        colHiraganaQuaternary{
-            no{"కానాను వేరుగా క్రమబద్ధీకరించు"}
-            yes{"కానాని భిన్నంగా క్రమబద్ధీకరించు"}
-        }
         colNormalization{
             no{"సాధారణీకరణ చేయకుండా క్రమబద్ధీకరించు"}
             yes{"సాధారణీకరించిన యూనికోడ్‌ని క్రమబద్ధీకరించు"}
@@ -745,6 +732,11 @@ te{
             traditional{"సాంప్రదాయ క్రమబద్ధీకరణ క్రమం"}
             unihan{"రాడికల్-స్ట్రోక్ క్రమబద్ధీకరణ క్రమం"}
         }
+        d0{
+            fwidth{"పూర్తి వెడల్పు"}
+            hwidth{"సగం వెడల్పు"}
+            npinyin{"సంఖ్య"}
+        }
         hc{
             h11{"12 గంటల పద్ధతి (0–11)"}
             h12{"12 గంటల పద్ధతి (1–12)"}
@@ -755,6 +747,10 @@ te{
             loose{"వదులు లైన్ బ్రేక్ శైలి"}
             normal{"సాధారణ లైన్ బ్రేక్ శైలి"}
             strict{"కఠిన లైన్ బ్రేక్ శైలి"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"మెట్రిక్ పద్ధతి"}
@@ -811,7 +807,7 @@ te{
         REVISED{"సవరించబడిన వర్ణక్రమం"}
         WADEGILE{"వేడ్-గైల్స్ రోమనైజేషన్"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"భాష: {0}"}
         script{"లిపి: {0}"}
