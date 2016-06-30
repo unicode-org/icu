@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/vi.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 vi{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -179,7 +171,7 @@ vi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.23.12"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1987,17 +1979,5 @@ vi{
         UK{"Hệ Anh"}
         US{"Hệ Mỹ"}
         metric{"Hệ mét"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Số"}
-        Tone{"Âm"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Dấu"}
-        x-Fullwidth{"Độ rộng tối đa"}
-        x-Halfwidth{"Nửa độ rộng"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Bính âm"}
-        x-Publishing{"Xuất bản"}
     }
 }

@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/eu.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 eu{
     Keys{
         calendar{"Egutegia"}
@@ -15,7 +7,6 @@ eu{
         colBackwards{"Azentuen alderantzizko ordena"}
         colCaseFirst{"Maiuskula/Minuskula ordena"}
         colCaseLevel{"Maiuskulak eta minuskulak bereizten dituen ordena"}
-        colHiraganaQuaternary{"Kana ordena"}
         colNormalization{"Araututako ordena"}
         colNumeric{"Zenbakizko ordena"}
         colStrength{"Ordenaren sendotasuna"}
@@ -24,7 +15,6 @@ eu{
         numbers{"Zenbakiak"}
         timezone{"Ordu-zona"}
         va{"Eskualdeko ezarpenen aldaera"}
-        variableTop{"Ordenatu ikur gisa"}
         x{"Erabilera pribatua"}
     }
     Languages{
@@ -299,6 +289,7 @@ eu{
         Hant{"tradizionala"}
         Hebr{"hebreera"}
         Hira{"hiragana"}
+        Jamo{"Jamo-bihurketa"}
         Jpan{"japoniarra"}
         Kana{"katakana"}
         Khmr{"khemerarra"}
@@ -363,10 +354,6 @@ eu{
             no{"Ordenatu maiuskulak eta minuskulak bereizi gabe"}
             yes{"Ordenatu maiuskulak eta minuskulak bereizita"}
         }
-        colHiraganaQuaternary{
-            no{"Ordenatu kanak bereizita"}
-            yes{"Ordenatu kanak desberdin"}
-        }
         colNormalization{
             no{"Ordenatu arauak kontuan hartu gabe"}
             yes{"Ordenatu Unicode arauen arabera"}
@@ -397,6 +384,15 @@ eu{
             stroke{"Tarteen araberako hurrenkera"}
             traditional{"Tradizionala"}
             unihan{"Radical trazuen hurrenkera"}
+        }
+        d0{
+            fwidth{"Zabalera osoko karaktere-bihurketa"}
+            hwidth{"Zabalera erdiko karaktere-bihurketa"}
+            npinyin{"Zenbakizko bihurketa"}
+        }
+        m0{
+            bgn{"BGN bihurketa"}
+            ungegn{"UNGEGN bihurketa"}
         }
         numbers{
             arab{"Digitu arabiar-hindikoak"}
@@ -448,7 +444,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

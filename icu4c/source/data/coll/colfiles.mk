@@ -1,7 +1,5 @@
-# Copyright (C) 2016 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html
-# *   Copyright (C) 1998-2016, International Business Machines
-# *   Corporation and others.  All Rights Reserved.
+# © 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html#License
 COLLATION_CLDR_VERSION = %version%
 # A list of txt's to build
 # Note:

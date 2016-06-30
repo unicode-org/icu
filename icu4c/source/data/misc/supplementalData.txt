@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/supplementalData.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 supplementalData:table(nofallback){
     calendarData{
         buddhist{
@@ -1849,7 +1841,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"29"}
+    cldrVersion{"30"}
     codeMappings{
         {
             "AA",
@@ -10695,9 +10687,6 @@ supplementalData:table(nofallback){
                 "1959acad",
                 "1994",
                 "1996",
-                "POSIX",
-                "REVISED",
-                "SAAHO",
                 "abl1943",
                 "alalc97",
                 "aluku",
@@ -13957,11 +13946,6 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
-        prs{
-            primary{
-                scripts{"Arab"}
-            }
-        }
         ps{
             primary{
                 scripts{"Arab"}
@@ -14555,7 +14539,6 @@ supplementalData:table(nofallback){
         sw{
             primary{
                 scripts{"Latn"}
-                territories{"CD"}
             }
         }
         swb{
@@ -14564,12 +14547,6 @@ supplementalData:table(nofallback){
                     "Arab",
                     "Latn",
                 }
-            }
-        }
-        swc{
-            primary{
-                scripts{"Latn"}
-                territories{"CD"}
             }
         }
         swg{
@@ -24967,9 +24944,6 @@ supplementalData:table(nofallback){
             sw{
                 officialStatus{"official_regional"}
                 populationShareF:int{49500000}
-            }
-            swc{
-                populationShareF:int{48900000}
             }
             territoryF:intvector{
                 60577800,

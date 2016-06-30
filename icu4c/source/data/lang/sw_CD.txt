@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sw_CD.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sw_CD{
     Languages{
         ak{"Kiakan"}
@@ -16,5 +8,5 @@ sw_CD{
         en{"Kingereza"}
         sw_CD{"Kiswahili ya Kongo"}
     }
-    Version{"2.1.21.97"}
+    Version{"2.1.25.97"}
 }

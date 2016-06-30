@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/eu.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 eu{
     AuxExemplarCharacters{"[á à ă â å ä ã ā æ é è ĕ ê ë ē í ì ĭ î ï ī ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ]"}
     Ellipsis{
@@ -157,7 +149,7 @@ eu{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             eras{
@@ -1272,17 +1264,5 @@ eu{
         UK{"Erresuma Batuko sistema"}
         US{"AEBetako sistema"}
         metric{"Sistema metrikoa"}
-    }
-    transformNames{
-        BGN{"BGN bihurketa"}
-        Numeric{"Zenbakizko bihurketa"}
-        Tone{"Tonu-bihurketa"}
-        UNGEGN{"UNGEGN bihurketa"}
-        x-Accents{"Azentu-bihurketa"}
-        x-Fullwidth{"Zabalera osoko karaktere-bihurketa"}
-        x-Halfwidth{"Zabalera erdiko karaktere-bihurketa"}
-        x-Jamo{"Jamo-bihurketa"}
-        x-Pinyin{"Pinyina"}
-        x-Publishing{"Argitalpen-bihurketa"}
     }
 }

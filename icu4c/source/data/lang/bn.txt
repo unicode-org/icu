@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/bn.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 bn{
     Keys{
         calendar{"ক্যালেন্ডার"}
@@ -15,7 +7,6 @@ bn{
         colBackwards{"বিপরীত করা স্বরাঘাত বাছাইকরণ"}
         colCaseFirst{"বড়হাতের/ছোটহাতের অক্ষর ক্রম"}
         colCaseLevel{"কেস সংবেদী বাছাইকরণ"}
-        colHiraganaQuaternary{"কানা বাছাইকরণ"}
         colNormalization{"স্বাভাবিককৃত বাছাইকরণ"}
         colNumeric{"সংখ্যাসূচক বাছাইকরণ"}
         colStrength{"বাছাইকরণ শক্তি"}
@@ -24,7 +15,6 @@ bn{
         numbers{"সংখ্যাগুলি"}
         timezone{"সময় জোন"}
         va{"স্থানীয় ভিন্নতা"}
-        variableTop{"প্রতীক হিসেবে বাছাই করুন"}
         x{"বক্তিগত- ব্যবহার"}
     }
     Languages{
@@ -580,6 +570,7 @@ bn{
         Hung{"পুরোনো হাঙ্গেরীয়"}
         Inds{"সিন্ধু"}
         Ital{"প্রাচীন ইতালি"}
+        Jamo{"জ্যামো"}
         Java{"জাভানিজ"}
         Jpan{"জাপানী"}
         Kali{"কায়াহ লি"}
@@ -705,10 +696,6 @@ bn{
             no{"কেস অসংবেদী বাছাই করুন"}
             yes{"কেস সংবেদী বাছাই করুন"}
         }
-        colHiraganaQuaternary{
-            no{"কানা আলাদাভাবে বাছাই করুন"}
-            yes{"কানা ভিন্নভাবে বাছাই করুন"}
-        }
         colNormalization{
             no{"স্বাভাবিক ছাড়া বাছাই করুন"}
             yes{"স্বাভাবিকৃত ইউনিকোড বাছাই করুন"}
@@ -739,6 +726,15 @@ bn{
             stroke{"আবর্তিত সজ্জাক্রম"}
             traditional{"প্রথাগত সজ্জাক্রম"}
             unihan{"রাডিকেল স্ট্রোক বাছাই বিন্যাস"}
+        }
+        d0{
+            fwidth{"পূর্ণচওড়া"}
+            hwidth{"অর্ধচওড়া"}
+            npinyin{"সাংখিক"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         numbers{
             arab{"আরবি-ভারতীয় সংখ্যা"}
@@ -783,7 +779,7 @@ bn{
             vaii{"ভাই সংখ্যা"}
         }
     }
-    Version{"2.1.23.6"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"ভাষা: {0}"}
         script{"লিপি: {0}"}

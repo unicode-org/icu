@@ -1,6 +1,6 @@
-﻿# ***************************************************************************
-# Copyright (C) 2016 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html
+﻿# © 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html#License
+# ***************************************************************************
 # *
 # *  Copyright (C) 2004-2016, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
@@ -10,8 +10,6 @@
 # Generated from CLDR 
 #
 
-#
-########################################################################
 # BGN/PCGN 1988 Agreement, with modifications 2009
 #
 # This romanization system supersedes the one which was approved by
@@ -21,10 +19,11 @@
 # with minor modifications introduced by the government of the Maldives
 # in 2009.
 #
-########################################################################
-#
-::[[:block=thaana:]\uFDF2] ;
-:: NFD (NFC) ;
+# In our rules, we also convert Arabic punctuation characters to Latin.
+# These appears to be used in Maldivian text, for example in the Universal
+# Declaration of Human Rights.
+::[[:block=thaana:][،؛؟٪٫٬]\uFDF2] ;
+::NFD;
 $wordBoundary = [^[:L:][:M:][:N:]] ;
 $vowel = [\u07A6-\u07AF] ;
 $sukun = \u07B0 ;
@@ -174,4 +173,10 @@ $rule4 → ;
 \u07AF → oa; # OABOAFILI
 \u07AA → u; # UBUFILI
 \u07AB → oo; # OOBOOFILI
+، → ',';  # U+060C ARABIC COMMA
+؛ → ';';  # U+061B ARABIC SEMICOLON
+؟ → '?';  # U+061F ARABIC QUESTION MARK
+٪ → '%';  # U+066A ARABIC PERCENT SIGN
+٫ → '.';  # U+066B ARABIC DECIMAL SEPARATOR
+٬ → ',';  # U+066C ARABIC THOUSANDS SEPARATOR
 

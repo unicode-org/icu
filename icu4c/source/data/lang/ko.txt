@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ko.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ko{
     Keys{
         calendar{"달력"}
@@ -15,7 +7,6 @@ ko{
         colBackwards{"악센트 역순 정렬"}
         colCaseFirst{"대문자/소문자 순서"}
         colCaseLevel{"대/소문자 구분 정렬"}
-        colHiraganaQuaternary{"가나 정렬"}
         colNormalization{"표준 정렬"}
         colNumeric{"숫자 정렬"}
         colStrength{"정렬 강도"}
@@ -27,7 +18,6 @@ ko{
         numbers{"숫자"}
         timezone{"시간대"}
         va{"방언"}
-        variableTop{"기호로 정렬"}
         x{"공개 여부"}
     }
     Languages{
@@ -614,6 +604,7 @@ ko{
         Hung{"고대 헝가리 문자"}
         Inds{"인더스 문자"}
         Ital{"고대 이탈리아 문자"}
+        Jamo{"자모"}
         Java{"자바 문자"}
         Jpan{"일본 문자"}
         Jurc{"줄첸 문자"}
@@ -763,10 +754,6 @@ ko{
             no{"대/소문자 무시 정렬"}
             yes{"대/소문자 구분 정렬"}
         }
-        colHiraganaQuaternary{
-            no{"가나 별도 정렬"}
-            yes{"가나를 다르게 정렬"}
-        }
         colNormalization{
             no{"표준화 없이 정렬"}
             yes{"유니코드 표준화 정렬"}
@@ -799,6 +786,11 @@ ko{
             unihan{"부수순"}
             zhuyin{"주음순"}
         }
+        d0{
+            fwidth{"전각"}
+            hwidth{"반각"}
+            npinyin{"숫자"}
+        }
         hc{
             h11{"12시간제(0–11)"}
             h12{"12시간제(1–12)"}
@@ -809,6 +801,10 @@ ko{
             loose{"줄바꿈 - 넓게"}
             normal{"줄바꿈 - 보통"}
             strict{"줄바꿈 - 좁게"}
+        }
+        m0{
+            bgn{"미국 지명위원회(BGN)"}
+            ungegn{"유엔지명전문가회의(UNGEGN)"}
         }
         ms{
             metric{"미터법"}
@@ -900,7 +896,7 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}

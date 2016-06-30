@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ar.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ar{
     Keys{
         calendar{"التقويم"}
@@ -15,7 +7,6 @@ ar{
         colBackwards{"التصنيف بحسب اللكنة المعكوسة"}
         colCaseFirst{"الترتيب بحسب الأحرف الكبيرة/الصغيرة"}
         colCaseLevel{"التصنيف بحسب حساسية حالة الأحرف"}
-        colHiraganaQuaternary{"التصنيف بحسب الكانا"}
         colNormalization{"التصنيف الموحد"}
         colNumeric{"التصنيف الرقمي"}
         colStrength{"قوة التصنيف"}
@@ -27,7 +18,6 @@ ar{
         numbers{"الأرقام"}
         timezone{"المنطقة الزمنية"}
         va{"متغيرات اللغة"}
-        variableTop{"تصنيف كرموز"}
         x{"استخدام خاص"}
     }
     Languages{
@@ -605,6 +595,7 @@ ar{
         Hung{"المجرية القديمة"}
         Inds{"اندس - هارابان"}
         Ital{"الإيطالية القديمة"}
+        Jamo{"جامو"}
         Java{"الجاوية"}
         Jpan{"اليابانية"}
         Kali{"الكياه لى"}
@@ -721,10 +712,6 @@ ar{
             no{"تصنيف بحسب الأحرف غير الحساسة لحالة الأحرف"}
             yes{"تصنيف بحسب حساسية الأحرف"}
         }
-        colHiraganaQuaternary{
-            no{"تصنيف الكانا بشكل منفصل"}
-            yes{"تصنيف الكانا بشكل مختلف"}
-        }
         colNormalization{
             no{"التصفية بدون تسوية"}
             yes{"تصنيف Unicode طبيعي"}
@@ -756,6 +743,11 @@ ar{
             traditional{"ترتيب تقليدي"}
             unihan{"ترتيب تصنيف الجذر والضغطات"}
         }
+        d0{
+            fwidth{"عرض كامل"}
+            hwidth{"نصف العرض"}
+            npinyin{"رقمي"}
+        }
         hc{
             h11{"نظام 12 ساعة (0–11)"}
             h12{"نظام 12 ساعة (1–12)"}
@@ -766,6 +758,10 @@ ar{
             loose{"نمط فصل السطور: متباعد"}
             normal{"نمط فصل السطور: عادي"}
             strict{"نمط فصل السطور: متقارب"}
+        }
+        m0{
+            bgn{"بي جي إن"}
+            ungegn{"يو إن جي إي جي إن"}
         }
         ms{
             metric{"نظام متري"}
@@ -835,7 +831,7 @@ ar{
         VALENCIA{"بلنسية"}
         WADEGILE{"المندرين باللاتينية - ويد–جيلز"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.36"}
     codePatterns{
         language{"اللغة: {0}"}
         script{"نظام الكتابة: {0}"}

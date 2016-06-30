@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/supplementalMetadata.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 metadata:table(nofallback){
     alias{
         language{
@@ -939,6 +931,10 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"pt"}
             }
+            prs{
+                reason{"overlong"}
+                replacement{"fa_AF"}
+            }
             pus{
                 reason{"overlong"}
                 replacement{"ps"}
@@ -1102,6 +1098,10 @@ metadata:table(nofallback){
             swa{
                 reason{"overlong"}
                 replacement{"sw"}
+            }
+            swc{
+                reason{"overlong"}
+                replacement{"sw_CD"}
             }
             swe{
                 reason{"overlong"}

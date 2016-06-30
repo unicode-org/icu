@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/cy.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 cy{
     Keys{
         calendar{"Calendr"}
@@ -681,7 +673,7 @@ cy{
         VAIDIKA{"VAIDIKA"}
         VALLADER{"VALLADER"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.25.97"}
     codePatterns{
         language{"Iaith: {0}"}
         script{"Sgript: {0}"}

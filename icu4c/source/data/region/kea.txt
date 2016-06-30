@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/kea.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 kea{
     Countries{
         001{"Mundu"}
@@ -313,5 +305,5 @@ kea{
         FK{"Ilhas Falkland (Ilhas Malvinas)"}
         MK{"Masidonia (FYROM)"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.25.97"}
 }

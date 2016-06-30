@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/et.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 et{
     AuxExemplarCharacters{"[á à â å ā æ ç é è ê ë ē í ì î ï ī ñ ó ò ŏ ô ø ō œ ú ù û ū]"}
     Ellipsis{
@@ -157,7 +149,7 @@ et{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1293,17 +1285,5 @@ et{
         UK{"inglise mõõdustik"}
         US{"USA mõõdustik"}
         metric{"meetermõõdustik"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Numbriline"}
-        Tone{"Toon"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Diakriitikud"}
-        x-Fullwidth{"Täislaius"}
-        x-Halfwidth{"Poolaius"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Kirjastamine"}
     }
 }

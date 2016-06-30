@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/es.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 es{
     AuxExemplarCharacters{"[ª à ă â å ä ã ā æ ç è ĕ ê ë ē ì ĭ î ī º ò ŏ ô ö ø ō œ ù ŭ û ū ÿ]"}
     Ellipsis{
@@ -211,7 +203,7 @@ es{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.23.18"}
+    Version{"2.1.26.52"}
     calendar{
         buddhist{
             eras{
@@ -1527,17 +1519,5 @@ es{
         UK{"anglosajón"}
         US{"estadounidense"}
         metric{"métrico"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Numérico"}
-        Tone{"Tono"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Acentos"}
-        x-Fullwidth{"Ancho completo"}
-        x-Halfwidth{"Ancho medio"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Publicación"}
     }
 }

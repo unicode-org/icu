@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zh_Hant.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant{
     %%Parent{"root"}
     AuxExemplarCharacters{
@@ -239,7 +231,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.1.23.90"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -3004,17 +2996,5 @@ zh_Hant{
         UK{"英制"}
         US{"美制"}
         metric{"公制"}
-    }
-    transformNames{
-        BGN{"美國地名委員會"}
-        Numeric{"數字"}
-        Tone{"聲調"}
-        UNGEGN{"聯合國地名專家組"}
-        x-Accents{"變音符號"}
-        x-Fullwidth{"全形"}
-        x-Halfwidth{"半形"}
-        x-Jamo{"韓文字母"}
-        x-Pinyin{"拼音"}
-        x-Publishing{"出版"}
     }
 }

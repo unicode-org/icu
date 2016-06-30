@@ -3982,12 +3982,17 @@ structLocale:table(nofallback){
             other{""}
         }
     }
+    characterLabelPattern{
+        strokes{
+            "",
+            "",
+        }
+    }
     codePatterns{
         language{""}
         script{""}
         territory{""}
     }
-    defaultNumberingSystem{""}
     contextTransforms{
         calendar-field:intvector{
             2,
@@ -4046,6 +4051,7 @@ structLocale:table(nofallback){
             2,
         }
     }
+    defaultNumberingSystem{""}
     delimiters{
         quotationStart{""}
         quotationEnd{""}
@@ -4179,6 +4185,24 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         fri-narrow{
             relative{
@@ -4186,12 +4210,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         fri-short{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         hour{
@@ -4356,6 +4416,24 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         mon-narrow{
             relative{
@@ -4363,12 +4441,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         mon-short{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         month{
@@ -4533,6 +4647,24 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         sat-narrow{
             relative{
@@ -4540,12 +4672,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         sat-short{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         second{
@@ -4632,12 +4800,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         sun-narrow{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         sun-short{
@@ -4646,12 +4850,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         thu{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         thu-narrow{
@@ -4660,12 +4900,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         thu-short{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         tue{
@@ -4674,12 +4950,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         tue-narrow{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         tue-short{
@@ -4688,12 +5000,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         wed{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         wed-narrow{
@@ -4702,12 +5050,48 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         wed-short{
             relative{
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         week{
@@ -4717,6 +5101,7 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativePeriod{""}
             relativeTime{
                 future{
                     zero{""}
@@ -4743,6 +5128,7 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativePeriod{""}
             relativeTime{
                 future{
                     zero{""}
@@ -4769,6 +5155,7 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativePeriod{""}
             relativeTime{
                 future{
                     zero{""}
@@ -5502,6 +5889,9 @@ structLocale:table(nofallback){
         zxx{""}
         zza{""}
     }
+    Languages%long{
+        zh{""}
+    }
     Languages%secondary{
         crh{""}
         fa{""}
@@ -5509,15 +5899,15 @@ structLocale:table(nofallback){
         lad{""}
         tr{""}
     }
-    Languages%variant{
-        ky{""}
-        ps{""}
-        ug{""}
-    }
     Languages%short{
         az{""}
         en_GB{""}
         en_US{""}
+    }
+    Languages%variant{
+        ky{""}
+        ps{""}
+        ug{""}
     }
     LocaleScript{
         "",

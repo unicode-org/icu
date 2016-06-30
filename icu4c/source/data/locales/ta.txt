@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ta.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ta{
     AuxExemplarCharacters{"[\u200C\u200D]"}
     Ellipsis{
@@ -214,7 +206,7 @@ ta{
         native{"tamldec"}
         traditional{"taml"}
     }
-    Version{"2.1.23.16"}
+    Version{"2.1.26.0"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -1541,17 +1533,5 @@ ta{
         UK{"யூகே"}
         US{"யூஎஸ்"}
         metric{"மெட்ரிக்"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"எண்"}
-        Tone{"டோன்"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"ஒலிப்புகள்"}
-        x-Fullwidth{"முழு அகலம்"}
-        x-Halfwidth{"அரை அகலம்"}
-        x-Jamo{"ஜமோ"}
-        x-Pinyin{"பின்யின்"}
-        x-Publishing{"வெளியிடுகிறது"}
     }
 }

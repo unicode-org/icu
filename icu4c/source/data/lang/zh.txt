@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zh.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 zh{
     Keys{
         calendar{"日历"}
@@ -15,7 +7,6 @@ zh{
         colBackwards{"对重音进行逆向排序"}
         colCaseFirst{"大写/小写字母排序"}
         colCaseLevel{"区分大小写的排序"}
-        colHiraganaQuaternary{"假名排序"}
         colNormalization{"规范化排序"}
         colNumeric{"数字排序"}
         colStrength{"排序强度"}
@@ -27,7 +18,6 @@ zh{
         numbers{"数字"}
         timezone{"时区"}
         va{"语言区域别名"}
-        variableTop{"按照符号排序"}
         x{"专用"}
     }
     Languages{
@@ -614,6 +604,7 @@ zh{
         Hung{"古匈牙利文"}
         Inds{"古希腊哈拉潘"}
         Ital{"古意大利文"}
+        Jamo{"韩文字母"}
         Java{"爪哇文"}
         Jpan{"日文"}
         Jurc{"女真文"}
@@ -761,10 +752,6 @@ zh{
             no{"不区分大小写进行排序"}
             yes{"区分大小写进行排序"}
         }
-        colHiraganaQuaternary{
-            no{"对假名进行单独排序"}
-            yes{"对假名进行区别排序"}
-        }
         colNormalization{
             no{"非规范化排序"}
             yes{"对 Unicode 进行规范化排序"}
@@ -797,6 +784,11 @@ zh{
             unihan{"部首笔画排序"}
             zhuyin{"注音排序"}
         }
+        d0{
+            fwidth{"全角"}
+            hwidth{"半角"}
+            npinyin{"数字"}
+        }
         hc{
             h11{"12小时制（0–11）"}
             h12{"12小时制（1–12）"}
@@ -807,6 +799,10 @@ zh{
             loose{"宽"}
             normal{"默认"}
             strict{"窄"}
+        }
+        m0{
+            bgn{"美国地名委员会 (BGN)"}
+            ungegn{"联合国地名专家组 (UNGEGN)"}
         }
         ms{
             metric{"公制"}
@@ -929,7 +925,7 @@ zh{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.39"}
     codePatterns{
         language{"语言：{0}"}
         script{"文字：{0}"}

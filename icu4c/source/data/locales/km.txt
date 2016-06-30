@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/km.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 km{
     AuxExemplarCharacters{"[\u17B4\u17B5\u200B \u17CC \u17CE \u17CF \u17D1 ឝ ឞ]"}
     Ellipsis{
@@ -175,7 +167,7 @@ km{
         minimumGroupingDigits{"1"}
         native{"khmr"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

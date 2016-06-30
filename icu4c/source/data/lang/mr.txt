@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/mr.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 mr{
     Keys{
         calendar{"दिनदर्शिका"}
@@ -15,7 +7,6 @@ mr{
         colBackwards{"उलट उच्चार क्रमवारी"}
         colCaseFirst{"अपरकेस/लोअरकेस क्रम"}
         colCaseLevel{"केस संवेदी क्रमवारी"}
-        colHiraganaQuaternary{"काना क्रमवारी"}
         colNormalization{"सामान्य क्रमवारी"}
         colNumeric{"अंकीय क्रमवारी"}
         colStrength{"क्रमवारी सामर्थ्य"}
@@ -27,7 +18,6 @@ mr{
         numbers{"संख्या"}
         timezone{"टाइम झोन"}
         va{"लोकेल व्हेरियंट"}
-        variableTop{"प्रतीक म्हणून क्रमवारी लावा"}
         x{"खासगी-वापर"}
     }
     Languages{
@@ -585,6 +575,7 @@ mr{
         Hung{"पुरातन हंगेरियन"}
         Inds{"सिन्धु"}
         Ital{"जुनी इटालिक"}
+        Jamo{"जामो"}
         Java{"जावानीस"}
         Jpan{"जपानी"}
         Kali{"कायाह ली"}
@@ -710,10 +701,6 @@ mr{
             no{"केस संवेदी क्रमवारी लावा"}
             yes{"केस संवेदी क्रमवारी लावा"}
         }
-        colHiraganaQuaternary{
-            no{"काना विभक्तपणे क्रमवारी लावा"}
-            yes{"काना भिन्नपणे क्रमवारी लावा"}
-        }
         colNormalization{
             no{"नेहमीसारखे न करता क्रमवारी लावा"}
             yes{"युनिकोड सामान्यीकृत क्रमवारी लावा"}
@@ -745,6 +732,11 @@ mr{
             traditional{"पारंपारिक अनुक्रम"}
             unihan{"रॅडिकल-स्ट्रोक अनुक्रम"}
         }
+        d0{
+            fwidth{"पूर्णरुंदी"}
+            hwidth{"अर्धीरुंदी"}
+            npinyin{"अंकीय"}
+        }
         hc{
             h11{"12 तास पद्धती (0–11)"}
             h12{"12 तास पद्धती (1–12)"}
@@ -755,6 +747,10 @@ mr{
             loose{"ढिली लाइन ब्रेक शैली"}
             normal{"सामान्य लाइन ब्रेक शैली"}
             strict{"काटेकोर लाइन ब्रेक"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"दशमान पद्धती"}
@@ -808,7 +804,7 @@ mr{
         PINYIN{"पिनयिन रोमनायझेशन"}
         WADEGILE{"वादे-गिलेस रोमनायझेशन"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपी: {0}"}

@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/be.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 be{
     AuxExemplarCharacters{
         "[{а\u0301} {е\u0301} {ё\u0301} {і\u0301} {о\u0301} {у\u0301} {ы\u0301} {э"
@@ -281,7 +273,7 @@ be{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.25.97"}
     calendar{
         buddhist{
             DateTimePatterns{

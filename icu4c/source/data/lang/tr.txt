@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/tr.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 tr{
     Keys{
         calendar{"Takvim"}
@@ -15,7 +7,6 @@ tr{
         colBackwards{"Ters Aksan Sıralama"}
         colCaseFirst{"Büyük/Küçük Harf Sıralama"}
         colCaseLevel{"Büyük/Küçük Harfe Duyarlı Sıralama"}
-        colHiraganaQuaternary{"Kana Sıralaması"}
         colNormalization{"Normalleştirilmiş Sıralama"}
         colNumeric{"Sayısal Sıralama"}
         colStrength{"Sıralama Gücü"}
@@ -27,7 +18,6 @@ tr{
         numbers{"Rakamlar"}
         timezone{"Saat Dilimi"}
         va{"Yerel Varyant"}
-        variableTop{"Sembollere Göre Sıralama"}
         x{"Özel Kullanım"}
     }
     Languages{
@@ -705,6 +695,7 @@ tr{
         Hung{"Eski Macar"}
         Inds{"Indus"}
         Ital{"Eski İtalyan"}
+        Jamo{"Jamo"}
         Java{"Cava Dili"}
         Jpan{"Japon"}
         Jurc{"Jurchen"}
@@ -859,10 +850,6 @@ tr{
             no{"Büyük/Küçük Harfe Duyarlı Olmadan Sıralama"}
             yes{"Büyük/Küçük Harfe Duyarla Sıralama"}
         }
-        colHiraganaQuaternary{
-            no{"Kana’yı Ayrı Sıralama"}
-            yes{"Kana’yı Farklı Sıralama"}
-        }
         colNormalization{
             no{"Normalleştirme Olmadan Sıralama"}
             yes{"Unicode Normalleştirilmiş Olarak Sıralama"}
@@ -896,6 +883,11 @@ tr{
             unihan{"Radical-Stroke Sıralama Düzeni"}
             zhuyin{"Zhuyin Sıralaması"}
         }
+        d0{
+            fwidth{"Tam Genişlik"}
+            hwidth{"Yarım genişlik"}
+            npinyin{"Rakam"}
+        }
         hc{
             h11{"12 Saat Sistemi (0–11)"}
             h12{"12 Saat Sistemi (1–12)"}
@@ -906,6 +898,10 @@ tr{
             loose{"loose"}
             normal{"normal"}
             strict{"strict"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"Metrik Sistem"}
@@ -1003,7 +999,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.1.23.73"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Alfabe: {0}"}

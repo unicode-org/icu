@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ro.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ro{
     Keys{
         calendar{"calendar"}
@@ -15,7 +7,6 @@ ro{
         colBackwards{"Ordonare inversă după accent"}
         colCaseFirst{"Ordonare după majuscule/minuscule"}
         colCaseLevel{"Ordonare care ține seama de majuscule/minuscule"}
-        colHiraganaQuaternary{"Ordonare după kana"}
         colNormalization{"Ordonare normalizată"}
         colNumeric{"Ordonare numerică"}
         colStrength{"Puterea ordonării"}
@@ -27,7 +18,6 @@ ro{
         numbers{"numere"}
         timezone{"Fusul orar"}
         va{"Varianta locală"}
-        variableTop{"Ordonați ca simboluri"}
         x{"Utilizare privată"}
     }
     Languages{
@@ -596,6 +586,7 @@ ro{
         Hung{"maghiară veche"}
         Inds{"indus"}
         Ital{"italică veche"}
+        Jamo{"Jamo"}
         Java{"javaneză"}
         Jpan{"japoneză"}
         Kana{"katakana"}
@@ -676,10 +667,6 @@ ro{
             no{"Ordonați neținând seama de diferența dintre majuscule/minuscule"}
             yes{"Ordonați ținând seama de diferența dintre majuscule/minuscule"}
         }
-        colHiraganaQuaternary{
-            no{"Ordonați caracterele kana separat"}
-            yes{"Ordonați kana diferențiat"}
-        }
         colNormalization{
             no{"Ordonați fără normalizare"}
             yes{"Ordonați caracterele unicode normalizat"}
@@ -712,6 +699,11 @@ ro{
             traditional{"sortare tradițională"}
             unihan{"Ordine de sortare a liniilor ideogramelor"}
         }
+        d0{
+            fwidth{"Cu lățime întreagă"}
+            hwidth{"Cu jumătate de lățime"}
+            npinyin{"Numeric"}
+        }
         hc{
             h11{"sistem cu 12 ore (0–11)"}
             h12{"sistem cu 12 ore (0–12)"}
@@ -722,6 +714,10 @@ ro{
             loose{"stil liber de întrerupere a liniei"}
             normal{"stil normal de întrerupere a liniei"}
             strict{"stil strict de întrerupere a liniei"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"sistemul metric"}
@@ -776,7 +772,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}

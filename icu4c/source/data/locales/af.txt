@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/af.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 af{
     AuxExemplarCharacters{"[à ä ã æ ç í ì ó ò ú ù ü ý]"}
     Ellipsis{
@@ -211,7 +203,7 @@ af{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1364,17 +1356,5 @@ af{
         UK{"VK"}
         US{"VSA"}
         metric{"Metriek"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Numeries"}
-        Tone{"Toon"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Aksente"}
-        x-Fullwidth{"Vollewydte"}
-        x-Halfwidth{"halfwydte"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Publisering"}
     }
 }

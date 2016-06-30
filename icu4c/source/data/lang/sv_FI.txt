@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sv_FI.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sv_FI{
     Keys{
         timezone{"tidszon"}
@@ -18,5 +10,5 @@ sv_FI{
     Scripts%variant{
         Arab{"persisk-arabiska"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.25.97"}
 }

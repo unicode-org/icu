@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/yo_BJ.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 yo_BJ{
     Languages{
         da{"Èdè Ilɛ̀ Denmark"}
@@ -19,5 +11,5 @@ yo_BJ{
         tr{"Èdè Tɔɔkisi"}
         zu{"Èdè Shulu"}
     }
-    Version{"2.1.24.17"}
+    Version{"2.1.25.97"}
 }

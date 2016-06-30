@@ -3575,8 +3575,11 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                 Transliterator *inv = t->createInverse(status);
                 if (U_FAILURE(status)) {
 #if UCONFIG_NO_BREAK_ITERATION
-                    // If UCONFIG_NO_BREAK_ITERATION is on, then only Thai should fail.
-                    if (id.compare((UnicodeString)"Latin-Thai/") != 0)
+                    // Devanagari-Arabic is forward-only cannot create inverse.
+                    // If UCONFIG_NO_BREAK_ITERATION is on, Thai should also fail.
+                    if (id.compare((UnicodeString)"Latin-Thai/") != 0 || (id.compare((UnicodeString)"Devanagari-Arabic/") != 0 && logKnownIssue("cldrbug 9583:", "cannot create inverse for Devanagari-Arabic")))
+#else
+                    if (id.compare((UnicodeString)"Devanagari-Arabic/") != 0 && logKnownIssue("cldrbug 9583:", "cannot create inverse for Devanagari-Arabic"))
 #endif
                         errln((UnicodeString)"FAIL: Could not create inverse of " + id);
 

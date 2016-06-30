@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/root.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 /**
  * ICU <specials> source: <path>/common/main/root.xml
  */
@@ -26,6 +18,10 @@ root{
     MoreInformation{"?"}
     NumberElements{
         arab{
+            patterns{
+                currencyFormat{"#,##0.00 ¤"}
+                percentFormat{"#,##0 %"}
+            }
             symbols{
                 decimal{"٫"}
                 exponential{"اس"}
@@ -35,7 +31,7 @@ root{
                 minusSign{"‏-"}
                 nan{"NaN"}
                 perMille{"؉"}
-                percentSign{"٪"}
+                percentSign{"٪‏"}
                 plusSign{"‏+"}
                 superscriptingExponent{"×"}
                 timeSeparator{":"}
@@ -166,7 +162,7 @@ root{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.65"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -980,6 +976,9 @@ root{
                 MEd{"MM-dd, E"}
                 MMM{"LLL"}
                 MMMEd{"MMM d, E"}
+                MMMMW{
+                    other{"'week' W 'of' MMM"}
+                }
                 MMMMd{"MMMM d"}
                 MMMd{"MMM d"}
                 Md{"MM-dd"}
@@ -1000,6 +999,9 @@ root{
                 yMd{"y-MM-dd"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
+                yw{
+                    other{"'week' w 'of' y"}
+                }
             }
             dayNames{
                 format{
@@ -2010,6 +2012,78 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
     }
+    characterLabel{
+        activities{"Activities"}
+        african_scripts{"African Scripts"}
+        american_scripts{"American Scripts"}
+        animals_nature{"Animals & Nature"}
+        arrows{"Arrows"}
+        box_drawing{"Box Drawing"}
+        braille{"Braille"}
+        bullets_stars{"Bullets/Stars"}
+        consonantal_jamo{"Consonantal Jamo"}
+        currency_symbols{"Currency Symbols"}
+        dash_connector{"Dash/Connector"}
+        digits{"Digits"}
+        dingbats{"Dingbats"}
+        divination_symbols{"Divination Symbols"}
+        downwards_arrows{"Downwards Arrows"}
+        downwards_upwards_arrows{"Downwards Upwards Arrows"}
+        east_asian_scripts{"East Asian Scripts"}
+        emoji{"Emoji"}
+        european_scripts{"European Scripts"}
+        flags{"Flags"}
+        food_drink{"Food & Drink"}
+        format{"Format"}
+        format_whitespace{"Format & Whitespace"}
+        full_width_form_variant{"Full-Width Form Variants"}
+        geometric_shapes{"Geometric Shapes"}
+        half_width_form_variant{"Half-Width Form Variants"}
+        han_characters{"Han Characters"}
+        han_radicals{"Han Radicals"}
+        hanja{"Hanja"}
+        hanzi_simplified{"Hanzi (Simplified)"}
+        hanzi_traditional{"Hanzi (Traditional)"}
+        historic_scripts{"Historic Scripts"}
+        ideographic_desc_characters{"Ideographic Desc. Characters"}
+        japanese_kana{"Japanese Kana"}
+        kanbun{"Kanbun"}
+        kanji{"Kanji"}
+        leftwards_arrows{"Leftwards Arrows"}
+        leftwards_rightwards_arrows{"Leftwards Rightwards Arrows"}
+        letterlike_symbols{"Letterlike Symbols"}
+        limited_use{"Limited Use"}
+        math_symbols{"Math Symbols"}
+        middle_eastern_scripts{"Middle Eastern Scripts"}
+        miscellaneous{"Miscellaneous"}
+        modern_scripts{"Modern Scripts"}
+        modifier{"Modifier"}
+        musical_symbols{"Musical Symbols"}
+        nonspacing{"Nonspacing"}
+        numbers{"Numbers"}
+        objects{"Objects"}
+        other{"Other"}
+        paired{"Paired"}
+        phonetic_alphabet{"Phonetic Alphabet"}
+        pictographs{"Pictographs"}
+        punctuation{"Punctuation"}
+        rightwards_arrows{"Rightwards Arrows"}
+        sign_standard_symbols{"Sign/Standard Symbols"}
+        small_form_variant{"Small Form Variants"}
+        smileys_people{"Smileys & People"}
+        south_asian_scripts{"South Asian Scripts"}
+        southeast_asian_scripts{"Southeast Asian Scripts"}
+        spacing{"Spacing"}
+        symbols{"Symbols"}
+        technical_symbols{"Technical Symbols"}
+        tone_marks{"Tone Marks"}
+        travel_places{"Travel & Places"}
+        upwards_arrows{"Upwards Arrows"}
+        variant_forms{"Variant Forms"}
+        vocalic_jamo{"Vocalic Jamo"}
+        western_asian_scripts{"Western Asian Scripts"}
+        whitespace{"Whitespace"}
+    }
     delimiters{
         alternateQuotationEnd{"’"}
         alternateQuotationStart{"‘"}
@@ -2047,11 +2121,22 @@ root{
                 "0"{"this Friday"}
                 "1"{"next Friday"}
             }
+            relativeTime{
+                future{
+                    other{"+{0} Fridays"}
+                }
+                past{
+                    other{"-{0} Fridays"}
+                }
+            }
         }
         fri-narrow:alias{"/LOCALE/fields/fri-short"}
         fri-short:alias{"/LOCALE/fields/fri"}
         hour{
             dn{"Hour"}
+            relative{
+                "0"{"this hour"}
+            }
             relativeTime{
                 future{
                     other{"+{0} h"}
@@ -2065,6 +2150,9 @@ root{
         hour-short:alias{"/LOCALE/fields/hour"}
         minute{
             dn{"Minute"}
+            relative{
+                "0"{"this minute"}
+            }
             relativeTime{
                 future{
                     other{"+{0} min"}
@@ -2081,6 +2169,14 @@ root{
                 "-1"{"last Monday"}
                 "0"{"this Monday"}
                 "1"{"next Monday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Mondays"}
+                }
+                past{
+                    other{"-{0} Mondays"}
+                }
             }
         }
         mon-narrow:alias{"/LOCALE/fields/mon-short"}
@@ -2127,6 +2223,14 @@ root{
                 "0"{"this Saturday"}
                 "1"{"next Saturday"}
             }
+            relativeTime{
+                future{
+                    other{"+{0} Saturdays"}
+                }
+                past{
+                    other{"-{0} Saturdays"}
+                }
+            }
         }
         sat-narrow:alias{"/LOCALE/fields/sat-short"}
         sat-short:alias{"/LOCALE/fields/sat"}
@@ -2152,6 +2256,14 @@ root{
                 "0"{"this Sunday"}
                 "1"{"next Sunday"}
             }
+            relativeTime{
+                future{
+                    other{"+{0} Sundays"}
+                }
+                past{
+                    other{"-{0} Sundays"}
+                }
+            }
         }
         sun-narrow:alias{"/LOCALE/fields/sun-short"}
         sun-short:alias{"/LOCALE/fields/sun"}
@@ -2160,6 +2272,14 @@ root{
                 "-1"{"last Thursday"}
                 "0"{"this Thursday"}
                 "1"{"next Thursday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Thursdays"}
+                }
+                past{
+                    other{"-{0} Thursdays"}
+                }
             }
         }
         thu-narrow:alias{"/LOCALE/fields/thu-short"}
@@ -2170,6 +2290,14 @@ root{
                 "0"{"this Tuesday"}
                 "1"{"next Tuesday"}
             }
+            relativeTime{
+                future{
+                    other{"+{0} Tuesdays"}
+                }
+                past{
+                    other{"-{0} Tuesdays"}
+                }
+            }
         }
         tue-narrow:alias{"/LOCALE/fields/tue-short"}
         tue-short:alias{"/LOCALE/fields/tue"}
@@ -2178,6 +2306,14 @@ root{
                 "-1"{"last Wednesday"}
                 "0"{"this Wednesday"}
                 "1"{"next Wednesday"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} Wednesdays"}
+                }
+                past{
+                    other{"-{0} Wednesdays"}
+                }
             }
         }
         wed-narrow:alias{"/LOCALE/fields/wed-short"}
@@ -2189,6 +2325,7 @@ root{
                 "0"{"this week"}
                 "1"{"next week"}
             }
+            relativePeriod{"the week of {0}"}
             relativeTime{
                 future{
                     other{"+{0} w"}
@@ -2235,6 +2372,12 @@ root{
             end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
+        }
+        standard-short{
+            2:alias{"/LOCALE/listPattern/standard/2"}
+            end:alias{"/LOCALE/listPattern/standard/end"}
+            middle:alias{"/LOCALE/listPattern/standard/middle"}
+            start:alias{"/LOCALE/listPattern/standard/start"}
         }
         unit{
             2:alias{"/LOCALE/listPattern/unit-short/2"}

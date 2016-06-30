@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/hi.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 hi{
     Keys{
         calendar{"कैलेंडर"}
@@ -15,7 +7,6 @@ hi{
         colBackwards{"विपरीत उच्‍चारण वर्गीकरण"}
         colCaseFirst{"अपरकेस/लोअरकेस क्रमांकन"}
         colCaseLevel{"केस संवेदी वर्गीकरण"}
-        colHiraganaQuaternary{"काना वर्गीकरण"}
         colNormalization{"सामान्यीकृत वर्गीकरण"}
         colNumeric{"संख्यात्मक वर्गीकरण"}
         colStrength{"वर्गीकरण सशक्तता"}
@@ -27,7 +18,6 @@ hi{
         numbers{"संख्याएँ"}
         timezone{"समय क्षेत्र"}
         va{"स्थानीय प्रकार"}
-        variableTop{"चिह्न के रूप में क्रमित करें"}
         x{"निजी-उपयोग"}
     }
     Languages{
@@ -585,6 +575,7 @@ hi{
         Hung{"ऑल्ड हंगेरियन"}
         Inds{"सिन्धु"}
         Ital{"पुरानी इटली"}
+        Jamo{"जामो"}
         Java{"जावानीस"}
         Jpan{"जापानी"}
         Kali{"कायाह ली"}
@@ -710,10 +701,6 @@ hi{
             no{"केस असंवेदी क्रमित करें"}
             yes{"केस संवेदी को क्रमित करें"}
         }
-        colHiraganaQuaternary{
-            no{"काना को अलग से क्रमित करें"}
-            yes{"काना को भिन्‍न रूप में क्रमित करें"}
-        }
         colNormalization{
             no{"बिना सामान्‍यीकरण के क्रमित करें"}
             yes{"यूनिकोड सामान्‍यीकृत क्रमित करें"}
@@ -745,6 +732,11 @@ hi{
             traditional{"पारम्पारिक वर्गीकरण"}
             unihan{"रेडिकल-स्ट्रोक क्रम विन्यास"}
         }
+        d0{
+            fwidth{"पूर्ण-चौड़ाई"}
+            hwidth{"आधी-चौड़ाई"}
+            npinyin{"सांख्यिक"}
+        }
         hc{
             h11{"12 घंटों की प्रणाली (0–11)"}
             h12{"12 घंटों की प्रणाली (1–12)"}
@@ -755,6 +747,10 @@ hi{
             loose{"ढीली पंक्ति विच्छेद शैली"}
             normal{"सामान्य पंक्ति विच्छेद शैली"}
             strict{"सख्त पंक्ति विच्छेद शैली"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"मीट्रिक"}
@@ -814,7 +810,7 @@ hi{
         POSIX{"कम्प्यूटर"}
         REVISED{"संशोधित वर्तनी"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपि: {0}"}

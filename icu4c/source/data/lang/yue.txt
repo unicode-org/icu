@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/yue.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 yue{
     Keys{
         calendar{"曆法"}
@@ -15,7 +7,6 @@ yue{
         colBackwards{"反向重音排序"}
         colCaseFirst{"大寫/小寫排列"}
         colCaseLevel{"區分大小寫排序"}
-        colHiraganaQuaternary{"假名排序"}
         colNormalization{"正規化排序"}
         colNumeric{"數字排序"}
         colStrength{"排序強度"}
@@ -27,7 +18,6 @@ yue{
         numbers{"數字"}
         timezone{"時區"}
         va{"區域變異"}
-        variableTop{"以符號排序"}
         x{"專用區"}
     }
     Languages{
@@ -692,6 +682,7 @@ yue{
         Hung{"古匈牙利文"}
         Inds{"印度河流域（哈拉帕文）"}
         Ital{"古意大利文"}
+        Jamo{"韓文字母"}
         Java{"爪哇文"}
         Jpan{"日文"}
         Jurc{"女真文字"}
@@ -843,10 +834,6 @@ yue{
             no{"不分大小寫排序"}
             yes{"依大小寫排序"}
         }
-        colHiraganaQuaternary{
-            no{"個別排序假名"}
-            yes{"分別排序假名"}
-        }
         colNormalization{
             no{"非正規化排序"}
             yes{"依正規化排序 Unicode"}
@@ -880,6 +867,11 @@ yue{
             unihan{"部首筆畫排序"}
             zhuyin{"注音排序"}
         }
+        d0{
+            fwidth{"全形"}
+            hwidth{"半形"}
+            npinyin{"數值"}
+        }
         hc{
             h11{"12 小時制 (0–11)"}
             h12{"12 小時制 (1–12)"}
@@ -890,6 +882,10 @@ yue{
             loose{"寬鬆換行樣式"}
             normal{"一般換行樣式"}
             strict{"強制換行樣式"}
+        }
+        m0{
+            bgn{"美國地名委員會"}
+            ungegn{"聯合國地名專家組"}
         }
         ms{
             metric{"公制"}
@@ -1019,7 +1015,7 @@ yue{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.1.23.47"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

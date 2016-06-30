@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/it.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 it{
     Keys{
         calendar{"Calendario"}
@@ -15,7 +7,6 @@ it{
         colBackwards{"Ordinamento Accento capovolto"}
         colCaseFirst{"Ordinamento Maiuscole/Minuscole"}
         colCaseLevel{"Ordinamento Distinzione fra maiuscole e minuscole"}
-        colHiraganaQuaternary{"Ordinamento Kana"}
         colNormalization{"Ordinamento normalizzato"}
         colNumeric{"Ordinamento numerico"}
         colStrength{"Sicurezza ordinamento"}
@@ -27,7 +18,6 @@ it{
         numbers{"Numeri"}
         timezone{"Fuso orario"}
         va{"Variante lingua"}
-        variableTop{"Ordina come simboli"}
         x{"Uso privato"}
     }
     Languages{
@@ -698,6 +688,7 @@ it{
         Hung{"antico ungherese"}
         Inds{"indu"}
         Ital{"italico antico"}
+        Jamo{"Jamo"}
         Java{"javanese"}
         Jpan{"giapponese"}
         Jurc{"jurchen"}
@@ -848,10 +839,6 @@ it{
             no{"Ordina senza distinzione tra maiuscole e minuscole"}
             yes{"Ordina distinzione tra maiuscole e minuscole"}
         }
-        colHiraganaQuaternary{
-            no{"Ordina Kana separatamente"}
-            yes{"Ordina Kana diversamente"}
-        }
         colNormalization{
             no{"Ordina senza normalizzazione"}
             yes{"Ordina Unicode normalizzato"}
@@ -885,6 +872,11 @@ it{
             unihan{"Ordinamento in base ai radicali"}
             zhuyin{"Ordinamento Zhuyin"}
         }
+        d0{
+            fwidth{"Larghezza intera"}
+            hwidth{"Metà larghezza"}
+            npinyin{"Numerica"}
+        }
         hc{
             h11{"Sistema orario a 12 ore (0–11)"}
             h12{"Sistema orario a 12 ore (1–12)"}
@@ -895,6 +887,10 @@ it{
             loose{"Interruzione di riga facoltativa"}
             normal{"Interruzione di riga normale"}
             strict{"Interruzione di riga forzata"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"Sistema metrico"}
@@ -1012,7 +1008,7 @@ it{
         VALENCIA{"valenziano"}
         WADEGILE{"romanizzazione Wade-Giles"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Scrittura: {0}"}

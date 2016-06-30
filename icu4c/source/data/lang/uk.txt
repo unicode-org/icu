@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/uk.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 uk{
     Keys{
         calendar{"календар"}
@@ -15,7 +7,6 @@ uk{
         colBackwards{"зворотне сортування за діакритичними знаками"}
         colCaseFirst{"порядок верхнього/нижнього регістру"}
         colCaseLevel{"сортування з урахуванням регістру"}
-        colHiraganaQuaternary{"сортування кана"}
         colNormalization{"уніфіковане сортування"}
         colNumeric{"цифрове сортування"}
         colStrength{"інтенсивність сортування"}
@@ -27,7 +18,6 @@ uk{
         numbers{"цифри"}
         timezone{"часовий пояс"}
         va{"варіант мовного коду"}
-        variableTop{"сортувати як символи"}
         x{"особисте використання"}
     }
     Languages{
@@ -614,6 +604,7 @@ uk{
         Hung{"Давньоугорський"}
         Inds{"Харапський"}
         Ital{"Давньоіталійський"}
+        Jamo{"Jamo"}
         Java{"Яванський"}
         Jpan{"японська"}
         Kali{"Кая Лі"}
@@ -742,10 +733,6 @@ uk{
             no{"сортувати без урахування регістру"}
             yes{"сортувати з урахуванням регістру"}
         }
-        colHiraganaQuaternary{
-            no{"сортувати кана окремо"}
-            yes{"сортувати за кана інакше"}
-        }
         colNormalization{
             no{"сортувати без уніфікації"}
             yes{"сортувати за Unicode уніфіковано"}
@@ -781,6 +768,11 @@ uk{
             unihan{"порядок сортування за ключами ієрогліфів"}
             zhuyin{"порядок сортування чжуїнь"}
         }
+        d0{
+            fwidth{"Повна ширина"}
+            hwidth{"Половинна ширина"}
+            npinyin{"Цифри"}
+        }
         hc{
             h11{"12-годинний формат (0–11)"}
             h12{"12-годинний формат (1–12)"}
@@ -791,6 +783,10 @@ uk{
             loose{"вільний стиль розриву рядка"}
             normal{"типовий стиль розриву рядка"}
             strict{"строгий стиль розриву рядка"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"мертична система"}
@@ -870,7 +866,7 @@ uk{
         VALENCIA{"Валенсійська"}
         WADEGILE{"Романізація Вейда-Джайлза"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Мова: {0}"}
         script{"Система письма: {0}"}

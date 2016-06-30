@@ -1,24 +1,14 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/pt_PT.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 pt_PT{
     Keys{
         colBackwards{"Ordenação de acentos invertida"}
         colCaseLevel{"Ordenação sensível a maiúsculas e minúsculas"}
-        colHiraganaQuaternary{"Ordenação kana"}
         colNormalization{"Ordenação normalizada"}
         colNumeric{"Ordenação numérica"}
         colStrength{"Força da ordenação"}
         hc{"Ciclo horário (12 vs. 24)"}
         ms{"Sistema de medida"}
-        variableTop{"Ordenar como símbolos"}
         x{"Utilização privada"}
     }
     Languages{
@@ -125,10 +115,6 @@ pt_PT{
             no{"Ordenar insensível a maiúsculas/minúsculas"}
             yes{"Ordenar sensível a maiúsculas/minúsculas"}
         }
-        colHiraganaQuaternary{
-            no{"Ordenar kana separadamente"}
-            yes{"Ordenar kana diferentemente"}
-        }
         colNormalization{
             no{"Ordenar sem normalização"}
             yes{"Ordenar Unicode normalizado"}
@@ -154,6 +140,10 @@ pt_PT{
             stroke{"Ordem por traços"}
             traditional{"Ordem tradicional"}
             unihan{"Ordem por radical e traços"}
+        }
+        d0{
+            fwidth{"Largura completa"}
+            hwidth{"Meia largura"}
         }
         lb{
             loose{"Estilo solto de quebra de linha"}
@@ -204,7 +194,7 @@ pt_PT{
         MONOTON{"monotónico"}
         POLYTON{"politónico"}
     }
-    Version{"2.1.24.13"}
+    Version{"2.1.26.0"}
     codePatterns{
         script{"Escrita: {0}"}
     }

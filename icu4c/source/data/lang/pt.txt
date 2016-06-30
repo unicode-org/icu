@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/pt.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 pt{
     Keys{
         calendar{"Calendário"}
@@ -15,7 +7,6 @@ pt{
         colBackwards{"Classificação reversa de acentos"}
         colCaseFirst{"Ordem de maiúsculas/minúsculas"}
         colCaseLevel{"Ordem com diferenciação de maiúsculas e minúsculas"}
-        colHiraganaQuaternary{"Classificação kana"}
         colNormalization{"Classificação normalizada"}
         colNumeric{"Classificação numérica"}
         colStrength{"Intensidade da classificação"}
@@ -27,7 +18,6 @@ pt{
         numbers{"Números"}
         timezone{"Fuso horário"}
         va{"Variante de localidade"}
-        variableTop{"Classificar como símbolos"}
         x{"Uso privado"}
     }
     Languages{
@@ -611,6 +601,7 @@ pt{
         Hung{"húngaro antigo"}
         Inds{"indo"}
         Ital{"itálico antigo"}
+        Jamo{"Jamo"}
         Java{"javanês"}
         Jpan{"japonês"}
         Kali{"kayah li"}
@@ -738,10 +729,6 @@ pt{
             no{"Classificação sem diferenciação de maiúsculas e minúsculas"}
             yes{"Classificação com diferenciação de maiúsculas e minúsculas"}
         }
-        colHiraganaQuaternary{
-            no{"Classificar kana separadamente"}
-            yes{"Classificar kana diferentemente"}
-        }
         colNormalization{
             no{"Classificar sem normalização"}
             yes{"Classificar Unicode normalizado"}
@@ -773,6 +760,11 @@ pt{
             traditional{"Ordem Tradicional"}
             unihan{"Ordem por Radical-Traços"}
         }
+        d0{
+            fwidth{"Extensão total"}
+            hwidth{"Extensão total"}
+            npinyin{"Numérico"}
+        }
         hc{
             h11{"Sistema de 12 horas (0–11)"}
             h12{"Sistema de 12 horas (1–12)"}
@@ -783,6 +775,10 @@ pt{
             loose{"Quebra de linha com estilo solto"}
             normal{"Quebra de linha com estilo normal"}
             strict{"Quebra de linha com estilo estrito"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"Sistema métrico"}
@@ -872,7 +868,7 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

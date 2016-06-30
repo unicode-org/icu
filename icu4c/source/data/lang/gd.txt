@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/gd.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 gd{
     Keys{
         calendar{"Mìosachan"}
@@ -656,6 +648,7 @@ gd{
         Hrkt{"Katakana no Hiragana"}
         Hung{"Seann-Ungarais"}
         Ital{"Seann-Eadailtis"}
+        Jamo{"Jamo"}
         Java{"Deàbhanais"}
         Jpan{"Seapanais"}
         Jurc{"Jurchen"}
@@ -787,6 +780,11 @@ gd{
             unihan{"Òrdugh an fhreumha ’s nan stràcan"}
             zhuyin{"Òrdugh seòrsachaidh Zhuyin"}
         }
+        d0{
+            fwidth{"Làn-Leud"}
+            hwidth{"Leth-Leud"}
+            npinyin{"Àireamhach"}
+        }
         hc{
             h11{"Cleoc 12 uair a thìde (0–11)"}
             h12{"Cleoc 12 uair a thìde (1–12)"}
@@ -797,6 +795,10 @@ gd{
             loose{"Brisidhean-loidhe fuasgailte"}
             normal{"Brisidhean-loidhe àbhaisteach"}
             strict{"Brisidhean-loidhe teanna"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"Tomhas meatrach"}
@@ -867,7 +869,7 @@ gd{
     Variants{
         SCOTLAND{"Beurla Bhun-Tomhasach na h-Alba"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Cànan: {0}"}
         script{"Litreadh: {0}"}

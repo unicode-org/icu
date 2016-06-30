@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ja.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ja{
     Keys{
         calendar{"暦法"}
@@ -15,7 +7,6 @@ ja{
         colBackwards{"アクセント（逆方向）による並べ替え"}
         colCaseFirst{"大文字順/小文字順による並べ替え"}
         colCaseLevel{"大文字小文字を区別した並べ替え"}
-        colHiraganaQuaternary{"仮名による並べ替え"}
         colNormalization{"正規化による並べ替え"}
         colNumeric{"数値による並べ替え"}
         colStrength{"強度による並べ替え"}
@@ -27,7 +18,6 @@ ja{
         numbers{"数値書式"}
         timezone{"タイムゾーン"}
         va{"ロケールのバリアント"}
-        variableTop{"記号として並べ替え"}
         x{"私用"}
     }
     Languages{
@@ -703,6 +693,7 @@ ja{
         Hung{"古代ハンガリー文字"}
         Inds{"インダス文字"}
         Ital{"古イタリア文字"}
+        Jamo{"字母"}
         Java{"ジャワ文字"}
         Jpan{"日本語の文字"}
         Jurc{"女真文字"}
@@ -857,10 +848,6 @@ ja{
             no{"大文字小文字を区別しないで並べ替え"}
             yes{"大文字小文字を区別して並べ替え"}
         }
-        colHiraganaQuaternary{
-            no{"仮名を区別しないで並べ替え"}
-            yes{"仮名を区別して並べ替え"}
-        }
         colNormalization{
             no{"正規化しないで並べ替え"}
             yes{"Unicode 正規化で並べ替え"}
@@ -894,6 +881,11 @@ ja{
             unihan{"部首順"}
             zhuyin{"注音順"}
         }
+        d0{
+            fwidth{"全角"}
+            hwidth{"半角"}
+            npinyin{"数字"}
+        }
         hc{
             h11{"12時間制(0〜11)"}
             h12{"12時間制(1〜12)"}
@@ -904,6 +896,10 @@ ja{
             loose{"禁則処理(弱)"}
             normal{"禁則処理(標準)"}
             strict{"禁則処理(強)"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"メートル法"}
@@ -1039,7 +1035,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

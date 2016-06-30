@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/zh.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 zh{
     AuxExemplarCharacters{"[仂 侣 傈 傣 僳 卑 卞 厘 吕 坝 堤 奎 屿 巽 撤 楔 楠 滕 瑚 甫 盲 碑 禄 粟 脚 艮 谬 钯 铂 锑 镑 魁]"}
     Ellipsis{
@@ -235,7 +227,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2702,17 +2694,5 @@ zh{
         UK{"英制"}
         US{"美制"}
         metric{"公制"}
-    }
-    transformNames{
-        BGN{"美国地名委员会 (BGN)"}
-        Numeric{"数字"}
-        Tone{"音调"}
-        UNGEGN{"联合国地名专家组 (UNGEGN)"}
-        x-Accents{"重音符号"}
-        x-Fullwidth{"全角"}
-        x-Halfwidth{"半角"}
-        x-Jamo{"韩文字母"}
-        x-Pinyin{"拼音"}
-        x-Publishing{"印刷体"}
     }
 }

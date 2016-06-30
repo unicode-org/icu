@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ca.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ca{
     Keys{
         calendar{"calendari"}
@@ -15,7 +7,6 @@ ca{
         colBackwards{"Ordenació per accents invertida"}
         colCaseFirst{"Ordenació per majúscules i minúscules"}
         colCaseLevel{"Ordenació per detecció de majúscules"}
-        colHiraganaQuaternary{"Ordenació per kana"}
         colNormalization{"Ordenació normalitzada"}
         colNumeric{"Ordenació numèrica"}
         colStrength{"Força de l’ordenació"}
@@ -27,7 +18,6 @@ ca{
         numbers{"xifres"}
         timezone{"Zona horària"}
         va{"Variant local"}
-        variableTop{"Ordena com a símbols"}
         x{"ús privat"}
     }
     Languages{
@@ -661,6 +651,7 @@ ca{
         Hung{"hongarès antic"}
         Inds{"escriptura de la vall de l’Indus"}
         Ital{"cursiva antiga"}
+        Jamo{"Jamo"}
         Java{"javanès"}
         Jpan{"japonès"}
         Jurc{"jürchen"}
@@ -808,10 +799,6 @@ ca{
             no{"Ordena sense distingir majúscules i minúscules"}
             yes{"Ordena amb detecció de majúscules i minúscules"}
         }
-        colHiraganaQuaternary{
-            no{"Ordena els caràcters kana de manera independent"}
-            yes{"Ordena els caràcters kana de manera diferent"}
-        }
         colNormalization{
             no{"Ordena sense normalització"}
             yes{"Ordena per caràcters Unicode normalitzats"}
@@ -844,6 +831,11 @@ ca{
             traditional{"ordre tradicional"}
             unihan{"ordenació per quantitat de traços radicals"}
         }
+        d0{
+            fwidth{"Amplada completa"}
+            hwidth{"Amplada mitjana"}
+            npinyin{"Numèric"}
+        }
         hc{
             h11{"sistema de 12 hores (0–11)"}
             h12{"sistema de 12 hores (1–12)"}
@@ -854,6 +846,10 @@ ca{
             loose{"salt de línia flexible"}
             normal{"salt de línia normal"}
             strict{"salt de línia estricte"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"sistema mètric"}
@@ -976,7 +972,7 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

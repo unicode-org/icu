@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/so.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 so{
     Countries{
         AD{"Andora"}
@@ -236,5 +228,5 @@ so{
         ZW{"Simbaabwe"}
         ZZ{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.25.97"}
 }

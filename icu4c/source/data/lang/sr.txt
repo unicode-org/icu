@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sr.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sr{
     Keys{
         calendar{"календар"}
@@ -15,7 +7,6 @@ sr{
         colBackwards{"Сортирање према обрнутим акцентима"}
         colCaseFirst{"Ређање према малом/великом слову"}
         colCaseLevel{"Сортирање према малом/великом слову"}
-        colHiraganaQuaternary{"Сортирање према кана симболима"}
         colNormalization{"Нормализовано сортирање"}
         colNumeric{"Нумеричко сортирање"}
         colStrength{"Сортирање према јачини"}
@@ -25,7 +16,6 @@ sr{
         numbers{"бројеви"}
         timezone{"Временска зона"}
         va{"Варијанта локалитета"}
-        variableTop{"Сортирај као симболе"}
         x{"Приватна употреба"}
     }
     Languages{
@@ -571,6 +561,7 @@ sr{
         Hung{"старомађарско писмо"}
         Inds{"индушко писмо"}
         Ital{"стари италик"}
+        Jamo{"Џамо"}
         Java{"јаванско писмо"}
         Jpan{"јапанско писмо"}
         Kali{"кајах-ли писмо"}
@@ -696,10 +687,6 @@ sr{
             no{"Сортирај без обзира на велика и мала слова"}
             yes{"Сортирај мала и велика слова"}
         }
-        colHiraganaQuaternary{
-            no{"Сортирај кана симболе одвојено"}
-            yes{"Сортирај кана симболе другачије"}
-        }
         colNormalization{
             no{"Сортирај без нормализације"}
             yes{"Сортирај Unicode нормализовано"}
@@ -730,6 +717,15 @@ sr{
             stroke{"Сортирање по броју црта"}
             traditional{"Традиционално сортирање"}
             unihan{"Редослед сортирања радикалним цртицама"}
+        }
+        d0{
+            fwidth{"пуна ширина"}
+            hwidth{"пола ширине"}
+            npinyin{"Нумеричка"}
+        }
+        m0{
+            bgn{"БГН (BGN)"}
+            ungegn{"УНГЕГН (BGN)"}
         }
         numbers{
             arab{"арапско-индијске цифре"}
@@ -803,7 +799,7 @@ sr{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Језик: {0}"}
         script{"писмо: {0}"}

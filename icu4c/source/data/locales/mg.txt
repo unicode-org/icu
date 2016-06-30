@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/mg.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 mg{
     AuxExemplarCharacters{"[c q u w x]"}
     ExemplarCharacters{"[a à â b d e é è ê ë f g h i ì î ï j k l m n ñ o ô p r s t v y z]"}
@@ -19,7 +11,7 @@ mg{
             }
         }
     }
-    Version{"2.1.21.28"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

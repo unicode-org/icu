@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/de.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 de{
     Keys{
         calendar{"Kalender"}
@@ -15,7 +7,6 @@ de{
         colBackwards{"Umgekehrte Sortierung von Akzenten"}
         colCaseFirst{"Sortierung nach Groß- bzw. Kleinbuchstaben"}
         colCaseLevel{"Sortierung nach Groß- oder Kleinschreibung"}
-        colHiraganaQuaternary{"Kana-Sortierung"}
         colNormalization{"Normierte Sortierung"}
         colNumeric{"Sortierung nach Zahlen"}
         colStrength{"Sortierstärke"}
@@ -27,7 +18,6 @@ de{
         numbers{"Zahlen"}
         timezone{"Zeitzone"}
         va{"Lokale Variante"}
-        variableTop{"Nach Symbolen sortieren"}
         x{"Privatnutzung"}
     }
     Languages{
@@ -706,6 +696,7 @@ de{
         Hung{"Altungarisch"}
         Inds{"Indus-Schrift"}
         Ital{"Altitalisch"}
+        Jamo{"Jamo"}
         Java{"Javanesisch"}
         Jpan{"Japanisch"}
         Jurc{"Jurchen"}
@@ -860,10 +851,6 @@ de{
             no{"Ohne Groß-/Kleinschreibung sortieren"}
             yes{"Nach Groß-/Kleinschreibung sortieren"}
         }
-        colHiraganaQuaternary{
-            no{"Kana separat sortieren"}
-            yes{"Kana anders sortieren"}
-        }
         colNormalization{
             no{"Ohne Normierung sortieren"}
             yes{"Nach Unicode sortieren"}
@@ -897,6 +884,11 @@ de{
             unihan{"Radikal-Strich-Sortierregeln"}
             zhuyin{"Zhuyin-Sortierregeln"}
         }
+        d0{
+            fwidth{"Breit"}
+            hwidth{"Halbe Breite"}
+            npinyin{"Numerisch"}
+        }
         hc{
             h11{"12-Stunden-Zählung (0-11)"}
             h12{"12-Stunden-Zählung (1-12)"}
@@ -907,6 +899,10 @@ de{
             loose{"lockerer Zeilenumbruch"}
             normal{"normaler Zeilenumbruch"}
             strict{"fester Zeilenumbruch"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"metrisches System"}
@@ -1011,7 +1007,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.31"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}

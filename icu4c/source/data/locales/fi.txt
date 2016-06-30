@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/fi.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 fi{
     AuxExemplarCharacters{
         "[á à ă â ã ą ā ć č ċ ç ď ð đ é è ê ě ë ė ę ē ğ ǧ ģ ǥ ȟ ħ í î ï İ į ī ı ǩ ķ ĺ"
@@ -212,7 +204,7 @@ fi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1665,17 +1657,5 @@ fi{
         UK{"brittiläinen"}
         US{"amerikkalainen"}
         metric{"metrinen"}
-    }
-    transformNames{
-        BGN{"BGN-latinaistus"}
-        Numeric{"numeerinen muunnos"}
-        Tone{"tooni"}
-        UNGEGN{"UNGEGN-latinaistus"}
-        x-Accents{"aksenttimerkit"}
-        x-Fullwidth{"ideogrammin levyinen"}
-        x-Halfwidth{"ideogrammin puolikkaan levyinen"}
-        x-Jamo{"jamo"}
-        x-Pinyin{"pinyin-latinaistus"}
-        x-Publishing{"julkaisuvalinta"}
     }
 }

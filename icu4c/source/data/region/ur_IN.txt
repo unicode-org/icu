@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/ur_IN.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 ur_IN{
     Countries{
         AC{"جزیرہ اسینشن"}
@@ -38,5 +30,5 @@ ur_IN{
     Countries%variant{
         FK{"جزائر فاکلینڈ (اسلاس مالویناس)"}
     }
-    Version{"2.1.22.17"}
+    Version{"2.1.25.97"}
 }

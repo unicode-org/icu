@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/kn.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 kn{
     AuxExemplarCharacters{"[\u200C\u200D ೞ]"}
     Ellipsis{
@@ -215,7 +207,7 @@ kn{
         minimumGroupingDigits{"1"}
         native{"knda"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1407,17 +1399,5 @@ kn{
         UK{"ಯುಕೆ"}
         US{"ಯುಎಸ್"}
         metric{"ಮೆಟ್ರಿಕ್"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"ಸಂಖ್ಯೆ"}
-        Tone{"ಧ್ವನಿ"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"ಉಚ್ಚಾರಣೆಗಳು"}
-        x-Fullwidth{"ಪೂರ್ಣಅಗಲ"}
-        x-Halfwidth{"ಅರೆಅಗಲ"}
-        x-Jamo{"ಹಮೋ"}
-        x-Pinyin{"ಪಿನ್‌ಯಿನ್‌"}
-        x-Publishing{"ಪ್ರಕಟಣೆ"}
     }
 }

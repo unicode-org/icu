@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/uz_Cyrl.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 uz_Cyrl{
     %%Parent{"root"}
     Countries{
@@ -316,5 +308,5 @@ uz_Cyrl{
         MK{"Македония (СЮР)"}
         TL{"Шарқий Тимор"}
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.25.97"}
 }

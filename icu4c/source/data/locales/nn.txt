@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/nn.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 nn{
     AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
     ExemplarCharacters{"[a à b c d e é f g h i j k l m n o ó ò ô p q r s t u v w x y z æ ø å]"}
@@ -35,7 +27,7 @@ nn{
             }
         }
     }
-    Version{"2.1.23.66"}
+    Version{"2.1.25.97"}
     calendar{
         generic{
             DateTimePatterns{

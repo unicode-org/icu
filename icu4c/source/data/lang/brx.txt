@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/brx.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 brx{
     Keys{
         calendar{"पंचाग"}
@@ -617,7 +609,7 @@ brx{
         SOLBA{"श्टोलविज़्ज़ा या सोलबीका डायलेक्ट"}
         TARASK{"तारास्कीएवीचा वर्तनी"}
     }
-    Version{"2.1.23.7"}
+    Version{"2.1.25.97"}
     codePatterns{
         script{"देवनागरी: {0}"}
         territory{"क्षेत्र:भारत {0}"}

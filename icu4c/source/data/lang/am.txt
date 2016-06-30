@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/am.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 am{
     Keys{
         calendar{"የቀን አቆጣጠር"}
@@ -15,7 +7,6 @@ am{
         colBackwards{"የኋሊዮሽ የፊደል ጭረት ድርደራ"}
         colCaseFirst{"የአቢይ/ንዑስ ሆሄ ቅደም ተከተል"}
         colCaseLevel{"የመልከፊደል ትብ ድርደራ"}
-        colHiraganaQuaternary{"የካና ድርደራ"}
         colNormalization{"መደበኛ ድርደራ"}
         colNumeric{"የቁጥር ድርደራ"}
         colStrength{"የድርደራ አቅም"}
@@ -27,7 +18,6 @@ am{
         numbers{"ቁጥሮች"}
         timezone{"የሰዓት ሰቅ"}
         va{"የአካባቢ አይነት"}
-        variableTop{"እንደምልክቶች ደርድር"}
         x{"ለግል ጥቅም"}
     }
     Languages{
@@ -416,6 +406,7 @@ am{
         Hant{"ባህላዊ"}
         Hebr{"እብራይስጥ"}
         Hira{"ሂራጋና"}
+        Jamo{"ጃሞ"}
         Jpan{"ጃፓንኛ"}
         Kana{"ካታካና"}
         Khmr{"ክህመር"}
@@ -480,10 +471,6 @@ am{
             no{"ያለመልከፊደል ትብ ደርድር"}
             yes{"በመልከፊደል ትብ ደርድር"}
         }
-        colHiraganaQuaternary{
-            no{"ካና ለይተህ ደርድር"}
-            yes{"ካና ለይተህ ደርድር"}
-        }
         colNormalization{
             no{"ያለመደበኛ ሁኔታ ደርድር"}
             yes{"ዩኒኮድ በመደበኛ ሁኔታ ደርድር"}
@@ -515,6 +502,11 @@ am{
             traditional{"ባህላዊ የድርድር ቅደም ተከተል"}
             unihan{"የመሰረታዊ በትር ድርድር ቅደም ተከተል"}
         }
+        d0{
+            fwidth{"ሙሉ ወርድ"}
+            hwidth{"ሃልፍዊድዝ"}
+            npinyin{"አሃዛዊ"}
+        }
         hc{
             h11{"የ12 ሰዓት ስርዓት (0–11)"}
             h12{"የ12 ሰዓት ስርዓት (1–12)"}
@@ -525,6 +517,10 @@ am{
             loose{"ላላ ያለ መስመር መስበሪያ ቅጥ"}
             normal{"መደበኛ መስመር መስበሪያ ቅጥ"}
             strict{"ጠበቅ ያለ መስመር መስበሪያ ቅጥ"}
+        }
+        m0{
+            bgn{"ቢ ጂ ኤን"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"የልኬት ስርዓት"}
@@ -574,7 +570,7 @@ am{
             vaii{"የቫይ አሃዞች"}
         }
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

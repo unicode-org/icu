@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sk.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sk{
     AuxExemplarCharacters{"[à ă â å ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ö ø ō œ ř ù ŭ û ü ū ÿ]"}
     Ellipsis{
@@ -283,7 +275,7 @@ sk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.24.11"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1575,17 +1567,5 @@ sk{
         UK{"britský"}
         US{"americký"}
         metric{"metrický"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Číslice"}
-        Tone{"Tón"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Diakritika"}
-        x-Fullwidth{"Celá šírka"}
-        x-Halfwidth{"Polovičná šírka"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"Uverejnenie"}
     }
 }

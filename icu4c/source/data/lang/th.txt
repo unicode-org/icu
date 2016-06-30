@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/th.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 th{
     Keys{
         calendar{"ปฏิทิน"}
@@ -15,7 +7,6 @@ th{
         colBackwards{"การจัดเรียงเสียงหนักเบาในลำดับถอยหลัง"}
         colCaseFirst{"การเรียงลำดับตัวพิมพ์ใหญ่/ตัวพิมพ์เล็ก"}
         colCaseLevel{"การจัดเรียงตามความสำคัญของตัวพิมพ์อักษร"}
-        colHiraganaQuaternary{"การจัดเรียงตัวอักษรคะนะ"}
         colNormalization{"การจัดเรียงแบบที่เป็นปกติ"}
         colNumeric{"การจัดเรียงตัวเลข"}
         colStrength{"ความแม่นยำในการจัดเรียง"}
@@ -27,7 +18,6 @@ th{
         numbers{"ตัวเลข"}
         timezone{"เขตเวลา"}
         va{"ตัวแปรภาษาถิ่น"}
-        variableTop{"จัดเรียงเป็นสัญลักษณ์"}
         x{"ใช้งานส่วนบุคคล"}
     }
     Languages{
@@ -710,6 +700,7 @@ th{
         Hung{"ฮังการีโบราณ"}
         Inds{"อินดัส"}
         Ital{"อิตาลีโบราณ"}
+        Jamo{"จาโม"}
         Java{"ชวา"}
         Jpan{"ญี่ปุ่น"}
         Jurc{"จูร์เชน"}
@@ -864,10 +855,6 @@ th{
             no{"จัดเรียงตามความสำคัญของตัวพิมพ์"}
             yes{"จัดเรียงความสำคัญของตัวพิมพ์"}
         }
-        colHiraganaQuaternary{
-            no{"จัดเรียงตัวอักษรคะนะแยกต่างหาก"}
-            yes{"จัดเรียงตัวอักษรคะนะในแบบอื่น"}
-        }
         colNormalization{
             no{"จัดเรียงโดยไม่ต้องทำให้เป็นแบบปกติ"}
             yes{"จัดเรียงยูนิโค้ดแบบที่เป็นปกติ"}
@@ -901,6 +888,11 @@ th{
             unihan{"เรียงลำดับตามจำนวนขีด"}
             zhuyin{"จัดเรียงตามการสะกดแบบจู้อิน"}
         }
+        d0{
+            fwidth{"ตัวเต็ม"}
+            hwidth{"ตัวย่อ"}
+            npinyin{"ตัวเลข"}
+        }
         hc{
             h11{"ระบบ 12 ชั่วโมง (0–11)"}
             h12{"ระบบ 12 ชั่วโมง (1–12)"}
@@ -911,6 +903,10 @@ th{
             loose{"รูปแบบที่ยืดหยุ่นของการขึ้นบรรทัดใหม่"}
             normal{"รูปแบบปกติของการขึ้นบรรทัดใหม่"}
             strict{"รูปแบบที่เคร่งครัดของการขึ้นบรรทัดใหม่"}
+        }
+        m0{
+            bgn{"ชื่อมาตรฐานอังกฤษ (BGN)"}
+            ungegn{"ชื่อภูมิศาสตร์มาตรฐาน UN (UNGEGN)"}
         }
         ms{
             metric{"ระบบเมตริก"}
@@ -1049,7 +1045,7 @@ th{
         VALLADER{"วัลลาเดอร์"}
         WADEGILE{"การถอดอักษรแบบเวด-ไจลส์"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"ภาษา: {0}"}
         script{"สคริปต์: {0}"}

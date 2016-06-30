@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/nb.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 nb{
     Keys{
         calendar{"kalender"}
@@ -15,7 +7,6 @@ nb{
         colBackwards{"omvendt sortering etter aksent"}
         colCaseFirst{"Organisering av store og små bokstaver"}
         colCaseLevel{"Sortering av store og små bokstaver"}
-        colHiraganaQuaternary{"Sortering av kana"}
         colNormalization{"Normalisert sortering"}
         colNumeric{"Numerisk sortering"}
         colStrength{"Sorteringsstyrke"}
@@ -27,7 +18,6 @@ nb{
         numbers{"tall"}
         timezone{"tidssone"}
         va{"Språkvariant"}
-        variableTop{"Sortér som symboler"}
         x{"privat bruk"}
     }
     Languages{
@@ -711,6 +701,7 @@ nb{
         Hung{"gammelungarsk"}
         Inds{"indus"}
         Ital{"gammelitalisk"}
+        Jamo{"Jamo"}
         Java{"javanesisk"}
         Jpan{"japansk"}
         Jurc{"jurchen"}
@@ -914,10 +905,6 @@ nb{
             no{"Sortér uavhengig av store og små bokstaver."}
             yes{"Sortér med skille mellom små og store bokstaver"}
         }
-        colHiraganaQuaternary{
-            no{"Sortér kana separat"}
-            yes{"Sortér med skille mellom forskjellige varianter av kana"}
-        }
         colNormalization{
             no{"Sortér uten normalisering"}
             yes{"Sortér Unicode normalisert"}
@@ -953,6 +940,11 @@ nb{
             unihan{"radikal-strek-sortering"}
             zhuyin{"zhuyin-sortering"}
         }
+        d0{
+            fwidth{"Full bredde"}
+            hwidth{"Halv bredde"}
+            npinyin{"Numerisk"}
+        }
         hc{
             h11{"12-timers system (0–11)"}
             h12{"12-timers system (1–12)"}
@@ -963,6 +955,10 @@ nb{
             loose{"løs linjeskiftstil"}
             normal{"normal linjeskiftstil"}
             strict{"streng linjeskiftstil"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"metrisk system"}
@@ -1105,7 +1101,7 @@ nb{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.23.79"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

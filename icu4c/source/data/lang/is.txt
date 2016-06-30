@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/is.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 is{
     Keys{
         calendar{"Dagatal"}
@@ -15,7 +7,6 @@ is{
         colBackwards{"Röðun með viðsnúnum áherslum"}
         colCaseFirst{"Röðun eftir hástöfum/lágstöfum"}
         colCaseLevel{"Stafrétt röðun"}
-        colHiraganaQuaternary{"Kana-röðun"}
         colNormalization{"Stöðluð röðun"}
         colNumeric{"Talnaröðun"}
         colStrength{"Röðunarstyrkur"}
@@ -27,7 +18,6 @@ is{
         numbers{"Tölur"}
         timezone{"Tímabelti"}
         va{"Landsstaðalsafbrigði"}
-        variableTop{"Raða sem táknum"}
         x{"Einkanotkun"}
     }
     Languages{
@@ -536,6 +526,7 @@ is{
         Hebr{"hebreskt"}
         Hira{"hiragana"}
         Hrkt{"katakana eða hiragana"}
+        Jamo{"Jamo"}
         Jpan{"japanskt"}
         Kana{"katakana"}
         Khmr{"kmer"}
@@ -600,10 +591,6 @@ is{
             no{"Raða óháð hástöfum og lágstöfum"}
             yes{"Raða stafrétt"}
         }
-        colHiraganaQuaternary{
-            no{"Raða Kana sér"}
-            yes{"Raða Kana öðruvísi"}
-        }
         colNormalization{
             no{"Raða án stöðlunar"}
             yes{"Raða Unicode með stöðluðum hætti"}
@@ -635,6 +622,11 @@ is{
             traditional{"Hefðbundin"}
             unihan{"Röðun eftir grunnstrikum"}
         }
+        d0{
+            fwidth{"Full breidd"}
+            hwidth{"Hálf breidd"}
+            npinyin{"Tölulegur"}
+        }
         hc{
             h11{"12 tíma kerfi (0–11)"}
             h12{"12 tíma kerfi (1–12)"}
@@ -645,6 +637,10 @@ is{
             loose{"Laus línuskipting"}
             normal{"Venjuleg línuskipting"}
             strict{"Ströng línuskipting"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"Metrakerfi"}
@@ -694,7 +690,7 @@ is{
             vaii{"Vai-tölustafir"}
         }
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

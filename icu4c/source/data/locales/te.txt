@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/te.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 te{
     AuxExemplarCharacters{"[\u200C\u200D ౦ ౧ ౨ ౩ ౪ ౫ ౬ ౭ ౮ ౯]"}
     Ellipsis{
@@ -215,7 +207,7 @@ te{
         minimumGroupingDigits{"1"}
         native{"telu"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1406,17 +1398,5 @@ te{
         UK{"యుకె"}
         US{"యుఎస్"}
         metric{"దశాంశం"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"సంఖ్య"}
-        Tone{"టోన్"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"గాఢతలు"}
-        x-Fullwidth{"పూర్తి వెడల్పు"}
-        x-Halfwidth{"సగం వెడల్పు"}
-        x-Jamo{"జమో"}
-        x-Pinyin{"పిన్యిన్"}
-        x-Publishing{"ప్రచురించబడుతోంది"}
     }
 }

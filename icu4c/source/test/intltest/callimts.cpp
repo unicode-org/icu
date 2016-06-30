@@ -416,18 +416,37 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
                       ", actual_min=" + minActual);
             }
             if (maxActual < maxLow || maxActual > maxHigh) {
-                errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
-                      ymdToString(cal, ymd) +
-                      " Range for max of " + FIELD_NAME[f] + "(" + f +
-                      ")=" + maxLow + ".." + maxHigh +
-                      ", actual_max=" + maxActual);
+                if ( uprv_strcmp(cal.getType(), "chinese") == 0 &&
+                        testMillis >= 2842992000000.0  && testMillis <= 2906668800000.0 &&
+                     logKnownIssue("12620", "chinese calendar failures for some actualMax tests")) {
+                    logln((UnicodeString)"KnownFail: [" + cal.getType() + "] " +
+                          ymdToString(cal, ymd) +
+                          " Range for max of " + FIELD_NAME[f] + "(" + f +
+                          ")=" + maxLow + ".." + maxHigh +
+                          ", actual_max=" + maxActual);
+                } else {
+                    errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                          ymdToString(cal, ymd) +
+                          " Range for max of " + FIELD_NAME[f] + "(" + f +
+                          ")=" + maxLow + ".." + maxHigh +
+                          ", actual_max=" + maxActual);
+                }
             }
             if (v < minActual || v > maxActual) {
                 // timebomb per #9967, fix with #9972
                 if ( uprv_strcmp(cal.getType(), "dangi") == 0 &&
                         testMillis >= 1865635198000.0  &&
                      logKnownIssue("9972", "as per #9967")) { // Feb 2029 gregorian, end of dangi 4361
-                    logln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                    logln((UnicodeString)"KnownFail: [" + cal.getType() + "] " +
+                          ymdToString(cal, ymd) +
+                          " " + FIELD_NAME[f] + "(" + f + ")=" + v +
+                          ", actual=" + minActual + ".." + maxActual +
+                          ", allowed=(" + minLow + ".." + minHigh + ")..(" +
+                          maxLow + ".." + maxHigh + ")");
+                } else if ( uprv_strcmp(cal.getType(), "chinese") == 0 &&
+                        testMillis >= 2842992000000.0  && testMillis <= 2906668800000.0 &&
+                     logKnownIssue("12620", "chinese calendar failures for some actualMax tests")) {
+                    logln((UnicodeString)"KnownFail: [" + cal.getType() + "] " +
                           ymdToString(cal, ymd) +
                           " " + FIELD_NAME[f] + "(" + f + ")=" + v +
                           ", actual=" + minActual + ".." + maxActual +

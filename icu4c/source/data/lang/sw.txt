@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sw.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sw{
     Keys{
         calendar{"Kalenda"}
@@ -15,7 +7,6 @@ sw{
         colBackwards{"Upangaji Uliogeuzwa wa Kiinitoni"}
         colCaseFirst{"Upangaji wa Herufi kubwa/Herufi ndogo"}
         colCaseLevel{"Upangaji Unaoathiriwa na Herufi"}
-        colHiraganaQuaternary{"Upangaji wa Kana"}
         colNormalization{"Upangaji wa Kawaida"}
         colNumeric{"Upangaji wa Namba"}
         colStrength{"Nguvu ya Upangaji"}
@@ -27,7 +18,6 @@ sw{
         numbers{"Nambari"}
         timezone{"Ukanda Saa"}
         va{"Tofauti ya Mandhari"}
-        variableTop{"Panga Kama Alama"}
         x{"Matumizi ya Kibinafsi"}
     }
     Languages{
@@ -312,6 +302,7 @@ sw{
         Hant{"Kihan cha Jadi"}
         Hebr{"Kiebrania"}
         Hira{"Kihiragana"}
+        Jamo{"Kijamo"}
         Jpan{"Kijapani"}
         Kana{"Kikatakana"}
         Khmr{"Kikambodia"}
@@ -376,10 +367,6 @@ sw{
             no{"Panga Isiyoathiriwa na Herufi"}
             yes{"Panga kwa Inayoathiriwa na Herufi"}
         }
-        colHiraganaQuaternary{
-            no{"Panga Kana Kando"}
-            yes{"Panga Kana Kitofauti"}
-        }
         colNormalization{
             no{"Panga Bila Ukawaida"}
             yes{"Upangaji Msimbosare Umekawaidishwa"}
@@ -411,6 +398,11 @@ sw{
             traditional{"Mpangilio wa Kawaida"}
             unihan{"Mpangilio wa Mikwaju ya Shina"}
         }
+        d0{
+            fwidth{"Upana kamili"}
+            hwidth{"Nusu upana"}
+            npinyin{"Ya Nambari"}
+        }
         hc{
             h11{"h11"}
             h12{"h12"}
@@ -421,6 +413,10 @@ sw{
             loose{"loose"}
             normal{"normal"}
             strict{"strict"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"metriki"}
@@ -470,7 +466,7 @@ sw{
             vaii{"Dijiti za Vai"}
         }
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

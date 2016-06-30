@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/pl.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 pl{
     Keys{
         calendar{"kalendarz"}
@@ -15,7 +7,6 @@ pl{
         colBackwards{"Odwrotne sortowanie ze znakami akcentowanymi"}
         colCaseFirst{"Porządek wielkie/małe litery"}
         colCaseLevel{"Sortowanie uwzględniające wielkość liter"}
-        colHiraganaQuaternary{"Sortowanie Kana"}
         colNormalization{"Sortowanie znormalizowane"}
         colNumeric{"Sortowanie numeryczne"}
         colStrength{"Siła sortowania"}
@@ -27,7 +18,6 @@ pl{
         numbers{"cyfry"}
         timezone{"Strefa czasowa"}
         va{"Wariant regionalny"}
-        variableTop{"Sortuj jak symbole"}
         x{"Do prywatnego użytku"}
     }
     Languages{
@@ -700,6 +690,7 @@ pl{
         Hung{"starowęgierskie"}
         Inds{"indus"}
         Ital{"starowłoskie"}
+        Jamo{"Jamo"}
         Java{"jawajskie"}
         Jpan{"japońskie"}
         Kali{"kayah li"}
@@ -828,10 +819,6 @@ pl{
             no{"Sortowanie bez rozróżniania wielkości liter"}
             yes{"Sortowanie z rozróżnianiem wielkości liter"}
         }
-        colHiraganaQuaternary{
-            no{"Osobne sortowanie kana"}
-            yes{"Inne sortowanie kana"}
-        }
         colNormalization{
             no{"Sortowanie bez normalizacji"}
             yes{"Sortowanie z normalizacją unicode"}
@@ -864,6 +851,11 @@ pl{
             traditional{"tradycyjny porządek sortowania"}
             unihan{"sortowanie wg kluczy i ich liczby kresek"}
         }
+        d0{
+            fwidth{"Pełna szerokość"}
+            hwidth{"Połowa szerokości"}
+            npinyin{"Liczbowe"}
+        }
         hc{
             h11{"system 12-godzinny (0-11)"}
             h12{"system 12-godzinny (1-12)"}
@@ -874,6 +866,10 @@ pl{
             loose{"luźny styl podziału wiersza"}
             normal{"normalny styl podziału wiersza"}
             strict{"ścisły styl podziału wiersza"}
+        }
+        m0{
+            bgn{"BGN"}
+            ungegn{"UNGEGN"}
         }
         ms{
             metric{"system metryczny"}
@@ -956,7 +952,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade’a i Gilesa"}
     }
-    Version{"2.1.22.93"}
+    Version{"2.1.26.0"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

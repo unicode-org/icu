@@ -1,13 +1,5 @@
-﻿// ***************************************************************************
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
-// *
-// * Copyright (C) 2016 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/main/sv.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 sv{
     AuxExemplarCharacters{"[á â ã ā ç ë í î ï ī ñ ó ú ÿ ü æ ø]"}
     Ellipsis{
@@ -223,7 +215,7 @@ sv{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.23.66"}
+    Version{"2.1.26.30"}
     calendar{
         buddhist{
             eras{
@@ -2176,17 +2168,5 @@ sv{
         UK{"engelska enheter"}
         US{"USA-enheter"}
         metric{"SI-enheter"}
-    }
-    transformNames{
-        BGN{"BGN"}
-        Numeric{"Numerisk"}
-        Tone{"Ton"}
-        UNGEGN{"UNGEGN"}
-        x-Accents{"Accenter"}
-        x-Fullwidth{"Helbreda"}
-        x-Halfwidth{"Halvbreda"}
-        x-Jamo{"Jamo"}
-        x-Pinyin{"Pinyin"}
-        x-Publishing{"För publicering"}
     }
 }
