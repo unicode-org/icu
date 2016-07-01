@@ -291,9 +291,16 @@
         <exclude name="**/*$*.class"/>
     </patternset>
 
-    <!--Class names that will be included/excluded as tests for time zone check-->
+    <!--Class names that will be included/excluded as tests for packaging check-->
     <patternset id="packagingCheck-patternset">
         <include name="**/TestLocaleNamePackaging*"/>
+        <exclude name="**/*$*.class"/>
+    </patternset>
+
+    <!--Class names that will be included/excluded as tests for locale SPI check-->
+    <patternset id="localespiCheck-patternset">
+        <include name="**/*Test*"/>
+        <exclude name="com/ibm/icu/dev/test/localespi/TestUtil.*"/>
         <exclude name="**/*$*.class"/>
     </patternset>
 
@@ -451,6 +458,7 @@
 
     <target name="_localespiCheck">
         <icu-junit testdir="${icu4j.localespi-tests.dir}" output="localespi"
+            test-patternset="localespiCheck-patternset"
             jvm-options="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${icu4j.currdata.dir}/${jar.dir}${path.separator}${icu4j.langdata.dir}/${jar.dir}${path.separator}${icu4j.regiondata.dir}/${jar.dir}${path.separator}${java.ext.dirs}"
             failure-status="icu-junit-failure"
         />
