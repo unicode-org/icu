@@ -1,0 +1,36 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+mt{
+    Currencies{
+        EUR{
+            "€",
+            "ewro",
+        }
+        MTL{
+            "MTL",
+            "Lira Maltija",
+        }
+        XXX{
+            "XXX",
+            "Munita Mhux Magħrufa jew Mhux Valida",
+        }
+    }
+    Currencies%narrow{
+        EUR{"€"}
+    }
+    CurrencyPlurals{
+        EUR{
+            few{"ewro"}
+            many{"ewro"}
+            one{"ewro"}
+            other{"ewro"}
+        }
+        XXX{
+            few{"Munita Mhux Magħruf jew Mhux Validu"}
+            many{"Munita Mhux Magħruf jew Mhux Validu"}
+            one{"Munita Mhux Magħruf jew Mhux Validu"}
+            other{"Munita Mhux Magħruf jew Mhux Validu"}
+        }
+    }
+    Version{"2.1.25.97"}
+}

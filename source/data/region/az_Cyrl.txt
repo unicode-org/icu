@@ -1,0 +1,18 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+az_Cyrl{
+    %%Parent{"root"}
+    Countries{
+        AZ{"Азәрбајҹан"}
+        BR{"Бразилија"}
+        CN{"Чин"}
+        DE{"Алманија"}
+        FR{"Франса"}
+        IN{"Һиндистан"}
+        IT{"Италија"}
+        JP{"Јапонија"}
+        RU{"Русија"}
+        US{"Америка Бирләшмиш Штатлары"}
+    }
+    Version{"2.1.25.97"}
+}

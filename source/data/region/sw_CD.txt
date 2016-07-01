@@ -1,0 +1,19 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+sw_CD{
+    Countries{
+        AF{"Afuganistani"}
+        BJ{"Benini"}
+        CG{"Kongo"}
+        CI{"Kodivaa"}
+        CY{"Kuprosi"}
+        IR{"Uajemi"}
+        LI{"Lishenteni"}
+        MG{"Bukini"}
+        MM{"Myama"}
+        NF{"Kisiwa cha Norfok"}
+        NG{"Nijeria"}
+        TL{"Timori ya Mashariki"}
+    }
+    Version{"2.1.25.97"}
+}

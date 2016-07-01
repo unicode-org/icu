@@ -1,0 +1,11 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+ps{
+    Currencies{
+        AFN{
+            "؋",
+            "افغانۍ",
+        }
+    }
+    Version{"2.1.25.97"}
+}

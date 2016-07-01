@@ -1,0 +1,24 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+ps{
+    Version{"2.1.25.97"}
+    zoneStrings{
+        "Asia:Kabul"{
+            ec{"کابل"}
+        }
+        "meta:Almaty"{
+            ld{"∅∅∅"}
+            lg{"الماتا په وخت"}
+            ls{"∅∅∅"}
+        }
+        "meta:Europe_Western"{
+            ld{"∅∅∅"}
+            lg{"لوېديزې اروپا وخت"}
+            ls{"∅∅∅"}
+        }
+        "meta:GMT"{
+            ls{"گرينويچ وخت"}
+        }
+        regionFormat{"د {0} په وخت"}
+    }
+}

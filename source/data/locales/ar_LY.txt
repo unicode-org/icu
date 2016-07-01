@@ -1,0 +1,14 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+ar_LY{
+    NumberElements{
+        default{"latn"}
+        latn{
+            symbols{
+                decimal{","}
+                group{"."}
+            }
+        }
+    }
+    Version{"2.1.25.97"}
+}

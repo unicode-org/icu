@@ -1,0 +1,31 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+es_419{
+    Keys{
+        ms{"sm"}
+    }
+    Languages{
+        eu{"vasco"}
+        luo{"luo"}
+        sw{"swahili"}
+        sw_CD{"swahili del Congo"}
+        vai{"vai"}
+    }
+    Languages%short{
+        en_GB{"inglés (R. U.)"}
+    }
+    Languages%variant{
+        ps{"pashtún"}
+        ug{"uighur"}
+    }
+    Types{
+        numbers{
+            knda{"números en kannada"}
+            laoo{"números en lao"}
+        }
+    }
+    Version{"2.1.25.97"}
+    codePatterns{
+        script{"Alfabeto: {0}"}
+    }
+}

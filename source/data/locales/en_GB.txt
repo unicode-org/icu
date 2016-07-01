@@ -1,0 +1,233 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+en_GB{
+    %%Parent{"en_001"}
+    Version{"2.1.26.18"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "am",
+                "pm",
+            }
+            AmPmMarkersAbbr{
+                "am",
+                "pm",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "dd/MM/y",
+                "{1}, {0}",
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            dayPeriod{
+                stand-alone{
+                    narrow{
+                        am{"a"}
+                        pm{"p"}
+                    }
+                    wide{
+                        am{"am"}
+                        pm{"pm"}
+                    }
+                }
+            }
+        }
+    }
+    fields{
+        dayperiod{
+            dn{"am/pm"}
+        }
+        hour-narrow{
+            relativeTime{
+                future{
+                    one{"in {0} hr"}
+                    other{"in {0} hr"}
+                }
+                past{
+                    one{"{0} hr ago"}
+                    other{"{0} hr ago"}
+                }
+            }
+        }
+        hour-short{
+            dn{"hr"}
+            relativeTime{
+                future{
+                    one{"in {0} hr"}
+                    other{"in {0} hr"}
+                }
+                past{
+                    one{"{0} hr ago"}
+                    other{"{0} hr ago"}
+                }
+            }
+        }
+        minute-narrow{
+            relativeTime{
+                future{
+                    one{"in {0} min"}
+                    other{"in {0} min"}
+                }
+                past{
+                    one{"{0} min ago"}
+                    other{"{0} min ago"}
+                }
+            }
+        }
+        minute-short{
+            dn{"min"}
+            relativeTime{
+                future{
+                    one{"in {0} min"}
+                    other{"in {0} min"}
+                }
+                past{
+                    one{"{0} min ago"}
+                    other{"{0} min ago"}
+                }
+            }
+        }
+        month-narrow{
+            dn{"mo"}
+            relativeTime{
+                future{
+                    one{"in {0} mo"}
+                    other{"in {0} mo"}
+                }
+                past{
+                    one{"{0} mo ago"}
+                    other{"{0} mo ago"}
+                }
+            }
+        }
+        month-short{
+            dn{"mo"}
+            relativeTime{
+                future{
+                    one{"in {0} mo"}
+                    other{"in {0} mo"}
+                }
+                past{
+                    one{"{0} mo ago"}
+                    other{"{0} mo ago"}
+                }
+            }
+        }
+        quarter-narrow{
+            dn{"qtr"}
+            relativeTime{
+                future{
+                    one{"in {0} qtr"}
+                    other{"in {0} qtr"}
+                }
+                past{
+                    one{"{0} qtr ago"}
+                    other{"{0} qtr ago"}
+                }
+            }
+        }
+        quarter-short{
+            dn{"qtr"}
+            relativeTime{
+                future{
+                    one{"in {0} qtr"}
+                    other{"in {0} qtr"}
+                }
+                past{
+                    one{"{0} qtr ago"}
+                    other{"{0} qtr ago"}
+                }
+            }
+        }
+        second-narrow{
+            relativeTime{
+                future{
+                    one{"in {0} sec"}
+                    other{"in {0} sec"}
+                }
+                past{
+                    one{"{0} sec ago"}
+                    other{"{0} sec ago"}
+                }
+            }
+        }
+        second-short{
+            dn{"sec"}
+            relativeTime{
+                future{
+                    one{"in {0} sec"}
+                    other{"in {0} sec"}
+                }
+                past{
+                    one{"{0} sec ago"}
+                    other{"{0} sec ago"}
+                }
+            }
+        }
+        week-narrow{
+            dn{"wk"}
+            relativeTime{
+                future{
+                    one{"in {0} wk"}
+                    other{"in {0} wk"}
+                }
+                past{
+                    one{"{0} wk ago"}
+                    other{"{0} wk ago"}
+                }
+            }
+        }
+        week-short{
+            dn{"wk"}
+            relativeTime{
+                future{
+                    one{"in {0} wk"}
+                    other{"in {0} wk"}
+                }
+                past{
+                    one{"{0} wk ago"}
+                    other{"{0} wk ago"}
+                }
+            }
+        }
+        year-narrow{
+            relativeTime{
+                future{
+                    one{"in {0} yr"}
+                    other{"in {0} yr"}
+                }
+                past{
+                    one{"{0} yr ago"}
+                    other{"{0} yr ago"}
+                }
+            }
+        }
+        year-short{
+            dn{"yr"}
+            relativeTime{
+                future{
+                    one{"in {0} yr"}
+                    other{"in {0} yr"}
+                }
+                past{
+                    one{"{0} yr ago"}
+                    other{"{0} yr ago"}
+                }
+            }
+        }
+    }
+    listPattern{
+        standard{
+            end{"{0} and {1}"}
+        }
+    }
+}

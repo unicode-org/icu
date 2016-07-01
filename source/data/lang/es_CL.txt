@@ -1,0 +1,11 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+es_CL{
+    %%Parent{"es_419"}
+    Types{
+        collation{
+            phonebook{"orden de directorio telefónico"}
+        }
+    }
+    Version{"2.1.25.97"}
+}

@@ -1,0 +1,113 @@
+#
+#   Copyright (C) 2002-2016, International Business Machines Corporation and others.
+#       All Rights Reserved.
+#
+#   file:  char.txt
+#
+#   ICU Character Break Rules, also known as Grapheme Cluster Boundaries
+#      See Unicode Standard Annex #29.
+#      These rules are based on UAX #29 Revision 28 (Draft 7) for Unicode Version 9.0
+#
+
+#
+#  Character Class Definitions.
+#
+$CR          = [\p{Grapheme_Cluster_Break = CR}];
+$LF          = [\p{Grapheme_Cluster_Break = LF}];
+$Control     = [[\p{Grapheme_Cluster_Break = Control}]];
+$Extend      = [[\p{Grapheme_Cluster_Break = Extend}]];
+$ZWJ         = [\p{Grapheme_Cluster_Break = ZWJ}];
+$Regional_Indicator = [\p{Grapheme_Cluster_Break = Regional_Indicator}];
+$Prepend     = [\p{Grapheme_Cluster_Break = Prepend}];
+$SpacingMark = [\p{Grapheme_Cluster_Break = SpacingMark}];
+
+#
+# Korean Syllable Definitions
+#
+$L           = [\p{Grapheme_Cluster_Break = L}];
+$V           = [\p{Grapheme_Cluster_Break = V}];
+$T           = [\p{Grapheme_Cluster_Break = T}];
+
+$LV          = [\p{Grapheme_Cluster_Break = LV}];
+$LVT         = [\p{Grapheme_Cluster_Break = LVT}];
+
+# Emoji defintions
+
+$E_Base      = [\p{Grapheme_Cluster_Break = EB}];
+$E_Modifier  = [\p{Grapheme_Cluster_Break = EM}];
+$GAZ         = [\p{Grapheme_Cluster_Break = GAZ}];
+$E_Base_GAZ  = [\p{Grapheme_Cluster_Break = EBG}];
+
+## -------------------------------------------------
+!!chain;
+!!lookAheadHardBreak;
+!!forward;
+
+$CR $LF;
+
+$L ($L | $V | $LV | $LVT);
+($LV | $V) ($V | $T);
+($LVT | $T) $T;
+
+# GB 9
+[^$Control $CR $LF] ($Extend | $ZWJ);
+
+# GB 9a (only for extended grapheme clusters)
+[^$Control $CR $LF] $SpacingMark;
+
+# GB 9b
+$Prepend [^$Control $CR $LF];
+
+# GB 10 Do not break within emoji modifier sequences or emoji zwj sequences.
+($E_Base | $E_Base_GAZ) $Extend* $E_Modifier;
+
+# GB 11
+$ZWJ ($GAZ | $E_Base_GAZ);
+
+# GB 12-13. Keep pairs of regional indicators together
+#           Note that hard break '/' rule triggers only if there are three or more initial RIs,
+
+^$Prepend* $Regional_Indicator $Regional_Indicator / $Regional_Indicator;
+^$Prepend* $Regional_Indicator $Regional_Indicator;
+
+## -------------------------------------------------
+
+!!reverse;
+$LF $CR;
+($L | $V | $LV | $LVT) $L;
+($V | $T) ($LV | $V);
+$T ($LVT | $T);
+
+# GB 9
+($Extend | $ZWJ)   [^$Control $CR $LF];    #note that this will chain into Regional_Indicator when needed.
+
+# GB 9a
+$SpacingMark [^$Control $CR $LF];
+
+# GB 9b
+[^$Control $CR $LF] $Prepend;
+
+# GB 10
+$E_Modifier $Extend* ($E_Base | $E_Base_GAZ);
+
+# GB 11 Don't break between ZWJ and Glue_After_ZWJ
+($GAZ | $E_Base_GAZ) $ZWJ;
+
+# GB 12-13. Going backwards, we must scan through any number of regional indicators as pairs.
+#
+[{bof} $Extend $ZWJ $SpacingMark] $Regional_Indicator $Regional_Indicator / ($Regional_Indicator $Regional_Indicator)+ [{eof}[^$Regional_Indicator]];
+[{bof} $Extend $ZWJ $SpacingMark]                     $Regional_Indicator / ($Regional_Indicator $Regional_Indicator)+ [{eof}[^$Regional_Indicator]];
+$Regional_Indicator $Regional_Indicator;
+$Regional_Indicator $Prepend;
+
+## -------------------------------------------------
+
+!!safe_reverse;
+$Regional_Indicator $Regional_Indicator;
+($Extend | $ZWJ)+ .;
+
+## -------------------------------------------------
+
+!!safe_forward;
+$Regional_Indicator $Regional_Indicator;
+($Extend | $ZWJ)+ .;

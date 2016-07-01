@@ -1,0 +1,17 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+es_SV{
+    %%Parent{"es_419"}
+    Version{"2.1.25.97"}
+    fields{
+        day{
+            relative{
+                "-1"{"ayer"}
+                "-2"{"antier"}
+                "0"{"hoy"}
+                "1"{"mañana"}
+                "2"{"pasado mañana"}
+            }
+        }
+    }
+}

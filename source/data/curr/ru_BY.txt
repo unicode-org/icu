@@ -1,0 +1,15 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+ru_BY{
+    Currencies{
+        BYR{
+            "р.",
+            "Белорусский рубль",
+        }
+        RUR{
+            "RUR",
+            "Российский рубль (1991–1998)",
+        }
+    }
+    Version{"2.1.25.97"}
+}

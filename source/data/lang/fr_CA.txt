@@ -1,0 +1,30 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+fr_CA{
+    Languages{
+        arn{"araukan"}
+        luo{"luo"}
+        mgo{"Meta’"}
+        nds{"bas allemand"}
+    }
+    Scripts{
+        Deva{"devanagari"}
+        Gujr{"gujarati"}
+    }
+    Types{
+        calendar{
+            ethiopic-amete-alem{"Calendrier éthiopien de l’An de grâce"}
+        }
+        collation{
+            dictionary{"Ordre de tri du dictionnaire"}
+            reformed{"Ordre de tri réformé"}
+            searchjl{"Rechercher par consonne initiale en hangeul"}
+        }
+        numbers{
+            gujr{"chiffres gujaratis"}
+            mong{"Chiffres mongols"}
+            taml{"chiffres tamouls traditionnels"}
+        }
+    }
+    Version{"2.1.26.0"}
+}

@@ -1,0 +1,56 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+fr_CH{
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##0.00;¤-#,##0.00"}
+                percentFormat{"#,##0%"}
+            }
+            symbols{
+                decimal{"."}
+            }
+        }
+    }
+    Version{"2.1.25.97"}
+    calendar{
+        generic{
+            DateTimePatterns{
+                "HH.mm:ss 'h' zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "dd.MM.yy GGGGG",
+                "{1} {0}",
+                "{1} 'à' {0}",
+                "{1} 'à' {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
+        gregorian{
+            DateTimePatterns{
+                "HH.mm:ss 'h' zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "dd.MM.yy",
+                "{1} 'à' {0}",
+                "{1} 'à' {0}",
+                "{1} 'à' {0}",
+                "{1} 'à' {0}",
+                "{1} {0}",
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"›"}
+        alternateQuotationStart{"‹"}
+    }
+}
