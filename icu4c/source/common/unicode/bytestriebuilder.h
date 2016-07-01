@@ -31,7 +31,6 @@ U_NAMESPACE_BEGIN
 
 class BytesTrieElement;
 class CharString;
-
 /**
  * Builder class for BytesTrie.
  *
@@ -143,7 +142,7 @@ private:
     virtual int32_t getMinLinearMatch() const { return BytesTrie::kMinLinearMatch; }
     virtual int32_t getMaxLinearMatchLength() const { return BytesTrie::kMaxLinearMatchLength; }
 
-    // don't use #ifndef U_HIDE_INTERNAL_API with private class members
+ #ifndef U_HIDE_INTERNAL_API
     /**
      * @internal
      */
@@ -155,7 +154,8 @@ private:
     private:
         const char *s;
     };
-
+#endif
+    
     // don't use #ifndef U_HIDE_INTERNAL_API with private class members or virtual methods.
     virtual Node *createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
                                         Node *nextNode) const;
