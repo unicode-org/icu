@@ -304,7 +304,6 @@
       <fileset dir="${icu4j.core-tests.dir}/src"/>
       <fileset dir="${icu4j.collate-tests.dir}/src"/>
       <fileset dir="${icu4j.translit-tests.dir}/src"/>
-      <fileset dir="${icu4j.testall.dir}/src"/>
     </copy>
 
     <!-- icu test data -->
