@@ -1936,7 +1936,6 @@ public:
    * @draft ICU 56
    */
   void swap(UnicodeString &other) U_NOEXCEPT;
-#endif  /* U_HIDE_DRAFT_API */
 
   /**
    * Non-member UnicodeString swap function.
@@ -1948,6 +1947,7 @@ public:
   swap(UnicodeString &s1, UnicodeString &s2) U_NOEXCEPT {
     s1.swap(s2);
   }
+#endif  /* U_HIDE_DRAFT_API */
 
   /**
    * Assignment operator.  Replace the characters in this UnicodeString
