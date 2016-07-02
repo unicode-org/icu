@@ -47,10 +47,6 @@ public final class StringPrepDataReader implements ICUBinary.Authenticate {
         return ICUBinary.getChars(byteBuffer, length, 0);
     }
 
-    public byte[] getDataFormatVersion(){
-        return DATA_FORMAT_VERSION;
-    }
-    
     public boolean isDataVersionAcceptable(byte version[]){
         return version[0] == DATA_FORMAT_VERSION[0] 
                && version[2] == DATA_FORMAT_VERSION[2] 
