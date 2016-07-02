@@ -55,7 +55,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
         super(name, rawOffset, dstSavings);
         this.dateTimeRule = dateTimeRule;
         this.startYear = startYear;
-        this.endYear = endYear > MAX_YEAR ? MAX_YEAR : endYear;
+        this.endYear = endYear;
     }
 
     /**

@@ -529,7 +529,7 @@ public class TimeUnitFormat extends MeasureFormat {
         // then search the units resource fallback from the current level to root
         if (parentLocale == null && resourceKey.equals("unitsShort")) {
             searchInTree("units", styl, timeUnit, srcPluralCount, searchPluralCount, countToPatterns);
-            if (countToPatterns != null && countToPatterns.get(srcPluralCount) != null
+            if (countToPatterns.get(srcPluralCount) != null
                     && countToPatterns.get(srcPluralCount)[styl] != null) {
                 return;
             }

@@ -345,6 +345,12 @@ public abstract class LocaleDisplayNames {
          */
         @Override
         public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || !(obj instanceof UiListItem)) {
+                return false;
+            }
             UiListItem other = (UiListItem)obj;
             return nameInDisplayLocale.equals(other.nameInDisplayLocale)
                     && nameInSelf.equals(other.nameInSelf)

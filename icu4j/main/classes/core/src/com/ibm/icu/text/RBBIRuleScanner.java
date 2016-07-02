@@ -48,8 +48,6 @@ class RBBIRuleScanner {
 
     RBBIRuleChar              fC = new RBBIRuleChar();    // Current char for parse state machine
                                                      //   processing.
-    String                    fVarName;          // $variableName, valid when we've just
-                                                     //   scanned one.
 
 
     short  fStack[] = new short[kStackSize];  // State stack, holds state pushes

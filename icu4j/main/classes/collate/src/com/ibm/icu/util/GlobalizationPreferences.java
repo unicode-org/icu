@@ -895,8 +895,7 @@ public class GlobalizationPreferences implements Freezable<GlobalizationPreferen
         int index = 0;
         while (index < result.size()) {
             ULocale uloc = result.get(index);
-            while (true) {
-                uloc = uloc.getFallback();
+            while ((uloc = uloc.getFallback()) != null) {
                 if (uloc.getLanguage().length() == 0) {
                     break;
                 }

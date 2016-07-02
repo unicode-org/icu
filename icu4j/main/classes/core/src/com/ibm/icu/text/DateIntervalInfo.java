@@ -245,10 +245,10 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
          * @stable ICU 4.0
          */
         public boolean equals(Object a) {
-            if ( a instanceof PatternInfo ) {
+            if (a instanceof PatternInfo) {
                 PatternInfo patternInfo = (PatternInfo)a;
                 return Utility.objectEquals(fIntervalPatternFirstPart, patternInfo.fIntervalPatternFirstPart) &&
-                       Utility.objectEquals(fIntervalPatternSecondPart, fIntervalPatternSecondPart) &&
+                       Utility.objectEquals(fIntervalPatternSecondPart, patternInfo.fIntervalPatternSecondPart) &&
                        fFirstDateInPtnIsLaterDate == patternInfo.fFirstDateInPtnIsLaterDate;
             }
             return false;

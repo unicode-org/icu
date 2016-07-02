@@ -110,7 +110,6 @@ class CharsetISCII extends CharsetICU {
     
     private final static String ISCII_CNV_PREFIX = "ISCII,version=";
     
-    @SuppressWarnings("unused")
     private static final class UConverterDataISCII {
         int option;
         int contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
@@ -123,12 +122,10 @@ class CharsetISCII extends CharsetICU {
         short defMaskToUnicode;           /* mask for default state in toUnicode */
         boolean isFirstBuffer;          /* boolean for fromUnicode to see if we need to announce the first script */
         boolean resetToDefaultToUnicode;    /* boolean for reseting to default delta and mask when a newline is encountered */
-        String name;
         int prevToUnicodeStatus;        /* Hold the previous toUnicodeStatus. This is necessary because we may need to know the last two code points. */
         
-        UConverterDataISCII(int option, String name) {
+        UConverterDataISCII(int option) {
             this.option = option;
-            this.name = name;
             
             initialize();
         }
@@ -766,10 +763,7 @@ class CharsetISCII extends CharsetICU {
         //get the version number of the ISCII converter
         int option = Integer.parseInt(icuCanonicalName.substring(14));
         
-        extraInfo = new UConverterDataISCII( 
-                            option,
-                            ISCII_CNV_PREFIX + (option & UCNV_OPTIONS_VERSION_MASK)  /* name */
-                        );
+        extraInfo = new UConverterDataISCII(option);
         
         initializePNJSets();
     }

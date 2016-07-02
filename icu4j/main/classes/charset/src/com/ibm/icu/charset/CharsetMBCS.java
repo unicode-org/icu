@@ -237,7 +237,6 @@ class CharsetMBCS extends CharsetICU {
         }
 
         data = new UConverterSharedData(1, null, false, 0);
-        data.dataReader = reader;
         data.staticData = staticData;
         data.sharedDataCached = false;
 

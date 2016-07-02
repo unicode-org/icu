@@ -1417,7 +1417,8 @@ public  class ICUResourceBundle extends UResourceBundle {
             UResourceBundle requested) {
         WholeBundle wholeBundle = base.wholeBundle;
         ClassLoader loaderToUse = wholeBundle.loader;
-        String locale = null, keyPath = null;
+        String locale;
+        String keyPath = null;
         String bundleName;
         String rpath = wholeBundle.reader.getAlias(_resource);
         if (aliasesVisited == null) {
@@ -1473,12 +1474,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             }
             sub = ICUResourceBundle.findResourceWithFallback(keyPath, bundle, null);
         }else{
-            if (locale == null) {
-                // {dlf} must use requestor's class loader to get resources from same jar
-                bundle = getBundleInstance(bundleName, "", loaderToUse, false);
-            } else {
-                bundle = getBundleInstance(bundleName, locale, loaderToUse, false);
-            }
+            bundle = getBundleInstance(bundleName, locale, loaderToUse, false);
 
             int numKeys;
             if (keyPath != null) {

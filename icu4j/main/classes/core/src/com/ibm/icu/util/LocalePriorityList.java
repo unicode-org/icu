@@ -352,7 +352,8 @@ public class LocalePriorityList implements Iterable<ULocale> {
 
     private static Comparator<Double> myDescendingDouble = new Comparator<Double>() {
         public int compare(Double o1, Double o2) {
-            return -o1.compareTo(o2);
+            int result = o1.compareTo(o2);
+            return result > 0 ? -1 : result < 0 ? 1 : 0; // Reverse the order.
         }
     };
 }

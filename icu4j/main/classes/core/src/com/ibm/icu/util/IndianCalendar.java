@@ -450,11 +450,7 @@ public class IndianCalendar extends Calendar {
            month %= 12;
        }
        
-       if(month == 12) {
-           imonth = 1;
-       } else {
-           imonth = month +1;  
-       }
+       imonth = month + 1;  
        
        double jd = IndianToJD(year ,imonth, 1);
        

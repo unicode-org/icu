@@ -106,7 +106,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         }
     }
 
-    private ULocale _locale;
+    private final ULocale _locale;
     private TimeZoneNames _tznames;
 
     private transient volatile boolean _frozen;

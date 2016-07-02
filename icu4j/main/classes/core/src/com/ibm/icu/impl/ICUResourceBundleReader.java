@@ -218,7 +218,7 @@ public final class ICUResourceBundleReader {
         // set pool bundle if necessary
         if (usesPoolBundle) {
             poolBundleReader = getReader(baseName, "pool", loader);
-            if (!poolBundleReader.isPoolBundle) {
+            if (poolBundleReader == null || !poolBundleReader.isPoolBundle) {
                 throw new IllegalStateException("pool.res is not a pool bundle");
             }
             if (poolBundleReader.poolCheckSum != poolCheckSum) {

@@ -506,7 +506,7 @@ final class NFRuleSet {
         }
 
         // if there's a master rule, use it to format the number
-        if (nonNumericalRules != null && nonNumericalRules[MASTER_RULE_INDEX] != null) {
+        if (nonNumericalRules[MASTER_RULE_INDEX] != null) {
             return nonNumericalRules[MASTER_RULE_INDEX];
         }
         else {
