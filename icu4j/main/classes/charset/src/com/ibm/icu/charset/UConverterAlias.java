@@ -49,7 +49,7 @@ final class UConverterAlias {
 
     static byte[] gNormalizedStringTable = null;
 
-    static final String GET_STRING(int idx) {
+    private static final String GET_STRING(int idx) {
         return extractString(gStringTable, 2 * idx);
     }
 
@@ -701,9 +701,6 @@ final class UConverterAlias {
 
     static int gAvailableConverterCount = 0;
 
-    static byte[] gDefaultConverterNameBuffer; // [MAX_CONVERTER_NAME_LENGTH +
-                                                // 1]; /* +1 for NULL */
-
     static String gDefaultConverterName = null;
 
     // static UBool haveAvailableConverterList(UErrorCode *pErrorCode)
@@ -762,53 +759,4 @@ final class UConverterAlias {
         }
         return null;
     }
-
-    /* default converter name --------------------------------------------------- */
-
-    /*
-     * In order to be really thread-safe, the get function would have to take
-     * a buffer parameter and copy the current string inside a mutex block.
-     * This implementation only tries to be really thread-safe while
-     * setting the name.
-     * It assumes that setting a pointer is atomic.
-     */
-
-    // U_CFUNC const char * getDefaultName()
-//    static final synchronized String getDefaultName() {
-//        /* local variable to be thread-safe */
-//        String name;
-//
-//        //agljport:todo umtx_lock(null);
-//        name = gDefaultConverterName;
-//        //agljport:todo umtx_unlock(null);
-//
-//        if (name == null) {
-//            //UConverter cnv = null;
-//            int length = 0;
-//
-//            name = CharsetICU.getDefaultCharsetName();
-//
-//            /* if the name is there, test it out and get the canonical name with options */
-//            if (name != null) {
-//               // cnv = UConverter.open(name); 
-//               // name = cnv.getName(cnv);
-//                // TODO: fix me
-//            }
-//
-//            if (name == null || name.length() == 0 ||/* cnv == null ||*/
-//                     length >= gDefaultConverterNameBuffer.length) {
-//                /* Panic time, let's use a fallback. */
-//                name = new String("US-ASCII");
-//            }
-//
-//            //length=(int32_t)(strlen(name));
-//
-//            /* Copy the name before we close the converter. */
-//            name = gDefaultConverterName;
-//        }
-//
-//        return name;
-//    }
-
-    //end bld.c
 }

@@ -170,8 +170,8 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     }
 
     public void putAll(Map<? extends K, ? extends V> t) {
-        for (K key : t.keySet()) {
-            put(key, t.get(key));
+        for (Map.Entry<? extends K, ? extends V> entry : t.entrySet()) {
+            put(entry.getKey(), entry.getValue());
         }
     }
 
@@ -266,8 +266,8 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     }
 
     public Relation<K,V> addAllInverted(Map<V,K> source) {
-        for (V value : source.keySet()) {
-            put(source.get(value), value);
+        for (Map.Entry<V,K> entry : source.entrySet()) {
+            put(entry.getValue(), entry.getKey());
         }
         return this;
     }

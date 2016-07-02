@@ -44,7 +44,6 @@ class CjkBreakEngine extends DictionaryBreakEngine {
             setCharacters(fHangulWordSet);
         } else { //Chinese and Japanese
             UnicodeSet cjSet = new UnicodeSet();
-            cjSet = new UnicodeSet();
             cjSet.addAll(fHanWordSet);
             cjSet.addAll(fKatakanaWordSet);
             cjSet.addAll(fHiraganaWordSet);

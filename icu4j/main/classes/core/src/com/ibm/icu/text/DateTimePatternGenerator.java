@@ -2068,14 +2068,15 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     MISSING_FIELD = 0x1000;
 
 
-    static private String getName(String s) {
+    private static String getName(String s) {
         int i = getCanonicalIndex(s, true);
         String name = FIELD_NAME[types[i][1]];
-        int subtype = types[i][2];
-        boolean string = subtype < 0;
-        if (string) subtype = -subtype;
-        if (subtype < 0) name += ":S";
-        else name += ":N";
+        if (types[i][2] < 0) {
+            name += ":S"; // string
+        }
+        else {
+            name += ":N";
+        }
         return name;
     }
 
@@ -2321,10 +2322,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         public boolean equals(Object other) {
-            if (this == other) { return true; }
-            if (other == null) { return false; }
-            SkeletonFields _other = (SkeletonFields) other;
-            return Arrays.equals(chars, _other.chars) && Arrays.equals(lengths, _other.lengths);
+            return this == other || (other != null && other instanceof SkeletonFields
+                && compareTo((SkeletonFields) other) == 0);
         }
 
         public int hashCode() {
@@ -2448,14 +2447,13 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         public int compareTo(DateTimeMatcher that) {
-            return -original.compareTo(that.original);
+            int result = original.compareTo(that.original);
+            return result > 0 ? -1 : result < 0 ? 1 : 0; // Reverse the order.
         }
 
         public boolean equals(Object other) {
-            if (this == other) { return true; }
-            if (other == null) { return false; }
-            DateTimeMatcher _other = (DateTimeMatcher) other;
-            return original.equals(_other.original);
+            return this == other || (other != null && other instanceof DateTimeMatcher
+                && original.equals(((DateTimeMatcher) other).original));
         }
 
         public int hashCode() {

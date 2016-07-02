@@ -601,12 +601,16 @@ public class SpoofChecker {
         // setAllowedLocales.
         private void addScriptChars(ULocale locale, UnicodeSet allowedChars) {
             int scripts[] = UScript.getCode(locale);
-            UnicodeSet tmpSet = new UnicodeSet();
-            int i;
-            for (i = 0; i < scripts.length; i++) {
-                tmpSet.applyIntPropertyValue(UProperty.SCRIPT, scripts[i]);
-                allowedChars.addAll(tmpSet);
+            if (scripts != null) {
+                UnicodeSet tmpSet = new UnicodeSet();
+                for (int i = 0; i < scripts.length; i++) {
+                    tmpSet.applyIntPropertyValue(UProperty.SCRIPT, scripts[i]);
+                    allowedChars.addAll(tmpSet);
+                }
             }
+            // else it's an unknown script.
+            // Maybe they asked for the script of "zxx", which refers to no linguistic content.
+            // Maybe they asked for the script of a newer locale that we don't know in the older version of ICU.
         }
 
         /**

@@ -1111,7 +1111,7 @@ public class MeasureFormat extends UFormat {
             return positive ? ((DecimalFormat)nf).getPositivePrefix() : ((DecimalFormat)nf).getNegativePrefix();
         }
         public String getSuffix(boolean positive) {
-            return positive ? ((DecimalFormat)nf).getPositiveSuffix() : ((DecimalFormat)nf).getPositiveSuffix();
+            return positive ? ((DecimalFormat)nf).getPositiveSuffix() : ((DecimalFormat)nf).getNegativeSuffix();
         }
     }
 

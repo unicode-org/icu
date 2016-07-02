@@ -529,7 +529,6 @@ public class Bidi {
         int   contextPos;               /* position of last strong char found before opening */
         short flags;                    /* bits for L or R/AL found within the pair */
         byte  contextDir;               /* L or R according to last strong char before opening */
-        byte  filler;                   /* to complete a nice multiple of 4 bytes */
     }
 
     static class IsoRun {

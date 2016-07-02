@@ -578,7 +578,6 @@ public class ICUService extends ICUNotifier {
      * Return a map from visible ids to factories.
      */
     private Map<String, Factory> getVisibleIDMap() {
-        Map<String, Factory> idcache = this.idcache;
         synchronized (this) { // or idcache-only lock?
             if (idcache == null) {
                 try {
@@ -589,7 +588,7 @@ public class ICUService extends ICUNotifier {
                         Factory f = lIter.previous();
                         f.updateVisibleIDs(mutableMap);
                     }
-                    this.idcache = idcache = Collections.unmodifiableMap(mutableMap);
+                    this.idcache = Collections.unmodifiableMap(mutableMap);
                 } finally {
                     factoryLock.releaseRead();
                 }

@@ -349,7 +349,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             return null;
         }
         boolean isFinal = false;
-        TimeZoneTransition result = null;
+        TimeZoneTransition result;
         TimeZoneTransition tzt = historicTransitions.get(0);
         long tt = tzt.getTime();
         if (tt > base || (inclusive && tt == base)) {
@@ -394,18 +394,16 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 result = prev;
             }
         }
-        if (result != null) {
-            // For now, this implementation ignore transitions with only zone name changes.
-            TimeZoneRule from = result.getFrom();
-            TimeZoneRule to = result.getTo();
-            if (from.getRawOffset() == to.getRawOffset()
-                    && from.getDSTSavings() == to.getDSTSavings()) {
-                // No offset changes.  Try next one if not final
-                if (isFinal) {
-                    return null;
-                } else {
-                    result = getNextTransition(result.getTime(), false /* always exclusive */);
-                }
+        // For now, this implementation ignore transitions with only zone name changes.
+        TimeZoneRule from = result.getFrom();
+        TimeZoneRule to = result.getTo();
+        if (from.getRawOffset() == to.getRawOffset()
+                && from.getDSTSavings() == to.getDSTSavings()) {
+            // No offset changes.  Try next one if not final
+            if (isFinal) {
+                return null;
+            } else {
+                result = getNextTransition(result.getTime(), false /* always exclusive */);
             }
         }
         return result;
@@ -422,7 +420,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         if (historicTransitions == null) {
             return null;
         }
-        TimeZoneTransition result = null;
+        TimeZoneTransition result;
         TimeZoneTransition tzt = historicTransitions.get(0);
         long tt = tzt.getTime();
         if (inclusive && tt == base) {
@@ -464,15 +462,13 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 result = tzt;                
             }
         }
-        if (result != null) {
-            // For now, this implementation ignore transitions with only zone name changes.
-            TimeZoneRule from = result.getFrom();
-            TimeZoneRule to = result.getTo();
-            if (from.getRawOffset() == to.getRawOffset()
-                    && from.getDSTSavings() == to.getDSTSavings()) {
-                // No offset changes.  Try previous one
-                result = getPreviousTransition(result.getTime(), false /* always exclusive */);
-            }
+        // For now, this implementation ignore transitions with only zone name changes.
+        TimeZoneRule from = result.getFrom();
+        TimeZoneRule to = result.getTo();
+        if (from.getRawOffset() == to.getRawOffset()
+                && from.getDSTSavings() == to.getDSTSavings()) {
+            // No offset changes.  Try previous one
+            result = getPreviousTransition(result.getTime(), false /* always exclusive */);
         }
         return result;
     }

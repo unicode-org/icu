@@ -124,7 +124,7 @@ class RBBISetBuilder {
     RangeDescriptor       fRangeList;      // Head of the linked list of RangeDescriptors
 
     IntTrieBuilder        fTrie;           // The mapping TRIE that is the end result of processing
-    int                  fTrieSize;        //  the Unicode Sets.
+                                           //  the Unicode Sets.
 
     // Groups correspond to character categories -
     //       groups of ranges that are in the same original UnicodeSets.

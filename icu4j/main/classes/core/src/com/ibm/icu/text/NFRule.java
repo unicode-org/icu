@@ -1277,7 +1277,7 @@ final class NFRule {
      */
     private boolean allIgnorable(String str) {
         // if the string is empty, we can just return true
-        if (str.length() == 0) {
+        if (str == null || str.length() == 0) {
             return true;
         }
         RbnfLenientScanner scanner = formatter.getLenientScanner();

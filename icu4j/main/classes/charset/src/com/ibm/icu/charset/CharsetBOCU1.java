@@ -688,7 +688,6 @@ class CharsetBOCU1 extends CharsetICU {
         int sourceIndex, nextSourceIndex;
         int prev, c , diff, count;
         byte[] bytes;
-        int targetCapacity;
         CoderResult cr;
         
         /* label values for supporting behavior similar to goto in C */

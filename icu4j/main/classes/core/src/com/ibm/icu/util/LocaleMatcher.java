@@ -460,6 +460,12 @@ public class LocaleMatcher {
          */
         @Override
         public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (obj == null || !(obj instanceof LocalePatternMatcher)) {
+                return false;
+            }
             LocalePatternMatcher other = (LocalePatternMatcher) obj;
             return Utility.objectEquals(level, other.level)
                 && Utility.objectEquals(lang, other.lang)
@@ -665,21 +671,6 @@ public class LocaleMatcher {
             return 1.0 - diff;
         }
 
-
-        /**
-         * Add an exceptional distance between languages, typically because regional
-         * dialects were given their own language codes. At this point the code is
-         * symmetric. We don't bother producing an equivalence class because there are
-         * so few cases; this function depends on the other permutations being
-         * added specifically.
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @SuppressWarnings("unused")
-        @Deprecated
-        private LanguageMatcherData addDistance(String desired, String supported, int percent) {
-            return addDistance(desired, supported, percent, false, null);
-        }
         /**
          * @internal
          * @deprecated This API is ICU internal only.

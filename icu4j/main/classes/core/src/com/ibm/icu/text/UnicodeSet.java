@@ -4512,7 +4512,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 if (o.list[i] == HIGH) {
                     if (o.strings.isEmpty()) return -1;
                     String item = o.strings.first();
-                    return -compare(item, list[i]);
+                    int compareResult = compare(item, list[i]);
+                    return compareResult > 0 ? -1 : compareResult < 0 ? 1 : 0; // Reverse the order.
                 }
                 // otherwise return the result if even index, or the reversal if not
                 return (i & 1) == 0 ? result : -result;

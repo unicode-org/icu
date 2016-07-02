@@ -34,8 +34,7 @@ public final class USerializedSet {
 
         length=src[srcStart++];
         
-        
-        if((length&0x8000) >0) {
+        if ((length&0x8000) != 0) {
             /* there are supplementary values */
             length&=0x7fff;
             if(src.length<(srcStart+1+length)) {

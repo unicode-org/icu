@@ -339,7 +339,6 @@ final class UConverterSharedData {
         return sharedData;
     }
 */
-    UConverterDataReader dataReader = null;
 
     /*
      * returns a converter type from a string

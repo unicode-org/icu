@@ -15,8 +15,8 @@ class NullTransliterator extends Transliterator {
     /**
      * Package accessible IDs for this transliterator.
      */
-    static String SHORT_ID = "Null";
-    static String _ID      = "Any-Null";
+    static final String SHORT_ID = "Null";
+    static final String _ID      = "Any-Null";
 
     /**
      * Constructs a transliterator.

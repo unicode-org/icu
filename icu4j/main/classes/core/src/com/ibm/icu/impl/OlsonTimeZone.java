@@ -570,7 +570,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         if (transitionCount > 0) {
             r = res.get("typeMap");
             typeMapData = r.getBinary(null);
-            if (typeMapData.length != transitionCount) {
+            if (typeMapData == null || typeMapData.length != transitionCount) {
                 throw new IllegalArgumentException("Invalid Format");
             }
         } else {

@@ -105,28 +105,28 @@ public final class ArabicShaping {
                                                ") for buffer of length " + dest.length);
         }
         /* Validate input options */
-        if ( ((options&TASHKEEL_MASK) > 0) &&
+        if ( ((options&TASHKEEL_MASK) != 0) &&
              !(((options & TASHKEEL_MASK)==TASHKEEL_BEGIN)  ||
-               ((options & TASHKEEL_MASK)==TASHKEEL_END )   ||
-               ((options & TASHKEEL_MASK)==TASHKEEL_RESIZE )||
-               ((options & TASHKEEL_MASK)==TASHKEEL_REPLACE_BY_TATWEEL)) ){
+               ((options & TASHKEEL_MASK)==TASHKEEL_END)    ||
+               ((options & TASHKEEL_MASK)==TASHKEEL_RESIZE) ||
+               ((options & TASHKEEL_MASK)==TASHKEEL_REPLACE_BY_TATWEEL))) {
             throw new IllegalArgumentException("Wrong Tashkeel argument");
         }
 
        ///CLOVER:OFF
        //According to Steven Loomis, the code is unreachable when you OR all the constants within the if statements
-       if(((options&LAMALEF_MASK) > 0)&&
+       if(((options&LAMALEF_MASK) != 0) &&
               !(((options & LAMALEF_MASK)==LAMALEF_BEGIN)  ||
-                ((options & LAMALEF_MASK)==LAMALEF_END )   ||
-                ((options & LAMALEF_MASK)==LAMALEF_RESIZE )||
-                 ((options & LAMALEF_MASK)==LAMALEF_AUTO)  ||
-                 ((options & LAMALEF_MASK)==LAMALEF_NEAR))){
+                ((options & LAMALEF_MASK)==LAMALEF_END)    ||
+                ((options & LAMALEF_MASK)==LAMALEF_RESIZE) ||
+                ((options & LAMALEF_MASK)==LAMALEF_AUTO)   ||
+                ((options & LAMALEF_MASK)==LAMALEF_NEAR))) {
            throw new IllegalArgumentException("Wrong Lam Alef argument");
        }
        ///CLOVER:ON
        
        /* Validate Tashkeel (Tashkeel replacement options should be enabled in shaping mode only)*/
-       if(((options&TASHKEEL_MASK) > 0) && (options&LETTERS_MASK) == LETTERS_UNSHAPE) {
+       if(((options&TASHKEEL_MASK) != 0) && (options&LETTERS_MASK) == LETTERS_UNSHAPE) {
             throw new IllegalArgumentException("Tashkeel replacement should not be enabled in deshaping mode ");
        }
        return internalShape(source, sourceStart, sourceLength, dest, destStart, destSize);
@@ -1689,8 +1689,8 @@ public final class ArabicShaping {
         int nw = 0;
 
         while (i >= 0) {
-            // If high byte of currLink > 0 then there might be more than one shape
-            if ((currLink & '\uFF00') > 0 || isTashkeelChar(dest[i])) {
+            // If high byte of currLink != 0 then there might be more than one shape
+            if ((currLink & '\uFF00') != 0 || isTashkeelChar(dest[i])) {
                 nw = i - 1;
                 nx = -2;
                 while (nx < 0) { // we need to know about next char
@@ -1871,7 +1871,7 @@ public final class ArabicShaping {
             break;
 
         case LETTERS_SHAPE:
-            if( ((options&TASHKEEL_MASK)> 0) && 
+            if( ((options&TASHKEEL_MASK) != 0) && 
                 ((options&TASHKEEL_MASK) !=TASHKEEL_REPLACE_BY_TATWEEL)) {
                    /* Call the shaping function with tashkeel flag == 2 for removal of tashkeel */
                 outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 2);

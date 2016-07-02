@@ -138,7 +138,7 @@ public class StringRange {
         }
         @Override
         public boolean equals(Object obj) {
-            return compareTo((Range)obj) == 0;
+            return this == obj || (obj != null && obj instanceof Range && compareTo((Range)obj) == 0);
         }
         public int compareTo(Range that) {
             int diff = min - that.min;

@@ -738,7 +738,7 @@ public class IslamicCalendar extends Calendar {
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
 
-        int length = 0;
+        int length;
         
         if (cType == CalculationType.ISLAMIC_CIVIL
                 || cType == CalculationType.ISLAMIC_TBLA
@@ -747,16 +747,20 @@ public class IslamicCalendar extends Calendar {
             if (month == DHU_AL_HIJJAH && civilLeapYear(extendedYear)) {
                 length++;
             } 
-        } else if (cType == CalculationType.ISLAMIC) {
+        }
+        else if (cType == CalculationType.ISLAMIC) {
             month = 12*(extendedYear-1) + month;
             length = (int)( trueMonthStart(month+1) - trueMonthStart(month) );
-        }else if (cType == CalculationType.ISLAMIC_UMALQURA){            
+        }
+        else { // cType == CalculationType.ISLAMIC_UMALQURA should be true at this point and not null.
             int idx = (extendedYear - UMALQURA_YEAR_START);     // calculate year offset into bit map array
             int mask = (0x01 << (11 - month));                  // set mask for bit corresponding to month            
-            if((UMALQURA_MONTHLENGTH[idx] & mask) == 0 )    
+            if((UMALQURA_MONTHLENGTH[idx] & mask) == 0 ) {
                 length = 29;
-            else
+            }
+            else {
                 length = 30;
+            }
         }
         return length;
     }

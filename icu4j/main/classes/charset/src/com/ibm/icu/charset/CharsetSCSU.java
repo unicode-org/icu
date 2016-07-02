@@ -110,8 +110,7 @@ class CharsetSCSU extends CharsetICU{
     private static final int defineOne=6;
   //  };
     
-    @SuppressWarnings("unused")
-    private final static class SCSUData{   
+    private final static class SCSUData {
         /* dynamic window offsets, intitialize to default values from initialDynamicOffsets */
         int toUDynamicOffsets[] = new int[8] ;
         int fromUDynamicOffsets[] = new int[8] ; 
@@ -121,7 +120,6 @@ class CharsetSCSU extends CharsetICU{
         short toUState;
         byte toUQuoteWindow, toUDynamicWindow;
         short toUByteOne;
-        short toUPadding[];
 
         /* state machine state - fromUnicode */
         boolean fromUIsSingleByteMode;

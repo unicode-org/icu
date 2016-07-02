@@ -260,7 +260,9 @@ public class JavaTimeZone extends TimeZone {
     public TimeZone cloneAsThawed() {
         JavaTimeZone tz = (JavaTimeZone)super.cloneAsThawed();
         tz.javatz = (java.util.TimeZone)javatz.clone();
-        tz.javacal = (java.util.GregorianCalendar)javacal.clone();
+        synchronized(javacal) {
+            tz.javacal = (java.util.GregorianCalendar)javacal.clone();
+        }
         tz.isFrozen = false;
         return tz;
     }

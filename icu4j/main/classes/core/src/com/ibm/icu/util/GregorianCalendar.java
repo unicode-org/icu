@@ -770,7 +770,7 @@ public class GregorianCalendar extends Calendar {
             eyear = (int) floorDivide(4*julianEpochDay + 1464, 1461);
             
             // Compute the Julian calendar day number for January 1, eyear
-            long january1 = 365*(eyear-1) + floorDivide(eyear-1, 4);
+            long january1 = 365L*(eyear-1L) + floorDivide(eyear-1L, 4L);
             dayOfYear = (int)(julianEpochDay - january1); // 0-based
             
             // Julian leap years occurred historically every 4 years starting
