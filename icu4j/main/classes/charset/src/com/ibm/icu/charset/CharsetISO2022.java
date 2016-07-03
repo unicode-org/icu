@@ -338,13 +338,11 @@ class CharsetISO2022 extends CharsetICU {
 //    private static final byte UCNV_OPTIONS_VERSION_MASK = 0xf;
     private static final byte UCNV_2022_MAX_CONVERTERS  = 10;
     
-    @SuppressWarnings("unused")
     private static class UConverterDataISO2022 {
         UConverterSharedData []myConverterArray;
         CharsetEncoderMBCS currentEncoder;
         CharsetDecoderMBCS currentDecoder;
         CharsetMBCS currentConverter;
-        int currentType; // Cnv2022Type;
         ISO2022State toU2022State;
         ISO2022State fromU2022State;
         int key;
@@ -355,7 +353,6 @@ class CharsetISO2022 extends CharsetICU {
             myConverterArray = new UConverterSharedData[UCNV_2022_MAX_CONVERTERS];
             toU2022State = new ISO2022State();
             fromU2022State = new ISO2022State();
-            currentType = 0;
             key = 0;
             version = 0;
             isEmptySegment = false;

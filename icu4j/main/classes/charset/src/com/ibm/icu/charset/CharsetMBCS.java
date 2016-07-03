@@ -236,7 +236,7 @@ class CharsetMBCS extends CharsetICU {
             throw new InvalidFormatException();
         }
 
-        data = new UConverterSharedData(1, null, false, 0);
+        data = new UConverterSharedData(1, null, false);
         data.staticData = staticData;
         data.sharedDataCached = false;
 

@@ -119,7 +119,7 @@ class RBBIRuleScanner {
         fRuleSets[RBBIRuleParseTable.kRuleSet_name_start_char - 128] = new UnicodeSet(gRuleSet_name_start_char_pattern);
         fRuleSets[RBBIRuleParseTable.kRuleSet_digit_char - 128] = new UnicodeSet(gRuleSet_digit_char_pattern);
 
-        fSymbolTable = new RBBISymbolTable(this, rb.fRules);
+        fSymbolTable = new RBBISymbolTable(this);
     }
 
     //----------------------------------------------------------------------------------------
