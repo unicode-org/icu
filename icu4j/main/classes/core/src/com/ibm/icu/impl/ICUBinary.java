@@ -570,7 +570,7 @@ public final class ICUBinary {
      */
     public static int readHeader(ByteBuffer bytes, int dataFormat, Authenticate authenticate)
             throws IOException {
-        assert bytes.position() == 0;
+        assert bytes != null && bytes.position() == 0;
         byte magic1 = bytes.get(2);
         byte magic2 = bytes.get(3);
         if (magic1 != MAGIC1 || magic2 != MAGIC2) {

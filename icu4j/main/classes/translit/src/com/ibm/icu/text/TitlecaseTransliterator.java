@@ -35,9 +35,9 @@ class TitlecaseTransliterator extends Transliterator {
         registerSpecialInverse("Title", "Lower", false);
     }
 
-    private ULocale locale;
+    private final ULocale locale;
 
-    private UCaseProps csp;
+    private final UCaseProps csp;
     private ReplaceableContextIterator iter;
     private StringBuilder result;
     private int[] locCache;

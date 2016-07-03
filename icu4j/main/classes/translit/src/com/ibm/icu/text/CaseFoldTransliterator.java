@@ -37,7 +37,7 @@ class CaseFoldTransliterator extends Transliterator{
         Transliterator.registerSpecialInverse("CaseFold", "Upper", false);
     }
 
-    private UCaseProps csp;
+    private final UCaseProps csp;
     private ReplaceableContextIterator iter;
     private StringBuilder result;
 

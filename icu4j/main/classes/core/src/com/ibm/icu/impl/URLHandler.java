@@ -171,15 +171,17 @@ public abstract class URLHandler {
         }
         
         private void process(URLVisitor v, boolean recurse, boolean strip, String path, File[] files) {
-            for (int i = 0; i < files.length; i++) {
-                File f = files[i];
-                
-                if (f.isDirectory()) {
-                    if (recurse) {
-                        process(v, recurse, strip, path + f.getName()+ '/', f.listFiles());
+            if (files != null) {
+                for (int i = 0; i < files.length; i++) {
+                    File f = files[i];
+                    
+                    if (f.isDirectory()) {
+                        if (recurse) {
+                            process(v, recurse, strip, path + f.getName()+ '/', f.listFiles());
+                        }
+                    } else {
+                        v.visit(strip? f.getName() : path + f.getName());
                     }
-                } else {
-                    v.visit(strip? f.getName() : path + f.getName());
                 }
             }
         }

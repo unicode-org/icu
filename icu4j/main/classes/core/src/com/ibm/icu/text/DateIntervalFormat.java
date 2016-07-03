@@ -786,7 +786,8 @@ public class DateIntervalFormat extends UFormat {
             FieldPosition otherPos = new FieldPosition(pos.getField());
             fDateFormat.format(secondCal, appendTo, otherPos);
             if (pos.getEndIndex() == 0 && otherPos.getEndIndex() > 0) {
-                pos = otherPos;
+                pos.setBeginIndex(otherPos.getBeginIndex());
+                pos.setEndIndex(otherPos.getEndIndex());
             }
         }
         fDateFormat.applyPattern(originalPattern);
