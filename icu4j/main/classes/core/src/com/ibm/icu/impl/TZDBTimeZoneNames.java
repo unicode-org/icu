@@ -214,10 +214,17 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
     }
 
     private static class TZDBNameInfo {
-        String mzID;
-        NameType type;
-        boolean ambiguousType;
-        String[] parseRegions;
+        final String mzID;
+        final NameType type;
+        final boolean ambiguousType;
+        final String[] parseRegions;
+
+        TZDBNameInfo(String mzID, NameType type, boolean ambiguousType, String[] parseRegions) {
+            this.mzID = mzID;
+            this.type = type;
+            this.ambiguousType = ambiguousType;
+            this.parseRegions = parseRegions;
+        }
     }
 
     private static class TZDBNameSearchHandler implements ResultHandler<TZDBNameInfo> {
@@ -360,19 +367,17 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
                         boolean ambiguousType = (std != null && dst != null && std.equals(dst));
 
                         if (std != null) {
-                            TZDBNameInfo stdInf = new TZDBNameInfo();
-                            stdInf.mzID = mzID;
-                            stdInf.type = NameType.SHORT_STANDARD;
-                            stdInf.ambiguousType = ambiguousType;
-                            stdInf.parseRegions = parseRegions;
+                            TZDBNameInfo stdInf = new TZDBNameInfo(mzID,
+                                    NameType.SHORT_STANDARD,
+                                    ambiguousType,
+                                    parseRegions);
                             trie.put(std, stdInf);
                         }
                         if (dst != null) {
-                            TZDBNameInfo dstInf = new TZDBNameInfo();
-                            dstInf.mzID = mzID;
-                            dstInf.type = NameType.SHORT_DAYLIGHT;
-                            dstInf.ambiguousType = ambiguousType;
-                            dstInf.parseRegions = parseRegions;
+                            TZDBNameInfo dstInf = new TZDBNameInfo(mzID,
+                                    NameType.SHORT_DAYLIGHT,
+                                    ambiguousType,
+                                    parseRegions);
                             trie.put(dst, dstInf);
                         }
                     }

@@ -51,7 +51,6 @@ final class UConverterSharedData {
     // const UConverterImpl *impl; /* vtable-style struct of mostly function pointers */
     // UConverterImpl impl; /* vtable-style struct of mostly function pointers */
     /** initial values of some members of the mutable part of object */
-    long toUnicodeStatus;
 
     /**
      * Shared data structures currently come in two flavors:
@@ -71,14 +70,12 @@ final class UConverterSharedData {
         mbcs = new CharsetMBCS.UConverterMBCSTable();
     }
 
-    UConverterSharedData(int referenceCounter_, UConverterStaticData staticData_, boolean sharedDataCached_, long toUnicodeStatus_)
+    UConverterSharedData(int referenceCounter_, UConverterStaticData staticData_, boolean sharedDataCached_)
     {
         this();
         referenceCounter = referenceCounter_;
         staticData = staticData_;
         sharedDataCached = sharedDataCached_;
-        // impl = impl_;
-        toUnicodeStatus = toUnicodeStatus_;
     }
 
     /**

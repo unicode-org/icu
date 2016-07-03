@@ -220,11 +220,9 @@ class TransliteratorRegistry {
 
     static class ResourceEntry {
         public String resource;
-        public String encoding;
         public int direction;
-        public ResourceEntry(String n, String enc, int d) {
+        public ResourceEntry(String n, int d) {
             resource = n;
-            encoding = enc;
             direction = d;
         }
     }
@@ -343,10 +341,9 @@ class TransliteratorRegistry {
      */
     public void put(String ID,
                     String resourceName,
-                    String encoding,
                     int dir,
                     boolean visible) {
-        registerEntry(ID, new ResourceEntry(resourceName, encoding, dir), visible);
+        registerEntry(ID, new ResourceEntry(resourceName, dir), visible);
     }
 
     /**

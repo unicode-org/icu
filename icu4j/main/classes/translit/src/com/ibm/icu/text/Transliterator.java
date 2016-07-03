@@ -1947,7 +1947,6 @@ public abstract class Transliterator implements StringTransform  {
                 }
                 registry.put(ID,
                              resString, // resource
-                             "UTF-16", // encoding
                              dir,
                              !type.equals("internal"));
             } else if (type.equals("alias")) {

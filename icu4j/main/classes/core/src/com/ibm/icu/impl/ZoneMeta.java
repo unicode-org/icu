@@ -843,7 +843,9 @@ public final class ZoneMeta {
         if (tz instanceof OlsonTimeZone) {
             canonicalID = ((OlsonTimeZone)tz).getCanonicalID();
         }
-        canonicalID = getCanonicalCLDRID(tz.getID());
+        else {
+            canonicalID = getCanonicalCLDRID(tz.getID());
+        }
         if (canonicalID == null) {
             return null;
         }
