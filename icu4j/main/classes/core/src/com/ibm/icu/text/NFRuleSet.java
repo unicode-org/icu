@@ -493,7 +493,7 @@ final class NFRuleSet {
         }
 
         // if the number isn't an integer, we use one f the fraction rules...
-        if (nonNumericalRules != null && number != Math.floor(number)) {
+        if (number != Math.floor(number)) {
             if (number < 1 && nonNumericalRules[PROPER_FRACTION_RULE_INDEX] != null) {
                 // if the number is between 0 and 1, return the proper
                 // fraction rule

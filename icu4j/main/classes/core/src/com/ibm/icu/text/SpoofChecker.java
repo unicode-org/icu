@@ -2341,12 +2341,10 @@ public class SpoofChecker {
             int CFUStringLengthsSize   = bytes.getInt();
 
             int anyCaseTrieOffset      = bytes.getInt();
-            @SuppressWarnings("unused")
-            int anyCaseTrieSize        = bytes.getInt();
+            /*int anyCaseTrieSize      =*/ bytes.getInt();
 
             int lowerCaseTrieOffset    = bytes.getInt();
-            @SuppressWarnings("unused")
-            int lowerCaseTrieLength    = bytes.getInt();
+            /*int lowerCaseTrieLength  =*/ bytes.getInt();
 
             int scriptSetsOffset       = bytes.getInt();
             int scriptSetslength       = bytes.getInt();

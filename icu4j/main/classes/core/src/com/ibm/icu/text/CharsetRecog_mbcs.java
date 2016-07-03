@@ -141,14 +141,12 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
      //
      static class iteratedChar {
          int             charValue = 0;             // 1-4 bytes from the raw input data
-         int             index     = 0;
          int             nextIndex = 0;
          boolean         error     = false;
          boolean         done      = false;
          
          void reset() {
              charValue = 0;
-             index     = -1;
              nextIndex = 0;
              error     = false;
              done      = false;
@@ -199,7 +197,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              0x838a, 0x838b, 0x838d, 0x8393, 0x8e96, 0x93fa, 0x95aa};
          
          boolean nextChar(iteratedChar it, CharsetDetector det) {
-             it.index = it.nextIndex;
              it.error = false;
              int firstByte;
              firstByte = it.charValue = it.nextByte(det);
@@ -262,7 +259,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              0xbba1, 0xbdd1, 0xc2c4, 0xc3b9, 0xc440, 0xc45f};
           
          boolean nextChar(iteratedChar it, CharsetDetector det) {
-             it.index = it.nextIndex;
              it.error = false;
              int firstByte;
              firstByte = it.charValue = it.nextByte(det);
@@ -321,7 +317,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
           *     packed into an int.
           */
          boolean nextChar(iteratedChar it, CharsetDetector det) {
-             it.index = it.nextIndex;
              it.error = false;
              int firstByte  = 0;
              int secondByte = 0;
@@ -461,7 +456,6 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
           *     packed into an int.
           */
          boolean nextChar(iteratedChar it, CharsetDetector det) {
-             it.index = it.nextIndex;
              it.error = false;
              int firstByte  = 0;
              int secondByte = 0;
