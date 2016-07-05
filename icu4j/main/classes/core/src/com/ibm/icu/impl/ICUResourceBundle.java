@@ -670,15 +670,19 @@ public  class ICUResourceBundle extends UResourceBundle {
             InputStream s = root.getResourceAsStream(bn + FULL_LOCALE_NAMES_LIST);
             if (s != null) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    if (line.length() != 0 && !line.startsWith("#")) {
-                        locales.add(line);
+                try {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        if (line.length() != 0 && !line.startsWith("#")) {
+                            locales.add(line);
+                        }
                     }
                 }
-                br.close();
+                finally {
+                    br.close();
+                }
             }
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             // swallow it
         }
     }
