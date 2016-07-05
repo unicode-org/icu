@@ -1714,12 +1714,8 @@ int main(int argc, char *argv[]) {
     ofstream file(filename.c_str());
     if (file) {
         file << "//---------------------------------------------------------" << endl
-             << "// Copyright (C) 2003";
-        if (thisYear > 2003) {
-            file << "-" << thisYear;
-        }
-        file << ", International Business Machines" << endl
-             << "// Corporation and others.  All Rights Reserved." << endl
+             << "// (C) 2016 and later: Unicode, Inc. and others." << endl
+             << "// License & terms of use: http://www.unicode.org/copyright.html#License" << endl
              << "//---------------------------------------------------------" << endl
              << "// Build tool:  tz2icu" << endl
              << "// Build date:  " << asctime(now) /* << endl -- asctime emits CR */
