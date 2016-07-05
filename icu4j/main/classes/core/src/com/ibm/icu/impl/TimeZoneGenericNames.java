@@ -596,10 +596,21 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      * {@link TimeZoneGenericNames#find(String, int, EnumSet)}.
      */
     public static class GenericMatchInfo {
-        GenericNameType nameType;
-        String tzID;
-        int matchLength;
-        TimeType timeType = TimeType.UNKNOWN;
+        final GenericNameType nameType;
+        final String tzID;
+        final int matchLength;
+        final TimeType timeType;
+
+        private GenericMatchInfo(GenericNameType nameType, String tzID, int matchLength) {
+            this(nameType, tzID, matchLength, TimeType.UNKNOWN);
+        }
+
+        private GenericMatchInfo(GenericNameType nameType, String tzID, int matchLength, TimeType timeType) {
+            this.nameType = nameType;
+            this.tzID = tzID;
+            this.matchLength = matchLength;
+            this.timeType = timeType;
+        }
 
         public GenericNameType nameType() {
             return nameType;
@@ -640,11 +651,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
                 if (_types != null && !_types.contains(info.type)) {
                     continue;
                 }
-                GenericMatchInfo matchInfo = new GenericMatchInfo();
-                matchInfo.tzID = info.tzID;
-                matchInfo.nameType = info.type;
-                matchInfo.matchLength = matchLength;
-                //matchInfo.timeType = TimeType.UNKNOWN;
+                GenericMatchInfo matchInfo = new GenericMatchInfo(info.type, info.tzID, matchLength);
                 if (_matches == null) {
                     _matches = new LinkedList<GenericMatchInfo>();
                 }
@@ -811,11 +818,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         }
         assert(tzID != null);
 
-        GenericMatchInfo gmatch = new GenericMatchInfo();
-        gmatch.nameType = nameType;
-        gmatch.tzID = tzID;
-        gmatch.matchLength = matchInfo.matchLength();
-        gmatch.timeType = timeType;
+        GenericMatchInfo gmatch = new GenericMatchInfo(nameType, tzID, matchInfo.matchLength(), timeType);
 
         return gmatch;
     }

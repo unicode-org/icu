@@ -66,7 +66,7 @@ public class UnicodeSetStringSpan {
     private short[] spanLengths;
 
     /** Maximum lengths of relevant strings. */
-    private int maxLength16;
+    private final int maxLength16;
 
     /** Are there strings that are not fully contained in the code point set? */
     private boolean someRelevant;
@@ -108,6 +108,7 @@ public class UnicodeSetStringSpan {
         int stringsLength = strings.size();
 
         int i, spanLength;
+        int maxLength16 = 0;
         someRelevant = false;
         for (i = 0; i < stringsLength; ++i) {
             String string = strings.get(i);
@@ -120,6 +121,7 @@ public class UnicodeSetStringSpan {
                 maxLength16 = length16;
             }
         }
+        this.maxLength16 = maxLength16;
         if (!someRelevant && (which & WITH_COUNT) == 0) {
             return;
         }
