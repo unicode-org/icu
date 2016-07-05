@@ -153,7 +153,7 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("ECT", 60, true),    // ICU Link - Europe/Paris
             new ZoneDescriptor("MET", 60, true),    // Olson europe 1:00 C-Eur
             new ZoneDescriptor("CAT", 120, false),  // ICU Link - Africa/Harare
-            new ZoneDescriptor("ART", 120, true),   // ICU Link - Africa/Cairo
+            new ZoneDescriptor("ART", 120, false),  // ICU Link - Africa/Cairo
             new ZoneDescriptor("EET", 120, true),   // Olson europe 2:00 EU
             new ZoneDescriptor("EAT", 180, false),  // ICU Link - Africa/Addis_Ababa
             new ZoneDescriptor("NET", 240, false),  // ICU Link - Asia/Yerevan
