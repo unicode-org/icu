@@ -142,6 +142,7 @@ public final class UResource {
         /**
          * Creates/caches/returns this resource key string as a Java String.
          */
+        @Override
         public String toString() {
             if (s == null) {
                 s = internalSubString(0, length);
@@ -257,7 +258,7 @@ public final class UResource {
             int csLength = cs.length();
             int minLength = length <= csLength ? length : csLength;
             for (int i = 0; i < minLength; ++i) {
-                int diff = (int)charAt(i) - (int)cs.charAt(i);
+                int diff = charAt(i) - cs.charAt(i);
                 if (diff != 0) {
                     return diff;
                 }
@@ -562,19 +563,6 @@ public final class UResource {
          * @param key to be removed
          */
         public void putNoFallback(Key key) {}
-
-        /**
-         * Returns a nested resource array for the key as another sink.
-         * Creates the sink if none exists for the key.
-         * Returns null if nested arrays are not supported.
-         * The default implementation always returns null.
-         *
-         * @param key resource key string
-         * @return nested-array sink, or null
-         */
-        public ArraySink getOrCreateArraySink(Key key) {
-            return null;
-        }
 
         /**
          * Returns a nested resource table for the key as another sink.
