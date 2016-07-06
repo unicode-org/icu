@@ -1053,7 +1053,6 @@ public final class ICUResourceBundleReader {
         }
         void getAllItems(ICUResourceBundleReader reader,
                 UResource.Key key, ReaderValue value, TableSink sink) {
-            sink.enter(size);
             for (int i = 0; i < size; ++i) {
                 if (keyOffsets != null) {
                     reader.setKeyFromKey16(keyOffsets[i], key);
@@ -1082,7 +1081,6 @@ public final class ICUResourceBundleReader {
                     sink.put(key, value);
                 }
             }
-            sink.leave();
         }
         @Override
         public boolean getKeyAndValue(int i, UResource.Key key, UResource.Value value) {
