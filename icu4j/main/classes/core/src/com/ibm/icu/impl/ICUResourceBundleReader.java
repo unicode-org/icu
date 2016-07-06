@@ -15,7 +15,6 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 
-import com.ibm.icu.impl.UResource.ArraySink;
 import com.ibm.icu.impl.UResource.TableSink;
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ICUUncheckedIOException;
@@ -977,35 +976,6 @@ public final class ICUResourceBundleReader {
     }
     static class Array extends Container implements UResource.Array {
         Array() {}
-        void getAllItems(ICUResourceBundleReader reader,
-                UResource.Key key, ReaderValue value, ArraySink sink) {
-            sink.enter(size);
-            for (int i = 0; i < size; ++i) {
-                int res = getContainerResource(reader, i);
-                int type = RES_GET_TYPE(res);
-                if (URES_IS_ARRAY(type)) {
-                    ArraySink subSink = sink.getOrCreateArraySink(i);
-                    if (subSink != null) {
-                        Array array = reader.getArray(res);
-                        array.getAllItems(reader, key, value, subSink);
-                    }
-                } else if (URES_IS_TABLE(type)) {
-                    TableSink subSink = sink.getOrCreateTableSink(i);
-                    if (subSink != null) {
-                        Table table = reader.getTable(res);
-                        table.getAllItems(reader, key, value, subSink);
-                    }
-                /* TODO: settle on how to deal with aliases, port to C++
-                } else if (type == ICUResourceBundle.ALIAS) {
-                    throw new UnsupportedOperationException(
-                            "aliases not handled in resource enumeration"); */
-                } else {
-                    value.res = res;
-                    sink.put(i, value);
-                }
-            }
-            sink.leave();
-        }
         @Override
         public boolean getValue(int i, UResource.Value value) {
             if (0 <= i && i < size) {

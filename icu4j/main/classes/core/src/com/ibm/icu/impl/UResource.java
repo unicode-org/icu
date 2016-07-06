@@ -468,66 +468,6 @@ public final class UResource {
     }
 
     /**
-     * Sink for ICU resource array contents.
-     * The base class does nothing.
-     *
-     * <p>Nested arrays and tables are stored as nested sinks,
-     * never put() as {@link Value} items.
-     */
-    public static class ArraySink {
-        /**
-         * "Enters" the array.
-         * Called just before enumerating the array's resource items.
-         * The size can be used to allocate storage for the items.
-         * It may differ between child and parent bundles.
-         *
-         * @param size number of array items
-         */
-        public void enter(int size) {}
-
-        /**
-         * Adds a value from a resource array.
-         *
-         * @param index of the resource array item
-         * @param value resource value
-         */
-        public void put(int index, Value value) {}
-
-        /**
-         * Returns a nested resource array at the array index as another sink.
-         * Creates the sink if none exists for the key.
-         * Returns null if nested arrays are not supported.
-         * The default implementation always returns null.
-         *
-         * @param index of the resource array item
-         * @return nested-array sink, or null
-         */
-        public ArraySink getOrCreateArraySink(int index) {
-            return null;
-        }
-
-        /**
-         * Returns a nested resource table at the array index as another sink.
-         * Creates the sink if none exists for the key.
-         * Returns null if nested tables are not supported.
-         * The default implementation always returns null.
-         *
-         * @param index of the resource array item
-         * @return nested-table sink, or null
-         */
-        public TableSink getOrCreateTableSink(int index) {
-            return null;
-        }
-
-        /**
-         * "Leaves" the array.
-         * Indicates that all of the resources and sub-resources of the current array
-         * have been enumerated.
-         */
-        public void leave() {}
-    }
-
-    /**
      * Sink for ICU resource table contents.
      * The base class does nothing.
      *

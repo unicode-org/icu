@@ -309,11 +309,11 @@ public  class ICUResourceBundle extends UResourceBundle {
 
         return result;
     }
-    
+
     public ICUResourceBundle at(int index) {
         return (ICUResourceBundle) handleGet(index, null, this);
     }
-    
+
     public ICUResourceBundle at(String key) {
         // don't ever presume the key is an int in disguise, like ResourceArray does.
         if (this instanceof ICUResourceBundleImpl.ResourceTable) {
@@ -321,17 +321,17 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         return null;
     }
-    
+
     @Override
     public ICUResourceBundle findTopLevel(int index) {
         return (ICUResourceBundle) super.findTopLevel(index);
     }
-    
+
     @Override
     public ICUResourceBundle findTopLevel(String aKey) {
         return (ICUResourceBundle) super.findTopLevel(aKey);
     }
-    
+
     /**
      * Like getWithFallback, but returns null if the resource is not found instead of
      * throwing an exception.
@@ -366,22 +366,17 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     public void getAllItemsWithFallback(String path, UResource.Sink sink)
             throws MissingResourceException {
-        getAllItemsWithFallback(path, sink, null, null);
-    }
-
-    public void getAllArrayItemsWithFallback(String path, UResource.ArraySink sink)
-            throws MissingResourceException {
-        getAllItemsWithFallback(path, null, sink, null);
+        getAllItemsWithFallback(path, sink, null);
     }
 
     public void getAllTableItemsWithFallback(String path, UResource.TableSink sink)
             throws MissingResourceException {
-        getAllItemsWithFallback(path, null, null, sink);
+        getAllItemsWithFallback(path, null, sink);
     }
 
     private void getAllItemsWithFallback(
             String path, UResource.Sink sink,
-            UResource.ArraySink arraySink, UResource.TableSink tableSink)
+            UResource.TableSink tableSink)
             throws MissingResourceException {
         // Collect existing and parsed key objects into an array of keys,
         // rather than assembling and parsing paths.
@@ -403,20 +398,19 @@ public  class ICUResourceBundle extends UResourceBundle {
             }
         }
         if (sink == null) {
-            int expectedType = arraySink != null ? ARRAY : TABLE;
-            if (rb.getType() != expectedType) {
+            if (rb.getType() != TABLE) {
                 throw new UResourceTypeMismatchException("");
             }
         }
         UResource.Key key = new UResource.Key();
         ReaderValue readerValue = new ReaderValue();
-        rb.getAllItemsWithFallback(key, readerValue, sink, arraySink, tableSink);
+        rb.getAllItemsWithFallback(key, readerValue, sink, tableSink);
     }
 
     private void getAllItemsWithFallback(
             UResource.Key key, ReaderValue readerValue,
             UResource.Sink sink,
-            UResource.ArraySink arraySink, UResource.TableSink tableSink) {
+            UResource.TableSink tableSink) {
         // We recursively enumerate child-first,
         // only storing parent items in the absence of child items.
         // The sink needs to store a placeholder value for the no-fallback/no-inheritance marker
@@ -436,13 +430,10 @@ public  class ICUResourceBundle extends UResourceBundle {
             key.setString(this.key != null ? this.key : "");
             sink.put(key, readerValue, parent == null);
         } else {
-            expectedType = arraySink != null ? ARRAY : TABLE;
+            expectedType = TABLE;
             if (getType() == expectedType) {
-                if (arraySink != null) {
-                    ((ICUResourceBundleImpl.ResourceArray)this).getAllItems(key, readerValue, arraySink);
-                } else /* tableSink != null */ {
-                    ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
-                }
+                // tableSink != null
+                ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
             }
         }
         if (parent != null) {
@@ -461,7 +452,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 rb = findResourceWithFallback(pathKeys, 0, parentBundle, null);
             }
             if (rb != null && (expectedType == NONE || rb.getType() == expectedType)) {
-                rb.getAllItemsWithFallback(key, readerValue, sink, arraySink, tableSink);
+                rb.getAllItemsWithFallback(key, readerValue, sink, tableSink);
             }
         }
     }
@@ -561,6 +552,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      *
      * @return the locale of this resource bundle
      */
+    @Override
     public Locale getLocale() {
         return getULocale().toLocale();
     }
@@ -632,6 +624,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             final String bn, final ClassLoader root, final Set<String> names) {
         java.security.AccessController
             .doPrivileged(new java.security.PrivilegedAction<Void>() {
+                @Override
                 public Void run() {
                     try {
                         // bn has a trailing slash: The WebSphere class loader would return null
@@ -641,6 +634,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                             return null;
                         }
                         URLVisitor v = new URLVisitor() {
+                            @Override
                             public void visit(String s) {
                                 if (s.endsWith(".res")) {
                                     String locstr = s.substring(0, s.length() - 4);
@@ -811,10 +805,11 @@ public  class ICUResourceBundle extends UResourceBundle {
 
 
     /*
-     * Cache used for AvailableEntry 
+     * Cache used for AvailableEntry
      */
     private static CacheBase<String, AvailEntry, ClassLoader> GET_AVAILABLE_CACHE =
         new SoftCache<String, AvailEntry, ClassLoader>()  {
+            @Override
             protected AvailEntry createInstance(String key, ClassLoader loader) {
                 return new AvailEntry(key, loader);
             }
@@ -1057,6 +1052,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
     }
 
+    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;
@@ -1070,7 +1066,8 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         return false;
     }
-    
+
+    @Override
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;
@@ -1317,14 +1314,17 @@ public  class ICUResourceBundle extends UResourceBundle {
         return getBundle(reader, baseName, localeID, root);
     }
 
+    @Override
     protected String getLocaleID() {
         return wholeBundle.localeID;
     }
 
+    @Override
     protected String getBaseName() {
         return wholeBundle.baseName;
     }
 
+    @Override
     public ULocale getULocale() {
         return wholeBundle.ulocale;
     }
@@ -1336,14 +1336,17 @@ public  class ICUResourceBundle extends UResourceBundle {
         return wholeBundle.localeID.isEmpty() || wholeBundle.localeID.equals("root");
     }
 
+    @Override
     public ICUResourceBundle getParent() {
         return (ICUResourceBundle) parent;
     }
 
+    @Override
     protected void setParent(ResourceBundle parent) {
         this.parent = parent;
     }
 
+    @Override
     public String getKey() {
         return key;
     }
@@ -1384,7 +1387,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     protected ICUResourceBundle(ICUResourceBundle container, String key) {
         this.key = key;
         wholeBundle = container.wholeBundle;
-        this.container = (ICUResourceBundleImpl.ResourceContainer) container;
+        this.container = container;
         parent = container.parent;
     }
 
@@ -1518,6 +1521,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final Set<String> getTopLevelKeySet() {
         return wholeBundle.topLevelKeys;
     }
@@ -1526,6 +1530,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public final void setTopLevelKeySet(Set<String> keySet) {
         wholeBundle.topLevelKeys = keySet;
     }
@@ -1536,10 +1541,12 @@ public  class ICUResourceBundle extends UResourceBundle {
     // by ResourceBundleWrapper despite its documentation requiring all subclasses to
     // implement it.
     // Consider deprecating UResourceBundle.handleGetKeys(), and consider making it always return null.
+    @Override
     protected Enumeration<String> handleGetKeys() {
         return Collections.enumeration(handleKeySet());
     }
 
+    @Override
     protected boolean isTopLevelResource() {
         return container == null;
     }
