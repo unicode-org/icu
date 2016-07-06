@@ -36,7 +36,7 @@ public final class ICUResourceBundleReader {
      */
     private static final int DATA_FORMAT = 0x52657342;
     private static final class IsAcceptable implements ICUBinary.Authenticate {
-        // @Override when we switch to Java 6
+        @Override
         public boolean isDataVersionAcceptable(byte formatVersion[]) {
             return
                     (formatVersion[0] == 1 && (formatVersion[1] & 0xff) >= 1) ||
@@ -157,6 +157,7 @@ public final class ICUResourceBundleReader {
             this.localeID = (localeID == null) ? "" : localeID;
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
@@ -169,6 +170,7 @@ public final class ICUResourceBundleReader {
                     && this.localeID.equals(info.localeID);
         }
 
+        @Override
         public int hashCode() {
             return baseName.hashCode() ^ localeID.hashCode();
         }
@@ -532,7 +534,7 @@ public final class ICUResourceBundleReader {
                 length=((first-0xdfef)<<16)|b16BitUnits.charAt(offset+1);
                 offset+=2;
             } else {
-                length=((int)b16BitUnits.charAt(offset+1)<<16)|b16BitUnits.charAt(offset+2);
+                length=(b16BitUnits.charAt(offset+1)<<16)|b16BitUnits.charAt(offset+2);
                 offset+=3;
             }
             // Cast up to CharSequence to insulate against the CharBuffer.subSequence() return type change
@@ -1091,11 +1093,8 @@ public final class ICUResourceBundleReader {
                 int res = getContainerResource(reader, i);
                 int type = RES_GET_TYPE(res);
                 if (URES_IS_ARRAY(type)) {
-                    ArraySink subSink = sink.getOrCreateArraySink(key);
-                    if (subSink != null) {
-                        Array array = reader.getArray(res);
-                        array.getAllItems(reader, key, value, subSink);
-                    }
+                    // ICU ticket #12634: This original version of the enumeration code
+                    // is going away. getOrCreateArraySink(key) was unused and has been removed.
                 } else if (URES_IS_TABLE(type)) {
                     TableSink subSink = sink.getOrCreateTableSink(key);
                     if (subSink != null) {
