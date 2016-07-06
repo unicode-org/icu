@@ -476,16 +476,6 @@ public final class UResource {
      */
     public static class TableSink {
         /**
-         * "Enters" the table.
-         * Called just before enumerating the table's resource items.
-         * The size can be used to allocate storage for the items.
-         * It usually differs between child and parent bundles.
-         *
-         * @param size number of table items
-         */
-        public void enter(int size) {}
-
-        /**
          * Adds a key-value pair from a resource table.
          *
          * @param key resource key string
@@ -516,12 +506,5 @@ public final class UResource {
         public TableSink getOrCreateTableSink(Key key) {
             return null;
         }
-
-        /**
-         * "Leaves" the table.
-         * Indicates that all of the resources and sub-resources of the current table
-         * have been enumerated.
-         */
-        public void leave() {}
     }
 }
