@@ -228,7 +228,6 @@ class CharsetMBCS extends CharsetICU {
             throw new InvalidFormatException(e);
         }
 
-        UConverterSharedData data = null;
         int type = staticData.conversionType;
 
         if (type != UConverterSharedData.UConverterType.MBCS
@@ -236,7 +235,7 @@ class CharsetMBCS extends CharsetICU {
             throw new InvalidFormatException();
         }
 
-        data = new UConverterSharedData(1, staticData);
+        UConverterSharedData data = new UConverterSharedData(staticData);
 
         // Load data
         UConverterMBCSTable mbcsTable = data.mbcs;

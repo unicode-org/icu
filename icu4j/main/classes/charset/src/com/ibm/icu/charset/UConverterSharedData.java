@@ -13,13 +13,6 @@ package com.ibm.icu.charset;
  * UConverter.
  */
 final class UConverterSharedData {
-    // uint32_t structSize; /* Size of this structure */
-    // int structSize; /* Size of this structure */
-    /**
-     * used to count number of clients, 0xffffffff for static SharedData
-     */
-    int referenceCounter;
-
     // agljport:todo const void *dataMemory; /* from udata_openChoice() - for cleanup */
     // agljport:todo void *table; /* Unused. This used to be a UConverterTable - Pointer to conversion data - see mbcs below */
 
@@ -29,24 +22,6 @@ final class UConverterSharedData {
      * data.
      */
     final UConverterStaticData staticData;
-
-    // UBool sharedDataCached; /* TRUE: shared data is in cache, don't destroy
-    // on close() if 0 ref. FALSE: shared data isn't in the cache, do attempt to
-    // clean it up if the ref is 0 */
-    
-    /*
-     * TRUE: shared data is in cache, don't destroy
-     * on close() if 0 ref. FALSE: shared data isn't
-     * in the cache, do attempt to clean it up if
-     * the ref is 0
-     */
-    //boolean sharedDataCached; 
-
-    /*
-     * UBool staticDataOwned; TRUE if static data owned by shared data & should
-     * be freed with it, NEVER true for udata() loaded statics. This ignored
-     * variable was removed to make space for sharedDataCached.
-     */
 
     // const UConverterImpl *impl; /* vtable-style struct of mostly function pointers */
     // UConverterImpl impl; /* vtable-style struct of mostly function pointers */
@@ -66,10 +41,9 @@ final class UConverterSharedData {
      */
     CharsetMBCS.UConverterMBCSTable mbcs;
 
-    UConverterSharedData(int referenceCounter_, UConverterStaticData staticData_)
+    UConverterSharedData(UConverterStaticData staticData_)
     {
         mbcs = new CharsetMBCS.UConverterMBCSTable();
-        referenceCounter = referenceCounter_;
         staticData = staticData_;
     }
 
