@@ -66,10 +66,6 @@ final class UConverterSharedData {
      */
     CharsetMBCS.UConverterMBCSTable mbcs;
 
-    UConverterSharedData() {
-        this(0, null);
-    }
-
     UConverterSharedData(int referenceCounter_, UConverterStaticData staticData_)
     {
         mbcs = new CharsetMBCS.UConverterMBCSTable();
