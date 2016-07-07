@@ -183,7 +183,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      */
     @Deprecated
     public static final String ICU_DATA_VERSION_PATH = "58b";
-    
+
     /**
      * Data version in ICU4J.
      * @internal
@@ -398,6 +398,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @return String representative of VersionInfo
      * @stable ICU 2.6
      */
+    @Override
     public String toString()
     {
         StringBuilder result = new StringBuilder(7);
@@ -458,6 +459,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      *         false otherwise
      * @stable ICU 2.6
      */
+    @Override
     public boolean equals(Object other)
     {
         return other == this;
@@ -474,6 +476,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      *           has version information less than this object.
      * @stable ICU 2.6
      */
+    @Override
     public int compareTo(VersionInfo other)
     {
         return m_version_ - other.m_version_;
@@ -482,7 +485,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
     // private data members ----------------------------------------------
 
     /**
-     * Unicode data version used by the current release
+     * Unicode data version used by the current release.
+     * Defined here privately for printing by the main() method in this class.
+     * Should be the same as {@link com.ibm.icu.lang.UCharacter#getUnicodeVersion()}
+     * which gets the version number from a data file.
+     * We do not want VersionInfo to have an import dependency on UCharacter.
      */
     private static final VersionInfo UNICODE_VERSION;
 
