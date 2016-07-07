@@ -28,19 +28,19 @@ final class UConverterSharedData {
      * pointer to the static (non changing)
      * data.
      */
-    UConverterStaticData staticData;
+    final UConverterStaticData staticData;
 
     // UBool sharedDataCached; /* TRUE: shared data is in cache, don't destroy
     // on close() if 0 ref. FALSE: shared data isn't in the cache, do attempt to
     // clean it up if the ref is 0 */
     
-    /**
+    /*
      * TRUE: shared data is in cache, don't destroy
      * on close() if 0 ref. FALSE: shared data isn't
      * in the cache, do attempt to clean it up if
      * the ref is 0
      */
-    boolean sharedDataCached; 
+    //boolean sharedDataCached; 
 
     /*
      * UBool staticDataOwned; TRUE if static data owned by shared data & should
@@ -67,15 +67,14 @@ final class UConverterSharedData {
     CharsetMBCS.UConverterMBCSTable mbcs;
 
     UConverterSharedData() {
-        mbcs = new CharsetMBCS.UConverterMBCSTable();
+        this(0, null);
     }
 
-    UConverterSharedData(int referenceCounter_, UConverterStaticData staticData_, boolean sharedDataCached_)
+    UConverterSharedData(int referenceCounter_, UConverterStaticData staticData_)
     {
-        this();
+        mbcs = new CharsetMBCS.UConverterMBCSTable();
         referenceCounter = referenceCounter_;
         staticData = staticData_;
-        sharedDataCached = sharedDataCached_;
     }
 
     /**
