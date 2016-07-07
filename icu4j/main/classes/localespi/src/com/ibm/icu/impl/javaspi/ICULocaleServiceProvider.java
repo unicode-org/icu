@@ -207,7 +207,7 @@ public class ICULocaleServiceProvider {
                 locBld.setVariant(var.toString());
                 ULocale ulocWithVar = locBld.build();
                 locales.add(ulocWithVar.toLocale());
-            } catch (Exception e) {
+            } catch (Exception ignored) {
                 // ignore
             }
         }
