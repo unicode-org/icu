@@ -261,9 +261,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
                 String tmp = _genericLocationNamesMap.putIfAbsent(canonicalTzID, name.intern());
                 if (tmp == null) {
                     // Also put the name info the to trie
-                    NameInfo info = new NameInfo();
-                    info.tzID = canonicalTzID;
-                    info.type = GenericNameType.LOCATION;
+                    NameInfo info = new NameInfo(canonicalTzID, GenericNameType.LOCATION);
                     _gnamesTrie.put(name, info);
                 } else {
                     name = tmp;
@@ -572,9 +570,8 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         synchronized (this) {   // we have to sync the name map and the trie
             String tmp = _genericPartialLocationNamesMap.putIfAbsent(key.intern(), name.intern());
             if (tmp == null) {
-                NameInfo info = new NameInfo();
-                info.tzID = tzID.intern();
-                info.type = isLong ? GenericNameType.LONG : GenericNameType.SHORT;
+                NameInfo info = new NameInfo(tzID.intern(),
+                        isLong ? GenericNameType.LONG : GenericNameType.SHORT);
                 _gnamesTrie.put(name, info);
             } else {
                 name = tmp;
@@ -587,8 +584,13 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      * A private class used for storing the name information in the local trie.
      */
     private static class NameInfo {
-        String tzID;
-        GenericNameType type;
+        final String tzID;
+        final GenericNameType type;
+
+        NameInfo(String tzID, GenericNameType type) {
+            this.tzID = tzID;
+            this.type = type;
+        }
     }
 
     /**
