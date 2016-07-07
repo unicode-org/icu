@@ -1248,7 +1248,7 @@ public class OlsonTimeZone extends BasicTimeZone {
                         finalZone.setID(tzid);
                     }
                     initialized = true;
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                     // throw away
                 }
             }
