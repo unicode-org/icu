@@ -233,6 +233,97 @@ CalendarData::getByKey(const char *key, UErrorCode& status) {
     return fFillin;
 }
 
+UResourceBundle* CalendarData::getByKey2(const char *key, const char *subKey, UErrorCode& status) {
+    if(U_FAILURE(status)) {
+        return NULL;
+    }
+
+    if(fBundle) {
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: //\n");
+#endif
+        fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
+        fOtherFillin = ures_getByKeyWithFallback(fFillin, U_FORMAT_KEY, fOtherFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: get %s/format/%s -> %s - from MAIN %s\n", this, key, subKey, u_errorName(status), ures_getLocale(fFillin, &status));
+#endif
+    }
+    if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
+        status = U_ZERO_ERROR; // retry with fallback (gregorian)
+        fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
+        fOtherFillin = ures_getByKeyWithFallback(fFillin, U_FORMAT_KEY, fOtherFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: get %s/format/%s -> %s - from FALLBACK %s\n",this, key, subKey, u_errorName(status), ures_getLocale(fFillin,&status));
+#endif
+    }
+
+//// handling of 'default' keyword on failure: Commented out for 3.0.
+//   if((status == U_MISSING_RESOURCE_ERROR) && 
+//      uprv_strcmp(subKey,U_DEFAULT_KEY)) { // avoid recursion
+// #if defined (U_DEBUG_CALDATA)
+//     fprintf(stderr, "%p: - attempting fallback -\n", this);
+//     fflush(stderr);
+// #endif
+//     UErrorCode subStatus = U_ZERO_ERROR;
+//     int32_t len;
+//     char kwBuf[128] = "";
+//     const UChar *kw;
+//     /* fFillin = */ getByKey2(key, U_DEFAULT_KEY, subStatus);
+//     kw = ures_getString(fFillin, &len, &subStatus);
+//     if(len>126) { // too big
+//       len = 0;
+//     }
+//     if(U_SUCCESS(subStatus) && (len>0)) {
+//       u_UCharsToChars(kw, kwBuf, len+1);
+//       if(*kwBuf && uprv_strcmp(kwBuf,subKey)) {
+// #if defined (U_DEBUG_CALDATA)
+//         fprintf(stderr, "%p: trying  %s/format/default -> \"%s\"\n",this, key, kwBuf);
+// #endif
+//         // now try again with the default
+//         status = U_ZERO_ERROR;
+//         /* fFillin = */ getByKey2(key, kwBuf, status);
+//       }
+// #if defined (U_DEBUG_CALDATA)
+//     } else {
+//       fprintf(stderr, "%p: could not load  %s/format/default  - fail out (%s)\n",this, key, kwBuf, u_errorName(status));
+// #endif
+//     }
+//   }
+
+    return fFillin;
+}
+
+UResourceBundle* CalendarData::getByKey3(const char *key, const char *contextKey, const char *subKey, UErrorCode& status) {
+    if(U_FAILURE(status)) {
+        return NULL;
+    }
+
+    if(fBundle) {
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: //\n");
+#endif
+        fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
+        fOtherFillin = ures_getByKeyWithFallback(fFillin, contextKey, fOtherFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: get %s/%s/%s -> %s - from MAIN %s\n", this, key, contextKey, subKey, u_errorName(status), ures_getLocale(fFillin, &status));
+#endif
+    }
+    if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
+        status = U_ZERO_ERROR; // retry with fallback (gregorian)
+        fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
+        fOtherFillin = ures_getByKeyWithFallback(fFillin, contextKey, fOtherFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+        fprintf(stderr, "%p: get %s/%s/%s -> %s - from FALLBACK %s\n",this, key, contextKey, subKey, u_errorName(status), ures_getLocale(fFillin,&status));
+#endif
+    }
+
+    return fFillin;
+}
+
 U_NAMESPACE_END
 
 #endif

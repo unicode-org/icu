@@ -715,9 +715,6 @@
     <ClInclude Include="digitlst.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="dt_impl.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
     <ClInclude Include="dtitv_impl.h">
       <Filter>formatting</Filter>
     </ClInclude>
