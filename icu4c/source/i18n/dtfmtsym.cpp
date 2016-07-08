@@ -2107,10 +2107,10 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     // Iterate over the resource bundle data following the fallbacks through different calendar types
     UnicodeString calendarType((type != NULL && *type != '\0')? type : gGregorianTag, -1, US_INV);
     while (!calendarType.isBogus()) {
-        int32_t calendarTypeSize = calendarType.length();
-        char calendarTypeCArray[calendarTypeSize + 1];
-        calendarType.extract(0, calendarTypeSize, calendarTypeCArray, calendarTypeSize, US_INV);
-        calendarTypeCArray[calendarTypeSize] = '\0';
+        CharString calendarTypeBuffer;
+        calendarTypeBuffer.appendInvariantChars(calendarType, status);
+        if (U_FAILURE(status)) { return; }
+        const char *calendarTypeCArray = calendarTypeBuffer.data();
 
         // Enumerate this calendar type. If the calendar is not found fallback to gregorian
         UErrorCode oldStatus = status;
