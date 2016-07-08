@@ -848,6 +848,7 @@
     <ClInclude Include="decNumber.h" />
     <ClInclude Include="decNumberLocal.h" />
     <ClInclude Include="digitlst.h" />
+    <ClInclude Include="dt_impl.h" />
     <CustomBuild Include="unicode\dtfmtsym.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
