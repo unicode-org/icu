@@ -85,7 +85,7 @@ public class TextTrieMap<V> {
     public void find(CharSequence text, ResultHandler<V> handler) {
         find(text, 0, handler);
     }
-    
+
     public void find(CharSequence text, int offset, ResultHandler<V> handler) {
         CharIterator chitr = new CharIterator(text, offset, _ignoreCase);
         find(_root, chitr, handler);

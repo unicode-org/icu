@@ -632,6 +632,9 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             {"AQTST",           0,      "en",       Style.SPECIFIC_LONG,
                 EnumSet.of(ParseOption.ALL_STYLES, ParseOption.TZ_DATABASE_ABBREVIATIONS),  "Asia/Aqtobe",  5,  TimeType.DAYLIGHT},
+
+            {"hora de verano británica", 0,     "es",       Style.SPECIFIC_LONG,
+                null,                   "Europe/London",    24,         TimeType.DAYLIGHT},
         };
 
         for (Object[] test : DATA) {
