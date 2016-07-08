@@ -118,6 +118,8 @@ public:
 
     UnicodeString& getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const;
 
+    void loadAllDisplayNames(UErrorCode& status);
+
     MatchInfoCollection* find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const;
 private:
     TimeZoneNamesDelegate();
@@ -280,6 +282,11 @@ TimeZoneNamesDelegate::getExemplarLocationName(const UnicodeString& tzID, Unicod
     return fTZnamesCacheEntry->names->getExemplarLocationName(tzID, name);
 }
 
+void
+TimeZoneNamesDelegate::loadAllDisplayNames(UErrorCode& status) {
+    fTZnamesCacheEntry->names->loadAllDisplayNames(status);
+}
+
 TimeZoneNames::MatchInfoCollection*
 TimeZoneNamesDelegate::find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const {
     return fTZnamesCacheEntry->names->find(text, start, types, status);
@@ -330,6 +337,29 @@ TimeZoneNames::getDisplayName(const UnicodeString& tzID, UTimeZoneNameType type,
         getMetaZoneDisplayName(mzID, type, name);
     }
     return name;
+}
+
+void
+TimeZoneNames::loadAllDisplayNames(UErrorCode& status) {
+    return loadAllDisplayNames(status);
+}
+
+void
+TimeZoneNames::getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[]) const {
+    if (tzID.isEmpty()) { return; }
+    UnicodeString mzID;
+    for (int i = 0; i < numTypes; i++) {
+        UnicodeString name;
+        UTimeZoneNameType type = types[i];
+        getTimeZoneDisplayName(tzID, type, name);
+        if (name.isEmpty()) {
+            if (mzID.isEmpty()) {
+                getMetaZoneID(tzID, date, mzID);
+            }
+            getMetaZoneDisplayName(mzID, type, name);
+        }
+        dest[i].setTo(name);
+    }
 }
 
 

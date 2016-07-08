@@ -1273,6 +1273,12 @@ DateFormatSymbols::initZoneStringsArray(void) {
     TimeZoneNames *tzNames = NULL;
     int32_t rows = 0;
 
+    static const UTimeZoneNameType TYPES[] = {
+        UTZNM_LONG_STANDARD, UTZNM_SHORT_STANDARD,
+        UTZNM_LONG_DAYLIGHT, UTZNM_SHORT_DAYLIGHT
+    };
+    static const int32_t NUM_TYPES = 4;
+
     do { // dummy do-while
 
         tzids = TimeZone::createTimeZoneIDEnumeration(ZONE_SET, NULL, NULL, status);
@@ -1291,6 +1297,8 @@ DateFormatSymbols::initZoneStringsArray(void) {
         uprv_memset(zarray, 0, size);
 
         tzNames = TimeZoneNames::createInstance(fZSFLocale, status);
+        tzNames->loadAllDisplayNames(status);
+        if (U_FAILURE(status)) { break; }
 
         const UnicodeString *tzid;
         int32_t i = 0;
@@ -1309,10 +1317,7 @@ DateFormatSymbols::initZoneStringsArray(void) {
             }
 
             zarray[i][0].setTo(*tzid);
-            zarray[i][1].setTo(tzNames->getDisplayName(*tzid, UTZNM_LONG_STANDARD, now, tzDispName));
-            zarray[i][2].setTo(tzNames->getDisplayName(*tzid, UTZNM_SHORT_STANDARD, now, tzDispName));
-            zarray[i][3].setTo(tzNames->getDisplayName(*tzid, UTZNM_LONG_DAYLIGHT, now, tzDispName));
-            zarray[i][4].setTo(tzNames->getDisplayName(*tzid, UTZNM_SHORT_DAYLIGHT, now, tzDispName));
+            tzNames->getDisplayNames(*tzid, TYPES, NUM_TYPES, now, zarray[i]+1);
             i++;
         }
 
@@ -1338,7 +1343,7 @@ DateFormatSymbols::initZoneStringsArray(void) {
 
     fLocaleZoneStrings = zarray;
     fZoneStringsRowCount = rows;
-    fZoneStringsColCount = 5;
+    fZoneStringsColCount = 1 + NUM_TYPES;
 }
 
 void
