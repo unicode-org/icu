@@ -335,9 +335,8 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             UResource.Table timeZonesTable = value.getTable();
             for (int j = 0; timeZonesTable.getKeyAndValue(j, key, value); ++j) {
-                if (value.isNoInheritanceMarker()) {
-                    consumeNoFallback(key);
-                } else if (value.getType() == UResourceBundle.TABLE) {
+                assert !value.isNoInheritanceMarker();
+                if (value.getType() == UResourceBundle.TABLE) {
                     consumeNamesTable(key, value, noFallback);
                 } else {
                     // Ignore fields that aren't tables (e.g., fallbackFormat and regionFormatStandard).
@@ -374,13 +373,6 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
             if (loader != ZNamesLoader.DUMMY_LOADER) {
                 // Let the ZNamesLoader consume the names table.
                 loader.put(key, value, noFallback);
-            }
-        }
-
-        private void consumeNoFallback(UResource.Key key) {
-            if (!keyToLoader.containsKey(key)) {
-                UResource.Key newKey = createKey(key);
-                keyToLoader.put(newKey, ZNamesLoader.DUMMY_LOADER);
             }
         }
 
