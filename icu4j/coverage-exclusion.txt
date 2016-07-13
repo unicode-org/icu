@@ -462,8 +462,7 @@ com/ibm/icu/impl/TimeZoneGenericNames$GenericNameType#isFallbackTypeOf:(Lcom/ibm
 com/ibm/icu/impl/TimeZoneGenericNames$GenericNameType#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/impl/TimeZoneGenericNames$GenericNameType;
 com/ibm/icu/impl/TimeZoneGenericNames$Pattern#defaultValue:()Ljava/lang/String;
 com/ibm/icu/impl/TimeZoneGenericNames$Pattern#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/impl/TimeZoneGenericNames$Pattern;
-com/ibm/icu/impl/TimeZoneNamesImpl#getAvailableMetaZoneIDs:()Ljava/util/Set;
-com/ibm/icu/impl/TimeZoneNamesImpl$ZoneStringsLoader#putNoFallback:(Lcom/ibm/icu/impl/UResource$Key;)V
+com/ibm/icu/impl/TimeZoneNamesImpl$ZNames$NameTypeIndex#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/impl/TimeZoneNamesImpl$ZNames$NameTypeIndex;
 com/ibm/icu/impl/Trie#equals:(Ljava/lang/Object;)Z
 com/ibm/icu/impl/Trie#getSerializedDataSize:()I
 com/ibm/icu/impl/Trie#hashCode:()I
@@ -504,6 +503,7 @@ com/ibm/icu/impl/UResource$Key#compareTo:(Ljava/lang/CharSequence;)I
 com/ibm/icu/impl/UResource$Key#subSequence:(II)Lcom/ibm/icu/impl/UResource$Key;
 com/ibm/icu/impl/UResource$Key#substring:(I)Ljava/lang/String;
 com/ibm/icu/impl/UResource$TableSink#getOrCreateTableSink:(Lcom/ibm/icu/impl/UResource$Key;)Lcom/ibm/icu/impl/UResource$TableSink;
+com/ibm/icu/impl/UResource$TableSink#put:(Lcom/ibm/icu/impl/UResource$Key;Lcom/ibm/icu/impl/UResource$Value;)V
 com/ibm/icu/impl/UResource$TableSink#putNoFallback:(Lcom/ibm/icu/impl/UResource$Key;)V
 com/ibm/icu/impl/URLHandler$FileURLHandler#<init>:(Ljava/net/URL;)V
 com/ibm/icu/impl/URLHandler$FileURLHandler#guide:(Lcom/ibm/icu/impl/URLHandler$URLVisitor;ZZ)V
