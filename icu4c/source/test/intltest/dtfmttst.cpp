@@ -4094,7 +4094,7 @@ void DateFormatTest::TestMonthPatterns()
                                                             CharsToUnicodeString("2 s\\u00ECyu\\u00E8bis ren-chen"),
                                                             CharsToUnicodeString("2 w\\u01D4yu\\u00E8 ren-chen") } },
         { "fr@calendar=chinese",      DateFormat::kShort, { UnicodeString("2/4/29"),        UnicodeString("2/4bis/29"),             UnicodeString("2/5/29") } },
-        { "en@calendar=dangi",        DateFormat::kLong,  { UnicodeString("Third Monthbis 2, 2012(29)"),  UnicodeString("Fourth Month 2, 2012(29)"),       UnicodeString("Fifth Month 1, 2012(29)") } },
+        { "en@calendar=dangi",        DateFormat::kLong,  { UnicodeString("Third Monthbis 2, 2012(ren-chen)"),  UnicodeString("Fourth Month 2, 2012(ren-chen)"),       UnicodeString("Fifth Month 1, 2012(ren-chen)") } },
         { "en@calendar=dangi",        DateFormat::kShort, { UnicodeString("3bis/2/2012"),   UnicodeString("4/2/2012"),              UnicodeString("5/1/2012") } },
         { "en@calendar=dangi",        -2,                 { UnicodeString("78x29-3bis-2"),  UnicodeString("78x29-4-2"),             UnicodeString("78x29-5-1") } },
         { "ko@calendar=dangi",        DateFormat::kLong,  { CharsToUnicodeString("\\uC784\\uC9C4\\uB144 \\uC7243\\uC6D4 2\\uC77C"),
