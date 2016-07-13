@@ -1546,24 +1546,13 @@ struct TimeZoneNamesImpl::ZoneStringsLoader : public ResourceSink {
         }
     }
 
-    void consumeNoFallback(const char* key, UErrorCode& status) {
-        void* loader = uhash_get(keyToLoader, key);
-        if (loader == NULL) {
-            void* newKey = createKey(key, status);
-            if (U_FAILURE(status)) { return; }
-            uhash_put(keyToLoader, newKey, (void*) DUMMY_LOADER, &status);
-            if (U_FAILURE(status)) { return; }
-        }
-    }
-
     virtual void put(const char *key, ResourceValue &value, UBool noFallback,
             UErrorCode &status) {
         ResourceTable timeZonesTable = value.getTable(status);
         if (U_FAILURE(status)) { return; }
         for (int32_t i = 0; timeZonesTable.getKeyAndValue(i, key, value); ++i) {
-            if (value.isNoInheritanceMarker()) {
-                consumeNoFallback(key, status);
-            } else if (value.getType() == URES_TABLE) {
+            U_ASSERT(!value.isNoInheritanceMarker());
+            if (value.getType() == URES_TABLE) {
                 consumeNamesTable(key, value, noFallback, status);
             } else {
                 // Ignore fields that aren't tables (e.g., fallbackFormat and regionFormatStandard).
