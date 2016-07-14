@@ -1519,7 +1519,7 @@ struct CalendarDataSink : public ResourceSink {
     // Initializes CalendarDataSink with default values
     CalendarDataSink(UErrorCode& status)
     :   arrays(FALSE, status), arraySizes(FALSE, status), maps(FALSE, status),
-        mapRefs(uprv_deleteUObject, NULL, 10, status),
+        mapRefs(deleteHashtable, NULL, 10, status),
         aliasPathPairs(uprv_deleteUObject, uhash_compareUnicodeString, status),
         currentCalendarType(), nextCalendarType(),
         resourcesToVisit(NULL), aliasRelativePath() {
@@ -1836,6 +1836,11 @@ struct CalendarDataSink : public ResourceSink {
     static void deleteUnicodeStringArray(void *uArray) {
         delete[] static_cast<UnicodeString *>(uArray);
     }
+
+    // Deleter function to be used by 'maps'
+    static void deleteHashtable(void *table) {
+        delete static_cast<Hashtable *>(table);
+    }
 };
 // Virtual destructors have to be defined out of line
 CalendarDataSink::~CalendarDataSink() {
@@ -1874,7 +1879,7 @@ initField(UnicodeString **field, int32_t& length, CalendarDataSink &sink, CharSt
             length = sink.arraySizes.geti(keyUString);
             *field = array;
             // DateFormatSymbols takes ownership of the array:
-            sink.arrays.put(keyUString, NULL, status);
+            sink.arrays.remove(keyUString);
         } else {
             length = 0;
             status = U_MISSING_RESOURCE_ERROR;
@@ -1892,7 +1897,7 @@ initField(UnicodeString **field, int32_t& length, CalendarDataSink &sink, CharSt
             int32_t arrayLength = sink.arraySizes.geti(keyUString);
             length = arrayLength + arrayOffset;
             *field = new UnicodeString[length];
-            if (field == NULL) {
+            if (*field == NULL) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
