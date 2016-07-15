@@ -1923,7 +1923,9 @@ initLeapMonthPattern(UnicodeString *field, int32_t index, CalendarDataSink &sink
             } else {
                 field[index].setToBogus();
             }
+            return;
         }
+        status = U_MISSING_RESOURCE_ERROR;
     }
 }
 
@@ -2123,7 +2125,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         if (status == U_MISSING_RESOURCE_ERROR) {
             ures_close(ctb);
             if (uprv_strcmp(calendarTypeCArray, gGregorianTag) != 0) {
-                calendarType.setTo(TRUE, kGregorianTagUChar, UPRV_LENGTHOF(kGregorianTagUChar));
+                calendarType.setTo(FALSE, kGregorianTagUChar, UPRV_LENGTHOF(kGregorianTagUChar));
                 calendarSink.visitAllResources();
                 status = oldStatus;
                 continue;
@@ -2146,7 +2148,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 
         // Gregorian is always the last fallback
         if (calendarType.isBogus()) {
-            calendarType.setTo(kGregorianTagUChar, UPRV_LENGTHOF(kGregorianTagUChar));
+            calendarType.setTo(FALSE, kGregorianTagUChar, UPRV_LENGTHOF(kGregorianTagUChar));
             calendarSink.visitAllResources();
         }
     }
