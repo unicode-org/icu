@@ -1295,6 +1295,7 @@ public class SimpleDateFormat extends DateFormat {
      * @stable ICU 53
      */
     // Here we override the DateFormat implementation in order to lazily initialize relevant items
+    @Override
     public void setContext(DisplayContext context) {
         super.setContext(context);
         if (capitalizationBrkIter == null && (context==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
@@ -1317,6 +1318,7 @@ public class SimpleDateFormat extends DateFormat {
      * @see DateFormat
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                FieldPosition pos) {
         TimeZone backupTZ = null;
@@ -1689,7 +1691,7 @@ public class SimpleDateFormat extends DateFormat {
                     value /= 10;
                 }
                 FieldPosition p = new FieldPosition(-1);
-                numberFormat.format((long) value, buf, p);
+                numberFormat.format(value, buf, p);
                 if (count > 3) {
                     numberFormat.setMinimumIntegerDigits(count - 3);
                     numberFormat.format(0L, buf, p);
@@ -2213,6 +2215,7 @@ public class SimpleDateFormat extends DateFormat {
      *
      * @stable ICU 2.0
      */
+    @Override
     public void setNumberFormat(NumberFormat newNumberFormat) {
         // Override this method to update local zero padding number formatter
         super.setNumberFormat(newNumberFormat);
@@ -2325,6 +2328,7 @@ public class SimpleDateFormat extends DateFormat {
      * @see DateFormat
      * @stable ICU 2.0
      */
+    @Override
     public void parse(String text, Calendar cal, ParsePosition parsePos)
     {
         TimeZone backupTZ = null;
@@ -3827,6 +3831,13 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Return a localized pattern string describing this date format.
+     * <p>
+     * <b>Note:</b> This implementation depends on {@link DateFormatSymbols#getLocalPatternChars()}
+     * to get localized format pattern characters. ICU does not include
+     * localized pattern character data, therefore, unless user sets localized
+     * pattern characters manually, this method returns a same result with
+     * {@link #toPattern()}.
+     *
      * @stable ICU 2.0
      */
     public String toLocalizedPattern() {
@@ -3921,6 +3932,7 @@ public class SimpleDateFormat extends DateFormat {
      * Overrides Cloneable
      * @stable ICU 2.0
      */
+    @Override
     public Object clone() {
         SimpleDateFormat other = (SimpleDateFormat) super.clone();
         other.formatData = (DateFormatSymbols) formatData.clone();
@@ -3937,6 +3949,7 @@ public class SimpleDateFormat extends DateFormat {
      * Generates the hash code for the SimpleDateFormat object
      * @stable ICU 2.0
      */
+    @Override
     public int hashCode()
     {
         return pattern.hashCode();
@@ -3947,6 +3960,7 @@ public class SimpleDateFormat extends DateFormat {
      * Override equals.
      * @stable ICU 2.0
      */
+    @Override
     public boolean equals(Object obj)
     {
         if (!super.equals(obj)) return false; // super does class check
@@ -4027,6 +4041,7 @@ public class SimpleDateFormat extends DateFormat {
      *
      * @stable ICU 3.8
      */
+    @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
         Calendar cal = calendar;
         if (obj instanceof Calendar) {
