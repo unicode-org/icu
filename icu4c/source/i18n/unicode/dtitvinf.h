@@ -341,7 +341,10 @@ private:
      */
     friend class DateIntervalFormat;
 
-    friend struct DateIntervalSink;
+    /**
+     * Internal struct used to load resource bundle data.
+     */
+    struct DateIntervalSink;
 
     /**
      * Following is for saving the interval patterns.
