@@ -20,16 +20,16 @@
  * - constructor, member, field (C M F)
  *
  * Requires JDK 1.5 or later
- * 
+ *
  * Sample compilation:
  * c:/doug/java/jdk1.5/build/windows-i586/bin/javac *.java
  *
  * Sample execution
  * c:/j2sdk1.5/bin/javadoc
- *   -classpath c:/jd2sk1.5/lib/tools.jar 
+ *   -classpath c:/jd2sk1.5/lib/tools.jar
  *   -doclet com.ibm.icu.dev.tool.docs.GatherAPIData
  *   -docletpath c:/doug/icu4j/tools/build/out/lib/icu4j-build-tools.jar
- *   -sourcepath c:/doug/icu4j/main/classes/core/src 
+ *   -sourcepath c:/doug/icu4j/main/classes/core/src
  *   -name "ICU4J 4.2"
  *   -output icu4j42.api2
  *   -gzip
@@ -37,8 +37,8 @@
  *   com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
  *
  * todo: provide command-line control of filters of which subclasses/packages to process
- * todo: record full inheritance hierarchy, not just immediate inheritance 
- * todo: allow for aliasing comparisons (force (pkg.)*class to be treated as though it 
+ * todo: record full inheritance hierarchy, not just immediate inheritance
+ * todo: allow for aliasing comparisons (force (pkg.)*class to be treated as though it
  *       were in a different pkg/class hierarchy (facilitates comparison of icu4j and java)
  */
 
@@ -395,10 +395,25 @@ public class GatherAPIData {
         }
 
         info.setPackage(trimBase(doc.containingPackage().name()));
-        info.setClassName((doc.isClass() || doc.isInterface() || (doc.containingClass() == null))
-                          ? ""
-                          : trimBase(doc.containingClass().name()));
-        info.setName(trimBase(doc.name()));
+
+        String className = (doc.isClass() || doc.isInterface() || (doc.containingClass() == null))
+                ? ""
+                : doc.containingClass().name();
+        info.setClassName(className);
+
+        String name = doc.name();
+        if (doc.isConstructor()) {
+            // Workaround for Javadoc incompatibility between 7 and 8.
+            // Javadoc 7 prepends enclosing class name for a nested
+            // class's constructor. We need to generate the same format
+            // because existing ICU API signature were generated with
+            // Javadoc 7 or older verions.
+            int dotIdx = className.lastIndexOf('.');
+            if (!name.contains(".") && dotIdx > 0) {
+                name = className.substring(0, dotIdx + 1) + name;
+            }
+        }
+        info.setName(name);
 
         if (doc instanceof FieldDoc) {
             FieldDoc fdoc = (FieldDoc)doc;
@@ -440,7 +455,14 @@ public class GatherAPIData {
             if (doc instanceof MethodDoc) {
                 MethodDoc mdoc = (MethodDoc)doc;
                 if (mdoc.isAbstract()) {
-                    info.setAbstract();
+                    // Workaround for Javadoc incompatibility between 7 and 8.
+                    // isAbstract() returns false for a method in an interface
+                    // on Javadoc 7, while Javadoc 8 returns true. Because existing
+                    // API signature data files were generated before, we do not
+                    // set abstract if a method is in an interface.
+                    if (!mdoc.containingClass().isInterface()) {
+                        info.setAbstract();
+                    }
                 }
                 info.setSignature(trimBase(mdoc.returnType().toString() + emdoc.signature()));
             } else {
