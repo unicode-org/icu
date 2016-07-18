@@ -1001,6 +1001,12 @@ public:
      * (Presumably, letters that would be more mnemonic in that locale's
      * language.)  This function would produce a pattern using those
      * letters.
+     * <p>
+     * <b>Note:</b> This implementation depends on DateFormatSymbols::getLocalPatternChars()
+     * to get localized format pattern characters. ICU does not include
+     * localized pattern character data, therefore, unless user sets localized
+     * pattern characters manually, this method returns a same result with
+     * toPattern().
      *
      * @param result    Receives the localized pattern.
      * @param status    Output param set to success/failure code on
