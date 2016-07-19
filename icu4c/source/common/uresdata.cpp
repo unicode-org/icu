@@ -852,7 +852,6 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
         errorCode = U_RESOURCE_TYPE_MISMATCH;
         return;
     }
-    sink.enter(length, errorCode);
     if(U_FAILURE(errorCode)) { return; }
 
     for (int32_t i = 0; i < length; ++i) {
@@ -870,10 +869,8 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
         }
         int32_t type = RES_GET_TYPE(res);
         if (URES_IS_ARRAY(type)) {
-            icu::ResourceArraySink *subSink = sink.getOrCreateArraySink(key, errorCode);
-            if (subSink != NULL) {
-                ures_getAllArrayItems(pResData, res, value, *subSink, errorCode);
-            }
+            // ICU ticket #12634: This original version of the enumeration code
+            // is going away. getOrCreateArraySink(key) was unused and has been removed.
         } else if (URES_IS_TABLE(type)) {
             icu::ResourceTableSink *subSink = sink.getOrCreateTableSink(key, errorCode);
             if (subSink != NULL) {
@@ -892,7 +889,6 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
         }
         if(U_FAILURE(errorCode)) { return; }
     }
-    sink.leave(errorCode);
 }
 
 UBool icu::ResourceTable::getKeyAndValue(int32_t i,
@@ -941,65 +937,6 @@ res_getArrayItem(const ResourceData *pResData, Resource array, int32_t indexR) {
         break;
     }
     return RES_BOGUS;
-}
-
-U_CFUNC void
-ures_getAllArrayItems(const ResourceData *pResData, Resource array,
-                      icu::ResourceDataValue &value, icu::ResourceArraySink &sink,
-                      UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return; }
-    const uint16_t *items16 = NULL;
-    const Resource *items32 = NULL;
-    uint32_t offset=RES_GET_OFFSET(array);
-    int32_t length = 0;
-    switch(RES_GET_TYPE(array)) {
-    case URES_ARRAY:
-        if (offset!=0) {  // empty if offset==0
-            items32 = (const Resource *)pResData->pRoot+offset;
-            length = *items32++;
-        }
-        break;
-    case URES_ARRAY16:
-        items16 = pResData->p16BitUnits+offset;
-        length = *items16++;
-        break;
-    default:
-        errorCode = U_RESOURCE_TYPE_MISMATCH;
-        return;
-    }
-    sink.enter(length, errorCode);
-    if(U_FAILURE(errorCode)) { return; }
-
-    for (int32_t i = 0; i < length; ++i) {
-        Resource res;
-        if (items16 != NULL) {
-            res = makeResourceFrom16(pResData, items16[i]);
-        } else {
-            res = items32[i];
-        }
-        int32_t type = RES_GET_TYPE(res);
-        if (URES_IS_ARRAY(type)) {
-            icu::ResourceArraySink *subSink = sink.getOrCreateArraySink(i, errorCode);
-            if (subSink != NULL) {
-                ures_getAllArrayItems(pResData, res, value, *subSink, errorCode);
-            }
-        } else if (URES_IS_TABLE(type)) {
-            icu::ResourceTableSink *subSink = sink.getOrCreateTableSink(i, errorCode);
-            if (subSink != NULL) {
-                ures_getAllTableItems(pResData, res, value, *subSink, errorCode);
-            }
-        /* TODO: settle on how to deal with aliases, port to Java
-        } else if (type == URES_ALIAS) {
-            // aliases not handled in resource enumeration
-            errorCode = U_UNSUPPORTED_ERROR;
-            return; */
-        } else {
-            value.setResource(res);
-            sink.put(i, value, errorCode);
-        }
-        if(U_FAILURE(errorCode)) { return; }
-    }
-    sink.leave(errorCode);
 }
 
 uint32_t icu::ResourceArray::internalGetResource(const ResourceData *pResData, int32_t i) const {
