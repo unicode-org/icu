@@ -514,15 +514,6 @@ ures_getAllTableItems(const ResourceData *pResData, Resource table,
                       icu::ResourceDataValue &value, icu::ResourceTableSink &sink,
                       UErrorCode &errorCode);
 
-/**
- * @param value will be set during enumeration; input contents is ignored
- * @param sink receives all array item values
- */
-U_CFUNC void
-ures_getAllArrayItems(const ResourceData *pResData, Resource array,
-                      icu::ResourceDataValue &value, icu::ResourceArraySink &sink,
-                      UErrorCode &errorCode);
-
 #endif  /* __cplusplus */
 
 /**

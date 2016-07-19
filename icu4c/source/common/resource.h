@@ -276,74 +276,6 @@ private:
 };
 
 /**
- * Sink for ICU resource array contents.
- * The base class does nothing.
- *
- * Nested arrays and tables are stored as nested sinks,
- * never put() as ResourceValue items.
- */
-class U_COMMON_API ResourceArraySink : public UObject {
-public:
-    ResourceArraySink() {}
-    virtual ~ResourceArraySink();
-
-    /**
-     * "Enters" the array.
-     * Called just before enumerating the array's resource items.
-     * The size can be used to allocate storage for the items.
-     * It may differ between child and parent bundles.
-     *
-     * @param size number of array items
-     */
-    virtual void enter(int32_t size, UErrorCode &errorCode);
-
-    /**
-     * Adds a value from a resource array.
-     *
-     * @param index of the resource array item
-     * @param value resource value
-     */
-    virtual void put(int32_t index, const ResourceValue &value, UErrorCode &errorCode);
-
-    /**
-     * Returns a nested resource array at the array index as another sink.
-     * Creates the sink if none exists for the key.
-     * Returns NULL if nested arrays are not supported.
-     * The default implementation always returns NULL.
-     *
-     * This sink (not the caller) owns the nested sink.
-     *
-     * @param index of the resource array item
-     * @return nested-array sink, or NULL
-     */
-    virtual ResourceArraySink *getOrCreateArraySink(int32_t index, UErrorCode &errorCode);
-
-    /**
-     * Returns a nested resource table at the array index as another sink.
-     * Creates the sink if none exists for the key.
-     * Returns NULL if nested tables are not supported.
-     * The default implementation always returns NULL.
-     *
-     * This sink (not the caller) owns the nested sink.
-     *
-     * @param index of the resource array item
-     * @return nested-table sink, or NULL
-     */
-    virtual ResourceTableSink *getOrCreateTableSink(int32_t index, UErrorCode &errorCode);
-
-    /**
-     * "Leaves" the array.
-     * Indicates that all of the resources and sub-resources of the current array
-     * have been enumerated.
-     */
-    virtual void leave(UErrorCode &errorCode);
-
-private:
-    ResourceArraySink(const ResourceArraySink &);  // no copy constructor
-    ResourceArraySink &operator=(const ResourceArraySink &);  // no assignment operator
-};
-
-/**
  * Sink for ICU resource table contents.
  * The base class does nothing.
  *
@@ -354,16 +286,6 @@ class U_COMMON_API ResourceTableSink : public UObject {
 public:
     ResourceTableSink() {}
     virtual ~ResourceTableSink();
-
-    /**
-     * "Enters" the table.
-     * Called just before enumerating the table's resource items.
-     * The size can be used to allocate storage for the items.
-     * It usually differs between child and parent bundles.
-     *
-     * @param size number of table items
-     */
-    virtual void enter(int32_t size, UErrorCode &errorCode);
 
     /**
      * Adds a key-value pair from a resource table.
@@ -385,19 +307,6 @@ public:
     virtual void putNoFallback(const char *key, UErrorCode &errorCode);
 
     /**
-     * Returns a nested resource array for the key as another sink.
-     * Creates the sink if none exists for the key.
-     * Returns NULL if nested arrays are not supported.
-     * The default implementation always returns NULL.
-     *
-     * This sink (not the caller) owns the nested sink.
-     *
-     * @param key resource key string
-     * @return nested-array sink, or NULL
-     */
-    virtual ResourceArraySink *getOrCreateArraySink(const char *key, UErrorCode &errorCode);
-
-    /**
      * Returns a nested resource table for the key as another sink.
      * Creates the sink if none exists for the key.
      * Returns NULL if nested tables are not supported.
@@ -409,13 +318,6 @@ public:
      * @return nested-table sink, or NULL
      */
     virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode);
-
-    /**
-     * "Leaves" the table.
-     * Indicates that all of the resources and sub-resources of the current table
-     * have been enumerated.
-     */
-    virtual void leave(UErrorCode &errorCode);
 
 private:
     ResourceTableSink(const ResourceTableSink &);  // no copy constructor
