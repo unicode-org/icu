@@ -425,20 +425,11 @@ struct RelDateTimeFmtDataSink : public ResourceTableSink {
                 return;  // Not interesting.
             }
 
-            // TODO(Travis Keep): This is a hack to get around CLDR bug 6818.
-            UnicodeString displayName = value.getUnicodeString(errorCode);
-            if (U_SUCCESS(errorCode)) {
-                if (uprv_strcmp("en", outer.sinkLocaleId) == 0) {
-                    displayName.toLower();
-                }
-            }
-            // end hack
-
             // Store displayname if not set.
             if (outer.outputData.absoluteUnits[outer.style]
                     [absUnit][UDAT_DIRECTION_PLAIN].isEmpty()) {
                 outer.outputData.absoluteUnits[outer.style]
-                    [absUnit][UDAT_DIRECTION_PLAIN].fastCopyFrom(displayName);
+                    [absUnit][UDAT_DIRECTION_PLAIN].fastCopyFrom(value.getUnicodeString(errorCode));
                 return;
             }
         }
@@ -456,10 +447,6 @@ struct RelDateTimeFmtDataSink : public ResourceTableSink {
         RelDateTimeFmtDataSink &outer;
     } unitSink;
 
-    // For hack for locale "en".
-    // TODO(Travis Keep): This is a hack to get around CLDR bug 6818.
-    const char* sinkLocaleId;
-
     // Values kept between levels of parsing the CLDR data.
     int32_t pastFutureIndex;  // 0 == past or 1 ==  future
     UDateRelativeDateTimeFormatterStyle style;  // {LONG, SHORT, NARROW}
@@ -470,9 +457,9 @@ struct RelDateTimeFmtDataSink : public ResourceTableSink {
     RelativeDateTimeCacheData &outputData;
 
     // Constructor
-    RelDateTimeFmtDataSink(RelativeDateTimeCacheData& cacheData, const char* localeId)
+    RelDateTimeFmtDataSink(RelativeDateTimeCacheData& cacheData)
         : relDateTimeDetailSink(*this), relativeTimeSink(*this), relativeSink(*this),
-            unitSink(*this), sinkLocaleId(localeId), outputData(cacheData) {
+            unitSink(*this), outputData(cacheData) {
         // Clear cacheData.fallBackCache
         cacheData.fallBackCache[UDAT_STYLE_LONG] = -1;
         cacheData.fallBackCache[UDAT_STYLE_SHORT] = -1;
@@ -651,7 +638,7 @@ static UBool loadUnitData(
         RelativeDateTimeCacheData &cacheData,
         const char* localeId,
         UErrorCode &status) {
-    RelDateTimeFmtDataSink sink(cacheData, localeId);
+    RelDateTimeFmtDataSink sink(cacheData);
     ures_getAllTableItemsWithFallback(resource, "fields", sink, status);
 
     // Get the weekday names from DateFormatSymbols.
