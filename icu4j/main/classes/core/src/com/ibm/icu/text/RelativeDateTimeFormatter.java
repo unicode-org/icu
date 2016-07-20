@@ -1200,12 +1200,7 @@ public final class RelativeDateTimeFormatter {
                         unitMap.put(absUnit, dirMap);
                     }
                     if (dirMap.get(Direction.PLAIN) == null) {
-                        String displayName = value.toString();
-                        // TODO(Travis Keep): This is a hack to get around CLDR bug 6818.
-                        if (ulocale.getLanguage().equals("en")) {
-                            displayName = displayName.toLowerCase(Locale.ROOT);
-                        }
-                        dirMap.put(Direction.PLAIN, displayName);
+                        dirMap.put(Direction.PLAIN, value.toString());
                     }
                 }
             }
