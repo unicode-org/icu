@@ -530,9 +530,9 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         };
         boolean isExcluded = false;
         for (Object[] excl : EXCLUSIONS) {
-            if (excl[0] == null || loc.equals((ULocale)excl[0])) {
+            if (excl[0] == null || loc.equals(excl[0])) {
                 if (id.equals(excl[1])) {
-                    if (excl[2] == null || pattern.equals((String)excl[2])) {
+                    if (excl[2] == null || pattern.equals(excl[2])) {
                         if (excl[3] == null || ((Long)excl[3]).compareTo(time) == 0) {
                             isExcluded = true;
                             break;
@@ -672,13 +672,13 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     // Coverage tests for other versions of the parse() method. All of them end up
     // calling the full parse() method tested on the TestParse() test.
     public void TestParseCoverage() {
-        TimeZone expectedTZ = TimeZone.getTimeZone("America/Los_Angeles");       
+        TimeZone expectedTZ = TimeZone.getTimeZone("America/Los_Angeles");
         TimeZoneFormat fmt = TimeZoneFormat.getInstance(ULocale.ENGLISH);
-        
+
         // Test parse(String)
         try {
             TimeZone tz1 = fmt.parse("America/Los_Angeles");
@@ -687,26 +687,26 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             } else if (!expectedTZ.equals(tz1)) {
                 errln("Parsed TimeZone: '" + tz1.getID()  + "' using parse(String) - expected: "
                         + expectedTZ.getID());
-            } 
+            }
         } catch (ParseException e) {
             errln("Parse failure using parse(String) - expected: " + expectedTZ.getID()
                     + " exception: " + e.getMessage());
         }
-        
+
         // Test parse(String, ParsePosition)
         TimeZone tz2 = fmt.parse("++America/Los_Angeles", new ParsePosition(2));
         if (tz2 == null) {
-            errln("Parse failure using parse(String, ParsePosition) - expected: " 
+            errln("Parse failure using parse(String, ParsePosition) - expected: "
                     + expectedTZ.getID());
         } else if (!expectedTZ.equals(tz2)) {
             errln("Parsed TimeZone: '" + tz2.getID()  + "' using parse(String, ParsePosition) - expected: "
                     + expectedTZ.getID());
         }
-        
+
         // Test parseObject(String, ParsePosition)
         Object tz3 = fmt.parseObject("++America/Los_Angeles", new ParsePosition(2));
         if (tz3 == null) {
-            errln("Parse failure using parseObject(String, ParsePosition) - expected: " 
+            errln("Parse failure using parseObject(String, ParsePosition) - expected: "
                     + expectedTZ.getID());
         } else if (!expectedTZ.equals(tz3)) {
             errln("Parsed TimeZone: '" + ((TimeZone)tz3).getID()
@@ -730,7 +730,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             -37845000,  // -10h 30m 45s
             108000000,  // 30h
         };
- 
+
         final String[][] ISO_STR = {
             // 0
             {
@@ -872,7 +872,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final Object[][] TESTDATA = {
             {
                 "en",
-                "America/Los_Angeles", 
+                "America/Los_Angeles",
                 dateJan,
                 Style.GENERIC_LOCATION,
                 "Los Angeles Time",
@@ -944,7 +944,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(uloc);
             String out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
 
-            if (!out.equals((String)testCase[4]) || timeType.value != testCase[5]) {
+            if (!out.equals(testCase[4]) || timeType.value != testCase[5]) {
                 errln("Format result for [locale=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
                         + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
                         + "]; actual [output=" + out + ",type=" + timeType.value + "]");
@@ -955,7 +955,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             tzfmt = TimeZoneFormat.getInstance(loc);
             out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
 
-            if (!out.equals((String)testCase[4]) || timeType.value != testCase[5]) {
+            if (!out.equals(testCase[4]) || timeType.value != testCase[5]) {
                 errln("Format result for [locale(Java)=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
                         + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
                         + "]; actual [output=" + out + ",type=" + timeType.value + "]");
@@ -971,7 +971,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final Object[][] TESTDATA = {
             {
                 "en",
-                "America/Chicago", 
+                "America/Chicago",
                 dateJan,
                 Style.SPECIFIC_SHORT,
                 "CST",
@@ -979,7 +979,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             },
             {
                 "en",
-                "Asia/Shanghai", 
+                "Asia/Shanghai",
                 dateJan,
                 Style.SPECIFIC_SHORT,
                 "CST",
@@ -987,7 +987,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             },
             {
                 "zh_Hans",
-                "Asia/Shanghai", 
+                "Asia/Shanghai",
                 dateJan,
                 Style.SPECIFIC_SHORT,
                 "CST",
@@ -1037,7 +1037,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             Output<TimeType> timeType = new Output<TimeType>();
             String out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
 
-            if (!out.equals((String)testCase[4]) || timeType.value != testCase[5]) {
+            if (!out.equals(testCase[4]) || timeType.value != testCase[5]) {
                 errln("Format result for [locale=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
                         + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
                         + "]; actual [output=" + out + ",type=" + timeType.value + "]");
@@ -1051,18 +1051,18 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar cal = Calendar.getInstance(tz);
         cal.setTimeInMillis(1459187377690L); // Mar 28, 2016
-        
+
         StringBuffer sb = new StringBuffer();
         FieldPosition fp = new FieldPosition(DateFormat.Field.TIME_ZONE);
-        
+
         TimeZoneFormat fmt = TimeZoneFormat.getInstance(ULocale.ENGLISH);
-        
+
         // Test formatting a non-timezone related object
         try {
             fmt.format(new Object(), sb, fp);
             errln("ERROR: format non-timezone related object failed");
         } catch (IllegalArgumentException e) { /* Expected */ }
-        
+
         // Test formatting a TimeZone object
         sb = new StringBuffer();
         fmt.format(tz, sb, fp);
@@ -1071,7 +1071,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!sb.toString().equals(fmtOutput)) {
             errln("ERROR: format TimerZone object failed. Expected: " + fmtOutput + ", actual: " + sb);
         }
-        
+
         // Test formatting a Calendar object
         sb = new StringBuffer();
         fmt.format(cal, sb, fp);
@@ -1079,7 +1079,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("ERROR: format Calendar object failed. Expected: GMT-07:00, actual: " + sb);
         }
     }
-    
+
     // This is a test case of Ticket#11487.
     // Because the problem is reproduced for the very first time,
     // the reported problem cannot be reproduced with regular test
@@ -1118,28 +1118,40 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("Incorrect count: " + found.toString() + ", expected: " + numIteration);
         }
     }
-    
+
     // Basic get/set test for methods not being called otherwise.
+    @Test
     public void TestAPI() {
         TimeZoneFormat tzfmtEn = TimeZoneFormat.getInstance(ULocale.ENGLISH);
         TimeZoneFormat tzfmtAr = TimeZoneFormat.getInstance(new ULocale("ar")).cloneAsThawed();
-        
+        TimeZoneNames tzn = TimeZoneNames.getInstance(ULocale.ENGLISH);
+
         String digits = tzfmtEn.getGMTOffsetDigits();
         tzfmtAr.setGMTOffsetDigits(digits);
         if (!digits.equals(tzfmtAr.getGMTOffsetDigits())) {
             errln("ERROR: get/set GMTOffsetDigits failed");
         }
-        
+
         String pattern = tzfmtEn.getGMTOffsetPattern(GMTOffsetPatternType.POSITIVE_H);
         tzfmtAr.setGMTOffsetPattern(GMTOffsetPatternType.POSITIVE_H, pattern);
         if (!pattern.equals(tzfmtAr.getGMTOffsetPattern(GMTOffsetPatternType.POSITIVE_H))) {
             errln("ERROR: get/set GMTOffsetPattern failed");
         }
-        
+
         String zeroFmt = tzfmtEn.getGMTZeroFormat();
         tzfmtAr.setGMTZeroFormat(zeroFmt);
         if (!zeroFmt.equals(tzfmtAr.getGMTZeroFormat())) {
             errln("ERROR: get/set GMTZeroFormat failed");
+        }
+
+        Set<String> allAvailableMZIDs = tzn.getAvailableMetaZoneIDs();
+        if (allAvailableMZIDs.size() < 150 || !allAvailableMZIDs.contains("America_Central")) {
+            errln("ERROR: getAvailableMetaZoneIDs() did not return expected value");
+        }
+
+        Set<String> kinshasaAvailableMZIDs = tzn.getAvailableMetaZoneIDs("Africa/Kinshasa");
+        if (!kinshasaAvailableMZIDs.contains("Africa_Western") || kinshasaAvailableMZIDs.contains("America_Central")) {
+            errln("ERROR: getAvailableMetaZoneIDs('Africa/Kinshasa') did not return expected value");
         }
     }
 }
