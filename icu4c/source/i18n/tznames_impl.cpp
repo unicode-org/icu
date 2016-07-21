@@ -1503,6 +1503,7 @@ struct TimeZoneNamesImpl::ZoneStringsLoader : public ResourceSink {
 
     void consumeNamesTable(const char *key, ResourceValue &value, UBool noFallback,
             UErrorCode &status) {
+        if (U_FAILURE(status)) { return; }
 
         void* loader = uhash_get(keyToLoader, key);
         if (loader == NULL) {
@@ -1535,7 +1536,11 @@ struct TimeZoneNamesImpl::ZoneStringsLoader : public ResourceSink {
             }
 
             void* newKey = createKey(key, status);
-            if (U_FAILURE(status)) { return; }
+            if (U_FAILURE(status)) {
+                deleteZNamesLoader(loader);
+                return;
+            }
+
             uhash_put(keyToLoader, newKey, loader, &status);
             if (U_FAILURE(status)) { return; }
         }
