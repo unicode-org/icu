@@ -555,7 +555,8 @@ struct CmptDecDataSink : public ResourceSink {
    *          one{"0 thousand"}   <-- plural variant and template
    */
 
-  CmptDecDataSink(CDFLocaleData& _dataBundle) : dataBundle(_dataBundle) {}
+  CmptDecDataSink(CDFLocaleData& _dataBundle)
+    : dataBundle(_dataBundle), isLatin(FALSE), isFallback(FALSE) {}
   virtual ~CmptDecDataSink();
 
   virtual void put(const char *key, ResourceValue &value, UBool isRoot, UErrorCode &errorCode) {
@@ -603,14 +604,14 @@ struct CmptDecDataSink : public ResourceSink {
             && formatsTableKey == DECIMAL_FORMAT) {
           style = UNUM_SHORT;
           destination = &dataBundle.shortData;
-        // TODO: Enable this statement when currency support is added
+        // TODO: Enable the following statements when currency support is added
         // } else if (patternsTableKey == PATTERNS_SHORT
         //     && formatsTableKey == CURRENCY_FORMAT) {
         //   style = UNUM_SHORT_CURRENCY; // or whatever the enum gets named
         //   destination = &dataBundle.shortCurrencyData;
-        } else {
-          // Silently ignore this case
-          continue;
+        // } else {
+        //   // Silently ignore this case
+        //   continue;
         }
 
         // SPECIAL CASE: RULES FOR WHETHER OR NOT TO CONSUME THIS TABLE:
