@@ -1139,16 +1139,15 @@ void RBBIRuleScanner::parse() {
     //
 #ifdef RBBI_DEBUG
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "symbols")) {fSymbolTable->rbbiSymtablePrint();}
-    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ptree"))
-    {
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ptree")) {
         RBBIDebugPrintf("Completed Forward Rules Parse Tree...\n");
-        fRB->fForwardTree->printTree(TRUE);
+        RBBINode::printTree(fRB->fForwardTree, TRUE);
         RBBIDebugPrintf("\nCompleted Reverse Rules Parse Tree...\n");
-        fRB->fReverseTree->printTree(TRUE);
+        RBBINode::printTree(fRB->fReverseTree, TRUE);
         RBBIDebugPrintf("\nCompleted Safe Point Forward Rules Parse Tree...\n");
-        fRB->fSafeFwdTree->printTree(TRUE);
+        RBBINode::printTree(fRB->fSafeFwdTree, TRUE);
         RBBIDebugPrintf("\nCompleted Safe Point Reverse Rules Parse Tree...\n");
-        fRB->fSafeRevTree->printTree(TRUE);
+        RBBINode::printTree(fRB->fSafeRevTree, TRUE);
     }
 #endif
 }
@@ -1163,7 +1162,7 @@ void RBBIRuleScanner::parse() {
 void RBBIRuleScanner::printNodeStack(const char *title) {
     int i;
     RBBIDebugPrintf("%s.  Dumping node stack...\n", title);
-    for (i=fNodeStackPtr; i>0; i--) {fNodeStack[i]->printTree(TRUE);}
+    for (i=fNodeStackPtr; i>0; i--) {RBBINode::printTree(fNodeStack[i], TRUE);}
 }
 #endif
 

@@ -548,7 +548,7 @@ void RBBISetBuilder::printSets() {
         RBBI_DEBUG_printUnicodeString(usetNode->fText);
         RBBIDebugPrintf("\n");
         if (usetNode->fLeftChild != NULL) {
-            usetNode->fLeftChild->printTree(TRUE);
+            RBBINode::printTree(usetNode->fLeftChild, TRUE);
         }
     }
     RBBIDebugPrintf("\n");
