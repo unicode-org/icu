@@ -25,6 +25,8 @@
 #include "unicode/uniset.h"
 #include "unicode/uchar.h"
 #include "unicode/parsepos.h"
+
+#include "cstr.h"
 #include "uvector.h"
 
 #include "rbbirb.h"
@@ -286,7 +288,7 @@ static int32_t serial(const RBBINode *node) {
 }
 
 
-void RBBINode::printNode() {
+void RBBINode::printNode(const RBBINode *node) {
     static const char * const nodeTypeNames[] = {
                 "setRef",
                 "uset",
@@ -306,15 +308,16 @@ void RBBINode::printNode() {
                 "opLParen"
     };
 
-    if (this==NULL) {
-        RBBIDebugPrintf("%10p", (void *)this);
+    if (node==NULL) {
+        RBBIDebugPrintf("%10p", (void *)node);
     } else {
         RBBIDebugPrintf("%10p %5d %12s %c%c  %5d       %5d     %5d       %6d     %d ",
-            (void *)this, fSerialNum, nodeTypeNames[fType],   fRuleRoot?'R':' ',  fChainIn?'C':' ',
-             serial(fLeftChild), serial(fRightChild), serial(fParent),
-            fFirstPos, fVal);
-        if (fType == varRef) {
-            RBBI_DEBUG_printUnicodeString(fText);
+            (void *)node, node->fSerialNum, nodeTypeNames[node->fType],
+            node->fRuleRoot?'R':' ', node->fChainIn?'C':' ',
+            serial(node->fLeftChild), serial(node->fRightChild), serial(node->fParent),
+            node->fFirstPos, node->fVal);
+        if (node->fType == varRef) {
+            RBBI_DEBUG_printUnicodeString(node->fText);
         }
     }
     RBBIDebugPrintf("\n");
@@ -323,16 +326,8 @@ void RBBINode::printNode() {
 
 
 #ifdef RBBI_DEBUG
-U_CFUNC void RBBI_DEBUG_printUnicodeString(const UnicodeString &s, int minWidth)
-{
-    int i;
-    for (i=0; i<s.length(); i++) {
-        RBBIDebugPrintf("%c", s.charAt(i));
-        // putc(s.charAt(i), stdout);
-    }
-    for (i=s.length(); i<minWidth; i++) {
-        RBBIDebugPrintf(" ");
-    }
+U_CFUNC void RBBI_DEBUG_printUnicodeString(const UnicodeString &s, int minWidth) {
+    RBBIDebugPrintf("%*s", minWidth, CStr(s)());
 }
 #endif
 
@@ -347,21 +342,21 @@ void RBBINode::printNodeHeader() {
     RBBIDebugPrintf(" Address   serial        type     LeftChild  RightChild   Parent   position value\n");
 }
     
-void RBBINode::printTree(UBool printHeading) {
+void RBBINode::printTree(const RBBINode *node, UBool printHeading) {
     if (printHeading) {
         printNodeHeader();
     }
-    this->printNode();
-    if (this != NULL) {
+    printNode(node);
+    if (node != NULL) {
         // Only dump the definition under a variable reference if asked to.
         // Unconditinally dump children of all other node types.
-        if (fType != varRef) {
-            if (fLeftChild != NULL) {
-                fLeftChild->printTree(FALSE);
+        if (node->fType != varRef) {
+            if (node->fLeftChild != NULL) {
+                printTree(node->fLeftChild, FALSE);
             }
             
-            if (fRightChild != NULL) {
-                fRightChild->printTree(FALSE);
+            if (node->fRightChild != NULL) {
+                printTree(node->fRightChild, FALSE);
             }
         }
     }

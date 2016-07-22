@@ -256,7 +256,7 @@ void RBBISymbolTable::rbbiSymtablePrint() const {
         }
         RBBISymbolTableEntry  *s   = (RBBISymbolTableEntry *)e->value.pointer;
         RBBI_DEBUG_printUnicodeString(s->key);
-        s->val->fLeftChild->printTree(TRUE);
+        RBBINode::printTree(s->val->fLeftChild, TRUE);
         RBBIDebugPrintf("\n");
     }
 }

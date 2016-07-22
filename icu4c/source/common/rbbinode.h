@@ -102,8 +102,8 @@ class RBBINode : public UMemory {
 
 #ifdef RBBI_DEBUG
         static void printNodeHeader();
-        void        printNode();
-        void        printTree(UBool withHeading);
+        static void printNode(const RBBINode *n);
+        static void printTree(const RBBINode *n, UBool withHeading);
 #endif
 
     private:
