@@ -471,7 +471,7 @@ umsg_vformat(   const UMessageFormat *fmt,
         }
     }
     UnicodeString resultStr;
-    FieldPosition fieldPosition(0);
+    FieldPosition fieldPosition(FieldPosition::DONT_CARE);
     
     /* format the message */
     ((const MessageFormat*)fmt)->format(args,count,resultStr,fieldPosition,*status);

@@ -218,14 +218,14 @@ PluralFormat::format(const Formattable& obj,
 
 UnicodeString
 PluralFormat::format(int32_t number, UErrorCode& status) const {
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPosition::DONT_CARE);
     UnicodeString result;
     return format(Formattable(number), number, result, fpos, status);
 }
 
 UnicodeString
 PluralFormat::format(double number, UErrorCode& status) const {
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPosition::DONT_CARE);
     UnicodeString result;
     return format(Formattable(number), number, result, fpos, status);
 }

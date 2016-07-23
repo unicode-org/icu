@@ -163,7 +163,7 @@ void DateIntervalFormatTest::testAPI() {
             errln("Failure encountered: %s", u_errorName(status));
             return;
         }
-        FieldPosition pos = 0;
+        FieldPosition pos(FieldPosition::DONT_CARE);
         fromTime->set(2013, 3, 26);
         toTime->set(2013, 3, 28);
         dif->format(*fromTime, *toTime, expected, pos, status);
@@ -280,7 +280,7 @@ void DateIntervalFormatTest::testAPI() {
     Formattable formattable;
     formattable.setInt64(10);
     UnicodeString res;
-    FieldPosition pos = 0;
+    FieldPosition pos(FieldPosition::DONT_CARE);
     status = U_ZERO_ERROR;
     dtitvfmt->format(formattable, res, pos, status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
@@ -1083,7 +1083,7 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length) {
 
         DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(oneSkeleton, loc, ec);
         if (!assertSuccess("createInstance(skeleton) in expect", ec)) return;
-        FieldPosition pos=0;
+        FieldPosition pos(FieldPosition::DONT_CARE);
         dtitvfmt->format(&dtitv, str.remove(), pos, ec);
         if (!assertSuccess("format in expect", ec)) return;
         assertEquals((UnicodeString)"\"" + locName + "\\" + oneSkeleton + "\\" + datestr + "\\" + datestr_2 + "\"", ctou(data[i++]), str);
@@ -1216,7 +1216,7 @@ void DateIntervalFormatTest::testYearFormats() {
         }
         UnicodeString actual;
         UnicodeString expected(ctou("4/26/0113 \\u2013 4/28/0113"));
-        FieldPosition pos = 0;
+        FieldPosition pos;
         dif->format(*fromTime, *toTime, actual, pos, status);
         if (U_FAILURE(status)) {
             errln("Failure encountered: %s", u_errorName(status));
@@ -1234,7 +1234,7 @@ void DateIntervalFormatTest::testYearFormats() {
         }
         UnicodeString actual;
         UnicodeString expected(ctou("4/26/13 \\u2013 4/28/13"));
-        FieldPosition pos = 0;
+        FieldPosition pos(FieldPosition::DONT_CARE);
         dif->format(*fromTime, *toTime, actual, pos, status);
         if (U_FAILURE(status)) {
             errln("Failure encountered: %s", u_errorName(status));
@@ -1252,7 +1252,7 @@ void DateIntervalFormatTest::testYearFormats() {
         }
         UnicodeString actual;
         UnicodeString expected(ctou("4/26/113 \\u2013 4/28/113"));
-        FieldPosition pos = 0;
+        FieldPosition pos(FieldPosition::DONT_CARE);
         dif->format(*fromTime, *toTime, actual, pos, status);
         if (U_FAILURE(status)) {
             errln("Failure encountered: %s", u_errorName(status));
@@ -1299,7 +1299,7 @@ void DateIntervalFormatTest::expectUserDII(const char** data,
         DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(UDAT_YEAR_ABBR_MONTH_DAY, loc, *dtitvinf, ec);
         delete dtitvinf;
         if (!assertSuccess("createInstance(skeleton,dtitvinf) in expectUserDII", ec)) return;
-        FieldPosition pos=0;
+        FieldPosition pos(FieldPosition::DONT_CARE);
         dtitvfmt->format(&dtitv, str.remove(), pos, ec);
         if (!assertSuccess("format in expectUserDII", ec)) return;
         assertEquals((UnicodeString)"\"" + locName + "\\" + datestr + "\\" + datestr_2 + "\"", ctou(data[i++]), str);
@@ -1470,7 +1470,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
                 if (!assertSuccess("adoptDateFormat()", ec)) return;
             }
             */
-            FieldPosition pos=0;
+            FieldPosition pos(FieldPosition::DONT_CARE);
             dtitvfmt->format(&dtitv, str.remove(), pos, ec);
             if (!assertSuccess("format", ec)) return;
 #ifdef DTIFMTTS_DEBUG
@@ -1495,7 +1495,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
         DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(UDAT_YEAR_ABBR_MONTH_DAY, loc, *dtitvinf, ec);
         delete dtitvinf;
         if (!assertSuccess("createInstance(skeleton,dtitvinf)", ec)) return;
-        FieldPosition pos=0;
+        FieldPosition pos(FieldPosition::DONT_CARE);
         dtitvfmt->format(&dtitv, str.remove(), pos, ec);
         if ( uprv_strcmp(locName, "th") ) {
             if (!assertSuccess("format", ec)) return;
@@ -1559,7 +1559,7 @@ void DateIntervalFormatTest::threadFunc11669(int32_t threadNum) {
     (void)threadNum;
     for (int loop=0; loop<1000; ++loop) {
         UErrorCode status = U_ZERO_ERROR;
-        FieldPosition pos(0);
+        FieldPosition pos(FieldPosition::DONT_CARE);
         UnicodeString result;
         gIntervalFormatter->format(gInterval, result, pos, status);
         if (U_FAILURE(status)) {
@@ -1587,7 +1587,7 @@ void DateIntervalFormatTest::testTicket11669() {
     intervalStart->set(2009, 6, 1, 14, 0);
     intervalEnd->set(2009, 6, 2, 14, 0);
     DateInterval interval(intervalStart->getTime(status), intervalEnd->getTime(status));
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     UnicodeString expectedResult;
     formatter->format(&interval, expectedResult, pos, status);
     if (U_FAILURE(status)) {
