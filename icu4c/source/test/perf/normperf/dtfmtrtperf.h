@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 * Copyright (c) 2010-2016,International Business Machines
@@ -165,7 +167,7 @@ public:
 
                     for (int32_t datidx = 0; datidx < nDates; datidx++) {
                         UnicodeString tzstr;
-                        FieldPosition fpos(0);
+                        FieldPosition fpos(FieldPosition::DONT_CARE);
 
                         // Format
                         sdf->setTimeZone(*tz);

@@ -8402,7 +8402,7 @@ void NumberFormatTest::TestBenchmark() {
     DecimalFormat fmt("0.0000000", new DecimalFormatSymbols(sym), status);
 //    DecimalFormat fmt("0.00000E0", new DecimalFormatSymbols(sym), status);
 //    DecimalFormat fmt("0", new DecimalFormatSymbols(sym), status);
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPosition::DONT_CARE);
     clock_t start = clock();
     for (int32_t i = 0; i < 1000000; ++i) {
         UnicodeString append;
@@ -8417,7 +8417,7 @@ void NumberFormatTest::TestBenchmark() {
 
     UErrorCode status = U_ZERO_ERROR;
     MessageFormat fmt("{0, plural, one {I have # friend.} other {I have # friends.}}", status);
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPosition::DONT_CARE);
     Formattable one(1.0);
     Formattable three(3.0);
     clock_t start = clock();
@@ -8434,7 +8434,7 @@ void NumberFormatTest::TestBenchmark() {
     Locale en("en");
     Measure measureC(23, MeasureUnit::createCelsius(status), status);
     MeasureFormat fmt(en, UMEASFMT_WIDTH_WIDE, status);
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPosition::DONT_CARE);
     clock_t start = clock();
     for (int32_t i = 0; i < 1000000; ++i) {
         UnicodeString appendTo;

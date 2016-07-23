@@ -294,14 +294,14 @@ void NumberFormatRegressionTest::Test4088161 (void)
         df->setMinimumFractionDigits(0);
         df->setMaximumFractionDigits(16);
         UnicodeString sBuf1;
-        FieldPosition fp1(0);
+        FieldPosition fp1(FieldPosition::DONT_CARE);
         logln(UnicodeString("d = ") + d);
         logln(UnicodeString("maxFractionDigits = ") + df->getMaximumFractionDigits());
 
         logln(" format(d) = '" + df->format(d, sBuf1, fp1) + "'");
         df->setMaximumFractionDigits(17);
         UnicodeString sBuf2;
-        FieldPosition fp2(0);
+        FieldPosition fp2(FieldPosition::DONT_CARE);
         logln(UnicodeString("maxFractionDigits = ") + df->getMaximumFractionDigits());
         sBuf2 = df->format(d, sBuf2, fp2);
         if(sBuf2 != "100")
@@ -386,7 +386,7 @@ void NumberFormatRegressionTest::Test4088503 (void)
     FieldPosition fp(FieldPosition::DONT_CARE);
     //try {
         logln(df->format((int32_t)123, sBuf, fp));
-        //if(fp == FieldPosition(0))
+        //if(fp == FieldPosition(FieldPosition::DONT_CARE))
         //    errln("Test for bug 4088503 failed.");
     /*} catch (Exception foo) {
         errln("Test for bug 4088503 failed.");
@@ -694,7 +694,7 @@ void NumberFormatRegressionTest::Test4090489 (void)
     double d = 1.000000000000001E7;
     //BigDecimal bd = new BigDecimal(d);
     UnicodeString sb;
-    FieldPosition fp(0);
+    FieldPosition fp(FieldPosition::DONT_CARE);
     logln(UnicodeString("d = ") + d);
     //logln("BigDecimal.toString():  " + bd.toString());
     df->format(d, sb, fp);
@@ -1399,7 +1399,7 @@ void NumberFormatRegressionTest::Test4062486(void)
         return;
     }
     UnicodeString formatted;
-    FieldPosition field(0);
+    FieldPosition field(FieldPosition::DONT_CARE);
     double num = 1234.5;
     fmt->format(num, formatted, field);
     if (field.getBeginIndex() != 0 && field.getEndIndex() != 5)

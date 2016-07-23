@@ -413,7 +413,7 @@ TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *t
     } 
 
     UnicodeString output;
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     output = testTZ->getID(output) + " " + sdf->format(testDate, output, pos) +
         " Offset(" + tzOffsetFloat + ")" +
         " RawOffset(" + tzRawOffsetFloat + ")" + 
@@ -892,7 +892,7 @@ TimeZoneRegressionTest::Test4162593()
         UnicodeString temp;
         logln(tz->getID(temp) + ":");
         for (int32_t i = 0; i < 4; ++i) {
-            FieldPosition pos(0);
+            FieldPosition pos(FieldPosition::DONT_CARE);
             zone[i].remove();
             zone[i] = fmt->format(d+ i*ONE_HOUR, zone[i], pos);
             logln(UnicodeString("") + i + ": " + d + " / " + zone[i]);

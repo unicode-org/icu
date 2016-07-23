@@ -50,7 +50,7 @@ TestChoiceFormat::TestSimpleExample( void )
     UnicodeString str;
     UnicodeString res1, res2;
     UErrorCode status;
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPosition::DONT_CARE);
     Formattable f;
     int32_t ix;
     //for (double i = 0.0; i <= 8.0; ++i) {
@@ -182,7 +182,7 @@ TestChoiceFormat::TestComplexExample( void )
         it_errln("***  ChoiceFormat to Pattern result!");
     }
 
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPosition::DONT_CARE);
 
     UnicodeString checkstr[] = { 
         "There are corrupted files on Disk_A",

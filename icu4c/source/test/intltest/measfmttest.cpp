@@ -1264,7 +1264,7 @@ void MeasureFormatTest::TestFormatSingleArg() {
         return;
     }
     UnicodeString buffer;
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     fmt.format(
             new Measure(3.5, MeasureUnit::createFoot(status), status),
             buffer,
@@ -1457,7 +1457,7 @@ void MeasureFormatTest::helperTestMultiples(
         UMeasureFormatWidth width,
         const char *expected) {
     UErrorCode status = U_ZERO_ERROR;
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     MeasureFormat fmt(locale, width, status);
     if (!assertSuccess("Error creating format object", status)) {
         return;
@@ -1525,7 +1525,7 @@ void MeasureFormatTest::helperTestManyLocaleDurations( const char *localeID,
         return;
     }
     UnicodeString buffer;
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     fmt.formatMeasures(measures, measureCount, buffer, pos, status);
     if (U_FAILURE(status)) {
         errln("MeasureFormat::formatMeasures failed for locale %s, width %d, status: %s", localeID, (int)width, u_errorName(status));
@@ -1683,7 +1683,7 @@ void MeasureFormatTest::TestBadArg() {
     if (!assertSuccess("Error creating format object", status)) {
         return;
     }
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     UnicodeString buffer;
     fmt.format(
             9.3,
@@ -1791,7 +1791,7 @@ void MeasureFormatTest::TestUnitPerUnitResolution() {
     if (!assertSuccess("Create of format unit and per unit", status)) {
         return;
     }
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     UnicodeString actual;
     fmt.formatMeasurePerUnit(
             measure,
@@ -1866,7 +1866,7 @@ void MeasureFormatTest::verifyFormatWithPrefix(
         int32_t measureCount,
         const char *expected) {
     UnicodeString result(prefix);
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     UErrorCode status = U_ZERO_ERROR;
     fmt.formatMeasures(measures, measureCount, result, pos, status);
     if (!assertSuccess("Error formatting", status)) {

@@ -144,7 +144,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     Formattable fD(d, Formattable::kIsDate);
 
     UnicodeString res1, res2;
-    FieldPosition pos1(0), pos2(0);
+    FieldPosition pos1(FieldPosition::DONT_CARE), pos2(FieldPosition::DONT_CARE);
     
     res1 = def.format(d, res1, pos1);
     logln( (UnicodeString) "" + d + " formatted to " + res1);

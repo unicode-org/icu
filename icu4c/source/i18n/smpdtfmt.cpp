@@ -1570,7 +1570,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             } else if (count == 2) {
                 value /= 10;
             }
-            FieldPosition p(0);
+            FieldPosition p(FieldPosition::DONT_CARE);
             currentNumberFormat->format(value, appendTo, p);
             if (count > 3) {
                 currentNumberFormat->setMinimumIntegerDigits(count - 3);
@@ -2057,7 +2057,7 @@ SimpleDateFormat::zeroPaddingNumber(
         int32_t value, int32_t minDigits, int32_t maxDigits) const
 {
     if (currentNumberFormat!=NULL) {
-        FieldPosition pos(0);
+        FieldPosition pos(FieldPosition::DONT_CARE);
 
         currentNumberFormat->setMinimumIntegerDigits(minDigits);
         currentNumberFormat->setMaximumIntegerDigits(maxDigits);

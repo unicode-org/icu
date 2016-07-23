@@ -1552,7 +1552,7 @@ LocaleTest::Test4105828()
             return;
         }
         UnicodeString result;
-        FieldPosition pos(0);
+        FieldPosition pos(FieldPosition::DONT_CARE);
         fmt->format((int32_t)1, result, pos);
         UnicodeString temp;
         if(result != "100%") {

@@ -122,7 +122,7 @@ if (cur_fr != NULL)
     Formattable fL(l);
 
     UnicodeString res1, res2, res3, res4, res5, res6;
-    FieldPosition pos1(0), pos2(0), pos3(0), pos4(0);
+    FieldPosition pos1(FieldPosition::DONT_CARE), pos2(FieldPosition::DONT_CARE), pos3(FieldPosition::DONT_CARE), pos4(FieldPosition::DONT_CARE);
     
     res1 = cur_fr->format(d, res1);
     logln( (UnicodeString) "" + (int32_t) d + " formatted to " + res1);

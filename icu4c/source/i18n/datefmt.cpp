@@ -319,7 +319,7 @@ DateFormat::format(UDate date, UnicodeString& appendTo) const
 {
     // Note that any error information is just lost.  That's okay
     // for this convenience method.
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPosition::DONT_CARE);
     return format(date, appendTo, fpos);
 }
 

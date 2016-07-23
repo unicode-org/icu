@@ -307,7 +307,7 @@ void DateFormatTest::TestWallyWedel()
          * Format the output.
          */
         UnicodeString fmtOffset;
-        FieldPosition pos(0);
+        FieldPosition pos(FieldPosition::DONT_CARE);
         sdf->format(today,fmtOffset, pos);
         // UnicodeString fmtOffset = tzS.toString();
         UnicodeString *fmtDstOffset = 0;
@@ -2390,7 +2390,7 @@ void DateFormatTest::TestRelative(int daysdelta,
 
     UErrorCode status = U_ZERO_ERROR;
 
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     UnicodeString test;
     Locale en("en");
     DateFormat *fullrelative = DateFormat::createDateInstance(DateFormat::kFullRelative, loc);
@@ -3428,7 +3428,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
         ASSERT_OK(status);
         cal->adoptTimeZone(tz);
         UnicodeString result;
-        FieldPosition pos(0);
+        FieldPosition pos(FieldPosition::DONT_CARE);
         fmt.format(*cal,result,pos);
         if (result != info[4]) {
             errln(info[0] + ";" + info[1] + ";" + info[2] + ";" + info[3] + " expected: '" +
@@ -3941,7 +3941,7 @@ void DateFormatTest::TestFormalChineseDate() {
     }
 
     UDate thedate = date(2009-1900, UCAL_JULY, 28);
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     UnicodeString result;
     sdf->format(thedate,result,pos);
 
@@ -4130,7 +4130,7 @@ void DateFormatTest::TestMonthPatterns()
                         rootChineseCalendar->set(datePtr->year, datePtr->month-1, datePtr->day);
                         rootChineseCalendar->set(UCAL_IS_LEAP_MONTH, datePtr->isLeapMonth);
                         UnicodeString result;
-                        FieldPosition fpos(0);
+                        FieldPosition fpos(FieldPosition::DONT_CARE);
                         dmft->format(*rootChineseCalendar, result, fpos);
                         if ( result.compare(itemPtr->dateString[idate]) != 0 ) {
                             errln( UnicodeString("FAIL: Chinese calendar format for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
@@ -4215,7 +4215,7 @@ void DateFormatTest::TestContext()
            } else {
                sdmft->setContext(itemPtr->capitalizationContext, status);
                UnicodeString result;
-               FieldPosition pos(0);
+               FieldPosition pos(FieldPosition::DONT_CARE);
                sdmft->format(*cal, result, pos);
                if (result.compare(itemPtr->expectedFormat) != 0) {
                    errln(UnicodeString("FAIL: format for locale ") + UnicodeString(itemPtr->locale) +
@@ -4329,7 +4329,7 @@ void DateFormatTest::TestNonGregoFmtParse()
                     cal->set(UCAL_HOUR_OF_DAY, caftItemPtr->hour);
                     cal->set(UCAL_MINUTE, caftItemPtr->minute);
                     UnicodeString result;
-                    FieldPosition fpos(0);
+                    FieldPosition fpos(FieldPosition::DONT_CARE);
                     dfmt->format(*cal, result, fpos);
                     if ( result.compare(caftItemPtr->formattedDate) != 0 ) {
                         errln( UnicodeString("FAIL: date format for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
@@ -4777,7 +4777,7 @@ void DateFormatTest::TestNumberFormatOverride() {
         }
 
         UnicodeString result;
-        FieldPosition pos(0);
+        FieldPosition pos(FieldPosition::DONT_CARE);
         fmt->format(test_date,result, pos);
 
         UnicodeString expected = ((UnicodeString)DATA[i][1]).unescape();;
@@ -4795,7 +4795,7 @@ void DateFormatTest::TestCreateInstanceForSkeleton() {
         return;
     }
     UnicodeString result;
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     fmt->format(date(98, 5-1, 25), result, pos);
     assertEquals("format yMMMMd", "May 25, 1998", result);
     fmt.adoptInstead(DateFormat::createInstanceForSkeleton(
@@ -4819,7 +4819,7 @@ void DateFormatTest::TestCreateInstanceForSkeletonDefault() {
         return;
     }
     UnicodeString result;
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     fmt->format(date(98, 5-1, 25), result, pos);
     assertEquals("format yMMMd", "May 25, 1998", result);
 }
@@ -4836,7 +4836,7 @@ void DateFormatTest::TestCreateInstanceForSkeletonWithCalendar() {
         return;
     }
     UnicodeString result;
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
 
     LocalPointer<Calendar> cal(Calendar::createInstance(
         TimeZone::createTimeZone("GMT-7:00"),
@@ -4904,7 +4904,7 @@ void DateFormatTest::TestChangeCalendar() {
         return;
     }
     UnicodeString result;
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
     fmt->format(date(98, 5-1, 25), result, pos);
     assertEquals("format yMMMd", "Iyar 29, 5758", result);
 }

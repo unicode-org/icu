@@ -183,7 +183,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
 
                 for (int32_t datidx = 0; datidx < nDates; datidx++) {
                     UnicodeString tzstr;
-                    FieldPosition fpos(0);
+                    FieldPosition fpos(FieldPosition::DONT_CARE);
                     // Format
                     sdf->setTimeZone(*tz);
                     sdf->format(DATES[datidx], tzstr, fpos);
@@ -653,7 +653,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                     }
 
                     UnicodeString text;
-                    FieldPosition fpos(0);
+                    FieldPosition fpos(FieldPosition::DONT_CARE);
                     sdf->format(testTimes[testidx], text, fpos);
 
                     UDate parsedDate = sdf->parse(text, status);

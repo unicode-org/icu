@@ -618,7 +618,7 @@ void NumberFormat2Test::TestBenchmark() {
     Locale en("en");
     DecimalFormatSymbols *sym = new DecimalFormatSymbols(en, status);
     DecimalFormat2 fmt(en, "0.0000000", status);
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPostion::DONT_CARE);
     clock_t start = clock();
     for (int32_t i = 0; i < 100000; ++i) {
        UParseError perror;
@@ -637,7 +637,7 @@ void NumberFormat2Test::TestBenchmark2() {
     Locale en("en");
     DecimalFormatSymbols *sym = new DecimalFormatSymbols(en, status);
     DecimalFormat fmt("0.0000000", sym, status);
-    FieldPosition fpos(0);
+    FieldPosition fpos(FieldPostion::DONT_CARE);
     clock_t start = clock();
     for (int32_t i = 0; i < 100000; ++i) {
       UParseError perror;

@@ -164,7 +164,7 @@ if (fr != NULL && it != NULL && de != NULL)
     Formattable fD(d, Formattable::kIsDate);
 
     UnicodeString res1, res2, res3;
-    FieldPosition pos1(0), pos2(0);
+    FieldPosition pos1(FieldPosition::DONT_CARE), pos2(FieldPosition::DONT_CARE);
     
     status = U_ZERO_ERROR;
     res1 = fr->format(d, res1, pos1, status);

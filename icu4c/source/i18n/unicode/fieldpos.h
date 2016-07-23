@@ -58,7 +58,7 @@ U_NAMESPACE_BEGIN
  * to perform partial formatting or to get information about the
  * formatted output (such as the position of a field).
  *
- * The FieldPosition class is not suitable for subclassing.
+ * The FieldPosition class is not intended for public subclassing.
  *
  * <p>
  * Below is an example of using <code>FieldPosition</code> to aid
@@ -109,7 +109,8 @@ class U_I18N_API FieldPosition : public UObject {
 public:
     /**
      * DONT_CARE may be specified as the field to indicate that the
-     * caller doesn't need to specify a field.  Do not subclass.
+     * caller doesn't need to specify a field.
+     * @stable ICU 2.0
      */
     enum { DONT_CARE = -1 };
 
