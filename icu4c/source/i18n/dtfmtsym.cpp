@@ -206,7 +206,6 @@ static const char gErasTag[]="eras";
 static const char gCyclicNameSetsTag[]="cyclicNameSets";
 static const char gNameSetYearsTag[]="years";
 static const char gNameSetZodiacsTag[]="zodiacs";
-static const char gNameSetDayPartsTag[]="dayParts";
 static const char gMonthNamesTag[]="monthNames";
 static const char gMonthPatternsTag[]="monthPatterns";
 static const char gDayNamesTag[]="dayNames";
@@ -215,7 +214,6 @@ static const char gNamesAbbrTag[]="abbreviated";
 static const char gNamesShortTag[]="short";
 static const char gNamesNarrowTag[]="narrow";
 static const char gNamesAllTag[]="all";
-static const char gNamesLeapTag[]="leap";
 static const char gNamesFormatTag[]="format";
 static const char gNamesStandaloneTag[]="stand-alone";
 static const char gNamesNumericTag[]="numeric";
@@ -2021,9 +2019,7 @@ UnicodeString* loadDayPeriodStrings(CalendarDataSink &sink, CharString &path,
 void
 DateFormatSymbols::initializeData(const Locale& locale, const char *type, UErrorCode& status, UBool useLastResortData)
 {
-    int32_t i;
     int32_t len = 0;
-    const UChar *resStr;
     /* In case something goes wrong, initialize all of the data to NULL. */
     fEras = NULL;
     fErasCount = 0;
