@@ -37,7 +37,7 @@ class BytesTrieElement : public UMemory {
 public:
     // Use compiler's default constructor, initializes nothing.
 
-    void setTo(const StringPiece &s, int32_t val, CharString &strings, UErrorCode &errorCode);
+    void setTo(StringPiece s, int32_t val, CharString &strings, UErrorCode &errorCode);
 
     StringPiece getString(const CharString &strings) const {
         int32_t offset=stringOffset;
@@ -88,7 +88,7 @@ private:
 };
 
 void
-BytesTrieElement::setTo(const StringPiece &s, int32_t val,
+BytesTrieElement::setTo(StringPiece s, int32_t val,
                         CharString &strings, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return;

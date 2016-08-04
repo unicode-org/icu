@@ -736,7 +736,7 @@ DigitList::set(int64_t source)
  * be acceptable for a public API.
  */
 void
-DigitList::set(const StringPiece &source, UErrorCode &status, uint32_t /*fastpathBits*/) {
+DigitList::set(StringPiece source, UErrorCode &status, uint32_t /*fastpathBits*/) {
     if (U_FAILURE(status)) {
         return;
     }

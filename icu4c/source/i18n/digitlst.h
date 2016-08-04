@@ -269,7 +269,7 @@ public:
      * @param source The value to be set.  The string must be nul-terminated.
      * @param fastpathBits special flags for fast parsing
      */
-    void set(const StringPiece &source, UErrorCode &status, uint32_t fastpathBits = 0);
+    void set(StringPiece source, UErrorCode &status, uint32_t fastpathBits = 0);
 
     /**
      * Multiply    this = this * arg

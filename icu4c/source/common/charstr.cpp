@@ -146,7 +146,7 @@ UBool CharString::ensureCapacity(int32_t capacity,
     return TRUE;
 }
 
-CharString &CharString::appendPathPart(const StringPiece &s, UErrorCode &errorCode) {
+CharString &CharString::appendPathPart(StringPiece s, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return *this;
     }
