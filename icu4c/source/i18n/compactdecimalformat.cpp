@@ -353,7 +353,7 @@ CompactDecimalFormat::format(
 
 UnicodeString&
 CompactDecimalFormat::format(
-    const StringPiece& /* number */,
+    StringPiece /* number */,
     UnicodeString& appendTo,
     FieldPositionIterator* /* posIter */,
     UErrorCode& status) const {

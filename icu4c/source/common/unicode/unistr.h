@@ -3394,7 +3394,7 @@ protected:
 
 private:
   // For char* constructors. Could be made public.
-  UnicodeString &setToUTF8(const StringPiece &utf8);
+  UnicodeString &setToUTF8(StringPiece utf8);
   // For extract(char*).
   // We could make a toUTF8(target, capacity, errorCode) public but not
   // this version: New API will be cleaner if we make callers create substrings

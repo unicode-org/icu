@@ -156,7 +156,7 @@ private:
             IDNAInfo &info, UErrorCode &errorCode) const;
 
     void
-    processUTF8(const StringPiece &src,
+    processUTF8(StringPiece src,
                 UBool isLabel, UBool toASCII,
                 ByteSink &dest,
                 IDNAInfo &info, UErrorCode &errorCode) const;
@@ -403,7 +403,7 @@ UTS46::process(const UnicodeString &src,
 }
 
 void
-UTS46::processUTF8(const StringPiece &src,
+UTS46::processUTF8(StringPiece src,
                    UBool isLabel, UBool toASCII,
                    ByteSink &dest,
                    IDNAInfo &info, UErrorCode &errorCode) const {

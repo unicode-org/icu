@@ -1301,7 +1301,7 @@ UnicodeString::setTo(UChar *buffer,
   return *this;
 }
 
-UnicodeString &UnicodeString::setToUTF8(const StringPiece &utf8) {
+UnicodeString &UnicodeString::setToUTF8(StringPiece utf8) {
   unBogus();
   int32_t length = utf8.length();
   int32_t capacity;

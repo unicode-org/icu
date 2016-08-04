@@ -427,7 +427,7 @@ DecimalFormatImpl::format(
 
 UnicodeString &
 DecimalFormatImpl::format(
-        const StringPiece &number,
+        StringPiece number,
         UnicodeString &appendTo,
         FieldPositionIterator *posIter,
         UErrorCode &status) const {
