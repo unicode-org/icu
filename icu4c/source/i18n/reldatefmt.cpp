@@ -452,7 +452,6 @@ struct RelDateTimeFmtDataSink : public ResourceTableSink {
     UDateRelativeDateTimeFormatterStyle style;  // {LONG, SHORT, NARROW}
     RelAbsUnit genericUnit;
     int32_t relUnitIndex;
-    int32_t absUnitIndex;
 
     RelativeDateTimeCacheData &outputData;
 
