@@ -479,13 +479,27 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }*/
 
     /**
-     * @internal CLDR
+     * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public static int getAppendFormatNumber(UResource.Key key) {
         for (int i = 0; i < CLDR_FIELD_APPEND.length; ++i) {
             if (key.contentEquals(CLDR_FIELD_APPEND[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * @internal CLDR
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static int getAppendFormatNumber(String string) {
+        for (int i = 0; i < CLDR_FIELD_APPEND.length; ++i) {
+            if (CLDR_FIELD_APPEND[i].equals(string)) {
                 return i;
             }
         }
