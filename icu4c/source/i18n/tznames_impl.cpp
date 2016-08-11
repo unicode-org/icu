@@ -1050,7 +1050,7 @@ TimeZoneNamesImpl::initialize(const Locale& locale, UErrorCode& status) {
     TimeZone *tz = TimeZone::createDefault();
     const UChar *tzID = ZoneMeta::getCanonicalCLDRID(*tz);
     if (tzID != NULL) {
-        loadStrings(UnicodeString(tzID));
+        loadStrings(UnicodeString(tzID), status);
     }
     delete tz;
 
@@ -1062,20 +1062,15 @@ TimeZoneNamesImpl::initialize(const Locale& locale, UErrorCode& status) {
  * except initializer.
  */
 void
-TimeZoneNamesImpl::loadStrings(const UnicodeString& tzCanonicalID) {
-    loadTimeZoneNames(tzCanonicalID);
+TimeZoneNamesImpl::loadStrings(const UnicodeString& tzCanonicalID, UErrorCode& status) {
+    loadTimeZoneNames(tzCanonicalID, status);
+    LocalPointer<StringEnumeration> mzIDs(getAvailableMetaZoneIDs(tzCanonicalID, status));
+    if (U_FAILURE(status)) { return; }
+    U_ASSERT(!mzIDs.isNull());
 
-    UErrorCode status = U_ZERO_ERROR;
-    StringEnumeration *mzIDs = getAvailableMetaZoneIDs(tzCanonicalID, status);
-    if (U_SUCCESS(status) && mzIDs != NULL) {
-        const UnicodeString *mzID;
-        while ((mzID = mzIDs->snext(status))) {
-            if (U_FAILURE(status)) {
-                break;
-            }
-            loadMetaZoneNames(*mzID);
-        }
-        delete mzIDs;
+    const UnicodeString *mzID;
+    while ((mzID = mzIDs->snext(status)) && U_SUCCESS(status)) {
+        loadMetaZoneNames(*mzID, status);
     }
 }
 
@@ -1196,7 +1191,6 @@ TimeZoneNamesImpl::_getReferenceZoneID(const UnicodeString& mzID, const char* re
     return tzID;
 }
 
-
 UnicodeString&
 TimeZoneNamesImpl::getMetaZoneDisplayName(const UnicodeString& mzID,
                                           UTimeZoneNameType type,
@@ -1211,7 +1205,9 @@ TimeZoneNamesImpl::getMetaZoneDisplayName(const UnicodeString& mzID,
 
     {
         Mutex lock(&gDataMutex);
-        znames = nonConstThis->loadMetaZoneNames(mzID);
+        UErrorCode status = U_ZERO_ERROR;
+        znames = nonConstThis->loadMetaZoneNames(mzID, status);
+        if (U_FAILURE(status)) { return name; }
     }
 
     if (znames != NULL) {
@@ -1235,7 +1231,9 @@ TimeZoneNamesImpl::getTimeZoneDisplayName(const UnicodeString& tzID, UTimeZoneNa
 
     {
         Mutex lock(&gDataMutex);
-        tznames = nonConstThis->loadTimeZoneNames(tzID);
+        UErrorCode status = U_ZERO_ERROR;
+        tznames = nonConstThis->loadTimeZoneNames(tzID, status);
+        if (U_FAILURE(status)) { return name; }
     }
 
     if (tznames != NULL) {
@@ -1256,7 +1254,9 @@ TimeZoneNamesImpl::getExemplarLocationName(const UnicodeString& tzID, UnicodeStr
 
     {
         Mutex lock(&gDataMutex);
-        tznames = nonConstThis->loadTimeZoneNames(tzID);
+        UErrorCode status = U_ZERO_ERROR;
+        tznames = nonConstThis->loadTimeZoneNames(tzID, status);
+        if (U_FAILURE(status)) { return name; }
     }
 
     if (tznames != NULL) {
@@ -1290,14 +1290,13 @@ static void mergeTimeZoneKey(const UnicodeString& mzID, char* result) {
  * This method updates the cache and must be called with a lock
  */
 ZNames*
-TimeZoneNamesImpl::loadMetaZoneNames(const UnicodeString& mzID) {
+TimeZoneNamesImpl::loadMetaZoneNames(const UnicodeString& mzID, UErrorCode& status) {
+    if (U_FAILURE(status)) { return NULL; }
     U_ASSERT(mzID.length() <= ZID_KEY_MAX - MZ_PREFIX_LEN);
-
-    UErrorCode status = U_ZERO_ERROR;
 
     UChar mzIDKey[ZID_KEY_MAX + 1];
     mzID.extract(mzIDKey, ZID_KEY_MAX + 1, status);
-    U_ASSERT(status == U_ZERO_ERROR);   // already checked length above
+    U_ASSERT(U_SUCCESS(status));   // already checked length above
     mzIDKey[mzID.length()] = 0;
 
     void* mznames = uhash_get(fMZNamesMap, mzIDKey);
@@ -1319,14 +1318,13 @@ TimeZoneNamesImpl::loadMetaZoneNames(const UnicodeString& mzID) {
  * This method updates the cache and must be called with a lock
  */
 ZNames*
-TimeZoneNamesImpl::loadTimeZoneNames(const UnicodeString& tzID) {
+TimeZoneNamesImpl::loadTimeZoneNames(const UnicodeString& tzID, UErrorCode& status) {
+    if (U_FAILURE(status)) { return NULL; }
     U_ASSERT(tzID.length() <= ZID_KEY_MAX);
-
-    UErrorCode status = U_ZERO_ERROR;
 
     UChar tzIDKey[ZID_KEY_MAX + 1];
     int32_t tzIDKeyLen = tzID.extract(tzIDKey, ZID_KEY_MAX + 1, status);
-    U_ASSERT(status == U_ZERO_ERROR);   // already checked length above
+    U_ASSERT(U_SUCCESS(status));   // already checked length above
     tzIDKey[tzIDKeyLen] = 0;
 
     void *tznames = uhash_get(fTZNamesMap, tzIDKey);
@@ -1582,6 +1580,61 @@ void TimeZoneNamesImpl::loadAllDisplayNames(UErrorCode& status) {
     }
 }
 
+void TimeZoneNamesImpl::getDisplayNames(const UnicodeString& tzID,
+        const UTimeZoneNameType types[], int32_t numTypes,
+        UDate date, UnicodeString dest[], UErrorCode& status) const {
+    if (U_FAILURE(status)) return;
+
+    if (tzID.isEmpty()) { return; }
+    void* tznames = NULL;
+    void* mznames = NULL;
+    TimeZoneNamesImpl *nonConstThis = const_cast<TimeZoneNamesImpl*>(this);
+
+    // Load the time zone strings
+    {
+        Mutex lock(&gDataMutex);
+        tznames = (void*) nonConstThis->loadTimeZoneNames(tzID, status);
+        if (U_FAILURE(status)) { return; }
+    }
+    U_ASSERT(tznames != NULL);
+
+    // Load the values into the dest array
+    for (int i = 0; i < numTypes; i++) {
+        UTimeZoneNameType type = types[i];
+        const UChar* name = ((ZNames*)tznames)->getName(type);
+        if (name == NULL) {
+            if (mznames == NULL) {
+                // Load the meta zone name
+                UnicodeString mzID;
+                getMetaZoneID(tzID, date, mzID);
+                if (mzID.isEmpty()) {
+                    mznames = (void*) EMPTY;
+                } else {
+                    // Load the meta zone strings
+                    // Mutex is scoped to the "else" statement
+                    Mutex lock(&gDataMutex);
+                    mznames = (void*) nonConstThis->loadMetaZoneNames(mzID, status);
+                    if (U_FAILURE(status)) { return; }
+                    // Note: when the metazone doesn't exist, in Java, loadMetaZoneNames returns
+                    // a dummy object instead of NULL.
+                    if (mznames == NULL) {
+                        mznames = (void*) EMPTY;
+                    }
+                }
+            }
+            U_ASSERT(mznames != NULL);
+            if (mznames != EMPTY) {
+                name = ((ZNames*)mznames)->getName(type);
+            }
+        }
+        if (name != NULL) {
+            dest[i].setTo(TRUE, name, -1);
+        } else {
+            dest[i].setToBogus();
+        }
+    }
+}
+
 // Caller must synchronize.
 void TimeZoneNamesImpl::internalLoadAllDisplayNames(UErrorCode& status) {
     if (!fNamesFullyLoaded) {
@@ -1604,8 +1657,8 @@ void TimeZoneNamesImpl::internalLoadAllDisplayNames(UErrorCode& status) {
                 UnicodeString copy(*id);
                 void* value = uhash_get(fTZNamesMap, copy.getTerminatedBuffer());
                 if (value == NULL) {
-                    // loadStrings also load related metazone strings
-                    loadStrings(*id);
+                    // loadStrings also loads related metazone strings
+                    loadStrings(*id, status);
                 }
             }
         }

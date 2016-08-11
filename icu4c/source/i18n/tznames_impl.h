@@ -186,8 +186,8 @@ public:
 
     TimeZoneNames::MatchInfoCollection* find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const;
 
-    void loadAllDisplayNames(UErrorCode& errorCode);
-    void internalLoadAllDisplayNames(UErrorCode& errorCode);
+    void loadAllDisplayNames(UErrorCode& status);
+    void getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[], UErrorCode& status) const;
 
     static UnicodeString& getDefaultExemplarLocationName(const UnicodeString& tzID, UnicodeString& name);
 
@@ -212,13 +212,15 @@ private:
     void initialize(const Locale& locale, UErrorCode& status);
     void cleanup();
 
-    void loadStrings(const UnicodeString& tzCanonicalID);
+    void loadStrings(const UnicodeString& tzCanonicalID, UErrorCode& status);
 
-    ZNames* loadMetaZoneNames(const UnicodeString& mzId);
-    ZNames* loadTimeZoneNames(const UnicodeString& mzId);
+    ZNames* loadMetaZoneNames(const UnicodeString& mzId, UErrorCode& status);
+    ZNames* loadTimeZoneNames(const UnicodeString& mzId, UErrorCode& status);
     TimeZoneNames::MatchInfoCollection* doFind(ZNameSearchHandler& handler,
         const UnicodeString& text, int32_t start, UErrorCode& status) const;
     void addAllNamesIntoTrie(UErrorCode& errorCode);
+
+    void internalLoadAllDisplayNames(UErrorCode& status);
 
     struct ZoneStringsLoader;
 };
