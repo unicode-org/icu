@@ -1025,7 +1025,8 @@ collectCurrencyNames(const char* locale,
             (*currencySymbols)[(*total_currency_symbol_count)++].currencyNameLen = len;
             // Add equivalent symbols
             if (currencySymbolsEquiv != NULL) {
-                icu::EquivIterator iter(*currencySymbolsEquiv, UnicodeString(TRUE, s, len));
+                UnicodeString str(TRUE, s, len);
+                icu::EquivIterator iter(*currencySymbolsEquiv, str);
                 const UnicodeString *symbol;
                 while ((symbol = iter.next()) != NULL) {
                     (*currencySymbols)[*total_currency_symbol_count].IsoCode = iso;
