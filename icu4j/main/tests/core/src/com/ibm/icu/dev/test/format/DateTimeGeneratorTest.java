@@ -1463,4 +1463,16 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
         assertEquals("German pattern 'yMdHms' - getInstance with Java Locale", patUloc, patLoc);
     }
+
+    /* Tests the method
+     *    public static int getAppendFormatNumber(String string)
+     */
+    @Test
+    public void TestGetAppendFormatNumber(){
+        int fieldNum;
+        fieldNum = DateTimePatternGenerator.getAppendFormatNumber("Era");
+        assertEquals("DateTimePatternGenerator.getAppendFormatNumber for Era", 0, fieldNum);
+        fieldNum = DateTimePatternGenerator.getAppendFormatNumber("Timezone");
+        assertEquals("DateTimePatternGenerator.getAppendFormatNumber for Timezone", 15, fieldNum);
+    }
 }
