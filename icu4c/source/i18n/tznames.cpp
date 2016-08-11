@@ -119,6 +119,7 @@ public:
     UnicodeString& getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const;
 
     void loadAllDisplayNames(UErrorCode& status);
+    void getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[], UErrorCode& status) const;
 
     MatchInfoCollection* find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const;
 private:
@@ -287,6 +288,11 @@ TimeZoneNamesDelegate::loadAllDisplayNames(UErrorCode& status) {
     fTZnamesCacheEntry->names->loadAllDisplayNames(status);
 }
 
+void
+TimeZoneNamesDelegate::getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[], UErrorCode& status) const {
+    fTZnamesCacheEntry->names->getDisplayNames(tzID, types, numTypes, date, dest, status);
+}
+
 TimeZoneNames::MatchInfoCollection*
 TimeZoneNamesDelegate::find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const {
     return fTZnamesCacheEntry->names->find(text, start, types, status);
@@ -339,26 +345,26 @@ TimeZoneNames::getDisplayName(const UnicodeString& tzID, UTimeZoneNameType type,
     return name;
 }
 
+// Empty default implementation, to be overriden in tznames_impl.cpp.
 void
-TimeZoneNames::loadAllDisplayNames(UErrorCode& status) {
-    return loadAllDisplayNames(status);
+TimeZoneNames::loadAllDisplayNames(UErrorCode& /*status*/) {
 }
 
+// A default, lightweight implementation of getDisplayNames.
+// Overridden in tznames_impl.cpp.
 void
-TimeZoneNames::getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[]) const {
+TimeZoneNames::getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[], UErrorCode& status) const {
+    if (U_FAILURE(status)) { return; }
     if (tzID.isEmpty()) { return; }
     UnicodeString mzID;
     for (int i = 0; i < numTypes; i++) {
-        UnicodeString name;
-        UTimeZoneNameType type = types[i];
-        getTimeZoneDisplayName(tzID, type, name);
-        if (name.isEmpty()) {
+        getTimeZoneDisplayName(tzID, types[i], dest[i]);
+        if (dest[i].isEmpty()) {
             if (mzID.isEmpty()) {
                 getMetaZoneID(tzID, date, mzID);
             }
-            getMetaZoneDisplayName(mzID, type, name);
+            getMetaZoneDisplayName(mzID, types[i], dest[i]);
         }
-        dest[i].setTo(name);
     }
 }
 

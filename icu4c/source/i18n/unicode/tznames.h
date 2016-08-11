@@ -300,7 +300,7 @@ public:
      * @internal For specific users only until proposed publicly.
      * @deprecated This API is ICU internal only.
      */
-    virtual void getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[]) const;
+    virtual void getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[], UErrorCode& status) const;
 
     /**
      * <code>MatchInfoCollection</code> represents a collection of time zone name matches used by

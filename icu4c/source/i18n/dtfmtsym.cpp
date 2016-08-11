@@ -1323,7 +1323,7 @@ DateFormatSymbols::initZoneStringsArray(void) {
             }
 
             zarray[i][0].setTo(*tzid);
-            tzNames->getDisplayNames(*tzid, TYPES, NUM_TYPES, now, zarray[i]+1);
+            tzNames->getDisplayNames(*tzid, TYPES, NUM_TYPES, now, zarray[i]+1, status);
             i++;
         }
 
@@ -1337,6 +1337,7 @@ DateFormatSymbols::initZoneStringsArray(void) {
                 }
             }
             uprv_free(zarray);
+            zarray = NULL;
         }
     }
 
