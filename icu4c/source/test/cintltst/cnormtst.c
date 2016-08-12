@@ -666,12 +666,12 @@ void TestCheckFCD()
     UChar nfd[100];
     int normsize = 0;
     int nfdsize = 0;
-    
+
     while (size != 19) {
-      data[size] = datachar[(rand() * 50) / RAND_MAX];
+      data[size] = datachar[rand() % UPRV_LENGTHOF(datachar)];
       log_verbose("0x%x", data[size]);
-      normsize += unorm_normalize(data + size, 1, UNORM_NFD, 0, 
-                                  norm + normsize, 100 - normsize, &status);       
+      normsize += unorm_normalize(data + size, 1, UNORM_NFD, 0,
+                                  norm + normsize, 100 - normsize, &status);
       if (U_FAILURE(status)) {
         log_data_err("unorm_quickCheck(FCD) failed: exception occured at data generation - (Are you missing data?)\n");
         break;
@@ -680,8 +680,8 @@ void TestCheckFCD()
     }
     log_verbose("\n");
 
-    nfdsize = unorm_normalize(data, size, UNORM_NFD, 0, 
-                              nfd, 100, &status);       
+    nfdsize = unorm_normalize(data, size, UNORM_NFD, 0,
+                              nfd, 100, &status);
     if (U_FAILURE(status)) {
       log_data_err("unorm_quickCheck(FCD) failed: exception occured at normalized data generation - (Are you missing data?)\n");
     }
