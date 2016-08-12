@@ -997,12 +997,9 @@ public final class RelativeDateTimeFormatter {
         EnumMap<Style, EnumMap<RelativeUnit, String[][]>> styleRelUnitPatterns =
                 new EnumMap<Style, EnumMap<RelativeUnit, String[][]>>(Style.class);
 
-        private ULocale ulocale = null;
-
         StringBuilder sb = new StringBuilder();
 
-        public RelDateTimeFmtDataSink(ULocale locale) {
-            ulocale = locale;
+        public RelDateTimeFmtDataSink() {
         }
 
         // Values keep between levels of parsing the CLDR data.
@@ -1227,7 +1224,7 @@ public final class RelativeDateTimeFormatter {
 
         public RelativeDateTimeFormatterData load() {
             // Sink for traversing data.
-            RelDateTimeFmtDataSink sink = new RelDateTimeFmtDataSink(ulocale);
+            RelDateTimeFmtDataSink sink = new RelDateTimeFmtDataSink();
             ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
                     getBundleInstance(ICUData.ICU_BASE_NAME, ulocale);
 
