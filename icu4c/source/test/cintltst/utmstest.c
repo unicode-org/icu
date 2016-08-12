@@ -65,7 +65,7 @@ static int64_t ranMax;
 
 static void initRandom(int64_t min, int64_t max)
 {
-    uint64_t interval = max - min;
+    uint64_t interval = (uint64_t)max - (uint64_t)min;
 
     ranMin = min;
     ranMax = max;

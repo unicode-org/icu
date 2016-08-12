@@ -344,7 +344,7 @@ packDiff(int32_t diff) {
     } while(--count>0);
 
     /* add lead byte */
-    result|=(lead+diff)<<shift;
+    result |= (uint32_t)(lead+diff)<<shift;
 
     return result;
 }
