@@ -257,8 +257,6 @@ private:
     UDateFormatStyle fDateStyle;
     Locale  fLocale;
 
-    int32_t fDayMin;    // day id of lowest #
-    int32_t fDayMax;    // day id of highest #
     int32_t fDatesLen;    // Length of array
     URelativeString *fDates; // array of strings
 
