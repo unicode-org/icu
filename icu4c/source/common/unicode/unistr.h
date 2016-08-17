@@ -3279,7 +3279,7 @@ public:
    * @see toUTF8String
    * @stable ICU 4.2
    */
-  static UnicodeString fromUTF8(const StringPiece &utf8);
+  static UnicodeString fromUTF8(StringPiece utf8);
 
   /**
    * Create a UnicodeString from a UTF-32 string.

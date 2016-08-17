@@ -830,7 +830,7 @@ DecimalFormat::format(  double number,
 
 
 UnicodeString&
-DecimalFormat::format(const StringPiece &number,
+DecimalFormat::format(StringPiece number,
                       UnicodeString &toAppendTo,
                       FieldPositionIterator *posIter,
                       UErrorCode &status) const

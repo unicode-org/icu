@@ -136,7 +136,7 @@ public:
      *                decimal number.
      * @stable ICU 4.4
      */
-    Formattable(const StringPiece &number, UErrorCode &status);
+    Formattable(StringPiece number, UErrorCode &status);
 
     /**
      * Creates a Formattable object with a UnicodeString object to copy from.
@@ -583,7 +583,7 @@ public:
      *                      incoming string is not a valid decimal number.
      * @stable ICU 4.4
      */
-    void             setDecimalNumber(const StringPiece &numberString,
+    void             setDecimalNumber(StringPiece numberString,
                                       UErrorCode &status);
 
     /**

@@ -200,7 +200,7 @@ public:
      * @stable ICU 4.6
      */
     virtual void
-    labelToASCII_UTF8(const StringPiece &label, ByteSink &dest,
+    labelToASCII_UTF8(StringPiece label, ByteSink &dest,
                       IDNAInfo &info, UErrorCode &errorCode) const;
 
     /**
@@ -218,7 +218,7 @@ public:
      * @stable ICU 4.6
      */
     virtual void
-    labelToUnicodeUTF8(const StringPiece &label, ByteSink &dest,
+    labelToUnicodeUTF8(StringPiece label, ByteSink &dest,
                        IDNAInfo &info, UErrorCode &errorCode) const;
 
     /**
@@ -236,7 +236,7 @@ public:
      * @stable ICU 4.6
      */
     virtual void
-    nameToASCII_UTF8(const StringPiece &name, ByteSink &dest,
+    nameToASCII_UTF8(StringPiece name, ByteSink &dest,
                      IDNAInfo &info, UErrorCode &errorCode) const;
 
     /**
@@ -254,7 +254,7 @@ public:
      * @stable ICU 4.6
      */
     virtual void
-    nameToUnicodeUTF8(const StringPiece &name, ByteSink &dest,
+    nameToUnicodeUTF8(StringPiece name, ByteSink &dest,
                       IDNAInfo &info, UErrorCode &errorCode) const;
 };
 
