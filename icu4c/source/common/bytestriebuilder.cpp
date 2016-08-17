@@ -145,7 +145,7 @@ BytesTrieBuilder::~BytesTrieBuilder() {
 }
 
 BytesTrieBuilder &
-BytesTrieBuilder::add(const StringPiece &s, int32_t value, UErrorCode &errorCode) {
+BytesTrieBuilder::add(StringPiece s, int32_t value, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return *this;
     }

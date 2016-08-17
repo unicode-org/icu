@@ -1091,7 +1091,7 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable 4.4
      */
-    virtual UnicodeString& format(const StringPiece &number,
+    virtual UnicodeString& format(StringPiece number,
                                   UnicodeString& appendTo,
                                   FieldPositionIterator* posIter,
                                   UErrorCode& status) const;

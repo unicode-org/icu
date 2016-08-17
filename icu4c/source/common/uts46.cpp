@@ -70,7 +70,7 @@ isASCIIOkBiDi(const char *s, int32_t length);
 IDNA::~IDNA() {}
 
 void
-IDNA::labelToASCII_UTF8(const StringPiece &label, ByteSink &dest,
+IDNA::labelToASCII_UTF8(StringPiece label, ByteSink &dest,
                         IDNAInfo &info, UErrorCode &errorCode) const {
     if(U_SUCCESS(errorCode)) {
         UnicodeString destString;
@@ -80,7 +80,7 @@ IDNA::labelToASCII_UTF8(const StringPiece &label, ByteSink &dest,
 }
 
 void
-IDNA::labelToUnicodeUTF8(const StringPiece &label, ByteSink &dest,
+IDNA::labelToUnicodeUTF8(StringPiece label, ByteSink &dest,
                          IDNAInfo &info, UErrorCode &errorCode) const {
     if(U_SUCCESS(errorCode)) {
         UnicodeString destString;
@@ -90,7 +90,7 @@ IDNA::labelToUnicodeUTF8(const StringPiece &label, ByteSink &dest,
 }
 
 void
-IDNA::nameToASCII_UTF8(const StringPiece &name, ByteSink &dest,
+IDNA::nameToASCII_UTF8(StringPiece name, ByteSink &dest,
                        IDNAInfo &info, UErrorCode &errorCode) const {
     if(U_SUCCESS(errorCode)) {
         UnicodeString destString;
@@ -100,7 +100,7 @@ IDNA::nameToASCII_UTF8(const StringPiece &name, ByteSink &dest,
 }
 
 void
-IDNA::nameToUnicodeUTF8(const StringPiece &name, ByteSink &dest,
+IDNA::nameToUnicodeUTF8(StringPiece name, ByteSink &dest,
                         IDNAInfo &info, UErrorCode &errorCode) const {
     if(U_SUCCESS(errorCode)) {
         UnicodeString destString;
@@ -133,19 +133,19 @@ public:
                   IDNAInfo &info, UErrorCode &errorCode) const;
 
     virtual void
-    labelToASCII_UTF8(const StringPiece &label, ByteSink &dest,
+    labelToASCII_UTF8(StringPiece label, ByteSink &dest,
                       IDNAInfo &info, UErrorCode &errorCode) const;
 
     virtual void
-    labelToUnicodeUTF8(const StringPiece &label, ByteSink &dest,
+    labelToUnicodeUTF8(StringPiece label, ByteSink &dest,
                        IDNAInfo &info, UErrorCode &errorCode) const;
 
     virtual void
-    nameToASCII_UTF8(const StringPiece &name, ByteSink &dest,
+    nameToASCII_UTF8(StringPiece name, ByteSink &dest,
                      IDNAInfo &info, UErrorCode &errorCode) const;
 
     virtual void
-    nameToUnicodeUTF8(const StringPiece &name, ByteSink &dest,
+    nameToUnicodeUTF8(StringPiece name, ByteSink &dest,
                       IDNAInfo &info, UErrorCode &errorCode) const;
 
 private:
@@ -253,25 +253,25 @@ UTS46::nameToUnicode(const UnicodeString &name, UnicodeString &dest,
 }
 
 void
-UTS46::labelToASCII_UTF8(const StringPiece &label, ByteSink &dest,
+UTS46::labelToASCII_UTF8(StringPiece label, ByteSink &dest,
                          IDNAInfo &info, UErrorCode &errorCode) const {
     processUTF8(label, TRUE, TRUE, dest, info, errorCode);
 }
 
 void
-UTS46::labelToUnicodeUTF8(const StringPiece &label, ByteSink &dest,
+UTS46::labelToUnicodeUTF8(StringPiece label, ByteSink &dest,
                           IDNAInfo &info, UErrorCode &errorCode) const {
     processUTF8(label, TRUE, FALSE, dest, info, errorCode);
 }
 
 void
-UTS46::nameToASCII_UTF8(const StringPiece &name, ByteSink &dest,
+UTS46::nameToASCII_UTF8(StringPiece name, ByteSink &dest,
                         IDNAInfo &info, UErrorCode &errorCode) const {
     processUTF8(name, FALSE, TRUE, dest, info, errorCode);
 }
 
 void
-UTS46::nameToUnicodeUTF8(const StringPiece &name, ByteSink &dest,
+UTS46::nameToUnicodeUTF8(StringPiece name, ByteSink &dest,
                          IDNAInfo &info, UErrorCode &errorCode) const {
     processUTF8(name, FALSE, FALSE, dest, info, errorCode);
 }

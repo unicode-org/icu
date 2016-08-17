@@ -417,7 +417,7 @@ UnicodeString::~UnicodeString()
 // Factory methods
 //========================================
 
-UnicodeString UnicodeString::fromUTF8(const StringPiece &utf8) {
+UnicodeString UnicodeString::fromUTF8(StringPiece utf8) {
   UnicodeString result;
   result.setToUTF8(utf8);
   return result;

@@ -66,7 +66,7 @@ public:
      * @return *this
      * @stable ICU 4.8
      */
-    BytesTrieBuilder &add(const StringPiece &s, int32_t value, UErrorCode &errorCode);
+    BytesTrieBuilder &add(StringPiece s, int32_t value, UErrorCode &errorCode);
 
     /**
      * Builds a BytesTrie for the add()ed data.

@@ -452,7 +452,7 @@ NumberFormat::format(int64_t number,
 //       XXXFormat::format(double
 
 UnicodeString&
-NumberFormat::format(const StringPiece &decimalNum,
+NumberFormat::format(StringPiece decimalNum,
                      UnicodeString& toAppendTo,
                      FieldPositionIterator* fpi,
                      UErrorCode& status) const
