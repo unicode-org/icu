@@ -1,8 +1,6 @@
-# Copyright (C) 2016 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html
 # Original file:
 # IdnaMappingTable-9.0.0.txt
-# Date: 2016-03-11, 09:01:52 GMT
+# Date: 2016-06-16, 13:35:01 GMT
 # © 2016 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
