@@ -49,7 +49,7 @@ public class RelativeDateFormat extends DateFormat {
     }
 
     // copy c'tor?
-    
+
     /**
      * @param timeStyle The time style for the date and time.
      * @param dateStyle The date style for the date and time.
@@ -104,6 +104,7 @@ public class RelativeDateFormat extends DateFormat {
     /* (non-Javadoc)
      * @see com.ibm.icu.text.DateFormat#format(com.ibm.icu.util.Calendar, java.lang.StringBuffer, java.text.FieldPosition)
      */
+    @Override
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
             FieldPosition fieldPosition) {
 
@@ -181,6 +182,7 @@ public class RelativeDateFormat extends DateFormat {
     /* (non-Javadoc)
      * @see com.ibm.icu.text.DateFormat#parse(java.lang.String, com.ibm.icu.util.Calendar, java.text.ParsePosition)
      */
+    @Override
     public void parse(String text, Calendar cal, ParsePosition pos) {
         throw new UnsupportedOperationException("Relative Date parse is not implemented yet");
     }
@@ -188,8 +190,9 @@ public class RelativeDateFormat extends DateFormat {
     /* (non-Javadoc)
      * @see com.ibm.icu.text.DateFormat#setContext(com.ibm.icu.text.DisplayContext)
      * Here we override the DateFormat implementation in order to
-     * lazily initialize relevant items 
+     * lazily initialize relevant items
      */
+    @Override
     public void setContext(DisplayContext context) {
         super.setContext(context);
         if (!capitalizationInfoIsSet &&
@@ -207,7 +210,7 @@ public class RelativeDateFormat extends DateFormat {
     private DateFormat fDateFormat; // keep for serialization compatibility
     @SuppressWarnings("unused")
     private DateFormat fTimeFormat; // now unused, keep for serialization compatibility
-    private MessageFormat fCombinedFormat; //  the {0} {1} format. 
+    private MessageFormat fCombinedFormat; //  the {0} {1} format.
     private SimpleDateFormat fDateTimeFormat = null; // the held date/time formatter
     private String fDatePattern = null;
     private String fTimePattern = null;
@@ -217,7 +220,7 @@ public class RelativeDateFormat extends DateFormat {
     ULocale  fLocale;
 
     private transient List<URelativeString> fDates = null;
-    
+
     private boolean combinedFormatHasDateAtStart = false;
     private boolean capitalizationInfoIsSet = false;
     private boolean capitalizationOfRelativeUnitsForListOrMenu = false;
@@ -270,7 +273,7 @@ public class RelativeDateFormat extends DateFormat {
         }
     }
 
-    /** 
+    /**
      * Load the Date string array
      */
     private synchronized void loadDates() {
@@ -283,7 +286,7 @@ public class RelativeDateFormat extends DateFormat {
     }
 
     /**
-     * Set capitalizationOfRelativeUnitsForListOrMenu, capitalizationOfRelativeUnitsForStandAlone 
+     * Set capitalizationOfRelativeUnitsForListOrMenu, capitalizationOfRelativeUnitsForStandAlone
      */
     private void initCapitalizationContextInfo(ULocale locale) {
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
@@ -310,7 +313,7 @@ public class RelativeDateFormat extends DateFormat {
         int dayDiff = until.get(Calendar.JULIAN_DAY) - nowCal.get(Calendar.JULIAN_DAY);
         return dayDiff;
     }
-    
+
     /**
      * initializes fCalendar from parameters.  Returns fCalendar as a convenience.
      * @param zone  Zone to be adopted, or NULL for TimeZone::createDefault().
@@ -332,35 +335,22 @@ public class RelativeDateFormat extends DateFormat {
     private MessageFormat initializeCombinedFormat(Calendar cal, ULocale locale) {
         String pattern = "{1} {0}";
         try {
-            CalendarData calData = new CalendarData(locale, cal.getType());
-            String[] patterns = calData.getDateTimePatterns();
-            if (patterns != null && patterns.length >= 9) {
+            ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+                ICUData.ICU_BASE_NAME, locale);
+            String resourcePath = "calendar/gregorian/DateTimePatterns";
+            ICUResourceBundle patternsRb= rb.findWithFallback(resourcePath);
+
+            if (patternsRb != null && patternsRb.getSize() >= 9) {
                 int glueIndex = 8;
-                if (patterns.length >= 13)
-                {
-                    switch (fDateStyle)
-                    {
-                        case DateFormat.RELATIVE_FULL:
-                        case DateFormat.FULL:
-                            glueIndex += (DateFormat.FULL + 1);
-                            break;
-                        case DateFormat.RELATIVE_LONG:
-                        case DateFormat.LONG:
-                            glueIndex += (DateFormat.LONG +1);
-                            break;
-                        case DateFormat.RELATIVE_MEDIUM:
-                        case DateFormat.MEDIUM:
-                            glueIndex += (DateFormat.MEDIUM +1);
-                            break;
-                        case DateFormat.RELATIVE_SHORT:
-                        case DateFormat.SHORT:
-                            glueIndex += (DateFormat.SHORT + 1);
-                            break;
-                        default:
-                            break;
-                    }
+                if (patternsRb.getSize() >= 13) {
+                    if (fDateStyle >= DateFormat.FULL && fDateStyle <= DateFormat.SHORT) {
+                        glueIndex += fDateStyle + 1;
+                    } else
+                        if (fDateStyle >= DateFormat.RELATIVE_FULL && fDateStyle <= DateFormat.RELATIVE_SHORT) {
+                            glueIndex += fDateStyle + 1 - DateFormat.RELATIVE;
+                        }
                 }
-                pattern = patterns[glueIndex];
+                pattern = patternsRb.getString(glueIndex);
             }
         } catch (MissingResourceException e) {
             // use default
