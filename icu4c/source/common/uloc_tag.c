@@ -579,6 +579,14 @@ _addExtensionToList(ExtensionListEntry **first, ExtensionListEntry *ext, UBool l
                     cmp = LDMLEXT - *(cur->key);
                 } else {
                     cmp = uprv_compareInvCharsAsAscii(ext->key, cur->key);
+                    /* Both are u extension keys - we need special handling for 'attribute' */
+                    if (cmp != 0) {
+                        if (uprv_strcmp(cur->key, LOCALE_ATTRIBUTE_KEY) == 0) {
+                            cmp = 1;
+                        } else if (uprv_strcmp(ext->key, LOCALE_ATTRIBUTE_KEY) == 0) {
+                            cmp = -1;
+                        }
+                    }
                 }
             } else {
                 cmp = uprv_compareInvCharsAsAscii(ext->key, cur->key);
@@ -894,7 +902,6 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
     char buf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
     char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY] = { 0 };
     int32_t attrBufLength = 0;
-    UBool isAttribute = FALSE;
     UEnumeration *keywordEnum = NULL;
     int32_t reslen = 0;
 
@@ -921,7 +928,6 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
         UBool isBcpUExt;
 
         while (TRUE) {
-            isAttribute = FALSE;
             key = uenum_next(keywordEnum, NULL, status);
             if (key == NULL) {
                 break;
@@ -943,7 +949,6 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
 
             /* special keyword used for representing Unicode locale attributes */
             if (uprv_strcmp(key, LOCALE_ATTRIBUTE_KEY) == 0) {
-                isAttribute = TRUE;
                 if (len > 0) {
                     int32_t i = 0;
                     while (TRUE) {
@@ -986,6 +991,9 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                             }
                         }
                     }
+                    /* for a place holder ExtensionListEntry */
+                    bcpKey = LOCALE_ATTRIBUTE_KEY;
+                    bcpValue = NULL;
                 }
             } else if (isBcpUExt) {
                 bcpKey = uloc_toUnicodeLocaleKey(key);
@@ -1065,22 +1073,20 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                 }
             }
 
-            if (!isAttribute) {
-                /* create ExtensionListEntry */
-                ext = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
-                if (ext == NULL) {
-                    *status = U_MEMORY_ALLOCATION_ERROR;
-                    break;
-                }
-                ext->key = bcpKey;
-                ext->value = bcpValue;
+            /* create ExtensionListEntry */
+            ext = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
+            if (ext == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                break;
+            }
+            ext->key = bcpKey;
+            ext->value = bcpValue;
 
-                if (!_addExtensionToList(&firstExt, ext, TRUE)) {
-                    uprv_free(ext);
-                    if (strict) {
-                        *status = U_ILLEGAL_ARGUMENT_ERROR;
-                        break;
-                    }
+            if (!_addExtensionToList(&firstExt, ext, TRUE)) {
+                uprv_free(ext);
+                if (strict) {
+                    *status = U_ILLEGAL_ARGUMENT_ERROR;
+                    break;
                 }
             }
         }
@@ -1103,12 +1109,9 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
 
         if (U_SUCCESS(*status) && (firstExt != NULL || firstAttr != NULL)) {
             UBool startLDMLExtension = FALSE;
-
-            attr = firstAttr;
-            ext = firstExt;
-            do {
-                if (!startLDMLExtension && (ext && uprv_strlen(ext->key) > 1)) {
-                   /* write LDML singleton extension */
+            for (ext = firstExt; ext; ext = ext->next) {
+                if (!startLDMLExtension && uprv_strlen(ext->key) > 1) {
+                    /* first LDML u singlton extension */
                    if (reslen < capacity) {
                        *(appendAt + reslen) = SEP;
                    }
@@ -1122,7 +1125,20 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                 }
 
                 /* write out the sorted BCP47 attributes, extensions and private use */
-                if (ext && (uprv_strlen(ext->key) == 1 || attr == NULL)) {
+                if (uprv_strcmp(ext->key, LOCALE_ATTRIBUTE_KEY) == 0) {
+                    /* write the value for the attributes */
+                    for (attr = firstAttr; attr; attr = attr->next) {
+                        if (reslen < capacity) {
+                            *(appendAt + reslen) = SEP;
+                        }
+                        reslen++;
+                        len = (int32_t)uprv_strlen(attr->attribute);
+                        if (reslen < capacity) {
+                            uprv_memcpy(appendAt + reslen, attr->attribute, uprv_min(len, capacity - reslen));
+                        }
+                        reslen += len;
+                    }
+                } else {
                     if (reslen < capacity) {
                         *(appendAt + reslen) = SEP;
                     }
@@ -1141,23 +1157,8 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                         uprv_memcpy(appendAt + reslen, ext->value, uprv_min(len, capacity - reslen));
                     }
                     reslen += len;
-
-                    ext = ext->next;
-                } else if (attr) {
-                    /* write the value for the attributes */
-                    if (reslen < capacity) {
-                        *(appendAt + reslen) = SEP;
-                    }
-                    reslen++;
-                    len = (int32_t)uprv_strlen(attr->attribute);
-                    if (reslen < capacity) {
-                        uprv_memcpy(appendAt + reslen, attr->attribute, uprv_min(len, capacity - reslen));
-                    }
-                    reslen += len;
-
-                    attr = attr->next;
                 }
-            } while (attr != NULL || ext != NULL);
+            }
         }
 cleanup:
         /* clean up */
