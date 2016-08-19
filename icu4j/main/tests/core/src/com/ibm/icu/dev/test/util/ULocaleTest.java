@@ -78,6 +78,7 @@ public class ULocaleTest extends TestFmwk {
         // };
 
         checkService("en_US_BROOKLYN", new ServiceFacade() {
+            @Override
             public Object create(ULocale req) {
                 return Calendar.getInstance(req);
             }
@@ -116,10 +117,12 @@ public class ULocaleTest extends TestFmwk {
     @Test
     public void TestDateFormat() {
         checkService("de_CH_ZURICH", new ServiceFacade() {
+            @Override
             public Object create(ULocale req) {
                 return DateFormat.getDateInstance(DateFormat.DEFAULT, req);
             }
         }, new Subobject() {
+            @Override
             public Object get(Object parent) {
                 return ((SimpleDateFormat) parent).getDateFormatSymbols();
             }
@@ -136,6 +139,7 @@ public class ULocaleTest extends TestFmwk {
                 this.locale = loc;
                 this.proto = fmt;
             }
+            @Override
             public NumberFormat createFormat(ULocale loc, int formatType) {
                 return (NumberFormat) (locale.equals(loc) ?
                         proto.clone() : null);
@@ -143,18 +147,22 @@ public class ULocaleTest extends TestFmwk {
         }
 
         checkService("fr_FR_NICE", new ServiceFacade() {
+            @Override
             public Object create(ULocale req) {
                 return NumberFormat.getInstance(req);
             }
         }, new Subobject() {
+            @Override
             public Object get(Object parent) {
                 return ((DecimalFormat) parent).getDecimalFormatSymbols();
             }
         }, new Registrar() {
+            @Override
             public Object register(ULocale loc, Object prototype) {
                 NFactory f = new NFactory(loc, (NumberFormat) prototype);
                 return NumberFormat.registerFactory(f);
             }
+            @Override
             public boolean unregister(Object key) {
                 return NumberFormat.unregister(key);
             }
@@ -1556,6 +1564,7 @@ public class ULocaleTest extends TestFmwk {
                 q = theq;
                 serial = theserial;
             }
+            @Override
             public int compareTo(Object o) {
                 ULocaleAcceptLanguageQ other = (ULocaleAcceptLanguageQ) o;
                 if(q > other.q) { // reverse - to sort in descending order
@@ -3962,7 +3971,7 @@ public class ULocaleTest extends TestFmwk {
 
         // why isn't this public for tests somewhere?
         final ClassLoader testLoader = ICUResourceBundleTest.class.getClassLoader();
-        UResourceBundle bundle = (UResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.ROOT, testLoader);
+        UResourceBundle bundle = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.ROOT, testLoader);
 
         testExpect = VersionInfo.getInstance(bundle.getString("ExpectCLDRVersionAtLeast"));
         testCurrent = VersionInfo.getInstance(bundle.getString("CurrentCLDRVersion"));
@@ -4024,6 +4033,13 @@ public class ULocaleTest extends TestFmwk {
                 {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix"},
                 {"@x=elmer",    "x-elmer"},
                 {"_US@x=elmer", "und-US-x-elmer"},
+                /* #12671 */
+                {"en@a=bar;attribute=baz",  "en-a-bar-u-baz"},
+                {"en@a=bar;attribute=baz;x=u-foo",  "en-a-bar-u-baz-x-u-foo"},
+                {"en@attribute=baz",    "en-u-baz"},
+                {"en@attribute=baz;calendar=islamic-civil", "en-u-baz-ca-islamic-civil"},
+                {"en@a=bar;calendar=islamic-civil;x=u-foo", "en-a-bar-u-ca-islamic-civil-x-u-foo"},
+                {"en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",   "en-a-bar-u-baz-ca-islamic-civil-x-u-foo"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -4086,9 +4102,15 @@ public class ULocaleTest extends TestFmwk {
                 {"de-u-kn-co-phonebk",  "de@collation=phonebook;colnumeric=yes",    NOERROR},
                 {"en-u-attr2-attr1-kn-kb",  "en@attribute=attr1-attr2;colbackwards=yes;colnumeric=yes", NOERROR},
                 {"ja-u-ijkl-efgh-abcd-ca-japanese-xx-yyy-zzz-kn",   "ja@attribute=abcd-efgh-ijkl;calendar=japanese;colnumeric=yes;xx=yyy-zzz",  NOERROR},
-
                 {"de-u-xc-xphonebk-co-phonebk-ca-buddhist-mo-very-lo-extensi-xd-that-de-should-vc-probably-xz-killthebuffer",
                     "de@calendar=buddhist;collation=phonebook;de=should;lo=extensi;mo=very;vc=probably;xc=xphonebk;xd=that;xz=yes", Integer.valueOf(92)},
+                /* #12761 */
+                {"en-a-bar-u-baz",      "en@a=bar;attribute=baz",   NOERROR},
+                {"en-a-bar-u-baz-x-u-foo",  "en@a=bar;attribute=baz;x=u-foo",   NOERROR},
+                {"en-u-baz",            "en@attribute=baz",     NOERROR},
+                {"en-u-baz-ca-islamic-civil",   "en@attribute=baz;calendar=islamic-civil",  NOERROR},
+                {"en-a-bar-u-ca-islamic-civil-x-u-foo", "en@a=bar;calendar=islamic-civil;x=u-foo",  NOERROR},
+                {"en-a-bar-u-baz-ca-islamic-civil-x-u-foo", "en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",    NOERROR},
 
         };
 
@@ -4407,7 +4429,7 @@ public class ULocaleTest extends TestFmwk {
                 };
 
                 for (int i = 0; i < DATA7EXT.length; i++) {
-                    Locale loc = new ULocale((String) DATA7EXT[i][0]).toLocale();
+                    Locale loc = new ULocale(DATA7EXT[i][0]).toLocale();
                     Locale expected = (Locale) localeForLanguageTag.invoke(null, DATA7EXT[i][1]);
                     assertEquals("toLocale with " + DATA7EXT[i][0], expected, loc);
                 }
