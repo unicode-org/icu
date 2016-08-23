@@ -59,50 +59,6 @@ public class CalendarData {
         }       
     }
 
-    /**
-     * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
-     * There is an implicit key of 'format'
-     * data is located in:   "calendar/key/format/subKey"
-     * for example,  calendar/dayNames/format/abbreviated
-     *
-     * @param key Resource key to data
-     * @param subKey Resource key to data
-     * @internal
-     */
-    public ICUResourceBundle get(String key, String subKey) {
-        try {
-            return fBundle.getWithFallback("calendar/" + fMainType + "/" + key + "/format/" + subKey);
-        } catch(MissingResourceException m) {
-            if(fFallbackType != null) {
-                return fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key + "/format/" + subKey);
-            }
-            throw m;
-            
-        }       
-    }
-
-    /**
-     * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
-     * data is located in:   "calendar/key/contextKey/subKey"
-     * for example,  calendar/dayNames/stand-alone/narrow
-     *
-     * @param key Resource key to data
-     * @param contextKey Resource key to data
-     * @param subKey Resource key to data
-     * @internal
-     */
-    public ICUResourceBundle get(String key, String contextKey, String subKey) {
-        try {
-            return fBundle.getWithFallback("calendar/" + fMainType + "/" + key + "/" + contextKey + "/" + subKey);
-        } catch(MissingResourceException m) {
-            if(fFallbackType != null) {
-                return fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key + "/" + contextKey + "/" + subKey);
-            }
-            throw m;
-            
-        }       
-    }
-
     public String[] getDateTimePatterns(){
         ICUResourceBundle bundle = get("DateTimePatterns");
         ArrayList<String> list = new ArrayList<String>();
@@ -151,26 +107,6 @@ public class CalendarData {
         }
         // DateTimePatterns start at index 9 in the array.
         return patterns[9 + offset];
-    }
-        
-    public String[] getOverrides(){
-        ICUResourceBundle bundle = get("DateTimePatterns");
-        ArrayList<String> list = new ArrayList<String>();
-        UResourceBundleIterator iter = bundle.getIterator();
-        while (iter.hasNext()) {
-            UResourceBundle patResource = iter.next();
-            int resourceType = patResource.getType();
-            switch (resourceType) {
-                case UResourceBundle.STRING:
-                    list.add(null);
-                    break;
-                case UResourceBundle.ARRAY:
-                    String[] items = patResource.getStringArray();
-                    list.add(items[1]);
-                    break;
-            }
-        }
-        return list.toArray(new String[list.size()]);
     }
 
     private ICUResourceBundle fBundle;
