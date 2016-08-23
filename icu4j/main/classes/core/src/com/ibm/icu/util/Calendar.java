@@ -28,6 +28,7 @@ import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
@@ -3610,9 +3611,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             if (patternData == null) {
                 // Cache missed.  Get one from bundle
                 try {
-                    CalendarData calData = new CalendarData(loc, calType);
-                    patternData = new PatternData(calData.getDateTimePatterns(),
-                            calData.getOverrides());
+                    patternData = getPatternData(loc, calType);
                 } catch (MissingResourceException e) {
                     patternData = new PatternData(DEFAULT_PATTERNS, null);
                 }
@@ -3620,6 +3619,39 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             }
             return patternData;
         }
+    }
+
+    /**
+     * Retrieves the DateTime patterns and overrides from the resource bundle and generates a
+     * new PatternData object.
+     * @param locale Locale to retrieve.
+     * @param calType Calendar type to retrieve. If not found will fallback to gregorian.
+     * @return PatternData object for this locale and calendarType.
+     */
+    private static PatternData getPatternData(ULocale locale, String calType) {
+        ICUResourceBundle rb =
+                (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+        ICUResourceBundle dtPatternsRb = rb.findWithFallback("calendar/" + calType + "/DateTimePatterns");
+        if (dtPatternsRb == null) {
+            dtPatternsRb = rb.getWithFallback("calendar/gregorian/DateTimePatterns");
+        }
+
+        int patternsSize = dtPatternsRb.getSize();
+        String[] dateTimePatterns = new String[patternsSize];
+        String[] dateTimePatternsOverrides = new String[patternsSize];
+        for (int i = 0; i < patternsSize; i++) {
+            ICUResourceBundle concatenationPatternRb = (ICUResourceBundle) dtPatternsRb.get(i);
+            switch (concatenationPatternRb.getType()) {
+                case UResourceBundle.STRING:
+                    dateTimePatterns[i] = concatenationPatternRb.getString();
+                    break;
+                case UResourceBundle.ARRAY:
+                    dateTimePatterns[i] = concatenationPatternRb.getString(0);
+                    dateTimePatternsOverrides[i] = concatenationPatternRb.getString(1);
+                    break;
+            }
+        }
+        return new PatternData(dateTimePatterns, dateTimePatternsOverrides);
     }
 
     /**
