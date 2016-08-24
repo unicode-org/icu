@@ -1,11 +1,13 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "letest", "letest.vcproj", "{67351485-4D18-4245-BE39-A7EF0675ACD2}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "letest", "letest.vcxproj", "{67351485-4D18-4245-BE39-A7EF0675ACD2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{ECA6B435-B4FA-4F9F-BF95-F451D078FC47} = {ECA6B435-B4FA-4F9F-BF95-F451D078FC47}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctestfw", "..\..\tools\ctestfw\ctestfw.vcproj", "{ECA6B435-B4FA-4F9F-BF95-F451D078FC47}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctestfw", "..\..\tools\ctestfw\ctestfw.vcxproj", "{ECA6B435-B4FA-4F9F-BF95-F451D078FC47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
