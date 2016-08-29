@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;

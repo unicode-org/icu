@@ -15,10 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
-import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -32,7 +29,6 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceTypeMismatchException;
 
 
 /**
