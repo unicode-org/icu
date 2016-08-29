@@ -333,27 +333,36 @@ public class RelativeDateFormat extends DateFormat {
     }
 
     private MessageFormat initializeCombinedFormat(Calendar cal, ULocale locale) {
-        String pattern = "{1} {0}";
-        try {
-            ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                ICUData.ICU_BASE_NAME, locale);
-            String resourcePath = "calendar/gregorian/DateTimePatterns";
-            ICUResourceBundle patternsRb= rb.findWithFallback(resourcePath);
+        String pattern;
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+            ICUData.ICU_BASE_NAME, locale);
+        String resourcePath = "calendar/" + cal.getType() + "/DateTimePatterns";
+        ICUResourceBundle patternsRb= rb.findWithFallback(resourcePath);
+        if (patternsRb == null && !cal.getType().equals("gregorian")) {
+            // Try again with gregorian, if not already attempted.
+            patternsRb = rb.findWithFallback("calendar/gregorian/DateTimePatterns");
+        }
 
-            if (patternsRb != null && patternsRb.getSize() >= 9) {
-                int glueIndex = 8;
-                if (patternsRb.getSize() >= 13) {
-                    if (fDateStyle >= DateFormat.FULL && fDateStyle <= DateFormat.SHORT) {
-                        glueIndex += fDateStyle + 1;
-                    } else
-                        if (fDateStyle >= DateFormat.RELATIVE_FULL && fDateStyle <= DateFormat.RELATIVE_SHORT) {
-                            glueIndex += fDateStyle + 1 - DateFormat.RELATIVE;
-                        }
-                }
+        if (patternsRb == null || patternsRb.getSize() < 9) {
+            // Undefined or too few elements.
+            pattern = "{1} {0}";
+        } else {
+            int glueIndex = 8;
+            if (patternsRb.getSize() >= 13) {
+              if (fDateStyle >= DateFormat.FULL && fDateStyle <= DateFormat.SHORT) {
+                  glueIndex += fDateStyle + 1;
+              } else
+                  if (fDateStyle >= DateFormat.RELATIVE_FULL &&
+                      fDateStyle <= DateFormat.RELATIVE_SHORT) {
+                      glueIndex += fDateStyle + 1 - DateFormat.RELATIVE;
+                  }
+            }
+            int elementType = patternsRb.get(glueIndex).getType();
+            if (elementType == UResourceBundle.ARRAY) {
+                pattern = patternsRb.get(glueIndex).getString(0);
+            } else {
                 pattern = patternsRb.getString(glueIndex);
             }
-        } catch (MissingResourceException e) {
-            // use default
         }
         combinedFormatHasDateAtStart = pattern.startsWith("{1}");
         fCombinedFormat = new MessageFormat(pattern, locale);
