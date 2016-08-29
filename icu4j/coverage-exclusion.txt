@@ -31,8 +31,6 @@ com/ibm/icu/impl/Assert#fail:(Ljava/lang/Exception;)V
 com/ibm/icu/impl/BMPSet#<init>:(Lcom/ibm/icu/impl/BMPSet;[II)V
 com/ibm/icu/impl/CacheValue$Strength#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/impl/CacheValue$Strength;
 com/ibm/icu/impl/CacheValue$Strength#values:()[Lcom/ibm/icu/impl/CacheValue$Strength;
-com/ibm/icu/impl/CalendarData#get:(Ljava/lang/String;Ljava/lang/String;)Lcom/ibm/icu/impl/ICUResourceBundle;
-com/ibm/icu/impl/CalendarData#get:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/ibm/icu/impl/ICUResourceBundle;
 com/ibm/icu/impl/CalendarUtil#<init>:()V
 com/ibm/icu/impl/CharacterIteration#<init>:()V
 com/ibm/icu/impl/CharTrie#equals:(Ljava/lang/Object;)Z
