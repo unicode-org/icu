@@ -366,18 +366,6 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     public void getAllItemsWithFallback(String path, UResource.Sink sink)
             throws MissingResourceException {
-        getAllItemsWithFallback(path, sink, null);
-    }
-
-    public void getAllTableItemsWithFallback(String path, UResource.TableSink sink)
-            throws MissingResourceException {
-        getAllItemsWithFallback(path, null, sink);
-    }
-
-    private void getAllItemsWithFallback(
-            String path, UResource.Sink sink,
-            UResource.TableSink tableSink)
-            throws MissingResourceException {
         // Collect existing and parsed key objects into an array of keys,
         // rather than assembling and parsing paths.
         int numPathKeys = countPathKeys(path);  // How much deeper does the path go?
@@ -404,13 +392,11 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         UResource.Key key = new UResource.Key();
         ReaderValue readerValue = new ReaderValue();
-        rb.getAllItemsWithFallback(key, readerValue, sink, tableSink);
+        rb.getAllItemsWithFallback(key, readerValue, sink);
     }
 
     private void getAllItemsWithFallback(
-            UResource.Key key, ReaderValue readerValue,
-            UResource.Sink sink,
-            UResource.TableSink tableSink) {
+            UResource.Key key, ReaderValue readerValue, UResource.Sink sink) {
         // We recursively enumerate child-first,
         // only storing parent items in the absence of child items.
         // The sink needs to store a placeholder value for the no-fallback/no-inheritance marker
@@ -421,21 +407,11 @@ public  class ICUResourceBundle extends UResourceBundle {
         // When the sink sees the no-fallback/no-inheritance marker,
         // then it would remove the parent's item.
         // We would deserialize parent values even though they are overridden in a child bundle.
-        int expectedType;
-        if (sink != null) {
-            expectedType = NONE;
-            ICUResourceBundleImpl impl = (ICUResourceBundleImpl)this;
-            readerValue.reader = impl.wholeBundle.reader;
-            readerValue.res = impl.getResource();
-            key.setString(this.key != null ? this.key : "");
-            sink.put(key, readerValue, parent == null);
-        } else {
-            expectedType = TABLE;
-            if (getType() == expectedType) {
-                // tableSink != null
-                ((ICUResourceBundleImpl.ResourceTable)this).getAllItems(key, readerValue, tableSink);
-            }
-        }
+        ICUResourceBundleImpl impl = (ICUResourceBundleImpl)this;
+        readerValue.reader = impl.wholeBundle.reader;
+        readerValue.res = impl.getResource();
+        key.setString(this.key != null ? this.key : "");
+        sink.put(key, readerValue, parent == null);
         if (parent != null) {
             // We might try to query the sink whether
             // any fallback from the parent bundle is still possible.
@@ -451,8 +427,8 @@ public  class ICUResourceBundle extends UResourceBundle {
                 getResPathKeys(pathKeys, depth);
                 rb = findResourceWithFallback(pathKeys, 0, parentBundle, null);
             }
-            if (rb != null && (expectedType == NONE || rb.getType() == expectedType)) {
-                rb.getAllItemsWithFallback(key, readerValue, sink, tableSink);
+            if (rb != null) {
+                rb.getAllItemsWithFallback(key, readerValue, sink);
             }
         }
     }

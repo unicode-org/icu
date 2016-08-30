@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.ICUResourceBundleReader.ReaderValue;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
@@ -294,16 +293,6 @@ class ICUResourceBundleImpl extends ICUResourceBundle {
                 return null;
             }
             return reader.getString(value.getContainerResource(reader, index));
-        }
-        /**
-         * @param key will be set during enumeration; input contents is ignored
-         * @param readerValue will be set during enumeration; input contents is ignored
-         * @param sink receives all table item key-value pairs
-         */
-        void getAllItems(UResource.Key key, ReaderValue readerValue, UResource.TableSink sink) {
-            ICUResourceBundleReader reader = wholeBundle.reader;
-            readerValue.reader = reader;
-            ((ICUResourceBundleReader.Table)value).getAllItems(reader, key, readerValue, sink);
         }
         ResourceTable(ICUResourceBundleImpl container, String key, int resource) {
             super(container, key, resource);
