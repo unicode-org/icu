@@ -1028,7 +1028,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
     const uint8_t *builtRules;
 
     if (U_FAILURE(status)) {
-        errcheckln(status, "Can't open \"%s\" - %s", dataFile, u_errorName(status));
+        errcheckln(status, "%s:%d Can't open \"%s\" - %s", __FILE__, __LINE__, dataFile, u_errorName(status));
         return;
     }
 
@@ -1036,14 +1036,15 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
     builtSource = (const UChar *)(builtRules + ((RBBIDataHeader*)builtRules)->fRuleSource);
     RuleBasedBreakIterator *brkItr = new RuleBasedBreakIterator(builtSource, parseError, status);
     if (U_FAILURE(status)) {
-        errln("createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",
-                u_errorName(status), parseError.line, parseError.offset);
+        errln("%s:%d createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",
+                __FILE__, __LINE__, u_errorName(status), parseError.line, parseError.offset);
+        errln(UnicodeString(builtSource));
         return;
     };
     rbbiRules = brkItr->getBinaryRules(length);
     logln("Comparing \"%s\" len=%d", dataFile, length);
     if (memcmp(builtRules, rbbiRules, (int32_t)length) != 0) {
-        errln("Built rules and rebuilt rules are different %s", dataFile);
+        errln("%s:%d Built rules and rebuilt rules are different %s", __FILE__, __LINE__, dataFile);
         return;
     }
     delete brkItr;

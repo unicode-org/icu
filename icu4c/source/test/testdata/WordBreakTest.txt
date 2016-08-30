@@ -8,6 +8,7 @@
 #   For documentation, see http://www.unicode.org/reports/tr44/
 #
 # Default Word Break Test
+#    Hand-patched for Emoji ZWJ Proposal L2/16-208R2.
 #
 # Format:
 # <string> (# <comment>)? 
@@ -1353,9 +1354,9 @@
 ÷ 200D × 0308 ÷ 0022 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) × [4.0] COMBINING DIAERESIS (Extend_FE) ÷ [999.0] QUOTATION MARK (Double_Quote) ÷ [0.3]
 ÷ 200D ÷ 0027 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) ÷ [999.0] APOSTROPHE (Single_Quote) ÷ [0.3]
 ÷ 200D × 0308 ÷ 0027 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) × [4.0] COMBINING DIAERESIS (Extend_FE) ÷ [999.0] APOSTROPHE (Single_Quote) ÷ [0.3]
-÷ 200D ÷ 261D ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) ÷ [999.0] WHITE UP POINTING INDEX (E_Base) ÷ [0.3]
+÷ 200D × 261D ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) ÷ [999.0] WHITE UP POINTING INDEX (E_Base) ÷ [0.3]
 ÷ 200D × 0308 ÷ 261D ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) × [4.0] COMBINING DIAERESIS (Extend_FE) ÷ [999.0] WHITE UP POINTING INDEX (E_Base) ÷ [0.3]
-÷ 200D ÷ 1F3FB ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) ÷ [999.0] EMOJI MODIFIER FITZPATRICK TYPE-1-2 (E_Modifier) ÷ [0.3]
+÷ 200D × 1F3FB ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) ÷ [999.0] EMOJI MODIFIER FITZPATRICK TYPE-1-2 (E_Modifier) ÷ [0.3]
 ÷ 200D × 0308 ÷ 1F3FB ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) × [4.0] COMBINING DIAERESIS (Extend_FE) ÷ [999.0] EMOJI MODIFIER FITZPATRICK TYPE-1-2 (E_Modifier) ÷ [0.3]
 ÷ 200D × 2764 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) × [3.3] HEAVY BLACK HEART (Glue_After_Zwj) ÷ [0.3]
 ÷ 200D × 0308 ÷ 2764 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ_FE) × [4.0] COMBINING DIAERESIS (Extend_FE) ÷ [999.0] HEAVY BLACK HEART (Glue_After_Zwj) ÷ [0.3]
