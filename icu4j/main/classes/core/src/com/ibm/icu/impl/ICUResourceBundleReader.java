@@ -15,7 +15,6 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 
-import com.ibm.icu.impl.UResource.TableSink;
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
@@ -1050,37 +1049,6 @@ public final class ICUResourceBundleReader {
         @Override
         int getResource(ICUResourceBundleReader reader, String resKey) {
             return getContainerResource(reader, findTableItem(reader, resKey));
-        }
-        void getAllItems(ICUResourceBundleReader reader,
-                UResource.Key key, ReaderValue value, TableSink sink) {
-            for (int i = 0; i < size; ++i) {
-                if (keyOffsets != null) {
-                    reader.setKeyFromKey16(keyOffsets[i], key);
-                } else {
-                    reader.setKeyFromKey32(key32Offsets[i], key);
-                }
-                int res = getContainerResource(reader, i);
-                int type = RES_GET_TYPE(res);
-                if (URES_IS_ARRAY(type)) {
-                    // ICU ticket #12634: This original version of the enumeration code
-                    // is going away. getOrCreateArraySink(key) was unused and has been removed.
-                } else if (URES_IS_TABLE(type)) {
-                    TableSink subSink = sink.getOrCreateTableSink(key);
-                    if (subSink != null) {
-                        Table table = reader.getTable(res);
-                        table.getAllItems(reader, key, value, subSink);
-                    }
-                /* TODO: settle on how to deal with aliases, port to C++
-                } else if (type == ICUResourceBundle.ALIAS) {
-                    throw new UnsupportedOperationException(
-                            "aliases not handled in resource enumeration"); */
-                } else if (reader.isNoInheritanceMarker(res)) {
-                    sink.putNoFallback(key);
-                } else {
-                    value.res = res;
-                    sink.put(key, value);
-                }
-            }
         }
         @Override
         public boolean getKeyAndValue(int i, UResource.Key key, UResource.Value value) {

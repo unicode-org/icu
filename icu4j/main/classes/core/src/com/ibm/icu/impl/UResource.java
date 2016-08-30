@@ -466,45 +466,4 @@ public final class UResource {
          */
         public abstract void put(Key key, Value value, boolean noFallback);
     }
-
-    /**
-     * Sink for ICU resource table contents.
-     * The base class does nothing.
-     *
-     * <p>Nested arrays and tables are stored as nested sinks,
-     * never put() as {@link Value} items.
-     */
-    public static class TableSink {
-        /**
-         * Adds a key-value pair from a resource table.
-         *
-         * @param key resource key string
-         * @param value resource value
-         */
-        public void put(Key key, Value value) {}
-
-        /**
-         * Adds a no-fallback/no-inheritance marker for this key.
-         * Used for CLDR no-fallback data values of "∅∅∅"
-         * when enumerating tables with fallback from the specific resource bundle to root.
-         *
-         * <p>The default implementation does nothing.
-         *
-         * @param key to be removed
-         */
-        public void putNoFallback(Key key) {}
-
-        /**
-         * Returns a nested resource table for the key as another sink.
-         * Creates the sink if none exists for the key.
-         * Returns null if nested tables are not supported.
-         * The default implementation always returns null.
-         *
-         * @param key resource key string
-         * @return nested-table sink, or null
-         */
-        public TableSink getOrCreateTableSink(Key key) {
-            return null;
-        }
-    }
 }

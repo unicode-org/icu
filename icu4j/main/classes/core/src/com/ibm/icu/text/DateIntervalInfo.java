@@ -26,7 +26,6 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.UResource.Key;
-import com.ibm.icu.impl.UResource.TableSink;
 import com.ibm.icu.impl.UResource.Value;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
@@ -244,6 +243,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
          * @return <code>true</code> if the specified object is equal to this <code>PatternInfo</code>.
          * @stable ICU 4.0
          */
+        @Override
         public boolean equals(Object a) {
             if (a instanceof PatternInfo) {
                 PatternInfo patternInfo = (PatternInfo)a;
@@ -259,6 +259,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
          * @return A hash code value for this object.
          * @stable ICU 4.0
          */
+        @Override
         public int hashCode() {
             int hash = fIntervalPatternFirstPart != null ? fIntervalPatternFirstPart.hashCode() : 0;
             if (fIntervalPatternSecondPart != null) {
@@ -469,11 +470,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             }
         }
 
-        /**
-         * Processes the patterns for a skeleton table.
-         * @param key
-         * @param value
-         */
+        /** Processes the patterns for a skeleton table. */
         public void processSkeletonTable(Key key, Value value) {
             // Iterate over all the patterns in the current skeleton table
             String currentSkeleton = key.toString();
@@ -933,6 +930,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @return     a copy of the object
      * @stable ICU4.0
      */
+    @Override
     public Object clone()
     {
         if ( frozen ) {
@@ -992,6 +990,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      *
      * @stable ICU 4.0
      */
+    @Override
     public boolean isFrozen() {
         return frozen;
     }
@@ -1001,6 +1000,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      *
      * @stable ICU 4.4
      */
+    @Override
     public DateIntervalInfo freeze() {
         fIntervalPatternsReadOnly = true;
         frozen = true;
@@ -1012,6 +1012,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      *
      * @stable ICU 4.4
      */
+    @Override
     public DateIntervalInfo cloneAsThawed() {
         DateIntervalInfo result = (DateIntervalInfo) (this.cloneUnfrozenDII());
         return result;
@@ -1145,6 +1146,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * Override equals
      * @stable ICU 4.0
      */
+    @Override
     public boolean equals(Object a) {
         if ( a instanceof DateIntervalInfo ) {
             DateIntervalInfo dtInfo = (DateIntervalInfo)a;
@@ -1157,6 +1159,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * Override hashcode
      * @stable ICU 4.0
      */
+    @Override
     public int hashCode() {
         return fIntervalPatterns.hashCode();
     }
