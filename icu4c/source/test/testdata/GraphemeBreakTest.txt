@@ -8,6 +8,7 @@
 #   For documentation, see http://www.unicode.org/reports/tr44/
 #
 # Default Grapheme Break Test
+#    Hand-patched for Emoji ZWJ Proposal L2/16-208R2.
 #
 # Format:
 # <string> (# <comment>)? 
@@ -653,9 +654,9 @@
 ÷ 200D × 0308 ÷ 1F3FB ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [9.0] COMBINING DIAERESIS (Extend) ÷ [999.0] EMOJI MODIFIER FITZPATRICK TYPE-1-2 (E_Modifier) ÷ [0.3]
 ÷ 200D × 200D ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [9.0] ZERO WIDTH JOINER (ZWJ) ÷ [0.3]
 ÷ 200D × 0308 × 200D ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [9.0] COMBINING DIAERESIS (Extend) × [9.0] ZERO WIDTH JOINER (ZWJ) ÷ [0.3]
-÷ 200D × 2764 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] HEAVY BLACK HEART (Glue_After_Zwj) ÷ [0.3]
+÷ 200D ÷ 2764 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] HEAVY BLACK HEART (Glue_After_Zwj) ÷ [0.3]
 ÷ 200D × 0308 ÷ 2764 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [9.0] COMBINING DIAERESIS (Extend) ÷ [999.0] HEAVY BLACK HEART (Glue_After_Zwj) ÷ [0.3]
-÷ 200D × 1F466 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] BOY (EBG) ÷ [0.3]
+÷ 200D ÷ 1F466 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] BOY (EBG) ÷ [0.3]
 ÷ 200D × 0308 ÷ 1F466 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [9.0] COMBINING DIAERESIS (Extend) ÷ [999.0] BOY (EBG) ÷ [0.3]
 ÷ 200D ÷ 0378 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) ÷ [999.0] <reserved-0378> (Other) ÷ [0.3]
 ÷ 200D × 0308 ÷ 0378 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [9.0] COMBINING DIAERESIS (Extend) ÷ [999.0] <reserved-0378> (Other) ÷ [0.3]
@@ -839,9 +840,9 @@
 ÷ 0061 ÷ 0600 × 0062 ÷	#  ÷ [0.2] LATIN SMALL LETTER A (Other) ÷ [999.0] ARABIC NUMBER SIGN (Prepend) × [9.2] LATIN SMALL LETTER B (Other) ÷ [0.3]
 ÷ 261D × 1F3FB ÷ 261D ÷	#  ÷ [0.2] WHITE UP POINTING INDEX (E_Base) × [10.0] EMOJI MODIFIER FITZPATRICK TYPE-1-2 (E_Modifier) ÷ [999.0] WHITE UP POINTING INDEX (E_Base) ÷ [0.3]
 ÷ 1F466 × 1F3FB ÷	#  ÷ [0.2] BOY (EBG) × [10.0] EMOJI MODIFIER FITZPATRICK TYPE-1-2 (E_Modifier) ÷ [0.3]
-÷ 200D × 1F466 × 1F3FB ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] BOY (EBG) × [10.0] EMOJI MODIFIER FITZPATRICK TYPE-1-2 (E_Modifier) ÷ [0.3]
-÷ 200D × 2764 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] HEAVY BLACK HEART (Glue_After_Zwj) ÷ [0.3]
-÷ 200D × 1F466 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] BOY (EBG) ÷ [0.3]
+÷ 200D ÷ 1F466 × 1F3FB ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] BOY (EBG) × [10.0] EMOJI MODIFIER FITZPATRICK TYPE-1-2 (E_Modifier) ÷ [0.3]
+÷ 200D ÷ 2764 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] HEAVY BLACK HEART (Glue_After_Zwj) ÷ [0.3]
+÷ 200D ÷ 1F466 ÷	#  ÷ [0.2] ZERO WIDTH JOINER (ZWJ) × [11.0] BOY (EBG) ÷ [0.3]
 ÷ 1F466 ÷ 1F466 ÷	#  ÷ [0.2] BOY (EBG) ÷ [999.0] BOY (EBG) ÷ [0.3]
 #
 # Lines: 822
