@@ -2248,7 +2248,7 @@ _uloc_strtod(const char *start, char **end) {
 typedef struct { 
     float q;
     int32_t dummy;  /* to avoid uninitialized memory copy from qsort */
-    char *locale;
+    char locale[ULOC_FULLNAME_CAPACITY+1];
 } _acceptLangItem;
 
 static int32_t U_CALLCONV
@@ -2290,9 +2290,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
                             UEnumeration* availableLocales,
                             UErrorCode *status)
 {
-    _acceptLangItem *j;
-    _acceptLangItem smallBuffer[30];
-    char **strs;
+  MaybeStackArray<_acceptLangItem, 4> items; // Struct for collecting items. 
     char tmp[ULOC_FULLNAME_CAPACITY +1];
     int32_t n = 0;
     const char *itemEnd;
@@ -2302,11 +2300,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
     int32_t res;
     int32_t i;
     int32_t l = (int32_t)uprv_strlen(httpAcceptLanguage);
-    int32_t jSize;
-    char *tempstr; /* Use for null pointer check */
 
-    j = smallBuffer;
-    jSize = UPRV_LENGTHOF(smallBuffer);
     if(U_FAILURE(*status)) {
         return -1;
     }
@@ -2334,27 +2328,29 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             while(isspace(*t)) {
                 t++;
             }
-            j[n].q = (float)_uloc_strtod(t,NULL);
+            items[n].q = (float)_uloc_strtod(t,NULL);
         } else {
             /* no semicolon - it's 1.0 */
-            j[n].q = 1.0f;
+            items[n].q = 1.0f;
             paramEnd = itemEnd;
         }
-        j[n].dummy=0;
+        items[n].dummy=0;
         /* eat spaces prior to semi */
         for(t=(paramEnd-1);(paramEnd>s)&&isspace(*t);t--)
             ;
-        /* Check for null pointer from uprv_strndup */
-        tempstr = uprv_strndup(s,(int32_t)((t+1)-s));
-        if (tempstr == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return -1;
+        int32_t slen = ((t+1)-s);
+        if(slen > ULOC_FULLNAME_CAPACITY) {
+          *status = U_BUFFER_OVERFLOW_ERROR;
+          return -1; // too big
         }
-        j[n].locale = tempstr;
-        uloc_canonicalize(j[n].locale,tmp,UPRV_LENGTHOF(tmp),status);
-        if(strcmp(j[n].locale,tmp)) {
-            uprv_free(j[n].locale);
-            j[n].locale=uprv_strdup(tmp);
+        uprv_strncpy(items[n].locale, s, slen);
+        items[n].locale[slen]=0; // terminate
+        int32_t clen = uloc_canonicalize(items[n].locale, tmp, UPRV_LENGTHOF(tmp)-1, status);
+        if(U_FAILURE(*status)) return -1;
+        if((clen!=slen) || (uprv_strncmp(items[n].locale, tmp, slen))) {
+            // canonicalization had an effect- copy back
+            uprv_strncpy(items[n].locale, tmp, clen);
+            items[n].locale[clen] = 0; // terminate
         }
 #if defined(ULOC_DEBUG)
         /*fprintf(stderr,"%d: s <%s> q <%g>\n", n, j[n].locale, j[n].q);*/
@@ -2364,63 +2360,29 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         while(*s==',') { /* eat duplicate commas */
             s++;
         }
-        if(n>=jSize) {
-            if(j==smallBuffer) {  /* overflowed the small buffer. */
-                j = static_cast<_acceptLangItem *>(uprv_malloc(sizeof(j[0])*(jSize*2)));
-                if(j!=NULL) {
-                    uprv_memcpy(j,smallBuffer,sizeof(j[0])*jSize);
-                }
+        if(n>=items.getCapacity()) { // If we need more items
+          if(NULL == items.resize(items.getCapacity()*2, items.getCapacity())) {
+              *status = U_MEMORY_ALLOCATION_ERROR;
+              return -1;
+          }
 #if defined(ULOC_DEBUG)
-                fprintf(stderr,"malloced at size %d\n", jSize);
+          fprintf(stderr,"malloced at size %d\n", items.getCapacity());
 #endif
-            } else {
-                j = static_cast<_acceptLangItem *>(uprv_realloc(j, sizeof(j[0])*jSize*2));
-#if defined(ULOC_DEBUG)
-                fprintf(stderr,"re-alloced at size %d\n", jSize);
-#endif
-            }
-            jSize *= 2;
-            if(j==NULL) {
-                *status = U_MEMORY_ALLOCATION_ERROR;
-                return -1;
-            }
         }
     }
-    uprv_sortArray(j, n, sizeof(j[0]), uloc_acceptLanguageCompare, NULL, TRUE, status);
+    uprv_sortArray(items.getAlias(), n, sizeof(items[0]), uloc_acceptLanguageCompare, NULL, TRUE, status);
+    LocalArray<const char*> strs(new const char*[n], *status);
     if(U_FAILURE(*status)) {
-        if(j != smallBuffer) {
-#if defined(ULOC_DEBUG)
-            fprintf(stderr,"freeing j %p\n", j);
-#endif
-            uprv_free(j);
-        }
-        return -1;
-    }
-    strs = static_cast<char **>(uprv_malloc((size_t)(sizeof(strs[0])*n)));
-    /* Check for null pointer */
-    if (strs == NULL) {
-        uprv_free(j); /* Free to avoid memory leak */
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return -1;
+      return -1;
     }
     for(i=0;i<n;i++) {
 #if defined(ULOC_DEBUG)
         /*fprintf(stderr,"%d: s <%s> q <%g>\n", i, j[i].locale, j[i].q);*/
 #endif
-        strs[i]=j[i].locale;
+        strs[i]=items[i].locale;
     }
     res =  uloc_acceptLanguage(result, resultAvailable, outResult, 
-        (const char**)strs, n, availableLocales, status);
-    for(i=0;i<n;i++) {
-        uprv_free(strs[i]);
-    }
-    uprv_free(strs);
-    if(j != smallBuffer) {
-#if defined(ULOC_DEBUG)
-        fprintf(stderr,"freeing j %p\n", j);
-#endif
-        uprv_free(j);
-    }
+                               strs.getAlias(), n, availableLocales, status);
     return res;
 }
 
