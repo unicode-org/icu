@@ -929,8 +929,8 @@ com/ibm/icu/text/RelativeDateTimeFormatter$AbsoluteUnit#valueOf:(Ljava/lang/Stri
 com/ibm/icu/text/RelativeDateTimeFormatter$Direction#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/RelativeDateTimeFormatter$Direction;
 com/ibm/icu/text/RelativeDateTimeFormatter$RelativeDateTimeUnit#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/RelativeDateTimeFormatter$RelativeDateTimeUnit;
 com/ibm/icu/text/RelativeDateTimeFormatter$RelativeUnit#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/RelativeDateTimeFormatter$RelativeUnit;
-com/ibm/icu/text/RelativeDateTimeFormatter$RelDateTimeFmtDataSink$DateTimeUnit#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/RelativeDateTimeFormatter$RelDateTimeFmtDataSink$DateTimeUnit;
-com/ibm/icu/text/RelativeDateTimeFormatter$RelDateTimeFmtDataSink$DateTimeUnit#values:()[Lcom/ibm/icu/text/RelativeDateTimeFormatter$RelDateTimeFmtDataSink$DateTimeUnit;
+com/ibm/icu/text/RelativeDateTimeFormatter$RelDateTimeDataSink$DateTimeUnit#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/RelativeDateTimeFormatter$RelDateTimeDataSink$DateTimeUnit;
+com/ibm/icu/text/RelativeDateTimeFormatter$RelDateTimeDataSink$DateTimeUnit#values:()[Lcom/ibm/icu/text/RelativeDateTimeFormatter$RelDateTimeDataSink$DateTimeUnit;
 com/ibm/icu/text/RelativeDateTimeFormatter$Style#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/RelativeDateTimeFormatter$Style;
 com/ibm/icu/text/ReplaceableContextIterator#getCaseMapCPStart:()I
 com/ibm/icu/text/RuleBasedBreakIterator#dump:()V
