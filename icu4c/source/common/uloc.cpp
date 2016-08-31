@@ -2371,10 +2371,14 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         }
     }
     uprv_sortArray(items.getAlias(), n, sizeof(items[0]), uloc_acceptLanguageCompare, NULL, TRUE, status);
-    LocalArray<const char*> strs(new const char*[n], *status);
-    if(U_FAILURE(*status)) {
-      return -1;
-    }
+	if (U_FAILURE(*status)) {
+		return -1;
+	}
+	LocalMemory<const char*> strs(NULL);
+	if (strs.allocateInsteadAndReset(n) == NULL) {
+		*status = U_MEMORY_ALLOCATION_ERROR;
+		return -1;
+	}
     for(i=0;i<n;i++) {
 #if defined(ULOC_DEBUG)
         /*fprintf(stderr,"%d: s <%s> q <%g>\n", i, j[i].locale, j[i].q);*/
