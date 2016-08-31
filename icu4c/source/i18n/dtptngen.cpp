@@ -445,21 +445,23 @@ struct AllowedHourFormatsSink : public ResourceSink {
             if (U_FAILURE(errorCode)) { return; }
             for (int32_t j = 0; formatList.getKeyAndValue(j, key, value); ++j) {
                 if (uprv_strcmp(key, "allowed") == 0) {  // Ignore "preferred" list.
-                    LocalArray<int32_t> list;
+                    LocalMemory<int32_t> list;
                     int32_t length;
                     if (value.getType() == URES_STRING) {
-                        list.adoptInsteadAndCheckErrorCode(
-                            static_cast<int32_t *>(uprv_malloc(2 * sizeof(int32_t))), errorCode);
-                        if (U_FAILURE(errorCode)) { return; }
+                        if (list.allocateInsteadAndReset(2) == NULL) { 
+							errorCode = U_MEMORY_ALLOCATION_ERROR;
+							return;
+						}
                         list[0] = getHourFormatFromUnicodeString(value.getUnicodeString(errorCode));
                         length = 1;
                     } else {
                         ResourceArray allowedFormats = value.getArray(errorCode);
                         length = allowedFormats.getSize();
-                        list.adoptInsteadAndCheckErrorCode(
-                            static_cast<int32_t *>(uprv_malloc((length + 1) * sizeof(int32_t))), errorCode);
-                        if (U_FAILURE(errorCode)) { return; }
-                        for (int32_t k = 0; k < length; ++k) {
+						if (list.allocateInsteadAndReset(length+1) == NULL) {
+							errorCode = U_MEMORY_ALLOCATION_ERROR;
+							return;
+						}
+						for (int32_t k = 0; k < length; ++k) {
                             allowedFormats.getValue(k, value);
                             list[k] = getHourFormatFromUnicodeString(value.getUnicodeString(errorCode));
                         }
