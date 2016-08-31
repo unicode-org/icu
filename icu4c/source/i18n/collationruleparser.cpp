@@ -790,7 +790,7 @@ CollationRuleParser::readWords(int32_t i, UnicodeString &raw) const {
             return i;
         }
         if(PatternProps::isWhiteSpace(c)) {
-            raw.append(0x20);
+            raw.append(sp);
             i = skipWhiteSpace(i + 1);
         } else {
             raw.append(c);

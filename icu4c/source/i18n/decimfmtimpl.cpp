@@ -243,9 +243,9 @@ DecimalFormatImpl::setMultiplierScale(int32_t scale) {
     if (scale == 0) {
         // Needed to preserve equality. fMultiplier == 0 means
         // multiplier is 1.
-        fMultiplier.set(0);
+        fMultiplier.set((int32_t)0);
     } else {
-        fMultiplier.set(1);
+        fMultiplier.set((int32_t)1);
         fMultiplier.shiftDecimalRight(scale);
     }
 }
