@@ -893,6 +893,16 @@ fi
 AC_SUBST(U_HAVE_TIMEZONE)
 AC_SUBST(U_TIMEZONE)
 
+AC_CHECK_FUNC(strtod_l)
+if test x$ac_cv_func_strtod_l = xyes
+then
+     U_HAVE_STRTOD_L=1
+else
+     CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=0"
+     U_HAVE_STRTOD_L=0
+fi
+AC_SUBST(U_HAVE_STRTOD_L)
+
 # Checks for typedefs
 AC_CHECK_TYPE(int8_t,signed char)
 AC_CHECK_TYPE(uint8_t,unsigned char)
