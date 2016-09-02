@@ -448,20 +448,21 @@ struct AllowedHourFormatsSink : public ResourceSink {
                     LocalMemory<int32_t> list;
                     int32_t length;
                     if (value.getType() == URES_STRING) {
-                        if (list.allocateInsteadAndReset(2) == NULL) { 
-							errorCode = U_MEMORY_ALLOCATION_ERROR;
-							return;
-						}
+                        if (list.allocateInsteadAndReset(2) == NULL) {
+                            errorCode = U_MEMORY_ALLOCATION_ERROR;
+                            return;
+                        }
                         list[0] = getHourFormatFromUnicodeString(value.getUnicodeString(errorCode));
                         length = 1;
-                    } else {
+                    }
+                    else {
                         ResourceArray allowedFormats = value.getArray(errorCode);
                         length = allowedFormats.getSize();
-						if (list.allocateInsteadAndReset(length+1) == NULL) {
-							errorCode = U_MEMORY_ALLOCATION_ERROR;
-							return;
-						}
-						for (int32_t k = 0; k < length; ++k) {
+                        if (list.allocateInsteadAndReset(length + 1) == NULL) {
+                            errorCode = U_MEMORY_ALLOCATION_ERROR;
+                            return;
+                        }
+                        for (int32_t k = 0; k < length; ++k) {
                             allowedFormats.getValue(k, value);
                             list[k] = getHourFormatFromUnicodeString(value.getUnicodeString(errorCode));
                         }
