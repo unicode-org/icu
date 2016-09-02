@@ -29,6 +29,15 @@
 #include "digitlst.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+#if !defined(U_HAVE_STRTOD_L)
+#  if U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM_HAS_WIN32_API
+#    define U_HAVE_STRTOD_L 1
+#  else
+#    define U_HAVE_STRTOD_L 0
+#  endif
+#endif
+
 #include "unicode/putil.h"
 #include "charstr.h"
 #include "cmemory.h"
@@ -44,6 +53,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <limits>
+
+#if U_HAVE_STRTOD_L && (U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM == U_PF_BSD)
+#include <xlocale.h>
+#endif
 
 // ***************************************************************************
 // class DigitList
@@ -464,19 +477,15 @@ DigitList::getDouble() const
     return tDouble;
 }
 
-#if !defined(U_HAVE_STRTOD_L)
-#  if U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM_HAS_WIN32_API
-#    define U_HAVE_STRTOD_L 1
-#  else
-#    define U_HAVE_STRTOD_L 0
-#  endif
-#endif
-
-#if U_HAVE_STRTOD_L && U_PLATFORM_HAS_WIN32_API
-#define locale_t _locale_t
-#define newlocale(cat, loc, base) _create_locale(cat, loc)
-#define freelocale _free_locale
-#define strtod_l _strtod_l
+#if U_HAVE_STRTOD_L
+# if U_PLATFORM_HAS_WIN32_API
+#   define locale_t _locale_t
+#   define newlocale(cat, loc, base) _create_locale(cat, loc)
+#   define freelocale _free_locale
+#   define strtod_l _strtod_l
+# elif U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM == U_PF_BSD
+#   define LC_ALL LC_ALL_MASK
+# endif
 #endif
 
 #if U_HAVE_STRTOD_L
