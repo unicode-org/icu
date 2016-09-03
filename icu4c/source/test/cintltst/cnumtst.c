@@ -1389,7 +1389,7 @@ static void TestInt64Format() {
     /* create a number format using unum_openPattern(....) */
     log_verbose("\nTesting Int64Format\n");
     u_uastrcpy(temp1, "#.#E0");
-    fmt = unum_open(UNUM_IGNORE, temp1, u_strlen(temp1), NULL, NULL, &status);
+    fmt = unum_open(UNUM_IGNORE, temp1, u_strlen(temp1), "en_US", NULL, &status);
     if(U_FAILURE(status)) {
         log_data_err("error in unum_openPattern() - %s\n", myErrorName(status));
     } else {
