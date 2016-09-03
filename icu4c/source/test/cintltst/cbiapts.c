@@ -977,7 +977,7 @@ static const TestBISuppressionsItem testBISuppressionsItems[] = {
     { "en@ss=standard", testSentenceSuppressionsEn, testSentSuppFwdOffsetsEn, testSentSuppRevOffsetsEn },
     { "en",             testSentenceSuppressionsEn, testSentFwdOffsetsEn,     testSentRevOffsetsEn     },
     { "fr@ss=standard", testSentenceSuppressionsEn, testSentFwdOffsetsEn,     testSentRevOffsetsEn     },
-    { "af@ss=standard", testSentenceSuppressionsEn, testSentSuppFwdOffsetsEn, testSentSuppRevOffsetsEn }, /* no brkiter data => en suppressions? */
+    { "af@ss=standard", testSentenceSuppressionsEn, testSentFwdOffsetsEn,     testSentRevOffsetsEn     }, /* no brkiter data => nosuppressions? */
     { "zh@ss=standard", testSentenceSuppressionsEn, testSentFwdOffsetsEn,     testSentRevOffsetsEn     }, /* brkiter data, no suppressions data => no suppressions */
     { "zh_Hant@ss=standard", testSentenceSuppressionsEn, testSentFwdOffsetsEn, testSentRevOffsetsEn    }, /* brkiter data, no suppressions data => no suppressions */
     { "fi@ss=standard", testSentenceSuppressionsEn, testSentFwdOffsetsEn,     testSentRevOffsetsEn     }, /* brkiter data, no suppressions data => no suppressions */
