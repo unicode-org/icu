@@ -480,15 +480,35 @@ SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder(const Loc
   if(U_SUCCESS(status)) {
     UErrorCode subStatus = U_ZERO_ERROR;
     LocalUResourceBundlePointer b(ures_open(U_ICUDATA_BRKITR, fromLocale.getBaseName(), &subStatus));
+    if (U_FAILURE(subStatus) || (subStatus == U_USING_DEFAULT_WARNING) ) {    
+      status = subStatus; // copy the failing status 
+#if FB_DEBUG
+      fprintf(stderr, "open BUNDLE %s : %s, %s\n", fromLocale.getBaseName(), "[exit]", u_errorName(status));
+#endif
+      return;  // leaves the builder empty, if you try to use it.
+    }
     LocalUResourceBundlePointer exceptions(ures_getByKeyWithFallback(b.getAlias(), "exceptions", NULL, &subStatus));
+    if (U_FAILURE(subStatus) || (subStatus == U_USING_DEFAULT_WARNING) ) {    
+      status = subStatus; // copy the failing status 
+#if FB_DEBUG
+      fprintf(stderr, "open EXCEPTIONS %s : %s, %s\n", fromLocale.getBaseName(), "[exit]", u_errorName(status));
+#endif
+      return;  // leaves the builder empty, if you try to use it.
+    }
     LocalUResourceBundlePointer breaks(ures_getByKeyWithFallback(exceptions.getAlias(), "SentenceBreak", NULL, &subStatus));
 
 #if FB_DEBUG
-    fprintf(stderr, "open %s => %s, %s\n", fromLocale.getBaseName(), "?", u_errorName(subStatus));
+    {
+      UErrorCode subsub = subStatus;
+      fprintf(stderr, "open SentenceBreak %s => %s, %s\n", fromLocale.getBaseName(), ures_getLocale(breaks.getAlias(), &subsub), u_errorName(subStatus));
+    }
 #endif
     
     if (U_FAILURE(subStatus) || (subStatus == U_USING_DEFAULT_WARNING) ) {    
       status = subStatus; // copy the failing status 
+#if FB_DEBUG
+      fprintf(stderr, "open %s : %s, %s\n", fromLocale.getBaseName(), "[exit]", u_errorName(status));
+#endif
       return;  // leaves the builder empty, if you try to use it.
     }
 
