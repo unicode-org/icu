@@ -478,13 +478,22 @@ SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder(const Loc
   : fSet(status)
 {
   if(U_SUCCESS(status)) {
-    LocalUResourceBundlePointer b(ures_open(U_ICUDATA_BRKITR, fromLocale.getBaseName(), &status));
-    LocalUResourceBundlePointer exceptions(ures_getByKeyWithFallback(b.getAlias(), "exceptions", NULL, &status));
-    LocalUResourceBundlePointer breaks(ures_getByKeyWithFallback(exceptions.getAlias(), "SentenceBreak", NULL, &status));
-    if(U_FAILURE(status)) return; // leaves the builder empty, if you try to use it.
+    UErrorCode subStatus = U_ZERO_ERROR;
+    LocalUResourceBundlePointer b(ures_open(U_ICUDATA_BRKITR, fromLocale.getBaseName(), &subStatus));
+    LocalUResourceBundlePointer exceptions(ures_getByKeyWithFallback(b.getAlias(), "exceptions", NULL, &subStatus));
+    LocalUResourceBundlePointer breaks(ures_getByKeyWithFallback(exceptions.getAlias(), "SentenceBreak", NULL, &subStatus));
+
+#if FB_DEBUG
+    fprintf(stderr, "open %s => %s, %s\n", fromLocale.getBaseName(), "?", u_errorName(subStatus));
+#endif
+    
+    if (U_FAILURE(subStatus) || (subStatus == U_USING_DEFAULT_WARNING) ) {    
+      status = subStatus; // copy the failing status 
+      return;  // leaves the builder empty, if you try to use it.
+    }
 
     LocalUResourceBundlePointer strs;
-    UErrorCode subStatus = status;
+    subStatus = status; // Pick up inherited warning status now 
     do {
       strs.adoptInstead(ures_getNextResource(breaks.getAlias(), strs.orphan(), &subStatus));
       if(strs.isValid() && U_SUCCESS(subStatus)) {
