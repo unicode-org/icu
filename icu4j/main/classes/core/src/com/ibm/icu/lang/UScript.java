@@ -1149,8 +1149,6 @@ public final class UScript {
      * <p>Some characters are commonly used in multiple scripts.
      * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
      *
-     * <p>The Script_Extensions property is provisional. It may be modified or removed
-     * in future versions of the Unicode Standard, and thus in ICU.
      * @param c code point
      * @param sc script code
      * @return true if sc is in Script_Extensions(c)
@@ -1197,8 +1195,6 @@ public final class UScript {
      * <p>Some characters are commonly used in multiple scripts.
      * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
      *
-     * <p>The Script_Extensions property is provisional. It may be modified or removed
-     * in future versions of the Unicode Standard, and thus in ICU.
      * @param c code point
      * @param set set of script code integers; will be cleared, then bits are set
      *            corresponding to c's Script_Extensions
