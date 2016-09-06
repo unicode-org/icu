@@ -454,9 +454,9 @@ typedef enum UScriptCode {
 } UScriptCode;
 
 /**
- * Gets the script codes associated with the given locale or ISO 15924 abbreviation or name. 
+ * Gets the script codes associated with the given locale or ISO 15924 abbreviation or name.
  * Fills in USCRIPT_MALAYALAM given "Malayam" OR "Mlym".
- * Fills in USCRIPT_LATIN given "en" OR "en_US" 
+ * Fills in USCRIPT_LATIN given "en" OR "en_US"
  * If the required capacity is greater than the capacity of the destination buffer,
  * then the error code is set to U_BUFFER_OVERFLOW_ERROR and the required capacity is returned.
  *
@@ -469,10 +469,10 @@ typedef enum UScriptCode {
  * @param fillIn the UScriptCode buffer to fill in the script code
  * @param capacity the capacity (size) fo UScriptCode buffer passed in.
  * @param err the error status code.
- * @return The number of script codes filled in the buffer passed in 
+ * @return The number of script codes filled in the buffer passed in
  * @stable ICU 2.4
  */
-U_STABLE int32_t  U_EXPORT2 
+U_STABLE int32_t  U_EXPORT2
 uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capacity,UErrorCode *err);
 
 /**
@@ -485,7 +485,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capac
  * or NULL if scriptCode is invalid
  * @stable ICU 2.4
  */
-U_STABLE const char*  U_EXPORT2 
+U_STABLE const char*  U_EXPORT2
 uscript_getName(UScriptCode scriptCode);
 
 /**
@@ -497,18 +497,18 @@ uscript_getName(UScriptCode scriptCode);
  * @return short script name (4-letter code), or NULL if scriptCode is invalid
  * @stable ICU 2.4
  */
-U_STABLE const char*  U_EXPORT2 
+U_STABLE const char*  U_EXPORT2
 uscript_getShortName(UScriptCode scriptCode);
 
 /**
  * Gets the script code associated with the given codepoint.
- * Returns USCRIPT_MALAYALAM given 0x0D02 
+ * Returns USCRIPT_MALAYALAM given 0x0D02
  * @param codepoint UChar32 codepoint
  * @param err the error status code.
- * @return The UScriptCode, or 0 if codepoint is invalid 
+ * @return The UScriptCode, or 0 if codepoint is invalid
  * @stable ICU 2.4
  */
-U_STABLE UScriptCode  U_EXPORT2 
+U_STABLE UScriptCode  U_EXPORT2
 uscript_getScript(UChar32 codepoint, UErrorCode *err);
 
 /**
@@ -518,9 +518,6 @@ uscript_getScript(UChar32 codepoint, UErrorCode *err);
  *
  * Some characters are commonly used in multiple scripts.
  * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
- *
- * The Script_Extensions property is provisional. It may be modified or removed
- * in future versions of the Unicode Standard, and thus in ICU.
  * @param c code point
  * @param sc script code
  * @return TRUE if sc is in Script_Extensions(c)
@@ -547,8 +544,6 @@ uscript_hasScript(UChar32 c, UScriptCode sc);
  * U_BUFFER_OVERFLOW_ERROR is set and the number of Script_Extensions is returned.
  * (Usual ICU buffer handling behavior.)
  *
- * The Script_Extensions property is provisional. It may be modified or removed
- * in future versions of the Unicode Standard, and thus in ICU.
  * @param c code point
  * @param scripts output script code array
  * @param capacity capacity of the scripts array
