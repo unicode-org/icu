@@ -587,7 +587,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         int start = 0;
         int limit = length;
         for (;;) {
-            int i = (start + limit) / 2;
+            int i = (int)(((long)start + (long)limit) / 2);
             long node = nodes[rootPrimaryIndexes[i]];
             long nodePrimary = node >>> 32;  // weight32FromNode(node)
             if (p == nodePrimary) {
