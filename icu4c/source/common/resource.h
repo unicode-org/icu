@@ -33,7 +33,6 @@ struct ResourceData;
 
 U_NAMESPACE_BEGIN
 
-class ResourceTableSink;
 class ResourceValue;
 
 // Note: In C++, we use const char * pointers for keys,
@@ -273,55 +272,6 @@ public:
 private:
     ResourceSink(const ResourceSink &);  // no copy constructor
     ResourceSink &operator=(const ResourceSink &);  // no assignment operator
-};
-
-/**
- * Sink for ICU resource table contents.
- * The base class does nothing.
- *
- * Nested arrays and tables are stored as nested sinks,
- * never put() as ResourceValue items.
- */
-class U_COMMON_API ResourceTableSink : public UObject {
-public:
-    ResourceTableSink() {}
-    virtual ~ResourceTableSink();
-
-    /**
-     * Adds a key-value pair from a resource table.
-     *
-     * @param key resource key string
-     * @param value resource value
-     */
-    virtual void put(const char *key, const ResourceValue &value, UErrorCode &errorCode);
-
-    /**
-     * Adds a no-fallback/no-inheritance marker for this key.
-     * Used for CLDR no-fallback data values of (three empty-set symbols)=={2205, 2205, 2205}
-     * when enumerating tables with fallback from the specific resource bundle to root.
-     *
-     * The default implementation does nothing.
-     *
-     * @param key to be removed
-     */
-    virtual void putNoFallback(const char *key, UErrorCode &errorCode);
-
-    /**
-     * Returns a nested resource table for the key as another sink.
-     * Creates the sink if none exists for the key.
-     * Returns NULL if nested tables are not supported.
-     * The default implementation always returns NULL.
-     *
-     * This sink (not the caller) owns the nested sink.
-     *
-     * @param key resource key string
-     * @return nested-table sink, or NULL
-     */
-    virtual ResourceTableSink *getOrCreateTableSink(const char *key, UErrorCode &errorCode);
-
-private:
-    ResourceTableSink(const ResourceTableSink &);  // no copy constructor
-    ResourceTableSink &operator=(const ResourceTableSink &);  // no assignment operator
 };
 
 U_NAMESPACE_END

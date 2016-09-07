@@ -230,10 +230,6 @@ U_CAPI void U_EXPORT2
 ures_getAllItemsWithFallback(const UResourceBundle *bundle, const char *path,
                              icu::ResourceSink &sink, UErrorCode &errorCode);
 
-U_CAPI void U_EXPORT2
-ures_getAllTableItemsWithFallback(const UResourceBundle *bundle, const char *path,
-                                  icu::ResourceTableSink &sink, UErrorCode &errorCode);
-
 #endif  /* __cplusplus */
 
 /**

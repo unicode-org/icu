@@ -1461,8 +1461,6 @@
 #define ures_findResource U_ICU_ENTRY_POINT_RENAME(ures_findResource)
 #define ures_findSubResource U_ICU_ENTRY_POINT_RENAME(ures_findSubResource)
 #define ures_getAllItemsWithFallback U_ICU_ENTRY_POINT_RENAME(ures_getAllItemsWithFallback)
-#define ures_getAllTableItems U_ICU_ENTRY_POINT_RENAME(ures_getAllTableItems)
-#define ures_getAllTableItemsWithFallback U_ICU_ENTRY_POINT_RENAME(ures_getAllTableItemsWithFallback)
 #define ures_getBinary U_ICU_ENTRY_POINT_RENAME(ures_getBinary)
 #define ures_getByIndex U_ICU_ENTRY_POINT_RENAME(ures_getByIndex)
 #define ures_getByKey U_ICU_ENTRY_POINT_RENAME(ures_getByKey)

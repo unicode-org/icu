@@ -13,26 +13,10 @@
 
 #include "resource.h"
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/ures.h"
-
 U_NAMESPACE_BEGIN
 
 ResourceValue::~ResourceValue() {}
 
 ResourceSink::~ResourceSink() {}
-
-ResourceTableSink::~ResourceTableSink() {}
-
-void ResourceTableSink::put(
-        const char * /*key*/, const ResourceValue & /*value*/, UErrorCode & /*errorCode*/) {}
-
-void ResourceTableSink::putNoFallback(const char * /*key*/, UErrorCode & /*errorCode*/) {}
-
-ResourceTableSink *ResourceTableSink::getOrCreateTableSink(
-        const char * /*key*/, UErrorCode & /*errorCode*/) {
-    return NULL;
-}
 
 U_NAMESPACE_END
