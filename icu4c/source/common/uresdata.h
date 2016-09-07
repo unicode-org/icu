@@ -505,15 +505,6 @@ private:
 
 U_NAMESPACE_END
 
-/**
- * @param value will be set during enumeration; input contents is ignored
- * @param sink receives all table item key-value pairs
- */
-U_CFUNC void
-ures_getAllTableItems(const ResourceData *pResData, Resource table,
-                      icu::ResourceDataValue &value, icu::ResourceTableSink &sink,
-                      UErrorCode &errorCode);
-
 #endif  /* __cplusplus */
 
 /**

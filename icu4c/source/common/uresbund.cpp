@@ -1889,8 +1889,7 @@ namespace {
 
 void getAllItemsWithFallback(
         const UResourceBundle *bundle, ResourceDataValue &value,
-        ResourceSink *sink,
-        ResourceTableSink *tableSink,
+        ResourceSink &sink,
         UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return; }
     // We recursively enumerate child-first,
@@ -1906,18 +1905,8 @@ void getAllItemsWithFallback(
     value.pResData = &bundle->fResData;
     UResourceDataEntry *parentEntry = bundle->fData->fParent;
     UBool hasParent = parentEntry != NULL && U_SUCCESS(parentEntry->fBogus);
-    UResType expectedType;
-    if (sink != NULL) {
-        expectedType = URES_NONE;
-        value.setResource(bundle->fRes);
-        sink->put(bundle->fKey, value, !hasParent, errorCode);
-    } else {
-        expectedType = URES_TABLE;
-        if (ures_getType(bundle) == expectedType) {
-            //tableSink != NULL
-            ures_getAllTableItems(&bundle->fResData, bundle->fRes, value, *tableSink, errorCode);
-        }
-    }
+    value.setResource(bundle->fRes);
+    sink.put(bundle->fKey, value, !hasParent, errorCode);
     if (hasParent) {
         // We might try to query the sink whether
         // any fallback from the parent bundle is still possible.
@@ -1951,19 +1940,19 @@ void getAllItemsWithFallback(
             rb = ures_getByKeyWithFallback(&parentBundle, bundle->fResPath,
                                            &containerBundle, &pathErrorCode);
         }
-        if (U_SUCCESS(pathErrorCode) && (expectedType == URES_NONE || ures_getType(rb) == expectedType)) {
-            getAllItemsWithFallback(rb, value, sink, tableSink, errorCode);
+        if (U_SUCCESS(pathErrorCode)) {
+            getAllItemsWithFallback(rb, value, sink, errorCode);
         }
         ures_close(&containerBundle);
         ures_close(&parentBundle);
     }
 }
 
-void getAllItemsWithFallback(
-        const UResourceBundle *bundle, const char *path,
-        ResourceSink *sink,
-        ResourceTableSink *tableSink,
-        UErrorCode &errorCode) {
+}  // namespace
+
+U_CAPI void U_EXPORT2
+ures_getAllItemsWithFallback(const UResourceBundle *bundle, const char *path,
+                             icu::ResourceSink &sink, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return; }
     if (path == NULL) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1982,32 +1971,10 @@ void getAllItemsWithFallback(
             return;
         }
     }
-    if (sink == NULL) {
-        UResType expectedType = URES_TABLE;
-        if (ures_getType(rb) != expectedType) {
-            errorCode = U_RESOURCE_TYPE_MISMATCH;
-            ures_close(&stackBundle);
-            return;
-        }
-    }
     // Get all table items with fallback.
     ResourceDataValue value;
-    getAllItemsWithFallback(rb, value, sink, tableSink, errorCode);
+    getAllItemsWithFallback(rb, value, sink, errorCode);
     ures_close(&stackBundle);
-}
-
-}  // namespace
-
-U_CAPI void U_EXPORT2
-ures_getAllItemsWithFallback(const UResourceBundle *bundle, const char *path,
-                             icu::ResourceSink &sink, UErrorCode &errorCode) {
-    getAllItemsWithFallback(bundle, path, &sink, NULL, errorCode);
-}
-
-U_CAPI void U_EXPORT2
-ures_getAllTableItemsWithFallback(const UResourceBundle *bundle, const char *path,
-                                  ResourceTableSink &sink, UErrorCode &errorCode) {
-    getAllItemsWithFallback(bundle, path, NULL, &sink, errorCode);
 }
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, const char* inKey, UResourceBundle *fillIn, UErrorCode *status) {
