@@ -30,14 +30,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#if !defined(U_HAVE_STRTOD_L)
-#  if U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM_HAS_WIN32_API
-#    define U_HAVE_STRTOD_L 1
-#  else
-#    define U_HAVE_STRTOD_L 0
-#  endif
-#endif
-
 #include "unicode/putil.h"
 #include "charstr.h"
 #include "cmemory.h"
@@ -54,7 +46,17 @@
 #include <stdio.h>
 #include <limits>
 
-#if U_HAVE_STRTOD_L && (U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM == U_PF_BSD)
+#if !defined(U_USE_STRTOD_L)
+# if U_PLATFORM_HAS_WIN32_API
+#   define U_USE_STRTOD_L 1
+# elif defined(U_HAVE_STRTOD_L)
+#   define U_USE_STRTOD_L U_HAVE_STRTOD_L
+# else
+#   define U_USE_STRTOD_L 0
+# endif
+#endif
+
+#if U_USE_STRTOD_L && !U_PLATFORM_HAS_WIN32_API
 #include <xlocale.h>
 #endif
 
@@ -477,18 +479,13 @@ DigitList::getDouble() const
     return tDouble;
 }
 
-#if U_HAVE_STRTOD_L
-# if U_PLATFORM_HAS_WIN32_API
-#   define locale_t _locale_t
-#   define newlocale(cat, loc, base) _create_locale(cat, loc)
-#   define freelocale _free_locale
-#   define strtod_l _strtod_l
-# elif U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM == U_PF_BSD
-#   define LC_ALL LC_ALL_MASK
-# endif
+#if U_USE_STRTOD_L && U_PLATFORM_HAS_WIN32_API
+# define locale_t _locale_t
+# define freelocale _free_locale
+# define strtod_l _strtod_l
 #endif
 
-#if U_HAVE_STRTOD_L
+#if U_USE_STRTOD_L
 static locale_t gCLocale = (locale_t)0;
 #endif
 static icu::UInitOnce gCLocaleInitOnce = U_INITONCE_INITIALIZER;
@@ -497,7 +494,7 @@ U_CDECL_BEGIN
 // Cleanup callback func
 static UBool U_CALLCONV digitList_cleanup(void)
 {
-#if U_HAVE_STRTOD_L
+#if U_USE_STRTOD_L
     if (gCLocale != (locale_t)0) {
         freelocale(gCLocale);
     }
@@ -507,8 +504,12 @@ static UBool U_CALLCONV digitList_cleanup(void)
 // C Locale initialization func
 static void U_CALLCONV initCLocale(void) {
     ucln_i18n_registerCleanup(UCLN_I18N_DIGITLIST, digitList_cleanup);
-#if U_HAVE_STRTOD_L
-    gCLocale = newlocale(LC_ALL, "C", (locale_t)0);
+#if U_USE_STRTOD_L
+# if U_PLATFORM_HAS_WIN32_API
+    gCLocale = _create_locale(LC_ALL, "C");
+# else
+    gCLocale = newlocale(LC_ALL_MASK, "C", (locale_t)0);
+# endif
 #endif
 }
 U_CDECL_END
@@ -516,7 +517,7 @@ U_CDECL_END
 double
 DigitList::decimalStrToDouble(char *decstr, char **end) {
     umtx_initOnce(gCLocaleInitOnce, &initCLocale);
-#if U_HAVE_STRTOD_L
+#if U_USE_STRTOD_L
     return strtod_l(decstr, end, gCLocale);
 #else
     char *decimalPt = strchr(decstr, '.');
