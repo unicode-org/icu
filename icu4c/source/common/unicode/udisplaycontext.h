@@ -43,7 +43,13 @@ enum UDisplayContextType {
      * UDISPCTX_LENGTH_FULL, UDISPCTX_LENGTH_SHORT.
      * @stable ICU 54
      */
-    UDISPCTX_TYPE_DISPLAY_LENGTH = 2
+    UDISPCTX_TYPE_DISPLAY_LENGTH = 2,
+    /**
+     * Type to retrieve the substitute handling setting, e.g.
+     * UDISPCTX_SUBSTITUTE, UDISPCTX_NO_SUBSTITUTE.
+     * @draft ICU 58
+     */
+    UDISPCTX_TYPE_SUBSTITUTE_HANDLING = 3
 };
 /**
 *  @stable ICU 51
@@ -134,7 +140,27 @@ enum UDisplayContext {
      * e.g. "U.S." for US.
      * @stable ICU 54
      */
-    UDISPCTX_LENGTH_SHORT = (UDISPCTX_TYPE_DISPLAY_LENGTH<<8) + 1
+    UDISPCTX_LENGTH_SHORT = (UDISPCTX_TYPE_DISPLAY_LENGTH<<8) + 1,
+    /**
+     * ================================
+     * SUBSTITUTE_HANDLING can be set to one of UDISPCTX_SUBSTITUTE or
+     * UDISPCTX_NO_SUBSTITUTE. Use UDisplayContextType UDISPCTX_TYPE_SUBSTITUTE_HANDLING
+     * to get the value.
+     */
+    /**
+     * A possible setting for SUBSTITUTE_HANDLING:
+     * Returns a fallback value (e.g., the input code) when no data is available.
+     * This is the default value.
+     * @draft ICU 58
+     */
+    UDISPCTX_SUBSTITUTE = (UDISPCTX_TYPE_SUBSTITUTE_HANDLING<<8) + 0,
+    /**
+     * A possible setting for SUBSTITUTE_HANDLING:
+     * Returns a null value when no data is available.
+     * @draft ICU 58
+     */
+    UDISPCTX_NO_SUBSTITUTE = (UDISPCTX_TYPE_SUBSTITUTE_HANDLING<<8) + 1
+
 };
 /**
 *  @stable ICU 51
