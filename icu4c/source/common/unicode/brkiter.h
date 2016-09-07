@@ -170,6 +170,11 @@ public:
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
+     *
+     * The BreakIterator will retain a reference to the supplied string.
+     * The caller must not modify or delete the text while the BreakIterator
+     * retains the reference.
+     *
      * @param text The UnicodeString used to change the text.
      * @stable ICU 2.0
      */
