@@ -45,7 +45,7 @@ final class CollationFastLatinBuilder {
         if (limit == 0) { return ~0; }
         int start = 0;
         for (;;) {
-            int i = (start + limit) / 2;
+            int i = (int)(((long)start + (long)limit) / 2);
             int cmp = compareInt64AsUnsigned(ce, list[i]);
             if (cmp == 0) {
                 return i;
