@@ -375,6 +375,11 @@ public:
     /**
      * Set the iterator to analyze a new piece of text.  This function resets
      * the current iteration position to the beginning of the text.
+     *
+     * The BreakIterator will retain a reference to the supplied string.
+     * The caller must not modify or delete the text while the BreakIterator
+     * retains the reference.
+     *
      * @param newText The text to analyze.
      *  @stable ICU 2.0
      */

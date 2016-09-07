@@ -72,7 +72,7 @@
  * "Extended Grapheme Clusters", which are groupings of codepoints
  * that should be treated as character-like units for many text operations.
  * Please see Unicode Standard Annex #29, Unicode Text Segmentation,
- * http://www.unicode.org/reports/tr29/ for additional information 
+ * http://www.unicode.org/reports/tr29/ for additional information
  * on grapheme clusters and guidelines on their use.
  * <p>
  * Title boundary analysis locates all positions,
@@ -318,7 +318,11 @@ U_NAMESPACE_END
 #endif
 
 /**
- * Sets an existing iterator to point to a new piece of text
+ * Sets an existing iterator to point to a new piece of text.
+ * The break iterator retains a pointer to the supplied text.
+ * The caller must not modify or delete the text while the BreakIterator
+ * retains the reference.
+ *
  * @param bi The iterator to use
  * @param text The text to be set
  * @param textLength The length of the text
