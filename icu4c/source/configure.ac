@@ -896,6 +896,7 @@ AC_SUBST(U_TIMEZONE)
 AC_CHECK_FUNC(strtod_l)
 if test x$ac_cv_func_strtod_l = xyes
 then
+     CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=1"
      U_HAVE_STRTOD_L=1
 else
      CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STRTOD_L=0"
