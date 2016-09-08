@@ -1645,4 +1645,27 @@ public class RbnfTest extends TestFmwk {
         };
         doTest(enFormatter, enTestThreeDigitsDownData, false);
     }
+
+    @Test
+    public void testLargeNumbers() {
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ULocale.US, RuleBasedNumberFormat.SPELLOUT);
+
+        String[][] enTestFullData = {
+                {"9999999999999998", "nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-eight"},
+                {"9999999999999999", "nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine"},
+                {"999999999999999999", "nine hundred ninety-nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine"},
+                {"1000000000000000000", "1,000,000,000,000,000,000"}, // The rules don't go to 1 quintillion yet
+                {"-9223372036854775809", "-9,223,372,036,854,775,809"}, // We've gone beyond 64-bit precision
+                {"-9223372036854775808", "-9,223,372,036,854,775,808"}, // We've gone beyond +64-bit precision
+                {"-9223372036854775807", "minus 9,223,372,036,854,775,807"}, // Minimum 64-bit precision
+                {"-9223372036854775806", "minus 9,223,372,036,854,775,806"}, // Minimum 64-bit precision + 1
+                {"9223372036854774111", "9,223,372,036,854,774,111"}, // Below 64-bit precision
+                {"9223372036854774999", "9,223,372,036,854,774,999"}, // Below 64-bit precision
+                {"9223372036854775000", "9,223,372,036,854,775,000"}, // Below 64-bit precision
+                {"9223372036854775806", "9,223,372,036,854,775,806"}, // Maximum 64-bit precision - 1
+                {"9223372036854775807", "9,223,372,036,854,775,807"}, // Maximum 64-bit precision
+                {"9223372036854775808", "9,223,372,036,854,775,808"}, // We've gone beyond 64-bit precision
+        };
+        doTest(rbnf, enTestFullData, false);
+    }
 }

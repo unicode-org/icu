@@ -167,7 +167,7 @@ final class NFRule {
             // base value is an even multiple of its divisor (or it's one
             // of the special rules)
             if ((rule1.baseValue > 0
-                 && rule1.baseValue % (Math.pow(rule1.radix, rule1.exponent)) == 0)
+                 && rule1.baseValue % (power(rule1.radix, rule1.exponent)) == 0)
                 || rule1.baseValue == IMPROPER_FRACTION_RULE
                 || rule1.baseValue == MASTER_RULE)
             {
@@ -567,7 +567,7 @@ final class NFRule {
         // gives us 1.9999999996 instead of 2.  The extra logic here is to take
         // that into account
         short tempResult = (short)(Math.log(baseValue) / Math.log(radix));
-        if (Math.pow(radix, tempResult + 1) <= baseValue) {
+        if (power(radix, (short)(tempResult + 1)) <= baseValue) {
             return (short)(tempResult + 1);
         } else {
             return tempResult;
@@ -723,8 +723,8 @@ final class NFRule {
      * of its substitutions)
      * @return The rule's divisor
      */
-    public double getDivisor() {
-        return Math.pow(radix, exponent);
+    public long getDivisor() {
+        return power(radix, exponent);
     }
 
     //-----------------------------------------------------------------------
@@ -740,7 +740,7 @@ final class NFRule {
      * @param pos The position in toInsertInto where the resultant text
      * should be inserted
      */
-    public void doFormat(long number, StringBuffer toInsertInto, int pos, int recursionCount) {
+    public void doFormat(long number, StringBuilder toInsertInto, int pos, int recursionCount) {
         // first, insert the rule's rule text into toInsertInto at the
         // specified position, then insert the results of the substitutions
         // into the right places in toInsertInto (notice we do the
@@ -758,7 +758,7 @@ final class NFRule {
             if (pluralRuleEnd < ruleText.length() - 1) {
                 toInsertInto.insert(pos, ruleText.substring(pluralRuleEnd + 2));
             }
-            toInsertInto.insert(pos, rulePatternFormat.format((long)(number/Math.pow(radix, exponent))));
+            toInsertInto.insert(pos, rulePatternFormat.format(number / power(radix, exponent)));
             if (pluralRuleStart > 0) {
                 toInsertInto.insert(pos, ruleText.substring(0, pluralRuleStart));
             }
@@ -781,7 +781,7 @@ final class NFRule {
      * @param pos The position in toInsertInto where the resultant text
      * should be inserted
      */
-    public void doFormat(double number, StringBuffer toInsertInto, int pos, int recursionCount) {
+    public void doFormat(double number, StringBuilder toInsertInto, int pos, int recursionCount) {
         // first, insert the rule's rule text into toInsertInto at the
         // specified position, then insert the results of the substitutions
         // into the right places in toInsertInto
@@ -804,10 +804,10 @@ final class NFRule {
             if (0 <= pluralVal && pluralVal < 1) {
                 // We're in a fractional rule, and we have to match the NumeratorSubstitution behavior.
                 // 2.3 can become 0.2999999999999998 for the fraction due to rounding errors.
-                pluralVal = Math.round(pluralVal * Math.pow(radix, exponent));
+                pluralVal = Math.round(pluralVal * power(radix, exponent));
             }
             else {
-                pluralVal = pluralVal / Math.pow(radix, exponent);
+                pluralVal = pluralVal / power(radix, exponent);
             }
             toInsertInto.insert(pos, rulePatternFormat.format((long)(pluralVal)));
             if (pluralRuleStart > 0) {
@@ -824,6 +824,32 @@ final class NFRule {
     }
 
     /**
+     * This is an equivalent to Math.pow that accurately works on 64-bit numbers
+     * @param base The base
+     * @param exponent The exponent
+     * @return radix ** exponent
+     * @see Math#pow(double, double)
+     */
+    static long power(long base, short exponent) {
+        if (exponent < 0) {
+            throw new IllegalArgumentException("Exponent can not be negative");
+        }
+        if (base < 0) {
+            throw new IllegalArgumentException("Base can not be negative");
+        }
+        long result = 1;
+        long pow = base;
+        while (exponent > 0) {
+            if ((exponent & 1) == 1) {
+                result *= pow;
+            }
+            pow *= pow;
+            exponent = (short) (exponent >> 1);
+        }
+        return result;
+    }
+
+    /**
      * Used by the owning rule set to determine whether to invoke the
      * rollback rule (i.e., whether this rule or the one that precedes
      * it in the rule set's list should be used to format the number)
@@ -831,7 +857,7 @@ final class NFRule {
      * @return True if the rule set should use the rule that precedes
      * this one in its list; false if it should use this rule
      */
-    public boolean shouldRollBack(double number) {
+    public boolean shouldRollBack(long number) {
         // we roll back if the rule contains a modulus substitution,
         // the number being formatted is an even multiple of the rule's
         // divisor, and the rule's base value is NOT an even multiple
@@ -848,8 +874,11 @@ final class NFRule {
         // a modulus substitution, its base value isn't an even multiple
         // of 100, and the value we're trying to format _is_ an even
         // multiple of 100.  This is called the "rollback rule."
-        return ((sub1 != null && sub1.isModulusSubstitution()) || (sub2 != null && sub2.isModulusSubstitution()))
-                && (number % Math.pow(radix, exponent)) == 0 && (baseValue % Math.pow(radix, exponent)) != 0;
+        if (!((sub1 != null && sub1.isModulusSubstitution()) || (sub2 != null && sub2.isModulusSubstitution()))) {
+            return false;
+        }
+        long divisor = power(radix, exponent);
+        return (number % divisor) == 0 && (baseValue % divisor) != 0;
     }
 
     //-----------------------------------------------------------------------

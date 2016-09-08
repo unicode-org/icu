@@ -1246,6 +1246,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
         return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
 
+    private static final com.ibm.icu.math.BigDecimal MAX_VALUE = com.ibm.icu.math.BigDecimal.valueOf(Long.MAX_VALUE);
+    private static final com.ibm.icu.math.BigDecimal MIN_VALUE = com.ibm.icu.math.BigDecimal.valueOf(Long.MIN_VALUE);
+
     /**
      * <strong style="font-family: helvetica; color: red;">NEW</strong>
      * Implement com.ibm.icu.text.NumberFormat:
@@ -1255,7 +1258,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
     public StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
-        // TEMPORARY:
+        if (MIN_VALUE.compareTo(number) >= 0 || MAX_VALUE.compareTo(number) <= 0) {
+            // We're outside of our normal range that this framework can handle.
+            // The DecimalFormat will provide more accurate results.
+            return getDecimalFormat().format(number, toAppendTo, pos);
+        }
+        if (number.scale() == 0) {
+            return format(number.longValue(), toAppendTo, pos);
+        }
         return format(number.doubleValue(), toAppendTo, pos);
     }
 
@@ -1930,7 +1940,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // be built, and pass it to the rule set (along with an insertion
         // position of 0 and the number being formatted) to the rule set
         // for formatting
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if (getRoundingMode() != BigDecimal.ROUND_UNNECESSARY) {
             // We convert to a string because BigDecimal insists on excessive precision.
             number = new BigDecimal(Double.toString(number)).setScale(getMaximumFractionDigits(), roundingMode).doubleValue();
@@ -1959,8 +1969,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // be built, and pass it to the rule set (along with an insertion
         // position of 0 and the number being formatted) to the rule set
         // for formatting
-        StringBuffer result = new StringBuffer();
-        ruleSet.format(number, result, 0, 0);
+        StringBuilder result = new StringBuilder();
+        if (number == Long.MIN_VALUE) {
+            // We can't handle this value right now. Provide an accurate default value.
+            result.append(getDecimalFormat().format(Long.MIN_VALUE));
+        }
+        else {
+            ruleSet.format(number, result, 0, 0);
+        }
         postProcess(result, ruleSet);
         return result.toString();
     }
@@ -1968,7 +1984,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Post-process the rules if we have a post-processor.
      */
-    private void postProcess(StringBuffer result, NFRuleSet ruleSet) {
+    private void postProcess(StringBuilder result, NFRuleSet ruleSet) {
         if (postProcessRules != null) {
             if (postProcessor == null) {
                 int ix = postProcessRules.indexOf(";");

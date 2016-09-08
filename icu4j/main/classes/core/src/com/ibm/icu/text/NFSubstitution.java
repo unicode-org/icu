@@ -101,7 +101,7 @@ abstract class NFSubstitution {
             }
             else {
                 // otherwise, return a MultiplierSubstitution
-                return new MultiplierSubstitution(pos, rule.getDivisor(), ruleSet,
+                return new MultiplierSubstitution(pos, rule, ruleSet,
                                                   description);
             }
 
@@ -131,7 +131,7 @@ abstract class NFSubstitution {
             }
             else {
                 // otherwise, return a ModulusSubstitution
-                return new ModulusSubstitution(pos, rule.getDivisor(), rulePredecessor,
+                return new ModulusSubstitution(pos, rule, rulePredecessor,
                                                ruleSet, description);
             }
         case '=':
@@ -219,7 +219,7 @@ abstract class NFSubstitution {
      * @param radix The radix of the divisor
      * @param exponent The exponent of the divisor
      */
-    public void setDivisor(int radix, int exponent) {
+    public void setDivisor(int radix, short exponent) {
         // a no-op for all substitutions except multiplier and modulus substitutions
     }
 
@@ -288,24 +288,15 @@ abstract class NFSubstitution {
      * rule text begins (this value is added to this substitution's
      * position to determine exactly where to insert the new text)
      */
-    public void doSubstitution(long number, StringBuffer toInsertInto, int position, int recursionCount) {
-        if (ruleSet != null) {
-            // perform a transformation on the number that is dependent
-            // on the type of substitution this is, then just call its
-            // rule set's format() method to format the result
-            long numberToFormat = transformNumber(number);
+    public void doSubstitution(long number, StringBuilder toInsertInto, int position, int recursionCount) {
+        // perform a transformation on the number that is dependent
+        // on the type of substitution this is, then just call its
+        // rule set's format() method to format the result
+        long numberToFormat = transformNumber(number);
 
+        if (ruleSet != null) {
             ruleSet.format(numberToFormat, toInsertInto, position + pos, recursionCount);
         } else {
-            // or perform the transformation on the number (preserving
-            // the result's fractional part if the formatter it set
-            // to show it), then use that formatter's format() method
-            // to format the result
-            double numberToFormat = transformNumber((double)number);
-            if (numberFormat.getMaximumFractionDigits() == 0) {
-                numberToFormat = Math.floor(numberToFormat);
-            }
-
             toInsertInto.insert(position + pos, numberFormat.format(numberToFormat));
         }
     }
@@ -320,7 +311,7 @@ abstract class NFSubstitution {
      * rule text begins (this value is added to this substitution's
      * position to determine exactly where to insert the new text)
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int position, int recursionCount) {
+    public void doSubstitution(double number, StringBuilder toInsertInto, int position, int recursionCount) {
         // perform a transformation on the number being formatted that
         // is dependent on the type of substitution this is
         double numberToFormat = transformNumber(number);
@@ -639,7 +630,7 @@ class MultiplierSubstitution extends NFSubstitution {
     /**
      * The divisor of the rule that owns this substitution.
      */
-    double divisor;
+    long divisor;
 
     //-----------------------------------------------------------------------
     // construction
@@ -650,12 +641,12 @@ class MultiplierSubstitution extends NFSubstitution {
      * constructor to initialize most members, but this substitution
      * also maintains its own copy of its rule's divisor.
      * @param pos The substitution's position in its rule's rule text
-     * @param divisor The owning rule's divisor
+     * @param rule The rule that owns this substitution
      * @param ruleSet The ruleSet this substitution uses to format its result
      * @param description The description describing this substitution
      */
     MultiplierSubstitution(int pos,
-                           double divisor,
+                           NFRule rule,
                            NFRuleSet ruleSet,
                            String description) {
         super(pos, ruleSet, description);
@@ -663,7 +654,7 @@ class MultiplierSubstitution extends NFSubstitution {
         // the owning rule's divisor affects the behavior of this
         // substitution.  Rather than keeping a back-pointer to the
         // rule, we keep a copy of the divisor
-        this.divisor = divisor;
+        this.divisor = rule.getDivisor();
 
         if (divisor == 0) { // this will cause recursion
             throw new IllegalStateException("Substitution with divisor 0 " + description.substring(0, pos) +
@@ -676,8 +667,8 @@ class MultiplierSubstitution extends NFSubstitution {
      * @param radix The radix of the divisor.
      * @param exponent The exponent of the divisor.
      */
-    public void setDivisor(int radix, int exponent) {
-        divisor = Math.pow(radix, exponent);
+    public void setDivisor(int radix, short exponent) {
+        divisor = NFRule.power(radix, exponent);
 
         if (divisor == 0) {
             throw new IllegalStateException("Substitution with divisor 0");
@@ -783,7 +774,7 @@ class ModulusSubstitution extends NFSubstitution {
     /**
      * The divisor of the rule owning this substitution
      */
-    double divisor;
+    long divisor;
 
     /**
      * If this is a &gt;&gt;&gt; substitution, the rule to use to format
@@ -802,13 +793,13 @@ class ModulusSubstitution extends NFSubstitution {
      * that precedes the rule containing this substitution in the rule
      * set's rule list.
      * @param pos The substitution's position in its rule's rule text
-     * @param divisor The divisor of the rule that owns this substitution
+     * @param rule The rule that owns this substitution
      * @param rulePredecessor The rule that precedes this substitution's
      * rule in its rule set's rule list
      * @param description The description for this substitution
      */
     ModulusSubstitution(int pos,
-                        double divisor,
+                        NFRule rule,
                         NFRule rulePredecessor,
                         NFRuleSet ruleSet,
                         String description)
@@ -818,7 +809,7 @@ class ModulusSubstitution extends NFSubstitution {
         // the owning rule's divisor controls the behavior of this
         // substitution: rather than keeping a backpointer to the rule,
         // we keep a copy of the divisor
-        this.divisor = divisor;
+        this.divisor = rule.getDivisor();
 
         if (divisor == 0) { // this will cause recursion
             throw new IllegalStateException("Substitution with bad divisor (" + divisor + ") "+ description.substring(0, pos) +
@@ -843,8 +834,8 @@ class ModulusSubstitution extends NFSubstitution {
      * @param radix The radix of the divisor.
      * @param exponent The exponent of the divisor.
      */
-    public void setDivisor(int radix, int exponent) {
-        divisor = Math.pow(radix, exponent);
+    public void setDivisor(int radix, short exponent) {
+        divisor = NFRule.power(radix, exponent);
 
         if (divisor == 0) { // this will cause recursion
             throw new IllegalStateException("Substitution with bad divisor");
@@ -883,7 +874,7 @@ class ModulusSubstitution extends NFSubstitution {
      * into
      * @param position The position of the rule text in toInsertInto
      */
-    public void doSubstitution(long number, StringBuffer toInsertInto, int position, int recursionCount) {
+    public void doSubstitution(long number, StringBuilder toInsertInto, int position, int recursionCount) {
         // if this isn't a >>> substitution, just use the inherited version
         // of this function (which uses either a rule set or a DecimalFormat
         // to format its substitution value)
@@ -906,7 +897,7 @@ class ModulusSubstitution extends NFSubstitution {
      * into
      * @param position The position of the rule text in toInsertInto
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int position, int recursionCount) {
+    public void doSubstitution(double number, StringBuilder toInsertInto, int position, int recursionCount) {
         // if this isn't a >>> substitution, just use the inherited version
         // of this function (which uses either a rule set or a DecimalFormat
         // to format its substitution value)
@@ -929,7 +920,7 @@ class ModulusSubstitution extends NFSubstitution {
      * @return "number" mod divisor
      */
     public long transformNumber(long number) {
-        return (long)Math.floor(number % divisor);
+        return number % divisor;
     }
 
     /**
@@ -1178,7 +1169,7 @@ class FractionalPartSubstitution extends NFSubstitution {
      * @param position The position of the owning rule's rule text in
      * toInsertInto
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int position, int recursionCount) {
+    public void doSubstitution(double number, StringBuilder toInsertInto, int position, int recursionCount) {
         if (!byDigits) {
             // if we're not in "byDigits" mode, just use the inherited
             // doSubstitution() routine
@@ -1503,7 +1494,7 @@ class NumeratorSubstitution extends NFSubstitution {
      * rule text begins (this value is added to this substitution's
      * position to determine exactly where to insert the new text)
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int position, int recursionCount) {
+    public void doSubstitution(double number, StringBuilder toInsertInto, int position, int recursionCount) {
         // perform a transformation on the number being formatted that
         // is dependent on the type of substitution this is
         //String s = toInsertInto.toString();

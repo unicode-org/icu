@@ -47,7 +47,7 @@ public class CoverageTest extends TestFmwk {
         Object[] serializedObjects = SerializableTestUtility.getSerializedObjects(serializedBytes);
         for (int i = 0; i < testObjects.length; i++) {
             if (!classHandler.hasSameBehavior(serializedObjects[i], testObjects[i])) {
-                errln("Input object " + i + " failed behavior test.");
+                errln("Input object " + className + "(" + i + ") failed behavior test.");
             }            
         }
     }
