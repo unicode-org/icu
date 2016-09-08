@@ -76,11 +76,13 @@ typedef enum UDateRelativeUnit {
      */
     UDAT_RELATIVE_YEARS,
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * Count of items in this enum.
-     * @stable ICU 53
+     * One more than the highest normal UDateRelativeUnit value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_RELATIVE_UNIT_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 } UDateRelativeUnit;
 
 /**
@@ -163,11 +165,13 @@ typedef enum UDateAbsoluteUnit {
      */
     UDAT_ABSOLUTE_NOW,
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * Count of items in this enum.
-     * @stable ICU 53
+     * One more than the highest normal UDateAbsoluteUnit value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_ABSOLUTE_UNIT_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 } UDateAbsoluteUnit;
 
 /**
@@ -213,11 +217,13 @@ typedef enum UDateDirection {
      */
     UDAT_DIRECTION_PLAIN,
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * Count of items in this enum.
-     * @stable ICU 53
+     * One more than the highest normal UDateDirection value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_DIRECTION_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 } UDateDirection;
 
 

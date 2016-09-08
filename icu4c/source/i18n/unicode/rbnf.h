@@ -56,7 +56,13 @@ enum URBNFRuleSetTag {
     URBNF_ORDINAL,
     URBNF_DURATION,
     URBNF_NUMBERING_SYSTEM,
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * One more than the highest normal URBNFRuleSetTag value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
     URBNF_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 };
 
 /**

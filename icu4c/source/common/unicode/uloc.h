@@ -350,10 +350,14 @@ typedef enum {
    *  @deprecated ICU 2.8 
    */
   ULOC_REQUESTED_LOCALE = 2,
-#endif /* U_HIDE_DEPRECATED_API */
 
-  ULOC_DATA_LOCALE_TYPE_LIMIT = 3
-} ULocDataLocaleType ;
+    /**
+     * One more than the highest normal ULocDataLocaleType value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
+    ULOC_DATA_LOCALE_TYPE_LIMIT = 3
+#endif  // U_HIDE_DEPRECATED_API
+} ULocDataLocaleType;
 
 #ifndef U_HIDE_SYSTEM_API
 /**

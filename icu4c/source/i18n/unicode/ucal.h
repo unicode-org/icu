@@ -425,11 +425,13 @@ enum UCalendarDateFields {
    */
   UCAL_IS_LEAP_MONTH,
 
-  /**
-   * Field count
-   * @stable ICU 2.6
-   */
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * One more than the highest normal UCalendarDateFields value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
   UCAL_FIELD_COUNT,
+#endif  // U_HIDE_DEPRECATED_API
 
  /**
    * Field number indicating the

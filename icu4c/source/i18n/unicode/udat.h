@@ -789,16 +789,15 @@ typedef enum UDateFormatField {
     UDAT_TIME_SEPARATOR_FIELD = 37,
 #endif  /* U_HIDE_INTERNAL_API */
 
-   /**
+#ifndef U_HIDE_DEPRECATED_API
+    /**
      * Number of FieldPosition and UFieldPosition selectors for
      * DateFormat and UDateFormat.
      * Valid selectors range from 0 to UDAT_FIELD_COUNT-1.
-     * This value is subject to change if new fields are defined
-     * in the future.
-     * @stable ICU 3.0
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_FIELD_COUNT = 38
-
+#endif  // U_HIDE_DEPRECATED_API
 } UDateFormatField;
 
 
@@ -904,11 +903,13 @@ typedef enum UDateFormatBooleanAttribute {
      */
     UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH = 3,
 #endif /* U_HIDE_DRAFT_API */
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * count boolean date format constants
-     * @stable ICU 53
+     * One more than the highest normal UDateFormatBooleanAttribute value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_BOOLEAN_ATTRIBUTE_COUNT = 4
+#endif  // U_HIDE_DEPRECATED_API
 } UDateFormatBooleanAttribute;
 
 /**

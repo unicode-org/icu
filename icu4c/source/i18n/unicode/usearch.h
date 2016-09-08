@@ -190,11 +190,13 @@ typedef enum {
      */
     USEARCH_ELEMENT_COMPARISON = 2,
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * Count of attribute types
-     * @stable ICU 2.4
+     * One more than the highest normal USearchAttribute value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     USEARCH_ATTRIBUTE_COUNT = 3
+#endif  // U_HIDE_DEPRECATED_API
 } USearchAttribute;
 
 /**
@@ -264,11 +266,13 @@ typedef enum {
      */
     USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD,
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * Count of attribute values
-     * @stable ICU 2.4
+     * One more than the highest normal USearchAttributeValue value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     USEARCH_ATTRIBUTE_VALUE_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 } USearchAttributeValue;
 
 /* open and close ------------------------------------------------------ */

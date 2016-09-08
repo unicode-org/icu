@@ -54,11 +54,13 @@ enum UPluralType {
      * @stable ICU 50
      */
     UPLURAL_TYPE_ORDINAL,
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * Number of Plural rules types.
-     * @stable ICU 50
+     * One more than the highest normal UPluralType value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UPLURAL_TYPE_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 };
 /**
  * @stable ICU 50
