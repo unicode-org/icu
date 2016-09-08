@@ -430,7 +430,7 @@ final class NFRuleSet {
      * @param pos The position in toInsertInto where the result of
      * this operation is to be inserted
      */
-    public void format(long number, StringBuffer toInsertInto, int pos, int recursionCount) {
+    public void format(long number, StringBuilder toInsertInto, int pos, int recursionCount) {
         if (recursionCount >= RECURSION_LIMIT) {
             throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
         }
@@ -446,7 +446,7 @@ final class NFRuleSet {
      * @param pos The position in toInsertInto where the result of
      * this operation is to be inserted
      */
-    public void format(double number, StringBuffer toInsertInto, int pos, int recursionCount) {
+    public void format(double number, StringBuilder toInsertInto, int pos, int recursionCount) {
         if (recursionCount >= RECURSION_LIMIT) {
             throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
         }
