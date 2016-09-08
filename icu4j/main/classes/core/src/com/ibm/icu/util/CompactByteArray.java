@@ -96,7 +96,7 @@ public final class CompactByteArray implements Cloneable {
             throw new IllegalArgumentException("Index out of bounds.");
         for (i = 0; i < INDEXCOUNT; ++i) {
             char index = indexArray[i];
-            if ((index < 0) || (index >= newValues.length+BLOCKCOUNT))
+            if (index >= newValues.length+BLOCKCOUNT)
                 throw new IllegalArgumentException("Index out of bounds.");
         }
         indices = indexArray;
@@ -150,7 +150,7 @@ public final class CompactByteArray implements Cloneable {
     {
         if (isCompact)
             expand();
-        values[(int)index] = value;
+        values[index] = value;
         touchBlock(index >> BLOCKSHIFT, value);
     }
 
@@ -307,6 +307,7 @@ public final class CompactByteArray implements Cloneable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public Object clone()
     {
@@ -329,6 +330,7 @@ public final class CompactByteArray implements Cloneable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public boolean equals(Object obj) {
         if (obj == null) return false;
@@ -350,6 +352,7 @@ public final class CompactByteArray implements Cloneable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public int hashCode() {
         int result = 0;
