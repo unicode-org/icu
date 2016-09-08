@@ -838,13 +838,12 @@ final class NFRule {
             throw new IllegalArgumentException("Base can not be negative");
         }
         long result = 1;
-        long pow = base;
         while (exponent > 0) {
             if ((exponent & 1) == 1) {
-                result *= pow;
+                result *= base;
             }
-            pow *= pow;
-            exponent = (short) (exponent >> 1);
+            base *= base;
+            exponent >>= 1;
         }
         return result;
     }
