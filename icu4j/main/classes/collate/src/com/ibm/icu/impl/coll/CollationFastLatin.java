@@ -205,6 +205,8 @@ public final class CollationFastLatin /* all static */ {
         if(header == null) { return -1; }
         assert((header[0] >> 8) == VERSION);
         assert(primaries.length == LATIN_LIMIT);
+        // FindBugs complains that primaries.length == LATIN_LIMIT is known after the assert,
+        // but we keep this here for when assertions are disabled.
         if(primaries.length != LATIN_LIMIT) { return -1; }
 
         int miniVarTop;

@@ -161,7 +161,7 @@ public class SpoofChecker {
         ASCII,
         /**
          * All characters in each identifier must be from a single script.
-         * 
+         *
          * @stable ICU 53
          */
         SINGLE_SCRIPT_RESTRICTIVE,
@@ -1077,7 +1077,7 @@ public class SpoofChecker {
                     StringBuilder mapString = new StringBuilder();
                     while (m.find()) {
                         int c = Integer.parseInt(m.group(1), 16);
-                        if (keyChar > 0x10ffff) {
+                        if (c > 0x10ffff) {
                             throw new ParseException("Confusables, line " + fLineNum + ": Bad code point: "
                                     + Integer.toString(c, 16), matcher.start(2));
                         }
@@ -1091,7 +1091,7 @@ public class SpoofChecker {
                     SPUString smapString = stringPool.addString(mapString.toString());
 
                     // Add the char . string mapping to the appropriate table.
-                    Hashtable<Integer, SPUString> table = 
+                    Hashtable<Integer, SPUString> table =
                             matcher.start(3) >= 0 ? fSLTable :
                             matcher.start(4) >= 0 ? fSATable :
                             matcher.start(5) >= 0 ? fMLTable :
@@ -1400,6 +1400,7 @@ public class SpoofChecker {
             // by code point order.
 
             private static class SPUStringComparator implements Comparator<SPUString> {
+                @Override
                 public int compare(SPUString sL, SPUString sR) {
                     int lenL = sL.fStr.length();
                     int lenR = sR.fStr.length();
@@ -1876,7 +1877,7 @@ public class SpoofChecker {
      * The latest proposed update, UAX 39 Version 8 draft 1, says "the tables SL, SA, and ML
      * were still problematic, and discouraged from use in [Uniocde] 7.0.
      * They were thus removed from version 8.0"
-     * 
+     *
      * In light of this, the default mapping data included with ICU 55 uses the
      * Unicode 7 MA (Multi script Any case) table data for the other type options
      * (Single Script, Any Case), (Single Script, Lower Case) and (Multi Script, Lower Case).
@@ -2243,6 +2244,7 @@ public class SpoofChecker {
         static class SpoofStringLengthsElement {
             int fLastString;  // index in string table of last string with this length
             int fStrLength;   // Length of strings
+            @Override
             public boolean equals(Object other) {
                 if (!(other instanceof SpoofStringLengthsElement)) {
                     return false;
@@ -2257,6 +2259,7 @@ public class SpoofChecker {
 
         private static final class IsAcceptable implements Authenticate {
             // @Override when we switch to Java 6
+            @Override
             public boolean isDataVersionAcceptable(byte version[]) {
                 return version[0] == 1;
             }
@@ -2294,6 +2297,7 @@ public class SpoofChecker {
             readData(bytes);
         }
 
+        @Override
         public boolean equals(Object other) {
             if (!(other instanceof SpoofData)) {
                 return false;
@@ -2422,6 +2426,7 @@ public class SpoofChecker {
             }
         }
 
+        @Override
         public boolean equals(Object other) {
             if (!(other instanceof ScriptSet)) {
                 return false;

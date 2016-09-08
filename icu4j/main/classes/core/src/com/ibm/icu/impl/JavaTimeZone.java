@@ -107,6 +107,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#getOffset(int, int, int, int, int, int)
      */
+    @Override
     public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {
         return javatz.getOffset(era, year, month, day, dayOfWeek, milliseconds);
     }
@@ -114,6 +115,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#getOffset(long, boolean, int[])
      */
+    @Override
     public void getOffset(long date, boolean local, int[] offsets) {
         synchronized (javacal) {
             if (local) {
@@ -159,6 +161,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#getRawOffset()
      */
+    @Override
     public int getRawOffset() {
         return javatz.getRawOffset();
     }
@@ -166,6 +169,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#inDaylightTime(java.util.Date)
      */
+    @Override
     public boolean inDaylightTime(Date date) {
         return javatz.inDaylightTime(date);
     }
@@ -173,6 +177,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#setRawOffset(int)
      */
+    @Override
     public void setRawOffset(int offsetMillis) {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify a frozen JavaTimeZone instance.");
@@ -183,6 +188,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#useDaylightTime()
      */
+    @Override
     public boolean useDaylightTime() {
         return javatz.useDaylightTime();
     }
@@ -190,6 +196,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#observesDaylightTime()
      */
+    @Override
     public boolean observesDaylightTime() {
         if (mObservesDaylightTime != null) {
             // Java 7+
@@ -206,6 +213,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#getDSTSavings()
      */
+    @Override
     public int getDSTSavings() {
         return javatz.getDSTSavings();
     }
@@ -217,6 +225,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#clone()
      */
+    @Override
     public Object clone() {
         if (isFrozen()) {
             return this;
@@ -227,6 +236,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#hashCode()
      */
+    @Override
     public int hashCode() {
         return super.hashCode() + javatz.hashCode();
     }
@@ -242,6 +252,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#isFrozen()
      */
+    @Override
     public boolean isFrozen() {
         return isFrozen;
     }
@@ -249,6 +260,7 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#freeze()
      */
+    @Override
     public TimeZone freeze() {
         isFrozen = true;
         return this;
@@ -257,12 +269,11 @@ public class JavaTimeZone extends TimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#cloneAsThawed()
      */
+    @Override
     public TimeZone cloneAsThawed() {
         JavaTimeZone tz = (JavaTimeZone)super.cloneAsThawed();
         tz.javatz = (java.util.TimeZone)javatz.clone();
-        synchronized(javacal) {
-            tz.javacal = (java.util.GregorianCalendar)javacal.clone();
-        }
+        tz.javacal = new java.util.GregorianCalendar(javatz);  // easier than synchronized javacal.clone()
         tz.isFrozen = false;
         return tz;
     }
