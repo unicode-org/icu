@@ -245,11 +245,13 @@ typedef enum UNumberFormatStyle {
     UNUM_CURRENCY_STANDARD=16,
 #endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * One more than the highest number format style constant.
-     * @stable ICU 4.8
+     * One more than the highest normal UNumberFormatStyle value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UNUM_FORMAT_STYLE_COUNT=17,
+#endif  // U_HIDE_DEPRECATED_API
 
     /**
      * Default format
@@ -325,8 +327,13 @@ enum UCurrencySpacing {
     UNUM_CURRENCY_SURROUNDING_MATCH,
     /** @stable ICU 4.8 */
     UNUM_CURRENCY_INSERT,
-    /** @stable ICU 4.8 */
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * One more than the highest normal UCurrencySpacing value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
     UNUM_CURRENCY_SPACING_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 };
 typedef enum UCurrencySpacing UCurrencySpacing; /**< @stable ICU 4.8 */
 
@@ -359,8 +366,13 @@ typedef enum UNumberFormatFields {
     UNUM_PERMILL_FIELD,
     /** @stable ICU 49 */
     UNUM_SIGN_FIELD,
-    /** @stable ICU 49 */
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * One more than the highest normal UNumberFormatFields value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
     UNUM_FIELD_COUNT
+#endif  // U_HIDE_DEPRECATED_API
 } UNumberFormatFields;
 
 
@@ -1274,8 +1286,13 @@ typedef enum UNumberFormatSymbol {
    */
   UNUM_EXPONENT_MULTIPLICATION_SYMBOL = 27,
 
-  /** count symbol constants */
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * One more than the highest normal UNumberFormatSymbol value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
   UNUM_FORMAT_SYMBOL_COUNT = 28
+#endif  // U_HIDE_DEPRECATED_API
 } UNumberFormatSymbol;
 
 /**

@@ -122,9 +122,13 @@ typedef enum {
     RES_INT_VECTOR=URES_INT_VECTOR,
     /** @deprecated ICU 2.6 Not used. */
     RES_RESERVED=15,
-#endif /* U_HIDE_DEPRECATED_API */
 
+    /**
+     * One more than the highest normal UResType value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
     URES_LIMIT = 16
+#endif  // U_HIDE_DEPRECATED_API
 } UResType;
 
 /*

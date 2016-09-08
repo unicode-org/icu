@@ -43,7 +43,13 @@ public:
         UTIMEUNIT_HOUR,
         UTIMEUNIT_MINUTE,
         UTIMEUNIT_SECOND,
+#ifndef U_HIDE_DEPRECATED_API
+        /**
+         * One more than the highest normal UTimeUnitFields value.
+         * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+         */
         UTIMEUNIT_FIELD_COUNT
+#endif  // U_HIDE_DEPRECATED_API
     };
 
     /**

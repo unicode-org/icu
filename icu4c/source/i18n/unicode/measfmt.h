@@ -61,11 +61,13 @@ enum UMeasureFormatWidth {
      */
     UMEASFMT_WIDTH_NUMERIC,
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
-     * Count of values in this enum.
-     * @stable ICU 53
+     * One more than the highest normal UMeasureFormatWidth value.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UMEASFMT_WIDTH_COUNT = 4
+#endif  // U_HIDE_DEPRECATED_API
 };
 /** @stable ICU 53 */
 typedef enum UMeasureFormatWidth UMeasureFormatWidth; 

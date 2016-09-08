@@ -444,13 +444,15 @@ typedef enum UScriptCode {
       /** @stable ICU 58 */
       USCRIPT_SYMBOLS_EMOJI                 = 174,/* Zsye */
 
-      /**
-       * One higher than the last script code constant.
-       * This value increases as constants for script codes are added.
-       *
-       * @stable ICU 2.2
-       */
-      USCRIPT_CODE_LIMIT    = 175
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * One more than the highest normal UScriptCode value.
+     * The highest value is available via u_getIntPropertyMaxValue(UCHAR_SCRIPT).
+     *
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
+    USCRIPT_CODE_LIMIT    = 175
+#endif  // U_HIDE_DEPRECATED_API
 } UScriptCode;
 
 /**
