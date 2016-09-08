@@ -385,11 +385,6 @@ public  class ICUResourceBundle extends UResourceBundle {
                     path, getKey());
             }
         }
-        if (sink == null) {
-            if (rb.getType() != TABLE) {
-                throw new UResourceTypeMismatchException("");
-            }
-        }
         UResource.Key key = new UResource.Key();
         ReaderValue readerValue = new ReaderValue();
         rb.getAllItemsWithFallback(key, readerValue, sink);
