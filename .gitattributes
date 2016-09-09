@@ -3934,6 +3934,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/CacheValue.java svneol=native#text/
 icu4j/main/classes/core/src/com/ibm/icu/impl/CalendarAstronomer.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CalendarCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CalendarUtil.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/CaseMap.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CharTrie.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CharacterIteration.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/CharacterIteratorWrapper.java svneol=native#text/plain%3Bcharset%3Dutf-8

@@ -21,12 +21,14 @@ import com.ibm.icu.util.ULocale;
 class TitlecaseTransliterator extends Transliterator {
 
     static final String _ID = "Any-Title";
+    // TODO: Add variants for tr/az, lt, default = default locale: ICU ticket #12720
 
     /**
      * System registration hook.
      */
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new TitlecaseTransliterator(ULocale.US);
             }
@@ -56,10 +58,11 @@ class TitlecaseTransliterator extends Transliterator {
         locCache = new int[1];
         locCache[0]=0;
     }
-     
+
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
+    @Override
     protected synchronized void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
         // TODO reimplement, see ustrcase.c
@@ -150,10 +153,10 @@ class TitlecaseTransliterator extends Transliterator {
         }
         offsets.start = offsets.limit;
     }
-    
+
     // NOTE: normally this would be static, but because the results vary by locale....
     SourceTargetUtility sourceTargetUtility = null;
-    
+
     /* (non-Javadoc)
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
@@ -162,8 +165,9 @@ class TitlecaseTransliterator extends Transliterator {
         synchronized (this) {
             if (sourceTargetUtility == null) {
                 sourceTargetUtility = new SourceTargetUtility(new Transform<String,String>() {
+                    @Override
                     public String transform(String source) {
-                        return UCharacter.toTitleCase(locale, source, null);                    
+                        return UCharacter.toTitleCase(locale, source, null);
                     }
                 });
             }
