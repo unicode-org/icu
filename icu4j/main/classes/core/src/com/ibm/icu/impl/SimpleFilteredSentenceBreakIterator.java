@@ -89,8 +89,9 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
             if (bestPosn >= 0) {
                 if (bestValue == Builder.MATCH) { // exact match!
                     n = delegate.next(); // skip this one. Find the next lowerlevel break.
-                    if (n == BreakIterator.DONE)
-                        return n;
+                    if (n == BreakIterator.DONE) {
+                        break;
+                    }
                     continue; // See if the next is another exception.
                 } else if (bestValue == Builder.PARTIAL && forwardsPartialTrie != null) {
                     // make sure there's a forward trie
@@ -107,18 +108,19 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
                         // only full matches here, nothing to check
                         // skip the next:
                         n = delegate.next();
-                        if (n == BreakIterator.DONE)
-                            return n;
+                        if (n == BreakIterator.DONE) {
+                            break;
+                        }
                         continue;
                     } else {
                         // no match (no exception) -return the 'underlying' break
-                        return n;
+                        break;
                     }
                 } else {
-                    return n; // internal error and/or no forwards trie
+                    break; // internal error and/or no forwards trie
                 }
             } else {
-                return n; // No match - so exit. Not an exception.
+                break; // No match - so exit. Not an exception.
             }
         } while (n != BreakIterator.DONE);
         return n;
