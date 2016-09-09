@@ -109,6 +109,7 @@ uidna.o usprep.o uts46.o punycode.o \
 util.o util_props.o parsepos.o locbased.o cwchar.o wintz.o dtintrv.o ucnvsel.o propsvec.o \
 ulist.o uloc_tag.o icudataver.o icuplug.o listformatter.o ulistformatter.o \
 sharedobject.o simpleformatter.o unifiedcache.o uloc_keytype.o \
+ubiditransform.o \
 pluralmap.o
 
 ## Header files to install

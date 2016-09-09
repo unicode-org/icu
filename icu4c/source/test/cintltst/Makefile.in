@@ -53,6 +53,7 @@ uenumtst.o utmstest.o currtest.o \
 idnatest.o nfsprep.o spreptst.o sprpdata.o \
 hpmufn.o tracetst.o reapits.o uregiontest.o ulistfmttest.o\
 utexttst.o ucsdetst.o spooftest.o \
+cbiditransformtst.o \
 cgendtst.o
 
 DEPS = $(OBJECTS:.o=.d)

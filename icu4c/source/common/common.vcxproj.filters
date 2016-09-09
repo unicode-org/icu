@@ -586,12 +586,17 @@
     <ClCompile Include="stringtriebuilder.cpp">
       <Filter>collections</Filter>
     </ClCompile>
-    <ClCompile Include="icuplug.cpp" />
     <ClCompile Include="uloc_keytype.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
     <ClCompile Include="filteredbrk.cpp">
       <Filter>break iteration</Filter>
+    </ClCompile>
+    <ClCompile Include="icuplug.cpp">
+      <Filter>registration</Filter>
+    </ClCompile>
+    <ClCompile Include="ubiditransform.c">
+      <Filter>bidi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -909,6 +914,9 @@
     </ClInclude>
     <ClInclude Include="unicode\filteredbrk.h">
       <Filter>break iteration</Filter>
+    </ClInclude>
+    <ClInclude Include="unicode\ubiditransform.h">
+      <Filter>bidi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

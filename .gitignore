@@ -6,11 +6,15 @@ icu4c/lib64
 icu4c/source/Doxyfile
 icu4c/source/Makefile
 icu4c/source/README
+icu4c/source/allinone/*.db
 icu4c/source/allinone/*.ncb
+icu4c/source/allinone/*.opendb
 icu4c/source/allinone/*.opensdf
 icu4c/source/allinone/*.opt
 icu4c/source/allinone/*.sdf
 icu4c/source/allinone/*.suo
+icu4c/source/allinone/.vs
+icu4c/source/allinone/Debug
 icu4c/source/allinone/ipch
 icu4c/source/autom4te.cache
 icu4c/source/bin

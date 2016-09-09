@@ -51,6 +51,8 @@ README text !eol
 icu4c/icu4c.css -text
 icu4c/source/aclocal.m4 -text
 icu4c/source/allinone/icucheck.bat -text
+icu4c/source/common/ubiditransform.c -text
+icu4c/source/common/unicode/ubiditransform.h -text
 icu4c/source/config/m4/icu-conditional.m4 -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/coll/ucadata-implicithan.icu -text
@@ -132,6 +134,7 @@ icu4c/source/samples/ugrep/ugrep.vcxproj -text
 icu4c/source/samples/uresb/resources.vcxproj -text
 icu4c/source/samples/uresb/uresb.vcxproj -text
 icu4c/source/samples/ustring/ustring.vcxproj -text
+icu4c/source/test/cintltst/cbiditransformtst.c -text
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/letest/cletest.vcxproj -text
