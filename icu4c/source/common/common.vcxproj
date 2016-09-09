@@ -238,6 +238,7 @@
   <ItemGroup>
     <ClCompile Include="filteredbrk.cpp" />
     <ClCompile Include="ubidi.c" />
+    <ClCompile Include="ubiditransform.c" />
     <ClCompile Include="ubidi_props.c" />
     <ClCompile Include="ubidiln.c" />
     <ClCompile Include="ubidiwrt.c" />
@@ -586,6 +587,7 @@
     <ClInclude Include="uchar_props_data.h" />
     <ClInclude Include="ucol_data.h" />
     <ClInclude Include="ucol_swp.h" />
+    <ClInclude Include="unicode\ubiditransform.h" />
     <ClInclude Include="unistrappender.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="propsvec.h" />

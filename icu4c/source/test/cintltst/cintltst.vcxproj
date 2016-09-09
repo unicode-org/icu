@@ -231,6 +231,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cbididat.c" />
+    <ClCompile Include="cbiditransformtst.c" />
     <ClCompile Include="cbiditst.c" />
     <ClCompile Include="cbiapts.c" />
     <ClCompile Include="cbkittst.c" />
