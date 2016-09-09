@@ -76,9 +76,6 @@
 .BI "\-\-ldflags"
 ]
 [
-.BI "\-\-ldflags\-layout"
-]
-[
 .BI "\-\-ldflags\-libsonly"
 ]
 [
