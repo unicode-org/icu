@@ -224,13 +224,13 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
                     if (!altered2.equals(definition2)) {
                         unused.remove(variable);
                         variables.put(variable2, altered2);
-                        if (log != null) {
-                            try {
-                                log.append(variable2 + "=" + altered2 + ";");
-                            } catch (IOException e) {
-                                throw (IllegalArgumentException) new IllegalArgumentException().initCause(e);
-                            }
-                        }
+//                        if (log != null) {
+//                            try {
+//                                log.append(variable2 + "=" + altered2 + ";");
+//                            } catch (IOException e) {
+//                                throw (IllegalArgumentException) new IllegalArgumentException().initCause(e);
+//                            }
+//                        }
                     }
                 }
             }
@@ -346,11 +346,11 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
         }
     }
 
-    private static UnicodeRegex STANDARD = new UnicodeRegex();
+    private static final UnicodeRegex STANDARD = new UnicodeRegex();
     private String bnfCommentString = "#";
     private String bnfVariableInfix = "=";
     private String bnfLineSeparator = "\n";
-    private Appendable log = null;
+//    private Appendable log = null;
 
     private Comparator<Object> LongestFirst = new Comparator<Object>() {
         public int compare(Object obj0, Object obj1) {
