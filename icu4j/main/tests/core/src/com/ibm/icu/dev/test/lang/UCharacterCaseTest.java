@@ -108,11 +108,11 @@ public final class UCharacterCaseTest extends TestFmwk
                 errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) +
                       ", true) should be \\u" + hex(FOLDING_SIMPLE_[i + 1]));
             }
-            if (UCharacter.foldCase(FOLDING_SIMPLE_[i], 
+            if (UCharacter.foldCase(FOLDING_SIMPLE_[i],
                                     UCharacter.FOLD_CASE_DEFAULT) !=
                                                       FOLDING_SIMPLE_[i + 1]) {
                 errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) +
-                      ", UCharacter.FOLD_CASE_DEFAULT) should be \\u" 
+                      ", UCharacter.FOLD_CASE_DEFAULT) should be \\u"
                       + hex(FOLDING_SIMPLE_[i + 1]));
             }
             if (UCharacter.foldCase(FOLDING_SIMPLE_[i], false) !=
@@ -120,11 +120,11 @@ public final class UCharacterCaseTest extends TestFmwk
                 errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) +
                       ", false) should be \\u" + hex(FOLDING_SIMPLE_[i + 2]));
             }
-            if (UCharacter.foldCase(FOLDING_SIMPLE_[i], 
+            if (UCharacter.foldCase(FOLDING_SIMPLE_[i],
                                     UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) !=
                                     FOLDING_SIMPLE_[i + 2]) {
                 errln("FAIL: foldCase(\\u" + hex(FOLDING_SIMPLE_[i]) +
-                      ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) should be \\u" 
+                      ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) should be \\u"
                       + hex(FOLDING_SIMPLE_[i + 2]));
             }
         }
@@ -136,7 +136,7 @@ public final class UCharacterCaseTest extends TestFmwk
                   ", true)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[0], true)) +
                   " should be " + prettify(FOLDING_DEFAULT_[0]));
         }
-        
+
         if (!FOLDING_DEFAULT_[0].equals(UCharacter.foldCase(FOLDING_MIXED_[0], UCharacter.FOLD_CASE_DEFAULT))) {
                     errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[0]) +
                           ", UCharacter.FOLD_CASE_DEFAULT)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[0], UCharacter.FOLD_CASE_DEFAULT))
@@ -149,7 +149,7 @@ public final class UCharacterCaseTest extends TestFmwk
                   ", false)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[0], false))
                   + " should be " + prettify(FOLDING_EXCLUDE_SPECIAL_I_[0]));
         }
-        
+
         if (!FOLDING_EXCLUDE_SPECIAL_I_[0].equals(
                                     UCharacter.foldCase(FOLDING_MIXED_[0], UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))) {
             errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[0]) +
@@ -168,7 +168,7 @@ public final class UCharacterCaseTest extends TestFmwk
                          ", UCharacter.FOLD_CASE_DEFAULT)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[1], UCharacter.FOLD_CASE_DEFAULT))
                          + " should be " + prettify(FOLDING_DEFAULT_[1]));
         }
-        
+
         // alternate handling for dotted I/dotless i (U+0130, U+0131)
         if (!FOLDING_EXCLUDE_SPECIAL_I_[1].equals(
                         UCharacter.foldCase(FOLDING_MIXED_[1], false))) {
@@ -176,7 +176,7 @@ public final class UCharacterCaseTest extends TestFmwk
                   ", false)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[1], false))
                   + " should be " + prettify(FOLDING_EXCLUDE_SPECIAL_I_[1]));
         }
-        
+
         if (!FOLDING_EXCLUDE_SPECIAL_I_[1].equals(
                                 UCharacter.foldCase(FOLDING_MIXED_[1], UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))) {
             errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[1]) +
@@ -299,7 +299,7 @@ public final class UCharacterCaseTest extends TestFmwk
     @Test
     public void TestTitle()
     {
-         try{ 
+         try{
             for (int i = 0; i < TITLE_DATA_.length;) {
                 String test = TITLE_DATA_[i++];
                 String expected = TITLE_DATA_[i++];
@@ -675,6 +675,39 @@ public final class UCharacterCaseTest extends TestFmwk
         logln("done testing upper Lower");
     }
 
+    private void assertGreekUpper(String s, String expected) {
+        assertEquals("toUpper/Greek(" + s + ')', expected, UCharacter.toUpperCase(GREEK_LOCALE_, s));
+    }
+
+    @Test
+    public void TestGreekUpper() {
+        // http://bugs.icu-project.org/trac/ticket/5456
+        assertGreekUpper("άδικος, κείμενο, ίριδα", "ΑΔΙΚΟΣ, ΚΕΙΜΕΝΟ, ΙΡΙΔΑ");
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=307039
+        // https://bug307039.bmoattachments.org/attachment.cgi?id=194893
+        assertGreekUpper("Πατάτα", "ΠΑΤΑΤΑ");
+        assertGreekUpper("Αέρας, Μυστήριο, Ωραίο", "ΑΕΡΑΣ, ΜΥΣΤΗΡΙΟ, ΩΡΑΙΟ");
+        assertGreekUpper("Μαΐου, Πόρος, Ρύθμιση", "ΜΑΪΟΥ, ΠΟΡΟΣ, ΡΥΘΜΙΣΗ");
+        assertGreekUpper("ΰ, Τηρώ, Μάιος", "Ϋ, ΤΗΡΩ, ΜΑΪΟΣ");
+        assertGreekUpper("άυλος", "ΑΫΛΟΣ");
+        assertGreekUpper("ΑΫΛΟΣ", "ΑΫΛΟΣ");
+        assertGreekUpper("Άκλιτα ρήματα ή άκλιτες μετοχές", "ΑΚΛΙΤΑ ΡΗΜΑΤΑ Ή ΑΚΛΙΤΕΣ ΜΕΤΟΧΕΣ");
+        // http://www.unicode.org/udhr/d/udhr_ell_monotonic.html
+        assertGreekUpper("Επειδή η αναγνώριση της αξιοπρέπειας", "ΕΠΕΙΔΗ Η ΑΝΑΓΝΩΡΙΣΗ ΤΗΣ ΑΞΙΟΠΡΕΠΕΙΑΣ");
+        assertGreekUpper("νομικού ή διεθνούς", "ΝΟΜΙΚΟΥ Ή ΔΙΕΘΝΟΥΣ");
+        // http://unicode.org/udhr/d/udhr_ell_polytonic.html
+        assertGreekUpper("Ἐπειδὴ ἡ ἀναγνώριση", "ΕΠΕΙΔΗ Η ΑΝΑΓΝΩΡΙΣΗ");
+        assertGreekUpper("νομικοῦ ἢ διεθνοῦς", "ΝΟΜΙΚΟΥ Ή ΔΙΕΘΝΟΥΣ");
+        // From Google bug report
+        assertGreekUpper("Νέο, Δημιουργία", "ΝΕΟ, ΔΗΜΙΟΥΡΓΙΑ");
+        // http://crbug.com/234797
+        assertGreekUpper("Ελάτε να φάτε τα καλύτερα παϊδάκια!", "ΕΛΑΤΕ ΝΑ ΦΑΤΕ ΤΑ ΚΑΛΥΤΕΡΑ ΠΑΪΔΑΚΙΑ!");
+        assertGreekUpper("Μαΐου, τρόλεϊ", "ΜΑΪΟΥ, ΤΡΟΛΕΪ");
+        assertGreekUpper("Το ένα ή το άλλο.", "ΤΟ ΕΝΑ Ή ΤΟ ΑΛΛΟ.");
+        // http://multilingualtypesetting.co.uk/blog/greek-typesetting-tips/
+        assertGreekUpper("ρωμέικα", "ΡΩΜΕΪΚΑ");
+    }
+
     // private data members - test data --------------------------------------
 
     private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");
@@ -764,7 +797,7 @@ public final class UCharacterCaseTest extends TestFmwk
                       "\u0061\u0042\u0049\u03a3\u00df\u03a3\u002f\ud93f\udfff";
     private static final String LOWER_ROOT_ =
                       "\u0061\u0062\u0069\u03c3\u00df\u03c2\u002f\ud93f\udfff";
-    private static final String LOWER_TURKISH_ = 
+    private static final String LOWER_TURKISH_ =
                       "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff";
 
     /**
@@ -797,7 +830,7 @@ public final class UCharacterCaseTest extends TestFmwk
         "4",
         "",
 
-        "\u01c4\u01c5\u01c6\u01c7\u01c8\u01c9\u01ca\u01cb\u01cc", 
+        "\u01c4\u01c5\u01c6\u01c7\u01c8\u01c9\u01ca\u01cb\u01cc",
         "\u01c5\u01c5\u01c5\u01c8\u01c8\u01c8\u01cb\u01cb\u01cb", // UBRK_CHARACTER
         "",
         "0",

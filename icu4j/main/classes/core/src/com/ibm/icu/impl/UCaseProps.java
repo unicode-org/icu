@@ -83,7 +83,7 @@ public final class UCaseProps {
 
     // implement ICUBinary.Authenticate
     private final static class IsAcceptable implements ICUBinary.Authenticate {
-        // @Override when we switch to Java 6
+        @Override
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0]==3;
         }
@@ -152,7 +152,7 @@ public final class UCaseProps {
      * @param index (in) desired slot index
      * @param excOffset (in) offset into exceptions[] after excWord=exceptions[excOffset++];
      * @return bits 31..0: slot value
-     *             63..32: modified excOffset, moved to the last char of the value, use +1 for beginning of next slot 
+     *             63..32: modified excOffset, moved to the last char of the value, use +1 for beginning of next slot
      */
     private final long getSlotValueAndOffset(int excWord, int index, int excOffset) {
         long value;
@@ -550,7 +550,7 @@ public final class UCaseProps {
      *   - The general category of C is
      *     Nonspacing Mark (Mn), or Enclosing Mark (Me), or Format Control (Cf), or
      *     Letter Modifier (Lm), or Symbol Modifier (Sk)
-     *   - C is one of the following characters 
+     *   - C is one of the following characters
      *     U+0027 APOSTROPHE
      *     U+00AD SOFT HYPHEN (SHY)
      *     U+2019 RIGHT SINGLE QUOTATION MARK
@@ -578,13 +578,13 @@ public final class UCaseProps {
          * @param dir >0: Begin iterating forward from the first code point
          * after the one that is being case-mapped.
          *            <0: Begin iterating backward from the first code point
-         * before the one that is being case-mapped.   
+         * before the one that is being case-mapped.
          */
         public void reset(int dir);
         /**
          * Iterate and return the next code point, moving in the direction
          * determined by the reset() call.
-         * @return Next code point, or <0 when the iteration is done. 
+         * @return Next code point, or <0 when the iteration is done.
          */
         public int next();
     }
@@ -609,12 +609,13 @@ public final class UCaseProps {
     private static final int LOC_ROOT=1;
     private static final int LOC_TURKISH=2;
     private static final int LOC_LITHUANIAN=3;
+    static final int LOC_GREEK=4;
 
     /*
      * Checks and caches the type of locale ID as it is relevant for case mapping.
      * If the locCache is not null, then it must be initialized with locCache[0]=0 .
      */
-    private static final int getCaseLocale(ULocale locale, int[] locCache) {
+    static final int getCaseLocale(ULocale locale, int[] locCache) {
         int result;
 
         if(locCache!=null && (result=locCache[0])!=LOC_UNKNOWN) {
@@ -626,6 +627,8 @@ public final class UCaseProps {
         String language=locale.getLanguage();
         if(language.equals("tr") || language.equals("tur") || language.equals("az") || language.equals("aze")) {
             result=LOC_TURKISH;
+        } else if(language.equals("el") || language.equals("ell")) {
+            result=LOC_GREEK;
         } else if(language.equals("lt") || language.equals("lit")) {
             result=LOC_LITHUANIAN;
         }
@@ -1104,7 +1107,7 @@ public final class UCaseProps {
      * @internal
      */
     private static final int FOLD_CASE_OPTIONS_MASK = 0xff;
-    
+
     /* return the simple case folding mapping for c */
     public final int fold(int c, int options) {
         int props=trie.get(c);

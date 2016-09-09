@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import com.ibm.icu.impl.CaseMap;
+import com.ibm.icu.impl.CaseMap.StringContextIterator;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
@@ -4865,126 +4867,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Implementation of UCaseProps.ContextIterator, iterates over a String.
-     * See ustrcase.c/utf16_caseContextIterator().
-     */
-    private static class StringContextIterator implements UCaseProps.ContextIterator {
-        /**
-         * Constructor.
-         * @param s String to iterate over.
-         */
-        StringContextIterator(String s) {
-            this.s=s;
-            limit=s.length();
-            cpStart=cpLimit=index=0;
-            dir=0;
-        }
-
-        /**
-         * Set the iteration limit for nextCaseMapCP() to an index within the string.
-         * If the limit parameter is negative or past the string, then the
-         * string length is restored as the iteration limit.
-         *
-         * <p>This limit does not affect the next() function which always
-         * iterates to the very end of the string.
-         *
-         * @param lim The iteration limit.
-         */
-        public void setLimit(int lim) {
-            if(0<=lim && lim<=s.length()) {
-                limit=lim;
-            } else {
-                limit=s.length();
-            }
-        }
-
-        /**
-         * Move to the iteration limit without fetching code points up to there.
-         */
-        public void moveToLimit() {
-            cpStart=cpLimit=limit;
-        }
-
-        /**
-         * Iterate forward through the string to fetch the next code point
-         * to be case-mapped, and set the context indexes for it.
-         *
-         * <p>When the iteration limit is reached (and -1 is returned),
-         * getCPStart() will be at the iteration limit.
-         *
-         * <p>Iteration with next() does not affect the position for nextCaseMapCP().
-         *
-         * @return The next code point to be case-mapped, or <0 when the iteration is done.
-         */
-        public int nextCaseMapCP() {
-            cpStart=cpLimit;
-            if(cpLimit<limit) {
-                int c=s.codePointAt(cpLimit);
-                cpLimit+=Character.charCount(c);
-                return c;
-            } else {
-                return -1;
-            }
-        }
-
-        /**
-         * Returns the start of the code point that was last returned
-         * by nextCaseMapCP().
-         */
-        public int getCPStart() {
-            return cpStart;
-        }
-
-        /**
-         * Returns the limit of the code point that was last returned
-         * by nextCaseMapCP().
-         */
-        public int getCPLimit() {
-            return cpLimit;
-        }
-
-        // implement UCaseProps.ContextIterator
-        // The following code is not used anywhere in this private class
-        @Override
-        public void reset(int direction) {
-            if(direction>0) {
-                /* reset for forward iteration */
-                dir=1;
-                index=cpLimit;
-            } else if(direction<0) {
-                /* reset for backward iteration */
-                dir=-1;
-                index=cpStart;
-            } else {
-                // not a valid direction
-                dir=0;
-                index=0;
-            }
-        }
-
-        @Override
-        public int next() {
-            int c;
-
-            if(dir>0 && index<s.length()) {
-                c=s.codePointAt(index);
-                index+=Character.charCount(c);
-                return c;
-            } else if(dir<0 && index>0) {
-                c=s.codePointBefore(index);
-                index-=Character.charCount(c);
-                return c;
-            }
-            return -1;
-        }
-
-        // variables
-        protected String s;
-        protected int index, limit, cpStart, cpLimit;
-        protected int dir; // 0=initial state  >0=forward  <0=backward
-    }
-
-    /**
      * Returns the uppercase version of the argument string.
      * Casing is dependent on the default locale and context-sensitive.
      * @param str source string to be performed on
@@ -5053,31 +4935,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.2
      */
     public static String toUpperCase(ULocale locale, String str) {
-        StringContextIterator iter = new StringContextIterator(str);
-        StringBuilder result = new StringBuilder(str.length());
-        int[] locCache = new int[1];
-        int c;
-
-        if (locale == null) {
-            locale = ULocale.getDefault();
-        }
-        locCache[0]=0;
-
-        while((c=iter.nextCaseMapCP())>=0) {
-            c = UCaseProps.INSTANCE.toFullUpper(c, iter, result, locale, locCache);
-
-            /* decode the result */
-            if(c<0) {
-                /* (not) original code point */
-                c=~c;
-            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
-                /* mapping already appended to result */
-                continue;
-                /* } else { append single-code point mapping */
-            }
-            result.appendCodePoint(c);
-        }
-        return result.toString();
+        return CaseMap.toUpper(locale, str);
     }
 
     /**

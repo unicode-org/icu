@@ -22,14 +22,15 @@ class LowercaseTransliterator extends Transliterator{
      * Package accessible ID.
      */
     static final String _ID = "Any-Lower";
-    
-    // TODO: Add variants for tr, az, lt, default = default locale
+
+    // TODO: Add variants for tr/az, lt, default = default locale: ICU ticket #12720
 
     /**
      * System registration hook.
      */
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new LowercaseTransliterator(ULocale.US);
             }
@@ -62,6 +63,7 @@ class LowercaseTransliterator extends Transliterator{
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
+    @Override
     protected synchronized void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
         if(csp==null) {
@@ -70,7 +72,7 @@ class LowercaseTransliterator extends Transliterator{
 
         if(offsets.start >= offsets.limit) {
             return;
-        } 
+        }
 
         iter.setText(text);
         result.setLength(0);
@@ -112,10 +114,10 @@ class LowercaseTransliterator extends Transliterator{
         }
         offsets.start = offsets.limit;
     }
-    
+
     // NOTE: normally this would be static, but because the results vary by locale....
     SourceTargetUtility sourceTargetUtility = null;
-    
+
     /* (non-Javadoc)
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)
      */
@@ -124,8 +126,9 @@ class LowercaseTransliterator extends Transliterator{
         synchronized (this) {
             if (sourceTargetUtility == null) {
                 sourceTargetUtility = new SourceTargetUtility(new Transform<String,String>() {
+                    @Override
                     public String transform(String source) {
-                        return UCharacter.toLowerCase(locale, source);                    
+                        return UCharacter.toLowerCase(locale, source);
                     }
                 });
             }
