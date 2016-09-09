@@ -21,18 +21,18 @@ import com.ibm.icu.impl.coll.Collation;
  * <code>Collator</code>s might differ.  Hence comparing
  * <code>CollationKey</code>s generated from different
  * <code>Collator</code>s can give incorrect results.
- 
+
  * <p>Both the method
  * <code>CollationKey.compareTo(CollationKey)</code> and the method
  * <code>Collator.compare(String, String)</code> compare two strings
  * and returns their relative order.  The performance characteristics
  * of these two approaches can differ.
- * Note that collation keys are often less efficient than simply doing comparison. 
+ * Note that collation keys are often less efficient than simply doing comparison.
  * For more details, see the ICU User Guide.
  *
  * <p>During the construction of a <code>CollationKey</code>, the
  * entire source string is examined and processed into a series of
- * bits terminated by a null, that are stored in the <code>CollationKey</code>. 
+ * bits terminated by a null, that are stored in the <code>CollationKey</code>.
  * When <code>CollationKey.compareTo(CollationKey)</code> executes, it
  * performs bitwise comparison on the bit sequences.  This can incurs
  * startup cost when creating the <code>CollationKey</code>, but once
@@ -45,7 +45,7 @@ import com.ibm.icu.impl.coll.Collation;
  * process the strings only until the first characters differing in
  * order.  This approach is recommended if the strings are to be
  * compared only once.</p>
- * 
+ *
  * <p>More information about the composition of the bit sequence can
  * be found in the
  * <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
@@ -82,49 +82,50 @@ import com.ibm.icu.impl.coll.Collation;
  * @see Collator
  * @see RuleBasedCollator
  * @author Syn Wee Quek
- * @stable ICU 2.8 
+ * @stable ICU 2.8
  */
 public final class CollationKey implements Comparable<CollationKey>
 {
     // public inner classes -------------------------------------------------
-    
-    /** 
-     * Options that used in the API CollationKey.getBound() for getting a 
+
+    /**
+     * Options that used in the API CollationKey.getBound() for getting a
      * CollationKey based on the bound mode requested.
      * @stable ICU 2.6
      */
-    public static final class BoundMode 
+    public static final class BoundMode
     {
         /*
-         * do not change the values assigned to the members of this enum. 
-         * Underlying code depends on them having these numbers  
+         * do not change the values assigned to the members of this enum.
+         * Underlying code depends on them having these numbers
          */
-         
-        /** 
+
+        /**
          * Lower bound
          * @stable ICU 2.6
          */
         public static final int LOWER = 0;
 
-        /** 
+        /**
          * Upper bound that will match strings of exact size
          * @stable ICU 2.6
          */
         public static final int UPPER = 1;
 
-        /** 
-         * Upper bound that will match all the strings that have the same 
+        /**
+         * Upper bound that will match all the strings that have the same
          * initial substring as the given string
          * @stable ICU 2.6
          */
         public static final int UPPER_LONG = 2;
 
         /**
-         * Number of bound mode
-         * @stable ICU 2.6
+         * One more than the highest normal BoundMode value.
+         * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
+        @Deprecated
         public static final int COUNT = 3;
-        
+
         /**
          * Private Constructor
          */
@@ -132,14 +133,14 @@ public final class CollationKey implements Comparable<CollationKey>
         private BoundMode(){}
         ///CLOVER:ON
     }
-    
+
     // public constructor ---------------------------------------------------
-    
+
     /**
      * CollationKey constructor.
      * This constructor is given public access, unlike the JDK version, to
-     * allow access to users extending the Collator class. See 
-     * {@link Collator#getCollationKey(String)}. 
+     * allow access to users extending the Collator class. See
+     * {@link Collator#getCollationKey(String)}.
      * @param source string this CollationKey is to represent
      * @param key array of bytes that represent the collation order of argument
      *            source terminated by a null
@@ -164,15 +165,15 @@ public final class CollationKey implements Comparable<CollationKey>
     }
 
     /**
-     * CollationKey constructor that forces key to release its internal byte 
-     * array for adoption. key will have a null byte array after this 
+     * CollationKey constructor that forces key to release its internal byte
+     * array for adoption. key will have a null byte array after this
      * construction.
      * @param source string this CollationKey is to represent
-     * @param key RawCollationKey object that represents the collation order of 
-     *            argument source. 
+     * @param key RawCollationKey object that represents the collation order of
+     *            argument source.
      * @see Collator
      * @see RawCollationKey
-     * @stable ICU 2.8 
+     * @stable ICU 2.8
      */
     public CollationKey(String source, RawCollationKey key)
     {
@@ -182,15 +183,15 @@ public final class CollationKey implements Comparable<CollationKey>
         assert m_key_[m_length_] == 0;
         m_hashCode_ = 0;
     }
-    
+
     // public getters -------------------------------------------------------
-    
+
     /**
      * Return the source string that this CollationKey represents.
      * @return source string that this CollationKey represents
      * @stable ICU 2.8
      */
-    public String getSourceString() 
+    public String getSourceString()
     {
         return m_source_;
     }
@@ -222,11 +223,11 @@ public final class CollationKey implements Comparable<CollationKey>
      * System.out.println("Strings are equal.");
      * </pre>
      *
-     * @return CollationKey value in a sequence of big-endian byte bytes 
+     * @return CollationKey value in a sequence of big-endian byte bytes
      *         terminated by a null.
      * @stable ICU 2.8
      */
-    public byte[] toByteArray() 
+    public byte[] toByteArray()
     {
         int length = getLength() + 1;
         byte result[] = new byte[length];
@@ -234,8 +235,8 @@ public final class CollationKey implements Comparable<CollationKey>
         return result;
     }
 
-    // public other methods -------------------------------------------------    
-     
+    // public other methods -------------------------------------------------
+
     /**
      * Compare this CollationKey to another CollationKey.  The
      * collation rules of the Collator that created this key are
@@ -248,12 +249,13 @@ public final class CollationKey implements Comparable<CollationKey>
      * @param target target CollationKey
      * @return an integer value.  If the value is less than zero this CollationKey
      *         is less than than target, if the value is zero they are equal, and
-     *         if the value is greater than zero this CollationKey is greater 
+     *         if the value is greater than zero this CollationKey is greater
      *         than target.
      * @exception NullPointerException is thrown if argument is null.
      * @see Collator#compare(String, String)
-     * @stable ICU 2.8 
+     * @stable ICU 2.8
      */
+    @Override
     public int compareTo(CollationKey target)
     {
         for (int i = 0;; ++i) {
@@ -280,24 +282,25 @@ public final class CollationKey implements Comparable<CollationKey>
      * @param target the object to compare to.
      * @return true if the two keys compare as equal, false otherwise.
      * @see #compareTo(CollationKey)
-     * @exception ClassCastException is thrown when the argument is not 
-     *            a CollationKey.  NullPointerException is thrown when the argument 
+     * @exception ClassCastException is thrown when the argument is not
+     *            a CollationKey.  NullPointerException is thrown when the argument
      *            is null.
-     * @stable ICU 2.8 
+     * @stable ICU 2.8
      */
-    public boolean equals(Object target) 
+    @Override
+    public boolean equals(Object target)
     {
         if (!(target instanceof CollationKey)) {
             return false;
         }
-        
+
         return equals((CollationKey)target);
     }
-    
+
     /**
      * Compare this CollationKey and the argument target CollationKey for
      * equality.
-     * The collation 
+     * The collation
      * rules of the Collator object which created these objects are applied.
      * <p>
      * See note in compareTo(CollationKey) for warnings of incorrect results
@@ -307,7 +310,7 @@ public final class CollationKey implements Comparable<CollationKey>
      * @exception NullPointerException is thrown when the argument is null.
      * @stable ICU 2.8
      */
-    public boolean equals(CollationKey target) 
+    public boolean equals(CollationKey target)
     {
         if (this == target) {
             return true;
@@ -331,15 +334,16 @@ public final class CollationKey implements Comparable<CollationKey>
 
     /**
      * Returns a hash code for this CollationKey. The hash value is calculated
-     * on the key itself, not the String from which the key was created. Thus 
-     * if x and y are CollationKeys, then x.hashCode(x) == y.hashCode() 
-     * if x.equals(y) is true. This allows language-sensitive comparison in a 
+     * on the key itself, not the String from which the key was created. Thus
+     * if x and y are CollationKeys, then x.hashCode(x) == y.hashCode()
+     * if x.equals(y) is true. This allows language-sensitive comparison in a
      * hash table.
      *
      * @return the hash value.
      * @stable ICU 2.8
      */
-    public int hashCode() 
+    @Override
+    public int hashCode()
     {
         if (m_hashCode_ == 0) {
             if (m_key_ == null) {
@@ -361,16 +365,16 @@ public final class CollationKey implements Comparable<CollationKey>
         }
         return m_hashCode_;
     }
-    
+
     /**
      * Produces a bound for the sort order of a given collation key and a
-     * strength level. This API does not attempt to find a bound for the 
-     * CollationKey String representation, hence null will be returned in its 
+     * strength level. This API does not attempt to find a bound for the
+     * CollationKey String representation, hence null will be returned in its
      * place.
      * <p>
      * Resulting bounds can be used to produce a range of strings that are
      * between upper and lower bounds. For example, if bounds are produced
-     * for a sortkey of string "smith", strings between upper and lower 
+     * for a sortkey of string "smith", strings between upper and lower
      * bounds with primary strength would include "Smith", "SMITH", "sMiTh".
      * <p>
      * There are two upper bounds that can be produced. If BoundMode.UPPER
@@ -378,31 +382,31 @@ public final class CollationKey implements Comparable<CollationKey>
      * is produced using BoundMode.UPPER_LONG is used, the above example will
      * also match "Smithsonian" and similar.
      * <p>
-     * For more on usage, see example in test procedure 
+     * For more on usage, see example in test procedure
      * <a href="http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
      * src/com/ibm/icu/dev/test/collator/CollationAPITest/TestBounds.
      * </a>
      * <p>
      * Collation keys produced may be compared using the <TT>compare</TT> API.
      * @param boundType Mode of bound required. It can be BoundMode.LOWER, which
-     *              produces a lower inclusive bound, BoundMode.UPPER, that 
-     *              produces upper bound that matches strings of the same 
-     *              length or BoundMode.UPPER_LONG that matches strings that 
+     *              produces a lower inclusive bound, BoundMode.UPPER, that
+     *              produces upper bound that matches strings of the same
+     *              length or BoundMode.UPPER_LONG that matches strings that
      *              have the same starting substring as the source string.
-     * @param noOfLevels Strength levels required in the resulting bound 
+     * @param noOfLevels Strength levels required in the resulting bound
      *                 (for most uses, the recommended value is PRIMARY). This
-     *                 strength should be less than the maximum strength of 
+     *                 strength should be less than the maximum strength of
      *                 this CollationKey.
-     *                 See users guide for explanation on the strength levels a 
-     *                 collation key can have. 
-     * @return the result bounded CollationKey with a valid sort order but 
+     *                 See users guide for explanation on the strength levels a
+     *                 collation key can have.
+     * @return the result bounded CollationKey with a valid sort order but
      *         a null String representation.
-     * @exception IllegalArgumentException thrown when the strength level 
+     * @exception IllegalArgumentException thrown when the strength level
      *            requested is higher than or equal to the strength in this
-     *            CollationKey. 
-     *            In the case of an Exception, information 
-     *            about the maximum strength to use will be returned in the 
-     *            Exception. The user can then call getBound() again with the 
+     *            CollationKey.
+     *            In the case of an Exception, information
+     *            about the maximum strength to use will be returned in the
+     *            Exception. The user can then call getBound() again with the
      *            appropriate strength.
      * @see CollationKey
      * @see CollationKey.BoundMode
@@ -413,38 +417,38 @@ public final class CollationKey implements Comparable<CollationKey>
      * @see Collator#IDENTICAL
      * @stable ICU 2.6
      */
-    public CollationKey getBound(int boundType, int noOfLevels) 
+    public CollationKey getBound(int boundType, int noOfLevels)
     {
-        // Scan the string until we skip enough of the key OR reach the end of 
+        // Scan the string until we skip enough of the key OR reach the end of
         // the key
         int offset = 0;
         int keystrength = Collator.PRIMARY;
-        
+
         if (noOfLevels > Collator.PRIMARY) {
             while (offset < m_key_.length && m_key_[offset] != 0) {
-                if (m_key_[offset ++] 
+                if (m_key_[offset ++]
                         == Collation.LEVEL_SEPARATOR_BYTE) {
                     keystrength ++;
                     noOfLevels --;
-                    if (noOfLevels == Collator.PRIMARY 
+                    if (noOfLevels == Collator.PRIMARY
                         || offset == m_key_.length || m_key_[offset] == 0) {
                         offset --;
                         break;
                     }
                 }
-            } 
+            }
         }
-        
+
         if (noOfLevels > 0) {
             throw new IllegalArgumentException(
-                                  "Source collation key has only " 
-                                  + keystrength 
+                                  "Source collation key has only "
+                                  + keystrength
                                   + " strength level. Call getBound() again "
                                   + " with noOfLevels < " + keystrength);
         }
-        
-        // READ ME: this code assumes that the values for BoundMode variables 
-        // will not change. They are set so that the enum value corresponds to 
+
+        // READ ME: this code assumes that the values for BoundMode variables
+        // will not change. They are set so that the enum value corresponds to
         // the number of extra bytes each bound type needs.
         byte resultkey[] = new byte[offset + boundType + 1];
         System.arraycopy(m_key_, 0, resultkey, 0, offset);
@@ -500,7 +504,7 @@ public final class CollationKey implements Comparable<CollationKey>
      * <p>Example (uncompressed):
      * <pre>191B1D 01 050505 01 910505 00
      * 1F2123 01 050505 01 910505 00</pre>
-     * will be merged as 
+     * will be merged as
      * <pre>191B1D 02 1F2123 01 050505 02 050505 01 910505 02 910505 00</pre>
      *
      * @param source CollationKey to merge with
@@ -522,31 +526,31 @@ public final class CollationKey implements Comparable<CollationKey>
         // 1 byte extra for the 02 separator at the end of the copy of this sort key,
         // and 1 more for the terminating 00.
         byte result[] = new byte[getLength() + source.getLength() + 2];
-    
+
         // merge the sort keys with the same number of levels
         int rindex = 0;
         int index = 0;
         int sourceindex = 0;
-        while (true) { 
+        while (true) {
             // copy level from src1 not including 00 or 01
             // unsigned issues
             while (m_key_[index] < 0 || m_key_[index] >= MERGE_SEPERATOR_) {
                 result[rindex++] = m_key_[index++];
             }
-    
+
             // add a 02 merge separator
             result[rindex++] = MERGE_SEPERATOR_;
-    
+
             // copy level from src2 not including 00 or 01
-            while (source.m_key_[sourceindex] < 0 
+            while (source.m_key_[sourceindex] < 0
                    || source.m_key_[sourceindex] >= MERGE_SEPERATOR_) {
                 result[rindex++] = source.m_key_[sourceindex++];
             }
-    
-            // if both sort keys have another level, then add a 01 level 
+
+            // if both sort keys have another level, then add a 01 level
             // separator and continue
             if (m_key_[index] == Collation.LEVEL_SEPARATOR_BYTE
-                && source.m_key_[sourceindex] 
+                && source.m_key_[sourceindex]
                         == Collation.LEVEL_SEPARATOR_BYTE) {
                 ++index;
                 ++sourceindex;
@@ -570,7 +574,7 @@ public final class CollationKey implements Comparable<CollationKey>
             rindex += remainingLength;
         }
         result[rindex] = 0;
-    
+
         assert rindex == result.length - 1;
         return new CollationKey(null, result, rindex);
     }
@@ -581,10 +585,10 @@ public final class CollationKey implements Comparable<CollationKey>
      * Sequence of bytes that represents the sort key
      */
     private byte m_key_[];
-    
+
     /**
      * Source string this CollationKey represents
-     */    
+     */
     private String m_source_;
 
     /**
@@ -599,9 +603,9 @@ public final class CollationKey implements Comparable<CollationKey>
      * Collation key merge seperator
      */
     private static final int MERGE_SEPERATOR_ = 2;
-    
+
     // private methods ------------------------------------------------------
-    
+
     /**
      * Gets the length of the CollationKey
      * @return length of the CollationKey
@@ -617,7 +621,7 @@ public final class CollationKey implements Comparable<CollationKey>
                 length = index;
                 break;
             }
-        } 
+        }
         m_length_ = length;
         return m_length_;
     }

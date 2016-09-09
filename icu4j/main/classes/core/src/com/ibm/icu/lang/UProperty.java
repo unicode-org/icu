@@ -159,160 +159,160 @@ public interface UProperty
 
     /**
      * <p>Binary property Hyphen.
-     * <p>Dashes used to mark connections between pieces of words, plus the 
+     * <p>Dashes used to mark connections between pieces of words, plus the
      * Katakana middle dot.
      * @stable ICU 2.6
-     */ 
-    public static final int HYPHEN = 14; 
+     */
+    public static final int HYPHEN = 14;
 
-    /** 
+    /**
      * <p>Binary property ID_Continue.
      * <p>Characters that can continue an identifier.
      * <p>ID_Start+Mn+Mc+Nd+Pc
      * @stable ICU 2.6
-     */ 
-    public static final int ID_CONTINUE = 15; 
+     */
+    public static final int ID_CONTINUE = 15;
 
-    /** 
+    /**
      * <p>Binary property ID_Start.
      * <p>Characters that can start an identifier.
      * <p>Lu+Ll+Lt+Lm+Lo+Nl
      * @stable ICU 2.6
-     */ 
-    public static final int ID_START = 16; 
+     */
+    public static final int ID_START = 16;
 
-    /** 
+    /**
      * <p>Binary property Ideographic.
      * <p>CJKV ideographs.
      * @stable ICU 2.6
-     */ 
-    public static final int IDEOGRAPHIC = 17; 
+     */
+    public static final int IDEOGRAPHIC = 17;
 
-    /** 
+    /**
      * <p>Binary property IDS_Binary_Operator (new).
      * <p>For programmatic determination of Ideographic Description Sequences.
      *
      * @stable ICU 2.6
-     */ 
-    public static final int IDS_BINARY_OPERATOR = 18; 
+     */
+    public static final int IDS_BINARY_OPERATOR = 18;
 
-    /** 
+    /**
      * <p>Binary property IDS_Trinary_Operator (new).
      * <p>For programmatic determination of Ideographic Description
      * Sequences.
      * @stable ICU 2.6
-     */ 
-    public static final int IDS_TRINARY_OPERATOR = 19; 
+     */
+    public static final int IDS_TRINARY_OPERATOR = 19;
 
-    /** 
+    /**
      * <p>Binary property Join_Control.
      * <p>Format controls for cursive joining and ligation.
      * @stable ICU 2.6
-     */ 
-    public static final int JOIN_CONTROL = 20; 
+     */
+    public static final int JOIN_CONTROL = 20;
 
-    /** 
+    /**
      * <p>Binary property Logical_Order_Exception (new).
-     * <p>Characters that do not use logical order and require special 
+     * <p>Characters that do not use logical order and require special
      * handling in most processing.
      * @stable ICU 2.6
-     */ 
-    public static final int LOGICAL_ORDER_EXCEPTION = 21; 
+     */
+    public static final int LOGICAL_ORDER_EXCEPTION = 21;
 
-    /** 
+    /**
      * <p>Binary property Lowercase.
-     * <p>Same as UCharacter.isULowercase(), different from 
+     * <p>Same as UCharacter.isULowercase(), different from
      * UCharacter.islower().
      * <p>Ll+Other_Lowercase
      * @stable ICU 2.6
-     */ 
-    public static final int LOWERCASE = 22; 
+     */
+    public static final int LOWERCASE = 22;
 
     /** <p>Binary property Math.
      * <p>Sm+Other_Math
      * @stable ICU 2.6
-     */ 
-    public static final int MATH = 23; 
+     */
+    public static final int MATH = 23;
 
-    /** 
+    /**
      * <p>Binary property Noncharacter_Code_Point.
-     * <p>Code points that are explicitly defined as illegal for the encoding 
+     * <p>Code points that are explicitly defined as illegal for the encoding
      * of characters.
      * @stable ICU 2.6
-     */ 
-    public static final int NONCHARACTER_CODE_POINT = 24; 
+     */
+    public static final int NONCHARACTER_CODE_POINT = 24;
 
-    /** 
+    /**
      * <p>Binary property Quotation_Mark.
      * @stable ICU 2.6
-     */ 
-    public static final int QUOTATION_MARK = 25; 
+     */
+    public static final int QUOTATION_MARK = 25;
 
-    /** 
+    /**
      * <p>Binary property Radical (new).
-     * <p>For programmatic determination of Ideographic Description 
+     * <p>For programmatic determination of Ideographic Description
      * Sequences.
      * @stable ICU 2.6
-     */ 
-    public static final int RADICAL = 26; 
+     */
+    public static final int RADICAL = 26;
 
-    /** 
+    /**
      * <p>Binary property Soft_Dotted (new).
      * <p>Characters with a "soft dot", like i or j.
      * <p>An accent placed on these characters causes the dot to disappear.
      * @stable ICU 2.6
-     */ 
-    public static final int SOFT_DOTTED = 27; 
+     */
+    public static final int SOFT_DOTTED = 27;
 
-    /** 
+    /**
      * <p>Binary property Terminal_Punctuation.
-     * <p>Punctuation characters that generally mark the end of textual 
+     * <p>Punctuation characters that generally mark the end of textual
      * units.
      * @stable ICU 2.6
-     */ 
-    public static final int TERMINAL_PUNCTUATION = 28; 
+     */
+    public static final int TERMINAL_PUNCTUATION = 28;
 
-    /** 
+    /**
      * <p>Binary property Unified_Ideograph (new).
-     * <p>For programmatic determination of Ideographic Description 
+     * <p>For programmatic determination of Ideographic Description
      * Sequences.
      * @stable ICU 2.6
-     */ 
-    public static final int UNIFIED_IDEOGRAPH = 29; 
+     */
+    public static final int UNIFIED_IDEOGRAPH = 29;
 
-    /** 
+    /**
      * <p>Binary property Uppercase.
-     * <p>Same as UCharacter.isUUppercase(), different from 
+     * <p>Same as UCharacter.isUUppercase(), different from
      * UCharacter.isUpperCase().
      * <p>Lu+Other_Uppercase
      * @stable ICU 2.6
-     */ 
-    public static final int UPPERCASE = 30; 
+     */
+    public static final int UPPERCASE = 30;
 
-    /** 
+    /**
      * <p>Binary property White_Space.
-     * <p>Same as UCharacter.isUWhiteSpace(), different from 
+     * <p>Same as UCharacter.isUWhiteSpace(), different from
      * UCharacter.isSpace() and UCharacter.isWhitespace().
      * Space characters+TAB+CR+LF-ZWSP-ZWNBSP
      * @stable ICU 2.6
-     */ 
-    public static final int WHITE_SPACE = 31; 
+     */
+    public static final int WHITE_SPACE = 31;
 
-    /** 
+    /**
      * <p>Binary property XID_Continue.
-     * <p>ID_Continue modified to allow closure under normalization forms 
+     * <p>ID_Continue modified to allow closure under normalization forms
      * NFKC and NFKD.
      * @stable ICU 2.6
-     */ 
-    public static final int XID_CONTINUE = 32; 
+     */
+    public static final int XID_CONTINUE = 32;
 
-    /** 
+    /**
      * <p>Binary property XID_Start.
-     * <p>ID_Start modified to allow closure under normalization forms NFKC 
+     * <p>ID_Start modified to allow closure under normalization forms NFKC
      * and NFKD.
      * @stable ICU 2.6
-     */ 
-    public static final int XID_START = 33; 
+     */
+    public static final int XID_START = 33;
 
     /**
      * <p>Binary property Case_Sensitive.
@@ -340,7 +340,7 @@ public interface UProperty
      */
     public static final int VARIATION_SELECTOR = 36;
 
-    /** 
+    /**
      * Binary property NFD_Inert.
      * ICU-specific property for characters that are inert under NFD,
      * i.e., they do not interact with adjacent characters.
@@ -366,7 +366,7 @@ public interface UProperty
      */
     public static final int NFD_INERT = 37;
 
-    /** 
+    /**
      * Binary property NFKD_Inert.
      * ICU-specific property for characters that are inert under NFKD,
      * i.e., they do not interact with adjacent characters.
@@ -374,11 +374,11 @@ public interface UProperty
      * to find the boundary of safely normalizable text despite possible
      * text additions.
      * @see #NFD_INERT
-     * @stable ICU 3.0 
+     * @stable ICU 3.0
      */
     public static final int NFKD_INERT = 38;
 
-    /** 
+    /**
      * Binary property NFC_Inert.
      * ICU-specific property for characters that are inert under NFC,
      * i.e., they do not interact with adjacent characters.
@@ -386,11 +386,11 @@ public interface UProperty
      * to find the boundary of safely normalizable text despite possible
      * text additions.
      * @see #NFD_INERT
-     * @stable ICU 3.0 
+     * @stable ICU 3.0
      */
     public static final int NFC_INERT = 39;
 
-    /** 
+    /**
      * Binary property NFKC_Inert.
      * ICU-specific property for characters that are inert under NFKC,
      * i.e., they do not interact with adjacent characters.
@@ -398,7 +398,7 @@ public interface UProperty
      * to find the boundary of safely normalizable text despite possible
      * text additions.
      * @see #NFD_INERT
-     * @stable ICU 3.0 
+     * @stable ICU 3.0
      */
     public static final int NFKC_INERT = 40;
 
@@ -412,7 +412,7 @@ public interface UProperty
      * ICU uses this property for segmenting a string for generating a set of
      * canonically equivalent strings, e.g. for canonical closure while
      * processing collation tailoring rules.
-     * @stable ICU 3.0 
+     * @stable ICU 3.0
      */
     public static final int SEGMENT_STARTER = 41;
 
@@ -548,100 +548,101 @@ public interface UProperty
     public static final int EMOJI_MODIFIER_BASE=60;
 
     /**
-     * One more than the last constant for binary Unicode properties. 
-     * @stable ICU 2.6
+     * One more than the last constant for binary Unicode properties.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     public static final int BINARY_LIMIT = 61;
 
-    /** 
+    /**
      * Enumerated property Bidi_Class.
-     * Same as UCharacter.getDirection(int), returns UCharacterDirection values. 
-     * @stable ICU 2.4 
+     * Same as UCharacter.getDirection(int), returns UCharacterDirection values.
+     * @stable ICU 2.4
      */
     public static final int BIDI_CLASS = 0x1000;
 
-    /** 
-     * First constant for enumerated/integer Unicode properties. 
+    /**
+     * First constant for enumerated/integer Unicode properties.
      * @stable ICU 2.4
      */
     public static final int INT_START = BIDI_CLASS;
 
-    /** 
+    /**
      * Enumerated property Block.
-     * Same as UCharacter.UnicodeBlock.of(int), returns UCharacter.UnicodeBlock 
-     * values. 
-     * @stable ICU 2.4 
+     * Same as UCharacter.UnicodeBlock.of(int), returns UCharacter.UnicodeBlock
+     * values.
+     * @stable ICU 2.4
      */
     public static final int BLOCK = 0x1001;
 
-    /** 
+    /**
      * Enumerated property Canonical_Combining_Class.
-     * Same as UCharacter.getCombiningClass(int), returns 8-bit numeric values. 
-     * @stable ICU 2.4 
+     * Same as UCharacter.getCombiningClass(int), returns 8-bit numeric values.
+     * @stable ICU 2.4
      */
     public static final int CANONICAL_COMBINING_CLASS = 0x1002;
 
-    /** 
+    /**
      * Enumerated property Decomposition_Type.
-     * Returns UCharacter.DecompositionType values. 
+     * Returns UCharacter.DecompositionType values.
      * @stable ICU 2.4
      */
     public static final int DECOMPOSITION_TYPE = 0x1003;
 
-    /** 
+    /**
      * Enumerated property East_Asian_Width.
      * See http://www.unicode.org/reports/tr11/
-     * Returns UCharacter.EastAsianWidth values. 
-     * @stable ICU 2.4 
+     * Returns UCharacter.EastAsianWidth values.
+     * @stable ICU 2.4
      */
     public static final int EAST_ASIAN_WIDTH = 0x1004;
 
-    /** 
+    /**
      * Enumerated property General_Category.
-     * Same as UCharacter.getType(int), returns UCharacterCategory values. 
-     * @stable ICU 2.4 
+     * Same as UCharacter.getType(int), returns UCharacterCategory values.
+     * @stable ICU 2.4
      */
     public static final int GENERAL_CATEGORY = 0x1005;
 
-    /** 
+    /**
      * Enumerated property Joining_Group.
-     * Returns UCharacter.JoiningGroup values. 
-     * @stable ICU 2.4 
+     * Returns UCharacter.JoiningGroup values.
+     * @stable ICU 2.4
      */
     public static final int JOINING_GROUP = 0x1006;
 
-    /** 
+    /**
      * Enumerated property Joining_Type.
-     * Returns UCharacter.JoiningType values. 
-     * @stable ICU 2.4 
+     * Returns UCharacter.JoiningType values.
+     * @stable ICU 2.4
      */
     public static final int JOINING_TYPE = 0x1007;
 
-    /** 
+    /**
      * Enumerated property Line_Break.
-     * Returns UCharacter.LineBreak values. 
-     * @stable ICU 2.4 
+     * Returns UCharacter.LineBreak values.
+     * @stable ICU 2.4
      */
     public static final int LINE_BREAK = 0x1008;
 
-    /** 
+    /**
      * Enumerated property Numeric_Type.
-     * Returns UCharacter.NumericType values. 
-     * @stable ICU 2.4 
+     * Returns UCharacter.NumericType values.
+     * @stable ICU 2.4
      */
     public static final int NUMERIC_TYPE = 0x1009;
 
-    /** 
+    /**
      * Enumerated property Script.
-     * Same as UScript.getScript(int), returns UScript values. 
-     * @stable ICU 2.4 
+     * Same as UScript.getScript(int), returns UScript values.
+     * @stable ICU 2.4
      */
     public static final int SCRIPT = 0x100A;
-    
-    /** 
+
+    /**
      * Enumerated property Hangul_Syllable_Type, new in Unicode 4.
-     * Returns UCharacter.HangulSyllableType values. 
-     * @stable ICU 2.6 
+     * Returns UCharacter.HangulSyllableType values.
+     * @stable ICU 2.6
      */
     public static final int HANGUL_SYLLABLE_TYPE = 0x100B;
 
@@ -731,36 +732,37 @@ public interface UProperty
      */
     public static final int BIDI_PAIRED_BRACKET_TYPE = 0x1015;
 
-    /** 
-     * One more than the last constant for enumerated/integer Unicode 
-     * properties. 
-     * @stable ICU 2.4 
+    /**
+     * One more than the last constant for enumerated/integer Unicode properties.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     public static final int INT_LIMIT = 0x1016;
 
-    /** 
+    /**
      * Bitmask property General_Category_Mask.
      * This is the General_Category property returned as a bit mask.
      * When used in UCharacter.getIntPropertyValue(c),
-     * returns bit masks for UCharacterCategory values where exactly one bit is set. 
-     * When used with UCharacter.getPropertyValueName() and UCharacter.getPropertyValueEnum(), 
-     * a multi-bit mask is used for sets of categories like "Letters". 
+     * returns bit masks for UCharacterCategory values where exactly one bit is set.
+     * When used with UCharacter.getPropertyValueName() and UCharacter.getPropertyValueEnum(),
+     * a multi-bit mask is used for sets of categories like "Letters".
      * @stable ICU 2.4
-     */ 
-    public static final int GENERAL_CATEGORY_MASK = 0x2000; 
+     */
+    public static final int GENERAL_CATEGORY_MASK = 0x2000;
 
-    /** 
-     * First constant for bit-mask Unicode properties. 
+    /**
+     * First constant for bit-mask Unicode properties.
      * @stable ICU 2.4
      */
     public static final int MASK_START = GENERAL_CATEGORY_MASK;
 
-    /** 
-     * One more than the last constant for bit-mask Unicode properties. 
-     * @stable ICU 2.4
-     */ 
-    public static final int MASK_LIMIT = 0x2001; 
-    
+    /**
+     * One more than the last constant for bit-mask Unicode properties.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
+     */
+    @Deprecated
+    public static final int MASK_LIMIT = 0x2001;
+
     /**
      * Double property Numeric_Value.
      * Corresponds to UCharacter.getUnicodeNumericValue(int).
@@ -776,8 +778,9 @@ public interface UProperty
 
     /**
      * One more than the last constant for double Unicode properties.
-     * @stable ICU 2.4
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     public static final int DOUBLE_LIMIT = 0x3001;
 
     /**
@@ -890,8 +893,9 @@ public interface UProperty
 
     /**
      * One more than the last constant for string Unicode properties.
-     * @stable ICU 2.4
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     public static final int STRING_LIMIT = 0x400E;
 
     /**
@@ -909,8 +913,9 @@ public interface UProperty
     public static final int OTHER_PROPERTY_START=SCRIPT_EXTENSIONS;
     /**
      * One more than the last constant for Unicode properties with unusual value types.
-     * @stable ICU 4.6
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     public static final int OTHER_PROPERTY_LIMIT=0x7001;
 
     /**
@@ -945,8 +950,9 @@ public interface UProperty
         /**
          * The number of predefined property name choices.  Individual
          * properties or values may have more than COUNT aliases.
-         * @stable ICU 2.4
+         * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
+        @Deprecated
         static final int COUNT = 2;
     }
 }
