@@ -7,8 +7,6 @@ icu4c/readme.html svneol=native#text/html
 icu4c/source/aclocal.m4 -text
 icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
-icu4c/source/common/ubiditransform.c -text
-icu4c/source/common/unicode/ubiditransform.h -text
 icu4c/source/config/m4/icu-conditional.m4 -text
 icu4c/source/data/brkitr/de.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/dictionaries/burmesedict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3638,7 +3636,6 @@ icu4c/source/samples/uresb/sr.txt svneol=native#text/plain%3Bcharset%3Dwindows-1
 icu4c/source/samples/uresb/uresb.vcxproj -text
 icu4c/source/samples/ustring/readme.txt svneol=native#text/plain
 icu4c/source/samples/ustring/ustring.vcxproj -text
-icu4c/source/test/cintltst/cbiditransformtst.c -text
 icu4c/source/test/compat/readme.txt svneol=native#text/plain
 icu4c/source/test/depstest/dependencies.txt svneol=native#text/plain
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
