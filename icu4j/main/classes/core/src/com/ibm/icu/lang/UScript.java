@@ -285,60 +285,60 @@ public final class UScript {
     public static final int TAGBANWA     = 45;  /* Tagb */
     /**
      * Braille
-     * Script in Unicode 4 
-     * @stable ICU 2.6 
-     * 
-     */ 
+     * Script in Unicode 4
+     * @stable ICU 2.6
+     *
+     */
     public static final int BRAILLE      = 46;  /* Brai */
     /**
      * Cypriot
-     * Script in Unicode 4 
-     * @stable ICU 2.6 
-     * 
-     */  
-    public static final int CYPRIOT              = 47;  /* Cprt */ 
+     * Script in Unicode 4
+     * @stable ICU 2.6
+     *
+     */
+    public static final int CYPRIOT              = 47;  /* Cprt */
     /**
      * Limbu
-     * Script in Unicode 4 
-     * @stable ICU 2.6 
-     * 
-     */       
-    public static final int LIMBU                = 48;  /* Limb */ 
+     * Script in Unicode 4
+     * @stable ICU 2.6
+     *
+     */
+    public static final int LIMBU                = 48;  /* Limb */
     /**
      * Linear B
-     * Script in Unicode 4 
-     * @stable ICU 2.6 
-     * 
-     */ 
-    public static final int LINEAR_B     = 49;  /* Linb */ 
+     * Script in Unicode 4
+     * @stable ICU 2.6
+     *
+     */
+    public static final int LINEAR_B     = 49;  /* Linb */
     /**
      * Osmanya
-     * Script in Unicode 4 
-     * @stable ICU 2.6 
-     * 
-     */ 
-    public static final int OSMANYA              = 50;  /* Osma */ 
+     * Script in Unicode 4
+     * @stable ICU 2.6
+     *
+     */
+    public static final int OSMANYA              = 50;  /* Osma */
     /**
      * Shavian
-     * Script in Unicode 4 
-     * @stable ICU 2.6 
-     * 
-     */ 
-    public static final int SHAVIAN              = 51;  /* Shaw */ 
+     * Script in Unicode 4
+     * @stable ICU 2.6
+     *
+     */
+    public static final int SHAVIAN              = 51;  /* Shaw */
     /**
      * Tai Le
-     * Script in Unicode 4 
-     * @stable ICU 2.6 
-     * 
-     */ 
-    public static final int TAI_LE               = 52;  /* Tale */ 
+     * Script in Unicode 4
+     * @stable ICU 2.6
+     *
+     */
+    public static final int TAI_LE               = 52;  /* Tale */
     /**
      * Ugaritic
-     * Script in Unicode 4 
-     * @stable ICU 2.6 
-     * 
-     */ 
-    public static final int UGARITIC     = 53;  /* Ugar */ 
+     * Script in Unicode 4
+     * @stable ICU 2.6
+     *
+     */
+    public static final int UGARITIC     = 53;  /* Ugar */
     /**
      * Script in Unicode 4.0.1
      * @stable ICU 3.0
@@ -611,7 +611,7 @@ public final class UScript {
     /**
      * ISO 15924 script code
      * @stable ICU 3.8
-     */ 
+     */
     public static final int CARIAN                        = 104;/* Cari */
     /**
      * ISO 15924 script code
@@ -998,11 +998,12 @@ public final class UScript {
     public static final int SYMBOLS_EMOJI = 174; /* Zsye */
 
     /**
-     * <p>One higher than the last script code constant.
-     * This value increases as constants for script codes are added.
+     * One more than the highest normal UScript code.
+     * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT).
      *
-     * @stable ICU 2.4
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     public static final int CODE_LIMIT   = 175;
 
     private static int[] getCodesFromLocale(ULocale locale) {

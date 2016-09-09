@@ -34,7 +34,7 @@ public final class LocaleData {
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
-     * Corresponds to the 'main' (aka 'standard') CLDR exemplars in 
+     * Corresponds to the 'main' (aka 'standard') CLDR exemplars in
      * <a href="http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements">
      *   http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements</a>.
      * @stable ICU 3.4
@@ -43,7 +43,7 @@ public final class LocaleData {
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
-     * Corresponds to the 'auxiliary' CLDR exemplars in 
+     * Corresponds to the 'auxiliary' CLDR exemplars in
      * <a href="http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements">
      *   http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements</a>.
      * @stable ICU 3.4
@@ -52,7 +52,7 @@ public final class LocaleData {
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
-     * Corresponds to the 'index' CLDR exemplars in 
+     * Corresponds to the 'index' CLDR exemplars in
      * <a href="http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements">
      *   http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements</a>.
      * @stable ICU 4.4
@@ -61,7 +61,7 @@ public final class LocaleData {
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
-     * Corresponds to the 'currencySymbol' CLDR exemplars in 
+     * Corresponds to the 'currencySymbol' CLDR exemplars in
      * <a href="http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements">
      *   http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements</a>.
      * Note: This type is no longer supported.
@@ -71,7 +71,7 @@ public final class LocaleData {
     public static final int ES_CURRENCY = 3;
 
     /**
-     * Corresponds to the 'punctuation' CLDR exemplars in 
+     * Corresponds to the 'punctuation' CLDR exemplars in
      * <a href="http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements">
      *   http://www.unicode.org/reports/tr35/tr35-general.html#Character_Elements</a>.
      * EXType for {@link #getExemplarSet(int, int)}.
@@ -81,8 +81,9 @@ public final class LocaleData {
 
     /**
      * Count of EXTypes for {@link #getExemplarSet(int, int)}.
-     * @stable ICU 3.4
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     public static final int ES_COUNT = 5;
 
     /**
@@ -111,8 +112,9 @@ public final class LocaleData {
 
     /**
      * Count of delimiter types for {@link #getDelimiter(int)}.
-     * @stable ICU 3.4
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     public static final int DELIMITER_COUNT = 4;
 
     // private constructor to prevent default construction
@@ -142,7 +144,7 @@ public final class LocaleData {
     }
 
     /**
-     * Returns the set of exemplar characters for a locale. 
+     * Returns the set of exemplar characters for a locale.
      * Equivalent to calling new LocaleData(locale).{@link #getExemplarSet(int, int)}.
      *
      * @param locale    Locale for which the exemplar character set
@@ -178,16 +180,16 @@ public final class LocaleData {
      *                  ES_STANDARD, ES_INDEX, ES_AUXILIARY, or ES_PUNCTUATION
      * @return          The set of exemplar characters for the given locale.
      *                  If there is nothing available for the locale,
-     *                  then null is returned if {@link #getNoSubstitute()} is true, otherwise the 
+     *                  then null is returned if {@link #getNoSubstitute()} is true, otherwise the
      *                  root value is returned (which may be UnicodeSet.EMPTY).
      * @exception       RuntimeException if the extype is invalid.
      * @stable ICU 3.4
      */
     public UnicodeSet getExemplarSet(int options, int extype) {
-        String [] exemplarSetTypes = { 
-                "ExemplarCharacters", 
+        String [] exemplarSetTypes = {
+                "ExemplarCharacters",
                 "AuxExemplarCharacters",
-                "ExemplarCharactersIndex", 
+                "ExemplarCharactersIndex",
                 "ExemplarCharactersCurrency",
                 "ExemplarCharactersPunctuation"
         };
@@ -266,9 +268,9 @@ public final class LocaleData {
     }
 
     private static final String [] DELIMITER_TYPES = {
-        "quotationStart", 
-        "quotationEnd", 
-        "alternateQuotationStart", 
+        "quotationStart",
+        "quotationEnd",
+        "alternateQuotationStart",
         "alternateQuotationEnd"
     };
 
@@ -328,13 +330,13 @@ public final class LocaleData {
     public static final class MeasurementSystem{
         /**
          * Measurement system specified by Le Syst&#x00E8;me International d'Unit&#x00E9;s (SI)
-         * otherwise known as Metric system. 
+         * otherwise known as Metric system.
          * @stable ICU 2.8
          */
         public static final MeasurementSystem SI = new MeasurementSystem(0);
 
         /**
-         * Measurement system followed in the United States of America. 
+         * Measurement system followed in the United States of America.
          * @stable ICU 2.8
          */
         public static final MeasurementSystem US = new MeasurementSystem(1);
@@ -381,7 +383,7 @@ public final class LocaleData {
     }
 
     /**
-     * A class that represents the size of letter head 
+     * A class that represents the size of letter head
      * used in the country
      * @stable ICU 2.8
      */
@@ -393,9 +395,9 @@ public final class LocaleData {
             height = h;
             width = w;
         }
-        /** 
+        /**
          * Retruns the height of the paper
-         * @return the height 
+         * @return the height
          * @stable ICU 2.8
          */
         public int getHeight(){
@@ -412,9 +414,9 @@ public final class LocaleData {
     }
 
     /**
-     * Returns the size of paper used in the locale. The paper sizes returned are always in 
+     * Returns the size of paper used in the locale. The paper sizes returned are always in
      * <em>milli-meters</em>.
-     * @param locale The locale for which the measurement system to be retrieved. 
+     * @param locale The locale for which the measurement system to be retrieved.
      * @return The paper size used in the locale
      * @stable ICU 3.0
      */
@@ -428,7 +430,7 @@ public final class LocaleData {
      * Returns LocaleDisplayPattern for this locale, e.g., {0}({1})
      * @return locale display pattern as a String.
      * @stable ICU 4.2
-     */ 
+     */
     public String getLocaleDisplayPattern() {
         ICUResourceBundle locDispBundle = (ICUResourceBundle) langBundle.get(LOCALE_DISPLAY_PATTERN);
         String localeDisplayPattern = locDispBundle.getStringWithFallback(PATTERN);
@@ -439,7 +441,7 @@ public final class LocaleData {
      * Returns LocaleDisplaySeparator for this locale.
      * @return locale display separator as a char.
      * @stable ICU 4.2
-     */ 
+     */
     public String getLocaleSeparator() {
         String sub0 = "{0}";
         String sub1 = "{1}";

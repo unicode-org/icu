@@ -482,9 +482,9 @@ public abstract class DateFormat extends UFormat {
     /**
      * {@icu} Number of FieldPosition selectors for DateFormat.
      * Valid selectors range from 0 to FIELD_COUNT-1.
-     * @stable ICU 3.0
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-
+    @Deprecated
     public final static int FIELD_COUNT = 38;
     // A previous comment for the above stated that we must have
     // DateFormat.FIELD_COUNT == DateFormatSymbols.patternChars.length()
@@ -593,6 +593,7 @@ public abstract class DateFormat extends UFormat {
      * @see java.text.Format
      * @stable ICU 2.0
      */
+    @Override
     public final StringBuffer format(Object obj, StringBuffer toAppendTo,
                                      FieldPosition fieldPosition)
     {
@@ -827,6 +828,7 @@ public abstract class DateFormat extends UFormat {
      * @see #parse(String, ParsePosition)
      * @stable ICU 2.0
      */
+    @Override
     public Object parseObject (String source, ParsePosition pos)
     {
         return parse(source, pos);
@@ -1749,6 +1751,7 @@ public abstract class DateFormat extends UFormat {
      */
     ///CLOVER:OFF
     // turn off code coverage since all subclasses override this
+    @Override
     public int hashCode() {
         return numberFormat.hashCode();
         // just enough fields for a reasonable distribution
@@ -1759,6 +1762,7 @@ public abstract class DateFormat extends UFormat {
      * Overrides equals.
      * @stable ICU 2.0
      */
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -1774,6 +1778,7 @@ public abstract class DateFormat extends UFormat {
      * Overrides clone.
      * @stable ICU 2.0
      */
+    @Override
     public Object clone()
     {
         DateFormat other = (DateFormat) super.clone();
@@ -2545,6 +2550,7 @@ public abstract class DateFormat extends UFormat {
          *
          * @stable ICU 3.8
          */
+        @Override
         protected Object readResolve() throws InvalidObjectException {
             ///CLOVER:OFF
             if (this.getClass() != DateFormat.Field.class) {

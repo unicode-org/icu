@@ -979,87 +979,89 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * @stable ICU 3.6
      */
-    static final public int ERA = 0;
+    public static final int ERA = 0;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int YEAR = 1;
+    public static final int YEAR = 1;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int QUARTER = 2;
+    public static final int QUARTER = 2;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int MONTH = 3;
+    public static final int MONTH = 3;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int WEEK_OF_YEAR = 4;
+    public static final int WEEK_OF_YEAR = 4;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int WEEK_OF_MONTH = 5;
+    public static final int WEEK_OF_MONTH = 5;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int WEEKDAY = 6;
+    public static final int WEEKDAY = 6;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int DAY = 7;
+    public static final int DAY = 7;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int DAY_OF_YEAR = 8;
+    public static final int DAY_OF_YEAR = 8;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int DAY_OF_WEEK_IN_MONTH = 9;
+    public static final int DAY_OF_WEEK_IN_MONTH = 9;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int DAYPERIOD = 10;
+    public static final int DAYPERIOD = 10;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int HOUR = 11;
+    public static final int HOUR = 11;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int MINUTE = 12;
+    public static final int MINUTE = 12;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int SECOND = 13;
+    public static final int SECOND = 13;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int FRACTIONAL_SECOND = 14;
+    public static final int FRACTIONAL_SECOND = 14;
 
     /**
      * @stable ICU 3.6
      */
-    static final public int ZONE = 15;
+    public static final int ZONE = 15;
 
     /**
-     * @stable ICU 3.6
+     * One more than the highest normal field number.
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    static final public int TYPE_LIMIT = 16;
+    @Deprecated
+    public static final int TYPE_LIMIT = 16;
 
     // Option masks for getBestPattern, replaceFieldTypes (individual masks may be ORed together)
 
@@ -1214,6 +1216,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * {@inheritDoc}
      * @stable ICU 3.6
      */
+    @Override
     public boolean isFrozen() {
         return frozen;
     }
@@ -1222,6 +1225,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * {@inheritDoc}
      * @stable ICU 4.4
      */
+    @Override
     public DateTimePatternGenerator freeze() {
         frozen = true;
         return this;
@@ -1231,6 +1235,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * {@inheritDoc}
      * @stable ICU 4.4
      */
+    @Override
     public DateTimePatternGenerator cloneAsThawed() {
         DateTimePatternGenerator result = (DateTimePatternGenerator) (this.clone());
         frozen = false;
@@ -1242,6 +1247,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @return A copy of this <code>DateTimePatternGenerator</code> object.
      * @stable ICU 3.6
      */
+    @Override
     @SuppressWarnings("unchecked")
     public Object clone() {
         try {
@@ -1354,6 +1360,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Override
         @Deprecated
         public String toString() {
             return string;
@@ -1515,6 +1522,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Override
         @Deprecated
         public String toString() {
             return toString(0, items.size());
@@ -1739,6 +1747,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             pattern = pat;
             skeletonWasSpecified = skelSpecified;
         }
+        @Override
         public String toString() {
             return pattern + "," + skeletonWasSpecified;
         }
@@ -2260,7 +2269,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         int getFieldLength(int field) {
-            return (int) lengths[field];
+            return lengths[field];
         }
 
         void populate(int field, String value) {
@@ -2284,6 +2293,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return lengths[field] == DEFAULT_LENGTH;
         }
 
+        @Override
         public String toString() {
             return appendTo(new StringBuilder()).toString();
         }
@@ -2309,7 +2319,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         private StringBuilder appendFieldTo(int field, StringBuilder sb, boolean canonical) {
             char ch = (char) chars[field];
-            int length = (int) lengths[field];
+            int length = lengths[field];
 
             if (canonical) {
                 ch = getCanonicalChar(field, ch);
@@ -2335,11 +2345,13 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return 0;
         }
 
+        @Override
         public boolean equals(Object other) {
             return this == other || (other != null && other instanceof SkeletonFields
                 && compareTo((SkeletonFields) other) == 0);
         }
 
+        @Override
         public int hashCode() {
             return Arrays.hashCode(chars) ^ Arrays.hashCode(lengths);
         }
@@ -2359,6 +2371,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return type[field] > 0;
         }
 
+        @Override
         public String toString() {
             return original.toString();
         }
@@ -2460,16 +2473,19 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return result;
         }
 
+        @Override
         public int compareTo(DateTimeMatcher that) {
             int result = original.compareTo(that.original);
             return result > 0 ? -1 : result < 0 ? 1 : 0; // Reverse the order.
         }
 
+        @Override
         public boolean equals(Object other) {
             return this == other || (other != null && other instanceof DateTimeMatcher
                 && original.equals(((DateTimeMatcher) other).original));
         }
 
+        @Override
         public int hashCode() {
             return original.hashCode();
         }
@@ -2491,6 +2507,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         void addExtra(int field) {
             extraFieldMask |= (1<<field);
         }
+        @Override
         public String toString() {
             return "missingFieldMask: " + DateTimePatternGenerator.showMask(missingFieldMask)
                     + ", extraFieldMask: " + DateTimePatternGenerator.showMask(extraFieldMask);

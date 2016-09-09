@@ -978,11 +978,14 @@ public class Bidi {
     /**
      * Value returned by <code>BidiClassifier</code> when there is no need to
      * override the standard Bidi class for a given code point.
+     *
+     * <p>This constant is deprecated; use UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)+1 instead.
+     *
      * @see BidiClassifier
-     * @stable ICU 3.8
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    public static final int CLASS_DEFAULT = UCharacterDirection
-                                            .CHAR_DIRECTION_COUNT;
+    @Deprecated
+    public static final int CLASS_DEFAULT = UCharacterDirection.CHAR_DIRECTION_COUNT;
 
     /* number of paras entries allocated initially */
     static final int SIMPLE_PARAS_COUNT = 10;
@@ -4677,8 +4680,8 @@ public class Bidi {
     /**
      * Retrieves the Bidi class for a given code point.
      * <p>If a <code>BidiClassifier</code> is defined and returns a value
-     * other than <code>CLASS_DEFAULT</code>, that value is used; otherwise
-     * the default class determination mechanism is invoked.
+     * other than <code>CLASS_DEFAULT=UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)+1</code>,
+     * that value is used; otherwise the default class determination mechanism is invoked.
      *
      * @param c The code point to get a Bidi class for.
      *

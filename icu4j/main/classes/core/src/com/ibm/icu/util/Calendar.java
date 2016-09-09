@@ -27,7 +27,6 @@ import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
@@ -956,15 +955,17 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * The number of fields defined by this class.  Subclasses may define
      * addition fields starting with this number.
-     * @stable ICU 2.0
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     protected static final int BASE_FIELD_COUNT = 23;
 
     /**
      * The maximum number of fields possible.  Subclasses must not define
      * more total fields than this number.
-     * @stable ICU 2.0
+     * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
+    @Deprecated
     protected static final int MAX_FIELD_COUNT = 32;
 
     /**
