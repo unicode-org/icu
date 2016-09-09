@@ -1258,7 +1258,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     dataPath = u_getDataDirectory();
 
     /****    Time zone individual files override  */
-    if (isTimeZoneFile(name, type) && isICUData) {
+    if (isICUData && isTimeZoneFile(name, type)) {
         const char *tzFilesDir = u_getTimeZoneFilesDirectory(pErrorCode);
         if (tzFilesDir[0] != 0) {
 #ifdef UDATA_DEBUG
