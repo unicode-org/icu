@@ -112,7 +112,16 @@ le_int32 getLanguageCode(const char *lang)
             return i;
         }
     }
+#else
+    if (!strcmp(lang, "JAN")) return janLanguageCode;
+    if (!strcmp(lang, "KOR")) return korLanguageCode;
+    if (!strcmp(lang, "ZHT")) return zhtLanguageCode;
+    if (!strcmp(lang, "ZHS")) return zhsLanguageCode;
+    if (!strcmp(lang, "HIN")) return hinLanguageCode;
+    if (!strcmp(lang, "MAR")) return marLanguageCode;
+    if (!strcmp(lang, "ROM")) return romLanguageCode;
 #endif
+
 
     return -1;
 }

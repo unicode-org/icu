@@ -26,7 +26,6 @@ icu-config --invoke=genrb
 icu-config --invoke=./myapp
 icu-config --invoke=/path/to/myapp
 icu-config --ldflags                 
-icu-config --ldflags-layout          
 icu-config --ldflags-searchpath
 icu-config --ldflags-libsonly
 icu-config --ldflags-system          
@@ -47,5 +46,5 @@ icu-config --version
 icu-config --prefix=/tmp --bindir
 # following needs to point to an alternate path that will work 
 icu-config --prefix=/Users/srl/II --cflags
-icu-config --detect-prefix --ldflags --ldflags-layout
+icu-config --detect-prefix --ldflags 
 

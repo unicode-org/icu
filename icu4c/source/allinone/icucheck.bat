@@ -91,7 +91,7 @@ set ICUFAILCNT=0
 :OK_cintltst
 @set ICURUN=%ICURUN% %THT%
 
-@REM  (Layout is deprecated)
+@REM  (Layout is deprecated - this would require HarfBuzz)
 @REM  @set THT=letest
 @REM  @echo ==== %THT% =========================================================================
 @REM  @cd %ICU_ICUDIR%\source\test\letest

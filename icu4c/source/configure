@@ -649,8 +649,6 @@ U_HAVE_TOOLS
 TOOLS_TRUE
 U_HAVE_LAYOUTEX
 LAYOUTEX_TRUE
-U_HAVE_LAYOUT
-LAYOUT_TRUE
 U_HAVE_ICUIO
 ICUIO_TRUE
 U_HAVE_EXTRAS
@@ -754,7 +752,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -795,8 +792,8 @@ enable_rpath
 enable_weak_threads
 enable_extras
 enable_icuio
-enable_layout
 enable_layoutex
+enable_layout
 enable_tools
 with_data_packaging
 with_library_suffix
@@ -858,7 +855,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1111,15 +1107,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1257,7 +1244,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1410,7 +1397,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1461,10 +1447,9 @@ Optional Features:
   --enable-weak-threads   weakly reference the threading library default=no
   --enable-extras         build ICU extras default=yes
   --enable-icuio          build ICU's icuio library default=yes
-  --enable-layout         build ICU's DEPRECATED layout library default=yes
-  --enable-layoutex         build ICU's Paragraph Layout library default=same-as-layout.
-            If not building with the ICU Layout library, then icu-le-hb must be installed via pkg-config.
-            See http://harfbuzz.org
+  --enable-layoutex         build ICU's Paragraph Layout library default=yes.
+            icu-le-hb must be installed via pkg-config. See http://harfbuzz.org
+
   --enable-tools         build ICU's tools default=yes
   --enable-tests          build ICU tests default=yes
   --enable-samples        build ICU samples default=yes
@@ -7545,38 +7530,16 @@ else
   U_HAVE_ICUIO=0
 fi
 
-# Enable/disable layout
-# Check whether --enable-layout was given.
-if test "${enable_layout+set}" = set; then :
-  enableval=$enable_layout; case "${enableval}" in
-		yes) layout=true ;;
-		no)  layout=false ;;
-		*) as_fn_error $? "bad value ${enableval} for --enable-layout" "$LINENO" 5 ;;
-		esac
-else
-  layout=true
-fi
-
-
-
-if test "$layout" = true; then
-  LAYOUT_TRUE=
-  U_HAVE_LAYOUT=1
-else
-  LAYOUT_TRUE='#'
-  U_HAVE_LAYOUT=0
-fi
-
 # Enable/disable layoutex
 # Check whether --enable-layoutex was given.
 if test "${enable_layoutex+set}" = set; then :
   enableval=$enable_layoutex; case "${enableval}" in
-		yes) layoutex=true ;;
+		yes) layoutex=$have_icu_le_hb ;;
 		no)  layoutex=false ;;
 		*) as_fn_error $? "bad value ${enableval} for --enable-layoutex" "$LINENO" 5 ;;
 		esac
 else
-  layoutex=$layout
+  layoutex=$have_icu_le_hb
 fi
 
 
@@ -7588,6 +7551,17 @@ else
   LAYOUTEX_TRUE='#'
   U_HAVE_LAYOUTEX=0
 fi
+
+# Enable/disable layoutex
+# Check whether --enable-layout was given.
+if test "${enable_layout+set}" = set; then :
+  enableval=$enable_layout; case "${enableval}" in
+		yes) as_fn_error $? "The ICU Layout Engine has been removed." "$LINENO" 5 ;;
+		no)   ;;
+		*) ;;
+		esac
+fi
+
 
 # Enable/disable tools
 # Check whether --enable-tools was given.
@@ -7829,7 +7803,7 @@ echo "CXXFLAGS=$CXXFLAGS"
 
 
 # output the Makefiles
-ac_config_files="$ac_config_files icudefs.mk Makefile data/pkgdataMakefile config/Makefile.inc config/icu.pc config/pkgdataMakefile data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layout/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/uconv/pkgdataMakefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/toolutil/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gendict/Makefile tools/gentest/Makefile tools/gennorm2/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icuinfo/Makefile tools/icupkg/Makefile tools/icuswap/Makefile tools/pkgdata/Makefile tools/tzcode/Makefile tools/gencfu/Makefile test/Makefile test/compat/Makefile test/testdata/Makefile test/testdata/pkgdataMakefile test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/letest/Makefile test/perf/Makefile test/perf/collationperf/Makefile test/perf/collperf/Makefile test/perf/collperf2/Makefile test/perf/dicttrieperf/Makefile test/perf/ubrkperf/Makefile test/perf/charperf/Makefile test/perf/convperf/Makefile test/perf/normperf/Makefile test/perf/DateFmtPerf/Makefile test/perf/howExpensiveIs/Makefile test/perf/strsrchperf/Makefile test/perf/unisetperf/Makefile test/perf/usetperf/Makefile test/perf/ustrperf/Makefile test/perf/utfperf/Makefile test/perf/utrie2perf/Makefile test/perf/leperf/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile"
+ac_config_files="$ac_config_files icudefs.mk Makefile data/pkgdataMakefile config/Makefile.inc config/icu.pc config/pkgdataMakefile data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/uconv/pkgdataMakefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/toolutil/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gendict/Makefile tools/gentest/Makefile tools/gennorm2/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icuinfo/Makefile tools/icupkg/Makefile tools/icuswap/Makefile tools/pkgdata/Makefile tools/tzcode/Makefile tools/gencfu/Makefile test/Makefile test/compat/Makefile test/testdata/Makefile test/testdata/pkgdataMakefile test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/letest/Makefile test/perf/Makefile test/perf/collationperf/Makefile test/perf/collperf/Makefile test/perf/collperf2/Makefile test/perf/dicttrieperf/Makefile test/perf/ubrkperf/Makefile test/perf/charperf/Makefile test/perf/convperf/Makefile test/perf/normperf/Makefile test/perf/DateFmtPerf/Makefile test/perf/howExpensiveIs/Makefile test/perf/strsrchperf/Makefile test/perf/unisetperf/Makefile test/perf/usetperf/Makefile test/perf/ustrperf/Makefile test/perf/utfperf/Makefile test/perf/utrie2perf/Makefile test/perf/leperf/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -8549,7 +8523,6 @@ do
     "stubdata/Makefile") CONFIG_FILES="$CONFIG_FILES stubdata/Makefile" ;;
     "common/Makefile") CONFIG_FILES="$CONFIG_FILES common/Makefile" ;;
     "i18n/Makefile") CONFIG_FILES="$CONFIG_FILES i18n/Makefile" ;;
-    "layout/Makefile") CONFIG_FILES="$CONFIG_FILES layout/Makefile" ;;
     "layoutex/Makefile") CONFIG_FILES="$CONFIG_FILES layoutex/Makefile" ;;
     "io/Makefile") CONFIG_FILES="$CONFIG_FILES io/Makefile" ;;
     "extra/Makefile") CONFIG_FILES="$CONFIG_FILES extra/Makefile" ;;
