@@ -293,43 +293,6 @@ inline int32_t Grego::gregorianShift(int32_t eyear) {
   return gregShift;
 }
 
-/**
- * This utility class provides convenient access to the data needed for a calendar. 
- * @internal ICU 3.0
- */
-class CalendarData : public UMemory {
-public: 
-    /**
-     * Construct a CalendarData from the given locale.
-     * @param loc locale to use. The 'calendar' keyword will be ignored.
-     * @param type calendar type. NULL indicates the gregorian calendar. 
-     * No default lookup is done.
-     * @param status error code
-     */
-    CalendarData(const Locale& loc, const char *type, UErrorCode& status);
-
-    /**
-     * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
-     * The ResourceBundle C++ API should NOT be used because it is too slow for a low level API.
-     *
-     * @param key Resource key to data
-     * @param status Error Status
-     * @internal
-     */
-    UResourceBundle* getByKey(const char *key, UErrorCode& status);
-
-    ~CalendarData();
-
-private:
-    void initData(const char *locale, const char *type, UErrorCode& status);
-
-    UResourceBundle *fFillin;
-    UResourceBundle *fOtherFillin;
-    UResourceBundle *fBundle;
-    UResourceBundle *fFallback;
-    CalendarData(); // Not implemented.
-};
-
 U_NAMESPACE_END
 
 #endif // !UCONFIG_NO_FORMATTING

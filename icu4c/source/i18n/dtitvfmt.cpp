@@ -26,8 +26,8 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "dtitv_impl.h"
-#include "gregoimp.h"
 #include "mutex.h"
+#include "uresimp.h"
 
 #ifdef DTITVFMT_DEBUG
 #include <iostream>
@@ -53,7 +53,9 @@ static const UChar gDateFormatSkeleton[][11] = {
 {LOW_Y, CAP_M, LOW_D, 0} };
 
 
-static const char gDateTimePatternsTag[]="DateTimePatterns";
+static const char gCalendarTag[] = "calendar";
+static const char gGregorianTag[] = "gregorian";
+static const char gDateTimePatternsTag[] = "DateTimePatterns";
 
 
 // latestFirst:
@@ -653,27 +655,22 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
         // with the time interval.
         // The date/time pattern ( such as {0} {1} ) is saved in
         // calendar, that is why need to get the CalendarData here.
-        CalendarData* calData = new CalendarData(locale, NULL, status);
-        if ( U_FAILURE(status) ) {
-            delete calData;
-            return;
-        }
-        if ( calData == NULL ) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-             return;
-        }
+        LocalUResourceBundlePointer dateTimePatternsRes(ures_open(NULL, locale.getBaseName(), &status));
+        ures_getByKey(dateTimePatternsRes.getAlias(), gCalendarTag,
+                      dateTimePatternsRes.getAlias(), &status);
+        ures_getByKeyWithFallback(dateTimePatternsRes.getAlias(), gGregorianTag,
+                                  dateTimePatternsRes.getAlias(), &status);
+        ures_getByKeyWithFallback(dateTimePatternsRes.getAlias(), gDateTimePatternsTag,
+                                  dateTimePatternsRes.getAlias(), &status);
 
-        const UResourceBundle* dateTimePatternsRes = calData->getByKey(
-                                            gDateTimePatternsTag, status);
         int32_t dateTimeFormatLength;
         const UChar* dateTimeFormat = ures_getStringByIndex(
-                                            dateTimePatternsRes,
+                                            dateTimePatternsRes.getAlias(),
                                             (int32_t)DateFormat::kDateTime,
                                             &dateTimeFormatLength, &status);
         if ( U_SUCCESS(status) && dateTimeFormatLength >= 3 ) {
             fDateTimeFormat = new UnicodeString(dateTimeFormat, dateTimeFormatLength);
         }
-        delete calData;
     }
 
     UBool found = setSeparateDateTimePtn(normalizedDateSkeleton,
