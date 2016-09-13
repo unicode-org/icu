@@ -232,7 +232,7 @@ public abstract class NumberFormat extends UFormat {
      * negative values (e.g. minus sign).
      * Overrides any style specified using -cf- key in locale.
      * @draft ICU 56
-     * @provisional This API might change or be removed in a future release. 
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int STANDARDCURRENCYSTYLE = 9;
 
@@ -251,7 +251,7 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public static final int FRACTION_FIELD = 1;
-    
+
     /**
      * Formats a number and appends the resulting text to the given string buffer.
      * {@icunote} recognizes <code>BigInteger</code>
@@ -402,11 +402,13 @@ public abstract class NumberFormat extends UFormat {
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
         // Default implementation -- subclasses may override
-        Currency save = getCurrency(), curr = currAmt.getCurrency();
-        boolean same = curr.equals(save);
-        if (!same) setCurrency(curr);
-        format(currAmt.getNumber(), toAppendTo, pos);
-        if (!same) setCurrency(save);
+        synchronized(this) {
+            Currency save = getCurrency(), curr = currAmt.getCurrency();
+            boolean same = curr.equals(save);
+            if (!same) setCurrency(curr);
+            format(currAmt.getNumber(), toAppendTo, pos);
+            if (!same) setCurrency(save);
+        }
         return toAppendTo;
     }
 
@@ -528,9 +530,9 @@ public abstract class NumberFormat extends UFormat {
 
     /**
      * {@icu} Set a particular DisplayContext value in the formatter,
-     * such as CAPITALIZATION_FOR_STANDALONE. 
-     * 
-     * @param context The DisplayContext value to set. 
+     * such as CAPITALIZATION_FOR_STANDALONE.
+     *
+     * @param context The DisplayContext value to set.
      * @stable ICU 53
      */
     public void setContext(DisplayContext context) {
@@ -542,7 +544,7 @@ public abstract class NumberFormat extends UFormat {
     /**
      * {@icu} Get the formatter's DisplayContext value for the specified DisplayContext.Type,
      * such as CAPITALIZATION.
-     * 
+     *
      * @param type the DisplayContext.Type whose value to return
      * @return the current DisplayContext setting for the specified type
      * @stable ICU 53
@@ -1000,11 +1002,11 @@ public abstract class NumberFormat extends UFormat {
      * {@icu} Registers a new NumberFormatFactory.  The factory is adopted by
      * the service and must not be modified.  The returned object is a
      * key that can be used to unregister this factory.
-     * 
+     *
      * <p>Because ICU may choose to cache NumberFormat objects internally, this must
      * be called at application startup, prior to any calls to
      * NumberFormat.getInstance to avoid undefined behavior.
-     * 
+     *
      * @param factory the factory to register
      * @return a key with which to unregister the factory
      * @stable ICU 2.6
@@ -1258,7 +1260,7 @@ public abstract class NumberFormat extends UFormat {
     public Currency getCurrency() {
         return currency;
     }
-    
+
     /**
      * Returns the currency in effect for this formatter.  Subclasses
      * should override this method as needed.  Unlike getCurrency(),
@@ -1414,7 +1416,7 @@ public abstract class NumberFormat extends UFormat {
                 f.setDecimalSeparatorAlwaysShown(false);
                 f.setParseIntegerOnly(true);
             }
-            
+
             if (choice == CASHCURRENCYSTYLE) {
                 f.setCurrencyUsage(CurrencyUsage.CASH);
             }
