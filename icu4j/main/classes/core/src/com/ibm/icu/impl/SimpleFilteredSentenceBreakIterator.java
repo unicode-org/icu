@@ -11,6 +11,7 @@ package com.ibm.icu.impl;
 import java.text.CharacterIterator;
 import java.util.HashSet;
 
+import com.ibm.icu.impl.ICUResourceBundle.OpenType;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.FilteredBreakIteratorBuilder;
 import com.ibm.icu.text.UCharacterIterator;
@@ -19,7 +20,6 @@ import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.StringTrieBuilder;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author tomzhang
@@ -46,84 +46,132 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
         this.backwardsTrie = backwardsTrie;
     }
 
-    @Override
-    public int next() {
-        int n = delegate.next();
+
+    /**
+     * Reset the filter from the delegate.
+     */
+    private final void resetState() {
+        text = UCharacterIterator.getInstance((CharacterIterator) delegate.getText().clone());
+    }
+
+    /**
+     * Is there an exception at this point?
+     *
+     * @param n
+     * @return
+     */
+    private final boolean breakExceptionAt(int n) {
+        // Note: the C++ version of this function is SimpleFilteredSentenceBreakIterator::breakExceptionAt()
+
+        int bestPosn = -1;
+        int bestValue = -1;
+
+        // loops while 'n' points to an exception
+        text.setIndex(n);
+        backwardsTrie.reset();
+        int uch;
+
+        // Assume a space is following the '.' (so we handle the case: "Mr. /Brown")
+        if ((uch = text.previousCodePoint()) == ' ') { // TODO: skip a class of chars here??
+            // TODO only do this the 1st time?
+        } else {
+            uch = text.nextCodePoint();
+        }
+
+        BytesTrie.Result r = BytesTrie.Result.INTERMEDIATE_VALUE;
+
+        while ((uch = text.previousCodePoint()) != UCharacterIterator.DONE && // more to consume backwards and..
+                ((r = backwardsTrie.nextForCodePoint(uch)).hasNext())) {// more in the trie
+            if (r.hasValue()) { // remember the best match so far
+                bestPosn = text.getIndex();
+                bestValue = backwardsTrie.getValue();
+            }
+        }
+
+        if (r.matches()) { // exact match?
+            bestValue = backwardsTrie.getValue();
+            bestPosn = text.getIndex();
+        }
+
+        if (bestPosn >= 0) {
+            if (bestValue == Builder.MATCH) { // exact match!
+                return true; // Exception here.
+            } else if (bestValue == Builder.PARTIAL && forwardsPartialTrie != null) {
+                // make sure there's a forward trie
+                // We matched the "Ph." in "Ph.D." - now we need to run everything through the forwards trie
+                // to see if it matches something going forward.
+                forwardsPartialTrie.reset();
+
+                BytesTrie.Result rfwd = BytesTrie.Result.INTERMEDIATE_VALUE;
+                text.setIndex(bestPosn); // hope that's close ..
+                while ((uch = text.nextCodePoint()) != BreakIterator.DONE
+                        && ((rfwd = forwardsPartialTrie.nextForCodePoint(uch)).hasNext())) {
+                }
+                if (rfwd.matches()) {
+                    // Exception here
+                    return true;
+                } // else fall through
+            } // else fall through
+        } // else fall through
+        return false; // No exception here.
+    }
+
+    /**
+     * Given that the delegate has already given its "initial" answer,
+     * find the NEXT actual (non-excepted) break.
+     * @param n initial position from delegate
+     * @return new break position or UBRK_DONE
+     */
+    private final int internalNext(int n) {
         if (n == BreakIterator.DONE || // at end or
                 backwardsTrie == null) { // .. no backwards table loaded == no exceptions
             return n;
         }
-        // UCharacterIterator text;
-        text = UCharacterIterator.getInstance((CharacterIterator) delegate.getText().clone());
-        do { // outer loop runs once per underlying break (from fDelegate).
-             // loops while 'n' points to an exception.
-            text.setIndex(n);
-            backwardsTrie.reset();
-            int uch;
+        resetState();
 
-            // Assume a space is following the '.' (so we handle the case: "Mr. /Brown")
-            if ((uch = text.previousCodePoint()) == ' ') { // TODO: skip a class of chars here??
-                // TODO only do this the 1st time?
+        final int textLen = text.getLength();
+
+        while (n != BreakIterator.DONE && n != textLen) {
+            // outer loop runs once per underlying break (from fDelegate).
+            // loops while 'n' points to an exception.
+
+            if (breakExceptionAt(n)) {
+                // n points to a break exception
+                n = delegate.next();
             } else {
-                uch = text.nextCodePoint();
+                // no exception at this spot
+                return n;
             }
+        }
+        return n; //hit underlying DONE or break at end of text
+    }
 
-            BytesTrie.Result r = BytesTrie.Result.INTERMEDIATE_VALUE;
+    /**
+     * Given that the delegate has already given its "initial" answer,
+     * find the NEXT actual (non-excepted) break.
+     * @param n initial position from delegate
+     * @return new break position or UBRK_DONE
+     */
+    private final int internalPrev(int n) {
+        if (n == 0 || n == BreakIterator.DONE || // at end or
+                backwardsTrie == null) { // .. no backwards table loaded == no exceptions
+            return n;
+        }
+        resetState();
 
-            int bestPosn = -1;
-            int bestValue = -1;
+        while (n != BreakIterator.DONE && n != 0) {
+            // outer loop runs once per underlying break (from fDelegate).
+            // loops while 'n' points to an exception.
 
-            while ((uch = text.previousCodePoint()) != BreakIterator.DONE && // more to consume backwards and..
-                    ((r = backwardsTrie.nextForCodePoint(uch)).hasNext())) {// more in the trie
-                if (r.hasValue()) { // remember the best match so far
-                    bestPosn = text.getIndex();
-                    bestValue = backwardsTrie.getValue();
-                }
-            }
-
-            if (r.matches()) { // exact match?
-                bestValue = backwardsTrie.getValue();
-                bestPosn = text.getIndex();
-            }
-
-            if (bestPosn >= 0) {
-                if (bestValue == Builder.MATCH) { // exact match!
-                    n = delegate.next(); // skip this one. Find the next lowerlevel break.
-                    if (n == BreakIterator.DONE) {
-                        break;
-                    }
-                    continue; // See if the next is another exception.
-                } else if (bestValue == Builder.PARTIAL && forwardsPartialTrie != null) {
-                    // make sure there's a forward trie
-                    // We matched the "Ph." in "Ph.D." - now we need to run everything through the forwards trie
-                    // to see if it matches something going forward.
-                    forwardsPartialTrie.reset();
-
-                    BytesTrie.Result rfwd = BytesTrie.Result.INTERMEDIATE_VALUE;
-                    text.setIndex(bestPosn); // hope that's close ..
-                    while ((uch = text.nextCodePoint()) != BreakIterator.DONE
-                            && ((rfwd = forwardsPartialTrie.nextForCodePoint(uch)).hasNext())) {
-                    }
-                    if (rfwd.matches()) {
-                        // only full matches here, nothing to check
-                        // skip the next:
-                        n = delegate.next();
-                        if (n == BreakIterator.DONE) {
-                            break;
-                        }
-                        continue;
-                    } else {
-                        // no match (no exception) -return the 'underlying' break
-                        break;
-                    }
-                } else {
-                    break; // internal error and/or no forwards trie
-                }
+            if (breakExceptionAt(n)) {
+                // n points to a break exception
+                n = delegate.previous();
             } else {
-                break; // No match - so exit. Not an exception.
+                // no exception at this spot
+                return n;
             }
-        } while (n != BreakIterator.DONE);
-        return n;
+        }
+        return n; //hit underlying DONE or break at end of text
     }
 
     @Override
@@ -150,32 +198,20 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
         return other;
     }
 
+
     @Override
     public int first() {
-        return delegate.first();
+        return internalNext(delegate.first());
     }
 
     @Override
-    public int last() {
-        return delegate.last();
-    }
-
-    @Override
-    public int next(int n) {
-        // TODO
-        throw new UnsupportedOperationException("next(int) is not yet implemented");
+    public int preceding(int offset) {
+        return internalPrev(delegate.preceding(offset));
     }
 
     @Override
     public int previous() {
-        // TODO
-        throw new UnsupportedOperationException("previous() is not yet implemented");
-    }
-
-    @Override
-    public int following(int offset) {
-        // TODO
-        throw new UnsupportedOperationException("following(int) is not yet implemented");
+        return internalPrev(delegate.previous());
     }
 
     @Override
@@ -184,9 +220,39 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
     }
 
     @Override
-    public int preceding(int offset) {
-        // TODO
-        throw new UnsupportedOperationException("preceding(int) is not yet implemented");
+    public boolean isBoundary(int offset) {
+        if(!delegate.isBoundary(offset)) {
+            return false; // No underlying break to suppress?
+        }
+
+        // delegate thinks there's a break…
+        if(backwardsTrie == null) {
+            return true; // no data
+        }
+
+        resetState();
+        return !breakExceptionAt(offset); // if there's an exception: no break.
+    }
+
+    @Override
+    public int next() {
+        return internalNext(delegate.next());
+    }
+
+    @Override
+    public int next(int n) {
+        return internalNext(delegate.next(n));
+    }
+
+    @Override
+    public int following(int offset) {
+        return internalNext(delegate.following(offset));
+    }
+
+    @Override
+    public int last() {
+        // Don't suppress a break opportunity at the end of text.
+        return delegate.last();
     }
 
     @Override
@@ -215,20 +281,18 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
          * @param loc the locale to get filtered iterators
          */
         public Builder(ULocale loc) {
-            ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                    ICUData.ICU_BRKITR_BASE_NAME, loc);
-            ICUResourceBundle exceptions = rb.findWithFallback("exceptions");
-            if (exceptions != null) {
-                ICUResourceBundle breaks = exceptions.findWithFallback("SentenceBreak");
-    
-                if (breaks != null) {
-                    for (int index = 0, size = breaks.getSize(); index < size; ++index) {
-                        ICUResourceBundle b = (ICUResourceBundle) breaks.get(index);
-                        String br = b.getString();
-                        filterSet.add(br);
-                    }
+            ICUResourceBundle rb = ICUResourceBundle.getBundleInstance(
+                    ICUData.ICU_BRKITR_BASE_NAME, loc, OpenType.LOCALE_ROOT);
+
+            ICUResourceBundle breaks = rb.findWithFallback("exceptions/SentenceBreak");
+
+            if (breaks != null) {
+                for (int index = 0, size = breaks.getSize(); index < size; ++index) {
+                    ICUResourceBundle b = (ICUResourceBundle) breaks.get(index);
+                    String br = b.getString();
+                    filterSet.add(br);
                 }
-            } // else - no exceptions.
+            }
         }
 
         /**
@@ -261,7 +325,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
                 // Short circuit - nothing to except.
                 return adoptBreakIterator;
             }
-            
+
             CharsTrieBuilder builder = new CharsTrieBuilder();
             CharsTrieBuilder builder2 = new CharsTrieBuilder();
 

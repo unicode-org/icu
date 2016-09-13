@@ -136,6 +136,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
                 typeKeyExt = "_" + lbKeyValue;
             }
         }
+
         try {
             String         typeKey       = (typeKeyExt == null)? KIND_NAMES[kind]: KIND_NAMES[kind] + typeKeyExt;
             String         brkfname      = rb.getStringWithFallback("boundaries/" + typeKey);
@@ -161,6 +162,15 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         ULocale uloc = ULocale.forLocale(rb.getLocale());
         iter.setLocale(uloc, uloc);
         iter.setBreakType(kind);
+
+        // filtered break
+        if (kind == BreakIterator.KIND_SENTENCE) {
+            final String ssKeyword = locale.getKeywordValue("ss");
+            if (ssKeyword != null && ssKeyword.equals("standard")) {
+                final ULocale base = new ULocale(locale.getBaseName());
+                return FilteredBreakIteratorBuilder.createInstance(base).build(iter);
+            }
+        }
 
         return iter;
 
