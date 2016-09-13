@@ -17,7 +17,6 @@ import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SoftCache;
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -27,7 +26,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
 /**
  * <code>NumberingSystem</code> is the base class for all number
  * systems. This class provides the interface for setting different numbering
- * system types, whether it be a simple alternate digit system such as 
+ * system types, whether it be a simple alternate digit system such as
  * Thai digits or Devanagari digits, or an algorithmic numbering system such
  * as Hebrew numbering or Chinese numbering.
  *
@@ -51,7 +50,7 @@ public class NumberingSystem {
 
     /**
      * Factory method for creating a numbering system.
-     * @param radix_in The radix for this numbering system.  ICU currently 
+     * @param radix_in The radix for this numbering system.  ICU currently
      * supports only numbering systems whose radix is 10.
      * @param isAlgorithmic_in Specifies whether the numbering system is algorithmic
      * (true) or numeric (false).
@@ -66,11 +65,11 @@ public class NumberingSystem {
     public static NumberingSystem getInstance(int radix_in, boolean isAlgorithmic_in, String desc_in ) {
         return getInstance(null,radix_in,isAlgorithmic_in,desc_in);
     }
-    
+
     /**
      * Factory method for creating a numbering system.
      * @param name_in The string representing the name of the numbering system.
-     * @param radix_in The radix for this numbering system.  ICU currently 
+     * @param radix_in The radix for this numbering system.  ICU currently
      * supports only numbering systems whose radix is 10.
      * @param isAlgorithmic_in Specifies whether the numbering system is algorithmic
      * (true) or numeric (false).
@@ -82,7 +81,7 @@ public class NumberingSystem {
      * this numbering system.
      * @stable ICU 4.6
      */
-   
+
     private static NumberingSystem getInstance(String name_in, int radix_in, boolean isAlgorithmic_in, String desc_in ) {
         if ( radix_in < 2 ) {
             throw new IllegalArgumentException("Invalid radix for numbering system");
@@ -252,7 +251,7 @@ public class NumberingSystem {
      * @stable ICU 4.2
      */
     public static String [] getAvailableNames() {
-    
+
             UResourceBundle numberingSystemsInfo = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "numberingSystems");
             UResourceBundle nsCurrent = numberingSystemsInfo.get("numberingSystems");
             UResourceBundle temp;
@@ -269,29 +268,14 @@ public class NumberingSystem {
     }
 
     /**
-     * Convenience method to determine if a given digit string is valid for use as a 
+     * Convenience method to determine if a given digit string is valid for use as a
      * descriptor of a numeric ( non-algorithmic ) numbering system.  In order for
-     * a digit string to be valid, it must meet the following criteria:
-     * 1. Digits must be in Unicode's basic multilingual plane.
+     * a digit string to be valid, it must contain exactly ten Unicode code points.
      * @stable ICU 4.2
      */
     public static boolean isValidDigitString(String str) {
-
-        int c;
-        int i = 0;
-        UCharacterIterator it = UCharacterIterator.getInstance(str);
-
-        it.setToStart();
-        while ( (c = it.nextCodePoint()) != UCharacterIterator.DONE) {
-            if ( UCharacter.isSupplementary(c)) { // Digits outside the BMP are not currently supported
-                return false;
-            }
-            i++;
-        }
-        if ( i != 10 ) {
-            return false;
-        }
-        return true;
+        int numCodepoints = str.codePointCount(0, str.length());
+        return (numCodepoints == 10);
     }
 
     /**
@@ -327,7 +311,7 @@ public class NumberingSystem {
      * Returns the numbering system's algorithmic status.  If true,
      * the numbering system is algorithmic and uses an RBNF formatter to
      * format numerals.  If false, the numbering system is numeric and
-     * uses a fixed set of digits. 
+     * uses a fixed set of digits.
      * @stable ICU 4.2
      */
     public boolean isAlgorithmic() {

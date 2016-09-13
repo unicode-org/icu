@@ -30,11 +30,11 @@ public class CurrencyData {
 
     public static final class CurrencyFormatInfo {
         public final String currencyPattern;
-        public final char monetarySeparator;
-        public final char monetaryGroupingSeparator;
+        public final String monetarySeparator;
+        public final String monetaryGroupingSeparator;
 
-        public CurrencyFormatInfo(String currencyPattern, char monetarySeparator,
-                char monetaryGroupingSeparator) {
+        public CurrencyFormatInfo(String currencyPattern, String monetarySeparator,
+                String monetaryGroupingSeparator) {
             this.currencyPattern = currencyPattern;
             this.monetarySeparator = monetarySeparator;
             this.monetaryGroupingSeparator = monetaryGroupingSeparator;
@@ -93,10 +93,12 @@ public class CurrencyData {
             temp = (CurrencyDisplayInfoProvider) clzz.newInstance();
         } catch (Throwable t) {
             temp = new CurrencyDisplayInfoProvider() {
+                @Override
                 public CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback) {
                     return DefaultInfo.getWithFallback(withFallback);
                 }
 
+                @Override
                 public boolean hasData() {
                     return false;
                 }

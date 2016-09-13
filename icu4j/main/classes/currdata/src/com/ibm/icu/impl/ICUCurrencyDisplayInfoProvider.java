@@ -177,8 +177,8 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                 crb = crb.at(2);
                 if (crb != null) {
                   String pattern = crb.getString(0);
-                  char separator = crb.getString(1).charAt(0);
-                  char groupingSeparator = crb.getString(2).charAt(0);
+                  String separator = crb.getString(1);
+                  String groupingSeparator = crb.getString(2);
                   return new CurrencyFormatInfo(pattern, separator, groupingSeparator);
                 }
             }
