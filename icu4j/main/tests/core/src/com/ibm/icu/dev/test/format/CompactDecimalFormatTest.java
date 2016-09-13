@@ -17,7 +17,6 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -129,7 +128,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
     };
 
     Object[][] ChineseCurrencyTestData = {
-            // The first one should really have a ￥ in front, but the CLDR data is 
+            // The first one should really have a ￥ in front, but the CLDR data is
             // incorrect.  See http://unicode.org/cldr/trac/ticket/9298 and update
             // this test case when the CLDR ticket is fixed.
             {new CurrencyAmount(1234f, Currency.getInstance("CNY")), "1200"},
@@ -245,18 +244,18 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void TestACoreCompactFormat() {
         Map<String,String[][]> affixes = new HashMap();
         affixes.put("one", new String[][] {
-                {"","",}, {"","",}, {"","",}, 
+                {"","",}, {"","",}, {"","",},
                 {"","K"}, {"","K"}, {"","K"},
                 {"","M"}, {"","M"}, {"","M"},
-                {"","B"}, {"","B"}, {"","B"}, 
-                {"","T"}, {"","T"}, {"","T"}, 
+                {"","B"}, {"","B"}, {"","B"},
+                {"","T"}, {"","T"}, {"","T"},
         });
         affixes.put("other", new String[][] {
-                {"","",}, {"","",}, {"","",}, 
+                {"","",}, {"","",}, {"","",},
                 {"","Ks"}, {"","Ks"}, {"","Ks"},
                 {"","Ms"}, {"","Ms"}, {"","Ms"},
-                {"","Bs"}, {"","Bs"}, {"","Bs"}, 
-                {"","Ts"}, {"","Ts"}, {"","Ts"}, 
+                {"","Bs"}, {"","Bs"}, {"","Bs"},
+                {"","Ts"}, {"","Ts"}, {"","Ts"},
         });
 
         Map<String,String[]> currencyAffixes = new HashMap();
@@ -264,10 +263,10 @@ public class CompactDecimalFormatTest extends TestFmwk {
         currencyAffixes.put("other", new String[] {"", "$s"});
 
         long[] divisors = new long[] {
-                0,0,0, 
-                1000, 1000, 1000, 
-                1000000, 1000000, 1000000, 
-                1000000000L, 1000000000L, 1000000000L, 
+                0,0,0,
+                1000, 1000, 1000,
+                1000000, 1000000, 1000000,
+                1000000000L, 1000000000L, 1000000000L,
                 1000000000000L, 1000000000000L, 1000000000000L};
         checkCore(affixes, null, divisors, TestACoreCompactFormatList);
         checkCore(affixes, currencyAffixes, divisors, TestACoreCompactFormatListCurrency);
@@ -276,7 +275,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
     private void checkCore(Map<String, String[][]> affixes, Map<String, String[]> currencyAffixes, long[] divisors, Object[][] testItems) {
         Collection<String> debugCreationErrors = new LinkedHashSet();
         CompactDecimalFormat cdf = new CompactDecimalFormat(
-                "#,###.00", 
+                "#,###.00",
                 DecimalFormatSymbols.getInstance(new ULocale("fr")),
                 CompactStyle.SHORT, PluralRules.createRules("one: j is 1 or f is 1"),
                 divisors, affixes, currencyAffixes,
@@ -319,17 +318,8 @@ public class CompactDecimalFormatTest extends TestFmwk {
         checkLocale(ULocale.ENGLISH, CompactStyle.SHORT, EnglishTestData);
     }
 
-    // JCE: 2016-02-26: This test is logKnownIssue because CompactDecimalFormat cannot properly format
-    // negative quantities until we implement support for positive/negative subpatterns within CDF.
-    // So, in the meantime, we are making any format of a negative throw an UnsupportedOperationException
-    // as the original JavaDoc states.
-
     @Test
-    @Ignore
     public void TestArabicLongStyle() {
-        if (logKnownIssue("12181","No support for negative numbers in CDF")) {
-            return;
-        }
         NumberFormat cdf =
                 CompactDecimalFormat.getInstance(new Locale("ar"), CompactStyle.LONG);
         assertEquals("Arabic Long", "\u200F-\u0665\u066B\u0663 \u0623\u0644\u0641", cdf.format(-5300));
@@ -355,17 +345,8 @@ public class CompactDecimalFormatTest extends TestFmwk {
         checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.LONG, SerbianTestDataLong);
     }
 
-// JCE: 2016-02-26: This test is logKnownIssue because CompactDecimalFormat cannot properly format
-// negative quantities until we implement support for positive/negative subpatterns within CDF.
-// So, in the meantime, we are making any format of a negative throw an UnsupportedOperationException
-// as the original JavaDoc states.
-//
     @Test
-    @Ignore
     public void TestSerbianLongNegative() {
-        if (logKnownIssue("12181","No support for negative numbers in CDF")) {
-            return;
-        }
         checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.LONG, SerbianTestDataLongNegative);
     }
 
@@ -378,18 +359,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void TestSwahiliShort() {
         checkLocale(ULocale.forLanguageTag("sw"), CompactStyle.SHORT, SwahiliTestData);
     }
-    
-// JCE: 2016-02-26: This test is logKnownIssue because CompactDecimalFormat cannot properly format
-// negative quantities until we implement support for positive/negative subpatterns within CDF.
-// So, in the meantime, we are making any format of a negative throw an UnsupportedOperationException
-// as the original JavaDoc states.
-//
+
     @Test
-    @Ignore
     public void TestSwahiliShortNegative() {
-        if (logKnownIssue("12181","No support for negative numbers in CDF")) {
-            return;
-        }
         checkLocale(ULocale.forLanguageTag("sw"), CompactStyle.SHORT, SwahiliTestDataNegative);
     }
 
@@ -397,12 +369,12 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void TestEnglishCurrency() {
         checkLocale(ULocale.ENGLISH, CompactStyle.SHORT, EnglishCurrencyTestData);
     }
-    
+
     @Test
     public void TestGermanCurrency() {
         checkLocale(ULocale.GERMAN, CompactStyle.SHORT, GermanCurrencyTestData);
     }
-    
+
     @Test
     public void TestChineseCurrency() {
         checkLocale(ULocale.CHINESE, CompactStyle.SHORT, ChineseCurrencyTestData);
@@ -442,7 +414,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
         for (Object[] row : testData) {
             Object source = row[0];
             Object expected = row[1];
-            assertEquals(title + source, expected, 
+            assertEquals(title + source, expected,
                     cdf.format(source));
         }
     }
@@ -471,5 +443,69 @@ public class CompactDecimalFormatTest extends TestFmwk {
         String result = CompactDecimalFormat.getInstance( new ULocale("no_NO"),
                 CompactDecimalFormat.CompactStyle.SHORT ).format(12000);
         assertNotEquals("CDF(12,000) for no_NO shouldn't be 12 (12K or similar)", "12", result);
+    }
+
+    @Test
+    public void TestBug12422() {
+        CompactDecimalFormat cdf;
+        String result;
+
+        // Bug #12422
+        cdf = CompactDecimalFormat.getInstance(new ULocale("ar", "SA"), CompactDecimalFormat.CompactStyle.LONG);
+        result = cdf.format(43000);
+        assertEquals("CDF should correctly format 43000 in 'ar'", "٤٣ ألف", result);
+
+        // Bug #12449
+        cdf = CompactDecimalFormat.getInstance(new ULocale("ar"), CompactDecimalFormat.CompactStyle.SHORT);
+        cdf.setMaximumSignificantDigits(3);
+        result = cdf.format(1234);
+        assertEquals("CDF should correctly format 1234 with 3 significant digits in 'ar'", "١٫٢٣ ألف", result);
+
+        // Check currency formatting as well
+        cdf = CompactDecimalFormat.getInstance(new ULocale("ar"), CompactDecimalFormat.CompactStyle.SHORT);
+        result = cdf.format(new CurrencyAmount(43000f, Currency.getInstance("USD")));
+        assertEquals("CDF should correctly format 43000 with currency in 'ar'", "US$ ٤٣ ألف", result);
+        result = cdf.format(new CurrencyAmount(-43000f, Currency.getInstance("USD")));
+        assertEquals("CDF should correctly format -43000 with currency in 'ar'", "US$ ‏-٤٣ ألف", result);
+
+        // Extra locale with different positive/negative formats
+        cdf = CompactDecimalFormat.getInstance(new ULocale("fi"), CompactDecimalFormat.CompactStyle.SHORT);
+        result = cdf.format(new CurrencyAmount(43000f, Currency.getInstance("USD")));
+        assertEquals("CDF should correctly format 43000 with currency in 'fi'", "43 t. $", result);
+        result = cdf.format(new CurrencyAmount(-43000f, Currency.getInstance("USD")));
+        assertEquals("CDF should correctly format -43000 with currency in 'fi'", "−43 t. $", result);
+    }
+
+
+    @Test
+    public void TestBug12689() {
+        if (logKnownIssue("12689", "CDF fails for numbers less than 1 thousand in most locales")) {
+            return;
+        }
+
+        CompactDecimalFormat cdf;
+        String result;
+
+        cdf = CompactDecimalFormat.getInstance(ULocale.forLanguageTag("en"), CompactStyle.SHORT);
+        result = cdf.format(new CurrencyAmount(123, Currency.getInstance("USD")));
+        assertEquals("CDF should correctly format 123 with currency in 'en'", "$120", result);
+
+        cdf = CompactDecimalFormat.getInstance(ULocale.forLanguageTag("it"), CompactStyle.SHORT);
+        result = cdf.format(new CurrencyAmount(123, Currency.getInstance("EUR")));
+        assertEquals("CDF should correctly format 123 with currency in 'it'", "120 €", result);
+    }
+
+    @Test
+    public void TestBug12688() {
+        if (logKnownIssue("12688", "CDF fails for numbers less than 1 million in 'it'")) {
+            return;
+        }
+
+        CompactDecimalFormat cdf;
+        String result;
+
+        cdf = CompactDecimalFormat.getInstance(ULocale.forLanguageTag("it"), CompactStyle.SHORT);
+        result = cdf.format(new CurrencyAmount(123000, Currency.getInstance("EUR")));
+        assertEquals("CDF should correctly format 123000 with currency in 'it'", "120000 €", result);
     }
 }
