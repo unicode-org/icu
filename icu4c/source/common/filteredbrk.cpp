@@ -417,7 +417,9 @@ SimpleFilteredSentenceBreakIterator::previous(void) {
 }
 
 UBool SimpleFilteredSentenceBreakIterator::isBoundary(int32_t offset) {
-  if(!fDelegate->isBoundary(offset)) return false; // no break to suppress
+  if (!fDelegate->isBoundary(offset)) return false; // no break to suppress
+
+  if (fData->fBackwardsTrie.isNull()) return true; // no data = no suppressions
 
   UErrorCode status = U_ZERO_ERROR;
   resetState(status);

@@ -38,7 +38,7 @@
 <locale en>
 <word>
 <data><0>ク<400>ライアン<400>ト<400>サーバー<400></data>
-
+# <data><0>ク<400>ライアン<400>トサーバー<400></data>
 
 ## FILTERED BREAK TESTS
 
@@ -52,6 +52,24 @@
 <sent>
 <data>\
 •In the meantime Mr. Weston arrived with his small ship, which he had now recovered. •Capt. Gorges, who informed the Sgt. here that one purpose of his going east was to meet with Mr. Weston, took this opportunity to call him to account for some abuses he had to lay to his charge.•</data>
+
+# This hits the case where "D." would match the end of "Ph.D.".
+<locale en@ss=standard>
+<sent>
+<data>\
+•Doctor with a D. •As in, Ph.D., you know.•</data>
+
+# same as root (unless some exceptions are added!)
+<locale tfg@ss=standard>
+<sent>
+<data>\
+•In the meantime Mr. •Weston arrived with his small ship, which he had now recovered. •Capt. •Gorges, who informed the Sgt. here that one purpose of his going east was to meet with Mr. •Weston, took this opportunity to call him to account for some abuses he had to lay to his charge.•</data>
+
+# same as root (unless some exceptions are added!)
+<locale ja@ss=standard>
+<sent>
+<data>\
+•In the meantime Mr. •Weston arrived with his small ship, which he had now recovered. •Capt. •Gorges, who informed the Sgt. here that one purpose of his going east was to meet with Mr. •Weston, took this opportunity to call him to account for some abuses he had to lay to his charge.•</data>
 
 ## END FILTERED BREAK TESTS
 
