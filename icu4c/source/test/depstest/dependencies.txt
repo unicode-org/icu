@@ -803,8 +803,7 @@ group: charset_detector
     uclean_i18n
 
 group: spoof_detection
-    uspoof.o uspoof_build.o uspoof_conf.o uspoof_impl.o uspoof_wsconf.o
-    identifier_info.o scriptset.o
+    uspoof.o uspoof_build.o uspoof_conf.o uspoof_impl.o scriptset.o
   deps
     uniset_props regex unorm uscript
 

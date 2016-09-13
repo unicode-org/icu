@@ -38,8 +38,6 @@ public:
 
     void testBug8654();
 
-    void testIdentifierInfo();
-
     void testScriptSet();
 
     void testRestrictionLevel();
