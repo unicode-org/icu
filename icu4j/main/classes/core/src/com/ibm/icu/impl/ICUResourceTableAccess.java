@@ -18,13 +18,13 @@ import com.ibm.icu.util.UResourceBundle;
 public class ICUResourceTableAccess {
     /**
      * Utility to fetch locale display data from resource bundle tables.  Convenience
-     * wrapper for {@link #getTableString(ICUResourceBundle, String, String, String)}.
+     * wrapper for {@link #getTableString(ICUResourceBundle, String, String, String, String)}.
      */
     public static String getTableString(String path, ULocale locale, String tableName,
-            String itemName) {
+            String itemName, String defaultValue) {
         ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.
             getBundleInstance(path, locale.getBaseName());
-        return getTableString(bundle, tableName, null, itemName);
+        return getTableString(bundle, tableName, null, itemName, defaultValue);
     }
 
     /**
@@ -32,13 +32,13 @@ public class ICUResourceTableAccess {
      * through the "Fallback" resource if available.
      */
     public static String getTableString(ICUResourceBundle bundle, String tableName,
-            String subtableName, String item) {
+            String subtableName, String item, String defaultValue) {
         String result = null;
         try {
             for (;;) {
                 ICUResourceBundle table = bundle.findWithFallback(tableName);
                 if (table == null) {
-                    return item;
+                    return defaultValue;
                 }
                 ICUResourceBundle stable = table;
                 if (subtableName != null) {
@@ -71,7 +71,7 @@ public class ICUResourceTableAccess {
                 // still can't figure it out? try the fallback mechanism
                 String fallbackLocale = table.findStringWithFallback("Fallback"); // again, possible exception
                 if (fallbackLocale == null) {
-                    return item;
+                    return defaultValue;
                 }
 
                 if (fallbackLocale.length() == 0) {
@@ -79,7 +79,7 @@ public class ICUResourceTableAccess {
                 }
 
                 if (fallbackLocale.equals(table.getULocale().getName())) {
-                    return item;
+                    return defaultValue;
                 }
 
                 bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(
@@ -91,6 +91,6 @@ public class ICUResourceTableAccess {
         }
 
         // If the result is empty return item instead
-        return ((result != null && result.length() > 0) ? result : item);
+        return ((result != null && result.length() > 0) ? result : defaultValue);
     }
 }

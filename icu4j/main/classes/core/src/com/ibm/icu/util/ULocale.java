@@ -1973,7 +1973,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      */
     public String getCharacterOrientation() {
         return ICUResourceTableAccess.getTableString(ICUData.ICU_BASE_NAME, this,
-                "layout", "characters");
+                "layout", "characters", "characters");
     }
 
     /**
@@ -1985,7 +1985,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      */
     public String getLineOrientation() {
         return ICUResourceTableAccess.getTableString(ICUData.ICU_BASE_NAME, this,
-                "layout", "lines");
+                "layout", "lines", "lines");
     }
 
     /**

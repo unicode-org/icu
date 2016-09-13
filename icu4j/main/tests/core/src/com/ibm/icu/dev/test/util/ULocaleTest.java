@@ -1072,85 +1072,102 @@ public class ULocaleTest extends TestFmwk {
         }
         // test use of context
         {
-            class TestContextItem {
+            final DisplayContext NM_STD = DisplayContext.STANDARD_NAMES;
+            final DisplayContext NM_DIA = DisplayContext.DIALECT_NAMES;
+            final DisplayContext CAP_BEG = DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE;
+            final DisplayContext CAP_MID = DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE;
+            final DisplayContext CAP_UIL = DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU;
+            final DisplayContext CAP_STA = DisplayContext.CAPITALIZATION_FOR_STANDALONE;
+            final DisplayContext CAP_NON = DisplayContext.CAPITALIZATION_NONE;
+            final DisplayContext LEN_FU = DisplayContext.LENGTH_FULL;
+            final DisplayContext LEN_SH = DisplayContext.LENGTH_SHORT;
+            final DisplayContext SUB_SU = DisplayContext.SUBSTITUTE;
+            final DisplayContext SUB_NO = DisplayContext.NO_SUBSTITUTE;
+
+            class Item {
                 public String displayLocale;
                 public DisplayContext dialectHandling;
                 public DisplayContext capitalization;
                 public DisplayContext nameLength;
+                public DisplayContext substituteHandling;
                 public String localeToBeNamed;
                 public String result;
-                public TestContextItem(String dLoc, DisplayContext dia, DisplayContext cap, DisplayContext nameLen, String locToName, String res) {
+                public Item(String dLoc, DisplayContext dia, DisplayContext cap, DisplayContext nameLen, DisplayContext sub, String locToName, String res) {
                     displayLocale = dLoc;
                     dialectHandling = dia;
                     capitalization = cap;
                     nameLength = nameLen;
+                    substituteHandling = sub;
                     localeToBeNamed = locToName;
                     result = res;
                 }
             };
-            final TestContextItem[] items = {
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en",    "engelsk" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en",    "Engelsk" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en",    "Engelsk" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en",    "engelsk" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en@calendar=buddhist", "engelsk (buddhistisk kalender)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en@calendar=buddhist", "Engelsk (buddhistisk kalender)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en@calendar=buddhist", "Engelsk (buddhistisk kalender)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en@calendar=buddhist", "engelsk (buddhistisk kalender)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en_GB", "engelsk (Storbritannien)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en_GB", "Engelsk (Storbritannien)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en_GB", "Engelsk (Storbritannien)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en_GB", "engelsk (Storbritannien)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_SHORT, "en_GB", "engelsk (UK)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_SHORT, "en_GB", "Engelsk (UK)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_SHORT, "en_GB", "Engelsk (UK)" ),
-                    new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_SHORT, "en_GB", "engelsk (UK)" ),
-                    new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en_GB", "britisk engelsk" ),
-                    new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en_GB", "Britisk engelsk" ),
-                    new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en_GB", "Britisk engelsk" ),
-                    new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en_GB", "britisk engelsk" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en",    "ingl\u00E9s" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en",    "Ingl\u00E9s" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en",    "Ingl\u00E9s" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en",    "Ingl\u00E9s" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en_GB", "ingl\u00E9s (Reino Unido)" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s (Reino Unido)" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s (Reino Unido)" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s (Reino Unido)" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_SHORT, "en_GB", "ingl\u00E9s (RU)" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_SHORT, "en_GB", "Ingl\u00E9s (RU)" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_SHORT, "en_GB", "Ingl\u00E9s (RU)" ),
-                    new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_SHORT, "en_GB", "Ingl\u00E9s (RU)" ),
-                    new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "en_GB", "ingl\u00E9s brit\u00E1nico" ),
-                    new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s brit\u00E1nico" ),
-                    new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s brit\u00E1nico" ),
-                    new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "en_GB", "Ingl\u00E9s brit\u00E1nico" ),
-                    new TestContextItem( "ru", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "uz_Latn", "\u0443\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)" ),
-                    new TestContextItem( "ru", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, DisplayContext.LENGTH_FULL,  "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)" ),
-                    new TestContextItem( "ru", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       DisplayContext.LENGTH_FULL,  "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)" ),
-                    new TestContextItem( "ru", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_STANDALONE,            DisplayContext.LENGTH_FULL,  "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)" ),
-                    new TestContextItem( "en", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "ur@numbers=latn",    "Urdu (Western Digits)" ),
-                    new TestContextItem( "en", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_FULL,  "ur@numbers=arabext", "Urdu (Extended Arabic-Indic Digits)" ),
-                    new TestContextItem( "en", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    DisplayContext.LENGTH_SHORT, "ur@numbers=arabext", "Urdu (X Arabic-Indic Digits)" ),
+            final Item[] items = {
+                new Item("da", NM_STD, CAP_MID, LEN_FU, SUB_SU, "en", "engelsk"),
+                new Item("da", NM_STD, CAP_BEG, LEN_FU, SUB_SU, "en", "Engelsk"),
+                new Item("da", NM_STD, CAP_UIL, LEN_FU, SUB_SU, "en", "Engelsk"),
+                new Item("da", NM_STD, CAP_STA, LEN_FU, SUB_SU, "en", "engelsk"),
+                new Item("da", NM_STD, CAP_MID, LEN_FU, SUB_SU, "en@calendar=buddhist", "engelsk (buddhistisk kalender)"),
+                new Item("da", NM_STD, CAP_BEG, LEN_FU, SUB_SU, "en@calendar=buddhist", "Engelsk (buddhistisk kalender)"),
+                new Item("da", NM_STD, CAP_UIL, LEN_FU, SUB_SU, "en@calendar=buddhist", "Engelsk (buddhistisk kalender)"),
+                new Item("da", NM_STD, CAP_STA, LEN_FU, SUB_SU, "en@calendar=buddhist", "engelsk (buddhistisk kalender)"),
+                new Item("da", NM_STD, CAP_MID, LEN_FU, SUB_SU, "en_GB", "engelsk (Storbritannien)"),
+                new Item("da", NM_STD, CAP_BEG, LEN_FU, SUB_SU, "en_GB", "Engelsk (Storbritannien)"),
+                new Item("da", NM_STD, CAP_UIL, LEN_FU, SUB_SU, "en_GB", "Engelsk (Storbritannien)"),
+                new Item("da", NM_STD, CAP_STA, LEN_FU, SUB_SU, "en_GB", "engelsk (Storbritannien)"),
+                new Item("da", NM_STD, CAP_MID, LEN_SH, SUB_SU, "en_GB", "engelsk (UK)"),
+                new Item("da", NM_STD, CAP_BEG, LEN_SH, SUB_SU, "en_GB", "Engelsk (UK)"),
+                new Item("da", NM_STD, CAP_UIL, LEN_SH, SUB_SU, "en_GB", "Engelsk (UK)"),
+                new Item("da", NM_STD, CAP_STA, LEN_SH, SUB_SU, "en_GB", "engelsk (UK)"),
+                new Item("da", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "en_GB", "britisk engelsk"),
+                new Item("da", NM_DIA, CAP_BEG, LEN_FU, SUB_SU, "en_GB", "Britisk engelsk"),
+                new Item("da", NM_DIA, CAP_UIL, LEN_FU, SUB_SU, "en_GB", "Britisk engelsk"),
+                new Item("da", NM_DIA, CAP_STA, LEN_FU, SUB_SU, "en_GB", "britisk engelsk"),
+                new Item("es", NM_STD, CAP_MID, LEN_FU, SUB_SU, "en", "ingl\u00E9s"),
+                new Item("es", NM_STD, CAP_BEG, LEN_FU, SUB_SU, "en", "Ingl\u00E9s"),
+                new Item("es", NM_STD, CAP_UIL, LEN_FU, SUB_SU, "en", "Ingl\u00E9s"),
+                new Item("es", NM_STD, CAP_STA, LEN_FU, SUB_SU, "en", "Ingl\u00E9s"),
+                new Item("es", NM_STD, CAP_MID, LEN_FU, SUB_SU, "en_GB", "ingl\u00E9s (Reino Unido)"),
+                new Item("es", NM_STD, CAP_BEG, LEN_FU, SUB_SU, "en_GB", "Ingl\u00E9s (Reino Unido)"),
+                new Item("es", NM_STD, CAP_UIL, LEN_FU, SUB_SU, "en_GB", "Ingl\u00E9s (Reino Unido)"),
+                new Item("es", NM_STD, CAP_STA, LEN_FU, SUB_SU, "en_GB", "Ingl\u00E9s (Reino Unido)"),
+                new Item("es", NM_STD, CAP_MID, LEN_SH, SUB_SU, "en_GB", "ingl\u00E9s (RU)"),
+                new Item("es", NM_STD, CAP_BEG, LEN_SH, SUB_SU, "en_GB", "Ingl\u00E9s (RU)"),
+                new Item("es", NM_STD, CAP_UIL, LEN_SH, SUB_SU, "en_GB", "Ingl\u00E9s (RU)"),
+                new Item("es", NM_STD, CAP_STA, LEN_SH, SUB_SU, "en_GB", "Ingl\u00E9s (RU)"),
+                new Item("es", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "en_GB", "ingl\u00E9s brit\u00E1nico"),
+                new Item("es", NM_DIA, CAP_BEG, LEN_FU, SUB_SU, "en_GB", "Ingl\u00E9s brit\u00E1nico"),
+                new Item("es", NM_DIA, CAP_UIL, LEN_FU, SUB_SU, "en_GB", "Ingl\u00E9s brit\u00E1nico"),
+                new Item("es", NM_DIA, CAP_STA, LEN_FU, SUB_SU, "en_GB", "Ingl\u00E9s brit\u00E1nico"),
+                new Item("ru", NM_STD, CAP_MID, LEN_FU, SUB_SU, "uz_Latn", "\u0443\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)"),
+                new Item("ru", NM_STD, CAP_BEG, LEN_FU, SUB_SU, "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)"),
+                new Item("ru", NM_STD, CAP_UIL, LEN_FU, SUB_SU, "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)"),
+                new Item("ru", NM_STD, CAP_STA, LEN_FU, SUB_SU, "uz_Latn", "\u0423\u0437\u0431\u0435\u043A\u0441\u043A\u0438\u0439 (\u043B\u0430\u0442\u0438\u043D\u0438\u0446\u0430)"),
+                new Item("en", NM_STD, CAP_MID, LEN_FU, SUB_SU, "ur@numbers=latn", "Urdu (Western Digits)"),
+                new Item("en", NM_STD, CAP_MID, LEN_FU, SUB_SU, "ur@numbers=arabext", "Urdu (Extended Arabic-Indic Digits)"),
+                new Item("en", NM_STD, CAP_MID, LEN_SH, SUB_SU, "ur@numbers=arabext", "Urdu (X Arabic-Indic Digits)"),
+                new Item("af", NM_STD, CAP_NON, LEN_FU, SUB_NO, "aa", null),
+                new Item("cs", NM_STD, CAP_NON, LEN_FU, SUB_NO, "vai", "vai"),
             };
-            for (TestContextItem item: items) {
+            for (Item item: items) {
                 ULocale locale = new ULocale(item.displayLocale);
-                LocaleDisplayNames ldn = LocaleDisplayNames.getInstance(locale, item.dialectHandling, item.capitalization, item.nameLength);
+                LocaleDisplayNames ldn = LocaleDisplayNames.getInstance(locale, item.dialectHandling, item.capitalization, item.nameLength, item.substituteHandling);
                 DisplayContext dialectHandling = ldn.getContext(DisplayContext.Type.DIALECT_HANDLING);
                 assertEquals("consistent dialect handling",
                         dialectHandling == DisplayContext.DIALECT_NAMES,
                         ldn.getDialectHandling() == LocaleDisplayNames.DialectHandling.DIALECT_NAMES);
                 DisplayContext capitalization = ldn.getContext(DisplayContext.Type.CAPITALIZATION);
                 DisplayContext nameLength = ldn.getContext(DisplayContext.Type.DISPLAY_LENGTH);
-                if (dialectHandling != item.dialectHandling || capitalization != item.capitalization || nameLength != item.nameLength) {
+                DisplayContext substituteHandling = ldn.getContext(DisplayContext.Type.SUBSTITUTE_HANDLING);
+                if (dialectHandling != item.dialectHandling || capitalization != item.capitalization || nameLength != item.nameLength || substituteHandling != item.substituteHandling) {
                     errln("FAIL: displayLoc: " + item.displayLocale + ", dialectNam?: " + item.dialectHandling +
-                            ", capitalize: " + item.capitalization + ", nameLen: " + item.nameLength + ", locToName: " + item.localeToBeNamed +
-                            ", => read back dialectNam?: " + dialectHandling + ", capitalize: " + capitalization + ", nameLen: " + nameLength);
+                            ", capitalize: " + item.capitalization + ", nameLen: " + item.nameLength + ", substituteHandling: " + item.substituteHandling + ", locToName: " + item.localeToBeNamed +
+                            ", => read back dialectNam?: " + dialectHandling + ", capitalize: " + capitalization + ", nameLen: " + nameLength + ", substituteHandling: " + substituteHandling);
                 } else {
                     String result = ldn.localeDisplayName(item.localeToBeNamed);
-                    if (!result.equals(item.result)) {
+                    if (!(item.result == null && result == null) && !(result != null && result.equals(item.result))) {
                         errln("FAIL: displayLoc: " + item.displayLocale + ", dialectNam?: " + item.dialectHandling +
-                                ", capitalize: " + item.capitalization + ", nameLen: " + item.nameLength + ", locToName: " + item.localeToBeNamed +
+                                ", capitalize: " + item.capitalization + ", nameLen: " + item.nameLength + ", substituteHandling: " + item.substituteHandling + ", locToName: " + item.localeToBeNamed +
                                 ", => expected result: " + item.result + ", got: " + result);
                     }
                 }
