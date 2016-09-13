@@ -362,7 +362,7 @@ public:
     UnicodeSet();
 
     /**
-     * Constructs a set containing the given range. If <code>end >
+     * Constructs a set containing the given range. If <code>end <
      * start</code> then an empty set is created.
      *
      * @param start first character, inclusive, of range

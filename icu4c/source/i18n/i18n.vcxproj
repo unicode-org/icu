@@ -337,7 +337,6 @@
     <ClCompile Include="gregocal.cpp" />
     <ClCompile Include="gregoimp.cpp" />
     <ClCompile Include="hebrwcal.cpp" />
-    <ClCompile Include="identifier_info.cpp" />
     <ClCompile Include="indiancal.cpp" />
     <ClCompile Include="islamcal.cpp" />
     <ClCompile Include="japancal.cpp" />
@@ -464,7 +463,6 @@
     <ClCompile Include="uspoof_build.cpp" />
     <ClCompile Include="uspoof_conf.cpp" />
     <ClCompile Include="uspoof_impl.cpp" />
-    <ClCompile Include="uspoof_wsconf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="unicode\alphaindex.h">
@@ -1686,11 +1684,9 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
-    <ClInclude Include="identifier_info.h" />
     <ClInclude Include="scriptset.h" />
     <ClInclude Include="uspoof_conf.h" />
     <ClInclude Include="uspoof_impl.h" />
-    <ClInclude Include="uspoof_wsconf.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="i18n.rc" />
