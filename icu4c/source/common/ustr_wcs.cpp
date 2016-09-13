@@ -260,7 +260,7 @@ u_strToWCS(wchar_t *dest,
        *pDestLength = srcLength;
     }
 
-    u_terminateUChars(dest,destCapacity,srcLength,pErrorCode);
+    u_terminateUChars((UChar *)dest,destCapacity,srcLength,pErrorCode);
 
     return dest;
 
@@ -506,7 +506,7 @@ u_strFromWCS(UChar   *dest,
 #ifdef U_WCHAR_IS_UTF16
     /* wchar_t is UTF-16 just do a memcpy */
     if(srcLength == -1){
-        srcLength = u_strlen(src);
+        srcLength = u_strlen((const UChar *)src);
     }
     if(0 < srcLength && srcLength <= destCapacity){
         uprv_memcpy(dest,src,srcLength*U_SIZEOF_UCHAR);

@@ -993,7 +993,7 @@ U_CAPI int32_t   U_EXPORT2
 u_strlen(const UChar *s) 
 {
 #if U_SIZEOF_WCHAR_T == U_SIZEOF_UCHAR
-    return (int32_t)uprv_wcslen(s);
+    return (int32_t)uprv_wcslen((const wchar_t *)s);
 #else
     const UChar *t = s;
     while(*t != 0) {
