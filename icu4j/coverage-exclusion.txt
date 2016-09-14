@@ -949,13 +949,9 @@ com/ibm/icu/text/SimpleDateFormat#subFormat:(CIILjava/text/FieldPosition;Lcom/ib
 com/ibm/icu/text/SimpleDateFormat#subParse:(Ljava/lang/String;ICIZZ[ZLcom/ibm/icu/util/Calendar;)I
 com/ibm/icu/text/SimpleDateFormat$ContextValue#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/SimpleDateFormat$ContextValue;
 com/ibm/icu/text/SimpleDateFormat$ContextValue#values:()[Lcom/ibm/icu/text/SimpleDateFormat$ContextValue;
-com/ibm/icu/text/SpoofChecker#getRestrictionLevel:()Lcom/ibm/icu/text/SpoofChecker$RestrictionLevel;
-com/ibm/icu/text/SpoofChecker#hashCode:()I
-com/ibm/icu/text/SpoofChecker$Builder#<init>:(Lcom/ibm/icu/text/SpoofChecker;)V
-com/ibm/icu/text/SpoofChecker$Builder$WSConfusableDataBuilder#<init>:()V
-com/ibm/icu/text/SpoofChecker$ScriptSet#output:(Ljava/io/DataOutputStream;)V
-com/ibm/icu/text/SpoofChecker$ScriptSet#resetAll:()V
-com/ibm/icu/text/SpoofChecker$ScriptSet#Union:(Lcom/ibm/icu/text/SpoofChecker$ScriptSet;)V
+com/ibm/icu/text/SpoofChecker$Builder#<init>:(Lcom/ibm/icu/text/SpoofChecker;)Vcom/ibm/icu/text/SpoofChecker$ConfusableDataUtils#<init>:()V
+com/ibm/icu/text/SpoofChecker$ConfusableDataUtils#<init>:()V
+com/ibm/icu/text/SpoofChecker$RestrictionLevel#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/SpoofChecker$RestrictionLevel;
 com/ibm/icu/text/SpoofChecker$SpoofData$DefaultData#<init>:()V
 com/ibm/icu/text/StringCharacterIterator#equals:(Ljava/lang/Object;)Z
 com/ibm/icu/text/StringCharacterIterator#first:()C
@@ -1127,3 +1123,4 @@ com/ibm/icu/util/UResourceBundle$RootType#valueOf:(Ljava/lang/String;)Lcom/ibm/i
 com/ibm/icu/util/VersionInfo#getVersionString:(II)Ljava/lang/String;
 com/ibm/icu/util/VersionInfo#main:([Ljava/lang/String;)V
 com/ibm/icu/util/VTimeZone#observesDaylightTime:()Z
+
