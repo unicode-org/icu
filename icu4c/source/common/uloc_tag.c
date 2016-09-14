@@ -19,6 +19,17 @@
 #include "ulocimp.h"
 #include "uassert.h"
 
+
+
+/**
+ * Ticket #12705 - VS2015 update 3, 32 bit release mode casues this file to have failures.
+ * As a workaround, we will turn off optimization just for this file.
+ */
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900))
+# pragma optimize("", off)
+#endif
+
+
 /* struct holding a single variant */
 typedef struct VariantListEntry {
     const char              *variant;
