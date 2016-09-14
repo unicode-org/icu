@@ -12,7 +12,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
+import java.util.BitSet;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -26,6 +30,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.SpoofChecker;
 import com.ibm.icu.text.SpoofChecker.CheckResult;
@@ -585,6 +590,10 @@ public class SpoofCheckerTest extends TestFmwk {
                 boolean expectedFailure = expectedLevel.compareTo(levelSetInSpoofChecker) > 0;
                 assertEquals("Testing spoof restriction level for '" + testString + "', " + levelSetInSpoofChecker,
                         expectedFailure, actualValue);
+
+                // Coverage for getRestrictionLevel
+                assertEquals("Restriction level on built SpoofChecker should be same as on builder",
+                        levelSetInSpoofChecker, sc.getRestrictionLevel());
             }
         }
     }
@@ -775,4 +784,49 @@ public class SpoofCheckerTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void testScriptSet() {
+        try {
+            Class ScriptSet = Class.forName("com.ibm.icu.text.SpoofChecker$ScriptSet");
+            Constructor ctor = ScriptSet.getDeclaredConstructor();
+            ctor.setAccessible(true);
+            BitSet ss = (BitSet) ctor.newInstance();
+
+            ss.set(UScript.MYANMAR);
+            assertEquals("ScriptSet toString with Myanmar", "<ScriptSet { Mymr }>", ss.toString());
+            ss.set(UScript.BENGALI);
+            ss.set(UScript.LATIN);
+            assertEquals("ScriptSet toString with Myanmar, Latin, and Bengali", "<ScriptSet { Beng Latn Mymr }>", ss.toString());
+
+            Method and = ScriptSet.getDeclaredMethod("and", Integer.TYPE);
+            and.setAccessible(true);
+            and.invoke(ss, UScript.BENGALI);
+            assertEquals("ScriptSet toString with Bengali only", "<ScriptSet { Beng }>", ss.toString());
+
+            Method setAll = ScriptSet.getDeclaredMethod("setAll");
+            setAll.setAccessible(true);
+            setAll.invoke(ss);
+            assertEquals("ScriptSet toString with all scripts", "<ScriptSet { * }>", ss.toString());
+
+            Method isFull = ScriptSet.getDeclaredMethod("isFull");
+            isFull.setAccessible(true);
+            boolean result = (Boolean) isFull.invoke(ss);
+            assertEquals("ScriptSet should evaluate as full", true, result);
+
+        } catch (ClassNotFoundException e) {
+            fail("Failed while testing ScriptSet: " + e.getClass() + ": " + e.getMessage());
+        } catch (InstantiationException e) {
+            fail("Failed while testing ScriptSet: " + e.getClass() + ": " + e.getMessage());
+        } catch (IllegalAccessException e) {
+            fail("Failed while testing ScriptSet: " + e.getClass() + ": " + e.getMessage());
+        } catch (SecurityException e) {
+            fail("Failed while testing ScriptSet: " + e.getClass() + ": " + e.getMessage());
+        } catch (NoSuchMethodException e) {
+            fail("Failed while testing ScriptSet: " + e.getClass() + ": " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            fail("Failed while testing ScriptSet: " + e.getClass() + ": " + e.getMessage());
+        } catch (InvocationTargetException e) {
+            fail("Failed while testing ScriptSet: " + e.getClass() + ": " + e.getMessage());
+        }
+    }
 }
