@@ -18,6 +18,7 @@
 *   Test file for string casing C++ API functions.
 */
 
+#include "unicode/std_string.h"
 #include "unicode/uchar.h"
 #include "unicode/ures.h"
 #include "unicode/uloc.h"
@@ -29,6 +30,8 @@
 #include "ustrtest.h"
 #include "unicode/tstdtmod.h"
 #include "cmemory.h"
+
+StringCaseTest::StringCaseTest() : GREEK_LOCALE_("el") {}
 
 StringCaseTest::~StringCaseTest() {}
 
@@ -43,6 +46,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestCasing);
 #endif
     TESTCASE_AUTO(TestFullCaseFoldingIterator);
+    TESTCASE_AUTO(TestGreekUpper);
     TESTCASE_AUTO_END;
 }
 
@@ -572,4 +576,114 @@ StringCaseTest::TestFullCaseFoldingIterator() {
     if(count<70) {
         errln("error: FullCaseFoldingIterator yielded only %d (cp, full) pairs", (int)count);
     }
+}
+
+void
+StringCaseTest::assertGreekUpper(const char *s, const char *expected) {
+    UnicodeString s16 = UnicodeString(s).unescape();
+    UnicodeString expected16 = UnicodeString(expected).unescape();
+    UnicodeString msg = UnicodeString("UnicodeString::toUpper/Greek(\"") + s16 + "\")";
+    UnicodeString result16(s16);
+    result16.toUpper(GREEK_LOCALE_);
+    assertEquals(msg, expected16, result16);
+
+#if U_HAVE_STD_STRING
+    UErrorCode errorCode = U_ZERO_ERROR;
+    LocalUCaseMapPointer csm(ucasemap_open("el", 0, &errorCode));
+    assertSuccess("ucasemap_open", errorCode);
+    std::string s8;
+    s16.toUTF8String(s8);
+    msg = UnicodeString("ucasemap_utf8ToUpper/Greek(\"") + s16 + "\")";
+    char dest[1000];
+    int32_t length = ucasemap_utf8ToUpper(csm.getAlias(), dest, UPRV_LENGTHOF(dest),
+                                          s8.data(), s8.length(), &errorCode);
+    assertSuccess("ucasemap_utf8ToUpper", errorCode);
+    StringPiece result8(dest, length);
+    UnicodeString result16From8 = UnicodeString::fromUTF8(result8);
+    assertEquals(msg, expected16, result16From8);
+#endif
+}
+
+void
+StringCaseTest::TestGreekUpper() {
+    // See UCharacterCaseTest.java for human-readable strings.
+
+    // http://bugs.icu-project.org/trac/ticket/5456
+    assertGreekUpper("\\u03AC\\u03B4\\u03B9\\u03BA\\u03BF\\u03C2, "
+                     "\\u03BA\\u03B5\\u03AF\\u03BC\\u03B5\\u03BD\\u03BF, "
+                     "\\u03AF\\u03C1\\u03B9\\u03B4\\u03B1",
+                     "\\u0391\\u0394\\u0399\\u039A\\u039F\\u03A3, "
+                     "\\u039A\\u0395\\u0399\\u039C\\u0395\\u039D\\u039F, "
+                     "\\u0399\\u03A1\\u0399\\u0394\\u0391");
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=307039
+    // https://bug307039.bmoattachments.org/attachment.cgi?id=194893
+    assertGreekUpper("\\u03A0\\u03B1\\u03C4\\u03AC\\u03C4\\u03B1",
+                     "\\u03A0\\u0391\\u03A4\\u0391\\u03A4\\u0391");
+    assertGreekUpper("\\u0391\\u03AD\\u03C1\\u03B1\\u03C2, "
+                     "\\u039C\\u03C5\\u03C3\\u03C4\\u03AE\\u03C1\\u03B9\\u03BF, "
+                     "\\u03A9\\u03C1\\u03B1\\u03AF\\u03BF",
+                     "\\u0391\\u0395\\u03A1\\u0391\\u03A3, "
+                     "\\u039C\\u03A5\\u03A3\\u03A4\\u0397\\u03A1\\u0399\\u039F, "
+                     "\\u03A9\\u03A1\\u0391\\u0399\\u039F");
+    assertGreekUpper("\\u039C\\u03B1\\u0390\\u03BF\\u03C5, \\u03A0\\u03CC\\u03C1\\u03BF\\u03C2, "
+                     "\\u03A1\\u03CD\\u03B8\\u03BC\\u03B9\\u03C3\\u03B7",
+                     "\\u039C\\u0391\\u03AA\\u039F\\u03A5, \\u03A0\\u039F\\u03A1\\u039F\\u03A3, "
+                     "\\u03A1\\u03A5\\u0398\\u039C\\u0399\\u03A3\\u0397");
+    assertGreekUpper("\\u03B0, \\u03A4\\u03B7\\u03C1\\u03CE, \\u039C\\u03AC\\u03B9\\u03BF\\u03C2",
+                     "\\u03AB, \\u03A4\\u0397\\u03A1\\u03A9, \\u039C\\u0391\\u03AA\\u039F\\u03A3");
+    assertGreekUpper("\\u03AC\\u03C5\\u03BB\\u03BF\\u03C2",
+                     "\\u0391\\u03AB\\u039B\\u039F\\u03A3");
+    assertGreekUpper("\\u0391\\u03AB\\u039B\\u039F\\u03A3",
+                     "\\u0391\\u03AB\\u039B\\u039F\\u03A3");
+    assertGreekUpper("\\u0386\\u03BA\\u03BB\\u03B9\\u03C4\\u03B1 "
+                     "\\u03C1\\u03AE\\u03BC\\u03B1\\u03C4\\u03B1 \\u03AE "
+                     "\\u03AC\\u03BA\\u03BB\\u03B9\\u03C4\\u03B5\\u03C2 "
+                     "\\u03BC\\u03B5\\u03C4\\u03BF\\u03C7\\u03AD\\u03C2",
+                     "\\u0391\\u039A\\u039B\\u0399\\u03A4\\u0391 "
+                     "\\u03A1\\u0397\\u039C\\u0391\\u03A4\\u0391 \\u0397\\u0301 "
+                     "\\u0391\\u039A\\u039B\\u0399\\u03A4\\u0395\\u03A3 "
+                     "\\u039C\\u0395\\u03A4\\u039F\\u03A7\\u0395\\u03A3");
+    // http://www.unicode.org/udhr/d/udhr_ell_monotonic.html
+    assertGreekUpper("\\u0395\\u03C0\\u03B5\\u03B9\\u03B4\\u03AE \\u03B7 "
+                     "\\u03B1\\u03BD\\u03B1\\u03B3\\u03BD\\u03CE\\u03C1\\u03B9\\u03C3\\u03B7 "
+                     "\\u03C4\\u03B7\\u03C2 \\u03B1\\u03BE\\u03B9\\u03BF\\u03C0\\u03C1\\u03AD"
+                     "\\u03C0\\u03B5\\u03B9\\u03B1\\u03C2",
+                     "\\u0395\\u03A0\\u0395\\u0399\\u0394\\u0397 \\u0397 "
+                     "\\u0391\\u039D\\u0391\\u0393\\u039D\\u03A9\\u03A1\\u0399\\u03A3\\u0397 "
+                     "\\u03A4\\u0397\\u03A3 \\u0391\\u039E\\u0399\\u039F\\u03A0\\u03A1\\u0395"
+                     "\\u03A0\\u0395\\u0399\\u0391\\u03A3");
+    assertGreekUpper("\\u03BD\\u03BF\\u03BC\\u03B9\\u03BA\\u03BF\\u03CD \\u03AE "
+                     "\\u03B4\\u03B9\\u03B5\\u03B8\\u03BD\\u03BF\\u03CD\\u03C2",
+                     "\\u039D\\u039F\\u039C\\u0399\\u039A\\u039F\\u03A5 \\u0397\\u0301 "
+                     "\\u0394\\u0399\\u0395\\u0398\\u039D\\u039F\\u03A5\\u03A3");
+    // http://unicode.org/udhr/d/udhr_ell_polytonic.html
+    assertGreekUpper("\\u1F18\\u03C0\\u03B5\\u03B9\\u03B4\\u1F74 \\u1F21 "
+                     "\\u1F00\\u03BD\\u03B1\\u03B3\\u03BD\\u1F7D\\u03C1\\u03B9\\u03C3\\u03B7",
+                     "\\u0395\\u03A0\\u0395\\u0399\\u0394\\u0397 \\u0397 "
+                     "\\u0391\\u039D\\u0391\\u0393\\u039D\\u03A9\\u03A1\\u0399\\u03A3\\u0397");
+    assertGreekUpper("\\u03BD\\u03BF\\u03BC\\u03B9\\u03BA\\u03BF\\u1FE6 \\u1F22 "
+                     "\\u03B4\\u03B9\\u03B5\\u03B8\\u03BD\\u03BF\\u1FE6\\u03C2",
+                     "\\u039D\\u039F\\u039C\\u0399\\u039A\\u039F\\u03A5 \\u0397\\u0301 "
+                     "\\u0394\\u0399\\u0395\\u0398\\u039D\\u039F\\u03A5\\u03A3");
+    // From Google bug report
+    assertGreekUpper("\\u039D\\u03AD\\u03BF, "
+                     "\\u0394\\u03B7\\u03BC\\u03B9\\u03BF\\u03C5\\u03C1\\u03B3\\u03AF\\u03B1",
+                     "\\u039D\\u0395\\u039F, "
+                     "\\u0394\\u0397\\u039C\\u0399\\u039F\\u03A5\\u03A1\\u0393\\u0399\\u0391");
+    // http://crbug.com/234797
+    assertGreekUpper("\\u0395\\u03BB\\u03AC\\u03C4\\u03B5 \\u03BD\\u03B1 \\u03C6\\u03AC\\u03C4\\u03B5 "
+                     "\\u03C4\\u03B1 \\u03BA\\u03B1\\u03BB\\u03CD\\u03C4\\u03B5\\u03C1\\u03B1 "
+                     "\\u03C0\\u03B1\\u03CA\\u03B4\\u03AC\\u03BA\\u03B9\\u03B1!",
+                     "\\u0395\\u039B\\u0391\\u03A4\\u0395 \\u039D\\u0391 \\u03A6\\u0391\\u03A4\\u0395 "
+                     "\\u03A4\\u0391 \\u039A\\u0391\\u039B\\u03A5\\u03A4\\u0395\\u03A1\\u0391 "
+                     "\\u03A0\\u0391\\u03AA\\u0394\\u0391\\u039A\\u0399\\u0391!");
+    assertGreekUpper("\\u039C\\u03B1\\u0390\\u03BF\\u03C5, \\u03C4\\u03C1\\u03CC\\u03BB\\u03B5\\u03CA",
+                     "\\u039C\\u0391\\u03AA\\u039F\\u03A5, \\u03A4\\u03A1\\u039F\\u039B\\u0395\\u03AA");
+    assertGreekUpper("\\u03A4\\u03BF \\u03AD\\u03BD\\u03B1 \\u03AE \\u03C4\\u03BF "
+                     "\\u03AC\\u03BB\\u03BB\\u03BF.",
+                     "\\u03A4\\u039F \\u0395\\u039D\\u0391 \\u0397\\u0301 \\u03A4\\u039F "
+                     "\\u0391\\u039B\\u039B\\u039F.");
+    // http://multilingualtypesetting.co.uk/blog/greek-typesetting-tips/
+    assertGreekUpper("\\u03C1\\u03C9\\u03BC\\u03AD\\u03B9\\u03BA\\u03B1",
+                     "\\u03A1\\u03A9\\u039C\\u0395\\u03AA\\u039A\\u0391");
 }
