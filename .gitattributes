@@ -4110,6 +4110,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/Bidi.java svneol=native#text/plain%
 icu4j/main/classes/core/src/com/ibm/icu/text/BidiClassifier.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BidiLine.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BidiRun.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/BidiTransform.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/BidiWriter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BreakIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/BreakIteratorFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4420,6 +4421,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.tx
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BiDiConformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/BidiFmwk.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestBidi.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestBidiTransform.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestCharFromDirProp.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestClassOverride.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestCompatibility.java svneol=native#text/plain%3Bcharset%3Dutf-8
