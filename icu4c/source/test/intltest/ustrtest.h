@@ -9,6 +9,7 @@
 #ifndef UNICODESTRINGTEST_H
 #define UNICODESTRINGTEST_H
 
+#include "unicode/locid.h"
 #include "unicode/unistr.h"
 #include "intltest.h"
 
@@ -95,7 +96,7 @@ public:
 
 class StringCaseTest: public IntlTest {
 public:
-    StringCaseTest() {}
+    StringCaseTest();
     virtual ~StringCaseTest();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
@@ -108,6 +109,12 @@ public:
                         void *iter, const char *localeID, uint32_t options);
     void TestCasing();
     void TestFullCaseFoldingIterator();
+    void TestGreekUpper();
+
+private:
+    void assertGreekUpper(const char *s, const char *expected);
+
+    Locale GREEK_LOCALE_;
 };
 
 #endif

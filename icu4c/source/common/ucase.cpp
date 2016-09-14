@@ -621,6 +621,18 @@ ucase_getCaseLocale(const char *locale, int32_t *locCache) {
                 result=UCASE_LOC_LITHUANIAN;
             }
         }
+    } else if(is_e(c)) {
+        /* el or ell? */
+        c=*locale++;
+        if(is_l(c)) {
+            c=*locale++;
+            if(is_l(c)) {
+                c=*locale;
+            }
+            if(is_sep(c)) {
+                result=UCASE_LOC_GREEK;
+            }
+        }
     } else if(is_n(c)) {
         /* nl or nld? */
         c=*locale++;
