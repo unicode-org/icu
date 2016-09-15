@@ -32,6 +32,8 @@ com/ibm/icu/impl/BMPSet#<init>:(Lcom/ibm/icu/impl/BMPSet;[II)V
 com/ibm/icu/impl/CacheValue$Strength#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/impl/CacheValue$Strength;
 com/ibm/icu/impl/CacheValue$Strength#values:()[Lcom/ibm/icu/impl/CacheValue$Strength;
 com/ibm/icu/impl/CalendarUtil#<init>:()V
+com/ibm/icu/impl/CaseMap#<init>:()V
+com/ibm/icu/impl/CaseMap$GreekUpper#<init>:()V
 com/ibm/icu/impl/CharacterIteration#<init>:()V
 com/ibm/icu/impl/CharTrie#equals:(Ljava/lang/Object;)Z
 com/ibm/icu/impl/CharTrie#getBMPValue:(C)C
