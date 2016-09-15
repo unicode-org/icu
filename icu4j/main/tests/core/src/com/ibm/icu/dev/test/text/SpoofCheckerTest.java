@@ -829,4 +829,14 @@ public class SpoofCheckerTest extends TestFmwk {
             fail("Failed while testing ScriptSet: " + e.getClass() + ": " + e.getMessage());
         }
     }
+
+    @Test
+    public void testCopyConstructor() {
+        SpoofChecker sc1 = new SpoofChecker.Builder()
+                .setAllowedChars(SpoofChecker.RECOMMENDED)
+                .setChecks(SpoofChecker.ALL_CHECKS &~ SpoofChecker.INVISIBLE)
+                .build();
+        SpoofChecker sc2 = new SpoofChecker.Builder(sc1).build();
+        assertEquals("Copy constructor should produce identical instances", sc1, sc2);
+    }
 }
