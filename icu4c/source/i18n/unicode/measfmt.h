@@ -210,6 +210,19 @@ class U_I18N_API MeasureFormat : public Format {
             FieldPosition &pos,
             UErrorCode &status) const;
 
+    /**
+     * Gets the display name of the specified {@link MeasureUnit} corresponding to the current
+     * locale and format width.
+     * @param unit  The unit for which to get a display name.
+     * @param status the error.
+     * @return  The display name in the locale and width specified in
+     *          {@link MeasureFormat#getInstance}, or null if there is no display name available
+     *          for the specified unit.
+     *
+     * @draft ICU 58
+     */
+    UnicodeString getUnitDisplayName(const MeasureUnit& unit, UErrorCode &status) const;
+
 
     /**
      * Return a formatter for CurrencyAmount objects in the given
