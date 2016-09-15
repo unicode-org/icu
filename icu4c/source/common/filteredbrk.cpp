@@ -403,7 +403,8 @@ SimpleFilteredSentenceBreakIterator::next() {
 
 int32_t
 SimpleFilteredSentenceBreakIterator::first(void) {
-  return internalNext(fDelegate->first());
+  // Don't suppress a break opportunity at the beginning of text.
+  return fDelegate->first();
 }
 
 int32_t
