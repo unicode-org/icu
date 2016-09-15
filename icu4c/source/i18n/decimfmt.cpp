@@ -447,13 +447,25 @@ DecimalFormat::construct(UErrorCode&            status,
     if (patternUsed->indexOf(kCurrencySign) != -1) {
         // initialize for currency, not only for plural format,
         // but also for mix parsing
-        if (fCurrencyPluralInfo == NULL) {
-           fCurrencyPluralInfo = new CurrencyPluralInfo(fImpl->fSymbols->getLocale(), status);
-           if (U_FAILURE(status)) {
-               return;
-           }
-        }
-        // need it for mix parsing
+        handleCurrencySignInPattern(status);
+    }
+}
+
+void
+DecimalFormat::handleCurrencySignInPattern(UErrorCode& status) {
+    // initialize for currency, not only for plural format,
+    // but also for mix parsing
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (fCurrencyPluralInfo == NULL) {
+       fCurrencyPluralInfo = new CurrencyPluralInfo(fImpl->fSymbols->getLocale(), status);
+       if (U_FAILURE(status)) {
+           return;
+       }
+    }
+    // need it for mix parsing
+    if (fAffixPatternsForCurrency == NULL) {
         setupCurrencyAffixPatterns(status);
     }
 }
@@ -2817,6 +2829,9 @@ DecimalFormat::toLocalizedPattern(UnicodeString& result) const
 void
 DecimalFormat::applyPattern(const UnicodeString& pattern, UErrorCode& status)
 {
+    if (pattern.indexOf(kCurrencySign) != -1) {
+        handleCurrencySignInPattern(status);
+    }
     fImpl->applyPattern(pattern, status);
 }
 
@@ -2827,6 +2842,9 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                             UParseError& parseError,
                             UErrorCode& status)
 {
+    if (pattern.indexOf(kCurrencySign) != -1) {
+        handleCurrencySignInPattern(status);
+    }
     fImpl->applyPattern(pattern, parseError, status);
 }
 //------------------------------------------------------------------------------
@@ -2834,6 +2852,9 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
 void
 DecimalFormat::applyLocalizedPattern(const UnicodeString& pattern, UErrorCode& status)
 {
+    if (pattern.indexOf(kCurrencySign) != -1) {
+        handleCurrencySignInPattern(status);
+    }
     fImpl->applyLocalizedPattern(pattern, status);
 }
 
@@ -2844,6 +2865,9 @@ DecimalFormat::applyLocalizedPattern(const UnicodeString& pattern,
                                      UParseError& parseError,
                                      UErrorCode& status)
 {
+    if (pattern.indexOf(kCurrencySign) != -1) {
+        handleCurrencySignInPattern(status);
+    }
     fImpl->applyLocalizedPattern(pattern, parseError, status);
 }
 
