@@ -46,7 +46,7 @@ public abstract class CalendarHandler implements SerializableTestUtility.Handler
         cal_b.setTimeInMillis(now);
         cal_b.roll(Calendar.MONTH, 1);
 
-        return cal_a.getTime().equals(cal_a.getTime());
+        return cal_a.getTime().equals(cal_b.getTime());
     }
 
     static class BasicCalendarHandler extends CalendarHandler
