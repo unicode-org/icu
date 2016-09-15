@@ -64,6 +64,7 @@ public class MeasureUnitTest extends TestFmwk {
             return new OrderedPair<F, S>(first, second);
         }
 
+        @Override
         public int compareTo(OrderedPair<F, S> other) {
             int result = first.compareTo(other.first);
             if (result != 0) {
@@ -1035,7 +1036,7 @@ public class MeasureUnitTest extends TestFmwk {
         StringBuilder builder = new StringBuilder();
         boolean failure = false;
         for (Object[] testCase : testData) {
-            String actual = mf.format((Measure[]) testCase[0]);
+            String actual = mf.format(testCase[0]);
             if (!testCase[1].equals(actual)) {
                 builder.append(String.format("%s: Expected: '%s', got: '%s'\n", desc, testCase[1], actual));
                 failure = true;
@@ -1270,14 +1271,14 @@ public class MeasureUnitTest extends TestFmwk {
             try{
                 mf = MeasureFormat.getInstance( (ULocale)row[0], (FormatWidth)row[1] );
             } catch(Exception e) {
-                errln("Exception creating MeasureFormat for locale " + (ULocale)row[0] + ", width " +
-                        (FormatWidth)row[1] + ": " + e);
+                errln("Exception creating MeasureFormat for locale " + row[0] + ", width " +
+                        row[1] + ": " + e);
                 continue;
             }
             String result = mf.formatMeasures(hours, minutes);
-            if (!result.equals((String)row[2])) {
-                errln("MeasureFormat.formatMeasures for locale " + (ULocale)row[0] + ", width " +
-                        (FormatWidth)row[1] + ", expected \"" + (String)row[2] + "\", got \"" + result + "\"" );
+            if (!result.equals(row[2])) {
+                errln("MeasureFormat.formatMeasures for locale " + row[0] + ", width " +
+                        row[1] + ", expected \"" + (String)row[2] + "\", got \"" + result + "\"" );
             }
         }
     }
@@ -1400,6 +1401,46 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("Wide currency", "-1.00\u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
         assertEquals("Wide currency", "1.00\u7C73\u30C9\u30EB", mf.format(USD_1));
         assertEquals("Wide currency", "2.00\u7C73\u30C9\u30EB", mf.format(USD_2));
+    }
+
+    @Test
+    public void testDisplayNames() {
+        Object[][] data = new Object[][] {
+            // Unit, locale, width, expected result
+            { MeasureUnit.YEAR, "en", FormatWidth.WIDE, "years" },
+            { MeasureUnit.YEAR, "ja", FormatWidth.WIDE, "年" },
+            { MeasureUnit.YEAR, "es", FormatWidth.WIDE, "años" },
+            { MeasureUnit.YEAR, "pt", FormatWidth.WIDE, "anos" },
+            { MeasureUnit.YEAR, "pt-PT", FormatWidth.WIDE, "anos" },
+            { MeasureUnit.AMPERE, "en", FormatWidth.WIDE, "amperes" },
+            { MeasureUnit.AMPERE, "ja", FormatWidth.WIDE, "アンペア" },
+            { MeasureUnit.AMPERE, "es", FormatWidth.WIDE, "amperios" },
+            { MeasureUnit.AMPERE, "pt", FormatWidth.WIDE, "amperes" },
+            { MeasureUnit.AMPERE, "pt-PT", FormatWidth.WIDE, "amperes" },
+            { MeasureUnit.METER_PER_SECOND_SQUARED, "pt", FormatWidth.WIDE, "metros por segundo ao quadrado" },
+            { MeasureUnit.METER_PER_SECOND_SQUARED, "pt-PT", FormatWidth.WIDE, "metros por segundo quadrado" },
+            { MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.NARROW, "km²" },
+            { MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.SHORT, "km²" },
+            { MeasureUnit.SQUARE_KILOMETER, "pt", FormatWidth.WIDE, "quilômetros quadrados" },
+            { MeasureUnit.SECOND, "pt-PT", FormatWidth.NARROW, "s" },
+            { MeasureUnit.SECOND, "pt-PT", FormatWidth.SHORT, "s" },
+            { MeasureUnit.SECOND, "pt-PT", FormatWidth.WIDE, "segundos" },
+            { MeasureUnit.SECOND, "pt", FormatWidth.NARROW, "seg" },
+            { MeasureUnit.SECOND, "pt", FormatWidth.SHORT, "segs" },
+            { MeasureUnit.SECOND, "pt", FormatWidth.WIDE, "segundos" },
+        };
+
+        for (Object[] test : data) {
+            MeasureUnit unit = (MeasureUnit) test[0];
+            ULocale locale = ULocale.forLanguageTag((String) test[1]);
+            FormatWidth formatWidth = (FormatWidth) test[2];
+            String expected = (String) test[3];
+
+            MeasureFormat mf = MeasureFormat.getInstance(locale, formatWidth);
+            String actual = mf.getUnitDisplayName(unit);
+            assertEquals(String.format("Unit Display Name for %s, %s, %s", unit, locale, formatWidth),
+                    expected, actual);
+        }
     }
 
     @Test
@@ -1804,6 +1845,7 @@ public class MeasureUnitTest extends TestFmwk {
                     units,
                     new Comparator<MeasureUnit>() {
 
+                        @Override
                         public int compare(MeasureUnit o1, MeasureUnit o2) {
                             return o1.getSubtype().compareTo(o2.getSubtype());
                         }
@@ -2146,6 +2188,7 @@ public class MeasureUnitTest extends TestFmwk {
 
     public static class MeasureUnitHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             MeasureUnit items[] = {
@@ -2154,6 +2197,7 @@ public class MeasureUnitTest extends TestFmwk {
             };
             return items;
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             MeasureUnit a1 = (MeasureUnit) a;
@@ -2165,6 +2209,7 @@ public class MeasureUnitTest extends TestFmwk {
 
     public static class MeasureFormatHandler  implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             MeasureFormat items[] = {
@@ -2176,6 +2221,7 @@ public class MeasureUnitTest extends TestFmwk {
             };
             return items;
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             MeasureFormat a1 = (MeasureFormat) a;
