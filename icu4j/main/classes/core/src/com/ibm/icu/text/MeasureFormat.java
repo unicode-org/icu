@@ -564,9 +564,38 @@ public class MeasureFormat extends UFormat {
                     measures[i],
                     i == measures.length - 1 ? numberFormat : integerFormat);
         }
-        return appendTo.append(listFormatter.format((Object[]) results));                 
+        return appendTo.append(listFormatter.format((Object[]) results));
 
-    }   
+    }
+
+    /**
+     * Gets the display name of the specified {@link MeasureUnit} corresponding to the current
+     * locale and format width.
+     * @param unit  The unit for which to get a display name.
+     * @return  The display name in the locale and width specified in
+     *          {@link MeasureFormat#getInstance}, or null if there is no display name available
+     *          for the specified unit.
+     *
+     * @draft ICU 58
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getUnitDisplayName(MeasureUnit unit) {
+        FormatWidth width = getRegularWidth(formatWidth);
+        Map<FormatWidth, String> styleToDnam = cache.unitToStyleToDnam.get(unit);
+        if (styleToDnam == null) {
+            return null;
+        }
+
+        String dnam = styleToDnam.get(width);
+        if (dnam != null) {
+            return dnam;
+        }
+        FormatWidth fallbackWidth = cache.widthFallback[width.ordinal()];
+        if (fallbackWidth != null) {
+            dnam = styleToDnam.get(fallbackWidth);
+        }
+        return dnam;
+    }
 
     /**
      * Two MeasureFormats, a and b, are equal if and only if they have the same formatWidth,
@@ -766,13 +795,25 @@ public class MeasureFormat extends UFormat {
             }
         }
 
+        void setDnamIfAbsent(UResource.Value value) {
+            EnumMap<FormatWidth, String> styleToDnam = cacheData.unitToStyleToDnam.get(unit);
+            if (styleToDnam == null) {
+                styleToDnam = new EnumMap<FormatWidth, String>(FormatWidth.class);
+                cacheData.unitToStyleToDnam.put(unit, styleToDnam);
+            }
+            if (styleToDnam.get(width) == null) {
+                styleToDnam.put(width, value.getString());
+            }
+        }
+
         /**
          * Consume a display pattern. For example,
          * unitsShort/duration/hour contains other{"{0} hrs"}.
          */
         void consumePattern(UResource.Key key, UResource.Value value) {
             if (key.contentEquals("dnam")) {
-                // Skip the unit display name for now.
+                // The display name for the unit in the current width.
+                setDnamIfAbsent(value);
             } else if (key.contentEquals("per")) {
                 // For example, "{0}/h".
                 setFormatterIfAbsent(MeasureFormatData.PER_UNIT_INDEX, value, 1);
@@ -1076,6 +1117,8 @@ public class MeasureFormat extends UFormat {
         /** Measure unit -> format width -> array of patterns ("{0} meters") (plurals + PER_UNIT_INDEX) */
         final Map<MeasureUnit, EnumMap<FormatWidth, String[]>> unitToStyleToPatterns =
                 new HashMap<MeasureUnit, EnumMap<FormatWidth, String[]>>();
+        final Map<MeasureUnit, EnumMap<FormatWidth, String>> unitToStyleToDnam =
+                new HashMap<MeasureUnit, EnumMap<FormatWidth, String>>();
         final EnumMap<FormatWidth, String> styleToPerPattern =
                 new EnumMap<FormatWidth, String>(FormatWidth.class);;
     }
