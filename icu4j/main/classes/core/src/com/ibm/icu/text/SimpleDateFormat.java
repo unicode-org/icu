@@ -3835,7 +3835,7 @@ public class SimpleDateFormat extends DateFormat {
      * <b>Note:</b> This implementation depends on {@link DateFormatSymbols#getLocalPatternChars()}
      * to get localized format pattern characters. ICU does not include
      * localized pattern character data, therefore, unless user sets localized
-     * pattern characters manually, this method returns a same result with
+     * pattern characters manually, this method returns the same result as
      * {@link #toPattern()}.
      *
      * @stable ICU 2.0
