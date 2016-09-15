@@ -118,9 +118,9 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
 
     /**
      * Given that the delegate has already given its "initial" answer,
-     * find the NEXT actual (non-excepted) break.
+     * find the NEXT actual (non-suppressed) break.
      * @param n initial position from delegate
-     * @return new break position or UBRK_DONE
+     * @return new break position or BreakIterator.DONE
      */
     private final int internalNext(int n) {
         if (n == BreakIterator.DONE || // at end or
@@ -148,9 +148,9 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
 
     /**
      * Given that the delegate has already given its "initial" answer,
-     * find the NEXT actual (non-excepted) break.
+     * find the PREV actual (non-suppressed) break.
      * @param n initial position from delegate
-     * @return new break position or UBRK_DONE
+     * @return new break position or BreakIterator.DONE
      */
     private final int internalPrev(int n) {
         if (n == 0 || n == BreakIterator.DONE || // at end or
@@ -201,7 +201,8 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
 
     @Override
     public int first() {
-        return internalNext(delegate.first());
+        // Don't suppress a break opportunity at the beginning of text.
+        return delegate.first();
     }
 
     @Override
