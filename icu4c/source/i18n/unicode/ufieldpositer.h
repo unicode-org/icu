@@ -86,8 +86,8 @@ U_NAMESPACE_END
 
 /**
  * Get information for the next field in the formatted string to which this
- * UFieldPositionIterator currently applies, or return FALSE if there are
- * no more fields.
+ * UFieldPositionIterator currently applies, or return a negative value if there
+ * are no more fields.
  * @param fpositer
  *          A pointer to the UFieldPositionIterator object containing iteration
  *          state for the format fields.
