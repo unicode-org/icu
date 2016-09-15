@@ -62,6 +62,7 @@ static void TestContext(void);
 static void TestCurrencyUsage(void);
 static void TestCurrFmtNegSameAsPositive(void);
 static void TestVariousStylesAndAttributes(void);
+static void TestParseCurrPatternWithDecStyle(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -91,6 +92,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestCurrencyUsage);
     TESTCASE(TestCurrFmtNegSameAsPositive);
     TESTCASE(TestVariousStylesAndAttributes);
+    TESTCASE(TestParseCurrPatternWithDecStyle);
 }
 
 /* test Parse int 64 */
@@ -2859,6 +2861,29 @@ static void TestVariousStylesAndAttributes(void) {
             }
             unum_close(unum);
         }
+    }
+}
+
+static const UChar currpat[]  = { 0xA4,0x23,0x2C,0x23,0x23,0x30,0x2E,0x30,0x30,0}; /* ¤#,##0.00 */
+static const UChar parsetxt[] = { 0x78,0x30,0x79,0x24,0 }; /* x0y$ */
+
+static void TestParseCurrPatternWithDecStyle() {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat *unumfmt = unum_open(UNUM_DECIMAL, NULL, 0, "en_US", NULL, &status);
+    if (U_FAILURE(status)) {
+        log_data_err("unum_open DECIMAL failed for en_US: %s (Are you missing data?)\n", u_errorName(status));
+    } else {
+        unum_applyPattern(unumfmt, FALSE, currpat, -1, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err_status(status, "unum_applyPattern failed: %s\n", u_errorName(status));
+        } else {
+            int32_t pos = 0;
+            double value = unum_parseDouble(unumfmt, parsetxt, -1, &pos, &status);
+            if (U_SUCCESS(status)) {
+                log_err_status(status, "unum_parseDouble expected to fail but got status %s, value %f\n", u_errorName(status), value);
+            }
+        }
+        unum_close(unumfmt);
     }
 }
 

@@ -2103,6 +2103,8 @@ private:
                    DecimalFormatSymbols*    symbolsToAdopt = 0
                    );
 
+    void handleCurrencySignInPattern(UErrorCode& status);
+
     void parse(const UnicodeString& text,
                Formattable& result,
                ParsePosition& pos,
