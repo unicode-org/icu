@@ -1005,7 +1005,7 @@ public:
      * <b>Note:</b> This implementation depends on DateFormatSymbols::getLocalPatternChars()
      * to get localized format pattern characters. ICU does not include
      * localized pattern character data, therefore, unless user sets localized
-     * pattern characters manually, this method returns a same result with
+     * pattern characters manually, this method returns the same result as
      * toPattern().
      *
      * @param result    Receives the localized pattern.
