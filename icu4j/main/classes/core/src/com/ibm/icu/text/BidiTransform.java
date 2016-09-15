@@ -4,7 +4,6 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.RelativeDateTimeFormatter.Direction;
 
 /**
  * Bidi Layout Transformation Engine.
@@ -259,8 +258,8 @@ public class BidiTransform
 
     /**
      * When the direction option is
-     * <code>{@link Direction#DIRECTION_DEFAULT_LTR}</code> or
-     * <code>{@link Direction#DIRECTION_DEFAULT_RTL}</code>, resolves the base
+     * <code>{@link Bidi#LEVEL_DEFAULT_LTR}</code> or
+     * <code>{@link Bidi#LEVEL_DEFAULT_RTL}</code>, resolves the base
      * direction according to that of the first strong directional character in
      * the text.
      *
