@@ -34,13 +34,12 @@
   *  by running the UNIX makefile target 'update-windows-makefiles' in icu/source.
   *
   *
-  * source/common/common.vcproj - update 'Output file name' on the link tab so
+  * source/common/common.vcxproj - update 'Output file name' on the link tab so
   *                   that it contains the new major/minor combination
-  * source/i18n/i18n.vcproj - same as for the common.vcproj
-  * source/layout/layout.vcproj - same as for the common.vcproj
+  * source/i18n/i18n.vcxproj - same as for the common.vcxproj
   * source/layoutex/layoutex.vcproj - same
-  * source/stubdata/stubdata.vcproj - same as for the common.vcproj
-  * source/io/io.vcproj - same as for the common.vcproj
+  * source/stubdata/stubdata.vcproj - same as for the common.vcxproj
+  * source/io/io.vcproj - same as for the common.vcxproj
   * source/data/makedata.mak - change U_ICUDATA_NAME so that it contains
   *                            the new major/minor combination and the Unicode version.
   */
@@ -53,7 +52,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2016, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html "
 
 /** The current ICU major version as an integer.
  *  This value will change in the subsequent releases of ICU
@@ -65,13 +64,13 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 0
+#define U_ICU_VERSION_MINOR_NUM 1
 
 /** The current ICU patchlevel version as an integer.
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 1
+#define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
 /** The current ICU build level version as an integer.
  *  This value is for use by ICU clients. It defaults to 0.
@@ -120,7 +119,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "58.0.1"
+#define U_ICU_VERSION "58.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes.
  *  This value will change in the subsequent releases of ICU
@@ -132,7 +131,7 @@
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
  **/
-#define U_ICU_DATA_VERSION "58.0.1"
+#define U_ICU_DATA_VERSION "58.1"
 #endif  /* U_HIDE_INTERNAL_API */
 
 /*===========================================================================
