@@ -1244,6 +1244,19 @@ public class NumberFormatTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void TestParseCurrPatternWithDecStyle() {
+        String currpat = "¤#,##0.00";
+        String parsetxt = "x0y$";
+        DecimalFormat decfmt = (DecimalFormat)NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.NUMBERSTYLE);
+        decfmt.applyPattern(currpat);
+        ParsePosition ppos = new ParsePosition(0);
+        Number value = decfmt.parse(parsetxt, ppos);
+        if (ppos.getIndex() != 0) {
+            errln("DecimalFormat.parse expected to fail but got ppos " + ppos.getIndex() + ", value " + value);
+        }
+    }
+
     /**
      * Test the Currency object handling, new as of ICU 2.2.
      */
