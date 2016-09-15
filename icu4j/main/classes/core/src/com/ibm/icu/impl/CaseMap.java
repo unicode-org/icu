@@ -643,7 +643,7 @@ public final class CaseMap {
             while (i < s.length()) {
                 int c = Character.codePointAt(s, i);
                 int type = UCaseProps.INSTANCE.getTypeOrIgnorable(c);
-                if ((type & 4) != 0) {
+                if ((type & UCaseProps.IGNORABLE) != 0) {
                     // Case-ignorable, continue with the loop.
                 } else if (type != UCaseProps.NONE) {
                     return true;  // Followed by cased letter.
@@ -668,7 +668,7 @@ public final class CaseMap {
                 int nextIndex = i + Character.charCount(c);
                 int nextState = 0;
                 int type = UCaseProps.INSTANCE.getTypeOrIgnorable(c);
-                if ((type & 4) != 0) {
+                if ((type & UCaseProps.IGNORABLE) != 0) {
                     // c is case-ignorable
                     nextState |= (state & AFTER_CASED);
                 } else if (type != UCaseProps.NONE) {
@@ -684,8 +684,8 @@ public final class CaseMap {
                     // Adding one only to the final vowel in a longer sequence
                     // (which does not occur in normal writing) would require lookahead.
                     // Set the same flag as for preserving an existing dialytika.
-                    if ((data & HAS_VOWEL) != 0 && (state & AFTER_VOWEL_WITH_ACCENT)
-                            != 0 && (upper == 'Ι' || upper == 'Υ')) {
+                    if ((data & HAS_VOWEL) != 0 && (state & AFTER_VOWEL_WITH_ACCENT) != 0 &&
+                            (upper == 'Ι' || upper == 'Υ')) {
                         data |= HAS_DIALYTIKA;
                     }
                     int numYpogegrammeni = 0;  // Map each one to a trailing, spacing, capital iota.

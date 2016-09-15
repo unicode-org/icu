@@ -1343,7 +1343,7 @@ public final class UCaseProps {
         return props&7;
     }
 
-    //private static final int IGNORABLE=   4;
+    public static final int IGNORABLE=      4;
     private static final int SENSITIVE=     8;
     private static final int EXCEPTION=     0x10;
 
