@@ -24,6 +24,7 @@
 #include "unicode/tmunit.h"
 #include "unicode/plurrule.h"
 #include "charstr.h"
+#include "cstr.h"
 #include "unicode/reldatefmt.h"
 
 struct ExpectedResult {
@@ -58,6 +59,7 @@ private:
     void TestManyLocaleDurations();
     void TestGram();
     void TestCurrencies();
+    void TestDisplayNames();
     void TestFieldPosition();
     void TestFieldPositionMultiple();
     void TestBadArg();
@@ -111,6 +113,11 @@ private:
         const Measure *measures,
         int32_t measureCount,
         const char *expected);
+    void helperTestDisplayName(
+        const MeasureUnit *unit,
+        const char *localeID,
+        UMeasureFormatWidth width,
+        const char *expected);
     void verifyFieldPosition(
         const char *description,
         const MeasureFormat &fmt,
@@ -147,6 +154,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestManyLocaleDurations);
     TESTCASE_AUTO(TestGram);
     TESTCASE_AUTO(TestCurrencies);
+    TESTCASE_AUTO(TestDisplayNames);
     TESTCASE_AUTO(TestFieldPosition);
     TESTCASE_AUTO(TestFieldPositionMultiple);
     TESTCASE_AUTO(TestBadArg);
@@ -1590,6 +1598,61 @@ void MeasureFormatTest::TestCurrencies() {
     verifyFormat("TestCurrenciesNumeric", fmt, &USD_NEG_1, 1, "-$1.00");
     verifyFormat("TestCurrenciesNumeric", fmt, &USD_1, 1, "$1.00");
     verifyFormat("TestCurrenciesNumeric", fmt, &USD_2, 1, "$2.00");
+}
+
+void MeasureFormatTest::TestDisplayNames() {
+    UErrorCode status = U_ZERO_ERROR;
+    helperTestDisplayName( MeasureUnit::createYear(status), "en", UMEASFMT_WIDTH_WIDE, "years" );
+    helperTestDisplayName( MeasureUnit::createYear(status), "ja", UMEASFMT_WIDTH_WIDE, "\\u5E74" );
+    helperTestDisplayName( MeasureUnit::createYear(status), "es", UMEASFMT_WIDTH_WIDE, "a\\u00F1os" );
+    helperTestDisplayName( MeasureUnit::createYear(status), "pt", UMEASFMT_WIDTH_WIDE, "anos" );
+    helperTestDisplayName( MeasureUnit::createYear(status), "pt-PT", UMEASFMT_WIDTH_WIDE, "anos" );
+    helperTestDisplayName( MeasureUnit::createAmpere(status), "en", UMEASFMT_WIDTH_WIDE, "amperes" );
+    helperTestDisplayName( MeasureUnit::createAmpere(status), "ja", UMEASFMT_WIDTH_WIDE, "\\u30A2\\u30F3\\u30DA\\u30A2" );
+    helperTestDisplayName( MeasureUnit::createAmpere(status), "es", UMEASFMT_WIDTH_WIDE, "amperios" );
+    helperTestDisplayName( MeasureUnit::createAmpere(status), "pt", UMEASFMT_WIDTH_WIDE, "amperes" );
+    helperTestDisplayName( MeasureUnit::createAmpere(status), "pt-PT", UMEASFMT_WIDTH_WIDE, "amperes" );
+    helperTestDisplayName( MeasureUnit::createMeterPerSecondSquared(status), "pt", UMEASFMT_WIDTH_WIDE, "metros por segundo ao quadrado" );
+    helperTestDisplayName( MeasureUnit::createMeterPerSecondSquared(status), "pt-PT", UMEASFMT_WIDTH_WIDE, "metros por segundo quadrado" );
+    helperTestDisplayName( MeasureUnit::createSquareKilometer(status), "pt", UMEASFMT_WIDTH_NARROW, "km\\u00B2" );
+    helperTestDisplayName( MeasureUnit::createSquareKilometer(status), "pt", UMEASFMT_WIDTH_SHORT, "km\\u00B2" );
+    helperTestDisplayName( MeasureUnit::createSquareKilometer(status), "pt", UMEASFMT_WIDTH_WIDE, "quil\\u00F4metros quadrados" );
+    helperTestDisplayName( MeasureUnit::createSecond(status), "pt-PT", UMEASFMT_WIDTH_NARROW, "s" );
+    helperTestDisplayName( MeasureUnit::createSecond(status), "pt-PT", UMEASFMT_WIDTH_SHORT, "s" );
+    helperTestDisplayName( MeasureUnit::createSecond(status), "pt-PT", UMEASFMT_WIDTH_WIDE, "segundos" );
+    helperTestDisplayName( MeasureUnit::createSecond(status), "pt", UMEASFMT_WIDTH_NARROW, "seg" );
+    helperTestDisplayName( MeasureUnit::createSecond(status), "pt", UMEASFMT_WIDTH_SHORT, "segs" );
+    helperTestDisplayName( MeasureUnit::createSecond(status), "pt", UMEASFMT_WIDTH_WIDE, "segundos" );
+    assertSuccess("Error creating measure units", status);
+}
+
+void MeasureFormatTest::helperTestDisplayName(const MeasureUnit *unit,
+                            const char *localeID,
+                            UMeasureFormatWidth width,
+                            const char *expected) {
+    UErrorCode status = U_ZERO_ERROR;
+    MeasureFormat fmt(Locale(localeID), width, status);
+    if (U_FAILURE(status)) {
+        errln("Could not create MeasureFormat for locale %s, width %d, status: %s",
+            localeID, (int)width, u_errorName(status));
+        return;
+    }
+
+    UnicodeString dnam = fmt.getUnitDisplayName(*unit, status);
+    if (U_FAILURE(status)) {
+        errln("MeasureFormat::getUnitDisplayName failed for unit %s-%s, locale %s, width %d, status: %s",
+            unit->getType(), unit->getSubtype(), localeID, (int)width, u_errorName(status));
+        return;
+    }
+
+    UnicodeString expStr(UnicodeString(expected).unescape());
+    if (dnam != expStr) {
+        errln("MeasureFormat::getUnitDisplayName for unit %s-%s, locale %s, width %d: expected \"%s\", got \"%s\"",
+            unit->getType(), unit->getSubtype(), localeID, (int)width, CStr(expStr)(), CStr(dnam)());
+    }
+
+    // Delete the measure unit
+    delete unit;
 }
 
 void MeasureFormatTest::TestFieldPosition() {

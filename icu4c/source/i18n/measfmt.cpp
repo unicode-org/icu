@@ -110,6 +110,7 @@ public:
     UMeasureFormatWidth widthFallback[WIDTH_INDEX_COUNT];
     /** Measure unit -> format width -> array of patterns ("{0} meters") (plurals + PER_UNIT_INDEX) */
     SimpleFormatter *patterns[MEAS_UNIT_COUNT][WIDTH_INDEX_COUNT][PATTERN_COUNT];
+    const UChar* dnams[MEAS_UNIT_COUNT][WIDTH_INDEX_COUNT];
     SimpleFormatter perFormatters[WIDTH_INDEX_COUNT];
 
     MeasureFormatCacheData();
@@ -159,6 +160,7 @@ MeasureFormatCacheData::MeasureFormatCacheData() {
         currencyFormats[i] = NULL;
     }
     uprv_memset(patterns, 0, sizeof(patterns));
+    uprv_memset(dnams, 0, sizeof(dnams));
     integerFormat = NULL;
     numericDateFormatters = NULL;
 }
@@ -174,6 +176,7 @@ MeasureFormatCacheData::~MeasureFormatCacheData() {
             }
         }
     }
+    // Note: the contents of 'dnams' are pointers into the resource bundle
     delete integerFormat;
     delete numericDateFormatters;
 }
@@ -232,14 +235,22 @@ struct UnitDataSink : public ResourceSink {
 
     void setFormatterIfAbsent(int32_t index, const ResourceValue &value,
                                 int32_t minPlaceholders, UErrorCode &errorCode) {
-        SimpleFormatter **patterns =
-            &cacheData.patterns[unitIndex][width][0];
+        SimpleFormatter **patterns = &cacheData.patterns[unitIndex][width][0];
         if (U_SUCCESS(errorCode) && patterns[index] == NULL) {
-            patterns[index] = new SimpleFormatter(
-                    value.getUnicodeString(errorCode), minPlaceholders, 1, errorCode);
+            if (minPlaceholders >= 0) {
+                patterns[index] = new SimpleFormatter(
+                        value.getUnicodeString(errorCode), minPlaceholders, 1, errorCode);
+            }
             if (U_SUCCESS(errorCode) && patterns[index] == NULL) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
             }
+        }
+    }
+
+    void setDnamIfAbsent(const ResourceValue &value, UErrorCode& errorCode) {
+        if (cacheData.dnams[unitIndex][width] == NULL) {
+            int32_t length;
+            cacheData.dnams[unitIndex][width] = value.getString(length, errorCode);
         }
     }
 
@@ -250,7 +261,8 @@ struct UnitDataSink : public ResourceSink {
     void consumePattern(const char *key, const ResourceValue &value, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) { return; }
         if (uprv_strcmp(key, "dnam") == 0) {
-            // Skip the unit display name for now.
+            // The display name for the unit in the current width.
+            setDnamIfAbsent(value, errorCode);
         } else if (uprv_strcmp(key, "per") == 0) {
             // For example, "{0}/h".
             setFormatterIfAbsent(MeasureFormatCacheData::PER_UNIT_INDEX, value, 1, errorCode);
@@ -815,6 +827,24 @@ UnicodeString &MeasureFormat::formatMeasures(
     listFormatter->format(results, measureCount, appendTo, status);
     delete [] results;
     return appendTo;
+}
+
+UnicodeString MeasureFormat::getUnitDisplayName(const MeasureUnit& unit, UErrorCode& /*status*/) const {
+    UMeasureFormatWidth width = getRegularWidth(this->width);
+    const UChar* const* styleToDnam = cache->dnams[unit.getIndex()];
+    const UChar* dnam = styleToDnam[width];
+    if (dnam == NULL) {
+        int32_t fallbackWidth = cache->widthFallback[width];
+        dnam = styleToDnam[fallbackWidth];
+    }
+
+    UnicodeString result;
+    if (dnam == NULL) {
+        result.setToBogus();
+    } else {
+        result.setTo(dnam, -1);
+    }
+    return result;
 }
 
 void MeasureFormat::initMeasureFormat(
