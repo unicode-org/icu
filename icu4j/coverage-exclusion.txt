@@ -296,8 +296,8 @@ com/ibm/icu/impl/LocaleDisplayNamesImpl#scriptDisplayName:(I)Ljava/lang/String;
 com/ibm/icu/impl/LocaleDisplayNamesImpl$CapitalizationContextUsage#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/impl/LocaleDisplayNamesImpl$CapitalizationContextUsage;
 com/ibm/icu/impl/LocaleDisplayNamesImpl$DataTable#get:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 com/ibm/icu/impl/LocaleDisplayNamesImpl$DataTable#getLocale:()Lcom/ibm/icu/util/ULocale;
-com/ibm/icu/impl/LocaleDisplayNamesImpl$DataTables$1#<init>:(Lcom/ibm/icu/impl/LocaleDisplayNamesImpl$DataTable;)V
-com/ibm/icu/impl/LocaleDisplayNamesImpl$DataTables$1#get:(Lcom/ibm/icu/util/ULocale;)Lcom/ibm/icu/impl/LocaleDisplayNamesImpl$DataTable;
+com/ibm/icu/impl/LocaleDisplayNamesImpl$DataTables$1#<init>:()V
+com/ibm/icu/impl/LocaleDisplayNamesImpl$DataTables$1#get:(Lcom/ibm/icu/util/ULocale;Z)Lcom/ibm/icu/impl/LocaleDisplayNamesImpl$DataTable;
 com/ibm/icu/impl/LocaleDisplayNamesImpl$DataTableType#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/impl/LocaleDisplayNamesImpl$DataTableType;
 com/ibm/icu/impl/LocaleDisplayNamesImpl$LangDataTables#<init>:()V
 com/ibm/icu/impl/LocaleDisplayNamesImpl$RegionDataTables#<init>:()V
