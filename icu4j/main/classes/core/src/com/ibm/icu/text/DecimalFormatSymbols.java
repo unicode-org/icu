@@ -1718,14 +1718,14 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private String monetarySeparatorString;
 
     /**
-     * The decimal separator character used when formatting currency values.
+     * The grouping separator character used when formatting currency values.
      * @serial
      * @see #getMonetaryGroupingSeparator
      */
     private  char    monetaryGroupingSeparator; // Field new in JDK 1.1.6
 
     /**
-     * The decimal separator string used when formatting currency values.
+     * The grouping separator string used when formatting currency values.
      * @serial
      */
     private String monetaryGroupingSeparatorString;
