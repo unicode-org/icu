@@ -65,7 +65,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @stable ICU 3.6
      */
     public static DateTimePatternGenerator getEmptyInstance() {
-        return new DateTimePatternGenerator();
+        DateTimePatternGenerator instance = new DateTimePatternGenerator();
+        instance.addCanonicalItems();
+        instance.fillInMissing();
+        return instance;
     }
 
     /**
@@ -141,6 +144,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         setDateTimeFromCalendar(uLocale);
         setDecimalSymbols(uLocale);
         getAllowedHourFormats(uLocale);
+        fillInMissing();
     }
 
     private void addICUPatterns(PatternInfo returnInfo, ULocale uLocale) {
@@ -206,13 +210,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 }
             }
         }
-        public void fillInMissing() {
-            for (int i = 0; i < TYPE_LIMIT; ++i) {
-                if (getAppendItemFormat(i) == null) {
-                    setAppendItemFormat(i, "{0} \u251C{2}: {1}\u2524");
-                }
-            }
-        }
     }
 
     private class AppendItemNamesSink extends UResource.Sink {
@@ -232,11 +229,15 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 }
             }
         }
-        public void fillInMissing() {
-            for (int i = 0; i < TYPE_LIMIT; ++i) {
-                if (getAppendItemName(i) == null) {
-                    setAppendItemName(i, "F" + i);
-                }
+    }
+
+    private void fillInMissing() {
+        for (int i = 0; i < TYPE_LIMIT; ++i) {
+            if (getAppendItemFormat(i) == null) {
+                setAppendItemFormat(i, "{0} \u251C{2}: {1}\u2524");
+            }
+            if (getAppendItemName(i) == null) {
+                setAppendItemName(i, "F" + i);
             }
         }
     }
@@ -282,7 +283,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     appendItemFormatsSink);
         }catch(MissingResourceException e) {
         }
-        appendItemFormatsSink.fillInMissing();
 
         // Load CLDR item names.
         AppendItemNamesSink appendItemNamesSink = new AppendItemNamesSink();
@@ -292,7 +292,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     appendItemNamesSink);
         }catch(MissingResourceException e) {
         }
-        appendItemNamesSink.fillInMissing();
 
         // Load the available formats from CLDR.
         AvailableFormatsSink availableFormatsSink = new AvailableFormatsSink(returnInfo);
