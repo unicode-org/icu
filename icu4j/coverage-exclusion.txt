@@ -626,6 +626,11 @@ com/ibm/icu/text/Bidi#reorderVisually:([BI[Ljava/lang/Object;II)V
 com/ibm/icu/text/Bidi#requiresBidi:([CII)Z
 com/ibm/icu/text/Bidi#setPara:(Ljava/text/AttributedCharacterIterator;)V
 com/ibm/icu/text/BidiLine#<init>:()V
+com/ibm/icu/text/BidiTransform$Mirroring#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/BidiTransform$Mirroring;
+com/ibm/icu/text/BidiTransform$Mirroring#values:()[Lcom/ibm/icu/text/BidiTransform$Mirroring;
+com/ibm/icu/text/BidiTransform$Order#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/BidiTransform$Order;
+com/ibm/icu/text/BidiTransform$Order#values:()[Lcom/ibm/icu/text/BidiTransform$Order;
+com/ibm/icu/text/BidiTransform$ReorderingScheme#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/BidiTransform$ReorderingScheme;
 com/ibm/icu/text/BidiWriter#<init>:()V
 com/ibm/icu/text/BreakIterator#getRuleStatus:()I
 com/ibm/icu/text/BreakIterator#getRuleStatusVec:([I)I
