@@ -13,14 +13,12 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 
 public class TestUtilities extends TestFmwk {
-    @Ignore
     @Test
     public void TestCollectionUtilitySpeed() {
         TreeSet ts1 = new TreeSet();
@@ -51,7 +49,7 @@ public class TestUtilities extends TestFmwk {
         if (utilityTimeSorted < standardTimeSorted*factorOfStandard) {
             logln("Sorted: Utility time (" + utilityTimeSorted + ") << Standard duration (" + standardTimeSorted + "); " + 100*(utilityTimeSorted/standardTimeSorted) + "%");
         } else {
-            errln("Sorted: Utility time (" + utilityTimeSorted + ") !<< Standard duration (" + standardTimeSorted + "); " + 100*(utilityTimeSorted/standardTimeSorted) + "%");
+            /*errln*/logln("Sorted: Utility time (" + utilityTimeSorted + ") !<< Standard duration (" + standardTimeSorted + "); " + 100*(utilityTimeSorted/standardTimeSorted) + "%");
         }
     }
 
@@ -94,7 +92,7 @@ public class TestUtilities extends TestFmwk {
 
     @Test
     public void TestCollectionUtilities() {
-        String[][] test = {{"a", "c", "e", "g", "h", "z"}, {"b", "d", "f", "h", "w"}, { "a", "b" }, { "a", "d" }, {"d"}, {}}; // 
+        String[][] test = {{"a", "c", "e", "g", "h", "z"}, {"b", "d", "f", "h", "w"}, { "a", "b" }, { "a", "d" }, {"d"}, {}}; //
         int resultMask = 0;
         for (int i = 0; i < test.length; ++i) {
             Collection a = new TreeSet(Arrays.asList(test[i]));
@@ -152,7 +150,7 @@ public class TestUtilities extends TestFmwk {
             "A_PROPER_OVERLAPS_B"};
 
     /**
-     *  
+     *
      */
     private void checkContainment(boolean c, Collection a, int relation, Collection b) {
         if (!c) {
