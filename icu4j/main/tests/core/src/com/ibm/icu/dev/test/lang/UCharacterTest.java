@@ -3005,14 +3005,14 @@ public final class UCharacterTest extends TestFmwk
 
     @Test
     public void testToTitleCase_Locale_String_BreakIterator_I() {
-        String titleCase = UCharacter.toTitleCase(Locale.forLanguageTag("nl"), "ijsland", null,
+        String titleCase = UCharacter.toTitleCase(new Locale("nl"), "ijsland", null,
                 UCharacter.FOLD_CASE_DEFAULT);
         assertEquals("Wrong title casing", "IJsland", titleCase);
     }
 
     @Test
     public void testToTitleCase_String_BreakIterator_en() {
-        String titleCase = UCharacter.toTitleCase(Locale.forLanguageTag("en"), "ijsland", null);
+        String titleCase = UCharacter.toTitleCase(new Locale("en"), "ijsland", null);
         assertEquals("Wrong title casing", "Ijsland", titleCase);
     }
     /*
