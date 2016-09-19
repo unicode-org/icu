@@ -86,10 +86,10 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {20890123456f, "21 милијарда"},
             {21890123456f, "22 милијарде"},
             {123456789012f, "120 милијарди"},
-            {1234567890123f, "1,2 трилиона"},
-            {12345678901234f, "12 трилиона"},
-            {123456789012345f, "120 трилиона"},
-            {1234567890123456f, "1.200 трилиона"},
+            {1234567890123f, "1,2 билиона"},
+            {12345678901234f, "12 билиона"},
+            {123456789012345f, "120 билиона"},
+            {1234567890123456f, "1.200 билиона"},
     };
 
     Object[][] SerbianTestDataLongNegative = {
@@ -106,10 +106,10 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {-20890123456f, "-21 милијарда"},
             {-21890123456f, "-22 милијарде"},
             {-123456789012f, "-120 милијарди"},
-            {-1234567890123f, "-1,2 трилиона"},
-            {-12345678901234f, "-12 трилиона"},
-            {-123456789012345f, "-120 трилиона"},
-            {-1234567890123456f, "-1.200 трилиона"},
+            {-1234567890123f, "-1,2 билиона"},
+            {-12345678901234f, "-12 билиона"},
+            {-123456789012345f, "-120 билиона"},
+            {-1234567890123456f, "-1.200 билиона"},
     };
 
     Object[][] JapaneseTestData = {
@@ -131,7 +131,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
             // The first one should really have a ￥ in front, but the CLDR data is
             // incorrect.  See http://unicode.org/cldr/trac/ticket/9298 and update
             // this test case when the CLDR ticket is fixed.
-            {new CurrencyAmount(1234f, Currency.getInstance("CNY")), "1200"},
+            {new CurrencyAmount(1234f, Currency.getInstance("CNY")), "￥1.2千"},
             {new CurrencyAmount(12345f, Currency.getInstance("CNY")), "￥1.2万"},
             {new CurrencyAmount(123456f, Currency.getInstance("CNY")), "￥12万"},
             {new CurrencyAmount(1234567f, Currency.getInstance("CNY")), "￥120万"},
@@ -322,7 +322,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void TestArabicLongStyle() {
         NumberFormat cdf =
                 CompactDecimalFormat.getInstance(new Locale("ar"), CompactStyle.LONG);
-        assertEquals("Arabic Long", "\u200F-\u0665\u066B\u0663 \u0623\u0644\u0641", cdf.format(-5300));
+        assertEquals("Arabic Long", "\u061C-\u0665\u066B\u0663 \u0623\u0644\u0641", cdf.format(-5300));
     }
 
     @Test
@@ -466,7 +466,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
         result = cdf.format(new CurrencyAmount(43000f, Currency.getInstance("USD")));
         assertEquals("CDF should correctly format 43000 with currency in 'ar'", "US$ ٤٣ ألف", result);
         result = cdf.format(new CurrencyAmount(-43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format -43000 with currency in 'ar'", "US$ ‏-٤٣ ألف", result);
+        assertEquals("CDF should correctly format -43000 with currency in 'ar'", "US$ ؜-٤٣ ألف", result);
 
         // Extra locale with different positive/negative formats
         cdf = CompactDecimalFormat.getInstance(new ULocale("fi"), CompactDecimalFormat.CompactStyle.SHORT);

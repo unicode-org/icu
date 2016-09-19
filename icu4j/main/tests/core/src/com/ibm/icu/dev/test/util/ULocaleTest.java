@@ -1146,7 +1146,7 @@ public class ULocaleTest extends TestFmwk {
                 new Item("en", NM_STD, CAP_MID, LEN_FU, SUB_SU, "ur@numbers=latn", "Urdu (Western Digits)"),
                 new Item("en", NM_STD, CAP_MID, LEN_FU, SUB_SU, "ur@numbers=arabext", "Urdu (Extended Arabic-Indic Digits)"),
                 new Item("en", NM_STD, CAP_MID, LEN_SH, SUB_SU, "ur@numbers=arabext", "Urdu (X Arabic-Indic Digits)"),
-                new Item("af", NM_STD, CAP_NON, LEN_FU, SUB_NO, "aa", null),
+                new Item("af", NM_STD, CAP_NON, LEN_FU, SUB_NO, "aa", "Afar"),
                 new Item("cs", NM_STD, CAP_NON, LEN_FU, SUB_NO, "vai", "vai"),
             };
             for (Item item: items) {
@@ -1499,7 +1499,7 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("stroke", "\u7B14\u5212\u987A\u5E8F");
         h[1].put("traditional", "\u4F20\u7EDF\u6392\u5E8F");
         h[1].put("japanese", "\u65E5\u672C\u65E5\u5386");
-        h[1].put("buddhist", "\u4F5B\u6559\u65E5\u5386");
+        h[1].put("buddhist", "\u4F5B\u5386");
         h[1].put("islamic", "\u4F0A\u65AF\u5170\u65E5\u5386");
         h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u65E5\u5386");
         h[1].put("hebrew", "\u5E0C\u4F2F\u6765\u65E5\u5386");

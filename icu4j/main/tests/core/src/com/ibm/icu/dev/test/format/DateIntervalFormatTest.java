@@ -602,7 +602,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hmz", "10:00 vorm. \\u2013 2:10 nachm. GMT-8", 
 
-                "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "h", "10 vorm. \\u2013 2 nachm.", 
+                "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "h", "10 Uhr vorm. \\u2013 2 Uhr nachm.", 
 
                 "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "EEEEdMMM", "Mittwoch, 10. Jan.", 
 
@@ -612,11 +612,11 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hmz", "10:00\\u201310:20 vorm. GMT-8", 
 
-                "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "h", "10 vorm.", 
+                "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "h", "10 Uhr vorm.", 
 
-                "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hv", "10 vorm. Los Angeles Zeit", 
+                "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hv", "10 Uhr vorm. Los Angeles Zeit", 
 
-                "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hz", "10 vorm. GMT-8", 
+                "de", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hz", "10 Uhr vorm. GMT-8", 
 
                 "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "EEEEdMMMy", "Mittwoch, 10. Jan. 2007", 
 
@@ -632,11 +632,11 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "jmz", "10:10 GMT-8", 
 
-                "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "h", "10 vorm.", 
+                "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "h", "10 Uhr vorm.", 
 
-                "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hv", "10 vorm. Los Angeles Zeit", 
+                "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hv", "10 Uhr vorm. Los Angeles Zeit", 
 
-                "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hz", "10 vorm. GMT-8", 
+                "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hz", "10 Uhr vorm. GMT-8", 
 
                 // Thai (default calendar buddhist)
 

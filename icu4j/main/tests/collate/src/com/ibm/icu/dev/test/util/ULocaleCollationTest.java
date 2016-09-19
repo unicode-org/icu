@@ -271,7 +271,7 @@ public class ULocaleCollationTest extends TestFmwk {
                 }, 
                 {{"en-gb", "fr", "zh-Hant", "zh-SG", "sr", "sr-Latn"}, 
                     {"Anglais (Royaume-Uni)", "English (United Kingdom)", "en_GB", "en_GB"}, 
-                    {"Chinois (simplifié, Singapour)", "中文（简体、新加坡）", "zh_SG", "zh_Hans_SG"}, 
+                    {"Chinois (simplifié, Singapour)", "中文（简体，新加坡）", "zh_SG", "zh_Hans_SG"}, 
                     {"Chinois (traditionnel, Taïwan)", "中文（繁體，台灣）", "zh_Hant", "zh_Hant_TW"}, 
                     {"Français", "Français", "fr", "fr"}, 
                     {"Serbe (cyrillique)", "Српски (ћирилица)", "sr", "sr_Cyrl"}, 
