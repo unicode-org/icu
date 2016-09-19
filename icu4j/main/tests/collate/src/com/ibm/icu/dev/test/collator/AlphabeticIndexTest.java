@@ -1069,4 +1069,73 @@ public class AlphabeticIndexTest extends TestFmwk {
         bucketIndex = index.getBucketIndex("\u7527");
         assertEquals("getBucketIndex(U+7527)", 101, bucketIndex);
     }
+
+    @Test
+    public void testAddLabels_Locale() {
+        AlphabeticIndex<?> ulocaleIndex = new AlphabeticIndex<String>(ULocale.CANADA);
+        AlphabeticIndex<?> localeIndex = new AlphabeticIndex<String>(Locale.CANADA);
+        ulocaleIndex.addLabels(ULocale.SIMPLIFIED_CHINESE);
+        localeIndex.addLabels(Locale.SIMPLIFIED_CHINESE);
+        assertEquals("getBucketLables() results of ulocaleIndex and localeIndex differ",
+                ulocaleIndex.getBucketLabels(), localeIndex.getBucketLabels());
+    }
+
+    @Test
+    public void testGetRecordCount_empty() {
+        assertEquals("Record count of empty index not 0", 0,
+                new AlphabeticIndex<String>(ULocale.CANADA).getRecordCount());
+    }
+
+    @Test
+    public void testGetRecordCount_withRecords() {
+        assertEquals("Record count of index with one record not 1", 1,
+                new AlphabeticIndex<String>(ULocale.CANADA).addRecord("foo", null).getRecordCount());
+    }
+
+    /**
+     * Check that setUnderflowLabel/setOverflowLabel/setInflowLabel correctly influence the name of
+     * generated labels.
+     */
+    @Test
+    public void testFlowLabels() {
+        AlphabeticIndex<?> index = new AlphabeticIndex<String>(ULocale.ENGLISH)
+                .addLabels(ULocale.forLanguageTag("ru"));
+        index.setUnderflowLabel("underflow");
+        index.setOverflowLabel("overflow");
+        index.setInflowLabel("inflow");
+        index.addRecord("!", null);
+        index.addRecord("\u03B1", null); // GREEK SMALL LETTER ALPHA
+        index.addRecord("\uab70", null); // CHEROKEE SMALL LETTER A
+        AlphabeticIndex.Bucket<?> underflowBucket = null;
+        AlphabeticIndex.Bucket<?> overflowBucket = null;
+        AlphabeticIndex.Bucket<?> inflowBucket = null;
+        for (AlphabeticIndex.Bucket<?> bucket : index) {
+            switch (bucket.getLabelType()) {
+                case UNDERFLOW:
+                    assertNull("LabelType not null", underflowBucket);
+                    underflowBucket = bucket;
+                    break;
+                case OVERFLOW:
+                    assertNull("LabelType not null", overflowBucket);
+                    overflowBucket = bucket;
+                    break;
+                case INFLOW:
+                    assertNull("LabelType not null", inflowBucket);
+                    inflowBucket = bucket;
+                    break;
+            }
+        }
+        assertNotNull("No bucket 'underflow'", underflowBucket);
+        assertEquals("Wrong bucket label", "underflow", underflowBucket.getLabel());
+        assertEquals("Wrong bucket label", "underflow", index.getUnderflowLabel());
+        assertEquals("Bucket size not 1", 1, underflowBucket.size());
+        assertNotNull("No bucket 'overflow'", overflowBucket);
+        assertEquals("Wrong bucket label", "overflow", overflowBucket.getLabel());
+        assertEquals("Wrong bucket label", "overflow", index.getOverflowLabel());
+        assertEquals("Bucket size not 1", 1, overflowBucket.size());
+        assertNotNull("No bucket 'inflow'", inflowBucket);
+        assertEquals("Wrong bucket label", "inflow", inflowBucket.getLabel());
+        assertEquals("Wrong bucket label", "inflow", index.getInflowLabel());
+        assertEquals("Bucket size not 1", 1, inflowBucket.size());
+    }
 }
