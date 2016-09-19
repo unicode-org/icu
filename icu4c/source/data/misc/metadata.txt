@@ -119,9 +119,13 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"bn"}
             }
+            bh{
+                reason{"macrolanguage"}
+                replacement{"bho"}
+            }
             bih{
                 reason{"overlong"}
-                replacement{"bh"}
+                replacement{"bho"}
             }
             bis{
                 reason{"overlong"}
@@ -4232,6 +4236,7 @@ metadata:table(nofallback){
         "ml_IN",
         "mn_MN",
         "mn_Mong_CN",
+        "mni_IN",
         "moh_CA",
         "mr_IN",
         "ms_Arab_MY",

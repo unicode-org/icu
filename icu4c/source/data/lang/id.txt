@@ -3,6 +3,7 @@
 id{
     Keys{
         calendar{"Kalender"}
+        cf{"Format Mata Uang"}
         colAlternate{"Penyortiran Abaikan Simbol"}
         colBackwards{"Penyortiran Aksen Terbalik"}
         colCaseFirst{"Pengurutan Huruf Besar/Huruf Kecil"}
@@ -45,20 +46,20 @@ id{
         ar{"Arab"}
         ar_001{"Arab Standar Modern"}
         arc{"Aram"}
-        arn{"Araukan"}
+        arn{"Mapuche"}
         arp{"Arapaho"}
-        arq{"Arab Algeria"}
+        arq{"Arab Aljazair"}
         arw{"Arawak"}
         ary{"Arab Maroko"}
         arz{"Arab Mesir"}
         as{"Assam"}
         asa{"Asu"}
         ase{"Bahasa Isyarat Amerika"}
-        ast{"Astur"}
+        ast{"Asturia"}
         av{"Avar"}
         awa{"Awadhi"}
         ay{"Aymara"}
-        az{"Azerbaijan"}
+        az{"Azerbaijani"}
         ba{"Bashkir"}
         bal{"Baluchi"}
         ban{"Bali"}
@@ -101,7 +102,7 @@ id{
         cay{"Cayuga"}
         cch{"Atsam"}
         ce{"Chechen"}
-        ceb{"Sebuano"}
+        ceb{"Cebuano"}
         cgg{"Kiga"}
         ch{"Chamorro"}
         chb{"Chibcha"}
@@ -118,6 +119,7 @@ id{
         cop{"Koptik"}
         cr{"Kree"}
         crh{"Tatar Krimea"}
+        crs{"Seselwa Kreol Prancis"}
         cs{"Cheska"}
         csb{"Kashubia"}
         cu{"Bahasa Gereja Slavonia"}
@@ -137,7 +139,7 @@ id{
         doi{"Dogri"}
         dsb{"Sorbia Rendah"}
         dua{"Duala"}
-        dum{"Belanda Tengah"}
+        dum{"Belanda Abad Pertengahan"}
         dv{"Divehi"}
         dyo{"Jola-Fonyi"}
         dyu{"Dyula"}
@@ -151,14 +153,13 @@ id{
         el{"Yunani"}
         elx{"Elam"}
         en{"Inggris"}
+        en_GB{"Inggris (Inggris)"}
         enm{"Inggris Abad Pertengahan"}
         eo{"Esperanto"}
         es{"Spanyol"}
-        es_419{"Spanyol Amerika Latin"}
         es_ES{"Spanyol (Eropa)"}
-        es_MX{"Spanyol Meksiko"}
         et{"Esti"}
-        eu{"Bask"}
+        eu{"Basque"}
         ewo{"Ewondo"}
         fa{"Persia"}
         fan{"Fang"}
@@ -167,7 +168,7 @@ id{
         fi{"Suomi"}
         fil{"Filipino"}
         fj{"Fiji"}
-        fo{"Faro"}
+        fo{"Faroe"}
         fon{"Fon"}
         fr{"Prancis"}
         frm{"Prancis Abad Pertengahan"}
@@ -192,11 +193,11 @@ id{
         goh{"Jerman Kuno"}
         gon{"Gondi"}
         gor{"Gorontalo"}
-        got{"Gothik"}
+        got{"Gotik"}
         grb{"Grebo"}
         grc{"Yunani Kuno"}
         gsw{"Jerman (Swiss)"}
-        gu{"Gujarati"}
+        gu{"Gujarat"}
         guz{"Gusii"}
         gv{"Manx"}
         gwi{"Gwich’in"}
@@ -212,7 +213,7 @@ id{
         ho{"Hiri Motu"}
         hr{"Kroasia"}
         hsb{"Sorbia Atas"}
-        ht{"Haiti"}
+        ht{"Kreol Haiti"}
         hu{"Hungaria"}
         hup{"Hupa"}
         hy{"Armenia"}
@@ -327,7 +328,7 @@ id{
         mg{"Malagasi"}
         mga{"Irlandia Abad Pertengahan"}
         mgh{"Makhuwa-Meetto"}
-        mgo{"meta’"}
+        mgo{"Meta’"}
         mh{"Marshall"}
         mi{"Maori"}
         mic{"Mikmak"}
@@ -348,7 +349,7 @@ id{
         mwl{"Miranda"}
         mwr{"Marwari"}
         mwv{"Mentawai"}
-        my{"Myanmar"}
+        my{"Burma"}
         mye{"Myene"}
         myv{"Eryza"}
         mzn{"Mazanderani"}
@@ -394,12 +395,14 @@ id{
         pam{"Pampanga"}
         pap{"Papiamento"}
         pau{"Palau"}
+        pcm{"Pidgin Nigeria"}
         pdc{"Jerman Pennsylvania"}
         peo{"Persia Kuno"}
         phn{"Funisia"}
         pi{"Pali"}
         pl{"Polski"}
         pon{"Pohnpeia"}
+        prg{"Prusia"}
         pro{"Provencal Lama"}
         ps{"Pashto"}
         pt{"Portugis"}
@@ -418,7 +421,7 @@ id{
         root{"Root"}
         rtm{"Rotuma"}
         ru{"Rusia"}
-        rup{"Makedo-Rumania"}
+        rup{"Aromania"}
         rw{"Kinyarwanda"}
         rwk{"Rwa"}
         sa{"Sanskerta"}
@@ -451,7 +454,7 @@ id{
         sid{"Sidamo"}
         sk{"Slovak"}
         sl{"Sloven"}
-        sli{"Silesia Bawah"}
+        sli{"Silesia Rendah"}
         sly{"Selayar"}
         sm{"Samoa"}
         sma{"Sami Selatan"}
@@ -611,8 +614,9 @@ id{
         Goth{"Gothic"}
         Gran{"Grantha"}
         Grek{"Yunani"}
-        Gujr{"Gujarati"}
+        Gujr{"Gujarat"}
         Guru{"Gurmukhi"}
+        Hanb{"Hanb"}
         Hang{"Hangul"}
         Hani{"Han"}
         Hano{"Hanunoo"}
@@ -729,6 +733,7 @@ id{
         Yiii{"Yi"}
         Zinh{"Warisan"}
         Zmth{"Notasi Matematika"}
+        Zsye{"Emoji"}
         Zsym{"Simbol"}
         Zxxx{"Tidak Tertulis"}
         Zyyy{"Umum"}
@@ -759,6 +764,10 @@ id{
             japanese{"Kalender Jepang"}
             persian{"Kalender Persia"}
             roc{"Kalendar Minguo"}
+        }
+        cf{
+            account{"Format Mata Uang Akuntansi"}
+            standard{"Format Mata Uang Standar"}
         }
         colAlternate{
             non-ignorable{"Sortir Simbol"}
@@ -849,7 +858,7 @@ id{
             geor{"Angka Georgia"}
             grek{"Angka Yunani"}
             greklow{"Angka Yunani Huruf Kecil"}
-            gujr{"Angka Gujarati"}
+            gujr{"Angka Gujarat"}
             guru{"Angka Gurmukhi"}
             hanidec{"Angka Desimal Tionghoa"}
             hans{"Angka Tionghoa Sederhana"}
@@ -950,7 +959,19 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
+    characterLabelPattern{
+        all{"{0} — Semua"}
+        category-list{"{0}: {1}"}
+        compatibility{"{0} — Kompatibilitas"}
+        enclosed{"{0} — Terlampir"}
+        extended{"{0} — Diperluas"}
+        historic{"{0} — Historis"}
+        miscellaneous{"{0} — Lain-lain"}
+        other{"{0} — Lainnya"}
+        scripts{"Skrip — {0}"}
+        strokes{"{0} Goresan"}
+    }
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

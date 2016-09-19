@@ -3,6 +3,7 @@
 it{
     Keys{
         calendar{"Calendario"}
+        cf{"Formato valuta"}
         colAlternate{"Ordinamento Ignora simboli"}
         colBackwards{"Ordinamento Accento capovolto"}
         colCaseFirst{"Ordinamento Maiuscole/Minuscole"}
@@ -46,7 +47,7 @@ it{
         ar{"arabo"}
         ar_001{"arabo moderno standard"}
         arc{"aramaico"}
-        arn{"araucano"}
+        arn{"mapuche"}
         aro{"araona"}
         arp{"arapaho"}
         arq{"arabo algerino"}
@@ -126,6 +127,7 @@ it{
         cps{"capiznon"}
         cr{"cree"}
         crh{"turco crimeo"}
+        crs{"creolo delle Seychelles"}
         cs{"ceco"}
         csb{"kashubian"}
         cu{"slavo della Chiesa"}
@@ -217,7 +219,7 @@ it{
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gotico"}
-        grb{"gerbo"}
+        grb{"grebo"}
         grc{"greco antico"}
         gsw{"tedesco svizzero"}
         gu{"gujarati"}
@@ -232,7 +234,7 @@ it{
         he{"ebraico"}
         hi{"hindi"}
         hif{"hindi figiano"}
-        hil{"hiligayna"}
+        hil{"ilongo"}
         hit{"hittite"}
         hmn{"hmong"}
         ho{"hiri motu"}
@@ -275,7 +277,7 @@ it{
         kaj{"kai"}
         kam{"kamba"}
         kaw{"kawi"}
-        kbd{"kabardia"}
+        kbd{"cabardino"}
         kbl{"kanembu"}
         kcg{"tyap"}
         kde{"makonde"}
@@ -322,10 +324,10 @@ it{
         lah{"lahnda"}
         lam{"lamba"}
         lb{"lussemburghese"}
-        lez{"lezghian"}
+        lez{"lesgo"}
         lfn{"Lingua Franca Nova"}
         lg{"ganda"}
-        li{"limburgese"}
+        li{"limburghese"}
         lij{"ligure"}
         liv{"livone"}
         lkt{"lakota"}
@@ -437,6 +439,7 @@ it{
         pap{"papiamento"}
         pau{"palau"}
         pcd{"piccardo"}
+        pcm{"pidgin nigeriano"}
         pdc{"tedesco della Pennsylvania"}
         peo{"persiano antico"}
         pfl{"tedesco palatino"}
@@ -502,7 +505,7 @@ it{
         sh{"serbo-croato"}
         shi{"tashelhit"}
         shn{"shan"}
-        shu{"chadian arabic"}
+        shu{"arabo ciadiano"}
         si{"singalese"}
         sid{"sidamo"}
         sk{"slovacco"}
@@ -532,7 +535,7 @@ it{
         sux{"sumero"}
         sv{"svedese"}
         sw{"swahili"}
-        sw_CD{"congo swahili"}
+        sw_CD{"swahili del Congo"}
         swb{"comoriano"}
         syc{"siriaco classico"}
         syr{"siriaco"}
@@ -675,6 +678,7 @@ it{
         Grek{"greco"}
         Gujr{"gujarati"}
         Guru{"gurmukhi"}
+        Hanb{"hanb"}
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanunoo"}
@@ -688,7 +692,7 @@ it{
         Hung{"antico ungherese"}
         Inds{"indu"}
         Ital{"italico antico"}
-        Jamo{"Jamo"}
+        Jamo{"jamo"}
         Java{"javanese"}
         Jpan{"giapponese"}
         Jurc{"jurchen"}
@@ -789,6 +793,7 @@ it{
         Yiii{"yi"}
         Zinh{"ereditato"}
         Zmth{"notazione matematica"}
+        Zsye{"emoji"}
         Zsym{"simboli"}
         Zxxx{"non scritto"}
         Zyyy{"comune"}
@@ -806,7 +811,7 @@ it{
             buddhist{"Calendario buddista"}
             chinese{"Calendario cinese"}
             coptic{"Calendario copto"}
-            dangi{"Calendario Dangi"}
+            dangi{"Calendario dangi"}
             ethiopic{"Calendario etiope"}
             ethiopic-amete-alem{"Calendario etiope Amete Alem"}
             gregorian{"Calendario gregoriano"}
@@ -820,7 +825,11 @@ it{
             iso8601{"Calendario ISO-8601"}
             japanese{"Calendario giapponese"}
             persian{"Calendario persiano"}
-            roc{"Calendario Minguo"}
+            roc{"Calendario minguo"}
+        }
+        cf{
+            account{"Formato valuta contabile"}
+            standard{"Formato valuta standard"}
         }
         colAlternate{
             non-ignorable{"Ordina simboli"}
@@ -1008,7 +1017,21 @@ it{
         VALENCIA{"valenziano"}
         WADEGILE{"romanizzazione Wade-Giles"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
+    characterLabelPattern{
+        all{"{0} — Tutto"}
+        category-list{"{0}: {1}"}
+        compatibility{"{0} — Compatibilità"}
+        extended{"{0} — Esteso"}
+        historic{"{0} — Storico"}
+        miscellaneous{"{0} — Miscellanea"}
+        other{"{0} — Altro"}
+        scripts{"Sistemi di scrittura — {0}"}
+        strokes{
+            "{0} tratto",
+            "{0} tratti",
+        }
+    }
     codePatterns{
         language{"Lingua: {0}"}
         script{"Scrittura: {0}"}

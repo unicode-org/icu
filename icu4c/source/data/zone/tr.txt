@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 tr{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abican"}
@@ -302,6 +302,9 @@ tr{
         }
         "America:El_Salvador"{
             ec{"El Salvador"}
+        }
+        "America:Fort_Nelson"{
+            ec{"Fort Nelson"}
         }
         "America:Fortaleza"{
             ec{"Fortaleza"}
@@ -666,6 +669,9 @@ tr{
         "Asia:Bangkok"{
             ec{"Bangkok"}
         }
+        "Asia:Barnaul"{
+            ec{"Barnaul"}
+        }
         "Asia:Beirut"{
             ec{"Beyrut"}
         }
@@ -843,6 +849,9 @@ tr{
         "Asia:Tokyo"{
             ec{"Tokyo"}
         }
+        "Asia:Tomsk"{
+            ec{"Tomsk"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Ulan Batur"}
         }
@@ -942,6 +951,9 @@ tr{
         "Europe:Andorra"{
             ec{"Andorra"}
         }
+        "Europe:Astrakhan"{
+            ec{"Astrakhan"}
+        }
         "Europe:Athens"{
             ec{"Atina"}
         }
@@ -999,6 +1011,9 @@ tr{
         }
         "Europe:Kiev"{
             ec{"Kiev"}
+        }
+        "Europe:Kirov"{
+            ec{"Kirov"}
         }
         "Europe:Lisbon"{
             ec{"Lizbon"}
@@ -1075,6 +1090,9 @@ tr{
         }
         "Europe:Tirane"{
             ec{"Tiran"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"Ulyanovsk"}
         }
         "Europe:Uzhgorod"{
             ec{"Ujgorod"}
@@ -1777,6 +1795,9 @@ tr{
         }
         "meta:Ponape"{
             ls{"Ponape Saati"}
+        }
+        "meta:Pyongyang"{
+            ls{"Pyongyang Saati"}
         }
         "meta:Qyzylorda"{
             ld{"Kızılorda Yaz Saati"}

@@ -1,13 +1,8 @@
 ﻿# © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-# ***************************************************************************
-# *
-# *  Copyright (C) 2004-2016, International Business Machines
-# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
-# *
-# ***************************************************************************
+#
 # File: ro_ro_FONIPA.txt
-# Generated from CLDR 
+# Generated from CLDR
 #
 
 # Romanian orthography to phonemic transcription.
@@ -75,14 +70,12 @@ a → a ;
 ă → ə ;
 b → b ;
 ch → k ;
-{c [ei]} $VowelAOU → t\u0361ʃ ;
 {c} [ei] → t\u0361ʃ ;
 c → k ;
 d → d ;
 e → e ;
 f → f ;
 gh → ɡ ;
-{g [ei]} $VowelAOU → d\u0361ʒ ;
 {g} [ei] → d\u0361ʒ ;
 g → ɡ ;
 h → h ;

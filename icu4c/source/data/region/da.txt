@@ -62,7 +62,7 @@ da{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
-        BQ{"De Nederlandske Antiller"}
+        BQ{"De tidligere Nederlandske Antiller"}
         BR{"Brasilien"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -126,12 +126,12 @@ da{
         GP{"Guadeloupe"}
         GQ{"Ækvatorialguinea"}
         GR{"Grækenland"}
-        GS{"South Georgia og South Sandwich Islands"}
+        GS{"South Georgia og De Sydlige Sandwichøer"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong SAR"}
+        HK{"SAR Hongkong"}
         HM{"Heard Island og McDonald Islands"}
         HN{"Honduras"}
         HR{"Kroatien"}
@@ -185,7 +185,7 @@ da{
         ML{"Mali"}
         MM{"Myanmar (Burma)"}
         MN{"Mongoliet"}
-        MO{"Macao SAR"}
+        MO{"SAR Macao"}
         MP{"Nordmarianerne"}
         MQ{"Martinique"}
         MR{"Mauretanien"}
@@ -272,6 +272,7 @@ da{
         UA{"Ukraine"}
         UG{"Uganda"}
         UM{"Amerikanske oversøiske øer"}
+        UN{"Forenede Nationer"}
         US{"USA"}
         UY{"Uruguay"}
         UZ{"Usbekistan"}
@@ -297,14 +298,15 @@ da{
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palæstina"}
+        UN{"FN"}
         US{"USA"}
     }
     Countries%variant{
-        CD{"Den Demokratiske Republik Congo"}
+        CD{"Den Demokratiske Republik Congo (DRC)"}
         CG{"Republikken Congo"}
         FK{"Falklandsøerne (Islas Malvinas)"}
         MK{"Den tidligere jugoslaviske republik Makedonien"}
         TL{"Østtimor"}
     }
-    Version{"2.1.26.32"}
+    Version{"2.1.28.79"}
 }

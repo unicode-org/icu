@@ -222,8 +222,9 @@ es_MX{
     }
     Currencies%narrow{
         ARS{"$a"}
-        BYR{"Br"}
+        BYN{"Br"}
         DOP{"RD$"}
+        RON{"lei"}
         TRY{"TL"}
     }
     CurrencyPlurals{
@@ -440,5 +441,5 @@ es_MX{
             other{"kwachas zambianos"}
         }
     }
-    Version{"2.1.26.35"}
+    Version{"2.1.28.76"}
 }

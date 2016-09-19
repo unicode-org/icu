@@ -17,8 +17,8 @@ set locale ar
 set pattern +0;-#
 begin
 format	output	breaks
-6	\u200F+\u0666	JK
--6	\u200F-\u0666	JK
+6	\u061C+\u0666	JK
+-6	\u061C-\u0666	JK
 
 test basic patterns
 set locale fr_FR

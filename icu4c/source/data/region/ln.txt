@@ -36,7 +36,7 @@ ln{
         BY{"Byelorisi"}
         BZ{"Belizɛ"}
         CA{"Kanada"}
-        CD{"Repibiki demokratiki ya Kongó"}
+        CD{"Republíki ya Kongó Demokratíki"}
         CF{"Repibiki ya Afríka ya Káti"}
         CG{"Kongo"}
         CH{"Swisɛ"}
@@ -234,5 +234,5 @@ ln{
         ZM{"Zambi"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
 }

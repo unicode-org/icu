@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_AU{
     %%Parent{"en_001"}
-    Version{"2.1.25.97"}
+    Version{"2.1.29.54"}
     units{
         coordinate{
             east{"{0} east"}
@@ -89,11 +89,6 @@ en_AU{
                 other{"{0} s."}
             }
         }
-        length{
-            meter{
-                dnam{"metre"}
-            }
-        }
         speed{
             kilometer-per-hour{
                 dnam{"km/h"}
@@ -132,6 +127,11 @@ en_AU{
                 one{"{0}hL"}
                 other{"{0}hL"}
             }
+            liter{
+                one{"{0}L"}
+                other{"{0}L"}
+                per{"{0}/L"}
+            }
             megaliter{
                 dnam{"ML"}
                 one{"{0}ML"}
@@ -159,11 +159,6 @@ en_AU{
             degree{
                 one{"{0} deg."}
                 other{"{0} deg."}
-            }
-        }
-        area{
-            square-meter{
-                dnam{"metres²"}
             }
         }
         concentr{
@@ -309,6 +304,7 @@ en_AU{
             liter{
                 one{"{0} L"}
                 other{"{0} L"}
+                per{"{0}/L"}
             }
             megaliter{
                 dnam{"ML"}

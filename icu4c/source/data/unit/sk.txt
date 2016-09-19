@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sk{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -78,11 +78,11 @@ sk{
             }
             square-centimeter{
                 dnam{"štvorcové centimetre"}
-                few{"{0} štvorcové centimetre"}
-                many{"{0} štvorcového centimetra"}
-                one{"{0} štvorcový centimeter"}
-                other{"{0} štvorcových centimetrov"}
-                per{"{0} na štvorcový centimeter"}
+                few{"{0} centimetre štvorcové"}
+                many{"{0} centimetra štvorcového"}
+                one{"{0} centimeter štvorcový"}
+                other{"{0} centimetrov štvorcových"}
+                per{"{0} na centimeter štvorcový"}
             }
             square-foot{
                 dnam{"štvorcové stopy"}
@@ -105,6 +105,7 @@ sk{
                 many{"{0} kilometra štvorcového"}
                 one{"{0} kilometer štvorcový"}
                 other{"{0} kilometrov štvorcových"}
+                per{"{0} na kilometer štvorcový"}
             }
             square-meter{
                 dnam{"štvorcové metre"}
@@ -120,6 +121,7 @@ sk{
                 many{"{0} míle štvorcovej"}
                 one{"{0} míľa štvorcová"}
                 other{"{0} míľ štvorcových"}
+                per{"{0} na míľu štvorcovú"}
             }
             square-yard{
                 dnam{"štvorcové yardy"}
@@ -130,7 +132,7 @@ sk{
             }
         }
         compound{
-            per{"{0} za {1}"}
+            per{"{0}/{1}"}
         }
         concentr{
             karat{
@@ -139,6 +141,27 @@ sk{
                 many{"{0} karátu"}
                 one{"{0} karát"}
                 other{"{0} karátov"}
+            }
+            milligram-per-deciliter{
+                dnam{"miligramy na deciliter"}
+                few{"{0} miligramy na deciliter"}
+                many{"{0} miligramu na deciliter"}
+                one{"{0} miligram na deciliter"}
+                other{"{0} miligramov na deciliter"}
+            }
+            millimole-per-liter{
+                dnam{"milimoly na liter"}
+                few{"{0} milimoly na liter"}
+                many{"{0} milimolu na liter"}
+                one{"{0} milimol na liter"}
+                other{"{0} milimolov na liter"}
+            }
+            part-per-million{
+                dnam{"milióntiny"}
+                few{"{0} milióntiny"}
+                many{"{0} milióntiny"}
+                one{"{0} milióntina"}
+                other{"{0} milióntin"}
             }
         }
         consumption{
@@ -162,6 +185,13 @@ sk{
                 many{"{0} míle na galón"}
                 one{"{0} míľa na galón"}
                 other{"{0} míľ na galón"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"míle na britský galón"}
+                few{"{0} míle na britský galón"}
+                many{"{0} míle na britský galón"}
+                one{"{0} míľa na britský galón"}
+                other{"{0} míľ na britský galón"}
             }
         }
         coordinate{
@@ -885,6 +915,14 @@ sk{
                 one{"{0} galón"}
                 other{"{0} galónov"}
                 per{"{0} na galón"}
+            }
+            gallon-imperial{
+                dnam{"britské galóny"}
+                few{"{0} britské galóny"}
+                many{"{0} britského galónu"}
+                one{"{0} britský galón"}
+                other{"{0} britských galónov"}
+                per{"{0} na britský galón"}
             }
             hectoliter{
                 dnam{"hektolitre"}
@@ -1659,6 +1697,7 @@ sk{
                 many{"{0} km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1674,6 +1713,7 @@ sk{
                 many{"{0} mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1693,6 +1733,27 @@ sk{
                 many{"{0} kt"}
                 one{"{0} kt"}
                 other{"{0} kt"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                few{"{0} mg/dl"}
+                many{"{0} mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                few{"{0} mmol/l"}
+                many{"{0} mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                few{"{0} ppm"}
+                many{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1716,6 +1777,13 @@ sk{
                 many{"{0} mpg"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg brit."}
+                few{"{0} mpg brit."}
+                many{"{0} mpg brit."}
+                one{"{0} mpg brit."}
+                other{"{0} mpg brit."}
             }
         }
         coordinate{
@@ -2439,6 +2507,14 @@ sk{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"brit. gal."}
+                few{"{0} brit. gal."}
+                many{"{0} brit. gal."}
+                one{"{0} brit. gal."}
+                other{"{0} brit. gal."}
+                per{"{0}/brit. gal."}
             }
             hectoliter{
                 dnam{"hl"}

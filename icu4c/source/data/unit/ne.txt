@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ne{
-    Version{"2.1.25.97"}
+    Version{"2.1.29.20"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -49,9 +49,9 @@ ne{
         }
         area{
             acre{
-                dnam{"बर्ग गज"}
-                one{"{0} बर्ग गज"}
-                other{"{0} बर्ग गज"}
+                dnam{"वर्ग गज"}
+                one{"{0}वर्ग गज"}
+                other{"{0}वर्ग गज"}
             }
             hectare{
                 dnam{"हेक्टर"}
@@ -65,9 +65,9 @@ ne{
                 per{"{0}प्रति वर्ग सेन्टिमिटर"}
             }
             square-foot{
-                dnam{"बर्ग फुट"}
-                one{"{0} बर्ग फुट"}
-                other{"{0} बर्ग फुट"}
+                dnam{"वर्ग फिट"}
+                one{"{0}वर्ग फुट"}
+                other{"{0}वर्ग फुट"}
             }
             square-inch{
                 dnam{"वर्ग इन्च"}
@@ -76,20 +76,22 @@ ne{
                 per{"{0}प्रति वर्ग इन्च"}
             }
             square-kilometer{
-                dnam{"बर्ग किलोमिटर"}
-                one{"{0} बर्ग किलोमिटर"}
-                other{"{0} बर्ग किलोमिटर"}
+                dnam{"वर्ग किलोमिटर"}
+                one{"{0}वर्ग किलोमिटर"}
+                other{"{0}वर्ग किलोमिटर"}
+                per{"{0}प्रति वर्ग किलोमिटर"}
             }
             square-meter{
-                dnam{"बर्ग मिटर"}
-                one{"{0} बर्ग मिटर"}
-                other{"{0} बर्ग मिटर"}
+                dnam{"वर्ग मिटर"}
+                one{"{0}वर्ग मिटर"}
+                other{"{0}वर्ग मिटर"}
                 per{"{0}प्रति वर्ग मिटर"}
             }
             square-mile{
-                dnam{"बर्ग माईल"}
-                one{"{0} बर्ग माईल"}
-                other{"{0} बर्ग माईल"}
+                dnam{"वर्ग माइल"}
+                one{"{0}वर्ग माइल"}
+                other{"{0}वर्ग माइल"}
+                per{"{0}प्रति वर्ग माइल"}
             }
             square-yard{
                 dnam{"वर्ग यार्ड"}
@@ -106,6 +108,21 @@ ne{
                 one{"{0}कराट"}
                 other{"{0}कराट"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -119,9 +136,14 @@ ne{
                 other{"{0}लिटर प्रति किलोमिटर"}
             }
             mile-per-gallon{
-                dnam{"माइल प्रति गालोन"}
-                one{"{0}माइल प्रति गालोन"}
-                other{"{0}माइल प्रति गालोन"}
+                dnam{"माइल प्रति ग्यालोन"}
+                one{"{0}माइल प्रति ग्यालोन"}
+                other{"{0}माइल प्रति ग्यालोन"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
             }
         }
         coordinate{
@@ -195,7 +217,7 @@ ne{
                 per{"{0}/दिन"}
             }
             hour{
-                dnam{"घन्टा"}
+                dnam{"घण्टा"}
                 one{"{0} घण्टा"}
                 other{"{0} घण्टा"}
                 per{"{0}प्रति घण्टा"}
@@ -466,9 +488,9 @@ ne{
                 other{"{0}ट्रोय आउन्स"}
             }
             pound{
-                dnam{"पाउण्ड"}
-                one{"{0} पाउण्ड"}
-                other{"{0} पाउण्ड"}
+                dnam{"पाउन्ड"}
+                one{"{0}पाउन्ड"}
+                other{"{0}पाउन्ड"}
                 per{"{0}प्रति पाउन्ड"}
             }
             ton{
@@ -582,9 +604,9 @@ ne{
         }
         volume{
             acre-foot{
-                dnam{"एकर-फिट"}
-                one{"{0}एकर-फिट"}
-                other{"{0}एकर-फिट"}
+                dnam{"वर्ग गज-फिट"}
+                one{"{0}वर्ग गज-फिट"}
+                other{"{0}वर्ग गज-फिट"}
             }
             centiliter{
                 dnam{"सेन्टिलिटर"}
@@ -649,10 +671,16 @@ ne{
                 other{"{0}तरल आउन्स"}
             }
             gallon{
-                dnam{"गालोन"}
-                one{"{0}गालोन"}
-                other{"{0} गालोन"}
-                per{"{0}/गालोन"}
+                dnam{"ग्यालोन"}
+                one{"{0}ग्यालोन"}
+                other{"{0}ग्यालोन"}
+                per{"{0}प्रति ग्यालोन"}
+            }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"हेक्टोलिटर"}
@@ -667,8 +695,8 @@ ne{
             }
             megaliter{
                 dnam{"मेगालिटर"}
-                one{"{0}मेघालिटर"}
-                other{"{0}मेघालिटर"}
+                one{"{0}मेगालिटर"}
+                other{"{0}मेगालिटर"}
             }
             milliliter{
                 dnam{"मिलिलिटर"}
@@ -750,7 +778,7 @@ ne{
             }
         }
         compound{
-            per{"{0}/{1}"}
+            per{"{0}प्रति {1}"}
         }
         consumption{
             liter-per-100kilometers{
@@ -772,7 +800,7 @@ ne{
                 other{"{0} दिन"}
             }
             hour{
-                dnam{"घन्टा"}
+                dnam{"घण्टा"}
                 one{"{0} घण्टा"}
                 other{"{0} घण्टा"}
             }
@@ -987,9 +1015,9 @@ ne{
         }
         area{
             acre{
-                dnam{"बर्ग गज"}
-                one{"{0} बर्ग गज"}
-                other{"{0} बर्ग गज"}
+                dnam{"वर्ग गज"}
+                one{"{0}वर्ग गज"}
+                other{"{0}वर्ग गज"}
             }
             hectare{
                 dnam{"हेक्टर"}
@@ -998,36 +1026,38 @@ ne{
             }
             square-centimeter{
                 dnam{"वर्ग सेन्टिमिटर"}
-                one{"{0} cm²"}
-                other{"{0} cm²"}
-                per{"{0}/cm²"}
+                one{"{0} वर्ग सेन्टिमिटर"}
+                other{"{0}वर्ग सेन्टिमिटर"}
+                per{"{0}वर्ग सेन्टिमिटर"}
             }
             square-foot{
-                dnam{"बर्ग फुट"}
-                one{"{0} ब.फु."}
-                other{"{0} ब.फु."}
+                dnam{"वर्ग फुट"}
+                one{"{0}वर्ग फुट"}
+                other{"{0}वर्ग फुट"}
             }
             square-inch{
                 dnam{"वर्ग इन्च"}
-                one{"{0} in²"}
-                other{"{0} in²"}
-                per{"{0}/in²"}
+                one{"{0}वर्ग इन्च"}
+                other{"{0}वर्ग इन्च"}
+                per{"{0}प्रति वर्ग इन्च"}
             }
             square-kilometer{
-                dnam{"बर्ग किलोमिटर"}
-                one{"{0} ब.कि.मि."}
-                other{"{0} ब.कि.मि."}
+                dnam{"वर्ग किलोमिटर"}
+                one{"{0}वर्ग किलोमिटर"}
+                other{"{0}वर्ग किलोमिटर"}
+                per{"{0}वर्ग किलोमिटर"}
             }
             square-meter{
-                dnam{"बर्ग मिटर"}
-                one{"{0} ब.मि."}
-                other{"{0} ब.मि."}
-                per{"{0}/m²"}
+                dnam{"वर्ग मिटर"}
+                one{"{0}वर्ग मिटर"}
+                other{"{0}वर्ग मिटर"}
+                per{"{0} प्रति वर्ग मिटर"}
             }
             square-mile{
-                dnam{"बर्ग माईल"}
-                one{"{0} बर्ग माईल"}
-                other{"{0} बर्ग माईल"}
+                dnam{"वर्ग माइल"}
+                one{"{0} वर्ग माइल"}
+                other{"{0}वर्ग माइल"}
+                per{"{0}प्रति वर्ग माइल"}
             }
             square-yard{
                 dnam{"वर्ग यार्ड"}
@@ -1036,13 +1066,28 @@ ne{
             }
         }
         compound{
-            per{"{0}/{1}"}
+            per{"{0}प्रति {1}"}
         }
         concentr{
             karat{
                 dnam{"कराट"}
                 one{"{0} kt"}
                 other{"{0} kt"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1057,9 +1102,14 @@ ne{
                 other{"{0} L/km"}
             }
             mile-per-gallon{
-                dnam{"माइल/गाल"}
+                dnam{"माइल प्रति ग्यालोन"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
             }
         }
         coordinate{
@@ -1133,10 +1183,10 @@ ne{
                 per{"{0}/दिन"}
             }
             hour{
-                dnam{"घन्टा"}
+                dnam{"घण्टा"}
                 one{"{0} घण्टा"}
                 other{"{0} घण्टा"}
-                per{"{0}/h"}
+                per{"{0}प्रति घण्टा"}
             }
             microsecond{
                 dnam{"μs"}
@@ -1152,7 +1202,7 @@ ne{
                 dnam{"मिनेट"}
                 one{"{0} मिनेट"}
                 other{"{0} मिनेट"}
-                per{"{0}/मिनेट"}
+                per{"{0}प्रति मिनेट"}
             }
             month{
                 dnam{"महिना"}
@@ -1169,7 +1219,7 @@ ne{
                 dnam{"सेकेण्ड"}
                 one{"{0} सेकेण्ड"}
                 other{"{0} सेकेण्ड"}
-                per{"{0}/s"}
+                per{"{0}प्रति सेकेण्ड"}
             }
             week{
                 dnam{"हप्ता"}
@@ -1270,7 +1320,7 @@ ne{
                 dnam{"से.मि."}
                 one{"{0}से.मि."}
                 other{"{0}से.मि."}
-                per{"{0}/से.मि."}
+                per{"{0}प्रति से.मि."}
             }
             decimeter{
                 dnam{"dm"}
@@ -1281,19 +1331,19 @@ ne{
                 dnam{"फिट"}
                 one{"{0}फिट"}
                 other{"{0}फिट"}
-                per{"{0}/फिट"}
+                per{"{0}प्रति फिट"}
             }
             inch{
                 dnam{"इन्च"}
                 one{"इन्च"}
                 other{"{0}इन्च"}
-                per{"{0}/इन्च"}
+                per{"{0}प्रति इन्च"}
             }
             kilometer{
                 dnam{"कि.मि."}
                 one{"{0}कि.मि."}
                 other{"{0}कि.मि."}
-                per{"{0}/कि.मि."}
+                per{"{0} प्रति कि.मि."}
             }
             light-year{
                 dnam{"प्रकाश वर्ष"}
@@ -1304,7 +1354,7 @@ ne{
                 dnam{"मिटर"}
                 one{"{0} मि."}
                 other{"{0} मि."}
-                per{"{0}/मिटर"}
+                per{"{0} प्रति मिटर"}
             }
             micrometer{
                 dnam{"µm"}
@@ -1369,13 +1419,13 @@ ne{
                 dnam{"ग्राम"}
                 one{"{0} ग्राम"}
                 other{"{0} ग्राम"}
-                per{"{0}/g"}
+                per{"{0}प्रति ग्राम"}
             }
             kilogram{
                 dnam{"किलोग्राम"}
                 one{"{0} किलो"}
                 other{"{0} किलो"}
-                per{"{0}/kg"}
+                per{"{0}प्रति किलो"}
             }
             metric-ton{
                 dnam{"t"}
@@ -1389,14 +1439,14 @@ ne{
             }
             milligram{
                 dnam{"मिलिग्राम"}
-                one{"{0} mg"}
-                other{"{0} mg"}
+                one{"{0}मिलिग्राम"}
+                other{"{0}मिलिग्राम"}
             }
             ounce{
                 dnam{"आउन्स"}
                 one{"{0} आउन्स"}
                 other{"{0} आउन्स"}
-                per{"{0}/oz"}
+                per{"{0}प्रति आउन्स"}
             }
             ounce-troy{
                 dnam{"ओज ट्रोय"}
@@ -1405,14 +1455,14 @@ ne{
             }
             pound{
                 dnam{"पाउन्ड"}
-                one{"{0}lb"}
-                other{"{0}lbs"}
-                per{"{0}/lb"}
+                one{"{0}पाउन्ड"}
+                other{"{0}पाउन्ड"}
+                per{"{0}प्रति पाउन्ड"}
             }
             ton{
                 dnam{"टन"}
-                one{"{0} tn"}
-                other{"{0} tn"}
+                one{"{0}टन"}
+                other{"{0}टन"}
             }
         }
         power{
@@ -1520,9 +1570,9 @@ ne{
         }
         volume{
             acre-foot{
-                dnam{"एकर फिट"}
-                one{"{0} ac ft"}
-                other{"{0} ac ft"}
+                dnam{"वर्ग गज फिट"}
+                one{"{0}वर्ग गज फिट"}
+                other{"{0}वर्ग गज फिट"}
             }
             centiliter{
                 dnam{"cL"}
@@ -1530,31 +1580,31 @@ ne{
                 other{"{0} cL"}
             }
             cubic-centimeter{
-                dnam{"cm³"}
-                one{"{0} cm³"}
-                other{"{0} cm³"}
-                per{"{0}/cm³"}
+                dnam{"घन से.मि."}
+                one{"{0}घन से.मि."}
+                other{"{0}घन से.मि."}
+                per{"{0}प्रति घन से.मि."}
             }
             cubic-foot{
                 dnam{"घन फिट"}
-                one{"{0} ft³"}
-                other{"{0} ft³"}
+                one{"{0}घन फिट"}
+                other{"{0}घन फिट"}
             }
             cubic-inch{
                 dnam{"घन इन्च"}
-                one{"{0} in³"}
-                other{"{0} in³"}
+                one{"{0}घन इन्च"}
+                other{"{0}घन इन्च"}
             }
             cubic-kilometer{
                 dnam{"घन किलोमिटर"}
-                one{"{0}km³"}
-                other{"{0} km³"}
+                one{"{0}घन कि.मि."}
+                other{"{0}घन कि.मि."}
             }
             cubic-meter{
                 dnam{"घन मिटर"}
-                one{"{0} m³"}
-                other{"{0} m³"}
-                per{"{0}/m³"}
+                one{"{0}घन मि."}
+                other{"{0}घन मि."}
+                per{"{0}प्रति घन मि."}
             }
             cubic-mile{
                 dnam{"घन माइल"}
@@ -1563,8 +1613,8 @@ ne{
             }
             cubic-yard{
                 dnam{"घन यार्ड"}
-                one{"{0} yd³"}
-                other{"{0} yd³"}
+                one{"{0}घन यार्ड"}
+                other{"{0}घन यार्ड"}
             }
             cup{
                 dnam{"कप्स"}
@@ -1587,10 +1637,16 @@ ne{
                 other{"{0} fl oz"}
             }
             gallon{
-                dnam{"गाल"}
-                one{"{0} gal"}
-                other{"{0} gal"}
-                per{"{0}/gal"}
+                dnam{"ग्यालोन"}
+                one{"{0}ग्यालोन"}
+                other{"{0}ग्यालोन"}
+                per{"{0}प्रति ग्यालोन"}
+            }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hL"}
@@ -1601,7 +1657,7 @@ ne{
                 dnam{"लिटर"}
                 one{"{0} लि."}
                 other{"{0} लि."}
-                per{"{0}/l"}
+                per{"{0} प्रति लिटर"}
             }
             megaliter{
                 dnam{"ML"}

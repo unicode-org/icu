@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant_HK{
-    Version{"2.1.26.0"}
+    Version{"2.1.27.99"}
     units{
         acceleration{
             meter-per-second-squared{
@@ -33,10 +33,16 @@ zh_Hant_HK{
                 other{"{0} 平方吋"}
                 per{"{0} 每平方吋"}
             }
+            square-kilometer{
+                per{"{0} 每平方公里"}
+            }
             square-meter{
                 dnam{"平方米"}
                 other{"{0} 平方米"}
                 per{"{0} 每平方米"}
+            }
+            square-mile{
+                per{"{0} 每平方英里"}
             }
         }
         compound{
@@ -122,10 +128,12 @@ zh_Hant_HK{
                 other{"{0} 分米"}
             }
             foot{
+                dnam{"呎"}
                 other{"{0} 呎"}
                 per{"{0} 每呎"}
             }
             inch{
+                dnam{"吋"}
                 other{"{0} 吋"}
                 per{"{0} 每吋"}
             }
@@ -276,6 +284,11 @@ zh_Hant_HK{
                 other{"{0}mi²"}
             }
         }
+        consumption{
+            liter-per-100kilometers{
+                other{"{0}L/100km"}
+            }
+        }
         coordinate{
             east{"{0}E"}
             north{"{0}N"}
@@ -355,6 +368,10 @@ zh_Hant_HK{
         angle{
             arc-minute{
                 dnam{"分"}
+                other{"{0} 分"}
+            }
+            arc-second{
+                other{"{0} 秒"}
             }
             degree{
                 dnam{"度"}
@@ -379,10 +396,24 @@ zh_Hant_HK{
                 other{"{0} 平方吋"}
                 per{"{0} 每平方吋"}
             }
+            square-kilometer{
+                per{"{0} 每平方公里"}
+            }
             square-meter{
                 dnam{"平方米"}
                 other{"{0} 平方米"}
                 per{"{0} 每平方米"}
+            }
+            square-mile{
+                per{"{0} 每平方英里"}
+            }
+        }
+        consumption{
+            liter-per-kilometer{
+                other{"{0} 升每公里"}
+            }
+            mile-per-gallon{
+                other{"{0} 英里每加侖"}
             }
         }
         coordinate{
@@ -416,6 +447,7 @@ zh_Hant_HK{
             }
             week{
                 dnam{"星期"}
+                other{"{0} 星期"}
                 per{"{0} 每週"}
             }
             year{

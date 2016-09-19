@@ -8,5 +8,11 @@ en_CA{
             "Canadian Dollar",
         }
     }
-    Version{"2.1.25.97"}
+    CurrencyPlurals{
+        ILS{
+            one{"Israeli new sheqel"}
+            other{"Israeli new sheqels"}
+        }
+    }
+    Version{"2.1.29.54"}
 }

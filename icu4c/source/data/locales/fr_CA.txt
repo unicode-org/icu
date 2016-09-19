@@ -99,14 +99,14 @@ fr_CA{
             }
         }
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.27.99"}
     calendar{
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
-                "HH:mm",
+                "HH 'h' mm",
                 "EEEE d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
@@ -156,6 +156,14 @@ fr_CA{
             }
         }
         gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
+            AmPmMarkersAbbr{
+                "a.m.",
+                "p.m.",
+            }
             AmPmMarkersNarrow{
                 "a",
                 "p",
@@ -164,7 +172,7 @@ fr_CA{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
-                "HH:mm",
+                "HH 'h' mm",
                 "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM y",
@@ -176,6 +184,9 @@ fr_CA{
                 "{1} {0}",
             }
             availableFormats{
+                EHm{"E HH 'h' mm"}
+                Hm{"HH 'h' mm"}
+                Hmv{"HH 'h' mm v"}
                 MEd{"E M-d"}
                 MMd{"MM-d"}
                 MMdd{"MM-dd"}
@@ -189,9 +200,9 @@ fr_CA{
                 format{
                     abbreviated{
                         afternoon1{"après-midi"}
-                        evening1{"soir"}
-                        midnight{"min."}
-                        morning1{"mat."}
+                        evening1{"du soir"}
+                        midnight{"minuit"}
+                        morning1{"du mat."}
                         night1{"du matin"}
                         noon{"midi"}
                     }
@@ -212,17 +223,57 @@ fr_CA{
                         noon{"midi"}
                     }
                 }
+                stand-alone{
+                    abbreviated{
+                        afternoon1{"après-midi"}
+                        am{"a.m."}
+                        evening1{"soir"}
+                        morning1{"mat."}
+                        night1{"nuit"}
+                        pm{"p.m."}
+                    }
+                    narrow{
+                        afternoon1{"après-midi"}
+                        evening1{"soir"}
+                        morning1{"mat."}
+                        night1{"nuit"}
+                    }
+                    wide{
+                        am{"a.m."}
+                        pm{"p.m."}
+                    }
+                }
+            }
+            eras{
+                wide%variant{
+                    "avant l’ère chrétienne",
+                    "de l’ère chrétienne",
+                }
             }
             intervalFormats{
                 H{
                     H{"H 'h' – H 'h'"}
                 }
+                Hm{
+                    H{"H 'h' mm – H 'h' mm"}
+                    m{"H 'h' mm – H 'h' mm"}
+                }
+                Hmv{
+                    H{"H 'h' mm – H 'h' mm v"}
+                    m{"H 'h' mm – H 'h' mm v"}
+                }
                 Hv{
                     H{"H 'h' – H 'h' v"}
+                }
+                M{
+                    M{"M – M"}
                 }
                 MEd{
                     M{"E MM-dd – E MM-dd"}
                     d{"E MM-dd – E MM-dd"}
+                }
+                MMM{
+                    M{"MMM – MMM"}
                 }
                 Md{
                     M{"MM-dd – MM-dd"}
@@ -239,6 +290,9 @@ fr_CA{
                     a{"h 'h' a – h 'h' a v"}
                     h{"h 'h' – h 'h' a v"}
                 }
+                y{
+                    y{"y – y"}
+                }
                 yM{
                     M{"y-MM – y-MM"}
                     y{"y-MM – y-MM"}
@@ -248,10 +302,47 @@ fr_CA{
                     d{"E y-MM-dd – E y-MM-dd"}
                     y{"E y-MM-dd – E y-MM-dd"}
                 }
+                yMMM{
+                    M{"MMM – MMM y"}
+                }
                 yMd{
                     M{"y-MM-dd – y-MM-dd"}
                     d{"y-MM-dd – y-MM-dd"}
                     y{"y-MM-dd – y-MM-dd"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "janv.",
+                        "févr.",
+                        "mars",
+                        "avr.",
+                        "mai",
+                        "juin",
+                        "juill.",
+                        "août",
+                        "sept.",
+                        "oct.",
+                        "nov.",
+                        "déc.",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "janv.",
+                        "févr.",
+                        "mars",
+                        "avr.",
+                        "mai",
+                        "juin",
+                        "juill.",
+                        "août",
+                        "sept.",
+                        "oct.",
+                        "nov.",
+                        "déc.",
+                    }
                 }
             }
         }
@@ -260,7 +351,7 @@ fr_CA{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
-                "HH:mm",
+                "HH 'h' mm",
                 "EEEE d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
@@ -280,15 +371,18 @@ fr_CA{
             }
         }
     }
+    characterLabel{
+        braille{"braille"}
+        bullets_stars{"puces/astérisques"}
+        dash_connector{"tirets/connecteurs"}
+        emoji{"Emojis"}
+        ideographic_desc_characters{"symboles de description sinographique"}
+    }
+    delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"”"}
+    }
     fields{
-        day-short{
-            relativeTime{
-                future{
-                    one{"dans {0} j"}
-                    other{"dans {0} j"}
-                }
-            }
-        }
         hour-narrow{
             relativeTime{
                 future{
@@ -301,16 +395,19 @@ fr_CA{
                 }
             }
         }
-        minute{
+        minute-narrow{
             relativeTime{
-                future{
-                    one{"Dans {0} minute"}
-                    other{"Dans {0} minutes"}
-                }
                 past{
-                    one{"Il y a {0} minute"}
-                    other{"Il y a {0} minutes"}
+                    one{"-{0} min"}
+                    other{"-{0} min"}
                 }
+            }
+        }
+        quarter{
+            relative{
+                "-1"{"le trimestre dernier"}
+                "0"{"ce trimestre-ci"}
+                "1"{"le trimestre prochain"}
             }
         }
         second-narrow{

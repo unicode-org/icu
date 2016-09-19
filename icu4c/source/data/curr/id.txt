@@ -214,9 +214,13 @@ id{
             "BYB",
             "Rubel Baru Belarus (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "Rubel Belarusia",
+        }
         BYR{
             "BYR",
-            "Rubel Belarusia",
+            "Rubel Belarusia (2000–2016)",
         }
         BZD{
             "BZD",
@@ -1188,7 +1192,7 @@ id{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1205,6 +1209,7 @@ id{
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
         GTQ{"Q"}
@@ -1399,8 +1404,11 @@ id{
         BYB{
             other{"Rubel Baru Belarus (1994–1999)"}
         }
-        BYR{
+        BYN{
             other{"Rubel Belarusia"}
+        }
+        BYR{
+            other{"Rubel Belarusia (2000–2016)"}
         }
         BZD{
             other{"Dolar Belize"}
@@ -1859,7 +1867,7 @@ id{
             other{"Franc CFP"}
         }
         XXX{
-            other{"Mata Uang Tidak Dikenal"}
+            other{"(mata uang tidak dikenal)"}
         }
         YER{
             other{"Rial Yaman"}
@@ -1898,5 +1906,5 @@ id{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

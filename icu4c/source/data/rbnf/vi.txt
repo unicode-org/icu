@@ -9,7 +9,7 @@ vi{
         }
         SpelloutRules{
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal=;",
@@ -21,6 +21,8 @@ vi{
             "0: =%spellout-cardinal=;",
             "1: m\u1ED1t;",
             "2: =%%teen=;",
+            "4: t\u01B0;",
+            "5: =%%teen=;",
             "%%after-hundred:",
             "0: l\u1EBB =%spellout-cardinal=;",
             "10: =%spellout-cardinal=;",
@@ -44,8 +46,8 @@ vi{
             "20: << m\u01B0\u01A1i[ >%%x-ty>];",
             "100: << tr\u0103m[ >%%after-hundred>];",
             "1000: << ngh\u00ECn[ >%%after-thousand-or-more>];",
-            "1000000: << tri\u1EC7u[ >%%after-thousand-or-more>];",
-            "1000000000: << t\u1EF7[ >%%after-thousand-or-more>];",
+            "1000000: << tri\u1EC7u[ >%%after-hundred>];",
+            "1000000000: << t\u1EF7[ >%%after-hundred>];",
             "1000000000000000000: =#,##0=;",
             "%spellout-ordinal:",
             "x.x: =#,##0.#=;",
@@ -57,5 +59,5 @@ vi{
             "5: th\u1EE9 =%spellout-cardinal=;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.27.23"}
 }

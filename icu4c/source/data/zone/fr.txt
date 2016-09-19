@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fr{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -303,6 +303,9 @@ fr{
         "America:El_Salvador"{
             ec{"El Salvador"}
         }
+        "America:Fort_Nelson"{
+            ec{"Fort Nelson"}
+        }
         "America:Fortaleza"{
             ec{"Fortaleza"}
         }
@@ -550,7 +553,7 @@ fr{
             ec{"Saint-Jean de Terre-Neuve"}
         }
         "America:St_Kitts"{
-            ec{"Saint-Kitts"}
+            ec{"Saint-Christophe"}
         }
         "America:St_Lucia"{
             ec{"Sainte-Lucie"}
@@ -665,6 +668,9 @@ fr{
         }
         "Asia:Bangkok"{
             ec{"Bangkok"}
+        }
+        "Asia:Barnaul"{
+            ec{"Barnaul"}
         }
         "Asia:Beirut"{
             ec{"Beyrouth"}
@@ -843,6 +849,9 @@ fr{
         "Asia:Tokyo"{
             ec{"Tokyo"}
         }
+        "Asia:Tomsk"{
+            ec{"Tomsk"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Oulan-Bator"}
         }
@@ -942,6 +951,9 @@ fr{
         "Europe:Andorra"{
             ec{"Andorre"}
         }
+        "Europe:Astrakhan"{
+            ec{"Astrakhan"}
+        }
         "Europe:Athens"{
             ec{"Athènes"}
         }
@@ -999,6 +1011,9 @@ fr{
         }
         "Europe:Kiev"{
             ec{"Kiev"}
+        }
+        "Europe:Kirov"{
+            ec{"Kirov"}
         }
         "Europe:Lisbon"{
             ec{"Lisbonne"}
@@ -1075,6 +1090,9 @@ fr{
         }
         "Europe:Tirane"{
             ec{"Tirana"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"Oulianovsk"}
         }
         "Europe:Uzhgorod"{
             ec{"Oujgorod"}
@@ -1767,8 +1785,11 @@ fr{
         "meta:Ponape"{
             ls{"heure de l’île de Pohnpei"}
         }
+        "meta:Pyongyang"{
+            ls{"heure de Pyongyang"}
+        }
         "meta:Reunion"{
-            ls{"heure de la Réunion"}
+            ls{"heure de La Réunion"}
         }
         "meta:Rothera"{
             ls{"heure de Rothera"}

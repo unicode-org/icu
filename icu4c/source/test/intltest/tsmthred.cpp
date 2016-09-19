@@ -779,7 +779,7 @@ public:
                 expected=       CharsToUnicodeString(
                             "2:user in Vereinigte Staaten is receiving a #7 error"
                             " - U_MEMORY_ALLOCATION_ERROR. They insist they just spent"
-                            " \\u00f6S\\u00A040\\u00A0193,12 on memory.");
+                            " \\u00f6S\\u00A040.193,12 on memory.");
                 break;
             }
 

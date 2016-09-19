@@ -49,7 +49,7 @@ tr{
         AW{"Aruba"}
         AX{"Åland Adaları"}
         AZ{"Azerbaycan"}
-        BA{"Bosna Hersek"}
+        BA{"Bosna-Hersek"}
         BB{"Barbados"}
         BD{"Bangladeş"}
         BE{"Belçika"}
@@ -68,7 +68,7 @@ tr{
         BT{"Butan"}
         BV{"Bouvet Adası"}
         BW{"Botsvana"}
-        BY{"Beyaz Rusya"}
+        BY{"Belarus"}
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Cocos (Keeling) Adaları"}
@@ -101,7 +101,7 @@ tr{
         EC{"Ekvador"}
         EE{"Estonya"}
         EG{"Mısır"}
-        EH{"Batı Sahara"}
+        EH{"Batı Sahra"}
         ER{"Eritre"}
         ES{"İspanya"}
         ET{"Etiyopya"}
@@ -131,7 +131,7 @@ tr{
         GU{"Guam"}
         GW{"Gine-Bissau"}
         GY{"Guyana"}
-        HK{"Çin Hong Kong ÖYB"}
+        HK{"Çin Hong Kong ÖİB"}
         HM{"Heard Adası ve McDonald Adaları"}
         HN{"Honduras"}
         HR{"Hırvatistan"}
@@ -169,7 +169,7 @@ tr{
         LI{"Liechtenstein"}
         LK{"Sri Lanka"}
         LR{"Liberya"}
-        LS{"Lesoto"}
+        LS{"Lesotho"}
         LT{"Litvanya"}
         LU{"Lüksemburg"}
         LV{"Letonya"}
@@ -185,7 +185,7 @@ tr{
         ML{"Mali"}
         MM{"Myanmar (Burma)"}
         MN{"Moğolistan"}
-        MO{"Çin Makao ÖYB"}
+        MO{"Çin Makao ÖİB"}
         MP{"Kuzey Mariana Adaları"}
         MQ{"Martinik"}
         MR{"Moritanya"}
@@ -239,7 +239,7 @@ tr{
         SG{"Singapur"}
         SH{"Saint Helena"}
         SI{"Slovenya"}
-        SJ{"Svalbard ve Jan Mayen Adaları"}
+        SJ{"Svalbard ve Jan Mayen"}
         SK{"Slovakya"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -272,7 +272,8 @@ tr{
         UA{"Ukrayna"}
         UG{"Uganda"}
         UM{"ABD Uzak Adaları"}
-        US{"ABD"}
+        UN{"Birleşmiş Milletler"}
+        US{"Amerika Birleşik Devletleri"}
         UY{"Uruguay"}
         UZ{"Özbekistan"}
         VA{"Vatikan"}
@@ -282,7 +283,7 @@ tr{
         VI{"ABD Virjin Adaları"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis ve Futuna Adaları"}
+        WF{"Wallis ve Futuna"}
         WS{"Samoa"}
         XK{"Kosova"}
         YE{"Yemen"}
@@ -297,14 +298,15 @@ tr{
         HK{"Hong Kong"}
         MO{"Makao"}
         PS{"Filistin"}
+        UN{"BM"}
         US{"ABD"}
     }
     Countries%variant{
-        CD{"Demokratik Kongo Cumhuriyeti"}
+        CD{"Kongo Demokratik Cumhuriyeti"}
         CG{"Kongo Cumhuriyeti"}
+        CZ{"Çekya"}
         FK{"Falkland Adaları (Malvinas Adaları)"}
-        MK{"Makedonya (EYMC)"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

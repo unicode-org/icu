@@ -4,7 +4,10 @@ pt_PT{
     Countries{
         009{"Oceânia"}
         015{"Norte de África"}
+        018{"África Austral"}
         029{"Caraíbas"}
+        034{"Ásia do Sul"}
+        039{"Europa do Sul"}
         154{"Europa do Norte"}
         AI{"Anguila"}
         AM{"Arménia"}
@@ -47,7 +50,6 @@ pt_PT{
         PS{"Territórios palestinianos"}
         QO{"Oceânia Insular"}
         RO{"Roménia"}
-        SC{"Seicheles"}
         SG{"Singapura"}
         SI{"Eslovénia"}
         SM{"São Marinho"}
@@ -65,11 +67,12 @@ pt_PT{
     }
     Countries%short{
         GB{"GB"}
+        UN{"ONU"}
     }
     Countries%variant{
         CG{"República do Congo"}
         FK{"Ilhas Malvinas"}
         MK{"Macedónia (ARJM)"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.54"}
 }

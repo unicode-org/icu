@@ -2,7 +2,38 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 es_SV{
     %%Parent{"es_419"}
-    Version{"2.1.25.97"}
+    NumberElements{
+        minimumGroupingDigits{"2"}
+    }
+    Version{"2.1.27.99"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a. m.",
+                "p. m.",
+            }
+            AmPmMarkersAbbr{
+                "a. m.",
+                "p. m.",
+            }
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                    narrow{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                    wide{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
+                }
+            }
+        }
+    }
     fields{
         day{
             relative{
@@ -12,6 +43,9 @@ es_SV{
                 "1"{"mañana"}
                 "2"{"pasado mañana"}
             }
+        }
+        dayperiod{
+            dn{"a. m./p. m."}
         }
     }
 }

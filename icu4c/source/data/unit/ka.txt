@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ka{
-    Version{"2.1.25.97"}
+    Version{"2.1.29.20"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,6 +79,7 @@ ka{
                 dnam{"კვადრატული კილომეტრი"}
                 one{"{0} კვადრატული კილომეტრი"}
                 other{"{0} კვადრატული კილომეტრი"}
+                per{"{0} კვადრატულ კილომეტრში"}
             }
             square-meter{
                 dnam{"კვადრატული მეტრი"}
@@ -90,6 +91,7 @@ ka{
                 dnam{"კვადრატული მილი"}
                 one{"{0} კვადრატული მილი"}
                 other{"{0} კვადრატული მილი"}
+                per{"{0} კვადრატულ მილში"}
             }
             square-yard{
                 dnam{"კვადრატული იარდი"}
@@ -105,6 +107,21 @@ ka{
                 dnam{"კარატი"}
                 one{"{0} კარატი"}
                 other{"{0} კარატი"}
+            }
+            milligram-per-deciliter{
+                dnam{"მილიგრამი დეცილიტრზე"}
+                one{"{0} მილიგრამი დეცილიტრზე"}
+                other{"{0} მილიგრამი დეცილიტრზე"}
+            }
+            millimole-per-liter{
+                dnam{"მილიმოლი ლიტრზე"}
+                one{"{0} მილიმოლი ლიტრზე"}
+                other{"{0} მილიმოლი ლიტრზე"}
+            }
+            part-per-million{
+                dnam{"ნაწილი მილიონზე"}
+                one{"{0} ნაწილი მილიონზე"}
+                other{"{0} ნაწილი მილიონზე"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ ka{
                 dnam{"მილი გალონზე"}
                 one{"{0} მილი გალონზე"}
                 other{"{0} მილი გალონზე"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"იმპ. გალონი მილზე"}
+                one{"{0} იმპ. გალონი მილზე"}
+                other{"{0} იმპ. გალონი მილზე"}
             }
         }
         coordinate{
@@ -654,6 +676,12 @@ ka{
                 other{"{0} გალონი"}
                 per{"{0} გალონში"}
             }
+            gallon-imperial{
+                dnam{"იმპ. გალონი"}
+                one{"{0} იმპ. გალონი"}
+                other{"{0} იმპ. გალონი"}
+                per{"{0}/იმპ. გალ."}
+            }
             hectoliter{
                 dnam{"ჰექტოლიტრი"}
                 one{"{0} ჰექტოლიტრი"}
@@ -1015,6 +1043,7 @@ ka{
                 dnam{"კმ²"}
                 one{"{0} კმ²"}
                 other{"{0} კმ²"}
+                per{"{0}/კმ²"}
             }
             square-meter{
                 dnam{"მ²"}
@@ -1026,6 +1055,7 @@ ka{
                 dnam{"მილი²"}
                 one{"{0} მილი²"}
                 other{"{0} მილი²"}
+                per{"{0}/მილი²"}
             }
             square-yard{
                 dnam{"იარდი²"}
@@ -1041,6 +1071,21 @@ ka{
                 dnam{"კარატი"}
                 one{"{0} კარ."}
                 other{"{0} კარ."}
+            }
+            milligram-per-deciliter{
+                dnam{"მგ/დლ"}
+                one{"{0} მგ/დლ"}
+                other{"{0} მგ/დლ"}
+            }
+            millimole-per-liter{
+                dnam{"მმოლ/ლ"}
+                one{"{0} მმოლ/ლ"}
+                other{"{0} მმოლ/ლ"}
+            }
+            part-per-million{
+                dnam{"ნაწილი/მილიონზე"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1058,6 +1103,11 @@ ka{
                 dnam{"მილი/გალ."}
                 one{"{0} მილი/გალ."}
                 other{"{0} მილი/გალ."}
+            }
+            mile-per-gallon-imperial{
+                dnam{"მილი/იმპ. გალონზე"}
+                one{"{0} მილი/იმპ. გალონზე"}
+                other{"{0} მილი/იმპ. გალონზე"}
             }
         }
         coordinate{
@@ -1589,6 +1639,12 @@ ka{
                 one{"{0} გალონი"}
                 other{"{0} გალონი"}
                 per{"{0}/გალონი"}
+            }
+            gallon-imperial{
+                dnam{"იმპ. გალ."}
+                one{"{0} იმპ. გალ."}
+                other{"{0} იმპ. გალ."}
+                per{"{0}/იმპ. გალ."}
             }
             hectoliter{
                 dnam{"ჰლ"}

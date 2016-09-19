@@ -3,6 +3,7 @@
 nl{
     Keys{
         calendar{"kalender"}
+        cf{"valutanotatie"}
         colAlternate{"Sorteren van symbolen negeren"}
         colBackwards{"Omgekeerd sorteren op accenten"}
         colCaseFirst{"Indelen op hoofdletters/kleine letters"}
@@ -44,7 +45,6 @@ nl{
         ang{"Oudengels"}
         anp{"Angika"}
         ar{"Arabisch"}
-        ar_001{"modern standaard Arabisch"}
         arc{"Aramees"}
         arn{"Mapudungun"}
         aro{"Araona"}
@@ -126,6 +126,7 @@ nl{
         cps{"Capiznon"}
         cr{"Cree"}
         crh{"Krim-Tataars"}
+        crs{"Seychellencreools"}
         cs{"Tsjechisch"}
         csb{"Kasjoebisch"}
         cu{"Kerkslavisch"}
@@ -136,8 +137,6 @@ nl{
         dar{"Dargwa"}
         dav{"Taita"}
         de{"Duits"}
-        de_AT{"Oostenrijks Duits"}
-        de_CH{"Zwitsers Hoogduits"}
         del{"Delaware"}
         den{"Slavey"}
         dgr{"Dogrib"}
@@ -162,16 +161,9 @@ nl{
         el{"Grieks"}
         elx{"Elamitisch"}
         en{"Engels"}
-        en_AU{"Australisch Engels"}
-        en_CA{"Canadees Engels"}
-        en_GB{"Brits Engels"}
-        en_US{"Amerikaans Engels"}
         enm{"Middelengels"}
         eo{"Esperanto"}
         es{"Spaans"}
-        es_419{"Latijns-Amerikaans Spaans"}
-        es_ES{"Europees Spaans"}
-        es_MX{"Mexicaans Spaans"}
         esu{"Yupik"}
         et{"Estisch"}
         eu{"Baskisch"}
@@ -188,8 +180,6 @@ nl{
         fo{"Faeröers"}
         fon{"Fon"}
         fr{"Frans"}
-        fr_CA{"Canadees Frans"}
-        fr_CH{"Zwitsers Frans"}
         frc{"Cajun-Frans"}
         frm{"Middelfrans"}
         fro{"Oudfrans"}
@@ -407,7 +397,6 @@ nl{
         niu{"Niueaans"}
         njo{"Ao Naga"}
         nl{"Nederlands"}
-        nl_BE{"Vlaams"}
         nmg{"Ngumba"}
         nn{"Noors - Nynorsk"}
         nnh{"Ngiemboon"}
@@ -440,6 +429,7 @@ nl{
         pap{"Papiaments"}
         pau{"Palaus"}
         pcd{"Picardisch"}
+        pcm{"Nigeriaans Pidgin"}
         pdc{"Pennsylvania-Duits"}
         pdt{"Plautdietsch"}
         peo{"Oudperzisch"}
@@ -454,8 +444,6 @@ nl{
         pro{"Oudprovençaals"}
         ps{"Pasjtoe"}
         pt{"Portugees"}
-        pt_BR{"Braziliaans Portugees"}
-        pt_PT{"Europees Portugees"}
         qu{"Quechua"}
         quc{"K’iche’"}
         qug{"Kichwa"}
@@ -535,7 +523,6 @@ nl{
         sux{"Soemerisch"}
         sv{"Zweeds"}
         sw{"Swahili"}
-        sw_CD{"Congo Swahili"}
         swb{"Shimaore"}
         syc{"Klassiek Syrisch"}
         syr{"Syrisch"}
@@ -625,8 +612,6 @@ nl{
         zen{"Zenaga"}
         zgh{"Standaard Marokkaanse Tamazight"}
         zh{"Chinees"}
-        zh_Hans{"vereenvoudigd Chinees"}
-        zh_Hant{"traditioneel Chinees"}
         zu{"Zoeloe"}
         zun{"Zuni"}
         zxx{"geen linguïstische inhoud"}
@@ -641,6 +626,7 @@ nl{
         ps{"Pashto"}
     }
     Scripts{
+        Adlm{"Adlam"}
         Afak{"Defaka"}
         Aghb{"Kaukasisch Albanees"}
         Ahom{"Ahom"}
@@ -653,6 +639,7 @@ nl{
         Bass{"Bassa Vah"}
         Batk{"Batak"}
         Beng{"Bengaals"}
+        Bhks{"Bhaiksuki"}
         Blis{"Blissymbolen"}
         Bopo{"Bopomofo"}
         Brah{"Brahmi"}
@@ -685,6 +672,7 @@ nl{
         Grek{"Grieks"}
         Gujr{"Gujarati"}
         Guru{"Gurmukhi"}
+        Hanb{"Hanb"}
         Hang{"Hangul"}
         Hani{"Han"}
         Hano{"Hanunoo"}
@@ -728,6 +716,7 @@ nl{
         Mahj{"Mahajani"}
         Mand{"Mandaeans"}
         Mani{"Manicheaans"}
+        Marc{"Marchen"}
         Maya{"Mayahiërogliefen"}
         Mend{"Mende"}
         Merc{"Meroitisch cursief"}
@@ -742,6 +731,7 @@ nl{
         Mymr{"Birmaans"}
         Narb{"Oud Noord-Arabisch"}
         Nbat{"Nabateaans"}
+        Newa{"Newari"}
         Nkgb{"Naxi Geba"}
         Nkoo{"N’Ko"}
         Nshu{"Nüshu"}
@@ -749,6 +739,7 @@ nl{
         Olck{"Ol Chiki"}
         Orkh{"Orkhon"}
         Orya{"Odia"}
+        Osge{"Osage"}
         Osma{"Osmanya"}
         Palm{"Palmyreens"}
         Pauc{"Pau Cin Hau"}
@@ -853,6 +844,7 @@ nl{
         Yiii{"Yi"}
         Zinh{"Overgeërfd"}
         Zmth{"Wiskundige notatie"}
+        Zsye{"emoji"}
         Zsym{"Symbolen"}
         Zxxx{"ongeschreven"}
         Zyyy{"algemeen"}
@@ -885,6 +877,10 @@ nl{
             japanese{"Japanse kalender"}
             persian{"Perzische kalender"}
             roc{"Kalender van de Chinese Republiek"}
+        }
+        cf{
+            account{"financiële valutanotatie"}
+            standard{"standaard valutanotatie"}
         }
         colAlternate{
             non-ignorable{"Symbolen sorteren"}
@@ -1034,13 +1030,16 @@ nl{
         1959ACAD{"Academisch"}
         1994{"Gestandaardiseerde Resiaanse spelling"}
         1996{"Duitse spelling van 1996"}
+        ABL1943{"Spellingsformulering van 1943"}
         ALALC97{"Romanisering ALA-LC, editie 1997"}
         ALUKU{"Aloekoe-dialect"}
+        AO1990{"Portugese spellingsovereenkomst van 1990"}
         AREVELA{"Oost-Armeens"}
         AREVMDA{"West-Armeens"}
         BAKU1926{"Eenvormig Turkse Latijnse alfabet"}
         BALANKA{"Balanka-dialect van Anii"}
         BARLA{"Barlavento-dialectgroep van Kabuverdianu"}
+        BASICENG{"Standaard Engels"}
         BAUDDHA{"Bauddha"}
         BISCAYAN{"Biskajaans"}
         BISKE{"San Giorgio/Bila-dialect"}
@@ -1084,6 +1083,7 @@ nl{
         SAAHO{"Saho"}
         SCOTLAND{"Schots standaard-Engels"}
         SCOUSE{"Liverpools (Scouse)"}
+        SIMPLE{"Simpel"}
         SOLBA{"Stolvizza/Solbica-dialect"}
         SOTAV{"Sotavento-dialectgroep van Kabuverdianu"}
         SURMIRAN{"Surmiran"}
@@ -1099,7 +1099,22 @@ nl{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
+    characterLabelPattern{
+        all{"{0} — alle"}
+        category-list{"{0}: {1}"}
+        compatibility{"{0} — compatibiliteit"}
+        enclosed{"{0} — ingebed"}
+        extended{"{0} — uitgebreid"}
+        historic{"{0} — historisch"}
+        miscellaneous{"{0} — diverse"}
+        other{"{0} — overige"}
+        scripts{"schriften — {0}"}
+        strokes{
+            "{0} streek",
+            "{0} streken",
+        }
+    }
     codePatterns{
         language{"Taal: {0}"}
         script{"Schrift: {0}"}

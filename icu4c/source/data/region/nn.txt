@@ -60,7 +60,7 @@ nn{
         BJ{"Benin"}
         BL{"Saint Barthélemy"}
         BM{"Bermuda"}
-        BN{"Brunei Darussalam"}
+        BN{"Brunei"}
         BO{"Bolivia"}
         BR{"Brasil"}
         BS{"Bahamas"}
@@ -85,6 +85,7 @@ nn{
         CR{"Costa Rica"}
         CU{"Cuba"}
         CV{"Kapp Verde"}
+        CW{"Curaçao"}
         CX{"Christmasøya"}
         CY{"Kypros"}
         CZ{"Tsjekkia"}
@@ -154,7 +155,7 @@ nn{
         KG{"Kirgisistan"}
         KH{"Kambodsja"}
         KI{"Kiribati"}
-        KM{"Komorene"}
+        KM{"Komorane"}
         KN{"St. Christopher og Nevis"}
         KP{"Nord-Korea"}
         KR{"Sør-Korea"}
@@ -181,7 +182,7 @@ nn{
         MH{"Marshalløyane"}
         MK{"Makedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar (Burma)"}
         MN{"Mongolia"}
         MO{"Macao S.A.R. Kina"}
         MP{"Nord-Marianane"}
@@ -229,7 +230,7 @@ nn{
         RS{"Serbia"}
         RU{"Russland"}
         RW{"Rwanda"}
-        SA{"Saudi Arabia"}
+        SA{"Saudi-Arabia"}
         SB{"Salomonøyane"}
         SC{"Seychellane"}
         SD{"Sudan"}
@@ -244,19 +245,21 @@ nn{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Sør-Sudan"}
         ST{"São Tomé og Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syria"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
         TC{"Turks- og Caicosøyane"}
-        TD{"Tchad"}
+        TD{"Tsjad"}
         TF{"Franske sørområde"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tadsjikistan"}
         TK{"Tokelau"}
-        TL{"Aust-Timor"}
+        TL{"Timor-Leste (Aust-Timor)"}
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
@@ -280,7 +283,8 @@ nn{
         VU{"Vanuatu"}
         WF{"Wallis og Futuna"}
         WS{"Samoa"}
-        YE{"Yemen"}
+        XK{"Kosovo"}
+        YE{"Jemen"}
         YT{"Mayotte"}
         ZA{"Sør-Afrika"}
         ZM{"Zambia"}
@@ -288,8 +292,16 @@ nn{
         ZZ{"ukjent område"}
     }
     Countries%short{
+        GB{"Storbritannia"}
         HK{"Hongkong"}
         MO{"Macao"}
+        US{"USA"}
     }
-    Version{"2.1.25.97"}
+    Countries%variant{
+        CD{"Den demokratiske republikken Kongo"}
+        CG{"Republikken Kongo"}
+        FK{"Falklandsøyane (Islas Malvinas)"}
+        MK{"Den tidlegare jugoslaviske republikken Makedonia"}
+    }
+    Version{"2.1.28.76"}
 }

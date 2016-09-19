@@ -34,7 +34,7 @@ mt{
             "%%lenient-parse:",
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%%spellout-cardinal-type-b-masculine=;",
@@ -268,5 +268,5 @@ mt{
             "10: g\u0127axart;",
         }
     }
-    Version{"2.1.19.95"}
+    Version{"2.1.27.22"}
 }

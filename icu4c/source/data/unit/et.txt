@@ -1,11 +1,11 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 et{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
-        hms{"h:mm.ss"}
-        ms{"m.ss"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
     }
     units{
         acceleration{
@@ -79,6 +79,7 @@ et{
                 dnam{"ruutkilomeetrid"}
                 one{"{0} ruutkilomeeter"}
                 other{"{0} ruutkilomeetrit"}
+                per{"{0} ruutkilomeetri kohta"}
             }
             square-meter{
                 dnam{"ruutmeetrid"}
@@ -90,6 +91,7 @@ et{
                 dnam{"ruutmiilid"}
                 one{"{0} ruutmiil"}
                 other{"{0} ruutmiili"}
+                per{"{0} ruutmiili kohta"}
             }
             square-yard{
                 dnam{"ruutjardid"}
@@ -105,6 +107,21 @@ et{
                 dnam{"karaadid"}
                 one{"{0} karaat"}
                 other{"{0} karaati"}
+            }
+            milligram-per-deciliter{
+                dnam{"milligrammid detsiliitri kohta"}
+                one{"{0} milligramm detsiliitri kohta"}
+                other{"{0} milligrammi detsiliitri kohta"}
+            }
+            millimole-per-liter{
+                dnam{"millimoolid liitri kohta"}
+                one{"{0} millimool liitri kohta"}
+                other{"{0} millimooli liitri kohta"}
+            }
+            part-per-million{
+                dnam{"osa miljoni kohta"}
+                one{"{0} osa miljoni kohta"}
+                other{"{0} osa miljoni kohta"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ et{
                 dnam{"miilid galloni kohta"}
                 one{"{0} miil galloni kohta"}
                 other{"{0} miili galloni kohta"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"miilid inglise galloni kohta"}
+                one{"{0} miil inglise galloni kohta"}
+                other{"{0} miili inglise galloni kohta"}
             }
         }
         coordinate{
@@ -653,6 +675,11 @@ et{
                 one{"{0} tass"}
                 other{"{0} tassi"}
             }
+            cup-metric{
+                dnam{"meetrilised tassid"}
+                one{"{0} meetriline tass"}
+                other{"{0} meetrilist tassi"}
+            }
             deciliter{
                 dnam{"detsiliitrid"}
                 one{"{0} detsiliiter"}
@@ -668,6 +695,12 @@ et{
                 one{"{0} gallon"}
                 other{"{0} gallonit"}
                 per{"{0} galloni kohta"}
+            }
+            gallon-imperial{
+                dnam{"inglise gallonid"}
+                one{"{0} inglise gallon"}
+                other{"{0} inglise gallonit"}
+                per{"{0} inglise galloni kohta"}
             }
             hectoliter{
                 dnam{"hektoliitrid"}
@@ -694,6 +727,11 @@ et{
                 dnam{"pindid"}
                 one{"{0} pint"}
                 other{"{0} pinti"}
+            }
+            pint-metric{
+                dnam{"meetrilised pindid"}
+                one{"{0} meetriline pint"}
+                other{"{0} meetrilist pinti"}
             }
             quart{
                 dnam{"kvardid"}
@@ -764,6 +802,7 @@ et{
         }
         consumption{
             liter-per-100kilometers{
+                dnam{"l/100 km"}
                 one{"{0} l/100km"}
                 other{"{0} l/100km"}
             }
@@ -993,12 +1032,17 @@ et{
                 one{"{0} rad"}
                 other{"{0} rad"}
             }
+            revolution{
+                dnam{"pööre"}
+                one{"{0} pööre"}
+                other{"{0} pööret"}
+            }
         }
         area{
             acre{
                 dnam{"aakrid"}
-                one{"{0} aaker"}
-                other{"{0} aakrit"}
+                one{"{0} ac"}
+                other{"{0} ac"}
             }
             hectare{
                 dnam{"hektarid"}
@@ -1026,6 +1070,7 @@ et{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1037,6 +1082,7 @@ et{
                 dnam{"mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"ruutjardid"}
@@ -1053,12 +1099,27 @@ et{
                 one{"{0} ct"}
                 other{"{0} ct"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"osa/miljon"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"l/100km"}
-                one{"{0} l/100km"}
-                other{"{0} l/100km"}
+                dnam{"l/100 km"}
+                one{"{0} l/100 km"}
+                other{"{0} l/100 km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
@@ -1069,6 +1130,11 @@ et{
                 dnam{"miil/gallon"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"miil/gal imp."}
+                one{"{0} mpg imp."}
+                other{"{0} mpg imp."}
             }
         }
         coordinate{
@@ -1291,16 +1357,18 @@ et{
             }
             foot{
                 dnam{"ft"}
-                one{"{0} jalg"}
-                other{"{0} jalga"}
+                one{"{0} ft"}
+                other{"{0} ft"}
+                per{"{0}/ft"}
             }
             furlong{
                 dnam{"furlongid"}
             }
             inch{
-                dnam{"in"}
-                one{"{0} toll"}
-                other{"{0} tolli"}
+                dnam{"tollid"}
+                one{"{0} in"}
+                other{"{0} in"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
@@ -1326,8 +1394,13 @@ et{
             }
             mile{
                 dnam{"mi"}
-                one{"{0} miil"}
-                other{"{0} miili"}
+                one{"{0} mi"}
+                other{"{0} mi"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}
@@ -1356,8 +1429,8 @@ et{
             }
             yard{
                 dnam{"jardid"}
-                one{"{0} jard"}
-                other{"{0} jardi"}
+                one{"{0} yd"}
+                other{"{0} yd"}
             }
         }
         light{
@@ -1412,7 +1485,7 @@ et{
                 other{"{0} oz t"}
             }
             pound{
-                dnam{"lb"}
+                dnam{"naelad"}
                 one{"{0} lb"}
                 other{"{0} lb"}
                 per{"{0}/lb"}
@@ -1490,6 +1563,11 @@ et{
                 dnam{"km/h"}
                 one{"{0} km/h"}
                 other{"{0} km/h"}
+            }
+            knot{
+                dnam{"kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
             }
             meter-per-second{
                 dnam{"m/s"}
@@ -1577,8 +1655,13 @@ et{
             }
             cup{
                 dnam{"tass"}
-                one{"{0} tass"}
-                other{"{0} tassi"}
+                one{"{0} c"}
+                other{"{0} c"}
+            }
+            cup-metric{
+                dnam{"mcup"}
+                one{"{0} mc"}
+                other{"{0} mc"}
             }
             deciliter{
                 dnam{"dl"}
@@ -1595,6 +1678,12 @@ et{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hl"}
@@ -1621,6 +1710,11 @@ et{
                 dnam{"pindid"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            pint-metric{
+                dnam{"mpt"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"kvart"}

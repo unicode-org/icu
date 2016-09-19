@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sv{
-    Version{"2.1.26.30"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,6 +79,7 @@ sv{
                 dnam{"kvadratkilometer"}
                 one{"{0} kvadratkilometer"}
                 other{"{0} kvadratkilometer"}
+                per{"{0} per kvadratkilometer"}
             }
             square-meter{
                 dnam{"kvadratmeter"}
@@ -90,10 +91,11 @@ sv{
                 dnam{"engelska kvadratmil"}
                 one{"{0} engelsk kvadratmil"}
                 other{"{0} engelska kvadratmil"}
+                per{"{0} per engelsk kvadratmil"}
             }
             square-yard{
                 dnam{"yard²"}
-                one{"{0} yard²"}
+                one{"{0} engelsk kvadratyard"}
                 other{"{0} yard²"}
             }
         }
@@ -105,6 +107,21 @@ sv{
                 dnam{"karat"}
                 one{"{0} karat"}
                 other{"{0} karat"}
+            }
+            milligram-per-deciliter{
+                dnam{"milligram per deciliter"}
+                one{"{0} milligram per deciliter"}
+                other{"{0} milligram per deciliter"}
+            }
+            millimole-per-liter{
+                dnam{"millimol per liter"}
+                one{"{0} millimol per liter"}
+                other{"{0} millimol per liter"}
+            }
+            part-per-million{
+                dnam{"miljondelar"}
+                one{"{0} miljondel"}
+                other{"{0} miljondelar"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ sv{
                 dnam{"miles per gallon"}
                 one{"{0} mile per gallon"}
                 other{"{0} miles per gallon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"UK mpg"}
+                one{"{0} UK mil/gn"}
+                other{"{0} UK mil/gn"}
             }
         }
         coordinate{
@@ -147,9 +169,9 @@ sv{
                 other{"{0} gigabit"}
             }
             gigabyte{
-                dnam{"GB"}
-                one{"{0} GB"}
-                other{"{0} GB"}
+                dnam{"gigabyte"}
+                one{"{0} gigabyte"}
+                other{"{0} gigabyte"}
             }
             kilobit{
                 dnam{"kilobit"}
@@ -157,9 +179,9 @@ sv{
                 other{"{0} kilobit"}
             }
             kilobyte{
-                dnam{"kB"}
-                one{"{0} kB"}
-                other{"{0} kB"}
+                dnam{"kilobyte"}
+                one{"{0} kilobyte"}
+                other{"{0} kilobyte"}
             }
             megabit{
                 dnam{"megabit"}
@@ -167,9 +189,9 @@ sv{
                 other{"{0} megabit"}
             }
             megabyte{
-                dnam{"MB"}
-                one{"{0} MB"}
-                other{"{0} MB"}
+                dnam{"megabyte"}
+                one{"{0} megabyte"}
+                other{"{0} megabyte"}
             }
             terabit{
                 dnam{"terabit"}
@@ -317,9 +339,9 @@ sv{
                 other{"{0} kilohertz"}
             }
             megahertz{
-                dnam{"MHz"}
-                one{"{0} MHz"}
-                other{"{0} MHz"}
+                dnam{"megahertz"}
+                one{"{0} megahertz"}
+                other{"{0} megahertz"}
             }
         }
         length{
@@ -674,6 +696,12 @@ sv{
                 other{"{0} gallon"}
                 per{"{0} per gallon"}
             }
+            gallon-imperial{
+                dnam{"ämbar à 4,6 l"}
+                one{"{0} ämbar à 4,6 l"}
+                other{"{0} ämbar à 4,6 l"}
+                per{"{0} per ämbar à 4,6 l"}
+            }
             hectoliter{
                 dnam{"hektoliter"}
                 one{"{0} hektoliter"}
@@ -794,6 +822,7 @@ sv{
                 dnam{"km²"}
                 one{"{0}km²"}
                 other{"{0}km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -805,6 +834,7 @@ sv{
                 dnam{"eng. mil²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/en.mil²"}
             }
             square-yard{
                 dnam{"eng. yard²"}
@@ -814,6 +844,22 @@ sv{
         }
         compound{
             per{"{0}/{1}"}
+        }
+        concentr{
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0}mg/dL"}
+                other{"{0}mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0}mmol/L"}
+                other{"{0}mmol/L"}
+            }
+            part-per-million{
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -830,6 +876,11 @@ sv{
                 dnam{"eng.mil/gallon"}
                 one{"{0}e.mil/gn"}
                 other{"{0}e.mil/gn"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"UK mpg"}
+                one{"{0}UK mpg"}
+                other{"{0}UK mpg"}
             }
         }
         coordinate{
@@ -1361,6 +1412,12 @@ sv{
                 other{"{0} v:egal:n"}
                 per{"{0}/äb·3,8L"}
             }
+            gallon-imperial{
+                dnam{"ämbar à 4,6L"}
+                one{"{0} äb·4,6L"}
+                other{"{0} äb·4,6L"}
+                per{"{0}/äb·4,6L"}
+            }
             hectoliter{
                 dnam{"hL"}
                 one{"{0}hL"}
@@ -1481,6 +1538,7 @@ sv{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1492,6 +1550,7 @@ sv{
                 dnam{"engelska kvadratmil"}
                 one{"{0} eng.mil²"}
                 other{"{0} eng.mil²"}
+                per{"{0}/eng. mil²"}
             }
             square-yard{
                 dnam{"yard²"}
@@ -1505,8 +1564,23 @@ sv{
         concentr{
             karat{
                 dnam{"karat"}
-                one{"{0} kt"}
-                other{"{0} kt"}
+                one{"{0} kar"}
+                other{"{0} kar"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"miljondelar"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1524,6 +1598,11 @@ sv{
                 dnam{"mpg"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"UK mpg"}
+                one{"{0}mpgUK"}
+                other{"{0}mpgUK"}
             }
         }
         coordinate{
@@ -1726,9 +1805,9 @@ sv{
         }
         length{
             astronomical-unit{
-                dnam{"AU"}
-                one{"{0} AU"}
-                other{"{0} AU"}
+                dnam{"AE"}
+                one{"{0} AE"}
+                other{"{0} AE"}
             }
             centimeter{
                 dnam{"cm"}
@@ -1771,8 +1850,8 @@ sv{
             }
             light-year{
                 dnam{"ljusår"}
-                one{"{0} ly"}
-                other{"{0} ly"}
+                one{"{0} ljusår"}
+                other{"{0} ljusår"}
             }
             meter{
                 dnam{"m"}
@@ -2075,6 +2154,12 @@ sv{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"ämbar à 4,6 l"}
+                one{"{0} ämb à 4,6l"}
+                other{"{0} ämb à 4,6l"}
+                per{"{0} ämb à 4,6l"}
             }
             hectoliter{
                 dnam{"hl"}

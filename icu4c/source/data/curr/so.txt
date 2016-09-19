@@ -30,6 +30,10 @@ so{
             "US$",
             "Doollar maraykan",
         }
+        XXX{
+            "XXX",
+            "Lacag aan la qoon ama aan saxnayn",
+        }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.78"}
 }

@@ -82,6 +82,26 @@ yue{
     NumberElements{
         default{"latn"}
         finance{"hantfin"}
+        hanidec{
+            patterns{
+                currencyFormat{"¤#,##0.00"}
+                decimalFormat{"#,##0.###"}
+                percentFormat{"#,##0%"}
+                scientificFormat{"#E0"}
+            }
+            symbols{
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                minusSign{"-"}
+                nan{"非數值"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+            }
+        }
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
@@ -97,7 +117,7 @@ yue{
             patternsLong{
                 decimalFormat{
                     1000{
-                        other{"0"}
+                        other{"0千"}
                     }
                     10000{
                         other{"0萬"}
@@ -137,7 +157,7 @@ yue{
             patternsShort{
                 currencyFormat{
                     1000{
-                        other{"0"}
+                        other{"¤0千"}
                     }
                     10000{
                         other{"¤0萬"}
@@ -175,7 +195,7 @@ yue{
                 }
                 decimalFormat{
                     1000{
-                        other{"0"}
+                        other{"0千"}
                     }
                     10000{
                         other{"0萬"}
@@ -227,10 +247,11 @@ yue{
                 timeSeparator{":"}
             }
         }
+        minimumGroupingDigits{"1"}
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.76"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1233,8 +1254,8 @@ yue{
                 "下午",
             }
             AmPmMarkersNarrow{
-                "朝早",
-                "下晝",
+                "上午",
+                "下午",
             }
             DateTimePatterns{
                 "ah:mm:ss [zzzz]",
@@ -1274,6 +1295,9 @@ yue{
                 MEd{"M/d（E）"}
                 MMM{"LLL"}
                 MMMEd{"M月d日 E"}
+                MMMMW{
+                    other{"M月第W個星期"}
+                }
                 MMMMd{"M月d日"}
                 MMMd{"M月d日"}
                 MMdd{"MM/dd"}
@@ -1296,6 +1320,9 @@ yue{
                 yMd{"y/M/d"}
                 yQQQ{"y年QQQ"}
                 yQQQQ{"y年QQQQ"}
+                yw{
+                    other{"y年第w個星期"}
+                }
             }
             dayNames{
                 format{
@@ -1409,19 +1436,21 @@ yue{
                     abbreviated{
                         afternoon1{"中午"}
                         afternoon2{"下晝"}
+                        am{"上午"}
                         evening1{"夜晚"}
                         midnight{"午夜"}
                         morning1{"清晨"}
                         morning2{"朝早"}
                         night1{"凌晨"}
+                        pm{"下午"}
                     }
                     narrow{
                         afternoon1{"中午"}
                         afternoon2{"下晝"}
-                        am{"朝早"}
+                        am{"上午"}
                         evening1{"夜晚"}
-                        midnight{"下晝"}
-                        morning1{"夜晚"}
+                        midnight{"午夜"}
+                        morning1{"清晨"}
                         morning2{"朝早"}
                         night1{"凌晨"}
                         pm{"下午"}
@@ -1429,11 +1458,13 @@ yue{
                     wide{
                         afternoon1{"中午"}
                         afternoon2{"下晝"}
+                        am{"上午"}
                         evening1{"夜晚"}
                         midnight{"午夜"}
                         morning1{"清晨"}
                         morning2{"朝早"}
                         night1{"凌晨"}
+                        pm{"下午"}
                     }
                 }
             }
@@ -1654,10 +1685,10 @@ yue{
             quarters{
                 format{
                     abbreviated{
-                        "1季",
-                        "2季",
-                        "3季",
-                        "4季",
+                        "第1季",
+                        "第2季",
+                        "第3季",
+                        "第4季",
                     }
                     narrow{
                         "1",
@@ -1674,10 +1705,10 @@ yue{
                 }
                 stand-alone{
                     abbreviated{
-                        "1季",
-                        "2季",
-                        "3季",
-                        "4季",
+                        "第1季",
+                        "第2季",
+                        "第3季",
+                        "第4季",
                     }
                     narrow{
                         "1",
@@ -2494,6 +2525,78 @@ yue{
             }
         }
     }
+    characterLabel{
+        activities{"活動"}
+        african_scripts{"非洲字體"}
+        american_scripts{"美洲字體"}
+        animals_nature{"動物和大自然"}
+        arrows{"箭咀"}
+        box_drawing{"繪畫箱"}
+        braille{"突字"}
+        bullets_stars{"列點/星號"}
+        consonantal_jamo{"輔音字母"}
+        currency_symbols{"貨幣符號"}
+        dash_connector{"破折號/連接符號"}
+        digits{"數碼"}
+        dingbats{"雜錦字型"}
+        divination_symbols{"占卜符號"}
+        downwards_arrows{"向下箭咀"}
+        downwards_upwards_arrows{"向下和向上箭咀"}
+        east_asian_scripts{"東亞字體"}
+        emoji{"表情符號"}
+        european_scripts{"歐洲字體"}
+        flags{"旗"}
+        food_drink{"食物和飲品"}
+        format{"格式"}
+        format_whitespace{"格式和空白"}
+        full_width_form_variant{"全型變體"}
+        geometric_shapes{"幾何圖形"}
+        half_width_form_variant{"半型變體"}
+        han_characters{"漢語字符"}
+        han_radicals{"漢字部首"}
+        hanja{"漢字"}
+        hanzi_simplified{"漢字 (簡體)"}
+        hanzi_traditional{"漢字 (繁體)"}
+        historic_scripts{"古代字體"}
+        ideographic_desc_characters{"漢字結構描述字符"}
+        japanese_kana{"日文假名"}
+        kanbun{"日本漢文"}
+        kanji{"日本漢字"}
+        leftwards_arrows{"向左箭咀"}
+        leftwards_rightwards_arrows{"向左和向右箭咀"}
+        letterlike_symbols{"字母符號"}
+        limited_use{"限制使用"}
+        math_symbols{"數學符號"}
+        middle_eastern_scripts{"中東字體"}
+        miscellaneous{"其他"}
+        modern_scripts{"現代字體"}
+        modifier{"修飾符"}
+        musical_symbols{"音樂符號"}
+        nonspacing{"非間距"}
+        numbers{"數字"}
+        objects{"物件"}
+        other{"其他"}
+        paired{"配對"}
+        phonetic_alphabet{"拼音字母"}
+        pictographs{"象形文字"}
+        punctuation{"標點符號"}
+        rightwards_arrows{"向右箭咀"}
+        sign_standard_symbols{"標記/標準符號"}
+        small_form_variant{"小寫變體"}
+        smileys_people{"表情符號與人"}
+        south_asian_scripts{"南亞字體"}
+        southeast_asian_scripts{"東南亞字體"}
+        spacing{"空位"}
+        symbols{"符號"}
+        technical_symbols{"技術符號"}
+        tone_marks{"聲調符號"}
+        travel_places{"旅遊和地點"}
+        upwards_arrows{"向上箭咀"}
+        variant_forms{"變化型"}
+        vocalic_jamo{"元音字母"}
+        western_asian_scripts{"西亞字體"}
+        whitespace{"空白"}
+    }
     delimiters{
         alternateQuotationEnd{"』"}
         alternateQuotationStart{"『"}
@@ -2506,16 +2609,16 @@ yue{
             relative{
                 "-1"{"尋日"}
                 "-2"{"前天"}
-                "0"{"今天"}
+                "0"{"今日"}
                 "1"{"聽日"}
                 "2"{"後天"}
             }
             relativeTime{
                 future{
-                    other{"{0} 天後"}
+                    other{"{0} 日後"}
                 }
                 past{
-                    other{"{0} 天前"}
+                    other{"{0} 日前"}
                 }
             }
         }
@@ -2523,10 +2626,10 @@ yue{
             dn{"日"}
             relativeTime{
                 future{
-                    other{"{0} 天後"}
+                    other{"{0} 日後"}
                 }
                 past{
-                    other{"{0} 天前"}
+                    other{"{0} 日前"}
                 }
             }
         }
@@ -2534,10 +2637,10 @@ yue{
             dn{"日"}
             relativeTime{
                 future{
-                    other{"{0} 天後"}
+                    other{"{0} 日後"}
                 }
                 past{
-                    other{"{0} 天前"}
+                    other{"{0} 日前"}
                 }
             }
         }
@@ -2549,27 +2652,54 @@ yue{
         }
         fri{
             relative{
-                "-1"{"上週五"}
-                "0"{"本週五"}
-                "1"{"下週五"}
+                "-1"{"上星期五"}
+                "0"{"今個星期五"}
+                "1"{"下星期五"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期五後"}
+                }
+                past{
+                    other{"{0} 個星期五前"}
+                }
             }
         }
         fri-narrow{
             relative{
-                "-1"{"上週五"}
-                "0"{"本週五"}
-                "1"{"下週五"}
+                "-1"{"上星期五"}
+                "0"{"今個星期五"}
+                "1"{"下星期五"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期五後"}
+                }
+                past{
+                    other{"{0} 個星期五前"}
+                }
             }
         }
         fri-short{
             relative{
-                "-1"{"上週五"}
-                "0"{"本週五"}
-                "1"{"下週五"}
+                "-1"{"上星期五"}
+                "0"{"今個星期五"}
+                "1"{"下星期五"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期五後"}
+                }
+                past{
+                    other{"{0} 個星期五前"}
+                }
             }
         }
         hour{
             dn{"小時"}
+            relative{
+                "0"{"呢個小時"}
+            }
             relativeTime{
                 future{
                     other{"{0} 小時後"}
@@ -2603,6 +2733,9 @@ yue{
         }
         minute{
             dn{"分鐘"}
+            relative{
+                "0"{"呢分鐘"}
+            }
             relativeTime{
                 future{
                     other{"{0} 分鐘後"}
@@ -2636,30 +2769,54 @@ yue{
         }
         mon{
             relative{
-                "-1"{"上週一"}
-                "0"{"本週一"}
-                "1"{"下週一"}
+                "-1"{"上星期一"}
+                "0"{"今個星期一"}
+                "1"{"下星期一"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期一後"}
+                }
+                past{
+                    other{"{0} 個星期一前"}
+                }
             }
         }
         mon-narrow{
             relative{
-                "-1"{"上週一"}
-                "0"{"本週一"}
-                "1"{"下週一"}
+                "-1"{"上星期一"}
+                "0"{"今個星期一"}
+                "1"{"下星期一"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期一後"}
+                }
+                past{
+                    other{"{0} 個星期一前"}
+                }
             }
         }
         mon-short{
             relative{
-                "-1"{"上週一"}
-                "0"{"本週一"}
-                "1"{"下週一"}
+                "-1"{"上星期一"}
+                "0"{"今個星期一"}
+                "1"{"下星期一"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期一後"}
+                }
+                past{
+                    other{"{0} 個星期一前"}
+                }
             }
         }
         month{
             dn{"月"}
             relative{
                 "-1"{"上個月"}
-                "0"{"本月"}
+                "0"{"今個月"}
                 "1"{"下個月"}
             }
             relativeTime{
@@ -2718,10 +2875,10 @@ yue{
             }
             relativeTime{
                 future{
-                    other{"{0}季後"}
+                    other{"{0} 季後"}
                 }
                 past{
-                    other{"{0}季前"}
+                    other{"{0} 季前"}
                 }
             }
         }
@@ -2743,29 +2900,53 @@ yue{
         }
         sat{
             relative{
-                "-1"{"上週六"}
-                "0"{"本週六"}
-                "1"{"下週六"}
+                "-1"{"上星期六"}
+                "0"{"今個星期六"}
+                "1"{"下星期六"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期六後"}
+                }
+                past{
+                    other{"{0} 個星期六前"}
+                }
             }
         }
         sat-narrow{
             relative{
-                "-1"{"上週六"}
-                "0"{"本週六"}
-                "1"{"下週六"}
+                "-1"{"上星期六"}
+                "0"{"今個星期六"}
+                "1"{"下星期六"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期六後"}
+                }
+                past{
+                    other{"{0} 個星期六前"}
+                }
             }
         }
         sat-short{
             relative{
-                "-1"{"上週六"}
-                "0"{"本週六"}
-                "1"{"下週六"}
+                "-1"{"上星期六"}
+                "0"{"今個星期六"}
+                "1"{"下星期六"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期六後"}
+                }
+                past{
+                    other{"{0} 個星期六前"}
+                }
             }
         }
         second{
             dn{"秒"}
             relative{
-                "0"{"現在"}
+                "0"{"宜家"}
             }
             relativeTime{
                 future{
@@ -2800,123 +2981,222 @@ yue{
         }
         sun{
             relative{
-                "-1"{"上週日"}
-                "0"{"本週日"}
-                "1"{"下週日"}
+                "-1"{"上星期日"}
+                "0"{"今個星期日"}
+                "1"{"下星期日"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期日後"}
+                }
+                past{
+                    other{"{0} 個星期日前"}
+                }
             }
         }
         sun-narrow{
             relative{
-                "-1"{"上週日"}
-                "0"{"本週日"}
-                "1"{"下週日"}
+                "-1"{"上星期日"}
+                "0"{"今個星期日"}
+                "1"{"下星期日"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期日後"}
+                }
+                past{
+                    other{"{0} 個星期日前"}
+                }
             }
         }
         sun-short{
             relative{
-                "-1"{"上週日"}
-                "0"{"本週日"}
-                "1"{"下週日"}
+                "-1"{"上星期日"}
+                "0"{"今個星期日"}
+                "1"{"下星期日"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期日後"}
+                }
+                past{
+                    other{"{0} 個星期日前"}
+                }
             }
         }
         thu{
             relative{
-                "-1"{"上週四"}
-                "0"{"本週四"}
-                "1"{"下週四"}
+                "-1"{"上星期四"}
+                "0"{"今個星期四"}
+                "1"{"下星期四"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期四後"}
+                }
+                past{
+                    other{"{0} 個星期四前"}
+                }
             }
         }
         thu-narrow{
             relative{
-                "-1"{"上週四"}
-                "0"{"本週四"}
-                "1"{"下週四"}
+                "-1"{"上星期四"}
+                "0"{"今個星期四"}
+                "1"{"下星期四"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期四後"}
+                }
+                past{
+                    other{"{0} 個星期四前"}
+                }
             }
         }
         thu-short{
             relative{
-                "-1"{"上週四"}
-                "0"{"本週四"}
-                "1"{"下週四"}
+                "-1"{"上星期四"}
+                "0"{"今個星期四"}
+                "1"{"下星期四"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期四後"}
+                }
+                past{
+                    other{"{0} 個星期四前"}
+                }
             }
         }
         tue{
             relative{
-                "-1"{"上週二"}
-                "0"{"本週二"}
-                "1"{"下週二"}
+                "-1"{"上星期二"}
+                "0"{"今個星期二"}
+                "1"{"下星期二"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期二後"}
+                }
+                past{
+                    other{"{0} 個星期二前"}
+                }
             }
         }
         tue-narrow{
             relative{
-                "-1"{"上週二"}
-                "0"{"本週二"}
-                "1"{"下週二"}
+                "-1"{"上星期二"}
+                "0"{"今個星期二"}
+                "1"{"下星期二"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期二後"}
+                }
+                past{
+                    other{"{0} 個星期二前"}
+                }
             }
         }
         tue-short{
             relative{
-                "-1"{"上週二"}
-                "0"{"本週二"}
-                "1"{"下週二"}
+                "-1"{"上星期二"}
+                "0"{"今個星期二"}
+                "1"{"下星期二"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期二後"}
+                }
+                past{
+                    other{"{0} 個星期二前"}
+                }
             }
         }
         wed{
             relative{
-                "-1"{"上週三"}
-                "0"{"本週三"}
-                "1"{"下週三"}
+                "-1"{"上星期三"}
+                "0"{"今個星期三"}
+                "1"{"下星期三"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期三後"}
+                }
+                past{
+                    other{"{0} 個星期三前"}
+                }
             }
         }
         wed-narrow{
             relative{
-                "-1"{"上週三"}
-                "0"{"本週三"}
-                "1"{"下週三"}
+                "-1"{"上星期三"}
+                "0"{"今個星期三"}
+                "1"{"下星期三"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期三後"}
+                }
+                past{
+                    other{"{0} 個星期三前"}
+                }
             }
         }
         wed-short{
             relative{
-                "-1"{"上週三"}
-                "0"{"本週三"}
-                "1"{"下週三"}
+                "-1"{"上星期三"}
+                "0"{"今個星期三"}
+                "1"{"下星期三"}
+            }
+            relativeTime{
+                future{
+                    other{"{0} 個星期三後"}
+                }
+                past{
+                    other{"{0} 個星期三前"}
+                }
             }
         }
         week{
             dn{"週"}
             relative{
-                "-1"{"上週"}
-                "0"{"本週"}
-                "1"{"下週"}
+                "-1"{"上星期"}
+                "0"{"今個星期"}
+                "1"{"下星期"}
             }
+            relativePeriod{"{0}嘅星期"}
             relativeTime{
                 future{
-                    other{"{0} 週後"}
+                    other{"{0} 個星期後"}
                 }
                 past{
-                    other{"{0} 週前"}
+                    other{"{0} 個星期前"}
                 }
             }
         }
         week-narrow{
             dn{"週"}
+            relativePeriod{"{0}嘅星期"}
             relativeTime{
                 future{
-                    other{"{0} 週後"}
+                    other{"{0} 個星期後"}
                 }
                 past{
-                    other{"{0} 週前"}
+                    other{"{0} 個星期前"}
                 }
             }
         }
         week-short{
             dn{"週"}
+            relativePeriod{"{0}嘅星期"}
             relativeTime{
                 future{
-                    other{"{0} 週後"}
+                    other{"{0} 個星期後"}
                 }
                 past{
-                    other{"{0} 週前"}
+                    other{"{0} 個星期前"}
                 }
             }
         }
@@ -2926,9 +3206,9 @@ yue{
         year{
             dn{"年"}
             relative{
-                "-1"{"去年"}
+                "-1"{"舊年"}
                 "0"{"今年"}
-                "1"{"明年"}
+                "1"{"下年"}
             }
             relativeTime{
                 future{
@@ -2967,6 +3247,12 @@ yue{
     }
     listPattern{
         standard{
+            2{"{0}同{1}"}
+            end{"{0}同{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
+        standard-short{
             2{"{0}同{1}"}
             end{"{0}同{1}"}
             middle{"{0}、{1}"}

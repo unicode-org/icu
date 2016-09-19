@@ -11,7 +11,7 @@ en_IN{
             }
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.99"}
     calendar{
         generic{
             DateTimePatterns{
@@ -33,6 +33,27 @@ en_IN{
                 yyyyMEd{"E d/M/y G"}
                 yyyyMMMEd{"E d MMM, y G"}
                 yyyyMd{"d/M/y G"}
+            }
+            intervalFormats{
+                yM{
+                    M{"MM/y – MM/y G"}
+                    y{"MM/y – MM/y G"}
+                }
+                yMEd{
+                    M{"E dd/MM/y – E dd/MM/y G"}
+                    d{"E dd/MM/y – E dd/MM/y G"}
+                    y{"E dd/MM/y – E dd/MM/y G"}
+                }
+                yMMMEd{
+                    M{"E d MMM – E d MMM y G"}
+                    d{"E d – E d MMM y G"}
+                    y{"E d MMM y – E d MMM y G"}
+                }
+                yMd{
+                    M{"dd/MM/y – dd/MM/y G"}
+                    d{"dd/MM/y – dd/MM/y G"}
+                    y{"dd/MM/y – dd/MM/y G"}
+                }
             }
         }
         gregorian{

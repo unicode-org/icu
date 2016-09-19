@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 lv{
-    Version{"2.1.26.29"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -91,6 +91,7 @@ lv{
                 dnam{"kvadrātkilometri"}
                 one{"{0} kvadrātkilometrs"}
                 other{"{0} kvadrātkilometri"}
+                per{"{0} uz kvadrātkilometru"}
                 zero{"{0} kvadrātkilometri"}
             }
             square-meter{
@@ -104,6 +105,7 @@ lv{
                 dnam{"kvadrātjūdzes"}
                 one{"{0} kvadrātjūdze"}
                 other{"{0} kvadrātjūdzes"}
+                per{"{0} uz kvadrātjūdzi"}
                 zero{"{0} kvadrātjūdzes"}
             }
             square-yard{
@@ -122,6 +124,24 @@ lv{
                 one{"{0} karāts"}
                 other{"{0} karāti"}
                 zero{"{0} karāti"}
+            }
+            milligram-per-deciliter{
+                dnam{"miligrami uz dekalitru"}
+                one{"{0} miligrams uz dekalitru"}
+                other{"{0} miligrami uz dekalitru"}
+                zero{"{0} miligrami uz dekalitru"}
+            }
+            millimole-per-liter{
+                dnam{"milimoli uz litru"}
+                one{"{0} milimols uz litru"}
+                other{"{0} milimoli uz litru"}
+                zero{"{0} milimoli uz litru"}
+            }
+            part-per-million{
+                dnam{"miljonās daļas"}
+                one{"{0} miljonā daļa"}
+                other{"{0} miljonās daļas"}
+                zero{"{0} miljonās daļas"}
             }
         }
         consumption{
@@ -142,6 +162,12 @@ lv{
                 one{"{0} jūdze ar galonu"}
                 other{"{0} jūdzes ar galonu"}
                 zero{"{0} jūdzes ar galonu"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"jūdzes ar imp. galonu"}
+                one{"{0} jūdze ar imp. galonu"}
+                other{"{0} jūdzes ar imp. galonu"}
+                zero{"{0} jūdzes ar imp. galonu"}
             }
         }
         coordinate{
@@ -249,7 +275,7 @@ lv{
                 dnam{"minūtes"}
                 one{"{0} minūte"}
                 other{"{0} minūtes"}
-                per{"{0}/minūtē"}
+                per{"{0} minūtē"}
                 zero{"{0} minūtes"}
             }
             month{
@@ -283,6 +309,7 @@ lv{
                 dnam{"gadi"}
                 one{"{0} gads"}
                 other{"{0} gadi"}
+                per{"{0} gadā"}
                 zero{"{0} gadi"}
             }
         }
@@ -744,6 +771,12 @@ lv{
                 other{"{0} glāzes"}
                 zero{"{0} glāzes"}
             }
+            cup-metric{
+                dnam{"metriskā glāze"}
+                one{"{0} metriskā glāze"}
+                other{"{0} metriskās glāzes"}
+                zero{"{0} metriskās glāzes"}
+            }
             deciliter{
                 dnam{"decilitri"}
                 one{"{0} decilitrs"}
@@ -762,6 +795,13 @@ lv{
                 other{"{0} galoni"}
                 per{"{0}/gal."}
                 zero{"{0} galoni"}
+            }
+            gallon-imperial{
+                dnam{"imperiālie galoni"}
+                one{"{0} imperiālais galons"}
+                other{"{0} imperiālie galoni"}
+                per{"{0} uz imperiālo galonu"}
+                zero{"{0} imperiālie galoni"}
             }
             hectoliter{
                 dnam{"hektolitri"}
@@ -1173,7 +1213,7 @@ lv{
                 dnam{"cm²"}
                 one{"{0} cm²"}
                 other{"{0} cm²"}
-                per{"{0} uz cm²"}
+                per{"{0}/cm²"}
                 zero{"{0} cm²"}
             }
             square-foot{
@@ -1193,19 +1233,21 @@ lv{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
                 zero{"{0} km²"}
             }
             square-meter{
                 dnam{"m²"}
                 one{"{0} m²"}
                 other{"{0} m²"}
-                per{"{0} uz m²"}
+                per{"{0}/m²"}
                 zero{"{0} m²"}
             }
             square-mile{
                 dnam{"mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
                 zero{"{0} mi²"}
             }
             square-yard{
@@ -1224,6 +1266,24 @@ lv{
                 one{"{0} kt"}
                 other{"{0} kt"}
                 zero{"{0} kt"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+                zero{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+                zero{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+                zero{"{0} ppm"}
             }
         }
         consumption{
@@ -1244,6 +1304,12 @@ lv{
                 one{"{0} mpg"}
                 other{"{0} mpg"}
                 zero{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
+                zero{"{0} mpg Imp."}
             }
         }
         coordinate{
@@ -1500,18 +1566,18 @@ lv{
                 zero{"{0} dm"}
             }
             foot{
-                dnam{"ft"}
-                one{"{0} ft"}
-                other{"{0} ft"}
+                dnam{"pēdas"}
+                one{"{0} pēda"}
+                other{"{0} pēdas"}
                 per{"{0}/pēda"}
-                zero{"{0} ft"}
+                zero{"{0} pēdas"}
             }
             inch{
-                dnam{"c."}
-                one{"{0} c."}
-                other{"{0} c."}
+                dnam{"colla"}
+                one{"{0} colla"}
+                other{"{0} collas"}
                 per{"{0}/colla"}
-                zero{"{0} c."}
+                zero{"{0} collas"}
             }
             kilometer{
                 dnam{"kilometri"}
@@ -1540,10 +1606,10 @@ lv{
                 zero{"{0} µm"}
             }
             mile{
-                dnam{"mi"}
-                one{"{0} mi"}
-                other{"{0} mi"}
-                zero{"{0} mi"}
+                dnam{"jūdzes"}
+                one{"{0} jūdze"}
+                other{"{0} jūdzes"}
+                zero{"{0} jūdzes"}
             }
             mile-scandinavian{
                 dnam{"skandināvu jūdze"}
@@ -1564,16 +1630,16 @@ lv{
                 zero{"{0} nm"}
             }
             nautical-mile{
-                dnam{"nmi"}
-                one{"{0} nmi"}
-                other{"{0} nmi"}
-                zero{"{0} nmi"}
+                dnam{"jūras jūdzes"}
+                one{"{0} jūras jūdze"}
+                other{"{0} jūras jūdzes"}
+                zero{"{0} jūras jūdzes"}
             }
             parsec{
-                dnam{"pc"}
-                one{"{0} pc"}
-                other{"{0} pc"}
-                zero{"{0} pc"}
+                dnam{"parseki"}
+                one{"{0} parseks"}
+                other{"{0} parseki"}
+                zero{"{0} parseki"}
             }
             picometer{
                 dnam{"pm"}
@@ -1582,10 +1648,10 @@ lv{
                 zero{"{0} pm"}
             }
             yard{
-                dnam{"yd"}
-                one{"{0} yd"}
-                other{"{0} yd"}
-                zero{"{0} yd"}
+                dnam{"jardi"}
+                one{"{0} jards"}
+                other{"{0} jardi"}
+                zero{"{0} jardi"}
             }
         }
         light{
@@ -1871,6 +1937,13 @@ lv{
                 other{"{0} gal"}
                 per{"{0}/gal."}
                 zero{"{0} gal"}
+            }
+            gallon-imperial{
+                dnam{"imp. gal."}
+                one{"{0} imp. gal."}
+                other{"{0} imp. gal."}
+                per{"{0}/imp. gal."}
+                zero{"{0} imp. gal."}
             }
             hectoliter{
                 dnam{"hl"}

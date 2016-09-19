@@ -7,10 +7,6 @@ en_AU{
             "$",
             "Australian Dollar",
         }
-        AWG{
-            "AWG",
-            "Aruba Guilder",
-        }
         BAM{
             "BAM",
             "Bosnia-Herzegovina Convertible Marka",
@@ -135,10 +131,6 @@ en_AU{
         TRY{"TRY"}
     }
     CurrencyPlurals{
-        AWG{
-            one{"Aruba guilder"}
-            other{"Aruba guilders"}
-        }
         BAM{
             one{"Bosnia-Herzegovina convertible marka"}
             other{"Bosnia-Herzegovina convertible marka"}
@@ -208,5 +200,5 @@ en_AU{
             other{"Samoan talas"}
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.29.54"}
 }

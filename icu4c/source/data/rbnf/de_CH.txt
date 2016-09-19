@@ -5,7 +5,7 @@ de_CH{
         SpelloutRules{
             "%spellout-numbering-year:",
             "-x: minus >>;",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "1100/100: <%spellout-cardinal-masculine<\u00ADhundert[\u00AD>>];",
             "10000: =%spellout-numbering=;",
@@ -180,5 +180,5 @@ de_CH{
             "0: =%spellout-ordinal=s;",
         }
     }
-    Version{"2.1.23.47"}
+    Version{"2.1.29.33"}
 }

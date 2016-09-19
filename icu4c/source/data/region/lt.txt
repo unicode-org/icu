@@ -113,7 +113,7 @@ lt{
         FO{"Farerų Salos"}
         FR{"Prancūzija"}
         GA{"Gabonas"}
-        GB{"Didžioji Britanija"}
+        GB{"Jungtinė Karalystė"}
         GD{"Grenada"}
         GE{"Gruzija"}
         GF{"Prancūzijos Gviana"}
@@ -165,7 +165,7 @@ lt{
         KZ{"Kazachstanas"}
         LA{"Laosas"}
         LB{"Libanas"}
-        LC{"Šventoji Liucija"}
+        LC{"Sent Lusija"}
         LI{"Lichtenšteinas"}
         LK{"Šri Lanka"}
         LR{"Liberija"}
@@ -212,13 +212,13 @@ lt{
         OM{"Omanas"}
         PA{"Panama"}
         PE{"Peru"}
-        PF{"Prancūzų Polinezija"}
+        PF{"Prancūzijos Polinezija"}
         PG{"Papua Naujoji Gvinėja"}
         PH{"Filipinai"}
         PK{"Pakistanas"}
         PL{"Lenkija"}
         PM{"Sen Pjeras ir Mikelonas"}
-        PN{"Pitkernas"}
+        PN{"Pitkerno salos"}
         PR{"Puerto Rikas"}
         PS{"Palestinos teritorija"}
         PT{"Portugalija"}
@@ -272,6 +272,7 @@ lt{
         UA{"Ukraina"}
         UG{"Uganda"}
         UM{"Jungtinių Valstijų Mažosios Tolimosios Salos"}
+        UN{"Jungtinės Tautos"}
         US{"Jungtinės Valstijos"}
         UY{"Urugvajus"}
         UZ{"Uzbekistanas"}
@@ -282,7 +283,7 @@ lt{
         VI{"Jungtinių Valstijų Mergelių Salos"}
         VN{"Vietnamas"}
         VU{"Vanuatu"}
-        WF{"Volisas ir Futuna"}
+        WF{"Volisas ir Futūna"}
         WS{"Samoa"}
         XK{"Kosovas"}
         YE{"Jemenas"}
@@ -293,10 +294,11 @@ lt{
         ZZ{"nežinoma sritis"}
     }
     Countries%short{
-        GB{"Didžioji Britanija"}
+        GB{"JK"}
         HK{"Honkongas"}
         MO{"Makao"}
         PS{"Palestina"}
+        UN{"JT"}
         US{"JAV"}
     }
     Countries%variant{
@@ -306,5 +308,5 @@ lt{
         FK{"Folklando (Malvinų) Salos"}
         MK{"Makedonijos Respublika"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

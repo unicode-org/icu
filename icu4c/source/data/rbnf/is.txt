@@ -10,7 +10,7 @@ is{
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
             "-x: m\u00EDnus >>;",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "1100/100: << hundra\u00F0[ og >>];",
             "10000: =%spellout-numbering=;",
@@ -116,5 +116,5 @@ is{
             "1000000000000000000: =#,##0.#=;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.27.22"}
 }

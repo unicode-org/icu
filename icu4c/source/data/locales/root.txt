@@ -28,11 +28,11 @@ root{
                 group{"٬"}
                 infinity{"∞"}
                 list{"؛"}
-                minusSign{"‏-"}
+                minusSign{"؜-"}
                 nan{"NaN"}
                 perMille{"؉"}
-                percentSign{"٪‏"}
-                plusSign{"‏+"}
+                percentSign{"٪؜"}
+                plusSign{"؜+"}
                 superscriptingExponent{"×"}
                 timeSeparator{":"}
             }
@@ -162,7 +162,7 @@ root{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.26.65"}
+    Version{"2.1.28.79"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -1463,13 +1463,13 @@ root{
                     "Yōrō (717–724)",
                     "Jinki (724–729)",
                     "Tenpyō (729–749)",
-                    "Tenpyō-kampō (749-749)",
-                    "Tenpyō-shōhō (749-757)",
-                    "Tenpyō-hōji (757-765)",
-                    "Tenpyō-jingo (765-767)",
-                    "Jingo-keiun (767-770)",
+                    "Tenpyō-kampō (749–749)",
+                    "Tenpyō-shōhō (749–757)",
+                    "Tenpyō-hōji (757–765)",
+                    "Tenpyō-jingo (765–767)",
+                    "Jingo-keiun (767–770)",
                     "Hōki (770–780)",
-                    "Ten-ō (781-782)",
+                    "Ten-ō (781–782)",
                     "Enryaku (782–806)",
                     "Daidō (806–810)",
                     "Kōnin (810–824)",
@@ -1478,7 +1478,7 @@ root{
                     "Kajō (848–851)",
                     "Ninju (851–854)",
                     "Saikō (854–857)",
-                    "Ten-an (857-859)",
+                    "Ten-an (857–859)",
                     "Jōgan (859–877)",
                     "Gangyō (877–885)",
                     "Ninna (885–889)",
@@ -1530,7 +1530,7 @@ root{
                     "Chōji (1104–1106)",
                     "Kashō (1106–1108)",
                     "Tennin (1108–1110)",
-                    "Ten-ei (1110-1113)",
+                    "Ten-ei (1110–1113)",
                     "Eikyū (1113–1118)",
                     "Gen’ei (1118–1120)",
                     "Hōan (1120–1124)",
@@ -1701,13 +1701,13 @@ root{
                     "Yōrō (717–724)",
                     "Jinki (724–729)",
                     "Tenpyō (729–749)",
-                    "Tenpyō-kampō (749-749)",
-                    "Tenpyō-shōhō (749-757)",
-                    "Tenpyō-hōji (757-765)",
-                    "Tenpyō-jingo (765-767)",
-                    "Jingo-keiun (767-770)",
+                    "Tenpyō-kampō (749–749)",
+                    "Tenpyō-shōhō (749–757)",
+                    "Tenpyō-hōji (757–765)",
+                    "Tenpyō-jingo (765–767)",
+                    "Jingo-keiun (767–770)",
                     "Hōki (770–780)",
-                    "Ten-ō (781-782)",
+                    "Ten-ō (781–782)",
                     "Enryaku (782–806)",
                     "Daidō (806–810)",
                     "Kōnin (810–824)",
@@ -1716,7 +1716,7 @@ root{
                     "Kajō (848–851)",
                     "Ninju (851–854)",
                     "Saikō (854–857)",
-                    "Ten-an (857-859)",
+                    "Ten-an (857–859)",
                     "Jōgan (859–877)",
                     "Gangyō (877–885)",
                     "Ninna (885–889)",
@@ -1768,7 +1768,7 @@ root{
                     "Chōji (1104–1106)",
                     "Kashō (1106–1108)",
                     "Tennin (1108–1110)",
-                    "Ten-ei (1110-1113)",
+                    "Ten-ei (1110–1113)",
                     "Eikyū (1113–1118)",
                     "Gen’ei (1118–1120)",
                     "Hōan (1120–1124)",
@@ -2013,76 +2013,92 @@ root{
         }
     }
     characterLabel{
-        activities{"Activities"}
-        african_scripts{"African Scripts"}
-        american_scripts{"American Scripts"}
-        animals_nature{"Animals & Nature"}
-        arrows{"Arrows"}
-        box_drawing{"Box Drawing"}
-        braille{"Braille"}
-        bullets_stars{"Bullets/Stars"}
-        consonantal_jamo{"Consonantal Jamo"}
-        currency_symbols{"Currency Symbols"}
-        dash_connector{"Dash/Connector"}
-        digits{"Digits"}
-        dingbats{"Dingbats"}
-        divination_symbols{"Divination Symbols"}
-        downwards_arrows{"Downwards Arrows"}
-        downwards_upwards_arrows{"Downwards Upwards Arrows"}
-        east_asian_scripts{"East Asian Scripts"}
-        emoji{"Emoji"}
-        european_scripts{"European Scripts"}
-        flags{"Flags"}
-        food_drink{"Food & Drink"}
-        format{"Format"}
-        format_whitespace{"Format & Whitespace"}
-        full_width_form_variant{"Full-Width Form Variants"}
-        geometric_shapes{"Geometric Shapes"}
-        half_width_form_variant{"Half-Width Form Variants"}
-        han_characters{"Han Characters"}
-        han_radicals{"Han Radicals"}
-        hanja{"Hanja"}
-        hanzi_simplified{"Hanzi (Simplified)"}
-        hanzi_traditional{"Hanzi (Traditional)"}
-        historic_scripts{"Historic Scripts"}
-        ideographic_desc_characters{"Ideographic Desc. Characters"}
-        japanese_kana{"Japanese Kana"}
-        kanbun{"Kanbun"}
-        kanji{"Kanji"}
-        leftwards_arrows{"Leftwards Arrows"}
-        leftwards_rightwards_arrows{"Leftwards Rightwards Arrows"}
-        letterlike_symbols{"Letterlike Symbols"}
-        limited_use{"Limited Use"}
-        math_symbols{"Math Symbols"}
-        middle_eastern_scripts{"Middle Eastern Scripts"}
-        miscellaneous{"Miscellaneous"}
-        modern_scripts{"Modern Scripts"}
-        modifier{"Modifier"}
-        musical_symbols{"Musical Symbols"}
-        nonspacing{"Nonspacing"}
-        numbers{"Numbers"}
-        objects{"Objects"}
-        other{"Other"}
-        paired{"Paired"}
-        phonetic_alphabet{"Phonetic Alphabet"}
-        pictographs{"Pictographs"}
-        punctuation{"Punctuation"}
-        rightwards_arrows{"Rightwards Arrows"}
-        sign_standard_symbols{"Sign/Standard Symbols"}
-        small_form_variant{"Small Form Variants"}
-        smileys_people{"Smileys & People"}
-        south_asian_scripts{"South Asian Scripts"}
-        southeast_asian_scripts{"Southeast Asian Scripts"}
-        spacing{"Spacing"}
-        symbols{"Symbols"}
-        technical_symbols{"Technical Symbols"}
-        tone_marks{"Tone Marks"}
-        travel_places{"Travel & Places"}
-        upwards_arrows{"Upwards Arrows"}
-        variant_forms{"Variant Forms"}
-        vocalic_jamo{"Vocalic Jamo"}
-        western_asian_scripts{"Western Asian Scripts"}
-        whitespace{"Whitespace"}
+        activities{"activity"}
+        african_scripts{"African script"}
+        american_scripts{"American script"}
+        animal{"animal"}
+        animals_nature{"animal or nature"}
+        arrows{"arrow"}
+        body{"body"}
+        box_drawing{"box drawing"}
+        braille{"braille"}
+        building{"building"}
+        bullets_stars{"bullet or star"}
+        consonantal_jamo{"consonantal jamo"}
+        currency_symbols{"currency symbol"}
+        dash_connector{"dash or connector"}
+        digits{"digit"}
+        dingbats{"dingbat"}
+        divination_symbols{"divination symbol"}
+        downwards_arrows{"downwards arrow"}
+        downwards_upwards_arrows{"downwards upwards arrow"}
+        east_asian_scripts{"East Asian script"}
+        emoji{"emoji"}
+        european_scripts{"European script"}
+        female{"female"}
+        flag{"flag"}
+        flags{"flags"}
+        food_drink{"food & drink"}
+        format{"format"}
+        format_whitespace{"format & whitespace"}
+        full_width_form_variant{"full-width variant"}
+        geometric_shapes{"geometric shape"}
+        half_width_form_variant{"half-width variant"}
+        han_characters{"Han character"}
+        han_radicals{"Han radical"}
+        hanja{"hanja"}
+        hanzi_simplified{"Hanzi (simplified)"}
+        hanzi_traditional{"Hanzi (traditional)"}
+        heart{"heart"}
+        historic_scripts{"historic script"}
+        ideographic_desc_characters{"ideographic desc. character"}
+        japanese_kana{"Japanese kana"}
+        kanbun{"kanbun"}
+        kanji{"kanji"}
+        keycap{"keycap"}
+        leftwards_arrows{"leftwards arrow"}
+        leftwards_rightwards_arrows{"leftwards rightwards arrow"}
+        letterlike_symbols{"letterlike symbol"}
+        limited_use{"limited-use"}
+        male{"male"}
+        math_symbols{"math symbol"}
+        middle_eastern_scripts{"Middle Eastern script"}
+        miscellaneous{"miscellaneous"}
+        modern_scripts{"modern script"}
+        modifier{"modifier"}
+        musical_symbols{"musical symbol"}
+        nature{"nature"}
+        nonspacing{"nonspacing"}
+        numbers{"numbers"}
+        objects{"object"}
+        other{"other"}
+        paired{"paired"}
+        person{"person"}
+        phonetic_alphabet{"phonetic alphabet"}
+        pictographs{"pictograph"}
+        place{"place"}
+        plant{"plant"}
+        punctuation{"punctuation"}
+        rightwards_arrows{"rightwards arrow"}
+        sign_standard_symbols{"sign or symbol"}
+        small_form_variant{"small variants"}
+        smiley{"smiley"}
+        smileys_people{"smiley or person"}
+        south_asian_scripts{"South Asian script"}
+        southeast_asian_scripts{"Southeast Asian script"}
+        spacing{"spacing"}
+        sport{"sport"}
+        symbols{"symbol"}
+        technical_symbols{"technical symbol"}
+        tone_marks{"tone mark"}
+        travel{"travel"}
+        travel_places{"travel or place"}
+        upwards_arrows{"upwards arrows"}
+        variant_forms{"variant"}
+        vocalic_jamo{"vocalic jamo"}
+        weather{"weather"}
+        western_asian_scripts{"Western Asian script"}
+        whitespace{"whitespace"}
     }
     delimiters{
         alternateQuotationEnd{"’"}

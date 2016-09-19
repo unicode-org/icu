@@ -2,17 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hans_SG{
     Currencies{
-        AWG{
-            "AWG",
-            "阿鲁巴弗罗林",
-        }
         CNY{
             "CN¥",
             "人民币",
-        }
-        NIO{
-            "NIO",
-            "尼加拉瓜科多巴",
         }
         SGD{
             "$",
@@ -37,5 +29,5 @@ zh_Hans_SG{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.99"}
 }

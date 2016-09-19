@@ -584,6 +584,7 @@ keyTypeData:table(nofallback){
             ussystem{""}
         }
         numbers{
+            adlm{""}
             ahom{""}
             arab{""}
             arabext{""}
@@ -591,6 +592,7 @@ keyTypeData:table(nofallback){
             armnlow{""}
             bali{""}
             beng{""}
+            bhks{""}
             brah{""}
             cakm{""}
             cham{""}
@@ -638,6 +640,7 @@ keyTypeData:table(nofallback){
             mymrshan{""}
             mymrtlng{""}
             native{""}
+            newa{""}
             nkoo{""}
             olck{""}
             orya{""}
@@ -671,6 +674,7 @@ keyTypeData:table(nofallback){
             hex{""}
             numericPinyin{"npinyin"}
             publishing{"publish"}
+            zawgyi{""}
         }
         sd{
             SUBDIVISION_CODE{""}

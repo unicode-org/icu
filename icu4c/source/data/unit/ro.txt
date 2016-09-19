@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ro{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -92,6 +92,7 @@ ro{
                 few{"{0} kilometri pătrați"}
                 one{"{0} kilometru pătrat"}
                 other{"{0} de kilometri pătrați"}
+                per{"{0} pe kilometru pătrat"}
             }
             square-meter{
                 dnam{"metri pătrați"}
@@ -105,6 +106,7 @@ ro{
                 few{"{0} mile pătrate"}
                 one{"{0} milă pătrată"}
                 other{"{0} de mile pătrate"}
+                per{"{0} pe milă pătrată"}
             }
             square-yard{
                 dnam{"iarzi pătrați"}
@@ -122,6 +124,24 @@ ro{
                 few{"{0} karate"}
                 one{"{0} karată"}
                 other{"{0} de karate"}
+            }
+            milligram-per-deciliter{
+                dnam{"miligrame pe decilitru"}
+                few{"{0} miligrame pe decilitru"}
+                one{"{0} miligram pe decilitru"}
+                other{"{0} de miligrame pe decilitru"}
+            }
+            millimole-per-liter{
+                dnam{"milimoli pe litru"}
+                few{"{0} milimoli pe litru"}
+                one{"{0} milimol pe litru"}
+                other{"{0} de milimoli pe litru"}
+            }
+            part-per-million{
+                dnam{"părți pe milion"}
+                few{"{0} părți pe milion"}
+                one{"{0} parte pe milion"}
+                other{"{0} de părți pe milion"}
             }
         }
         consumption{
@@ -142,6 +162,12 @@ ro{
                 few{"{0} mile pe galon"}
                 one{"{0} milă pe galon"}
                 other{"{0} de mile pe galon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mile pe galon imperial"}
+                few{"{0} mile pe galon imperial"}
+                one{"{0} milă pe galon imperial"}
+                other{"{0} de mile pe galon imperial"}
             }
         }
         coordinate{
@@ -770,6 +796,13 @@ ro{
                 other{"{0} de galoane"}
                 per{"{0} per galon"}
             }
+            gallon-imperial{
+                dnam{"galoane imperiale"}
+                few{"{0} galoane imperiale"}
+                one{"{0} galon imperial"}
+                other{"{0} de galoane imperiale"}
+                per{"{0} pe galon imperial"}
+            }
             hectoliter{
                 dnam{"hectolitri"}
                 few{"{0} hectolitri"}
@@ -1139,9 +1172,9 @@ ro{
             }
             arc-second{
                 dnam{"arcsec"}
-                few{"{0} sec."}
-                one{"{0} sec."}
-                other{"{0} sec."}
+                few{"{0} arcsec"}
+                one{"{0} arcsec"}
+                other{"{0} arcsec"}
             }
             degree{
                 dnam{"grade"}
@@ -1200,6 +1233,7 @@ ro{
                 few{"{0} km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1213,6 +1247,7 @@ ro{
                 few{"{0} mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1230,6 +1265,24 @@ ro{
                 few{"{0} kt"}
                 one{"{0} kt"}
                 other{"{0} kt"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                few{"{0} mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                few{"{0} mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                few{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1250,6 +1303,12 @@ ro{
                 few{"{0} mile/gal."}
                 one{"{0} milă/gal."}
                 other{"{0} mile/gal."}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mi/gal imp."}
+                few{"{0} mi/gal imp."}
+                one{"{0} mi/gal imp."}
+                other{"{0} mi/gal imp."}
             }
         }
         coordinate{

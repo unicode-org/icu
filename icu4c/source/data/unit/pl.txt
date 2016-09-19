@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pl{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -27,17 +27,17 @@ pl{
         angle{
             arc-minute{
                 dnam{"minuty kątowe"}
-                few{"{0} minuty"}
-                many{"{0} minut"}
-                one{"{0} minuta"}
-                other{"{0} minuty"}
+                few{"{0} minuty kątowe"}
+                many{"{0} minut kątowych"}
+                one{"{0} minuta kątowa"}
+                other{"{0} minuty kątowej"}
             }
             arc-second{
                 dnam{"sekundy kątowe"}
-                few{"{0} sekundy"}
-                many{"{0} sekund"}
-                one{"{0} sekunda"}
-                other{"{0} sekundy"}
+                few{"{0} sekundy kątowe"}
+                many{"{0} sekund kątowych"}
+                one{"{0} sekunda kątowa"}
+                other{"{0} sekundy kątowej"}
             }
             degree{
                 dnam{"stopnie"}
@@ -105,6 +105,7 @@ pl{
                 many{"{0} kilometrów kwadratowych"}
                 one{"{0} kilometr kwadratowy"}
                 other{"{0} kilometra kwadratowego"}
+                per{"{0} na kilometr kwadratowy"}
             }
             square-meter{
                 dnam{"metry kwadratowe"}
@@ -120,6 +121,7 @@ pl{
                 many{"{0} mil kwadratowych"}
                 one{"{0} mila kwadratowa"}
                 other{"{0} mili kwadratowej"}
+                per{"{0} na milę kwadratową"}
             }
             square-yard{
                 dnam{"jardy kwadratowe"}
@@ -140,10 +142,31 @@ pl{
                 one{"{0} karat"}
                 other{"{0} karata"}
             }
+            milligram-per-deciliter{
+                dnam{"miligramy na decylitr"}
+                few{"{0} miligramy na decylitr"}
+                many{"{0} miligramów na decylitr"}
+                one{"{0} miligram na decylitr"}
+                other{"{0} miligrama na decylitr"}
+            }
+            millimole-per-liter{
+                dnam{"milimole na litr"}
+                few{"{0} milimole na litr"}
+                many{"{0} milimoli na litr"}
+                one{"{0} milimol na litr"}
+                other{"{0} milimola na litr"}
+            }
+            part-per-million{
+                dnam{"części na milion"}
+                few{"{0} części na milion"}
+                many{"{0} części na milion"}
+                one{"{0} część na milion"}
+                other{"{0} części na milion"}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"litrów na 100 kilometrów"}
+                dnam{"litry na 100 kilometrów"}
                 few{"{0} litry na 100 kilometrów"}
                 many{"{0} litrów na 100 kilometrów"}
                 one{"{0} litr na 100 kilometrów"}
@@ -162,6 +185,13 @@ pl{
                 many{"{0} mili na galon"}
                 one{"{0} mila na galon"}
                 other{"{0} mili na galon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mile na galon angielski"}
+                few{"{0} mile na galon angielski"}
+                many{"{0} mil na galon angielski"}
+                one{"{0} mila na galon angielski"}
+                other{"{0} mili na galon angielski"}
             }
         }
         coordinate{
@@ -886,6 +916,14 @@ pl{
                 other{"{0} galona"}
                 per{"{0} na galon"}
             }
+            gallon-imperial{
+                dnam{"galony angielskie"}
+                few{"{0} galony angielskie"}
+                many{"{0} galonów angielskich"}
+                one{"{0} galon angielski"}
+                other{"{0} galona angielskiego"}
+                per{"{0} na galon angielski"}
+            }
             hectoliter{
                 dnam{"hektolitry"}
                 few{"{0} hektolitry"}
@@ -1307,17 +1345,17 @@ pl{
         angle{
             arc-minute{
                 dnam{"minuty"}
-                few{"{0} min"}
-                many{"{0} min"}
-                one{"{0} min"}
-                other{"{0} min"}
+                few{"{0}′"}
+                many{"{0}′"}
+                one{"{0}′"}
+                other{"{0}′"}
             }
             arc-second{
                 dnam{"sekundy"}
-                few{"{0} s"}
-                many{"{0} s"}
-                one{"{0} s"}
-                other{"{0} s"}
+                few{"{0}″"}
+                many{"{0}″"}
+                one{"{0}″"}
+                other{"{0}″"}
             }
             degree{
                 dnam{"stopnie"}
@@ -1385,6 +1423,7 @@ pl{
                 many{"{0} km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1400,6 +1439,7 @@ pl{
                 many{"{0} mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1414,11 +1454,32 @@ pl{
         }
         concentr{
             karat{
-                dnam{"kt"}
+                dnam{"karaty"}
                 few{"{0} kt"}
                 many{"{0} kt"}
                 one{"{0} kt"}
                 other{"{0} kt"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                few{"{0} mg/dl"}
+                many{"{0} mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"milimole/litr"}
+                few{"{0} mmol/l"}
+                many{"{0} mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"części/milion"}
+                few{"{0} ppm"}
+                many{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1442,6 +1503,13 @@ pl{
                 many{"{0} mpg"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mile/gal ang."}
+                few{"{0} mi/gal ang."}
+                many{"{0} mi/gal ang."}
+                one{"{0} mi/gal ang."}
+                other{"{0} mi/gal ang."}
             }
         }
         coordinate{
@@ -1745,10 +1813,10 @@ pl{
             }
             inch{
                 dnam{"cale"}
-                few{"{0}″"}
-                many{"{0}″"}
-                one{"{0}″"}
-                other{"{0}″"}
+                few{"{0} cale"}
+                many{"{0} cali"}
+                one{"{0} cal"}
+                other{"{0} cala"}
                 per{"{0}/cal"}
             }
             kilometer{
@@ -2165,6 +2233,14 @@ pl{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"gal ang."}
+                few{"{0} gal ang."}
+                many{"{0} gal ang."}
+                one{"{0} gal ang."}
+                other{"{0} gal ang."}
+                per{"{0}/gal ang."}
             }
             hectoliter{
                 dnam{"hl"}

@@ -2,17 +2,5 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_GB{
     %%Parent{"en_001"}
-    Keys{
-        colNormalization{"Normalised Sorting"}
-    }
-    Languages{
-        nds_NL{"West Low German"}
-    }
-    Types{
-        colNormalization{
-            no{"Sort Without Normalisation"}
-            yes{"Sort Unicode Normalised"}
-        }
-    }
-    Version{"2.1.26.18"}
+    Version{"2.1.29.24"}
 }

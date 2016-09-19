@@ -215,5 +215,5 @@ yo_BJ{
             "Dɔla ti Orílɛ́ède Siibabuwe",
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.29.54"}
 }

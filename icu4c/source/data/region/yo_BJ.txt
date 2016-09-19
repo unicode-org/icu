@@ -227,5 +227,5 @@ yo_BJ{
         ZM{"Orílɛ́ède shamibia"}
         ZW{"Orílɛ́ède shimibabe"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.29.54"}
 }

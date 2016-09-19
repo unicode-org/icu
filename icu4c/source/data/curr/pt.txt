@@ -218,9 +218,13 @@ pt{
             "BYB",
             "Rublo novo bielo-russo (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "Rublo bielorrusso",
+        }
         BYR{
             "BYR",
-            "Rublo bielorrusso",
+            "Rublo bielorrusso (2000–2016)",
         }
         BZD{
             "BZD",
@@ -1192,7 +1196,7 @@ pt{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1209,6 +1213,7 @@ pt{
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
         GTQ{"Q"}
@@ -1249,6 +1254,7 @@ pt{
         PKR{"Rs"}
         PLN{"zł"}
         PYG{"₲"}
+        RON{"L"}
         RUB{"₽"}
         RWF{"RF"}
         SBD{"$"}
@@ -1494,9 +1500,13 @@ pt{
             one{"Novo rublo bielorusso (BYB)"}
             other{"Novos rublos bielorussos (BYB)"}
         }
-        BYR{
+        BYN{
             one{"Rublo bielorrusso"}
             other{"Rublos bielorrussos"}
+        }
+        BYR{
+            one{"Rublo bielorrusso (2000–2016)"}
+            other{"Rublos bielorrussos (2000–2016)"}
         }
         BZD{
             one{"Dólar belizenho"}
@@ -2459,5 +2469,5 @@ pt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

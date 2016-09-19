@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fa{
-    Version{"2.1.26.36"}
+    Version{"2.1.29.44"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,6 +79,7 @@ fa{
                 dnam{"کیلومتر مربع"}
                 one{"{0} کیلومتر مربع"}
                 other{"{0} کیلومتر مربع"}
+                per{"کیلومتر مربع در {0}"}
             }
             square-meter{
                 dnam{"متر مربع"}
@@ -90,6 +91,7 @@ fa{
                 dnam{"مایل مربع"}
                 one{"{0} مایل مربع"}
                 other{"{0} مایل مربع"}
+                per{"{0} در مایل مربع"}
             }
             square-yard{
                 dnam{"یارد مربع"}
@@ -105,6 +107,21 @@ fa{
                 dnam{"عیار"}
                 one{"{0} عیار"}
                 other{"{0} عیار"}
+            }
+            milligram-per-deciliter{
+                dnam{"میلی‌گرم در دسی‌لیتر"}
+                one{"{0} میلی‌گرم در دسی‌لیتر"}
+                other{"{0} میلی‌گرم در دسی‌لیتر"}
+            }
+            millimole-per-liter{
+                dnam{"میلی‌مول در لیتر"}
+                one{"{0} میلی‌مول در لیتر"}
+                other{"{0} میلی‌مول در لیتر"}
+            }
+            part-per-million{
+                dnam{"بخش در میلیون"}
+                one{"{0} بخش در میلیون"}
+                other{"{0} بخش در میلیون"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ fa{
                 dnam{"مایل در گالن"}
                 one{"{0} مایل در گالن"}
                 other{"{0} مایل در گالن"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"مایل در امپریال گالن"}
+                one{"{0} مایل در امپریال گالن"}
+                other{"{0} مایل در امپریال گالن"}
             }
         }
         coordinate{
@@ -654,6 +676,12 @@ fa{
                 other{"{0} گالن"}
                 per{"{0} در گالن"}
             }
+            gallon-imperial{
+                dnam{"گالن امپریال"}
+                one{"{0} گالن امپریال"}
+                other{"{0} گالن امپریال"}
+                per{"{0} در گالن امپریال"}
+            }
             hectoliter{
                 dnam{"هکتولیتر"}
                 one{"{0} هکتولیتر"}
@@ -1075,6 +1103,7 @@ fa{
                 dnam{"کیلومتر مربع"}
                 one{"{0}‎ km²"}
                 other{"{0}‎ km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"متر مربع"}
@@ -1086,6 +1115,7 @@ fa{
                 dnam{"مایل مربع"}
                 one{"{0} مایل مربع"}
                 other{"{0} مایل مربع"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"یارد مربع"}
@@ -1101,6 +1131,21 @@ fa{
                 dnam{"عیار"}
                 one{"{0} عیار"}
                 other{"{0} عیار"}
+            }
+            milligram-per-deciliter{
+                dnam{"میلی‌گرم در دسی‌لیتر"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"میلی‌مول/لیتر"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"بخش/میلیون"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1118,6 +1163,11 @@ fa{
                 dnam{"مایل/گالن"}
                 one{"{0} مایل در گالن"}
                 other{"{0} مایل در گالن"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"مایل/امپریال گالن"}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
             }
         }
         coordinate{
@@ -1266,9 +1316,9 @@ fa{
         }
         energy{
             calorie{
-                dnam{"cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
+                dnam{"کالری"}
+                one{"{0} کالری"}
+                other{"{0} کالری"}
             }
             foodcalorie{
                 dnam{"کالری"}
@@ -1649,6 +1699,12 @@ fa{
                 one{"{0} گالن"}
                 other{"{0} گالن"}
                 per{"{0} در گالن"}
+            }
+            gallon-imperial{
+                dnam{"گالن امپریال"}
+                one{"{0} گالن امپریال"}
+                other{"{0} گالن امپریال"}
+                per{"{0}/گالن امپریال"}
             }
             hectoliter{
                 dnam{"هکتولیتر"}

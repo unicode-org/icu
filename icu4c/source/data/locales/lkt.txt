@@ -8,7 +8,7 @@ lkt{
     }
     ExemplarCharactersIndex{"[A B Č E G Ǧ H Ȟ I K L M N Ŋ O P S Š T U W Y Z Ž]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . \u0022 “ ” ( ) \\[ \\] @ * / \\& #]"}
-    Version{"2.1.25.97"}
+    Version{"2.1.27.40"}
     calendar{
         gregorian{
             dayNames{
@@ -57,7 +57,7 @@ lkt{
         day{
             dn{"Aŋpétu"}
             relative{
-                "-1"{"Lé aŋpétu kiŋ"}
+                "-1"{"Ȟtálehaŋ"}
                 "0"{"Lé aŋpétu kiŋ"}
                 "1"{"Híŋhaŋni kiŋháŋ"}
             }
@@ -90,6 +90,14 @@ lkt{
         }
         minute{
             dn{"Owápȟe oȟʼáŋkȟo"}
+            relativeTime{
+                future{
+                    other{"Letáŋhaŋ oȟ’áŋkȟo {0} kiŋháŋ"}
+                }
+                past{
+                    other{"Hékta oȟ’áŋkȟo {0} k’uŋ héhaŋ"}
+                }
+            }
         }
         mon{
             relative{
@@ -103,7 +111,7 @@ lkt{
             relative{
                 "-1"{"Wí kʼuŋ héhaŋ"}
                 "0"{"Lé wí kiŋ"}
-                "1"{"Wí kiŋháŋ"}
+                "1"{"Tȟokáta wí kiŋháŋ"}
             }
             relativeTime{
                 future{

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 lt{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -105,6 +105,7 @@ lt{
                 many{"{0} kvadratinio kilometro"}
                 one{"{0} kvadratinis kilometras"}
                 other{"{0} kvadratinių kilometrų"}
+                per{"{0} kv. km"}
             }
             square-meter{
                 dnam{"kvadratiniai metrai"}
@@ -120,6 +121,7 @@ lt{
                 many{"{0} kvadratinės mylios"}
                 one{"{0} kvadratinė mylia"}
                 other{"{0} kvadratinių mylių"}
+                per{"{0} kv. my"}
             }
             square-yard{
                 dnam{"kvadratiniai jardai"}
@@ -139,6 +141,27 @@ lt{
                 many{"{0} karato"}
                 one{"{0} karatas"}
                 other{"{0} karatų"}
+            }
+            milligram-per-deciliter{
+                dnam{"miligramai decilitre"}
+                few{"{0} miligramai decilitre"}
+                many{"{0} miligramo decilitre"}
+                one{"{0} miligramas decilitre"}
+                other{"{0} miligramų decilitre"}
+            }
+            millimole-per-liter{
+                dnam{"milimoliai litre"}
+                few{"{0} milimoliai litre"}
+                many{"{0} milimoliai litre"}
+                one{"{0} milimolis litre"}
+                other{"{0} milimolių litre"}
+            }
+            part-per-million{
+                dnam{"milijoninės dalys"}
+                few{"{0} milijoninės dalys"}
+                many{"{0} milijoninės dalies"}
+                one{"{0} milijoninė dalis"}
+                other{"{0} milijoninių dalių"}
             }
         }
         consumption{
@@ -162,6 +185,13 @@ lt{
                 many{"{0} mylios už galoną"}
                 one{"{0} mylia už galoną"}
                 other{"{0} mylių už galoną"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mylios už imperinį galoną"}
+                few{"{0} mylios už imperinį galoną"}
+                many{"{0} mylios už imperinį galoną"}
+                one{"{0} mylia už imperinį galoną"}
+                other{"{0} mylių už imperinį galoną"}
             }
         }
         coordinate{
@@ -914,6 +944,14 @@ lt{
                 other{"{0} galonų"}
                 per{"{0}/gal"}
             }
+            gallon-imperial{
+                dnam{"imperinis galonas"}
+                few{"{0} imperiniai galonai"}
+                many{"{0} imperinio galono"}
+                one{"{0} imperinis galonas"}
+                other{"{0} imperinių galonų"}
+                per{"{0} imperiniame galone"}
+            }
             hectoliter{
                 dnam{"hektolitrai"}
                 few{"{0} hektolitrai"}
@@ -1479,6 +1517,7 @@ lt{
                 many{"{0} kv. km"}
                 one{"{0} kv. km"}
                 other{"{0} kv. km"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"kv. m"}
@@ -1494,6 +1533,7 @@ lt{
                 many{"{0} kv. my"}
                 one{"{0} kv. my"}
                 other{"{0} kv. my"}
+                per{"{0}/my²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1514,6 +1554,27 @@ lt{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                few{"{0} mg/dl"}
+                many{"{0} mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                few{"{0} mmol/l"}
+                many{"{0} mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                few{"{0} ppm"}
+                many{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1531,11 +1592,18 @@ lt{
                 other{"{0} l/km"}
             }
             mile-per-gallon{
-                dnam{"mi/gal"}
-                few{"{0} mi/gal"}
-                many{"{0} mi/gal"}
-                one{"{0} mi/gal"}
-                other{"{0} mi/gal"}
+                dnam{"my/gal"}
+                few{"{0} my/gal"}
+                many{"{0} my/gal"}
+                one{"{0} my/gal"}
+                other{"{0} my/gal"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"my/imp. g"}
+                few{"{0} my/imp. g"}
+                many{"{0} my/imp. g"}
+                one{"{0} my/imp. g"}
+                other{"{0} my/imp. g"}
             }
         }
         coordinate{
@@ -2287,6 +2355,14 @@ lt{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"imp. galonas"}
+                few{"{0} imp. galonai"}
+                many{"{0} imp. galono"}
+                one{"{0} imp. galonas"}
+                other{"{0} imp. galonų"}
+                per{"{0}/imp. galone"}
             }
             hectoliter{
                 dnam{"hl"}

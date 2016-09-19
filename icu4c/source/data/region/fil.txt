@@ -137,7 +137,7 @@ fil{
         HR{"Croatia"}
         HT{"Haiti"}
         HU{"Hungary"}
-        IC{"Canary Island"}
+        IC{"Canary Islands"}
         ID{"Indonesia"}
         IE{"Ireland"}
         IL{"Israel"}
@@ -272,6 +272,7 @@ fil{
         UA{"Ukraine"}
         UG{"Uganda"}
         UM{"U.S. Outlying Islands"}
+        UN{"Nagkakaisang Bansa"}
         US{"Estados Unidos"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -297,15 +298,17 @@ fil{
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palestine"}
+        UN{"UN"}
         US{"U.S."}
     }
     Countries%variant{
         CD{"Congo (DRC)"}
         CG{"Congo (Republika)"}
         CI{"Ivory Coast"}
+        CZ{"Czechia"}
         FK{"Falkland Islands (Islas Malvinas)"}
         MK{"Macedonia (FYROM)"}
         TL{"East Timor"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

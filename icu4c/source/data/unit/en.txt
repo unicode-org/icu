@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en{
-    Version{"2.1.26.81"}
+    Version{"2.1.29.81"}
     units{
         acceleration{
             g-force{
@@ -851,9 +851,9 @@ en{
                 other{"{0}mpg"}
             }
             mile-per-gallon-imperial{
-                dnam{"mpg Imp"}
-                one{"{0}mpgIm"}
-                other{"{0}mpgIm"}
+                dnam{"mpg UK"}
+                one{"{0}m/gUK"}
+                other{"{0}m/gUK"}
             }
         }
         digital{
@@ -1083,7 +1083,7 @@ en{
                 other{"{0}ly"}
             }
             meter{
-                dnam{"meter"}
+                dnam{"m"}
                 one{"{0}m"}
                 other{"{0}m"}
             }
@@ -1810,7 +1810,7 @@ en{
                 other{"{0} ly"}
             }
             meter{
-                dnam{"meters"}
+                dnam{"m"}
                 one{"{0} m"}
                 other{"{0} m"}
                 per{"{0}/m"}
@@ -2117,6 +2117,7 @@ en{
                 dnam{"liters"}
                 one{"{0} L"}
                 other{"{0} L"}
+                per{"{0}/L"}
             }
             megaliter{
                 dnam{"ML"}

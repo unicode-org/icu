@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 az{
-    Version{"2.1.25.97"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,6 +79,7 @@ az{
                 dnam{"kvadrat kilometr"}
                 one{"{0} kvadrat kilometr"}
                 other{"{0} kvadrat kilometr"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"kvadrat metr"}
@@ -90,6 +91,7 @@ az{
                 dnam{"kvadrat mil"}
                 one{"{0} kvadrat mil"}
                 other{"{0} kvadrat mil"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -106,12 +108,27 @@ az{
                 one{"{0} karat"}
                 other{"{0} karat"}
             }
+            milligram-per-deciliter{
+                dnam{"milliqram/desilitr"}
+                one{"{0} milliqram/desilitr"}
+                other{"{0} milliqram/desilitr"}
+            }
+            millimole-per-liter{
+                dnam{"millimol/litr"}
+                one{"{0} millimol/litr"}
+                other{"{0} millimol/litr"}
+            }
+            part-per-million{
+                dnam{"milyonda hissəcik"}
+                one{"milyonda {0} hissəcik"}
+                other{"milyonda {0} hissəcik"}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"L/100km"}
-                one{"{0} L/100km"}
-                other{"{0} L/100km"}
+                dnam{"100 kilometrə litr"}
+                one{"100 kilometrə {0} litr"}
+                other{"100 kilometrə {0} litr"}
             }
             liter-per-kilometer{
                 dnam{"litr/kilometr"}
@@ -119,9 +136,14 @@ az{
                 other{"{0} litr/kilometr"}
             }
             mile-per-gallon{
-                dnam{"mil/qallon"}
-                one{"{0} mil/qallon"}
-                other{"{0} mil/qallon"}
+                dnam{"qallona mil"}
+                one{"qallona {0} mil"}
+                other{"qallona {0} mil"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"imp. qallona mil"}
+                one{"imp. qallona {0} mil"}
+                other{"imp. qallona {0} mil"}
             }
         }
         coordinate{
@@ -659,6 +681,12 @@ az{
                 other{"{0} qallon"}
                 per{"{0}/qal"}
             }
+            gallon-imperial{
+                dnam{"İmp. qallon"}
+                one{"{0} imp. qallon"}
+                other{"{0} imp. qallon"}
+                per{"{0}/imp. qallon"}
+            }
             hectoliter{
                 dnam{"hektolitr"}
                 one{"{0} hektolitr"}
@@ -759,9 +787,9 @@ az{
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"L/100km"}
-                one{"{0} L/100km"}
-                other{"{0} L/100km"}
+                dnam{"l/100km"}
+                one{"{0} l/100km"}
+                other{"{0} l/100km"}
             }
         }
         coordinate{
@@ -1023,6 +1051,7 @@ az{
                 dnam{"kvadrat kilometr"}
                 one{"{0} kv km"}
                 other{"{0} kv km"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"kvadrat metr"}
@@ -1034,6 +1063,7 @@ az{
                 dnam{"kvadrat mil"}
                 one{"{0} kv mil"}
                 other{"{0} kv mil"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1050,22 +1080,42 @@ az{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            milligram-per-deciliter{
+                dnam{"mq/dl"}
+                one{"{0} mq/dl"}
+                other{"{0} mq/dl"}
+            }
+            millimole-per-liter{
+                dnam{"millimol/litr"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"hissəcik/milyon"}
+                one{"{0} hs/mln"}
+                other{"{0} hs/mln"}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"L/100km"}
-                one{"{0} L/100km"}
-                other{"{0} L/100km"}
+                dnam{"l/100km"}
+                one{"{0} l/100km"}
+                other{"{0} l/100km"}
             }
             liter-per-kilometer{
-                dnam{"L/km"}
-                one{"{0} L/km"}
-                other{"{0} L/km"}
+                dnam{"l/km"}
+                one{"{0} l/km"}
+                other{"{0} l/km"}
             }
             mile-per-gallon{
-                dnam{"mpg"}
-                one{"{0} mpg"}
-                other{"{0} mpg"}
+                dnam{"mil/qal"}
+                one{"{0} mil/qal"}
+                other{"{0} mil/qal"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mil/imp. qal"}
+                one{"{0} m/q imp"}
+                other{"{0} m/q imp"}
             }
         }
         coordinate{
@@ -1602,6 +1652,12 @@ az{
                 one{"{0} qal"}
                 other{"{0} qal"}
                 per{"{0}/qal"}
+            }
+            gallon-imperial{
+                dnam{"İmp. qal"}
+                one{"{0} imp. qal"}
+                other{"{0} imp. qal"}
+                per{"{0}/imp. qal"}
             }
             hectoliter{
                 dnam{"hL"}

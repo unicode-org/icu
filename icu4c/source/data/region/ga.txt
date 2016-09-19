@@ -272,6 +272,7 @@ ga{
         UA{"An Úcráin"}
         UG{"Uganda"}
         UM{"Oileáin Imeallacha S.A.M."}
+        UN{"Náisiúin Aontaithe"}
         US{"Stáit Aontaithe Mheiriceá"}
         UY{"Urugua"}
         UZ{"An Úisbéiceastáin"}
@@ -297,6 +298,7 @@ ga{
         HK{"Hong Cong"}
         MO{"Macao"}
         PS{"An Phalaistín"}
+        UN{"NA"}
         US{"SAM"}
     }
     Countries%variant{
@@ -305,5 +307,5 @@ ga{
         FK{"Oileáin Fháclainne (Islas Malvinas)"}
         MK{"An Mhacadóin (PIIM)"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.79"}
 }

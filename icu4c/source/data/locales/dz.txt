@@ -91,7 +91,7 @@ dz{
                 exponential{"E"}
                 group{","}
                 infinity{"གྲངས་མེད"}
-                list{"དང་"}
+                list{";"}
                 minusSign{"-"}
                 nan{"ཨང་མད"}
                 perMille{"‰"}
@@ -100,7 +100,7 @@ dz{
             }
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.29.61"}
     calendar{
         generic{
             DateTimePatterns{

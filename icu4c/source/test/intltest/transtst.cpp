@@ -3574,15 +3574,22 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                 _trans(*t, test, rev);
                 Transliterator *inv = t->createInverse(status);
                 if (U_FAILURE(status)) {
+                    // The following are forward-only, it is OK that creating an inverse will not work:
+                    // 1. Devanagari-Arabic
+                    // 2. Any-*/BGN
+                    // 3. Any-*/UNGEGN
+                    // If UCONFIG_NO_BREAK_ITERATION is on, Latin-Thai is also not expected to work.
+                    if (    id.compare((UnicodeString)"Devanagari-Arabic/") != 0
+                         && !(id.startsWith((UnicodeString)"Any-") &&
+                                (id.endsWith((UnicodeString)"/BGN") || id.endsWith((UnicodeString)"/UNGEGN") || id.endsWith((UnicodeString)"/MNS"))
+                             )
 #if UCONFIG_NO_BREAK_ITERATION
-                    // Devanagari-Arabic is forward-only cannot create inverse.
-                    // If UCONFIG_NO_BREAK_ITERATION is on, Thai should also fail.
-                    if (id.compare((UnicodeString)"Latin-Thai/") != 0 || (id.compare((UnicodeString)"Devanagari-Arabic/") != 0 && logKnownIssue("cldrbug 9583:", "cannot create inverse for Devanagari-Arabic")))
-#else
-                    if (id.compare((UnicodeString)"Devanagari-Arabic/") != 0 && logKnownIssue("cldrbug 9583:", "cannot create inverse for Devanagari-Arabic"))
+                         && id.compare((UnicodeString)"Latin-Thai/") != 0
 #endif
+                       )
+                    {
                         errln((UnicodeString)"FAIL: Could not create inverse of " + id);
-
+                    }
                     delete t;
                     delete inv;
                     continue;

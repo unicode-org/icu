@@ -296,7 +296,7 @@ lrc{
             latn{"عأدأدیا لاتین"}
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.40"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

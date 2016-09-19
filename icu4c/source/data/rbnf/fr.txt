@@ -9,6 +9,12 @@ fr{
             "%digits-ordinal-feminine:",
             "-x: \u2212>>;",
             "0: =#,##0=$(ordinal,one{re}other{e})$;",
+            "%digits-ordinal-masculine-plural:",
+            "-x: \u2212>>;",
+            "0: =#,##0=$(ordinal,one{ers}other{es})$;",
+            "%digits-ordinal-feminine-plural:",
+            "-x: \u2212>>;",
+            "0: =#,##0=$(ordinal,one{res}other{es})$;",
             "%digits-ordinal:",
             "0: =%digits-ordinal-masculine=;",
         }
@@ -17,7 +23,7 @@ fr{
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
             "-x: moins >>;",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "1100/100: <%spellout-cardinal-masculine<-cent>%%cents-m>;",
             "10000: =%spellout-numbering=;",
@@ -195,5 +201,5 @@ fr{
             "2: =%%spellout-ordinal=;",
         }
     }
-    Version{"2.1.25.32"}
+    Version{"2.1.27.22"}
 }

@@ -16,7 +16,7 @@ nb{
         }
         AFN{
             "AFN",
-            "afghansk afghani",
+            "afghanske afghani",
         }
         ALK{
             "ALK",
@@ -218,9 +218,13 @@ nb{
             "BYB",
             "hviterussiske nye rubler (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "hviterussiske rubler",
+        }
         BYR{
             "BYR",
-            "hviterussiske rubler",
+            "hviterussiske rubler (2000–2016)",
         }
         BZD{
             "BZD",
@@ -1204,7 +1208,7 @@ nb{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1221,6 +1225,7 @@ nb{
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
         GTQ{"Q"}
@@ -1263,6 +1268,7 @@ nb{
         PKR{"Rs"}
         PLN{"zł"}
         PYG{"₲"}
+        RON{"L"}
         RUB{"₽"}
         RWF{"RF"}
         SBD{"$"}
@@ -1508,9 +1514,13 @@ nb{
             one{"hviterussisk ny rubel (1994–1999)"}
             other{"hviterussiske nye rubler (1994–1999)"}
         }
-        BYR{
+        BYN{
             one{"hviterussisk rubel"}
             other{"hviterussiske rubler"}
+        }
+        BYR{
+            one{"hviterussisk rubel (2000–2016)"}
+            other{"hviterussiske rubler (2000–2016)"}
         }
         BZD{
             one{"belizisk dollar"}
@@ -2473,5 +2483,5 @@ nb{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.90"}
 }

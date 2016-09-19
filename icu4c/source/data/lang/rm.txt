@@ -627,7 +627,7 @@ rm{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valencian"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Scrittira: {0}"}

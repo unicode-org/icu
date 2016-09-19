@@ -22,7 +22,7 @@ it{
         039{"Europa meridionale"}
         053{"Australasia"}
         054{"Melanesia"}
-        057{"Regione Micronesiana"}
+        057{"Regione micronesiana"}
         061{"Polinesia"}
         142{"Asia"}
         143{"Asia centrale"}
@@ -62,7 +62,7 @@ it{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
-        BQ{"Caraibi Olandesi"}
+        BQ{"Caraibi olandesi"}
         BR{"Brasile"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -126,7 +126,7 @@ it{
         GP{"Guadalupa"}
         GQ{"Guinea Equatoriale"}
         GR{"Grecia"}
-        GS{"Georgia del Sud e isole Sandwich australi"}
+        GS{"Georgia del Sud e Sandwich australi"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
@@ -272,6 +272,7 @@ it{
         UA{"Ucraina"}
         UG{"Uganda"}
         UM{"Altre isole americane del Pacifico"}
+        UN{"nazioni unite"}
         US{"Stati Uniti"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -293,18 +294,21 @@ it{
         ZZ{"Regione sconosciuta"}
     }
     Countries%short{
-        GB{"GB"}
+        GB{"UK"}
         HK{"Hong Kong"}
         MO{"Macao"}
         PS{"Palestina"}
+        UN{"nazioni unite"}
         US{"USA"}
     }
     Countries%variant{
         CD{"Congo (RDC)"}
         CG{"Congo (Repubblica)"}
+        CI{"Côte d’Ivoire"}
+        CZ{"Cèchia"}
         FK{"Isole Falkland (Isole Malvine)"}
         MK{"Ex Repubblica Jugoslava di Macedonia"}
         TL{"Timor Est"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

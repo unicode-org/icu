@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fr_CA{
-    Version{"2.1.26.0"}
+    Version{"2.1.27.99"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -29,6 +29,7 @@ fr_CA{
                 dnam{"milles carrés"}
                 one{"{0} mille carré"}
                 other{"{0} milles carrés"}
+                per{"{0} par mille carré"}
             }
             square-yard{
                 dnam{"verges carrées"}
@@ -36,7 +37,17 @@ fr_CA{
                 other{"{0} verges carrées"}
             }
         }
+        concentr{
+            part-per-million{
+                dnam{"parties par million"}
+                one{"{0} partie par million"}
+                other{"{0} parties par million"}
+            }
+        }
         consumption{
+            liter-per-100kilometers{
+                dnam{"litres aux 100 kilomètres"}
+            }
             mile-per-gallon{
                 dnam{"milles au gallon"}
                 one{"{0} mille au gallon"}
@@ -77,6 +88,7 @@ fr_CA{
         }
         temperature{
             generic{
+                dnam{"°"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
@@ -91,6 +103,12 @@ fr_CA{
                 dnam{"verges cubes"}
                 one{"{0} verge cube"}
                 other{"{0} verges cubes"}
+            }
+            gallon-imperial{
+                dnam{"gallon impérial"}
+                one{"{0} gallon impérial"}
+                other{"{0} gallons impériaux"}
+                per{"{0} par gallon impérial"}
             }
             pint{
                 dnam{"chopine"}
@@ -139,6 +157,24 @@ fr_CA{
         concentr{
             karat{
                 dnam{"carats"}
+            }
+        }
+        consumption{
+            mile-per-gallon-imperial{
+                dnam{"mi/gal Imp"}
+                one{"{0} mi/gal Imp"}
+                other{"{0} mi/gal Imp"}
+            }
+        }
+        digital{
+            gigabit{
+                dnam{"Gb"}
+            }
+            kilobit{
+                dnam{"kb"}
+            }
+            megabit{
+                dnam{"Mb"}
             }
         }
         length{
@@ -199,6 +235,12 @@ fr_CA{
                 dnam{"oz liq."}
                 one{"{0} oz liq."}
                 other{"{0} oz liq."}
+            }
+            gallon-imperial{
+                dnam{"gal Imp"}
+                one{"{0} gal Imp"}
+                other{"{0} gal Imp"}
+                per{"{0}/gal Imp"}
             }
             hectoliter{
                 dnam{"hL"}

@@ -2,18 +2,35 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sw_CD{
     Countries{
+        030{"Asia Mashariki"}
         AF{"Afuganistani"}
+        AZ{"Azabajani"}
         BJ{"Benini"}
-        CG{"Kongo"}
         CI{"Kodivaa"}
-        CY{"Kuprosi"}
-        IR{"Uajemi"}
+        CX{"Kisiwa cha Christmas"}
+        CY{"Saiprasi"}
+        DK{"Denmaki"}
+        HR{"Kroeshia"}
+        JO{"Yordani"}
+        LB{"Lebanoni"}
         LI{"Lishenteni"}
-        MG{"Bukini"}
+        LU{"Lasembagi"}
+        LV{"Lativia"}
+        MA{"Moroko"}
         MM{"Myama"}
-        NF{"Kisiwa cha Norfok"}
+        MV{"Maldivi"}
+        NE{"Nijeri"}
         NG{"Nijeria"}
+        NO{"Norwe"}
+        NP{"Nepali"}
+        OM{"Omani"}
+        PR{"Puetoriko"}
+        QA{"Katari"}
+        SD{"Sudani"}
+        ST{"Sao Tome na Prinsipe"}
+        TD{"Chadi"}
         TL{"Timori ya Mashariki"}
+        VN{"Vietnamu"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.99"}
 }

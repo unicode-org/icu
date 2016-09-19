@@ -68,10 +68,10 @@ hu{
         BT{"Bhután"}
         BV{"Bouvet-sziget"}
         BW{"Botswana"}
-        BY{"Fehéroroszország"}
+        BY{"Belarusz"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kókusz-szigetek"}
+        CC{"Kókusz (Keeling)-szigetek"}
         CD{"Kongó - Kinshasa"}
         CF{"Közép-afrikai Köztársaság"}
         CG{"Kongó - Brazzaville"}
@@ -131,7 +131,7 @@ hu{
         GU{"Guam"}
         GW{"Bissau-Guinea"}
         GY{"Guyana"}
-        HK{"Hongkong SAR Kína"}
+        HK{"Hongkong KKT"}
         HM{"Heard-sziget és McDonald-szigetek"}
         HN{"Honduras"}
         HR{"Horvátország"}
@@ -165,7 +165,7 @@ hu{
         KZ{"Kazahsztán"}
         LA{"Laosz"}
         LB{"Libanon"}
-        LC{"Santa Lucia"}
+        LC{"Saint Lucia"}
         LI{"Liechtenstein"}
         LK{"Srí Lanka"}
         LR{"Libéria"}
@@ -185,7 +185,7 @@ hu{
         ML{"Mali"}
         MM{"Mianmar (Burma)"}
         MN{"Mongólia"}
-        MO{"Makaó SAR Kína"}
+        MO{"Makaó KKT"}
         MP{"Északi Mariana-szigetek"}
         MQ{"Martinique"}
         MR{"Mauritánia"}
@@ -217,7 +217,7 @@ hu{
         PH{"Fülöp-szigetek"}
         PK{"Pakisztán"}
         PL{"Lengyelország"}
-        PM{"Saint Pierre és Miquelon"}
+        PM{"Saint-Pierre és Miquelon"}
         PN{"Pitcairn-szigetek"}
         PR{"Puerto Rico"}
         PS{"Palesztin Terület"}
@@ -226,7 +226,7 @@ hu{
         PY{"Paraguay"}
         QA{"Katar"}
         QO{"Külső-Óceánia"}
-        RE{"Reunion"}
+        RE{"Réunion"}
         RO{"Románia"}
         RS{"Szerbia"}
         RU{"Oroszország"}
@@ -239,7 +239,7 @@ hu{
         SG{"Szingapúr"}
         SH{"Szent Ilona"}
         SI{"Szlovénia"}
-        SJ{"Spitzbergák és Jan Mayen-szigetek"}
+        SJ{"Svalbard és Jan Mayen"}
         SK{"Szlovákia"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -271,7 +271,8 @@ hu{
         TZ{"Tanzánia"}
         UA{"Ukrajna"}
         UG{"Uganda"}
-        UM{"Amerikai Csendes-óceáni Szigetek"}
+        UM{"Az Amerikai Egyesült Államok lakatlan külbirtokai"}
+        UN{"ENSZ"}
         US{"Egyesült Államok"}
         UY{"Uruguay"}
         UZ{"Üzbegisztán"}
@@ -282,7 +283,7 @@ hu{
         VI{"Amerikai Virgin-szigetek"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis- és Futuna-szigetek"}
+        WF{"Wallis és Futuna"}
         WS{"Szamoa"}
         XK{"Koszovó"}
         YE{"Jemen"}
@@ -297,6 +298,7 @@ hu{
         HK{"Hongkong"}
         MO{"Makaó"}
         PS{"Palesztina"}
+        UN{"ENSZ"}
         US{"USA"}
     }
     Countries%variant{
@@ -305,5 +307,5 @@ hu{
         FK{"Falkland-szigetek (Malvin-szigetek)"}
         MK{"Macedónia (MVJK)"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

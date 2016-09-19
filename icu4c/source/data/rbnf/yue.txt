@@ -4,7 +4,7 @@ yue{
     RBNFRules{
         SpelloutRules{
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "1000: =%%spellout-numbering-year-digits=;",
             "10000: =%spellout-numbering=;",
@@ -34,7 +34,7 @@ yue{
             "100000000: <<\u5104[>%%number5>];",
             "1000000000000: <<\u5146[>%%number8>];",
             "10000000000000000: <<\u4EAC[>%%number13>];",
-            "1000000000000000000: =#,###0=;",
+            "1000000000000000000: =#,##0=;",
             "%%number2:",
             "1: \u96F6=%spellout-numbering=;",
             "10: \u4E00=%spellout-numbering=;",
@@ -85,7 +85,7 @@ yue{
             "100000000: <%spellout-cardinal-financial<\u5104[>%%financialnumber5>];",
             "1000000000000: <%spellout-cardinal-financial<\u5146[>%%financialnumber8>];",
             "10000000000000000: <%spellout-cardinal-financial<\u4EAC[>%%financialnumber13>];",
-            "1000000000000000000: =#,###0=;",
+            "1000000000000000000: =#,##0=;",
             "%%financialnumber2:",
             "1: \u96F6=%spellout-cardinal-financial=;",
             "10: \u58F9=%spellout-cardinal-financial=;",
@@ -137,7 +137,7 @@ yue{
             "100000000: <%spellout-numbering<\u5104[>%%number5>];",
             "1000000000000: <%spellout-numbering<\u5146[>%%number8>];",
             "10000000000000000: <%spellout-numbering<\u4EAC[>%%number13>];",
-            "1000000000000000000: =#,###0=;",
+            "1000000000000000000: =#,##0=;",
             "%spellout-cardinal-alternate2:",
             "-x: \u8CA0>>;",
             "x.x: =%spellout-cardinal=;",
@@ -160,14 +160,14 @@ yue{
             "100000000: <%spellout-numbering<\u5104[>%%number5>];",
             "1000000000000: <%spellout-numbering<\u5146[>%%number8>];",
             "10000000000000000: <%spellout-numbering<\u4EAC[>%%number13>];",
-            "1000000000000000000: =#,###0=;",
+            "1000000000000000000: =#,##0=;",
             "%%cardinal-twenties:",
             "1: ;",
             "2: \u4E8C;",
             "%spellout-ordinal:",
-            "x.x: =#,###0.#=;",
+            "x.x: =#,##0.#=;",
             "0: \u7B2C=%spellout-numbering=;",
         }
     }
-    Version{"2.1.23.22"}
+    Version{"2.1.27.22"}
 }

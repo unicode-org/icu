@@ -1,13 +1,8 @@
 ﻿# © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-# ***************************************************************************
-# *
-# *  Copyright (C) 2004-2016, International Business Machines
-# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
-# *
-# ***************************************************************************
+#
 # File: ch_ch_FONIPA.txt
-# Generated from CLDR 
+# Generated from CLDR
 #
 
 # Transformation from Chamorro (ch) to its IPA transcription (ch_FONIPA).

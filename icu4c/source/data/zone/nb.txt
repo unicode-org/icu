@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nb{
-    Version{"2.1.26.0"}
+    Version{"2.1.29.90"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -302,6 +302,9 @@ nb{
         }
         "America:El_Salvador"{
             ec{"El Salvador"}
+        }
+        "America:Fort_Nelson"{
+            ec{"Fort Nelson"}
         }
         "America:Fortaleza"{
             ec{"Fortaleza"}
@@ -666,6 +669,9 @@ nb{
         "Asia:Bangkok"{
             ec{"Bangkok"}
         }
+        "Asia:Barnaul"{
+            ec{"Barnaul"}
+        }
         "Asia:Beirut"{
             ec{"Beirut"}
         }
@@ -843,6 +849,9 @@ nb{
         "Asia:Tokyo"{
             ec{"Tokyo"}
         }
+        "Asia:Tomsk"{
+            ec{"Tomsk"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Ulan Bator"}
         }
@@ -942,6 +951,9 @@ nb{
         "Europe:Andorra"{
             ec{"Andorra"}
         }
+        "Europe:Astrakhan"{
+            ec{"Astrakhan"}
+        }
         "Europe:Athens"{
             ec{"Athen"}
         }
@@ -967,7 +979,7 @@ nb{
             ec{"Büsingen"}
         }
         "Europe:Chisinau"{
-            ec{"Chișinău"}
+            ec{"Chisinau"}
         }
         "Europe:Copenhagen"{
             ec{"København"}
@@ -999,6 +1011,9 @@ nb{
         }
         "Europe:Kiev"{
             ec{"Kiev"}
+        }
+        "Europe:Kirov"{
+            ec{"Kirov"}
         }
         "Europe:Lisbon"{
             ec{"Lisboa"}
@@ -1075,6 +1090,9 @@ nb{
         }
         "Europe:Tirane"{
             ec{"Tirana"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"Uljanovsk"}
         }
         "Europe:Uzhgorod"{
             ec{"Uzjhorod"}
@@ -1809,6 +1827,9 @@ nb{
         "meta:Ponape"{
             ls{"tidssone for Pohnpei"}
         }
+        "meta:Pyongyang"{
+            ls{"tidssone for Pyongyang"}
+        }
         "meta:Qyzylorda"{
             ld{"Qyzylorda, sommertid"}
             lg{"Qyzylorda-tid"}
@@ -1933,7 +1954,7 @@ nb{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
-        hourFormat{"+HH.mm;-HH.mm"}
+        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"tidssone for {0}"}
         regionFormatDaylight{"sommertid – {0}"}
         regionFormatStandard{"normaltid – {0}"}

@@ -218,9 +218,13 @@ yue{
             "BYB",
             "白俄羅斯新盧布 (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "白俄羅斯盧布",
+        }
         BYR{
             "BYR",
-            "白俄羅斯盧布",
+            "白俄羅斯盧布 (2000–2016)",
         }
         BZD{
             "BZD",
@@ -971,7 +975,7 @@ yue{
             "千里達及托巴哥元",
         }
         TWD{
-            "$",
+            "NT$",
             "新台幣",
         }
         TZS{
@@ -1204,7 +1208,7 @@ yue{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1222,6 +1226,7 @@ yue{
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
         GTQ{"Q"}
@@ -1262,6 +1267,7 @@ yue{
         PKR{"Rs"}
         PLN{"zł"}
         PYG{"₲"}
+        RON{"lei"}
         RUB{"₽"}
         RUR{"р."}
         RWF{"RF"}
@@ -1454,8 +1460,11 @@ yue{
         BYB{
             other{"白俄羅斯新盧布 (1994–1999)"}
         }
-        BYR{
+        BYN{
             other{"白俄羅斯盧布"}
+        }
+        BYR{
+            other{"白俄羅斯盧布 (2000–2016)"}
         }
         BZD{
             other{"貝里斯元"}
@@ -2184,5 +2193,5 @@ yue{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.76"}
 }

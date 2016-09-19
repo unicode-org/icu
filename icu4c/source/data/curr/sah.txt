@@ -4,8 +4,26 @@ sah{
     Currencies{
         RUB{
             "₽",
-            "RUB",
+            "Арассыыйа солкуобайа",
+        }
+        USD{
+            "US$",
+            "АХШ дуоллара",
         }
     }
-    Version{"2.1.25.97"}
+    Currencies%narrow{
+        RUB{"₽"}
+    }
+    CurrencyPlurals{
+        RUB{
+            other{"Арассыыйа солкуобайа"}
+        }
+        USD{
+            other{"АХШ дуоллара"}
+        }
+    }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    Version{"2.1.27.87"}
 }

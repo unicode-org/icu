@@ -106,6 +106,7 @@ en{
         ES{"Spain"}
         ET{"Ethiopia"}
         EU{"European Union"}
+        EZ{"Eurozone"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falkland Islands"}
@@ -272,6 +273,7 @@ en{
         UA{"Ukraine"}
         UG{"Uganda"}
         UM{"U.S. Outlying Islands"}
+        UN{"United Nations"}
         US{"United States"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -299,6 +301,7 @@ en{
         MM{"Myanmar"}
         MO{"Macau"}
         PS{"Palestine"}
+        UN{"UN"}
         US{"US"}
     }
     Countries%variant{
@@ -310,5 +313,5 @@ en{
         MK{"Macedonia (FYROM)"}
         TL{"East Timor"}
     }
-    Version{"2.1.26.81"}
+    Version{"2.1.29.81"}
 }

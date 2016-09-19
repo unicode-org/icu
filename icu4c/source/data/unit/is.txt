@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 is{
-    Version{"2.1.26.0"}
+    Version{"2.1.29.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -37,9 +37,9 @@ is{
                 other{"{0} gráður"}
             }
             radian{
-                dnam{"bogaeiningar"}
-                one{"{0} bogaeining"}
-                other{"{0} bogaeiningar"}
+                dnam{"radíanar"}
+                one{"{0} radían"}
+                other{"{0} radíanar"}
             }
             revolution{
                 dnam{"snúningur"}
@@ -79,6 +79,7 @@ is{
                 dnam{"ferkílómetrar"}
                 one{"{0} ferkílómetri"}
                 other{"{0} ferkílómetrar"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"fermetrar"}
@@ -90,6 +91,7 @@ is{
                 dnam{"fermílur"}
                 one{"{0} fermíla"}
                 other{"{0} fermílur"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"feryardar"}
@@ -105,6 +107,11 @@ is{
                 dnam{"karöt"}
                 one{"{0} karat"}
                 other{"{0} karöt"}
+            }
+            part-per-million{
+                dnam{"milljónarhlutar"}
+                one{"{0} milljónarhluti"}
+                other{"{0} milljónarhlutar"}
             }
         }
         consumption{
@@ -187,6 +194,7 @@ is{
                 dnam{"dagar"}
                 one{"{0} dagur"}
                 other{"{0} dagar"}
+                per{"{0} á dag"}
             }
             hour{
                 dnam{"klukkustundir"}
@@ -208,6 +216,7 @@ is{
                 dnam{"mínútur"}
                 one{"{0} mínúta"}
                 other{"{0} mínútur"}
+                per{"{0} á mínútu"}
             }
             month{
                 dnam{"mánuðir"}
@@ -647,6 +656,10 @@ is{
                 other{"{0} gallon"}
                 per{"{0} á gallon"}
             }
+            gallon-imperial{
+                one{"{0} breskt gallon"}
+                other{"{0} breskt gallon"}
+            }
             hectoliter{
                 dnam{"hektólítrar"}
                 one{"{0} hektólítri"}
@@ -1007,6 +1020,7 @@ is{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"fermetrar"}
@@ -1018,6 +1032,7 @@ is{
                 dnam{"fermílur"}
                 one{"{0} fermíla"}
                 other{"{0} fermílur"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yardar²"}
@@ -1033,6 +1048,9 @@ is{
                 dnam{"kt"}
                 one{"{0} kt"}
                 other{"{0} kt"}
+            }
+            part-per-million{
+                dnam{"milljónarhlutar"}
             }
         }
         consumption{

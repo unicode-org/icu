@@ -3,6 +3,7 @@
 ast{
     Keys{
         calendar{"calendariu"}
+        cf{"formatu monetariu"}
         collation{"orde de clasificación"}
         currency{"moneda"}
         hc{"ciclu horariu (12 o 24)"}
@@ -116,6 +117,7 @@ ast{
         cps{"capiznon"}
         cr{"cree"}
         crh{"turcu de Crimea"}
+        crs{"francés criollu seselwa"}
         cs{"checu"}
         csb{"kashubianu"}
         cu{"eslávicu eclesiásticu"}
@@ -422,7 +424,7 @@ ast{
         om{"oromo"}
         or{"oriya"}
         os{"oséticu"}
-        osa{"Osage"}
+        osa{"osage"}
         ota{"turcu otomanu"}
         pa{"punyabí"}
         pag{"pangasinan"}
@@ -431,6 +433,7 @@ ast{
         pap{"papiamento"}
         pau{"palauanu"}
         pcd{"pícaru"}
+        pcm{"nixerianu simplificáu"}
         pdc{"alemán de Pennsylvania"}
         pdt{"plautdietsch"}
         peo{"persa antiguu"}
@@ -484,7 +487,7 @@ ast{
         sco{"scots"}
         sd{"sindhi"}
         sdc{"sardu sassarés"}
-        sdh{"Kurdu del sur"}
+        sdh{"kurdu del sur"}
         se{"sami del norte"}
         see{"séneca"}
         seh{"sena"}
@@ -527,7 +530,7 @@ ast{
         sux{"sumeriu"}
         sv{"suecu"}
         sw{"suaḥili"}
-        sw_CD{"swahili del Congu"}
+        sw_CD{"suaḥili del Congu"}
         swb{"comorianu"}
         syc{"siriacu clásicu"}
         syr{"siriacu"}
@@ -630,6 +633,7 @@ ast{
         en_US{"inglés d’EE.XX."}
     }
     Scripts{
+        Adlm{"adlm"}
         Afak{"afaka"}
         Aghb{"cáucaso-albanés"}
         Ahom{"ahom"}
@@ -642,6 +646,7 @@ ast{
         Bass{"bassa vah"}
         Batk{"batak"}
         Beng{"bengalín"}
+        Bhks{"bhks"}
         Blis{"símbolos de Bliss"}
         Bopo{"bopomofo"}
         Brah{"brahmi"}
@@ -674,6 +679,7 @@ ast{
         Grek{"griegu"}
         Gujr{"guyarati"}
         Guru{"gurmukhi"}
+        Hanb{"hanb"}
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanunó’o"}
@@ -688,6 +694,7 @@ ast{
         Hung{"húngaru antiguu"}
         Inds{"indus"}
         Ital{"itálicu antiguu"}
+        Jamo{"jamo"}
         Java{"xavanés"}
         Jpan{"xaponés"}
         Jurc{"jurchen"}
@@ -716,6 +723,7 @@ ast{
         Mahj{"mahajani"}
         Mand{"mandéu"}
         Mani{"maniquéu"}
+        Marc{"marc"}
         Maya{"xeroglíficos mayes"}
         Mend{"mende"}
         Merc{"meroíticu en cursiva"}
@@ -730,6 +738,7 @@ ast{
         Mymr{"birmanu"}
         Narb{"árabe del norte antiguu"}
         Nbat{"nabatéu"}
+        Newa{"newa"}
         Nkgb{"geba del naxi"}
         Nkoo{"n’ko"}
         Nshu{"nüshu"}
@@ -737,9 +746,10 @@ ast{
         Olck{"ol chiki"}
         Orkh{"orkhon"}
         Orya{"oriya"}
+        Osge{"osge"}
         Osma{"osmanya"}
         Palm{"palmirenu"}
-        Pauc{"Pau Cin Hau"}
+        Pauc{"pau cin hau"}
         Perm{"pérmicu antiguu"}
         Phag{"escritura ‘Phags-pa"}
         Phli{"pahlavi d’inscripciones"}
@@ -841,6 +851,7 @@ ast{
         Yiii{"yi"}
         Zinh{"heredáu"}
         Zmth{"escritura matemática"}
+        Zsye{"emoji"}
         Zsym{"símbolos"}
         Zxxx{"non escritu"}
         Zyyy{"común"}
@@ -869,7 +880,11 @@ ast{
             iso8601{"calendariu ISO-8601"}
             japanese{"calendariu xaponés"}
             persian{"calendariu persa"}
-            roc{"calendariu Minguo"}
+            roc{"calendariu de la República de China"}
+        }
+        cf{
+            account{"formatu monetariu contable"}
+            standard{"formatu monetariu estándar"}
         }
         collation{
             big5han{"orde de clasificación chinu tradicional - Big5"}
@@ -907,6 +922,7 @@ ast{
             ussystem{"sistema de midida d’EE.XX."}
         }
         numbers{
+            ahom{"númberos ahom"}
             arab{"númberos arábico-índicos"}
             arabext{"númberos arábico-índicos estendíos"}
             armn{"númberos armenios"}
@@ -916,6 +932,7 @@ ast{
             brah{"númberos brahmi"}
             cakm{"númberos chakma"}
             cham{"númberos cham"}
+            cyrl{"númberos cirílicos"}
             deva{"númberos devanagari"}
             ethi{"númberos etíopes"}
             fullwide{"númberos n’anchu completu"}
@@ -930,6 +947,7 @@ ast{
             hant{"númberos chinos tradicionales"}
             hantfin{"númberos chinos financieros tradicionales"}
             hebr{"númberos hebreos"}
+            hmng{"númberos Pahawh Hmong"}
             java{"númberos xavanesos"}
             jpan{"númberos xaponeses"}
             jpanfin{"númberos financieros xaponeses"}
@@ -942,19 +960,29 @@ ast{
             latn{"númberos occidentales"}
             lepc{"númberos lepcha"}
             limb{"númberos limbu"}
+            mathbold{"númberos matemáticos en negrina"}
+            mathdbl{"númberos matemáticos con trazu doble"}
+            mathmono{"númberos matemáticos monoespaciaos"}
+            mathsanb{"númberos matemáticos Sans-Serif en negrina"}
+            mathsans{"númberos matemáticos Sans-Serif"}
             mlym{"númberos malayalam"}
+            modi{"númberos modi"}
             mong{"númberos mongoles"}
+            mroo{"númberos mro"}
             mtei{"númberos Meetei Mayek"}
             mymr{"númberos de Myanmar"}
             mymrshan{"númberos Shan de Myanmar"}
+            mymrtlng{"númberos Tai Laing de Myanmar"}
             nkoo{"númberos N’Ko"}
             olck{"númberos Ol Chiki"}
-            orya{"númberos oriya"}
+            orya{"númberos odia"}
             osma{"númberos osmanya"}
             roman{"númberos romanos"}
             romanlow{"númberos romanos en minúscules"}
             saur{"númberos saurashtra"}
             shrd{"númberos sharada"}
+            sind{"númberos Khudawadi"}
+            sinh{"númberos Lith cingaleses"}
             sora{"númberos Sora Sompeng"}
             sund{"númberos sondaneses"}
             takr{"númberos takri"}
@@ -964,7 +992,9 @@ ast{
             telu{"númberos telugu"}
             thai{"númberos tailandeses"}
             tibt{"númberos tibetanos"}
+            tirh{"númberos tirhuta"}
             vaii{"númberos vai"}
+            wara{"númberos Warang Citi"}
         }
     }
     Variants{
@@ -974,18 +1004,23 @@ ast{
         1959ACAD{"académicu"}
         1994{"ortografía resiana estandarizada"}
         1996{"ortografía alemana de 1996"}
+        ABL1943{"formulación ortográfica de 1943"}
         ALALC97{"romanizacion ALA-LC, edicion de 1997"}
         ALUKU{"dialectu aluku"}
+        AO1990{"alcuerdu ortográficu de 1990 pa la llingua portuguesa"}
         AREVELA{"armeniu oriental"}
         AREVMDA{"armeniu occidental"}
         BAKU1926{"alfabetu turcu llatino unificáu"}
         BALANKA{"dialectu balanka del anii"}
         BARLA{"grupu dialectal barlavento del cabuverdianu"}
+        BASICENG{"BASICENG"}
         BAUDDHA{"BAUDDHA"}
         BISCAYAN{"BISCAYAN"}
         BISKE{"dialectu San Giorgio/Bila"}
         BOHORIC{"alfabetu bohorič"}
         BOONT{"boontling"}
+        COLB1945{"convención ortográfica brasilanu-portuguesa de 1945"}
+        CORNU{"CORNU"}
         DAJNKO{"alfabetu dajnko"}
         EKAVSK{"serbiu con pronunciación ekaviana"}
         EMODENG{"inglés modernu primitivu"}
@@ -1008,9 +1043,11 @@ ast{
         MONOTON{"monotónicu"}
         NDYUKA{"dialectu ndyuka"}
         NEDIS{"dialectu natisone"}
+        NEWFOUND{"NEWFOUND"}
         NJIVA{"dialectu gniva/njiva"}
         NULIK{"volapük modernu"}
         OSOJS{"dialectu oseacco/osojane"}
+        OXENDICT{"ortografía del diccionariu d’inglés d’Oxford"}
         PAMAKA{"dialectu pamaka"}
         PETR1708{"PETR1708"}
         PINYIN{"romanización pinyin"}
@@ -1024,6 +1061,7 @@ ast{
         SAAHO{"saho"}
         SCOTLAND{"inglés estándar escocés"}
         SCOUSE{"scouse"}
+        SIMPLE{"SIMPLE"}
         SOLBA{"dialectu stolvizza/solbica"}
         SOTAV{"grupu dialectal sotavento del cabuverdianu"}
         SURMIRAN{"SURMIRAN"}
@@ -1039,7 +1077,21 @@ ast{
         VALLADER{"VALLADER"}
         WADEGILE{"romanización de Wade-Giles"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
+    characterLabelPattern{
+        all{"{0} — too"}
+        compatibility{"{0} — compatibilidá"}
+        enclosed{"{0} — arrodiáu"}
+        extended{"{0} — enantáu"}
+        historic{"{0} — históricu"}
+        miscellaneous{"{0} — mecigayu"}
+        other{"{0} — otru"}
+        scripts{"escritures — {0}"}
+        strokes{
+            "{0} trazu",
+            "{0} trazos",
+        }
+    }
     codePatterns{
         language{"Llingua: {0}"}
         script{"Alfabetu: {0}"}

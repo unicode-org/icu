@@ -113,7 +113,7 @@ cs{
         FO{"Faerské ostrovy"}
         FR{"Francie"}
         GA{"Gabon"}
-        GB{"Velká Británie"}
+        GB{"Spojené království"}
         GD{"Grenada"}
         GE{"Gruzie"}
         GF{"Francouzská Guyana"}
@@ -272,6 +272,7 @@ cs{
         UA{"Ukrajina"}
         UG{"Uganda"}
         UM{"Menší odlehlé ostrovy USA"}
+        UN{"OSN"}
         US{"Spojené státy"}
         UY{"Uruguay"}
         UZ{"Uzbekistán"}
@@ -293,10 +294,11 @@ cs{
         ZZ{"Neznámá oblast"}
     }
     Countries%short{
-        GB{"VB"}
+        GB{"GB"}
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestina"}
+        UN{"OSN"}
         US{"USA"}
     }
     Countries%variant{
@@ -307,5 +309,5 @@ cs{
         FK{"Falklandské ostrovy (Malvíny)"}
         MK{"Makedonie (FYROM)"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

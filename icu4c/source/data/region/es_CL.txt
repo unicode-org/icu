@@ -3,7 +3,15 @@
 es_CL{
     %%Parent{"es_419"}
     Countries{
+        BA{"Bosnia y Herzegovina"}
         EH{"Sahara Occidental"}
+        TA{"Tristán de Acuña"}
+        TL{"Timor-Leste"}
+        UM{"Islas menores alejadas de EE. UU."}
     }
-    Version{"2.1.25.97"}
+    Countries%short{
+        GB{"RU"}
+        US{"EE. UU."}
+    }
+    Version{"2.1.27.99"}
 }

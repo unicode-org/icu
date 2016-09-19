@@ -116,6 +116,7 @@ to{
         cps{"lea fakakapiseno"}
         cr{"lea fakakelī"}
         crh{"lea fakatoake-kilimea"}
+        crs{"lea fakaseselua-falanisē"}
         cs{"lea fakaseki"}
         csb{"lea fakakasiupia"}
         cu{"lea fakasilavia-fakasiasi"}
@@ -141,7 +142,7 @@ to{
         dv{"lea fakativehi"}
         dyo{"lea fakaiola-fonī"}
         dyu{"lea fakatiula"}
-        dz{"lea fakaputeni"}
+        dz{"lea fakatisōngika"}
         dzg{"lea fakatasaka"}
         ebu{"lea fakaʻemipū"}
         ee{"lea fakaʻeue"}
@@ -357,7 +358,7 @@ to{
         mg{"lea fakamalakasi"}
         mga{"lea fakaʻaelani-lotoloto"}
         mgh{"lea fakamakūa-meʻeto"}
-        mgo{"lea fakameta"}
+        mgo{"lea fakametā"}
         mh{"lea fakamāsolo"}
         mi{"lea fakamauli"}
         mic{"lea fakamikemaki"}
@@ -420,7 +421,7 @@ to{
         oc{"lea fakaʻokitane"}
         oj{"lea fakaʻosipiuā"}
         om{"lea fakaʻolomo"}
-        or{"lea fakaʻinitia-ʻolāea"}
+        or{"lea faka-ʻotia"}
         os{"lea fakaʻosetiki"}
         osa{"lea fakaʻosēse"}
         ota{"lea fakatoake-ʻotomani"}
@@ -431,6 +432,7 @@ to{
         pap{"lea fakapapiamēnito"}
         pau{"lea fakapalau"}
         pcd{"lea fakapikāti"}
+        pcm{"lea fakanaisilia"}
         pdc{"lea fakasiamane-penisilivania"}
         pdt{"lea fakasiamane-lafalafa"}
         peo{"lea fakapēsia-motuʻa"}
@@ -515,7 +517,7 @@ to{
         sog{"lea fakasokitiana"}
         sq{"lea fakaʻalapēnia"}
         sr{"lea fakasēpia"}
-        srn{"lea fakasuranane-tongikō"}
+        srn{"lea fakasulanane-tongikō"}
         srr{"lea fakasēlēle"}
         ss{"lea fakasuati"}
         ssy{"lea fakasaho"}
@@ -552,7 +554,7 @@ to{
         tli{"lea fakatilingikīte"}
         tly{"lea fakatalisi"}
         tmh{"lea fakatamasieki"}
-        tn{"lea suana"}
+        tn{"lea fakatisuana"}
         to{"lea fakatonga"}
         tog{"lea fakaniasa-tonga"}
         tpi{"lea fakatoki-pisini"}
@@ -627,7 +629,7 @@ to{
     Languages%short{
         az{"lea fakaʻasapaisani"}
         en_GB{"lea fakapilitānia"}
-        en_US{"lea fakapālangi (ʻAmelika)"}
+        en_US{"lea fakapālangi-ʻAmelika"}
     }
     Scripts{
         Afak{"tohinima fakaʻafaka"}
@@ -673,6 +675,7 @@ to{
         Grek{"tohinima fakakalisi"}
         Gujr{"tohinima fakaʻinitia-kutalati"}
         Guru{"tohinima fakakūmuki"}
+        Hanb{"tohinima fakahānipi"}
         Hang{"tohinima fakakōlea-hāngūlu"}
         Hani{"tohinima fakasiaina"}
         Hano{"tohinima fakahanunōʻo"}
@@ -686,6 +689,7 @@ to{
         Hung{"tohinima fakahungakalia-motuʻa"}
         Inds{"tohinima fakaʻinitusi"}
         Ital{"tohinima fakaʻītali-motuʻa"}
+        Jamo{"tohinima fakasamo"}
         Java{"tohinima fakasava"}
         Jpan{"tohinima fakasiapani"}
         Jurc{"tohinima fakaiūkeni"}
@@ -733,7 +737,7 @@ to{
         Ogam{"tohinima fakaʻokami"}
         Olck{"tohinima fakaʻolisiki"}
         Orkh{"tohinima fakaʻolikoni"}
-        Orya{"tohinima fakaʻinitia-ʻolāea"}
+        Orya{"tohinima fakaʻotia"}
         Osma{"tohinima fakaʻosimānia"}
         Palm{"tohinima fakapalamilene"}
         Pauc{"tohinima fakapausinihau"}
@@ -790,6 +794,7 @@ to{
         Yiii{"tohinima fakaīī"}
         Zinh{"tohinima hokosi"}
         Zmth{"tohinima fakamatematika"}
+        Zsye{"tohinima fakatātā"}
         Zsym{"tohinima fakaʻilonga"}
         Zxxx{"tohinima taʻetohitohiʻi"}
         Zyyy{"tohinima fakatatau"}
@@ -826,7 +831,7 @@ to{
             h11{"takai houa 0–11"}
             h12{"takai houa 1–12"}
             h23{"takai houa 0–23"}
-            h24{"taki houa 1–24"}
+            h24{"takai houa 1–24"}
         }
         lb{
             loose{"fesiʻilaine ngaloku"}
@@ -866,7 +871,8 @@ to{
             latn{"fika fakalatina"}
             mlym{"fika fakamalāialami"}
             mymr{"fika fakapema"}
-            orya{"fika fakaʻolia"}
+            nkoo{"fika fakanikō"}
+            orya{"fika fakaʻotia"}
             roman{"fika fakaloma"}
             romanlow{"fika fakaloma fakalalo"}
             taml{"fika fakatamili tukufakaholo"}
@@ -876,7 +882,7 @@ to{
             tibt{"fika fakatipeti"}
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.98"}
     codePatterns{
         language{"Lea: {0}"}
         script{"Tohinima: {0}"}

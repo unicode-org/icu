@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fr_CA{
-    Version{"2.1.26.0"}
+    Version{"2.1.27.99"}
     zoneStrings{
         "Africa:Ndjamena"{
             ec{"Ndjamena"}
@@ -395,9 +395,9 @@ fr_CA{
             ls{"heure normale de Novossibirsk"}
         }
         "meta:Omsk"{
-            ld{"heure avancée de Omsk"}
-            lg{"heure de Omsk"}
-            ls{"heure normale de Omsk"}
+            ld{"heure avancée d’Omsk"}
+            lg{"heure d’Omsk"}
+            ls{"heure normale d’Omsk"}
         }
         "meta:Pakistan"{
             ld{"heure avancée du Pakistan"}
@@ -423,6 +423,9 @@ fr_CA{
             ld{"heure avancée de Saint-Pierre-et-Miquelon"}
             lg{"heure de Saint-Pierre-et-Miquelon"}
             ls{"heure normale de Saint-Pierre-et-Miquelon"}
+        }
+        "meta:Reunion"{
+            ls{"heure de la Réunion"}
         }
         "meta:Sakhalin"{
             ld{"heure avancée de Sakhaline"}

@@ -732,7 +732,7 @@ br{
         VALLADER{"rannyezh romañchek Vallader"}
         WADEGILE{"romanekadur Wade-Giles"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

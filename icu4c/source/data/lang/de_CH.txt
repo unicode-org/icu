@@ -7,7 +7,18 @@ de_CH{
         ms{"Mass-System"}
     }
     Languages{
+        ace{"Aceh-Sprache"}
+        ach{"Acholi-Sprache"}
+        bas{"Basaa-Sprache"}
         be{"Weissrussisch"}
+        bik{"Bikol-Sprache"}
+        bin{"Bini-Sprache"}
+        chb{"Chibcha-Sprache"}
+        din{"Dinka-Sprache"}
+        fan{"Pangwe-Sprache"}
+        gba{"Gbaya-Sprache"}
+        kmb{"Kimbundu-Sprache"}
+        mus{"Muskogee-Sprache"}
         prg{"Altpreussisch"}
     }
     Types{
@@ -23,5 +34,5 @@ de_CH{
             ussystem{"US Mass-System"}
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.29.33"}
 }

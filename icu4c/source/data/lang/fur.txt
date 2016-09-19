@@ -299,7 +299,7 @@ fur{
         SOLBA{"dialet di Stolvize"}
         VALENCIA{"valenzian"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
     codePatterns{
         language{"Lenghe: {0}"}
         script{"Scriture: {0}"}

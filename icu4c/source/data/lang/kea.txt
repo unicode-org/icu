@@ -5,13 +5,13 @@ kea{
         calendar{"Kalendáriu"}
     }
     Languages{
-        ab{"abkaziu"}
+        ab{"abkáziu"}
         af{"afrikaner"}
         agq{"aghem"}
         ak{"akan"}
-        am{"amariku"}
-        ar{"arabi"}
-        ar_001{"arabi mudernu"}
+        am{"amáriku"}
+        ar{"árabi"}
+        ar_001{"árabi mudernu"}
         arn{"araukanu"}
         as{"asames"}
         asa{"asu"}
@@ -70,12 +70,12 @@ kea{
         fr{"franses"}
         fr_CA{"franses kanadianu"}
         fr_CH{"franses suisu"}
-        fy{"frisiu osidental"}
+        fy{"fríziu osidental"}
         ga{"irlandes"}
         gag{"gagauz"}
         gl{"galegu"}
         gn{"guarani"}
-        gsw{"alimãu di Suisa"}
+        gsw{"alimãu suísu"}
         gu{"gujarati"}
         guz{"gusii"}
         gv{"manks"}
@@ -125,10 +125,10 @@ kea{
         lv{"letãu"}
         mg{"malgaxi"}
         mi{"maori"}
-        mk{"masedoniu"}
+        mk{"masedóniu"}
         ml{"malaialam"}
         mr{"marati"}
-        ms{"malaiu"}
+        ms{"maláiu"}
         mt{"maltes"}
         my{"birmanes"}
         nb{"norueges bokmål"}
@@ -138,7 +138,7 @@ kea{
         nmg{"kuazio"}
         nn{"norueges nynorsk"}
         om{"oromo"}
-        or{"oriya"}
+        or{"odía"}
         pa{"pandjabi"}
         pl{"pulaku"}
         ps{"paxto"}
@@ -149,14 +149,15 @@ kea{
         quc{"kitxe"}
         rm{"romanxi"}
         ro{"rumenu"}
+        ro_MD{"rumenu moldáviku"}
         ru{"rusu"}
         rw{"kiniaruanda"}
-        sa{"sanskritu"}
+        sa{"sánskritu"}
         sd{"sindi"}
         ses{"koiraboro seni"}
         si{"singales"}
         sk{"slovaku"}
-        sl{"sloveniu"}
+        sl{"slovéniu"}
         smn{"inari sami"}
         so{"somali"}
         sq{"albanes"}
@@ -167,7 +168,7 @@ kea{
         sw_CD{"suaíli kongoles"}
         ta{"tamil"}
         te{"telugu"}
-        tg{"tajik"}
+        tg{"tadjiki"}
         th{"tailandes"}
         ti{"tigrinia"}
         tk{"turkmenu"}
@@ -177,7 +178,7 @@ kea{
         tzm{"tamazait di Atlas Sentral"}
         ug{"uigur"}
         uk{"ukranianu"}
-        und{"lingua diskonxedu"}
+        und{"língua diskonxedu"}
         ur{"urdu"}
         uz{"uzbeki"}
         vi{"vietnamita"}
@@ -188,7 +189,7 @@ kea{
         zh_Hans{"xines simplifikadu"}
         zh_Hant{"xines tradisional"}
         zu{"zulu"}
-        zxx{"sem konteudo linguistiku"}
+        zxx{"sen kontiudu linguístiku"}
     }
     Languages%short{
         az{"azeri"}
@@ -208,7 +209,7 @@ kea{
         Grek{"gregu"}
         Gujr{"gujarati"}
         Guru{"gurmuki"}
-        Hang{"angul"}
+        Hang{"hangul"}
         Hani{"han"}
         Hans{"simplifikadu"}
         Hant{"tradisional"}
@@ -231,7 +232,7 @@ kea{
         Thaa{"taana"}
         Thai{"tailandes"}
         Tibt{"tibetanu"}
-        Zsym{"simbulus"}
+        Zsym{"símbulus"}
         Zxxx{"nãu skritu"}
         Zyyy{"komun"}
         Zzzz{"skrita diskonxedu"}
@@ -248,7 +249,7 @@ kea{
             latn{"Númerus Arábikus"}
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.46"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Skrita: {0}"}

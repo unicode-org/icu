@@ -66,6 +66,10 @@ fr_CA{
             "ILS",
             "nouveau shekel israélien",
         }
+        INR{
+            "INR",
+            "roupie indienne",
+        }
         JPY{
             "¥",
             "yen japonais",
@@ -140,6 +144,7 @@ fr_CA{
         }
     }
     Currencies%narrow{
+        GEL{"GEL"}
         KMF{"CF"}
         NIO{"C$"}
         ZMW{"ZK"}
@@ -161,5 +166,5 @@ fr_CA{
             other{"(devise inconnue)"}
         }
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.27.99"}
 }

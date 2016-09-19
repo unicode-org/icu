@@ -4,7 +4,7 @@ pl{
     RBNFRules{
         SpelloutRules{
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal-masculine=;",
@@ -394,5 +394,5 @@ pl{
             "10: << >>;",
         }
     }
-    Version{"2.1.21.56"}
+    Version{"2.1.27.22"}
 }

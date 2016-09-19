@@ -27,7 +27,7 @@ es{
             "%%lenient-parse:",
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "-x: menos >>;",
@@ -81,7 +81,7 @@ es{
             "1000000: un mill\u00F3n[ >>];",
             "2000000: <%spellout-cardinal-masculine< millones[ >>];",
             "1000000000000: un bill\u00F3n[ >>];",
-            "2000000000000: <%spellout-cardinal-masculine< billiones[ >>];",
+            "2000000000000: <%spellout-cardinal-masculine< billones[ >>];",
             "1000000000000000000: =#,##0=;",
             "%spellout-cardinal-masculine:",
             "-x: menos >>;",
@@ -114,7 +114,7 @@ es{
             "1000000: un mill\u00F3n[ >>];",
             "2000000: <%spellout-cardinal-masculine< millones[ >>];",
             "1000000000000: un bill\u00F3n[ >>];",
-            "2000000000000: <%spellout-cardinal-masculine< billiones[ >>];",
+            "2000000000000: <%spellout-cardinal-masculine< billones[ >>];",
             "1000000000000000000: =#,##0=;",
             "%spellout-cardinal-feminine:",
             "-x: menos >>;",
@@ -147,7 +147,7 @@ es{
             "1000000: un mill\u00F3n[ >>];",
             "2000000: <%spellout-cardinal-masculine< millones[ >>];",
             "1000000000000: un bill\u00F3n[ >>];",
-            "2000000000000: <%spellout-cardinal-masculine< billiones[ >>];",
+            "2000000000000: <%spellout-cardinal-masculine< billones[ >>];",
             "1000000000000000000: =#,##0=;",
             "%spellout-ordinal-masculine-adjective:",
             "-x: menos >>;",
@@ -288,5 +288,5 @@ es{
             "1000000000000000000: =#,##0=\u00AA;",
         }
     }
-    Version{"2.1.21.54"}
+    Version{"2.1.27.33"}
 }

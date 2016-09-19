@@ -178,7 +178,7 @@ sv{
         MC{"Monaco"}
         MD{"Moldavien"}
         ME{"Montenegro"}
-        MF{"S:t Martin"}
+        MF{"Saint-Martin"}
         MG{"Madagaskar"}
         MH{"Marshallöarna"}
         MK{"Makedonien"}
@@ -272,6 +272,7 @@ sv{
         UA{"Ukraina"}
         UG{"Uganda"}
         UM{"USA:s yttre öar"}
+        UN{"Förenta Nationerna"}
         US{"USA"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -297,13 +298,13 @@ sv{
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestina"}
+        UN{"FN"}
         US{"USA"}
     }
     Countries%variant{
         CD{"Demokratiska republiken Kongo"}
         CG{"Republiken Kongo"}
-        FK{"Falklandsöarna (Malvinerna)"}
         MK{"f.d. jugoslaviska republiken Makedonien"}
     }
-    Version{"2.1.26.30"}
+    Version{"2.1.28.79"}
 }

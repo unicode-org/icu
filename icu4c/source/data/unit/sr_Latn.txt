@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sr_Latn{
     %%Parent{"root"}
-    Version{"2.1.26.0"}
+    Version{"2.1.29.33"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -93,6 +93,7 @@ sr_Latn{
                 few{"{0} kvadratna kilometra"}
                 one{"{0} kvadratni kilometar"}
                 other{"{0} kvadratnih kilometara"}
+                per{"{0} po kvadratnom kilometru"}
             }
             square-meter{
                 dnam{"kvadratni metri"}
@@ -106,6 +107,7 @@ sr_Latn{
                 few{"{0} kvadratne milje"}
                 one{"{0} kvadratna milja"}
                 other{"{0} kvadratnih milja"}
+                per{"{0} po kvadratnoj milji"}
             }
             square-yard{
                 dnam{"kvadratni jardi"}
@@ -123,6 +125,24 @@ sr_Latn{
                 few{"{0} karata"}
                 one{"{0} karat"}
                 other{"{0} karata"}
+            }
+            milligram-per-deciliter{
+                dnam{"miligrami po decilitru"}
+                few{"{0} miligrama po decilitru"}
+                one{"{0} miligram po decilitru"}
+                other{"{0} miligrama po decilitru"}
+            }
+            millimole-per-liter{
+                dnam{"milimol po litri"}
+                few{"{0} milimola po litri"}
+                one{"{0} milimol po litri"}
+                other{"{0} milimola po litri"}
+            }
+            part-per-million{
+                dnam{"čestica na milion"}
+                few{"{0} čestica na milion"}
+                one{"{0} čestica na milion"}
+                other{"{0} čestica na milion"}
             }
         }
         consumption{
@@ -144,6 +164,18 @@ sr_Latn{
                 one{"{0} milja po galonu"}
                 other{"{0} milja po galonu"}
             }
+            mile-per-gallon-imperial{
+                dnam{"milja po imperijalnom galonu"}
+                few{"{0} milje po imperijalnom galonu"}
+                one{"{0} milja po imperijalnom galonu"}
+                other{"{0} milja po imperijalnom galonu"}
+            }
+        }
+        coordinate{
+            east{"{0}I"}
+            north{"{0}S"}
+            south{"{0}J"}
+            west{"{0}Z"}
         }
         digital{
             bit{
@@ -265,7 +297,7 @@ sr_Latn{
                 few{"{0} sekunde"}
                 one{"{0} sekunda"}
                 other{"{0} sekundi"}
-                per{"{0}/sek"}
+                per{"{0}/u sekundi"}
             }
             week{
                 dnam{"nedelje"}
@@ -296,7 +328,7 @@ sr_Latn{
                 other{"{0} miliampera"}
             }
             ohm{
-                dnam{"om"}
+                dnam{"omi"}
                 few{"{0} oma"}
                 one{"{0} om"}
                 other{"{0} oma"}
@@ -440,6 +472,9 @@ sr_Latn{
             }
             mile-scandinavian{
                 dnam{"skandinavska milja"}
+                few{"{0} skandinavske milje"}
+                one{"{0} skandinavska milja"}
+                other{"{0} skandinavskih milja"}
             }
             millimeter{
                 dnam{"milimetri"}
@@ -629,6 +664,12 @@ sr_Latn{
                 one{"{0} kilometar na sat"}
                 other{"{0} kilometara na sat"}
             }
+            knot{
+                dnam{"čvor"}
+                few{"{0} čvora"}
+                one{"{0} čvor"}
+                other{"{0} čvorova"}
+            }
             meter-per-second{
                 dnam{"metri u sekundi"}
                 few{"{0} metra u sekundi"}
@@ -756,6 +797,13 @@ sr_Latn{
                 other{"{0} galona"}
                 per{"{0} po galonu"}
             }
+            gallon-imperial{
+                dnam{"imperijalni galon"}
+                few{"{0} imp. galona"}
+                one{"{0} imp. galon"}
+                other{"{0} imp. galona"}
+                per{"{0} po imp. galonu"}
+            }
             hectoliter{
                 dnam{"hektolitri"}
                 few{"{0} hektolitra"}
@@ -881,18 +929,24 @@ sr_Latn{
                 other{"{0} L/100km"}
             }
         }
+        coordinate{
+            east{"{0}I"}
+            north{"{0}S"}
+            south{"{0}J"}
+            west{"{0}Z"}
+        }
         duration{
             day{
-                dnam{"d."}
+                dnam{"d"}
                 few{"{0} d"}
                 one{"{0} d"}
                 other{"{0} d"}
             }
             hour{
-                dnam{"sat"}
-                few{"{0} sata"}
-                one{"{0} sat"}
-                other{"{0} sati"}
+                dnam{"č"}
+                few{"{0} č"}
+                one{"{0} č"}
+                other{"{0} č"}
             }
             millisecond{
                 dnam{"ms"}
@@ -913,10 +967,10 @@ sr_Latn{
                 other{"{0} m"}
             }
             second{
-                dnam{"sek"}
-                few{"{0} sek"}
-                one{"{0} sek"}
-                other{"{0} sek"}
+                dnam{"s"}
+                few{"{0} s"}
+                one{"{0} s"}
+                other{"{0} s"}
             }
             week{
                 dnam{"n."}
@@ -1119,7 +1173,7 @@ sr_Latn{
                 other{"{0}′"}
             }
             arc-second{
-                dnam{"sekundi"}
+                dnam{"lučne sek"}
                 few{"{0}″"}
                 one{"{0}″"}
                 other{"{0}″"}
@@ -1181,6 +1235,7 @@ sr_Latn{
                 few{"{0} km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"kvadratni metri"}
@@ -1194,6 +1249,7 @@ sr_Latn{
                 few{"{0} mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1212,13 +1268,31 @@ sr_Latn{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                few{"{0} mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                few{"{0} mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                few{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"L/100km"}
-                few{"{0} L/100km"}
-                one{"{0} L/100km"}
-                other{"{0} L/100km"}
+                dnam{"L/100 km"}
+                few{"{0} L/100 km"}
+                one{"{0} L/100 km"}
+                other{"{0} L/100 km"}
             }
             liter-per-kilometer{
                 dnam{"L/km"}
@@ -1232,6 +1306,18 @@ sr_Latn{
                 one{"{0} mpg"}
                 other{"{0} mpg"}
             }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
+                few{"{0} mpg Imp."}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
+            }
+        }
+        coordinate{
+            east{"{0}I"}
+            north{"{0}S"}
+            south{"{0}J"}
+            west{"{0}Z"}
         }
         digital{
             bit{
@@ -1314,7 +1400,7 @@ sr_Latn{
                 few{"{0} sata"}
                 one{"{0} sat"}
                 other{"{0} sati"}
-                per{"{0}/s"}
+                per{"{0}/č"}
             }
             microsecond{
                 dnam{"μs"}
@@ -1353,7 +1439,7 @@ sr_Latn{
                 few{"{0} sek"}
                 one{"{0} sek"}
                 other{"{0} sek"}
-                per{"{0}/sek"}
+                per{"{0}/s"}
             }
             week{
                 dnam{"ned."}
@@ -1372,7 +1458,7 @@ sr_Latn{
         }
         electric{
             ampere{
-                dnam{"amperi"}
+                dnam{"A"}
                 few{"{0} A"}
                 one{"{0} A"}
                 other{"{0} A"}
@@ -1384,13 +1470,13 @@ sr_Latn{
                 other{"{0} mA"}
             }
             ohm{
-                dnam{"omi"}
+                dnam{"Ω"}
                 few{"{0} Ω"}
                 one{"{0} Ω"}
                 other{"{0} Ω"}
             }
             volt{
-                dnam{"volti"}
+                dnam{"V"}
                 few{"{0} V"}
                 one{"{0} V"}
                 other{"{0} V"}
@@ -1410,7 +1496,7 @@ sr_Latn{
                 other{"{0} Cal"}
             }
             joule{
-                dnam{"džuli"}
+                dnam{"J"}
                 few{"{0} J"}
                 one{"{0} J"}
                 other{"{0} J"}
@@ -1618,9 +1704,9 @@ sr_Latn{
             }
             ounce{
                 dnam{"oz"}
-                few{"{0} unce"}
-                one{"{0} unca"}
-                other{"{0} unci"}
+                few{"{0} oz"}
+                one{"{0} oz"}
+                other{"{0} oz"}
                 per{"{0}/oz"}
             }
             ounce-troy{
@@ -1675,7 +1761,7 @@ sr_Latn{
                 other{"{0} mW"}
             }
             watt{
-                dnam{"vati"}
+                dnam{"W"}
                 few{"{0} W"}
                 one{"{0} W"}
                 other{"{0} W"}
@@ -1715,10 +1801,16 @@ sr_Latn{
         }
         speed{
             kilometer-per-hour{
-                dnam{"kilometri na sat"}
+                dnam{"km/h"}
                 few{"{0} km/h"}
                 one{"{0} km/h"}
                 other{"{0} km/h"}
+            }
+            knot{
+                dnam{"čv"}
+                few{"{0} čv"}
+                one{"{0} čv"}
+                other{"{0} čv"}
             }
             meter-per-second{
                 dnam{"metri u sekundi"}
@@ -1846,6 +1938,13 @@ sr_Latn{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                few{"{0} gal Imp."}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hL"}

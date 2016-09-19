@@ -702,7 +702,7 @@ bs_Cyrl{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.76"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -5,8 +5,8 @@ es_PE{
     Currencies{
         PEN{
             "S/",
-            "sol peruano",
+            "nuevo sol peruano",
         }
     }
-    Version{"2.1.26.15"}
+    Version{"2.1.27.99"}
 }

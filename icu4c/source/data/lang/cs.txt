@@ -3,6 +3,7 @@
 cs{
     Keys{
         calendar{"Kalendář"}
+        cf{"Měnový formát"}
         colAlternate{"Ignorovat řazení symbolů"}
         colBackwards{"Obrácené řazení akcentů"}
         colCaseFirst{"Řazení velkých a malých písmen"}
@@ -46,7 +47,7 @@ cs{
         ar{"arabština"}
         ar_001{"arabština (moderní standardní)"}
         arc{"aramejština"}
-        arn{"araukánština"}
+        arn{"mapudungun"}
         aro{"araonština"}
         arp{"arapažština"}
         arq{"arabština (alžírská)"}
@@ -126,6 +127,7 @@ cs{
         cps{"kapiznonština"}
         cr{"kríjština"}
         crh{"turečtina (krymská)"}
+        crs{"kreolština (seychelská)"}
         cs{"čeština"}
         csb{"kašubština"}
         cu{"staroslověnština"}
@@ -161,6 +163,7 @@ cs{
         el{"řečtina"}
         elx{"elamitština"}
         en{"angličtina"}
+        en_GB{"angličtina (Velká Británie)"}
         en_US{"angličtina (USA)"}
         enm{"angličtina (středověká)"}
         eo{"esperanto"}
@@ -189,7 +192,7 @@ cs{
         frr{"fríština (severní)"}
         frs{"fríština (východní)"}
         fur{"furlanština"}
-        fy{"fríština"}
+        fy{"fríština (západní)"}
         ga{"irština"}
         gaa{"gaština"}
         gag{"gagauzština"}
@@ -433,6 +436,7 @@ cs{
         pap{"papiamento"}
         pau{"palauština"}
         pcd{"picardština"}
+        pcm{"nigerijský pidžin"}
         pdc{"němčina (pensylvánská)"}
         pdt{"němčina (plautdietsch)"}
         peo{"staroperština"}
@@ -496,7 +500,7 @@ cs{
         sga{"irština (stará)"}
         sgs{"žemaitština"}
         sh{"srbochorvatština"}
-        shi{"tachelhit"}
+        shi{"tašelhit"}
         shn{"šanština"}
         shu{"arabština (čadská)"}
         si{"sinhálština"}
@@ -673,6 +677,7 @@ cs{
         Grek{"řecké"}
         Gujr{"gudžarátí"}
         Guru{"gurmukhi"}
+        Hanb{"hanb"}
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanunóo"}
@@ -686,7 +691,7 @@ cs{
         Hung{"staromaďarské"}
         Inds{"harappské"}
         Ital{"etruské"}
-        Jamo{"Jamo"}
+        Jamo{"jamo"}
         Java{"javánské"}
         Jpan{"japonské"}
         Jurc{"džürčenské"}
@@ -790,6 +795,7 @@ cs{
         Xsux{"sumero-akkadské klínové písmo"}
         Yiii{"yi"}
         Zmth{"matematický zápis"}
+        Zsye{"emodži"}
         Zsym{"symboly"}
         Zxxx{"bez zápisu"}
         Zyyy{"obecné"}
@@ -813,12 +819,16 @@ cs{
             gregorian{"Gregoriánský kalendář"}
             hebrew{"Hebrejský kalendář"}
             indian{"Indický národní kalendář"}
-            islamic{"Muslimský kalendář"}
+            islamic{"Islámský kalendář"}
             islamic-civil{"Muslimský občanský kalendář"}
             iso8601{"Kalendář ISO-8601"}
             japanese{"Japonský kalendář"}
             persian{"Perský kalendář"}
             roc{"Kalendář Čínské republiky"}
+        }
+        cf{
+            account{"Účetní měnový formát"}
+            standard{"Standardní měnový formát"}
         }
         colAlternate{
             non-ignorable{"Řadit symboly"}
@@ -947,7 +957,24 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
+    characterLabelPattern{
+        all{"{0} – vše"}
+        category-list{"{0}: {1}"}
+        compatibility{"{0} – kompatibilita"}
+        enclosed{"{0} – uzavřené"}
+        extended{"{0} – rozšířené"}
+        historic{"{0} – historické"}
+        miscellaneous{"{0} – různé"}
+        other{"{0} – jiné"}
+        scripts{"Písma – {0}"}
+        strokes{
+            "{0} tah",
+            "{0} tahy",
+            "{0} tahu",
+            "{0} tahů",
+        }
+    }
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

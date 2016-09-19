@@ -231,5 +231,8 @@ zgh{
             "ⴰⴷⵓⵍⴰⵔ ⵏ ⵣⵉⵎⴱⴰⴱⵡⵉ (2008)",
         }
     }
-    Version{"2.1.25.97"}
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    Version{"2.1.27.40"}
 }

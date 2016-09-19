@@ -413,7 +413,7 @@ kea{
         }
         STD{
             "STD",
-            "Dobra di Sãu Tume i Prinsipi",
+            "Dobra di Sãu Tume i Prínsipi",
         }
         SYP{
             "SYP",
@@ -485,7 +485,7 @@ kea{
         }
         XAF{
             "FCFA",
-            "Franku CFA BEAC",
+            "Franku CFA (BEAC)",
         }
         XCD{
             "EC$",
@@ -493,7 +493,7 @@ kea{
         }
         XOF{
             "CFA",
-            "Franku CFA BCEAO",
+            "Franku CFA (BCEAO)",
         }
         XPF{
             "CFPF",
@@ -725,10 +725,10 @@ kea{
             other{"Dola merkanu"}
         }
         XAF{
-            other{"Franku CFA BEAC"}
+            other{"Franku CFA (BEAC)"}
         }
         XOF{
-            other{"Franku CFA BCEAO"}
+            other{"Franku CFA (BCEAO)"}
         }
         XXX{
             other{"(mueda diskonxedu)"}
@@ -743,5 +743,5 @@ kea{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.46"}
 }

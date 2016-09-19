@@ -7,5 +7,9 @@ haw{
             "USD",
         }
     }
-    Version{"2.1.25.97"}
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
+    Version{"2.1.27.98"}
 }

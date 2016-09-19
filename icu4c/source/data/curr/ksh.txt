@@ -98,9 +98,13 @@ ksh{
             "BWP",
             "Pula us Bozwaana",
         }
+        BYN{
+            "BYN",
+            "wiißrußesche Rubel",
+        }
         BYR{
             "BYR",
-            "wiißrußesche Rubel",
+            "wiißrußesche Rubel (2000–2016)",
         }
         BZD{
             "BZD",
@@ -891,5 +895,5 @@ ksh{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
 }

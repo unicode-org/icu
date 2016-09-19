@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_001{
-    Version{"2.1.25.97"}
+    Version{"2.1.29.54"}
     units{
         acceleration{
             meter-per-second-squared{
@@ -31,6 +31,11 @@ en_001{
             }
         }
         concentr{
+            karat{
+                dnam{"carat"}
+                one{"{0} carat"}
+                other{"{0} carats"}
+            }
             milligram-per-deciliter{
                 dnam{"milligrams per decilitre"}
                 one{"{0} milligram per decilitre"}
@@ -109,6 +114,18 @@ en_001{
                 other{"{0} picometres"}
             }
         }
+        mass{
+            metric-ton{
+                dnam{"tonne"}
+                one{"{0} tonne"}
+                other{"{0} tonnes"}
+            }
+            stone{
+                dnam{"stone"}
+                one{"{0} stone"}
+                other{"{0} stone"}
+            }
+        }
         pressure{
             millimeter-of-mercury{
                 dnam{"millimetres of mercury"}
@@ -126,6 +143,13 @@ en_001{
                 dnam{"metres per second"}
                 one{"{0} metre per second"}
                 other{"{0} metres per second"}
+            }
+        }
+        temperature{
+            kelvin{
+                dnam{"kelvin"}
+                one{"{0} kelvin"}
+                other{"{0} kelvin"}
             }
         }
         volume{
@@ -192,6 +216,11 @@ en_001{
         }
     }
     unitsNarrow{
+        area{
+            square-meter{
+                dnam{"metres²"}
+            }
+        }
         concentr{
             milligram-per-deciliter{
                 dnam{"mg/dl"}
@@ -224,6 +253,11 @@ en_001{
                 dnam{"mpg"}
                 one{"{0}mpg"}
                 other{"{0}mpg"}
+            }
+        }
+        length{
+            meter{
+                dnam{"metre"}
             }
         }
         mass{
@@ -294,7 +328,17 @@ en_001{
                 dnam{"metres/sec²"}
             }
         }
+        area{
+            square-meter{
+                dnam{"metres²"}
+            }
+        }
         concentr{
+            karat{
+                dnam{"carats"}
+                one{"{0} ct"}
+                other{"{0} ct"}
+            }
             milligram-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
@@ -332,6 +376,7 @@ en_001{
             hour{
                 one{"{0} hr"}
                 other{"{0} hrs"}
+                per{"{0}ph"}
             }
             minute{
                 one{"{0} min"}
@@ -340,6 +385,7 @@ en_001{
             second{
                 one{"{0} sec"}
                 other{"{0} secs"}
+                per{"{0}ps"}
             }
         }
         length{
@@ -348,6 +394,21 @@ en_001{
             }
             micrometer{
                 dnam{"µmetres"}
+            }
+        }
+        mass{
+            stone{
+                dnam{"stone"}
+            }
+        }
+        pressure{
+            inch-hg{
+                dnam{"in Hg"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
             }
         }
         speed{
@@ -375,6 +436,7 @@ en_001{
                 dnam{"gal"}
                 one{"{0} gal"}
                 other{"{0} gal"}
+                per{"{0}/gal"}
             }
             hectoliter{
                 dnam{"hl"}
@@ -385,11 +447,12 @@ en_001{
                 dnam{"litres"}
                 one{"{0} l"}
                 other{"{0} l"}
+                per{"{0}/l"}
             }
             megaliter{
                 dnam{"Ml"}
                 one{"{0} Ml"}
-                other{"{0} Ml"}
+                other{"{0} MLl"}
             }
             milliliter{
                 dnam{"ml"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 bg{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -302,6 +302,9 @@ bg{
         }
         "America:El_Salvador"{
             ec{"Салвадор"}
+        }
+        "America:Fort_Nelson"{
+            ec{"Форт Нелсън"}
         }
         "America:Fortaleza"{
             ec{"Форталеза"}
@@ -666,6 +669,9 @@ bg{
         "Asia:Bangkok"{
             ec{"Банкок"}
         }
+        "Asia:Barnaul"{
+            ec{"Барнаул"}
+        }
         "Asia:Beirut"{
             ec{"Бейрут"}
         }
@@ -843,6 +849,9 @@ bg{
         "Asia:Tokyo"{
             ec{"Токио"}
         }
+        "Asia:Tomsk"{
+            ec{"Томск"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Улан Батор"}
         }
@@ -942,6 +951,9 @@ bg{
         "Europe:Andorra"{
             ec{"Андора"}
         }
+        "Europe:Astrakhan"{
+            ec{"Астрахан"}
+        }
         "Europe:Athens"{
             ec{"Атина"}
         }
@@ -999,6 +1011,9 @@ bg{
         }
         "Europe:Kiev"{
             ec{"Киев"}
+        }
+        "Europe:Kirov"{
+            ec{"Киров"}
         }
         "Europe:Lisbon"{
             ec{"Лисабон"}
@@ -1075,6 +1090,9 @@ bg{
         }
         "Europe:Tirane"{
             ec{"Тирана"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"Уляновск"}
         }
         "Europe:Uzhgorod"{
             ec{"Ужгород"}
@@ -1740,6 +1758,9 @@ bg{
         }
         "meta:Ponape"{
             ls{"Понапе"}
+        }
+        "meta:Pyongyang"{
+            ls{"Времето в Пхенян"}
         }
         "meta:Reunion"{
             ls{"Реюнион"}

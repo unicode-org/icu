@@ -220,7 +220,7 @@ ca{
         PM{"Saint-Pierre-et-Miquelon"}
         PN{"Illes Pitcairn"}
         PR{"Puerto Rico"}
-        PS{"Palestina"}
+        PS{"territoris palestins"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguai"}
@@ -272,6 +272,7 @@ ca{
         UA{"Ucraïna"}
         UG{"Uganda"}
         UM{"Illes Perifèriques Menors dels EUA"}
+        UN{"Nacions Unides"}
         US{"Estats Units"}
         UY{"Uruguai"}
         UZ{"Uzbekistan"}
@@ -293,17 +294,19 @@ ca{
         ZZ{"Regió desconeguda"}
     }
     Countries%short{
-        GB{"GB"}
+        GB{"RU"}
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palestina"}
+        UN{"ONU"}
         US{"EUA"}
     }
     Countries%variant{
         CD{"Congo (República Democràtica del Congo)"}
         CG{"Congo (República del Congo)"}
+        CZ{"Txèquia"}
         FK{"Illes Malvines (Illes Falkland)"}
         MK{"Macedònia (Antiga República Iugoslava de Macedònia)"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

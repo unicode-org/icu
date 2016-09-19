@@ -2,23 +2,24 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 de_CH{
     Currencies{
-        BYR{
-            "BYR",
+        BYN{
+            "BYN",
             "Weissrussischer Rubel",
         }
-        EUR{
-            "EUR",
-            "Euro",
+        BYR{
+            "BYR",
+            "Weissrussischer Rubel (2000–2016)",
         }
     }
-    Currencies%narrow{
-        EUR{"EUR"}
-    }
     CurrencyPlurals{
-        BYR{
+        BYN{
             one{"Weissrussischer Rubel"}
             other{"Weissrussische Rubel"}
         }
+        BYR{
+            one{"Weissrussischer Rubel (2000–2016)"}
+            other{"Weissrussische Rubel (2000–2016)"}
+        }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.29.33"}
 }

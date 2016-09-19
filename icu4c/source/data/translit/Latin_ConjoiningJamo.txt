@@ -1,13 +1,8 @@
 ﻿# © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-# ***************************************************************************
-# *
-# *  Copyright (C) 2004-2016, International Business Machines
-# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
-# *
-# ***************************************************************************
+#
 # File: Latin_ConjoiningJamo.txt
-# Generated from CLDR 
+# Generated from CLDR
 #
 
 # Follows the Ministry of Culture and Tourism romanization: see http://www.korea.net/korea/kor_loca.asp?code=A020303

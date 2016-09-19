@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 kea{
-    Version{"2.1.25.97"}
+    Version{"2.1.27.46"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -19,6 +19,14 @@ kea{
             }
         }
         angle{
+            arc-minute{
+                dnam{"minutu di arku"}
+                other{"{0} minutu di arku"}
+            }
+            arc-second{
+                dnam{"sigundu di arku"}
+                other{"{0} sigundu di arku"}
+            }
             degree{
                 dnam{"grau"}
                 other{"{0} grau"}
@@ -26,6 +34,10 @@ kea{
             radian{
                 dnam{"radianu"}
                 other{"{0} radianu"}
+            }
+            revolution{
+                dnam{"volta"}
+                other{"{0} volta"}
             }
         }
         area{
@@ -40,26 +52,31 @@ kea{
             square-centimeter{
                 dnam{"sentímetru kuadradu"}
                 other{"{0} sentímetru kuadradu"}
+                per{"{0} pur sentímetru kuadradu"}
             }
             square-foot{
-                dnam{"pé kuadradu"}
-                other{"{0} pé kuadradu"}
+                dnam{"pe kuadradu"}
+                other{"{0} pe kuadradu"}
             }
             square-inch{
                 dnam{"pulegada kuadradu"}
                 other{"{0} pulegada kuadradu"}
+                per{"{0} pur pulegada kuadradu"}
             }
             square-kilometer{
                 dnam{"kilómetru kuadradu"}
                 other{"{0} kilómetru kuadradu"}
+                per{"{0} pur kilómetru kuadradu"}
             }
             square-meter{
-                dnam{"métru kuadradu"}
-                other{"{0} métru kuadradu"}
+                dnam{"metru kuadradu"}
+                other{"{0} metru kuadradu"}
+                per{"{0} pur metru kuadradu"}
             }
             square-mile{
                 dnam{"milha kuadradu"}
                 other{"{0} milha kuadradu"}
+                per{"{0} pur milha kuadradu"}
             }
             square-yard{
                 dnam{"jarda kuadradu"}
@@ -71,8 +88,24 @@ kea{
                 dnam{"kilati"}
                 other{"{0} kilati"}
             }
+            milligram-per-deciliter{
+                dnam{"miligrama pur desilitru"}
+                other{"{0} miligrama pur desilitru"}
+            }
+            millimole-per-liter{
+                dnam{"milimol pur litru"}
+                other{"{0} milimol pur litru"}
+            }
+            part-per-million{
+                dnam{"parti pur milhãu"}
+                other{"{0} parti pur milhãu"}
+            }
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"litru pur 100 kilómetru"}
+                other{"{0} litru pur 100 kilómetru"}
+            }
             liter-per-kilometer{
                 dnam{"litru pur kilómetru"}
                 other{"{0} litru pur kilómetru"}
@@ -80,6 +113,10 @@ kea{
             mile-per-gallon{
                 dnam{"milha pur galãu"}
                 other{"{0} milha pur galãu"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"milha pur galãu imperial"}
+                other{"{0} milha pur galãu imperial"}
             }
         }
         digital{
@@ -125,9 +162,14 @@ kea{
             }
         }
         duration{
+            century{
+                dnam{"sékulu"}
+                other{"{0} sékulu"}
+            }
             day{
                 dnam{"dia"}
                 other{"{0} dia"}
+                per{"{0} pur dia"}
             }
             hour{
                 dnam{"ora"}
@@ -145,10 +187,12 @@ kea{
             minute{
                 dnam{"minutu"}
                 other{"{0} minutu"}
+                per{"{0} pur minutu"}
             }
             month{
                 dnam{"mes"}
                 other{"{0} mes"}
+                per{"{0} pur mes"}
             }
             nanosecond{
                 dnam{"nanosigundu"}
@@ -162,10 +206,12 @@ kea{
             week{
                 dnam{"simana"}
                 other{"{0} simana"}
+                per{"{0} pur simana"}
             }
             year{
                 dnam{"anu"}
                 other{"{0} anu"}
+                per{"{0} pur anu"}
             }
         }
         length{
@@ -176,30 +222,35 @@ kea{
             centimeter{
                 dnam{"sentímetru"}
                 other{"{0} sentímetru"}
+                per{"{0} pur sentímetru"}
             }
             decimeter{
                 dnam{"desímetru"}
                 other{"{0} desímetru"}
             }
             foot{
-                dnam{"pé"}
-                other{"{0} pé"}
+                dnam{"pe"}
+                other{"{0} pe"}
+                per{"{0} pur pe"}
             }
             inch{
                 dnam{"pulegada"}
                 other{"{0} pulegada"}
+                per{"{0} pur pulegada"}
             }
             kilometer{
                 dnam{"kilómetru"}
                 other{"{0} kilómetru"}
+                per{"{0} pur kilómetru"}
             }
             light-year{
                 dnam{"anu-lus"}
                 other{"{0} anu-lus"}
             }
             meter{
-                dnam{"métru"}
-                other{"{0} métru"}
+                dnam{"metru"}
+                other{"{0} metru"}
+                per{"{0} pur metru"}
             }
             micrometer{
                 dnam{"mikrómetru"}
@@ -208,6 +259,10 @@ kea{
             mile{
                 dnam{"milha"}
                 other{"{0} milha"}
+            }
+            mile-scandinavian{
+                dnam{"milha skandinavu"}
+                other{"{0} milha skandinavu"}
             }
             millimeter{
                 dnam{"milímetru"}
@@ -347,6 +402,12 @@ kea{
         }
     }
     unitsNarrow{
+        consumption{
+            liter-per-100kilometers{
+                dnam{"l/100km"}
+                other{"{0} l/100km"}
+            }
+        }
         duration{
             day{
                 dnam{"dia"}
@@ -362,6 +423,7 @@ kea{
             }
             minute{
                 dnam{"min."}
+                other{"{0} min."}
             }
             month{
                 dnam{"mes"}
@@ -433,12 +495,12 @@ kea{
         }
         angle{
             arc-minute{
-                dnam{"arcmin"}
-                other{"{0}′"}
+                dnam{"arkmin"}
+                other{"{0} arkmin"}
             }
             arc-second{
-                dnam{"arcsec"}
-                other{"{0}″"}
+                dnam{"arksig"}
+                other{"{0} arksig"}
             }
             degree{
                 dnam{"grau"}
@@ -447,6 +509,10 @@ kea{
             radian{
                 dnam{"rad"}
                 other{"{0} rad"}
+            }
+            revolution{
+                dnam{"vol"}
+                other{"{0} vol"}
             }
         }
         area{
@@ -461,6 +527,7 @@ kea{
             square-centimeter{
                 dnam{"cm²"}
                 other{"{0} cm²"}
+                per{"{0}/cm²"}
             }
             square-foot{
                 dnam{"ft²"}
@@ -469,18 +536,22 @@ kea{
             square-inch{
                 dnam{"in²"}
                 other{"{0} in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
                 dnam{"km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
                 other{"{0} m²"}
+                per{"{0}/m²"}
             }
             square-mile{
                 dnam{"mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -492,8 +563,24 @@ kea{
                 dnam{"kt"}
                 other{"{0} kt"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"milimol/litru"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"parti/milhãu"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"litru/100km"}
+                other{"{0} l/100 km"}
+            }
             liter-per-kilometer{
                 dnam{"l/km"}
                 other{"{0} l/km"}
@@ -501,6 +588,10 @@ kea{
             mile-per-gallon{
                 dnam{"mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"milha/gal imp."}
+                other{"{0} mpg imp."}
             }
         }
         digital{
@@ -546,9 +637,14 @@ kea{
             }
         }
         duration{
+            century{
+                dnam{"sék."}
+                other{"{0} sék."}
+            }
             day{
                 dnam{"dia"}
                 other{"{0} dia"}
+                per{"{0}/dia"}
             }
             hour{
                 dnam{"ora"}
@@ -566,10 +662,12 @@ kea{
             minute{
                 dnam{"min."}
                 other{"{0} min."}
+                per{"{0}/min."}
             }
             month{
                 dnam{"mes"}
                 other{"{0} mes"}
+                per{"{0}/mes"}
             }
             nanosecond{
                 dnam{"ns"}
@@ -583,10 +681,12 @@ kea{
             week{
                 dnam{"sim."}
                 other{"{0} sim."}
+                per{"{0}/sim."}
             }
             year{
                 dnam{"anu"}
                 other{"{0} anu"}
+                per{"{0}/anu"}
             }
         }
         electric{
@@ -655,22 +755,26 @@ kea{
             centimeter{
                 dnam{"cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
             }
             decimeter{
                 dnam{"dm"}
                 other{"{0} dm"}
             }
             foot{
-                dnam{"pé"}
-                other{"{0} pé"}
+                dnam{"pe"}
+                other{"{0} pe"}
+                per{"{0}/pe"}
             }
             inch{
                 dnam{"in"}
                 other{"{0} in"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 dnam{"anu-lus"}
@@ -679,6 +783,7 @@ kea{
             meter{
                 dnam{"m"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             micrometer{
                 dnam{"µm"}
@@ -687,6 +792,10 @@ kea{
             mile{
                 dnam{"mi"}
                 other{"{0} mi"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}

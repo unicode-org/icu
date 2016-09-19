@@ -129,7 +129,7 @@ so{
         MH{"Marshall Islands"}
         MK{"Makadooniya"}
         ML{"Maali"}
-        MM{"Myanmar"}
+        MM{"Miyanmar"}
         MN{"Mongooliya"}
         MP{"Northern Mariana Islands"}
         MQ{"Martinique"}
@@ -228,5 +228,5 @@ so{
         ZW{"Simbaabwe"}
         ZZ{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.78"}
 }

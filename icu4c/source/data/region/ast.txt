@@ -302,9 +302,10 @@ ast{
     Countries%variant{
         CD{"Congu (RDC)"}
         CG{"Congu (República del)"}
+        CI{"Costa del Marfil"}
         FK{"Islles Malvines (Falkland Islands)"}
         MK{"Macedonia (ARYDM)"}
         TL{"Timor Este"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
 }

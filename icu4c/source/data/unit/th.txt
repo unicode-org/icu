@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 th{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -66,19 +66,21 @@ th{
             square-kilometer{
                 dnam{"ตารางกิโลเมตร"}
                 other{"{0} ตารางกิโลเมตร"}
+                per{"{0} ต่อตารางกิโลเมตร"}
             }
             square-meter{
                 dnam{"ตารางเมตร"}
                 other{"{0} ตารางเมตร"}
-                per{"{0} ต่อ ตร.ม."}
+                per{"{0} ต่อตารางเมตร"}
             }
             square-mile{
                 dnam{"ตารางไมล์"}
                 other{"{0} ตารางไมล์"}
+                per{"{0} ต่อตารางไมล์"}
             }
             square-yard{
-                dnam{"ตารางวา"}
-                other{"{0} ตารางวา"}
+                dnam{"ตารางหลา"}
+                other{"{0} ตารางหลา"}
             }
         }
         compound{
@@ -89,11 +91,23 @@ th{
                 dnam{"กะรัต"}
                 other{"{0} กะรัต"}
             }
+            milligram-per-deciliter{
+                dnam{"มิลลิกรัมต่อเดซิลิตร"}
+                other{"{0} มิลลิกรัมต่อเดซิลิตร"}
+            }
+            millimole-per-liter{
+                dnam{"มิลลิโมลต่อลิตร"}
+                other{"{0} มิลลิโมลต่อลิตร"}
+            }
+            part-per-million{
+                dnam{"ส่วนต่อล้าน"}
+                other{"{0} ส่วนต่อล้าน"}
+            }
         }
         consumption{
             liter-per-100kilometers{
                 dnam{"ลิตรต่อ100 กิโลเมตร"}
-                other{"{0} ลิตร/100 กิโลเมตร"}
+                other{"{0} ลิตรต่อ100 กิโลเมตร"}
             }
             liter-per-kilometer{
                 dnam{"ลิตรต่อกิโลเมตร"}
@@ -102,6 +116,10 @@ th{
             mile-per-gallon{
                 dnam{"ไมล์ต่อแกลลอน"}
                 other{"{0} ไมล์ต่อแกลลอน"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"ไมล์ต่อแกลลอนอังกฤษ"}
+                other{"{0} ไมล์ต่อแกลลอนอังกฤษ"}
             }
         }
         coordinate{
@@ -538,6 +556,11 @@ th{
                 other{"{0} แกลลอน"}
                 per{"{0} ต่อแกลลอน"}
             }
+            gallon-imperial{
+                dnam{"แกลลอนอังกฤษ"}
+                other{"{0} แกลลอนอังกฤษ"}
+                per{"{0} ต่อแกลลอนอังกฤษ"}
+            }
             hectoliter{
                 dnam{"เฮกโตลิตร"}
                 other{"{0} เฮกโตลิตร"}
@@ -548,8 +571,8 @@ th{
                 per{"{0} ต่อลิตร"}
             }
             megaliter{
-                dnam{"เมกกะลิตร"}
-                other{"{0} เมกกะลิตร"}
+                dnam{"เมกะลิตร"}
+                other{"{0} เมกะลิตร"}
             }
             milliliter{
                 dnam{"มิลลิลิตร"}
@@ -620,7 +643,7 @@ th{
         consumption{
             liter-per-100kilometers{
                 dnam{"ล. /100 กม."}
-                other{"{0}ล/100กม"}
+                other{"{0} ล./100กม."}
             }
         }
         coordinate{
@@ -780,7 +803,7 @@ th{
             }
             meter-per-second-squared{
                 dnam{"เมตร/วินาที²"}
-                other{"{0} ม./วินาที²"}
+                other{"{0} ม./วิ²"}
             }
         }
         angle{
@@ -817,7 +840,7 @@ th{
             square-centimeter{
                 dnam{"ตร.ซม."}
                 other{"{0} ตร.ซม."}
-                per{"{0} ต่อ ตร.ซม."}
+                per{"{0}/ตร.ซม."}
             }
             square-foot{
                 dnam{"ตร.ฟุต"}
@@ -826,24 +849,26 @@ th{
             square-inch{
                 dnam{"ตร.นิ้ว"}
                 other{"{0} ตร.นิ้ว"}
-                per{"{0} ต่อตารางนิ้ว"}
+                per{"{0}/ตร.นิ้ว"}
             }
             square-kilometer{
                 dnam{"ตร.กม."}
                 other{"{0} ตร.กม."}
+                per{"{0}/ตร.กม."}
             }
             square-meter{
                 dnam{"ตร.ม."}
                 other{"{0} ตร.ม."}
-                per{"{0} ต่อ ตร.ม."}
+                per{"{0}/ตร.ม."}
             }
             square-mile{
                 dnam{"ตร.ไมล์"}
                 other{"{0} ตร.ไมล์"}
+                per{"{0}/ตร.ไมล์"}
             }
             square-yard{
-                dnam{"ตร.ว."}
-                other{"{0} ตร.ว."}
+                dnam{"ตร.หลา"}
+                other{"{0} ตร.หลา"}
             }
         }
         compound{
@@ -854,10 +879,22 @@ th{
                 dnam{"กะรัต"}
                 other{"{0} กะรัต"}
             }
+            milligram-per-deciliter{
+                dnam{"มก./ดล."}
+                other{"{0} มก./ดล."}
+            }
+            millimole-per-liter{
+                dnam{"มิลลิโมล/ลิตร"}
+                other{"{0} มลม./ล."}
+            }
+            part-per-million{
+                dnam{"ส่วน/ล้าน"}
+                other{"{0} สตล."}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"ลิตร/100 กิโลเมตร"}
+                dnam{"ล./100 กม."}
                 other{"{0} ล./100กม."}
             }
             liter-per-kilometer{
@@ -867,6 +904,10 @@ th{
             mile-per-gallon{
                 dnam{"ไมล์/แกลลอน"}
                 other{"{0} ไมล์/แกลลอน"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"ไมล์/แกลลอนอังกฤษ"}
+                other{"{0} ไมล์ต่อแกลลอนอังกฤษ"}
             }
         }
         coordinate{
@@ -1121,12 +1162,12 @@ th{
             gram{
                 dnam{"กรัม"}
                 other{"{0} ก."}
-                per{"{0}/กรัม"}
+                per{"{0}/ก."}
             }
             kilogram{
                 dnam{"กก."}
                 other{"{0} กก."}
-                per{"{0}/ก.ก."}
+                per{"{0}/กก."}
             }
             metric-ton{
                 dnam{"ต."}
@@ -1303,6 +1344,11 @@ th{
                 other{"{0} แกลลอน"}
                 per{"{0}/แกลลอน"}
             }
+            gallon-imperial{
+                dnam{"แกลลอนอังกฤษ"}
+                other{"{0} แกลลอนอังกฤษ"}
+                per{"{0}/แกลลอนอังกฤษ"}
+            }
             hectoliter{
                 dnam{"ฮล."}
                 other{"{0} ฮล."}
@@ -1313,8 +1359,8 @@ th{
                 per{"{0}/ล."}
             }
             megaliter{
-                dnam{"เมกกะลิตร"}
-                other{"{0} เมกกะลิตร"}
+                dnam{"เมกะลิตร"}
+                other{"{0} เมกะลิตร"}
             }
             milliliter{
                 dnam{"มล."}
