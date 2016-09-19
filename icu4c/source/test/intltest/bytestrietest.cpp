@@ -55,6 +55,7 @@ public:
     void TestTruncatingIteratorFromLinearMatchShort();
     void TestTruncatingIteratorFromLinearMatchLong();
     void TestIteratorFromBytes();
+    void TestFailedIterator();
 
     void checkData(const StringAndValue data[], int32_t dataLength);
     void checkData(const StringAndValue data[], int32_t dataLength, UStringTrieBuildOption buildOption);
@@ -107,6 +108,7 @@ void BytesTrieTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestTruncatingIteratorFromLinearMatchShort);
     TESTCASE_AUTO(TestTruncatingIteratorFromLinearMatchLong);
     TESTCASE_AUTO(TestIteratorFromBytes);
+    TESTCASE_AUTO(TestFailedIterator);
     TESTCASE_AUTO_END;
 }
 
@@ -585,6 +587,15 @@ void BytesTrieTest::TestIteratorFromBytes() {
     StringPiece trieBytes=builder_->buildStringPiece(USTRINGTRIE_BUILD_FAST, errorCode);
     BytesTrie::Iterator iter(trieBytes.data(), 0, errorCode);
     checkIterator(iter, data, UPRV_LENGTHOF(data));
+}
+
+void BytesTrieTest::TestFailedIterator() {
+    UErrorCode failure = U_ILLEGAL_ARGUMENT_ERROR;
+    BytesTrie::Iterator iter(NULL, 0, failure);
+    StringPiece sp = iter.getString();
+    if (!sp.empty()) {
+        errln("failed iterator returned garbage data");
+    }
 }
 
 void BytesTrieTest::checkData(const StringAndValue data[], int32_t dataLength) {

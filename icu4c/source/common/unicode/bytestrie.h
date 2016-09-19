@@ -308,7 +308,7 @@ public:
          * @return The NUL-terminated byte sequence for the last successful next().
          * @stable ICU 4.8
          */
-        const StringPiece &getString() const { return sp_; }
+        StringPiece getString() const;
         /**
          * @return The value for the last successful next().
          * @stable ICU 4.8
@@ -327,7 +327,6 @@ public:
         int32_t initialRemainingMatchLength_;
 
         CharString *str_;
-        StringPiece sp_;
         int32_t maxLength_;
         int32_t value_;
 
