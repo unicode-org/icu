@@ -20,16 +20,6 @@
 #include "uassert.h"
 
 
-
-/**
- * Ticket #12705 - VS2015 update 3, 32 bit release mode casues this file to have failures.
- * As a workaround, we will turn off optimization just for this file.
- */
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900))
-# pragma optimize("", off)
-#endif
-
-
 /* struct holding a single variant */
 typedef struct VariantListEntry {
     const char              *variant;
@@ -1785,6 +1775,15 @@ _appendPrivateuseToLanguageTag(const char* localeID, char* appendAt, int32_t cap
 #define EXTV 0x0040
 #define PRIV 0x0080
 
+/**
+ * Ticket #12705 - Visual Studio 2015 Update 3 contains a new code optimizer which has problems optimizing
+ * this function. (See https://blogs.msdn.microsoft.com/vcblog/2016/05/04/new-code-optimizer/ )
+ * As a workaround, we will turn off optimization just for this function on VS2015 Update 3 and above.
+ */
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900) && defined(_MSC_FULL_VER) && (_MSC_FULL_VER >= 190024210))
+#pragma optimize( "", off )
+#endif
+
 static ULanguageTag*
 ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* status) {
     ULanguageTag *t;
@@ -2147,6 +2146,13 @@ error:
     ultag_close(t);
     return NULL;
 }
+
+/**
+* Ticket #12705 - Turn optimization back on.
+*/
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900) && defined(_MSC_FULL_VER) && (_MSC_FULL_VER >= 190024210))
+#pragma optimize( "", on )
+#endif
 
 static void
 ultag_close(ULanguageTag* langtag) {
