@@ -1,7 +1,44 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 se_FI{
-    Version{"2.1.25.97"}
+    Version{"2.1.27.78"}
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    narrow{
+                        "S",
+                        "M",
+                        "D",
+                        "G",
+                        "D",
+                        "B",
+                        "L",
+                    }
+                    wide{
+                        "sotnabeaivi",
+                        "vuossárgga",
+                        "maŋŋebárgga",
+                        "gaskavahku",
+                        "duorastaga",
+                        "bearjadaga",
+                        "lávvardaga",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "D",
+                        "G",
+                        "D",
+                        "B",
+                        "L",
+                    }
+                }
+            }
+        }
+    }
     fields{
         era{
             dn{"áigodat"}

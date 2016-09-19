@@ -1043,10 +1043,10 @@ void MeasureFormatTest::TestFormatPeriodEn() {
             {t_3h_5h, UPRV_LENGTHOF(t_3h_5h), "3h 5h"}};
 
     ExpectedResult fullDataDe[] = {
-            {t_1m_59_9996s, UPRV_LENGTHOF(t_1m_59_9996s), "1 Minute und 59,9996 Sekunden"},
+            {t_1m_59_9996s, UPRV_LENGTHOF(t_1m_59_9996s), "1 Minute, 59,9996 Sekunden"},
             {t_19m, UPRV_LENGTHOF(t_19m), "19 Minuten"},
-            {t_1h_23_5s, UPRV_LENGTHOF(t_1h_23_5s), "1 Stunde und 23,5 Sekunden"},
-            {t_1h_23_5m, UPRV_LENGTHOF(t_1h_23_5m), "1 Stunde und 23,5 Minuten"},
+            {t_1h_23_5s, UPRV_LENGTHOF(t_1h_23_5s), "1 Stunde, 23,5 Sekunden"},
+            {t_1h_23_5m, UPRV_LENGTHOF(t_1h_23_5m), "1 Stunde, 23,5 Minuten"},
             {t_1h_0m_23s, UPRV_LENGTHOF(t_1h_0m_23s), "1 Stunde, 0 Minuten und 23 Sekunden"},
             {t_2y_5M_3w_4d, UPRV_LENGTHOF(t_2y_5M_3w_4d), "2 Jahre, 5 Monate, 3 Wochen und 4 Tage"}};
 
@@ -1507,14 +1507,14 @@ void MeasureFormatTest::TestManyLocaleDurations() {
     helperTestManyLocaleDurations("fr", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "05:37");
     helperTestManyLocaleDurations("is", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 klst. og 37 m\\u00EDn.");
     helperTestManyLocaleDurations("is", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
-    helperTestManyLocaleDurations("ja", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5\\u6642\\u959337\\u5206");
+    helperTestManyLocaleDurations("ja", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h37m");
     helperTestManyLocaleDurations("ja", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("nb", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5t, 37m");
-    helperTestManyLocaleDurations("nb", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5.37");
+    helperTestManyLocaleDurations("nb", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("nl", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 u, 37 m");
     helperTestManyLocaleDurations("nl", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("nn", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 h og 37 min");
-    helperTestManyLocaleDurations("nn", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5.37");
+    helperTestManyLocaleDurations("nn", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("sv", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h 37m");
     helperTestManyLocaleDurations("sv", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("zh", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5\\u5C0F\\u65F637\\u5206\\u949F");

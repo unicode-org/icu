@@ -9,7 +9,7 @@ sr{
             "%%lenient-parse:",
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal-masculine=;",
@@ -150,5 +150,5 @@ sr{
             "400: <%spellout-cardinal-feminine<\u0441\u0442\u043E>%%ordti>;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.27.22"}
 }

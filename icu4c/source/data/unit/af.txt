@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 af{
-    Version{"2.1.26.0"}
+    Version{"2.1.29.44"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -79,6 +79,7 @@ af{
                 dnam{"vierkante kilometer"}
                 one{"{0} vierkante kilometer"}
                 other{"{0} vierkante kilometer"}
+                per{"{0} per vierkante kilometer"}
             }
             square-meter{
                 dnam{"vierkante meter"}
@@ -90,6 +91,7 @@ af{
                 dnam{"vierkante myl"}
                 one{"{0} vierkante myl"}
                 other{"{0} vierkante myl"}
+                per{"{0} per vierkante myl"}
             }
             square-yard{
                 dnam{"vierkante jaart"}
@@ -102,9 +104,24 @@ af{
         }
         concentr{
             karat{
-                dnam{"karat"}
-                one{"{0} karat"}
-                other{"{0} karat"}
+                dnam{"karaat"}
+                one{"{0} karaat"}
+                other{"{0} karaat"}
+            }
+            milligram-per-deciliter{
+                dnam{"milligram per desiliter"}
+                one{"{0} milligram per desiliter"}
+                other{"{0} milligram per desiliter"}
+            }
+            millimole-per-liter{
+                dnam{"millimol per liter"}
+                one{"{0} millimol per liter"}
+                other{"{0} millimol per liter"}
+            }
+            part-per-million{
+                dnam{"dele per miljoen"}
+                one{"{0} dele per miljoen"}
+                other{"{0} dele per miljoen"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ af{
                 dnam{"myl per gelling"}
                 one{"{0} myl per gelling"}
                 other{"{0} myl per gelling"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"myl per imp. gelling"}
+                one{"{0} myl per imp. gelling"}
+                other{"{0} myl per imp. gelling"}
             }
         }
         coordinate{
@@ -440,9 +462,9 @@ af{
                 per{"{0} per kilogram"}
             }
             metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
+                dnam{"metrieke ton"}
+                one{"{0} metrieke ton"}
+                other{"{0} metrieke ton"}
             }
             microgram{
                 dnam{"mikrogram"}
@@ -653,6 +675,12 @@ af{
                 one{"{0} gelling"}
                 other{"{0} gelling"}
                 per{"{0} per gelling"}
+            }
+            gallon-imperial{
+                dnam{"imp. gelling"}
+                one{"{0} imp. gelling"}
+                other{"{0} imp. gelling"}
+                per{"{0}/imp. gel."}
             }
             hectoliter{
                 dnam{"hektoliter"}
@@ -1015,6 +1043,7 @@ af{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1026,6 +1055,7 @@ af{
                 dnam{"myl²"}
                 one{"{0} myl²"}
                 other{"{0} myl²"}
+                per{"{0}/myl²"}
             }
             square-yard{
                 dnam{"jaart²"}
@@ -1038,9 +1068,24 @@ af{
         }
         concentr{
             karat{
-                dnam{"karat"}
+                dnam{"karaat"}
                 one{"{0} kar."}
                 other{"{0} kar."}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dℓ"}
+                one{"{0} mg/dℓ"}
+                other{"{0} mg/dℓ"}
+            }
+            millimole-per-liter{
+                dnam{"millimol/ℓ"}
+                one{"{0} mmol/ℓ"}
+                other{"{0} mmol/ℓ"}
+            }
+            part-per-million{
+                dnam{"dele/miljoen"}
+                one{"{0} d.p.m."}
+                other{"{0} d.p.m."}
             }
         }
         consumption{
@@ -1055,9 +1100,14 @@ af{
                 other{"{0} ℓ/km"}
             }
             mile-per-gallon{
-                dnam{"myl/gelling"}
+                dnam{"myl/gel."}
                 one{"{0} m.p.g."}
                 other{"{0} m.p.g."}
+            }
+            mile-per-gallon-imperial{
+                dnam{"myl/imp. gel."}
+                one{"{0} m.p.imp.g."}
+                other{"{0} m.p.imp.g."}
             }
         }
         coordinate{
@@ -1589,6 +1639,12 @@ af{
                 one{"{0} gell."}
                 other{"{0} gell."}
                 per{"{0}/gell."}
+            }
+            gallon-imperial{
+                dnam{"imp. gel."}
+                one{"{0} imp. gel."}
+                other{"{0} imp. gel."}
+                per{"{0}/imp. gel."}
             }
             hectoliter{
                 dnam{"hℓ"}

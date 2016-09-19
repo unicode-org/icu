@@ -16,7 +16,7 @@ pt{
             "%%lenient-parse:",
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal-masculine=;",
@@ -194,5 +194,5 @@ pt{
             "1000000000000000000: =#,##0=\u00AA;",
         }
     }
-    Version{"2.1.25.33"}
+    Version{"2.1.27.22"}
 }

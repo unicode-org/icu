@@ -157,7 +157,7 @@ format:table(nofallback) {
                     "GMT",
                     "DATE=RELATIVE_LONG,TIME=MEDIUM",
                     "ERA=1,YEAR=2012,MONTH=OCTOBER,DATE=8,HOUR_OF_DAY=23,MINUTE=59,SECOND=0",
-                    "23:59:00 Ngày 08 tháng 10 năm 2012"
+                    "23:59:00 8 tháng 10, 2012"
                },
                {
                     "vi@calendar=gregorian",         

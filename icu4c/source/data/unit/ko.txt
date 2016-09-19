@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ko{
-    Version{"2.1.26.0"}
+    Version{"2.1.29.22"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -66,6 +66,7 @@ ko{
             square-kilometer{
                 dnam{"제곱킬로미터"}
                 other{"{0}제곱킬로미터"}
+                per{"제곱킬로미터당 {0}"}
             }
             square-meter{
                 dnam{"제곱미터"}
@@ -75,6 +76,7 @@ ko{
             square-mile{
                 dnam{"제곱마일"}
                 other{"{0}제곱마일"}
+                per{"제곱마일당 {0}"}
             }
             square-yard{
                 dnam{"제곱야드"}
@@ -89,6 +91,17 @@ ko{
                 dnam{"캐럿"}
                 other{"{0}캐럿"}
             }
+            milligram-per-deciliter{
+                dnam{"데시리터당 밀리그램"}
+                other{"데시리터당 {0}밀리그램"}
+            }
+            millimole-per-liter{
+                dnam{"리터당 밀리몰"}
+                other{"리터당 {0}밀리몰"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -102,6 +115,10 @@ ko{
             mile-per-gallon{
                 dnam{"갤런당 마일"}
                 other{"갤런당 {0}마일"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"영국식 갤런당 마일"}
+                other{"영국식 갤런당 {0}마일"}
             }
         }
         coordinate{
@@ -538,6 +555,11 @@ ko{
                 other{"{0}갤런"}
                 per{"갤런당 {0}"}
             }
+            gallon-imperial{
+                dnam{"영국식 갤런"}
+                other{"{0}영국식 갤런"}
+                per{"영국식 갤런당 {0}"}
+            }
             hectoliter{
                 dnam{"헥토리터"}
                 other{"{0}헥토리터"}
@@ -830,6 +852,7 @@ ko{
             square-kilometer{
                 dnam{"km²"}
                 other{"{0}km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -839,6 +862,7 @@ ko{
             square-mile{
                 dnam{"mi²"}
                 other{"{0}mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -853,6 +877,17 @@ ko{
                 dnam{"kt"}
                 other{"{0}kt"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                other{"{0}mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                other{"{0}mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -866,6 +901,9 @@ ko{
             mile-per-gallon{
                 dnam{"mpg"}
                 other{"{0}mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
             }
         }
         coordinate{
@@ -884,15 +922,15 @@ ko{
                 other{"{0}byte"}
             }
             gigabit{
-                dnam{"Gbit"}
+                dnam{"Gb"}
                 other{"{0}Gb"}
             }
             gigabyte{
-                dnam{"GByte"}
+                dnam{"GB"}
                 other{"{0}GB"}
             }
             kilobit{
-                dnam{"kbit"}
+                dnam{"kb"}
                 other{"{0}kb"}
             }
             kilobyte{
@@ -900,7 +938,7 @@ ko{
                 other{"{0}kB"}
             }
             megabit{
-                dnam{"Mbit"}
+                dnam{"Mb"}
                 other{"{0}Mb"}
             }
             megabyte{
@@ -908,11 +946,11 @@ ko{
                 other{"{0}MB"}
             }
             terabit{
-                dnam{"Tbit"}
+                dnam{"Tb"}
                 other{"{0}Tb"}
             }
             terabyte{
-                dnam{"TByte"}
+                dnam{"TB"}
                 other{"{0}TB"}
             }
         }
@@ -1301,6 +1339,11 @@ ko{
                 dnam{"gal"}
                 other{"{0}gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                other{"{0}gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hL"}

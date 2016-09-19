@@ -12,5 +12,8 @@ es_US{
             "dólar estadounidense",
         }
     }
-    Version{"2.1.25.97"}
+    Currencies%narrow{
+        RON{"lei"}
+    }
+    Version{"2.1.27.99"}
 }

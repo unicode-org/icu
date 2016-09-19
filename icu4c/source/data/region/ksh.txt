@@ -5,25 +5,25 @@ ksh{
         001{"de Ääd"}
         002{"Affrika"}
         003{"Nood-Amärrika"}
-        005{"Söd-Amärrika"}
-        009{"Ozejaanije"}
+        005{"Söhd-Amärrika"}
+        009{"Ozejahneje"}
         011{"Wäß-Affrika"}
         013{"Meddelammärrika"}
         014{"Oß-Affrika"}
         015{"Nood-Affrika"}
         017{"Meddel-Affrika"}
-        018{"Söd-Affrika"}
+        018{"Söhd-Affrika"}
         019{"Ammärrika"}
         021{"der Norde vun Amärrika"}
         029{"de Karribik"}
         030{"Oß-Aasije"}
-        034{"Söd-Aasije"}
-        035{"Söd-Oß-Aasije"}
-        039{"Söd-Europpa"}
-        053{"de Rejjohn öm Austraalije"}
-        054{"Mellaneesije"}
-        057{"de Rejohn vun Mikroneeseje"}
-        061{"Polineesije"}
+        034{"Söhd-Aasije"}
+        035{"Söhd-Oß-Aasije"}
+        039{"Söhd-Europpa"}
+        053{"de Rejjohn öm Austrahlije"}
+        054{"Mellanehsije"}
+        057{"de Rejohn vun Mikronehseje"}
+        061{"Polinehsije"}
         142{"Aasije"}
         143{"Meddelaasije"}
         145{"Wäß-Aasije"}
@@ -84,7 +84,7 @@ ksh{
         CO{"Kolumbije"}
         CP{"de Klipperton-Ensel"}
         CR{"Kostarika"}
-        CU{"Kuba"}
+        CU{"Kuhba"}
         CV{"de kapvärdesche Enselle"}
         CW{"Curaçao"}
         CX{"de Weihnaachs-Ensel"}
@@ -105,7 +105,7 @@ ksh{
         ER{"Äritreja"}
         ES{"Schpaanije"}
         ET{"Ättijoopije"}
-        EU{"de Europäjesche Unijon"}
+        EU{"de Europähjesche Unijon"}
         FI{"Finnland"}
         FJ{"de Fidschi-Endelle"}
         FK{"de Falkland-Enselle"}
@@ -114,7 +114,7 @@ ksh{
         FR{"Frankrisch"}
         GA{"Jabuhn"}
         GB{"Jruußbrettannije"}
-        GD{"Jrenaada"}
+        GD{"Jrenahda"}
         GE{"Jeorrjije"}
         GF{"Franzüüsesch Jujaana"}
         GG{"Jöönsei"}
@@ -127,7 +127,7 @@ ksh{
         GQ{"Äquatorial Jineeja"}
         GR{"Jriescheland"}
         GS{"Söd-Jeorjie un de södlijje Botteramms-Enselle"}
-        GT{"Juwatemaala"}
+        GT{"Juwatemahla"}
         GU{"Juham"}
         GW{"Jinneha_Bißau"}
         GY{"Jujaana"}
@@ -202,7 +202,7 @@ ksh{
         NE{"Nijer"}
         NF{"de Noofok-Ensel"}
         NG{"Nikaraagua"}
-        NI{"Nikaraaguwa"}
+        NI{"Nikarahguwa"}
         NL{"de Nederläng"}
         NO{"Norrweeje"}
         NP{"Nepall"}
@@ -225,7 +225,7 @@ ksh{
         PW{"Pallau"}
         PY{"Parraguwai"}
         QA{"Kataa"}
-        QO{"Ozejaanije ußerhallef"}
+        QO{"Ozejahnije ußerhallef"}
         RE{"Rehunjohn"}
         RO{"Romäänije"}
         RS{"Särbije"}
@@ -248,7 +248,7 @@ ksh{
         SR{"Sürinamm"}
         SS{"Södsudahn"}
         ST{"Zint Tommeh un Printschipe"}
-        SV{"Äl Slavadoor"}
+        SV{"Äl Slavadohr"}
         SX{"Zint Maarten"}
         SY{"Sürije"}
         SZ{"ẞwaasiland"}
@@ -265,7 +265,7 @@ ksh{
         TN{"Tuneesije"}
         TO{"Tongga"}
         TR{"de Törkei"}
-        TT{"Trinidad un Tobääjo"}
+        TT{"Trinidad un Tobähjo"}
         TV{"Tuvalu"}
         TW{"Taiwan"}
         TZ{"Tansanija"}
@@ -290,7 +290,7 @@ ksh{
         ZA{"de Republik Södaffrika"}
         ZM{"Sambija"}
         ZW{"Simbabwe"}
-        ZZ{"- Jääjend onbikannt -"}
+        ZZ{"- Jähjend onbikannt -"}
     }
     Countries%short{
         GB{"Jruußbrettannije"}
@@ -305,5 +305,5 @@ ksh{
         FK{"de malleviinesche Enselle"}
         MK{"de vörmaals ens jugoßlaawesch jewääse Republik Mazedoonije"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
 }

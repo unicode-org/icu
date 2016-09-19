@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fr{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -79,6 +79,7 @@ fr{
                 dnam{"kilomètres carrés"}
                 one{"{0} kilomètre carré"}
                 other{"{0} kilomètres carrés"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"mètres carrés"}
@@ -90,6 +91,7 @@ fr{
                 dnam{"miles carrés"}
                 one{"{0} mile carré"}
                 other{"{0} miles carrés"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yards carrés"}
@@ -105,6 +107,21 @@ fr{
                 dnam{"carats"}
                 one{"{0} carat"}
                 other{"{0} carats"}
+            }
+            milligram-per-deciliter{
+                dnam{"milligrammes par décilitre"}
+                one{"{0} milligramme par décilitre"}
+                other{"{0} milligrammes par décilitre"}
+            }
+            millimole-per-liter{
+                dnam{"millimoles par litre"}
+                one{"{0} millimole par litre"}
+                other{"{0} millimoles par litre"}
+            }
+            part-per-million{
+                dnam{"parts par million"}
+                one{"{0} part par million"}
+                other{"{0} parts par million"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ fr{
                 dnam{"miles par gallon"}
                 one{"{0} mile par gallon"}
                 other{"{0} miles par gallon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"miles par gallon impérial"}
+                one{"{0} mile par gallon impérial"}
+                other{"{0} miles par gallon impérial"}
             }
         }
         coordinate{
@@ -374,9 +396,9 @@ fr{
                 other{"{0} micromètres"}
             }
             mile{
-                dnam{"milles anglais"}
-                one{"{0} mille anglais"}
-                other{"{0} milles anglais"}
+                dnam{"miles"}
+                one{"{0} mile"}
+                other{"{0} miles"}
             }
             mile-scandinavian{
                 dnam{"milles scandinaves"}
@@ -556,9 +578,9 @@ fr{
                 other{"{0} mètres par seconde"}
             }
             mile-per-hour{
-                dnam{"milles anglais par heure"}
-                one{"{0} mille anglais par heure"}
-                other{"{0} milles anglais par heure"}
+                dnam{"miles par heure"}
+                one{"{0} mile par heure"}
+                other{"{0} miles par heure"}
             }
         }
         temperature{
@@ -622,7 +644,7 @@ fr{
                 per{"{0} par mètre cube"}
             }
             cubic-mile{
-                dnam{"milles anglais cubes"}
+                dnam{"miles cubes"}
                 one{"{0} mille anglais cube"}
                 other{"{0} milles anglais cubes"}
             }
@@ -656,6 +678,12 @@ fr{
                 one{"{0} gallon"}
                 other{"{0} gallons"}
                 per{"{0} par gallon"}
+            }
+            gallon-imperial{
+                dnam{"gallon imp."}
+                one{"{0} gal imp."}
+                other{"{0} gal imp."}
+                per{"{0} par gallon imp."}
             }
             hectoliter{
                 dnam{"hectolitres"}
@@ -1108,6 +1136,7 @@ fr{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1119,6 +1148,7 @@ fr{
                 dnam{"mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1134,6 +1164,21 @@ fr{
                 dnam{"ct"}
                 one{"{0} ct"}
                 other{"{0} ct"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1151,6 +1196,11 @@ fr{
                 dnam{"mi/gal"}
                 one{"{0} mi/gal"}
                 other{"{0} mi/gal"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mi/gal imp."}
+                one{"{0} mi/gal imp."}
+                other{"{0} mi/gal imp."}
             }
         }
         coordinate{
@@ -1171,7 +1221,7 @@ fr{
                 other{"{0} octet"}
             }
             gigabit{
-                dnam{"Gb"}
+                dnam{"Gbit"}
                 one{"{0} Gb"}
                 other{"{0} Gb"}
             }
@@ -1181,7 +1231,7 @@ fr{
                 other{"{0} Go"}
             }
             kilobit{
-                dnam{"kb"}
+                dnam{"kbit"}
                 one{"{0} kb"}
                 other{"{0} kb"}
             }
@@ -1191,7 +1241,7 @@ fr{
                 other{"{0} ko"}
             }
             megabit{
-                dnam{"Mb"}
+                dnam{"Mbit"}
                 one{"{0} Mb"}
                 other{"{0} Mb"}
             }
@@ -1201,7 +1251,7 @@ fr{
                 other{"{0} Mo"}
             }
             terabit{
-                dnam{"Tb"}
+                dnam{"Tbit"}
                 one{"{0} Tb"}
                 other{"{0} Tb"}
             }
@@ -1246,7 +1296,7 @@ fr{
                 per{"{0}/min"}
             }
             month{
-                dnam{"m"}
+                dnam{"mois"}
                 one{"{0} m"}
                 other{"{0} m"}
                 per{"{0}/mois"}
@@ -1686,6 +1736,12 @@ fr{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"gal imp."}
+                one{"{0} gal imp."}
+                other{"{0} gal imp."}
+                per{"{0} gal imp."}
             }
             hectoliter{
                 dnam{"hl"}

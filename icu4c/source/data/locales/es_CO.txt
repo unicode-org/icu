@@ -13,8 +13,9 @@ es_CO{
                 group{"."}
             }
         }
+        minimumGroupingDigits{"2"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.99"}
     calendar{
         generic{
             DateTimePatterns{
@@ -104,6 +105,14 @@ es_CO{
             }
         }
         gregorian{
+            AmPmMarkers{
+                "a. m.",
+                "p. m.",
+            }
+            AmPmMarkersAbbr{
+                "a. m.",
+                "p. m.",
+            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -122,13 +131,28 @@ es_CO{
             availableFormats{
                 GyMMM{"MMM 'de' y G"}
                 GyMMMEd{"E, d MMM 'de' y G"}
+                H{"H"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 MMMEd{"E, d 'de' MMM"}
                 MMMd{"d 'de' MMM"}
                 MMMdd{"d 'de' MMM"}
+                yMEd{"EEE, d/M/y"}
                 yMMM{"MMM 'de' y"}
                 yMMMd{"d 'de' MMM 'de' y"}
             }
             dayNames{
+                format{
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "J",
+                        "V",
+                        "S",
+                    }
+                }
                 stand-alone{
                     narrow{
                         "d",
@@ -138,6 +162,32 @@ es_CO{
                         "j",
                         "v",
                         "s",
+                    }
+                }
+            }
+            dayPeriod{
+                format{
+                    abbreviated{
+                        evening1{"de la tarde"}
+                        morning2{"de la mañana"}
+                        night1{"de la noche"}
+                        noon{"m."}
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        am{"a. m."}
+                        noon{"m."}
+                        pm{"p. m."}
+                    }
+                    narrow{
+                        am{"a. m."}
+                        noon{"m."}
+                        pm{"p. m."}
+                    }
+                    wide{
+                        am{"a. m."}
+                        pm{"p. m."}
                     }
                 }
             }

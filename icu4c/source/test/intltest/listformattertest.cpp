@@ -183,7 +183,7 @@ void ListFormatterTest::TestMalayalam() {
 void ListFormatterTest::TestZulu() {
     UnicodeString results[4] = {
         one,
-        "I-" + one + " ne-" + two,
+        one + " ne-" + two,
         one + ", " + two + ", ne-" + three,
         one + ", " + two + ", " + three + ", ne-" + four
     };

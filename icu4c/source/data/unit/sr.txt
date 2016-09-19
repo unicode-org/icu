@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sr{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -92,6 +92,7 @@ sr{
                 few{"{0} квадратна километра"}
                 one{"{0} квадратни километар"}
                 other{"{0} квадратних километара"}
+                per{"{0} по квадратном километру"}
             }
             square-meter{
                 dnam{"квадратни метри"}
@@ -105,6 +106,7 @@ sr{
                 few{"{0} квадратне миље"}
                 one{"{0} квадратна миља"}
                 other{"{0} квадратних миља"}
+                per{"{0} по квадратној миљи"}
             }
             square-yard{
                 dnam{"квадратни јарди"}
@@ -122,6 +124,24 @@ sr{
                 few{"{0} карата"}
                 one{"{0} карат"}
                 other{"{0} карата"}
+            }
+            milligram-per-deciliter{
+                dnam{"милиграми по децилитру"}
+                few{"{0} милиграма по децилитру"}
+                one{"{0} милиграм по децилитру"}
+                other{"{0} милиграма по децилитру"}
+            }
+            millimole-per-liter{
+                dnam{"милимол по литри"}
+                few{"{0} милимола по литри"}
+                one{"{0} милимол по литри"}
+                other{"{0} милимола по литри"}
+            }
+            part-per-million{
+                dnam{"честица на милион"}
+                few{"{0} честица на милион"}
+                one{"{0} честица на милион"}
+                other{"{0} честица на милион"}
             }
         }
         consumption{
@@ -143,6 +163,18 @@ sr{
                 one{"{0} миља по галону"}
                 other{"{0} миља по галону"}
             }
+            mile-per-gallon-imperial{
+                dnam{"миља по империјалном галону"}
+                few{"{0} миље по империјалном галону"}
+                one{"{0} миља по империјалном галону"}
+                other{"{0} миља по империјалном галону"}
+            }
+        }
+        coordinate{
+            east{"{0}И"}
+            north{"{0}С"}
+            south{"{0}Ј"}
+            west{"{0}З"}
         }
         digital{
             bit{
@@ -264,7 +296,7 @@ sr{
                 few{"{0} секунде"}
                 one{"{0} секунда"}
                 other{"{0} секунди"}
-                per{"{0}/сек"}
+                per{"{0}/у секунди"}
             }
             week{
                 dnam{"недеље"}
@@ -295,7 +327,7 @@ sr{
                 other{"{0} милиампера"}
             }
             ohm{
-                dnam{"ом"}
+                dnam{"оми"}
                 few{"{0} ома"}
                 one{"{0} ом"}
                 other{"{0} ома"}
@@ -439,6 +471,9 @@ sr{
             }
             mile-scandinavian{
                 dnam{"скандинавска миља"}
+                few{"{0} скандинавске миље"}
+                one{"{0} скандинавска миља"}
+                other{"{0} скандинавских миља"}
             }
             millimeter{
                 dnam{"милиметри"}
@@ -628,6 +663,12 @@ sr{
                 one{"{0} километар на сат"}
                 other{"{0} километара на сат"}
             }
+            knot{
+                dnam{"чвор"}
+                few{"{0} чвора"}
+                one{"{0} чвор"}
+                other{"{0} чворова"}
+            }
             meter-per-second{
                 dnam{"метри у секунди"}
                 few{"{0} метра у секунди"}
@@ -755,6 +796,13 @@ sr{
                 other{"{0} галона"}
                 per{"{0} по галону"}
             }
+            gallon-imperial{
+                dnam{"империјални галон"}
+                few{"{0} имп. галона"}
+                one{"{0} имп. галон"}
+                other{"{0} имп. галона"}
+                per{"{0} по имп. галону"}
+            }
             hectoliter{
                 dnam{"хектолитри"}
                 few{"{0} хектолитра"}
@@ -880,18 +928,24 @@ sr{
                 other{"{0} L/100km"}
             }
         }
+        coordinate{
+            east{"{0}И"}
+            north{"{0}С"}
+            south{"{0}Ј"}
+            west{"{0}З"}
+        }
         duration{
             day{
-                dnam{"д."}
+                dnam{"д"}
                 few{"{0} д"}
                 one{"{0} д"}
                 other{"{0} д"}
             }
             hour{
-                dnam{"сат"}
-                few{"{0} сата"}
-                one{"{0} сат"}
-                other{"{0} сати"}
+                dnam{"ч"}
+                few{"{0} ч"}
+                one{"{0} ч"}
+                other{"{0} ч"}
             }
             millisecond{
                 dnam{"ms"}
@@ -912,10 +966,10 @@ sr{
                 other{"{0} м"}
             }
             second{
-                dnam{"сек"}
-                few{"{0} сек"}
-                one{"{0} сек"}
-                other{"{0} сек"}
+                dnam{"с"}
+                few{"{0} с"}
+                one{"{0} с"}
+                other{"{0} с"}
             }
             week{
                 dnam{"н."}
@@ -1118,7 +1172,7 @@ sr{
                 other{"{0}′"}
             }
             arc-second{
-                dnam{"секунди"}
+                dnam{"лучне сек"}
                 few{"{0}″"}
                 one{"{0}″"}
                 other{"{0}″"}
@@ -1180,6 +1234,7 @@ sr{
                 few{"{0} km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"квадратни метри"}
@@ -1193,6 +1248,7 @@ sr{
                 few{"{0} mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1211,13 +1267,31 @@ sr{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                few{"{0} mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                few{"{0} mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                few{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"L/100km"}
-                few{"{0} L/100km"}
-                one{"{0} L/100km"}
-                other{"{0} L/100km"}
+                dnam{"L/100 km"}
+                few{"{0} L/100 km"}
+                one{"{0} L/100 km"}
+                other{"{0} L/100 km"}
             }
             liter-per-kilometer{
                 dnam{"L/km"}
@@ -1231,6 +1305,18 @@ sr{
                 one{"{0} mpg"}
                 other{"{0} mpg"}
             }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
+                few{"{0} mpg Imp."}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
+            }
+        }
+        coordinate{
+            east{"{0}И"}
+            north{"{0}С"}
+            south{"{0}Ј"}
+            west{"{0}З"}
         }
         digital{
             bit{
@@ -1313,7 +1399,7 @@ sr{
                 few{"{0} сата"}
                 one{"{0} сат"}
                 other{"{0} сати"}
-                per{"{0}/с"}
+                per{"{0}/ч"}
             }
             microsecond{
                 dnam{"μs"}
@@ -1332,14 +1418,14 @@ sr{
                 few{"{0} мин"}
                 one{"{0} мин"}
                 other{"{0} мин"}
-                per{"{0}/min"}
+                per{"{0}/мин"}
             }
             month{
                 dnam{"месеци"}
                 few{"{0} мес."}
                 one{"{0} мес."}
                 other{"{0} мес."}
-                per{"{0}/m"}
+                per{"{0}/м"}
             }
             nanosecond{
                 dnam{"ns"}
@@ -1352,7 +1438,7 @@ sr{
                 few{"{0} сек"}
                 one{"{0} сек"}
                 other{"{0} сек"}
-                per{"{0}/сек"}
+                per{"{0}/с"}
             }
             week{
                 dnam{"нед."}
@@ -1371,7 +1457,7 @@ sr{
         }
         electric{
             ampere{
-                dnam{"ампери"}
+                dnam{"A"}
                 few{"{0} A"}
                 one{"{0} A"}
                 other{"{0} A"}
@@ -1383,13 +1469,13 @@ sr{
                 other{"{0} mA"}
             }
             ohm{
-                dnam{"оми"}
+                dnam{"Ω"}
                 few{"{0} Ω"}
                 one{"{0} Ω"}
                 other{"{0} Ω"}
             }
             volt{
-                dnam{"волти"}
+                dnam{"V"}
                 few{"{0} V"}
                 one{"{0} V"}
                 other{"{0} V"}
@@ -1409,7 +1495,7 @@ sr{
                 other{"{0} Cal"}
             }
             joule{
-                dnam{"џули"}
+                dnam{"J"}
                 few{"{0} J"}
                 one{"{0} J"}
                 other{"{0} J"}
@@ -1617,9 +1703,9 @@ sr{
             }
             ounce{
                 dnam{"oz"}
-                few{"{0} унце"}
-                one{"{0} унца"}
-                other{"{0} унци"}
+                few{"{0} oz"}
+                one{"{0} oz"}
+                other{"{0} oz"}
                 per{"{0}/oz"}
             }
             ounce-troy{
@@ -1674,7 +1760,7 @@ sr{
                 other{"{0} mW"}
             }
             watt{
-                dnam{"вати"}
+                dnam{"W"}
                 few{"{0} W"}
                 one{"{0} W"}
                 other{"{0} W"}
@@ -1714,10 +1800,16 @@ sr{
         }
         speed{
             kilometer-per-hour{
-                dnam{"километри на сат"}
+                dnam{"km/h"}
                 few{"{0} km/h"}
                 one{"{0} km/h"}
                 other{"{0} km/h"}
+            }
+            knot{
+                dnam{"чв"}
+                few{"{0} чв"}
+                one{"{0} чв"}
+                other{"{0} чв"}
             }
             meter-per-second{
                 dnam{"метри у секунди"}
@@ -1845,6 +1937,13 @@ sr{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                few{"{0} gal Imp."}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hL"}

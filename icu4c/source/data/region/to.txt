@@ -219,7 +219,7 @@ to{
         PL{"Polani"}
         PM{"Sā Piea mo Mikeloni"}
         PN{"ʻOtumotu Pitikeni"}
-        PR{"Pueto Liko"}
+        PR{"Puēto Liko"}
         PS{"Potu Palesitaine"}
         PT{"Potukali"}
         PW{"Palau"}
@@ -252,7 +252,7 @@ to{
         SX{"Sā Mātini (fakahōlani)"}
         SY{"Sīlia"}
         SZ{"Suasilani"}
-        TA{"Tulisiteni ta Kunuha"}
+        TA{"Tulisitani ta Kunuha"}
         TC{"ʻOtumotu Tuki mo Kaikosi"}
         TD{"Sāti"}
         TF{"Potu fonua tonga fakafalanisē"}
@@ -302,7 +302,8 @@ to{
     Countries%variant{
         CD{"Kongo (LTK)"}
         CG{"Kongo (Lipapilika)"}
+        CZ{"Sēkia"}
         MK{"Masetōnia (FYROM)"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.98"}
 }

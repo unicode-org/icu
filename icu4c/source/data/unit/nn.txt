@@ -1,11 +1,11 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nn{
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
     durationUnits{
-        hm{"h.mm"}
-        hms{"h.mm.ss"}
-        ms{"m.ss"}
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
     }
     unitsNarrow{
         area{

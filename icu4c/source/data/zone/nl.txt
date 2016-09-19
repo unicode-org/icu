@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nl{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -302,6 +302,9 @@ nl{
         }
         "America:El_Salvador"{
             ec{"El Salvador"}
+        }
+        "America:Fort_Nelson"{
+            ec{"Fort Nelson"}
         }
         "America:Fortaleza"{
             ec{"Fortaleza"}
@@ -666,6 +669,9 @@ nl{
         "Asia:Bangkok"{
             ec{"Bangkok"}
         }
+        "Asia:Barnaul"{
+            ec{"Barnaul"}
+        }
         "Asia:Beirut"{
             ec{"Beiroet"}
         }
@@ -843,6 +849,9 @@ nl{
         "Asia:Tokyo"{
             ec{"Tokio"}
         }
+        "Asia:Tomsk"{
+            ec{"Tomsk"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Ulaanbaatar"}
         }
@@ -942,6 +951,9 @@ nl{
         "Europe:Andorra"{
             ec{"Andorra"}
         }
+        "Europe:Astrakhan"{
+            ec{"Astrakhan"}
+        }
         "Europe:Athens"{
             ec{"Athene"}
         }
@@ -999,6 +1011,9 @@ nl{
         }
         "Europe:Kiev"{
             ec{"Kiev"}
+        }
+        "Europe:Kirov"{
+            ec{"Kirov"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
@@ -1075,6 +1090,9 @@ nl{
         }
         "Europe:Tirane"{
             ec{"Tirana"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"Ulyanovsk"}
         }
         "Europe:Uzhgorod"{
             ec{"Oezjhorod"}
@@ -1183,6 +1201,9 @@ nl{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
+            sd{"HDT"}
+            sg{"HST"}
+            ss{"HST"}
         }
         "Pacific:Johnston"{
             ec{"Johnston"}
@@ -1786,6 +1807,9 @@ nl{
         }
         "meta:Ponape"{
             ls{"Pohnpei-tijd"}
+        }
+        "meta:Pyongyang"{
+            ls{"Pyongyang-tijd"}
         }
         "meta:Qyzylorda"{
             ld{"Qyzylorda-zomertijd"}

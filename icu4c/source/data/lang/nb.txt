@@ -3,6 +3,7 @@
 nb{
     Keys{
         calendar{"kalender"}
+        cf{"valutaformat"}
         colAlternate{"Ignorer sortering etter symboler"}
         colBackwards{"omvendt sortering etter aksent"}
         colCaseFirst{"Organisering av store og små bokstaver"}
@@ -26,7 +27,7 @@ nb{
         ace{"achinesisk"}
         ach{"acoli"}
         ada{"adangme"}
-        ady{"adyghe"}
+        ady{"adygeisk"}
         ae{"avestisk"}
         aeb{"tunisisk-arabisk"}
         af{"afrikaans"}
@@ -44,29 +45,29 @@ nb{
         ang{"gammelengelsk"}
         anp{"angika"}
         ar{"arabisk"}
-        ar_001{"moderne standard arabisk"}
+        ar_001{"moderne standardarabisk"}
         arc{"arameisk"}
-        arn{"araukansk"}
+        arn{"mapudungun"}
         aro{"araona"}
         arp{"arapaho"}
         arq{"algerisk arabisk"}
         arw{"arawak"}
         ary{"marokkansk-arabisk"}
         arz{"egyptisk arabisk"}
-        as{"assamisk"}
+        as{"assamesisk"}
         asa{"asu"}
         ase{"amerikansk tegnspråk"}
         ast{"asturisk"}
         av{"avarisk"}
         avk{"kotava"}
-        awa{"awadhi"}
+        awa{"avadhi"}
         ay{"aymara"}
         az{"aserbajdsjansk"}
         ba{"basjkirsk"}
         bal{"baluchi"}
         ban{"balinesisk"}
         bar{"bairisk"}
-        bas{"basa"}
+        bas{"basaa"}
         bax{"bamun"}
         bbc{"batak toba"}
         bbj{"ghomala"}
@@ -97,7 +98,7 @@ nb{
         brx{"bodo"}
         bs{"bosnisk"}
         bss{"akose"}
-        bua{"buriat"}
+        bua{"burjatisk"}
         bug{"buginesisk"}
         bum{"bulu"}
         byn{"blin"}
@@ -112,7 +113,7 @@ nb{
         cgg{"kiga"}
         ch{"chamorro"}
         chb{"chibcha"}
-        chg{"chagatai"}
+        chg{"tsjagatai"}
         chk{"chuukesisk"}
         chm{"mari"}
         chn{"chinook"}
@@ -126,6 +127,7 @@ nb{
         cps{"kapiz"}
         cr{"cree"}
         crh{"krimtatarisk"}
+        crs{"seselwa"}
         cs{"tsjekkisk"}
         csb{"kasjubisk"}
         cu{"kirkeslavisk"}
@@ -136,10 +138,8 @@ nb{
         dar{"dargwa"}
         dav{"taita"}
         de{"tysk"}
-        de_AT{"østerriksk tysk"}
-        de_CH{"sveitsisk høytysk"}
         del{"delaware"}
-        den{"slavisk"}
+        den{"slavey"}
         dgr{"dogrib"}
         din{"dinka"}
         dje{"zarma"}
@@ -148,7 +148,7 @@ nb{
         dtp{"sentraldusun"}
         dua{"duala"}
         dum{"mellomnederlandsk"}
-        dv{"divehi"}
+        dv{"dhivehi"}
         dyo{"jola-fonyi"}
         dyu{"dyula"}
         dz{"dzongkha"}
@@ -162,16 +162,9 @@ nb{
         el{"gresk"}
         elx{"elamittisk"}
         en{"engelsk"}
-        en_AU{"australsk engelsk"}
-        en_CA{"canadisk engelsk"}
-        en_GB{"britisk engelsk"}
-        en_US{"amerikansk engelsk"}
         enm{"mellomengelsk"}
         eo{"esperanto"}
         es{"spansk"}
-        es_419{"latinamerikansk spansk"}
-        es_ES{"europeisk spansk"}
-        es_MX{"meksikansk spansk"}
         esu{"sentralyupik"}
         et{"estisk"}
         eu{"baskisk"}
@@ -180,17 +173,15 @@ nb{
         fa{"persisk"}
         fan{"fang"}
         fat{"fanti"}
-        ff{"fulani"}
+        ff{"fulfulde"}
         fi{"finsk"}
-        fil{"filippinsk"}
+        fil{"filipino"}
         fit{"tornedalsfinsk"}
         fj{"fijiansk"}
         fo{"færøysk"}
         fon{"fon"}
         fr{"fransk"}
-        fr_CA{"canadisk fransk"}
-        fr_CH{"sveitsisk fransk"}
-        frc{"kajunfransk"}
+        frc{"cajunfransk"}
         frm{"mellomfransk"}
         fro{"gammelfransk"}
         frp{"arpitansk"}
@@ -205,8 +196,8 @@ nb{
         gay{"gayo"}
         gba{"gbaya"}
         gbz{"zoroastrisk dari"}
-        gd{"skotsk gælisk"}
-        gez{"ges"}
+        gd{"skotsk-gælisk"}
+        gez{"geez"}
         gil{"kiribatisk"}
         gl{"galisisk"}
         glk{"gileki"}
@@ -258,7 +249,7 @@ nb{
         io{"ido"}
         is{"islandsk"}
         it{"italiensk"}
-        iu{"inuktitut"}
+        iu{"inuittisk"}
         izh{"ingrisk"}
         ja{"japansk"}
         jam{"jamaicansk kreolengelsk"}
@@ -305,7 +296,7 @@ nb{
         kos{"kosraeansk"}
         kpe{"kpelle"}
         kr{"kanuri"}
-        krc{"karachay-balkar"}
+        krc{"karatsjajbalkarsk"}
         kri{"krio"}
         krj{"kinaray-a"}
         krl{"karelsk"}
@@ -315,7 +306,7 @@ nb{
         ksf{"bafia"}
         ksh{"kølnsk"}
         ku{"kurdisk"}
-        kum{"kumyk"}
+        kum{"kumykisk"}
         kut{"kutenai"}
         kv{"komi"}
         kw{"kornisk"}
@@ -326,10 +317,10 @@ nb{
         lah{"lahnda"}
         lam{"lamba"}
         lb{"luxemburgsk"}
-        lez{"lezghian"}
+        lez{"lesgisk"}
         lfn{"lingua franca nova"}
         lg{"ganda"}
-        li{"limburgisk"}
+        li{"limburgsk"}
         lij{"ligurisk"}
         liv{"livisk"}
         lkt{"lakota"}
@@ -359,7 +350,7 @@ nb{
         man{"mandingo"}
         mas{"masai"}
         mde{"maba"}
-        mdf{"moksha"}
+        mdf{"moksja"}
         mdr{"mandar"}
         men{"mende"}
         mer{"meru"}
@@ -391,7 +382,7 @@ nb{
         mwv{"mentawai"}
         my{"burmesisk"}
         mye{"myene"}
-        myv{"erzya"}
+        myv{"erzia"}
         mzn{"mazandarani"}
         na{"nauru"}
         nan{"minnan"}
@@ -413,7 +404,7 @@ nb{
         nn{"norsk nynorsk"}
         nnh{"ngiemboon"}
         no{"norsk"}
-        nog{"nogai"}
+        nog{"nogaisk"}
         non{"gammelnorsk"}
         nov{"novial"}
         nqo{"nʼko"}
@@ -441,6 +432,7 @@ nb{
         pap{"papiamento"}
         pau{"palauisk"}
         pcd{"pikardisk"}
+        pcm{"nigeriansk pidginspråk"}
         pdc{"pennsylvaniatysk"}
         pdt{"plautdietsch"}
         peo{"gammelpersisk"}
@@ -455,8 +447,6 @@ nb{
         pro{"gammelprovençalsk"}
         ps{"pashto"}
         pt{"portugisisk"}
-        pt_BR{"brasiliansk portugisisk"}
-        pt_PT{"europeisk portugisisk"}
         qu{"quechua"}
         quc{"quiché"}
         qug{"kichwa (Chimborazo-høylandet)"}
@@ -481,7 +471,7 @@ nb{
         rwk{"rwa"}
         sa{"sanskrit"}
         sad{"sandawe"}
-        sah{"jakutsk"}
+        sah{"jakutisk"}
         sam{"samaritansk arameisk"}
         saq{"samburu"}
         sas{"sasak"}
@@ -489,11 +479,11 @@ nb{
         saz{"saurashtra"}
         sba{"ngambay"}
         sbp{"sangu"}
-        sc{"sardinsk"}
+        sc{"sardisk"}
         scn{"siciliansk"}
         sco{"skotsk"}
         sd{"sindhi"}
-        sdc{"sassarisk sardinsk"}
+        sdc{"sassaresisk sardisk"}
         sdh{"sørkurdisk"}
         se{"nordsamisk"}
         see{"seneca"}
@@ -507,7 +497,7 @@ nb{
         sh{"serbokroatisk"}
         shi{"tachelhit"}
         shn{"shan"}
-        shu{"Tsjad-arabisk"}
+        shu{"tsjadisk arabisk"}
         si{"singalesisk"}
         sid{"sidamo"}
         sk{"slovakisk"}
@@ -525,7 +515,7 @@ nb{
         sog{"sogdisk"}
         sq{"albansk"}
         sr{"serbisk"}
-        srn{"sranan tongo"}
+        srn{"sranan"}
         srr{"serer"}
         ss{"swati"}
         ssy{"saho"}
@@ -540,7 +530,7 @@ nb{
         sw_CD{"kongolesisk swahili"}
         swb{"komorisk"}
         syc{"klassisk syrisk"}
-        syr{"syrisk"}
+        syr{"gammelsyrisk"}
         szl{"schlesisk"}
         ta{"tamil"}
         tcy{"tulu"}
@@ -555,12 +545,12 @@ nb{
         tig{"tigré"}
         tiv{"tiv"}
         tk{"turkmensk"}
-        tkl{"tokelau"}
+        tkl{"tokelauisk"}
         tkr{"tsakhursk"}
         tl{"tagalog"}
         tlh{"klingon"}
         tli{"tlingit"}
-        tly{"talysh"}
+        tly{"talysj"}
         tmh{"tamasjek"}
         tn{"setswana"}
         to{"tongansk"}
@@ -575,13 +565,13 @@ nb{
         tt{"tatarisk"}
         ttt{"muslimsk tat"}
         tum{"tumbuka"}
-        tvl{"tuvalu"}
+        tvl{"tuvalsk"}
         tw{"twi"}
         twq{"tasawaq"}
         ty{"tahitisk"}
-        tyv{"tuvinisk"}
+        tyv{"tuvinsk"}
         tzm{"sentralmarokkansk tamazight"}
-        udm{"udmurt"}
+        udm{"udmurtisk"}
         ug{"uigurisk"}
         uga{"ugaritisk"}
         uk{"ukrainsk"}
@@ -601,14 +591,14 @@ nb{
         vro{"sørestisk"}
         vun{"vunjo"}
         wa{"vallonsk"}
-        wae{"walser"}
-        wal{"walamo"}
-        war{"waray"}
+        wae{"walsertysk"}
+        wal{"wolaytta"}
+        war{"waray-waray"}
         was{"washo"}
         wbp{"warlpiri"}
         wo{"wolof"}
         wuu{"wu"}
-        xal{"kalmyk"}
+        xal{"kalmukkisk"}
         xh{"xhosa"}
         xmf{"mingrelsk"}
         xog{"soga"}
@@ -621,7 +611,7 @@ nb{
         yrl{"nheengatu"}
         yue{"kantonesisk"}
         za{"zhuang"}
-        zap{"zapotec"}
+        zap{"zapotekisk"}
         zbl{"blissymboler"}
         zea{"zeeuws"}
         zen{"zenaga"}
@@ -632,12 +622,10 @@ nb{
         zu{"zulu"}
         zun{"zuni"}
         zxx{"uten språklig innhold"}
-        zza{"zaza"}
+        zza{"zazaisk"}
     }
     Languages%short{
         az{"azeri"}
-        en_GB{"engelsk – Storbritannia"}
-        en_US{"engelsk – USA"}
     }
     Languages%variant{
         ps{"pushto"}
@@ -687,6 +675,7 @@ nb{
         Grek{"gresk"}
         Gujr{"gujarati"}
         Guru{"gurmukhi"}
+        Hanb{"hanb"}
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanunoo"}
@@ -697,11 +686,11 @@ nb{
         Hira{"hiragana"}
         Hluw{"anatoliske hieroglyfer"}
         Hmng{"pahawh hmong"}
-        Hrkt{"katakana eller hiragana"}
+        Hrkt{"japanske stavelsesskrifter"}
         Hung{"gammelungarsk"}
         Inds{"indus"}
         Ital{"gammelitalisk"}
-        Jamo{"Jamo"}
+        Jamo{"jamo"}
         Java{"javanesisk"}
         Jpan{"japansk"}
         Jurc{"jurchen"}
@@ -855,6 +844,7 @@ nb{
         Yiii{"yi"}
         Zinh{"nedarvet"}
         Zmth{"matematisk notasjon"}
+        Zsye{"zsye"}
         Zsym{"symboler"}
         Zxxx{"språk uten skrift"}
         Zyyy{"felles"}
@@ -886,7 +876,11 @@ nb{
             iso8601{"ISO 8601-kalender"}
             japanese{"japansk kalender"}
             persian{"persisk kalender"}
-            roc{"kalender for Republikken Kina"}
+            roc{"minguo-kalender"}
+        }
+        cf{
+            account{"valutaformat for regnskapsføring"}
+            standard{"standard valutaformat"}
         }
         colAlternate{
             non-ignorable{"sortér symboler"}
@@ -968,31 +962,31 @@ nb{
         numbers{
             arab{"arabisk-indiske sifre"}
             arabext{"utvidede arabisk-indiske sifre"}
-            armn{"armenske tallsymboler"}
-            armnlow{"små armenske tallsymboler"}
+            armn{"armenske tall"}
+            armnlow{"små armenske tall"}
             bali{"baliske tall"}
             beng{"bengalske sifre"}
             brah{"brahmiske tall"}
             cakm{"chakma-tall"}
             cham{"cham-tall"}
             deva{"devanagari-sifre"}
-            ethi{"etiopiske tallsymboler"}
+            ethi{"etiopiske tall"}
             finance{"Finansielle tall"}
             fullwide{"sifre med full bredde"}
-            geor{"georgiske tallsymboler"}
-            grek{"greske tallsymboler"}
-            greklow{"små greske tallsymboler"}
+            geor{"georgiske tall"}
+            grek{"greske tall"}
+            greklow{"små greske tall"}
             gujr{"gujarati-sifre"}
             guru{"gurmukhi-sifre"}
-            hanidec{"kinesiske desimaltallsymboler"}
-            hans{"forenklede kinesiske tallsymboler"}
-            hansfin{"forenklede kinesiske finanstallsymboler"}
-            hant{"tradisjonelle kinesiske tallsymboler"}
-            hantfin{"tradisjonelle kinesiske finanstallsymboler"}
-            hebr{"hebraiske tallsymboler"}
+            hanidec{"kinesiske desimaltall"}
+            hans{"forenklede kinesiske tall"}
+            hansfin{"forenklede kinesiske finanstall"}
+            hant{"tradisjonelle kinesiske tall"}
+            hantfin{"tradisjonelle kinesiske finanstall"}
+            hebr{"hebraiske tall"}
             java{"java-tall"}
-            jpan{"japanske tallsymboler"}
-            jpanfin{"japanske finanstallsymboler"}
+            jpan{"japanske tall"}
+            jpanfin{"japanske finanstall"}
             kali{"kayah li-tall"}
             khmr{"khmer-sifre"}
             knda{"kannada-sifre"}
@@ -1005,7 +999,7 @@ nb{
             mlym{"malayalam-sifre"}
             mong{"mongolske tall"}
             mtei{"meetei mayek-tall"}
-            mymr{"myanmar-sifre"}
+            mymr{"myanmarske sifre"}
             mymrshan{"myanmar shan-tall"}
             native{"Språkspesifikke sifre"}
             nkoo{"n’ko-tall"}
@@ -1020,7 +1014,7 @@ nb{
             sund{"sundanese-tall"}
             takr{"takri-tall"}
             talu{"ny tai lue-tall"}
-            taml{"tamilske tallsymboler"}
+            taml{"tamilske tall"}
             tamldec{"tamilske sifre"}
             telu{"telugu-sifre"}
             thai{"thailandske sifre"}
@@ -1101,7 +1095,22 @@ nb{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.90"}
+    characterLabelPattern{
+        all{"{0} – alt"}
+        category-list{"{0}: {1}"}
+        compatibility{"{0} – kompatibilitet"}
+        enclosed{"{0} – omsluttet"}
+        extended{"{0} – utvidet"}
+        historic{"{0} – historisk"}
+        miscellaneous{"{0} – diverse"}
+        other{"{0} – annet"}
+        scripts{"skriftsystemer – {0}"}
+        strokes{
+            "{0} strek",
+            "{0} streker",
+        }
+    }
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

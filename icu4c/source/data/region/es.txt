@@ -76,7 +76,7 @@ es{
         CF{"República Centroafricana"}
         CG{"República del Congo"}
         CH{"Suiza"}
-        CI{"Costa de Marfil"}
+        CI{"Côte d’Ivoire"}
         CK{"Islas Cook"}
         CL{"Chile"}
         CM{"Camerún"}
@@ -252,7 +252,7 @@ es{
         SX{"Sint Maarten"}
         SY{"Siria"}
         SZ{"Suazilandia"}
-        TA{"Tristán da Cunha"}
+        TA{"Tristán de Acuña"}
         TC{"Islas Turcas y Caicos"}
         TD{"Chad"}
         TF{"Territorios Australes Franceses"}
@@ -260,7 +260,7 @@ es{
         TH{"Tailandia"}
         TJ{"Tayikistán"}
         TK{"Tokelau"}
-        TL{"Timor Oriental"}
+        TL{"Timor-Leste"}
         TM{"Turkmenistán"}
         TN{"Túnez"}
         TO{"Tonga"}
@@ -302,8 +302,11 @@ es{
     Countries%variant{
         CD{"Congo (República Democrática del Congo)"}
         CG{"Congo (República)"}
+        CI{"Costa de Marfil"}
+        CZ{"Chequia"}
         FK{"Islas Malvinas (Islas Falkland)"}
         MK{"Macedonia (ERYM)"}
+        TL{"Timor Oriental"}
     }
-    Version{"2.1.26.52"}
+    Version{"2.1.28.80"}
 }

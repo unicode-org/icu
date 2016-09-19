@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 it{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -302,6 +302,9 @@ it{
         }
         "America:El_Salvador"{
             ec{"El Salvador"}
+        }
+        "America:Fort_Nelson"{
+            ec{"Fort Nelson"}
         }
         "America:Fortaleza"{
             ec{"Fortaleza"}
@@ -666,6 +669,9 @@ it{
         "Asia:Bangkok"{
             ec{"Bangkok"}
         }
+        "Asia:Barnaul"{
+            ec{"Barnaul"}
+        }
         "Asia:Beirut"{
             ec{"Beirut"}
         }
@@ -843,6 +849,9 @@ it{
         "Asia:Tokyo"{
             ec{"Tokyo"}
         }
+        "Asia:Tomsk"{
+            ec{"Tomsk"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Ulaanbaatar"}
         }
@@ -942,6 +951,9 @@ it{
         "Europe:Andorra"{
             ec{"Andorra"}
         }
+        "Europe:Astrakhan"{
+            ec{"Astrakhan"}
+        }
         "Europe:Athens"{
             ec{"Atene"}
         }
@@ -999,6 +1011,9 @@ it{
         }
         "Europe:Kiev"{
             ec{"Kiev"}
+        }
+        "Europe:Kirov"{
+            ec{"Kirov"}
         }
         "Europe:Lisbon"{
             ec{"Lisbona"}
@@ -1075,6 +1090,9 @@ it{
         }
         "Europe:Tirane"{
             ec{"Tirana"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"Ulyanovsk"}
         }
         "Europe:Uzhgorod"{
             ec{"Užhorod"}
@@ -1393,7 +1411,7 @@ it{
             ls{"Ora standard di Capo Verde"}
         }
         "meta:Chamorro"{
-            ls{"Ora Chamorro"}
+            ls{"Ora di Chamorro"}
         }
         "meta:Chatham"{
             ld{"Ora legale delle Chatham"}
@@ -1750,6 +1768,9 @@ it{
         "meta:Ponape"{
             ls{"Ora di Pohnpei"}
         }
+        "meta:Pyongyang"{
+            ls{"Ora di Pyongyang"}
+        }
         "meta:Reunion"{
             ls{"Ora di Riunione"}
         }
@@ -1775,7 +1796,7 @@ it{
             ls{"Ora delle Seychelles"}
         }
         "meta:Singapore"{
-            ls{"Ora Singapore"}
+            ls{"Ora di Singapore"}
         }
         "meta:Solomon"{
             ls{"Ora delle Isole Salomone"}

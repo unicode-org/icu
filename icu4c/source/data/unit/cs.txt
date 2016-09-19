@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 cs{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -105,6 +105,7 @@ cs{
                 many{"{0} kilometru čtverečního"}
                 one{"{0} kilometr čtvereční"}
                 other{"{0} kilometrů čtverečních"}
+                per{"{0} na kilometr čtvereční"}
             }
             square-meter{
                 dnam{"metry čtvereční"}
@@ -120,6 +121,7 @@ cs{
                 many{"{0} míle čtvereční"}
                 one{"{0} míle čtvereční"}
                 other{"{0} mil čtverečních"}
+                per{"{0} na míli čtvereční"}
             }
             square-yard{
                 dnam{"yardy čtvereční"}
@@ -139,6 +141,27 @@ cs{
                 many{"{0} karátu"}
                 one{"{0} karát"}
                 other{"{0} karátů"}
+            }
+            milligram-per-deciliter{
+                dnam{"miligramy na decilitr"}
+                few{"{0} miligramy na decilitr"}
+                many{"{0} miligramu na decilitr"}
+                one{"{0} miligram na decilitr"}
+                other{"{0} miligramů na decilitr"}
+            }
+            millimole-per-liter{
+                dnam{"milimoly na litr"}
+                few{"{0} milimoly na litr"}
+                many{"{0} milimolu na litr"}
+                one{"{0} milimol na litr"}
+                other{"{0} milimolů na litr"}
+            }
+            part-per-million{
+                dnam{"díly z milionu"}
+                few{"{0} díly z milionu"}
+                many{"{0} dílu z milionu"}
+                one{"{0} díl z milionu"}
+                other{"{0} dílů z milionu"}
             }
         }
         consumption{
@@ -162,6 +185,13 @@ cs{
                 many{"{0} míle na galon"}
                 one{"{0} míle na galon"}
                 other{"{0} mil na galon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"míle na imp. galon"}
+                few{"{0} míle na imp. galon"}
+                many{"{0} míle na imp. galon"}
+                one{"{0} míle na imp. galon"}
+                other{"{0} mil na imp. galon"}
             }
         }
         coordinate{
@@ -907,12 +937,20 @@ cs{
                 other{"{0} kapalinových uncí"}
             }
             gallon{
-                dnam{"galon"}
+                dnam{"galony"}
                 few{"{0} galony"}
                 many{"{0} galonu"}
                 one{"{0} galon"}
                 other{"{0} galonů"}
                 per{"{0} na galon"}
+            }
+            gallon-imperial{
+                dnam{"imp. galony"}
+                few{"{0} imp. galony"}
+                many{"{0} imp. galonu"}
+                one{"{0} imp. galon"}
+                other{"{0} imp. galonů"}
+                per{"{0} na imp. galon"}
             }
             hectoliter{
                 dnam{"hektolitr"}
@@ -2005,6 +2043,7 @@ cs{
                 many{"{0} km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -2020,6 +2059,7 @@ cs{
                 many{"{0} mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -2039,6 +2079,27 @@ cs{
                 many{"{0} kt"}
                 one{"{0} kt"}
                 other{"{0} kt"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                few{"{0} mg/dl"}
+                many{"{0} mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                few{"{0} mmol/l"}
+                many{"{0} mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                few{"{0} ppm"}
+                many{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -2062,6 +2123,13 @@ cs{
                 many{"{0} mpg"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
+                few{"{0} mpg Imp."}
+                many{"{0} mpg Imp."}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
             }
         }
         coordinate{
@@ -2813,6 +2881,14 @@ cs{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"gal Imp."}
+                few{"{0} gal Imp."}
+                many{"{0} gal Imp."}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hl"}

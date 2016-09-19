@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 yue{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.76"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比讓"}
@@ -302,6 +302,9 @@ yue{
         }
         "America:El_Salvador"{
             ec{"薩爾瓦多"}
+        }
+        "America:Fort_Nelson"{
+            ec{"納爾遜堡"}
         }
         "America:Fortaleza"{
             ec{"福塔力莎"}
@@ -666,6 +669,9 @@ yue{
         "Asia:Bangkok"{
             ec{"曼谷"}
         }
+        "Asia:Barnaul"{
+            ec{"巴爾瑙爾"}
+        }
         "Asia:Beirut"{
             ec{"貝魯特"}
         }
@@ -843,6 +849,9 @@ yue{
         "Asia:Tokyo"{
             ec{"東京"}
         }
+        "Asia:Tomsk"{
+            ec{"托木斯克"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"烏蘭巴托"}
         }
@@ -942,6 +951,9 @@ yue{
         "Europe:Andorra"{
             ec{"安道爾"}
         }
+        "Europe:Astrakhan"{
+            ec{"阿斯特拉罕"}
+        }
         "Europe:Athens"{
             ec{"雅典"}
         }
@@ -999,6 +1011,9 @@ yue{
         }
         "Europe:Kiev"{
             ec{"基輔"}
+        }
+        "Europe:Kirov"{
+            ec{"基洛夫"}
         }
         "Europe:Lisbon"{
             ec{"里斯本"}
@@ -1075,6 +1090,9 @@ yue{
         }
         "Europe:Tirane"{
             ec{"地拉那"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"烏里揚諾夫斯克"}
         }
         "Europe:Uzhgorod"{
             ec{"烏茲哥洛"}

@@ -5,12 +5,12 @@ zh_Hant{
     RBNFRules{
         OrdinalRules{
             "%digits-ordinal:",
-            "-x: \u7B2C\u2212>#,###0>;",
-            "0: \u7B2C=#,###0=;",
+            "-x: \u7B2C\u2212>#,##0>;",
+            "0: \u7B2C=#,##0=;",
         }
         SpelloutRules{
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "1000: =%spellout-numbering=;",
             "1001: =%%spellout-numbering-year-digits=;",
@@ -57,7 +57,7 @@ zh_Hant{
             "100000000: <%spellout-cardinal<\u5104[>%%cardinal5>];",
             "1000000000000: <%spellout-cardinal<\u5146[>%%cardinal8>];",
             "10000000000000000: <%spellout-cardinal<\u4EAC[>%%cardinal13>];",
-            "1000000000000000000: =#,###0=;",
+            "1000000000000000000: =#,##0=;",
             "%spellout-cardinal-financial:",
             "-x: \u8CA0>>;",
             "x.x: <<\u9EDE>>>;",
@@ -79,7 +79,7 @@ zh_Hant{
             "100000000: <<\u5104[>%%financialnumber5>];",
             "1000000000000: <<\u5146[>%%financialnumber8>];",
             "10000000000000000: <<\u4EAC[>%%financialnumber13>];",
-            "1000000000000000000: =#,###0=;",
+            "1000000000000000000: =#,##0=;",
             "%%financialnumber2:",
             "1: \u96F6=%spellout-cardinal-financial=;",
             "10: \u58F9=%spellout-cardinal-financial=;",
@@ -129,7 +129,7 @@ zh_Hant{
             "100000000: <<\u5104[>%%cardinal5>];",
             "1000000000000: <<\u5146[>%%cardinal8>];",
             "10000000000000000: <<\u4EAC[>%%cardinal13>];",
-            "1000000000000000000: =#,###0=;",
+            "1000000000000000000: =#,##0=;",
             "%%cardinal2:",
             "1: \u96F6=%spellout-numbering=;",
             "10: \u4E00=%spellout-numbering=;",
@@ -179,7 +179,7 @@ zh_Hant{
             "100000000: <<\u5104[>%%cardinal-alternate2-5>];",
             "1000000000000: <<\u5146[>%%cardinal-alternate2-8>];",
             "10000000000000000: <<\u4EAC[>%%cardinal-alternate2-13>];",
-            "1000000000000000000: =#,###0=;",
+            "1000000000000000000: =#,##0=;",
             "%%cardinal-alternate2-2:",
             "1: \u96F6=%spellout-numbering=;",
             "10: \u4E00=%spellout-numbering=;",
@@ -210,9 +210,9 @@ zh_Hant{
             "20: \u96F6=%spellout-cardinal-alternate2=;",
             "1000000000000: =%spellout-cardinal-alternate2=;",
             "%spellout-ordinal:",
-            "x.x: =#,###0.#=;",
+            "x.x: =#,##0.#=;",
             "0: \u7B2C=%spellout-numbering=;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.27.22"}
 }

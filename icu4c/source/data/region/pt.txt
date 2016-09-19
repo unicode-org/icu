@@ -12,14 +12,14 @@ pt{
         014{"África Oriental"}
         015{"África do Norte"}
         017{"África Central"}
-        018{"África Austral"}
+        018{"África Meridional"}
         019{"Américas"}
         021{"América Setentrional"}
         029{"Caribe"}
         030{"Ásia Oriental"}
-        034{"Ásia do Sul"}
+        034{"Ásia Meridional"}
         035{"Sudeste Asiático"}
-        039{"Europa do Sul"}
+        039{"Europa Meridional"}
         053{"Australásia"}
         054{"Melanésia"}
         057{"Região da Micronésia"}
@@ -233,7 +233,7 @@ pt{
         RW{"Ruanda"}
         SA{"Arábia Saudita"}
         SB{"Ilhas Salomão"}
-        SC{"Seychelles"}
+        SC{"Seicheles"}
         SD{"Sudão"}
         SE{"Suécia"}
         SG{"Cingapura"}
@@ -272,6 +272,7 @@ pt{
         UA{"Ucrânia"}
         UG{"Uganda"}
         UM{"Ilhas Menores Distantes dos EUA"}
+        UN{"Nações Unidas"}
         US{"Estados Unidos"}
         UY{"Uruguai"}
         UZ{"Uzbequistão"}
@@ -297,14 +298,16 @@ pt{
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palestina"}
+        UN{"NU"}
         US{"EUA"}
     }
     Countries%variant{
         CD{"República Democrática do Congo"}
         CG{"Congo"}
+        CZ{"Tchéquia"}
         FK{"Ilhas Falkland (Ilhas Malvinas)"}
-        MK{"Macedônia (Antiga República Iugoslava da Macedônia - ARIM)"}
+        MK{"Macedônia (ARIM)"}
         TL{"República Democrática de Timor-Leste"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

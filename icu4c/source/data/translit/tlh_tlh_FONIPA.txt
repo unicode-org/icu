@@ -1,13 +1,8 @@
 ﻿# © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-# ***************************************************************************
-# *
-# *  Copyright (C) 2004-2016, International Business Machines
-# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
-# *
-# ***************************************************************************
+#
 # File: tlh_tlh_FONIPA.txt
-# Generated from CLDR 
+# Generated from CLDR
 #
 
 # Transformation from Klingon (tlh) to its IPA transcription (tlh_FONIPA).

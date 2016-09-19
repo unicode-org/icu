@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ur{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"عابدجان"}
@@ -302,6 +302,9 @@ ur{
         }
         "America:El_Salvador"{
             ec{"ال سلواڈور"}
+        }
+        "America:Fort_Nelson"{
+            ec{"فورٹ نیلسن"}
         }
         "America:Fortaleza"{
             ec{"فورٹالیزا"}
@@ -666,6 +669,9 @@ ur{
         "Asia:Bangkok"{
             ec{"بنکاک"}
         }
+        "Asia:Barnaul"{
+            ec{"برنال"}
+        }
         "Asia:Beirut"{
             ec{"بیروت"}
         }
@@ -843,6 +849,9 @@ ur{
         "Asia:Tokyo"{
             ec{"ٹوکیو"}
         }
+        "Asia:Tomsk"{
+            ec{"ٹامسک"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"اولان باتار"}
         }
@@ -942,6 +951,9 @@ ur{
         "Europe:Andorra"{
             ec{"انڈورا"}
         }
+        "Europe:Astrakhan"{
+            ec{"استراخان"}
+        }
         "Europe:Athens"{
             ec{"ایتھنز"}
         }
@@ -999,6 +1011,9 @@ ur{
         }
         "Europe:Kiev"{
             ec{"کیوو"}
+        }
+        "Europe:Kirov"{
+            ec{"کیروف"}
         }
         "Europe:Lisbon"{
             ec{"لسبن"}
@@ -1075,6 +1090,9 @@ ur{
         }
         "Europe:Tirane"{
             ec{"ٹیرانی"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"الیانوسک"}
         }
         "Europe:Uzhgorod"{
             ec{"ازگوروڈ"}
@@ -1740,6 +1758,9 @@ ur{
         }
         "meta:Ponape"{
             ls{"پوناپے ٹائم"}
+        }
+        "meta:Pyongyang"{
+            ls{"پیانگ یانگ وقت"}
         }
         "meta:Reunion"{
             ls{"ری یونین ٹائم"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fi{
-    Version{"2.1.26.0"}
+    Version{"2.1.29.88"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -79,6 +79,7 @@ fi{
                 dnam{"neliökilometrit"}
                 one{"{0} neliökilometri"}
                 other{"{0} neliökilometriä"}
+                per{"{0} / neliökilometri"}
             }
             square-meter{
                 dnam{"neliömetrit"}
@@ -90,6 +91,7 @@ fi{
                 dnam{"neliömailit"}
                 one{"{0} neliömaili"}
                 other{"{0} neliömailia"}
+                per{"{0} / neliömaili"}
             }
             square-yard{
                 dnam{"neliöjaardit"}
@@ -98,7 +100,7 @@ fi{
             }
         }
         compound{
-            per{"{0}/{1}"}
+            per{"{0} / {1}"}
         }
         concentr{
             karat{
@@ -106,22 +108,42 @@ fi{
                 one{"{0} karaatti"}
                 other{"{0} karaattia"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"litrat per 100 kilometriä"}
-                one{"{0} litra per 100 km"}
-                other{"{0} litraa per 100 km"}
+                dnam{"litrat / 100 kilometriä"}
+                one{"{0} litra / 100 km"}
+                other{"{0} litraa / 100 km"}
             }
             liter-per-kilometer{
-                dnam{"litrat per kilometri"}
-                one{"{0} litra per kilometri"}
-                other{"{0} litraa per kilometri"}
+                dnam{"litrat / kilometri"}
+                one{"{0} litra / kilometri"}
+                other{"{0} litraa / kilometri"}
             }
             mile-per-gallon{
-                dnam{"mailit per gallona"}
-                one{"{0} maili per gallona"}
-                other{"{0} mailia per gallona"}
+                dnam{"mailit / am. gallona"}
+                one{"{0} maili / am. gallona"}
+                other{"{0} mailia / am. gallona"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mailit / br. gallona"}
+                one{"{0} maili / br. gallona"}
+                other{"{0} mailia / br. gallona"}
             }
         }
         coordinate{
@@ -192,13 +214,13 @@ fi{
                 dnam{"päivät"}
                 one{"{0} päivä"}
                 other{"{0} päivää"}
-                per{"{0} päivässä"}
+                per{"{0} / päivä"}
             }
             hour{
                 dnam{"tunnit"}
                 one{"{0} tunti"}
                 other{"{0} tuntia"}
-                per{"{0} tunnissa"}
+                per{"{0} / tunti"}
             }
             microsecond{
                 dnam{"mikrosekunnit"}
@@ -214,13 +236,13 @@ fi{
                 dnam{"minuutit"}
                 one{"{0} minuutti"}
                 other{"{0} minuuttia"}
-                per{"{0} minuutissa"}
+                per{"{0} / minuutti"}
             }
             month{
                 dnam{"kuukaudet"}
                 one{"{0} kuukausi"}
                 other{"{0} kuukautta"}
-                per{"{0} kuukaudessa"}
+                per{"{0} / kuukausi"}
             }
             nanosecond{
                 dnam{"nanosekunnit"}
@@ -231,19 +253,19 @@ fi{
                 dnam{"sekunnit"}
                 one{"{0} sekunti"}
                 other{"{0} sekuntia"}
-                per{"{0} sekunnissa"}
+                per{"{0} / sekunti"}
             }
             week{
                 dnam{"viikot"}
                 one{"{0} viikko"}
                 other{"{0} viikkoa"}
-                per{"{0} viikossa"}
+                per{"{0} / viikko"}
             }
             year{
                 dnam{"vuodet"}
                 one{"{0} vuosi"}
                 other{"{0} vuotta"}
-                per{"{0} vuodessa"}
+                per{"{0} / vuosi"}
             }
         }
         electric{
@@ -441,13 +463,13 @@ fi{
                 dnam{"grammat"}
                 one{"{0} gramma"}
                 other{"{0} grammaa"}
-                per{"{0}/g"}
+                per{"{0} / gramma"}
             }
             kilogram{
                 dnam{"kilogrammat"}
                 one{"{0} kilogramma"}
                 other{"{0} kilogrammaa"}
-                per{"{0}/kg"}
+                per{"{0} / kilogramma"}
             }
             metric-ton{
                 dnam{"tonnit"}
@@ -487,9 +509,9 @@ fi{
                 other{"{0} stonea"}
             }
             ton{
-                dnam{"US-tonnit"}
-                one{"{0} US-tonni"}
-                other{"{0} US-tonnia"}
+                dnam{"am. tonnit"}
+                one{"{0} am. tonni"}
+                other{"{0} am. tonnia"}
             }
         }
         power{
@@ -546,9 +568,9 @@ fi{
                 other{"{0} millimetriä elohopeaa"}
             }
             pound-per-square-inch{
-                dnam{"paunat neliötuumaa kohti"}
-                one{"{0} pauna neliötuumaa kohti"}
-                other{"{0} paunaa neliötuumaa kohti"}
+                dnam{"paunat / neliötuuma"}
+                one{"{0} pauna / neliötuuma"}
+                other{"{0} paunaa / neliötuuma"}
             }
         }
         speed{
@@ -669,10 +691,16 @@ fi{
                 other{"{0} nesteunssia"}
             }
             gallon{
-                dnam{"gallonat"}
-                one{"{0} gallona"}
-                other{"{0} gallonaa"}
-                per{"{0} / gallona"}
+                dnam{"am. gallonat"}
+                one{"{0} am. gallona"}
+                other{"{0} am. gallonaa"}
+                per{"{0} / am. gallona"}
+            }
+            gallon-imperial{
+                dnam{"br. gallonat"}
+                one{"{0} br. gallona"}
+                other{"{0} br. gallonaa"}
+                per{"{0} / br. gallona"}
             }
             hectoliter{
                 dnam{"hehtolitrat"}
@@ -683,7 +711,7 @@ fi{
                 dnam{"litrat"}
                 one{"{0} litra"}
                 other{"{0} litraa"}
-                per{"{0} litrassa"}
+                per{"{0} / litra"}
             }
             megaliter{
                 dnam{"megalitrat"}
@@ -794,6 +822,7 @@ fi{
                 dnam{"km²"}
                 one{"{0}km²"}
                 other{"{0}km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -805,6 +834,7 @@ fi{
                 dnam{"mi²"}
                 one{"{0}mi²"}
                 other{"{0}mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -821,6 +851,21 @@ fi{
                 one{"{0}ka"}
                 other{"{0}ka"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0}mg/dl"}
+                other{"{0}mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                one{"{0}mmol/l"}
+                other{"{0}mmol/l"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -834,9 +879,14 @@ fi{
                 other{"{0}l/km"}
             }
             mile-per-gallon{
-                dnam{"mpg"}
-                one{"{0}mpg"}
-                other{"{0}mpg"}
+                dnam{"mpg-am"}
+                one{"{0}mpg-am"}
+                other{"{0}mpg-am"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg-br"}
+                one{"{0}mpg-br"}
+                other{"{0}mpg-br"}
             }
         }
         coordinate{
@@ -1105,8 +1155,8 @@ fi{
             }
             mile-scandinavian{
                 dnam{"pnk"}
-                one{"{0} pnk"}
-                other{"{0} pnk"}
+                one{"{0}pnk"}
+                other{"{0}pnk"}
             }
             millimeter{
                 dnam{"mm"}
@@ -1202,9 +1252,9 @@ fi{
                 other{"{0}st"}
             }
             ton{
-                dnam{"US-tn"}
-                one{"{0}US-tn"}
-                other{"{0}US-tn"}
+                dnam{"am.tn"}
+                one{"{0}am.tn"}
+                other{"{0}am.tn"}
             }
         }
         power{
@@ -1256,9 +1306,9 @@ fi{
                 other{"{0}mbar"}
             }
             millimeter-of-mercury{
-                dnam{"mm Hg"}
-                one{"{0}mm Hg"}
-                other{"{0}mm Hg"}
+                dnam{"mmHg"}
+                one{"{0}mmHg"}
+                other{"{0}mmHg"}
             }
             pound-per-square-inch{
                 dnam{"psi"}
@@ -1274,8 +1324,8 @@ fi{
             }
             knot{
                 dnam{"kn"}
-                one{"{0} kn"}
-                other{"{0} kn"}
+                one{"{0}kn"}
+                other{"{0}kn"}
             }
             meter-per-second{
                 dnam{"m/s"}
@@ -1350,7 +1400,7 @@ fi{
             cubic-meter{
                 dnam{"m³"}
                 one{"{0}m³"}
-                other{"{0} m³"}
+                other{"{0}m³"}
                 per{"{0}/m³"}
             }
             cubic-mile{
@@ -1370,8 +1420,8 @@ fi{
             }
             cup-metric{
                 dnam{"tkp"}
-                one{"{0} tkp"}
-                other{"{0} tkp"}
+                one{"{0}tkp"}
+                other{"{0}tkp"}
             }
             deciliter{
                 dnam{"dl"}
@@ -1384,10 +1434,16 @@ fi{
                 other{"{0}fl oz"}
             }
             gallon{
-                dnam{"gal"}
-                one{"{0}gal"}
-                other{"{0}gal"}
-                per{"{0}/gal"}
+                dnam{"am.gal"}
+                one{"{0}am.gal"}
+                other{"{0}am.gal"}
+                per{"{0}/am.gal"}
+            }
+            gallon-imperial{
+                dnam{"br.gal"}
+                one{"{0}br.gal"}
+                other{"{0}br.gal"}
+                per{"{0}/br.gal"}
             }
             hectoliter{
                 dnam{"hl"}
@@ -1417,8 +1473,8 @@ fi{
             }
             pint-metric{
                 dnam{"tp"}
-                one{"{0} tp"}
-                other{"{0} tp"}
+                one{"{0}tp"}
+                other{"{0}tp"}
             }
             quart{
                 dnam{"qt"}
@@ -1509,6 +1565,7 @@ fi{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1520,6 +1577,7 @@ fi{
                 dnam{"mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1536,6 +1594,21 @@ fi{
                 one{"{0} ka"}
                 other{"{0} ka"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1549,9 +1622,14 @@ fi{
                 other{"{0} l/km"}
             }
             mile-per-gallon{
-                dnam{"mpg"}
-                one{"{0} mpg"}
-                other{"{0} mpg"}
+                dnam{"mpg-am"}
+                one{"{0} mpg-am"}
+                other{"{0} mpg-am"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg-br"}
+                one{"{0} mpg-br"}
+                other{"{0} mpg-br"}
             }
         }
         coordinate{
@@ -1917,9 +1995,9 @@ fi{
                 other{"{0} st"}
             }
             ton{
-                dnam{"US-tn"}
-                one{"{0} US-tn"}
-                other{"{0} US-tn"}
+                dnam{"am. tn"}
+                one{"{0} am. tn"}
+                other{"{0} am. tn"}
             }
         }
         power{
@@ -2099,10 +2177,16 @@ fi{
                 other{"{0} fl oz"}
             }
             gallon{
-                dnam{"gal"}
-                one{"{0} gal"}
-                other{"{0} gal"}
-                per{"{0}/gal"}
+                dnam{"am. gal"}
+                one{"{0} am. gal"}
+                other{"{0} am. gal"}
+                per{"{0}/am. gal"}
+            }
+            gallon-imperial{
+                dnam{"br. gal"}
+                one{"{0} br. gal"}
+                other{"{0} br. gal"}
+                per{"{0}/br. gal"}
             }
             hectoliter{
                 dnam{"hl"}

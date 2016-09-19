@@ -8,7 +8,6 @@ es_MX{
         015{"África del Norte"}
         017{"África Central"}
         018{"África del Sur"}
-        019{"América"}
         030{"Asia Oriental"}
         034{"Asia del Sur"}
         035{"Sudeste Asiático"}
@@ -18,21 +17,14 @@ es_MX{
         151{"Europa Oriental"}
         154{"Europa del Norte"}
         155{"Europa Occidental"}
-        BD{"Bangladesh"}
-        CC{"Islas Cocos (Keeling)"}
-        GG{"Guernsey"}
-        HK{
-            "Región Administrativa Especial de Hong Kong de la República Popular Chin"
-            "a"
-        }
-        IC{"Islas Canarias"}
-        MO{"Región Administrativa Especial de Macao de la República Popular China"}
+        BA{"Bosnia y Herzegovina"}
         TA{"Tristán de Acuña"}
+        TL{"Timor-Leste"}
         UM{"Islas Ultramarinas Menores de Estados Unidos"}
-        VI{"Islas Vírgenes de los Estados Unidos"}
     }
     Countries%short{
         GB{"RU"}
+        US{"EE. UU."}
     }
-    Version{"2.1.26.35"}
+    Version{"2.1.28.76"}
 }

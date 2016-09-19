@@ -134,5 +134,5 @@ qu{
     Variants{
         VALENCIA{"Valenciano Simi"}
     }
-    Version{"2.1.26.15"}
+    Version{"2.1.27.98"}
 }

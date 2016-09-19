@@ -1261,7 +1261,7 @@ static void TestLocaleDisplayPattern(void){
     static const UChar enExpectPat[] = { 0x007B,0x0030,0x007D,0x0020,0x0028,0x007B,0x0031,0x007D,0x0029,0 }; /* "{0} ({1})" */
     static const UChar enExpectSep[] = { 0x002C,0x0020,0 }; /* ", " */
     static const UChar zhExpectPat[] = { 0x007B,0x0030,0x007D,0xFF08,0x007B,0x0031,0x007D,0xFF09,0 };
-    static const UChar zhExpectSep[] = { 0x3001,0 };
+    static const UChar zhExpectSep[] = { 0xFF0C,0 };
 
     status = U_ZERO_ERROR;
     uld = ulocdata_open("en", &status);

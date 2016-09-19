@@ -186,9 +186,13 @@ nn{
             "BYB",
             "kviterussisk ny rubel (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "kviterussisk rubel",
+        }
         BYR{
             "BYR",
-            "kviterussisk rubel",
+            "kviterussisk rubel (2000–2016)",
         }
         BZD{
             "BZD",
@@ -1096,9 +1100,13 @@ nn{
             one{"kviterussisk ny rubel (BYB)"}
             other{"kviterussiske nye rublar (BYB)"}
         }
-        BYR{
+        BYN{
             one{"kviterussisk rubel"}
             other{"kviterussiske rublar"}
+        }
+        BYR{
+            one{"kviterussisk rubel (2000–2016)"}
+            other{"kviterussiske rublar (2000–2016)"}
         }
         BZD{
             one{"belizisk dollar"}
@@ -1913,5 +1921,5 @@ nn{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
 }

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ky{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,6 +79,7 @@ ky{
                 dnam{"чарчы километр"}
                 one{"{0} чарчы километр"}
                 other{"{0} чарчы километр"}
+                per{"чарчы километрине {0}"}
             }
             square-meter{
                 dnam{"чарчы метр"}
@@ -87,9 +88,10 @@ ky{
                 per{"чарчы метрине {0}"}
             }
             square-mile{
-                dnam{"чарчы мил"}
-                one{"{0} чарчы мил"}
-                other{"{0} чарчы мил"}
+                dnam{"чарчы миля"}
+                one{"{0} чарчы миля"}
+                other{"{0} чарчы миля"}
+                per{"чарчы милясына {0}"}
             }
             square-yard{
                 dnam{"чарчы ярд"}
@@ -106,6 +108,21 @@ ky{
                 one{"{0} карат"}
                 other{"{0} карат"}
             }
+            milligram-per-deciliter{
+                dnam{"децилитрга миллиграмм"}
+                one{"децилитрга {0} миллиграмм"}
+                other{"децилитрга {0} миллиграмм"}
+            }
+            millimole-per-liter{
+                dnam{"литрине миллимоль"}
+                one{"литрине {0} миллимоль"}
+                other{"литрине {0} миллимоль"}
+            }
+            part-per-million{
+                dnam{"миллионго бөлүктөр"}
+                one{"миллионго {0} бөлүк"}
+                other{"миллионго {0} бөлүк"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -119,9 +136,14 @@ ky{
                 other{"километрине {0} литр"}
             }
             mile-per-gallon{
-                dnam{"милге/галон"}
-                one{"{0} милге/галон"}
-                other{"{0} милге/галон"}
+                dnam{"миляга/галлон"}
+                one{"{0} миляга/галлон"}
+                other{"{0} миляга/галлон"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"англ. галлонуна миля"}
+                one{"англ. галлонуна {0} миля"}
+                other{"англ. галлонуна {0} миля"}
             }
         }
         coordinate{
@@ -324,9 +346,9 @@ ky{
         }
         length{
             astronomical-unit{
-                dnam{"астрономикалык бирдик"}
-                one{"{0} астрономикалык бирдик"}
-                other{"{0} астрономикалык бирдик"}
+                dnam{"астрономиялык бирдик"}
+                one{"{0} астрономиялык бирдик"}
+                other{"{0} астрономиялык бирдик"}
             }
             centimeter{
                 dnam{"сантиметр"}
@@ -335,9 +357,9 @@ ky{
                 per{"сантиметрине {0}"}
             }
             decimeter{
-                dnam{"дм"}
-                one{"{0} дм"}
-                other{"{0} дм"}
+                dnam{"дециметр"}
+                one{"{0} дециметр"}
+                other{"{0} дециметр"}
             }
             foot{
                 dnam{"фут"}
@@ -374,9 +396,9 @@ ky{
                 other{"{0} микрометр"}
             }
             mile{
-                dnam{"мил"}
-                one{"{0} мил"}
-                other{"{0} мил"}
+                dnam{"миля"}
+                one{"{0} миля"}
+                other{"{0} миля"}
             }
             mile-scandinavian{
                 dnam{"smi"}
@@ -394,9 +416,9 @@ ky{
                 other{"{0} нанометр"}
             }
             nautical-mile{
-                dnam{"деңиз мили"}
-                one{"{0} деңиз мили"}
-                other{"{0} деңиз мили"}
+                dnam{"деңиз милясы"}
+                one{"{0} деңиз милясы"}
+                other{"{0} деңиз милясы"}
             }
             parsec{
                 dnam{"парсек"}
@@ -553,9 +575,9 @@ ky{
                 other{"секундасына {0} метр"}
             }
             mile-per-hour{
-                dnam{"милине саат"}
-                one{"саатына {0} миль"}
-                other{"саатына {0} миль"}
+                dnam{"саатына миля"}
+                one{"саатына {0} миля"}
+                other{"саатына {0} миля"}
             }
         }
         temperature{
@@ -619,9 +641,9 @@ ky{
                 per{"куб метрине {0}"}
             }
             cubic-mile{
-                dnam{"куб мил"}
-                one{"{0} куб мил"}
-                other{"{0} куб мил"}
+                dnam{"куб миля"}
+                one{"{0} куб миля"}
+                other{"{0} куб миля"}
             }
             cubic-yard{
                 dnam{"куб ярд"}
@@ -649,10 +671,16 @@ ky{
                 other{"{0} суюк унция"}
             }
             gallon{
-                dnam{"галон"}
-                one{"{0} галон"}
-                other{"{0} гал"}
-                per{"галонуна {0}"}
+                dnam{"галлон"}
+                one{"{0} галлон"}
+                other{"{0} галлон"}
+                per{"галлонуна {0}"}
+            }
+            gallon-imperial{
+                dnam{"англ. галлону"}
+                one{"{0} англ. галлону"}
+                other{"{0} англ. галлону"}
+                per{"англ. галлонуна {0}"}
             }
             hectoliter{
                 dnam{"гектолитр"}
@@ -778,8 +806,8 @@ ky{
             }
             millisecond{
                 dnam{"миллисек"}
-                one{"{0} мс"}
-                other{"{0} мс"}
+                one{"{0} мсек"}
+                other{"{0} мсек"}
             }
             minute{
                 dnam{"мүн"}
@@ -1015,6 +1043,7 @@ ky{
                 dnam{"км²"}
                 one{"{0} км²"}
                 other{"{0} км²"}
+                per{"km²/{0}"}
             }
             square-meter{
                 dnam{"метр²"}
@@ -1023,9 +1052,10 @@ ky{
                 per{"м²/{0}"}
             }
             square-mile{
-                dnam{"чарчы мил"}
+                dnam{"чарчы миля"}
                 one{"{0} мл²"}
                 other{"{0} мл²"}
+                per{"mi²/{0}"}
             }
             square-yard{
                 dnam{"ярд²"}
@@ -1041,6 +1071,21 @@ ky{
                 dnam{"карат"}
                 one{"{0} кт"}
                 other{"{0} кт"}
+            }
+            milligram-per-deciliter{
+                dnam{"мг/Дл"}
+                one{"{0} мг/Дл"}
+                other{"{0} мг/Дл"}
+            }
+            millimole-per-liter{
+                dnam{"ммоль/л"}
+                one{"{0} ммоль/л"}
+                other{"{0} ммоль/л"}
+            }
+            part-per-million{
+                dnam{"миллионго/бөлүк"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1058,6 +1103,11 @@ ky{
                 dnam{"мил/гал"}
                 one{"{0} мил/гал"}
                 other{"{0} мил/гал"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"миля/англ. галлонуна"}
+                one{"{0} мил/англ.гал"}
+                other{"{0} мил/англ.гал"}
             }
         }
         coordinate{
@@ -1143,8 +1193,8 @@ ky{
             }
             millisecond{
                 dnam{"миллисекунд"}
-                one{"{0} мс"}
-                other{"{0} мс"}
+                one{"{0} мсек"}
+                other{"{0} мсек"}
             }
             minute{
                 dnam{"мүнөт"}
@@ -1200,8 +1250,8 @@ ky{
             }
             volt{
                 dnam{"вольт"}
-                one{"{0} V"}
-                other{"{0} V"}
+                one{"{0} В"}
+                other{"{0} В"}
             }
         }
         energy{
@@ -1310,9 +1360,9 @@ ky{
                 other{"{0} µм"}
             }
             mile{
-                dnam{"мил"}
-                one{"{0} мил"}
-                other{"{0} мил"}
+                dnam{"миля"}
+                one{"{0} миля"}
+                other{"{0} миля"}
             }
             mile-scandinavian{
                 dnam{"smi"}
@@ -1447,7 +1497,7 @@ ky{
         }
         pressure{
             hectopascal{
-                dnam{"hPa"}
+                dnam{"гПа"}
                 one{"{0} гПа"}
                 other{"{0} гПа"}
             }
@@ -1489,9 +1539,9 @@ ky{
                 other{"{0} м/сек."}
             }
             mile-per-hour{
-                dnam{"миль/саат"}
-                one{"{0} мил/с"}
-                other{"{0} мил/с"}
+                dnam{"миля/саатына"}
+                one{"{0} миля/с"}
+                other{"{0} миля/с"}
             }
         }
         temperature{
@@ -1589,6 +1639,12 @@ ky{
                 one{"{0} гал"}
                 other{"{0} гал"}
                 per{"гал/{0}"}
+            }
+            gallon-imperial{
+                dnam{"англ. гал"}
+                one{"{0} англ. гал"}
+                other{"{0} англ. гал"}
+                per{"англ. гал/{0}"}
             }
             hectoliter{
                 dnam{"гл"}

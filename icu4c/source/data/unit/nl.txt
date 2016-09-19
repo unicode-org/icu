@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nl{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,6 +79,7 @@ nl{
                 dnam{"vierkante kilometer"}
                 one{"{0} vierkante kilometer"}
                 other{"{0} vierkante kilometer"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"vierkante meter"}
@@ -90,6 +91,7 @@ nl{
                 dnam{"vierkante mijl"}
                 one{"{0} vierkante mijl"}
                 other{"{0} vierkante mijl"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"vierkante yard"}
@@ -105,6 +107,21 @@ nl{
                 dnam{"karaat"}
                 one{"{0} karaat"}
                 other{"{0} karaat"}
+            }
+            milligram-per-deciliter{
+                dnam{"milligram per deciliter"}
+                one{"{0} milligram per deciliter"}
+                other{"{0} milligram per deciliter"}
+            }
+            millimole-per-liter{
+                dnam{"millimol per liter"}
+                one{"{0} millimol per liter"}
+                other{"{0} millimol per liter"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -123,12 +140,17 @@ nl{
                 one{"{0} mijl per gallon"}
                 other{"{0} mijl per gallon"}
             }
+            mile-per-gallon-imperial{
+                dnam{"mijl per imp. gallon"}
+                one{"{0} mijl per imp. gallon"}
+                other{"{0} mijl per imp. gallon"}
+            }
         }
         coordinate{
-            east{"{0} OL"}
-            north{"{0} NB"}
-            south{"{0} ZB"}
-            west{"{0} WL"}
+            east{"{0} oosterlengte"}
+            north{"{0} noorderbreedte"}
+            south{"{0} zuiderbreedte"}
+            west{"{0} westerlengte"}
         }
         digital{
             bit{
@@ -674,6 +696,12 @@ nl{
                 other{"{0} gallon"}
                 per{"{0} per gallon"}
             }
+            gallon-imperial{
+                dnam{"imp. gallon"}
+                one{"{0} imp. gallon"}
+                other{"{0} imp. gallon"}
+                per{"{0} per imp. gallon"}
+            }
             hectoliter{
                 dnam{"hectoliter"}
                 one{"{0} hectoliter"}
@@ -1163,9 +1191,9 @@ nl{
         }
         speed{
             kilometer-per-hour{
-                dnam{"km/h"}
-                one{"{0} km/h"}
-                other{"{0} km/h"}
+                dnam{"km/u"}
+                one{"{0} km/u"}
+                other{"{0} km/u"}
             }
             meter-per-second{
                 one{"{0} m/s"}
@@ -1361,6 +1389,7 @@ nl{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1372,6 +1401,7 @@ nl{
                 dnam{"mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1387,6 +1417,21 @@ nl{
                 dnam{"K"}
                 one{"{0} K"}
                 other{"{0} K"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"millimol/liter"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1404,6 +1449,11 @@ nl{
                 dnam{"mpg"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mijl/imp. gal"}
+                one{"{0} mpg imp."}
+                other{"{0} mpg imp."}
             }
         }
         coordinate{
@@ -1835,9 +1885,9 @@ nl{
         }
         speed{
             kilometer-per-hour{
-                dnam{"km/h"}
-                one{"{0} km/h"}
-                other{"{0} km/h"}
+                dnam{"km/u"}
+                one{"{0} km/u"}
+                other{"{0} km/u"}
             }
             knot{
                 dnam{"kt"}
@@ -1955,6 +2005,12 @@ nl{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"imp. gal"}
+                one{"{0} imp. gal"}
+                other{"{0} imp. gal"}
+                per{"{0}/imp. gal"}
             }
             hectoliter{
                 dnam{"hl"}

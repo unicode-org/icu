@@ -13,9 +13,17 @@ es_PY{
             }
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.99"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "a. m.",
+                "p. m.",
+            }
+            AmPmMarkersAbbr{
+                "a. m.",
+                "p. m.",
+            }
             dayNames{
                 format{
                     short{
@@ -41,18 +49,19 @@ es_PY{
                 }
             }
             dayPeriod{
-                format{
-                    narrow{
-                        evening1{"de la tarde"}
-                        morning1{"de la madrugada"}
-                        morning2{"de la mañana"}
-                        night1{"de la noche"}
-                        noon{"del mediodía"}
-                    }
-                }
                 stand-alone{
+                    abbreviated{
+                        am{"a. m."}
+                        pm{"p. m."}
+                    }
                     narrow{
+                        am{"a. m."}
                         noon{"m."}
+                        pm{"p. m."}
+                    }
+                    wide{
+                        am{"a. m."}
+                        pm{"p. m."}
                     }
                 }
             }

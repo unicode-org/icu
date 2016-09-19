@@ -3,6 +3,7 @@
 yue{
     Keys{
         calendar{"曆法"}
+        cf{"貨幣格式"}
         colAlternate{"略過符號排序"}
         colBackwards{"反向重音排序"}
         colCaseFirst{"大寫/小寫排列"}
@@ -126,6 +127,7 @@ yue{
         cps{"卡皮茲文"}
         cr{"克裡文"}
         crh{"克里米亞半島的土耳其文；克里米亞半島的塔塔爾文"}
+        crs{"法語克里奧爾混合語"}
         cs{"捷克文"}
         csb{"卡舒布文"}
         cu{"宗教斯拉夫文"}
@@ -431,6 +433,7 @@ yue{
         pap{"帕皮阿門托文"}
         pau{"帛琉文"}
         pcd{"庇卡底文"}
+        pcm{"尼日利亞皮欽語"}
         pdc{"賓夕法尼亞德文"}
         pdt{"門諾低地德文"}
         peo{"古波斯文"}
@@ -669,6 +672,7 @@ yue{
         Grek{"希臘文"}
         Gujr{"古吉拉特文"}
         Guru{"古魯穆奇文"}
+        Hanb{"漢語注音"}
         Hang{"韓文字"}
         Hani{"漢語"}
         Hano{"哈努諾文"}
@@ -784,6 +788,7 @@ yue{
         Yiii{"彞文"}
         Zinh{"繼承文字（Unicode）"}
         Zmth{"數學符號"}
+        Zsye{"表情符號"}
         Zsym{"符號"}
         Zxxx{"非書寫語言"}
         Zyyy{"一般文字"}
@@ -816,6 +821,10 @@ yue{
             japanese{"日本曆"}
             persian{"波斯曆"}
             roc{"民國曆"}
+        }
+        cf{
+            account{"會計貨幣格式"}
+            standard{"標準貨幣格式"}
         }
         colAlternate{
             non-ignorable{"排序符號"}
@@ -1015,7 +1024,18 @@ yue{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.76"}
+    characterLabelPattern{
+        all{"{0} — 全部"}
+        compatibility{"{0} — 相容性"}
+        enclosed{"{0} — 包圍"}
+        extended{"{0} — 擴充"}
+        historic{"{0} - 古代"}
+        miscellaneous{"{0} — 其他"}
+        other{"{0} — 其他"}
+        scripts{"字體 — {0}"}
+        strokes{"{0}斜線"}
+    }
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

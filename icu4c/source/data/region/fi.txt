@@ -245,7 +245,7 @@ fi{
         SM{"San Marino"}
         SN{"Senegal"}
         SO{"Somalia"}
-        SR{"Surinam"}
+        SR{"Suriname"}
         SS{"Etelä-Sudan"}
         ST{"São Tomé ja Príncipe"}
         SV{"El Salvador"}
@@ -272,6 +272,7 @@ fi{
         UA{"Ukraina"}
         UG{"Uganda"}
         UM{"Yhdysvaltain erillissaaret"}
+        UN{"Yhdistyneet kansakunnat"}
         US{"Yhdysvallat"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -297,15 +298,17 @@ fi{
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestiina"}
+        UN{"YK"}
         US{"USA"}
     }
     Countries%variant{
         CD{"Kongo-Kinshasa"}
         CG{"Kongo-Brazzaville"}
         CI{"Côte d’Ivoire"}
+        CZ{"Tšekinmaa"}
         FK{"Falklandinsaaret (Malvinassaaret)"}
         MK{"EJT Makedonia"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.88"}
 }

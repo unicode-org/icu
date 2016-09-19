@@ -1,13 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-// ***************************************************************************
-// *
-// *  Copyright (C) 2004-2016, International Business Machines
-// *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
-// *
-// ***************************************************************************
+//
 // File: root.txt
-// Generated from CLDR 
+// Generated from CLDR
 //
 root {
     RuleBasedTransliteratorIDs {
@@ -282,6 +277,16 @@ root {
             }
         }
 
+        ur-t-und-beng {
+            alias {"Beng-ur"}
+        }
+        Beng-ur {
+            file {
+                resource:process(transliterator) {"Beng_ur.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Bulgarian-Latin/BGN {
             alias {"bg-bg_Latn/BGN"}
         }
@@ -453,6 +458,16 @@ root {
         Deva-Telu {
             file {
                 resource:process(transliterator) {"Deva_Telu.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ur-t-und-deva {
+            alias {"Deva-ur"}
+        }
+        Deva-ur {
+            file {
+                resource:process(transliterator) {"Deva_ur.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -714,6 +729,16 @@ root {
             }
         }
 
+        ur-t-und-gujr {
+            alias {"Gujr-ur"}
+        }
+        Gujr-ur {
+            file {
+                resource:process(transliterator) {"Gujr_ur.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Gurmukhi-Arabic {
             alias {"Guru-Arab"}
         }
@@ -847,6 +872,16 @@ root {
         Guru-Telu {
             file {
                 resource:process(transliterator) {"Guru_Telu.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ur-t-und-guru {
+            alias {"Guru-ur"}
+        }
+        Guru-ur {
+            file {
+                resource:process(transliterator) {"Guru_ur.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -1090,6 +1125,13 @@ root {
             }
         }
 
+        InterIndic-ur {
+            internal {
+                resource:process(transliterator) {"InterIndic_ur.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Jamo-Latin {
             alias {"Jamo-Latn"}
         }
@@ -1236,6 +1278,16 @@ root {
         Knda-Telu {
             file {
                 resource:process(transliterator) {"Knda_Telu.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ur-t-und-knda {
+            alias {"Knda-ur"}
+        }
+        Knda-ur {
+            file {
+                resource:process(transliterator) {"Knda_ur.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -1731,6 +1783,16 @@ root {
             }
         }
 
+        ur-t-und-mlym {
+            alias {"Mlym-ur"}
+        }
+        Mlym-ur {
+            file {
+                resource:process(transliterator) {"Mlym_ur.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Maldivian-Latin/BGN {
             alias {"dv-dv_Latn/BGN"}
         }
@@ -1890,6 +1952,16 @@ root {
         Orya-Telu {
             file {
                 resource:process(transliterator) {"Orya_Telu.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ur-t-und-orya {
+            alias {"Orya-ur"}
+        }
+        Orya-ur {
+            file {
+                resource:process(transliterator) {"Orya_ur.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -2146,6 +2218,16 @@ root {
             }
         }
 
+        ur-t-und-taml {
+            alias {"Taml-ur"}
+        }
+        Taml-ur {
+            file {
+                resource:process(transliterator) {"Taml_ur.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Telugu-Arabic {
             alias {"Telu-Arab"}
         }
@@ -2279,6 +2361,16 @@ root {
         Telu-Taml {
             file {
                 resource:process(transliterator) {"Telu_Taml.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ur-t-und-telu {
+            alias {"Telu-ur"}
+        }
+        Telu-ur {
+            file {
+                resource:process(transliterator) {"Telu_ur.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -3274,6 +3366,16 @@ root {
         my-my_FONIPA {
             file {
                 resource:process(transliterator) {"my_my_FONIPA.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        my-t-my-s0-zawgyi {
+            alias {"Zawgyi-my"}
+        }
+        Zawgyi-my {
+            file {
+                resource:process(transliterator) {"Zawgyi_my.txt"}
                 direction {"FORWARD"}
             }
         }

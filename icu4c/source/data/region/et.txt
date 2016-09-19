@@ -41,7 +41,7 @@ et{
         AL{"Albaania"}
         AM{"Armeenia"}
         AO{"Angola"}
-        AQ{"Antarktis"}
+        AQ{"Antarktika"}
         AR{"Argentina"}
         AS{"Ameerika Samoa"}
         AT{"Austria"}
@@ -272,6 +272,7 @@ et{
         UA{"Ukraina"}
         UG{"Uganda"}
         UM{"Ühendriikide hajasaared"}
+        UN{"Ühendatud Rahvaste Organisatsioon"}
         US{"Ameerika Ühendriigid"}
         UY{"Uruguay"}
         UZ{"Usbekistan"}
@@ -297,15 +298,17 @@ et{
         HK{"Hongkong"}
         MO{"Macau"}
         PS{"Palestiina"}
+        UN{"ÜRO"}
         US{"USA"}
     }
     Countries%variant{
         CD{"Kongo-Kinshasa"}
         CG{"Kongo-Brazzaville"}
         CI{"Elevandiluurannik"}
+        CZ{"Tšehhia"}
         FK{"Malviini saared"}
         MK{"Makedoonia Vabariik"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

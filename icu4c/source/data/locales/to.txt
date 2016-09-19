@@ -131,7 +131,7 @@ to{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.98"}
     calendar{
         generic{
             DateTimePatterns{
@@ -276,8 +276,8 @@ to{
         }
         gregorian{
             AmPmMarkers{
-                "AM",
-                "PM",
+                "hengihengi",
+                "efiafi",
             }
             AmPmMarkersAbbr{
                 "AM",
@@ -437,8 +437,8 @@ to{
                         pm{"PM"}
                     }
                     wide{
-                        am{"AM"}
-                        pm{"PM"}
+                        am{"HH"}
+                        pm{"EA"}
                     }
                 }
             }
@@ -980,7 +980,7 @@ to{
         second{
             dn{"sekoni"}
             relative{
-                "0"{"taimiʻni"}
+                "0"{"taimí ni"}
             }
             relativeTime{
                 future{
@@ -1202,6 +1202,12 @@ to{
     }
     listPattern{
         standard{
+            2{"{0} mo {1}"}
+            end{"{0} mo {1}"}
+            middle{"{0} mo {1}"}
+            start{"{0} mo {1}"}
+        }
+        standard-short{
             2{"{0} mo {1}"}
             end{"{0} mo {1}"}
             middle{"{0} mo {1}"}

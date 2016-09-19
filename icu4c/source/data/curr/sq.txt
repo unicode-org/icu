@@ -28,7 +28,7 @@ sq{
         }
         ARS{
             "ARS",
-            "Pezoja argjentinase",
+            "Pesoja argjentinase",
         }
         AUD{
             "A$",
@@ -94,9 +94,13 @@ sq{
             "BWP",
             "Pula botsuane",
         }
+        BYN{
+            "BYN",
+            "Rubla bjelloruse",
+        }
         BYR{
             "BYR",
-            "Rubla bjelloruse",
+            "Rubla bjelloruse (2000–2016)",
         }
         BZD{
             "BZD",
@@ -116,7 +120,7 @@ sq{
         }
         CLP{
             "CLP",
-            "Pezoja kiliane",
+            "Pesoja kiliane",
         }
         CNY{
             "CN¥",
@@ -124,7 +128,7 @@ sq{
         }
         COP{
             "COP",
-            "Pezoja kolumbiane",
+            "Pesoja kolumbiane",
         }
         CRC{
             "CRC",
@@ -132,11 +136,11 @@ sq{
         }
         CUC{
             "CUC",
-            "Pezoja kubaneze e shkëmbyeshme",
+            "Pesoja kubaneze e shkëmbyeshme",
         }
         CUP{
             "CUP",
-            "Pezoja kubaneze",
+            "Pesoja kubaneze",
         }
         CVE{
             "CVE",
@@ -156,7 +160,7 @@ sq{
         }
         DOP{
             "DOP",
-            "Pezoja dominikane",
+            "Pesoja dominikane",
         }
         DZD{
             "DZD",
@@ -184,7 +188,7 @@ sq{
         }
         FKP{
             "FKP",
-            "Stërlina e Ishujve Folkland",
+            "Stërlina e Ishujve Falkland",
         }
         GBP{
             "£",
@@ -384,7 +388,7 @@ sq{
         }
         MXN{
             "MX$",
-            "Pezoja meksikane",
+            "Pesoja meksikane",
         }
         MYR{
             "MYR",
@@ -436,7 +440,7 @@ sq{
         }
         PHP{
             "PHP",
-            "Pezoja filipinase",
+            "Pesoja filipinase",
         }
         PKR{
             "PKR",
@@ -576,7 +580,7 @@ sq{
         }
         UYU{
             "UYU",
-            "Pezoja uruguaiane",
+            "Pesoja uruguaiane",
         }
         UZS{
             "UZS",
@@ -624,12 +628,16 @@ sq{
         }
         ZAR{
             "ZAR",
-            "Randa afrikano-jugore",
+            "Randi afrikano-jugor",
         }
         ZMW{
             "ZMW",
             "Kuaça e Zambikut",
         }
+    }
+    Currencies%narrow{
+        UYU{"$"}
+        VEF{"Bs"}
     }
     CurrencyPlurals{
         AED{
@@ -657,8 +665,8 @@ sq{
             other{"kuanza angole"}
         }
         ARS{
-            one{"pezo argjentinase"}
-            other{"pezo argjentinase"}
+            one{"peso argjentinase"}
+            other{"peso argjentinase"}
         }
         AUD{
             one{"dollar australian"}
@@ -724,9 +732,13 @@ sq{
             one{"pulë botsuane"}
             other{"pula botsuane"}
         }
-        BYR{
+        BYN{
             one{"rubël bjelloruse"}
             other{"rubla bjelloruse"}
+        }
+        BYR{
+            one{"rubël bjelloruse (2000–2016)"}
+            other{"rubla bjelloruse (2000–2016)"}
         }
         BZD{
             one{"dollar belize"}
@@ -745,28 +757,28 @@ sq{
             other{"franga zvicerane"}
         }
         CLP{
-            one{"pezo kiliane"}
-            other{"pezo kiliane"}
+            one{"peso kiliane"}
+            other{"peso kiliane"}
         }
         CNY{
             one{"juan kinez"}
             other{"juanë kinez"}
         }
         COP{
-            one{"pezo kolumbiane"}
-            other{"pezo kolumbiane"}
+            one{"peso kolumbiane"}
+            other{"peso kolumbiane"}
         }
         CRC{
             one{"kolon kostarikan"}
             other{"kolonë kostarikan"}
         }
         CUC{
-            one{"pezo kubaneze e shkëmbyeshme"}
-            other{"pezo kubaneze të shkëmbyeshme"}
+            one{"peso kubaneze e shkëmbyeshme"}
+            other{"peso kubaneze e shkëmbyeshme"}
         }
         CUP{
-            one{"pezo kubaneze"}
-            other{"pezo kubaneze"}
+            one{"peso kubaneze"}
+            other{"peso kubaneze"}
         }
         CVE{
             one{"eskudo e Kepit të Gjelbër"}
@@ -785,8 +797,8 @@ sq{
             other{"korona daneze"}
         }
         DOP{
-            one{"pezo dominikane"}
-            other{"pezo dominikane"}
+            one{"peso dominikane"}
+            other{"peso dominikane"}
         }
         DZD{
             one{"dinar algjerian"}
@@ -813,8 +825,8 @@ sq{
             other{"dollarë fixhi"}
         }
         FKP{
-            one{"stërlinë e Ishujve Folkland"}
-            other{"stërlina të Ishujve Folkland"}
+            one{"stërlinë e Ishujve Falkland"}
+            other{"stërlina të Ishujve Falkland"}
         }
         GBP{
             one{"sterlinë britanike"}
@@ -1013,8 +1025,8 @@ sq{
             other{"kuaça malaviane"}
         }
         MXN{
-            one{"pezo meksikane"}
-            other{"pezo meksikane"}
+            one{"peso meksikane"}
+            other{"peso meksikane"}
         }
         MYR{
             one{"ringit malajzian"}
@@ -1065,8 +1077,8 @@ sq{
             other{"kina të Papua-Guineas së Re"}
         }
         PHP{
-            one{"pezo filipinase"}
-            other{"pezo filipinase"}
+            one{"peso filipinase"}
+            other{"peso filipinase"}
         }
         PKR{
             one{"rupi pakistaneze"}
@@ -1205,8 +1217,8 @@ sq{
             other{"dollarë amerikan"}
         }
         UYU{
-            one{"pezo uruguaiane"}
-            other{"pezo uruguaiane"}
+            one{"peso uruguaiane"}
+            other{"peso uruguaiane"}
         }
         UZS{
             one{"somë uzbeke"}
@@ -1253,8 +1265,8 @@ sq{
             other{"rialë jemeni"}
         }
         ZAR{
-            one{"randë afrikano-jugore"}
-            other{"randa afrikano-jugore"}
+            one{"rand afrikano-jugor"}
+            other{"randë afrikano-jugorë"}
         }
         ZMW{
             one{"kuaçë zambiku"}
@@ -1265,5 +1277,5 @@ sq{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.79"}
 }

@@ -272,6 +272,7 @@ ms{
         UA{"Ukraine"}
         UG{"Uganda"}
         UM{"Kepulauan Terpencil A.S."}
+        UN{"Bangsa-bangsa Bersatu"}
         US{"Amerika Syarikat"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -297,15 +298,17 @@ ms{
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palestin"}
+        UN{"PBB"}
         US{"A.S"}
     }
     Countries%variant{
         CD{"Congo (DRC)"}
         CG{"Congo (Republik)"}
         CI{"Ivory Coast"}
+        CZ{"Czechia"}
         FK{"Kepulauan Falkland (Islas Malvinas)"}
         MK{"Macedonia (FYROM)"}
         TL{"Timor Timur"}
     }
-    Version{"2.1.26.77"}
+    Version{"2.1.28.79"}
 }

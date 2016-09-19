@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 si{
-    Version{"2.1.26.76"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -79,6 +79,7 @@ si{
                 dnam{"වර්ග කිලෝමීටර්"}
                 one{"වර්ග කිලෝමීටර් {0}"}
                 other{"වර්ග කිලෝමීටර් {0}"}
+                per{"{0} කට වර්ග කිලෝමීටර්"}
             }
             square-meter{
                 dnam{"වර්ග මීටර්"}
@@ -90,6 +91,7 @@ si{
                 dnam{"වර්ග සැතපුම්"}
                 one{"වර්ග සැතපුම් {0}"}
                 other{"වර්ග සැතපුම් {0}"}
+                per{"{0} කට වර්ග සැතපුම්"}
             }
             square-yard{
                 dnam{"වර්ග යාර"}
@@ -105,6 +107,21 @@ si{
                 dnam{"ක්‍රාත්"}
                 one{"ක්‍රාත් {0}"}
                 other{"ක්‍රාත් {0}"}
+            }
+            milligram-per-deciliter{
+                dnam{"ඩෙසිලීටරයකට මිලිග්‍රෑම්"}
+                one{"ඩෙසිලීටරයකට මිලිග්‍රෑම් {0}"}
+                other{"ඩෙසිලීටරයකට මිලිග්‍රෑම් {0}"}
+            }
+            millimole-per-liter{
+                dnam{"ලීටරයකට මිලිමෝල්"}
+                one{"ලීටරයකට මිලිමෝල් {0}"}
+                other{"ලීටරයකට මිලිමෝල් {0}"}
+            }
+            part-per-million{
+                dnam{"මිලියනයට කොටස්"}
+                one{"මිලියනයට කොටස් {0}"}
+                other{"මිලියනයට කොටස් {0}"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ si{
                 dnam{"ගැලුමට හැතැප්ම"}
                 one{"ගැලුමට හැතැප්ම {0}"}
                 other{"ගැලුමට හැතැප්ම {0}"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"ඉම්පීරියල් ගැලුමට හැතැප්ම"}
+                one{"{0} ඉම්පීරියල් ගැලුමට හැතැප්ම"}
+                other{"{0} ඉම්පීරියල් ගැලුමට හැතැප්ම"}
             }
         }
         coordinate{
@@ -654,6 +676,12 @@ si{
                 other{"ගැලුම් {0}"}
                 per{"ගැලුමට {0}"}
             }
+            gallon-imperial{
+                dnam{"ඉම්පීරියල් ගැලුම්"}
+                one{"{0} ඉම්පී. ගැලුම"}
+                other{"{0} ඉම්පී. ගැලුම්"}
+                per{"ඉම්පීරියල් ගැලුමකට {0}"}
+            }
             hectoliter{
                 dnam{"භෙක්ටොලීටර්"}
                 one{"භෙක්ටොලීටර් {0}"}
@@ -1015,6 +1043,7 @@ si{
                 dnam{"ව.කී"}
                 one{"ව.කී {0}"}
                 other{"ව.කී {0}"}
+                per{"{0} කට වර්ග කිලෝමීටර්"}
             }
             square-meter{
                 dnam{"වර්ග මීටර්"}
@@ -1026,6 +1055,7 @@ si{
                 dnam{"වර්ග සැතපුම්"}
                 one{"ව.සැ {0}"}
                 other{"ව.සැ {0}"}
+                per{"{0} කට ව.සැ"}
             }
             square-yard{
                 dnam{"වර්ග යාර"}
@@ -1041,6 +1071,21 @@ si{
                 dnam{"ක්‍රාත්"}
                 one{"ක්‍රාත් {0}"}
                 other{"ක්‍රාත් {0}"}
+            }
+            milligram-per-deciliter{
+                dnam{"මිග්‍රෑ/ඩෙලි"}
+                one{"{0} මිග්‍රෑ/ඩෙලි"}
+                other{"{0} මිග්‍රෑ/ඩෙලි"}
+            }
+            millimole-per-liter{
+                dnam{"මිලිමෝල්/ලීටර්"}
+                one{"{0} මිමෝල්/ලී"}
+                other{"{0} මිමෝල්/ලී"}
+            }
+            part-per-million{
+                dnam{"කොටස්/මිලියනය"}
+                one{"{0} මිලිකො"}
+                other{"{0} මිලිකො"}
             }
         }
         consumption{
@@ -1058,6 +1103,11 @@ si{
                 dnam{"හැතැප්ම/ගැලු"}
                 one{"හැගැ {0}"}
                 other{"හැගැ {0}"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"හැතැප්ම/ගැලුම්"}
+                one{"{0} ගැහැ"}
+                other{"{0} ගැහැ"}
             }
         }
         coordinate{
@@ -1367,13 +1417,13 @@ si{
                 dnam{"ග්‍රෑම්"}
                 one{"ග්‍රෑ. {0}"}
                 other{"ග්‍රෑ. {0}"}
-                per{"{0}/g"}
+                per{"{0}/ග්‍රෑ."}
             }
             kilogram{
                 dnam{"කි.ග්‍රෑ."}
                 one{"කි.ග්‍රෑ. {0}"}
                 other{"කි.ග්‍රෑ. {0}"}
-                per{"{0}/kg"}
+                per{"{0}/කි.ග්‍රෑ."}
             }
             metric-ton{
                 dnam{"ටො"}
@@ -1394,7 +1444,7 @@ si{
                 dnam{"අවුස"}
                 one{"අවුස {0}"}
                 other{"අවුස {0}"}
-                per{"{0}/oz"}
+                per{"{0}/අවුස"}
             }
             ounce-troy{
                 dnam{"අවුස ට්‍රෝයි"}
@@ -1405,7 +1455,7 @@ si{
                 dnam{"රාත්තල්"}
                 one{"රා {0}"}
                 other{"රා {0}"}
-                per{"{0}/lb"}
+                per{"{0}/රා"}
             }
             ton{
                 dnam{"ටොන්"}
@@ -1589,6 +1639,12 @@ si{
                 one{"ගැලු {0}"}
                 other{"ගැලු {0}"}
                 per{"{0}/ගැලු"}
+            }
+            gallon-imperial{
+                dnam{"ඉම්පී. ගැ"}
+                one{"{0} ගැ ඉම්පී."}
+                other{"{0} ගැ ඉම්පී."}
+                per{"{0}/ ගැ ඉම්පී."}
             }
             hectoliter{
                 dnam{"භෙලී"}

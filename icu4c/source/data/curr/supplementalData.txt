@@ -854,10 +854,21 @@ supplementalData:table(nofallback){
         BY{
             {
                 from:intvector{
+                    341,
+                    -1547615232,
+                }
+                id{"BYN"}
+            }
+            {
+                from:intvector{
                     220,
                     1791994880,
                 }
                 id{"BYR"}
+                to:intvector{
+                    345,
+                    1551482879,
+                }
             }
             {
                 from:intvector{
@@ -4741,6 +4752,12 @@ supplementalData:table(nofallback){
             0,
             0,
             0,
+            0,
+        }
+        BYN:intvector{
+            2,
+            0,
+            2,
             0,
         }
         BYR:intvector{

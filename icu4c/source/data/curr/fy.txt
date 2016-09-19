@@ -214,9 +214,13 @@ fy{
             "BYB",
             "Wit-Russyske nieuwe roebel (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "Wit-Russyske roebel",
+        }
         BYR{
             "BYR",
-            "Wit-Russyske roebel",
+            "Wit-Russyske roebel (2000–2016)",
         }
         BZD{
             "BZD",
@@ -1384,9 +1388,13 @@ fy{
             one{"Wit-Russyske nieuwe roebel (1994–1999)"}
             other{"Wit-Russyske nieuwe roebel (1994–1999)"}
         }
-        BYR{
+        BYN{
             one{"Wit-Russyske roebel"}
             other{"Wit-Russyske roebel"}
+        }
+        BYR{
+            one{"Wit-Russyske roebel (2000–2016)"}
+            other{"Wit-Russyske roebel (2000–2016)"}
         }
         BZD{
             one{"Belizaanske dollar"}
@@ -2345,5 +2353,5 @@ fy{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.44"}
 }

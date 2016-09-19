@@ -10,7 +10,7 @@ am{
         SpelloutRules{
             "%spellout-numbering-year:",
             "-x: \u1245\u1295\u1235\u1293\u123D >>;",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "1100/100: << \u1218\u1276[ >>];",
             "10000: =%spellout-numbering=;",
@@ -47,5 +47,5 @@ am{
             "0: =%spellout-numbering=\u129B;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.27.22"}
 }

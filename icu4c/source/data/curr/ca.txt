@@ -218,9 +218,13 @@ ca{
             "BYB",
             "nou ruble bielorús (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "ruble bielorús",
+        }
         BYR{
             "BYR",
-            "ruble bielorús",
+            "ruble bielorús (2000–2016)",
         }
         BZD{
             "BZD",
@@ -1181,7 +1185,7 @@ ca{
         }
     }
     Currencies%narrow{
-        AOA{"AOA"}
+        AOA{"Kz"}
         ARS{"$"}
         AUD{"$"}
         BAM{"KM"}
@@ -1189,11 +1193,11 @@ ca{
         BDT{"৳"}
         BMD{"$"}
         BND{"$"}
-        BOB{"BOB"}
+        BOB{"Bs"}
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1203,25 +1207,26 @@ ca{
         CUC{"$"}
         CUP{"$"}
         CZK{"Kč"}
-        DKK{"DKK"}
+        DKK{"kr"}
         DOP{"$"}
         EGP{"E£"}
         EUR{"€"}
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
-        GTQ{"GTQ"}
+        GTQ{"Q"}
         GYD{"$"}
         HKD{"$"}
-        HNL{"HNL"}
+        HNL{"L"}
         HRK{"kn"}
         HUF{"Ft"}
         IDR{"Rp"}
         ILS{"₪"}
         INR{"₹"}
-        ISK{"ISK"}
+        ISK{"kr"}
         JMD{"$"}
         JPY{"¥"}
         KHR{"៛"}
@@ -1243,7 +1248,7 @@ ca{
         NAD{"$"}
         NGN{"₦"}
         NIO{"C$"}
-        NOK{"NOK"}
+        NOK{"kr"}
         NPR{"Rs"}
         NZD{"$"}
         PHP{"₱"}
@@ -1253,12 +1258,12 @@ ca{
         RUB{"₽"}
         RWF{"RF"}
         SBD{"$"}
-        SEK{"SEK"}
+        SEK{"kr"}
         SGD{"$"}
         SHP{"£"}
         SRD{"$"}
         SSP{"£"}
-        STD{"STD"}
+        STD{"Db"}
         SYP{"£"}
         THB{"฿"}
         TOP{"T$"}
@@ -1495,9 +1500,13 @@ ca{
             one{"nou ruble bielorús (1994–1999)"}
             other{"nous rubles bielorussos (1994–1999)"}
         }
-        BYR{
+        BYN{
             one{"ruble bielorús"}
             other{"rubles bielorussos"}
+        }
+        BYR{
+            one{"ruble bielorús (2000–2016)"}
+            other{"rubles bielorussos (2000–2016)"}
         }
         BZD{
             one{"dòlar de Belize"}
@@ -2460,5 +2469,5 @@ ca{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

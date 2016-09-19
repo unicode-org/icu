@@ -9,7 +9,7 @@ ru{
             "%%lenient-parse:",
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
-            "x.x: =0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-ordinal-masculine-genitive=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal-masculine=;",
@@ -1386,5 +1386,5 @@ ru{
             "21001: =0=.;",
         }
     }
-    Version{"2.1.19.86"}
+    Version{"2.1.27.22"}
 }

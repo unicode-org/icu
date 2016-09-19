@@ -1,13 +1,8 @@
 ﻿# © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-# ***************************************************************************
-# *
-# *  Copyright (C) 2004-2016, International Business Machines
-# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
-# *
-# ***************************************************************************
+#
 # File: Orya_Knda.txt
-# Generated from CLDR 
+# Generated from CLDR
 #
 
 ::[\u0B01-ଃଅ-ଌଏ-ଐଓ-ନପ-ରଲ-ଳଵ-ହ\u0B3C-\u0B43େ-ୈୋ-\u0B4D\u0B56-ୗଡ଼-ଢ଼ୟ-ୡ୦-ୱ];

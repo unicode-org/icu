@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ms{
-    Version{"2.1.26.77"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -37,7 +37,7 @@ ms{
             }
             revolution{
                 dnam{"revolusi"}
-                other{"{0} rev"}
+                other{"{0} revolusi"}
             }
         }
         area{
@@ -66,6 +66,7 @@ ms{
             square-kilometer{
                 dnam{"kilometer persegi"}
                 other{"{0} kilometer persegi"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"meter persegi"}
@@ -75,6 +76,7 @@ ms{
             square-mile{
                 dnam{"batu persegi"}
                 other{"{0} batu persegi"}
+                per{"{0} setiap batu persegi"}
             }
             square-yard{
                 dnam{"ela persegi"}
@@ -89,6 +91,18 @@ ms{
                 dnam{"karat"}
                 other{"{0} karat"}
             }
+            milligram-per-deciliter{
+                dnam{"miligram setiap desiliter"}
+                other{"{0} miligram setiap desiliter"}
+            }
+            millimole-per-liter{
+                dnam{"milimol setiap liter"}
+                other{"{0} milimol setiap liter"}
+            }
+            part-per-million{
+                dnam{"bahagian setiap juta"}
+                other{"{0} bahagian setiap juta"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -102,6 +116,10 @@ ms{
             mile-per-gallon{
                 dnam{"batu segelen"}
                 other{"{0} batu segelen"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"batu setiap gelen Piawai Diraja"}
+                other{"{0} batu setiap gelen Piawai Diraja"}
             }
         }
         coordinate{
@@ -538,6 +556,11 @@ ms{
                 other{"{0} gelen"}
                 per{"{0} segelen"}
             }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
+            }
             hectoliter{
                 dnam{"hektoliter"}
                 other{"{0} hektoliter"}
@@ -830,6 +853,7 @@ ms{
             square-kilometer{
                 dnam{"km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -839,6 +863,7 @@ ms{
             square-mile{
                 dnam{"batu persegi"}
                 other{"{0} bt²"}
+                per{"{0}/bt²"}
             }
             square-yard{
                 dnam{"ela²"}
@@ -853,6 +878,18 @@ ms{
                 dnam{"karat"}
                 other{"{0} kt"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -866,6 +903,10 @@ ms{
             mile-per-gallon{
                 dnam{"batu/gal"}
                 other{"{0} bpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp."}
+                other{"{0} mpg Imp."}
             }
         }
         coordinate{
@@ -1301,6 +1342,11 @@ ms{
                 dnam{"gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"Imp. gal"}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hL"}

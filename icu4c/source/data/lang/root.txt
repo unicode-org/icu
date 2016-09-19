@@ -4,17 +4,18 @@
  * ICU <specials> source: <path>/common/main/root.xml
  */
 root{
-    Version{"2.1.26.65"}
+    Version{"2.1.28.79"}
     characterLabelPattern{
-        all{"{0} — All"}
-        compatibility{"{0} — Compatibility"}
-        enclosed{"{0} — Enclosed"}
-        extended{"{0} — Extended"}
-        historic{"{0} — Historic"}
-        miscellaneous{"{0} — Miscellaneous"}
-        other{"{0} — Other"}
-        scripts{"Scripts — {0}"}
-        strokes{"{0} Strokes"}
+        all{"{0} — all"}
+        category-list{"{0}: {1}"}
+        compatibility{"{0} — compatibility"}
+        enclosed{"{0} — enclosed"}
+        extended{"{0} — extended"}
+        historic{"{0} — historic"}
+        miscellaneous{"{0} — miscellaneous"}
+        other{"{0} — other"}
+        scripts{"scripts — {0}"}
+        strokes{"{0} strokes"}
     }
     codePatterns{
         language{"{0}"}

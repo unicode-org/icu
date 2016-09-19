@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sq{
-    Version{"2.1.25.97"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -42,9 +42,9 @@ sq{
                 other{"{0} radianë"}
             }
             revolution{
-                dnam{"revolucion"}
-                one{"{0} revolucion"}
-                other{"{0} revolucione"}
+                dnam{"rrotullim"}
+                one{"{0} rrotullim"}
+                other{"{0} rrotullime"}
             }
         }
         area{
@@ -79,6 +79,7 @@ sq{
                 dnam{"kilometra katrore"}
                 one{"{0} kilometër katror"}
                 other{"{0} kilometra katrore"}
+                per{"{0} për kilometër katror"}
             }
             square-meter{
                 dnam{"metra katrore"}
@@ -90,6 +91,7 @@ sq{
                 dnam{"milje katrore"}
                 one{"{0} milje katror"}
                 other{"{0} milje katrore"}
+                per{"{0} për milje katrore"}
             }
             square-yard{
                 dnam{"jardë katrore"}
@@ -105,6 +107,21 @@ sq{
                 dnam{"karatë"}
                 one{"{0} karat"}
                 other{"{0} karatë"}
+            }
+            milligram-per-deciliter{
+                dnam{"miligramë për decilitër"}
+                one{"{0} miligram për decilitër"}
+                other{"{0} miligramë për decilitër"}
+            }
+            millimole-per-liter{
+                dnam{"milimolë për litër"}
+                one{"{0} milimol për litër"}
+                other{"{0} milimolë për litër"}
+            }
+            part-per-million{
+                dnam{"pjesë për milion"}
+                one{"{0} pjesë për milion"}
+                other{"{0} pjesë për milion"}
             }
         }
         consumption{
@@ -123,12 +140,17 @@ sq{
                 one{"{0} milje për gallon"}
                 other{"{0} milje për gallon"}
             }
+            mile-per-gallon-imperial{
+                dnam{"milje për gallon imperial"}
+                one{"{0} milje për gallon imperial"}
+                other{"{0} milje për gallon imperial"}
+            }
         }
         coordinate{
-            east{"{0}Lindje"}
-            north{"{0}Veri"}
-            south{"{0}Jug"}
-            west{"{0}Perëndim"}
+            east{"{0} Lindje"}
+            north{"{0} Veri"}
+            south{"{0} Jug"}
+            west{"{0} Perëndim"}
         }
         digital{
             bit{
@@ -434,7 +456,7 @@ sq{
                 per{"{0}/gram"}
             }
             kilogram{
-                dnam{"kilogram"}
+                dnam{"kilogramë"}
                 one{"{0} kilogram"}
                 other{"{0} kilogramë"}
                 per{"{0}/kilogram"}
@@ -582,9 +604,9 @@ sq{
         }
         volume{
             acre-foot{
-                dnam{"akra-këmbë"}
-                one{"{0} akër-këmbë"}
-                other{"{0} akra-këmbë"}
+                dnam{"këmbë-akër"}
+                one{"{0} këmbë-akër"}
+                other{"{0} këmbë-akër"}
             }
             centiliter{
                 dnam{"centilitra"}
@@ -644,15 +666,21 @@ sq{
                 other{"{0} decilitra"}
             }
             fluid-ounce{
-                dnam{"onsë fluidë"}
-                one{"{0} ons fluidë"}
-                other{"{0} onsë fluidë"}
+                dnam{"onsë të lëngshëm"}
+                one{"{0} ons i lëngshëm"}
+                other{"{0} onsë të lëngshëm"}
             }
             gallon{
                 dnam{"gallonë"}
                 one{"{0} gallon"}
                 other{"{0} gallonë"}
                 per{"{0}/gallon"}
+            }
+            gallon-imperial{
+                dnam{"gallonë imperial"}
+                one{"{0} gallon imperial"}
+                other{"{0} gallonë imperial"}
+                per{"{0} për gallon imperial"}
             }
             hectoliter{
                 dnam{"hektolitra"}
@@ -686,9 +714,9 @@ sq{
                 other{"{0} pinta metrike"}
             }
             quart{
-                dnam{"çerekje"}
+                dnam{"çerekë"}
                 one{"{0} çerek"}
-                other{"{0} çerekje"}
+                other{"{0} çerekë"}
             }
             tablespoon{
                 dnam{"lugë gjelle"}
@@ -696,9 +724,9 @@ sq{
                 other{"{0} lugë gjelle"}
             }
             teaspoon{
-                dnam{"lugë çaji"}
-                one{"{0} lugë çaji"}
-                other{"{0} lugë çaji"}
+                dnam{"lugë kafeje"}
+                one{"{0} lugë kafeje"}
+                other{"{0} lugë kafeje"}
             }
         }
     }
@@ -765,10 +793,10 @@ sq{
             }
         }
         coordinate{
-            east{"{0}L"}
-            north{"{0}V"}
-            south{"{0}J"}
-            west{"{0}P"}
+            east{"{0} L"}
+            north{"{0} V"}
+            south{"{0} J"}
+            west{"{0} P"}
         }
         duration{
             day{
@@ -1008,9 +1036,9 @@ sq{
                 other{"{0} rad"}
             }
             revolution{
-                dnam{"rev"}
-                one{"{0} rev"}
-                other{"{0} rev"}
+                dnam{"rrot."}
+                one{"{0} rrot."}
+                other{"{0} rrot."}
             }
         }
         area{
@@ -1045,6 +1073,7 @@ sq{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -1056,6 +1085,7 @@ sq{
                 dnam{"mi²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"yd²"}
@@ -1072,6 +1102,21 @@ sq{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1085,16 +1130,21 @@ sq{
                 other{"{0} L/km"}
             }
             mile-per-gallon{
-                dnam{"mi/gallon"}
-                one{"{0} mi/gallon"}
-                other{"{0} mi/gallon"}
+                dnam{"mi/gal"}
+                one{"{0} mi/gal"}
+                other{"{0} mi/gal"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mi/gal Imp."}
+                one{"{0} mi/gal Imp."}
+                other{"{0} mi/gal Imp."}
             }
         }
         coordinate{
-            east{"{0}L"}
-            north{"{0}V"}
-            south{"{0}J"}
-            west{"{0}P"}
+            east{"{0} L"}
+            north{"{0} V"}
+            south{"{0} J"}
+            west{"{0} P"}
         }
         digital{
             bit{
@@ -1619,6 +1669,12 @@ sq{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"gal Imp."}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hL"}

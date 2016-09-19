@@ -272,6 +272,7 @@ fr{
         UA{"Ukraine"}
         UG{"Ouganda"}
         UM{"Îles mineures éloignées des États-Unis"}
+        UN{"Nations Unies"}
         US{"États-Unis"}
         UY{"Uruguay"}
         UZ{"Ouzbékistan"}
@@ -297,14 +298,16 @@ fr{
         HK{"Hong Kong"}
         MO{"Macao"}
         PS{"Palestine"}
+        UN{"NU"}
         US{"É.-U."}
     }
     Countries%variant{
         CD{"Congo (RDC)"}
         CG{"République du Congo"}
+        CZ{"Tchéquie"}
         FK{"Îles Falkland"}
         MK{"Macédoine (ARYM)"}
         TL{"Timor-Oriental"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

@@ -214,9 +214,13 @@ ko{
             "BYB",
             "벨라루스 신권 루블 (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "벨라루스 루블",
+        }
         BYR{
             "BYR",
-            "벨라루스 루블",
+            "벨라루스 루블 (2000–2016)",
         }
         BZD{
             "BZD",
@@ -899,7 +903,7 @@ ko{
             "스와질란드 릴랑게니",
         }
         THB{
-            "฿",
+            "THB",
             "태국 바트",
         }
         TJR{
@@ -1020,7 +1024,7 @@ ko{
         }
         XAF{
             "FCFA",
-            "CFA 프랑 BEAC",
+            "중앙아프리카 CFA 프랑",
         }
         XAG{
             "XAG",
@@ -1068,7 +1072,7 @@ ko{
         }
         XOF{
             "CFA",
-            "CFA 프랑 BCEAO",
+            "서아프리카 CFA 프랑",
         }
         XPD{
             "XPD",
@@ -1164,7 +1168,7 @@ ko{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1181,6 +1185,7 @@ ko{
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
         GTQ{"Q"}
@@ -1221,6 +1226,7 @@ ko{
         PKR{"Rs"}
         PLN{"zł"}
         PYG{"₲"}
+        RON{"L"}
         RUB{"₽"}
         RWF{"RF"}
         SBD{"$"}
@@ -1319,8 +1325,11 @@ ko{
         BWP{
             other{"보츠와나 폴라"}
         }
-        BYR{
+        BYN{
             other{"벨라루스 루블"}
+        }
+        BYR{
+            other{"벨라루스 루블 (2000–2016)"}
         }
         BZD{
             other{"벨리즈 달러"}
@@ -1698,13 +1707,13 @@ ko{
             other{"서 사모아 탈라"}
         }
         XAF{
-            other{"CFA 프랑 BEAC"}
+            other{"중앙아프리카 CFA 프랑"}
         }
         XCD{
             other{"동카리브 달러"}
         }
         XOF{
-            other{"CFA 프랑 BCEAO"}
+            other{"서아프리카 CFA 프랑"}
         }
         XPF{
             other{"CFP 프랑"}
@@ -1725,5 +1734,5 @@ ko{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.22"}
 }

@@ -218,9 +218,13 @@ nl{
             "BYB",
             "Wit-Russische nieuwe roebel (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "Wit-Russische roebel",
+        }
         BYR{
             "BYR",
-            "Wit-Russische roebel",
+            "Wit-Russische roebel (2000–2016)",
         }
         BZD{
             "BZD",
@@ -1204,7 +1208,7 @@ nl{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1222,6 +1226,7 @@ nl{
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
         GTQ{"Q"}
@@ -1508,9 +1513,13 @@ nl{
             one{"Wit-Russische nieuwe roebel (1994–1999)"}
             other{"Wit-Russische nieuwe roebel (1994–1999)"}
         }
-        BYR{
+        BYN{
             one{"Wit-Russische roebel"}
             other{"Wit-Russische roebel"}
+        }
+        BYR{
+            one{"Wit-Russische roebel (2000–2016)"}
+            other{"Wit-Russische roebel (2000–2016)"}
         }
         BZD{
             one{"Belizaanse dollar"}
@@ -2485,5 +2494,5 @@ nl{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

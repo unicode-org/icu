@@ -11,7 +11,7 @@ ee{
         }
         SpelloutRules{
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal=;",
@@ -83,5 +83,5 @@ ee{
             "2: =%spellout-cardinal=lia;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.27.22"}
 }

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 mk{
-    Version{"2.1.25.97"}
+    Version{"2.1.28.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -302,6 +302,9 @@ mk{
         }
         "America:El_Salvador"{
             ec{"Ел Салвадор"}
+        }
+        "America:Fort_Nelson"{
+            ec{"Форт Нелсон"}
         }
         "America:Fortaleza"{
             ec{"Форталеза"}
@@ -666,6 +669,9 @@ mk{
         "Asia:Bangkok"{
             ec{"Бангкок"}
         }
+        "Asia:Barnaul"{
+            ec{"Барнаул"}
+        }
         "Asia:Beirut"{
             ec{"Бејрут"}
         }
@@ -843,6 +849,9 @@ mk{
         "Asia:Tokyo"{
             ec{"Токио"}
         }
+        "Asia:Tomsk"{
+            ec{"Томск"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Улан Батор"}
         }
@@ -942,6 +951,9 @@ mk{
         "Europe:Andorra"{
             ec{"Андора"}
         }
+        "Europe:Astrakhan"{
+            ec{"Астрахан"}
+        }
         "Europe:Athens"{
             ec{"Атина"}
         }
@@ -999,6 +1011,9 @@ mk{
         }
         "Europe:Kiev"{
             ec{"Киев"}
+        }
+        "Europe:Kirov"{
+            ec{"Киров"}
         }
         "Europe:Lisbon"{
             ec{"Лисабон"}
@@ -1075,6 +1090,9 @@ mk{
         }
         "Europe:Tirane"{
             ec{"Тирана"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"Улјановск"}
         }
         "Europe:Uzhgorod"{
             ec{"Ужхород"}
@@ -1319,7 +1337,7 @@ mk{
             ls{"Стандардно време во Апија"}
         }
         "meta:Arabian"{
-            ld{"Арапски летно сметање на времето"}
+            ld{"Арапско летно сметање на времето"}
             lg{"Арапско време"}
             ls{"Стандардно арапско време"}
         }
@@ -1749,6 +1767,9 @@ mk{
         }
         "meta:Ponape"{
             ls{"Време во Понапе"}
+        }
+        "meta:Pyongyang"{
+            ls{"Пјонгјанг"}
         }
         "meta:Reunion"{
             ls{"Време на Ријунион"}

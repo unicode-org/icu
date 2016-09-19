@@ -218,9 +218,13 @@ tr{
             "BYB",
             "Yeni Beyaz Rusya Rublesi (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "Beyaz Rusya Rublesi",
+        }
         BYR{
             "BYR",
-            "Beyaz Rusya Rublesi",
+            "Beyaz Rusya Rublesi (2000–2016)",
         }
         BZD{
             "BZD",
@@ -1209,7 +1213,7 @@ tr{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1227,6 +1231,7 @@ tr{
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
         GTQ{"Q"}
@@ -1267,6 +1272,7 @@ tr{
         PKR{"Rs"}
         PLN{"zł"}
         PYG{"₲"}
+        RON{"L"}
         RUB{"₽"}
         RUR{"р."}
         RWF{"RF"}
@@ -1501,9 +1507,13 @@ tr{
             one{"Yeni Beyaz Rusya Rublesi (1994–1999)"}
             other{"Yeni Beyaz Rusya Rublesi (1994–1999)"}
         }
-        BYR{
+        BYN{
             one{"Beyaz Rusya rublesi"}
             other{"Beyaz Rusya rublesi"}
+        }
+        BYR{
+            one{"Beyaz Rusya rublesi (2000–2016)"}
+            other{"Beyaz Rusya rublesi (2000–2016)"}
         }
         BZD{
             one{"Belize doları"}
@@ -2358,5 +2368,5 @@ tr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

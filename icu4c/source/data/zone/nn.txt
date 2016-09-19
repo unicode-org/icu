@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nn{
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
     zoneStrings{
         "America:Belem"{
             ec{"Belém"}
@@ -106,6 +106,6 @@ nn{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
-        hourFormat{"+HH.mm;-HH.mm"}
+        hourFormat{"+HH:mm;-HH:mm"}
     }
 }

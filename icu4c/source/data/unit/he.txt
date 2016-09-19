@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 he{
-    Version{"2.1.26.0"}
+    Version{"2.1.29.27"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -81,7 +81,7 @@ he{
                 many{"{0} סנטימטר רבוע"}
                 one{"סנטימטר רבוע {0}"}
                 other{"{0} סנטימטר רבוע"}
-                per{"{0}/סנטימטר רבוע"}
+                per{"{0} לסנטימטר רבוע"}
                 two{"{0} סנטימטר רבוע"}
             }
             square-foot{
@@ -92,11 +92,11 @@ he{
                 two{"{0} רגל רבועה"}
             }
             square-inch{
-                dnam{"אינצ׳ רבוע"}
+                dnam{"אינץ׳ רבוע"}
                 many{"{0} אינץ׳ רבוע"}
-                one{"{0} אינץ׳ רבוע"}
+                one{"אינץ׳ רבוע {0}"}
                 other{"{0} אינץ׳ רבוע"}
-                per{"{0}/אינץ׳ רבוע"}
+                per{"{0} לאינץ׳ רבוע"}
                 two{"{0} אינץ׳ רבוע"}
             }
             square-kilometer{
@@ -104,6 +104,7 @@ he{
                 many{"{0} קילומטר רבוע"}
                 one{"קילומטר רבוע {0}"}
                 other{"{0} קילומטר רבוע"}
+                per{"{0} לקילומטר רבוע"}
                 two{"{0} קילומטר רבוע"}
             }
             square-meter{
@@ -111,7 +112,7 @@ he{
                 many{"{0} מטר רבוע"}
                 one{"מטר רבוע {0}"}
                 other{"{0} מטר רבוע"}
-                per{"{0}/מטר רבוע"}
+                per{"{0} למטר רבוע"}
                 two{"{0} מטר רבוע"}
             }
             square-mile{
@@ -119,12 +120,13 @@ he{
                 many{"{0} מייל רבוע"}
                 one{"מייל רבוע {0}"}
                 other{"{0} מייל רבוע"}
+                per{"{0} למייל רבוע"}
                 two{"{0} מייל רבוע"}
             }
             square-yard{
                 dnam{"יארד רבוע"}
                 many{"{0} יארד רבוע"}
-                one{"{0} יארד רבוע"}
+                one{"יארד רבוע {0}"}
                 other{"{0} יארד רבוע"}
                 two{"{0} יארד רבוע"}
             }
@@ -139,6 +141,27 @@ he{
                 one{"קראט אחד"}
                 other{"{0} קראט"}
                 two{"{0} קראט"}
+            }
+            milligram-per-deciliter{
+                dnam{"מיליגרם/דציליטר"}
+                many{"{0} מיליגרם/דציליטר"}
+                one{"{0} מיליגרם/דציליטר"}
+                other{"{0} מיליגרם/דציליטר"}
+                two{"{0} מיליגרם/דציליטר"}
+            }
+            millimole-per-liter{
+                dnam{"מילימול/ליטר"}
+                many{"{0} מילימול/ליטר"}
+                one{"{0} מילימול/ליטר"}
+                other{"{0} מילימול/ליטר"}
+                two{"{0} מילימול/ליטר"}
+            }
+            part-per-million{
+                dnam{"חלקים למיליון"}
+                many{"{0} חלקים למיליון"}
+                one{"{0} חלקים למיליון"}
+                other{"{0} חלקים למיליון"}
+                two{"{0} חלקים למיליון"}
             }
         }
         consumption{
@@ -162,6 +185,13 @@ he{
                 one{"{0} מייל/גלון"}
                 other{"{0} מייל/גלון"}
                 two{"{0} מייל/גלון"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"מייל/גלון אימפריאלי"}
+                many{"{0} מייל/גלון אימפריאלי"}
+                one{"{0} מייל/גלון אימפריאלי"}
+                other{"{0} מייל/גלון אימפריאלי"}
+                two{"{0} מייל/גלון אימפריאלי"}
             }
         }
         coordinate{
@@ -253,7 +283,7 @@ he{
             day{
                 dnam{"ימים"}
                 many{"{0} יום"}
-                one{"יום"}
+                one{"יום {0}"}
                 other{"{0} ימים"}
                 per{"{0}/יום"}
                 two{"יומיים"}
@@ -321,9 +351,10 @@ he{
             }
             year{
                 dnam{"שנים"}
-                many{"{0} שנה"}
+                many{"{0} שנים"}
                 one{"שנה"}
                 other{"{0} שנים"}
+                per{"‏{0} לשנה"}
                 two{"שנתיים"}
             }
         }
@@ -435,31 +466,31 @@ he{
             astronomical-unit{
                 dnam{"יחידות אסטרונומיות"}
                 many{"{0} יחידות אסטרונומיות"}
-                one{"יחידה אסטרונומית אחת"}
+                one{"יחידה אסטרונומית {0}"}
                 other{"{0} יחידות אסטרונומיות"}
-                two{"שתי יחידת אסטרונומיות"}
+                two{"{0} יחידות אסטרונומיות"}
             }
             centimeter{
                 dnam{"סנטימטרים"}
-                many{"{0} סנטימטר"}
-                one{"סנטימטר אחד"}
+                many{"{0} סנטימטרים"}
+                one{"סנטימטר {0}"}
                 other{"{0} סנטימטרים"}
-                per{"{0}/סנטימטר"}
-                two{"שני סנטימטרים"}
+                per{"{0} לסנטימטר"}
+                two{"{0} סנטימטרים"}
             }
             decimeter{
                 dnam{"דצימטר"}
-                many{"{0} דצימטר"}
+                many{"{0} דצימטרים"}
                 one{"דצימטר אחד"}
                 other{"{0} דצימטרים"}
-                two{"שני דצימטרים"}
+                two{"{0} דצימטרים"}
             }
             foot{
                 dnam{"רגל"}
                 many{"{0} רגל"}
                 one{"רגל {0}"}
                 other{"{0} רגל"}
-                per{"{0}/רגל"}
+                per{"{0} לרגל"}
                 two{"{0} רגל"}
             }
             inch{
@@ -467,16 +498,16 @@ he{
                 many{"{0} אינץ׳"}
                 one{"אינץ׳ {0}"}
                 other{"{0} אינץ׳"}
-                per{"{0}/אינץ׳"}
+                per{"{0} לאינץ׳"}
                 two{"{0} אינץ׳"}
             }
             kilometer{
                 dnam{"קילומטרים"}
-                many{"{0} ק״מ"}
+                many{"{0} קילומטרים"}
                 one{"קילומטר {0}"}
-                other{"{0} ק״מ"}
-                per{"{0}/ק״מ"}
-                two{"{0} ק״מ"}
+                other{"{0} קילומטרים"}
+                per{"{0} לקילומטר"}
+                two{"{0} קילומטרים"}
             }
             light-year{
                 dnam{"שנות אור"}
@@ -487,23 +518,23 @@ he{
             }
             meter{
                 dnam{"מטרים"}
-                many{"{0} מטר"}
-                one{"מטר אחד"}
+                many{"{0} מטרים"}
+                one{"מטר {0}"}
                 other{"{0} מטרים"}
-                per{"{0}/מטר"}
-                two{"שני מטר"}
+                per{"{0} למטר"}
+                two{"{0} מטרים"}
             }
             micrometer{
-                dnam{"מיקרומטר"}
-                many{"{0} מיקרומטר"}
-                one{"מיקרומטר אחד"}
+                dnam{"מיקרומטרים"}
+                many{"{0} מיקרומטרים"}
+                one{"מיקרומטר {0}"}
                 other{"{0} מיקרומטרים"}
-                two{"שני מיקרומטרים"}
+                two{"{0} מיקרומטרים"}
             }
             mile{
                 dnam{"מייל"}
                 many{"{0} מייל"}
-                one{"{0} מייל"}
+                one{"מייל {0}"}
                 other{"{0} מייל"}
                 two{"{0} מייל"}
             }
@@ -515,39 +546,39 @@ he{
                 two{"{0} מייל-סקנדינביה"}
             }
             millimeter{
-                dnam{"מילימטר"}
-                many{"{0} מילימטר"}
-                one{"{0} מילימטר"}
-                other{"{0} מילימטר"}
-                two{"{0} מילימטר"}
+                dnam{"מילימטרים"}
+                many{"{0} מילימטרים"}
+                one{"מילימטר {0}"}
+                other{"{0} מילימטרים"}
+                two{"{0} מילימטרים"}
             }
             nanometer{
-                dnam{"ננומטר"}
-                many{"{0} ננומטר"}
+                dnam{"ננומטרים"}
+                many{"{0} ננומטרים"}
                 one{"ננומטר {0}"}
-                other{"{0} ננומטר"}
-                two{"{0} ננומטר"}
+                other{"{0} ננומטרים"}
+                two{"{0} ננומטרים"}
             }
             nautical-mile{
                 dnam{"מייל ימי"}
                 many{"{0} מייל ימי"}
-                one{"{0} מייל ימי"}
+                one{"מייל ימי {0}"}
                 other{"{0} מייל ימי"}
                 two{"{0} מייל ימי"}
             }
             parsec{
                 dnam{"פארסק"}
                 many{"{0} פארסק"}
-                one{"פארסק {0}"}
+                one{"{0} פארסק"}
                 other{"{0} פארסק"}
                 two{"{0} פארסק"}
             }
             picometer{
-                dnam{"פיקומטר"}
-                many{"{0} פיקומטר"}
+                dnam{"פיקומטרים"}
+                many{"{0} פיקומטרים"}
                 one{"פיקומטר {0}"}
-                other{"{0} פיקומטר"}
-                two{"{0} פיקומטר"}
+                other{"{0} פיקומטרים"}
+                two{"{0} פיקומטרים"}
             }
             yard{
                 dnam{"יארד"}
@@ -778,9 +809,9 @@ he{
             kelvin{
                 dnam{"מעלות קלווין"}
                 many{"{0} קלווין"}
-                one{"קלווין אחד"}
+                one{"קלווין {0}"}
                 other{"{0} קלווין"}
-                two{"שני קלווין"}
+                two{"{0} קלווין"}
             }
         }
         volume{
@@ -884,6 +915,9 @@ he{
                 other{"{0} גלונים"}
                 per{"{0}/גלון"}
                 two{"{0} גלונים"}
+            }
+            gallon-imperial{
+                per{"{0}/גלון אימפריאלי"}
             }
             hectoliter{
                 dnam{"הקטוליטר"}
@@ -1043,14 +1077,14 @@ he{
                 many{"{0} י׳"}
                 one{"י׳"}
                 other{"{0} י׳"}
-                two{"יומיים"}
+                two{"{0} י׳"}
             }
             hour{
                 dnam{"שע׳"}
                 many{"{0} שע׳"}
-                one{"שעה"}
+                one{"שעה {0}"}
                 other{"{0} שע׳"}
-                two{"שעתיים"}
+                two{"{0} שע׳"}
             }
             millisecond{
                 dnam{"ms"}
@@ -1081,7 +1115,7 @@ he{
                 two{"שתי שנ׳"}
             }
             week{
-                dnam{"שב׳"}
+                dnam{"שבוע"}
                 many{"{0} שבועות"}
                 one{"שבוע {0}"}
                 other{"{0} שבועות"}
@@ -1099,9 +1133,9 @@ he{
             centimeter{
                 dnam{"ס״מ"}
                 many{"{0} ס״מ"}
-                one{"ס״מ אחד"}
+                one{"ס\u0022מ {0}"}
                 other{"{0} ס״מ"}
-                two{"שני ס״מ"}
+                two{"{0} ס״מ"}
             }
             foot{
                 many{"{0} רגל"}
@@ -1118,7 +1152,7 @@ he{
             kilometer{
                 dnam{"ק״מ"}
                 many{"{0} ק״מ"}
-                one{"ק״מ {0}"}
+                one{"{0} ק״מ"}
                 other{"{0} ק״מ"}
                 two{"{0} ק״מ"}
             }
@@ -1132,7 +1166,7 @@ he{
                 dnam{"מטר"}
                 many{"{0}מ׳"}
                 one{"מ׳ אחד"}
-                other{"{0}מ׳"}
+                other{"{0} מ׳"}
                 two{"שני מ׳"}
             }
             mile{
@@ -1253,10 +1287,10 @@ he{
         temperature{
             celsius{
                 dnam{"°C"}
-                many{"{0}°"}
-                one{"{0}°"}
-                other{"{0}°"}
-                two{"{0}°"}
+                many{"{0}°C"}
+                one{"{0}°C"}
+                other{"{0}°C"}
+                two{"{0}°C"}
             }
             fahrenheit{
                 many{"{0}°F"}
@@ -1344,17 +1378,17 @@ he{
         area{
             acre{
                 dnam{"אקר"}
-                many{"{0} אקר"}
-                one{"אקר {0}"}
-                other{"{0} אקר"}
-                two{"{0} אקר"}
+                many{"{0} ac"}
+                one{"{0} ac"}
+                other{"{0} ac"}
+                two{"{0} ac"}
             }
             hectare{
                 dnam{"הקטאר"}
-                many{"{0} הקטאר"}
-                one{"הקטאר {0}"}
-                other{"{0} הקטאר"}
-                two{"{0} הקטאר"}
+                many{"{0} ha"}
+                one{"{0} ha"}
+                other{"{0} ha"}
+                two{"{0} ha"}
             }
             square-centimeter{
                 dnam{"סמ״ר"}
@@ -1384,6 +1418,7 @@ he{
                 many{"{0} קמ״ר"}
                 one{"{0} קמ״ר"}
                 other{"{0} קמ״ר"}
+                per{"{0}/קמ״ר"}
                 two{"{0} קמ״ר"}
             }
             square-meter{
@@ -1396,13 +1431,14 @@ he{
             }
             square-mile{
                 dnam{"מייל רבוע"}
-                many{"{0} מייל רבוע"}
-                one{"מייל רבוע {0}"}
-                other{"{0} מייל רבוע"}
-                two{"{0} מייל רבוע"}
+                many{"{0} sq mi"}
+                one{"{0} sq mi"}
+                other{"{0} sq mi"}
+                per{"{0}/mi²"}
+                two{"{0} sq mi"}
             }
             square-yard{
-                dnam{"yd²"}
+                dnam{"yards²"}
                 many{"{0} yd²"}
                 one{"{0} yd²"}
                 other{"{0} yd²"}
@@ -1419,6 +1455,27 @@ he{
                 one{"{0} kt"}
                 other{"{0} kt"}
                 two{"{0} kt"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                many{"{0} mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+                two{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                many{"{0} mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+                two{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                many{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+                two{"{0} ppm"}
             }
         }
         consumption{
@@ -1443,6 +1500,13 @@ he{
                 other{"{0} mpg"}
                 two{"{0} mpg"}
             }
+            mile-per-gallon-imperial{
+                dnam{"miles/gal Imp."}
+                many{"{0} mpg Imp."}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
+                two{"{0} mpg Imp."}
+            }
         }
         coordinate{
             east{"{0}מז׳"}
@@ -1452,11 +1516,11 @@ he{
         }
         digital{
             bit{
-                dnam{"ביט"}
-                many{"{0} ביט"}
-                one{"{0} ביט"}
-                other{"{0} ביט"}
-                two{"{0} ביט"}
+                dnam{"סיבית"}
+                many{"{0} סיביות"}
+                one{"סיבית {0}"}
+                other{"{0} סיביות"}
+                two{"{0} סיביות"}
             }
             byte{
                 dnam{"בייט"}
@@ -1565,7 +1629,7 @@ he{
                 many{"{0} דק׳"}
                 one{"דקה"}
                 other{"{0} דק׳"}
-                per{"{0}/דק׳"}
+                per{"{0}/ד׳"}
                 two{"שתי דק׳"}
             }
             month{
@@ -1601,11 +1665,11 @@ he{
             }
             year{
                 dnam{"שנים"}
-                many{"{0} שנה"}
-                one{"שנה"}
+                many{"{0} שנים"}
+                one{"שנה {0}"}
                 other{"{0} שנים"}
                 per{"{0}/שנה"}
-                two{"שנתיים"}
+                two{"{0} שנים"}
             }
         }
         electric{
@@ -1714,45 +1778,47 @@ he{
         }
         length{
             astronomical-unit{
-                dnam{"י״א"}
-                many{"{0} י״א"}
-                one{"י״א אחת"}
-                other{"{0} י״א"}
-                two{"שתי י״א"}
+                dnam{"au"}
+                many{"{0} au"}
+                one{"{0} au"}
+                other{"{0} au"}
+                two{"{0} au"}
             }
             centimeter{
                 dnam{"ס״מ"}
                 many{"{0} ס״מ"}
-                one{"ס״מ אחד"}
+                one{"ס\u0022מ {0}"}
                 other{"{0} ס״מ"}
                 per{"{0}/ס״מ"}
-                two{"שני ס״מ"}
+                two{"{0} ס״מ"}
             }
             decimeter{
                 dnam{"ד״מ"}
                 many{"{0} ד״מ"}
-                one{"ד״מ אחד"}
+                one{"{0} ד״מ"}
                 other{"{0} ד״מ"}
-                two{"שני ד״מ"}
+                two{"{0} ד״מ"}
             }
             foot{
                 dnam{"רגל"}
-                many{"{0} רגל"}
-                one{"רגל {0}"}
-                other{"{0} רגל"}
-                two{"{0} רגל"}
+                many{"{0} ft"}
+                one{"{0} ft"}
+                other{"{0} ft"}
+                per{"{0}/ft"}
+                two{"{0} ft"}
             }
             inch{
                 dnam{"אינץ׳"}
-                many{"{0} אינץ׳"}
-                one{"אינץ׳ {0}"}
-                other{"{0} אינץ׳"}
-                two{"{0} אינץ׳"}
+                many{"{0} in"}
+                one{"{0} in"}
+                other{"{0} in"}
+                per{"{0}/in"}
+                two{"{0} in"}
             }
             kilometer{
                 dnam{"ק״מ"}
                 many{"{0} ק״מ"}
-                one{"ק״מ {0}"}
+                one{"{0} ק״מ"}
                 other{"{0} ק״מ"}
                 per{"{0}/ק״מ"}
                 two{"{0} ק״מ"}
@@ -1782,7 +1848,7 @@ he{
             mile{
                 dnam{"מייל"}
                 many{"{0} מייל"}
-                one{"{0} מייל"}
+                one{"מייל {0}"}
                 other{"{0} מייל"}
                 two{"{0} מייל"}
             }
@@ -1822,7 +1888,7 @@ he{
                 two{"{0} pc"}
             }
             picometer{
-                dnam{"pm"}
+                dnam{"פ״מ"}
                 many{"{0} פיקומטר"}
                 one{"פיקומטר {0}"}
                 other{"{0} פיקומטר"}
@@ -1981,11 +2047,11 @@ he{
                 two{"{0} inHg"}
             }
             millibar{
-                dnam{"מ״ב"}
-                many{"{0} מ״ב"}
-                one{"מיליבר {0}"}
-                other{"{0} מ״ב"}
-                two{"{0} מיליבר"}
+                dnam{"mbar"}
+                many{"{0} mbar"}
+                one{"{0} mbar"}
+                other{"{0} mbar"}
+                two{"{0} mbar"}
             }
             millimeter-of-mercury{
                 dnam{"mm Hg"}
@@ -2055,11 +2121,11 @@ he{
                 two{"{0}°"}
             }
             kelvin{
-                dnam{"°K"}
-                many{"{0}°K"}
-                one{"{0}°K"}
-                other{"{0}°K"}
-                two{"{0}°K"}
+                dnam{"K"}
+                many{"{0} K"}
+                one{"{0} K"}
+                other{"{0} K"}
+                two{"{0} K"}
             }
         }
         volume{
@@ -2163,6 +2229,14 @@ he{
                 other{"{0} גל׳"}
                 per{"{0}/גל׳"}
                 two{"{0} גל׳"}
+            }
+            gallon-imperial{
+                dnam{"גלון בריטי"}
+                many{"{0} גלון בריטי"}
+                one{"{0} גלון בריטי"}
+                other{"{0} גלון בריטי"}
+                per{"{0}/גלון בריטי"}
+                two{"{0} גלון בריטי"}
             }
             hectoliter{
                 dnam{"hL"}

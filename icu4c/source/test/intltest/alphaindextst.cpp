@@ -498,7 +498,7 @@ static const char *localeAndIndexCharactersLists[][2] = {
     /* Estonian*/   {"et", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:\\u0160:Z:\\u017D:T:U:V:\\u00D5:\\u00C4:\\u00D6:\\u00DC:X:Y"},
     /* Basque*/ {"eu", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
     /* Finnish*/    {"fi", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z:\\u00C5:\\u00C4:\\u00D6"},
-    /* Filipino*/   {"fil", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
+    /* Filipino*/   {"fil", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:\\u00D1:Ng:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
     /* French*/ {"fr", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
     /* Hebrew*/ {"he", "\\u05D0:\\u05D1:\\u05D2:\\u05D3:\\u05D4:\\u05D5:\\u05D6:\\u05D7:\\u05D8:\\u05D9:\\u05DB:\\u05DC:\\u05DE:\\u05E0:\\u05E1:\\u05E2:\\u05E4:\\u05E6:\\u05E7:\\u05E8:\\u05E9:\\u05EA"},
     /* Icelandic*/  {"is", "A:\\u00C1:B:C:D:\\u00D0:E:\\u00C9:F:G:H:I:\\u00CD:J:K:L:M:N:O:\\u00D3:P:Q:R:S:T:U:\\u00DA:V:W:X:Y:\\u00DD:Z:\\u00DE:\\u00C6:\\u00D6"},

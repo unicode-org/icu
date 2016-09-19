@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ga{
-    Version{"2.1.25.97"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -117,6 +117,7 @@ ga{
                 many{"{0} gciliméadar chearnacha"}
                 one{"{0} chiliméadar cearnach"}
                 other{"{0} ciliméadar cearnach"}
+                per{"{0} sa chiliméadar cearnach"}
                 two{"{0} chiliméadar chearnacha"}
             }
             square-meter{
@@ -134,6 +135,7 @@ ga{
                 many{"{0} míle chearnacha"}
                 one{"{0} mhíle cearnach"}
                 other{"{0} míle cearnach"}
+                per{"{0} sa mhíle cearnach"}
                 two{"{0} mhíle chearnacha"}
             }
             square-yard{
@@ -156,6 +158,30 @@ ga{
                 one{"{0} charat óir"}
                 other{"{0} carat óir"}
                 two{"{0} charat óir"}
+            }
+            milligram-per-deciliter{
+                dnam{"milleagraim sa deicilítear"}
+                few{"{0} mhilleagram sa deicilítear"}
+                many{"{0} milleagram sa deicilítear"}
+                one{"{0} mhilleagram sa deicilítear"}
+                other{"{0} milleagram sa deicilítear"}
+                two{"{0} mhilleagram sa deicilítear"}
+            }
+            millimole-per-liter{
+                dnam{"milleamóil sa lítear"}
+                few{"{0} mhilleamól sa lítear"}
+                many{"{0} milleamól sa lítear"}
+                one{"{0} mhilleamól sa lítear"}
+                other{"{0} milleamól sa lítear"}
+                two{"{0} mhilleamól sa lítear"}
+            }
+            part-per-million{
+                dnam{"codanna sa mhilliún"}
+                few{"{0} sa mhilliún"}
+                many{"{0} sa mhilliún"}
+                one{"{0} sa mhilliún"}
+                other{"{0} sa mhilliún"}
+                two{"{0} sa mhilliún"}
             }
         }
         consumption{
@@ -182,6 +208,14 @@ ga{
                 one{"{0} mhíle an galún"}
                 other{"{0} míle an galún"}
                 two{"{0} mhíle an galún"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mílte sa ghalún impiriúil"}
+                few{"{0} mhíle sa ghalún impiriúil"}
+                many{"{0} míle sa ghalún impiriúil"}
+                one{"{0} mhíle sa ghalún impiriúil"}
+                other{"{0} míle sa ghalún impiriúil"}
+                two{"{0} mhíle sa ghalún impiriúil"}
             }
         }
         coordinate{
@@ -1033,6 +1067,15 @@ ga{
                 other{"{0} galún"}
                 per{"{0} sa ghalún"}
                 two{"{0} ghalún"}
+            }
+            gallon-imperial{
+                dnam{"galúin impiriúla"}
+                few{"{0} ghalún impiriúla"}
+                many{"{0} ngalún impiriúla"}
+                one{"{0} ghalún impiriúil"}
+                other{"{0} galún impiriúil"}
+                per{"{0} sa ghalún impiriúil"}
+                two{"{0} ghalún impiriúla"}
             }
             hectoliter{
                 dnam{"heictilítir"}
@@ -2026,6 +2069,7 @@ ga{
                 many{"{0} km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
                 two{"{0} km²"}
             }
             square-meter{
@@ -2043,6 +2087,7 @@ ga{
                 many{"{0} míle²"}
                 one{"{0} mhíle²"}
                 other{"{0} míle²"}
+                per{"{0}/mi²"}
                 two{"{0} mhíle²"}
             }
             square-yard{
@@ -2065,6 +2110,30 @@ ga{
                 one{"{0} kt"}
                 other{"{0} kt"}
                 two{"{0} kt"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                few{"{0} mg/dL"}
+                many{"{0} mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+                two{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"milleamól/lítear"}
+                few{"{0} mmol/L"}
+                many{"{0} mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+                two{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"codanna/milliún"}
+                few{"{0}/milliún"}
+                many{"{0}/milliún"}
+                one{"{0}/milliún"}
+                other{"{0}/milliún"}
+                two{"{0}/milliún"}
             }
         }
         consumption{
@@ -2091,6 +2160,14 @@ ga{
                 one{"{0} mhíle/gal"}
                 other{"{0} míle/gal"}
                 two{"{0} mhíle/gal"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mílte/gal. imp."}
+                few{"{0} msg imp"}
+                many{"{0} msg imp"}
+                one{"{0} msg imp"}
+                other{"{0} msg imp"}
+                two{"{0} msg imp"}
             }
         }
         coordinate{
@@ -2932,6 +3009,15 @@ ga{
                 other{"{0} gal."}
                 per{"{0}/gal."}
                 two{"{0} ghal."}
+            }
+            gallon-imperial{
+                dnam{"gal. imp."}
+                few{"{0} ghal. imp."}
+                many{"{0} ngal. imp."}
+                one{"{0} ghal. imp."}
+                other{"{0} gal. imp."}
+                per{"{0}/gal. imp."}
+                two{"{0} ghal. imp."}
             }
             hectoliter{
                 dnam{"hl"}

@@ -154,7 +154,7 @@ se{
         PINYIN{"pinyin"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.98"}
     codePatterns{
         language{"giella: {0}"}
         script{"chállin: {0}"}

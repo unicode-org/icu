@@ -131,7 +131,7 @@ sl{
         GU{"Guam"}
         GW{"Gvineja Bissau"}
         GY{"Gvajana"}
-        HK{"Posebno administrativno območje LR Kitajske Hong Kong"}
+        HK{"Posebno administrativno območje LR Kitajske Hongkong"}
         HM{"Heardov otok in McDonaldovi otoki"}
         HN{"Honduras"}
         HR{"Hrvaška"}
@@ -253,14 +253,14 @@ sl{
         SY{"Sirija"}
         SZ{"Svazi"}
         TA{"Tristan da Cunha"}
-        TC{"Otočji Turks in Caicos"}
+        TC{"Otoki Turks in Caicos"}
         TD{"Čad"}
         TF{"Francosko južno ozemlje"}
         TG{"Togo"}
         TH{"Tajska"}
         TJ{"Tadžikistan"}
         TK{"Tokelau"}
-        TL{"Vzhodni Timor"}
+        TL{"Timor-Leste"}
         TM{"Turkmenistan"}
         TN{"Tunizija"}
         TO{"Tonga"}
@@ -271,7 +271,8 @@ sl{
         TZ{"Tanzanija"}
         UA{"Ukrajina"}
         UG{"Uganda"}
-        UM{"Druga ameriška ozemlja v Tihem oceanu"}
+        UM{"Stranski zunanji otoki Združenih držav"}
+        UN{"Združeni narodi"}
         US{"Združene države Amerike"}
         UY{"Urugvaj"}
         UZ{"Uzbekistan"}
@@ -297,6 +298,7 @@ sl{
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestina"}
+        UN{"Združeni narodi"}
         US{"ZDA"}
     }
     Countries%variant{
@@ -305,6 +307,7 @@ sl{
         CI{"Côte d’Ivoire"}
         FK{"Falklandski otoki (Malvini)"}
         MK{"Makedonija (FYROM)"}
+        TL{"Vzhodni Timor"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

@@ -272,6 +272,7 @@ is{
         UA{"Úkraína"}
         UG{"Úganda"}
         UM{"Smáeyjar Bandaríkjanna"}
+        UN{"Sameinuðu þjóðirnar"}
         US{"Bandaríkin"}
         UY{"Úrúgvæ"}
         UZ{"Úsbekistan"}
@@ -297,6 +298,7 @@ is{
         HK{"Hong Kong"}
         MO{"Makaó"}
         PS{"Palestína"}
+        UN{"Sameinuðu þjóðirnar"}
         US{"BNA"}
     }
     Countries%variant{
@@ -306,5 +308,5 @@ is{
         MK{"Makedónía (Fyrrverandi lýðveldi Júgóslavíu)"}
         TL{"Austur-Tímor"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.65"}
 }

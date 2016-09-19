@@ -8,13 +8,22 @@ de_AT{
                 currencyFormat{"¤ #,##0.00"}
             }
             symbols{
+                currencyGroup{"."}
                 group{" "}
             }
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.73"}
     calendar{
         gregorian{
+            dayPeriod{
+                stand-alone{
+                    narrow{
+                        am{"vm."}
+                        pm{"nm."}
+                    }
+                }
+            }
             monthNames{
                 format{
                     abbreviated{

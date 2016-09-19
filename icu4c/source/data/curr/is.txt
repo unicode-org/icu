@@ -130,9 +130,13 @@ is{
             "BWP",
             "botsvönsk púla",
         }
+        BYN{
+            "BYN",
+            "hvítrússnesk rúbla",
+        }
         BYR{
             "BYR",
-            "hvítrússnesk rúbla",
+            "hvítrússnesk rúbla (2000–2016)",
         }
         BZD{
             "BZD",
@@ -896,7 +900,7 @@ is{
         BND{"$"}
         BRL{"R$"}
         BSD{"$"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1039,9 +1043,13 @@ is{
             one{"botsvönsk púla"}
             other{"botsvanskar púlur"}
         }
-        BYR{
+        BYN{
             one{"hvítrússnesk rúbla"}
             other{"hvítrússneskar rúblur"}
+        }
+        BYR{
+            one{"hvítrússnesk rúbla (2000–2016)"}
+            other{"hvítrússneskar rúblur (2000–2016)"}
         }
         BZD{
             one{"belískur dalur"}
@@ -1592,5 +1600,5 @@ is{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.65"}
 }

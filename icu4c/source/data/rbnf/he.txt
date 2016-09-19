@@ -4,7 +4,7 @@ he{
     RBNFRules{
         SpelloutRules{
             "%spellout-numbering-year:",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "-x: \u05DE\u05D9\u05E0\u05D5\u05E1 >>;",
@@ -300,5 +300,5 @@ he{
             "11: =%spellout-numbering=;",
         }
     }
-    Version{"2.1.25.57"}
+    Version{"2.1.27.22"}
 }

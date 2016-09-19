@@ -60,7 +60,7 @@ pl{
         BJ{"Benin"}
         BL{"Saint-Barthélemy"}
         BM{"Bermudy"}
-        BN{"Brunei Darussalam"}
+        BN{"Brunei"}
         BO{"Boliwia"}
         BQ{"Niderlandy Karaibskie"}
         BR{"Brazylia"}
@@ -272,6 +272,7 @@ pl{
         UA{"Ukraina"}
         UG{"Uganda"}
         UM{"Dalekie Wyspy Mniejsze Stanów Zjednoczonych"}
+        UN{"Organizacja Narodów Zjednoczonych"}
         US{"Stany Zjednoczone"}
         UY{"Urugwaj"}
         UZ{"Uzbekistan"}
@@ -293,17 +294,20 @@ pl{
         ZZ{"Nieznany region"}
     }
     Countries%short{
-        GB{"GB"}
+        GB{"Wlk. Bryt."}
         HK{"Hongkong"}
         MO{"Makau"}
         PS{"Palestyna"}
+        UN{"ONZ"}
         US{"USA"}
     }
     Countries%variant{
         CG{"Republika Konga"}
         CI{"Wybrzeże Kości Słoniowej"}
+        CZ{"Republika Czeska"}
         FK{"Falklandy (Malwiny)"}
+        MK{"Była Jugosłowiańska Republika Macedonii"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
 }

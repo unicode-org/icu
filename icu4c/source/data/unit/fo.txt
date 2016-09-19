@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fo{
-    Version{"2.1.25.97"}
+    Version{"2.1.28.76"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,6 +79,7 @@ fo{
                 dnam{"ferkilometrar"}
                 one{"{0} ferkilometur"}
                 other{"{0} ferkilometrar"}
+                per{"{0} fyri hvønn ferkilometur"}
             }
             square-meter{
                 dnam{"fermetrar"}
@@ -90,6 +91,7 @@ fo{
                 dnam{"fermíl"}
                 one{"{0} fermíl"}
                 other{"{0} fermíl"}
+                per{"{0} fyri hvørt fermíl"}
             }
             square-yard{
                 dnam{"feryards"}
@@ -98,13 +100,28 @@ fo{
             }
         }
         compound{
-            per{"{0} á {1}"}
+            per{"{0}/{1}"}
         }
         concentr{
             karat{
                 dnam{"karat"}
                 one{"{0} karat"}
                 other{"{0} karat"}
+            }
+            milligram-per-deciliter{
+                dnam{"milligramm fyri hvønn desilitur"}
+                one{"{0} milligramm fyri hvønn desilitur"}
+                other{"{0} milligramm fyri hvønn desilitur"}
+            }
+            millimole-per-liter{
+                dnam{"millimol fyri hvønn litur"}
+                one{"{0} millimol fyri hvønn litur"}
+                other{"{0} millimol fyri hvønn litur"}
+            }
+            part-per-million{
+                dnam{"partar fyri hvørja millión"}
+                one{"{0} partur fyri hvørja millión"}
+                other{"{0} partar fyri hvørja millión"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ fo{
                 dnam{"míl fyri hvønn gallon"}
                 one{"{0} míl fyri hvønn gallon"}
                 other{"{0} míl fyri hvønn gallon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"míl fyri hvønn bretska gallon"}
+                one{"{0} míl fyri hvønn bretska gallon"}
+                other{"{0} míl fyri hvønn bretska gallon"}
             }
         }
         coordinate{
@@ -654,6 +676,12 @@ fo{
                 other{"{0} gallons"}
                 per{"{0} fyri hvønn gallon"}
             }
+            gallon-imperial{
+                dnam{"bretskar gallons"}
+                one{"{0} bretskur gallon"}
+                other{"{0} bretskar gallons"}
+                per{"{0} fyri hvønn bretska gallon"}
+            }
             hectoliter{
                 dnam{"hektolitrar"}
                 one{"{0} hektolitur"}
@@ -959,6 +987,7 @@ fo{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"m²"}
@@ -970,6 +999,7 @@ fo{
                 dnam{"míl²"}
                 one{"{0} míl²"}
                 other{"{0} míl²"}
+                per{"{0}/míl²"}
             }
             square-yard{
                 dnam{"yards²"}
@@ -985,6 +1015,21 @@ fo{
                 dnam{"karat"}
                 one{"{0} karat"}
                 other{"{0} karat"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"partar/millión"}
+                one{"{0} partur/mill."}
+                other{"{0} partar/mill."}
             }
         }
         consumption{
@@ -1002,6 +1047,11 @@ fo{
                 dnam{"míl/gallon"}
                 one{"{0} míl/gallon"}
                 other{"{0} míl/gallon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"míl/UK gallon"}
+                one{"{0} míl/UK gallon"}
+                other{"{0} míl/UK gallon"}
             }
         }
         coordinate{
@@ -1533,6 +1583,12 @@ fo{
                 one{"{0} gallon"}
                 other{"{0} gallons"}
                 per{"{0}/gallon"}
+            }
+            gallon-imperial{
+                dnam{"UK gallons"}
+                one{"{0} UK gallon"}
+                other{"{0} UK gallons"}
+                per{"{0}/UK gallon"}
             }
             hectoliter{
                 dnam{"hl"}

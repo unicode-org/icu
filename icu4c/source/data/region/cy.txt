@@ -272,6 +272,7 @@ cy{
         UA{"Wcráin"}
         UG{"Uganda"}
         UM{"Ynysoedd Pellennig UDA"}
+        UN{"Cenhedloedd Unedig"}
         US{"Yr Unol Daleithiau"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -297,15 +298,17 @@ cy{
         HK{"Hong Kong"}
         MO{"Macau"}
         PS{"Palesteina"}
+        UN{"UN"}
         US{"UDA"}
     }
     Countries%variant{
-        CD{"y Congo (G.Dd.C.)"}
+        CD{"Y Congo (G.Dd.C.)"}
         CG{"Y Congo (Gweriniaeth)"}
         CI{"Arfordir Ifori"}
+        CZ{"Tsiecia"}
         FK{"Ynysoedd y Falkland (Ynysoedd y Malfinas)"}
         MK{"Macedonia (CWIM)"}
         TL{"Dwyrain Timor"}
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.28.79"}
 }

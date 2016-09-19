@@ -3,7 +3,6 @@
 en_AU{
     %%Parent{"en_001"}
     Languages{
-        bax{"Bamum"}
         en_US{"United States English"}
         ro_MD{"Moldovan"}
     }
@@ -13,5 +12,5 @@ en_AU{
             ethiopic{"Ethiopian Calendar"}
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.29.54"}
 }

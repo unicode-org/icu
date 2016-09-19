@@ -8,7 +8,7 @@ fr_MA{
             }
         }
     }
-    Version{"2.1.25.97"}
+    Version{"2.1.27.99"}
     calendar{
         gregorian{
             AmPmMarkers{

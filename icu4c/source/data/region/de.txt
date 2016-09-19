@@ -85,7 +85,7 @@ de{
         CP{"Clipperton-Insel"}
         CR{"Costa Rica"}
         CU{"Kuba"}
-        CV{"Kap Verde"}
+        CV{"Cabo Verde"}
         CW{"Curaçao"}
         CX{"Weihnachtsinsel"}
         CY{"Zypern"}
@@ -131,7 +131,7 @@ de{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Sonderverwaltungsregion Hongkong"}
+        HK{"Sonderverwaltungszone Hongkong"}
         HM{"Heard und McDonaldinseln"}
         HN{"Honduras"}
         HR{"Kroatien"}
@@ -239,7 +239,7 @@ de{
         SG{"Singapur"}
         SH{"St. Helena"}
         SI{"Slowenien"}
-        SJ{"Svalbard und Jan Mayen"}
+        SJ{"Spitzbergen"}
         SK{"Slowakei"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -260,7 +260,7 @@ de{
         TH{"Thailand"}
         TJ{"Tadschikistan"}
         TK{"Tokelau"}
-        TL{"Timor-Leste"}
+        TL{"Osttimor"}
         TM{"Turkmenistan"}
         TN{"Tunesien"}
         TO{"Tonga"}
@@ -272,6 +272,7 @@ de{
         UA{"Ukraine"}
         UG{"Uganda"}
         UM{"Amerikanische Überseeinseln"}
+        UN{"Vereinte Nationen"}
         US{"Vereinigte Staaten"}
         UY{"Uruguay"}
         UZ{"Usbekistan"}
@@ -297,15 +298,16 @@ de{
         HK{"Hongkong"}
         MO{"Macau"}
         PS{"Palästina"}
+        UN{"UN"}
         US{"USA"}
     }
     Countries%variant{
         CD{"Kongo (Demokratische Republik)"}
         CG{"Kongo (Republik)"}
         CI{"Elfenbeinküste"}
+        CZ{"Tschechien"}
         FK{"Falklandinseln (Malwinen)"}
         MK{"Mazedonien (EJR)"}
-        TL{"Osttimor"}
     }
-    Version{"2.1.26.31"}
+    Version{"2.1.28.79"}
 }

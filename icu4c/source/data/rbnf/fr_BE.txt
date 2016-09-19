@@ -7,7 +7,7 @@ fr_BE{
             "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
             "-x: moins >>;",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "1100/100: <%spellout-cardinal-masculine<-cent>%%cents-m>;",
             "10000: =%spellout-numbering=;",
@@ -180,5 +180,5 @@ fr_BE{
             "2: =%%spellout-ordinal=;",
         }
     }
-    Version{"2.1.25.32"}
+    Version{"2.1.27.22"}
 }

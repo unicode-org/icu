@@ -66,6 +66,7 @@ en{
         aro{"Araona"}
         arp{"Arapaho"}
         arq{"Algerian Arabic"}
+        ars{"Najdi Arabic"}
         arw{"Arawak"}
         ary{"Moroccan Arabic"}
         arz{"Egyptian Arabic"}
@@ -388,7 +389,7 @@ en{
         mgo{"Metaʼ"}
         mh{"Marshallese"}
         mi{"Maori"}
-        mic{"Micmac"}
+        mic{"Mi'kmaq"}
         min{"Minangkabau"}
         mk{"Macedonian"}
         ml{"Malayalam"}
@@ -402,7 +403,7 @@ en{
         ms{"Malay"}
         mt{"Maltese"}
         mua{"Mundang"}
-        mul{"Multiple Languages"}
+        mul{"Multiple languages"}
         mus{"Creek"}
         mwl{"Mirandese"}
         mwr{"Marwari"}
@@ -605,7 +606,7 @@ en{
         uga{"Ugaritic"}
         uk{"Ukrainian"}
         umb{"Umbundu"}
-        und{"Unknown Language"}
+        und{"Unknown language"}
         ur{"Urdu"}
         uz{"Uzbek"}
         vai{"Vai"}
@@ -933,9 +934,19 @@ en{
             zhuyin{"Zhuyin Sort Order"}
         }
         d0{
-            fwidth{"Fullwidth"}
-            hwidth{"Halfwidth"}
-            npinyin{"Numeric"}
+            ascii{"To ASCII"}
+            charname{"To Unicode Character Names"}
+            fwidth{"To Fullwidth"}
+            hex{"To Hexadecimal Codes"}
+            hwidth{"To Halfwidth"}
+            lower{"To Lowercase"}
+            nfc{"To Unicode NFC"}
+            nfd{"To Unicode NFD"}
+            nfkc{"To Unicode NFKC"}
+            nfkd{"To Unicode NFKD"}
+            npinyin{"To Pinyin With Numeric Tones"}
+            title{"To Titlecase"}
+            upper{"To Uppercase"}
         }
         em{
             default{"Use Default Presentation For Emoji Characters"}
@@ -964,6 +975,12 @@ en{
             space{"Whitespace"}
             symbol{"Symbol"}
         }
+        kv{
+            currency{"Ignore Symbols affects spaces, punctuation, all symbols"}
+            punct{"Ignore Symbols affects spaces and punctuation only"}
+            space{"Ignore Symbols affects spaces only"}
+            symbol{"Ignore Symbols affects spaces, punctuation, non-currency symbols"}
+        }
         lb{
             loose{"Loose Line Break Style"}
             normal{"Normal Line Break Style"}
@@ -984,6 +1001,7 @@ en{
             ussystem{"US Measurement System"}
         }
         numbers{
+            adlm{"Adlam Digits"}
             ahom{"Ahom Digits"}
             arab{"Arabic-Indic Digits"}
             arabext{"Extended Arabic-Indic Digits"}
@@ -991,6 +1009,7 @@ en{
             armnlow{"Armenian Lowercase Numerals"}
             bali{"Balinese Digits"}
             beng{"Bangla Digits"}
+            bhks{"Bhaiksuki Digits"}
             brah{"Brahmi Digits"}
             cakm{"Chakma Digits"}
             cham{"Cham Digits"}
@@ -1038,6 +1057,7 @@ en{
             mymrshan{"Myanmar Shan Digits"}
             mymrtlng{"Myanmar Tai Laing Digits"}
             native{"Native Digits"}
+            newa{"Newa Digits"}
             nkoo{"N’Ko Digits"}
             olck{"Ol Chiki Digits"}
             orya{"Odia Digits"}
@@ -1132,18 +1152,23 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.26.81"}
+    Version{"2.1.29.81"}
     characterLabelPattern{
+        all{"{0} — all"}
+        category-list{"{0}: {1}"}
+        compatibility{"{0} — compatibility"}
+        enclosed{"{0} — enclosed"}
+        extended{"{0} — extended"}
+        historic{"{0} — historic"}
+        miscellaneous{"{0} — miscellaneous"}
+        other{"{0} — other"}
+        scripts{"scripts — {0}"}
         strokes{
-            "{0} Stroke",
-            "{0} Strokes",
+            "{0} stroke",
+            "{0} strokes",
         }
     }
     codePatterns{
-        combined{"combined {0}"}
-        emoji{"emoji {0}"}
-        flag{"emoji flag for {0}"}
-        keycap{"emoji keycap for {0}"}
         language{"Language: {0}"}
         script{"Script: {0}"}
         territory{"Region: {0}"}

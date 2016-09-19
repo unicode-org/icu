@@ -186,9 +186,13 @@ es{
             "BYB",
             "nuevo rublo bielorruso (1994–1999)",
         }
+        BYN{
+            "BYN",
+            "rublo bielorruso",
+        }
         BYR{
             "BYR",
-            "rublo bielorruso",
+            "rublo bielorruso (2000–2016)",
         }
         BZD{
             "BZD",
@@ -704,7 +708,7 @@ es{
         }
         PEN{
             "PEN",
-            "sol peruano",
+            "nuevo sol peruano",
         }
         PES{
             "PES",
@@ -1112,7 +1116,7 @@ es{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYR{"р."}
+        BYN{"р."}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1129,6 +1133,7 @@ es{
         FJD{"$"}
         FKP{"£"}
         GBP{"£"}
+        GEL{"₾"}
         GIP{"£"}
         GNF{"FG"}
         GTQ{"Q"}
@@ -1169,6 +1174,7 @@ es{
         PKR{"Rs"}
         PLN{"zł"}
         PYG{"₲"}
+        RON{"L"}
         RUB{"₽"}
         RWF{"RF"}
         SBD{"$"}
@@ -1362,9 +1368,13 @@ es{
             one{"nuevo rublo bielorruso"}
             other{"nuevos rublos bielorrusos"}
         }
-        BYR{
+        BYN{
             one{"rublo bielorruso"}
             other{"rublos bielorrusos"}
+        }
+        BYR{
+            one{"rublo bielorruso (2000–2016)"}
+            other{"rublos bielorrusos (2000–2016)"}
         }
         BZD{
             one{"dólar beliceño"}
@@ -1843,8 +1853,8 @@ es{
             other{"intis peruanos"}
         }
         PEN{
-            one{"sol peruano"}
-            other{"soles peruanos"}
+            one{"nuevo sol peruano"}
+            other{"nuevos soles peruanos"}
         }
         PES{
             one{"sol peruano (1863–1965)"}
@@ -2179,5 +2189,5 @@ es{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.26.52"}
+    Version{"2.1.28.80"}
 }

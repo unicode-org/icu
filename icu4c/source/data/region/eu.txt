@@ -178,12 +178,12 @@ eu{
         MC{"Monako"}
         MD{"Moldavia"}
         ME{"Montenegro"}
-        MF{"Saint Martin"}
+        MF{"San Martin"}
         MG{"Madagaskar"}
         MH{"Marshall uharteak"}
         MK{"Mazedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar (Birmania)"}
         MN{"Mongolia"}
         MO{"Macau AEB Txina"}
         MP{"Iparraldeko Mariana uharteak"}
@@ -237,7 +237,7 @@ eu{
         SD{"Sudan"}
         SE{"Suedia"}
         SG{"Singapur"}
-        SH{"Saint Helena"}
+        SH{"Santa Helena"}
         SI{"Eslovenia"}
         SJ{"Svalbard eta Jan Mayen uharteak"}
         SK{"Eslovakia"}
@@ -253,7 +253,7 @@ eu{
         SY{"Siria"}
         SZ{"Swazilandia"}
         TA{"Tristan da Cunha"}
-        TC{"Turk eta Caicos uharteak"}
+        TC{"Turk eta Caico uharteak"}
         TD{"Txad"}
         TF{"Hegoaldeko lurralde frantsesak"}
         TG{"Togo"}
@@ -302,9 +302,10 @@ eu{
     Countries%variant{
         CD{"Kongo (KED)"}
         CG{"Kongo (errepublika)"}
+        CZ{"Txekia"}
         FK{"Falkland uharteak (Malvina uharteak)"}
         MK{"Mazedonia (Mazedoniako Yugoslaviar Errepublika ohia)"}
         TL{"Timor ekialdea"}
     }
-    Version{"2.1.26.0"}
+    Version{"2.1.29.20"}
 }

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pt{
-    Version{"2.1.26.0"}
+    Version{"2.1.28.79"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,6 +79,7 @@ pt{
                 dnam{"quilômetros quadrados"}
                 one{"{0} quilômetro quadrado"}
                 other{"{0} quilômetros quadrados"}
+                per{"{0} por quilômetro quadrado"}
             }
             square-meter{
                 dnam{"metros quadrados"}
@@ -90,6 +91,7 @@ pt{
                 dnam{"milhas quadradas"}
                 one{"{0} milha quadrada"}
                 other{"{0} milhas quadradas"}
+                per{"{0} por milha quadrada"}
             }
             square-yard{
                 dnam{"jardas quadradas"}
@@ -105,6 +107,21 @@ pt{
                 dnam{"kilates"}
                 one{"{0} kilate"}
                 other{"{0} kilates"}
+            }
+            milligram-per-deciliter{
+                dnam{"miligramas por decilitro"}
+                one{"{0} miligrama por decilitro"}
+                other{"{0} miligramas por decilitro"}
+            }
+            millimole-per-liter{
+                dnam{"milimols por litro"}
+                one{"{0} milimol por litro"}
+                other{"{0} milimols por litro"}
+            }
+            part-per-million{
+                dnam{"partes por milhão"}
+                one{"{0} parte por milhão"}
+                other{"{0} partes por milhão"}
             }
         }
         consumption{
@@ -122,6 +139,11 @@ pt{
                 dnam{"milhas por galão"}
                 one{"{0} milha por galão"}
                 other{"{0} milhas por galão"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"milhas por galão imperial"}
+                one{"{0} milha por galão imperial"}
+                other{"{0} milhas por galão imperial"}
             }
         }
         coordinate{
@@ -654,6 +676,12 @@ pt{
                 other{"{0} galões"}
                 per{"{0} por galão"}
             }
+            gallon-imperial{
+                dnam{"galões imperiais"}
+                one{"{0} galão imperial"}
+                other{"{0} galões imperiais"}
+                per{"{0} por galão imperial"}
+            }
             hectoliter{
                 dnam{"hectolitros"}
                 one{"{0} hectolitro"}
@@ -1016,6 +1044,7 @@ pt{
                 dnam{"km²"}
                 one{"{0} km²"}
                 other{"{0} km²"}
+                per{"{0}/km²"}
             }
             square-meter{
                 dnam{"metros²"}
@@ -1027,6 +1056,7 @@ pt{
                 dnam{"milhas²"}
                 one{"{0} mi²"}
                 other{"{0} mi²"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"jardas²"}
@@ -1042,6 +1072,21 @@ pt{
                 dnam{"kilates"}
                 one{"{0} k"}
                 other{"{0} k"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dl"}
+                one{"{0} mg/dl"}
+                other{"{0} mg/dl"}
+            }
+            millimole-per-liter{
+                dnam{"milimol/litro"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            part-per-million{
+                dnam{"partes/milhão"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
         }
         consumption{
@@ -1059,6 +1104,11 @@ pt{
                 dnam{"milhas/gal"}
                 one{"{0} mpg"}
                 other{"{0} mpg"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"milhas/gal. imp."}
+                one{"{0} mpg imp."}
+                other{"{0} mpg imp."}
             }
         }
         coordinate{
@@ -1590,6 +1640,12 @@ pt{
                 one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"gal. imp."}
+                one{"{0} gal. imp."}
+                other{"{0} gal. imp."}
+                per{"{0}/gal. imp."}
             }
             hectoliter{
                 dnam{"hl"}

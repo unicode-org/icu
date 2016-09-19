@@ -2,5 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 es_SV{
     %%Parent{"es_419"}
-    Version{"2.1.25.97"}
+    Languages{
+        ace{"acehnés"}
+        arp{"arapaho"}
+        bho{"bhojpuri"}
+        grc{"griego antiguo"}
+        nso{"sotho septentrional"}
+        ss{"siswati"}
+        wo{"wolof"}
+    }
+    Version{"2.1.27.99"}
 }

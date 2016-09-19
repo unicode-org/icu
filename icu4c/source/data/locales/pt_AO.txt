@@ -2,5 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pt_AO{
     %%Parent{"pt_PT"}
-    Version{"2.1.25.97"}
+    NumberElements{
+        minimumGroupingDigits{"1"}
+    }
+    Version{"2.1.27.40"}
 }

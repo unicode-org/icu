@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pt_PT{
-    Version{"2.1.26.0"}
+    Version{"2.1.29.54"}
     units{
         acceleration{
             g-force{
@@ -20,6 +20,7 @@ pt_PT{
                 dnam{"quilómetros quadrados"}
                 one{"{0} quilómetro quadrado"}
                 other{"{0} quilómetros quadrados"}
+                per{"{0} por quilómetro quadrado"}
             }
         }
         concentr{
@@ -109,6 +110,10 @@ pt_PT{
                 one{"{0} chávena"}
                 other{"{0} chávenas"}
             }
+            cup-metric{
+                one{"{0} chávena métrica"}
+                other{"{0} chávenas métricas"}
+            }
         }
     }
     unitsNarrow{
@@ -190,6 +195,9 @@ pt_PT{
             }
             mile-per-gallon{
                 dnam{"milhas/galão"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"milhas/gal imp."}
             }
         }
         duration{
@@ -288,6 +296,16 @@ pt_PT{
                 dnam{"chávenas"}
                 one{"{0} cháv."}
                 other{"{0} cháv."}
+            }
+            cup-metric{
+                one{"{0} chám"}
+                other{"{0} chám"}
+            }
+            gallon-imperial{
+                dnam{"gal imp."}
+                one{"{0} gal imp."}
+                other{"{0} gal imp."}
+                per{"{0}/gal imp."}
             }
             tablespoon{
                 dnam{"cs"}

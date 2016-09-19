@@ -13,7 +13,7 @@ nl{
             "1: =%spellout-numbering=;",
             "%spellout-numbering-year:",
             "-x: min >>;",
-            "x.x: =#,###0.#=;",
+            "x.x: =0.0=;",
             "0: =%spellout-numbering=;",
             "1100/100: <<>%%2d-year>;",
             "2000: =%spellout-numbering=;",
@@ -106,5 +106,5 @@ nl{
             "1000000000000000000: =#,##0=.;",
         }
     }
-    Version{"2.1.19.14"}
+    Version{"2.1.27.22"}
 }
