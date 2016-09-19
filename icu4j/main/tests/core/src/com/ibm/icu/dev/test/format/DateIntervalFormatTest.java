@@ -1354,6 +1354,43 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     @Test
+    public void testGetInstance_String_DateIntervalInfo() {
+        DateIntervalInfo dateIntervalInfo = new DateIntervalInfo(new ULocale("ca"));
+        DateIntervalFormat dateIntervalFormat = DateIntervalFormat.getInstance(
+                DateFormat.YEAR_MONTH, Locale.ENGLISH, dateIntervalInfo);
+        Calendar from = Calendar.getInstance();
+        from.set(2000, Calendar.JANUARY, 1, 12, 0);
+        Calendar to = Calendar.getInstance();
+        to.set(2001, Calendar.FEBRUARY, 1, 12, 0);
+        DateInterval interval = new DateInterval(from.getTimeInMillis(), to.getTimeInMillis());
+        dateIntervalFormat.setTimeZone(from.getTimeZone());
+        // Month names are default (English), format is Catalan
+        assertEquals("Wrong date interval",
+                "January de 2000 – February de 2001", dateIntervalFormat.format(interval));
+    }
+
+    @Test
+    public void testGetInstance_String_Locale_DateIntervalInfo() {
+        DateIntervalInfo dateIntervalInfo = new DateIntervalInfo(new ULocale("ca"));
+        DateIntervalFormat dateIntervalFormat = DateIntervalFormat.getInstance(
+                DateFormat.YEAR_MONTH, Locale.GERMAN, dateIntervalInfo);
+        Calendar from = Calendar.getInstance();
+        from.set(2000, Calendar.JANUARY, 1, 12, 0);
+        Calendar to = Calendar.getInstance();
+        to.set(2001, Calendar.FEBRUARY, 1, 12, 0);
+        DateInterval interval = new DateInterval(from.getTimeInMillis(), to.getTimeInMillis());
+        dateIntervalFormat.setTimeZone(from.getTimeZone());
+        // Month names are German, format is Catalan
+        assertEquals("Wrong date interval",
+                "Januar de 2000 – Februar de 2001", dateIntervalFormat.format(interval));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testParseObject_notSupported() throws ParseException {
+        DateIntervalFormat.getInstance(DateFormat.YEAR_MONTH).parseObject("");
+    }
+
+    @Test
     public void TestTicket9919GetInstance() {
         // Creating a DateIntervalFormat with a custom DateIntervalInfo
         // object used to corrupt the cache.

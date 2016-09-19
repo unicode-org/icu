@@ -2979,7 +2979,7 @@ public final class UCharacterTest extends TestFmwk
     }
 
     /*
-     * The following method tests
+     * The following methods test
      *      public static String toTitleCase(Locale locale, String str, BreakIterator breakiter)
      */
     @Test
@@ -3001,6 +3001,19 @@ public final class UCharacterTest extends TestFmwk
         // TODO: Tests when "if(c<=0xffff)" is false
         // TODO: Tests when "if(titleLimit<index)" is false
         // TODO: Tests when "else if((nc=iter.nextCaseMapCP())>=0)" is false
+    }
+
+    @Test
+    public void testToTitleCase_Locale_String_BreakIterator_I() {
+        String titleCase = UCharacter.toTitleCase(Locale.forLanguageTag("nl"), "ijsland", null,
+                UCharacter.FOLD_CASE_DEFAULT);
+        assertEquals("Wrong title casing", "IJsland", titleCase);
+    }
+
+    @Test
+    public void testToTitleCase_String_BreakIterator_en() {
+        String titleCase = UCharacter.toTitleCase(Locale.forLanguageTag("en"), "ijsland", null);
+        assertEquals("Wrong title casing", "Ijsland", titleCase);
     }
     /*
      * The following method tests
@@ -3553,5 +3566,18 @@ public final class UCharacterTest extends TestFmwk
         us.freeze();
         if(us.isFrozen() != true)
             errln("Unicode.isFrozen() was suppose to return true.");
+    }
+
+    /* Tests the methods
+     *      public static String getNameAlias() and
+     *      public static String getCharFromNameAlias()
+     */
+    @Test
+    public void testNameAliasing() {
+        int input = '\u01a2';
+        String alias = UCharacter.getNameAlias(input);
+        assertEquals("Wrong name alias", "LATIN CAPITAL LETTER GHA", alias);
+        int output = UCharacter.getCharFromNameAlias(alias);
+        assertEquals("alias for '" + input + "'", input, output);
     }
 }

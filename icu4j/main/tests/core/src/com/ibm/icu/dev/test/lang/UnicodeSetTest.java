@@ -13,6 +13,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -2704,5 +2705,38 @@ public class UnicodeSetTest extends TestFmwk {
             assertEquals("StringRange " + i, expected, actual);
             ++i;
         }
+    }
+
+    @Test
+    public void testAddAll_CharacterSequences() {
+        UnicodeSet unicodeSet = new UnicodeSet();
+        unicodeSet.addAll("a", "b");
+        assertEquals("Wrong UnicodeSet pattern", "[ab]", unicodeSet.toPattern(true));
+        unicodeSet.addAll("b", "x");
+        assertEquals("Wrong UnicodeSet pattern", "[abx]", unicodeSet.toPattern(true));
+        unicodeSet.addAll(new CharSequence[]{new StringBuilder("foo"), new StringBuffer("bar")});
+        assertEquals("Wrong UnicodeSet pattern", "[abx{bar}{foo}]", unicodeSet.toPattern(true));
+    }
+
+    @Test
+    public void testCompareTo() {
+        Set<String> test_set = Collections.emptySet();
+        assertEquals("UnicodeSet not empty", 0, UnicodeSet.EMPTY.compareTo(test_set));
+        assertEquals("UnicodeSet comparison wrong",
+                0, UnicodeSet.fromAll("a").compareTo(Collections.singleton("a")));
+
+        // Longer is bigger
+        assertTrue("UnicodeSet is empty", 
+                UnicodeSet.ALL_CODE_POINTS.compareTo(test_set) > 0);
+        assertTrue("UnicodeSet not empty",
+                UnicodeSet.EMPTY.compareTo(Collections.singleton("a")) < 0);
+
+        // Equal length compares on first difference.
+        assertTrue("UnicodeSet comparison wrong",
+                UnicodeSet.fromAll("a").compareTo(Collections.singleton("b")) < 0);
+        assertTrue("UnicodeSet comparison wrong",
+                UnicodeSet.fromAll("ab").compareTo(Arrays.asList("a", "c")) < 0);
+        assertTrue("UnicodeSet comparison wrong",
+                UnicodeSet.fromAll("b").compareTo(Collections.singleton("a")) > 0);
     }
 }
