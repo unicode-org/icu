@@ -664,6 +664,7 @@ Locale::setToBogus() {
     *script = 0;
     *country = 0;
     fIsBogus = TRUE;
+    variantBegin = 0;
 }
 
 const Locale& U_EXPORT2
