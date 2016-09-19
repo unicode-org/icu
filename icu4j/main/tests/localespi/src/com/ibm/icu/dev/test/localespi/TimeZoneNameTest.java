@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -151,6 +152,102 @@ public class TimeZoneNameTest extends TestFmwk {
                             + " for time zone " + tz.getID() + " in locale " + icuLoc
                             + " (daylight=" + daylight + ", style=" + styleStr + ")");
                 }
+            }
+        }
+    }
+
+    @Test
+    public void testGetInstance_Locale() {
+        TimeZoneNames uLocaleInstance = TimeZoneNames.getInstance(ULocale.CANADA);
+        TimeZoneNames localeInstance = TimeZoneNames.getInstance(Locale.CANADA);
+
+        Set<String> uLocaleAvailableIds = uLocaleInstance.getAvailableMetaZoneIDs();
+        Set<String> localeAvailableIds = localeInstance.getAvailableMetaZoneIDs();
+        assertEquals("Available ids", uLocaleAvailableIds, localeAvailableIds);
+
+        for (String availableId : uLocaleAvailableIds) {
+            long date = 1458385200000L;
+            TimeZoneNames.NameType nameType = TimeZoneNames.NameType.SHORT_GENERIC;
+            String uLocaleName = uLocaleInstance.getDisplayName(availableId, nameType, date);
+            String localeName = localeInstance.getDisplayName(availableId, nameType, date);
+            assertEquals("Id: " + availableId, uLocaleName, localeName);
+        }
+    }
+
+    @Test
+    public void testGetAvailableMetaZoneIDs() {
+        TimeZoneNames japaneseNames = TimeZoneNames.getInstance(ULocale.JAPANESE);
+        Set<String> allJapan = japaneseNames.getAvailableMetaZoneIDs();
+
+        TimeZoneNames tzdbNames = TimeZoneNames.getTZDBInstance(ULocale.CHINESE);
+        Set<String> tzdbAll = tzdbNames.getAvailableMetaZoneIDs();
+
+        // The data is the same in the current implementation.
+        assertEquals("MetaZone IDs different between locales", allJapan, tzdbAll);
+
+        // Make sure that there is something.
+        assertTrue("count of zone ids is less than 100", allJapan.size() >= 180);
+    }
+
+    @Test
+    public void testGetAvailableMetaZoneIDs_String() {
+        TimeZoneNames japaneseNames = TimeZoneNames.getInstance(ULocale.JAPANESE);
+        assertEquals("Timezone name mismatch", Collections.singleton("America_Pacific"),
+                japaneseNames.getAvailableMetaZoneIDs("America/Los_Angeles"));
+
+        TimeZoneNames tzdbNames = TimeZoneNames.getTZDBInstance(ULocale.CHINESE);
+        assertEquals("Timezone name mismatch", Collections.singleton("Taipei"),
+                tzdbNames.getAvailableMetaZoneIDs("Asia/Taipei"));
+    }
+
+    @Test
+    public void testGetMetaZoneDisplayName() {
+        TimeZoneNames usNames = TimeZoneNames.getInstance(ULocale.US);
+
+        String europeanCentralName = usNames.getMetaZoneDisplayName("Europe_Central",
+                TimeZoneNames.NameType.LONG_STANDARD);
+        assertEquals("Timezone name mismatch", "Central European Standard Time",
+                europeanCentralName);
+
+        TimeZoneNames tzdbNames = TimeZoneNames.getTZDBInstance(ULocale.CHINESE);
+        String americaPacificName = tzdbNames.getMetaZoneDisplayName("America_Pacific",
+                TimeZoneNames.NameType.SHORT_DAYLIGHT);
+        assertEquals("Timezone name mismatch", "PDT", americaPacificName);
+    }
+
+    @Test
+    public void testGetMetaZoneID() {
+        TimeZoneNames usNames = TimeZoneNames.getInstance(ULocale.US);
+
+        String europeanCentralName = usNames.getMetaZoneID("Europe/Paris", 0);
+        assertEquals("Timezone name mismatch", "Europe_Central", europeanCentralName);
+
+        TimeZoneNames tzdbNames = TimeZoneNames.getTZDBInstance(ULocale.KOREAN);
+        String seoulName = tzdbNames.getMetaZoneID("Asia/Seoul", 0);
+        assertEquals("Timezone name mismatch", "Korea", seoulName);
+
+        // Now try Jan 1st 1945 GMT
+        seoulName = tzdbNames.getMetaZoneID("Asia/Seoul", -786240000000L);
+        assertNull("Timezone name mismatch", seoulName);
+    }
+
+    @Test
+    public void testGetTimeZoneDisplayName() {
+        TimeZoneNames frenchNames = TimeZoneNames.getInstance(ULocale.FRENCH);
+        String dublinName = frenchNames.getTimeZoneDisplayName("Europe/Dublin",
+                TimeZoneNames.NameType.LONG_DAYLIGHT);
+        assertEquals("Timezone name mismatch", "heure d’été irlandaise", dublinName);
+
+        String dublinLocation = frenchNames.getTimeZoneDisplayName("Europe/Dublin",
+                TimeZoneNames.NameType.EXEMPLAR_LOCATION);
+        assertEquals("Timezone name mismatch", "Dublin", dublinLocation);
+
+        // All the names returned by this are null.
+        TimeZoneNames tzdbNames = TimeZoneNames.getTZDBInstance(ULocale.KOREAN);
+        for (String tzId : TimeZone.getAvailableIDs()) {
+            for (TimeZoneNames.NameType nameType : TimeZoneNames.NameType.values()) {
+                String name = tzdbNames.getTimeZoneDisplayName(tzId, nameType);
+                assertNull("TZ:" + tzId + ", NameType: " + nameType + ", value: " + name, name);
             }
         }
     }
