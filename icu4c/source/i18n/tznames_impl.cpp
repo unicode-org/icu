@@ -1822,7 +1822,7 @@ TZDBNames::createInstance(UResourceBundle* rb, const char* key) {
         if (regions != NULL) {
             char **p = regions;
             for (int32_t i = 0; i < numRegions; p++, i++) {
-                uprv_free(p);
+                uprv_free(*p);
             }
             uprv_free(regions);
         }
