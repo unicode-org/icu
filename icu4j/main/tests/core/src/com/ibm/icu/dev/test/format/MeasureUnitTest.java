@@ -985,10 +985,10 @@ public class MeasureUnitTest extends TestFmwk {
                 {_3h_4s_5m, "3h 4s 5m"},
                 {_3h_5h, "3h 5h"}};
         Object[][] fullDataDe = {
-                {_1m_59_9996s, "1 Minute und 59,9996 Sekunden"},
+                {_1m_59_9996s, "1 Minute, 59,9996 Sekunden"},
                 {_19m, "19 Minuten"},
-                {_1h_23_5s, "1 Stunde und 23,5 Sekunden"},
-                {_1h_23_5m, "1 Stunde und 23,5 Minuten"},
+                {_1h_23_5s, "1 Stunde, 23,5 Sekunden"},
+                {_1h_23_5m, "1 Stunde, 23,5 Minuten"},
                 {_1h_0m_23s, "1 Stunde, 0 Minuten und 23 Sekunden"},
                 {_2y_5M_3w_4d, "2 Jahre, 5 Monate, 3 Wochen und 4 Tage"}};
         Object[][] numericDataDe = {
@@ -1253,14 +1253,14 @@ public class MeasureUnitTest extends TestFmwk {
             { ULocale.FRENCH,   FormatWidth.NUMERIC, "05:37" },
             { ulocIcelandic,    FormatWidth.NARROW,  "5 klst. og 37 m\u00EDn." },
             { ulocIcelandic,    FormatWidth.NUMERIC, "5:37" },
-            { ULocale.JAPANESE, FormatWidth.NARROW,  "5\u6642\u959337\u5206" },
+            { ULocale.JAPANESE, FormatWidth.NARROW,  "5h37m" },
             { ULocale.JAPANESE, FormatWidth.NUMERIC, "5:37" },
             { ulocNorwegianBok, FormatWidth.NARROW,  "5t, 37m" },
-            { ulocNorwegianBok, FormatWidth.NUMERIC, "5.37" },
+            { ulocNorwegianBok, FormatWidth.NUMERIC, "5:37" },
             { ulocDutch,        FormatWidth.NARROW,  "5 u, 37 m" },
             { ulocDutch,        FormatWidth.NUMERIC, "5:37" },
             { ulocNorwegianNyn, FormatWidth.NARROW,  "5 h og 37 min" },
-            { ulocNorwegianNyn, FormatWidth.NUMERIC, "5.37" },
+            { ulocNorwegianNyn, FormatWidth.NUMERIC, "5:37" },
             { ulocSwedish,      FormatWidth.NARROW,  "5h 37m" },
             { ulocSwedish,      FormatWidth.NUMERIC, "5:37" },
             { ULocale.CHINESE,  FormatWidth.NARROW,  "5\u5C0F\u65F637\u5206\u949F" },

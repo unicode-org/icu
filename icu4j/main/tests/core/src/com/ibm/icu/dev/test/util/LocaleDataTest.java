@@ -443,7 +443,7 @@ public class LocaleDataTest extends TestFmwk{
             errln("Unexpected LocaleDisplayPattern for locale: "+ locale);
         }
         logln("LocaleSeparator for locale " + locale + ": " + separator);
-        if (!separator.equals("\u3001")) {
+        if (!separator.equals("\uFF0C")) {
             errln("Unexpected LocaleSeparator for locale: "+ locale);
         }
 

@@ -1061,7 +1061,7 @@ public class NumberFormatTest extends TestFmwk {
                 // test locale without currency information
                 {"root", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"},
                 {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers
-                {"root@numbers=arab", "-1.23", "USD", "\u200F-\u0661\u066B\u0662\u0663\u00A0US$", "\u200F-\u0661\u066B\u0662\u0663\u00A0USD", "\u200F-\u0661\u066B\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
+                {"root@numbers=arab", "-1.23", "USD", "\u061C-\u0661\u066B\u0662\u0663\u00A0US$", "\u061C-\u0661\u066B\u0662\u0663\u00A0USD", "\u061C-\u0661\u066B\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
                 {"es_AR", "1", "INR", "INR\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
                 {"ar_EG", "1", "USD", "١٫٠٠\u00A0US$", "١٫٠٠\u00A0USD", "١٫٠٠ دولار أمريكي"},
         };
@@ -2557,7 +2557,7 @@ public class NumberFormatTest extends TestFmwk {
         plCurrencyFmt = NumberFormat.getInstance(new Locale("ar", "eg"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer11 = new StringBuffer();
         plCurrencyFmt.format(negAmount, buffer11, cp);
-        assertEquals("‏-٣٤٫٥٧ جنيه مصري", "‏-٣٤٫٥٧ جنيه مصري", buffer11.toString());
+        assertEquals("؜-٣٤٫٥٧ جنيه مصري", "؜-٣٤٫٥٧ جنيه مصري", buffer11.toString());
         assertEquals("cp begin", 8, cp.getBeginIndex());
         assertEquals("cp end", 17, cp.getEndIndex());
     }
