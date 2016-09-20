@@ -42,10 +42,10 @@
  * <a href="http://unicode.org/reports/tr39">Unicode Technical Standard #39</a>, has two main functions:
  *
  * <ol>
- * <li>Checking whether two strings are visually <em>confusable</em> with each other, such as "desordenado" and
- * "ԁеѕогԁепаԁо".</li>
+ * <li>Checking whether two strings are visually <em>confusable</em> with each other, such as "Harvest" and
+ * &quot;&Eta;arvest&quot;, where the second string starts with the Greek capital letter Eta.</li>
  * <li>Checking whether an individual string is likely to be an attempt at confusing the reader (<em>spoof
- * detection</em>), such as "pаypаl" spelled with Cyrillic 'а' characters.</li>
+ * detection</em>), such as "paypal" with some Latin characters substituted with Cyrillic look-alikes.</li>
  * </ol>
  *
  * <p>
@@ -63,19 +63,25 @@
  *
  * \code{.c}
  * UErrorCode status = U_ZERO_ERROR;
+ * UChar* str1 = (UChar*) u"Harvest";
+ * UChar* str2 = (UChar*) u"\u0397arvest";  // with U+0397 GREEK CAPITAL LETTER ETA
+ *
  * USpoofChecker* sc = uspoof_open(&status);
  * uspoof_setChecks(sc, USPOOF_CONFUSABLE, &status);
- * int32_t bitmask = uspoof_areConfusable(sc, (UChar*) u"desordenado", -1, (UChar*) u"ԁеѕогԁепаԁо", -1, &status);
- * UBool result = (bitmask & USPOOF_ALL_CHECKS) != 0;
- * printf("areConfusable: %d (success: %d)\n", result, U_SUCCESS(status));  // areConfusable: 1 (success: 1)
+ *
+ * int32_t bitmask = uspoof_areConfusable(sc, str1, -1, str2, -1, &status);
+ * UBool result = bitmask != 0;
+ * // areConfusable: 1 (status: U_ZERO_ERROR)
+ * printf("areConfusable: %d (status: %s)\n", result, u_errorName(status));
  * uspoof_close(sc);
  * \endcode
  *
  * <p>
- * The second line of the example creates a <code>USpoofChecker</code> object; the third line enables confusable
- * checking and disables all other checks; the fourth line performs the confusability test; and the fifth line extracts
- * the result out of the confusability test. For best performance, the instance should be created once (e.g., upon
- * application startup), and the efficient {@link uspoof_areConfusable} method can be used at runtime.
+ * The call to {@link uspoof_open} creates a <code>USpoofChecker</code> object; the call to {@link uspoof_setChecks}
+ * enables confusable checking and disables all other checks; the call to {@link uspoof_areConfusable} performs the
+ * confusability test; and the following line extracts the result out of the return value. For best performance,
+ * the instance should be created once (e.g., upon application startup), and the efficient
+ * {@link uspoof_areConfusable} method can be used at runtime.
  *
  * <p>
  * The type {@link LocalUSpoofCheckerPointer} is exposed for C++ programmers.  It will automatically call
@@ -95,27 +101,28 @@
  *
  * \code{.c}
  * UErrorCode status = U_ZERO_ERROR;
- * UChar* str1 = (UChar*) u"desordenado";
- * UChar* str2 = (UChar*) u"ԁеѕогԁепаԁо";
+ * UChar* str1 = (UChar*) u"Harvest";
+ * UChar* str2 = (UChar*) u"\u0397arvest";  // with U+0397 GREEK CAPITAL LETTER ETA
  *
  * USpoofChecker* sc = uspoof_open(&status);
  * uspoof_setChecks(sc, USPOOF_CONFUSABLE, &status);
  *
  * // Get skeleton 1
  * int32_t skel1Len = uspoof_getSkeleton(sc, 0, str1, -1, NULL, 0, &status);
- * UChar* skel1 = (UChar*) malloc(skel1Len * sizeof(UChar));
+ * UChar* skel1 = (UChar*) malloc(++skel1Len * sizeof(UChar));
  * status = U_ZERO_ERROR;
  * uspoof_getSkeleton(sc, 0, str1, -1, skel1, skel1Len, &status);
  *
  * // Get skeleton 2
  * int32_t skel2Len = uspoof_getSkeleton(sc, 0, str2, -1, NULL, 0, &status);
- * UChar* skel2 = (UChar*) malloc(skel2Len * sizeof(UChar));
+ * UChar* skel2 = (UChar*) malloc(++skel2Len * sizeof(UChar));
  * status = U_ZERO_ERROR;
  * uspoof_getSkeleton(sc, 0, str2, -1, skel2, skel2Len, &status);
  *
  * // Are the skeletons the same?
- * UBool result = (skel1Len == skel2Len) && memcmp(skel1, skel2, skel1Len) == 0;
- * printf("areConfusable: %d (success: %d)\n", result, U_SUCCESS(status));  // areConfusable: 1 (success: 1)
+ * UBool result = u_strCompare(skel1, -1, skel2, -1, FALSE) == 0;
+ * // areConfusable: 1 (status: U_ZERO_ERROR)
+ * printf("areConfusable: %d (status: %s)\n", result, u_errorName(status));
  * uspoof_close(sc);
  * free(skel1);
  * free(skel2);
@@ -126,21 +133,19 @@
  * {uspoof_areConfusable} many times in a loop, {uspoof_getSkeleton} can be used instead, as shown below:
  *
  * \code{.c}
- * // Setup:
  * UErrorCode status = U_ZERO_ERROR;
- * UChar* dictionary[2] = { (UChar*) u"lorem", (UChar*) u"ipsum" };
- * UChar* skeletons[sizeof(dictionary)/sizeof(UChar*)];
- * int32_t skeletonLengths[sizeof(dictionary)/sizeof(UChar*)];
+ * #define DICTIONARY_LENGTH 2
+ * UChar* dictionary[DICTIONARY_LENGTH] = { (UChar*) u"lorem", (UChar*) u"ipsum" };
+ * UChar* skeletons[DICTIONARY_LENGTH];
  * UChar* str = (UChar*) u"1orern";
  *
  * // Setup:
  * USpoofChecker* sc = uspoof_open(&status);
  * uspoof_setChecks(sc, USPOOF_CONFUSABLE, &status);
- * for (size_t i=0; i<sizeof(dictionary)/sizeof(UChar*); i++) {
+ * for (size_t i=0; i<DICTIONARY_LENGTH; i++) {
  *     UChar* word = dictionary[i];
  *     int32_t len = uspoof_getSkeleton(sc, 0, word, -1, NULL, 0, &status);
- *     skeletons[i] = (UChar*) malloc(len * sizeof(UChar));
- *     skeletonLengths[i] = len;
+ *     skeletons[i] = (UChar*) malloc(++len * sizeof(UChar));
  *     status = U_ZERO_ERROR;
  *     uspoof_getSkeleton(sc, 0, word, -1, skeletons[i], len, &status);
  * }
@@ -148,22 +153,20 @@
  * // Live Check:
  * {
  *     int32_t len = uspoof_getSkeleton(sc, 0, str, -1, NULL, 0, &status);
- *     UChar* skel = (UChar*) malloc(len * sizeof(UChar));
+ *     UChar* skel = (UChar*) malloc(++len * sizeof(UChar));
  *     status = U_ZERO_ERROR;
  *     uspoof_getSkeleton(sc, 0, str, -1, skel, len, &status);
  *     UBool result = FALSE;
- *     for (size_t i=0; i<sizeof(dictionary)/sizeof(UChar*); i++) {
- *         if (len == skeletonLengths[i] && memcmp(skel, skeletons[i], len) == 0) {
- *             result = TRUE;
- *         }
+ *     for (size_t i=0; i<DICTIONARY_LENGTH; i++) {
+ *         result = u_strCompare(skel, -1, skeletons[i], -1, FALSE) == 0;
+ *         if (result == TRUE) { break; }
  *     }
- *     // Has confusable in dictionary: 1 (success: 1)
- *     printf("Has confusable in dictionary: %d (success: %d)\n", result, U_SUCCESS(status));
+ *     // Has confusable in dictionary: 1 (status: U_ZERO_ERROR)
+ *     printf("Has confusable in dictionary: %d (status: %s)\n", result, u_errorName(status));
  *     free(skel);
  * }
  *
- * // Cleanup:
- * for (size_t i=0; i<sizeof(dictionary)/sizeof(UChar*); i++) {
+ * for (size_t i=0; i<DICTIONARY_LENGTH; i++) {
  *     free(skeletons[i]);
  * }
  * uspoof_close(sc);
@@ -182,7 +185,7 @@
  *
  * \code{.c}
  * UErrorCode status = U_ZERO_ERROR;
- * UChar* str = (UChar*) u"pаypаl";  // with Cyrillic 'а' characters
+ * UChar* str = (UChar*) u"p\u0430ypal";  // with U+0430 CYRILLIC SMALL LETTER A
  *
  * // Get the default set of allowable characters:
  * USet* allowed = uset_openEmpty();
@@ -195,7 +198,8 @@
  *
  * int32_t bitmask = uspoof_check(sc, str, -1, NULL, &status);
  * UBool result = bitmask != 0;
- * printf("fails checks: %d (success: %d)\n", result, U_SUCCESS(status));  // fails checks: 1 (success: 1)
+ * // fails checks: 1 (status: U_ZERO_ERROR)
+ * printf("fails checks: %d (status: %s)\n", result, u_errorName(status));
  * uspoof_close(sc);
  * uset_close(allowed);
  * \endcode
@@ -216,7 +220,7 @@
  *
  * \code{.c}
  * UErrorCode status = U_ZERO_ERROR;
- * UChar* str = (UChar*) u"pаypаl";  // with Cyrillic 'а' characters
+ * UChar* str = (UChar*) u"p\u0430ypal";  // with U+0430 CYRILLIC SMALL LETTER A
  *
  * // Get the default set of allowable characters:
  * USet* allowed = uset_openEmpty();
@@ -233,8 +237,8 @@
  * int32_t failures1 = bitmask;
  * int32_t failures2 = uspoof_getCheckResultChecks(checkResult, &status);
  * assert(failures1 == failures2);
- * // checks that failed: 16 (success: 1)
- * printf("checks that failed: %d (success: %d)\n", failures1, U_SUCCESS(status));
+ * // checks that failed: 0x00000010 (status: U_ZERO_ERROR)
+ * printf("checks that failed: %#010x (status: %s)\n", failures1, u_errorName(status));
  *
  * // Cleanup:
  * uspoof_close(sc);
@@ -247,7 +251,7 @@
  *
  * \code{.cpp}
  * UErrorCode status = U_ZERO_ERROR;
- * UnicodeString str((UChar*) u"pаypаl");  // with Cyrillic 'а' characters
+ * UnicodeString str((UChar*) u"p\u0430ypal");  // with U+0430 CYRILLIC SMALL LETTER A
  *
  * // Get the default set of allowable characters:
  * UnicodeSet allowed;
@@ -264,8 +268,8 @@
  * int32_t failures1 = bitmask;
  * int32_t failures2 = uspoof_getCheckResultChecks(checkResult.getAlias(), &status);
  * assert(failures1 == failures2);
- * // checks that failed: 16 (success: 1)
- * printf("checks that failed: %d (success: %d)\n", failures1, U_SUCCESS(status));
+ * // checks that failed: 0x00000010 (status: U_ZERO_ERROR)
+ * printf("checks that failed: %#010x (status: %s)\n", failures1, u_errorName(status));
  *
  * // Explicit cleanup not necessary.
  * \endcode
@@ -291,14 +295,15 @@
  *
  * \code{.c}
  * UErrorCode status = U_ZERO_ERROR;
- * UChar* str = (UChar*) u"৪8";
+ * UChar* str = (UChar*) u"8\u09EA";  // 8 mixed with U+09EA BENGALI DIGIT FOUR
  *
  * USpoofChecker* sc = uspoof_open(&status);
  * uspoof_setChecks(sc, USPOOF_INVISIBLE | USPOOF_MIXED_NUMBERS, &status);
  *
  * int32_t bitmask = uspoof_check2(sc, str, -1, NULL, &status);
  * UBool result = bitmask != 0;
- * printf("fails checks: %d (success: %d)\n", result, U_SUCCESS(status));  // fails checks: 1 (success: 1)
+ * // fails checks: 1 (status: U_ZERO_ERROR)
+ * printf("fails checks: %d (status: %s)\n", result, u_errorName(status));
  * uspoof_close(sc);
  * \endcode
  *
@@ -307,7 +312,7 @@
  *
  * \code{.cpp}
  * UErrorCode status = U_ZERO_ERROR;
- * UnicodeString str((UChar*) u"pаypаl");  // with Cyrillic 'а' characters
+ * UnicodeString str((UChar*) u"p\u0430ypal");  // with U+0430 CYRILLIC SMALL LETTER A
  *
  * // Get the default set of allowable characters:
  * UnicodeSet allowed;
@@ -323,14 +328,14 @@
  * int32_t bitmask = uspoof_check2UnicodeString(sc.getAlias(), str, checkResult.getAlias(), &status);
  *
  * URestrictionLevel restrictionLevel = uspoof_getCheckResultRestrictionLevel(checkResult.getAlias(), &status);
- * // Since USPOOF_AUX_INFO was enabled, the restriction level is also available via the bitmask:
+ * // Since USPOOF_AUX_INFO was enabled, the restriction level is also available in the upper bits of the bitmask:
  * assert((restrictionLevel & bitmask) == restrictionLevel);
- * // Restriction level: 1342177280 (success: 1)
- * printf("Restriction level: %d (success: %d)\n", restrictionLevel, U_SUCCESS(status));
+ * // Restriction level: 0x50000000 (status: U_ZERO_ERROR)
+ * printf("Restriction level: %#010x (status: %s)\n", restrictionLevel, u_errorName(status));
  * \endcode
  *
  * <p>
- * The code '1342177280' corresponds to the restriction level USPOOF_MINIMALLY_RESTRICTIVE.  Since
+ * The code '0x50000000' corresponds to the restriction level USPOOF_MINIMALLY_RESTRICTIVE.  Since
  * USPOOF_MINIMALLY_RESTRICTIVE is weaker than USPOOF_MODERATELY_RESTRICTIVE, the string fails the check.
  *
  * <p>
@@ -351,13 +356,13 @@
  * A <code>USpoofChecker</code> instance may be used repeatedly to perform checks on any number of identifiers.
  *
  * <p>
- * <b>Thread Safety:</b> Thread Safety: The test functions for checking a single identifier, or for testing whether
+ * <b>Thread Safety:</b> The test functions for checking a single identifier, or for testing whether
  * two identifiers are possible confusable, are thread safe. They may called concurrently, from multiple threads,
  * using the same USpoofChecker instance.
  *
  * <p>
  * More generally, the standard ICU thread safety rules apply: functions that take a const USpoofChecker parameter are
- * thread safe. Those that take a non-const USpoofChecier are not thread safe..
+ * thread safe. Those that take a non-const USpoofChecker are not thread safe..
  *
  * @stable ICU 4.6
  */
@@ -419,13 +424,9 @@ typedef enum USpoofChecks {
      * the checks to some subset of SINGLE_SCRIPT_CONFUSABLE, MIXED_SCRIPT_CONFUSABLE, or WHOLE_SCRIPT_CONFUSABLE to
      * make {@link uspoof_areConfusable} return only those types of confusables.
      *
-     * <p>Note: if you wish to use {@link uspoof_getSkeleton}, it is required that you enable at least one of the
-     * CONFUSABLE flags.
-     *
      * @see uspoof_areConfusable
      * @see uspoof_getSkeleton
      * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
      */
     USPOOF_CONFUSABLE               =   USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE | USPOOF_WHOLE_SCRIPT_CONFUSABLE,
 
@@ -471,7 +472,7 @@ typedef enum USpoofChecks {
     USPOOF_INVISIBLE                =  32,
 
     /** Check that an identifier contains only characters from a specified set
-      * of acceptable characters.  See {@link uspoof_setAllowedChars}
+      * of acceptable characters.  See {@link uspoof_setAllowedChars} and
       * {@link uspoof_setAllowedLocales}.  Note that a string that fails this check
       * will also fail the {@link USPOOF_RESTRICTION_LEVEL} check.
       */
@@ -750,14 +751,16 @@ U_STABLE int32_t U_EXPORT2
 uspoof_getChecks(const USpoofChecker *sc, UErrorCode *status);
 
 /**
-  * Set the loosest restriction level allowed for strings. The default if this is not called is
-  * {@link USPOOF_HIGHLY_RESTRICTIVE}. Calling this method enables the {@link USPOOF_RESTRICTION_LEVEL} and
-  * {@link USPOOF_MIXED_NUMBERS} checks, corresponding to Sections 5.1 and 5.2 of UTS 39. To customize which checks are
-  * to be performed by {@link uspoof_check}, see {@link uspoof_setChecks}.
-  * @param restrictionLevel The loosest restriction level allowed.
-  * @see URestrictionLevel
-  * @stable ICU 51
-  */
+ * Set the loosest restriction level allowed for strings. The default if this is not called is
+ * {@link USPOOF_HIGHLY_RESTRICTIVE}. Calling this method enables the {@link USPOOF_RESTRICTION_LEVEL} and
+ * {@link USPOOF_MIXED_NUMBERS} checks, corresponding to Sections 5.1 and 5.2 of UTS 39. To customize which checks are
+ * to be performed by {@link uspoof_check}, see {@link uspoof_setChecks}.
+ *
+ * @param sc       The USpoofChecker
+ * @param restrictionLevel The loosest restriction level allowed.
+ * @see URestrictionLevel
+ * @stable ICU 51
+ */
 U_STABLE void U_EXPORT2
 uspoof_setRestrictionLevel(USpoofChecker *sc, URestrictionLevel restrictionLevel);
 
@@ -1059,6 +1062,8 @@ uspoof_checkUnicodeString(const USpoofChecker *sc,
  * @param sc      The USpoofChecker
  * @param id      The identifier to be checked for possible security issues,
  *                in UTF-16 format.
+ * @param length  the length of the string to be checked, or -1 if the string is
+ *                zero terminated.
  * @param checkResult  An instance of USpoofCheckResult to be filled with
  *                details about the identifier.  Can be NULL.
  * @param status  The error code, set if an error occurred while attempting to
@@ -1259,7 +1264,7 @@ uspoof_getCheckResultNumerics(const USpoofCheckResult *checkResult, UErrorCode *
  *
  * <ul>
  *   <li>{@link USPOOF_SINGLE_SCRIPT_CONFUSABLE}</li>
- *   <li>{@link USPOOF_MIXED_SCRIPT_CONFUSABLE</li>
+ *   <li>{@link USPOOF_MIXED_SCRIPT_CONFUSABLE}</li>
  *   <li>{@link USPOOF_WHOLE_SCRIPT_CONFUSABLE}</li>
  * </ul>
  *

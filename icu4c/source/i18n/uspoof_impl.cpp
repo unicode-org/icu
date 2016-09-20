@@ -62,13 +62,13 @@ void SpoofImpl::construct(UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
 
     UnicodeSet *allowedCharsSet = new UnicodeSet(0, 0x10ffff);
-    allowedCharsSet->freeze();
     fAllowedCharsSet = allowedCharsSet;
     fAllowedLocales  = uprv_strdup("");
     if (fAllowedCharsSet == NULL || fAllowedLocales == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
+    allowedCharsSet->freeze();
 }
 
 
@@ -85,10 +85,10 @@ SpoofImpl::SpoofImpl(const SpoofImpl &src, UErrorCode &status)  :
         fSpoofData = src.fSpoofData->addReference();
     }
     fAllowedCharsSet = static_cast<const UnicodeSet *>(src.fAllowedCharsSet->clone());
-    if (fAllowedCharsSet == NULL) {
+    fAllowedLocales = uprv_strdup(src.fAllowedLocales);
+    if (fAllowedCharsSet == NULL || fAllowedLocales == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
-    fAllowedLocales = uprv_strdup(src.fAllowedLocales);
     fRestrictionLevel = src.fRestrictionLevel;
 }
 
