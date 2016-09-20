@@ -895,7 +895,7 @@ void TestParams::setUTF8(UErrorCode &status) {
 }
 
 
-int32_t TestParams::getSrcLine(int bp) {
+int32_t TestParams::getSrcLine(int32_t bp) {
     if (bp >= textMap->size()) {
         bp = textMap->size() - 1;
     }
@@ -911,7 +911,7 @@ int32_t TestParams::getSrcLine(int bp) {
 }
 
 
-int32_t TestParams::getExpectedBreak(int bp) {
+int32_t TestParams::getExpectedBreak(int32_t bp) {
     if (bp >= textMap->size()) {
         return 0;
     }
@@ -924,7 +924,7 @@ int32_t TestParams::getExpectedBreak(int bp) {
 }
 
 
-int32_t TestParams::getSrcCol(int bp) {
+int32_t TestParams::getSrcCol(int32_t bp) {
     if (bp >= textMap->size()) {
         bp = textMap->size() - 1;
     }

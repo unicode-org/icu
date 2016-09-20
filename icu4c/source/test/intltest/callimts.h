@@ -38,7 +38,7 @@ public:
     virtual void TestCalendarExtremeLimit(void);
 
     void TestLimits(void);
-    void TestLimitsThread(int threadNumber);
+    void TestLimitsThread(int32_t threadNumber);
 
 private:
     /*

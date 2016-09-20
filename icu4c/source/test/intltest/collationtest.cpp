@@ -1117,7 +1117,7 @@ void CollationTest::parseAndSetAttribute(IcuTestErrorCode &errorCode) {
     // Parse attributes even if the Collator could not be created,
     // in order to report syntax errors.
     int32_t start = skipSpaces(1);
-    int32_t equalPos = fileLine.indexOf(0x3d);
+    int32_t equalPos = fileLine.indexOf((UChar)0x3d);
     if(equalPos < 0) {
         if(fileLine.compare(start, 7, UNICODE_STRING("reorder", 7)) == 0) {
             parseAndSetReorderCodes(start + 7, errorCode);

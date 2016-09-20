@@ -30,7 +30,7 @@ enum CurrencySignCount {
 
 class DecimalFormatSymbols;
 
-struct DecimalFormatPattern : UMemory {
+struct DecimalFormatPattern : public UMemory {
   enum EPadPosition {
       kPadBeforePrefix,
       kPadAfterPrefix,
@@ -73,7 +73,7 @@ struct DecimalFormatPattern : UMemory {
   EPadPosition fPadPosition;
 };
 
-class DecimalFormatPatternParser : UMemory {
+class DecimalFormatPatternParser : public UMemory {
   public:
     DecimalFormatPatternParser();
     void useSymbols(const DecimalFormatSymbols& symbols);
