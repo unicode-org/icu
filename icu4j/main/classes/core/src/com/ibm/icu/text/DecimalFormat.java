@@ -2597,7 +2597,7 @@ public class DecimalFormat extends NumberFormat {
 
                     // If we're only parsing integers, or if we ALREADY saw the decimal,
                     // then don't parse this one.
-                    if (isParseIntegerOnly() || sawDecimal) {
+                    if (isParseIntegerOnly()) {
                         break;
                     }
 
