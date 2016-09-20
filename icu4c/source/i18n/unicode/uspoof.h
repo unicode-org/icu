@@ -577,7 +577,7 @@ typedef enum USpoofChecks {
          * An undefined restriction level.
          * @internal
          */
-        USPOOF_UNDEFINED_RESTRICTIVE = -1,
+        USPOOF_UNDEFINED_RESTRICTIVE = -1
     } URestrictionLevel;
 
 /**
