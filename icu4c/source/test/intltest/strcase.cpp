@@ -719,7 +719,7 @@ StringCaseTest::TestLongUpper() {
 
 void StringCaseTest::TestMalformedUTF8() {
     // ticket #12639
-    IcuTestErrorCode errorCode(*this, "TestTitleMalformedUTF8");
+    IcuTestErrorCode errorCode(*this, "TestMalformedUTF8");
     LocalUCaseMapPointer csm(ucasemap_open("en", U_TITLECASE_NO_BREAK_ADJUSTMENT, errorCode));
     if (errorCode.isFailure()) {
         errln("ucasemap_open(English) failed - %s", errorCode.errorName());
