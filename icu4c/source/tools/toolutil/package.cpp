@@ -1294,7 +1294,7 @@ void Package::setItemCapacity(int32_t max)
     exit(U_MEMORY_ALLOCATION_ERROR);
   }
   if(items && itemCount>0) {
-    uprv_memcpy(newItems, items, itemCount*sizeof(items[0]));
+    uprv_memcpy(newItems, items, (size_t)itemCount*sizeof(items[0]));
   }
   itemMax = max;
   items = newItems;

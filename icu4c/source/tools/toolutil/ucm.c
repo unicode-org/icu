@@ -969,7 +969,7 @@ ucm_addMapping(UCMTable *table,
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
 
-        uprv_memcpy(table->codePoints+idx, codePoints, m->uLen*4);
+        uprv_memcpy(table->codePoints+idx, codePoints, (size_t)m->uLen*4);
         m->u=idx;
     }
 

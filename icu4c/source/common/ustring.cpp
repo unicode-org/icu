@@ -1115,7 +1115,7 @@ u_strHasMoreChar32Than(const UChar *s, int32_t length, int32_t number) {
 U_CAPI UChar * U_EXPORT2
 u_memcpy(UChar *dest, const UChar *src, int32_t count) {
     if(count > 0) {
-        uprv_memcpy(dest, src, count*U_SIZEOF_UCHAR);
+        uprv_memcpy(dest, src, (size_t)count*U_SIZEOF_UCHAR);
     }
     return dest;
 }
@@ -1123,7 +1123,7 @@ u_memcpy(UChar *dest, const UChar *src, int32_t count) {
 U_CAPI UChar * U_EXPORT2
 u_memmove(UChar *dest, const UChar *src, int32_t count) {
     if(count > 0) {
-        uprv_memmove(dest, src, count*U_SIZEOF_UCHAR);
+        uprv_memmove(dest, src, (size_t)count*U_SIZEOF_UCHAR);
     }
     return dest;
 }

@@ -57,8 +57,8 @@ RelativeDateFormat::RelativeDateFormat(const RelativeDateFormat& other) :
         fCombinedFormat = new SimpleFormatter(*other.fCombinedFormat);
     }
     if (fDatesLen > 0) {
-        fDates = (URelativeString*) uprv_malloc(sizeof(fDates[0])*fDatesLen);
-        uprv_memcpy(fDates, other.fDates, sizeof(fDates[0])*fDatesLen);
+        fDates = (URelativeString*) uprv_malloc(sizeof(fDates[0])*(size_t)fDatesLen);
+        uprv_memcpy(fDates, other.fDates, sizeof(fDates[0])*(size_t)fDatesLen);
     }
 #if !UCONFIG_NO_BREAK_ITERATION
     if (other.fCapitalizationBrkIter != NULL) {

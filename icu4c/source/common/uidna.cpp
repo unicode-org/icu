@@ -318,7 +318,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
     // Step 4: if the source is ASCII then proceed to step 8
     if(srcIsASCII){
         if(b1Len <= destCapacity){
-            uprv_memmove(dest, b1, b1Len * U_SIZEOF_UCHAR);
+            u_memmove(dest, b1, b1Len);
             reqLength = b1Len;
         }else{
             reqLength = b1Len;
@@ -364,9 +364,9 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
                 goto CLEANUP;
             }
             //Step 7: prepend the ACE prefix
-            uprv_memcpy(dest,ACE_PREFIX,ACE_PREFIX_LENGTH * U_SIZEOF_UCHAR);
+            u_memcpy(dest, ACE_PREFIX, ACE_PREFIX_LENGTH);
             //Step 6: copy the contents in b2 into dest
-            uprv_memcpy(dest+ACE_PREFIX_LENGTH, b2, b2Len * U_SIZEOF_UCHAR);
+            u_memcpy(dest+ACE_PREFIX_LENGTH, b2, b2Len);
 
         }else{
             *status = U_IDNA_ACE_PREFIX_ERROR; 
@@ -543,7 +543,7 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
         //step 8: return output of step 5
         reqLength = b2Len;
         if(b2Len <= destCapacity) {
-            uprv_memmove(dest, b2, b2Len * U_SIZEOF_UCHAR);
+            u_memmove(dest, b2, b2Len);
         }
     }
     else{
@@ -572,7 +572,7 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
         // just return the source
         //copy the source to destination
         if(srcLength <= destCapacity){
-            uprv_memmove(dest,src,srcLength * U_SIZEOF_UCHAR);
+            u_memmove(dest, src, srcLength);
         }
         reqLength = srcLength;
     }
@@ -599,7 +599,7 @@ CLEANUP:
         if(dest && srcLength <= destCapacity){
             // srcLength should have already been set earlier.
             U_ASSERT(srcLength >= 0);
-            uprv_memmove(dest,src,srcLength * U_SIZEOF_UCHAR);
+            u_memmove(dest, src, srcLength);
         }
         reqLength = srcLength;
         *status = U_ZERO_ERROR;

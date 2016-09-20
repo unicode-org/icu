@@ -44,7 +44,7 @@ u_growAnyBufferFromStatic(void *context,
     char *newBuffer=(char *)uprv_malloc(reqCapacity*size);
     if(newBuffer!=NULL) {
         if(length>0) {
-            uprv_memcpy(newBuffer, *pBuffer, length*size);
+            uprv_memcpy(newBuffer, *pBuffer, (size_t)length*size);
         }
         *pCapacity=reqCapacity;
     } else {
@@ -202,7 +202,7 @@ _strToWCS(wchar_t *dest,
         count = (int32_t)(pIntTarget-intTarget);
        
         if(0 < count && count <= destCapacity){
-            uprv_memcpy(dest,intTarget,count*sizeof(wchar_t));
+            uprv_memcpy(dest, intTarget, (size_t)count*sizeof(wchar_t));
         }  
 
         if(pDestLength){
@@ -254,7 +254,7 @@ u_strToWCS(wchar_t *dest,
         srcLength = u_strlen(src);
     }
     if(0 < srcLength && srcLength <= destCapacity){
-        uprv_memcpy(dest,src,srcLength*U_SIZEOF_UCHAR);
+        u_memcpy(dest, src, srcLength);
     }
     if(pDestLength){
        *pDestLength = srcLength;
@@ -397,7 +397,7 @@ _strFromWCS( UChar   *dest,
                 }
                 if(nulLen>0){
                     /* copy the contents to tempStack */
-                    uprv_memcpy(pWStack,pSrc,nulLen*sizeof(wchar_t));
+                    uprv_memcpy(pWStack, pSrc, (size_t)nulLen*sizeof(wchar_t));
                 }
             
                 /* null terminate the tempBuffer */
@@ -509,7 +509,7 @@ u_strFromWCS(UChar   *dest,
         srcLength = u_strlen((const UChar *)src);
     }
     if(0 < srcLength && srcLength <= destCapacity){
-        uprv_memcpy(dest,src,srcLength*U_SIZEOF_UCHAR);
+        u_memcpy(dest, src, srcLength);
     }
     if(pDestLength){
        *pDestLength = srcLength;
