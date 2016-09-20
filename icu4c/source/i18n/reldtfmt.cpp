@@ -507,7 +507,7 @@ struct RelDateFmtDataSink : public ResourceSink {
 
 
 // Virtual destructors must be defined out of line.
-RelDateFmtDataSink::~RelDateFmtDataSink() {};
+RelDateFmtDataSink::~RelDateFmtDataSink() {}
 
 }  // Namespace
 
