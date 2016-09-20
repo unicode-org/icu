@@ -175,7 +175,7 @@ public class BidiTransform
      * <li>{Logical LTR, Visual RTL},</li>
      * <li>{Visual RTL, Logical RTL}.</li>
      * </ul>
-     * <p>Example of usage of the transformation engine:<br>
+     * <p>Example of usage of the transformation engine:</p>
      * <pre>
      * BidiTransform bidiTransform = new BidiTransform();
      * String in = "abc \u06f0123"; // "abc \\u06f0123"
@@ -197,7 +197,6 @@ public class BidiTransform
      *          ArabicShaping.DIGITS_EN2AN | ArabicShaping.DIGIT_TYPE_AN_EXTENDED);
      * // Result: "abc \\u06f4\\u06f1\\u06f2\\u06f3"
      * </pre>
-     * </p>
      *
      * @param text An input character sequence that the Bidi layout
      *        transformations will be performed on.
