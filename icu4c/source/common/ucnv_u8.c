@@ -1074,7 +1074,10 @@ static const UConverterImpl _CESU8Impl={
     NULL,
     NULL,
     NULL,
-    ucnv_getCompleteUnicodeSet
+    ucnv_getCompleteUnicodeSet,
+
+    NULL,
+    NULL
 };
 
 static const UConverterStaticData _CESU8StaticData={

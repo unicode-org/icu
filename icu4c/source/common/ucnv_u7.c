@@ -762,7 +762,10 @@ static const UConverterImpl _UTF7Impl={
     _UTF7GetName,
     NULL, /* we don't need writeSub() because we never call a callback at fromUnicode() */
     NULL,
-    ucnv_getCompleteUnicodeSet
+    ucnv_getCompleteUnicodeSet,
+
+    NULL,
+    NULL
 };
 
 static const UConverterStaticData _UTF7StaticData={

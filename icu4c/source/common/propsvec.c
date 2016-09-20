@@ -479,7 +479,7 @@ upvec_cloneArray(const UPropsVectors *pv,
 
 U_CAPI UTrie2 * U_EXPORT2
 upvec_compactToUTrie2WithRowIndexes(UPropsVectors *pv, UErrorCode *pErrorCode) {
-    UPVecToUTrie2Context toUTrie2={ NULL };
+    UPVecToUTrie2Context toUTrie2={ NULL, 0, 0, 0 };
     upvec_compact(pv, upvec_compactToUTrie2Handler, &toUTrie2, pErrorCode);
     utrie2_freeze(toUTrie2.trie, UTRIE2_16_VALUE_BITS, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {

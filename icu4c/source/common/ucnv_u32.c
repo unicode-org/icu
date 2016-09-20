@@ -482,7 +482,10 @@ static const UConverterImpl _UTF32BEImpl = {
     NULL,
     NULL,
     NULL,
-    ucnv_getNonSurrogateUnicodeSet
+    ucnv_getNonSurrogateUnicodeSet,
+
+    NULL,
+    NULL
 };
 
 /* The 1232 CCSID refers to any version of Unicode with any endianess of UTF-32 */
@@ -974,7 +977,10 @@ static const UConverterImpl _UTF32LEImpl = {
     NULL,
     NULL,
     NULL,
-    ucnv_getNonSurrogateUnicodeSet
+    ucnv_getNonSurrogateUnicodeSet,
+
+    NULL,
+    NULL
 };
 
 /* The 1232 CCSID refers to any version of Unicode with any endianess of UTF-32 */
@@ -1216,7 +1222,10 @@ static const UConverterImpl _UTF32Impl = {
     NULL,
     NULL,
     NULL,
-    ucnv_getNonSurrogateUnicodeSet
+    ucnv_getNonSurrogateUnicodeSet,
+
+    NULL,
+    NULL
 };
 
 /* The 1236 CCSID refers to any version of Unicode with a BOM sensitive endianess of UTF-32 */
