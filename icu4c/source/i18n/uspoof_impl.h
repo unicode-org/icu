@@ -123,7 +123,7 @@ public:
     // Used to convert this CheckResult to the older int32_t return value API
     int32_t toCombinedBitmask(int32_t expectedChecks);
 
-    // Data Members (all stack-allocated)
+    // Data Members
     int32_t fMagic;                        // Internal sanity check.
     int32_t fChecks;                       // Bit vector of checks that were failed.
     UnicodeSet fNumerics;                  // Set of numerics found in the string.

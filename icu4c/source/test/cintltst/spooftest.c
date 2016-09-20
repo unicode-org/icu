@@ -478,7 +478,7 @@ static void TestUSpoofCAPI(void) {
         const UChar* tests[] = { goodLatin, scMixed, scLatin,
                 goodCyrl, goodGreek, lll_Latin_a, lll_Latin_b, han_Hiragana };
 
-        for (int32_t i=0; i<sizeof(tests)/sizeof(UChar*); i++) {
+        for (int32_t i=0; i<UPRV_LENGTHOF(tests); i++) {
             const UChar* str = tests[i];
 
             // Basic test
