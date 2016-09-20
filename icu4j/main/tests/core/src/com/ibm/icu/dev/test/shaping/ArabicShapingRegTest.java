@@ -12,7 +12,6 @@ package com.ibm.icu.dev.test.shaping;
 import java.lang.reflect.Method;
 import java.util.MissingResourceException;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
