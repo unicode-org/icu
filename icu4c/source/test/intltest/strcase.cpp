@@ -698,8 +698,12 @@ StringCaseTest::TestLongUpper() {
     int32_t length = 0x40000004;  // more than 1G UChars
     UnicodeString s(length, (UChar32)0x390, length);
     UnicodeString result;
-    IcuTestErrorCode errorCode(*this, "TestLongUpper");
     UChar *dest = result.getBuffer(length + 1);
+    if (s.isBogus() || dest == NULL) {
+        logln("Out of memory, unable to run this test on this machine.");
+        return;
+    }
+    IcuTestErrorCode errorCode(*this, "TestLongUpper");
     int32_t destLength = u_strToUpper(dest, result.getCapacity(),
                                       s.getBuffer(), s.length(), "", errorCode);
     result.releaseBuffer(destLength);
