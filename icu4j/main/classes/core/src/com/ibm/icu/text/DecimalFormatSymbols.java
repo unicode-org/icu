@@ -185,7 +185,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Sets the character used for zero.
      * <p>
-     * <b>Note:</p> When the specified zeroDigit is a Unicode decimal digit character
+     * <b>Note:</b> When the specified zeroDigit is a Unicode decimal digit character
      * (category:Nd) and the number value is 0, then this method propagate digit 1 to
      * digit 9 by incrementing code point one by one.
      *

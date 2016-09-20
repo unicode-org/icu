@@ -98,7 +98,6 @@ import com.ibm.icu.util.ULocale;
  * shown below:
  *
  * <pre>
- * <code>
  * // Setup:
  * String[] DICTIONARY = new String[]{ "lorem", "ipsum" }; // example
  * SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CONFUSABLE).build();
@@ -110,7 +109,6 @@ import com.ibm.icu.util.ULocale;
  * // Live Check:
  * boolean result = skeletons.contains(sc.getSkeleton("1orern"));
  * System.out.println(result);  // true
- * </code>
  * </pre>
  *
  * <p>
@@ -124,7 +122,6 @@ import com.ibm.icu.util.ULocale;
  * The following snippet shows a minimal example of using <code>SpoofChecker</code> to perform spoof detection on a
  * string:
  *
- * <code>
  * <pre>
  * SpoofChecker sc = new SpoofChecker.Builder()
  *     .setAllowedChars(SpoofChecker.RECOMMENDED.cloneAsThawed().addAll(SpoofChecker.INCLUSION))
@@ -134,7 +131,6 @@ import com.ibm.icu.util.ULocale;
  * boolean result = sc.failsChecks("pаypаl");  // with Cyrillic 'а' characters
  * System.out.println(result);  // true
  * </pre>
- * </code>
  *
  * <p>
  * As in the case for confusability checking, it is good practice to create one <code>SpoofChecker</code> instance at

@@ -917,7 +917,7 @@
 
     <target name="_docsLintOption" unless="doclint.options">
         <!-- syntax check is disabled because JCite tag name "@.jcite" is invalidated -->
-        <condition property="doclint.option" value="-Xdoclint:all,-accessibility,-syntax" else="">
+        <condition property="doclint.option" value="-Xdoclint:reference,html" else="">
             <isset property="is.java8.plus"/>
         </condition>
     </target>
