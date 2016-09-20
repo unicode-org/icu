@@ -204,10 +204,10 @@ public final class CollationFastLatin /* all static */ {
         char[] header = data.fastLatinTableHeader;
         if(header == null) { return -1; }
         assert((header[0] >> 8) == VERSION);
-        assert(primaries.length == LATIN_LIMIT);
-        // FindBugs complains that primaries.length == LATIN_LIMIT is known after the assert,
-        // but we keep this here for when assertions are disabled.
-        if(primaries.length != LATIN_LIMIT) { return -1; }
+        if(primaries.length != LATIN_LIMIT) {
+            assert false;
+            return -1;
+        }
 
         int miniVarTop;
         if((settings.options & CollationSettings.ALTERNATE_MASK) == 0) {

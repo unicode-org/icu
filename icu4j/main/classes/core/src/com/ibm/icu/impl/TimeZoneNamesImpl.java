@@ -668,6 +668,9 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
             for (int i = 0; i < ZNames.NUM_NAME_TYPES; ++i) {
                 String name = names[i];
                 if (name != null) {
+                    // TODO Findbugs: Comparison of String objects using == or !=
+                    // Review the logic and modify below if necessary. See ticket #12746.
+
                     // FindBugs complains about == but
                     // we do want to check for the NO_NAME reference, not its contents!
                     if (name == NO_NAME) {

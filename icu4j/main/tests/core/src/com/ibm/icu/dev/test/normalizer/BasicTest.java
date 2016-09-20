@@ -1615,7 +1615,7 @@ public class BasicTest extends TestFmwk {
 
         // Concatenates 're' with '\u0301sum\u00e9 is HERE' and places the result at
         // position 3 of string 'My resume is here'.
-        int len = Normalizer.concatenate(left.toCharArray(), 0, 2, right.toCharArray(), 2, 15,
+        Normalizer.concatenate(left.toCharArray(), 0, 2, right.toCharArray(), 2, 15,
                                          destination, 3, 17, mode, 0);
         if(!String.valueOf(destination).equals(expect)) {
             errln("error in Normalizer.concatenate(), cases2[] failed"
@@ -1625,12 +1625,12 @@ public class BasicTest extends TestFmwk {
 
         // Error case when result of concatenation won't fit into destination array.
         try {
-            len = Normalizer.concatenate(left.toCharArray(), 0, 2, right.toCharArray(), 2, 15,
+            Normalizer.concatenate(left.toCharArray(), 0, 2, right.toCharArray(), 2, 15,
                                          destination, 3, 16, mode, 0);
         } catch (IndexOutOfBoundsException e) {
             assertTrue("Normalizer.concatenate() failed", e.getMessage().equals("14"));
             return;
-	}
+        }
         fail("Normalizer.concatenate() tested for failure but passed");
     }
 
@@ -1734,7 +1734,7 @@ public class BasicTest extends TestFmwk {
     private int ref_norm_compare(String s1, String s2, int options) {
         String t1, t2,r1,r2;
 
-        int normOptions=(int)(options>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT);
+        int normOptions=options>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT;
 
         if((options&Normalizer.COMPARE_IGNORE_CASE)!=0) {
             // NFD(toCasefold(NFD(X))) = NFD(toCasefold(NFD(Y)))
@@ -1763,7 +1763,7 @@ public class BasicTest extends TestFmwk {
 
     // test wrapper for Normalizer::compare, sets UNORM_INPUT_IS_FCD appropriately
     private int norm_compare(String s1, String s2, int options) {
-        int normOptions=(int)(options>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT);
+        int normOptions=options>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT;
 
         if( Normalizer.YES==Normalizer.quickCheck(s1,Normalizer.FCD,normOptions) &&
             Normalizer.YES==Normalizer.quickCheck(s2,Normalizer.FCD,normOptions)) {
@@ -2428,7 +2428,7 @@ public class BasicTest extends TestFmwk {
         };
         StringBuilder s, pattern;
 
-        // build NF*Skippable sets from runtime data 
+        // build NF*Skippable sets from runtime data
         skipSets[D].applyPattern("[:NFD_Inert:]");
         skipSets[C].applyPattern("[:NFC_Inert:]");
         skipSets[KD].applyPattern("[:NFKD_Inert:]");
@@ -2867,17 +2867,28 @@ public class BasicTest extends TestFmwk {
     public class TestNormalizer2 extends Normalizer2 {
 
         public TestNormalizer2() {}
+        @Override
         public StringBuilder normalize(CharSequence src, StringBuilder dest) { return null; }
+        @Override
         public Appendable normalize(CharSequence src, Appendable dest) { return null; }
+        @Override
         public StringBuilder normalizeSecondAndAppend(
             StringBuilder first, CharSequence second) { return null; }
+        @Override
         public StringBuilder append(StringBuilder first, CharSequence second) { return null; }
+        @Override
         public String getDecomposition(int c) { return null; }
+        @Override
         public boolean isNormalized(CharSequence s) { return false; }
+        @Override
         public Normalizer.QuickCheckResult quickCheck(CharSequence s) { return null; }
+        @Override
         public int spanQuickCheckYes(CharSequence s) { return 0; }
+        @Override
         public boolean hasBoundaryBefore(int c) { return false; }
+        @Override
         public boolean hasBoundaryAfter(int c) { return false; }
+        @Override
         public boolean isInert(int c) { return false; }
     }
 

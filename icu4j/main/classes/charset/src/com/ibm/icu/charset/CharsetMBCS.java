@@ -511,7 +511,6 @@ class CharsetMBCS extends CharsetICU {
         int p;
         int c;
         int i, st3;
-        long temp;
 
         table = mbcsTable.fromUnicodeTable;
         int[] tableInts = mbcsTable.fromUnicodeTableInts;
@@ -579,10 +578,8 @@ class CharsetMBCS extends CharsetICU {
             }
 
             // Set the roundtrip flag.
-            // FindBugs complains about "possible bad parsing of shift operation"
-            // but this is as intended.
-            temp = (1L<<(16+(c&0xf)));
-            tableInts[stage2] |= temp;
+            int shift = 16 + (c & 0x0F);
+            tableInts[stage2] |= (1L << shift);
         }
         return true;
      }
