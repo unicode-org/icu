@@ -328,7 +328,7 @@ storeMappingData(){
                      mappingData[currentIndex++] = (uint16_t) mappingLength;
                 }
                 /* copy the contents to mappindData array */
-                uprv_memmove(mappingData+currentIndex, value->mapping, value->length*U_SIZEOF_UCHAR);
+                u_memmove(mappingData+currentIndex, value->mapping, value->length);
                 currentIndex += value->length;
                 if (currentIndex > mappingDataCapacity) {
                     /* If this happens there is a bug in the computation of the mapping data size in storeMapping() */

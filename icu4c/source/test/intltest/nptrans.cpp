@@ -174,7 +174,7 @@ int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength,
     }
     // check if there is enough room in the output
     if(bufLen < destCapacity){
-        uprv_memcpy(dest,buffer,bufLen*U_SIZEOF_UCHAR);
+        u_memcpy(dest, buffer, bufLen);
     }
 
     return u_terminateUChars(dest, destCapacity, bufLen, &status);
@@ -266,7 +266,7 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
     }
 
     if(b1Len <= destCapacity){
-        uprv_memmove(dest,b1, b1Len*U_SIZEOF_UCHAR);
+        u_memmove(dest, b1, b1Len);
     }
 
 CLEANUP:

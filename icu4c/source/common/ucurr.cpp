@@ -416,7 +416,7 @@ struct CReg : public icu::UMemory {
         }
         uprv_strncpy(id, _id, len);
         id[len] = 0;
-        uprv_memcpy(iso, _iso, ISO_CURRENCY_CODE_LENGTH * sizeof(const UChar));
+        u_memcpy(iso, _iso, ISO_CURRENCY_CODE_LENGTH);
         iso[ISO_CURRENCY_CODE_LENGTH] = 0;
     }
 
@@ -940,7 +940,7 @@ toUpperCase(const UChar* source, int32_t len, const char* locale) {
     dest = (UChar*)uprv_malloc(sizeof(UChar) * MAX(destLen, len));
     u_strToUpper(dest, destLen, source, len, locale, &ec);
     if (U_FAILURE(ec)) {
-        uprv_memcpy(dest, source, sizeof(UChar) * len);
+        u_memcpy(dest, source, len);
     } 
     return dest;
 }

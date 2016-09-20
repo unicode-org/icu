@@ -167,7 +167,7 @@ BytesTrieBuilder::add(StringPiece s, int32_t value, UErrorCode &errorCode) {
             return *this; // error instead of dereferencing null
         }
         if(elementsLength>0) {
-            uprv_memcpy(newElements, elements, elementsLength*sizeof(BytesTrieElement));
+            uprv_memcpy(newElements, elements, (size_t)elementsLength*sizeof(BytesTrieElement));
         }
         delete[] elements;
         elements=newElements;

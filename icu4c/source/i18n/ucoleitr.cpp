@@ -36,9 +36,9 @@ U_NAMESPACE_USE
 #define DEFAULT_BUFFER_SIZE 16
 #define BUFFER_GROW 8
 
-#define ARRAY_COPY(dst, src, count) uprv_memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
+#define ARRAY_COPY(dst, src, count) uprv_memcpy((void *) (dst), (void *) (src), (size_t)(count) * sizeof (src)[0])
 
-#define NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
+#define NEW_ARRAY(type, count) (type *) uprv_malloc((size_t)(count) * sizeof(type))
 
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 

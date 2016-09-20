@@ -1299,13 +1299,13 @@ ucnv_swapAliases(const UDataSwapper *ds,
                         oldIndex=tempTable.rows[i].sortIndex;
                         ds->swapArray16(ds, p+oldIndex, 2, r+i, pErrorCode);
                     }
-                    uprv_memcpy(q, r, 2*count);
+                    uprv_memcpy(q, r, 2*(size_t)count);
 
                     for(i=0; i<count; ++i) {
                         oldIndex=tempTable.rows[i].sortIndex;
                         ds->swapArray16(ds, p2+oldIndex, 2, r+i, pErrorCode);
                     }
-                    uprv_memcpy(q2, r, 2*count);
+                    uprv_memcpy(q2, r, 2*(size_t)count);
                 }
             }
 

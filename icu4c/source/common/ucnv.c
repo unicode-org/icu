@@ -1063,7 +1063,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
 
                         length=(int32_t)(pArgs->sourceLimit-pArgs->source);
                         if(length>0) {
-                            uprv_memcpy(cnv->preFromU, pArgs->source, length*U_SIZEOF_UCHAR);
+                            u_memcpy(cnv->preFromU, pArgs->source, length);
                             cnv->preFromULength=(int8_t)-length;
                         }
 
@@ -2745,7 +2745,7 @@ ucnv_getInvalidUChars (const UConverter * converter,
     }
     if ((*len = converter->invalidUCharLength) > 0)
     {
-        uprv_memcpy (errChars, converter->invalidUCharBuffer, sizeof(UChar) * (*len));
+        u_memcpy (errChars, converter->invalidUCharBuffer, *len);
     }
 }
 
