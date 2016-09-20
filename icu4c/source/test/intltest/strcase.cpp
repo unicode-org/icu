@@ -692,6 +692,10 @@ StringCaseTest::TestGreekUpper() {
 
 void
 StringCaseTest::TestLongUpper() {
+    if (quick) {
+        logln("not exhaustive mode: skipping this test");
+        return;
+    }
     // Ticket #12663, crash with an extremely long string where
     // U+0390 maps to 0399 0308 0301 so that the result is three times as long
     // and overflows an int32_t.
