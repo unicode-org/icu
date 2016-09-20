@@ -523,7 +523,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             result,
             fp);
         assertEquals("format", compareStr, result.toString());
-        
+
         Map<String,Object> map = new HashMap<String,Object>();
         try{
             msg.format("", map);
@@ -989,15 +989,15 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             assertEquals("[" + (i/2) + "] \"" + patterns[i] + "\"", patterns[i+1], MessageFormat.autoQuoteApostrophe(patterns[i]));
         }
     }
-    
-    // This tests passing named arguments instead of numbers to format(). 
+
+    // This tests passing named arguments instead of numbers to format().
     @Test
     public void testFormatNamedArguments() {
         Map arguments = new HashMap();
         arguments.put("startDate", new Date(871068000000L));
 
         StringBuffer result = new StringBuffer();
-        
+
         String formatStr = "On {startDate,date}, it began.";
         String compareStr = "On Aug 8, 1997, it began.";
 
@@ -1017,9 +1017,9 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             fp);
         assertEquals("format", compareStr, result.toString());
     }
-    
+
     // This tests parsing formatted messages with named arguments instead of
-    // numbers. 
+    // numbers.
     @Test
     public void testParseNamedArguments() {
         String msgFormatString = "{foo} =sep= {bar}";
@@ -1039,7 +1039,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
 
         ParsePosition pp = new ParsePosition(0);
-        Map fmt_map = msg.parseToMap(source, pp); 
+        Map fmt_map = msg.parseToMap(source, pp);
         if (pp.getIndex()==0 || fmt_map==null) {
             errln("*** MSG parse (ustring, parsepos., count) error.");
         } else {
@@ -1052,7 +1052,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
 
         pp.setIndex(0);
-       
+
         Map fmta = (Map) msg.parseObject( source, pp );
         if (pp.getIndex() == 0) {
             errln("*** MSG parse (ustring, Object, parsepos ) error.");
@@ -1065,7 +1065,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     // Ensure that methods designed for numeric arguments only, will throw
     // an exception when called on MessageFormat objects created with
     // named arguments.
@@ -1081,10 +1081,10 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
         if (!gotException) {
             errln("MessageFormat.setFormatsByArgumentIndex() should throw an " +
-                  "IllegalArgumentException when called on formats with " + 
+                  "IllegalArgumentException when called on formats with " +
                   "named arguments but did not!");
         }
-        
+
         gotException = false;
         try {
             msg.setFormatByArgumentIndex(0, new DecimalFormat());
@@ -1093,10 +1093,10 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
         if (!gotException) {
             errln("MessageFormat.setFormatByArgumentIndex() should throw an " +
-                  "IllegalArgumentException when called on formats with " + 
+                  "IllegalArgumentException when called on formats with " +
                   "named arguments but did not!");
         }
-        
+
         gotException = false;
         try {
             msg.getFormatsByArgumentIndex();
@@ -1105,10 +1105,10 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
         if (!gotException) {
             errln("MessageFormat.getFormatsByArgumentIndex() should throw an " +
-                  "IllegalArgumentException when called on formats with " + 
+                  "IllegalArgumentException when called on formats with " +
                   "named arguments but did not!");
         }
-        
+
         gotException = false;
         try {
             Object args[] = {new Long(42)};
@@ -1118,10 +1118,10 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
         if (!gotException) {
             errln("MessageFormat.format(Object[], StringBuffer, FieldPosition) " +
-                  "should throw an IllegalArgumentException when called on " + 
+                  "should throw an IllegalArgumentException when called on " +
                   "formats with named arguments but did not!");
         }
-        
+
         gotException = false;
         try {
             Object args[] = {new Long(42)};
@@ -1132,10 +1132,10 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         if (!gotException) {
             errln("MessageFormat.format(Object, StringBuffer, FieldPosition) " +
                   "should throw an IllegalArgumentException when called with " +
-                  "non-Map object as argument on formats with named " + 
+                  "non-Map object as argument on formats with named " +
                   "arguments but did not!");
         }
-        
+
         gotException = false;
         try {
             msg.parse("Number of files: 5", new ParsePosition(0));
@@ -1145,10 +1145,10 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         if (!gotException) {
             errln("MessageFormat.parse(String, ParsePosition) " +
                   "should throw an IllegalArgumentException when called with " +
-                  "non-Map object as argument on formats with named " + 
+                  "non-Map object as argument on formats with named " +
                   "arguments but did not!");
         }
-        
+
         gotException = false;
         try {
             msg.parse("Number of files: 5");
@@ -1160,11 +1160,11 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         if (!gotException) {
             errln("MessageFormat.parse(String) " +
                   "should throw an IllegalArgumentException when called with " +
-                  "non-Map object as argument on formats with named " + 
+                  "non-Map object as argument on formats with named " +
                   "arguments but did not!");
         }
     }
-    
+
     @Test
     public void testNamedArguments() {
         // ICU 4.8 allows mixing named and numbered arguments.
@@ -1184,34 +1184,34 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         if (!mf.usesNamedArguments()) {
             errln("message format 2 should have used named arguments");
         }
-        
+
         // Test argument names with invalid start characters.
         // Modified: ICU 4.8 allows all characters except for Pattern_White_Space and Pattern_Syntax.
         try {
             new MessageFormat("Wavelength:  {^\u028EValue\uFF14}");
-            errln("Creating a MessageFormat with invalid argument names " + 
+            errln("Creating a MessageFormat with invalid argument names " +
             "should throw an IllegalArgumentException but did not!");
         } catch (IllegalArgumentException e) {}
-        
+
         try {
             new MessageFormat("Wavelength:  {\uFE45\u028EValue}");
-            errln("Creating a MessageFormat with invalid argument names " + 
+            errln("Creating a MessageFormat with invalid argument names " +
             "should throw an IllegalArgumentException but did not!");
         } catch (IllegalArgumentException e) {}
-        
+
         // Test argument names with invalid continue characters.
         // Modified: ICU 4.8 allows all characters except for Pattern_White_Space and Pattern_Syntax.
         try {
             new MessageFormat("Wavelength:  {Value@\uFF14}");
-            errln("Creating a MessageFormat with invalid argument names " + 
+            errln("Creating a MessageFormat with invalid argument names " +
             "should throw an IllegalArgumentException but did not!");
         } catch (IllegalArgumentException e) {}
-        
+
         try {
             new MessageFormat("Wavelength:  {Value(\uFF14)}");
-            errln("Creating a MessageFormat with invalid argument names " + 
+            errln("Creating a MessageFormat with invalid argument names " +
             "should throw an IllegalArgumentException but did not!");
-        } catch (IllegalArgumentException e) {}        
+        } catch (IllegalArgumentException e) {}
     }
 
     @Test
@@ -1300,7 +1300,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
     public void testPluralFormat() {
         {
             MessageFormat mfNum = new MessageFormat(
-                    "{0, plural, one{C''est # fichier} other " + 
+                    "{0, plural, one{C''est # fichier} other " +
                       "{Ce sont # fichiers}} dans la liste.",
                     new ULocale("fr"));
             MessageFormat mfAlpha = new MessageFormat(
@@ -1312,7 +1312,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             objMap.put("argument", objArray[0]);
             String result = mfNum.format(objArray);
             if (!result.equals(mfAlpha.format(objMap))) {
-                errln("PluralFormat's output differs when using named " + 
+                errln("PluralFormat's output differs when using named " +
                         "arguments instead of numbers!");
             }
             if (!result.equals("C'est 0 fichier dans la liste.")) {
@@ -1327,7 +1327,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                     new ULocale("uk"));
             MessageFormat mfAlpha = new MessageFormat (
                     "There {argument, plural, one{is # zavod}few{" +
-                      "are {argument, number,###.0} zavoda} other{are # " + 
+                      "are {argument, number,###.0} zavoda} other{are # " +
                       "zavodov}} in the directory.",
                     new ULocale("uk"));
             Object objArray[] = {new Long(4)};
@@ -1335,7 +1335,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             objMap.put("argument", objArray[0]);
             String result = mfNum.format(objArray);
             if (!result.equals(mfAlpha.format(objMap))) {
-                errln("PluralFormat's output differs when using named " + 
+                errln("PluralFormat's output differs when using named " +
                         "arguments instead of numbers!");
             }
             if (!result.equals("There are 4,0 zavoda in the directory.")) {
@@ -1383,16 +1383,16 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
      */
     @Test
     public void testSelectFormat() {
-        String pattern = null; 
+        String pattern = null;
         MessageFormat msgFmt = null ;
 
-        //Create the MessageFormat with simple French pattern  
-        pattern = "{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris."; 
+        //Create the MessageFormat with simple French pattern
+        pattern = "{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.";
         msgFmt = new MessageFormat(pattern);
         assertNotNull( "ERROR:Failure in constructing with simple French pattern", msgFmt);
 
-        //Format 
-        Object testArgs[][] ={ 
+        //Format
+        Object testArgs[][] ={
             {"Kirti","female"} ,
             {"Victor","other"} ,
             {"Ash","unknown"} ,
@@ -1404,7 +1404,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         };
         for ( int i=0; i< 3; i++){
             assertEquals("ERROR:Failure in format with simple French Pattern" ,
-                      exp[i] , msgFmt.format(testArgs[i]) ); 
+                      exp[i] , msgFmt.format(testArgs[i]) );
         }
 
         //Create the MessageFormat with Quoted French Pattern
@@ -1412,8 +1412,8 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         msgFmt = new MessageFormat(pattern);
         assertNotNull( "ERROR:Failure in constructing with quoted French pattern", msgFmt);
 
-        //Format 
-        Object testArgs1[][] ={ 
+        //Format
+        Object testArgs1[][] ={
             {"Kirti","female"} ,
             {"Victor","other"} ,
             {"Ash","male"} ,
@@ -1425,7 +1425,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         };
         for ( int i=0; i< 3; i++){
             assertEquals("ERROR:Failure in format with quoted French Pattern" ,
-                          exp1[i] , msgFmt.format(testArgs1[i]) ); 
+                          exp1[i] , msgFmt.format(testArgs1[i]) );
         }
 
         //Nested patterns with plural, number ,choice ,select format etc.
@@ -1434,11 +1434,11 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         msgFmt = new MessageFormat(pattern);
         assertNotNull( "ERROR:Failure in constructing with nested pattern 1", msgFmt);
 
-        //Format 
-        Object testArgs3[][] ={ 
+        //Format
+        Object testArgs3[][] ={
             {"Kirti", "female", 6} ,
             {"Kirti", "female", 100.100} ,
-            {"Kirti", "other", 6} , 
+            {"Kirti", "other", 6} ,
         };
         String exp3[] = {
             "Kirti est 6 all\\u00E9e \\u00E0 Paris." ,
@@ -1448,7 +1448,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
         for ( int i=0; i< 3; i++){
             assertEquals("ERROR:Failure in format with nested Pattern 1" ,
-                          exp3[i] , msgFmt.format(testArgs3[i]) ); 
+                          exp3[i] , msgFmt.format(testArgs3[i]) );
         }
 
         //Plural format with embedded select format
@@ -1456,8 +1456,8 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         msgFmt = new MessageFormat(pattern);
         assertNotNull( "ERROR:Failure in constructing with nested pattern 2", msgFmt);
 
-        //Format 
-        Object testArgs4[][] ={ 
+        //Format
+        Object testArgs4[][] ={
             {"Kirti",6,"female"},
             {"Kirti",1,"female"},
             {"Ash",1,"other"},
@@ -1471,16 +1471,16 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         };
         for ( int i=0; i< 4; i++){
             assertEquals("ERROR:Failure in format with nested Pattern 2" ,
-                          exp4[i] , msgFmt.format(testArgs4[i]) ); 
+                          exp4[i] , msgFmt.format(testArgs4[i]) );
         }
 
-        //Select, plural, and number formats heavily nested 
+        //Select, plural, and number formats heavily nested
         pattern = "{0} und {1, select, female {{2, plural, one {{3, select, female {ihre Freundin} other {ihr Freund}} } other {ihre {2, number, integer} {3, select, female {Freundinnen} other {Freunde}} } }} other{{2, plural, one {{3, select, female {seine Freundin} other {sein Freund}}} other {seine {2, number, integer} {3, select, female {Freundinnen} other {Freunde}}}}} } gingen nach Paris.";
         msgFmt = new MessageFormat(pattern);
         assertNotNull( "ERROR:Failure in constructing with nested pattern 3", msgFmt);
 
-        //Format 
-        Object testArgs5[][] ={ 
+        //Format
+        Object testArgs5[][] ={
             {"Kirti","other",1,"other"},
             {"Kirti","other",6,"other"},
             {"Kirti","other",1,"female"},
@@ -1515,7 +1515,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         //Format
         for ( int i=0; i< 14; i++){
             assertEquals("ERROR:Failure in format with nested Pattern 3" ,
-                          exp5[i] , msgFmt.format(testArgs5[i]) ); 
+                          exp5[i] , msgFmt.format(testArgs5[i]) );
         }
     }
 
@@ -1527,7 +1527,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         String[] patterns = {
           //Pattern with some text at start and at end
           "{0} est {1,select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.",
-          //Pattern with some text at start 
+          //Pattern with some text at start
           "{0} est {1,select, female {all\\u00E9e} other {all\\u00E9}}",
           //Pattern with some text at end
           "{1, select,female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.",
@@ -1542,7 +1542,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             MessageFormat mf = new MessageFormat(pattern);
             MessageFormat mf2 = new MessageFormat(mf.toPattern());
             if (!mf.equals(mf2)) {
-                errln("message formats not equal for pattern:\n*** '" 
+                errln("message formats not equal for pattern:\n*** '"
                      + pattern + "'\n*** '" + mf.toPattern() + "'");
             }
         }
@@ -1569,7 +1569,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     @Test
     public void TestSetFormat() {
         MessageFormat ms = new MessageFormat("{number} {date}", ULocale.ENGLISH);
@@ -1734,7 +1734,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         } catch (Exception e) {
         }
     }
-    
+
     /*
      * Tests the method public Format getFormatByArgumentName(String argumentName)
      */
@@ -2068,5 +2068,15 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                 "1.0<is 1+ |2#is two |2<is more than 2.");
         // Only simple API coverage. The parser implementation is tested via MessageFormat.
         assertTrue("many parts", pattern.countParts() > 10);
+    }
+
+    public void TestDateFormatHashCode() {
+        DateFormat testDF = DateFormat.getDateInstance(DateFormat.DEFAULT, ULocale.GERMAN);
+        NumberFormat testNF = testDF.getNumberFormat();
+
+        int expectedResult =
+                testNF.getMaximumIntegerDigits() * 37 + testNF.getMaximumFractionDigits();
+        int actualHashResult = testDF.hashCode();
+        assertEquals("DateFormat hashCode", expectedResult, actualHashResult);
     }
 }

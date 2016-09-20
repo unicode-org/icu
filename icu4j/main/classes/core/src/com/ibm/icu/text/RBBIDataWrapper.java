@@ -21,7 +21,7 @@ import com.ibm.icu.impl.Trie;
 /**
 * <p>Internal class used for Rule Based Break Iterators</p>
 * <p>This class provides access to the compiled break rule data, as
-* it is stored in a .brk file.  
+* it is stored in a .brk file.
 */
 final class RBBIDataWrapper {
     //
@@ -44,6 +44,7 @@ final class RBBIDataWrapper {
 
     private static final class IsAcceptable implements Authenticate {
         // @Override when we switch to Java 6
+        @Override
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0] == (FORMAT_VERSION >>> 24);
         }
@@ -73,17 +74,17 @@ final class RBBIDataWrapper {
     final static int    DH_RULESOURCELEN  = 15;
     final static int    DH_STATUSTABLE    = 16;
     final static int    DH_STATUSTABLELEN = 17;
-    
-    
+
+
     // Index offsets to the fields in a state table row.
     //    Corresponds to struct RBBIStateTableRow in the C version.
-    //   
+    //
     final static int      ACCEPTING  = 0;
     final static int      LOOKAHEAD  = 1;
     final static int      TAGIDX     = 2;
     final static int      RESERVED   = 3;
     final static int      NEXTSTATES = 4;
-    
+
     // Index offsets to header fields of a state table
     //     struct RBBIStateTable {...   in the C version.
     //
@@ -97,37 +98,37 @@ final class RBBIDataWrapper {
     //     enum RBBIStateTableFlags in the C version.
     //
     final static int      RBBI_LOOKAHEAD_HARD_BREAK = 1;
-    final static int      RBBI_BOF_REQUIRED         = 2;  
-    
+    final static int      RBBI_BOF_REQUIRED         = 2;
+
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
      */
     final static class RBBIDataHeader {
-        int         fMagic;         //  == 0xbla0 
-        int         fVersion;       //  == 1 (for ICU 3.2 and earlier. 
+        int         fMagic;         //  == 0xbla0
+        int         fVersion;       //  == 1 (for ICU 3.2 and earlier.
         byte[]      fFormatVersion; //  For ICU 3.4 and later.
-        int         fLength;        //  Total length in bytes of this RBBI Data, 
-                                       //      including all sections, not just the header. 
-        int         fCatCount;      //  Number of character categories. 
+        int         fLength;        //  Total length in bytes of this RBBI Data,
+                                       //      including all sections, not just the header.
+        int         fCatCount;      //  Number of character categories.
 
-        //  
-        //  Offsets and sizes of each of the subsections within the RBBI data. 
-        //  All offsets are bytes from the start of the RBBIDataHeader. 
-        //  All sizes are in bytes. 
-        //  
-        int         fFTable;         //  forward state transition table. 
+        //
+        //  Offsets and sizes of each of the subsections within the RBBI data.
+        //  All offsets are bytes from the start of the RBBIDataHeader.
+        //  All sizes are in bytes.
+        //
+        int         fFTable;         //  forward state transition table.
         int         fFTableLen;
-        int         fRTable;         //  Offset to the reverse state transition table. 
+        int         fRTable;         //  Offset to the reverse state transition table.
         int         fRTableLen;
-        int         fSFTable;        //  safe point forward transition table 
+        int         fSFTable;        //  safe point forward transition table
         int         fSFTableLen;
-        int         fSRTable;        //  safe point reverse transition table 
+        int         fSRTable;        //  safe point reverse transition table
         int         fSRTableLen;
-        int         fTrie;           //  Offset to Trie data for character categories 
+        int         fTrie;           //  Offset to Trie data for character categories
         int         fTrieLen;
-        int         fRuleSource;     //  Offset to the source for for the break 
-        int         fRuleSourceLen;  //    rules.  Stored UChar *. 
-        int         fStatusTable;    // Offset to the table of rule status values 
+        int         fRuleSource;     //  Offset to the source for for the break
+        int         fRuleSourceLen;  //    rules.  Stored UChar *.
+        int         fStatusTable;    // Offset to the table of rule status values
         int         fStatusTableLen;
 
         public RBBIDataHeader() {
@@ -135,18 +136,19 @@ final class RBBIDataWrapper {
             fFormatVersion = new byte[4];
         }
     }
-    
-    
+
+
     /**
      * RBBI State Table Indexing Function.  Given a state number, return the
      * array index of the start of the state table row for that state.
-     * 
+     *
      */
     int getRowIndex(int state){
         return ROW_DATA + state * (fHeader.fCatCount + 4);
     }
-    
+
     static class TrieFoldingFunc implements  Trie.DataManipulate {
+        @Override
         public int getFoldingOffset(int data) {
             if ((data & 0x8000) != 0) {
                 return data & 0x7fff;
@@ -156,8 +158,8 @@ final class RBBIDataWrapper {
         }
     }
     static TrieFoldingFunc  fTrieFoldingFunc = new TrieFoldingFunc();
- 
-    
+
+
     RBBIDataWrapper() {
     }
 
@@ -317,7 +319,7 @@ final class RBBIDataWrapper {
                 bytes, This.fHeader.fRuleSourceLen / 2, This.fHeader.fRuleSourceLen & 1);
 
         if (RuleBasedBreakIterator.fDebugEnv!=null && RuleBasedBreakIterator.fDebugEnv.indexOf("data")>=0) {
-            This.dump();
+            This.dump(System.out);
         }
         return This;
     }
@@ -341,35 +343,35 @@ final class RBBIDataWrapper {
 
     ///CLOVER:OFF
     /* Debug function to display the break iterator data. */
-    void dump() {
+    void dump(java.io.PrintStream out) {
         if (fFTable.length == 0) {
             // There is no table. Fail early for testing purposes.
             throw new NullPointerException();
         }
-        System.out.println("RBBI Data Wrapper dump ...");
-        System.out.println();
-        System.out.println("Forward State Table");
-        dumpTable(fFTable);
-        System.out.println("Reverse State Table");
-        dumpTable(fRTable);
-        System.out.println("Forward Safe Points Table");
-        dumpTable(fSFTable);
-        System.out.println("Reverse Safe Points Table");
-        dumpTable(fSRTable);
-        
-        dumpCharCategories();
-        System.out.println("Source Rules: " + fRuleSource);
-        
+        out.println("RBBI Data Wrapper dump ...");
+        out.println();
+        out.println("Forward State Table");
+        dumpTable(out, fFTable);
+        out.println("Reverse State Table");
+        dumpTable(out, fRTable);
+        out.println("Forward Safe Points Table");
+        dumpTable(out, fSFTable);
+        out.println("Reverse Safe Points Table");
+        dumpTable(out, fSRTable);
+
+        dumpCharCategories(out);
+        out.println("Source Rules: " + fRuleSource);
+
     }
     ///CLOVER:ON
 
     ///CLOVER:OFF
     /* Fixed width int-to-string conversion. */
     static public String intToString(int n, int width) {
-        StringBuilder  dest = new StringBuilder(width);   
+        StringBuilder  dest = new StringBuilder(width);
         dest.append(n);
         while (dest.length() < width) {
-           dest.insert(0, ' ');   
+           dest.insert(0, ' ');
         }
         return dest.toString();
     }
@@ -378,10 +380,10 @@ final class RBBIDataWrapper {
     ///CLOVER:OFF
     /* Fixed width int-to-string conversion. */
     static public String intToHexString(int n, int width) {
-        StringBuilder  dest = new StringBuilder(width);   
+        StringBuilder  dest = new StringBuilder(width);
         dest.append(Integer.toHexString(n));
         while (dest.length() < width) {
-           dest.insert(0, ' ');   
+           dest.insert(0, ' ');
         }
         return dest.toString();
     }
@@ -389,9 +391,9 @@ final class RBBIDataWrapper {
 
     ///CLOVER:OFF
     /** Dump a state table.  (A full set of RBBI rules has 4 state tables.)  */
-    private void dumpTable(short table[]) {
+    private void dumpTable(java.io.PrintStream out, short table[]) {
         if (table == null)   {
-            System.out.println("  -- null -- ");
+            out.println("  -- null -- ");
         } else {
             int n;
             int state;
@@ -399,15 +401,15 @@ final class RBBIDataWrapper {
             for (n=0; n<fHeader.fCatCount; n++) {
                 header.append(intToString(n, 5));
             }
-            System.out.println(header.toString());
+            out.println(header.toString());
             for (n=0; n<header.length(); n++) {
-                System.out.print("-");
+                out.print("-");
             }
-            System.out.println();
+            out.println();
             for (state=0; state< getStateTableNumStates(table); state++) {
-                dumpRow(table, state);   
+                dumpRow(out, table, state);
             }
-            System.out.println();
+            out.println();
         }
     }
     ///CLOVER:ON
@@ -418,32 +420,32 @@ final class RBBIDataWrapper {
      * @param table
      * @param state
      */
-    private void dumpRow(short table[], int   state) {
+    private void dumpRow(java.io.PrintStream out, short table[], int   state) {
         StringBuilder dest = new StringBuilder(fHeader.fCatCount*5 + 20);
         dest.append(intToString(state, 4));
         int row = getRowIndex(state);
         if (table[row+ACCEPTING] != 0) {
-           dest.append(intToString(table[row+ACCEPTING], 5)); 
+           dest.append(intToString(table[row+ACCEPTING], 5));
         }else {
             dest.append("     ");
         }
         if (table[row+LOOKAHEAD] != 0) {
-            dest.append(intToString(table[row+LOOKAHEAD], 5)); 
+            dest.append(intToString(table[row+LOOKAHEAD], 5));
         }else {
             dest.append("     ");
         }
-        dest.append(intToString(table[row+TAGIDX], 5)); 
-        
+        dest.append(intToString(table[row+TAGIDX], 5));
+
         for (int col=0; col<fHeader.fCatCount; col++) {
-            dest.append(intToString(table[row+NEXTSTATES+col], 5));   
+            dest.append(intToString(table[row+NEXTSTATES+col], 5));
         }
 
-        System.out.println(dest);
+        out.println(dest);
     }
     ///CLOVER:ON
 
     ///CLOVER:OFF
-    private void dumpCharCategories() {
+    private void dumpCharCategories(java.io.PrintStream out) {
         int n = fHeader.fCatCount;
         String   catStrings[] = new  String[n+1];
         int      rangeStart = 0;
@@ -452,32 +454,32 @@ final class RBBIDataWrapper {
         int      char32;
         int      category;
         int      lastNewline[] = new int[n+1];
-        
+
         for (category = 0; category <= fHeader.fCatCount; category ++) {
-            catStrings[category] = "";   
+            catStrings[category] = "";
         }
-        System.out.println("\nCharacter Categories");
-        System.out.println("--------------------");
+        out.println("\nCharacter Categories");
+        out.println("--------------------");
         for (char32 = 0; char32<=0x10ffff; char32++) {
             category = fTrie.getCodePointValue(char32);
             category &= ~0x4000;            // Mask off dictionary bit.
             if (category < 0 || category > fHeader.fCatCount) {
-                System.out.println("Error, bad category " + Integer.toHexString(category) + 
-                        " for char " + Integer.toHexString(char32)); 
+                out.println("Error, bad category " + Integer.toHexString(category) +
+                        " for char " + Integer.toHexString(char32));
                 break;
             }
             if (category == lastCat ) {
-                rangeEnd = char32;   
+                rangeEnd = char32;
             } else {
                 if (lastCat >= 0) {
                     if (catStrings[lastCat].length() > lastNewline[lastCat] + 70) {
                         lastNewline[lastCat] = catStrings[lastCat].length() + 10;
                         catStrings[lastCat] += "\n       ";
                     }
-                    
+
                     catStrings[lastCat] += " " + Integer.toHexString(rangeStart);
                     if (rangeEnd != rangeStart) {
-                        catStrings[lastCat] += "-" + Integer.toHexString(rangeEnd);   
+                        catStrings[lastCat] += "-" + Integer.toHexString(rangeEnd);
                     }
                 }
                 lastCat = category;
@@ -486,13 +488,13 @@ final class RBBIDataWrapper {
         }
         catStrings[lastCat] += " " + Integer.toHexString(rangeStart);
         if (rangeEnd != rangeStart) {
-            catStrings[lastCat] += "-" + Integer.toHexString(rangeEnd);   
+            catStrings[lastCat] += "-" + Integer.toHexString(rangeEnd);
         }
-        
+
         for (category = 0; category <= fHeader.fCatCount; category ++) {
-            System.out.println (intToString(category, 5) + "  " + catStrings[category]);   
+            out.println (intToString(category, 5) + "  " + catStrings[category]);
         }
-        System.out.println();
+        out.println();
     }
     ///CLOVER:ON
 
@@ -510,9 +512,9 @@ final class RBBIDataWrapper {
             s = args[0];
         }
         System.out.println("RBBIDataWrapper.main(" + s + ") ");
-        
+
         String versionedName = ICUResourceBundle.ICU_BUNDLE+"/"+ s + ".brk";
-        
+
         try {
             RBBIDataWrapper This = RBBIDataWrapper.get(versionedName);
             This.dump();
@@ -520,6 +522,6 @@ final class RBBIDataWrapper {
        catch (Exception e) {
            System.out.println("Exception: " + e.toString());
        }
-           
+
     }*/
 }

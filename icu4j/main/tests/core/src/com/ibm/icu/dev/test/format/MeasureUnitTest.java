@@ -1401,6 +1401,10 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("Wide currency", "-1.00\u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
         assertEquals("Wide currency", "1.00\u7C73\u30C9\u30EB", mf.format(USD_1));
         assertEquals("Wide currency", "2.00\u7C73\u30C9\u30EB", mf.format(USD_2));
+
+        Measure CAD_1 = new Measure(1.0, Currency.getInstance("CAD"));
+        mf = MeasureFormat.getInstance(ULocale.CANADA, FormatWidth.SHORT);
+        assertEquals("short currency", "CAD1.00", mf.format(CAD_1));
     }
 
     @Test

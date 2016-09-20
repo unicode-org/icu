@@ -7,11 +7,11 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v2.1 : collate/CollationAPITest
  * Source File: $ICU4CRoot/source/test/intltest/apicoll.cpp
  **/
- 
+
 package com.ibm.icu.dev.test.collator;
 
 import java.text.CharacterIterator;
@@ -52,16 +52,16 @@ public class CollationAPITest extends TestFmwk {
         logln("testing CollationKey begins...");
         Collator col = Collator.getInstance();
         col.setStrength(Collator.TERTIARY);
-    
+
         String test1 = "Abcda";
         String test2 = "abcda";
-    
+
         logln("Testing weird arguments");
         CollationKey sortk1 = col.getCollationKey("");
         // key gets reset here
         byte[] bytes = sortk1.toByteArray();
-        doAssert(bytes.length == 3 && bytes[0] == 1 && bytes[1] == 1 
-                 && bytes[2] == 0, 
+        doAssert(bytes.length == 3 && bytes[0] == 1 && bytes[1] == 1
+                 && bytes[2] == 0,
                  "Empty string should return a collation key with empty levels");
 
         // Most control codes and CGJ are completely ignorable.
@@ -104,38 +104,38 @@ public class CollationAPITest extends TestFmwk {
         CollationKey key1 = col.getCollationKey(test1);
         CollationKey key2 = col.getCollationKey(test2);
         CollationKey key3 = col.getCollationKey(test2);
-    
-        doAssert(key1.compareTo(key2) > 0, 
+
+        doAssert(key1.compareTo(key2) > 0,
                  "Result should be \"Abcda\" > \"abcda\"");
         doAssert(key2.compareTo(key1) < 0,
                 "Result should be \"abcda\" < \"Abcda\"");
         doAssert(key2.compareTo(key3) == 0,
                 "Result should be \"abcda\" ==  \"abcda\"");
-     
+
         byte key2identical[] = key2.toByteArray();
-    
+
         logln("Use secondary comparision level testing ...");
         col.setStrength(Collator.SECONDARY);
-    
+
         key1 = col.getCollationKey(test1);
         key2 = col.getCollationKey(test2);
         key3 = col.getCollationKey(test2);
-    
-        doAssert(key1.compareTo(key2) == 0, 
+
+        doAssert(key1.compareTo(key2) == 0,
                 "Result should be \"Abcda\" == \"abcda\"");
         doAssert(key2.compareTo(key3) == 0,
                 "Result should be \"abcda\" ==  \"abcda\"");
-    
+
         byte tempkey[] = key2.toByteArray();
         byte subkey2compat[] = new byte[tempkey.length];
         System.arraycopy(key2identical, 0, subkey2compat, 0, tempkey.length);
         subkey2compat[subkey2compat.length - 1] = 0;
         doAssert(Arrays.equals(tempkey, subkey2compat),
                  "Binary format for 'abcda' sortkey different for secondary strength!");
-    
+
         logln("testing sortkey ends...");
     }
-    
+
     @Test
     public void TestRawCollationKey()
     {
@@ -143,47 +143,47 @@ public class CollationAPITest extends TestFmwk {
         RawCollationKey key = new RawCollationKey();
         if (key.bytes != null || key.size != 0) {
             errln("Empty default constructor expected to leave the bytes null "
-                  + "and size 0"); 
+                  + "and size 0");
         }
         byte array[] = new byte[128];
         key = new RawCollationKey(array);
         if (key.bytes != array || key.size != 0) {
             errln("Constructor taking an array expected to adopt it and "
-                  + "retaining its size 0"); 
+                  + "retaining its size 0");
         }
         try {
             key = new RawCollationKey(array, 129);
             errln("Constructor taking an array and a size > array.length "
-                  + "expected to throw an exception"); 
+                  + "expected to throw an exception");
         } catch (IndexOutOfBoundsException e) {
                 logln("PASS: Constructor failed as expected");
         }
         try {
             key = new RawCollationKey(array, -1);
             errln("Constructor taking an array and a size < 0 "
-                  + "expected to throw an exception"); 
+                  + "expected to throw an exception");
         } catch (IndexOutOfBoundsException e) {
                 logln("PASS: Constructor failed as expected");
         }
         key = new RawCollationKey(array, array.length >> 1);
         if (key.bytes != array || key.size != (array.length >> 1)) {
             errln("Constructor taking an array and a size, "
-                  + "expected to adopt it and take the size specified"); 
+                  + "expected to adopt it and take the size specified");
         }
         key = new RawCollationKey(10);
         if (key.bytes == null || key.bytes.length != 10 || key.size != 0) {
             errln("Constructor taking a specified capacity expected to "
                   + "create a new internal byte array with length 10 and "
-                  + "retain size 0"); 
+                  + "retain size 0");
         }
     }
-    
+
     void doAssert(boolean conditions, String message) {
         if (!conditions) {
             errln(message);
         }
     }
-    
+
     /**
      * This tests the comparison convenience methods of a collator object.
      * - greater than
@@ -198,24 +198,24 @@ public class CollationAPITest extends TestFmwk {
         String test1 = "Abcda";
         String test2 = "abcda";
         logln("Use tertiary comparison level testing ....");
-        
+
         doAssert((!col.equals(test1, test2) ), "Result should be \"Abcda\" != \"abcda\"");
         doAssert((col.compare(test1, test2) > 0 ), "Result should be \"Abcda\" >>> \"abcda\"");
 
         col.setStrength(Collator.SECONDARY);
         logln("Use secondary comparison level testing ....");
-                    
+
         doAssert((col.equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.compare(test1, test2) == 0), "Result should be \"Abcda\" == \"abcda\"");
 
         col.setStrength(Collator.PRIMARY);
         logln("Use primary comparison level testing ....");
-        
+
         doAssert((col.equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.compare(test1, test2) == 0 ), "Result should be \"Abcda\" == \"abcda\"");
         logln("The compare tests end.");
     }
-    
+
     /**
     * Tests decomposition setting
     */
@@ -227,7 +227,7 @@ public class CollationAPITest extends TestFmwk {
         el_GR = Collator.getInstance(new Locale("el", "GR"));
         vi_VN = Collator.getInstance(new Locale("vi", "VN"));
 
-        
+
         // there is no reason to have canonical decomposition in en_US OR default locale */
         if (vi_VN.getDecomposition() != Collator.CANONICAL_DECOMPOSITION)
         {
@@ -244,15 +244,15 @@ public class CollationAPITest extends TestFmwk {
             errln("en_US collation had cannonical decomposition for normalization!");
         }
     }
-    
+
     /**
      * This tests the duplication of a collator object.
      */
     @Test
     public void TestDuplicate() {
-        //Clone does not be implemented 
+        //Clone does not be implemented
         Collator col1 = Collator.getInstance(Locale.ENGLISH);
-        
+
         // Collator col2 = (Collator)col1.clone();
         // doAssert(col1.equals(col2), "Cloned object is not equal to the orginal");
         String ruleset = "&9 < a, A < b, B < c, C < d, D, e, E";
@@ -266,9 +266,9 @@ public class CollationAPITest extends TestFmwk {
         doAssert(!col1.equals(col3), "Cloned object is equal to some dummy");
         col3 = (RuleBasedCollator)col1;
         doAssert(col1.equals(col3), "Copied object is not equal to the orginal");
-        
+
     }
-    
+
     /**
      * This tests the CollationElementIterator related APIs.
      * - creation of a CollationElementIterator object
@@ -282,18 +282,18 @@ public class CollationAPITest extends TestFmwk {
         // logln("testing sortkey begins...");
         Collator col = Collator.getInstance(Locale.ENGLISH);
 
-           
+
         String testString1 = "XFILE What subset of all possible test cases has the highest probability of detecting the most errors?";
         String testString2 = "Xf_ile What subset of all possible test cases has the lowest probability of detecting the least errors?";
         // logln("Constructors and comparison testing....");
         CollationElementIterator iterator1 = ((RuleBasedCollator)col).getCollationElementIterator(testString1);
-        
+
         CharacterIterator chariter=new StringCharacterIterator(testString1);
         // copy ctor
         CollationElementIterator iterator2 = ((RuleBasedCollator)col).getCollationElementIterator(chariter);
         UCharacterIterator uchariter=UCharacterIterator.getInstance(testString2);
         CollationElementIterator iterator3 = ((RuleBasedCollator)col).getCollationElementIterator(uchariter);
-    
+
         int offset = 0;
         offset = iterator1.getOffset();
         if (offset != 0) {
@@ -303,10 +303,17 @@ public class CollationAPITest extends TestFmwk {
         iterator1.setOffset(6);
         iterator1.setOffset(0);
         int order1, order2, order3;
-        
+
         order1 = iterator1.next();
         doAssert(!(iterator1.equals(iterator2)), "The first iterator advance failed");
         order2 = iterator2.next();
+
+        // Code coverage for dummy "not designed" hashCode() which does "assert false".
+        try {
+            iterator1.hashCode();  // We don't expect any particular value.
+        } catch (AssertionError ignored) {
+            // Expected to be thrown if assertions are enabled.
+        }
 
         // In ICU 52 and earlier we had iterator1.equals(iterator2)
         // but in ICU 53 this fails because the iterators differ (String vs. CharacterIterator).
@@ -314,37 +321,37 @@ public class CollationAPITest extends TestFmwk {
         doAssert(iterator1.getOffset() == iterator2.getOffset(), "The second iterator advance failed");
         doAssert((order1 == order2), "The order result should be the same");
         order3 = iterator3.next();
-        
-        doAssert((CollationElementIterator.primaryOrder(order1) == 
+
+        doAssert((CollationElementIterator.primaryOrder(order1) ==
             CollationElementIterator.primaryOrder(order3)), "The primary orders should be the same");
-        doAssert((CollationElementIterator.secondaryOrder(order1) == 
+        doAssert((CollationElementIterator.secondaryOrder(order1) ==
             CollationElementIterator.secondaryOrder(order3)), "The secondary orders should be the same");
-        doAssert((CollationElementIterator.tertiaryOrder(order1) == 
+        doAssert((CollationElementIterator.tertiaryOrder(order1) ==
             CollationElementIterator.tertiaryOrder(order3)), "The tertiary orders should be the same");
-    
-        order1 = iterator1.next(); 
+
+        order1 = iterator1.next();
         order3 = iterator3.next();
-        
-        doAssert((CollationElementIterator.primaryOrder(order1) == 
+
+        doAssert((CollationElementIterator.primaryOrder(order1) ==
             CollationElementIterator.primaryOrder(order3)), "The primary orders should be identical");
-        doAssert((CollationElementIterator.tertiaryOrder(order1) != 
+        doAssert((CollationElementIterator.tertiaryOrder(order1) !=
             CollationElementIterator.tertiaryOrder(order3)), "The tertiary orders should be different");
-    
-        order1 = iterator1.next(); 
+
+        order1 = iterator1.next();
         order3 = iterator3.next();
         // invalid test wrong in UCA
-        // doAssert((CollationElementIterator.secondaryOrder(order1) != 
+        // doAssert((CollationElementIterator.secondaryOrder(order1) !=
         //    CollationElementIterator.secondaryOrder(order3)), "The secondary orders should not be the same");
-            
+
         doAssert((order1 != CollationElementIterator.NULLORDER), "Unexpected end of iterator reached");
-    
-        iterator1.reset(); 
-        iterator2.reset(); 
+
+        iterator1.reset();
+        iterator2.reset();
         iterator3.reset();
         order1 = iterator1.next();
-        
+
         doAssert(!(iterator1.equals(iterator2)), "The first iterator advance failed");
-        
+
         order2 = iterator2.next();
 
         // In ICU 52 and earlier we had iterator1.equals(iterator2)
@@ -352,36 +359,36 @@ public class CollationAPITest extends TestFmwk {
         // doAssert((iterator1.equals(iterator2)), "The second iterator advance failed");
         doAssert(iterator1.getOffset() == iterator2.getOffset(), "The second iterator advance failed");
         doAssert((order1 == order2), "The order result should be the same");
-    
+
         order3 = iterator3.next();
-        
-        doAssert((CollationElementIterator.primaryOrder(order1) == 
+
+        doAssert((CollationElementIterator.primaryOrder(order1) ==
             CollationElementIterator.primaryOrder(order3)), "The primary orders should be the same");
-        doAssert((CollationElementIterator.secondaryOrder(order1) == 
+        doAssert((CollationElementIterator.secondaryOrder(order1) ==
             CollationElementIterator.secondaryOrder(order3)), "The secondary orders should be the same");
-        doAssert((CollationElementIterator.tertiaryOrder(order1) == 
+        doAssert((CollationElementIterator.tertiaryOrder(order1) ==
             CollationElementIterator.tertiaryOrder(order3)), "The tertiary orders should be the same");
-    
-        order1 = iterator1.next(); 
-        order2 = iterator2.next(); 
+
+        order1 = iterator1.next();
+        order2 = iterator2.next();
         order3 = iterator3.next();
-        
-        doAssert((CollationElementIterator.primaryOrder(order1) == 
+
+        doAssert((CollationElementIterator.primaryOrder(order1) ==
             CollationElementIterator.primaryOrder(order3)), "The primary orders should be identical");
-        doAssert((CollationElementIterator.tertiaryOrder(order1) != 
+        doAssert((CollationElementIterator.tertiaryOrder(order1) !=
             CollationElementIterator.tertiaryOrder(order3)), "The tertiary orders should be different");
-    
-        order1 = iterator1.next(); 
+
+        order1 = iterator1.next();
         order3 = iterator3.next();
-        
+
         // obsolete invalid test, removed
-        // doAssert((CollationElementIterator.secondaryOrder(order1) != 
+        // doAssert((CollationElementIterator.secondaryOrder(order1) !=
         //    CollationElementIterator.secondaryOrder(order3)), "The secondary orders should not be the same");
         doAssert((order1 != CollationElementIterator.NULLORDER), "Unexpected end of iterator reached");
         doAssert(!(iterator2.equals(iterator3)), "The iterators should be different");
         logln("testing CollationElementIterator ends...");
     }
-    
+
     /**
      * This tests the hashCode method of a collator object.
      */
@@ -389,7 +396,7 @@ public class CollationAPITest extends TestFmwk {
     public void TestHashCode() {
         logln("hashCode tests begin.");
         Collator col1 = Collator.getInstance(Locale.ENGLISH);
-    
+
         Collator col2 = null;
         Locale dk = new Locale("da", "DK", "");
         try {
@@ -398,7 +405,7 @@ public class CollationAPITest extends TestFmwk {
             errln("Danish collation creation failed.");
             return;
         }
-    
+
         Collator col3 = null;
         try {
             col3 = Collator.getInstance(Locale.ENGLISH);
@@ -406,28 +413,28 @@ public class CollationAPITest extends TestFmwk {
             errln("2nd default collation creation failed.");
             return;
         }
-    
+
         logln("Collator.hashCode() testing ...");
-        
-        doAssert(col1.hashCode() != col2.hashCode(), "Hash test1 result incorrect" );                 
-        doAssert(!(col1.hashCode() == col2.hashCode()), "Hash test2 result incorrect" );              
-        doAssert(col1.hashCode() == col3.hashCode(), "Hash result not equal" );               
-    
+
+        doAssert(col1.hashCode() != col2.hashCode(), "Hash test1 result incorrect" );
+        doAssert(!(col1.hashCode() == col2.hashCode()), "Hash test2 result incorrect" );
+        doAssert(col1.hashCode() == col3.hashCode(), "Hash result not equal" );
+
         logln("hashCode tests end.");
-        
+
         String test1 = "Abcda";
         String test2 = "abcda";
-        
+
         CollationKey sortk1, sortk2, sortk3;
-                    
+
         sortk1 = col3.getCollationKey(test1);
-        sortk2 = col3.getCollationKey(test2); 
-        sortk3 = col3.getCollationKey(test2); 
-        
-        doAssert(sortk1.hashCode() != sortk2.hashCode(), "Hash test1 result incorrect");               
+        sortk2 = col3.getCollationKey(test2);
+        sortk3 = col3.getCollationKey(test2);
+
+        doAssert(sortk1.hashCode() != sortk2.hashCode(), "Hash test1 result incorrect");
         doAssert(sortk2.hashCode() == sortk3.hashCode(), "Hash result not equal" );
     }
-    
+
     /**
      * This tests the properties of a collator object.
      * - constructor
@@ -437,13 +444,13 @@ public class CollationAPITest extends TestFmwk {
      */
     @Test
     public void TestProperty() {
-        /* 
+        /*
           All the collations have the same version in an ICU
           version.
           ICU 2.0 currVersionArray = {0x18, 0xC0, 0x02, 0x02};
           ICU 2.1 currVersionArray = {0x19, 0x00, 0x03, 0x03};
-          ICU 2.8 currVersionArray = {0x29, 0x80, 0x00, 0x04};          
-        */    
+          ICU 2.8 currVersionArray = {0x29, 0x80, 0x00, 0x04};
+        */
         logln("The property tests begin : ");
         logln("Test ctors : ");
         Collator col = Collator.getInstance(Locale.ENGLISH);
@@ -467,60 +474,60 @@ public class CollationAPITest extends TestFmwk {
         doAssert((col.compare("blackbird", "black-bird") > 0), "black-bird > blackbird comparison failed");
         doAssert((col.compare("black bird", "black-bird") < 0), "black bird > black-bird comparison failed");
         doAssert((col.compare("Hello", "hello") > 0), "Hello > hello comparison failed");
-    
+
         logln("Test ctors ends.");
-        
+
         logln("testing Collator.getStrength() method ...");
         doAssert((col.getStrength() == Collator.TERTIARY), "collation object has the wrong strength");
         doAssert((col.getStrength() != Collator.PRIMARY), "collation object's strength is primary difference");
-            
+
         logln("testing Collator.setStrength() method ...");
         col.setStrength(Collator.SECONDARY);
         doAssert((col.getStrength() != Collator.TERTIARY), "collation object's strength is secondary difference");
         doAssert((col.getStrength() != Collator.PRIMARY), "collation object's strength is primary difference");
         doAssert((col.getStrength() == Collator.SECONDARY), "collation object has the wrong strength");
-    
+
         logln("testing Collator.setDecomposition() method ...");
         col.setDecomposition(Collator.NO_DECOMPOSITION);
         doAssert((col.getDecomposition() != Collator.CANONICAL_DECOMPOSITION), "Decomposition mode != Collator.CANONICAL_DECOMPOSITION");
         doAssert((col.getDecomposition() == Collator.NO_DECOMPOSITION), "Decomposition mode = Collator.NO_DECOMPOSITION");
-        
-        
+
+
         RuleBasedCollator rcol = (RuleBasedCollator)Collator.getInstance(new Locale("da", "DK"));
         doAssert(rcol.getRules().length() != 0, "da_DK rules does not have length 0");
-        
+
         try {
             col = Collator.getInstance(Locale.FRENCH);
         } catch (Exception e) {
             errln("Creating French collation failed.");
             return;
         }
-    
+
         col.setStrength(Collator.PRIMARY);
         logln("testing Collator.getStrength() method again ...");
         doAssert((col.getStrength() != Collator.TERTIARY), "collation object has the wrong strength");
         doAssert((col.getStrength() == Collator.PRIMARY), "collation object's strength is not primary difference");
-            
+
         logln("testing French Collator.setStrength() method ...");
         col.setStrength(Collator.TERTIARY);
         doAssert((col.getStrength() == Collator.TERTIARY), "collation object's strength is not tertiary difference");
         doAssert((col.getStrength() != Collator.PRIMARY), "collation object's strength is primary difference");
         doAssert((col.getStrength() != Collator.SECONDARY), "collation object's strength is secondary difference");
-    
+
     }
 
     @Test
     public void TestJunkCollator(){
         logln("Create junk collation: ");
         Locale abcd = new Locale("ab", "CD", "");
-        
+
         Collator junk = Collator.getInstance(abcd);
         Collator col = Collator.getInstance();
 
-    
+
         String colrules = ((RuleBasedCollator)col).getRules();
         String junkrules = ((RuleBasedCollator)junk).getRules();
-        doAssert(colrules == junkrules || colrules.equals(junkrules), 
+        doAssert(colrules == junkrules || colrules.equals(junkrules),
                    "The default collation should be returned.");
         Collator frCol = null;
         try {
@@ -529,10 +536,10 @@ public class CollationAPITest extends TestFmwk {
             errln("Creating fr_CA collator failed.");
             return;
         }
-    
+
         doAssert(!(frCol.equals(junk)), "The junk is the same as the fr_CA collator.");
         logln("Collator property test ended.");
-    
+
     }
 
     /**
@@ -543,26 +550,26 @@ public class CollationAPITest extends TestFmwk {
     @Test
     public void TestRuleBasedColl() {
         RuleBasedCollator col1 = null, col2 = null, col3 = null, col4 = null;
-    
-        String ruleset1 = "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E"; 
+
+        String ruleset1 = "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E";
         String ruleset2 = "&9 < a, A < b, B < c, C < d, D, e, E";
         String ruleset3 = "&";
-        
+
         try {
             col1 = new RuleBasedCollator(ruleset1);
         } catch (Exception e) {
-            // only first error needs to be a warning since we exit function 
+            // only first error needs to be a warning since we exit function
             warnln("RuleBased Collator creation failed.");
             return;
         }
-    
+
         try {
             col2 = new RuleBasedCollator(ruleset2);
         } catch (Exception e) {
             errln("RuleBased Collator creation failed.");
             return;
         }
-    
+
         try {
             // empty rules fail
             col3 = new RuleBasedCollator(ruleset3);
@@ -573,7 +580,7 @@ public class CollationAPITest extends TestFmwk {
         } catch (Exception e) {
             logln("PASS: Empty rules for the collator failed as expected");
         }
-        
+
         Locale locale = new Locale("aa", "AA");
         try {
             col3 = (RuleBasedCollator)Collator.getInstance(locale);
@@ -581,29 +588,29 @@ public class CollationAPITest extends TestFmwk {
             errln("Fallback Collator creation failed.: %s");
             return;
         }
-    
+
         try {
             col3 = (RuleBasedCollator)Collator.getInstance();
         } catch (Exception e) {
             errln("Default Collator creation failed.: %s");
             return;
         }
-    
-        String rule1 = col1.getRules(); 
+
+        String rule1 = col1.getRules();
         String rule2 = col2.getRules();
         String rule3 = col3.getRules();
-    
+
         doAssert(!rule1.equals(rule2), "Default collator getRules failed");
         doAssert(!rule2.equals(rule3), "Default collator getRules failed");
         doAssert(!rule1.equals(rule3), "Default collator getRules failed");
-        
+
         try {
             col4 = new RuleBasedCollator(rule2);
         } catch (Exception e) {
             errln("RuleBased Collator creation failed.");
             return;
         }
-    
+
         String rule4 = col4.getRules();
         doAssert(rule2.equals(rule4), "Default collator getRules failed");
         // tests that modifier ! is always ignored
@@ -614,9 +621,9 @@ public class CollationAPITest extends TestFmwk {
             RuleBasedCollator col5 = new RuleBasedCollator(exclamationrules);
             RuleBasedCollator encol = (RuleBasedCollator)
                                         Collator.getInstance(Locale.ENGLISH);
-            CollationElementIterator col5iter 
+            CollationElementIterator col5iter
                                    = col5.getCollationElementIterator(thaistr);
-            CollationElementIterator encoliter 
+            CollationElementIterator encoliter
                                    = encol.getCollationElementIterator(
                                                                       thaistr);
             while (true) {
@@ -635,7 +642,7 @@ public class CollationAPITest extends TestFmwk {
             return;
         }
     }
-    
+
     /**
     * This tests the RuleBasedCollator
     * - getRules
@@ -645,67 +652,67 @@ public class CollationAPITest extends TestFmwk {
         RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(new Locale("","","")); //root
             // logln("PASS: RuleBased Collator creation passed");
 
-    
+
         String rules = coll.getRules();
         if (rules != null && rules.length() != 0) {
             errln("Root tailored rules failed");
         }
     }
-    
+
     @Test
     public void TestSafeClone() {
         String test1 = "abCda";
         String test2 = "abcda";
-        
-        // one default collator & two complex ones 
+
+        // one default collator & two complex ones
         RuleBasedCollator someCollators[] = {
             (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH),
             (RuleBasedCollator)Collator.getInstance(Locale.KOREA),
             (RuleBasedCollator)Collator.getInstance(Locale.JAPAN)
         };
         RuleBasedCollator someClonedCollators[] = new RuleBasedCollator[3];
-        
-        // change orig & clone & make sure they are independent 
-    
+
+        // change orig & clone & make sure they are independent
+
         for (int index = 0; index < someCollators.length; index ++)
         {
             try {
-                someClonedCollators[index] 
+                someClonedCollators[index]
                             = (RuleBasedCollator)someCollators[index].clone();
             } catch (CloneNotSupportedException e) {
                 errln("Error cloning collator");
             }
-    
+
             someClonedCollators[index].setStrength(Collator.TERTIARY);
             someCollators[index].setStrength(Collator.PRIMARY);
             someClonedCollators[index].setCaseLevel(false);
             someCollators[index].setCaseLevel(false);
-            
-            doAssert(someClonedCollators[index].compare(test1, test2) > 0, 
+
+            doAssert(someClonedCollators[index].compare(test1, test2) > 0,
                      "Result should be \"abCda\" >>> \"abcda\" ");
-            doAssert(someCollators[index].compare(test1, test2) == 0, 
+            doAssert(someCollators[index].compare(test1, test2) == 0,
                      "Result should be \"abCda\" == \"abcda\" ");
         }
     }
 
     @Test
-    public void TestGetTailoredSet() 
+    public void TestGetTailoredSet()
     {
         logln("testing getTailoredSet...");
         String rules[] = {
-            "&a < \u212b",             
+            "&a < \u212b",
             "& S < \u0161 <<< \u0160",
         };
         String data[][] = {
-            { "\u212b", "A\u030a", "\u00c5" },        
-            { "\u0161", "s\u030C", "\u0160", "S\u030C" }            
+            { "\u212b", "A\u030a", "\u00c5" },
+            { "\u0161", "s\u030C", "\u0160", "S\u030C" }
         };
-    
+
         int i = 0, j = 0;
-        
+
         RuleBasedCollator coll;
         UnicodeSet set;
-        
+
         for(i = 0; i < rules.length; i++) {
             try {
                 logln("Instantiating a collator from "+rules[i]);
@@ -727,11 +734,12 @@ public class CollationAPITest extends TestFmwk {
         }
     }
 
-    /** 
-     * Simple test to see if Collator is subclassable
+    /**
+     * Simple test to see if Collator is subclassable.
+     * Also test coverage of base class methods that are overridden by RuleBasedCollator.
      */
     @Test
-    public void TestSubClass() 
+    public void TestSubClass()
     {
         class TestCollator extends Collator
         {
@@ -739,25 +747,25 @@ public class CollationAPITest extends TestFmwk {
             public boolean equals(Object that) {
                 return this == that;
             }
-    
+
             @Override
             public int hashCode() {
                 return 0;
             }
-            
+
             @Override
             public int compare(String source, String target) {
                 return source.compareTo(target);
             }
-            
+
             @Override
             public CollationKey getCollationKey(String source)
-            {   return new CollationKey(source, 
+            {   return new CollationKey(source,
                           getRawCollationKey(source, new RawCollationKey()));
             }
-            
+
             @Override
-            public RawCollationKey getRawCollationKey(String source, 
+            public RawCollationKey getRawCollationKey(String source,
                                                       RawCollationKey key)
             {
                 byte temp1[] = source.getBytes();
@@ -767,11 +775,11 @@ public class CollationAPITest extends TestFmwk {
                 if (key == null) {
                     key = new RawCollationKey();
                 }
-                key.bytes = temp2; 
+                key.bytes = temp2;
                 key.size = temp2.length;
                 return key;
             }
-            
+
             @Override
             public void setVariableTop(int ce)
             {
@@ -779,9 +787,9 @@ public class CollationAPITest extends TestFmwk {
                     throw new UnsupportedOperationException("Attempt to modify frozen object");
                 }
             }
-            
+
             @Override
-            public int setVariableTop(String str) 
+            public int setVariableTop(String str)
             {
                 if (isFrozen()) {
                     throw new UnsupportedOperationException("Attempt to modify frozen object");
@@ -789,7 +797,7 @@ public class CollationAPITest extends TestFmwk {
 
                 return 0;
             }
-            
+
             @Override
             public int getVariableTop()
             {
@@ -804,9 +812,9 @@ public class CollationAPITest extends TestFmwk {
             public VersionInfo getUCAVersion()
             {
                 return VersionInfo.getInstance(0);
-            }            
+            }
         }
- 
+
         Collator col1 = new TestCollator();
         Collator col2 = new TestCollator();
         if (col1.equals(col2)) {
@@ -826,22 +834,91 @@ public class CollationAPITest extends TestFmwk {
         byte temp2[] = new byte[temp1.length + 1];
         System.arraycopy(temp1, 0, temp2, 0, temp1.length);
         temp2[temp1.length] = 0;
-        if (!java.util.Arrays.equals(key.toByteArray(), temp2) 
-            || !key.getSourceString().equals(abc)) {
+        if (!java.util.Arrays.equals(key.toByteArray(), temp2)
+                || !key.getSourceString().equals(abc)) {
             errln("TestCollator collationkey API is returning wrong values");
         }
         UnicodeSet set = col1.getTailoredSet();
         if (!set.equals(new UnicodeSet(0, 0x10FFFF))) {
             errln("Error getting default tailored set");
         }
+
+        // Base class code coverage.
+        // Most of these methods are dummies;
+        // they are overridden by any subclass that supports their features.
+
+        assertEquals("compare(strings as Object)", 0,
+                col1.compare(new StringBuilder("abc"), new StringBuffer("abc")));
+
+        col1.setStrength(Collator.SECONDARY);
+        assertNotEquals("getStrength()", Collator.PRIMARY, col1.getStrength());
+
+        // setStrength2() is @internal and returns this.
+        // The base class getStrength() always returns the same value,
+        // since the base class does not have a field to store the strength.
+        assertNotEquals("setStrength2().getStrength()", Collator.PRIMARY,
+                col1.setStrength2(Collator.IDENTICAL).getStrength());
+
+        // (base class).setDecomposition() may or may not be implemented.
+        try {
+            col1.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        } catch (UnsupportedOperationException expected) {
+        }
+        assertNotEquals("getDecomposition()", -1, col1.getDecomposition());  // don't care about the value
+
+        // (base class).setMaxVariable() may or may not be implemented.
+        try {
+            col1.setMaxVariable(Collator.ReorderCodes.CURRENCY);
+        } catch (UnsupportedOperationException expected) {
+        }
+        assertNotEquals("getMaxVariable()", -1, col1.getMaxVariable());  // don't care about the value
+
+        // (base class).setReorderCodes() may or may not be implemented.
+        try {
+            col1.setReorderCodes(0, 1, 2);
+        } catch (UnsupportedOperationException expected) {
+        }
+        try {
+            col1.getReorderCodes();
+        } catch (UnsupportedOperationException expected) {
+        }
+
+        assertFalse("getDisplayName()", Collator.getDisplayName(Locale.GERMAN).isEmpty());
+        assertFalse("getDisplayName()", Collator.getDisplayName(Locale.GERMAN, Locale.ITALIAN).isEmpty());
+
+        assertNotEquals("getLocale()", ULocale.GERMAN, col1.getLocale(ULocale.ACTUAL_LOCALE));
+
+        // Cover Collator.setLocale() which is only package-visible.
+        Object token = Collator.registerInstance(new TestCollator(), new ULocale("de-Japn-419"));
+        Collator.unregister(token);
+
+        // Freezable default implementations. freeze() may or may not be implemented.
+        assertFalse("not yet frozen", col2.isFrozen());
+        try {
+            col2.freeze();
+            assertTrue("now frozen", col2.isFrozen());
+        } catch (UnsupportedOperationException expected) {
+        }
+        try {
+            col2.setStrength(Collator.PRIMARY);
+            if (col2.isFrozen()) {
+                fail("(frozen Collator).setStrength() should throw an exception");
+            }
+        } catch (UnsupportedOperationException expected) {
+        }
+        try {
+            Collator col3 = col2.cloneAsThawed();
+            assertFalse("!cloneAsThawed().isFrozen()", col3.isFrozen());
+        } catch (UnsupportedOperationException expected) {
+        }
     }
 
-    /** 
+    /**
      * Simple test the collator setter and getters.
      * Similar to C++ apicoll.cpp TestAttribute().
      */
     @Test
-    public void TestSetGet() 
+    public void TestSetGet()
     {
         RuleBasedCollator collator = (RuleBasedCollator)Collator.getInstance();
         int decomp = collator.getDecomposition();
@@ -852,7 +929,7 @@ public class CollationAPITest extends TestFmwk {
         boolean hquart = collator.isHiraganaQuaternary();
         boolean lowercase = collator.isLowerCaseFirst();
         boolean uppercase = collator.isUpperCaseFirst();
-        
+
         collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         if (collator.getDecomposition() != Collator.CANONICAL_DECOMPOSITION) {
             errln("Setting decomposition failed");
@@ -884,7 +961,7 @@ public class CollationAPITest extends TestFmwk {
         collator.setUpperCaseFirst(!uppercase);
         if (collator.isUpperCaseFirst() == uppercase) {
             errln("Setting upper case first failed");
-        }   
+        }
         collator.setDecompositionDefault();
         if (collator.getDecomposition() != decomp) {
             errln("Setting decomposition default failed");
@@ -910,7 +987,7 @@ public class CollationAPITest extends TestFmwk {
             errln("Setting Hiragana Quartenary default failed");
         }
         collator.setCaseFirstDefault();
-        if (collator.isLowerCaseFirst() != lowercase 
+        if (collator.isLowerCaseFirst() != lowercase
             || collator.isUpperCaseFirst() != uppercase) {
             errln("Setting case first handling default failed");
         }
@@ -1101,32 +1178,32 @@ public class CollationAPITest extends TestFmwk {
     }
 
     @Test
-    public void TestBounds() 
+    public void TestBounds()
     {
         Collator coll = Collator.getInstance(new Locale("sh", ""));
-          
-        String test[] = { "John Smith", "JOHN SMITH", 
+
+        String test[] = { "John Smith", "JOHN SMITH",
                           "john SMITH", "j\u00F6hn sm\u00EFth",
                           "J\u00F6hn Sm\u00EFth", "J\u00D6HN SM\u00CFTH",
                           "john smithsonian", "John Smithsonian",
         };
-      
+
         String testStr[] = {
-                          "\u010CAKI MIHALJ", 
                           "\u010CAKI MIHALJ",
-                          "\u010CAKI PIRO\u0160KA", 
+                          "\u010CAKI MIHALJ",
+                          "\u010CAKI PIRO\u0160KA",
                           "\u010CABAI ANDRIJA",
-                          "\u010CABAI LAJO\u0160", 
+                          "\u010CABAI LAJO\u0160",
                           "\u010CABAI MARIJA",
-                          "\u010CABAI STEVAN", 
                           "\u010CABAI STEVAN",
-                          "\u010CABARKAPA BRANKO", 
+                          "\u010CABAI STEVAN",
+                          "\u010CABARKAPA BRANKO",
                           "\u010CABARKAPA MILENKO",
-                          "\u010CABARKAPA MIROSLAV", 
+                          "\u010CABARKAPA MIROSLAV",
                           "\u010CABARKAPA SIMO",
-                          "\u010CABARKAPA STANKO", 
+                          "\u010CABARKAPA STANKO",
                           "\u010CABARKAPA TAMARA",
-                          "\u010CABARKAPA TOMA\u0160", 
+                          "\u010CABARKAPA TOMA\u0160",
                           "\u010CABDARI\u0106 NIKOLA",
                           "\u010CABDARI\u0106 ZORICA",
                           "\u010CABI NANDOR",
@@ -1169,20 +1246,20 @@ public class CollationAPITest extends TestFmwk {
                           "\u010CAKI ANDRA\u0160",
                           "\u010CAKI LADISLAV",
                           "\u010CAKI LAJO\u0160",
-                          "\u010CAKI LASLO" }; 
-        
+                          "\u010CAKI LASLO" };
+
         CollationKey testKey[] = new CollationKey[testStr.length];
         for (int i = 0; i < testStr.length; i ++) {
             testKey[i] = coll.getCollationKey(testStr[i]);
         }
-        
+
         Arrays.sort(testKey);
         for(int i = 0; i < testKey.length - 1; i ++) {
-            CollationKey lower 
+            CollationKey lower
                            = testKey[i].getBound(CollationKey.BoundMode.LOWER,
                                                  Collator.SECONDARY);
             for (int j = i + 1; j < testKey.length; j ++) {
-                CollationKey upper 
+                CollationKey upper
                            = testKey[j].getBound(CollationKey.BoundMode.UPPER,
                                                  Collator.SECONDARY);
                 for (int k = i; k <= j; k ++) {
@@ -1197,8 +1274,8 @@ public class CollationAPITest extends TestFmwk {
                 }
             }
         }
-        
-        for (int i = 0; i < test.length; i ++) 
+
+        for (int i = 0; i < test.length; i ++)
         {
             CollationKey key = coll.getCollationKey(test[i]);
             CollationKey lower = key.getBound(CollationKey.BoundMode.LOWER,
@@ -1216,7 +1293,7 @@ public class CollationAPITest extends TestFmwk {
             }
         }
     }
-    
+
     public final void TestGetAll() {
         Locale[] list = Collator.getAvailableLocales();
         int errorCount = 0;
@@ -1227,24 +1304,24 @@ public class CollationAPITest extends TestFmwk {
             logln(list[i].getDisplayName());
             try{
                 logln("     ...... Or display as: " + Collator.getDisplayName(list[i]));
-                logln("     ...... and display in Chinese: " + 
-                      Collator.getDisplayName(list[i],Locale.CHINA)); 
+                logln("     ...... and display in Chinese: " +
+                      Collator.getDisplayName(list[i],Locale.CHINA));
             }catch(MissingResourceException ex){
                 errorCount++;
                 logln("could not get displayName for " + list[i]);
-            }           
+            }
         }
         if(errorCount>0){
           warnln("Could not load the locale data.");
         }
-    }    
+    }
 
     private boolean
     doSetsTest(UnicodeSet ref, UnicodeSet set, String inSet, String outSet) {
         boolean ok = true;
         set.clear();
         set.applyPattern(inSet);
-        
+
         if(!ref.containsAll(set)) {
             err("Some stuff from "+inSet+" is not present in the set.\nMissing:"+
                 set.removeAll(ref).toPattern(true)+"\n");
@@ -1275,7 +1352,7 @@ public class CollationAPITest extends TestFmwk {
          }
          */
         String tests[][] = {
-                { "ru", 
+                { "ru",
                     "[{\u0418\u0306}{\u0438\u0306}]",
                     "[\u0439\u0457]",
                     "[\u00e6]",
@@ -1326,7 +1403,7 @@ public class CollationAPITest extends TestFmwk {
         UnicodeSet conts = new UnicodeSet();
         UnicodeSet exp = new UnicodeSet();
         UnicodeSet set = new UnicodeSet();
-        
+
         for(i = 0; i < tests.length; i++) {
             logln("Testing locale: "+ tests[i][0]);
             coll = (RuleBasedCollator)Collator.getInstance(new ULocale(tests[i][0]));
@@ -1352,7 +1429,7 @@ public class CollationAPITest extends TestFmwk {
     }
     private static final String bigone = "One";
     private static final String littleone = "one";
-    
+
     @Test
     public void TestClone() {
         logln("\ninit c0");
@@ -1441,7 +1518,7 @@ public class CollationAPITest extends TestFmwk {
             }
         }
     }
-    
+
     /*
      * Tests the class CollatorFactory
      */
@@ -1449,6 +1526,7 @@ public class CollationAPITest extends TestFmwk {
     public void TestCreateCollator() {
         // The following class override public Collator createCollator(Locale loc)
         class TestCreateCollator extends CollatorFactory {
+            @Override
             public Set<String> getSupportedLocaleIDs() {
                 return new HashSet<String>();
             }
@@ -1457,12 +1535,14 @@ public class CollationAPITest extends TestFmwk {
                 super();
             }
 
+            @Override
             public Collator createCollator(ULocale c) {
                 return null;
             }
         }
         // The following class override public Collator createCollator(ULocale loc)
         class TestCreateCollator1 extends CollatorFactory {
+            @Override
             public Set<String> getSupportedLocaleIDs() {
                 return new HashSet<String>();
             }
@@ -1471,9 +1551,11 @@ public class CollationAPITest extends TestFmwk {
                 super();
             }
 
+            @Override
             public Collator createCollator(Locale c) {
                 return null;
             }
+            @Override
             public boolean visible(){
                 return false;
             }
@@ -1498,7 +1580,7 @@ public class CollationAPITest extends TestFmwk {
         } catch (Exception e) {
             errln("Collator.createCollator(ULocale) was not suppose to " + "return an exception.");
         }
-        
+
         /*
          * Tests the method public String getDisplayName(Locale objectLocale, Locale displayLocale) using TestCreateCollator1 class
          */
@@ -1508,7 +1590,7 @@ public class CollationAPITest extends TestFmwk {
         } catch (Exception e) {
             errln("Collator.getDisplayName(Locale,Locale) was not suppose to return an exception.");
         }
-        
+
         /*
          * Tests the method public String getDisplayName(ULocale objectLocale, ULocale displayLocale) using TestCreateCollator1 class
          */

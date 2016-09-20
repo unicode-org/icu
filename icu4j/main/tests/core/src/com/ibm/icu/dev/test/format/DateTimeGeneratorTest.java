@@ -1480,6 +1480,66 @@ public class DateTimeGeneratorTest extends TestFmwk {
         assertEquals("DateTimePatternGenerator.getAppendFormatNumber for Timezone", 15, fieldNum);
     }
 
+    /*
+     * Coverage for methods otherwise not covered by other tests.
+     */
+    @Test
+    public void TestCoverage() {
+        DateTimePatternGenerator dtpg;
+
+        // DateTimePatternGenerator#getDefaultHourFormatChar
+        // DateTimePatternGenerator#setDefaultHourFormatChar
+        {
+            dtpg = DateTimePatternGenerator.getEmptyInstance();
+            assertEquals("Default hour char on empty instance", 'H', dtpg.getDefaultHourFormatChar());
+            dtpg.setDefaultHourFormatChar('e');
+            assertEquals("Default hour char after explicit set", 'e', dtpg.getDefaultHourFormatChar());
+            dtpg = DateTimePatternGenerator.getInstance(ULocale.ENGLISH);
+            assertEquals("Default hour char on populated English instance", 'h', dtpg.getDefaultHourFormatChar());
+        }
+
+        // DateTimePatternGenerator#getSkeletonAllowingDuplicates
+        // DateTimePatternGenerator#getCanonicalSkeletonAllowingDuplicates
+        // DateTimePatternGenerator#getCanonicalChar
+        {
+            dtpg = DateTimePatternGenerator.getInstance(ULocale.ENGLISH);
+            assertEquals("Example skeleton with no duplicate fields", "MMMdd", dtpg.getSkeleton("dd/MMM"));
+            assertEquals("Should return same result as getSkeleton with no duplicate fields",
+                    dtpg.getSkeleton("dd/MMM"), dtpg.getSkeletonAllowingDuplicates("dd/MMM"));
+
+            try {
+                dtpg.getSkeleton("dd/MMM Zz");
+                fail("getSkeleton should throw upon duplicate fields");
+            } catch(IllegalArgumentException e) {
+                assertEquals("getSkeleton should throw upon duplicate fields",
+                        "Conflicting fields:\tZ, z\t in dd/MMM Zz", e.getMessage());
+            }
+
+            assertEquals("Should not throw upon duplicate fields",
+                    "MMMddZ", dtpg.getSkeletonAllowingDuplicates("dd/MMM Zz"));
+            assertEquals("Should not throw upon duplicate fields and should return Canonical fields",
+                    "MMMddv", dtpg.getCanonicalSkeletonAllowingDuplicates("dd/MMM Zz"));
+        }
+
+        // DistanceInfo#toString
+        // DateTimePatternGenerator#showMask
+        try {
+            String actual = invokeToString("com.ibm.icu.text.DateTimePatternGenerator$DistanceInfo");
+            assertEquals("DistanceInfo toString", "missingFieldMask: , extraFieldMask: ", actual);
+        } catch(Exception e) {
+            errln("Couldn't call DistanceInfo.toString(): " + e.toString());
+        }
+
+        // DateTimePatternGenerator#skeletonsAreSimilar
+        // DateTimePatternGenerator#getSet
+        {
+            dtpg = DateTimePatternGenerator.getInstance(ULocale.ENGLISH);
+            assertTrue("Trivial skeletonsAreSimilar", dtpg.skeletonsAreSimilar("MMMdd", "MMMdd"));
+            assertTrue("Different number of chars in skeletonsAreSimilar", dtpg.skeletonsAreSimilar("Mddd", "MMMdd"));
+            assertFalse("Failure case for skeletonsAreSimilar", dtpg.skeletonsAreSimilar("mmDD", "MMMdd"));
+        }
+    }
+
     @Test
     public void TestEmptyInstance() {
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getEmptyInstance();

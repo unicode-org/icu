@@ -904,6 +904,14 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
                 "",
                 DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,
                 fmt.getCapitalizationContext());
+
+        // test the no-arguments getInstance();
+        RelativeDateTimeFormatter fmt_default = RelativeDateTimeFormatter.getInstance();
+        assertEquals("", RelativeDateTimeFormatter.Style.LONG, fmt_default.getFormatStyle());
+        assertEquals(
+                "",
+                DisplayContext.CAPITALIZATION_NONE,
+                fmt_default.getCapitalizationContext());
     }
 
     @Test
