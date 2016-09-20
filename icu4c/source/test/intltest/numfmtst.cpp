@@ -8057,19 +8057,19 @@ void NumberFormatTest::TestAccountingCurrency() {
     UNumberFormatStyle style = UNUM_CURRENCY_ACCOUNTING;
 
     expect(NumberFormat::createInstance("en_US", style, status),
-        (Formattable)1234.5, "$1,234.50", TRUE, status);
+        (Formattable)(double)1234.5, "$1,234.50", TRUE, status);
     expect(NumberFormat::createInstance("en_US", style, status),
-        (Formattable)-1234.5, "($1,234.50)", TRUE, status);
+        (Formattable)(double)-1234.5, "($1,234.50)", TRUE, status);
     expect(NumberFormat::createInstance("en_US", style, status),
-        (Formattable)0, "$0.00", TRUE, status);
+        (Formattable)(double)0, "$0.00", TRUE, status);
     expect(NumberFormat::createInstance("en_US", style, status),
-        (Formattable)-0.2, "($0.20)", TRUE, status);
+        (Formattable)(double)-0.2, "($0.20)", TRUE, status);
     expect(NumberFormat::createInstance("ja_JP", style, status),
-        (Formattable)10000, UnicodeString("\\uFFE510,000").unescape(), TRUE, status);
+        (Formattable)(double)10000, UnicodeString("\\uFFE510,000").unescape(), TRUE, status);
     expect(NumberFormat::createInstance("ja_JP", style, status),
-        (Formattable)-1000.5, UnicodeString("(\\uFFE51,000)").unescape(), FALSE, status);
+        (Formattable)(double)-1000.5, UnicodeString("(\\uFFE51,000)").unescape(), FALSE, status);
     expect(NumberFormat::createInstance("de_DE", style, status),
-        (Formattable)-23456.7, UnicodeString("-23.456,70\\u00A0\\u20AC").unescape(), TRUE, status);
+        (Formattable)(double)-23456.7, UnicodeString("-23.456,70\\u00A0\\u20AC").unescape(), TRUE, status);
 }
 
 // for #5186
@@ -8124,7 +8124,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
             // test the getter here
             UCurrencyUsage curUsage = fmt->getCurrencyUsage();
-            assertEquals("Test usage getter - standard", curUsage, UCURR_USAGE_STANDARD);
+            assertEquals("Test usage getter - standard", (int32_t)curUsage, (int32_t)UCURR_USAGE_STANDARD);
 
             fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
         }else{
@@ -8136,7 +8136,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         // must be usage = cash
         UCurrencyUsage curUsage = fmt->getCurrencyUsage();
-        assertEquals("Test usage getter - cash", curUsage, UCURR_USAGE_CASH);
+        assertEquals("Test usage getter - cash", (int32_t)curUsage, (int32_t)UCURR_USAGE_CASH);
 
         UnicodeString cash_currency;
         fmt->format(agent,cash_currency);
@@ -8314,9 +8314,9 @@ void NumberFormatTest::TestFastPathConsistent11524() {
     }
     fmt->setMaximumIntegerDigits(INT32_MIN);
     UnicodeString appendTo;
-    assertEquals("", "0", fmt->format(123, appendTo));
+    assertEquals("", "0", fmt->format((int32_t)123, appendTo));
     appendTo.remove();
-    assertEquals("", "0", fmt->format(12345, appendTo));
+    assertEquals("", "0", fmt->format((int32_t)12345, appendTo));
     delete fmt;
 }
 
@@ -8489,13 +8489,13 @@ void NumberFormatTest::TestCtorApplyPatternDifference() {
     assertEquals(
             "ctor favors precision of currency",
             "$5.00",
-            fmt.format(5, result));
+            fmt.format((double)5, result));
     result.remove();
     fmt.applyPattern(pattern.unescape(), status);
     assertEquals(
             "applyPattern favors precision of pattern",
             "$5",
-            fmt.format(5, result));
+            fmt.format((double)5, result));
 }
 
 void NumberFormatTest::Test11868() {

@@ -1954,14 +1954,14 @@ void TimeZoneTest::TestCanonicalIDAPI() {
     UnicodeString canonicalID;
     UErrorCode ec = U_ZERO_ERROR;
     UnicodeString *pResult = &TimeZone::getCanonicalID(bogus, canonicalID, ec);
-    assertEquals("TimeZone::getCanonicalID(bogus) should fail", U_ILLEGAL_ARGUMENT_ERROR, ec);
+    assertEquals("TimeZone::getCanonicalID(bogus) should fail", (int32_t)U_ILLEGAL_ARGUMENT_ERROR, ec);
     assertTrue("TimeZone::getCanonicalID(bogus) should return the dest string", pResult == &canonicalID);
 
     // U_FAILURE on input.
     UnicodeString berlin("Europe/Berlin");
     ec = U_MEMORY_ALLOCATION_ERROR;
     pResult = &TimeZone::getCanonicalID(berlin, canonicalID, ec);
-    assertEquals("TimeZone::getCanonicalID(failure) should fail", U_MEMORY_ALLOCATION_ERROR, ec);
+    assertEquals("TimeZone::getCanonicalID(failure) should fail", (int32_t)U_MEMORY_ALLOCATION_ERROR, ec);
     assertTrue("TimeZone::getCanonicalID(failure) should return the dest string", pResult == &canonicalID);
 
     // Valid input should un-bogus the dest string.

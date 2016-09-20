@@ -32,7 +32,7 @@ export QSH
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
 #****************************************************************************
-binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML nrm NRM'
+binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP xml XML nrm NRM utf16be UTF16BE'
 data_files='icu/source/data/brkitr/* icu/source/data/locales/* icu/source/data/coll/* icu/source/data/rbnf/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
 
 #****************************************************************************

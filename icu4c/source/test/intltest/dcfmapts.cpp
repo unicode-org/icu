@@ -931,14 +931,14 @@ void IntlTestDecimalFormatAPI::TestBadFastpath() {
 
     UnicodeString fmt;
     fmt.remove();
-    assertEquals("Format 1234", "1234", df->format(1234, fmt));
+    assertEquals("Format 1234", "1234", df->format((int32_t)1234, fmt));
     df->setGroupingUsed(FALSE);
     fmt.remove();
-    assertEquals("Format 1234", "1234", df->format(1234, fmt));
+    assertEquals("Format 1234", "1234", df->format((int32_t)1234, fmt));
     df->setGroupingUsed(TRUE);
     df->setGroupingSize(3);
     fmt.remove();
-    assertEquals("Format 1234 w/ grouping", "1,234", df->format(1234, fmt));
+    assertEquals("Format 1234 w/ grouping", "1,234", df->format((int32_t)1234, fmt));
 }
 
 void IntlTestDecimalFormatAPI::TestRequiredDecimalPoint() {

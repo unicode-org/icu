@@ -708,7 +708,7 @@ DecimalFormatImpl::getMultiplier() const {
 void
 DecimalFormatImpl::setMultiplier(int32_t m) {
     if (m == 0 || m == 1) {
-        fMultiplier.set(0);
+        fMultiplier.set((int32_t)0);
     } else {
         fMultiplier.set(m);
     }
@@ -1483,7 +1483,7 @@ DecimalFormatImpl::toNumberPattern(
             }
         } else {
             if (i < roundingIncrementUpperExp && i >= roundingIncrementLowerExp) {
-                result.append(fEffPrecision.fMantissa.fRoundingIncrement.getDigitByExponent(i) + kPatternZeroDigit);
+                result.append((UChar)(fEffPrecision.fMantissa.fRoundingIncrement.getDigitByExponent(i) + kPatternZeroDigit));
             } else if (minInterval.contains(i)) {
                 result.append(kPatternZeroDigit);
             } else {
