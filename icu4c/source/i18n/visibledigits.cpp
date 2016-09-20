@@ -163,7 +163,8 @@ void VisibleDigits::getFixedDecimal(
     // f (decimal digits)
     // skip over any leading 0's in fraction digits.
     int32_t idx = -1;
-    for (; idx >= -v && getDigitByExponent(idx) == 0; --idx);
+    for (; idx >= -v && getDigitByExponent(idx) == 0; --idx)
+      ;
 
     // Only process up to first 18 non zero fraction digits for decimalDigits
     // since that is all we can fit into an int64.
