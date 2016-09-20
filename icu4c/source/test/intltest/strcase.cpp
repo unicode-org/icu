@@ -48,6 +48,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestFullCaseFoldingIterator);
     TESTCASE_AUTO(TestGreekUpper);
     TESTCASE_AUTO(TestLongUpper);
+    TESTCASE_AUTO(TestMalformedUTF8);
     TESTCASE_AUTO_END;
 }
 
@@ -705,5 +706,46 @@ StringCaseTest::TestLongUpper() {
     if (errorCode.reset() != U_INDEX_OUTOFBOUNDS_ERROR) {
         errln("expected U_INDEX_OUTOFBOUNDS_ERROR, got %s (destLength is undefined, got %ld)",
               errorCode.errorName(), (long)destLength);
+    }
+}
+
+void StringCaseTest::TestMalformedUTF8() {
+    // ticket #12639
+    IcuTestErrorCode errorCode(*this, "TestTitleMalformedUTF8");
+    LocalUCaseMapPointer csm(ucasemap_open("en", U_TITLECASE_NO_BREAK_ADJUSTMENT, errorCode));
+    if (errorCode.isFailure()) {
+        errln("ucasemap_open(English) failed - %s", errorCode.errorName());
+        return;
+    }
+    char src[1] = { (char)0x85 };  // malformed UTF-8
+    char dest[3] = { 0, 0, 0 };
+    int32_t destLength = ucasemap_utf8ToTitle(csm.getAlias(), dest, 3, src, 1, errorCode);
+    if (errorCode.isFailure() || destLength != 1 || dest[0] != src[0]) {
+        errln("ucasemap_utf8ToTitle(\\x85) failed: %s destLength=%d dest[0]=0x%02x",
+              errorCode.errorName(), (int)destLength, dest[0]);
+    }
+
+    errorCode.reset();
+    dest[0] = 0;
+    destLength = ucasemap_utf8ToLower(csm.getAlias(), dest, 3, src, 1, errorCode);
+    if (errorCode.isFailure() || destLength != 1 || dest[0] != src[0]) {
+        errln("ucasemap_utf8ToLower(\\x85) failed: %s destLength=%d dest[0]=0x%02x",
+              errorCode.errorName(), (int)destLength, dest[0]);
+    }
+
+    errorCode.reset();
+    dest[0] = 0;
+    destLength = ucasemap_utf8ToUpper(csm.getAlias(), dest, 3, src, 1, errorCode);
+    if (errorCode.isFailure() || destLength != 1 || dest[0] != src[0]) {
+        errln("ucasemap_utf8ToUpper(\\x85) failed: %s destLength=%d dest[0]=0x%02x",
+              errorCode.errorName(), (int)destLength, dest[0]);
+    }
+
+    errorCode.reset();
+    dest[0] = 0;
+    destLength = ucasemap_utf8FoldCase(csm.getAlias(), dest, 3, src, 1, errorCode);
+    if (errorCode.isFailure() || destLength != 1 || dest[0] != src[0]) {
+        errln("ucasemap_utf8FoldCase(\\x85) failed: %s destLength=%d dest[0]=0x%02x",
+              errorCode.errorName(), (int)destLength, dest[0]);
     }
 }

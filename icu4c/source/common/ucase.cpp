@@ -815,8 +815,9 @@ U_CAPI int32_t U_EXPORT2
 ucase_toFullLower(const UCaseProps *csp, UChar32 c,
                   UCaseContextIterator *iter, void *context,
                   const UChar **pString,
-                  const char *locale, int32_t *locCache)
-{
+                  const char *locale, int32_t *locCache) {
+    // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
+    U_ASSERT(c >= 0);
     UChar32 result=c;
     uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
@@ -961,6 +962,8 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
                const UChar **pString,
                const char *locale, int32_t *locCache,
                UBool upperNotTitle) {
+    // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
+    U_ASSERT(c >= 0);
     UChar32 result=c;
     uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
@@ -1169,8 +1172,9 @@ ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options) {
 U_CAPI int32_t U_EXPORT2
 ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
                     const UChar **pString,
-                    uint32_t options)
-{
+                    uint32_t options) {
+    // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
+    U_ASSERT(c >= 0);
     UChar32 result=c;
     uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {

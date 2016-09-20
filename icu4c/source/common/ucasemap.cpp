@@ -206,6 +206,21 @@ appendUChar(uint8_t *dest, int32_t destIndex, int32_t destCapacity, UChar c) {
     return limit;
 }
 
+static inline int32_t
+appendString(uint8_t *dest, int32_t destIndex, int32_t destCapacity,
+             const uint8_t *s, int32_t length) {
+    if(length>0) {
+        if(length>(INT32_MAX-destIndex)) {
+            return -1;  // integer overflow
+        }
+        if((destIndex+length)<=destCapacity) {
+            uprv_memcpy(dest+destIndex, s, length);
+        }
+        destIndex+=length;
+    }
+    return destIndex;
+}
+
 static UChar32 U_CALLCONV
 utf8_caseContextIterator(void *context, int8_t dir) {
     UCaseContext *csc=(UCaseContext *)context;
@@ -263,9 +278,11 @@ _caseMap(const UCaseMap *csm, UCaseMapFull *map,
         U8_NEXT(src, srcIndex, srcLimit, c);
         csc->cpLimit=srcIndex;
         if(c<0) {
-            int32_t i=csc->cpStart;
-            while(destIndex<destCapacity && i<srcIndex) {
-                dest[destIndex++]=src[i++];
+            // Malformed UTF-8.
+            destIndex=appendString(dest, destIndex, destCapacity, src+csc->cpStart, srcIndex-csc->cpStart);
+            if(destIndex<0) {
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
             }
             continue;
         }
@@ -297,7 +314,7 @@ ucasemap_internalUTF8ToTitle(const UCaseMap *csm,
          UErrorCode *pErrorCode) {
     const UChar *s;
     UChar32 c;
-    int32_t prev, titleStart, titleLimit, idx, destIndex, length;
+    int32_t prev, titleStart, titleLimit, idx, destIndex;
     UBool isFirstIndex;
 
     if(U_FAILURE(*pErrorCode)) {
@@ -363,21 +380,24 @@ ucasemap_internalUTF8ToTitle(const UCaseMap *csm,
                         break; /* cased letter at [titleStart..titleLimit[ */
                     }
                 }
-                length=titleStart-prev;
-                if(length>0) {
-                    if((destIndex+length)<=destCapacity) {
-                        uprv_memcpy(dest+destIndex, src+prev, length);
-                    }
-                    destIndex+=length;
+                destIndex=appendString(dest, destIndex, destCapacity, src+prev, titleStart-prev);
+                if(destIndex<0) {
+                    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                    return 0;
                 }
             }
 
             if(titleStart<titleLimit) {
                 /* titlecase c which is from [titleStart..titleLimit[ */
-                csc.cpStart=titleStart;
-                csc.cpLimit=titleLimit;
-                c=ucase_toFullTitle(csm->csp, c, utf8_caseContextIterator, &csc, &s, csm->locale, &locCache);
-                destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+                if(c>=0) {
+                    csc.cpStart=titleStart;
+                    csc.cpLimit=titleLimit;
+                    c=ucase_toFullTitle(csm->csp, c, utf8_caseContextIterator, &csc, &s, csm->locale, &locCache);
+                    destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+                } else {
+                    // Malformed UTF-8.
+                    destIndex=appendString(dest, destIndex, destCapacity, src+titleStart, titleLimit-titleStart);
+                }
                 if(destIndex<0) {
                     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                     return 0;
@@ -407,15 +427,11 @@ ucasemap_internalUTF8ToTitle(const UCaseMap *csm,
                         }
                     } else {
                         /* Optionally just copy the rest of the word unchanged. */
-                        length=idx-titleLimit;
-                        if(length>(INT32_MAX-destIndex)) {
+                        destIndex=appendString(dest, destIndex, destCapacity, src+titleLimit, idx-titleLimit);
+                        if(destIndex<0) {
                             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                             return 0;
                         }
-                        if((destIndex+length)<=destCapacity) {
-                            uprv_memcpy(dest+destIndex, src+titleLimit, length);
-                        }
-                        destIndex+=length;
                     }
                 }
             }
@@ -547,7 +563,7 @@ int32_t toUpper(const UCaseMap *csm,
                 *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                 return 0;
             }
-        } else {
+        } else if(c>=0) {
             const UChar *s;
             UChar32 c2 = 0;
             c=ucase_toFullUpper(csm->csp, c, NULL, NULL, &s, csm->locale, &locCache);
@@ -560,6 +576,13 @@ int32_t toUpper(const UCaseMap *csm,
                     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                     return 0;
                 }
+            }
+        } else {
+            // Malformed UTF-8.
+            destIndex=appendString(dest, destIndex, destCapacity, src+i, nextIndex-i);
+            if(destIndex<0) {
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
             }
         }
         i = nextIndex;
@@ -627,8 +650,11 @@ utf8_foldCase(const UCaseProps *csp,
         start=srcIndex;
         U8_NEXT(src, srcIndex, srcLength, c);
         if(c<0) {
-            while(destIndex<destCapacity && start<srcIndex) {
-                dest[destIndex++]=src[start++];
+            // Malformed UTF-8.
+            destIndex=appendString(dest, destIndex, destCapacity, src+start, srcIndex-start);
+            if(destIndex<0) {
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
             }
             continue;
         }
