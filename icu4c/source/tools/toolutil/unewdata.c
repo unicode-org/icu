@@ -41,7 +41,7 @@ udata_create(const char *dir, const char *type, const char *name,
     uint16_t headerSize, commentLength;
     char filename[512];
     uint8_t bytes[16];
-    int length;
+    int32_t length;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return NULL;
@@ -76,7 +76,7 @@ udata_create(const char *dir, const char *type, const char *name,
 
         
      /* LDH buffer Length error check */
-    if(length  > (sizeof(filename) - 1))
+    if(length  > ((int32_t)sizeof(filename) - 1))
     {
    	    *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
    	    uprv_free(pData);

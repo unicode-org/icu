@@ -1126,7 +1126,7 @@ ucm_addMappingAuto(UCMFile *ucm, UBool forBase, UCMStates *baseStates,
 
 U_CAPI UBool U_EXPORT2
 ucm_addMappingFromLine(UCMFile *ucm, const char *line, UBool forBase, UCMStates *baseStates) {
-    UCMapping m={ 0 };
+  UCMapping m={ 0, {0}, 0, 0, 0, 0 };
     UChar32 codePoints[UCNV_EXT_MAX_UCHARS];
     uint8_t bytes[UCNV_EXT_MAX_BYTES];
 
