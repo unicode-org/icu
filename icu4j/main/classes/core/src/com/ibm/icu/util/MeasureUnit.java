@@ -397,8 +397,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of angle: revolution
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final MeasureUnit REVOLUTION_ANGLE = MeasureUnit.internalGetInstance("angle", "revolution");
 
@@ -485,8 +484,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of consumption: liter-per-100kilometers
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final MeasureUnit LITER_PER_100KILOMETERS = MeasureUnit.internalGetInstance("consumption", "liter-per-100kilometers");
 
@@ -508,6 +506,34 @@ public class MeasureUnit implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit MILE_PER_GALLON_IMPERIAL = MeasureUnit.internalGetInstance("consumption", "mile-per-gallon-imperial");
+
+    /**
+     * Constant for unit of coordinate: east
+     * @draft ICU 58
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit EAST = MeasureUnit.internalGetInstance("coordinate", "east");
+
+    /**
+     * Constant for unit of coordinate: north
+     * @draft ICU 58
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit NORTH = MeasureUnit.internalGetInstance("coordinate", "north");
+
+    /**
+     * Constant for unit of coordinate: south
+     * @draft ICU 58
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit SOUTH = MeasureUnit.internalGetInstance("coordinate", "south");
+
+    /**
+     * Constant for unit of coordinate: west
+     * @draft ICU 58
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit WEST = MeasureUnit.internalGetInstance("coordinate", "west");
 
     /**
      * Constant for unit of digital: bit
@@ -571,8 +597,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of duration: century
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final MeasureUnit CENTURY = MeasureUnit.internalGetInstance("duration", "century");
 
@@ -794,8 +819,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of length: mile-scandinavian
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final MeasureUnit MILE_SCANDINAVIAN = MeasureUnit.internalGetInstance("length", "mile-scandinavian");
 
@@ -981,8 +1005,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of speed: knot
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final MeasureUnit KNOT = MeasureUnit.internalGetInstance("speed", "knot");
 
@@ -1012,8 +1035,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of temperature: generic
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final MeasureUnit GENERIC_TEMPERATURE = MeasureUnit.internalGetInstance("temperature", "generic");
 
@@ -1091,8 +1113,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: cup-metric
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final MeasureUnit CUP_METRIC = MeasureUnit.internalGetInstance("volume", "cup-metric");
 
@@ -1153,8 +1174,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: pint-metric
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final MeasureUnit PINT_METRIC = MeasureUnit.internalGetInstance("volume", "pint-metric");
 
