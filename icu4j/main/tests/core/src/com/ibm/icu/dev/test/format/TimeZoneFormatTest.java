@@ -14,10 +14,12 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,6 +39,7 @@ import com.ibm.icu.text.TimeZoneFormat.ParseOption;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.text.TimeZoneNames;
+import com.ibm.icu.text.TimeZoneNames.Factory;
 import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
@@ -1119,12 +1122,137 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    @Test
+    public void TestGetDisplayNames() {
+        long date = System.currentTimeMillis();
+        NameType[] types = new NameType[]{
+                NameType.LONG_STANDARD, NameType.LONG_DAYLIGHT,
+                NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT
+        };
+        Set<String> zones = ZoneMeta.getAvailableIDs(SystemTimeZoneType.ANY, null, null);
+
+        int casesTested = 0;
+        Random rnd = new Random(2016);
+        for (ULocale uloc : ULocale.getAvailableLocales()) {
+            if (rnd.nextDouble() > 0.01) { continue; }
+            for (String zone : zones) {
+                if (rnd.nextDouble() > 0.01) { continue; }
+                casesTested++;
+
+                // Test default TimeZoneNames (uses an overridden getDisplayNames)
+                {
+                    TimeZoneNames tznames = TimeZoneNames.getInstance(uloc);
+                    tznames.loadAllDisplayNames();
+                    String[] result = new String[types.length];
+                    tznames.getDisplayNames(zone, types, date, result, 0);
+                    for (int i=0; i<types.length; i++) {
+                        NameType type = types[i];
+                        String expected = result[i];
+                        String actual = tznames.getDisplayName(zone, type, date);
+                        assertEquals("TimeZoneNames: getDisplayNames() returns different result than getDisplayName()"
+                                + " for " + zone + " in locale " + uloc, expected, actual);
+                    }
+                    // Coverage for empty call to getDisplayNames
+                    tznames.getDisplayNames(null, null, 0, null, 0);
+                }
+
+                // Test TZDBTimeZoneNames (uses getDisplayNames from abstract class)
+                {
+                    TimeZoneNames tznames = new TZDBTimeZoneNames(uloc);
+                    tznames.loadAllDisplayNames();
+                    String[] result = new String[types.length];
+                    tznames.getDisplayNames(zone, types, date, result, 0);
+                    for (int i=0; i<types.length; i++) {
+                        NameType type = types[i];
+                        String expected = result[i];
+                        String actual = tznames.getDisplayName(zone, type, date);
+                        assertEquals("TZDBTimeZoneNames: getDisplayNames() returns different result than getDisplayName()"
+                                + " for " + zone + " in locale " + uloc, expected, actual);
+                    }
+                    // Coverage for empty call to getDisplayNames
+                    tznames.getDisplayNames(null, null, 0, null, 0);
+                }
+            }
+        }
+
+        assertTrue("No cases were tested", casesTested > 0);
+    }
+
+    class TimeZoneNamesInheriter extends TimeZoneNames {
+        @Override
+        public Set<String> getAvailableMetaZoneIDs() {
+            return null;
+        }
+
+        @Override
+        public Set<String> getAvailableMetaZoneIDs(String tzID) {
+            return null;
+        }
+
+        @Override
+        public String getMetaZoneID(String tzID, long date) {
+            return null;
+        }
+
+        @Override
+        public String getReferenceZoneID(String mzID, String region) {
+            return null;
+        }
+
+        @Override
+        public String getMetaZoneDisplayName(String mzID, NameType type) {
+            return null;
+        }
+
+        @Override
+        public String getTimeZoneDisplayName(String tzID, NameType type) {
+            return null;
+        }
+    }
+
+    // Coverage for default implementation and abstract methods in base class.
+    @Test
+    public void TestDefaultTimeZoneNames() {
+        long date = System.currentTimeMillis();
+        TimeZoneNames.Factory factory;
+        try {
+            Class cls = Class.forName("com.ibm.icu.text.TimeZoneNames$DefaultTimeZoneNames$FactoryImpl");
+            factory = (Factory) cls.newInstance();
+        } catch (Exception e) {
+            errln("Could not create class DefaultTimeZoneNames.FactoryImpl: " + e.getClass() + ": " + e.getMessage());
+            return;
+        }
+        TimeZoneNames tzn = factory.getTimeZoneNames(ULocale.ENGLISH);
+        assertEquals("Abstract: getAvailableMetaZoneIDs()",
+                tzn.getAvailableMetaZoneIDs(), Collections.emptySet());
+        assertEquals("Abstract: getAvailableMetaZoneIDs(String tzID)",
+                tzn.getAvailableMetaZoneIDs("America/Chicago"), Collections.emptySet());
+        assertEquals("Abstract: getMetaZoneID(String tzID, long date)",
+                tzn.getMetaZoneID("America/Chicago", date), null);
+        assertEquals("Abstract: getReferenceZoneID(String mzID, String region)",
+                tzn.getReferenceZoneID("America_Central", "IT"), null);
+        assertEquals("Abstract: getMetaZoneDisplayName(String mzID, NameType type)",
+                tzn.getMetaZoneDisplayName("America_Central", NameType.LONG_DAYLIGHT), null);
+        assertEquals("Abstract: getTimeZoneDisplayName(String mzID, NameType type)",
+                tzn.getTimeZoneDisplayName("America/Chicago", NameType.LONG_DAYLIGHT), null);
+        assertEquals("Abstract: find(CharSequence text, int start, EnumSet<NameType> nameTypes)",
+                tzn.find("foo", 0, EnumSet.noneOf(NameType.class)), Collections.emptyList());
+
+        // Other abstract-class methods that aren't covered
+        tzn = new TimeZoneNamesInheriter();
+        try {
+            tzn.find(null, 0, null);
+        } catch (UnsupportedOperationException e) {
+            assertEquals("find() exception", "The method is not implemented in TimeZoneNames base class.", e.getMessage());
+        }
+    }
+
     // Basic get/set test for methods not being called otherwise.
     @Test
     public void TestAPI() {
         TimeZoneFormat tzfmtEn = TimeZoneFormat.getInstance(ULocale.ENGLISH);
         TimeZoneFormat tzfmtAr = TimeZoneFormat.getInstance(new ULocale("ar")).cloneAsThawed();
-        TimeZoneNames tzn = TimeZoneNames.getInstance(ULocale.ENGLISH);
+        TimeZoneNames tzn = TimeZoneNames.getInstance(Locale.ENGLISH);
 
         String digits = tzfmtEn.getGMTOffsetDigits();
         tzfmtAr.setGMTOffsetDigits(digits);
@@ -1152,6 +1280,27 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Set<String> kinshasaAvailableMZIDs = tzn.getAvailableMetaZoneIDs("Africa/Kinshasa");
         if (!kinshasaAvailableMZIDs.contains("Africa_Western") || kinshasaAvailableMZIDs.contains("America_Central")) {
             errln("ERROR: getAvailableMetaZoneIDs('Africa/Kinshasa') did not return expected value");
+        }
+
+        try {
+            new TimeZoneNames.MatchInfo(null, null, null, -1);
+            assertTrue("MatchInfo doesn't throw IllegalArgumentException", false);
+        } catch (IllegalArgumentException e) {
+            assertEquals("MatchInfo constructor exception", "nameType is null", e.getMessage());
+        }
+
+        try {
+            new TimeZoneNames.MatchInfo(NameType.LONG_GENERIC, null, null, -1);
+            assertTrue("MatchInfo doesn't throw IllegalArgumentException", false);
+        } catch (IllegalArgumentException e) {
+            assertEquals("MatchInfo constructor exception", "Either tzID or mzID must be available", e.getMessage());
+        }
+
+        try {
+            new TimeZoneNames.MatchInfo(NameType.LONG_GENERIC, "America/Chicago", null, -1);
+            assertTrue("MatchInfo doesn't throw IllegalArgumentException", false);
+        } catch (IllegalArgumentException e) {
+            assertEquals("MatchInfo constructor exception", "matchLength must be positive value", e.getMessage());
         }
     }
 }

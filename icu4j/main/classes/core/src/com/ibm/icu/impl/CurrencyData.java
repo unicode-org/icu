@@ -17,6 +17,8 @@ import com.ibm.icu.util.ULocale;
 public class CurrencyData {
     public static final CurrencyDisplayInfoProvider provider;
 
+    private CurrencyData() {}
+
     public static interface CurrencyDisplayInfoProvider {
         CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback);
         boolean hasData();

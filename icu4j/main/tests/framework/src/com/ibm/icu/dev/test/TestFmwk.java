@@ -8,6 +8,9 @@
  */
 package com.ibm.icu.dev.test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.security.Policy;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,16 +53,16 @@ abstract public class TestFmwk extends AbstractTestLog {
     private static final String EXHAUSTIVENESS = "ICU.exhaustive";
     private static final int DEFAULT_EXHAUSTIVENESS = 0;
     private static final int MAX_EXHAUSTIVENESS = 10;
-    
+
     private static final String LOGGING_LEVEL = "ICU.logging";
     private static final int DEFAULT_LOGGING_LEVEL = 0;
     private static final int MAX_LOGGING_LEVEL = 3;
-    
+
     public static final int LOGGING_NONE = 0;
     public static final int LOGGING_WARN = 1;
     public static final int LOGGING_INFO = 2;
     public static final int LOGGING_DEBUG = 3;
-    
+
     private static final String SEED = "ICU.seed";
     private static final String SECURITY_POLICY = "ICU.securitypolicy";
 
@@ -75,24 +78,24 @@ abstract public class TestFmwk extends AbstractTestLog {
     public void testInitialize() {
         Locale.setDefault(defaultLocale);
         TimeZone.setDefault(defaultTimeZone);
-       
+
         if (getParams().testSecurityManager != null) {
             System.setSecurityManager(getParams().testSecurityManager);
         }
     }
-    
+
     @After
     public void testTeardown() {
         if (getParams().testSecurityManager != null) {
             System.setSecurityManager(getParams().originalSecurityManager);
         }
     }
-    
+
     private static TestParams getParams() {
         //return paramsReference.get();
         return testParams;
     }
-    
+
     protected static boolean isVerbose() {
         return getParams().getLoggingLevel() >= LOGGING_INFO;
     }
@@ -122,7 +125,7 @@ abstract public class TestFmwk extends AbstractTestLog {
      * Log the known issue.
      * This method returns true unless -prop:logKnownIssue=no is specified
      * in the argument list.
-     * 
+     *
      * @param ticket A ticket number string. For an ICU ticket, use numeric characters only,
      * such as "10245". For a CLDR ticket, use prefix "cldrbug:" followed by ticket number,
      * such as "cldrbug:5013".
@@ -175,7 +178,7 @@ abstract public class TestFmwk extends AbstractTestLog {
     protected static boolean getBooleanProperty(String key) {
         return getParams().getBooleanProperty(key);
     }
-    
+
     protected static boolean getBooleanProperty(String key, boolean defVal) {
         return getParams().getBooleanProperty(key, defVal);
     }
@@ -183,11 +186,11 @@ abstract public class TestFmwk extends AbstractTestLog {
     protected static int getIntProperty(String key, int defVal) {
         return getParams().getIntProperty(key, defVal);
     }
-    
+
     protected static int getIntProperty(String key, int defVal, int maxVal) {
         return getParams().getIntProperty(key, defVal, maxVal);
     }
-    
+
     protected static TimeZone safeGetTimeZone(String id) {
         TimeZone tz = TimeZone.getTimeZone(id);
         if (tz == null) {
@@ -200,9 +203,9 @@ abstract public class TestFmwk extends AbstractTestLog {
         return tz;
     }
 
-   
+
     // Utility Methods
-    
+
     protected static String hex(char[] s){
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < s.length; ++i) {
@@ -211,7 +214,7 @@ abstract public class TestFmwk extends AbstractTestLog {
         }
         return result.toString();
     }
-    
+
     protected static String hex(byte[] s){
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < s.length; ++i) {
@@ -220,7 +223,7 @@ abstract public class TestFmwk extends AbstractTestLog {
         }
         return result.toString();
     }
-    
+
     protected static String hex(char ch) {
         StringBuffer result = new StringBuffer();
         String foo = Integer.toString(ch, 16).toUpperCase();
@@ -297,30 +300,30 @@ abstract public class TestFmwk extends AbstractTestLog {
     }
 
     private static class TestParams {
-        
+
         private int inclusion;
         private long seed;
         private int loggingLevel;
-        
+
         private String policyFileName;
         private SecurityManager testSecurityManager;
         private SecurityManager originalSecurityManager;
-        
+
         private Map<String, List<String>> knownIssues;
 
         private Properties props;
 
-        
+
         private TestParams() {
         }
 
         static TestParams create() {
-            TestParams params = new TestParams();            
+            TestParams params = new TestParams();
             Properties props = System.getProperties();
             params.parseProperties(props);
             return params;
         }
-        
+
         private void parseProperties(Properties props) {
             this.props = props;
 
@@ -338,7 +341,7 @@ abstract public class TestFmwk extends AbstractTestLog {
                 System.setProperty("java.security.policy", originalPolicyFileName==null ? "" : originalPolicyFileName);
             }
         }
-        
+
         public String getProperty(String key) {
             String val = null;
             if (key != null && key.length() > 0) {
@@ -350,7 +353,7 @@ abstract public class TestFmwk extends AbstractTestLog {
         public boolean getBooleanProperty(String key) {
             return getBooleanProperty(key, false);
         }
-        
+
         public boolean getBooleanProperty(String key, boolean defVal) {
             String s = getProperty(key);
             if (s == null) {
@@ -365,7 +368,7 @@ abstract public class TestFmwk extends AbstractTestLog {
         public int getIntProperty(String key, int defVal) {
             return getIntProperty(key, defVal, -1);
         }
-        
+
         public int getIntProperty(String key, int defVal, int maxVal) {
             String s = getProperty(key);
             if (s == null) {
@@ -373,7 +376,7 @@ abstract public class TestFmwk extends AbstractTestLog {
             }
             return (maxVal == -1) ? Integer.valueOf(s) : Math.max(Integer.valueOf(s), maxVal);
         }
-        
+
         public long getLongProperty(String key, long defVal) {
             String s = getProperty(key);
             if (s == null) {
@@ -381,15 +384,15 @@ abstract public class TestFmwk extends AbstractTestLog {
             }
             return Long.valueOf(s);
         }
-        
+
         public int getInclusion() {
             return inclusion;
         }
-        
+
         public long getSeed() {
             return seed;
         }
-        
+
         public int getLoggingLevel() {
             return loggingLevel;
         }
@@ -575,7 +578,7 @@ abstract public class TestFmwk extends AbstractTestLog {
 
     protected static void fail(String message) {
         if (message == null) {
-            message = "";            
+            message = "";
         }
         if (!message.equals("")) {
             message = ": " + message;
@@ -630,13 +633,84 @@ abstract public class TestFmwk extends AbstractTestLog {
             String source = st.getFileName();
             if (source != null && !source.equals("TestFmwk.java") && !source.equals("AbstractTestLog.java")) {
                 String methodName = st.getMethodName();
-                if (methodName != null && 
+                if (methodName != null &&
                        (methodName.startsWith("Test") || methodName.startsWith("test") || methodName.equals("main"))) {
                     return "(" + source + ":" + st.getLineNumber() + ") ";
                 }
             }
         }
         throw new InternalError();
+    }
+
+    protected static boolean checkDefaultPrivateConstructor(String fullyQualifiedClassName) throws Exception {
+        return checkDefaultPrivateConstructor(Class.forName(fullyQualifiedClassName));
+    }
+
+    protected static boolean checkDefaultPrivateConstructor(Class<?> classToBeTested) throws Exception {
+        Constructor<?> constructor = classToBeTested.getDeclaredConstructor();
+
+        // Check that the constructor is private.
+        boolean isPrivate = Modifier.isPrivate(constructor.getModifiers());
+
+        // Call the constructor for coverage.
+        constructor.setAccessible(true);
+        constructor.newInstance();
+
+        if (!isPrivate) {
+            errln("Default private constructor for class: " + classToBeTested.getName() + " is not private.");
+        }
+        return isPrivate;
+    }
+
+    /**
+     * Tests the toString method on a private or hard-to-reach class.  Assumes constructor of the class does not
+     * take any arguments.
+     * @param fullyQualifiedClassName
+     * @return The output of the toString method.
+     * @throws Exception
+     */
+    protected static String invokeToString(String fullyQualifiedClassName) throws Exception {
+        return invokeToString(fullyQualifiedClassName, new Class<?>[]{}, new Object[]{});
+    }
+
+    /**
+     * Tests the toString method on a private or hard-to-reach class.  Assumes constructor of the class does not
+     * take any arguments.
+     * @param classToBeTested
+     * @return The output of the toString method.
+     * @throws Exception
+     */
+    protected static String invokeToString(Class<?> classToBeTested) throws Exception {
+        return invokeToString(classToBeTested, new Class<?>[]{}, new Object[]{});
+    }
+
+    /**
+     * Tests the toString method on a private or hard-to-reach class.  Allows you to specify the argument types for
+     * the constructor.
+     * @param fullyQualifiedClassName
+     * @return The output of the toString method.
+     * @throws Exception
+     */
+    protected static String invokeToString(String fullyQualifiedClassName,
+            Class<?>[] constructorParamTypes, Object[] constructorParams) throws Exception {
+        return invokeToString(Class.forName(fullyQualifiedClassName), constructorParamTypes, constructorParams);
+    }
+
+    /**
+     * Tests the toString method on a private or hard-to-reach class.  Allows you to specify the argument types for
+     * the constructor.
+     * @param classToBeTested
+     * @return The output of the toString method.
+     * @throws Exception
+     */
+    protected static String invokeToString(Class<?> classToBeTested,
+            Class<?>[] constructorParamTypes, Object[] constructorParams) throws Exception {
+        Constructor<?> constructor = classToBeTested.getDeclaredConstructor(constructorParamTypes);
+        constructor.setAccessible(true);
+        Object obj = constructor.newInstance(constructorParams);
+        Method toStringMethod = classToBeTested.getDeclaredMethod("toString");
+        toStringMethod.setAccessible(true);
+        return (String) toStringMethod.invoke(obj);
     }
 
 

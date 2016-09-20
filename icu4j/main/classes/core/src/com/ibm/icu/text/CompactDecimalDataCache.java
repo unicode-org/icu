@@ -393,8 +393,11 @@ class CompactDecimalDataCache {
 
 
     /**
-     * Returns locale and style. Used to form useful messages in thrown
-     * exceptions.
+     * Returns locale and style. Used to form useful messages in thrown exceptions.
+     *
+     * Note: This is not covered by unit tests since no exceptions are thrown on the default CLDR data.  It is too
+     * cumbersome to cover via reflection.
+     *
      * @param locale the locale
      * @param style the style
      */
