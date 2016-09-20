@@ -98,6 +98,21 @@ appendUChar(UChar *dest, int32_t destIndex, int32_t destCapacity, UChar c) {
     return destIndex+1;
 }
 
+static inline int32_t
+appendString(UChar *dest, int32_t destIndex, int32_t destCapacity,
+             const UChar *s, int32_t length) {
+    if(length>0) {
+        if(length>(INT32_MAX-destIndex)) {
+            return -1;  // integer overflow
+        }
+        if((destIndex+length)<=destCapacity) {
+            u_memcpy(dest+destIndex, s, length);
+        }
+        destIndex+=length;
+    }
+    return destIndex;
+}
+
 static UChar32 U_CALLCONV
 utf16_caseContextIterator(void *context, int8_t dir) {
     UCaseContext *csc=(UCaseContext *)context;
@@ -182,7 +197,7 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                          UErrorCode *pErrorCode) {
     const UChar *s;
     UChar32 c;
-    int32_t prev, titleStart, titleLimit, idx, destIndex, length;
+    int32_t prev, titleStart, titleLimit, idx, destIndex;
     UBool isFirstIndex;
 
     if(U_FAILURE(*pErrorCode)) {
@@ -248,12 +263,10 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                         break; /* cased letter at [titleStart..titleLimit[ */
                     }
                 }
-                length=titleStart-prev;
-                if(length>0) {
-                    if((destIndex+length)<=destCapacity) {
-                        u_memcpy(dest+destIndex, src+prev, length);
-                    }
-                    destIndex+=length;
+                destIndex=appendString(dest, destIndex, destCapacity, src+prev, titleStart-prev);
+                if(destIndex<0) {
+                    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                    return 0;
                 }
             }
 
@@ -297,15 +310,11 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                         }
                     } else {
                         /* Optionally just copy the rest of the word unchanged. */
-                        length=idx-titleLimit;
-                        if(length>(INT32_MAX-destIndex)) {
+                        destIndex=appendString(dest, destIndex, destCapacity, src+titleLimit, idx-titleLimit);
+                        if(destIndex<0) {
                             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                             return 0;
                         }
-                        if((destIndex+length)<=destCapacity) {
-                            u_memcpy(dest+destIndex, src+titleLimit, length);
-                        }
-                        destIndex+=length;
                     }
                 }
             }
