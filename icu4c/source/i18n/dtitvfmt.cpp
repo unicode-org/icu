@@ -1267,11 +1267,11 @@ DateIntervalFormat::splitPatternInto2Part(const UnicodeString& intervalPattern) 
             }
             count = 0;
         }
-        if (ch == '\'') {
+        if (ch == 0x0027 /*'*/) {
             // Consecutive single quotes are a single quote literal,
             // either outside of quotes or between quotes
             if ((i+1) < intervalPattern.length() &&
-                intervalPattern.charAt(i+1) == '\'') {
+                intervalPattern.charAt(i+1) == 0x0027 /*'*/) {
                 ++i;
             } else {
                 inQuote = ! inQuote;
@@ -1471,10 +1471,10 @@ DateIntervalFormat::adjustFieldWidth(const UnicodeString& inputSkeleton,
             }
             count = 0;
         }
-        if (ch == '\'') {
+        if (ch == 0x0027 /*'*/) {
             // Consecutive single quotes are a single quote literal,
             // either outside of quotes or between quotes
-            if ((i+1) < adjustedPtn.length() && adjustedPtn.charAt(i+1) == '\'') {
+            if ((i+1) < adjustedPtn.length() && adjustedPtn.charAt(i+1) == 0x0027 /* ' */) {
                 ++i;
             } else {
                 inQuote = ! inQuote;

@@ -1641,7 +1641,7 @@ static void TestOverrideNumberFormat(void) {
         overrideFmt = NULL; // no longer valid
         assertSuccess("udat_setNumberFormatForField()", &status);
 
-        getter_result = udat_getNumberFormatForField(fmt, 'd');
+        getter_result = udat_getNumberFormatForField(fmt, 0x0064 /*'d'*/);
         if(getter_result == NULL) {
             log_err("FAIL: udat_getNumberFormatForField did not return a valid pointer\n");
         }

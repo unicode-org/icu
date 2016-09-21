@@ -4727,7 +4727,7 @@ void DateFormatTest::TestNumberFormatOverride() {
         fmt->adoptNumberFormat(fields, check_nf, status);
         assertSuccess("adoptNumberFormat check_nf", status);
 
-        const NumberFormat* get_nf = fmt->getNumberFormatForField('M');
+        const NumberFormat* get_nf = fmt->getNumberFormatForField((UChar)0x004D /*'M'*/);
         if (get_nf != check_nf) errln("FAIL: getter and setter do not work");
     }
     NumberFormat* check_nf = NumberFormat::createInstance(Locale("en_US"), status);
