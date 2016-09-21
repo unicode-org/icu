@@ -88,9 +88,10 @@ public class ICURWLock {
         /**
          * Return a string listing all the stats.
          */
+        @Override
         public String toString() {
             return " rc: " + _rc +
-                " mrc: " + _mrc + 
+                " mrc: " + _mrc +
                 " wrc: " + _wrc +
                 " wc: " + _wc +
                 " wwc: " + _wwc;
@@ -114,7 +115,7 @@ public class ICURWLock {
         stats = null;
         return result;
     }
-    
+
     /**
      * Return a snapshot of the current stats.  This does not reset the stats.
      */
@@ -130,7 +131,7 @@ public class ICURWLock {
      * <p>If there's a writer, or a waiting writer, increment the
      * waiting reader count and block on this.  Otherwise
      * increment the active reader count and return.  Caller must call
-     * releaseRead when done (for example, in a finally block).</p> 
+     * releaseRead when done (for example, in a finally block).</p>
      */
     public void acquireRead() {
         if (stats != null) {    // stats is null by default
@@ -168,7 +169,7 @@ public class ICURWLock {
      * having an active writer and return.  Otherwise, add a lock to the
      * end of the waiting writer list, and block on it.  Caller
      * must call releaseWrite when done (for example, in a finally
-     * block).<p> 
+     * block).<p>
      */
     public void acquireWrite() {
         if (stats != null) {    // stats is null by default
@@ -189,7 +190,7 @@ public class ICURWLock {
      * <p>If there are waiting readers, make them all active and
      * notify all of them.  Otherwise, notify the oldest waiting
      * writer, if any.  Call when finished with work controlled by
-     * acquireWrite.</p> 
+     * acquireWrite.</p>
      */
     public void releaseWrite() {
         rwl.writeLock().unlock();

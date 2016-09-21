@@ -14,7 +14,7 @@ import java.util.Date;
  * <code>InitialTimeZoneRule</code> represents a time zone rule
  * representing a time zone effective from the beginning and
  * has no actual start times.
- * 
+ *
  * @stable ICU 3.8
  */
 public class InitialTimeZoneRule extends TimeZoneRule {
@@ -24,12 +24,12 @@ public class InitialTimeZoneRule extends TimeZoneRule {
     /**
      * Constructs a <code>InitialTimeZoneRule</code> with the name, the GMT offset of its
      * standard time and the amount of daylight saving offset adjustment.
-     * 
+     *
      * @param name          The time zone name.
      * @param rawOffset     The UTC offset of its standard time in milliseconds.
      * @param dstSavings    The amount of daylight saving offset adjustment in milliseconds.
      *                      If this ia a rule for standard time, the value of this argument is 0.
-     * 
+     *
      * @stable ICU 3.8
      */
     public InitialTimeZoneRule(String name, int rawOffset, int dstSavings) {
@@ -38,22 +38,24 @@ public class InitialTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
+    @Override
     public boolean isEquivalentTo(TimeZoneRule other) {
         if (other instanceof InitialTimeZoneRule) {
             return super.isEquivalentTo(other);
         }
         return false;
     }
-    
+
     /**
      * {@inheritDoc}<br><br>
      * Note: This method in <code>InitialTimeZoneRule</code> always returns null.
-     * 
+     *
      * @stable ICU 3.8
      */
+    @Override
     public Date getFinalStart(int prevRawOffset, int prevDSTSavings) {
         // No start time available
         return null;
@@ -62,9 +64,10 @@ public class InitialTimeZoneRule extends TimeZoneRule {
     /**
      * {@inheritDoc}<br><br>
      * Note: This method in <code>InitialTimeZoneRule</code> always returns null.
-     * 
+     *
      * @stable ICU 3.8
      */
+    @Override
     public Date getFirstStart(int prevRawOffset, int prevDSTSavings) {
         // No start time available
         return null;
@@ -73,9 +76,10 @@ public class InitialTimeZoneRule extends TimeZoneRule {
     /**
      * {@inheritDoc}<br><br>
      * Note: This method in <code>InitialTimeZoneRule</code> always returns null.
-     * 
+     *
      * @stable ICU 3.8
      */
+    @Override
     public Date getNextStart(long base, int prevRawOffset, int prevDSTSavings,
             boolean inclusive) {
         // No start time available
@@ -85,9 +89,10 @@ public class InitialTimeZoneRule extends TimeZoneRule {
     /**
      * {@inheritDoc}<br><br>
      * Note: This method in <code>InitialTimeZoneRule</code> always returns null.
-     * 
+     *
      * @stable ICU 3.8
      */
+    @Override
     public Date getPreviousStart(long base, int prevRawOffset,
             int prevDSTSavings, boolean inclusive) {
         // No start time available
@@ -99,6 +104,7 @@ public class InitialTimeZoneRule extends TimeZoneRule {
      * Note: This method in <code>InitialTimeZoneRule</code> always returns false.
      * @stable ICU 3.8
      */
+    @Override
     public boolean isTransitionRule() {
         return false;
     }

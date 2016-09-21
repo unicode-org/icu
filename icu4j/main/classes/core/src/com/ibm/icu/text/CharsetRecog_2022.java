@@ -13,19 +13,19 @@ package com.ibm.icu.text;
  *                           This is a superclass for the individual detectors for
  *                           each of the detectable members of the ISO 2022 family
  *                           of encodings.
- * 
+ *
  *                           The separate classes are nested within this class.
  */
 abstract class CharsetRecog_2022 extends CharsetRecognizer {
 
-    
+
     /**
      * Matching function shared among the 2022 detectors JP, CN and KR
      * Counts up the number of legal an unrecognized escape sequences in
      * the sample of text, and computes a score based on the total number &
      * the proportion that fit the encoding.
-     * 
-     * 
+     *
+     *
      * @param text the byte buffer containing text to analyse
      * @param textLen  the size of the text in the byte.
      * @param escapeSequences the byte escape sequences to test for.
@@ -44,59 +44,59 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
                     checkEscapes:
                         for (escN=0; escN<escapeSequences.length; escN++) {
                             byte [] seq = escapeSequences[escN];
-                            
+
                             if ((textLen - i) < seq.length) {
                                 continue checkEscapes;
                             }
-                            
+
                             for (j=1; j<seq.length; j++) {
                                 if (seq[j] != text[i+j])  {
                                     continue checkEscapes;
-                                }                                   
+                                }
                             }
-                            
-                            hits++; 
+
+                            hits++;
                             i += seq.length-1;
                             continue scanInput;
                         }
-                
-                        misses++;                  
+
+                        misses++;
                 }
-                
+
                 if (text[i] == 0x0e || text[i] == 0x0f) {
                     // Shift in/out
                     shifts++;
                 }
             }
-        
+
         if (hits == 0) {
             return 0;
         }
-        
+
         //
         // Initial quality is based on relative proportion of recongized vs.
-        //   unrecognized escape sequences. 
+        //   unrecognized escape sequences.
         //   All good:  quality = 100;
         //   half or less good: quality = 0;
         //   linear inbetween.
         quality = (100*hits - 100*misses) / (hits + misses);
-        
+
         // Back off quality if there were too few escape sequences seen.
         //   Include shifts in this computation, so that KR does not get penalized
         //   for having only a single Escape sequence, but many shifts.
         if (hits+shifts < 5) {
             quality -= (5-(hits+shifts))*10;
         }
-        
+
         if (quality < 0) {
             quality = 0;
-        }        
+        }
         return quality;
     }
 
-    
- 
-    
+
+
+
     static class CharsetRecog_2022JP extends CharsetRecog_2022 {
         private byte [] [] escapeSequences = {
                 {0x1b, 0x24, 0x28, 0x43},   // KS X 1001:1992
@@ -112,11 +112,13 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
                 {0x1b, 0x2e, 0x41},         // ISO 8859-1
                 {0x1b, 0x2e, 0x46}          // ISO 8859-7
                 };
-        
+
+        @Override
         String getName() {
             return "ISO-2022-JP";
         }
-        
+
+        @Override
         CharsetMatch   match(CharsetDetector det) {
             int confidence = match(det.fInputBytes, det.fInputLen, escapeSequences);
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
@@ -125,13 +127,15 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
 
     static class CharsetRecog_2022KR extends CharsetRecog_2022 {
         private byte [] [] escapeSequences = {
-                {0x1b, 0x24, 0x29, 0x43}   
+                {0x1b, 0x24, 0x29, 0x43}
                  };
-        
+
+        @Override
         String getName() {
             return "ISO-2022-KR";
         }
-        
+
+        @Override
         CharsetMatch   match(CharsetDetector det) {
             int confidence =  match(det.fInputBytes, det.fInputLen, escapeSequences);
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
@@ -152,16 +156,18 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
                 {0x1b, 0x4e},               // SS2
                 {0x1b, 0x4f},               // SS3
         };
-        
+
+        @Override
         String getName() {
             return "ISO-2022-CN";
         }
-        
+
+        @Override
         CharsetMatch   match(CharsetDetector det) {
             int confidence = match(det.fInputBytes, det.fInputLen, escapeSequences);
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
-    
+
 }
 

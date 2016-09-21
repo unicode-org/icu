@@ -25,14 +25,14 @@ class CharsetCompoundText extends CharsetICU {
     private static final byte[] fromUSubstitution = new byte[] { (byte) 0x3F };
     private CharsetMBCS myConverterArray[];
     private byte state;
-    
+
     private final static byte INVALID = -2;
     private final static byte DO_SEARCH = -1;
     private final static byte COMPOUND_TEXT_SINGLE_0 = 0;
     private final static byte COMPOUND_TEXT_SINGLE_1 = 1;
     private final static byte COMPOUND_TEXT_SINGLE_2 = 2;
     private final static byte COMPOUND_TEXT_SINGLE_3 = 3;
-    
+
     /*private final static byte COMPOUND_TEXT_DOUBLE_1 = 4;
     private final static byte COMPOUND_TEXT_DOUBLE_2 = 5;
     private final static byte COMPOUND_TEXT_DOUBLE_3 = 6;
@@ -40,9 +40,9 @@ class CharsetCompoundText extends CharsetICU {
     private final static byte COMPOUND_TEXT_DOUBLE_5 = 8;
     private final static byte COMPOUND_TEXT_DOUBLE_6 = 9;
     private final static byte COMPOUND_TEXT_DOUBLE_7 = 10;
-    
+
     private final static byte COMPOUND_TEXT_TRIPLE_DOUBLE = 11;*/
-    
+
     private final static byte IBM_915 = 12;
     private final static byte IBM_916 = 13;
     private final static byte IBM_914 = 14;
@@ -51,18 +51,18 @@ class CharsetCompoundText extends CharsetICU {
     private final static byte IBM_913 = 17;
     private final static byte ISO_8859_14 = 18;
     private final static byte IBM_923 = 19;
-    
+
     private final static byte NUM_OF_CONVERTERS = 20;
-    
+
     private final static byte SEARCH_LENGTH = 12;
-    
+
     private final static byte[][] escSeqCompoundText = {
         /* Single */
         { 0x1B, 0x2D, 0x41 },
         { 0x1B, 0x2D, 0x4D },
         { 0x1B, 0x2D, 0x46 },
         { 0x1B, 0x2D, 0x47 },
-        
+
         /* Double */
         { 0x1B, 0x24, 0x29, 0x41 },
         { 0x1B, 0x24, 0x29, 0x42 },
@@ -71,10 +71,10 @@ class CharsetCompoundText extends CharsetICU {
         { 0x1B, 0x24, 0x29, 0x47 },
         { 0x1B, 0x24, 0x29, 0x48 },
         { 0x1B, 0x24, 0x29, 0x49 },
-        
+
         /* Triple/Double */
         { 0x1B, 0x25, 0x47 },
-        
+
         /*IBM-915*/
         { 0x1B, 0x2D, 0x4C },
         /*IBM-916*/
@@ -92,9 +92,9 @@ class CharsetCompoundText extends CharsetICU {
         /* IBM-923 */
         { 0x1B, 0x2D, 0x62 },
     };
-    
+
     private final static byte ESC_START = 0x1B;
-    
+
     private static boolean isASCIIRange(int codepoint) {
         if ((codepoint == 0x0000) || (codepoint == 0x0009) || (codepoint == 0x000A) ||
                 (codepoint >= 0x0020 && codepoint <= 0x007f) || (codepoint >= 0x00A0 && codepoint <= 0x00FF)) {
@@ -102,21 +102,21 @@ class CharsetCompoundText extends CharsetICU {
         }
         return false;
     }
-    
+
     private static boolean isIBM915(int codepoint) {
         if ((codepoint >= 0x0401 && codepoint <= 0x045F) || (codepoint == 0x2116)) {
             return true;
         }
         return false;
     }
-    
+
     private static boolean isIBM916(int codepoint) {
         if ((codepoint >= 0x05D0 && codepoint <= 0x05EA) || (codepoint == 0x2017) || (codepoint == 0x203E)) {
             return true;
         }
         return false;
     }
-    
+
     private static boolean isCompoundS3(int codepoint) {
         if ((codepoint == 0x060C) || (codepoint == 0x061B) || (codepoint == 0x061F) || (codepoint >= 0x0621 && codepoint <= 0x063A) ||
                 (codepoint >= 0x0640 && codepoint <= 0x0652) || (codepoint >= 0x0660 && codepoint <= 0x066D) || (codepoint == 0x200B) ||
@@ -125,14 +125,14 @@ class CharsetCompoundText extends CharsetICU {
         }
         return false;
     }
-    
+
     private static boolean isCompoundS2(int codepoint) {
         if ((codepoint == 0x02BC) || (codepoint == 0x02BD) || (codepoint >= 0x0384 && codepoint <= 0x03CE) || (codepoint == 0x2015)) {
             return true;
         }
         return false;
     }
-    
+
     private static boolean isIBM914(int codepoint) {
         if ((codepoint == 0x0100) || (codepoint == 0x0101) || (codepoint == 0x0112) || (codepoint == 0x0113) || (codepoint == 0x0116) || (codepoint == 0x0117) ||
                 (codepoint == 0x0122) || (codepoint == 0x0123) || (codepoint >= 0x0128 && codepoint <= 0x012B) || (codepoint == 0x012E) || (codepoint == 0x012F) ||
@@ -143,14 +143,14 @@ class CharsetCompoundText extends CharsetICU {
         }
         return false;
     }
-    
+
     private static boolean isIBM874(int codepoint) {
         if ((codepoint >= 0x0E01 && codepoint <= 0x0E3A) || (codepoint >= 0x0E3F && codepoint <= 0x0E5B)) {
             return true;
         }
         return false;
     }
-    
+
     private static boolean isIBM912(int codepoint) {
         return ((codepoint >= 0x0102  && codepoint <= 0x0107)  || (codepoint >= 0x010C && codepoint <= 0x0111)    || (codepoint >= 0x0118 && codepoint <= 0x011B) ||
                 (codepoint == 0x0139) || (codepoint == 0x013A) || (codepoint == 0x013D) || (codepoint == 0x013E)  || (codepoint >= 0x0141 && codepoint <= 0x0144) ||
@@ -159,7 +159,7 @@ class CharsetCompoundText extends CharsetICU {
                 (codepoint == 0x016E) || (codepoint == 0x016F) || (codepoint == 0x0170) || (codepoint ==  0x0171) || (codepoint >= 0x0179 && codepoint <= 0x017E) ||
                 (codepoint == 0x02C7) || (codepoint == 0x02D8) || (codepoint == 0x02D9) || (codepoint == 0x02DB)  || (codepoint == 0x02DD));
     }
-    
+
     private static boolean isIBM913(int codepoint) {
         if ((codepoint >= 0x0108 && codepoint <= 0x010B) || (codepoint == 0x011C) ||
                 (codepoint == 0x011D) || (codepoint == 0x0120) || (codepoint == 0x0121) ||
@@ -169,7 +169,7 @@ class CharsetCompoundText extends CharsetICU {
         }
         return false;
     }
-    
+
     private static boolean isCompoundS1(int codepoint) {
         if ((codepoint == 0x011E) || (codepoint == 0x011F) || (codepoint == 0x0130) ||
                 (codepoint == 0x0131) || (codepoint >= 0x0218 && codepoint <= 0x021B)) {
@@ -177,7 +177,7 @@ class CharsetCompoundText extends CharsetICU {
         }
         return false;
     }
-    
+
     private static boolean isISO8859_14(int codepoint) {
         if ((codepoint >= 0x0174 && codepoint <= 0x0177) || (codepoint == 0x1E0A) ||
                 (codepoint == 0x1E0B) || (codepoint == 0x1E1E) || (codepoint == 0x1E1F) ||
@@ -189,14 +189,14 @@ class CharsetCompoundText extends CharsetICU {
         }
         return false;
     }
-    
+
     private static boolean isIBM923(int codepoint) {
         if ((codepoint == 0x0152) || (codepoint == 0x0153) || (codepoint == 0x0178) || (codepoint == 0x20AC)) {
             return true;
         }
         return false;
     }
-    
+
     private static int findNextEsc(ByteBuffer source) {
         int sourceLimit = source.limit();
         for (int i = (source.position() + 1); i < sourceLimit; i++) {
@@ -206,10 +206,10 @@ class CharsetCompoundText extends CharsetICU {
         }
         return sourceLimit;
     }
-    
+
     private static byte getState(int codepoint) {
         byte state = -1;
-        
+
         if (isASCIIRange(codepoint)) {
             state = COMPOUND_TEXT_SINGLE_0;
         } else if (isIBM912(codepoint)) {
@@ -235,10 +235,10 @@ class CharsetCompoundText extends CharsetICU {
         } else if (isCompoundS1(codepoint)) {
             state = COMPOUND_TEXT_SINGLE_1;
         }
-        
+
         return state;
     }
-    
+
     private static byte findStateFromEscSeq(ByteBuffer source, byte[] toUBytes, int toUBytesLength) {
         byte state = INVALID;
         int sourceIndex = source.position();
@@ -246,7 +246,7 @@ class CharsetCompoundText extends CharsetICU {
         byte i, n;
         int offset = toUBytesLength;
         int sourceLimit = source.limit();
-        
+
         for (i = 0; i < escSeqCompoundText.length; i++) {
             matchFound = true;
             for (n = 0; n < escSeqCompoundText[i].length; n++) {
@@ -266,30 +266,30 @@ class CharsetCompoundText extends CharsetICU {
                 break;
             }
         }
-        
+
         if (matchFound) {
             state = i;
             source.position(sourceIndex + (escSeqCompoundText[i].length - offset));
         }
-        
+
         return state;
     }
-    
+
     public CharsetCompoundText(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
-        
+
         LoadConverters();
-        
+
         maxBytesPerChar = 6;
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
     }
-    
+
     private void LoadConverters() {
         myConverterArray = new CharsetMBCS[NUM_OF_CONVERTERS];
-        
+
         myConverterArray[COMPOUND_TEXT_SINGLE_0] = null;
-        
+
         for (int i = 1; i < SEARCH_LENGTH; i++) {
             String name = "icu-internal-compound-";
             if (i <= 3) {
@@ -299,10 +299,10 @@ class CharsetCompoundText extends CharsetICU {
             } else {
                 name = name + "t";
             }
-            
+
             myConverterArray[i] = (CharsetMBCS)CharsetICU.forNameICU(name);
         }
-        
+
         myConverterArray[IBM_915] = (CharsetMBCS)CharsetICU.forNameICU("ibm-915_P100-1995");
         myConverterArray[IBM_916] = (CharsetMBCS)CharsetICU.forNameICU("ibm-916_P100-1995");
         myConverterArray[IBM_914] = (CharsetMBCS)CharsetICU.forNameICU("ibm-914_P100-1995");
@@ -312,15 +312,15 @@ class CharsetCompoundText extends CharsetICU {
         myConverterArray[ISO_8859_14] = (CharsetMBCS)CharsetICU.forNameICU("iso-8859_14-1998");
         myConverterArray[IBM_923] = (CharsetMBCS)CharsetICU.forNameICU("ibm-923_P100-1998");
     }
-    
+
     class CharsetEncoderCompoundText extends CharsetEncoderICU {
         CharsetEncoderMBCS gbEncoder[];
-        
+
         public CharsetEncoderCompoundText(CharsetICU cs) {
             super(cs, fromUSubstitution);
-            
+
             gbEncoder = new CharsetEncoderMBCS[NUM_OF_CONVERTERS];
-            
+
             for (int i = 0; i < NUM_OF_CONVERTERS; i++) {
                 if (i == 0) {
                     gbEncoder[i] = null;
@@ -329,7 +329,8 @@ class CharsetCompoundText extends CharsetICU {
                 }
             }
         }
-        
+
+        @Override
         protected void implReset() {
             super.implReset();
             for (int i = 0; i < NUM_OF_CONVERTERS; i++) {
@@ -338,7 +339,8 @@ class CharsetCompoundText extends CharsetICU {
                 }
             }
         }
-        
+
+        @Override
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             int sourceChar;
@@ -350,35 +352,35 @@ class CharsetCompoundText extends CharsetICU {
             byte tmpState = 0;
             int i = 0;
             boolean gotoGetTrail = false;
-            
+
             if (!source.hasRemaining())
                 return CoderResult.UNDERFLOW;
             else if (!target.hasRemaining())
                 return CoderResult.OVERFLOW;
-            
+
             /* check if the last codepoint of previous buffer was a lead surrogate */
             if ((sourceChar = fromUChar32) != 0 && target.hasRemaining()) {
                 // goto getTrail label
-                gotoGetTrail = true; 
+                gotoGetTrail = true;
             }
-            
+
             while (source.hasRemaining()) {
                 if (target.hasRemaining()) {
                     if (!gotoGetTrail) {
                         sourceChar = source.get();
                     }
-                    
+
                     targetLength = 0;
                     tmpTargetBuffer.position(0);
                     tmpTargetBuffer.limit(3);
-                    
+
                     /* check if the char is a First surrogate */
                     if (UTF16.isSurrogate((char)sourceChar) || gotoGetTrail) {
                         if (UTF16.isLeadSurrogate((char)sourceChar) || gotoGetTrail) {
 // getTrail label
                             /* reset gotoGetTrail flag*/
                              gotoGetTrail = false;
-                            
+
                             /* look ahead to find the trail surrogate */
                             if (source.hasRemaining()) {
                                 /* test the following code unit */
@@ -410,11 +412,11 @@ class CharsetCompoundText extends CharsetICU {
                             break;
                         }
                     }
-                    
+
                     tmpState = getState(sourceChar);
-                    
+
                     sourceCharArray[0] = (char)sourceChar;
-                    
+
                     if (tmpState < 0) {
                         /* Test all available converters */
                         for (i = 1; i < SEARCH_LENGTH; i++) {
@@ -438,22 +440,22 @@ class CharsetCompoundText extends CharsetICU {
                     if (err.isError()) {
                         break;
                     }
-                    
+
                     if (currentState != tmpState) {
                         currentState = tmpState;
-                        
+
                         /* Write escape sequence if necessary */
                         for (i = 0; i < escSeqCompoundText[currentState].length; i++) {
                             targetBytes[i] = escSeqCompoundText[currentState][i];
                         }
                         targetLength = i;
                     }
-                    
+
                     for (i = 0; i < tmpTargetBuffer.limit(); i++) {
                         targetBytes[i+targetLength] = tmpTargetBuffer.get(i);
                     }
                     targetLength += i;
-                    
+
                     for (i = 0; i < targetLength; i++) {
                         if (target.hasRemaining()) {
                             target.put(targetBytes[i]);
@@ -467,7 +469,7 @@ class CharsetCompoundText extends CharsetICU {
                     break;
                 }
             }
-            
+
             if (err.isOverflow()) {
                 int m = 0;
                 for (int n = i; n < targetLength; n++) {
@@ -476,18 +478,18 @@ class CharsetCompoundText extends CharsetICU {
                 this.errorBufferLength = m;
             }
             state = currentState;
-            
+
             return err;
         }
     }
-    
+
     class CharsetDecoderCompoundText extends CharsetDecoderICU {
         CharsetDecoderMBCS gbDecoder[];
-        
+
         public CharsetDecoderCompoundText(CharsetICU cs) {
             super(cs);
             gbDecoder = new CharsetDecoderMBCS[NUM_OF_CONVERTERS];
-            
+
             for (int i = 0; i < NUM_OF_CONVERTERS; i++) {
                 if (i == 0) {
                     gbDecoder[i] = null;
@@ -496,7 +498,8 @@ class CharsetCompoundText extends CharsetICU {
                 }
             }
         }
-        
+
+        @Override
         protected void implReset() {
             super.implReset();
             for (int i = 0; i < NUM_OF_CONVERTERS; i++) {
@@ -505,7 +508,8 @@ class CharsetCompoundText extends CharsetICU {
                 }
             }
         }
-        
+
+        @Override
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             byte[] sourceChar = { 0x00 };
@@ -513,12 +517,12 @@ class CharsetCompoundText extends CharsetICU {
             byte tmpState = currentState;
             CharsetDecoderMBCS decoder;
             int sourceLimit = source.limit();;
-            
+
             if (!source.hasRemaining())
                 return CoderResult.UNDERFLOW;
             else if (!target.hasRemaining())
                 return CoderResult.OVERFLOW;
-            
+
             while (source.hasRemaining()) {
                 if (target.hasRemaining()) {
                     if (this.toULength > 0) {
@@ -526,7 +530,7 @@ class CharsetCompoundText extends CharsetICU {
                     } else {
                         sourceChar[0] = source.get(source.position());
                     }
-                    
+
                     if (sourceChar[0] == ESC_START) {
                         tmpState = findStateFromEscSeq(source, this.toUBytesArray, this.toULength);
                         if (tmpState == DO_SEARCH) {
@@ -542,14 +546,14 @@ class CharsetCompoundText extends CharsetICU {
                             }
                             break;
                         }
-                        
+
                         this.toULength = 0;
                     }
-                    
+
                     if (tmpState != currentState) {
                         currentState = tmpState;
                     }
-                    
+
                     if (currentState == COMPOUND_TEXT_SINGLE_0) {
                         while (source.hasRemaining()) {
                             if (!target.hasRemaining()) {
@@ -567,29 +571,29 @@ class CharsetCompoundText extends CharsetICU {
                         source.limit(findNextEsc(source));
 
                         decoder = gbDecoder[currentState];
-                        
+
                         decoder.toUBytesArray = this.toUBytesArray;
                         decoder.toULength = this.toULength;
 
                         err = decoder.decodeLoop(source, target, offsets, true);
-                        
+
                         this.toULength = decoder.toULength;
                         decoder.toULength = 0;
-                        
+
                         if (err.isError()) {
                             if (err.isOverflow()) {
                                 this.charErrorBufferArray = decoder.charErrorBufferArray;
                                 this.charErrorBufferBegin = decoder.charErrorBufferBegin;
                                 this.charErrorBufferLength = decoder.charErrorBufferLength;
-                                
+
                                 decoder.charErrorBufferBegin = 0;
                                 decoder.charErrorBufferLength = 0;
                             }
                         }
-                        
+
                         source.limit(sourceLimit);
                     }
-                    
+
                     if (err.isError()) {
                         break;
                     }
@@ -602,15 +606,18 @@ class CharsetCompoundText extends CharsetICU {
             return err;
         }
     }
-    
+
+    @Override
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderCompoundText(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderCompoundText(this);
     }
-    
+
+    @Override
     void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
         for (int i = 1; i < NUM_OF_CONVERTERS; i++) {
             myConverterArray[i].MBCSGetFilteredUnicodeSetForUnicode(myConverterArray[i].sharedData, setFillIn, which, CharsetMBCS.UCNV_SET_FILTER_NONE);

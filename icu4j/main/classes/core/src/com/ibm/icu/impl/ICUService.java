@@ -297,6 +297,7 @@ public class ICUService extends ICUNotifier {
          * Return the service instance if the factory's id is equal to
          * the key's currentID.  Service is ignored.
          */
+        @Override
         public Object create(Key key, ICUService service) {
             if (id.equals(key.currentID())) {
                 return instance;
@@ -308,6 +309,7 @@ public class ICUService extends ICUNotifier {
          * If visible, adds a mapping from id -> this to the result,
          * otherwise removes id from result.
          */
+        @Override
         public void updateVisibleIDs(Map<String, Factory> result) {
             if (visible) {
                 result.put(id, this);
@@ -321,6 +323,7 @@ public class ICUService extends ICUNotifier {
          * otherwise returns null.  (This default implementation has
          * no localized id information.)
          */
+        @Override
         public String getDisplayName(String identifier, ULocale locale) {
             return (visible && id.equals(identifier)) ? identifier : null;
         }
@@ -328,6 +331,7 @@ public class ICUService extends ICUNotifier {
         /**
          * For debugging.
          */
+        @Override
         public String toString() {
             StringBuilder buf = new StringBuilder(super.toString());
             buf.append(", id: ");
@@ -625,12 +629,12 @@ public class ICUService extends ICUNotifier {
                 return f.getDisplayName(id, locale);
             }
         }
-        
+
         return null;
     }
 
     /**
-     * Convenience override of getDisplayNames(ULocale, Comparator, String) that 
+     * Convenience override of getDisplayNames(ULocale, Comparator, String) that
      * uses the current default Locale as the locale, null as
      * the comparator, and null for the matchID.
      */
@@ -685,7 +689,7 @@ public class ICUService extends ICUNotifier {
             synchronized (this) {
                 if (ref == dnref || dnref == null) {
                     dncache = new TreeMap<String, String>(com); // sorted
-                    
+
                     Map<String, Factory> m = getVisibleIDMap();
                     Iterator<Entry<String, Factory>> ei = m.entrySet().iterator();
                     while (ei.hasNext()) {
@@ -923,6 +927,7 @@ public class ICUService extends ICUNotifier {
      * requires a ServiceListener.  Subclasses can override to accept
      * different listeners.
      */
+    @Override
     protected boolean acceptsListener(EventListener l) {
         return l instanceof ServiceListener;
     }
@@ -931,6 +936,7 @@ public class ICUService extends ICUNotifier {
      * Notify the listener, which by default is a ServiceListener.
      * Subclasses can override to use a different listener.
      */
+    @Override
     protected void notifyListener(EventListener l) {
         ((ServiceListener)l).serviceChanged(this);
     }
@@ -959,6 +965,7 @@ public class ICUService extends ICUNotifier {
     /**
      * Returns the result of super.toString, appending the name in curly braces.
      */
+    @Override
     public String toString() {
         return super.toString() + "{" + name + "}";
     }

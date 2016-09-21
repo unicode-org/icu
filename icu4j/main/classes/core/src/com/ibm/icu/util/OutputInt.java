@@ -54,6 +54,7 @@ public class OutputInt {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @Override
     public String toString() {
         return Integer.toString(value);
     }

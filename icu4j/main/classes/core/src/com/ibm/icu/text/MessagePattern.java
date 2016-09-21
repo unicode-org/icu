@@ -874,6 +874,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
      * @return a copy of this object.
      * @stable ICU 4.8
      */
+    @Override
     @SuppressWarnings("unchecked")
     public MessagePattern cloneAsThawed() {
         MessagePattern newMsg;
@@ -892,9 +893,10 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
 
     /**
      * Freezes this object, making it immutable and thread-safe.
-     * @return this 
+     * @return this
      * @stable ICU 4.8
      */
+    @Override
     public MessagePattern freeze() {
         frozen=true;
         return this;
@@ -905,6 +907,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
      * @return true if this object is frozen.
      * @stable ICU 4.8
      */
+    @Override
     public boolean isFrozen() {
         return frozen;
     }
@@ -938,7 +941,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
             char c=msg.charAt(index++);
             if(c=='\'') {
                 if(index==msg.length()) {
-                    // The apostrophe is the last character in the pattern. 
+                    // The apostrophe is the last character in the pattern.
                     // Add a Part for auto-quoting.
                     addPart(Part.Type.INSERT_CHAR, index, 0, '\'');  // value=char to be inserted
                     needsAutoQuoting=true;

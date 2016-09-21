@@ -63,6 +63,7 @@ public class ICUConfig {
         if (System.getSecurityManager() != null) {
             try {
                 val = AccessController.doPrivileged(new PrivilegedAction<String>() {
+                    @Override
                     public String run() {
                         return System.getProperty(fname);
                     }

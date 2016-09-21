@@ -34,6 +34,7 @@ public class Extension {
         return _key + LanguageTag.SEP + _value;
     }
 
+    @Override
     public String toString() {
         return getID();
     }

@@ -1422,6 +1422,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Overrides clone.
      * @stable ICU 2.0
      */
+    @Override
     public Object clone()
     {
         try {
@@ -1439,6 +1440,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Generates a hash code for the DateFormatSymbols object.
      * @stable ICU 2.0
      */
+    @Override
     public int hashCode() {
         // Is this sufficient?
         return requestedLocale.toString().hashCode();
@@ -1448,6 +1450,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Overrides equals.
      * @stable ICU 2.0
      */
+    @Override
     public boolean equals(Object obj)
     {
         if (this == obj) return true;
@@ -2013,7 +2016,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         }
         UResourceBundle contextTransformsBundle = null;
         try {
-           contextTransformsBundle = (UResourceBundle)rb.getWithFallback("contextTransforms");
+           contextTransformsBundle = rb.getWithFallback("contextTransforms");
         }
         catch (MissingResourceException e) {
             contextTransformsBundle = null; // probably redundant

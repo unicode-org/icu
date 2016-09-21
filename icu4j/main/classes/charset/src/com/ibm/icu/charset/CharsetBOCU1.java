@@ -23,12 +23,12 @@ import com.ibm.icu.text.UnicodeSet;
  * @author krajwade
  *
  */
-class CharsetBOCU1 extends CharsetICU {   
+class CharsetBOCU1 extends CharsetICU {
     /* BOCU constants and macros */
-    
+
     /* initial value for "prev": middle of the ASCII range */
     private static final byte BOCU1_ASCII_PREV = 0x40;
-    
+
     /* bounding byte values for differences */
     private static final int BOCU1_MIN = 0x21;
     private static final int BOCU1_MIDDLE = 0x90;
@@ -45,7 +45,7 @@ class CharsetBOCU1 extends CharsetICU {
 
     /* number of trail bytes */
     private static final int BOCU1_TRAIL_COUNT =((BOCU1_MAX_TRAIL-BOCU1_MIN+1)+BOCU1_TRAIL_CONTROLS_COUNT);
-    
+
     /*
      * number of positive and negative single-byte codes
      * (counting 0==BOCU1_MIDDLE among the positive ones)
@@ -84,8 +84,8 @@ class CharsetBOCU1 extends CharsetICU {
 
     /* The length of a byte sequence, according to the lead byte (!=BOCU1_RESET). */
    /* private static int BOCU1_LENGTH_FROM_LEAD(int lead) {
-       return ((BOCU1_START_NEG_2<=(lead) && (lead)<BOCU1_START_POS_2) ? 1 : 
-         (BOCU1_START_NEG_3<=(lead) && (lead)<BOCU1_START_POS_3) ? 2 : 
+       return ((BOCU1_START_NEG_2<=(lead) && (lead)<BOCU1_START_POS_2) ? 1 :
+         (BOCU1_START_NEG_3<=(lead) && (lead)<BOCU1_START_POS_3) ? 2 :
          (BOCU1_START_NEG_4<=(lead) && (lead)<BOCU1_START_POS_4) ? 3 : 4);
     }*/
 
@@ -93,7 +93,7 @@ class CharsetBOCU1 extends CharsetICU {
     private static int BOCU1_LENGTH_FROM_PACKED(int packed) {
         return (((packed)&UConverterConstants.UNSIGNED_INT_MASK)<0x04000000 ? (packed)>>24 : 4);
     }
-    
+
     /*
      * Byte value map for control codes,
      * from external byte values 0x00..0x20
@@ -123,7 +123,7 @@ class CharsetBOCU1 extends CharsetICU {
      * from trail byte values 0..19 (0..0x13) as used in the difference calculation
      * to external byte values 0x00..0x20.
      */
-    private static final int[] 
+    private static final int[]
     bocu1TrailToByte = {
     /*  0     1     2     3     4     5     6     7    */
         0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x10, 0x11,
@@ -134,8 +134,8 @@ class CharsetBOCU1 extends CharsetICU {
     /*  10    11    12    13   */
         0x1c, 0x1d, 0x1e, 0x1f
     };
-    
-    
+
+
     /*
      * 12 commonly used C0 control codes (and space) are only used to encode
      * themselves directly,
@@ -166,8 +166,8 @@ class CharsetBOCU1 extends CharsetICU {
      */
     private static int BOCU1_TRAIL_TO_BYTE(int trail) {
         return ((trail)>=BOCU1_TRAIL_CONTROLS_COUNT ? (trail)+BOCU1_TRAIL_BYTE_OFFSET : bocu1TrailToByte[trail]);
-    }    
-    
+    }
+
     /* BOCU-1 implementation functions ------------------------------------------ */
     private static int BOCU1_SIMPLE_PREV(int c){
         return (((c)&~0x7f)+BOCU1_ASCII_PREV);
@@ -201,7 +201,7 @@ class CharsetBOCU1 extends CharsetICU {
     private static int BOCU1_PREV(int c) {
         return ((c)<0x3040 || (c)>0xd7a3 ? BOCU1_SIMPLE_PREV(c) : bocu1Prev(c));
     }
-    
+
     protected byte[] fromUSubstitution = new byte[]{(byte)0x1A};
 
     /* Faster versions of packDiff() for single-byte-encoded diff values. */
@@ -219,35 +219,35 @@ class CharsetBOCU1 extends CharsetICU {
     /** Is a diff value encodable in two bytes? */
     private static boolean DIFF_IS_DOUBLE(int diff){
         return (BOCU1_REACH_NEG_2<=(diff) && (diff)<=BOCU1_REACH_POS_2);
-    }   
-      
+    }
+
     public CharsetBOCU1(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
-        maxBytesPerChar = 4; 
+        maxBytesPerChar = 4;
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
      }
-    
+
     class CharsetEncoderBOCU extends CharsetEncoderICU {
         public CharsetEncoderBOCU(CharsetICU cs) {
             super(cs,fromUSubstitution);
         }
-        
+
         int sourceIndex, nextSourceIndex;
         int prev, c , diff;
         boolean checkNegative;
         boolean LoopAfterTrail;
         int targetCapacity;
-        CoderResult cr;        
-        
+        CoderResult cr;
+
         /* label values for supporting behavior similar to goto in C */
         private static final int fastSingle=0;
         private static final int getTrail=1;
         private static final int regularLoop=2;
-        
+
         private boolean LabelLoop; //used to break the while loop
         private int labelType = fastSingle; //labeType is set to fastSingle to start the code from fastSingle:
-        
+
         /**
          * Integer division and modulo with negative numerators
          * yields negative modulo results and quotients that are one more than
@@ -263,15 +263,15 @@ class CharsetBOCU1 extends CharsetICU {
          */
         private int NEGDIVMOD(int n, int d, int m) {
             diff = n;
-            (m)=(diff)%(d); 
-            (diff)/=(d); 
-            if((m)<0) { 
+            (m)=(diff)%(d);
+            (diff)/=(d);
+            if((m)<0) {
                 --(diff);
                 (m)+=(d);
             }
             return m;
         }
-        
+
         /**
          * Encode a difference -0x10ffff..0x10ffff in 1..4 bytes
          * and return a packed integer with them.
@@ -385,32 +385,33 @@ class CharsetBOCU1 extends CharsetICU {
             }
             return result;
         }
-           
+
+        @Override
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
             cr = CoderResult.UNDERFLOW;
-            
+
             LabelLoop = true; //used to break the while loop
             checkNegative = false; // its value is set to true to get out of while loop when c = -c
             LoopAfterTrail = false; // its value is set to true to ignore code before getTrail:
-            
+
             /*set up the local pointers*/
             targetCapacity = target.limit() - target.position();
             c = fromUChar32;
             prev = fromUnicodeStatus;
-            
+
             if(prev==0){
                 prev = BOCU1_ASCII_PREV;
             }
-            
+
             /*sourceIndex ==-1 if the current characte began in the previous buffer*/
             sourceIndex = c == 0 ? 0: -1;
             nextSourceIndex = 0;
-            
+
             /*conversion loop*/
             if(c!=0 && targetCapacity>0){
                 labelType = getTrail;
             }
-            
+
             while(LabelLoop){
                 switch(labelType){
                     case fastSingle:
@@ -424,12 +425,12 @@ class CharsetBOCU1 extends CharsetICU {
                         break;
                 }
             }
-                    
+
             return cr;
         }
-        
-        private int fastSingle(CharBuffer source, ByteBuffer target, IntBuffer offsets){                     
-//fastSingle:        
+
+        private int fastSingle(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+//fastSingle:
             /*fast loop for single-byte differences*/
             /*use only one loop counter variable , targetCapacity, not also source*/
             diff = source.limit() - source.position();
@@ -464,7 +465,7 @@ class CharsetBOCU1 extends CharsetICU {
             }
             return regularLoop;
         }
-        
+
         private int getTrail(CharBuffer source, ByteBuffer target, IntBuffer offsets){
             if(source.hasRemaining()){
                 /*test the following code unit*/
@@ -493,11 +494,11 @@ class CharsetBOCU1 extends CharsetICU {
             /*regular loop for all classes*/
             while(LoopAfterTrail || source.hasRemaining()){
                 if(LoopAfterTrail || targetCapacity>0){
-                    
+
                     if(!LoopAfterTrail){
                         c = source.get();
                         ++nextSourceIndex;
-                        
+
                         if(c<=0x20){
                             /*
                              * ISO C0 control & space:
@@ -512,11 +513,11 @@ class CharsetBOCU1 extends CharsetICU {
                                 offsets.put(sourceIndex++);
                             }
                             --targetCapacity;
-                         
+
                             sourceIndex=nextSourceIndex;
                             continue;
                         }
-                        
+
                         if(UTF16.isLeadSurrogate((char)c)){
                             getTrail(source, target, offsets);
                             if(checkNegative){
@@ -524,11 +525,11 @@ class CharsetBOCU1 extends CharsetICU {
                             }
                         }
                     }
-                        
+
                     if(LoopAfterTrail){
-                        LoopAfterTrail = false; 
+                        LoopAfterTrail = false;
                     }
-                    
+
                     /*
                      * all other Unicode code points c==U+0021..U+10ffff
                      * are encoded with the difference c-prev
@@ -576,7 +577,7 @@ class CharsetBOCU1 extends CharsetICU {
                         int length; /*will be 2..4*/
                         diff = packDiff(diff);
                         length = BOCU1_LENGTH_FROM_PACKED(diff);
-                        
+
                         /*write the output character bytes from diff and length*/
                         /*from the first if in the loop we know that targetCapacity>0*/
                         if(length<=targetCapacity){
@@ -631,7 +632,7 @@ class CharsetBOCU1 extends CharsetICU {
                                 break;
                             }
                             errorBufferLength = length;
-                            
+
                             /* now output what fits into the regular target */
                             diff>>=8*length; /* length was reduced by targetCapacity */
                             switch(targetCapacity) {
@@ -667,7 +668,7 @@ class CharsetBOCU1 extends CharsetICU {
                     cr = CoderResult.OVERFLOW;
                     break;
                 }
-                   
+
             }
             /*set the converter state back into UConverter*/
             fromUChar32 = c<0 ? -c :0;
@@ -676,26 +677,26 @@ class CharsetBOCU1 extends CharsetICU {
             labelType = fastSingle;
             return labelType;
         }
-       
+
     }
-    
+
     static class CharsetDecoderBOCU extends CharsetDecoderICU{
         public CharsetDecoderBOCU(CharsetICU cs) {
             super(cs);
         }
-        
+
         int byteIndex;
         int sourceIndex, nextSourceIndex;
         int prev, c , diff, count;
         byte[] bytes;
         CoderResult cr;
-        
+
         /* label values for supporting behavior similar to goto in C */
         private static final int fastSingle=0;
         private static final int getTrail=1;
         private static final int regularLoop=2;
         private static final int endLoop=3;
-        
+
         private boolean LabelLoop;//used to break the while loop
         private boolean afterTrail; // its value is set to true to ignore code after getTrail:
         private int labelType;
@@ -711,8 +712,8 @@ class CharsetBOCU1 extends CharsetICU {
 
         /* BOCU-1-from-Unicode conversion functions --------------------------------- */
 
-        
-        
+
+
         /**
          * Function for BOCU-1 decoder; handles multi-byte lead bytes.
          *
@@ -758,7 +759,7 @@ class CharsetBOCU1 extends CharsetICU {
             /* return the state for decoding the trail byte(s) */
             return (diffValue<<2)|countValue;
         }
-        
+
         /**
          * Function for BOCU-1 decoder; handles multi-byte trail bytes.
          *
@@ -788,37 +789,38 @@ class CharsetBOCU1 extends CharsetICU {
                 return b*(BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT);
             }
         }
-        
+
+        @Override
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 boolean flush){
             cr = CoderResult.UNDERFLOW;
-            
-            LabelLoop = true; 
-            afterTrail = false; 
+
+            LabelLoop = true;
+            afterTrail = false;
             labelType = fastSingle; // labelType is set to fastSingle so t
-            
+
             /*get the converter state*/
             prev = toUnicodeStatus;
-            
+
             if(prev==0){
                 prev = BOCU1_ASCII_PREV;
             }
             diff = mode;
             count = diff&3;
             diff>>=2;
-            
+
             byteIndex = toULength;
             bytes = toUBytesArray;
-            
+
             /* sourceIndex=-1 if the current character began in the previous buffer */
             sourceIndex=byteIndex==0 ? 0 : -1;
             nextSourceIndex=0;
-            
+
             /* conversion "loop" similar to _SCSUToUnicodeWithOffsets() */
             if(count>0 && byteIndex>0 && target.position()<target.limit()) {
                 labelType = getTrail;
             }
-            
+
             while(LabelLoop){
                 switch(labelType){
                     case fastSingle:
@@ -835,10 +837,10 @@ class CharsetBOCU1 extends CharsetICU {
                         break;
                 }
             }
-            
+
             return cr;
         }
-        
+
         private int fastSingle(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             labelType = regularLoop;
             /* fast loop for single-byte differences */
@@ -855,7 +857,7 @@ class CharsetBOCU1 extends CharsetICU {
                         target.put((char)c);
                         if(offsets!=null){
                             offsets.put(nextSourceIndex++);
-                        } 
+                        }
                         prev = BOCU1_SIMPLE_PREV(c);
                     } else {
                         break;
@@ -867,7 +869,7 @@ class CharsetBOCU1 extends CharsetICU {
                     target.put((char)c);
                     if(offsets!=null){
                         offsets.put(nextSourceIndex++);
-                    } 
+                    }
                 } else {
                     break;
                 }
@@ -877,7 +879,7 @@ class CharsetBOCU1 extends CharsetICU {
             sourceIndex=nextSourceIndex; /* wrong if offsets==NULL but does not matter */
             return labelType;
         }
-        
+
         private int getTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             labelType = regularLoop;
             for(;;) {
@@ -911,9 +913,9 @@ class CharsetBOCU1 extends CharsetICU {
             }
             afterTrail = true;
             return labelType;
-            
+
         }
-        
+
         private int afterGetTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             /* decode a sequence of single and lead bytes */
             while(afterTrail || source.hasRemaining()) {
@@ -994,11 +996,11 @@ class CharsetBOCU1 extends CharsetICU {
                         }
                     }
                 }
-                
+
                 if(afterTrail){
                     afterTrail = false;
                 }
-                
+
                 /* calculate the next prev and output c */
                 prev = BOCU1_PREV(c);
                 if(c<=0xffff) {
@@ -1031,7 +1033,7 @@ class CharsetBOCU1 extends CharsetICU {
           labelType = endLoop;
           return labelType;
         }
-        
+
         private void endLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             if(cr.isMalformed()) {
                 /* set the converter state in UConverter to deal with the next character */
@@ -1045,18 +1047,21 @@ class CharsetBOCU1 extends CharsetICU {
             toULength=byteIndex;
             LabelLoop = false;
         }
-    
+
     }
-    
-    
+
+
+    @Override
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderBOCU(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderBOCU(this);
     }
-    
+
+    @Override
     void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
         CharsetICU.getCompleteUnicodeSet(setFillIn);
     }

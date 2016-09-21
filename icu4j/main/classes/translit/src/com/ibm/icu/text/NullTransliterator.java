@@ -28,6 +28,7 @@ class NullTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
+    @Override
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {
         offsets.start = offsets.limit;

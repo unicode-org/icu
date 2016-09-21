@@ -212,6 +212,7 @@ public final class UCharacterProperty
             super(SRC_CASE);
             this.which=which;
         }
+        @Override
         boolean contains(int c) {
             return UCaseProps.INSTANCE.hasBinaryProperty(c, which);
         }
@@ -223,6 +224,7 @@ public final class UCharacterProperty
             super(source);
             this.which=which;
         }
+        @Override
         boolean contains(int c) {
             return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_INERT).isInert(c);
         }
@@ -236,11 +238,13 @@ public final class UCharacterProperty
         new BinaryProperty(1, (1<<ALPHABETIC_PROPERTY_)),
         new BinaryProperty(1, (1<<ASCII_HEX_DIGIT_PROPERTY_)),
         new BinaryProperty(SRC_BIDI) {  // UCHAR_BIDI_CONTROL
+            @Override
             boolean contains(int c) {
                 return UBiDiProps.INSTANCE.isBidiControl(c);
             }
         },
         new BinaryProperty(SRC_BIDI) {  // UCHAR_BIDI_MIRRORED
+            @Override
             boolean contains(int c) {
                 return UBiDiProps.INSTANCE.isMirrored(c);
             }
@@ -251,6 +255,7 @@ public final class UCharacterProperty
         new BinaryProperty(1, (1<<DIACRITIC_PROPERTY_)),
         new BinaryProperty(1, (1<<EXTENDER_PROPERTY_)),
         new BinaryProperty(SRC_NFC) {  // UCHAR_FULL_COMPOSITION_EXCLUSION
+            @Override
             boolean contains(int c) {
                 // By definition, Full_Composition_Exclusion is the same as NFC_QC=No.
                 Normalizer2Impl impl=Norm2AllModes.getNFCInstance().impl;
@@ -268,6 +273,7 @@ public final class UCharacterProperty
         new BinaryProperty(1, (1<<IDS_BINARY_OPERATOR_PROPERTY_)),
         new BinaryProperty(1, (1<<IDS_TRINARY_OPERATOR_PROPERTY_)),
         new BinaryProperty(SRC_BIDI) {  // UCHAR_JOIN_CONTROL
+            @Override
             boolean contains(int c) {
                 return UBiDiProps.INSTANCE.isJoinControl(c);
             }
@@ -293,6 +299,7 @@ public final class UCharacterProperty
         new NormInertBinaryProperty(SRC_NFC, UProperty.NFC_INERT),
         new NormInertBinaryProperty(SRC_NFKC, UProperty.NFKC_INERT),
         new BinaryProperty(SRC_NFC_CANON_ITER) {  // UCHAR_SEGMENT_STARTER
+            @Override
             boolean contains(int c) {
                 return Norm2AllModes.getNFCInstance().impl.
                     ensureCanonIterData().isCanonSegmentStarter(c);
@@ -301,11 +308,13 @@ public final class UCharacterProperty
         new BinaryProperty(1, (1<<PATTERN_SYNTAX)),
         new BinaryProperty(1, (1<<PATTERN_WHITE_SPACE)),
         new BinaryProperty(SRC_CHAR_AND_PROPSVEC) {  // UCHAR_POSIX_ALNUM
+            @Override
             boolean contains(int c) {
                 return UCharacter.isUAlphabetic(c) || UCharacter.isDigit(c);
             }
         },
         new BinaryProperty(SRC_CHAR) {  // UCHAR_POSIX_BLANK
+            @Override
             boolean contains(int c) {
                 // "horizontal space"
                 if(c<=0x9f) {
@@ -317,11 +326,13 @@ public final class UCharacterProperty
             }
         },
         new BinaryProperty(SRC_CHAR) {  // UCHAR_POSIX_GRAPH
+            @Override
             boolean contains(int c) {
                 return isgraphPOSIX(c);
             }
         },
         new BinaryProperty(SRC_CHAR) {  // UCHAR_POSIX_PRINT
+            @Override
             boolean contains(int c) {
                 /*
                  * Checks if codepoint is in \p{graph}\p{blank} - \p{cntrl}.
@@ -333,6 +344,7 @@ public final class UCharacterProperty
             }
         },
         new BinaryProperty(SRC_CHAR) {  // UCHAR_POSIX_XDIGIT
+            @Override
             boolean contains(int c) {
                 /* check ASCII and Fullwidth ASCII a-fA-F */
                 if(
@@ -350,6 +362,7 @@ public final class UCharacterProperty
         new CaseBinaryProperty(UProperty.CHANGES_WHEN_UPPERCASED),
         new CaseBinaryProperty(UProperty.CHANGES_WHEN_TITLECASED),
         new BinaryProperty(SRC_CASE_AND_NORM) {  // UCHAR_CHANGES_WHEN_CASEFOLDED
+            @Override
             boolean contains(int c) {
                 String nfd=Norm2AllModes.getNFCInstance().impl.getDecomposition(c);
                 if(nfd!=null) {
@@ -376,6 +389,7 @@ public final class UCharacterProperty
         },
         new CaseBinaryProperty(UProperty.CHANGES_WHEN_CASEMAPPED),
         new BinaryProperty(SRC_NFKC_CF) {  // UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED
+            @Override
             boolean contains(int c) {
                 Normalizer2Impl kcf=Norm2AllModes.getNFKC_CFInstance().impl;
                 String src=UTF16.valueOf(c);
@@ -457,6 +471,7 @@ public final class UCharacterProperty
         BiDiIntProperty() {
             super(SRC_BIDI);
         }
+        @Override
         int getMaxValue(int which) {
             return UBiDiProps.INSTANCE.getMaxValue(which);
         }
@@ -466,6 +481,7 @@ public final class UCharacterProperty
         CombiningClassIntProperty(int source) {
             super(source);
         }
+        @Override
         int getMaxValue(int which) {
             return 0xff;
         }
@@ -479,9 +495,11 @@ public final class UCharacterProperty
             this.which=which;
             this.max=max;
         }
+        @Override
         int getValue(int c) {
             return Norm2AllModes.getN2WithImpl(which-UProperty.NFD_QUICK_CHECK).getQuickCheck(c);
         }
+        @Override
         int getMaxValue(int which) {
             return max;
         }
@@ -489,12 +507,14 @@ public final class UCharacterProperty
 
     IntProperty intProps[]={
         new BiDiIntProperty() {  // BIDI_CLASS
+            @Override
             int getValue(int c) {
                 return UBiDiProps.INSTANCE.getClass(c);
             }
         },
         new IntProperty(0, BLOCK_MASK_, BLOCK_SHIFT_),
         new CombiningClassIntProperty(SRC_NFC) {  // CANONICAL_COMBINING_CLASS
+            @Override
             int getValue(int c) {
                 return Normalizer2.getNFDInstance().getCombiningClass(c);
             }
@@ -502,38 +522,46 @@ public final class UCharacterProperty
         new IntProperty(2, DECOMPOSITION_TYPE_MASK_, 0),
         new IntProperty(0, EAST_ASIAN_MASK_, EAST_ASIAN_SHIFT_),
         new IntProperty(SRC_CHAR) {  // GENERAL_CATEGORY
+            @Override
             int getValue(int c) {
                 return getType(c);
             }
+            @Override
             int getMaxValue(int which) {
                 return UCharacterCategory.CHAR_CATEGORY_COUNT-1;
             }
         },
         new BiDiIntProperty() {  // JOINING_GROUP
+            @Override
             int getValue(int c) {
                 return UBiDiProps.INSTANCE.getJoiningGroup(c);
             }
         },
         new BiDiIntProperty() {  // JOINING_TYPE
+            @Override
             int getValue(int c) {
                 return UBiDiProps.INSTANCE.getJoiningType(c);
             }
         },
         new IntProperty(2, LB_MASK, LB_SHIFT),  // LINE_BREAK
         new IntProperty(SRC_CHAR) {  // NUMERIC_TYPE
+            @Override
             int getValue(int c) {
                 return ntvGetType(getNumericTypeValue(getProperty(c)));
             }
+            @Override
             int getMaxValue(int which) {
                 return NumericType.COUNT-1;
             }
         },
         new IntProperty(0, SCRIPT_MASK_, 0) {
+            @Override
             int getValue(int c) {
                 return UScript.getScript(c);
             }
         },
         new IntProperty(SRC_PROPSVEC) {  // HANGUL_SYLLABLE_TYPE
+            @Override
             int getValue(int c) {
                 /* see comments on gcbToHst[] above */
                 int gcb=(getAdditional(c, 2)&GCB_MASK)>>>GCB_SHIFT;
@@ -543,6 +571,7 @@ public final class UCharacterProperty
                     return HangulSyllableType.NOT_APPLICABLE;
                 }
             }
+            @Override
             int getMaxValue(int which) {
                 return HangulSyllableType.COUNT-1;
             }
@@ -554,11 +583,13 @@ public final class UCharacterProperty
         new NormQuickCheckIntProperty(SRC_NFC, UProperty.NFC_QUICK_CHECK, 2),
         new NormQuickCheckIntProperty(SRC_NFKC, UProperty.NFKC_QUICK_CHECK, 2),
         new CombiningClassIntProperty(SRC_NFC) {  // LEAD_CANONICAL_COMBINING_CLASS
+            @Override
             int getValue(int c) {
                 return Norm2AllModes.getNFCInstance().impl.getFCD16(c)>>8;
             }
         },
         new CombiningClassIntProperty(SRC_NFC) {  // TRAIL_CANONICAL_COMBINING_CLASS
+            @Override
             int getValue(int c) {
                 return Norm2AllModes.getNFCInstance().impl.getFCD16(c)&0xff;
             }
@@ -567,6 +598,7 @@ public final class UCharacterProperty
         new IntProperty(2, SB_MASK, SB_SHIFT),  // SENTENCE_BREAK
         new IntProperty(2, WB_MASK, WB_SHIFT),  // WORD_BREAK
         new BiDiIntProperty() {  // BIDI_PAIRED_BRACKET_TYPE
+            @Override
             int getValue(int c) {
                 return UBiDiProps.INSTANCE.getPairedBracketType(c);
             }
@@ -1240,6 +1272,7 @@ public final class UCharacterProperty
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
+        @Override
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0] == 7;
         }
@@ -1332,7 +1365,7 @@ public final class UCharacterProperty
 
         /* add for u_charDigitValue() */
         // TODO remove when UCharacter.getHanNumericValue() is changed to just return
-        // Unicode numeric values 
+        // Unicode numeric values
         set.add(0x3007);
         set.add(0x3008);
         set.add(0x4e00);

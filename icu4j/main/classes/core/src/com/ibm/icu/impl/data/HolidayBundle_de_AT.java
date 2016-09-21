@@ -44,5 +44,6 @@ public class HolidayBundle_de_AT extends ListResourceBundle {
         {   "Christmas",        "Christtag" },
         {   "New Year's Day",   "Neujahrstag" },
     };
+    @Override
     public synchronized Object[][] getContents() { return fContents; }
 }

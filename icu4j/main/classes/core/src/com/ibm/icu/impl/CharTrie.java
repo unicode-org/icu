@@ -103,7 +103,7 @@ public class CharTrie extends Trie
     }
 
     // public methods --------------------------------------------------
-    
+
     /**
     * Gets the value associated with the codepoint.
     * If no value is associated with the codepoint, a default value will be
@@ -118,14 +118,14 @@ public class CharTrie extends Trie
         // fastpath for U+0000..U+D7FF
         if(0 <= ch && ch < UTF16.LEAD_SURROGATE_MIN_VALUE) {
             // copy of getRawOffset()
-            offset = (m_index_[ch >> INDEX_STAGE_1_SHIFT_] << INDEX_STAGE_2_SHIFT_) 
+            offset = (m_index_[ch >> INDEX_STAGE_1_SHIFT_] << INDEX_STAGE_2_SHIFT_)
                     + (ch & INDEX_STAGE_3_MASK_);
             return m_data_[offset];
         }
 
         // handle U+D800..U+10FFFF
         offset = getCodePointOffset(ch);
-        
+
         // return -1 if there is an error, in this case we return the default
         // value: m_initialValue_
         return (offset >= 0) ? m_data_[offset] : m_initialValue_;
@@ -174,7 +174,7 @@ public class CharTrie extends Trie
     /**
     * <p>Get a value from a folding offset (from the value of a lead surrogate)
     * and a trail surrogate.</p>
-    * <p>If the 
+    * <p>If the
     * @param leadvalue value associated with the lead surrogate which contains
     *        the folding offset
     * @param trail surrogate
@@ -188,24 +188,24 @@ public class CharTrie extends Trie
         }
         int offset = m_dataManipulate_.getFoldingOffset(leadvalue);
         if (offset > 0) {
-            return m_data_[getRawOffset(offset, 
+            return m_data_[getRawOffset(offset,
                                         (char)(trail & SURROGATE_MASK_))];
         }
         return m_initialValue_;
     }
-    
+
     /**
      * <p>Gets the latin 1 fast path value.</p>
-     * <p>Note this only works if latin 1 characters have their own linear 
+     * <p>Note this only works if latin 1 characters have their own linear
      * array.</p>
      * @param ch latin 1 characters
      * @return value associated with latin character
      */
-    public final char getLatin1LinearValue(char ch) 
+    public final char getLatin1LinearValue(char ch)
     {
         return m_data_[INDEX_STAGE_3_MASK_ + 1 + m_dataOffset_ + ch];
     }
-    
+
     /**
      * Checks if the argument Trie has the same data as this Trie
      * @param other Trie to check
@@ -213,7 +213,8 @@ public class CharTrie extends Trie
      *         otherwise
      */
     ///CLOVER:OFF
-    public boolean equals(Object other) 
+    @Override
+    public boolean equals(Object other)
     {
         boolean result = super.equals(other);
         if (result && other instanceof CharTrie) {
@@ -222,7 +223,8 @@ public class CharTrie extends Trie
         }
         return false;
     }
-    
+
+    @Override
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;
@@ -236,6 +238,7 @@ public class CharTrie extends Trie
      * data array</p>
      * @param bytes buffer containing trie data
      */
+    @Override
     protected final void unserialize(ByteBuffer bytes)
     {
         int indexDataLength = m_dataOffset_ + m_dataLength_;
@@ -250,13 +253,14 @@ public class CharTrie extends Trie
     * @param trail trailing surrogate
     * @return offset to data
     */
+    @Override
     protected final int getSurrogateOffset(char lead, char trail)
     {
         if (m_dataManipulate_ == null) {
             throw new NullPointerException(
                              "The field DataManipulate in this Trie is null");
         }
-        
+
         // get fold position for the next trail surrogate
         int offset = m_dataManipulate_.getFoldingOffset(getLeadValue(lead));
 
@@ -269,7 +273,7 @@ public class CharTrie extends Trie
         // value: m_initialValue_
         return -1;
     }
-    
+
     /**
     * Gets the value at the argument index.
     * For use internally in TrieIterator.
@@ -277,6 +281,7 @@ public class CharTrie extends Trie
     * @return 32 bit value
     * @see com.ibm.icu.impl.TrieIterator
     */
+    @Override
     protected final int getValue(int index)
     {
         return m_data_[index];
@@ -284,13 +289,14 @@ public class CharTrie extends Trie
 
     /**
     * Gets the default initial value
-    * @return 32 bit value 
+    * @return 32 bit value
     */
+    @Override
     protected final int getInitialValue()
     {
         return m_initialValue_;
     }
-  
+
     // private data members --------------------------------------------
 
     /**

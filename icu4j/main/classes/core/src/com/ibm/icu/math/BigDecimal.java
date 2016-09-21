@@ -125,7 +125,7 @@ import com.ibm.icu.lang.UCharacter;
  * The floating point arithmetic provided by this class is defined by the ANSI X3.274-1996 standard, and is also
  * documented at <code>http://www2.hursley.ibm.com/decimal</code> <br>
  * <i>[This URL will change.]</i>
- * 
+ *
  * <h3>Operator methods</h3>
  * <p>
  * Operations on <code>BigDecimal</code> numbers are controlled by a {@link MathContext} object, which provides the
@@ -215,7 +215,7 @@ import com.ibm.icu.lang.UCharacter;
  * <p>
  * The names of methods in this class follow the conventions established by <code>java.lang.Number</code>,
  * <code>java.math.BigInteger</code>, and <code>java.math.BigDecimal</code> in Java 1.1 and Java 1.2.
- * 
+ *
  * @see MathContext
  * @author Mike Cowlishaw
  * @stable ICU 2.0
@@ -228,7 +228,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     /* properties constant public */// useful to others
     /**
      * The <code>BigDecimal</code> constant "0".
-     * 
+     *
      * @see #ONE
      * @see #TEN
      * @stable ICU 2.0
@@ -240,7 +240,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * The <code>BigDecimal</code> constant "1".
-     * 
+     *
      * @see #TEN
      * @see #ZERO
      * @stable ICU 2.0
@@ -252,7 +252,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * The <code>BigDecimal</code> constant "10".
-     * 
+     *
      * @see #ONE
      * @see #ZERO
      * @stable ICU 2.0
@@ -262,7 +262,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     // the rounding modes (copied here for upwards compatibility)
     /**
      * Rounding mode to round to a more positive number.
-     * 
+     *
      * @see MathContext#ROUND_CEILING
      * @stable ICU 2.0
      */
@@ -270,7 +270,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * Rounding mode to round towards zero.
-     * 
+     *
      * @see MathContext#ROUND_DOWN
      * @stable ICU 2.0
      */
@@ -278,7 +278,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * Rounding mode to round to a more negative number.
-     * 
+     *
      * @see MathContext#ROUND_FLOOR
      * @stable ICU 2.0
      */
@@ -286,7 +286,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * Rounding mode to round to nearest neighbor, where an equidistant value is rounded down.
-     * 
+     *
      * @see MathContext#ROUND_HALF_DOWN
      * @stable ICU 2.0
      */
@@ -294,7 +294,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * Rounding mode to round to nearest neighbor, where an equidistant value is rounded to the nearest even neighbor.
-     * 
+     *
      * @see MathContext#ROUND_HALF_EVEN
      * @stable ICU 2.0
      */
@@ -302,7 +302,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * Rounding mode to round to nearest neighbor, where an equidistant value is rounded up.
-     * 
+     *
      * @see MathContext#ROUND_HALF_UP
      * @stable ICU 2.0
      */
@@ -310,7 +310,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * Rounding mode to assert that no rounding is necessary.
-     * 
+     *
      * @see MathContext#ROUND_UNNECESSARY
      * @stable ICU 2.0
      */
@@ -318,7 +318,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
 
     /**
      * Rounding mode to round away from zero.
-     * 
+     *
      * @see MathContext#ROUND_UP
      * @stable ICU 2.0
      */
@@ -358,7 +358,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <ul>
      * <li>ispos -- the number is positive <li>iszero -- the number is zero <li>isneg -- the number is negative
      * </ul>
-     * 
+     *
      * @serial
      */
     private byte ind; // assumed undefined
@@ -375,7 +375,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * This property is an optimization; it allows us to defer number layout until it is actually needed as a string,
      * hence avoiding unnecessary formatting.
-     * 
+     *
      * @serial
      */
     private byte form = (byte) com.ibm.icu.math.MathContext.PLAIN; // assumed PLAIN
@@ -391,7 +391,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * If the first byte is 0 then the value of the number is zero (and mant.length=1, except when constructed from a
      * plain number, for example, 0.000).
-     * 
+     *
      * @serial
      */
     private byte mant[]; // assumed null
@@ -400,9 +400,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The exponent.
      * <p>
      * For fixed point arithmetic, scale is <code>-exp</code>, and can apply to zero.
-     * 
+     *
      * Note that this property can have a value less than MinExp when the mantissa has more than one digit.
-     * 
+     *
      * @serial
      */
     private int exp;
@@ -422,7 +422,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * <i>(Note: this constructor is provided only in the <code>com.ibm.icu.math</code> version of the BigDecimal class.
      * It would not be present in a <code>java.math</code> version.)</i>
-     * 
+     *
      * @param bd The <code>BigDecimal</code> to be translated.
      * @stable ICU 2.0
      */
@@ -441,7 +441,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The <code>BigDecimal</code> will contain only decimal digits, prefixed with a leading minus sign (hyphen) if the
      * <code>BigInteger</code> is negative. A leading zero will be present only if the <code>BigInteger</code> is zero.
-     * 
+     *
      * @param bi The <code>BigInteger</code> to be converted.
      * @stable ICU 2.0
      */
@@ -464,7 +464,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The <code>BigDecimal</code> will contain only decimal digits, (with an embedded decimal point followed by <code>
      * scale</code> decimal digits if the scale is positive), prefixed with a leading minus sign (hyphen) if the <code>
      * BigInteger</code> is negative. A leading zero will be present only if the <code>BigInteger</code> is zero.
-     * 
+     *
      * @param bi The <code>BigInteger</code> to be converted.
      * @param scale The <code>int</code> specifying the scale.
      * @throws NumberFormatException If the scale is negative.
@@ -488,7 +488,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Using this constructor is faster than using the <code>BigDecimal(String)</code> constructor if the string is
      * already available in character array form.
-     * 
+     *
      * @param inchars The <code>char[]</code> array containing the number to be converted.
      * @throws NumberFormatException If the parameter is not a valid number.
      * @stable ICU 2.0
@@ -508,7 +508,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Using this constructor is faster than using the <code>BigDecimal(String)</code> constructor if the string is
      * already available within a character array.
-     * 
+     *
      * @param inchars The <code>char[]</code> array containing the number to be converted.
      * @param offset The <code>int</code> offset into the array of the start of the number to be converted.
      * @param length The <code>int</code> length of the number.
@@ -620,7 +620,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                             if (dvalue < 0)
                                 bad(inchars); // not base 10
                         } else
-                            dvalue = ((int) (sj)) - ((int) ('0'));
+                            dvalue = ((sj)) - (('0'));
                         exp = (exp * 10) + dvalue;
                     }
                 }/* j */
@@ -676,7 +676,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                             j++; // at dot
                         sj = inchars[j];
                         if (sj <= '9')
-                            mant[i] = (byte) (((int) (sj)) - ((int) ('0')));/* easy */
+                            mant[i] = (byte) (((sj)) - (('0')));/* easy */
                         else {
                             dvalue = UCharacter.digit(sj, 10);
                             if (dvalue < 0)
@@ -696,7 +696,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                     for (; $5 > 0; $5--, i++) {
                         if (i == dotoff)
                             j++;
-                        mant[i] = (byte) (((int) (inchars[j])) - ((int) ('0')));
+                        mant[i] = (byte) (((inchars[j])) - (('0')));
                         j++;
                     }
                 }/* i */
@@ -743,7 +743,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * </code> to a <code>String</code> using the <code>Double.toString()</code> method and then using the
      * {@link #BigDecimal(java.lang.String)} constructor. To get that result, use the static {@link #valueOf(double)}
      * method to construct a <code>BigDecimal</code> from a <code>double</code>.
-     * 
+     *
      * @param num The <code>double</code> to be converted.
      * @throws NumberFormatException If the parameter is infinite or not a number.
      * @stable ICU 2.0
@@ -764,7 +764,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Constructs a <code>BigDecimal</code> which is the exact decimal representation of the 32-bit signed binary
      * integer parameter. The <code>BigDecimal</code> will contain only decimal digits, prefixed with a leading minus
      * sign (hyphen) if the parameter is negative. A leading zero will be present only if the parameter is zero.
-     * 
+     *
      * @param num The <code>int</code> to be converted.
      * @stable ICU 2.0
      */
@@ -843,7 +843,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Constructs a <code>BigDecimal</code> which is the exact decimal representation of the 64-bit signed binary
      * integer parameter. The <code>BigDecimal</code> will contain only decimal digits, prefixed with a leading minus
      * sign (hyphen) if the parameter is negative. A leading zero will be present only if the parameter is zero.
-     * 
+     *
      * @param num The <code>long</code> to be converted.
      * @stable ICU 2.0
      */
@@ -896,13 +896,13 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * decimal point, and exponential notation may be used. They follow conventional syntax, and may not contain blanks.
      * <p>
      * Some valid strings from which a <code>BigDecimal</code> might be constructed are:
-     * 
+     *
      * <pre>
-     * 
+     *
      * "0" -- Zero "12" -- A whole number "-76" -- A signed whole number "12.70" -- Some decimal places "+0.003" -- Plus
      * sign is allowed "17." -- The same as 17 ".5" -- The same as 0.5 "4E+9" -- Exponential notation "0.73e-7" --
      * Exponential notation
-     * 
+     *
      * </pre>
      * <p>
      * (Exponential notation means that the number includes an optional sign and a power of ten following an
@@ -920,7 +920,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Any digits in the parameter must be decimal; that is, <code>Character.digit(c, 10)</code> (where <code>c</code>
      * is the character in question) would not return -1.
-     * 
+     *
      * @param string The <code>String</code> to be converted.
      * @throws NumberFormatException If the parameter is not a valid number.
      * @stable ICU 2.0
@@ -948,7 +948,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The same as {@link #abs(MathContext)}, where the context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * <p>
      * The length of the decimal part (the scale) of the result will be <code>this.scale()</code>
-     * 
+     *
      * @return A <code>BigDecimal</code> whose value is the absolute value of this <code>BigDecimal</code>.
      * @stable ICU 2.0
      */
@@ -963,7 +963,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * If the current object is zero or positive, then the same result as invoking the {@link #plus(MathContext)} method
      * with the same parameter is returned. Otherwise, the same result as invoking the {@link #negate(MathContext)}
      * method with the same parameter is returned.
-     * 
+     *
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the absolute value of this <code>BigDecimal</code>.
      * @stable ICU 2.0
@@ -982,7 +982,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * <p>
      * The length of the decimal part (the scale) of the result will be the maximum of the scales of the two operands.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the addition.
      * @return A <code>BigDecimal</code> whose value is <code>this+rhs</code>, using fixed point arithmetic.
      * @stable ICU 2.0
@@ -997,7 +997,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Implements the addition (<b><code>+</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the addition.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this+rhs</code>.
@@ -1218,13 +1218,14 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The same as {@link #compareTo(BigDecimal, MathContext)}, where the <code>BigDecimal</code> is <code>rhs</code>,
      * and the context is <code>new MathContext(0, MathContext.PLAIN)</code>.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @return An <code>int</code> whose value is -1, 0, or 1 as <code>this</code> is numerically less than, equal to,
      *         or greater than <code>rhs</code>.
      * @stable ICU 2.0
      */
 
+    @Override
     public int compareTo(com.ibm.icu.math.BigDecimal rhs) {
         return this.compareTo(rhs, plainMC);
     }
@@ -1249,7 +1250,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * </table>
      * <p>
      * A {@link #compareTo(BigDecimal)} method is also provided.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return An <code>int</code> whose value is -1, 0, or 1 as <code>this</code> is numerically less than, equal to,
@@ -1308,10 +1309,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The same as {@link #divide(BigDecimal, int)}, where the <code>BigDecimal</code> is <code>rhs</code>, and the
      * rounding mode is {@link MathContext#ROUND_HALF_UP}.
-     * 
+     *
      * The length of the decimal part (the scale) of the result will be the same as the scale of the current object, if
      * the latter were formatted without exponential notation.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
      * @return A plain <code>BigDecimal</code> whose value is <code>this/rhs</code>, using fixed point arithmetic.
      * @throws ArithmeticException If <code>rhs</code> is zero.
@@ -1332,7 +1333,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The length of the decimal part (the scale) of the result will therefore be the same as the scale of the current
      * object, if the latter were formatted without exponential notation.
      * <p>
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
      * @param round The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
      * @return A plain <code>BigDecimal</code> whose value is <code>this/rhs</code>, using fixed point arithmetic and
@@ -1361,7 +1362,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The length of the decimal part (the scale) of the result will be the same as the scale of the current object, if
      * the latter were formatted without exponential notation.
      * <p>
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
      * @param scale The <code>int</code> scale to be used for the result.
      * @param round The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
@@ -1388,7 +1389,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Implements the division (<b><code>/</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this/rhs</code>.
@@ -1405,7 +1406,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The same as {@link #divideInteger(BigDecimal, MathContext)}, where the <code>BigDecimal</code> is <code>rhs
      * </code>, and the context is <code>new MathContext(0, MathContext.PLAIN)</code>.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the integer division.
      * @return A <code>BigDecimal</code> whose value is the integer part of <code>this/rhs</code>.
      * @throws ArithmeticException if <code>rhs</code> is zero.
@@ -1422,7 +1423,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Implements the integer division operator (as defined in the decimal documentation, see {@link BigDecimal class
      * header}), and returns the result as a <code>BigDecimal</code> object.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the integer division.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the integer part of <code>this/rhs</code>.
@@ -1441,7 +1442,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The same as {@link #max(BigDecimal, MathContext)}, where the <code>BigDecimal</code> is <code>rhs</code>, and the
      * context is <code>new MathContext(0, MathContext.PLAIN)</code>.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @return A <code>BigDecimal</code> whose value is the maximum of <code>this</code> and <code>rhs</code>.
      * @stable ICU 2.0
@@ -1461,7 +1462,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * (using the same <code>MathContext</code> parameter) is returned. Otherwise, the result of calling the
      * {@link #plus(MathContext)} method on the first parameter object (using the same <code>MathContext</code>
      * parameter) is returned.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the maximum of <code>this</code> and <code>rhs</code>.
@@ -1480,7 +1481,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The same as {@link #min(BigDecimal, MathContext)}, where the <code>BigDecimal</code> is <code>rhs</code>, and the
      * context is <code>new MathContext(0, MathContext.PLAIN)</code>.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @return A <code>BigDecimal</code> whose value is the minimum of <code>this</code> and <code>rhs</code>.
      * @stable ICU 2.0
@@ -1500,7 +1501,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * (using the same <code>MathContext</code> parameter) is returned. Otherwise, the result of calling the
      * {@link #plus(MathContext)} method on the first parameter object (using the same <code>MathContext</code>
      * parameter) is returned.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the comparison.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the minimum of <code>this</code> and <code>rhs</code>.
@@ -1522,7 +1523,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The length of the decimal part (the scale) of the result will be the sum of the scales of the operands, if they
      * were formatted without exponential notation.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the multiplication.
      * @return A <code>BigDecimal</code> whose value is <code>this*rhs</code>, using fixed point arithmetic.
      * @stable ICU 2.0
@@ -1537,7 +1538,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Implements the multiplication (<b><code>&#42;</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the multiplication.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this*rhs</code>.
@@ -1638,8 +1639,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * .
      * <p>
      * The length of the decimal part (the scale) of the result will be be <code>this.scale()</code>
-     * 
-     * 
+     *
+     *
      * @return A <code>BigDecimal</code> whose value is <code>-this</code>.
      * @stable ICU 2.0
      */
@@ -1653,7 +1654,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Implements the negation (Prefix <b><code>-</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
-     * 
+     *
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>-this</code>.
      * @stable ICU 2.0
@@ -1677,7 +1678,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The same as {@link #plus(MathContext)}, where the context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * <p>
      * The length of the decimal part (the scale) of the result will be be <code>this.scale()</code>
-     * 
+     *
      * @return A <code>BigDecimal</code> whose value is <code>+this</code>.
      * @stable ICU 2.0
      */
@@ -1693,7 +1694,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
      * <p>
      * This method is useful for rounding or otherwise applying a context to a decimal value.
-     * 
+     *
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>+this</code>.
      * @stable ICU 2.0
@@ -1727,7 +1728,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * In addition, the power must not be negative, as no <code>MathContext</code> is used and so the result would then
      * always be 0.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the operation (the power).
      * @return A <code>BigDecimal</code> whose value is <code>this**rhs</code>, using fixed point arithmetic.
      * @throws ArithmeticException if <code>rhs</code> is out of range or is not a whole number.
@@ -1753,7 +1754,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * If the <code>digits</code> setting of the <code>MathContext</code> parameter is 0, the power must be zero or
      * positive.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the operation (the power).
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this**rhs</code>.
@@ -1833,7 +1834,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * and the context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * <p>
      * This is not the modulo operator -- the result may be negative.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the remainder operation.
      * @return A <code>BigDecimal</code> whose value is the remainder of <code>this/rhs</code>, using fixed point
      *         arithmetic.
@@ -1852,7 +1853,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * and returns the result as a <code>BigDecimal</code> object.
      * <p>
      * This is not the modulo operator -- the result may be negative.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the remainder operation.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is the remainder of <code>this+rhs</code>.
@@ -1872,7 +1873,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * and the context is <code>new MathContext(0, MathContext.PLAIN)</code>.
      * <p>
      * The length of the decimal part (the scale) of the result will be the maximum of the scales of the two operands.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the subtraction.
      * @return A <code>BigDecimal</code> whose value is <code>this-rhs</code>, using fixed point arithmetic.
      * @stable ICU 2.0
@@ -1887,7 +1888,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Implements the subtraction (<b><code>-</code></b>) operator (as defined in the decimal documentation, see
      * {@link BigDecimal class header}), and returns the result as a <code>BigDecimal</code> object.
-     * 
+     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the subtraction.
      * @param set The <code>MathContext</code> arithmetic settings.
      * @return A <code>BigDecimal</code> whose value is <code>this-rhs</code>.
@@ -1914,7 +1915,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Converts this <code>BigDecimal</code> to a <code>byte</code>. If the <code>BigDecimal</code> has a non-zero
      * decimal part or is out of the possible range for a <code>byte</code> (8-bit signed integer) result then an <code>
      * ArithmeticException</code> is thrown.
-     * 
+     *
      * @return A <code>byte</code> equal in value to <code>this</code>.
      * @throws ArithmeticException if <code>this</code> has a non-zero decimal part, or will not fit in a <code>byte</code>.
      * @stable ICU 2.0
@@ -1936,11 +1937,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The double produced is identical to result of expressing the <code>BigDecimal</code> as a <code>String</code> and
      * then converting it using the <code>Double(String)</code> constructor; this can result in values of <code>
      * Double.NEGATIVE_INFINITY</code> or <code>Double.POSITIVE_INFINITY</code>.
-     * 
+     *
      * @return A <code>double</code> corresponding to <code>this</code>.
      * @stable ICU 2.0
      */
 
+    @Override
     public double doubleValue() {
         // We go via a String [as does BigDecimal in JDK 1.2]
         // Next line could possibly raise NumberFormatException
@@ -1957,7 +1959,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * are identical (they have the same characters in the same sequence).
      * <p>
      * The {@link #compareTo(BigDecimal, MathContext)} method should be used for more general comparisons.
-     * 
+     *
      * @param obj The <code>Object</code> for the right hand side of the comparison.
      * @return A <code>boolean</code> whose value <i>true</i> if and only if the operands have identical string
      *         representations.
@@ -1967,6 +1969,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * @see #compareTo(BigDecimal, MathContext)
      */
 
+    @Override
     public boolean equals(java.lang.Object obj) {
         com.ibm.icu.math.BigDecimal rhs;
         int i = 0;
@@ -2018,11 +2021,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The float produced is identical to result of expressing the <code>BigDecimal</code> as a <code>String</code> and
      * then converting it using the <code>Float(String)</code> constructor; this can result in values of <code>
      * Float.NEGATIVE_INFINITY</code> or <code>Float.POSITIVE_INFINITY</code>.
-     * 
+     *
      * @return A <code>float</code> corresponding to <code>this</code>.
      * @stable ICU 2.0
      */
 
+    @Override
     public float floatValue() {
         return java.lang.Float.valueOf(this.toString()).floatValue();
     }
@@ -2056,7 +2060,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Other rounding methods, and the use of exponential notation, can be selected by using
      * {@link #format(int,int,int,int,int,int)}. Using the two-parameter form of the method has exactly the same effect
      * as using the six-parameter form with the final four parameters all being -1.
-     * 
+     *
      * @param before The <code>int</code> specifying the number of places before the decimal point. Use -1 for 'as many as are needed'.
      * @param after The <code>int</code> specifying the number of places after the decimal point. Use -1 for 'as many as are needed'.
      * @return A <code>String</code> representing this <code>BigDecimal</code>, laid out according to the specified parameters
@@ -2118,7 +2122,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The special value <code>MathContext.ROUND_UNNECESSARY</code> may be used to detect whether non-zero digits are
      * discarded -- if <code>exround</code> has this value than if non-zero digits would be discarded (rounded) during
      * formatting then an <code>ArithmeticException</code> is thrown.
-     * 
+     *
      * @param before The <code>int</code> specifying the number of places before the decimal point. Use -1 for 'as many as
      *            are needed'.
      * @param after The <code>int</code> specifying the number of places after the decimal point. Use -1 for 'as many as
@@ -2303,7 +2307,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                         newa[i] = ' ';
                     }
                 }/* i */
-                java.lang.System.arraycopy((java.lang.Object) a, 0, (java.lang.Object) newa, i, a.length);
+                java.lang.System.arraycopy(a, 0, newa, i, a.length);
                 a = newa;
             }
             // [if p=before then it's just the right length]
@@ -2322,7 +2326,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             // p is now offset of 'E', or 0
             if (p == 0) { // no E part; add trailing blanks
                 newa = new char[(a.length + explaces) + 2];
-                java.lang.System.arraycopy((java.lang.Object) a, 0, (java.lang.Object) newa, 0, a.length);
+                java.lang.System.arraycopy(a, 0, newa, 0, a.length);
                 {
                     int $14 = explaces + 2;
                     i = a.length;
@@ -2337,7 +2341,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                     badarg("format", 3, java.lang.String.valueOf(explaces));
                 if (places < explaces) { // need to insert zeros
                     newa = new char[(a.length + explaces) - places];
-                    java.lang.System.arraycopy((java.lang.Object) a, 0, (java.lang.Object) newa, 0, p + 2); // through E
+                    java.lang.System.arraycopy(a, 0, newa, 0, p + 2); // through E
                                                                                                             // and sign
                     {
                         int $15 = explaces - places;
@@ -2346,7 +2350,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                             newa[i] = '0';
                         }
                     }/* i */
-                    java.lang.System.arraycopy((java.lang.Object) a, p + 2, (java.lang.Object) newa, i, places); // remainder
+                    java.lang.System.arraycopy(a, p + 2, newa, i, places); // remainder
                                                                                                                  // of
                                                                                                                  // exponent
                     a = newa;
@@ -2364,11 +2368,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Note that two <code>BigDecimal</code> objects are only guaranteed to produce the same hashcode if they are
      * exactly equal (that is, the <code>String</code> representations of the <code>BigDecimal</code> numbers are
      * identical -- they have the same characters in the same sequence).
-     * 
+     *
      * @return An <code>int</code> that is the hashcode for <code>this</code>.
      * @stable ICU 2.0
      */
 
+    @Override
     public int hashCode() {
         // Maybe calculate ourselves, later. If so, note that there can be
         // more than one internal representation for a given toString() result.
@@ -2381,11 +2386,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * (32-bit signed integer) result then only the low-order 32 bits are used. (That is, the number may be
      * <i>decapitated</i>.) To avoid unexpected errors when these conditions occur, use the {@link #intValueExact}
      * method.
-     * 
+     *
      * @return An <code>int</code> converted from <code>this</code>, truncated and decapitated if necessary.
      * @stable ICU 2.0
      */
 
+    @Override
     public int intValue() {
         return toBigInteger().intValue();
     }
@@ -2394,7 +2400,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Converts this <code>BigDecimal</code> to an <code>int</code>. If the <code>BigDecimal</code> has a non-zero
      * decimal part or is out of the possible range for an <code>int</code> (32-bit signed integer) result then an
      * <code>ArithmeticException</code> is thrown.
-     * 
+     *
      * @return An <code>int</code> equal in value to <code>this</code>.
      * @throws ArithmeticException if <code>this</code> has a non-zero decimal part, or will not fit in an <code>int</code>.
      * @stable ICU 2.0
@@ -2465,11 +2471,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * (64-bit signed integer) result then only the low-order 64 bits are used. (That is, the number may be
      * <i>decapitated</i>.) To avoid unexpected errors when these conditions occur, use the {@link #longValueExact}
      * method.
-     * 
+     *
      * @return A <code>long</code> converted from <code>this</code>, truncated and decapitated if necessary.
      * @stable ICU 2.0
      */
 
+    @Override
     public long longValue() {
         return toBigInteger().longValue();
     }
@@ -2478,7 +2485,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Converts this <code>BigDecimal</code> to a <code>long</code>. If the <code>BigDecimal</code> has a non-zero
      * decimal part or is out of the possible range for a <code>long</code> (64-bit signed integer) result then an
      * <code>ArithmeticException</code> is thrown.
-     * 
+     *
      * @return A <code>long</code> equal in value to <code>this</code>.
      * @throws ArithmeticException if <code>this</code> has a non-zero decimal part, or will not fit in a <code>long</code>.
      * @stable ICU 2.0
@@ -2517,7 +2524,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         // note that we could safely use the 'test for wrap to negative'
         // algorithm here, but instead we parallel the intValueExact
         // algorithm for ease of checking and maintenance.
-        result = (long) 0;
+        result = 0;
         {
             int $17 = lodigit + useexp;
             i = 0;
@@ -2556,7 +2563,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * <code>n</code> may be negative, in which case the method returns the same result as <code>movePointRight(-n)
      * </code>.
-     * 
+     *
      * @param n The <code>int</code> specifying the number of places to move the decimal point leftwards.
      * @return A <code>BigDecimal</code> derived from <code>this</code>, with the decimal point moved <code>n</code>
      *         places to the left.
@@ -2580,7 +2587,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * <code>n</code> may be negative, in which case the method returns the same result as <code>movePointLeft(-n)
      * </code>.
-     * 
+     *
      * @param n The <code>int</code> specifying the number of places to move the decimal point rightwards.
      * @return A <code>BigDecimal</code> derived from <code>this</code>, with the decimal point moved <code>n</code>
      *         places to the right.
@@ -2598,7 +2605,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Returns the scale of this <code>BigDecimal</code>. Returns a non-negative <code>int</code> which is the scale of
      * the number. The scale is the number of digits in the decimal part of the number if the number were formatted
      * without exponential notation.
-     * 
+     *
      * @return An <code>int</code> whose value is the scale of this <code>BigDecimal</code>.
      * @stable ICU 2.0
      */
@@ -2621,7 +2628,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * The same as {@link #setScale(int, int)}, where the first parameter is the scale, and the second is <code>
      * MathContext.ROUND_UNNECESSARY</code>.
-     * 
+     *
      * @param scale The <code>int</code> specifying the scale of the resulting <code>BigDecimal</code>.
      * @return A plain <code>BigDecimal</code> with the given scale.
      * @throws ArithmeticException if <code>scale</code> is negative.
@@ -2646,7 +2653,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * If <code>round</code> is <code>MathContext.ROUND_UNNECESSARY</code>, an <code>ArithmeticException</code> is
      * thrown if any discarded digits are non-zero.
-     * 
+     *
      * @param scale The <code>int</code> specifying the scale of the resulting <code>BigDecimal</code>.
      * @param round The <code>int</code> rounding mode to be used for the division (see the {@link MathContext} class).
      * @return A plain <code>BigDecimal</code> with the given scale.
@@ -2698,7 +2705,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Converts this <code>BigDecimal</code> to a <code>short</code>. If the <code>BigDecimal</code> has a non-zero
      * decimal part or is out of the possible range for a <code>short</code> (16-bit signed integer) result then an
      * <code>ArithmeticException</code> is thrown.
-     * 
+     *
      * @return A <code>short</code> equal in value to <code>this</code>.
      * @throws ArithmeticException if <code>this</code> has a non-zero decimal part, or will not fit in a <code>short</code>.
      * @stable ICU 2.0
@@ -2716,14 +2723,14 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Returns the sign of this <code>BigDecimal</code>, as an <code>int</code>. This returns the <i>signum</i> function
      * value that represents the sign of this <code>BigDecimal</code>. That is, -1 if the <code>BigDecimal</code> is
      * negative, 0 if it is numerically equal to zero, or 1 if it is positive.
-     * 
+     *
      * @return An <code>int</code> which is -1 if the <code>BigDecimal</code> is negative, 0 if it is numerically equal
      *         to zero, or 1 if it is positive.
      * @stable ICU 2.0
      */
 
     public int signum() {
-        return (int) this.ind; // [note this assumes values for ind.]
+        return this.ind; // [note this assumes values for ind.]
     }
 
     /**
@@ -2735,7 +2742,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * <i>(Note: this method is provided only in the <code>com.ibm.icu.math</code> version of the BigDecimal class. It
      * would not be present in a <code>java.math</code> version.)</i>
-     * 
+     *
      * @return The <code>java.math.BigDecimal</code> equal in value to this <code>BigDecimal</code>.
      * @stable ICU 2.0
      */
@@ -2749,7 +2756,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * Any decimal part is truncated (discarded). If an exception is desired should the decimal part be non-zero, use
      * {@link #toBigIntegerExact()}.
-     * 
+     *
      * @return The <code>java.math.BigInteger</code> equal in value to the integer part of this <code>BigDecimal</code>.
      * @stable ICU 2.0
      */
@@ -2773,7 +2780,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                         res = clone(this); // safe copy
                         newlen = res.mant.length + res.exp;
                         newmant = new byte[newlen]; // [shorter]
-                        java.lang.System.arraycopy((java.lang.Object) res.mant, 0, (java.lang.Object) newmant, 0,
+                        java.lang.System.arraycopy(res.mant, 0, newmant, 0,
                                 newlen);
                         res.mant = newmant;
                         res.form = (byte) com.ibm.icu.math.MathContext.PLAIN;
@@ -2789,7 +2796,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Converts this <code>BigDecimal</code> to a <code>java.math.BigInteger</code>.
      * <p>
      * An exception is thrown if the decimal part (if any) is non-zero.
-     * 
+     *
      * @return The <code>java.math.BigInteger</code> equal in value to the integer part of this <code>BigDecimal</code>.
      * @throws ArithmeticException if <code>this</code> has a non-zero decimal part.
      * @stable ICU 2.0
@@ -2809,7 +2816,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Returns the <code>BigDecimal</code> as a character array. The result of this method is the same as using the
      * sequence <code>toString().toCharArray()</code>, but avoids creating the intermediate <code>String</code> and
      * <code>char[]</code> objects.
-     * 
+     *
      * @return The <code>char[]</code> array corresponding to this <code>BigDecimal</code>.
      * @stable ICU 2.0
      */
@@ -2825,7 +2832,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <p>
      * By definition, using the {@link #BigDecimal(String)} constructor on the result <code>String</code> will create a
      * <code>BigDecimal</code> that is exactly equal to the original <code>BigDecimal</code>.
-     * 
+     *
      * @return The <code>String</code> exactly corresponding to this <code>BigDecimal</code>.
      * @see #format(int, int)
      * @see #format(int, int, int, int, int, int)
@@ -2833,6 +2840,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * @stable ICU 2.0
      */
 
+    @Override
     public java.lang.String toString() {
         return new java.lang.String(layout());
     }
@@ -2841,7 +2849,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * Returns the number as a <code>BigInteger</code> after removing the scale. That is, the number is expressed as a
      * plain number, any decimal point is then removed (retaining the digits of any decimal part), and the result is
      * then converted to a <code>BigInteger</code>.
-     * 
+     *
      * @return The <code>java.math.BigInteger</code> equal in value to this <code>BigDecimal</code> multiplied by ten to
      *         the power of <code>this.scale()</code>.
      * @stable ICU 2.0
@@ -2868,7 +2876,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * The number is constructed as though <code>num</code> had been converted to a <code>String</code> using the <code>
      * Double.toString()</code> method and the {@link #BigDecimal(java.lang.String)} constructor had then been used.
      * This is typically not an exact conversion.
-     * 
+     *
      * @param dub The <code>double</code> to be translated.
      * @return The <code>BigDecimal</code> equal in value to <code>dub</code>.
      * @throws NumberFormatException if the parameter is infinite or not a number.
@@ -2885,7 +2893,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     /**
      * Translates a <code>long</code> to a <code>BigDecimal</code>. That is, returns a plain <code>BigDecimal</code>
      * whose value is equal to the given <code>long</code>.
-     * 
+     *
      * @param lint The <code>long</code> to be translated.
      * @return The <code>BigDecimal</code> equal in value to <code>lint</code>.
      * @stable ICU 2.0
@@ -2905,7 +2913,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <code> (new BigDecimal(lint)).divide(TEN.pow(new BigDecimal(scale))) </code>
      * <p>
      * A <code>NumberFormatException</code> is thrown if <code>scale</code> is negative.
-     * 
+     *
      * @param lint The <code>long</code> to be translated.
      * @param scale The <code>int</code> scale to be applied.
      * @return The <code>BigDecimal</code> equal in value to <code>lint</code>.
@@ -2963,7 +2971,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             int $18 = mant.length;
             i = 0;
             for (; $18 > 0; $18--, i++) {
-                cmant[i] = (char) (mant[i] + ((int) ('0')));
+                cmant[i] = (char) (mant[i] + (('0')));
             }
         }/* i */
 
@@ -3019,7 +3027,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                 return cmant; // non-negative integer
             rec = new char[cmant.length + 1];
             rec[0] = '-';
-            java.lang.System.arraycopy((java.lang.Object) cmant, 0, (java.lang.Object) rec, 1, cmant.length);
+            java.lang.System.arraycopy(cmant, 0, rec, 1, cmant.length);
             return rec;
         }
 
@@ -3045,7 +3053,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                     rec[i] = '0';
                 }
             }/* i */
-            java.lang.System.arraycopy((java.lang.Object) cmant, 0, (java.lang.Object) rec, (needsign + 2) - mag,
+            java.lang.System.arraycopy(cmant, 0, rec, (needsign + 2) - mag,
                     cmant.length);
             return rec;
         }
@@ -3055,7 +3063,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             rec = new char[len];
             if (needsign != 0)
                 rec[0] = '-';
-            java.lang.System.arraycopy((java.lang.Object) cmant, 0, (java.lang.Object) rec, needsign, cmant.length);
+            java.lang.System.arraycopy(cmant, 0, rec, needsign, cmant.length);
             {
                 int $21 = mag - cmant.length;
                 i = needsign + cmant.length;
@@ -3071,9 +3079,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         rec = new char[len];
         if (needsign != 0)
             rec[0] = '-';
-        java.lang.System.arraycopy((java.lang.Object) cmant, 0, (java.lang.Object) rec, needsign, mag);
+        java.lang.System.arraycopy(cmant, 0, rec, needsign, mag);
         rec[needsign + mag] = '.';
-        java.lang.System.arraycopy((java.lang.Object) cmant, mag, (java.lang.Object) rec, (needsign + mag) + 1,
+        java.lang.System.arraycopy(cmant, mag, rec, (needsign + mag) + 1,
                 cmant.length - mag);
         return rec;
     }
@@ -3096,9 +3104,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     /*
      * Arg1 is operation code: D=divide, I=integer divide, R=remainder Arg2 is the rhs. Arg3 is the context. Arg4 is
      * explicit scale iff code='D' or 'I' (-1 if none).
-     * 
+     *
      * Underlying algorithm (complications for Remainder function and scaled division are omitted for clarity):
-     * 
+     *
      * Test for x/0 and then 0/x Exp =Exp1 - Exp2 Exp =Exp +len(var1) -len(var2) Sign=Sign1 Sign2 Pad accumulator (Var1)
      * to double-length with 0's (pad1) Pad Var2 to same length as Var1 B2B=1st two digits of var2, +1 to allow for
      * roundup have=0 Do until (have=digits+1 OR residue=0) if exp<0 then if integer divide/residue then leave
@@ -3108,7 +3116,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * if mult=0 then mult=1 this_digit=this_digit+mult subtract end inner_loop if have\=0 | this_digit\=0 then do
      * output this_digit have=have+1; end var2=var2/10 exp=exp-1 end outer_loop exp=exp+1 -- set the proper exponent if
      * have=0 then generate answer=0 Return to FINISHED Result defined by MATHV1
-     * 
+     *
      * For extended commentary, see DMSRCN.
      */
 
@@ -3248,7 +3256,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                                 } while (false);
                             }/* compare */
                             /* prepare for subtraction. Estimate BA (lengths the same) */
-                            ba = (int) var1[0]; // use only first digit
+                            ba = var1[0]; // use only first digit
                         } // lengths the same
                         else {/* lhs longer than rhs */
                             /* use first two digits for estimate */
@@ -3281,7 +3289,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                         if (start == 0)
                             continue inner;
                         // shift left
-                        java.lang.System.arraycopy((java.lang.Object) var1, start, (java.lang.Object) var1, 0, var1len);
+                        java.lang.System.arraycopy(var1, start, var1, 0, var1len);
                     }
                 }/* inner */
 
@@ -3351,7 +3359,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                     }/* i */
                     if (d < var1.length) {/* need to reduce */
                         newvar1 = new byte[d];
-                        java.lang.System.arraycopy((java.lang.Object) var1, 0, (java.lang.Object) newvar1, 0, d); // shorten
+                        java.lang.System.arraycopy(var1, 0, newvar1, 0, d); // shorten
                         var1 = newvar1;
                     }
                     res.mant = var1;
@@ -3404,7 +3412,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             // [we could let finish do this, during strip, if we adjusted
             // the exponent; however, truncation avoids the strip loop]
             newmant = new byte[have]; // shorten
-            java.lang.System.arraycopy((java.lang.Object) res.mant, 0, (java.lang.Object) newmant, 0, have);
+            java.lang.System.arraycopy(res.mant, 0, newmant, 0, have);
             res.mant = newmant;
         }
         return res.finish(set, true);
@@ -3429,7 +3437,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     /*
      * <sgml> Extend byte array to given length, padding with 0s. If no extension is required then return the same
      * array. </sgml>
-     * 
+     *
      * Arg1 is the source byte array Arg2 is the new length (longer)
      */
 
@@ -3438,7 +3446,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         if (inarr.length == newlen)
             return inarr;
         newarr = new byte[newlen];
-        java.lang.System.arraycopy((java.lang.Object) inarr, 0, (java.lang.Object) newarr, 0, inarr.length);
+        java.lang.System.arraycopy(inarr, 0, newarr, 0, inarr.length);
         // 0 padding is carried out by the JVM on allocation initialization
         return newarr;
     }
@@ -3447,15 +3455,15 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      * <sgml> Add or subtract two >=0 integers in byte arrays <p>This routine performs the calculation: <pre> C=A+(BM)
      * </pre> Where M is in the range -9 through +9 <p> If M<0 then A>=B must be true, so the result is always
      * non-negative.
-     * 
+     *
      * Leading zeros are not removed after a subtraction. The result is either the same length as the longer of A and B,
      * or 1 longer than that (if a carry occurred).
-     * 
+     *
      * A is not altered unless Arg6 is 1. B is never altered.
-     * 
+     *
      * Arg1 is A Arg2 is A length to use (if longer than A, pad with 0's) Arg3 is B Arg4 is B length to use (if longer
      * than B, pad with 0's) Arg5 is M, the multiplier Arg6 is 1 if A can be used to build the result (if it fits)
-     * 
+     *
      * This routine is severely performance-critical;any change here must be measured (timed) to assure no performance
      * degradation.
      */
@@ -3488,7 +3496,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         maxarr = bp;
         if (maxarr < ap)
             maxarr = ap;
-        reb = (byte[]) null; // result byte array
+        reb = null; // result byte array
         if (reuse)
             if ((maxarr + 1) == alength)
                 reb = a; // OK to reuse A
@@ -3543,7 +3551,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         // if digit<0 then signal ArithmeticException("internal.error ["digit"]")
 
         /* We have carry -- need to make space for the extra digit */
-        newarr = (byte[]) null;
+        newarr = null;
         if (reuse)
             if ((maxarr + 2) == a.length)
                 newarr = a; // OK to reuse A
@@ -3559,7 +3567,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             }
         }/* i */
         else
-            java.lang.System.arraycopy((java.lang.Object) reb, 0, (java.lang.Object) newarr, 1, maxarr + 1);
+            java.lang.System.arraycopy(reb, 0, newarr, 1, maxarr + 1);
         return newarr;
     }
 
@@ -3637,9 +3645,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     /*
      * <sgml> Round to specified digits, if necessary. Arg1 is requested length (digits to round to) [may be <=0 when
      * called from format, dodivide, etc.] Arg2 is rounding mode returns this, for convenience
-     * 
+     *
      * ind and exp are adjusted, but not cleared for a mantissa of zero
-     * 
+     *
      * The length of the mantissa returned will be Arg1, except when Arg1 is 0, in which case the returned mantissa
      * length will be 1. </sgml>
      */
@@ -3657,12 +3665,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
             return this; // nowt to do
 
         exp = exp + adjust; // exponent of result
-        sign = (int) ind; // save [assumes -1, 0, 1]
+        sign = ind; // save [assumes -1, 0, 1]
         oldmant = mant; // save
         if (len > 0) {
             // remove the unwanted digits
             mant = new byte[len];
-            java.lang.System.arraycopy((java.lang.Object) oldmant, 0, (java.lang.Object) mant, 0, len);
+            java.lang.System.arraycopy(oldmant, 0, mant, 0, len);
             reuse = true; // can reuse mantissa
             first = oldmant[len]; // first of discarded digits
         } else {/* len<=0 */
@@ -3736,7 +3744,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                         // drop rightmost digit and raise exponent
                         exp++;
                         // mant is already the correct length
-                        java.lang.System.arraycopy((java.lang.Object) newmant, 0, (java.lang.Object) mant, 0,
+                        java.lang.System.arraycopy(newmant, 0, mant, 0,
                                 mant.length);
                     } else
                         mant = newmant;
@@ -3752,7 +3760,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     /*
      * <sgml> Test if rightmost digits are all 0. Arg1 is a mantissa array to test Arg2 is the offset of first digit to
      * check [may be negative; if so, digits to left are 0's] returns 1 if all the digits starting at Arg2 are 0
-     * 
+     *
      * Arg2 may be beyond array bounds, in which case 1 is returned </sgml>
      */
 
@@ -3809,7 +3817,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                 }/* i */
                 if (d < this.mant.length) {/* need to reduce */
                     newmant = new byte[d];
-                    java.lang.System.arraycopy((java.lang.Object) this.mant, 0, (java.lang.Object) newmant, 0, d);
+                    java.lang.System.arraycopy(this.mant, 0, newmant, 0, d);
                     this.mant = newmant;
                 }
             }
@@ -3827,7 +3835,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
                     if (i > 0) {
                         do {
                             newmant = new byte[this.mant.length - i];
-                            java.lang.System.arraycopy((java.lang.Object) this.mant, i, (java.lang.Object) newmant, 0,
+                            java.lang.System.arraycopy(this.mant, i, newmant, 0,
                                     this.mant.length - i);
                             this.mant = newmant;
                         } while (false);

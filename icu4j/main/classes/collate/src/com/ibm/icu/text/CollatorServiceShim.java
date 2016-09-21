@@ -28,6 +28,7 @@ import com.ibm.icu.util.ULocale;
 
 final class CollatorServiceShim extends Collator.ServiceShim {
 
+    @Override
     Collator getInstance(ULocale locale) {
     // use service cache, it's faster than instantiation
 //          if (service.isDefault()) {
@@ -51,6 +52,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         }
     }
 
+    @Override
     Object registerInstance(Collator collator, ULocale locale) {
         // Set the collator locales while registering so that getInstance()
         // need not guess whether the collator's locales are already set properly
@@ -59,6 +61,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         return service.registerObject(collator, locale);
     }
 
+    @Override
     Object registerFactory(CollatorFactory f) {
         class CFactory extends LocaleKeyFactory {
             CollatorFactory delegate;
@@ -68,16 +71,19 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 this.delegate = fctry;
             }
 
+            @Override
             public Object handleCreate(ULocale loc, int kind, ICUService srvc) {
                 Object coll = delegate.createCollator(loc);
                 return coll;
             }
 
+            @Override
             public String getDisplayName(String id, ULocale displayLocale) {
                 ULocale objectLocale = new ULocale(id);
                 return delegate.getDisplayName(objectLocale, displayLocale);
             }
 
+            @Override
             public Set<String> getSupportedIDs() {
                 return delegate.getSupportedLocaleIDs();
             }
@@ -86,10 +92,12 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         return service.registerFactory(new CFactory(f));
     }
 
+    @Override
     boolean unregister(Object registryKey) {
         return service.unregisterFactory((Factory)registryKey);
     }
 
+    @Override
     Locale[] getAvailableLocales() {
         // TODO rewrite this to just wrap getAvailableULocales later
         Locale[] result;
@@ -102,6 +110,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         return result;
     }
 
+    @Override
     ULocale[] getAvailableULocales() {
         ULocale[] result;
         if (service.isDefault()) {
@@ -113,6 +122,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         return result;
     }
 
+    @Override
     String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
         String id = objectLocale.getName();
         return service.getDisplayName(id, displayLocale);
@@ -152,6 +162,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 
         ///CLOVER:OFF
         // The following method can not be reached by testing
+        @Override
         protected Object handleDefault(Key key, String[] actualIDReturn) {
             if (actualIDReturn != null) {
                 actualIDReturn[0] = "root";

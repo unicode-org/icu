@@ -29,6 +29,7 @@ class NameUnicodeTransliterator extends Transliterator {
      */
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new NameUnicodeTransliterator(null);
             }
@@ -45,6 +46,7 @@ class NameUnicodeTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
+    @Override
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
 
@@ -64,7 +66,7 @@ class NameUnicodeTransliterator extends Transliterator {
         // 1 - after open delimiter
         int mode = 0;
         int openPos = -1; // open delim candidate pos
-        
+
         int c;
         while (cursor < limit) {
             c = text.char32At(cursor);
@@ -88,7 +90,7 @@ class NameUnicodeTransliterator extends Transliterator {
                 // to a single space.  If closeDelimiter is found, exit
                 // the loop.  If any other character is found, exit the
                 // loop.  If the limit is reached, exit the loop.
-                
+
                 // Convert \s+ => SPACE.  This assumes there are no
                 // runs of >1 space characters in names.
                 if (PatternProps.isWhiteSpace(c)) {
@@ -108,7 +110,7 @@ class NameUnicodeTransliterator extends Transliterator {
                 if (c == CLOSE_DELIM) {
 
                     int len = name.length();
-                    
+
                     // Delete trailing space, if any
                     if (len > 0 &&
                         name.charAt(len-1) == SPACE) {
@@ -175,7 +177,7 @@ class NameUnicodeTransliterator extends Transliterator {
     public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
         UnicodeSet myFilter = getFilterAsUnicodeSet(inputFilter);
         if (!myFilter.containsAll(UnicodeNameTransliterator.OPEN_DELIM) || !myFilter.contains(CLOSE_DELIM)) {
-            return; // we have to contain both prefix and suffix 
+            return; // we have to contain both prefix and suffix
         }
         UnicodeSet items = new UnicodeSet()
         .addAll('0', '9')

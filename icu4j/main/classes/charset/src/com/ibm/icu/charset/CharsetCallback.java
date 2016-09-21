@@ -16,13 +16,13 @@ import java.nio.charset.CoderResult;
 
 /**
  * <h2> Callback API for CharsetICU API </h2>
- * 
- *  CharsetCallback class defines some error behaviour functions called 
+ *
+ *  CharsetCallback class defines some error behaviour functions called
  *  by CharsetDecoderICU and CharsetEncoderICU. The class also provides
  *  the facility by which clients can write their own callbacks.
  *
  *  These functions, although public, should NEVER be called directly.
- *  They should be used as parameters to the onUmappableCharacter() and 
+ *  They should be used as parameters to the onUmappableCharacter() and
  *  onMalformedInput() methods, to set the behaviour of a converter
  *  when it encounters UNMAPPED/INVALID sequences.
  *  Currently the only way to set callbacks is by using CodingErrorAction.
@@ -44,7 +44,7 @@ public class CharsetCallback {
 //    private static final String SKIP_STOP_ON_ILLEGAL = "i";
 
 //    /*
-//     * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to ICU (%UXXXX) 
+//     * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to ICU (%UXXXX)
 //     */
 //    private static final String ESCAPE_ICU  = null;
 
@@ -92,36 +92,36 @@ public class CharsetCallback {
      * For a list of the default ignorable code points, use this link: http://unicode.org/cldr/utility/list-unicodeset.jsp?a=[%3ADI%3A]&g=
      *
      * This list should be sync with the one in ucnv_err.c
-     * 
+     *
      */
     private static boolean IS_DEFAULT_IGNORABLE_CODE_POINT(int c) {
-        return ((c == 0x00AD) || 
-                (c == 0x034F) || 
-                (c == 0x061C) || 
-                (c == 0x115F) || 
-                (c == 0x1160) || 
-                (0x17B4 <= c && c <= 0x17B5) || 
-                (0x180B <= c && c <= 0x180E) || 
-                (0x200B <= c && c <= 0x200F) || 
-                (0x202A <= c && c <= 0x202E) || 
-                (c == 0x2060) || 
-                (0x2066 <= c && c <= 0x2069) || 
-                (0x2061 <= c && c <= 0x2064) || 
-                (0x206A <= c && c <= 0x206F) || 
-                (c == 0x3164) || 
-                (0x0FE00 <= c && c <= 0x0FE0F) || 
-                (c == 0x0FEFF) || 
-                (c == 0x0FFA0) || 
-                (0x01BCA0  <= c && c <= 0x01BCA3) || 
-                (0x01D173 <= c && c <= 0x01D17A) || 
-                (c == 0x0E0001) || 
-                (0x0E0020 <= c && c <= 0x0E007F) || 
-                (0x0E0100 <= c && c <= 0x0E01EF) || 
-                (c == 0x2065) || 
-                (0x0FFF0 <= c && c <= 0x0FFF8) || 
-                (c == 0x0E0000) || 
-                (0x0E0002 <= c && c <= 0x0E001F) || 
-                (0x0E0080 <= c && c <= 0x0E00FF) || 
+        return ((c == 0x00AD) ||
+                (c == 0x034F) ||
+                (c == 0x061C) ||
+                (c == 0x115F) ||
+                (c == 0x1160) ||
+                (0x17B4 <= c && c <= 0x17B5) ||
+                (0x180B <= c && c <= 0x180E) ||
+                (0x200B <= c && c <= 0x200F) ||
+                (0x202A <= c && c <= 0x202E) ||
+                (c == 0x2060) ||
+                (0x2066 <= c && c <= 0x2069) ||
+                (0x2061 <= c && c <= 0x2064) ||
+                (0x206A <= c && c <= 0x206F) ||
+                (c == 0x3164) ||
+                (0x0FE00 <= c && c <= 0x0FE0F) ||
+                (c == 0x0FEFF) ||
+                (c == 0x0FFA0) ||
+                (0x01BCA0  <= c && c <= 0x01BCA3) ||
+                (0x01D173 <= c && c <= 0x01D17A) ||
+                (c == 0x0E0001) ||
+                (0x0E0020 <= c && c <= 0x0E007F) ||
+                (0x0E0100 <= c && c <= 0x0E01EF) ||
+                (c == 0x2065) ||
+                (0x0FFF0 <= c && c <= 0x0FFF8) ||
+                (c == 0x0E0000) ||
+                (0x0E0002 <= c && c <= 0x0E001F) ||
+                (0x0E0080 <= c && c <= 0x0E00FF) ||
                 (0x0E01F0 <= c && c <= 0x0E0FFF)
                 );
     }
@@ -133,12 +133,12 @@ public class CharsetCallback {
         /**
          * This function is called when the bytes in the source cannot be handled,
          * and this function is meant to handle or fix the error if possible.
-         * 
+         *
          * @return Result of decoding action. This returned object is set to an error
          *  if this function could not handle the conversion.
          * @stable ICU 3.6
          */
-        public CoderResult call(CharsetDecoderICU decoder, Object context, 
+        public CoderResult call(CharsetDecoderICU decoder, Object context,
                                 ByteBuffer source, CharBuffer target, IntBuffer offsets,
                                 char[] buffer, int length, CoderResult cr);
     }
@@ -154,17 +154,18 @@ public class CharsetCallback {
          *  if this function could not handle the conversion.
          * @stable ICU 3.6
          */
-        public CoderResult call(CharsetEncoderICU encoder, Object context, 
-                                CharBuffer source, ByteBuffer target, IntBuffer offsets, 
+        public CoderResult call(CharsetEncoderICU encoder, Object context,
+                                CharBuffer source, ByteBuffer target, IntBuffer offsets,
                                 char[] buffer, int length, int cp, CoderResult cr);
-    }    
+    }
     /**
      * Skip callback
      * @stable ICU 3.6
      */
     public static final Encoder FROM_U_CALLBACK_SKIP = new Encoder() {
-        public CoderResult call(CharsetEncoderICU encoder, Object context, 
-                CharBuffer source, ByteBuffer target, IntBuffer offsets, 
+        @Override
+        public CoderResult call(CharsetEncoderICU encoder, Object context,
+                CharBuffer source, ByteBuffer target, IntBuffer offsets,
                 char[] buffer, int length, int cp, CoderResult cr){
             if(context==null){
                 return CoderResult.UNDERFLOW;
@@ -183,7 +184,8 @@ public class CharsetCallback {
      * @stable ICU 3.6
      */
     public static final Decoder TO_U_CALLBACK_SKIP = new Decoder() {
-        public CoderResult call(CharsetDecoderICU decoder, Object context, 
+        @Override
+        public CoderResult call(CharsetDecoderICU decoder, Object context,
                 ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 char[] buffer, int length, CoderResult cr){
             if(context==null){
@@ -202,9 +204,10 @@ public class CharsetCallback {
      * Write substitute callback
      * @stable ICU 3.6
      */
-    public static final Encoder FROM_U_CALLBACK_SUBSTITUTE = new Encoder(){        
-        public CoderResult call(CharsetEncoderICU encoder, Object context, 
-                CharBuffer source, ByteBuffer target, IntBuffer offsets, 
+    public static final Encoder FROM_U_CALLBACK_SUBSTITUTE = new Encoder(){
+        @Override
+        public CoderResult call(CharsetEncoderICU encoder, Object context,
+                CharBuffer source, ByteBuffer target, IntBuffer offsets,
                 char[] buffer, int length, int cp, CoderResult cr){
             if (cr.isUnmappable() && IS_DEFAULT_IGNORABLE_CODE_POINT(cp)) {
                 return CoderResult.UNDERFLOW;
@@ -227,7 +230,8 @@ public class CharsetCallback {
      * @stable ICU 3.6
      */
     public static final Decoder TO_U_CALLBACK_SUBSTITUTE  = new Decoder() {
-        public CoderResult call(CharsetDecoderICU decoder, Object context, 
+        @Override
+        public CoderResult call(CharsetDecoderICU decoder, Object context,
                 ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 char[] buffer, int length, CoderResult cr){
 
@@ -238,7 +242,7 @@ public class CharsetCallback {
             if (replacementChar.length == 1 && (replacementChar[0] == kSubstituteChar1[0] || replacementChar[0] == kSubstituteChar[0])) {
                 useReplacement = false;
             }
-            
+
             /* could optimize this case, just one uchar */
             if(decoder.invalidCharLength == 1 && cs.subChar1 != 0) {
                 return CharsetDecoderICU.toUWriteUChars(decoder, useReplacement ? replacementChar : kSubstituteChar1, 0, useReplacement ? replacementChar.length : 1, target, offsets, source.position());
@@ -252,8 +256,9 @@ public class CharsetCallback {
      * @stable ICU 3.6
      */
     public static final Encoder FROM_U_CALLBACK_STOP = new Encoder() {
-        public CoderResult call(CharsetEncoderICU encoder, Object context, 
-                CharBuffer source, ByteBuffer target, IntBuffer offsets, 
+        @Override
+        public CoderResult call(CharsetEncoderICU encoder, Object context,
+                CharBuffer source, ByteBuffer target, IntBuffer offsets,
                 char[] buffer, int length, int cp, CoderResult cr){
             if (cr.isUnmappable() && IS_DEFAULT_IGNORABLE_CODE_POINT(cp)) {
                 return CoderResult.UNDERFLOW;
@@ -266,12 +271,13 @@ public class CharsetCallback {
      * @stable ICU 3.6
      */
     public static final Decoder TO_U_CALLBACK_STOP = new Decoder() {
-        public CoderResult call(CharsetDecoderICU decoder, Object context, 
+        @Override
+        public CoderResult call(CharsetDecoderICU decoder, Object context,
                 ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 char[] buffer, int length, CoderResult cr){
             return cr;
         }
-    };  
+    };
     private static final int VALUE_STRING_LENGTH = 32;
     private static final char UNICODE_PERCENT_SIGN_CODEPOINT    = 0x0025;
     private static final char UNICODE_U_CODEPOINT               = 0x0055;
@@ -291,17 +297,18 @@ public class CharsetCallback {
      * @stable ICU 4.0
      */
     public static final Encoder FROM_U_CALLBACK_ESCAPE = new Encoder() {
-        public CoderResult call(CharsetEncoderICU encoder, Object context, 
-                CharBuffer source, ByteBuffer target, IntBuffer offsets, 
+        @Override
+        public CoderResult call(CharsetEncoderICU encoder, Object context,
+                CharBuffer source, ByteBuffer target, IntBuffer offsets,
                 char[] buffer, int length, int cp, CoderResult cr){
             char[] valueString = new char[VALUE_STRING_LENGTH];
             int valueStringLength = 0;
             int i = 0;
-            
+
             if (cr.isUnmappable() && IS_DEFAULT_IGNORABLE_CODE_POINT(cp)) {
                 return CoderResult.UNDERFLOW;
             }
-            
+
             if (context == null || !(context instanceof String)) {
                 while (i < length) {
                     valueString[valueStringLength++] = UNICODE_PERCENT_SIGN_CODEPOINT; /* adding % */
@@ -317,7 +324,7 @@ public class CharsetCallback {
                     }
                 } else if (((String)context).equals(ESCAPE_C)) {
                     valueString[valueStringLength++] = UNICODE_RS_CODEPOINT;    /* adding \ */
-                    
+
                     if (length == 2) {
                         valueString[valueStringLength++] = UNICODE_U_CODEPOINT; /* adding U */
                         valueStringLength = itou(valueString, valueStringLength, cp, 16, 8);
@@ -376,13 +383,14 @@ public class CharsetCallback {
      * @stable ICU 4.0
      */
     public static final Decoder TO_U_CALLBACK_ESCAPE = new Decoder() {
-        public CoderResult call(CharsetDecoderICU decoder, Object context, 
+        @Override
+        public CoderResult call(CharsetDecoderICU decoder, Object context,
                 ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 char[] buffer, int length, CoderResult cr){
             char[] uniValueString = new char[VALUE_STRING_LENGTH];
             int valueStringLength = 0;
             int i = 0;
-            
+
             if (context == null || !(context instanceof String)) {
                 while (i < length) {
                     uniValueString[valueStringLength++] = UNICODE_PERCENT_SIGN_CODEPOINT;   /* adding % */
@@ -420,12 +428,12 @@ public class CharsetCallback {
                     }
                 }
             }
-            
+
             cr = CharsetDecoderICU.toUWriteUChars(decoder, uniValueString, 0, valueStringLength, target, offsets, 0);
-            
+
             return cr;
         }
-    };  
+    };
     /***
      * Java port of uprv_itou() in ICU4C used by TO_U_CALLBACK_ESCAPE and FROM_U_CALLBACK_ESCAPE.
      * Fills in a char string with the radix-based representation of a number padded with zeroes
@@ -436,13 +444,13 @@ public class CharsetCallback {
         int digit;
         int j;
         char temp;
-        
+
         do {
             digit = i % radix;
             buffer[sourceIndex + length++] = (char)(digit <= 9 ? (0x0030+digit) : (0x0030+digit+7));
             i = i/radix;
         } while (i != 0 && (sourceIndex + length) < buffer.length);
-        
+
         while (length < minwidth) {
             buffer[sourceIndex + length++] = (char)0x0030; /* zero padding */
         }
@@ -452,7 +460,7 @@ public class CharsetCallback {
             buffer[(sourceIndex + length-1) -j] = buffer[sourceIndex + j];
             buffer[sourceIndex + j] = temp;
         }
-        
+
         return length;
     }
 

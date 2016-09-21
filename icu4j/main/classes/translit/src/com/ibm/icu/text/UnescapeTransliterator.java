@@ -51,6 +51,7 @@ class UnescapeTransliterator extends Transliterator {
     static void register() {
         // Unicode: "U+10FFFF" hex, min=4, max=6
         Transliterator.registerFactory("Hex-Any/Unicode", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new UnescapeTransliterator("Hex-Any/Unicode", new char[] {
                     2, 0, 16, 4, 6, 'U', '+',
@@ -58,9 +59,10 @@ class UnescapeTransliterator extends Transliterator {
                 });
             }
         });
-        
+
         // Java: "\\uFFFF" hex, min=4, max=4
         Transliterator.registerFactory("Hex-Any/Java", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new UnescapeTransliterator("Hex-Any/Java", new char[] {
                     2, 0, 16, 4, 4, '\\', 'u',
@@ -68,9 +70,10 @@ class UnescapeTransliterator extends Transliterator {
                 });
             }
         });
-        
+
         // C: "\\uFFFF" hex, min=4, max=4; \\U0010FFFF hex, min=8, max=8
         Transliterator.registerFactory("Hex-Any/C", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new UnescapeTransliterator("Hex-Any/C", new char[] {
                     2, 0, 16, 4, 4, '\\', 'u',
@@ -79,9 +82,10 @@ class UnescapeTransliterator extends Transliterator {
                 });
             }
         });
-        
+
         // XML: "&#x10FFFF;" hex, min=1, max=6
         Transliterator.registerFactory("Hex-Any/XML", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new UnescapeTransliterator("Hex-Any/XML", new char[] {
                     3, 1, 16, 1, 6, '&', '#', 'x', ';',
@@ -92,6 +96,7 @@ class UnescapeTransliterator extends Transliterator {
 
         // XML10: "&1114111;" dec, min=1, max=7 (not really "Hex-Any")
         Transliterator.registerFactory("Hex-Any/XML10", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new UnescapeTransliterator("Hex-Any/XML10", new char[] {
                     2, 1, 10, 1, 7, '&', '#', ';',
@@ -102,6 +107,7 @@ class UnescapeTransliterator extends Transliterator {
 
         // Perl: "\\x{263A}" hex, min=1, max=6
         Transliterator.registerFactory("Hex-Any/Perl", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new UnescapeTransliterator("Hex-Any/Perl", new char[] {
                     3, 1, 16, 1, 6, '\\', 'x', '{', '}',
@@ -112,6 +118,7 @@ class UnescapeTransliterator extends Transliterator {
 
         // All: Java, C, Perl, XML, XML10, Unicode
         Transliterator.registerFactory("Hex-Any", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new UnescapeTransliterator("Hex-Any", new char[] {
                     2, 0, 16, 4, 6, 'U', '+',            // Unicode
@@ -137,6 +144,7 @@ class UnescapeTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
+    @Override
     protected void handleTransliterate(Replaceable text,
                                        Position pos, boolean isIncremental) {
         int start = pos.start;

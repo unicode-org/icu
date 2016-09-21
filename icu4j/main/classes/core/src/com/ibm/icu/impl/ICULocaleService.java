@@ -61,7 +61,7 @@ public class ICULocaleService extends ICUService {
      * Convenience override for callers using locales.  This uses
      * createKey(ULocale.toString(), kind) to create a key, calls getKey, and then
      * if actualReturn is not null, returns the actualResult from
-     * getKey (stripping any prefix) into a ULocale.  
+     * getKey (stripping any prefix) into a ULocale.
      */
     public Object get(ULocale locale, int kind, ULocale[] actualReturn) {
         Key key = createKey(locale, kind);
@@ -146,7 +146,7 @@ public class ICULocaleService extends ICUService {
         }
         return locales;
     }
-        
+
     /**
      * A subclass of Key that implements a locale fallback mechanism.
      * The first locale to search for is the locale provided by the
@@ -157,7 +157,7 @@ public class ICULocaleService extends ICUService {
      *
      * <p>Canonicalization adjusts the locale string so that the
      * section before the first understore is in lower case, and the rest
-     * is in upper case, with no trailing underscores.</p> 
+     * is in upper case, with no trailing underscores.</p>
      */
     public static class LocaleKey extends ICUService.Key {
         private int kind;
@@ -174,7 +174,7 @@ public class ICULocaleService extends ICUService {
         public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID) {
             return createWithCanonicalFallback(primaryID, canonicalFallbackID, KIND_ANY);
         }
-            
+
         /**
          * Create a LocaleKey with canonical primary and fallback IDs.
          */
@@ -185,7 +185,7 @@ public class ICULocaleService extends ICUService {
             String canonicalPrimaryID = ULocale.getName(primaryID);
             return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
         }
-            
+
         /**
          * Create a LocaleKey with canonical primary and fallback IDs.
          */
@@ -196,7 +196,7 @@ public class ICULocaleService extends ICUService {
             String canonicalPrimaryID = locale.getName();
             return new LocaleKey(canonicalPrimaryID, canonicalPrimaryID, canonicalFallbackID, kind);
         }
-            
+
         /**
          * PrimaryID is the user's requested locale string,
          * canonicalPrimaryID is this string in canonical form,
@@ -248,6 +248,7 @@ public class ICULocaleService extends ICUService {
         /**
          * Return the (canonical) original ID.
          */
+        @Override
         public String canonicalID() {
             return primaryID;
         }
@@ -255,6 +256,7 @@ public class ICULocaleService extends ICUService {
         /**
          * Return the (canonical) current ID, or null if no current id.
          */
+        @Override
         public String currentID() {
             return currentID;
         }
@@ -263,6 +265,7 @@ public class ICULocaleService extends ICUService {
          * Return the (canonical) current descriptor, or null if no current id.
          * Includes the keywords, whereas the ID does not include keywords.
          */
+        @Override
         public String currentDescriptor() {
             String result = currentID();
             if (result != null) {
@@ -305,8 +308,9 @@ public class ICULocaleService extends ICUService {
          * <p>First falls back through the primary ID, then through
          * the fallbackID.  The final fallback is "" (root)
          * unless the primary id was "" (root), in which case
-         * there is no fallback.  
+         * there is no fallback.
          */
+        @Override
         public boolean fallback() {
             int x = currentID.lastIndexOf('_');
             if (x != -1) {
@@ -329,9 +333,10 @@ public class ICULocaleService extends ICUService {
         }
 
         /**
-         * If a key created from id would eventually fallback to match the 
+         * If a key created from id would eventually fallback to match the
          * canonical ID of this key, return true.
          */
+        @Override
         public boolean isFallbackOf(String id) {
             return LocaleUtility.isFallbackOf(canonicalID(), id);
         }
@@ -369,11 +374,12 @@ public class ICULocaleService extends ICUService {
          * the key against the supported IDs, and passes the canonicalLocale and
          * kind off to handleCreate (which subclasses must implement).
          */
+        @Override
         public Object create(Key key, ICUService service) {
             if (handlesKey(key)) {
                 LocaleKey lkey = (LocaleKey)key;
                 int kind = lkey.kind();
-                
+
                 ULocale uloc = lkey.currentLocale();
                 return handleCreate(uloc, kind, service);
             } else {
@@ -395,6 +401,7 @@ public class ICULocaleService extends ICUService {
         /**
          * Override of superclass method.
          */
+        @Override
         public void updateVisibleIDs(Map<String, Factory> result) {
             Set<String> cache = getSupportedIDs();
             for (String id : cache) {
@@ -409,6 +416,7 @@ public class ICULocaleService extends ICUService {
         /**
          * Return a localized name for the locale represented by id.
          */
+        @Override
         public String getDisplayName(String id, ULocale locale) {
             // assume if the user called this on us, we must have handled some fallback of this id
             //          if (isSupportedID(id)) {
@@ -432,15 +440,15 @@ public class ICULocaleService extends ICUService {
         ///CLOVER:ON
 
         /**
-         * Return true if this id is one the factory supports (visible or 
+         * Return true if this id is one the factory supports (visible or
          * otherwise).
          */
         protected boolean isSupportedID(String id) {
             return getSupportedIDs().contains(id);
         }
-        
+
         /**
-         * Return the set of ids that this factory supports (visible or 
+         * Return the set of ids that this factory supports (visible or
          * otherwise).  This can be called often and might need to be
          * cached if it is expensive to create.
          */
@@ -451,6 +459,7 @@ public class ICULocaleService extends ICUService {
         /**
          * For debugging.
          */
+        @Override
         public String toString() {
             StringBuilder buf = new StringBuilder(super.toString());
             if (name != null) {
@@ -478,7 +487,7 @@ public class ICULocaleService extends ICUService {
 
         public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, boolean visible, String name) {
             super(visible, name);
-            
+
             this.obj = obj;
             this.id = locale.getBaseName();
             this.kind = kind;
@@ -487,11 +496,12 @@ public class ICULocaleService extends ICUService {
         /**
          * Returns the service object if kind/locale match.  Service is not used.
          */
+        @Override
         public Object create(Key key, ICUService service) {
             if (!(key instanceof LocaleKey)) {
                 return null;
             }
-            
+
             LocaleKey lkey = (LocaleKey)key;
             if (kind != LocaleKey.KIND_ANY && kind != lkey.kind()) {
                 return null;
@@ -499,14 +509,16 @@ public class ICULocaleService extends ICUService {
             if (!id.equals(lkey.currentID())) {
                 return null;
             }
-            
+
             return obj;
         }
 
+        @Override
         protected boolean isSupportedID(String idToCheck) {
             return this.id.equals(idToCheck);
         }
 
+        @Override
         public void updateVisibleIDs(Map<String, Factory> result) {
             if (visible) {
                 result.put(id, this);
@@ -515,6 +527,7 @@ public class ICULocaleService extends ICUService {
             }
         }
 
+        @Override
         public String toString() {
             StringBuilder buf = new StringBuilder(super.toString());
             buf.append(", id: ");
@@ -555,13 +568,15 @@ public class ICULocaleService extends ICUService {
         /**
          * Return the supported IDs.  This is the set of all locale names for the bundleName.
          */
+        @Override
         protected Set<String> getSupportedIDs() {
-            return ICUResourceBundle.getFullLocaleNameSet(bundleName, loader()); 
+            return ICUResourceBundle.getFullLocaleNameSet(bundleName, loader());
         }
 
         /**
          * Override of superclass method.
          */
+        @Override
         public void updateVisibleIDs(Map<String, Factory> result) {
           Set<String> visibleIDs = ICUResourceBundle.getAvailableLocaleNameSet(bundleName, loader()); // only visible ids
             for (String id : visibleIDs) {
@@ -573,6 +588,7 @@ public class ICULocaleService extends ICUService {
          * Create the service.  The default implementation returns the resource bundle
          * for the locale, ignoring kind, and service.
          */
+        @Override
         protected Object handleCreate(ULocale loc, int kind, ICUService service) {
             return ICUResourceBundle.getBundleInstance(bundleName, loc, loader());
         }
@@ -581,6 +597,7 @@ public class ICULocaleService extends ICUService {
             return ClassLoaderUtil.getClassLoader(getClass());
         }
 
+        @Override
         public String toString() {
             return super.toString() + ", bundle: " + bundleName;
         }
@@ -604,6 +621,7 @@ public class ICULocaleService extends ICUService {
         return fallbackLocaleName;
     }
 
+    @Override
     public Key createKey(String id) {
         return LocaleKey.createWithCanonicalFallback(id, validateFallbackLocale());
     }

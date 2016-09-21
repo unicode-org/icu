@@ -148,6 +148,7 @@ public class BidiRun {
      * String to display run
      * @stable ICU 3.8
      */
+    @Override
     public String toString()
     {
         return "BidiRun " + start + " - " + limit + " @ " + level;

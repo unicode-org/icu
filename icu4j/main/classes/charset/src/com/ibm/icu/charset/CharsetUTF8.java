@@ -65,6 +65,7 @@ class CharsetUTF8 extends CharsetICU {
             super(cs);
         }
 
+        @Override
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 boolean flush) {
             if (!source.hasRemaining()) {
@@ -346,10 +347,12 @@ class CharsetUTF8 extends CharsetICU {
             implReset();
         }
 
+        @Override
         protected void implReset() {
             super.implReset();
         }
 
+        @Override
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets,
                 boolean flush) {
             if (!source.hasRemaining()) {
@@ -548,7 +551,7 @@ class CharsetUTF8 extends CharsetICU {
             CoderResult cr = handleSurrogates(sourceArray, sourceIndex, sourceLimit, (char)char32);
             if (cr != null)
                 return cr;
-            
+
             sourceIndex++;
             char32 = fromUChar32;
             fromUChar32 = 0;
@@ -588,10 +591,10 @@ class CharsetUTF8 extends CharsetICU {
             CoderResult cr = handleSurrogates(source, (char)char32);
             if (cr != null)
                 return cr;
-            
+
             char32 = fromUChar32;
             fromUChar32 = 0;
-            
+
             /* the rest is routine -- encode four bytes, stopping on overflow */
 
             target.put(encodeHeadOf4(char32));
@@ -672,7 +675,7 @@ class CharsetUTF8 extends CharsetICU {
     // UConverterConstants.UNSIGNED_BYTE_MASK)<0x3e);}
     /*
      * Is this code unit (byte) a UTF-8 trail byte?
-     * 
+     *
      * @param c
      *            8-bit code unit (byte)
      * @return TRUE or FALSE
@@ -681,15 +684,18 @@ class CharsetUTF8 extends CharsetICU {
         return (((c) & 0xc0) == 0x80);
     }*/
 
+    @Override
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderUTF8(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF8(this);
     }
-    
-    
+
+
+    @Override
     void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
         getNonSurrogateUnicodeSet(setFillIn);
     }

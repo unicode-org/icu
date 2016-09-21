@@ -111,7 +111,7 @@ public abstract class LocaleDisplayNames {
         if (FACTORY_DISPLAYCONTEXT != null) {
             try {
                 result = (LocaleDisplayNames) FACTORY_DISPLAYCONTEXT.invoke(null,
-                        locale, (Object[])contexts);
+                        locale, contexts);
             } catch (InvocationTargetException e) {
                 // fall through
             } catch (IllegalAccessException e) {
@@ -397,6 +397,7 @@ public abstract class LocaleDisplayNames {
                 this.collator = collator;
                 this.useSelf = useSelf;
             }
+            @Override
             public int compare(UiListItem o1, UiListItem o2) {
                 int result = useSelf ? collator.compare(o1.nameInSelf, o2.nameInSelf)
                         : collator.compare(o1.nameInDisplayLocale, o2.nameInDisplayLocale);

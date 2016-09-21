@@ -78,6 +78,7 @@ public final class BaseLocale {
         return _variant;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -93,6 +94,7 @@ public final class BaseLocale {
                 && _variant.equals(other._variant);
     }
 
+    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         if (_language.length() > 0) {
@@ -123,6 +125,7 @@ public final class BaseLocale {
         return buf.toString();
     }
 
+    @Override
     public int hashCode() {
         int h = _hash;
         if (h == 0) {
@@ -167,6 +170,7 @@ public final class BaseLocale {
             }
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (JDKIMPL) {
                 return (this == obj) ||
@@ -184,6 +188,7 @@ public final class BaseLocale {
                     && AsciiUtil.caseIgnoreMatch(((Key)obj)._vart, this._vart);
         }
 
+        @Override
         public int compareTo(Key other) {
             int res = AsciiUtil.caseIgnoreCompare(this._lang, other._lang);
             if (res == 0) {
@@ -202,6 +207,7 @@ public final class BaseLocale {
             return res;
         }
 
+        @Override
         public int hashCode() {
             int h = _hash;
             if (h == 0) {
@@ -247,10 +253,12 @@ public final class BaseLocale {
         public Cache() {
         }
 
+        @Override
         protected Key normalizeKey(Key key) {
             return Key.normalize(key);
         }
 
+        @Override
         protected BaseLocale createObject(Key key) {
             return new BaseLocale(key._lang, key._scrt, key._regn, key._vart);
         }

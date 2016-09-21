@@ -71,7 +71,7 @@ import com.ibm.icu.util.ULocale.Category;
  * offset from GMT(=UTC) and does not observe daylight saving
  * time. For example, you might specify GMT+14:00 as a custom
  * time zone ID to create a TimeZone representing 14 hours ahead
- * of GMT (with no daylight saving time). In addition, 
+ * of GMT (with no daylight saving time). In addition,
  * <code>getCanonicalID</code> can also be used to
  * normalize a custom time zone ID.
  *
@@ -228,7 +228,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
     /**
      * {@icu} The time zone ID reserved for unknown time zone.
      * @see #getTimeZone(String)
-     * 
+     *
      * @stable ICU 4.8
      */
     public static final String UNKNOWN_ZONE_ID = "Etc/Unknown";
@@ -246,7 +246,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      *
      * @see #UNKNOWN_ZONE_ID
      * @see #getTimeZone(String)
-     * 
+     *
      * @stable ICU 49
      */
     public static final TimeZone UNKNOWN_ZONE = new ConstantZone(0, UNKNOWN_ZONE_ID).freeze();
@@ -524,7 +524,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         if (style < SHORT || style > GENERIC_LOCATION) {
             throw new IllegalArgumentException("Illegal style: " + style);
         }
-        
+
         return _getDisplayName(style, daylight, locale);
     }
 
@@ -670,7 +670,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * the implementation does not take past daylight saving time into account, so
      * that this method may return <code>false</code> even when {@link #useDaylightTime()} returns
      * <code>true</code>.
-     * 
+     *
      * @return <code>true</code> if this time zone is in daylight saving time or will observe
      * daylight saving time at any future time.
      * @see #useDaylightTime
@@ -745,7 +745,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
     /**
      * Gets the <code>TimeZone</code> for the given ID and the timezone type.
      * @param id time zone ID
-     * @param type time zone implementation type, TIMEZONE_JDK or TIMEZONE_ICU 
+     * @param type time zone implementation type, TIMEZONE_JDK or TIMEZONE_ICU
      * @param frozen specify if the returned object can be frozen
      * @return the specified <code>TimeZone</code> or UNKNOWN_ZONE if the given ID
      * cannot be understood.
@@ -756,7 +756,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
             result = JavaTimeZone.createTimeZone(id);
             if (result != null) {
                 return frozen ? result.freeze() : result;
-            } 
+            }
             result = getFrozenICUTimeZone(id, false);
         } else {
             result = getFrozenICUTimeZone(id, true);
@@ -767,7 +767,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         }
         return frozen ? result : result.cloneAsThawed();
     }
-    
+
     /**
      * Returns a frozen ICU type TimeZone object given a time zone ID.
      * @param id the time zone ID
@@ -809,20 +809,20 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         return TZ_IMPL;
     }
 
-    /** 
-     * {@icu} Returns a set of time zone ID strings with the given filter conditions. 
+    /**
+     * {@icu} Returns a set of time zone ID strings with the given filter conditions.
      * <p><b>Note:</b>A <code>Set</code> returned by this method is
      * immutable.
      * @param zoneType      The system time zone type.
-     * @param region        The ISO 3166 two-letter country code or UN M.49 three-digit area code. 
-     *                      When null, no filtering done by region. 
-     * @param rawOffset     An offset from GMT in milliseconds, ignoring the effect of daylight savings 
-     *                      time, if any. When null, no filtering done by zone offset. 
+     * @param region        The ISO 3166 two-letter country code or UN M.49 three-digit area code.
+     *                      When null, no filtering done by region.
+     * @param rawOffset     An offset from GMT in milliseconds, ignoring the effect of daylight savings
+     *                      time, if any. When null, no filtering done by zone offset.
      * @return an immutable set of system time zone IDs.
      * @see SystemTimeZoneType
-     * 
+     *
      * @stable ICU 4.8
-     */ 
+     */
     public static Set<String> getAvailableIDs(SystemTimeZoneType zoneType,
             String region, Integer rawOffset) {
         return ZoneMeta.getAvailableIDs(zoneType, region, rawOffset);
@@ -837,7 +837,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @return an array of IDs for system TimeZones with the given
      * raw offset.  If there are none, return a zero-length array.
      * @see #getAvailableIDs(SystemTimeZoneType, String, Integer)
-     * 
+     *
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs(int rawOffset) {
@@ -855,7 +855,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @return an array of IDs for system TimeZones in the given
      * country.  If there are none, return a zero-length array.
      * @see #getAvailableIDs(SystemTimeZoneType, String, Integer)
-     * 
+     *
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs(String country) {
@@ -870,7 +870,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * object.
      * @return an array of all system TimeZone IDs
      * @see #getAvailableIDs(SystemTimeZoneType, String, Integer)
-     * 
+     *
      * @stable ICU 2.0
      */
     public static String[] getAvailableIDs() {
@@ -1012,6 +1012,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * Overrides clone.
      * @stable ICU 2.0
      */
+    @Override
     public Object clone() {
         if (isFrozen()) {
             return this;
@@ -1023,6 +1024,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * Overrides equals.
      * @stable ICU 3.6
      */
+    @Override
     public boolean equals(Object obj){
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -1033,6 +1035,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * Overrides hashCode.
      * @stable ICU 3.6
      */
+    @Override
     public int hashCode(){
         return ID.hashCode();
     }
@@ -1100,21 +1103,21 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         return canonicalID;
     }
 
-    /** 
-     * {@icu} Returns the region code associated with the given 
-     * system time zone ID. The region code is either ISO 3166 
-     * 2-letter country code or UN M.49 3-digit area code. 
-     * When the time zone is not associated with a specific location, 
-     * for example - "Etc/UTC", "EST5EDT", then this method returns 
-     * "001" (UN M.49 area code for World). 
-     * @param id the system time zone ID. 
-     * @return the region code associated with the given 
-     * system time zone ID. 
-     * @throws IllegalArgumentException if <code>id</code> is not a known system ID. 
-     * @see #getAvailableIDs(String) 
-     * 
+    /**
+     * {@icu} Returns the region code associated with the given
+     * system time zone ID. The region code is either ISO 3166
+     * 2-letter country code or UN M.49 3-digit area code.
+     * When the time zone is not associated with a specific location,
+     * for example - "Etc/UTC", "EST5EDT", then this method returns
+     * "001" (UN M.49 area code for World).
+     * @param id the system time zone ID.
+     * @return the region code associated with the given
+     * system time zone ID.
+     * @throws IllegalArgumentException if <code>id</code> is not a known system ID.
+     * @see #getAvailableIDs(String)
+     *
      * @stable ICU 4.8
-     */ 
+     */
     public static String getRegion(String id) {
         String region = null;
         // "Etc/Unknown" is not a system time zone ID,
@@ -1132,21 +1135,21 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
     /**
      * {@icu} Converts a system time zone ID to an equivalent Windows time zone ID. For example,
      * Windows time zone ID "Pacific Standard Time" is returned for input "America/Los_Angeles".
-     * 
+     *
      * <p>There are system time zones that cannot be mapped to Windows zones. When the input
      * system time zone ID is unknown or unmappable to a Windows time zone, then this
      * method returns <code>null</code>.
-     * 
+     *
      * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
      * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
      * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
      * Updating the Time Zone Data</a>.
-     * 
+     *
      * @param id A system time zone ID
      * @return A Windows time zone ID mapped from the input system time zone ID,
      * or <code>null</code> when the input ID is unknown or unmappable.
      * @see #getIDForWindowsID(String, String)
-     * 
+     *
      * @stable ICU 52
      */
     public static String getWindowsID(String id) {
@@ -1155,7 +1158,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         id = getCanonicalID(id, isSystemID);
         if (!isSystemID[0]) {
             // mapping data is only applicable to tz database IDs
-            return null; 
+            return null;
         }
 
         UResourceBundle top = UResourceBundle.getBundleInstance(
@@ -1188,11 +1191,11 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * {@icu} Converts a Windows time zone ID to an equivalent system time zone ID
-     * for a region. For example, system time zone ID "America/Los_Angeles" is returned 
+     * for a region. For example, system time zone ID "America/Los_Angeles" is returned
      * for input Windows ID "Pacific Standard Time" and region "US" (or <code>null</code>),
      * "America/Vancouver" is returned for the same Windows ID "Pacific Standard Time" and
      * region "CA".
-     * 
+     *
      * <p>Not all Windows time zones can be mapped to system time zones. When the input
      * Windows time zone ID is unknown or unmappable to a system time zone, then this
      * method returns <code>null</code>.
@@ -1207,7 +1210,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @return A system time zone ID mapped from the input Windows time zone ID,
      * or <code>null</code> when the input ID is unknown or unmappable.
      * @see #getWindowsID(String)
-     * 
+     *
      * @stable ICU 52
      */
     public static String getIDForWindowsID(String winid, String region) {
@@ -1249,6 +1252,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public boolean isFrozen() {
         return false;
     }
@@ -1257,6 +1261,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZone freeze() {
         throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
     }
@@ -1265,6 +1270,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZone cloneAsThawed() {
         try {
             TimeZone other = (TimeZone) super.clone();

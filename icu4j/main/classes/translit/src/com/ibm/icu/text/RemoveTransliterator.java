@@ -25,6 +25,7 @@ class RemoveTransliterator extends Transliterator {
      */
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new RemoveTransliterator();
             }
@@ -42,6 +43,7 @@ class RemoveTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
+    @Override
     protected void handleTransliterate(Replaceable text,
                                        Position index, boolean incremental) {
         // Our caller (filteredTransliterate) has already narrowed us

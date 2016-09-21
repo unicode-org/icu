@@ -69,12 +69,14 @@ class CharsetUTF32 extends CharsetICU {
             super(cs);
         }
 
+        @Override
         protected void implReset() {
             super.implReset();
             isBOMReadYet = false;
             actualBOM = null;
         }
 
+        @Override
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             /*
              * If we detect a BOM in this buffer, then we must add the BOM size to the offsets because the actual
@@ -171,11 +173,13 @@ class CharsetUTF32 extends CharsetICU {
             fromUnicodeStatus = isEndianSpecified ? 0 : NEED_TO_WRITE_BOM;
         }
 
+        @Override
         protected void implReset() {
             super.implReset();
             fromUnicodeStatus = isEndianSpecified ? 0 : NEED_TO_WRITE_BOM;
         }
 
+        @Override
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult cr;
 
@@ -238,16 +242,19 @@ class CharsetUTF32 extends CharsetICU {
         }
     }
 
+    @Override
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderUTF32(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF32(this);
     }
-    
-    
+
+
+    @Override
     void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
-        getNonSurrogateUnicodeSet(setFillIn);                    
+        getNonSurrogateUnicodeSet(setFillIn);
     }
 }

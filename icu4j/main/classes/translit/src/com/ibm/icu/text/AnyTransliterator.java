@@ -66,7 +66,7 @@ class AnyTransliterator extends Transliterator {
      * The target script code.  Never USCRIPT_INVALID_CODE.
      */
     private int targetScript;
-    
+
     /**
      * Special code for handling width characters
      */
@@ -75,6 +75,7 @@ class AnyTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
+    @Override
     protected void handleTransliterate(Replaceable text,
                                        Position pos, boolean isIncremental) {
         int allStart = pos.start;
@@ -149,7 +150,7 @@ class AnyTransliterator extends Transliterator {
      * @param id the ID of the form S-T or S-T/V, where T is theTarget
      * and V is theVariant.  Must not be empty.
      * @param filter The Unicode filter.
-     * @param target2 the target name. 
+     * @param target2 the target name.
      * @param targetScript2 the script code corresponding to theTarget.
      * @param widthFix2 The Transliterator width fix.
      * @param cache2 The Map object for cache.
@@ -257,7 +258,7 @@ class AnyTransliterator extends Transliterator {
                 for (Enumeration<String> v = Transliterator.getAvailableVariants(source, target);
                      v.hasMoreElements(); ) {
                     String variant = v.nextElement();
-                    
+
                     // Only process each target/variant pair once
                     if (seenVariants.contains(variant)) {
                         continue;

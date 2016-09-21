@@ -24,6 +24,7 @@ public class Output<T> {
      * {@inheritDoc}
      * @stable ICU 4.8
      */
+    @Override
     public String toString() {
         return value == null ? "null" : value.toString();
     }
@@ -33,7 +34,7 @@ public class Output<T> {
      * @stable ICU 4.8
      */
     public Output() {
-        
+
     }
 
     /**

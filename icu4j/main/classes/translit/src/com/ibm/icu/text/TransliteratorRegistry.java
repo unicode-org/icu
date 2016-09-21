@@ -397,10 +397,12 @@ class TransliteratorRegistry {
             en = e;
         }
 
+        @Override
         public boolean hasMoreElements() {
             return en != null && en.hasMoreElements();
         }
 
+        @Override
         public String nextElement() {
             return (en.nextElement()).getString();
         }
@@ -871,10 +873,10 @@ class TransliteratorRegistry {
             TransliteratorParser parser = new TransliteratorParser();
 
             try {
-               
+
                 ResourceEntry re = (ResourceEntry) entry;
                 parser.parse(re.resource, re.direction);
-                
+
             } catch (ClassCastException e) {
                 // If we pull a rule from a locale resource bundle it will
                 // be a LocaleEntry.

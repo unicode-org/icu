@@ -85,6 +85,7 @@ public final class UBiDiProps {
 
     // implement ICUBinary.Authenticate
     private final static class IsAcceptable implements ICUBinary.Authenticate {
+        @Override
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0]==2;
         }
@@ -226,12 +227,12 @@ public final class UBiDiProps {
         start=indexes[IX_JG_START];
         limit=indexes[IX_JG_LIMIT];
         if(start<=c && c<limit) {
-            return (int)jgArray[c-start]&0xff;
+            return jgArray[c-start]&0xff;
         }
         start=indexes[IX_JG_START2];
         limit=indexes[IX_JG_LIMIT2];
         if(start<=c && c<limit) {
-            return (int)jgArray2[c-start]&0xff;
+            return jgArray2[c-start]&0xff;
         }
         return UCharacter.JoiningGroup.NO_JOINING_GROUP;
     }

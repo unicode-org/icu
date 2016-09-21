@@ -47,6 +47,7 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
    *
    * @return this BasicDurationFormatterFactory
    */
+  @Override
   public DurationFormatterFactory setPeriodFormatter(
       PeriodFormatter formatter) {
     if (formatter != this.formatter) {
@@ -63,6 +64,7 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
    * @param builder the builder to use
    * @return this BasicDurationFormatterFactory
    */
+  @Override
   public DurationFormatterFactory setPeriodBuilder(PeriodBuilder builder) {
     if (builder != this.builder) {
       this.builder = builder;
@@ -77,6 +79,7 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
    * @param fallback the fallback formatter to use, or null
    * @return this BasicDurationFormatterFactory
    */
+  @Override
   public DurationFormatterFactory setFallback(DateFormatter fallback) {
     boolean doReset = fallback == null
         ? this.fallback != null
@@ -94,6 +97,7 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
    * @param fallbackLimit the fallback limit to use, or 0 if none is desired.
    * @return this BasicDurationFormatterFactory
    */
+  @Override
   public DurationFormatterFactory setFallbackLimit(long fallbackLimit) {
     if (fallbackLimit < 0) {
       fallbackLimit = 0;
@@ -106,12 +110,13 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
   }
 
   /**
-   * Set the name of the locale that will be used when 
+   * Set the name of the locale that will be used when
    * creating new formatters.
    *
    * @param localeName the name of the Locale
    * @return this BasicDurationFormatterFactory
    */
+  @Override
   public DurationFormatterFactory setLocale(String localeName) {
     if (!localeName.equals(this.localeName)) {
       this.localeName = localeName;
@@ -127,12 +132,13 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
   }
 
   /**
-   * Set the name of the locale that will be used when 
+   * Set the name of the locale that will be used when
    * creating new formatters.
    *
    * @param timeZone The time zone to use.
    * @return this BasicDurationFormatterFactory
    */
+  @Override
   public DurationFormatterFactory setTimeZone(TimeZone timeZone) {
     if (!timeZone.equals(this.timeZone)) {
       this.timeZone = timeZone;
@@ -149,6 +155,7 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
    *
    * @return a BasicDurationFormatter
    */
+  @Override
   public DurationFormatter getFormatter() {
     if (f == null) {
       if (fallback != null) {
@@ -232,7 +239,7 @@ class BasicDurationFormatterFactory implements DurationFormatterFactory {
    * Create the formatter.  All local fields are already initialized.
    */
   protected BasicDurationFormatter createFormatter() {
-    return new BasicDurationFormatter(formatter, builder, fallback, 
+    return new BasicDurationFormatter(formatter, builder, fallback,
                                       fallbackLimit, localeName,
                                       timeZone);
   }

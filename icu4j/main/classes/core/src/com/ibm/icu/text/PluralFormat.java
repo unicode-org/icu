@@ -55,9 +55,9 @@ import com.ibm.icu.util.ULocale.Category;
  *     need not worry about the plural cases of a language and
  *     does not have to define the plural cases; they can simply
  *     use the predefined keywords. The whole plural formatting of messages can
- *     be done using localized patterns from resource bundles. For predefined plural 
+ *     be done using localized patterns from resource bundles. For predefined plural
  *     rules, see the CLDR <i>Language Plural Rules</i> page at
- *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html 
+ *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
  * </ul>
  *
  * <h4>Usage of <code>PluralFormat</code></h4>
@@ -90,8 +90,8 @@ import com.ibm.icu.util.ULocale.Category;
  * between the {curly braces} and their sub-message,
  * and between the '=' and the number of an explicitValue.
  * <p>
- * There are 6 predefined case keywords in CLDR/ICU - 'zero', 'one', 'two', 'few', 'many' and 
- * 'other'. You always have to define a message text for the default plural case 
+ * There are 6 predefined case keywords in CLDR/ICU - 'zero', 'one', 'two', 'few', 'many' and
+ * 'other'. You always have to define a message text for the default plural case
  * "<code>other</code>" which is contained in every rule set.
  * If you do not specify a message text for a particular plural case, the
  * message text of the plural case "<code>other</code>" gets assigned to this
@@ -155,7 +155,7 @@ public class PluralFormat extends UFormat {
      * The MessagePattern which contains the parsed structure of the pattern string.
      */
     transient private MessagePattern msgPattern;
-    
+
     /**
      * Obsolete with use of MessagePattern since ICU 4.8. Used to be:
      * The format messages for each plural case. It is a mapping:
@@ -552,6 +552,7 @@ public class PluralFormat extends UFormat {
     // We could avoid this adapter class if we made PluralSelector public
     // (or at least publicly visible) and had PluralRules implement PluralSelector.
     private final class PluralSelectorAdapter implements PluralSelector {
+        @Override
         public String select(Object context, double number) {
             FixedDecimal dec = (FixedDecimal) context;
             assert dec.source == (dec.isNegative ? -number : number);
@@ -591,6 +592,7 @@ public class PluralFormat extends UFormat {
      * @throws IllegalArgumentException if number is not an instance of Number
      * @stable ICU 3.8
      */
+    @Override
     public StringBuffer format(Object number, StringBuffer toAppendTo,
             FieldPosition pos) {
         if (!(number instanceof Number)) {
@@ -687,6 +689,7 @@ public class PluralFormat extends UFormat {
      * @throws UnsupportedOperationException will always be thrown by this method.
      * @stable ICU 3.8
      */
+    @Override
     public Object parseObject(String source, ParsePosition pos) {
         throw new UnsupportedOperationException();
     }

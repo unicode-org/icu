@@ -46,6 +46,7 @@ class FunctionReplacer implements UnicodeReplacer {
     /**
      * UnicodeReplacer API
      */
+    @Override
     public int replace(Replaceable text,
                        int start,
                        int limit,
@@ -64,6 +65,7 @@ class FunctionReplacer implements UnicodeReplacer {
     /**
      * UnicodeReplacer API
      */
+    @Override
     public String toReplacerPattern(boolean escapeUnprintable) {
         StringBuilder rule = new StringBuilder("&");
         rule.append(translit.getID());
@@ -78,6 +80,7 @@ class FunctionReplacer implements UnicodeReplacer {
      * into the given set.
      * @param toUnionTo the set into which to union the output characters
      */
+    @Override
     public void addReplacementSetTo(UnicodeSet toUnionTo) {
         toUnionTo.addAll(translit.getTargetSet());
     }

@@ -17,9 +17,9 @@ import com.ibm.icu.impl.duration.impl.DataRecord.ETimeLimit;
  * In addition Period can either represent the duration as being into the past
  * or future, and as being more or less than the defined value.
  * <p>
- * Use a PeriodFormatter to convert a Period to a String.  
+ * Use a PeriodFormatter to convert a Period to a String.
  * <p>
- * Periods are immutable.  Mutating operations return the new 
+ * Periods are immutable.  Mutating operations return the new
  * result leaving the original unchanged.
  * <p>
  * Example:<pre>
@@ -92,7 +92,7 @@ public final class Period {
   public Period omit(TimeUnit unit) {
     return setTimeUnitInternalValue(unit, 0);
   }
-  
+
   /**
    * Mark the duration as being at the defined duration.
    *
@@ -197,9 +197,9 @@ public final class Period {
   }
 
   /**
-   * Returns true if this represents a 
+   * Returns true if this represents a
    * duration into the future.
-   * @return true if this represents a 
+   * @return true if this represents a
    * duration into the future.
    */
   public boolean isInFuture() {
@@ -207,9 +207,9 @@ public final class Period {
   }
 
   /**
-   * Returns true if this represents a 
+   * Returns true if this represents a
    * duration into the past
-   * @return true if this represents a 
+   * @return true if this represents a
    * duration into the past
    */
   public boolean isInPast  () {
@@ -236,12 +236,13 @@ public final class Period {
     return timeLimit == ETimeLimit.LT;
   }
 
-  /** 
+  /**
    * Returns true if rhs extends Period and
    * the two Periods are equal.
    * @param rhs the object to compare to
    * @return true if rhs is a Period and is equal to this
    */
+  @Override
   public boolean equals(Object rhs) {
     try {
       return equals((Period)rhs);
@@ -275,11 +276,12 @@ public final class Period {
     return false;
   }
 
-  /** 
-   * Returns the hashCode. 
+  /**
+   * Returns the hashCode.
    * @return the hashCode
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     int hc = (timeLimit << 1) | (inFuture ? 1 : 0);
     for (int i = 0; i < counts.length; ++i) {
       hc = (hc << 2) ^ counts[i];
@@ -316,7 +318,7 @@ public final class Period {
     return setTimeUnitInternalValue(unit, (int)(value * 1000) + 1);
   }
 
-  /** 
+  /**
    * Sets the period to have the provided value, 1/1000 of the
    * unit plus 1.  Thus unset values are '0', 1' is the set value '0',
    * 2 is the set value '1/1000', 3 is the set value '2/1000' etc.
@@ -368,7 +370,7 @@ public final class Period {
    */
   private static void checkCount(float count) {
     if (count < 0) {
-      throw new IllegalArgumentException("count (" + count + 
+      throw new IllegalArgumentException("count (" + count +
                                          ") cannot be negative");
     }
   }

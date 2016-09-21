@@ -26,31 +26,31 @@ import com.ibm.icu.util.ULocale;
 
 /*
  * LMBCS
- * 
+ *
  * (Lotus Multi-Byte Character Set)
- * 
+ *
  * LMBS was invented in the alte 1980's and is primarily used in Lotus Notes
  * databases and in Lotus 1-2-3 files. Programmers who work with the APIs
  * into these products will sometimes need to deal with strings in this format.
- * 
+ *
  * The code in this file provides an implementation for an ICU converter of
  * LMBCS to and from Unicode.
- * 
+ *
  * Since the LMBCS character set is only sparsely documented in existing
  * printed or online material, we have added extensive annotation to this
  * file to serve as a guide to understanding LMBCS.
- * 
+ *
  * LMBCS was originally designed with these four sometimes-competing design goals:
  * -Provide encodings for characters in 12 existing national standards
  *  (plus a few other characters)
  * -Minimal memory footprint
  * -Maximal speed of conversion into the existing national character sets
  * -No need to track a changing state as you interpret a string.
- * 
+ *
  * All of the national character sets LMBCS was trying to encode are 'ANSI'
  * based, in that the bytes from 0x20 - 0x7F are almost exactly the
  * same common Latin unaccented characters and symbols in all character sets.
- * 
+ *
  * So, in order to help meet the speed & memory design goals, the common ANSI
  * bytes from 0x20-0x7F are represented by the same single-byte values in LMBCS.
  */
@@ -89,14 +89,14 @@ class CharsetLMBCS extends CharsetICU {
     private static final short ULMBCS_GRP_KO   = 0x11; /* Korean       :ibm-1261   */
     private static final short ULMBCS_GRP_TW   = 0x12; /* Chinese SC   :ibm-950    */
     private static final short ULMBCS_GRP_CN   = 0x13; /* Chinese TC   :ibm-1386   */
-    /* 
+    /*
      * So, the beginnning of understanding LMBCS is that IF the first byte of a LMBCS
-     * character is one of those 12 values, you can interpret the remaining bytes of 
+     * character is one of those 12 values, you can interpret the remaining bytes of
      * that character as coming from one of those character sets. Since the lower
      * ANSI bytes already are represented in singl bytes, using one of the chracter
      * set announcers is used to announce a character that starts with a byte of
      * 0x80 or greater.
-     * 
+     *
      * The character sets are arranged so that the single byte sets all appear
      * before the multi-byte character sets. When we need to tell whether a
      * group byte is for a single byte char set or not we use this definition:
@@ -105,7 +105,7 @@ class CharsetLMBCS extends CharsetICU {
     /*
      * However, to fully understand LMBCS, you must also understand a series of
      * exceptions & optimizations made in service of the design goals.
-     * 
+     *
      * First, those of you who are character set mavens may have noticed that
      * the 'double-byte' character sets are actually multi-byte chracter sets
      * that can have 1 or two bytes, even in upper-ascii range. To force
@@ -114,10 +114,10 @@ class CharsetLMBCS extends CharsetICU {
      * to introduce any single-byte character > 0x80 in an otherwise double-byte
      * character set. So, for example, the LMBCS sequence x10 x10 xAE is the
      * same as '0xAE' in the Japanese code page 943.
-     * 
+     *
      * Next, you will notice that the list of group bytes has some gaps.
      * These are used in various ways.
-     * 
+     *
      * We reserve a few special single byte values for common control
      * characters. These are in the same place as their ANSI equivalents for speed.
      */
@@ -163,7 +163,7 @@ class CharsetLMBCS extends CharsetICU {
     private static final short ULMBCS_GRP_UNICODE  = 0x14;
     /*
      * The two bytes appearing after a 0x14 are interpreted as UTF-16 BE
-     * (Big Endian) characters. The exception comes when UTF16 
+     * (Big Endian) characters. The exception comes when UTF16
      * representation would have a zero as the second byte. In that case,
      * 'F6' is used in its place, and the bytes are swapped. (This prevents
      * LMBCS from encoding any Unicode values of the form U+F6xx, but that's OK:
@@ -180,7 +180,7 @@ class CharsetLMBCS extends CharsetICU {
      * translations even faster, sometimes the optimization group byte can be dropped
      * from a LMBCS character. This is decided on a process-by-process basis. The
      * group byte that is dropped is called the 'optimization group.'
-     * 
+     *
      * For Notes, the optimization group is always 0x1.
      */
     //private static final short ULMBCS_DEFAULTOPTGROUP  = 0x01;
@@ -191,19 +191,19 @@ class CharsetLMBCS extends CharsetICU {
      * etc.). Using plain 'LMBCS' as the name of the converter will give you
      * LMBCS-1.
      */
-    
+
     /* Implementation strategy */
-    /* 
+    /*
      * Because of the extensive use of other character sets, the LMBCS converter
      * keeps a mapping between optimization groups and IBM character sets, so that
      * ICU converters can be created and used as needed.
-     * 
+     *
      * As you can see, even though any byte below 0x20 could be an optimization
      * byte, only those at 0x13 or below can map to an actual converter. To limit
      * some loops and searches, we define a value for that last group converter:
      */
     private static final short ULMBCS_GRP_LAST = 0x13; /* last LMBCS group that has a converter */
-    
+
     private static final String[] OptGroupByteToCPName = {
         /* 0x0000 */ "lmb-excp", /* internal home for the LOTUS exceptions list */
         /* 0x0001 */ "ibm-850",
@@ -227,14 +227,14 @@ class CharsetLMBCS extends CharsetICU {
         /* 0x0013 */ "windows-936",
         /* The rest are null, including the 0x0014 Unicode compatibility region
          * and 0x0019, the 1-2-3 system range control char */
-        /* 0x0014 */ null 
+        /* 0x0014 */ null
     };
-    
+
     /* That's approximately all the data that's needed for translating
      * LMBCS to Unicode.
-     * 
+     *
      * However, to translate Unicode to LMBCS, we need some more support.
-     * 
+     *
      * That's because there are often more than one possible mappings from a Unicode
      * code point back into LMBCS. The first thing we do is look up into a table
      * to figure out if there are more than one possible mapplings. This table,
@@ -252,7 +252,7 @@ class CharsetLMBCS extends CharsetICU {
                                                            LMBCS mbcs native encoding
                                                            (example: Unihan) */
     private static final short ULMBCS_AMBIGUOUS_ALL    = 0x82;
-    
+
     /* And here's a simple way to see if a group falls in an appropriate range */
     private boolean ULMBCS_AMBIGUOUS_MATCH(short agroup, short xgroup) {
         return (((agroup == ULMBCS_AMBIGUOUS_SBCS) &&
@@ -261,7 +261,7 @@ class CharsetLMBCS extends CharsetICU {
                  (xgroup >= ULMBCS_DOUBLEOPTGROUP_START)) ||
                  ((agroup) == ULMBCS_AMBIGUOUS_ALL));
     }
-    
+
     /* The table & some code to use it: */
     private static class _UniLMBCSGrpMap {
         int uniStartRange;
@@ -273,7 +273,7 @@ class CharsetLMBCS extends CharsetICU {
             this.GrpType        = GrpType;
         }
     }
-    
+
     private static final _UniLMBCSGrpMap[] UniLMBCSGrpMap = {
         new _UniLMBCSGrpMap(0x0001, 0x001F, ULMBCS_GRP_CTRL),
         new _UniLMBCSGrpMap(0x0080, 0x009F, ULMBCS_GRP_CTRL),
@@ -413,27 +413,27 @@ class CharsetLMBCS extends CharsetICU {
         new _UniLMBCSGrpMap(0xFF01, 0xFFEE, ULMBCS_AMBIGUOUS_MBCS),
         new _UniLMBCSGrpMap(0xFFFF, 0xFFFF, ULMBCS_GRP_UNICODE)
     };
-    
+
     static short FindLMBCSUniRange(char uniChar) {
         int index = 0;
-        
+
         while (uniChar > UniLMBCSGrpMap[index].uniEndRange) {
             index++;
         }
-        
+
         if (uniChar >= UniLMBCSGrpMap[index].uniStartRange) {
             return UniLMBCSGrpMap[index].GrpType;
         }
         return ULMBCS_GRP_UNICODE;
     }
-    
+
     /*
      * We also ask the creator of a converter to send in a preferred locale
      * that we can use in resolving ambiguous mappings. They send the locale
      * in as a string, and we map it, if possible, to one of the
      * LMBCS groups. We use this table, and the associated code, to
      * do the lookup:
-     * 
+     *
      *     This table maps locale ID's to LMBCS opt groups.
      *     The default return is group 0x01. Note that for
      *     performance reasons, the table is sorted in
@@ -500,11 +500,11 @@ class CharsetLMBCS extends CharsetICU {
     };
     static short FindLMBCSLocale(String LocaleID) {
         int index = 0;
-        
+
         if (LocaleID == null) {
             return 0;
         }
-        
+
         while (LocaleLMBCSGrpMap[index].LocaleID != null) {
             if (LocaleLMBCSGrpMap[index].LocaleID == LocaleID) {
                 return LocaleLMBCSGrpMap[index].OptGroup;
@@ -515,7 +515,7 @@ class CharsetLMBCS extends CharsetICU {
         }
         return ULMBCS_GRP_L1;
     }
-    
+
     /*
      * Before we get to the main body of code, here's how we hook up the rest
      * of ICU. ICU converters are required to define a structure that includes
@@ -540,67 +540,68 @@ class CharsetLMBCS extends CharsetICU {
             decoder = (CharsetDecoderMBCS)charset.newDecoder();
         }
     }
-    
+
     private UConverterDataLMBCS extraInfo; /* extraInfo in ICU4C implementation */
-    
+
     public CharsetLMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
-        maxBytesPerChar = ULMBCS_CHARSIZE_MAX; 
+        maxBytesPerChar = ULMBCS_CHARSIZE_MAX;
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
-        
+
         extraInfo = new UConverterDataLMBCS();
-        
+
         for (int i = 0; i <= ULMBCS_GRP_LAST; i++) {
             if (OptGroupByteToCPName[i] != null) {
                 extraInfo.OptGrpConverter[i] = ((CharsetMBCS)CharsetICU.forNameICU(OptGroupByteToCPName[i])).sharedData;
             }
         }
-        
+
       //get the Opt Group number for the LMBCS converter
         int option = Integer.parseInt(icuCanonicalName.substring(6));
         extraInfo.OptGroup = (short)option;
         extraInfo.localeConverterIndex = FindLMBCSLocale(ULocale.getDefault().getBaseName());
     }
-    
+
     class CharsetDecoderLMBCS extends CharsetDecoderICU {
         public CharsetDecoderLMBCS(CharsetICU cs) {
             super(cs);
             implReset();
         }
-    
+
+        @Override
         protected void implReset() {
             super.implReset();
         }
-        
+
         /* A function to call when we are looking at the Unicode group byte in LMBCS */
         private char GetUniFromLMBCSUni(ByteBuffer ppLMBCSin) {
             short HighCh = (short)(ppLMBCSin.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
             short LowCh  = (short)(ppLMBCSin.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
-            
+
             if (HighCh == ULMBCS_UNICOMPATZERO) {
                 HighCh = LowCh;
                 LowCh = 0; /* zero-byte in LSB special character */
             }
-            
+
             return (char)((HighCh << 8) | LowCh);
         }
-        
+
         private int LMBCS_SimpleGetNextUChar(UConverterSharedData cnv, ByteBuffer source, int positionOffset, int length) {
             int uniChar;
             int oldSourceLimit;
             int oldSourcePos;
-            
+
             extraInfo.charset.sharedData = cnv;
-            
+
             oldSourceLimit = source.limit();
             oldSourcePos = source.position();
-            
+
             source.position(oldSourcePos + positionOffset);
             source.limit(source.position() + length);
-            
+
             uniChar = extraInfo.decoder.simpleGetNextUChar(source, false);
-            
+
             source.limit(oldSourceLimit);
             source.position(oldSourcePos);
 
@@ -615,7 +616,7 @@ class CharsetLMBCS extends CharsetICU {
         private int LMBCSGetNextUCharWorker(ByteBuffer source, CoderResult[] err) {
             int uniChar = 0;  /* an output Unicode char */
             short CurByte;   /* A byte from the input stream */
-            
+
             /* error check */
             if (!source.hasRemaining()) {
                 err[0] = CoderResult.malformedForLength(0);
@@ -623,12 +624,12 @@ class CharsetLMBCS extends CharsetICU {
             }
             /* Grab first byte & save address for error recovery */
             CurByte = (short)(source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
-            
+
             /*
              * at entry of each if clause:
              * 1. 'CurByte' points at the first byte of a LMBCS character
              * 2. 'source' points to the next byte of the source stream after 'CurByte'
-             * 
+             *
              * the job of each if clause is:
              * 1. set 'source' to the point at the beginning of the next char (not if LMBCS char is only 1 byte)
              * 2. set 'uniChar' up with the right Unicode value, or set 'err' appropriately
@@ -637,12 +638,12 @@ class CharsetLMBCS extends CharsetICU {
             if ((CurByte > ULMBCS_C0END && CurByte < ULMBCS_C1START) /* ascii range */ ||
                 CurByte == 0 || CurByte == ULMBCS_HT || CurByte == ULMBCS_CR || CurByte == ULMBCS_LF ||
                 CurByte == ULMBCS_123SYSTEMRANGE) {
-                
+
                 uniChar = CurByte;
             } else {
                 short group;
                 UConverterSharedData cnv;
-                
+
                 if (CurByte == ULMBCS_GRP_CTRL) {  /* Control character group - no opt group update */
                     short C0C1byte;
                     /* CHECK_SOURCE_LIMIT(1) */
@@ -660,7 +661,7 @@ class CharsetLMBCS extends CharsetICU {
                         source.position(source.limit());
                         return 0xFFFF;
                     }
-                    
+
                     /* don't check for error indicators fffe/ffff below */
                     return GetUniFromLMBCSUni(source);
                 } else if (CurByte <= ULMBCS_CTRLOFFSET) {
@@ -675,7 +676,7 @@ class CharsetLMBCS extends CharsetICU {
                             source.position(source.limit());
                             return 0xFFFF;
                         }
-                        
+
                         /* check for LMBCS doubled-group-byte case */
                         if (source.get(source.position()) == group) {
                             /* single byte */
@@ -696,7 +697,7 @@ class CharsetLMBCS extends CharsetICU {
                             return 0xFFFF;
                         }
                         CurByte = (short)(source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
-                        
+
                         if (CurByte >= ULMBCS_C1START) {
                             uniChar = CharsetMBCS.MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(cnv.mbcs, CurByte);
                         } else {
@@ -705,16 +706,16 @@ class CharsetLMBCS extends CharsetICU {
                              * AND the second byte is not in the upper ascii range
                              */
                             byte[] bytes = new byte[2];
-                            
+
                             cnv = extraInfo.OptGrpConverter[ULMBCS_GRP_EXCEPT];
-                            
+
                             /* Lookup value must include opt group */
                             bytes[0] = (byte)group;
                             bytes[1] = (byte)CurByte;
                             uniChar = LMBCS_SimpleGetNextUChar(cnv, ByteBuffer.wrap(bytes), 0, 2);
                         }
                     }
-                    
+
                 } else if (CurByte >= ULMBCS_C1START) { /* group byte is implicit */
                     group = extraInfo.OptGroup;
                     cnv = extraInfo.OptGrpConverter[group];
@@ -726,7 +727,7 @@ class CharsetLMBCS extends CharsetICU {
                                 source.position(source.limit());
                                 return 0xFFFF;
                             }
-                            
+
                             /* let the MBCS conversion consume CurByte again */
                             uniChar = LMBCS_SimpleGetNextUChar(cnv, source, -1, 1);
                         } else {
@@ -736,7 +737,7 @@ class CharsetLMBCS extends CharsetICU {
                                 source.position(source.limit());
                                 return 0xFFFF;
                             }
-                            
+
                             /* let the MBCS conversion consume CurByte again */
                             uniChar = LMBCS_SimpleGetNextUChar(cnv, source, -1, 2);
                             source.get();
@@ -746,11 +747,12 @@ class CharsetLMBCS extends CharsetICU {
                     }
                 }
             }
-            
+
             return uniChar;
         }
-        
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) { 
+
+        @Override
+        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult[] err = new CoderResult[1];
             err[0] = CoderResult.UNDERFLOW;
             byte[] LMBCS = new byte[ULMBCS_CHARSIZE_MAX * 2]; /* Increase the size for proper handling in subsequent calls to MBCS functions */
@@ -758,14 +760,14 @@ class CharsetLMBCS extends CharsetICU {
             int saveSource; /* beginning of current code point */
             int errSource = 0; /* index to actual input in case an error occurs */
             byte savebytes = 0;
-            
+
             /* Process from source to limit, or until error */
             while (err[0].isUnderflow() && source.hasRemaining() && target.hasRemaining()) {
                 saveSource = source.position(); /* beginning of current code point */
                 if (toULength > 0) { /* reassemble char from previous call */
                     int size_old = toULength;
                     ByteBuffer tmpSourceBuffer;
-                    
+
                     /* limit from source is either remainder of temp buffer, or user limit on source */
                     int size_new_maybe_1 = ULMBCS_CHARSIZE_MAX - size_old;
                     int size_new_maybe_2 = source.remaining();
@@ -783,8 +785,8 @@ class CharsetLMBCS extends CharsetICU {
                     uniChar = (char)LMBCSGetNextUCharWorker(tmpSourceBuffer, err);
                     source.position(saveSource + tmpSourceBuffer.position() - size_old);
                     errSource = saveSource - size_old;
-                    
-                    if (err[0].isOverflow()) { /* err == U_TRUNCATED_CHAR_FOUND */ 
+
+                    if (err[0].isOverflow()) { /* err == U_TRUNCATED_CHAR_FOUND */
                         /* evil special case: source buffers so small a char spans more than 2 buffers */
                         toULength = savebytes;
                         for (int i = 0; i < savebytes; i++) {
@@ -802,7 +804,7 @@ class CharsetLMBCS extends CharsetICU {
                     uniChar = (char)LMBCSGetNextUCharWorker(source, err);
                     savebytes = (byte)(source.position() - saveSource);
                 }
-                
+
                 if (err[0].isUnderflow()) {
                     if (uniChar < 0x0fffe) {
                         target.put(uniChar);
@@ -834,13 +836,14 @@ class CharsetLMBCS extends CharsetICU {
             return err[0];
         }
     }
-    
+
     class CharsetEncoderLMBCS extends CharsetEncoderICU {
         public CharsetEncoderLMBCS(CharsetICU cs) {
             super(cs, fromUSubstitution);
             implReset();
         }
-        
+
+        @Override
         protected void implReset() {
             super.implReset();
         }
@@ -854,14 +857,14 @@ class CharsetLMBCS extends CharsetICU {
         private int LMBCSConversionWorker(short group, byte[] LMBCS, char pUniChar, short[] lastConverterIndex, boolean[] groups_tried) {
             byte pLMBCS = 0;
             UConverterSharedData xcnv = extraInfo.OptGrpConverter[group];
-            
+
             int bytesConverted;
             int[] value = new int[1];
             short firstByte;
-            
+
             extraInfo.charset.sharedData = xcnv;
             bytesConverted = extraInfo.encoder.fromUChar32(pUniChar, value, false);
-            
+
             /* get the first result byte */
             if (bytesConverted > 0) {
                 firstByte = (short)((value[0] >> ((bytesConverted - 1) * 8)) & UConverterConstants.UNSIGNED_BYTE_MASK);
@@ -870,14 +873,14 @@ class CharsetLMBCS extends CharsetICU {
                 groups_tried[group] = true;
                 return 0;
             }
-            
+
             lastConverterIndex[0] = group;
-            
-            /* 
+
+            /*
              * All initial byte values in lower ascii range should have been caught by now,
              * except with the exception group.
              */
-            
+
             /* use converted data: first write 0, 1 or two group bytes */
             if (group != ULMBCS_GRP_EXCEPT && extraInfo.OptGroup != group) {
                 LMBCS[pLMBCS++] = (byte)group;
@@ -885,12 +888,12 @@ class CharsetLMBCS extends CharsetICU {
                     LMBCS[pLMBCS++] = (byte)group;
                 }
             }
-            
+
             /* don't emit control chars */
             if (bytesConverted == 1 && firstByte < 0x20) {
                 return 0;
             }
-            
+
             /* then move over the converted data */
             switch (bytesConverted) {
             case 4:
@@ -905,7 +908,7 @@ class CharsetLMBCS extends CharsetICU {
                 /* will never occur */
                 break;
             }
-            
+
             return pLMBCS;
         }
         /*
@@ -916,9 +919,9 @@ class CharsetLMBCS extends CharsetICU {
             int index = 0;
             short LowCh  = (short)(uniChar & UConverterConstants.UNSIGNED_BYTE_MASK);
             short HighCh = (short)((uniChar >> 8) & UConverterConstants.UNSIGNED_BYTE_MASK);
-            
+
             LMBCS[index++] = (byte)ULMBCS_GRP_UNICODE;
-            
+
             if (LowCh == 0) {
                 LMBCS[index++] = (byte)ULMBCS_UNICOMPATZERO;
                 LMBCS[index++] = (byte)HighCh;
@@ -929,6 +932,7 @@ class CharsetLMBCS extends CharsetICU {
             return ULMBCS_UNICODE_SIZE;
         }
         /* The main Unicode to LMBCS conversion function */
+        @Override
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             short[] lastConverterIndex = new short[1];
@@ -938,12 +942,12 @@ class CharsetLMBCS extends CharsetICU {
             int bytes_written;
             boolean[] groups_tried = new boolean[ULMBCS_GRP_LAST+1];
             int sourceIndex = 0;
-            
+
             /*
              * Basic strategy: attempt to fill in local LMBCS 1-char buffer.(LMBCS)
              * If that succeeds, see if it will all fit into the target & copy it over
              * if it does.
-             * 
+             *
              * We try conversions in the following order:
              * 1. Single-byte ascii & special fixed control chars (&null)
              * 2. Look up group in table & try that (could b
@@ -959,23 +963,23 @@ class CharsetLMBCS extends CharsetICU {
              *     E) If its single-byte ambiguous, try the exceptions group
              * 4. And as a grand fallback: Unicode
              */
-            
+
             short OldConverterIndex = 0;
-            
+
             while (source.hasRemaining() && err.isUnderflow()) {
                 OldConverterIndex = extraInfo.localeConverterIndex;
-                
+
                 if (!target.hasRemaining()) {
                     err = CoderResult.OVERFLOW;
                     break;
                 }
-                
+
                 uniChar = source.get(source.position());
                 bytes_written = 0;
                 pLMBCS = 0;
-                
+
                 /* check cases in rough order of how common they are, for speed */
-                
+
                 /* single-byte matches: strategy 1 */
                 if((uniChar>=0x80) && (uniChar<=0xff) && (uniChar!=0xB1) && (uniChar!=0xD7) && (uniChar!=0xF7) &&
                    (uniChar!=0xB0) && (uniChar!=0xB4) && (uniChar!=0xB6) && (uniChar!=0xA7) && (uniChar!=0xA8)) {
@@ -987,7 +991,7 @@ class CharsetLMBCS extends CharsetICU {
                     LMBCS[pLMBCS++] = (byte)uniChar;
                     bytes_written = 1;
                 }
-                
+
                 if (bytes_written == 0) {
                     /* Check by Unicode rage (Strategy 2) */
                     short group = FindLMBCSUniRange(uniChar);
@@ -1009,12 +1013,12 @@ class CharsetLMBCS extends CharsetICU {
                     }
                     if (bytes_written == 0) { /* the ambiguous group cases (Strategy 3) */
                         groups_tried = new boolean[ULMBCS_GRP_LAST+1];
-                        
+
                         /* check for non-default optimization group (Strategy 3A) */
                         if (extraInfo.OptGroup != 1 && ULMBCS_AMBIGUOUS_MATCH(group, extraInfo.OptGroup)) {
                             if(extraInfo.localeConverterIndex < ULMBCS_DOUBLEOPTGROUP_START) {
                                 bytes_written = LMBCSConversionWorker (ULMBCS_GRP_L1, LMBCS, uniChar, lastConverterIndex, groups_tried);
-                            
+
                                 if(bytes_written == 0) {
                                     bytes_written = LMBCSConversionWorker (ULMBCS_GRP_EXCEPT, LMBCS, uniChar, lastConverterIndex, groups_tried);
                                 }
@@ -1027,7 +1031,7 @@ class CharsetLMBCS extends CharsetICU {
                         }
                         /* check for locale optimization group (Strategy 3B) */
                         if (bytes_written == 0 && extraInfo.localeConverterIndex > 0 && ULMBCS_AMBIGUOUS_MATCH(group, extraInfo.localeConverterIndex)) {
-                            
+
                             bytes_written = LMBCSConversionWorker(extraInfo.localeConverterIndex, LMBCS, uniChar, lastConverterIndex, groups_tried);
                         }
                         /* check for last optimization group used for this string (Strategy 3C) */
@@ -1039,23 +1043,23 @@ class CharsetLMBCS extends CharsetICU {
                             short grp_start;
                             short grp_end;
                             short grp_ix;
-                            
+
                             grp_start = (group == ULMBCS_AMBIGUOUS_MBCS) ? ULMBCS_DOUBLEOPTGROUP_START : ULMBCS_GRP_L1;
                             grp_end   = (group == ULMBCS_AMBIGUOUS_MBCS) ? ULMBCS_GRP_LAST : ULMBCS_GRP_TH;
-                            
+
                             if(group == ULMBCS_AMBIGUOUS_ALL) {
                                 grp_start = ULMBCS_GRP_L1;
                                 grp_end = ULMBCS_GRP_LAST;
                             }
-                            
+
                             for (grp_ix = grp_start; grp_ix <= grp_end && bytes_written == 0; grp_ix++) {
                                 if (extraInfo.OptGrpConverter[grp_ix] != null && !groups_tried[grp_ix]) {
                                     bytes_written = LMBCSConversionWorker(grp_ix, LMBCS, uniChar, lastConverterIndex, groups_tried);
                                 }
                             }
-                            /* 
+                            /*
                              * a final conversion fallback to the exceptions group if its likely
-                             * to be single byte (Strategy 3E) 
+                             * to be single byte (Strategy 3E)
                              */
                             if (bytes_written == 0 && grp_start == ULMBCS_GRP_L1) {
                                 bytes_written = LMBCSConversionWorker(ULMBCS_GRP_EXCEPT, LMBCS, uniChar, lastConverterIndex, groups_tried);
@@ -1092,18 +1096,21 @@ class CharsetLMBCS extends CharsetICU {
                 }
                 extraInfo.localeConverterIndex = OldConverterIndex;
             }
-            
+
             return err;
         }
     }
+    @Override
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderLMBCS(this);
     }
-    
+
+    @Override
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderLMBCS(this);
     }
-    
+
+    @Override
     void getUnicodeSetImpl(UnicodeSet setFillIn, int which){
         getCompleteUnicodeSet(setFillIn);
     }

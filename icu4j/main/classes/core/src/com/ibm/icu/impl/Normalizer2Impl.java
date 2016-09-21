@@ -206,6 +206,7 @@ public final class Normalizer2Impl {
         // They assume that the cc or trailCC of their input is 0.
         // Most of them implement Appendable interface methods.
         // @Override when we switch to Java 6
+        @Override
         public ReorderingBuffer append(char c) {
             str.append(c);
             lastCC=0;
@@ -218,6 +219,7 @@ public final class Normalizer2Impl {
             reorderStart=str.length();
         }
         // @Override when we switch to Java 6
+        @Override
         public ReorderingBuffer append(CharSequence s) {
             if(s.length()!=0) {
                 str.append(s);
@@ -227,6 +229,7 @@ public final class Normalizer2Impl {
             return this;
         }
         // @Override when we switch to Java 6
+        @Override
         public ReorderingBuffer append(CharSequence s, int start, int limit) {
             if(start!=limit) {
                 str.append(s, start, limit);
@@ -413,6 +416,7 @@ public final class Normalizer2Impl {
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
+        @Override
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0]==2;
         }
@@ -560,6 +564,7 @@ public final class Normalizer2Impl {
         }
     }
     private static final Trie2.ValueMapper segmentStarterMapper=new Trie2.ValueMapper() {
+        @Override
         public int map(int in) {
             return in&CANON_NOT_SEGMENT_STARTER;
         }
@@ -1829,7 +1834,7 @@ public final class Normalizer2Impl {
             }
             if(key1==(firstUnit&COMP_1_TRAIL_MASK)) {
                 if((firstUnit&COMP_1_TRIPLE)!=0) {
-                    return ((int)compositions.charAt(list+1)<<16)|compositions.charAt(list+2);
+                    return (compositions.charAt(list+1)<<16)|compositions.charAt(list+2);
                 } else {
                     return compositions.charAt(list+1);
                 }
@@ -1874,7 +1879,7 @@ public final class Normalizer2Impl {
                 compositeAndFwd=maybeYesCompositions.charAt(list+1);
                 list+=2;
             } else {
-                compositeAndFwd=(((int)maybeYesCompositions.charAt(list+1)&~COMP_2_TRAIL_MASK)<<16)|
+                compositeAndFwd=((maybeYesCompositions.charAt(list+1)&~COMP_2_TRAIL_MASK)<<16)|
                                 maybeYesCompositions.charAt(list+2);
                 list+=3;
             }

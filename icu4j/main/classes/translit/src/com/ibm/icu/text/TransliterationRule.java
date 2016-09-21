@@ -542,12 +542,13 @@ class TransliterationRule {
      * Return a string representation of this object.
      * @return string representation of this object
      */
+    @Override
     public String toString() {
         return '{' + toRule(true) + '}';
     }
 
     /**
-     * Find the source and target sets, subject to the input filter. 
+     * Find the source and target sets, subject to the input filter.
      * There is a known issue with filters containing multiple characters.
      */
     // TODO: Problem: the rule is [{ab}]c > x

@@ -33,5 +33,6 @@ public class HolidayBundle_it extends ListResourceBundle {
         {   "Thanksgiving",         "Giorno del Ringraziamento" },
 
     };
+    @Override
     public synchronized Object[][] getContents() { return fContents; }
 }

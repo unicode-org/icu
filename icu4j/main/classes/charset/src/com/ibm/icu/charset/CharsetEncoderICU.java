@@ -25,7 +25,7 @@ import com.ibm.icu.text.UTF16;
 
 /**
  * An abstract class that provides framework methods of decoding operations for concrete
- * subclasses. 
+ * subclasses.
  * In the future this class will contain API that will implement converter semantics of ICU4C.
  * @stable ICU 3.6
  */
@@ -70,6 +70,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     private CharsetCallback.Encoder onMalformedInput = CharsetCallback.FROM_U_CALLBACK_STOP;
 
     CharsetCallback.Encoder fromCharErrorBehaviour = new CharsetCallback.Encoder() {
+        @Override
         public CoderResult call(CharsetEncoderICU encoder, Object context,
                 CharBuffer source, ByteBuffer target, IntBuffer offsets,
                 char[] buffer, int length, int cp, CoderResult cr) {
@@ -87,7 +88,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 
     /*
      * Construcs a new encoder for the given charset
-     * 
+     *
      * @param cs
      *            for which the decoder is created
      * @param replacement
@@ -144,28 +145,30 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 
     /**
      * Sets the action to be taken if an illegal sequence is encountered
-     * 
+     *
      * @param newAction
      *            action to be taken
      * @exception IllegalArgumentException
      * @stable ICU 3.6
      */
+    @Override
     protected void implOnMalformedInput(CodingErrorAction newAction) {
         onMalformedInput = getCallback(newAction);
     }
-    
+
     /**
      * Sets the action to be taken if an illegal sequence is encountered
-     * 
+     *
      * @param newAction
      *            action to be taken
      * @exception IllegalArgumentException
      * @stable ICU 3.6
      */
+    @Override
     protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
         onUnmappableInput = getCallback(newAction);
     }
-    
+
     /**
      * Sets the callback encoder method and context to be used if an illegal sequence is encountered.
      * You would normally call this twice to set both the malform and unmappable error. In this case,
@@ -184,7 +187,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         } else {
             /* Error: Only malformed and unmappable are handled. */
         }
-        
+
         if (fromUContext == null || !fromUContext.equals(newContext)) {
             setFromUContext(newContext);
         }
@@ -192,7 +195,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 
     /**
      * Sets fromUContext used in callbacks.
-     * 
+     *
      * @param newContext Object
      * @exception IllegalArgumentException The object is an illegal argument for UContext.
      * @stable ICU 4.0
@@ -200,7 +203,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     public final void setFromUContext(Object newContext) {
         fromUContext = newContext;
     }
-    
+
     private static CharsetCallback.Encoder getCallback(CodingErrorAction action) {
         if (action == CodingErrorAction.REPLACE) {
             return CharsetCallback.FROM_U_CALLBACK_SUBSTITUTE;
@@ -217,10 +220,11 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * Flushes any characters saved in the converter's internal buffer and
      * resets the converter.
      * @param out action to be taken
-     * @return result of flushing action and completes the decoding all input. 
+     * @return result of flushing action and completes the decoding all input.
      *         Returns CoderResult.UNDERFLOW if the action succeeds.
      * @stable ICU 3.6
      */
+    @Override
     protected CoderResult implFlush(ByteBuffer out) {
         return encode(EMPTY, out, null, true);
     }
@@ -229,6 +233,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * Resets the from Unicode mode of converter
      * @stable ICU 3.6
      */
+    @Override
     protected void implReset() {
         errorBufferLength = 0;
         fromUnicodeStatus = 0;
@@ -252,6 +257,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      *         action succeeds or more input is needed for completing the decoding action.
      * @stable ICU 3.6
      */
+    @Override
     protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
         if (!in.hasRemaining() && this.errorBufferLength == 0) { // make sure the errorBuffer is empty
             // The Java framework should have already substituted what was left.
@@ -596,7 +602,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
                 /* callback handling */
                 {
                     int codePoint;
-                    
+
                     /* get and write the code point */
                     codePoint = fromUChar32;
                     errorInputLength = UTF16.append(invalidUCharBuffer, 0,
@@ -671,8 +677,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     }*/
     /**
      * Overrides super class method
-     * @stable ICU 3.6 
+     * @stable ICU 3.6
      */
+    @Override
     public boolean isLegalReplacement(byte[] repl) {
         return true;
     }
@@ -701,7 +708,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
                 out.put(bytesArray[bytesBegin]);
                 bytesBegin++;
             }
-            // success 
+            // success
             bytesLength = 0;
         } catch (BufferOverflowException ex) {
             cr = CoderResult.OVERFLOW;
@@ -713,7 +720,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
                 --obl;
             }
         }
-        //write overflow 
+        //write overflow
         cnv.errorBufferLength = bytesLimit - bytesBegin;
         if (cnv.errorBufferLength > 0) {
             int index = 0;
@@ -727,7 +734,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 
     /*
      * Returns the number of chars held in the converter's internal state
-     * because more input is needed for completing the conversion. This function is 
+     * because more input is needed for completing the conversion. This function is
      * useful for mapping semantics of ICU's converter interface to those of iconv,
      * and this information is not needed for normal conversion.
      * @return The number of chars in the state. -1 if an error is encountered.
@@ -746,12 +753,12 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     }
 
     /**
-     * 
+     *
      * @param source
      */
     private final void setSourcePosition(CharBuffer source) {
 
-        // ok was there input held in the previous invocation of encodeLoop 
+        // ok was there input held in the previous invocation of encodeLoop
         // that resulted in output in this invocation?
         source.position(source.position() - fromUCountPending());
     }
@@ -816,7 +823,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
          */
         if (cr.isOverflow()) {
             /* Overflowed target. Now, we'll write into the charErrorBuffer.
-             * It's a fixed size. If we overflow it...Hm 
+             * It's a fixed size. If we overflow it...Hm
              */
 
             /* start the new target at the first free slot in the error buffer */
@@ -840,13 +847,13 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * a lead surrogate followed by a trail surrogate. This method can change
      * the source position and will modify fromUChar32.
      * </p>
-     * 
+     *
      * <p>
      * If <code>null</code> is returned, then there was success in reading a
      * surrogate pair, the codepoint is stored in <code>fromUChar32</code> and
      * <code>fromUChar32</code> should be reset (to 0) after being read.
      * </p>
-     * 
+     *
      * @param source
      *            The encoding source.
      * @param lead
@@ -886,8 +893,8 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * requirement, the calling method must also increment the index if this method returns
      * <code>null</code>.
      * </p>
-     * 
-     * 
+     *
+     *
      * @param source
      *            The encoding source.
      * @param lead
@@ -920,7 +927,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         fromUChar32 = UCharacter.getCodePoint(lead, trail);
         return null;
     }
-    
+
     /**
      * Returns the maxCharsPerByte value for the Charset that created this encoder.
      * @return maxCharsPerByte
@@ -929,7 +936,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     public final float maxCharsPerByte() {
         return ((CharsetICU)(this.charset())).maxCharsPerByte;
     }
-    
+
     /**
      * Calculates the size of a buffer for conversion from Unicode to a charset.
      * The calculated size is guaranteed to be sufficient for this conversion.

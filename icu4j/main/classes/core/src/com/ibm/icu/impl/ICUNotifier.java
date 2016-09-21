@@ -21,12 +21,12 @@ import java.util.List;
  * eventually dequeues the list and calls notifyListener on each
  * listener in the list.</p>
  *
- * <p>Subclasses override acceptsListener and notifyListener 
+ * <p>Subclasses override acceptsListener and notifyListener
  * to add type-safe notification.  AcceptsListener should return
  * true if the listener is of the appropriate type; ICUNotifier
  * itself will ensure the listener is non-null and that the
  * identical listener is not already registered with the Notifier.
- * NotifyListener should cast the listener to the appropriate 
+ * NotifyListener should cast the listener to the appropriate
  * type and call the appropriate method on the listener.
  */
 public abstract class ICUNotifier {
@@ -39,7 +39,7 @@ public abstract class ICUNotifier {
      * The listener must not be null. AcceptsListener must return
      * true for the listener.  Attempts to concurrently
      * register the identical listener more than once will be
-     * silently ignored.  
+     * silently ignored.
      */
     public void addListener(EventListener l) {
         if (l == null) {
@@ -137,6 +137,7 @@ public abstract class ICUNotifier {
          * Wait for a notification to be queued, then notify all
          * listeners listed in the notification.
          */
+        @Override
         public void run() {
             EventListener[] list;
             while (true) {

@@ -642,10 +642,12 @@ public final class InternalLocaleBuilder {
             return _s;
         }
 
+        @Override
         public int hashCode() {
             return AsciiUtil.toLowerString(_s).hashCode();
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;
@@ -668,10 +670,12 @@ public final class InternalLocaleBuilder {
             return _c;
         }
 
+        @Override
         public int hashCode() {
             return AsciiUtil.toLower(_c);
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) {
                 return true;

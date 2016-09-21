@@ -385,6 +385,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @return A new CharsTrie.Iterator.
      * @stable ICU 4.8
      */
+    @Override
     public Iterator iterator() {
         return new Iterator(chars_, pos_, remainingMatchLength_, 0);
     }
@@ -480,6 +481,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
          * @return true if there are more elements.
          * @stable ICU 4.8
          */
+        @Override
         public boolean hasNext() /*const*/ { return pos_>=0 || !stack_.isEmpty(); }
 
         /**
@@ -493,6 +495,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
          * @throws NoSuchElementException - iteration has no more elements.
          * @stable ICU 4.8
          */
+        @Override
         public Entry next() {
             int pos=pos_;
             if(pos<0) {
@@ -578,6 +581,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
          * @throws UnsupportedOperationException (always)
          * @stable ICU 4.8
          */
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }

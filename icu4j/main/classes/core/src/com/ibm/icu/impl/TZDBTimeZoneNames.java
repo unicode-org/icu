@@ -26,10 +26,10 @@ import com.ibm.icu.util.UResourceBundle;
  * Yet another TimeZoneNames implementation based on the tz database.
  * This implementation contains only tz abbreviations (short standard
  * and daylight names) for each metazone.
- * 
+ *
  * The data file $ICU4C_ROOT/source/data/zone/tzdbNames.txt contains
  * the metazone - abbreviations mapping data (manually edited).
- * 
+ *
  * Note: The abbreviations in the tz database are not necessarily
  * unique. For example, parsing abbreviation "IST" is ambiguous
  * (can be parsed as India Standard Time or Israel Standard Time).
@@ -40,7 +40,7 @@ import com.ibm.icu.util.UResourceBundle;
 public class TZDBTimeZoneNames extends TimeZoneNames {
     private static final long serialVersionUID = 1L;
 
-    private static final ConcurrentHashMap<String, TZDBNames> TZDB_NAMES_MAP = 
+    private static final ConcurrentHashMap<String, TZDBNames> TZDB_NAMES_MAP =
             new ConcurrentHashMap<String, TZDBNames>();
 
     private static volatile TextTrieMap<TZDBNameInfo> TZDB_NAMES_TRIE = null;
@@ -97,7 +97,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
      */
     @Override
     public String getMetaZoneDisplayName(String mzID, NameType type) {
-        if (mzID == null || mzID.length() == 0 || 
+        if (mzID == null || mzID.length() == 0 ||
                 (type != NameType.SHORT_STANDARD && type != NameType.SHORT_DAYLIGHT)) {
             return null;
         }
@@ -242,6 +242,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
          * @see com.ibm.icu.impl.TextTrieMap.ResultHandler#handlePrefixMatch(int,
          *      java.util.Iterator)
          */
+        @Override
         public boolean handlePrefixMatch(int matchLength, Iterator<TZDBNameInfo> values) {
             TZDBNameInfo match = null;
             TZDBNameInfo defaultRegionMatch = null;

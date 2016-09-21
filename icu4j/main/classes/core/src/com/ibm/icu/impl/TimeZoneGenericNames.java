@@ -79,7 +79,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      * Format pattern enum used for composing location and partial location names
      */
     public enum Pattern {
-        // The format pattern such as "{0} Time", where {0} is the country or city. 
+        // The format pattern such as "{0} Time", where {0} is the country or city.
         REGION_FORMAT("regionFormat", "({0})"),
 
         // Note: FALLBACK_REGION_FORMAT is no longer used since ICU 50/CLDR 22.1
@@ -185,7 +185,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
     /**
      * Returns the display name of the time zone for the given name type
      * at the given date, or null if the display name is not available.
-     * 
+     *
      * @param tz the time zone
      * @param type the generic name type - see {@link GenericNameType}
      * @param date the date
@@ -218,7 +218,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
 
     /**
      * Returns the generic location name for the given canonical time zone ID.
-     * 
+     *
      * @param canonicalTzID the canonical time zone ID
      * @return the generic location name for the given canonical time zone ID.
      */
@@ -303,9 +303,9 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
     /**
      * Private method to get a generic string, with fallback logics involved,
      * that is,
-     * 
+     *
      * 1. If a generic non-location string is available for the zone, return it.
-     * 2. If a generic non-location string is associated with a meta zone and 
+     * 2. If a generic non-location string is associated with a meta zone and
      *    the zone never use daylight time around the given date, use the standard
      *    string (if available).
      * 3. If a generic non-location string is associated with a meta zone and
@@ -313,7 +313,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      *    current locale, then return the generic partial location string (if available)
      * 4. If a generic non-location string is not available, use generic location
      *    string.
-     * 
+     *
      * @param tz the requested time zone
      * @param date the date
      * @param type the generic name type, either LONG or SHORT
@@ -433,7 +433,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      * Private simple pattern formatter used for formatting generic location names
      * and partial location names. We intentionally use JDK MessageFormat
      * for performance reason.
-     * 
+     *
      * @param pat the message pattern enum
      * @param args the format argument(s)
      * @return the formatted string
@@ -464,7 +464,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      * instance. Because LocaleDisplayNames is only used for generic
      * location formant and partial location format, the LocaleDisplayNames
      * is instantiated lazily.
-     * 
+     *
      * @return the instance of LocaleDisplayNames for the locale of this object.
      */
     private synchronized LocaleDisplayNames getLocaleDisplayNames() {
@@ -484,7 +484,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
             return;
         }
         // getGenericLocationName() formats a name and put it into the trie
-        getGenericLocationName(tzCanonicalID); 
+        getGenericLocationName(tzCanonicalID);
 
         // Generic partial location format
         Set<String> mzIDs = _tznames.getAvailableMetaZoneIDs(tzCanonicalID);
@@ -510,7 +510,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      * the locale of this instance. When a generic name is coming from
      * a meta zone, this region is used for checking if the time zone
      * is a reference zone of the meta zone.
-     * 
+     *
      * @return the target region
      */
     private synchronized String getTargetRegion() {
@@ -531,7 +531,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      * Private method for formatting partial location names. This format
      * is used when a generic name of a meta zone is available, but the given
      * time zone is not a reference zone (golden zone) of the meta zone.
-     * 
+     *
      * @param tzID the canonical time zone ID
      * @param mzID the meta zone ID
      * @param isLong true when long generic name
@@ -647,6 +647,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         /* (non-Javadoc)
          * @see com.ibm.icu.impl.TextTrieMap.ResultHandler#handlePrefixMatch(int, java.util.Iterator)
          */
+        @Override
         public boolean handlePrefixMatch(int matchLength, Iterator<NameInfo> values) {
             while (values.hasNext()) {
                 NameInfo info = values.next();
@@ -847,7 +848,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
             nameTypes.add(NameType.SHORT_GENERIC);
             nameTypes.add(NameType.SHORT_STANDARD);
         }
-        
+
         if (!nameTypes.isEmpty()) {
             // Find matches in the TimeZoneNames
             tznamesMatches = _tznames.find(text, start, nameTypes);
@@ -900,7 +901,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         protected TimeZoneGenericNames createInstance(String key, ULocale data) {
             return new TimeZoneGenericNames(data).freeze();
         }
-        
+
     }
 
     /*
@@ -915,6 +916,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isFrozen() {
         return _frozen;
     }
@@ -922,6 +924,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
     /**
      * {@inheritDoc}
      */
+    @Override
     public TimeZoneGenericNames freeze() {
         _frozen = true;
         return this;
@@ -930,6 +933,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
     /**
      * {@inheritDoc}
      */
+    @Override
     public TimeZoneGenericNames cloneAsThawed() {
         TimeZoneGenericNames copy = null;
         try {

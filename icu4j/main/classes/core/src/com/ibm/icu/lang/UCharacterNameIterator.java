@@ -34,6 +34,7 @@ class UCharacterNameIterator implements ValueIterator
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see com.ibm.icu.util.ValueIterator.Element
     */
+    @Override
     public boolean next(ValueIterator.Element element)
     {
         if (m_current_ >= m_limit_) {
@@ -74,7 +75,7 @@ class UCharacterNameIterator implements ValueIterator
                             return true;
                         }
                     }
-                    /* 
+                    /*
                     // "if (m_current_ >= m_limit_)" would not return true
                     // because it can never be reached due to:
                     // 1) It has already been checked earlier
@@ -116,6 +117,7 @@ class UCharacterNameIterator implements ValueIterator
     * UCharacter.MIN_VALUE or X if a setRange(X, Y) has been called previously.
     * </p>
     */
+    @Override
     public void reset()
     {
         m_current_        = m_start_;
@@ -138,6 +140,7 @@ class UCharacterNameIterator implements ValueIterator
      * @exception IllegalArgumentException thrown when attempting to set an
      *            illegal range. E.g limit <= start
      */
+    @Override
     public void setRange(int start, int limit)
     {
         if (start >= limit) {

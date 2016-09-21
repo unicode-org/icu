@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * <code>TimeArrayTimeZoneRule</code> represents a time zone rule whose start times are
  * defined by an array of milliseconds since the standard base time.
- * 
+ *
  * @stable ICU 3.8
  */
 public class TimeArrayTimeZoneRule extends TimeZoneRule {
@@ -27,7 +27,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * Constructs a <code>TimeArrayTimeZoneRule</code> with the name, the GMT offset of its
      * standard time, the amount of daylight saving offset adjustment and
      * the array of times when this rule takes effect.
-     * 
+     *
      * @param name          The time zone name.
      * @param rawOffset     The UTC offset of its standard time in milliseconds.
      * @param dstSavings    The amount of daylight saving offset adjustment in
@@ -38,7 +38,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * @param timeType      The time type of the start times, which is one of
      *                      <code>DataTimeRule.WALL_TIME</code>, <code>STANDARD_TIME</code>
      *                      and <code>UTC_TIME</code>.
-     * 
+     *
      * @stable ICU 3.8
      */
     public TimeArrayTimeZoneRule(String name, int rawOffset, int dstSavings, long[] startTimes, int timeType) {
@@ -54,7 +54,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
 
     /**
      * Gets the array of start times used by this rule.
-     * 
+     *
      * @return  An array of the start times in milliseconds since the base time
      *          (January 1, 1970, 00:00:00 GMT).
      * @stable ICU 3.8
@@ -67,7 +67,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * Gets the time type of the start times used by this rule.  The return value
      * is either <code>DateTimeRule.WALL_TIME</code> or <code>DateTimeRule.STANDARD_TIME</code>
      * or <code>DateTimeRule.UTC_TIME</code>.
-     * 
+     *
      * @return The time type used of the start times used by this rule.
      * @stable ICU 3.8
      */
@@ -79,6 +79,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public Date getFirstStart(int prevRawOffset, int prevDSTSavings) {
         return new Date(getUTC(startTimes[0], prevRawOffset, prevDSTSavings));
     }
@@ -87,6 +88,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public Date getFinalStart(int prevRawOffset, int prevDSTSavings) {
         return new Date(getUTC(startTimes[startTimes.length - 1], prevRawOffset, prevDSTSavings));
     }
@@ -95,6 +97,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public Date getNextStart(long base, int prevOffset, int prevDSTSavings, boolean inclusive) {
         int i = startTimes.length - 1;
         for (; i >= 0; i--) {
@@ -113,6 +116,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public Date getPreviousStart(long base, int prevOffset, int prevDSTSavings, boolean inclusive) {
         int i = startTimes.length - 1;
         for (; i >= 0; i--) {
@@ -128,6 +132,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public boolean isEquivalentTo(TimeZoneRule other) {
         if (!(other instanceof TimeArrayTimeZoneRule)) {
             return false;
@@ -144,6 +149,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * Note: This method in <code>TimeArrayTimeZoneRule</code> always returns true.
      * @stable ICU 3.8
      */
+    @Override
     public boolean isTransitionRule() {
         return true;
     }
@@ -163,9 +169,10 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      * Returns a <code>String</code> representation of this <code>TimeArrayTimeZoneRule</code> object.
      * This method is used for debugging purpose only.  The string representation can be changed
      * in future version of ICU without any notice.
-     * 
+     *
      * @stable ICU 3.8
      */
+    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append(super.toString());
