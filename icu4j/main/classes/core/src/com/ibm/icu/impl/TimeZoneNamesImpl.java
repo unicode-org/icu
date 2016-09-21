@@ -582,7 +582,6 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
     }
 
     private static final class ZNamesLoader extends UResource.Sink {
-        private static String NO_NAME = "";
         private String[] names;
 
         /**
@@ -642,8 +641,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
             if (index == null) { return; }
             assert index.ordinal() < ZNames.NUM_NAME_TYPES;
             if (names[index.ordinal()] == null) {
-                String toSet = (value == null) ? NO_NAME : value.getString();
-                names[index.ordinal()] = toSet;
+                names[index.ordinal()] = value.getString();
             }
         }
 
@@ -651,12 +649,8 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             UResource.Table namesTable = value.getTable();
             for (int i = 0; namesTable.getKeyAndValue(i, key, value); ++i) {
-                if (value.isNoInheritanceMarker()) {
-                    setNameIfEmpty(key, null);
-                } else {
-                    assert value.getType() == UResourceBundle.STRING;
-                    setNameIfEmpty(key, value);
-                }
+                assert value.getType() == UResourceBundle.STRING;
+                setNameIfEmpty(key, value);  // could be value.isNoInheritanceMarker()
             }
         }
 
@@ -668,12 +662,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
             for (int i = 0; i < ZNames.NUM_NAME_TYPES; ++i) {
                 String name = names[i];
                 if (name != null) {
-                    // TODO Findbugs: Comparison of String objects using == or !=
-                    // Review the logic and modify below if necessary. See ticket #12746.
-
-                    // FindBugs complains about == but
-                    // we do want to check for the NO_NAME reference, not its contents!
-                    if (name == NO_NAME) {
+                    if (name.equals(ICUResourceBundle.NO_INHERITANCE_MARKER)) {
                         names[i] = null;
                     } else {
                         length = i + 1;
