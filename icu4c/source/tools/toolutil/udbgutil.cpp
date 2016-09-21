@@ -15,6 +15,7 @@
 #include "unicode/ulocdata.h"
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
+#include "cstr.h"
 
 /*
 To add a new enum type
@@ -691,8 +692,9 @@ void KnownIssues::add(const char *ticket, const char *where, const UChar *msg, U
   }
   if(msg==NULL || !*msg) return;
 
-  std::string str;
-  fTable[ticket][where].insert(icu::UnicodeString(msg).toUTF8String(str));
+  const icu::UnicodeString ustr(msg);
+  
+  fTable[ticket][where].insert(std::string(CStr(ustr)()));
 }
 
 void KnownIssues::add(const char *ticket, const char *where, const char *msg, UBool *firstForTicket, UBool *firstForWhere)
