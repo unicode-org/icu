@@ -159,7 +159,6 @@ public:
                                   FieldPositionIterator* posIter,
                                   UErrorCode& status) const;
 
-	/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual. */
     /**
      * Format a long number using base-10 representation.
      *
@@ -169,7 +168,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 56
+     * @stable ICU 56
      */
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& appendTo,

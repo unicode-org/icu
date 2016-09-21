@@ -889,20 +889,18 @@ typedef enum UDateFormatBooleanAttribute {
      * @stable ICU 53
      */
     UDAT_PARSE_ALLOW_NUMERIC = 1,
-#ifndef U_HIDE_DRAFT_API
     /**
      * indicates tolerance of a partial literal match
      * e.g. accepting "--mon-02-march-2011" for a pattern of "'--: 'EEE-WW-MMMM-yyyy"
-     * @draft ICU 56
+     * @stable ICU 56
      */
     UDAT_PARSE_PARTIAL_LITERAL_MATCH = 2,
     /**
      * indicates tolerance of pattern mismatch between input data and specified format pattern.
      * e.g. accepting "September" for a month pattern of MMM ("Sep")
-     * @draft ICU 56
+     * @stable ICU 56
      */
     UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH = 3,
-#endif /* U_HIDE_DRAFT_API */
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UDateFormatBooleanAttribute value.
