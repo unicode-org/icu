@@ -34,12 +34,11 @@ endif
 
 COM=$(ICUDIR)/lib/libicuuc.$(SO)
 I18=$(ICUDIR)/lib/libicui18n.$(SO)
-LAY=$(ICUDIR)/lib/libicule.$(SO)
 LEX=$(ICUDIR)/lib/libiculx.$(SO)
 DAT=$(ICUDIR)/stubdata/libicudata.$(SO)
 UIO=$(ICUDIR)/lib/libicuio.$(SO)
 
-LIBS=$(COM) $(I18) $(LAY) $(LEX) $(UIO)
+LIBS=$(COM) $(I18) $(LEX) $(UIO)
 
 ## Targets.
 
@@ -70,9 +69,6 @@ $(COM): $(DAT) $(ICUDIR)/config.status Makefile
 
 $(I18): $(DAT) $(COM) $(ICUDIR)/config.status Makefile
 	$(MAKE) $(FLAG_OVERRIDE) -C $(ICUDIR)/i18n all-local
-
-$(LAY): $(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
-	$(MAKE) $(FLAG_OVERRIDE) -C $(ICUDIR)/layout all-local
 
 $(LEX): $(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
 	$(MAKE) $(FLAG_OVERRIDE) -C $(ICUDIR)/layoutex all-local
