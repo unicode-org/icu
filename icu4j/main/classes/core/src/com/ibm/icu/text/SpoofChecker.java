@@ -1483,7 +1483,7 @@ public class SpoofChecker {
      * @deprecated ICU 58
      */
     @Deprecated
-    public String getSkeleton(int type, CharSequence id) {
+    public String getSkeleton(int type, String id) {
         return getSkeleton(id);
     }
 
