@@ -534,7 +534,7 @@ void TestHasScript() {
     }
 }
 
-static UBool scriptsContain(int32_t scripts[], int32_t length, int32_t script) {
+static UBool scriptsContain(UScriptCode scripts[], int32_t length, UScriptCode script) {
     UBool contain=FALSE;
     int32_t prev=-1, i;
     for(i=0; i<length; ++i) {
