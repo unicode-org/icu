@@ -4,10 +4,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- © 2016 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html#License -->
-<title>ICU4J API Comparison: ICU4J 57.1 with ICU4J 58.0.1</title>
+<title>ICU4J API Comparison: ICU4J 57.1 with ICU4J 58.1</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 57.1 with ICU4J 58.0.1</h1>
+<h1>ICU4J API Comparison: ICU4J 57.1 with ICU4J 58.1</h1>
 
 <hr/>
 <h2>Removed from ICU4J 57.1</h2>
@@ -22,19 +22,172 @@ ChineseDateFormatSymbols
 
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 58.0.1</h2>
-<p>(no API obsoleted)</p>
+<h2>Deprecated or Obsoleted in ICU4J 58.1</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter.BidiPairedBracketType
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.DecompositionType
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.EastAsianWidth
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.GraphemeClusterBreak
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.HangulSyllableType
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.JoiningGroup
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.JoiningType
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.LineBreak
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.NumericType
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.SentenceBreak
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacter.WordBreak
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UCharacterEnums.ECharacterDirection
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int CHAR_DIRECTION_COUNT</li>
+</ul>
+UProperty
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int BINARY_LIMIT</li>
+<li><span style='color:gray'>(deprecated)</span> public static final int DOUBLE_LIMIT</li>
+<li><span style='color:gray'>(deprecated)</span> public static final int INT_LIMIT</li>
+<li><span style='color:gray'>(deprecated)</span> public static final int MASK_LIMIT</li>
+<li><span style='color:gray'>(deprecated)</span> public static final int OTHER_PROPERTY_LIMIT</li>
+<li><span style='color:gray'>(deprecated)</span> public static final int STRING_LIMIT</li>
+</ul>
+UProperty.NameChoice
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+UScript
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int CODE_LIMIT</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+Bidi
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int CLASS_DEFAULT</li>
+</ul>
+CollationKey.BoundMode
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int COUNT</li>
+</ul>
+Collator.ReorderCodes
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int LIMIT</li>
+</ul>
+DateFormat
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int FIELD_COUNT</li>
+</ul>
+DateTimePatternGenerator
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int TYPE_LIMIT</li>
+</ul>
+SpoofChecker
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int ANY_CASE</li>
+<li><span style='color:gray'>(deprecated)</span> public java.lang.String <i>getSkeleton</i>(int, java.lang.String)</li>
+</ul>
+SpoofChecker.Builder
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public SpoofChecker.Builder <i>setData</i>(java.io.Reader, java.io.Reader)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Calendar
+<ul>
+<li><span style='color:gray'>(deprecated)</span> protected static final int BASE_FIELD_COUNT</li>
+<li><span style='color:gray'>(deprecated)</span> protected static final int MAX_FIELD_COUNT</li>
+</ul>
+LocaleData
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int DELIMITER_COUNT</li>
+<li><span style='color:gray'>(deprecated)</span> public static final int ES_COUNT</li>
+</ul>
+</ul>
+
 
 <hr/>
-<h2>Changed in ICU4J 58.0.1 (old, new)</h2>
+<h2>Changed in ICU4J 58.1 (old, new)</h2>
 <p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 58.0.1</h2>
-<p>(no API promoted to stable)</p>
+<h2>Promoted to stable in ICU4J 58.1</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+DateFormat.BooleanAttribute
+<ul>
+<li><span style='color:green'>(stable)</span> public static final DateFormat.BooleanAttribute PARSE_MULTIPLE_PATTERNS_FOR_MATCH</li>
+<li><span style='color:green'>(stable)</span> public static final DateFormat.BooleanAttribute PARSE_PARTIAL_LITERAL_MATCH</li>
+</ul>
+NumberFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int STANDARDCURRENCYSTYLE</li>
+</ul>
+RuleBasedNumberFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>getRoundingMode</i>()</li>
+<li><span style='color:green'>(stable)</span> public void <i>setRoundingMode</i>(int)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+MeasureUnit
+<ul>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit CENTURY</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit CUP_METRIC</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit GENERIC_TEMPERATURE</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit KNOT</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit LITER_PER_100KILOMETERS</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit MILE_SCANDINAVIAN</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit PINT_METRIC</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit REVOLUTION_ANGLE</li>
+</ul>
+</ul>
+
 
 <hr/>
-<h2>Added in ICU4J 58.0.1</h2>
+<h2>Added in ICU4J 58.1</h2>
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
@@ -106,14 +259,89 @@ UScript
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
+<li><span style='color:orange'>(draft)</span> public class <i>BidiTransform</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>BidiTransform.Mirroring</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>BidiTransform.Order</i></li>
+BidiTransform.Mirroring
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final BidiTransform.Mirroring OFF</li>
+<li><span style='color:orange'>(draft)</span> public static final BidiTransform.Mirroring ON</li>
+</ul>
+BidiTransform.Order
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final BidiTransform.Order LOGICAL</li>
+<li><span style='color:orange'>(draft)</span> public static final BidiTransform.Order VISUAL</li>
+</ul>
 ChineseDateFormatSymbols
 <ul>
 <li><span style='color:gray'>(deprecated)</span> protected void <i>initializeData</i>(ULocale, ICUResourceBundle, java.lang.String)</li>
+</ul>
+DecimalFormatSymbols
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getDecimalSeparatorString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String[] <i>getDigitStrings</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getGroupingSeparatorString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getMinusSignString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getMonetaryDecimalSeparatorString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getMonetaryGroupingSeparatorString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getPerMillString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getPercentString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getPlusSignString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setDecimalSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setDigitStrings</i>(java.lang.String[])</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setGroupingSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setMinusSignString</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setMonetaryDecimalSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setMonetaryGroupingSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setPerMillString</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setPercentString</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setPlusSignString</i>(java.lang.String)</li>
+</ul>
+DisplayContext
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final DisplayContext NO_SUBSTITUTE</li>
+<li><span style='color:orange'>(draft)</span> public static final DisplayContext SUBSTITUTE</li>
+</ul>
+DisplayContext.Type
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final DisplayContext.Type SUBSTITUTE_HANDLING</li>
+</ul>
+MeasureFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getUnitDisplayName</i>(MeasureUnit)</li>
+</ul>
+SpoofChecker
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int CONFUSABLE</li>
+<li><span style='color:orange'>(draft)</span> public static final UnicodeSet INCLUSION</li>
+<li><span style='color:orange'>(draft)</span> public static final int MIXED_NUMBERS</li>
+<li><span style='color:orange'>(draft)</span> public static final UnicodeSet RECOMMENDED</li>
+<li><span style='color:orange'>(draft)</span> public static final int RESTRICTION_LEVEL</li>
+<li><span style='color:orange'>(draft)</span> public boolean <i>equals</i>(java.lang.Object)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getSkeleton</i>(java.lang.CharSequence)</li>
+<li><span style='color:orange'>(draft)</span> public int <i>hashCode</i>()</li>
+</ul>
+SpoofChecker.Builder
+<ul>
+<li><span style='color:orange'>(draft)</span> public SpoofChecker.Builder <i>setData</i>(java.io.Reader)</li>
+<li><span style='color:orange'>(draft)</span> public SpoofChecker.Builder <i>setRestrictionLevel</i>(SpoofChecker.RestrictionLevel)</li>
+</ul>
+SpoofChecker.CheckResult
+<ul>
+<li><span style='color:orange'>(draft)</span> public UnicodeSet numerics</li>
+<li><span style='color:orange'>(draft)</span> public SpoofChecker.RestrictionLevel restrictionLevel</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
+MeasureUnit
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit EAST</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit NORTH</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit SOUTH</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit WEST</li>
+</ul>
 VersionInfo
 <ul>
 <li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_9_0</li>
@@ -121,6 +349,6 @@ VersionInfo
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Jun 29 12:47:00 EDT 2016<br/>© 2016 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Sep 21 15:35:29 EDT 2016<br/>© 2016 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
 </body>
 </html>

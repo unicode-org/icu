@@ -896,6 +896,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return A RuleBasedNumberFormat that is equal to this one.
      * @stable ICU 2.0
      */
+    @Override
     public Object clone() {
         return super.clone();
     }
@@ -906,6 +907,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return true if the two formatters have identical behavior.
      * @stable ICU 2.0
      */
+    @Override
     public boolean equals(Object that) {
         // if the other object isn't a RuleBasedNumberFormat, that's
         // all we need to know
@@ -937,13 +939,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
             return true;
         }
     }
-    
+
     /**
      * Mock implementation of hashCode(). This implementation always returns a constant
      * value. When Java assertion is enabled, this method triggers an assertion failure.
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public int hashCode() {
         return super.hashCode();
@@ -957,6 +960,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * the same result.
      * @stable ICU 2.0
      */
+    @Override
     public String toString() {
 
         // accumulate the descriptions of all the rule sets in a
@@ -1178,6 +1182,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return toAppendTo
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(double number,
                                StringBuffer toAppendTo,
                                FieldPosition ignore) {
@@ -1207,6 +1212,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return toAppendTo
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(long number,
                                StringBuffer toAppendTo,
                                FieldPosition ignore) {
@@ -1228,6 +1234,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Format a BigInteger.
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(BigInteger number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
@@ -1240,6 +1247,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Format a BigDecimal.
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(java.math.BigDecimal number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
@@ -1255,6 +1263,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Format a BigDecimal.
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
@@ -1285,6 +1294,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @see #setLenientParseMode
      * @stable ICU 2.0
      */
+    @Override
     public Number parse(String text, ParsePosition parsePosition) {
 
         // parsePosition tells us where to start parsing.  We copy the
@@ -1373,7 +1383,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * Sets the provider for the lenient scanner.  If this has not been set, 
+     * Sets the provider for the lenient scanner.  If this has not been set,
      * {@link #setLenientParseMode}
      * has no effect.  This is necessary to decouple collation from format code.
      * @param scannerProvider the provider
@@ -1463,11 +1473,11 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
         return "";
     }
-    
+
     /**
      * Sets the decimal format symbols used by this formatter. The formatter uses a copy of the
      * provided symbols.
-     * 
+     *
      * @param newSymbols desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
      * @stable ICU 49
@@ -1496,14 +1506,15 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * {@icu} Set a particular DisplayContext value in the formatter,
-     * such as CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see 
+     * such as CAPITALIZATION_FOR_STANDALONE. Note: For getContext, see
      * NumberFormat.
-     * 
-     * @param context The DisplayContext value to set. 
+     *
+     * @param context The DisplayContext value to set.
      * @stable ICU 53
      */
     // Here we override the NumberFormat implementation in order to
-    // lazily initialize relevant items 
+    // lazily initialize relevant items
+    @Override
     public void setContext(DisplayContext context) {
         super.setContext(context);
         if (!capitalizationInfoIsSet &&
@@ -1525,7 +1536,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * <code>BigDecimal.ROUND_UNNECESSARY</code>.
      * @see #setRoundingMode
      * @see java.math.BigDecimal
-     * @draft ICU 56
+     * @stable ICU 56
      */
     @Override
     public int getRoundingMode() {
@@ -1541,7 +1552,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @exception IllegalArgumentException if <code>roundingMode</code> is unrecognized.
      * @see #getRoundingMode
      * @see java.math.BigDecimal
-     * @draft ICU 56
+     * @stable ICU 56
      */
     @Override
     public void setRoundingMode(int roundingMode) {
@@ -1853,7 +1864,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * Set capitalizationForListOrMenu, capitalizationForStandAlone 
+     * Set capitalizationForListOrMenu, capitalizationForStandAlone
      */
     private void initCapitalizationContextInfo(ULocale theLocale) {
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, theLocale);

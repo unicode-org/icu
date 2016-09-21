@@ -38,11 +38,11 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class MeasureUnit implements Serializable {
     private static final long serialVersionUID = -1839973855554750484L;
-    
+
     // Cache of MeasureUnits.
     // All access to the cache or cacheIsPopulated flag must be synchronized on class MeasureUnit,
     // i.e. from synchronized static methods. Beware of non-static methods.
-    private static final Map<String, Map<String,MeasureUnit>> cache 
+    private static final Map<String, Map<String,MeasureUnit>> cache
         = new HashMap<String, Map<String,MeasureUnit>>();
     private static boolean cacheIsPopulated = false;
 
@@ -52,14 +52,14 @@ public class MeasureUnit implements Serializable {
      */
     @Deprecated
     protected final String type;
-    
+
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     protected final String subType;
-    
+
     /**
      * @internal
      * @deprecated This API is ICU internal only.
@@ -69,16 +69,16 @@ public class MeasureUnit implements Serializable {
         this.type = type;
         this.subType = subType;
     }
-    
+
     /**
      * Get the type, such as "length"
-     * 
+     *
      * @stable ICU 53
      */
     public String getType() {
         return type;
     }
-    
+
 
     /**
      * Get the subType, such as “foot”.
@@ -88,22 +88,22 @@ public class MeasureUnit implements Serializable {
     public String getSubtype() {
         return subType;
     }
-    
-    
+
+
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 53
      */
     @Override
     public int hashCode() {
         return 31 * type.hashCode() + subType.hashCode();
     }
-    
+
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 53
      */
     @Override
@@ -117,24 +117,24 @@ public class MeasureUnit implements Serializable {
         MeasureUnit c = (MeasureUnit) rhs;
         return type.equals(c.type) && subType.equals(c.subType);
     }
-    
+
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 53
      */
     @Override
     public String toString() {
         return type + "-" + subType;
     }
-    
+
     /**
      * Get all of the available units' types. Returned set is unmodifiable.
-     * 
+     *
      * @stable ICU 53
      */
     public synchronized static Set<String> getAvailableTypes() {
-        populateCache();            
+        populateCache();
         return Collections.unmodifiableSet(cache.keySet());
     }
 
@@ -145,7 +145,7 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 53
      */
     public synchronized static Set<MeasureUnit> getAvailable(String type) {
-        populateCache();            
+        populateCache();
         Map<String, MeasureUnit> units = cache.get(type);
         // Train users not to modify returned set from the start giving us more
         // flexibility for implementation.
@@ -200,7 +200,7 @@ public class MeasureUnit implements Serializable {
         }
         return MeasureUnit.addUnit(type, subType, factory);
     }
-    
+
     /**
      * For ICU use only.
      * @internal
@@ -229,18 +229,21 @@ public class MeasureUnit implements Serializable {
     }
 
     private static Factory UNIT_FACTORY = new Factory() {
+        @Override
         public MeasureUnit create(String type, String subType) {
             return new MeasureUnit(type, subType);
         }
     };
 
     static Factory CURRENCY_FACTORY = new Factory() {
+        @Override
         public MeasureUnit create(String unusedType, String subType) {
             return new Currency(subType);
         }
     };
-    
+
     static Factory TIMEUNIT_FACTORY = new Factory() {
+        @Override
         public MeasureUnit create(String type, String subType) {
            return new TimeUnit(type, subType);
         }
@@ -288,12 +291,12 @@ public class MeasureUnit implements Serializable {
      * or other API that expects to see all of the MeasureUnits.
      *
      * <p>At static initialization time the MeasureUnits cache is populated
-     * with public static instances (G_FORCE, METER_PER_SECOND_SQUARED, etc.) only. 
-     * Adding of others is deferred until later to avoid circular static init 
+     * with public static instances (G_FORCE, METER_PER_SECOND_SQUARED, etc.) only.
+     * Adding of others is deferred until later to avoid circular static init
      * dependencies with classes Currency and TimeUnit.
      *
      * <p>Synchronization: this function must be called from static synchronized methods only.
-     * 
+     *
      * @internal
      */
     static private void populateCache() {
@@ -337,7 +340,7 @@ public class MeasureUnit implements Serializable {
             cache.put(type, tmp = new HashMap<String, MeasureUnit>());
         } else {
             // "intern" the type by setting to first item's type.
-            type = tmp.entrySet().iterator().next().getValue().type; 
+            type = tmp.entrySet().iterator().next().getValue().type;
         }
         MeasureUnit unit = tmp.get(unitName);
         if (unit == null) {
@@ -350,7 +353,7 @@ public class MeasureUnit implements Serializable {
     /*
      * Useful constants. Not necessarily complete: see {@link #getAvailable()}.
      */
-    
+
 // All code between the "Start generated MeasureUnit constants" comment and
 // the "End generated MeasureUnit constants" comment is auto generated code
 // and must not be edited manually. For instructions on how to correctly
@@ -358,7 +361,7 @@ public class MeasureUnit implements Serializable {
 // http://site.icu-project.org/design/formatting/measureformat/updating-measure-unit
 //
     // Start generated MeasureUnit constants
-    
+
     /**
      * Constant for unit of acceleration: g-force
      * @stable ICU 53
@@ -1232,6 +1235,7 @@ public class MeasureUnit implements Serializable {
         public MeasureUnitProxy() {
         }
 
+        @Override
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeByte(0); // version
             out.writeUTF(type);
@@ -1239,6 +1243,7 @@ public class MeasureUnit implements Serializable {
             out.writeShort(0); // allow for more data.
         }
 
+        @Override
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
             /* byte version = */ in.readByte(); // version
             type = in.readUTF();

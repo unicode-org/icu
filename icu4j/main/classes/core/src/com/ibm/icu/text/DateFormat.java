@@ -514,15 +514,13 @@ public abstract class DateFormat extends UFormat {
         /**
          * indicates tolerance of pattern mismatch between input data and specified format pattern.
          * e.g. accepting "September" for a month pattern of MMM ("Sep")
-         * @draft ICU 56
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 56
          */
         PARSE_MULTIPLE_PATTERNS_FOR_MATCH,
         /**
          * indicates tolerance of a partial literal match
          * e.g. accepting "--mon-02-march-2011" for a pattern of "'--: 'EEE-WW-MMMM-yyyy"
-         * @draft ICU 56
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 56
          */
         PARSE_PARTIAL_LITERAL_MATCH,
         /**
