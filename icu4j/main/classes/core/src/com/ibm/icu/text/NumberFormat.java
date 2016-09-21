@@ -231,8 +231,7 @@ public abstract class NumberFormat extends UFormat {
      * to represent currency, for example "$3.00", using non-accounting style for
      * negative values (e.g. minus sign).
      * Overrides any style specified using -cf- key in locale.
-     * @draft ICU 56
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 56
      */
     public static final int STANDARDCURRENCYSTYLE = 9;
 
