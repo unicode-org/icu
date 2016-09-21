@@ -1886,12 +1886,7 @@ public class MeasureUnitTest extends TestFmwk {
             }
             for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {
                 if (!knownUnits.contains(unit)) {
-                    String message = "Unit present in CLDR but not available via constant in MeasureUnit: " + unit;
-                    if (unit.getType().equals("coordinate")) {
-                        logKnownIssue("12573", message);
-                    } else {
-                        fail(message);
-                    }
+                    fail("Unit present in CLDR but not available via constant in MeasureUnit: " + unit);
                 }
             }
         }
