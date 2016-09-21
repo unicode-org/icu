@@ -36,7 +36,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * CLDR string value "∅∅∅" prevents fallback to the parent bundle.
      */
-    private static final String NO_INHERITANCE_MARKER = "\u2205\u2205\u2205";
+    public static final String NO_INHERITANCE_MARKER = "\u2205\u2205\u2205";
 
     /**
      * The class loader constant to be used with getBundleInstance API
