@@ -791,6 +791,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public void getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
@@ -964,6 +965,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public boolean observesDaylightTime() {
         return useDaylight;
     }
@@ -1418,6 +1420,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public boolean isFrozen() {
         return isFrozen;
     }
@@ -1426,6 +1429,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZone freeze() {
         isFrozen = true;
         return this;
@@ -1435,6 +1439,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZone cloneAsThawed() {
         SimpleTimeZone tz = (SimpleTimeZone)super.cloneAsThawed();
         tz.isFrozen = false;

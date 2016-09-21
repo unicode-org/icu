@@ -67,7 +67,7 @@ public final class DateNumberFormat extends NumberFormat {
             } catch (MissingResourceException ex) {
                 if ( !nsName.equals("latn") ) {
                     try {
-                       minusString = rb.getStringWithFallback("NumberElements/latn/symbols/minusSign");                 
+                       minusString = rb.getStringWithFallback("NumberElements/latn/symbols/minusSign");
                     } catch (MissingResourceException ex1) {
                         minusString = "-";
                     }
@@ -90,18 +90,22 @@ public final class DateNumberFormat extends NumberFormat {
         minusSign = elems[10];
     }
 
+    @Override
     public void setMaximumIntegerDigits(int newValue) {
         maxIntDigits = newValue;
     }
 
+    @Override
     public int getMaximumIntegerDigits() {
         return maxIntDigits;
     }
 
+    @Override
     public void setMinimumIntegerDigits(int newValue) {
         minIntDigits = newValue;
     }
 
+    @Override
     public int getMinimumIntegerDigits() {
         return minIntDigits;
     }
@@ -130,11 +134,13 @@ public final class DateNumberFormat extends NumberFormat {
         return digits.clone();
     }
 
+    @Override
     public StringBuffer format(double number, StringBuffer toAppendTo,
             FieldPosition pos) {
         throw new UnsupportedOperationException("StringBuffer format(double, StringBuffer, FieldPostion) is not implemented");
     }
 
+    @Override
     public StringBuffer format(long numberL, StringBuffer toAppendTo,
             FieldPosition pos) {
 
@@ -173,17 +179,20 @@ public final class DateNumberFormat extends NumberFormat {
         }
         return toAppendTo;
     }
-    
+
+    @Override
     public StringBuffer format(BigInteger number, StringBuffer toAppendTo,
             FieldPosition pos) {
         throw new UnsupportedOperationException("StringBuffer format(BigInteger, StringBuffer, FieldPostion) is not implemented");
     }
 
+    @Override
     public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo,
             FieldPosition pos) {
         throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPostion) is not implemented");
     }
 
+    @Override
     public StringBuffer format(BigDecimal number,
             StringBuffer toAppendTo, FieldPosition pos) {
         throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPostion) is not implemented");
@@ -194,6 +203,7 @@ public final class DateNumberFormat extends NumberFormat {
      */
     private static final long PARSE_THRESHOLD = 922337203685477579L; // (Long.MAX_VALUE / 10) - 1
 
+    @Override
     public Number parse(String text, ParsePosition parsePosition) {
         long num = 0;
         boolean sawNumber = false;
@@ -236,6 +246,7 @@ public final class DateNumberFormat extends NumberFormat {
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj == null || !super.equals(obj) || !(obj instanceof DateNumberFormat)) {
             return false;
@@ -247,7 +258,8 @@ public final class DateNumberFormat extends NumberFormat {
                 && this.positiveOnly == other.positiveOnly
                 && Arrays.equals(this.digits, other.digits));
     }
-    
+
+    @Override
     public int hashCode() {
         return super.hashCode();
     }

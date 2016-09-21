@@ -39,6 +39,7 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
         }
     }
 
+    @Override
     public V get(Object key) {
         Reference<Map<K, V>> ref = cacheRef;
         if (ref != null) {
@@ -50,6 +51,7 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
         return null;
     }
 
+    @Override
     public void put(K key, V value) {
         Reference<Map<K, V>> ref = cacheRef;
         Map<K, V> map = null;
@@ -68,6 +70,7 @@ public class SimpleCache<K, V> implements ICUCache<K, V> {
         map.put(key, value);
     }
 
+    @Override
     public void clear() {
         cacheRef = null;
     }

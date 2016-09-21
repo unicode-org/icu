@@ -22,7 +22,7 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
- * just a wrapper for Java ListResourceBundles and 
+ * just a wrapper for Java ListResourceBundles and
  * @author ram
  *
  */
@@ -49,6 +49,7 @@ public final class ResourceBundleWrapper extends UResourceBundle {
         this.bundle=bundle;
     }
 
+    @Override
     protected Object handleGetObject(String aKey){
         ResourceBundleWrapper current = this;
         Object obj = null;
@@ -69,11 +70,12 @@ public final class ResourceBundleWrapper extends UResourceBundle {
         }
         return obj;
     }
-    
+
+    @Override
     public Enumeration<String> getKeys(){
         return Collections.enumeration(keys);
     }
-    
+
     private void initKeysVector(){
         ResourceBundleWrapper current = this;
         keys = new ArrayList<String>();
@@ -88,25 +90,29 @@ public final class ResourceBundleWrapper extends UResourceBundle {
             current = (ResourceBundleWrapper)current.getParent();
         }
     }
+    @Override
     protected String getLocaleID(){
-        return localeID;   
+        return localeID;
     }
- 
+
+    @Override
     protected String getBaseName(){
-        return bundle.getClass().getName().replace('.','/');   
+        return bundle.getClass().getName().replace('.','/');
     }
-    
+
+    @Override
     public ULocale getULocale(){
-        return new ULocale(localeID);   
+        return new ULocale(localeID);
     }
-    
+
+    @Override
     public UResourceBundle getParent(){
-        return (UResourceBundle)parent;   
+        return (UResourceBundle)parent;
     }
 
     // Flag for enabling/disabling debugging code
     private static final boolean DEBUG = ICUDebug.enabled("resourceBundleWrapper");
-    
+
     // This method is for super class's instantiateBundle method
     public static ResourceBundleWrapper getBundleInstance(String baseName, String localeID,
             ClassLoader root, boolean disableFallback) {
@@ -182,6 +188,7 @@ public final class ResourceBundleWrapper extends UResourceBundle {
                     final String resName = name.replace('.', '/') + ".properties";
                     InputStream stream = java.security.AccessController.doPrivileged(
                         new java.security.PrivilegedAction<InputStream>() {
+                            @Override
                             public InputStream run() {
                                 return root.getResourceAsStream(resName);
                             }

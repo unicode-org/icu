@@ -507,6 +507,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Return a new set that is equivalent to this one.
      * @stable ICU 2.0
      */
+    @Override
     public Object clone() {
         if (isFrozen()) {
             return this;
@@ -694,6 +695,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * will produce another set that is equal to this one.
      * @stable ICU 2.0
      */
+    @Override
     public String toPattern(boolean escapeUnprintable) {
         if (pat != null && !escapeUnprintable) {
             return pat;
@@ -864,6 +866,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * indexing.
      * @stable ICU 2.0
      */
+    @Override
     public boolean matchesIndexValue(int v) {
         /* The index value v, in the range [0,255], is contained in this set if
          * it is contained in any pair of this set.  Pairs either have the high
@@ -905,6 +908,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * longest possible multichar string.
      * @stable ICU 2.0
      */
+    @Override
     public int matches(Replaceable text,
             int[] offset,
             int limit,
@@ -915,7 +919,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             // about them here.  If we ever allow zero-length strings
             // we much check for them here.
             if (contains(UnicodeMatcher.ETHER)) {
-                return incremental ? U_PARTIAL_MATCH : U_MATCH; 
+                return incremental ? U_PARTIAL_MATCH : U_MATCH;
             } else {
                 return U_MISMATCH;
             }
@@ -951,7 +955,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     // Strings are sorted, so we can optimize in the
                     // forward direction.
                     if (forward && c > firstChar) break;
-                    if (c != firstChar) continue; 
+                    if (c != firstChar) continue;
 
                     int length = matchRest(text, offset[0], limit, trial);
 
@@ -1030,7 +1034,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Tests whether the text matches at the offset. If so, returns the end of the longest substring that it matches. If not, returns -1. 
+     * Tests whether the text matches at the offset. If so, returns the end of the longest substring that it matches. If not, returns -1.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -1098,6 +1102,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @param toUnionTo the set into which to union the source characters
      * @stable ICU 2.2
      */
+    @Override
     public void addMatchSetTo(UnicodeSet toUnionTo) {
         toUnionTo.addAll(this);
     }
@@ -1264,7 +1269,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             // c is before start of next range
             list[i] = c;
             // if we touched the HIGH mark, then add a new one
-            if (c == MAX_VALUE) { 
+            if (c == MAX_VALUE) {
                 ensureCapacity(len+1);
                 list[len++] = HIGH;
             }
@@ -1356,7 +1361,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         if (s.length() == 1) return s.charAt(0);
 
         // at this point, len = 2
-        int cp = UTF16.charAt(s, 0); 
+        int cp = UTF16.charAt(s, 0);
         if (cp > 0xFFFF) { // is surrogate pair
             return cp;
         }
@@ -1499,7 +1504,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     public final UnicodeSet retain(CharSequence cs) {
 
-        int cp = getSingleCP(cs); 
+        int cp = getSingleCP(cs);
         if (cp < 0) {
             String s = cs.toString();
             boolean isIn = strings.contains(s);
@@ -1661,6 +1666,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @return true if the test condition is met
      * @stable ICU 2.0
      */
+    @Override
     public boolean contains(int c) {
         if (c < MIN_VALUE || c > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(c, 6));
@@ -2325,6 +2331,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @return <tt>true</tt> if the specified Object is equal to this set.
      * @stable ICU 2.0
      */
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -2352,6 +2359,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @see java.lang.Object#hashCode()
      * @stable ICU 2.0
      */
+    @Override
     public int hashCode() {
         int result = len;
         for (int i = 0; i < len; ++i) {
@@ -2365,6 +2373,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Return a programmer-readable string representation of this object.
      * @stable ICU 2.0
      */
+    @Override
     public String toString() {
         return toPattern(true);
     }
@@ -2436,17 +2445,17 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     // Add constants to make the applyPattern() code easier to follow.
 
-    private static final int LAST0_START = 0, 
-            LAST1_RANGE = 1, 
+    private static final int LAST0_START = 0,
+            LAST1_RANGE = 1,
             LAST2_SET = 2;
 
-    private static final int MODE0_NONE = 0, 
-            MODE1_INBRACKET = 1, 
+    private static final int MODE0_NONE = 0,
+            MODE1_INBRACKET = 1,
             MODE2_OUTBRACKET = 2;
 
-    private static final int SETMODE0_NONE = 0, 
-            SETMODE1_UNICODESET = 1, 
-            SETMODE2_PROPERTYPAT = 2, 
+    private static final int SETMODE0_NONE = 0,
+            SETMODE1_UNICODESET = 1,
+            SETMODE2_PROPERTYPAT = 2,
             SETMODE3_PREPARSED = 3;
 
     /**
@@ -2885,7 +2894,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Add the contents of the collection (as strings) into this UnicodeSet. 
+     * Add the contents of the collection (as strings) into this UnicodeSet.
      * The collection must not contain null.
      * @param source the collection to add
      * @return a reference to this object
@@ -2916,7 +2925,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     private void ensureCapacity(int newLen) {
         if (newLen <= list.length) return;
-        int[] temp = new int[newLen + GROW_EXTRA]; 
+        int[] temp = new int[newLen + GROW_EXTRA];
         System.arraycopy(list, 0, temp, 0, len);
         list = temp;
     }
@@ -3175,6 +3184,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     private static class NumericValueFilter implements Filter {
         double value;
         NumericValueFilter(double value) { this.value = value; }
+        @Override
         public boolean contains(int ch) {
             return UCharacter.getUnicodeNumericValue(ch) == value;
         }
@@ -3183,6 +3193,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     private static class GeneralCategoryMaskFilter implements Filter {
         int mask;
         GeneralCategoryMaskFilter(int mask) { this.mask = mask; }
+        @Override
         public boolean contains(int ch) {
             return ((1 << UCharacter.getType(ch)) & mask) != 0;
         }
@@ -3195,6 +3206,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             this.prop = prop;
             this.value = value;
         }
+        @Override
         public boolean contains(int ch) {
             return UCharacter.getIntPropertyValue(ch, prop) == value;
         }
@@ -3203,6 +3215,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     private static class ScriptExtensionsFilter implements Filter {
         int script;
         ScriptExtensionsFilter(int script) { this.script = script; }
+        @Override
         public boolean contains(int c) {
             return UScript.hasScript(c, script);
         }
@@ -3214,6 +3227,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     private static class VersionFilter implements Filter {
         VersionInfo version;
         VersionFilter(VersionInfo version) { this.version = version; }
+        @Override
         public boolean contains(int ch) {
             VersionInfo v = UCharacter.getAge(ch);
             // Reference comparison ok; VersionInfo caches and reuses
@@ -3923,6 +3937,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * @draft ICU3.8 (retain)
          * @provisional This API might change or be removed in a future release.
          */
+        @Override
         public UnicodeMatcher lookupMatcher(int i) {
             return null;
         }
@@ -3933,7 +3948,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * <p>
          * This routine will be called whenever the parsing of a UnicodeSet pattern finds such a
          * propertyName+propertyValue combination.
-         * 
+         *
          * @param propertyName
          *            the name of the property
          * @param propertyValue
@@ -3954,6 +3969,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * @draft ICU3.8 (retain)
          * @provisional This API might change or be removed in a future release.
          */
+        @Override
         public char[] lookup(String s) {
             return null;
         }
@@ -3962,6 +3978,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * @draft ICU3.8 (retain)
          * @provisional This API might change or be removed in a future release.
          */
+        @Override
         public String parseReference(String text, ParsePosition pos, int limit) {
             return null;
         }
@@ -3969,20 +3986,22 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Is this frozen, according to the Freezable interface?
-     * 
+     *
      * @return value
      * @stable ICU 3.8
      */
+    @Override
     public boolean isFrozen() {
         return (bmpSet != null || stringSpan != null);
     }
 
     /**
      * Freeze this class, according to the Freezable interface.
-     * 
+     *
      * @return this
      * @stable ICU 4.4
      */
+    @Override
     public UnicodeSet freeze() {
         if (!isFrozen()) {
             // Do most of what compact() does before freezing because
@@ -4190,6 +4209,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @return the clone, not frozen
      * @stable ICU 4.4
      */
+    @Override
     public UnicodeSet cloneAsThawed() {
         UnicodeSet result = new UnicodeSet(this);
         assert !result.isFrozen();
@@ -4210,19 +4230,19 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * A struct-like class used for iteration through ranges, for faster iteration than by String.
      * Read about the restrictions on usage in {@link UnicodeSet#ranges()}.
-     * 
+     *
      * @stable ICU 54
      */
     public static class EntryRange {
         /**
          * The starting code point of the range.
-         * 
+         *
          * @stable ICU 54
          */
         public int codepoint;
         /**
          * The ending code point of the range
-         * 
+         *
          * @stable ICU 54
          */
         public int codepointEnd;
@@ -4232,13 +4252,13 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
         /**
          * {@inheritDoc}
-         * 
+         *
          * @stable ICU 54
          */
         @Override
         public String toString() {
             StringBuilder b = new StringBuilder();
-            return ( 
+            return (
                     codepoint == codepointEnd ? _appendToPat(b, codepoint, false)
                             : _appendToPat(_appendToPat(b, codepoint, false).append('-'), codepointEnd, false))
                             .toString();
@@ -4252,9 +4272,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      *
      * <p><b>Warning: </b>To iterate over the full contents, you have to also iterate over the strings.
      *
-     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
+     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification.
      * Do not alter the UnicodeSet while iterating.
-     * 
+     *
      * <pre>
      * // Sample code
      * for (EntryRange range : us1.ranges()) {
@@ -4264,7 +4284,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      *     // do something with each string;
      * }
      * </pre>
-     * 
+     *
      * @stable ICU 54
      */
     public Iterable<EntryRange> ranges() {
@@ -4272,6 +4292,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     private class EntryRangeIterable implements Iterable<EntryRange> {
+        @Override
         public Iterator<EntryRange> iterator() {
             return new EntryRangeIterator();
         }
@@ -4281,9 +4302,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         int pos;
         EntryRange result = new EntryRange();
 
+        @Override
         public boolean hasNext() {
             return pos < len-1;
         }
+        @Override
         public EntryRange next() {
             if (pos < len-1) {
                 result.codepoint = list[pos++];
@@ -4293,6 +4316,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             }
             return result;
         }
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -4301,16 +4325,17 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Returns a string iterator. Uses the same order of iteration as {@link UnicodeSetIterator}.
-     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
+     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification.
      * Do not alter the UnicodeSet while iterating.
      * @see java.util.Set#iterator()
      * @stable ICU 4.4
      */
+    @Override
     public Iterator<String> iterator() {
         return new UnicodeSetIterator2(this);
     }
 
-    // Cover for string iteration. 
+    // Cover for string iteration.
     private static class UnicodeSetIterator2 implements Iterator<String> {
         // Invariants:
         // sourceList != null then sourceList[item] is a valid character
@@ -4341,6 +4366,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /* (non-Javadoc)
          * @see java.util.Iterator#hasNext()
          */
+        @Override
         public boolean hasNext() {
             return sourceList != null || stringIterator.hasNext();
         }
@@ -4348,6 +4374,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /* (non-Javadoc)
          * @see java.util.Iterator#next()
          */
+        @Override
         public String next() {
             if (sourceList == null) {
                 return stringIterator.next();
@@ -4382,9 +4409,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /* (non-Javadoc)
          * @see java.util.Iterator#remove()
          */
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
-        }  
+        }
     }
 
     /**
@@ -4485,6 +4513,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      * @stable ICU 4.4
      */
+    @Override
     public int compareTo(UnicodeSet o) {
         return compareTo(o, ComparisonStyle.SHORTER_FIRST);
     }
@@ -4535,7 +4564,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Utility to compare a string to a code point.
      * Same results as turning the code point into a string (with the [ugly] new StringBuilder().appendCodePoint(codepoint).toString())
-     * and comparing, but much faster (no object creation). 
+     * and comparing, but much faster (no object creation).
      * Actually, there is one difference; a null compares as less.
      * Note that this (=String) order is UTF-16 order -- *not* code point order.
      * @stable ICU 4.4
@@ -4547,7 +4576,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Utility to compare a string to a code point.
-     * Same results as turning the code point into a string and comparing, but much faster (no object creation). 
+     * Same results as turning the code point into a string and comparing, but much faster (no object creation).
      * Actually, there is one difference; a null compares as less.
      * Note that this (=String) order is UTF-16 order -- *not* code point order.
      * @stable ICU 4.4
@@ -4657,8 +4686,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Simplify the ranges in a Unicode set by merging any ranges that are only separated by characters in the dontCare set. 
-     * For example, the ranges: \\u2E80-\\u2E99\\u2E9B-\\u2EF3\\u2F00-\\u2FD5\\u2FF0-\\u2FFB\\u3000-\\u303E change to \\u2E80-\\u303E 
+     * Simplify the ranges in a Unicode set by merging any ranges that are only separated by characters in the dontCare set.
+     * For example, the ranges: \\u2E80-\\u2E99\\u2E9B-\\u2EF3\\u2F00-\\u2FD5\\u2FF0-\\u2FFB\\u3000-\\u303E change to \\u2E80-\\u303E
      * if the dontCare set includes unassigned characters (for a particular version of Unicode).
      * @param dontCare Set with the don't-care characters for spanning
      * @return the input set, modified
@@ -4854,14 +4883,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Unassigned characters (gc=Cn) are different than in ICU other than in ICU, you MUST call
      * {@code UnicodeProperty.ResetCacheProperties} afterwards. If you then call {@code UnicodeSet.setDefaultXSymbolTable}
      * with null to clear the value, you MUST also call {@code UnicodeProperty.ResetCacheProperties}.
-     * 
+     *
      * @param xSymbolTable the new default symbol table.
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public static void setDefaultXSymbolTable(XSymbolTable xSymbolTable) {
-        INCLUSIONS = null; // If the properties override inclusions, these have to be regenerated. 
+        INCLUSIONS = null; // If the properties override inclusions, these have to be regenerated.
         XSYMBOL_TABLE = xSymbolTable;
     }
 }

@@ -342,6 +342,7 @@ public final class Norm2AllModes {
     }
     private static CacheBase<String, Norm2AllModes, ByteBuffer> cache =
         new SoftCache<String, Norm2AllModes, ByteBuffer>() {
+            @Override
             protected Norm2AllModes createInstance(String key, ByteBuffer bytes) {
                 Normalizer2Impl impl;
                 if(bytes==null) {

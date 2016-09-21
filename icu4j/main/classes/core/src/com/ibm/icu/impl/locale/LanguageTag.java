@@ -114,38 +114,38 @@ public class LanguageTag {
 
     /*
      * BNF in RFC5464
-     *  
+     *
      * Language-Tag  = langtag             ; normal language tags
      *               / privateuse          ; private use tag
      *               / grandfathered       ; grandfathered tags
      *
-     * 
+     *
      * langtag       = language
      *                 ["-" script]
      *                 ["-" region]
      *                 *("-" variant)
      *                 *("-" extension)
      *                 ["-" privateuse]
-     * 
+     *
      * language      = 2*3ALPHA            ; shortest ISO 639 code
      *                 ["-" extlang]       ; sometimes followed by
      *                                     ; extended language subtags
      *               / 4ALPHA              ; or reserved for future use
      *               / 5*8ALPHA            ; or registered language subtag
-     * 
+     *
      * extlang       = 3ALPHA              ; selected ISO 639 codes
      *                 *2("-" 3ALPHA)      ; permanently reserved
-     * 
+     *
      * script        = 4ALPHA              ; ISO 15924 code
-     * 
+     *
      * region        = 2ALPHA              ; ISO 3166-1 code
      *               / 3DIGIT              ; UN M.49 code
-     * 
+     *
      * variant       = 5*8alphanum         ; registered variants
      *               / (DIGIT 3alphanum)
-     * 
+     *
      * extension     = singleton 1*("-" (2*8alphanum))
-     * 
+     *
      *                                     ; Single alphanumerics
      *                                     ; "x" reserved for private use
      * singleton     = DIGIT               ; 0 - 9
@@ -153,9 +153,9 @@ public class LanguageTag {
      *               / %x59-5A             ; Y - Z
      *               / %x61-77             ; a - w
      *               / %x79-7A             ; y - z
-     * 
+     *
      * privateuse    = "x" 1*("-" (1*8alphanum))
-     * 
+     *
      */
     public static LanguageTag parse(String languageTag, ParseStatus sts) {
         if (sts == null) {
@@ -201,7 +201,7 @@ public class LanguageTag {
             if (s.length() == 0) {
                 sts._errorMsg = "Empty subtag";
             } else {
-                sts._errorMsg = "Invalid subtag: " + s; 
+                sts._errorMsg = "Invalid subtag: " + s;
             }
         }
 
@@ -692,6 +692,7 @@ public class LanguageTag {
         return AsciiUtil.toLowerString(s);
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

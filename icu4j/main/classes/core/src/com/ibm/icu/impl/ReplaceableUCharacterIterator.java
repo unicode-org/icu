@@ -26,7 +26,7 @@ import com.ibm.icu.text.UTF16;
 public class ReplaceableUCharacterIterator extends UCharacterIterator {
 
     // public constructor ------------------------------------------------------
-    
+
     /**
      * Public constructor
      * @param replaceable text which the iterator will be based on
@@ -38,7 +38,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         this.replaceable  = replaceable;
         this.currentIndex = 0;
     }
-    
+
     /**
      * Public constructor
      * @param str text which the iterator will be based on
@@ -50,7 +50,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         this.replaceable  = new ReplaceableString(str);
         this.currentIndex = 0;
     }
-    
+
     /**
      * Public constructor
      * @param buf buffer of text on which the iterator will be based
@@ -62,14 +62,15 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         this.replaceable  = new ReplaceableString(buf);
         this.currentIndex = 0;
     }
-    
+
     // public methods ----------------------------------------------------------
-    
+
     /**
-     * Creates a copy of this iterator, does not clone the underlying 
+     * Creates a copy of this iterator, does not clone the underlying
      * <code>Replaceable</code>object
      * @return copy of this iterator
      */
+    @Override
     public Object clone(){
         try {
           return super.clone();
@@ -77,37 +78,39 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
             return null; // never invoked
         }
     }
-    
+
     /**
      * Returns the current UTF16 character.
      * @return current UTF16 character
      */
+    @Override
     public int current(){
         if (currentIndex < replaceable.length()) {
             return replaceable.charAt(currentIndex);
         }
         return DONE;
     }
-    
+
     /**
      * Returns the current codepoint
      * @return current codepoint
      */
+    @Override
     public int currentCodePoint(){
-        // cannot use charAt due to it different 
+        // cannot use charAt due to it different
         // behaviour when index is pointing at a
         // trail surrogate, check for surrogates
-         
+
         int ch = current();
         if(UTF16.isLeadSurrogate((char)ch)){
             // advance the index to get the next code point
             next();
-            // due to post increment semantics current() after next() 
+            // due to post increment semantics current() after next()
             // actually returns the next char which is what we want
             int ch2 = current();
             // current should never change the current index so back off
             previous();
-            
+
             if(UTF16.isTrailSurrogate((char)ch2)){
                 // we found a surrogate pair
                 return Character.toCodePoint((char)ch, (char)ch2);
@@ -115,47 +118,51 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         }
         return ch;
     }
-    
+
     /**
      * Returns the length of the text
      * @return length of the text
      */
+    @Override
     public int getLength(){
         return replaceable.length();
     }
-    
+
     /**
      * Gets the current currentIndex in text.
      * @return current currentIndex in text.
      */
+    @Override
     public int getIndex(){
         return currentIndex;
     }
-        
+
     /**
-     * Returns next UTF16 character and increments the iterator's currentIndex by 1. 
-     * If the resulting currentIndex is greater or equal to the text length, the 
-     * currentIndex is reset to the text length and a value of DONECODEPOINT is 
-     * returned. 
-     * @return next UTF16 character in text or DONE if the new currentIndex is off the 
+     * Returns next UTF16 character and increments the iterator's currentIndex by 1.
+     * If the resulting currentIndex is greater or equal to the text length, the
+     * currentIndex is reset to the text length and a value of DONECODEPOINT is
+     * returned.
+     * @return next UTF16 character in text or DONE if the new currentIndex is off the
      *         end of the text range.
      */
+    @Override
     public int next(){
         if (currentIndex < replaceable.length()) {
             return replaceable.charAt(currentIndex++);
         }
         return DONE;
     }
-    
-                
+
+
     /**
-     * Returns previous UTF16 character and decrements the iterator's currentIndex by 
-     * 1. 
-     * If the resulting currentIndex is less than 0, the currentIndex is reset to 0 and a 
-     * value of DONECODEPOINT is returned. 
-     * @return next UTF16 character in text or DONE if the new currentIndex is off the 
+     * Returns previous UTF16 character and decrements the iterator's currentIndex by
+     * 1.
+     * If the resulting currentIndex is less than 0, the currentIndex is reset to 0 and a
+     * value of DONECODEPOINT is returned.
+     * @return next UTF16 character in text or DONE if the new currentIndex is off the
      *         start of the text range.
      */
+    @Override
     public int previous(){
         if (currentIndex > 0) {
             return replaceable.charAt(--currentIndex);
@@ -164,22 +171,24 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
     }
 
     /**
-     * <p>Sets the currentIndex to the specified currentIndex in the text and returns that 
-     * single UTF16 character at currentIndex. 
+     * <p>Sets the currentIndex to the specified currentIndex in the text and returns that
+     * single UTF16 character at currentIndex.
      * This assumes the text is stored as 16-bit code units.</p>
-     * @param currentIndex the currentIndex within the text. 
-     * @exception IllegalArgumentException is thrown if an invalid currentIndex is 
+     * @param currentIndex the currentIndex within the text.
+     * @exception IllegalArgumentException is thrown if an invalid currentIndex is
      *            supplied. i.e. currentIndex is out of bounds.
-     * @returns the character at the specified currentIndex or DONE if the specified 
+     * @returns the character at the specified currentIndex or DONE if the specified
      *         currentIndex is equal to the end of the text.
      */
+    @Override
     public void setIndex(int currentIndex) throws IndexOutOfBoundsException{
         if (currentIndex < 0 || currentIndex > replaceable.length()) {
             throw new IndexOutOfBoundsException();
         }
         this.currentIndex = currentIndex;
     }
-    
+
+    @Override
     public int getText(char[] fillIn, int offset){
         int length = replaceable.length();
         if(offset < 0 || offset + length > fillIn.length){
@@ -187,10 +196,10 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         }
         replaceable.getChars(0,length,fillIn,offset);
         return length;
-    }       
-        
+    }
+
     // private data members ----------------------------------------------------
-    
+
     /**
      * Replacable object
      */

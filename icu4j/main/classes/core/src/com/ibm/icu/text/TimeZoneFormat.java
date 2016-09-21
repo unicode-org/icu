@@ -60,7 +60,7 @@ import com.ibm.icu.util.ULocale;
  * Unicode Locale Data Markup Language (LDML)</a>. {@link TimeZoneNames} represents the
  * time zone display name data model and this class implements the algorithm for actual
  * formatting and parsing.
- * 
+ *
  * @see SimpleDateFormat
  * @see TimeZoneNames
  * @stable ICU 49
@@ -74,7 +74,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Time zone display format style enum used by format/parse APIs in <code>TimeZoneFormat</code>.
-     * 
+     *
      * @see TimeZoneFormat#format(Style, TimeZone, long)
      * @see TimeZoneFormat#format(Style, TimeZone, long, Output)
      * @see TimeZoneFormat#parse(Style, String, ParsePosition, Output)
@@ -210,7 +210,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         EXEMPLAR_LOCATION (0x0800);
 
         final int flag;
-    
+
         private Style(int flag) {
             this.flag = flag;
         }
@@ -218,7 +218,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Offset pattern type enum.
-     * 
+     *
      * @see TimeZoneFormat#getGMTOffsetPattern(GMTOffsetPatternType)
      * @see TimeZoneFormat#setGMTOffsetPattern(GMTOffsetPatternType, String)
      * @stable ICU 49
@@ -281,7 +281,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Time type enum used for receiving time type (standard time, daylight time or unknown)
      * in <code>TimeZoneFormat</code> APIs.
-     * 
+     *
      * @stable ICU 49
      */
     public enum TimeType {
@@ -318,7 +318,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
          * When parsing a time zone display name in {@link Style#SPECIFIC_SHORT},
          * look for the IANA tz database compatible zone abbreviations in addition
          * to the localized names coming from the {@link TimeZoneNames} currently
-         * used by the {@link TimeZoneFormat}. 
+         * used by the {@link TimeZoneFormat}.
          * @stable ICU 54
          */
         TZ_DATABASE_ABBREVIATIONS;
@@ -372,7 +372,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     private static final String UNKNOWN_LOCATION = "Unknown";
 
     // Order of GMT offset pattern parsing, *_HMS must be evaluated first
-    // because *_HM is most likely a substring of *_HMS 
+    // because *_HM is most likely a substring of *_HMS
     private static final GMTOffsetPatternType[] PARSE_GMT_OFFSET_TYPES = {
         GMTOffsetPatternType.POSITIVE_HMS, GMTOffsetPatternType.NEGATIVE_HMS,
         GMTOffsetPatternType.POSITIVE_HM, GMTOffsetPatternType.NEGATIVE_HM,
@@ -480,7 +480,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <p><b>Note</b>: The instance returned by this method is frozen. If you want to
      * customize a TimeZoneFormat, you must use {@link #cloneAsThawed()} to get a
      * thawed copy first.
-     * 
+     *
      * @param locale the locale.
      * @return a frozen instance of <code>TimeZoneFormat</code> for the given locale.
      * @stable ICU 49
@@ -498,7 +498,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <p><b>Note</b>: The instance returned by this method is frozen. If you want to
      * customize a TimeZoneFormat, you must use {@link #cloneAsThawed()} to get a
      * thawed copy first.
-     * 
+     *
      * @param locale the {@link Locale}.
      * @return a frozen instance of <code>TimeZoneFormat</code> for the given locale.
      * @stable ICU 54
@@ -509,7 +509,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Returns the time zone display name data used by this instance.
-     * 
+     *
      * @return the time zone display name data.
      * @see #setTimeZoneNames(TimeZoneNames)
      * @stable ICU 49
@@ -557,7 +557,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Sets the time zone display name data to this instance.
-     * 
+     *
      * @param tznames the time zone display name data.
      * @return this object.
      * @throws UnsupportedOperationException when this object is frozen.
@@ -576,7 +576,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Returns the localized GMT format pattern.
-     * 
+     *
      * @return the localized GMT format pattern.
      * @see #setGMTPattern(String)
      * @stable ICU 49
@@ -588,7 +588,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Sets the localized GMT format pattern. The pattern must contain
      * a single argument {0}, for example "GMT {0}".
-     * 
+     *
      * @param pattern the localized GMT format pattern string
      * @return this object.
      * @throws IllegalArgumentException when the pattern string does not contain "{0}"
@@ -606,7 +606,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Returns the offset pattern used for localized GMT format.
-     * 
+     *
      * @param type the offset pattern enum
      * @see #setGMTOffsetPattern(GMTOffsetPatternType, String)
      * @stable ICU 49
@@ -617,7 +617,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Sets the offset pattern for the given offset type.
-     * 
+     *
      * @param type the offset pattern.
      * @param pattern the pattern string.
      * @return this object.
@@ -646,7 +646,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Returns the decimal digit characters used for localized GMT format in a single string
      * containing from 0 to 9 in the ascending order.
-     * 
+     *
      * @return the decimal digits for localized GMT format.
      * @see #setGMTOffsetDigits(String)
      * @stable ICU 49
@@ -661,7 +661,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Sets the decimal digit characters used for localized GMT format.
-     * 
+     *
      * @param digits a string contains the decimal digit characters from 0 to 9 n the ascending order.
      * @return this object.
      * @throws IllegalArgumentException when the string did not contain ten characters.
@@ -686,7 +686,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Returns the localized GMT format string for GMT(UTC) itself (GMT offset is 0).
-     * 
+     *
      * @return the localized GMT string string for GMT(UTC) itself.
      * @see #setGMTZeroFormat(String)
      * @stable ICU 49
@@ -697,7 +697,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Sets the localized GMT format string for GMT(UTC) itself (GMT offset is 0).
-     * 
+     *
      * @param gmtZeroFormat the localized GMT format string for GMT(UTC).
      * @return this object.
      * @throws UnsupportedOperationException when this object is frozen.
@@ -723,7 +723,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <p>
      * <b>Note:</b> By default, an instance of <code>TimeZoneFormat</code>
      * created by {#link {@link #getInstance(ULocale)} has no parse options set.
-     * 
+     *
      * @param options the default parse options.
      * @return this object.
      * @see ParseOption
@@ -755,7 +755,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Returns the ISO 8601 basic time zone string for the given offset.
      * For example, "-08", "-0830" and "Z"
-     * 
+     *
      * @param offset the offset from GMT(UTC) in milliseconds.
      * @param useUtcIndicator true if ISO 8601 UTC indicator "Z" is used when the offset is 0.
      * @param isShort true if shortest form is used.
@@ -774,7 +774,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Returns the ISO 8601 extended time zone string for the given offset.
      * For example, "-08:00", "-08:30" and "Z"
-     * 
+     *
      * @param offset the offset from GMT(UTC) in milliseconds.
      * @param useUtcIndicator true if ISO 8601 UTC indicator "Z" is used when the offset is 0.
      * @param isShort true if shortest form is used.
@@ -839,7 +839,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Returns the display name of the time zone at the given date for
      * the style.
-     * 
+     *
      * <p><b>Note</b>: A style may have fallback styles defined. For example,
      * when <code>GENERIC_LONG</code> is requested, but there is no display name
      * data available for <code>GENERIC_LONG</code> style, the implementation
@@ -847,7 +847,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * See UTS#35 UNICODE LOCALE DATA MARKUP LANGUAGE (LDML)
      * <a href="http://www.unicode.org/reports/tr35/#Time_Zone_Fallback">Appendix J: Time Zone Display Name</a>
      * for the details.
-     * 
+     *
      * @param style the style enum (e.g. <code>GENERIC_LONG</code>, <code>LOCALIZED_GMT</code>...)
      * @param tz the time zone.
      * @param date the date.
@@ -866,7 +866,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * in addition to the argument list of {@link #format(Style, TimeZone, long)}.
      * The argument is used for receiving the time type (standard time
      * or daylight saving time, or unknown) actually used for the display name.
-     * 
+     *
      * @param style the style enum (e.g. <code>GENERIC_LONG</code>, <code>LOCALIZED_GMT</code>...)
      * @param tz the time zone.
      * @param date the date.
@@ -1005,7 +1005,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * basic or extended time zone string. When the given string is not an ISO 8601 time
      * zone string, this method sets the current position as the error index
      * to <code>ParsePosition pos</code> and returns 0.
-     * 
+     *
      * @param text the text contains ISO 8601 style time zone string (e.g. "-08", "-0800", "-08:00", and "Z")
      * at the position.
      * @param pos the position.
@@ -1024,7 +1024,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * offset format string. When the given string cannot be parsed, this method
      * sets the current position as the error index to <code>ParsePosition pos</code>
      * and returns 0.
-     * 
+     *
      * @param text the text contains a localized GMT offset string at the position.
      * @param pos the position.
      * @return the offset from GMT(UTC) in milliseconds for the given localized GMT
@@ -1041,7 +1041,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * offset format string. When the given string cannot be parsed, this method
      * sets the current position as the error index to <code>ParsePosition pos</code>
      * and returns 0.
-     * 
+     *
      * @param text the text contains a short localized GMT offset string at the position.
      * @param pos the position.
      * @return the offset from GMT(UTC) in milliseconds for the given short localized GMT
@@ -1056,7 +1056,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Returns a <code>TimeZone</code> by parsing the time zone string according to
      * the parse position, the style and the parse options.
-     * 
+     *
      * @param text the text contains a time zone string at the position.
      * @param style the format style.
      * @param pos the position.
@@ -1513,7 +1513,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <p>
      * <b>Note</b>: This method is equivalent to {@link #parse(Style, String, ParsePosition, EnumSet, Output)
      * parse(style, text, pos, null, timeType)}.
-     * 
+     *
      * @param text the text contains a time zone string at the position.
      * @param style the format style
      * @param pos the position.
@@ -1536,7 +1536,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <p>
      * <b>Note</b>: This method is equivalent to {@link #parse(Style, String, ParsePosition, EnumSet, Output)
      * parse(Style.GENERIC_LOCATION, text, pos, EnumSet.of(ParseOption.ALL_STYLES), timeType)}.
-     * 
+     *
      * @param text the text contains a time zone string at the position.
      * @param pos the position.
      * @return A <code>TimeZone</code>, or null if the input could not be parsed.
@@ -1569,7 +1569,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 49
      */
     @Override
@@ -1600,7 +1600,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 49
      */
     @Override
@@ -1618,7 +1618,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 49
      */
     @Override
@@ -1769,7 +1769,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Private method returning the time zone's specific format string.
-     * 
+     *
      * @param tz the time zone
      * @param stdType the name type used for standard time
      * @param dstType the name type used for daylight time
@@ -1795,7 +1795,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     /**
      * Private method returning the time zone's exemplar location string.
      * This method will never return null.
-     * 
+     *
      * @param tz the time zone
      * @return the time zone's exemplar location name.
      */
@@ -1816,7 +1816,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * Private method returns a time zone ID. If tzID is not null, the value of tzID is returned.
      * If tzID is null, then this method look up a time zone ID for the current region. This is a
      * small helper method used by the parse implementation method
-     * 
+     *
      * @param tzID
      *            the time zone ID or null
      * @param mzID
@@ -1842,7 +1842,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * the locale of this instance. When a generic name is coming from
      * a meta zone, this region is used for checking if the time zone
      * is a reference zone of the meta zone.
-     * 
+     *
      * @return the target region
      */
     private synchronized String getTargetRegion() {
@@ -1883,7 +1883,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * Parses the localized GMT pattern string and initialize
      * localized gmt pattern fields including {{@link #_gmtPatternTokens}.
      * This method must be also called at deserialization time.
-     * 
+     *
      * @param gmtPattern the localized GMT pattern string such as "GMT {0}"
      * @throws IllegalArgumentException when the pattern string does not contain "{0}"
      */
@@ -1900,7 +1900,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Unquotes the message format style pattern.
-     * 
+     *
      * @param s the pattern
      * @return the unquoted pattern string
      */
@@ -1933,7 +1933,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * Initialize localized GMT format offset hour/min/sec patterns.
      * This method parses patterns into optimized run-time format.
      * This method must be called at deserialization time.
-     * 
+     *
      * @param gmtOffsetPatterns patterns, String[4]
      * @throws IllegalArgumentException when patterns are not valid
      */
@@ -2005,7 +2005,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Parse the GMT offset pattern into runtime optimized format
-     * 
+     *
      * @param pattern the offset pattern string
      * @param letters the required pattern letters such as "Hm"
      * @return An array of Object. Each array entry is either String (representing
@@ -2110,7 +2110,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Appends seconds field to the offset pattern with hour/minute
-     * 
+     *
      * @param offsetHM the offset pattern including hours and minutes fields
      * @return the offset pattern including hours, minutes and seconds fields
      */
@@ -2130,7 +2130,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Truncates minutes field from the offset pattern with hour/minute
-     * 
+     *
      * @param offsetHM the offset pattern including hours and minutes fields
      * @return the offset pattern including only hours field
      */
@@ -2155,7 +2155,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * Appends localized digits to the buffer.
      * <p>
      * Note: This code assumes that the input number is 0 - 59
-     * 
+     *
      * @param buf the target buffer
      * @param n the integer number
      * @param minDigits the minimum digits width
@@ -2190,7 +2190,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * offset format string. When the given string cannot be parsed, this method
      * sets the current position as the error index to <code>ParsePosition pos</code>
      * and returns 0.
-     * 
+     *
      * @param text the text contains a localized GMT offset string at the position.
      * @param pos the position.
      * @param isShort true if this parser to try the short format first
@@ -2276,7 +2276,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
                 break;
             }
             idx += len;
-    
+
             // Offset part
             int[] offsetLen = new int[1];
             offset = parseOffsetFields(text, idx, false, offsetLen);
@@ -2285,7 +2285,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
                 break;
             }
             idx += offsetLen[0];
-    
+
             // Suffix part
             len = _gmtPatternSuffix.length();
             if (len > 0 && !text.regionMatches(true, idx, _gmtPatternSuffix, 0, len)) {
@@ -2302,7 +2302,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Parses localized GMT offset fields into offset.
-     * 
+     *
      * @param text the input text
      * @param start the start index
      * @param isShort true if this is a short format - currently not used
@@ -2376,7 +2376,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
     /**
      * Parses localized GMT offset fields with the given pattern
-     * 
+     *
      * @param text the input text
      * @param start the start index
      * @param patternItems the pattern (already itemized)
@@ -2631,7 +2631,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * Reads an offset field value. This method will stop parsing when
      * 1) number of digits reaches <code>maxDigits</code>
      * 2) just before already parsed number exceeds <code>maxVal</code>
-     * 
+     *
      * @param text the text
      * @param start the start offset
      * @param minDigits the minimum number of required digits
@@ -2714,7 +2714,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * Break input String into String[]. Each array element represents
      * a code point. This method is used for parsing localized digit
      * characters and support characters in Unicode supplemental planes.
-     * 
+     *
      * @param str the string
      * @return the array of code points in String[]
      */
@@ -2737,7 +2737,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * (basic format, extended format, or UTC indicator). When the given string is not an ISO 8601 time
      * zone string, this method sets the current position as the error index
      * to <code>ParsePosition pos</code> and returns 0.
-     * 
+     *
      * @param text the text contains ISO 8601 style time zone string (e.g. "-08", "-08:00", "Z")
      * at the position.
      * @param pos the position.
@@ -2805,7 +2805,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <p>
      * Note: This method expects the input position is already at the start of
      * ASCII digits and does not parse sign (+/-).
-     * 
+     *
      * @param text The text contains a sequence of ASCII digits
      * @param pos The parse position
      * @param minFields The minimum Fields to be parsed
@@ -2897,7 +2897,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * <p>
      * Note: This method expects the input position is already at the start of
      * ASCII digits and does not parse sign (+/-).
-     * 
+     *
      * @param text The text
      * @param pos The parse position
      * @param sep The separator character
@@ -3142,7 +3142,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     };
 
     /**
-     * 
+     *
      * @param oos the object output stream
      * @throws IOException
      */
@@ -3161,7 +3161,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
     }
 
     /**
-     * 
+     *
      * @param ois the object input stream
      * @throws ClassNotFoundException
      * @throws IOException
@@ -3256,6 +3256,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public boolean isFrozen() {
         return _frozen;
     }
@@ -3264,6 +3265,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZoneFormat freeze() {
         _frozen = true;
         return this;
@@ -3273,6 +3275,7 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZoneFormat cloneAsThawed() {
         TimeZoneFormat copy = (TimeZoneFormat)super.clone();
         copy._frozen = false;

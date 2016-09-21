@@ -28,31 +28,37 @@ final class NormalizationTransliterator extends Transliterator {
      */
     static void register() {
         Transliterator.registerFactory("Any-NFC", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator("NFC", Normalizer2.getNFCInstance());
             }
         });
         Transliterator.registerFactory("Any-NFD", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator("NFD", Normalizer2.getNFDInstance());
             }
         });
         Transliterator.registerFactory("Any-NFKC", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator("NFKC", Normalizer2.getNFKCInstance());
             }
         });
         Transliterator.registerFactory("Any-NFKD", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator("NFKD", Normalizer2.getNFKDInstance());
             }
         });
         Transliterator.registerFactory("Any-FCD", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator("FCD", Norm2AllModes.getFCDNormalizer2());
             }
         });
         Transliterator.registerFactory("Any-FCC", new Transliterator.Factory() {
+            @Override
             public Transliterator getInstance(String ID) {
                 return new NormalizationTransliterator("FCC", Norm2AllModes.getNFCInstance().fcc);
             }
@@ -74,6 +80,7 @@ final class NormalizationTransliterator extends Transliterator {
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
+    @Override
     protected void handleTransliterate(Replaceable text,
             Position offsets, boolean isIncremental) {
         // start and limit of the input range
@@ -130,16 +137,17 @@ final class NormalizationTransliterator extends Transliterator {
     }
 
     static final Map<Normalizer2, SourceTargetUtility> SOURCE_CACHE = new HashMap<Normalizer2, SourceTargetUtility>();
-    
+
     // TODO Get rid of this if Normalizer2 becomes a Transform
     static class NormalizingTransform implements Transform<String,String> {
         final Normalizer2 norm2;
         public NormalizingTransform(Normalizer2 norm2) {
             this.norm2 = norm2;
         }
+        @Override
         public String transform(String source) {
             return norm2.normalize(source);
-        }   
+        }
     }
 
     /* (non-Javadoc)

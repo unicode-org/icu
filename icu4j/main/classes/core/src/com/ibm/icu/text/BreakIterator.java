@@ -231,6 +231,7 @@ public abstract class BreakIterator implements Cloneable
      * @return The clone.
      * @stable ICU 2.0
      */
+    @Override
     public Object clone()
     {
         try {
@@ -380,52 +381,52 @@ public abstract class BreakIterator implements Cloneable
      */
     public abstract int current();
 
-    
-    /** 
-     * Tag value for "words" that do not fit into any of other categories. 
-     * Includes spaces and most punctuation. 
+
+    /**
+     * Tag value for "words" that do not fit into any of other categories.
+     * Includes spaces and most punctuation.
      * @stable ICU 53
      */
     public static final int WORD_NONE           = 0;
 
     /**
-     * Upper bound for tags for uncategorized words. 
+     * Upper bound for tags for uncategorized words.
      * @stable ICU 53
      */
     public static final int WORD_NONE_LIMIT     = 100;
 
     /**
-     * Tag value for words that appear to be numbers, lower limit. 
+     * Tag value for words that appear to be numbers, lower limit.
      * @stable ICU 53
      */
     public static final int WORD_NUMBER         = 100;
 
-    /** 
+    /**
      * Tag value for words that appear to be numbers, upper limit.
      * @stable ICU 53
      */
     public static final int WORD_NUMBER_LIMIT   = 200;
 
-    /** 
+    /**
      * Tag value for words that contain letters, excluding
-     * hiragana, katakana or ideographic characters, lower limit. 
+     * hiragana, katakana or ideographic characters, lower limit.
      * @stable ICU 53
      */
     public static final int WORD_LETTER         = 200;
 
-    /** 
-     * Tag value for words containing letters, upper limit 
+    /**
+     * Tag value for words containing letters, upper limit
      * @stable ICU 53
      */
     public static final int WORD_LETTER_LIMIT   = 300;
 
-    /** 
+    /**
      * Tag value for words containing kana characters, lower limit
      * @stable ICU 53
      */
     public static final int WORD_KANA           = 300;
 
-    /** 
+    /**
      * Tag value for words containing kana characters, upper limit
      * @stable ICU 53
      */
@@ -764,11 +765,11 @@ s     */
      * {@icu} Registers a new break iterator of the indicated kind, to use in the given
      * locale.  Clones of the iterator will be returned if a request for a break iterator
      * of the given kind matches or falls back to this locale.
-     * 
+     *
      * <p>Because ICU may choose to cache BreakIterator objects internally, this must
      * be called at application startup, prior to any calls to
      * BreakIterator.getInstance to avoid undefined behavior.
-     * 
+     *
      * @param iter the BreakIterator instance to adopt.
      * @param locale the Locale for which this instance is to be registered
      * @param kind the type of iterator for which this instance is to be registered
@@ -783,11 +784,11 @@ s     */
      * {@icu} Registers a new break iterator of the indicated kind, to use in the given
      * locale.  Clones of the iterator will be returned if a request for a break iterator
      * of the given kind matches or falls back to this locale.
-     * 
+     *
      * <p>Because ICU may choose to cache BreakIterator objects internally, this must
      * be called at application startup, prior to any calls to
      * BreakIterator.getInstance to avoid undefined behavior.
-     * 
+     *
      * @param iter the BreakIterator instance to adopt.
      * @param locale the Locale for which this instance is to be registered
      * @param kind the type of iterator for which this instance is to be registered

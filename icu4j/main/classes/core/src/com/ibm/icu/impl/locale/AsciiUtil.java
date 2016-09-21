@@ -168,6 +168,7 @@ public final class AsciiUtil {
             _hash = AsciiUtil.toLowerString(key).hashCode();
         }
 
+        @Override
         public boolean equals(Object o) {
             if (this == o) {
                 return true;
@@ -178,6 +179,7 @@ public final class AsciiUtil {
             return false;
         }
 
+        @Override
         public int hashCode() {
             return _hash;
         }

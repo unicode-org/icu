@@ -69,6 +69,7 @@ public final class UPropertyAliases {
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
+        @Override
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0]==2;
         }
@@ -186,7 +187,7 @@ public final class UPropertyAliases {
         // Find the end of this name.
         int nameStart=nameGroupsIndex;
         while(0!=nameGroups.charAt(nameGroupsIndex)) {
-            ++nameGroupsIndex;            
+            ++nameGroupsIndex;
         }
         if(nameStart==nameGroupsIndex) {
             return null;  // no name (Property[Value]Aliases.txt has "n/a")

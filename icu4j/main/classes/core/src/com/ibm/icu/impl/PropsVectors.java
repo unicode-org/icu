@@ -9,9 +9,9 @@
 
 /**
  * Store bits (Unicode character properties) in bit set vectors.
- * 
+ *
  * This is a port of the C++ class UPropsVectors from ICU4C
- * 
+ *
  * @author Shaopeng Jia
  * @internal
  */
@@ -23,15 +23,15 @@ import java.util.Comparator;
 
 /**
  * Unicode Properties Vectors associated with code point ranges.
- * 
+ *
  * Rows of primitive integers in a contiguous array store the range limits and
  * the properties vectors.
- * 
+ *
  * In each row, row[0] contains the start code point and row[1] contains the
  * limit code point, which is the start of the next range.
- * 
+ *
  * Initially, there is only one range [0..0x110000] with values 0.
- * 
+ *
  * It would be possible to store only one range boundary per row, but
  * self-contained rows allow to later sort them by contents.
  */
@@ -45,10 +45,10 @@ public class PropsVectors {
     private boolean isCompacted;
 
     // internal function to compare elements in v and target. Return true iff
-    // elements in v starting from index1 to index1 + length - 1 
+    // elements in v starting from index1 to index1 + length - 1
     // are exactly the same as elements in target
     // starting from index2 to index2 + length - 1
-    private boolean areElementsSame(int index1, int[] target, int index2, 
+    private boolean areElementsSame(int index1, int[] target, int index2,
             int length) {
         for (int i = 0; i < length; ++i) {
             if (v[index1 + i] != target[index2 + i]) {
@@ -57,7 +57,7 @@ public class PropsVectors {
         }
         return true;
     }
-    
+
     // internal function which given rangeStart, returns
     // index where v[index]<=rangeStart<v[index+1].
     // The returned index is a multiple of columns, and therefore
@@ -165,11 +165,11 @@ public class PropsVectors {
     /*
      * In rows for code points [start..end], select the column, reset the mask
      * bits and set the value bits (ANDed with the mask).
-     * 
+     *
      * @throws IllegalArgumentException
-     * 
+     *
      * @throws IllegalStateException
-     * 
+     *
      * @throws IndexOutOfBoundsException
      */
     public void setValue(int start, int end, int column, int value, int mask) {
@@ -290,7 +290,7 @@ public class PropsVectors {
 
     /*
      * Returns an array which contains value elements
-     * in row rowIndex. 
+     * in row rowIndex.
      *
      * @throws IllegalStateException
      * @throws IllegalArgumentException
@@ -312,9 +312,9 @@ public class PropsVectors {
     /*
      * Returns an int which is the start codepoint
      * in row rowIndex.
-     * 
+     *
      * @throws IllegalStateException
-     * 
+     *
      * @throws IllegalArgumentException
      */
     public int getRowStart(int rowIndex) {
@@ -329,11 +329,11 @@ public class PropsVectors {
     }
 
     /*
-     * Returns an int which is the limit codepoint 
+     * Returns an int which is the limit codepoint
      * minus 1 in row rowIndex.
-     * 
+     *
      * @throws IllegalStateException
-     * 
+     *
      * @throws IllegalArgumentException
      */
     public int getRowEnd(int rowIndex) {
@@ -346,23 +346,23 @@ public class PropsVectors {
         }
         return v[rowIndex * columns + 1] - 1;
     }
-    
+
     /*
      * Compact the vectors:
      * - modify the memory
      * - keep only unique vectors
      * - store them contiguously from the beginning of the memory
-     * - for each (non-unique) row, call the respective function in 
+     * - for each (non-unique) row, call the respective function in
      *   CompactHandler
      *
      * The handler's rowIndex is the index of the row in the compacted
-     * memory block. Therefore, it starts at 0 increases in increments of the 
+     * memory block. Therefore, it starts at 0 increases in increments of the
      * columns value.
      *
      * In a first phase, only special values are delivered (each exactly once).
      * Then CompactHandler::startRealValues() is called
      * where rowIndex is the length of the compacted array.
-     * Then, in the second phase, the CompactHandler::setRowIndexForRange() is 
+     * Then, in the second phase, the CompactHandler::setRowIndexForRange() is
      * called for each row of real values.
      */
     public void compact(CompactHandler compactor) {
@@ -382,6 +382,7 @@ public class PropsVectors {
         }
 
         Arrays.sort(indexArray, new Comparator<Integer>() {
+            @Override
             public int compare(Integer o1, Integer o2) {
                 int indexOfRow1 = o1.intValue();
                 int indexOfRow2 = o2.intValue();
@@ -436,10 +437,10 @@ public class PropsVectors {
         compactor.startRealValues(count);
 
         /*
-         * Move vector contents up to a contiguous array with only unique 
+         * Move vector contents up to a contiguous array with only unique
          * vector values, and call the handler function for each vector.
-         * 
-         * This destroys the Properties Vector structure and replaces it 
+         *
+         * This destroys the Properties Vector structure and replaces it
          * with an array of just vector values.
          */
         int[] temp = new int[count];
@@ -450,7 +451,7 @@ public class PropsVectors {
 
             // count a new values vector if it is different
             // from the current one
-            if (count < 0 || !areElementsSame(indexArray[i].intValue() + 2, 
+            if (count < 0 || !areElementsSame(indexArray[i].intValue() + 2,
                     temp, count, valueColumns)) {
                 count += valueColumns;
                 System.arraycopy(v, indexArray[i].intValue() + 2, temp, count,
@@ -462,7 +463,7 @@ public class PropsVectors {
             }
         }
         v = temp;
-        
+
         // count is at the beginning of the last vector,
         // add one to include that last vector
         rows = count / valueColumns + 1;
@@ -470,7 +471,7 @@ public class PropsVectors {
 
     /*
      * Get the vectors array after calling compact().
-     * 
+     *
      * @throws IllegalStateException
      */
     public int[] getCompactedArray() {
@@ -483,7 +484,7 @@ public class PropsVectors {
 
     /*
      * Get the number of rows for the compacted array.
-     * 
+     *
      * @throws IllegalStateException
      */
     public int getCompactedRows() {
@@ -496,7 +497,7 @@ public class PropsVectors {
 
     /*
      * Get the number of columns for the compacted array.
-     * 
+     *
      * @throws IllegalStateException
      */
     public int getCompactedColumns() {
@@ -520,6 +521,7 @@ public class PropsVectors {
 
     // inner class implementation of Trie.DataManipulate
     private static class DefaultGetFoldingOffset implements Trie.DataManipulate {
+        @Override
         public int getFoldingOffset(int value) {
             return value;
         }
@@ -534,8 +536,9 @@ public class PropsVectors {
             builder = inBuilder;
         }
 
+        @Override
         public int getFoldedValue(int start, int offset) {
-            int initialValue = builder.m_initialValue_; 
+            int initialValue = builder.m_initialValue_;
             int limit = start + 0x400;
             while (start < limit) {
                 boolean[] inBlockZero = new boolean[1];
@@ -551,7 +554,7 @@ public class PropsVectors {
             return 0;
         }
     }
-    
+
     public static interface CompactHandler {
         public void setRowIndexForRange(int start, int end, int rowIndex);
         public void setRowIndexForInitialValue(int rowIndex);

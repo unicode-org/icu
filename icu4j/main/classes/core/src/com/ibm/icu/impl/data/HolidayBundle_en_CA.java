@@ -40,5 +40,6 @@ public class HolidayBundle_en_CA extends ListResourceBundle {
 
         { "Labor Day",  "Labour Day" },
     };
+    @Override
     public synchronized Object[][] getContents() { return fContents; }
 }

@@ -48,5 +48,6 @@ public class HolidayBundle_es extends ListResourceBundle {
         {   "Whit Sunday",              "Pentecost\u00e9s" },
     };
 
+    @Override
     public synchronized Object[][] getContents() { return fContents; }
 }

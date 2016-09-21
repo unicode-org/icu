@@ -150,6 +150,7 @@ final class UConverterAliasDataReader implements ICUBinary.Authenticate {
         return ICUBinary.getInts(byteBuffer, n, 0);
     }
 
+    @Override
     public boolean isDataVersionAcceptable(byte version[])
     {
         return version.length >= DATA_FORMAT_VERSION.length
@@ -157,9 +158,9 @@ final class UConverterAliasDataReader implements ICUBinary.Authenticate {
             && version[1] == DATA_FORMAT_VERSION[1]
             && version[2] == DATA_FORMAT_VERSION[2];
     }
-    
+
     /*byte[] getUnicodeVersion(){
-        return ICUBinary.getVersionByteArrayFromCompactInt(unicodeVersion);    
+        return ICUBinary.getVersionByteArrayFromCompactInt(unicodeVersion);
     }*/
     // private data members -------------------------------------------------
 

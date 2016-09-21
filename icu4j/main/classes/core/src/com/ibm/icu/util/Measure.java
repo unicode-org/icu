@@ -31,7 +31,7 @@ package com.ibm.icu.util;
  * @stable ICU 3.0
  */
 public class Measure {
-    
+
     private final Number number;
     private final MeasureUnit unit;
 
@@ -48,12 +48,13 @@ public class Measure {
         this.number = number;
         this.unit = unit;
     }
-    
+
     /**
      * Returns true if the given object is equal to this object.
      * @return true if this object is equal to the given object
      * @stable ICU 3.0
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -64,7 +65,7 @@ public class Measure {
         Measure m = (Measure) obj;
         return unit.equals(m.unit) && numbersEqual(number, m.number);
     }
-    
+
     /*
      * See if two numbers are identical or have the same double value.
      * @param a A number
@@ -87,6 +88,7 @@ public class Measure {
      * @return a 32-bit hash
      * @stable ICU 3.0
      */
+    @Override
     public int hashCode() {
         return 31 * Double.valueOf(number.doubleValue()).hashCode() + unit.hashCode();
     }
@@ -97,6 +99,7 @@ public class Measure {
      * code together with the numeric amount
      * @stable ICU 3.0
      */
+    @Override
     public String toString() {
         return number.toString() + ' ' + unit.toString();
     }

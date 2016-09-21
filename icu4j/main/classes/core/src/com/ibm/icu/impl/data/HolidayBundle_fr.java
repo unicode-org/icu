@@ -41,5 +41,6 @@ public class HolidayBundle_fr extends ListResourceBundle {
         {   "Victory Day",          "F\u00EAte de la Victoire" },
     };
 
+    @Override
     public synchronized Object[][] getContents() { return fContents; }
 }

@@ -81,15 +81,15 @@ import com.ibm.icu.impl.InvalidFormatException;
  *     -- normal base table with optional extension
  *
  *     int32_t stateTable[countStates][256];
- *    
+ *
  *     struct _MBCSToUFallback { (fallbacks are sorted by offset)
  *         uint32_t offset;
  *         UChar32 codePoint;
  *     } toUFallbacks[countToUFallbacks];
- *    
+ *
  *     uint16_t unicodeCodeUnits[(offsetFromUTable-offsetToUCodeUnits)/2];
  *                  (padded to an even number of units)
- *    
+ *
  *     -- stage 1 tables
  *     if(staticData.unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
  *         -- stage 1 table for all of Unicode
@@ -98,7 +98,7 @@ import com.ibm.icu.impl.InvalidFormatException;
  *         -- BMP-only tables have a smaller stage 1 table
  *         uint16_t fromUTable[0x40]; (32-bit-aligned)
  *     }
- *    
+ *
  *     -- stage 2 tables
  *        length determined by top of stage 1 and bottom of stage 3 tables
  *     if(outputType==MBCS_OUTPUT_1) {
@@ -108,7 +108,7 @@ import com.ibm.icu.impl.InvalidFormatException;
  *         -- DBCS, MBCS, EBCDIC_STATEFUL, ...: roundtrip flags and indexes
  *         uint32_t stage 2 flags and indexes[?];
  *     }
- *    
+ *
  *     -- stage 3 tables with byte results
  *     if(outputType==MBCS_OUTPUT_1) {
  *         -- SBCS: each 16-bit result contains flags and the result byte, see ucnvmbcs.c
@@ -342,7 +342,7 @@ import com.ibm.icu.impl.InvalidFormatException;
  *           the result bytes in fromUBytes[]; (0 indexes fromUBytes[0])
  *       }
  *     }
- *       
+ *
  *   The first pair in a section contains the number of following pairs in the
  *   UChar position (16 bits, number=1..0xffff).
  *   The value of the initial pair is used when the current UChar is not found
@@ -408,6 +408,7 @@ final class UConverterDataReader {
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         // @Override when we switch to Java 6
+        @Override
         public boolean isDataVersionAcceptable(byte formatVersion[]) {
             return formatVersion[0] == 6;
         }

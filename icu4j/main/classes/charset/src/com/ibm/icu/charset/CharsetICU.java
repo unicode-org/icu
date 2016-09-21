@@ -5,7 +5,7 @@
 * Copyright (C) 2006-2016, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
-*/ 
+*/
 
 package com.ibm.icu.charset;
 
@@ -69,7 +69,7 @@ public abstract class CharsetICU extends Charset{
      int options;
 
      float  maxCharsPerByte;
-    
+
      String name; /* +4: 60  internal name of the converter- invariant chars */
 
      int codepage;               /* +64: 4 codepage # (now IBM-$codepage) */
@@ -82,20 +82,20 @@ public abstract class CharsetICU extends Charset{
 
      byte subChar[/*UCNV_MAX_SUBCHAR_LEN*/]; /* +72: 4  [note:  4 and 8 byte boundary] */
      byte subCharLen;              /* +76: 1 */
-    
+
      byte hasToUnicodeFallback;   /* +77: 1 UBool needs to be changed to UBool to be consistent across platform */
      byte hasFromUnicodeFallback; /* +78: 1 */
      short unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
      byte subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
      //byte reserved[/*19*/];           /* +81: 19 to round out the structure */
-     
-     
+
+
     // typedef enum UConverterUnicodeSet {
-     /** 
-      * Parameter that select the set of roundtrippable Unicode code points. 
+     /**
+      * Parameter that select the set of roundtrippable Unicode code points.
       * @stable ICU 4.0
       */
-      public static final int ROUNDTRIP_SET=0; 
+      public static final int ROUNDTRIP_SET=0;
       /**
        * Select the set of Unicode code points with roundtrip or fallback mappings.
        * Not supported at this point.
@@ -106,9 +106,9 @@ public abstract class CharsetICU extends Charset{
       public static final int ROUNDTRIP_AND_FALLBACK_SET =1;
 
     //} UConverterUnicodeSet;
-     
+
     /**
-     * 
+     *
      * @param icuCanonicalName
      * @param canonicalName
      * @param aliases
@@ -121,7 +121,7 @@ public abstract class CharsetICU extends Charset{
         }
         this.icuCanonicalName  = icuCanonicalName;
     }
-    
+
     /**
      * Ascertains if a charset is a sub set of this charset
      * Implements the abstract method of super class.
@@ -129,6 +129,7 @@ public abstract class CharsetICU extends Charset{
      * @return true if the given charset is a subset of this charset
      * @stable ICU 3.6
      */
+    @Override
     public boolean contains(Charset cs){
         if (null == cs) {
             return false;
@@ -152,7 +153,7 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("LMBCS-18",              "com.ibm.icu.charset.CharsetLMBCS");
         algorithmicCharsets.put("LMBCS-19",              "com.ibm.icu.charset.CharsetLMBCS");
         algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
-        algorithmicCharsets.put("SCSU",                  "com.ibm.icu.charset.CharsetSCSU" ); 
+        algorithmicCharsets.put("SCSU",                  "com.ibm.icu.charset.CharsetSCSU" );
         algorithmicCharsets.put("US-ASCII",              "com.ibm.icu.charset.CharsetASCII" );
         algorithmicCharsets.put("ISO-8859-1",            "com.ibm.icu.charset.Charset88591" );
         algorithmicCharsets.put("UTF-16",                "com.ibm.icu.charset.CharsetUTF16" );
@@ -206,7 +207,7 @@ public abstract class CharsetICU extends Charset{
            Class<?>[] paramTypes = new Class<?>[]{ String.class, String.class,  String[].class};
            final Constructor<? extends CharsetICU> c = cs.getConstructor(paramTypes);
            Object[] params = new Object[]{ icuCanonicalName, javaCanonicalName, aliases};
-           
+
            // Run constructor
            try {
                conv = c.newInstance(params);
@@ -222,18 +223,18 @@ public abstract class CharsetICU extends Charset{
            }
        }catch(ClassNotFoundException ex){
        }catch(NoSuchMethodException ex){
-       }catch (IllegalAccessException ex){ 
-       }catch (InstantiationException ex){ 
+       }catch (IllegalAccessException ex){
+       }catch (InstantiationException ex){
        }
-       throw new UnsupportedCharsetException( icuCanonicalName+": "+"Could not load " + className);    
+       throw new UnsupportedCharsetException( icuCanonicalName+": "+"Could not load " + className);
     }
-    
+
     static final boolean isSurrogate(int c){
         return (((c)&0xfffff800)==0xd800);
     }
-    
+
     /*
-     * Returns the default charset name 
+     * Returns the default charset name
      */
 //    static final String getDefaultCharsetName(){
 //        String defaultEncoding = new InputStreamReader(new ByteArrayInputStream(new byte[0])).getEncoding();
@@ -246,7 +247,7 @@ public abstract class CharsetICU extends Charset{
      * available.  If the ICU charset provider does not support
      * the specified charset, then try other charset providers
      * including the standard Java charset provider.
-     * 
+     *
      * @param charsetName The name of the requested charset,
      * may be either a canonical name or an alias
      * @return A charset object for the named charset
@@ -281,11 +282,11 @@ public abstract class CharsetICU extends Charset{
      * This follows ucnv.c method ucnv_detectUnicodeSignature() to detect the
      * start of the stream for example U+FEFF (the Unicode BOM/signature
      * character) that can be ignored.
-     * 
+     *
      * Detects Unicode signature byte sequences at the start of the byte stream
      * and returns number of bytes of the BOM of the indicated Unicode charset.
      * 0 is returned when no Unicode signature is recognized.
-     * 
+     *
      */
     // TODO This should be proposed as CharsetDecoderICU API.
 //    static String detectUnicodeSignature(ByteBuffer source) {
@@ -373,17 +374,17 @@ public abstract class CharsetICU extends Charset{
 //        /* no known Unicode signature byte sequence recognized */
 //        return null;
 //    }
-    
-    
+
+
     abstract void getUnicodeSetImpl(UnicodeSet setFillIn, int which);
-    
+
     /**
     * Returns the set of Unicode code points that can be converted by an ICU Converter.
     *
     * <p>The current implementation returns only one kind of set (UCNV_ROUNDTRIP_SET): The set of all Unicode code points that can be
-    * roundtrip-converted (converted without any data loss) with the converter This set will not include code points that have fallback 
+    * roundtrip-converted (converted without any data loss) with the converter This set will not include code points that have fallback
     * mappings or are only the result of reverse fallback mappings.  See UTR #22 "Character Mapping Markup Language" at  <a href="http://www.unicode.org/reports/tr22/">http://www.unicode.org/reports/tr22/</a>
-    * 
+    *
     * <p>In the future, there may be more UConverterUnicodeSet choices to select sets with different properties.
     *
     * <p>This is useful for example for
@@ -393,10 +394,10 @@ public abstract class CharsetICU extends Charset{
     *   by comparing its roundtrip set with the set of ExemplarCharacters from
     *   ICU's locale data or other sources</li></ul>
     *
-    * @param setFillIn A valid UnicodeSet. It will be cleared by this function before 
+    * @param setFillIn A valid UnicodeSet. It will be cleared by this function before
     *                   the converter's specific set is filled in.
     * @param which A selector; currently ROUNDTRIP_SET is the only supported value.
-    * @throws IllegalArgumentException if the parameters does not match.              
+    * @throws IllegalArgumentException if the parameters does not match.
     * @stable ICU 4.0
     */
        public void getUnicodeSet(UnicodeSet setFillIn, int which){
@@ -406,7 +407,7 @@ public abstract class CharsetICU extends Charset{
            setFillIn.clear();
            getUnicodeSetImpl(setFillIn, which);
        }
-       
+
        /**
         * Returns whether or not the charset of the converter has a fixed number of bytes
         * per charset character.
@@ -422,21 +423,21 @@ public abstract class CharsetICU extends Charset{
            if (this instanceof CharsetASCII || this instanceof CharsetUTF32) {
                return true;
            }
-           
+
            if (this instanceof CharsetMBCS) {
                if (((CharsetMBCS)this).sharedData.staticData.maxBytesPerChar == ((CharsetMBCS)this).sharedData.staticData.minBytesPerChar) {
                    return true;
                }
            }
-           
+
            return false;
        }
-      
+
        static void getNonSurrogateUnicodeSet(UnicodeSet setFillIn){
            setFillIn.add(0, 0xd7ff);
            setFillIn.add(0xe000, 0x10ffff);
        }
-       
+
        static void getCompleteUnicodeSet(UnicodeSet setFillIn){
            setFillIn.add(0, 0x10ffff);
        }

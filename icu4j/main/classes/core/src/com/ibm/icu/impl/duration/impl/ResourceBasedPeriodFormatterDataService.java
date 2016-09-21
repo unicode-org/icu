@@ -82,6 +82,7 @@ public class ResourceBasedPeriodFormatterDataService extends
         availableLocales = Collections.unmodifiableList(localeNames);
     }
 
+    @Override
     public PeriodFormatterData get(String localeName) {
         // remove tag info including calendar, we don't use the calendar
         int x = localeName.indexOf('@');
@@ -152,6 +153,7 @@ public class ResourceBasedPeriodFormatterDataService extends
         }
     }
 
+    @Override
     public Collection<String> getAvailableLocales() {
         return availableLocales;
     }

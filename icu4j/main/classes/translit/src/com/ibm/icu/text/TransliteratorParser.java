@@ -79,7 +79,7 @@ class TransliteratorParser {
 
     /**
      * Vector of StringMatcher objects for segments.  Used during the
-     * parsing of a single rule.  
+     * parsing of a single rule.
      * segmentStandins.charAt(0) is the standin for "$1" and corresponds
      * to StringMatcher object segmentObjects.elementAt(0), etc.
      */
@@ -179,7 +179,7 @@ class TransliteratorParser {
     private static final char ALT_FORWARD_RULE_OP = '\u2192'; // Right Arrow
     private static final char ALT_FWDREV_RULE_OP  = '\u2194'; // Left Right Arrow
     private static final char ALT_FUNCTION        = '\u2206'; // Increment (~Greek Capital Delta)
-    
+
     // Special characters disallowed at the top level
     private static UnicodeSet ILLEGAL_TOP = new UnicodeSet("[\\)]");
 
@@ -204,6 +204,7 @@ class TransliteratorParser {
         /**
          * Implement SymbolTable API.
          */
+        @Override
         public char[] lookup(String name) {
             return variableNames.get(name);
         }
@@ -211,6 +212,7 @@ class TransliteratorParser {
         /**
          * Implement SymbolTable API.
          */
+        @Override
         public UnicodeMatcher lookupMatcher(int ch) {
             // Note that we cannot use data.lookup() because the
             // set array has not been constructed yet.
@@ -225,6 +227,7 @@ class TransliteratorParser {
          * Implement SymbolTable API.  Parse out a symbol reference
          * name.
          */
+        @Override
         public String parseReference(String text, ParsePosition pos, int limit) {
             int start = pos.getIndex();
             int i = start;
@@ -329,9 +332,11 @@ class TransliteratorParser {
         String[] array;
         int i;
         public RuleArray(String[] array) { this.array = array; i = 0; }
+        @Override
         public String handleNextLine() {
             return (i < array.length) ? array[i++] : null;
         }
+        @Override
         public void reset() {
             i = 0;
         }
@@ -480,7 +485,7 @@ class TransliteratorParser {
                     }
                     pp.setIndex(pos-1); // Backup to opening '['
                     buf.append(parser.parseSet(rule, pp));
-                    pos = pp.getIndex();                    
+                    pos = pp.getIndex();
                     continue;
                 }
                 // Handle escapes
@@ -527,7 +532,7 @@ class TransliteratorParser {
                             }
                         }
                         quoteLimit = buf.length();
-                        
+
                         for (iq=quoteStart; iq<quoteLimit; ++iq) {
                             parser.checkVariableRange(buf.charAt(iq), rule, start);
                         }
@@ -542,7 +547,7 @@ class TransliteratorParser {
                 }
 
                 switch (c) {
-                    
+
                 //------------------------------------------------------
                 // Elements allowed within and out of segments
                 //------------------------------------------------------
@@ -689,7 +694,7 @@ class TransliteratorParser {
                             break;
                         }
                         ///CLOVER:ON
- 
+
                         int qstart, qlimit;
                         // The */+ follows an isolated character or quote
                         // or variable reference
@@ -715,9 +720,8 @@ class TransliteratorParser {
                         } catch (RuntimeException e) {
                             final String precontext = pos < 50 ? rule.substring(0, pos) : "..." + rule.substring(pos - 50, pos);
                             final String postContext = limit-pos <= 50 ? rule.substring(pos, limit) : rule.substring(pos, pos+50) + "...";
-                            throw (RuntimeException)
-                                new IllegalIcuArgumentException("Failure in rule: " + precontext + "$$$"
-                                        + postContext).initCause(e);
+                            throw new IllegalIcuArgumentException("Failure in rule: " + precontext + "$$$"
+                                    + postContext).initCause(e);
                         }
                         int min = 0;
                         int max = Quantifier.MAX;
@@ -868,7 +872,7 @@ class TransliteratorParser {
     public void parse(String rules, int dir) {
         parseRules(new RuleArray(new String[] { rules }), dir);
     }
-   
+
     /*
      * Parse a set of rules.  After the parse completes, examine the public
      * data members for results.
@@ -1310,7 +1314,7 @@ class TransliteratorParser {
         if (start > end || start < 0 || end > 0xFFFF) {
             throw new IllegalIcuArgumentException("Invalid variable range " + start + ", " + end);
         }
-        
+
         curData.variablesBase = (char) start; // first private use
 
         if (dataVector.size() == 0) {
@@ -1385,7 +1389,7 @@ class TransliteratorParser {
         // know that pos points to /use\s/i; we can skip 4 characters
         // immediately
         pos += 4;
-        
+
         // Here are the pragmas we recognize:
         // use variable range 0xE000 0xEFFF;
         // use maximum backup 16;
@@ -1497,7 +1501,7 @@ class TransliteratorParser {
         }
         return c;
     }
-    
+
     /**
      * Set the object for segment seg (1-based).
      */

@@ -333,28 +333,21 @@ public final class LocaleData {
          * otherwise known as Metric system.
          * @stable ICU 2.8
          */
-        public static final MeasurementSystem SI = new MeasurementSystem(0);
+        public static final MeasurementSystem SI = new MeasurementSystem();
 
         /**
          * Measurement system followed in the United States of America.
          * @stable ICU 2.8
          */
-        public static final MeasurementSystem US = new MeasurementSystem(1);
+        public static final MeasurementSystem US = new MeasurementSystem();
 
         /**
          * Mix of metric and imperial units used in Great Britain.
          * @stable ICU 55
          */
-        public static final MeasurementSystem UK = new MeasurementSystem(2);
+        public static final MeasurementSystem UK = new MeasurementSystem();
 
-        private int systemID;
-        private MeasurementSystem(int id){
-            systemID = id;
-        }
-
-        private boolean equals(int id){
-            return systemID == id;
-        }
+        private MeasurementSystem() {}
     }
 
     /**
@@ -367,19 +360,15 @@ public final class LocaleData {
     public static final MeasurementSystem getMeasurementSystem(ULocale locale){
         UResourceBundle sysBundle = measurementTypeBundleForLocale(locale, MEASUREMENT_SYSTEM);
 
-        int system = sysBundle.getInt();
-        if(MeasurementSystem.US.equals(system)){
-            return MeasurementSystem.US;
+        switch (sysBundle.getInt()) {
+        case 0: return MeasurementSystem.SI;
+        case 1: return MeasurementSystem.US;
+        case 2: return MeasurementSystem.UK;
+        default:
+            // return null if the object is null or is not an instance
+            // of integer indicating an error
+            return null;
         }
-        if(MeasurementSystem.UK.equals(system)){
-            return MeasurementSystem.UK;
-        }
-        if(MeasurementSystem.SI.equals(system)){
-            return MeasurementSystem.SI;
-        }
-        // return null if the object is null or is not an instance
-        // of integer indicating an error
-        return null;
     }
 
     /**

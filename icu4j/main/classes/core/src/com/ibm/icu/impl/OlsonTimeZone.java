@@ -45,52 +45,52 @@ import com.ibm.icu.util.UResourceBundle;
  *
  *   a. Zone (table).  A zone is a table resource contains several
  *   type of resources below:
- *  
+ *
  *   - typeOffsets:intvector (Required)
- *  
+ *
  *   Sets of UTC raw/dst offset pairs in seconds.  Entries at
  *   2n represents raw offset and 2n+1 represents dst offset
  *   paired with the raw offset at 2n.  The very first pair represents
  *   the initial zone offset (before the first transition) always.
  *
- *   - trans:intvector (Optional) 
- *  
+ *   - trans:intvector (Optional)
+ *
  *   List of transition times represented by 32bit seconds from the
  *   epoch (1970-01-01T00:00Z) in ascending order.
- *  
+ *
  *   - transPre32/transPost32:intvector (Optional)
- *  
+ *
  *   List of transition times before/after 32bit minimum seconds.
  *   Each time is represented by a pair of 32bit integer.
- * 
+ *
  *   - typeMap:bin (Optional)
- *  
+ *
  *   Array of bytes representing the mapping between each transition
  *   time (transPre32/trans/transPost32) and its corresponding offset
  *   data (typeOffsets).
- *  
+ *
  *   - finalRule:string (Optional)
- *  
+ *
  *   If a recurrent transition rule is applicable to a zone forever
  *   after the final transition time, finalRule represents the rule
  *   in Rules data.
- *  
+ *
  *   - finalRaw:int (Optional)
- *   
+ *
  *   When finalRule is available, finalRaw is required and specifies
  *   the raw (base) offset of the rule.
- *   
+ *
  *   - finalYear:int (Optional)
- *   
+ *
  *   When finalRule is available, finalYear is required and specifies
  *   the start year of the rule.
- *   
+ *
  *   - links:intvector (Optional)
- *   
+ *
  *   When this zone data is shared with other zones, links specifies
  *   all zones including the zone itself.  Each zone is referenced by
  *   integer index.
- * 
+ *
  *  b. Link (int, length 1).  A link zone is an int resource.  The
  *  integer is the zone number of the target zone.  The key of this
  *  resource is an alternate name for the target zone.  This data
@@ -317,8 +317,8 @@ public class OlsonTimeZone extends BasicTimeZone {
         int[] fields = Grego.timeToFields(current, null);
 
         // Find start of this year, and start of next year
-        long start = Grego.fieldsToDay(fields[0], 0, 1) * SECONDS_PER_DAY;    
-        long limit = Grego.fieldsToDay(fields[0] + 1, 0, 1) * SECONDS_PER_DAY;    
+        long start = Grego.fieldsToDay(fields[0], 0, 1) * SECONDS_PER_DAY;
+        long limit = Grego.fieldsToDay(fields[0] + 1, 0, 1) * SECONDS_PER_DAY;
 
         // Return TRUE if DST is observed at any time during the current
         // year.
@@ -485,7 +485,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     }
 
     private void construct(UResourceBundle top, UResourceBundle res){
-        
+
         if ((top == null || res == null)) {
             throw new IllegalArgumentException();
         }
@@ -537,21 +537,21 @@ public class OlsonTimeZone extends BasicTimeZone {
             int idx = 0;
             if (transPre32 != null) {
                 for (int i = 0; i < transPre32.length / 2; i++, idx++) {
-                    transitionTimes64[idx] = 
-                        (((long)transPre32[i * 2]) & 0x00000000FFFFFFFFL) << 32
-                        | (((long)transPre32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
+                    transitionTimes64[idx] =
+                        ((transPre32[i * 2]) & 0x00000000FFFFFFFFL) << 32
+                        | ((transPre32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
                 }
             }
             if (trans32 != null) {
                 for (int i = 0; i < trans32.length; i++, idx++) {
-                    transitionTimes64[idx] = (long)trans32[i];
+                    transitionTimes64[idx] = trans32[i];
                 }
             }
             if (transPost32 != null) {
                 for (int i = 0; i < transPost32.length / 2; i++, idx++) {
-                    transitionTimes64[idx] = 
-                        (((long)transPost32[i * 2]) & 0x00000000FFFFFFFFL) << 32
-                        | (((long)transPost32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
+                    transitionTimes64[idx] =
+                        ((transPost32[i * 2]) & 0x00000000FFFFFFFFL) << 32
+                        | ((transPost32[i * 2 + 1]) & 0x00000000FFFFFFFFL);
                 }
             }
         } else {
@@ -607,7 +607,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             finalStartYear = r.getInt();
 
             // Note: Setting finalStartYear to the finalZone is problematic.  When a date is around
-            // year boundary, SimpleTimeZone may return false result when DST is observed at the 
+            // year boundary, SimpleTimeZone may return false result when DST is observed at the
             // beginning of year.  We could apply safe margin (day or two), but when one of recurrent
             // rules falls around year boundary, it could return false result.  Without setting the
             // start year, finalZone works fine around the year boundary of the start year.
@@ -747,7 +747,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     }
 
     private int getInt(byte val){
-        return val & 0xFF; 
+        return val & 0xFF;
     }
 
     /*
@@ -827,7 +827,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         buf.append(",finalStartMillis=" + finalStartMillis);
         buf.append(",finalZone=" + finalZone);
         buf.append(']');
-        
+
         return buf.toString();
     }
 
@@ -874,7 +874,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      * If and only if finalYear == INT32_MAX then finalZone == 0.
      */
     private SimpleTimeZone finalZone = null; // owned, may be NULL
- 
+
     /**
      * The canonical ID of this zone. Initialized when {@link #getCanonicalID()}
      * is invoked first time, or {@link #setID(String)} is called.
@@ -885,7 +885,7 @@ public class OlsonTimeZone extends BasicTimeZone {
 
     private static final boolean DEBUG = ICUDebug.enabled("olson");
     private static final int SECONDS_PER_DAY = 24*60*60;
-    
+
     private static UResourceBundle loadRule(UResourceBundle top, String ruleid) {
         UResourceBundle r = top.get("Rules");
         r = r.get(ruleid);
@@ -919,9 +919,9 @@ public class OlsonTimeZone extends BasicTimeZone {
     public int hashCode(){
         int ret =   (int)  (finalStartYear ^ (finalStartYear>>>4) +
                    transitionCount ^ (transitionCount>>>6) +
-                   typeCount ^ (typeCount>>>8) + 
+                   typeCount ^ (typeCount>>>8) +
                    Double.doubleToLongBits(finalStartMillis)+
-                   (finalZone == null ? 0 : finalZone.hashCode()) + 
+                   (finalZone == null ? 0 : finalZone.hashCode()) +
                    super.hashCode());
         if (transitionTimes64 != null) {
             for(int i=0; i<transitionTimes64.length; i++){
@@ -934,7 +934,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         if (typeMapData != null) {
             for(int i=0; i<typeMapData.length; i++){
                 ret+=typeMapData[i] & 0xFF;
-            } 
+            }
         }
         return ret;
     }
@@ -1010,7 +1010,7 @@ public class OlsonTimeZone extends BasicTimeZone {
                     return finalZoneWithStartYear.getPreviousTransition(base, inclusive);
                 } else {
                     return firstFinalTZTransition;
-                }                
+                }
             }
         }
 
@@ -1091,7 +1091,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             } else {
                 // Create a TimeArrayTimeZoneRule at finalMillis
                 rules[idx++] = new TimeArrayTimeZoneRule(getID() + "(STD)", finalZone.getRawOffset(), 0,
-                        new long[] {(long)finalStartMillis}, DateTimeRule.UTC_TIME);                
+                        new long[] {(long)finalStartMillis}, DateTimeRule.UTC_TIME);
             }
         }
         return rules;
@@ -1175,7 +1175,7 @@ public class OlsonTimeZone extends BasicTimeZone {
                 typeIdx = getInt(typeMapData[firstTZTransitionIdx]);
                 firstTZTransition = new TimeZoneTransition(transitionTimes64[firstTZTransitionIdx] * Grego.MILLIS_PER_SECOND,
                         initialRule, historicRules[typeIdx]);
-                
+
             }
         }
 
@@ -1268,6 +1268,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#isFrozen()
      */
+    @Override
     public boolean isFrozen() {
         return isFrozen;
     }
@@ -1275,6 +1276,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#freeze()
      */
+    @Override
     public TimeZone freeze() {
         isFrozen = true;
         return this;
@@ -1283,6 +1285,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     /* (non-Javadoc)
      * @see com.ibm.icu.util.TimeZone#cloneAsThawed()
      */
+    @Override
     public TimeZone cloneAsThawed() {
         OlsonTimeZone tz = (OlsonTimeZone)super.cloneAsThawed();
         if (finalZone != null) {

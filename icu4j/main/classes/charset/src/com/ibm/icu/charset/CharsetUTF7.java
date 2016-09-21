@@ -25,20 +25,20 @@ class CharsetUTF7 extends CharsetICU {
     private final static String IMAP_NAME="IMAP-mailbox-name";
     private boolean useIMAP;
     protected byte[] fromUSubstitution=new byte[]{0x3F};
-   
+
     public CharsetUTF7(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
         maxBytesPerChar=4; /* max 3 bytes per code unit from UTF-7 (base64) */
         minBytesPerChar=1;
         maxCharsPerByte=1;
-        
+
         useIMAP=false;
-        
+
         if (icuCanonicalName.equals(IMAP_NAME)) {
             useIMAP=true;
         }
     }
-    
+
     //private static boolean inSetD(char c) {
     //    return (
     //            (char)(c - 97) < 26 || (char)(c - 65) < 26 || /* letters */
@@ -48,7 +48,7 @@ class CharsetUTF7 extends CharsetICU {
     //            (c==58) || (c==63)            /* :? */
     //            );
     //}
-    
+
     //private static boolean inSetO(char c) {
     //    return (
     //            (char)(c - 33) < 6 ||                           /* !"#$%& */
@@ -58,19 +58,19 @@ class CharsetUTF7 extends CharsetICU {
     //            (c==58) || (c==63)             /* *@[ */
     //            );
     //}
-    
+
     private static boolean isCRLFTAB(char c) {
         return (
                 (c==13) || (c==10) || (c==9)
                 );
     }
-    
+
     //private static boolean isCRLFSPTAB(char c) {
     //   return (
     //            (c==32) || (c==13) || (c==10) || (c==9)
     //            );
     //}
-    
+
     private static final byte PLUS=43;
     private static final byte MINUS=45;
     private static final byte BACKSLASH=92;
@@ -78,7 +78,7 @@ class CharsetUTF7 extends CharsetICU {
     private static final byte AMPERSAND=0x26;
     private static final byte COMMA=0x2c;
     private static final byte SLASH=0x2f;
-    
+
     // legal byte values: all US-ASCII graphic characters 0x20..0x7e
     private static boolean isLegal(char c, boolean useIMAP) {
         if (useIMAP) {
@@ -91,56 +91,56 @@ class CharsetUTF7 extends CharsetICU {
                     );
         }
     }
-    
+
     // directly encode all of printable ASCII 0x20..0x7e except '&' 0x26
     private static boolean inSetDIMAP(char c) {
         return (
                 (isLegal(c, true) && c != AMPERSAND)
                 );
     }
-    
+
     private static byte TO_BASE64_IMAP(int n) {
         return (n < 63 ? TO_BASE_64[n] : COMMA);
     }
-    
+
     private static byte FROM_BASE64_IMAP(char c) {
         return (c==COMMA ? 63 : c==SLASH ? -1 : FROM_BASE_64[c]);
     }
-    
+
     /* encode directly sets D and O and CR LF SP TAB */
     private static final byte ENCODE_DIRECTLY_MAXIMUM[] =
     {
      /*0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f*/
         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        
+
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        
+
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
-        
+
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0
     };
-    
+
     /* encode directly set D and CR LF SP TAB but not set O */
     private static final byte ENCODE_DIRECTLY_RESTRICTED[] =
     {
      /*0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f*/
         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        
+
         1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
-        
+
         0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 
-        
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+
         0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
     };
-    
+
     private static final byte TO_BASE_64[] =
     {
        /* A-Z */
@@ -154,7 +154,7 @@ class CharsetUTF7 extends CharsetICU {
        /* +/ */
        43, 47
     };
-    
+
     private static final byte FROM_BASE_64[] =
     {
        /* C0 controls, -1 for legal ones (CR LF TAB), -3 for illegal ones */
@@ -166,24 +166,26 @@ class CharsetUTF7 extends CharsetICU {
        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1,
        /* A-Z */
        -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-       15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -3, -1, -1, -1,       
+       15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -3, -1, -1, -1,
        /* a-z*/
        -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -3, -3
     };
-    
+
     class CharsetDecoderUTF7 extends CharsetDecoderICU {
         public CharsetDecoderUTF7(CharsetICU cs) {
             super(cs);
             implReset();
         }
-    
+
+        @Override
         protected void implReset() {
             super.implReset();
             toUnicodeStatus=(toUnicodeStatus & 0xf0000000) | 0x1000000;
         }
-        
-        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) { 
+
+        @Override
+        protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult cr=CoderResult.UNDERFLOW;
             byte base64Value;
             byte base64Counter;
@@ -191,14 +193,14 @@ class CharsetUTF7 extends CharsetICU {
             char bits;
             int byteIndex;
             int sourceIndex, nextSourceIndex;
-            
+
             int length;
-            
+
             char b;
             char c;
-            
+
             int sourceArrayIndex=source.position();
-            
+
             //get the state of the machine state
             {
             int status=toUnicodeStatus;
@@ -209,23 +211,23 @@ class CharsetUTF7 extends CharsetICU {
             byteIndex=toULength;
             /* sourceIndex=-1 if the current character began in the previous buffer */
             sourceIndex=byteIndex==0 ? 0 : -1;
-            nextSourceIndex=0;            
-            
+            nextSourceIndex=0;
+
             directMode:  while (true) {
                 if (inDirectMode==1) {
-                    /* 
+                    /*
                      * In Direct Mode, most US-ASCII characters are encoded directly, i.e.,
                      * with their US-ASCII byte values.
                      * Backslash and Tilde and most control characters are not alled in UTF-7.
                      * A plus sign starts Unicode (or "escape") Mode.
                      * An ampersand starts Unicode Mode for IMAP.
-                     * 
+                     *
                      * In Direct Mode, only the sourceIndex is used.
                      */
                     byteIndex=0;
                     length=source.remaining();
                     //targetCapacity=target.remaining();
-                    //Commented out because length of source may be larger than target when it comes to bytes 
+                    //Commented out because length of source may be larger than target when it comes to bytes
                     /*if (useIMAP && length > targetCapacity) {
                         length=targetCapacity;
                     }*/
@@ -266,11 +268,11 @@ class CharsetUTF7 extends CharsetICU {
                     }
                     break directMode;
                 } else { /* Unicode Mode*/
-                    /* 
+                    /*
                      * In Unicode Mode, UTF-16BE is base64-encoded.
                      * The base64 sequence ends with any character that is not in the base64 alphabet.
                      * A terminating minus sign is consumed.
-                     * 
+                     *
                      * In Unicode Mode, the sourceIndex has the index to the start of the current
                      * base64 bytes, while nextSourceIndex is precisely parallel to source,
                      * keeping the index to the following byte.
@@ -296,7 +298,7 @@ class CharsetUTF7 extends CharsetICU {
                                  * 2.2.2. Else if the current char is illegal, we might as well deal with it here.
                                  */
                                 inDirectMode=1;
-                                
+
                                 if(base64Counter==-1) {
                                     /* illegal: + immediately followed by something other than base64 or minus sign */
                                     /* include the plus sign in the reported sequence, but not the subsequent char */
@@ -396,9 +398,9 @@ class CharsetUTF7 extends CharsetICU {
                                     bits=0;
                                     base64Counter=0;
                                     break;
-                                //default:                  
+                                //default:
                                     /* will never occur */
-                                    //break;                                                           
+                                    //break;
                                 }//end of switch
                             } else if (!useIMAP || (useIMAP && base64Value==-2)) {
                                 /* minus sign terminates the base64 sequence */
@@ -419,7 +421,7 @@ class CharsetUTF7 extends CharsetICU {
                                 }
                                 sourceIndex=nextSourceIndex;
                                 continue directMode;
-                            } else if (useIMAP) { 
+                            } else if (useIMAP) {
                                 if (base64Counter==-1) {
                                     // illegal: & immediately followed by something other than base64 or minus sign
                                     // include the ampersand in the reported sequence
@@ -455,13 +457,13 @@ class CharsetUTF7 extends CharsetICU {
                     inDirectMode=1;
                     cr=CoderResult.malformedForLength(sourceIndex);
                 }
-                
+
             } else {
                 if (!cr.isError() && flush && !source.hasRemaining() && bits  ==0) {
                     /*
                      * if we are in Unicode Mode, then the byteIndex might not be 0,
                      * but that is ok if bits -- 0
-                     * -> we set byteIndex=0 at the end of the stream to avoid a truncated error 
+                     * -> we set byteIndex=0 at the end of the stream to avoid a truncated error
                      * (not true for IMAP-mailbox-name where we must end in direct mode)
                      */
                     if (!cr.isOverflow()) {
@@ -470,32 +472,34 @@ class CharsetUTF7 extends CharsetICU {
                 }
             }
             /* set the converter state */
-            toUnicodeStatus=(inDirectMode<<24 | (((short)base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | (int)bits);
+            toUnicodeStatus=(inDirectMode<<24 | ((base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | bits);
             toULength=byteIndex;
-   
+
             return cr;
         }
     }
-    
+
     class CharsetEncoderUTF7 extends CharsetEncoderICU {
         public CharsetEncoderUTF7(CharsetICU cs) {
             super(cs, fromUSubstitution);
             implReset();
         }
-        
+
+        @Override
         protected void implReset() {
             super.implReset();
             fromUnicodeStatus=(fromUnicodeStatus & 0xf0000000) | 0x1000000;
         }
-        
+
+        @Override
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult cr=CoderResult.UNDERFLOW;
             byte inDirectMode;
             byte encodeDirectly[];
             int status;
-            
+
             int length, targetCapacity, sourceIndex;
-            
+
             byte base64Counter;
             char bits;
             char c;
@@ -510,7 +514,7 @@ class CharsetUTF7 extends CharsetICU {
             }
             /* UTF-7 always encodes UTF-16 code units, therefore we need only a simple sourceIndex */
             sourceIndex=0;
-            
+
             directMode: while(true) {
             if(inDirectMode==1) {
                 length=source.remaining();
@@ -567,7 +571,7 @@ class CharsetUTF7 extends CharsetICU {
                     cr=CoderResult.OVERFLOW;
                 }
                 break directMode;
-            } else { 
+            } else {
                 /* Unicode Mode */
                 while (source.hasRemaining()) {
                     if (target.hasRemaining()) {
@@ -575,10 +579,10 @@ class CharsetUTF7 extends CharsetICU {
                         if ((!useIMAP && c<=127 && encodeDirectly[c]==1) || (useIMAP && isLegal(c, useIMAP))) {
                             /* encode directly */
                             inDirectMode=1;
-                            
+
                             /* trick: back out this character to make this easier */
                             source.position(source.position() - 1);
-                            
+
                             /* terminate the base64 sequence */
                             if (base64Counter!=0) {
                                 /* write remaining bits for the previous character */
@@ -607,7 +611,7 @@ class CharsetUTF7 extends CharsetICU {
                              * base64 this character:
                              * Output 2 or 3 base64 bytres for the remaining bits of the previous character
                              * and the bits of this character, each implicitly in UTF-16BE.
-                             * 
+                             *
                              * Here, bits is an 8-bit variable because only 6 bits need to be kept from one
                              * character to the next.  The actual 2 or 4 bits are shifted to the left edge
                              * of the 6-bits filed 5..0 to make the termination of the base64 sequence easier.
@@ -714,8 +718,8 @@ class CharsetUTF7 extends CharsetICU {
                            //default:
                                /* will never occur */
                                //break;
-                           } //end of switch 
-                        }                      
+                           } //end of switch
+                        }
                     } else {
                         /* target is full */
                         cr=CoderResult.OVERFLOW;
@@ -725,7 +729,7 @@ class CharsetUTF7 extends CharsetICU {
                 break directMode;
             }
             } //end of directMode label
-            
+
             if (flush && !source.hasRemaining()) {
                 /* flush remaining bits to the target */
                 if (inDirectMode==0) {
@@ -740,7 +744,7 @@ class CharsetUTF7 extends CharsetICU {
                             cr=CoderResult.OVERFLOW;
                         }
                     }
-                    
+
                     /* need to terminate with a minus */
                     if (target.hasRemaining()) {
                         target.put(MINUS);
@@ -756,21 +760,24 @@ class CharsetUTF7 extends CharsetICU {
                 fromUnicodeStatus=((status&0xf0000000) | 0x1000000); /* keep version, inDirectMode=TRUE */
             } else {
                 /* set the converter state back */
-                fromUnicodeStatus=((status&0xf0000000) | (inDirectMode<<24) | (((short)base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | ((int)bits));
+                fromUnicodeStatus=((status&0xf0000000) | (inDirectMode<<24) | ((base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | (bits));
             }
-            
+
             return cr;
         }
     }
-    
+
+    @Override
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderUTF7(this);
     }
-    
+
+    @Override
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF7(this);
     }
-    
+
+    @Override
     void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
         getCompleteUnicodeSet(setFillIn);
     }

@@ -637,10 +637,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                     path, locale.getBaseName());
         }
 
+        @Override
         public ULocale getLocale() {
             return bundle.getULocale();
         }
 
+        @Override
         public String get(String tableName, String subTableName, String code) {
             return ICUResourceTableAccess.getTableString(bundle, tableName, subTableName,
                     code, nullIfNotFound ? null : code);
@@ -654,6 +656,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                 return (DataTables) Class.forName(className).newInstance();
             } catch (Throwable t) {
                 return new DataTables() {
+                    @Override
                     public DataTable get(ULocale locale, boolean nullIfNotFound) {
                         return new DataTable(nullIfNotFound);
                     }

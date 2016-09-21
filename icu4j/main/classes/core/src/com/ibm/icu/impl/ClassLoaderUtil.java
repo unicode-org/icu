@@ -29,7 +29,7 @@ public class ClassLoaderUtil {
             // this constructor on Android, because ClassLoaderUtil.getClassLoader()
             // should get non-null ClassLoader before calling
             // ClassLoaderUtil.getBootstrapClassLoader().
-            // 
+            //
             // On other common JREs (such as Oracle, OpenJDK),
             // Object.class.getClassLoader() returns null, but
             // super(null) is commonly used for accessing the bootstrap
@@ -44,7 +44,7 @@ public class ClassLoaderUtil {
      * Lazily create a singleton BootstrapClassLoader.
      * This class loader might be necessary when ICU4J classes are
      * initialized by bootstrap class loader.
-     * 
+     *
      * @return The BootStrapClassLoader singleton instance
      */
     private static ClassLoader getBootstrapClassLoader() {
@@ -54,10 +54,11 @@ public class ClassLoaderUtil {
                     ClassLoader cl = null;
                     if (System.getSecurityManager() != null) {
                         cl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-                                public BootstrapClassLoader run() {
-                                    return new BootstrapClassLoader();
-                                }
-                            });
+                            @Override
+                            public BootstrapClassLoader run() {
+                                return new BootstrapClassLoader();
+                            }
+                        });
                     } else {
                         cl = new BootstrapClassLoader();
                     }

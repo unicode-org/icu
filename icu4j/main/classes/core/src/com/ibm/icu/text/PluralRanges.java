@@ -18,7 +18,7 @@ import com.ibm.icu.util.Output;
 /**
  * Utility class for returning the plural category for a range of numbers, such as 1–5, so that appropriate messages can
  * be chosen. The rules for determining this value vary widely across locales.
- * 
+ *
  * @author markdavis
  * @internal
  * @deprecated This API is ICU internal only.
@@ -32,7 +32,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
 
     /**
      * Constructor
-     * 
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -152,6 +152,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
             return 0 == compareTo((Matrix) other);
         }
 
+        @Override
         public int compareTo(Matrix o) {
             for (int i = 0; i < data.length; ++i) {
                 int diff = data[i] - o.data[i];
@@ -168,7 +169,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
             result.data = data.clone();
             return result;
         }
-        
+
         @Override
         public String toString() {
             StringBuilder result = new StringBuilder();
@@ -186,7 +187,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
 
     /**
      * Internal method for building. If the start or end are null, it means everything of that type.
-     * 
+     *
      * @param rangeStart
      *            plural category for the start of the range
      * @param rangeEnd
@@ -229,7 +230,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
     /**
      * Returns the appropriate plural category for a range from start to end. If there is no available data, then
      * 'end' is returned as an implicit value. (Such an implicit value can be tested for with {@link #isExplicit}.)
-     * 
+     *
      * @param start
      *            plural category for the start of the range
      * @param end
@@ -247,7 +248,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
     /**
      * Returns whether the appropriate plural category for a range from start to end
      * is explicitly in the data (vs given an implicit value). See also {@link #get}.
-     * 
+     *
      * @param start
      *            plural category for the start of the range
      * @param end
@@ -263,7 +264,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
 
     /**
      * Internal method to determines whether the StandardPluralCategories was explicitly used in any add statement.
-     * 
+     *
      * @param count
      *            plural category to test
      * @return true if set
@@ -309,6 +310,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public int compareTo(PluralRanges that) {
         return matrix.compareTo(that.matrix);
@@ -319,6 +321,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public boolean isFrozen() {
         return isFrozen;
@@ -329,6 +332,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public PluralRanges freeze() {
         isFrozen = true;
@@ -340,6 +344,7 @@ public final class PluralRanges implements Freezable<PluralRanges>, Comparable<P
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public PluralRanges cloneAsThawed() {
         PluralRanges result = new PluralRanges();

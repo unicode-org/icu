@@ -22,5 +22,6 @@ public interface StringTransform extends Transform<String,String> {
      * @return result
      * @stable ICU 3.8
      */
+    @Override
     public String transform(String source);
 }

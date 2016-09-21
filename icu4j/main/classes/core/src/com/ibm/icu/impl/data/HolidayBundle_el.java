@@ -27,5 +27,6 @@ public class HolidayBundle_el extends ListResourceBundle {
         {   "Whit Monday",          "\u0394\u03b5\u03cd\u03c4\u03b5\u03c1\u03b7 \u03bc\u03ad\u03c1\u03b1 \u03c4\u03bf\u03cd \u03a0\u03b5\u03bd\u03c4\u03b7\u03ba\u03bf\u03c3\u03c4\u03ae" },
 
     };
+    @Override
     public synchronized Object[][] getContents() { return fContents; }
 }

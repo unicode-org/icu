@@ -32,6 +32,7 @@ public class CollatorICU extends java.text.Collator {
         return fIcuCollator;
     }
 
+    @Override
     public Object clone() {
         CollatorICU other = (CollatorICU)super.clone();
         try {
@@ -45,14 +46,17 @@ public class CollatorICU extends java.text.Collator {
         return other;
     }
 
+    @Override
     public int compare(Object o1, Object o2) {
         return fIcuCollator.compare(o1, o2);
     }
 
+    @Override
     public int compare(String source, String target) {
         return fIcuCollator.compare(source, target);
     }
 
+    @Override
     public boolean equals(Object that) {
         if (that instanceof CollatorICU) {
             return ((CollatorICU)that).fIcuCollator.equals(fIcuCollator);
@@ -60,15 +64,18 @@ public class CollatorICU extends java.text.Collator {
         return false;
     }
 
+    @Override
     public boolean equals(String source, String target) {
         return fIcuCollator.equals(source, target);
     }
 
+    @Override
     public CollationKey getCollationKey(String source) {
         com.ibm.icu.text.CollationKey icuCollKey = fIcuCollator.getCollationKey(source);
         return CollationKeyICU.wrap(icuCollKey);
     }
 
+    @Override
     public int getDecomposition() {
         int mode = java.text.Collator.NO_DECOMPOSITION;
 
@@ -89,6 +96,7 @@ public class CollatorICU extends java.text.Collator {
         return mode;
     }
 
+    @Override
     public int getStrength() {
         int strength;
         int icuStrength = fIcuCollator.getStrength();
@@ -116,10 +124,12 @@ public class CollatorICU extends java.text.Collator {
         return strength;
     }
 
+    @Override
     public int hashCode() {
         return fIcuCollator.hashCode();
     }
 
+    @Override
     public void setDecomposition(int decompositionMode) {
         switch (decompositionMode) {
         case java.text.Collator.CANONICAL_DECOMPOSITION:
@@ -138,6 +148,7 @@ public class CollatorICU extends java.text.Collator {
         }
     }
 
+    @Override
     public void setStrength(int newStrength) {
         switch (newStrength) {
         case java.text.Collator.IDENTICAL:

@@ -34,5 +34,6 @@ public class HolidayBundle_es_MX extends ListResourceBundle {
     static private final Object[][] fContents = {
         { "holidays",   fHolidays },
     };
+    @Override
     public synchronized Object[][] getContents() { return fContents; }
 }

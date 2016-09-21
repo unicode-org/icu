@@ -24,7 +24,7 @@ public class BasicPeriodFormatterService implements PeriodFormatterService {
 
     /**
      * Return the default service instance. This uses the default data service.
-     * 
+     *
      * @return an BasicPeriodFormatterService
      */
     public static BasicPeriodFormatterService getInstance() {
@@ -39,25 +39,29 @@ public class BasicPeriodFormatterService implements PeriodFormatterService {
     /**
      * Construct a BasicPeriodFormatterService using the given
      * PeriodFormatterDataService.
-     * 
+     *
      * @param ds the data service to use
      */
     public BasicPeriodFormatterService(PeriodFormatterDataService ds) {
         this.ds = ds;
     }
 
+    @Override
     public DurationFormatterFactory newDurationFormatterFactory() {
         return new BasicDurationFormatterFactory(this);
     }
 
+    @Override
     public PeriodFormatterFactory newPeriodFormatterFactory() {
         return new BasicPeriodFormatterFactory(ds);
     }
 
+    @Override
     public PeriodBuilderFactory newPeriodBuilderFactory() {
         return new BasicPeriodBuilderFactory(ds);
     }
 
+    @Override
     public Collection<String> getAvailableLocaleNames() {
         return ds.getAvailableLocales();
     }

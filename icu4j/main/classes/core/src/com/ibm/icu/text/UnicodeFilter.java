@@ -34,6 +34,7 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
      * filters.  Matches a single 16-bit code unit at offset.
      * @stable ICU 2.0
      */
+    @Override
     public int matches(Replaceable text,
                        int[] offset,
                        int limit,

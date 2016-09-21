@@ -32,6 +32,7 @@ public class IterableComparator<T> implements Comparator<Iterable<T>> {
         this.shorterFirst = shorterFirst ? 1 : -1;
     }
 
+    @Override
     public int compare(Iterable<T> a, Iterable<T> b) {
         if (a == null) {
             return b == null ? 0 : -shorterFirst;

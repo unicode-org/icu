@@ -15,11 +15,12 @@ import com.ibm.icu.util.CharsTrie;
 
 class CharsDictionaryMatcher extends DictionaryMatcher {
     private CharSequence characters;
-    
+
     public CharsDictionaryMatcher(CharSequence chars) {
         characters = chars;
     }
 
+    @Override
     public int matches(CharacterIterator text_, int maxLength, int[] lengths, int[] count_, int limit, int[] values) {
         UCharacterIterator text = UCharacterIterator.getInstance(text_);
         CharsTrie uct = new CharsTrie(characters, 0);
@@ -53,7 +54,7 @@ class CharsDictionaryMatcher extends DictionaryMatcher {
             }
             c = text.nextCodePoint();
             if (c == UCharacterIterator.DONE) {
-                break;                
+                break;
             }
             ++numChars;
             result = uct.nextForCodePoint(c);
@@ -62,6 +63,7 @@ class CharsDictionaryMatcher extends DictionaryMatcher {
         return numChars;
     }
 
+    @Override
     public int getType() {
         return DictionaryData.TRIE_TYPE_UCHARS;
     }

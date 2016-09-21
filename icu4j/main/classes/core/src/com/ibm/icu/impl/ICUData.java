@@ -93,6 +93,7 @@ public final class ICUData {
         URL i = null;
         if (System.getSecurityManager() != null) {
             i = AccessController.doPrivileged(new PrivilegedAction<URL>() {
+                    @Override
                     public URL run() {
                         return ICUData.class.getResource(resourceName);
                     }
@@ -107,6 +108,7 @@ public final class ICUData {
         InputStream i = null;
         if (System.getSecurityManager() != null) {
             i = AccessController.doPrivileged(new PrivilegedAction<InputStream>() {
+                    @Override
                     public InputStream run() {
                         return root.getResourceAsStream(resourceName);
                     }
@@ -129,6 +131,7 @@ public final class ICUData {
         InputStream i = null;
         if (System.getSecurityManager() != null) {
             i = AccessController.doPrivileged(new PrivilegedAction<InputStream>() {
+                    @Override
                     public InputStream run() {
                         return loader.getResourceAsStream(resourceName);
                     }

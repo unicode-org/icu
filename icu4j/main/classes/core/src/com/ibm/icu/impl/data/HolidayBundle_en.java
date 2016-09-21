@@ -25,6 +25,7 @@ public class HolidayBundle_en extends ListResourceBundle {
         {   "", ""  },      // Can't be empty!
     };
 
+    @Override
     public synchronized Object[][] getContents() { return fContents; }
 
 }

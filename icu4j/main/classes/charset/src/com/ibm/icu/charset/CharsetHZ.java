@@ -42,7 +42,7 @@ class CharsetHZ extends CharsetICU {
         maxBytesPerChar = 4;
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
-        
+
         isEmptySegment = false;
     }
 
@@ -55,6 +55,7 @@ class CharsetHZ extends CharsetICU {
             gbDecoder = (CharsetMBCS.CharsetDecoderMBCS) gbCharset.newDecoder();
         }
 
+        @Override
         protected void implReset() {
             super.implReset();
             gbDecoder.implReset();
@@ -63,6 +64,7 @@ class CharsetHZ extends CharsetICU {
             isEmptySegment = false;
         }
 
+        @Override
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             byte[] tempBuf = new byte[2];
@@ -141,7 +143,7 @@ class CharsetHZ extends CharsetICU {
                                  * add another bit to distinguish a 0 byte from not having seen a lead byte
                                  */
                                 toUnicodeStatus = mySourceChar | 0x100;
-                                isEmptySegment = false; /* the segment has something, either valid or will produce a different error, so reset this */ 
+                                isEmptySegment = false; /* the segment has something, either valid or will produce a different error, so reset this */
                             }
                             continue;
                         } else {
@@ -154,7 +156,7 @@ class CharsetHZ extends CharsetICU {
                              * - We include at least the first byte in the illegal sequence.
                              * - If any of the non-initial bytes could be the start of a character,
                              *   we stop the illegal sequence before the first one of those
-                             * 
+                             *
                              * In HZ DBCS, if the second byte is in the 21..7e range,
                              * we report ony the first byte as the illegal sequence.
                              * Otherwise we convert of report the pair of bytes.
@@ -230,6 +232,7 @@ class CharsetHZ extends CharsetICU {
             gbEncoder = (CharsetMBCS.CharsetEncoderMBCS) gbCharset.newEncoder();
         }
 
+        @Override
         protected void implReset() {
             super.implReset();
             gbEncoder.implReset();
@@ -238,6 +241,7 @@ class CharsetHZ extends CharsetICU {
             isTargetUCharDBCS = false;
         }
 
+        @Override
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
             int length = 0;
             int[] targetUniChar = new int[] { 0 };
@@ -375,14 +379,17 @@ class CharsetHZ extends CharsetICU {
         }
     }
 
+    @Override
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderHZ(this);
     }
 
+    @Override
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderHZ(this);
     }
-    
+
+    @Override
     void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
         setFillIn.add(0,0x7f);
        // CharsetMBCS mbcshz = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");

@@ -74,14 +74,14 @@ import com.ibm.icu.impl.ResourceBundleWrapper;
  * change.  To open ICU style organization use:
  *
  * <pre>
- *      UResourceBundle bundle = 
- *          UResourceBundle.getBundleInstance("com/mycompany/resources", 
+ *      UResourceBundle bundle =
+ *          UResourceBundle.getBundleInstance("com/mycompany/resources",
  *                                            "en_US", myClassLoader);
  * </pre>
  * To open Java/JDK style organization use:
  * <pre>
- *      UResourceBundle bundle = 
- *          UResourceBundle.getBundleInstance("com.mycompany.resources.LocaleElements", 
+ *      UResourceBundle bundle =
+ *          UResourceBundle.getBundleInstance("com.mycompany.resources.LocaleElements",
  *                                            "en_US", myClassLoader);
  * </pre>
  *
@@ -107,7 +107,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @stable ICU 3.0
      */
     public static UResourceBundle getBundleInstance(String baseName, String localeName){
-        return getBundleInstance(baseName, localeName, ICUResourceBundle.ICU_DATA_CLASS_LOADER, 
+        return getBundleInstance(baseName, localeName, ICUResourceBundle.ICU_DATA_CLASS_LOADER,
                                  false);
     }
 
@@ -123,7 +123,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @return a resource bundle for the given base name and locale
      * @stable ICU 3.0
      */
-    public static UResourceBundle getBundleInstance(String baseName, String localeName, 
+    public static UResourceBundle getBundleInstance(String baseName, String localeName,
                                                     ClassLoader root){
         return getBundleInstance(baseName, localeName, root, false);
     }
@@ -144,7 +144,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @stable ICU 3.0
      *
      */
-    protected static UResourceBundle getBundleInstance(String baseName, String localeName, 
+    protected static UResourceBundle getBundleInstance(String baseName, String localeName,
                                                        ClassLoader root, boolean disableFallback) {
         return instantiateBundle(baseName, localeName, root, disableFallback);
     }
@@ -187,7 +187,7 @@ public abstract class UResourceBundle extends ResourceBundle {
             baseName = ICUData.ICU_BASE_NAME;
         }
         ULocale uloc = ULocale.getDefault();
-        return getBundleInstance(baseName, uloc.getBaseName(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, 
+        return getBundleInstance(baseName, uloc.getBaseName(), ICUResourceBundle.ICU_DATA_CLASS_LOADER,
                                  false);
     }
 
@@ -244,7 +244,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @return a resource bundle for the given base name and locale
      * @stable ICU 3.8
      */
-    public static UResourceBundle getBundleInstance(String baseName, Locale locale, 
+    public static UResourceBundle getBundleInstance(String baseName, Locale locale,
                                                     ClassLoader loader) {
         if (baseName == null) {
             baseName = ICUData.ICU_BASE_NAME;
@@ -267,7 +267,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @return a resource bundle for the given base name and locale
      * @stable ICU 3.8
      */
-    public static UResourceBundle getBundleInstance(String baseName, ULocale locale, 
+    public static UResourceBundle getBundleInstance(String baseName, ULocale locale,
                                                     ClassLoader loader) {
         if (baseName == null) {
             baseName = ICUData.ICU_BASE_NAME;
@@ -316,6 +316,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @return the locale of this resource bundle
      * @stable ICU 3.0
      */
+    @Override
     public Locale getLocale(){
         return getULocale().toLocale();
     }
@@ -374,18 +375,18 @@ public abstract class UResourceBundle extends ResourceBundle {
             return ICUResourceBundle.getBundleInstance(baseName, localeName, root, disableFallback);
 
         case JAVA:
-            return ResourceBundleWrapper.getBundleInstance(baseName, localeName, root, 
+            return ResourceBundleWrapper.getBundleInstance(baseName, localeName, root,
                                                            disableFallback);
 
         case MISSING:
         default:
             UResourceBundle b;
             try{
-                b = ICUResourceBundle.getBundleInstance(baseName, localeName, root, 
+                b = ICUResourceBundle.getBundleInstance(baseName, localeName, root,
                                                         disableFallback);
                 setRootType(baseName, RootType.ICU);
             }catch(MissingResourceException ex){
-                b = ResourceBundleWrapper.getBundleInstance(baseName, localeName, root, 
+                b = ResourceBundleWrapper.getBundleInstance(baseName, localeName, root,
                                                             disableFallback);
                 setRootType(baseName, RootType.JAVA);
             }
@@ -568,7 +569,7 @@ public abstract class UResourceBundle extends ResourceBundle {
     public UResourceBundle get(int index) {
         UResourceBundle obj = handleGet(index, null, this);
         if (obj == null) {
-            obj = (ICUResourceBundle) getParent();
+            obj = getParent();
             if (obj != null) {
                 obj = obj.get(index);
             }
@@ -614,6 +615,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      *         which is empty if this is not a bundle or a table resource
      * @stable ICU 3.8
      */
+    @Override
     public Enumeration<String> getKeys() {
         return Collections.enumeration(keySet());
     }
@@ -625,6 +627,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     public Set<String> keySet() {
         // TODO: Java 6 ResourceBundle has keySet() which calls handleKeySet()
@@ -676,6 +679,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     protected Set<String> handleKeySet() {
         return Collections.emptySet();
@@ -684,7 +688,7 @@ public abstract class UResourceBundle extends ResourceBundle {
     /**
      * {@icu} Returns the size of a resource. Size for scalar types is always 1, and for
      * vector/table types is the number of child resources.
-     * 
+     *
      * <br><b>Note:</b> Integer array is treated as a scalar type. There are no APIs to
      * access individual members of an integer array. It is always returned as a whole.
      * @return number of resources in a given resource.
@@ -795,7 +799,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @return UResourceBundle a resource associated with the key
      * @stable ICU 3.8
      */
-    protected UResourceBundle handleGet(String aKey, HashMap<String, String> aliasesVisited, 
+    protected UResourceBundle handleGet(String aKey, HashMap<String, String> aliasesVisited,
                                         UResourceBundle requested) {
         return null;
     }
@@ -811,7 +815,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @return UResourceBundle a resource associated with the index
      * @stable ICU 3.8
      */
-    protected UResourceBundle handleGet(int index, HashMap<String, String> aliasesVisited, 
+    protected UResourceBundle handleGet(int index, HashMap<String, String> aliasesVisited,
                                         UResourceBundle requested) {
         return null;
     }
@@ -844,6 +848,7 @@ public abstract class UResourceBundle extends ResourceBundle {
     // this method is declared in ResourceBundle class
     // so cannot change the signature
     // Override this method
+    @Override
     protected Object handleGetObject(String aKey) {
         return handleGetObjectImpl(aKey, this);
     }

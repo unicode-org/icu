@@ -199,6 +199,7 @@ public class LocaleExtensions {
     }
 
 
+    @Override
     public String toString() {
         return _id;
     }
@@ -207,10 +208,12 @@ public class LocaleExtensions {
         return _id;
     }
 
+    @Override
     public int hashCode() {
         return _id.hashCode();
     }
 
+    @Override
     public boolean equals(Object other) {
         if (this == other) {
             return true;

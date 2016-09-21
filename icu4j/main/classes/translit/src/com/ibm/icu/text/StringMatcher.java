@@ -38,7 +38,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      * match.
      */
     private int matchStart;
-    
+
     /**
      * Limit offset, in the match text, of the <em>rightmost</em>
      * match.
@@ -98,6 +98,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
     /**
      * Implement UnicodeMatcher
      */
+    @Override
     public int matches(Replaceable text,
                        int[] offset,
                        int limit,
@@ -174,6 +175,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
     /**
      * Implement UnicodeMatcher
      */
+    @Override
     public String toPattern(boolean escapeUnprintable) {
         StringBuffer result = new StringBuffer();
         StringBuffer quoteBuf = new StringBuffer();
@@ -202,6 +204,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
     /**
      * Implement UnicodeMatcher
      */
+    @Override
     public boolean matchesIndexValue(int v) {
         if (pattern.length() == 0) {
             return true;
@@ -217,6 +220,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      * set.
      * @param toUnionTo the set into which to union the source characters
      */
+    @Override
     public void addMatchSetTo(UnicodeSet toUnionTo) {
         int ch;
         for (int i=0; i<pattern.length(); i+=UTF16.getCharCount(ch)) {
@@ -233,6 +237,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
     /**
      * UnicodeReplacer API
      */
+    @Override
     public int replace(Replaceable text,
                        int start,
                        int limit,
@@ -259,6 +264,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
     /**
      * UnicodeReplacer API
      */
+    @Override
     public String toReplacerPattern(boolean escapeUnprintable) {
         // assert(segmentNumber > 0);
         StringBuffer rule = new StringBuffer("$");
@@ -279,6 +285,7 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      * into the given set.
      * @param toUnionTo the set into which to union the output characters
      */
+    @Override
     public void addReplacementSetTo(UnicodeSet toUnionTo) {
         // The output of this replacer varies; it is the source text between
         // matchStart and matchLimit.  Since this varies depending on the

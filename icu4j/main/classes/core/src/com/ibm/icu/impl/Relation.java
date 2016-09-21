@@ -57,7 +57,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
                 this.setCreator.newInstance(setComparatorParam); // check to make sure compiles
             } else {
                 this.setCreator = ((Class<? extends Set<V>>)setCreator).getConstructor(Comparator.class);
-                this.setCreator.newInstance(setComparatorParam); // check to make sure compiles        
+                this.setCreator.newInstance(setComparatorParam); // check to make sure compiles
             }
             data = map == null ? new HashMap<K, Set<V>>() : map;
         } catch (Exception e) {
@@ -85,11 +85,11 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     public final Set<Entry<K, V>> entrySet() {
         return keyValueSet();
     }
-    
+
     public Set<Entry<K, Set<V>>> keyValuesSet() {
         return data.entrySet();
     }
-    
+
     public Set<Entry<K, V>> keyValueSet() {
         Set<Entry<K, V>> result = new LinkedHashSet<Entry<K, V>>();
         for (K key : data.keySet()) {
@@ -100,6 +100,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         return result;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o == null)
             return false;
@@ -123,6 +124,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         return data.get(key);
     }
 
+    @Override
     public int hashCode() {
         return data.hashCode();
     }
@@ -163,7 +165,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
 
     private Set<V> newSet() {
         try {
-            return (Set<V>) setCreator.newInstance(setComparatorParam);
+            return setCreator.newInstance(setComparatorParam);
         } catch (Exception e) {
             throw (RuntimeException) new IllegalArgumentException("Can't create new set").initCause(e);
         }
@@ -222,6 +224,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         return result;
     }
 
+    @Override
     public String toString() {
         return data.toString();
     }
@@ -241,14 +244,17 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
             this.value = e.getValue();
         }
 
+        @Override
         public K getKey() {
             return key;
         }
 
+        @Override
         public V getValue() {
             return value;
         }
 
+        @Override
         public V setValue(V value) {
             V oldValue = this.value;
             this.value = value;
@@ -274,10 +280,12 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
 
     volatile boolean frozen = false;
 
+    @Override
     public boolean isFrozen() {
         return frozen;
     }
 
+    @Override
     public Relation<K, V> freeze() {
         if (!frozen) {
             // does not handle one level down, so we do that on a case-by-case basis
@@ -291,6 +299,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         return this;
     }
 
+    @Override
     public Relation<K, V> cloneAsThawed() {
         // TODO do later
         throw new UnsupportedOperationException();
