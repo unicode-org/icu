@@ -110,7 +110,7 @@ DataDrivenNumberFormatTestSuite::~DataDrivenNumberFormatTestSuite() {
 }
 
 UBool DataDrivenNumberFormatTestSuite::breaksC() {
-    return (NFTT_GET_FIELD(fTuple, breaks, "").toUpper().indexOf(0x43) != -1);
+    return (NFTT_GET_FIELD(fTuple, breaks, "").toUpper().indexOf((UChar)0x43) != -1);
 }
 
 void DataDrivenNumberFormatTestSuite::setTupleField(UErrorCode &status) {

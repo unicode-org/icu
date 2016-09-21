@@ -999,17 +999,17 @@ void MeasureFormatTest::TestExamplesInDocs() {
     if (!assertSuccess("Error creating formatters", status)) {
         return;
     }
-    Measure measureC(23, MeasureUnit::createCelsius(status), status);
-    Measure measureF(70, MeasureUnit::createFahrenheit(status), status);
+    Measure measureC((double)23, MeasureUnit::createCelsius(status), status);
+    Measure measureF((double)70, MeasureUnit::createFahrenheit(status), status);
     Measure feetAndInches[] = {
-            Measure(70, MeasureUnit::createFoot(status), status),
-            Measure(5.3, MeasureUnit::createInch(status), status)};
+            Measure((double)70, MeasureUnit::createFoot(status), status),
+            Measure((double)5.3, MeasureUnit::createInch(status), status)};
     Measure footAndInch[] = {
-            Measure(1, MeasureUnit::createFoot(status), status),
-            Measure(1, MeasureUnit::createInch(status), status)};
+            Measure((double)1, MeasureUnit::createFoot(status), status),
+            Measure((double)1, MeasureUnit::createInch(status), status)};
     Measure inchAndFeet[] = {
-            Measure(1, MeasureUnit::createInch(status), status),
-            Measure(2, MeasureUnit::createFoot(status), status)};
+            Measure((double)1, MeasureUnit::createInch(status), status),
+            Measure((double)2, MeasureUnit::createFoot(status), status)};
     if (!assertSuccess("Error creating measurements.", status)) {
         return;
     }
@@ -1067,28 +1067,28 @@ void MeasureFormatTest::TestExamplesInDocs() {
 
 void MeasureFormatTest::TestFormatPeriodEn() {
     UErrorCode status = U_ZERO_ERROR;
-    Measure t_19m[] = {Measure(19, MeasureUnit::createMinute(status), status)};
+    Measure t_19m[] = {Measure((double)19, MeasureUnit::createMinute(status), status)};
     Measure t_1h_23_5s[] = {
-            Measure(1.0, MeasureUnit::createHour(status), status),
-            Measure(23.5, MeasureUnit::createSecond(status), status)
+            Measure((double)1.0, MeasureUnit::createHour(status), status),
+            Measure((double)23.5, MeasureUnit::createSecond(status), status)
     };
     Measure t_1h_23_5m[] = {
-            Measure(1.0, MeasureUnit::createHour(status), status),
-            Measure(23.5, MeasureUnit::createMinute(status), status)
+            Measure((double)1.0, MeasureUnit::createHour(status), status),
+            Measure((double)23.5, MeasureUnit::createMinute(status), status)
     };
     Measure t_1h_0m_23s[] = {
             Measure(
-                    1.0,
+                    (double)1.0,
                     TimeUnit::createInstance(
                             TimeUnit::UTIMEUNIT_HOUR, status),
                     status),
             Measure(
-                    0.0,
+                    (double)0.0,
                     TimeUnit::createInstance(
                             TimeUnit::UTIMEUNIT_MINUTE, status),
                      status),
             Measure(
-                    23,
+                    (double)23.0,
                     TimeUnit::createInstance(
                             TimeUnit::UTIMEUNIT_SECOND, status),
                     status)
@@ -1617,8 +1617,8 @@ void MeasureFormatTest::helperTestMultiples(
         return;
     }
     Measure measures[] = {
-            Measure(2, MeasureUnit::createMile(status), status),
-            Measure(1, MeasureUnit::createFoot(status), status),
+            Measure(2.0, MeasureUnit::createMile(status), status),
+            Measure(1.0, MeasureUnit::createFoot(status), status),
             Measure(2.3, MeasureUnit::createInch(status), status)};
     if (!assertSuccess("Error creating measures", status)) {
         return;
@@ -1634,8 +1634,8 @@ void MeasureFormatTest::helperTestMultiples(
 void MeasureFormatTest::TestManyLocaleDurations() {
     UErrorCode status = U_ZERO_ERROR;
     Measure measures[] = {
-            Measure(5, MeasureUnit::createHour(status), status),
-            Measure(37, MeasureUnit::createMinute(status), status)};
+            Measure(5.0, MeasureUnit::createHour(status), status),
+            Measure(37.0, MeasureUnit::createMinute(status), status)};
     if (!assertSuccess("Error creating measures", status)) {
         return;
     }
@@ -1697,8 +1697,8 @@ void MeasureFormatTest::TestGram() {
     if (!assertSuccess("Error creating format object", status)) {
         return;
     }
-    Measure gram(1, MeasureUnit::createGram(status), status);
-    Measure gforce(1, MeasureUnit::createGForce(status), status);
+    Measure gram((double)1, MeasureUnit::createGram(status), status);
+    Measure gforce((double)1, MeasureUnit::createGForce(status), status);
     if (!assertSuccess("Error creating measures", status)) {
         return;
     }
@@ -1821,7 +1821,7 @@ void MeasureFormatTest::TestFieldPosition() {
             NumberFormat::kDecimalSeparatorField,
             10,
             11);
-    measure = Measure(43, MeasureUnit::createFoot(status), status);
+    measure = Measure(43.0, MeasureUnit::createFoot(status), status);
     if (!assertSuccess("Error creating measure object 2", status)) {
         return;
     }
@@ -1843,16 +1843,16 @@ void MeasureFormatTest::TestFieldPositionMultiple() {
         return;
     }
     Measure first[] = {
-            Measure(354, MeasureUnit::createMeter(status), status),
-            Measure(23, MeasureUnit::createCentimeter(status), status)};
+      Measure((double)354, MeasureUnit::createMeter(status), status),
+      Measure((double)23, MeasureUnit::createCentimeter(status), status)};
     Measure second[] = {
-            Measure(354, MeasureUnit::createMeter(status), status),
-            Measure(23, MeasureUnit::createCentimeter(status), status),
-            Measure(5.4, MeasureUnit::createMillimeter(status), status)};
+      Measure((double)354, MeasureUnit::createMeter(status), status),
+      Measure((double)23, MeasureUnit::createCentimeter(status), status),
+      Measure((double)5.4, MeasureUnit::createMillimeter(status), status)};
     Measure third[] = {
-            Measure(3, MeasureUnit::createMeter(status), status),
-            Measure(23, MeasureUnit::createCentimeter(status), status),
-            Measure(5, MeasureUnit::createMillimeter(status), status)};
+      Measure((double)3, MeasureUnit::createMeter(status), status),
+      Measure((double)23, MeasureUnit::createCentimeter(status), status),
+      Measure((double)5, MeasureUnit::createMillimeter(status), status)};
     if (!assertSuccess("Error creating measure objects", status)) {
         return;
     }
@@ -1937,9 +1937,9 @@ void MeasureFormatTest::TestGroupingSeparator() {
     Measure ms[] = {
             Measure((int32_t)INT32_MAX, MeasureUnit::createYear(status), status),
             Measure((int32_t)INT32_MIN, MeasureUnit::createMonth(status), status),
-            Measure(-987, MeasureUnit::createDay(status), status),
-            Measure(1362, MeasureUnit::createHour(status), status),
-            Measure(987, MeasureUnit::createMinute(status), status)};
+            Measure(-987.0, MeasureUnit::createDay(status), status),
+            Measure(1362.0, MeasureUnit::createHour(status), status),
+            Measure(987.0, MeasureUnit::createMinute(status), status)};
     FieldPosition pos(NumberFormat::kGroupingSeparatorField);
     UnicodeString appendTo;
     fmt.formatMeasures(ms, 5, appendTo, pos, status);
@@ -1958,8 +1958,8 @@ void MeasureFormatTest::TestDoubleZero() {
     UErrorCode status = U_ZERO_ERROR;
     Measure measures[] = {
         Measure(4.7, MeasureUnit::createHour(status), status),
-        Measure(23, MeasureUnit::createMinute(status), status),
-        Measure(16, MeasureUnit::createSecond(status), status)};
+        Measure(23.0, MeasureUnit::createMinute(status), status),
+        Measure(16.0, MeasureUnit::createSecond(status), status)};
     Locale en("en");
     NumberFormat *nf = NumberFormat::createInstance(en, status);
     MeasureFormat fmt("en", UMEASFMT_WIDTH_WIDE, nf, status);
@@ -1995,7 +1995,7 @@ void MeasureFormatTest::TestUnitPerUnitResolution() {
     UErrorCode status = U_ZERO_ERROR;
     Locale en("en");
     MeasureFormat fmt("en", UMEASFMT_WIDTH_SHORT, status);
-    Measure measure(50, MeasureUnit::createPound(status), status);
+    Measure measure(50.0, MeasureUnit::createPound(status), status);
     LocalPointer<MeasureUnit> sqInch(MeasureUnit::createSquareInch(status));
     if (!assertSuccess("Create of format unit and per unit", status)) {
         return;
@@ -2018,7 +2018,7 @@ void MeasureFormatTest::TestIndividualPluralFallback() {
     IcuTestErrorCode errorCode(*this, "TestIndividualPluralFallback");
     MeasureFormat mf("fr_CA", UMEASFMT_WIDTH_SHORT, errorCode);
     LocalPointer<Measure> twoDeg(
-        new Measure(2, MeasureUnit::createGenericTemperature(errorCode), errorCode), errorCode);
+        new Measure(2.0, MeasureUnit::createGenericTemperature(errorCode), errorCode), errorCode);
     UnicodeString expected = UNICODE_STRING_SIMPLE("2\\u00B0").unescape();
     UnicodeString actual;
     assertEquals("2 deg temp in fr_CA", expected, mf.format(twoDeg.orphan(), actual, errorCode), TRUE);
