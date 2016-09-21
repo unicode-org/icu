@@ -1707,12 +1707,14 @@ void MeasureFormatTest::TestGram() {
 }
 
 void MeasureFormatTest::TestCurrencies() {
-    UChar USD[] = {'U', 'S', 'D', 0};
+    UChar USD[4];
+    u_uastrcpy(USD, "USD");
     UErrorCode status = U_ZERO_ERROR;
     CurrencyAmount USD_1(1.0, USD, status);
+    assertEquals("Currency Code", USD, USD_1.getISOCurrency());
     CurrencyAmount USD_2(2.0, USD, status);
     CurrencyAmount USD_NEG_1(-1.0, USD, status);
-    if (!assertSuccess("Error creating measures", status)) {
+    if (!assertSuccess("Error creating currencies", status)) {
         return;
     }
     Locale en("en");
@@ -2081,7 +2083,7 @@ void MeasureFormatTest::verifyFormatWithPrefix(
     if (!assertSuccess("Error formatting", status)) {
         return;
     }
-    assertEquals(description, UnicodeString(expected).unescape(), result);
+    assertEquals(description, ctou(expected), result);
 }
 
 void MeasureFormatTest::verifyFormat(

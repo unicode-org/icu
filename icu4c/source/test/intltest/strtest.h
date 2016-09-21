@@ -48,6 +48,7 @@ private:
     void TestSTLCompatibility();
     void TestCharString();
     void TestCStr();
+    void Testctou();
 };
 
 #endif

@@ -2020,7 +2020,7 @@ FormatParser::getCanonicalIndex(const UnicodeString& s, UBool strict) {
     }
     int32_t i = 0;
     int32_t bestRow = -1;
-    while (dtTypes[i].patternChar != '\0') {
+    while (dtTypes[i].patternChar != 0x0000) {
         if ( dtTypes[i].patternChar != ch ) {
             ++i;
             continue;

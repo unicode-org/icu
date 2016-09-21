@@ -966,7 +966,8 @@ void DateIntervalFormatTest::testFormat() {
 
         "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "EEEEdMMM", "Mittwoch, 10. Jan.",
 
-
+        /* Following is an important test, because the 'h' in 'Uhr' is interpreted as a pattern
+           if not escaped properly. */
         "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "h", "10 Uhr vorm. \\u2013 2 Uhr nachm.",
         "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "H", "10\\u201314 Uhr",
 
@@ -1051,17 +1052,12 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length) {
     const char* pattern = data[0];
     i++;
 
-#ifdef DTIFMTTS_DEBUG
-    char result[1000];
-    char mesg[1000];
-    sprintf(mesg, "locale: %s\n", locName);
-    PRINTMESG(mesg);
-#endif
-
     while (i<data_length) {
         const char* locName = data[i++];
         Locale loc(locName);
         SimpleDateFormat ref(pattern, loc, ec);
+        logln( "case %d, locale: %s\n", (i-1)/5, locName);
+
         if (U_FAILURE(ec)) {
             dataerrln("contruct SimpleDateFormat in expect failed: %s", u_errorName(ec));
             return;
@@ -1069,39 +1065,25 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length) {
         // 'f'
         const char* datestr = data[i++];
         const char* datestr_2 = data[i++];
-#ifdef DTIFMTTS_DEBUG
-        sprintf(mesg, "original date: %s - %s\n", datestr, datestr_2);
-        PRINTMESG(mesg)
-#endif
+        logln("original date: %s - %s\n", datestr, datestr_2);
         UDate date = ref.parse(ctou(datestr), ec);
         if (!assertSuccess("parse 1st data in expect", ec)) return;
         UDate date_2 = ref.parse(ctou(datestr_2), ec);
         if (!assertSuccess("parse 2nd data in expect", ec)) return;
         DateInterval dtitv(date, date_2);
 
-        const UnicodeString& oneSkeleton = data[i++];
+        const UnicodeString& oneSkeleton(ctou(data[i++]));
 
         DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(oneSkeleton, loc, ec);
         if (!assertSuccess("createInstance(skeleton) in expect", ec)) return;
         FieldPosition pos(FieldPosition::DONT_CARE);
         dtitvfmt->format(&dtitv, str.remove(), pos, ec);
         if (!assertSuccess("format in expect", ec)) return;
-        assertEquals((UnicodeString)"\"" + locName + "\\" + oneSkeleton + "\\" + datestr + "\\" + datestr_2 + "\"", ctou(data[i++]), str);
+        assertEquals((UnicodeString)"\"" + locName + "\\" + oneSkeleton + "\\" + ctou(datestr) + "\\" + ctou(datestr_2) + "\"", ctou(data[i++]), str);
 
-
-
-#ifdef DTIFMTTS_DEBUG
-        str.extract(0,  str.length(), result, "UTF-8");
-        sprintf(mesg, "interval date: %s\n", result);
-        std::cout << "//";
-        PRINTMESG(mesg)
-        std::cout << "\"" << locName << "\", "
-                 << "\"" << datestr << "\", "
-                 << "\"" << datestr_2 << "\", ";
-        printUnicodeString(oneSkeleton);
-        printUnicodeString(str);
-        std::cout << "\n\n";
-#endif
+        logln("interval date:" + str + "\"" + locName + "\", "
+                 + "\"" + datestr + "\", "
+              + "\"" + datestr_2 + "\", " + oneSkeleton);
         delete dtitvfmt;
     }
 }
