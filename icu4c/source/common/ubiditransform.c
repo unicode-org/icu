@@ -468,7 +468,7 @@ ubiditransform_transform(UBiDiTransform *pBiDiTransform,
 
     pBiDiTransform->pActiveScheme = findMatchingScheme(inParaLevel, outParaLevel,
             inOrder, outOrder);
-    if (pBiDiTransform->pActiveScheme == NULL || pBiDiTransform->pActiveScheme->actions == NULL) {
+    if (pBiDiTransform->pActiveScheme == NULL) {
         goto cleanup;
     }
     pBiDiTransform->reorderingOptions = doMirroring ? UBIDI_DO_MIRRORING
