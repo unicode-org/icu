@@ -210,6 +210,7 @@ class U_I18N_API MeasureFormat : public Format {
             FieldPosition &pos,
             UErrorCode &status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Gets the display name of the specified {@link MeasureUnit} corresponding to the current
      * locale and format width.
@@ -222,6 +223,7 @@ class U_I18N_API MeasureFormat : public Format {
      * @draft ICU 58
      */
     UnicodeString getUnitDisplayName(const MeasureUnit& unit, UErrorCode &status) const;
+#endif /* U_HIDE_DRAFT_API */
 
 
     /**

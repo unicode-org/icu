@@ -221,29 +221,27 @@ typedef enum UNumberFormatStyle {
      * @stable ICU 54
      */
     UNUM_CASH_CURRENCY=13,
-#ifndef U_HIDE_DRAFT_API
     /**
      * Decimal format expressed using compact notation
      * (short form, corresponds to UNumberCompactStyle=UNUM_SHORT)
      * e.g. "23K", "45B"
-     * @draft ICU 56
+     * @stable ICU 56
      */
     UNUM_DECIMAL_COMPACT_SHORT=14,
     /**
      * Decimal format expressed using compact notation
      * (long form, corresponds to UNumberCompactStyle=UNUM_LONG)
      * e.g. "23 thousand", "45 billion"
-     * @draft ICU 56
+     * @stable ICU 56
      */
     UNUM_DECIMAL_COMPACT_LONG=15,
     /**
      * Currency format with a currency symbol, e.g., "$1.00",
      * using non-accounting style for negative values (e.g. minus sign).
      * Overrides any style specified using -cf- key in locale.
-     * @draft ICU 56
+     * @stable ICU 56
      */
     UNUM_CURRENCY_STANDARD=16,
-#endif /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**

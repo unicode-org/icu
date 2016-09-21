@@ -21,6 +21,8 @@
 #include "unicode/uchar.h"
 #include "unicode/localpointer.h"
 
+#ifndef U_HIDE_DRAFT_API
+
 /**
  * <code>UBiDiOrder</code> indicates the order of text.<p>
  * This bidi transformation engine supports all possible combinations (4 in
@@ -309,4 +311,5 @@ U_NAMESPACE_END
 
 #endif
 
+#endif /* U_HIDE_DRAFT_API */
 #endif

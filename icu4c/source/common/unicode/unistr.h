@@ -174,8 +174,6 @@ class UnicodeStringAppendable;  // unicode/appendable.h
 # endif
 #endif
 
-/* Cannot make the following #ifndef U_HIDE_DRAFT_API,
-   it is used to construct other non-internal constants */
 /**
  * \def UNISTR_OBJECT_SIZE
  * Desired sizeof(UnicodeString) in bytes.
@@ -207,7 +205,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * and the internal buffer would hold up to 11 UChars in that case.
  *
  * @see U16_MAX_LENGTH
- * @draft ICU 56
+ * @stable ICU 56
  */
 #ifndef UNISTR_OBJECT_SIZE
 # define UNISTR_OBJECT_SIZE 64
@@ -1904,7 +1902,6 @@ public:
    */
   UnicodeString &fastCopyFrom(const UnicodeString &src);
 
-#ifndef U_HIDE_DRAFT_API
 #if U_HAVE_RVALUE_REFERENCES
   /**
    * Move assignment operator, might leave src in bogus state.
@@ -1912,12 +1909,13 @@ public:
    * The behavior is undefined if *this and src are the same object.
    * @param src source string
    * @return *this
-   * @draft ICU 56
+   * @stable ICU 56
    */
   UnicodeString &operator=(UnicodeString &&src) U_NOEXCEPT {
     return moveFrom(src);
   }
 #endif
+#ifndef U_HIDE_DRAFT_API
   /**
    * Move assignment, might leave src in bogus state.
    * This string will have the same contents and state that the source string had.
@@ -1929,11 +1927,12 @@ public:
    * @draft ICU 56
    */
   UnicodeString &moveFrom(UnicodeString &src) U_NOEXCEPT;
+#endif /* U_HIDE_DRAFT_API */
 
   /**
    * Swap strings.
    * @param other other string
-   * @draft ICU 56
+   * @stable ICU 56
    */
   void swap(UnicodeString &other) U_NOEXCEPT;
 
@@ -1941,13 +1940,12 @@ public:
    * Non-member UnicodeString swap function.
    * @param s1 will get s2's contents and state
    * @param s2 will get s1's contents and state
-   * @draft ICU 56
+   * @stable ICU 56
    */
   friend U_COMMON_API inline void U_EXPORT2
   swap(UnicodeString &s1, UnicodeString &s2) U_NOEXCEPT {
     s1.swap(s2);
   }
-#endif  /* U_HIDE_DRAFT_API */
 
   /**
    * Assignment operator.  Replace the characters in this UnicodeString
@@ -3214,17 +3212,15 @@ public:
    */
   UnicodeString(const UnicodeString& that);
 
-#ifndef U_HIDE_DRAFT_API
 #if U_HAVE_RVALUE_REFERENCES
   /**
    * Move constructor, might leave src in bogus state.
    * This string will have the same contents and state that the source string had.
    * @param src source string
-   * @draft ICU 56
+   * @stable ICU 56
    */
   UnicodeString(UnicodeString &&src) U_NOEXCEPT;
 #endif
-#endif  /* U_HIDE_DRAFT_API */
 
   /**
    * 'Substring' constructor from tail of source string.
