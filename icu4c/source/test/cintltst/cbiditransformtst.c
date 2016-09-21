@@ -387,7 +387,7 @@ testAllTransformOptions(void)
         U_SHAPE_LETTERS_UNSHAPE,
         U_SHAPE_LETTERS_SHAPE
     };
-    const char *expected;
+    const char *expectedStr;
     uint32_t i, nTestCases = sizeof(testCases) / sizeof(testCases[0]);
     uint32_t j, nDigits = sizeof(digits) / sizeof(digits[0]);
     uint32_t k, nLetters = sizeof(letters) / sizeof(letters[0]);
@@ -399,16 +399,16 @@ testAllTransformOptions(void)
 
     // Test various combinations of base levels, orders, mirroring, digits and letters
     for (i = 0; i < nTestCases; i++) {
-        expected = testCases[i].pReorderAndMirror;
+        expectedStr = testCases[i].pReorderAndMirror;
         ubiditransform_transform(pTransform, src, -1, dest, STR_CAPACITY,
                 testCases[i].inLevel, testCases[i].inOr,
                 testCases[i].outLevel, testCases[i].outOr,
                 UBIDI_MIRRORING_ON, 0, &errorCode);
-        verifyResultsForAllOpt(&testCases[i], src, dest, expected, U_SHAPE_DIGITS_NOOP,
+        verifyResultsForAllOpt(&testCases[i], src, dest, expectedStr, U_SHAPE_DIGITS_NOOP,
                 U_SHAPE_LETTERS_NOOP);
 
         for (j = 0; j < nDigits; j++) {
-            expected = digits[j] == U_SHAPE_DIGITS_ALEN2AN_INIT_LR ? testCases[i].pContextShapes
+            expectedStr = digits[j] == U_SHAPE_DIGITS_ALEN2AN_INIT_LR ? testCases[i].pContextShapes
                     : testCases[i].pReorderNoMirror;
             for (k = 0; k < nLetters; k++) {
                 /* Use here NULL for pTransform */
@@ -417,7 +417,7 @@ testAllTransformOptions(void)
                         testCases[i].outLevel, testCases[i].outOr,
                         UBIDI_MIRRORING_OFF, digits[j] | letters[k],
                         &errorCode);
-                verifyResultsForAllOpt(&testCases[i], src, dest, expected, digits[j],
+                verifyResultsForAllOpt(&testCases[i], src, dest, expectedStr, digits[j],
                         letters[k]);
             }
         }
