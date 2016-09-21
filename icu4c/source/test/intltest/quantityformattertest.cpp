@@ -40,12 +40,12 @@ void QuantityFormatterTest::TestBasic() {
     assertFalse(
             "adding bad variant",
             fmt.addIfAbsent("a bad variant", "{0} pounds", status));
-    assertEquals("adding bad variant status", U_ILLEGAL_ARGUMENT_ERROR, status);
+    assertEquals("adding bad variant status", (int32_t)U_ILLEGAL_ARGUMENT_ERROR, status);
     status = U_ZERO_ERROR;
     assertFalse(
             "Adding bad pattern",
             fmt.addIfAbsent("other", "{0} {1} too many placeholders", status));
-    assertEquals("adding bad pattern status", U_ILLEGAL_ARGUMENT_ERROR, status);
+    assertEquals("adding bad pattern status", (int32_t)U_ILLEGAL_ARGUMENT_ERROR, status);
     status = U_ZERO_ERROR;
     assertFalse("isValid with no patterns", fmt.isValid());
     assertTrue(
@@ -121,9 +121,9 @@ void QuantityFormatterTest::TestBasic() {
         UnicodeString appendTo;
         assertEquals(
                 "format singular",
-                "1 pound",
+                UnicodeString("1 pound"),
                 fmt.format(
-                        1,
+                        1.0,
                         *numfmt,
                         *plurrule,
                         appendTo,
@@ -132,9 +132,9 @@ void QuantityFormatterTest::TestBasic() {
         appendTo.remove();
         assertEquals(
                 "format plural",
-                "2 pounds",
+                UnicodeString("2 pounds"),
                 fmt.format(
-                        2,
+                        2.0,
                         *numfmt,
                         *plurrule,
                         appendTo,

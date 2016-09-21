@@ -714,10 +714,10 @@ void RelativeDateTimeFormatterTest::TestGetters() {
     // copy and assignment.
     RelativeDateTimeFormatter fmt2(fmt);
     fmt3 = fmt2;
-    assertEquals("style", UDAT_STYLE_NARROW, fmt3.getFormatStyle());
+    assertEquals("style", (int32_t)UDAT_STYLE_NARROW, fmt3.getFormatStyle());
     assertEquals(
             "context",
-            UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+            (int32_t)UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
             fmt3.getCapitalizationContext());
     assertSuccess("", status);
 }

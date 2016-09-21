@@ -90,10 +90,10 @@ void SimpleFormatterTest::TestNoArguments() {
 void SimpleFormatterTest::TestSyntaxErrors() {
     UErrorCode status = U_ZERO_ERROR;
     SimpleFormatter fmt("{}", status);
-    assertEquals("syntax error {}", U_ILLEGAL_ARGUMENT_ERROR, status);
+    assertEquals("syntax error {}", (int32_t)U_ILLEGAL_ARGUMENT_ERROR, status);
     status = U_ZERO_ERROR;
     fmt.applyPattern("{12d", status);
-    assertEquals("syntax error {12d", U_ILLEGAL_ARGUMENT_ERROR, status);
+    assertEquals("syntax error {12d", (int32_t)U_ILLEGAL_ARGUMENT_ERROR, status);
 }
 
 void SimpleFormatterTest::TestOneArgument() {
@@ -343,7 +343,7 @@ void SimpleFormatterTest::TestFormatReplaceNoOptimization() {
         return;
     }
     UnicodeString result("original");
-    int offsets[4];
+    int32_t offsets[4];
     UnicodeString freddy("freddy");
     UnicodeString frog("frog");
     UnicodeString by("by");
@@ -373,7 +373,7 @@ void SimpleFormatterTest::TestFormatReplaceNoOptimizationLeadingText() {
         return;
     }
     UnicodeString result("original");
-    int offsets[4];
+    int32_t offsets[4];
     UnicodeString freddy("freddy");
     UnicodeString frog("frog");
     UnicodeString by("by");
@@ -403,7 +403,7 @@ void SimpleFormatterTest::TestFormatReplaceOptimization() {
         return;
     }
     UnicodeString result("original");
-    int offsets[4];
+    int32_t offsets[4];
     UnicodeString freddy("freddy");
     UnicodeString frog("frog");
     UnicodeString by("by");
@@ -433,7 +433,7 @@ void SimpleFormatterTest::TestFormatReplaceNoOptimizationLeadingArgumentUsedTwic
         return;
     }
     UnicodeString result("original");
-    int offsets[4];
+    int32_t offsets[4];
     UnicodeString freddy("freddy");
     UnicodeString frog("frog");
     UnicodeString by("by");

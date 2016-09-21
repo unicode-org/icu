@@ -321,7 +321,7 @@ void NumberFormat2Test::TestDigitListInterval() {
     DigitInterval result;
     DigitList digitList;
     {
-        digitList.set(12345);
+        digitList.set((int32_t)12345);
         verifyInterval(digitList.getSmallestInterval(result), 0, 5);
     }
     {
@@ -393,7 +393,7 @@ void NumberFormat2Test::TestQuantize() {
     DigitList digits;
     UErrorCode status = U_ZERO_ERROR;
     {
-        digits.set(1);
+        digits.set((int32_t)1);
         digits.quantize(quantity, status);
         verifyDigitList(".9996", digits);
     }
@@ -417,77 +417,77 @@ void NumberFormat2Test::TestQuantize() {
 void NumberFormat2Test::TestConvertScientificNotation() {
     DigitList digits;
     {
-        digits.set(186283);
+        digits.set((int32_t)186283);
         assertEquals("", 5, digits.toScientific(1, 1));
         verifyDigitList(
                 "1.86283",
                 digits);
     }
     {
-        digits.set(186283);
+        digits.set((int32_t)186283);
         assertEquals("", 0, digits.toScientific(6, 1));
         verifyDigitList(
                 "186283",
                 digits);
     }
     {
-        digits.set(186283);
+        digits.set((int32_t)186283);
         assertEquals("", -2, digits.toScientific(8, 1));
         verifyDigitList(
                 "18628300",
                 digits);
     }
     {
-        digits.set(43561);
+        digits.set((int32_t)43561);
         assertEquals("", 6, digits.toScientific(-1, 3));
         verifyDigitList(
                 ".043561",
                 digits);
     }
     {
-        digits.set(43561);
+        digits.set((int32_t)43561);
         assertEquals("", 3, digits.toScientific(0, 3));
         verifyDigitList(
                 "43.561",
                 digits);
     }
     {
-        digits.set(43561);
+        digits.set((int32_t)43561);
         assertEquals("", 3, digits.toScientific(2, 3));
         verifyDigitList(
                 "43.561",
                 digits);
     }
     {
-        digits.set(43561);
+        digits.set((int32_t)43561);
         assertEquals("", 0, digits.toScientific(3, 3));
         verifyDigitList(
                 "43561",
                 digits);
     }
     {
-        digits.set(43561);
+        digits.set((int32_t)43561);
         assertEquals("", 0, digits.toScientific(5, 3));
         verifyDigitList(
                 "43561",
                 digits);
     }
     {
-        digits.set(43561);
+        digits.set((int32_t)43561);
         assertEquals("", -3, digits.toScientific(6, 3));
         verifyDigitList(
                 "43561000",
                 digits);
     }
     {
-        digits.set(43561);
+        digits.set((int32_t)43561);
         assertEquals("", -3, digits.toScientific(8, 3));
         verifyDigitList(
                 "43561000",
                 digits);
     }
     {
-        digits.set(43561);
+        digits.set((int32_t)43561);
         assertEquals("", -6, digits.toScientific(9, 3));
         verifyDigitList(
                 "43561000000",
@@ -1456,19 +1456,19 @@ void NumberFormat2Test::TestAffixPattern() {
     second.remove();
     assertFalse("", second.iterator(iter).nextToken());
     assertTrue("", first.iterator(iter).nextToken());
-    assertEquals("", AffixPattern::kPercent, iter.getTokenType());
+    assertEquals("", (int32_t)AffixPattern::kPercent, iter.getTokenType());
     assertEquals("", 1, iter.getTokenLength());
     assertTrue("", iter.nextToken());
     UnicodeString str;
     assertEquals("", 500, iter.getLiteral(str).length());
-    assertEquals("", AffixPattern::kLiteral, iter.getTokenType());
+    assertEquals("", (int32_t)AffixPattern::kLiteral, iter.getTokenType());
     assertEquals("", 500, iter.getTokenLength());
     assertTrue("", iter.nextToken());
-    assertEquals("", AffixPattern::kCurrency, iter.getTokenType());
+    assertEquals("", (int32_t)AffixPattern::kCurrency, iter.getTokenType());
     assertEquals("", 2, iter.getTokenLength());
     assertTrue("", iter.nextToken());
     assertEquals("", 256, iter.getLiteral(str).length());
-    assertEquals("", AffixPattern::kLiteral, iter.getTokenType());
+    assertEquals("", (int32_t)AffixPattern::kLiteral, iter.getTokenType());
     assertEquals("", 256, iter.getTokenLength());
     assertFalse("", iter.nextToken());
 }
@@ -2534,7 +2534,7 @@ void NumberFormat2Test::TestPluralsAndRoundingScientific() {
                 expectedAttributes);
     }
     {
-        digits.set(-299792458);
+        digits.set(-299792458.0);
         NumberFormat2Test_Attributes expectedAttributes[] = {
             {UNUM_SIGN_FIELD, 0, 1},
             {UNUM_INTEGER_FIELD, 1, 2},
@@ -2555,7 +2555,7 @@ void NumberFormat2Test::TestPluralsAndRoundingScientific() {
     options.fExponent.fAlwaysShowSign = TRUE;
     precision.fMinExponentDigits = 3;
     {
-        digits.set(3);
+        digits.set(3.0);
         NumberFormat2Test_Attributes expectedAttributes[] = {
             {UNUM_INTEGER_FIELD, 0, 1},
             {UNUM_DECIMAL_SEPARATOR_FIELD, 1, 2},
@@ -2631,7 +2631,7 @@ void NumberFormat2Test::TestPluralsAndRoundingScientific() {
     precision.fMantissa.fMax.setIntDigitCount(1);
     precision.fMantissa.fMax.setFracDigitCount(2);
     {
-        digits.set(299792458);
+        digits.set((int32_t)299792458);
         verifyAffixesAndPadding(
                 "3.00E+008 Meters",
                 aap,

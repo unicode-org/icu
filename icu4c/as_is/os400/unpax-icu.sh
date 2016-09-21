@@ -25,6 +25,9 @@ else
 fi
 export QSH
 
+# set this to "v" to list files as they are unpacked (default)
+VERBOSE_UNPACK="v"
+
 # Set the following variable to the list of binary file suffixes (extensions)
 
 
@@ -78,13 +81,13 @@ echo "Extracting from $tar_file ..."
 echo ""
 
 # extract everything as iso-8859-1 except these directories
-pax -C 819 -rcvf $tar_file $ebcdic_data
+pax -C 819 -rc${VERBOSE_UNPACK}f $tar_file $ebcdic_data
 
 # extract files while converting them to EBCDIC
 echo ""
 echo "Extracting files which must be in ibm-37 ..."
 echo ""
-pax -C 37 -rvf $tar_file $ebcdic_data
+pax -C 37 -r${VERBOSE_UNPACK}f $tar_file $ebcdic_data
 
 #****************************************************************************
 # For files we have restored as CCSID 37, check the BOM to see if they    
@@ -139,7 +142,9 @@ fi
 
 echo "# Processing special paths."
 # Process special paths
-more_bin_files=$(find icu -type f \( -name '*.zzz' `echo $binary_suffixes | sed -e 's%[a-zA-Z]*%-o -name \*.&%g'` \)  -print)
+more_bin_opts=$(echo $binary_suffixes | sed -e 's%[a-zA-Z0-9]*%-o -name \*.&%g')
+# echo "Looking for additional files: find ... $more_bin_opts"
+more_bin_files=$(find icu -type f \( -name '*.zzz' $more_bin_opts \)  -print)
 echo "Restoring binary files by special paths ($bin_count) ..."
 rm $more_bin_files
 pax -C 819 -rvf $tar_file $more_bin_files

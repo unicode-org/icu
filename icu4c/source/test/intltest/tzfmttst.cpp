@@ -410,7 +410,7 @@ struct LocaleData {
         numDone = 0;
     }
 
-    UBool nextTest(int &rLocaleIndex, int &rPatternIndex) {
+    UBool nextTest(int32_t &rLocaleIndex, int32_t &rPatternIndex) {
         Mutex lock;
         if (patternIndex >= UPRV_LENGTHOF(PATTERNS) - 1) {
             if (localeIndex >= nLocales - 1) {
