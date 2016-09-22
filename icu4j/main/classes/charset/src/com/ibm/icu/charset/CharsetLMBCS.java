@@ -506,7 +506,7 @@ class CharsetLMBCS extends CharsetICU {
         }
 
         while (LocaleLMBCSGrpMap[index].LocaleID != null) {
-            if (LocaleLMBCSGrpMap[index].LocaleID == LocaleID) {
+            if (LocaleLMBCSGrpMap[index].LocaleID.equals(LocaleID)) {
                 return LocaleLMBCSGrpMap[index].OptGroup;
             } else if (LocaleLMBCSGrpMap[index].LocaleID.compareTo(LocaleID) > 0){
                break;

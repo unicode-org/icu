@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.RuleBasedTransliterator.Data;
 import com.ibm.icu.util.CaseInsensitiveString;
@@ -145,7 +146,7 @@ class TransliteratorRegistry {
         }
 
         public void reset() {
-            if (spec != top) { // [sic] pointer comparison
+            if (!Utility.sameObjects(spec, top)) {
                 spec = top;
                 isSpecLocale = (res != null);
                 setupNext();
@@ -167,7 +168,7 @@ class TransliteratorRegistry {
                 }
             } else {
                 // Fallback to the script, which may be null
-                if (nextSpec != scriptName) {
+                if (!Utility.sameObjects(nextSpec, scriptName)) {
                     nextSpec = scriptName;
                 } else {
                     nextSpec = null;
