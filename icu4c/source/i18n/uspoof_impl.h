@@ -154,10 +154,6 @@ public:
 //       The strings table contains all of the value strings (those of length two or greater)
 //       concatentated together into one long UChar (UTF-16) array.
 //
-//       The array is arranged by length of the strings - all strings of the same length
-//       are stored together.  The sections are ordered by length of the strings -
-//       all two char strings first, followed by all of the three Char strings, etc.
-//
 //       There is no nul character or other mark between adjacent strings.
 //
 

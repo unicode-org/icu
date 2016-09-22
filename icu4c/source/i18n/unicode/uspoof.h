@@ -130,7 +130,7 @@
  *
  * <p>
  * If you need to check if a string is confusable with any string in a dictionary of many strings, rather than calling
- * {uspoof_areConfusable} many times in a loop, {uspoof_getSkeleton} can be used instead, as shown below:
+ * {@link uspoof_areConfusable} many times in a loop, {@link uspoof_getSkeleton} can be used instead, as shown below:
  *
  * \code{.c}
  * UErrorCode status = U_ZERO_ERROR;
@@ -436,7 +436,7 @@ typedef enum USpoofChecks {
     /**
       * This flag is deprecated and no longer affects the behavior of SpoofChecker.
       *
-      * @deprecated ICU 58  This API was deprecated in UTS 39 Version 8 and is no longer used.
+      * @deprecated ICU 58  Any case confusable mappings were removed from UTS 39; the corresponding ICU API was deprecated.
       */
     USPOOF_ANY_CASE                 =   8,
 #endif  /* U_HIDE_DEPRECATED_API */
@@ -1243,7 +1243,8 @@ uspoof_getCheckResultRestrictionLevel(const USpoofCheckResult *checkResult, UErr
 
 /**
  * Gets the set of numerics found in the string, if the USPOOF_MIXED_NUMBERS check was enabled;
- * otherwise, undefined.  Ownership of the returned USet remains with the USpoofCheckResult.
+ * otherwise, undefined.  The set will contain the zero digit from each decimal number system found
+ * in the input string.  Ownership of the returned USet remains with the USpoofCheckResult.
  * The USet will be free'd when {@link uspoof_closeCheckResult} is called.
  *
  * @param checkResult  The instance of USpoofCheckResult created by {@link uspoof_openCheckResult}
