@@ -149,7 +149,7 @@
  *   </tr>
  *   <tr>
  *     <td>Bidirectional Algorithm</td>
- *     <td>ubidi.h</td>
+ *     <td>ubidi.h, ubiditransform.h</td>
  *     <td>C API</td>
  *   </tr>
  *   <tr>
