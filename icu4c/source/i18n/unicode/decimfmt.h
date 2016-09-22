@@ -970,7 +970,7 @@ public:
      *                  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(double number,
                                   UnicodeString& appendTo,
@@ -1019,7 +1019,7 @@ public:
      *                  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& appendTo,
@@ -1068,7 +1068,7 @@ public:
      *                  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(int64_t number,
                                   UnicodeString& appendTo,
@@ -1089,7 +1089,7 @@ public:
      *                  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(StringPiece number,
                                   UnicodeString& appendTo,
