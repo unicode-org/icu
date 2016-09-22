@@ -282,8 +282,7 @@ static void TestFPos_SkelWithSeconds()
 	    UChar   ubuf[kSizeUBuf];
 	    int32_t ulen, uelen;
 	    UErrorCode status = U_ZERO_ERROR;
-	    
-	    u_strFromUTF8(ubuf, kSizeUBuf, &ulen, locSkelItemPtr->skeleton, -1, &status);
+            ulen = u_unescape(locSkelItemPtr->skeleton, ubuf, kSizeUBuf);
 	    udifmt = udtitvfmt_open(locSkelItemPtr->locale, ubuf, ulen, zoneGMT, -1, &status);
 	    if ( U_FAILURE(status) ) {
            log_data_err("FAIL: udtitvfmt_open for locale %s, skeleton %s: %s\n",

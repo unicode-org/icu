@@ -6159,6 +6159,8 @@ static void TestToLegacyType(void)
             }
         } else if (uprv_strcmp(legacyType, expected) != 0) {
             log_data_err("toLegacyType: keyword=%s, value=%s => %s, expected=%s\n", keyword, value, legacyType, expected);
+        } else {
+            log_verbose("toLegacyType: keyword=%s, value=%s => %s\n", keyword, value, legacyType);
         }
     }
 }
