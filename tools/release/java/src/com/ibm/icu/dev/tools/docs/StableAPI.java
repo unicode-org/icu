@@ -1,5 +1,6 @@
 /*
  **********************************************************************
+ * Copyright (C) 2016 and later: Unicode, Inc. and others.
  * Copyright (c) 2006-2013, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.*;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -244,36 +246,13 @@ public class StableAPI {
     private static boolean didWarnSuperTrim = false;
 
     private static String trimICU(String ver) {
-        final String ICU_ = ICU_SPACE_PREFIX;
-        final String ICU = "ICU";
-        if(ver != null) { // trim everything before the 'ICU...'
-            ver = ver.trim();
-            int icuidx = ver.lastIndexOf(ICU_);
-            int icuidx1 = ver.lastIndexOf(ICU);
-            if(icuidx>=0) {
-                warn("Trimming text before 'ICU': " + ver.substring(0,icuidx+ICU_.length()));
-                ver = ver.substring(icuidx+ICU_.length()).trim();
-            } else if(icuidx1>=0) {
-                warn("Trimming text before 'ICU ': " + ver.substring(0,icuidx1+ICU.length()));
-                ver = ver.substring(icuidx1+ICU.length()).trim();
-            }
-
-            // always trim anything after a version #
-            {
-                int n;
-                for(n=ver.length()-1;n>0 && ((ver.charAt(n)=='.') || Character.isDigit(ver.charAt(n))) ;n--)
-                    ;
-                if(n>0) {
-                    warn("Trimming extraneous text after version: '" + ver.substring(n+1,ver.length()) + "'");
-                    ver = ver.substring(n+1).trim();
-                    if(!didWarnSuperTrim) {
-                	didWarnSuperTrim = true;
-                	warn("Please ONLY use:  '@whatever ICU X.Y.Z'");
-                    }
-                }
-            }
+        Matcher icuVersionMatcher =  Pattern.compile("ICU *\\d+(\\.\\d+){0,2}").matcher(ver);
+        if (icuVersionMatcher.find()) {
+            return icuVersionMatcher.group();
+        } else {
+            warn("@whatever not followed by ICU <version number>");
+            return "";
         }
-        return ver;
     }
 
     private String setVer(String prevVer, String whichVer, File dir) {

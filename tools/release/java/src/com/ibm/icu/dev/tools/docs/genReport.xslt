@@ -26,7 +26,7 @@ doctype-system="http://www.w3.org/TR/html4/loose.dtd"
   <xsl:template match="/">
     <html>
 	<xsl:comment>
-     Copyright (C)  <xsl:value-of select="$ourYear" />: Unicode, Inc. and others.
+     Copyright (C) 2016 and later: Unicode, Inc. and others.
      License &amp; terms of use: http://www.unicode.org/copyright.html
 	</xsl:comment>
     <head>
