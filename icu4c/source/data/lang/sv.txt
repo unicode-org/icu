@@ -1081,7 +1081,7 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.30.7"}
     characterLabelPattern{
         all{"{0} — alla"}
         category-list{"{0}: {1}"}

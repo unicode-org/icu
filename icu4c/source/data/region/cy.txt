@@ -310,5 +310,5 @@ cy{
         MK{"Macedonia (CWIM)"}
         TL{"Dwyrain Timor"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.30.6"}
 }

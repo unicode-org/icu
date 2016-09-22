@@ -20,7 +20,7 @@ ks{
                 decimal{"."}
                 exponential{"E"}
                 group{","}
-                infinity{"?"}
+                infinity{"∞"}
                 list{";"}
                 minusSign{"‎-"}
                 nan{"NaN"}
@@ -31,7 +31,7 @@ ks{
         }
         native{"arabext"}
     }
-    Version{"2.1.28.76"}
+    Version{"2.1.30.6"}
     calendar{
         generic{
             DateTimePatterns{

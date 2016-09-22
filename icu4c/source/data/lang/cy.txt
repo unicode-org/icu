@@ -732,7 +732,7 @@ cy{
         VAIDIKA{"VAIDIKA"}
         VALLADER{"VALLADER"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.30.6"}
     characterLabelPattern{
         all{"{0} — Popeth"}
         category-list{"{0}: {1}"}
