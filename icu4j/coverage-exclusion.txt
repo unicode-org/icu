@@ -62,6 +62,7 @@ com/ibm/icu/impl/coll/CollationDataBuilder$DataBuilderCollationIterator#getOffse
 com/ibm/icu/impl/coll/CollationDataBuilder$DataBuilderCollationIterator#resetToOffset:(I)V
 com/ibm/icu/impl/coll/CollationDataReader#<init>:()V
 com/ibm/icu/impl/coll/CollationFastLatin#<init>:()V
+com/ibm/icu/impl/coll/CollationFastLatinBuilder#resetCEs:()V
 com/ibm/icu/impl/coll/CollationFCD#<init>:()V
 com/ibm/icu/impl/coll/CollationIterator#equals:(Ljava/lang/Object;)Z
 com/ibm/icu/impl/coll/CollationIterator#getCE32FromBuilderData:(I)I
@@ -279,6 +280,7 @@ com/ibm/icu/impl/locale/LocaleExtensions#getID:()Ljava/lang/String;
 com/ibm/icu/impl/locale/LocaleExtensions#hashCode:()I
 com/ibm/icu/impl/locale/LocaleExtensions#isEmpty:()Z
 com/ibm/icu/impl/locale/LocaleExtensions#toString:()Ljava/lang/String;
+com/ibm/icu/impl/locale/LocaleObjectCache$CacheEntry#getKey:()Ljava/lang/Object;
 com/ibm/icu/impl/locale/LocaleObjectCache#normalizeKey:(Ljava/lang/Object;)Ljava/lang/Object;
 com/ibm/icu/impl/locale/LocaleValidityChecker#<init>:(Ljava/util/Set;)V
 com/ibm/icu/impl/locale/LocaleValidityChecker#getDatasubtypes:()Ljava/util/Set;
