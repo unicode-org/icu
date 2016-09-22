@@ -173,6 +173,15 @@ public final class Utility {
     }
 
     /**
+     * Trivial reference equality.
+     * This method should help document that we really want == not equals(),
+     * and to have a single place to suppress warnings from static analysis tools.
+     */
+    public static final boolean sameObjects(Object a, Object b) {
+        return a == b;
+    }
+
+    /**
      * Convenience utility. Does null checks on objects, then calls equals.
      */
     public final static boolean objectEquals(Object a, Object b) {

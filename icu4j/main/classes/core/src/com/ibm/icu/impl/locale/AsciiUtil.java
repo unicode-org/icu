@@ -8,9 +8,11 @@
  */
 package com.ibm.icu.impl.locale;
 
+import com.ibm.icu.impl.Utility;
+
 public final class AsciiUtil {
     public static boolean caseIgnoreMatch(String s1, String s2) {
-        if (s1 == s2) {
+        if (Utility.sameObjects(s1, s2)) {
             return true;
         }
         int len = s1.length();
@@ -30,7 +32,7 @@ public final class AsciiUtil {
     }
 
     public static int caseIgnoreCompare(String s1, String s2) {
-        if (s1 == s2) {
+        if (Utility.sameObjects(s1, s2)) {
             return 0;
         }
         return AsciiUtil.toLowerString(s1).compareTo(AsciiUtil.toLowerString(s2));

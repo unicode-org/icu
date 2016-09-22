@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUBinary.Authenticate;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
@@ -1792,7 +1793,7 @@ public class SpoofChecker {
                 return false;
             if (!Arrays.equals(fCFUValues, otherData.fCFUValues))
                 return false;
-            if (fCFUStrings != otherData.fCFUStrings && fCFUStrings != null
+            if (!Utility.sameObjects(fCFUStrings, otherData.fCFUStrings) && fCFUStrings != null
                     && !fCFUStrings.equals(otherData.fCFUStrings))
                 return false;
             return true;

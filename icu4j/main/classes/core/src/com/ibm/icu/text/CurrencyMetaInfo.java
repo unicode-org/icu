@@ -14,19 +14,20 @@ import java.util.Date;
 import java.util.List;
 
 import com.ibm.icu.impl.Grego;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 
 /**
  * Provides information about currencies that is not specific to a locale.
- * 
+ *
  * A note about currency dates.  The CLDR data provides data to the day,
  * inclusive.  The date information used by CurrencyInfo and CurrencyFilter
- * is represented by milliseconds, which is overly precise.  These times are 
+ * is represented by milliseconds, which is overly precise.  These times are
  * in GMT, so queries involving dates should use GMT times, but more generally
  * you should avoid relying on time of day in queries.
- * 
+ *
  * This class is not intended for public subclassing.
- * 
+ *
  * @stable ICU 4.4
  */
 public class CurrencyMetaInfo {
@@ -43,7 +44,7 @@ public class CurrencyMetaInfo {
     }
 
     /**
-     * Returns the unique instance of the currency meta info, or null if 
+     * Returns the unique instance of the currency meta info, or null if
      * noSubstitute is true and there is no data to support this API.
      * @param noSubstitute true if no substitute data should be used
      * @return the meta info, or null
@@ -101,7 +102,7 @@ public class CurrencyMetaInfo {
          * @stable ICU 4.4
          */
         public final long to;
-        
+
         /**
          * true if we are filtering only for currencies used as legal tender.
          * @internal
@@ -116,7 +117,7 @@ public class CurrencyMetaInfo {
             this.from = from;
             this.to = to;
             this.tenderOnly = tenderOnly;
-            
+
         }
 
         private static final CurrencyFilter ALL = new CurrencyFilter(
@@ -187,7 +188,7 @@ public class CurrencyMetaInfo {
         public static CurrencyFilter onDateRange(Date from, Date to) {
             return ALL.withDateRange(from, to);
         }
-        
+
         /**
          * Returns a filter that accepts all currencies in use on the given date.
          * @param date the date as milliseconds after Jan 1, 1970
@@ -210,7 +211,7 @@ public class CurrencyMetaInfo {
         public static CurrencyFilter onDateRange(long from, long to) {
             return ALL.withDateRange(from, to);
         }
-        
+
         /**
          * Returns a CurrencyFilter for finding currencies that were either once used,
          * are used, or will be used as tender.
@@ -268,7 +269,7 @@ public class CurrencyMetaInfo {
             long toLong = to == null ? Long.MAX_VALUE : to.getTime();
             return new CurrencyFilter(this.region, this.currency, fromLong, toLong, this.tenderOnly);
         }
-        
+
         /**
          * Returns a copy of this filter that accepts all currencies in use on
          * the given date.
@@ -292,7 +293,7 @@ public class CurrencyMetaInfo {
         public CurrencyFilter withDateRange(long from, long to) {
             return new CurrencyFilter(this.region, this.currency, from, to, this.tenderOnly);
         }
-        
+
         /**
          * Returns a copy of this filter that filters for currencies that were
          * either once used, are used, or will be used as tender.
@@ -359,7 +360,8 @@ public class CurrencyMetaInfo {
         }
 
         private static boolean equals(String lhs, String rhs) {
-            return lhs == rhs || (lhs != null && lhs.equals(rhs));
+            return (Utility.sameObjects(lhs, rhs) ||
+                    (lhs != null && lhs.equals(rhs)));
         }
     }
 
@@ -422,8 +424,8 @@ public class CurrencyMetaInfo {
         public final String code;
 
         /**
-         * Date on which the currency was first officially used in the region.  
-         * This is midnight at the start of the first day on which the currency was used, GMT. 
+         * Date on which the currency was first officially used in the region.
+         * This is midnight at the start of the first day on which the currency was used, GMT.
          * If there is no date, this is Long.MIN_VALUE;
          * @stable ICU 4.4
          */
@@ -433,7 +435,7 @@ public class CurrencyMetaInfo {
          * Date at which the currency stopped being officially used in the region.
          * This is one millisecond before midnight at the end of the last day on which the currency was used, GMT.
          * If there is no date, this is Long.MAX_VALUE.
-         * 
+         *
          * @stable ICU 4.4
          */
         public final long to;
@@ -445,8 +447,8 @@ public class CurrencyMetaInfo {
          * @stable ICU 49
          */
         public final int priority;
-        
-        
+
+
         private final boolean tender;
 
         /**
@@ -456,10 +458,10 @@ public class CurrencyMetaInfo {
         public CurrencyInfo(String region, String code, long from, long to, int priority) {
             this(region, code, from, to, priority, true);
         }
-        
+
         /**
          * Constructs a currency info.
-         * 
+         *
          * @internal
          * @deprecated This API is ICU internal only.
          */
@@ -482,7 +484,7 @@ public class CurrencyMetaInfo {
         public String toString() {
             return debugString(this);
         }
-        
+
         /**
          * Determine whether or not this currency was once used, is used,
          * or will be used as tender in this region.
