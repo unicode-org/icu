@@ -36,7 +36,6 @@ public class CurrencyNameProviderICU extends CurrencyNameProvider {
         return name;
     }
 
-    @Override
     public Locale[] getAvailableLocales() {
         return ICULocaleServiceProvider.getAvailableLocales();
     }
