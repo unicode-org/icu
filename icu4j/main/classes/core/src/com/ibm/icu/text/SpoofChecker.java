@@ -247,8 +247,6 @@ public class SpoofChecker {
          * and the string is covered by Latin and any one other Recommended or Aspirational script, except Cyrillic,
          * Greek, and Cherokee.
          *
-         * This is the default restriction level as of ICU 58.
-         *
          * @stable ICU 53
          */
         MODERATELY_RESTRICTIVE,
@@ -386,10 +384,6 @@ public class SpoofChecker {
      * checks to some subset of SINGLE_SCRIPT_CONFUSABLE, MIXED_SCRIPT_CONFUSABLE, or WHOLE_SCRIPT_CONFUSABLE to make
      * {@link SpoofChecker#areConfusable} return only those types of confusables.
      *
-     * <p>
-     * Note: if you wish to use {@link SpoofChecker#getSkeleton}, it is required that you enable at least one of the
-     * CONFUSABLE flags.
-     *
      * @draft ICU 58
      * @provisional This API might change or be removed in a future release.
      */
@@ -398,7 +392,8 @@ public class SpoofChecker {
     /**
      * This flag is deprecated and no longer affects the behavior of SpoofChecker.
      *
-     * @deprecated ICU 58 This API was deprecated in UTS 39 revision 11 and is no longer used.
+     * @deprecated ICU 58 Any case confusable mappings were removed from UTS 39; the corresponding ICU API was
+     * deprecated.
      */
     @Deprecated
     public static final int ANY_CASE = 8;
@@ -1188,7 +1183,8 @@ public class SpoofChecker {
         public int position;
 
         /**
-         * The numerics found in the string, if MIXED_NUMBERS was set; otherwise null;
+         * The numerics found in the string, if MIXED_NUMBERS was set; otherwise null.  The set will contain the zero
+         * digit from each decimal number system found in the input string.
          *
          * @draft ICU 58
          * @provisional This API might change or be removed in a future release.
@@ -1692,10 +1688,6 @@ public class SpoofChecker {
     // The strings table contains all of the value strings (those of length two or greater)
     // concatentated together into one long char (UTF-16) array.
     //
-    // The array is arranged by length of the strings - all strings of the same length
-    // are stored together. The sections are ordered by length of the strings -
-    // all two char strings first, followed by all of the three Char strings, etc.
-    //
     // There is no nul character or other mark between adjacent strings.
     private static final class ConfusableDataUtils {
         public static final int FORMAT_VERSION = 2; // version for ICU 58
@@ -1932,8 +1924,7 @@ public class SpoofChecker {
 
     // -------------------------------------------------------------------------------
     //
-    // ScriptSet - Script code bit sets. Used with the whole script confusable data.
-    // Used both at data build and at run time.
+    // ScriptSet - Script code bit sets.
     // Extends Java BitSet with input/output support and a few helper methods.
     // Note: The I/O is not currently being used, so it has been commented out. If
     // it is needed again, the code can be restored.
