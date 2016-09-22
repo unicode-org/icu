@@ -26,11 +26,11 @@ nb{
                 group{" "}
                 infinity{"∞"}
                 list{"؛"}
-                minusSign{"−"}
+                minusSign{"؜−"}
                 nan{"NaN"}
                 perMille{"؉"}
-                percentSign{"٪"}
-                plusSign{"+"}
+                percentSign{"٪؜"}
+                plusSign{"؜+"}
                 superscriptingExponent{"×"}
                 timeSeparator{"."}
             }
@@ -42,11 +42,11 @@ nb{
                 group{" "}
                 infinity{"∞"}
                 list{"؛"}
-                minusSign{"−"}
+                minusSign{"‎−‎"}
                 nan{"NaN"}
                 perMille{"؉"}
                 percentSign{"٪"}
-                plusSign{"+"}
+                plusSign{"‎+‎"}
                 superscriptingExponent{"×"}
                 timeSeparator{"."}
             }
@@ -236,7 +236,7 @@ nb{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.29.90"}
+    Version{"2.1.30.7"}
     calendar{
         buddhist{
             availableFormats{

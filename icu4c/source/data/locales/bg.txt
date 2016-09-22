@@ -193,14 +193,14 @@ bg{
                 perMille{"‰"}
                 percentSign{"%"}
                 plusSign{"+"}
-                superscriptingExponent{"."}
+                superscriptingExponent{"·"}
                 timeSeparator{":"}
             }
         }
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.30.6"}
     calendar{
         generic{
             DateTimePatterns{

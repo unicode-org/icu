@@ -20,7 +20,7 @@ sv{
     NumberElements{
         arab{
             symbols{
-                minusSign{"‏−"}
+                minusSign{"؜−"}
                 nan{"¤¤¤"}
                 perMille{"؉‏"}
                 timeSeparator{":"}
@@ -28,7 +28,7 @@ sv{
         }
         arabext{
             symbols{
-                minusSign{"‏−"}
+                minusSign{"‎−‎"}
                 nan{"¤¤¤"}
                 plusSign{"‎+‎"}
                 timeSeparator{":"}
@@ -219,7 +219,7 @@ sv{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.30.7"}
     calendar{
         buddhist{
             eras{

@@ -11,5 +11,8 @@ ru_BY{
             "Российский рубль (1991–1998)",
         }
     }
-    Version{"2.1.28.88"}
+    Currencies%narrow{
+        BYN{"Br"}
+    }
+    Version{"2.1.30.5"}
 }
