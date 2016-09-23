@@ -120,7 +120,7 @@
  * uspoof_getSkeleton(sc, 0, str2, -1, skel2, skel2Len, &status);
  *
  * // Are the skeletons the same?
- * UBool result = u_strCompare(skel1, -1, skel2, -1, FALSE) == 0;
+ * UBool result = u_strcmp(skel1, skel2) == 0;
  * // areConfusable: 1 (status: U_ZERO_ERROR)
  * printf("areConfusable: %d (status: %s)\n", result, u_errorName(status));
  * uspoof_close(sc);
@@ -158,7 +158,7 @@
  *     uspoof_getSkeleton(sc, 0, str, -1, skel, len, &status);
  *     UBool result = FALSE;
  *     for (size_t i=0; i<DICTIONARY_LENGTH; i++) {
- *         result = u_strCompare(skel, -1, skeletons[i], -1, FALSE) == 0;
+ *         result = u_strcmp(skel, skeletons[i]) == 0;
  *         if (result == TRUE) { break; }
  *     }
  *     // Has confusable in dictionary: 1 (status: U_ZERO_ERROR)
