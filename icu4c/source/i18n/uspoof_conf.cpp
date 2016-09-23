@@ -49,6 +49,9 @@ U_NAMESPACE_USE
 //
 //     2.  Sort all of the strings encountered by length, since they will need to
 //         be stored in that order in the final string table.
+//         TODO: Sorting these strings by length is no longer needed since the removal of
+//         the string lengths table.  This logic can be removed to save processing time
+//         when building confusables data.
 //
 //     3.  Build a list of keys (UChar32s) from the four mapping tables.  Sort the
 //         list because that will be the ordering of our runtime table.
