@@ -81,9 +81,10 @@ import com.ibm.icu.util.ULocale;
  * application startup), and the more efficient {@link SpoofChecker#areConfusable} method can be used at runtime.
  *
  * <p>
- * UTS 39 defines two strings to be <em>confusable</em> if they map to the same <em>skeleton string</em>. A skeleton can
- * be thought of as a "hash code". {@link SpoofChecker#getSkeleton} computes the skeleton for a particular string, so
- * the following snippet is equivalent to the example above:
+ * UTS 39 defines two strings to be <em>confusable</em> if they map to the same skeleton. A <em>skeleton</em> is a
+ * sequence of families of confusable characters, where each family has a single exemplar character.
+ * {@link SpoofChecker#getSkeleton} computes the skeleton for a particular string, so the following snippet is
+ * equivalent to the example above:
  *
  * <pre>
  * <code>
@@ -767,8 +768,8 @@ public class SpoofChecker {
         }
 
         /*
-         * ***************************************************************************** Internal classes for
-         * compililing confusable data into its binary (runtime) form.
+         * *****************************************************************************
+         * Internal classes for compililing confusable data into its binary (runtime) form.
          * *****************************************************************************
          */
         // ---------------------------------------------------------------------
@@ -783,6 +784,9 @@ public class SpoofChecker {
         //
         // 2. Sort all of the strings encountered by length, since they will need to
         // be stored in that order in the final string table.
+        // TODO: Sorting these strings by length is no longer needed since the removal of
+        // the string lengths table.  This logic can be removed to save processing time
+        // when building confusables data.
         //
         // 3. Build a list of keys (UChar32s) from the mapping table. Sort the
         // list because that will be the ordering of our runtime table.
@@ -1003,8 +1007,8 @@ public class SpoofChecker {
             }
 
             /*
-             * ***************************************************************************** Internal classes for
-             * compiling confusable data into its binary (runtime) form.
+             * *****************************************************************************
+             * Internal classes for compiling confusable data into its binary (runtime) form.
              * *****************************************************************************
              */
             // SPUString
