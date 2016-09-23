@@ -408,12 +408,19 @@ public class CurrencyTest extends TestFmwk {
 
         CurrencyFilter filter = CurrencyFilter.onRegion("DE"); // must be capitalized
         List<CurrencyInfo> currenciesInGermany = metainfo.currencyInfo(filter);
-        logln("currencies: " + currenciesInGermany.size());
+        CurrencyFilter filter_br = CurrencyFilter.onRegion("BR"); // must be capitalized
+        List<CurrencyInfo> currenciesInBrazil = metainfo.currencyInfo(filter_br);
+        logln("currencies Germany: " + currenciesInGermany.size());
+        logln("currencies Brazil: " + currenciesInBrazil.size());
+        long demFirstDate = Long.MIN_VALUE;
         long demLastDate = Long.MAX_VALUE;
         long eurFirstDate = Long.MIN_VALUE;
+        CurrencyInfo demInfo = null;
         for (CurrencyInfo info : currenciesInGermany) {
             logln(info.toString());
             if (info.code.equals("DEM")) {
+                demInfo = info;
+                demFirstDate = info.from;
                 demLastDate = info.to;
             } else if (info.code.equals("EUR")) {
                 eurFirstDate = info.from;
@@ -431,7 +438,20 @@ public class CurrencyTest extends TestFmwk {
 
         // but not one millisecond before the start of the first day
         long eurFirstDateMinus1ms = eurFirstDate - 1;
-        assertEquals("EUR not avilable before very start of first date", 1, metainfo.currencyInfo(filter.withDate(eurFirstDateMinus1ms)).size());
+        assertEquals("EUR not avilable before very start of first date", 1,
+                     metainfo.currencyInfo(filter.withDate(eurFirstDateMinus1ms)).size());
+
+        // Deutschmark available from first millisecond on
+        assertEquals("Millisecond of DEM Big Bang", 1,
+                     metainfo.currencyInfo(filter.onDate(demFirstDate).withRegion("DE")).size());
+
+        assertEquals("From Deutschmark to Euro", 2,
+                     metainfo.currencyInfo(filter.onDateRange(demFirstDate, eurFirstDate).withRegion("DE")).size());
+
+        assertEquals("all Tender for Brazil", 7,
+                metainfo.currencyInfo(filter_br.onTender().withRegion("BR")).size());
+
+        assertTrue("No legal tender", demInfo.isTender());        
     }
 
     @Test
@@ -793,6 +813,36 @@ public class CurrencyTest extends TestFmwk {
     @Test
     public void TestCurrencyInfoCtor() {
         new CurrencyMetaInfo.CurrencyInfo("region", "code", 0, 0, 1);
+    }
+
+    /**
+     * Class CurrencyMetaInfo has methods which are overwritten by its derived classes.
+     * A derived class is defined here for the purpose of testing these methods.
+     * Since the creator of CurrencyMetaInfo is defined as 'protected', no instance of
+     * this class can be created directly.
+     */
+    public class TestCurrencyMetaInfo extends CurrencyMetaInfo {
+    }
+
+    final TestCurrencyMetaInfo tcurrMetaInfo = new TestCurrencyMetaInfo();
+
+    /*
+     *
+     * Test methods of base class CurrencyMetaInfo. ICU4J only creates subclasses,
+     * never an instance of the base class.
+     */
+    @Test
+    public void TestCurrMetaInfoBaseClass() {
+        CurrencyFilter usFilter = CurrencyFilter.onRegion("US");
+
+        List<CurrencyInfo> listCurrInfo =  tcurrMetaInfo.currencyInfo(usFilter);
+        assertEquals("Empty list expected", 0, tcurrMetaInfo.currencyInfo(usFilter).size());
+        assertEquals("Empty list expected", 0, tcurrMetaInfo.currencies(usFilter).size());
+        assertEquals("Empty list expected", 0, tcurrMetaInfo.regions(usFilter).size());
+
+        assertEquals("Iso format for digits expected",
+                     "CurrencyDigits(fractionDigits='2',roundingIncrement='0')",
+                     tcurrMetaInfo.currencyDigits("isoCode").toString());
     }
 
     /**
