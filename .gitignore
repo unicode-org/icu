@@ -893,6 +893,7 @@ icu4c/source/tools/tzcode/Makefile
 icu4c/source/uconfig.h.prepend
 icu4j/*.jar
 icu4j/.project
+icu4j/build-local.properties
 icu4j/demos/out
 icu4j/doc
 icu4j/eclipse-build/out
