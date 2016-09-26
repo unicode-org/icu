@@ -623,13 +623,12 @@ com/ibm/icu/text/CompactDecimalDataCache$FormatsTableKey#valueOf:(Ljava/lang/Str
 com/ibm/icu/text/CompactDecimalDataCache$FormatsTableKey#values:()[Lcom/ibm/icu/text/CompactDecimalDataCache$FormatsTableKey;
 com/ibm/icu/text/CompactDecimalDataCache$PatternsTableKey#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/CompactDecimalDataCache$PatternsTableKey;
 com/ibm/icu/text/CompactDecimalDataCache$PatternsTableKey#values:()[Lcom/ibm/icu/text/CompactDecimalDataCache$PatternsTableKey;
+com/ibm/icu/text/CompactDecimalFormat#format:(Lcom/ibm/icu/math/BigDecimal;Ljava/lang/StringBuffer;Ljava/text/FieldPosition;)Ljava/lang/StringBuffer;
 com/ibm/icu/text/CompactDecimalFormat$CompactStyle#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/CompactDecimalFormat$CompactStyle;
 com/ibm/icu/text/ComposedCharIter#<init>:()V
 com/ibm/icu/text/CurrencyDisplayNames#getInstance:(Ljava/util/Locale;)Lcom/ibm/icu/text/CurrencyDisplayNames;
 com/ibm/icu/text/CurrencyFormat#clone:()Ljava/lang/Object;
 com/ibm/icu/text/CurrencyFormat#readResolve:()Ljava/lang/Object;
-com/ibm/icu/text/CurrencyMetaInfo#currencyInfo:(Lcom/ibm/icu/text/CurrencyMetaInfo$CurrencyFilter;)Ljava/util/List;
-com/ibm/icu/text/CurrencyMetaInfo$CurrencyFilter#withDateRange:(JJ)Lcom/ibm/icu/text/CurrencyMetaInfo$CurrencyFilter;
 com/ibm/icu/text/CurrencyPluralInfo#hashCode:()I
 com/ibm/icu/text/CurrencyPluralInfo#select:(D)Ljava/lang/String;
 com/ibm/icu/text/DateFormat#hashCode:()I
@@ -1000,4 +999,3 @@ com/ibm/icu/util/UResourceBundle$RootType#valueOf:(Ljava/lang/String;)Lcom/ibm/i
 com/ibm/icu/util/VersionInfo#getVersionString:(II)Ljava/lang/String;
 com/ibm/icu/util/VersionInfo#main:([Ljava/lang/String;)V
 com/ibm/icu/util/VTimeZone#observesDaylightTime:()Z
-
