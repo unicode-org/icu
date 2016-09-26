@@ -576,11 +576,13 @@ typedef enum USpoofChecks {
          * @stable ICU 53
          */
         USPOOF_RESTRICTION_LEVEL_MASK = 0x7F000000,
+#ifndef U_HIDE_INTERNAL_API
         /**
          * An undefined restriction level.
          * @internal
          */
         USPOOF_UNDEFINED_RESTRICTIVE = -1
+#endif  /* U_HIDE_INTERNAL_API */
     } URestrictionLevel;
 
 /**

@@ -181,6 +181,7 @@ public:
    * @deprecated ICU 56 Use Normalizer2 instead.
    */
   Normalizer(const CharacterIterator& iter, UNormalizationMode mode);
+#endif  /* U_HIDE_DEPRECATED_API */
 
   /**
    * Copy constructor.
@@ -188,7 +189,6 @@ public:
    * @deprecated ICU 56 Use Normalizer2 instead.
    */
   Normalizer(const Normalizer& copy);
-#endif  /* U_HIDE_DEPRECATED_API */
 
   /**
    * Destructor
@@ -752,9 +752,7 @@ private:
 
   FilteredNormalizer2*fFilteredNorm2;  // owned if not NULL
   const Normalizer2  *fNorm2;  // not owned; may be equal to fFilteredNorm2
-#ifndef U_HIDE_DEPRECATED_API
-  UNormalizationMode  fUMode;
-#endif  /* U_HIDE_DEPRECATED_API */
+  UNormalizationMode  fUMode;  // deprecated
   int32_t             fOptions;
 
   // The input text and our position in it
