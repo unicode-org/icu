@@ -443,15 +443,15 @@ public class CurrencyTest extends TestFmwk {
 
         // Deutschmark available from first millisecond on
         assertEquals("Millisecond of DEM Big Bang", 1,
-                     metainfo.currencyInfo(filter.onDate(demFirstDate).withRegion("DE")).size());
+                     metainfo.currencyInfo(CurrencyFilter.onDate(demFirstDate).withRegion("DE")).size());
 
         assertEquals("From Deutschmark to Euro", 2,
-                     metainfo.currencyInfo(filter.onDateRange(demFirstDate, eurFirstDate).withRegion("DE")).size());
+                     metainfo.currencyInfo(CurrencyFilter.onDateRange(demFirstDate, eurFirstDate).withRegion("DE")).size());
 
         assertEquals("all Tender for Brazil", 7,
-                metainfo.currencyInfo(filter_br.onTender().withRegion("BR")).size());
+                metainfo.currencyInfo(CurrencyFilter.onTender().withRegion("BR")).size());
 
-        assertTrue("No legal tender", demInfo.isTender());        
+        assertTrue("No legal tender", demInfo.isTender());
     }
 
     @Test
@@ -809,7 +809,7 @@ public class CurrencyTest extends TestFmwk {
             assertEquals("getDisplayName() for " + data[0] + " in locale " + root, data[0], cur.getDisplayName(root));
         }
     }
-    
+
     @Test
     public void TestCurrencyInfoCtor() {
         new CurrencyMetaInfo.CurrencyInfo("region", "code", 0, 0, 1);
@@ -835,7 +835,6 @@ public class CurrencyTest extends TestFmwk {
     public void TestCurrMetaInfoBaseClass() {
         CurrencyFilter usFilter = CurrencyFilter.onRegion("US");
 
-        List<CurrencyInfo> listCurrInfo =  tcurrMetaInfo.currencyInfo(usFilter);
         assertEquals("Empty list expected", 0, tcurrMetaInfo.currencyInfo(usFilter).size());
         assertEquals("Empty list expected", 0, tcurrMetaInfo.currencies(usFilter).size());
         assertEquals("Empty list expected", 0, tcurrMetaInfo.regions(usFilter).size());

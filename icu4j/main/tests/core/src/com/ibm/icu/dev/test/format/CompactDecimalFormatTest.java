@@ -279,9 +279,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
                 1000000000000L, 1000000000000L, 1000000000000L};
         long[] divisors_err = new long[] {
                 0,0,0,
-                13, 13, 13, 
-                1000000, 1000000, 1000000, 
-                1000000000L, 1000000000L, 1000000000L, 
+                13, 13, 13,
+                1000000, 1000000, 1000000,
+                1000000000L, 1000000000L, 1000000000L,
                 1000000000000L, 1000000000000L, 1000000000000L};
         checkCore(affixes, null, divisors, TestACoreCompactFormatList);
         checkCore(affixes, currencyAffixes, divisors, TestACoreCompactFormatListCurrency);
@@ -438,7 +438,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
         assertEquals("BigDecimal format wrong: ", "31,000,000,000,000 trillion",
                      cdf.format(source_dec));
     }
-      
+
     @Test
     public void TestParsing() {
         CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(
@@ -514,20 +514,19 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void TestReadObject() throws IOException, ClassNotFoundException {
         FileInputStream fi_stream = new FileInputStream("tmp.ser");
         ObjectInputStream objinstream = new ObjectInputStream(fi_stream);
-        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(
-                ULocale.ENGLISH, CompactStyle.LONG);
 
-        try{
+        try {
+            @SuppressWarnings("unused")
             CompactDecimalFormat cmpctDF = (CompactDecimalFormat) objinstream.readObject();
-            } catch (NotSerializableException e) {
+        } catch (NotSerializableException e) {
                 // Exception expected, thus return.
                 objinstream.close();
                 return;
-            }
-            objinstream.close();
-            fail("readObject currently unsupported, expected invokation to fail but passed");
+        }
+        objinstream.close();
+        fail("readObject currently unsupported, expected invokation to fail but passed");
     }
-    
+
     @Test
     public void TestBug12422() {
         CompactDecimalFormat cdf;
