@@ -1,4 +1,6 @@
 <!--
+* © 2016 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html#License
 *******************************************************************************
 * Copyright (C) 2012-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
@@ -11,9 +13,9 @@
     <property name="res.dir" value="${out.dir}/res"/>
     <property name="xml.dir" value="${out.dir}/xml"/>
 
-    <property name="base.url" value="http://www.currency-iso.org/dam/downloads/"/>
-    <property name="current.xml" value="table_a1.xml"/>
-    <property name="historic.xml" value="table_a3.xml"/>
+    <property name="base.url" value="http://www.currency-iso.org/dam/downloads/lists/"/>
+    <property name="current.xml" value="list_one.xml"/>
+    <property name="historic.xml" value="list_three.xml"/>
 
 <target name="build" depends="check, resource" description="Verify ICU's local data and generate ISO 4217 alpha-numeric code mapping data resource"/>
 
