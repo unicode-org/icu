@@ -82,14 +82,15 @@
         </condition>
     </fail>
 
-    <condition property="is.java7">
-            <contains string="${java.version}" substring="1.7."/>
+    <condition property="is.java8">
+            <contains string="${java.version}" substring="1.8."/>
     </condition>
 
     <condition property="is.java7.plus">
         <or>
             <contains string="${java.version}" substring="1.7."/>
             <contains string="${java.version}" substring="1.8."/>
+            <contains string="${java.version}" substring="1.9."/>
         </or>
     </condition>
 
@@ -542,10 +543,10 @@
 
 
     <!-- release targets -->
-    <target name="_check_config_for_release">
+    <target name="_check_config_for_release" depends="_checkJCite">
         <condition property="release.build.config.ok">
             <and>
-                <isset property="is.java7"/>
+                <isset property="is.java8"/>
                 <isset property="java6.bootclasspath"/>
                 <isset property="jcite.libs"/>
             </and>
@@ -553,8 +554,8 @@
     </target>
 
     <target name="_verify_config_for_release" depends="_check_config_for_release" unless="release.build.config.ok">
-        <condition property="disp.is.java7" value="${java.version}" else="${java.version} - Must be 1.7!">
-            <isset property="is.java7"/>
+        <condition property="disp.is.java8" value="${java.version}" else="${java.version} - Must be 1.8!">
+            <isset property="is.java8"/>
         </condition>
         <condition property="disp.java6.bootclasspath" value="${java6.bootclasspath}" else="Not Defined!">
             <isset property="java6.bootclasspath"/>
@@ -565,7 +566,7 @@
 
         <echo message="################################################################"/>
         <echo message="[WARNING] Insufficient Build Configuration for ICU4J Release"/>
-        <echo message="JDK Tools Version:              ${disp.is.java7}"/>
+        <echo message="JDK Tools Version:              ${disp.is.java8}"/>
         <echo message="JRE 6 System Library Path:      ${disp.java6.bootclasspath}"/>
         <echo message="JCite Library Path:             ${disp.jcite.libs}"/>
         <echo message="################################################################"/>
