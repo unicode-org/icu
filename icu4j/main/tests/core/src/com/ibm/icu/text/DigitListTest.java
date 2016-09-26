@@ -7,9 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.text.DigitList;
-import com.ibm.icu.text.NumberFormat;
 
 
 public class DigitListTest extends TestFmwk {

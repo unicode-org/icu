@@ -1179,6 +1179,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     class TimeZoneNamesInheriter extends TimeZoneNames {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Set<String> getAvailableMetaZoneIDs() {
             return null;
