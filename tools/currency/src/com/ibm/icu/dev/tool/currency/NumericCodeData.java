@@ -1,3 +1,5 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 /*
  *******************************************************************************
  * Copyright (C) 2012-2013, International Business Machines Corporation and    *
@@ -82,7 +84,10 @@ public class NumericCodeData {
 
         // Header
         pw.println("//---------------------------------------------------------");
-        pw.println(String.format("// Copyright (C) %1$tY, International Business Machines", cal));
+        pw.println("// Copyright (C) 2016 and later: Unicode, Inc. and others.");
+        pw.println("// License & terms of use: http://www.unicode.org/copyright.html");
+        pw.println("//---------------------------------------------------------");
+        pw.println("// Copyright (C) 2013, International Business Machines");
         pw.println("// Corporation and others.  All Rights Reserved.");
         pw.println("//---------------------------------------------------------");
         pw.println("// Build tool: com.ibm.icu.dev.tool.currency.NumericCodeData");
@@ -154,6 +159,7 @@ public class NumericCodeData {
         {"BTN", "064"},
         {"BWP", "072"},
         {"BYB", "112"},
+        {"BYN", "933"},
         {"BYR", "974"},
         {"BZD", "084"},
         {"CAD", "124"},
