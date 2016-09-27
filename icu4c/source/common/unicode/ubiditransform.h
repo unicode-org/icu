@@ -24,6 +24,9 @@
 #ifndef U_HIDE_DRAFT_API
 
 /**
+ * \file
+ * \brief Bidi Transformations
+ *
  * <code>UBiDiOrder</code> indicates the order of text.<p>
  * This bidi transformation engine supports all possible combinations (4 in
  * total) of input and output text order:
@@ -108,6 +111,7 @@ typedef struct UBiDiTransform UBiDiTransform;
  * ordering scheme to the bidi layout defined by the output ordering scheme,
  * and applies character mirroring and Arabic shaping operations.<p>
  * In terms of <code>UBiDi</code>, such a transformation implies:
+ * <ul>
  * <li>calling <code>ubidi_setReorderingMode</code> as needed (when the
  * reordering mode is other than normal),</li>
  * <li>calling <code>ubidi_setInverse</code> as needed (when text should be
@@ -132,7 +136,7 @@ typedef struct UBiDiTransform UBiDiTransform;
  * <li><Logical RTL, Visual LTR>: this is equivalent to calling
  * <code>ubidi_setPara</code> with <code>paraLevel == UBIDI_RTL</code>,</li>
  * <li><Logical Default ("Auto") LTR, Visual LTR>: this is equivalent to
- * calling <code>ubidi_setPara</code> with 
+ * calling <code>ubidi_setPara</code> with
  * <code>paraLevel == UBIDI_DEFAULT_LTR</code>,</li>
  * <li><Logical Default ("Auto") RTL, Visual LTR>: this is equivalent to
  * calling <code>ubidi_setPara</code> with
