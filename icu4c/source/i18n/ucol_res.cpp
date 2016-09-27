@@ -80,7 +80,7 @@ ucol_res_cleanup() {
 
 U_CDECL_END
 
-void
+U_CAPI void U_CALLCONV
 CollationLoader::loadRootRules(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     rootBundle = ures_open(U_ICUDATA_COLL, kRootLocaleName, &errorCode);

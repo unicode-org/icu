@@ -382,7 +382,7 @@ static const uint8_t ebcdicTypes[128] = {
 #endif
 
 /* @see ucnv_compareNames */
-U_CFUNC char * U_EXPORT2
+U_CAPI char * U_EXPORT2
 ucnv_io_stripASCIIForCompare(char *dst, const char *name) {
     char *dstItr = dst;
     uint8_t type, nextType;
@@ -417,7 +417,7 @@ ucnv_io_stripASCIIForCompare(char *dst, const char *name) {
     return dst;
 }
 
-U_CFUNC char * U_EXPORT2
+U_CAPI char * U_EXPORT2
 ucnv_io_stripEBCDICForCompare(char *dst, const char *name) {
     char *dstItr = dst;
     uint8_t type, nextType;
@@ -778,7 +778,7 @@ ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode * /*pErrorCode
     return value;
 }
 
-static const char* U_CALLCONV
+static const char U_CALLCONV *
 ucnv_io_nextStandardAliases(UEnumeration *enumerator,
                             int32_t* resultLength,
                             UErrorCode * /*pErrorCode*/)
@@ -1017,7 +1017,7 @@ ucnv_io_countAllConverters(UEnumeration * /*enumerator*/, UErrorCode * /*pErrorC
     return gMainTable.converterListSize;
 }
 
-static const char* U_CALLCONV
+static const char U_CALLCONV *
 ucnv_io_nextAllConverters(UEnumeration *enumerator,
                             int32_t* resultLength,
                             UErrorCode * /*pErrorCode*/)
@@ -1087,7 +1087,7 @@ ucnv_io_countKnownConverters(UErrorCode *pErrorCode) {
 
 /* alias table swapping ----------------------------------------------------- */
 
-typedef char * U_CALLCONV StripForCompareFn(char *dst, const char *name);
+typedef char U_CALLCONV * StripForCompareFn(char *dst, const char *name);
 
 /*
  * row of a temporary array
@@ -1111,7 +1111,7 @@ enum {
     STACK_ROW_CAPACITY=500
 };
 
-static int32_t
+static int32_t U_CALLCONV
 io_compareRows(const void *context, const void *left, const void *right) {
     char strippedLeft[UCNV_MAX_CONVERTER_NAME_LENGTH],
          strippedRight[UCNV_MAX_CONVERTER_NAME_LENGTH];

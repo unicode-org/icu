@@ -419,7 +419,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    * are considered to fall within so that its start date is 80 years
    * before the current time.
    */
-  static void  initializeSystemDefaultCentury(void);
+  static void U_CALLCONV initializeSystemDefaultCentury(void);
 };
 
 U_NAMESPACE_END

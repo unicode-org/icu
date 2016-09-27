@@ -81,7 +81,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RegionNameEnumeration)
  * If the region data has already loaded, then this method simply returns without doing
  * anything meaningful.
  */
-void Region::loadRegionData(UErrorCode &status) {
+void U_CALLCONV Region::loadRegionData(UErrorCode &status) {
 
     // Construct service objs first
     LocalUHashtablePointer newRegionIDMap(uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, NULL, &status));

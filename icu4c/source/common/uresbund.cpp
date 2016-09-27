@@ -269,7 +269,7 @@ static UBool U_CALLCONV ures_cleanup(void)
 }
 
 /** INTERNAL: Initializes the cache for resources */
-static void createCache(UErrorCode &status) {
+static void U_CALLCONV createCache(UErrorCode &status) {
     U_ASSERT(cache == NULL);
     cache = uhash_open(hashEntry, compareEntries, NULL, &status);
     ucln_common_registerCleanup(UCLN_COMMON_URES, ures_cleanup);
@@ -2408,7 +2408,7 @@ ures_loc_countLocales(UEnumeration *en, UErrorCode * /*status*/) {
     return ures_getSize(&ctx->installed);
 }
 
-static const char* U_CALLCONV 
+static const char U_CALLCONV *
 ures_loc_nextLocale(UEnumeration* en,
                     int32_t* resultLength,
                     UErrorCode* status) {

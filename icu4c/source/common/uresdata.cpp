@@ -985,7 +985,7 @@ typedef struct Row {
     int32_t keyIndex, sortIndex;
 } Row;
 
-static int32_t
+static int32_t U_CALLCONV
 ures_compareRows(const void *context, const void *left, const void *right) {
     const char *keyChars=(const char *)context;
     return (int32_t)uprv_strcmp(keyChars+((const Row *)left)->keyIndex,

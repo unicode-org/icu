@@ -78,7 +78,7 @@ public:
     const CollationCacheEntry *createCacheEntry(UErrorCode &errorCode);
 
 private:
-    static void loadRootRules(UErrorCode &errorCode);
+    static void U_CALLCONV loadRootRules(UErrorCode &errorCode);
 
     // The following members are used by loadTailoring()
     // and the cache callback.

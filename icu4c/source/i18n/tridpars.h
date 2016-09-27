@@ -351,7 +351,7 @@ class TransliteratorIDParser /* not : public UObject because all methods are sta
     /**
      * Initialize static memory.
      */
-    static void init(UErrorCode &status);
+    static void U_CALLCONV init(UErrorCode &status);
 
     friend class SingleID;
 };

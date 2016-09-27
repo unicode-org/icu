@@ -1492,7 +1492,7 @@ uloc_kw_countKeywords(UEnumeration *en, UErrorCode * /*status*/) {
     return result;
 }
 
-static const char* U_CALLCONV
+static const char U_CALLCONV*
 uloc_kw_nextKeyword(UEnumeration* en,
                     int32_t* resultLength,
                     UErrorCode* /*status*/) {
