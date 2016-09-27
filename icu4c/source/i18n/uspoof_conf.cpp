@@ -344,6 +344,13 @@ void ConfusabledataBuilder::build(const char * confusables, int32_t confusablesL
             SPUString *targetMapping = static_cast<SPUString *>(uhash_iget(fTable, keyChar));
             U_ASSERT(targetMapping != NULL);
 
+            // Set an error code if trying to consume a long string.  Otherwise,
+            // codePointAndLengthToKey will abort on a U_ASSERT.
+            if (targetMapping->fStr->length() > 256) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+
             int32_t key = ConfusableDataUtils::codePointAndLengthToKey(keyChar,
                 targetMapping->fStr->length());
             int32_t value = targetMapping->fCharOrStrTableIndex;
