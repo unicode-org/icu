@@ -962,6 +962,12 @@ public class SpoofChecker {
                     SPUString targetMapping = fTable.get(keyChar);
                     assert targetMapping != null;
 
+                    // Throw a sane exception if trying to consume a long string.  Otherwise,
+                    // codePointAndLengthToKey will throw an assertion error.
+                    if (targetMapping.fStr.length() > 256) {
+                        throw new IllegalArgumentException("Confusable prototypes cannot be longer than 256 entries.");
+                    }
+
                     int key = ConfusableDataUtils.codePointAndLengthToKey(keyChar, targetMapping.fStr.length());
                     int value = targetMapping.fCharOrStrTableIndex;
 
