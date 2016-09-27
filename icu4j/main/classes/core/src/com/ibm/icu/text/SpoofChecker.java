@@ -1670,30 +1670,43 @@ public class SpoofChecker {
 
     private static Normalizer2 nfdNormalizer = Normalizer2.getNFDInstance();
 
-    // Confusable Mappings Data Structures
+    // Confusable Mappings Data Structures, version 2.0
+    //
+    // This description and the corresponding implementation are to be kept
+    // in-sync with the copy in icu4c uspoof_impl.h.
     //
     // For the confusable data, we are essentially implementing a map,
-    // key: a code point
-    // value: a string. Most commonly one char in length, but can be more.
+    //     key: a code point
+    //     value: a string. Most commonly one char in length, but can be more.
     //
     // The keys are stored as a sorted array of 32 bit ints.
-    // bits 0-23 a code point value
-    // bits 24-31 length of value string, in UChars (between 1 and 256 UChars).
-    // The key table is sorted in ascending code point order. (not on the
-    // 32 bit int value, the flag bits do not participate in the sorting.)
+    //         bits 0-23 a code point value
+    //         bits 24-31 length of value string, in UChars (between 1 and 256 UChars).
+    //     The key table is sorted in ascending code point order. (not on the
+    //     32 bit int value, the flag bits do not participate in the sorting.)
     //
-    // Lookup is done by means of a binary search in the key table.
+    //     Lookup is done by means of a binary search in the key table.
     //
     // The corresponding values are kept in a parallel array of 16 bit ints.
-    // If the value string is of length 1, it is literally in the value array.
-    // For longer strings, the value array contains an index into the strings
-    // table.
+    //     If the value string is of length 1, it is literally in the value array.
+    //     For longer strings, the value array contains an index into the strings
+    //     table.
     //
     // String Table:
-    // The strings table contains all of the value strings (those of length two or greater)
-    // concatentated together into one long char (UTF-16) array.
+    //     The strings table contains all of the value strings (those of length two or greater)
+    //     concatentated together into one long char (UTF-16) array.
     //
-    // There is no nul character or other mark between adjacent strings.
+    //     There is no nul character or other mark between adjacent strings.
+    //
+    //----------------------------------------------------------------------------
+    //
+    //  Changes from format version 1 to format version 2:
+    //        1) Removal of the whole-script confusable data tables.
+    //        2) Removal of the SL/SA/ML/MA and multi-table flags in the key bitmask.
+    //        3) Expansion of string length value in the key bitmask from 2 bits to 8 bits.
+    //        4) Removal of the string lengths table since 8 bits is sufficient for the
+    //           lengths of all entries in confusables.txt.
+    //
     private static final class ConfusableDataUtils {
         public static final int FORMAT_VERSION = 2; // version for ICU 58
 
