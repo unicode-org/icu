@@ -159,7 +159,7 @@ U_NAMESPACE_END
 U_CAPI int32_t U_EXPORT2
 ucase_getType(const UCaseProps *csp, UChar32 c);
 
-/** @return same as ucase_getType() and set bit 2 if c is case-ignorable */
+/** @return like ucase_getType() but also sets UCASE_IGNORABLE if c is case-ignorable */
 U_CAPI int32_t U_EXPORT2
 ucase_getTypeOrIgnorable(const UCaseProps *csp, UChar32 c);
 
