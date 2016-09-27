@@ -132,7 +132,7 @@ public:
 
 
 //
-//  Confusable Mappings Data Structures
+//  Confusable Mappings Data Structures, version 2.0
 //
 //    For the confusable data, we are essentially implementing a map,
 //       key:    a code point
@@ -156,6 +156,16 @@ public:
 //
 //       There is no nul character or other mark between adjacent strings.
 //
+//----------------------------------------------------------------------------
+//
+//  Changes from format version 1 to format version 2:
+//      1) Removal of the whole-script confusable data tables.
+//      2) Removal of the SL/SA/ML/MA and multi-table flags in the key bitmask.
+//      3) Expansion of string length value in the key bitmask from 2 bits to 8 bits.
+//      4) Removal of the string lengths table since 8 bits is sufficient for the
+//         lengths of all entries in confusables.txt.
+
+
 
 // Internal functions for manipulating confusable data table keys
 #define USPOOF_CONFUSABLE_DATA_FORMAT_VERSION 2  // version for ICU 58
