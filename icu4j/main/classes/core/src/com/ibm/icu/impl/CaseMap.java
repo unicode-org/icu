@@ -659,6 +659,8 @@ public final class CaseMap {
          * Probably simpler than a stateless function that has to figure out complex context-before
          * for each character.
          * TODO: Try to re-consolidate one way or another with the non-Greek function.
+         *
+         * <p>Keep this consistent with the C++ versions in ustrcase.cpp (UTF-16) and ucasemap.cpp (UTF-8).
          */
         private static String toUpper(CharSequence s, int[] locCache) {
             StringBuilder result = new StringBuilder(s.length());

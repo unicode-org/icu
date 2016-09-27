@@ -457,7 +457,7 @@ public final class UCaseProps {
         return getTypeFromProps(trie.get(c));
     }
 
-    /** @return same as ucase_getType() and set bit 2 if c is case-ignorable */
+    /** @return like getType() but also sets IGNORABLE if c is case-ignorable */
     public final int getTypeOrIgnorable(int c) {
         return getTypeAndIgnorableFromProps(trie.get(c));
     }
@@ -1335,15 +1335,17 @@ public final class UCaseProps {
     public static final int UPPER=2;
     public static final int TITLE=3;
 
+    /** @return NONE, LOWER, UPPER, TITLE */
     private static final int getTypeFromProps(int props) {
         return props&TYPE_MASK;
     }
 
+    /** @return like getTypeFromProps() but also sets IGNORABLE if props indicate case-ignorable */
     private static final int getTypeAndIgnorableFromProps(int props) {
         return props&7;
     }
 
-    public static final int IGNORABLE=      4;
+    static final int IGNORABLE=4;
     private static final int SENSITIVE=     8;
     private static final int EXCEPTION=     0x10;
 
