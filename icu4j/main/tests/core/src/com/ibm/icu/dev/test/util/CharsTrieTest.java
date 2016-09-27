@@ -329,8 +329,8 @@ public class CharsTrieTest extends TestFmwk {
                 index=0;
             } else {
                 if(trie.first(x.charAt(0))==BytesTrie.Result.NO_MATCH) {
-                    errln(String.format("first(first char U+%04X)=BytesTrie.Result.NO_MATCH for string %d\n",
-                                        x.charAt(0), gen.getIndex()));
+                    errln(String.format("first(first char U+%04x)=BytesTrie.Result.NO_MATCH for string %d\n",
+                            Character.getNumericValue(x.charAt(0)), gen.getIndex()));
                     break;
                 }
                 index=1;
@@ -732,7 +732,7 @@ public class CharsTrieTest extends TestFmwk {
     }
 
     private void checkNext(CharsTrie trie, StringAndValue[] data, int dataLength) {
-        CharsTrie.State state=new CharsTrie.State(); 
+        CharsTrie.State state=new CharsTrie.State();
         for(int i=0; i<dataLength; ++i) {
             String expectedString=data[i].s;
             int stringLength=expectedString.length();
