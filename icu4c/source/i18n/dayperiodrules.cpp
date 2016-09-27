@@ -303,7 +303,7 @@ namespace {
 
 UInitOnce initOnce = U_INITONCE_INITIALIZER;
 
-UBool dayPeriodRulesCleanup() {
+U_CFUNC UBool U_CALLCONV dayPeriodRulesCleanup() {
     delete[] data->rules;
     uhash_close(data->localeToRuleSetNumMap);
     delete data;
@@ -313,7 +313,7 @@ UBool dayPeriodRulesCleanup() {
 
 }  // namespace
 
-void DayPeriodRules::load(UErrorCode &errorCode) {
+void U_CALLCONV DayPeriodRules::load(UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }

@@ -856,7 +856,7 @@ private:
      */
     UBool isUnsafe(UChar32 c) const;
 
-    static void computeMaxExpansions(const CollationTailoring *t, UErrorCode &errorCode);
+    static void U_CALLCONV computeMaxExpansions(const CollationTailoring *t, UErrorCode &errorCode);
     UBool initMaxExpansions(UErrorCode &errorCode) const;
 
     void setFastLatinOptions(CollationSettings &ownedSettings) const;

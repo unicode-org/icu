@@ -538,7 +538,7 @@ uspoof_cleanupDefaultData(void) {
     return TRUE;
 }
 
-static void uspoof_loadDefaultData(UErrorCode& status) {
+static void U_CALLCONV uspoof_loadDefaultData(UErrorCode& status) {
     UDataMemory *udm = udata_openChoice(NULL, "cfu", "confusables",
                                         spoofDataIsAcceptable, 
                                         NULL,       // context, would receive dataVersion if supplied.

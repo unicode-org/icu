@@ -270,7 +270,7 @@ static void U_CALLCONV DataCacheElement_deleter(void *pDCEl) {
     uprv_free(pDCEl);                  /* delete 'this'          */
 }
 
-static void udata_initHashTable(UErrorCode &err) {
+static void U_CALLCONV udata_initHashTable(UErrorCode &err) {
     U_ASSERT(gCommonDataCache == NULL);
     gCommonDataCache = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &err);
     if (U_FAILURE(err)) {

@@ -47,7 +47,7 @@ static UBool U_CALLCONV uprv_collation_root_cleanup() {
 
 U_CDECL_END
 
-void
+void U_CALLCONV
 CollationRoot::load(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     LocalPointer<CollationTailoring> t(new CollationTailoring(NULL));

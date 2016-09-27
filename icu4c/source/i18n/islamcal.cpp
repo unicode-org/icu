@@ -736,7 +736,7 @@ int32_t IslamicCalendar::defaultCenturyStartYear() const
 }
 
 
-void U_CALLCONV
+U_CFUNC void U_CALLCONV
 IslamicCalendar::initializeSystemDefaultCentury()
 {
     // initialize systemDefaultCentury and systemDefaultCenturyYear based

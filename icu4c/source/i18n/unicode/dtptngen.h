@@ -554,7 +554,7 @@ private:
     UBool isAvailableFormatSet(const UnicodeString &key) const;
     void copyHashtable(Hashtable *other, UErrorCode &status);
     UBool isCanonicalItem(const UnicodeString& item) const;
-    static void loadAllowedHourFormatsData(UErrorCode &status);
+    static void U_CALLCONV loadAllowedHourFormatsData(UErrorCode &status);
     void getAllowedHourFormats(const Locale &locale, UErrorCode &status);
 
     struct AppendItemFormatsSink;

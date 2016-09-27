@@ -212,7 +212,7 @@ private:
      * anything meaningful.
      */
 
-    static void loadRegionData(UErrorCode &status);
+    static void U_CALLCONV loadRegionData(UErrorCode &status);
 
 };
 

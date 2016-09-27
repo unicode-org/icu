@@ -1832,12 +1832,12 @@ struct CalendarDataSink : public ResourceSink {
     }
 
     // Deleter function to be used by 'arrays'
-    static void deleteUnicodeStringArray(void *uArray) {
+    static void U_CALLCONV deleteUnicodeStringArray(void *uArray) {
         delete[] static_cast<UnicodeString *>(uArray);
     }
 
     // Deleter function to be used by 'maps'
-    static void deleteHashtable(void *table) {
+    static void U_CALLCONV deleteHashtable(void *table) {
         delete static_cast<Hashtable *>(table);
     }
 };

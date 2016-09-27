@@ -390,12 +390,12 @@ UInitOnce initOnce = U_INITONCE_INITIALIZER;
 UHashtable *localeToAllowedHourFormatsMap = NULL;
 
 // Value deleter for hashmap.
-void deleteAllowedHourFormats(void *ptr) {
+U_CFUNC void U_CALLCONV deleteAllowedHourFormats(void *ptr) {
     uprv_free(ptr);
 }
 
 // Close hashmap at cleanup.
-UBool allowedHourFormatsCleanup() {
+U_CFUNC UBool U_CALLCONV allowedHourFormatsCleanup() {
     uhash_close(localeToAllowedHourFormatsMap);
     return TRUE;
 }
@@ -494,7 +494,7 @@ struct AllowedHourFormatsSink : public ResourceSink {
 
 AllowedHourFormatsSink::~AllowedHourFormatsSink() {}
 
-void DateTimePatternGenerator::loadAllowedHourFormatsData(UErrorCode &status) {
+U_CFUNC void U_CALLCONV DateTimePatternGenerator::loadAllowedHourFormatsData(UErrorCode &status) {
     if (U_FAILURE(status)) { return; }
     localeToAllowedHourFormatsMap = uhash_open(
         uhash_hashChars, uhash_compareChars, NULL, &status);
