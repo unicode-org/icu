@@ -975,10 +975,10 @@ pl{
         other{"{0} — inne"}
         scripts{"systemy pisma — {0}"}
         strokes{
-            "{0} kreska",
-            "{0} kreski",
-            "{0} kresek",
-            "{0} kreski",
+            few{"{0} kreski"}
+            many{"{0} kresek"}
+            one{"{0} kreska"}
+            other{"{0} kreski"}
         }
     }
     codePatterns{

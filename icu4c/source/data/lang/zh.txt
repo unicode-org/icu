@@ -965,7 +965,9 @@ zh{
         miscellaneous{"{0} — 杂项"}
         other{"{0} — 其它"}
         scripts{"文字 — {0}"}
-        strokes{"{0}笔"}
+        strokes{
+            other{"{0}笔"}
+        }
     }
     codePatterns{
         language{"语言：{0}"}

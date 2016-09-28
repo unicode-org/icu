@@ -567,8 +567,8 @@ sq{
         other{"{0} — Tjetër"}
         scripts{"Shkrimet — {0}"}
         strokes{
-            "{0} vijëzim drejtshkrimor",
-            "{0} vijëzime drejtshkrimore",
+            one{"{0} vijëzim drejtshkrimor"}
+            other{"{0} vijëzime drejtshkrimore"}
         }
     }
     codePatterns{

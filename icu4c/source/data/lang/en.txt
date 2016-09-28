@@ -1164,8 +1164,8 @@ en{
         other{"{0} — other"}
         scripts{"scripts — {0}"}
         strokes{
-            "{0} stroke",
-            "{0} strokes",
+            one{"{0} stroke"}
+            other{"{0} strokes"}
         }
     }
     codePatterns{

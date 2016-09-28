@@ -1032,10 +1032,10 @@ lt{
         other{"{0} – kitas"}
         scripts{"raštai – {0}"}
         strokes{
-            "{0} brūkšnys",
-            "{0} brūkšniai",
-            "{0} brūkšnio",
-            "{0} brūkšnių",
+            few{"{0} brūkšniai"}
+            many{"{0} brūkšnio"}
+            one{"{0} brūkšnys"}
+            other{"{0} brūkšnių"}
         }
     }
     codePatterns{

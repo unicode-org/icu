@@ -906,8 +906,8 @@ hu{
         other{"{0} — Egyéb"}
         scripts{"Kézírások — {0}"}
         strokes{
-            "{0} vonás",
-            "{0} vonás",
+            one{"{0} vonás"}
+            other{"{0} vonás"}
         }
     }
     codePatterns{

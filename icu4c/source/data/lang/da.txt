@@ -965,8 +965,8 @@ da{
         other{"{0} — andet"}
         scripts{"skriftsystemer — {0}"}
         strokes{
-            "{0} streger",
-            "{0} streger",
+            one{"{0} streger"}
+            other{"{0} streger"}
         }
     }
     codePatterns{

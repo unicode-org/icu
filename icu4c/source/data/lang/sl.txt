@@ -843,10 +843,10 @@ sl{
         other{"{0} – drugo"}
         scripts{"pisave – {0}"}
         strokes{
-            "{0} poteza",
-            "{0} potezi",
-            "{0} potez",
-            "{0} potez",
+            few{"{0} potez"}
+            one{"{0} poteza"}
+            other{"{0} potez"}
+            two{"{0} potezi"}
         }
     }
     codePatterns{

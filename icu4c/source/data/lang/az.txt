@@ -755,8 +755,8 @@ az{
         other{"{0} — Digər"}
         scripts{"Yazılar — {0}"}
         strokes{
-            "{0} Vurğu",
-            "{0} Vurğu",
+            one{"{0} Vurğu"}
+            other{"{0} Vurğu"}
         }
     }
     codePatterns{

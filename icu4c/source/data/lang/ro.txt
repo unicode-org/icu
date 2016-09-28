@@ -786,9 +786,9 @@ ro{
         other{"{0} – altele"}
         scripts{"Scrieri – {0}"}
         strokes{
-            "{0} trasare",
-            "{0} trasări",
-            "{0} de trasări",
+            few{"{0} trasări"}
+            one{"{0} trasare"}
+            other{"{0} de trasări"}
         }
     }
     codePatterns{

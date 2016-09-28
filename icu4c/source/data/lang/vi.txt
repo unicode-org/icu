@@ -990,7 +990,9 @@ vi{
         miscellaneous{"{0} — Khác"}
         other{"{0} — Khác"}
         scripts{"Chữ viết — {0}"}
-        strokes{"{0} nét"}
+        strokes{
+            other{"{0} nét"}
+        }
     }
     codePatterns{
         language{"Ngôn ngữ: {0}"}

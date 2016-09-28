@@ -815,9 +815,9 @@ lv{
         other{"{0} — citas"}
         scripts{"rakstības — {0}"}
         strokes{
-            "{0} vilkumi",
-            "{0} vilkums",
-            "{0} vilkumi",
+            one{"{0} vilkums"}
+            other{"{0} vilkumi"}
+            zero{"{0} vilkumi"}
         }
     }
     codePatterns{

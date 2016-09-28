@@ -545,7 +545,9 @@ km{
         miscellaneous{"{0} — ផ្សេងៗ"}
         other{"{0} — ផ្សេងទៀត"}
         scripts{"អក្សរ — {0}"}
-        strokes{"{0} វាស"}
+        strokes{
+            other{"{0} វាស"}
+        }
     }
     codePatterns{
         language{"ភាសា៖ {0}"}

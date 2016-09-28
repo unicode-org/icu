@@ -744,12 +744,12 @@ cy{
         other{"{0} — Arall"}
         scripts{"Sgriptiau — {0}"}
         strokes{
-            "{0} Strôc",
-            "{0} Strôc",
-            "{0} Strôc",
-            "{0} Strôc",
-            "{0} Strôc",
-            "{0} Strôc",
+            few{"{0} Strôc"}
+            many{"{0} Strôc"}
+            one{"{0} Strôc"}
+            other{"{0} Strôc"}
+            two{"{0} Strôc"}
+            zero{"{0} Strôc"}
         }
     }
     codePatterns{

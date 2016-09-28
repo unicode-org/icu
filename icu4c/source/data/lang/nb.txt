@@ -1107,8 +1107,8 @@ nb{
         other{"{0} – annet"}
         scripts{"skriftsystemer – {0}"}
         strokes{
-            "{0} strek",
-            "{0} streker",
+            one{"{0} strek"}
+            other{"{0} streker"}
         }
     }
     codePatterns{

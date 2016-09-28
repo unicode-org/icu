@@ -767,10 +767,10 @@ sk{
         other{"{0} – ostatné"}
         scripts{"písma – {0}"}
         strokes{
-            "{0} úder",
-            "{0} údery",
-            "{0} úderu",
-            "{0} úderov",
+            few{"{0} údery"}
+            many{"{0} úderu"}
+            one{"{0} úder"}
+            other{"{0} úderov"}
         }
     }
     codePatterns{

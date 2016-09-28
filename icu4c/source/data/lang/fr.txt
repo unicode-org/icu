@@ -974,8 +974,8 @@ fr{
         other{"{0} — autre"}
         scripts{"écritures — {0}"}
         strokes{
-            "{0} trait",
-            "{0} traits",
+            one{"{0} trait"}
+            other{"{0} traits"}
         }
     }
     codePatterns{

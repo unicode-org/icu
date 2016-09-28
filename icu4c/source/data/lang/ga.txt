@@ -541,11 +541,11 @@ ga{
         other{"{0} — Eile"}
         scripts{"Scripteanna — {0}"}
         strokes{
-            "{0} Stríoc",
-            "{0} Stríoc",
-            "{0} Stríoc",
-            "{0} Stríoc",
-            "{0} Stríoc",
+            few{"{0} Stríoc"}
+            many{"{0} Stríoc"}
+            one{"{0} Stríoc"}
+            other{"{0} Stríoc"}
+            two{"{0} Stríoc"}
         }
     }
     codePatterns{

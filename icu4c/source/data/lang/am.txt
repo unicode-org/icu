@@ -700,8 +700,8 @@ am{
         other{"{0} — ሌሎች"}
         scripts{"ስክሪፕቶች — {0}"}
         strokes{
-            "{0} Strokes",
-            "{0} Strokes",
+            one{"{0} Strokes"}
+            other{"{0} Strokes"}
         }
     }
     codePatterns{

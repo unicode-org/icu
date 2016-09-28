@@ -1093,8 +1093,8 @@ sv{
         other{"{0} — övriga"}
         scripts{"skrift — {0}"}
         strokes{
-            "{0} streck",
-            "{0} streck",
+            one{"{0} streck"}
+            other{"{0} streck"}
         }
     }
     codePatterns{

@@ -1028,8 +1028,8 @@ de{
         other{"{0} — Andere"}
         scripts{"Schriften — {0}"}
         strokes{
-            "{0} Strich",
-            "{0} Striche",
+            one{"{0} Strich"}
+            other{"{0} Striche"}
         }
     }
     codePatterns{

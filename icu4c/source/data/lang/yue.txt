@@ -1034,7 +1034,9 @@ yue{
         miscellaneous{"{0} — 其他"}
         other{"{0} — 其他"}
         scripts{"字體 — {0}"}
-        strokes{"{0}斜線"}
+        strokes{
+            other{"{0}斜線"}
+        }
     }
     codePatterns{
         language{"語言：{0}"}

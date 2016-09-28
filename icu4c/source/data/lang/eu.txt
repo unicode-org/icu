@@ -640,8 +640,8 @@ eu{
         other{"{0} — Bestelakoak"}
         scripts{"Scriptak — {0}"}
         strokes{
-            "{0} trazuak",
-            "{0} trazuak",
+            one{"{0} trazuak"}
+            other{"{0} trazuak"}
         }
     }
     codePatterns{

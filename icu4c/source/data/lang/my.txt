@@ -591,7 +591,9 @@ my{
         miscellaneous{"{0} — အထွေထွေ"}
         other{"{0} — အခြား"}
         scripts{"လက်ရေးမူ — {0}"}
-        strokes{"ရေးချက် {0} ခု"}
+        strokes{
+            other{"ရေးချက် {0} ခု"}
+        }
     }
     codePatterns{
         language{"ဘာသာစကား - {0}"}

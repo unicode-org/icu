@@ -630,8 +630,8 @@ af{
         other{"{0} – Ander"}
         scripts{"Skrifte – {0}"}
         strokes{
-            "{0} hale",
-            "{0} hale",
+            one{"{0} hale"}
+            other{"{0} hale"}
         }
     }
     codePatterns{

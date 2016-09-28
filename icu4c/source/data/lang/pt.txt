@@ -886,8 +886,8 @@ pt{
         other{"{0} — Outro"}
         scripts{"Escritas — {0}"}
         strokes{
-            "{0} traços",
-            "{0} traços",
+            one{"{0} traços"}
+            other{"{0} traços"}
         }
     }
     codePatterns{

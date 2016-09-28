@@ -1118,8 +1118,8 @@ fi{
         other{"{0} – Muu"}
         scripts{"Kirjoitusjärjestelmät – {0}"}
         strokes{
-            "{0} piirtoviiva",
-            "{0} piirtoviivaa",
+            one{"{0} piirtoviiva"}
+            other{"{0} piirtoviivaa"}
         }
     }
     codePatterns{
