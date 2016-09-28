@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Modifier;
@@ -70,34 +71,36 @@ public class SerializableTestUtility {
             e.printStackTrace();
         }
     }
-    
+
     public interface Handler
     {
         public Object[] getTestObjects();
-        
+
         public boolean hasSameBehavior(Object a, Object b);
     }
-    
+
     public static Handler getHandler(String className)
     {
         return (Handler) map.get(className);
     }
-    
+
     private static class TimeZoneHandler implements Handler
     {
         String[] ZONES = { "GMT", "MET", "IST" };
 
+        @Override
         public Object[] getTestObjects()
         {
             TimeZone zones[] = new TimeZone[ZONES.length];
-            
+
             for(int z = 0; z < ZONES.length; z += 1) {
                 zones[z] = TimeZone.getTimeZone(ZONES[z]);
             }
-            
+
             return zones;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             TimeZone zone_a = (TimeZone) a;
@@ -122,89 +125,91 @@ public class SerializableTestUtility {
             return bSame;
         }
     }
-    
+
     private static Locale locales[] = {
-        Locale.CANADA, Locale.CANADA_FRENCH, Locale.CHINA, 
-        Locale.CHINESE, Locale.ENGLISH, Locale.FRANCE, Locale.FRENCH, 
-        Locale.GERMAN, Locale.GERMANY, Locale.ITALIAN, Locale.ITALY, 
-        Locale.JAPAN, Locale.JAPANESE, Locale.KOREA, Locale.KOREAN, 
-        Locale.PRC, Locale.SIMPLIFIED_CHINESE, Locale.TAIWAN, 
+        Locale.CANADA, Locale.CANADA_FRENCH, Locale.CHINA,
+        Locale.CHINESE, Locale.ENGLISH, Locale.FRANCE, Locale.FRENCH,
+        Locale.GERMAN, Locale.GERMANY, Locale.ITALIAN, Locale.ITALY,
+        Locale.JAPAN, Locale.JAPANESE, Locale.KOREA, Locale.KOREAN,
+        Locale.PRC, Locale.SIMPLIFIED_CHINESE, Locale.TAIWAN,
         Locale.TRADITIONAL_CHINESE, Locale.UK, Locale.US
     };
-    
+
     private static Locale places[] = {
-        Locale.CANADA, Locale.CANADA_FRENCH, Locale.CHINA, 
-        Locale.FRANCE, Locale.GERMANY, Locale.ITALY, 
-        Locale.JAPAN, Locale.KOREA, Locale.PRC, Locale.TAIWAN, 
+        Locale.CANADA, Locale.CANADA_FRENCH, Locale.CHINA,
+        Locale.FRANCE, Locale.GERMANY, Locale.ITALY,
+        Locale.JAPAN, Locale.KOREA, Locale.PRC, Locale.TAIWAN,
         Locale.UK, Locale.US
     };
-    
+
     public static Locale[] getLocales()
     {
         return locales;
     }
-    
+
     public static boolean compareStrings(String a[], String b[])
     {
         if (a.length != b.length) {
             return false;
         }
-        
+
         for (int i = 0; i < a.length; i += 1) {
             if (! a[i].equals(b[i])) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     public static boolean compareChars(char a[], char b[])
     {
         if (a.length != b.length) {
             return false;
         }
-        
+
         for (int i = 0; i < a.length; i += 1) {
             if (a[i] != b[i]) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
     private static class SimpleTimeZoneHandler extends TimeZoneHandler
     {
+        @Override
         public Object[] getTestObjects()
         {
             SimpleTimeZone simpleTimeZones[] = new SimpleTimeZone[6];
-            
+
             simpleTimeZones[0] = new SimpleTimeZone(32400000, "MyTimeZone");
-            
+
             simpleTimeZones[1] = new SimpleTimeZone(32400000, "Asia/Tokyo");
-            
+
             simpleTimeZones[2] = new SimpleTimeZone(32400000, "Asia/Tokyo");
             simpleTimeZones[2].setRawOffset(0);
-            
+
             simpleTimeZones[3] = new SimpleTimeZone(32400000, "Asia/Tokyo");
             simpleTimeZones[3].setStartYear(100);
-            
+
             simpleTimeZones[4] = new SimpleTimeZone(32400000, "Asia/Tokyo");
             simpleTimeZones[4].setStartYear(1000);
             simpleTimeZones[4].setDSTSavings(1800000);
             simpleTimeZones[4].setStartRule(3, 4, 180000);
             simpleTimeZones[4].setEndRule(6, 3, 4, 360000);
-            
+
             simpleTimeZones[5] = new SimpleTimeZone(32400000, "Asia/Tokyo");
             simpleTimeZones[5].setStartRule(2, 3, 4, 360000);
             simpleTimeZones[5].setEndRule(6, 3, 4, 360000);
-            
+
             return simpleTimeZones;
         }
     }
 
     private static class VTimeZoneHandler extends TimeZoneHandler {
+        @Override
         public Object[] getTestObjects() {
             //TODO
             VTimeZone[] vtzs = new VTimeZone[1];
@@ -218,11 +223,11 @@ public class SerializableTestUtility {
         new AnnualTimeZoneRule("EST", -5*HOUR, 0,
                 new DateTimeRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 2*HOUR, DateTimeRule.WALL_TIME),
                 1967, 2006),
-        
+
         new AnnualTimeZoneRule("EST", -5*HOUR, 0,
                 new DateTimeRule(Calendar.NOVEMBER, 1, Calendar.SUNDAY, true, 2*HOUR, DateTimeRule.WALL_TIME),
                 2007, AnnualTimeZoneRule.MAX_YEAR),
-        
+
         new AnnualTimeZoneRule("EDT", -5*HOUR, 1*HOUR,
                 new DateTimeRule(Calendar.APRIL, -1, Calendar.SUNDAY, 2*HOUR, DateTimeRule.WALL_TIME),
                 1967, 1973),
@@ -250,6 +255,7 @@ public class SerializableTestUtility {
 
     private static class RuleBasedTimeZoneHandler extends TimeZoneHandler
     {
+        @Override
         public Object[] getTestObjects()
         {
             RuleBasedTimeZone ruleBasedTimeZones[] = new RuleBasedTimeZone[2];
@@ -270,6 +276,7 @@ public class SerializableTestUtility {
     }
 
     private static class DateTimeRuleHandler implements Handler {
+        @Override
         public Object[] getTestObjects() {
             DateTimeRule[] rules = new DateTimeRule[4];
 
@@ -288,6 +295,7 @@ public class SerializableTestUtility {
             return rules;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             return hasSameRule((DateTimeRule)a, (DateTimeRule)b);
         }
@@ -313,7 +321,7 @@ public class SerializableTestUtility {
                     break;
                 }
             }
-            return bSame;            
+            return bSame;
         }
     }
 
@@ -323,14 +331,16 @@ public class SerializableTestUtility {
                 ra.getDSTSavings() == rb.getDSTSavings()) {
             return true;
         }
-        return false;        
+        return false;
     }
 
     private static class AnnualTimeZoneRuleHandler implements Handler {
+        @Override
         public Object[] getTestObjects() {
             return TEST_US_EASTERN;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             AnnualTimeZoneRule ra = (AnnualTimeZoneRule)a;
             AnnualTimeZoneRule rb = (AnnualTimeZoneRule)b;
@@ -344,6 +354,7 @@ public class SerializableTestUtility {
     }
 
     private static class InitialTimeZoneRuleHandler implements Handler {
+        @Override
         public Object[] getTestObjects() {
             TimeZoneRule[] rules = new TimeZoneRule[2];
             rules[0] = new InitialTimeZoneRule("EST", -5*HOUR, 0);
@@ -351,12 +362,14 @@ public class SerializableTestUtility {
             return rules;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             return compareTimeZoneRules((TimeZoneRule)a, (TimeZoneRule)b);
         }
     }
 
     private static class TimeArrayTimeZoneRuleHandler implements Handler {
+        @Override
         public Object[] getTestObjects() {
             TimeArrayTimeZoneRule[] rules = new TimeArrayTimeZoneRule[1];
             long[] ttime = new long[] {-631152000000L, 0L, 946684800000L}; /* {1950-1-1, 1970-1-1, 2000-1-1} */
@@ -364,6 +377,7 @@ public class SerializableTestUtility {
 
             return rules;
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             TimeArrayTimeZoneRule ra = (TimeArrayTimeZoneRule)a;
             TimeArrayTimeZoneRule rb = (TimeArrayTimeZoneRule)b;
@@ -393,36 +407,40 @@ public class SerializableTestUtility {
 
     private static class ULocaleHandler implements Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             ULocale uLocales[] = new ULocale[locales.length];
-            
+
             for (int i = 0; i < locales.length; i += 1) {
                 uLocales[i] = ULocale.forLocale(locales[i]);
             }
-            
+
             return uLocales;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             ULocale uloc_a = (ULocale) a;
             ULocale uloc_b = (ULocale) b;
-            
+
             return uloc_a.getName().equals(uloc_b.getName());
         }
     }
-    
+
     public static class DateIntervalHandler implements Handler
     {
         private DateInterval dateInterval[] = {
                 new DateInterval(0L, 1164931200000L/*20061201T000000Z*/)
         };
+        @Override
         public Object[] getTestObjects()
         {
             return dateInterval;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             return a.equals(b);
@@ -431,28 +449,30 @@ public class SerializableTestUtility {
 
     private static class CurrencyHandler implements Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             Currency currencies[] = new Currency[places.length];
-            
+
             for (int i = 0; i < places.length; i += 1) {
                 currencies[i] = Currency.getInstance(places[i]);
             }
-            
+
             return currencies;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
-            
+
             Currency curr_a = (Currency) a;
             Currency curr_b = (Currency) b;
-            
-            return a == b 
-                    || a != null && b != null 
+
+            return a == b
+                    || a != null && b != null
                     && curr_a.getCurrencyCode() != null
                     && curr_a.getCurrencyCode().equals(curr_b.getCurrencyCode());
-            
+
         }
     }
 
@@ -464,7 +484,7 @@ public class SerializableTestUtility {
         "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
         "Europe/Paris", "Europe/Rome"
     };
-        
+
     private static long sampleTimes[] = {
         1136073600000L, // 20060101T000000Z
         1138752000000L, // 20060201T000000Z
@@ -482,18 +502,20 @@ public class SerializableTestUtility {
 
     private static class OlsonTimeZoneHandler implements Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             OlsonTimeZone timeZones[] = new OlsonTimeZone[zoneIDs.length];
-            
+
             for (int i = 0; i < zoneIDs.length; i += 1) {
                 timeZones[i] = new OlsonTimeZone(zoneIDs[i]);
             }
-            
+
             return timeZones;
-                
+
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             OlsonTimeZone otz_a = (OlsonTimeZone) a;
@@ -516,24 +538,26 @@ public class SerializableTestUtility {
 
     private static class TimeZoneAdapterHandler implements Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             TimeZoneAdapter timeZones[] = new TimeZoneAdapter[zoneIDs.length];
-            
+
             for (int i = 0; i < zoneIDs.length; i += 1) {
                 timeZones[i] = new TimeZoneAdapter(TimeZone.getTimeZone(zoneIDs[i]));
             }
-            
+
             return timeZones;
-                
+
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             GregorianCalendar cal = new GregorianCalendar();
             TimeZoneAdapter tza_a = (TimeZoneAdapter) a;
             TimeZoneAdapter tza_b = (TimeZoneAdapter) b;
-            
+
             int a_offset, b_offset;
             boolean a_dst, b_dst;
             boolean bSame = true;
@@ -562,6 +586,7 @@ public class SerializableTestUtility {
     private static class JavaTimeZoneHandler implements Handler {
         String[] ZONES = { "GMT", "America/New_York", "GMT+05:45" };
 
+        @Override
         public Object[] getTestObjects() {
             JavaTimeZone zones[] = new JavaTimeZone[ZONES.length];
             for(int z = 0; z < ZONES.length; z += 1) {
@@ -570,7 +595,8 @@ public class SerializableTestUtility {
             }
             return zones;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             TimeZone zone_a = (TimeZone) a;
@@ -610,26 +636,28 @@ public class SerializableTestUtility {
             "12.34567890",
             "1.234567890",
             ".1234567890"};
-        
+
+        @Override
         public Object[] getTestObjects()
         {
             BigDecimal bds[] = new BigDecimal[values.length];
-            
+
             for (int i = 0; i < values.length; i += 1) {
                 bds[i] = new BigDecimal(values[i]);
             }
-            
+
             return bds;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             BigDecimal bda = (BigDecimal) a;
             BigDecimal bdb = (BigDecimal) b;
-            
+
             return bda.toString().equals(bdb.toString());
         }
     }
-    
+
     private static class MathContextHandler implements Handler
     {
         int forms[] = {MathContext.PLAIN, MathContext.ENGINEERING, MathContext.SCIENTIFIC};
@@ -638,41 +666,44 @@ public class SerializableTestUtility {
             MathContext.ROUND_HALF_DOWN, MathContext.ROUND_HALF_EVEN, MathContext.ROUND_HALF_UP,
             MathContext.ROUND_UNNECESSARY, MathContext.ROUND_UP};
 
+        @Override
         public Object[] getTestObjects()
         {
             int objectCount = forms.length * rounds.length;
             MathContext contexts[] = new MathContext[objectCount];
             int i = 0;
-            
+
             for (int f = 0; f < forms.length; f += 1) {
                 for (int r = 0; r < rounds.length; r += 1) {
                     int digits = f * r;
                     boolean lostDigits = (r & 1) != 0;
-                    
+
                     contexts[i++] = new MathContext(digits, forms[f], lostDigits, rounds[r]);
                 }
             }
-            
+
             return contexts;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             MathContext mca = (MathContext) a;
             MathContext mcb = (MathContext) b;
-            
+
             return mca.toString().equals(mcb.toString());
         }
     }
 
     private static abstract class ExceptionHandlerBase implements Handler {
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             return sameThrowable((Exception) a, (Exception) b);
         }
 
         // Exception.equals() does not seem to work.
         private static final boolean sameThrowable(Throwable a, Throwable b) {
-            return a == null ? b == null : 
+            return a == null ? b == null :
                     b == null ? false :
                             a.getClass().equals(b.getClass()) &&
                             Utility.objectEquals(a.getMessage(), b.getMessage()) &&
@@ -681,6 +712,7 @@ public class SerializableTestUtility {
     }
 
     private static class ICUExceptionHandler extends ExceptionHandlerBase {
+        @Override
         public Object[] getTestObjects() {
             return new ICUException[] {
                     new ICUException(),
@@ -692,6 +724,7 @@ public class SerializableTestUtility {
     }
 
     private static class ICUUncheckedIOExceptionHandler extends ExceptionHandlerBase {
+        @Override
         public Object[] getTestObjects() {
             return new ICUUncheckedIOException[] {
                     new ICUUncheckedIOException(),
@@ -703,6 +736,7 @@ public class SerializableTestUtility {
     }
 
     private static class ICUCloneNotSupportedExceptionHandler extends ExceptionHandlerBase {
+        @Override
         public Object[] getTestObjects() {
             return new ICUCloneNotSupportedException[] {
                     new ICUCloneNotSupportedException(),
@@ -714,7 +748,7 @@ public class SerializableTestUtility {
     }
 
     private static HashMap map = new HashMap();
-    
+
     static {
         map.put("com.ibm.icu.util.TimeZone", new TimeZoneHandler());
         map.put("com.ibm.icu.util.SimpleTimeZone", new SimpleTimeZoneHandler());
@@ -731,7 +765,7 @@ public class SerializableTestUtility {
         map.put("com.ibm.icu.impl.TimeZoneAdapter", new TimeZoneAdapterHandler());
         map.put("com.ibm.icu.math.BigDecimal", new BigDecimalHandler());
         map.put("com.ibm.icu.math.MathContext", new MathContextHandler());
-        
+
         map.put("com.ibm.icu.text.NumberFormat", new FormatHandler.NumberFormatHandler());
         map.put("com.ibm.icu.text.DecimalFormat", new FormatHandler.DecimalFormatHandler());
         map.put("com.ibm.icu.text.CompactDecimalFormat", new FormatHandler.CompactDecimalFormatHandler());
@@ -772,7 +806,7 @@ public class SerializableTestUtility {
         map.put("com.ibm.icu.util.JapaneseCalendar", new CalendarHandler.JapaneseCalendarHandler());
         map.put("com.ibm.icu.util.PersianCalendar", new CalendarHandler.PersianCalendarHandler());
         map.put("com.ibm.icu.util.TaiwanCalendar", new CalendarHandler.TaiwanCalendarHandler());
-        
+
         map.put("com.ibm.icu.text.ArabicShapingException", new ExceptionHandler.ArabicShapingExceptionHandler());
         map.put("com.ibm.icu.text.StringPrepParseException", new ExceptionHandler.StringPrepParseExceptionHandler());
         map.put("com.ibm.icu.util.UResourceTypeMismatchException", new ExceptionHandler.UResourceTypeMismatchExceptionHandler());
@@ -798,7 +832,7 @@ public class SerializableTestUtility {
         map.put("com.ibm.icu.util.ICUUncheckedIOException", new ICUUncheckedIOExceptionHandler());
         map.put("com.ibm.icu.util.ICUCloneNotSupportedException", new ICUCloneNotSupportedExceptionHandler());
     }
-    
+
     /*
      * Serialization Helpers
      */
@@ -829,6 +863,17 @@ public class SerializableTestUtility {
         return objects;
     }
 
+    static byte[] copyStreamBytes(InputStream is) throws IOException {
+        byte[] buffer = new byte[1024];
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        int len;
+        while((len = is.read(buffer, 0, buffer.length)) >= 0) {
+            bos.write(buffer, 0, len);
+        }
+        return bos.toByteArray();
+    }
+
     static List<String> getSerializationClassList(Object caller) throws IOException {
         List<String> classList = new ArrayList();
         Enumeration<URL> urlEnum = caller.getClass().getClassLoader().getResources("com/ibm/icu");
@@ -842,8 +887,6 @@ public class SerializableTestUtility {
             CoverageClassVisitor visitor = new CoverageClassVisitor(classList);
             handler.guide(visitor, true, false);
         }
-        // TODO(junit): add randomization support on the list based on the params object
-
         return classList;
     }
 
@@ -853,7 +896,7 @@ public class SerializableTestUtility {
         public CoverageClassVisitor(List<String> classNamesList) {
             this.classNames = classNamesList;
         }
-        
+
         /* (non-Javadoc)
          * @see com.ibm.icu.impl.URLHandler.URLVisitor#visit(java.lang.String)
          */
@@ -881,7 +924,7 @@ public class SerializableTestUtility {
                 // Known Issue: "10268", "Serializable interface is not implemented in PluralRules$FixedDecimal"
                 return;
             }
-            
+
             if (c.isEnum() || !serializable.isAssignableFrom(c)) {
                 //System.out.println("@@@ Skipping: " + className);
                 return;
@@ -891,8 +934,8 @@ public class SerializableTestUtility {
                 return;
             }
 
-            this.classNames.add(className);  
-        } 
+            this.classNames.add(className);
+        }
     }
 
     public static void serializeObjects(File oof, Object[] objectsOut) throws IOException {
@@ -900,6 +943,6 @@ public class SerializableTestUtility {
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(objectsOut);
 
-        oos.close();        
+        oos.close();
     }
 }

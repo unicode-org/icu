@@ -68,303 +68,303 @@ public class FormatHandler
     static HashMap cannedShortMonthNames = new HashMap();
 
     static String en_CA_MonthNames[] = {
-        "January", 
-        "February", 
-        "March", 
-        "April", 
-        "May", 
-        "June", 
-        "July", 
-        "August", 
-        "September", 
-        "October", 
-        "November", 
-        "December", 
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     };
 
     static String fr_CA_MonthNames[] = {
-        "janvier", 
-        "f\u00E9vrier", 
-        "mars", 
-        "avril", 
-        "mai", 
-        "juin", 
-        "juillet", 
-        "ao\u00FBt", 
-        "septembre", 
-        "octobre", 
-        "novembre", 
-        "d\u00E9cembre", 
+        "janvier",
+        "f\u00E9vrier",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "ao\u00FBt",
+        "septembre",
+        "octobre",
+        "novembre",
+        "d\u00E9cembre",
     };
 
     static String zh_Hans_CN_MonthNames[] = {
-        "\u4E00\u6708", 
-        "\u4E8C\u6708", 
-        "\u4E09\u6708", 
-        "\u56DB\u6708", 
-        "\u4E94\u6708", 
-        "\u516D\u6708", 
-        "\u4E03\u6708", 
-        "\u516B\u6708", 
-        "\u4E5D\u6708", 
-        "\u5341\u6708", 
-        "\u5341\u4E00\u6708", 
-        "\u5341\u4E8C\u6708", 
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
     };
 
     static String zh_CN_MonthNames[] = {
-        "\u4E00\u6708", 
-        "\u4E8C\u6708", 
-        "\u4E09\u6708", 
-        "\u56DB\u6708", 
-        "\u4E94\u6708", 
-        "\u516D\u6708", 
-        "\u4E03\u6708", 
-        "\u516B\u6708", 
-        "\u4E5D\u6708", 
-        "\u5341\u6708", 
-        "\u5341\u4E00\u6708", 
-        "\u5341\u4E8C\u6708", 
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
     };
 
     static String zh_MonthNames[] = {
-        "\u4E00\u6708", 
-        "\u4E8C\u6708", 
-        "\u4E09\u6708", 
-        "\u56DB\u6708", 
-        "\u4E94\u6708", 
-        "\u516D\u6708", 
-        "\u4E03\u6708", 
-        "\u516B\u6708", 
-        "\u4E5D\u6708", 
-        "\u5341\u6708", 
-        "\u5341\u4E00\u6708", 
-        "\u5341\u4E8C\u6708", 
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
     };
 
     static String en_MonthNames[] = {
-        "January", 
-        "February", 
-        "March", 
-        "April", 
-        "May", 
-        "June", 
-        "July", 
-        "August", 
-        "September", 
-        "October", 
-        "November", 
-        "December", 
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     };
 
     static String fr_FR_MonthNames[] = {
-        "janvier", 
-        "f\u00E9vrier", 
-        "mars", 
-        "avril", 
-        "mai", 
-        "juin", 
-        "juillet", 
-        "ao\u00FBt", 
-        "septembre", 
-        "octobre", 
-        "novembre", 
-        "d\u00E9cembre", 
+        "janvier",
+        "f\u00E9vrier",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "ao\u00FBt",
+        "septembre",
+        "octobre",
+        "novembre",
+        "d\u00E9cembre",
     };
 
     static String fr_MonthNames[] = {
-        "janvier", 
-        "f\u00E9vrier", 
-        "mars", 
-        "avril", 
-        "mai", 
-        "juin", 
-        "juillet", 
-        "ao\u00FBt", 
-        "septembre", 
-        "octobre", 
-        "novembre", 
-        "d\u00E9cembre", 
+        "janvier",
+        "f\u00E9vrier",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "ao\u00FBt",
+        "septembre",
+        "octobre",
+        "novembre",
+        "d\u00E9cembre",
     };
 
     static String de_MonthNames[] = {
-        "Januar", 
-        "Februar", 
-        "M\u00E4rz", 
-        "April", 
-        "Mai", 
-        "Juni", 
-        "Juli", 
-        "August", 
-        "September", 
-        "Oktober", 
-        "November", 
-        "Dezember", 
+        "Januar",
+        "Februar",
+        "M\u00E4rz",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember",
     };
 
     static String de_DE_MonthNames[] = {
-        "Januar", 
-        "Februar", 
-        "M\u00E4rz", 
-        "April", 
-        "Mai", 
-        "Juni", 
-        "Juli", 
-        "August", 
-        "September", 
-        "Oktober", 
-        "November", 
-        "Dezember", 
+        "Januar",
+        "Februar",
+        "M\u00E4rz",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember",
     };
 
     static String it_MonthNames[] = {
-        "gennaio", 
-        "febbraio", 
-        "marzo", 
-        "aprile", 
-        "maggio", 
-        "giugno", 
-        "luglio", 
-        "agosto", 
-        "settembre", 
-        "ottobre", 
-        "novembre", 
-        "dicembre", 
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre",
     };
 
     static String it_IT_MonthNames[] = {
-        "gennaio", 
-        "febbraio", 
-        "marzo", 
-        "aprile", 
-        "maggio", 
-        "giugno", 
-        "luglio", 
-        "agosto", 
-        "settembre", 
-        "ottobre", 
-        "novembre", 
-        "dicembre", 
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre",
     };
 
     static String ja_JP_MonthNames[] = {
-        "1\u6708", 
-        "2\u6708", 
-        "3\u6708", 
-        "4\u6708", 
-        "5\u6708", 
-        "6\u6708", 
-        "7\u6708", 
-        "8\u6708", 
-        "9\u6708", 
-        "10\u6708", 
-        "11\u6708", 
-        "12\u6708", 
+        "1\u6708",
+        "2\u6708",
+        "3\u6708",
+        "4\u6708",
+        "5\u6708",
+        "6\u6708",
+        "7\u6708",
+        "8\u6708",
+        "9\u6708",
+        "10\u6708",
+        "11\u6708",
+        "12\u6708",
     };
 
     static String ja_MonthNames[] = {
-        "1\u6708", 
-        "2\u6708", 
-        "3\u6708", 
-        "4\u6708", 
-        "5\u6708", 
-        "6\u6708", 
-        "7\u6708", 
-        "8\u6708", 
-        "9\u6708", 
-        "10\u6708", 
-        "11\u6708", 
-        "12\u6708", 
+        "1\u6708",
+        "2\u6708",
+        "3\u6708",
+        "4\u6708",
+        "5\u6708",
+        "6\u6708",
+        "7\u6708",
+        "8\u6708",
+        "9\u6708",
+        "10\u6708",
+        "11\u6708",
+        "12\u6708",
     };
 
     static String ko_KR_MonthNames[] = {
-        "1\uC6D4", 
-        "2\uC6D4", 
-        "3\uC6D4", 
-        "4\uC6D4", 
-        "5\uC6D4", 
-        "6\uC6D4", 
-        "7\uC6D4", 
-        "8\uC6D4", 
-        "9\uC6D4", 
-        "10\uC6D4", 
-        "11\uC6D4", 
-        "12\uC6D4", 
+        "1\uC6D4",
+        "2\uC6D4",
+        "3\uC6D4",
+        "4\uC6D4",
+        "5\uC6D4",
+        "6\uC6D4",
+        "7\uC6D4",
+        "8\uC6D4",
+        "9\uC6D4",
+        "10\uC6D4",
+        "11\uC6D4",
+        "12\uC6D4",
     };
 
     static String ko_MonthNames[] = {
-        "1\uC6D4", 
-        "2\uC6D4", 
-        "3\uC6D4", 
-        "4\uC6D4", 
-        "5\uC6D4", 
-        "6\uC6D4", 
-        "7\uC6D4", 
-        "8\uC6D4", 
-        "9\uC6D4", 
-        "10\uC6D4", 
-        "11\uC6D4", 
-        "12\uC6D4", 
+        "1\uC6D4",
+        "2\uC6D4",
+        "3\uC6D4",
+        "4\uC6D4",
+        "5\uC6D4",
+        "6\uC6D4",
+        "7\uC6D4",
+        "8\uC6D4",
+        "9\uC6D4",
+        "10\uC6D4",
+        "11\uC6D4",
+        "12\uC6D4",
     };
 
     static String zh_Hant_TW_MonthNames[] = {
-        "\u4E00\u6708", 
-        "\u4E8C\u6708", 
-        "\u4E09\u6708", 
-        "\u56DB\u6708", 
-        "\u4E94\u6708", 
-        "\u516D\u6708", 
-        "\u4E03\u6708", 
-        "\u516B\u6708", 
-        "\u4E5D\u6708", 
-        "\u5341\u6708", 
-        "\u5341\u4E00\u6708", 
-        "\u5341\u4E8C\u6708", 
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
     };
 
     static String zh_TW_MonthNames[] = {
-        "\u4E00\u6708", 
-        "\u4E8C\u6708", 
-        "\u4E09\u6708", 
-        "\u56DB\u6708", 
-        "\u4E94\u6708", 
-        "\u516D\u6708", 
-        "\u4E03\u6708", 
-        "\u516B\u6708", 
-        "\u4E5D\u6708", 
-        "\u5341\u6708", 
-        "\u5341\u4E00\u6708", 
-        "\u5341\u4E8C\u6708", 
+        "\u4E00\u6708",
+        "\u4E8C\u6708",
+        "\u4E09\u6708",
+        "\u56DB\u6708",
+        "\u4E94\u6708",
+        "\u516D\u6708",
+        "\u4E03\u6708",
+        "\u516B\u6708",
+        "\u4E5D\u6708",
+        "\u5341\u6708",
+        "\u5341\u4E00\u6708",
+        "\u5341\u4E8C\u6708",
         };
 
     static String en_GB_MonthNames[] = {
-        "January", 
-        "February", 
-        "March", 
-        "April", 
-        "May", 
-        "June", 
-        "July", 
-        "August", 
-        "September", 
-        "October", 
-        "November", 
-        "December", 
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     };
 
     static String en_US_MonthNames[] = {
-        "January", 
-        "February", 
-        "March", 
-        "April", 
-        "May", 
-        "June", 
-        "July", 
-        "August", 
-        "September", 
-        "October", 
-        "November", 
-        "December", 
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     };
 
     static String en_CA_ShortMonthNames[] = {
@@ -666,7 +666,7 @@ public class FormatHandler
         "Nov",
         "Dec",
     };
-        
+
     static {
         cannedMonthNames.put("en_CA",      en_CA_MonthNames);
         cannedMonthNames.put("fr_CA",      fr_CA_MonthNames);
@@ -715,20 +715,24 @@ public class FormatHandler
     {
         DateFormatSymbols dfs =new DateFormatSymbols(GregorianCalendar.class, uloc);
         String key = uloc.toString();
-        
+
         dfs.setMonths((String[]) cannedMonthNames.get(key));
         dfs.setShortMonths((String[]) cannedShortMonthNames.get(key));
-        
+
         return dfs;
     }
-    
+
     private static SimpleDateFormat getCannedSimpleDateFormat(String pattern, ULocale uloc)
     {
         DateFormatSymbols dfs = getCannedDateFormatSymbols(uloc);
-        
-        return new SimpleDateFormat(pattern, dfs, uloc);
+
+        // Force PT
+        TimeZone pt = TimeZone.getTimeZone("America/Los_Angeles");
+        SimpleDateFormat cannedSDF = new SimpleDateFormat(pattern, dfs, uloc);
+        cannedSDF.setTimeZone(pt);
+        return cannedSDF;
     }
-    
+
     /*
      * The serialized form of a normally created DecimalFormatSymbols object
      * will have locale-specific data in it that might change from one version
@@ -736,187 +740,187 @@ public class FormatHandler
      * data into the test objects we create.
      */
     static HashMap cannedDecimalFormatSymbols = new HashMap();
-    
+
     static String en_CA_StringSymbols[] = {
-        "$", 
-        "E", 
-        "\u221E", 
-        "CAD", 
-        "\uFFFD", 
+        "$",
+        "E",
+        "\u221E",
+        "CAD",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String fr_CA_StringSymbols[] = {
-        "$", 
-        "E", 
-        "\u221E", 
-        "CAD", 
-        "\uFFFD", 
+        "$",
+        "E",
+        "\u221E",
+        "CAD",
+        "\uFFFD",
         ",#\u00A0-,*;%\u2030+@0"
     };
 
     static String zh_CN_StringSymbols[] = {
-        "\uFFE5", 
-        "E", 
-        "\u221E", 
-        "CNY", 
+        "\uFFE5",
+        "E",
+        "\u221E",
+        "CNY",
         "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String zh_StringSymbols[] = {
-        "\u00A4", 
-        "E", 
-        "\u221E", 
-        "XXX", 
-        "\uFFFD", 
+        "\u00A4",
+        "E",
+        "\u221E",
+        "XXX",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String en_StringSymbols[] = {
-        "\u00A4", 
-        "E", 
-        "\u221E", 
-        "XXX", 
-        "\uFFFD", 
+        "\u00A4",
+        "E",
+        "\u221E",
+        "XXX",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String fr_FR_StringSymbols[] = {
-        "\u20AC", 
-        "E", 
-        "\u221E", 
-        "EUR", 
-        "\uFFFD", 
+        "\u20AC",
+        "E",
+        "\u221E",
+        "EUR",
+        "\uFFFD",
         ",#\u00A0-,*;%\u2030+@0"
     };
 
     static String fr_StringSymbols[] = {
-        "\u00A4", 
-        "E", 
-        "\u221E", 
-        "XXX", 
-        "\uFFFD", 
+        "\u00A4",
+        "E",
+        "\u221E",
+        "XXX",
+        "\uFFFD",
         ",#\u00A0-,*;%\u2030+@0"
     };
 
     static String de_StringSymbols[] = {
-        "\u00A4", 
-        "E", 
-        "\u221E", 
-        "XXX", 
+        "\u00A4",
+        "E",
+        "\u221E",
+        "XXX",
         "\uFFFD",
         ",#.-,*;%\u2030+@0"
     };
 
     static String de_DE_StringSymbols[] = {
-        "\u20AC", 
-        "E", 
-        "\u221E", 
-        "EUR", 
-        "\uFFFD", 
+        "\u20AC",
+        "E",
+        "\u221E",
+        "EUR",
+        "\uFFFD",
         ",#.-,*;%\u2030+@0"
     };
 
     static String it_StringSymbols[] = {
-        "\u00A4", 
-        "E", 
-        "\u221E", 
-        "XXX", 
-        "\uFFFD", 
+        "\u00A4",
+        "E",
+        "\u221E",
+        "XXX",
+        "\uFFFD",
         ",#.-,*;%\u2030+@0"
     };
 
     static String it_IT_StringSymbols[] = {
-        "\u20AC", 
-        "E", 
-        "\u221E", 
-        "EUR", 
-        "\uFFFD", 
+        "\u20AC",
+        "E",
+        "\u221E",
+        "EUR",
+        "\uFFFD",
         ",#.-,*;%\u2030+@0"
     };
 
     static String ja_JP_StringSymbols[] = {
-        "\uFFE5", 
-        "E", 
-        "\u221E", 
-        "JPY", 
-        "\uFFFD", 
+        "\uFFE5",
+        "E",
+        "\u221E",
+        "JPY",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String ja_StringSymbols[] = {
-        "\u00A4", 
-        "E", 
-        "\u221E", 
-        "XXX", 
-        "\uFFFD", 
+        "\u00A4",
+        "E",
+        "\u221E",
+        "XXX",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String ko_KR_StringSymbols[] = {
-        "\uFFE6", 
-        "E", 
-        "\u221E", 
-        "KRW", 
+        "\uFFE6",
+        "E",
+        "\u221E",
+        "KRW",
         "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String ko_StringSymbols[] = {
-        "\u00A4", 
-        "E", 
-        "\u221E", 
-        "XXX", 
+        "\u00A4",
+        "E",
+        "\u221E",
+        "XXX",
         "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String zh_Hans_CN_StringSymbols[] = {
-        "\uFFE5", 
-        "E", 
-        "\u221E", 
-        "CNY", 
-        "\uFFFD", 
+        "\uFFE5",
+        "E",
+        "\u221E",
+        "CNY",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String zh_Hant_TW_StringSymbols[] = {
-        "NT$", 
-        "E", 
-        "\u221E", 
-        "TWD", 
-        "\uFFFD", 
+        "NT$",
+        "E",
+        "\u221E",
+        "TWD",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String zh_TW_StringSymbols[] = {
-        "NT$", 
-        "E", 
-        "\u221E", 
-        "TWD", 
-        "\uFFFD", 
+        "NT$",
+        "E",
+        "\u221E",
+        "TWD",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String en_GB_StringSymbols[] = {
-        "\u00A3", 
-        "E", 
-        "\u221E", 
-        "GBP", 
-        "\uFFFD", 
+        "\u00A3",
+        "E",
+        "\u221E",
+        "GBP",
+        "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
 
     static String en_US_StringSymbols[] = {
-        "$", 
-        "E", 
-        "\u221E", 
-        "USD", 
+        "$",
+        "E",
+        "\u221E",
+        "USD",
         "\uFFFD",
         ".#,-.*;%\u2030+@0"
     };
-    
+
     static {
         cannedDecimalFormatSymbols.put("en_CA",      en_CA_StringSymbols);
         cannedDecimalFormatSymbols.put("fr_CA",      fr_CA_StringSymbols);
@@ -939,7 +943,7 @@ public class FormatHandler
         cannedDecimalFormatSymbols.put("en_GB",      en_GB_StringSymbols);
         cannedDecimalFormatSymbols.put("en_US",      en_US_StringSymbols);
     }
-    
+
     private static char[] getCharSymbols(DecimalFormatSymbols dfs)
     {
         char symbols[] = {
@@ -956,10 +960,10 @@ public class FormatHandler
             dfs.getSignificantDigit(),
             dfs.getZeroDigit()
         };
-        
+
         return symbols;
     }
-    
+
     private static void setCharSymbols(DecimalFormatSymbols dfs, char symbols[])
     {
         dfs.setDecimalSeparator(symbols[0]);
@@ -975,7 +979,7 @@ public class FormatHandler
         dfs.setSignificantDigit(symbols[10]);
         dfs.setZeroDigit(symbols[11]);
     }
-    
+
     private static String[] getStringSymbols(DecimalFormatSymbols dfs)
     {
         String symbols[] = {
@@ -985,16 +989,16 @@ public class FormatHandler
             dfs.getInternationalCurrencySymbol(),
             dfs.getNaN()
         };
-        
+
         return symbols;
     }
-    
+
     private static DecimalFormatSymbols getCannedDecimalFormatSymbols(ULocale uloc)
     {
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(uloc);
-        
+
         setSymbols(dfs, (String[]) cannedDecimalFormatSymbols.get(uloc.toString()));
-        
+
         return dfs;
     }
 
@@ -1002,7 +1006,7 @@ public class FormatHandler
     {
         return new DecimalFormat(pattern, getCannedDecimalFormatSymbols(uloc));
     }
-    
+
     private static void setSymbols(DecimalFormatSymbols dfs, String symbols[])
     {
         dfs.setCurrencySymbol(symbols[0]);
@@ -1010,26 +1014,28 @@ public class FormatHandler
         dfs.setInfinity(symbols[2]);
         dfs.setInternationalCurrencySymbol(symbols[3]);
         dfs.setNaN(symbols[4]);
-        
+
         setCharSymbols(dfs, symbols[5].toCharArray());
     }
-    
+
     public static class RelativeDateFormatHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
-            DateFormat formats[] = { 
+            DateFormat formats[] = {
                     DateFormat.getDateInstance(DateFormat.RELATIVE_LONG,new ULocale("en")),
                     DateFormat.getDateInstance(DateFormat.RELATIVE_SHORT,new ULocale("ru")),
             };
-            
+
             return formats;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             DateFormat da = (DateFormat)a;
             DateFormat db = (DateFormat)b;
-            
+
             Date d = new Date(System.currentTimeMillis());
             return da.format(d).equals(db.format(d));
         }
@@ -1037,21 +1043,23 @@ public class FormatHandler
 
     public static class BasicDurationFormatHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
-            DurationFormat formats[] = { 
+            DurationFormat formats[] = {
                     DurationFormat.getInstance(new ULocale("en"))
-                   
+
             };
-            
+
             return formats;
         }
-        
+
         //TODO: Revisit this after 3.8
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             //DurationFormat da = (DurationFormat)a;
             //DurationFormat db = (DurationFormat)b;
-            
+
             //Date d = new Date(12345);
             //System.err.println("Warning: BasicDurationFormat test is being skipped for now.");
             return true;
@@ -1061,6 +1069,7 @@ public class FormatHandler
 
     public static class NumberFormatHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             ULocale uloc = ULocale.forLocale(Locale.US);
@@ -1068,12 +1077,12 @@ public class FormatHandler
                 /*
                  * The code below was used to genereate the
                  * serialized NumberFormat objects in ICU 3.6:
-                 * 
+                 *
                  *    NumberFormat.getInstance(Locale.US)
                  *    NumberFormat.getCurrencyInstance(Locale.US)
                  *    NumberFormat.getPercentInstance(Locale.US)
                  *    NumberFormat.getScientificInstance(Locale.US)
-                 * 
+                 *
                  * Because the locale data might now be different that it was in
                  * ICU 3.6, the only way to guarantee that the object we generate
                  * will match the ICU 3.6 objects is to generate DecimalFormat objects
@@ -1084,32 +1093,34 @@ public class FormatHandler
                 getCannedDecimalFormat("\u00A4#,##0.00;(\u00A4#,##0.00)", uloc),
                 getCannedDecimalFormat("#,##0%", uloc),
                 getCannedDecimalFormat("#E0", uloc)
-               
+
             };
-            
+
             return formats;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             NumberFormat format_a = (NumberFormat) a;
             NumberFormat format_b = (NumberFormat) b;
             double number = 1234.56;
-            
+
             return format_a.format(number).equals(format_b.format(number));
         }
     }
-    
+
     public static class DecimalFormatHandler extends NumberFormatHandler
     {
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
             DecimalFormat formats[] = new DecimalFormat[locales.length];
-            
+
             for (int i = 0; i < locales.length; i += 1) {
                 ULocale uloc = ULocale.forLocale(locales[i]);
-                
+
                 formats[i] = getCannedDecimalFormat("#,##0.###", uloc);
             }
             if (formats[0] != null) {
@@ -1127,15 +1138,15 @@ public class FormatHandler
             return formats;
         }
     }
-    
+
     public static class RuleBasedNumberFormatHandler extends NumberFormatHandler
     {
         // default rules, from root.txt
         String xx_SpelloutRules = "=#,##0.######=;\n";
         String xx_OrdinalRules = "=#,##0=;\n";
         String xx_DurationRules = "=#,##0=;\n";
-        
-        String ja_spelloutRules = 
+
+        String ja_spelloutRules =
             "%financial:\n" +
                 "\u96f6; \u58f1; \u5f10; \u53c2; \u56db; \u4f0d; \u516d; \u4e03; \u516b; \u4e5d;\n" +
                 "\u62fe[>>];\n" +
@@ -1146,7 +1157,7 @@ public class FormatHandler
                 "100,000,000: <<\u5104[>>];\n" +
                 "1,000,000,000,000: <<\u5146[>>];\n" +
                 "10,000,000,000,000,000: =#,##0=;\n" +
-                
+
             "%traditional:\n" +
                 "\u96f6; \u4e00; \u4e8c; \u4e09; \u56db; \u4e94; \u516d; \u4e03; \u516b; \u4e5d;\n" +
                 "\u5341[>>];\n" +
@@ -1157,8 +1168,8 @@ public class FormatHandler
                 "100,000,000: <<\u5104[>>];\n" +
                 "1,000,000,000,000: <<\u5146[>>];\n" +
                 "10,000,000,000,000,000: =#,##0=;";
-        
-        String en_SpelloutRules = 
+
+        String en_SpelloutRules =
             // This rule set shows the normal simple formatting rules for English
             "%simplified:\n" +
                    // negative number rule.  This rule is used to format negative
@@ -1320,7 +1331,7 @@ public class FormatHandler
             "1,000,000: , =%default=;" +
         "%%lenient-parse:\n" +
             "& ' ' , ',' ;\n";
-        
+
         String fr_SpelloutRules =
             // the main rule set
             "%main:\n" +
@@ -1371,10 +1382,10 @@ public class FormatHandler
                 "1,000,000,000,000,000: =#,##0=;\n" +
             // %%alt-ones is used to insert "et" when the ones digit is 1
             "%%alt-ones:\n" +
-                "; et-un; =%main=;\n" + 
+                "; et-un; =%main=;\n" +
             "%%lenient-parse:\n" +
                 "&\u0000 << ' ' << ',' << '-';\n";
-        
+
         String de_SpelloutRules =
             // 1 is "eins" when by itself, but turns into "ein" in most
             // combinations
@@ -1414,7 +1425,7 @@ public class FormatHandler
                 "& ae , \u00e4 & ae , \u00c4\n" +
                 "& oe , \u00f6 & oe , \u00d6\n" +
                 "& ue , \u00fc & ue , \u00dc\n";
-        
+
         String it_SpelloutRules =
             // main rule set.  Follows the patterns of the preceding rule sets,
             // except that the final vowel is omitted from words ending in
@@ -1495,7 +1506,7 @@ public class FormatHandler
                 "1000: omille; omill[>%%with-i>];\n" +
                 "2000: <%%with-o<mila; <%%with-o<mil[>%%with-a>];\n" +
                 "100,000: =%main=;\n" ;
-        
+
         String en_OrdinalRules =
             // this rule set formats the numeral and calls %%abbrev to
             // supply the abbreviation
@@ -1512,7 +1523,7 @@ public class FormatHandler
                    // at 100, we repeat the whole cycle by considering only the
                    // tens and ones digits in picking an abbreviation
                 "100: >>;\n";
-        
+
         String en_DurationRules =
             // main rule set for formatting with words
             "%with-words:\n" +
@@ -1560,76 +1571,76 @@ public class FormatHandler
                 "& ':' = '.' = ' ' = '-';\n";
 
             HashMap cannedData = new HashMap();
-        
+
         {
             cannedData.put("en_CA/SpelloutRules",      en_SpelloutRules);
             cannedData.put("en_CA/OrdinalRules",       en_OrdinalRules);
             cannedData.put("en_CA/DurationRules",      en_DurationRules);
-            
+
             cannedData.put("fr_CA/SpelloutRules",      fr_SpelloutRules);
             cannedData.put("fr_CA/OrdinalRules",       xx_OrdinalRules);
             cannedData.put("fr_CA/DurationRules",      xx_DurationRules);
-            
+
             cannedData.put("zh_CN/SpelloutRules",      en_SpelloutRules);
             cannedData.put("zh_CN/OrdinalRules",       en_OrdinalRules);
             cannedData.put("zh_CH/DurationRules",      xx_DurationRules);
-            
+
             cannedData.put("zh/SpelloutRules",         en_SpelloutRules);
             cannedData.put("zh/OrdinalRules",          en_OrdinalRules);
             cannedData.put("zh_DurationRules",         xx_DurationRules);
-            
+
             cannedData.put("en/SpelloutRules",         en_SpelloutRules);
             cannedData.put("en/OrdinalRules",          en_OrdinalRules);
             cannedData.put("en/DurationRules",         en_DurationRules);
-            
+
             cannedData.put("fr_FR/SpelloutRules",      fr_SpelloutRules);
             cannedData.put("fr_FR/OrdinalRules",       xx_OrdinalRules);
             cannedData.put("fr_FR/DurationRules",      xx_DurationRules);
-            
+
             cannedData.put("fr/SpelloutRules",         fr_SpelloutRules);
             cannedData.put("fr/OrdinalRules",          xx_OrdinalRules);
             cannedData.put("fr/DurationRules",         xx_DurationRules);
-            
+
             cannedData.put("de/SpelloutRules",         de_SpelloutRules);
             cannedData.put("de/OrdinalRules",          xx_OrdinalRules);
             cannedData.put("de/DurationRules",         xx_DurationRules);
-            
+
             cannedData.put("de_DE/SpelloutRules",      de_SpelloutRules);
             cannedData.put("de_DE/OrdinalRules",       xx_OrdinalRules);
             cannedData.put("de_DE/DurationRules",      xx_DurationRules);
-            
+
             cannedData.put("it/SpelloutRules",         it_SpelloutRules);
             cannedData.put("it/OrdinalRules",          xx_OrdinalRules);
             cannedData.put("it/DurationRules",         xx_DurationRules);
-            
+
             cannedData.put("it_IT/SpelloutRules",      it_SpelloutRules);
             cannedData.put("it_IT/OrdinalRules",       xx_OrdinalRules);
             cannedData.put("it_IT/DuratonRules",       xx_DurationRules);
-            
+
             cannedData.put("ko_KR/SpelloutRules",      en_SpelloutRules);
             cannedData.put("ko_KR/OrdinalRules",       en_OrdinalRules);
             cannedData.put("ko_KR/DurationRules",      en_DurationRules);
-            
+
             cannedData.put("ko/SpelloutRules",         en_SpelloutRules);
             cannedData.put("ko/OrdinalRules",          en_OrdinalRules);
             cannedData.put("ko/DurationRules",         en_DurationRules);
-            
+
             cannedData.put("zh_Hans_CN/SpelloutRules", en_SpelloutRules);
             cannedData.put("zh_Hans_CN/OrdinalRules",  en_OrdinalRules);
             cannedData.put("zh_Hans_CH/DurationRules", xx_DurationRules);
-            
+
             cannedData.put("zh_Hant_TW/SpelloutRules", en_SpelloutRules);
             cannedData.put("zh_Hant_TW/OrdinalRules",  en_OrdinalRules);
             cannedData.put("zh_Hant_TW/DurationRules", en_DurationRules);
-            
+
             cannedData.put("zh_TW/SpelloutRules",      en_SpelloutRules);
             cannedData.put("zh_TW/OrdinalRules",       en_OrdinalRules);
             cannedData.put("zh_TW/DurationRules",      en_DurationRules);
-            
+
             cannedData.put("en_GB/SpelloutRules",      en_GB_SpelloutRules);
             cannedData.put("en_GB/OrdinalRules",       en_OrdinalRules);
             cannedData.put("en_GB/DurationRules",      en_DurationRules);
-            
+
             cannedData.put("en_US/SpelloutRules",      en_SpelloutRules);
             cannedData.put("en_US/OrdinalRules",       en_OrdinalRules);
             cannedData.put("en_US/DurationRules",      en_DurationRules);
@@ -1637,25 +1648,26 @@ public class FormatHandler
             cannedData.put("ja/SpelloutRules",         ja_spelloutRules);
             cannedData.put("ja/OrdinalRules",          xx_OrdinalRules);
             cannedData.put("ja/DurationRules",         xx_DurationRules);
-            
+
             cannedData.put("ja_JP/SpelloutRules",      ja_spelloutRules);
             cannedData.put("ja_JP/OrdinalRules",       xx_OrdinalRules);
             cannedData.put("ja_JP/DurationRules",      xx_DurationRules);
         }
-        
+
         int types[]        = {RuleBasedNumberFormat.SPELLOUT, RuleBasedNumberFormat.ORDINAL, RuleBasedNumberFormat.DURATION};
         String typeNames[] = {"SpelloutRules", "OrdinalRules", "DurationRules"};
-        
+
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
             RuleBasedNumberFormat formats[] = new RuleBasedNumberFormat[types.length * locales.length];
             int i = 0;
-            
+
             for (int t = 0; t < types.length; t += 1) {
                 for (int l = 0; l < locales.length; l += 1) {
                     String cannedRules = (String) cannedData.get(locales[l].toString() + "/" + typeNames[t]);
-                    
+
                     if (cannedRules != null) {
                         formats[i++] = new RuleBasedNumberFormat(cannedRules, locales[l]);
                     } else {
@@ -1663,30 +1675,32 @@ public class FormatHandler
                     }
                 }
             }
-            
+
             return formats;
         }
     }
-    
+
     public static class DecimalFormatSymbolsHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
             DecimalFormatSymbols dfs[] = new DecimalFormatSymbols[locales.length];
-            
+
             for (int i = 0; i < locales.length; i += 1) {
                 ULocale uloc = ULocale.forLocale(locales[i]);
 
                 dfs[i] = getCannedDecimalFormatSymbols(uloc);
 
-//                System.out.println("\n    " + uloc.toString() + " = \"" + 
+//                System.out.println("\n    " + uloc.toString() + " = \"" +
 //                        com.ibm.icu.impl.Utility.escape(String.valueOf(getCharSymbols(dfs[i]), 0, 12)) + "\"");
             }
-            
+
             return dfs;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             DecimalFormatSymbols dfs_a = (DecimalFormatSymbols) a;
@@ -1699,9 +1713,10 @@ public class FormatHandler
             return SerializableTestUtility.compareStrings(strings_a, strings_b) && SerializableTestUtility.compareChars(chars_a, chars_b);
         }
     }
-    
+
     public static class CurrencyPluralInfoHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             CurrencyPluralInfo currencyPluralInfo[] = {
@@ -1715,45 +1730,51 @@ public class FormatHandler
             }
             return currencyPluralInfo;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             return a.equals(b);
         }
     }
-    
+
     public static class CompactDecimalFormatHandler extends NumberFormatHandler {
+        @Override
         public Object[] getTestObjects() {
             return new CompactDecimalFormat[0];
         }
     }
-    
+
     public static class MessageFormatHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             MessageFormat formats[] = {new MessageFormat("pattern{0}")};
-            
+
             return formats;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             MessageFormat mfa = (MessageFormat) a;
             MessageFormat mfb = (MessageFormat) b;
             Object arguments[] = {new Integer(123456)};
-            
+
             return mfa.format(arguments) != mfb.format(arguments);
         }
     }
 
     public static class MessageFormatFieldHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             return new Object[] {MessageFormat.Field.ARGUMENT};
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             return (a == b);
@@ -1764,7 +1785,7 @@ public class FormatHandler
     {
         static HashMap cannedPatterns = new HashMap();
         static Date fixedDate;
-        
+
         {
             cannedPatterns.put("en_CA",      "EEEE, MMMM d, yyyy h:mm:ss a z");
             cannedPatterns.put("fr_CA",      "EEEE d MMMM yyyy HH' h 'mm' min 'ss' s 'z");
@@ -1786,35 +1807,45 @@ public class FormatHandler
             cannedPatterns.put("zh_TW",      "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE ahh'\u6642'mm'\u5206'ss'\u79D2' z");
             cannedPatterns.put("en_GB",      "EEEE, d MMMM yyyy HH:mm:ss z");
             cannedPatterns.put("en_US",      "EEEE, MMMM d, yyyy h:mm:ss a z");
-            
+
             // Get a date that will likely not move in or out of Daylight savings time...
             Calendar cal = Calendar.getInstance(Locale.US);
-            
+
             cal.clear();
             cal.set(2007, Calendar.JANUARY, 1, 12, 0, 0); // January 1, 2007 12:00:00 PM.
             fixedDate = cal.getTime();
         }
-        
+
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
             DateFormat formats[] = new DateFormat[locales.length];
-            
+
             for (int i = 0; i < locales.length; i += 1) {
                 ULocale uloc = ULocale.forLocale(locales[i]);
-                
+
               //formats[i] = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locales[i]);
                 formats[i] = getCannedSimpleDateFormat((String)cannedPatterns.get(uloc.toString()), uloc);
             }
-            
+
             return formats;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             DateFormat dfa = (DateFormat) a;
             DateFormat dfb = (DateFormat) b;
-          //Date date = new Date(System.currentTimeMillis());
+
+            // We previously did not use 'canned' time zone.
+            TimeZone tza = dfa.getTimeZone();
+            TimeZone tzb = dfb.getTimeZone();
+            if (!tza.getID().equals(tzb.getID())) {
+                // If IDs do not match, reset TimeZone in dfa.
+                dfa.setTimeZone(tzb);
+            }
+
             String sfa = dfa.format(fixedDate);
             String sfb = dfb.format(fixedDate);
 
@@ -1841,14 +1872,19 @@ public class FormatHandler
 
                 sfa = dfa.format(fixedDate);
             }
-            
-            return sfa.equals(sfb);
+
+            //return sfa.equals(sfb);
+            if (!sfa.equals(sfb)) {
+                return false;
+            }
+            return true;
         }
-        
+
     }
 
     public static class DateFormatFieldHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects() {
             return new Object[] {
                     DateFormat.Field.AM_PM,
@@ -1877,6 +1913,7 @@ public class FormatHandler
                     DateFormat.Field.QUARTER
             };
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             return (a == b);
@@ -1885,32 +1922,34 @@ public class FormatHandler
 
     public static class DateFormatSymbolsHandler implements SerializableTestUtility.Handler
     {
-        
+
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
             DateFormatSymbols dfs[] = new DateFormatSymbols[locales.length];
-            
+
             for (int i = 0; i < locales.length; i += 1) {
                 ULocale uloc = ULocale.forLocale(locales[i]);
-                
+
                 dfs[i] = getCannedDateFormatSymbols(uloc);
             }
-            
+
             return dfs;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             DateFormatSymbols dfs_a = (DateFormatSymbols) a;
             DateFormatSymbols dfs_b = (DateFormatSymbols) b;
             String months_a[] = dfs_a.getMonths();
             String months_b[] = dfs_b.getMonths();
-            
+
             return SerializableTestUtility.compareStrings(months_a, months_b);
         }
     }
-    
+
     public static class SimpleDateFormatHandler extends DateFormatHandler
     {
         String patterns[] = {
@@ -1919,25 +1958,27 @@ public class FormatHandler
             "yyyy MMM d",
             "yy/MM/dd"
         };
-        
+
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
             SimpleDateFormat dateFormats[] = new SimpleDateFormat[patterns.length * locales.length];
             int i = 0;
-            
+
             for (int p = 0; p < patterns.length; p += 1) {
                 for (int l = 0; l < locales.length; l += 1) {
                     dateFormats[i++] = getCannedSimpleDateFormat(patterns[p], ULocale.forLocale(locales[l]));
                 }
             }
-            
+
             return dateFormats;
         }
     }
 
     public static class DateIntervalFormatHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             DateIntervalFormat dateIntervalFormats[] = {
@@ -1946,6 +1987,7 @@ public class FormatHandler
             return dateIntervalFormats;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             DateIntervalFormat dfa = (DateIntervalFormat) a;
@@ -1961,6 +2003,7 @@ public class FormatHandler
 
     public static class DateIntervalInfoHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             DateIntervalInfo dateIntervalInfo[] = {
@@ -1971,6 +2014,7 @@ public class FormatHandler
             return dateIntervalInfo;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             return a.equals(b);
@@ -1980,16 +2024,18 @@ public class FormatHandler
 
     public static class PatternInfoHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             DateIntervalInfo.PatternInfo patternInfo[] = {
-                new DateIntervalInfo.PatternInfo("yyyy MMM dd - ", 
+                new DateIntervalInfo.PatternInfo("yyyy MMM dd - ",
                                                  "dd",
                                                  false)
             };
             return patternInfo;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             return a.equals(b);
@@ -2004,32 +2050,35 @@ public class FormatHandler
             "y'x'G-Ml-d",
             "y'x'G-Ml-d"
         };
-        
+
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
             ChineseDateFormat dateFormats[] = new ChineseDateFormat[patterns.length * locales.length];
             int i = 0;
-            
+
             for (int p = 0; p < patterns.length; p += 1) {
                 for (int l = 0; l < locales.length; l += 1) {
                     ULocale locale = new ULocale(locales[l].toString() + "@calendar=chinese");
-                    
+
                     dateFormats[i++] = new ChineseDateFormat(patterns[p], locale);
                 }
             }
-            
+
             return dateFormats;
         }
     }
 
     public static class ChineseDateFormatFieldHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects() {
             return new Object[] {
                     ChineseDateFormat.Field.IS_LEAP_MONTH
             };
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             return (a == b);
@@ -2038,30 +2087,32 @@ public class FormatHandler
 
     public static class ChineseDateFormatSymbolsHandler extends DateFormatSymbolsHandler
     {
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
             ChineseDateFormatSymbols cdfs[] = new ChineseDateFormatSymbols[locales.length];
-            
+
             for (int i = 0; i < locales.length; i += 1) {
                 ULocale uloc = ULocale.forLocale(locales[i]);
-                
+
                 cdfs[i] = new ChineseDateFormatSymbols(uloc);
                 cdfs[i].setMonths((String[]) cannedMonthNames.get(uloc.toString()));
             }
-            
+
             return cdfs;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             if (! super.hasSameBehavior(a, b)) {
                 return false;
             }
-            
+
             ChineseDateFormatSymbols cdfs_a = (ChineseDateFormatSymbols) a;
             ChineseDateFormatSymbols cdfs_b = (ChineseDateFormatSymbols) b;
-            
+
             // The old test did this, which tested that the leap month marker never
             // changed from one ICU version to the next; this is not a valid test.
             //return cdfs_a.getLeapMonth(0).equals(cdfs_b.getLeapMonth(0)) &&
@@ -2079,6 +2130,7 @@ public class FormatHandler
 
     public static class NumberFormatFieldHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             NumberFormat.Field fields[] = {
@@ -2087,21 +2139,23 @@ public class FormatHandler
                 NumberFormat.Field.GROUPING_SEPARATOR, NumberFormat.Field.INTEGER, NumberFormat.Field.PERCENT,
                 NumberFormat.Field.PERMILLE, NumberFormat.Field.SIGN
             };
-            
+
             return fields;
         }
-        
+
+        @Override
         public boolean hasSameBehavior(Object a, Object b)
         {
             NumberFormat.Field field_a = (NumberFormat.Field) a;
             NumberFormat.Field field_b = (NumberFormat.Field) b;
-            
+
             return field_a.toString().equals(field_b.toString());
         }
     }
 
     public static class DateNumberFormatHandler implements SerializableTestUtility.Handler
     {
+        @Override
         public Object[] getTestObjects()
         {
             Locale locales[] = SerializableTestUtility.getLocales();
@@ -2113,6 +2167,7 @@ public class FormatHandler
             return dnfmts;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             return a.equals(b);
         }
@@ -2120,12 +2175,14 @@ public class FormatHandler
 
     public static class SelectFormatHandler implements SerializableTestUtility.Handler {
 
+        @Override
         public Object[] getTestObjects() {
             SelectFormat[] selfmts = {new SelectFormat("keyword{phrase} other{otherPhrase}")};
 
             return selfmts;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             SelectFormat sfa = (SelectFormat) a;
             SelectFormat sfb = (SelectFormat) b;
@@ -2136,6 +2193,7 @@ public class FormatHandler
     }
 
     public static class PluralFormatHandler implements SerializableTestUtility.Handler {
+        @Override
         public Object[] getTestObjects() {
             Locale[] locales = { Locale.US }; // main test is in plural rules handler
             PluralFormat[] plfmts = new PluralFormat[locales.length];
@@ -2149,6 +2207,7 @@ public class FormatHandler
             }
             return plfmts;
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             PluralFormat pfa = (PluralFormat)a;
             PluralFormat pfb = (PluralFormat)b;
@@ -2181,6 +2240,7 @@ public class FormatHandler
                 "few: n mod 100 in 3..4; one: n mod 100 is 1; two: n mod 100 is 2", // sl
         };
 
+        @Override
         public Object[] getTestObjects() {
             PluralRules[] plrulz = new PluralRules[cannedRules.length];
             for (int i = 0; i < cannedRules.length; i++) {
@@ -2192,18 +2252,21 @@ public class FormatHandler
             }
             return plrulz;
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             return a.equals(b);
         }
     }
-    
+
     public static class PluralRulesSerialProxyHandler implements SerializableTestUtility.Handler {
         // Tested through PluralRules, so just a stub here to keep CoverageTest happy
         final String[] cannedRules = {};
 
+        @Override
         public Object[] getTestObjects() {
             return new PluralRules[cannedRules.length];
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             return a.equals(b);
         }
@@ -2213,9 +2276,11 @@ public class FormatHandler
 
     public static class TimeUnitFormatHandler implements SerializableTestUtility.Handler {
         // TODO - more test coverage!
+        @Override
         public Object[] getTestObjects() {
             return new Object[] { new TimeUnitFormat().setLocale(ULocale.ENGLISH) };
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             TimeUnitFormat tufa = (TimeUnitFormat)a;
             TimeUnitFormat tufb = (TimeUnitFormat)b;
@@ -2229,12 +2294,14 @@ public class FormatHandler
     }
 
     public static class TimeZoneNamesHandler implements SerializableTestUtility.Handler {
+        @Override
         public Object[] getTestObjects() {
             return new Object[] {
                     TimeZoneNames.getInstance(ULocale.ENGLISH),
                     TimeZoneNames.getInstance(ULocale.JAPAN)
             };
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             TimeZoneNames tzna = (TimeZoneNames)a;
             TimeZoneNames tznb = (TimeZoneNames)b;
@@ -2263,12 +2330,14 @@ public class FormatHandler
     }
 
     public static class TimeZoneGenericNamesHandler implements SerializableTestUtility.Handler {
+        @Override
         public Object[] getTestObjects() {
             return new Object[] {
                     TimeZoneGenericNames.getInstance(ULocale.ENGLISH),
                     TimeZoneGenericNames.getInstance(ULocale.JAPAN)
             };
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             TimeZoneGenericNames tzgna = (TimeZoneGenericNames)a;
             TimeZoneGenericNames tzgnb = (TimeZoneGenericNames)b;
@@ -2302,12 +2371,14 @@ public class FormatHandler
     }
 
     public static class TZDBTimeZoneNamesHandler implements SerializableTestUtility.Handler {
+        @Override
         public Object[] getTestObjects() {
             return new Object[] {
                     TimeZoneNames.getTZDBInstance(ULocale.ENGLISH),
                     TimeZoneNames.getTZDBInstance(ULocale.JAPAN)
             };
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             TZDBTimeZoneNames tzdbna = (TZDBTimeZoneNames)a;
             TZDBTimeZoneNames tzdbnb = (TZDBTimeZoneNames)b;
@@ -2348,12 +2419,14 @@ public class FormatHandler
     public static class TimeZoneFormatHandler implements SerializableTestUtility.Handler {
         static final String CUSTOM_GMT_PATTERN = "Offset {0} from UTC";
 
+        @Override
         public Object[] getTestObjects() {
             TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(ULocale.ENGLISH).cloneAsThawed();
             tzfmt.setGMTPattern(CUSTOM_GMT_PATTERN);
 
             return new Object[] {tzfmt};
         }
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             TimeZoneFormat tzfa = (TimeZoneFormat)a;
             TimeZoneFormat tzfb = (TimeZoneFormat)b;

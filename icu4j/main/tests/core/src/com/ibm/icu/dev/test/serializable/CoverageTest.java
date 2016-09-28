@@ -38,7 +38,7 @@ public class CoverageTest extends TestFmwk {
         Handler classHandler = SerializableTestUtility.getHandler(className);
         if (classHandler == null) {
             if (!Modifier.isAbstract(m)) {
-                //errln("Missing test handler. Update the list of tests in SerializableTest.java to include a test case for " + className);
+                errln("Missing test handler. Update the list of tests in SerializableTest.java to include a test case for " + className);
             }
             return;
         }
@@ -48,10 +48,10 @@ public class CoverageTest extends TestFmwk {
         for (int i = 0; i < testObjects.length; i++) {
             if (!classHandler.hasSameBehavior(serializedObjects[i], testObjects[i])) {
                 errln("Input object " + className + "(" + i + ") failed behavior test.");
-            }            
+            }
         }
     }
-    
+
     List<String> generateClassList() throws IOException {
         return SerializableTestUtility.getSerializationClassList(this);
     }
