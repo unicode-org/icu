@@ -1505,6 +1505,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             if (digitStrings == null) {
                 digitStrings = new String[10];
                 if (digits != null && digits.length == 10) {
+                    zeroDigit = digits[0];
                     for (int i = 0; i < 10; i++) {
                         digitStrings[i] = String.valueOf(digits[i]);
                     }
@@ -1538,7 +1539,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
                 monetarySeparatorString = String.valueOf(monetarySeparator);
             }
             if (monetaryGroupingSeparatorString == null) {
-                monetaryGroupingSeparatorString = String.valueOf(monetaryGroupingSeparatorString);
+                monetaryGroupingSeparatorString = String.valueOf(monetaryGroupingSeparator);
             }
         }
 
