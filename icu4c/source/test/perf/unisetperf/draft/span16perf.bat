@@ -1,3 +1,6 @@
+rem  Copyright (C) 2016 and later: Unicode, Inc. and others.
+rem  License & terms of use: http://www.unicode.org/copyright.html#License
+
 rem  Copyright (c) 2007, International Business Machines Corporation and
 rem  others. All Rights Reserved.
 

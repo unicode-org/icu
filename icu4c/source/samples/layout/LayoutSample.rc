@@ -1,5 +1,7 @@
 //Microsoft Developer Studio generated resource script.
 //
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -8,6 +10,12 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 /*
+*******************************************************************************
+*
+*   Copyright (C) 2016 and later: Unicode, Inc. and others.
+*   License & terms of use: http://www.unicode.org/copyright.html#License
+*
+*******************************************************************************
 *******************************************************************************
 *
 *   Copyright (C) 2002-2003, International Business Machines

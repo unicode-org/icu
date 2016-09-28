@@ -1,8 +1,12 @@
-**********************************************************************
+***********************************************************************
+* Copyright (C) 2016 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html#License
+***********************************************************************
+***********************************************************************
 * Copyright (c) 2002-2010,International Business Machines
 * Corporation and others.  All Rights Reserved.
-**********************************************************************
-**********************************************************************
+***********************************************************************
+***********************************************************************
 
 
 The purpose of this performance test is to test the "real world" applications of ICU, such as Date Formatting and the Break Iterator.  In both of these cases, the performance test function does all of the work, i.e. initializing, formatting, etc.
