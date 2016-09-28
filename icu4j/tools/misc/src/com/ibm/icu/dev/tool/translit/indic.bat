@@ -1,5 +1,9 @@
 REM /**
 REM *******************************************************************************
+REM * Copyright (C) 2016 and later: Unicode, Inc. and others.                     *
+REM * License & terms of use: http://www.unicode.org/copyright.html#License       *
+REM *******************************************************************************
+REM *******************************************************************************
 REM * Copyright (C) 2002-2004, International Business Machines Corporation and    *
 REM * others. All Rights Reserved.                                                *
 REM *******************************************************************************
