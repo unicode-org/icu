@@ -559,8 +559,8 @@ si{
         other{"{0} — වෙනත්"}
         scripts{"සිද්ධි මාලා — {0}"}
         strokes{
-            "{0} පහර",
-            "{0} පහර",
+            one{"{0} පහර"}
+            other{"{0} පහර"}
         }
     }
     codePatterns{

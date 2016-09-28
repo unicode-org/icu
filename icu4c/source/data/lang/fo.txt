@@ -561,8 +561,8 @@ fo{
         other{"{0} — Annað"}
         scripts{"Skriftir — {0}"}
         strokes{
-            "{0} strok",
-            "{0} strok",
+            one{"{0} strok"}
+            other{"{0} strok"}
         }
     }
     codePatterns{

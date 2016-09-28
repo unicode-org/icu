@@ -1036,7 +1036,9 @@ zh_Hant{
         miscellaneous{"{0} — 混合"}
         other{"{0} — 其他"}
         scripts{"語系 — {0}"}
-        strokes{"{0} 畫"}
+        strokes{
+            other{"{0} 畫"}
+        }
     }
     codePatterns{
         language{"語言：{0}"}

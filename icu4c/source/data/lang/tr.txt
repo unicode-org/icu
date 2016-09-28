@@ -1023,8 +1023,8 @@ tr{
         other{"{0} — Diğer"}
         scripts{"Alfabeler — {0}"}
         strokes{
-            "{0} Çizgi",
-            "{0} Çizgi",
+            one{"{0} Çizgi"}
+            other{"{0} Çizgi"}
         }
     }
     codePatterns{

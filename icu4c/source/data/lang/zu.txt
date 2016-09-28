@@ -641,8 +641,8 @@ zu{
         other{"{0} — Okunye"}
         scripts{"Amaskripthi — {0}"}
         strokes{
-            "{0} Imivimbo",
-            "{0} Imivimbo",
+            one{"{0} Imivimbo"}
+            other{"{0} Imivimbo"}
         }
     }
     codePatterns{

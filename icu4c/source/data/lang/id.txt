@@ -970,7 +970,9 @@ id{
         miscellaneous{"{0} — Lain-lain"}
         other{"{0} — Lainnya"}
         scripts{"Skrip — {0}"}
-        strokes{"{0} Goresan"}
+        strokes{
+            other{"{0} Goresan"}
+        }
     }
     codePatterns{
         language{"Bahasa: {0}"}

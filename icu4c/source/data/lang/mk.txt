@@ -901,8 +901,8 @@ mk{
         other{"{0} - Друго"}
         scripts{"Писма - {0}"}
         strokes{
-            "{0} Црта",
-            "{0} Црти",
+            one{"{0} Црта"}
+            other{"{0} Црти"}
         }
     }
     codePatterns{

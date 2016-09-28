@@ -1028,8 +1028,8 @@ it{
         other{"{0} — Altro"}
         scripts{"Sistemi di scrittura — {0}"}
         strokes{
-            "{0} tratto",
-            "{0} tratti",
+            one{"{0} tratto"}
+            other{"{0} tratti"}
         }
     }
     codePatterns{

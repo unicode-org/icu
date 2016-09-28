@@ -642,8 +642,8 @@ fil{
         other{"{0} — Other"}
         scripts{"Scripts — {0}"}
         strokes{
-            "{0} Strokes",
-            "{0} Stroke",
+            one{"{0} Strokes"}
+            other{"{0} Stroke"}
         }
     }
     codePatterns{

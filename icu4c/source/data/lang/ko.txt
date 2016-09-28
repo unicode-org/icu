@@ -924,7 +924,9 @@ ko{
         miscellaneous{"{0} — 기타"}
         other{"{0} — 기타"}
         scripts{"문자 — {0}"}
-        strokes{"{0}획"}
+        strokes{
+            other{"{0}획"}
+        }
     }
     codePatterns{
         language{"언어: {0}"}

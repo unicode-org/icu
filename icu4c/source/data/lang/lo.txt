@@ -885,7 +885,9 @@ lo{
         miscellaneous{"{0} — ເບັດຕະເລັດ"}
         other{"{0} — ອື່ນໆ"}
         scripts{"ແບບຂຽນ — {0}"}
-        strokes{"{0} ສະໂຕຣກ"}
+        strokes{
+            other{"{0} ສະໂຕຣກ"}
+        }
     }
     codePatterns{
         language{"{0}"}

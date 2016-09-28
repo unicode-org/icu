@@ -1088,8 +1088,8 @@ ast{
         other{"{0} — otru"}
         scripts{"escritures — {0}"}
         strokes{
-            "{0} trazu",
-            "{0} trazos",
+            one{"{0} trazu"}
+            other{"{0} trazos"}
         }
     }
     codePatterns{

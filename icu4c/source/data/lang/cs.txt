@@ -969,10 +969,10 @@ cs{
         other{"{0} – jiné"}
         scripts{"Písma – {0}"}
         strokes{
-            "{0} tah",
-            "{0} tahy",
-            "{0} tahu",
-            "{0} tahů",
+            few{"{0} tahy"}
+            many{"{0} tahu"}
+            one{"{0} tah"}
+            other{"{0} tahů"}
         }
     }
     codePatterns{

@@ -857,8 +857,8 @@ es{
         other{"{0} — Otros"}
         scripts{"Sistemas de escritura — {0}"}
         strokes{
-            "{0} trazo",
-            "{0} trazos",
+            one{"{0} trazo"}
+            other{"{0} trazos"}
         }
     }
     codePatterns{

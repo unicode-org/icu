@@ -533,8 +533,8 @@ uz{
         other{"{0} — boshqa"}
         scripts{"yozuvlar — {0}"}
         strokes{
-            "{0} ta chiziq",
-            "{0} ta chiziq",
+            one{"{0} ta chiziq"}
+            other{"{0} ta chiziq"}
         }
     }
     codePatterns{

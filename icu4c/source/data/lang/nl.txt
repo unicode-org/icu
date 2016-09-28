@@ -1111,8 +1111,8 @@ nl{
         other{"{0} — overige"}
         scripts{"schriften — {0}"}
         strokes{
-            "{0} streek",
-            "{0} streken",
+            one{"{0} streek"}
+            other{"{0} streken"}
         }
     }
     codePatterns{

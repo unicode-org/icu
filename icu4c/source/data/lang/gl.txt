@@ -638,8 +638,8 @@ gl{
         other{"{0} (outr.)"}
         scripts{"Sistemas de escrita ({0})"}
         strokes{
-            "Trazo de {0}",
-            "Trazos de {0}",
+            one{"Trazo de {0}"}
+            other{"Trazos de {0}"}
         }
     }
     codePatterns{

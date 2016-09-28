@@ -922,9 +922,9 @@ hr{
         other{"{0} — Ostalo"}
         scripts{"Pisma — {0}"}
         strokes{
-            "{0} potez",
-            "{0} poteza",
-            "{0} poteza",
+            few{"{0} poteza"}
+            one{"{0} potez"}
+            other{"{0} poteza"}
         }
     }
     codePatterns{

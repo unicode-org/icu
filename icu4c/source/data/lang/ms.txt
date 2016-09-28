@@ -678,7 +678,9 @@ ms{
         miscellaneous{"{0} — Pelbagai"}
         other{"{0} — Lain"}
         scripts{"Skrip — {0}"}
-        strokes{"{0} Lejang"}
+        strokes{
+            other{"{0} Lejang"}
+        }
     }
     codePatterns{
         language{"Bahasa: {0}"}

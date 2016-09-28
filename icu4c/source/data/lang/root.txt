@@ -15,7 +15,9 @@ root{
         miscellaneous{"{0} — miscellaneous"}
         other{"{0} — other"}
         scripts{"scripts — {0}"}
-        strokes{"{0} strokes"}
+        strokes{
+            other{"{0} strokes"}
+        }
     }
     codePatterns{
         language{"{0}"}

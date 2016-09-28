@@ -744,8 +744,8 @@ is{
         other{"{0} — annað"}
         scripts{"letur — {0}"}
         strokes{
-            "{0} slög",
-            "{0} slög",
+            one{"{0} slög"}
+            other{"{0} slög"}
         }
     }
     codePatterns{

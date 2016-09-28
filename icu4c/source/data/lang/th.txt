@@ -1065,7 +1065,9 @@ th{
         miscellaneous{"{0} — อื่นๆ"}
         other{"{0} — อื่นๆ"}
         scripts{"สคริปต์ — {0}"}
-        strokes{"{0} ขีด"}
+        strokes{
+            other{"{0} ขีด"}
+        }
     }
     codePatterns{
         language{"ภาษา: {0}"}

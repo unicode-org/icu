@@ -93,7 +93,9 @@ sah{
     }
     Version{"2.1.27.87"}
     characterLabelPattern{
-        strokes{"{0} Strokes"}
+        strokes{
+            other{"{0} Strokes"}
+        }
     }
     codePatterns{
         language{"Тыл: {0}"}

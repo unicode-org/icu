@@ -1055,7 +1055,9 @@ ja{
         miscellaneous{"{0} — 雑多"}
         other{"{0} — その他"}
         scripts{"文字 — {0}"}
-        strokes{"{0} 画"}
+        strokes{
+            other{"{0} 画"}
+        }
     }
     codePatterns{
         language{"言語: {0}"}

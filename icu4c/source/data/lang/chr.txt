@@ -548,8 +548,8 @@ chr{
         other{"{0} — ᏐᎢ"}
         scripts{"ᏗᎧᏁᎢᏍᏗ — {0}"}
         strokes{
-            "{0} ᏗᎬᏂᎸᎯ",
-            "{0} ᏗᎬᏂᎸᎯ",
+            one{"{0} ᏗᎬᏂᎸᎯ"}
+            other{"{0} ᏗᎬᏂᎸᎯ"}
         }
     }
     codePatterns{

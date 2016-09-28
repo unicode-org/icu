@@ -1006,8 +1006,8 @@ ca{
         other{"{0} — altres"}
         scripts{"sistemes d’escriptura — {0}"}
         strokes{
-            "{0} traç",
-            "{0} traços",
+            one{"{0} traç"}
+            other{"{0} traços"}
         }
     }
     codePatterns{
