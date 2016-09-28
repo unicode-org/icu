@@ -77,10 +77,10 @@ typedef struct UConverterAlias {
 #   error U_CHARSET_FAMILY is not valid
 #endif
 
-U_CAPI char U_CALLCONV * 
+U_CAPI char * U_CALLCONV
 ucnv_io_stripASCIIForCompare(char *dst, const char *name);
 
-U_CAPI char U_CALLCONV *
+U_CAPI char * U_CALLCONV
 ucnv_io_stripEBCDICForCompare(char *dst, const char *name);
 
 /**
