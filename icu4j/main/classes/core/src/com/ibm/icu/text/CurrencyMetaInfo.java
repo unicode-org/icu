@@ -320,7 +320,7 @@ public class CurrencyMetaInfo {
          * @stable ICU 4.4
          */
         public boolean equals(CurrencyFilter rhs) {
-            return this == rhs || (rhs != null &&
+          return Utility.sameObjects(this, rhs) || (rhs != null &&
                     equals(this.region, rhs.region) &&
                     equals(this.currency, rhs.currency) &&
                     this.from == rhs.from &&

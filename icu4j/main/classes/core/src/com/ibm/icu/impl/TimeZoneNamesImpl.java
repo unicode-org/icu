@@ -655,7 +655,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
         }
 
         private String[] getNames() {
-            if (names == null) {
+            if (Utility.sameObjects(names, null)) {
                 return null;
             }
             int length = 0;
