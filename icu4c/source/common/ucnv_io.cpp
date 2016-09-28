@@ -381,8 +381,9 @@ static const uint8_t ebcdicTypes[128] = {
 #   error U_CHARSET_FAMILY is not valid
 #endif
 
+
 /* @see ucnv_compareNames */
-U_CAPI char * U_EXPORT2
+U_CAPI char * U_CALLCONV
 ucnv_io_stripASCIIForCompare(char *dst, const char *name) {
     char *dstItr = dst;
     uint8_t type, nextType;
@@ -417,7 +418,7 @@ ucnv_io_stripASCIIForCompare(char *dst, const char *name) {
     return dst;
 }
 
-U_CAPI char * U_EXPORT2
+U_CAPI char * U_CALLCONV
 ucnv_io_stripEBCDICForCompare(char *dst, const char *name) {
     char *dstItr = dst;
     uint8_t type, nextType;
@@ -733,9 +734,7 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
     return UINT32_MAX;
 }
 
-
-
-U_CFUNC const char *
+U_CAPI const char *
 ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *pErrorCode) {
     const char *aliasTmp = alias;
     int32_t i = 0;
@@ -765,6 +764,9 @@ ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *p
 
     return NULL;
 }
+
+U_CDECL_BEGIN
+
 
 static int32_t U_CALLCONV
 ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode * /*pErrorCode*/) {
@@ -815,6 +817,8 @@ ucnv_io_closeUEnumeration(UEnumeration *enumerator) {
     uprv_free(enumerator->context);
     uprv_free(enumerator);
 }
+
+U_CDECL_END
 
 /* Enumerate the aliases for the specified converter and standard tag */
 static const UEnumeration gEnumAliases = {
@@ -1012,6 +1016,9 @@ ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErro
     return NULL;
 }
 
+U_CDECL_BEGIN
+
+
 static int32_t U_CALLCONV
 ucnv_io_countAllConverters(UEnumeration * /*enumerator*/, UErrorCode * /*pErrorCode*/) {
     return gMainTable.converterListSize;
@@ -1042,7 +1049,7 @@ static void U_CALLCONV
 ucnv_io_resetAllConverters(UEnumeration *enumerator, UErrorCode * /*pErrorCode*/) {
     *((uint16_t *)(enumerator->context)) = 0;
 }
-
+U_CDECL_END
 static const UEnumeration gEnumAllConverters = {
     NULL,
     NULL,
@@ -1077,7 +1084,7 @@ ucnv_openAllNames(UErrorCode *pErrorCode) {
     return myEnum;
 }
 
-U_CFUNC uint16_t
+U_CAPI uint16_t
 ucnv_io_countKnownConverters(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
         return (uint16_t)gMainTable.converterListSize;
@@ -1087,7 +1094,11 @@ ucnv_io_countKnownConverters(UErrorCode *pErrorCode) {
 
 /* alias table swapping ----------------------------------------------------- */
 
+U_CDECL_BEGIN
+
 typedef char * U_CALLCONV StripForCompareFn(char *dst, const char *name);
+U_CDECL_END
+
 
 /*
  * row of a temporary array

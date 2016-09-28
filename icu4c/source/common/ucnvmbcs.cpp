@@ -400,8 +400,10 @@ ucnv_MBCSGetStarters(const UConverter* cnv,
                  UBool starters[256],
                  UErrorCode *pErrorCode);
 
+U_CDECL_BEGIN
 static const char* U_CALLCONV
 ucnv_MBCSGetName(const UConverter *cnv);
+U_CDECL_END
 
 static void U_CALLCONV
 ucnv_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
@@ -1982,6 +1984,8 @@ ucnv_MBCSOpen(UConverter *cnv,
 #endif
 }
 
+U_CDECL_BEGIN
+
 static const char* U_CALLCONV
 ucnv_MBCSGetName(const UConverter *cnv) {
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0 && cnv->sharedData->mbcs.swapLFNLName!=NULL) {
@@ -1990,6 +1994,8 @@ ucnv_MBCSGetName(const UConverter *cnv) {
         return cnv->sharedData->staticData->name;
     }
 }
+U_CDECL_END
+
 
 /* MBCS-to-Unicode conversion functions ------------------------------------- */
 
