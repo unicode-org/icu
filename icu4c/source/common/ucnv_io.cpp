@@ -778,7 +778,7 @@ ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode * /*pErrorCode
     return value;
 }
 
-static const char U_CALLCONV *
+static const char * U_CALLCONV
 ucnv_io_nextStandardAliases(UEnumeration *enumerator,
                             int32_t* resultLength,
                             UErrorCode * /*pErrorCode*/)
@@ -1017,7 +1017,7 @@ ucnv_io_countAllConverters(UEnumeration * /*enumerator*/, UErrorCode * /*pErrorC
     return gMainTable.converterListSize;
 }
 
-static const char U_CALLCONV *
+static const char * U_CALLCONV
 ucnv_io_nextAllConverters(UEnumeration *enumerator,
                             int32_t* resultLength,
                             UErrorCode * /*pErrorCode*/)
@@ -1087,7 +1087,7 @@ ucnv_io_countKnownConverters(UErrorCode *pErrorCode) {
 
 /* alias table swapping ----------------------------------------------------- */
 
-typedef char U_CALLCONV * StripForCompareFn(char *dst, const char *name);
+typedef char * U_CALLCONV StripForCompareFn(char *dst, const char *name);
 
 /*
  * row of a temporary array

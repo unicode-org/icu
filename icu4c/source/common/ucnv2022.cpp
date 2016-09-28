@@ -394,13 +394,13 @@ static void U_CALLCONV
 static void U_CALLCONV
 _ISO2022Reset(UConverter *converter, UConverterResetChoice choice);
 
-static const char  U_CALLCONV*
+static const char * U_CALLCONV
 _ISO2022getName(const UConverter* cnv);
 
 static void  U_CALLCONV
 _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
 
-static UConverter  U_CALLCONV*
+static UConverter * U_CALLCONV
 _ISO_2022_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
 
 #ifdef U_ENABLE_GENERIC_ISO_2022
@@ -716,7 +716,7 @@ _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
     }
 }
 
-static const char U_CALLCONV*
+static const char * U_CALLCONV
 _ISO2022getName(const UConverter* cnv){
     if(cnv->extraInfo){
         UConverterDataISO2022* myData= (UConverterDataISO2022*)cnv->extraInfo;
@@ -3580,7 +3580,7 @@ struct cloneStruct
 };
 
 
-static UConverter U_CALLCONV *
+static UConverter * U_CALLCONV
 _ISO_2022_SafeClone(
             const UConverter *cnv,
             void *stackBuffer,

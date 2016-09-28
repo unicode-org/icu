@@ -400,7 +400,7 @@ ucnv_MBCSGetStarters(const UConverter* cnv,
                  UBool starters[256],
                  UErrorCode *pErrorCode);
 
-static const char U_CALLCONV *
+static const char* U_CALLCONV
 ucnv_MBCSGetName(const UConverter *cnv);
 
 static void U_CALLCONV
@@ -1982,7 +1982,7 @@ ucnv_MBCSOpen(UConverter *cnv,
 #endif
 }
 
-static const char U_CALLCONV *
+static const char* U_CALLCONV
 ucnv_MBCSGetName(const UConverter *cnv) {
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0 && cnv->sharedData->mbcs.swapLFNLName!=NULL) {
         return cnv->sharedData->mbcs.swapLFNLName;

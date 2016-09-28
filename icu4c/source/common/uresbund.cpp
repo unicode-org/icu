@@ -2408,7 +2408,7 @@ ures_loc_countLocales(UEnumeration *en, UErrorCode * /*status*/) {
     return ures_getSize(&ctx->installed);
 }
 
-static const char U_CALLCONV *
+static const char * U_CALLCONV
 ures_loc_nextLocale(UEnumeration* en,
                     int32_t* resultLength,
                     UErrorCode* status) {
