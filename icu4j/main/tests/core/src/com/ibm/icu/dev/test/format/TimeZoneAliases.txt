@@ -1,7 +1,11 @@
-#--------------------------------------------------------------------
+#----------------------------------------------------------------------
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html#License
+#----------------------------------------------------------------------
+#----------------------------------------------------------------------
 # Copyright (c) 2004, International Business Machines
 # Corporation and others. All Rights Reserved.
-#--------------------------------------------------------------------
+#----------------------------------------------------------------------
 America/Atka ; America/Adak
 America/Ensenada ; America/Tijuana
 America/Fort_Wayne ; America/Indianapolis
