@@ -371,10 +371,6 @@ Locale::Locale( const   char * newLanguage,
             size += ksize + 1;
         }
 
-        if (size < 0) {
-            setToBogus();
-            return;
-        }
         //  NOW we have the full locale string..
         // Now, copy it back.
 
