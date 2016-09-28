@@ -13,7 +13,6 @@
 
 #include <stdlib.h>
 
-#include "reldtfmt.h"
 #include "unicode/datefmt.h"
 #include "unicode/reldatefmt.h"
 #include "unicode/simpleformatter.h"
@@ -22,6 +21,7 @@
 #include "unicode/uchar.h"
 #include "unicode/brkiter.h"
 
+#include "reldtfmt.h"
 #include "cmemory.h"
 #include "uresimp.h"
 
@@ -592,4 +592,4 @@ int32_t RelativeDateFormat::dayDifference(Calendar &cal, UErrorCode &status) {
 
 U_NAMESPACE_END
 
-#endif
+#endif  /* !UCONFIG_NO_FORMATTING */

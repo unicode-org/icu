@@ -280,7 +280,11 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
     SimpleFormatter format;
     SimpleFormatter keyTypeFormat;
     UDisplayContext capitalizationContext;
+#if !UCONFIG_NO_BREAK_ITERATION
     BreakIterator* capitalizationBrkIter;
+#else
+    UObject* capitalizationBrkIter;
+#endif
     static UMutex  capitalizationBrkIterLock;
     UnicodeString formatOpenParen;
     UnicodeString formatReplaceOpenParen;
@@ -509,8 +513,10 @@ LocaleDisplayNamesImpl::initialize(void) {
 }
 
 LocaleDisplayNamesImpl::~LocaleDisplayNamesImpl() {
+#if !UCONFIG_NO_BREAK_ITERATION
     delete capitalizationBrkIter;
- }
+#endif
+}
 
 const Locale&
 LocaleDisplayNamesImpl::getLocale() const {
