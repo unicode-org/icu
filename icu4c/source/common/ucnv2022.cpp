@@ -394,14 +394,19 @@ static void U_CALLCONV
 static void U_CALLCONV
 _ISO2022Reset(UConverter *converter, UConverterResetChoice choice);
 
+U_CDECL_BEGIN
 static const char * U_CALLCONV
 _ISO2022getName(const UConverter* cnv);
+U_CDECL_END
 
 static void  U_CALLCONV
 _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
 
+U_CDECL_BEGIN
 static UConverter * U_CALLCONV
 _ISO_2022_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
+
+U_CDECL_END
 
 #ifdef U_ENABLE_GENERIC_ISO_2022
 static void U_CALLCONV
@@ -716,6 +721,8 @@ _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
     }
 }
 
+U_CDECL_BEGIN
+
 static const char * U_CALLCONV
 _ISO2022getName(const UConverter* cnv){
     if(cnv->extraInfo){
@@ -724,6 +731,8 @@ _ISO2022getName(const UConverter* cnv){
     }
     return NULL;
 }
+
+U_CDECL_END
 
 
 /*************** to unicode *******************/
@@ -3580,6 +3589,8 @@ struct cloneStruct
 };
 
 
+U_CDECL_BEGIN
+
 static UConverter * U_CALLCONV
 _ISO_2022_SafeClone(
             const UConverter *cnv,
@@ -3626,6 +3637,8 @@ _ISO_2022_SafeClone(
 
     return &localClone->cnv;
 }
+
+U_CDECL_END
 
 static void U_CALLCONV
 _ISO_2022_GetUnicodeSet(const UConverter *cnv,

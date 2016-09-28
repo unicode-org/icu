@@ -1474,6 +1474,8 @@ typedef struct UKeywordsContext {
     char* current;
 } UKeywordsContext;
 
+U_CDECL_BEGIN
+
 static void U_CALLCONV
 uloc_kw_closeKeywords(UEnumeration *enumerator) {
     uprv_free(((UKeywordsContext *)enumerator->context)->keywords);
@@ -1515,6 +1517,9 @@ uloc_kw_resetKeywords(UEnumeration* en,
                       UErrorCode* /*status*/) {
     ((UKeywordsContext *)en->context)->current = ((UKeywordsContext *)en->context)->keywords;
 }
+
+U_CDECL_END
+
 
 static const UEnumeration gKeywordsEnum = {
     NULL,

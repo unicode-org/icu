@@ -119,7 +119,7 @@ U_NAMESPACE_BEGIN
 
 // EquivIterator iterates over all strings that are equivalent to a given
 // string, s. Note that EquivIterator will never yield s itself.
-class EquivIterator : icu::UMemory {
+class EquivIterator : public icu::UMemory {
 public:
     // Constructor. hash stores the equivalence relationships; s is the string
     // for which we find equivalent strings.

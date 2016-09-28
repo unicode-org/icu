@@ -93,7 +93,7 @@ ucnv_io_stripEBCDICForCompare(char *dst, const char *name);
  * @param pErrorCode The error code
  * @return the converter name in mixed-case, return NULL if the alias is not found.
  */
-U_CFUNC const char *
+U_CAPI const char *
 ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *pErrorCode);
 
 /**
@@ -101,7 +101,7 @@ ucnv_io_getConverterName(const char *alias, UBool *containsOption, UErrorCode *p
  * @param pErrorCode The error code
  * @return the number of all aliases
  */
-U_CFUNC uint16_t
+U_CAPI uint16_t
 ucnv_io_countKnownConverters(UErrorCode *pErrorCode);
 
 /**
