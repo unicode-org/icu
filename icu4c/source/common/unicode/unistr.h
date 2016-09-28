@@ -76,7 +76,9 @@ UStringCaseMapper(const UCaseMap *csm,
 
 U_NAMESPACE_BEGIN
 
+#if !UCONFIG_NO_BREAK_ITERATION
 class BreakIterator;        // unicode/brkiter.h
+#endif
 class Locale;               // unicode/locid.h
 class StringCharacterIterator;
 class UnicodeStringAppendable;  // unicode/appendable.h

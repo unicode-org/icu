@@ -25,7 +25,7 @@
  * \brief C++ API: Formats relative dates such as "1 day ago" or "tomorrow"
  */
 
-#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION
+#if !UCONFIG_NO_FORMATTING
 
 /**
  * Represents the unit for formatting a relative date. e.g "in 5 days"
@@ -226,6 +226,7 @@ typedef enum UDateDirection {
 #endif  // U_HIDE_DEPRECATED_API
 } UDateDirection;
 
+#if !UCONFIG_NO_BREAK_ITERATION
 
 U_NAMESPACE_BEGIN
 
@@ -517,5 +518,6 @@ private:
 
 U_NAMESPACE_END
 
-#endif /* !UCONFIG_NO_FORMATTING && !UCONFIG_NO_BREAK_ITERATION*/
-#endif
+#endif /* !UCONFIG_NO_BREAK_ITERATION */
+#endif /* !UCONFIG_NO_FORMATTING */
+#endif /* __RELDATEFMT_H */

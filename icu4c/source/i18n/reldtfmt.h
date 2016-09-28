@@ -264,7 +264,11 @@ private:
     UBool fCapitalizationInfoSet;
     UBool fCapitalizationOfRelativeUnitsForUIListMenu;
     UBool fCapitalizationOfRelativeUnitsForStandAlone;
+#if !UCONFIG_NO_BREAK_ITERATION
     BreakIterator* fCapitalizationBrkIter;
+#else
+    UObject* fCapitalizationBrkIter;
+#endif
 
     /**
      * Get the string at a specific offset.
@@ -333,4 +337,3 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // RELDTFMT_H
-//eof
