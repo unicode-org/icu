@@ -17,6 +17,10 @@
 */
 #ifndef _CRESTSTN
 #define _CRESTSTN
+
+#include "unicode/utypes.h"
+#include "unicode/ures.h"
+
 /* C TEST FOR NEW RESOURCEBUNDLE API*/
 #include "cintltst.h"
 

@@ -186,7 +186,8 @@ protected:
     /** @internal */
     UHashtable *nodes;
 
-#ifndef U_HIDE_INTERNAL_API
+    // Do not conditionalize the following with #ifndef U_HIDE_INTERNAL_API,
+    // it is needed for layout of other objects.
     /** @internal */
     class Node : public UObject {
     public:
@@ -245,6 +246,7 @@ protected:
         int32_t offset;
     };
 
+#ifndef U_HIDE_INTERNAL_API
     // This class should not be overridden because
     // registerFinalValue() compares a stack-allocated FinalValueNode
     // (stack-allocated so that we don't unnecessarily create lots of duplicate nodes)
@@ -260,7 +262,10 @@ protected:
     protected:
         int32_t value;
     };
+#endif  /* U_HIDE_INTERNAL_API */
 
+    // Do not conditionalize the following with #ifndef U_HIDE_INTERNAL_API,
+    // it is needed for layout of other objects.
     /**
      * @internal 
      */
@@ -278,6 +283,7 @@ protected:
         int32_t value;
     };
 
+#ifndef U_HIDE_INTERNAL_API
     /** 
      * @internal 
      */
@@ -291,7 +297,10 @@ protected:
     protected:
         Node *next;
     };
+#endif  /* U_HIDE_INTERNAL_API */
 
+    // Do not conditionalize the following with #ifndef U_HIDE_INTERNAL_API,
+    // it is needed for layout of other objects.
     /**
      * @internal 
      */
@@ -307,6 +316,7 @@ protected:
         Node *next;
     };
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * @internal 
      */

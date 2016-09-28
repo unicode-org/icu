@@ -901,13 +901,14 @@ typedef enum UDateFormatBooleanAttribute {
      * @stable ICU 56
      */
     UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH = 3,
-#ifndef U_HIDE_DEPRECATED_API
+
+    // Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
+    // it is needed for layout of DateFormat object.
     /**
      * One more than the highest normal UDateFormatBooleanAttribute value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_BOOLEAN_ATTRIBUTE_COUNT = 4
-#endif  // U_HIDE_DEPRECATED_API
 } UDateFormatBooleanAttribute;
 
 /**

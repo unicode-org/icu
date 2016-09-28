@@ -19,6 +19,7 @@
 #define _CDTFRRGSTST
 
 #include "unicode/utypes.h"
+#include "unicode/udat.h"
 
 #if !UCONFIG_NO_FORMATTING
 

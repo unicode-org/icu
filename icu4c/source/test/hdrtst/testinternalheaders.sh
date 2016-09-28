@@ -32,22 +32,17 @@ for file in `ls io/*.h`; do
     $CXX -c -I common -I i18n -I io -O0 ht_temp.cpp ;
 done ;
 
-# layout is deprecated, but layoutex is not.
+# layout is removed.
 
-for file in `ls layout/*.h`; do
-    echo $file
-    echo '#include "'$file'"' > ht_temp.cpp ;
-    echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -I common -I i18n -I io -O0 ht_temp.cpp ;
-done ;
+# layoutex now depends on external additions such as HarfBuzz, skip here
 
 # -I .  for includes of layout/*.h
-for file in `ls layoutex/*.h`; do
-    echo $file
-    echo '#include "'$file'"' > ht_temp.cpp ;
-    echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -I common -I i18n -I io -I layout -I . -I layoutex -O0 ht_temp.cpp ;
-done ;
+#for file in `ls layoutex/*.h`; do
+#    echo $file
+#    echo '#include "'$file'"' > ht_temp.cpp ;
+#    echo 'void noop() {}' >> ht_temp.cpp ;
+#    $CXX -c -I common -I i18n -I io -I layout -I . -I layoutex -O0 ht_temp.cpp ;
+#done ;
 
 # Tools
 
@@ -83,7 +78,7 @@ for file in `ls tools/ctestfw/unicode/*.h`; do
 done ;
 
 # C not C++ for cintltst
-for file in `ls tools/cintltst/*.h`; do
+for file in `ls test/cintltst/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
@@ -99,12 +94,14 @@ for test in intltest iotest testmap thaitest; do
     done ;
 done ;
 
-for file in `ls test/letest/*.h`; do
-    echo $file
-    echo '#include "'$file'"' > ht_temp.cpp ;
-    echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -I common -I i18n -I io -I layout -I . -I layoutex -I tools/toolutil -I tools/ctestfw -I test/letest -O0 ht_temp.cpp ;
-done ;
+# layoutex now depends on external additions such as HarfBuzz, skip here
+
+#for file in `ls test/letest/*.h`; do
+#    echo $file
+#    echo '#include "'$file'"' > ht_temp.cpp ;
+#    echo 'void noop() {}' >> ht_temp.cpp ;
+#    $CXX -c -I common -I i18n -I io -I layout -I . -I layoutex -I tools/toolutil -I tools/ctestfw -I test/letest -O0 ht_temp.cpp ;
+#done ;
 
 # TODO: perf/*/*.h
 

@@ -341,13 +341,14 @@ typedef enum {
       * @stable ICU 2.8
       */
      UCOL_NUMERIC_COLLATION = UCOL_STRENGTH + 2, 
-#ifndef U_HIDE_DEPRECATED_API
+
+    // Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
+    // it is needed for layout of RuleBasedCollator object.
     /**
      * One more than the highest normal UColAttribute value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
      UCOL_ATTRIBUTE_COUNT
-#endif  // U_HIDE_DEPRECATED_API
 } UColAttribute;
 
 /** Options for retrieving the rule string 
