@@ -321,6 +321,12 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         return this == obj || (obj != null && getClass() == obj.getClass());
     }
 
+    @Override
+    public int hashCode() {
+        // Dummy return to prevent compile warnings.
+        return 0;
+    }
+
     // public setters --------------------------------------------------------
 
     private void checkNotFrozen() {

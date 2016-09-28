@@ -219,6 +219,12 @@ public abstract class CollationIterator {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        // Dummy return to prevent compile warnings.
+        return 0;
+    }
+
     /**
      * Resets the iterator state and sets the position to the specified offset.
      * Subclasses must implement, and must call the parent class method,
