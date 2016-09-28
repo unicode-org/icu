@@ -214,7 +214,7 @@ public class UnicodeSetStringSpan {
         maxLength16 = otherStringSpan.maxLength16;
         someRelevant = otherStringSpan.someRelevant;
         all = true;
-        if (otherStringSpan.spanNotSet == otherStringSpan.spanSet) {
+        if (Utility.sameObjects(otherStringSpan.spanNotSet, otherStringSpan.spanSet)) {
             spanNotSet = spanSet;
         } else {
             spanNotSet = (UnicodeSet) otherStringSpan.spanNotSet.clone();
@@ -226,7 +226,7 @@ public class UnicodeSetStringSpan {
 
     /**
      * Do the strings need to be checked in span() etc.?
-     * 
+     *
      * @return true if strings need to be checked (call span() here),
      *         false if not (use a BMPSet for best performance).
      */
@@ -244,7 +244,7 @@ public class UnicodeSetStringSpan {
      * so that a character span ends before any string.
      */
     private void addToSpanNotSet(int c) {
-        if (spanNotSet == null || spanNotSet == spanSet) {
+        if (Utility.sameObjects(spanNotSet, null) || Utility.sameObjects(spanNotSet, spanSet)) {
             if (spanSet.contains(c)) {
                 return; // Nothing to do.
             }
@@ -269,7 +269,7 @@ public class UnicodeSetStringSpan {
 
     /*
      * Algorithm for span(SpanCondition.CONTAINED)
-     * 
+     *
      * Theoretical algorithm:
      * - Iterate through the string, and at each code point boundary:
      *   + If the code point there is in the set, then remember to continue after it.
@@ -322,7 +322,7 @@ public class UnicodeSetStringSpan {
 
     /*
      * Algorithm for span(SIMPLE)
-     * 
+     *
      * Theoretical algorithm:
      * - Iterate through the string, and at each code point boundary:
      *   + If the code point there is in the set, then remember to continue after it.
@@ -358,7 +358,7 @@ public class UnicodeSetStringSpan {
      */
     /**
      * Spans a string.
-     * 
+     *
      * @param s The string to be spanned
      * @param start The start index that the span begins
      * @param spanCondition The span condition
@@ -637,7 +637,7 @@ public class UnicodeSetStringSpan {
 
     /**
      * Span a string backwards.
-     * 
+     *
      * @param s The string to be spanned
      * @param spanCondition The span condition
      * @return The string index which starts the span (i.e. inclusive).
@@ -806,7 +806,7 @@ public class UnicodeSetStringSpan {
 
     /**
      * Algorithm for spanNot()==span(SpanCondition.NOT_CONTAINED)
-     * 
+     *
      * Theoretical algorithm:
      * - Iterate through the string, and at each code point boundary:
      *   + If the code point there is in the set, then return with the current position.

@@ -3232,7 +3232,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             VersionInfo v = UCharacter.getAge(ch);
             // Reference comparison ok; VersionInfo caches and reuses
             // unique objects.
-            return v != NO_VERSION &&
+            return !Utility.sameObjects(v, NO_VERSION) &&
                     v.compareTo(version) <= 0;
         }
     }
