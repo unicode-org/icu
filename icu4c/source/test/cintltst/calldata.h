@@ -9,6 +9,8 @@
 #ifndef COLLATION_TEST_DATA
 #define COLLATION_TEST_DATA
 
+#include "unicode/utypes.h"
+
 #define COUNT_TEST_CASES 13
 
 const UChar testSourceCases[][16] = {

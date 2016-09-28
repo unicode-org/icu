@@ -85,13 +85,14 @@ typedef enum UDateTimePatternField {
     UDATPG_FRACTIONAL_SECOND_FIELD,
     /** @stable ICU 3.8 */
     UDATPG_ZONE_FIELD,
-#ifndef U_HIDE_DEPRECATED_API
+
+    // Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
+    // it is needed for layout of DateTimePatternGenerator object.
     /**
      * One more than the highest normal UDateTimePatternField value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDATPG_FIELD_COUNT
-#endif  // U_HIDE_DEPRECATED_API
 } UDateTimePatternField;
 
 /**

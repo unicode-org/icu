@@ -20,6 +20,7 @@
 #define _CNUMDEPTST
 
 #include "unicode/utypes.h"
+#include "unicode/unum.h"
 
 #if !UCONFIG_NO_FORMATTING
 

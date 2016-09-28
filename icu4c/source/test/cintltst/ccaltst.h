@@ -18,6 +18,8 @@
 #define _CCALTST
 
 #include "unicode/utypes.h"
+#include "unicode/ucal.h"
+#include "unicode/udat.h"
 
 #if !UCONFIG_NO_FORMATTING
 

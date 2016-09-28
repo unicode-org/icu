@@ -242,7 +242,7 @@ public:
         return moveFrom(src);
     }
 #endif
-#ifndef U_HIDE_DRAFT_API
+    // do not use #ifndef U_HIDE_DRAFT_API for moveFrom, needed by non-draft API
     /**
      * Move assignment, leaves src with isNull().
      * The behavior is undefined if *this and src are the same object.
@@ -258,7 +258,6 @@ public:
         src.ptr=NULL;
         return *this;
     }
-#endif /* U_HIDE_DRAFT_API */
     /**
      * Swap pointers.
      * @param other other smart pointer
@@ -392,7 +391,7 @@ public:
         return moveFrom(src);
     }
 #endif
-#ifndef U_HIDE_DRAFT_API
+    // do not use #ifndef U_HIDE_DRAFT_API for moveFrom, needed by non-draft API
     /**
      * Move assignment, leaves src with isNull().
      * The behavior is undefined if *this and src are the same object.
@@ -408,7 +407,6 @@ public:
         src.ptr=NULL;
         return *this;
     }
-#endif /* U_HIDE_DRAFT_API */
     /**
      * Swap pointers.
      * @param other other smart pointer

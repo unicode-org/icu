@@ -16,9 +16,12 @@
 */
 #ifndef _NCCBTST
 #define _NCCBTST
+
+#include "unicode/utypes.h"
+#include "unicode/ucnv.h"
+
 /* C API TEST FOR CALL BACK ROUTINES OF CODESET CONVERSION COMPONENT */
 #include "cintltst.h"
-#include "unicode/utypes.h"
 
 
 static void TestSkipCallBack(void);

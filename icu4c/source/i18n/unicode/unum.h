@@ -325,13 +325,14 @@ enum UCurrencySpacing {
     UNUM_CURRENCY_SURROUNDING_MATCH,
     /** @stable ICU 4.8 */
     UNUM_CURRENCY_INSERT,
-#ifndef U_HIDE_DEPRECATED_API
+
+    // Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
+    // it is needed for layout of DecimalFormatSymbols object.
     /**
      * One more than the highest normal UCurrencySpacing value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UNUM_CURRENCY_SPACING_COUNT
-#endif  // U_HIDE_DEPRECATED_API
 };
 typedef enum UCurrencySpacing UCurrencySpacing; /**< @stable ICU 4.8 */
 

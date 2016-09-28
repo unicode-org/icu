@@ -24,8 +24,6 @@
 #include "unicode/uiter.h"
 #include "unicode/unorm2.h"
 
-#ifndef U_HIDE_DEPRECATED_API
-
 /**
  * \file
  * \brief C API: Unicode Normalization
@@ -131,6 +129,8 @@
  * For more usage examples, see the Unicode Standard Annex.
  */
 
+// Do not conditionalize the following enum with #ifndef U_HIDE_DEPRECATED_API,
+// it is needed for layout of Normalizer object.
 /**
  * Constants for normalization modes.
  * @deprecated ICU 56 Use unorm2.h instead.
@@ -154,6 +154,8 @@ typedef enum {
   /** One more than the highest normalization mode constant. @deprecated ICU 56 Use unorm2.h instead. */
   UNORM_MODE_COUNT
 } UNormalizationMode;
+
+#ifndef U_HIDE_DEPRECATED_API
 
 /**
  * Constants for options flags for normalization.
