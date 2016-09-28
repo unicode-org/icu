@@ -466,6 +466,18 @@ public final class VersionInfo implements Comparable<VersionInfo>
     }
 
     /**
+     * Returns the hash code value for this set.
+     *
+     * @return the hash code value for this set.
+     * @see java.lang.Object#hashCode()
+     * @stable ICU 2.0
+     */
+    @Override
+    public int hashCode() {
+        return m_version_;
+    }
+
+    /**
      * Compares other with this VersionInfo.
      * @param other VersionInfo to be compared
      * @return 0 if the argument is a VersionInfo object that has version
