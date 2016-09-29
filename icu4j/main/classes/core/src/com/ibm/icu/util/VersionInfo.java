@@ -470,7 +470,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      *
      * @return the hash code value for this set.
      * @see java.lang.Object#hashCode()
-     * @stable ICU 2.0
+     * @stable ICU 58
      */
     @Override
     public int hashCode() {

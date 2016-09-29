@@ -321,6 +321,16 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
         return this == obj || (obj != null && getClass() == obj.getClass());
     }
 
+    /**
+     * Generates a hash code for this Collator object.
+     *
+     * <p>The implementation exists just for consistency with {@link #equals(Object)}
+     * implementation in this class and does not generate a useful hash code.
+     * Subclasses should override this implementation.
+     *
+     * @return a hash code value.
+     * @stable ICU 58
+     */
     @Override
     public int hashCode() {
         // Dummy return to prevent compile warnings.

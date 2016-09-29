@@ -68,6 +68,7 @@ com/ibm/icu/impl/coll/CollationIterator#equals:(Ljava/lang/Object;)Z
 com/ibm/icu/impl/coll/CollationIterator#getCE32FromBuilderData:(I)I
 com/ibm/icu/impl/coll/CollationIterator#handleGetTrailSurrogate:()C
 com/ibm/icu/impl/coll/CollationIterator#handleNextCE32:()J
+com/ibm/icu/impl/coll/CollationIterator#hashCode:()I
 com/ibm/icu/impl/coll/CollationKeys#<init>:()V
 com/ibm/icu/impl/coll/CollationKeys$SortKeyByteSink#GetRemainingCapacity:()I
 com/ibm/icu/impl/coll/CollationKeys$SortKeyByteSink#Overflowed:()Z
@@ -617,6 +618,7 @@ com/ibm/icu/text/CjkBreakEngine#hashCode:()I
 com/ibm/icu/text/CollationElementIterator#strengthOrder:(I)I
 com/ibm/icu/text/CollationKey$BoundMode#<init>:()V
 com/ibm/icu/text/Collator$ASCII#<init>:()V
+com/ibm/icu/text/Collator#hashCode:()I
 com/ibm/icu/text/CollatorServiceShim$CService#handleDefault:(Lcom/ibm/icu/impl/ICUService$Key;[Ljava/lang/String;)Ljava/lang/Object;
 com/ibm/icu/text/CompactDecimalDataCache#localeAndStyle:(Lcom/ibm/icu/util/ULocale;Ljava/lang/String;)Ljava/lang/String;
 com/ibm/icu/text/CompactDecimalDataCache$FormatsTableKey#valueOf:(Ljava/lang/String;)Lcom/ibm/icu/text/CompactDecimalDataCache$FormatsTableKey;
