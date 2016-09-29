@@ -44,7 +44,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2016-Sep-27<br/>
+    <p>Last updated: 2016-Sep-28<br/>
       Copyright &copy; 2016 and later: Unicode, Inc. and others. License &amp; terms of use:
       <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a><br/>
       Copyright &copy; 1997-2016 International Business Machines Corporation and others.
@@ -235,6 +235,13 @@
     <h2><a name="News" href="#News" id="News">What is new in this
     release?</a></h2>
 
+    <h3>New License</h3>
+    <p>This is the first release of ICU since the project
+    	<a href="http://blog.unicode.org/2016/05/icu-joins-unicode-consortium.html">joined
+    	the Unicode Consortium</a>. The license has changed to the
+    	<a href="http://www.unicode.org/copyright.html#License">Unicode license</a>
+    	(which is similar to the ICU 1.8.1-57 license).</p>
+
     <h3>Layout Engine Removed</h3>
     <p>The LayoutEngine was deprecated in ICU 54 and has now been removed.
     see <a href='http://userguide.icu-project.org/layoutengine'>the
@@ -253,6 +260,27 @@
       compatibility, but have no effect.
     </p>
 
+    <h3>Changes in CLDR 30 data</h3>
+    <ul>
+    	<li>For some combinations of numbering system (arab, arabext, latn) and/or locale
+    		(ar, fa, he), there were changes to the bidirectional control characters used
+    		with certain symbols (percent, minus, plus), and changes to number patterns
+    		(currency and/or percent, including addition of bidirectional control
+    		characters in some cases).</li>
+    	<li>The bidirectional controls used for such purposes now include U+061C ARABIC
+    		LETTER MARK (ALM), which requires use of the bidirectional algorithm from
+    		Unicode 6.3 or later.</li>
+    	<li>The time separator for Norwegian locales (nb, nn) was changed to be ‘:’
+    		throughout.</li>
+    	<li>For more information on CLDR 30 changes, see
+    		<a href="http://cldr.unicode.org/index/downloads/cldr-30">CLDR 30 download
+    		page</a>.</li>
+    </ul>
+
+    <h3>Windows build changes</h3>
+    <p>Windows builds using Visual Studio now require Visual Studio 2015; otherwise you can
+    	use cygwin or similar to build for Windows.</p>
+
     <h3>API Changes</h3>
     <p>See the <a href="APIChangeReport.html">API Change Report</a> for a complete
       list of APIs added, removed, or changed in this release.</p>
@@ -263,6 +291,13 @@
     applications migrating from previous ICU releases</em>.
     For more news about this release, as well as late-breaking news, see the
     <a href="http://site.icu-project.org/download/57">ICU download page</a>.</p>
+
+    <h3>Upcoming changes</h3>
+    <p>Please note the following changes planned for an upcoming ICU4C release (likely ICU 59):</p>
+    <ul>
+    	<li>Compiler support for C++11 will be required.</li>
+    	<li>Support for Windows XP will be removed.</li>
+    </ul>
 
     <h2><a name="RecentPreviousChanges" href="#RecentPreviousChanges" id="RecentPreviousChanges">Changes in recent
     previous releases</a></h2>
