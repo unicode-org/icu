@@ -47,6 +47,7 @@ timezoneTypes:table(nofallback){
             "Asia:Thimbu"{"Asia/Thimphu"}
             "Asia:Ujung_Pandang"{"Asia/Makassar"}
             "Asia:Ulan_Bator"{"Asia/Ulaanbaatar"}
+            "Asia:Yangon"{"Asia/Rangoon"}
             "Atlantic:Faroe"{"Atlantic/Faeroe"}
             "Atlantic:Jan_Mayen"{"Arctic/Longyearbyen"}
             "Australia:ACT"{"Australia/Sydney"}
