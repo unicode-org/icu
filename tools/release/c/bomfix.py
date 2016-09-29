@@ -63,6 +63,10 @@ for ent in tree:
             noprops = noprops + 1
             continue
 
+        if (fp == "./LICENSE"):
+            print "Skipping: %s" % fp
+            continue
+
         type = props
 
         # ends with \n because of process
