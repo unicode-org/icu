@@ -1,5 +1,9 @@
 #!/usr/bin/perl -w
 #  ***********************************************************************
+#  * Copyright (C) 2016 and later: Unicode, Inc. and others.
+#  * License & terms of use: http://www.unicode.org/copyright.html#License
+#  ***********************************************************************
+#  ***********************************************************************
 #  * COPYRIGHT:
 #  * Copyright (c) 2002-2011, International Business Machines Corporation
 #  * and others. All Rights Reserved.
@@ -23,7 +27,8 @@ find({
             return if should_ignore($_);
 
             open F, "<$_" or die "Error opening '$_'.";
-            my $result = any { $_ =~ /copyright.*(international|ibm)/i } <F>;
+            my $result = any { $_ =~ /(Copyright|©).*Unicode/i } <F>;
+
             close F;
 
             print "$_\n" unless $result;
