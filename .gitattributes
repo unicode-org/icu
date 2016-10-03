@@ -553,6 +553,7 @@ icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/es.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/mt.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/res_index.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/root.res -text
+icu4j/stylesheet8.css -text
 icu4j/tools/build/icu4j48.api3.gz -text
 icu4j/tools/build/icu4j49.api3.gz -text
 icu4j/tools/build/icu4j50.api3.gz -text
