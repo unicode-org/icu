@@ -82,22 +82,34 @@
         </condition>
     </fail>
 
+    <condition property="is.java6">
+            <contains string="${java.version}" substring="1.6."/>
+    </condition>
+
+    <condition property="is.java7">
+            <contains string="${java.version}" substring="1.7."/>
+    </condition>
+
     <condition property="is.java8">
             <contains string="${java.version}" substring="1.8."/>
     </condition>
 
+    <condition property="is.java9">
+            <contains string="${java.version}" substring="1.9."/>
+    </condition>
+
     <condition property="is.java7.plus">
         <or>
-            <contains string="${java.version}" substring="1.7."/>
-            <contains string="${java.version}" substring="1.8."/>
-            <contains string="${java.version}" substring="1.9."/>
+            <isset property="is.java7"/>
+            <isset property="is.java8"/>
+            <isset property="is.java9"/>
         </or>
     </condition>
 
     <condition property="is.java8.plus">
         <or>
-            <contains string="${java.version}" substring="1.8."/>
-            <contains string="${java.version}" substring="1.9."/>
+            <isset property="is.java8"/>
+            <isset property="is.java9"/>
         </or>
     </condition>
 
@@ -911,9 +923,14 @@
     </target>
 
     <target name="_docsStyleSheet">
-        <condition property="docs.style.sheet" value="stylesheet7.css" else="stylesheet.css">
-            <isset property="is.java7.plus"/>
+        <condition property="docs.style.sheet" value="stylesheet6.css">
+            <isset property="is.java6"/>
         </condition>
+        <condition property="docs.style.sheet" value="stylesheet7.css">
+            <isset property="is.java7"/>
+        </condition>
+        <!-- all other cases -->
+        <property name="docs.style.sheet" value="stylesheet8.css"/>
     </target>
 
     <target name="_docsLintOption" unless="doclint.options">
