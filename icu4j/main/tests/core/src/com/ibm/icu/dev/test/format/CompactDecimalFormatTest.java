@@ -8,8 +8,8 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
@@ -493,38 +493,41 @@ public class CompactDecimalFormatTest extends TestFmwk {
     }
 
     @Test
-    public void TestwriteObject() throws IOException {
-        FileOutputStream ba_stream = new FileOutputStream("tmp.ser");
-        ObjectOutputStream objoutstream = new ObjectOutputStream(ba_stream);
+    public void TestWriteAndReadObject() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream objoutstream = new ObjectOutputStream(baos);
         CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(
                 ULocale.ENGLISH, CompactStyle.LONG);
 
-        try{
+        try {
             objoutstream.writeObject(cdf);
-            } catch (NotSerializableException e) {
-                // Exception expected, thus return.
-                objoutstream.close();
-                return;
+        } catch (NotSerializableException e) {
+            if (logKnownIssue("10494", "PluralRules is not serializable")) {
+                logln("NotSerializableException thrown when serializing CopactDecimalFormat");
+            } else {
+                errln("NotSerializableException thrown when serializing CopactDecimalFormat");
             }
+        } finally {
             objoutstream.close();
-            fail("writeObject currently unsupported, expected invokation to fail but passed");
-    }
+        }
 
-    @Test
-    public void TestReadObject() throws IOException, ClassNotFoundException {
-        FileInputStream fi_stream = new FileInputStream("tmp.ser");
-        ObjectInputStream objinstream = new ObjectInputStream(fi_stream);
+        // This test case relies on serialized byte stream which might be premature
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream objinstream = new ObjectInputStream(bais);
 
         try {
-            @SuppressWarnings("unused")
-            CompactDecimalFormat cmpctDF = (CompactDecimalFormat) objinstream.readObject();
+            cdf = (CompactDecimalFormat) objinstream.readObject();
         } catch (NotSerializableException e) {
-                // Exception expected, thus return.
-                objinstream.close();
-                return;
+            if (logKnownIssue("10494", "PluralRules is not de-serializable")) {
+                logln("NotSerializableException thrown when deserializing CopactDecimalFormat");
+            } else {
+                errln("NotSerializableException thrown when deserializing CopactDecimalFormat");
+            }
+        } catch (ClassNotFoundException e) {
+            errln("ClassNotFoundException: " + e.getMessage());
+        } finally {
+            objinstream.close();
         }
-        objinstream.close();
-        fail("readObject currently unsupported, expected invokation to fail but passed");
     }
 
     @Test
