@@ -320,13 +320,7 @@ U_NAMESPACE_END
 // #inlcude "U_USER_MUTEX_H"
 #include U_MUTEX_XSTR(U_USER_MUTEX_H)
 
-#elif U_PLATFORM_HAS_WIN32_API
-
-/* Windows Definitions.
- *    Windows comes first in the platform chain.
- *    Cygwin (and possibly others) have both WIN32 and POSIX APIs. Prefer Win32 in this case.
- */
-
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 
 /* For CRITICAL_SECTION */
 

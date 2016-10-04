@@ -39,16 +39,7 @@ static UMutex   globalMutex = U_MUTEX_INITIALIZER;
 // Build time user mutex hook: #include "U_USER_MUTEX_CPP"
 #include U_MUTEX_XSTR(U_USER_MUTEX_CPP)
 
-#elif U_PLATFORM_HAS_WIN32_API
-
-//-------------------------------------------------------------------------------------------
-//
-//    Windows Specific Definitions
-//
-//        Note: Cygwin (and possibly others) have both WIN32 and POSIX.
-//              Prefer Win32 in these cases.  (Win32 comes ahead in the #if chain)
-//
-//-------------------------------------------------------------------------------------------
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 
 #if defined U_NO_PLATFORM_ATOMICS
 #error ICU on Win32 requires support for low level atomic operations.
