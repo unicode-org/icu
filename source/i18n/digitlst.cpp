@@ -26,6 +26,10 @@
 ******************************************************************************
 */
 
+#if U_PLATFORM == U_PF_CYGWIN
+#define _GNU_SOURCE
+#endif
+
 #include "digitlst.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -47,7 +51,7 @@
 #include <limits>
 
 #if !defined(U_USE_STRTOD_L)
-# if U_PLATFORM_HAS_WIN32_API
+# if U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_USE_STRTOD_L 1
 # elif defined(U_HAVE_STRTOD_L)
 #   define U_USE_STRTOD_L U_HAVE_STRTOD_L
@@ -56,8 +60,12 @@
 # endif
 #endif
 
-#if U_USE_STRTOD_L && !U_PLATFORM_HAS_WIN32_API
-#include <xlocale.h>
+#if U_USE_STRTOD_L && !U_PLATFORM_USES_ONLY_WIN32_API
+# if U_PLATFORM == U_PF_CYGWIN
+#   include <locale.h>
+# else
+#   include <xlocale.h>
+# endif
 #endif
 
 // ***************************************************************************
@@ -479,7 +487,7 @@ DigitList::getDouble() const
     return tDouble;
 }
 
-#if U_USE_STRTOD_L && U_PLATFORM_HAS_WIN32_API
+#if U_USE_STRTOD_L && U_PLATFORM_USES_ONLY_WIN32_API
 # define locale_t _locale_t
 # define freelocale _free_locale
 # define strtod_l _strtod_l
@@ -505,7 +513,7 @@ static UBool U_CALLCONV digitList_cleanup(void)
 static void U_CALLCONV initCLocale(void) {
     ucln_i18n_registerCleanup(UCLN_I18N_DIGITLIST, digitList_cleanup);
 #if U_USE_STRTOD_L
-# if U_PLATFORM_HAS_WIN32_API
+# if U_PLATFORM_USES_ONLY_WIN32_API
     gCLocale = _create_locale(LC_ALL, "C");
 # else
     gCLocale = newlocale(LC_ALL_MASK, "C", (locale_t)0);
