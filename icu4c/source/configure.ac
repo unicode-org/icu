@@ -834,8 +834,8 @@ AC_SUBST(U_TZSET)
 
 U_HAVE_TZNAME=0
 AC_CACHE_CHECK(for tzname,ac_cv_var_tzname,
-[AC_LINK_IFELSE([AC_LANG_PROGRAM([[#ifndef __USE_POSIX
-#define __USE_POSIX
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([[#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE
 #endif
 #include <stdlib.h>
 #include <time.h>
@@ -861,11 +861,8 @@ AC_SUBST(U_HAVE_TZNAME)
 AC_SUBST(U_TZNAME)
 
 AC_CACHE_CHECK(for timezone,ac_cv_var_timezone,
-[AC_LINK_IFELSE([AC_LANG_PROGRAM([#ifndef __USE_POSIX
-#define __USE_POSIX
-#endif
-#ifndef __USE_XOPEN
-#define __USE_XOPEN
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE
 #endif
 #include <time.h>
 ], [[timezone = 1;]])],[ac_cv_var_timezone=yes],[ac_cv_var_timezone=no])])
