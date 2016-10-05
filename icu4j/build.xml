@@ -329,10 +329,12 @@
     <property name="jvm_options" value="${env.JVM_OPTIONS}"/>
 
     <target name="_check">
-        <antcall target="_charsetCheck"/>
-        <antcall target="_collateCheck"/>
-        <antcall target="_coreCheck"/>
-        <antcall target="_translitCheck"/>
+    	<parallel>
+	        <antcall target="_charsetCheck"/>
+    	    <antcall target="_collateCheck"/>
+        	<antcall target="_coreCheck"/>
+        	<antcall target="_translitCheck"/>
+        </parallel>
     </target>
 
     <target name="exhaustiveCheck" description="Run the standard ICU4J test suite in exhaustive mode">
