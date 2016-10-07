@@ -4464,7 +4464,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestReorderArabicMathSymbols
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestReorderRunsOnly.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestReorderingMode.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestStreaming.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/bigdec/DiagBigDecimal.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/bigdec/DiagBigDecimalTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/AstroTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/CalendarTestFmwk.java svneol=native#text/plain%3Bcharset%3Dutf-8

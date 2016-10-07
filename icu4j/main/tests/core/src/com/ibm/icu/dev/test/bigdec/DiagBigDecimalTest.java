@@ -97,7 +97,7 @@ import com.ibm.icu.math.BigDecimal;
  * @author Mike Cowlishaw
  */
 
-public class DiagBigDecimal extends TestFmwk {
+public class DiagBigDecimalTest extends TestFmwk {
     private static final com.ibm.icu.math.BigDecimal zero = com.ibm.icu.math.BigDecimal.ZERO;
     private static final com.ibm.icu.math.BigDecimal one = com.ibm.icu.math.BigDecimal.ONE;
     private static final com.ibm.icu.math.BigDecimal two = new com.ibm.icu.math.BigDecimal(2);
@@ -144,7 +144,7 @@ public class DiagBigDecimal extends TestFmwk {
      * Invoke its {@link #diagrun} method to run the tests.
      */
 
-    public DiagBigDecimal() {
+    public DiagBigDecimalTest() {
         super();
     }
 
