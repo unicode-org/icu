@@ -172,8 +172,6 @@ class RBBINode {
                 n.fRightChild.fParent = n;
             }
         }
-        n.fRuleRoot = this.fRuleRoot;
-        n.fChainIn  = this.fChainIn;
         return n;
     }
 
@@ -199,8 +197,9 @@ class RBBINode {
     //-------------------------------------------------------------------------
     RBBINode flattenVariables() {
         if (fType == varRef) {
-            RBBINode retNode = fLeftChild.cloneTree();
-            // delete this;
+            RBBINode retNode  = fLeftChild.cloneTree();
+            retNode.fRuleRoot = this.fRuleRoot;
+            retNode.fChainIn  = this.fChainIn;
             return retNode;
         }
 
