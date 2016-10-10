@@ -102,6 +102,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestDictRules);
     TESTCASE_AUTO(TestBug5532);
     TESTCASE_AUTO(TestBug7547);
+    TESTCASE_AUTO(TestBug12797);
     TESTCASE_AUTO_END;
 }
 
@@ -4633,35 +4634,32 @@ void RBBITest::TestBug7547() {
 }
 
 
+void RBBITest::TestBug12797() {
+    UnicodeString rules = "!!chain; !!forward; $v=b c; a b; $v; !!reverse; .*;";
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    RuleBasedBreakIterator bi(rules, parseError, status);
+    if (U_FAILURE(status)) {
+        errln("%s:%s status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    UnicodeString text = "abc";
+    bi.setText(text);
+    bi.first();
+    int32_t boundary = bi.next();
+    if (boundary != 3) {
+        errln("%s:%d expected boundary==3, got %d", __FILE__, __LINE__, boundary);
+    }
+}
+
+
 //
 //  TestDebug    -  A place-holder test for debugging purposes.
 //                  For putting in fragments of other tests that can be invoked
 //                  for tracing  without a lot of unwanted extra stuff happening.
 //
 void RBBITest::TestDebug(void) {
-#if 0
-    UErrorCode   status = U_ZERO_ERROR;
-    int pos = 0;
-    int ruleStatus = 0;
 
-    RuleBasedBreakIterator* bi =
-       // (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getDefault(), status);
-       // (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::Locale("th"), status);
-       (RuleBasedBreakIterator *)BreakIterator::createSentenceInstance(Locale::getDefault(), status);
-    UnicodeString s("\\u2008\\u002e\\udc6a\\u37cd\\u71d0\\u2048\\U000e006a\\u002e\\u0046\\ufd3f\\u000a\\u002e");
-    // UnicodeString s("Aaa.  Bcd");
-    s = s.unescape();
-    bi->setText(s);
-    UBool r = bi->isBoundary(8);
-    printf("%s", r?"true":"false");
-    return;
-    pos = bi->last();
-    do {
-        // ruleStatus = bi->getRuleStatus();
-        printf("%d\t%d\n", pos, ruleStatus);
-        pos = bi->previous();
-    } while (pos != BreakIterator::DONE);
-#endif
 }
 
 void RBBITest::TestProperties() {

@@ -169,8 +169,6 @@ RBBINode *RBBINode::cloneTree() {
             }
         }
     }
-    n->fRuleRoot = this->fRuleRoot;
-    n->fChainIn  = this->fChainIn;
     return n;
 }
 
@@ -196,8 +194,12 @@ RBBINode *RBBINode::cloneTree() {
 //-------------------------------------------------------------------------
 RBBINode *RBBINode::flattenVariables() {
     if (fType == varRef) {
-        RBBINode *retNode = fLeftChild->cloneTree();
-        delete this;
+        RBBINode *retNode  = fLeftChild->cloneTree();
+        if (retNode != NULL) {
+            retNode->fRuleRoot = this->fRuleRoot;
+            retNode->fChainIn  = this->fChainIn;
+        }
+        delete this;   // TODO: undefined behavior. Fix.
         return retNode;
     }
 
