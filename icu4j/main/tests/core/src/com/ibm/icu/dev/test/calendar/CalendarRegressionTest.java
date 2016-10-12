@@ -39,7 +39,7 @@ import com.ibm.icu.util.ULocale;
  * 4145158 4145983 4147269 4149677 4162587 4165343 4166109 4167060 4173516
  * 4174361 4177484 4197699 4209071 4288792
  */
-public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
+public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     static final String[] FIELD_NAME = {
             "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
             "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",
@@ -1660,7 +1660,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             if (!act.equals(exp)) {
                 errln("FAIL: Test " + (i/2) + " got " + act +
                       ", want " + exp +
-                      " (see test/java/util/Calendar/CalendarRegression.java");
+                      " (see test/java/util/Calendar/CalendarRegressionTest.java");
             }
         }
 

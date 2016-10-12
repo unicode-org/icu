@@ -11,7 +11,7 @@
 **********************************************************************
 */
 /**
- * MessageRegression.java
+ * MessageRegressionTest.java
  *
  * @test 1.29 01/03/12
  * @bug 4031438 4058973 4074764 4094906 4104976 4105380 4106659 4106660 4106661
@@ -51,7 +51,7 @@ import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 
-public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
+public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     /* @bug 4074764
      * Null exception when formatting pattern with MessageFormat
      * with no parameters.
