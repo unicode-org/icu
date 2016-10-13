@@ -9,7 +9,7 @@ en_AU{
             }
         }
     }
-    Version{"2.1.29.54"}
+    Version{"2.1.30.50"}
     calendar{
         generic{
             availableFormats{
@@ -57,9 +57,6 @@ en_AU{
                 "{1} 'at' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            availableFormats{
-                yMMMEd{"E, d MMM,y"}
             }
             dayNames{
                 format{

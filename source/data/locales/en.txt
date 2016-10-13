@@ -192,7 +192,7 @@ en{
             }
         }
     }
-    Version{"2.1.29.81"}
+    Version{"2.1.30.50"}
     calendar{
         buddhist{
             eras{
@@ -641,8 +641,8 @@ en{
                 MMM{"LLL"}
                 MMMEd{"E, MMM d"}
                 MMMMW{
-                    one{"'week' W 'of' MMM"}
-                    other{"'week' W 'of' MMM"}
+                    one{"'week' W 'of' MMMM"}
+                    other{"'week' W 'of' MMMM"}
                 }
                 MMMMd{"MMMM d"}
                 MMMd{"MMM d"}
