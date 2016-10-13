@@ -3,7 +3,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 //---------------------------------------------------------
 // Build tool:  tz2icu
-// Build date:  Wed Sep 28 21:48:54 2016
+// Build date:  Wed Oct 12 18:07:23 2016
 // tz database: ftp://ftp.iana.org/tz/
 // tz version:  2016g
 // ICU version: 58.1
@@ -3627,7 +3627,7 @@ zoneinfo64:table(nofallback) {
   "RU", //Z#476 Europe/Samara
   "SM", //Z#477 Europe/San_Marino
   "BA", //Z#478 Europe/Sarajevo
-  "RU", //Z#479 Europe/Simferopol
+  "UA", //Z#479 Europe/Simferopol
   "MK", //Z#480 Europe/Skopje
   "BG", //Z#481 Europe/Sofia
   "SE", //Z#482 Europe/Stockholm
