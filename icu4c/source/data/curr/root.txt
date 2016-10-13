@@ -192,7 +192,7 @@ root{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.30.50"}
     currencySpacing{
         afterCurrency{
             currencyMatch{"[:^S:]"}
