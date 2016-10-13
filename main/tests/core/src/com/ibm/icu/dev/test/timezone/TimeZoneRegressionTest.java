@@ -34,7 +34,7 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
-public class TimeZoneRegression extends TestFmwk {
+public class TimeZoneRegressionTest extends TestFmwk {
     @Test
     public void Test4052967() {
         logln("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");
