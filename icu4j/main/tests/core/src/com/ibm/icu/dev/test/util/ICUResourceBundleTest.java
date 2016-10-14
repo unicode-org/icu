@@ -15,6 +15,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
@@ -58,7 +59,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 if (c instanceof JarURLConnection) {
                     JarURLConnection jc = (JarURLConnection)c;
                     JarEntry je = jc.getJarEntry();
-                    logln("jar entry: " + je.toString()); 
+                    logln("jar entry: " + je.toString());
                 } else {
                     BufferedReader br = new BufferedReader(
                             new InputStreamReader(c.getInputStream()));
@@ -118,7 +119,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // this tests tests loading of root bundle when a resource bundle
         // for the default locale is requested
         try {
-            UResourceBundle bundle = (UResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault(), testLoader);
+            UResourceBundle bundle = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault(), testLoader);
             if(bundle==null){
                 errln("could not create the resource bundle");
             }
@@ -129,7 +130,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
     @Test
     public void TestOpen(){
-        UResourceBundle bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "en_US_POSIX");
+        UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "en_US_POSIX");
 
         if(bundle==null){
             errln("could not create the resource bundle");
@@ -151,7 +152,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 //System.out.println("\""+prettify(temp)+"\"");
             }
         }
-        
+
         obj =  bundle.get("NumberElements").get("latn").get("symbols");
 
         size = obj.getSize();
@@ -168,14 +169,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
                    // System.out.println("\""+prettify(temp)+"\"");
             }
         }
-        
+
         if(bundle==null){
             errln("could not create the resource bundle");
         }
 
-        bundle = (UResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "zzz_ZZ_very_very_very_long_bogus_bundle");
+        bundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "zzz_ZZ_very_very_very_long_bogus_bundle");
         if(!bundle.getULocale().equals(ULocale.getDefault())){
-            errln("UResourceBundle did not load the default bundle when bundle was not found. Default: " + ULocale.getDefault() + 
+            errln("UResourceBundle did not load the default bundle when bundle was not found. Default: " + ULocale.getDefault() +
                         ", Bundle locale: " + bundle.getULocale());
         }
     }
@@ -184,7 +185,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestBasicTypes(){
         UResourceBundle bundle = null;
         try {
-            bundle = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "testtypes", testLoader);
+            bundle = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "testtypes", testLoader);
         }
         catch (MissingResourceException e) {
             warnln("could not load test data: " + e.getMessage());
@@ -452,7 +453,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestAliases(){
        String simpleAlias   = "Open";
 
-       UResourceBundle rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases", testLoader);
+       UResourceBundle rb = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases", testLoader);
        if (rb == null) {
            warnln("could not load testaliases data");
            return;
@@ -466,7 +467,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
         {
             try{
-                rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
+                rb = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
                 sub = rb.get("nonexisting");
                 errln("Did not get the expected exception for nonexisting");
             }catch(MissingResourceException ex){
@@ -474,7 +475,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
         }
         {
-            rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
+            rb = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
             sub = rb.get("referencingalias");
             s1 = sub.getString();
             if(s1.equals("H:mm:ss")){
@@ -484,7 +485,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
         }
         {
-            UResourceBundle rb1 = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
+            UResourceBundle rb1 = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
             if(rb1!=rb){
                 errln("Caching of the resource bundle failed");
             }else{
@@ -551,7 +552,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 // Note: Following test cases are no longer working because collation data is now in the collation module
 //        {
 //            sub = rb.get("testAliasToTree" );
-//            
+//
 //            ByteBuffer buf = sub.get("standard").get("%%CollationBin").getBinary();
 //            if(buf==null){
 //                errln("Did not get the expected output for %%CollationBin");
@@ -593,7 +594,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     @Test
     public void TestAlias(){
         logln("Testing %%ALIAS");
-        UResourceBundle rb = (UResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,"iw_IL");
+        UResourceBundle rb = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,"iw_IL");
         UResourceBundle b = rb.get("NumberElements");
         if(b != null){
             if(b.getSize()>0){
@@ -607,10 +608,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
     @Test
     public void TestXPathAlias(){
-        UResourceBundle rb = (UResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","te_IN",testLoader);
+        UResourceBundle rb = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","te_IN",testLoader);
         UResourceBundle b = rb.get("aliasClient");
         String result = b.getString();
-        String expResult= "correct"; 
+        String expResult= "correct";
 
         if(!result.equals(expResult)){
             errln("Did not get the expected result for XPath style alias");
@@ -618,7 +619,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         try{
             UResourceBundle c = rb.get("rootAliasClient");
             result = c.getString();
-            expResult = "correct"; 
+            expResult = "correct";
             if(!result.equals(expResult)){
                 errln("Did not get the expected result for XPath style alias for rootAliasClient");
             }
@@ -629,7 +630,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     @Test
     public void TestCircularAliases(){
         try{
-            UResourceBundle rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
+            UResourceBundle rb = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
             UResourceBundle sub = rb.get("aaa");
             String s1 = sub.getString();
             if(s1!=null){
@@ -642,7 +643,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             warnln("could not load resource data: " + ex.getMessage());
         }
     }
-    
+
     @Test
     public void TestPreventFallback() {
         String noFallbackResource = "string_in_te_no_te_IN_fallback";
@@ -694,20 +695,40 @@ public final class ICUResourceBundleTest extends TestFmwk {
     @Test
     public void TestLocaleDisplayNames() {
         ULocale[] locales = ULocale.getAvailableLocales();
+
+        Set<String> localCountryExceptions = new HashSet<String>();
+        if (logKnownIssue("cldrbug:8903",
+                "No localized region name for lrc_IQ, lrc_IR, nus_SS, nds_DE, ti_ER, ti_ET")) {
+            localCountryExceptions.add("lrc_IQ");
+            localCountryExceptions.add("lrc_IR");
+            localCountryExceptions.add("nus_SS");
+            localCountryExceptions.add("nds_DE");
+            localCountryExceptions.add("nds_NL");
+            localCountryExceptions.add("ti_ER");
+            localCountryExceptions.add("ti_ET");
+        }
+
+        Set<String> localLangExceptions = new HashSet<String>();
+        if (logKnownIssue("cldrbug:8903", "No localized language name for nmg, nds")) {
+            localLangExceptions.add("nmg");
+            localLangExceptions.add("nds");
+        }
+
         for (int i = 0; i < locales.length; ++i) {
-            if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i]) && (locales[i].getLanguage().compareTo("ti") != 0)){ // TODO: restore test for ti_* when cldrbug 3058 is fixed
+            if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])){
                  errln("Could not get English localized country for " + locales[i]);
             }
             if(!hasLocalizedLanguageFor(ULocale.ENGLISH, locales[i])){
                 errln("Could not get English localized language for " + locales[i]);
             }
-            if(!hasLocalizedCountryFor(locales[i], locales[i]) &&
-                    !(locales[i].getLanguage().equals("ti") || // TODO: restore test for ti_* when cldrbug 3058 is fixed
-                    ((locales[i].getBaseName().equals("lrc_IQ") || locales[i].getBaseName().equals("lrc_IR") || locales[i].getBaseName().equals("nus_SS")) && logKnownIssue("cldrbug:8903", "No localized region name for lrc_IQ, lrc_IR, nus_SS")))) {
+
+            if(!hasLocalizedCountryFor(locales[i], locales[i])
+                    && !localCountryExceptions.contains(locales[i].toString())) {
                 errln("Could not get native localized country for " + locales[i]);
                 hasLocalizedCountryFor(locales[i], locales[i]);
             }
-            if(!hasLocalizedLanguageFor(locales[i], locales[i]) && (locales[i].getLanguage().compareTo("nmg") != 0)){
+            if(!hasLocalizedLanguageFor(locales[i], locales[i])
+                    && !localLangExceptions.contains(locales[i].getLanguage())) {
                 errln("Could not get native localized language for " + locales[i]);
             }
 
@@ -803,7 +824,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestJB4102(){
         try {
             ICUResourceBundle root =(ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "root");
-            ICUResourceBundle t = null;    
+            ICUResourceBundle t = null;
 // AmPmMarkers now exist in root/islamic calendar, so this test is rendered useless.
 //          try{
 //              t = root.getWithFallback("calendar/islamic-civil/AmPmMarkers");
@@ -841,7 +862,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
           UResourceBundle a = (alias).getWithFallback(resource);
           result = a.getString();
           if(result.equals(expected)) {
-              errln("CLDR style aliases failed resource with name "+resource+"resource, exp "+expects[i] +" , got " + result); 
+              errln("CLDR style aliases failed resource with name "+resource+"resource, exp "+expects[i] +" , got " + result);
           }
         }
 
@@ -858,20 +879,26 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if (bundle == null){
             errln("UResourceBundle.getBundleInstance(ULocale) failed");
             return;
-        } 
+        }
         if (new UResourceTypeMismatchException("coverage") == null){
             errln("Create UResourceTypeMismatchException error");
         }
         class Stub extends UResourceBundle{
+            @Override
             public ULocale getULocale() {return ULocale.ROOT;}
+            @Override
             protected String getLocaleID() {return null;}
+            @Override
             protected String getBaseName() {return null;}
+            @Override
             protected UResourceBundle getParent() {return null;}
+            @Override
             public Enumeration getKeys() {return null;}
+            @Override
             protected Object handleGetObject(String aKey) {return null;}
         }
         Stub stub = new Stub();
-        
+
         if (!stub.getLocale().equals(ULocale.ROOT.toLocale())){
             errln("UResourceBundle.getLoclae(Locale) should delegate to (ULocale)");
         }
@@ -904,14 +931,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(bundle1!=bundle){
             errln("Did not load the bundle from cache");
         }
-        
+
         UResourceBundle bundle2 = UResourceBundle.getBundleInstance(baseName, "en_IN", testLoader);
         if(!bundle2.getLocale().toString().equals("en")){
-            errln("Did not get the expected fallback locale. Expected: en Got: "+bundle2.getLocale().toString());    
+            errln("Did not get the expected fallback locale. Expected: en Got: "+bundle2.getLocale().toString());
         }
         UResourceBundle bundle3 = UResourceBundle.getBundleInstance(baseName, "te_IN", testLoader);
         if(!bundle3.getLocale().toString().equals("te")){
-            errln("Did not get the expected fallback locale. Expected: te Got: "+bundle2.getLocale().toString());    
+            errln("Did not get the expected fallback locale. Expected: te Got: "+bundle2.getLocale().toString());
         }
         // non-existent bundle .. should return default
         UResourceBundle defaultBundle = UResourceBundle.getBundleInstance(baseName, "hi_IN", testLoader);
@@ -925,7 +952,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         UResourceBundle root = UResourceBundle.getBundleInstance(baseName, "hi_IN", testLoader);
         if(!root.getULocale().toString().equals("")){
             errln("Did not get the root bundle for non-existent default bundle for non-existent bundle");
-        }        
+        }
         //reset the default
         ULocale.setDefault(defaultLocale);
         Enumeration keys = bundle.getKeys();
@@ -947,9 +974,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
         try{
             ULocale loc = new ULocale("en_US");
             ICUResourceBundle b = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, loc);
-            ICUResourceBundle b1 = (ICUResourceBundle)b.getWithFallback("calendar/hebrew/monthNames/format/abbreviated");
+            ICUResourceBundle b1 = b.getWithFallback("calendar/hebrew/monthNames/format/abbreviated");
             if(b1!=null){
-                logln("loaded data for abbreviated month names: "+ b1.getKey()); 
+                logln("loaded data for abbreviated month names: "+ b1.getKey());
             }
         }catch(MissingResourceException ex){
             warnln("Failed to load data for abbreviated month names");
@@ -1021,19 +1048,19 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln(t.getMessage());
         }
     }
-    
+
     @Test
     public void TestUResourceBundleCoverage() {
         Locale locale = null;
         ULocale ulocale = null;
         String baseName = null;
         UResourceBundle rb1, rb2, rb3, rb4, rb5, rb6, rb7;
-        
+
         rb1 = UResourceBundle.getBundleInstance(ulocale);
         rb2 = UResourceBundle.getBundleInstance(baseName);
         rb3 = UResourceBundle.getBundleInstance(baseName, ulocale);
         rb4 = UResourceBundle.getBundleInstance(baseName, locale);
-        
+
         rb5 = UResourceBundle.getBundleInstance(baseName, ulocale, testLoader);
         rb6 = UResourceBundle.getBundleInstance(baseName, locale, testLoader);
         try {
@@ -1044,7 +1071,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if (rb1 == null || rb2 == null || rb3 == null || rb4 == null || rb5 == null || rb6 == null) {
             errln("Error getting resource bundle.");
         }
-        
+
         rb7 = UResourceBundle.getBundleInstance("com.ibm.icu.dev.data.resources.TestDataElements", Locale.getDefault(), testLoader);
 
         try {
