@@ -26,7 +26,7 @@
 ******************************************************************************
 */
 
-#if U_PLATFORM == U_PF_CYGWIN
+#if defined(__CYGWIN__) && !defined(_GNU_SOURCE)
 #define _GNU_SOURCE
 #endif
 
