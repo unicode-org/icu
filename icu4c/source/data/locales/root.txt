@@ -19,6 +19,7 @@ root{
     NumberElements{
         arab{
             patterns{
+                accountingFormat:alias{"/LOCALE/NumberElements/arab/patterns/currencyFormat"}
                 currencyFormat{"#,##0.00 ¤"}
                 percentFormat{"#,##0 %"}
             }
@@ -162,7 +163,7 @@ root{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.30.50"}
+    Version{"2.1.30.58"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
