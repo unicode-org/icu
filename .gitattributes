@@ -460,7 +460,6 @@ samples/src/com/ibm/icu/samples/iuc/data/reshello/es.res -text
 samples/src/com/ibm/icu/samples/iuc/data/reshello/mt.res -text
 samples/src/com/ibm/icu/samples/iuc/data/reshello/res_index.res -text
 samples/src/com/ibm/icu/samples/iuc/data/reshello/root.res -text
-/stylesheet8.css -text
 tools/build/icu4j48.api3.gz -text
 tools/build/icu4j49.api3.gz -text
 tools/build/icu4j50.api3.gz -text
