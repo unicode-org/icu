@@ -1,9 +1,9 @@
 //---------------------------------------------------------
-// (C) 2016 and later: Unicode, Inc. and others.
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 //---------------------------------------------------------
 // Build tool:  tz2icu
-// Build date:  Wed Oct 12 18:07:23 2016
+// Build date:  Mon Oct 17 13:29:16 2016
 // tz database: ftp://ftp.iana.org/tz/
 // tz version:  2016g
 // ICU version: 58.1

@@ -1714,7 +1714,7 @@ int main(int argc, char *argv[]) {
     ofstream file(filename.c_str());
     if (file) {
         file << "//---------------------------------------------------------" << endl
-             << "// (C) 2016 and later: Unicode, Inc. and others." << endl
+             << "// Copyright (C) 2016 and later: Unicode, Inc. and others." << endl
              << "// License & terms of use: http://www.unicode.org/copyright.html#License" << endl
              << "//---------------------------------------------------------" << endl
              << "// Build tool:  tz2icu" << endl
