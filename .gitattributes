@@ -4482,7 +4482,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiCharacterTest.txt svn
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/CompositionExclusions.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationCorrections.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest-3.2.0.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest-3.2.0.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationTest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt svneol=native#text/plain
@@ -5232,9 +5232,9 @@ icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MiniMessageFormatter.j
 icu4j/samples/src/com/ibm/icu/samples/text/pluralformat/PluralFormatSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/util/timescale/PivotDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/util/timezone/BasicTimeZoneExample.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/stylesheet6.css svneol=native#text/css
-icu4j/stylesheet7.css svneol=native#text/css
-icu4j/stylesheet8.css -text
+icu4j/stylesheet6.css svneol=native#text/css%3Bcharset%3Dutf-8
+icu4j/stylesheet7.css svneol=native#text/css%3Bcharset%3Dutf-8
+icu4j/stylesheet8.css svneol=native#text/css%3Bcharset%3Dutf-8
 icu4j/tools/build/README.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/icu4j48.api3.gz -text
 icu4j/tools/build/icu4j49.api3.gz -text
