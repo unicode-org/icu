@@ -4914,4 +4914,21 @@ public class NumberFormatTest extends TestFmwk {
 
         expect2(fmt, 1234567.89, "(1)^^(2)(3)(4)^^(5)(6)(7)~~(8)(9)");
     }
+
+    @Test
+    public void TestArabicCurrencyPatternInfo() {
+        ULocale arLocale = new ULocale("ar");
+ 
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(arLocale);
+        String currSpacingPatn = symbols.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH, true);
+        if (currSpacingPatn==null || currSpacingPatn.length() == 0) {
+            errln("locale ar, getPatternForCurrencySpacing returns null or 0-length string");
+        }
+        
+        DecimalFormat currAcctFormat = (DecimalFormat)NumberFormat.getInstance(arLocale, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
+        String currAcctPatn = currAcctFormat.toPattern();
+        if (currAcctPatn==null || currAcctPatn.length() == 0) {
+            errln("locale ar, toPattern for ACCOUNTINGCURRENCYSTYLE returns null or 0-length string");
+        }
+    }
 }
