@@ -1177,8 +1177,10 @@ static UBool U_CALLCONV putil_cleanup(void)
     gTimeZoneFilesDirectory = NULL;
     gTimeZoneFilesInitOnce.reset();
 
+#ifdef SEARCH_TZFILE
     delete gSearchTZFileResult;
     gSearchTZFileResult = NULL;
+#endif
 
 #if U_POSIX_LOCALE || U_PLATFORM_USES_ONLY_WIN32_API
     if (gCorrectedPOSIXLocale) {
