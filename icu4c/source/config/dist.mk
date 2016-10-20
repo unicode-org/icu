@@ -17,7 +17,7 @@ include $(top_builddir)/icudefs.mk
 DISTY_TMP=dist/tmp
 DISTY_ICU=$(DISTY_TMP)/icu
 DISTY_DATA=$(DISTY_ICU)/source/data
-DISTY_RMV=brkitr coll curr lang locales mappings rbnf region translit xml zone
+DISTY_RMV=brkitr coll curr lang locales mappings rbnf region translit xml zone misc sprep unit
 DISTY_RMDIR=$(DISTY_RMV:%=$(DISTY_DATA)/%)
 DISTY_IN=$(DISTY_DATA)/in
 DOCZIP=icu-docs.zip
@@ -67,6 +67,7 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP): $(SVNDOT) $(DISTY_DAT) $(
 	( cd $(DISTY_TMP)/icu/source ; zip -rlq $(DISTY_DATA_ZIP) data )
 	$(RMV) $(DISTY_RMDIR)
 	$(MKINSTALLDIRS) $(DISTY_IN)
+	echo DISTY_DAT=$(DISTY_DAT)
 	cp $(DISTY_DAT) $(DISTY_IN)
 	( cd $(DISTY_TMP)/icu ; python as_is/bomlist.py > as_is/bomlist.txt || rm -f as_is/bomlist.txt )
 	( cd $(DISTY_TMP) ; tar cfpz $(DISTY_FILE_TGZ) icu )
