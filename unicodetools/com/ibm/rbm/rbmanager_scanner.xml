@@ -1,0 +1,21 @@
+<?xml version="1.0" ?> 
+<RBFileScanner name="RBManager Scanner" filename="rbmanager_scanner.xml">
+	<FileRules>
+		<!--  FileRules can have attributes starts_with, ends_with, and contains --> 
+		<FileRule name="Java File" ends_with=".java" /> 
+		<FileRule name="XSL File" ends_with=".xsl" /> 
+	</FileRules>
+	<ParseRules>
+		<!--  ParseRules can have attributes follows and precedes --> 
+		<ParseRule name="Java static resource" follows="Resources.getTranslation(&quot;" precedes="&quot;" />
+	</ParseRules>
+	<Scan>
+		<Directory location="." recurse_directories="true">
+			<Rules>
+				<ApplyFileRule name="Java File">
+					<ApplyParseRule name="Java static resource" />
+				</ApplyFileRule>
+			</Rules>
+		</Directory>
+	</Scan>
+</RBFileScanner>

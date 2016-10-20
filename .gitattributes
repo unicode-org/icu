@@ -1,0 +1,185 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+currency/.classpath -text
+currency/.project -text
+currency/.settings/org.eclipse.core.resources.prefs -text
+currency/.settings/org.eclipse.jdt.core.prefs -text
+currency/.settings/org.eclipse.jdt.ui.prefs -text
+multi/c/Makefile-c.inc -text
+multi/c/patch/3_0 -text
+multi/c/patch/3_2 -text
+multi/c/patch/3_4_1 -text
+multi/common/Makefile-multi.inc -text
+multi/j/Makefile-j.inc -text
+multi/proj/icu4cscan/Makefile -text
+multi/proj/icu4cscan/Makefile.local.sample -text
+multi/proj/icu4cscan/Makefile_c -text
+multi/proj/icu4cscan/Makefile_j -text
+multi/proj/icu4cscan/dtd/icucaps.dtd -text
+multi/proj/icu4cscan/old-xmls.tar.bz2 -text
+multi/proj/icu4cscan/zappit.sed -text
+multi/proj/icu4jscan/.classpath -text
+multi/proj/icu4jscan/.project -text
+multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/CapDocument.java -text
+multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/CapElement.java -text
+multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/CapNode.java -text
+multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/CapScan.java -text
+multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/ScanICU.java -text
+multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/ScanJava.java -text
+multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/SimpleScan.java -text
+multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/Spinner.java -text
+multi/proj/provider/Makefile.local-sample -text
+multi/proj/provider/icu-config.sed -text
+multi/proj/provider/readme.txt -text
+release/c/bomfix.py -text
+release/java/.classpath -text
+release/java/.project -text
+release/java/Makefile -text
+release/java/icu4c.css -text
+release/java/lib/LICENSE.txt -text
+release/java/lib/README.TXT -text
+release/java/lib/serializer.jar -text
+release/java/lib/xalan.jar -text
+release/java/lib/xercesImpl.jar -text
+release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc_xml.xslt -text
+release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt -text
+release/java/src/com/ibm/icu/dev/tools/docs/genreport_xml.xslt -text
+scripts/icurun -text
+scripts/reticket -text
+trac/IcuCodeTools/0.11/icucodetools/__init__.py -text
+trac/IcuCodeTools/0.11/icucodetools/dcut.py -text
+trac/IcuCodeTools/0.11/icucodetools/htdocs/css/icuxtn.css -text
+trac/IcuCodeTools/0.11/icucodetools/htdocs/js/review.js -text
+trac/IcuCodeTools/0.11/icucodetools/review.py -text
+trac/IcuCodeTools/0.11/icucodetools/templates/nothing.html -text
+trac/IcuCodeTools/0.11/icucodetools/templates/review.html -text
+trac/IcuCodeTools/0.11/icucodetools/ticketmgr.py -text
+trac/IcuCodeTools/0.11/icucodetools/tktlist.py -text
+trac/IcuCodeTools/0.11/license.html -text
+trac/IcuCodeTools/0.11/readme.txt -text
+trac/IcuCodeTools/0.11/setup.cfg -text
+trac/IcuCodeTools/0.11/setup.py -text
+trac/IcuCodeTools/0.12/icucodetools/__init__.py -text
+trac/IcuCodeTools/0.12/icucodetools/dcut.py -text
+trac/IcuCodeTools/0.12/icucodetools/htdocs/css/icuxtn.css -text
+trac/IcuCodeTools/0.12/icucodetools/htdocs/js/review.js -text
+trac/IcuCodeTools/0.12/icucodetools/review.py -text
+trac/IcuCodeTools/0.12/icucodetools/templates/nothing.html -text
+trac/IcuCodeTools/0.12/icucodetools/templates/review.html -text
+trac/IcuCodeTools/0.12/icucodetools/ticketmgr.py -text
+trac/IcuCodeTools/0.12/icucodetools/tktlist.py -text
+trac/IcuCodeTools/0.12/icucodetools/traccheck.py -text
+trac/IcuCodeTools/0.12/license.html -text
+trac/IcuCodeTools/0.12/readme.txt -text
+trac/IcuCodeTools/0.12/setup.cfg -text
+trac/IcuCodeTools/0.12/setup.py -text
+unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
+unicodetools/com/ibm/rbm/docs/images/arrow_bullet.gif -text
+unicodetools/com/ibm/rbm/docs/images/diamond_bullet.gif -text
+unicodetools/com/ibm/rbm/docs/images/ibm_logo_small_white.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/RBReporter.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_group.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_resource.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_translation.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/basic_untranslated.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/create_group.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/empty_group.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/empty_resource.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/empty_screen.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/empty_with_preferences.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/laf_metal.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/laf_motif.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/laf_windows.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/lookup_resource.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/main_page.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_file_export.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_file_import.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_help.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_options.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/menu_popup_tree.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/new_baseclass.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/new_bundle.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/preferences_dialog.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_groups_bundle.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_groups_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_search.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_stats_bundle.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_stats_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_tree_basic.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_untrans_bundle.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_untrans_dialog0.gif -text
+unicodetools/com/ibm/rbm/docs/images/screenshots/view_untrans_file.gif -text
+unicodetools/com/ibm/rbm/docs/images/spacer.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_l.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_line.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_ll.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_u.gif -text
+unicodetools/com/ibm/rbm/docs/images/template_ul.gif -text
+unicodetools/com/ibm/rbm/gui/images/TitleLogo_transparent.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_bundle.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_country.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_file.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_group.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_item.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_language.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_project.gif -text
+unicodetools/com/ibm/rbm/gui/images/tree_icon_variant.gif -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+
