@@ -35,6 +35,7 @@ public:
      * - displayable name in the desired locale
      */
     void TestProperty(/* char* par */);
+    void TestKeywordValues();
 
     /**
     * This tests the RuleBasedCollator
