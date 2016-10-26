@@ -680,6 +680,7 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
         return NULL;
     }
     memcpy(en, &defaultKeywordValues, sizeof(UEnumeration));
+    ulist_resetList(sink.values);  // Initialize the iterator.
     en->context = sink.values;
     sink.values = NULL;  // Avoid deletion in the sink destructor.
     return en;
