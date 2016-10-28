@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Main-Class: com.ibm.icu.dev.demo.Launcher
+Class-Path: icu4j.jar
+
+Name: com/ibm/icu/dev/demo
+Specification-Title: ICU for Java Demo
+Specification-Version: @SPECVERSION@
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java Demo
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: @COPYRIGHT@
