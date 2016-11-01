@@ -1,0 +1,60 @@
+﻿#
+# Copyright (c) 2016, International Business Machines Corporation and others. All Rights Reserved.
+
+# file: grapheme.txt
+#
+# Reference Grapheme Break rules for intltest rbbi/RBBIMonkeyTest
+#
+#
+# Note: Rule syntax and the monkey test itself are still a work in progress.
+#       They are expected to change with review and the addition of support for rule tailoring.
+
+type = grapheme;      # one of grapheme | word | line | sentence
+locale = en;
+
+CR = [\u000d];
+LF = [\u000a];
+
+Control            = [[\p{Grapheme_Cluster_Break = Control}]-[:Block=Tags:]];
+Extend             = [[\p{Grapheme_Cluster_Break = Extend}][:Block=Tags:]];
+Regional_Indicator = [\p{Grapheme_Cluster_Break = Regional_Indicator}];
+Prepend            = [];
+SpacingMark        = [\p{Grapheme_Cluster_Break = SpacingMark}];
+E_Base             = [\u261D\u26F9\u270A-\u270D\U0001F385\U0001F3C3-\U0001F3C4\U0001F3CA-\U0001F3CB\U0001F442-\U0001F443\U0001F446-\U0001F450\U0001F466-\U0001F469\U0001F46E\U0001F470-\U0001F478\U0001F47C\U0001F481-\U0001F483\U0001F485-\U0001F487\U0001F4AA\U0001F575\U0001F590\U0001F595-\U0001F596\U0001F645-\U0001F647\U0001F64B-\U0001F64F\U0001F6A3\U0001F6B4-\U0001F6B6\U0001F6C0\U0001F918];
+E_Modifier         = [\U0001F3FB-\U0001F3FF];
+GAZ                = [\U0001F466-\U0001F469\U0001F48B\U0001F5E8\u2764];
+ZWJ                = [\u200D];
+
+#
+# Korean Syllable Definitions
+#
+L       = [\p{Grapheme_Cluster_Break = L}];
+V       = [\p{Grapheme_Cluster_Break = V}];
+T       = [\p{Grapheme_Cluster_Break = T}];
+
+LV      = [\p{Grapheme_Cluster_Break = LV}];
+LVT     = [\p{Grapheme_Cluster_Break = LVT}];
+
+GB3:     CR LF;
+GB4:     (Control | CR | LF) ÷;
+GB5:     . ÷ (Control | CR | LF);
+
+GB6:     L (L | V | LV | LVT);
+GB7:     (LV | V) (V | T);
+GB8:     (LVT | T) T;
+
+# Regional Indicators, split into pairs.
+#      Note that a pair of RIs that is not followed by a third RI will fall into
+#      the normal rules for Extend, etc.
+#
+GB8a.1:  Regional_Indicator Regional_Indicator ÷ Regional_Indicator;
+GB8a.2:  Regional_Indicator Regional_Indicator;
+
+GB9:     . Extend;
+
+GB9a:    . SpacingMark;
+GB9b:    Prepend .;
+GB9c:    (E_Base | GAZ) E_Modifier;
+GB9d:    ZWJ GAZ;
+
+GB10:     . ÷;
