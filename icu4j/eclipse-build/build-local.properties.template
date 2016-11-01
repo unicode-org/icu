@@ -1,0 +1,33 @@
+#*******************************************************************************
+#* Copyright (C) 2014, International Business Machines Corporation and         *
+#* others. All Rights Reserved.                                                *
+#*******************************************************************************
+
+#
+# Eclipse installation location
+# Specify the folder that contains eclipse.exe, for example: eclipse.home=C:/eclipse
+#
+# Note:
+#      By default, this value is set by an environment variable 'ECLIPSE_HOME'.
+#      You could uncomment below and specify the path in this file alternatively (recommended). 
+#
+#eclipse.home=
+
+#
+# Java 5 runtime jar location
+# Specify jar file path(es) including J2SE runtime classes
+#
+# Note: 
+#
+#   [Oracle JDK]   All of J2SE runtime classes are in <JRE dir>/lib/rt.jar
+#
+#   [IBM JDK]      J2SE runtime classes are in multiple jar files. To build ICU4J
+#                  plug-in, you need followings:
+#                      - <JRE dir>/lib/vm.jar
+#                      - <JRE dir>/lib/core.jar
+#                      - <JRE dir>/lib/graphics.jar
+#                      - <JRE dir>/lib/xml.jar
+#
+# For example: java.rt=C:/ibmjava5/jre/lib/vm.jar;C:/ibmjava5/jre/lib/core.jar;C:/ibmjava5/jre/lib/graphics.jar;C:/ibmjava5/jre/lib/xml.jar
+#
+#java.rt=
