@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+
+Name: com/ibm/icu/dev/test
+Specification-Title: ICU for Java Locale Service Provider Tests
+Specification-Version: @SPECVERSION@
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java Locale Service Provider Tests
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: @COPYRIGHT@

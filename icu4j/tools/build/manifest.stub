@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+
+Name: com/ibm/icu/dev/tool/docs
+Specification-Title: ICU for Java Doc Tools
+Specification-Version: @SPECVERSION@
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java Doc Tools
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: @COPYRIGHT@
+
+Name: com/ibm/icu/dev/tool/index
+Specification-Title: ICU for Java Resource Index Generator
+Specification-Version: @SPECVERSION@
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java Resource Index Generator
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: @COPYRIGHT@

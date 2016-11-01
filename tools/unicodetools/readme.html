@@ -1,0 +1,400 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>ICU's Unicode Tools Read Me</title>
+    <meta name="COPYRIGHT" content=
+    "Copyright (c) 2004-2006 IBM Corporation and others. All Rights Reserved." />
+<style>
+<!--
+li           { margin-top: 0.5em; margin-bottom: 0.5em }
+-->
+</style>
+</head>
+
+<body>
+
+<h1>UnicodeTools</h1>
+<p>This file provides instructions for building and running the UnicodeTools, which<br>
+can be used to:</p>
+<ul>
+  <li>build the Derived Unicode files in the UCD (Unicode Character Database),</li>
+  <li>build the transformed UCA (Unicode Collation Algorithm) files needed by ICU.</li>
+  <li>run consistency checks on beta releases of the UCD and the UCA.</li>
+  <li>build 4 chart folders on the unicode site</li>
+</ul>
+<p><font color="#FF0000"><b>WARNING!!</b></font></p>
+<ul>
+  <li>This is NOT production level code, and should never be used in programs.</li>
+  <li>The API is subject to change without notice, and will not be maintained.</li>
+  <li>The source is uncommented, and has many warts; since it is not production code, it has not 
+  been worth the time to clean it up.</li>
+  <li>It will probably not work on Unix or Mac without changing the file separator.</li>
+  <li>Currently it uses hard-coded directory names.</li>
+  <li>The contents of multiple versions of the UCD must be copied to a local directory, as described 
+  below.</li>
+</ul>
+<h2>Instructions:</h2>
+<h3>0. You will need to get ICU4J on your system, using CVS.</h3>
+<p>The rest of this will assume that you have set up CVS so that you load the ICU4J project into 
+C:\ICU4J<br>
+<br>
+You need both the main icu4j and a subproject called unicodetools. See:
+<a href="http://www.ibm.com/software/globalization/icu/repository.jsp">
+http://www.ibm.com/software/globalization/icu/repository.jsp</a>. Inside unicodetools, look at com/ibm/text. The 
+main directories of interest are UCD, UCA and utility.</p>
+<h4>0a. If you are using Eclipse for your IDE, look at the instructions on
+<a href="http://icu.sourceforge.net/docs/eclipse_howto/eclipse_howto.html">
+http://icu.sourceforge.net/docs/eclipse_howto/eclipse_howto.html</a> </h4>
+<p>Set up Eclipse to build two projects: ICU4J and UnicodeTools:<br>
+<br>
+<b>Project Name: </b>ICU4J<br>
+<b>Directory: </b>C:\ICU4J\icu4j<br>
+<b>Default output folder = </b>ICU4J/classes<br>
+<br>
+<b>Project Name: </b>unicodetools<br>
+<b>Create project from existing source: </b>C:\ICU4J\unicodetools<br>
+<b>Default Output Folder: </b>unicodetools/classes<br>
+<br>
+After Eclipse is set up with these, exclude certain files from unicodetools:<br>
+<br>
+Right-Click UnicodeTools &gt; Properties &gt; Java Build Path &gt; Exclusions<br>
+com/ibm/rbm/<br>
+com/ibm/text/utility/UnicodeMapInt.java<br>
+com/ibm/text/utility/TestUtility.java<br>
+com/ibm/text/UCD/GenerateThaiBreaks-old.java/<br>
+com/ibm/text/UCD/ProcessUnihan.java/<br>
+com/ibm/text/UCA/WriteHTMLCollation.java/<br>
+<br>
+UnicodeTools must also include the ICU4J project, with<br>
+<br>
+Right-Click UnicodeTools &gt; Properties &gt; Java Build Path &gt; Projects</p>
+<h3>1. In UCD, you must edit UCD_Types.java at the top, to set the directories for the build:</h3>
+<p>public static final String DATA_DIR = &quot;C:\\DATA\\&quot;;<br>
+public static final String UCD_DIR = BASE_DIR + &quot;UCD\\&quot;;<br>
+public static final String BIN_DIR = DATA_DIR + &quot;BIN\\&quot;;<br>
+public static final String GEN_DIR = DATA_DIR + &quot;GEN\\&quot;;<br>
+<br>
+Make sure that each of these directories exist. Also make sure that the following<br>
+exist:<br>
+<br>
+&lt;GEN_DIR&gt;/DerivedData<br>
+&lt;GEN_DIR&gt;/DerivedData/ExtractedProperties<br>
+&lt;UCD_DIR&gt;/EXTRAS-Update</p>
+<h3>2. Download all of the UnicodeData files for each version into UCD_DIR.</h3>
+<p>The folder names must be of the form: &quot;3.2.0-Update&quot;, so rename the folders on the<br>
+Unicode site to this format. I<span style="background-color: #FFFF00">f the 
+folder contains ucd, then make the contents of that directory be the contents of 
+the x.x.x-Update directory. That is, each directory will directly contain files 
+like PropList....txt</span></p>
+<h4>2a Ensure Complete Release</h4>
+<p>If you are downloading any &quot;incomplete&quot; release (one that does not contain a complete set of data 
+files for that release, you need to also download the previous complete release). Most of the N.M-Update 
+directoriess are complete, *except*:</p>
+<p>4.0-Update, which does not contain a copy of Unihan.txt and some other files<br>
+3.1-Update, which does not contain a copy of BidiMirroring.txt</p>
+<p>Also, make the following changes to UnicodeData for 1.1.5:</p>
+<p><b>Delete</b></p>
+<pre>3400;HANGUL SYLLABLE KIYEOK A;Lo;0;L;1100 1161;;;;N;;;;;
+...
+4DFF;HANGUL SYLLABLE MIEUM WEO RIEUL-THIEUTH;Lo;0;L;1106 116F 11B4;;;;N;;;;;
+4E00;<cjk IDEOGRAPH REPRESENTATIVE>;Lo;0;L;;;;;N;;;;;</pre>
+<p><b>Add:</b></p>
+<pre>4E00;<cjk Ideograph, First>;Lo;0;L;;;;;N;;;;;
+9FA5;<cjk Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+E000;<private Use, First>;Co;0;L;;;;;N;;;;;
+F8FF;<private Use, Last>;Co;0;L;;;;;N;;;;;</pre>
+<p><b>And from a late version of Unicode, add:</b></p>
+<pre>F900;CJK COMPATIBILITY IDEOGRAPH-F900;Lo;0;L;8C48;;;;N;;;;;
+...
+FA2D;CJK COMPATIBILITY IDEOGRAPH-FA2D;Lo;0;L;9DB4;;;;N;;;;;</pre>
+<h4>2b. UCA data</h4>
+<p>If you are building any of the UCA tools, you need to get a copy of the UCA data file<br>
+from http://www.unicode.org/reports/tr10/#AllKeys. The default location for this is:<br>
+<br>
+BASE_DIR + &quot;Collation\allkeys&quot; + VERSION + &quot;.txt&quot;.<br>
+<br>
+If you have it in a different location, change that value for KEYS in UCA.java, and <br>
+the value for BASE_DIR</p>
+<h4>2c. Here is an example of the default directory structure with files. All of 
+the yellow ones should exist</h4>
+<pre>C://DATA/
+
+        BIN/
+    
+<span style="background-color: #FFFF00">        Collation/
+            allkeys-3.1.1.txt
+</span>        
+        GEN/
+            DerivedData/
+<span style="background-color: #FFFF00">        </span><span style="background-color: #FFFF00">UCD/
+            3.0.0-Update/
+                Unihan-3.2.0.txt
+                ...
+            3.0.1-Update/
+                ...
+            3.1.0-Update/
+                ...
+            3.1.1-Update/
+                ...
+            3.2.0-Update/
+                ...
+            4.0.0-Update/
+                ArabicShaping-4.0.0d14b.txt
+                BidiMirroring-4.0.0d1b.txt
+                ...
+            EXTRAS-Update/</span></pre>
+<h3>3. Versions</h3>
+<p>All of the following have &quot;version X&quot; in the options you give to Java (either on the&nbsp; 
+command line, or in the Eclipse 'run' options. If you want a specific version like 3.1.0, then you 
+would write &quot;version 3.1.1&quot;. If you want the latest version (4.1.0), you can omit the &quot;version X&quot;.</p>
+<h3>4. Building Files</h3>
+<ol>
+	<li><b>Setup</b><ol>
+		<li>In Eclipse, open the Package Explorer (Use Window&gt;Show View if you 
+		don't see it)</li>
+		<li>Open UnicodeTools<ul>
+			<li>com.ibm.text.UCD<ul>
+				<li>MakeUnicodeFiles.<span style="background-color: #FFFF00">txt</span><p>This file drives the production of 
+				the derived Unicode files. The first three lines contain 
+				parameters that you may want to modify at some times:</p>
+				<pre>Generate: <b>.*script.*</b> <i>// this is a regular expression. Use .* for all files</i>
+DeltaVersion: <b>10</b> <i>    // This gets appended to the file name. Pick 1+ the highest value in Public</i>
+CopyrightYear: <b>2006</b> <i> // Pick the current year</i></pre>
+				</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Open in Package Explorer 
+		<ul>
+			<li>com.ibm.text.UCD<ul>
+				<li>Main</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Run&gt;Run As...<ol>
+			<li>Choose Java Application<ul>
+				<li>it will fail, don't worry; you need to set some parameters.</li>
+			</ul>
+			</li>
+		</ol>
+		</li>
+		<li>Run&gt;Run...<ul>
+			<li>Select the Arguments tab, and fill in the following<ul>
+				<li>Program arguments:<pre>build 5.0<span style="background-color: #FFFF00">.0</span> MakeUnicodeFiles</pre>
+				</li>
+				<li>VM arguments: 
+				<pre>-Xms512m -Xmx512m</pre>
+				</li>
+			</ul>
+			</li>
+			<li>Close and Save</li>
+		</ul>
+		</li>
+	</ol>
+	</li>
+	<li><b>Run</b><ol>
+		<li>You'll see it build the 5.0 files, with something like the following 
+		results:<pre>Writing UCD_Data5.0.0
+Data Size: 109,802
+Wrote Data 109802</pre>
+		</li>
+		<li>For each version, the tools build a set of binary data in BIN that 
+		contain the information for that release. This is done automatically, or 
+		you can manually do it with the Program Arguments<pre>version X build</pre>
+		<p>This builds an compressed format of all the UCD data (except blocks 
+		and Unihan) into the BIN directory. Don't worry about the voluminous 
+		console messages, unless one says &quot;FAIL&quot;.</p>
+		<p><font color="#FF0000"><i>You have to manually do this if you change 
+		any of the data files in that version!</i></font></p>
+		<p>Note: if for any reason you modify the binary format of the BIN files, you also have to bump the 
+value in that file:</p>
+		<pre>static final byte BINARY_FORMAT = 8; // bumped if binary format of UCD changes</pre>
+		</li>
+	</ol>
+	</li>
+	<li>Results in <a href="file:///C:/DATA/GEN/DerivedData">
+	C:\DATA\GEN\DerivedData</a><ol>
+		<li>The files will be in this directory.</li>
+		<li>There are also DIFF folders, that contain BAT files that you can run 
+		on Windows with CompareIt. (You can modify the code to build BATs with 
+		another Diff program if you want).<ol>
+			<li>For any file with a significant difference, it will build two 
+			BAT files, such as the first two below.<pre>Diff_PropList-5.0.0d10.txt.bat
+OLDER-Diff_PropList-5.0.0d10.txt.bat
+
+UNCHANGED-Diff_PropertyValueAliases-5.0.0d10.txt.bat</pre>
+			</li>
+		</ol>
+		</li>
+		<li>Any files without significant changes will have &quot;UNCHANGED&quot; as a 
+		prefix: ignore them.&nbsp; The OLDER prefix is the comparison to the 
+		last version of Unicode.</li>
+		<li>On Windows you can run these BATs to compare files:</li>
+	</ol>
+	</li>
+	<li><span style="background-color: #FFFF00">NFSkippable</span><ol>
+	<li><span style="background-color: #FFFF00">A file is needed by ICU that is 
+	generated with the same tool. Just use the input parameter &quot;NFSkippable&quot; to 
+	generate the file NFSafeSets.txt, also in </span>
+	<a href="file:///C:/DATA/GEN"><span style="background-color: #FFFF00">
+	file:///C:/DATA/GEN</span></a></li>
+</ol>
+	</li>
+</ol>
+<h3>5. Invariant Checking</h3>
+<ol>
+	<li>Setup<ol>
+		<li>Open in Package Explorer<ul>
+			<li>com.ibm.text.UCD<ul>
+				<li>TestUnicodeInvariants.java</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+		<li>Run&gt;Run As... Java Application<br>
+		Will create the following file of results:<pre><a href="file:///C:/DATA/GEN/UnicodeInvariantResults.txt/">C:\DATA\GEN\UnicodeInvariantResults.txt\</a></pre>
+		<p>And on the console will list whether any problems are found. Thus in 
+		the following case there was one failure:</p>
+		<pre>ParseErrorCount=0
+TestFailureCount=1</pre>
+		</li>
+		<li>The header of the result file explains the syntax of the tests.</li>
+		<li>Open that file and search for &quot;**** START Error Info ****&quot;. Each such 
+		point provides a dump of comparison information.<ol>
+		<li>Failures print a list of differences between two sets being 
+		compared. So if A and B are being compared, it prints all the items in 
+		A-B, then in B-A, then in A&amp;B.</li>
+		<li>For example, here is a listing of a problem that must be corrected. 
+		Note that usually there is a comment that explains what the following 
+		line or lines are supposed to test. Then will come FALSE (indicating 
+		that the test failed), then the detailed error report.<pre><span style="font-size: 9pt"># Canonical decompositions (minus exclusions) must be identical across releases
+[$Decomposition_Type:Canonical - $Full_Composition_Exclusion] = [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion]
+
+FALSE
+**** START Error Info ****
+
+In [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion], but not in [$Decomposition_Type:Canonical - $Full_Composition_Exclusion] :
+
+# Total code points: 0
+
+Not in [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion], but in [$Decomposition_Type:Canonical - $Full_Composition_Exclusion] :
+1B06           # Lo       BALINESE LETTER AKARA TEDUNG
+1B08           # Lo       BALINESE LETTER IKARA TEDUNG
+1B0A           # Lo       BALINESE LETTER UKARA TEDUNG
+1B0C           # Lo       BALINESE LETTER RA REPA TEDUNG
+1B0E           # Lo       BALINESE LETTER LA LENGA TEDUNG
+1B12           # Lo       BALINESE LETTER OKARA TEDUNG
+1B3B           # Mc       BALINESE VOWEL SIGN RA REPA TEDUNG
+1B3D           # Mc       BALINESE VOWEL SIGN LA LENGA TEDUNG
+1B40..1B41     # Mc   [2] BALINESE VOWEL SIGN TALING TEDUNG..BALINESE VOWEL SIGN TALING REPA TEDUNG
+1B43           # Mc       BALINESE VOWEL SIGN PEPET TEDUNG
+
+# Total code points: 11
+
+In both [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion], and in [$Decomposition_Type:Canonical - $Full_Composition_Exclusion] :
+00C0..00C5     # L&amp;   [6] LATIN CAPITAL LETTER A WITH GRAVE..LATIN CAPITAL LETTER A WITH RING ABOVE
+00C7..00CF     # L&amp;   [9] LATIN CAPITAL LETTER C WITH CEDILLA..LATIN CAPITAL LETTER I WITH DIAERESIS
+00D1..00D6     # L&amp;   [6] LATIN CAPITAL LETTER N WITH TILDE..LATIN CAPITAL LETTER O WITH DIAERESIS
+...
+30F7..30FA     # Lo   [4] KATAKANA LETTER VA..KATAKANA LETTER VO
+30FE           # Lm       KATAKANA VOICED ITERATION MARK
+AC00..D7A3     # Lo [11172] HANGUL SYLLABLE GA..HANGUL SYLLABLE HIH
+
+# Total code points: 12089
+**** END Error Info ****</span></pre>
+		</li>
+	</ol>
+		</li>
+		<li>Options:<ol>
+		<li>-r&nbsp;&nbsp;&nbsp; Print the failures as a range list.</li>
+		<li>-fxxx&nbsp;&nbsp;&nbsp; Use a different input file, such as -fInvariantTest.txt</li>
+	</ol>
+		</li>
+	</ol>
+	</li>
+</ol>
+<h3>6. Options</h3>
+<ol>
+	<li>If you want to see files that are opened while processing, do the 
+	following:<ol>
+		<li>Run&gt;Run</li>
+		<li>Select the Arguments tab, and add the following<ol>
+			<li>VM arguments:
+			<pre>-DSHOW_FILES</pre>
+			</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+</ol>
+<h3>5. UCA</h3>
+<ol>
+	<li>You will use com.ibm.text.UCA.Main as your main class, creating along 
+	the same lines as above.</li>
+	<li>To test whether the UCA files are valid, use the
+	<span style="font-weight: 400">options (<i>note: you must also build the ICU 
+	files below, since they test other aspects</i>).</span><pre>writeCollationValidityLog</pre>
+	<p>It will create a file:</p>
+	<pre><a href="file:///C:/DATA/GEN/collation/5.0.0/CheckCollationValidity.html">C:\DATA\GEN\collation\5.0.0\CheckCollationValidity.html</a></pre>
+	<ol>
+		<li>Review this file. It will list errors. Some of those are actually 
+	warnings, and indicate possible problems (this is indicated in the text, 
+	such as by: &quot;These are not necessarily errors, but should be examined for 
+		<i>possible</i> errors&quot;). In those cases, the items should be reviewed to make 
+	sure that there are no inadvertent problems.</li>
+		<li>If it is not so marked, it is a true error, and must be fixed.</li>
+		<li>At the end, there is section <b>11. Coverage</b>. There are two sections:<ol>
+			<li>In UCDxxx, but not in allkeys. Check this over to make sure that these 
+	are all the characters that should get <b><i>implicit</i></b> weights.</li>
+			<li>In allkeys, but not in UCD. These should be <b><i>only</i></b> 
+	contractions. Check them over to make sure they look right also.</li>
+		</ol></li>
+	</ol></li>
+	<li>
+	<h4><span style="font-weight: 400">To build all the charts (including for 
+	the UCA), use the options: </span></h4>
+	<pre>normalizationChart caseChart scriptChart indexChart</pre>
+	<p>They will be built into</p>
+	<pre><a href="file:///C:/DATA/GEN/charts">C:\DATA\GEN\charts</a></pre>
+	<p><b>Once UCA is released, then copy those files up to the right spots in 
+	the Unicode site:</b><ul>
+		<li>
+		<pre><a href="http://www.unicode.org/charts/normalization/">http://www.unicode.org/charts/normalization/</a></pre>
+		</li>
+		<li>
+		<pre><a href="http://www.unicode.org/charts/collation/">http://www.unicode.org/charts/collation/</a> </pre>
+		</li>
+		<li>
+		<pre><a href="http://www.unicode.org/charts/case/">http://www.unicode.org/charts/case/</a> </pre>
+		</li>
+		<li>
+		<pre><a href="http://www.unicode.org/charts/collation/">http://www.unicode.org/charts/collation/</a> </pre>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<h4><span style="font-weight: 400">To build all the UCA files used by ICU, use the 
+	option:</span></h4>
+	<pre>ICU</pre>
+	<p>They will be built into:</p>
+	<pre><a href="file:///C:/DATA/GEN/collation/5.0.0">C:\DATA\GEN\collation\5.0.0</a></pre>
+	</li>
+	<li>You should then build a set of the ICU files for the previous version, 
+	if you don't have them. Use the options:<pre>version 4.1.0 ICU</pre>
+	<p>Or whatever the last version was.</li>
+	<li>Now, you will want to compare versions. The key file is 
+	UCA_Rules_NoCE.txt. It contains the rules expressed in ICU format, which 
+	allows for comparison across versions of UCA without spurious variations of 
+	the numbers getting in the way.<ol>
+		<li>Do a Diff between the last and current versions of these files, and 
+		verify that all the differences are either new characters, or were 
+		authorized to be changed by the UTC.</li>
+	</ol></li>
+</ol>
+
+</body>
+
+</html>
