@@ -1,0 +1,98 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/jgo.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/jgo.xml
+ */
+jgo{
+    Countries{
+        001{"Mbí"}
+        002{"Afɛlîk"}
+        019{"Amɛlîk"}
+        142{"Azî"}
+        150{"Ʉlôp"}
+        AO{"Aŋgɔ́la"}
+        AR{"Ajɛntîn"}
+        BF{"Mbulukína Fásɔ"}
+        BI{"Mbulundí"}
+        BJ{"Mbɛnɛ̂ŋ"}
+        BO{"Mbɔlivî"}
+        BR{"Mbɛlazîl"}
+        BW{"Mbɔtswɑ́nɑ"}
+        CA{"Kanadâ"}
+        CD{"Kɔ́ŋɡɔ-Kinshɑ́sɑ"}
+        CG{"Kɔ́ŋɡɔ-Mbɛlɑzɑvîl"}
+        CH{"Sẅísɛ"}
+        CI{"Kɔ́t Ndivwâ"}
+        CL{"Cíllɛ"}
+        CM{"Kamɛlûn"}
+        CN{"Shîn"}
+        CO{"Kɔllɔmbî"}
+        CU{"Kúba"}
+        DE{"Njáman"}
+        DJ{"Njimbúti"}
+        DZ{"Aljɛlî"}
+        EC{"Ɛkwandɔ̂"}
+        EG{"Ɛjíptɛ"}
+        ER{"Ɛlitɛlɛ́yɑ"}
+        ES{"Ɛspániya"}
+        ET{"Ɛtiyɔpî"}
+        FR{"Fɛlánci"}
+        GA{"Ŋɡɑbɔ̂ŋ"}
+        GH{"Ŋgána"}
+        GM{"Ŋgambî"}
+        GN{"Ŋginɛ̂"}
+        GQ{"Ŋɡinɛ̂ Ɛkwɑtɔliyɑ̂l"}
+        GR{"Ŋgɛlɛ̂k"}
+        GW{"Ŋginɛ̂ Mbisáwu"}
+        IL{"Islɑyɛ̂l"}
+        IN{"Ándɛ"}
+        IQ{"Ilɑ̂k"}
+        IT{"Italî"}
+        JP{"Japɔ̂n"}
+        KE{"Kɛ́nyɑ"}
+        KM{"Kɔmɔ́lɔshi"}
+        LR{"Libɛrî"}
+        LS{"Lɛsɔ́tɔ"}
+        LY{"Libî"}
+        MA{"Mɔlɔ̂k"}
+        MG{"Mɑ́ndɑŋɡɑsɛkɑ̂"}
+        ML{"Malî"}
+        MR{"Mɔlitanî"}
+        MW{"Mɑlɑ́wi"}
+        MX{"Mɛksîk"}
+        MZ{"Mɔzɑmbîk"}
+        NA{"Namimbî"}
+        NE{"Nijɛ̂"}
+        NG{"Ninjɛliyâ"}
+        NO{"Nɔlɛvɛ́jɛ"}
+        PE{"Pɛlû"}
+        RE{"Lɛ́uniyɔ̂n"}
+        RS{"Sɛlɛbî"}
+        RU{"Lusî"}
+        RW{"Luwɑ́ndɑ"}
+        SC{"Pɛsɛ́shɛl"}
+        SD{"Sundân"}
+        SL{"Siyɛ́la Lɛɔ̂n"}
+        SN{"Sɛnɛgâl"}
+        SO{"Sɔmɑlî"}
+        ST{"Sɑ́wɔŋ Tɔmɛ́ nɛ́ Pɛlínsipɛ"}
+        SZ{"Swɑzilɑ̂n"}
+        TD{"Cɑ̂t"}
+        TG{"Tɔ́ŋgɔ"}
+        TN{"Tunizî"}
+        TZ{"Tɑnzɑnî"}
+        UG{"Uŋɡɑ́ndɑ"}
+        VE{"Vɛnɛzwɛ́la"}
+        YT{"Mɑyɔ̂t"}
+        ZM{"Zɑmbî"}
+        ZW{"Zimbɑ́mbwɛ"}
+        ZZ{"ŋgɔŋ yi pɛ́ ká kɛ́ jʉɔ"}
+    }
+    Version{"2.0.82.45"}
+}

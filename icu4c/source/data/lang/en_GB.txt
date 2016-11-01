@@ -1,0 +1,29 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/en_GB.xml
+// *
+// ***************************************************************************
+en_GB{
+    Languages{
+        arn{"Araucanian"}
+        bax{"Bamum"}
+        en_US{"US English"}
+        tzm{"Central Morocco Tamazight"}
+        wal{"Walamo"}
+    }
+    Scripts{
+        Thai{"Thai"}
+    }
+    Types{
+        numbers{
+            fullwide{"Full-Width Digits"}
+        }
+    }
+    Version{"2.0.82.45"}
+    localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
+    }
+}
