@@ -1,0 +1,129 @@
+<!--
+/*
+*******************************************************************************
+* Copyright (C) 2006-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+* This is the ant build file for ICU tools.
+*/
+-->
+<project name="release-tools" default="tools" basedir="." >
+    <target name="init">
+        <tstamp/>
+        <property name="src.dir" value="src"/>
+        <property name="lib.dir" value="lib"/>
+        <property name="build.dir" value="classes"/>
+        <property file="api-report.properties" />
+
+        <mkdir dir="${build.dir}"/>
+        <echo message="java home: ${java.home}"/>
+        <echo message="java version: ${java.version}"/>
+        <echo message="java vendor: ${java.vm.vendor}"/>
+        <echo message="ant java version: ${ant.java.version}"/>
+        <echo message="${ant.version}"/>
+        <echo message="${basedir}"/>
+    </target>
+
+    <target name="tools"  depends="init" description="compile release tools">
+        <javac includeantruntime="false" includes="**/*.java"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            source="1.5"
+            debug="on" deprecation="off"
+            encoding="ascii"/>
+    </target>
+
+    <target name="clean" depends="init" description="remove all build targets">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="apireport" depends="tools">
+        <java classname="com.ibm.icu.dev.tools.docs.StableAPI" fork="yes" failonerror="true">
+
+<!--
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "4.6"/>
+-->
+
+            <arg value = "--olddir"/>
+            <arg value = "${olddir}"/>
+
+<!--
+	!! Only need these if you must override. Remove the DELETEME
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "${newver}"/>
+-->
+
+            <arg value = "--newdir"/>
+            <arg value = "${newdir}"/>
+
+            <arg value = "--cppxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc.xslt"/>
+
+            <arg value = "--cxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc.xslt"/>
+
+            <arg value = "--reportxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/genReport.xslt"/>
+
+            <arg value = "--resultfile"/>
+            <arg value = "${basedir}/APIChangeReport.html"/>
+
+            <classpath>
+                <pathelement location="${build.dir}"/>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="${lib.dir}/xalan.jar"/>
+		<fileset dir="${lib.dir}"/>
+                <pathelement location="${lib.dir}/xercesImpl.jar"/>
+                <pathelement path="."/>
+            </classpath>
+        </java>
+    </target>
+    <target name="apireport_xml" depends="tools">
+        <java classname="com.ibm.icu.dev.tools.docs.StableAPI" fork="yes" failonerror="true">
+
+<!--
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "4.4.1"/>
+
+-->
+
+<!--
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "4.6"/>
+-->
+
+            <arg value = "--olddir"/>
+            <arg value = "${olddir}"/>
+
+<!--
+	!! Only need these if you must override. Remove the DELETEME
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "${newver}"/>
+-->
+
+            <arg value = "--newdir"/>
+            <arg value = "${newdir}"/>
+
+            <arg value = "--cppxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt"/>
+
+            <arg value = "--cxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc_xml.xslt"/>
+
+            <arg value = "--reportxslt"/>
+            <arg value = "${basedir}/src/com/ibm/icu/dev/tools/docs/genreport_xml.xslt"/>
+
+            <arg value = "--resultfile"/>
+            <arg value = "${basedir}/APIChangeReport.xml"/>
+
+            <classpath>
+                <pathelement location="${build.dir}"/>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement location="${lib.dir}/xalan.jar"/>
+                <pathelement location="${lib.dir}/xercesImpl.jar"/>
+                <pathelement path="."/>
+            </classpath>
+        </java>
+    </target>
+</project>
