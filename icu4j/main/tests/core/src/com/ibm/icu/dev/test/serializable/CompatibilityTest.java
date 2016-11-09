@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 /*
  *******************************************************************************
- * Copyright (C) 1996-2015, International Business Machines Corporation and
+ * Copyright (C) 1996-2016, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  *
@@ -15,6 +15,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -95,9 +96,23 @@ public class CompatibilityTest extends TestFmwk
         }
     }
 
+    /**
+     * The path to an actual data resource file in the JAR. This is needed because when the
+     * code is packaged for Android the resulting archive does not have entries for directories
+     * and so only actual resources can be found.
+     */
+    private static final String ACTUAL_RESOURCE = "/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat";
+
     @SuppressWarnings("unused")
     private List<FileHolder> generateClassList() throws IOException {
-        URL dataURL = getClass().getResource("data");
+        // Get the URL to an actual resource and then compute the URL to the directory just in
+        // case the resources are in a JAR file that doesn't have entries for directories.
+        URL dataURL = getClass().getResource("data" + ACTUAL_RESOURCE);
+        try {
+            dataURL = new URL(dataURL.toExternalForm().replace(ACTUAL_RESOURCE, ""));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
         String protocol = dataURL.getProtocol();
 
         if (protocol.equals("jar")) {
@@ -152,6 +167,8 @@ public class CompatibilityTest extends TestFmwk
 
         JarFile jarFile = null;
         try {
+            // Need to trim the directory off the JAR entry before opening the connection otherwise
+            // it could fail as it will try and find the entry within the JAR which may not exist.
             String urlAsString = jarURL.toExternalForm();
             ix = urlAsString.indexOf("!/");
             jarURL = new URL(urlAsString.substring(0, ix + 2));
