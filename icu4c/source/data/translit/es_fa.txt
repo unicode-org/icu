@@ -1,0 +1,22 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2016, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: es_fa.txt
+# Generated from CLDR 
+#
+
+$Boundary =  [^[:L:][:M:][:N:]];
+$Vowel = [i e o u a];
+::es-es_FONIPA;
+# In Farsi transcription of Spanish, un-stressed [e] should be treated
+# like [ə] which gets stripped off.  However, we currently do have not
+# have a good way of finding stress in Spanish words.  In the long term,
+# it would be _much_ better to look at stress markers, but for now
+# we do this trivial heuristics to find unstressed [e] in the first
+# syllable.
+$Boundary [^Vowel] {e} [^$Vowel]* $Vowel → ə;
+::und_FONIPA-fa;
+

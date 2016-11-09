@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>ARABIC</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>&#x0633;&#x0646;&#x0648;&#x0627;&#x062a;</pluralName>
+            <pluralName>&#x0633;&#x0646;&#x0629;</pluralName>
+            <pluralName>&#x0633;&#x0646;&#x062a;&#x064a;&#x0646;</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>&#x0634;&#x0647;&#x0648;&#x0631;</pluralName>
+            <pluralName>&#x0634;&#x0647;&#x0631;</pluralName>
+            <pluralName>&#x0634;&#x0647;&#x0631;&#x064a;&#x0646;</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>&#x0623;&#x0633;&#x0627;&#x0628;&#x064a;&#x0639;</pluralName>
+            <pluralName>&#x0623;&#x0633;&#x0628;&#x0648;&#x0639;</pluralName>
+            <pluralName>&#x0623;&#x0633;&#x0628;&#x0648;&#x0639;&#x064a;&#x0646;</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>&#x0623;&#x064a;&#x0627;&#x0645;</pluralName>
+            <pluralName>&#x064a;&#x0648;&#x0645;</pluralName>
+            <pluralName>&#x064a;&#x0648;&#x0645;&#x064a;&#x0646;</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>&#x0633;&#x0627;&#x0639;&#x0627;&#x062a;</pluralName>
+            <pluralName>&#x0633;&#x0627;&#x0639;&#x0629;</pluralName>
+            <pluralName>&#x0633;&#x0627;&#x0639;&#x062a;&#x064a;&#x0646;</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>&#x062f;&#x0642;&#x0627;&#x0626;&#x0642;</pluralName>
+            <pluralName>&#x062f;&#x0642;&#x064a;&#x0642;&#x0629;</pluralName>
+            <pluralName>&#x062f;&#x0642;&#x064a;&#x0642;&#x062a;&#x064a;&#x0646;</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>&#x062b;&#x0648;&#x0627;&#x0646;&#x064a;</pluralName>
+            <pluralName>&#x062b;&#x0627;&#x0646;&#x064a;&#x0629;</pluralName>
+            <pluralName>&#x062b;&#x0627;&#x0646;&#x064a;&#x062a;&#x064a;&#x0646;</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>&#x0623;&#x062c;&#x0632;&#x0627;&#x0621; &#x0645;&#x0646; &#x0627;&#x0644;&#x062b;&#x0627;&#x0646;&#x064a;&#x0629;</pluralName>
+            <pluralName>&#x062c;&#x0632;&#x0621; &#x0645;&#x0646; &#x0627;&#x0644;&#x062b;&#x0627;&#x0646;&#x064a;&#x0629;</pluralName>
+            <pluralName>&#x062c;&#x0632;&#x0626;&#x064a;&#x0646; &#x0645;&#x0646; &#x0627;&#x0644;&#x062b;&#x0627;&#x0646;&#x064a;&#x0629;</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <halvesList>
+        <halves>&#x0646;&#x0635;&#x0641;</halves>
+        <halves> &#x0648;&#x0646;&#x0635;&#x0641;</halves>
+    </halvesList>
+    <halfPlacementList>
+        <halfPlacement>PREFIX</halfPlacement>
+        <halfPlacement>LAST</halfPlacement>
+    </halfPlacementList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep> </countSep>
+    <shortUnitSep> </shortUnitSep>
+    <unitSepList>
+        <unitSep>&#x060c; &#x0648;</unitSep>
+        <unitSep>&#x060c; &#x0648;</unitSep>
+        <unitSep>&#x060c; &#x0648;</unitSep>
+        <unitSep> &#x0648;</unitSep>
+    </unitSepList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>&#x0660;</zero>
+    <decimalSep>&#x066b;</decimalSep>
+    <omitSingularCount>true</omitSingularCount>
+    <omitDualCount>true</omitDualCount>
+    <decimalHandling>DSINGULAR</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>&#x0645;&#x0646;&#x0630; </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> &#x0628;&#x0639;&#x062f; &#x0627;&#x0644;&#x0622;&#x0646;</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>&#x0623;&#x0642;&#x0644; &#x0645;&#x0646; </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>&#x0645;&#x0646;&#x0630; &#x0623;&#x0642;&#x0644; &#x0645;&#x0646; </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>&#x0623;&#x0642;&#x0644; &#x0645;&#x0646; </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> &#x0628;&#x0639;&#x062f; &#x0627;&#x0644;&#x0622;&#x0646;</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>&#x0623;&#x0643;&#x062b;&#x0631; &#x0645;&#x0646; </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>&#x0645;&#x0646;&#x0630; &#x0623;&#x0643;&#x062b;&#x0631; &#x0645;&#x0646; </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>&#x0623;&#x0643;&#x062b;&#x0631; &#x0645;&#x0646; </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix> &#x0628;&#x0639;&#x062f; &#x0627;&#x0644;&#x0622;&#x0646;</suffix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>

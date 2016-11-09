@@ -1,0 +1,13 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2016, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: ky_ar.txt
+# Generated from CLDR 
+#
+
+::ky-ky_FONIPA;
+::und_FONIPA-ar;
+

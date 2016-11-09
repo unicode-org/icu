@@ -1,0 +1,55 @@
+<!--
+*******************************************************************************
+* Copyright (C) 2009-2015, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+-->
+<project name="build-tools" default="build" basedir=".">
+    <property file="build-local.properties"/>
+    <property file="build.properties"/>
+
+    <!-- before importing common-targets.xml -->
+    <condition property="alt.src.dir" value="out/tmp-src8">
+        <equals arg1="${ant.java.version}" arg2="1.8"/>
+    </condition>
+
+    <condition property="src.dir" value="${alt.src.dir}">
+        <isset property="alt.src.dir"/>
+    </condition>
+
+    <import file="${shared.dir}/build/common-targets.xml"/>
+
+    <path id="javac.classpathref">
+        <path refid="javac.classpathref.${ant.project.name}"/>
+    </path>
+    <property name="jar.name" value="icu4j-${ant.project.name}.jar"/>
+    <property name="src.jar.name" value="icu4j-${ant.project.name}-src.jar"/>
+
+    <target name="build" depends="compile, copy, jar" description="Build the project"/>
+
+    <target name="build-all" depends="@build-all" description="Build the project including all dependencies"/>
+
+    <target name="clean" depends="@clean" description="Clean up the build outputs"/>
+
+    <target name="compile" depends="copy-src-jdk8, @compile" description="Compile java source files"/>
+
+    <target name="copy" depends="@copy" description="Copy non-java runtime files to the project's binary directory"/>
+
+    <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
+
+    <target name="src-jar" depends="copy-src-jdk8, @src-jar" description="Create the project's source jar file"/>
+
+    <!-- Override a source file for supporting JDK 8 JavaDoc -->
+    <target name="copy-src-jdk8" if="alt.src.dir">
+        <echo message="Building ICU4J build tools with JDK8 tools..."/>
+        <mkdir dir="${alt.src.dir}"/>
+        <!-- copy all files under 'src' -->
+        <copy todir="${alt.src.dir}">
+            <fileset dir="src"/>
+        </copy>
+        <!-- overwrite jdk8 specific source file -->
+        <copy todir="${alt.src.dir}" overwrite="yes">
+            <fileset dir="src8"/>
+        </copy>
+    </target>
+</project>

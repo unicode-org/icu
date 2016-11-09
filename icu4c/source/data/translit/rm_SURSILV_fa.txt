@@ -1,0 +1,13 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2016, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: rm_SURSILV_fa.txt
+# Generated from CLDR 
+#
+
+::rm_SURSILV-rm_FONIPA_SURSILV;
+::und_FONIPA-fa;
+
