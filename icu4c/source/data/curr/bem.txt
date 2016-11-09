@@ -1,0 +1,24 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/bem.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/bem.xml
+ */
+bem{
+    Currencies{
+        ZMK{
+            "K",
+            "ZMK",
+        }
+        ZMW{
+            "KR",
+            "ZMW",
+        }
+    }
+    Version{"2.0.82.45"}
+}

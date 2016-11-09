@@ -1,0 +1,154 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="COPYRIGHT" content="Copyright 2006-2007, International Business Machines Corporation and others. All Rights Reserved.">
+<title>New Transliteration Test Files</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h2>New Transliteration Test Files</h2>
+<p>The Test_*.html files show the transliteration of characters for given
+languages. The sample for each language consists of &quot;What Is Unicode&quot;
+in Thai, followed by other available text. The text is broken apart into
+sentences for ease of viewing (note: we know of some problems with the sentence
+rules for Japanese and Chinese). The left column is the original, and the right
+is the romanization. The program also converts back to the original script. If
+there is a discrepancy between the source and the reverse transformation, that
+is indicated by making the background <font color="#FF0000"><b>red</b></font>
+from that point on.</p>
+<blockquote>
+  <p><i><b>Note: </b>If you have some more text that you would like added to the
+  sample, just let me know. I am particularly interested in name lists, since
+  they are the typical source.</i></p>
+</blockquote>
+<h3>Standards</h3>
+<p>The goal is to follow a given standard, such as ISO* or UNGEGN wherever
+possible. We also need to round-trip, so in some cases, that means adding some
+additional accent marks to disambiguate characters. And often the source
+standards are missing some characters, such as characters with combining Hamzas
+in Arabic. Remember that the goal for these is transliteration (unambiguously
+representing all the letters in the original), not transcription (representing
+the best pronunciation).</p>
+<ul>
+  <li><b><a href="Test_Thai-Latin.html">Thai</a>:</b> ISO 11940 &lt; <a href="http://homepage.mac.com/sirbinks/pdf/Thai.r2.pdf">http://homepage.mac.com/sirbinks/pdf/Thai.r2.pdf</a>
+    &gt; plus a few items:
+    <ul>
+      <li>Accents may be added to the Latin for disambiguation.</li>
+      <li>In the next release, we'd like to do the UNGEGN version &lt; <a href="http://www.eki.ee/wgrs/rom1_th.pdf">http://www.eki.ee/wgrs/rom1_th.pdf</a>
+        &gt; which is probably more useful (and readable), and follows more
+        closely the Thai standard.</li>
+      <li>Spaces are provided at word-breaks, using the Thai BreakIterator.</li>
+      <li>An inherent vowel (&#7885;) is added, as in UNGEGN. The dot is for
+        disambiguation.
+        <ul>
+          <li><i>Note: if the inherent vowel positions cannot be algorithmically
+            determined, let me know and I will remove them.</i></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><b><a href="Test_Arabic-Latin.html">Arabic</a>: </b>Generally follows
+    UNGEGN &lt; <a href="http://www.eki.ee/wgrs/rom1_ar.pdf">http://www.eki.ee/wgrs/rom1_ar.pdf</a>
+    &gt;
+    <ul>
+      <li>Accents may be added to the Latin for disambiguation.</li>
+      <li>Occasionally deviates in the direction of ISO 233 &lt; <a href="http://homepage.mac.com/sirbinks/pdf/Arabic.pdf">http://homepage.mac.com/sirbinks/pdf/Arabic.pdf</a>
+        &gt;
+        <ul>
+          <li>with underdot instead of cedilla for letter like SAD, since those
+            are explicitly in Unicode for transliteration of Arabic</li>
+          <li>adding extra non-Arabic-language letters, like PEH. Note: not all
+            extended Arabic characters are handled yet.</li>
+        </ul>
+      </li>
+      <li>Does <i>not</i> do assimilation of &quot;al&quot;, nor hyphenation of
+        it.
+        <ul>
+          <li>While it could be done, we need to determine whether a prefix
+            &quot;al&quot; could occur other than as the definite article (since
+            no space is used).</li>
+        </ul>
+      </li>
+      <li>This is transliteration. For <i>transcription</i> one would want an
+        engine that added points appropriately to the Hebrew.</li>
+    </ul>
+  </li>
+  <li><b><a href="Test_Hebrew-Latin.html">Hebrew</a></b><b>: </b>Generally
+    follows UNGEGN &lt; <a href="http://www.eki.ee/wgrs/rom1_he.pdf">http://www.eki.ee/wgrs/rom1_he.pdf</a>
+    &gt;, with some exceptions:
+    <ul>
+      <li>Accents may be added to the Latin for disambiguation.</li>
+      <li>Combinations of dagesh, shin/sin dot that would produce different
+        letters are not yet called out.</li>
+      <li>Note that the final forms are not preserved. Thus, when going from
+        Latin to Hebrew, a character is given final form depending on its
+        position.
+        <ul>
+          <li>E.g. &#1502;&#1501;&#1502;&#1501; =&gt; mmmm =&gt;
+            &#1502;&#1502;&#1502;&#1501;</li>
+        </ul>
+      </li>
+      <li>This is transliteration. For <i>transcription</i> one would want an
+        engine that added points appropriately to the Hebrew.</li>
+      <li>See also &lt; <a href="http://homepage.mac.com/sirbinks/pdf/Hebrew.r1.pdf">http://homepage.mac.com/sirbinks/pdf/Hebrew.r1.pdf</a>
+        &gt; for the ISO version. The Chicago Manual of Style has a clear table
+        of mappings for the vowel marks.</li>
+    </ul>
+  </li>
+  <li><b><a href="Test_Han-Latin.html">Han</a>:</b> Uses the <a href="http://www.mandarintools.com/cedict.html">CEDICT</a>
+    data plus Unicode Unihan <i>kMandarin</i> values for pinyin. Doesn't
+    roundtrip!
+    <ul>
+      <li><i>Note: </i>the Chinese pronunciation of Han characters varies by
+        context and grammar, though nowhere near as much a Japanese.
+        <ul>
+          <li>Ideally we'd have an underlying engine for this. In 2.4 we will
+            have a plug-in interface so that people could add one, such as the
+            IBM engine.</li>
+          <li>The data from CEDICT and Unihan don't list the most frequent
+            choice first, so we will be updating that.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="Test_Greek-Latin_UNGEGN.html"><b>Greek/UNGEGN</b></a>: Uses a
+    modern Greek transliteration, based on the UNGEGN rules at &lt; <a href="http://www.eki.ee/wgrs/rom1_el.pdf">http://www.eki.ee/wgrs/rom1_el.pdf</a>
+    &gt;. This version will not roundtrip ancient Greek.</li>
+  <li><a href="Test_Greek-Latin.html"><b>Greek</b></a>: Uses a classic Greek
+    transliteration. This version will not roundtrip modern Greek.</li>
+</ul>
+<h3><b>Notes</b></h3>
+<ol>
+  <li>For readability, the files have a few other things besides just the
+    transliteration:
+    <ul>
+      <li>The first word of the sentences are titlecased, as are names (where we
+        have a name-list, such as in Thai).</li>
+      <li>The Latin in the original is mapped to the private-use zone before
+        conversion, and then again after conversion. This does have the downside
+        that any rules (such as in Han) that need to know the context (e.g. for
+        inserting spaces or capitalization) will gum up a little bit. This is
+        just an artifact of the test display.</li>
+    </ul>
+  </li>
+  <li>I don't think that ISO 11940 is a particularly good way to romanize, but
+    it is at least complete and a standard. So what I am interested in just for
+    now is whether the samples in the file follow it (with the above
+    exceptions).</li>
+  <li>Some of the files also have a set of characters at the end, one character
+    per row, with a following row listing the hex and name.</li>
+  <li>The source rules for all of these is in the following URL. So if you want
+    to know the details of how the characters are handled, that is the place to
+    look.
+    <ul>
+      <li><a href="http://source.icu-project.org/repos/icu/icu/trunk/source/data/translit/">http://source.icu-project.org/repos/icu/icu/trunk/source/data/translit/</a></li>
+    </ul>
+  </li>
+</ol>
+
+</body>
+
+</html>

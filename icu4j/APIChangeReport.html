@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4J API Comparison: ICU4J 50.1 with ICU4J 51.1</title>
+<!-- Copyright 2013, IBM, All Rights Reserved. -->
+</head>
+<body>
+<h1>ICU4J API Comparison: ICU4J 50.1 with ICU4J 51.1</h1>
+
+<hr/>
+<h2>Removed from ICU4J 50.1</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+TimeZoneFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String <i>formatOffsetISO8601</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String <i>formatOffsetRFC822</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public final int <i>parseOffsetRFC822</i>(java.lang.String, java.text.ParsePosition)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Deprecated or Obsoleted in ICU4J 51.1</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+CurrencyMetaInfo.CurrencyInfo
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public <i>CurrencyMetaInfo.CurrencyInfo</i>(java.lang.String, java.lang.String, long, long, int)</li>
+</ul>
+SpoofChecker.CheckResult
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public int position</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+LocaleData
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final int ES_CURRENCY</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Changed in ICU4J 51.1 (old, new)</h2>
+<p>(no API changed)</p>
+
+<hr/>
+<h2>Promoted to stable in ICU4J 51.1</h2>
+
+<h3>Package com.ibm.icu.charset</h3>
+<ul>
+CharsetEncoderICU
+<ul>
+<li><span style='color:green'>(stable)</span> public static int <i>getMaxBytesForString</i>(int, int)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UScript
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int <i>getScriptExtensions</i>(int, java.util.BitSet)</li>
+<li><span style='color:green'>(stable)</span> public static final boolean <i>hasScript</i>(int, int)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:green'>(stable)</span> public class <i>CompactDecimalFormat</i></li>
+<li><span style='color:green'>(stable)</span> public final class <i>MessagePatternUtil</i></li>
+<li><span style='color:green'>(stable)</span> public static class <i>MessagePatternUtil.ArgNode</i></li>
+<li><span style='color:green'>(stable)</span> public static class <i>MessagePatternUtil.ComplexArgStyleNode</i></li>
+<li><span style='color:green'>(stable)</span> public static class <i>MessagePatternUtil.MessageContentsNode</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>MessagePatternUtil.MessageContentsNode.Type</i></li>
+<li><span style='color:green'>(stable)</span> public static class <i>MessagePatternUtil.MessageNode</i></li>
+<li><span style='color:green'>(stable)</span> public static class <i>MessagePatternUtil.Node</i></li>
+<li><span style='color:green'>(stable)</span> public static class <i>MessagePatternUtil.TextNode</i></li>
+<li><span style='color:green'>(stable)</span> public static class <i>MessagePatternUtil.VariantNode</i></li>
+CurrencyDisplayNames
+<ul>
+<li><span style='color:green'>(stable)</span> public static CurrencyDisplayNames <i>getInstance</i>(ULocale, boolean)</li>
+<li><span style='color:green'>(stable)</span> public abstract ULocale <i>getULocale</i>()</li>
+</ul>
+CurrencyMetaInfo
+<ul>
+<li><span style='color:green'>(stable)</span> public static CurrencyMetaInfo <i>getInstance</i>(boolean)</li>
+</ul>
+CurrencyMetaInfo.CurrencyDigits
+<ul>
+<li><span style='color:green'>(stable)</span> public final int fractionDigits</li>
+<li><span style='color:green'>(stable)</span> public final int roundingIncrement</li>
+</ul>
+CurrencyMetaInfo.CurrencyFilter
+<ul>
+<li><span style='color:green'>(stable)</span> public static CurrencyMetaInfo.CurrencyFilter <i>onDateRange</i>(java.util.Date, java.util.Date)</li>
+<li><span style='color:green'>(stable)</span> public CurrencyMetaInfo.CurrencyFilter <i>withDateRange</i>(java.util.Date, java.util.Date)</li>
+</ul>
+CurrencyMetaInfo.CurrencyInfo
+<ul>
+<li><span style='color:green'>(stable)</span> public final int priority</li>
+</ul>
+DateFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int YEAR_NAME_FIELD</li>
+</ul>
+DecimalFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public CurrencyAmount <i>parseCurrency</i>(java.lang.CharSequence, java.text.ParsePosition)</li>
+</ul>
+FilteredNormalizer2
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>composePair</i>(int, int)</li>
+<li><span style='color:green'>(stable)</span> public int <i>getCombiningClass</i>(int)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getRawDecomposition</i>(int)</li>
+</ul>
+IDNA
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int CHECK_CONTEXTO</li>
+</ul>
+Normalizer2
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>composePair</i>(int, int)</li>
+<li><span style='color:green'>(stable)</span> public int <i>getCombiningClass</i>(int)</li>
+<li><span style='color:green'>(stable)</span> public static Normalizer2 <i>getNFCInstance</i>()</li>
+<li><span style='color:green'>(stable)</span> public static Normalizer2 <i>getNFDInstance</i>()</li>
+<li><span style='color:green'>(stable)</span> public static Normalizer2 <i>getNFKCCasefoldInstance</i>()</li>
+<li><span style='color:green'>(stable)</span> public static Normalizer2 <i>getNFKCInstance</i>()</li>
+<li><span style='color:green'>(stable)</span> public static Normalizer2 <i>getNFKDInstance</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getRawDecomposition</i>(int)</li>
+</ul>
+NumberFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public CurrencyAmount <i>parseCurrency</i>(java.lang.CharSequence, java.text.ParsePosition)</li>
+</ul>
+RuleBasedNumberFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public void <i>setDecimalFormatSymbols</i>(DecimalFormatSymbols)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Calendar
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int WALLTIME_FIRST</li>
+<li><span style='color:green'>(stable)</span> public static final int WALLTIME_LAST</li>
+<li><span style='color:green'>(stable)</span> public static final int WALLTIME_NEXT_VALID</li>
+<li><span style='color:green'>(stable)</span> public int <i>getRepeatedWallTimeOption</i>()</li>
+<li><span style='color:green'>(stable)</span> public int <i>getSkippedWallTimeOption</i>()</li>
+<li><span style='color:green'>(stable)</span> public void <i>setRepeatedWallTimeOption</i>(int)</li>
+<li><span style='color:green'>(stable)</span> public void <i>setSkippedWallTimeOption</i>(int)</li>
+</ul>
+LocaleData
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int ES_PUNCTUATION</li>
+</ul>
+RuleBasedTimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public TimeZone <i>cloneAsThawed</i>()</li>
+<li><span style='color:green'>(stable)</span> public TimeZone <i>freeze</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>isFrozen</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>observesDaylightTime</i>()</li>
+</ul>
+SimpleTimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public TimeZone <i>cloneAsThawed</i>()</li>
+<li><span style='color:green'>(stable)</span> public TimeZone <i>freeze</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>isFrozen</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>observesDaylightTime</i>()</li>
+</ul>
+TimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public static final TimeZone GMT_ZONE</li>
+<li><span style='color:green'>(stable)</span> public static final TimeZone UNKNOWN_ZONE</li>
+<li><span style='color:green'>(stable)</span> public TimeZone <i>cloneAsThawed</i>()</li>
+<li><span style='color:green'>(stable)</span> public TimeZone <i>freeze</i>()</li>
+<li><span style='color:green'>(stable)</span> public static TimeZone <i>getFrozenTimeZone</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>isFrozen</i>()</li>
+</ul>
+VTimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public TimeZone <i>cloneAsThawed</i>()</li>
+<li><span style='color:green'>(stable)</span> public TimeZone <i>freeze</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>isFrozen</i>()</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>observesDaylightTime</i>()</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 51.1</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final class <i>UScript.ScriptUsage</i></li>
+UScript
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final boolean <i>breaksBetweenLetters</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String <i>getSampleString</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public static final UScript.ScriptUsage <i>getUsage</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public static final boolean <i>isCased</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public static final boolean <i>isRightToLeft</i>(int)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final class <i>AlphabeticIndex.ImmutableIndex</i></li>
+<li><span style='color:orange'>(draft)</span> public final class <i>DisplayContext</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>DisplayContext.Type</i></li>
+AlphabeticIndex
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>AlphabeticIndex</i>(RuleBasedCollator)</li>
+<li><span style='color:orange'>(draft)</span> public AlphabeticIndex.ImmutableIndex<V> <i>buildImmutableIndex</i>()</li>
+</ul>
+CompactDecimalFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public boolean <i>equals</i>(java.lang.Object)</li>
+</ul>
+CurrencyMetaInfo.CurrencyFilter
+<ul>
+<li><span style='color:orange'>(draft)</span> public static CurrencyMetaInfo.CurrencyFilter <i>onDate</i>(long)</li>
+<li><span style='color:orange'>(draft)</span> public static CurrencyMetaInfo.CurrencyFilter <i>onDateRange</i>(long, long)</li>
+<li><span style='color:orange'>(draft)</span> public static CurrencyMetaInfo.CurrencyFilter <i>onTender</i>()</li>
+<li><span style='color:orange'>(draft)</span> public CurrencyMetaInfo.CurrencyFilter <i>withDate</i>(long)</li>
+<li><span style='color:orange'>(draft)</span> public CurrencyMetaInfo.CurrencyFilter <i>withDateRange</i>(long, long)</li>
+<li><span style='color:orange'>(draft)</span> public CurrencyMetaInfo.CurrencyFilter <i>withTender</i>()</li>
+</ul>
+CurrencyMetaInfo.CurrencyInfo
+<ul>
+<li><span style='color:orange'>(draft)</span> public boolean <i>isTender</i>()</li>
+</ul>
+DateFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int TIMEZONE_ISO_FIELD</li>
+<li><span style='color:orange'>(draft)</span> public static final int TIMEZONE_ISO_LOCAL_FIELD</li>
+<li><span style='color:orange'>(draft)</span> public static final int TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD</li>
+</ul>
+DateFormatSymbols
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int SHORT</li>
+</ul>
+DecimalFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public int <i>getParseMaxDigits</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setParseMaxDigits</i>(int)</li>
+</ul>
+LocaleDisplayNames
+<ul>
+<li><span style='color:orange'>(draft)</span> public abstract DisplayContext <i>getContext</i>(DisplayContext.Type)</li>
+<li><span style='color:orange'>(draft)</span> public static LocaleDisplayNames <i>getInstance</i>(ULocale, DisplayContext...)</li>
+</ul>
+SimpleDateFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public DisplayContext <i>getContext</i>(DisplayContext.Type)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setContext</i>(DisplayContext)</li>
+</ul>
+TimeZoneFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String <i>formatOffsetISO8601Basic</i>(int, boolean, boolean, boolean)</li>
+<li><span style='color:orange'>(draft)</span> public final java.lang.String <i>formatOffsetISO8601Extended</i>(int, boolean, boolean, boolean)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>formatOffsetShortLocalizedGMT</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public int <i>parseOffsetShortLocalizedGMT</i>(java.lang.String, java.text.ParsePosition)</li>
+</ul>
+</ul>
+
+<hr/>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Mar 05 00:09:35 EST 2013<br/>Copyright (C) 2013, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+</body>
+</html>
