@@ -1,0 +1,20 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2012, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: Han_Latin_Names.txt
+# Generated from CLDR 
+#
+::Han-Spacedhan();
+长→cháng;
+葛→gě;
+贾→jǐa;
+賈→jǐa;
+筠→jūn;
+沈→shěn;
+峙→shì;
+莘→xīn;
+曾→zēng;
+::Han-Latin();
