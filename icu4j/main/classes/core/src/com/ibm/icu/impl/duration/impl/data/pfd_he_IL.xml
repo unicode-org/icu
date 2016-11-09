@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>HEBREW</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>שנים</pluralName>
+            <pluralName>שנה</pluralName>
+            <pluralName>שנתיים</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>חודשים</pluralName>
+            <pluralName>חודש</pluralName>
+            <pluralName>חודשיים</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>שבועות</pluralName>
+            <pluralName>שבוע</pluralName>
+            <pluralName>שבועיים</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>ימים</pluralName>
+            <pluralName>יום</pluralName>
+            <pluralName>יומיים</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>שעות</pluralName>
+            <pluralName>שעה</pluralName>
+            <pluralName>שעתיים</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>דקות</pluralName>
+            <pluralName>דקה</pluralName>
+            <pluralName>Null</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>שניות</pluralName>
+            <pluralName>שנייה</pluralName>
+            <pluralName>Null</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>מילישניות</pluralName>
+            <pluralName>מילישניה</pluralName>
+            <pluralName>Null</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <singularNameList>
+        <singularName>שנה אחת</singularName>
+        <singularName>חודש אחד</singularName>
+        <singularName>שבוע אחד</singularName>
+        <singularName>יום אחד</singularName>
+        <singularName>שעה אחת</singularName>
+        <singularName>דקה אחת</singularName>
+        <singularName>שנייה אחת</singularName>
+        <singularName>מילישניה אחת</singularName>
+    </singularNameList>
+    <halvesList>
+        <halves>½</halves>
+        <halves>½</halves>
+    </halvesList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <digitPrefix>־</digitPrefix>
+    <countSep> </countSep>
+    <shortUnitSep> </shortUnitSep>
+    <unitSepList>
+        <unitSep>, </unitSep>
+        <unitSep> ו</unitSep>
+        <unitSep>, </unitSep>
+        <unitSep> ו</unitSep>
+    </unitSepList>
+    <unitSepRequiresDPList>
+        <unitSepRequiresDP>false</unitSepRequiresDP>
+        <unitSepRequiresDP>true</unitSepRequiresDP>
+        <unitSepRequiresDP>false</unitSepRequiresDP>
+        <unitSepRequiresDP>true</unitSepRequiresDP>
+    </unitSepRequiresDPList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>true</omitSingularCount>
+    <omitDualCount>true</omitDualCount>
+    <decimalHandling>DSINGULAR_SUBONE</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>לפני </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>אחרי </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>יותר מ</prefix>
+            <requiresDigitPrefix>true</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>לפני יותר מ</prefix>
+            <requiresDigitPrefix>true</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>אחרי יותר מ</prefix>
+            <requiresDigitPrefix>true</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>פחות מ</prefix>
+            <requiresDigitPrefix>true</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>לפני פחות מ</prefix>
+            <requiresDigitPrefix>true</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>אחרי פחות מ</prefix>
+            <requiresDigitPrefix>true</requiresDigitPrefix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>
