@@ -1,0 +1,1765 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><!--
+	 Copyright (C)  2015, International Business Machines Corporation, All Rights Reserved.
+	-->
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4C API Comparison: 55 with 56</title>
+<link type="text/css" href="icu4c.css" rel="stylesheet">
+</head>
+<body>
+<a name="#_top"></a>
+<h1>ICU4C API Comparison: 55 with 56</h1>
+<div id="toc">
+<ul>
+<li>
+<a href="#removed">Removed from 55</a>
+</li>
+<li>
+<a href="#deprecated">Deprecated or Obsoleted in 56</a>
+</li>
+<li>
+<a href="#changed">Changed in  56</a>
+</li>
+<li>
+<a href="#promoted">Promoted to stable in 56</a>
+</li>
+<li>
+<a href="#added">Added in 56</a>
+</li>
+<li>
+<a href="#other">Other existing drafts in 56</a>
+</li>
+<li>
+<a href="#purevirtual">Signature Simplifications</a><sup style="background-color: yellow; font-size: smallest;">(new)</sup>
+</li>
+</ul>
+<hr>
+</div>
+<a name="removed"></a>
+<h2>Removed from 55</h2>
+<table BORDER="1" class="genTable">
+<THEAD>
+<tr>
+<th>File</th><th>API</th><th>55</th><th>56</th>
+</tr>
+</THEAD>
+<tr class="row1">
+<td class="file">datefmt.h</td><td class="proto"><tt>static</tt> DateFormat* icu::DateFormat::internalCreateInstanceForSkeleton(const UnicodeString&amp;, const Locale&amp;, DateTimePatternGenerator&amp;, UErrorCode&amp;)</td><td class="">Internal</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatBooleanAttribute::UDAT_PARSE_PARTIAL_MATCH</td><td class="">Draft<br>53</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatAttribute::UNUM_NUMERIC_ATTRIBUTE_COUNT</td><td class="">Internal</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+</table>
+<P></P>
+<a href="#_top">(jump back to top)</a>
+<hr>
+<a name="deprecated"></a>
+<h2>Deprecated or Obsoleted in 56</h2>
+<table BORDER="1" class="genTable">
+<THEAD>
+<tr>
+<th>File</th><th>API</th><th>55</th><th>56</th>
+</tr>
+</THEAD>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">Normalizer* icu::Normalizer::clone()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UBool icu::Normalizer::getOption(int32_t)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UBool icu::Normalizer::operator!=(const Normalizer&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UBool icu::Normalizer::operator==(const Normalizer&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::current()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::first()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::last()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::next()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::previous()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UClassID icu::Normalizer::getDynamicClassID()</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UNormalizationMode icu::Normalizer::getUMode()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>enum</tt> icu::Normalizer::(anonymous) {}</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>enum</tt> icu::Normalizer::(anonymous)::DONE</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::Normalizer(const CharacterIterator&amp;, UNormalizationMode)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::Normalizer(const Normalizer&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::Normalizer(const UChar*, int32_t, UNormalizationMode)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::Normalizer(const UnicodeString&amp;, UNormalizationMode)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::~Normalizer()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">int32_t icu::Normalizer::endIndex()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">int32_t icu::Normalizer::getIndex()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">int32_t icu::Normalizer::hashCode()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">int32_t icu::Normalizer::startIndex()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UBool icu::Normalizer::isNormalized(const UnicodeString&amp;, UNormalizationMode, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UBool icu::Normalizer::isNormalized(const UnicodeString&amp;, UNormalizationMode, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UClassID icu::Normalizer::getStaticClassID()</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UNormalizationCheckResult icu::Normalizer::quickCheck(const UnicodeString&amp;, UNormalizationMode, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UNormalizationCheckResult icu::Normalizer::quickCheck(const UnicodeString&amp;, UNormalizationMode, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UnicodeString&amp; icu::Normalizer::concatenate(const UnicodeString&amp;, const UnicodeString&amp;, UnicodeString&amp;, UNormalizationMode, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.1</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> void icu::Normalizer::compose(const UnicodeString&amp;, UBool, int32_t, UnicodeString&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> void icu::Normalizer::decompose(const UnicodeString&amp;, UBool, int32_t, UnicodeString&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> void icu::Normalizer::normalize(const UnicodeString&amp;, UNormalizationMode, int32_t, UnicodeString&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::getText(UnicodeString&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::reset()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setIndexOnly(int32_t)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setMode(UNormalizationMode)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setOption(int32_t, UBool)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setText(const CharacterIterator&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setText(const UChar*, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setText(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>#define</tt> UNORM_COMPARE_NORM_OPTIONS_SHIFT</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto">UBool unorm_isNormalized(const UChar*, int32_t, UNormalizationMode, UErrorCode*)</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto">UBool unorm_isNormalizedWithOptions(const UChar*, int32_t, UNormalizationMode, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto">UNormalizationCheckResult unorm_quickCheck(const UChar*, int32_t, UNormalizationMode, UErrorCode*)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto">UNormalizationCheckResult unorm_quickCheckWithOptions(const UChar*, int32_t, UNormalizationMode, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> (anonymous)::UNORM_UNICODE_3_2</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_DEFAULT</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_FCD</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_MODE_COUNT</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NFC</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NFD</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NFKC</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NFKD</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NONE</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto">int32_t unorm_concatenate(const UChar*, int32_t, const UChar*, int32_t, UChar*, int32_t, UNormalizationMode, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.1</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto">int32_t unorm_next(UCharIterator*, UChar*, int32_t, UNormalizationMode, int32_t, UBool, UBool*, UErrorCode*)</td><td class="stabchange">Stable<br>2.1</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto">int32_t unorm_normalize(const UChar*, int32_t, UNormalizationMode, int32_t, UChar*, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto">int32_t unorm_previous(UCharIterator*, UChar*, int32_t, UNormalizationMode, int32_t, UBool, UBool*, UErrorCode*)</td><td class="stabchange">Stable<br>2.1</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+</table>
+<P></P>
+<a href="#_top">(jump back to top)</a>
+<hr>
+<a name="changed"></a>
+<h2>Changed in  56 (old, new)</h2>
+<table BORDER="1" class="genTable">
+<THEAD>
+<tr>
+<th>File</th><th>API</th><th>55</th><th>56</th>
+</tr>
+</THEAD>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto"><tt>enum</tt> 
+							icu::DecimalFormatSymbols::ENumberFormatSymbol::kExponentMultiplicationSymbol</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">decimfmt.h</td><td class="proto">UBool icu::DecimalFormat::isDecimalPatternMatchRequired()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">decimfmt.h</td><td class="proto">UCurrencyUsage icu::DecimalFormat::getCurrencyUsage()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setCurrencyUsage(UCurrencyUsage, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setDecimalPatternMatchRequired(UBool)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">dtfmtsym.h</td><td class="proto">const UnicodeString* icu::DateFormatSymbols::getYearNames(int32_t&amp;, DtContextType, DtWidthType)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">dtfmtsym.h</td><td class="proto">const UnicodeString* icu::DateFormatSymbols::getZodiacNames(int32_t&amp;, DtContextType, DtWidthType)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">dtfmtsym.h</td><td class="proto">void icu::DateFormatSymbols::setYearNames(const UnicodeString*, int32_t, DtContextType, DtWidthType)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">dtfmtsym.h</td><td class="proto">void icu::DateFormatSymbols::setZodiacNames(const UnicodeString*, int32_t, DtContextType, DtWidthType)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">filteredbrk.h</td><td class="proto">BreakIterator* icu::FilteredBreakIteratorBuilder::build(BreakIterator*, UErrorCode&amp;)</td><td class="">Internal</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">filteredbrk.h</td><td class="proto">UBool icu::FilteredBreakIteratorBuilder::suppressBreakAfter(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="">Internal</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">filteredbrk.h</td><td class="proto">UBool icu::FilteredBreakIteratorBuilder::unsuppressBreakAfter(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="">Internal</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">filteredbrk.h</td><td class="proto">icu::FilteredBreakIteratorBuilder::~FilteredBreakIteratorBuilder()</td><td class="">Internal</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">filteredbrk.h</td><td class="proto"><tt>static</tt> FilteredBreakIteratorBuilder* icu::FilteredBreakIteratorBuilder::createInstance(UErrorCode&amp;)</td><td class="">Internal</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">filteredbrk.h</td><td class="proto"><tt>static</tt> FilteredBreakIteratorBuilder* icu::FilteredBreakIteratorBuilder::createInstance(const Locale&amp;, UErrorCode&amp;)</td><td class="">Internal</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">locid.h</td><td class="proto">UBool icu::Locale::isRightToLeft()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createAcreFoot(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createAmpere(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createAstronomicalUnit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBushel(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createByte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCalorie(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCarat(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCentiliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicCentimeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicFoot(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicInch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicMeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicYard(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCup(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDeciliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDecimeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createFathom(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createFluidOunce(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createFoodcalorie(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createFurlong(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGallon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGigabit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGigabyte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGigahertz(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGigawatt(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createHectoliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createHertz(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createJoule(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKarat(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKelvin(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilobit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilobyte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilocalorie(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilohertz(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilojoule(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilowattHour(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createLiterPerKilometer(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createLux(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegabit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegabyte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegahertz(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegaliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegawatt(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMeterPerSecondSquared(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMetricTon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMicrogram(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMicrometer(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMicrosecond(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilePerGallon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilliampere(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligram(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilliliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMillimeterOfMercury(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilliwatt(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createNanometer(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createNanosecond(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createNauticalMile(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createOhm(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createOunceTroy(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createParsec(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPint(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPoundPerSquareInch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuart(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createRadian(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createSquareCentimeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createSquareInch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createSquareYard(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createStone(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTablespoon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTeaspoon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTerabit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTerabyte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createVolt(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">Normalizer* icu::Normalizer::clone()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UBool icu::Normalizer::getOption(int32_t)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UBool icu::Normalizer::operator!=(const Normalizer&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UBool icu::Normalizer::operator==(const Normalizer&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::current()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::first()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::last()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::next()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UChar32 icu::Normalizer::previous()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">UClassID icu::Normalizer::getDynamicClassID()</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">UNormalizationMode icu::Normalizer::getUMode()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>enum</tt> icu::Normalizer::(anonymous) {}</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>enum</tt> icu::Normalizer::(anonymous)::DONE</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::Normalizer(const CharacterIterator&amp;, UNormalizationMode)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::Normalizer(const Normalizer&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::Normalizer(const UChar*, int32_t, UNormalizationMode)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::Normalizer(const UnicodeString&amp;, UNormalizationMode)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">icu::Normalizer::~Normalizer()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">int32_t icu::Normalizer::endIndex()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">int32_t icu::Normalizer::getIndex()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">int32_t icu::Normalizer::hashCode()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">int32_t icu::Normalizer::startIndex()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UBool icu::Normalizer::isNormalized(const UnicodeString&amp;, UNormalizationMode, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UBool icu::Normalizer::isNormalized(const UnicodeString&amp;, UNormalizationMode, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UClassID icu::Normalizer::getStaticClassID()</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UNormalizationCheckResult icu::Normalizer::quickCheck(const UnicodeString&amp;, UNormalizationMode, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UNormalizationCheckResult icu::Normalizer::quickCheck(const UnicodeString&amp;, UNormalizationMode, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> UnicodeString&amp; icu::Normalizer::concatenate(const UnicodeString&amp;, const UnicodeString&amp;, UnicodeString&amp;, UNormalizationMode, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.1</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> void icu::Normalizer::compose(const UnicodeString&amp;, UBool, int32_t, UnicodeString&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> void icu::Normalizer::decompose(const UnicodeString&amp;, UBool, int32_t, UnicodeString&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto"><tt>static</tt> void icu::Normalizer::normalize(const UnicodeString&amp;, UNormalizationMode, int32_t, UnicodeString&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::getText(UnicodeString&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::reset()</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setIndexOnly(int32_t)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setMode(UNormalizationMode)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setOption(int32_t, UBool)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setText(const CharacterIterator&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setText(const UChar*, int32_t, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">normlzr.h</td><td class="proto">void icu::Normalizer::setText(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">reldatefmt.h</td><td class="proto">UDateRelativeDateTimeFormatterStyle icu::RelativeDateTimeFormatter::getFormatStyle()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">reldatefmt.h</td><td class="proto">UDisplayContext icu::RelativeDateTimeFormatter::getCapitalizationContext()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateRelativeDateTimeFormatterStyle::UDAT_STYLE_COUNT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateRelativeDateTimeFormatterStyle::UDAT_STYLE_LONG</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateRelativeDateTimeFormatterStyle::UDAT_STYLE_NARROW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateRelativeDateTimeFormatterStyle::UDAT_STYLE_SHORT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">reldatefmt.h</td><td class="proto">icu::RelativeDateTimeFormatter::RelativeDateTimeFormatter(const Locale&amp;, NumberFormat*, UDateRelativeDateTimeFormatterStyle, UDisplayContext, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">smpdtfmt.h</td><td class="proto">const NumberFormat* icu::SimpleDateFormat::getNumberFormatForField(UChar)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">smpdtfmt.h</td><td class="proto">void icu::SimpleDateFormat::adoptNumberFormat(NumberFormat*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">smpdtfmt.h</td><td class="proto">void icu::SimpleDateFormat::adoptNumberFormat(const UnicodeString&amp;, NumberFormat*, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">tzfmt.h</td><td class="proto"><tt>enum</tt> UTimeZoneFormatParseOption::UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">tznames.h</td><td class="proto"><tt>static</tt> TimeZoneNames* icu::TimeZoneNames::createTZDBInstance(const Locale&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">ucurr.h</td><td class="proto">double ucurr_getRoundingIncrementForUsage(const UChar*, const UCurrencyUsage, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrencyUsage::UCURR_USAGE_CASH</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrencyUsage::UCURR_USAGE_COUNT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrencyUsage::UCURR_USAGE_STANDARD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">ucurr.h</td><td class="proto">int32_t ucurr_getDefaultFractionDigitsForUsage(const UChar*, const UCurrencyUsage, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto">const UNumberFormat* udat_getNumberFormatForField(const UDateFormat*, UChar)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatBooleanAttribute::UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH</td><td class="">Draft<br>53</td><td>Draft<br>
+<span class="verchange"><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_CYCLIC_YEARS_ABBREVIATED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_CYCLIC_YEARS_NARROW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_CYCLIC_YEARS_WIDE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_ZODIAC_NAMES_ABBREVIATED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_ZODIAC_NAMES_NARROW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_ZODIAC_NAMES_WIDE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto">void udat_adoptNumberFormat(UDateFormat*, UNumberFormat*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto">void udat_adoptNumberFormatForFields(UDateFormat*, const UChar*, UNumberFormat*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplaycontext.h</td><td class="proto"><tt>enum</tt> UDisplayContext::UDISPCTX_LENGTH_FULL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplaycontext.h</td><td class="proto"><tt>enum</tt> UDisplayContext::UDISPCTX_LENGTH_SHORT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplaycontext.h</td><td class="proto"><tt>enum</tt> UDisplayContextType::UDISPCTX_TYPE_DISPLAY_LENGTH</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto">UBool uloc_isRightToLeft(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">uloc.h</td><td class="proto">const char* uloc_toLegacyKey(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto">const char* uloc_toLegacyType(const char*, const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">uloc.h</td><td class="proto">const char* uloc_toUnicodeLocaleKey(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto">const char* uloc_toUnicodeLocaleType(const char*, const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>#define</tt> UNORM_COMPARE_NORM_OPTIONS_SHIFT</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto">UBool unorm_isNormalized(const UChar*, int32_t, UNormalizationMode, UErrorCode*)</td><td class="stabchange">Stable<br>2.2</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto">UBool unorm_isNormalizedWithOptions(const UChar*, int32_t, UNormalizationMode, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto">UNormalizationCheckResult unorm_quickCheck(const UChar*, int32_t, UNormalizationMode, UErrorCode*)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto">UNormalizationCheckResult unorm_quickCheckWithOptions(const UChar*, int32_t, UNormalizationMode, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> (anonymous)::UNORM_UNICODE_3_2</td><td class="stabchange">Stable<br>2.6</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_DEFAULT</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_FCD</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_MODE_COUNT</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NFC</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NFD</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NFKC</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NFKD</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto"><tt>enum</tt> UNormalizationMode::UNORM_NONE</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto">int32_t unorm_concatenate(const UChar*, int32_t, const UChar*, int32_t, UChar*, int32_t, UNormalizationMode, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.1</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto">int32_t unorm_next(UCharIterator*, UChar*, int32_t, UNormalizationMode, int32_t, UBool, UBool*, UErrorCode*)</td><td class="stabchange">Stable<br>2.1</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unorm.h</td><td class="proto">int32_t unorm_normalize(const UChar*, int32_t, UNormalizationMode, int32_t, UChar*, int32_t, UErrorCode*)</td><td class="stabchange">Stable<br>2.0</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unorm.h</td><td class="proto">int32_t unorm_previous(UCharIterator*, UChar*, int32_t, UNormalizationMode, int32_t, UBool, UBool*, UErrorCode*)</td><td class="stabchange">Stable<br>2.1</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatAttribute::UNUM_CURRENCY_USAGE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatAttribute::UNUM_PARSE_DECIMAL_MARK_REQUIRED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatStyle::UNUM_CASH_CURRENCY</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatSymbol::UNUM_EXPONENT_MULTIPLICATION_SYMBOL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">ustdio.h</td><td class="proto">UFILE* u_fopen_u(const UChar*, const char*, const char*, const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+</table>
+<P></P>
+<a href="#_top">(jump back to top)</a>
+<hr>
+<a name="promoted"></a>
+<h2>Promoted to stable in 56</h2>
+<table BORDER="1" class="genTable">
+<THEAD>
+<tr>
+<th>File</th><th>API</th><th>55</th><th>56</th>
+</tr>
+</THEAD>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto"><tt>enum</tt> 
+							icu::DecimalFormatSymbols::ENumberFormatSymbol::kExponentMultiplicationSymbol</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">decimfmt.h</td><td class="proto">UBool icu::DecimalFormat::isDecimalPatternMatchRequired()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">decimfmt.h</td><td class="proto">UCurrencyUsage icu::DecimalFormat::getCurrencyUsage()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setCurrencyUsage(UCurrencyUsage, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setDecimalPatternMatchRequired(UBool)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">dtfmtsym.h</td><td class="proto">const UnicodeString* icu::DateFormatSymbols::getYearNames(int32_t&amp;, DtContextType, DtWidthType)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">dtfmtsym.h</td><td class="proto">const UnicodeString* icu::DateFormatSymbols::getZodiacNames(int32_t&amp;, DtContextType, DtWidthType)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">dtfmtsym.h</td><td class="proto">void icu::DateFormatSymbols::setYearNames(const UnicodeString*, int32_t, DtContextType, DtWidthType)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">dtfmtsym.h</td><td class="proto">void icu::DateFormatSymbols::setZodiacNames(const UnicodeString*, int32_t, DtContextType, DtWidthType)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">locid.h</td><td class="proto">UBool icu::Locale::isRightToLeft()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createAcreFoot(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createAmpere(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createAstronomicalUnit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBushel(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createByte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCalorie(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCarat(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCentiliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicCentimeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicFoot(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicInch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicMeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCubicYard(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCup(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDeciliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDecimeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createFathom(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createFluidOunce(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createFoodcalorie(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createFurlong(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGallon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGigabit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGigabyte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGigahertz(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGigawatt(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createHectoliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createHertz(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createJoule(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKarat(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKelvin(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilobit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilobyte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilocalorie(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilohertz(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilojoule(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilowattHour(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createLiterPerKilometer(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createLux(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegabit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegabyte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegahertz(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegaliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegawatt(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMeterPerSecondSquared(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMetricTon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMicrogram(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMicrometer(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMicrosecond(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilePerGallon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilliampere(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligram(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilliliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMillimeterOfMercury(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilliwatt(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createNanometer(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createNanosecond(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createNauticalMile(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createOhm(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createOunceTroy(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createParsec(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPint(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPoundPerSquareInch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuart(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createRadian(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createSquareCentimeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createSquareInch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createSquareYard(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createStone(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTablespoon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTeaspoon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTerabit(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTerabyte(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createTon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createVolt(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">reldatefmt.h</td><td class="proto">UDateRelativeDateTimeFormatterStyle icu::RelativeDateTimeFormatter::getFormatStyle()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">reldatefmt.h</td><td class="proto">UDisplayContext icu::RelativeDateTimeFormatter::getCapitalizationContext()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateRelativeDateTimeFormatterStyle::UDAT_STYLE_COUNT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateRelativeDateTimeFormatterStyle::UDAT_STYLE_LONG</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateRelativeDateTimeFormatterStyle::UDAT_STYLE_NARROW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateRelativeDateTimeFormatterStyle::UDAT_STYLE_SHORT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">reldatefmt.h</td><td class="proto">icu::RelativeDateTimeFormatter::RelativeDateTimeFormatter(const Locale&amp;, NumberFormat*, UDateRelativeDateTimeFormatterStyle, UDisplayContext, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">smpdtfmt.h</td><td class="proto">const NumberFormat* icu::SimpleDateFormat::getNumberFormatForField(UChar)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">smpdtfmt.h</td><td class="proto">void icu::SimpleDateFormat::adoptNumberFormat(NumberFormat*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">smpdtfmt.h</td><td class="proto">void icu::SimpleDateFormat::adoptNumberFormat(const UnicodeString&amp;, NumberFormat*, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">tzfmt.h</td><td class="proto"><tt>enum</tt> UTimeZoneFormatParseOption::UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">tznames.h</td><td class="proto"><tt>static</tt> TimeZoneNames* icu::TimeZoneNames::createTZDBInstance(const Locale&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_AHOM</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_ANATOLIAN_HIEROGLYPHS</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_CHEROKEE_SUPPLEMENT</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_EARLY_DYNASTIC_CUNEIFORM</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_HATRAN</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_MULTANI</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_OLD_HUNGARIAN</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_SUTTON_SIGNWRITING</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">ucurr.h</td><td class="proto">double ucurr_getRoundingIncrementForUsage(const UChar*, const UCurrencyUsage, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrencyUsage::UCURR_USAGE_CASH</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrencyUsage::UCURR_USAGE_COUNT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrencyUsage::UCURR_USAGE_STANDARD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">ucurr.h</td><td class="proto">int32_t ucurr_getDefaultFractionDigitsForUsage(const UChar*, const UCurrencyUsage, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto">const UNumberFormat* udat_getNumberFormatForField(const UDateFormat*, UChar)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_CYCLIC_YEARS_ABBREVIATED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_CYCLIC_YEARS_NARROW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_CYCLIC_YEARS_WIDE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_ZODIAC_NAMES_ABBREVIATED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_ZODIAC_NAMES_NARROW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_ZODIAC_NAMES_WIDE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto">void udat_adoptNumberFormat(UDateFormat*, UNumberFormat*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto">void udat_adoptNumberFormatForFields(UDateFormat*, const UChar*, UNumberFormat*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplaycontext.h</td><td class="proto"><tt>enum</tt> UDisplayContext::UDISPCTX_LENGTH_FULL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">udisplaycontext.h</td><td class="proto"><tt>enum</tt> UDisplayContext::UDISPCTX_LENGTH_SHORT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">udisplaycontext.h</td><td class="proto"><tt>enum</tt> UDisplayContextType::UDISPCTX_TYPE_DISPLAY_LENGTH</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto">UBool uloc_isRightToLeft(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">uloc.h</td><td class="proto">const char* uloc_toLegacyKey(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto">const char* uloc_toLegacyType(const char*, const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">uloc.h</td><td class="proto">const char* uloc_toUnicodeLocaleKey(const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto">const char* uloc_toUnicodeLocaleType(const char*, const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatAttribute::UNUM_CURRENCY_USAGE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatAttribute::UNUM_PARSE_DECIMAL_MARK_REQUIRED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatStyle::UNUM_CASH_CURRENCY</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatSymbol::UNUM_EXPONENT_MULTIPLICATION_SYMBOL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+<tr class="row0">
+<td class="file">ustdio.h</td><td class="proto">UFILE* u_fopen_u(const UChar*, const char*, const char*, const char*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>54</td>
+</tr>
+</table>
+<P></P>
+<a href="#_top">(jump back to top)</a>
+<hr>
+<a name="added"></a>
+<h2>Added in 56</h2>
+<table BORDER="1" class="genTable">
+<THEAD>
+<tr>
+<th>File</th><th>API</th><th>55</th><th>56</th>
+</tr>
+</THEAD>
+<tr class="row1">
+<td class="file">compactdecimalformat.h</td><td class="proto">UnicodeString&amp; icu::CompactDecimalFormat::format(double, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">compactdecimalformat.h</td><td class="proto">UnicodeString&amp; icu::CompactDecimalFormat::format(int32_t, UnicodeString&amp;, FieldPosition&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">compactdecimalformat.h</td><td class="proto">UnicodeString&amp; icu::CompactDecimalFormat::format(int32_t, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">compactdecimalformat.h</td><td class="proto">UnicodeString&amp; icu::CompactDecimalFormat::format(int32_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">compactdecimalformat.h</td><td class="proto">UnicodeString&amp; icu::CompactDecimalFormat::format(int64_t, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">datefmt.h</td><td class="proto"><tt>static</tt> UnicodeString icu::DateFormat::getBestPattern(const Locale&amp;, const UnicodeString&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">dcfmtsym.h</td><td class="proto">UBool icu::DecimalFormatSymbols::isCustomCurrencySymbol()</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">dcfmtsym.h</td><td class="proto">UBool icu::DecimalFormatSymbols::isCustomIntlCurrencySymbol()</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">decimfmt.h</td><td class="proto">UnicodeString&amp; icu::DecimalFormat::format(const VisibleDigitsWithExponent&amp;, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">decimfmt.h</td><td class="proto">UnicodeString&amp; icu::DecimalFormat::format(const VisibleDigitsWithExponent&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">decimfmt.h</td><td class="proto">VisibleDigitsWithExponent&amp; icu::DecimalFormat::initVisibleDigitsWithExponent(DigitList&amp;, VisibleDigitsWithExponent&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">decimfmt.h</td><td class="proto">VisibleDigitsWithExponent&amp; icu::DecimalFormat::initVisibleDigitsWithExponent(const Formattable&amp;, VisibleDigitsWithExponent&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">decimfmt.h</td><td class="proto">VisibleDigitsWithExponent&amp; icu::DecimalFormat::initVisibleDigitsWithExponent(double, VisibleDigitsWithExponent&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">decimfmt.h</td><td class="proto">int32_t icu::DecimalFormat::getMinimumGroupingDigits()</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setMinimumGroupingDigits(int32_t)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">dtptngen.h</td><td class="proto"><tt>static</tt> UnicodeString icu::DateTimePatternGenerator::staticGetBaseSkeleton(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">dtptngen.h</td><td class="proto"><tt>static</tt> UnicodeString icu::DateTimePatternGenerator::staticGetSkeleton(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">localpointer.h</td><td class="proto">LocalArray&lt;T&gt;&amp; icu::LocalArray&lt; T &gt;::moveFrom(LocalArray&lt; T &gt;&amp;) U_NOEXCEPT</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">localpointer.h</td><td class="proto">LocalPointer&lt;T&gt;&amp; icu::LocalPointer&lt; T &gt;::moveFrom(LocalPointer&lt; T &gt;&amp;) U_NOEXCEPT</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">localpointer.h</td><td class="proto">icu::LocalArray&lt; T &gt;::LocalArray(T*, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">localpointer.h</td><td class="proto">void icu::LocalArray&lt; T &gt;::adoptInsteadAndCheckErrorCode(T*, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">localpointer.h</td><td class="proto">void icu::LocalArray&lt; T &gt;::swap(LocalArray&lt; T &gt;&amp;) U_NOEXCEPT</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">localpointer.h</td><td class="proto">void icu::LocalPointer&lt; T &gt;::swap(LocalPointer&lt; T &gt;&amp;) U_NOEXCEPT</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCentury(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCupMetric(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGenericTemperature(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKnot(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createLiterPer100Kilometers(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMileScandinavian(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPintMetric(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createRevolutionAngle(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> U_CPLUSPLUS_VERSION</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> U_HAVE_RVALUE_REFERENCES</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> U_NOEXCEPT</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> __has_builtin</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> __has_extension</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">platform.h</td><td class="proto"><tt>#define</tt> __has_feature</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">plurrule.h</td><td class="proto">UnicodeString icu::PluralRules::select(const VisibleDigitsWithExponent&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_AHOM</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_ANATOLIAN_HIEROGLYPHS</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_CHEROKEE_SUPPLEMENT</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_EARLY_DYNASTIC_CUNEIFORM</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_HATRAN</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_MULTANI</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_OLD_HUNGARIAN</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row0">
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_SUTTON_SIGNWRITING</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>56</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto"><tt>#define</tt> UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatBooleanAttribute::UDAT_PARSE_PARTIAL_LITERAL_MATCH</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uniset.h</td><td class="proto"><tt>enum</tt> 
+							icu::UnicodeSet::ESerialization {}</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">uniset.h</td><td class="proto"><tt>enum</tt> 
+							icu::UnicodeSet::ESerialization::kSerialized</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uniset.h</td><td class="proto">icu::UnicodeSet::UnicodeSet(const uint16_t buffer[], int32_t, ESerialization, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
+<span class=""></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unistr.h</td><td class="proto"><tt>#define</tt> UNISTR_OBJECT_SIZE</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unistr.h</td><td class="proto">UnicodeString&amp; icu::UnicodeString::moveFrom(UnicodeString&amp;) U_NOEXCEPT</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unistr.h</td><td class="proto">void icu::UnicodeString::swap(UnicodeString&amp;) U_NOEXCEPT</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatAttribute::UNUM_MINIMUM_GROUPING_DIGITS</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatStyle::UNUM_CURRENCY_STANDARD</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatStyle::UNUM_DECIMAL_COMPACT_LONG</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatStyle::UNUM_DECIMAL_COMPACT_SHORT</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>56</span></span></td>
+</tr>
+</table>
+<P></P>
+<a href="#_top">(jump back to top)</a>
+<hr>
+<a name="other"></a>
+<h2>Other existing drafts in 56</h2>
+<div class="other">
+<table BORDER="1" class="genTable">
+<THEAD>
+<tr>
+<th>File</th><th>API</th><th>55</th><th>56</th>
+</tr>
+</THEAD>
+<tr class="row1">
+<td class="file">datefmt.h</td><td class="proto"><tt>static</tt> DateFormat* icu::DateFormat::createInstanceForSkeleton(Calendar*, const UnicodeString&amp;, const Locale&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">datefmt.h</td><td class="proto"><tt>static</tt> DateFormat* icu::DateFormat::createInstanceForSkeleton(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">datefmt.h</td><td class="proto"><tt>static</tt> DateFormat* icu::DateFormat::createInstanceForSkeleton(const UnicodeString&amp;, const Locale&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">dtfmtsym.h</td><td class="proto">UnicodeString&amp; icu::DateFormatSymbols::getTimeSeparatorString(UnicodeString&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">dtfmtsym.h</td><td class="proto">void icu::DateFormatSymbols::setTimeSeparatorString(const UnicodeString&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">localpointer.h</td><td class="proto">icu::LocalPointer&lt; T &gt;::LocalPointer(T*, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">localpointer.h</td><td class="proto">void icu::LocalPointer&lt; T &gt;::adoptInsteadAndCheckErrorCode(T*, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">measfmt.h</td><td class="proto">UnicodeString&amp; icu::MeasureFormat::formatMeasurePerUnit(const Measure&amp;, const MeasureUnit&amp;, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">measfmt.h</td><td class="proto">void icu::MeasureFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;)</td><td class="" colspan="2" align="center">Draft<br>53</td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">UBool icu::RegexMatcher::find(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">regex.h</td><td class="proto">int32_t icu::RegexPattern::groupNumberFromName(const UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">regex.h</td><td class="proto">int32_t icu::RegexPattern::groupNumberFromName(const char*, int32_t, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">region.h</td><td class="proto">StringEnumeration* icu::Region::getContainedRegions(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">region.h</td><td class="proto">StringEnumeration* icu::Region::getContainedRegions(URegionType, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">region.h</td><td class="proto">StringEnumeration* icu::Region::getPreferredValues(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">region.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::Region::getAvailable(URegionType, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">scientificnumberformatter.h</td><td class="proto">ScientificNumberFormatter* icu::ScientificNumberFormatter::clone()</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">scientificnumberformatter.h</td><td class="proto">UnicodeString&amp; icu::ScientificNumberFormatter::format(const Formattable&amp;, UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">scientificnumberformatter.h</td><td class="proto">icu::ScientificNumberFormatter::~ScientificNumberFormatter()</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">scientificnumberformatter.h</td><td class="proto"><tt>static</tt> ScientificNumberFormatter* icu::ScientificNumberFormatter::createMarkupInstance(DecimalFormat*, const UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">scientificnumberformatter.h</td><td class="proto"><tt>static</tt> ScientificNumberFormatter* icu::ScientificNumberFormatter::createMarkupInstance(const Locale&amp;, const UnicodeString&amp;, const UnicodeString&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">scientificnumberformatter.h</td><td class="proto"><tt>static</tt> ScientificNumberFormatter* icu::ScientificNumberFormatter::createSuperscriptInstance(DecimalFormat*, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">scientificnumberformatter.h</td><td class="proto"><tt>static</tt> ScientificNumberFormatter* icu::ScientificNumberFormatter::createSuperscriptInstance(const Locale&amp;, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">timezone.h</td><td class="proto"><tt>static</tt> TimeZone* icu::TimeZone::detectHostTimeZone()</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">uconfig.h</td><td class="proto"><tt>#define</tt> UCONFIG_ONLY_HTML_CONVERSION</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatField::UDAT_TIME_SEPARATOR_FIELD</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto">int32_t udat_formatCalendar(const UDateFormat*, UCalendar*, UChar*, int32_t, UFieldPosition*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">udat.h</td><td class="proto">int32_t udat_formatCalendarForFields(const UDateFormat*, UCalendar*, UChar*, int32_t, UFieldPositionIterator*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">udat.h</td><td class="proto">int32_t udat_formatForFields(const UDateFormat*, UDate, UChar*, int32_t, UFieldPositionIterator*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">ufieldpositer.h</td><td class="proto">UFieldPositionIterator* ufieldpositer_open(UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">ufieldpositer.h</td><td class="proto">int32_t ufieldpositer_next(UFieldPositionIterator*, int32_t*, int32_t*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">ufieldpositer.h</td><td class="proto">void ufieldpositer_close(UFieldPositionIterator*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">ulistformatter.h</td><td class="proto">UListFormatter* ulistfmt_open(const char*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">ulistformatter.h</td><td class="proto">int32_t ulistfmt_format(const UListFormatter*, const UChar* const strings[], const int32_t*, int32_t, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row1">
+<td class="file">ulistformatter.h</td><td class="proto">void ulistfmt_close(UListFormatter*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto"><tt>enum</tt> URegexpFlag::UREGEX_CANON_EQ</td><td class="" colspan="2" align="center">Draft<br>2.4</td>
+</tr>
+<tr class="row1">
+<td class="file">uregex.h</td><td class="proto">int32_t uregex_groupNumberFromCName(URegularExpression*, const char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+<tr class="row0">
+<td class="file">uregex.h</td><td class="proto">int32_t uregex_groupNumberFromName(URegularExpression*, const UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>55</td>
+</tr>
+</table>
+</div>
+<P></P>
+<a href="#_top">(jump back to top)</a>
+<hr>
+<a name="purevirtual"></a>
+<h2>Signature Simplifications</h2>
+<i>This section shows cases where the signature was "simplified" for the sake of comparison. The simplified form is in bold, followed by
+    	all possible variations in "original" form.</i>
+<div class="other">
+<ul></ul>
+</div>
+<P></P>
+<a href="#_top">(jump back to top)</a>
+<hr>
+<p>
+<i><font size="-1">Contents generated by StableAPI tool on Wed Sep 23 14:03:30 PDT 2015<br>Copyright (C) 2015, International Business Machines Corporation, All Rights Reserved.</font></i>
+</p>
+</body>
+</html>
