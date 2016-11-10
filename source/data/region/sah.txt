@@ -1,0 +1,19 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/sah.xml
+// *
+// ***************************************************************************
+sah{
+    Countries{
+        001{"Аан дойду"}
+        002{"Аапырыка"}
+        003{"Хотугу Эмиэрикэ"}
+        005{"Соҕуруу Эмиэрикэ"}
+        CN{"Кытай"}
+        RU{"Арассыыйа"}
+    }
+    Version{"2.1.23.7"}
+}

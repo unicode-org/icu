@@ -1,0 +1,32 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/collation/he.xml
+// *
+// ***************************************************************************
+he{
+    Version{"2.1.19.14"}
+    collations{
+        search{
+            Sequence{
+                "[import und-u-co-search]"
+                "‎&׳"
+                "<<''"
+                "‎&״"
+                "<<'\u0022'"
+            }
+            Version{"29"}
+        }
+        standard{
+            Sequence{
+                "[normalization on]"
+                "[reorder Hebr]"
+                "&[before 2]''<<׳"
+                "&[before 2]'\u0022'<<״"
+            }
+            Version{"29"}
+        }
+    }
+}

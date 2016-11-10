@@ -1,0 +1,21 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/yo_BJ.xml
+// *
+// ***************************************************************************
+yo_BJ{
+    Languages{
+        da{"Èdè Ilɛ̀ Denmark"}
+        de{"Èdè Ilɛ̀ Gemani"}
+        en{"Èdè Gɛ̀ɛ́sì"}
+        pl{"Èdè Ilɛ̀ Polandi"}
+        pt{"Èdè Pɔtugi"}
+        ru{"Èdè ̣Rɔɔsia"}
+        tr{"Èdè Tɔɔkisi"}
+        zu{"Èdè Shulu"}
+    }
+    Version{"2.1.24.17"}
+}

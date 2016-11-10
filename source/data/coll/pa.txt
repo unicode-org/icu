@@ -1,0 +1,22 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/collation/pa.xml
+// *
+// ***************************************************************************
+pa{
+    Version{"2.1.19.14"}
+    collations{
+        standard{
+            Sequence{
+                "[normalization on]"
+                "[reorder Guru Deva Beng Gujr Orya Taml Telu Knda Mlym Sinh Arab]"
+                "&ੱ<<ੰ<<ਂ<<ਁ<<਼"
+                "&ੜ<੍"
+            }
+            Version{"29"}
+        }
+    }
+}

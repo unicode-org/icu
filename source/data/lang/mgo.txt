@@ -1,0 +1,33 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/mgo.xml
+// *
+// ***************************************************************************
+mgo{
+    Languages{
+        mgo{"metaʼ"}
+        und{"ngam tisɔʼ"}
+    }
+    Scripts{
+        Latn{"ngam ŋwaʼri"}
+        Zxxx{"ngam choʼ"}
+        Zzzz{"abo ŋwaʼri tisɔʼ"}
+    }
+    Types{
+        calendar{
+            gregorian{"ngàb mə̀kala"}
+        }
+        numbers{
+            latn{"inu"}
+        }
+    }
+    Version{"2.1.23.7"}
+    codePatterns{
+        language{"{0}"}
+        script{"{0}"}
+        territory{"{0}"}
+    }
+}

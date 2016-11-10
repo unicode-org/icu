@@ -1,0 +1,18 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/sw_CD.xml
+// *
+// ***************************************************************************
+sw_CD{
+    Languages{
+        ak{"Kiakan"}
+        bn{"Kibangla"}
+        cs{"Kichecki"}
+        en{"Kingereza"}
+        sw_CD{"Kiswahili ya Kongo"}
+    }
+    Version{"2.1.21.97"}
+}

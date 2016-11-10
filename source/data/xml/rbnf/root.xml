@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
+-->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd">
+<ldml>
+	<identity>
+		<version number="$Revision: 1.4 $"/>
+		<language type="root"/>
+	</identity>
+    <rbnf>
+        <rulesetGrouping type="DurationRules">
+            <ruleset type="duration">
+                <rbnfrule value="0">=#,##0=;</rbnfrule>
+            </ruleset>
+        </rulesetGrouping>
+    </rbnf>
+</ldml>

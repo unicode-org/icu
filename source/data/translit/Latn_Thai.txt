@@ -1,0 +1,16 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2016 and later: Unicode, Inc. and others.
+# *  License & terms of use: http://www.unicode.org/copyright.html.
+# *
+# ***************************************************************************
+# File: Latn_Thai.txt
+# Generated from CLDR 
+#
+
+::[[:Latin:][:Mn:][:Me:] \u0020\u0026 ;0-9|~«»ʹʹ‡ˌ];
+::NFD;
+::Latin-ThaiLogical;
+::ThaiLogical-Thai;
+::NFC;
+

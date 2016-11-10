@@ -1,0 +1,14 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/uz_Arab_AF.xml
+// *
+// ***************************************************************************
+uz_Arab_AF{
+    Version{"2.1.19.14"}
+    calendar{
+        default{"persian"}
+    }
+}

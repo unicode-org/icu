@@ -1,0 +1,63 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/chr.xml
+// *
+// ***************************************************************************
+chr{
+    Currencies{
+        BRL{
+            "R$",
+            "ᏆᏏᎵᎢ ᎠᏕᎳ",
+        }
+        CAD{
+            "CA$",
+            "ᎧᎾᏓ ᎠᏕᎳ",
+        }
+        CNY{
+            "CN¥",
+            "ᏓᎶᏂᎨ ᎠᏕᎳ",
+        }
+        EUR{
+            "€",
+            "ᏳᎳᏛ",
+        }
+        GBP{
+            "£",
+            "ᎩᎵᏏᏲ ᎠᏕᎳ",
+        }
+        INR{
+            "₹",
+            "ᎢᏅᏗᎾ ᎠᏕᎳ",
+        }
+        JPY{
+            "JP¥",
+            "ᏣᏩᏂᏏ ᎠᏕᎳ",
+        }
+        MXN{
+            "MX$",
+            "ᏍᏆᏂ ᎠᏕᎳ",
+        }
+        RUB{
+            "RUB",
+            "ᏲᏂᎢ ᎠᏕᎳ",
+        }
+        USD{
+            "$",
+            "ᎤᏃᏍᏗ",
+        }
+    }
+    CurrencyPlurals{
+        USD{
+            one{"ᎤᏃᏍᏗ"}
+            other{"ᏧᏃᏍᏗ"}
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
+    Version{"2.1.23.7"}
+}

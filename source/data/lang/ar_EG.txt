@@ -1,0 +1,14 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ar_EG.xml
+// *
+// ***************************************************************************
+ar_EG{
+    Languages{
+        da{"الدنماركية"}
+    }
+    Version{"2.1.19.14"}
+}

@@ -1,0 +1,14 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/kw.xml
+// *
+// ***************************************************************************
+kw{
+    Languages{
+        kw{"kernewek"}
+    }
+    Version{"2.1.23.7"}
+}

@@ -1,0 +1,21 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/qu_BO.xml
+// *
+// ***************************************************************************
+qu_BO{
+    Currencies{
+        BOB{
+            "Bs",
+            "BOB",
+        }
+        PEN{
+            "PEN",
+            "PEN",
+        }
+    }
+    Version{"2.1.19.14"}
+}

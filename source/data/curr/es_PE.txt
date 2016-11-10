@@ -1,0 +1,18 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/es_PE.xml
+// *
+// ***************************************************************************
+es_PE{
+    %%Parent{"es_419"}
+    Currencies{
+        PEN{
+            "S/.",
+            "nuevo sol peruano",
+        }
+    }
+    Version{"2.1.19.14"}
+}
