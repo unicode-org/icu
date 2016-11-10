@@ -1,0 +1,22 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/collation/de_AT.xml
+// *
+// ***************************************************************************
+de_AT{
+    Version{"2.1.19.14"}
+    collations{
+        phonebook{
+            Sequence{
+                "&a<ä<<<Ä"
+                "&o<ö<<<Ö"
+                "&u<ü<<<Ü"
+                "&ss<ß<<<ẞ"
+            }
+            Version{"29"}
+        }
+    }
+}

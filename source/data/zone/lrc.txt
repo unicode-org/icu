@@ -1,0 +1,22 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/lrc.xml
+// *
+// ***************************************************************************
+lrc{
+    Version{"2.1.23.7"}
+    zoneStrings{
+        "Etc:Unknown"{
+            ec{"نادیار"}
+        }
+        "meta:America_Central"{
+            ld{"روٙشنایی نئهادار روٙز"}
+            lg{"گاٛت مینجاٛیی"}
+            ls{"گاٛت مینجاٛیی ئستاٛنداٛرد"}
+        }
+        regionFormat{"{0}"}
+    }
+}

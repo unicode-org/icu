@@ -1,0 +1,24 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/en_GB.xml
+// *
+// ***************************************************************************
+en_GB{
+    %%Parent{"en_001"}
+    Keys{
+        colNormalization{"Normalised Sorting"}
+    }
+    Languages{
+        nds_NL{"West Low German"}
+    }
+    Types{
+        colNormalization{
+            no{"Sort Without Normalisation"}
+            yes{"Sort Unicode Normalised"}
+        }
+    }
+    Version{"2.1.22.17"}
+}

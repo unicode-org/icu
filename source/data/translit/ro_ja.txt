@@ -1,0 +1,13 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2016 and later: Unicode, Inc. and others.
+# *  License & terms of use: http://www.unicode.org/copyright.html.
+# *
+# ***************************************************************************
+# File: ro_ja.txt
+# Generated from CLDR 
+#
+
+::ro-ro_FONIPA;
+::ro_FONIPA-ja;
+

@@ -1,0 +1,18 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/en_CX.xml
+// *
+// ***************************************************************************
+en_CX{
+    %%Parent{"en_001"}
+    Currencies{
+        AUD{
+            "$",
+            "Australian Dollar",
+        }
+    }
+    Version{"2.1.19.14"}
+}

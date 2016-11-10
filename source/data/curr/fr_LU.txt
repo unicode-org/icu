@@ -1,0 +1,21 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/fr_LU.xml
+// *
+// ***************************************************************************
+fr_LU{
+    Currencies{
+        FRF{
+            "FRF",
+            "franc français",
+        }
+        LUF{
+            "F",
+            "franc luxembourgeois",
+        }
+    }
+    Version{"2.1.19.14"}
+}

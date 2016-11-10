@@ -1,0 +1,19 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/es_CO.xml
+// *
+// ***************************************************************************
+es_CO{
+    %%Parent{"es_419"}
+    Version{"2.1.22.17"}
+    zoneStrings{
+        "meta:Colombia"{
+            sd{"COST"}
+            sg{"COT"}
+            ss{"COT"}
+        }
+    }
+}

@@ -1,0 +1,20 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/collation/en_US_POSIX.xml
+// *
+// ***************************************************************************
+en_US_POSIX{
+    Version{"2.1.19.14"}
+    collations{
+        standard{
+            Sequence{
+                "&A<*'\u0020'-'/'<*0-'@'<*ABCDEFGHIJKLMNOPQRSTUVWXYZ<*'['-'`'<*abcdefghijklmnopqrstuvwxyz"
+                "<*'{'-'\u007F'"
+            }
+            Version{"29"}
+        }
+    }
+}

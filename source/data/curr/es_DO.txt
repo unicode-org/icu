@@ -1,0 +1,22 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2016 and later: Unicode, Inc. and others.
+// * License & terms of use: http://www.unicode.org/copyright.html.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/es_DO.xml
+// *
+// ***************************************************************************
+es_DO{
+    %%Parent{"es_419"}
+    Currencies{
+        DOP{
+            "RD$",
+            "peso dominicano",
+        }
+        USD{
+            "US$",
+            "dólar estadounidense",
+        }
+    }
+    Version{"2.1.22.17"}
+}

@@ -1,0 +1,13 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2016 and later: Unicode, Inc. and others.
+# *  License & terms of use: http://www.unicode.org/copyright.html.
+# *
+# ***************************************************************************
+# File: cs_fa.txt
+# Generated from CLDR 
+#
+
+::cs-cs_FONIPA;
+::und_FONIPA-fa;
+
