@@ -422,6 +422,9 @@ ucasemap_internalUTF8ToTitle(const UCaseMap *csm,
                                 src, &csc,
                                 titleLimit, idx,
                                 pErrorCode);
+                        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                            *pErrorCode=U_ZERO_ERROR;
+                        }
                         if(U_FAILURE(*pErrorCode)) {
                             return destIndex;
                         }
