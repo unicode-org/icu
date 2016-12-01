@@ -49,6 +49,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestGreekUpper);
     TESTCASE_AUTO(TestLongUpper);
     TESTCASE_AUTO(TestMalformedUTF8);
+    TESTCASE_AUTO(TestBufferOverflow);
     TESTCASE_AUTO_END;
 }
 
@@ -814,4 +815,36 @@ void StringCaseTest::TestMalformedUTF8() {
         errln("ucasemap_utf8FoldCase(\\x85) failed: %s destLength=%d dest[0]=0x%02x",
               errorCode.errorName(), (int)destLength, dest[0]);
     }
+}
+
+void StringCaseTest::TestBufferOverflow() {
+    // Ticket #12849, incorrect result from Title Case preflight operation, 
+    // when buffer overflow error is expected.
+    IcuTestErrorCode errorCode(*this, "TestBufferOverflow");
+    LocalUCaseMapPointer csm(ucasemap_open("en", 0, errorCode));
+    if (errorCode.isFailure()) {
+        errln("ucasemap_open(English) failed - %s", errorCode.errorName());
+        return;
+    }
+
+    UnicodeString data("hello world");
+    int32_t result = ucasemap_toTitle(csm.getAlias(), NULL, 0, data.getBuffer(), data.length(), errorCode);
+    if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != data.length()) {
+        errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
+              "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",
+              __FILE__, __LINE__, data.length(), errorCode.errorName(), result);
+    }
+    errorCode.reset();
+
+#if U_HAVE_STD_STRING
+    std::string data_utf8;
+    data.toUTF8String(data_utf8);
+    result = ucasemap_utf8ToTitle(csm.getAlias(), NULL, 0, data_utf8.c_str(), data_utf8.length(), errorCode);
+    if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != (int32_t)data_utf8.length()) {
+        errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
+              "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",
+              __FILE__, __LINE__, data_utf8.length(), errorCode.errorName(), result);
+    }
+    errorCode.reset();
+#endif  // U_HAVE_STD_STRING
 }
