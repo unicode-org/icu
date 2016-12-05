@@ -1014,23 +1014,20 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Indicates the currency match pattern used in {@link #getPatternForCurrencySpacing}.
      * @stable ICU 4.2
      */
-    public static final int CURRENCY_SPC_CURRENCY_MATCH =
-            CurrencySpacingInfo.SpacingPattern.CURRENCY_MATCH.ordinal();
+    public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
 
     /**
      * {@icu} Indicates the surrounding match pattern used in {@link
      * #getPatternForCurrencySpacing}.
      * @stable ICU 4.2
      */
-    public static final int CURRENCY_SPC_SURROUNDING_MATCH =
-            CurrencySpacingInfo.SpacingPattern.SURROUNDING_MATCH.ordinal();
+    public static final int CURRENCY_SPC_SURROUNDING_MATCH = 1;
 
     /**
      * {@icu} Indicates the insertion value used in {@link #getPatternForCurrencySpacing}.
      * @stable ICU 4.4
      */
-    public static final int CURRENCY_SPC_INSERT =
-            CurrencySpacingInfo.SpacingPattern.INSERT_BETWEEN.ordinal();
+    public static final int CURRENCY_SPC_INSERT = 2;
 
     private String[] currencySpcBeforeSym;
     private String[] currencySpcAfterSym;
