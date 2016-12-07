@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.ibm.icu.text.CurrencyDisplayNames;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
 public class CurrencyData {
@@ -47,7 +48,15 @@ public class CurrencyData {
         private final String[][] symbols = new String[SpacingType.COUNT.ordinal()][SpacingPattern.COUNT.ordinal()];
 
         public static enum SpacingType { BEFORE, AFTER, COUNT };
-        public static enum SpacingPattern { CURRENCY_MATCH, SURROUNDING_MATCH, INSERT_BETWEEN, COUNT };
+        public static enum SpacingPattern {
+            CURRENCY_MATCH(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH),
+            SURROUNDING_MATCH(DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH),
+            INSERT_BETWEEN(DecimalFormatSymbols.CURRENCY_SPC_INSERT),
+            COUNT;
+
+            SpacingPattern() {}
+            SpacingPattern(int value) { assert value == ordinal(); }
+        };
 
         public CurrencySpacingInfo() {}
 
