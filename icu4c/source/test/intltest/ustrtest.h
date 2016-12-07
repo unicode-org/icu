@@ -112,6 +112,7 @@ public:
     void TestGreekUpper();
     void TestLongUpper();
     void TestMalformedUTF8();
+    void TestBufferOverflow();
 
 private:
     void assertGreekUpper(const char *s, const char *expected);

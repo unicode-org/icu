@@ -49,6 +49,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestGreekUpper);
     TESTCASE_AUTO(TestLongUpper);
     TESTCASE_AUTO(TestMalformedUTF8);
+    TESTCASE_AUTO(TestBufferOverflow);
     TESTCASE_AUTO_END;
 }
 
@@ -589,6 +590,35 @@ StringCaseTest::assertGreekUpper(const char *s, const char *expected) {
     result16.toUpper(GREEK_LOCALE_);
     assertEquals(msg, expected16, result16);
 
+    msg = UnicodeString("u_strToUpper/Greek(\"") + s16 + "\") cap=";
+    int32_t length = expected16.length();
+    int32_t capacities[] = {
+        // Keep in sync with the UTF-8 capacities near the bottom of this function.
+        0, length / 2, length - 1, length, length + 1
+    };
+    for (int32_t i = 0; i < UPRV_LENGTHOF(capacities); ++i) {
+        int32_t cap = capacities[i];
+        UChar *dest16 = result16.getBuffer(expected16.length() + 1);
+        u_memset(dest16, 0x55AA, result16.getCapacity());
+        UErrorCode errorCode = U_ZERO_ERROR;
+        length = u_strToUpper(dest16, cap, s16.getBuffer(), s16.length(), "el", &errorCode);
+        assertEquals(msg + cap, expected16.length(), length);
+        UErrorCode expectedErrorCode;
+        if (cap < expected16.length()) {
+            expectedErrorCode = U_BUFFER_OVERFLOW_ERROR;
+        } else if (cap == expected16.length()) {
+            expectedErrorCode = U_STRING_NOT_TERMINATED_WARNING;
+        } else {
+            expectedErrorCode = U_ZERO_ERROR;
+            assertEquals(msg + cap + " NUL", 0, dest16[length]);
+        }
+        assertEquals(msg + cap + " errorCode", expectedErrorCode, errorCode);
+        result16.releaseBuffer(length);
+        if (cap >= expected16.length()) {
+            assertEquals(msg + cap, expected16, result16);
+        }
+    }
+
 #if U_HAVE_STD_STRING
     UErrorCode errorCode = U_ZERO_ERROR;
     LocalUCaseMapPointer csm(ucasemap_open("el", 0, &errorCode));
@@ -596,13 +626,42 @@ StringCaseTest::assertGreekUpper(const char *s, const char *expected) {
     std::string s8;
     s16.toUTF8String(s8);
     msg = UnicodeString("ucasemap_utf8ToUpper/Greek(\"") + s16 + "\")";
-    char dest[1000];
-    int32_t length = ucasemap_utf8ToUpper(csm.getAlias(), dest, UPRV_LENGTHOF(dest),
-                                          s8.data(), s8.length(), &errorCode);
+    char dest8[1000];
+    length = ucasemap_utf8ToUpper(csm.getAlias(), dest8, UPRV_LENGTHOF(dest8),
+                                  s8.data(), s8.length(), &errorCode);
     assertSuccess("ucasemap_utf8ToUpper", errorCode);
-    StringPiece result8(dest, length);
+    StringPiece result8(dest8, length);
     UnicodeString result16From8 = UnicodeString::fromUTF8(result8);
     assertEquals(msg, expected16, result16From8);
+
+    msg += " cap=";
+    capacities[1] = length / 2;
+    capacities[2] = length - 1;
+    capacities[3] = length;
+    capacities[4] = length + 1;
+    char dest8b[1000];
+    int32_t expected8Length = length;  // Assuming the previous call worked.
+    for (int32_t i = 0; i < UPRV_LENGTHOF(capacities); ++i) {
+        int32_t cap = capacities[i];
+        memset(dest8b, 0x5A, UPRV_LENGTHOF(dest8b));
+        UErrorCode errorCode = U_ZERO_ERROR;
+        length = ucasemap_utf8ToUpper(csm.getAlias(), dest8b, cap,
+                                      s8.data(), s8.length(), &errorCode);
+        assertEquals(msg + cap, expected8Length, length);
+        UErrorCode expectedErrorCode;
+        if (cap < expected8Length) {
+            expectedErrorCode = U_BUFFER_OVERFLOW_ERROR;
+        } else if (cap == expected8Length) {
+            expectedErrorCode = U_STRING_NOT_TERMINATED_WARNING;
+        } else {
+            expectedErrorCode = U_ZERO_ERROR;
+            assertEquals(msg + cap + " NUL", 0, dest8b[length]);
+        }
+        assertEquals(msg + cap + " errorCode", expectedErrorCode, errorCode);
+        if (cap >= expected8Length) {
+            assertEquals(msg + cap + " (memcmp)", 0, memcmp(dest8, dest8b, expected8Length));
+        }
+    }
 #endif
 }
 
@@ -756,4 +815,36 @@ void StringCaseTest::TestMalformedUTF8() {
         errln("ucasemap_utf8FoldCase(\\x85) failed: %s destLength=%d dest[0]=0x%02x",
               errorCode.errorName(), (int)destLength, dest[0]);
     }
+}
+
+void StringCaseTest::TestBufferOverflow() {
+    // Ticket #12849, incorrect result from Title Case preflight operation, 
+    // when buffer overflow error is expected.
+    IcuTestErrorCode errorCode(*this, "TestBufferOverflow");
+    LocalUCaseMapPointer csm(ucasemap_open("en", 0, errorCode));
+    if (errorCode.isFailure()) {
+        errln("ucasemap_open(English) failed - %s", errorCode.errorName());
+        return;
+    }
+
+    UnicodeString data("hello world");
+    int32_t result = ucasemap_toTitle(csm.getAlias(), NULL, 0, data.getBuffer(), data.length(), errorCode);
+    if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != data.length()) {
+        errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
+              "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",
+              __FILE__, __LINE__, data.length(), errorCode.errorName(), result);
+    }
+    errorCode.reset();
+
+#if U_HAVE_STD_STRING
+    std::string data_utf8;
+    data.toUTF8String(data_utf8);
+    result = ucasemap_utf8ToTitle(csm.getAlias(), NULL, 0, data_utf8.c_str(), data_utf8.length(), errorCode);
+    if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != (int32_t)data_utf8.length()) {
+        errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
+              "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",
+              __FILE__, __LINE__, data_utf8.length(), errorCode.errorName(), result);
+    }
+    errorCode.reset();
+#endif  // U_HAVE_STD_STRING
 }
