@@ -57,21 +57,19 @@
  *     When defined, force use of char16_t for UChar.
  *     Note: char16_t is expected to become the default and required in the future,
  *           and this option will be removed.
+ *
+ *     Note: for plain C, #include <uchar.h> should define char16_t,
+ *           but Macintosh Xcode does not yet implement it.
  *     @internal
  */
 #ifdef U_USE_CHAR16_T
+#ifdef __cplusplus
 #ifdef UCHAR_TYPE
 #undef UCHAR_TYPE
 #endif
 #define UCHAR_TYPE char16_t
-
-/*
- * In plain C, <uchar.h> is needed for the definition of char16_t
- */
-#ifndef __cplusplus
-#include <uchar.h>
-#endif
-#endif
+#endif  /* __cpluplus  */
+#endif  /* U_USE_CHAR16_t */
 #endif  /* U_HIDE_INTERNAL_API */
 
 /*==========================================================================*/

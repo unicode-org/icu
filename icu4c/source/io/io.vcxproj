@@ -249,18 +249,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="locbund.cpp" />
-    <ClCompile Include="sprintf.c" />
-    <ClCompile Include="sscanf.c" />
+    <ClCompile Include="sprintf.cpp" />
+    <ClCompile Include="sscanf.cpp" />
     <ClCompile Include="ucln_io.cpp">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
-    <ClCompile Include="ufile.c" />
-    <ClCompile Include="ufmt_cmn.c" />
+    <ClCompile Include="ufile.cpp" />
+    <ClCompile Include="ufmt_cmn.cpp" />
     <ClCompile Include="uprintf.cpp" />
-    <ClCompile Include="uprntf_p.c" />
-    <ClCompile Include="uscanf.c" />
-    <ClCompile Include="uscanf_p.c" />
-    <ClCompile Include="ustdio.c" />
+    <ClCompile Include="uprntf_p.cpp" />
+    <ClCompile Include="uscanf.cpp" />
+    <ClCompile Include="uscanf_p.cpp" />
+    <ClCompile Include="ustdio.cpp" />
     <ClCompile Include="ustream.cpp">
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>

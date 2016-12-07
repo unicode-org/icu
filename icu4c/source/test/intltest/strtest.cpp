@@ -22,6 +22,8 @@
 #include "unicode/stringpiece.h"
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
+#include "unicode/utf_old.h"    // for UTF8_COUNT_TRAIL_BYTES
+#include "unicode/utf8.h"
 #include "charstr.h"
 #include "cstr.h"
 #include "intltest.h"
@@ -148,8 +150,18 @@ StringTest::Test_UTF8_COUNT_TRAIL_BYTES() {
         || UTF8_COUNT_TRAIL_BYTES(0xF0) != 3)
     {
         errln("Test_UTF8_COUNT_TRAIL_BYTES: UTF8_COUNT_TRAIL_BYTES does not work right! "
-              "See utf8.h.");
+              "See utf_old.h.");
     }
+	// Note: U8_COUNT_TRAIL_BYTES (current) and UTF8_COUNT_TRAIL_BYTES (deprecated)
+	//       have completely different implementations.
+	if (U8_COUNT_TRAIL_BYTES(0x7F) != 0
+		|| U8_COUNT_TRAIL_BYTES(0xC0) != 1
+		|| U8_COUNT_TRAIL_BYTES(0xE0) != 2
+		|| U8_COUNT_TRAIL_BYTES(0xF0) != 3)
+	{
+		errln("Test_UTF8_COUNT_TRAIL_BYTES: U8_COUNT_TRAIL_BYTES does not work right! "
+			"See utf8.h.");
+	}
 }
 
 void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {

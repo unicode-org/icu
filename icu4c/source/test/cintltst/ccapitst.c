@@ -24,6 +24,7 @@
 #include "unicode/putil.h"
 #include "unicode/uset.h"
 #include "unicode/ustring.h"
+#include "unicode/utf8.h"
 #include "ucnv_bld.h" /* for sizeof(UConverter) */
 #include "cmemory.h"  /* for UAlignedMemory */
 #include "cintltst.h"
