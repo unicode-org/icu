@@ -268,7 +268,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="stubdata.c" />
+    <ClCompile Include="stubdata.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\data\misc\icudata.rc">

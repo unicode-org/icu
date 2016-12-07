@@ -151,9 +151,6 @@
     <ClCompile Include="simplethread.cpp">
       <Filter>configuration</Filter>
     </ClCompile>
-    <ClCompile Include="strtest.cpp">
-      <Filter>configuration</Filter>
-    </ClCompile>
     <ClCompile Include="tsmthred.cpp">
       <Filter>configuration</Filter>
     </ClCompile>
@@ -436,6 +433,9 @@
     <ClCompile Include="strcase.cpp">
       <Filter>strings</Filter>
     </ClCompile>
+    <ClCompile Include="strtest.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
     <ClCompile Include="ustrtest.cpp">
       <Filter>strings</Filter>
     </ClCompile>
@@ -583,9 +583,6 @@
       <Filter>collections</Filter>
     </ClInclude>
     <ClInclude Include="simplethread.h">
-      <Filter>configuration</Filter>
-    </ClInclude>
-    <ClInclude Include="strtest.h">
       <Filter>configuration</Filter>
     </ClInclude>
     <ClInclude Include="tsmthred.h">
@@ -829,6 +826,9 @@
       <Filter>strings</Filter>
     </ClInclude>
     <ClInclude Include="sfwdchit.h">
+      <Filter>strings</Filter>
+    </ClInclude>
+    <ClInclude Include="strtest.h">
       <Filter>strings</Filter>
     </ClInclude>
     <ClInclude Include="ustrtest.h">
