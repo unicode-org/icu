@@ -14,13 +14,15 @@ h3.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J Release Candidate</h2>
-(Last Update: 2016-Oct-14)
+<h2>Read Me for ICU4J 58.2</h2>
+(Last Update: 2016-Dec-8)
 <hr size="2" width="100%">
 
 <p>
-<b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality.
+<!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality. -->
+<b>Note:</b> This is an update release of ICU4J 58. This release contains bug fixes and
+updated data, but does not introduce any new APIs for functionalities.
 <!-- <b>Note:</b> This is a development release of ICU4J 58.
 The contents of this document may not reflect the recent changes done
 for ICU 58 development. This milestone is intended for those wishing
@@ -139,7 +141,7 @@ found in ICU4J.</p>
 <p>See the <a href="https://sites.google.com/site/icusite/download/58">ICU 58 download page</a>
 about new features in this release.
 The list of API changes since the previous ICU4J release is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-58-1/APIChangeReport.html">here</a>.</p>
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-58-2/APIChangeReport.html">here</a>.</p>
 
     <!-- ICU 58 items -->
 <h3 class="doc">ICU development and license change</h3>
@@ -184,7 +186,7 @@ builds, and they are packaged in jar files for convenient download.
 &lt;dependency&gt;
     &lt;groupId&gt;com.ibm.icu&lt;/groupId&gt;
     &lt;artifactId&gt;icu4j&lt;/artifactId&gt;
-    &lt;version&gt;58.1&lt;/version&gt;
+    &lt;version&gt;58.2&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
   </ul>
@@ -860,9 +862,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-30-0-2'</li>
-    <li>Checkout ICU4C with tag 'release-58-1'</li>
-    <li>Checkout ICU4J with tag 'release-58-1'</li>
+    <li>Checkout or download CLDR version 'release-30-0-3'</li>
+    <li>Checkout ICU4C with tag 'release-58-2'</li>
+    <li>Checkout ICU4J with tag 'release-58-2'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
