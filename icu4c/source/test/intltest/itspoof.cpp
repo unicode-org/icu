@@ -88,6 +88,8 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
     TESTCASE_AUTO(testRestrictionLevel);
     TESTCASE_AUTO(testMixedNumbers);
     TESTCASE_AUTO(testBug12153);
+    TESTCASE_AUTO(testBug12825);
+    TESTCASE_AUTO(testBug12815);
     TESTCASE_AUTO_END;
 }
 
@@ -654,6 +656,29 @@ void IntlTestSpoof::testBug12153() {
     uspoof_setRestrictionLevel(sc.getAlias(), USPOOF_MODERATELY_RESTRICTIVE);
     checks = uspoof_getChecks(sc.getAlias(), &status);
     TEST_ASSERT((checks & USPOOF_RESTRICTION_LEVEL) != 0);
+    TEST_ASSERT_SUCCESS(status);
+}
+
+// uspoof_checkUnicodeString should NOT have an infinite loop.
+void IntlTestSpoof::testBug12825() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalUSpoofCheckerPointer sc(uspoof_open(&status));
+    TEST_ASSERT_SUCCESS(status);
+    uspoof_setChecks(sc.getAlias(), USPOOF_ALL_CHECKS | USPOOF_AUX_INFO, &status);
+    TEST_ASSERT_SUCCESS(status);
+    uspoof_checkUnicodeString(sc.getAlias(), UnicodeString("\\u30FB").unescape(), NULL, &status);
+    TEST_ASSERT_SUCCESS(status);
+}
+
+// uspoof_getSkeleton should NOT set an ILLEGAL_ARGUMENT_EXCEPTION.
+void IntlTestSpoof::testBug12815() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalUSpoofCheckerPointer sc(uspoof_open(&status));
+    TEST_ASSERT_SUCCESS(status);
+    uspoof_setChecks(sc.getAlias(), USPOOF_RESTRICTION_LEVEL, &status);
+    TEST_ASSERT_SUCCESS(status);
+    UnicodeString result;
+    uspoof_getSkeletonUnicodeString(sc.getAlias(), 0, UnicodeString("hello world"), result, &status);
     TEST_ASSERT_SUCCESS(status);
 }
 
