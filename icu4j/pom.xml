@@ -24,8 +24,8 @@
   <inceptionYear>2001</inceptionYear>
   <licenses>
     <license>
-      <name>ICU License</name>
-      <url>http://source.icu-project.org/repos/icu/icu/trunk/LICENSE</url>
+      <name>Unicode/ICU License</name>
+      <url>http://source.icu-project.org/repos/icu/trunk/icu4j/main/shared/licenses/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -122,9 +122,9 @@
   </mailingLists>
 
   <scm>
-    <connection>scm:svn:http://source.icu-project.org/repos/icu/icu4j/trunk/</connection>
-    <developerConnection>scm:svn:http://source.icu-project.org/repos/icu/icu4j/trunk/</developerConnection>
-    <url>http://source.icu-project.org/repos/icu/icu4j/trunk/</url>
+    <connection>scm:svn:http://source.icu-project.org/repos/icu/trunk/icu4j</connection>
+    <developerConnection>scm:svn:http://source.icu-project.org/repos/icu/turnk/icu4j</developerConnection>
+    <url>http://source.icu-project.org/repos/icu/trunk/icu4j</url>
   </scm>
   <issueManagement>
     <system>Trac</system>
