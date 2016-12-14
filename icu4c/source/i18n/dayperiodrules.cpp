@@ -174,7 +174,7 @@ struct DayPeriodRulesDataSink : public ResourceSink {
         }
     }
 
-    void addCutoff(CutoffType type, UnicodeString hour_str, UErrorCode &errorCode) {
+    void addCutoff(CutoffType type, const UnicodeString &hour_str, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) { return; }
 
         if (type == CUTOFF_TYPE_UNKNOWN) {

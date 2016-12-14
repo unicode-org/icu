@@ -193,7 +193,7 @@ private:
 
     void setAlgorithmic(UBool algorithmic);
 
-    void setDesc(UnicodeString desc);
+    void setDesc(const UnicodeString &desc);
 
     void setName(const char* name);
 

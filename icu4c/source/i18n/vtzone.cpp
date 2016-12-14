@@ -358,7 +358,7 @@ static void millisToOffset(int32_t millis, UnicodeString& str) {
 /*
  * Create a default TZNAME from TZID
  */
-static void getDefaultTZName(const UnicodeString tzid, UBool isDST, UnicodeString& zonename) {
+static void getDefaultTZName(const UnicodeString &tzid, UBool isDST, UnicodeString& zonename) {
     zonename = tzid;
     if (isDST) {
         zonename += UNICODE_STRING_SIMPLE("(DST)");

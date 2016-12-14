@@ -230,7 +230,7 @@ void NumberingSystem::setAlgorithmic(UBool c) {
     algorithmic = c;
 }
 
-void NumberingSystem::setDesc(UnicodeString d) {
+void NumberingSystem::setDesc(const UnicodeString &d) {
     desc.setTo(d);
 }
 void NumberingSystem::setName(const char *n) {
