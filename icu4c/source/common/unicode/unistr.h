@@ -99,10 +99,12 @@ class UnicodeStringAppendable;  // unicode/appendable.h
 
 /**
  * Unicode String literals in C++.
- * Dependent on the platform properties, different UnicodeString
- * constructors should be used to create a UnicodeString object from
- * a string literal.
- * The macros are defined for maximum performance.
+ *
+ * Note: these macros are not recommended for new code.
+ * Prior to the availability of C++11 and u"unicode string literals",
+ * these macros were provided for portability and efficiency when
+ * initializing UnicodeStrings from literals.
+ *
  * They work only for strings that contain "invariant characters", i.e.,
  * only latin letters, digits, and some punctuation.
  * See utypes.h for details.
@@ -110,19 +112,9 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * The string parameter must be a C string literal.
  * The length of the string, not including the terminating
  * <code>NUL</code>, must be specified as a constant.
- * The U_STRING_DECL macro should be invoked exactly once for one
- * such string variable before it is used.
  * @stable ICU 2.0
  */
-#if defined(U_DECLARE_UTF16)
-#   define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, (const UChar *)U_DECLARE_UTF16(cs), _length)
-#elif U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
-#   define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, (const UChar *)L ## cs, _length)
-#elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, (const UChar *)cs, _length)
-#else
-#   define UNICODE_STRING(cs, _length) icu::UnicodeString(cs, _length, US_INV)
-#endif
+#define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, (const UChar *)u ## cs, _length)
 
 /**
  * Unicode String literals in C++.

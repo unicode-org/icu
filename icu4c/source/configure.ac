@@ -492,17 +492,17 @@ else
 fi
 
 if [[ "$GXX" = yes ]]; then
-    # if CXXFLAGS does not have a "-std=" setting, set it now to -std=c++0x,
+    # if CXXFLAGS does not have a "-std=" setting, set it now to -std=c++11,
     # and check that the compiler still works.
     if ! echo "$CXXFLAGS" | grep '\-std=' >/dev/null 2>&1; then
         OLD_CXXFLAGS="${CXXFLAGS}"
-        CXXFLAGS="$CXXFLAGS --std=c++0x"
+        CXXFLAGS="$CXXFLAGS -std=c++11"
         AC_MSG_CHECKING([[if we have a C++11 compiler]])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],[[]])],[cxx11_okay=yes],[cxx11_okay=no])
         AC_MSG_RESULT($cxx11_okay)
         if [[ $cxx11_okay = yes ]]; then
-            AC_MSG_NOTICE([Adding CXXFLAGS option --std=c++0x])
-            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} --std=c++0x"
+            AC_MSG_NOTICE([Adding CXXFLAGS option -std=c++11])
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -std=c++11"
         else
             CXXFLAGS="$OLD_CXXFLAGS"
         fi
