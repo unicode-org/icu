@@ -87,7 +87,7 @@ ucasemap_toTitle(UCaseMap *csm,
         csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToTitle, pErrorCode);
+        ustrcase_internalToTitle, NULL, pErrorCode);
 }
 
 #endif  // !UCONFIG_NO_BREAK_ITERATION

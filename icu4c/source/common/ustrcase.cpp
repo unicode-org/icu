@@ -32,6 +32,190 @@
 #include "ustr_imp.h"
 #include "uassert.h"
 
+U_NAMESPACE_BEGIN
+
+namespace {
+
+// 0000uuuuuuuuuuuu records u+1 unchanged text units.
+const int32_t MAX_UNCHANGED_LENGTH = 0x1000;
+const int32_t MAX_UNCHANGED = MAX_UNCHANGED_LENGTH - 1;
+
+// 0wwwcccccccccccc with w=1..6 records ccc+1 replacements of w:w text units.
+// No length change.
+const int32_t MAX_SHORT_WIDTH = 6;
+const int32_t MAX_SHORT_CHANGE_LENGTH = 0xfff;
+const int32_t MAX_SHORT_CHANGE = 0x6fff;
+
+// 0111mmmmmmnnnnnn records a replacement of m text units with n.
+// m or n = 61: actual length follows in the next edits array unit.
+// m or n = 62..63: actual length follows in the next two edits array units.
+// Bit 30 of the actual length is in the head unit.
+// Trailing units have bit 15 set.
+const int32_t LENGTH_IN_1TRAIL = 61;
+const int32_t LENGTH_IN_2TRAIL = 62;
+
+}  // namespace
+
+Edits::~Edits() {
+    if(array != stackArray) {
+        uprv_free(array);
+    }
+}
+
+void Edits::reset() {
+    length = 0;
+}
+
+void Edits::addUnchanged(int32_t unchangedLength) {
+    if(U_FAILURE(errorCode) || unchangedLength == 0) { return; }
+    if(unchangedLength < 0) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    // Merge into previous unchanged-text record, if any.
+    int32_t last = lastUnit();
+    if(last < MAX_UNCHANGED) {
+        int32_t remaining = MAX_UNCHANGED - last;
+        if (remaining >= unchangedLength) {
+            setLastUnit(last + unchangedLength);
+            return;
+        }
+        setLastUnit(MAX_UNCHANGED);
+        unchangedLength -= remaining;
+    }
+    // Split large lengths into multiple units.
+    while(unchangedLength >= MAX_UNCHANGED_LENGTH) {
+        append(MAX_UNCHANGED);
+        unchangedLength -= MAX_UNCHANGED_LENGTH;
+    }
+    // Write a small (remaining) length.
+    if(unchangedLength > 0) {
+        append(unchangedLength - 1);
+    }
+}
+
+void Edits::addReplace(int32_t oldLength, int32_t newLength) {
+    if(U_FAILURE(errorCode)) { return; }
+    if(oldLength == newLength && 0 < oldLength && oldLength <= MAX_SHORT_WIDTH) {
+        // Replacement of short oldLength text units by same-length new text.
+        // Merge into previous short-replacement record, if any.
+        int32_t last = lastUnit();
+        if(MAX_UNCHANGED < last && last < MAX_SHORT_CHANGE &&
+                (last >> 12) == oldLength && (last & 0xfff) < MAX_SHORT_CHANGE_LENGTH) {
+            setLastUnit(last + 1);
+            return;
+        }
+        append(oldLength << 12);
+        return;
+    }
+
+    if(oldLength < 0 || newLength < 0) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (oldLength == 0 && newLength == 0) {
+        return;
+    }
+    int32_t newDelta = newLength - oldLength;
+    if (newDelta != 0) {
+        if (newDelta > 0 ? newDelta > (INT32_MAX - delta) : newDelta < (INT32_MIN - delta)) {
+            // Integer overflow or underflow.
+            errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+            return;
+        }
+        delta += newDelta;
+    }
+
+    uint16_t buffer[5];
+    int32_t bLength = 1;
+    int32_t head = 0x7000;
+    if(oldLength < LENGTH_IN_1TRAIL) {
+        head |= oldLength << 6;
+    } else if(oldLength <= 0x7fff) {
+        head |= LENGTH_IN_1TRAIL << 6;
+        buffer[bLength++] = (uint16_t)(0x8000 | oldLength);
+    } else {
+        head |= (LENGTH_IN_2TRAIL + (oldLength >> 30)) << 6;
+        buffer[bLength++] = (uint16_t)(0x8000 | (oldLength >> 15));
+        buffer[bLength++] = (uint16_t)(0x8000 | oldLength);
+    }
+    if(newLength < LENGTH_IN_1TRAIL) {
+        head |= newLength;
+    } else if(newLength <= 0x7fff) {
+        head |= LENGTH_IN_1TRAIL;
+        buffer[bLength++] = (uint16_t)(0x8000 | newLength);
+    } else {
+        head |= LENGTH_IN_2TRAIL + (newLength >> 30);
+        buffer[bLength++] = (uint16_t)(0x8000 | (newLength >> 15));
+        buffer[bLength++] = (uint16_t)(0x8000 | newLength);
+    }
+    if(bLength == 1) {
+        append(head);
+    } else {
+        buffer[0] = (uint16_t)head;
+        append(buffer, bLength);
+    }
+}
+
+void Edits::append(int32_t r) {
+    if(length < capacity || growArray()) {
+        array[length++] = (uint16_t)r;
+    }
+}
+
+void Edits::append(const uint16_t *buffer, int32_t bLength) {
+    if(bLength > (INT32_MAX - length)) {
+        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;  // Integer overflow.
+        return;
+    }
+    if((length + bLength) < capacity || growArray()) {
+        int32_t i = 0;
+        do {
+            array[length++] = buffer[i++];
+        } while (i < bLength);
+    }
+}
+
+UBool Edits::growArray() {
+    int32_t newCapacity;
+    if (array == stackArray) {
+        newCapacity = 2000;
+    } else if (capacity == INT32_MAX) {
+        errorCode = U_BUFFER_OVERFLOW_ERROR;
+        return FALSE;
+    } else if (capacity >= (INT32_MAX / 2)) {
+        newCapacity = INT32_MAX;
+    } else {
+        newCapacity = 2 * capacity;
+    }
+    // Grow by at least 5 units so that a maximal change record will fit.
+    if ((newCapacity - capacity) < 5) {
+        errorCode = U_BUFFER_OVERFLOW_ERROR;
+        return FALSE;
+    }
+    uint16_t *newArray = (uint16_t *)uprv_malloc((size_t)newCapacity * 2);
+    if (newArray == NULL) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return FALSE;
+    }
+    uprv_memcpy(newArray, array, (size_t)length * 2);
+    if (array != stackArray) {
+        uprv_free(array);
+    }
+    array = newArray;
+    capacity = newCapacity;
+    return TRUE;
+}
+
+UBool Edits::setErrorCode(UErrorCode &outErrorCode) {
+    if(U_FAILURE(outErrorCode)) { return TRUE; }
+    if(U_SUCCESS(errorCode)) { return FALSE; }
+    outErrorCode = errorCode;
+    return TRUE;
+}
+
+U_NAMESPACE_END
+
 U_NAMESPACE_USE
 
 /* string casing ------------------------------------------------------------ */
@@ -39,21 +223,43 @@ U_NAMESPACE_USE
 /* Appends a full case mapping result, see UCASE_MAX_STRING_LENGTH. */
 static inline int32_t
 appendResult(UChar *dest, int32_t destIndex, int32_t destCapacity,
-             int32_t result, const UChar *s) {
+             int32_t result, const UChar *s,
+             uint32_t options, int32_t cpLength, icu::Edits *edits) {
     UChar32 c;
     int32_t length;
 
     /* decode the result */
     if(result<0) {
         /* (not) original code point */
+        if(edits!=NULL) {
+            edits->addUnchanged(cpLength);
+        }
+        if(options & UCASEMAP_OMIT_UNCHANGED) {
+            return destIndex;
+        }
         c=~result;
-        length=U16_LENGTH(c);
-    } else if(result<=UCASE_MAX_STRING_LENGTH) {
-        c=U_SENTINEL;
-        length=result;
+        if(destIndex<destCapacity && c<=0xffff) {  // BMP slightly-fastpath
+            dest[destIndex++]=(UChar)c;
+            return destIndex;
+        }
+        length=cpLength;
     } else {
-        c=result;
-        length=U16_LENGTH(c);
+        if(result<=UCASE_MAX_STRING_LENGTH) {
+            c=U_SENTINEL;
+            length=result;
+        } else if(destIndex<destCapacity && result<=0xffff) {  // BMP slightly-fastpath
+            dest[destIndex++]=(UChar)result;
+            if(edits!=NULL) {
+                edits->addReplace(cpLength, 1);
+            }
+            return destIndex;
+        } else {
+            c=result;
+            length=U16_LENGTH(c);
+        }
+        if(edits!=NULL) {
+            edits->addReplace(cpLength, length);
+        }
     }
     if(length>(INT32_MAX-destIndex)) {
         return -1;  // integer overflow
@@ -99,8 +305,8 @@ appendUChar(UChar *dest, int32_t destIndex, int32_t destCapacity, UChar c) {
 }
 
 static inline int32_t
-appendString(UChar *dest, int32_t destIndex, int32_t destCapacity,
-             const UChar *s, int32_t length) {
+appendUnchanged(UChar *dest, int32_t destIndex, int32_t destCapacity,
+                const UChar *s, int32_t length, icu::Edits *edits) {
     if(length>0) {
         if(length>(INT32_MAX-destIndex)) {
             return -1;  // integer overflow
@@ -109,6 +315,9 @@ appendString(UChar *dest, int32_t destIndex, int32_t destCapacity,
             u_memcpy(dest+destIndex, s, length);
         }
         destIndex+=length;
+        if(edits!=NULL) {
+            edits->addUnchanged(length);
+        }
     }
     return destIndex;
 }
@@ -154,31 +363,26 @@ _caseMap(const UCaseMap *csm, UCaseMapFull *map,
          UChar *dest, int32_t destCapacity,
          const UChar *src, UCaseContext *csc,
          int32_t srcStart, int32_t srcLimit,
+         icu::Edits *edits,
          UErrorCode *pErrorCode) {
-    const UChar *s;
-    UChar32 c, c2 = 0;
-    int32_t srcIndex, destIndex;
-    int32_t locCache;
-
-    locCache=csm->locCache;
+    int32_t locCache=csm->locCache;
 
     /* case mapping loop */
-    srcIndex=srcStart;
-    destIndex=0;
+    int32_t srcIndex=srcStart;
+    int32_t destIndex=0;
     while(srcIndex<srcLimit) {
-        csc->cpStart=srcIndex;
+        int32_t cpStart;
+        csc->cpStart=cpStart=srcIndex;
+        UChar32 c;
         U16_NEXT(src, srcIndex, srcLimit, c);
         csc->cpLimit=srcIndex;
+        const UChar *s;
         c=map(csm->csp, c, utf16_caseContextIterator, csc, &s, csm->locale, &locCache);
-        if((destIndex<destCapacity) && (c<0 ? (c2=~c)<=0xffff : UCASE_MAX_STRING_LENGTH<c && (c2=c)<=0xffff)) {
-            /* fast path version of appendResult() for BMP results */
-            dest[destIndex++]=(UChar)c2;
-        } else {
-            destIndex=appendResult(dest, destIndex, destCapacity, c, s);
-            if(destIndex<0) {
-                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-                return 0;
-            }
+        destIndex = appendResult(dest, destIndex, destCapacity, c, s,
+                                 csm->options, srcIndex - cpStart, edits);
+        if (destIndex < 0) {
+            *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
         }
     }
 
@@ -194,12 +398,8 @@ U_CFUNC int32_t U_CALLCONV
 ustrcase_internalToTitle(const UCaseMap *csm,
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
+                         icu::Edits *edits,
                          UErrorCode *pErrorCode) {
-    const UChar *s;
-    UChar32 c;
-    int32_t prev, titleStart, titleLimit, idx, destIndex;
-    UBool isFirstIndex;
-
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
@@ -213,13 +413,14 @@ ustrcase_internalToTitle(const UCaseMap *csm,
     UCaseContext csc=UCASECONTEXT_INITIALIZER;
     csc.p=(void *)src;
     csc.limit=srcLength;
-    destIndex=0;
-    prev=0;
-    isFirstIndex=TRUE;
+    int32_t destIndex=0;
+    int32_t prev=0;
+    UBool isFirstIndex=TRUE;
 
     /* titlecasing loop */
     while(prev<srcLength) {
         /* find next index where to titlecase */
+        int32_t idx;
         if(isFirstIndex) {
             isFirstIndex=FALSE;
             idx=bi->first();
@@ -245,7 +446,9 @@ ustrcase_internalToTitle(const UCaseMap *csm,
          */
         if(prev<idx) {
             /* find and copy uncased characters [prev..titleStart[ */
-            titleStart=titleLimit=prev;
+            int32_t titleStart=prev;
+            int32_t titleLimit=prev;
+            UChar32 c;
             U16_NEXT(src, titleLimit, idx, c);
             if((csm->options&U_TITLECASE_NO_BREAK_ADJUSTMENT)==0 && UCASE_NONE==ucase_getType(csm->csp, c)) {
                 /* Adjust the titlecasing index (titleStart) to the next cased character. */
@@ -263,7 +466,8 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                         break; /* cased letter at [titleStart..titleLimit[ */
                     }
                 }
-                destIndex=appendString(dest, destIndex, destCapacity, src+prev, titleStart-prev);
+                destIndex=appendUnchanged(dest, destIndex, destCapacity,
+                                          src+prev, titleStart-prev, edits);
                 if(destIndex<0) {
                     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                     return 0;
@@ -274,8 +478,11 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                 /* titlecase c which is from [titleStart..titleLimit[ */
                 csc.cpStart=titleStart;
                 csc.cpLimit=titleLimit;
-                c=ucase_toFullTitle(csm->csp, c, utf16_caseContextIterator, &csc, &s, csm->locale, &locCache);
-                destIndex=appendResult(dest, destIndex, destCapacity, c, s); 
+                const UChar *s;
+                c=ucase_toFullTitle(csm->csp, c, utf16_caseContextIterator, &csc, &s,
+                                    csm->locale, &locCache);
+                destIndex=appendResult(dest, destIndex, destCapacity, c, s,
+                                       csm->options, titleLimit-titleStart, edits);
                 if(destIndex<0) {
                     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                     return 0;
@@ -291,6 +498,9 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                         return 0;
                     }
+                    if(edits!=NULL) {
+                        edits->addReplace(1, 1);
+                    }
                     titleLimit++;
                 }
 
@@ -304,7 +514,7 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                                 dest+destIndex, destCapacity-destIndex,
                                 src, &csc,
                                 titleLimit, idx,
-                                pErrorCode);
+                                edits, pErrorCode);
                         if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                             *pErrorCode=U_ZERO_ERROR;
                         }
@@ -313,7 +523,8 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                         }
                     } else {
                         /* Optionally just copy the rest of the word unchanged. */
-                        destIndex=appendString(dest, destIndex, destCapacity, src+titleLimit, idx-titleLimit);
+                        destIndex=appendUnchanged(dest, destIndex, destCapacity,
+                                                  src+titleLimit, idx-titleLimit, edits);
                         if(destIndex<0) {
                             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                             return 0;
@@ -816,6 +1027,7 @@ UBool isFollowedByCasedLetter(const UCaseProps *csp, const UChar *s, int32_t i, 
 int32_t toUpper(const UCaseMap *csm,
                 UChar *dest, int32_t destCapacity,
                 const UChar *src, int32_t srcLength,
+                Edits *edits,
                 UErrorCode *pErrorCode) {
     int32_t locCache = UCASE_LOC_GREEK;
     int32_t destIndex=0;
@@ -890,34 +1102,63 @@ int32_t toUpper(const UCaseMap *csm,
                     data &= ~HAS_EITHER_DIALYTIKA;
                 }
             }
-            destIndex=appendUChar(dest, destIndex, destCapacity, (UChar)upper);
-            if (destIndex >= 0 && (data & HAS_EITHER_DIALYTIKA) != 0) {
-                destIndex=appendUChar(dest, destIndex, destCapacity, 0x308);  // restore or add a dialytika
-            }
-            if (destIndex >= 0 && addTonos) {
-                destIndex=appendUChar(dest, destIndex, destCapacity, 0x301);
-            }
-            while (destIndex >= 0 && numYpogegrammeni > 0) {
-                destIndex=appendUChar(dest, destIndex, destCapacity, 0x399);
-                --numYpogegrammeni;
-            }
-            if(destIndex<0) {
-                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-                return 0;
-            }
-        } else {
-            const UChar *s;
-            UChar32 c2 = 0;
-            c=ucase_toFullUpper(csm->csp, c, NULL, NULL, &s, csm->locale, &locCache);
-            if((destIndex<destCapacity) && (c<0 ? (c2=~c)<=0xffff : UCASE_MAX_STRING_LENGTH<c && (c2=c)<=0xffff)) {
-                /* fast path version of appendResult() for BMP results */
-                dest[destIndex++]=(UChar)c2;
+
+            UBool change;
+            if ((csm->options & UCASEMAP_OMIT_UNCHANGED) == 0 && edits == NULL) {
+                change = TRUE;  // common, simple usage
             } else {
-                destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+                // Find out first whether we are changing the text.
+                change = src[i] != upper || numYpogegrammeni > 0;
+                int32_t i2 = i + 1;
+                if ((data & HAS_EITHER_DIALYTIKA) != 0) {
+                    change |= i2 >= nextIndex || src[i2] != 0x308;
+                    ++i2;
+                }
+                if (addTonos) {
+                    change |= i2 >= nextIndex || src[i2] != 0x301;
+                    ++i2;
+                }
+                int32_t oldLength = nextIndex - i;
+                int32_t newLength = (i2 - i) + numYpogegrammeni;
+                change |= oldLength != newLength;
+                if (change) {
+                    if (edits != NULL) {
+                        edits->addReplace(oldLength, newLength);
+                    }
+                } else {
+                    if (edits != NULL) {
+                        edits->addUnchanged(oldLength);
+                    }
+                    // Write unchanged text?
+                    change |= (csm->options & UCASEMAP_OMIT_UNCHANGED) == 0;
+                }
+            }
+
+            if (change) {
+                destIndex=appendUChar(dest, destIndex, destCapacity, (UChar)upper);
+                if (destIndex >= 0 && (data & HAS_EITHER_DIALYTIKA) != 0) {
+                    destIndex=appendUChar(dest, destIndex, destCapacity, 0x308);  // restore or add a dialytika
+                }
+                if (destIndex >= 0 && addTonos) {
+                    destIndex=appendUChar(dest, destIndex, destCapacity, 0x301);
+                }
+                while (destIndex >= 0 && numYpogegrammeni > 0) {
+                    destIndex=appendUChar(dest, destIndex, destCapacity, 0x399);
+                    --numYpogegrammeni;
+                }
                 if(destIndex<0) {
                     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                     return 0;
                 }
+            }
+        } else {
+            const UChar *s;
+            c=ucase_toFullUpper(csm->csp, c, NULL, NULL, &s, csm->locale, &locCache);
+            destIndex = appendResult(dest, destIndex, destCapacity, c, s,
+                                     csm->options, nextIndex - i, edits);
+            if (destIndex < 0) {
+                *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
             }
         }
         i = nextIndex;
@@ -939,6 +1180,7 @@ U_CFUNC int32_t U_CALLCONV
 ustrcase_internalToLower(const UCaseMap *csm,
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
+                         icu::Edits *edits,
                          UErrorCode *pErrorCode) {
     UCaseContext csc=UCASECONTEXT_INITIALIZER;
     csc.p=(void *)src;
@@ -947,17 +1189,18 @@ ustrcase_internalToLower(const UCaseMap *csm,
         csm, ucase_toFullLower,
         dest, destCapacity,
         src, &csc, 0, srcLength,
-        pErrorCode);
+        edits, pErrorCode);
 }
 
 U_CFUNC int32_t U_CALLCONV
 ustrcase_internalToUpper(const UCaseMap *csm,
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
+                         icu::Edits *edits,
                          UErrorCode *pErrorCode) {
     int32_t locCache = csm->locCache;
     if (ucase_getCaseLocale(csm->locale, &locCache) == UCASE_LOC_GREEK) {
-        return GreekUpper::toUpper(csm, dest, destCapacity, src, srcLength, pErrorCode);
+        return GreekUpper::toUpper(csm, dest, destCapacity, src, srcLength, edits, pErrorCode);
     }
     UCaseContext csc=UCASECONTEXT_INITIALIZER;
     csc.p=(void *)src;
@@ -966,49 +1209,37 @@ ustrcase_internalToUpper(const UCaseMap *csm,
         csm, ucase_toFullUpper,
         dest, destCapacity,
         src, &csc, 0, srcLength,
-        pErrorCode);
-}
-
-static int32_t
-ustr_foldCase(const UCaseProps *csp,
-              UChar *dest, int32_t destCapacity,
-              const UChar *src, int32_t srcLength,
-              uint32_t options,
-              UErrorCode *pErrorCode) {
-    int32_t srcIndex, destIndex;
-
-    const UChar *s;
-    UChar32 c, c2 = 0;
-
-    /* case mapping loop */
-    srcIndex=destIndex=0;
-    while(srcIndex<srcLength) {
-        U16_NEXT(src, srcIndex, srcLength, c);
-        c=ucase_toFullFolding(csp, c, &s, options);
-        if((destIndex<destCapacity) && (c<0 ? (c2=~c)<=0xffff : UCASE_MAX_STRING_LENGTH<c && (c2=c)<=0xffff)) {
-            /* fast path version of appendResult() for BMP results */
-            dest[destIndex++]=(UChar)c2;
-        } else {
-            destIndex=appendResult(dest, destIndex, destCapacity, c, s);
-            if(destIndex<0) {
-                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-                return 0;
-            }
-        }
-    }
-
-    if(destIndex>destCapacity) {
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-    }
-    return destIndex;
+        edits, pErrorCode);
 }
 
 U_CFUNC int32_t U_CALLCONV
 ustrcase_internalFold(const UCaseMap *csm,
                       UChar *dest, int32_t destCapacity,
                       const UChar *src, int32_t srcLength,
+                      icu::Edits *edits,
                       UErrorCode *pErrorCode) {
-    return ustr_foldCase(csm->csp, dest, destCapacity, src, srcLength, csm->options, pErrorCode);
+    /* case mapping loop */
+    int32_t srcIndex = 0;
+    int32_t destIndex = 0;
+    while (srcIndex < srcLength) {
+        int32_t cpStart = srcIndex;
+        UChar32 c;
+        U16_NEXT(src, srcIndex, srcLength, c);
+        const UChar *s;
+        c = ucase_toFullFolding(csm->csp, c, &s, csm->options);
+        destIndex = appendResult(dest, destIndex, destCapacity, c, s,
+                                 csm->options, srcIndex - cpStart, edits);
+        if (destIndex < 0) {
+            *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+    }
+
+    // TODO: are these internal functions called where destIndex>destCapacity is not already checked? (see u_terminateUChars())
+    if (destIndex > destCapacity) {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+    }
+    return destIndex;
 }
 
 U_CFUNC int32_t
@@ -1016,6 +1247,7 @@ ustrcase_map(const UCaseMap *csm,
              UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              UStringCaseMapper *stringCaseMapper,
+             icu::Edits *edits,
              UErrorCode *pErrorCode) {
     UChar buffer[300];
     UChar *temp;
@@ -1061,14 +1293,11 @@ ustrcase_map(const UCaseMap *csm,
         temp=dest;
     }
 
-    destLength=stringCaseMapper(csm, temp, destCapacity, src, srcLength, pErrorCode);
+    destLength=stringCaseMapper(csm, temp, destCapacity, src, srcLength, edits, pErrorCode);
     if(temp!=dest) {
         /* copy the result string to the destination buffer */
-        if(destLength>0) {
-            int32_t copyLength= destLength<=destCapacity ? destLength : destCapacity;
-            if(copyLength>0) {
-                u_memmove(dest, temp, copyLength);
-            }
+        if (U_SUCCESS(*pErrorCode) && 0 < destLength && destLength <= destCapacity) {
+            u_memmove(dest, temp, destLength);
         }
         if(temp!=buffer) {
             uprv_free(temp);
@@ -1092,7 +1321,7 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
         &csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalFold, pErrorCode);
+        ustrcase_internalFold, NULL, pErrorCode);
 }
 
 /* case-insensitive string comparisons -------------------------------------- */

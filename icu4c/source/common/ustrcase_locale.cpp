@@ -94,7 +94,7 @@ u_strToLower(UChar *dest, int32_t destCapacity,
         &csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToLower, pErrorCode);
+        ustrcase_internalToLower, NULL, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -108,5 +108,5 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
         &csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToUpper, pErrorCode);
+        ustrcase_internalToUpper, NULL, pErrorCode);
 }
