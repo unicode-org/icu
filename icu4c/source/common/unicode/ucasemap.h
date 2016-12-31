@@ -25,6 +25,12 @@
 #include "unicode/ustring.h"
 #include "unicode/localpointer.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
+#include "unicode/uobject.h"
+
+#endif  // U_SHOW_CPLUSPLUS_API
+
 /**
  * \file
  * \brief C API: Unicode case mapping functions using a UCaseMap service object.
@@ -93,6 +99,98 @@ U_NAMESPACE_BEGIN
  * @stable ICU 4.4
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUCaseMapPointer, UCaseMap, ucasemap_close);
+
+#ifndef U_HIDE_INTERNAL_API
+
+/**
+ * Records lengths of string edits but not replacement text.
+ * Supports replacements, insertions, deletions in linear progression.
+ * Does not support moving/reordering of text.
+ *
+ * @internal ICU 59 technology preview
+ */
+class Edits final : public UMemory {
+public:
+    /**
+     * Constructs an empty object.
+     * @internal ICU 59 technology preview
+     */
+    Edits() :
+            array(stackArray), capacity(STACK_CAPACITY), length(0), delta(0),
+            errorCode(U_ZERO_ERROR) {}
+    ~Edits();
+    /**
+     * Resets the data but may not release memory.
+     * @internal ICU 59 technology preview
+     */
+    void reset();
+    /**
+     * Adds a record for an unchanged segment of text.
+     * @internal ICU 59 technology preview
+     */
+    void addUnchanged(int32_t unchangedLength);
+    /**
+     * Adds a record for a text replacement/insertion/deletion.
+     * @internal ICU 59 technology preview
+     */
+    void addReplace(int32_t oldLength, int32_t newLength);
+    /**
+     * Sets the UErrorCode if an error occurred while recording edits.
+     * Preserves older error codes in the outErrorCode.
+     * @return TRUE if U_FAILURE(outErrorCode)
+     * @internal ICU 59 technology preview
+     */
+    UBool setErrorCode(UErrorCode &outErrorCode);
+
+    /**
+     * How much longer is the new text compared with the old text?
+     * @return new length minus old length
+     * @internal ICU 59 technology preview
+     */
+    int32_t lengthDelta() const { return delta; }
+
+private:
+    Edits(const Edits &) = delete;
+    Edits &operator=(const Edits &) = delete;
+
+    void setLastUnit(int32_t last) { array[length - 1] = (uint16_t)last; }
+    int32_t lastUnit() const { return length > 0 ? array[length - 1] : 0xffff; }
+
+    void append(int32_t r);
+    void append(const uint16_t *buffer, int32_t bLength);
+    UBool growArray();
+
+    static const int32_t STACK_CAPACITY = 100;
+    uint16_t *array;
+    int32_t capacity;
+    int32_t length;
+    int32_t delta;
+    UErrorCode errorCode;
+    uint16_t stackArray[STACK_CAPACITY];
+};
+
+/**
+ * Omit unchanged text when case-mapping with Edits.
+ *
+ * TODO: revisit which bit to use; currently:
+ * - 31..20: old normalization options (only deprecated Unicode 3.2)
+ *           shifted up for unorm_compare()
+ * - 19..16: more options specific to unorm_compare() (currently bits 19, 17, 16)
+ * - 15..12: more string compare options (currently bits 15 & 12)
+ * - 11.. 8: titlecase mapping options (currently bits 9..8)
+ * -  7.. 0: case folding options, but only bit 0 currently used
+ *
+ * could overlay any normalization and string *comparison* option bits
+ * with case *mapping* option bits
+ * *unless* we start using UCaseMap for string comparison functions
+ *
+ * future: German sharp s may need locale variant or option bit
+ *
+ * @internal ICU 59 technology preview
+ */
+#define UCASEMAP_OMIT_UNCHANGED 0x4000
+
+#endif  // U_HIDE_INTERNAL_API
 
 U_NAMESPACE_END
 
@@ -421,5 +519,20 @@ ucasemap_utf8FoldCase(const UCaseMap *csm,
                       char *dest, int32_t destCapacity,
                       const char *src, int32_t srcLength,
                       UErrorCode *pErrorCode);
+
+// Not #ifndef U_HIDE_INTERNAL_API because UnicodeString needs the UStringCaseMapper.
+/**
+ * Internal string case mapping function type.
+ * All error checking must be done.
+ * The UCaseMap must be fully initialized, with locale and/or iter set as needed.
+ * src and dest must not overlap.
+ * @internal
+ */
+typedef int32_t U_CALLCONV
+UStringCaseMapper(const UCaseMap *csm,
+                  UChar *dest, int32_t destCapacity,
+                  const UChar *src, int32_t srcLength,
+                  icu::Edits *edits,
+                  UErrorCode *pErrorCode);
 
 #endif

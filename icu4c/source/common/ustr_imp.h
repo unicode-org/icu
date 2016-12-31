@@ -18,6 +18,7 @@
 #define __USTR_IMP_H__
 
 #include "unicode/utypes.h"
+#include "unicode/ucasemap.h"
 #include "unicode/uiter.h"
 #include "ucase.h"
 
@@ -129,28 +130,12 @@ typedef struct UCaseMap UCaseMap;
 U_CFUNC void
 ustrcase_setTempCaseMapLocale(UCaseMap *csm, const char *locale);
 
-#ifndef U_STRING_CASE_MAPPER_DEFINED
-#define U_STRING_CASE_MAPPER_DEFINED
-
-/**
- * String case mapping function type, used by ustrcase_map().
- * All error checking must be done.
- * The UCaseMap must be fully initialized, with locale and/or iter set as needed.
- * src and dest must not overlap.
- */
-typedef int32_t U_CALLCONV
-UStringCaseMapper(const UCaseMap *csm,
-                  UChar *dest, int32_t destCapacity,
-                  const UChar *src, int32_t srcLength,
-                  UErrorCode *pErrorCode);
-
-#endif
-
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
 ustrcase_internalToLower(const UCaseMap *csm,
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
+                         icu::Edits *edits,
                          UErrorCode *pErrorCode);
 
 /** Implements UStringCaseMapper. */
@@ -158,6 +143,7 @@ U_CFUNC int32_t U_CALLCONV
 ustrcase_internalToUpper(const UCaseMap *csm,
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
+                         icu::Edits *edits,
                          UErrorCode *pErrorCode);
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -167,6 +153,7 @@ U_CFUNC int32_t U_CALLCONV
 ustrcase_internalToTitle(const UCaseMap *csm,
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
+                         icu::Edits *edits,
                          UErrorCode *pErrorCode);
 
 #endif
@@ -176,6 +163,7 @@ U_CFUNC int32_t U_CALLCONV
 ustrcase_internalFold(const UCaseMap *csm,
                       UChar *dest, int32_t destCapacity,
                       const UChar *src, int32_t srcLength,
+                      icu::Edits *edits,
                       UErrorCode *pErrorCode);
 
 /**
@@ -187,6 +175,7 @@ ustrcase_map(const UCaseMap *csm,
              UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              UStringCaseMapper *stringCaseMapper,
+             icu::Edits *edits,
              UErrorCode *pErrorCode);
 
 /**

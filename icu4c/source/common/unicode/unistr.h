@@ -55,25 +55,6 @@ U_STABLE int32_t U_EXPORT2
 u_strlen(const UChar *s);
 #endif
 
-/**
- * \def U_STRING_CASE_MAPPER_DEFINED
- * @internal
- */
-#ifndef U_STRING_CASE_MAPPER_DEFINED
-#define U_STRING_CASE_MAPPER_DEFINED
-
-/**
- * Internal string case mapping function type.
- * @internal
- */
-typedef int32_t U_CALLCONV
-UStringCaseMapper(const UCaseMap *csm,
-                  UChar *dest, int32_t destCapacity,
-                  const UChar *src, int32_t srcLength,
-                  UErrorCode *pErrorCode);
-
-#endif
-
 U_NAMESPACE_BEGIN
 
 #if !UCONFIG_NO_BREAK_ITERATION
