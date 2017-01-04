@@ -66,7 +66,7 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
         &csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToTitle, pErrorCode);
+        ustrcase_internalToTitle, NULL, pErrorCode);
     if(titleIter==NULL && csm.iter!=NULL) {
         ubrk_close(csm.iter);
     }

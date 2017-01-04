@@ -117,13 +117,41 @@ public:
      */
     Edits() :
             array(stackArray), capacity(STACK_CAPACITY), length(0), delta(0),
-            errorCode(U_ZERO_ERROR) {}
+            omit(FALSE), errorCode(U_ZERO_ERROR) {}
     ~Edits();
+
     /**
      * Resets the data but may not release memory.
      * @internal ICU 59 technology preview
      */
     void reset();
+
+    /**
+     * Controls whether the case mapping function is to write or omit
+     * characters that do not change.
+     * The complete result can be computed by applying just the changes
+     * to the original string.
+     * @see omitUnchanged
+     * @see writeUnchanged
+     * @internal ICU 59 technology preview
+     */
+    Edits &setWriteUnchanged(UBool write) {
+        omit = !write;
+        return *this;
+    }
+    /**
+     * @return TRUE if the case mapping function is to omit characters that do not change.
+     * @see setWriteUnchanged
+     * @internal ICU 59 technology preview
+     */
+    UBool omitUnchanged() const { return omit; }
+    /**
+     * @return TRUE if the case mapping function is to write characters that do not change.
+     * @see setWriteUnchanged
+     * @internal ICU 59 technology preview
+     */
+    UBool writeUnchanged() const { return !omit; }
+
     /**
      * Adds a record for an unchanged segment of text.
      * @internal ICU 59 technology preview
@@ -148,6 +176,75 @@ public:
      * @internal ICU 59 technology preview
      */
     int32_t lengthDelta() const { return delta; }
+    /**
+     * @return TRUE if there are any change edits
+     * @internal ICU 59 technology preview
+     */
+    UBool hasChanges() const;
+
+    /**
+     * Access to the list of edits.
+     * @see getCoarseIterator
+     * @see getFineIterator
+     * @internal ICU 59 technology preview
+     */
+    struct Iterator final : public UMemory {
+        /**
+         * Advances to the next edit.
+         * @return TRUE if there is another edit
+         * @internal ICU 59 technology preview
+         */
+        UBool next(UErrorCode &errorCode);
+
+        /**
+         * TRUE if this edit replaces oldLength units with newLength different ones.
+         * FALSE if oldLength units remain unchanged.
+         * @internal ICU 59 technology preview
+         */
+        UBool changed;
+        /**
+         * Number of units in the original string which are replaced or remain unchanged.
+         * @internal ICU 59 technology preview
+         */
+        int32_t oldLength;
+        /**
+         * Number of units in the modified string, if changed is TRUE.
+         * Same as oldLength if changed is FALSE.
+         * @internal ICU 59 technology preview
+         */
+        int32_t newLength;
+
+    private:
+        friend class Edits;
+
+        Iterator(const uint16_t *a, int32_t len, UBool crs) :
+                array(a), index(0), length(len), width(0), remaining(0), coarse(crs) {}
+
+        int32_t readLength(int32_t head);
+
+        const uint16_t *array;
+        int32_t index, length;
+        int32_t width, remaining;
+        UBool coarse;
+    };
+
+    /**
+     * Returns an Iterator for coarse-grained changes for simple string updates.
+     * @return an Iterator that merges adjacent changes.
+     * @internal ICU 59 technology preview
+     */
+    Iterator getCoarseIterator() const {
+        return Iterator(array, length, TRUE);
+    }
+
+    /**
+     * Returns an Iterator for fine-grained changes for modifying text with metadata.
+     * @return an Iterator that separates adjacent changes.
+     * @internal ICU 59 technology preview
+     */
+    Iterator getFineIterator() const {
+        return Iterator(array, length, FALSE);
+    }
 
 private:
     Edits(const Edits &) = delete;
@@ -165,6 +262,7 @@ private:
     int32_t capacity;
     int32_t length;
     int32_t delta;
+    UBool omit;
     UErrorCode errorCode;
     uint16_t stackArray[STACK_CAPACITY];
 };
@@ -188,7 +286,9 @@ private:
  *
  * @internal ICU 59 technology preview
  */
-#define UCASEMAP_OMIT_UNCHANGED 0x4000
+// TODO: does not work well as an option because we would need to set/reset it on UCaseMaps
+// that are often const, replaced for now by Edits.setWriteUnchanged(UBool)
+// #define UCASEMAP_OMIT_UNCHANGED 0x4000
 
 #endif  // U_HIDE_INTERNAL_API
 
@@ -520,6 +620,8 @@ ucasemap_utf8FoldCase(const UCaseMap *csm,
                       const char *src, int32_t srcLength,
                       UErrorCode *pErrorCode);
 
+#if U_SHOW_CPLUSPLUS_API
+
 // Not #ifndef U_HIDE_INTERNAL_API because UnicodeString needs the UStringCaseMapper.
 /**
  * Internal string case mapping function type.
@@ -535,4 +637,5 @@ UStringCaseMapper(const UCaseMap *csm,
                   icu::Edits *edits,
                   UErrorCode *pErrorCode);
 
+#endif  // U_SHOW_CPLUSPLUS_API
 #endif
