@@ -208,10 +208,118 @@ UBool Edits::growArray() {
 }
 
 UBool Edits::setErrorCode(UErrorCode &outErrorCode) {
-    if(U_FAILURE(outErrorCode)) { return TRUE; }
-    if(U_SUCCESS(errorCode)) { return FALSE; }
+    if (U_FAILURE(outErrorCode)) { return TRUE; }
+    if (U_SUCCESS(errorCode)) { return FALSE; }
     outErrorCode = errorCode;
     return TRUE;
+}
+
+UBool Edits::hasChanges() const {
+    if (delta != 0) {
+        return TRUE;
+    }
+    for (int32_t i = 0; i < length; ++i) {
+        if (array[i] > MAX_UNCHANGED) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+UBool Edits::Iterator::next(UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return FALSE; }
+    // Always set all relevant public fields: Do not rely on them not having been touched.
+    if (remaining > 0) {
+        // Fine-grained iterator: Continue a sequence of equal-length changes.
+        changed = TRUE;
+        oldLength = newLength = width;
+        --remaining;
+        return TRUE;
+    }
+    if (index >= length) {
+        return FALSE;
+    }
+    int32_t u = array[index++];
+    if (u <= MAX_UNCHANGED) {
+        // Combine adjacent unchanged ranges.
+        changed = FALSE;
+        oldLength = u + 1;
+        while (index < length && (u = array[index]) <= MAX_UNCHANGED) {
+            ++index;
+            if (u >= (INT32_MAX - oldLength)) {
+                errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+                return FALSE;
+            }
+            oldLength += u + 1;
+        }
+        newLength = oldLength;
+        return TRUE;
+    }
+    changed = TRUE;
+    if (u <= MAX_SHORT_CHANGE) {
+        if (coarse) {
+            int32_t w = u >> 12;
+            int32_t len = (u & 0xfff) + 1;
+            oldLength = newLength = w * len;
+        } else {
+            // Split a sequence of equal-length changes that was compressed into one unit.
+            oldLength = newLength = width = u >> 12;
+            remaining = u & 0xfff;
+            return TRUE;
+        }
+    } else {
+        U_ASSERT(u <= 0x7fff);
+        oldLength = readLength((u >> 6) & 0x3f);
+        newLength = readLength(u & 0x3f);
+        if (!coarse) {
+            return TRUE;
+        }
+    }
+    // Combine adjacent changes.
+    while (index < length && (u = array[index]) > MAX_UNCHANGED) {
+        ++index;
+        if (u <= MAX_SHORT_CHANGE) {
+            int32_t w = u >> 12;
+            int32_t len = (u & 0xfff) + 1;
+            len = w * len;
+            if (len > (INT32_MAX - oldLength) || len > (INT32_MAX - newLength)) {
+                errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+                return FALSE;
+            }
+            oldLength += len;
+            newLength += len;
+        } else {
+            U_ASSERT(u <= 0x7fff);
+            int32_t oldLen = readLength((u >> 6) & 0x3f);
+            int32_t newLen = readLength(u & 0x3f);
+            if (oldLen > (INT32_MAX - oldLength) || newLen > (INT32_MAX - newLength)) {
+                errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+                return FALSE;
+            }
+            oldLength += oldLen;
+            newLength += newLen;
+        }
+    }
+    return TRUE;
+}
+
+int32_t Edits::Iterator::readLength(int32_t head) {
+    if (head < LENGTH_IN_1TRAIL) {
+        return head;
+    } else if (head < LENGTH_IN_2TRAIL) {
+        U_ASSERT(index < length);
+        U_ASSERT(array[index] >= 0x8000);
+        return array[index++];
+    } else {
+        U_ASSERT((index + 2) <= length);
+        U_ASSERT(array[index] >= 0x8000);
+        U_ASSERT(array[index + 1] >= 0x8000);
+        int32_t len = ((head & 1) << 30) |
+                ((int32_t)(array[index] & 0x7fff) << 15) |
+                (array[index + 1] & 0x7fff);
+        index += 2;
+        return len;
+    }
 }
 
 U_NAMESPACE_END
@@ -224,7 +332,7 @@ U_NAMESPACE_USE
 static inline int32_t
 appendResult(UChar *dest, int32_t destIndex, int32_t destCapacity,
              int32_t result, const UChar *s,
-             uint32_t options, int32_t cpLength, icu::Edits *edits) {
+             int32_t cpLength, icu::Edits *edits) {
     UChar32 c;
     int32_t length;
 
@@ -233,9 +341,9 @@ appendResult(UChar *dest, int32_t destIndex, int32_t destCapacity,
         /* (not) original code point */
         if(edits!=NULL) {
             edits->addUnchanged(cpLength);
-        }
-        if(options & UCASEMAP_OMIT_UNCHANGED) {
-            return destIndex;
+            if(edits->omitUnchanged()) {
+                return destIndex;
+            }
         }
         c=~result;
         if(destIndex<destCapacity && c<=0xffff) {  // BMP slightly-fastpath
@@ -308,6 +416,12 @@ static inline int32_t
 appendUnchanged(UChar *dest, int32_t destIndex, int32_t destCapacity,
                 const UChar *s, int32_t length, icu::Edits *edits) {
     if(length>0) {
+        if(edits!=NULL) {
+            edits->addUnchanged(length);
+            if(edits->omitUnchanged()) {
+                return destIndex;
+            }
+        }
         if(length>(INT32_MAX-destIndex)) {
             return -1;  // integer overflow
         }
@@ -315,9 +429,6 @@ appendUnchanged(UChar *dest, int32_t destIndex, int32_t destCapacity,
             u_memcpy(dest+destIndex, s, length);
         }
         destIndex+=length;
-        if(edits!=NULL) {
-            edits->addUnchanged(length);
-        }
     }
     return destIndex;
 }
@@ -379,7 +490,7 @@ _caseMap(const UCaseMap *csm, UCaseMapFull *map,
         const UChar *s;
         c=map(csm->csp, c, utf16_caseContextIterator, csc, &s, csm->locale, &locCache);
         destIndex = appendResult(dest, destIndex, destCapacity, c, s,
-                                 csm->options, srcIndex - cpStart, edits);
+                                 srcIndex - cpStart, edits);
         if (destIndex < 0) {
             *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
             return 0;
@@ -482,7 +593,7 @@ ustrcase_internalToTitle(const UCaseMap *csm,
                 c=ucase_toFullTitle(csm->csp, c, utf16_caseContextIterator, &csc, &s,
                                     csm->locale, &locCache);
                 destIndex=appendResult(dest, destIndex, destCapacity, c, s,
-                                       csm->options, titleLimit-titleStart, edits);
+                                       titleLimit-titleStart, edits);
                 if(destIndex<0) {
                     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                     return 0;
@@ -1104,7 +1215,7 @@ int32_t toUpper(const UCaseMap *csm,
             }
 
             UBool change;
-            if ((csm->options & UCASEMAP_OMIT_UNCHANGED) == 0 && edits == NULL) {
+            if (edits == NULL) {
                 change = TRUE;  // common, simple usage
             } else {
                 // Find out first whether we are changing the text.
@@ -1130,7 +1241,7 @@ int32_t toUpper(const UCaseMap *csm,
                         edits->addUnchanged(oldLength);
                     }
                     // Write unchanged text?
-                    change |= (csm->options & UCASEMAP_OMIT_UNCHANGED) == 0;
+                    change = edits->writeUnchanged();
                 }
             }
 
@@ -1155,7 +1266,7 @@ int32_t toUpper(const UCaseMap *csm,
             const UChar *s;
             c=ucase_toFullUpper(csm->csp, c, NULL, NULL, &s, csm->locale, &locCache);
             destIndex = appendResult(dest, destIndex, destCapacity, c, s,
-                                     csm->options, nextIndex - i, edits);
+                                     nextIndex - i, edits);
             if (destIndex < 0) {
                 *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
                 return 0;
@@ -1228,7 +1339,7 @@ ustrcase_internalFold(const UCaseMap *csm,
         const UChar *s;
         c = ucase_toFullFolding(csm->csp, c, &s, csm->options);
         destIndex = appendResult(dest, destIndex, destCapacity, c, s,
-                                 csm->options, srcIndex - cpStart, edits);
+                                 srcIndex - cpStart, edits);
         if (destIndex < 0) {
             *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
             return 0;

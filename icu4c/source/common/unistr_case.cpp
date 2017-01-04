@@ -25,6 +25,7 @@
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
 #include "unicode/uchar.h"
+#include "uassert.h"
 #include "uelement.h"
 #include "ustr_imp.h"
 
@@ -94,49 +95,104 @@ UnicodeString::caseMap(const UCaseMap *csm,
     return *this;
   }
 
+  UChar oldBuffer[2 * US_STACKBUF_SIZE];
+  UChar *oldArray;
+  int32_t oldLength = length();
+  int32_t newLength;
+  UBool writable = isBufferWritable();
+  UErrorCode errorCode = U_ZERO_ERROR;
+
+  // Try to avoid heap-allocating a new character array for this string.
+  if (writable ? oldLength <= UPRV_LENGTHOF(oldBuffer) : oldLength < US_STACKBUF_SIZE) {
+    // Short string: Copy the contents into a temporary buffer and
+    // case-map back into the current array, or into the stack buffer.
+    UChar *buffer = getArrayStart();
+    int32_t capacity;
+    oldArray = oldBuffer;
+    u_memcpy(oldBuffer, buffer, oldLength);
+    if (writable) {
+      capacity = getCapacity();
+    } else {
+      // Switch from the read-only alias or shared heap buffer to the stack buffer.
+      if (!cloneArrayIfNeeded(US_STACKBUF_SIZE, US_STACKBUF_SIZE, /* doCopyArray= */ FALSE)) {
+        return *this;
+      }
+      U_ASSERT(fUnion.fFields.fLengthAndFlags & kUsingStackBuffer);
+      buffer = fUnion.fStackFields.fBuffer;
+      capacity = US_STACKBUF_SIZE;
+    }
+    newLength = stringCaseMapper(csm, buffer, capacity, oldArray, oldLength, NULL, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+      setLength(newLength);
+      return *this;
+    } else if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
+      // common overflow handling below
+    } else {
+      setToBogus();
+      return *this;
+    }
+  } else {
+    // Longer string or read-only buffer:
+    // Collect only changes and then apply them to this string.
+    // Case mapping often changes only small parts of a string,
+    // and often does not change its length.
+    oldArray = getArrayStart();
+    Edits edits;
+    edits.setWriteUnchanged(FALSE);
+    UChar replacementChars[200];
+    int32_t replacementLength = stringCaseMapper(
+            csm, replacementChars, UPRV_LENGTHOF(replacementChars),
+            oldArray, oldLength, &edits, &errorCode);
+    UErrorCode editsError = U_ZERO_ERROR;
+    if (edits.setErrorCode(editsError)) {
+      setToBogus();
+      return *this;
+    }
+    newLength = oldLength + edits.lengthDelta();
+    if (U_SUCCESS(errorCode)) {
+      if (!cloneArrayIfNeeded(newLength, newLength)) {
+        return *this;
+      }
+      int32_t index = 0;  // index into this string
+      int32_t replIndex = 0;  // index into replacementChars
+      for (Edits::Iterator iter = edits.getCoarseIterator(); iter.next(errorCode);) {
+        if (iter.changed) {
+          doReplace(index, iter.oldLength, replacementChars, replIndex, iter.newLength);
+          replIndex += iter.newLength;
+        }
+        index += iter.newLength;
+      }
+      if (U_FAILURE(errorCode)) {
+        setToBogus();
+      }
+      U_ASSERT(replIndex == replacementLength);
+      return *this;
+    } else if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
+      // common overflow handling below
+    } else {
+      setToBogus();
+      return *this;
+    }
+  }
+
+  // Handle buffer overflow, newLength is known.
   // We need to allocate a new buffer for the internal string case mapping function.
   // This is very similar to how doReplace() keeps the old array pointer
   // and deletes the old array itself after it is done.
   // In addition, we are forcing cloneArrayIfNeeded() to always allocate a new array.
-  UChar oldStackBuffer[US_STACKBUF_SIZE];
-  UChar *oldArray;
-  int32_t oldLength;
-
-  if(fUnion.fFields.fLengthAndFlags&kUsingStackBuffer) {
-    // copy the stack buffer contents because it will be overwritten
-    oldArray = oldStackBuffer;
-    oldLength = getShortLength();
-    u_memcpy(oldStackBuffer, fUnion.fStackFields.fBuffer, oldLength);
-  } else {
-    oldArray = getArrayStart();
-    oldLength = length();
-  }
-
-  int32_t capacity;
-  if(oldLength <= US_STACKBUF_SIZE) {
-    capacity = US_STACKBUF_SIZE;
-  } else {
-    capacity = oldLength + 20;
-  }
   int32_t *bufferToDelete = 0;
-  if(!cloneArrayIfNeeded(capacity, capacity, FALSE, &bufferToDelete, TRUE)) {
+  if (!cloneArrayIfNeeded(newLength, newLength, FALSE, &bufferToDelete, TRUE)) {
     return *this;
   }
-
-  // Case-map, and if the result is too long, then reallocate and repeat.
-  UErrorCode errorCode;
-  int32_t newLength;
-  do {
-    errorCode = U_ZERO_ERROR;
-    newLength = stringCaseMapper(csm, getArrayStart(), getCapacity(),
-                                 oldArray, oldLength, &errorCode);
-    setLength(newLength);
-  } while(errorCode==U_BUFFER_OVERFLOW_ERROR && cloneArrayIfNeeded(newLength, newLength, FALSE));
-
+  errorCode = U_ZERO_ERROR;
+  newLength = stringCaseMapper(csm, getArrayStart(), getCapacity(),
+                               oldArray, oldLength, NULL, &errorCode);
   if (bufferToDelete) {
     uprv_free(bufferToDelete);
   }
-  if(U_FAILURE(errorCode)) {
+  if (U_SUCCESS(errorCode)) {
+    setLength(newLength);
+  } else {
     setToBogus();
   }
   return *this;

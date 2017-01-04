@@ -102,6 +102,10 @@ uprv_haveProperties(UErrorCode *pErrorCode);
 /*U_CFUNC int8_t
 uprv_loadPropsData(UErrorCode *errorCode);*/
 
+#ifdef __cplusplus
+// TODO: Consider moving these case mapping definitions
+// into a new internal header like ucasemap_imp.h.
+
 /*
  * Internal string casing functions implementing
  * ustring.h/ustrcase.c and UnicodeString case mapping functions.
@@ -116,10 +120,6 @@ struct UCaseMap {
     int32_t locCache;
     uint32_t options;
 };
-
-#ifndef __UCASEMAP_H__
-typedef struct UCaseMap UCaseMap;
-#endif
 
 #if UCONFIG_NO_BREAK_ITERATION
 #   define UCASEMAP_INITIALIZER { NULL, { 0 }, 0, 0 }
@@ -208,8 +208,6 @@ ucasemap_mapUTF8(const UCaseMap *csm,
                  const uint8_t *src, int32_t srcLength,
                  UTF8CaseMapper *stringCaseMapper,
                  UErrorCode *pErrorCode);
-
-#ifdef __cplusplus
 
 U_NAMESPACE_BEGIN
 namespace GreekUpper {
