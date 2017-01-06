@@ -90,11 +90,11 @@ u_strToLower(UChar *dest, int32_t destCapacity,
              UErrorCode *pErrorCode) {
     UCaseMap csm=UCASEMAP_INITIALIZER;
     setTempCaseMap(&csm, locale);
-    return ustrcase_map(
+    return ustrcase_mapWithOverlap(
         &csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToLower, NULL, pErrorCode);
+        ustrcase_internalToLower, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -104,9 +104,9 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
              UErrorCode *pErrorCode) {
     UCaseMap csm=UCASEMAP_INITIALIZER;
     setTempCaseMap(&csm, locale);
-    return ustrcase_map(
+    return ustrcase_mapWithOverlap(
         &csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToUpper, NULL, pErrorCode);
+        ustrcase_internalToUpper, pErrorCode);
 }

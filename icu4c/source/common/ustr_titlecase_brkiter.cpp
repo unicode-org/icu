@@ -62,11 +62,11 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
     } else {
         csm.iter=ubrk_open(UBRK_WORD, csm.locale, src, srcLength, pErrorCode);
     }
-    int32_t length=ustrcase_map(
+    int32_t length=ustrcase_mapWithOverlap(
         &csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToTitle, NULL, pErrorCode);
+        ustrcase_internalToTitle, pErrorCode);
     if(titleIter==NULL && csm.iter!=NULL) {
         ubrk_close(csm.iter);
     }
