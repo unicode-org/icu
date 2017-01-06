@@ -197,53 +197,113 @@ public:
         UBool next(UErrorCode &errorCode);
 
         /**
-         * TRUE if this edit replaces oldLength units with newLength different ones.
-         * FALSE if oldLength units remain unchanged.
+         * Finds the edit that contains the source index.
+         * The source index may be found in a non-change
+         * even if normal iteration would skip non-changes.
+         * Normal iteration can continue from a found edit.
+         *
+         * The iterator state before this search logically does not matter.
+         * (It may affect the performance of the search.)
+         *
+         * The iterator state after this search is undefined
+         * if the source index is out of bounds for the source string.
+         *
+         * @param i source index
+         * @return TRUE if the edit for the source index was found
          * @internal ICU 59 technology preview
          */
-        UBool changed;
+        UBool findSourceIndex(int32_t i, UErrorCode &errorCode);
+
         /**
-         * Number of units in the original string which are replaced or remain unchanged.
+         * @return TRUE if this edit replaces oldLength() units with newLength() different ones.
+         *         FALSE if oldLength units remain unchanged.
          * @internal ICU 59 technology preview
          */
-        int32_t oldLength;
+        UBool hasChange() const { return changed; }
         /**
-         * Number of units in the modified string, if changed is TRUE.
-         * Same as oldLength if changed is FALSE.
+         * @return the number of units in the original string which are replaced or remain unchanged.
          * @internal ICU 59 technology preview
          */
-        int32_t newLength;
+        int32_t oldLength() const { return oldLength_; }
+        /**
+         * @return the number of units in the modified string, if hasChange() is TRUE.
+         *         Same as oldLength if hasChange() is FALSE.
+         * @internal ICU 59 technology preview
+         */
+        int32_t newLength() const { return newLength_; }
+
+        /**
+         * @return the current index into the source string
+         * @internal ICU 59 technology preview
+         */
+        int32_t sourceIndex() const { return srcIndex; }
+        /**
+         * @return the current index into the replacement-characters-only string,
+         *         not counting unchanged spans
+         * @internal ICU 59 technology preview
+         */
+        int32_t replacementIndex() const { return replIndex; }
+        /**
+         * @return the current index into the full destination string
+         * @internal ICU 59 technology preview
+         */
+        int32_t destinationIndex() const { return destIndex; }
 
     private:
         friend class Edits;
 
-        Iterator(const uint16_t *a, int32_t len, UBool crs) :
-                array(a), index(0), length(len), width(0), remaining(0), coarse(crs) {}
+        Iterator(const uint16_t *a, int32_t len, UBool oc, UBool crs);
 
         int32_t readLength(int32_t head);
+        void updateIndexes();
+        UBool noNext();
 
         const uint16_t *array;
         int32_t index, length;
-        int32_t width, remaining;
-        UBool coarse;
+        int32_t remaining;
+        UBool onlyChanges, coarse;
+
+        UBool changed;
+        int32_t oldLength_, newLength_;
+        int32_t srcIndex, replIndex, destIndex;
     };
 
     /**
      * Returns an Iterator for coarse-grained changes for simple string updates.
+     * Skips non-changes.
+     * @return an Iterator that merges adjacent changes.
+     * @internal ICU 59 technology preview
+     */
+    Iterator getCoarseChangesIterator() const {
+        return Iterator(array, length, TRUE, TRUE);
+    }
+
+    /**
+     * Returns an Iterator for coarse-grained changes and non-changes for simple string updates.
      * @return an Iterator that merges adjacent changes.
      * @internal ICU 59 technology preview
      */
     Iterator getCoarseIterator() const {
-        return Iterator(array, length, TRUE);
+        return Iterator(array, length, FALSE, TRUE);
     }
 
     /**
-     * Returns an Iterator for fine-grained changes for modifying text with metadata.
+     * Returns an Iterator for fine-grained changes for modifying styled text.
+     * Skips non-changes.
+     * @return an Iterator that separates adjacent changes.
+     * @internal ICU 59 technology preview
+     */
+    Iterator getFineChangesIterator() const {
+        return Iterator(array, length, TRUE, FALSE);
+    }
+
+    /**
+     * Returns an Iterator for fine-grained changes and non-changes for modifying styled text.
      * @return an Iterator that separates adjacent changes.
      * @internal ICU 59 technology preview
      */
     Iterator getFineIterator() const {
-        return Iterator(array, length, FALSE);
+        return Iterator(array, length, FALSE, FALSE);
     }
 
 private:
@@ -382,6 +442,76 @@ ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
  * @stable ICU 3.8
  */
 #define U_TITLECASE_NO_BREAK_ADJUSTMENT 0x200
+
+#if U_SHOW_CPLUSPLUS_API
+#ifndef U_HIDE_INTERNAL_API
+
+/**
+ * Lowercases the characters in a UTF-16 string and optionally records edits.
+ * Casing is locale-dependent and context-sensitive.
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer must not overlap.
+ *
+ * @param csm       UCaseMap service object.
+ * @param dest      A buffer for the result string. The result will be NUL-terminated if
+ *                  the buffer is large enough.
+ *                  The contents is undefined in case of failure.
+ * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string.
+ * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
+ * @param edits     Records edits for index mapping, working with styled text,
+ *                  and getting only changes (if any). Can be NULL.
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
+ *
+ * @see u_strToLower
+ * @internal ICU 59 technology preview
+ */
+U_CAPI int32_t U_EXPORT2
+ucasemap_toLowerWithEdits(const UCaseMap *csm,
+                          UChar *dest, int32_t destCapacity,
+                          const UChar *src, int32_t srcLength,
+                          icu::Edits *edits,
+                          UErrorCode *pErrorCode);
+
+/**
+ * Uppercases the characters in a UTF-16 string and optionally records edits.
+ * Casing is locale-dependent and context-sensitive.
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer must not overlap.
+ *
+ * @param csm       UCaseMap service object.
+ * @param dest      A buffer for the result string. The result will be NUL-terminated if
+ *                  the buffer is large enough.
+ *                  The contents is undefined in case of failure.
+ * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string.
+ * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
+ * @param edits     Records edits for index mapping, working with styled text,
+ *                  and getting only changes (if any). Can be NULL.
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
+ *
+ * @see u_strToLower
+ * @internal ICU 59 technology preview
+ */
+U_CAPI int32_t U_EXPORT2
+ucasemap_toUpperWithEdits(const UCaseMap *csm,
+                          UChar *dest, int32_t destCapacity,
+                          const UChar *src, int32_t srcLength,
+                          icu::Edits *edits,
+                          UErrorCode *pErrorCode);
+
+#endif  // U_HIDE_INTERNAL_API
+#endif  // U_SHOW_CPLUSPLUS_API
 
 #if !UCONFIG_NO_BREAK_ITERATION
 

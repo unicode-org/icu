@@ -226,82 +226,11 @@ UBool Edits::hasChanges() const {
     return FALSE;
 }
 
-UBool Edits::Iterator::next(UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return FALSE; }
-    // Always set all relevant public fields: Do not rely on them not having been touched.
-    if (remaining > 0) {
-        // Fine-grained iterator: Continue a sequence of equal-length changes.
-        changed = TRUE;
-        oldLength = newLength = width;
-        --remaining;
-        return TRUE;
-    }
-    if (index >= length) {
-        return FALSE;
-    }
-    int32_t u = array[index++];
-    if (u <= MAX_UNCHANGED) {
-        // Combine adjacent unchanged ranges.
-        changed = FALSE;
-        oldLength = u + 1;
-        while (index < length && (u = array[index]) <= MAX_UNCHANGED) {
-            ++index;
-            if (u >= (INT32_MAX - oldLength)) {
-                errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
-                return FALSE;
-            }
-            oldLength += u + 1;
-        }
-        newLength = oldLength;
-        return TRUE;
-    }
-    changed = TRUE;
-    if (u <= MAX_SHORT_CHANGE) {
-        if (coarse) {
-            int32_t w = u >> 12;
-            int32_t len = (u & 0xfff) + 1;
-            oldLength = newLength = w * len;
-        } else {
-            // Split a sequence of equal-length changes that was compressed into one unit.
-            oldLength = newLength = width = u >> 12;
-            remaining = u & 0xfff;
-            return TRUE;
-        }
-    } else {
-        U_ASSERT(u <= 0x7fff);
-        oldLength = readLength((u >> 6) & 0x3f);
-        newLength = readLength(u & 0x3f);
-        if (!coarse) {
-            return TRUE;
-        }
-    }
-    // Combine adjacent changes.
-    while (index < length && (u = array[index]) > MAX_UNCHANGED) {
-        ++index;
-        if (u <= MAX_SHORT_CHANGE) {
-            int32_t w = u >> 12;
-            int32_t len = (u & 0xfff) + 1;
-            len = w * len;
-            if (len > (INT32_MAX - oldLength) || len > (INT32_MAX - newLength)) {
-                errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
-                return FALSE;
-            }
-            oldLength += len;
-            newLength += len;
-        } else {
-            U_ASSERT(u <= 0x7fff);
-            int32_t oldLen = readLength((u >> 6) & 0x3f);
-            int32_t newLen = readLength(u & 0x3f);
-            if (oldLen > (INT32_MAX - oldLength) || newLen > (INT32_MAX - newLength)) {
-                errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
-                return FALSE;
-            }
-            oldLength += oldLen;
-            newLength += newLen;
-        }
-    }
-    return TRUE;
-}
+Edits::Iterator::Iterator(const uint16_t *a, int32_t len, UBool oc, UBool crs) :
+        array(a), index(0), length(len), remaining(0),
+        onlyChanges(oc), coarse(crs),
+        changed(FALSE), oldLength_(0), newLength_(0),
+        srcIndex(0), replIndex(0), destIndex(0) {}
 
 int32_t Edits::Iterator::readLength(int32_t head) {
     if (head < LENGTH_IN_1TRAIL) {
@@ -320,6 +249,129 @@ int32_t Edits::Iterator::readLength(int32_t head) {
         index += 2;
         return len;
     }
+}
+
+void Edits::Iterator::updateIndexes() {
+    srcIndex += oldLength_;
+    if (changed) {
+        replIndex += newLength_;
+    }
+    destIndex += newLength_;
+}
+
+UBool Edits::Iterator::noNext() {
+    // Empty span beyond the string.
+    oldLength_ = newLength_ = 0;
+    return FALSE;
+}
+
+UBool Edits::Iterator::next(UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return FALSE; }
+    // We have an errorCode in case we need to start guarding against integer overflows.
+    // It is also convenient for caller loops if we bail out when an error was set elsewhere.
+    updateIndexes();
+    if (remaining > 0) {
+        // Fine-grained iterator: Continue a sequence of equal-length changes.
+        --remaining;
+        return TRUE;
+    }
+    if (index >= length) {
+        return noNext();
+    }
+    int32_t u = array[index++];
+    if (u <= MAX_UNCHANGED) {
+        // Combine adjacent unchanged ranges.
+        changed = FALSE;
+        oldLength_ = u + 1;
+        while (index < length && (u = array[index]) <= MAX_UNCHANGED) {
+            ++index;
+            oldLength_ += u + 1;
+        }
+        newLength_ = oldLength_;
+        if (onlyChanges) {
+            updateIndexes();
+            if (index >= length) {
+                return noNext();
+            }
+            // already fetched u > MAX_UNCHANGED at index
+            ++index;
+        } else {
+            return TRUE;
+        }
+    }
+    changed = TRUE;
+    if (u <= MAX_SHORT_CHANGE) {
+        if (coarse) {
+            int32_t w = u >> 12;
+            int32_t len = (u & 0xfff) + 1;
+            oldLength_ = newLength_ = len * w;
+        } else {
+            // Split a sequence of equal-length changes that was compressed into one unit.
+            oldLength_ = newLength_ = u >> 12;
+            remaining = u & 0xfff;
+            return TRUE;
+        }
+    } else {
+        U_ASSERT(u <= 0x7fff);
+        oldLength_ = readLength((u >> 6) & 0x3f);
+        newLength_ = readLength(u & 0x3f);
+        if (!coarse) {
+            return TRUE;
+        }
+    }
+    // Combine adjacent changes.
+    while (index < length && (u = array[index]) > MAX_UNCHANGED) {
+        ++index;
+        if (u <= MAX_SHORT_CHANGE) {
+            int32_t w = u >> 12;
+            int32_t len = (u & 0xfff) + 1;
+            len = len * w;
+            oldLength_ += len;
+            newLength_ += len;
+        } else {
+            U_ASSERT(u <= 0x7fff);
+            int32_t oldLen = readLength((u >> 6) & 0x3f);
+            int32_t newLen = readLength(u & 0x3f);
+            oldLength_ += oldLen;
+            newLength_ += newLen;
+        }
+    }
+    return TRUE;
+}
+
+UBool Edits::Iterator::findSourceIndex(int32_t i, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode) || i < 0) { return FALSE; }
+    if (i < srcIndex) {
+        // Reset the iterator to the start.
+        index = remaining = srcIndex = replIndex = destIndex = 0;
+    } else if (i < (srcIndex + oldLength_)) {
+        // The index is in the current span.
+        return TRUE;
+    }
+    while (next(errorCode)) {
+        if (i < (srcIndex + oldLength_)) {
+            // The index is in the current span.
+            return TRUE;
+        }
+        if (remaining > 0) {
+            // Is the index in one of the remaining compressed edits?
+            // srcIndex is the start of the current span, before the remaining ones.
+            int32_t len = (remaining + 1) * oldLength_;
+            if (i < (srcIndex + len)) {
+                int32_t n = (i - srcIndex) / oldLength_;  // 1 <= n <= remaining
+                len = n * oldLength_;
+                srcIndex += len;
+                replIndex += len;
+                destIndex += len;
+                remaining -= n;
+                return TRUE;
+            }
+            // Make next() skip all of these edits at once.
+            oldLength_ = newLength_ = len;
+            remaining = 0;
+        }
+    }
+    return FALSE;
 }
 
 U_NAMESPACE_END
@@ -1360,6 +1412,45 @@ ustrcase_map(const UCaseMap *csm,
              UStringCaseMapper *stringCaseMapper,
              icu::Edits *edits,
              UErrorCode *pErrorCode) {
+    int32_t destLength;
+
+    /* check argument values */
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if( destCapacity<0 ||
+        (dest==NULL && destCapacity>0) ||
+        src==NULL ||
+        srcLength<-1
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* get the string length */
+    if(srcLength==-1) {
+        srcLength=u_strlen(src);
+    }
+
+    /* check for overlapping source and destination */
+    if( dest!=NULL &&
+        ((src>=dest && src<(dest+destCapacity)) ||
+         (dest>=src && dest<(src+srcLength)))
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    destLength=stringCaseMapper(csm, dest, destCapacity, src, srcLength, edits, pErrorCode);
+    return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
+}
+
+U_CFUNC int32_t
+ustrcase_mapWithOverlap(const UCaseMap *csm,
+                        UChar *dest, int32_t destCapacity,
+                        const UChar *src, int32_t srcLength,
+                        UStringCaseMapper *stringCaseMapper,
+                        UErrorCode *pErrorCode) {
     UChar buffer[300];
     UChar *temp;
 
@@ -1404,7 +1495,7 @@ ustrcase_map(const UCaseMap *csm,
         temp=dest;
     }
 
-    destLength=stringCaseMapper(csm, temp, destCapacity, src, srcLength, edits, pErrorCode);
+    destLength=stringCaseMapper(csm, temp, destCapacity, src, srcLength, NULL, pErrorCode);
     if(temp!=dest) {
         /* copy the result string to the destination buffer */
         if (U_SUCCESS(*pErrorCode) && 0 < destLength && destLength <= destCapacity) {
@@ -1428,11 +1519,37 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
     UCaseMap csm=UCASEMAP_INITIALIZER;
     csm.csp=ucase_getSingleton();
     csm.options=options;
-    return ustrcase_map(
+    return ustrcase_mapWithOverlap(
         &csm,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalFold, NULL, pErrorCode);
+        ustrcase_internalFold, pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucasemap_toLowerWithEdits(const UCaseMap *csm,
+                          UChar *dest, int32_t destCapacity,
+                          const UChar *src, int32_t srcLength,
+                          icu::Edits *edits,
+                          UErrorCode *pErrorCode) {
+    return ustrcase_map(
+        csm,
+        dest, destCapacity,
+        src, srcLength,
+        ustrcase_internalToLower, edits, pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucasemap_toUpperWithEdits(const UCaseMap *csm,
+                          UChar *dest, int32_t destCapacity,
+                          const UChar *src, int32_t srcLength,
+                          icu::Edits *edits,
+                          UErrorCode *pErrorCode) {
+    return ustrcase_map(
+        csm,
+        dest, destCapacity,
+        src, srcLength,
+        ustrcase_internalToUpper, edits, pErrorCode);
 }
 
 /* case-insensitive string comparisons -------------------------------------- */

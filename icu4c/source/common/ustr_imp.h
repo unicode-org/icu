@@ -167,8 +167,8 @@ ustrcase_internalFold(const UCaseMap *csm,
                       UErrorCode *pErrorCode);
 
 /**
- * Implements argument checking and buffer handling
- * for string case mapping as a common function.
+ * Common string case mapping implementation for ucasemap_toXyz() and UnicodeString::toXyz().
+ * Implements argument checking.
  */
 U_CFUNC int32_t
 ustrcase_map(const UCaseMap *csm,
@@ -177,6 +177,18 @@ ustrcase_map(const UCaseMap *csm,
              UStringCaseMapper *stringCaseMapper,
              icu::Edits *edits,
              UErrorCode *pErrorCode);
+
+/**
+ * Common string case mapping implementation for old-fashioned u_strToXyz() functions
+ * that allow the source string to overlap the destination buffer.
+ * Implements argument checking and internally works with an intermediate buffer if necessary.
+ */
+U_CFUNC int32_t
+ustrcase_mapWithOverlap(const UCaseMap *csm,
+                        UChar *dest, int32_t destCapacity,
+                        const UChar *src, int32_t srcLength,
+                        UStringCaseMapper *stringCaseMapper,
+                        UErrorCode *pErrorCode);
 
 /**
  * UTF-8 string case mapping function type, used by ucasemap_mapUTF8().

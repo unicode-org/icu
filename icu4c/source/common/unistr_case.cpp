@@ -140,9 +140,8 @@ UnicodeString::caseMap(const UCaseMap *csm,
     Edits edits;
     edits.setWriteUnchanged(FALSE);
     UChar replacementChars[200];
-    int32_t replacementLength = stringCaseMapper(
-            csm, replacementChars, UPRV_LENGTHOF(replacementChars),
-            oldArray, oldLength, &edits, &errorCode);
+    stringCaseMapper(csm, replacementChars, UPRV_LENGTHOF(replacementChars),
+                     oldArray, oldLength, &edits, &errorCode);
     UErrorCode editsError = U_ZERO_ERROR;
     if (edits.setErrorCode(editsError)) {
       setToBogus();
@@ -150,22 +149,17 @@ UnicodeString::caseMap(const UCaseMap *csm,
     }
     newLength = oldLength + edits.lengthDelta();
     if (U_SUCCESS(errorCode)) {
-      if (!cloneArrayIfNeeded(newLength, newLength)) {
+      // Grow the buffer at most once, not for multiple doReplace() calls.
+      if (newLength > oldLength && !cloneArrayIfNeeded(newLength, newLength)) {
         return *this;
       }
-      int32_t index = 0;  // index into this string
-      int32_t replIndex = 0;  // index into replacementChars
-      for (Edits::Iterator iter = edits.getCoarseIterator(); iter.next(errorCode);) {
-        if (iter.changed) {
-          doReplace(index, iter.oldLength, replacementChars, replIndex, iter.newLength);
-          replIndex += iter.newLength;
-        }
-        index += iter.newLength;
+      for (Edits::Iterator iter = edits.getCoarseChangesIterator(); iter.next(errorCode);) {
+        doReplace(iter.destinationIndex(), iter.oldLength(),
+                  replacementChars, iter.replacementIndex(), iter.newLength());
       }
       if (U_FAILURE(errorCode)) {
         setToBogus();
       }
-      U_ASSERT(replIndex == replacementLength);
       return *this;
     } else if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
       // common overflow handling below
