@@ -3573,7 +3573,11 @@ private:
    * as in ustr_imp.h for ustrcase_map().
    */
   UnicodeString &
-  caseMap(const UCaseMap *csm, UStringCaseMapper *stringCaseMapper);
+  caseMap(const UCaseMap *csm,
+#if !UCONFIG_NO_BREAK_ITERATION
+          BreakIterator *iter,
+#endif
+          UStringCaseMapper *stringCaseMapper);
 
   // ref counting
   void addRef(void);

@@ -88,7 +88,7 @@ UnicodeString::doCaseCompare(int32_t start,
 //========================================
 
 UnicodeString &
-UnicodeString::caseMap(const UCaseMap *csm,
+UnicodeString::caseMap(const UCaseMap *csm, UCASEMAP_BREAK_ITERATOR_PARAM
                        UStringCaseMapper *stringCaseMapper) {
   if(isEmpty() || !isWritable()) {
     // nothing to do
@@ -121,7 +121,9 @@ UnicodeString::caseMap(const UCaseMap *csm,
       buffer = fUnion.fStackFields.fBuffer;
       capacity = US_STACKBUF_SIZE;
     }
-    newLength = stringCaseMapper(csm, buffer, capacity, oldArray, oldLength, NULL, &errorCode);
+    newLength = stringCaseMapper(csm, UCASEMAP_BREAK_ITERATOR
+                                 buffer, capacity,
+                                 oldArray, oldLength, NULL, errorCode);
     if (U_SUCCESS(errorCode)) {
       setLength(newLength);
       return *this;
@@ -140,22 +142,18 @@ UnicodeString::caseMap(const UCaseMap *csm,
     Edits edits;
     edits.setWriteUnchanged(FALSE);
     UChar replacementChars[200];
-    stringCaseMapper(csm, replacementChars, UPRV_LENGTHOF(replacementChars),
-                     oldArray, oldLength, &edits, &errorCode);
-    UErrorCode editsError = U_ZERO_ERROR;
-    if (edits.setErrorCode(editsError)) {
-      setToBogus();
-      return *this;
-    }
-    newLength = oldLength + edits.lengthDelta();
+    stringCaseMapper(csm, UCASEMAP_BREAK_ITERATOR
+                     replacementChars, UPRV_LENGTHOF(replacementChars),
+                     oldArray, oldLength, &edits, errorCode);
     if (U_SUCCESS(errorCode)) {
       // Grow the buffer at most once, not for multiple doReplace() calls.
+      newLength = oldLength + edits.lengthDelta();
       if (newLength > oldLength && !cloneArrayIfNeeded(newLength, newLength)) {
         return *this;
       }
-      for (Edits::Iterator iter = edits.getCoarseChangesIterator(); iter.next(errorCode);) {
-        doReplace(iter.destinationIndex(), iter.oldLength(),
-                  replacementChars, iter.replacementIndex(), iter.newLength());
+      for (Edits::Iterator ei = edits.getCoarseChangesIterator(); ei.next(errorCode);) {
+        doReplace(ei.destinationIndex(), ei.oldLength(),
+                  replacementChars, ei.replacementIndex(), ei.newLength());
       }
       if (U_FAILURE(errorCode)) {
         setToBogus();
@@ -163,6 +161,7 @@ UnicodeString::caseMap(const UCaseMap *csm,
       return *this;
     } else if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
       // common overflow handling below
+      newLength = oldLength + edits.lengthDelta();
     } else {
       setToBogus();
       return *this;
@@ -179,8 +178,9 @@ UnicodeString::caseMap(const UCaseMap *csm,
     return *this;
   }
   errorCode = U_ZERO_ERROR;
-  newLength = stringCaseMapper(csm, getArrayStart(), getCapacity(),
-                               oldArray, oldLength, NULL, &errorCode);
+  newLength = stringCaseMapper(csm, UCASEMAP_BREAK_ITERATOR
+                               getArrayStart(), getCapacity(),
+                               oldArray, oldLength, NULL, errorCode);
   if (bufferToDelete) {
     uprv_free(bufferToDelete);
   }
@@ -197,7 +197,7 @@ UnicodeString::foldCase(uint32_t options) {
   UCaseMap csm=UCASEMAP_INITIALIZER;
   csm.csp=ucase_getSingleton();
   csm.options=options;
-  return caseMap(&csm, ustrcase_internalFold);
+  return caseMap(&csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalFold);
 }
 
 U_NAMESPACE_END

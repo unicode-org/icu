@@ -22,14 +22,13 @@
 #define __UCASEMAP_H__
 
 #include "unicode/utypes.h"
-#include "unicode/ustring.h"
 #include "unicode/localpointer.h"
 
 #if U_SHOW_CPLUSPLUS_API
-
 #include "unicode/uobject.h"
-
 #endif  // U_SHOW_CPLUSPLUS_API
+
+#include "unicode/ustring.h"
 
 /**
  * \file
@@ -89,6 +88,8 @@ ucasemap_close(UCaseMap *csm);
 
 U_NAMESPACE_BEGIN
 
+class BreakIterator;
+
 /**
  * \class LocalUCaseMapPointer
  * "Smart pointer" class, closes a UCaseMap via ucasemap_close().
@@ -106,6 +107,9 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUCaseMapPointer, UCaseMap, ucasemap_close);
  * Records lengths of string edits but not replacement text.
  * Supports replacements, insertions, deletions in linear progression.
  * Does not support moving/reordering of text.
+ *
+ * An Edits object tracks a separate UErrorCode, but ICU case mapping functions
+ * merge any such errors into their API's UErrorCode.
  *
  * @internal ICU 59 technology preview
  */
@@ -154,21 +158,24 @@ public:
 
     /**
      * Adds a record for an unchanged segment of text.
+     * Normally called from inside ICU case mapping functions, not user code.
      * @internal ICU 59 technology preview
      */
     void addUnchanged(int32_t unchangedLength);
     /**
      * Adds a record for a text replacement/insertion/deletion.
+     * Normally called from inside ICU case mapping functions, not user code.
      * @internal ICU 59 technology preview
      */
     void addReplace(int32_t oldLength, int32_t newLength);
     /**
      * Sets the UErrorCode if an error occurred while recording edits.
      * Preserves older error codes in the outErrorCode.
+     * Normally called from inside ICU case mapping functions, not user code.
      * @return TRUE if U_FAILURE(outErrorCode)
      * @internal ICU 59 technology preview
      */
-    UBool setErrorCode(UErrorCode &outErrorCode);
+    UBool copyErrorTo(UErrorCode &outErrorCode);
 
     /**
      * How much longer is the new text compared with the old text?
@@ -463,7 +470,7 @@ ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
  * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
  * @param edits     Records edits for index mapping, working with styled text,
  *                  and getting only changes (if any). Can be NULL.
- * @param pErrorCode Must be a valid pointer to an error code value,
+ * @param errorCode Reference to an in/out error code value
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string, if successful - or in case of a buffer overflow,
  *         in which case it will be greater than destCapacity.
@@ -476,7 +483,7 @@ ucasemap_toLowerWithEdits(const UCaseMap *csm,
                           UChar *dest, int32_t destCapacity,
                           const UChar *src, int32_t srcLength,
                           icu::Edits *edits,
-                          UErrorCode *pErrorCode);
+                          UErrorCode &errorCode);
 
 /**
  * Uppercases the characters in a UTF-16 string and optionally records edits.
@@ -495,7 +502,7 @@ ucasemap_toLowerWithEdits(const UCaseMap *csm,
  * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
  * @param edits     Records edits for index mapping, working with styled text,
  *                  and getting only changes (if any). Can be NULL.
- * @param pErrorCode Must be a valid pointer to an error code value,
+ * @param errorCode Reference to an in/out error code value
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string, if successful - or in case of a buffer overflow,
  *         in which case it will be greater than destCapacity.
@@ -508,7 +515,99 @@ ucasemap_toUpperWithEdits(const UCaseMap *csm,
                           UChar *dest, int32_t destCapacity,
                           const UChar *src, int32_t srcLength,
                           icu::Edits *edits,
-                          UErrorCode *pErrorCode);
+                          UErrorCode &errorCode);
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
+/**
+ * Titlecases a UTF-16 string and optionally records edits.
+ * Casing is locale-dependent and context-sensitive.
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer must not overlap.
+ *
+ * Titlecasing uses a break iterator to find the first characters of words
+ * that are to be titlecased. It titlecases those characters and lowercases
+ * all others. (This can be modified with ucasemap_setOptions().)
+ *
+ * The titlecase break iterator can be provided to customize for arbitrary
+ * styles, using rules and dictionaries beyond the standard iterators.
+ * The standard titlecase iterator for the root locale implements the
+ * algorithm of Unicode TR 21.
+ *
+ * This function uses only the setText(), first() and next() methods of the
+ * provided break iterator.
+ *
+ * @param csm       UCaseMap service object.
+ * @param iter      A break iterator to find the first characters of words that are to be titlecased.
+ *                  It is set to the source string and used one or more times for iteration.
+ *                  If NULL, then a clone of ucasemap_getBreakIterator() is used.
+ *                  If that is NULL too, then a word break iterator for the locale is used
+ *                  (or something equivalent).
+ * @param dest      A buffer for the result string. The result will be NUL-terminated if
+ *                  the buffer is large enough.
+ *                  The contents is undefined in case of failure.
+ * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string.
+ * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
+ * @param edits     Records edits for index mapping, working with styled text,
+ *                  and getting only changes (if any). Can be NULL.
+ * @param errorCode Reference to an in/out error code value
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
+ *
+ * @see u_strToTitle
+ * @internal ICU 59 technology preview
+ */
+U_CAPI int32_t U_EXPORT2
+ucasemap_toTitleWithEdits(const UCaseMap *csm, icu::BreakIterator *iter,
+                          UChar *dest, int32_t destCapacity,
+                          const UChar *src, int32_t srcLength,
+                          icu::Edits *edits,
+                          UErrorCode &errorCode);
+
+#endif  // UCONFIG_NO_BREAK_ITERATION
+
+/**
+ * Case-folds the characters in a UTF-16 string and optionally records edits.
+ *
+ * Case-folding is locale-independent and not context-sensitive,
+ * but there is an option for whether to include or exclude mappings for dotted I
+ * and dotless i that are marked with 'T' in CaseFolding.txt.
+ *
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer must not overlap.
+ *
+ * @param csm       UCaseMap service object.
+ * @param dest      A buffer for the result string. The result will be NUL-terminated if
+ *                  the buffer is large enough.
+ *                  The contents is undefined in case of failure.
+ * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string.
+ * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
+ * @param edits     Records edits for index mapping, working with styled text,
+ *                  and getting only changes (if any). Can be NULL.
+ * @param errorCode Reference to an in/out error code value
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string, if successful - or in case of a buffer overflow,
+ *         in which case it will be greater than destCapacity.
+ *
+ * @see u_strFoldCase
+ * @see ucasemap_setOptions
+ * @see U_FOLD_CASE_DEFAULT
+ * @see U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @internal ICU 59 technology preview
+ */
+U_CAPI int32_t U_EXPORT2
+ucasemap_foldCaseWithEdits(const UCaseMap *csm,
+                           UChar *dest, int32_t destCapacity,
+                           const UChar *src, int32_t srcLength,
+                           icu::Edits *edits,
+                           UErrorCode &errorCode);
 
 #endif  // U_HIDE_INTERNAL_API
 #endif  // U_SHOW_CPLUSPLUS_API
@@ -600,7 +699,7 @@ ucasemap_toTitle(UCaseMap *csm,
                  const UChar *src, int32_t srcLength,
                  UErrorCode *pErrorCode);
 
-#endif
+#endif  // UCONFIG_NO_BREAK_ITERATION
 
 /**
  * Lowercase the characters in a UTF-8 string.
@@ -762,10 +861,13 @@ ucasemap_utf8FoldCase(const UCaseMap *csm,
  */
 typedef int32_t U_CALLCONV
 UStringCaseMapper(const UCaseMap *csm,
+#if !UCONFIG_NO_BREAK_ITERATION
+                  icu::BreakIterator *iter,
+#endif
                   UChar *dest, int32_t destCapacity,
                   const UChar *src, int32_t srcLength,
                   icu::Edits *edits,
-                  UErrorCode *pErrorCode);
+                  UErrorCode &errorCode);
 
 #endif  // U_SHOW_CPLUSPLUS_API
 #endif

@@ -32,14 +32,13 @@ U_NAMESPACE_USE
 
 U_CAPI const UBreakIterator * U_EXPORT2
 ucasemap_getBreakIterator(const UCaseMap *csm) {
-    return csm->iter;
+    return reinterpret_cast<UBreakIterator *>(csm->iter);
 }
 
 U_CAPI void U_EXPORT2
 ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode * /*pErrorCode*/) {
-    // Do not call ubrk_close() so that we do not depend on all of the BreakIterator code.
-    delete reinterpret_cast<BreakIterator *>(csm->iter);
-    csm->iter=iterToAdopt;
+    delete csm->iter;
+    csm->iter=reinterpret_cast<BreakIterator *>(iterToAdopt);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -49,15 +48,13 @@ ucasemap_utf8ToTitle(UCaseMap *csm,
                      UErrorCode *pErrorCode) {
     UText utext=UTEXT_INITIALIZER;
     utext_openUTF8(&utext, (const char *)src, srcLength, pErrorCode);
+    if(csm->iter==NULL) {
+        csm->iter=BreakIterator::createWordInstance(Locale(csm->locale), *pErrorCode);
+    }
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(csm->iter==NULL) {
-        csm->iter=ubrk_open(UBRK_WORD, csm->locale,
-                            NULL, 0,
-                            pErrorCode);
-    }
-    ubrk_setUText(csm->iter, &utext, pErrorCode);
+    csm->iter->setText(&utext, *pErrorCode);
     int32_t length=ucasemap_mapUTF8(csm,
                    (uint8_t *)dest, destCapacity,
                    (const uint8_t *)src, srcLength,
