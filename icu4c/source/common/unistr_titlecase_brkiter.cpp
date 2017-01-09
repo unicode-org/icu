@@ -22,21 +22,10 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/brkiter.h"
-#include "unicode/ubrk.h"
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
 #include "cmemory.h"
 #include "ustr_imp.h"
-
-static int32_t U_CALLCONV
-unistr_case_internalToTitle(const UCaseMap *csm,
-                            UChar *dest, int32_t destCapacity,
-                            const UChar *src, int32_t srcLength,
-                            icu::Edits *edits,
-                            UErrorCode *pErrorCode) {
-  ubrk_setText(csm->iter, src, srcLength, pErrorCode);
-  return ustrcase_internalToTitle(csm, dest, destCapacity, src, srcLength, edits, pErrorCode);
-}
 
 /*
  * Set parameters on an empty UCaseMap, for UCaseMap-less API functions.
@@ -80,8 +69,8 @@ UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t 
       return *this;
     }
   }
-  csm.iter=reinterpret_cast<UBreakIterator *>(bi);
-  caseMap(&csm, unistr_case_internalToTitle);
+  bi->setText(*this);
+  caseMap(&csm, bi, ustrcase_internalToTitle);
   if(titleIter==NULL) {
     delete bi;
   }

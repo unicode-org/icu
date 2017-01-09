@@ -54,7 +54,7 @@ UnicodeString &
 UnicodeString::toLower(const Locale &locale) {
   UCaseMap csm=UCASEMAP_INITIALIZER;
   setTempCaseMap(&csm, locale.getName());
-  return caseMap(&csm, ustrcase_internalToLower);
+  return caseMap(&csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToLower);
 }
 
 UnicodeString &
@@ -66,7 +66,7 @@ UnicodeString &
 UnicodeString::toUpper(const Locale &locale) {
   UCaseMap csm=UCASEMAP_INITIALIZER;
   setTempCaseMap(&csm, locale.getName());
-  return caseMap(&csm, ustrcase_internalToUpper);
+  return caseMap(&csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToUpper);
 }
 
 U_NAMESPACE_END

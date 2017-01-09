@@ -114,7 +114,7 @@ uprv_loadPropsData(UErrorCode *errorCode);*/
 struct UCaseMap {
     const UCaseProps *csp;
 #if !UCONFIG_NO_BREAK_ITERATION
-    UBreakIterator *iter;  /* We adopt the iterator, so we own it. */
+    icu::BreakIterator *iter;  /* We adopt the iterator, so we own it. */
 #endif
     char locale[32];
     int32_t locCache;
@@ -123,8 +123,16 @@ struct UCaseMap {
 
 #if UCONFIG_NO_BREAK_ITERATION
 #   define UCASEMAP_INITIALIZER { NULL, { 0 }, 0, 0 }
+#   define UCASEMAP_BREAK_ITERATOR_PARAM
+#   define UCASEMAP_BREAK_ITERATOR_UNUSED
+#   define UCASEMAP_BREAK_ITERATOR
+#   define UCASEMAP_BREAK_ITERATOR_NULL
 #else
 #   define UCASEMAP_INITIALIZER { NULL, NULL, { 0 }, 0, 0 }
+#   define UCASEMAP_BREAK_ITERATOR_PARAM icu::BreakIterator *iter,
+#   define UCASEMAP_BREAK_ITERATOR_UNUSED icu::BreakIterator *,
+#   define UCASEMAP_BREAK_ITERATOR iter,
+#   define UCASEMAP_BREAK_ITERATOR_NULL NULL,
 #endif
 
 U_CFUNC void
@@ -132,51 +140,52 @@ ustrcase_setTempCaseMapLocale(UCaseMap *csm, const char *locale);
 
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
-ustrcase_internalToLower(const UCaseMap *csm,
+ustrcase_internalToLower(const UCaseMap *csm, UCASEMAP_BREAK_ITERATOR_PARAM
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
                          icu::Edits *edits,
-                         UErrorCode *pErrorCode);
+                         UErrorCode &errorCode);
 
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
-ustrcase_internalToUpper(const UCaseMap *csm,
+ustrcase_internalToUpper(const UCaseMap *csm, UCASEMAP_BREAK_ITERATOR_PARAM
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
                          icu::Edits *edits,
-                         UErrorCode *pErrorCode);
+                         UErrorCode &errorCode);
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
 ustrcase_internalToTitle(const UCaseMap *csm,
+                         icu::BreakIterator *iter,
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
                          icu::Edits *edits,
-                         UErrorCode *pErrorCode);
+                         UErrorCode &errorCode);
 
 #endif
 
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
-ustrcase_internalFold(const UCaseMap *csm,
+ustrcase_internalFold(const UCaseMap *csm, UCASEMAP_BREAK_ITERATOR_PARAM
                       UChar *dest, int32_t destCapacity,
                       const UChar *src, int32_t srcLength,
                       icu::Edits *edits,
-                      UErrorCode *pErrorCode);
+                      UErrorCode &errorCode);
 
 /**
  * Common string case mapping implementation for ucasemap_toXyz() and UnicodeString::toXyz().
  * Implements argument checking.
  */
 U_CFUNC int32_t
-ustrcase_map(const UCaseMap *csm,
+ustrcase_map(const UCaseMap *csm, UCASEMAP_BREAK_ITERATOR_PARAM
              UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              UStringCaseMapper *stringCaseMapper,
              icu::Edits *edits,
-             UErrorCode *pErrorCode);
+             UErrorCode &errorCode);
 
 /**
  * Common string case mapping implementation for old-fashioned u_strToXyz() functions
@@ -184,11 +193,11 @@ ustrcase_map(const UCaseMap *csm,
  * Implements argument checking and internally works with an intermediate buffer if necessary.
  */
 U_CFUNC int32_t
-ustrcase_mapWithOverlap(const UCaseMap *csm,
+ustrcase_mapWithOverlap(const UCaseMap *csm, UCASEMAP_BREAK_ITERATOR_PARAM
                         UChar *dest, int32_t destCapacity,
                         const UChar *src, int32_t srcLength,
                         UStringCaseMapper *stringCaseMapper,
-                        UErrorCode *pErrorCode);
+                        UErrorCode &errorCode);
 
 /**
  * UTF-8 string case mapping function type, used by ucasemap_mapUTF8().

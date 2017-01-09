@@ -22,6 +22,7 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/brkiter.h"
+#include "unicode/localpointer.h"
 #include "unicode/ubrk.h"
 #include "unicode/ucasemap.h"
 #include "cmemory.h"
@@ -57,20 +58,51 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
              UErrorCode *pErrorCode) {
     UCaseMap csm=UCASEMAP_INITIALIZER;
     setTempCaseMap(&csm, locale);
+    icu::LocalPointer<icu::BreakIterator> ownedIter;
+    icu::BreakIterator *iter;
     if(titleIter!=NULL) {
-        ubrk_setText(csm.iter=titleIter, src, srcLength, pErrorCode);
+        iter=reinterpret_cast<icu::BreakIterator *>(titleIter);
     } else {
-        csm.iter=ubrk_open(UBRK_WORD, csm.locale, src, srcLength, pErrorCode);
+        iter=icu::BreakIterator::createWordInstance(icu::Locale(csm.locale), *pErrorCode);
+        ownedIter.adoptInstead(iter);
     }
-    int32_t length=ustrcase_mapWithOverlap(
-        &csm,
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    icu::UnicodeString s(srcLength<0, src, srcLength);
+    iter->setText(s);
+    return ustrcase_mapWithOverlap(
+        &csm, iter,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToTitle, pErrorCode);
-    if(titleIter==NULL && csm.iter!=NULL) {
-        ubrk_close(csm.iter);
+        ustrcase_internalToTitle, *pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucasemap_toTitleWithEdits(const UCaseMap *csm, icu::BreakIterator *iter,
+                          UChar *dest, int32_t destCapacity,
+                          const UChar *src, int32_t srcLength,
+                          icu::Edits *edits,
+                          UErrorCode &errorCode) {
+    icu::LocalPointer<icu::BreakIterator> ownedIter;
+    if(iter==NULL) {
+        if(csm->iter!=NULL) {
+            iter=csm->iter->clone();
+        } else {
+            iter=icu::BreakIterator::createWordInstance(icu::Locale(csm->locale), errorCode);
+        }
+        ownedIter.adoptInsteadAndCheckErrorCode(iter, errorCode);
     }
-    return length;
+    if(U_FAILURE(errorCode)) {
+        return 0;
+    }
+    icu::UnicodeString s(srcLength<0, src, srcLength);
+    iter->setText(s);
+    return ustrcase_map(
+        csm, iter,
+        dest, destCapacity,
+        src, srcLength,
+        ustrcase_internalToTitle, edits, errorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -78,16 +110,19 @@ ucasemap_toTitle(UCaseMap *csm,
                  UChar *dest, int32_t destCapacity,
                  const UChar *src, int32_t srcLength,
                  UErrorCode *pErrorCode) {
-    if(csm->iter!=NULL) {
-        ubrk_setText(csm->iter, src, srcLength, pErrorCode);
-    } else {
-        csm->iter=ubrk_open(UBRK_WORD, csm->locale, src, srcLength, pErrorCode);
+    if(csm->iter==NULL) {
+        csm->iter=icu::BreakIterator::createWordInstance(icu::Locale(csm->locale), *pErrorCode);
     }
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    icu::UnicodeString s(srcLength<0, src, srcLength);
+    csm->iter->setText(s);
     return ustrcase_map(
-        csm,
+        csm, csm->iter,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToTitle, NULL, pErrorCode);
+        ustrcase_internalToTitle, NULL, *pErrorCode);
 }
 
 #endif  // !UCONFIG_NO_BREAK_ITERATION
