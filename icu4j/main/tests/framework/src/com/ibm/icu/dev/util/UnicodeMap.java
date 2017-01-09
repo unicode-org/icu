@@ -36,6 +36,8 @@ import com.ibm.icu.util.Freezable;
  * that is, a put(x,null) is the same as remove(x).<br>
  * At this point "" is also not allowed as a key, although that may change.
  * @author markdavis
+ *
+ * @internal CLDR
  */
 
 public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>, StringTransform, Iterable<String> {

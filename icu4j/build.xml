@@ -1490,11 +1490,12 @@
                 classpath="${icu4j.jar.file}">
 
             <src path="${icu4j.tools.dir}/src"/>
-            <src path="${icu4j.translit-tests.dir}/src"/>
             <src path="${icu4j.test-framework.dir}/src"/>
 
-            <include name="com/ibm/icu/dev/test/TestFmwk.java" />
-            <include name="com/ibm/icu/dev/util/*.java" />
+            <include name="com/ibm/icu/dev/util/CollectionUtilities.java" />
+            <include name="com/ibm/icu/dev/util/ElapsedTimer.java" />
+            <include name="com/ibm/icu/dev/util/UnicodeMap.java" />
+            <include name="com/ibm/icu/dev/util/UnicodeMapIterator.java" />
             <include name="com/ibm/icu/dev/tool/UOption.java" />
         </javac>
 
@@ -1502,7 +1503,6 @@
         <jar jarfile="${cldr.util.out.dir}/lib/utilities.jar"
                 compress="true"
                 basedir="${cldr.util.out.dir}/bin">
-            <include name="com/ibm/icu/dev/test/*.class"/>
             <include name="com/ibm/icu/dev/util/*.class"/>
             <include name="com/ibm/icu/dev/tool/UOption*.class"/>
         </jar>
@@ -1519,13 +1519,11 @@
         <!-- utilities-src.jar -->
         <jar jarfile="${cldr.release.dir}/utilities-src.jar" compress="true">
             <fileset dir="${icu4j.test-framework.dir}/${src.dir}">
-                <include name="com/ibm/icu/dev/test/TestFmwk.java"/>
-                <include name="com/ibm/icu/dev/test/*Log*.java"/>
-                <include name="com/ibm/icu/dev/test/TestUtil.java"/>
-                <include name="com/ibm/icu/dev/test/UTF16Util.java"/>
+                <include name="com/ibm/icu/dev/util/CollectionUtilities.java" />
+                <include name="com/ibm/icu/dev/util/ElapsedTimer.java" />
+                <include name="com/ibm/icu/dev/util/UnicodeMap.java" />
+                <include name="com/ibm/icu/dev/util/UnicodeMapIterator.java" />
             </fileset>
-            <fileset dir="${icu4j.test-framework.dir}/${src.dir}" includes="com/ibm/icu/dev/util/*.java"/>
-            <fileset dir="${icu4j.translit-tests.dir}/${src.dir}" includes="com/ibm/icu/dev/util/*.java"/>
             <fileset dir="${icu4j.tools.dir}/${src.dir}" includes="com/ibm/icu/dev/tool/UOption.java"/>
        </jar>
     </target>

@@ -43,6 +43,8 @@ import com.ibm.icu.text.UTF16;
  * }
  * </pre>
  * @author M. Davis
+ *
+ * @internal CLDR
  */
 public class UnicodeMapIterator<T> {
 
