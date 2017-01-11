@@ -123,7 +123,7 @@
 
   <scm>
     <connection>scm:svn:http://source.icu-project.org/repos/icu/trunk/icu4j</connection>
-    <developerConnection>scm:svn:http://source.icu-project.org/repos/icu/turnk/icu4j</developerConnection>
+    <developerConnection>scm:svn:http://source.icu-project.org/repos/icu/trunk/icu4j</developerConnection>
     <url>http://source.icu-project.org/repos/icu/trunk/icu4j</url>
   </scm>
   <issueManagement>
