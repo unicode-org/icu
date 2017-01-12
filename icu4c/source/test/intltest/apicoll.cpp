@@ -41,6 +41,7 @@
 #include "apicoll.h"
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
+#include "unicode/strenum.h"
 #include "unicode/ustring.h"
 #include "unicode/ucol.h"
 

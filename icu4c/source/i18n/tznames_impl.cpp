@@ -15,6 +15,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/strenum.h"
 #include "unicode/ustring.h"
 #include "unicode/timezone.h"
 
