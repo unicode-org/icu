@@ -35,6 +35,7 @@
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
 #include "unicode/unum.h"
+#include "unicode/unistr.h"
 
 /**
  * \file

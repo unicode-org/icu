@@ -13,6 +13,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/locid.h"
+#include "unicode/strenum.h"
 #include "unicode/ucnv.h"
 #include "unicode/uenum.h"
 #include "unicode/utf16.h"

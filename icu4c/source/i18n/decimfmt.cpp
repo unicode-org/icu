@@ -49,6 +49,7 @@
 #include "unicode/utf16.h"
 #include "unicode/numsys.h"
 #include "unicode/localpointer.h"
+#include "unicode/ustring.h"
 #include "uresimp.h"
 #include "ucurrimp.h"
 #include "charstr.h"

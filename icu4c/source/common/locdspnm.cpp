@@ -13,6 +13,7 @@
 
 #include "unicode/locdspnm.h"
 #include "unicode/simpleformatter.h"
+#include "unicode/ucasemap.h"
 #include "unicode/ures.h"
 #include "unicode/udisplaycontext.h"
 #include "unicode/brkiter.h"

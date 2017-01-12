@@ -18,6 +18,7 @@
 #include "unicode/rbtz.h"
 #include "unicode/simpleformatter.h"
 #include "unicode/simpletz.h"
+#include "unicode/strenum.h"
 #include "unicode/vtzone.h"
 
 #include "cmemory.h"

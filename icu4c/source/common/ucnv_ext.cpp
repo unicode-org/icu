@@ -23,6 +23,7 @@
 #if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION
 
 #include "unicode/uset.h"
+#include "unicode/ustring.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "ucnv_ext.h"

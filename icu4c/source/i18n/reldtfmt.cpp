@@ -20,7 +20,7 @@
 #include "unicode/udisplaycontext.h"
 #include "unicode/uchar.h"
 #include "unicode/brkiter.h"
-
+#include "unicode/ucasemap.h"
 #include "reldtfmt.h"
 #include "cmemory.h"
 #include "uresimp.h"

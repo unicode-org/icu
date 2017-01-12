@@ -32,6 +32,7 @@
 #include "unicode/messagepattern.h"
 #include "unicode/selfmt.h"
 #include "unicode/gregocal.h"
+#include "unicode/strenum.h"
 #include <stdio.h>
 
 void
