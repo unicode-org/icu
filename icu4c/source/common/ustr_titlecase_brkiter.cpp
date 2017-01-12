@@ -29,24 +29,18 @@
 #include "ucase.h"
 #include "ustr_imp.h"
 
-/* functions available in the common library (for unistr_case.cpp) */
+U_NAMESPACE_USE
 
-/*
- * Set parameters on an empty UCaseMap, for UCaseMap-less API functions.
- * Do this fast because it is called with every function call.
- * Duplicate of the same function in ustrcase.cpp, to keep it inline.
- */
-static inline void
-setTempCaseMap(UCaseMap *csm, const char *locale) {
-    if(csm->csp==NULL) {
-        csm->csp=ucase_getSingleton();
-    }
-    if(locale!=NULL && locale[0]==0) {
-        csm->locale[0]=0;
-    } else {
-        ustrcase_setTempCaseMapLocale(csm, locale);
-    }
+using icu::internal::CaseMapFriend;
+
+// TODO: create casemap.cpp
+
+void icu::internal::CaseMapFriend::adoptIter(CaseMap &csm, BreakIterator *iter) {
+    delete csm.iter;
+    csm.iter = iter;
 }
+
+/* functions available in the common library (for unistr_case.cpp) */
 
 /* public API functions */
 
@@ -56,70 +50,76 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
              UBreakIterator *titleIter,
              const char *locale,
              UErrorCode *pErrorCode) {
-    UCaseMap csm=UCASEMAP_INITIALIZER;
-    setTempCaseMap(&csm, locale);
-    icu::LocalPointer<icu::BreakIterator> ownedIter;
-    icu::BreakIterator *iter;
+    CaseMap csm(locale, 0, *pErrorCode);
+    BreakIterator *iter;
     if(titleIter!=NULL) {
-        iter=reinterpret_cast<icu::BreakIterator *>(titleIter);
+        iter=reinterpret_cast<BreakIterator *>(titleIter);
     } else {
-        iter=icu::BreakIterator::createWordInstance(icu::Locale(csm.locale), *pErrorCode);
-        ownedIter.adoptInstead(iter);
+        iter=BreakIterator::createWordInstance(CaseMapFriend::locale(csm), *pErrorCode);
+        CaseMapFriend::adoptIter(csm, iter);
     }
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    icu::UnicodeString s(srcLength<0, src, srcLength);
+    UnicodeString s(srcLength<0, src, srcLength);
     iter->setText(s);
     return ustrcase_mapWithOverlap(
-        &csm, iter,
+        csm, iter,
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToTitle, *pErrorCode);
 }
 
-U_CAPI int32_t U_EXPORT2
-ucasemap_toTitleWithEdits(const UCaseMap *csm, icu::BreakIterator *iter,
-                          UChar *dest, int32_t destCapacity,
-                          const UChar *src, int32_t srcLength,
-                          icu::Edits *edits,
-                          UErrorCode &errorCode) {
-    icu::LocalPointer<icu::BreakIterator> ownedIter;
-    if(iter==NULL) {
-        if(csm->iter!=NULL) {
-            iter=csm->iter->clone();
+U_NAMESPACE_BEGIN
+
+int32_t CaseMap::toTitle(BreakIterator *it,
+                         UChar *dest, int32_t destCapacity,
+                         const UChar *src, int32_t srcLength,
+                         Edits *edits,
+                         UErrorCode &errorCode) const {
+    LocalPointer<BreakIterator> ownedIter;
+    if(it==NULL) {
+        if(iter!=NULL) {
+            it=iter->clone();
         } else {
-            iter=icu::BreakIterator::createWordInstance(icu::Locale(csm->locale), errorCode);
+            it=BreakIterator::createWordInstance(locale, errorCode);
         }
-        ownedIter.adoptInsteadAndCheckErrorCode(iter, errorCode);
+        ownedIter.adoptInsteadAndCheckErrorCode(it, errorCode);
     }
     if(U_FAILURE(errorCode)) {
         return 0;
     }
-    icu::UnicodeString s(srcLength<0, src, srcLength);
-    iter->setText(s);
+    UnicodeString s(srcLength<0, src, srcLength);
+    it->setText(s);
     return ustrcase_map(
-        csm, iter,
+        *this, it,
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToTitle, edits, errorCode);
 }
 
+U_NAMESPACE_END
+
 U_CAPI int32_t U_EXPORT2
-ucasemap_toTitle(UCaseMap *csm,
+ucasemap_toTitle(UCaseMap *ucsm,
                  UChar *dest, int32_t destCapacity,
                  const UChar *src, int32_t srcLength,
                  UErrorCode *pErrorCode) {
-    if(csm->iter==NULL) {
-        csm->iter=icu::BreakIterator::createWordInstance(icu::Locale(csm->locale), *pErrorCode);
-    }
-    if(U_FAILURE(*pErrorCode)) {
+    if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    icu::UnicodeString s(srcLength<0, src, srcLength);
-    csm->iter->setText(s);
+    CaseMap &csm = *CaseMapFriend::fromUCaseMap(ucsm);
+    if (CaseMapFriend::iter(csm) == NULL) {
+        CaseMapFriend::adoptIter(
+            csm, BreakIterator::createWordInstance(CaseMapFriend::locale(csm), *pErrorCode));
+    }
+    if (U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    UnicodeString s(srcLength<0, src, srcLength);
+    CaseMapFriend::mutableIter(csm)->setText(s);
     return ustrcase_map(
-        csm, csm->iter,
+        csm, CaseMapFriend::mutableIter(csm),
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToTitle, NULL, *pErrorCode);

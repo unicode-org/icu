@@ -19,8 +19,8 @@
 
 #include "unicode/utypes.h"
 #include "unicode/locid.h"
+#include "unicode/ucasemap.h"
 #include "unicode/unistr.h"
-#include "cmemory.h"
 #include "ustr_imp.h"
 
 U_NAMESPACE_BEGIN
@@ -29,22 +29,6 @@ U_NAMESPACE_BEGIN
 // Write implementation
 //========================================
 
-/*
- * Set parameters on an empty UCaseMap, for UCaseMap-less API functions.
- * Do this fast because it is called with every function call.
- */
-static inline void
-setTempCaseMap(UCaseMap *csm, const char *locale) {
-    if(csm->csp==NULL) {
-        csm->csp=ucase_getSingleton();
-    }
-    if(locale!=NULL && locale[0]==0) {
-        csm->locale[0]=0;
-    } else {
-        ustrcase_setTempCaseMapLocale(csm, locale);
-    }
-}
-
 UnicodeString &
 UnicodeString::toLower() {
   return toLower(Locale::getDefault());
@@ -52,9 +36,9 @@ UnicodeString::toLower() {
 
 UnicodeString &
 UnicodeString::toLower(const Locale &locale) {
-  UCaseMap csm=UCASEMAP_INITIALIZER;
-  setTempCaseMap(&csm, locale.getName());
-  return caseMap(&csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToLower);
+  UErrorCode errorCode = U_ZERO_ERROR;
+  CaseMap csm(locale, 0, errorCode);
+  return caseMap(csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToLower);
 }
 
 UnicodeString &
@@ -64,9 +48,9 @@ UnicodeString::toUpper() {
 
 UnicodeString &
 UnicodeString::toUpper(const Locale &locale) {
-  UCaseMap csm=UCASEMAP_INITIALIZER;
-  setTempCaseMap(&csm, locale.getName());
-  return caseMap(&csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToUpper);
+  UErrorCode errorCode = U_ZERO_ERROR;
+  CaseMap csm(locale, 0, errorCode);
+  return caseMap(csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToUpper);
 }
 
 U_NAMESPACE_END
