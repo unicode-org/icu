@@ -88,7 +88,7 @@ UnicodeString::doCaseCompare(int32_t start,
 //========================================
 
 UnicodeString &
-UnicodeString::caseMap(const UCaseMap *csm, UCASEMAP_BREAK_ITERATOR_PARAM
+UnicodeString::caseMap(const CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
                        UStringCaseMapper *stringCaseMapper) {
   if(isEmpty() || !isWritable()) {
     // nothing to do
@@ -194,10 +194,9 @@ UnicodeString::caseMap(const UCaseMap *csm, UCASEMAP_BREAK_ITERATOR_PARAM
 
 UnicodeString &
 UnicodeString::foldCase(uint32_t options) {
-  UCaseMap csm=UCASEMAP_INITIALIZER;
-  csm.csp=ucase_getSingleton();
-  csm.options=options;
-  return caseMap(&csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalFold);
+  UErrorCode errorCode = U_ZERO_ERROR;
+  CaseMap csm(options, errorCode);
+  return caseMap(csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalFold);
 }
 
 U_NAMESPACE_END

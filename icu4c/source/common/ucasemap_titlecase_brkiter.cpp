@@ -30,35 +30,47 @@
 
 U_NAMESPACE_USE
 
+using icu::internal::CaseMapFriend;
+
 U_CAPI const UBreakIterator * U_EXPORT2
 ucasemap_getBreakIterator(const UCaseMap *csm) {
-    return reinterpret_cast<UBreakIterator *>(csm->iter);
+    return reinterpret_cast<const UBreakIterator *>(
+        CaseMapFriend::iter(*CaseMapFriend::fromUCaseMap(csm)));
 }
 
 U_CAPI void U_EXPORT2
-ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode * /*pErrorCode*/) {
-    delete csm->iter;
-    csm->iter=reinterpret_cast<BreakIterator *>(iterToAdopt);
+ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode *pErrorCode) {
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
+    CaseMapFriend::adoptIter(*CaseMapFriend::fromUCaseMap(csm),
+                             reinterpret_cast<BreakIterator *>(iterToAdopt));
 }
 
 U_CAPI int32_t U_EXPORT2
-ucasemap_utf8ToTitle(UCaseMap *csm,
+ucasemap_utf8ToTitle(UCaseMap *ucsm,
                      char *dest, int32_t destCapacity,
                      const char *src, int32_t srcLength,
                      UErrorCode *pErrorCode) {
-    UText utext=UTEXT_INITIALIZER;
-    utext_openUTF8(&utext, (const char *)src, srcLength, pErrorCode);
-    if(csm->iter==NULL) {
-        csm->iter=BreakIterator::createWordInstance(Locale(csm->locale), *pErrorCode);
-    }
-    if(U_FAILURE(*pErrorCode)) {
+    if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    csm->iter->setText(&utext, *pErrorCode);
+    CaseMap &csm = *CaseMapFriend::fromUCaseMap(ucsm);
+    UText utext=UTEXT_INITIALIZER;
+    utext_openUTF8(&utext, (const char *)src, srcLength, pErrorCode);
+    if (CaseMapFriend::iter(csm) == NULL) {
+        CaseMapFriend::adoptIter(
+            csm, BreakIterator::createWordInstance(CaseMapFriend::locale(csm), *pErrorCode));
+    }
+    if (U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    CaseMapFriend::mutableIter(csm)->setText(&utext, *pErrorCode);
     int32_t length=ucasemap_mapUTF8(csm,
-                   (uint8_t *)dest, destCapacity,
-                   (const uint8_t *)src, srcLength,
-                   ucasemap_internalUTF8ToTitle, pErrorCode);
+            CaseMapFriend::mutableIter(csm),
+            (uint8_t *)dest, destCapacity,
+            (const uint8_t *)src, srcLength,
+            ucasemap_internalUTF8ToTitle, pErrorCode);
     utext_close(&utext);
     return length;
 }
