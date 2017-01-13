@@ -278,6 +278,8 @@ abstract class NFSubstitution {
     // formatting
     //-----------------------------------------------------------------------
 
+    private static final long MAX_INT64_IN_DOUBLE = 0x1FFFFFFFFFFFFFL;
+
     /**
      * Performs a mathematical operation on the number, formats it using
      * either ruleSet or decimalFormat, and inserts the result into
@@ -289,15 +291,37 @@ abstract class NFSubstitution {
      * position to determine exactly where to insert the new text)
      */
     public void doSubstitution(long number, StringBuilder toInsertInto, int position, int recursionCount) {
-        // perform a transformation on the number that is dependent
-        // on the type of substitution this is, then just call its
-        // rule set's format() method to format the result
-        long numberToFormat = transformNumber(number);
-
         if (ruleSet != null) {
+            // Perform a transformation on the number that is dependent
+            // on the type of substitution this is, then just call its
+            // rule set's format() method to format the result
+            long numberToFormat = transformNumber(number);
+
             ruleSet.format(numberToFormat, toInsertInto, position + pos, recursionCount);
         } else {
-            toInsertInto.insert(position + pos, numberFormat.format(numberToFormat));
+            if (number <= MAX_INT64_IN_DOUBLE) {
+                // or perform the transformation on the number (preserving
+                // the result's fractional part if the formatter it set
+                // to show it), then use that formatter's format() method
+                // to format the result
+                double numberToFormat = transformNumber((double) number);
+                if (numberFormat.getMaximumFractionDigits() == 0) {
+                    numberToFormat = Math.floor(numberToFormat);
+                }
+
+                toInsertInto.insert(position + pos, numberFormat.format(numberToFormat));
+            }
+            else {
+                // We have gone beyond double precision. Something has to give.
+                // We're favoring accuracy of the large number over potential rules
+                // that round like a CompactDecimalFormat, which is not a common use case.
+                //
+                // Perform a transformation on the number that is dependent
+                // on the type of substitution this is, then just call its
+                // rule set's format() method to format the result
+                long numberToFormat = transformNumber(number);
+                toInsertInto.insert(position + pos, numberFormat.format(numberToFormat));
+            }
         }
     }
 
