@@ -165,10 +165,8 @@ static LONG getTZI(const char *winid, TZI *tzi)
                                     NULL,
                                     (LPBYTE)tzi,
                                     &cbData);
-
+        RegCloseKey(hkey);
     }
-
-    RegCloseKey(hkey);
 
     return result;
 }
@@ -187,10 +185,8 @@ static LONG getSTDName(const char *winid, char *regStdName, int32_t length) {
                                     NULL,
                                     (LPBYTE)regStdName,
                                     &cbData);
-
+        RegCloseKey(hkey);
     }
-
-    RegCloseKey(hkey);
 
     return result;
 }
@@ -214,9 +210,9 @@ static LONG getTZKeyName(char* tzKeyName, int32_t length) {
              NULL,
              (LPBYTE)tzKeyName,
              &cbData);
-    }
 
-    RegCloseKey(hkey);
+        RegCloseKey(hkey);
+    }
 
     return result;
 }
