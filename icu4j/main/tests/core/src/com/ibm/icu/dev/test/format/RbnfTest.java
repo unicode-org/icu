@@ -948,9 +948,9 @@ public class RbnfTest extends TestFmwk {
 
     @Test
     public void TestRuleSetDisplayName() {
-        /**
+        /*
          * Spellout rules for U.K. English.
-         * I borrow the rule sets for TestRuleSetDisplayName()
+         * This was borrowed from the rule sets for TestRuleSetDisplayName()
          */
         final String ukEnglish =
                 "%simplified:\n"
@@ -1309,13 +1309,13 @@ public class RbnfTest extends TestFmwk {
             rbnf.getRuleSetDisplayName("", new ULocale("en_US"));
             errln("RuleBasedNumberFormat.getRuleSetDisplayName(String ruleSetName, ULocale loc) " +
                     "was suppose to have an exception.");
-        } catch(Exception e){}
+        } catch(Exception ignored){}
 
         try{
             rbnf.getRuleSetDisplayName("dummy", new ULocale("en_US"));
             errln("RuleBasedNumberFormat.getRuleSetDisplayName(String ruleSetName, ULocale loc) " +
                     "was suppose to have an exception.");
-        } catch(Exception e){}
+        } catch(Exception ignored){}
     }
 
     /* Test the method
@@ -1651,6 +1651,10 @@ public class RbnfTest extends TestFmwk {
         RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ULocale.US, RuleBasedNumberFormat.SPELLOUT);
 
         String[][] enTestFullData = {
+                {"-9007199254740991", "minus nine quadrillion seven trillion one hundred ninety-nine billion two hundred fifty-four million seven hundred forty thousand nine hundred ninety-one"}, // Maximum precision in both a double and a long
+                {"9007199254740991", "nine quadrillion seven trillion one hundred ninety-nine billion two hundred fifty-four million seven hundred forty thousand nine hundred ninety-one"}, // Maximum precision in both a double and a long
+                {"-9007199254740992", "minus nine quadrillion seven trillion one hundred ninety-nine billion two hundred fifty-four million seven hundred forty thousand nine hundred ninety-two"}, // Only precisely contained in a long
+                {"9007199254740992", "nine quadrillion seven trillion one hundred ninety-nine billion two hundred fifty-four million seven hundred forty thousand nine hundred ninety-two"}, // Only precisely contained in a long
                 {"9999999999999998", "nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-eight"},
                 {"9999999999999999", "nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine"},
                 {"999999999999999999", "nine hundred ninety-nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine"},
@@ -1664,7 +1668,40 @@ public class RbnfTest extends TestFmwk {
                 {"9223372036854775000", "9,223,372,036,854,775,000"}, // Below 64-bit precision
                 {"9223372036854775806", "9,223,372,036,854,775,806"}, // Maximum 64-bit precision - 1
                 {"9223372036854775807", "9,223,372,036,854,775,807"}, // Maximum 64-bit precision
-                {"9223372036854775808", "9,223,372,036,854,775,808"}, // We've gone beyond 64-bit precision
+                {"9223372036854775808", "9,223,372,036,854,775,808"}, // We've gone beyond 64-bit precision. This can only be represented with BigDecimal.
+        };
+        doTest(rbnf, enTestFullData, false);
+    }
+
+    @Test
+    public void testCompactDecimalFormatStyle() {
+        // This is not a common use case, but we're testing it anyway.
+        final String numberPattern = "=###0.#####=;"
+                + "1000: <###0.00< K;"
+                + "1000000: <###0.00< M;"
+                + "1000000000: <###0.00< B;"
+                + "1000000000000: <###0.00< T;"
+                + "1000000000000000: <###0.00< Q;";
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(numberPattern, ULocale.US);
+
+        String[][] enTestFullData = {
+                {"1000", "1.00 K"},
+                {"1234", "1.23 K"},
+                {"999994", "999.99 K"},
+                {"999995", "1000.00 K"},
+                {"1000000", "1.00 M"},
+                {"1200000", "1.20 M"},
+                {"1200000000", "1.20 B"},
+                {"1200000000000", "1.20 T"},
+                {"1200000000000000", "1.20 Q"},
+                {"4503599627370495", "4.50 Q"},
+                {"4503599627370496", "4.50 Q"},
+                {"8990000000000000", "8.99 Q"},
+                {"9008000000000000", "9.00 Q"}, // Number doesn't precisely fit into a double
+                {"9456000000000000", "9.00 Q"},  // Number doesn't precisely fit into a double
+                {"10000000000000000", "10.00 Q"},  // Number doesn't precisely fit into a double
+                {"9223372036854775807", "9223.00 Q"}, // Maximum 64-bit precision
+                {"9223372036854775808", "9,223,372,036,854,775,808"}, // We've gone beyond 64-bit precision. This can only be represented with BigDecimal.
         };
         doTest(rbnf, enTestFullData, false);
     }
