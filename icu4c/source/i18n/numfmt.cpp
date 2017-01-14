@@ -529,7 +529,7 @@ UnicodeString& NumberFormat::format(const DigitList &number,
                       FieldPositionIterator* posIter,
                       UErrorCode& status) const {
     // DecimalFormat overrides this function, and handles DigitList based big decimals.
-    // Other subclasses (ChoiceFormat, RuleBasedNumberFormat) do not (yet) handle DigitLists,
+    // Other subclasses (ChoiceFormat) do not (yet) handle DigitLists,
     // so this default implementation falls back to formatting decimal numbers as doubles.
     if (U_FAILURE(status)) {
         return appendTo;
@@ -547,7 +547,7 @@ NumberFormat::format(const DigitList &number,
                      FieldPosition& pos,
                      UErrorCode &status) const { 
     // DecimalFormat overrides this function, and handles DigitList based big decimals.
-    // Other subclasses (ChoiceFormat, RuleBasedNumberFormat) do not (yet) handle DigitLists,
+    // Other subclasses (ChoiceFormat) do not (yet) handle DigitLists,
     // so this default implementation falls back to formatting decimal numbers as doubles.
     if (U_FAILURE(status)) {
         return appendTo;
