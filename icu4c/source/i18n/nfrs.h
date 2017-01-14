@@ -88,7 +88,7 @@ private:
 int64_t util64_fromDouble(double d);
 
 // raise radix to the power exponent, only non-negative exponents
-int64_t util64_pow(int32_t radix, uint32_t exponent);
+int64_t util64_pow(int32_t radix, uint16_t exponent);
 
 // convert n to digit string in buffer, return length of string
 uint32_t util64_tou(int64_t n, UChar* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE);

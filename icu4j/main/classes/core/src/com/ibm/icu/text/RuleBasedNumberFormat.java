@@ -2026,8 +2026,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Adjust capitalization of formatted result for display context
      */
     private String adjustForContext(String result) {
-        if (result != null && result.length() > 0 && UCharacter.isLowerCase(result.codePointAt(0))) {
-            DisplayContext capitalization = getContext(DisplayContext.Type.CAPITALIZATION);
+        DisplayContext capitalization = getContext(DisplayContext.Type.CAPITALIZATION);
+        if (capitalization != DisplayContext.CAPITALIZATION_NONE && result != null && result.length() > 0
+            && UCharacter.isLowerCase(result.codePointAt(0)))
+        {
             if (  capitalization==DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                   (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForListOrMenu) ||
                   (capitalization == DisplayContext.CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone) ) {

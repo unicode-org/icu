@@ -91,7 +91,7 @@ public:
      * @param radix The radix of the divisor
      * @param exponent The exponent of the divisor
      */
-    virtual void setDivisor(int32_t radix, int32_t exponent, UErrorCode& status);
+    virtual void setDivisor(int32_t radix, int16_t exponent, UErrorCode& status);
     
     /**
      * Replaces result with the string describing the substitution.

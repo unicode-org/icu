@@ -73,6 +73,8 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(21, TestMultiplePluralRules);
         TESTCASE(22, TestInfinityNaN);
         TESTCASE(23, TestVariableDecimalPoint);
+        TESTCASE(24, TestLargeNumbers);
+        TESTCASE(25, TestCompactDecimalFormatStyle);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2216,6 +2218,69 @@ void IntlTestRBNF::TestVariableDecimalPoint() {
             { NULL, NULL }
     };
     doTest(&enFormatter, enTestCommaData, true);
+}
+
+void IntlTestRBNF::TestLargeNumbers() {
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rbnf(URBNF_SPELLOUT, Locale::getEnglish(), status);
+
+    const char * const enTestFullData[][2] = {
+            {"-9007199254740991", "minus nine quadrillion seven trillion one hundred ninety-nine billion two hundred fifty-four million seven hundred forty thousand nine hundred ninety-one"}, // Maximum precision in both a double and a long
+            {"9007199254740991", "nine quadrillion seven trillion one hundred ninety-nine billion two hundred fifty-four million seven hundred forty thousand nine hundred ninety-one"}, // Maximum precision in both a double and a long
+            {"-9007199254740992", "minus nine quadrillion seven trillion one hundred ninety-nine billion two hundred fifty-four million seven hundred forty thousand nine hundred ninety-two"}, // Only precisely contained in a long
+            {"9007199254740992", "nine quadrillion seven trillion one hundred ninety-nine billion two hundred fifty-four million seven hundred forty thousand nine hundred ninety-two"}, // Only precisely contained in a long
+            {"9999999999999998", "nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-eight"},
+            {"9999999999999999", "nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine"},
+            {"999999999999999999", "nine hundred ninety-nine quadrillion nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine"},
+            {"1000000000000000000", "1,000,000,000,000,000,000"}, // The rules don't go to 1 quintillion yet
+            {"-9223372036854775809", "-9,223,372,036,854,775,809"}, // We've gone beyond 64-bit precision
+            {"-9223372036854775808", "-9,223,372,036,854,775,808"}, // We've gone beyond +64-bit precision
+            {"-9223372036854775807", "minus 9,223,372,036,854,775,807"}, // Minimum 64-bit precision
+            {"-9223372036854775806", "minus 9,223,372,036,854,775,806"}, // Minimum 64-bit precision + 1
+            {"9223372036854774111", "9,223,372,036,854,774,111"}, // Below 64-bit precision
+            {"9223372036854774999", "9,223,372,036,854,774,999"}, // Below 64-bit precision
+            {"9223372036854775000", "9,223,372,036,854,775,000"}, // Below 64-bit precision
+            {"9223372036854775806", "9,223,372,036,854,775,806"}, // Maximum 64-bit precision - 1
+            {"9223372036854775807", "9,223,372,036,854,775,807"}, // Maximum 64-bit precision
+            {"9223372036854775808", "9,223,372,036,854,775,808"}, // We've gone beyond 64-bit precision. This can only be represented with BigDecimal.
+            { NULL, NULL }
+    };
+    doTest(&rbnf, enTestFullData, false);
+}
+
+void IntlTestRBNF::TestCompactDecimalFormatStyle() {
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    // This is not a common use case, but we're testing it anyway.
+    UnicodeString numberPattern("=###0.#####=;"
+            "1000: <###0.00< K;"
+            "1000000: <###0.00< M;"
+            "1000000000: <###0.00< B;"
+            "1000000000000: <###0.00< T;"
+            "1000000000000000: <###0.00< Q;");
+    RuleBasedNumberFormat rbnf(numberPattern, UnicodeString(), Locale::getEnglish(), parseError, status);
+
+    const char * const enTestFullData[][2] = {
+            {"1000", "1.00 K"},
+            {"1234", "1.23 K"},
+            {"999994", "999.99 K"},
+            {"999995", "1000.00 K"},
+            {"1000000", "1.00 M"},
+            {"1200000", "1.20 M"},
+            {"1200000000", "1.20 B"},
+            {"1200000000000", "1.20 T"},
+            {"1200000000000000", "1.20 Q"},
+            {"4503599627370495", "4.50 Q"},
+            {"4503599627370496", "4.50 Q"},
+            {"8990000000000000", "8.99 Q"},
+            {"9008000000000000", "9.00 Q"}, // Number doesn't precisely fit into a double
+            {"9456000000000000", "9.00 Q"},  // Number doesn't precisely fit into a double
+            {"10000000000000000", "10.00 Q"},  // Number doesn't precisely fit into a double
+            {"9223372036854775807", "9223.00 Q"}, // Maximum 64-bit precision
+            {"9223372036854775808", "9,223,372,036,854,775,808"}, // We've gone beyond 64-bit precision. This can only be represented with BigDecimal.
+            { NULL, NULL }
+    };
+    doTest(&rbnf, enTestFullData, false);
 }
 
 void 
