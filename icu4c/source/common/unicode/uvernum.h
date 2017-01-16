@@ -58,19 +58,19 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_MAJOR_NUM 58
+#define U_ICU_VERSION_MAJOR_NUM 59
 
 /** The current ICU minor version as an integer.
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 1
+#define U_ICU_VERSION_MINOR_NUM 0
 
 /** The current ICU patchlevel version as an integer.
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 0
+#define U_ICU_VERSION_PATCHLEVEL_NUM 1
 
 /** The current ICU build level version as an integer.
  *  This value is for use by ICU clients. It defaults to 0.
@@ -84,7 +84,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _58
+#define U_ICU_VERSION_SUFFIX _59
 
 /**
  * \def U_DEF2_ICU_ENTRY_POINT_RENAME
@@ -119,19 +119,19 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "58.1"
+#define U_ICU_VERSION "59.0.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes.
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "58"
+#define U_ICU_VERSION_SHORT "59"
 
 #ifndef U_HIDE_INTERNAL_API
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
  **/
-#define U_ICU_DATA_VERSION "58.1"
+#define U_ICU_DATA_VERSION "59.0.1"
 #endif  /* U_HIDE_INTERNAL_API */
 
 /*===========================================================================
