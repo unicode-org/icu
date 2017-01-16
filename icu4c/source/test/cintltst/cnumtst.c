@@ -63,6 +63,7 @@ static void TestCurrencyUsage(void);
 static void TestCurrFmtNegSameAsPositive(void);
 static void TestVariousStylesAndAttributes(void);
 static void TestParseCurrPatternWithDecStyle(void);
+static void TestFormatForFields(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -93,6 +94,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestCurrFmtNegSameAsPositive);
     TESTCASE(TestVariousStylesAndAttributes);
     TESTCASE(TestParseCurrPatternWithDecStyle);
+    TESTCASE(TestFormatForFields);
 }
 
 /* test Parse int 64 */
@@ -2884,6 +2886,113 @@ static void TestParseCurrPatternWithDecStyle() {
             }
         }
         unum_close(unumfmt);
+    }
+}
+
+/*
+ * Ticket #12684
+ * Test unum_formatDoubleForFields (and UFieldPositionIterator)
+ */
+
+typedef struct {
+    int32_t field;
+    int32_t beginPos;
+    int32_t endPos;
+} FieldsData;
+
+typedef struct {
+    const char *       locale;
+    UNumberFormatStyle style;
+    double             value;
+    const FieldsData * expectedFields;
+} FormatForFieldsItem;
+
+static const UChar patNoFields[] = { 0x0027, 0x0078, 0x0027, 0 }; /* "'x'", for UNUM_PATTERN_DECIMAL */
+
+
+/* "en_US", UNUM_CURRENCY, 123456.0 : "¤#,##0.00" => "$123,456.00" */
+static const FieldsData fields_en_CURR[] = {
+    { UNUM_CURRENCY_FIELD /*7*/,            0, 1 },
+    { UNUM_GROUPING_SEPARATOR_FIELD /*6*/,  4, 5 },
+    { UNUM_INTEGER_FIELD /*0*/,             1, 8 },
+    { UNUM_DECIMAL_SEPARATOR_FIELD /*2*/,   8, 9 },
+    { UNUM_FRACTION_FIELD /*1*/,            9, 11 },
+    { -1, -1, -1 },
+};
+/* "en_US", UNUM_PERCENT, -34 : "#,##0%" => "-34%" */
+static const FieldsData fields_en_PRCT[] = {
+    { UNUM_SIGN_FIELD /*10*/,               0, 1 },
+    { UNUM_INTEGER_FIELD /*0*/,             1, 3 },
+    { UNUM_PERCENT_FIELD /*8*/,             3, 4 },
+    { -1, -1, -1 },
+};
+/* "fr_FR", UNUM_CURRENCY, 123456.0 : "#,##0.00 ¤" => "123,456.00 €" */
+static const FieldsData fields_fr_CURR[] = {
+    { UNUM_GROUPING_SEPARATOR_FIELD /*6*/,  3, 4 },
+    { UNUM_INTEGER_FIELD /*0*/,             0, 7 },
+    { UNUM_DECIMAL_SEPARATOR_FIELD /*2*/,   7, 8 },
+    { UNUM_FRACTION_FIELD /*1*/,            8, 10 },
+    { UNUM_CURRENCY_FIELD /*7*/,           11, 12 },
+    { -1, -1, -1 },
+};
+/* "en_US", UNUM_PATTERN_DECIMAL, 12.0 : "'x'" => "x12" */
+static const FieldsData fields_en_PATN[] = {
+    { UNUM_INTEGER_FIELD /*0*/,             1, 3 },
+    { -1, -1, -1 },
+};
+
+static const FormatForFieldsItem fffItems[] = {
+    { "en_US", UNUM_CURRENCY_STANDARD, 123456.0, fields_en_CURR },
+    { "en_US", UNUM_PERCENT,              -0.34, fields_en_PRCT },
+    { "fr_FR", UNUM_CURRENCY_STANDARD, 123456.0, fields_fr_CURR },
+    { "en_US", UNUM_PATTERN_DECIMAL,       12.0, fields_en_PATN },
+    { NULL, (UNumberFormatStyle)0, 0, NULL },
+};
+
+static void TestFormatForFields(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UFieldPositionIterator* fpositer = ufieldpositer_open(&status);
+    if ( U_FAILURE(status) ) {
+        log_err("ufieldpositer_open fails, status %s\n", u_errorName(status));
+    } else {
+        const FormatForFieldsItem * itemPtr;
+        for (itemPtr = fffItems; itemPtr->locale != NULL; itemPtr++) {
+            UNumberFormat* unum;
+            status = U_ZERO_ERROR;
+            unum = (itemPtr->style == UNUM_PATTERN_DECIMAL)?
+                unum_open(itemPtr->style, patNoFields, -1, itemPtr->locale, NULL, &status):
+                unum_open(itemPtr->style, NULL, 0, itemPtr->locale, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_data_err("unum_open fails for locale %s, style %d: status %s (Are you missing data?)\n", itemPtr->locale, itemPtr->style, u_errorName(status));
+            } else {
+                UChar ubuf[kUBufSize];
+                int32_t ulen = unum_formatDoubleForFields(unum, itemPtr->value, ubuf, kUBufSize, fpositer, &status);
+                if ( U_FAILURE(status) ) {
+                    log_err("unum_formatDoubleForFields fails for locale %s, style %d: status %s\n", itemPtr->locale, itemPtr->style, u_errorName(status));
+                } else {
+                    const FieldsData * fptr;
+                    int32_t field, beginPos, endPos;
+                    for (fptr = itemPtr->expectedFields; TRUE; fptr++) {
+                        field = ufieldpositer_next(fpositer, &beginPos, &endPos);
+                        if (field != fptr->field || (field >= 0 && (beginPos != fptr->beginPos || endPos != fptr->endPos))) {
+                            if (fptr->field >= 0) {
+                                log_err("unum_formatDoubleForFields for locale %s as \"%s\"; expect field %d range %d-%d, get field %d range %d-%d\n",
+                                    itemPtr->locale, aescstrdup(ubuf, ulen), fptr->field, fptr->beginPos, fptr->endPos, field, beginPos, endPos);
+                            } else {
+                                log_err("unum_formatDoubleForFields for locale %s as \"%s\"; expect field < 0, get field %d range %d-%d\n",
+                                    itemPtr->locale, aescstrdup(ubuf, ulen), field, beginPos, endPos);
+                            }
+                            break;
+                        }
+                        if (field < 0) {
+                            break;
+                        }
+                    }
+                }
+                unum_close(unum);
+            }
+        }
+        ufieldpositer_close(fpositer);
     }
 }
 
