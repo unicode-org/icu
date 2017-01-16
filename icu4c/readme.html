@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 58.1</title>
+    <title>ReadMe for ICU 59.0.1</title>
     <meta name="COPYRIGHT" content=
     "Copyright (C) 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html"/>
     <!-- meta name="COPYRIGHT" content=
@@ -23,7 +23,7 @@
         milestone - if the release note is a milestone release
 -->
 
-  <body>
+  <body class="milestone">
   <!-- <body> -->
     <p class="only-draft"><b>Note:</b> This is a draft readme.</p>
 
@@ -32,7 +32,7 @@
       International Components for Unicode<br/>
       <span class="only-rc">Release Candidate</span>
       <span class="only-milestone">(Milestone Release)</span>
-      <abbr title="International Components for Unicode">ICU</abbr> 58.1 ReadMe
+      <abbr title="International Components for Unicode">ICU</abbr> 59.0.1 ReadMe
     </h1>
 
     <!-- Shouldn't need to comment/uncomment this paragraph, just change the body class -->
@@ -44,7 +44,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2016-Oct-13<br/>
+    <p>Last updated: 2017-Jan-15<br/>
       Copyright &copy; 2016 and later: Unicode, Inc. and others. License &amp; terms of use:
       <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a><br/>
       Copyright &copy; 1997-2016 International Business Machines Corporation and others.
@@ -235,52 +235,6 @@
     <h2><a name="News" href="#News" id="News">What is new in this
     release?</a></h2>
 
-    <h3>New License</h3>
-    <p>This is the first release of ICU since the project
-    	<a href="http://blog.unicode.org/2016/05/icu-joins-unicode-consortium.html">joined
-    	the Unicode Consortium</a>. The license has changed to the
-    	<a href="http://www.unicode.org/copyright.html#License">Unicode license</a>
-    	(which is similar to the ICU 1.8.1-57 license).</p>
-
-    <h3>Layout Engine Removed</h3>
-    <p>The LayoutEngine was deprecated in ICU 54 and has now been removed.
-    see <a href='http://userguide.icu-project.org/layoutengine'>the
-    User's Guide</a> for more details and migration recommendations.
-    </p>
-    <p>
-      Note that the ParagraphLayout (layoutex) library is not deprecated.
-      There is a new option, <tt>--enable-layoutex</tt> which will build
-      the ParagraphLayout library using <a href="http://harfbuzz.org">HarfBuzz</a>
-      instead of ICU as the layout engine. See <a href="http://userguide.icu-project.org/layoutengine">
-        the users' guide</a> for more information about how to build.
-    </p>
-    <p>
-      The options <tt>--disable-layout</tt>
-      or <tt>--with-layout=false</tt> are being retained for
-      compatibility, but have no effect.
-    </p>
-
-    <h3>Changes in CLDR 30 data</h3>
-    <ul>
-    	<li>For some combinations of numbering system (arab, arabext, latn) and/or locale
-    		(ar, fa, he), there were changes to the bidirectional control characters used
-    		with certain symbols (percent, minus, plus), and changes to number patterns
-    		(currency and/or percent, including addition of bidirectional control
-    		characters in some cases).</li>
-    	<li>The bidirectional controls used for such purposes now include U+061C ARABIC
-    		LETTER MARK (ALM), which requires use of the bidirectional algorithm from
-    		Unicode 6.3 or later.</li>
-    	<li>The time separator for Norwegian locales (nb, nn) was changed to be ‘:’
-    		throughout.</li>
-    	<li>For more information on CLDR 30 changes, see
-    		<a href="http://cldr.unicode.org/index/downloads/cldr-30">CLDR 30 download
-    		page</a>.</li>
-    </ul>
-
-    <h3>Windows build changes</h3>
-    <p>Windows builds using Visual Studio now require Visual Studio 2015; otherwise you can
-    	use cygwin or similar to build for Windows.</p>
-
     <h3>API Changes</h3>
     <p>See the <a href="APIChangeReport.html">API Change Report</a> for a complete
       list of APIs added, removed, or changed in this release.</p>
@@ -301,6 +255,54 @@
 
     <h2><a name="RecentPreviousChanges" href="#RecentPreviousChanges" id="RecentPreviousChanges">Changes in recent
     previous releases</a></h2>
+
+    <!-- ICU 58 items -->
+    <h3>ICU 58: New License</h3>
+    <p>This is the first release of ICU since the project
+    	<a href="http://blog.unicode.org/2016/05/icu-joins-unicode-consortium.html">joined
+    	the Unicode Consortium</a>. The license has changed to the
+    	<a href="http://www.unicode.org/copyright.html#License">Unicode license</a>
+    	(which is similar to the ICU 1.8.1-57 license).</p>
+
+    <h3>ICU 58: Layout Engine Removed</h3>
+    <p>The LayoutEngine was deprecated in ICU 54 and has now been removed.
+    see <a href='http://userguide.icu-project.org/layoutengine'>the
+    User's Guide</a> for more details and migration recommendations.
+    </p>
+    <p>
+      Note that the ParagraphLayout (layoutex) library is not deprecated.
+      There is a new option, <tt>--enable-layoutex</tt> which will build
+      the ParagraphLayout library using <a href="http://harfbuzz.org">HarfBuzz</a>
+      instead of ICU as the layout engine. See <a href="http://userguide.icu-project.org/layoutengine">
+        the users' guide</a> for more information about how to build.
+    </p>
+    <p>
+      The options <tt>--disable-layout</tt>
+      or <tt>--with-layout=false</tt> are being retained for
+      compatibility, but have no effect.
+    </p>
+
+    <h3>ICU 58: Changes in CLDR 30 data</h3>
+    <ul>
+    	<li>For some combinations of numbering system (arab, arabext, latn) and/or locale
+    		(ar, fa, he), there were changes to the bidirectional control characters used
+    		with certain symbols (percent, minus, plus), and changes to number patterns
+    		(currency and/or percent, including addition of bidirectional control
+    		characters in some cases).</li>
+    	<li>The bidirectional controls used for such purposes now include U+061C ARABIC
+    		LETTER MARK (ALM), which requires use of the bidirectional algorithm from
+    		Unicode 6.3 or later.</li>
+    	<li>The time separator for Norwegian locales (nb, nn) was changed to be ‘:’
+    		throughout.</li>
+    	<li>For more information on CLDR 30 changes, see
+    		<a href="http://cldr.unicode.org/index/downloads/cldr-30">CLDR 30 download
+    		page</a>.</li>
+    </ul>
+
+    <h3>ICU 58: Windows build changes</h3>
+    <p>Windows builds using Visual Studio now require Visual Studio 2015; otherwise you can
+    	use cygwin or similar to build for Windows.</p>
+
 
     <!-- ICU 57 items -->
     <h3>ICU 57: Changes related to new CLDR data and specifications</h3>
