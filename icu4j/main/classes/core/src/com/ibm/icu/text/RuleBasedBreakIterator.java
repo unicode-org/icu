@@ -20,7 +20,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.CharTrie;
@@ -48,7 +49,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
     private RuleBasedBreakIterator() {
         fLastStatusIndexValid = true;
         fDictionaryCharCount  = 0;
-        fBreakEngines.put(-1, fUnhandledBreakEngine);
+        synchronized(gAllBreakEngines) {
+            fBreakEngines = new ArrayList<LanguageBreakEngine>(gAllBreakEngines);
+        }
     }
 
     /**
@@ -133,6 +136,13 @@ public class RuleBasedBreakIterator extends BreakIterator {
         RuleBasedBreakIterator result = (RuleBasedBreakIterator)super.clone();
         if (fText != null) {
             result.fText = (CharacterIterator)(fText.clone());
+        }
+        synchronized (gAllBreakEngines)  {
+            result.fBreakEngines = new ArrayList<LanguageBreakEngine>(gAllBreakEngines);
+        }
+        result.fLookAheadMatches = new LookAheadResults();
+        if (fCachedBreakPositions != null) {
+            result.fCachedBreakPositions = fCachedBreakPositions.clone();
         }
         return result;
     }
@@ -260,10 +270,34 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * The "default" break engine - just skips over ranges of dictionary words,
      * producing no breaks. Should only be used if characters need to be handled
      * by a dictionary but we have no dictionary implementation for them.
+     *
+     * Only one instance; shared by all break iterators.
      */
-    private final UnhandledBreakEngine fUnhandledBreakEngine = new UnhandledBreakEngine();
+    private static final UnhandledBreakEngine gUnhandledBreakEngine;
 
     /**
+     * List of all known break engines, common for all break iterators.
+     * Lazily updated as break engines are needed, because instantiation of
+     * break engines is expensive.
+     *
+     * Because gAllBreakEngines can be referenced concurrently from different
+     * BreakIterator instances, all access is synchronized.
+     */
+    private static final List<LanguageBreakEngine> gAllBreakEngines;
+
+    static {
+        gUnhandledBreakEngine = new UnhandledBreakEngine();
+        gAllBreakEngines = new ArrayList<LanguageBreakEngine>();
+        gAllBreakEngines.add(gUnhandledBreakEngine);
+    }
+
+    /**
+     * List of all known break engines. Similar to gAllBreakEngines, but local to a
+     * break iterator, allowing it to be used without synchronization.
+     */
+    private List<LanguageBreakEngine> fBreakEngines;
+
+  /**
      * when a range of characters is divided up using the dictionary, the break
      * positions that are discovered are stored here, preventing us from having
      * to use either the dictionary or the state table again until the iterator
@@ -277,9 +311,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     private int fPositionInCache;
 
-
-    private final ConcurrentHashMap<Integer, LanguageBreakEngine> fBreakEngines =
-            new ConcurrentHashMap<Integer, LanguageBreakEngine>();
     /**
      * Dumps caches and performs other actions associated with a complete change
      * in text or iteration position.
@@ -1107,26 +1138,32 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
         // We have a dictionary character.
         // Does an already instantiated break engine handle it?
-        for (LanguageBreakEngine candidate : fBreakEngines.values()) {
+        for (LanguageBreakEngine candidate : fBreakEngines) {
             if (candidate.handles(c, fBreakType)) {
                 return candidate;
             }
         }
 
-        // if we don't have an existing engine, build one.
-        int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
-        if (script == UScript.KATAKANA || script == UScript.HIRAGANA) {
-            // Katakana, Hiragana and Han are handled by the same dictionary engine.
-            // Fold them together for mapping from script -> engine.
-            script = UScript.HAN;
-        }
+        synchronized (gAllBreakEngines) {
+            // This break iterator's list of break engines didn't handle the character.
+            // Check the global list, another break iterator may have instantiated the
+            // desired engine.
+            for (LanguageBreakEngine candidate : gAllBreakEngines) {
+                if (candidate.handles(c, fBreakType)) {
+                    fBreakEngines.add(candidate);
+                    return candidate;
+                }
+            }
 
-        LanguageBreakEngine eng = fBreakEngines.get(script);
-        /*
-        if (eng != null && !eng.handles(c, fBreakType)) {
-            fUnhandledBreakEngine.handleChar(c, getBreakType());
-            eng = fUnhandledBreakEngine;
-        } else  */  {
+            // The global list doesn't have an existing engine, build one.
+            int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
+            if (script == UScript.KATAKANA || script == UScript.HIRAGANA) {
+                // Katakana, Hiragana and Han are handled by the same dictionary engine.
+                // Fold them together for mapping from script -> engine.
+                script = UScript.HAN;
+            }
+
+            LanguageBreakEngine eng;
             try {
                 switch (script) {
                 case UScript.THAI:
@@ -1146,38 +1183,33 @@ public class RuleBasedBreakIterator extends BreakIterator {
                         eng = new CjkBreakEngine(false);
                     }
                     else {
-                        fUnhandledBreakEngine.handleChar(c, getBreakType());
-                        eng = fUnhandledBreakEngine;
+                        gUnhandledBreakEngine.handleChar(c, getBreakType());
+                        eng = gUnhandledBreakEngine;
                     }
                     break;
                 case UScript.HANGUL:
                     if (getBreakType() == KIND_WORD) {
                         eng = new CjkBreakEngine(true);
                     } else {
-                        fUnhandledBreakEngine.handleChar(c, getBreakType());
-                        eng = fUnhandledBreakEngine;
+                        gUnhandledBreakEngine.handleChar(c, getBreakType());
+                        eng = gUnhandledBreakEngine;
                     }
                     break;
                 default:
-                    fUnhandledBreakEngine.handleChar(c, getBreakType());
-                    eng = fUnhandledBreakEngine;
+                    gUnhandledBreakEngine.handleChar(c, getBreakType());
+                    eng = gUnhandledBreakEngine;
                     break;
                 }
             } catch (IOException e) {
                 eng = null;
             }
-        }
 
-        if (eng != null && eng != fUnhandledBreakEngine) {
-            LanguageBreakEngine existingEngine = fBreakEngines.putIfAbsent(script, eng);
-            if (existingEngine != null) {
-                // There was a race & another thread was first to register an engine for this script.
-                // Use theirs and discard the one we just created.
-                eng = existingEngine;
+            if (eng != null && eng != gUnhandledBreakEngine) {
+                gAllBreakEngines.add(eng);
+                fBreakEngines.add(eng);
             }
-            // assert eng.handles(c, fBreakType);
-        }
-        return eng;
+            return eng;
+        }   // end synchronized(gAllBreakEngines)
     }
 
     private static final int kMaxLookaheads = 8;

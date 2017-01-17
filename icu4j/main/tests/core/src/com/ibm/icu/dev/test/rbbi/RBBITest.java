@@ -851,6 +851,89 @@ public class RBBITest extends TestFmwk {
         bi.setText("abc");
         bi.first();
         assertEquals("Rule chaining test", 3,  bi.next());
-         }
     }
 
+
+    @Test
+    public void TestBug12873() {
+        // Bug with RuleBasedBreakIterator's internal structure for recording potential look-ahead
+        // matches not being cloned when a break iterator is cloned. This resulted in usage
+        // collisions if the original break iterator and its clone were used concurrently.
+
+        // The Line Break rules for Regional Indicators make use of look-ahead rules, and
+        // show the bug. 1F1E6 = \uD83C\uDDE6 = REGIONAL INDICATOR SYMBOL LETTER A
+        // Regional indicators group into pairs, expect breaks after two code points, which
+        // is after four 16 bit code units.
+
+        final String dataToBreak = "\uD83C\uDDE6\uD83C\uDDE6\uD83C\uDDE6\uD83C\uDDE6\uD83C\uDDE6\uD83C\uDDE6";
+        final RuleBasedBreakIterator bi = (RuleBasedBreakIterator)BreakIterator.getLineInstance();
+        final AssertionError[] assertErr = new AssertionError[1];  // saves an error found from within a thread
+
+        class WorkerThread implements Runnable {
+            @Override
+            public void run() {
+                try {
+                    RuleBasedBreakIterator localBI = (RuleBasedBreakIterator)bi.clone();
+                    localBI.setText(dataToBreak);
+                    for (int loop=0; loop<100; loop++) {
+                        int nextExpectedBreak = 0;
+                        for (int actualBreak = localBI.first(); actualBreak != BreakIterator.DONE;
+                                actualBreak = localBI.next(), nextExpectedBreak+= 4) {
+                            assertEquals("", nextExpectedBreak, actualBreak);
+                        }
+                        assertEquals("", dataToBreak.length()+4, nextExpectedBreak);
+                    }
+                } catch (AssertionError e) {
+                    assertErr[0] = e;
+                }
+            }
+        }
+
+        List<Thread> threads = new ArrayList<Thread>();
+        for (int n = 0; n<4; ++n) {
+            threads.add(new Thread(new WorkerThread()));
+        }
+        for (Thread thread: threads) {
+            thread.start();
+        }
+        for (Thread thread: threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                fail(e.toString());
+            }
+        }
+
+        // JUnit wont see failures from within the worker threads, so
+        // check again if one occurred.
+        if (assertErr[0] != null) {
+            throw assertErr[0];
+        }
+    }
+
+    @Test
+    public void TestBreakAllChars() {
+        // Make a "word" from each code point, separated by spaces.
+        // For dictionary based breaking, runs the start-of-range
+        // logic with all possible dictionary characters.
+        StringBuilder sb = new StringBuilder();
+        for (int c=0; c<0x110000; ++c) {
+            sb.appendCodePoint(c);
+            sb.appendCodePoint(c);
+            sb.appendCodePoint(c);
+            sb.appendCodePoint(c);
+            sb.append(' ');
+        }
+        String s = sb.toString();
+
+        for (int breakKind=BreakIterator.KIND_CHARACTER; breakKind<=BreakIterator.KIND_TITLE; ++breakKind) {
+            RuleBasedBreakIterator bi =
+                    (RuleBasedBreakIterator)BreakIterator.getBreakInstance(ULocale.ENGLISH, breakKind);
+            bi.setText(s);
+            int lastb = -1;
+            for (int b = bi.first(); b != BreakIterator.DONE; b = bi.next()) {
+                assertTrue("(lastb < b) : (" + lastb + " < " + b + ")", lastb < b);
+            }
+        }
+    }
+}
