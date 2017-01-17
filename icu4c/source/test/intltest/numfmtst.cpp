@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
  * COPYRIGHT:
  * Copyright (c) 1997-2015, International Business Machines Corporation and
@@ -1974,11 +1976,12 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     for (i = 0; i < sizeof(badLocales) / sizeof(char*); i++) {
         const char *localeName = badLocales[i];
         Locale locBad(localeName);
+        TEST_ASSERT_TRUE(!locBad.isBogus());
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString intlCurrencySymbol((UChar)0xa4);
 
         intlCurrencySymbol.append((UChar)0xa4);
-
+        
         logln("Current locale is %s", Locale::getDefault().getName());
         Locale::setDefault(locBad, status);
         logln("Current locale is %s", Locale::getDefault().getName());
