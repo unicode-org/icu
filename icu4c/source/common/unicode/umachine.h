@@ -54,7 +54,7 @@
 #ifndef U_HIDE_INTERNAL_API
 /*
  *  U_USE_CHAR16_T
- *     When defined, force use of char16_t for UChar.
+ *     When set, force use of char16_t for UChar.
  *     Note: char16_t is expected to become the default and required in the future,
  *           and this option will be removed.
  *
@@ -62,7 +62,11 @@
  *           but Macintosh Xcode does not yet implement it.
  *     @internal
  */
-#ifdef U_USE_CHAR16_T
+#ifndef U_USE_CHAR16_T
+#define U_USE_CHAR16_T 1
+#endif
+
+#if U_USE_CHAR16_T
 #ifdef __cplusplus
 #ifdef UCHAR_TYPE
 #undef UCHAR_TYPE
