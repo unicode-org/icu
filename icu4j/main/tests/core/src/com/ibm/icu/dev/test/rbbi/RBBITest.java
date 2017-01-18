@@ -936,4 +936,25 @@ public class RBBITest extends TestFmwk {
             }
         }
     }
+
+    @Test
+    public void TestBug12918() {
+        // This test triggered an assertion failure in ICU4C, in dictbe.cpp
+        // The equivalent code in ICU4J is structured slightly differently,
+        // and does not appear vulnerable to the same issue.
+        //
+        // \u3325 decomposes with normalization, then the CJK dictionary
+        // finds a break within the decomposition.
+
+        String crasherString = "\u3325\u4a16";
+        BreakIterator iter = BreakIterator.getWordInstance(ULocale.ENGLISH);
+        iter.setText(crasherString);
+        iter.first();
+        int pos = 0;
+        int lastPos = -1;
+        while((pos = iter.next()) != BreakIterator.DONE) {
+            assertTrue("", pos > lastPos);
+        }
+    }
+
 }
