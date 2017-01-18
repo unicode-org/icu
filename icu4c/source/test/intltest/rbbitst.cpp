@@ -1171,15 +1171,6 @@ void RBBITest::TestExtended() {
 
     EParseState savedState = PARSE_TAG;
 
-    static const UChar CH_LF        = 0x0a;
-    static const UChar CH_CR        = 0x0d;
-    static const UChar CH_HASH      = 0x23;
-    /*static const UChar CH_PERIOD    = 0x2e;*/
-    static const UChar CH_LT        = 0x3c;
-    static const UChar CH_GT        = 0x3e;
-    static const UChar CH_BACKSLASH = 0x5c;
-    static const UChar CH_BULLET    = 0x2022;
-
     int32_t    lineNum  = 1;
     int32_t    colStart = 0;
     int32_t    column   = 0;
@@ -1191,12 +1182,12 @@ void RBBITest::TestExtended() {
         status = U_ZERO_ERROR;
         UChar  c = testString.charAt(charIdx);
         charIdx++;
-        if (c == CH_CR && charIdx<len && testString.charAt(charIdx) == CH_LF) {
+        if (c == u'\r' && charIdx<len && testString.charAt(charIdx) == u'\n') {
             // treat CRLF as a unit
-            c = CH_LF;
+            c = u'\n';
             charIdx++;
         }
-        if (c == CH_LF || c == CH_CR) {
+        if (c == u'\n' || c == u'\r') {
             lineNum++;
             colStart = charIdx;
         }
@@ -1204,14 +1195,14 @@ void RBBITest::TestExtended() {
 
         switch (parseState) {
         case PARSE_COMMENT:
-            if (c == 0x0a || c == 0x0d) {
+            if (c == u'\n' || c == u'\r') {
                 parseState = savedState;
             }
             break;
 
         case PARSE_TAG:
             {
-            if (c == CH_HASH) {
+            if (c == u'#') {
                 parseState = PARSE_COMMENT;
                 savedState = PARSE_TAG;
                 break;
@@ -1283,7 +1274,7 @@ void RBBITest::TestExtended() {
             break;
 
         case PARSE_DATA:
-            if (c == CH_BULLET) {
+            if (c == u'•') {
                 int32_t  breakIdx = tp.dataToBreak.length();
                 tp.expectedBreaks->setSize(breakIdx+1);
                 tp.expectedBreaks->setElementAt(-1, breakIdx);
@@ -1325,7 +1316,7 @@ void RBBITest::TestExtended() {
                 // Get the code point from the name and insert it into the test data.
                 //   (Damn, no API takes names in Unicode  !!!
                 //    we've got to take it back to char *)
-                int32_t nameEndIdx = testString.indexOf((UChar)0x7d/*'}'*/, charIdx);
+                int32_t nameEndIdx = testString.indexOf(u'}', charIdx);
                 int32_t nameLength = nameEndIdx - (charIdx+2);
                 char charNameBuf[200];
                 UChar32 theChar = -1;
@@ -1372,28 +1363,28 @@ void RBBITest::TestExtended() {
                 break;
             }
 
-            if (c == CH_LT) {
+            if (c == u'<') {
                 tagValue   = 0;
                 parseState = PARSE_NUM;
                 break;
             }
 
-            if (c == CH_HASH && column==3) {   // TODO:  why is column off so far?
+            if (c == u'#' && column==3) {   // TODO:  why is column off so far?
                 parseState = PARSE_COMMENT;
                 savedState = PARSE_DATA;
                 break;
             }
 
-            if (c == CH_BACKSLASH) {
+            if (c == u'\\') {
                 // Check for \ at end of line, a line continuation.
                 //     Advance over (discard) the newline
                 UChar32 cp = testString.char32At(charIdx);
-                if (cp == CH_CR && charIdx<len && testString.charAt(charIdx+1) == CH_LF) {
+                if (cp == u'\r' && charIdx<len && testString.charAt(charIdx+1) == u'\n') {
                     // We have a CR LF
                     //  Need an extra increment of the input ptr to move over both of them
                     charIdx++;
                 }
-                if (cp == CH_LF || cp == CH_CR) {
+                if (cp == u'\n' || cp == u'\r') {
                     lineNum++;
                     colStart = charIdx;
                     charIdx++;
@@ -1442,7 +1433,7 @@ void RBBITest::TestExtended() {
                 break;
             }
 
-            if (c == CH_GT) {
+            if (c == u'>') {
                 // Finished the number.  Add the info to the expected break data,
                 //   and switch parse state back to doing plain data.
                 parseState = PARSE_DATA;
@@ -1689,20 +1680,20 @@ void RBBITest::TestUnicodeFiles() {
 // See ticket #7270.
 
 UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *fileName) {
-    static const UChar badTestCases[][4] = {                     // Line Numbers from Unicode 7.0.0 file.
-        {(UChar)0x200B, (UChar)0x0020, (UChar)0x007D, (UChar)0x0000},   // Line 5198
-        {(UChar)0x200B, (UChar)0x0020, (UChar)0x0029, (UChar)0x0000},   // Line 5202
-        {(UChar)0x200B, (UChar)0x0020, (UChar)0x0021, (UChar)0x0000},   // Line 5214
-        {(UChar)0x200B, (UChar)0x0020, (UChar)0x002c, (UChar)0x0000},   // Line 5246
-        {(UChar)0x200B, (UChar)0x0020, (UChar)0x002f, (UChar)0x0000},   // Line 5298
-        {(UChar)0x200B, (UChar)0x0020, (UChar)0x2060, (UChar)0x0000}    // Line 5302
+    static const UChar *badTestCases[] = {                     // Line Numbers from Unicode 7.0.0 file.
+        u"\u200B\u0020\u007D",   // Line 5198
+        u"\u200B\u0020\u0029",   // Line 5202
+        u"\u200B\u0020\u0021",   // Line 5214
+        u"\u200B\u0020\u002c",   // Line 5246
+        u"\u200B\u0020\u002f",   // Line 5298
+        u"\u200B\u0020\u2060"    // Line 5302
     };
     if (strcmp(fileName, "LineBreakTest.txt") != 0) {
         return FALSE;
     }
 
-    for (int i=0; i<UPRV_LENGTHOF(badTestCases); i++) {
-        if (testCase == UnicodeString(badTestCases[i])) {
+    for (const UChar *badCase: badTestCases) {
+        if (testCase == UnicodeString(badCase)) {
             return logKnownIssue("7270");
         }
     }
@@ -3203,7 +3194,7 @@ void RBBILineMonkey::rule9Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos
 
     // LB 10  Treat any remaining combining mark as AL
     if (fCM->contains(*posChar)) {
-        *posChar = 0x41;   // thisChar = 'A';
+        *posChar = u'A';
     }
 
     // Push the updated nextPos and nextChar back to our caller.
