@@ -103,6 +103,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug5532);
     TESTCASE_AUTO(TestBug7547);
     TESTCASE_AUTO(TestBug12797);
+    TESTCASE_AUTO(TestBug12918);
     TESTCASE_AUTO_END;
 }
 
@@ -4652,6 +4653,26 @@ void RBBITest::TestBug12797() {
     }
 }
 
+void RBBITest::TestBug12918() {
+    // This test triggers an assertion failure in dictbe.cpp
+    const UChar *crasherString = u"\u3325\u4a16";
+    UErrorCode status = U_ZERO_ERROR;
+    UBreakIterator* iter = ubrk_open(UBRK_WORD, NULL, crasherString, -1, &status);
+    if (U_FAILURE(status)) {
+        errln("%s:%d status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    ubrk_first(iter);
+    int32_t pos = 0;
+    int32_t lastPos = -1;
+    while((pos = ubrk_next(iter)) != UBRK_DONE) {
+        if (pos <= lastPos) {
+            errln("%s:%d (pos, lastPos) = (%d, %d)", __FILE__, __LINE__, pos, lastPos);
+            break;
+        }
+    }
+    ubrk_close(iter);
+}
 
 //
 //  TestDebug    -  A place-holder test for debugging purposes.
