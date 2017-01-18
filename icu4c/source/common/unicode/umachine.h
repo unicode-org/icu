@@ -51,7 +51,6 @@
  */
 #include <stddef.h>
 
-#ifndef U_HIDE_INTERNAL_API
 /*
  *  U_USE_CHAR16_T
  *     When set, force use of char16_t for UChar.
@@ -74,7 +73,6 @@
 #define UCHAR_TYPE char16_t
 #endif  /* __cpluplus  */
 #endif  /* U_USE_CHAR16_t */
-#endif  /* U_HIDE_INTERNAL_API */
 
 /*==========================================================================*/
 /* For C wrappers, we use the symbol U_STABLE.                                */
