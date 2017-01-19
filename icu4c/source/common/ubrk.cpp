@@ -20,6 +20,7 @@
 #include "unicode/rbbi.h"
 #include "rbbirb.h"
 #include "uassert.h"
+#include "cmemory.h"
 
 U_NAMESPACE_USE
 
@@ -119,7 +120,24 @@ ubrk_openRules(  const UChar        *rules,
 }
 
 
-
+U_CAPI UBreakIterator* U_EXPORT2
+ubrk_openBinaryRules(const uint8_t *binaryRules, uint32_t rulesLength,
+                     const UChar *  text, int32_t textLength,
+                     UErrorCode *   status)
+{
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    LocalPointer<RuleBasedBreakIterator> lpRBBI(new RuleBasedBreakIterator(binaryRules, rulesLength, *status), *status);
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    UBreakIterator *uBI = reinterpret_cast<UBreakIterator *>(lpRBBI.orphan());
+    if (text != NULL) {
+        ubrk_setText(uBI, text, textLength, status);
+    }
+    return uBI;
+}
 
 
 U_CAPI UBreakIterator * U_EXPORT2
@@ -288,7 +306,8 @@ ubrk_getLocaleByType(const UBreakIterator *bi,
 }
 
 
-void ubrk_refreshUText(UBreakIterator *bi,
+U_CAPI void U_EXPORT2
+ubrk_refreshUText(UBreakIterator *bi,
                        UText          *text,
                        UErrorCode     *status)
 {
@@ -296,6 +315,34 @@ void ubrk_refreshUText(UBreakIterator *bi,
     bii->refreshInputText(text, *status);
 }
 
+U_CAPI uint32_t U_EXPORT2
+ubrk_getBinaryRules(UBreakIterator *bi,
+                    uint8_t *       binaryRules, uint32_t rulesCapacity,
+                    UErrorCode *    status)
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    if (binaryRules == NULL && rulesCapacity > 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    RuleBasedBreakIterator* rbbi;
+    if ((rbbi = dynamic_cast<RuleBasedBreakIterator*>(reinterpret_cast<BreakIterator*>(bi))) == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    uint32_t rulesLength;
+    const uint8_t * returnedRules = rbbi->getBinaryRules(rulesLength);
+    if (binaryRules != NULL) { // if not preflighting
+        if (rulesLength > rulesCapacity) {
+            *status = U_BUFFER_OVERFLOW_ERROR;
+        } else {
+            uprv_memcpy(binaryRules, returnedRules, rulesLength);
+        }
+    }
+    return rulesLength;
+}
 
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
