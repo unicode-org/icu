@@ -254,7 +254,7 @@ u_strToWCS(wchar_t *dest,
         srcLength = u_strlen(src);
     }
     if(0 < srcLength && srcLength <= destCapacity){
-        u_memcpy(dest, src, srcLength);
+        u_memcpy((UChar *)dest, src, srcLength);
     }
     if(pDestLength){
        *pDestLength = srcLength;
@@ -509,7 +509,7 @@ u_strFromWCS(UChar   *dest,
         srcLength = u_strlen((const UChar *)src);
     }
     if(0 < srcLength && srcLength <= destCapacity){
-        u_memcpy(dest, src, srcLength);
+        u_memcpy(dest, (const UChar *)src, srcLength);
     }
     if(pDestLength){
        *pDestLength = srcLength;

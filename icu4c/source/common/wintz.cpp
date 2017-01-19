@@ -280,7 +280,7 @@ uprv_detectWindowsTimeZone() {
     int32_t len;
     int id;
     int errorCode;
-    UChar ISOcodeW[3]; /* 2 letter iso code in UTF-16*/
+    wchar_t ISOcodeW[3]; /* 2 letter iso code in UTF-16*/
     char  ISOcodeA[3]; /* 2 letter iso code in ansi */
 
     LONG result;
@@ -312,8 +312,8 @@ uprv_detectWindowsTimeZone() {
     tmpid[0] = 0;
 
     id = GetUserGeoID(GEOCLASS_NATION);
-    errorCode = GetGeoInfoW(id,GEO_ISO2,ISOcodeW,3,0);
-    u_strToUTF8(ISOcodeA, 3, NULL, ISOcodeW, 3, &status);
+    errorCode = GetGeoInfoW(id, GEO_ISO2, ISOcodeW, 3, 0);
+    u_strToUTF8(ISOcodeA, 3, NULL, (const UChar *)ISOcodeW, 3, &status);
 
     bundle = ures_openDirect(NULL, "windowsZones", &status);
     ures_getByKey(bundle, "mapTimezones", bundle, &status);

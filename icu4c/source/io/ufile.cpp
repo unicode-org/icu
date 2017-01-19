@@ -25,6 +25,8 @@
 
 #if !UCONFIG_NO_CONVERSION
 
+#include <stdlib.h>
+
 #include "ufile.h"
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
@@ -147,7 +149,11 @@ u_fopen_u(const UChar   *filename,
 #if U_PLATFORM_USES_ONLY_WIN32_API
     /* Try Windows API _wfopen if the above fails. */
     if (!result) {
-        FILE *systemFile = _wfopen(filename, (UChar*)perm);
+        // TODO: test this code path, including wperm.
+        wchar_t wperm[40] = {};
+        size_t  retVal;
+        mbstowcs_s(&retVal, wperm, perm, _TRUNCATE);
+        FILE *systemFile = _wfopen((const wchar_t *)filename, wperm);
         if (systemFile) {
             result = finit_owner(systemFile, locale, codepage, TRUE);
         }
@@ -175,7 +181,7 @@ u_fstropen(UChar *stringBuf,
     result = (UFILE*) uprv_malloc(sizeof(UFILE));
     /* Null pointer test */
     if (result == NULL) {
-    	return NULL; /* Just get out. */
+        return NULL; /* Just get out. */
     }
     uprv_memset(result, 0, sizeof(UFILE));
     result->str.fBuffer = stringBuf;
