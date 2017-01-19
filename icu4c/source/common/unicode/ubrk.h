@@ -267,6 +267,34 @@ ubrk_openRules(const UChar     *rules,
                UParseError     *parseErr,
                UErrorCode      *status);
 
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Open a new UBreakIterator for locating text boundaries using precompiled binary rules.
+ * Opening a UBreakIterator this way is substantially faster than using ubrk_openRules.
+ * Binary rules may be obtained using ubrk_getBinaryRules. The compiled rules are not
+ * compatible across different major versions of ICU, nor across platforms of different
+ * endianness or different base character set family (ASCII vs EBCDIC).
+ * @param binaryRules A set of compiled binary rules specifying the text breaking
+ *                    conventions. Ownership of the storage containing the compiled
+ *                    rules remains with the caller of this function. The compiled
+ *                    rules must not be modified or deleted during the life of the
+ *                    break iterator.
+ * @param rulesLength The length of binaryRules in bytes.
+ * @param text        The text to be iterated over.  May be null, in which case
+ *                    ubrk_setText() is used to specify the text to be iterated.
+ * @param textLength  The number of characters in text, or -1 if null-terminated.
+ * @param status      Pointer to UErrorCode to receive any errors.
+ * @return            UBreakIterator for the specified rules.
+ * @see ubrk_getBinaryRules
+ * @draft ICU 59
+ */
+U_DRAFT UBreakIterator* U_EXPORT2
+ubrk_openBinaryRules(const uint8_t *binaryRules, uint32_t rulesLength,
+                     const UChar *  text, int32_t textLength,
+                     UErrorCode *   status);
+
+#endif  /* U_HIDE_DRAFT_API */
+
 /**
  * Thread safe cloning operation
  * @param bi iterator to be cloned
@@ -565,6 +593,35 @@ U_STABLE void U_EXPORT2
 ubrk_refreshUText(UBreakIterator *bi,
                        UText          *text,
                        UErrorCode     *status);
+
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Get a compiled binary version of the rules specifying the behavior of a UBreakIterator.
+ * The binary rules may be used with ubrk_openBinaryRules to open a new UBreakIterator
+ * more quickly than using ubrk_openRules. The compiled rules are not compatible across
+ * different major versions of ICU, nor across platforms of different endianness or
+ * different base character set family (ASCII vs EBCDIC). Supports preflighting (with
+ * binaryRules=NULL and rulesCapacity=0) to get the rules length without copying them to
+ * the binaryRules buffer,
+ * @param bi            The break iterator to use.
+ * @param binaryRules   Buffer to receive the compiled binary rules; set to NULL for
+ *                      preflighting.
+ * @param rulesCapacity Capacity (in bytes) of the binaryRules buffer; set to 0 for
+ *                      preflighting.
+ * @param status        Pointer to UErrorCode to receive any errors.
+ * @return              The actual byte length of the binary rules. If not preflighting
+ *                      and this is larger than rulesCapacity, *status will be set to
+ *                      an error.
+ * @see ubrk_openBinaryRules
+ * @draft ICU 59
+ */
+U_DRAFT uint32_t U_EXPORT2
+ubrk_getBinaryRules(UBreakIterator *bi,
+                    uint8_t *       binaryRules, uint32_t rulesCapacity,
+                    UErrorCode *    status);
+
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
