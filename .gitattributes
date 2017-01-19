@@ -382,7 +382,10 @@ icu4c/source/common/uvectr64.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/uvectr64.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/wintz.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/wintz.h svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/config.guess eol=lf
+icu4c/source/config.sub eol=lf
 icu4c/source/config/m4/icu-conditional.m4 -text
+icu4c/source/configure eol=lf
 icu4c/source/data/brkitr/de.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/dictionaries/burmesedict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/dictionaries/cjdict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4448,6 +4451,7 @@ icu4c/source/i18n/zrule.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/zrule.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/ztrans.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/ztrans.h svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/install-sh eol=lf
 icu4c/source/io/locbund.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/io/locbund.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/io/sprintf.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4478,6 +4482,8 @@ icu4c/source/layoutex/layout/playout.h svneol=native#text/plain%3Bcharset%3Dutf-
 icu4c/source/layoutex/layout/plruns.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/layoutex/playout.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/layoutex/plruns.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/mkinstalldirs eol=lf
+icu4c/source/runConfigureICU eol=lf
 icu4c/source/samples/break/break.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/samples/break/break.vcxproj -text
 icu4c/source/samples/break/readme.txt svneol=native#text/plain
@@ -5046,7 +5052,6 @@ icu4c/source/test/intltest/winutil.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/iotest/filetst.c svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/iotest/iotest.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/iotest/iotest.h svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/stream.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/iotest/strtst.c svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/iotest/trnstst.c svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5223,7 +5228,6 @@ icu4c/source/test/testmap/testmap.c svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/thaitest/space.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/thaitest/thaitest.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/ctest.c svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/tools/ctestfw/ctestfw.vcxproj -text
 icu4c/source/tools/ctestfw/datamap.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/testdata.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/tstdtmod.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
