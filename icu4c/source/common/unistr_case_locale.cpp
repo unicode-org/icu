@@ -31,26 +31,26 @@ U_NAMESPACE_BEGIN
 
 UnicodeString &
 UnicodeString::toLower() {
-  return toLower(Locale::getDefault());
+  return caseMap(ustrcase_getCaseLocale(NULL), 0,
+                 UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToLower);
 }
 
 UnicodeString &
 UnicodeString::toLower(const Locale &locale) {
-  UErrorCode errorCode = U_ZERO_ERROR;
-  CaseMap csm(locale, 0, errorCode);
-  return caseMap(csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToLower);
+  return caseMap(ustrcase_getCaseLocale(locale.getBaseName()), 0,
+                 UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToLower);
 }
 
 UnicodeString &
 UnicodeString::toUpper() {
-  return toUpper(Locale::getDefault());
+  return caseMap(ustrcase_getCaseLocale(NULL), 0,
+                 UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToUpper);
 }
 
 UnicodeString &
 UnicodeString::toUpper(const Locale &locale) {
-  UErrorCode errorCode = U_ZERO_ERROR;
-  CaseMap csm(locale, 0, errorCode);
-  return caseMap(csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToUpper);
+  return caseMap(ustrcase_getCaseLocale(locale.getBaseName()), 0,
+                 UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalToUpper);
 }
 
 U_NAMESPACE_END

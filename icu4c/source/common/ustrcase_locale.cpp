@@ -26,62 +26,17 @@
 #include "ucase.h"
 #include "ustr_imp.h"
 
-U_NAMESPACE_BEGIN
-
-// TODO: new casemap_locale.cpp
-
-CaseMap::CaseMap(const Locale &loc, int32_t caseLoc, uint32_t opts, UErrorCode & /*errorCode*/) :
-        caseLocale(caseLoc), options(opts), locale(loc)
-#if !UCONFIG_NO_BREAK_ITERATION
-        , iter(NULL)
-#endif
-        {
-    if (caseLoc == 0) {  // UCASE_LOC_UNKNOWN
-        setCaseLocale(locale.getBaseName());
+U_CFUNC int32_t
+ustrcase_getCaseLocale(const char *locale) {
+    if (locale == NULL) {
+        locale = uloc_getDefault();
     }
-}
-
-CaseMap::CaseMap(const Locale &locale, uint32_t options, UErrorCode &errorCode) :
-        CaseMap(locale, /* UCASE_LOC_UNKNOWN = */ 0, options, errorCode) {}
-
-// small optimization for localeID=="", a little slower otherwise
-CaseMap::CaseMap(const char *localeID, uint32_t options, UErrorCode &errorCode) :
-        CaseMap(Locale::getRoot(), /* UCASE_LOC_ROOT = */ 1, options, errorCode) {
-    if (localeID == NULL || *localeID != 0) {
-        setLocale(localeID, errorCode);  // not root
-    }
-}
-
-CaseMap::~CaseMap() {
-#if !UCONFIG_NO_BREAK_ITERATION
-    delete iter;
-#endif
-}
-
-void CaseMap::setCaseLocale(const char *localeID) {
-    U_ASSERT(localeID != NULL);
-    caseLocale = UCASE_LOC_UNKNOWN;
-    ucase_getCaseLocale(localeID, &caseLocale);
-}
-
-void CaseMap::setLocale(const char *localeID, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return; }
-    if (localeID == NULL) {
-        locale = Locale::getDefault();
-        localeID = locale.getBaseName();
+    if (*locale == 0) {
+        return UCASE_LOC_ROOT;
     } else {
-        locale = Locale(localeID);
-        if (locale.isBogus()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            localeID = "";
-        }
+        return ucase_getCaseLocale(locale, NULL);
     }
-    setCaseLocale(localeID);
 }
-
-U_NAMESPACE_END
-
-U_NAMESPACE_USE
 
 /* public API functions */
 
@@ -90,9 +45,8 @@ u_strToLower(UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode) {
-    CaseMap csm(locale, 0, *pErrorCode);
     return ustrcase_mapWithOverlap(
-        csm, UCASEMAP_BREAK_ITERATOR_NULL
+        ustrcase_getCaseLocale(locale), 0, UCASEMAP_BREAK_ITERATOR_NULL
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToLower, *pErrorCode);
@@ -103,10 +57,37 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode) {
-    CaseMap csm(locale, 0, *pErrorCode);
     return ustrcase_mapWithOverlap(
-        csm, UCASEMAP_BREAK_ITERATOR_NULL
+        ustrcase_getCaseLocale(locale), 0, UCASEMAP_BREAK_ITERATOR_NULL
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToUpper, *pErrorCode);
 }
+
+U_NAMESPACE_BEGIN
+
+int32_t CaseMap::toLower(
+        const char *locale, uint32_t options,
+        const UChar *src, int32_t srcLength,
+        UChar *dest, int32_t destCapacity, Edits *edits,
+        UErrorCode &errorCode) {
+    return ustrcase_map(
+        ustrcase_getCaseLocale(locale), options, UCASEMAP_BREAK_ITERATOR_NULL
+        dest, destCapacity,
+        src, srcLength,
+        ustrcase_internalToLower, edits, errorCode);
+}
+
+int32_t CaseMap::toUpper(
+        const char *locale, uint32_t options,
+        const UChar *src, int32_t srcLength,
+        UChar *dest, int32_t destCapacity, Edits *edits,
+        UErrorCode &errorCode) {
+    return ustrcase_map(
+        ustrcase_getCaseLocale(locale), options, UCASEMAP_BREAK_ITERATOR_NULL
+        dest, destCapacity,
+        src, srcLength,
+        ustrcase_internalToUpper, edits, errorCode);
+}
+
+U_NAMESPACE_END

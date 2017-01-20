@@ -59,7 +59,6 @@ U_NAMESPACE_BEGIN
 #if !UCONFIG_NO_BREAK_ITERATION
 class BreakIterator;        // unicode/brkiter.h
 #endif
-class CaseMap;
 class Edits;
 
 U_NAMESPACE_END
@@ -72,7 +71,7 @@ U_NAMESPACE_END
  * @internal
  */
 typedef int32_t U_CALLCONV
-UStringCaseMapper(const icu::CaseMap &csm,
+UStringCaseMapper(int32_t caseLocale, uint32_t options,
 #if !UCONFIG_NO_BREAK_ITERATION
                   icu::BreakIterator *iter,
 #endif
@@ -3596,7 +3595,7 @@ private:
    * as in ustr_imp.h for ustrcase_map().
    */
   UnicodeString &
-  caseMap(const CaseMap &csm,
+  caseMap(int32_t caseLocale, uint32_t options,
 #if !UCONFIG_NO_BREAK_ITERATION
           BreakIterator *iter,
 #endif
