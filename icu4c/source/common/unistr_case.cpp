@@ -88,7 +88,7 @@ UnicodeString::doCaseCompare(int32_t start,
 //========================================
 
 UnicodeString &
-UnicodeString::caseMap(const CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
+UnicodeString::caseMap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
                        UStringCaseMapper *stringCaseMapper) {
   if(isEmpty() || !isWritable()) {
     // nothing to do
@@ -121,7 +121,7 @@ UnicodeString::caseMap(const CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
       buffer = fUnion.fStackFields.fBuffer;
       capacity = US_STACKBUF_SIZE;
     }
-    newLength = stringCaseMapper(csm, UCASEMAP_BREAK_ITERATOR
+    newLength = stringCaseMapper(caseLocale, options, UCASEMAP_BREAK_ITERATOR
                                  buffer, capacity,
                                  oldArray, oldLength, NULL, errorCode);
     if (U_SUCCESS(errorCode)) {
@@ -140,9 +140,8 @@ UnicodeString::caseMap(const CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
     // and often does not change its length.
     oldArray = getArrayStart();
     Edits edits;
-    edits.setWriteUnchanged(FALSE);
     UChar replacementChars[200];
-    stringCaseMapper(csm, UCASEMAP_BREAK_ITERATOR
+    stringCaseMapper(caseLocale, options | UCASEMAP_OMIT_UNCHANGED_TEXT, UCASEMAP_BREAK_ITERATOR
                      replacementChars, UPRV_LENGTHOF(replacementChars),
                      oldArray, oldLength, &edits, errorCode);
     if (U_SUCCESS(errorCode)) {
@@ -178,7 +177,7 @@ UnicodeString::caseMap(const CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
     return *this;
   }
   errorCode = U_ZERO_ERROR;
-  newLength = stringCaseMapper(csm, UCASEMAP_BREAK_ITERATOR
+  newLength = stringCaseMapper(caseLocale, options, UCASEMAP_BREAK_ITERATOR
                                getArrayStart(), getCapacity(),
                                oldArray, oldLength, NULL, errorCode);
   if (bufferToDelete) {
@@ -194,9 +193,7 @@ UnicodeString::caseMap(const CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
 
 UnicodeString &
 UnicodeString::foldCase(uint32_t options) {
-  UErrorCode errorCode = U_ZERO_ERROR;
-  CaseMap csm(options, errorCode);
-  return caseMap(csm, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalFold);
+  return caseMap(UCASE_LOC_ROOT, options, UCASEMAP_BREAK_ITERATOR_NULL ustrcase_internalFold);
 }
 
 U_NAMESPACE_END

@@ -104,7 +104,7 @@ uprv_loadPropsData(UErrorCode *errorCode);*/
 
 #ifdef __cplusplus
 // TODO: Consider moving these case mapping definitions
-// into a new internal header like casemap_imp.h.
+// into a new internal header like ucasemap_imp.h.
 
 #include "unicode/unistr.h"  // for UStringCaseMapper
 
@@ -113,39 +113,25 @@ uprv_loadPropsData(UErrorCode *errorCode);*/
  * ustring.h/ustrcase.c and UnicodeString case mapping functions.
  */
 
-/** Avoid public @internal CaseMap methods. Define only one CaseMap friend. */
-class icu::internal::CaseMapFriend final /* all static */ {
-public:
-    static UCaseMap *toUCaseMap(icu::CaseMap &csm) {
-        return reinterpret_cast<UCaseMap *>(&csm);
+struct UCaseMap : public icu::UMemory {
+    /** Implements most of ucasemap_open(). */
+    UCaseMap(const char *localeID, uint32_t opts, UErrorCode *pErrorCode);
+    /** Root locale. */
+    UCaseMap(uint32_t opts) :
+#if !UCONFIG_NO_BREAK_ITERATION
+            iter(NULL),
+#endif
+            locCache(/* UCASE_LOC_ROOT= */ 1), options(opts) {
+        locale[0] = 0;
     }
-
-    static const icu::CaseMap *fromUCaseMap(const UCaseMap *csm) {
-        return reinterpret_cast<const icu::CaseMap *>(csm);
-    }
-    static icu::CaseMap *fromUCaseMap(UCaseMap *csm) {
-        return reinterpret_cast<icu::CaseMap *>(csm);
-    }
+    ~UCaseMap();
 
 #if !UCONFIG_NO_BREAK_ITERATION
-    static const icu::BreakIterator *iter(const icu::CaseMap &csm) { return csm.iter; }
-    static icu::BreakIterator *mutableIter(icu::CaseMap &csm) { return csm.iter; }
-    static void adoptIter(icu::CaseMap &csm, icu::BreakIterator *iter);
+    icu::BreakIterator *iter;  /* We adopt the iterator, so we own it. */
 #endif
-
-    static const icu::Locale &locale(const icu::CaseMap &csm) { return csm.locale; }
-    static const char *localeID(const icu::CaseMap &csm) { return csm.locale.getName(); }
-    static void setLocale(icu::CaseMap &csm, const char *localeID, UErrorCode &errorCode) {
-        csm.setLocale(localeID, errorCode);
-    }
-
-    static int32_t caseLocale(const icu::CaseMap &csm) { return csm.caseLocale; }
-
-    static uint32_t options(const icu::CaseMap &csm) { return csm.options; }
-    static void setOptions(icu::CaseMap &csm, uint32_t options) { csm.options = options; }
-
-private:
-    CaseMapFriend() = delete;
+    char locale[32];
+    int32_t locCache;
+    uint32_t options;
 };
 
 #if UCONFIG_NO_BREAK_ITERATION
@@ -162,9 +148,13 @@ private:
 #   define UCASEMAP_BREAK_ITERATOR_NULL NULL,
 #endif
 
+U_CFUNC int32_t
+ustrcase_getCaseLocale(const char *locale);
+
+// TODO: swap src / dest if approved for new public api
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
-ustrcase_internalToLower(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
+ustrcase_internalToLower(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
                          icu::Edits *edits,
@@ -172,7 +162,7 @@ ustrcase_internalToLower(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
 
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
-ustrcase_internalToUpper(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
+ustrcase_internalToUpper(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
                          icu::Edits *edits,
@@ -182,7 +172,7 @@ ustrcase_internalToUpper(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
 
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
-ustrcase_internalToTitle(const icu::CaseMap &csm,
+ustrcase_internalToTitle(int32_t caseLocale, uint32_t options,
                          icu::BreakIterator *iter,
                          UChar *dest, int32_t destCapacity,
                          const UChar *src, int32_t srcLength,
@@ -193,7 +183,7 @@ ustrcase_internalToTitle(const icu::CaseMap &csm,
 
 /** Implements UStringCaseMapper. */
 U_CFUNC int32_t U_CALLCONV
-ustrcase_internalFold(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
+ustrcase_internalFold(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
                       UChar *dest, int32_t destCapacity,
                       const UChar *src, int32_t srcLength,
                       icu::Edits *edits,
@@ -204,7 +194,7 @@ ustrcase_internalFold(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
  * Implements argument checking.
  */
 U_CFUNC int32_t
-ustrcase_map(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
+ustrcase_map(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
              UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              UStringCaseMapper *stringCaseMapper,
@@ -217,7 +207,7 @@ ustrcase_map(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
  * Implements argument checking and internally works with an intermediate buffer if necessary.
  */
 U_CFUNC int32_t
-ustrcase_mapWithOverlap(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
+ustrcase_mapWithOverlap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
                         UChar *dest, int32_t destCapacity,
                         const UChar *src, int32_t srcLength,
                         UStringCaseMapper *stringCaseMapper,
@@ -231,7 +221,7 @@ ustrcase_mapWithOverlap(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
  * src and dest must not overlap.
  */
 typedef int32_t U_CALLCONV
-UTF8CaseMapper(const icu::CaseMap &csm,
+UTF8CaseMapper(int32_t caseLocale, uint32_t options,
 #if !UCONFIG_NO_BREAK_ITERATION
                icu::BreakIterator *iter,
 #endif
@@ -243,7 +233,7 @@ UTF8CaseMapper(const icu::CaseMap &csm,
 
 /** Implements UTF8CaseMapper. */
 U_CFUNC int32_t U_CALLCONV
-ucasemap_internalUTF8ToTitle(const icu::CaseMap &csm,
+ucasemap_internalUTF8ToTitle(int32_t caseLocale, uint32_t options,
         icu::BreakIterator *iter,
         uint8_t *dest, int32_t destCapacity,
         const uint8_t *src, int32_t srcLength,
@@ -256,7 +246,7 @@ ucasemap_internalUTF8ToTitle(const icu::CaseMap &csm,
  * for UTF-8 string case mapping as a common function.
  */
 U_CFUNC int32_t
-ucasemap_mapUTF8(const icu::CaseMap &csm, UCASEMAP_BREAK_ITERATOR_PARAM
+ucasemap_mapUTF8(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
                  uint8_t *dest, int32_t destCapacity,
                  const uint8_t *src, int32_t srcLength,
                  UTF8CaseMapper *stringCaseMapper,

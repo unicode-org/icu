@@ -41,10 +41,9 @@ UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale) {
 
 UnicodeString &
 UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t options) {
-  UErrorCode errorCode = U_ZERO_ERROR;
-  CaseMap csm(locale, options, errorCode);
   BreakIterator *bi=titleIter;
   if(bi==NULL) {
+    UErrorCode errorCode=U_ZERO_ERROR;
     bi=BreakIterator::createWordInstance(locale, errorCode);
     if(U_FAILURE(errorCode)) {
       setToBogus();
@@ -52,7 +51,7 @@ UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t 
     }
   }
   bi->setText(*this);
-  caseMap(csm, bi, ustrcase_internalToTitle);
+  caseMap(ustrcase_getCaseLocale(locale.getBaseName()), options, bi, ustrcase_internalToTitle);
   if(titleIter==NULL) {
     delete bi;
   }

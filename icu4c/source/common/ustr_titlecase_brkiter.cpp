@@ -31,14 +31,7 @@
 
 U_NAMESPACE_USE
 
-using icu::internal::CaseMapFriend;
-
 // TODO: create casemap.cpp
-
-void icu::internal::CaseMapFriend::adoptIter(CaseMap &csm, BreakIterator *iter) {
-    delete csm.iter;
-    csm.iter = iter;
-}
 
 /* functions available in the common library (for unistr_case.cpp) */
 
@@ -50,13 +43,13 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
              UBreakIterator *titleIter,
              const char *locale,
              UErrorCode *pErrorCode) {
-    CaseMap csm(locale, 0, *pErrorCode);
+    LocalPointer<BreakIterator> ownedIter;
     BreakIterator *iter;
     if(titleIter!=NULL) {
         iter=reinterpret_cast<BreakIterator *>(titleIter);
     } else {
-        iter=BreakIterator::createWordInstance(CaseMapFriend::locale(csm), *pErrorCode);
-        CaseMapFriend::adoptIter(csm, iter);
+        iter=BreakIterator::createWordInstance(Locale(locale), *pErrorCode);
+        ownedIter.adoptInstead(iter);
     }
     if(U_FAILURE(*pErrorCode)) {
         return 0;
@@ -64,7 +57,7 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
     UnicodeString s(srcLength<0, src, srcLength);
     iter->setText(s);
     return ustrcase_mapWithOverlap(
-        csm, iter,
+        ustrcase_getCaseLocale(locale), 0, iter,
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToTitle, *pErrorCode);
@@ -72,27 +65,23 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
 
 U_NAMESPACE_BEGIN
 
-int32_t CaseMap::toTitle(BreakIterator *it,
-                         UChar *dest, int32_t destCapacity,
-                         const UChar *src, int32_t srcLength,
-                         Edits *edits,
-                         UErrorCode &errorCode) const {
+int32_t CaseMap::toTitle(
+        const char *locale, uint32_t options, BreakIterator *iter,
+        const UChar *src, int32_t srcLength,
+        UChar *dest, int32_t destCapacity, Edits *edits,
+        UErrorCode &errorCode) {
     LocalPointer<BreakIterator> ownedIter;
-    if(it==NULL) {
-        if(iter!=NULL) {
-            it=iter->clone();
-        } else {
-            it=BreakIterator::createWordInstance(locale, errorCode);
-        }
-        ownedIter.adoptInsteadAndCheckErrorCode(it, errorCode);
+    if(iter==NULL) {
+        iter=BreakIterator::createWordInstance(Locale(locale), errorCode);
+        ownedIter.adoptInstead(iter);
     }
     if(U_FAILURE(errorCode)) {
         return 0;
     }
     UnicodeString s(srcLength<0, src, srcLength);
-    it->setText(s);
+    iter->setText(s);
     return ustrcase_map(
-        *this, it,
+        ustrcase_getCaseLocale(locale), options, iter,
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToTitle, edits, errorCode);
@@ -101,25 +90,23 @@ int32_t CaseMap::toTitle(BreakIterator *it,
 U_NAMESPACE_END
 
 U_CAPI int32_t U_EXPORT2
-ucasemap_toTitle(UCaseMap *ucsm,
+ucasemap_toTitle(UCaseMap *csm,
                  UChar *dest, int32_t destCapacity,
                  const UChar *src, int32_t srcLength,
                  UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    CaseMap &csm = *CaseMapFriend::fromUCaseMap(ucsm);
-    if (CaseMapFriend::iter(csm) == NULL) {
-        CaseMapFriend::adoptIter(
-            csm, BreakIterator::createWordInstance(CaseMapFriend::locale(csm), *pErrorCode));
+    if (csm->iter == NULL) {
+        csm->iter = BreakIterator::createWordInstance(Locale(csm->locale), *pErrorCode);
     }
     if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
     UnicodeString s(srcLength<0, src, srcLength);
-    CaseMapFriend::mutableIter(csm)->setText(s);
+    csm->iter->setText(s);
     return ustrcase_map(
-        csm, CaseMapFriend::mutableIter(csm),
+        csm->locCache, csm->options, csm->iter,
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToTitle, NULL, *pErrorCode);
