@@ -118,7 +118,7 @@ void TitlecaseTransliterator::handleTransliterate(
 
     UnicodeString tmp;
     const UChar *s;
-    int32_t textPos, delta, result, locCache=0;
+    int32_t textPos, delta, result;
 
     for(textPos=offsets.start; textPos<offsets.limit;) {
         csc.cpStart=textPos;
@@ -128,9 +128,9 @@ void TitlecaseTransliterator::handleTransliterate(
         type=ucase_getTypeOrIgnorable(fCsp, c);
         if(type>=0) { // not case-ignorable
             if(doTitle) {
-                result=ucase_toFullTitle(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, "", &locCache);
+                result=ucase_toFullTitle(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, UCASE_LOC_ROOT);
             } else {
-                result=ucase_toFullLower(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, "", &locCache);
+                result=ucase_toFullLower(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, UCASE_LOC_ROOT);
             }
             doTitle = (UBool)(type==0); // doTitle=isUncased
 

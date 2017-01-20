@@ -151,14 +151,14 @@ void CaseMapTransliterator::handleTransliterate(Replaceable& text,
     UnicodeString tmp;
     const UChar *s;
     UChar32 c;
-    int32_t textPos, delta, result, locCache=0;
+    int32_t textPos, delta, result;
 
     for(textPos=offsets.start; textPos<offsets.limit;) {
         csc.cpStart=textPos;
         c=text.char32At(textPos);
         csc.cpLimit=textPos+=U16_LENGTH(c);
 
-        result=fMap(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, "", &locCache);
+        result=fMap(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, UCASE_LOC_ROOT);
 
         if(csc.b1 && isIncremental) {
             // fMap() tried to look beyond the context limit

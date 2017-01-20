@@ -554,7 +554,7 @@ _caseMap(int32_t caseLocale, uint32_t options, UCaseMapFull *map,
         U16_NEXT(src, srcIndex, srcLimit, c);
         csc->cpLimit=srcIndex;
         const UChar *s;
-        c=map(NULL, c, utf16_caseContextIterator, csc, &s, NULL, &caseLocale);
+        c=map(NULL, c, utf16_caseContextIterator, csc, &s, caseLocale);
         destIndex = appendResult(dest, destIndex, destCapacity, c, s,
                                  srcIndex - cpStart, options, edits);
         if (destIndex < 0) {
@@ -648,8 +648,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                 csc.cpStart=titleStart;
                 csc.cpLimit=titleLimit;
                 const UChar *s;
-                c=ucase_toFullTitle(NULL, c, utf16_caseContextIterator, &csc, &s,
-                                    NULL, &caseLocale);
+                c=ucase_toFullTitle(NULL, c, utf16_caseContextIterator, &csc, &s, caseLocale);
                 destIndex=appendResult(dest, destIndex, destCapacity, c, s,
                                        titleLimit-titleStart, options, edits);
                 if(destIndex<0) {
@@ -1318,7 +1317,7 @@ int32_t toUpper(int32_t caseLocale, uint32_t options,
             }
         } else {
             const UChar *s;
-            c=ucase_toFullUpper(NULL, c, NULL, NULL, &s, NULL, &caseLocale);
+            c=ucase_toFullUpper(NULL, c, NULL, NULL, &s, caseLocale);
             destIndex = appendResult(dest, destIndex, destCapacity, c, s,
                                      nextIndex - i, options, edits);
             if (destIndex < 0) {

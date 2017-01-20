@@ -56,7 +56,7 @@ ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *
  * Accepts both 2- and 3-letter codes and accepts case variants.
  */
 U_CFUNC int32_t
-ucase_getCaseLocale(const char *locale, int32_t *locCache);
+ucase_getCaseLocale(const char *locale);
 
 /* Casing locale types for ucase_getCaseLocale */
 enum {
@@ -240,10 +240,7 @@ enum {
  * @param context Pointer to be passed into iter.
  * @param pString If the mapping result is a string, then the pointer is
  *                written to *pString.
- * @param locale Locale ID for locale-dependent mappings.
- * @param locCache Initialize to 0; may be used to cache the result of parsing
- *                 the locale ID for subsequent calls.
- *                 Can be NULL.
+ * @param caseLocale Case locale value from ucase_getCaseLocale().
  * @return Output code point or string length, see UCASE_MAX_STRING_LENGTH.
  *
  * @see UCaseContextIterator
@@ -254,19 +251,19 @@ U_CAPI int32_t U_EXPORT2
 ucase_toFullLower(const UCaseProps *csp, UChar32 c,
                   UCaseContextIterator *iter, void *context,
                   const UChar **pString,
-                  const char *locale, int32_t *locCache);
+                  int32_t caseLocale);
 
 U_CAPI int32_t U_EXPORT2
 ucase_toFullUpper(const UCaseProps *csp, UChar32 c,
                   UCaseContextIterator *iter, void *context,
                   const UChar **pString,
-                  const char *locale, int32_t *locCache);
+                  int32_t caseLocale);
 
 U_CAPI int32_t U_EXPORT2
 ucase_toFullTitle(const UCaseProps *csp, UChar32 c,
                   UCaseContextIterator *iter, void *context,
                   const UChar **pString,
-                  const char *locale, int32_t *locCache);
+                  int32_t caseLocale);
 
 U_CAPI int32_t U_EXPORT2
 ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
@@ -286,7 +283,7 @@ typedef int32_t U_CALLCONV
 UCaseMapFull(const UCaseProps *csp, UChar32 c,
              UCaseContextIterator *iter, void *context,
              const UChar **pString,
-             const char *locale, int32_t *locCache);
+             int32_t caseLocale);
 
 U_CDECL_END
 

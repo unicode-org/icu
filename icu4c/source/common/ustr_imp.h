@@ -116,32 +116,22 @@ uprv_loadPropsData(UErrorCode *errorCode);*/
 struct UCaseMap : public icu::UMemory {
     /** Implements most of ucasemap_open(). */
     UCaseMap(const char *localeID, uint32_t opts, UErrorCode *pErrorCode);
-    /** Root locale. */
-    UCaseMap(uint32_t opts) :
-#if !UCONFIG_NO_BREAK_ITERATION
-            iter(NULL),
-#endif
-            locCache(/* UCASE_LOC_ROOT= */ 1), options(opts) {
-        locale[0] = 0;
-    }
     ~UCaseMap();
 
 #if !UCONFIG_NO_BREAK_ITERATION
     icu::BreakIterator *iter;  /* We adopt the iterator, so we own it. */
 #endif
     char locale[32];
-    int32_t locCache;
+    int32_t caseLocale;
     uint32_t options;
 };
 
 #if UCONFIG_NO_BREAK_ITERATION
-#   define UCASEMAP_INITIALIZER { NULL, { 0 }, 0, 0 }
 #   define UCASEMAP_BREAK_ITERATOR_PARAM
 #   define UCASEMAP_BREAK_ITERATOR_UNUSED
 #   define UCASEMAP_BREAK_ITERATOR
 #   define UCASEMAP_BREAK_ITERATOR_NULL
 #else
-#   define UCASEMAP_INITIALIZER { NULL, NULL, { 0 }, 0, 0 }
 #   define UCASEMAP_BREAK_ITERATOR_PARAM icu::BreakIterator *iter,
 #   define UCASEMAP_BREAK_ITERATOR_UNUSED icu::BreakIterator *,
 #   define UCASEMAP_BREAK_ITERATOR iter,
