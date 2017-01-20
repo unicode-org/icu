@@ -207,7 +207,6 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
             int32_t n = getRangeCount();
             UChar32 result;
             const UChar *full;
-            int32_t locCache = 0;
 
             for (int32_t i=0; i<n; ++i) {
                 UChar32 start = getRangeStart(i);
@@ -222,13 +221,13 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                     // add case mappings
                     // (does not add long s for regular s, or Kelvin for k, for example)
                     for (UChar32 cp=start; cp<=end; ++cp) {
-                        result = ucase_toFullLower(csp, cp, NULL, NULL, &full, "", &locCache);
+                        result = ucase_toFullLower(csp, cp, NULL, NULL, &full, UCASE_LOC_ROOT);
                         addCaseMapping(foldSet, result, full, str);
 
-                        result = ucase_toFullTitle(csp, cp, NULL, NULL, &full, "", &locCache);
+                        result = ucase_toFullTitle(csp, cp, NULL, NULL, &full, UCASE_LOC_ROOT);
                         addCaseMapping(foldSet, result, full, str);
 
-                        result = ucase_toFullUpper(csp, cp, NULL, NULL, &full, "", &locCache);
+                        result = ucase_toFullUpper(csp, cp, NULL, NULL, &full, UCASE_LOC_ROOT);
                         addCaseMapping(foldSet, result, full, str);
 
                         result = ucase_toFullFolding(csp, cp, &full, 0);

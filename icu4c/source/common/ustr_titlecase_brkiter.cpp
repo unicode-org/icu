@@ -31,8 +31,6 @@
 
 U_NAMESPACE_USE
 
-// TODO: create casemap.cpp
-
 /* functions available in the common library (for unistr_case.cpp) */
 
 /* public API functions */
@@ -106,7 +104,7 @@ ucasemap_toTitle(UCaseMap *csm,
     UnicodeString s(srcLength<0, src, srcLength);
     csm->iter->setText(s);
     return ustrcase_map(
-        csm->locCache, csm->options, csm->iter,
+        csm->caseLocale, csm->options, csm->iter,
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToTitle, NULL, *pErrorCode);

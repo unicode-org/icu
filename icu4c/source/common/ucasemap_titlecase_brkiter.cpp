@@ -62,7 +62,7 @@ ucasemap_utf8ToTitle(UCaseMap *csm,
     }
     csm->iter->setText(&utext, *pErrorCode);
     int32_t length=ucasemap_mapUTF8(
-            csm->locCache, csm->options, csm->iter,
+            csm->caseLocale, csm->options, csm->iter,
             (uint8_t *)dest, destCapacity,
             (const uint8_t *)src, srcLength,
             ucasemap_internalUTF8ToTitle, pErrorCode);
