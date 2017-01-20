@@ -5409,6 +5409,7 @@ structLocale:table(nofallback){
         aro{""}
         arp{""}
         arq{""}
+        ars{""}
         arw{""}
         ary{""}
         arz{""}
