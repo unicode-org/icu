@@ -17,6 +17,8 @@
 #include "unicode/plurrule.h"
 #include "unicode/upluralrules.h"
 #include "unicode/ures.h"
+#include "unicode/numfmt.h"
+#include "unicode/decimfmt.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -35,7 +37,6 @@
 #include "unifiedcache.h"
 #include "digitinterval.h" 
 #include "visibledigits.h"
-
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -244,6 +245,24 @@ PluralRules::select(int32_t number) const {
 UnicodeString
 PluralRules::select(double number) const {
     return select(FixedDecimal(number));
+}
+
+UnicodeString
+PluralRules::select(const Formattable& obj, const NumberFormat& fmt) const {
+    UErrorCode status = U_ZERO_ERROR;
+    const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
+    if (decFmt != NULL) {
+        VisibleDigitsWithExponent digits;
+        decFmt->initVisibleDigitsWithExponent(obj, digits, status);
+        if (U_SUCCESS(status)) {
+            return select(digits);
+        }
+    }
+    double number = obj.getDouble(status);
+    if (U_SUCCESS(status)) {
+        return select(number);
+    }
+    return getKeywordOther();
 }
 
 UnicodeString
