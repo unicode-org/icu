@@ -15,6 +15,8 @@
 #include "unicode/plurrule.h"
 #include "unicode/locid.h"
 #include "unicode/unistr.h"
+#include "unicode/unum.h"
+#include "unicode/numfmt.h"
 
 U_NAMESPACE_USE
 
@@ -54,5 +56,25 @@ uplrules_select(const UPluralRules *uplrules,
     return result.extract(keyword, capacity, *status);
 }
 
+U_CAPI int32_t U_EXPORT2
+uplrules_selectWithFormat(const UPluralRules *uplrules,
+                          double number,
+                          const UNumberFormat *fmt,
+                          UChar *keyword, int32_t capacity,
+                          UErrorCode *status)
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    const PluralRules* plrules = reinterpret_cast<const PluralRules*>(uplrules);
+    const NumberFormat* nf = reinterpret_cast<const NumberFormat*>(fmt);
+    if (plrules == NULL || nf == NULL || ((keyword == NULL)? capacity != 0 : capacity < 0)) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    Formattable obj(number);
+    UnicodeString result = plrules->select(obj, *nf);
+    return result.extract(keyword, capacity, *status);
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
