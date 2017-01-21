@@ -126,53 +126,41 @@ void Edits::addReplace(int32_t oldLength, int32_t newLength) {
         delta += newDelta;
     }
 
-    uint16_t buffer[5];
-    int32_t bLength = 1;
     int32_t head = 0x7000;
-    if(oldLength < LENGTH_IN_1TRAIL) {
+    if (oldLength < LENGTH_IN_1TRAIL && newLength < LENGTH_IN_1TRAIL) {
         head |= oldLength << 6;
-    } else if(oldLength <= 0x7fff) {
-        head |= LENGTH_IN_1TRAIL << 6;
-        buffer[bLength++] = (uint16_t)(0x8000 | oldLength);
-    } else {
-        head |= (LENGTH_IN_2TRAIL + (oldLength >> 30)) << 6;
-        buffer[bLength++] = (uint16_t)(0x8000 | (oldLength >> 15));
-        buffer[bLength++] = (uint16_t)(0x8000 | oldLength);
-    }
-    if(newLength < LENGTH_IN_1TRAIL) {
         head |= newLength;
-    } else if(newLength <= 0x7fff) {
-        head |= LENGTH_IN_1TRAIL;
-        buffer[bLength++] = (uint16_t)(0x8000 | newLength);
-    } else {
-        head |= LENGTH_IN_2TRAIL + (newLength >> 30);
-        buffer[bLength++] = (uint16_t)(0x8000 | (newLength >> 15));
-        buffer[bLength++] = (uint16_t)(0x8000 | newLength);
-    }
-    if(bLength == 1) {
         append(head);
-    } else {
-        buffer[0] = (uint16_t)head;
-        append(buffer, bLength);
+    } else if ((capacity - length) >= 5 || growArray()) {
+        int32_t limit = length + 1;
+        if(oldLength < LENGTH_IN_1TRAIL) {
+            head |= oldLength << 6;
+        } else if(oldLength <= 0x7fff) {
+            head |= LENGTH_IN_1TRAIL << 6;
+            array[limit++] = (uint16_t)(0x8000 | oldLength);
+        } else {
+            head |= (LENGTH_IN_2TRAIL + (oldLength >> 30)) << 6;
+            array[limit++] = (uint16_t)(0x8000 | (oldLength >> 15));
+            array[limit++] = (uint16_t)(0x8000 | oldLength);
+        }
+        if(newLength < LENGTH_IN_1TRAIL) {
+            head |= newLength;
+        } else if(newLength <= 0x7fff) {
+            head |= LENGTH_IN_1TRAIL;
+            array[limit++] = (uint16_t)(0x8000 | newLength);
+        } else {
+            head |= LENGTH_IN_2TRAIL + (newLength >> 30);
+            array[limit++] = (uint16_t)(0x8000 | (newLength >> 15));
+            array[limit++] = (uint16_t)(0x8000 | newLength);
+        }
+        array[length] = (uint16_t)head;
+        length = limit;
     }
 }
 
 void Edits::append(int32_t r) {
     if(length < capacity || growArray()) {
         array[length++] = (uint16_t)r;
-    }
-}
-
-void Edits::append(const uint16_t *buffer, int32_t bLength) {
-    if(bLength > (INT32_MAX - length)) {
-        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;  // Integer overflow.
-        return;
-    }
-    if((length + bLength) < capacity || growArray()) {
-        int32_t i = 0;
-        do {
-            array[length++] = buffer[i++];
-        } while (i < bLength);
     }
 }
 

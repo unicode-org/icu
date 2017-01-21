@@ -312,7 +312,6 @@ private:
     int32_t lastUnit() const { return length > 0 ? array[length - 1] : 0xffff; }
 
     void append(int32_t r);
-    void append(const uint16_t *buffer, int32_t bLength);
     UBool growArray();
 
     static const int32_t STACK_CAPACITY = 100;

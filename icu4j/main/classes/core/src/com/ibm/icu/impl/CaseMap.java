@@ -4,6 +4,7 @@ package com.ibm.icu.impl;
 
 import com.ibm.icu.util.ULocale;
 
+// TODO: rename to CaseMapImpl
 public final class CaseMap {
     /**
      * Implementation of UCaseProps.ContextIterator, iterates over a String.
