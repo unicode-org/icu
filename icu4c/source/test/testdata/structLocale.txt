@@ -4250,6 +4250,15 @@ structLocale:table(nofallback){
                 }
             }
         }
+        dayOfYear{
+            dn{""}
+        }
+        dayOfYear-short{
+            dn{""}
+        }
+        dayOfYear-narrow{
+            dn{""}
+        }
         dayperiod{
             dn{""}
             dn%variant{""}
@@ -4259,6 +4268,14 @@ structLocale:table(nofallback){
                 "1"{""}
             }
         }
+        dayperiod-short{
+            dn{""}
+            dn%variant{""}
+        }
+        dayperiod-narrow{
+            dn{""}
+            dn%variant{""}
+        }
         era{
             dn{""}
             relative{
@@ -4266,6 +4283,12 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+        }
+        era-short{
+            dn{""}
+        }
+        era-narrow{
+            dn{""}
         }
         fri{
             relative{
@@ -5263,6 +5286,15 @@ structLocale:table(nofallback){
                 }
             }
         }
+        weekOfMonth{
+            dn{""}
+        }
+        weekOfMonth-short{
+            dn{""}
+        }
+        weekOfMonth-narrow{
+            dn{""}
+        }
         weekday{
             dn{""}
             relative{
@@ -5270,6 +5302,21 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+        }
+        weekday-short{
+            dn{""}
+        }
+        weekday-narrow{
+            dn{""}
+        }
+        weekdayOfMonth{
+            dn{""}
+        }
+        weekdayOfMonth-short{
+            dn{""}
+        }
+        weekdayOfMonth-narrow{
+            dn{""}
         }
         year{
             dn{""}                    
@@ -5359,6 +5406,12 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+        }
+        zone-short{
+            dn{""}
+        }
+        zone-narrow{
+            dn{""}
         }
     }
     CurrencyUnitPatterns{
@@ -13194,6 +13247,24 @@ structLocale:table(nofallback){
                 currencyGroup{""}
                 superscriptingExponent{""}
                 timeSeparator{""}
+            }
+        }
+        minimalPairs{
+            ordinal{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            plural{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
             }
         }
         mlym{
