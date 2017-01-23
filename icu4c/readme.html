@@ -983,7 +983,7 @@
     <ul>
       <li>Microsoft Windows</li>
 
-      <li>Microsoft Visual C++ (when gcc isn't used).</li>
+      <li>Microsoft Visual C++ (from Visual Studio 2015 or newer, when gcc isn't used).</li>
 
       <li>
         Cygwin with the following installed:
@@ -1018,11 +1018,11 @@
       Visual C++ compiler will not work with a bash command prompt.</li>
 
       <li>If the computer isn't set up to use Visual C++ from the command line,
-      you need to run vcvars32.bat.<br />For example:<br />"<tt>C:\Program Files\Microsoft
-      Visual Studio 8\VC\bin\vcvars32.bat</tt>" can be used for 32-bit builds
-      <strong>or</strong> <br />"<tt>C:\Program Files (x86)\Microsoft Visual Studio
-      8\VC\bin\amd64\vcvarsamd64.bat</tt>" can be used for 64-bit builds on
-      Windows x64.</li>
+      you need to run vcvars32.bat.<br />For example:<br />
+      "<tt>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\vcvars32.bat</tt>"
+      can be used for 32-bit builds <strong>or</strong> <br />
+      "<tt>C:\Program Files (x86)\Microsoft Visual Studio 14\VC\bin\x86_amd64\vcvarsx86_amd64.bat</tt>"
+      can be used for 64-bit builds on Windows x64.</li>
 
       <li>Unzip the icu-XXXX.zip file into any convenient location. Using command
       line zip, type "unzip -a icu-XXXX.zip -d drive:\directory", or just use
