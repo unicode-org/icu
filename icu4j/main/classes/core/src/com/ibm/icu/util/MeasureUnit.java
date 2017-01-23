@@ -257,8 +257,8 @@ public class MeasureUnit implements Serializable {
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             UResource.Table unitTypesTable = value.getTable();
             for (int i2 = 0; unitTypesTable.getKeyAndValue(i2, key, value); ++i2) {
-                // Skip "compound" since it is treated differently from the other units
-                if (key.contentEquals("compound")) {
+                // Skip "compound" and "coordinate" since they are treated differently from the other units
+                if (key.contentEquals("compound") || key.contentEquals("coordinate")) {
                     continue;
                 }
 
@@ -511,32 +511,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit MILE_PER_GALLON_IMPERIAL = MeasureUnit.internalGetInstance("consumption", "mile-per-gallon-imperial");
 
     /**
-     * Constant for unit of coordinate: east
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @draft ICU 58, withdrawn
+     * public static final MeasureUnit EAST = MeasureUnit.internalGetInstance("coordinate", "east");
+     * public static final MeasureUnit NORTH = MeasureUnit.internalGetInstance("coordinate", "north");
+     * public static final MeasureUnit SOUTH = MeasureUnit.internalGetInstance("coordinate", "south");
+     * public static final MeasureUnit WEST = MeasureUnit.internalGetInstance("coordinate", "west");
      */
-    public static final MeasureUnit EAST = MeasureUnit.internalGetInstance("coordinate", "east");
-
-    /**
-     * Constant for unit of coordinate: north
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final MeasureUnit NORTH = MeasureUnit.internalGetInstance("coordinate", "north");
-
-    /**
-     * Constant for unit of coordinate: south
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final MeasureUnit SOUTH = MeasureUnit.internalGetInstance("coordinate", "south");
-
-    /**
-     * Constant for unit of coordinate: west
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final MeasureUnit WEST = MeasureUnit.internalGetInstance("coordinate", "west");
 
     /**
      * Constant for unit of digital: bit

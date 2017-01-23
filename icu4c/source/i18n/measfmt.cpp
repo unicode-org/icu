@@ -41,7 +41,7 @@
 #include "standardplural.h"
 #include "unifiedcache.h"
 
-#define MEAS_UNIT_COUNT 138
+#define MEAS_UNIT_COUNT 134
 #define WIDTH_INDEX_COUNT (UMEASFMT_WIDTH_NARROW + 1)
 
 U_NAMESPACE_BEGIN
@@ -288,10 +288,8 @@ struct UnitDataSink : public ResourceSink {
             return;
         }
 
-        if (value.getType() == URES_STRING) {
-            // Units like "coordinate" that don't have plural variants
-            setFormatterIfAbsent(StandardPlural::OTHER, value, 0, errorCode);
-        } else if (value.getType() == URES_TABLE) {
+        // We no longer handle units like "coordinate" here (which do not have plural variants)
+        if (value.getType() == URES_TABLE) {
             // Units that have plural variants
             ResourceTable patternTableTable = value.getTable(errorCode);
             if (U_FAILURE(errorCode)) { return; }
@@ -333,6 +331,8 @@ struct UnitDataSink : public ResourceSink {
                     consumeCompoundPattern(key, value, errorCode);
                 }
             }
+        } else if (uprv_strcmp(key, "coordinate") == 0) {
+            // special handling but we need to determine what that is
         } else {
             type = key;
             ResourceTable subtypeTable = value.getTable(errorCode);

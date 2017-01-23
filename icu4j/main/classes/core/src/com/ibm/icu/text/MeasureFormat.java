@@ -834,10 +834,8 @@ public class MeasureFormat extends UFormat {
             // Trigger a fresh lookup of the patterns for this unit+width.
             patterns = null;
 
-            if (value.getType() == ICUResourceBundle.STRING) {
-                // Units like "coordinate" that don't have plural variants
-                setFormatterIfAbsent(StandardPlural.OTHER.ordinal(), value, 0);
-            } else if (value.getType() == ICUResourceBundle.TABLE) {
+            // We no longer handle units like "coordinate" here (which do not have plural variants)
+            if (value.getType() == ICUResourceBundle.TABLE) {
                 // Units that have plural variants
                 UResource.Table patternTableTable = value.getTable();
                 for (int i = 0; patternTableTable.getKeyAndValue(i, key, value); i++) {
@@ -875,6 +873,8 @@ public class MeasureFormat extends UFormat {
                         consumeCompoundPattern(key, value);
                     }
                 }
+            } else if (key.contentEquals("coordinate")) {
+                // special handling but we need to determine what that is
             } else {
                 type = key.toString();
                 UResource.Table subtypeTable = value.getTable();
