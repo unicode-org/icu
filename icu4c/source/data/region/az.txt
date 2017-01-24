@@ -89,7 +89,7 @@ az{
         CW{"Kurasao"}
         CX{"Milad adası"}
         CY{"Kipr"}
-        CZ{"Çex Respublikası"}
+        CZ{"Çexiya"}
         DE{"Almaniya"}
         DG{"Dieqo Qarsiya"}
         DJ{"Cibuti"}
@@ -305,10 +305,10 @@ az{
         CD{"Konqo (KDR)"}
         CG{"Konqo (Respublika)"}
         CI{"Fil Dişi Sahili"}
-        CZ{"Çexiya"}
+        CZ{"Çex Respublikası"}
         FK{"Folklend adaları (Malvin adaları)"}
         MK{"Makedoniya (KYRM)"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

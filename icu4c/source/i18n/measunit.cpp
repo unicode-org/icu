@@ -46,14 +46,14 @@ static const int32_t gOffsets[] = {
     310,
     316,
     320,
-    339,
     340,
-    351,
-    357,
-    362,
-    366,
-    370,
-    395
+    341,
+    352,
+    358,
+    363,
+    367,
+    371,
+    396
 };
 
 static const int32_t gIndexes[] = {
@@ -69,14 +69,14 @@ static const int32_t gIndexes[] = {
     49,
     55,
     59,
-    78,
     79,
-    90,
-    96,
-    101,
-    105,
-    109,
-    134
+    80,
+    91,
+    97,
+    102,
+    106,
+    110,
+    135
 };
 
 // Must be sorted alphabetically.
@@ -442,6 +442,7 @@ static const char * const gSubTypes[] = {
     "nautical-mile",
     "parsec",
     "picometer",
+    "point",
     "yard",
     "lux",
     "carat",
@@ -506,11 +507,11 @@ static int32_t unitPerUnitToSingleUnit[][4] = {
         {327, 297, 16, 0},
         {329, 303, 16, 2},
         {331, 297, 16, 3},
-        {331, 384, 4, 2},
-        {331, 385, 4, 3},
-        {345, 382, 3, 1},
-        {348, 11, 15, 4},
-        {387, 327, 4, 1}
+        {331, 385, 4, 2},
+        {331, 386, 4, 3},
+        {346, 383, 3, 1},
+        {349, 11, 15, 4},
+        {388, 327, 4, 1}
 };
 
 MeasureUnit *MeasureUnit::createGForce(UErrorCode &status) {
@@ -829,8 +830,12 @@ MeasureUnit *MeasureUnit::createPicometer(UErrorCode &status) {
     return MeasureUnit::create(11, 17, status);
 }
 
-MeasureUnit *MeasureUnit::createYard(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createPoint(UErrorCode &status) {
     return MeasureUnit::create(11, 18, status);
+}
+
+MeasureUnit *MeasureUnit::createYard(UErrorCode &status) {
+    return MeasureUnit::create(11, 19, status);
 }
 
 MeasureUnit *MeasureUnit::createLux(UErrorCode &status) {

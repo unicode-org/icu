@@ -220,8 +220,8 @@ likelySubtags:table(nofallback){
     can{"can_Latn_ZZ"}
     cbj{"cbj_Latn_ZZ"}
     cch{"cch_Latn_NG"}
-    ccp{"ccp_Beng_IN"}
-    ccp_Cakm{"ccp_Cakm_BD"}
+    ccp{"ccp_Cakm_BD"}
+    ccp_Beng{"ccp_Beng_IN"}
     ce{"ce_Cyrl_RU"}
     ceb{"ceb_Latn_PH"}
     cfa{"cfa_Latn_ZZ"}

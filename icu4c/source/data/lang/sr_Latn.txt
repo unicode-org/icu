@@ -843,7 +843,7 @@ sr_Latn{
         TARASK{"Taraskijevička ortografija"}
         VALENCIA{"Valencijska"}
     }
-    Version{"2.1.29.33"}
+    Version{"2.1.31.74"}
     characterLabelPattern{
         all{"{0} — sve"}
         category-list{"{0}: {1}"}

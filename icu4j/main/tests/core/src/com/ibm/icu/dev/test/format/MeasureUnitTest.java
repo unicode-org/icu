@@ -74,7 +74,7 @@ public class MeasureUnitTest extends TestFmwk {
         }
     }
 
-    private static final String[] DRAFT_VERSIONS = {"57", "58"};
+    private static final String[] DRAFT_VERSIONS = {"57", "58", "59"};
 
     private static final HashSet<String> DRAFT_VERSION_SET = new HashSet<String>();
 
@@ -219,6 +219,7 @@ public class MeasureUnitTest extends TestFmwk {
         // {"NORTH", "58"},
         // {"SOUTH", "58"},
         // {"WEST", "58"},
+        {"POINT", "59"},
     };
 
     private static final HashMap<String, String> JAVA_VERSION_MAP = new HashMap<String, String>();
@@ -274,16 +275,16 @@ public class MeasureUnitTest extends TestFmwk {
         // http://site.icu-project.org/design/formatting/measureformat/updating-measure-unit
         // use this test to run each of the ollowing in succession
         //generateConstants("59"); // for MeasureUnit.java, update generated MeasureUnit constants
-        //generateBackwardCompatibilityTest("59.1"); // for MeasureUnitTest.java, create TestCompatible58_1
+        //generateBackwardCompatibilityTest("59"); // for MeasureUnitTest.java, create TestCompatible59
         //generateCXXHConstants("59"); // for measunit.h, update generated createXXX methods
         //generateCXXConstants(); // for measunit.cpp, update generated code
-        //generateCXXBackwardCompatibilityTest("59.1"); // for measfmttest.cpp, create TestCompatible58_1
+        //generateCXXBackwardCompatibilityTest("59"); // for measfmttest.cpp, create TestCompatible59
         //updateJAVAVersions("59"); // for MeasureUnitTest.java, JAVA_VERSIONS
     }
 */
 
     @Test
-    public void TestCompatible53_1() {
+    public void TestCompatible53() {
         MeasureUnit[] units = {
                 MeasureUnit.G_FORCE,
                 MeasureUnit.DEGREE,
@@ -336,7 +337,7 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     @Test
-    public void TestCompatible54_1() {
+    public void TestCompatible54() {
         MeasureUnit[] units = {
                 MeasureUnit.G_FORCE,
                 MeasureUnit.METER_PER_SECOND_SQUARED,
@@ -464,7 +465,7 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     @Test
-    public void TestCompatible55_1() {
+    public void TestCompatible55() {
         MeasureUnit[] units = {
                 MeasureUnit.G_FORCE,
                 MeasureUnit.METER_PER_SECOND_SQUARED,
@@ -593,7 +594,7 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     @Test
-    public void TestCompatible56_1() {
+    public void TestCompatible56() {
         MeasureUnit[] units = {
                 MeasureUnit.G_FORCE,
                 MeasureUnit.METER_PER_SECOND_SQUARED,
@@ -729,7 +730,7 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     @Test
-    public void TestCompatible57_1() {
+    public void TestCompatible57() {
         MeasureUnit[] units = {
                 MeasureUnit.G_FORCE,
                 MeasureUnit.METER_PER_SECOND_SQUARED,
@@ -870,7 +871,7 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     @Test
-    public void TestCompatible58_1() {
+    public void TestCompatible58() {
         MeasureUnit[] units = {
                 MeasureUnit.G_FORCE,
                 MeasureUnit.METER_PER_SECOND_SQUARED,
@@ -1015,7 +1016,7 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     @Test
-    public void TestCompatible59_1() {
+    public void TestCompatible59() {
         MeasureUnit[] units = {
                 MeasureUnit.G_FORCE,
                 MeasureUnit.METER_PER_SECOND_SQUARED,
@@ -1094,6 +1095,7 @@ public class MeasureUnitTest extends TestFmwk {
                 MeasureUnit.NAUTICAL_MILE,
                 MeasureUnit.PARSEC,
                 MeasureUnit.PICOMETER,
+                MeasureUnit.POINT,
                 MeasureUnit.YARD,
                 MeasureUnit.LUX,
                 MeasureUnit.CARAT,
@@ -1152,7 +1154,7 @@ public class MeasureUnitTest extends TestFmwk {
                 MeasureUnit.TABLESPOON,
                 MeasureUnit.TEASPOON,
         };
-        assertEquals("",  134, units.length);
+        assertEquals("",  135, units.length);
     }
 
     @Test
@@ -2098,10 +2100,11 @@ public class MeasureUnitTest extends TestFmwk {
                     System.out.println("     * @stable ICU " + getVersion(javaName, thisVersion));
                 }
                 System.out.println("     */");
-                System.out.printf("    static MeasureUnit *create%s(UErrorCode &status);\n\n", name);
+                System.out.printf("    static MeasureUnit *create%s(UErrorCode &status);\n", name);
                 if (isDraft(javaName)) {
                     System.out.println("#endif /* U_HIDE_DRAFT_API */");
                 }
+                System.out.println("");
             }
         }
     }
@@ -2283,11 +2286,20 @@ public class MeasureUnitTest extends TestFmwk {
         StringBuilder result = new StringBuilder();
         boolean caps = true;
         String code = unit.getSubtype();
+        if (code.equals("revolution")) {
+            code = code + "-angle";
+        }
+        if (code.equals("generic")) {
+             code = code + "-temperature";
+        }
         int len = code.length();
         for (int i = 0; i < len; i++) {
             char ch = code.charAt(i);
             if (ch == '-') {
                 caps = true;
+            } else if (Character.isDigit(ch)) {
+                caps = true;
+                result.append(ch);
             } else if (caps) {
                 result.append(Character.toUpperCase(ch));
                 caps = false;
@@ -2357,6 +2369,14 @@ public class MeasureUnitTest extends TestFmwk {
         if (type.equals("angle")) {
             if (code.equals("minute") || code.equals("second")) {
                 name = "ARC_" + name;
+            }
+            if (code.equals("revolution")) {
+                name = name + "_ANGLE";
+            }
+        }
+        if (type.equals("temperature")) {
+            if (code.equals("generic")) {
+                name = name + "_TEMPERATURE";
             }
         }
         return name;

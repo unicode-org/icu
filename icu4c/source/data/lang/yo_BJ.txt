@@ -11,5 +11,5 @@ yo_BJ{
         tr{"Èdè Tɔɔkisi"}
         zu{"Èdè Shulu"}
     }
-    Version{"2.1.29.54"}
+    Version{"2.1.31.33"}
 }

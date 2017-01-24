@@ -216,10 +216,20 @@ sv{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                one{"Ta {0}:a svängen till höger"}
+                other{"Ta {0}:e svängen till höger"}
+            }
+            plural{
+                one{"om {0} dag"}
+                other{"om {0} dagar"}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.30.7"}
+    Version{"2.1.31.34"}
     calendar{
         buddhist{
             eras{

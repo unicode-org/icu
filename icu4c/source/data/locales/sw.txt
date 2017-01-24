@@ -195,10 +195,19 @@ sw{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"Chukua mpinduko wa {0} kulia."}
+            }
+            plural{
+                one{"siku {0} iliyopita"}
+                other{"siku {0} zilizopita"}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
     calendar{
         generic{
             DateTimePatterns{

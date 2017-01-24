@@ -221,11 +221,19 @@ ja{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"{0} 番目の角を右折します。"}
+            }
+            plural{
+                other{"{0}日"}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
     calendar{
         buddhist{
             DateTimePatterns{

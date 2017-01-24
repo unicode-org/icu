@@ -203,10 +203,19 @@ de{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"{0}. Abzweigung nach rechts nehmen"}
+            }
+            plural{
+                one{"{0} Tag"}
+                other{"{0} Tage"}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
     calendar{
         buddhist{
             eras{

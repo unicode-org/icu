@@ -197,10 +197,19 @@ bg{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"Завийте надясно по {0}-ата пресечка."}
+            }
+            plural{
+                one{"{0} ден"}
+                other{"{0} дена"}
+            }
+        }
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.30.6"}
+    Version{"2.1.31.74"}
     calendar{
         generic{
             DateTimePatterns{

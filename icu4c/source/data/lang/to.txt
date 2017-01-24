@@ -882,7 +882,7 @@ to{
             tibt{"fika fakatipeti"}
         }
     }
-    Version{"2.1.27.98"}
+    Version{"2.1.31.74"}
     codePatterns{
         language{"Lea: {0}"}
         script{"Tohinima: {0}"}

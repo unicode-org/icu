@@ -87,6 +87,10 @@ public class TestLocaleValidity extends TestFmwk {
                 {"OK", "en-t-t0-und"},
                 {"OK", "en-t-x0-12345678"},
 
+                // temporary tests for h0,h1 to bootstrap data integration, will need more serious tests with 2-letter lang codes
+                {"OK", "en-t-h0-haw"},
+                {"OK", "ta-t-hi-h0-haw-h1-haw"},
+
                 {"OK", "en-u-rg-uszzzz"},
                 {"OK", "en-u-rg-USZZZZ"},
                 {"{region, 001}", "en-u-rg-001zzzz"}, // well-formed but invalid

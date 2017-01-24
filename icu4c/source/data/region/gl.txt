@@ -89,7 +89,7 @@ gl{
         CW{"Curaçao"}
         CX{"Illa de Nadal"}
         CY{"Chipre"}
-        CZ{"República Checa"}
+        CZ{"Chequia"}
         DE{"Alemaña"}
         DG{"Diego García"}
         DJ{"Djibuti"}
@@ -304,9 +304,9 @@ gl{
     Countries%variant{
         CD{"Congo (RDC)"}
         CG{"Congo (RC)"}
-        CZ{"Chequia"}
+        CZ{"República Checa"}
         FK{"Illas Malvinas (Falkland)"}
         MK{"Macedonia (ARIM)"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

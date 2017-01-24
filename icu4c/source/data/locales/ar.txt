@@ -366,10 +366,23 @@ ar{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"اتجه إلى المنعطف الـ {0} يمينًا."}
+            }
+            plural{
+                few{"{0} أولاد حضروا"}
+                many{"{0} ولدًا حضروا"}
+                one{"ولد واحد حضر"}
+                other{"{0} ولد حضروا"}
+                two{"ولدان حضرا"}
+                zero{"{0} كتاب"}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"arab"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
     calendar{
         buddhist{
             eras{

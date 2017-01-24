@@ -1841,7 +1841,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"30.0.3"}
+    cldrVersion{"31"}
     codeMappings{
         {
             "AA",
@@ -7355,20 +7355,47 @@ supplementalData:table(nofallback){
                 "ba01~9",
                 "ba10",
                 "bh16",
+                "cdbn",
+                "cdka",
+                "cdkw",
+                "cdor",
                 "ci01~9",
                 "ci10~9",
                 "cn71",
                 "cn91~2",
+                "cz10a~f",
+                "cz611~5",
+                "cz621~7",
+                "czjc",
+                "czjm",
+                "czka",
+                "czkr",
+                "czli",
+                "czmo",
+                "czol",
+                "czpa",
+                "czpl",
+                "czpr",
+                "czst",
+                "czus",
+                "czvy",
+                "czzl",
+                "fra~b",
                 "frbl",
-                "frgf",
+                "frc~g",
                 "frgp",
+                "frh~m",
                 "frmf",
-                "frmq",
+                "frn",
                 "frnc",
+                "fro~p",
                 "frpf",
                 "frpm",
+                "frq~r",
                 "frre",
+                "frs~t",
                 "frtf",
+                "fru~v",
                 "frwf",
                 "fryt",
                 "gbant",
@@ -7396,6 +7423,18 @@ supplementalData:table(nofallback){
                 "gbnym",
                 "gbomh",
                 "gbstb",
+                "gr01",
+                "gr03~7",
+                "gr11~7",
+                "gr21~4",
+                "gr31~4",
+                "gr41~4",
+                "gr51~9",
+                "gr61~4",
+                "gr71~3",
+                "gr81~5",
+                "gr91~4",
+                "gra1",
                 "is0",
                 "laxn",
                 "lud",
@@ -7414,6 +7453,7 @@ supplementalData:table(nofallback){
                 "mk79",
                 "mk84",
                 "mrnkc",
+                "mxdif",
                 "nlaw",
                 "nlcw",
                 "nlsx",
@@ -7428,6 +7468,7 @@ supplementalData:table(nofallback){
                 "twtnq",
                 "twtpq",
                 "twtxq",
+                "ug331",
                 "usas",
                 "usgu",
                 "usmp",
@@ -7609,7 +7650,7 @@ supplementalData:table(nofallback){
                 "bd40~9",
                 "bd50~9",
                 "bd60~4",
-                "bda~g",
+                "bda~h",
                 "bebru",
                 "bevan",
                 "bevbr",
@@ -7811,16 +7852,29 @@ supplementalData:table(nofallback){
                 "cask",
                 "cayt",
                 "cdbc",
-                "cdbn",
+                "cdbu",
                 "cdeq",
-                "cdka",
+                "cdhk~l",
+                "cdhu",
+                "cdit",
+                "cdkc",
                 "cdke",
+                "cdkg",
+                "cdkl",
                 "cdkn",
-                "cdkw",
+                "cdks",
+                "cdlo",
+                "cdlu",
                 "cdma",
+                "cdmn~o",
                 "cdnk",
-                "cdor",
+                "cdnu",
+                "cdsa",
                 "cdsk",
+                "cdsu",
+                "cdta",
+                "cdto",
+                "cdtu",
                 "cfac",
                 "cfbb",
                 "cfbgf",
@@ -7979,36 +8033,37 @@ supplementalData:table(nofallback){
                 "cvta",
                 "cvts",
                 "cy01~6",
+                "cz10",
                 "cz101~9",
-                "cz10a~f",
+                "cz110~9",
+                "cz120~2",
+                "cz20",
                 "cz201~9",
                 "cz20a~c",
+                "cz31",
                 "cz311~7",
+                "cz32",
                 "cz321~7",
+                "cz41",
                 "cz411~3",
+                "cz42",
                 "cz421~7",
+                "cz51",
                 "cz511~4",
+                "cz52",
                 "cz521~5",
+                "cz53",
                 "cz531~4",
-                "cz611~5",
-                "cz621~7",
+                "cz63",
+                "cz631~5",
+                "cz64",
+                "cz641~7",
+                "cz71",
                 "cz711~5",
+                "cz72",
                 "cz721~4",
+                "cz80",
                 "cz801~6",
-                "czjc",
-                "czjm",
-                "czka",
-                "czkr",
-                "czli",
-                "czmo",
-                "czol",
-                "czpa",
-                "czpl",
-                "czpr",
-                "czst",
-                "czus",
-                "czvy",
-                "czzl",
                 "debb",
                 "debe",
                 "debw",
@@ -8188,9 +8243,25 @@ supplementalData:table(nofallback){
                 "fr70~9",
                 "fr80~9",
                 "fr90~5",
-                "fra~c",
+                "frara",
+                "frbfc",
+                "frbre",
+                "frcor",
                 "frcp",
-                "frd~v",
+                "frcvl",
+                "frges",
+                "frgf",
+                "frgua",
+                "frhdf",
+                "fridf",
+                "frlre",
+                "frmay",
+                "frmq",
+                "frnaq",
+                "frnor",
+                "frocc",
+                "frpac",
+                "frpdl",
                 "ga1~9",
                 "gbabc~e",
                 "gbagb",
@@ -8480,21 +8551,8 @@ supplementalData:table(nofallback){
                 "gqkn",
                 "gqli",
                 "gqwn",
-                "gr01",
-                "gr03~7",
-                "gr11~7",
-                "gr21~4",
-                "gr31~4",
-                "gr41~4",
-                "gr51~9",
-                "gr61~4",
                 "gr69",
-                "gr71~3",
-                "gr81~5",
-                "gr91~4",
-                "gra",
-                "gra1",
-                "grb~m",
+                "gra~m",
                 "gtav",
                 "gtbv",
                 "gtcm",
@@ -8888,6 +8946,7 @@ supplementalData:table(nofallback){
                 "kzalm",
                 "kzast",
                 "kzaty",
+                "kzbay",
                 "kzkar",
                 "kzkus",
                 "kzkzy",
@@ -9290,9 +9349,9 @@ supplementalData:table(nofallback){
                 "mxcam",
                 "mxchh",
                 "mxchp",
+                "mxcmx",
                 "mxcoa",
                 "mxcol",
-                "mxdif",
                 "mxdur",
                 "mxgro",
                 "mxgua",
@@ -9847,7 +9906,7 @@ supplementalData:table(nofallback){
                 "si180~9",
                 "si190~9",
                 "si200~9",
-                "si210~2",
+                "si210~3",
                 "skbc",
                 "skbl",
                 "skki",
@@ -9986,6 +10045,7 @@ supplementalData:table(nofallback){
                 "tjdu",
                 "tjgb",
                 "tjkt",
+                "tjra",
                 "tjsu",
                 "tlal",
                 "tlan",
@@ -10108,10 +10168,10 @@ supplementalData:table(nofallback){
                 "ug301~9",
                 "ug310~9",
                 "ug320~9",
-                "ug330~1",
+                "ug330",
                 "ug401~9",
                 "ug410~9",
-                "ug420~5",
+                "ug420~6",
                 "ugc",
                 "uge",
                 "ugn",
@@ -16475,6 +16535,84 @@ supplementalData:table(nofallback){
     languageMatching{
         written{
             {
+                "no",
+                "nb",
+                "99",
+                "0",
+            }
+            {
+                "ku",
+                "ckb",
+                "96",
+                "0",
+            }
+            {
+                "hr",
+                "bs",
+                "96",
+                "0",
+            }
+            {
+                "sh",
+                "bs",
+                "96",
+                "0",
+            }
+            {
+                "sr",
+                "bs",
+                "96",
+                "0",
+            }
+            {
+                "sh",
+                "hr",
+                "96",
+                "0",
+            }
+            {
+                "sr",
+                "hr",
+                "96",
+                "0",
+            }
+            {
+                "sh",
+                "sr",
+                "96",
+                "0",
+            }
+            {
+                "ssy",
+                "aa",
+                "96",
+                "0",
+            }
+            {
+                "gsw",
+                "de",
+                "96",
+                "1",
+            }
+            {
+                "lb",
+                "de",
+                "96",
+                "1",
+            }
+            {
+                "da",
+                "no",
+                "92",
+                "0",
+            }
+            {
+                "da",
+                "nb",
+                "92",
+                "0",
+            }
+            {
                 "ab",
                 "ru",
                 "90",
@@ -16511,13 +16649,19 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "az",
+                "ru",
+                "90",
+                "1",
+            }
+            {
                 "az_Latn",
                 "ru_Cyrl",
                 "90",
                 "1",
             }
             {
-                "az",
+                "be",
                 "ru",
                 "90",
                 "1",
@@ -16529,26 +16673,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "be",
-                "ru",
-                "90",
-                "1",
-            }
-            {
                 "bh",
                 "hi",
                 "90",
                 "1",
             }
             {
-                "bn_Beng",
-                "en_Latn",
+                "bn",
+                "en",
                 "90",
                 "1",
             }
             {
-                "bn",
-                "en",
+                "bn_Beng",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -16577,12 +16715,6 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "ckb",
-                "ku",
-                "92",
-                "0",
-            }
-            {
                 "co",
                 "fr",
                 "90",
@@ -16601,70 +16733,16 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "da",
-                "nb",
-                "92",
-                "0",
-            }
-            {
-                "da",
-                "no",
-                "92",
-                "0",
-            }
-            {
                 "ee",
                 "en",
                 "90",
                 "1",
             }
             {
-                "en_*_001",
-                "en_*_*",
-                "96",
-                "0",
-            }
-            {
-                "en_*_GB",
-                "en_*_*",
-                "96",
-                "0",
-            }
-            {
-                "en_*_US",
-                "en_*_*",
-                "94",
-                "0",
-            }
-            {
-                "en_*_*",
-                "en_*_*",
-                "95",
-                "0",
-            }
-            {
                 "eo",
                 "en",
                 "90",
                 "1",
-            }
-            {
-                "es_*_419",
-                "es_*_*",
-                "96",
-                "0",
-            }
-            {
-                "es_*_ES",
-                "es_*_*",
-                "92",
-                "0",
-            }
-            {
-                "es_*_*",
-                "es_*_*",
-                "95",
-                "0",
             }
             {
                 "et",
@@ -16691,13 +16769,13 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "gaa",
+                "ga",
                 "en",
                 "90",
                 "1",
             }
             {
-                "ga",
+                "gaa",
                 "en",
                 "90",
                 "1",
@@ -16721,12 +16799,6 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "gsw",
-                "de",
-                "96",
-                "1",
-            }
-            {
                 "gu",
                 "hi",
                 "90",
@@ -16745,26 +16817,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "hr",
-                "bs",
-                "96",
-                "0",
-            }
-            {
                 "ht",
                 "fr",
                 "90",
                 "1",
             }
             {
-                "hy_Armn",
-                "ru_Cyrl",
+                "hy",
+                "ru",
                 "90",
                 "1",
             }
             {
-                "hy",
-                "ru",
+                "hy_Armn",
+                "ru_Cyrl",
                 "90",
                 "1",
             }
@@ -16817,19 +16883,13 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "km_Khmr",
-                "en_Latn",
-                "90",
-                "1",
-            }
-            {
                 "km",
                 "en",
                 "90",
                 "1",
             }
             {
-                "kn_Knda",
+                "km_Khmr",
                 "en_Latn",
                 "90",
                 "1",
@@ -16841,16 +16901,16 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "kri",
-                "en",
+                "kn_Knda",
+                "en_Latn",
                 "90",
                 "1",
             }
             {
-                "ku",
-                "ckb",
-                "96",
-                "0",
+                "kri",
+                "en",
+                "90",
+                "1",
             }
             {
                 "ku",
@@ -16871,12 +16931,6 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "lb",
-                "de",
-                "96",
-                "1",
-            }
-            {
                 "lg",
                 "en",
                 "90",
@@ -16889,14 +16943,14 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "lo_Laoo",
-                "en_Latn",
+                "lo",
+                "en",
                 "90",
                 "1",
             }
             {
-                "lo",
-                "en",
+                "lo_Laoo",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -16937,14 +16991,14 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "ml_Mlym",
-                "en_Latn",
+                "ml",
+                "en",
                 "90",
                 "1",
             }
             {
-                "ml",
-                "en",
+                "ml_Mlym",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -16973,19 +17027,13 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "my_Mymr",
-                "en_Latn",
-                "90",
-                "1",
-            }
-            {
                 "my",
                 "en",
                 "90",
                 "1",
             }
             {
-                "ne_Deva",
+                "my_Mymr",
                 "en_Latn",
                 "90",
                 "1",
@@ -16997,6 +17045,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "ne_Deva",
+                "en_Latn",
+                "90",
+                "1",
+            }
+            {
                 "nn",
                 "nb",
                 "90",
@@ -17007,12 +17061,6 @@ supplementalData:table(nofallback){
                 "no",
                 "90",
                 "1",
-            }
-            {
-                "no",
-                "nb",
-                "99",
-                "0",
             }
             {
                 "nso",
@@ -17045,19 +17093,13 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "or_Orya",
-                "en_Latn",
-                "90",
-                "1",
-            }
-            {
                 "or",
                 "en",
                 "90",
                 "1",
             }
             {
-                "pa_Guru",
+                "or_Orya",
                 "en_Latn",
                 "90",
                 "1",
@@ -17069,14 +17111,14 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "pcm",
-                "en",
+                "pa_Guru",
+                "en_Latn",
                 "90",
                 "1",
             }
             {
-                "ps_Arab",
-                "en_Latn",
+                "pcm",
+                "en",
                 "90",
                 "1",
             }
@@ -17087,28 +17129,10 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "pt_*_BR",
-                "pt_*_US",
-                "96",
-                "0",
-            }
-            {
-                "pt_*_BR",
-                "pt_*_*",
-                "92",
-                "0",
-            }
-            {
-                "pt_*_US",
-                "pt_*_*",
-                "92",
-                "0",
-            }
-            {
-                "pt_*_*",
-                "pt_*_*",
-                "96",
-                "0",
+                "ps_Arab",
+                "en_Latn",
+                "90",
+                "1",
             }
             {
                 "qu",
@@ -17141,37 +17165,13 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "sd_Arab",
-                "en_Latn",
-                "90",
-                "1",
-            }
-            {
                 "sd",
                 "en",
                 "90",
                 "1",
             }
             {
-                "sh",
-                "bs",
-                "96",
-                "0",
-            }
-            {
-                "sh",
-                "hr",
-                "96",
-                "0",
-            }
-            {
-                "sh",
-                "sr",
-                "96",
-                "0",
-            }
-            {
-                "si_Sinh",
+                "sd_Arab",
                 "en_Latn",
                 "90",
                 "1",
@@ -17179,6 +17179,12 @@ supplementalData:table(nofallback){
             {
                 "si",
                 "en",
+                "90",
+                "1",
+            }
+            {
+                "si_Sinh",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -17201,30 +17207,6 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "sr_Latn",
-                "sr_Cyrl",
-                "95",
-                "0",
-            }
-            {
-                "sr",
-                "bs",
-                "96",
-                "0",
-            }
-            {
-                "sr",
-                "hr",
-                "96",
-                "0",
-            }
-            {
-                "ssy",
-                "aa",
-                "96",
-                "0",
-            }
-            {
                 "st",
                 "en",
                 "90",
@@ -17243,19 +17225,13 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "ta_Taml",
-                "en_Latn",
-                "90",
-                "1",
-            }
-            {
                 "ta",
                 "en",
                 "90",
                 "1",
             }
             {
-                "te_Telu",
+                "ta_Taml",
                 "en_Latn",
                 "90",
                 "1",
@@ -17267,14 +17243,14 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "tg",
-                "ru",
+                "te_Telu",
+                "en_Latn",
                 "90",
                 "1",
             }
             {
-                "ti_Ethi",
-                "en_Latn",
+                "tg",
+                "ru",
                 "90",
                 "1",
             }
@@ -17285,14 +17261,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "tk_Latn",
-                "ru_Cyrl",
+                "ti_Ethi",
+                "en_Latn",
                 "90",
                 "1",
             }
             {
                 "tk",
                 "ru",
+                "90",
+                "1",
+            }
+            {
+                "tk_Latn",
+                "ru_Cyrl",
                 "90",
                 "1",
             }
@@ -17333,26 +17315,26 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "ur_Arab",
-                "en_Latn",
-                "90",
-                "1",
-            }
-            {
                 "ur",
                 "en",
                 "90",
                 "1",
             }
             {
-                "uz_Latn",
-                "ru_Cyrl",
+                "ur_Arab",
+                "en_Latn",
                 "90",
                 "1",
             }
             {
                 "uz",
                 "ru",
+                "90",
+                "1",
+            }
+            {
+                "uz_Latn",
+                "ru_Cyrl",
                 "90",
                 "1",
             }
@@ -17369,14 +17351,14 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "yi_Hebr",
-                "en_Latn",
+                "yi",
+                "en",
                 "90",
                 "1",
             }
             {
-                "yi",
-                "en",
+                "yi_Hebr",
+                "en_Latn",
                 "90",
                 "1",
             }
@@ -17387,33 +17369,105 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "zh_Hant_HK",
-                "zh_Hant_MO",
-                "97",
-                "0",
-            }
-            {
                 "zu",
                 "en",
                 "90",
                 "1",
             }
             {
-                "*_Hans",
-                "*_Hant",
+                "sr_Latn",
+                "sr_Cyrl",
+                "95",
+                "0",
+            }
+            {
+                "zh_Hans",
+                "zh_Hant",
                 "85",
                 "1",
             }
             {
-                "*_Hant",
-                "*_Hans",
+                "zh_Hant",
+                "zh_Hans",
                 "81",
                 "1",
             }
             {
-                "*_*_*",
-                "*_*_*",
+                "zh_Hant_HK",
+                "zh_Hant_MO",
+                "97",
+                "0",
+            }
+            {
+                "pt_*_BR",
+                "pt_*_US",
                 "96",
+                "0",
+            }
+            {
+                "pt_*_US",
+                "pt_*_*",
+                "92",
+                "0",
+            }
+            {
+                "pt_*_BR",
+                "pt_*_*",
+                "92",
+                "0",
+            }
+            {
+                "pt_*_*",
+                "pt_*_*",
+                "96",
+                "0",
+            }
+            {
+                "en_*_US",
+                "en_*_*",
+                "94",
+                "0",
+            }
+            {
+                "en_*_GB",
+                "en_*_*",
+                "96",
+                "0",
+            }
+            {
+                "en_*_001",
+                "en_*_*",
+                "96",
+                "0",
+            }
+            {
+                "en_*_*",
+                "en_*_*",
+                "95",
+                "0",
+            }
+            {
+                "es_*_ES",
+                "es_*_*",
+                "92",
+                "0",
+            }
+            {
+                "es_*_419",
+                "es_*_*",
+                "96",
+                "0",
+            }
+            {
+                "es_*_*",
+                "es_*_*",
+                "95",
+                "0",
+            }
+            {
+                "*",
+                "*",
+                "20",
                 "0",
             }
             {
@@ -17423,9 +17477,991 @@ supplementalData:table(nofallback){
                 "0",
             }
             {
+                "*_*_*",
+                "*_*_*",
+                "96",
+                "0",
+            }
+        }
+    }
+    languageMatchingInfo{
+        written{
+            matchVariable{
+                americas{"019"}
+                cnsar{"HK+MO"}
+                enUS{"AS+GU+MH+MP+PR+UM+US+VI"}
+                maghreb{"MA+DZ+TN+LY+MR+EH"}
+            }
+            paradigmLocales{
+                "en",
+                "en-GB",
+                "es",
+                "es-419",
+                "pt-BR",
+                "pt-PT",
+            }
+        }
+    }
+    languageMatchingNew{
+        written{
+            {
+                "no",
+                "nb",
+                "1",
+                "0",
+            }
+            {
+                "ku",
+                "ckb",
+                "4",
+                "0",
+            }
+            {
+                "hr",
+                "bs",
+                "4",
+                "0",
+            }
+            {
+                "sh",
+                "bs",
+                "4",
+                "0",
+            }
+            {
+                "sr",
+                "bs",
+                "4",
+                "0",
+            }
+            {
+                "sh",
+                "hr",
+                "4",
+                "0",
+            }
+            {
+                "sr",
+                "hr",
+                "4",
+                "0",
+            }
+            {
+                "sh",
+                "sr",
+                "4",
+                "0",
+            }
+            {
+                "ssy",
+                "aa",
+                "4",
+                "0",
+            }
+            {
+                "gsw",
+                "de",
+                "4",
+                "1",
+            }
+            {
+                "lb",
+                "de",
+                "4",
+                "1",
+            }
+            {
+                "da",
+                "no",
+                "8",
+                "0",
+            }
+            {
+                "da",
+                "nb",
+                "8",
+                "0",
+            }
+            {
+                "ab",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "ach",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "af",
+                "nl",
+                "10",
+                "1",
+            }
+            {
+                "ak",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ay",
+                "es",
+                "10",
+                "1",
+            }
+            {
+                "az",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "be",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "bem",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "bh",
+                "hi",
+                "10",
+                "1",
+            }
+            {
+                "bn",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "br",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "ceb",
+                "fil",
+                "10",
+                "1",
+            }
+            {
+                "chr",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ckb",
+                "ar",
+                "10",
+                "1",
+            }
+            {
+                "co",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "crs",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "cy",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ee",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "eo",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "et",
+                "fi",
+                "10",
+                "1",
+            }
+            {
+                "eu",
+                "es",
+                "10",
+                "1",
+            }
+            {
+                "fo",
+                "da",
+                "10",
+                "1",
+            }
+            {
+                "fy",
+                "nl",
+                "10",
+                "1",
+            }
+            {
+                "ga",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "gaa",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "gd",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "gl",
+                "es",
+                "10",
+                "1",
+            }
+            {
+                "gn",
+                "es",
+                "10",
+                "1",
+            }
+            {
+                "gu",
+                "hi",
+                "10",
+                "1",
+            }
+            {
+                "ha",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "haw",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ht",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "hy",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "ia",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ig",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "is",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "jv",
+                "id",
+                "10",
+                "1",
+            }
+            {
+                "ka",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "kg",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "kk",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "km",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "kn",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "kri",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ku",
+                "tr",
+                "10",
+                "1",
+            }
+            {
+                "ky",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "la",
+                "it",
+                "10",
+                "1",
+            }
+            {
+                "lg",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ln",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "lo",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "loz",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "lua",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "mfe",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "mg",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "mi",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "mk",
+                "bg",
+                "10",
+                "1",
+            }
+            {
+                "ml",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "mn",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "mr",
+                "hi",
+                "10",
+                "1",
+            }
+            {
+                "ms",
+                "id",
+                "10",
+                "1",
+            }
+            {
+                "mt",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "my",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ne",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "nn",
+                "nb",
+                "10",
+                "0",
+            }
+            {
+                "nn",
+                "no",
+                "10",
+                "1",
+            }
+            {
+                "nso",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ny",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "nyn",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "oc",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "om",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "or",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "pa",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "pcm",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ps",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "qu",
+                "es",
+                "10",
+                "1",
+            }
+            {
+                "rm",
+                "de",
+                "10",
+                "1",
+            }
+            {
+                "rn",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "rw",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "sa",
+                "hi",
+                "10",
+                "1",
+            }
+            {
+                "sd",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "si",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "sn",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "so",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "sq",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "st",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "su",
+                "id",
+                "10",
+                "1",
+            }
+            {
+                "sw",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ta",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "te",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "tg",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "ti",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "tk",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "tlh",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "tn",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "to",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "tt",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "tum",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "ug",
+                "zh",
+                "10",
+                "1",
+            }
+            {
+                "ur",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "uz",
+                "ru",
+                "10",
+                "1",
+            }
+            {
+                "wo",
+                "fr",
+                "10",
+                "1",
+            }
+            {
+                "xh",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "yi",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "yo",
+                "en",
+                "10",
+                "1",
+            }
+            {
+                "zu",
+                "en",
+                "10",
+                "1",
+            }
+            {
                 "*",
                 "*",
-                "20",
+                "80",
+                "0",
+            }
+            {
+                "az_Latn",
+                "ru_Cyrl",
+                "10",
+                "1",
+            }
+            {
+                "bn_Beng",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "hy_Armn",
+                "ru_Cyrl",
+                "10",
+                "1",
+            }
+            {
+                "ka_Geor",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "km_Khmr",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "kn_Knda",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "lo_Laoo",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "ml_Mlym",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "my_Mymr",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "ne_Deva",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "or_Orya",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "pa_Guru",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "ps_Arab",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "sd_Arab",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "si_Sinh",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "ta_Taml",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "te_Telu",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "ti_Ethi",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "tk_Latn",
+                "ru_Cyrl",
+                "10",
+                "1",
+            }
+            {
+                "ur_Arab",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "uz_Latn",
+                "ru_Cyrl",
+                "10",
+                "1",
+            }
+            {
+                "yi_Hebr",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "sr_Latn",
+                "sr_Cyrl",
+                "5",
+                "0",
+            }
+            {
+                "zh_Hans",
+                "zh_Hant",
+                "15",
+                "1",
+            }
+            {
+                "zh_Hant",
+                "zh_Hans",
+                "19",
+                "1",
+            }
+            {
+                "*_*",
+                "*_*",
+                "50",
+                "0",
+            }
+            {
+                "ar_*_$maghreb",
+                "ar_*_$maghreb",
+                "4",
+                "0",
+            }
+            {
+                "ar_*_$!maghreb",
+                "ar_*_$!maghreb",
+                "4",
+                "0",
+            }
+            {
+                "ar_*_*",
+                "ar_*_*",
+                "5",
+                "0",
+            }
+            {
+                "en_*_$enUS",
+                "en_*_$enUS",
+                "4",
+                "0",
+            }
+            {
+                "en_*_$!enUS",
+                "en_*_$!enUS",
+                "4",
+                "0",
+            }
+            {
+                "en_*_*",
+                "en_*_*",
+                "5",
+                "0",
+            }
+            {
+                "es_*_$americas",
+                "es_*_$americas",
+                "4",
+                "0",
+            }
+            {
+                "es_*_$!americas",
+                "es_*_$!americas",
+                "4",
+                "0",
+            }
+            {
+                "es_*_*",
+                "es_*_*",
+                "5",
+                "0",
+            }
+            {
+                "pt_*_$americas",
+                "pt_*_$americas",
+                "4",
+                "0",
+            }
+            {
+                "pt_*_$!americas",
+                "pt_*_$!americas",
+                "4",
+                "0",
+            }
+            {
+                "pt_*_*",
+                "pt_*_*",
+                "5",
+                "0",
+            }
+            {
+                "zh_Hant_$cnsar",
+                "zh_Hant_$cnsar",
+                "4",
+                "0",
+            }
+            {
+                "zh_Hant_$!cnsar",
+                "zh_Hant_$!cnsar",
+                "4",
+                "0",
+            }
+            {
+                "zh_Hant_*",
+                "zh_Hant_*",
+                "5",
+                "0",
+            }
+            {
+                "*_*_*",
+                "*_*_*",
+                "4",
                 "0",
             }
         }
@@ -17663,6 +18699,7 @@ supplementalData:table(nofallback){
             "es_AR",
             "es_BO",
             "es_BR",
+            "es_BZ",
             "es_CL",
             "es_CO",
             "es_CR",
@@ -17983,6 +19020,7 @@ supplementalData:table(nofallback){
             "E",
             "F",
             "G",
+            "H",
         }
         BD-A{
             "02",
@@ -18010,17 +19048,13 @@ supplementalData:table(nofallback){
             "15",
             "17",
             "18",
-            "21",
             "26",
             "33",
-            "34",
             "35",
             "36",
             "40",
-            "41",
             "42",
             "53",
-            "57",
             "62",
             "63",
         }
@@ -18044,7 +19078,6 @@ supplementalData:table(nofallback){
             "48",
             "49",
             "54",
-            "55",
             "59",
         }
         BD-F{
@@ -18054,6 +19087,7 @@ supplementalData:table(nofallback){
             "32",
             "46",
             "52",
+            "55",
             "64",
         }
         BD-G{
@@ -18061,6 +19095,12 @@ supplementalData:table(nofallback){
             "38",
             "60",
             "61",
+        }
+        BD-H{
+            "21",
+            "34",
+            "41",
+            "57",
         }
         BE{
             "BRU",
@@ -18393,16 +19433,31 @@ supplementalData:table(nofallback){
         }
         CD{
             "BC",
-            "BN",
+            "BU",
             "EQ",
-            "KA",
+            "HK",
+            "HL",
+            "HU",
+            "IT",
+            "KC",
             "KE",
+            "KG",
+            "KL",
             "KN",
-            "KW",
+            "KS",
+            "LO",
+            "LU",
             "MA",
+            "MN",
+            "MO",
             "NK",
-            "OR",
+            "NU",
+            "SA",
             "SK",
+            "SU",
+            "TA",
+            "TO",
+            "TU",
         }
         CF{
             "AC",
@@ -18647,94 +19702,22 @@ supplementalData:table(nofallback){
             "06",
         }
         CZ{
-            "JC",
-            "JM",
-            "KA",
-            "KR",
-            "LI",
-            "MO",
-            "OL",
-            "PA",
-            "PL",
-            "PR",
-            "ST",
-            "US",
-            "VY",
-            "ZL",
+            "10",
+            "20",
+            "31",
+            "32",
+            "41",
+            "42",
+            "51",
+            "52",
+            "53",
+            "63",
+            "64",
+            "71",
+            "72",
+            "80",
         }
-        CZ-JC{
-            "311",
-            "312",
-            "313",
-            "314",
-            "315",
-            "316",
-            "317",
-        }
-        CZ-JM{
-            "621",
-            "622",
-            "623",
-            "624",
-            "625",
-            "626",
-            "627",
-        }
-        CZ-KA{
-            "411",
-            "412",
-            "413",
-        }
-        CZ-KR{
-            "521",
-            "522",
-            "523",
-            "524",
-            "525",
-        }
-        CZ-LI{
-            "511",
-            "512",
-            "513",
-            "514",
-        }
-        CZ-MO{
-            "801",
-            "802",
-            "803",
-            "804",
-            "805",
-            "806",
-        }
-        CZ-OL{
-            "711",
-            "712",
-            "713",
-            "714",
-            "715",
-        }
-        CZ-PA{
-            "531",
-            "532",
-            "533",
-            "534",
-        }
-        CZ-PL{
-            "321",
-            "322",
-            "323",
-            "324",
-            "325",
-            "326",
-            "327",
-        }
-        CZ-PR{
-            "10A",
-            "10B",
-            "10C",
-            "10D",
-            "10E",
-            "10F",
+        CZ-10{
             "101",
             "102",
             "103",
@@ -18744,8 +19727,21 @@ supplementalData:table(nofallback){
             "107",
             "108",
             "109",
+            "110",
+            "111",
+            "112",
+            "113",
+            "114",
+            "115",
+            "116",
+            "117",
+            "118",
+            "119",
+            "120",
+            "121",
+            "122",
         }
-        CZ-ST{
+        CZ-20{
             "20A",
             "20B",
             "20C",
@@ -18759,7 +19755,30 @@ supplementalData:table(nofallback){
             "208",
             "209",
         }
-        CZ-US{
+        CZ-31{
+            "311",
+            "312",
+            "313",
+            "314",
+            "315",
+            "316",
+            "317",
+        }
+        CZ-32{
+            "321",
+            "322",
+            "323",
+            "324",
+            "325",
+            "326",
+            "327",
+        }
+        CZ-41{
+            "411",
+            "412",
+            "413",
+        }
+        CZ-42{
             "421",
             "422",
             "423",
@@ -18768,18 +19787,61 @@ supplementalData:table(nofallback){
             "426",
             "427",
         }
-        CZ-VY{
-            "611",
-            "612",
-            "613",
-            "614",
-            "615",
+        CZ-51{
+            "511",
+            "512",
+            "513",
+            "514",
         }
-        CZ-ZL{
+        CZ-52{
+            "521",
+            "522",
+            "523",
+            "524",
+            "525",
+        }
+        CZ-53{
+            "531",
+            "532",
+            "533",
+            "534",
+        }
+        CZ-63{
+            "631",
+            "632",
+            "633",
+            "634",
+            "635",
+        }
+        CZ-64{
+            "641",
+            "642",
+            "643",
+            "644",
+            "645",
+            "646",
+            "647",
+        }
+        CZ-71{
+            "711",
+            "712",
+            "713",
+            "714",
+            "715",
+        }
+        CZ-72{
             "721",
             "722",
             "723",
             "724",
+        }
+        CZ-80{
+            "801",
+            "802",
+            "803",
+            "804",
+            "805",
+            "806",
         }
         DE{
             "BB",
@@ -19146,25 +20208,33 @@ supplementalData:table(nofallback){
             "19",
         }
         FJ{
-            "01",
-            "02",
-            "03",
-            "04",
-            "05",
-            "06",
-            "07",
-            "08",
-            "09",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
             "C",
             "E",
             "N",
             "R",
             "W",
+        }
+        FJ-C{
+            "09",
+            "10",
+            "12",
+            "13",
+            "14",
+        }
+        FJ-E{
+            "04",
+            "05",
+            "06",
+        }
+        FJ-N{
+            "02",
+            "03",
+            "07",
+        }
+        FJ-W{
+            "01",
+            "08",
+            "11",
         }
         FM{
             "KSA",
@@ -19173,72 +20243,68 @@ supplementalData:table(nofallback){
             "YAP",
         }
         FR{
-            "A",
-            "B",
+            "ARA",
+            "BFC",
             "BL",
-            "C",
+            "BRE",
+            "COR",
             "CP",
-            "D",
-            "E",
-            "F",
-            "G",
+            "CVL",
+            "GES",
             "GF",
-            "GP",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
+            "GUA",
+            "HDF",
+            "IDF",
+            "LRE",
+            "MAY",
             "MF",
             "MQ",
-            "N",
+            "NAQ",
             "NC",
-            "O",
-            "P",
+            "NOR",
+            "OCC",
+            "PAC",
+            "PDL",
             "PF",
             "PM",
-            "Q",
-            "R",
-            "RE",
-            "S",
-            "T",
             "TF",
-            "U",
-            "V",
             "WF",
-            "YT",
         }
-        FR-A{
-            "67",
-            "68",
-        }
-        FR-B{
-            "24",
-            "33",
-            "40",
-            "47",
-            "64",
-        }
-        FR-C{
+        FR-ARA{
+            "01",
             "03",
+            "07",
             "15",
+            "26",
+            "38",
+            "42",
             "43",
             "63",
+            "69",
+            "73",
+            "74",
         }
-        FR-D{
+        FR-BFC{
             "21",
+            "25",
+            "39",
             "58",
+            "70",
             "71",
             "89",
+            "90",
         }
-        FR-E{
+        FR-BRE{
             "22",
             "29",
             "35",
             "56",
         }
-        FR-F{
+        FR-COR{
+            "2A",
+            "2B",
+        }
+        FR-CVL{
             "18",
             "28",
             "36",
@@ -19246,23 +20312,27 @@ supplementalData:table(nofallback){
             "41",
             "45",
         }
-        FR-G{
+        FR-GES{
             "08",
             "10",
             "51",
             "52",
+            "54",
+            "55",
+            "57",
+            "67",
+            "68",
+            "88",
         }
-        FR-H{
-            "2A",
-            "2B",
+        FR-GUA{"GP"}
+        FR-HDF{
+            "02",
+            "59",
+            "60",
+            "62",
+            "80",
         }
-        FR-I{
-            "25",
-            "39",
-            "70",
-            "90",
-        }
-        FR-J{
+        FR-IDF{
             "75",
             "77",
             "78",
@@ -19272,66 +20342,45 @@ supplementalData:table(nofallback){
             "94",
             "95",
         }
-        FR-K{
-            "11",
-            "30",
-            "34",
-            "48",
-            "66",
-        }
-        FR-L{
+        FR-LRE{"RE"}
+        FR-MAY{"YT"}
+        FR-NAQ{
+            "16",
+            "17",
             "19",
             "23",
+            "24",
+            "33",
+            "40",
+            "47",
+            "64",
+            "79",
+            "86",
             "87",
         }
-        FR-M{
-            "54",
-            "55",
-            "57",
-            "88",
+        FR-NOR{
+            "14",
+            "27",
+            "50",
+            "61",
+            "76",
         }
-        FR-N{
+        FR-OCC{
             "09",
+            "11",
             "12",
+            "30",
             "31",
             "32",
+            "34",
             "46",
+            "48",
             "65",
+            "66",
             "81",
             "82",
         }
-        FR-O{
-            "59",
-            "62",
-        }
-        FR-P{
-            "14",
-            "50",
-            "61",
-        }
-        FR-Q{
-            "27",
-            "76",
-        }
-        FR-R{
-            "44",
-            "49",
-            "53",
-            "72",
-            "85",
-        }
-        FR-S{
-            "02",
-            "60",
-            "80",
-        }
-        FR-T{
-            "16",
-            "17",
-            "79",
-            "86",
-        }
-        FR-U{
+        FR-PAC{
             "04",
             "05",
             "06",
@@ -19339,15 +20388,12 @@ supplementalData:table(nofallback){
             "83",
             "84",
         }
-        FR-V{
-            "01",
-            "07",
-            "26",
-            "38",
-            "42",
-            "69",
-            "73",
-            "74",
+        FR-PDL{
+            "44",
+            "49",
+            "53",
+            "72",
+            "85",
         }
         GA{
             "1",
@@ -19730,81 +20776,6 @@ supplementalData:table(nofallback){
             "K",
             "L",
             "M",
-        }
-        GR-A{
-            "52",
-            "55",
-            "71",
-            "72",
-            "73",
-        }
-        GR-B{
-            "53",
-            "54",
-            "57",
-            "59",
-            "61",
-            "62",
-            "64",
-        }
-        GR-C{
-            "51",
-            "56",
-            "58",
-            "63",
-        }
-        GR-D{
-            "31",
-            "32",
-            "33",
-            "34",
-        }
-        GR-E{
-            "41",
-            "42",
-            "43",
-            "44",
-        }
-        GR-F{
-            "21",
-            "22",
-            "23",
-            "24",
-        }
-        GR-G{
-            "01",
-            "13",
-            "14",
-        }
-        GR-H{
-            "03",
-            "04",
-            "05",
-            "06",
-            "07",
-        }
-        GR-I{"A1"}
-        GR-J{
-            "11",
-            "12",
-            "15",
-            "16",
-            "17",
-        }
-        GR-K{
-            "83",
-            "84",
-            "85",
-        }
-        GR-L{
-            "81",
-            "82",
-        }
-        GR-M{
-            "91",
-            "92",
-            "93",
-            "94",
         }
         GT{
             "AV",
@@ -20583,6 +21554,7 @@ supplementalData:table(nofallback){
             "ALM",
             "AST",
             "ATY",
+            "BAY",
             "KAR",
             "KUS",
             "KZY",
@@ -21520,9 +22492,9 @@ supplementalData:table(nofallback){
             "CAM",
             "CHH",
             "CHP",
+            "CMX",
             "COA",
             "COL",
-            "DIF",
             "DUR",
             "GRO",
             "GUA",
@@ -22593,6 +23565,7 @@ supplementalData:table(nofallback){
             "210",
             "211",
             "212",
+            "213",
         }
         SK{
             "BC",
@@ -22839,6 +23812,7 @@ supplementalData:table(nofallback){
             "DU",
             "GB",
             "KT",
+            "RA",
             "SU",
         }
         TL{
@@ -23189,7 +24163,6 @@ supplementalData:table(nofallback){
             "328",
             "329",
             "330",
-            "331",
         }
         UG-W{
             "401",
@@ -23217,6 +24190,7 @@ supplementalData:table(nofallback){
             "423",
             "424",
             "425",
+            "426",
         }
         UM{
             "67",
@@ -25204,7 +26178,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49990000}
             }
             territoryF:intvector{
-                57376800,
+                57392900,
                 49990000,
                 52940000,
             }
@@ -25353,8 +26327,8 @@ supplementalData:table(nofallback){
         }
         AO{
             kmb{
+                literacyShareF:int{49100000}
                 populationShareF:int{49250000}
-                writingShareF:int{49100000}
             }
             ln{
                 populationShareF:int{47670000}
@@ -25589,12 +26563,12 @@ supplementalData:table(nofallback){
                 populationShareF:int{47210000}
             }
             rkt{
+                literacyShareF:int{49200000}
                 populationShareF:int{48650000}
-                writingShareF:int{49200000}
             }
             syl{
+                literacyShareF:int{49350000}
                 populationShareF:int{48500000}
-                writingShareF:int{49350000}
             }
             territoryF:intvector{
                 61536500,
@@ -25978,22 +26952,22 @@ supplementalData:table(nofallback){
                 populationShareF:int{45160000}
             }
             ikt{
+                literacyShareF:int{49300000}
                 officialStatus{"official_regional"}
                 populationShareF:int{46110000}
-                writingShareF:int{49300000}
             }
             it{
                 populationShareF:int{48200000}
             }
             iu_Cans{
+                literacyShareF:int{49300000}
                 officialStatus{"official_regional"}
                 populationShareF:int{46420000}
-                writingShareF:int{49300000}
             }
             iu_Latn{
+                literacyShareF:int{49300000}
                 officialStatus{"official_regional"}
                 populationShareF:int{46420000}
-                writingShareF:int{49300000}
             }
             moe{
                 populationShareF:int{46330000}
@@ -26147,16 +27121,16 @@ supplementalData:table(nofallback){
         }
         CI{
             bci{
+                literacyShareF:int{49100000}
                 populationShareF:int{49110000}
-                writingShareF:int{49100000}
             }
             bqv{
+                literacyShareF:int{49100000}
                 populationShareF:int{47170000}
-                writingShareF:int{49100000}
             }
             dnj{
+                literacyShareF:int{48100000}
                 populationShareF:int{48400000}
-                writingShareF:int{48100000}
             }
             fr{
                 officialStatus{"official"}
@@ -26205,53 +27179,53 @@ supplementalData:table(nofallback){
         }
         CM{
             agq{
+                literacyShareF:int{49200000}
                 populationShareF:int{47140000}
-                writingShareF:int{49200000}
             }
             ar{
                 populationShareF:int{47390000}
             }
             bas{
+                literacyShareF:int{49250000}
                 populationShareF:int{48120000}
-                writingShareF:int{49250000}
             }
             bax{
                 populationShareF:int{48120000}
             }
             bbj{
+                literacyShareF:int{49250000}
                 populationShareF:int{48140000}
-                writingShareF:int{49250000}
             }
             bfd{
+                literacyShareF:int{49300000}
                 populationShareF:int{47570000}
-                writingShareF:int{49300000}
             }
             bkm{
                 populationShareF:int{48130000}
                 writingShareF:int{48500000}
             }
             bss{
+                literacyShareF:int{49300000}
                 populationShareF:int{47540000}
-                writingShareF:int{49300000}
             }
             bum{
                 populationShareF:int{48460000}
             }
             byv{
+                literacyShareF:int{49150000}
                 populationShareF:int{48110000}
-                writingShareF:int{49150000}
             }
             dua{
+                literacyShareF:int{49250000}
                 populationShareF:int{47480000}
-                writingShareF:int{49250000}
             }
             en{
                 officialStatus{"official"}
                 populationShareF:int{49380000}
             }
             ewo{
+                literacyShareF:int{49150000}
                 populationShareF:int{48310000}
-                writingShareF:int{49150000}
             }
             ff{
                 populationShareF:int{48360000}
@@ -26264,8 +27238,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47140000}
             }
             jgo{
+                literacyShareF:int{49300000}
                 populationShareF:int{47340000}
-                writingShareF:int{49300000}
             }
             kkj{
                 populationShareF:int{47540000}
@@ -26284,12 +27258,12 @@ supplementalData:table(nofallback){
                 populationShareF:int{48100000}
             }
             nmg{
+                literacyShareF:int{49100000}
                 populationShareF:int{46380000}
-                writingShareF:int{49100000}
             }
             nnh{
+                literacyShareF:int{48800000}
                 populationShareF:int{48140000}
-                writingShareF:int{48800000}
             }
             territoryF:intvector{
                 60677800,
@@ -26300,8 +27274,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{45970000}
             }
             ybb{
+                literacyShareF:int{48200000}
                 populationShareF:int{48160000}
-                writingShareF:int{48200000}
             }
         }
         CN{
@@ -26322,8 +27296,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{48290000}
             }
             ii{
+                literacyShareF:int{49600000}
                 populationShareF:int{47600000}
-                writingShareF:int{49600000}
             }
             khb{
                 populationShareF:int{46190000}
@@ -26712,8 +27686,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{49200000}
             }
             kab{
+                literacyShareF:int{49100000}
                 populationShareF:int{48780000}
-                writingShareF:int{49100000}
             }
             territoryF:intvector{
                 61548600,
@@ -27006,8 +27980,8 @@ supplementalData:table(nofallback){
         }
         FR{
             br{
+                literacyShareF:int{48300000}
                 populationShareF:int{47830000}
-                writingShareF:int{48300000}
             }
             ca{
                 populationShareF:int{47170000}
@@ -27387,8 +28361,8 @@ supplementalData:table(nofallback){
                 51200000,
             }
             und{
+                literacyShareF:int{50100000}
                 populationShareF:int{50100000}
-                writingShareF:int{50100000}
             }
         }
         GT{
@@ -27471,8 +28445,8 @@ supplementalData:table(nofallback){
                 50100000,
             }
             und{
+                literacyShareF:int{50100000}
                 populationShareF:int{50100000}
-                writingShareF:int{50100000}
             }
         }
         HN{
@@ -27509,9 +28483,9 @@ supplementalData:table(nofallback){
         }
         HT{
             fr{
+                literacyShareF:int{50100000}
                 officialStatus{"official"}
                 populationShareF:int{48470000}
-                writingShareF:int{50100000}
             }
             ht{
                 officialStatus{"official"}
@@ -27571,8 +28545,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47270000}
             }
             ban{
+                literacyShareF:int{49100000}
                 populationShareF:int{48180000}
-                writingShareF:int{49100000}
             }
             bbc{
                 populationShareF:int{47920000}
@@ -27581,12 +28555,12 @@ supplementalData:table(nofallback){
                 populationShareF:int{48210000}
             }
             bjn{
+                literacyShareF:int{49100000}
                 populationShareF:int{48150000}
-                writingShareF:int{49100000}
             }
             bug{
+                literacyShareF:int{49100000}
                 populationShareF:int{48160000}
-                writingShareF:int{49100000}
             }
             gay{
                 populationShareF:int{47120000}
@@ -27599,8 +28573,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{49640000}
             }
             jv{
+                literacyShareF:int{49100000}
                 populationShareF:int{49340000}
-                writingShareF:int{49100000}
             }
             kge{
                 populationShareF:int{47320000}
@@ -27615,8 +28589,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47690000}
             }
             mad{
+                literacyShareF:int{49400000}
                 populationShareF:int{48630000}
-                writingShareF:int{49400000}
             }
             mak{
                 populationShareF:int{47730000}
@@ -27625,8 +28599,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{46920000}
             }
             min{
+                literacyShareF:int{49100000}
                 populationShareF:int{48300000}
-                writingShareF:int{49100000}
             }
             ms_Arab{
                 populationShareF:int{48460000}
@@ -27758,8 +28732,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{46370000}
             }
             bgc{
+                literacyShareF:int{49550000}
                 populationShareF:int{48120000}
-                writingShareF:int{49550000}
             }
             bhb{
                 populationShareF:int{47120000}
@@ -27768,12 +28742,12 @@ supplementalData:table(nofallback){
                 populationShareF:int{46920000}
             }
             bho{
+                literacyShareF:int{49300000}
                 populationShareF:int{48230000}
-                writingShareF:int{49300000}
             }
             bjj{
+                literacyShareF:int{49600000}
                 populationShareF:int{47560000}
-                writingShareF:int{49600000}
             }
             bn{
                 officialStatus{"official_regional"}
@@ -27849,9 +28823,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{47220000}
             }
             kha{
+                literacyShareF:int{49290000}
                 officialStatus{"official_regional"}
                 populationShareF:int{46800000}
-                writingShareF:int{49290000}
             }
             khn{
                 populationShareF:int{47150000}
@@ -27887,8 +28861,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47270000}
             }
             mag{
+                literacyShareF:int{49300000}
                 populationShareF:int{48120000}
-                writingShareF:int{49300000}
             }
             mai{
                 officialStatus{"official_regional"}
@@ -27936,8 +28910,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{46130000}
             }
             rkt{
+                literacyShareF:int{49200000}
                 populationShareF:int{47440000}
-                writingShareF:int{49200000}
             }
             sa{
                 officialStatus{"official_regional"}
@@ -28000,8 +28974,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47150000}
             }
             wtm{
+                literacyShareF:int{49250000}
                 populationShareF:int{47460000}
-                writingShareF:int{49250000}
             }
             xnr{
                 populationShareF:int{47160000}
@@ -28009,9 +28983,9 @@ supplementalData:table(nofallback){
         }
         IO{
             en{
+                literacyShareF:int{50100000}
                 officialStatus{"official"}
                 populationShareF:int{50100000}
-                writingShareF:int{50100000}
             }
             territoryF:intvector{
                 58140300,
@@ -28093,8 +29067,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47760000}
             }
             lrc{
+                literacyShareF:int{49100000}
                 populationShareF:int{48210000}
-                writingShareF:int{49100000}
             }
             luz{
                 populationShareF:int{48120000}
@@ -28109,8 +29083,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47160000}
             }
             rmt{
+                literacyShareF:int{48100000}
                 populationShareF:int{48190000}
-                writingShareF:int{48100000}
             }
             sdh{
                 populationShareF:int{48370000}
@@ -28273,8 +29247,8 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             ebu{
+                literacyShareF:int{48100000}
                 populationShareF:int{48150000}
-                writingShareF:int{48100000}
             }
             en{
                 officialStatus{"official"}
@@ -28302,8 +29276,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{49110000}
             }
             mas{
+                literacyShareF:int{49500000}
                 populationShareF:int{48160000}
-                writingShareF:int{49500000}
             }
             mer{
                 populationShareF:int{48400000}
@@ -28315,12 +29289,12 @@ supplementalData:table(nofallback){
                 populationShareF:int{46220000}
             }
             pko{
+                literacyShareF:int{48100000}
                 populationShareF:int{47700000}
-                writingShareF:int{48100000}
             }
             saq{
+                literacyShareF:int{48100000}
                 populationShareF:int{47460000}
-                writingShareF:int{48100000}
             }
             so{
                 populationShareF:int{48130000}
@@ -28731,9 +29705,9 @@ supplementalData:table(nofallback){
                 57333227,
             }
             tzm_Latn{
+                literacyShareF:int{49250000}
                 officialStatus{"official"}
                 populationShareF:int{48980000}
-                writingShareF:int{49250000}
             }
             zgh{
                 populationShareF:int{49220000}
@@ -29324,8 +30298,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{49530000}
             }
             fuv{
+                literacyShareF:int{49200000}
                 populationShareF:int{48670000}
-                writingShareF:int{49200000}
             }
             ha_Arab{
                 populationShareF:int{48100000}
@@ -29354,8 +30328,8 @@ supplementalData:table(nofallback){
                 58181562,
             }
             tiv{
+                literacyShareF:int{49250000}
                 populationShareF:int{48160000}
-                writingShareF:int{49250000}
             }
             yo{
                 officialStatus{"official"}
@@ -29501,8 +30475,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{48330000}
             }
             rjs{
+                literacyShareF:int{49670000}
                 populationShareF:int{47440000}
-                writingShareF:int{49670000}
             }
             taj{
                 populationShareF:int{48300000}
@@ -29671,9 +30645,9 @@ supplementalData:table(nofallback){
                 56667243,
             }
             tpi{
+                literacyShareF:int{49450000}
                 officialStatus{"official"}
                 populationShareF:int{49710000}
-                writingShareF:int{49450000}
             }
         }
         PH{
@@ -29690,9 +30664,9 @@ supplementalData:table(nofallback){
                 populationShareF:int{47280000}
             }
             ceb{
+                literacyShareF:int{49130000}
                 officialStatus{"official_regional"}
                 populationShareF:int{49240000}
-                writingShareF:int{49130000}
             }
             cps{
                 populationShareF:int{47670000}
@@ -29709,17 +30683,17 @@ supplementalData:table(nofallback){
                 populationShareF:int{49600000}
             }
             hil{
+                literacyShareF:int{48800000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48840000}
-                writingShareF:int{48800000}
             }
             hnn{
                 populationShareF:int{46160000}
             }
             ilo{
+                literacyShareF:int{49100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48960000}
-                writingShareF:int{49100000}
             }
             krj{
                 populationShareF:int{47390000}
@@ -29736,8 +30710,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{48230000}
             }
             tbw{
+                literacyShareF:int{49360000}
                 populationShareF:int{45990000}
-                writingShareF:int{49360000}
             }
             territoryF:intvector{
                 61693400,
@@ -29820,8 +30794,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{49120000}
             }
             skr{
+                literacyShareF:int{48100000}
                 populationShareF:int{48910000}
-                writingShareF:int{48100000}
             }
             territoryF:intvector{
                 61884200,
@@ -30129,8 +31103,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{46120000}
             }
             hy{
+                literacyShareF:int{49500000}
                 populationShareF:int{47840000}
-                writingShareF:int{49500000}
             }
             inh{
                 officialStatus{"official_regional"}
@@ -30338,8 +31312,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47330000}
             }
             sma{
+                literacyShareF:int{49750000}
                 populationShareF:int{45310000}
-                writingShareF:int{49750000}
             }
             smj{
                 populationShareF:int{46150000}
@@ -30469,8 +31443,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{49270000}
             }
             tem{
+                literacyShareF:int{48600000}
                 populationShareF:int{49260000}
-                writingShareF:int{48600000}
             }
             territoryF:intvector{
                 60128000,
@@ -30494,52 +31468,52 @@ supplementalData:table(nofallback){
         }
         SN{
             bjt{
+                literacyShareF:int{50100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{47610000}
-                writingShareF:int{50100000}
             }
             bsc{
+                literacyShareF:int{49100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{46980000}
-                writingShareF:int{49100000}
             }
             dyo{
+                literacyShareF:int{49100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48260000}
-                writingShareF:int{49100000}
             }
             ff{
                 officialStatus{"official_regional"}
                 populationShareF:int{49210000}
             }
             fr{
+                literacyShareF:int{50100000}
                 officialStatus{"official"}
                 populationShareF:int{49390000}
-                writingShareF:int{50100000}
             }
             knf{
+                literacyShareF:int{49100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{47210000}
-                writingShareF:int{49100000}
             }
             mey{
+                literacyShareF:int{49100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{46510000}
-                writingShareF:int{49100000}
             }
             mfv{
+                literacyShareF:int{49100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{47770000}
-                writingShareF:int{49100000}
             }
             sav{
                 officialStatus{"official_regional"}
                 populationShareF:int{48150000}
             }
             snf{
+                literacyShareF:int{49100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{47240000}
-                writingShareF:int{49100000}
             }
             srr{
                 officialStatus{"official_regional"}
@@ -30551,9 +31525,9 @@ supplementalData:table(nofallback){
                 57139758,
             }
             tnr{
+                literacyShareF:int{49100000}
                 officialStatus{"official_regional"}
                 populationShareF:int{46240000}
-                writingShareF:int{49100000}
             }
             wo{
                 officialStatus{"de_facto_official"}
@@ -30562,9 +31536,9 @@ supplementalData:table(nofallback){
         }
         SO{
             ar{
+                literacyShareF:int{49990000}
                 officialStatus{"official"}
                 populationShareF:int{49340000}
-                writingShareF:int{49990000}
             }
             om{
                 populationShareF:int{47420000}
@@ -30588,8 +31562,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{49900000}
             }
             srn{
+                literacyShareF:int{49750000}
                 populationShareF:int{49680000}
-                writingShareF:int{49750000}
             }
             territoryF:intvector{
                 59898700,
@@ -30744,8 +31718,8 @@ supplementalData:table(nofallback){
         }
         TF{
             fr{
+                literacyShareF:int{50100000}
                 populationShareF:int{50100000}
-                writingShareF:int{50100000}
             }
             territoryF:intvector{
                 56545000,
@@ -30772,15 +31746,15 @@ supplementalData:table(nofallback){
                 populationShareF:int{49270000}
             }
             kdt{
+                literacyShareF:int{49500000}
                 populationShareF:int{47480000}
-                writingShareF:int{49500000}
             }
             kxm{
                 populationShareF:int{48170000}
             }
             lcp{
+                literacyShareF:int{49250000}
                 populationShareF:int{46100000}
-                writingShareF:int{49250000}
             }
             lwl{
                 populationShareF:int{46100000}
@@ -30808,9 +31782,9 @@ supplementalData:table(nofallback){
                 57679764,
             }
             th{
+                literacyShareF:int{49930000}
                 officialStatus{"official"}
                 populationShareF:int{49800000}
-                writingShareF:int{49930000}
             }
             tts{
                 populationShareF:int{49240000}
@@ -30858,9 +31832,9 @@ supplementalData:table(nofallback){
         }
         TL{
             pt{
+                literacyShareF:int{50100000}
                 officialStatus{"official"}
                 populationShareF:int{49590000}
-                writingShareF:int{50100000}
             }
             territoryF:intvector{
                 59674500,
@@ -31070,8 +32044,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47870000}
             }
             mas{
+                literacyShareF:int{49500000}
                 populationShareF:int{48150000}
-                writingShareF:int{49500000}
             }
             mgy{
                 populationShareF:int{48140000}
@@ -31086,8 +32060,8 @@ supplementalData:table(nofallback){
                 populationShareF:int{47220000}
             }
             sbp{
+                literacyShareF:int{48100000}
                 populationShareF:int{47200000}
-                writingShareF:int{48100000}
             }
             suk{
                 populationShareF:int{48870000}
@@ -31378,8 +32352,8 @@ supplementalData:table(nofallback){
         }
         VN{
             cjm{
+                literacyShareF:int{49600000}
                 populationShareF:int{46890000}
-                writingShareF:int{49600000}
             }
             territoryF:intvector{
                 61512600,
@@ -31503,42 +32477,42 @@ supplementalData:table(nofallback){
         }
         ZA{
             af{
+                literacyShareF:int{49990000}
                 officialStatus{"official_regional"}
                 populationShareF:int{49130000}
-                writingShareF:int{49990000}
             }
             en{
+                literacyShareF:int{49990000}
                 officialStatus{"official"}
                 populationShareF:int{49310000}
-                writingShareF:int{49990000}
             }
             hi{
+                literacyShareF:int{49690000}
                 populationShareF:int{48200000}
-                writingShareF:int{49690000}
             }
             nr{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48160000}
-                writingShareF:int{49500000}
             }
             nso{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48940000}
-                writingShareF:int{49500000}
             }
             ss{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48270000}
-                writingShareF:int{49500000}
             }
             st{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48790000}
-                writingShareF:int{49500000}
             }
             sw{
+                literacyShareF:int{49500000}
                 populationShareF:int{45190000}
-                writingShareF:int{49500000}
             }
             territoryF:intvector{
                 61707100,
@@ -31546,29 +32520,29 @@ supplementalData:table(nofallback){
                 57536756,
             }
             tn{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48820000}
-                writingShareF:int{49500000}
             }
             ts{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48440000}
-                writingShareF:int{49500000}
             }
             ve{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{48230000}
-                writingShareF:int{49500000}
             }
             xh{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{49180000}
-                writingShareF:int{49500000}
             }
             zu{
+                literacyShareF:int{49500000}
                 officialStatus{"official_regional"}
                 populationShareF:int{49240000}
-                writingShareF:int{49500000}
             }
         }
         ZM{

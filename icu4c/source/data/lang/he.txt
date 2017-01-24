@@ -772,7 +772,7 @@ he{
         POSIX{"מחשב"}
         SCOTLAND{"אנגלית סקוטית סטנדרטית"}
     }
-    Version{"2.1.29.27"}
+    Version{"2.1.31.74"}
     characterLabelPattern{
         all{"{0} - הכל"}
         category-list{"{0}: {1}"}

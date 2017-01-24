@@ -168,10 +168,18 @@ th{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"เลี้ยวขวาที่ทางเลี้ยวที่ {0}"}
+            }
+            plural{
+                other{"{0} วัน"}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"thai"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -849,7 +849,7 @@ ar{
         VALENCIA{"بلنسية"}
         WADEGILE{"المندرين باللاتينية - ويد–جيلز"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
     characterLabelPattern{
         all{"{0} - الكل"}
         category-list{"{0}: {1}"}

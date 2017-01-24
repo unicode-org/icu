@@ -19,5 +19,5 @@ sr_Latn_ME{
     Countries%variant{
         MK{"BJR Makedonija"}
     }
-    Version{"2.1.29.33"}
+    Version{"2.1.31.33"}
 }

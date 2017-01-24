@@ -305,9 +305,8 @@ sr_Latn{
     Countries%variant{
         CD{"Kongo (DRK)"}
         CG{"Kongo (Republika)"}
-        CZ{"CZ"}
         FK{"Foklandska (Malvinska) ostrva"}
         MK{"Makedonija (BJRM)"}
     }
-    Version{"2.1.29.33"}
+    Version{"2.1.31.74"}
 }

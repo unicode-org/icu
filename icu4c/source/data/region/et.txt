@@ -89,7 +89,7 @@ et{
         CW{"Curaçao"}
         CX{"Jõulusaar"}
         CY{"Küpros"}
-        CZ{"Tšehhi"}
+        CZ{"Tšehhia"}
         DE{"Saksamaa"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
@@ -305,10 +305,10 @@ et{
         CD{"Kongo-Kinshasa"}
         CG{"Kongo-Brazzaville"}
         CI{"Elevandiluurannik"}
-        CZ{"Tšehhia"}
+        CZ{"Tšehhi"}
         FK{"Malviini saared"}
         MK{"Makedoonia Vabariik"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

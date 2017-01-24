@@ -89,7 +89,7 @@ zu{
         CW{"i-Curaçao"}
         CX{"i-Christmas Island"}
         CY{"i-Cyprus"}
-        CZ{"i-Czech Republic"}
+        CZ{"i-Czechia"}
         DE{"i-Germany"}
         DG{"i-Diego Garcia"}
         DJ{"i-Djibouti"}
@@ -305,10 +305,10 @@ zu{
         CD{"i-Congo (DRC)"}
         CG{"i-Congo (Republic)"}
         CI{"i-Ivory Coast"}
-        CZ{"i-Czechia"}
+        CZ{"i-Czech Republic"}
         FK{"i-Falkland Islands (Islas Malvinas)"}
         MK{"i-Macedonia (FYROM)"}
         TL{"i-East Timor"}
     }
-    Version{"2.1.29.22"}
+    Version{"2.1.31.74"}
 }

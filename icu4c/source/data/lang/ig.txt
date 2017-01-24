@@ -47,5 +47,5 @@ ig{
         zh{"Mandarịịnị"}
         zu{"Zulu"}
     }
-    Version{"2.1.27.84"}
+    Version{"2.1.31.33"}
 }
