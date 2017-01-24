@@ -234,6 +234,7 @@ plurals:table(nofallback){
         fy{"set36"}
         ga{"set38"}
         gl{"set36"}
+        gsw{"set36"}
         gu{"set52"}
         he{"set36"}
         hi{"set52"}

@@ -618,7 +618,7 @@ af{
             vaii{"Vai-syfers"}
         }
     }
-    Version{"2.1.29.44"}
+    Version{"2.1.31.74"}
     characterLabelPattern{
         all{"{0} – Alle"}
         category-list{"{0}: {1}"}

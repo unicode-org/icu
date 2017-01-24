@@ -3793,6 +3793,16 @@ root {
             }
         }
 
+        ta-fonipa-t-ta {
+            alias {"ta-ta_FONIPA"}
+        }
+        ta-ta_FONIPA {
+            file {
+                resource:process(transliterator) {"ta_ta_FONIPA.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         am-t-tlh {
             alias {"tlh-am"}
         }

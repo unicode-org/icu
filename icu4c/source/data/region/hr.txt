@@ -89,7 +89,7 @@ hr{
         CW{"Curaçao"}
         CX{"Božićni otok"}
         CY{"Cipar"}
-        CZ{"Češka Republika"}
+        CZ{"Češka"}
         DE{"Njemačka"}
         DG{"Diego Garcia"}
         DJ{"Džibuti"}
@@ -305,10 +305,10 @@ hr{
         CD{"Kongo (DRK)"}
         CG{"Kongo (RK)"}
         CI{"Bjelokosna Obala"}
-        CZ{"Češka"}
+        CZ{"Češka Republika"}
         FK{"Falklandski otoci (Malvini)"}
         MK{"Makedonija (BJRM)"}
         TL{"Istočni Timor"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

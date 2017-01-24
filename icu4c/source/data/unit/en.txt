@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en{
-    Version{"2.1.30.50"}
+    Version{"2.1.31.74"}
     units{
         acceleration{
             g-force{
@@ -140,6 +140,12 @@ en{
                 one{"{0} mile per Imp. gallon"}
                 other{"{0} miles per Imp. gallon"}
             }
+        }
+        coordinate{
+            east{"{0} east"}
+            north{"{0} north"}
+            south{"{0} south"}
+            west{"{0} west"}
         }
         digital{
             bit{
@@ -428,6 +434,11 @@ en{
                 dnam{"picometers"}
                 one{"{0} picometer"}
                 other{"{0} picometers"}
+            }
+            point{
+                dnam{"points"}
+                one{"{0} point"}
+                other{"{0} points"}
             }
             yard{
                 dnam{"yards"}
@@ -856,6 +867,12 @@ en{
                 other{"{0}m/gUK"}
             }
         }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
+        }
         digital{
             bit{
                 dnam{"bit"}
@@ -1126,6 +1143,11 @@ en{
                 dnam{"pm"}
                 one{"{0}pm"}
                 other{"{0}pm"}
+            }
+            point{
+                dnam{"pts"}
+                one{"{0}pt"}
+                other{"{0}pt"}
             }
             yard{
                 dnam{"yd"}
@@ -1567,6 +1589,12 @@ en{
                 other{"{0} mpg Imp."}
             }
         }
+        coordinate{
+            east{"{0} E"}
+            north{"{0} N"}
+            south{"{0} S"}
+            west{"{0} W"}
+        }
         digital{
             bit{
                 dnam{"bit"}
@@ -1854,6 +1882,11 @@ en{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"points"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"yards"}

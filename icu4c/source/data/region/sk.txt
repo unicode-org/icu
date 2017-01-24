@@ -89,7 +89,7 @@ sk{
         CW{"Curaçao"}
         CX{"Vianočný ostrov"}
         CY{"Cyprus"}
-        CZ{"Česká republika"}
+        CZ{"Česko"}
         DE{"Nemecko"}
         DG{"Diego Garcia"}
         DJ{"Džibutsko"}
@@ -302,8 +302,8 @@ sk{
         US{"USA"}
     }
     Countries%variant{
-        CZ{"Česko"}
+        CZ{"Česká republika"}
         MK{"Macedónsko (BJRM)"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

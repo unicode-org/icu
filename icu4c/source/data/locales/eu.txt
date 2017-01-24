@@ -150,10 +150,19 @@ eu{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"{0}. bira eskuinetara"}
+            }
+            plural{
+                one{"Nire {0} lagunarekin nago"}
+                other{"Nire {0} lagunekin nago"}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.29.20"}
+    Version{"2.1.31.74"}
     calendar{
         buddhist{
             eras{

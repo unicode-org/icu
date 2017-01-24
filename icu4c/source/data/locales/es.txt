@@ -200,10 +200,19 @@ es{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"Toma la {0}.ª a la derecha."}
+            }
+            plural{
+                one{"{0} día"}
+                other{"{0} días"}
+            }
+        }
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.28.80"}
+    Version{"2.1.31.74"}
     calendar{
         buddhist{
             eras{

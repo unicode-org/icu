@@ -89,7 +89,7 @@ fil{
         CW{"Curaçao"}
         CX{"Christmas Island"}
         CY{"Cyprus"}
-        CZ{"Czech Republic"}
+        CZ{"Czechia"}
         DE{"Germany"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
@@ -305,10 +305,10 @@ fil{
         CD{"Congo (DRC)"}
         CG{"Congo (Republika)"}
         CI{"Ivory Coast"}
-        CZ{"Czechia"}
+        CZ{"Czech Republic"}
         FK{"Falkland Islands (Islas Malvinas)"}
         MK{"Macedonia (FYROM)"}
         TL{"East Timor"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

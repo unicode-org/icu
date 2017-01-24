@@ -89,7 +89,7 @@ bs{
         CW{"Kurasao"}
         CX{"Božićna Ostrva"}
         CY{"Kipar"}
-        CZ{"Češka Republika"}
+        CZ{"Češka"}
         DE{"Njemačka"}
         DG{"Dijego Garsija"}
         DJ{"Džibuti"}
@@ -305,9 +305,9 @@ bs{
         CD{"Kongo (DRC)"}
         CG{"Republika Kongo"}
         CI{"Obala Bjelokosti"}
-        CZ{"Češka"}
+        CZ{"Češka Republika"}
         FK{"Folklandska Ostrva (Malvinska Ostrva)"}
         MK{"Makedonija (BJR)"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

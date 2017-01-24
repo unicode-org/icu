@@ -1359,29 +1359,129 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"MO"}
             }
+            CZ-JC{
+                reason{"deprecated"}
+                replacement{"CZ-31"}
+            }
+            CZ-KA{
+                reason{"deprecated"}
+                replacement{"CZ-41"}
+            }
+            CZ-KR{
+                reason{"deprecated"}
+                replacement{"CZ-52"}
+            }
+            CZ-LI{
+                reason{"deprecated"}
+                replacement{"CZ-51"}
+            }
+            CZ-MO{
+                reason{"deprecated"}
+                replacement{"CZ-80"}
+            }
+            CZ-OL{
+                reason{"deprecated"}
+                replacement{"CZ-71"}
+            }
+            CZ-PA{
+                reason{"deprecated"}
+                replacement{"CZ-53"}
+            }
+            CZ-PL{
+                reason{"deprecated"}
+                replacement{"CZ-32"}
+            }
+            CZ-ST{
+                reason{"deprecated"}
+                replacement{"CZ-20"}
+            }
+            CZ-US{
+                reason{"deprecated"}
+                replacement{"CZ-42"}
+            }
+            CZ-ZL{
+                reason{"deprecated"}
+                replacement{"CZ-72"}
+            }
+            FR-A{
+                reason{"deprecated"}
+                replacement{"FR-GES"}
+            }
+            FR-B{
+                reason{"deprecated"}
+                replacement{"FR-NAQ"}
+            }
             FR-BL{
                 reason{"overlong"}
                 replacement{"BL"}
             }
-            FR-GF{
-                reason{"overlong"}
-                replacement{"GF"}
+            FR-C{
+                reason{"deprecated"}
+                replacement{"FR-ARA"}
+            }
+            FR-D{
+                reason{"deprecated"}
+                replacement{"FR-BFC"}
+            }
+            FR-E{
+                reason{"deprecated"}
+                replacement{"FR-BRE"}
+            }
+            FR-F{
+                reason{"deprecated"}
+                replacement{"FR-CVL"}
+            }
+            FR-G{
+                reason{"deprecated"}
+                replacement{"FR-GES"}
             }
             FR-GP{
                 reason{"overlong"}
                 replacement{"GP"}
             }
+            FR-H{
+                reason{"deprecated"}
+                replacement{"FR-COR"}
+            }
+            FR-I{
+                reason{"deprecated"}
+                replacement{"FR-BFC"}
+            }
+            FR-J{
+                reason{"deprecated"}
+                replacement{"FR-IDF"}
+            }
+            FR-K{
+                reason{"deprecated"}
+                replacement{"FR-OCC"}
+            }
+            FR-L{
+                reason{"deprecated"}
+                replacement{"FR-NAQ"}
+            }
+            FR-M{
+                reason{"deprecated"}
+                replacement{"FR-GES"}
+            }
             FR-MF{
                 reason{"overlong"}
                 replacement{"MF"}
             }
-            FR-MQ{
-                reason{"overlong"}
-                replacement{"MQ"}
+            FR-N{
+                reason{"deprecated"}
+                replacement{"FR-OCC"}
             }
             FR-NC{
                 reason{"overlong"}
                 replacement{"NC"}
+            }
+            FR-O{
+                reason{"deprecated"}
+                replacement{"FR-HDF"}
+            }
+            FR-P{
+                reason{"deprecated"}
+                replacement{"FR-NOR"}
             }
             FR-PF{
                 reason{"overlong"}
@@ -1391,13 +1491,37 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"PM"}
             }
+            FR-Q{
+                reason{"deprecated"}
+                replacement{"FR-NOR"}
+            }
+            FR-R{
+                reason{"deprecated"}
+                replacement{"FR-PDL"}
+            }
             FR-RE{
                 reason{"overlong"}
                 replacement{"RE"}
             }
+            FR-S{
+                reason{"deprecated"}
+                replacement{"FR-HDF"}
+            }
+            FR-T{
+                reason{"deprecated"}
+                replacement{"FR-NAQ"}
+            }
             FR-TF{
                 reason{"overlong"}
                 replacement{"TF"}
+            }
+            FR-U{
+                reason{"deprecated"}
+                replacement{"FR-PAC"}
+            }
+            FR-V{
+                reason{"deprecated"}
+                replacement{"FR-ARA"}
             }
             FR-WF{
                 reason{"overlong"}
@@ -4120,6 +4244,7 @@ metadata:table(nofallback){
         "byn_ER",
         "ca_ES",
         "cch_NG",
+        "ccp_BD",
         "ce_RU",
         "cgg_UG",
         "chr_US",

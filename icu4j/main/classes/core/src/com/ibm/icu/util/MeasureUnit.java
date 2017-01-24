@@ -837,6 +837,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit PICOMETER = MeasureUnit.internalGetInstance("length", "picometer");
 
     /**
+     * Constant for unit of length: point
+     * @draft ICU 59
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit POINT = MeasureUnit.internalGetInstance("length", "point");
+
+    /**
      * Constant for unit of length: yard
      * @stable ICU 53
      */

@@ -89,7 +89,7 @@ it{
         CW{"Curaçao"}
         CX{"Isola Christmas"}
         CY{"Cipro"}
-        CZ{"Repubblica Ceca"}
+        CZ{"Cèchia"}
         DE{"Germania"}
         DG{"Diego Garcia"}
         DJ{"Gibuti"}
@@ -260,7 +260,7 @@ it{
         TH{"Thailandia"}
         TJ{"Tagikistan"}
         TK{"Tokelau"}
-        TL{"Timor Leste"}
+        TL{"Timor Est"}
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
@@ -305,10 +305,10 @@ it{
         CD{"Congo (RDC)"}
         CG{"Congo (Repubblica)"}
         CI{"Côte d’Ivoire"}
-        CZ{"Cèchia"}
+        CZ{"Repubblica Ceca"}
         FK{"Isole Falkland (Isole Malvine)"}
         MK{"Ex Repubblica Jugoslava di Macedonia"}
-        TL{"Timor Est"}
+        TL{"Timor Leste"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

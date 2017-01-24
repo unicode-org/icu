@@ -4,7 +4,7 @@
  * ICU <specials> source: <path>/common/main/root.xml
  */
 root{
-    Version{"2.1.30.58"}
+    Version{"2.1.31.53"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -367,6 +367,10 @@ root{
             picometer{
                 dnam{"pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"yd"}

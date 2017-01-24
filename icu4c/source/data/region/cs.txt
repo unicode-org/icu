@@ -89,7 +89,7 @@ cs{
         CW{"Curaçao"}
         CX{"Vánoční ostrov"}
         CY{"Kypr"}
-        CZ{"Česká republika"}
+        CZ{"Česko"}
         DE{"Německo"}
         DG{"Diego García"}
         DJ{"Džibutsko"}
@@ -305,9 +305,9 @@ cs{
         CD{"Kongo (DRK)"}
         CG{"Kongo (republika)"}
         CI{"Côte d’Ivoire"}
-        CZ{"Česko"}
+        CZ{"Česká republika"}
         FK{"Falklandské ostrovy (Malvíny)"}
         MK{"Makedonie (FYROM)"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

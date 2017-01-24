@@ -89,7 +89,7 @@ sq{
         CW{"Kuraçao"}
         CX{"Ishulli i Krishtlindjes"}
         CY{"Qipro"}
-        CZ{"Republika Çeke"}
+        CZ{"Çeki"}
         DE{"Gjermani"}
         DG{"Diego-Garsia"}
         DJ{"Xhibuti"}
@@ -305,10 +305,10 @@ sq{
         CD{"Kongo (RDK)"}
         CG{"Kongo (Republika)"}
         CI{"Bregu i Fildishtë"}
-        CZ{"Çeki"}
+        CZ{"Republika Çeke"}
         FK{"Ishujt Falkland (Malvine)"}
         MK{"Maqedoni (IRJM)"}
         TL{"Timori Lindor"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

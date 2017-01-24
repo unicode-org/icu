@@ -89,7 +89,7 @@ sw{
         CW{"Kurakao"}
         CX{"Kisiwa cha Krismasi"}
         CY{"Cyprus"}
-        CZ{"Jamhuri ya Cheki"}
+        CZ{"Chechia"}
         DE{"Ujerumani"}
         DG{"Diego Garcia"}
         DJ{"Jibuti"}
@@ -305,9 +305,10 @@ sw{
         CD{"Kongo (DRC)"}
         CG{"Jamhuri ya Kongo"}
         CI{"Ivory Coast"}
+        CZ{"Jamhuri ya Cheki"}
         FK{"Visiwa vya Falkland (Islas Malvinas)"}
         MK{"Masedonia (FYROM)"}
         TL{"Timor ya Mashariki"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

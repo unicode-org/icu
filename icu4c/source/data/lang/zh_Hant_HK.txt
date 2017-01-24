@@ -127,7 +127,7 @@ zh_Hant_HK{
         REVISED{"已修訂拼字法"}
         SCOTLAND{"蘇格蘭標準英語"}
     }
-    Version{"2.1.27.99"}
+    Version{"2.1.31.33"}
     characterLabelPattern{
         enclosed{"{0} — 包含"}
         historic{"{0} — 舊式"}

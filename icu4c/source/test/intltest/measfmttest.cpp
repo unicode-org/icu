@@ -41,13 +41,13 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 private:
     void TestBasic();
-    void TestCompatible53_1();
-    void TestCompatible54_1();
-    void TestCompatible55_1();
-    void TestCompatible56_1();
-    void TestCompatible57_1();
-    void TestCompatible58_1();
-    void TestCompatible59_1();
+    void TestCompatible53();
+    void TestCompatible54();
+    void TestCompatible55();
+    void TestCompatible56();
+    void TestCompatible57();
+    void TestCompatible58();
+    void TestCompatible59();
     void TestGetAvailable();
     void TestExamplesInDocs();
     void TestFormatPeriodEn();
@@ -138,13 +138,13 @@ void MeasureFormatTest::runIndexedTest(
     }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestBasic);
-    TESTCASE_AUTO(TestCompatible53_1);
-    TESTCASE_AUTO(TestCompatible54_1);
-    TESTCASE_AUTO(TestCompatible55_1);
-    TESTCASE_AUTO(TestCompatible56_1);
-    TESTCASE_AUTO(TestCompatible57_1);
-    TESTCASE_AUTO(TestCompatible58_1);
-    TESTCASE_AUTO(TestCompatible59_1);
+    TESTCASE_AUTO(TestCompatible53);
+    TESTCASE_AUTO(TestCompatible54);
+    TESTCASE_AUTO(TestCompatible55);
+    TESTCASE_AUTO(TestCompatible56);
+    TESTCASE_AUTO(TestCompatible57);
+    TESTCASE_AUTO(TestCompatible58);
+    TESTCASE_AUTO(TestCompatible59);
     TESTCASE_AUTO(TestGetAvailable);
     TESTCASE_AUTO(TestExamplesInDocs);
     TESTCASE_AUTO(TestFormatPeriodEn);
@@ -170,7 +170,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO_END;
 }
 
-void MeasureFormatTest::TestCompatible53_1() {
+void MeasureFormatTest::TestCompatible53() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<MeasureUnit> measureUnit;
     measureUnit.adoptInstead(MeasureUnit::createGForce(status));
@@ -222,7 +222,7 @@ void MeasureFormatTest::TestCompatible53_1() {
     assertSuccess("", status);
 }
 
-void MeasureFormatTest::TestCompatible54_1() {
+void MeasureFormatTest::TestCompatible54() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<MeasureUnit> measureUnit;
     measureUnit.adoptInstead(MeasureUnit::createGForce(status));
@@ -349,7 +349,7 @@ void MeasureFormatTest::TestCompatible54_1() {
     assertSuccess("", status);
 }
 
-void MeasureFormatTest::TestCompatible55_1() {
+void MeasureFormatTest::TestCompatible55() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<MeasureUnit> measureUnit;
     measureUnit.adoptInstead(MeasureUnit::createGForce(status));
@@ -477,7 +477,7 @@ void MeasureFormatTest::TestCompatible55_1() {
     assertSuccess("", status);
 }
 
-void MeasureFormatTest::TestCompatible56_1() {
+void MeasureFormatTest::TestCompatible56() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<MeasureUnit> measureUnit;
     measureUnit.adoptInstead(MeasureUnit::createGForce(status));
@@ -612,7 +612,7 @@ void MeasureFormatTest::TestCompatible56_1() {
     assertSuccess("", status);
 }
 
-void MeasureFormatTest::TestCompatible57_1() {
+void MeasureFormatTest::TestCompatible57() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<MeasureUnit> measureUnit;
     measureUnit.adoptInstead(MeasureUnit::createGForce(status));
@@ -752,7 +752,7 @@ void MeasureFormatTest::TestCompatible57_1() {
     assertSuccess("", status);
 }
 
-void MeasureFormatTest::TestCompatible58_1() {
+void MeasureFormatTest::TestCompatible58() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<MeasureUnit> measureUnit;
     measureUnit.adoptInstead(MeasureUnit::createGForce(status));
@@ -896,7 +896,7 @@ void MeasureFormatTest::TestCompatible58_1() {
     assertSuccess("", status);
 }
 
-void MeasureFormatTest::TestCompatible59_1() {
+void MeasureFormatTest::TestCompatible59() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<MeasureUnit> measureUnit;
     measureUnit.adoptInstead(MeasureUnit::createGForce(status));
@@ -976,6 +976,7 @@ void MeasureFormatTest::TestCompatible59_1() {
     measureUnit.adoptInstead(MeasureUnit::createNauticalMile(status));
     measureUnit.adoptInstead(MeasureUnit::createParsec(status));
     measureUnit.adoptInstead(MeasureUnit::createPicometer(status));
+    measureUnit.adoptInstead(MeasureUnit::createPoint(status));
     measureUnit.adoptInstead(MeasureUnit::createYard(status));
     measureUnit.adoptInstead(MeasureUnit::createLux(status));
     measureUnit.adoptInstead(MeasureUnit::createCarat(status));

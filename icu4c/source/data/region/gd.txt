@@ -89,7 +89,7 @@ gd{
         CW{"Curaçao"}
         CX{"Eilean na Nollaig"}
         CY{"Cìopras"}
-        CZ{"Poblachd na Seice"}
+        CZ{"An t-Seic"}
         DE{"A’ Ghearmailt"}
         DG{"Diego Garcia"}
         DJ{"Diobùtaidh"}
@@ -303,10 +303,10 @@ gd{
         CD{"A’ Chongo (PDC)"}
         CG{"A’ Chongo"}
         CI{"An Costa Ìbhri"}
-        CZ{"An t-Seic"}
+        CZ{"Poblachd na Seice"}
         FK{"Na h-Eileanan Fàclannach (Islas Malvinas)"}
         MK{"A’ Mhasadon (FYROM)"}
         TL{"Tìomor an Ear"}
     }
-    Version{"2.1.28.76"}
+    Version{"2.1.31.74"}
 }

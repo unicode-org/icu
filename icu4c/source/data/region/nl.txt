@@ -89,7 +89,7 @@ nl{
         CW{"Curaçao"}
         CX{"Christmaseiland"}
         CY{"Cyprus"}
-        CZ{"Tsjechië"}
+        CZ{"Tsjechische Republiek"}
         DE{"Duitsland"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
@@ -304,9 +304,9 @@ nl{
     Countries%variant{
         CD{"Congo (DRC)"}
         CG{"Congo (Republiek)"}
-        CZ{"Tsjechische Republiek"}
+        CZ{"Tsjechië"}
         FK{"Falklandeilanden (Islas Malvinas)"}
         MK{"Macedonië (FYROM)"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }

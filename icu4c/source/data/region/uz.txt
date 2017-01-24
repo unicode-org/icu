@@ -89,7 +89,7 @@ uz{
         CW{"Kyurasao"}
         CX{"Rojdestvo oroli"}
         CY{"Kipr"}
-        CZ{"Chexiya Respublikasi"}
+        CZ{"Chexiya"}
         DE{"Germaniya"}
         DG{"Diyego-Garsiya"}
         DJ{"Jibuti"}
@@ -305,10 +305,10 @@ uz{
         CD{"Kongo (KDR)"}
         CG{"Kongo (Respublika)"}
         CI{"Fil suyagi qirg‘og‘i"}
-        CZ{"Chexiya"}
+        CZ{"Chexiya Respublikasi"}
         FK{"Folklend (Malvin) orollari"}
         MK{"Makedoniya (SYRM)"}
         TL{"Sharqiy Timor"}
     }
-    Version{"2.1.29.44"}
+    Version{"2.1.31.74"}
 }

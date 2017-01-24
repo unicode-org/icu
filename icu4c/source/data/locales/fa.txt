@@ -238,10 +238,19 @@ fa{
                 timeSeparator{":"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"در پیچ {0}ام سمت راست بپیچید."}
+            }
+            plural{
+                one{"او {0} فیلم در هفته می‌بیند که کمدی است."}
+                other{"او {0} فیلم در هفته می‌بیند که کمدی هستند."}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"arabext"}
     }
-    Version{"2.1.29.44"}
+    Version{"2.1.31.74"}
     calendar{
         chinese{
             cyclicNameSets{

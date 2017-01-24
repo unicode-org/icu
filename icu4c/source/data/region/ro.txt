@@ -89,7 +89,7 @@ ro{
         CW{"Curaçao"}
         CX{"Insula Christmas"}
         CY{"Cipru"}
-        CZ{"Republica Cehă"}
+        CZ{"Cehia"}
         DE{"Germania"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
@@ -305,9 +305,9 @@ ro{
         CD{"Congo (Republica Democrată Congo)"}
         CG{"Congo (Republica)"}
         CI{"Coasta de Fildeș"}
-        CZ{"Cehia"}
+        CZ{"Republica Cehă"}
         FK{"Insulele Falkland (Insulele Malvine)"}
         MK{"Republica Macedonia (FRIM)"}
     }
-    Version{"2.1.28.79"}
+    Version{"2.1.31.74"}
 }
