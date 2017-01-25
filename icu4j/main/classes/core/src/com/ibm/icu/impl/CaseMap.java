@@ -2,6 +2,10 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl;
 
+import java.io.IOException;
+
+import com.ibm.icu.text.Edits;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
 
 // TODO: rename to CaseMapImpl
@@ -13,11 +17,11 @@ public final class CaseMap {
     public static final class StringContextIterator implements UCaseProps.ContextIterator {
         /**
          * Constructor.
-         * @param s String to iterate over.
+         * @param src String to iterate over.
          */
-        public StringContextIterator(String s) {
-            this.s=s;
-            limit=s.length();
+        public StringContextIterator(CharSequence src) {
+            this.s=src;
+            limit=src.length();
             cpStart=cpLimit=index=0;
             dir=0;
         }
@@ -61,7 +65,7 @@ public final class CaseMap {
         public int nextCaseMapCP() {
             cpStart=cpLimit;
             if(cpLimit<limit) {
-                int c=s.codePointAt(cpLimit);
+                int c=Character.codePointAt(s, cpLimit);
                 cpLimit+=Character.charCount(c);
                 return c;
             } else {
@@ -83,6 +87,10 @@ public final class CaseMap {
          */
         public int getCPLimit() {
             return cpLimit;
+        }
+
+        public int getCPLength() {
+            return cpLimit-cpStart;
         }
 
         // implement UCaseProps.ContextIterator
@@ -109,11 +117,11 @@ public final class CaseMap {
             int c;
 
             if(dir>0 && index<s.length()) {
-                c=s.codePointAt(index);
+                c=Character.codePointAt(s, index);
                 index+=Character.charCount(c);
                 return c;
             } else if(dir<0 && index>0) {
-                c=s.codePointBefore(index);
+                c=Character.codePointBefore(s, index);
                 index-=Character.charCount(c);
                 return c;
             }
@@ -121,44 +129,107 @@ public final class CaseMap {
         }
 
         // variables
-        protected String s;
+        protected CharSequence s;
         protected int index, limit, cpStart, cpLimit;
         protected int dir; // 0=initial state  >0=forward  <0=backward
     }
 
-    /** Appends a full case mapping result, see {@link UCaseProps#MAX_STRING_LENGTH}. */
-    private static final void appendResult(int c, StringBuilder result) {
-        // Decode the result.
-        if (c < 0) {
-            // (not) original code point
-            result.appendCodePoint(~c);
-        } else if (c <= UCaseProps.MAX_STRING_LENGTH) {
-            // The mapping has already been appended to result.
+    private static int appendCodePoint(Appendable a, int c) throws IOException {
+        if (c <= Character.MAX_VALUE) {
+            a.append((char)c);
+            return 1;
         } else {
-            // Append the single-code point mapping.
-            result.appendCodePoint(c);
+            a.append((char)(0xd7c0 + (c >> 10)));
+            a.append((char)(Character.MIN_LOW_SURROGATE + (c & 0x3ff)));
+            return 2;
         }
     }
 
-    // TODO: Move the other string case mapping functions from UCharacter to here, too.
+    /**
+     * Appends a full case mapping result, see {@link UCaseProps#MAX_STRING_LENGTH}.
+     * @throws IOException
+     */
+    private static void appendResult(int result, Appendable dest,
+            int cpLength, int options, Edits edits) throws IOException {
+        // Decode the result.
+        if (result < 0) {
+            // (not) original code point
+            if (edits != null) {
+                edits.addUnchanged(cpLength);
+                // TODO: remove package path
+                if ((options & com.ibm.icu.text.CaseMap.OMIT_UNCHANGED_TEXT) != 0) {
+                    return;
+                }
+            }
+            appendCodePoint(dest, ~result);
+        } else if (result <= UCaseProps.MAX_STRING_LENGTH) {
+            // The mapping has already been appended to result.
+            if (edits != null) {
+                edits.addReplace(cpLength, result);
+            }
+        } else {
+            // Append the single-code point mapping.
+            int length = appendCodePoint(dest, result);
+            if (edits != null) {
+                edits.addReplace(cpLength, length);
+            }
+        }
+    }
+
+    private static final void appendUnchanged(CharSequence src, int start, int length,
+            Appendable dest, int options, Edits edits) throws IOException {
+        if (length > 0) {
+            if (edits != null) {
+                edits.addUnchanged(length);
+                // TODO: remove package path
+                if ((options & com.ibm.icu.text.CaseMap.OMIT_UNCHANGED_TEXT) != 0) {
+                    return;
+                }
+            }
+            dest.append(src, start, start + length);
+        }
+    }
+
+    public static <A extends Appendable> A toLower(int caseLocale, int options,
+            CharSequence src, A dest, Edits edits) {
+        try {
+            if (edits != null) {
+                edits.reset();
+            }
+            StringContextIterator iter = new StringContextIterator(src);
+            int c;
+            while ((c = iter.nextCaseMapCP()) >= 0) {
+                c = UCaseProps.INSTANCE.toFullLower(c, iter, dest, caseLocale);
+                appendResult(c, dest, iter.getCPLength(), options, edits);
+            }
+            return dest;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
+    }
 
     public static String toUpper(ULocale locale, String str) {
-        if (locale == null) {
-            locale = ULocale.getDefault();
-        }
-        int[] locCache = new int[] { UCaseProps.getCaseLocale(locale, null) };
-        if (locCache[0] == UCaseProps.LOC_GREEK) {
-            return GreekUpper.toUpper(str, locCache);
-        }
+        try {
+            int options = 0; Edits edits = null;  // TODO
+            if (locale == null) {
+                locale = ULocale.getDefault();
+            }
+            int caseLocale = UCaseProps.getCaseLocale(locale);
+            if (caseLocale == UCaseProps.LOC_GREEK) {
+                return GreekUpper.toUpper(str);
+            }
 
-        StringContextIterator iter = new StringContextIterator(str);
-        StringBuilder result = new StringBuilder(str.length());
-        int c;
-        while((c=iter.nextCaseMapCP())>=0) {
-            c = UCaseProps.INSTANCE.toFullUpper(c, iter, result, locale, locCache);
-            appendResult(c, result);
+            StringContextIterator iter = new StringContextIterator(str);
+            StringBuilder result = new StringBuilder(str.length());
+            int c;
+            while((c=iter.nextCaseMapCP())>=0) {
+                c = UCaseProps.INSTANCE.toFullUpper(c, iter, result, caseLocale);
+                appendResult(c, result, iter.getCPLength(), options, edits);
+            }
+            return result.toString();
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
         }
-        return result.toString();
     }
 
     private static final class GreekUpper {
@@ -662,8 +733,10 @@ public final class CaseMap {
          * TODO: Try to re-consolidate one way or another with the non-Greek function.
          *
          * <p>Keep this consistent with the C++ versions in ustrcase.cpp (UTF-16) and ucasemap.cpp (UTF-8).
+         * @throws IOException
          */
-        private static String toUpper(CharSequence s, int[] locCache) {
+        private static String toUpper(CharSequence s) throws IOException {
+            int options = 0; Edits edits = null;  // TODO
             StringBuilder result = new StringBuilder(s.length());
             int state = 0;
             for (int i = 0; i < s.length();) {
@@ -747,8 +820,8 @@ public final class CaseMap {
                         --numYpogegrammeni;
                     }
                 } else {
-                    c = UCaseProps.INSTANCE.toFullUpper(c, null, result, null, locCache);
-                    appendResult(c, result);
+                    c = UCaseProps.INSTANCE.toFullUpper(c, null, result, UCaseProps.LOC_GREEK);
+                    appendResult(c, result, nextIndex - i, options, edits);
                 }
                 i = nextIndex;
                 state = nextState;
