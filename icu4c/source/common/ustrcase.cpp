@@ -1177,7 +1177,7 @@ UBool isFollowedByCasedLetter(const UCaseProps *csp, const UChar *s, int32_t i, 
  * for each character.
  * TODO: Try to re-consolidate one way or another with the non-Greek function.
  */
-int32_t toUpper(int32_t caseLocale, uint32_t options,
+int32_t toUpper(uint32_t options,
                 UChar *dest, int32_t destCapacity,
                 const UChar *src, int32_t srcLength,
                 Edits *edits,
@@ -1305,7 +1305,7 @@ int32_t toUpper(int32_t caseLocale, uint32_t options,
             }
         } else {
             const UChar *s;
-            c=ucase_toFullUpper(NULL, c, NULL, NULL, &s, caseLocale);
+            c=ucase_toFullUpper(NULL, c, NULL, NULL, &s, UCASE_LOC_GREEK);
             destIndex = appendResult(dest, destIndex, destCapacity, c, s,
                                      nextIndex - i, options, edits);
             if (destIndex < 0) {
@@ -1349,7 +1349,7 @@ ustrcase_internalToUpper(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_IT
                          icu::Edits *edits,
                          UErrorCode &errorCode) {
     if (caseLocale == UCASE_LOC_GREEK) {
-        return GreekUpper::toUpper(caseLocale, options, dest, destCapacity, src, srcLength, edits, errorCode);
+        return GreekUpper::toUpper(options, dest, destCapacity, src, srcLength, edits, errorCode);
     }
     UCaseContext csc=UCASECONTEXT_INITIALIZER;
     csc.p=(void *)src;

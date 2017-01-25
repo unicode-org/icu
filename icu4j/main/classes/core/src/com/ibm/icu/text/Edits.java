@@ -10,9 +10,6 @@ import java.util.Arrays;
  * Supports replacements, insertions, deletions in linear progression.
  * Does not support moving/reordering of text.
  *
- * An Edits object tracks a separate UErrorCode, but ICU string transformation functions
- * (e.g., case mapping functions) merge any such errors into their API's UErrorCode.
- *
  * @draft ICU 59
  * @provisional This API might change or be removed in a future release.
  */

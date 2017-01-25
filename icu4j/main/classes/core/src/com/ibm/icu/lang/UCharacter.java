@@ -29,6 +29,7 @@ import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterDirection;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Edits;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
@@ -4960,29 +4961,37 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.2
      */
     public static String toLowerCase(ULocale locale, String str) {
-        StringContextIterator iter = new StringContextIterator(str);
-        StringBuilder result = new StringBuilder(str.length());
-        int[] locCache = new int[1];
-        int c;
-
-        if (locale == null) {
-            locale = ULocale.getDefault();
-        }
-        locCache[0]=0;
-
-        while((c=iter.nextCaseMapCP())>=0) {
-            c = UCaseProps.INSTANCE.toFullLower(c, iter, result, locale, locCache);
-
-            /* decode the result */
-            if(c<0) {
-                /* (not) original code point */
-                c=~c;
-            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
-                /* mapping already appended to result */
-                continue;
-                /* } else { append single-code point mapping */
+        // TODO: remove package path
+        if (str.length() <= 100) {
+            if (str.isEmpty()) {
+                return str;
             }
-            result.appendCodePoint(c);
+            // Collect and apply only changes.
+            // Good if no or few changes.
+            // Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = com.ibm.icu.text.CaseMap.toLower(
+                    locale, com.ibm.icu.text.CaseMap.OMIT_UNCHANGED_TEXT, str,
+                    new StringBuilder(), edits);
+            return applyEdits(str, replacementChars, edits);
+        } else {
+            return com.ibm.icu.text.CaseMap.toLower(locale, 0, str, new StringBuilder(), null).toString();
+        }
+    }
+
+    private static String applyEdits(String str, StringBuilder replacementChars, Edits edits) {
+        if (!edits.hasChanges()) {
+            return str;
+        }
+        StringBuilder result = new StringBuilder(str.length() + edits.lengthDelta());
+        for (Edits.Iterator ei = edits.getCoarseIterator(); ei.next();) {
+            if (ei.hasChange()) {
+                int i = ei.replacementIndex();
+                result.append(replacementChars, i, i + ei.newLength());
+            } else {
+                int i = ei.sourceIndex();
+                result.append(str, i, i + ei.oldLength());
+            }
         }
         return result.toString();
     }
@@ -5063,13 +5072,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             int options) {
         StringContextIterator iter = new StringContextIterator(str);
         StringBuilder result = new StringBuilder(str.length());
-        int[] locCache = new int[1];
         int c, nc, srcLength = str.length();
 
         if (locale == null) {
             locale = ULocale.getDefault();
         }
-        locCache[0]=0;
+        int caseLocale = UCaseProps.getCaseLocale(locale);
 
         if(titleIter == null) {
             titleIter = BreakIterator.getWordInstance(locale);
@@ -5130,7 +5138,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 if(titleStart<index) {
                     FirstIJ = true;
                     /* titlecase c which is from titleStart */
-                    c = UCaseProps.INSTANCE.toFullTitle(c, iter, result, locale, locCache);
+                    c = UCaseProps.INSTANCE.toFullTitle(c, iter, result, caseLocale);
 
                     /* decode the result and lowercase up to index */
                     for(;;) {
@@ -5166,8 +5174,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                 FirstIJ = false;
                             } else {
                                 /* Normal operation: Lowercase the rest of the word. */
-                                c = UCaseProps.INSTANCE.toFullLower(nc, iter, result, locale,
-                                        locCache);
+                                c = UCaseProps.INSTANCE.toFullLower(nc, iter, result, caseLocale);
                             }
                         } else {
                             break;
