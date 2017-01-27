@@ -285,7 +285,7 @@ sl{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.34"}
+    Version{"2.1.31.86"}
     calendar{
         generic{
             DateTimePatterns{

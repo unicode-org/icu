@@ -230,7 +230,7 @@ sr{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
-                timeSeparator{"."}
+                timeSeparator{":"}
             }
         }
         minimalPairs{
@@ -247,7 +247,7 @@ sr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.92"}
     calendar{
         buddhist{
             eras{

@@ -521,7 +521,7 @@ uz{
             tibt{"tibet raqamlari"}
         }
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.86"}
     characterLabelPattern{
         all{"{0} — hammasi"}
         category-list{"{0}: {1}"}

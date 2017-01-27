@@ -141,7 +141,7 @@ ug{
         }
         native{"arabext"}
     }
-    Version{"2.1.31.34"}
+    Version{"2.1.31.86"}
     calendar{
         buddhist{
             eras{

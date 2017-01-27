@@ -552,7 +552,7 @@ pa{
             tibt{"ਤਿੱਬਤੀ ਅੰਕ"}
         }
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.86"}
     characterLabelPattern{
         all{"{0} — ਸਭ"}
         category-list{"{0}: {1}"}

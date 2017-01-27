@@ -14,8 +14,7 @@ keyTypeData:table(nofallback){
         }
         valueType{
             ca{"incremental"}
-            h0{"language-tag"}
-            h1{"language-tag"}
+            h0{"single"}
             kr{"multiple"}
             vt{"multiple"}
             x0{"any"}
@@ -39,7 +38,6 @@ keyTypeData:table(nofallback){
         em{""}
         fw{""}
         h0{""}
-        h1{""}
         hours{"hc"}
         i0{""}
         k0{""}
@@ -502,10 +500,7 @@ keyTypeData:table(nofallback){
             wed{""}
         }
         h0{
-            LANGUAGE_TAG{""}
-        }
-        h1{
-            LANGUAGE_TAG{""}
+            hybrid{""}
         }
         hours{
             h11{""}

@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sr_Latn{
     %%Parent{"root"}
-    Version{"2.1.31.74"}
+    Version{"2.1.31.92"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
