@@ -879,7 +879,7 @@ gd{
     Variants{
         SCOTLAND{"Beurla Bhun-Tomhasach na h-Alba"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.86"}
     codePatterns{
         language{"Cànan: {0}"}
         script{"Litreadh: {0}"}

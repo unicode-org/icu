@@ -894,7 +894,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.31.34"}
+    Version{"2.1.31.86"}
     characterLabelPattern{
         all{"{0} — Összes"}
         category-list{"{0}: {1}"}

@@ -1024,7 +1024,7 @@ yue{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.86"}
     characterLabelPattern{
         all{"{0} — 全部"}
         compatibility{"{0} — 相容性"}

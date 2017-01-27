@@ -200,7 +200,7 @@ fo{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.31.86"}
     calendar{
         generic{
             DateTimePatterns{

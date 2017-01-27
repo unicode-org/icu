@@ -979,7 +979,7 @@ vi{
         VALLADER{"VALLADER"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.93"}
     characterLabelPattern{
         all{"{0} — Tất cả"}
         category-list{"{0}: {1}"}

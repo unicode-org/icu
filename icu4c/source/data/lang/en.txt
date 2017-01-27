@@ -17,6 +17,7 @@ en{
         d0{"Transform Destination"}
         em{"Emoji Presentation Style"}
         fw{"First day of week"}
+        h0{"Mixed-in Language"}
         hc{"Hour Cycle (12 vs 24)"}
         i0{"Input Method"}
         k0{"Keyboard"}
@@ -934,8 +935,12 @@ en{
             zhuyin{"Zhuyin Sort Order"}
         }
         d0{
+            accents{"To Accented Characters From ASCII Sequence"}
             ascii{"To ASCII"}
+            casefold{"To Casefolded"}
             charname{"To Unicode Character Names"}
+            fcc{"To Unicode FCC"}
+            fcd{"To Unicode FCD"}
             fwidth{"To Fullwidth"}
             hex{"To Hexadecimal Codes"}
             hwidth{"To Halfwidth"}
@@ -945,6 +950,9 @@ en{
             nfkc{"To Unicode NFKC"}
             nfkd{"To Unicode NFKD"}
             npinyin{"To Pinyin With Numeric Tones"}
+            null{"No Change"}
+            publish{"To Publishing Characters From ASCII"}
+            remove{"To Empty String"}
             title{"To Titlecase"}
             upper{"To Uppercase"}
         }
@@ -962,11 +970,51 @@ en{
             tue{"First Day of Week Is Tuesday"}
             wed{"First Day of Week Is Wednesday"}
         }
+        h0{
+            hybrid{"Hybrid Language"}
+        }
         hc{
             h11{"12 Hour System (0–11)"}
             h12{"12 Hour System (1–12)"}
             h23{"24 Hour System (0–23)"}
             h24{"24 Hour System (1–24)"}
+        }
+        i0{
+            handwrit{"Handwriting Input Method"}
+            pinyin{"Pinyin Input Method"}
+            und{"Unspecified Input Method"}
+            wubi{"Wubi Input Method"}
+        }
+        k0{
+            101key{"101-Key Keyboard"}
+            102key{"102-Key Keyboard"}
+            600dpi{"600 dpi Keyboard"}
+            768dpi{"768 dpi Keyboard"}
+            android{"Android Keyboard"}
+            azerty{"AZERTY-Based Keyboard"}
+            chromeos{"ChromeOS Keyboard"}
+            colemak{"Colemak Keyboard"}
+            dvorak{"Dvorak Keyboard"}
+            dvorakl{"Dvorak Left-Handed Keyboard"}
+            dvorakr{"Dvorak Right-Handed Keyboard"}
+            el220{"Greek 220 Keyboard"}
+            el319{"Greek 319 Keyboard"}
+            extended{"Keyboard With Many Extra Characters"}
+            googlevk{"Google Virtual Keyboard"}
+            isiri{"Persian ISIRI Keyboard"}
+            legacy{"Legacy Keyboard"}
+            lt1205{"Lithuanian LST 1205 Keyboard"}
+            lt1582{"Lithuanian LST 1582 Keyboard"}
+            nutaaq{"Inuktitut Nutaaq Keyboard"}
+            osx{"macOS Keyboard"}
+            patta{"Thai Pattachote Keyboard"}
+            qwerty{"QWERTY-Based Keyboard"}
+            qwertz{"QWERTZ-Based Keyboard"}
+            ta99{"Tamil 99 Keyboard"}
+            und{"Unspecified Keyboard"}
+            var{"Keyboard Variant"}
+            viqr{"Vietnamese VIQR Keyboard"}
+            windows{"Windows Keyboard"}
         }
         kr{
             currency{"Currency"}
@@ -992,8 +1040,17 @@ en{
             normal{"Normal Line Breaks For Words"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            alaloc{"US ALA-LOC Transliteration"}
+            bgn{"US BGN Transliteration"}
+            buckwalt{"Buckwalter Arabic Transliteration"}
+            din{"German DIN Transliteration"}
+            gost{"CIS GOST Transliteration"}
+            iso{"ISO Transliteration"}
+            mcst{"Korean MCST Transliteration"}
+            mns{"Mongolian National Standard Transliteration"}
+            prprname{"Personal Name Transliteration Variant"}
+            satts{"Standard Arabic Technical Transliteration"}
+            ungegn{"UN GEGN Transliteration"}
         }
         ms{
             metric{"Metric System"}
@@ -1082,9 +1139,20 @@ en{
             vaii{"Vai Digits"}
             wara{"Warang Citi Digits"}
         }
+        s0{
+            accents{"From Accented Characters To ASCII Sequence"}
+            ascii{"From ASCII"}
+            hex{"From Hexadecimal Codes"}
+            npinyin{"From Pinyin With Numeric Tones"}
+            publish{"From Publishing Punctuation To ASCII"}
+            zawgyi{"From Zawgyi Myanmar Encoding"}
+        }
         ss{
             none{"Sentence Breaks Without Abbreviation Handling"}
             standard{"Suppress Sentence Breaks After Standard Abbreviations"}
+        }
+        t0{
+            und{"Unspecified Machine Translation"}
         }
         va{
             posix{"POSIX Compliant Locale"}
@@ -1152,7 +1220,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.94"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

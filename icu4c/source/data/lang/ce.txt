@@ -295,7 +295,7 @@ ce{
             persian{"гӀажарийн"}
         }
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.31.86"}
     codePatterns{
         language{"Мотт: {0}"}
         script{"Скрипт: {0}"}

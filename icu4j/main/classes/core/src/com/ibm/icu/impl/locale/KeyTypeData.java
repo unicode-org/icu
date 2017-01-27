@@ -30,7 +30,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
 public class KeyTypeData {
 
     public enum ValueType {
-        single, multiple, incremental, languageTag, any
+        single, multiple, incremental, any
     }
 
     private static abstract class SpecialTypeHandler {
@@ -42,14 +42,6 @@ public class KeyTypeData {
 
     private static class CodepointsTypeHandler extends SpecialTypeHandler {
         private static final Pattern pat = Pattern.compile("[0-9a-fA-F]{4,6}(-[0-9a-fA-F]{4,6})*");
-        @Override
-        boolean isWellFormed(String value) {
-            return pat.matcher(value).matches();
-        }
-    }
-
-    private static class LanguageTagTypeHandler extends SpecialTypeHandler {
-        private static final Pattern pat = Pattern.compile("[a-zA-Z]{3,8}");
         @Override
         boolean isWellFormed(String value) {
             return pat.matcher(value).matches();
@@ -90,7 +82,6 @@ public class KeyTypeData {
 
     private enum SpecialType {
         CODEPOINTS(new CodepointsTypeHandler()),
-        LANGUAGE_TAG(new LanguageTagTypeHandler()),
         REORDER_CODE(new ReorderCodeTypeHandler()),
         RG_KEY_VALUE(new RgKeyValueTypeHandler()),
         SUBDIVISION_CODE(new SubdivisionKeyValueTypeHandler()),
@@ -420,8 +411,7 @@ keyInfo{
     }
     valueType{
         ca{"incremental"}
-        h0{"language-tag"}
-        h1{"language-tag"}
+        h0{"single"}
         kr{"multiple"}
         vt{"multiple"}
         x0{"any"}
@@ -444,11 +434,7 @@ keyInfo{
                     _deprecatedKeys.add(key2);
                     break;
                 case valueType:
-                    if (value2.equals("language-tag")) {
-                        _valueTypes.put(key2, ValueType.languageTag);
-                    } else {
-                        _valueTypes.put(key2, ValueType.valueOf(value2));
-                    }
+                    _valueTypes.put(key2, ValueType.valueOf(value2));
                     break;
                 }
             }

@@ -235,7 +235,7 @@ bn{
         minimumGroupingDigits{"1"}
         native{"beng"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.86"}
     calendar{
         generic{
             DateTimePatterns{

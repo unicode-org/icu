@@ -382,7 +382,7 @@ ar{
         minimumGroupingDigits{"1"}
         native{"arab"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.86"}
     calendar{
         buddhist{
             eras{

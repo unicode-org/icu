@@ -231,13 +231,13 @@ sr_Latn{
                 percentSign{"%"}
                 plusSign{"+"}
                 superscriptingExponent{"×"}
-                timeSeparator{"."}
+                timeSeparator{":"}
             }
         }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.92"}
     calendar{
         buddhist{
             eras{

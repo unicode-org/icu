@@ -287,7 +287,7 @@ uk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.31.86"}
     calendar{
         coptic{
             monthNames{
