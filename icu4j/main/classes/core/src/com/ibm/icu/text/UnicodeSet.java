@@ -3409,8 +3409,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * property alias, or a special ID.  Special IDs are matched
      * loosely and correspond to the following sets:
      *
-     * "ANY" = [\u0000-\U0010FFFF],
-     * "ASCII" = [\u0000-\u007F].
+     * "ANY" = [\\u0000-\\U0010FFFF],
+     * "ASCII" = [\\u0000-\\u007F].
      *
      * @param valueAlias a value alias, either short or long.  The
      * name is matched loosely.  See PropertyValueAliases.txt for
