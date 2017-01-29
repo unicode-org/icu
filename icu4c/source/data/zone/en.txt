@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en{
-    Version{"2.1.31.94"}
+    Version{"2.1.31.98"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -20,6 +20,10 @@ en{
         }
         "Asia:Saigon"{
             ec{"Ho Chi Minh City"}
+        }
+        "Etc:UTC"{
+            ls{"Coordinated Universal Time"}
+            ss{"UTC"}
         }
         "Etc:Unknown"{
             ec{"Unknown City"}

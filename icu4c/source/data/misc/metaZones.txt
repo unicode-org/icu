@@ -3454,6 +3454,11 @@ metaZones:table(nofallback){
                 "America_Eastern",
             }
         }
+        "Etc:GMT"{
+            {
+                "GMT",
+            }
+        }
         "Europe:Amsterdam"{
             {
                 "Europe_Central",
