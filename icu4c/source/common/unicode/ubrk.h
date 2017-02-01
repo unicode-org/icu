@@ -279,7 +279,7 @@ ubrk_openRules(const UChar     *rules,
  *                    rules remains with the caller of this function. The compiled
  *                    rules must not be modified or deleted during the life of the
  *                    break iterator.
- * @param rulesLength The length of binaryRules in bytes.
+ * @param rulesLength The length of binaryRules in bytes; must be >= 0.
  * @param text        The text to be iterated over.  May be null, in which case
  *                    ubrk_setText() is used to specify the text to be iterated.
  * @param textLength  The number of characters in text, or -1 if null-terminated.
@@ -289,7 +289,7 @@ ubrk_openRules(const UChar     *rules,
  * @draft ICU 59
  */
 U_DRAFT UBreakIterator* U_EXPORT2
-ubrk_openBinaryRules(const uint8_t *binaryRules, uint32_t rulesLength,
+ubrk_openBinaryRules(const uint8_t *binaryRules, int32_t rulesLength,
                      const UChar *  text, int32_t textLength,
                      UErrorCode *   status);
 
@@ -603,22 +603,27 @@ ubrk_refreshUText(UBreakIterator *bi,
  * different major versions of ICU, nor across platforms of different endianness or
  * different base character set family (ASCII vs EBCDIC). Supports preflighting (with
  * binaryRules=NULL and rulesCapacity=0) to get the rules length without copying them to
- * the binaryRules buffer,
+ * the binaryRules buffer. However, whether preflighting or not, if the actual length
+ * is greater than INT32_MAX, then the function returns 0 and sets *status to
+ * U_INDEX_OUTOFBOUNDS_ERROR.
+
  * @param bi            The break iterator to use.
  * @param binaryRules   Buffer to receive the compiled binary rules; set to NULL for
  *                      preflighting.
  * @param rulesCapacity Capacity (in bytes) of the binaryRules buffer; set to 0 for
- *                      preflighting.
- * @param status        Pointer to UErrorCode to receive any errors.
- * @return              The actual byte length of the binary rules. If not preflighting
- *                      and this is larger than rulesCapacity, *status will be set to
- *                      an error.
+ *                      preflighting. Must be >= 0.
+ * @param status        Pointer to UErrorCode to receive any errors, such as
+ *                      U_BUFFER_OVERFLOW_ERROR, U_INDEX_OUTOFBOUNDS_ERROR, or
+ *                      U_ILLEGAL_ARGUMENT_ERROR.
+ * @return              The actual byte length of the binary rules, if <= INT32_MAX;
+ *                      otherwise 0. If not preflighting and this is larger than
+ *                      rulesCapacity, *status will be set to an error.
  * @see ubrk_openBinaryRules
  * @draft ICU 59
  */
-U_DRAFT uint32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 ubrk_getBinaryRules(UBreakIterator *bi,
-                    uint8_t *       binaryRules, uint32_t rulesCapacity,
+                    uint8_t *       binaryRules, int32_t rulesCapacity,
                     UErrorCode *    status);
 
 #endif  /* U_HIDE_DRAFT_API */
