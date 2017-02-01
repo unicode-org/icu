@@ -605,15 +605,17 @@ static void TestBreakIteratorRules() {
                 if (U_FAILURE(status)) {
                     log_err("FAIL: ubrk_openBinaryRules err: %s", u_errorName(status));
                 } else {
+                    int32_t maxCount = sizeof(breaks); /* fail-safe test limit */
                     int32_t pos2 = ubrk_first(bi2);
                     pos = ubrk_first(bi);
-                    for (i=0; i<sizeof(breaks); i++) {
+                    do {
                         if (pos2 != pos) {
                             log_err("FAIL: interator from ubrk_openBinaryRules does not match original, get pos = %d instead of %d", pos2, pos);
                         }
                         pos2 = ubrk_next(bi2);
                         pos = ubrk_next(bi);
-                    }
+                    } while ((pos != UBRK_DONE || pos2 != UBRK_DONE) && maxCount-- > 0);
+                    
                     ubrk_close(bi2);
                 }
             }
