@@ -121,11 +121,15 @@ ubrk_openRules(  const UChar        *rules,
 
 
 U_CAPI UBreakIterator* U_EXPORT2
-ubrk_openBinaryRules(const uint8_t *binaryRules, uint32_t rulesLength,
+ubrk_openBinaryRules(const uint8_t *binaryRules, int32_t rulesLength,
                      const UChar *  text, int32_t textLength,
                      UErrorCode *   status)
 {
     if (U_FAILURE(*status)) {
+        return NULL;
+    }
+    if (rulesLength < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
     LocalPointer<RuleBasedBreakIterator> lpRBBI(new RuleBasedBreakIterator(binaryRules, rulesLength, *status), *status);
@@ -315,15 +319,15 @@ ubrk_refreshUText(UBreakIterator *bi,
     bii->refreshInputText(text, *status);
 }
 
-U_CAPI uint32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ubrk_getBinaryRules(UBreakIterator *bi,
-                    uint8_t *       binaryRules, uint32_t rulesCapacity,
+                    uint8_t *       binaryRules, int32_t rulesCapacity,
                     UErrorCode *    status)
 {
     if (U_FAILURE(*status)) {
         return 0;
     }
-    if (binaryRules == NULL && rulesCapacity > 0) {
+    if ((binaryRules == NULL && rulesCapacity > 0) || rulesCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -334,14 +338,19 @@ ubrk_getBinaryRules(UBreakIterator *bi,
     }
     uint32_t rulesLength;
     const uint8_t * returnedRules = rbbi->getBinaryRules(rulesLength);
+    if (rulesLength > INT32_MAX) {
+        *status = U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
     if (binaryRules != NULL) { // if not preflighting
-        if (rulesLength > rulesCapacity) {
+        // Here we know rulesLength <= INT32_MAX and rulesCapacity >= 0, can cast safely
+        if ((int32_t)rulesLength > rulesCapacity) {
             *status = U_BUFFER_OVERFLOW_ERROR;
         } else {
             uprv_memcpy(binaryRules, returnedRules, rulesLength);
         }
     }
-    return rulesLength;
+    return (int32_t)rulesLength;
 }
 
 

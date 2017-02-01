@@ -589,7 +589,7 @@ static void TestBreakIteratorRules() {
     /* #12914 add basic sanity test for ubrk_getBinaryRules, ubrk_openBinaryRules */
     /* Underlying functionality checked in C++ rbbiapts.cpp TestRoundtripRules */
     status = U_ZERO_ERROR;
-    uint32_t rulesLength = ubrk_getBinaryRules(bi, NULL, 0, &status); /* preflight */
+    int32_t rulesLength = ubrk_getBinaryRules(bi, NULL, 0, &status); /* preflight */
     if (U_FAILURE(status)) {
         log_err("FAIL: ubrk_getBinaryRules preflight err: %s", u_errorName(status));
     } else {
