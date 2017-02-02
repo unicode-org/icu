@@ -4949,18 +4949,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(Locale locale, String str)
     {
-        return toLowerCase(ULocale.forLocale(locale), str);
-    }
-
-    /**
-     * Returns the lowercase version of the argument string.
-     * Casing is dependent on the argument locale and context-sensitive
-     * @param locale which string is to be converted in
-     * @param str source string to be performed on
-     * @return lowercase version of the argument string
-     * @stable ICU 3.2
-     */
-    public static String toLowerCase(ULocale locale, String str) {
         // TODO: remove package path
         if (str.length() <= 100) {
             if (str.isEmpty()) {
@@ -4977,6 +4965,18 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         } else {
             return com.ibm.icu.text.CaseMap.toLower(locale, 0, str, new StringBuilder(), null).toString();
         }
+    }
+
+    /**
+     * Returns the lowercase version of the argument string.
+     * Casing is dependent on the argument locale and context-sensitive
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @return lowercase version of the argument string
+     * @stable ICU 3.2
+     */
+    public static String toLowerCase(ULocale locale, String str) {
+        return toLowerCase(locale.toLocale(), str);
     }
 
     private static String applyEdits(String str, StringBuilder replacementChars, Edits edits) {
