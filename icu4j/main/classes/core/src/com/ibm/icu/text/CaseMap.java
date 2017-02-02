@@ -2,12 +2,12 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.text;
 
+import java.util.Locale;
+
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.util.ULocale;
 
 // TODO: issues/questions
-// - add java.util.Locale overloads when signatures are settled
 // - optimizing strategies for unstyled text: stop after number of changes or length of replacement?
 
 /**
@@ -39,14 +39,14 @@ public final class CaseMap {
      *                  This function calls edits.reset() first. edits can be null.
      * @return dest with the result string (or only changes) appended.
      *
-     * @see UCharacter#toLowerCase(ULocale, String)
+     * @see UCharacter#toLowerCase(Locale, String)
      * @draft ICU 59
      * @provisional This API might change or be removed in a future release.
      */
      public static <A extends Appendable> A toLower(
-             ULocale locale, int options, CharSequence src, A dest, Edits edits) {
+             Locale locale, int options, CharSequence src, A dest, Edits edits) {
          if (locale == null) {
-             locale = ULocale.getDefault();
+             locale = Locale.getDefault();
          }
          int caseLocale = UCaseProps.getCaseLocale(locale);
          // TODO: remove package path
@@ -67,12 +67,12 @@ public final class CaseMap {
      *                  This function calls edits.reset() first. edits can be null.
      * @return dest with the result string (or only changes) appended.
      *
-     * @see UCharacter#toUpperCase(ULocale, String)
+     * @see UCharacter#toUpperCase(Locale, String)
      * @draft ICU 59
      * @provisional This API might change or be removed in a future release.
      */
      public static <A extends Appendable> A toUpper(
-             ULocale locale, int options, CharSequence src, A dest, Edits edits) {
+             Locale locale, int options, CharSequence src, A dest, Edits edits) {
          return null;
      }
 
@@ -101,12 +101,12 @@ public final class CaseMap {
      *                  This function calls edits.reset() first. edits can be null.
      * @return dest with the result string (or only changes) appended.
      *
-     * @see UCharacter#toTitleCase(ULocale, String, BreakIterator, int)
+     * @see UCharacter#toTitleCase(Locale, String, BreakIterator, int)
      * @draft ICU 59
      * @provisional This API might change or be removed in a future release.
      */
      public static <A extends Appendable> A toTitle(
-             ULocale locale, int options, BreakIterator iter,
+             Locale locale, int options, BreakIterator iter,
              CharSequence src, A dest, Edits edits) {
          return null;
      }
