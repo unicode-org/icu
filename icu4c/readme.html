@@ -246,10 +246,19 @@
     For more news about this release, as well as late-breaking news, see the
     <a href="http://site.icu-project.org/download/57">ICU download page</a>.</p>
 
+    <h3>New for 59 Milestone 1</h3>
+    <ul>
+    	<li>Compiler support for C++11 is required for building the ICU libraries.</li>
+        <li>All source files are UTF-8 encoded. On platforms where the native charset is not UTF-8,
+            including Windows, check the settings of your editor before working with the source.</li>
+        <li>The type of UChar is char16_t, on all platforms. This is no longer configurable.
+            This change may affect Windows code with assumptions that UChar was wchar_t, and thus
+            type compatible with other Windows code expecting wchar_t strings.</li>
+    </ul>
+
     <h3>Upcoming changes</h3>
     <p>Please note the following changes planned for an upcoming ICU4C release (likely ICU 59):</p>
     <ul>
-    	<li>Compiler support for C++11 will be required.</li>
     	<li>Support for Windows XP will be removed.</li>
     </ul>
 
