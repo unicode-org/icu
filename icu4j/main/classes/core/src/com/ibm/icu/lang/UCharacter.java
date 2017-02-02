@@ -4958,12 +4958,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             // Good if no or few changes.
             // Bad (slow) if many changes.
             Edits edits = new Edits();
-            StringBuilder replacementChars = com.ibm.icu.text.CaseMap.toLower(
-                    locale, com.ibm.icu.text.CaseMap.OMIT_UNCHANGED_TEXT, str,
-                    new StringBuilder(), edits);
+            StringBuilder replacementChars = com.ibm.icu.text.CaseMap.toLower().omitUnchangedText().apply(
+                    locale, str, new StringBuilder(), edits);
             return applyEdits(str, replacementChars, edits);
         } else {
-            return com.ibm.icu.text.CaseMap.toLower(locale, 0, str, new StringBuilder(), null).toString();
+            return com.ibm.icu.text.CaseMap.toLower().apply(locale, str, new StringBuilder(), null).toString();
         }
     }
 
