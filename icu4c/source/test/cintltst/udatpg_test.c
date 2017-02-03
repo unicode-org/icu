@@ -8,7 +8,7 @@
 *
 *******************************************************************************
 *   file name:  udatpg_test.c
-*   encoding:   US-ASCII
+*   encoding:   UTF-8
 *   tab size:   8 (not used)
 *   indentation:4
 *

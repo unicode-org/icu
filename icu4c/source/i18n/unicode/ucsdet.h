@@ -6,7 +6,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   file name:  ucsdet.h
- *   encoding:   US-ASCII
+ *   encoding:   UTF-8
  *   indentation:4
  *
  *   created on: 2005Aug04
