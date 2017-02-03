@@ -98,6 +98,11 @@
  *     <td>C API</td>
  *   </tr>
  *   <tr>
+ *     <td>Codepage Detection</td>
+ *     <td>ucsdet.h</td>
+ *     <td>C API</td>
+ *   </tr>
+ *   <tr>
  *     <td>Unicode Text Compression</td>
  *     <td>ucnv.h<br/>(encoding name "SCSU" or "BOCU-1")</td>
  *     <td>C API</td>
