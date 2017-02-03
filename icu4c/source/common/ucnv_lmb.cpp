@@ -6,7 +6,7 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_lmb.cpp
-*   encoding:   US-ASCII
+*   encoding:   UTF-8
 *   tab size:   4 (not used)
 *   indentation:4
 *

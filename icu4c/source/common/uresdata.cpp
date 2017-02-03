@@ -6,7 +6,7 @@
 *               and others. All Rights Reserved.
 *******************************************************************************
 *   file name:  uresdata.cpp
-*   encoding:   US-ASCII
+*   encoding:   UTF-8
 *   tab size:   8 (not used)
 *   indentation:4
 *
