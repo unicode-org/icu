@@ -6,12 +6,16 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.util.ULocale;
 
 // TODO: issues/questions
 // - optimizing strategies for unstyled text: stop after number of changes or length of replacement?
 
 /**
  * Low-level case mapping options and methods. Immutable.
+ * "Setters" return instances with the union of the current and new options set.
+ *
+ * This class is not intended for public subclassing.
  *
  * @draft ICU 59
  * @provisional This API might change or be removed in a future release.
@@ -52,7 +56,8 @@ public abstract class CaseMap {
     public static Fold fold() { return Fold.DEFAULT; }
 
     /**
-     * Omit unchanged text when case-mapping with {@link Edits}.
+     * Returns an instance that behaves like this one but
+     * omits unchanged text when case-mapping with {@link Edits}.
      *
      * @return an options object with this option.
      * @draft ICU 59
@@ -88,6 +93,7 @@ public abstract class CaseMap {
          * The result may be longer or shorter than the original.
          *
          * @param locale    The locale ID. Can be null for {@link Locale#getDefault}.
+         *                  (See {@link ULocale#toLocale}.)
          * @param src       The original string.
          * @param dest      A buffer for the result string. Must not be null.
          * @param edits     Records edits for index mapping, working with styled text,
@@ -139,6 +145,7 @@ public abstract class CaseMap {
          * The result may be longer or shorter than the original.
          *
          * @param locale    The locale ID. Can be null for {@link Locale#getDefault}.
+         *                  (See {@link ULocale#toLocale}.)
          * @param src       The original string.
          * @param dest      A buffer for the result string. Must not be null.
          * @param edits     Records edits for index mapping, working with styled text,
@@ -182,7 +189,8 @@ public abstract class CaseMap {
         }
 
         /**
-         * Do not lowercase non-initial parts of words when titlecasing.
+         * Returns an instance that behaves like this one but
+         * does not lowercase non-initial parts of words when titlecasing.
          *
          * <p>By default, titlecasing will titlecase the first cased character
          * of a word and lowercase all other characters.
@@ -199,8 +207,9 @@ public abstract class CaseMap {
 
         // TODO: update references to the Unicode Standard for recent version
         /**
-         * Do not adjust the titlecasing indexes from BreakIterator::next() indexes;
-         * titlecase exactly the characters at breaks from the iterator.
+         * Returns an instance that behaves like this one but
+         * does not adjust the titlecasing indexes from BreakIterator::next() indexes;
+         * titlecases exactly the characters at breaks from the iterator.
          *
          * <p>By default, titlecasing will take each break iterator index,
          * adjust it by looking for the next cased character, and titlecase that one.
@@ -227,11 +236,12 @@ public abstract class CaseMap {
          * Casing is locale-dependent and context-sensitive.
          * The result may be longer or shorter than the original.
          *
-         * Titlecasing uses a break iterator to find the first characters of words
+         * <p>Titlecasing uses a break iterator to find the first characters of words
          * that are to be titlecased. It titlecases those characters and lowercases
          * all others. (This can be modified with options bits.)
          *
          * @param locale    The locale ID. Can be null for {@link Locale#getDefault}.
+         *                  (See {@link ULocale#toLocale}.)
          * @param iter      A break iterator to find the first characters of words that are to be titlecased.
          *                  It is set to the source string (setText())
          *                  and used one or more times for iteration (first() and next()).
@@ -281,7 +291,8 @@ public abstract class CaseMap {
         }
 
         /**
-         * Handle dotted I and dotless i appropriately for Turkic languages (tr, az).
+         * Returns an instance that behaves like this one but
+         * handles dotted I and dotless i appropriately for Turkic languages (tr, az).
          *
          * <p>Uses the Unicode CaseFolding.txt mappings marked with 'T' that
          * are to be excluded for default mappings and
@@ -300,11 +311,11 @@ public abstract class CaseMap {
         /**
          * Case-folds a string and optionally records edits (see {@link #omitUnchangedText}).
          *
-         * Case-folding is locale-independent and not context-sensitive,
+         * <p>Case-folding is locale-independent and not context-sensitive,
          * but there is an option for whether to include or exclude mappings for dotted I
          * and dotless i that are marked with 'T' in CaseFolding.txt.
          *
-         * The result may be longer or shorter than the original.
+         * <p>The result may be longer or shorter than the original.
          *
          * @param src       The original string.
          * @param dest      A buffer for the result string. Must not be null.
