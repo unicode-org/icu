@@ -29,7 +29,6 @@ import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterDirection;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.CaseMap;
 import com.ibm.icu.text.Edits;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.util.RangeValueIterator;
@@ -4877,7 +4876,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toUpperCase(String str)
     {
-        return toUpperCase(ULocale.getDefault(), str);
+        return toUpperCase(getDefaultCaseLocale(), str);
     }
 
     /**
@@ -4889,7 +4888,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(String str)
     {
-        return toLowerCase(ULocale.getDefault(), str);
+        return toLowerCase(getDefaultCaseLocale(), str);
     }
 
     /**
@@ -4912,70 +4911,57 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toTitleCase(String str, BreakIterator breakiter)
     {
-        return toTitleCase(ULocale.getDefault(), str, breakiter);
+        return toTitleCase(Locale.getDefault(), str, breakiter, 0);
     }
 
-    /**
-     * Returns the uppercase version of the argument string.
-     * Casing is dependent on the argument locale and context-sensitive.
-     * @param locale which string is to be converted in
-     * @param str source string to be performed on
-     * @return uppercase version of the argument string
-     * @stable ICU 2.1
-     */
-    public static String toUpperCase(Locale locale, String str)
-    {
-        return toUpperCase(ULocale.forLocale(locale), str);
+    private static int getDefaultCaseLocale() {
+        return UCaseProps.getCaseLocale(Locale.getDefault());
     }
 
-    /**
-     * Returns the uppercase version of the argument string.
-     * Casing is dependent on the argument locale and context-sensitive.
-     * @param locale which string is to be converted in
-     * @param str source string to be performed on
-     * @return uppercase version of the argument string
-     * @stable ICU 3.2
-     */
-    public static String toUpperCase(ULocale locale, String str) {
-        return CaseMapImpl.toUpper(locale, str);
+    private static int getCaseLocale(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return UCaseProps.getCaseLocale(locale);
     }
 
-    /**
-     * Returns the lowercase version of the argument string.
-     * Casing is dependent on the argument locale and context-sensitive
-     * @param locale which string is to be converted in
-     * @param str source string to be performed on
-     * @return lowercase version of the argument string
-     * @stable ICU 2.1
-     */
-    public static String toLowerCase(Locale locale, String str)
-    {
+    private static int getCaseLocale(ULocale locale) {
+        if (locale == null) {
+            locale = ULocale.getDefault();
+        }
+        return UCaseProps.getCaseLocale(locale);
+    }
+
+    private static String toLowerCase(int caseLocale, String str) {
         if (str.length() <= 100) {
             if (str.isEmpty()) {
                 return str;
             }
             // Collect and apply only changes.
-            // Good if no or few changes.
-            // Bad (slow) if many changes.
+            // Good if no or few changes. Bad (slow) if many changes.
             Edits edits = new Edits();
-            StringBuilder replacementChars = CaseMap.toLower().omitUnchangedText().apply(
-                    locale, str, new StringBuilder(), edits);
+            StringBuilder replacementChars = CaseMapImpl.toLower(
+                    caseLocale, CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
             return applyEdits(str, replacementChars, edits);
         } else {
-            return CaseMap.toLower().apply(locale, str, new StringBuilder(), null).toString();
+            return CaseMapImpl.toLower(caseLocale, 0, str, new StringBuilder(), null).toString();
         }
     }
 
-    /**
-     * Returns the lowercase version of the argument string.
-     * Casing is dependent on the argument locale and context-sensitive
-     * @param locale which string is to be converted in
-     * @param str source string to be performed on
-     * @return lowercase version of the argument string
-     * @stable ICU 3.2
-     */
-    public static String toLowerCase(ULocale locale, String str) {
-        return toLowerCase(locale.toLocale(), str);
+    private static String toUpperCase(int caseLocale, String str) {
+        if (str.length() <= 100) {
+            if (str.isEmpty()) {
+                return str;
+            }
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = CaseMapImpl.toUpper(
+                    caseLocale, CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
+            return applyEdits(str, replacementChars, edits);
+        } else {
+            return CaseMapImpl.toUpper(caseLocale, 0, str, new StringBuilder(), null).toString();
+        }
     }
 
     private static String applyEdits(String str, StringBuilder replacementChars, Edits edits) {
@@ -4993,6 +4979,56 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             }
         }
         return result.toString();
+    }
+
+    /**
+     * Returns the uppercase version of the argument string.
+     * Casing is dependent on the argument locale and context-sensitive.
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @return uppercase version of the argument string
+     * @stable ICU 2.1
+     */
+    public static String toUpperCase(Locale locale, String str)
+    {
+        return toUpperCase(getCaseLocale(locale), str);
+    }
+
+    /**
+     * Returns the uppercase version of the argument string.
+     * Casing is dependent on the argument locale and context-sensitive.
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @return uppercase version of the argument string
+     * @stable ICU 3.2
+     */
+    public static String toUpperCase(ULocale locale, String str) {
+        return toUpperCase(getCaseLocale(locale), str);
+    }
+
+    /**
+     * Returns the lowercase version of the argument string.
+     * Casing is dependent on the argument locale and context-sensitive
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @return lowercase version of the argument string
+     * @stable ICU 2.1
+     */
+    public static String toLowerCase(Locale locale, String str)
+    {
+        return toLowerCase(getCaseLocale(locale), str);
+    }
+
+    /**
+     * Returns the lowercase version of the argument string.
+     * Casing is dependent on the argument locale and context-sensitive
+     * @param locale which string is to be converted in
+     * @param str source string to be performed on
+     * @return lowercase version of the argument string
+     * @stable ICU 3.2
+     */
+    public static String toLowerCase(ULocale locale, String str) {
+        return toLowerCase(getCaseLocale(locale), str);
     }
 
     /**

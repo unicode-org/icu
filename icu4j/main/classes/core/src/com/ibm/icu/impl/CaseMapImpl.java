@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import com.ibm.icu.text.Edits;
 import com.ibm.icu.util.ICUUncheckedIOException;
-import com.ibm.icu.util.ULocale;
 
 public final class CaseMapImpl {
     /**
@@ -210,25 +209,22 @@ public final class CaseMapImpl {
         }
     }
 
-    public static String toUpper(ULocale locale, String str) {
+    public static <A extends Appendable> A toUpper(int caseLocale, int options,
+            CharSequence src, A dest, Edits edits) {
         try {
-            int options = 0; Edits edits = null;  // TODO
-            if (locale == null) {
-                locale = ULocale.getDefault();
+            if (edits != null) {
+                edits.reset();
             }
-            int caseLocale = UCaseProps.getCaseLocale(locale);
             if (caseLocale == UCaseProps.LOC_GREEK) {
-                return GreekUpper.toUpper(str);
+                return GreekUpper.toUpper(options, src, dest, edits);
             }
-
-            StringContextIterator iter = new StringContextIterator(str);
-            StringBuilder result = new StringBuilder(str.length());
+            StringContextIterator iter = new StringContextIterator(src);
             int c;
-            while((c=iter.nextCaseMapCP())>=0) {
-                c = UCaseProps.INSTANCE.toFullUpper(c, iter, result, caseLocale);
-                appendResult(c, result, iter.getCPLength(), options, edits);
+            while ((c = iter.nextCaseMapCP()) >= 0) {
+                c = UCaseProps.INSTANCE.toFullUpper(c, iter, dest, caseLocale);
+                appendResult(c, dest, iter.getCPLength(), options, edits);
             }
-            return result.toString();
+            return dest;
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
         }
@@ -737,12 +733,11 @@ public final class CaseMapImpl {
          * <p>Keep this consistent with the C++ versions in ustrcase.cpp (UTF-16) and ucasemap.cpp (UTF-8).
          * @throws IOException
          */
-        private static String toUpper(CharSequence s) throws IOException {
-            int options = 0; Edits edits = null;  // TODO
-            StringBuilder result = new StringBuilder(s.length());
+        private static <A extends Appendable> A toUpper(int options,
+                CharSequence src, A dest, Edits edits) throws IOException {
             int state = 0;
-            for (int i = 0; i < s.length();) {
-                int c = Character.codePointAt(s, i);
+            for (int i = 0; i < src.length();) {
+                int c = Character.codePointAt(src, i);
                 int nextIndex = i + Character.charCount(c);
                 int nextState = 0;
                 int type = UCaseProps.INSTANCE.getTypeOrIgnorable(c);
@@ -771,8 +766,8 @@ public final class CaseMapImpl {
                         numYpogegrammeni = 1;
                     }
                     // Skip combining diacritics after this Greek letter.
-                    while (nextIndex < s.length()) {
-                        int diacriticData = getDiacriticData(s.charAt(nextIndex));
+                    while (nextIndex < src.length()) {
+                        int diacriticData = getDiacriticData(src.charAt(nextIndex));
                         if (diacriticData != 0) {
                             data |= diacriticData;
                             if ((diacriticData & HAS_YPOGEGRAMMENI) != 0) {
@@ -792,7 +787,7 @@ public final class CaseMapImpl {
                             (data & HAS_ACCENT) != 0 &&
                             numYpogegrammeni == 0 &&
                             (state & AFTER_CASED) == 0 &&
-                            !isFollowedByCasedLetter(s, nextIndex)) {
+                            !isFollowedByCasedLetter(src, nextIndex)) {
                         // Keep disjunctive "or" with (only) a tonos.
                         // We use the same "word boundary" conditions as for the Final_Sigma test.
                         if (i == nextIndex) {
@@ -810,25 +805,59 @@ public final class CaseMapImpl {
                             data &= ~HAS_EITHER_DIALYTIKA;
                         }
                     }
-                    result.appendCodePoint(upper);
-                    if ((data & HAS_EITHER_DIALYTIKA) != 0) {
-                        result.append('\u0308');  // restore or add a dialytika
+
+                    boolean change;
+                    if (edits == null) {
+                        change = true;  // common, simple usage
+                    } else {
+                        // Find out first whether we are changing the text.
+                        change = src.charAt(i) != upper || numYpogegrammeni > 0;
+                        int i2 = i + 1;
+                        if ((data & HAS_EITHER_DIALYTIKA) != 0) {
+                            change |= i2 >= nextIndex || src.charAt(i2) != 0x308;
+                            ++i2;
+                        }
+                        if (addTonos) {
+                            change |= i2 >= nextIndex || src.charAt(i2) != 0x301;
+                            ++i2;
+                        }
+                        int oldLength = nextIndex - i;
+                        int newLength = (i2 - i) + numYpogegrammeni;
+                        change |= oldLength != newLength;
+                        if (change) {
+                            if (edits != null) {
+                                edits.addReplace(oldLength, newLength);
+                            }
+                        } else {
+                            if (edits != null) {
+                                edits.addUnchanged(oldLength);
+                            }
+                            // Write unchanged text?
+                            change = (options & OMIT_UNCHANGED_TEXT) == 0;
+                        }
                     }
-                    if (addTonos) {
-                        result.append('\u0301');
-                    }
-                    while (numYpogegrammeni > 0) {
-                        result.append('Ι');
-                        --numYpogegrammeni;
+
+                    if (change) {
+                        dest.append((char)upper);
+                        if ((data & HAS_EITHER_DIALYTIKA) != 0) {
+                            dest.append('\u0308');  // restore or add a dialytika
+                        }
+                        if (addTonos) {
+                            dest.append('\u0301');
+                        }
+                        while (numYpogegrammeni > 0) {
+                            dest.append('Ι');
+                            --numYpogegrammeni;
+                        }
                     }
                 } else {
-                    c = UCaseProps.INSTANCE.toFullUpper(c, null, result, UCaseProps.LOC_GREEK);
-                    appendResult(c, result, nextIndex - i, options, edits);
+                    c = UCaseProps.INSTANCE.toFullUpper(c, null, dest, UCaseProps.LOC_GREEK);
+                    appendResult(c, dest, nextIndex - i, options, edits);
                 }
                 i = nextIndex;
                 state = nextState;
             }
-            return result.toString();
+            return dest;
         }
     }
 }

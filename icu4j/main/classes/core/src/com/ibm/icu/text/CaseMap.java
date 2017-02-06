@@ -31,6 +31,13 @@ public abstract class CaseMap {
 
     private CaseMap(int opt) { internalOptions = opt; }
 
+    private static int getCaseLocale(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return UCaseProps.getCaseLocale(locale);
+    }
+
     /**
      * @return Lowercasing object with default options.
      * @draft ICU 59
@@ -108,11 +115,7 @@ public abstract class CaseMap {
          */
          public <A extends Appendable> A apply(
                  Locale locale, CharSequence src, A dest, Edits edits) {
-             if (locale == null) {
-                 locale = Locale.getDefault();
-             }
-             int caseLocale = UCaseProps.getCaseLocale(locale);
-             return CaseMapImpl.toLower(caseLocale, internalOptions, src, dest, edits);
+             return CaseMapImpl.toLower(getCaseLocale(locale), internalOptions, src, dest, edits);
          }
     }
 
@@ -158,7 +161,7 @@ public abstract class CaseMap {
          */
          public <A extends Appendable> A apply(
                  Locale locale, CharSequence src, A dest, Edits edits) {
-             return null;
+             return CaseMapImpl.toUpper(getCaseLocale(locale), internalOptions, src, dest, edits);
          }
     }
 
