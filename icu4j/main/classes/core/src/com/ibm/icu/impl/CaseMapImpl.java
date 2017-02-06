@@ -8,8 +8,7 @@ import com.ibm.icu.text.Edits;
 import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
 
-// TODO: rename to CaseMapImpl
-public final class CaseMap {
+public final class CaseMapImpl {
     /**
      * Implementation of UCaseProps.ContextIterator, iterates over a String.
      * See ustrcase.c/utf16_caseContextIterator().
@@ -134,6 +133,11 @@ public final class CaseMap {
         protected int dir; // 0=initial state  >0=forward  <0=backward
     }
 
+    /**
+     * Omit unchanged text when case-mapping with Edits.
+     */
+    public static final int OMIT_UNCHANGED_TEXT = 0x4000;
+
     private static int appendCodePoint(Appendable a, int c) throws IOException {
         if (c <= Character.MAX_VALUE) {
             a.append((char)c);
@@ -156,8 +160,7 @@ public final class CaseMap {
             // (not) original code point
             if (edits != null) {
                 edits.addUnchanged(cpLength);
-                // TODO: remove package path
-                if ((options & com.ibm.icu.text.CaseMap.OMIT_UNCHANGED_TEXT) != 0) {
+                if ((options & OMIT_UNCHANGED_TEXT) != 0) {
                     return;
                 }
             }
@@ -181,8 +184,7 @@ public final class CaseMap {
         if (length > 0) {
             if (edits != null) {
                 edits.addUnchanged(length);
-                // TODO: remove package path
-                if ((options & com.ibm.icu.text.CaseMap.OMIT_UNCHANGED_TEXT) != 0) {
+                if ((options & OMIT_UNCHANGED_TEXT) != 0) {
                     return;
                 }
             }

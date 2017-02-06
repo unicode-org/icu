@@ -4,6 +4,7 @@ package com.ibm.icu.text;
 
 import java.util.Locale;
 
+import com.ibm.icu.impl.CaseMapImpl;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
@@ -74,7 +75,7 @@ public abstract class CaseMap {
      */
     public static final class Lower extends CaseMap {
         private static final Lower DEFAULT = new Lower(0);
-        private static final Lower OMIT_UNCHANGED = new Lower(OMIT_UNCHANGED_TEXT);
+        private static final Lower OMIT_UNCHANGED = new Lower(CaseMapImpl.OMIT_UNCHANGED_TEXT);
         private Lower(int opt) { super(opt); }
 
         /**
@@ -111,9 +112,7 @@ public abstract class CaseMap {
                  locale = Locale.getDefault();
              }
              int caseLocale = UCaseProps.getCaseLocale(locale);
-             // TODO: remove package path
-             return com.ibm.icu.impl.CaseMap.toLower(
-                     caseLocale, internalOptions, src, dest, edits);
+             return CaseMapImpl.toLower(caseLocale, internalOptions, src, dest, edits);
          }
     }
 
@@ -126,7 +125,7 @@ public abstract class CaseMap {
      */
     public static final class Upper extends CaseMap {
         private static final Upper DEFAULT = new Upper(0);
-        private static final Upper OMIT_UNCHANGED = new Upper(OMIT_UNCHANGED_TEXT);
+        private static final Upper OMIT_UNCHANGED = new Upper(CaseMapImpl.OMIT_UNCHANGED_TEXT);
         private Upper(int opt) { super(opt); }
 
         /**
@@ -172,7 +171,7 @@ public abstract class CaseMap {
      */
     public static final class Title extends CaseMap {
         private static final Title DEFAULT = new Title(0);
-        private static final Title OMIT_UNCHANGED = new Title(OMIT_UNCHANGED_TEXT);
+        private static final Title OMIT_UNCHANGED = new Title(CaseMapImpl.OMIT_UNCHANGED_TEXT);
         private Title(int opt) { super(opt); }
 
         /**
@@ -182,10 +181,10 @@ public abstract class CaseMap {
          */
         @Override
         public Title omitUnchangedText() {
-            if (internalOptions == 0 || internalOptions == OMIT_UNCHANGED_TEXT) {
+            if (internalOptions == 0 || internalOptions == CaseMapImpl.OMIT_UNCHANGED_TEXT) {
                 return OMIT_UNCHANGED;
             }
-            return new Title(internalOptions | OMIT_UNCHANGED_TEXT);
+            return new Title(internalOptions | CaseMapImpl.OMIT_UNCHANGED_TEXT);
         }
 
         /**
@@ -274,9 +273,9 @@ public abstract class CaseMap {
     public static final class Fold extends CaseMap {
         private static final Fold DEFAULT = new Fold(0);
         private static final Fold TURKIC = new Fold(UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I);
-        private static final Fold OMIT_UNCHANGED = new Fold(OMIT_UNCHANGED_TEXT);
+        private static final Fold OMIT_UNCHANGED = new Fold(CaseMapImpl.OMIT_UNCHANGED_TEXT);
         private static final Fold TURKIC_OMIT_UNCHANGED = new Fold(
-                UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I | OMIT_UNCHANGED_TEXT);
+                UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I | CaseMapImpl.OMIT_UNCHANGED_TEXT);
         private Fold(int opt) { super(opt); }
 
         /**
@@ -304,7 +303,7 @@ public abstract class CaseMap {
          * @provisional This API might change or be removed in a future release.
          */
         public Fold turkic() {
-            return (internalOptions & OMIT_UNCHANGED_TEXT) == 0 ?
+            return (internalOptions & CaseMapImpl.OMIT_UNCHANGED_TEXT) == 0 ?
                     TURKIC : TURKIC_OMIT_UNCHANGED;
         }
 
@@ -332,13 +331,4 @@ public abstract class CaseMap {
              return null;
          }
     }
-
-    /**
-     * Omit unchanged text when case-mapping with Edits.
-     *
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static final int OMIT_UNCHANGED_TEXT = 0x4000;  // TODO: move to a non-public class
 }
