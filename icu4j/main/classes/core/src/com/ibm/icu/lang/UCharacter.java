@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.impl.CaseMap;
-import com.ibm.icu.impl.CaseMap.StringContextIterator;
+import com.ibm.icu.impl.CaseMapImpl;
+import com.ibm.icu.impl.CaseMapImpl.StringContextIterator;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
@@ -29,6 +29,7 @@ import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterDirection;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.CaseMap;
 import com.ibm.icu.text.Edits;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.util.RangeValueIterator;
@@ -4936,7 +4937,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.2
      */
     public static String toUpperCase(ULocale locale, String str) {
-        return CaseMap.toUpper(locale, str);
+        return CaseMapImpl.toUpper(locale, str);
     }
 
     /**
@@ -4949,7 +4950,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(Locale locale, String str)
     {
-        // TODO: remove package path
         if (str.length() <= 100) {
             if (str.isEmpty()) {
                 return str;
@@ -4958,11 +4958,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             // Good if no or few changes.
             // Bad (slow) if many changes.
             Edits edits = new Edits();
-            StringBuilder replacementChars = com.ibm.icu.text.CaseMap.toLower().omitUnchangedText().apply(
+            StringBuilder replacementChars = CaseMap.toLower().omitUnchangedText().apply(
                     locale, str, new StringBuilder(), edits);
             return applyEdits(str, replacementChars, edits);
         } else {
-            return com.ibm.icu.text.CaseMap.toLower().apply(locale, str, new StringBuilder(), null).toString();
+            return CaseMap.toLower().apply(locale, str, new StringBuilder(), null).toString();
         }
     }
 
