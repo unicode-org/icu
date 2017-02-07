@@ -4,6 +4,8 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Edits;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
@@ -191,6 +193,15 @@ public final class CaseMapImpl {
         }
     }
 
+    private static void internalToLower(int caseLocale, int options, StringContextIterator iter,
+            Appendable dest, Edits edits) throws IOException {
+        int c;
+        while ((c = iter.nextCaseMapCP()) >= 0) {
+            c = UCaseProps.INSTANCE.toFullLower(c, iter, dest, caseLocale);
+            appendResult(c, dest, iter.getCPLength(), options, edits);
+        }
+    }
+
     public static <A extends Appendable> A toLower(int caseLocale, int options,
             CharSequence src, A dest, Edits edits) {
         try {
@@ -198,11 +209,7 @@ public final class CaseMapImpl {
                 edits.reset();
             }
             StringContextIterator iter = new StringContextIterator(src);
-            int c;
-            while ((c = iter.nextCaseMapCP()) >= 0) {
-                c = UCaseProps.INSTANCE.toFullLower(c, iter, dest, caseLocale);
-                appendResult(c, dest, iter.getCPLength(), options, edits);
-            }
+            internalToLower(caseLocale, options, iter, dest, edits);
             return dest;
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
@@ -223,6 +230,107 @@ public final class CaseMapImpl {
             while ((c = iter.nextCaseMapCP()) >= 0) {
                 c = UCaseProps.INSTANCE.toFullUpper(c, iter, dest, caseLocale);
                 appendResult(c, dest, iter.getCPLength(), options, edits);
+            }
+            return dest;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    public static <A extends Appendable> A toTitle(
+            int caseLocale, int options, BreakIterator titleIter,
+            CharSequence src, A dest, Edits edits) {
+        try {
+            if (edits != null) {
+                edits.reset();
+            }
+
+            /* set up local variables */
+            StringContextIterator iter = new StringContextIterator(src);
+            int srcLength = src.length();
+            int prev=0;
+            boolean isFirstIndex=true;
+
+            /* titlecasing loop */
+            while(prev<srcLength) {
+                /* find next index where to titlecase */
+                int index;
+                if(isFirstIndex) {
+                    isFirstIndex=false;
+                    index=titleIter.first();
+                } else {
+                    index=titleIter.next();
+                }
+                if(index==BreakIterator.DONE || index>srcLength) {
+                    index=srcLength;
+                }
+
+                /*
+                 * Unicode 4 & 5 section 3.13 Default Case Operations:
+                 *
+                 * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
+                 * #29, "Text Boundaries." Between each pair of word boundaries, find the first
+                 * cased character F. If F exists, map F to default_title(F); then map each
+                 * subsequent character C to default_lower(C).
+                 *
+                 * In this implementation, segment [prev..index[ into 3 parts:
+                 * a) uncased characters (copy as-is) [prev..titleStart[
+                 * b) first case letter (titlecase)         [titleStart..titleLimit[
+                 * c) subsequent characters (lowercase)                 [titleLimit..index[
+                 */
+                if(prev<index) {
+                    // find and copy uncased characters [prev..titleStart[
+                    int titleStart=prev;
+                    iter.setLimit(index);
+                    int c=iter.nextCaseMapCP();
+                    if((options&UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT)==0
+                            && UCaseProps.NONE==UCaseProps.INSTANCE.getType(c)) {
+                        // Adjust the titlecasing index (titleStart) to the next cased character.
+                        while((c=iter.nextCaseMapCP())>=0
+                                && UCaseProps.NONE==UCaseProps.INSTANCE.getType(c)) {}
+                        // If c<0 then we have only uncased characters in [prev..index[
+                        // and stopped with titleStart==titleLimit==index.
+                        titleStart=iter.getCPStart();
+                        appendUnchanged(src, prev, titleStart-prev, dest, options, edits);
+                    }
+
+                    if(titleStart<index) {
+                        int titleLimit=iter.getCPLimit();
+                        // titlecase c which is from [titleStart..titleLimit[
+                        c = UCaseProps.INSTANCE.toFullTitle(c, iter, dest, caseLocale);
+                        appendResult(c, dest, iter.getCPLength(), options, edits);
+
+                        // Special case Dutch IJ titlecasing
+                        if (titleStart+1 < index && caseLocale == UCaseProps.LOC_DUTCH) {
+                            char c1 = src.charAt(titleStart);
+                            char c2 = src.charAt(titleStart+1);
+                            if ((c1 == 'i' || c1 == 'I') && c2 == 'j') {
+                                dest.append('J');
+                                if (edits != null) {
+                                    edits.addReplace(1, 1);
+                                }
+                                c=iter.nextCaseMapCP();
+                                titleLimit++;
+                                assert c == c2;
+                                assert titleLimit == iter.getCPLimit();
+                            }
+                        }
+
+                        // lowercase [titleLimit..index[
+                        if(titleLimit<index) {
+                            if((options&UCharacter.TITLECASE_NO_LOWERCASE)==0) {
+                                // Normal operation: Lowercase the rest of the word.
+                                internalToLower(caseLocale, options, iter, dest, edits);
+                            } else {
+                                // Optionally just copy the rest of the word unchanged.
+                                appendUnchanged(src, titleLimit, index-titleLimit, dest, options, edits);
+                                iter.moveToLimit();
+                            }
+                        }
+                    }
+                }
+
+                prev=index;
             }
             return dest;
         } catch (IOException e) {
