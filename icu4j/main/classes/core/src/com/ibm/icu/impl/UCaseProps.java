@@ -612,6 +612,7 @@ public final class UCaseProps {
     private static final int LOC_TURKISH=2;
     private static final int LOC_LITHUANIAN=3;
     static final int LOC_GREEK=4;
+    public static final int LOC_DUTCH=5;
 
     public static final int getCaseLocale(Locale locale) {
         return getCaseLocale(locale.getLanguage());
@@ -634,6 +635,8 @@ public final class UCaseProps {
                 return LOC_GREEK;
             } else if(language.equals("lt")) {
                 return LOC_LITHUANIAN;
+            } else if(language.equals("nl")) {
+                return LOC_DUTCH;
             }
         } else if(language.length()==3) {
             if(language.equals("tur") || language.equals("aze")) {
@@ -642,6 +645,8 @@ public final class UCaseProps {
                 return LOC_GREEK;
             } else if(language.equals("lit")) {
                 return LOC_LITHUANIAN;
+            } else if(language.equals("nld")) {
+                return LOC_DUTCH;
             }
         }
         return LOC_ROOT;

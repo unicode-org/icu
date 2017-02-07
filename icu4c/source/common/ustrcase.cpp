@@ -577,15 +577,15 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
     /* titlecasing loop */
     while(prev<srcLength) {
         /* find next index where to titlecase */
-        int32_t idx;
+        int32_t index;
         if(isFirstIndex) {
             isFirstIndex=FALSE;
-            idx=iter->first();
+            index=iter->first();
         } else {
-            idx=iter->next();
+            index=iter->next();
         }
-        if(idx==UBRK_DONE || idx>srcLength) {
-            idx=srcLength;
+        if(index==UBRK_DONE || index>srcLength) {
+            index=srcLength;
         }
 
         /*
@@ -601,24 +601,24 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
          * b) first case letter (titlecase)         [titleStart..titleLimit[
          * c) subsequent characters (lowercase)                 [titleLimit..index[
          */
-        if(prev<idx) {
+        if(prev<index) {
             /* find and copy uncased characters [prev..titleStart[ */
             int32_t titleStart=prev;
             int32_t titleLimit=prev;
             UChar32 c;
-            U16_NEXT(src, titleLimit, idx, c);
+            U16_NEXT(src, titleLimit, index, c);
             if((options&U_TITLECASE_NO_BREAK_ADJUSTMENT)==0 && UCASE_NONE==ucase_getType(NULL, c)) {
                 /* Adjust the titlecasing index (titleStart) to the next cased character. */
                 for(;;) {
                     titleStart=titleLimit;
-                    if(titleLimit==idx) {
+                    if(titleLimit==index) {
                         /*
                          * only uncased characters in [prev..index[
                          * stop with titleStart==titleLimit==index
                          */
                         break;
                     }
-                    U16_NEXT(src, titleLimit, idx, c);
+                    U16_NEXT(src, titleLimit, index, c);
                     if(UCASE_NONE!=ucase_getType(NULL, c)) {
                         break; /* cased letter at [titleStart..titleLimit[ */
                     }
@@ -645,10 +645,10 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                 }
 
                 /* Special case Dutch IJ titlecasing */
-                if (titleStart+1 < idx &&
+                if (titleStart+1 < index &&
                         caseLocale == UCASE_LOC_DUTCH &&
                         (src[titleStart] == 0x0049 || src[titleStart] == 0x0069) &&
-                        (src[titleStart+1] == 0x004A || src[titleStart+1] == 0x006A)) {
+                        src[titleStart+1] == 0x006A) {
                     destIndex=appendUChar(dest, destIndex, destCapacity, 0x004A);
                     if(destIndex<0) {
                         errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -661,7 +661,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                 }
 
                 /* lowercase [titleLimit..index[ */
-                if(titleLimit<idx) {
+                if(titleLimit<index) {
                     if((options&U_TITLECASE_NO_LOWERCASE)==0) {
                         /* Normal operation: Lowercase the rest of the word. */
                         destIndex+=
@@ -669,7 +669,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                                 caseLocale, options, ucase_toFullLower,
                                 dest+destIndex, destCapacity-destIndex,
                                 src, &csc,
-                                titleLimit, idx,
+                                titleLimit, index,
                                 edits, errorCode);
                         if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
                             errorCode=U_ZERO_ERROR;
@@ -680,7 +680,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                     } else {
                         /* Optionally just copy the rest of the word unchanged. */
                         destIndex=appendUnchanged(dest, destIndex, destCapacity,
-                                                  src+titleLimit, idx-titleLimit, options, edits);
+                                                  src+titleLimit, index-titleLimit, options, edits);
                         if(destIndex<0) {
                             errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                             return 0;
@@ -690,7 +690,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
             }
         }
 
-        prev=idx;
+        prev=index;
     }
 
     return checkOverflowAndEditsError(destIndex, destCapacity, edits, errorCode);

@@ -9,9 +9,6 @@ import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
-// TODO: issues/questions
-// - optimizing strategies for unstyled text: stop after number of changes or length of replacement?
-
 /**
  * Low-level case mapping options and methods. Immutable.
  * "Setters" return instances with the union of the current and new options set.
@@ -262,7 +259,12 @@ public abstract class CaseMap {
          */
          public <A extends Appendable> A apply(
                  Locale locale, BreakIterator iter, CharSequence src, A dest, Edits edits) {
-             return null;
+             if (iter == null) {
+                 iter = BreakIterator.getWordInstance(locale);
+             }
+             iter.setText(src.toString());
+             return CaseMapImpl.toTitle(
+                     getCaseLocale(locale), internalOptions, iter, src, dest, edits);
          }
     }
 
