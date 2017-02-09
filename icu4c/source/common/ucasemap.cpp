@@ -290,7 +290,7 @@ _caseMap(int32_t caseLocale, uint32_t /* TODO: options */, UCaseMapFull *map,
             }
             continue;
         }
-        c=map(NULL, c, utf8_caseContextIterator, csc, &s, caseLocale);
+        c=map(c, utf8_caseContextIterator, csc, &s, caseLocale);
         if((destIndex<destCapacity) && (c<0 ? (c2=~c)<=0x7f : UCASE_MAX_STRING_LENGTH<c && (c2=c)<=0x7f)) {
             /* fast path version of appendResult() for ASCII results */
             dest[destIndex++]=(uint8_t)c2;
@@ -364,7 +364,7 @@ ucasemap_internalUTF8ToTitle(
             /* find and copy uncased characters [prev..titleStart[ */
             titleStart=titleLimit=prev;
             U8_NEXT(src, titleLimit, idx, c);
-            if((options&U_TITLECASE_NO_BREAK_ADJUSTMENT)==0 && UCASE_NONE==ucase_getType(NULL, c)) {
+            if((options&U_TITLECASE_NO_BREAK_ADJUSTMENT)==0 && UCASE_NONE==ucase_getType(c)) {
                 /* Adjust the titlecasing index (titleStart) to the next cased character. */
                 for(;;) {
                     titleStart=titleLimit;
@@ -376,7 +376,7 @@ ucasemap_internalUTF8ToTitle(
                         break;
                     }
                     U8_NEXT(src, titleLimit, idx, c);
-                    if(UCASE_NONE!=ucase_getType(NULL, c)) {
+                    if(UCASE_NONE!=ucase_getType(c)) {
                         break; /* cased letter at [titleStart..titleLimit[ */
                     }
                 }
@@ -392,7 +392,7 @@ ucasemap_internalUTF8ToTitle(
                 if(c>=0) {
                     csc.cpStart=titleStart;
                     csc.cpLimit=titleLimit;
-                    c=ucase_toFullTitle(NULL, c, utf8_caseContextIterator, &csc, &s, caseLocale);
+                    c=ucase_toFullTitle(c, utf8_caseContextIterator, &csc, &s, caseLocale);
                     destIndex=appendResult(dest, destIndex, destCapacity, c, s);
                 } else {
                     // Malformed UTF-8.
@@ -454,11 +454,11 @@ ucasemap_internalUTF8ToTitle(
 U_NAMESPACE_BEGIN
 namespace GreekUpper {
 
-UBool isFollowedByCasedLetter(const UCaseProps *csp, const uint8_t *s, int32_t i, int32_t length) {
+UBool isFollowedByCasedLetter(const uint8_t *s, int32_t i, int32_t length) {
     while (i < length) {
         UChar32 c;
         U8_NEXT(s, i, length, c);
-        int32_t type = ucase_getTypeOrIgnorable(csp, c);
+        int32_t type = ucase_getTypeOrIgnorable(c);
         if ((type & UCASE_IGNORABLE) != 0) {
             // Case-ignorable, continue with the loop.
         } else if (type != UCASE_NONE) {
@@ -482,7 +482,7 @@ int32_t toUpper(int32_t caseLocale, uint32_t /* TODO: options */,
         UChar32 c;
         U8_NEXT(src, nextIndex, srcLength, c);
         uint32_t nextState = 0;
-        int32_t type = ucase_getTypeOrIgnorable(NULL, c);
+        int32_t type = ucase_getTypeOrIgnorable(c);
         if ((type & UCASE_IGNORABLE) != 0) {
             // c is case-ignorable
             nextState |= (state & AFTER_CASED);
@@ -532,7 +532,7 @@ int32_t toUpper(int32_t caseLocale, uint32_t /* TODO: options */,
                     (data & HAS_ACCENT) != 0 &&
                     numYpogegrammeni == 0 &&
                     (state & AFTER_CASED) == 0 &&
-                    !isFollowedByCasedLetter(NULL, src, nextIndex, srcLength)) {
+                    !isFollowedByCasedLetter(src, nextIndex, srcLength)) {
                 // Keep disjunctive "or" with (only) a tonos.
                 // We use the same "word boundary" conditions as for the Final_Sigma test.
                 if (i == nextIndex) {
@@ -568,7 +568,7 @@ int32_t toUpper(int32_t caseLocale, uint32_t /* TODO: options */,
         } else if(c>=0) {
             const UChar *s;
             UChar32 c2 = 0;
-            c=ucase_toFullUpper(NULL, c, NULL, NULL, &s, caseLocale);
+            c=ucase_toFullUpper(c, NULL, NULL, &s, caseLocale);
             if((destIndex<destCapacity) && (c<0 ? (c2=~c)<=0x7f : UCASE_MAX_STRING_LENGTH<c && (c2=c)<=0x7f)) {
                 /* fast path version of appendResult() for ASCII results */
                 dest[destIndex++]=(uint8_t)c2;
@@ -658,7 +658,7 @@ ucasemap_internalUTF8Fold(int32_t /* caseLocale */, uint32_t options, UCASEMAP_B
             }
             continue;
         }
-        c=ucase_toFullFolding(NULL, c, &s, options);
+        c=ucase_toFullFolding(c, &s, options);
         if((destIndex<destCapacity) && (c<0 ? (c2=~c)<=0x7f : UCASE_MAX_STRING_LENGTH<c && (c2=c)<=0x7f)) {
             /* fast path version of appendResult() for ASCII results */
             dest[destIndex++]=(uint8_t)c2;

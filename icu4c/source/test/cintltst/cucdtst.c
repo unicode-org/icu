@@ -34,7 +34,7 @@
 #include "uprops.h"
 #include "uset_imp.h"
 #include "usc_impl.h"
-#include "udatamem.h" /* for testing ucase_openBinary() */
+#include "udatamem.h"
 #include "cucdapi.h"
 #include "cmemory.h"
 
@@ -59,7 +59,6 @@ static void TestNumericProperties(void);
 static void TestPropertyNames(void);
 static void TestPropertyValues(void);
 static void TestConsistency(void);
-static void TestUCase(void);
 static void TestUBiDiProps(void);
 static void TestCaseFolding(void);
 
@@ -196,7 +195,6 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestPropertyNames, "tsutil/cucdtst/TestPropertyNames");
     addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
     addTest(root, &TestConsistency, "tsutil/cucdtst/TestConsistency");
-    addTest(root, &TestUCase, "tsutil/cucdtst/TestUCase");
     addTest(root, &TestUBiDiProps, "tsutil/cucdtst/TestUBiDiProps");
     addTest(root, &TestCaseFolding, "tsutil/cucdtst/TestCaseFolding");
 }
@@ -3255,47 +3253,6 @@ TestConsistency() {
  * See Jitterbug 4497.
  */
 #define HARDCODED_DATA_4497 1
-
-/* API coverage for ucase.c */
-static void TestUCase() {
-#if !HARDCODED_DATA_4497
-    UDataMemory *pData;
-    UCaseProps *csp;
-    const UCaseProps *ccsp;
-    UErrorCode errorCode;
-
-    /* coverage for ucase_openBinary() */
-    errorCode=U_ZERO_ERROR;
-    pData=udata_open(NULL, UCASE_DATA_TYPE, UCASE_DATA_NAME, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_data_err("unable to open " UCASE_DATA_NAME "." UCASE_DATA_TYPE ": %s\n",
-                    u_errorName(errorCode));
-        return;
-    }
-
-    csp=ucase_openBinary((const uint8_t *)pData->pHeader, -1, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_err("ucase_openBinary() fails for the contents of " UCASE_DATA_NAME "." UCASE_DATA_TYPE ": %s\n",
-                u_errorName(errorCode));
-        udata_close(pData);
-        return;
-    }
-
-    if(UCASE_LOWER!=ucase_getType(csp, 0xdf)) { /* verify islower(sharp s) */
-        log_err("ucase_openBinary() does not seem to return working UCaseProps\n");
-    }
-
-    ucase_close(csp);
-    udata_close(pData);
-
-    /* coverage for ucase_getDummy() */
-    errorCode=U_ZERO_ERROR;
-    ccsp=ucase_getDummy(&errorCode);
-    if(ucase_tolower(ccsp, 0x41)!=0x41) {
-        log_err("ucase_tolower(dummy, A)!=A\n");
-    }
-#endif
-}
 
 /* API coverage for ubidi_props.c */
 static void TestUBiDiProps() {
