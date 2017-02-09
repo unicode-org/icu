@@ -356,10 +356,14 @@ public:
      * @param obj The numeric object for which the rule should be determined.
      * @param fmt The NumberFormat specifying how the number will be formatted
      *        (this can affect the plural form, e.g. "1 dollar" vs "1.0 dollars").
-     * @return The keyword of the selected rule.
+     * @param status  Input/output parameter. If at entry this indicates a
+     *                failure status, the method returns immediately; otherwise
+     *                this is set to indicate the outcome of the call.
+     * @return The keyword of the selected rule, or an empty string in the case
+     *         of an error.
      * @internal ICU 59 technology preview, may be removed in the future
      */
-    UnicodeString select(const Formattable& obj, const NumberFormat& fmt) const;
+    UnicodeString select(const Formattable& obj, const NumberFormat& fmt, UErrorCode& status) const;
 
     /**
       * @internal
