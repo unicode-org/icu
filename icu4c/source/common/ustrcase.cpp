@@ -217,7 +217,7 @@ _caseMap(int32_t caseLocale, uint32_t options, UCaseMapFull *map,
         U16_NEXT(src, srcIndex, srcLimit, c);
         csc->cpLimit=srcIndex;
         const UChar *s;
-        c=map(NULL, c, utf16_caseContextIterator, csc, &s, caseLocale);
+        c=map(c, utf16_caseContextIterator, csc, &s, caseLocale);
         destIndex = appendResult(dest, destIndex, destCapacity, c, s,
                                  srcIndex - cpStart, options, edits);
         if (destIndex < 0) {
@@ -282,7 +282,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
             int32_t titleLimit=prev;
             UChar32 c;
             U16_NEXT(src, titleLimit, index, c);
-            if((options&U_TITLECASE_NO_BREAK_ADJUSTMENT)==0 && UCASE_NONE==ucase_getType(NULL, c)) {
+            if((options&U_TITLECASE_NO_BREAK_ADJUSTMENT)==0 && UCASE_NONE==ucase_getType(c)) {
                 /* Adjust the titlecasing index (titleStart) to the next cased character. */
                 for(;;) {
                     titleStart=titleLimit;
@@ -294,7 +294,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                         break;
                     }
                     U16_NEXT(src, titleLimit, index, c);
-                    if(UCASE_NONE!=ucase_getType(NULL, c)) {
+                    if(UCASE_NONE!=ucase_getType(c)) {
                         break; /* cased letter at [titleStart..titleLimit[ */
                     }
                 }
@@ -311,7 +311,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                 csc.cpStart=titleStart;
                 csc.cpLimit=titleLimit;
                 const UChar *s;
-                c=ucase_toFullTitle(NULL, c, utf16_caseContextIterator, &csc, &s, caseLocale);
+                c=ucase_toFullTitle(c, utf16_caseContextIterator, &csc, &s, caseLocale);
                 destIndex=appendResult(dest, destIndex, destCapacity, c, s,
                                        titleLimit-titleStart, options, edits);
                 if(destIndex<0) {
@@ -830,11 +830,11 @@ uint32_t getDiacriticData(UChar32 c) {
     }
 }
 
-UBool isFollowedByCasedLetter(const UCaseProps *csp, const UChar *s, int32_t i, int32_t length) {
+UBool isFollowedByCasedLetter(const UChar *s, int32_t i, int32_t length) {
     while (i < length) {
         UChar32 c;
         U16_NEXT(s, i, length, c);
-        int32_t type = ucase_getTypeOrIgnorable(csp, c);
+        int32_t type = ucase_getTypeOrIgnorable(c);
         if ((type & UCASE_IGNORABLE) != 0) {
             // Case-ignorable, continue with the loop.
         } else if (type != UCASE_NONE) {
@@ -864,7 +864,7 @@ int32_t toUpper(uint32_t options,
         UChar32 c;
         U16_NEXT(src, nextIndex, srcLength, c);
         uint32_t nextState = 0;
-        int32_t type = ucase_getTypeOrIgnorable(NULL, c);
+        int32_t type = ucase_getTypeOrIgnorable(c);
         if ((type & UCASE_IGNORABLE) != 0) {
             // c is case-ignorable
             nextState |= (state & AFTER_CASED);
@@ -911,7 +911,7 @@ int32_t toUpper(uint32_t options,
                     (data & HAS_ACCENT) != 0 &&
                     numYpogegrammeni == 0 &&
                     (state & AFTER_CASED) == 0 &&
-                    !isFollowedByCasedLetter(NULL, src, nextIndex, srcLength)) {
+                    !isFollowedByCasedLetter(src, nextIndex, srcLength)) {
                 // Keep disjunctive "or" with (only) a tonos.
                 // We use the same "word boundary" conditions as for the Final_Sigma test.
                 if (i == nextIndex) {
@@ -980,7 +980,7 @@ int32_t toUpper(uint32_t options,
             }
         } else {
             const UChar *s;
-            c=ucase_toFullUpper(NULL, c, NULL, NULL, &s, UCASE_LOC_GREEK);
+            c=ucase_toFullUpper(c, NULL, NULL, &s, UCASE_LOC_GREEK);
             destIndex = appendResult(dest, destIndex, destCapacity, c, s,
                                      nextIndex - i, options, edits);
             if (destIndex < 0) {
@@ -1051,7 +1051,7 @@ ustrcase_internalFold(int32_t /* caseLocale */, uint32_t options, UCASEMAP_BREAK
         UChar32 c;
         U16_NEXT(src, srcIndex, srcLength, c);
         const UChar *s;
-        c = ucase_toFullFolding(NULL, c, &s, options);
+        c = ucase_toFullFolding(c, &s, options);
         destIndex = appendResult(dest, destIndex, destCapacity, c, s,
                                  srcIndex - cpStart, options, edits);
         if (destIndex < 0) {
@@ -1241,8 +1241,6 @@ static int32_t _cmpFold(
             UErrorCode *pErrorCode) {
     int32_t cmpRes = 0;
 
-    const UCaseProps *csp;
-
     /* current-level start/limit - s1/s2 as current */
     const UChar *start1, *start2, *limit1, *limit2;
 
@@ -1274,7 +1272,6 @@ static int32_t _cmpFold(
      * assume that at least the option U_COMPARE_IGNORE_CASE is set
      * otherwise this function would have to behave exactly as uprv_strCompare()
      */
-    csp=ucase_getSingleton();
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
@@ -1456,7 +1453,7 @@ static int32_t _cmpFold(
          */
 
         if( level1==0 &&
-            (length=ucase_toFullFolding(csp, (UChar32)cp1, &p, options))>=0
+            (length=ucase_toFullFolding((UChar32)cp1, &p, options))>=0
         ) {
             /* cp1 case-folds to the code point "length" or to p[length] */
             if(U_IS_SURROGATE(c1)) {
@@ -1502,7 +1499,7 @@ static int32_t _cmpFold(
         }
 
         if( level2==0 &&
-            (length=ucase_toFullFolding(csp, (UChar32)cp2, &p, options))>=0
+            (length=ucase_toFullFolding((UChar32)cp2, &p, options))>=0
         ) {
             /* cp2 case-folds to the code point "length" or to p[length] */
             if(U_IS_SURROGATE(c2)) {
