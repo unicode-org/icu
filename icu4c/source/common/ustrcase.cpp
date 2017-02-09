@@ -322,17 +322,27 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                 /* Special case Dutch IJ titlecasing */
                 if (titleStart+1 < index &&
                         caseLocale == UCASE_LOC_DUTCH &&
-                        (src[titleStart] == 0x0049 || src[titleStart] == 0x0069) &&
-                        src[titleStart+1] == 0x006A) {
-                    destIndex=appendUChar(dest, destIndex, destCapacity, 0x004A);
-                    if(destIndex<0) {
-                        errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-                        return 0;
+                        (src[titleStart] == 0x0049 || src[titleStart] == 0x0069)) {
+                    if (src[titleStart+1] == 0x006A) {
+                        destIndex=appendUChar(dest, destIndex, destCapacity, 0x004A);
+                        if(destIndex<0) {
+                            errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                            return 0;
+                        }
+                        if(edits!=NULL) {
+                            edits->addReplace(1, 1);
+                        }
+                        titleLimit++;
+                    } else if (src[titleStart+1] == 0x004A) {
+                        // Keep the capital J from getting lowercased.
+                        destIndex=appendUnchanged(dest, destIndex, destCapacity,
+                                                  src+titleStart+1, 1, options, edits);
+                        if(destIndex<0) {
+                            errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                            return 0;
+                        }
+                        titleLimit++;
                     }
-                    if(edits!=NULL) {
-                        edits->addReplace(1, 1);
-                    }
-                    titleLimit++;
                 }
 
                 /* lowercase [titleLimit..index[ */

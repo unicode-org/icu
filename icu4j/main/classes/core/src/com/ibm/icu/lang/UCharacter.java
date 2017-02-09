@@ -4974,11 +4974,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             // Good if no or few changes. Bad (slow) if many changes.
             Edits edits = new Edits();
             StringBuilder replacementChars = CaseMapImpl.toTitle(
-                    caseLocale, CaseMapImpl.OMIT_UNCHANGED_TEXT, titleIter, str,
+                    caseLocale, options | CaseMapImpl.OMIT_UNCHANGED_TEXT, titleIter, str,
                     new StringBuilder(), edits);
             return applyEdits(str, replacementChars, edits);
         } else {
-            return CaseMapImpl.toTitle(caseLocale, 0, titleIter, str,
+            return CaseMapImpl.toTitle(caseLocale, options, titleIter, str,
                     new StringBuilder(str.length()), null).toString();
         }
     }
@@ -5124,6 +5124,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String toTitleCase(ULocale locale, String str,
             BreakIterator titleIter, int options) {
         if(titleIter == null) {
+            if (locale == null) {
+                locale = ULocale.getDefault();
+            }
             titleIter = BreakIterator.getWordInstance(locale);
         }
         titleIter.setText(str);
@@ -5359,10 +5362,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             // Good if no or few changes. Bad (slow) if many changes.
             Edits edits = new Edits();
             StringBuilder replacementChars = CaseMapImpl.fold(
-                    CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
+                    options | CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
             return applyEdits(str, replacementChars, edits);
         } else {
-            return CaseMapImpl.fold(0, str, new StringBuilder(str.length()), null).toString();
+            return CaseMapImpl.fold(options, str, new StringBuilder(str.length()), null).toString();
         }
     }
 
