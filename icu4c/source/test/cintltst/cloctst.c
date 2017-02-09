@@ -50,6 +50,7 @@ static void TestDisplayNameBrackets(void);
 static void TestUnicodeDefines(void);
 
 static void TestIsRightToLeft(void);
+static void TestBadLocaleIDs(void);
 
 void PrintDataTable();
 
@@ -259,6 +260,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestToLegacyKey);
     TESTCASE(TestToUnicodeLocaleType);
     TESTCASE(TestToLegacyType);
+    TESTCASE(TestBadLocaleIDs);
 }
 
 
@@ -6192,5 +6194,42 @@ static void TestIsRightToLeft() {
     // API test only. More test cases in intltest/LocaleTest.
     if(uloc_isRightToLeft("root") || !uloc_isRightToLeft("EN-HEBR")) {
         log_err("uloc_isRightToLeft() failed");
+    }
+}
+
+typedef struct {
+    const char * badLocaleID;
+    const char * displayLocale;
+    const char * expectedName;
+    UErrorCode   expectedStatus;
+} BadLocaleItem;
+
+static const BadLocaleItem badLocaleItems[] = {
+    { "-9223372036854775808", "en", "9223372036854775808", U_USING_DEFAULT_WARNING },
+    /* add more in the future */
+    { NULL, NULL, NULL, U_ZERO_ERROR } /* terminator */
+};
+
+enum { kUBufDispNameMax = 128, kBBufDispNameMax = 256 };
+
+static void TestBadLocaleIDs() {
+    const BadLocaleItem* itemPtr;
+    for (itemPtr = badLocaleItems; itemPtr->badLocaleID != NULL; itemPtr++) {
+        UChar ubufExpect[kUBufDispNameMax], ubufGet[kUBufDispNameMax];
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t ulenExpect = u_unescape(itemPtr->expectedName, ubufExpect, kUBufDispNameMax);
+        int32_t ulenGet = uloc_getDisplayName(itemPtr->badLocaleID, itemPtr->displayLocale, ubufGet, kUBufDispNameMax, &status);
+        if (status != itemPtr->expectedStatus ||
+                (U_SUCCESS(status) && (ulenGet != ulenExpect || u_strncmp(ubufGet, ubufExpect, ulenExpect) != 0))) {
+            char bbufExpect[kBBufDispNameMax], bbufGet[kBBufDispNameMax];
+            u_austrncpy(bbufExpect, ubufExpect, ulenExpect);
+            u_austrncpy(bbufGet, ubufGet, ulenGet);
+            log_err("FAIL: For localeID %s, displayLocale %s, calling uloc_getDisplayName:\n"
+                    "    expected status %-26s, name (len %2d): %s\n"
+                    "    got      status %-26s, name (len %2d): %s\n",
+                    itemPtr->badLocaleID, itemPtr->displayLocale,
+                    u_errorName(itemPtr->expectedStatus), ulenExpect, bbufExpect,
+                    u_errorName(status), ulenGet, bbufGet );
+        }
     }
 }
