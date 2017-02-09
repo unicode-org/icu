@@ -5351,27 +5351,19 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.6
      */
     public static final String foldCase(String str, int options) {
-        StringBuilder result = new StringBuilder(str.length());
-        int c, i, length;
-
-        length = str.length();
-        for(i=0; i<length;) {
-            c=str.codePointAt(i);
-            i+=Character.charCount(c);
-            c = UCaseProps.INSTANCE.toFullFolding(c, result, options);
-
-            /* decode the result */
-            if(c<0) {
-                /* (not) original code point */
-                c=~c;
-            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
-                /* mapping already appended to result */
-                continue;
-                /* } else { append single-code point mapping */
+        if (str.length() <= 100) {
+            if (str.isEmpty()) {
+                return str;
             }
-            result.appendCodePoint(c);
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = CaseMapImpl.fold(
+                    CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
+            return applyEdits(str, replacementChars, edits);
+        } else {
+            return CaseMapImpl.fold(0, str, new StringBuilder(str.length()), null).toString();
         }
-        return result.toString();
     }
 
     /**

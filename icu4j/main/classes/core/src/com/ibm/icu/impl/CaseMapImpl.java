@@ -338,6 +338,26 @@ public final class CaseMapImpl {
         }
     }
 
+    public static <A extends Appendable> A fold(int options,
+            CharSequence src, A dest, Edits edits) {
+        try {
+            if (edits != null) {
+                edits.reset();
+            }
+            int length = src.length();
+            for (int i = 0; i < length;) {
+                int c = Character.codePointAt(src, i);
+                int cpLength = Character.charCount(c);
+                i += cpLength;
+                c = UCaseProps.INSTANCE.toFullFolding(c, dest, options);
+                appendResult(c, dest, cpLength, options, edits);
+            }
+            return dest;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
+    }
+
     private static final class GreekUpper {
         // Data bits.
         private static final int UPPER_MASK = 0x3ff;
