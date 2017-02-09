@@ -248,21 +248,23 @@ PluralRules::select(double number) const {
 }
 
 UnicodeString
-PluralRules::select(const Formattable& obj, const NumberFormat& fmt) const {
-    UErrorCode status = U_ZERO_ERROR;
-    const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
-    if (decFmt != NULL) {
-        VisibleDigitsWithExponent digits;
-        decFmt->initVisibleDigitsWithExponent(obj, digits, status);
-        if (U_SUCCESS(status)) {
-            return select(digits);
+PluralRules::select(const Formattable& obj, const NumberFormat& fmt, UErrorCode& status) const {
+    if (U_SUCCESS(status)) {
+        const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
+        if (decFmt != NULL) {
+            VisibleDigitsWithExponent digits;
+            decFmt->initVisibleDigitsWithExponent(obj, digits, status);
+            if (U_SUCCESS(status)) {
+                return select(digits);
+            }
+        } else {
+            double number = obj.getDouble(status);
+            if (U_SUCCESS(status)) {
+                return select(number);
+            }
         }
     }
-    double number = obj.getDouble(status);
-    if (U_SUCCESS(status)) {
-        return select(number);
-    }
-    return getKeywordOther();
+    return UnicodeString();
 }
 
 UnicodeString

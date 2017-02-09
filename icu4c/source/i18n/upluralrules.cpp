@@ -73,7 +73,7 @@ uplrules_selectWithFormat(const UPluralRules *uplrules,
         return 0;
     }
     Formattable obj(number);
-    UnicodeString result = plrules->select(obj, *nf);
+    UnicodeString result = plrules->select(obj, *nf, *status);
     return result.extract(keyword, capacity, *status);
 }
 
