@@ -19,6 +19,8 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/casemap.h"
+#include "unicode/edits.h"
 #include "unicode/putil.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -26,8 +28,8 @@
 #include "unicode/unistr.h"
 #include "unicode/uchar.h"
 #include "uassert.h"
+#include "ucasemap_imp.h"
 #include "uelement.h"
-#include "ustr_imp.h"
 
 U_NAMESPACE_BEGIN
 

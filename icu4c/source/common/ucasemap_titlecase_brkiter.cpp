@@ -26,7 +26,7 @@
 #include "unicode/ucasemap.h"
 #include "cmemory.h"
 #include "ucase.h"
-#include "ustr_imp.h"
+#include "ucasemap_imp.h"
 
 U_NAMESPACE_USE
 

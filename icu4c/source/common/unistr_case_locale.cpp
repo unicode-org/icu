@@ -21,7 +21,7 @@
 #include "unicode/locid.h"
 #include "unicode/ucasemap.h"
 #include "unicode/unistr.h"
-#include "ustr_imp.h"
+#include "ucasemap_imp.h"
 
 U_NAMESPACE_BEGIN
 

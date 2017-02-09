@@ -22,12 +22,13 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/brkiter.h"
+#include "unicode/casemap.h"
 #include "unicode/localpointer.h"
 #include "unicode/ubrk.h"
 #include "unicode/ucasemap.h"
 #include "cmemory.h"
 #include "ucase.h"
-#include "ustr_imp.h"
+#include "ucasemap_imp.h"
 
 U_NAMESPACE_USE
 
