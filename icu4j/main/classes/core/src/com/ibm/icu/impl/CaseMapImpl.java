@@ -303,16 +303,25 @@ public final class CaseMapImpl {
                         // Special case Dutch IJ titlecasing
                         if (titleStart+1 < index && caseLocale == UCaseProps.LOC_DUTCH) {
                             char c1 = src.charAt(titleStart);
-                            char c2 = src.charAt(titleStart+1);
-                            if ((c1 == 'i' || c1 == 'I') && c2 == 'j') {
-                                dest.append('J');
-                                if (edits != null) {
-                                    edits.addReplace(1, 1);
+                            if ((c1 == 'i' || c1 == 'I')) {
+                                char c2 = src.charAt(titleStart+1);
+                                if (c2 == 'j') {
+                                    dest.append('J');
+                                    if (edits != null) {
+                                        edits.addReplace(1, 1);
+                                    }
+                                    c = iter.nextCaseMapCP();
+                                    titleLimit++;
+                                    assert c == c2;
+                                    assert titleLimit == iter.getCPLimit();
+                                } else if (c2 == 'J') {
+                                    // Keep the capital J from getting lowercased.
+                                    appendUnchanged(src, titleStart + 1, 1, dest, options, edits);
+                                    c = iter.nextCaseMapCP();
+                                    titleLimit++;
+                                    assert c == c2;
+                                    assert titleLimit == iter.getCPLimit();
                                 }
-                                c=iter.nextCaseMapCP();
-                                titleLimit++;
-                                assert c == c2;
-                                assert titleLimit == iter.getCPLimit();
                             }
                         }
 
