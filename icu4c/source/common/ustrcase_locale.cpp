@@ -20,11 +20,12 @@
 #include "unicode/utypes.h"
 #include "uassert.h"
 #include "unicode/brkiter.h"
+#include "unicode/casemap.h"
 #include "unicode/ucasemap.h"
 #include "unicode/uloc.h"
 #include "unicode/ustring.h"
 #include "ucase.h"
-#include "ustr_imp.h"
+#include "ucasemap_imp.h"
 
 U_CFUNC int32_t
 ustrcase_getCaseLocale(const char *locale) {

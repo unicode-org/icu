@@ -22,6 +22,7 @@
 #include "unicode/utypes.h"
 #include "unicode/locid.h"
 #include "unicode/putil.h"
+#include "unicode/uchar.h"
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
 #include "unicode/uscript.h"

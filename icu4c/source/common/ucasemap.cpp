@@ -33,6 +33,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "ucase.h"
+#include "ucasemap_imp.h"
 #include "ustr_imp.h"
 
 U_NAMESPACE_USE

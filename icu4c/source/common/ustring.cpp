@@ -19,6 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
+#include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
 #include "cstring.h"
