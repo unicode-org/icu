@@ -1346,6 +1346,16 @@
 "(?<!aą)spam"                   "**bą<0>spam</0>**"
 "(?<!ąabc)spam"                 "**ąabx<0>spam</0>**"
 
+# Bug #12930
+#
+#   Minimum Match Length computation, int32_t overflow on an empty set in the pattern.
+#   The empty set, with no match possible, has a min match length of INT32_MAX.
+#   Was incremented subsequently. Caused assertion failure on pattern compile.
+
+"[^\u0000-\U0010ffff]bc?"       "bc no match"
+"[^\u0000-\U0010ffff]?bc?"      "<0>bc</0> has a match"
+
+
 #  Random debugging, Temporary
 #
 
