@@ -40,7 +40,7 @@ Edits::~Edits() {
 }
 
 void Edits::reset() {
-    length = 0;
+    length = delta = 0;
 }
 
 void Edits::addUnchanged(int32_t unchangedLength) {
@@ -95,7 +95,8 @@ void Edits::addReplace(int32_t oldLength, int32_t newLength) {
     }
     int32_t newDelta = newLength - oldLength;
     if (newDelta != 0) {
-        if (newDelta > 0 ? newDelta > (INT32_MAX - delta) : newDelta < (INT32_MIN - delta)) {
+        if ((newDelta > 0 && delta >= 0 && newDelta > (INT32_MAX - delta)) ||
+                (newDelta < 0 && delta < 0 && newDelta < (INT32_MIN - delta))) {
             // Integer overflow or underflow.
             errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
             return;
@@ -193,7 +194,7 @@ UBool Edits::hasChanges() const {
 
 Edits::Iterator::Iterator(const uint16_t *a, int32_t len, UBool oc, UBool crs) :
         array(a), index(0), length(len), remaining(0),
-        onlyChanges(oc), coarse(crs),
+        onlyChanges_(oc), coarse(crs),
         changed(FALSE), oldLength_(0), newLength_(0),
         srcIndex(0), replIndex(0), destIndex(0) {}
 
@@ -203,7 +204,7 @@ int32_t Edits::Iterator::readLength(int32_t head) {
     } else if (head < LENGTH_IN_2TRAIL) {
         U_ASSERT(index < length);
         U_ASSERT(array[index] >= 0x8000);
-        return array[index++];
+        return array[index++] & 0x7fff;
     } else {
         U_ASSERT((index + 2) <= length);
         U_ASSERT(array[index] >= 0x8000);
@@ -225,12 +226,13 @@ void Edits::Iterator::updateIndexes() {
 }
 
 UBool Edits::Iterator::noNext() {
-    // Empty span beyond the string.
+    // No change beyond the string.
+    changed = FALSE;
     oldLength_ = newLength_ = 0;
     return FALSE;
 }
 
-UBool Edits::Iterator::next(UErrorCode &errorCode) {
+UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return FALSE; }
     // We have an errorCode in case we need to start guarding against integer overflows.
     // It is also convenient for caller loops if we bail out when an error was set elsewhere.
@@ -308,12 +310,12 @@ UBool Edits::Iterator::findSourceIndex(int32_t i, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode) || i < 0) { return FALSE; }
     if (i < srcIndex) {
         // Reset the iterator to the start.
-        index = remaining = srcIndex = replIndex = destIndex = 0;
+        index = remaining = oldLength_ = newLength_ = srcIndex = replIndex = destIndex = 0;
     } else if (i < (srcIndex + oldLength_)) {
         // The index is in the current span.
         return TRUE;
     }
-    while (next(errorCode)) {
+    while (next(FALSE, errorCode)) {
         if (i < (srcIndex + oldLength_)) {
             // The index is in the current span.
             return TRUE;

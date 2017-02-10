@@ -106,7 +106,7 @@ public:
          * @return TRUE if there is another edit
          * @draft ICU 59
          */
-        UBool next(UErrorCode &errorCode);
+        UBool next(UErrorCode &errorCode) { return next(onlyChanges_, errorCode); }
 
         /**
          * Finds the edit that contains the source index.
@@ -169,11 +169,12 @@ public:
         int32_t readLength(int32_t head);
         void updateIndexes();
         UBool noNext();
+        UBool next(UBool onlyChanges, UErrorCode &errorCode);
 
         const uint16_t *array;
         int32_t index, length;
         int32_t remaining;
-        UBool onlyChanges, coarse;
+        UBool onlyChanges_, coarse;
 
         UBool changed;
         int32_t oldLength_, newLength_;
