@@ -52,7 +52,7 @@ public final class Edits {
      * @provisional This API might change or be removed in a future release.
      */
     public void reset() {
-        length = 0;
+        length = delta = 0;
     }
 
     private void setLastUnit(int last) {
@@ -125,8 +125,8 @@ public final class Edits {
         }
         int newDelta = newLength - oldLength;
         if (newDelta != 0) {
-            if (newDelta > 0 ? newDelta > (Integer.MAX_VALUE - delta) :
-                    newDelta < (Integer.MIN_VALUE - delta)) {
+            if ((newDelta > 0 && delta >= 0 && newDelta > (Integer.MAX_VALUE - delta)) ||
+                    (newDelta < 0 && delta < 0 && newDelta < (Integer.MIN_VALUE - delta))) {
                 // Integer overflow or underflow.
                 throw new IndexOutOfBoundsException();
             }
@@ -226,7 +226,7 @@ public final class Edits {
         private int index;
         private final int length;
         private int remaining;
-        private final boolean onlyChanges, coarse;
+        private final boolean onlyChanges_, coarse;
 
         private boolean changed;
         private int oldLength_, newLength_;
@@ -235,7 +235,7 @@ public final class Edits {
         private Iterator(char[] a, int len, boolean oc, boolean crs) {
             array = a;
             length = len;
-            onlyChanges = oc;
+            onlyChanges_ = oc;
             coarse = crs;
         }
 
@@ -245,7 +245,7 @@ public final class Edits {
             } else if (head < LENGTH_IN_2TRAIL) {
                 assert(index < length);
                 assert(array[index] >= 0x8000);
-                return array[index++];
+                return array[index++] & 0x7fff;
             } else {
                 assert((index + 2) <= length);
                 assert(array[index] >= 0x8000);
@@ -267,7 +267,8 @@ public final class Edits {
         }
 
         private boolean noNext() {
-            // Empty span beyond the string.
+            // No change beyond the string.
+            changed = false;
             oldLength_ = newLength_ = 0;
             return false;
         }
@@ -279,6 +280,10 @@ public final class Edits {
          * @provisional This API might change or be removed in a future release.
          */
         public boolean next() {
+            return next(onlyChanges_);
+        }
+
+        private boolean next(boolean onlyChanges) {
             // We have an errorCode in case we need to start guarding against integer overflows.
             // It is also convenient for caller loops if we bail out when an error was set elsewhere.
             updateIndexes();
@@ -357,10 +362,10 @@ public final class Edits {
          * even if normal iteration would skip non-changes.
          * Normal iteration can continue from a found edit.
          *
-         * The iterator state before this search logically does not matter.
+         * <p>The iterator state before this search logically does not matter.
          * (It may affect the performance of the search.)
          *
-         * The iterator state after this search is undefined
+         * <p>The iterator state after this search is undefined
          * if the source index is out of bounds for the source string.
          *
          * @param i source index
@@ -372,12 +377,12 @@ public final class Edits {
             if (i < 0) { return false; }
             if (i < srcIndex) {
                 // Reset the iterator to the start.
-                index = remaining = srcIndex = replIndex = destIndex = 0;
+                index = remaining = oldLength_ = newLength_ = srcIndex = replIndex = destIndex = 0;
             } else if (i < (srcIndex + oldLength_)) {
                 // The index is in the current span.
                 return true;
             }
-            while (next()) {
+            while (next(false)) {
                 if (i < (srcIndex + oldLength_)) {
                     // The index is in the current span.
                     return true;

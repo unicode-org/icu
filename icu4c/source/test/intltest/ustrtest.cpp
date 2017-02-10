@@ -30,11 +30,13 @@ using namespace std;
 
 UnicodeStringTest::~UnicodeStringTest() {}
 
+extern IntlTest *createStringCaseTest();
+
 void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char *par)
 {
     if (exec) logln("TestSuite UnicodeStringTest: ");
     TESTCASE_AUTO_BEGIN;
-    TESTCASE_AUTO_CLASS(StringCaseTest);
+    TESTCASE_AUTO_CREATE_CLASS(StringCaseTest);
     TESTCASE_AUTO(TestBasicManipulation);
     TESTCASE_AUTO(TestCompare);
     TESTCASE_AUTO(TestExtract);

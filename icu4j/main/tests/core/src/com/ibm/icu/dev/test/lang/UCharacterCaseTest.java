@@ -24,6 +24,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Edits;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale;
@@ -708,6 +709,127 @@ public final class UCharacterCaseTest extends TestFmwk
         assertGreekUpper("ρωμέικα", "ΡΩΜΕΪΚΑ");
     }
 
+    private static final class EditChange {
+        private boolean change;
+        private int oldLength, newLength;
+        EditChange(boolean change, int oldLength, int newLength) {
+            this.change = change;
+            this.oldLength = oldLength;
+            this.newLength = newLength;
+        }
+    }
+
+    private static void checkEditsIter(
+            String name, Edits.Iterator ei1, Edits.Iterator ei2,  // two equal iterators
+            EditChange[] expected, boolean withUnchanged) {
+        assertFalse(name, ei2.findSourceIndex(-1));
+
+        int expSrcIndex = 0;
+        int expDestIndex = 0;
+        int expReplIndex = 0;
+        for (int expIndex = 0; expIndex < expected.length; ++expIndex) {
+            String msg = name + ' ' + expIndex;
+            if (withUnchanged || expected[expIndex].change) {
+                assertTrue(msg, ei1.next());
+                assertEquals(msg, expected[expIndex].change, ei1.hasChange());
+                assertEquals(msg, expected[expIndex].oldLength, ei1.oldLength());
+                assertEquals(msg, expected[expIndex].newLength, ei1.newLength());
+                assertEquals(msg, expSrcIndex, ei1.sourceIndex());
+                assertEquals(msg, expDestIndex, ei1.destinationIndex());
+                assertEquals(msg, expReplIndex, ei1.replacementIndex());
+            }
+
+            if (expected[expIndex].oldLength > 0) {
+                assertTrue(msg, ei2.findSourceIndex(expSrcIndex));
+                assertEquals(msg, expected[expIndex].change, ei2.hasChange());
+                assertEquals(msg, expected[expIndex].oldLength, ei2.oldLength());
+                assertEquals(msg, expected[expIndex].newLength, ei2.newLength());
+                assertEquals(msg, expSrcIndex, ei2.sourceIndex());
+                assertEquals(msg, expDestIndex, ei2.destinationIndex());
+                assertEquals(msg, expReplIndex, ei2.replacementIndex());
+                if (!withUnchanged) {
+                    // For some iterators, move past the current range
+                    // so that findSourceIndex() has to look before the current index.
+                    ei2.next();
+                    ei2.next();
+                }
+            }
+
+            expSrcIndex += expected[expIndex].oldLength;
+            expDestIndex += expected[expIndex].newLength;
+            if (expected[expIndex].change) {
+                expReplIndex += expected[expIndex].newLength;
+            }
+        }
+        String msg = name + " end";
+        assertFalse(msg, ei1.next());
+        assertFalse(msg, ei1.hasChange());
+        assertEquals(msg, 0, ei1.oldLength());
+        assertEquals(msg, 0, ei1.newLength());
+        assertEquals(msg, expSrcIndex, ei1.sourceIndex());
+        assertEquals(msg, expDestIndex, ei1.destinationIndex());
+        assertEquals(msg, expReplIndex, ei1.replacementIndex());
+
+        assertFalse(name, ei2.findSourceIndex(expSrcIndex));
+    }
+
+    @Test
+    public void TestEdits() {
+        Edits edits = new Edits();
+        assertFalse("new Edits", edits.hasChanges());
+        assertEquals("new Edits", 0, edits.lengthDelta());
+        edits.addUnchanged(1);  // multiple unchanged ranges are combined
+        edits.addUnchanged(10000);  // too long, and they are split
+        edits.addReplace(0, 0);
+        edits.addUnchanged(2);
+        assertFalse("unchanged 10003", edits.hasChanges());
+        assertEquals("unchanged 10003", 0, edits.lengthDelta());
+        edits.addReplace(1, 1);  // multiple short equal-length edits are compressed
+        edits.addUnchanged(0);
+        edits.addReplace(1, 1);
+        edits.addReplace(1, 1);
+        edits.addReplace(0, 10);
+        edits.addReplace(100, 0);
+        edits.addReplace(3000, 4000);  // variable-length encoding
+        edits.addReplace(100000, 100000);
+        assertTrue("some edits", edits.hasChanges());
+        assertEquals("some edits", 10 - 100 + 1000, edits.lengthDelta());
+
+        EditChange[] coarseExpectedChanges = new EditChange[] {
+                new EditChange(false, 10003, 10003),
+                new EditChange(true, 103103, 104013)
+        };
+        checkEditsIter("coarse",
+                edits.getCoarseIterator(), edits.getCoarseIterator(),
+                coarseExpectedChanges, true);
+        checkEditsIter("coarse changes",
+                edits.getCoarseChangesIterator(), edits.getCoarseChangesIterator(),
+                coarseExpectedChanges, false);
+
+        EditChange[] fineExpectedChanges = new EditChange[] {
+                new EditChange(false, 10003, 10003),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 0, 10),
+                new EditChange(true, 100, 0),
+                new EditChange(true, 3000, 4000),
+                new EditChange(true, 100000, 100000)
+        };
+        checkEditsIter("fine",
+                edits.getFineIterator(), edits.getFineIterator(),
+                fineExpectedChanges, true);
+        checkEditsIter("fine changes",
+                edits.getFineChangesIterator(), edits.getFineChangesIterator(),
+                fineExpectedChanges, false);
+
+        edits.reset();
+        assertFalse("reset", edits.hasChanges());
+        assertEquals("reset", 0, edits.lengthDelta());
+        Edits.Iterator ei = edits.getCoarseChangesIterator();
+        assertFalse("reset then iterator", ei.next());
+    }
+
     // private data members - test data --------------------------------------
 
     private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");
@@ -945,7 +1067,7 @@ public final class UCharacterCaseTest extends TestFmwk
     // private methods -------------------------------------------------------
 
     /**
-     * Converting the hex numbers represented betwee                             n ';' to Unicode strings
+     * Converting the hex numbers represented between ';' to Unicode strings
      * @param str string to break up into Unicode strings
      * @return array of Unicode strings ending with a null
      */
