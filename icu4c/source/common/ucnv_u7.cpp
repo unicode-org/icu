@@ -179,7 +179,8 @@ fromBase64[128]={
  *
  */
 
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 _UTF7Reset(UConverter *cnv, UConverterResetChoice choice) {
     if(choice<=UCNV_RESET_TO_UNICODE) {
         /* reset toUnicode */
@@ -192,7 +193,7 @@ _UTF7Reset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
-static void
+static void U_CALLCONV
 _UTF7Open(UConverter *cnv,
           UConverterLoadArgs *pArgs,
           UErrorCode *pErrorCode) {
@@ -206,7 +207,7 @@ _UTF7Open(UConverter *cnv,
     }
 }
 
-static void
+static void U_CALLCONV
 _UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -457,7 +458,7 @@ unicodeMode:
     return;
 }
 
-static void
+static void U_CALLCONV
 _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -733,7 +734,7 @@ unicodeMode:
     return;
 }
 
-static const char *
+static const char * U_CALLCONV
 _UTF7GetName(const UConverter *cnv) {
     switch(cnv->fromUnicodeStatus>>28) {
     case 1:
@@ -742,6 +743,7 @@ _UTF7GetName(const UConverter *cnv) {
         return "UTF-7";
     }
 }
+U_CDECL_END
 
 static const UConverterImpl _UTF7Impl={
     UCNV_UTF7,
@@ -888,7 +890,8 @@ const UConverterSharedData _UTF7Data=
  * ignore bits 31..25
  */
 
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 _IMAPToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -1156,7 +1159,7 @@ endloop:
     return;
 }
 
-static void
+static void U_CALLCONV
 _IMAPFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -1442,6 +1445,7 @@ unicodeMode:
     pArgs->offsets=offsets;
     return;
 }
+U_CDECL_END
 
 static const UConverterImpl _IMAPImpl={
     UCNV_IMAP_MAILBOX,

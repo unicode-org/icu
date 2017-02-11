@@ -30,11 +30,12 @@ enum {
     UCNV_NEED_TO_WRITE_BOM=1
 };
 
+U_CDECL_BEGIN
 /*
  * The UTF-16 toUnicode implementation is also used for the Java-specific
  * "with BOM" variants of UTF-16BE and UTF-16LE.
  */
-static void
+static void  U_CALLCONV
 _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                            UErrorCode *pErrorCode);
 
@@ -47,7 +48,7 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 #endif
 
 
-static void
+static void  U_CALLCONV
 _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -251,7 +252,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     pArgs->offsets=offsets;
 }
 
-static void
+static void  U_CALLCONV
 _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                              UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -489,7 +490,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     pArgs->offsets=offsets;
 }
 
-static UChar32
+static UChar32  U_CALLCONV
 _UTF16BEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     const uint8_t *s, *sourceLimit;
     UChar32 c;
@@ -568,7 +569,7 @@ _UTF16BEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     return c;
 } 
 
-static void
+static void  U_CALLCONV
 _UTF16BEReset(UConverter *cnv, UConverterResetChoice choice) {
     if(choice<=UCNV_RESET_TO_UNICODE) {
         /* reset toUnicode state */
@@ -584,7 +585,7 @@ _UTF16BEReset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
-static void
+static void  U_CALLCONV
 _UTF16BEOpen(UConverter *cnv,
              UConverterLoadArgs *pArgs,
              UErrorCode *pErrorCode) {
@@ -596,7 +597,7 @@ _UTF16BEOpen(UConverter *cnv,
     }
 }
 
-static const char *
+static const char *  U_CALLCONV
 _UTF16BEGetName(const UConverter *cnv) {
     if(UCNV_GET_VERSION(cnv)==0) {
         return "UTF-16BE";
@@ -604,6 +605,7 @@ _UTF16BEGetName(const UConverter *cnv) {
         return "UTF-16BE,version=1";
     }
 }
+U_CDECL_END
 
 static const UConverterImpl _UTF16BEImpl={
     UCNV_UTF16_BigEndian,
@@ -646,8 +648,8 @@ const UConverterSharedData _UTF16BEData=
         UCNV_IMMUTABLE_SHARED_DATA_INITIALIZER(&_UTF16BEStaticData, &_UTF16BEImpl);
 
 /* UTF-16LE ----------------------------------------------------------------- */
-
-static void
+U_CDECL_BEGIN
+static void  U_CALLCONV
 _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -851,7 +853,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     pArgs->offsets=offsets;
 }
 
-static void
+static void  U_CALLCONV
 _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                              UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -1089,7 +1091,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     pArgs->offsets=offsets;
 }
 
-static UChar32
+static UChar32  U_CALLCONV
 _UTF16LEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     const uint8_t *s, *sourceLimit;
     UChar32 c;
@@ -1168,7 +1170,7 @@ _UTF16LEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     return c;
 } 
 
-static void
+static void  U_CALLCONV
 _UTF16LEReset(UConverter *cnv, UConverterResetChoice choice) {
     if(choice<=UCNV_RESET_TO_UNICODE) {
         /* reset toUnicode state */
@@ -1184,7 +1186,7 @@ _UTF16LEReset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
-static void
+static void  U_CALLCONV
 _UTF16LEOpen(UConverter *cnv,
              UConverterLoadArgs *pArgs,
              UErrorCode *pErrorCode) {
@@ -1196,7 +1198,7 @@ _UTF16LEOpen(UConverter *cnv,
     }
 }
 
-static const char *
+static const char *  U_CALLCONV
 _UTF16LEGetName(const UConverter *cnv) {
     if(UCNV_GET_VERSION(cnv)==0) {
         return "UTF-16LE";
@@ -1204,6 +1206,7 @@ _UTF16LEGetName(const UConverter *cnv) {
         return "UTF-16LE,version=1";
     }
 }
+U_CDECL_END
 
 static const UConverterImpl _UTF16LEImpl={
     UCNV_UTF16_LittleEndian,
@@ -1271,8 +1274,8 @@ const UConverterSharedData _UTF16LEData=
  * - UTF-16BE,version=1 (Java "UnicodeBig" encoding) and
  *   UTF-16LE,version=1 (Java "UnicodeLittle" encoding) treat a reverse BOM as an error.
  */
-
-static void
+U_CDECL_BEGIN
+static void  U_CALLCONV
 _UTF16Reset(UConverter *cnv, UConverterResetChoice choice) {
     if(choice<=UCNV_RESET_TO_UNICODE) {
         /* reset toUnicode: state=0 */
@@ -1283,10 +1286,10 @@ _UTF16Reset(UConverter *cnv, UConverterResetChoice choice) {
         cnv->fromUnicodeStatus=UCNV_NEED_TO_WRITE_BOM;
     }
 }
-
+U_CDECL_END
 extern const UConverterSharedData _UTF16v2Data;
-
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 _UTF16Open(UConverter *cnv,
            UConverterLoadArgs *pArgs,
            UErrorCode *pErrorCode) {
@@ -1307,7 +1310,7 @@ _UTF16Open(UConverter *cnv,
     }
 }
 
-static const char *
+static const char *  U_CALLCONV
 _UTF16GetName(const UConverter *cnv) {
     if(UCNV_GET_VERSION(cnv)==0) {
         return "UTF-16";
@@ -1317,14 +1320,15 @@ _UTF16GetName(const UConverter *cnv) {
         return "UTF-16,version=2";
     }
 }
-
+U_CDECL_END
 extern const UConverterSharedData _UTF16Data;
 
 #define IS_UTF16BE(cnv) ((cnv)->sharedData==&_UTF16BEData)
 #define IS_UTF16LE(cnv) ((cnv)->sharedData==&_UTF16LEData)
 #define IS_UTF16(cnv) ((cnv)->sharedData==&_UTF16Data || (cnv)->sharedData==&_UTF16v2Data)
 
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                            UErrorCode *pErrorCode) {
     UConverter *cnv=pArgs->converter;
@@ -1464,7 +1468,7 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     cnv->mode=state;
 }
 
-static UChar32
+static UChar32 U_CALLCONV
 _UTF16GetNextUChar(UConverterToUnicodeArgs *pArgs,
                    UErrorCode *pErrorCode) {
     switch(pArgs->converter->mode) {
@@ -1476,6 +1480,7 @@ _UTF16GetNextUChar(UConverterToUnicodeArgs *pArgs,
         return UCNV_GET_NEXT_UCHAR_USE_TO_U;
     }
 }
+U_CDECL_END
 
 static const UConverterImpl _UTF16Impl = {
     UCNV_UTF16,

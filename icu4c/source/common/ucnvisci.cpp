@@ -186,8 +186,9 @@ isPNJBindiTippi(UChar32 c) {
         return (UBool)(pnjMap[c - 0xa00] >> 1);
     }
 }
-
-static void _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode) {
+U_CDECL_BEGIN
+static void  U_CALLCONV
+_ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode) {
     if(pArgs->onlyTestIsLoadable) {
         return;
     }
@@ -231,7 +232,8 @@ static void _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *e
     }
 }
 
-static void _ISCIIClose(UConverter *cnv) {
+static void U_CALLCONV
+_ISCIIClose(UConverter *cnv) {
     if (cnv->extraInfo!=NULL) {
         if (!cnv->isExtraLocal) {
             uprv_free(cnv->extraInfo);
@@ -240,7 +242,8 @@ static void _ISCIIClose(UConverter *cnv) {
     }
 }
 
-static const char* _ISCIIgetName(const UConverter* cnv) {
+static const char*  U_CALLCONV
+_ISCIIgetName(const UConverter* cnv) {
     if (cnv->extraInfo) {
         UConverterDataISCII* myData= (UConverterDataISCII*)cnv->extraInfo;
         return myData->name;
@@ -248,7 +251,8 @@ static const char* _ISCIIgetName(const UConverter* cnv) {
     return NULL;
 }
 
-static void _ISCIIReset(UConverter *cnv, UConverterResetChoice choice) {
+static void U_CALLCONV
+_ISCIIReset(UConverter *cnv, UConverterResetChoice choice) {
     UConverterDataISCII* data =(UConverterDataISCII *) (cnv->extraInfo);
     if (choice<=UCNV_RESET_TO_UNICODE) {
         cnv->toUnicodeStatus = missingCharMarker;
@@ -888,8 +892,8 @@ static const uint16_t nuktaSpecialCases[][2]={
  *    Soft Halant :
  *                      <HALANT> + <ZWJ>
  */
-
-static void UConverter_fromUnicode_ISCII_OFFSETS_LOGIC(
+static void U_CALLCONV
+UConverter_fromUnicode_ISCII_OFFSETS_LOGIC(
         UConverterFromUnicodeArgs * args, UErrorCode * err) {
     const UChar *source = args->source;
     const UChar *sourceLimit = args->sourceLimit;
@@ -1172,7 +1176,8 @@ static const uint16_t lookupTable[][2]={
  *
  */
 
-static void UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args, UErrorCode* err) {
+static void U_CALLCONV
+UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args, UErrorCode* err) {
     const char *source = ( char *) args->source;
     UChar *target = args->target;
     const char *sourceLimit = args->sourceLimit;
@@ -1522,7 +1527,7 @@ struct cloneISCIIStruct {
     UConverterDataISCII mydata;
 };
 
-static UConverter *
+static UConverter * U_CALLCONV
 _ISCII_SafeClone(const UConverter *cnv,
               void *stackBuffer,
               int32_t *pBufferSize,
@@ -1550,7 +1555,7 @@ _ISCII_SafeClone(const UConverter *cnv,
     return &localClone->cnv;
 }
 
-static void
+static void U_CALLCONV
 _ISCIIGetUnicodeSet(const UConverter *cnv,
                     const USetAdder *sa,
                     UConverterUnicodeSet which,
@@ -1579,7 +1584,7 @@ _ISCIIGetUnicodeSet(const UConverter *cnv,
     sa->add(sa->set, ZWNJ);
     sa->add(sa->set, ZWJ);
 }
-
+U_CDECL_END
 static const UConverterImpl _ISCIIImpl={
 
     UCNV_ISCII,

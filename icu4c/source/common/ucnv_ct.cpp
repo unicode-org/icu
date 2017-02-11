@@ -165,16 +165,17 @@ typedef struct{
 } UConverterDataCompoundText;
 
 /*********** Compound Text Converter Protos ***********/
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 _CompoundTextOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode);
 
-static void
+static void U_CALLCONV
  _CompoundTextClose(UConverter *converter);
 
-static void
+static void U_CALLCONV
 _CompoundTextReset(UConverter *converter, UConverterResetChoice choice);
 
-static const char*
+static const char* U_CALLCONV
 _CompoundTextgetName(const UConverter* cnv);
 
 
@@ -257,7 +258,7 @@ static COMPOUND_TEXT_CONVERTERS findStateFromEscSeq(const char* source, const ch
     return state;
 }
 
-static void
+static void U_CALLCONV
 _CompoundTextOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataCompoundText));
     if (cnv->extraInfo != NULL) {
@@ -300,7 +301,7 @@ _CompoundTextOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorC
 }
 
 
-static void
+static void U_CALLCONV
 _CompoundTextClose(UConverter *converter) {
     UConverterDataCompoundText* myConverterData = (UConverterDataCompoundText*)(converter->extraInfo);
     int32_t i;
@@ -317,19 +318,19 @@ _CompoundTextClose(UConverter *converter) {
     }
 }
 
-static void
+static void U_CALLCONV
 _CompoundTextReset(UConverter *converter, UConverterResetChoice choice) {
     (void)converter;
     (void)choice;
 }
 
-static const char*
+static const char* U_CALLCONV
 _CompoundTextgetName(const UConverter* cnv){
     (void)cnv;
     return "x11-compound-text";
 }
 
-static void
+static void U_CALLCONV
 UConverter_fromUnicode_CompoundText_OFFSETS(UConverterFromUnicodeArgs* args, UErrorCode* err){
     UConverter *cnv = args->converter;
     uint8_t *target = (uint8_t *) args->target;
@@ -461,7 +462,7 @@ getTrail:
 }
 
 
-static void
+static void U_CALLCONV
 UConverter_toUnicode_CompoundText_OFFSETS(UConverterToUnicodeArgs *args,
                                                UErrorCode* err){
     const char *mySource = (char *) args->source;
@@ -577,7 +578,7 @@ UConverter_toUnicode_CompoundText_OFFSETS(UConverterToUnicodeArgs *args,
     args->source = mySource;
 }
 
-static void
+static void U_CALLCONV
 _CompoundText_GetUnicodeSet(const UConverter *cnv,
                     const USetAdder *sa,
                     UConverterUnicodeSet which,
@@ -594,6 +595,7 @@ _CompoundText_GetUnicodeSet(const UConverter *cnv,
     sa->addRange(sa->set, 0x0020, 0x007F);
     sa->addRange(sa->set, 0x00A0, 0x00FF);
 }
+U_CDECL_END
 
 static const UConverterImpl _CompoundTextImpl = {
 
@@ -620,6 +622,7 @@ static const UConverterImpl _CompoundTextImpl = {
     NULL,
     NULL
 };
+
 static const UConverterStaticData _CompoundTextStaticData = {
     sizeof(UConverterStaticData),
     "COMPOUND_TEXT",

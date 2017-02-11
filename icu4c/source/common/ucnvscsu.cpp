@@ -154,8 +154,8 @@ enum {
 };
 
 /* SCSU setup functions ----------------------------------------------------- */
-
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 _SCSUReset(UConverter *cnv, UConverterResetChoice choice) {
     SCSUData *scsu=(SCSUData *)cnv->extraInfo;
 
@@ -191,7 +191,7 @@ _SCSUReset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
-static void
+static void U_CALLCONV
 _SCSUOpen(UConverter *cnv,
           UConverterLoadArgs *pArgs,
           UErrorCode *pErrorCode) {
@@ -216,7 +216,7 @@ _SCSUOpen(UConverter *cnv,
     cnv->subCharLen=-1;
 }
 
-static void
+static void U_CALLCONV
 _SCSUClose(UConverter *cnv) {
     if(cnv->extraInfo!=NULL) {
         if(!cnv->isExtraLocal) {
@@ -228,7 +228,7 @@ _SCSUClose(UConverter *cnv) {
 
 /* SCSU-to-Unicode conversion functions ------------------------------------- */
 
-static void
+static void U_CALLCONV
 _SCSUToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -582,7 +582,7 @@ endloop:
  * re-copy the original function and remove the variables
  * offsets, sourceIndex, and nextSourceIndex.
  */
-static void
+static void U_CALLCONV
 _SCSUToUnicode(UConverterToUnicodeArgs *pArgs,
                UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -866,7 +866,7 @@ endloop:
     pArgs->target=target;
     return;
 }
-
+U_CDECL_END
 /* SCSU-from-Unicode conversion functions ----------------------------------- */
 
 /*
@@ -989,7 +989,7 @@ getDynamicOffset(uint32_t c, uint32_t *pOffset) {
         return -1;
     }
 }
-
+U_CDECL_BEGIN
 /*
  * Idea for compression:
  *  - save SCSUData and other state before really starting work
@@ -1007,7 +1007,7 @@ getDynamicOffset(uint32_t c, uint32_t *pOffset) {
  *  - Only replace the result after an SDX or SCU?
  */
 
-static void
+static void U_CALLCONV
 _SCSUFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -1515,7 +1515,7 @@ outputBytes:
  * re-copy the original function and remove the variables
  * offsets, sourceIndex, and nextSourceIndex.
  */
-static void
+static void U_CALLCONV
 _SCSUFromUnicode(UConverterFromUnicodeArgs *pArgs,
                  UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -1949,7 +1949,7 @@ outputBytes:
 
 /* miscellaneous ------------------------------------------------------------ */
 
-static const char *
+static const char *  U_CALLCONV
 _SCSUGetName(const UConverter *cnv) {
     SCSUData *scsu=(SCSUData *)cnv->extraInfo;
 
@@ -1968,7 +1968,7 @@ struct cloneSCSUStruct
     SCSUData mydata;
 };
 
-static UConverter * 
+static UConverter *  U_CALLCONV
 _SCSUSafeClone(const UConverter *cnv, 
                void *stackBuffer, 
                int32_t *pBufferSize, 
@@ -1995,7 +1995,7 @@ _SCSUSafeClone(const UConverter *cnv,
 
     return &localClone->cnv;
 }
-
+U_CDECL_END
 
 static const UConverterImpl _SCSUImpl={
     UCNV_SCSU,
