@@ -77,6 +77,7 @@ public:
     void TestBug7547();
     void TestBug12797();
     void TestBug12918();
+    void TestBug12932();
 
     void TestDebug();
     void TestProperties();
