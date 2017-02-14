@@ -104,6 +104,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug7547);
     TESTCASE_AUTO(TestBug12797);
     TESTCASE_AUTO(TestBug12918);
+    TESTCASE_AUTO(TestBug12932);
     TESTCASE_AUTO_END;
 }
 
@@ -4665,13 +4666,32 @@ void RBBITest::TestBug12918() {
     ubrk_close(iter);
 }
 
+void RBBITest::TestBug12932() {
+    // Node Stack overflow in the RBBI rule parser caused a seg fault.
+    UnicodeString ruleStr(
+            "((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("
+            "((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("
+            "(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((()))"
+            ")))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))"
+            ")))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))"
+            ")))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))");
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    RuleBasedBreakIterator rbbi(ruleStr, parseError, status);
+    if (status != U_BRK_RULE_SYNTAX) {
+        errln("%s:%d expected U_BRK_RULE_SYNTAX, got %s",
+                __FILE__, __LINE__, u_errorName(status));
+    }
+}
+
+
 //
 //  TestDebug    -  A place-holder test for debugging purposes.
 //                  For putting in fragments of other tests that can be invoked
 //                  for tracing  without a lot of unwanted extra stuff happening.
 //
 void RBBITest::TestDebug(void) {
-
 }
 
 void RBBITest::TestProperties() {
