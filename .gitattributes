@@ -6,7 +6,11 @@ icu4c/license.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/readme.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/source/aclocal.m4 -text
 icu4c/source/allinone/icucheck.bat -text
+icu4c/source/common/edits.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
+icu4c/source/common/ucasemap_imp.h svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/common/unicode/casemap.h svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/common/unicode/edits.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/config/m4/icu-conditional.m4 -text
 icu4c/source/data/brkitr/de.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/dictionaries/burmesedict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
