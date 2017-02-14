@@ -333,7 +333,7 @@ public abstract class CaseMap {
          * @provisional This API might change or be removed in a future release.
          */
          public <A extends Appendable> A apply(CharSequence src, A dest, Edits edits) {
-             return null;
+             return CaseMapImpl.fold(internalOptions, src, dest, edits);
          }
     }
 }
