@@ -38,6 +38,7 @@ public:
     void Ticket10562();
     void Ticket10983();
     void Ticket12130();
+    void Ticket12888();
 
 private:
     struct m {                              // Map between native indices & code points.
