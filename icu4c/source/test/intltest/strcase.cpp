@@ -1068,8 +1068,8 @@ void StringCaseTest::TestCaseMapWithEdits() {
             TRUE, errorCode);
 
     edits.reset();
-    length = CaseMap::foldCase(UCASEMAP_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
-                               (const UChar *)u"IßtanBul", 8, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
+    length = CaseMap::fold(UCASEMAP_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                           (const UChar *)u"IßtanBul", 8, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals((const UChar *)u"foldCase(IßtanBul)", UnicodeString((const UChar *)u"ıssb"), UnicodeString(TRUE, dest, length));
     static const EditChange foldExpectedChanges[] = {
             { TRUE, 1, 1 },

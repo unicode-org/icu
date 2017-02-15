@@ -146,7 +146,7 @@ public:
     /**
      * Case-folds a UTF-16 string and optionally records edits.
      *
-     * Case-folding is locale-independent and not context-sensitive,
+     * Case folding is locale-independent and not context-sensitive,
      * but there is an option for whether to include or exclude mappings for dotted I
      * and dotless i that are marked with 'T' in CaseFolding.txt.
      *
@@ -174,7 +174,7 @@ public:
      * @see u_strFoldCase
      * @draft ICU 59
      */
-    static int32_t foldCase(
+    static int32_t fold(
             uint32_t options,
             const UChar *src, int32_t srcLength,
             UChar *dest, int32_t destCapacity, Edits *edits,
