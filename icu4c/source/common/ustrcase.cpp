@@ -1198,7 +1198,7 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
 
 U_NAMESPACE_BEGIN
 
-int32_t CaseMap::foldCase(
+int32_t CaseMap::fold(
         uint32_t options,
         const UChar *src, int32_t srcLength,
         UChar *dest, int32_t destCapacity, Edits *edits,
