@@ -2252,6 +2252,7 @@ icu4c/source/data/locales/zu.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/zu_ZA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/makedata.vcxproj -text
 icu4c/source/data/mappings/convrtrs.txt svneol=native#text/plain
+icu4c/source/data/mappings/gsm-03.38-2009.ucm -text
 icu4c/source/data/misc/currencyNumericCodes.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/dayPeriods.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/genderList.txt svneol=native#text/plain%3Bcharset%3Dutf-8
