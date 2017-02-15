@@ -120,5 +120,5 @@ icu-internal-compound-d1.ucm icu-internal-compound-d2.ucm icu-internal-compound-
 icu-internal-compound-d5.ucm icu-internal-compound-d6.ucm icu-internal-compound-d7.ucm \
 icu-internal-compound-s1.ucm icu-internal-compound-s2.ucm icu-internal-compound-s3.ucm icu-internal-compound-t.ucm \
 euc-jp-2007.ucm\
-euc-tw-2014.ucm
-
+euc-tw-2014.ucm\
+gsm-03.38-2009.ucm
