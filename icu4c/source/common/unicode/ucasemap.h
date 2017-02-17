@@ -262,7 +262,7 @@ ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode
  * @param dest      A buffer for the result string. The result will be NUL-terminated if
  *                  the buffer is large enough.
  *                  The contents is undefined in case of failure.
- * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+ * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
  *                  dest may be NULL and the function will only return the length of the result
  *                  without writing any of the result string.
  * @param src       The original string.

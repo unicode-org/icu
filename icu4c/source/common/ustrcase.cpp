@@ -940,10 +940,8 @@ int32_t toUpper(uint32_t options,
                 }
             }
 
-            UBool change;
-            if (edits == NULL) {
-                change = TRUE;  // common, simple usage
-            } else {
+            UBool change = TRUE;
+            if (edits != NULL) {
                 // Find out first whether we are changing the text.
                 change = src[i] != upper || numYpogegrammeni > 0;
                 int32_t i2 = i + 1;
