@@ -84,7 +84,6 @@ protected:
                                      UTransPosition& offsets, 
                                      UBool isIncremental) const;
 
-    const UCaseProps *fCsp;
     UCaseMapFull *fMap;
 
 private:

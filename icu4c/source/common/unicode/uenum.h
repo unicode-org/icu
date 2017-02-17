@@ -23,7 +23,9 @@
 #include "unicode/localpointer.h"
 
 #if U_SHOW_CPLUSPLUS_API
-#include "unicode/strenum.h"
+U_NAMESPACE_BEGIN
+class StringEnumeration;
+U_NAMESPACE_END
 #endif
 
 /**

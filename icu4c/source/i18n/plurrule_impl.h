@@ -24,6 +24,7 @@
 #include "unicode/format.h"
 #include "unicode/locid.h"
 #include "unicode/parseerr.h"
+#include "unicode/strenum.h"
 #include "unicode/ures.h"
 #include "uvector.h"
 #include "hash.h"

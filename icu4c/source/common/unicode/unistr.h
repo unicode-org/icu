@@ -33,7 +33,6 @@
 #include "unicode/std_string.h"
 #include "unicode/stringpiece.h"
 #include "unicode/bytestream.h"
-#include "unicode/ucasemap.h"
 
 struct UConverter;          // unicode/ucnv.h
 
@@ -55,30 +54,34 @@ U_STABLE int32_t U_EXPORT2
 u_strlen(const UChar *s);
 #endif
 
-/**
- * \def U_STRING_CASE_MAPPER_DEFINED
- * @internal
- */
-#ifndef U_STRING_CASE_MAPPER_DEFINED
-#define U_STRING_CASE_MAPPER_DEFINED
-
-/**
- * Internal string case mapping function type.
- * @internal
- */
-typedef int32_t U_CALLCONV
-UStringCaseMapper(const UCaseMap *csm,
-                  UChar *dest, int32_t destCapacity,
-                  const UChar *src, int32_t srcLength,
-                  UErrorCode *pErrorCode);
-
-#endif
-
 U_NAMESPACE_BEGIN
 
 #if !UCONFIG_NO_BREAK_ITERATION
 class BreakIterator;        // unicode/brkiter.h
 #endif
+class Edits;
+
+U_NAMESPACE_END
+
+// Not #ifndef U_HIDE_INTERNAL_API because UnicodeString needs the UStringCaseMapper.
+/**
+ * Internal string case mapping function type.
+ * All error checking must be done.
+ * src and dest must not overlap.
+ * @internal
+ */
+typedef int32_t U_CALLCONV
+UStringCaseMapper(int32_t caseLocale, uint32_t options,
+#if !UCONFIG_NO_BREAK_ITERATION
+                  icu::BreakIterator *iter,
+#endif
+                  UChar *dest, int32_t destCapacity,
+                  const UChar *src, int32_t srcLength,
+                  icu::Edits *edits,
+                  UErrorCode &errorCode);
+
+U_NAMESPACE_BEGIN
+
 class Locale;               // unicode/locid.h
 class StringCharacterIterator;
 class UnicodeStringAppendable;  // unicode/appendable.h
@@ -3592,7 +3595,11 @@ private:
    * as in ustr_imp.h for ustrcase_map().
    */
   UnicodeString &
-  caseMap(const UCaseMap *csm, UStringCaseMapper *stringCaseMapper);
+  caseMap(int32_t caseLocale, uint32_t options,
+#if !UCONFIG_NO_BREAK_ITERATION
+          BreakIterator *iter,
+#endif
+          UStringCaseMapper *stringCaseMapper);
 
   // ref counting
   void addRef(void);

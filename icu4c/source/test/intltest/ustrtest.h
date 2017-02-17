@@ -94,30 +94,4 @@ public:
     void TestMoveSwap();
 };
 
-class StringCaseTest: public IntlTest {
-public:
-    StringCaseTest();
-    virtual ~StringCaseTest();
-
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
-
-    void TestCaseConversion();
-
-    void TestCasingImpl(const UnicodeString &input,
-                        const UnicodeString &output,
-                        int32_t whichCase,
-                        void *iter, const char *localeID, uint32_t options);
-    void TestCasing();
-    void TestFullCaseFoldingIterator();
-    void TestGreekUpper();
-    void TestLongUpper();
-    void TestMalformedUTF8();
-    void TestBufferOverflow();
-
-private:
-    void assertGreekUpper(const char *s, const char *expected);
-
-    Locale GREEK_LOCALE_;
-};
-
 #endif
