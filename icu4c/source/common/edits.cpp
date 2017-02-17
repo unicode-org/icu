@@ -147,7 +147,9 @@ UBool Edits::growArray() {
     if (array == stackArray) {
         newCapacity = 2000;
     } else if (capacity == INT32_MAX) {
-        errorCode = U_BUFFER_OVERFLOW_ERROR;
+        // Not U_BUFFER_OVERFLOW_ERROR because that could be confused on a string transform API
+        // with a result-string-buffer overflow.
+        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     } else if (capacity >= (INT32_MAX / 2)) {
         newCapacity = INT32_MAX;
@@ -156,7 +158,7 @@ UBool Edits::growArray() {
     }
     // Grow by at least 5 units so that a maximal change record will fit.
     if ((newCapacity - capacity) < 5) {
-        errorCode = U_BUFFER_OVERFLOW_ERROR;
+        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
     uint16_t *newArray = (uint16_t *)uprv_malloc((size_t)newCapacity * 2);

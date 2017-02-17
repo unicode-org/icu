@@ -42,7 +42,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -50,8 +50,9 @@ public:
      *                  This function calls edits->reset() first. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
-     * @return The length of the result string, if successful - or in case of a buffer overflow,
-     *         in which case it will be greater than destCapacity.
+     * @return The length of the result string, if successful.
+     *         When the result would be longer than destCapacity,
+     *         the full length is returned and a U_BUFFER_OVERFLOW_ERROR is set.
      *
      * @see u_strToLower
      * @draft ICU 59
@@ -75,7 +76,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -83,8 +84,9 @@ public:
      *                  This function calls edits->reset() first. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
-     * @return The length of the result string, if successful - or in case of a buffer overflow,
-     *         in which case it will be greater than destCapacity.
+     * @return The length of the result string, if successful.
+     *         When the result would be longer than destCapacity,
+     *         the full length is returned and a U_BUFFER_OVERFLOW_ERROR is set.
      *
      * @see u_strToUpper
      * @draft ICU 59
@@ -120,7 +122,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -128,8 +130,9 @@ public:
      *                  This function calls edits->reset() first. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
-     * @return The length of the result string, if successful - or in case of a buffer overflow,
-     *         in which case it will be greater than destCapacity.
+     * @return The length of the result string, if successful.
+     *         When the result would be longer than destCapacity,
+     *         the full length is returned and a U_BUFFER_OVERFLOW_ERROR is set.
      *
      * @see u_strToTitle
      * @see ucasemap_toTitle
@@ -160,7 +163,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of bytes). If it is 0, then
+     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -168,8 +171,9 @@ public:
      *                  This function calls edits->reset() first. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
-     * @return The length of the result string, if successful - or in case of a buffer overflow,
-     *         in which case it will be greater than destCapacity.
+     * @return The length of the result string, if successful.
+     *         When the result would be longer than destCapacity,
+     *         the full length is returned and a U_BUFFER_OVERFLOW_ERROR is set.
      *
      * @see u_strFoldCase
      * @draft ICU 59
