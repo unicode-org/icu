@@ -33,6 +33,7 @@
 
 
 #include "unicode/locid.h"
+#include "unicode/strenum.h"
 #include "unicode/uloc.h"
 #include "putilimp.h"
 #include "mutex.h"

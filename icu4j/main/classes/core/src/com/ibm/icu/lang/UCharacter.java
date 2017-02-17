@@ -15,8 +15,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.impl.CaseMap;
-import com.ibm.icu.impl.CaseMap.StringContextIterator;
+import com.ibm.icu.impl.CaseMapImpl;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
@@ -29,6 +28,7 @@ import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterDirection;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Edits;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
@@ -4875,7 +4875,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toUpperCase(String str)
     {
-        return toUpperCase(ULocale.getDefault(), str);
+        return toUpperCase(getDefaultCaseLocale(), str);
     }
 
     /**
@@ -4887,7 +4887,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(String str)
     {
-        return toLowerCase(ULocale.getDefault(), str);
+        return toLowerCase(getDefaultCaseLocale(), str);
     }
 
     /**
@@ -4910,7 +4910,94 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toTitleCase(String str, BreakIterator breakiter)
     {
-        return toTitleCase(ULocale.getDefault(), str, breakiter);
+        return toTitleCase(Locale.getDefault(), str, breakiter, 0);
+    }
+
+    private static int getDefaultCaseLocale() {
+        return UCaseProps.getCaseLocale(Locale.getDefault());
+    }
+
+    private static int getCaseLocale(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return UCaseProps.getCaseLocale(locale);
+    }
+
+    private static int getCaseLocale(ULocale locale) {
+        if (locale == null) {
+            locale = ULocale.getDefault();
+        }
+        return UCaseProps.getCaseLocale(locale);
+    }
+
+    private static String toLowerCase(int caseLocale, String str) {
+        if (str.length() <= 100) {
+            if (str.isEmpty()) {
+                return str;
+            }
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = CaseMapImpl.toLower(
+                    caseLocale, CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
+            return applyEdits(str, replacementChars, edits);
+        } else {
+            return CaseMapImpl.toLower(caseLocale, 0, str,
+                    new StringBuilder(str.length()), null).toString();
+        }
+    }
+
+    private static String toUpperCase(int caseLocale, String str) {
+        if (str.length() <= 100) {
+            if (str.isEmpty()) {
+                return str;
+            }
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = CaseMapImpl.toUpper(
+                    caseLocale, CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
+            return applyEdits(str, replacementChars, edits);
+        } else {
+            return CaseMapImpl.toUpper(caseLocale, 0, str,
+                    new StringBuilder(str.length()), null).toString();
+        }
+    }
+
+    private static String toTitleCase(int caseLocale, int options, BreakIterator titleIter, String str) {
+        if (str.length() <= 100) {
+            if (str.isEmpty()) {
+                return str;
+            }
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = CaseMapImpl.toTitle(
+                    caseLocale, options | CaseMapImpl.OMIT_UNCHANGED_TEXT, titleIter, str,
+                    new StringBuilder(), edits);
+            return applyEdits(str, replacementChars, edits);
+        } else {
+            return CaseMapImpl.toTitle(caseLocale, options, titleIter, str,
+                    new StringBuilder(str.length()), null).toString();
+        }
+    }
+
+    private static String applyEdits(String str, StringBuilder replacementChars, Edits edits) {
+        if (!edits.hasChanges()) {
+            return str;
+        }
+        StringBuilder result = new StringBuilder(str.length() + edits.lengthDelta());
+        for (Edits.Iterator ei = edits.getCoarseIterator(); ei.next();) {
+            if (ei.hasChange()) {
+                int i = ei.replacementIndex();
+                result.append(replacementChars, i, i + ei.newLength());
+            } else {
+                int i = ei.sourceIndex();
+                result.append(str, i, i + ei.oldLength());
+            }
+        }
+        return result.toString();
     }
 
     /**
@@ -4923,7 +5010,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toUpperCase(Locale locale, String str)
     {
-        return toUpperCase(ULocale.forLocale(locale), str);
+        return toUpperCase(getCaseLocale(locale), str);
     }
 
     /**
@@ -4935,7 +5022,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.2
      */
     public static String toUpperCase(ULocale locale, String str) {
-        return CaseMap.toUpper(locale, str);
+        return toUpperCase(getCaseLocale(locale), str);
     }
 
     /**
@@ -4948,7 +5035,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(Locale locale, String str)
     {
-        return toLowerCase(ULocale.forLocale(locale), str);
+        return toLowerCase(getCaseLocale(locale), str);
     }
 
     /**
@@ -4960,31 +5047,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.2
      */
     public static String toLowerCase(ULocale locale, String str) {
-        StringContextIterator iter = new StringContextIterator(str);
-        StringBuilder result = new StringBuilder(str.length());
-        int[] locCache = new int[1];
-        int c;
-
-        if (locale == null) {
-            locale = ULocale.getDefault();
-        }
-        locCache[0]=0;
-
-        while((c=iter.nextCaseMapCP())>=0) {
-            c = UCaseProps.INSTANCE.toFullLower(c, iter, result, locale, locCache);
-
-            /* decode the result */
-            if(c<0) {
-                /* (not) original code point */
-                c=~c;
-            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
-                /* mapping already appended to result */
-                continue;
-                /* } else { append single-code point mapping */
-            }
-            result.appendCodePoint(c);
-        }
-        return result.toString();
+        return toLowerCase(getCaseLocale(locale), str);
     }
 
     /**
@@ -5009,7 +5072,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String toTitleCase(Locale locale, String str,
             BreakIterator breakiter)
     {
-        return toTitleCase(ULocale.forLocale(locale), str, breakiter);
+        return toTitleCase(locale, str, breakiter, 0);
     }
 
     /**
@@ -5059,126 +5122,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #TITLECASE_NO_BREAK_ADJUSTMENT
      */
     public static String toTitleCase(ULocale locale, String str,
-            BreakIterator titleIter,
-            int options) {
-        StringContextIterator iter = new StringContextIterator(str);
-        StringBuilder result = new StringBuilder(str.length());
-        int[] locCache = new int[1];
-        int c, nc, srcLength = str.length();
-
-        if (locale == null) {
-            locale = ULocale.getDefault();
-        }
-        locCache[0]=0;
-
+            BreakIterator titleIter, int options) {
         if(titleIter == null) {
+            if (locale == null) {
+                locale = ULocale.getDefault();
+            }
             titleIter = BreakIterator.getWordInstance(locale);
         }
         titleIter.setText(str);
-
-        int prev, titleStart, index;
-        boolean isFirstIndex;
-        boolean isDutch = locale.getLanguage().equals("nl");
-        boolean FirstIJ = true;
-
-        /* set up local variables */
-        prev=0;
-        isFirstIndex=true;
-
-        /* titlecasing loop */
-        while(prev<srcLength) {
-            /* find next index where to titlecase */
-            if(isFirstIndex) {
-                isFirstIndex=false;
-                index=titleIter.first();
-            } else {
-                index=titleIter.next();
-            }
-            if(index==BreakIterator.DONE || index>srcLength) {
-                index=srcLength;
-            }
-
-            /*
-             * Unicode 4 & 5 section 3.13 Default Case Operations:
-             *
-             * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
-             * #29, "Text Boundaries." Between each pair of word boundaries, find the first
-             * cased character F. If F exists, map F to default_title(F); then map each
-             * subsequent character C to default_lower(C).
-             *
-             * In this implementation, segment [prev..index[ into 3 parts:
-             * a) uncased characters (copy as-is) [prev..titleStart[
-             * b) first case letter (titlecase)         [titleStart..titleLimit[
-             * c) subsequent characters (lowercase)                 [titleLimit..index[
-             */
-            if(prev<index) {
-                /* find and copy uncased characters [prev..titleStart[ */
-                iter.setLimit(index);
-                c=iter.nextCaseMapCP();
-                if((options&TITLECASE_NO_BREAK_ADJUSTMENT)==0
-                        && UCaseProps.NONE==UCaseProps.INSTANCE.getType(c)) {
-                    while((c=iter.nextCaseMapCP())>=0
-                            && UCaseProps.NONE==UCaseProps.INSTANCE.getType(c)) {}
-                    titleStart=iter.getCPStart();
-                    if(prev<titleStart) {
-                        result.append(str, prev, titleStart);
-                    }
-                } else {
-                    titleStart=prev;
-                }
-
-                if(titleStart<index) {
-                    FirstIJ = true;
-                    /* titlecase c which is from titleStart */
-                    c = UCaseProps.INSTANCE.toFullTitle(c, iter, result, locale, locCache);
-
-                    /* decode the result and lowercase up to index */
-                    for(;;) {
-                        if(c<0) {
-                            /* (not) original code point */
-                            c=~c;
-                            result.appendCodePoint(c);
-                        } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
-                            /* mapping already appended to result */
-                        } else {
-                            /* append single-code point mapping */
-                            result.appendCodePoint(c);
-                        }
-
-                        if((options&TITLECASE_NO_LOWERCASE)!=0) {
-                            /* Optionally just copy the rest of the word unchanged. */
-
-                            int titleLimit=iter.getCPLimit();
-                            if(titleLimit<index) {
-                                /* Special Case - Dutch IJ Titlecasing */
-                                if (isDutch && c == 0x0049 && str.charAt(titleLimit) == 'j') {
-                                    result.append('J').append(str, titleLimit + 1, index);
-                                } else {
-                                    result.append(str, titleLimit, index);
-                                }
-                            }
-                            iter.moveToLimit();
-                            break;
-                        } else if((nc=iter.nextCaseMapCP())>=0) {
-                            if (isDutch && (nc == 0x004A ||  nc == 0x006A)
-                                    && (c == 0x0049) && (FirstIJ == true)) {
-                                c = 0x004A; /* J */
-                                FirstIJ = false;
-                            } else {
-                                /* Normal operation: Lowercase the rest of the word. */
-                                c = UCaseProps.INSTANCE.toFullLower(nc, iter, result, locale,
-                                        locCache);
-                            }
-                        } else {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            prev=index;
-        }
-        return result.toString();
+        return toTitleCase(getCaseLocale(locale), options, titleIter, str);
     }
 
 
@@ -5281,7 +5233,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String toTitleCase(Locale locale, String str,
             BreakIterator titleIter,
             int options) {
-        return toTitleCase(ULocale.forLocale(locale), str, titleIter, options);
+        if(titleIter == null) {
+            titleIter = BreakIterator.getWordInstance(locale);
+        }
+        titleIter.setText(str);
+        return toTitleCase(getCaseLocale(locale), options, titleIter, str);
     }
 
     /**
@@ -5398,27 +5354,19 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.6
      */
     public static final String foldCase(String str, int options) {
-        StringBuilder result = new StringBuilder(str.length());
-        int c, i, length;
-
-        length = str.length();
-        for(i=0; i<length;) {
-            c=str.codePointAt(i);
-            i+=Character.charCount(c);
-            c = UCaseProps.INSTANCE.toFullFolding(c, result, options);
-
-            /* decode the result */
-            if(c<0) {
-                /* (not) original code point */
-                c=~c;
-            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
-                /* mapping already appended to result */
-                continue;
-                /* } else { append single-code point mapping */
+        if (str.length() <= 100) {
+            if (str.isEmpty()) {
+                return str;
             }
-            result.appendCodePoint(c);
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = CaseMapImpl.fold(
+                    options | CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
+            return applyEdits(str, replacementChars, edits);
+        } else {
+            return CaseMapImpl.fold(options, str, new StringBuilder(str.length()), null).toString();
         }
-        return result.toString();
     }
 
     /**

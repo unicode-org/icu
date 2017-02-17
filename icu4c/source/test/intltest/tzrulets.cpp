@@ -18,6 +18,7 @@
 #include "unicode/tzrule.h"
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
+#include "unicode/strenum.h"
 #include "unicode/ucal.h"
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"

@@ -7,6 +7,7 @@
  *********************************************************************/
 
 #include "locnmtst.h"
+#include "unicode/ustring.h"
 #include "cstring.h"
 
 /*

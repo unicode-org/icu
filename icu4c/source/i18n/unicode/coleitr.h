@@ -47,6 +47,7 @@ U_NAMESPACE_BEGIN
 
 struct CollationData;
 
+class CharacterIterator;
 class CollationIterator;
 class RuleBasedCollator;
 class UCollationPCE;

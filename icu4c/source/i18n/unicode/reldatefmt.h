@@ -230,6 +230,7 @@ typedef enum UDateDirection {
 
 U_NAMESPACE_BEGIN
 
+class BreakIterator;
 class RelativeDateTimeCacheData;
 class SharedNumberFormat;
 class SharedPluralRules;
