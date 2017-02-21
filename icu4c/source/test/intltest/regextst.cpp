@@ -68,105 +68,41 @@ RegexTest::~RegexTest()
 void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite RegexTest: ");
-    switch (index) {
-
-        case 0: name = "Basic";
-            if (exec) Basic();
-            break;
-        case 1: name = "API_Match";
-            if (exec) API_Match();
-            break;
-        case 2: name = "API_Replace";
-            if (exec) API_Replace();
-            break;
-        case 3: name = "API_Pattern";
-            if (exec) API_Pattern();
-            break;
-        case 4:
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(Basic);
+    TESTCASE_AUTO(API_Match);
+    TESTCASE_AUTO(API_Replace);
+    TESTCASE_AUTO(API_Pattern);
 #if !UCONFIG_NO_FILE_IO
-            name = "Extended";
-            if (exec) Extended();
-#else
-            name = "skip";
+    TESTCASE_AUTO(Extended);
 #endif
-            break;
-        case 5: name = "Errors";
-            if (exec) Errors();
-            break;
-        case 6: name = "PerlTests";
-            if (exec) PerlTests();
-            break;
-        case 7: name = "Callbacks";
-            if (exec) Callbacks();
-            break;
-        case 8: name = "FindProgressCallbacks";
-            if (exec) FindProgressCallbacks();
-            break;
-        case 9: name = "Bug 6149";
-             if (exec) Bug6149();
-             break;
-        case 10: name = "UTextBasic";
-          if (exec) UTextBasic();
-          break;
-        case 11: name = "API_Match_UTF8";
-          if (exec) API_Match_UTF8();
-          break;
-        case 12: name = "API_Replace_UTF8";
-          if (exec) API_Replace_UTF8();
-          break;
-        case 13: name = "API_Pattern_UTF8";
-          if (exec) API_Pattern_UTF8();
-          break;
-        case 14: name = "PerlTestsUTF8";
-          if (exec) PerlTestsUTF8();
-          break;
-        case 15: name = "PreAllocatedUTextCAPI";
-          if (exec) PreAllocatedUTextCAPI();
-          break;
-        case 16: name = "Bug 7651";
-             if (exec) Bug7651();
-             break;
-        case 17: name = "Bug 7740";
-            if (exec) Bug7740();
-            break;
-        case 18: name = "Bug 8479";
-            if (exec) Bug8479();
-            break;
-        case 19: name = "Bug 7029";
-            if (exec) Bug7029();
-            break;
-        case 20: name = "CheckInvBufSize";
-            if (exec) CheckInvBufSize();
-            break;
-        case 21: name = "Bug 9283";
-            if (exec) Bug9283();
-            break;
-        case 22: name = "Bug10459";
-            if (exec) Bug10459();
-            break;
-        case 23: name = "TestCaseInsensitiveStarters";
-            if (exec) TestCaseInsensitiveStarters();
-            break;
-        case 24: name = "TestBug11049";
-            if (exec) TestBug11049();
-            break;
-        case 25: name = "TestBug11371";
-            if (exec) TestBug11371();
-            break;
-        case 26: name = "TestBug11480";
-            if (exec) TestBug11480();
-            break;
-        case 27: name = "NamedCapture";
-            if (exec) NamedCapture();
-            break;
-        case 28: name = "NamedCaptureLimits";
-            if (exec) NamedCaptureLimits();
-            break;
-        default: name = "";
-            break; //needed to end loop
-    }
+    TESTCASE_AUTO(Errors);
+    TESTCASE_AUTO(PerlTests);
+    TESTCASE_AUTO(Callbacks);
+    TESTCASE_AUTO(FindProgressCallbacks);
+    TESTCASE_AUTO(Bug6149);
+    TESTCASE_AUTO(UTextBasic);
+    TESTCASE_AUTO(API_Match_UTF8);
+    TESTCASE_AUTO(API_Replace_UTF8);
+    TESTCASE_AUTO(API_Pattern_UTF8);
+    TESTCASE_AUTO(PerlTestsUTF8);
+    TESTCASE_AUTO(PreAllocatedUTextCAPI);
+    TESTCASE_AUTO(Bug7651);
+    TESTCASE_AUTO(Bug7740);
+    TESTCASE_AUTO(Bug8479);
+    TESTCASE_AUTO(Bug7029);
+    TESTCASE_AUTO(CheckInvBufSize);
+    TESTCASE_AUTO(Bug9283);
+    TESTCASE_AUTO(Bug10459);
+    TESTCASE_AUTO(TestCaseInsensitiveStarters);
+    TESTCASE_AUTO(TestBug11049);
+    TESTCASE_AUTO(TestBug11371);
+    TESTCASE_AUTO(TestBug11480);
+    TESTCASE_AUTO(NamedCapture);
+    TESTCASE_AUTO(NamedCaptureLimits);
+    TESTCASE_AUTO(TestBug12884);
+    TESTCASE_AUTO_END;
 }
-
 
 
 /**
@@ -5833,5 +5769,41 @@ void RegexTest::TestBug11480() {
     REGEX_CHECK_STATUS;
 }
 
+void RegexTest::TestBug12884() {
+    // setTimeLimit() was not effective for empty sub-patterns with large {minimum counts}
+    UnicodeString pattern(u"(((((((){120}){11}){11}){11}){80}){11}){4}");
+    UnicodeString text(u"hello");
+    UErrorCode status = U_ZERO_ERROR;
+    RegexMatcher m(pattern, text, 0, status);
+    REGEX_CHECK_STATUS;
+    m.setTimeLimit(5, status);
+    m.find(status);
+    REGEX_ASSERT(status == U_REGEX_TIME_OUT);
+
+    // Non-greedy loops. They take a different code path during matching.
+    UnicodeString ngPattern(u"(((((((){120}?){11}?){11}?){11}?){80}?){11}?){4}?");
+    status = U_ZERO_ERROR;
+    RegexMatcher ngM(ngPattern, text, 0, status);
+    REGEX_CHECK_STATUS;
+    ngM.setTimeLimit(5, status);
+    ngM.find(status);
+    REGEX_ASSERT(status == U_REGEX_TIME_OUT);
+
+    // UText, wrapping non-UTF-16 text, also takes a different execution path.
+    const char *text8 = u8"¿Qué es Unicode?  Unicode proporciona un número único para cada"
+                          "carácter, sin importar la plataforma, sin importar el programa,"
+                          "sin importar el idioma.";
+    status = U_ZERO_ERROR;
+    LocalUTextPointer ut(utext_openUTF8(NULL, text8, -1, &status));
+    REGEX_CHECK_STATUS;
+    m.reset(ut.getAlias());
+    m.find(status);
+    REGEX_ASSERT(status == U_REGEX_TIME_OUT);
+
+    status = U_ZERO_ERROR;
+    ngM.reset(ut.getAlias());
+    ngM.find(status);
+    REGEX_ASSERT(status == U_REGEX_TIME_OUT);
+}
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
