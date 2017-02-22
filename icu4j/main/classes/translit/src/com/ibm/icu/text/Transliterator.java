@@ -221,9 +221,6 @@ import com.ibm.icu.util.UResourceBundle;
  * <code>transliterate()</code> method taking a <code>String</code> and <code>StringBuffer</code> if the performance of
  * these methods can be improved over the performance obtained by the default implementations in this class.
  *
- * <p>
- * Copyright &copy; IBM Corporation 1999. All rights reserved.
- *
  * @author Alan Liu
  * @stable ICU 2.0
  */

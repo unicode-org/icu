@@ -16,8 +16,6 @@ package com.ibm.icu.text;
  * intended for general use.  Most clients will need to implement
  * {@link Replaceable} in their text representation class.
  *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
- *
  * @see Replaceable
  * @author Alan Liu
  * @stable ICU 2.0
@@ -60,6 +58,7 @@ public class ReplaceableString implements Replaceable {
      * @return string contents of this object
      * @stable ICU 2.0
      */
+    @Override
     public String toString() {
         return buf.toString();
     }
@@ -76,7 +75,8 @@ public class ReplaceableString implements Replaceable {
      * Return the number of characters contained in this object.
      * <code>Replaceable</code> API.
      * @stable ICU 2.0
-     */ 
+     */
+    @Override
     public int length() {
         return buf.length();
     }
@@ -88,6 +88,7 @@ public class ReplaceableString implements Replaceable {
      * <code>length()</code> - 1
      * @stable ICU 2.0
      */
+    @Override
     public char charAt(int offset) {
         return buf.charAt(offset);
     }
@@ -103,6 +104,7 @@ public class ReplaceableString implements Replaceable {
      * @return 32-bit code point of text at given offset
      * @stable ICU 2.0
      */
+    @Override
     public int char32At(int offset) {
         return UTF16.charAt(buf, offset);
     }
@@ -125,6 +127,7 @@ public class ReplaceableString implements Replaceable {
      * @param dstStart the start offset in the destination array.
      * @stable ICU 2.0
      */
+    @Override
     public void getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
         if (srcStart != srcLimit) {
             buf.getChars(srcStart, srcLimit, dst, dstStart);
@@ -142,6 +145,7 @@ public class ReplaceableString implements Replaceable {
      * <code>limit - 1</code>
      * @stable ICU 2.0
      */
+    @Override
     public void replace(int start, int limit, String text) {
         buf.replace(start, limit, text);
     }
@@ -159,6 +163,7 @@ public class ReplaceableString implements Replaceable {
      * @param charsLen the number of characters of <code>chars</code>.
      * @stable ICU 2.0
      */
+    @Override
     public void replace(int start, int limit, char[] chars,
                         int charsStart, int charsLen) {
         buf.delete(start, limit);
@@ -169,7 +174,7 @@ public class ReplaceableString implements Replaceable {
      * Copy a substring of this object, retaining attribute (out-of-band)
      * information.  This method is used to duplicate or reorder substrings.
      * The destination index must not overlap the source range.
-     * 
+     *
      * @param start the beginning index, inclusive; <code>0 &lt;= start &lt;=
      * limit</code>.
      * @param limit the ending index, exclusive; <code>start &lt;= limit &lt;=
@@ -180,6 +185,7 @@ public class ReplaceableString implements Replaceable {
      * dest &gt;= limit</code>.
      * @stable ICU 2.0
      */
+    @Override
     public void copy(int start, int limit, int dest) {
         if (start == limit && start >= 0 && start <= buf.length()) {
             return;
@@ -188,11 +194,12 @@ public class ReplaceableString implements Replaceable {
         getChars(start, limit, text, 0);
         replace(dest, dest, text, 0, limit - start);
     }
-    
+
     /**
      * Implements Replaceable
      * @stable ICU 2.0
      */
+    @Override
     public boolean hasMetaData() {
         return false;
     }
