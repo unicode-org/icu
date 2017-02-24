@@ -51,29 +51,6 @@
  */
 #include <stddef.h>
 
-/*
- *  U_USE_CHAR16_T
- *     When set, force use of char16_t for UChar.
- *     Note: char16_t is expected to become the default and required in the future,
- *           and this option will be removed.
- *
- *     Note: for plain C, #include <uchar.h> should define char16_t,
- *           but Macintosh Xcode does not yet implement it.
- *     @internal
- */
-#ifndef U_USE_CHAR16_T
-#define U_USE_CHAR16_T 1
-#endif
-
-#if U_USE_CHAR16_T
-#ifdef __cplusplus
-#ifdef UCHAR_TYPE
-#undef UCHAR_TYPE
-#endif
-#define UCHAR_TYPE char16_t
-#endif  /* __cpluplus  */
-#endif  /* U_USE_CHAR16_t */
-
 /*==========================================================================*/
 /* For C wrappers, we use the symbol U_STABLE.                                */
 /* This works properly if the includer is C or C++.                         */
@@ -315,7 +292,10 @@ typedef int8_t UBool;
 
 /**
  * \var UChar
- * Define UChar to be UCHAR_TYPE, if that is #defined (for example, to char16_t),
+ *
+ * For C++, UChar is always defined to be char16_t.
+ *
+ * For plain C, define UChar to be UCHAR_TYPE, if that is #defined (for example, to char16_t),
  * or wchar_t if that is 16 bits wide; always assumed to be unsigned.
  * If neither is available, then define UChar to be uint16_t.
  *
@@ -325,12 +305,14 @@ typedef int8_t UBool;
  *
  * @stable ICU 4.4
  */
-#if defined(UCHAR_TYPE)
+#ifdef __cplusplus
+    typedef char16_t UChar;
+#elif defined(UCHAR_TYPE)
     typedef UCHAR_TYPE UChar;
-/* Not #elif U_HAVE_CHAR16_T -- because that is type-incompatible with pre-C++11 callers
-    typedef char16_t UChar;  */
 #elif U_SIZEOF_WCHAR_T==2
     typedef wchar_t UChar;
+#elif U_HAVE_CHAR16_T
+    typedef char16_t UChar;
 #elif defined(__CHAR16_TYPE__)
     typedef __CHAR16_TYPE__ UChar;
 #else
