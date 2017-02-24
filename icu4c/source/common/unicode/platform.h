@@ -430,7 +430,7 @@
 #   define U_HAVE_DEBUG_LOCATION_NEW 0
 #endif
 
-/* Compatibility with non clang compilers: http://clang.llvm.org/docs/LanguageExtensions.html */
+/* Compatibility with compilers other than clang: http://clang.llvm.org/docs/LanguageExtensions.html */
 #ifndef __has_attribute
 #    define __has_attribute(x) 0
 #endif
@@ -538,8 +538,11 @@
  * @internal
  */
 #ifdef __cplusplus
-#   if __has_cpp_attribute(clang::fallthrough) || \
-            (__has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough"))
+#   ifdef U_FALLTHROUGH
+        // Use the predefined value.
+#   elif defined(__clang__) && \
+            (__has_cpp_attribute(clang::fallthrough) || \
+            (__has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough")))
 #       define U_FALLTHROUGH [[clang::fallthrough]]
 #   else
 #       define U_FALLTHROUGH

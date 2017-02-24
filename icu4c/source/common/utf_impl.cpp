@@ -155,6 +155,7 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
             c=(c<<6)|trail;
             /* c>=0x110 would result in code point>0x10ffff, outside Unicode */
             if(c>=0x110 || trail>0x3f) { break; }
+            U_FALLTHROUGH;
         case 2:
             trail=s[i++]-0x80;
             c=(c<<6)|trail;
@@ -163,6 +164,7 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
              * before the last (c<<6), a surrogate is c=360..37f
              */
             if(((c&0xffe0)==0x360 && strict!=-2) || trail>0x3f) { break; }
+            U_FALLTHROUGH;
         case 1:
             trail=s[i++]-0x80;
             c=(c<<6)|trail;
