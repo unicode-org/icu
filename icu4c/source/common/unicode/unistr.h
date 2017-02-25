@@ -28,6 +28,7 @@
  * \brief C++ API: Unicode String
  */
 
+#include <cstddef>
 #include "unicode/utypes.h"
 #include "unicode/rep.h"
 #include "unicode/std_string.h"
@@ -55,6 +56,173 @@ u_strlen(const UChar *s);
 #endif
 
 U_NAMESPACE_BEGIN
+
+// TODO begin experiment ---------------
+
+/**
+ * \def U_ALIASING_BARRIER
+ * Barrier for pointer anti-aliasing optimizations even across function boundaries.
+ * @internal
+ */
+#ifdef U_ALIASING_BARRIER
+    // Use the predefined value.
+#elif defined(__clang__) || defined(__GNUC__)
+#   define U_ALIASING_BARRIER(ptr) asm volatile("" : "+rm"(ptr))
+#endif
+
+/**
+ * char16_t * wrapper with implicit conversion from distinct but bit-compatible pointer types,
+ * and from NULL.
+ * @draft ICU 59
+ */
+class U_COMMON_API Char16Ptr {
+public:
+    /**
+     * Copies the pointer.
+     * @draft ICU 59
+     */
+    inline Char16Ptr(char16_t *p);
+    /**
+     * Converts the pointer to char16_t *.
+     * @draft ICU 59
+     */
+    inline Char16Ptr(uint16_t *p);
+#if U_SIZEOF_WCHAR_T==2
+    /**
+     * Converts the pointer to char16_t *.
+     * @draft ICU 59
+     */
+    inline Char16Ptr(wchar_t *p);
+#endif
+    /**
+     * nullptr constructor.
+     * @draft ICU 59
+     */
+    inline Char16Ptr(std::nullptr_t p);
+    /**
+     * Pointer access.
+     * @draft ICU 59
+     */
+    inline operator char16_t *();
+
+private:
+#ifdef U_ALIASING_BARRIER
+    template<typename T> char16_t *cast(T *t) {
+        U_ALIASING_BARRIER(t);
+        return reinterpret_cast<char16_t *>(t);
+    }
+
+    char16_t *p;
+#else
+    union {
+        char16_t *cp;
+        uint16_t *up;
+        wchar_t *wp;
+    } u;
+#endif
+};
+
+#ifdef U_ALIASING_BARRIER
+
+Char16Ptr::Char16Ptr(char16_t *p) : p(p) {}
+Char16Ptr::Char16Ptr(uint16_t *p) : p(cast(p)) {}
+#if U_SIZEOF_WCHAR_T==2
+Char16Ptr::Char16Ptr(wchar_t *p) : p(cast(p)) {}
+#endif
+Char16Ptr::Char16Ptr(std::nullptr_t p) : p(p) {}
+
+Char16Ptr::operator char16_t *() { return p; }
+
+#else
+
+Char16Ptr::Char16Ptr(char16_t *p) { u.cp = p; }
+Char16Ptr::Char16Ptr(uint16_t *p) { u.up = p; }
+#if U_SIZEOF_WCHAR_T==2
+Char16Ptr::Char16Ptr(wchar_t *p) { u.wp = p; }
+#endif
+Char16Ptr::Char16Ptr(std::nullptr_t p) { u.cp = p; }
+
+Char16Ptr::operator char16_t *() { return u.cp; }
+
+#endif
+
+/**
+ * const char16_t * wrapper with implicit conversion from distinct but bit-compatible pointer types,
+ * and from NULL.
+ * @draft ICU 59
+ */
+class U_COMMON_API ConstChar16Ptr {
+public:
+    /**
+     * Copies the pointer.
+     * @draft ICU 59
+     */
+    inline ConstChar16Ptr(const char16_t *p);
+    /**
+     * Converts the pointer to char16_t *.
+     * @draft ICU 59
+     */
+    inline ConstChar16Ptr(const uint16_t *p);
+#if U_SIZEOF_WCHAR_T==2
+    /**
+     * Converts the pointer to char16_t *.
+     * @draft ICU 59
+     */
+    inline ConstChar16Ptr(const wchar_t *p);
+#endif
+    /**
+     * nullptr constructor.
+     * @draft ICU 59
+     */
+    inline ConstChar16Ptr(const std::nullptr_t p);
+    /**
+     * Pointer access.
+     * @draft ICU 59
+     */
+    inline operator const char16_t *() const;
+
+private:
+#ifdef U_ALIASING_BARRIER
+    template<typename T> const char16_t *cast(const T *t) {
+        U_ALIASING_BARRIER(t);
+        return reinterpret_cast<const char16_t *>(t);
+    }
+
+    const char16_t *p;
+#else
+    union {
+        const char16_t *cp;
+        const uint16_t *up;
+        const wchar_t *wp;
+    } u;
+#endif
+};
+
+#ifdef U_ALIASING_BARRIER
+
+ConstChar16Ptr::ConstChar16Ptr(const char16_t *p) : p(p) {}
+ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) : p(cast(p)) {}
+#if U_SIZEOF_WCHAR_T==2
+ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) : p(cast(p)) {}
+#endif
+ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) : p(p) {}
+
+ConstChar16Ptr::operator const char16_t *() const { return p; }
+
+#else
+
+ConstChar16Ptr::ConstChar16Ptr(const char16_t *p) { u.cp = p; }
+ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) { u.up = p; }
+#if U_SIZEOF_WCHAR_T==2
+ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) { u.wp = p; }
+#endif
+ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) { u.cp = p; }
+
+ConstChar16Ptr::operator const char16_t *() const { return u.cp; }
+
+#endif
+
+// TODO end experiment -----------------
 
 #if !UCONFIG_NO_BREAK_ITERATION
 class BreakIterator;        // unicode/brkiter.h
@@ -1454,7 +1622,7 @@ public:
    */
   inline void extract(int32_t start,
            int32_t length,
-           UChar *dst,
+           Char16Ptr dst,
            int32_t dstStart = 0) const;
 
   /**
@@ -1479,7 +1647,7 @@ public:
    * @stable ICU 2.0
    */
   int32_t
-  extract(UChar *dest, int32_t destCapacity,
+  extract(Char16Ptr dest, int32_t destCapacity,
           UErrorCode &errorCode) const;
 
   /**
@@ -2070,7 +2238,7 @@ public:
    * a new buffer will be allocated and the contents copied as with regularly
    * constructed strings.
    * In an assignment to another UnicodeString, the buffer will be copied.
-   * The extract(UChar *dst) function detects whether the dst pointer is the same
+   * The extract(Char16Ptr dst) function detects whether the dst pointer is the same
    * as the string buffer itself and will in this case not copy the contents.
    *
    * @param buffer The characters to alias for the UnicodeString.
@@ -3005,6 +3173,46 @@ public:
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const UChar *text);
 
   /**
+   * uint16_t * constructor.
+   * Delegates to UnicodeString(const UChar *).
+   *
+   * It is recommended to mark this constructor "explicit" by
+   * <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code>
+   * on the compiler command line or similar.
+   * @param text NUL-terminated UTF-16 string
+   * @draft ICU 59
+   */
+  UNISTR_FROM_STRING_EXPLICIT UnicodeString(const uint16_t *text) :
+      UnicodeString(static_cast<const UChar *>(ConstChar16Ptr(text))) {}
+
+#if U_SIZEOF_WCHAR_T==2
+  /**
+   * wchar_t * constructor.
+   * Delegates to UnicodeString(const UChar *).
+   *
+   * It is recommended to mark this constructor "explicit" by
+   * <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code>
+   * on the compiler command line or similar.
+   * @param text NUL-terminated UTF-16 string
+   * @draft ICU 59
+   */
+  UNISTR_FROM_STRING_EXPLICIT UnicodeString(const wchar_t *text) :
+      UnicodeString(static_cast<const UChar *>(ConstChar16Ptr(text))) {}
+#endif
+
+  /**
+   * nullptr_t constructor.
+   * Effectively the same as the default constructor, makes an empty string object.
+   *
+   * It is recommended to mark this constructor "explicit" by
+   * <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code>
+   * on the compiler command line or similar.
+   * @param text nullptr
+   * @draft ICU 59
+   */
+  UNISTR_FROM_STRING_EXPLICIT inline UnicodeString(const std::nullptr_t text);
+
+  /**
    * UChar* constructor.
    * @param text The characters to place in the UnicodeString.
    * @param textLength The number of Unicode characters in <TT>text</TT>
@@ -3013,6 +3221,37 @@ public:
    */
   UnicodeString(const UChar *text,
         int32_t textLength);
+
+  /**
+   * uint16_t * constructor.
+   * Delegates to UnicodeString(const UChar *, int32_t).
+   * @param text UTF-16 string
+   * @param length string length
+   * @draft ICU 59
+   */
+  UnicodeString(const uint16_t *text, int32_t length) :
+      UnicodeString(static_cast<const UChar *>(ConstChar16Ptr(text)), length) {}
+
+#if U_SIZEOF_WCHAR_T==2
+  /**
+   * wchar_t * constructor.
+   * Delegates to UnicodeString(const UChar *, int32_t).
+   * @param text NUL-terminated UTF-16 string
+   * @param length string length
+   * @draft ICU 59
+   */
+  UnicodeString(const wchar_t *text, int32_t length) :
+      UnicodeString(static_cast<const UChar *>(ConstChar16Ptr(text)), length) {}
+#endif
+
+  /**
+   * nullptr_t constructor.
+   * Effectively the same as the default constructor, makes an empty string object.
+   * @param text nullptr
+   * @param length ignored
+   * @draft ICU 59
+   */
+  inline UnicodeString(const std::nullptr_t text, int32_t length);
 
   /**
    * Readonly-aliasing UChar* constructor.
@@ -3037,7 +3276,7 @@ public:
    * @stable ICU 2.0
    */
   UnicodeString(UBool isTerminated,
-                const UChar *text,
+                ConstChar16Ptr text,
                 int32_t textLength);
 
   /**
@@ -3050,7 +3289,7 @@ public:
    * a new buffer will be allocated and the contents copied as with regularly
    * constructed strings.
    * In an assignment to another UnicodeString, the buffer will be copied.
-   * The extract(UChar *dst) function detects whether the dst pointer is the same
+   * The extract(Char16Ptr dst) function detects whether the dst pointer is the same
    * as the string buffer itself and will in this case not copy the contents.
    *
    * @param buffer The characters to alias for the UnicodeString.
@@ -3059,6 +3298,40 @@ public:
    * @stable ICU 2.0
    */
   UnicodeString(UChar *buffer, int32_t buffLength, int32_t buffCapacity);
+
+  /**
+   * Writable-aliasing uint16_t * constructor.
+   * Delegates to UnicodeString(const UChar *, int32_t, int32_t).
+   * @param buffer writable buffer of/for UTF-16 text
+   * @param buffLength length of the current buffer contents
+   * @param buffCapacity buffer capacity
+   * @draft ICU 59
+   */
+  UnicodeString(uint16_t *buffer, int32_t buffLength, int32_t buffCapacity) :
+      UnicodeString(static_cast<UChar *>(Char16Ptr(buffer)), buffLength, buffCapacity) {}
+
+#if U_SIZEOF_WCHAR_T==2
+  /**
+   * Writable-aliasing wchar_t * constructor.
+   * Delegates to UnicodeString(const UChar *, int32_t, int32_t).
+   * @param buffer writable buffer of/for UTF-16 text
+   * @param buffLength length of the current buffer contents
+   * @param buffCapacity buffer capacity
+   * @draft ICU 59
+   */
+  UnicodeString(wchar_t *buffer, int32_t buffLength, int32_t buffCapacity) :
+      UnicodeString(static_cast<UChar *>(Char16Ptr(buffer)), buffLength, buffCapacity) {}
+#endif
+
+  /**
+   * Writable-aliasing nullptr_t constructor.
+   * Effectively the same as the default constructor, makes an empty string object.
+   * @param buffer nullptr
+   * @param buffLength ignored
+   * @param buffCapacity ignored
+   * @draft ICU 59
+   */
+  inline UnicodeString(std::nullptr_t buffer, int32_t buffLength, int32_t buffCapacity);
 
 #if U_CHARSET_IS_UTF8 || !UCONFIG_NO_CONVERSION
 
@@ -3772,6 +4045,18 @@ UnicodeString::UnicodeString() {
   fUnion.fStackFields.fLengthAndFlags=kShortString;
 }
 
+inline UnicodeString::UnicodeString(const std::nullptr_t /*text*/) {
+  fUnion.fStackFields.fLengthAndFlags=kShortString;
+}
+
+inline UnicodeString::UnicodeString(const std::nullptr_t /*text*/, int32_t /*length*/) {
+  fUnion.fStackFields.fLengthAndFlags=kShortString;
+}
+
+inline UnicodeString::UnicodeString(std::nullptr_t /*buffer*/, int32_t /*buffLength*/, int32_t /*buffCapacity*/) {
+  fUnion.fStackFields.fLengthAndFlags=kShortString;
+}
+
 //========================================
 // Read-only implementation methods
 //========================================
@@ -4364,7 +4649,7 @@ UnicodeString::doExtract(int32_t start,
 inline void
 UnicodeString::extract(int32_t start,
                int32_t _length,
-               UChar *target,
+               Char16Ptr target,
                int32_t targetStart) const
 { doExtract(start, _length, target, targetStart); }
 
