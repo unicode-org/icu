@@ -218,7 +218,7 @@ UnicodeString::UnicodeString(const UChar *text,
 }
 
 UnicodeString::UnicodeString(UBool isTerminated,
-                             const UChar *text,
+                             ConstChar16Ptr text,
                              int32_t textLength) {
   fUnion.fFields.fLengthAndFlags = kReadonlyAlias;
   if(text == NULL) {
@@ -234,7 +234,8 @@ UnicodeString::UnicodeString(UBool isTerminated,
       // text is terminated, or else it would have failed the above test
       textLength = u_strlen(text);
     }
-    setArray((UChar *)text, textLength, isTerminated ? textLength + 1 : textLength);
+    setArray(const_cast<UChar *>(static_cast<const char16_t *>(text)), textLength,
+             isTerminated ? textLength + 1 : textLength);
   }
 }
 
@@ -873,7 +874,7 @@ UnicodeString::doExtract(int32_t start,
 }
 
 int32_t
-UnicodeString::extract(UChar *dest, int32_t destCapacity,
+UnicodeString::extract(Char16Ptr dest, int32_t destCapacity,
                        UErrorCode &errorCode) const {
   int32_t len = length();
   if(U_SUCCESS(errorCode)) {
