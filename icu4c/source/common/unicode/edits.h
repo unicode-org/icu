@@ -89,7 +89,7 @@ public:
      * @see getFineIterator
      * @draft ICU 59
      */
-    struct Iterator final : public UMemory {
+    struct U_COMMON_API Iterator final : public UMemory {
         /**
          * Copy constructor.
          * @draft ICU 59
