@@ -222,7 +222,7 @@ uz{
         }
         minimalPairs{
             ordinal{
-                other{"{0}chi chorraxada o'ngga buriling."}
+                other{"{0}chi chorraxada oʼngga buriling."}
             }
             plural{
                 one{"Savatingizda {0}X bor. Uni sotib olasizmi?"}
@@ -232,7 +232,7 @@ uz{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.60"}
     calendar{
         generic{
             DateTimePatterns{

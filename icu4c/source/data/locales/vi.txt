@@ -181,7 +181,7 @@ vi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.93"}
+    Version{"2.1.32.59"}
     calendar{
         buddhist{
             DateTimePatterns{

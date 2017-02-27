@@ -315,6 +315,7 @@ timezoneTypes:table(nofallback){
             "America:Port_of_Spain"{"ttpos"}
             "America:Porto_Velho"{"brpvh"}
             "America:Puerto_Rico"{"prsju"}
+            "America:Punta_Arenas"{"clpuq"}
             "America:Rainy_River"{"caffs"}
             "America:Rankin_Inlet"{"cayek"}
             "America:Recife"{"brrec"}

@@ -1734,5 +1734,5 @@ ko{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
 }

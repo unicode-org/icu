@@ -473,7 +473,7 @@ mt{
         uk{"Ukren"}
         umb{"Umbundu"}
         und{"Lingwa Mhix Magħrufa"}
-        ur{"ur"}
+        ur{"Urdu"}
         uz{"Uzbek"}
         vai{"Vai"}
         ve{"Venda"}
@@ -559,7 +559,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.32.59"}
     codePatterns{
         language{"Lingwa: {0}"}
         script{"Skript: {0}"}

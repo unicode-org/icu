@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 kk{
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -941,6 +941,9 @@ kk{
         }
         "Australia:Sydney"{
             ec{"Сидней"}
+        }
+        "Etc:UTC"{
+            ls{"Дүниежүзілік үйлестірілген уақыт"}
         }
         "Etc:Unknown"{
             ec{"Белгісіз қала"}

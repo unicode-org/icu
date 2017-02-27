@@ -774,7 +774,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.60"}
     characterLabelPattern{
         all{"{0} – toate"}
         category-list{"{0}: {1}"}

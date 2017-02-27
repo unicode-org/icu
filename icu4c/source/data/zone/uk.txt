@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 uk{
-    Version{"2.1.31.86"}
+    Version{"2.1.32.60"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -941,6 +941,9 @@ uk{
         }
         "Australia:Sydney"{
             ec{"Сідней"}
+        }
+        "Etc:UTC"{
+            ls{"Всесвітній координований час"}
         }
         "Etc:Unknown"{
             ec{"Невідоме місто"}

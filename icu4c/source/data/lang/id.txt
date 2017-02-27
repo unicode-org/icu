@@ -959,7 +959,7 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     characterLabelPattern{
         all{"{0} — Semua"}
         category-list{"{0}: {1}"}

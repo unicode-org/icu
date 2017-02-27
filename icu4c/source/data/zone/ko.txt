@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ko{
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -941,6 +941,9 @@ ko{
         }
         "Australia:Sydney"{
             ec{"시드니"}
+        }
+        "Etc:UTC"{
+            ls{"협정 세계시"}
         }
         "Etc:Unknown"{
             ec{"알 수 없는 장소"}

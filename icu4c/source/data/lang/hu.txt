@@ -350,7 +350,7 @@ hu{
         nan{"min nan kínai"}
         nap{"nápolyi"}
         naq{"nama"}
-        nb{"norvég (bokmál)"}
+        nb{"norvég (bokmål)"}
         nd{"északi ndebele"}
         nds{"alsónémet"}
         nds_NL{"alsószász"}
@@ -362,7 +362,7 @@ hu{
         nl{"holland"}
         nl_BE{"flamand"}
         nmg{"ngumba"}
-        nn{"norvég (nynrosk)"}
+        nn{"norvég (nynorsk)"}
         nnh{"ngiemboon"}
         no{"norvég"}
         nog{"nogaj"}
@@ -894,7 +894,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     characterLabelPattern{
         all{"{0} — Összes"}
         category-list{"{0}: {1}"}

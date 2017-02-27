@@ -309,5 +309,5 @@ ro{
         FK{"Insulele Falkland (Insulele Malvine)"}
         MK{"Republica Macedonia (FRIM)"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.60"}
 }

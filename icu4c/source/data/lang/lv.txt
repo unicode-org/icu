@@ -225,7 +225,7 @@ lv{
         ilo{"iloku"}
         inh{"ingušu"}
         io{"ido"}
-        is{"īslandiešu"}
+        is{"islandiešu"}
         it{"itāļu"}
         iu{"inuītu"}
         ja{"japāņu"}
@@ -803,7 +803,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     characterLabelPattern{
         all{"{0} — visas"}
         category-list{"{0}: {1}"}
