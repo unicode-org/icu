@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sr_Latn{
     %%Parent{"root"}
-    Version{"2.1.31.92"}
+    Version{"2.1.32.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -942,6 +942,9 @@ sr_Latn{
         }
         "Australia:Sydney"{
             ec{"Sidnej"}
+        }
+        "Etc:UTC"{
+            ls{"Koordinisano univerzalno vreme"}
         }
         "Etc:Unknown"{
             ec{"Nepoznat grad"}

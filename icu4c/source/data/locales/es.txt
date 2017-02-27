@@ -212,7 +212,7 @@ es{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     calendar{
         buddhist{
             eras{
@@ -989,7 +989,7 @@ es{
         japanese_kana{"Kana japoneses"}
         kanbun{"Kanbun"}
         kanji{"Kanji"}
-        keycap{"tecla 10"}
+        keycap{"tecla"}
         leftwards_arrows{"Flechas hacia la izquierda"}
         leftwards_rightwards_arrows{"Flechas hacia la izquierda y la derecha"}
         letterlike_symbols{"Símbolos con letras"}

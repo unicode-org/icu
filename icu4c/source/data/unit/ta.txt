@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ta{
-    Version{"2.1.31.74"}
+    Version{"2.1.32.4"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -584,7 +584,7 @@ ta{
             celsius{
                 dnam{"டிகிரி செல்சியஸ்"}
                 one{"{0} டிகிரி செல்சியஸ்"}
-                other{"{0}டிகிரி செல்சியஸ்"}
+                other{"{0} டிகிரி செல்சியஸ்"}
             }
             fahrenheit{
                 dnam{"டிகிரி ஃபாரன்ஹீட்"}

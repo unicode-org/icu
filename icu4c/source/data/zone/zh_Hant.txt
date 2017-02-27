@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant{
     %%Parent{"root"}
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比讓"}
@@ -942,6 +942,9 @@ zh_Hant{
         }
         "Australia:Sydney"{
             ec{"雪梨"}
+        }
+        "Etc:UTC"{
+            ls{"世界標準時間"}
         }
         "Etc:Unknown"{
             ec{"未知城市"}

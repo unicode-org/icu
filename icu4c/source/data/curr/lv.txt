@@ -312,7 +312,7 @@ lv{
         }
         ISK{
             "ISK",
-            "Īslandes krona",
+            "Islandes krona",
         }
         ITL{
             "ITL",
@@ -1259,9 +1259,9 @@ lv{
             zero{"Irānas riāli"}
         }
         ISK{
-            one{"Īslandes krona"}
-            other{"Īslandes kronas"}
-            zero{"Īslandes kronas"}
+            one{"Islandes krona"}
+            other{"Islandes kronas"}
+            zero{"Islandes kronas"}
         }
         JMD{
             one{"Jamaikas dolārs"}
@@ -1784,5 +1784,5 @@ lv{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
 }

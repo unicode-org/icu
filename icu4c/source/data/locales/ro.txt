@@ -235,8 +235,8 @@ ro{
         }
         minimalPairs{
             ordinal{
-                one{"Faceţi virajul nr. {0} la dreapta."}
-                other{"Faceţi virajul al {0}-lea la dreapta."}
+                one{"Faceți virajul nr. {0} la dreapta."}
+                other{"Faceți virajul al {0}-lea la dreapta."}
             }
             plural{
                 few{"{0} zile"}
@@ -247,7 +247,7 @@ ro{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.60"}
     calendar{
         buddhist{
             eras{

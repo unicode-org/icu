@@ -876,7 +876,7 @@ el{
         VALENCIA{"Βαλενθιανά"}
         WADEGILE{"Εκλατινισμένα Γουάντ-Γκιλς"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     characterLabelPattern{
         all{"{0} — Όλα"}
         category-list{"{0}: {1}"}
