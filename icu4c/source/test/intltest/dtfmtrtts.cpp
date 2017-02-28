@@ -121,7 +121,9 @@ void DateFormatRoundTripTest::TestCentury()
      */
     //if (date[1] != date[2] || result[0] != result[1]) {
     if (date[1] != date[2]) {
-        errln("Round trip failure: \"%S\" (%f), \"%S\" (%f)", result[0].getBuffer(), date[1], result[1].getBuffer(), date[2]);
+        errln("Round trip failure: \"%S\" (%f), \"%S\" (%f)",
+              static_cast<const UChar *>(result[0].getBuffer()), date[1],
+              static_cast<const UChar *>(result[1].getBuffer()), date[2]);
     }
 }
 

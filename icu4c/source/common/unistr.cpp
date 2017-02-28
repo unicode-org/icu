@@ -260,9 +260,10 @@ UnicodeString::UnicodeString(const UChar *text,
 }
 
 UnicodeString::UnicodeString(UBool isTerminated,
-                             ConstChar16Ptr text,
+                             ConstChar16Ptr textPtr,
                              int32_t textLength) {
   fUnion.fFields.fLengthAndFlags = kReadonlyAlias;
+  const UChar *text = textPtr;
   if(text == NULL) {
     // treat as an empty string, do not alias
     setToEmpty();
@@ -276,7 +277,7 @@ UnicodeString::UnicodeString(UBool isTerminated,
       // text is terminated, or else it would have failed the above test
       textLength = u_strlen(text);
     }
-    setArray(const_cast<UChar *>(text.get()), textLength,
+    setArray(const_cast<UChar *>(text), textLength,
              isTerminated ? textLength + 1 : textLength);
   }
 }
@@ -916,10 +917,11 @@ UnicodeString::doExtract(int32_t start,
 }
 
 int32_t
-UnicodeString::extract(Char16Ptr dest, int32_t destCapacity,
+UnicodeString::extract(Char16Ptr destPtr, int32_t destCapacity,
                        UErrorCode &errorCode) const {
   int32_t len = length();
   if(U_SUCCESS(errorCode)) {
+    UChar *dest = destPtr;
     if(isBogus() || destCapacity<0 || (destCapacity>0 && dest==0)) {
       errorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else {
@@ -1258,7 +1260,7 @@ UnicodeString::unBogus() {
   }
 }
 
-const UChar *
+ConstChar16Ptr
 UnicodeString::getTerminatedBuffer() {
   if(!isWritable()) {
     return 0;
@@ -1292,7 +1294,7 @@ UnicodeString::getTerminatedBuffer() {
     array[len] = 0;
     return array;
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -1756,7 +1758,7 @@ UnicodeString::doHashCode() const
 // External Buffer
 //========================================
 
-UChar *
+Char16Ptr
 UnicodeString::getBuffer(int32_t minCapacity) {
   if(minCapacity>=-1 && cloneArrayIfNeeded(minCapacity)) {
     fUnion.fFields.fLengthAndFlags|=kOpenGetBuffer;
