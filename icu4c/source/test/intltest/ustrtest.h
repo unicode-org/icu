@@ -92,6 +92,11 @@ public:
     void TestUnicodeStringImplementsAppendable();
     void TestSizeofUnicodeString();
     void TestMoveSwap();
+
+    void TestUInt16Pointers();
+    void TestWCharPointers();
+    void TestNullPointers();
+    void TestZeroPointers();
 };
 
 #endif
