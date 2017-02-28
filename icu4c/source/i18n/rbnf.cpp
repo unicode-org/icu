@@ -27,6 +27,7 @@
 #include "unicode/udata.h"
 #include "unicode/udisplaycontext.h"
 #include "unicode/brkiter.h"
+#include "unicode/ucasemap.h"
 
 #include "cmemory.h"
 #include "cstring.h"

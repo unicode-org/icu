@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sv{
-    AuxExemplarCharacters{"[á â ã ā ç ë í î ï ī ñ ó ú ÿ ü æ ø]"}
+    AuxExemplarCharacters{"[á â ã ā ç è ë í î ï ī ñ ó ú ÿ ü æ ø]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -229,7 +229,7 @@ sv{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     calendar{
         buddhist{
             eras{

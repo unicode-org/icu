@@ -211,7 +211,7 @@ mn{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     calendar{
         generic{
             DateTimePatterns{

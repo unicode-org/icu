@@ -77,7 +77,7 @@ public class PluralFormatTest extends TestFmwk {
   
   @Test
   public void TestSingular1Locales() {
-    String localeIDs = "bem,da,de,el,en,eo,es,et,fi,fo,he,it,nb,nl,nn,no,pt_PT,sv,af,bg,ca,eu,fur,fy,ha,ku,lb,ml," +
+    String localeIDs = "bem,da,de,el,en,eo,es,et,fi,fo,he,it,nb,nl,nn,no,sv,af,bg,ca,eu,fur,fy,ha,ku,lb,ml," +
         "nah,ne,om,or,pap,ps,so,sq,sw,ta,te,tk,ur,mn,gsw,rm";
     String testPattern = "one{one} other{other}";
     Map changes = new HashMap();
@@ -89,7 +89,7 @@ public class PluralFormatTest extends TestFmwk {
   
   @Test
   public void TestSingular01Locales() {
-    String localeIDs = "ff,fr,kab,gu,mr,pa,pt,zu,bn";
+    String localeIDs = "ff,fr,kab,gu,mr,pa,pt,pt_PT,zu,bn";
     String testPattern = "one{one} other{other}";
     Map changes = new HashMap();
     changes.put(new Integer(0), "one");

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 gu{
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"આબિદ્જાન"}
@@ -941,6 +941,9 @@ gu{
         }
         "Australia:Sydney"{
             ec{"સિડ્ની"}
+        }
+        "Etc:UTC"{
+            ls{"સંકલિત યુનિવર્સલ સમય"}
         }
         "Etc:Unknown"{
             ec{"અજ્ઞાત શહેર"}

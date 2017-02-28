@@ -2,9 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl;
 
-import com.ibm.icu.util.ULocale;
+import java.io.IOException;
 
-public final class CaseMap {
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.Edits;
+import com.ibm.icu.util.ICUUncheckedIOException;
+
+public final class CaseMapImpl {
     /**
      * Implementation of UCaseProps.ContextIterator, iterates over a String.
      * See ustrcase.c/utf16_caseContextIterator().
@@ -12,11 +17,11 @@ public final class CaseMap {
     public static final class StringContextIterator implements UCaseProps.ContextIterator {
         /**
          * Constructor.
-         * @param s String to iterate over.
+         * @param src String to iterate over.
          */
-        public StringContextIterator(String s) {
-            this.s=s;
-            limit=s.length();
+        public StringContextIterator(CharSequence src) {
+            this.s=src;
+            limit=src.length();
             cpStart=cpLimit=index=0;
             dir=0;
         }
@@ -60,7 +65,7 @@ public final class CaseMap {
         public int nextCaseMapCP() {
             cpStart=cpLimit;
             if(cpLimit<limit) {
-                int c=s.codePointAt(cpLimit);
+                int c=Character.codePointAt(s, cpLimit);
                 cpLimit+=Character.charCount(c);
                 return c;
             } else {
@@ -82,6 +87,10 @@ public final class CaseMap {
          */
         public int getCPLimit() {
             return cpLimit;
+        }
+
+        public int getCPLength() {
+            return cpLimit-cpStart;
         }
 
         // implement UCaseProps.ContextIterator
@@ -108,11 +117,11 @@ public final class CaseMap {
             int c;
 
             if(dir>0 && index<s.length()) {
-                c=s.codePointAt(index);
+                c=Character.codePointAt(s, index);
                 index+=Character.charCount(c);
                 return c;
             } else if(dir<0 && index>0) {
-                c=s.codePointBefore(index);
+                c=Character.codePointBefore(s, index);
                 index-=Character.charCount(c);
                 return c;
             }
@@ -120,44 +129,242 @@ public final class CaseMap {
         }
 
         // variables
-        protected String s;
+        protected CharSequence s;
         protected int index, limit, cpStart, cpLimit;
         protected int dir; // 0=initial state  >0=forward  <0=backward
     }
 
-    /** Appends a full case mapping result, see {@link UCaseProps#MAX_STRING_LENGTH}. */
-    private static final void appendResult(int c, StringBuilder result) {
-        // Decode the result.
-        if (c < 0) {
-            // (not) original code point
-            result.appendCodePoint(~c);
-        } else if (c <= UCaseProps.MAX_STRING_LENGTH) {
-            // The mapping has already been appended to result.
+    /**
+     * Omit unchanged text when case-mapping with Edits.
+     */
+    public static final int OMIT_UNCHANGED_TEXT = 0x4000;
+
+    private static int appendCodePoint(Appendable a, int c) throws IOException {
+        if (c <= Character.MAX_VALUE) {
+            a.append((char)c);
+            return 1;
         } else {
-            // Append the single-code point mapping.
-            result.appendCodePoint(c);
+            a.append((char)(0xd7c0 + (c >> 10)));
+            a.append((char)(Character.MIN_LOW_SURROGATE + (c & 0x3ff)));
+            return 2;
         }
     }
 
-    // TODO: Move the other string case mapping functions from UCharacter to here, too.
-
-    public static String toUpper(ULocale locale, String str) {
-        if (locale == null) {
-            locale = ULocale.getDefault();
+    /**
+     * Appends a full case mapping result, see {@link UCaseProps#MAX_STRING_LENGTH}.
+     * @throws IOException
+     */
+    private static void appendResult(int result, Appendable dest,
+            int cpLength, int options, Edits edits) throws IOException {
+        // Decode the result.
+        if (result < 0) {
+            // (not) original code point
+            if (edits != null) {
+                edits.addUnchanged(cpLength);
+                if ((options & OMIT_UNCHANGED_TEXT) != 0) {
+                    return;
+                }
+            }
+            appendCodePoint(dest, ~result);
+        } else if (result <= UCaseProps.MAX_STRING_LENGTH) {
+            // The mapping has already been appended to result.
+            if (edits != null) {
+                edits.addReplace(cpLength, result);
+            }
+        } else {
+            // Append the single-code point mapping.
+            int length = appendCodePoint(dest, result);
+            if (edits != null) {
+                edits.addReplace(cpLength, length);
+            }
         }
-        int[] locCache = new int[] { UCaseProps.getCaseLocale(locale, null) };
-        if (locCache[0] == UCaseProps.LOC_GREEK) {
-            return GreekUpper.toUpper(str, locCache);
-        }
+    }
 
-        StringContextIterator iter = new StringContextIterator(str);
-        StringBuilder result = new StringBuilder(str.length());
+    private static final void appendUnchanged(CharSequence src, int start, int length,
+            Appendable dest, int options, Edits edits) throws IOException {
+        if (length > 0) {
+            if (edits != null) {
+                edits.addUnchanged(length);
+                if ((options & OMIT_UNCHANGED_TEXT) != 0) {
+                    return;
+                }
+            }
+            dest.append(src, start, start + length);
+        }
+    }
+
+    private static void internalToLower(int caseLocale, int options, StringContextIterator iter,
+            Appendable dest, Edits edits) throws IOException {
         int c;
-        while((c=iter.nextCaseMapCP())>=0) {
-            c = UCaseProps.INSTANCE.toFullUpper(c, iter, result, locale, locCache);
-            appendResult(c, result);
+        while ((c = iter.nextCaseMapCP()) >= 0) {
+            c = UCaseProps.INSTANCE.toFullLower(c, iter, dest, caseLocale);
+            appendResult(c, dest, iter.getCPLength(), options, edits);
         }
-        return result.toString();
+    }
+
+    public static <A extends Appendable> A toLower(int caseLocale, int options,
+            CharSequence src, A dest, Edits edits) {
+        try {
+            if (edits != null) {
+                edits.reset();
+            }
+            StringContextIterator iter = new StringContextIterator(src);
+            internalToLower(caseLocale, options, iter, dest, edits);
+            return dest;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    public static <A extends Appendable> A toUpper(int caseLocale, int options,
+            CharSequence src, A dest, Edits edits) {
+        try {
+            if (edits != null) {
+                edits.reset();
+            }
+            if (caseLocale == UCaseProps.LOC_GREEK) {
+                return GreekUpper.toUpper(options, src, dest, edits);
+            }
+            StringContextIterator iter = new StringContextIterator(src);
+            int c;
+            while ((c = iter.nextCaseMapCP()) >= 0) {
+                c = UCaseProps.INSTANCE.toFullUpper(c, iter, dest, caseLocale);
+                appendResult(c, dest, iter.getCPLength(), options, edits);
+            }
+            return dest;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    public static <A extends Appendable> A toTitle(
+            int caseLocale, int options, BreakIterator titleIter,
+            CharSequence src, A dest, Edits edits) {
+        try {
+            if (edits != null) {
+                edits.reset();
+            }
+
+            /* set up local variables */
+            StringContextIterator iter = new StringContextIterator(src);
+            int srcLength = src.length();
+            int prev=0;
+            boolean isFirstIndex=true;
+
+            /* titlecasing loop */
+            while(prev<srcLength) {
+                /* find next index where to titlecase */
+                int index;
+                if(isFirstIndex) {
+                    isFirstIndex=false;
+                    index=titleIter.first();
+                } else {
+                    index=titleIter.next();
+                }
+                if(index==BreakIterator.DONE || index>srcLength) {
+                    index=srcLength;
+                }
+
+                /*
+                 * Unicode 4 & 5 section 3.13 Default Case Operations:
+                 *
+                 * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
+                 * #29, "Text Boundaries." Between each pair of word boundaries, find the first
+                 * cased character F. If F exists, map F to default_title(F); then map each
+                 * subsequent character C to default_lower(C).
+                 *
+                 * In this implementation, segment [prev..index[ into 3 parts:
+                 * a) uncased characters (copy as-is) [prev..titleStart[
+                 * b) first case letter (titlecase)         [titleStart..titleLimit[
+                 * c) subsequent characters (lowercase)                 [titleLimit..index[
+                 */
+                if(prev<index) {
+                    // find and copy uncased characters [prev..titleStart[
+                    int titleStart=prev;
+                    iter.setLimit(index);
+                    int c=iter.nextCaseMapCP();
+                    if((options&UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT)==0
+                            && UCaseProps.NONE==UCaseProps.INSTANCE.getType(c)) {
+                        // Adjust the titlecasing index (titleStart) to the next cased character.
+                        while((c=iter.nextCaseMapCP())>=0
+                                && UCaseProps.NONE==UCaseProps.INSTANCE.getType(c)) {}
+                        // If c<0 then we have only uncased characters in [prev..index[
+                        // and stopped with titleStart==titleLimit==index.
+                        titleStart=iter.getCPStart();
+                        appendUnchanged(src, prev, titleStart-prev, dest, options, edits);
+                    }
+
+                    if(titleStart<index) {
+                        int titleLimit=iter.getCPLimit();
+                        // titlecase c which is from [titleStart..titleLimit[
+                        c = UCaseProps.INSTANCE.toFullTitle(c, iter, dest, caseLocale);
+                        appendResult(c, dest, iter.getCPLength(), options, edits);
+
+                        // Special case Dutch IJ titlecasing
+                        if (titleStart+1 < index && caseLocale == UCaseProps.LOC_DUTCH) {
+                            char c1 = src.charAt(titleStart);
+                            if ((c1 == 'i' || c1 == 'I')) {
+                                char c2 = src.charAt(titleStart+1);
+                                if (c2 == 'j') {
+                                    dest.append('J');
+                                    if (edits != null) {
+                                        edits.addReplace(1, 1);
+                                    }
+                                    c = iter.nextCaseMapCP();
+                                    titleLimit++;
+                                    assert c == c2;
+                                    assert titleLimit == iter.getCPLimit();
+                                } else if (c2 == 'J') {
+                                    // Keep the capital J from getting lowercased.
+                                    appendUnchanged(src, titleStart + 1, 1, dest, options, edits);
+                                    c = iter.nextCaseMapCP();
+                                    titleLimit++;
+                                    assert c == c2;
+                                    assert titleLimit == iter.getCPLimit();
+                                }
+                            }
+                        }
+
+                        // lowercase [titleLimit..index[
+                        if(titleLimit<index) {
+                            if((options&UCharacter.TITLECASE_NO_LOWERCASE)==0) {
+                                // Normal operation: Lowercase the rest of the word.
+                                internalToLower(caseLocale, options, iter, dest, edits);
+                            } else {
+                                // Optionally just copy the rest of the word unchanged.
+                                appendUnchanged(src, titleLimit, index-titleLimit, dest, options, edits);
+                                iter.moveToLimit();
+                            }
+                        }
+                    }
+                }
+
+                prev=index;
+            }
+            return dest;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    public static <A extends Appendable> A fold(int options,
+            CharSequence src, A dest, Edits edits) {
+        try {
+            if (edits != null) {
+                edits.reset();
+            }
+            int length = src.length();
+            for (int i = 0; i < length;) {
+                int c = Character.codePointAt(src, i);
+                int cpLength = Character.charCount(c);
+                i += cpLength;
+                c = UCaseProps.INSTANCE.toFullFolding(c, dest, options);
+                appendResult(c, dest, cpLength, options, edits);
+            }
+            return dest;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
     }
 
     private static final class GreekUpper {
@@ -661,12 +868,13 @@ public final class CaseMap {
          * TODO: Try to re-consolidate one way or another with the non-Greek function.
          *
          * <p>Keep this consistent with the C++ versions in ustrcase.cpp (UTF-16) and ucasemap.cpp (UTF-8).
+         * @throws IOException
          */
-        private static String toUpper(CharSequence s, int[] locCache) {
-            StringBuilder result = new StringBuilder(s.length());
+        private static <A extends Appendable> A toUpper(int options,
+                CharSequence src, A dest, Edits edits) throws IOException {
             int state = 0;
-            for (int i = 0; i < s.length();) {
-                int c = Character.codePointAt(s, i);
+            for (int i = 0; i < src.length();) {
+                int c = Character.codePointAt(src, i);
                 int nextIndex = i + Character.charCount(c);
                 int nextState = 0;
                 int type = UCaseProps.INSTANCE.getTypeOrIgnorable(c);
@@ -695,8 +903,8 @@ public final class CaseMap {
                         numYpogegrammeni = 1;
                     }
                     // Skip combining diacritics after this Greek letter.
-                    while (nextIndex < s.length()) {
-                        int diacriticData = getDiacriticData(s.charAt(nextIndex));
+                    while (nextIndex < src.length()) {
+                        int diacriticData = getDiacriticData(src.charAt(nextIndex));
                         if (diacriticData != 0) {
                             data |= diacriticData;
                             if ((diacriticData & HAS_YPOGEGRAMMENI) != 0) {
@@ -716,7 +924,7 @@ public final class CaseMap {
                             (data & HAS_ACCENT) != 0 &&
                             numYpogegrammeni == 0 &&
                             (state & AFTER_CASED) == 0 &&
-                            !isFollowedByCasedLetter(s, nextIndex)) {
+                            !isFollowedByCasedLetter(src, nextIndex)) {
                         // Keep disjunctive "or" with (only) a tonos.
                         // We use the same "word boundary" conditions as for the Final_Sigma test.
                         if (i == nextIndex) {
@@ -734,25 +942,59 @@ public final class CaseMap {
                             data &= ~HAS_EITHER_DIALYTIKA;
                         }
                     }
-                    result.appendCodePoint(upper);
-                    if ((data & HAS_EITHER_DIALYTIKA) != 0) {
-                        result.append('\u0308');  // restore or add a dialytika
+
+                    boolean change;
+                    if (edits == null) {
+                        change = true;  // common, simple usage
+                    } else {
+                        // Find out first whether we are changing the text.
+                        change = src.charAt(i) != upper || numYpogegrammeni > 0;
+                        int i2 = i + 1;
+                        if ((data & HAS_EITHER_DIALYTIKA) != 0) {
+                            change |= i2 >= nextIndex || src.charAt(i2) != 0x308;
+                            ++i2;
+                        }
+                        if (addTonos) {
+                            change |= i2 >= nextIndex || src.charAt(i2) != 0x301;
+                            ++i2;
+                        }
+                        int oldLength = nextIndex - i;
+                        int newLength = (i2 - i) + numYpogegrammeni;
+                        change |= oldLength != newLength;
+                        if (change) {
+                            if (edits != null) {
+                                edits.addReplace(oldLength, newLength);
+                            }
+                        } else {
+                            if (edits != null) {
+                                edits.addUnchanged(oldLength);
+                            }
+                            // Write unchanged text?
+                            change = (options & OMIT_UNCHANGED_TEXT) == 0;
+                        }
                     }
-                    if (addTonos) {
-                        result.append('\u0301');
-                    }
-                    while (numYpogegrammeni > 0) {
-                        result.append('Ι');
-                        --numYpogegrammeni;
+
+                    if (change) {
+                        dest.append((char)upper);
+                        if ((data & HAS_EITHER_DIALYTIKA) != 0) {
+                            dest.append('\u0308');  // restore or add a dialytika
+                        }
+                        if (addTonos) {
+                            dest.append('\u0301');
+                        }
+                        while (numYpogegrammeni > 0) {
+                            dest.append('Ι');
+                            --numYpogegrammeni;
+                        }
                     }
                 } else {
-                    c = UCaseProps.INSTANCE.toFullUpper(c, null, result, null, locCache);
-                    appendResult(c, result);
+                    c = UCaseProps.INSTANCE.toFullUpper(c, null, dest, UCaseProps.LOC_GREEK);
+                    appendResult(c, dest, nextIndex - i, options, edits);
                 }
                 i = nextIndex;
                 state = nextState;
             }
-            return result.toString();
+            return dest;
         }
     }
 }

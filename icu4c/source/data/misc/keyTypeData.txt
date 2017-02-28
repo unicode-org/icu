@@ -218,6 +218,7 @@ keyTypeData:table(nofallback){
             buk{""}
             bwp{""}
             byb{""}
+            byn{""}
             byr{""}
             bzd{""}
             cad{""}

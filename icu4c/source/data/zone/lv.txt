@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 lv{
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžana"}
@@ -941,6 +941,9 @@ lv{
         }
         "Australia:Sydney"{
             ec{"Sidneja"}
+        }
+        "Etc:UTC"{
+            ls{"Universālais koordinētais laiks"}
         }
         "Etc:Unknown"{
             ec{"nezināma pilsēta"}

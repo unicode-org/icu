@@ -26,6 +26,7 @@
 #include "unicode/decimfmt.h"
 #include "uresimp.h"
 #include "unicode/ures.h"
+#include "unicode/ustring.h"
 #include "ureslocs.h"
 #include "cstring.h"
 #include "mutex.h"

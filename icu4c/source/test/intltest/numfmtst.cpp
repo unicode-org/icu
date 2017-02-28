@@ -22,6 +22,7 @@
 #include "unicode/ustring.h"
 #include "unicode/measfmt.h"
 #include "unicode/curramt.h"
+#include "unicode/strenum.h"
 #include "digitlst.h"
 #include "textfile.h"
 #include "tokiter.h"

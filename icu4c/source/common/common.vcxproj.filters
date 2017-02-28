@@ -478,6 +478,9 @@
     <ClCompile Include="cwchar.cpp">
       <Filter>strings</Filter>
     </ClCompile>
+    <ClCompile Include="edits.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
     <ClCompile Include="schriter.cpp">
       <Filter>strings</Filter>
     </ClCompile>
@@ -870,6 +873,9 @@
     <ClInclude Include="cwchar.h">
       <Filter>strings</Filter>
     </ClInclude>
+    <ClInclude Include="ucasemap_imp.h">
+      <Filter>strings</Filter>
+    </ClInclude>
     <ClInclude Include="uinvchar.h">
       <Filter>strings</Filter>
     </ClInclude>
@@ -1096,7 +1102,13 @@
     <CustomBuild Include="unicode\bytestream.h">
       <Filter>strings</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\casemap.h">
+      <Filter>strings</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\chariter.h">
+      <Filter>strings</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\edits.h">
       <Filter>strings</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\rep.h">

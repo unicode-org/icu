@@ -359,8 +359,7 @@ public:
      * @param status  Input/output parameter. If at entry this indicates a
      *                failure status, the method returns immediately; otherwise
      *                this is set to indicate the outcome of the call.
-     * @return The keyword of the selected rule, or an empty string in the case
-     *         of an error.
+     * @return The keyword of the selected rule. Undefined in the case of an error.
      * @internal ICU 59 technology preview, may be removed in the future
      */
     UnicodeString select(const Formattable& obj, const NumberFormat& fmt, UErrorCode& status) const;

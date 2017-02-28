@@ -374,7 +374,6 @@ class CaseFoldingUTextIterator: public UMemory {
                                   //  folding of the same code point from the orignal UText.
       private:
         UText             &fUText;
-        const  UCaseProps *fcsp;
         const  UChar      *fFoldChars;
         int32_t            fFoldLength;
         int32_t            fFoldIndex;
@@ -404,7 +403,6 @@ class CaseFoldingUCharIterator: public UMemory {
         const  UChar      *fChars;
         int64_t            fIndex;
         int64_t            fLimit;
-        const  UCaseProps *fcsp;
         const  UChar      *fFoldChars;
         int32_t            fFoldLength;
         int32_t            fFoldIndex;

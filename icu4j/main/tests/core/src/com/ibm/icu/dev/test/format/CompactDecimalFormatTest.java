@@ -544,7 +544,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
         cdf = CompactDecimalFormat.getInstance(new ULocale("ar"), CompactDecimalFormat.CompactStyle.SHORT);
         cdf.setMaximumSignificantDigits(3);
         result = cdf.format(1234);
-        assertEquals("CDF should correctly format 1234 with 3 significant digits in 'ar'", "١٫٢٣ ألف", result);
+        if (!logKnownIssue("cldrbug:9492", "CLDR 31-d01 incorrectly deleted ar compactDecimals short form")) {
+            assertEquals("CDF should correctly format 1234 with 3 significant digits in 'ar'", "١٫٢٣ ألف", result);
+        }
 
         // Check currency formatting as well
         cdf = CompactDecimalFormat.getInstance(new ULocale("ar"), CompactDecimalFormat.CompactStyle.SHORT);

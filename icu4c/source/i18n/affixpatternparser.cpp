@@ -13,7 +13,9 @@
 
 #include "unicode/dcfmtsym.h"
 #include "unicode/plurrule.h"
+#include "unicode/strenum.h"
 #include "unicode/ucurr.h"
+#include "unicode/ustring.h"
 #include "affixpatternparser.h"
 #include "charstr.h"
 #include "precision.h"

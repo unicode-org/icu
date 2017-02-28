@@ -4255,6 +4255,7 @@ metadata:table(nofallback){
         "bez_TZ",
         "bg_BG",
         "bgn_PK",
+        "blt_Tavt_VN",
         "bm_ML",
         "bm_Nkoo_ML",
         "bn_BD",

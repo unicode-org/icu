@@ -26,7 +26,7 @@ $ukinzi = \u1004\u103A\u1039;  # Codepoints representing kinzi in Unicode
 # This character has multiple representations in the Zawgyi font.
 $zmedialra = [\u103B\u107E-\u1084];
 ####
-#### STAGE (1): CODEPOINT MAPPING FROM ZAWGYI TO UNICODE
+#### STAGE 1: CODEPOINT MAPPING FROM ZAWGYI TO UNICODE
 ####
 # Kinzi (predefined ligatures)
 # Move base character to the right
@@ -66,8 +66,6 @@ $zmedialra = [\u103B\u107E-\u1084];
 \u1087 → \u103E ;
 \u1088 → \u103E \u102F ;
 \u1089 → \u103E \u1030 ;
-# Single diacritics with space - use non-breaking
-# TODO(ccornelius): determine if this breaks transliteration
 # asat
 \u1039 → \u103A ;
 # Vowels
@@ -128,26 +126,30 @@ $zmedialra = [\u103B\u107E-\u1084];
 # yayit
 $zmedialra → \u103C ;
 ####
-#### STAGE (2): POST REORDERING RULES FOR UNICODE RENDERING
+#### STAGE 2: POST REORDERING RULES FOR UNICODE RENDERING
 #### Now every codepoint is Unicode.  This starts conversion
 #### from semi-visual order to logical order.
 ####
 ::Null;
 # Case of MYANMAR digit being used instead of a letter
-\u1044 \u103a → | \u104E \u103A ;
-# Lone zero with diacritic mark
-\u1031 \u1040 ($nondigits) → \u1031 \u101D $1;
-($nondigits) \u1040 ([\u102B-\u103F]) → $1 \u101D $2;
-# cwc: Simpler replacements for Zawgyi 1025
+# Lone digit zero
+[$] \u1040 ($nondigits) → \u101D $1;
+([\u102b-\u103f]) \u1040 ($nondigits) → $1 \u101d $2;
+# Lone digit 4
+^ \u1044 ($nondigits) → | \u104E $1 ;
+([\u102b-\u103f]) \u1044 ($nondigits) → $1 \u104E $2;
+# Simpler replacements for Zawgyi 1025
 \u1025 \u103A → \u1009 \u103A;
 \u1025 \u102E → \u1026;
-# Asat and dot below reordering.
-\u1037\u103A → \u103A\u1037;
+# Asat and dot below reordering, to Unicode NFC.
+\u103A\u1037 → \u1037\u103A;
 # Reorder some vowel signs
 \u1036 ($umedial*) ($vowelsign+) → $1 $2 \u1036 ;
 ([\u102B\u102C\u102F\u1030]) ([\u102D\u102E\u1032]) → $2 $1;
 # Move ra medial, but not others.
 \u103C ($consonant) → $1 \u103C;
+# Replace CA + YA with JHA
+\u1005\u103b → \u1008;
 ####
 #### Stage 3
 #### Move \u1031, \u1036, and \u103C after consonants.
@@ -193,11 +195,21 @@ $zmedialra → \u103C ;
 # Move visarga (\u1038) after other signs
 \u1038 ([$vowelmedial]) → $1 \u1038;
 \u1038 ([\u1036\u1037\u103A]) → $1 \u1038;
+# Reorder
+\u1036 \u102f → \u102f \u1036;
 ###
 ### Stage 6
 ### Finish medial sorting, fix conflicting and extra diacritics
 ###
 ::Null;
+# Fix duplicate and overlapping modifiers.
+\u102F \u102F+ → \u102F;
+\u102F \u1030 → \u102F;
+\u102F \u103A → \u102F;
+\u102D \u102E → \u102E;
+\u1036 \u1036+ → \u1036;
+# Remove space directly before diacritics.
+[:WSpace:] ([\u102b-\u1032\u1036-\u103e]) → $1;
 # Fix 103B/103A order for asat.
 ($consonant) \u103B \u103A → $1 \u103A \u103B;
 

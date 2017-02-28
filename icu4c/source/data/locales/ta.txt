@@ -234,7 +234,7 @@ ta{
         }
         traditional{"taml"}
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.32.4"}
     calendar{
         chinese{
             DateTimePatterns{

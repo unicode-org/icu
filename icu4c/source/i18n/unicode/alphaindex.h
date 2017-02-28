@@ -15,6 +15,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
+#include "unicode/unistr.h"
 
 #if !UCONFIG_NO_COLLATION
 

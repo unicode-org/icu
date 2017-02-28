@@ -146,7 +146,7 @@ lv{
         IO{"Indijas okeāna Britu teritorija"}
         IQ{"Irāka"}
         IR{"Irāna"}
-        IS{"Īslande"}
+        IS{"Islande"}
         IT{"Itālija"}
         JE{"Džērsija"}
         JM{"Jamaika"}
@@ -309,5 +309,5 @@ lv{
         FK{"Folklenda (Malvinu) salas"}
         MK{"bijusī Dienvidslāvijas Maķedonijas Republika"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
 }

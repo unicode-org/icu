@@ -262,7 +262,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.59"}
     calendar{
         buddhist{
             DateTimePatterns{

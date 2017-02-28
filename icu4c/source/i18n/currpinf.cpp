@@ -20,6 +20,7 @@
 
 #include "unicode/locid.h"
 #include "unicode/plurrule.h"
+#include "unicode/strenum.h"
 #include "unicode/ures.h"
 #include "unicode/numsys.h"
 #include "cstring.h"
