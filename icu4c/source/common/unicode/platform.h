@@ -537,20 +537,22 @@
  * http://clang.llvm.org/docs/AttributeReference.html#fallthrough-clang-fallthrough
  * @internal
  */
-#ifdef __cplusplus
-#   ifdef U_FALLTHROUGH
-        // Use the predefined value.
-#   elif defined(__clang__) && \
-            (__has_cpp_attribute(clang::fallthrough) || \
-            (__has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough")))
+#ifndef __cplusplus
+    // Not for C.
+#elif defined(U_FALLTHROUGH)
+    // Use the predefined value.
+#elif defined(__clang__)
+    // Test for compiler vs. feature separately.
+    // Other compilers might choke on the feature test.
+#   if __has_cpp_attribute(clang::fallthrough) || \
+            (__has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough"))
 #       define U_FALLTHROUGH [[clang::fallthrough]]
-#   else
-#       define U_FALLTHROUGH
 #   endif
-#else
-#   define U_FALLTHROUGH
 #endif
 
+#ifndef U_FALLTHROUGH
+#   define U_FALLTHROUGH
+#endif
 
 /** @} */
 
