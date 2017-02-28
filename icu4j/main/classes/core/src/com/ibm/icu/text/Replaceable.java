@@ -48,8 +48,6 @@ package com.ibm.icu.text;
  *   </li>
  * </ul>
  * If this is not the behavior, the subclass should document any differences.
- * 
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
  * @stable ICU 2.0
@@ -59,7 +57,7 @@ public interface Replaceable {
      * Returns the number of 16-bit code units in the text.
      * @return number of 16-bit code units in text
      * @stable ICU 2.0
-     */ 
+     */
     int length();
 
     /**
@@ -163,7 +161,7 @@ public interface Replaceable {
      * <pre> char[] text = new char[limit - start];
      * getChars(start, limit, text, 0);
      * replace(dest, dest, text, 0, limit - start);</pre>
-     * 
+     *
      * @param start the beginning index, inclusive; <code>0 &lt;= start &lt;=
      * limit</code>.
      * @param limit the ending index, exclusive; <code>start &lt;= limit &lt;=
@@ -175,7 +173,7 @@ public interface Replaceable {
      * @stable ICU 2.0
      */
     void copy(int start, int limit, int dest);
-    
+
     /**R
      * Returns true if this object contains metadata.  If a
      * Replaceable object has metadata, calls to the Replaceable API

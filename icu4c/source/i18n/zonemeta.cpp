@@ -17,7 +17,7 @@
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
 #include "unicode/simpletz.h"
-
+#include "unicode/strenum.h"
 #include "umutex.h"
 #include "uvector.h"
 #include "cmemory.h"

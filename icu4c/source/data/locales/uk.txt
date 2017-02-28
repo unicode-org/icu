@@ -15,7 +15,7 @@ uk{
     }
     ExemplarCharacters{"[а б в г ґ д е є ж з и і ї й к л м н о п р с т у ф х ц ч ш щ ь ю я ʼ]"}
     ExemplarCharactersIndex{"[А Б В Г Ґ Д Е Є Ж З И І Ї Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ю Я]"}
-    ExemplarCharactersPunctuation{"[\\- – , ; \\: ! ? . ' \u0022 “ „ ’ « » ( ) \\[ \\] \\{ \\} § @ * / \\\\ №]"}
+    ExemplarCharactersPunctuation{"[\\- – , ; \\: ! ? . ' ’ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § @ * / \\\\ №]"}
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}
@@ -287,7 +287,7 @@ uk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.32.60"}
     calendar{
         coptic{
             monthNames{

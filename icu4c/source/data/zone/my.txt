@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 my{
-    Version{"2.1.31.96"}
+    Version{"2.1.32.60"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"အာဘီဂျန်"}
@@ -941,6 +941,9 @@ my{
         }
         "Australia:Sydney"{
             ec{"ဆစ်ဒနီ"}
+        }
+        "Etc:UTC"{
+            ls{"ညှိထားသည့် ကမ္ဘာ့ စံတော်ချိန်"}
         }
         "Etc:Unknown"{
             ec{"အမည်မသိသောမြို့"}

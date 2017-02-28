@@ -24,6 +24,8 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.CaseMap;
+import com.ibm.icu.text.Edits;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale;
@@ -708,6 +710,191 @@ public final class UCharacterCaseTest extends TestFmwk
         assertGreekUpper("ρωμέικα", "ΡΩΜΕΪΚΑ");
     }
 
+    private static final class EditChange {
+        private boolean change;
+        private int oldLength, newLength;
+        EditChange(boolean change, int oldLength, int newLength) {
+            this.change = change;
+            this.oldLength = oldLength;
+            this.newLength = newLength;
+        }
+    }
+
+    private static void checkEditsIter(
+            String name, Edits.Iterator ei1, Edits.Iterator ei2,  // two equal iterators
+            EditChange[] expected, boolean withUnchanged) {
+        assertFalse(name, ei2.findSourceIndex(-1));
+
+        int expSrcIndex = 0;
+        int expDestIndex = 0;
+        int expReplIndex = 0;
+        for (int expIndex = 0; expIndex < expected.length; ++expIndex) {
+            EditChange expect = expected[expIndex];
+            String msg = name + ' ' + expIndex;
+            if (withUnchanged || expect.change) {
+                assertTrue(msg, ei1.next());
+                assertEquals(msg, expect.change, ei1.hasChange());
+                assertEquals(msg, expect.oldLength, ei1.oldLength());
+                assertEquals(msg, expect.newLength, ei1.newLength());
+                assertEquals(msg, expSrcIndex, ei1.sourceIndex());
+                assertEquals(msg, expDestIndex, ei1.destinationIndex());
+                assertEquals(msg, expReplIndex, ei1.replacementIndex());
+            }
+
+            if (expect.oldLength > 0) {
+                assertTrue(msg, ei2.findSourceIndex(expSrcIndex));
+                assertEquals(msg, expect.change, ei2.hasChange());
+                assertEquals(msg, expect.oldLength, ei2.oldLength());
+                assertEquals(msg, expect.newLength, ei2.newLength());
+                assertEquals(msg, expSrcIndex, ei2.sourceIndex());
+                assertEquals(msg, expDestIndex, ei2.destinationIndex());
+                assertEquals(msg, expReplIndex, ei2.replacementIndex());
+                if (!withUnchanged) {
+                    // For some iterators, move past the current range
+                    // so that findSourceIndex() has to look before the current index.
+                    ei2.next();
+                    ei2.next();
+                }
+            }
+
+            expSrcIndex += expect.oldLength;
+            expDestIndex += expect.newLength;
+            if (expect.change) {
+                expReplIndex += expect.newLength;
+            }
+        }
+        String msg = name + " end";
+        assertFalse(msg, ei1.next());
+        assertFalse(msg, ei1.hasChange());
+        assertEquals(msg, 0, ei1.oldLength());
+        assertEquals(msg, 0, ei1.newLength());
+        assertEquals(msg, expSrcIndex, ei1.sourceIndex());
+        assertEquals(msg, expDestIndex, ei1.destinationIndex());
+        assertEquals(msg, expReplIndex, ei1.replacementIndex());
+
+        assertFalse(name, ei2.findSourceIndex(expSrcIndex));
+    }
+
+    @Test
+    public void TestEdits() {
+        Edits edits = new Edits();
+        assertFalse("new Edits", edits.hasChanges());
+        assertEquals("new Edits", 0, edits.lengthDelta());
+        edits.addUnchanged(1);  // multiple unchanged ranges are combined
+        edits.addUnchanged(10000);  // too long, and they are split
+        edits.addReplace(0, 0);
+        edits.addUnchanged(2);
+        assertFalse("unchanged 10003", edits.hasChanges());
+        assertEquals("unchanged 10003", 0, edits.lengthDelta());
+        edits.addReplace(1, 1);  // multiple short equal-length edits are compressed
+        edits.addUnchanged(0);
+        edits.addReplace(1, 1);
+        edits.addReplace(1, 1);
+        edits.addReplace(0, 10);
+        edits.addReplace(100, 0);
+        edits.addReplace(3000, 4000);  // variable-length encoding
+        edits.addReplace(100000, 100000);
+        assertTrue("some edits", edits.hasChanges());
+        assertEquals("some edits", 10 - 100 + 1000, edits.lengthDelta());
+
+        EditChange[] coarseExpectedChanges = new EditChange[] {
+                new EditChange(false, 10003, 10003),
+                new EditChange(true, 103103, 104013)
+        };
+        checkEditsIter("coarse",
+                edits.getCoarseIterator(), edits.getCoarseIterator(),
+                coarseExpectedChanges, true);
+        checkEditsIter("coarse changes",
+                edits.getCoarseChangesIterator(), edits.getCoarseChangesIterator(),
+                coarseExpectedChanges, false);
+
+        EditChange[] fineExpectedChanges = new EditChange[] {
+                new EditChange(false, 10003, 10003),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 0, 10),
+                new EditChange(true, 100, 0),
+                new EditChange(true, 3000, 4000),
+                new EditChange(true, 100000, 100000)
+        };
+        checkEditsIter("fine",
+                edits.getFineIterator(), edits.getFineIterator(),
+                fineExpectedChanges, true);
+        checkEditsIter("fine changes",
+                edits.getFineChangesIterator(), edits.getFineChangesIterator(),
+                fineExpectedChanges, false);
+
+        edits.reset();
+        assertFalse("reset", edits.hasChanges());
+        assertEquals("reset", 0, edits.lengthDelta());
+        Edits.Iterator ei = edits.getCoarseChangesIterator();
+        assertFalse("reset then iterator", ei.next());
+    }
+
+    @Test
+    public void TestCaseMapWithEdits() {
+        StringBuilder sb = new StringBuilder();
+        Edits edits = new Edits();
+
+        sb = CaseMap.toLower().omitUnchangedText().apply(TURKISH_LOCALE_, "IstanBul", sb, edits);
+        assertEquals("toLower(Istanbul)", "ıb", sb.toString());
+        EditChange[] lowerExpectedChanges = new EditChange[] {
+                new EditChange(true, 1, 1),
+                new EditChange(false, 4, 4),
+                new EditChange(true, 1, 1),
+                new EditChange(false, 2, 2)
+        };
+        checkEditsIter("toLower(Istanbul)",
+                edits.getFineIterator(), edits.getFineIterator(),
+                lowerExpectedChanges, true);
+
+        sb.delete(0, sb.length());
+        edits.reset();
+        sb = CaseMap.toUpper().omitUnchangedText().apply(GREEK_LOCALE_, "Πατάτα", sb, edits);
+        assertEquals("toUpper(Πατάτα)", "ΑΤΑΤΑ", sb.toString());
+        EditChange[] upperExpectedChanges = new EditChange[] {
+                new EditChange(false, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 1)
+        };
+        checkEditsIter("toUpper(Πατάτα)",
+                edits.getFineIterator(), edits.getFineIterator(),
+                upperExpectedChanges, true);
+
+        sb.delete(0, sb.length());
+        edits.reset();
+        sb = CaseMap.toTitle().omitUnchangedText().noBreakAdjustment().noLowercase().apply(
+                new Locale("nl"), null, "IjssEL IglOo", sb, edits);
+        assertEquals("toTitle(IjssEL IglOo)", "J", sb.toString());
+        EditChange[] titleExpectedChanges = new EditChange[] {
+                new EditChange(false, 1, 1),
+                new EditChange(true, 1, 1),
+                new EditChange(false, 10, 10)
+        };
+        checkEditsIter("toTitle(IjssEL IglOo)",
+                edits.getFineIterator(), edits.getFineIterator(),
+                titleExpectedChanges, true);
+
+        sb.delete(0, sb.length());
+        edits.reset();
+        sb = CaseMap.fold().omitUnchangedText().turkic().apply("IßtanBul", sb, edits);
+        assertEquals("fold(IßtanBul)", "ıssb", sb.toString());
+        EditChange[] foldExpectedChanges = new EditChange[] {
+                new EditChange(true, 1, 1),
+                new EditChange(true, 1, 2),
+                new EditChange(false, 3, 3),
+                new EditChange(true, 1, 1),
+                new EditChange(false, 2, 2)
+        };
+        checkEditsIter("fold(IßtanBul)",
+                edits.getFineIterator(), edits.getFineIterator(),
+                foldExpectedChanges, true);
+    }
+
     // private data members - test data --------------------------------------
 
     private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");
@@ -945,7 +1132,7 @@ public final class UCharacterCaseTest extends TestFmwk
     // private methods -------------------------------------------------------
 
     /**
-     * Converting the hex numbers represented betwee                             n ';' to Unicode strings
+     * Converting the hex numbers represented between ';' to Unicode strings
      * @param str string to break up into Unicode strings
      * @return array of Unicode strings ending with a null
      */

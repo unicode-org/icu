@@ -27,6 +27,7 @@
 #include "unicode/ucasemap.h"
 #include "cmemory.h"
 #include "cintltst.h"
+#include "ucasemap_imp.h"
 #include "ustr_imp.h"
 
 /* test string case mapping functions --------------------------------------- */
@@ -744,11 +745,12 @@ TestUCaseMap(void) {
     if(0!=strcmp(locale, "tr")) {
         log_err("ucasemap_getLocale(ucasemap_open(\"tur\"))==%s!=\"tr\"\n", locale);
     }
-    /* overly long locale IDs get truncated to their language code to avoid unnecessary allocation */
+    /* overly long locale IDs may get truncated to their language code to avoid unnecessary allocation */
     ucasemap_setLocale(csm, "I-kLInGOn-the-quick-brown-fox-jumps-over-the-lazy-dog", &errorCode);
     locale=ucasemap_getLocale(csm);
-    if(0!=strcmp(locale, "i-klingon")) {
-        log_err("ucasemap_getLocale(ucasemap_setLocale(\"I-kLInGOn-the-quick-br...\"))==%s!=\"i-klingon\"\n", locale);
+    if(0!=strncmp(locale, "i-klingon", 9)) {
+        log_err("ucasemap_getLocale(ucasemap_setLocale(\"I-kLInGOn-the-quick-br...\"))==%s\n"
+                "    does not start with \"i-klingon\"\n", locale);
     }
 
     errorCode=U_ZERO_ERROR;

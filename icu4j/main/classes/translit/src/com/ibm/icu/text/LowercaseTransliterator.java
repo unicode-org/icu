@@ -44,7 +44,7 @@ class LowercaseTransliterator extends Transliterator{
     private final UCaseProps csp;
     private ReplaceableContextIterator iter;
     private StringBuilder result;
-    private int[] locCache;
+    private int caseLocale;
 
     /**
      * Constructs a transliterator.
@@ -56,8 +56,7 @@ class LowercaseTransliterator extends Transliterator{
         csp=UCaseProps.INSTANCE;
         iter=new ReplaceableContextIterator();
         result = new StringBuilder();
-        locCache = new int[1];
-        locCache[0]=0;
+        caseLocale = UCaseProps.getCaseLocale(locale);
     }
 
     /**
@@ -85,7 +84,7 @@ class LowercaseTransliterator extends Transliterator{
         iter.setLimit(offsets.limit);
         iter.setContextLimits(offsets.contextStart, offsets.contextLimit);
         while((c=iter.nextCaseMapCP())>=0) {
-            c=csp.toFullLower(c, iter, result, locale, locCache);
+            c=csp.toFullLower(c, iter, result, caseLocale);
 
             if(iter.didReachLimit() && isIncremental) {
                 // the case mapping function tried to look beyond the context limit
