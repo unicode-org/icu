@@ -75,7 +75,7 @@ U_NAMESPACE_BEGIN
  * and from NULL.
  * @draft ICU 59
  */
-class U_COMMON_API Char16Ptr {
+class U_COMMON_API Char16Ptr final {
 public:
     /**
      * Copies the pointer.
@@ -87,9 +87,10 @@ public:
      * @draft ICU 59
      */
     inline Char16Ptr(uint16_t *p);
-#if U_SIZEOF_WCHAR_T==2
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
     /**
      * Converts the pointer to char16_t *.
+     * (Only defined if U_SIZEOF_WCHAR_T==2.)
      * @draft ICU 59
      */
     inline Char16Ptr(wchar_t *p);
@@ -100,12 +101,25 @@ public:
      */
     inline Char16Ptr(std::nullptr_t p);
     /**
+     * NULL constructor.
+     * Must only be used for 0 which is usually the value of NULL.
+     * @draft ICU 59
+     */
+    Char16Ptr(int null);
+    /**
      * Pointer access.
      * @draft ICU 59
      */
-    inline operator char16_t *();
+    inline char16_t *get();
+    /**
+     * Pointer access via type conversion (e.g., static_cast).
+     * @draft ICU 59
+     */
+    operator char16_t *() { return get(); }
 
 private:
+    Char16Ptr() = delete;
+
 #ifdef U_ALIASING_BARRIER
     template<typename T> char16_t *cast(T *t) {
         U_ALIASING_BARRIER(t);
@@ -131,7 +145,7 @@ Char16Ptr::Char16Ptr(wchar_t *p) : p(cast(p)) {}
 #endif
 Char16Ptr::Char16Ptr(std::nullptr_t p) : p(p) {}
 
-Char16Ptr::operator char16_t *() { return p; }
+char16_t *Char16Ptr::get() { return p; }
 
 #else
 
@@ -142,7 +156,7 @@ Char16Ptr::Char16Ptr(wchar_t *p) { u.wp = p; }
 #endif
 Char16Ptr::Char16Ptr(std::nullptr_t p) { u.cp = p; }
 
-Char16Ptr::operator char16_t *() { return u.cp; }
+char16_t *Char16Ptr::get() { return u.cp; }
 
 #endif
 
@@ -151,7 +165,7 @@ Char16Ptr::operator char16_t *() { return u.cp; }
  * and from NULL.
  * @draft ICU 59
  */
-class U_COMMON_API ConstChar16Ptr {
+class U_COMMON_API ConstChar16Ptr final {
 public:
     /**
      * Copies the pointer.
@@ -163,9 +177,10 @@ public:
      * @draft ICU 59
      */
     inline ConstChar16Ptr(const uint16_t *p);
-#if U_SIZEOF_WCHAR_T==2
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
     /**
      * Converts the pointer to char16_t *.
+     * (Only defined if U_SIZEOF_WCHAR_T==2.)
      * @draft ICU 59
      */
     inline ConstChar16Ptr(const wchar_t *p);
@@ -176,12 +191,25 @@ public:
      */
     inline ConstChar16Ptr(const std::nullptr_t p);
     /**
+     * NULL constructor.
+     * Must only be used for 0 which is usually the value of NULL.
+     * @draft ICU 59
+     */
+    ConstChar16Ptr(int null);
+    /**
      * Pointer access.
      * @draft ICU 59
      */
-    inline operator const char16_t *() const;
+    inline const char16_t *get() const;
+    /**
+     * Pointer access via type conversion (e.g., static_cast).
+     * @draft ICU 59
+     */
+    operator const char16_t *() { return get(); }
 
 private:
+    ConstChar16Ptr() = delete;
+
 #ifdef U_ALIASING_BARRIER
     template<typename T> const char16_t *cast(const T *t) {
         U_ALIASING_BARRIER(t);
@@ -207,7 +235,7 @@ ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) : p(cast(p)) {}
 #endif
 ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) : p(p) {}
 
-ConstChar16Ptr::operator const char16_t *() const { return p; }
+const char16_t *ConstChar16Ptr::get() const { return p; }
 
 #else
 
@@ -218,7 +246,7 @@ ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) { u.wp = p; }
 #endif
 ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) { u.cp = p; }
 
-ConstChar16Ptr::operator const char16_t *() const { return u.cp; }
+const char16_t *ConstChar16Ptr::get() const { return u.cp; }
 
 #endif
 
@@ -3183,11 +3211,12 @@ public:
    * @draft ICU 59
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const uint16_t *text) :
-      UnicodeString(static_cast<const UChar *>(ConstChar16Ptr(text))) {}
+      UnicodeString(ConstChar16Ptr(text).get()) {}
 
-#if U_SIZEOF_WCHAR_T==2
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
    * wchar_t * constructor.
+   * (Only defined if U_SIZEOF_WCHAR_T==2.)
    * Delegates to UnicodeString(const UChar *).
    *
    * It is recommended to mark this constructor "explicit" by
@@ -3197,7 +3226,7 @@ public:
    * @draft ICU 59
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const wchar_t *text) :
-      UnicodeString(static_cast<const UChar *>(ConstChar16Ptr(text))) {}
+      UnicodeString(ConstChar16Ptr(text).get()) {}
 #endif
 
   /**
@@ -3230,18 +3259,19 @@ public:
    * @draft ICU 59
    */
   UnicodeString(const uint16_t *text, int32_t length) :
-      UnicodeString(static_cast<const UChar *>(ConstChar16Ptr(text)), length) {}
+      UnicodeString(ConstChar16Ptr(text).get(), length) {}
 
-#if U_SIZEOF_WCHAR_T==2
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
    * wchar_t * constructor.
+   * (Only defined if U_SIZEOF_WCHAR_T==2.)
    * Delegates to UnicodeString(const UChar *, int32_t).
    * @param text NUL-terminated UTF-16 string
    * @param length string length
    * @draft ICU 59
    */
   UnicodeString(const wchar_t *text, int32_t length) :
-      UnicodeString(static_cast<const UChar *>(ConstChar16Ptr(text)), length) {}
+      UnicodeString(ConstChar16Ptr(text).get(), length) {}
 #endif
 
   /**
@@ -3308,11 +3338,12 @@ public:
    * @draft ICU 59
    */
   UnicodeString(uint16_t *buffer, int32_t buffLength, int32_t buffCapacity) :
-      UnicodeString(static_cast<UChar *>(Char16Ptr(buffer)), buffLength, buffCapacity) {}
+      UnicodeString(Char16Ptr(buffer).get(), buffLength, buffCapacity) {}
 
-#if U_SIZEOF_WCHAR_T==2
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
    * Writable-aliasing wchar_t * constructor.
+   * (Only defined if U_SIZEOF_WCHAR_T==2.)
    * Delegates to UnicodeString(const UChar *, int32_t, int32_t).
    * @param buffer writable buffer of/for UTF-16 text
    * @param buffLength length of the current buffer contents
@@ -3320,7 +3351,7 @@ public:
    * @draft ICU 59
    */
   UnicodeString(wchar_t *buffer, int32_t buffLength, int32_t buffCapacity) :
-      UnicodeString(static_cast<UChar *>(Char16Ptr(buffer)), buffLength, buffCapacity) {}
+      UnicodeString(Char16Ptr(buffer).get(), buffLength, buffCapacity) {}
 #endif
 
   /**

@@ -98,6 +98,48 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
+#ifdef U_ALIASING_BARRIER
+
+Char16Ptr::Char16Ptr(int null) : p(nullptr) {
+    U_ASSERT(null == 0);
+    if (null != 0) {
+        // Try to provoke a crash.
+        p = reinterpret_cast<char16_t *>(1);
+    }
+}
+
+ConstChar16Ptr::ConstChar16Ptr(int null) : p(nullptr) {
+    U_ASSERT(null == 0);
+    if (null != 0) {
+        // Try to provoke a crash.
+        p = reinterpret_cast<char16_t *>(1);
+    }
+}
+
+#else
+
+Char16Ptr::Char16Ptr(int null) {
+    U_ASSERT(null == 0);
+    if (null == 0) {
+        u.cp = nullptr;
+    } else {
+        // Try to provoke a crash.
+        u.cp = reinterpret_cast<char16_t *>(1);
+    }
+}
+
+ConstChar16Ptr::ConstChar16Ptr(int null) {
+    U_ASSERT(null == 0);
+    if (null == 0) {
+        u.cp = nullptr;
+    } else {
+        // Try to provoke a crash.
+        u.cp = reinterpret_cast<char16_t *>(1);
+    }
+}
+
+#endif
+
 /* The Replaceable virtual destructor can't be defined in the header
    due to how AIX works with multiple definitions of virtual functions.
 */
@@ -234,7 +276,7 @@ UnicodeString::UnicodeString(UBool isTerminated,
       // text is terminated, or else it would have failed the above test
       textLength = u_strlen(text);
     }
-    setArray(const_cast<UChar *>(static_cast<const char16_t *>(text)), textLength,
+    setArray(const_cast<UChar *>(text.get()), textLength,
              isTerminated ? textLength + 1 : textLength);
   }
 }
