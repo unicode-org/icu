@@ -37,7 +37,7 @@ public:
     UBool forData(const CollationData &data, UErrorCode &errorCode);
 
     const uint16_t *getTable() const {
-        return reinterpret_cast<const uint16_t *>(result.getBuffer());
+        return result.getBuffer();
     }
     int32_t lengthOfTable() const { return result.length(); }
 

@@ -79,6 +79,7 @@ class U_COMMON_API Char16Ptr final {
 public:
     /**
      * Copies the pointer.
+     * TODO: @param p ...
      * @draft ICU 59
      */
     inline Char16Ptr(char16_t *p);
@@ -107,21 +108,70 @@ public:
      */
     Char16Ptr(int null);
     /**
-     * Pointer access.
+     * Destructor.
      * @draft ICU 59
      */
-    inline char16_t *get();
+    inline ~Char16Ptr();
+
     /**
-     * Pointer access via type conversion (e.g., static_cast).
+     * Pointer access.
+     * TODO @return ...
      * @draft ICU 59
      */
-    operator char16_t *() { return get(); }
+    inline char16_t *get() const;
+    /**
+     * char16_t pointer access via type conversion (e.g., static_cast).
+     * @draft ICU 59
+     */
+    operator char16_t *() const { return get(); }
+    /**
+     * uint16_t pointer access via type conversion (e.g., static_cast).
+     * @draft ICU 59
+     */
+    inline operator uint16_t *() const;
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+    /**
+     * wchar_t pointer access via type conversion (e.g., static_cast).
+     * @draft ICU 59
+     */
+    inline operator wchar_t *() const;
+#endif
+    operator void *() const { return get(); }
+
+    char16_t operator[](size_t offset) const { return get()[offset]; }
+
+    UBool operator==(const Char16Ptr &other) const { return get() == other.get(); }
+    UBool operator!=(const Char16Ptr &other) const { return !operator==(other); }
+    UBool operator==(const char16_t *other) const { return get() == other; }
+    UBool operator!=(const char16_t *other) const { return !operator==(other); }
+    UBool operator==(const uint16_t *other) const { return static_cast<uint16_t *>(*this) == other; }
+    UBool operator!=(const uint16_t *other) const { return !operator==(other); }
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+    UBool operator==(const wchar_t *other) const { return static_cast<wchar_t *>(*this) == other; }
+    UBool operator!=(const wchar_t *other) const { return !operator==(other); }
+#endif
+    UBool operator==(const std::nullptr_t null) const { return get() == null; }
+    UBool operator!=(const std::nullptr_t null) const { return !operator==(null); }
+    /**
+     * Comparison with NULL.
+     * @return TRUE if the pointer is nullptr and null==0
+     * @draft ICU 59
+     */
+    UBool operator==(int null) const { return get() == nullptr && null == 0; }
+    /**
+     * Comparison with NULL.
+     * @return TRUE if the pointer is not nullptr and null==0
+     * @draft ICU 59
+     */
+    UBool operator!=(int null) const { return get() != nullptr && null == 0; }
+
+    Char16Ptr operator+(size_t offset) const { return Char16Ptr(get() + offset); }
 
 private:
     Char16Ptr() = delete;
 
 #ifdef U_ALIASING_BARRIER
-    template<typename T> char16_t *cast(T *t) {
+    template<typename T> static char16_t *cast(T *t) {
         U_ALIASING_BARRIER(t);
         return reinterpret_cast<char16_t *>(t);
     }
@@ -144,8 +194,22 @@ Char16Ptr::Char16Ptr(uint16_t *p) : p(cast(p)) {}
 Char16Ptr::Char16Ptr(wchar_t *p) : p(cast(p)) {}
 #endif
 Char16Ptr::Char16Ptr(std::nullptr_t p) : p(p) {}
+Char16Ptr::~Char16Ptr() {
+    U_ALIASING_BARRIER(p);
+}
 
-char16_t *Char16Ptr::get() { return p; }
+char16_t *Char16Ptr::get() const { return p; }
+
+Char16Ptr::operator uint16_t *() const {
+    U_ALIASING_BARRIER(p);
+    return reinterpret_cast<uint16_t *>(p);
+}
+#if U_SIZEOF_WCHAR_T==2
+Char16Ptr::operator wchar_t *() const {
+    U_ALIASING_BARRIER(p);
+    return reinterpret_cast<wchar_t *>(p);
+}
+#endif
 
 #else
 
@@ -155,8 +219,18 @@ Char16Ptr::Char16Ptr(uint16_t *p) { u.up = p; }
 Char16Ptr::Char16Ptr(wchar_t *p) { u.wp = p; }
 #endif
 Char16Ptr::Char16Ptr(std::nullptr_t p) { u.cp = p; }
+Char16Ptr::~Char16Ptr() {}
 
-char16_t *Char16Ptr::get() { return u.cp; }
+char16_t *Char16Ptr::get() const { return u.cp; }
+
+Char16Ptr::operator uint16_t *() const {
+    return u.up;
+}
+#if U_SIZEOF_WCHAR_T==2
+Char16Ptr::operator wchar_t *() const {
+    return u.wp;
+}
+#endif
 
 #endif
 
@@ -197,21 +271,59 @@ public:
      */
     ConstChar16Ptr(int null);
     /**
+     * Destructor.
+     * @draft ICU 59
+     */
+    inline ~ConstChar16Ptr();
+
+    /**
      * Pointer access.
      * @draft ICU 59
      */
     inline const char16_t *get() const;
     /**
-     * Pointer access via type conversion (e.g., static_cast).
+     * char16_t pointer access via type conversion (e.g., static_cast).
      * @draft ICU 59
      */
-    operator const char16_t *() { return get(); }
+    operator const char16_t *() const { return get(); }
+    /**
+     * uint16_t pointer access via type conversion (e.g., static_cast).
+     * @draft ICU 59
+     */
+    inline operator const uint16_t *() const;
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+    /**
+     * wchar_t pointer access via type conversion (e.g., static_cast).
+     * @draft ICU 59
+     */
+    inline operator const wchar_t *() const;
+#endif
+    operator const void *() const { return get(); }
+
+    char16_t operator[](size_t offset) const { return get()[offset]; }
+
+    UBool operator==(const ConstChar16Ptr &other) const { return get() == other.get(); }
+    UBool operator!=(const ConstChar16Ptr &other) const { return !operator==(other); }
+    UBool operator==(const char16_t *other) const { return get() == other; }
+    UBool operator!=(const char16_t *other) const { return !operator==(other); }
+    UBool operator==(const uint16_t *other) const { return static_cast<const uint16_t *>(*this) == other; }
+    UBool operator!=(const uint16_t *other) const { return !operator==(other); }
+#if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
+    UBool operator==(const wchar_t *other) const { return static_cast<const wchar_t *>(*this) == other; }
+    UBool operator!=(const wchar_t *other) const { return !operator==(other); }
+#endif
+    UBool operator==(const std::nullptr_t null) const { return get() == null; }
+    UBool operator!=(const std::nullptr_t null) const { return !operator==(null); }
+    UBool operator==(int null) const { return get() == nullptr && null == 0; }
+    UBool operator!=(int null) const { return get() != nullptr && null == 0; }
+
+    ConstChar16Ptr operator+(size_t offset) { return ConstChar16Ptr(get() + offset); }
 
 private:
     ConstChar16Ptr() = delete;
 
 #ifdef U_ALIASING_BARRIER
-    template<typename T> const char16_t *cast(const T *t) {
+    template<typename T> static const char16_t *cast(const T *t) {
         U_ALIASING_BARRIER(t);
         return reinterpret_cast<const char16_t *>(t);
     }
@@ -234,8 +346,22 @@ ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) : p(cast(p)) {}
 ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) : p(cast(p)) {}
 #endif
 ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) : p(p) {}
+ConstChar16Ptr::~ConstChar16Ptr() {
+    U_ALIASING_BARRIER(p);
+}
 
 const char16_t *ConstChar16Ptr::get() const { return p; }
+
+ConstChar16Ptr::operator const uint16_t *() const {
+    U_ALIASING_BARRIER(p);
+    return reinterpret_cast<const uint16_t *>(p);
+}
+#if U_SIZEOF_WCHAR_T==2
+ConstChar16Ptr::operator const wchar_t *() const {
+    U_ALIASING_BARRIER(p);
+    return reinterpret_cast<const wchar_t *>(p);
+}
+#endif
 
 #else
 
@@ -245,8 +371,18 @@ ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) { u.up = p; }
 ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) { u.wp = p; }
 #endif
 ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) { u.cp = p; }
+ConstChar16Ptr::~ConstChar16Ptr() {}
 
 const char16_t *ConstChar16Ptr::get() const { return u.cp; }
+
+ConstChar16Ptr::operator const uint16_t *() const {
+    return u.up;
+}
+#if U_SIZEOF_WCHAR_T==2
+ConstChar16Ptr::operator const wchar_t *() const {
+    return u.wp;
+}
+#endif
 
 #endif
 
@@ -3047,13 +3183,13 @@ public:
    *        in the buffer, starting at the returned pointer;
    *        default to the current string capacity if minCapacity==-1
    * @return a writable pointer to the internal string buffer,
-   *         or 0 if an error occurs (nested calls, out of memory)
+   *         or nullptr if an error occurs (nested calls, out of memory)
    *
    * @see releaseBuffer
    * @see getTerminatedBuffer()
    * @stable ICU 2.0
    */
-  UChar *getBuffer(int32_t minCapacity);
+  Char16Ptr getBuffer(int32_t minCapacity);
 
   /**
    * Release a read/write buffer on a UnicodeString object with an
@@ -3101,13 +3237,13 @@ public:
    * be modified.
    *
    * @return a read-only pointer to the internal string buffer,
-   *         or 0 if the string is empty or bogus
+   *         or nullptr if the string is empty or bogus
    *
    * @see getBuffer(int32_t minCapacity)
    * @see getTerminatedBuffer()
    * @stable ICU 2.0
    */
-  inline const UChar *getBuffer() const;
+  inline ConstChar16Ptr getBuffer() const;
 
   /**
    * Get a read-only pointer to the internal buffer,
@@ -3142,7 +3278,7 @@ public:
    * @see getBuffer()
    * @stable ICU 2.2
    */
-  const UChar *getTerminatedBuffer();
+  ConstChar16Ptr getTerminatedBuffer();
 
   //========================================
   // Constructors
@@ -4134,7 +4270,7 @@ UnicodeString::isBufferWritable() const
       (!(fUnion.fFields.fLengthAndFlags&kRefCounted) || refCount()==1));
 }
 
-inline const UChar *
+inline ConstChar16Ptr
 UnicodeString::getBuffer() const {
   if(fUnion.fFields.fLengthAndFlags&(kIsBogus|kOpenGetBuffer)) {
     return 0;
