@@ -1615,8 +1615,8 @@ UnicodeStringTest::TestBogus() {
     // test that NULL primitive input string values are treated like
     // empty strings, not errors (bogus)
     test2.setTo((UChar32)0x10005);
-    if(test2.insert(1, NULL, 1).length()!=2) {
-        errln("UniStr.insert(...NULL...) should not modify the string but does");
+    if(test2.insert(1, nullptr, 1).length()!=2) {
+        errln("UniStr.insert(...nullptr...) should not modify the string but does");
     }
 
     UErrorCode errorCode=U_ZERO_ERROR;
