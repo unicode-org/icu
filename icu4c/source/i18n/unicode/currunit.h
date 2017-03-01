@@ -28,7 +28,7 @@ U_NAMESPACE_BEGIN
 
 /**
  * A unit of currency, such as USD (U.S. dollars) or JPY (Japanese
- * yen).  This class is a thin wrapper over a UChar string that
+ * yen).  This class is a thin wrapper over a char16_t string that
  * subclasses MeasureUnit, for use with Measure and MeasureFormat.
  *
  * @author Alan Liu
@@ -99,7 +99,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
     /**
      * The ISO 4217 code of this object.
      */
-    UChar isoCode[4];
+    char16_t isoCode[4];
 };
 
 inline ConstChar16Ptr CurrencyUnit::getISOCurrency() const {
