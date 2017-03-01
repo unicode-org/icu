@@ -119,7 +119,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * <code>NUL</code>, must be specified as a constant.
  * @stable ICU 2.0
  */
-#define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, (const UChar *)u ## cs, _length)
+#define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, u ## cs, _length)
 
 /**
  * Unicode String literals in C++.
@@ -436,7 +436,7 @@ public:
    * in <code>srcChars</code>.
    * @stable ICU 2.0
    */
-  inline int8_t compare(const UChar *srcChars,
+  inline int8_t compare(ConstChar16Ptr srcChars,
          int32_t srcLength) const;
 
   /**
@@ -590,7 +590,7 @@ public:
    * in code point order
    * @stable ICU 2.0
    */
-  inline int8_t compareCodePointOrder(const UChar *srcChars,
+  inline int8_t compareCodePointOrder(ConstChar16Ptr srcChars,
                                       int32_t srcLength) const;
 
   /**
@@ -763,7 +763,7 @@ public:
    * @return A negative, zero, or positive integer indicating the comparison result.
    * @stable ICU 2.0
    */
-  inline int8_t caseCompare(const UChar *srcChars,
+  inline int8_t caseCompare(ConstChar16Ptr srcChars,
          int32_t srcLength,
          uint32_t options) const;
 
@@ -881,7 +881,7 @@ public:
    * FALSE otherwise
    * @stable ICU 2.0
    */
-  inline UBool startsWith(const UChar *srcChars,
+  inline UBool startsWith(ConstChar16Ptr srcChars,
             int32_t srcLength) const;
 
   /**
@@ -928,7 +928,7 @@ public:
    * FALSE otherwise
    * @stable ICU 2.0
    */
-  inline UBool endsWith(const UChar *srcChars,
+  inline UBool endsWith(ConstChar16Ptr srcChars,
           int32_t srcLength) const;
 
   /**
@@ -1034,7 +1034,7 @@ public:
    * or -1 if not found.
    * @stable ICU 2.0
    */
-  inline int32_t indexOf(const UChar *srcChars,
+  inline int32_t indexOf(ConstChar16Ptr srcChars,
               int32_t srcLength,
               int32_t start,
               int32_t length) const;
@@ -1217,7 +1217,7 @@ public:
    * or -1 if not found.
    * @stable ICU 2.0
    */
-  inline int32_t lastIndexOf(const UChar *srcChars,
+  inline int32_t lastIndexOf(ConstChar16Ptr srcChars,
               int32_t srcLength,
               int32_t start,
               int32_t length) const;
@@ -2220,7 +2220,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  inline UnicodeString& append(const UChar *srcChars,
+  inline UnicodeString& append(ConstChar16Ptr srcChars,
             int32_t srcLength);
 
   /**
@@ -2299,7 +2299,7 @@ public:
    * @stable ICU 2.0
    */
   inline UnicodeString& insert(int32_t start,
-            const UChar *srcChars,
+            ConstChar16Ptr srcChars,
             int32_t srcLength);
 
   /**
@@ -2403,7 +2403,7 @@ public:
    */
   inline UnicodeString& replace(int32_t start,
              int32_t length,
-             const UChar *srcChars,
+             ConstChar16Ptr srcChars,
              int32_t srcLength);
 
   /**
@@ -4011,7 +4011,7 @@ UnicodeString::compare(int32_t start,
 { return doCompare(start, _length, srcText, 0, srcText.length()); }
 
 inline int8_t
-UnicodeString::compare(const UChar *srcChars,
+UnicodeString::compare(ConstChar16Ptr srcChars,
                int32_t srcLength) const
 { return doCompare(0, length(), srcChars, 0, srcLength); }
 
@@ -4072,7 +4072,7 @@ UnicodeString::compareCodePointOrder(int32_t start,
 { return doCompareCodePointOrder(start, _length, srcText, 0, srcText.length()); }
 
 inline int8_t
-UnicodeString::compareCodePointOrder(const UChar *srcChars,
+UnicodeString::compareCodePointOrder(ConstChar16Ptr srcChars,
                                      int32_t srcLength) const
 { return doCompareCodePointOrder(0, length(), srcChars, 0, srcLength); }
 
@@ -4137,7 +4137,7 @@ UnicodeString::caseCompare(int32_t start,
 }
 
 inline int8_t
-UnicodeString::caseCompare(const UChar *srcChars,
+UnicodeString::caseCompare(ConstChar16Ptr srcChars,
                            int32_t srcLength,
                            uint32_t options) const {
   return doCaseCompare(0, length(), srcChars, 0, srcLength, options);
@@ -4223,7 +4223,7 @@ UnicodeString::indexOf(const UChar *srcChars,
 }
 
 inline int32_t
-UnicodeString::indexOf(const UChar *srcChars,
+UnicodeString::indexOf(ConstChar16Ptr srcChars,
                int32_t srcLength,
                int32_t start,
                int32_t _length) const
@@ -4264,7 +4264,7 @@ UnicodeString::indexOf(UChar32 c,
 }
 
 inline int32_t
-UnicodeString::lastIndexOf(const UChar *srcChars,
+UnicodeString::lastIndexOf(ConstChar16Ptr srcChars,
                int32_t srcLength,
                int32_t start,
                int32_t _length) const
@@ -4358,7 +4358,7 @@ UnicodeString::startsWith(const UnicodeString& srcText,
 { return doCompare(0, srcLength, srcText, srcStart, srcLength) == 0; }
 
 inline UBool
-UnicodeString::startsWith(const UChar *srcChars, int32_t srcLength) const {
+UnicodeString::startsWith(ConstChar16Ptr srcChars, int32_t srcLength) const {
   if(srcLength < 0) {
     srcLength = u_strlen(srcChars);
   }
@@ -4388,7 +4388,7 @@ UnicodeString::endsWith(const UnicodeString& srcText,
 }
 
 inline UBool
-UnicodeString::endsWith(const UChar *srcChars,
+UnicodeString::endsWith(ConstChar16Ptr srcChars,
             int32_t srcLength) const {
   if(srcLength < 0) {
     srcLength = u_strlen(srcChars);
@@ -4428,7 +4428,7 @@ UnicodeString::replace(int32_t start,
 inline UnicodeString&
 UnicodeString::replace(int32_t start,
                int32_t _length,
-               const UChar *srcChars,
+               ConstChar16Ptr srcChars,
                int32_t srcLength)
 { return doReplace(start, _length, srcChars, 0, srcLength); }
 
@@ -4658,7 +4658,7 @@ UnicodeString::append(const UChar *srcChars,
 { return doAppend(srcChars, srcStart, srcLength); }
 
 inline UnicodeString&
-UnicodeString::append(const UChar *srcChars,
+UnicodeString::append(ConstChar16Ptr srcChars,
               int32_t srcLength)
 { return doAppend(srcChars, 0, srcLength); }
 
@@ -4700,7 +4700,7 @@ UnicodeString::insert(int32_t start,
 
 inline UnicodeString&
 UnicodeString::insert(int32_t start,
-              const UChar *srcChars,
+              ConstChar16Ptr srcChars,
               int32_t srcLength)
 { return doReplace(start, 0, srcChars, 0, srcLength); }
 
