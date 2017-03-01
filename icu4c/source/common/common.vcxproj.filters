@@ -463,6 +463,9 @@
     <ClCompile Include="bytestream.cpp">
       <Filter>strings</Filter>
     </ClCompile>
+    <ClCompile Include="char16ptr.cpp">
+      <Filter>strings</Filter>
+    </ClCompile>
     <ClCompile Include="chariter.cpp">
       <Filter>strings</Filter>
     </ClCompile>
@@ -1103,6 +1106,9 @@
       <Filter>strings</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\casemap.h">
+      <Filter>strings</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\char16ptr.h">
       <Filter>strings</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\chariter.h">

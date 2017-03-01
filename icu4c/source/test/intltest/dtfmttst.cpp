@@ -514,7 +514,7 @@ void DateFormatTest::TestFieldPosition() {
     // local pattern chars data is not longer loaded
     // from icu locale bundle
     assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars(buf));
-    assertEquals("patternChars", PATTERN_CHARS, DateFormatSymbols::getPatternUChars());
+    assertEquals("patternChars", PATTERN_CHARS, DateFormatSymbols::getPatternUChars().get());
     assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES_LENGTH == UDAT_FIELD_COUNT);
 #if UDAT_HAS_PATTERN_CHAR_FOR_TIME_SEPARATOR
     assertTrue("Data", UDAT_FIELD_COUNT == uprv_strlen(PATTERN_CHARS));

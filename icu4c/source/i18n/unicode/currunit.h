@@ -44,7 +44,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      * then this will be set to a failing value.
      * @stable ICU 3.0
      */
-    CurrencyUnit(const UChar* isoCode, UErrorCode &ec);
+    CurrencyUnit(ConstChar16Ptr isoCode, UErrorCode &ec);
 
     /**
      * Copy constructor
@@ -93,7 +93,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      * Return the ISO currency code of this object.
      * @stable ICU 3.0
      */
-    inline const UChar* getISOCurrency() const;
+    inline ConstChar16Ptr getISOCurrency() const;
 
  private:
     /**
@@ -102,7 +102,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
     UChar isoCode[4];
 };
 
-inline const UChar* CurrencyUnit::getISOCurrency() const {
+inline ConstChar16Ptr CurrencyUnit::getISOCurrency() const {
     return isoCode;
 }
 

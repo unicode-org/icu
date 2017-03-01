@@ -69,8 +69,8 @@ U_NAMESPACE_BEGIN
 
 int32_t CaseMap::toLower(
         const char *locale, uint32_t options,
-        const UChar *src, int32_t srcLength,
-        UChar *dest, int32_t destCapacity, Edits *edits,
+        ConstChar16Ptr src, int32_t srcLength,
+        Char16Ptr dest, int32_t destCapacity, Edits *edits,
         UErrorCode &errorCode) {
     return ustrcase_map(
         ustrcase_getCaseLocale(locale), options, UCASEMAP_BREAK_ITERATOR_NULL
@@ -81,8 +81,8 @@ int32_t CaseMap::toLower(
 
 int32_t CaseMap::toUpper(
         const char *locale, uint32_t options,
-        const UChar *src, int32_t srcLength,
-        UChar *dest, int32_t destCapacity, Edits *edits,
+        ConstChar16Ptr src, int32_t srcLength,
+        Char16Ptr dest, int32_t destCapacity, Edits *edits,
         UErrorCode &errorCode) {
     return ustrcase_map(
         ustrcase_getCaseLocale(locale), options, UCASEMAP_BREAK_ITERATOR_NULL

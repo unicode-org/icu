@@ -168,7 +168,7 @@ public:
    * @param mode  The normalization mode.
    * @deprecated ICU 56 Use Normalizer2 instead.
    */
-  Normalizer(const UChar* str, int32_t length, UNormalizationMode mode);
+  Normalizer(ConstChar16Ptr str, int32_t length, UNormalizationMode mode);
 
   /**
    * Creates a new <code>Normalizer</code> object for iterating over the
@@ -704,7 +704,7 @@ public:
    * @param status a UErrorCode
    * @deprecated ICU 56 Use Normalizer2 instead.
    */
-  void setText(const UChar* newText,
+  void setText(ConstChar16Ptr newText,
                     int32_t length,
             UErrorCode &status);
   /**

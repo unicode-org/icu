@@ -63,7 +63,7 @@ public:
      * @param trieUChars The UChar array that contains the serialized trie.
      * @stable ICU 4.8
      */
-    UCharsTrie(const UChar *trieUChars)
+    UCharsTrie(ConstChar16Ptr trieUChars)
             : ownedArray_(NULL), uchars_(trieUChars),
               pos_(uchars_), remainingMatchLength_(-1) {}
 
@@ -208,7 +208,7 @@ public:
      * @return The match/value Result.
      * @stable ICU 4.8
      */
-    UStringTrieResult next(const UChar *s, int32_t length);
+    UStringTrieResult next(ConstChar16Ptr s, int32_t length);
 
     /**
      * Returns a matching string's value if called immediately after
@@ -268,7 +268,7 @@ public:
          *                  function chaining. (See User Guide for details.)
          * @stable ICU 4.8
          */
-        Iterator(const UChar *trieUChars, int32_t maxStringLength, UErrorCode &errorCode);
+        Iterator(ConstChar16Ptr trieUChars, int32_t maxStringLength, UErrorCode &errorCode);
 
         /**
          * Iterates from the current state of the specified UCharsTrie.
