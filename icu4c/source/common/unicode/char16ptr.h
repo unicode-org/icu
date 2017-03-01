@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
  */
 #ifdef U_ALIASING_BARRIER
     // Use the predefined value.
-#elif defined(__clang__) || defined(__GNUC__)
+#elif 0 // TODO: only some versions of clang?? defined(__clang__) || defined(__GNUC__)
 #   define U_ALIASING_BARRIER(ptr) asm volatile("" : "+rm"(ptr))
 #endif
 
