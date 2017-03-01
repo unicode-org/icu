@@ -64,7 +64,6 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO(TestUInt16Pointers);
     TESTCASE_AUTO(TestWCharPointers);
     TESTCASE_AUTO(TestNullPointers);
-    TESTCASE_AUTO(TestZeroPointers);
     TESTCASE_AUTO_END;
 }
 
@@ -2257,19 +2256,4 @@ UnicodeStringTest::TestNullPointers() {
     UErrorCode errorCode = U_ZERO_ERROR;
     UnicodeString(u"def").extract(nullptr, 0, errorCode);
     assertEquals("buffer overflow extracting to nullptr", U_BUFFER_OVERFLOW_ERROR, errorCode);
-}
-
-void
-UnicodeStringTest::TestZeroPointers() {
-    // There are constructor overloads with one and three integer parameters
-    // which match passing 0, so we cannot test using 0 for UnicodeString(pointer)
-    // or UnicodeString(read-only or writable alias).
-    // There are multiple two-parameter constructors that make using 0
-    // for the first parameter ambiguous already,
-    // so we cannot test using 0 for UnicodeString(pointer, length).
-
-    // extract() also has enough overloads to be ambiguous with 0.
-    // Test the pointer wrapper directly.
-    assertTrue("0 --> nullptr", Char16Ptr(0).get() == nullptr);
-    assertTrue("0 --> const nullptr", ConstChar16Ptr(0).get() == nullptr);
 }

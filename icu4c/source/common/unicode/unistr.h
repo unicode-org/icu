@@ -3943,7 +3943,7 @@ UnicodeString::isBufferWritable() const
 inline ConstChar16Ptr
 UnicodeString::getBuffer() const {
   if(fUnion.fFields.fLengthAndFlags&(kIsBogus|kOpenGetBuffer)) {
-    return 0;
+    return nullptr;
   } else if(fUnion.fFields.fLengthAndFlags&kUsingStackBuffer) {
     return fUnion.fStackFields.fBuffer;
   } else {

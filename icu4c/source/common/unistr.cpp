@@ -1221,7 +1221,7 @@ UnicodeString::unBogus() {
 ConstChar16Ptr
 UnicodeString::getTerminatedBuffer() {
   if(!isWritable()) {
-    return 0;
+    return nullptr;
   }
   UChar *array = getArrayStart();
   int32_t len = length();
@@ -1723,7 +1723,7 @@ UnicodeString::getBuffer(int32_t minCapacity) {
     setZeroLength();
     return getArrayStart();
   } else {
-    return 0;
+    return nullptr;
   }
 }
 

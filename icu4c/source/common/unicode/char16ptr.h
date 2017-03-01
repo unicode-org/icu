@@ -30,8 +30,7 @@ U_NAMESPACE_BEGIN
 #endif
 
 /**
- * char16_t * wrapper with implicit conversion from distinct but bit-compatible pointer types,
- * and from NULL.
+ * char16_t * wrapper with implicit conversion from/to distinct but bit-compatible pointer types.
  * @draft ICU 59
  */
 class U_COMMON_API Char16Ptr final {
@@ -60,12 +59,6 @@ public:
      * @draft ICU 59
      */
     inline Char16Ptr(std::nullptr_t p);
-    /**
-     * NULL constructor.
-     * Must only be used for 0 which is usually the value of NULL.
-     * @draft ICU 59
-     */
-    Char16Ptr(int null);
     /**
      * Destructor.
      * @draft ICU 59
@@ -97,7 +90,7 @@ public:
 #endif
     operator void *() const { return get(); }
 
-    char16_t operator[](size_t offset) const { return get()[offset]; }
+    char16_t operator[](std::ptrdiff_t offset) const { return get()[offset]; }
 
     UBool operator==(const Char16Ptr &other) const { return get() == other.get(); }
     UBool operator!=(const Char16Ptr &other) const { return !operator==(other); }
@@ -112,19 +105,19 @@ public:
     UBool operator==(const std::nullptr_t null) const { return get() == null; }
     UBool operator!=(const std::nullptr_t null) const { return !operator==(null); }
     /**
-     * Comparison with NULL.
-     * @return TRUE if the pointer is nullptr and null==0
+     * Comparison with 0.
+     * @return TRUE if the pointer is nullptr and zero==0
      * @draft ICU 59
      */
-    UBool operator==(int null) const { return get() == nullptr && null == 0; }
+    UBool operator==(int zero) const { return get() == nullptr && zero == 0; }
     /**
-     * Comparison with NULL.
-     * @return TRUE if the pointer is not nullptr and null==0
+     * Comparison with 0.
+     * @return TRUE if the pointer is not nullptr and zero==0
      * @draft ICU 59
      */
-    UBool operator!=(int null) const { return get() != nullptr && null == 0; }
+    UBool operator!=(int zero) const { return get() != nullptr && zero == 0; }
 
-    Char16Ptr operator+(size_t offset) const { return Char16Ptr(get() + offset); }
+    Char16Ptr operator+(std::ptrdiff_t offset) const { return Char16Ptr(get() + offset); }
 
 private:
     Char16Ptr() = delete;
@@ -194,8 +187,7 @@ Char16Ptr::operator wchar_t *() const {
 #endif
 
 /**
- * const char16_t * wrapper with implicit conversion from distinct but bit-compatible pointer types,
- * and from NULL.
+ * const char16_t * wrapper with implicit conversion from/to distinct but bit-compatible pointer types.
  * @draft ICU 59
  */
 class U_COMMON_API ConstChar16Ptr final {
@@ -223,12 +215,6 @@ public:
      * @draft ICU 59
      */
     inline ConstChar16Ptr(const std::nullptr_t p);
-    /**
-     * NULL constructor.
-     * Must only be used for 0 which is usually the value of NULL.
-     * @draft ICU 59
-     */
-    ConstChar16Ptr(int null);
     /**
      * Destructor.
      * @draft ICU 59
@@ -259,7 +245,7 @@ public:
 #endif
     operator const void *() const { return get(); }
 
-    char16_t operator[](size_t offset) const { return get()[offset]; }
+    char16_t operator[](std::ptrdiff_t offset) const { return get()[offset]; }
 
     UBool operator==(const ConstChar16Ptr &other) const { return get() == other.get(); }
     UBool operator!=(const ConstChar16Ptr &other) const { return !operator==(other); }
@@ -273,10 +259,10 @@ public:
 #endif
     UBool operator==(const std::nullptr_t null) const { return get() == null; }
     UBool operator!=(const std::nullptr_t null) const { return !operator==(null); }
-    UBool operator==(int null) const { return get() == nullptr && null == 0; }
-    UBool operator!=(int null) const { return get() != nullptr && null == 0; }
+    UBool operator==(int zero) const { return get() == nullptr && zero == 0; }
+    UBool operator!=(int zero) const { return get() != nullptr && zero == 0; }
 
-    ConstChar16Ptr operator+(size_t offset) { return ConstChar16Ptr(get() + offset); }
+    ConstChar16Ptr operator+(std::ptrdiff_t offset) { return ConstChar16Ptr(get() + offset); }
 
 private:
     ConstChar16Ptr() = delete;
