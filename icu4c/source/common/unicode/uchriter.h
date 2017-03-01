@@ -43,7 +43,7 @@ public:
    * @param length The length of the UChar array
    * @stable ICU 2.0
    */
-  UCharCharacterIterator(const UChar* textPtr, int32_t length);
+  UCharCharacterIterator(ConstChar16Ptr textPtr, int32_t length);
 
   /**
    * Create an iterator over the UChar array referred to by "textPtr".
@@ -58,7 +58,7 @@ public:
    * @param position The starting position of the iteration
    * @stable ICU 2.0
    */
-  UCharCharacterIterator(const UChar* textPtr, int32_t length,
+  UCharCharacterIterator(ConstChar16Ptr textPtr, int32_t length,
                          int32_t position);
 
   /**
@@ -77,7 +77,7 @@ public:
    * @param position    The starting position of the iteration
    * @stable ICU 2.0
    */
-  UCharCharacterIterator(const UChar* textPtr, int32_t length,
+  UCharCharacterIterator(ConstChar16Ptr textPtr, int32_t length,
                          int32_t textBegin,
                          int32_t textEnd,
                          int32_t position);
@@ -340,7 +340,7 @@ public:
    * Sets the iterator to iterate over a new range of text
    * @stable ICU 2.0
    */
-  void setText(const UChar* newText, int32_t newTextLength);
+  void setText(ConstChar16Ptr newText, int32_t newTextLength);
 
   /**
    * Copies the UChar array under iteration into the UnicodeString

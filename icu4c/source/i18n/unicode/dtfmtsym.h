@@ -566,7 +566,7 @@ public:
      * @return    the non-localized date-time pattern characters
      * @stable ICU 2.0
      */
-    static const UChar * U_EXPORT2 getPatternUChars(void);
+    static ConstChar16Ptr U_EXPORT2 getPatternUChars(void);
 
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.

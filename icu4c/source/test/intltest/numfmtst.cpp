@@ -440,7 +440,7 @@ UBool NumberFormatTestDataDriven::isParseCurrencyPass(
         }
         return TRUE;
     }
-    UnicodeString currStr(currAmt->getISOCurrency());
+    UnicodeString currStr(currAmt->getISOCurrency().get());
     Formattable resultFormattable(currAmt->getNumber());
     UnicodeString resultStr(UnicodeString::fromUTF8(resultFormattable.getDecimalNumber(status)));
     if (tuple.output == "fail") {
@@ -3168,7 +3168,7 @@ void NumberFormatTest::expectParseCurrency(const NumberFormat &fmt, const UChar*
 
     uprv_strcpy(theOperation, theInfo);
     uprv_strcat(theOperation, ", check currency:");
-    assertEquals(theOperation, currency, currencyAmount->getISOCurrency());
+    assertEquals(theOperation, currency, currencyAmount->getISOCurrency().get());
 }
   
 
@@ -3763,14 +3763,14 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
         } else if (result.getType() != Formattable::kObject ||
             (curramt = dynamic_cast<const CurrencyAmount*>(result.getObject())) == NULL ||
             curramt->getNumber().getDouble() != 1234.56 ||
-            UnicodeString(curramt->getISOCurrency()).compare(ISO_CURRENCY_USD)
+            UnicodeString(curramt->getISOCurrency().get()).compare(ISO_CURRENCY_USD)
         ) {
             errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number ");
             if (curramt->getNumber().getDouble() != 1234.56) {
                 errln((UnicodeString)"wong number, expect: 1234.56" + ", got: " + curramt->getNumber().getDouble());
             }
             if (curramt->getISOCurrency() != ISO_CURRENCY_USD) {
-                errln((UnicodeString)"wong currency, expect: USD" + ", got: " + curramt->getISOCurrency());
+                errln((UnicodeString)"wong currency, expect: USD" + ", got: " + curramt->getISOCurrency().get());
             }
         }
     }

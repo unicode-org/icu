@@ -609,7 +609,7 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
             break;
 
         case UNUM_CURRENCY_CODE:
-            res = UnicodeString(df->getCurrency());
+            res = UnicodeString(df->getCurrency().get());
             break;
 
         default:

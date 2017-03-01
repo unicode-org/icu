@@ -8,6 +8,7 @@
 #define __CASEMAP_H__
 
 #include "unicode/utypes.h"
+#include "unicode/char16ptr.h"
 #include "unicode/uobject.h"
 
 /**
@@ -59,8 +60,8 @@ public:
      */
      static int32_t toLower(
             const char *locale, uint32_t options,
-            const UChar *src, int32_t srcLength,
-            UChar *dest, int32_t destCapacity, Edits *edits,
+            ConstChar16Ptr src, int32_t srcLength,
+            Char16Ptr dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
     /**
@@ -93,8 +94,8 @@ public:
      */
     static int32_t toUpper(
             const char *locale, uint32_t options,
-            const UChar *src, int32_t srcLength,
-            UChar *dest, int32_t destCapacity, Edits *edits,
+            ConstChar16Ptr src, int32_t srcLength,
+            Char16Ptr dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -140,8 +141,8 @@ public:
      */
     static int32_t toTitle(
             const char *locale, uint32_t options, BreakIterator *iter,
-            const UChar *src, int32_t srcLength,
-            UChar *dest, int32_t destCapacity, Edits *edits,
+            ConstChar16Ptr src, int32_t srcLength,
+            Char16Ptr dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 #endif  // UCONFIG_NO_BREAK_ITERATION
@@ -180,8 +181,8 @@ public:
      */
     static int32_t fold(
             uint32_t options,
-            const UChar *src, int32_t srcLength,
-            UChar *dest, int32_t destCapacity, Edits *edits,
+            ConstChar16Ptr src, int32_t srcLength,
+            Char16Ptr dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 private:

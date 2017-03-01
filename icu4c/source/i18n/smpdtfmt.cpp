@@ -3789,7 +3789,7 @@ SimpleDateFormat::toLocalizedPattern(UnicodeString& result,
                                      UErrorCode& status) const
 {
     translatePattern(fPattern, result,
-                     UnicodeString(DateFormatSymbols::getPatternUChars()),
+                     UnicodeString(DateFormatSymbols::getPatternUChars().get()),
                      fSymbols->fLocalPatternChars, status);
     return result;
 }
@@ -3811,7 +3811,7 @@ SimpleDateFormat::applyLocalizedPattern(const UnicodeString& pattern,
 {
     translatePattern(pattern, fPattern,
                      fSymbols->fLocalPatternChars,
-                     UnicodeString(DateFormatSymbols::getPatternUChars()), status);
+                     UnicodeString(DateFormatSymbols::getPatternUChars().get()), status);
 }
 
 //----------------------------------------------------------------------

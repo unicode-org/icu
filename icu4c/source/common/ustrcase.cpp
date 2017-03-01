@@ -1198,8 +1198,8 @@ U_NAMESPACE_BEGIN
 
 int32_t CaseMap::fold(
         uint32_t options,
-        const UChar *src, int32_t srcLength,
-        UChar *dest, int32_t destCapacity, Edits *edits,
+        ConstChar16Ptr src, int32_t srcLength,
+        Char16Ptr dest, int32_t destCapacity, Edits *edits,
         UErrorCode &errorCode) {
     return ustrcase_map(
         UCASE_LOC_ROOT, options, UCASEMAP_BREAK_ITERATOR_NULL

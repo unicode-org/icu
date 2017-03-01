@@ -66,8 +66,8 @@ U_NAMESPACE_BEGIN
 
 int32_t CaseMap::toTitle(
         const char *locale, uint32_t options, BreakIterator *iter,
-        const UChar *src, int32_t srcLength,
-        UChar *dest, int32_t destCapacity, Edits *edits,
+        ConstChar16Ptr src, int32_t srcLength,
+        Char16Ptr dest, int32_t destCapacity, Edits *edits,
         UErrorCode &errorCode) {
     LocalPointer<BreakIterator> ownedIter;
     if(iter==NULL) {

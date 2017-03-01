@@ -1368,7 +1368,7 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 
 //------------------------------------------------------
 
-const UChar * U_EXPORT2
+ConstChar16Ptr U_EXPORT2
 DateFormatSymbols::getPatternUChars(void)
 {
     return gPatternChars;
