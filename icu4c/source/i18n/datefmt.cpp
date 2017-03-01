@@ -80,7 +80,7 @@ public:
             fSkeleton(other.fSkeleton) { }
     virtual ~DateFmtBestPatternKey();
     virtual int32_t hashCode() const {
-        return 37 * LocaleCacheKey<DateFmtBestPattern>::hashCode() + fSkeleton.hashCode();
+        return (int32_t)(37u * (uint32_t)LocaleCacheKey<DateFmtBestPattern>::hashCode() + (uint32_t)fSkeleton.hashCode());
     }
     virtual UBool operator==(const CacheKeyBase &other) const {
        // reflexive
