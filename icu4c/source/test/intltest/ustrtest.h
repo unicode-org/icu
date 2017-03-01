@@ -96,7 +96,6 @@ public:
     void TestUInt16Pointers();
     void TestWCharPointers();
     void TestNullPointers();
-    void TestZeroPointers();
 };
 
 #endif
