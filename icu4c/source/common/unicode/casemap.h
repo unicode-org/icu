@@ -43,7 +43,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+     * @param destCapacity The size of the buffer (number of char16_ts). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -77,7 +77,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+     * @param destCapacity The size of the buffer (number of char16_ts). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -123,7 +123,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+     * @param destCapacity The size of the buffer (number of char16_ts). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -164,7 +164,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+     * @param destCapacity The size of the buffer (number of char16_ts). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,

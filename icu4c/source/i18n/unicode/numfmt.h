@@ -931,7 +931,7 @@ public:
      * @param ec input-output error code
      * @stable ICU 3.0
      */
-    virtual void setCurrency(const UChar* theCurrency, UErrorCode& ec);
+    virtual void setCurrency(const char16_t* theCurrency, UErrorCode& ec);
 
     /**
      * Gets the currency used to display currency
@@ -1018,7 +1018,7 @@ protected:
      * have a capacity of at least 4
      * @internal
      */
-    virtual void getEffectiveCurrency(UChar* result, UErrorCode& ec) const;
+    virtual void getEffectiveCurrency(char16_t* result, UErrorCode& ec) const;
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -1065,7 +1065,7 @@ private:
     UBool      fLenient; // TRUE => lenient parse is enabled
 
     // ISO currency code
-    UChar      fCurrency[4];
+    char16_t      fCurrency[4];
 
     UDisplayContext fCapitalizationContext;
 

@@ -939,7 +939,7 @@ private:
      * @return the index of the list which matches the keyword s.
      */
     static int32_t findKeyword( const UnicodeString& s,
-                                const UChar * const *list);
+                                const char16_t * const *list);
 
     /**
      * Thin wrapper around the format(... AppendableWrapper ...) variant.
