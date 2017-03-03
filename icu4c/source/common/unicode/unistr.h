@@ -3017,7 +3017,7 @@ public:
    * @draft ICU 59
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const uint16_t *text) :
-      UnicodeString(ConstChar16Ptr(text).get()) {}
+      UnicodeString(ConstChar16Ptr(text)) {}
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
@@ -3032,7 +3032,7 @@ public:
    * @draft ICU 59
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const wchar_t *text) :
-      UnicodeString(ConstChar16Ptr(text).get()) {}
+      UnicodeString(ConstChar16Ptr(text)) {}
 #endif
 
   /**
@@ -3065,7 +3065,7 @@ public:
    * @draft ICU 59
    */
   UnicodeString(const uint16_t *text, int32_t length) :
-      UnicodeString(ConstChar16Ptr(text).get(), length) {}
+      UnicodeString(ConstChar16Ptr(text), length) {}
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
@@ -3077,7 +3077,7 @@ public:
    * @draft ICU 59
    */
   UnicodeString(const wchar_t *text, int32_t length) :
-      UnicodeString(ConstChar16Ptr(text).get(), length) {}
+      UnicodeString(ConstChar16Ptr(text), length) {}
 #endif
 
   /**
@@ -3144,7 +3144,7 @@ public:
    * @draft ICU 59
    */
   UnicodeString(uint16_t *buffer, int32_t buffLength, int32_t buffCapacity) :
-      UnicodeString(Char16Ptr(buffer).get(), buffLength, buffCapacity) {}
+      UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
@@ -3157,7 +3157,7 @@ public:
    * @draft ICU 59
    */
   UnicodeString(wchar_t *buffer, int32_t buffLength, int32_t buffCapacity) :
-      UnicodeString(Char16Ptr(buffer).get(), buffLength, buffCapacity) {}
+      UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
 #endif
 
   /**
