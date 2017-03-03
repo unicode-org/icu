@@ -115,14 +115,14 @@ class U_I18N_API CurrencyAmount: public Measure {
      * Return the ISO currency code of this object.
      * @stable ICU 3.0
      */
-    inline ConstChar16Ptr getISOCurrency() const;
+    inline const char16_t* getISOCurrency() const;
 };
 
 inline const CurrencyUnit& CurrencyAmount::getCurrency() const {
     return (const CurrencyUnit&) getUnit();
 }
 
-inline ConstChar16Ptr CurrencyAmount::getISOCurrency() const {
+inline const char16_t* CurrencyAmount::getISOCurrency() const {
     return getCurrency().getISOCurrency();
 }
 

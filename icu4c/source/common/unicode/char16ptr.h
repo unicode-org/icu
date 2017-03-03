@@ -76,6 +76,8 @@ public:
      * @draft ICU 59
      */
     operator char16_t *() const { return get(); }
+    // TODO: do we need output conversion and other operator overloads
+    // if we do not change return values to pointer wrappers?
     /**
      * uint16_t pointer access via type conversion (e.g., static_cast).
      * @draft ICU 59

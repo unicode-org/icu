@@ -187,7 +187,7 @@ UnicodeString _toString(const Formattable& f) {
     case Formattable::kObject: {
         const CurrencyAmount* c = dynamic_cast<const CurrencyAmount*>(f.getObject());
         if (c != NULL) {
-            s = _toString(c->getNumber()) + " " + UnicodeString(c->getISOCurrency().get());
+            s = _toString(c->getNumber()) + " " + UnicodeString(c->getISOCurrency());
         } else {
             s = UnicodeString("Unknown UObject");
         }

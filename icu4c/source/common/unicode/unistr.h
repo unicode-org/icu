@@ -2859,7 +2859,7 @@ public:
    * @see getTerminatedBuffer()
    * @stable ICU 2.0
    */
-  Char16Ptr getBuffer(int32_t minCapacity);
+  char16_t *getBuffer(int32_t minCapacity);
 
   /**
    * Release a read/write buffer on a UnicodeString object with an
@@ -2913,7 +2913,7 @@ public:
    * @see getTerminatedBuffer()
    * @stable ICU 2.0
    */
-  inline ConstChar16Ptr getBuffer() const;
+  inline const char16_t *getBuffer() const;
 
   /**
    * Get a read-only pointer to the internal buffer,
@@ -2948,7 +2948,7 @@ public:
    * @see getBuffer()
    * @stable ICU 2.2
    */
-  ConstChar16Ptr getTerminatedBuffer();
+  const char16_t *getTerminatedBuffer();
 
   //========================================
   // Constructors
@@ -3940,7 +3940,7 @@ UnicodeString::isBufferWritable() const
       (!(fUnion.fFields.fLengthAndFlags&kRefCounted) || refCount()==1));
 }
 
-inline ConstChar16Ptr
+inline const char16_t *
 UnicodeString::getBuffer() const {
   if(fUnion.fFields.fLengthAndFlags&(kIsBogus|kOpenGetBuffer)) {
     return nullptr;

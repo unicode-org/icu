@@ -93,7 +93,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      * Return the ISO currency code of this object.
      * @stable ICU 3.0
      */
-    inline ConstChar16Ptr getISOCurrency() const;
+    inline const char16_t* getISOCurrency() const;
 
  private:
     /**
@@ -102,7 +102,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
     char16_t isoCode[4];
 };
 
-inline ConstChar16Ptr CurrencyUnit::getISOCurrency() const {
+inline const char16_t* CurrencyUnit::getISOCurrency() const {
     return isoCode;
 }
 

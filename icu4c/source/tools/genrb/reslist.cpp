@@ -1031,7 +1031,7 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
             if (f16BitUnits.length() <= 1) {
                 // no pool strings to checksum
             } else if (U_IS_BIG_ENDIAN) {
-                checksum = computeCRC(reinterpret_cast<const char *>(f16BitUnits.getBuffer().get()),
+                checksum = computeCRC(reinterpret_cast<const char *>(f16BitUnits.getBuffer()),
                                       (uint32_t)f16BitUnits.length() * 2, checksum);
             } else {
                 // Swap to big-endian so we get the same checksum on all platforms
@@ -1039,7 +1039,7 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
                 UnicodeString s(f16BitUnits);
                 s.append((UChar)1);  // Ensure that we own this buffer.
                 assert(!s.isBogus());
-                uint16_t *p = const_cast<uint16_t *>(static_cast<const uint16_t *>(s.getBuffer()));
+                uint16_t *p = const_cast<uint16_t *>(reinterpret_cast<const uint16_t *>(s.getBuffer()));
                 for (int32_t count = f16BitUnits.length(); count > 0; --count) {
                     uint16_t x = *p;
                     *p++ = (uint16_t)((x << 8) | (x >> 8));

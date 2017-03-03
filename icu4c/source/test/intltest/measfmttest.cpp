@@ -1856,7 +1856,7 @@ void MeasureFormatTest::TestCurrencies() {
     u_uastrcpy(USD, "USD");
     UErrorCode status = U_ZERO_ERROR;
     CurrencyAmount USD_1(1.0, USD, status);
-    assertEquals("Currency Code", USD, USD_1.getISOCurrency().get());
+    assertEquals("Currency Code", USD, USD_1.getISOCurrency());
     CurrencyAmount USD_2(2.0, USD, status);
     CurrencyAmount USD_NEG_1(-1.0, USD, status);
     if (!assertSuccess("Error creating currencies", status)) {

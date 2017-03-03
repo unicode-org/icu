@@ -1086,7 +1086,7 @@ UnicodeStringTest::TestMiscellaneous()
     }
 
     // test releaseBuffer() with a NUL-terminated buffer
-    test1.getBuffer(20).get()[2]=0;
+    test1.getBuffer(20)[2]=0;
     test1.releaseBuffer(); // implicit -1
     if(test1.length()!=2 || test1.charAt(0)!=1 || test1.charAt(1) !=2) {
         errln("UnicodeString::releaseBuffer(-1) does not properly set the length of the UnicodeString");
@@ -1558,7 +1558,7 @@ UnicodeStringTest::TestBogus() {
     // writable alias to another string's buffer: very bad idea, just convenient for this test
     test3.setToBogus();
     if(!test3.isBogus() ||
-            test3.setTo(const_cast<UChar *>(test1.getBuffer().get()),
+            test3.setTo(const_cast<UChar *>(test1.getBuffer()),
                         test1.length(), test1.getCapacity()).isBogus() ||
             test3!=test1) {
         errln("bogus.setTo(writable alias) failed");
