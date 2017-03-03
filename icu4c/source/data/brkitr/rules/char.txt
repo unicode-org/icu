@@ -67,7 +67,7 @@ $Prepend [^$Control $CR $LF];
 ($E_Base | $E_Base_GAZ) $Extend* $E_Modifier;
 
 # GB 11
-($Extended_Pict | $EmojiNRK) $ZWJ ($Extended_Pict | $EmojiNRK);
+($Extended_Pict | $EmojiNRK) $Extend* $ZWJ ($Extended_Pict | $EmojiNRK);
 
 # GB 12-13. Keep pairs of regional indicators together
 #           Note that hard break '/' rule triggers only if there are three or more initial RIs,
@@ -96,7 +96,7 @@ $SpacingMark [^$Control $CR $LF];
 $E_Modifier $Extend* ($E_Base | $E_Base_GAZ);
 
 # GB 11 Don't break between ZWJ and Glue_After_ZWJ
-($Extended_Pict | $EmojiNRK) $ZWJ ($Extended_Pict | $EmojiNRK);
+($Extended_Pict | $EmojiNRK) $ZWJ $Extend* ($Extended_Pict | $EmojiNRK);
 
 # GB 12-13. Going backwards, we must scan through any number of regional indicators as pairs.
 #
