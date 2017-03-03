@@ -1218,7 +1218,7 @@ UnicodeString::unBogus() {
   }
 }
 
-ConstChar16Ptr
+const char16_t *
 UnicodeString::getTerminatedBuffer() {
   if(!isWritable()) {
     return nullptr;
@@ -1716,7 +1716,7 @@ UnicodeString::doHashCode() const
 // External Buffer
 //========================================
 
-Char16Ptr
+char16_t *
 UnicodeString::getBuffer(int32_t minCapacity) {
   if(minCapacity>=-1 && cloneArrayIfNeeded(minCapacity)) {
     fUnion.fFields.fLengthAndFlags|=kOpenGetBuffer;

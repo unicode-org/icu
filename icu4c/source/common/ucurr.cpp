@@ -1031,7 +1031,7 @@ collectCurrencyNames(const char* locale,
                 while ((symbol = iter.next()) != NULL) {
                     (*currencySymbols)[*total_currency_symbol_count].IsoCode = iso;
                     (*currencySymbols)[*total_currency_symbol_count].currencyName =
-                        const_cast<UChar*>(symbol->getBuffer().get());
+                        const_cast<UChar*>(symbol->getBuffer());
                     (*currencySymbols)[*total_currency_symbol_count].flag = 0;
                     (*currencySymbols)[(*total_currency_symbol_count)++].currencyNameLen = symbol->length();
                 }

@@ -940,7 +940,7 @@ public:
      * the currency in use, or a pointer to the empty string.
      * @stable ICU 2.6
      */
-    ConstChar16Ptr getCurrency() const;
+    const char16_t* getCurrency() const;
 	
     /**
      * Set a particular UDisplayContext value in the formatter, such as

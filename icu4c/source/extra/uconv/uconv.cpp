@@ -290,7 +290,7 @@ static int printConverters(const char *pname, const char *lookfor,
 
             UnicodeString str(name, "");
             putchar('\t');
-            u_wmsg(stderr, "cantGetAliases", str.getTerminatedBuffer().get(),
+            u_wmsg(stderr, "cantGetAliases", str.getTerminatedBuffer(),
                 u_wmsg_errorName(err));
             goto error_cleanup;
         } else {
@@ -304,7 +304,7 @@ static int printConverters(const char *pname, const char *lookfor,
                 if (U_FAILURE(err)) {
                     UnicodeString str(name, "");
                     putchar('\t');
-                    u_wmsg(stderr, "cantGetAliases", str.getTerminatedBuffer().get(),
+                    u_wmsg(stderr, "cantGetAliases", str.getTerminatedBuffer(),
                         u_wmsg_errorName(err));
                     goto error_cleanup;
                 }
@@ -627,7 +627,7 @@ ConvertFile::convertFile(const char *pname,
             UnicodeString str2(strerror(errno), "");
             str2.append((UChar32) 0);
             initMsg(pname);
-            u_wmsg(stderr, "cantOpenInputF", str1.getBuffer().get(), str2.getBuffer().get());
+            u_wmsg(stderr, "cantOpenInputF", str1.getBuffer(), str2.getBuffer());
             return FALSE;
         }
         closeFile = TRUE;
@@ -672,10 +672,10 @@ ConvertFile::convertFile(const char *pname,
                 UChar linebuf[20], offsetbuf[20];
                 uprv_itou(linebuf, 20, parse.line, 10, 0);
                 uprv_itou(offsetbuf, 20, parse.offset, 10, 0);
-                u_wmsg(stderr, "cantCreateTranslitParseErr", str.getTerminatedBuffer().get(),
+                u_wmsg(stderr, "cantCreateTranslitParseErr", str.getTerminatedBuffer(),
                     u_wmsg_errorName(err), linebuf, offsetbuf);
             } else {
-                u_wmsg(stderr, "cantCreateTranslit", str.getTerminatedBuffer().get(),
+                u_wmsg(stderr, "cantCreateTranslit", str.getTerminatedBuffer(),
                     u_wmsg_errorName(err));
             }
 
@@ -698,7 +698,7 @@ ConvertFile::convertFile(const char *pname,
     if (U_FAILURE(err)) {
         UnicodeString str(fromcpage, "");
         initMsg(pname);
-        u_wmsg(stderr, "cantOpenFromCodeset", str.getTerminatedBuffer().get(),
+        u_wmsg(stderr, "cantOpenFromCodeset", str.getTerminatedBuffer(),
             u_wmsg_errorName(err));
         goto error_exit;
     }
@@ -713,7 +713,7 @@ ConvertFile::convertFile(const char *pname,
     if (U_FAILURE(err)) {
         UnicodeString str(tocpage, "");
         initMsg(pname);
-        u_wmsg(stderr, "cantOpenToCodeset", str.getTerminatedBuffer().get(),
+        u_wmsg(stderr, "cantOpenToCodeset", str.getTerminatedBuffer(),
             u_wmsg_errorName(err));
         goto error_exit;
     }
@@ -742,7 +742,7 @@ ConvertFile::convertFile(const char *pname,
         if (ferror(infile) != 0) {
             UnicodeString str(strerror(errno));
             initMsg(pname);
-            u_wmsg(stderr, "cantRead", str.getTerminatedBuffer().get());
+            u_wmsg(stderr, "cantRead", str.getTerminatedBuffer());
             goto error_exit;
         }
 
@@ -819,8 +819,8 @@ ConvertFile::convertFile(const char *pname,
 
                 initMsg(pname);
                 u_wmsg(stderr, "problemCvtToU",
-                        UnicodeString(pos, length, "").getTerminatedBuffer().get(),
-                        str.getTerminatedBuffer().get(),
+                        UnicodeString(pos, length, "").getTerminatedBuffer(),
+                        str.getTerminatedBuffer(),
                         u_wmsg_errorName(err));
 
                 willexit = TRUE;
@@ -1008,10 +1008,10 @@ ConvertFile::convertFile(const char *pname,
 
                     initMsg(pname);
                     u_wmsg(stderr, errtag,
-                            UnicodeString(pos, length, "").getTerminatedBuffer().get(),
-                            str.getTerminatedBuffer().get(),
+                            UnicodeString(pos, length, "").getTerminatedBuffer(),
+                            str.getTerminatedBuffer(),
                            u_wmsg_errorName(err));
-                    u_wmsg(stderr, "errorUnicode", str.getTerminatedBuffer().get());
+                    u_wmsg(stderr, "errorUnicode", str.getTerminatedBuffer());
 
                     willexit = TRUE;
                     err = U_ZERO_ERROR; /* reset the error for the rest of the conversion. */
@@ -1026,7 +1026,7 @@ ConvertFile::convertFile(const char *pname,
                 if (wr != outlen) {
                     UnicodeString str(strerror(errno));
                     initMsg(pname);
-                    u_wmsg(stderr, "cantWrite", str.getTerminatedBuffer().get());
+                    u_wmsg(stderr, "cantWrite", str.getTerminatedBuffer());
                     willexit = TRUE;
                 }
 
@@ -1075,7 +1075,7 @@ static void usage(const char *pname, int ecode) {
     UnicodeString upname(pname, (int32_t)(uprv_strlen(pname) + 1));
     UnicodeString mname(msg, msgLen + 1);
 
-    res = u_wmsg(fp, "usage", mname.getBuffer().get(), upname.getBuffer().get());
+    res = u_wmsg(fp, "usage", mname.getBuffer(), upname.getBuffer());
     if (!ecode) {
         if (!res) {
             fputc('\n', fp);
@@ -1184,7 +1184,7 @@ main(int argc, char **argv)
                     initMsg(pname);
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg(stderr, "badBlockSize", str.getTerminatedBuffer().get());
+                    u_wmsg(stderr, "badBlockSize", str.getTerminatedBuffer());
                     return 3;
                 }
             } else {
@@ -1212,7 +1212,7 @@ main(int argc, char **argv)
                 if (U_FAILURE(e) || !printName) {
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg(stderr, "noSuchCodeset", str.getTerminatedBuffer().get());
+                    u_wmsg(stderr, "noSuchCodeset", str.getTerminatedBuffer());
                     return 2;
                 }
             } else
@@ -1240,7 +1240,7 @@ main(int argc, char **argv)
                 } else {
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg(stderr, "unknownCallback", str.getTerminatedBuffer().get());
+                    u_wmsg(stderr, "unknownCallback", str.getTerminatedBuffer());
                     return 4;
                 }
             } else {
@@ -1256,7 +1256,7 @@ main(int argc, char **argv)
                 } else {
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg(stderr, "unknownCallback", str.getTerminatedBuffer().get());
+                    u_wmsg(stderr, "unknownCallback", str.getTerminatedBuffer());
                     return 4;
                 }
             } else {
@@ -1276,7 +1276,7 @@ main(int argc, char **argv)
                 } else {
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg(stderr, "unknownCallback", str.getTerminatedBuffer().get());
+                    u_wmsg(stderr, "unknownCallback", str.getTerminatedBuffer());
                     return 4;
                 }
             } else {
@@ -1329,7 +1329,7 @@ main(int argc, char **argv)
             UnicodeString str2(strerror(errno), "");
             initMsg(pname);
             u_wmsg(stderr, "cantCreateOutputF",
-                str1.getBuffer().get(), str2.getBuffer().get());
+                str1.getBuffer(), str2.getBuffer());
             return 1;
         }
     } else {

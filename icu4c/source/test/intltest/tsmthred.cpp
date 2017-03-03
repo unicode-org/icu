@@ -547,7 +547,7 @@ UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UError
     appendErr.append("fFormat currency != ")
       .append(kUSD)
       .append(", =")
-      .append(fFormat->getCurrency().get())
+      .append(fFormat->getCurrency())
       .append("! ");
     okay = FALSE;
   }
@@ -556,7 +556,7 @@ UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UError
     appendErr.append("gFormat currency != ")
       .append(kUSD)
       .append(", =")
-      .append(gSharedData->fFormat->getCurrency().get())
+      .append(gSharedData->fFormat->getCurrency())
       .append("! ");
     okay = FALSE;
   }
