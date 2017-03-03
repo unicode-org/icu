@@ -53,7 +53,7 @@ GB7:     (LV | V) (V | T);
 GB8:     (LVT | T) T;
 
 GB10:    (E_Base | E_Base_GAZ) Extend* E_Modifier;
-GB11:    (Extended_Pict | EmojiNRK) ZWJ (Extended_Pict | EmojiNRK);
+GB11:    (Extended_Pict | EmojiNRK) Extend* ZWJ (Extended_Pict | EmojiNRK);
 GB9:     . (Extend | ZWJ);
 
 GB9a:    . SpacingMark;

@@ -298,6 +298,10 @@ public class RBBITestMonkey extends TestFmwk {
                         (fExtendedPictSet.contains(c2) || fEmojiNRKSet.contains(c2))) {
                     continue;
                 }
+                if ((fExtendedPictSet.contains(cBase) || fEmojiNRKSet.contains(cBase)) && fExtendSet.contains(c0) && fZWJSet.contains(c1) &&
+                        (fExtendedPictSet.contains(c2) || fEmojiNRKSet.contains(c2))) {
+                    continue;
+                }
 
                 // Rule (GB12-13)   Regional_Indicator x Regional_Indicator
                 //                  Note: The first if condition is a little tricky. We only need to force
