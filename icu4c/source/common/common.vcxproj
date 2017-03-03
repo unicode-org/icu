@@ -448,7 +448,6 @@
     <ClCompile Include="bytestrie.cpp" />
     <ClCompile Include="bytestriebuilder.cpp" />
     <ClCompile Include="bytestrieiterator.cpp" />
-    <ClCompile Include="char16ptr.cpp" />
     <ClCompile Include="chariter.cpp" />
     <ClCompile Include="charstr.cpp" />
     <ClCompile Include="cstring.cpp" />

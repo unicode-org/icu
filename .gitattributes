@@ -17,7 +17,6 @@ icu4c/source/common/bytestrie.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/bytestriebuilder.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/bytestrieiterator.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/caniter.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/common/char16ptr.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/chariter.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/charstr.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/charstr.h svneol=native#text/plain%3Bcharset%3Dutf-8
