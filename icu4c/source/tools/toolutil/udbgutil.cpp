@@ -613,40 +613,6 @@ U_CAPI char *udbg_knownIssueURLFrom(const char *ticket, char *buf) {
 }
 
 
-#if !U_HAVE_STD_STRING
-const char *warning = "WARNING: Don't have std::string (STL) - known issue logs will be deficient.";
-
-U_CAPI void *udbg_knownIssue_openU(void *ptr, const char *ticket, char *where, const UChar *msg, UBool *firstForTicket,
-                                   UBool *firstForWhere) {
-  if(ptr==NULL) {
-    puts(warning);
-  }
-  printf("%s\tKnown Issue #%s\n", where, ticket);
-
-  return (void*)warning;
-}
-
-U_CAPI void *udbg_knownIssue_open(void *ptr, const char *ticket, char *where, const char *msg, UBool *firstForTicket,
-                                   UBool *firstForWhere) {
-  if(ptr==NULL) {
-    puts(warning);
-  }
-  if(msg==NULL) msg = "";
-  printf("%s\tKnown Issue #%s  \"%s\n", where, ticket, msg);
-
-  return (void*)warning;
-}
-
-U_CAPI UBool udbg_knownIssue_print(void *ptr) {
-  puts(warning);
-  return FALSE;
-}
-
-U_CAPI void udbg_knownIssue_close(void *ptr) {
-  // nothing to do
-}
-#else
-
 #include <set>
 #include <map>
 #include <string>
@@ -785,5 +751,3 @@ U_CAPI void udbg_knownIssue_close(void *ptr) {
   KnownIssues *t = static_cast<KnownIssues*>(ptr);
   delete t;
 }
-
-#endif

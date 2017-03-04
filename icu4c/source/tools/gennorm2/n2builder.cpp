@@ -25,9 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if U_HAVE_STD_STRING
 #include <vector>
-#endif
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
 #include "unicode/putil.h"
