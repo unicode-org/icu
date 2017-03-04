@@ -481,7 +481,6 @@ void CollationTest::TestFCD() {
     CodePointIterator cpi(cp, UPRV_LENGTHOF(cp));
     checkFCD("FCDUTF16CollationIterator", u16ci, cpi);
 
-#if U_HAVE_STD_STRING
     cpi.resetToStart();
     std::string utf8;
     UnicodeString(s).toUTF8String(utf8);
@@ -491,7 +490,6 @@ void CollationTest::TestFCD() {
         return;
     }
     checkFCD("FCDUTF8CollationIterator", u8ci, cpi);
-#endif
 
     cpi.resetToStart();
     UCharIterator iter;
@@ -1607,7 +1605,6 @@ UBool CollationTest::checkCompareTwo(const char *norm, const UnicodeString &prev
         }
     }
 
-#if U_HAVE_STD_STRING
     // compare(UTF-16) treats unpaired surrogates like unassigned code points.
     // Unpaired surrogates cannot be converted to UTF-8.
     // Create valid UTF-16 strings if necessary, and use those for
@@ -1672,7 +1669,6 @@ UBool CollationTest::checkCompareTwo(const char *norm, const UnicodeString &prev
             return FALSE;
         }
     }
-#endif
 
     UCharIterator leftIter;
     UCharIterator rightIter;

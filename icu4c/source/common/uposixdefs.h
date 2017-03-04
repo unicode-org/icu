@@ -54,22 +54,8 @@
  *
  * z/OS needs this definition for timeval and to get usleep.
  */
-#if !defined(_XOPEN_SOURCE_EXTENDED)
+#if !defined(_XOPEN_SOURCE_EXTENDED) && defined(__TOS_MVS__)
 #   define _XOPEN_SOURCE_EXTENDED 1
-#endif
-
-/*
- * There is an issue with turning on _XOPEN_SOURCE_EXTENDED on certain platforms.
- * A compatibility issue exists between turning on _XOPEN_SOURCE_EXTENDED and using
- * standard C++ string class. As a result, standard C++ string class needs to be
- * turned off for the follwing platforms:
- *  -AIX/VACPP
- *  -Solaris/GCC
- */
-#if (U_PLATFORM == U_PF_AIX && !defined(__GNUC__)) || (U_PLATFORM == U_PF_SOLARIS && defined(__GNUC__))
-#   if _XOPEN_SOURCE_EXTENDED && !defined(U_HAVE_STD_STRING)
-#   define U_HAVE_STD_STRING 0
-#   endif
 #endif
 
 #endif  /* __UPOSIXDEFS_H__ */
