@@ -25,7 +25,7 @@
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
 #include "cmemory.h"
-#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
+#if !UCONFIG_NO_BREAK_ITERATION
 #include "unicode/filteredbrk.h"
 #include <stdio.h> // for sprintf
 #endif
@@ -1154,7 +1154,7 @@ void RBBIAPITest::TestRefreshInputText() {
 
 }
 
-#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILTERED_BREAK_ITERATION
 static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it) {
   static const UChar PILCROW=0x00B6, CHSTR=0x3010, CHEND=0x3011; // lenticular brackets
   it.logln(UnicodeString("String:'")+ustr+UnicodeString("'"));
@@ -1196,7 +1196,7 @@ static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it)
 #endif
 
 void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
-#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION
+#if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILTERED_BREAK_ITERATION
   UErrorCode status = U_ZERO_ERROR;
   LocalPointer<FilteredBreakIteratorBuilder> builder;
   LocalPointer<BreakIterator> baseBI;
@@ -1392,7 +1392,7 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
   }
 
 #else
-  logln("Skipped- not: !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING && !UCONFIG_NO_FILTERED_BREAK_ITERATION");
+  logln("Skipped- not: !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILTERED_BREAK_ITERATION");
 #endif
 }
 
@@ -1423,7 +1423,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestGetBinaryRules);
 #endif
     TESTCASE_AUTO(TestRefreshInputText);
-#if !UCONFIG_NO_BREAK_ITERATION && U_HAVE_STD_STRING
+#if !UCONFIG_NO_BREAK_ITERATION
     TESTCASE_AUTO(TestFilteredBreakIteratorBuilder);
 #endif
     TESTCASE_AUTO_END;

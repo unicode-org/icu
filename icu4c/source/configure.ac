@@ -514,19 +514,6 @@ if [[ "$GXX" = yes ]]; then
     fi
 fi
 
-AC_MSG_CHECKING([[if #include <string> works]])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <string>]], [[]])], [ac_cv_header_stdstring=yes], [ac_cv_header_stdstring=no])
-AC_MSG_RESULT($ac_cv_header_stdstring)
-if test $ac_cv_header_stdstring = yes
-then
-	U_HAVE_STD_STRING=1
-else
-        U_HAVE_STD_STRING=0
-        CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_STD_STRING=0"
-fi
-AC_SUBST(U_HAVE_STD_STRING)
-
-
 AC_MSG_CHECKING([[if #include <atomic> works]])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <atomic>]], [[]])], [ac_cv_header_atomic=yes], [ac_cv_header_atomic=no])
 AC_MSG_RESULT($ac_cv_header_atomic)

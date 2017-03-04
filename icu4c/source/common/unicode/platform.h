@@ -343,17 +343,6 @@
 #define U_IOSTREAM_SOURCE 199711
 #endif
 
-/**
- * \def U_HAVE_STD_STRING
- * Defines whether the standard C++ (STL) &lt;string&gt; header is available.
- * @internal
- */
-#ifdef U_HAVE_STD_STRING
-    /* Use the predefined value. */
-#else
-#   define U_HAVE_STD_STRING 1
-#endif
-
 /*===========================================================================*/
 /** @{ Compiler and environment features                                     */
 /*===========================================================================*/
