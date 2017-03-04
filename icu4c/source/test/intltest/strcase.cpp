@@ -666,7 +666,6 @@ StringCaseTest::assertGreekUpper(const char *s, const char *expected) {
         }
     }
 
-#if U_HAVE_STD_STRING
     UErrorCode errorCode = U_ZERO_ERROR;
     LocalUCaseMapPointer csm(ucasemap_open("el", 0, &errorCode));
     assertSuccess("ucasemap_open", errorCode);
@@ -710,7 +709,6 @@ StringCaseTest::assertGreekUpper(const char *s, const char *expected) {
             assertEquals(msg + cap + " (memcmp)", 0, memcmp(dest8, dest8b, expected8Length));
         }
     }
-#endif
 }
 
 void
@@ -884,7 +882,6 @@ void StringCaseTest::TestBufferOverflow() {
     }
     errorCode.reset();
 
-#if U_HAVE_STD_STRING
     std::string data_utf8;
     data.toUTF8String(data_utf8);
     result = ucasemap_utf8ToTitle(csm.getAlias(), NULL, 0, data_utf8.c_str(), data_utf8.length(), errorCode);
@@ -894,7 +891,6 @@ void StringCaseTest::TestBufferOverflow() {
               __FILE__, __LINE__, data_utf8.length(), errorCode.errorName(), result);
     }
     errorCode.reset();
-#endif  // U_HAVE_STD_STRING
 }
 
 void StringCaseTest::checkEditsIter(

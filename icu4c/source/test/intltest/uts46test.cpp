@@ -830,8 +830,7 @@ void UTS46Test::TestSomeCases() {
                 continue;
             }
         }
-        // UTF-8 if we have std::string
-#if U_HAVE_STD_STRING
+        // UTF-8
         std::string input8, aT8, uT8, aN8, uN8;
         StringByteSink<std::string> aT8Sink(&aT8), uT8Sink(&uT8), aN8Sink(&aN8), uN8Sink(&uN8);
         IDNAInfo aT8Info, uT8Info, aN8Info, uN8Info;
@@ -879,7 +878,6 @@ void UTS46Test::TestSomeCases() {
                   testCase.o, (int)i, testCase.s);
             continue;
         }
-#endif
     }
 }
 
