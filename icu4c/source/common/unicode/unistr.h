@@ -1710,8 +1710,6 @@ public:
    */
   void toUTF8(ByteSink &sink) const;
 
-#if U_HAVE_STD_STRING
-
   /**
    * Convert the UnicodeString to UTF-8 and append the result
    * to a standard string.
@@ -1730,8 +1728,6 @@ public:
     toUTF8(sbs);
     return result;
   }
-
-#endif
 
   /**
    * Convert the UnicodeString to UTF-32.

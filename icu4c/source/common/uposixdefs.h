@@ -54,7 +54,7 @@
  *
  * z/OS needs this definition for timeval and to get usleep.
  */
-#if !defined(_XOPEN_SOURCE_EXTENDED)
+#if !defined(_XOPEN_SOURCE_EXTENDED) && defined(__TOS_MVS__)
 #   define _XOPEN_SOURCE_EXTENDED 1
 #endif
 
@@ -68,7 +68,7 @@
  */
 #if (U_PLATFORM == U_PF_AIX && !defined(__GNUC__)) || (U_PLATFORM == U_PF_SOLARIS && defined(__GNUC__))
 #   if _XOPEN_SOURCE_EXTENDED && !defined(U_HAVE_STD_STRING)
-#   define U_HAVE_STD_STRING 0
+// TODO: conflicts with unconditional use of std::string #   define U_HAVE_STD_STRING 0
 #   endif
 #endif
 
