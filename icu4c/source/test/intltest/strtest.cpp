@@ -212,14 +212,12 @@ StringTest::TestStringPiece() {
     if(abcd.empty() || abcd.data()!=abcdefg_chars || abcd.length()!=4 || abcd.size()!=4) {
         errln("StringPiece(abcdefg_chars, 4) failed");
     }
-#if U_HAVE_STD_STRING
     // Construct from std::string.
     std::string uvwxyz_string("uvwxyz");
     StringPiece uvwxyz(uvwxyz_string);
     if(uvwxyz.empty() || uvwxyz.data()!=uvwxyz_string.data() || uvwxyz.length()!=6 || uvwxyz.size()!=6) {
         errln("StringPiece(uvwxyz_string) failed");
     }
-#endif
     // Substring constructor with pos.
     StringPiece sp(abcd, -1);
     if(sp.empty() || sp.data()!=abcdefg_chars || sp.length()!=4 || sp.size()!=4) {
@@ -463,7 +461,6 @@ StringTest::TestCheckedArrayByteSink() {
 
 void
 StringTest::TestStringByteSink() {
-#if U_HAVE_STD_STRING
     // Not much to test because only the constructor and Append()
     // are implemented, and trivially so.
     std::string result("abc");  // std::string
@@ -472,7 +469,6 @@ StringTest::TestStringByteSink() {
     if(result != "abcdef") {
         errln("StringByteSink did not Append() as expected");
     }
-#endif
 }
 
 #if defined(_MSC_VER)
