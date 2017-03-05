@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 59.0.1</title>
+    <title>ReadMe for ICU 59.1</title>
     <meta name="COPYRIGHT" content=
     "Copyright (C) 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html"/>
     <!-- meta name="COPYRIGHT" content=
@@ -23,7 +23,7 @@
         milestone - if the release note is a milestone release
 -->
 
-  <body class="milestone">
+  <body class="rc">
   <!-- <body> -->
     <p class="only-draft"><b>Note:</b> This is a draft readme.</p>
 
@@ -32,7 +32,7 @@
       International Components for Unicode<br/>
       <span class="only-rc">Release Candidate</span>
       <span class="only-milestone">(Milestone Release)</span>
-      <abbr title="International Components for Unicode">ICU</abbr> 59.0.1 ReadMe
+      <abbr title="International Components for Unicode">ICU</abbr> 59.1 ReadMe
     </h1>
 
     <!-- Shouldn't need to comment/uncomment this paragraph, just change the body class -->
@@ -44,7 +44,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2017-Jan-15<br/>
+    <p>Last updated: 2017-Mar-04<br/>
       Copyright &copy; 2016 and later: Unicode, Inc. and others. License &amp; terms of use:
       <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a><br/>
       Copyright &copy; 1997-2016 International Business Machines Corporation and others.
@@ -230,7 +230,7 @@
     </table>
 
     <p><strong>Important:</strong> Please make sure you understand the <a href=
-    "http://source.icu-project.org/repos/icu/icu/trunk/LICENSE">Copyright and License Information</a>.</p>
+    "http://source.icu-project.org/repos/icu/trunk/icu4c/LICENSE">Copyright and License Information</a>.</p>
 
     <h2><a name="News" href="#News" id="News">What is new in this
     release?</a></h2>
@@ -790,7 +790,7 @@
         source file tree clean and have build output files written to
         a different location. This is called an "out-of-source build".
         Simply invoke the configure script from the target location:
-<pre>~/icu$ svn export http://source.icu-project.org/repos/icu/icu/trunk
+<pre>~/icu$ svn export http://source.icu-project.org/repos/icu/trunk/icu4c
 ~/icu$ mkdir trunk-dev
 ~/icu$ cd trunk-dev
 ~/icu/trunk-dev$ ../trunk/source/runConfigureICU Linux
