@@ -2674,28 +2674,29 @@ public class Bidi {
         return dirct;
     }
 
-    /*
+    /**
      * Use a pre-specified embedding levels array:
      *
-     * Adjust the directional properties for overrides (->LEVEL_OVERRIDE),
+     * <p>Adjust the directional properties for overrides (->LEVEL_OVERRIDE),
      * ignore all explicit codes (X9),
      * and check all the preset levels.
      *
-     * Recalculate the flags to have them reflect the real properties
+     * <p>Recalculate the flags to have them reflect the real properties
      * after taking the explicit embeddings into account.
      */
     private byte checkExplicitLevels() {
-        byte dirProp;
-        int i;
         int isolateCount = 0;
 
         this.flags = 0;     /* collect all directionalities in the text */
-        byte level;
         this.isolateCount = 0;
 
-        for (i = 0; i < length; ++i) {
-            level = levels[i];
-            dirProp = dirProps[i];
+        int currentParaIndex = 0;
+        int currentParaLimit = paras_limit[0];
+        byte currentParaLevel = paraLevel;
+
+        for (int i = 0; i < length; ++i) {
+            byte level = levels[i];
+            byte dirProp = dirProps[i];
             if (dirProp == LRI || dirProp == RLI) {
                 isolateCount++;
                 if (isolateCount > this.isolateCount)
@@ -2705,20 +2706,39 @@ public class Bidi {
                 isolateCount--;
             else if (dirProp == B)
                 isolateCount = 0;
-            if ((level & LEVEL_OVERRIDE) != 0) {
+
+            // optimized version of  byte currentParaLevel = GetParaLevelAt(i);
+            if (defaultParaLevel != 0 &&
+                    i == currentParaLimit && (currentParaIndex + 1) < paraCount) {
+                currentParaLevel = paras_level[++currentParaIndex];
+                currentParaLimit = paras_limit[currentParaIndex];
+            }
+
+            int overrideFlag = level & LEVEL_OVERRIDE;
+            level &= ~LEVEL_OVERRIDE;
+            if (level < currentParaLevel || MAX_EXPLICIT_LEVEL < level) {
+                if (level == 0) {
+                    if (dirProp == B) {
+                        // Paragraph separators are ok with explicit level 0.
+                        // Prevents reordering of paragraphs.
+                    } else {
+                        // Treat explicit level 0 as a wildcard for the paragraph level.
+                        // Avoid making the caller guess what the paragraph level would be.
+                        level = currentParaLevel;
+                        levels[i] = (byte)(level | overrideFlag);
+                    }
+                } else {
+                    // 1 <= level < currentParaLevel or MAX_EXPLICIT_LEVEL < level
+                    throw new IllegalArgumentException("level " + level +
+                                                       " out of bounds at " + i);
+                }
+            }
+            if (overrideFlag != 0) {
                 /* keep the override flag in levels[i] but adjust the flags */
-                level &= ~LEVEL_OVERRIDE;     /* make the range check below simpler */
                 flags |= DirPropFlagO(level);
             } else {
                 /* set the flags */
                 flags |= DirPropFlagE(level) | DirPropFlag(dirProp);
-            }
-            if ((level < GetParaLevelAt(i) &&
-                    !((0 == level) && (dirProp == B))) ||
-                    (MAX_EXPLICIT_LEVEL < level)) {
-                /* level out of bounds */
-                throw new IllegalArgumentException("level " + level +
-                                                   " out of bounds at " + i);
             }
         }
         if ((flags & MASK_EMBEDDING) != 0)
@@ -3950,11 +3970,12 @@ public class Bidi {
      *        A level overrides the directional property of its corresponding
      *        (same index) character if the level has the
      *        <code>LEVEL_OVERRIDE</code> bit set.<br><br>
-     *        Except for that bit, it must be
+     *        Aside from that bit, it must be
      *        <code>paraLevel&lt;=embeddingLevels[]&lt;=MAX_EXPLICIT_LEVEL</code>,
-     *        with one exception: a level of zero may be specified for a
-     *        paragraph separator even if <code>paraLevel&gt;0</code> when multiple
-     *        paragraphs are submitted in the same call to <code>setPara()</code>.<br><br>
+     *        except that level 0 is always allowed.
+     *        Level 0 for a paragraph separator prevents reordering of paragraphs.
+     *        Level 0 for other characters is treated as a wildcard
+     *        and is lifted up to the resolved level of the surrounding paragraph.<br><br>
      *        <strong>Caution: </strong>A reference to this array, not a copy
      *        of the levels, will be stored in the <code>Bidi</code> object;
      *        the <code>embeddingLevels</code>
@@ -5294,13 +5315,19 @@ public class Bidi {
 
     /**
      * Create Bidi from the given text, embedding, and direction information.
-     * The embeddings array may be null. If present, the values represent
-     * embedding level information. Negative values from -1 to -61 indicate
-     * overrides at the absolute value of the level. Positive values from 1 to
-     * 61 indicate embeddings. Where values are zero, the base embedding level
-     * as determined by the base direction is assumed.<p>
      *
-     * Note: this constructor calls setPara() internally.
+     * <p>The embeddings array may be null. If present, the values represent
+     * embedding level information.
+     * Negative values from -1 to -{@link #MAX_EXPLICIT_LEVEL}
+     * indicate overrides at the absolute value of the level.
+     * Positive values from 1 to {@link #MAX_EXPLICIT_LEVEL} indicate embeddings.
+     * Where values are zero, the base embedding level
+     * as determined by the base direction is assumed,
+     * except for paragraph separators which remain at 0 to prevent reordering of paragraphs.<p>
+     *
+     * <p>Note: This constructor calls setPara() internally,
+     * after converting the java.text.Bidi-style embeddings with negative overrides
+     * into ICU-style embeddings with bit fields for {@link #LEVEL_OVERRIDE} and the level.
      *
      * @param text an array containing the paragraph of text to process.
      * @param textStart the index into the text array of the start of the
@@ -5354,22 +5381,23 @@ public class Bidi {
         if (embeddings == null) {
             paraEmbeddings = null;
         } else {
+            // Convert from java.text.Bidi embeddings to ICU setPara() levels:
+            // Copy to the start of a new array and convert java.text negative overrides
+            // to ICU bit-field-and-mask overrides.
+            // A copy of the embeddings is always required because
+            // setPara() may modify its embeddings.
             paraEmbeddings = new byte[paragraphLength];
             byte lev;
             for (int i = 0; i < paragraphLength; i++) {
                 lev = embeddings[i + embStart];
                 if (lev < 0) {
                     lev = (byte)((- lev) | LEVEL_OVERRIDE);
-                } else if (lev == 0) {
-                    lev = paraLvl;
-                    if (paraLvl > MAX_EXPLICIT_LEVEL) {
-                        lev &= 1;
-                    }
                 }
+                // setPara() lifts level 0 up to the resolved paragraph level.
                 paraEmbeddings[i] = lev;
             }
         }
-        if (textStart == 0 && embStart == 0 && paragraphLength == text.length) {
+        if (textStart == 0 && paragraphLength == text.length) {
             setPara(text, paraLvl, paraEmbeddings);
         } else {
             char[] paraText = new char[paragraphLength];

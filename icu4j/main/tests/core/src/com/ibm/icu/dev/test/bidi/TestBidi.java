@@ -526,7 +526,7 @@ public class TestBidi extends BidiFmwk {
         bidi.setReorderingMode(Bidi.REORDER_RUNS_ONLY);
         bidi.setPara("a \u05d0 b \u05d1 c \u05d2 d ", Bidi.LTR, null);
         assertEquals("\nWrong number of runs #4", 14, bidi.countRuns());
-        
+
         /* test testGetBaseDirection to verify fast string direction detection function */
         /* mixed start with L */
         String mixedEnglishFirst = "\u0061\u0627\u0032\u06f3\u0061\u0034";
@@ -566,12 +566,28 @@ public class TestBidi extends BidiFmwk {
         assertEquals("\nWrong direction through fast detection #12", Bidi.NEUTRAL, Bidi.getBaseDirection(allArabicDigits));
         /* null string */
         String nullString = null;
-        assertEquals("\nWrong direction through fast detection #13", Bidi.NEUTRAL, Bidi.getBaseDirection(nullString));   
+        assertEquals("\nWrong direction through fast detection #13", Bidi.NEUTRAL, Bidi.getBaseDirection(nullString));
         /* first L (English) others are R (Hebrew etc.) */
         String startEnglishOthersHebrew = "\u0071\u0590\u05D5\u05EA\u05F1";
         assertEquals("\nWrong direction through fast detection #14", Bidi.LTR, Bidi.getBaseDirection(startEnglishOthersHebrew));
         /* last R (Hebrew etc.) others are weak L (English Digits) */
         String lastHebrewOthersEnglishDigit = "\u0031\u0032\u0033\u05F1";
         assertEquals("\nWrong direction through fast detection #15", Bidi.RTL, Bidi.getBaseDirection(lastHebrewOthersEnglishDigit));
+    }
+
+    @Test
+    public void testExplicitLevel0() {
+        // The following used to fail with an error, see ICU ticket #12922.
+        String text = "\u202d\u05d0";
+        byte[] embeddings = new byte[2];  // all 0
+        int flags = Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;  // 0x7e
+        Bidi bidi = new Bidi(text.toCharArray(), 0, embeddings, 0, text.length(), flags);
+        assertEquals("resolved level at 0", 1, bidi.getLevelAt(0));
+        assertEquals("resolved level at 1", 1, bidi.getLevelAt(1));
+
+        flags = java.text.Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;  // -2
+        java.text.Bidi jb = new java.text.Bidi(text.toCharArray(), 0, embeddings, 0, text.length(), flags);
+        assertEquals("java.text resolved level at 0", 1, jb.getLevelAt(0));
+        assertEquals("java.text resolved level at 1", 1, jb.getLevelAt(1));
     }
 }
