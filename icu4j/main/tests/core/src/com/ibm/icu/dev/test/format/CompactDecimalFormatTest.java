@@ -484,9 +484,6 @@ public class CompactDecimalFormatTest extends TestFmwk {
 
     @Test
     public void TestNordic() {
-        if (logKnownIssue("cldrbug:9465","CDF(12,000) for no_NO shouldn't be 12 (12K or similar)")) {
-            return;
-        }
         String result = CompactDecimalFormat.getInstance( new ULocale("no_NO"),
                 CompactDecimalFormat.CompactStyle.SHORT ).format(12000);
         assertNotEquals("CDF(12,000) for no_NO shouldn't be 12 (12K or similar)", "12", result);
@@ -544,9 +541,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
         cdf = CompactDecimalFormat.getInstance(new ULocale("ar"), CompactDecimalFormat.CompactStyle.SHORT);
         cdf.setMaximumSignificantDigits(3);
         result = cdf.format(1234);
-        if (!logKnownIssue("cldrbug:9492", "CLDR 31-d01 incorrectly deleted ar compactDecimals short form")) {
-            assertEquals("CDF should correctly format 1234 with 3 significant digits in 'ar'", "١٫٢٣ ألف", result);
-        }
+        assertEquals("CDF should correctly format 1234 with 3 significant digits in 'ar'", "١٫٢٣ ألف", result);
 
         // Check currency formatting as well
         cdf = CompactDecimalFormat.getInstance(new ULocale("ar"), CompactDecimalFormat.CompactStyle.SHORT);

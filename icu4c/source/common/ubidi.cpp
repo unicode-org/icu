@@ -1348,18 +1348,20 @@ resolveExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
 static UBiDiDirection
 checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     DirProp *dirProps=pBiDi->dirProps;
-    DirProp dirProp;
     UBiDiLevel *levels=pBiDi->levels;
     int32_t isolateCount=0;
 
-    int32_t i, length=pBiDi->length;
+    int32_t length=pBiDi->length;
     Flags flags=0;  /* collect all directionalities in the text */
-    UBiDiLevel level;
     pBiDi->isolateCount=0;
 
-    for(i=0; i<length; ++i) {
-        level=levels[i];
-        dirProp=dirProps[i];
+    int32_t currentParaIndex = 0;
+    int32_t currentParaLimit = pBiDi->paras[0].limit;
+    int32_t currentParaLevel = pBiDi->paraLevel;
+
+    for(int32_t i=0; i<length; ++i) {
+        UBiDiLevel level=levels[i];
+        DirProp dirProp=dirProps[i];
         if(dirProp==LRI || dirProp==RLI) {
             isolateCount++;
             if(isolateCount>pBiDi->isolateCount)
@@ -1369,20 +1371,40 @@ checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
             isolateCount--;
         else if(dirProp==B)
             isolateCount=0;
-        if(level&UBIDI_LEVEL_OVERRIDE) {
+
+        // optimized version of  int32_t currentParaLevel = GET_PARALEVEL(pBiDi, i);
+        if (pBiDi->defaultParaLevel != 0 &&
+                i == currentParaLimit && (currentParaIndex + 1) < pBiDi->paraCount) {
+            currentParaLevel = pBiDi->paras[++currentParaIndex].level;
+            currentParaLimit = pBiDi->paras[currentParaIndex].limit;
+        }
+
+        UBiDiLevel overrideFlag = level & UBIDI_LEVEL_OVERRIDE;
+        level &= ~UBIDI_LEVEL_OVERRIDE;
+        if (level < currentParaLevel || UBIDI_MAX_EXPLICIT_LEVEL < level) {
+            if (level == 0) {
+                if (dirProp == B) {
+                    // Paragraph separators are ok with explicit level 0.
+                    // Prevents reordering of paragraphs.
+                } else {
+                    // Treat explicit level 0 as a wildcard for the paragraph level.
+                    // Avoid making the caller guess what the paragraph level would be.
+                    level = (UBiDiLevel)currentParaLevel;
+                    levels[i] = level | overrideFlag;
+                }
+            } else {
+                // 1 <= level < currentParaLevel or UBIDI_MAX_EXPLICIT_LEVEL < level
+                /* level out of bounds */
+                *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+                return UBIDI_LTR;
+            }
+        }
+        if (overrideFlag != 0) {
             /* keep the override flag in levels[i] but adjust the flags */
-            level&=~UBIDI_LEVEL_OVERRIDE;     /* make the range check below simpler */
             flags|=DIRPROP_FLAG_O(level);
         } else {
             /* set the flags */
             flags|=DIRPROP_FLAG_E(level)|DIRPROP_FLAG(dirProp);
-        }
-        if((level<GET_PARALEVEL(pBiDi, i) &&
-            !((0==level)&&(dirProp==B))) ||
-           (UBIDI_MAX_EXPLICIT_LEVEL<level)) {
-            /* level out of bounds */
-            *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-            return UBIDI_LTR;
         }
     }
     if(flags&MASK_EMBEDDING)
