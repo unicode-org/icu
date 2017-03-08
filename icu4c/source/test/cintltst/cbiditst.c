@@ -90,6 +90,7 @@ static void testContext(void);
 static void doTailTest(void);
 
 static void testBracketOverflow(void);
+static void TestExplicitLevel0();
 
 /* new BIDI API */
 static void testReorderingMode(void);
@@ -138,6 +139,7 @@ addComplexTest(TestNode** root) {
     addTest(root, testGetBaseDirection, "complex/bidi/testGetBaseDirection");
     addTest(root, testContext, "complex/bidi/testContext");
     addTest(root, testBracketOverflow, "complex/bidi/TestBracketOverflow");
+    addTest(root, &TestExplicitLevel0, "complex/bidi/TestExplicitLevel0");
 
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
@@ -4922,3 +4924,24 @@ testBracketOverflow(void) {
     ubidi_close(bidi);
 }
 
+static void TestExplicitLevel0() {
+    // The following used to fail with an error, see ICU ticket #12922.
+    static const UChar text[2] = { 0x202d, 0x05d0 };
+    static UBiDiLevel embeddings[2] = { 0, 0 };
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UBiDi *bidi = ubidi_open();
+    ubidi_setPara(bidi, text, 2, UBIDI_DEFAULT_LTR , embeddings, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("ubidi_setPara() - %s", u_errorName(errorCode));
+    } else {
+        UBiDiLevel level0 = ubidi_getLevelAt(bidi, 0);
+        UBiDiLevel level1 = ubidi_getLevelAt(bidi, 1);
+        if (level0 != 1 || level1 != 1) {
+            log_err("resolved levels != 1: { %d, %d }\n", level0, level1);
+        }
+        if (embeddings[0] != 1 || embeddings[1] != 1) {
+            log_err("modified embeddings[] levels != 1: { %d, %d }\n", embeddings[0], embeddings[1]);
+        }
+    }
+    ubidi_close(bidi);
+}

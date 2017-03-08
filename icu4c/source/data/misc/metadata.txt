@@ -1279,6 +1279,14 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"yo"}
             }
+            yue_CN{
+                reason{"legacy"}
+                replacement{"yue_Hans_CN"}
+            }
+            yue_HK{
+                reason{"legacy"}
+                replacement{"yue_Hant_HK"}
+            }
             zai{
                 reason{"macrolanguage"}
                 replacement{"zap"}
