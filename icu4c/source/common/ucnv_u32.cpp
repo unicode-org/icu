@@ -42,8 +42,8 @@ enum {
 };
 
 /* UTF-32BE ----------------------------------------------------------------- */
-
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs * args,
                                 UErrorCode * err)
 {
@@ -122,7 +122,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-static void
+static void U_CALLCONV
 T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
                                              UErrorCode * err)
 {
@@ -209,7 +209,7 @@ donefornow:
     args->offsets = myOffsets;
 }
 
-static void
+static void U_CALLCONV
 T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
                                   UErrorCode * err)
 {
@@ -310,7 +310,7 @@ lowsurogate:
     args->source = mySource;
 }
 
-static void
+static void U_CALLCONV
 T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
                                                UErrorCode * err)
 {
@@ -417,7 +417,7 @@ lowsurogate:
     args->offsets = myOffsets;
 }
 
-static UChar32
+static UChar32 U_CALLCONV
 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
                                    UErrorCode* err)
 {
@@ -461,7 +461,7 @@ T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
     *err = U_ILLEGAL_CHAR_FOUND;
     return 0xffff;
 }
-
+U_CDECL_END
 static const UConverterImpl _UTF32BEImpl = {
     UCNV_UTF32_BigEndian,
 
@@ -504,8 +504,8 @@ const UConverterSharedData _UTF32BEData =
         UCNV_IMMUTABLE_SHARED_DATA_INITIALIZER(&_UTF32BEStaticData, &_UTF32BEImpl);
 
 /* UTF-32LE ---------------------------------------------------------- */
-
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs * args,
                                 UErrorCode * err)
 {
@@ -590,7 +590,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-static void
+static void U_CALLCONV
 T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
                                              UErrorCode * err)
 {
@@ -687,7 +687,7 @@ donefornow:
     args->offsets = myOffsets;
 }
 
-static void
+static void U_CALLCONV
 T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
                                   UErrorCode * err)
 {
@@ -796,7 +796,7 @@ lowsurogate:
     args->source = mySource;
 }
 
-static void
+static void U_CALLCONV
 T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
                                                UErrorCode * err)
 {
@@ -912,7 +912,7 @@ lowsurogate:
     args->offsets = myOffsets;
 }
 
-static UChar32
+static UChar32 U_CALLCONV
 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
                                    UErrorCode* err)
 {
@@ -956,7 +956,7 @@ T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
     *err = U_ILLEGAL_CHAR_FOUND;
     return 0xffff;
 }
-
+U_CDECL_END
 static const UConverterImpl _UTF32LEImpl = {
     UCNV_UTF32_LittleEndian,
 
@@ -1021,8 +1021,8 @@ const UConverterSharedData _UTF32LEData =
  *
  * On output, emit U+FEFF as the first code point.
  */
-
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 _UTF32Reset(UConverter *cnv, UConverterResetChoice choice) {
     if(choice<=UCNV_RESET_TO_UNICODE) {
         /* reset toUnicode: state=0 */
@@ -1034,7 +1034,7 @@ _UTF32Reset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
-static void
+static void U_CALLCONV
 _UTF32Open(UConverter *cnv,
            UConverterLoadArgs *pArgs,
            UErrorCode *pErrorCode) {
@@ -1045,7 +1045,7 @@ _UTF32Open(UConverter *cnv,
 
 static const char utf32BOM[8]={ 0, 0, (char)0xfe, (char)0xff,    (char)0xff, (char)0xfe, 0, 0 };
 
-static void
+static void U_CALLCONV
 _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                            UErrorCode *pErrorCode) {
     UConverter *cnv=pArgs->converter;
@@ -1186,7 +1186,7 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     cnv->mode=state;
 }
 
-static UChar32
+static UChar32 U_CALLCONV
 _UTF32GetNextUChar(UConverterToUnicodeArgs *pArgs,
                    UErrorCode *pErrorCode) {
     switch(pArgs->converter->mode) {
@@ -1198,7 +1198,7 @@ _UTF32GetNextUChar(UConverterToUnicodeArgs *pArgs,
         return UCNV_GET_NEXT_UCHAR_USE_TO_U;
     }
 }
-
+U_CDECL_END
 static const UConverterImpl _UTF32Impl = {
     UCNV_UTF32,
 

@@ -1681,8 +1681,8 @@ void NumberFormat2Test::TestLargeIntValue() {
         // Last 18 digits for int values.
         verifyIntValue(
                 223372036854775807LL, 
-                precision.initVisibleDigits(INT64_MAX, digits, status));
-        assertSuccess("INT64_MAX", status);
+                precision.initVisibleDigits(U_INT64_MAX, digits, status));
+        assertSuccess("U_INT64_MAX", status);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -1692,7 +1692,7 @@ void NumberFormat2Test::TestLargeIntValue() {
         // Last 18 digits for int values.
         verifyIntValue(
                 75807LL, 
-                precision.initVisibleDigits(INT64_MAX, digits, status));
+                precision.initVisibleDigits(U_INT64_MAX, digits, status));
         verifySource(75807.0, digits);
         assertSuccess("75807", status);
     }
@@ -1703,8 +1703,8 @@ void NumberFormat2Test::TestLargeIntValue() {
         // Last 18 digits for int values.
         verifyIntValue(
                 223372036854775808LL, 
-                precision.initVisibleDigits(INT64_MIN, digits, status));
-        assertSuccess("INT64_MIN", status);
+                precision.initVisibleDigits(U_INT64_MIN, digits, status));
+        assertSuccess("U_INT64_MIN", status);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -1714,7 +1714,7 @@ void NumberFormat2Test::TestLargeIntValue() {
         // Last 18 digits for int values.
         verifyIntValue(
                 75808LL, 
-                precision.initVisibleDigits(INT64_MIN, digits, status));
+                precision.initVisibleDigits(U_INT64_MIN, digits, status));
         verifySource(75808.0, digits);
         assertSuccess("75808", status);
     }
@@ -1747,7 +1747,7 @@ void NumberFormat2Test::TestIntInitVisibleDigits() {
         verifyVisibleDigits(
                 "9223372036854775808",
                 TRUE,
-                precision.initVisibleDigits(INT64_MIN, digits, status));
+                precision.initVisibleDigits(U_INT64_MIN, digits, status));
         assertSuccess("-9223372036854775808", status);
     }
     {
@@ -1756,7 +1756,7 @@ void NumberFormat2Test::TestIntInitVisibleDigits() {
         verifyVisibleDigits(
                 "9223372036854775807",
                 FALSE,
-                precision.initVisibleDigits(INT64_MAX, digits, status));
+                precision.initVisibleDigits(U_INT64_MAX, digits, status));
         assertSuccess("9223372036854775807", status);
     }
     {

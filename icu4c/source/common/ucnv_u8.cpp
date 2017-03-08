@@ -97,8 +97,8 @@ static UBool hasCESU8Data(const UConverter *cnv)
     return (UBool)(cnv->sharedData == &_CESU8Data);
 #endif
 }
-
-static void ucnv_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
+U_CDECL_BEGIN
+static void  U_CALLCONV ucnv_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
                                   UErrorCode * err)
 {
     UConverter *cnv = args->converter;
@@ -226,7 +226,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-static void ucnv_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
+static void  U_CALLCONV ucnv_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
                                                 UErrorCode * err)
 {
     UConverter *cnv = args->converter;
@@ -355,8 +355,9 @@ donefornow:
     args->source = (const char *) mySource;
     args->offsets = myOffsets;
 }
+U_CDECL_END
 
-U_CFUNC void ucnv_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
+U_CFUNC void  U_CALLCONV ucnv_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
                                     UErrorCode * err)
 {
     UConverter *cnv = args->converter;
@@ -470,7 +471,7 @@ lowsurrogate:
     args->source = mySource;
 }
 
-U_CFUNC void ucnv_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
+U_CFUNC void  U_CALLCONV ucnv_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                   UErrorCode * err)
 {
     UConverter *cnv = args->converter;
@@ -609,7 +610,8 @@ lowsurrogate:
     args->offsets = myOffsets;
 }
 
-static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
+U_CDECL_BEGIN
+static UChar32 U_CALLCONV ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                                                UErrorCode *err) {
     UConverter *cnv;
     const uint8_t *sourceInitial;
@@ -751,6 +753,7 @@ static UChar32 ucnv_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     *err = U_ILLEGAL_CHAR_FOUND;
     return 0xffff;
 } 
+U_CDECL_END
 
 /* UTF-8-from-UTF-8 conversion functions ------------------------------------ */
 
@@ -762,8 +765,9 @@ utf8_minLegal[5]={ 0, 0, 0x80, 0x800, 0x10000 };
 static const UChar32
 utf8_offsets[7]={ 0, 0, 0x3080, 0xE2080, 0x3C82080 };
 
+U_CDECL_BEGIN
 /* "Convert" UTF-8 to UTF-8: Validate and copy. Modified from ucnv_DBCSFromUTF8(). */
-static void
+static void U_CALLCONV
 ucnv_UTF8FromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                   UConverterToUnicodeArgs *pToUArgs,
                   UErrorCode *pErrorCode) {
@@ -1007,6 +1011,8 @@ moreBytes:
     pToUArgs->source=(char *)source;
     pFromUArgs->target=(char *)target;
 }
+
+U_CDECL_END
 
 /* UTF-8 converter data ----------------------------------------------------- */
 

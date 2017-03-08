@@ -103,8 +103,10 @@ addFile(const char *filename, const char *name, const char *source, UBool source
 static char *
 allocString(uint32_t length);
 
+U_CDECL_BEGIN
 static int
 compareFiles(const void *file1, const void *file2);
+U_CDECL_END
 
 static char *
 pathToFullPath(const char *path, const char *source);
@@ -548,11 +550,13 @@ pathToFullPath(const char *path, const char *source) {
     return fullPath;
 }
 
+U_CDECL_BEGIN
 static int
 compareFiles(const void *file1, const void *file2) {
     /* sort by basename */
     return uprv_strcmp(((File *)file1)->basename, ((File *)file2)->basename);
 }
+U_CDECL_END
 
 static void
 fixDirToTreePath(char *s)

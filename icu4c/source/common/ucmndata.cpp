@@ -207,7 +207,9 @@ pointerTOCPrefixBinarySearch(const char *s, const PointerTOCEntry *toc, int32_t 
     return -1;
 }
 
-static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
+U_CDECL_BEGIN
+static uint32_t U_CALLCONV
+offsetTOCEntryCount(const UDataMemory *pData) {
     int32_t          retVal=0;
     const UDataOffsetTOC *toc = (UDataOffsetTOC *)pData->toc;
     if (toc != NULL) {
@@ -216,7 +218,7 @@ static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
     return retVal;
 }
 
-static const DataHeader *
+static const DataHeader * U_CALLCONV
 offsetTOCLookupFn(const UDataMemory *pData,
                   const char *tocEntryName,
                   int32_t *pLength,
@@ -263,13 +265,12 @@ offsetTOCLookupFn(const UDataMemory *pData,
 }
 
 
-static uint32_t pointerTOCEntryCount(const UDataMemory *pData) {
+static uint32_t U_CALLCONV pointerTOCEntryCount(const UDataMemory *pData) {
     const PointerTOC *toc = (PointerTOC *)pData->toc;
     return (uint32_t)((toc != NULL) ? (toc->count) : 0);
 }
 
-
-static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
+static const DataHeader * U_CALLCONV pointerTOCLookupFn(const UDataMemory *pData,
                    const char *name,
                    int32_t *pLength,
                    UErrorCode *pErrorCode) {
@@ -302,6 +303,8 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
         return pData->pHeader;
     }
 }
+U_CDECL_END
+
 
 static const commonDataFuncs CmnDFuncs = {offsetTOCLookupFn,  offsetTOCEntryCount};
 static const commonDataFuncs ToCPFuncs = {pointerTOCLookupFn, pointerTOCEntryCount};

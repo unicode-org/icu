@@ -582,7 +582,9 @@ typedef struct
   }
 UConverterDataLMBCS;
 
-static void _LMBCSClose(UConverter * _this);
+U_CDECL_BEGIN
+static void  U_CALLCONV _LMBCSClose(UConverter * _this);
+U_CDECL_END
 
 #define DECLARE_LMBCS_DATA(n) \
 static const UConverterImpl _LMBCSImpl##n={\
@@ -618,7 +620,7 @@ function, which will do basically the same thing except set a  different
 optimization group. So, we put the common stuff into a worker function, 
 and set up another macro to stamp out the 12 open functions:*/
 #define DEFINE_LMBCS_OPEN(n) \
-static void \
+static void U_CALLCONV \
    _LMBCSOpen##n(UConverter* _this, UConverterLoadArgs* pArgs, UErrorCode* err) \
 { _LMBCSOpenWorker(_this, pArgs, err, n); }
 
@@ -663,7 +665,8 @@ _LMBCSOpenWorker(UConverter*  _this,
     }
 }
 
-static void 
+U_CDECL_BEGIN
+static void  U_CALLCONV
 _LMBCSClose(UConverter *   _this) 
 {
     if (_this->extraInfo != NULL)
@@ -688,7 +691,7 @@ typedef struct LMBCSClone {
     UConverterDataLMBCS lmbcs;
 } LMBCSClone;
 
-static UConverter * 
+static UConverter *  U_CALLCONV
 _LMBCSSafeClone(const UConverter *cnv, 
                 void *stackBuffer, 
                 int32_t *pBufferSize, 
@@ -845,7 +848,7 @@ LMBCSConvertUni(ulmbcs_byte_t * pLMBCS, UChar uniChar)
 
 
 /* The main Unicode to LMBCS conversion function */
-static void 
+static void  U_CALLCONV
 _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                   UErrorCode*     err)
 {
@@ -1112,7 +1115,7 @@ GetUniFromLMBCSUni(char const ** ppLMBCSin)  /* Called with LMBCS-style Unicode 
 
 /* Return the Unicode representation for the current LMBCS character */
 
-static UChar32 
+static UChar32  U_CALLCONV
 _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                          UErrorCode*   err)
 {
@@ -1254,7 +1257,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
 /* The exported function that converts lmbcs to one or more
    UChars - currently UTF-16
 */
-static void 
+static void  U_CALLCONV
 _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
                      UErrorCode*    err)
 {
@@ -1377,5 +1380,7 @@ DECLARE_LMBCS_DATA(16)
 DECLARE_LMBCS_DATA(17)
 DECLARE_LMBCS_DATA(18)
 DECLARE_LMBCS_DATA(19)
+
+U_CDECL_END
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
