@@ -21,7 +21,6 @@
 #include "unicode/ucnv.h"
 #include "unicode/regex.h"
 #include "filestrm.h"
-#include "toolutil.h"
 #include "xmlparser.h"
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_CONVERSION
@@ -210,7 +209,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
             goto exit;
         }
 
-        buffer=UCharPtr(src.getBuffer(bytesLength));
+        buffer=toUCharPtr(src.getBuffer(bytesLength));
         if(buffer==NULL) {
             // unexpected failure to reserve some string capacity
             errorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -279,7 +278,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
         pb=bytes;
         for(;;) {
             length=src.length();
-            buffer=UCharPtr(src.getBuffer(capacity));
+            buffer=toUCharPtr(src.getBuffer(capacity));
             if(buffer==NULL) {
                 // unexpected failure to reserve some string capacity
                 errorCode=U_MEMORY_ALLOCATION_ERROR;

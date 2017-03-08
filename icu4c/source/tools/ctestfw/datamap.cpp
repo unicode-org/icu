@@ -10,8 +10,8 @@
 
 #include "unicode/datamap.h"
 #include "unicode/resbund.h"
+#include "unicode/unistr.h"
 #include "hash.h"
-#include "toolutil.h"
 #include <stdlib.h>
 
 DataMap::~DataMap() {}
@@ -21,7 +21,7 @@ int32_t
 DataMap::utoi(const UnicodeString &s) const
 {
   char ch[256];
-  const UChar *u = constUCharPtr(s.getBuffer());
+  const UChar *u = toUCharPtr(s.getBuffer());
   int32_t len = s.length();
   u_UCharsToChars(u, ch, len);
   ch[len] = 0; /* include terminating \0 */

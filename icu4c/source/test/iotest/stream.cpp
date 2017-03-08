@@ -49,13 +49,6 @@ const char C_NEW_LINE[] = {'\n',0};
 #endif
 U_CDECL_END
 
-inline const UChar *constUCharPtr(const char16_t *p) {
-#ifdef U_ALIASING_BARRIER
-    U_ALIASING_BARRIER(p);
-#endif
-    return reinterpret_cast<const UChar *>(p);
-}
-
 U_CDECL_BEGIN
 static void U_CALLCONV TestStream(void)
 {
@@ -113,12 +106,12 @@ static void U_CALLCONV TestStream(void)
 
     inTestStream >> inStr >> inStr2;
     if (inStr.compare(thisMu) != 0) {
-        u_austrncpy(inStrC, constUCharPtr(inStr.getBuffer()), inStr.length());
+        u_austrncpy(inStrC, toUCharPtr(inStr.getBuffer()), inStr.length());
         inStrC[inStr.length()] = 0;
         log_err("Got: \"%s\", Expected: \"tHis\\u03BC\"\n", inStrC);
     }
     if (inStr2.compare(mu) != 0) {
-        u_austrncpy(inStrC, constUCharPtr(inStr.getBuffer()), inStr.length());
+        u_austrncpy(inStrC, toUCharPtr(inStr.getBuffer()), inStr.length());
         inStrC[inStr.length()] = 0;
         log_err("Got: \"%s\", Expected: \"mu\"\n", inStrC);
     }

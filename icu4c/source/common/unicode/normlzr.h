@@ -795,15 +795,9 @@ inline int32_t
 Normalizer::compare(const UnicodeString &s1, const UnicodeString &s2,
                     uint32_t options,
                     UErrorCode &errorCode) {
-  const char16_t *p1 = s1.getBuffer();
-  const char16_t *p2 = s2.getBuffer();
-#ifdef U_ALIASING_BARRIER
-  U_ALIASING_BARRIER(p1);
-  U_ALIASING_BARRIER(p2);
-#endif
   // all argument checking is done in unorm_compare
-  return unorm_compare(reinterpret_cast<const UChar *>(p1), s1.length(),
-                       reinterpret_cast<const UChar *>(p2), s2.length(),
+  return unorm_compare(toUCharPtr(s1.getBuffer()), s1.length(),
+                       toUCharPtr(s2.getBuffer()), s2.length(),
                        options,
                        &errorCode);
 }
