@@ -271,7 +271,7 @@ StringBaseResource::StringBaseResource(SRBRoot *bundle, const char *tag, int8_t 
         return;
     }
 
-    fString.setTo(value, len);
+    fString.setTo(ConstChar16Ptr(value), len);
     fString.getTerminatedBuffer();  // Some code relies on NUL-termination.
     if (U_SUCCESS(errorCode) && fString.isBogus()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;

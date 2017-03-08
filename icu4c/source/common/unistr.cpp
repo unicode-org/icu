@@ -1258,7 +1258,7 @@ UnicodeString::getTerminatedBuffer() {
 // setTo() analogous to the readonly-aliasing constructor with the same signature
 UnicodeString &
 UnicodeString::setTo(UBool isTerminated,
-                     const UChar *text,
+                     ConstChar16Ptr textPtr,
                      int32_t textLength)
 {
   if(fUnion.fFields.fLengthAndFlags & kOpenGetBuffer) {
@@ -1266,6 +1266,7 @@ UnicodeString::setTo(UBool isTerminated,
     return *this;
   }
 
+  const UChar *text = textPtr;
   if(text == NULL) {
     // treat as an empty string, do not alias
     releaseArray();
