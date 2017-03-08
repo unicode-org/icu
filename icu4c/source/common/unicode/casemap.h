@@ -60,8 +60,8 @@ public:
      */
      static int32_t toLower(
             const char *locale, uint32_t options,
-            ConstChar16Ptr src, int32_t srcLength,
-            Char16Ptr dest, int32_t destCapacity, Edits *edits,
+            const char16_t *src, int32_t srcLength,
+            char16_t *dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
     /**
@@ -94,8 +94,8 @@ public:
      */
     static int32_t toUpper(
             const char *locale, uint32_t options,
-            ConstChar16Ptr src, int32_t srcLength,
-            Char16Ptr dest, int32_t destCapacity, Edits *edits,
+            const char16_t *src, int32_t srcLength,
+            char16_t *dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -141,8 +141,8 @@ public:
      */
     static int32_t toTitle(
             const char *locale, uint32_t options, BreakIterator *iter,
-            ConstChar16Ptr src, int32_t srcLength,
-            Char16Ptr dest, int32_t destCapacity, Edits *edits,
+            const char16_t *src, int32_t srcLength,
+            char16_t *dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 #endif  // UCONFIG_NO_BREAK_ITERATION
@@ -181,8 +181,8 @@ public:
      */
     static int32_t fold(
             uint32_t options,
-            ConstChar16Ptr src, int32_t srcLength,
-            Char16Ptr dest, int32_t destCapacity, Edits *edits,
+            const char16_t *src, int32_t srcLength,
+            char16_t *dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 private:
