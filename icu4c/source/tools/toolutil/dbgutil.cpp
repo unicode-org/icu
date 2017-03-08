@@ -13,6 +13,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
+#include "toolutil.h"
 #include "util.h"
 #include "ucln.h"
 
@@ -117,7 +118,7 @@ U_CAPI int32_t
 udbg_stoi(const UnicodeString &s)
 {
     char ch[256];
-    const UChar *u = s.getBuffer();
+    const UChar *u = constUCharPtr(s.getBuffer());
     int32_t len = s.length();
     u_UCharsToChars(u, ch, len);
     ch[len] = 0; /* include terminating \0 */
@@ -129,7 +130,7 @@ U_CAPI double
 udbg_stod(const UnicodeString &s)
 {
     char ch[256];
-    const UChar *u = s.getBuffer();
+    const UChar *u = constUCharPtr(s.getBuffer());
     int32_t len = s.length();
     u_UCharsToChars(u, ch, len);
     ch[len] = 0; /* include terminating \0 */

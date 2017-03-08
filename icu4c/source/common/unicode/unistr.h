@@ -2059,7 +2059,7 @@ public:
    * @stable ICU 2.0
    */
   UnicodeString &setTo(UBool isTerminated,
-                       const char16_t *text,
+                       ConstChar16Ptr text,
                        int32_t textLength);
 
   /**
@@ -3495,6 +3495,13 @@ protected:
   virtual UChar32 getChar32At(int32_t offset) const;
 
 private:
+  static inline const UChar *constUCharPtr(const char16_t *p) {
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return reinterpret_cast<const UChar *>(p);
+  }
+
   // For char* constructors. Could be made public.
   UnicodeString &setToUTF8(StringPiece utf8);
   // For extract(char*).
@@ -4360,7 +4367,7 @@ UnicodeString::startsWith(const UnicodeString& srcText,
 inline UBool
 UnicodeString::startsWith(ConstChar16Ptr srcChars, int32_t srcLength) const {
   if(srcLength < 0) {
-    srcLength = u_strlen(srcChars);
+    srcLength = u_strlen(constUCharPtr(srcChars));
   }
   return doCompare(0, srcLength, srcChars, 0, srcLength) == 0;
 }
@@ -4368,7 +4375,7 @@ UnicodeString::startsWith(ConstChar16Ptr srcChars, int32_t srcLength) const {
 inline UBool
 UnicodeString::startsWith(const char16_t *srcChars, int32_t srcStart, int32_t srcLength) const {
   if(srcLength < 0) {
-    srcLength = u_strlen(srcChars);
+    srcLength = u_strlen(constUCharPtr(srcChars));
   }
   return doCompare(0, srcLength, srcChars, srcStart, srcLength) == 0;
 }
@@ -4391,7 +4398,7 @@ inline UBool
 UnicodeString::endsWith(ConstChar16Ptr srcChars,
             int32_t srcLength) const {
   if(srcLength < 0) {
-    srcLength = u_strlen(srcChars);
+    srcLength = u_strlen(constUCharPtr(srcChars));
   }
   return doCompare(length() - srcLength, srcLength,
                    srcChars, 0, srcLength) == 0;
@@ -4402,7 +4409,7 @@ UnicodeString::endsWith(const char16_t *srcChars,
             int32_t srcStart,
             int32_t srcLength) const {
   if(srcLength < 0) {
-    srcLength = u_strlen(srcChars + srcStart);
+    srcLength = u_strlen(constUCharPtr(srcChars + srcStart));
   }
   return doCompare(length() - srcLength, srcLength,
                    srcChars, srcStart, srcLength) == 0;

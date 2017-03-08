@@ -64,7 +64,11 @@ uprv_isInvariantUString(const UChar *s, int32_t length);
  */
 U_INTERNAL inline UBool U_EXPORT2
 uprv_isInvariantUnicodeString(const icu::UnicodeString &s) {
-    return uprv_isInvariantUString(s.getBuffer(), s.length());
+    const char16_t *p = s.getBuffer();
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return uprv_isInvariantUString(reinterpret_cast<const UChar *>(p), s.length());
 }
 
 #endif  /* __cplusplus */

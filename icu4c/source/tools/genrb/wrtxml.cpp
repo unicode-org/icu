@@ -44,6 +44,7 @@
 #include "unicode/uchar.h"
 #include "ustr.h"
 #include "prscmnts.h"
+#include "toolutil.h"
 #include "unicode/unistr.h"
 #include "unicode/utf8.h"
 #include "unicode/utf16.h"
@@ -73,7 +74,7 @@ static int32_t write_utf8_file(FileStream* fileStream, UnicodeString outString)
     u_strToUTF8(NULL,
                 0,
                 &len,
-                outString.getBuffer(),
+                constUCharPtr(outString.getBuffer()),
                 outString.length(),
                 &status);
 
@@ -85,7 +86,7 @@ static int32_t write_utf8_file(FileStream* fileStream, UnicodeString outString)
     u_strToUTF8(dest,
                 len,
                 &len,
-                outString.getBuffer(),
+                constUCharPtr(outString.getBuffer()),
                 outString.length(),
                 &status);
 

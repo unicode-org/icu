@@ -29,6 +29,7 @@
 #include "unicode/ustring.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "toolutil.h"
 #include "uhash.h"
 #include "unewdata.h"
 #include "uresdata.h"
@@ -304,7 +305,7 @@ public:
     StringBaseResource(int8_t type, const UChar *value, int32_t len, UErrorCode &errorCode);
     virtual ~StringBaseResource();
 
-    const UChar *getBuffer() const { return fString.getBuffer(); }
+    const UChar *getBuffer() const { return icu::constUCharPtr(fString.getBuffer()); }
     int32_t length() const { return fString.length(); }
 
     virtual void handlePreWrite(uint32_t *byteOffset);
