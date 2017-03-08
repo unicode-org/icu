@@ -14,6 +14,7 @@
  * \file
  * \brief C++ API: char16_t pointer wrappers with
  *        implicit conversion to/from bit-compatible raw pointer types.
+ *        Also conversion functions from char16_t * to UChar * and OldUChar *.
  */
 
 U_NAMESPACE_BEGIN
@@ -226,6 +227,62 @@ ConstChar16Ptr::~ConstChar16Ptr() {}
 const char16_t *ConstChar16Ptr::get() const { return u.cp; }
 
 #endif
+
+/**
+ * Converts from const char16_t * to const UChar *.
+ * Includes an aliasing barrier if available.
+ * @param p pointer
+ * @return p as const UChar *
+ * @draft ICU 59
+ */
+inline U_COMMON_API const UChar *toUCharPtr(const char16_t *p) {
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return reinterpret_cast<const UChar *>(p);
+}
+
+/**
+ * Converts from char16_t * to UChar *.
+ * Includes an aliasing barrier if available.
+ * @param p pointer
+ * @return p as UChar *
+ * @draft ICU 59
+ */
+inline U_COMMON_API UChar *toUCharPtr(char16_t *p) {
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return reinterpret_cast<UChar *>(p);
+}
+
+/**
+ * Converts from const char16_t * to const OldUChar *.
+ * Includes an aliasing barrier if available.
+ * @param p pointer
+ * @return p as const OldUChar *
+ * @draft ICU 59
+ */
+inline U_COMMON_API const OldUChar *toOldUCharPtr(const char16_t *p) {
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return reinterpret_cast<const OldUChar *>(p);
+}
+
+/**
+ * Converts from char16_t * to OldUChar *.
+ * Includes an aliasing barrier if available.
+ * @param p pointer
+ * @return p as OldUChar *
+ * @draft ICU 59
+ */
+inline U_COMMON_API OldUChar *toOldUCharPtr(char16_t *p) {
+#ifdef U_ALIASING_BARRIER
+    U_ALIASING_BARRIER(p);
+#endif
+    return reinterpret_cast<OldUChar *>(p);
+}
 
 U_NAMESPACE_END
 

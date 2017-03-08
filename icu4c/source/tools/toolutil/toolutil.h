@@ -30,20 +30,6 @@
 
 U_NAMESPACE_BEGIN
 
-inline const UChar *constUCharPtr(const char16_t *p) {
-#ifdef U_ALIASING_BARRIER
-    U_ALIASING_BARRIER(p);
-#endif
-    return reinterpret_cast<const UChar *>(p);
-}
-
-inline UChar *UCharPtr(char16_t *p) {
-#ifdef U_ALIASING_BARRIER
-    U_ALIASING_BARRIER(p);
-#endif
-    return reinterpret_cast<UChar *>(p);
-}
-
 /**
  * ErrorCode subclass for use in ICU command-line tools.
  * The destructor calls handleFailure() which calls exit(errorCode) when isFailure().
