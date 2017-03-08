@@ -1260,7 +1260,7 @@ RuleBasedNumberFormat::format(int64_t number, NFRuleSet *ruleSet, UnicodeString&
     // for formatting
 
     if (U_SUCCESS(status)) {
-        if (number == INT64_MIN) {
+        if (number == U_INT64_MIN) {
             // We can't handle this value right now. Provide an accurate default value.
 
             // TODO this section should probably be optimized. The DecimalFormat is shared in ICU4J.

@@ -30,7 +30,8 @@
 /* ISO 8859-1 --------------------------------------------------------------- */
 
 /* This is a table-less and callback-less version of ucnv_MBCSSingleToBMPWithOffsets(). */
-static void
+U_CDECL_BEGIN
+static void U_CALLCONV
 _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     const uint8_t *source;
@@ -116,7 +117,7 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 }
 
 /* This is a table-less and callback-less version of ucnv_MBCSSingleGetNextUChar(). */
-static UChar32
+static UChar32 U_CALLCONV
 _Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
                     UErrorCode *pErrorCode) {
     const uint8_t *source=(const uint8_t *)pArgs->source;
@@ -131,7 +132,7 @@ _Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
 }
 
 /* This is a table-less version of ucnv_MBCSSingleFromBMPWithOffsets(). */
-static void
+static void U_CALLCONV
 _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                               UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -318,7 +319,7 @@ noMoreInput:
 }
 
 /* Convert UTF-8 to Latin-1. Adapted from ucnv_SBCSFromUTF8(). */
-static void
+static void U_CALLCONV
 ucnv_Latin1FromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                     UConverterToUnicodeArgs *pToUArgs,
                     UErrorCode *pErrorCode) {
@@ -416,7 +417,7 @@ ucnv_Latin1FromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
     pFromUArgs->target=(char *)target;
 }
 
-static void
+static void U_CALLCONV
 _Latin1GetUnicodeSet(const UConverter *cnv,
                      const USetAdder *sa,
                      UConverterUnicodeSet which,
@@ -426,6 +427,8 @@ _Latin1GetUnicodeSet(const UConverter *cnv,
     (void)pErrorCode;
     sa->addRange(sa->set, 0, 0xff);
 }
+U_CDECL_END
+
 
 static const UConverterImpl _Latin1Impl={
     UCNV_LATIN_1,
@@ -468,8 +471,9 @@ const UConverterSharedData _Latin1Data=
 
 /* US-ASCII ----------------------------------------------------------------- */
 
+U_CDECL_BEGIN
 /* This is a table-less version of ucnv_MBCSSingleToBMPWithOffsets(). */
-static void
+static void U_CALLCONV
 _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                            UErrorCode *pErrorCode) {
     const uint8_t *source, *sourceLimit;
@@ -578,7 +582,7 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 }
 
 /* This is a table-less version of ucnv_MBCSSingleGetNextUChar(). */
-static UChar32
+static UChar32 U_CALLCONV
 _ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
                    UErrorCode *pErrorCode) {
     const uint8_t *source;
@@ -605,7 +609,7 @@ _ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
 }
 
 /* "Convert" UTF-8 to US-ASCII: Validate and copy. */
-static void
+static void U_CALLCONV
 ucnv_ASCIIFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                    UConverterToUnicodeArgs *pToUArgs,
                    UErrorCode *pErrorCode) {
@@ -693,7 +697,7 @@ ucnv_ASCIIFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
     pFromUArgs->target=(char *)target;
 }
 
-static void
+static void U_CALLCONV
 _ASCIIGetUnicodeSet(const UConverter *cnv,
                     const USetAdder *sa,
                     UConverterUnicodeSet which,
@@ -703,6 +707,7 @@ _ASCIIGetUnicodeSet(const UConverter *cnv,
     (void)pErrorCode;
     sa->addRange(sa->set, 0, 0x7f);
 }
+U_CDECL_END
 
 static const UConverterImpl _ASCIIImpl={
     UCNV_US_ASCII,

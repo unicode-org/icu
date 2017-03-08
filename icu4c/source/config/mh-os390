@@ -69,7 +69,7 @@ SHAREDLIBCXXFLAGS	= -Wc,expo
 # NOCSECT might be used as an optimization option.
 # -+ means accept any file extension as a C++ file. By default only .C is accepted.
 CFLAGS          += -Wc,DLL,ROS,RENT,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED)' $(ICU_IEEE)
-CXXFLAGS        += -Wc,DLL,ROS,RTTI,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED)' $(ICU_IEEE) -+
+CXXFLAGS        += -Wc,DLL,ROS,RTTI,'ARCH(7)','LOC(POSIX)',NOANSIALIAS,'LANGLVL(EXTENDED0X)' $(ICU_IEEE) -+
 ARFLAGS         = -cr
 
 # _MSE_PROTOS usually interacts with _XOPEN_SOURCE. It affects some standard

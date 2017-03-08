@@ -67,8 +67,8 @@ typedef struct{
 }UConverterDataHZ;
 
 
-
-static void 
+U_CDECL_BEGIN
+static void  U_CALLCONV
 _HZOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
     UConverter *gbConverter;
     if(pArgs->onlyTestIsLoadable) {
@@ -94,7 +94,7 @@ _HZOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
     }
 }
 
-static void 
+static void  U_CALLCONV
 _HZClose(UConverter *cnv){
     if(cnv->extraInfo != NULL) {
         ucnv_close (((UConverterDataHZ *) (cnv->extraInfo))->gbConverter);
@@ -105,7 +105,7 @@ _HZClose(UConverter *cnv){
     }
 }
 
-static void 
+static void  U_CALLCONV
 _HZReset(UConverter *cnv, UConverterResetChoice choice){
     if(choice<=UCNV_RESET_TO_UNICODE) {
         cnv->toUnicodeStatus = 0;
@@ -152,7 +152,7 @@ _HZReset(UConverter *cnv, UConverterResetChoice choice){
 */
 
 
-static void 
+static void  U_CALLCONV
 UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     char tempBuf[2];
@@ -332,7 +332,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
 }
 
 
-static void 
+static void  U_CALLCONV
 UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                       UErrorCode * err){
     const UChar *mySource = args->source;
@@ -496,7 +496,7 @@ getTrail:
     myConverterData->isTargetUCharDBCS = isTargetUCharDBCS;
 }
 
-static void
+static void U_CALLCONV
 _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err) {
     UConverter *cnv = args->converter;
     UConverterDataHZ *convData=(UConverterDataHZ *) cnv->extraInfo;
@@ -535,7 +535,7 @@ struct cloneHZStruct
 };
 
 
-static UConverter * 
+static UConverter *  U_CALLCONV
 _HZ_SafeClone(const UConverter *cnv, 
               void *stackBuffer, 
               int32_t *pBufferSize, 
@@ -568,7 +568,7 @@ _HZ_SafeClone(const UConverter *cnv,
     return &localClone->cnv;
 }
 
-static void
+static void U_CALLCONV
 _HZ_GetUnicodeSet(const UConverter *cnv,
                   const USetAdder *sa,
                   UConverterUnicodeSet which,
@@ -582,7 +582,7 @@ _HZ_GetUnicodeSet(const UConverter *cnv,
         sa, which, UCNV_SET_FILTER_HZ,
         pErrorCode);
 }
-
+U_CDECL_END
 static const UConverterImpl _HZImpl={
 
     UCNV_HZ,

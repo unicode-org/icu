@@ -199,9 +199,9 @@ compareMappings(UCMTable *lTable, const UCMapping *l,
     /* compare the flags */
     return l->f-r->f;
 }
-
+U_CDECL_BEGIN
 /* sorting by Unicode first sorts mappings directly */
-static int32_t
+static int32_t  U_CALLCONV
 compareMappingsUnicodeFirst(const void *context, const void *left, const void *right) {
     return compareMappings(
         (UCMTable *)context, (const UCMapping *)left,
@@ -209,7 +209,7 @@ compareMappingsUnicodeFirst(const void *context, const void *left, const void *r
 }
 
 /* sorting by bytes first sorts the reverseMap; use indirection to mappings */
-static int32_t
+static int32_t U_CALLCONV
 compareMappingsBytesFirst(const void *context, const void *left, const void *right) {
     UCMTable *table=(UCMTable *)context;
     int32_t l=*(const int32_t *)left, r=*(const int32_t *)right;
@@ -217,6 +217,7 @@ compareMappingsBytesFirst(const void *context, const void *left, const void *rig
         table, table->mappings+l,
         table, table->mappings+r, FALSE);
 }
+U_CDECL_END
 
 U_CAPI void U_EXPORT2
 ucm_sortTable(UCMTable *t) {
