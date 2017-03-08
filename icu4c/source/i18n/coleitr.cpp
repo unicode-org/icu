@@ -29,6 +29,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#include "unicode/chariter.h"
 #include "unicode/coleitr.h"
 #include "unicode/tblcoll.h"
 #include "unicode/ustring.h"

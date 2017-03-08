@@ -58,7 +58,7 @@
 
 #include "unicode/uobject.h"
 #include "unicode/ucol.h"
-#include "unicode/normlzr.h"
+#include "unicode/unorm.h"
 #include "unicode/locid.h"
 #include "unicode/uniset.h"
 #include "unicode/umisc.h"
@@ -158,7 +158,7 @@ class CollationKey;
 * @see         CollationKey
 * @see         CollationElementIterator
 * @see         Locale
-* @see         Normalizer
+* @see         Normalizer2
 * @version     2.0 11/15/01
 */
 
