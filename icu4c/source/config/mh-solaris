@@ -5,6 +5,10 @@
 ## Copyright (c) 1999-2010, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
+## Flags for ICU 59+
+CXXFLAGS += -std=c++11
+CFLAGS   += -std=c99
+
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
 SHAREDLIBCXXFLAGS = -KPIC
