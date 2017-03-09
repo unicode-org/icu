@@ -58,4 +58,14 @@
 #   define _XOPEN_SOURCE_EXTENDED 1
 #endif
 
+/**
+ * Solaris says:
+ *   "...it is invalid to compile an XPG6 or a POSIX.1-2001 application with anything other
+ *   than a c99 or later compiler."
+ * Apparently C++11 is not "or later". Work around this.
+ */
+#if defined(__cplusplus) && (defined(sun) || defined(__sun)) && !defined (_STDC_C99)
+#   define _STDC_C99
+#endif
+
 #endif  /* __UPOSIXDEFS_H__ */
