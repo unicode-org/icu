@@ -8,7 +8,6 @@
 #define __CASEMAP_H__
 
 #include "unicode/utypes.h"
-#include "unicode/char16ptr.h"
 #include "unicode/uobject.h"
 
 /**
