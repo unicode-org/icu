@@ -13,8 +13,8 @@ GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 #           This helps in the data library,
 # -qproto assumes all functions are prototyped (for optimization)
 # -qrtti turns on compiler RTTI, required beginning with ICU 4.6
-CFLAGS += -qproto -qroconst
-CXXFLAGS += -qproto -qroconst -qrtti
+CFLAGS += -qproto -qroconst -qlanglvl=extended
+CXXFLAGS += -qproto -qroconst -qrtti -qlanglvl=extended0x
 
 # If you readd this line, you must change the SO value
 #LDFLAGS += -brtl
