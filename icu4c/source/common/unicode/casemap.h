@@ -27,7 +27,7 @@ class Edits;
  *
  * @draft ICU 59
  */
-class U_COMMON_API CaseMap final : public UMemory {
+class U_COMMON_API CaseMap U_FINAL : public UMemory {
 public:
     /**
      * Lowercases a UTF-16 string and optionally records edits.
