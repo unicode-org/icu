@@ -34,7 +34,7 @@ U_NAMESPACE_BEGIN
  * char16_t * wrapper with implicit conversion from distinct but bit-compatible pointer types.
  * @draft ICU 59
  */
-class U_COMMON_API Char16Ptr final {
+class U_COMMON_API Char16Ptr U_FINAL {
 public:
     /**
      * Copies the pointer.
@@ -133,7 +133,7 @@ char16_t *Char16Ptr::get() const { return u.cp; }
  * const char16_t * wrapper with implicit conversion from distinct but bit-compatible pointer types.
  * @draft ICU 59
  */
-class U_COMMON_API ConstChar16Ptr final {
+class U_COMMON_API ConstChar16Ptr U_FINAL {
 public:
     /**
      * Copies the pointer.
