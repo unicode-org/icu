@@ -1349,6 +1349,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		tools/pkgdata/Makefile \
 		tools/tzcode/Makefile \
 		tools/gencfu/Makefile \
+		tools/escapesrc/Makefile \
 		test/Makefile \
 		test/compat/Makefile \
 		test/testdata/Makefile \
