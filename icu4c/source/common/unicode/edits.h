@@ -29,7 +29,7 @@ U_NAMESPACE_BEGIN
  *
  * @draft ICU 59
  */
-class U_COMMON_API Edits final : public UMemory {
+class U_COMMON_API Edits U_FINAL : public UMemory {
 public:
     /**
      * Constructs an empty object.
@@ -89,7 +89,7 @@ public:
      * @see getFineIterator
      * @draft ICU 59
      */
-    struct U_COMMON_API Iterator final : public UMemory {
+    struct U_COMMON_API Iterator U_FINAL : public UMemory {
         /**
          * Copy constructor.
          * @draft ICU 59
