@@ -280,7 +280,7 @@ uint8_t Normalizer2DataBuilder::getCC(UChar32 c) const {
 
 static UBool isWellFormed(const UnicodeString &s) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    u_strToUTF8(NULL, 0, NULL, s.getBuffer(), s.length(), &errorCode);
+    u_strToUTF8(NULL, 0, NULL, toUCharPtr(s.getBuffer()), s.length(), &errorCode);
     return U_SUCCESS(errorCode) || errorCode==U_BUFFER_OVERFLOW_ERROR;
 }
 
@@ -313,7 +313,7 @@ void Normalizer2DataBuilder::setRoundTripMapping(UChar32 c, const UnicodeString 
                 (int)phase, (long)c);
         exit(U_INVALID_FORMAT_ERROR);
     }
-    int32_t numCP=u_countChar32(m.getBuffer(), m.length());
+    int32_t numCP=u_countChar32(toUCharPtr(m.getBuffer()), m.length());
     if(numCP!=2) {
         fprintf(stderr,
                 "error in gennorm2 phase %d: "
@@ -450,7 +450,7 @@ Normalizer2DataBuilder::decompose(UChar32 start, UChar32 end, uint32_t value) {
         Norm &norm=norms[value];
         const UnicodeString &m=*norm.mapping;
         UnicodeString *decomposed=NULL;
-        const UChar *s=m.getBuffer();
+        const UChar *s=toUCharPtr(m.getBuffer());
         int32_t length=m.length();
         int32_t prev, i=0;
         UChar32 c;
@@ -605,7 +605,7 @@ Normalizer2DataBuilder::reorder(Norm *p, BuilderReorderingBuffer &buffer) {
     if(length>Normalizer2Impl::MAPPING_LENGTH_MASK) {
         return;  // writeMapping() will complain about it and print the code point.
     }
-    const UChar *s=m.getBuffer();
+    const UChar *s=toUCharPtr(m.getBuffer());
     int32_t i=0;
     UChar32 c;
     while(i<length) {
@@ -1207,7 +1207,7 @@ void Normalizer2DataBuilder::writeBinaryFile(const char *filename) {
     }
     udata_writeBlock(pData, indexes, sizeof(indexes));
     udata_writeBlock(pData, norm16TrieBytes.getAlias(), norm16TrieLength);
-    udata_writeUString(pData, extraData.getBuffer(), extraData.length());
+    udata_writeUString(pData, toUCharPtr(extraData.getBuffer()), extraData.length());
     udata_writeBlock(pData, smallFCD, sizeof(smallFCD));
     int32_t writtenSize=udata_finish(pData, errorCode);
     if(errorCode.isFailure()) {
