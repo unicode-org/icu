@@ -291,6 +291,14 @@ typedef int8_t UBool;
 #define U_SIZEOF_UCHAR 2
 
 /**
+ * for AIX, uchar.h needs to be included
+ */
+#if (U_PLATFORM == U_PF_AIX) && defined(__cplusplus) &&(U_CPLUSPLUS_VERSION < 11)
+# include <uchar.h>
+#endif
+
+
+/**
  * \var UChar
  *
  * For C++, UChar is always defined to be char16_t.
