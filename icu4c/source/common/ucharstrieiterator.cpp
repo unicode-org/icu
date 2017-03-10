@@ -21,7 +21,7 @@
 
 U_NAMESPACE_BEGIN
 
-UCharsTrie::Iterator::Iterator(const UChar *trieUChars, int32_t maxStringLength,
+UCharsTrie::Iterator::Iterator(ConstChar16Ptr trieUChars, int32_t maxStringLength,
                                UErrorCode &errorCode)
         : uchars_(trieUChars),
           pos_(uchars_), initialPos_(uchars_),

@@ -73,7 +73,7 @@ static int32_t write_utf8_file(FileStream* fileStream, UnicodeString outString)
     u_strToUTF8(NULL,
                 0,
                 &len,
-                outString.getBuffer(),
+                toUCharPtr(outString.getBuffer()),
                 outString.length(),
                 &status);
 
@@ -85,7 +85,7 @@ static int32_t write_utf8_file(FileStream* fileStream, UnicodeString outString)
     u_strToUTF8(dest,
                 len,
                 &len,
-                outString.getBuffer(),
+                toUCharPtr(outString.getBuffer()),
                 outString.length(),
                 &status);
 

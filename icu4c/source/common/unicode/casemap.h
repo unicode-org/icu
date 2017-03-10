@@ -42,7 +42,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+     * @param destCapacity The size of the buffer (number of char16_ts). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -59,8 +59,8 @@ public:
      */
      static int32_t toLower(
             const char *locale, uint32_t options,
-            const UChar *src, int32_t srcLength,
-            UChar *dest, int32_t destCapacity, Edits *edits,
+            const char16_t *src, int32_t srcLength,
+            char16_t *dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
     /**
@@ -76,7 +76,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+     * @param destCapacity The size of the buffer (number of char16_ts). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -93,8 +93,8 @@ public:
      */
     static int32_t toUpper(
             const char *locale, uint32_t options,
-            const UChar *src, int32_t srcLength,
-            UChar *dest, int32_t destCapacity, Edits *edits,
+            const char16_t *src, int32_t srcLength,
+            char16_t *dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -122,7 +122,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+     * @param destCapacity The size of the buffer (number of char16_ts). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -140,8 +140,8 @@ public:
      */
     static int32_t toTitle(
             const char *locale, uint32_t options, BreakIterator *iter,
-            const UChar *src, int32_t srcLength,
-            UChar *dest, int32_t destCapacity, Edits *edits,
+            const char16_t *src, int32_t srcLength,
+            char16_t *dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 #endif  // UCONFIG_NO_BREAK_ITERATION
@@ -163,7 +163,7 @@ public:
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
      *                  the buffer is large enough.
      *                  The contents is undefined in case of failure.
-     * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+     * @param destCapacity The size of the buffer (number of char16_ts). If it is 0, then
      *                  dest may be NULL and the function will only return the length of the result
      *                  without writing any of the result string.
      * @param edits     Records edits for index mapping, working with styled text,
@@ -180,8 +180,8 @@ public:
      */
     static int32_t fold(
             uint32_t options,
-            const UChar *src, int32_t srcLength,
-            UChar *dest, int32_t destCapacity, Edits *edits,
+            const char16_t *src, int32_t srcLength,
+            char16_t *dest, int32_t destCapacity, Edits *edits,
             UErrorCode &errorCode);
 
 private:

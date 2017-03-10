@@ -368,7 +368,7 @@
     <ClCompile Include="idnaconf.cpp" />
     <ClCompile Include="idnaref.cpp" />
     <ClCompile Include="nptrans.cpp" />
-    <ClCompile Include="punyref.c" />
+    <ClCompile Include="punyref.cpp" />
     <ClCompile Include="testidn.cpp">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
