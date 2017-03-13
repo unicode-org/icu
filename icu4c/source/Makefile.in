@@ -140,6 +140,7 @@ $(LIBDIR) $(BINDIR):
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive check-exhaustive-recursive: $(LIBDIR) $(BINDIR)
+	@(cd tools/escapesrc && $(MAKE) RECURSIVE=YES $$local_target) || exit
 	@dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
 	list='$(LOCAL_SUBDIRS)'; for subdir in $$list; do \
