@@ -5265,6 +5265,7 @@ icu4c/source/tools/ctestfw/unicode/tstdtmod.h svneol=native#text/plain%3Bcharset
 icu4c/source/tools/ctestfw/unicode/uperf.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/unicode/utimer.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/uperf.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/escapesrc/escapesrc.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/genbrk/genbrk.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/genbrk/genbrk.vcxproj -text
 icu4c/source/tools/genccode/genccode.c svneol=native#text/plain%3Bcharset%3Dutf-8
