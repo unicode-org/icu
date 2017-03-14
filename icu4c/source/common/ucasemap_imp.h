@@ -172,7 +172,8 @@ UTF8CaseMapper(int32_t caseLocale, uint32_t options,
 #endif
                uint8_t *dest, int32_t destCapacity,
                const uint8_t *src, int32_t srcLength,
-               UErrorCode *pErrorCode);
+               icu::Edits *edits,
+               UErrorCode &errorCode);
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
@@ -182,7 +183,8 @@ ucasemap_internalUTF8ToTitle(int32_t caseLocale, uint32_t options,
         icu::BreakIterator *iter,
         uint8_t *dest, int32_t destCapacity,
         const uint8_t *src, int32_t srcLength,
-        UErrorCode *pErrorCode);
+        icu::Edits *edits,
+        UErrorCode &errorCode);
 
 #endif
 
@@ -195,7 +197,8 @@ ucasemap_mapUTF8(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_P
                  uint8_t *dest, int32_t destCapacity,
                  const uint8_t *src, int32_t srcLength,
                  UTF8CaseMapper *stringCaseMapper,
-                 UErrorCode *pErrorCode);
+                 icu::Edits *edits,
+                 UErrorCode &errorCode);
 
 U_NAMESPACE_BEGIN
 namespace GreekUpper {
