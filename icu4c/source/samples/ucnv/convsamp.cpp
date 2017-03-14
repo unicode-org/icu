@@ -39,7 +39,6 @@
 #include <string.h>
 #include <stdlib.h>  /* malloc */
 
-#include "cmemory.h"
 #include "unicode/utypes.h"   /* Basic ICU data types */
 #include "unicode/ucnv.h"     /* C   Converter API    */
 #include "unicode/ustring.h"  /* some more string fcns*/
@@ -50,6 +49,9 @@
 #include "flagcb.h"
 
 /* Some utility functions */
+#ifndef UPRV_LENGTHOF
+#define UPRV_LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+#endif
 
 static const UChar kNone[] = { 0x0000 };
 
