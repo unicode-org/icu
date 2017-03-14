@@ -336,96 +336,75 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     private transient volatile BaseLocale baseLocale;
     private transient volatile LocaleExtensions extensions;
 
+    /**
+     * This table lists pairs of locale ids for canonicalization.  The
+     * The 1st item is the normalized id. The 2nd item is the
+     * canonicalized id. The 3rd is the keyword. The 4th is the keyword value.
+     */
+    private static String[][] CANONICALIZE_MAP = {
+        { "C",              "en_US_POSIX", null, null }, /* POSIX name */
+        { "art_LOJBAN",     "jbo", null, null }, /* registered name */
+        { "az_AZ_CYRL",     "az_Cyrl_AZ", null, null }, /* .NET name */
+        { "az_AZ_LATN",     "az_Latn_AZ", null, null }, /* .NET name */
+        { "ca_ES_PREEURO",  "ca_ES", "currency", "ESP" },
+        { "cel_GAULISH",    "cel__GAULISH", null, null }, /* registered name */
+        { "de_1901",        "de__1901", null, null }, /* registered name */
+        { "de_1906",        "de__1906", null, null }, /* registered name */
+        { "de__PHONEBOOK",  "de", "collation", "phonebook" }, /* Old ICU name */
+        { "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
+        { "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
+        { "de_LU_PREEURO",  "de_LU", "currency", "EUR" },
+        { "el_GR_PREEURO",  "el_GR", "currency", "GRD" },
+        { "en_BOONT",       "en__BOONT", null, null }, /* registered name */
+        { "en_SCOUSE",      "en__SCOUSE", null, null }, /* registered name */
+        { "en_BE_PREEURO",  "en_BE", "currency", "BEF" },
+        { "en_IE_PREEURO",  "en_IE", "currency", "IEP" },
+        { "es__TRADITIONAL", "es", "collation", "traditional" }, /* Old ICU name */
+        { "es_ES_PREEURO",  "es_ES", "currency", "ESP" },
+        { "eu_ES_PREEURO",  "eu_ES", "currency", "ESP" },
+        { "fi_FI_PREEURO",  "fi_FI", "currency", "FIM" },
+        { "fr_BE_PREEURO",  "fr_BE", "currency", "BEF" },
+        { "fr_FR_PREEURO",  "fr_FR", "currency", "FRF" },
+        { "fr_LU_PREEURO",  "fr_LU", "currency", "LUF" },
+        { "ga_IE_PREEURO",  "ga_IE", "currency", "IEP" },
+        { "gl_ES_PREEURO",  "gl_ES", "currency", "ESP" },
+        { "hi__DIRECT",     "hi", "collation", "direct" }, /* Old ICU name */
+        { "it_IT_PREEURO",  "it_IT", "currency", "ITL" },
+        { "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" },
+      //{ "nb_NO_NY",       "nn_NO", null, null },
+        { "nl_BE_PREEURO",  "nl_BE", "currency", "BEF" },
+        { "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
+        { "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
+        { "sl_ROZAJ",       "sl__ROZAJ", null, null }, /* registered name */
+        { "sr_SP_CYRL",     "sr_Cyrl_RS", null, null }, /* .NET name */
+        { "sr_SP_LATN",     "sr_Latn_RS", null, null }, /* .NET name */
+        { "sr_YU_CYRILLIC", "sr_Cyrl_RS", null, null }, /* Linux name */
+        { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" }, /* Old ICU name */
+        { "uz_UZ_CYRILLIC", "uz_Cyrl_UZ", null, null }, /* Linux name */
+        { "uz_UZ_CYRL",     "uz_Cyrl_UZ", null, null }, /* .NET name */
+        { "uz_UZ_LATN",     "uz_Latn_UZ", null, null }, /* .NET name */
+        { "zh_CHS",         "zh_Hans", null, null }, /* .NET name */
+        { "zh_CHT",         "zh_Hant", null, null }, /* .NET name */
+        { "zh_GAN",         "zh__GAN", null, null }, /* registered name */
+        { "zh_GUOYU",       "zh", null, null }, /* registered name */
+        { "zh_HAKKA",       "zh__HAKKA", null, null }, /* registered name */
+        { "zh_MIN",         "zh__MIN", null, null }, /* registered name */
+        { "zh_MIN_NAN",     "zh__MINNAN", null, null }, /* registered name */
+        { "zh_WUU",         "zh__WUU", null, null }, /* registered name */
+        { "zh_XIANG",       "zh__XIANG", null, null }, /* registered name */
+        { "zh_YUE",         "zh__YUE", null, null } /* registered name */
+    };
 
-    private static String[][] CANONICALIZE_MAP;
-    private static String[][] variantsToKeywords;
+    /**
+     * This table lists pairs of locale ids for canonicalization.
+     * The first item is the normalized variant id.
+     */
+    private static String[][] variantsToKeywords = {
+        { "EURO",   "currency", "EUR" },
+        { "PINYIN", "collation", "pinyin" }, /* Solaris variant */
+        { "STROKE", "collation", "stroke" }  /* Solaris variant */
+    };
 
-    private static void initCANONICALIZE_MAP() {
-        if (CANONICALIZE_MAP == null) {
-            /**
-             * This table lists pairs of locale ids for canonicalization.  The
-             * The 1st item is the normalized id. The 2nd item is the
-             * canonicalized id. The 3rd is the keyword. The 4th is the keyword value.
-             */
-            String[][] tempCANONICALIZE_MAP = {
-                    //              { EMPTY_STRING,     "en_US_POSIX", null, null }, /* .NET name */
-                    { "C",              "en_US_POSIX", null, null }, /* POSIX name */
-                    { "art_LOJBAN",     "jbo", null, null }, /* registered name */
-                    { "az_AZ_CYRL",     "az_Cyrl_AZ", null, null }, /* .NET name */
-                    { "az_AZ_LATN",     "az_Latn_AZ", null, null }, /* .NET name */
-                    { "ca_ES_PREEURO",  "ca_ES", "currency", "ESP" },
-                    { "cel_GAULISH",    "cel__GAULISH", null, null }, /* registered name */
-                    { "de_1901",        "de__1901", null, null }, /* registered name */
-                    { "de_1906",        "de__1906", null, null }, /* registered name */
-                    { "de__PHONEBOOK",  "de", "collation", "phonebook" }, /* Old ICU name */
-                    { "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
-                    { "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
-                    { "de_LU_PREEURO",  "de_LU", "currency", "EUR" },
-                    { "el_GR_PREEURO",  "el_GR", "currency", "GRD" },
-                    { "en_BOONT",       "en__BOONT", null, null }, /* registered name */
-                    { "en_SCOUSE",      "en__SCOUSE", null, null }, /* registered name */
-                    { "en_BE_PREEURO",  "en_BE", "currency", "BEF" },
-                    { "en_IE_PREEURO",  "en_IE", "currency", "IEP" },
-                    { "es__TRADITIONAL", "es", "collation", "traditional" }, /* Old ICU name */
-                    { "es_ES_PREEURO",  "es_ES", "currency", "ESP" },
-                    { "eu_ES_PREEURO",  "eu_ES", "currency", "ESP" },
-                    { "fi_FI_PREEURO",  "fi_FI", "currency", "FIM" },
-                    { "fr_BE_PREEURO",  "fr_BE", "currency", "BEF" },
-                    { "fr_FR_PREEURO",  "fr_FR", "currency", "FRF" },
-                    { "fr_LU_PREEURO",  "fr_LU", "currency", "LUF" },
-                    { "ga_IE_PREEURO",  "ga_IE", "currency", "IEP" },
-                    { "gl_ES_PREEURO",  "gl_ES", "currency", "ESP" },
-                    { "hi__DIRECT",     "hi", "collation", "direct" }, /* Old ICU name */
-                    { "it_IT_PREEURO",  "it_IT", "currency", "ITL" },
-                    { "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" },
-                    //              { "nb_NO_NY",       "nn_NO", null, null },
-                    { "nl_BE_PREEURO",  "nl_BE", "currency", "BEF" },
-                    { "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
-                    { "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
-                    { "sl_ROZAJ",       "sl__ROZAJ", null, null }, /* registered name */
-                    { "sr_SP_CYRL",     "sr_Cyrl_RS", null, null }, /* .NET name */
-                    { "sr_SP_LATN",     "sr_Latn_RS", null, null }, /* .NET name */
-                    { "sr_YU_CYRILLIC", "sr_Cyrl_RS", null, null }, /* Linux name */
-                    { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" }, /* Old ICU name */
-                    { "uz_UZ_CYRILLIC", "uz_Cyrl_UZ", null, null }, /* Linux name */
-                    { "uz_UZ_CYRL",     "uz_Cyrl_UZ", null, null }, /* .NET name */
-                    { "uz_UZ_LATN",     "uz_Latn_UZ", null, null }, /* .NET name */
-                    { "zh_CHS",         "zh_Hans", null, null }, /* .NET name */
-                    { "zh_CHT",         "zh_Hant", null, null }, /* .NET name */
-                    { "zh_GAN",         "zh__GAN", null, null }, /* registered name */
-                    { "zh_GUOYU",       "zh", null, null }, /* registered name */
-                    { "zh_HAKKA",       "zh__HAKKA", null, null }, /* registered name */
-                    { "zh_MIN",         "zh__MIN", null, null }, /* registered name */
-                    { "zh_MIN_NAN",     "zh__MINNAN", null, null }, /* registered name */
-                    { "zh_WUU",         "zh__WUU", null, null }, /* registered name */
-                    { "zh_XIANG",       "zh__XIANG", null, null }, /* registered name */
-                    { "zh_YUE",         "zh__YUE", null, null } /* registered name */
-            };
-
-            synchronized (ULocale.class) {
-                if (CANONICALIZE_MAP == null) {
-                    CANONICALIZE_MAP = tempCANONICALIZE_MAP;
-                }
-            }
-        }
-        if (variantsToKeywords == null) {
-            /**
-             * This table lists pairs of locale ids for canonicalization.  The
-             * The first item is the normalized variant id.
-             */
-            String[][] tempVariantsToKeywords = {
-                    { "EURO",   "currency", "EUR" },
-                    { "PINYIN", "collation", "pinyin" }, /* Solaris variant */
-                    { "STROKE", "collation", "stroke" }  /* Solaris variant */
-            };
-
-            synchronized (ULocale.class) {
-                if (variantsToKeywords == null) {
-                    variantsToKeywords = tempVariantsToKeywords;
-                }
-            }
-        }
-    }
 
     /**
      * Private constructor used by static initializers.
@@ -1253,8 +1232,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         }
 
         // we have an ID in the form xx_Yyyy_ZZ_KKKKK
-
-        initCANONICALIZE_MAP();
 
         /* convert the variants to appropriate ID */
         for (int i = 0; i < variantsToKeywords.length; i++) {
