@@ -26,7 +26,7 @@ U_NAMESPACE_BEGIN
  */
 #ifdef U_ALIASING_BARRIER
     // Use the predefined value.
-#elif defined(__clang__) || defined(__GNUC__)
+#elif (defined(__clang__) || defined(__GNUC__)) && U_PLATFORM != U_PF_BROWSER_NATIVE_CLIENT
 #   define U_ALIASING_BARRIER(ptr) asm volatile("" : : "rm"(ptr) : "memory")
 #endif
 
