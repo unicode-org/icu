@@ -13,7 +13,7 @@
 
 #include "unicode/utypes.h"
 
-// This file contains only desktop windows behavior
+// This file contains only desktop Windows behavior
 #if U_PLATFORM_HAS_WIN32_API
 
 #include "wintz.h"
@@ -148,7 +148,7 @@ static LONG getTZKeyName(char* tzKeyName, int32_t length)
 /*
   This code attempts to detect the Windows time zone directly,
   as set in the Windows Date and Time control panel.  It attempts
-  to work on windows greater than Windows Vista and on localized
+  to work on versions greater than Windows Vista and on localized
   installs.  It works by directly interrogating the registry and
   comparing the data there with the data returned by the
   GetTimeZoneInformation API, along with some other strategies.  The
@@ -156,8 +156,8 @@ static LONG getTZKeyName(char* tzKeyName, int32_t length)
 
     HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones\
 
-  Under this key are several subkeys, one for each time zone.  These
-  subkeys are named "Pacific Standard Time" on Vista+.
+  Under this key are several subkeys, one for each time zone.  For
+  example these subkeys are named "Pacific Standard Time" on Vista+.
   There are some other wrinkles; see the code for
   details.  The subkey name is NOT LOCALIZED, allowing us to support
   localized installs.
