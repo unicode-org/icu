@@ -3836,15 +3836,13 @@ public class Bidi {
 
     /**
      * Perform the Unicode Bidi algorithm. It is defined in the
-     * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Annex #9</a>,
-     * version 13,
-     * also described in The Unicode Standard, Version 4.0 .<p>
+     * <a href="http://www.unicode.org/reports/tr9/">Unicode Standard Annex #9</a>.
      *
-     * This method takes a piece of plain text containing one or more paragraphs,
+     * <p>This method takes a piece of plain text containing one or more paragraphs,
      * with or without externally specified embedding levels from <i>styled</i>
      * text and computes the left-right-directionality of each character.<p>
      *
-     * If the entire text is all of the same directionality, then
+     * <p>If the entire text is all of the same directionality, then
      * the method may not perform all the steps described by the algorithm,
      * i.e., some levels may not be the same as if all steps were performed.
      * This is not relevant for unidirectional text.<br>
@@ -3853,7 +3851,7 @@ public class Bidi {
      * the algorithm. This implementation may set all resolved levels to
      * the same value in such a case.<p>
      *
-     * The text can be composed of multiple paragraphs. Occurrence of a block
+     * <p>The text can be composed of multiple paragraphs. Occurrence of a block
      * separator in the text terminates a paragraph, and whatever comes next starts
      * a new paragraph. The exception to this rule is when a Carriage Return (CR)
      * is followed by a Line Feed (LF). Both CR and LF are block separators, but
@@ -3861,7 +3859,7 @@ public class Bidi {
      * preceding paragraph, and a new paragraph will be started by a character
      * coming after the LF.
      *
-     * Although the text is passed here as a <code>String</code>, it is
+     * <p>Although the text is passed here as a <code>String</code>, it is
      * stored internally as an array of characters. Therefore the
      * documentation will refer to indexes of the characters in the text.
      *
@@ -3886,11 +3884,14 @@ public class Bidi {
      *        A level overrides the directional property of its corresponding
      *        (same index) character if the level has the
      *        <code>LEVEL_OVERRIDE</code> bit set.<br><br>
-     *        Except for that bit, it must be
+     *        Aside from that bit, it must be
      *        <code>paraLevel&lt;=embeddingLevels[]&lt;=MAX_EXPLICIT_LEVEL</code>,
-     *        with one exception: a level of zero may be specified for a
-     *        paragraph separator even if <code>paraLevel&gt;0</code> when multiple
-     *        paragraphs are submitted in the same call to <code>setPara()</code>.<br><br>
+     *        except that level 0 is always allowed.
+     *        Level 0 for a paragraph separator prevents reordering of paragraphs;
+     *        this only works reliably if <code>LEVEL_OVERRIDE</code>
+     *        is also set for paragraph separators.
+     *        Level 0 for other characters is treated as a wildcard
+     *        and is lifted up to the resolved level of the surrounding paragraph.<br><br>
      *        <strong>Caution: </strong>A reference to this array, not a copy
      *        of the levels, will be stored in the <code>Bidi</code> object;
      *        the <code>embeddingLevels</code>
@@ -3921,15 +3922,13 @@ public class Bidi {
 
     /**
      * Perform the Unicode Bidi algorithm. It is defined in the
-     * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Annex #9</a>,
-     * version 13,
-     * also described in The Unicode Standard, Version 4.0 .<p>
+     * <a href="http://www.unicode.org/reports/tr9/">Unicode Standard Annex #9</a>.
      *
-     * This method takes a piece of plain text containing one or more paragraphs,
+     * <p>This method takes a piece of plain text containing one or more paragraphs,
      * with or without externally specified embedding levels from <i>styled</i>
      * text and computes the left-right-directionality of each character.<p>
      *
-     * If the entire text is all of the same directionality, then
+     * <p>If the entire text is all of the same directionality, then
      * the method may not perform all the steps described by the algorithm,
      * i.e., some levels may not be the same as if all steps were performed.
      * This is not relevant for unidirectional text.<br>
@@ -3938,7 +3937,7 @@ public class Bidi {
      * the algorithm. This implementation may set all resolved levels to
      * the same value in such a case.<p>
      *
-     * The text can be composed of multiple paragraphs. Occurrence of a block
+     * <p>The text can be composed of multiple paragraphs. Occurrence of a block
      * separator in the text terminates a paragraph, and whatever comes next starts
      * a new paragraph. The exception to this rule is when a Carriage Return (CR)
      * is followed by a Line Feed (LF). Both CR and LF are block separators, but
@@ -3946,7 +3945,7 @@ public class Bidi {
      * preceding paragraph, and a new paragraph will be started by a character
      * coming after the LF.
      *
-     * The text is stored internally as an array of characters. Therefore the
+     * <p>The text is stored internally as an array of characters. Therefore the
      * documentation will refer to indexes of the characters in the text.
      *
      * @param chars contains the text that the Bidi algorithm will be performed
@@ -3973,7 +3972,9 @@ public class Bidi {
      *        Aside from that bit, it must be
      *        <code>paraLevel&lt;=embeddingLevels[]&lt;=MAX_EXPLICIT_LEVEL</code>,
      *        except that level 0 is always allowed.
-     *        Level 0 for a paragraph separator prevents reordering of paragraphs.
+     *        Level 0 for a paragraph separator prevents reordering of paragraphs;
+     *        this only works reliably if <code>LEVEL_OVERRIDE</code>
+     *        is also set for paragraph separators.
      *        Level 0 for other characters is treated as a wildcard
      *        and is lifted up to the resolved level of the surrounding paragraph.<br><br>
      *        <strong>Caution: </strong>A reference to this array, not a copy
