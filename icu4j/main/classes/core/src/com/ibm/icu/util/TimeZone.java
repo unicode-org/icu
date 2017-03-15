@@ -927,19 +927,28 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @stable ICU 2.0
      */
     public static TimeZone getDefault() {
-        if (defaultZone == null) {
-            synchronized(TimeZone.class) {
-                if (defaultZone == null) {
-                    if (TZ_IMPL == TIMEZONE_JDK) {
-                        defaultZone = new JavaTimeZone();
-                    } else {
-                        java.util.TimeZone temp = java.util.TimeZone.getDefault();
-                        defaultZone = getFrozenTimeZone(temp.getID());
+        // Copy the reference to the current defaultZone,
+        // so it won't be affected by setDefault().
+        TimeZone tmpDefaultZone = defaultZone;
+
+        if (tmpDefaultZone == null) {
+            synchronized (java.util.TimeZone.class) {
+                synchronized(TimeZone.class) {
+                    tmpDefaultZone = defaultZone;
+                    if (tmpDefaultZone == null) {
+                        if (TZ_IMPL == TIMEZONE_JDK) {
+                            tmpDefaultZone = new JavaTimeZone();
+                        } else {
+                            java.util.TimeZone temp = java.util.TimeZone.getDefault();
+                            tmpDefaultZone = getFrozenTimeZone(temp.getID());
+                        }
+                        defaultZone = tmpDefaultZone;
                     }
                 }
             }
         }
-        return defaultZone.cloneAsThawed();
+
+        return tmpDefaultZone.cloneAsThawed();
     }
 
     /**
