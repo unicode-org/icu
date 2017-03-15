@@ -59,14 +59,12 @@ public:
      */
     inline Char16Ptr(wchar_t *p);
 #endif
-#if !U_NO_NULLPTR_T
     /**
      * nullptr constructor.
      * @param p nullptr
      * @draft ICU 59
      */
     inline Char16Ptr(std::nullptr_t p);
-#endif
     /**
      * Destructor.
      * @draft ICU 59
@@ -114,9 +112,7 @@ Char16Ptr::Char16Ptr(uint16_t *p) : p(cast(p)) {}
 #if U_SIZEOF_WCHAR_T==2
 Char16Ptr::Char16Ptr(wchar_t *p) : p(cast(p)) {}
 #endif
-#if !U_NO_NULLPTR_T
 Char16Ptr::Char16Ptr(std::nullptr_t p) : p(p) {}
-#endif
 Char16Ptr::~Char16Ptr() {
     U_ALIASING_BARRIER(p);
 }
@@ -132,9 +128,7 @@ Char16Ptr::Char16Ptr(uint16_t *p) { u.up = p; }
 #if U_SIZEOF_WCHAR_T==2
 Char16Ptr::Char16Ptr(wchar_t *p) { u.wp = p; }
 #endif
-#if !U_NO_NULLPTR_T
 Char16Ptr::Char16Ptr(std::nullptr_t p) { u.cp = p; }
-#endif
 Char16Ptr::~Char16Ptr() {}
 
 char16_t *Char16Ptr::get() const { return u.cp; }
@@ -170,14 +164,13 @@ public:
      */
     inline ConstChar16Ptr(const wchar_t *p);
 #endif
-#if !U_NO_NULLPTR_T
     /**
      * nullptr constructor.
      * @param p nullptr
      * @draft ICU 59
      */
     inline ConstChar16Ptr(const std::nullptr_t p);
-#endif
+
     /**
      * Destructor.
      * @draft ICU 59
@@ -225,9 +218,7 @@ ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) : p(cast(p)) {}
 #if U_SIZEOF_WCHAR_T==2
 ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) : p(cast(p)) {}
 #endif
-#if !U_NO_NULLPTR_T
 ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) : p(p) {}
-#endif
 ConstChar16Ptr::~ConstChar16Ptr() {
     U_ALIASING_BARRIER(p);
 }
@@ -243,9 +234,7 @@ ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) { u.up = p; }
 #if U_SIZEOF_WCHAR_T==2
 ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) { u.wp = p; }
 #endif
-#if !U_NO_NULLPTR_T
 ConstChar16Ptr::ConstChar16Ptr(const std::nullptr_t p) { u.cp = p; }
-#endif
 ConstChar16Ptr::~ConstChar16Ptr() {}
 
 const char16_t *ConstChar16Ptr::get() const { return u.cp; }

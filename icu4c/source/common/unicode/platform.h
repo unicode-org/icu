@@ -487,9 +487,10 @@
 #endif
 
 #if (U_PLATFORM == U_PF_AIX) && defined(__cplusplus) &&(U_CPLUSPLUS_VERSION < 11)
-# define U_NO_NULLPTR_T 1
-#else
-# define U_NO_NULLPTR_T 0
+// add in std::nullptr_t
+namespace std {
+  typedef decltype(nullptr) nullptr_t;
+};
 #endif
 
 /**
