@@ -31,6 +31,10 @@
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
 
+#ifndef UPRV_LENGTHOF
+#define UPRV_LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+#endif
+
 // helper functions -------------------------------------------------------- ***
 
 // default converter for the platform encoding
