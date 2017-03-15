@@ -5,6 +5,7 @@
 ## others. All Rights Reserved.
 ## Steven R. Loomis
 
+# To avoid recursion
 SKIP_ESCAPING=YES
 
 ## Source directory information
@@ -25,7 +26,7 @@ SECTION = 8
 #MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(MAN_FILES) ./output-*.cpp
 
 ## Target information
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
@@ -74,6 +75,12 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
+	@echo Testing test-nochange.cpp
+	@$(INVOKE) $(TARGET) $(srcdir)/test-nochange.cpp ./output-nochange.cpp
+	@-diff -I '#line.*' $(srcdir)/test-nochange.cpp ./output-nochange.cpp || (echo >&2 'warning: diff failed or not found' ; true)
+	@echo Testing test-simple.cpp
+	@$(INVOKE) $(TARGET) $(srcdir)/test-simple.cpp ./output-simple.cpp
+	@-diff -I '#line.*' $(srcdir)/expect-simple.cpp ./output-simple.cpp   || (echo >&2 'warning: diff failed or not found' ; true)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

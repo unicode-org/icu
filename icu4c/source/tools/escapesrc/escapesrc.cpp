@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
+#include <iostream>
+#include <fstream>
 
 // with caution:
 #include "unicode/utf8.h"
@@ -112,7 +115,6 @@ bool fixAt(std::string &linestr, size_t pos) {
     } else {
       // Proceed to decode utf-8
       const uint8_t *s = (const uint8_t*) (linestr.c_str());
-      const uint8_t *b = s;
       int32_t i = pos;
       int32_t length = linestr.size();
       UChar32 c;
@@ -123,24 +125,22 @@ bool fixAt(std::string &linestr, size_t pos) {
         U8_NEXT(s, i, length, c);
       }
       if(c<0) {
-        fprintf(stderr, "Illegal utf-8 sequence %04X pos %d\n", c, pos);
+        fprintf(stderr, "Illegal utf-8 sequence\n");
         return true;
       }
 
       size_t seqLen = (i-pos);
 
-      printf("U+%04X pos %d [len %d]\n", c, pos, seqLen);
+      //printf("U+%04X pos %d [len %d]\n", c, pos, seqLen);
 
+      char newSeq[] = "\\U0000FFFD";
       if( c <= 0xFFFF) {
-        char newSeq[] = "\\uFFFD";
         sprintf(newSeq, "\\u%04X", c);
-        linestr.replace(pos, seqLen, newSeq);
-        //pos += seqLen; // advance
-        pos += strlen(newSeq) - 1;
       } else {
-        fprintf(stderr, "%s: Error: not implemented yet: surrogate pairs for U+%04X\n", prog.c_str(), c);
-        return true;
+        sprintf(newSeq, "\\U%08X", c);
       }
+      linestr.replace(pos, seqLen, newSeq);
+      pos += strlen(newSeq) - 1;
     }
   }
 
@@ -151,91 +151,85 @@ bool fixAt(std::string &linestr, size_t pos) {
  * false = no err
  * true = had err
  */
-bool fixLine(int no, std::string &linestr) {
+bool fixLine(int /*no*/, std::string &linestr) {
   const char *line = linestr.c_str();
   size_t len = linestr.size();
-  // Quick Check: all ascii?
 
+  // no u' in the line?
+  if(!strstr(line, "u'") && !strstr(line, "u\"")) {
+    return false; // Nothing to do. No u' or u" detected
+  }
+
+  // Quick Check: all ascii?
   if(!hasNonAscii(line, len)) {
     return false; // ASCII
   }
 
+  // comment or empty line?
   if(isCommentOrEmpty(line, len)) {
     return false; // Comment or just empty
   }
 
-  if(!strnstr(line, "u'", len) && !strnstr(line, "u\"", len)) {
-    return false; // Nothing to do. No u' or u" detected
-  }
-
   // start from the end and find all u" cases
   size_t pos = len = linestr.size();
-  while((pos = linestr.rfind("u\"", pos)) != std::string::npos) {
-    printf("found doublequote at %d\n", pos);
+  while((pos>0) && (pos = linestr.rfind("u\"", pos)) != std::string::npos) {
+    //printf("found doublequote at %d\n", pos);
     if(fixAt(linestr, pos)) return true;
+    if(pos == 0) break;
     pos--;
   }
 
   // reset and find all u' cases
   pos = len = linestr.size();
-  while((pos = linestr.rfind("u'", pos)) != std::string::npos) {
-    printf("found singlequote at %d\n", pos);
+  while((pos>0) && (pos = linestr.rfind("u'", pos)) != std::string::npos) {
+    //printf("found singlequote at %d\n", pos);
     if(fixAt(linestr, pos)) return true;
+    if(pos == 0) break;
     pos--;
   }
 
-  fprintf(stderr, "%d - fixed\n", no);
+  //fprintf(stderr, "%d - fixed\n", no);
   return false;
 }
 
 int convert(const std::string &infile, const std::string &outfile) {
-  fprintf(stderr, "%s: %s -> %s\n", prog.c_str(), infile.c_str(), outfile.c_str());
+  fprintf(stderr, "escapesrc: %s -> %s\n", infile.c_str(), outfile.c_str());
 
-  FILE *inf = fopen(infile.c_str(), "rb");
-  if(!inf) {
+  std::ifstream inf;
+  
+  inf.open(infile, std::ios::in);
+
+  if(!inf.is_open()) {
     fprintf(stderr, "%s: could not open input file %s\n", prog.c_str(), infile.c_str());
     cleanup(outfile);
     return 1;
   }
 
-  FILE *outf = fopen(outfile.c_str(), "w");
+  std::ofstream outf;
 
-  if(!outf) {
+  outf.open(outfile, std::ios::out);
+
+  if(!outf.is_open()) {
     fprintf(stderr, "%s: could not open output file %s\n", prog.c_str(), outfile.c_str());
-    fclose(inf);
     return 1;
   }
 
-  // TODO: any platform variations of this?
-  fprintf(outf, "#line 1 \"%s\"\n", infile.c_str());
+  // TODO: any platform variations of #line?
+  outf << "#line 1 \"" << infile << "\"" << '\n';
 
-  size_t len;
-  char *line;
   int no = 0;
   std::string linestr;
-  while((line = fgetln(inf, &len))!= NULL) {
+  while( getline( inf, linestr)) {
     no++;
-    linestr.assign(line, len);
     if(fixLine(no, linestr)) {
-      fclose(inf);
-      fclose(outf);
+      outf.close();
       fprintf(stderr, "%s:%d: Fixup failed by %s\n", infile.c_str(), no, prog.c_str());
       cleanup(outfile);
       return 1;
     }
-    len = linestr.size(); // size may have changed.
-    
-    if(fwrite(linestr.c_str(), 1, linestr.size(), outf) != len) {
-      fclose(inf);
-      fclose(outf);
-      fprintf(stderr, "%s: short write to  %s:%d\n", prog.c_str(), outfile.c_str(), no);
-      cleanup(outfile);
-      return 1;
-    }
+    outf << linestr << '\n';
   }
 
-  fclose(inf);
-  fclose(outf);
   return 0;
 }
 

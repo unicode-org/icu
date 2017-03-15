@@ -17,7 +17,7 @@ subdir = tools
 
 SUBDIRS = toolutil ctestfw makeconv genrb genbrk \
 gencnval gensprep icuinfo genccode gencmn icupkg pkgdata \
-gentest gennorm2 gencfu gendict
+gentest gennorm2 gencfu gendict escapesrc
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local	\
