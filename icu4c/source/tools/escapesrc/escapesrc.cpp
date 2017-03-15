@@ -13,6 +13,19 @@
 // with caution:
 #include "unicode/utf8.h"
 
+static const char
+  kSPACE = 0x20,
+  kTAB   = 0x09,
+  kLF    = 0x0A,
+  kCR    = 0x0D,
+  kHASH  = 0x23,
+  kSLASH = 0x2f,
+  kSTAR  = 0x2A,
+  kL_U   = 0x75,
+  kU_U   = 0x55,
+  kQUOT  = 0x27,
+  kDBLQ  = 0x22;
+
 std::string prog;
 
 void usage() {
@@ -39,6 +52,7 @@ int cleanup(const std::string &outfile) {
   return 0;
 }
 
+#if 0
 inline bool hasNonAscii(const char *line, size_t len) {
   const unsigned char *uline = reinterpret_cast<const unsigned char*>(line);
   for(size_t i=0;i<len; i++) {
@@ -48,14 +62,15 @@ inline bool hasNonAscii(const char *line, size_t len) {
   }
   return false;
 }
+#endif
 
 inline const char *skipws(const char *p, const char *e) {
   for(;p<e;p++) {
     switch(*p) {
-    case ' ':
-    case '\t':
-    case '\n':
-    case '\r':
+    case kSPACE:
+    case kTAB:
+    case kLF:
+    case kCR:
       break;
     default:
       return p; // non ws
@@ -64,6 +79,7 @@ inline const char *skipws(const char *p, const char *e) {
   return p;
 }
 
+#if 0
 inline bool isCommentOrEmpty(const char* line, size_t len) {
   const char *p = line;
   const char *e = line+len;
@@ -73,19 +89,95 @@ inline bool isCommentOrEmpty(const char* line, size_t len) {
   }
   p++;
   switch(*p) {
-  case '#': return true; // #directive
-  case '/':
+  case kHASH: return true; // #directive
+  case kSLASH:
     p++;
     if(p==e) return false; // single slash
     switch(*p) {
-    case '/': // '/ /'
-    case '*': // '/ *'
+    case kSLASH: // '/ /'
+    case kSTAR: // '/ *'
       return true; // start of comment
     default: return false; // something else
     }
   default: return false; // something else
   }
   /*NOTREACHED*/
+}
+#endif
+
+void appendByte(std::string &outstr,
+                uint8_t byte) {
+    char tmp2[4];
+    sprintf(tmp2, "\\x%02X", 0xFF & (int)(byte));
+    outstr += tmp2;
+}
+
+/**
+ * @return true on failure
+ */
+bool appendUtf8(std::string &outstr,
+                const std::string &linestr,
+                size_t &pos,
+                size_t chars) {
+  char tmp[9];
+  for(size_t i=0;i<chars;i++) {
+    tmp[i] = linestr[++pos];
+  }
+  tmp[chars] = 0;
+  UChar32 ch;
+  sscanf(tmp, "%X", &ch);
+
+  // now to append \\x%% etc
+  uint8_t bytesNeeded = U8_LENGTH(ch);
+  if(bytesNeeded == 0) {
+    fprintf(stderr, "Illegal code point U+%X\n", ch);
+    return true;
+  }
+  uint8_t bytes[4];
+  uint8_t *s = bytes;
+  size_t i = 0;
+  U8_APPEND_UNSAFE(s, i, ch);
+  for(size_t t = 0; t<i; t++) {
+    appendByte(outstr, s[t]);
+  }
+  return false;
+}
+
+/**
+ * @param linestr string to mutate. Already escaped into \u format.
+ * @param origpos beginning, points to 'u8"'
+ * @param pos end, points to "
+ * @return false for no-problem, true for failure!
+ */
+bool fixu8(std::string &linestr, size_t origpos, size_t &endpos) {
+  size_t pos = origpos + 3;
+  std::string outstr;
+  outstr += (kDBLQ);
+  for(;pos<endpos;pos++) {
+    char c = linestr[pos];
+    if(c == kSLASH) {
+      char c2 = linestr[++pos];
+      switch(c2) {
+      case kQUOT:
+      case kDBLQ:
+        appendByte(outstr, c2);
+        break;
+      case kL_U:
+        appendUtf8(outstr, linestr, pos, 4);
+        break;
+      case kU_U:
+        appendUtf8(outstr, linestr, pos, 8);
+        break;
+      }
+    } else {
+      appendByte(outstr, c);
+    }
+  }
+  outstr += (kDBLQ);
+
+  linestr.replace(origpos, (endpos-origpos+1), outstr);
+  
+  return false; // OK
 }
 
 /**
@@ -94,18 +186,46 @@ inline bool isCommentOrEmpty(const char* line, size_t len) {
  * true = had err
  */
 bool fixAt(std::string &linestr, size_t pos) {
+  size_t origpos = pos;
+  
   if(linestr[pos] != 'u') {
     fprintf(stderr, "Not a 'u'?");
     return true;
   }
 
-  char quote = linestr[pos+1];
+  pos++; // past 'u'
+
+  bool utf8 = false;
+  
+  if(linestr[pos] == '8') { // u8"
+    utf8 = true;
+    pos++;
+  }
+  
+  char quote = linestr[pos];
+
+  if(quote != '\'' && quote != '\"') {
+    fprintf(stderr, "Quote is '%c' - not sure what to do.\n", quote);
+    return true;
+  }
+
+  if(quote == '\'' && utf8) {
+    fprintf(stderr, "Cannot do u8'...'\n");
+    return true;
+  }
+
+  pos ++;
 
   //printf("u%c…%c\n", quote, quote);
 
-
-  for(pos += 2; pos < linestr.size(); pos++) {
-    if(linestr[pos] == quote) return false; // end of quote
+  for(; pos < linestr.size(); pos++) {
+    if(linestr[pos] == quote) {
+      if(utf8) {
+        return fixu8(linestr, origpos, pos); // fix u8"..."
+      } else {
+        return false; // end of quote
+      }
+    }
     if(linestr[pos] == '\\') {
       pos++;
       if(linestr[pos] == quote) continue; // quoted quote
@@ -156,19 +276,20 @@ bool fixLine(int /*no*/, std::string &linestr) {
   size_t len = linestr.size();
 
   // no u' in the line?
-  if(!strstr(line, "u'") && !strstr(line, "u\"")) {
+  if(!strstr(line, "u'") && !strstr(line, "u\"") && !strstr(line, "u8\"")) {
     return false; // Nothing to do. No u' or u" detected
   }
 
-  // Quick Check: all ascii?
-  if(!hasNonAscii(line, len)) {
-    return false; // ASCII
-  }
+  // lines such as u8"\u0308" are all ASCII.
+  // // Quick Check: all ascii?
+  // if(!hasNonAscii(line, len)) {
+  //   return false; // ASCII
+  // }
 
-  // comment or empty line?
-  if(isCommentOrEmpty(line, len)) {
-    return false; // Comment or just empty
-  }
+  // // comment or empty line?
+  // if(isCommentOrEmpty(line, len)) {
+  //   return false; // Comment or just empty
+  // }
 
   // start from the end and find all u" cases
   size_t pos = len = linestr.size();
@@ -183,6 +304,14 @@ bool fixLine(int /*no*/, std::string &linestr) {
   pos = len = linestr.size();
   while((pos>0) && (pos = linestr.rfind("u'", pos)) != std::string::npos) {
     //printf("found singlequote at %d\n", pos);
+    if(fixAt(linestr, pos)) return true;
+    if(pos == 0) break;
+    pos--;
+  }
+
+  // reset and find all u8" cases
+  pos = len = linestr.size();
+  while((pos>0) && (pos = linestr.rfind("u8\"", pos)) != std::string::npos) {
     if(fixAt(linestr, pos)) return true;
     if(pos == 0) break;
     pos--;
