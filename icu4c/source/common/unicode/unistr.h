@@ -119,7 +119,11 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * <code>NUL</code>, must be specified as a constant.
  * @stable ICU 2.0
  */
-#define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, u ## cs, _length)
+#if !U_CHAR16_IS_TYPEDEF
+# define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, u ## cs, _length)
+#else
+# define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, (const char16_t*)u ## cs, _length)
+#endif
 
 /**
  * Unicode String literals in C++.
@@ -3033,7 +3037,6 @@ public:
       UnicodeString(ConstChar16Ptr(text)) {}
 #endif
 
-#if !U_NO_NULLPTR_T
   /**
    * nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.
@@ -3045,7 +3048,6 @@ public:
    * @draft ICU 59
    */
   UNISTR_FROM_STRING_EXPLICIT inline UnicodeString(const std::nullptr_t text);
-#endif
 
   /**
    * char16_t* constructor.
@@ -3082,7 +3084,6 @@ public:
       UnicodeString(ConstChar16Ptr(text), length) {}
 #endif
 
-#if !U_NO_NULLPTR_T
   /**
    * nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.
@@ -3091,7 +3092,7 @@ public:
    * @draft ICU 59
    */
   inline UnicodeString(const std::nullptr_t text, int32_t length);
-#endif
+
   /**
    * Readonly-aliasing char16_t* constructor.
    * The text will be used for the UnicodeString object, but
@@ -3165,7 +3166,6 @@ public:
       UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
 #endif
 
-#if !U_NO_NULLPTR_T
   /**
    * Writable-aliasing nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.
@@ -3175,7 +3175,6 @@ public:
    * @draft ICU 59
    */
   inline UnicodeString(std::nullptr_t buffer, int32_t buffLength, int32_t buffCapacity);
-#endif
 
 #if U_CHARSET_IS_UTF8 || !UCONFIG_NO_CONVERSION
 
@@ -3889,7 +3888,6 @@ UnicodeString::UnicodeString() {
   fUnion.fStackFields.fLengthAndFlags=kShortString;
 }
 
-#if !U_NO_NULLPTR_T
 inline UnicodeString::UnicodeString(const std::nullptr_t /*text*/) {
   fUnion.fStackFields.fLengthAndFlags=kShortString;
 }
@@ -3901,7 +3899,6 @@ inline UnicodeString::UnicodeString(const std::nullptr_t /*text*/, int32_t /*len
 inline UnicodeString::UnicodeString(std::nullptr_t /*buffer*/, int32_t /*buffLength*/, int32_t /*buffCapacity*/) {
   fUnion.fStackFields.fLengthAndFlags=kShortString;
 }
-#endif
 
 //========================================
 // Read-only implementation methods
