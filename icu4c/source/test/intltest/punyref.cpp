@@ -7,7 +7,7 @@
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
- *   file name:  punyref.h
+ *   file name:  punyref.cpp
  *   encoding:   UTF-8
  *   tab size:   8 (not used)
  *   indentation:4

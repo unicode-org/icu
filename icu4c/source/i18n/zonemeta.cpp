@@ -28,6 +28,7 @@
 #include "uresimp.h"
 #include "uhash.h"
 #include "olsontz.h"
+#include "uinvchar.h"
 
 static UMutex gZoneMetaLock = U_MUTEX_INITIALIZER;
 
@@ -254,6 +255,12 @@ ZoneMeta::getCanonicalCLDRID(const UnicodeString &tzid, UErrorCode& status) {
     UChar utzid[ZID_KEY_MAX + 1];
     tzid.extract(utzid, ZID_KEY_MAX + 1, tmpStatus);
     U_ASSERT(tmpStatus == U_ZERO_ERROR);    // we checked the length of tzid already
+
+    if (!uprv_isInvariantUString(utzid, -1)) {
+        // All of known tz IDs are only containing ASCII invariant characters.
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
 
     // Check if it was already cached
     umtx_lock(&gZoneMetaLock);

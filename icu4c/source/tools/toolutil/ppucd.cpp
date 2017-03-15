@@ -515,12 +515,12 @@ PreparsedUCD::parseCodePointRange(const char *s, UChar32 &start, UChar32 &end, U
 
 void
 PreparsedUCD::parseString(const char *s, UnicodeString &uni, UErrorCode &errorCode) {
-    UChar *buffer=uni.getBuffer(-1);
+    UChar *buffer=toUCharPtr(uni.getBuffer(-1));
     int32_t length=u_parseString(s, buffer, uni.getCapacity(), NULL, &errorCode);
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         errorCode=U_ZERO_ERROR;
         uni.releaseBuffer(0);
-        buffer=uni.getBuffer(length);
+        buffer=toUCharPtr(uni.getBuffer(length));
         length=u_parseString(s, buffer, uni.getCapacity(), NULL, &errorCode);
     }
     uni.releaseBuffer(length);
