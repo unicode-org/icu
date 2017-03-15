@@ -176,7 +176,7 @@ public:
         lastCC=0;
     }
     void copyReorderableSuffixTo(UnicodeString &s) const {
-        s.setTo(reorderStart, (int32_t)(limit-reorderStart));
+        s.setTo(ConstChar16Ptr(reorderStart), (int32_t)(limit-reorderStart));
     }
 private:
     /*

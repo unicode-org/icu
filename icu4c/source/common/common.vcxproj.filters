@@ -1105,6 +1105,9 @@
     <CustomBuild Include="unicode\casemap.h">
       <Filter>strings</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\char16ptr.h">
+      <Filter>strings</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\chariter.h">
       <Filter>strings</Filter>
     </CustomBuild>

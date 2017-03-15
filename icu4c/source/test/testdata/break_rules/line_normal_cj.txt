@@ -164,7 +164,7 @@ LB20.1b:      CB CM* ÷;
 #       not picking up the continuing match after the BA from 21a.
 # TODO: For CJ tailorings (with BAX) does this rule want to include BAX? If so,
 #       should "HL BAX" not break when followed by a CB? Thats what the current
-#       rules do, which is why "[^CM CB]?" includes the ?.
+#       rules do, which is why "[^CM CB]?" includes the ?.
 LB21a:       HL CM* (HY | BA | BAX) CM* [^CM CB]?;
 
 # DO allow breaks here before $BAXcm and $NSXcm, so don't include them

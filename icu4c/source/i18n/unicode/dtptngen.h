@@ -517,7 +517,7 @@ private:
     DateTimeMatcher *skipMatcher;
     Hashtable *fAvailableFormatKeyHash;
     UnicodeString emptyString;
-    UChar fDefaultHourFormatChar;
+    char16_t fDefaultHourFormatChar;
 
     int32_t fAllowedHourFormats[7];  // Actually an array of AllowedHourFormat enum type, ending with UNKNOWN.
 

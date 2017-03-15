@@ -19,12 +19,12 @@
 
 U_NAMESPACE_BEGIN
 
-CurrencyAmount::CurrencyAmount(const Formattable& amount, const UChar* isoCode,
+CurrencyAmount::CurrencyAmount(const Formattable& amount, ConstChar16Ptr isoCode,
                                UErrorCode& ec) :
     Measure(amount, new CurrencyUnit(isoCode, ec), ec) {
 }
 
-CurrencyAmount::CurrencyAmount(double amount, const UChar* isoCode,
+CurrencyAmount::CurrencyAmount(double amount, ConstChar16Ptr isoCode,
                                UErrorCode& ec) :
     Measure(Formattable(amount), new CurrencyUnit(isoCode, ec), ec) {
 }

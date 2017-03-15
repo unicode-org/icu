@@ -644,7 +644,7 @@ void StringSearchTest::TestOpenClose()
     }
     delete result;
 
-    text.append(0, 0x1);
+    // No-op: text.append(0, 0x1); -- what was intended here?
     status = U_ZERO_ERROR;
     result = new StringSearch(pattern, text, NULL, NULL, status);
     if (U_SUCCESS(status)) {

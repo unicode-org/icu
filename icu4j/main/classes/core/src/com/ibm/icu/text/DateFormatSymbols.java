@@ -2147,57 +2147,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Returns the {@link DateFormatSymbols} object that should be used to format a
      * calendar system's dates in the given locale.
-     * <p>
-     * <b>Subclassing:</b><br>
-     * When creating a new Calendar subclass, you must create the
-     * {@link ResourceBundle ResourceBundle}
-     * containing its {@link DateFormatSymbols DateFormatSymbols} in a specific place.
-     * The resource bundle name is based on the calendar's fully-specified
-     * class name, with ".resources" inserted at the end of the package name
-     * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
-     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * <p>
-     * Within the ResourceBundle, this method searches for five keys:
-     * <ul>
-     * <li><b>DayNames</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>DAY_OF_WEEK</code> field.  Even though
-     *      <code>DAY_OF_WEEK</code> starts with <code>SUNDAY</code> = 1,
-     *      This array is 0-based; the name for Sunday goes in the
-     *      first position, at index 0.  If this key is not found
-     *      in the bundle, the day names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
      *
-     * <li><b>DayAbbreviations</b> -
-     *      An array of abbreviated day names corresponding
-     *      to the values in the "DayNames" array.  If this key
-     *      is not found in the resource bundle, the "DayNames"
-     *      values are used instead.  If neither key is found,
-     *      the day abbreviations are inherited from the default
-     *      <code>DateFormatSymbols</code> for the locale.
-     *
-     * <li><b>MonthNames</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>MONTH</code> field.  If this key is not found
-     *      in the bundle, the month names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     *
-     * <li><b>MonthAbbreviations</b> -
-     *      An array of abbreviated day names corresponding
-     *      to the values in the "MonthNames" array.  If this key
-     *      is not found in the resource bundle, the "MonthNames"
-     *      values are used instead.  If neither key is found,
-     *      the day abbreviations are inherited from the default
-     *      <code>DateFormatSymbols</code> for the locale.
-     *
-     * <li><b>Eras</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>ERA</code> field.  If this key is not found
-     *      in the bundle, the era names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     * </ul>
-     * <p>
      * @param cal       The calendar system whose date format symbols are desired.
      * @param locale    The locale whose symbols are desired.
      *
@@ -2211,57 +2161,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Returns the {@link DateFormatSymbols} object that should be used to format a
      * calendar system's dates in the given locale.
-     * <p>
-     * <b>Subclassing:</b><br>
-     * When creating a new Calendar subclass, you must create the
-     * {@link ResourceBundle ResourceBundle}
-     * containing its {@link DateFormatSymbols DateFormatSymbols} in a specific place.
-     * The resource bundle name is based on the calendar's fully-specified
-     * class name, with ".resources" inserted at the end of the package name
-     * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
-     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * <p>
-     * Within the ResourceBundle, this method searches for five keys:
-     * <ul>
-     * <li><b>DayNames</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>DAY_OF_WEEK</code> field.  Even though
-     *      <code>DAY_OF_WEEK</code> starts with <code>SUNDAY</code> = 1,
-     *      This array is 0-based; the name for Sunday goes in the
-     *      first position, at index 0.  If this key is not found
-     *      in the bundle, the day names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     *
-     * <li><b>DayAbbreviations</b> -
-     *      An array of abbreviated day names corresponding
-     *      to the values in the "DayNames" array.  If this key
-     *      is not found in the resource bundle, the "DayNames"
-     *      values are used instead.  If neither key is found,
-     *      the day abbreviations are inherited from the default
-     *      <code>DateFormatSymbols</code> for the locale.
-     *
-     * <li><b>MonthNames</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>MONTH</code> field.  If this key is not found
-     *      in the bundle, the month names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     *
-     * <li><b>MonthAbbreviations</b> -
-     *      An array of abbreviated day names corresponding
-     *      to the values in the "MonthNames" array.  If this key
-     *      is not found in the resource bundle, the "MonthNames"
-     *      values are used instead.  If neither key is found,
-     *      the day abbreviations are inherited from the default
-     *      <code>DateFormatSymbols</code> for the locale.
-     *
-     * <li><b>Eras</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>ERA</code> field.  If this key is not found
-     *      in the bundle, the era names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     * </ul>
-     * <p>
      * @param cal       The calendar system whose date format symbols are desired.
      * @param locale    The ulocale whose symbols are desired.
      *

@@ -2242,13 +2242,13 @@ unistrTextCopy(UText *ut,
     }
 
     if(move) {
-        // move: copy to destIndex, then replace original with nothing
+        // move: copy to destIndex, then remove original
         int32_t segLength=limit32-start32;
         us->copy(start32, limit32, destIndex32);
         if(destIndex32<start32) {
             start32+=segLength;
         }
-        us->replace(start32, segLength, NULL, 0);
+        us->remove(start32, segLength);
     } else {
         // copy
         us->copy(start32, limit32, destIndex32);
