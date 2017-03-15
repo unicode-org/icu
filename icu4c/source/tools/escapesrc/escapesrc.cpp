@@ -107,7 +107,7 @@ inline bool isCommentOrEmpty(const char* line, size_t len) {
 
 void appendByte(std::string &outstr,
                 uint8_t byte) {
-    char tmp2[4];
+    char tmp2[5];
     sprintf(tmp2, "\\x%02X", 0xFF & (int)(byte));
     outstr += tmp2;
 }
@@ -124,8 +124,9 @@ bool appendUtf8(std::string &outstr,
     tmp[i] = linestr[++pos];
   }
   tmp[chars] = 0;
-  UChar32 ch;
-  sscanf(tmp, "%X", &ch);
+  unsigned int c;
+  sscanf(tmp, "%X", &c);
+  UChar32 ch = c & 0x1FFFFF; 
 
   // now to append \\x%% etc
   uint8_t bytesNeeded = U8_LENGTH(ch);
@@ -251,9 +252,9 @@ bool fixAt(std::string &linestr, size_t pos) {
 
       size_t seqLen = (i-pos);
 
-      //printf("U+%04X pos %d [len %d]\n", c, pos, seqLen);
+      //printf("U+%04X pos %d [len %d]\n", c, pos, seqLen);fflush(stdout);
 
-      char newSeq[] = "\\U0000FFFD";
+      char newSeq[20];
       if( c <= 0xFFFF) {
         sprintf(newSeq, "\\u%04X", c);
       } else {
