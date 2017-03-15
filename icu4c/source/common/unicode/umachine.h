@@ -295,6 +295,9 @@ typedef int8_t UBool;
  */
 #if (U_PLATFORM == U_PF_AIX) && defined(__cplusplus) &&(U_CPLUSPLUS_VERSION < 11)
 # include <uchar.h>
+# define U_CHAR16_IS_TYPEDEF 1
+#else
+# define U_CHAR16_IS_TYPEDEF 0
 #endif
 
 

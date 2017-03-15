@@ -3002,6 +3002,7 @@ public:
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char16_t *text);
 
+#if !U_CHAR16_IS_TYPEDEF
   /**
    * uint16_t * constructor.
    * Delegates to UnicodeString(const char16_t *).
@@ -3014,6 +3015,7 @@ public:
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const uint16_t *text) :
       UnicodeString(ConstChar16Ptr(text)) {}
+#endif
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
@@ -3031,6 +3033,7 @@ public:
       UnicodeString(ConstChar16Ptr(text)) {}
 #endif
 
+#if !U_NO_NULLPTR_T
   /**
    * nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.
@@ -3042,6 +3045,7 @@ public:
    * @draft ICU 59
    */
   UNISTR_FROM_STRING_EXPLICIT inline UnicodeString(const std::nullptr_t text);
+#endif
 
   /**
    * char16_t* constructor.
@@ -3053,6 +3057,7 @@ public:
   UnicodeString(const char16_t *text,
         int32_t textLength);
 
+#if !U_CHAR16_IS_TYPEDEF
   /**
    * uint16_t * constructor.
    * Delegates to UnicodeString(const char16_t *, int32_t).
@@ -3062,6 +3067,7 @@ public:
    */
   UnicodeString(const uint16_t *text, int32_t length) :
       UnicodeString(ConstChar16Ptr(text), length) {}
+#endif
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
@@ -3076,6 +3082,7 @@ public:
       UnicodeString(ConstChar16Ptr(text), length) {}
 #endif
 
+#if !U_NO_NULLPTR_T
   /**
    * nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.
@@ -3084,7 +3091,7 @@ public:
    * @draft ICU 59
    */
   inline UnicodeString(const std::nullptr_t text, int32_t length);
-
+#endif
   /**
    * Readonly-aliasing char16_t* constructor.
    * The text will be used for the UnicodeString object, but
@@ -3131,6 +3138,7 @@ public:
    */
   UnicodeString(char16_t *buffer, int32_t buffLength, int32_t buffCapacity);
 
+#if !U_CHAR16_IS_TYPEDEF
   /**
    * Writable-aliasing uint16_t * constructor.
    * Delegates to UnicodeString(const char16_t *, int32_t, int32_t).
@@ -3141,6 +3149,7 @@ public:
    */
   UnicodeString(uint16_t *buffer, int32_t buffLength, int32_t buffCapacity) :
       UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
+#endif
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
@@ -3156,6 +3165,7 @@ public:
       UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
 #endif
 
+#if !U_NO_NULLPTR_T
   /**
    * Writable-aliasing nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.
@@ -3165,6 +3175,7 @@ public:
    * @draft ICU 59
    */
   inline UnicodeString(std::nullptr_t buffer, int32_t buffLength, int32_t buffCapacity);
+#endif
 
 #if U_CHARSET_IS_UTF8 || !UCONFIG_NO_CONVERSION
 
@@ -3878,6 +3889,7 @@ UnicodeString::UnicodeString() {
   fUnion.fStackFields.fLengthAndFlags=kShortString;
 }
 
+#if !U_NO_NULLPTR_T
 inline UnicodeString::UnicodeString(const std::nullptr_t /*text*/) {
   fUnion.fStackFields.fLengthAndFlags=kShortString;
 }
@@ -3889,6 +3901,7 @@ inline UnicodeString::UnicodeString(const std::nullptr_t /*text*/, int32_t /*len
 inline UnicodeString::UnicodeString(std::nullptr_t /*buffer*/, int32_t /*buffLength*/, int32_t /*buffCapacity*/) {
   fUnion.fStackFields.fLengthAndFlags=kShortString;
 }
+#endif
 
 //========================================
 // Read-only implementation methods

@@ -1,7 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-char16_t CH = u'•';
-
 /*
 *******************************************************************************
 *
@@ -219,8 +217,6 @@ extern int
 main(int argc, char* argv[]) {
     UErrorCode errorCode = U_ZERO_ERROR;
     UBool didSomething = FALSE;
-
-    printf("U+%lx\n", CH); return 0;
     
     /* preset then read command line options */
     argc=u_parseArgs(argc, argv, UPRV_LENGTHOF(options), options);
