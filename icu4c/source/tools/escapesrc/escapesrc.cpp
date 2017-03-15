@@ -197,7 +197,7 @@ int convert(const std::string &infile, const std::string &outfile) {
 
   std::ifstream inf;
   
-  inf.open(infile, std::ios::in);
+  inf.open(infile.c_str(), std::ios::in);
 
   if(!inf.is_open()) {
     fprintf(stderr, "%s: could not open input file %s\n", prog.c_str(), infile.c_str());
@@ -207,7 +207,7 @@ int convert(const std::string &infile, const std::string &outfile) {
 
   std::ofstream outf;
 
-  outf.open(outfile, std::ios::out);
+  outf.open(outfile.c_str(), std::ios::out);
 
   if(!outf.is_open()) {
     fprintf(stderr, "%s: could not open output file %s\n", prog.c_str(), outfile.c_str());

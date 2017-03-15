@@ -486,6 +486,12 @@
 #   define U_CPLUSPLUS_VERSION 1
 #endif
 
+#if (U_PLATFORM == U_PF_AIX) && defined(__cplusplus) &&(U_CPLUSPLUS_VERSION < 11)
+# define U_NO_NULLPTR_T 1
+#else
+# define U_NO_NULLPTR_T 0
+#endif
+
 /**
  * \def U_HAVE_RVALUE_REFERENCES
  * Set to 1 if the compiler supports rvalue references.
