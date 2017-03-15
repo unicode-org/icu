@@ -13,7 +13,7 @@
 /**
  * \file
  * \brief C++ API: char16_t pointer wrappers with
- *        implicit conversion to/from bit-compatible raw pointer types.
+ *        implicit conversion from bit-compatible raw pointer types.
  *        Also conversion functions from char16_t * to UChar * and OldUChar *.
  */
 
