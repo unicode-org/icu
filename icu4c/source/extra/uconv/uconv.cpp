@@ -659,7 +659,7 @@ ConvertFile::convertFile(const char *pname,
         parse.line = -1;
 
         if (uprv_strchr(translit, ':') || uprv_strchr(translit, '>') || uprv_strchr(translit, '<') || uprv_strchr(translit, '>')) {
-            t = Transliterator::createFromRules(UnicodeString(u"Uconv"), str, UTRANS_FORWARD, parse, err);
+            t = Transliterator::createFromRules(UNICODE_STRING_SIMPLE("Uconv"), str, UTRANS_FORWARD, parse, err);
         } else {
             t = Transliterator::createInstance(UnicodeString(translit, -1, US_INV), UTRANS_FORWARD, err);
         }
