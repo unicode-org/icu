@@ -1199,7 +1199,9 @@ ubidi_setContext(UBiDi *pBiDi,
  *        Aside from that bit, it must be
  *        <code>paraLevel<=embeddingLevels[]<=UBIDI_MAX_EXPLICIT_LEVEL</code>,
  *        except that level 0 is always allowed.
- *        Level 0 for a paragraph separator prevents reordering of paragraphs.
+ *        Level 0 for a paragraph separator prevents reordering of paragraphs;
+ *        this only works reliably if <code>#UBIDI_LEVEL_OVERRIDE</code>
+ *        is also set for paragraph separators.
  *        Level 0 for other characters is treated as a wildcard
  *        and is lifted up to the resolved level of the surrounding paragraph.<br><br>
  *        <strong>Caution: </strong>A copy of this pointer, not of the levels,
