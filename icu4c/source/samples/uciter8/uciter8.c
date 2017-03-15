@@ -30,6 +30,10 @@
 #include "unicode/uiter.h"
 #include "uit_len8.h"
 
+#ifndef UPRV_LENGTHOF
+#define UPRV_LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+#endif
+
 #define log_err printf
 
 /* UCharIterator test ------------------------------------------------------- */
