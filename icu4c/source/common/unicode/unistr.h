@@ -119,7 +119,11 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * <code>NUL</code>, must be specified as a constant.
  * @stable ICU 2.0
  */
-#define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, u ## cs, _length)
+#if !U_CHAR16_IS_TYPEDEF
+# define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, u ## cs, _length)
+#else
+# define UNICODE_STRING(cs, _length) icu::UnicodeString(TRUE, (const char16_t*)u ## cs, _length)
+#endif
 
 /**
  * Unicode String literals in C++.
@@ -3002,6 +3006,7 @@ public:
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char16_t *text);
 
+#if !U_CHAR16_IS_TYPEDEF
   /**
    * uint16_t * constructor.
    * Delegates to UnicodeString(const char16_t *).
@@ -3014,6 +3019,7 @@ public:
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const uint16_t *text) :
       UnicodeString(ConstChar16Ptr(text)) {}
+#endif
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
@@ -3053,6 +3059,7 @@ public:
   UnicodeString(const char16_t *text,
         int32_t textLength);
 
+#if !U_CHAR16_IS_TYPEDEF
   /**
    * uint16_t * constructor.
    * Delegates to UnicodeString(const char16_t *, int32_t).
@@ -3062,6 +3069,7 @@ public:
    */
   UnicodeString(const uint16_t *text, int32_t length) :
       UnicodeString(ConstChar16Ptr(text), length) {}
+#endif
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
@@ -3131,6 +3139,7 @@ public:
    */
   UnicodeString(char16_t *buffer, int32_t buffLength, int32_t buffCapacity);
 
+#if !U_CHAR16_IS_TYPEDEF
   /**
    * Writable-aliasing uint16_t * constructor.
    * Delegates to UnicodeString(const char16_t *, int32_t, int32_t).
@@ -3141,6 +3150,7 @@ public:
    */
   UnicodeString(uint16_t *buffer, int32_t buffLength, int32_t buffCapacity) :
       UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
+#endif
 
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
