@@ -19,7 +19,7 @@ include $(top_builddir)/icudefs.mk
 DISTY_TMP=dist/tmp
 DISTY_ICU=$(DISTY_TMP)/icu
 DISTY_DATA=$(DISTY_ICU)/source/data
-DISTY_RMV=brkitr coll curr lang locales mappings rbnf region translit xml zone misc sprep unit
+DISTY_RMV=brkitr coll curr lang locales mappings rbnf region translit xml zone misc unit
 DISTY_RMDIR=$(DISTY_RMV:%=$(DISTY_DATA)/%)
 DISTY_IN=$(DISTY_DATA)/in
 DOCZIP=icu-docs.zip
