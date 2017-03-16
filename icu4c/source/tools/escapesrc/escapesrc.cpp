@@ -27,6 +27,10 @@ static const char
   kQUOT    = 0x27,
   kDBLQ    = 0x22;
 
+# include "cptbl.h"
+
+# define cp1047_to_8859(c) cp1047_8859_1[c]
+
 std::string prog;
 
 void usage() {
@@ -150,7 +154,7 @@ bool appendUtf8(std::string &outstr,
 bool fixu8(std::string &linestr, size_t origpos, size_t &endpos) {
   size_t pos = origpos + 3;
   std::string outstr;
-  outstr += (kDBLQ);
+  outstr += '\"'; // local encoding
   for(;pos<endpos;pos++) {
     char c = linestr[pos];
     if(c == kBKSLASH) {
@@ -171,7 +175,7 @@ bool fixu8(std::string &linestr, size_t origpos, size_t &endpos) {
       appendByte(outstr, c);
     }
   }
-  outstr += (kDBLQ);
+  outstr += ('\"');
 
   linestr.replace(origpos, (endpos-origpos+1), outstr);
   
@@ -231,19 +235,36 @@ bool fixAt(std::string &linestr, size_t pos) {
       if(linestr[pos] == '\\') continue;
       // some other escape… ignore
     } else {
+#if (U_CHARSET_FAMILY == U_EBCDIC_FAMILY)
+      // mogrify 1-4 bytes from 1047 'back' to utf-8
+      char old_byte = linestr[pos];
+      linestr[pos] = cp1047_to_8859(linestr[pos]);
+      // how many more?
+      int32_t trail = U8_COUNT_TRAIL_BYTES(linestr[pos]);
+      for(size_t pos2 = pos+1; trail>0; pos++,trail--) {
+        linestr[pos2] = cp1047_to_8859(linestr[pos2]);
+      }
+#endif
+      
       // Proceed to decode utf-8
       const uint8_t *s = (const uint8_t*) (linestr.c_str());
       int32_t i = pos;
       int32_t length = linestr.size();
       UChar32 c;
+      if(U8_IS_SINGLE((uint8_t)s[i]) && oldIllegal[s[i]]) {
+#if (U_CHARSET_FAMILY == U_EBCDIC_FAMILY)
+        linestr[pos] = old_byte; // put it back
+#endif
+        continue; // single code point not previously legal for \u escaping
+      }
 
-      if(U8_IS_SINGLE((uint8_t)s[i])) continue; // single code point
-
+      // otherwise, convert it to \u / \U
       {
         U8_NEXT(s, i, length, c);
       }
       if(c<0) {
         fprintf(stderr, "Illegal utf-8 sequence\n");
+        fprintf(stderr, "Line: >>%s<<\n", linestr.c_str());
         return true;
       }
 
