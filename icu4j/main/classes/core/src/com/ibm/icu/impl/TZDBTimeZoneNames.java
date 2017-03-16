@@ -203,6 +203,10 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
             case SHORT_DAYLIGHT:
                 name = _names[1];
                 break;
+            default:
+                // No names for all other types handled by
+                // this class.
+                break;
             }
 
             return name;

@@ -23,10 +23,44 @@
 
 #include "unicode/brkiter.h"
 #include "unicode/ubrk.h"
+#include "unicode/casemap.h"
 #include "unicode/ucasemap.h"
 #include "cmemory.h"
 #include "ucase.h"
 #include "ucasemap_imp.h"
+
+U_NAMESPACE_BEGIN
+
+int32_t CaseMap::utf8ToTitle(
+        const char *locale, uint32_t options, BreakIterator *iter,
+        const char *src, int32_t srcLength,
+        char *dest, int32_t destCapacity, Edits *edits,
+        UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return 0;
+    }
+    UText utext=UTEXT_INITIALIZER;
+    utext_openUTF8(&utext, src, srcLength, &errorCode);
+    LocalPointer<BreakIterator> ownedIter;
+    if(iter==NULL) {
+        iter=BreakIterator::createWordInstance(Locale(locale), errorCode);
+        ownedIter.adoptInstead(iter);
+    }
+    if(U_FAILURE(errorCode)) {
+        utext_close(&utext);
+        return 0;
+    }
+    iter->setText(&utext, errorCode);
+    int32_t length=ucasemap_mapUTF8(
+        ustrcase_getCaseLocale(locale), options, iter,
+        (uint8_t *)dest, destCapacity,
+        (const uint8_t *)src, srcLength,
+        ucasemap_internalUTF8ToTitle, edits, errorCode);
+    utext_close(&utext);
+    return length;
+}
+
+U_NAMESPACE_END
 
 U_NAMESPACE_USE
 
@@ -65,7 +99,7 @@ ucasemap_utf8ToTitle(UCaseMap *csm,
             csm->caseLocale, csm->options, csm->iter,
             (uint8_t *)dest, destCapacity,
             (const uint8_t *)src, srcLength,
-            ucasemap_internalUTF8ToTitle, pErrorCode);
+            ucasemap_internalUTF8ToTitle, NULL, *pErrorCode);
     utext_close(&utext);
     return length;
 }

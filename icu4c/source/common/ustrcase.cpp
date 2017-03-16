@@ -1000,7 +1000,7 @@ int32_t toUpper(uint32_t options,
         state = nextState;
     }
 
-    return checkOverflowAndEditsError(destIndex, destCapacity, edits, errorCode);
+    return destIndex;
 }
 
 }  // namespace GreekUpper
@@ -1031,17 +1031,20 @@ ustrcase_internalToUpper(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_IT
                          const UChar *src, int32_t srcLength,
                          icu::Edits *edits,
                          UErrorCode &errorCode) {
+    int32_t destIndex;
     if (caseLocale == UCASE_LOC_GREEK) {
-        return GreekUpper::toUpper(options, dest, destCapacity, src, srcLength, edits, errorCode);
+        destIndex = GreekUpper::toUpper(options, dest, destCapacity,
+                                        src, srcLength, edits, errorCode);
+    } else {
+        UCaseContext csc=UCASECONTEXT_INITIALIZER;
+        csc.p=(void *)src;
+        csc.limit=srcLength;
+        destIndex = _caseMap(
+            caseLocale, options, ucase_toFullUpper,
+            dest, destCapacity,
+            src, &csc, 0, srcLength,
+            edits, errorCode);
     }
-    UCaseContext csc=UCASECONTEXT_INITIALIZER;
-    csc.p=(void *)src;
-    csc.limit=srcLength;
-    int32_t destIndex = _caseMap(
-        caseLocale, options, ucase_toFullUpper,
-        dest, destCapacity,
-        src, &csc, 0, srcLength,
-        edits, errorCode);
     return checkOverflowAndEditsError(destIndex, destCapacity, edits, errorCode);
 }
 

@@ -352,7 +352,7 @@
     <ClCompile Include="nptrans.cpp">
       <Filter>idna</Filter>
     </ClCompile>
-    <ClCompile Include="punyref.c">
+    <ClCompile Include="punyref.cpp">
       <Filter>idna</Filter>
     </ClCompile>
     <ClCompile Include="testidn.cpp">

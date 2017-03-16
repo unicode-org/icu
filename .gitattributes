@@ -222,6 +222,7 @@ icu4c/source/common/unicode/bytestrie.h svneol=native#text/plain%3Bcharset%3Dutf
 icu4c/source/common/unicode/bytestriebuilder.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/caniter.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/casemap.h svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/common/unicode/char16ptr.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/chariter.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/dbbi.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/docmain.h svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4950,7 +4951,7 @@ icu4c/source/test/intltest/plurults.cpp svneol=native#text/plain%3Bcharset%3Dutf
 icu4c/source/test/intltest/plurults.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/pptest.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/pptest.h svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/test/intltest/punyref.c svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/test/intltest/punyref.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/punyref.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/quantityformattertest.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/rbbiapts.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5265,6 +5266,10 @@ icu4c/source/tools/ctestfw/unicode/tstdtmod.h svneol=native#text/plain%3Bcharset
 icu4c/source/tools/ctestfw/unicode/uperf.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/unicode/utimer.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/uperf.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/escapesrc/escapesrc.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/escapesrc/expect-simple.cpp -text
+icu4c/source/tools/escapesrc/test-nochange.cpp -text
+icu4c/source/tools/escapesrc/test-simple.cpp -text
 icu4c/source/tools/genbrk/genbrk.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/genbrk/genbrk.vcxproj -text
 icu4c/source/tools/genccode/genccode.c svneol=native#text/plain%3Bcharset%3Dutf-8

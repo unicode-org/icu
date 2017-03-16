@@ -64,7 +64,7 @@ uprv_isInvariantUString(const UChar *s, int32_t length);
  */
 U_INTERNAL inline UBool U_EXPORT2
 uprv_isInvariantUnicodeString(const icu::UnicodeString &s) {
-    return uprv_isInvariantUString(s.getBuffer(), s.length());
+    return uprv_isInvariantUString(icu::toUCharPtr(s.getBuffer()), s.length());
 }
 
 #endif  /* __cplusplus */
