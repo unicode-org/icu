@@ -23,6 +23,8 @@ bytestrie.h
 bytestriebuilder.h
 calendar.h
 caniter.h
+casemap.h
+char16ptr.h
 chariter.h
 choicfmt.h
 coleitr.h
@@ -43,6 +45,7 @@ dtitvfmt.h
 dtfmtsym.h
 dtptngen.h
 dtrule.h
+edits.h
 enumset.h
 errorcode.h
 fieldpos.h
