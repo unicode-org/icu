@@ -14,17 +14,18 @@
 #include "unicode/utf8.h"
 
 static const char
-  kSPACE = 0x20,
-  kTAB   = 0x09,
-  kLF    = 0x0A,
-  kCR    = 0x0D,
-  kHASH  = 0x23,
-  kSLASH = 0x2f,
-  kSTAR  = 0x2A,
-  kL_U   = 0x75,
-  kU_U   = 0x55,
-  kQUOT  = 0x27,
-  kDBLQ  = 0x22;
+  kSPACE   = 0x20,
+  kTAB     = 0x09,
+  kLF      = 0x0A,
+  kCR      = 0x0D,
+  // kHASH    = 0x23,
+  // kSLASH   = 0x2f,
+  kBKSLASH = 0x5C,
+  // kSTAR    = 0x2A,
+  kL_U     = 0x75,
+  kU_U     = 0x55,
+  kQUOT    = 0x27,
+  kDBLQ    = 0x22;
 
 std::string prog;
 
@@ -52,17 +53,15 @@ int cleanup(const std::string &outfile) {
   return 0;
 }
 
-#if 0
-inline bool hasNonAscii(const char *line, size_t len) {
-  const unsigned char *uline = reinterpret_cast<const unsigned char*>(line);
-  for(size_t i=0;i<len; i++) {
-    if( uline[i] > 0x7F) {
-      return true;
-    }
-  }
-  return false;
-}
-#endif
+// inline bool hasNonAscii(const char *line, size_t len) {
+//   const unsigned char *uline = reinterpret_cast<const unsigned char*>(line);
+//   for(size_t i=0;i<len; i++) {
+//     if( uline[i] > 0x7F) {
+//       return true;
+//     }
+//   }
+//   return false;
+// }
 
 inline const char *skipws(const char *p, const char *e) {
   for(;p<e;p++) {
@@ -79,31 +78,29 @@ inline const char *skipws(const char *p, const char *e) {
   return p;
 }
 
-#if 0
-inline bool isCommentOrEmpty(const char* line, size_t len) {
-  const char *p = line;
-  const char *e = line+len;
-  p = skipws(p,e);
-  if(p==e) {
-    return true; // whitespace only
-  }
-  p++;
-  switch(*p) {
-  case kHASH: return true; // #directive
-  case kSLASH:
-    p++;
-    if(p==e) return false; // single slash
-    switch(*p) {
-    case kSLASH: // '/ /'
-    case kSTAR: // '/ *'
-      return true; // start of comment
-    default: return false; // something else
-    }
-  default: return false; // something else
-  }
-  /*NOTREACHED*/
-}
-#endif
+// inline bool isCommentOrEmpty(const char* line, size_t len) {
+//   const char *p = line;
+//   const char *e = line+len;
+//   p = skipws(p,e);
+//   if(p==e) {
+//     return true; // whitespace only
+//   }
+//   p++;
+//   switch(*p) {
+//   case kHASH: return true; // #directive
+//   case kSLASH:
+//     p++;
+//     if(p==e) return false; // single slash
+//     switch(*p) {
+//     case kSLASH: // '/ /'
+//     case kSTAR: // '/ *'
+//       return true; // start of comment
+//     default: return false; // something else
+//     }
+//   default: return false; // something else
+//   }
+//   /*NOTREACHED*/
+// }
 
 void appendByte(std::string &outstr,
                 uint8_t byte) {
@@ -156,7 +153,7 @@ bool fixu8(std::string &linestr, size_t origpos, size_t &endpos) {
   outstr += (kDBLQ);
   for(;pos<endpos;pos++) {
     char c = linestr[pos];
-    if(c == kSLASH) {
+    if(c == kBKSLASH) {
       char c2 = linestr[++pos];
       switch(c2) {
       case kQUOT:
