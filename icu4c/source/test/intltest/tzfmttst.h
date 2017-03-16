@@ -27,6 +27,7 @@ class TimeZoneFormatTest : public IntlTest {
     void TestISOFormat(void);
     void TestFormat(void);
     void TestFormatTZDBNames(void);
+    void TestFormatCustomZone(void);
 
     void RunTimeRoundTripTests(int32_t threadNumber);
 };

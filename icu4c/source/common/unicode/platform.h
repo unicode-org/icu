@@ -150,7 +150,7 @@
 #   define U_PLATFORM U_PF_ANDROID
     /* Android wchar_t support depends on the API level. */
 #   include <android/api-level.h>
-#elif defined(__native_client__)
+#elif defined(__pnacl__) || defined(__native_client__)
 #   define U_PLATFORM U_PF_BROWSER_NATIVE_CLIENT
 #elif defined(linux) || defined(__linux__) || defined(__linux)
 #   define U_PLATFORM U_PF_LINUX
@@ -484,6 +484,13 @@
 #else
     // C++98 or C++03
 #   define U_CPLUSPLUS_VERSION 1
+#endif
+
+#if (U_PLATFORM == U_PF_AIX) && defined(__cplusplus) &&(U_CPLUSPLUS_VERSION < 11)
+// add in std::nullptr_t
+namespace std {
+  typedef decltype(nullptr) nullptr_t;
+};
 #endif
 
 /**

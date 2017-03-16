@@ -11,6 +11,10 @@
 #include "unicode/unistr.h"
 #include "unicode/fmtable.h"
 
+#ifndef UPRV_LENGTHOF 
+#define UPRV_LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0])) 
+#endif 
+
 // Verify that a UErrorCode is successful; exit(1) if not
 void check(UErrorCode& status, const char* msg);
 

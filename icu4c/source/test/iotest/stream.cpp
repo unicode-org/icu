@@ -106,12 +106,12 @@ static void U_CALLCONV TestStream(void)
 
     inTestStream >> inStr >> inStr2;
     if (inStr.compare(thisMu) != 0) {
-        u_austrncpy(inStrC, inStr.getBuffer(), inStr.length());
+        u_austrncpy(inStrC, toUCharPtr(inStr.getBuffer()), inStr.length());
         inStrC[inStr.length()] = 0;
         log_err("Got: \"%s\", Expected: \"tHis\\u03BC\"\n", inStrC);
     }
     if (inStr2.compare(mu) != 0) {
-        u_austrncpy(inStrC, inStr.getBuffer(), inStr.length());
+        u_austrncpy(inStrC, toUCharPtr(inStr.getBuffer()), inStr.length());
         inStrC[inStr.length()] = 0;
         log_err("Got: \"%s\", Expected: \"mu\"\n", inStrC);
     }

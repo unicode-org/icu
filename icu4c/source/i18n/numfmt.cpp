@@ -1188,7 +1188,7 @@ void NumberFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
     }
 }
 
-const UChar* NumberFormat::getCurrency() const {
+const char16_t* NumberFormat::getCurrency() const {
     return fCurrency;
 }
 

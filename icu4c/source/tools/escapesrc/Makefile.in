@@ -1,9 +1,12 @@
-## Makefile.in for ICU - tools/pkgdata
+## Makefile.in for ICU - tools/escapesrc
 ## Copyright (C) 2016 and later: Unicode, Inc. and others.
 ## License & terms of use: http://www.unicode.org/copyright.html
 ## Copyright (c) 1999-2011, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Steven R. Loomis
+
+# To avoid recursion
+SKIP_ESCAPING=YES
 
 ## Source directory information
 srcdir = @srcdir@
@@ -14,29 +17,25 @@ top_builddir = ../..
 include $(top_builddir)/icudefs.mk
 
 ## Build directory information
-subdir = tools/pkgdata
+subdir = tools/escapesrc
 
-TARGET_STUB_NAME = pkgdata
+TARGET_STUB_NAME = escapesrc
 
-SECTION = 1
+SECTION = 8
 
-MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
+#MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(MAN_FILES)
-
-ifneq ($(PKGDATA_DEFS),)
-DEFS += $(PKGDATA_DEFS)
-endif
+CLEANFILES = *~ $(DEPS) $(MAN_FILES) ./output-*.cpp
 
 ## Target information
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
-CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/common -I$(srcdir)/../toolutil
-DEFS += -DUDATA_SO_SUFFIX=\".$(SO)\" -DSTATIC_O=\"$(STATIC_O)\"
-LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+#LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC)
+LIBS += $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = pkgdata.o pkgtypes.o
+OBJECTS = escapesrc.o
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -58,12 +57,12 @@ check: all check-local
 all-local: $(TARGET) $(MAN_FILES)
 
 install-local: all-local install-man
-	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
 
 install-man: $(MAN_FILES)
-	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 
 dist-local:
@@ -76,6 +75,12 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
+	@echo Testing test-nochange.cpp
+	@$(INVOKE) $(TARGET) $(srcdir)/test-nochange.cpp ./output-nochange.cpp
+	@-diff -I '#line.*' $(srcdir)/test-nochange.cpp ./output-nochange.cpp || (echo >&2 'warning: diff failed or not found' ; true)
+	@echo Testing test-simple.cpp
+	@$(INVOKE) $(TARGET) $(srcdir)/test-simple.cpp ./output-simple.cpp
+	@-diff -I '#line.*' $(srcdir)/expect-simple.cpp ./output-simple.cpp   || (echo >&2 'warning: diff failed or not found' ; true)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
