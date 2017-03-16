@@ -486,6 +486,13 @@
 #   define U_CPLUSPLUS_VERSION 1
 #endif
 
+#if (U_PLATFORM == U_PF_AIX) && defined(__cplusplus) &&(U_CPLUSPLUS_VERSION < 11)
+// add in std::nullptr_t
+namespace std {
+  typedef decltype(nullptr) nullptr_t;
+};
+#endif
+
 /**
  * \def U_HAVE_RVALUE_REFERENCES
  * Set to 1 if the compiler supports rvalue references.

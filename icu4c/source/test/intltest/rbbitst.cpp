@@ -1682,18 +1682,22 @@ void RBBITest::TestUnicodeFiles() {
 
 UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *fileName) {
     static const UChar *badTestCases[] = {                     // Line Numbers from Unicode 7.0.0 file.
-        u"\u200B\u0020\u007D",   // Line 5198
-        u"\u200B\u0020\u0029",   // Line 5202
-        u"\u200B\u0020\u0021",   // Line 5214
-        u"\u200B\u0020\u002c",   // Line 5246
-        u"\u200B\u0020\u002f",   // Line 5298
+        u"\u200B\u0020}",   // Line 5198
+        u"\u200B\u0020)",   // Line 5202
+        u"\u200B\u0020!",   // Line 5214
+        u"\u200B\u0020,",   // Line 5246
+        u"\u200B\u0020/",   // Line 5298
         u"\u200B\u0020\u2060"    // Line 5302
     };
     if (strcmp(fileName, "LineBreakTest.txt") != 0) {
         return FALSE;
     }
 
+#if (U_CPLUSPLUS_VERSION >= 11)
     for (const UChar *badCase: badTestCases) {
+#else
+    for (const UChar *badCase = badTestCases[0]; badCase < badTestCases[UPRV_LENGTHOF(badTestCases)]; badCase++) {
+#endif
         if (testCase == UnicodeString(badCase)) {
             return logKnownIssue("7270");
         }

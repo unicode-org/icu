@@ -42,12 +42,14 @@ public:
      * @draft ICU 59
      */
     inline Char16Ptr(char16_t *p);
+#if !U_CHAR16_IS_TYPEDEF
     /**
      * Converts the pointer to char16_t *.
      * @param p pointer to be converted
      * @draft ICU 59
      */
     inline Char16Ptr(uint16_t *p);
+#endif
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
     /**
      * Converts the pointer to char16_t *.
@@ -104,7 +106,9 @@ private:
 #ifdef U_ALIASING_BARRIER
 
 Char16Ptr::Char16Ptr(char16_t *p) : p(p) {}
+#if !U_CHAR16_IS_TYPEDEF
 Char16Ptr::Char16Ptr(uint16_t *p) : p(cast(p)) {}
+#endif
 #if U_SIZEOF_WCHAR_T==2
 Char16Ptr::Char16Ptr(wchar_t *p) : p(cast(p)) {}
 #endif
@@ -118,7 +122,9 @@ char16_t *Char16Ptr::get() const { return p; }
 #else
 
 Char16Ptr::Char16Ptr(char16_t *p) { u.cp = p; }
+#if !U_CHAR16_IS_TYPEDEF
 Char16Ptr::Char16Ptr(uint16_t *p) { u.up = p; }
+#endif
 #if U_SIZEOF_WCHAR_T==2
 Char16Ptr::Char16Ptr(wchar_t *p) { u.wp = p; }
 #endif
@@ -141,12 +147,14 @@ public:
      * @draft ICU 59
      */
     inline ConstChar16Ptr(const char16_t *p);
+#if !U_CHAR16_IS_TYPEDEF
     /**
      * Converts the pointer to char16_t *.
      * @param p pointer to be converted
      * @draft ICU 59
      */
     inline ConstChar16Ptr(const uint16_t *p);
+#endif
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
     /**
      * Converts the pointer to char16_t *.
@@ -162,6 +170,7 @@ public:
      * @draft ICU 59
      */
     inline ConstChar16Ptr(const std::nullptr_t p);
+
     /**
      * Destructor.
      * @draft ICU 59
@@ -203,7 +212,9 @@ private:
 #ifdef U_ALIASING_BARRIER
 
 ConstChar16Ptr::ConstChar16Ptr(const char16_t *p) : p(p) {}
+#if !U_CHAR16_IS_TYPEDEF
 ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) : p(cast(p)) {}
+#endif
 #if U_SIZEOF_WCHAR_T==2
 ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) : p(cast(p)) {}
 #endif
@@ -217,7 +228,9 @@ const char16_t *ConstChar16Ptr::get() const { return p; }
 #else
 
 ConstChar16Ptr::ConstChar16Ptr(const char16_t *p) { u.cp = p; }
+#if !U_CHAR16_IS_TYPEDEF
 ConstChar16Ptr::ConstChar16Ptr(const uint16_t *p) { u.up = p; }
+#endif
 #if U_SIZEOF_WCHAR_T==2
 ConstChar16Ptr::ConstChar16Ptr(const wchar_t *p) { u.wp = p; }
 #endif
