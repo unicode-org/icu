@@ -80,7 +80,6 @@ icu4c/source/test/testdata/old_l_testtypes.res -text
 icu4c/source/test/testdata/uni-text.bin -text
 icu4c/source/tools/gencolusb/README.md -text
 icu4c/source/tools/tzcode/icuregions -text
-icu4j/lib/.project -text
 icu4j/main/shared/data/icudata.jar -text
 icu4j/main/shared/data/icutzdata.jar -text
 icu4j/main/shared/data/testdata.jar -text
