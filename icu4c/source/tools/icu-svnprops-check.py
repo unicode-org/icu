@@ -97,39 +97,41 @@ def usage():
 
     
 #
-#  UTF-8 file check.   For text files, add a charset to the mime-type if their contents are UTF-8
+#  UTF-8 file check.   For text files with svn:mime-type=text/anything, check the specified charset
 #    file_name:        name of a text file.
-#    base_mime_type:   svn:mime-type property value from the auto-props file (no charset= part)
+#    base_mime_type:   svn:mime-type property from the auto-props settings for this file type.
 #    actual_mime_type: existing svn:mime-type property value for the file.
-#    return:           svn:mime-type property value, with charset added when appropriate.
+#    return:           The correct svn:mime-type property value,
+#                         either the original, if it looks OK, otherwise the value from auto-props
 #
 def check_utf8(file_name, base_mime_type, actual_mime_type):
-
-    # If the file already has a charset in its mime-type, don't make any change.
-
-    if actual_mime_type.find("charset=") > 0:
-        return actual_mime_type;
 
     f = open(file_name, 'r')
     bytes = f.read()
     f.close()
-
-    if all(ord(byte) < 128 for byte in bytes):
-        # pure ASCII.
-        # print "Pure ASCII " + file_name
-        return base_mime_type
-
+    file_is_utf8 = True
     try:
         bytes.decode("UTF-8")
     except UnicodeDecodeError:
-        print "warning: %s: not ASCII, not UTF-8" % file_name
-        return base_mime_type
+        file_is_utf8 = False
 
-    if ord(bytes[0]) != 0xef:
-      print "UTF-8 file with no BOM: " + file_name
+    if not file_is_utf8 and actual_mime_type.find("utf-8") >= 0:
+        print "Error: %s is not valid utf-8, but has a utf-8 mime type." % file_name
+        return actual_mime_type
 
-    # Append charset=utf-8.
-    return base_mime_type + ';charset=utf-8'
+    if file_is_utf8 and actual_mime_type.find("charset") >=0 and actual_mime_type.find("utf-8") < 0:
+        print "Warning: %s is valid utf-8, but has a mime-type of %s." % (file_name, actual_mime_type)
+
+    if ord(bytes[0]) == 0xef:
+        if not file_name.endswith(".txt"):
+            print "Warning: file %s contains a UTF-8 BOM: " % file_name
+
+    # If the file already has a charset in its mime-type, don't make any change.
+
+    if actual_mime_type.find("charset=") >= 0:
+        return actual_mime_type;
+
+    return base_mime_type
 
 
 def main(argv):
@@ -176,13 +178,6 @@ def main(argv):
                         print "svn propset %s '%s' %s" % (propname, propval, f)
                         if fix_problems:
                             os.system("svn propset %s '%s' %s" % (propname, propval, f))
-                    if propname == "svn:eol-style" and propval == "native":
-                        if os.system("grep -q -v \r " + f):
-                            if fix_problems:
-                                print f + ": Removing DOS CR characters."
-                                os.system("sed -i s/\r// " + f);
-                            else:
-                                print f + " contains DOS CR characters."
 
 
 if __name__ == "__main__":
