@@ -66,8 +66,6 @@ icu4c/source/data/in/uprops.icu -text
 icu4c/source/data/in/uts46.nrm -text
 icu4c/source/data/lang/pool.res -text
 icu4c/source/data/locales/pool.res -text
-icu4c/source/data/makedata.vcxproj -text
-icu4c/source/data/mappings/gsm-03.38-2009.ucm -text
 icu4c/source/data/region/pool.res -text
 icu4c/source/data/unit/pool.res -text
 icu4c/source/data/zone/pool.res -text
@@ -96,7 +94,6 @@ icu4c/source/samples/udata/reader.vcxproj -text
 icu4c/source/samples/udata/writer.vcxproj -text
 icu4c/source/samples/ufortune/ufortune.vcxproj -text
 icu4c/source/samples/ugrep/ugrep.vcxproj -text
-icu4c/source/samples/uresb/resources.vcxproj -text
 icu4c/source/samples/uresb/uresb.vcxproj -text
 icu4c/source/samples/ustring/ustring.vcxproj -text
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
@@ -108,7 +105,6 @@ icu4c/source/test/perf/README -text
 icu4c/source/test/perf/charperf/charperf.vcxproj -text
 icu4c/source/test/perf/collperf/collperf.vcxproj -text
 icu4c/source/test/perf/convperf/convperf.vcxproj -text
-icu4c/source/test/perf/icuperf2report.xsl -text
 icu4c/source/test/perf/normperf/normperf.vcxproj -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.vcxproj -text
 icu4c/source/test/perf/ubrkperf/ubrkperf.vcxproj -text

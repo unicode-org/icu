@@ -30,64 +30,6 @@ import os.path
 import re
 import getopt
 
-#
-#  svn autoprops definitions.
-#      Copy and paste here the ICU recommended auto-props from
-#      http://icu-project.org/docs/subversion_howto/index.html
-#
-#  This program will parse this autoprops string, and verify that files in
-#  the repository have the recommeded properties set.
-#
-svn_auto_props = """
-### Section for configuring automatic properties.
-[auto-props]
-### The format of the entries is:
-###   file-name-pattern = propname[=value][;propname[=value]...]
-### The file-name-pattern can contain wildcards (such as '*' and
-### '?').  All entries which match will be applied to the file.
-### Note that auto-props functionality must be enabled, which
-### is typically done by setting the 'enable-auto-props' option.
-*.c = svn:eol-style=native
-*.cc = svn:eol-style=native
-*.cpp = svn:eol-style=native
-*.h = svn:eol-style=native
-*.rc = svn:eol-style=native
-*.dsp = svn:eol-style=native
-*.dsw = svn:eol-style=native
-*.sln = svn:eol-style=native
-*.vcproj = svn:eol-style=native
-configure = svn:eol-style=native;svn:executable
-*.sh = svn:eol-style=native;svn:executable
-*.pl = svn:eol-style=native;svn:executable
-*.py = svn:eol-style=native;svn:executable
-*.txt = svn:mime-type=text/plain;svn:eol-style=native
-*.java = svn:eol-style=native;svn:mime-type=text/plain;;charset=utf-8
-*.ucm = svn:eol-style=native
-*.html = svn:eol-style=native;svn:mime-type=text/html
-*.htm = svn:eol-style=native;svn:mime-type=text/html
-*.xml = svn:eol-style=native
-Makefile = svn:eol-style=native
-*.in = svn:eol-style=native
-*.mak = svn:eol-style=native
-*.mk = svn:eol-style=native
-*.png = svn:mime-type=image/png
-*.jpeg = svn:mime-type=image/jpeg
-*.jpg = svn:mime-type=image/jpeg
-*.bin = svn:mime-type=application/octet-stream
-*.brk = svn:mime-type=application/octet-stream
-*.cnv = svn:mime-type=application/octet-stream
-*.dat = svn:mime-type=application/octet-stream
-*.icu = svn:mime-type=application/octet-stream
-*.res = svn:mime-type=application/octet-stream
-*.spp = svn:mime-type=application/octet-stream
-# new additions 2007-dec-5 srl
-*.rtf = mime-type=text/rtf
-*.pdf = mime-type=application/pdf
-# changed 2008-04-08: modified .txt, above, adding mime-type
-# changed 2010-11-09: modified .java, adding mime-type
-# Note: The escape syntax for semicolon (";;") is supported since subversion 1.6.1
-"""
-
 
 # file_types:  The parsed form of the svn auto-props specification.
 #              A list of file types - .cc, .cpp, .txt, etc.
@@ -148,6 +90,7 @@ def runCommand(cmd):
         sys.exit(exit_status)
     return output_text
 
+svn_auto_props = runCommand("svn propget svn:auto-props http://source.icu-project.org/repos/icu")
 
 def usage():
     print "usage: " + sys.argv[0] + " [-f | --fix] [-h | --help]"
