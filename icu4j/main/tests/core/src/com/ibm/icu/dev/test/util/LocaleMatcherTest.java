@@ -9,6 +9,8 @@
 
 package com.ibm.icu.dev.test.util;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -18,11 +20,12 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.LocaleMatcher;
 import com.ibm.icu.util.LocaleMatcher.LanguageMatcherData;
 import com.ibm.icu.util.LocalePriorityList;
+import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
 /**
  * Test the LocaleMatcher.
- * 
+ *
  * @author markdavis
  */
 @SuppressWarnings("deprecation")
@@ -490,7 +493,7 @@ public class LocaleMatcherTest extends TestFmwk {
         LocaleMatcher matcher;
         matcher = new LocaleMatcher("mul, nl");
         assertEquals("nl", matcher.getBestMatch("af").toString()); // af => nl
-        
+
         matcher = new LocaleMatcher("mul, af");
         assertEquals("mul", matcher.getBestMatch("nl").toString()); // but nl !=> af
     }
@@ -618,7 +621,7 @@ public class LocaleMatcherTest extends TestFmwk {
         }
     }
 
-    private long timeLocaleMatcher(String title, String desired, LocaleMatcher matcher, 
+    private long timeLocaleMatcher(String title, String desired, LocaleMatcher matcher,
         boolean showmessage, int iterations, long comparisonTime) {
         long start = System.nanoTime();
         for (int i = iterations; i > 0; --i) {
@@ -629,11 +632,36 @@ public class LocaleMatcherTest extends TestFmwk {
             + (comparisonTime > 0 ? (delta * 100 / comparisonTime - 100) + "% longer" : ""));
         return delta;
     }
-    
+
     @Test
     public void Test8288() {
         final LocaleMatcher matcher = newLocaleMatcher("it, en");
         assertEquals("it", matcher.getBestMatch("und").toString());
         assertEquals("en", matcher.getBestMatch("und, en").toString());
+    }
+
+    @Test
+    public void TestTechPreview() {
+        final LocaleMatcher matcher = newLocaleMatcher("it, en, ru");
+        ULocale und = new ULocale("und");
+        ULocale bulgarian = new ULocale("bg");
+        ULocale russian = new ULocale("ru");
+
+        assertEquals("es-419/MX", 4, matcher.distance(new ULocale("es","419"), new ULocale("es","MX")));
+        assertEquals("es-ES/DE", 4, matcher.distance(new ULocale("es","DE"), new ULocale("es","ES")));
+
+        Output<ULocale> outputBestDesired = new Output<ULocale>();
+
+        ULocale best = matcher.getBestMatch(new LinkedHashSet(Arrays.asList(und, ULocale.GERMAN)), outputBestDesired);
+        assertEquals(ULocale.ITALIAN, best);
+        assertEquals(null, outputBestDesired.value);
+
+        matcher.setDefaultLanguage(ULocale.JAPANESE);
+        best = matcher.getBestMatch(new LinkedHashSet(Arrays.asList(und, ULocale.GERMAN)), outputBestDesired);
+        assertEquals(ULocale.JAPANESE, best);
+
+        matcher.setFavorScript(true);
+        best = matcher.getBestMatch(new LinkedHashSet(Arrays.asList(und, bulgarian)), outputBestDesired);
+        assertEquals(russian, best);
     }
 }
