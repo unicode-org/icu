@@ -1,4 +1,9 @@
+/*.jar
 /.git
+/ShanesDecimalFormat
+/android
+/dcfmtb
+/dd1
 icu4c/bin
 icu4c/bin64
 icu4c/include
