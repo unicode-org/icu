@@ -497,8 +497,13 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * {@icu} Sets whether strict parsing is in effect.  When this is true, the
-     * following conditions cause a parse failure (examples use the pattern "#,##0.#"):<ul>
+     * {@icu} Sets whether strict parsing is in effect.  When this is true, the string
+     * is required to be a stronger match to the pattern than when lenient parsing is in
+     * effect.  More specifically, the following conditions cause a parse failure relative
+     * to lenient mode (examples use the pattern "#,##0.#"):<ul>
+     * <li>The presence and position of special symbols, including currency, must match the
+     * pattern.<br>
+     * '123-' fails (the minus sign is expected in the prefix, not suffix)</li>
      * <li>Leading or doubled grouping separators<br>
      * ',123' and '1,,234" fail</li>
      * <li>Groups of incorrect length when grouping is used<br>
@@ -1113,8 +1118,13 @@ public abstract class NumberFormat extends UFormat {
     /**
      * Returns the maximum number of digits allowed in the integer portion of a
      * number.  The default value is 40, which subclasses can override.
-     * When formatting, the exact behavior when this value is exceeded is
-     * subclass-specific.  When parsing, this has no effect.
+     *
+     * When formatting, if the number of digits exceeds this value, the highest-
+     * significance digits are truncated until the limit is reached, in accordance
+     * with UTS#35.
+     *
+     * This setting has no effect on parsing.
+     *
      * @return the maximum number of integer digits
      * @see #setMaximumIntegerDigits
      * @stable ICU 2.0
@@ -1415,9 +1425,11 @@ public abstract class NumberFormat extends UFormat {
                 f.setDecimalSeparatorAlwaysShown(false);
                 f.setParseIntegerOnly(true);
             }
-
             if (choice == CASHCURRENCYSTYLE) {
                 f.setCurrencyUsage(CurrencyUsage.CASH);
+            }
+            if (choice == PLURALCURRENCYSTYLE) {
+                f.setCurrencyPluralInfo(CurrencyPluralInfo.getInstance(desiredLocale));
             }
             format = f;
        }
@@ -1449,8 +1461,11 @@ public abstract class NumberFormat extends UFormat {
      * @param choice the pattern format.
      * @return the pattern
      * @stable ICU 3.2
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    protected static String getPattern(ULocale forLocale, int choice) {
+    @Deprecated
+    public static String getPattern(ULocale forLocale, int choice) {
         /* for ISOCURRENCYSTYLE and PLURALCURRENCYSTYLE,
          * the pattern is the same as the pattern of CURRENCYSTYLE
          * but by replacing the single currency sign with
@@ -1460,6 +1475,7 @@ public abstract class NumberFormat extends UFormat {
         switch (choice) {
         case NUMBERSTYLE:
         case INTEGERSTYLE:
+        case PLURALCURRENCYSTYLE:
             patternKey = "decimalFormat";
             break;
         case CURRENCYSTYLE:
@@ -1469,7 +1485,6 @@ public abstract class NumberFormat extends UFormat {
             break;
         case CASHCURRENCYSTYLE:
         case ISOCURRENCYSTYLE:
-        case PLURALCURRENCYSTYLE:
         case STANDARDCURRENCYSTYLE:
             patternKey = "currencyFormat";
             break;

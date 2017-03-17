@@ -1106,7 +1106,14 @@ public class FormatHandler
             NumberFormat format_b = (NumberFormat) b;
             double number = 1234.56;
 
-            return format_a.format(number).equals(format_b.format(number));
+            String result_a = format_a.format(number);
+            String result_b = format_b.format(number);
+            boolean equal = result_a.equals(result_b);
+            if (!equal) {
+                System.out.println(format_a+" "+format_b);
+                System.out.println(result_a+" "+result_b);
+            }
+            return equal;
         }
     }
 
@@ -1710,7 +1717,17 @@ public class FormatHandler
             char chars_a[] = getCharSymbols(dfs_a);
             char chars_b[] = getCharSymbols(dfs_b);
 
-            return SerializableTestUtility.compareStrings(strings_a, strings_b) && SerializableTestUtility.compareChars(chars_a, chars_b);
+            // Spot-check char-to-string conversion (ICU 58)
+            String percent_a1 = Character.toString(dfs_a.getPercent());
+            String percent_a2 = dfs_a.getPercentString();
+            String percent_b1 = Character.toString(dfs_b.getPercent());
+            String percent_b2 = dfs_b.getPercentString();
+
+            return SerializableTestUtility.compareStrings(strings_a, strings_b)
+                    && SerializableTestUtility.compareChars(chars_a, chars_b)
+                    && percent_a1.equals(percent_b1)
+                    && percent_a2.equals(percent_b2)
+                    && percent_a1.equals(percent_a2);
         }
     }
 

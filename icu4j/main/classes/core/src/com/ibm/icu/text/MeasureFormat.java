@@ -56,13 +56,13 @@ import com.ibm.icu.util.UResourceBundle;
  * <p>To format a Measure object, first create a formatter
  * object using a MeasureFormat factory method.  Then use that
  * object's format or formatMeasures methods.
- * 
+ *
  * Here is sample code:
  * <pre>
  *      MeasureFormat fmtFr = MeasureFormat.getInstance(
  *              ULocale.FRENCH, FormatWidth.SHORT);
  *      Measure measure = new Measure(23, MeasureUnit.CELSIUS);
- *      
+ *
  *      // Output: 23 °C
  *      System.out.println(fmtFr.format(measure));
  *
@@ -70,29 +70,29 @@ import com.ibm.icu.util.UResourceBundle;
  *
  *      // Output: 70 °F
  *      System.out.println(fmtFr.format(measureF));
- *     
+ *
  *      MeasureFormat fmtFrFull = MeasureFormat.getInstance(
  *              ULocale.FRENCH, FormatWidth.WIDE);
  *      // Output: 70 pieds et 5,3 pouces
  *      System.out.println(fmtFrFull.formatMeasures(
  *              new Measure(70, MeasureUnit.FOOT),
  *              new Measure(5.3, MeasureUnit.INCH)));
- *              
+ *
  *      // Output: 1 pied et 1 pouce
  *      System.out.println(fmtFrFull.formatMeasures(
  *              new Measure(1, MeasureUnit.FOOT),
  *              new Measure(1, MeasureUnit.INCH)));
- *  
+ *
  *      MeasureFormat fmtFrNarrow = MeasureFormat.getInstance(
                 ULocale.FRENCH, FormatWidth.NARROW);
  *      // Output: 1′ 1″
  *      System.out.println(fmtFrNarrow.formatMeasures(
  *              new Measure(1, MeasureUnit.FOOT),
  *              new Measure(1, MeasureUnit.INCH)));
- *      
- *      
+ *
+ *
  *      MeasureFormat fmtEn = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
- *      
+ *
  *      // Output: 1 inch, 2 feet
  *      fmtEn.formatMeasures(
  *              new Measure(1, MeasureUnit.INCH),
@@ -105,7 +105,7 @@ import com.ibm.icu.util.UResourceBundle;
  * This class is immutable and thread-safe so long as its deprecated subclass,
  * TimeUnitFormat, is never used. TimeUnitFormat is not thread-safe, and is
  * mutable. Although this class has existing subclasses, this class does not support new
- * sub-classes.   
+ * sub-classes.
  *
  * @see com.ibm.icu.text.UFormat
  * @author Alan Liu
@@ -154,7 +154,7 @@ public class MeasureFormat extends UFormat {
 
     /**
      * Formatting width enum.
-     * 
+     *
      * @stable ICU 53
      */
     // Be sure to update MeasureUnitTest.TestSerialFormatWidthEnum
@@ -163,21 +163,21 @@ public class MeasureFormat extends UFormat {
 
         /**
          * Spell out everything.
-         * 
+         *
          * @stable ICU 53
          */
-        WIDE(ListFormatter.Style.DURATION, NumberFormat.PLURALCURRENCYSTYLE), 
+        WIDE(ListFormatter.Style.DURATION, NumberFormat.PLURALCURRENCYSTYLE),
 
         /**
          * Abbreviate when possible.
-         * 
+         *
          * @stable ICU 53
          */
-        SHORT(ListFormatter.Style.DURATION_SHORT, NumberFormat.ISOCURRENCYSTYLE), 
+        SHORT(ListFormatter.Style.DURATION_SHORT, NumberFormat.ISOCURRENCYSTYLE),
 
         /**
          * Brief. Use only a symbol for the unit when possible.
-         * 
+         *
          * @stable ICU 53
          */
         NARROW(ListFormatter.Style.DURATION_NARROW, NumberFormat.CURRENCYSTYLE),
@@ -186,7 +186,7 @@ public class MeasureFormat extends UFormat {
          * Identical to NARROW except when formatMeasures is called with
          * an hour and minute; minute and second; or hour, minute, and second Measures.
          * In these cases formatMeasures formats as 5:37:23 instead of 5h, 37m, 23s.
-         * 
+         *
          * @stable ICU 53
          */
         NUMERIC(ListFormatter.Style.DURATION_NARROW, NumberFormat.CURRENCYSTYLE);
@@ -294,16 +294,16 @@ public class MeasureFormat extends UFormat {
      * If the pos argument identifies a NumberFormat field,
      * then its indices are set to the beginning and end of the first such field
      * encountered. MeasureFormat itself does not supply any fields.
-     * 
+     *
      * Calling a
      * <code>formatMeasures</code> method is preferred over calling
      * this method as they give better performance.
-     * 
+     *
      * @param obj must be a Collection&lt;? extends Measure&gt;, Measure[], or Measure object.
      * @param toAppendTo Formatted string appended here.
      * @param pos Identifies a field in the formatted text.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
-     * 
+     *
      * @stable ICU53
      */
     @Override
@@ -327,7 +327,7 @@ public class MeasureFormat extends UFormat {
         } else if (obj instanceof Measure){
             toAppendTo.append(formatMeasure((Measure) obj, numberFormat, new StringBuilder(), fpos));
         } else {
-            throw new IllegalArgumentException(obj.toString());            
+            throw new IllegalArgumentException(obj.toString());
         }
         if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
             pos.setBeginIndex(fpos.getBeginIndex() + prevLength);
@@ -356,7 +356,7 @@ public class MeasureFormat extends UFormat {
      * and using the appropriate Number values. Typically the units should be
      * in descending order, with all but the last Measure having integer values
      * (eg, not “3.2 feet, 2 inches”).
-     * 
+     *
      * @param measures a sequence of one or more measures.
      * @return the formatted string.
      * @stable ICU 53
@@ -375,7 +375,7 @@ public class MeasureFormat extends UFormat {
      * <br>Note: If the format doesn’t have enough decimals, or lowValue ≥ highValue,
      * the result will be a degenerate range, like “5-5 meters”.
      * <br>Currency Units are not yet supported.
-     * 
+     *
      * @param lowValue low value in range
      * @param highValue high value in range
      * @return the formatted string.
@@ -416,11 +416,11 @@ public class MeasureFormat extends UFormat {
         }
 
         final double lowDouble = lowNumber.doubleValue();
-        String keywordLow = rules.select(new PluralRules.FixedDecimal(lowDouble, 
+        String keywordLow = rules.select(new PluralRules.FixedDecimal(lowDouble,
                 lowFpos.getCountVisibleFractionDigits(), lowFpos.getFractionDigits()));
 
         final double highDouble = highNumber.doubleValue();
-        String keywordHigh = rules.select(new PluralRules.FixedDecimal(highDouble, 
+        String keywordHigh = rules.select(new PluralRules.FixedDecimal(highDouble,
                 highFpos.getCountVisibleFractionDigits(), highFpos.getFractionDigits()));
 
         final PluralRanges pluralRanges = Factory.getDefaultFactory().getPluralRanges(getLocale());
@@ -482,10 +482,10 @@ public class MeasureFormat extends UFormat {
             result.append(affix.substring(pos+replacement.length()));
         }
     }
-    
+
     /**
-     * Formats a single measure per unit. 
-     * 
+     * Formats a single measure per unit.
+     *
      * An example of such a formatted string is "3.5 meters per second."
      *
      * @param measure  the measure object. In above example, 3.5 meters.
@@ -521,11 +521,11 @@ public class MeasureFormat extends UFormat {
 
     /**
      * Formats a sequence of measures.
-     * 
+     *
      * If the fieldPosition argument identifies a NumberFormat field,
      * then its indices are set to the beginning and end of the first such field
      * encountered. MeasureFormat itself does not supply any fields.
-     * 
+     *
      * @param appendTo the formatted string appended here.
      * @param fieldPosition Identifies a field in the formatted text.
      * @param measures the measures to format.
@@ -612,8 +612,8 @@ public class MeasureFormat extends UFormat {
         }
         MeasureFormat rhs = (MeasureFormat) other;
         // A very slow but safe implementation.
-        return getWidth() == rhs.getWidth() 
-                && getLocale().equals(rhs.getLocale()) 
+        return getWidth() == rhs.getWidth()
+                && getLocale().equals(rhs.getLocale())
                 && getNumberFormat().equals(rhs.getNumberFormat());
     }
 
@@ -624,7 +624,7 @@ public class MeasureFormat extends UFormat {
     @Override
     public final int hashCode() {
         // A very slow but safe implementation.
-        return (getLocale().hashCode() * 31 
+        return (getLocale().hashCode() * 31
                 + getNumberFormat().hashCode()) * 31 + getWidth().hashCode();
     }
 
@@ -1020,7 +1020,12 @@ public class MeasureFormat extends UFormat {
         return pattern;
     }
 
-    private String getPluralFormatter(MeasureUnit unit, FormatWidth width, int index) {
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public String getPluralFormatter(MeasureUnit unit, FormatWidth width, int index) {
         if (index != StandardPlural.OTHER_INDEX) {
             String pattern = getFormatterOrNull(unit, width, index);
             if (pattern != null) {
@@ -1171,6 +1176,7 @@ public class MeasureFormat extends UFormat {
                 suffix = pattern.substring(pos+3);
             }
         }
+        @Override
         public String toString() {
             return prefix + "; " + suffix;
         }
@@ -1202,7 +1208,7 @@ public class MeasureFormat extends UFormat {
             if (fieldPositionFoundIndex == -1) {
                 results[i] = formatMeasure(measures[i], nf, new StringBuilder(), fpos).toString();
                 if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-                    fieldPositionFoundIndex = i;    
+                    fieldPositionFoundIndex = i;
                 }
             } else {
                 results[i] = formatMeasure(measures[i], nf);
@@ -1283,7 +1289,7 @@ public class MeasureFormat extends UFormat {
         // if hour-minute-second
         if (startIndex == 0 && endIndex == 2) {
             return formatNumeric(
-                    d, 
+                    d,
                     numericFormatters.getHourMinuteSecond(),
                     DateFormat.Field.SECOND,
                     hms[endIndex],
@@ -1292,7 +1298,7 @@ public class MeasureFormat extends UFormat {
         // if minute-second
         if (startIndex == 1 && endIndex == 2) {
             return formatNumeric(
-                    d, 
+                    d,
                     numericFormatters.getMinuteSecond(),
                     DateFormat.Field.SECOND,
                     hms[endIndex],
@@ -1301,7 +1307,7 @@ public class MeasureFormat extends UFormat {
         // if hour-minute
         if (startIndex == 0 && endIndex == 1) {
             return formatNumeric(
-                    d, 
+                    d,
                     numericFormatters.getHourMinute(),
                     DateFormat.Field.MINUTE,
                     hms[endIndex],
@@ -1404,6 +1410,7 @@ public class MeasureFormat extends UFormat {
         public MeasureProxy() {
         }
 
+        @Override
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeByte(0); // version
             out.writeUTF(locale.toLanguageTag());
@@ -1413,6 +1420,7 @@ public class MeasureFormat extends UFormat {
             out.writeObject(keyValues);
         }
 
+        @Override
         @SuppressWarnings("unchecked")
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
             in.readByte(); // version.
