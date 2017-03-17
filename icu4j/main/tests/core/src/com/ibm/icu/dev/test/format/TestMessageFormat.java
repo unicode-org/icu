@@ -883,8 +883,9 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                             errln("parsed argument " + parsedArgs[0] + " != " + num);
                         }
                     }
-                    catch (Exception e) {
-                        errln("parse of '" + result + " returned exception: " + e.getMessage());
+                    catch (ParseException e) {
+                        errln("parse of '" + result + "' returned exception: "
+                                + e.getMessage() + " " + e.getErrorOffset());
                     }
                 }
             }

@@ -6,11 +6,11 @@
  * Corporation and others.  All Rights Reserved.
  **/
 
-/** 
+/**
  * Port From:   JDK 1.4b1 : java.text.Format.NumberRegression
  * Source File: java/text/format/NumberRegression.java
  **/
- 
+
 /**
  * @test 1.49 01/05/21
  * @bug 4052223 4059870 4061302 4062486 4066646 4068693 4070798 4071005 4071014
@@ -28,7 +28,6 @@ package com.ibm.icu.dev.test.format;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -424,24 +423,24 @@ public class NumberRegressionTests extends TestFmwk {
 
         try {
             dfFoo.applyPattern("0000;-000");
-            if (!dfFoo.toPattern().equals("#0000"))
+            if (!dfFoo.toPattern().equals("0000"))
                 errln("dfFoo.toPattern : " + dfFoo.toPattern());
             logln(dfFoo.format(42));
             logln(dfFoo.format(-42));
             dfFoo.applyPattern("000;-000");
-            if (!dfFoo.toPattern().equals("#000"))
+            if (!dfFoo.toPattern().equals("000"))
                 errln("dfFoo.toPattern : " + dfFoo.toPattern());
             logln(dfFoo.format(42));
             logln(dfFoo.format(-42));
 
             dfFoo.applyPattern("000;-0000");
-            if (!dfFoo.toPattern().equals("#000"))
+            if (!dfFoo.toPattern().equals("000"))
                 errln("dfFoo.toPattern : " + dfFoo.toPattern());
             logln(dfFoo.format(42));
             logln(dfFoo.format(-42));
 
             dfFoo.applyPattern("0000;-000");
-            if (!dfFoo.toPattern().equals("#0000"))
+            if (!dfFoo.toPattern().equals("0000"))
                 errln("dfFoo.toPattern : " + dfFoo.toPattern());
             logln(dfFoo.format(42));
             logln(dfFoo.format(-42));
@@ -987,7 +986,7 @@ public class NumberRegressionTests extends TestFmwk {
             errln("getMaximumIntegerDigits() returns " +
                 nf.getMaximumIntegerDigits());
     }
-    
+
     /**
      * Locale data should use generic currency symbol
      *
@@ -999,7 +998,7 @@ public class NumberRegressionTests extends TestFmwk {
     public void Test4122840()
     {
         Locale[] locales = NumberFormat.getAvailableLocales();
-        
+
         for (int i = 0; i < locales.length; i++) {
             ICUResourceBundle rb = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,locales[i]);
 
@@ -1014,13 +1013,13 @@ public class NumberRegressionTests extends TestFmwk {
                         " does not contain generic currency symbol:" +
                         pattern );
             }
-            
+
             // Create a DecimalFormat using the pattern we got and format a number
             DecimalFormatSymbols symbols = new DecimalFormatSymbols(locales[i]);
             DecimalFormat fmt1 = new DecimalFormat(pattern, symbols);
-            
+
             String result1 = fmt1.format(1.111);
-            
+
             //
             // Now substitute in the locale's currency symbol and create another
             // pattern.  Replace the decimal separator with the monetary separator.
@@ -1031,7 +1030,7 @@ public class NumberRegressionTests extends TestFmwk {
             for (int j = 0; j < buf.length(); j++) {
                 if (buf.charAt(j) == '\u00a4') {
                     String cur = "'" + symbols.getCurrencySymbol() + "'";
-                    buf.replace(j, j+1, cur); 
+                    buf.replace(j, j+1, cur);
                     j += cur.length() - 1;
                 }
             }
@@ -1039,16 +1038,22 @@ public class NumberRegressionTests extends TestFmwk {
             DecimalFormat fmt2 = new DecimalFormat(buf.toString(), symbols);
 
             // Actual width of decimal fractions and rounding option are inherited
-            // from the currency, not the pattern itself.  So we need to force 
+            // from the currency, not the pattern itself.  So we need to force
             // maximum/minimumFractionDigits and rounding option for the second
             // DecimalForamt instance.  The fix for ticket#7282 requires this test
             // code change to make it work properly.
-            fmt2.setMaximumFractionDigits(fmt1.getMaximumFractionDigits());
-            fmt2.setMinimumFractionDigits(fmt1.getMinimumFractionDigits());
-            fmt2.setRoundingIncrement(fmt1.getRoundingIncrement());
+            if (symbols.getCurrency() != null) {
+                fmt2.setMaximumFractionDigits(symbols.getCurrency().getDefaultFractionDigits());
+                fmt2.setMinimumFractionDigits(symbols.getCurrency().getDefaultFractionDigits());
+                fmt2.setRoundingIncrement(symbols.getCurrency().getRoundingIncrement());
+            } else {
+                fmt2.setMaximumFractionDigits(fmt1.getMinimumFractionDigits());
+                fmt2.setMinimumFractionDigits(fmt1.getMaximumFractionDigits());
+                fmt2.setRoundingIncrement(fmt1.getRoundingIncrement());
+            }
 
             String result2 = fmt2.format(1.111);
-            
+
             // NOTE: en_IN is a special case (ChoiceFormat currency display name)
             if (!result1.equals(result2) &&
                 !locales[i].toString().equals("en_IN")) {
@@ -1057,7 +1062,7 @@ public class NumberRegressionTests extends TestFmwk {
             }
         }
     }
-     
+
     /**
      * DecimalFormat.format() delivers wrong string.
      */
@@ -1086,7 +1091,7 @@ public class NumberRegressionTests extends TestFmwk {
     @Test
     public void Test4134034() {
         DecimalFormat nf = new DecimalFormat("##,###,###.00");
-        
+
         String f = nf.format(9.02);
         if (f.equals("9.02")) logln(f + " ok"); else errln("9.02 -> " + f + "; want 9.02");
 
@@ -1100,17 +1105,17 @@ public class NumberRegressionTests extends TestFmwk {
      *
      * JDK 1.1.6 Bug, did NOT occur in 1.1.5
      * Possibly related to bug 4125885.
-     * 
+     *
      * This class demonstrates a regression in version 1.1.6
      * of DecimalFormat class.
-     * 
+     *
      * 1.1.6 Results
      * Value 1.2 Format #.00 Result '01.20' !!!wrong
      * Value 1.2 Format 0.00 Result '001.20' !!!wrong
      * Value 1.2 Format 00.00 Result '0001.20' !!!wrong
      * Value 1.2 Format #0.0# Result '1.2'
      * Value 1.2 Format #0.00 Result '001.20' !!!wrong
-     * 
+     *
      * 1.1.5 Results
      * Value 1.2 Format #.00 Result '1.20'
      * Value 1.2 Format 0.00 Result '1.20'
@@ -1204,12 +1209,12 @@ public class NumberRegressionTests extends TestFmwk {
                 String out = nf.format(pi);
                 String pat = nf.toPattern();
                 double val = nf.parse(out).doubleValue();
-            
+
                 nf.applyPattern(pat);
                 String out2 = nf.format(pi);
                 String pat2 = nf.toPattern();
                 double val2 = nf.parse(out2).doubleValue();
-            
+
                 if (!pat.equals(pat2))
                     errln("Fail with \"" + PATS[i] + "\": Patterns should concur, \"" +
                           pat + "\" vs. \"" + pat2 + "\"");
@@ -1246,7 +1251,9 @@ public class NumberRegressionTests extends TestFmwk {
         logln("Applying pattern \"" + pattern + "\"");
         sdf.applyPattern(pattern);
         int minIntDig = sdf.getMinimumIntegerDigits();
-        if (minIntDig != 0) {
+        // In ICU 58 and older, this case returned 0.
+        // Now it returns 1 instead, since the pattern parser enforces at least 1 min digit.
+        if (minIntDig != 1) {
             errln("Test failed");
             errln(" Minimum integer digits : " + minIntDig);
             errln(" new pattern: " + sdf.toPattern());
@@ -1295,9 +1302,7 @@ public class NumberRegressionTests extends TestFmwk {
             e.printStackTrace();
         }
         logln("The string " + s + " parsed as " + n);
-        if (n.doubleValue() != dbl) {
-            errln("Round trip failure");
-        }
+        assertEquals("Round trip failure", dbl, n.doubleValue());
     }
 
     /**
@@ -1327,7 +1332,7 @@ public class NumberRegressionTests extends TestFmwk {
     @Test
     public void Test4167494() throws Exception {
         NumberFormat fmt = NumberFormat.getInstance(Locale.US);
-        
+
         double a = Double.MAX_VALUE;
         String s = fmt.format(a);
         double b = fmt.parse(s).doubleValue();
@@ -1379,15 +1384,15 @@ public class NumberRegressionTests extends TestFmwk {
     @Test
     public void Test4176114() {
         String[] DATA = {
-            "00", "#00",
-            "000", "#000", // No grouping
-            "#000", "#000", // No grouping
+            "00", "00",
+            "000", "000", // No grouping
+            "#000", "000", // No grouping
             "#,##0", "#,##0",
             "#,000", "#,000",
-            "0,000", "#0,000",
-            "00,000", "#00,000",
-            "000,000", "#,000,000",
-            "0,000,000,000,000.0000", "#0,000,000,000,000.0000", // Reported
+            "0,000", "0,000",
+            "00,000", "00,000",
+            "000,000", "000,000",
+            "0,000,000,000,000.0000", "0,000,000,000,000.0000", // Reported
         };
         for (int i=0; i<DATA.length; i+=2) {
             DecimalFormat df = new DecimalFormat(DATA[i]);
@@ -1426,98 +1431,6 @@ public class NumberRegressionTests extends TestFmwk {
         }
     }
 
-    @Test
-    public void Test4185761() throws IOException, ClassNotFoundException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        
-        NumberFormat nf = NumberFormat.getInstance(Locale.US);
-
-    // Set special values we are going to search for in the output byte stream
-    // These are all legal values.
-        nf.setMinimumIntegerDigits(0x111); // Keep under 309
-        nf.setMaximumIntegerDigits(0x112); // Keep under 309
-        nf.setMinimumFractionDigits(0x113); // Keep under 340
-        nf.setMaximumFractionDigits(0x114); // Keep under 340
-        
-        oos.writeObject(nf);
-        oos.flush();
-        baos.close();
-        
-        byte[] bytes = baos.toByteArray();
-
-    // Scan for locations of min/max int/fract values in the byte array.
-    // At the moment (ICU4J 2.1), there is only one instance of each target pair
-    // in the byte stream, so assume first match is it.  Note this is not entirely
-    // failsafe, and needs to be checked if we change the package or structure of
-    // this class.
-    // Current positions are 890, 880, 886, 876
-        int[] offsets = new int[4];
-        for (int i = 0; i < bytes.length - 1; ++i) {
-            if (bytes[i] == 0x01) { // high byte
-                for (int j = 0; j < offsets.length; ++j) {
-                    if ((offsets[j] == 0) && (bytes[i+1] == (0x11 + j))) { // low byte
-                        offsets[j] = i;
-                        break;
-                    }
-                }
-            }
-        }
-
-        {
-            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            Object o = ois.readObject();
-            ois.close();
-            
-            if (!nf.equals(o)) {
-                errln("Fail: NumberFormat serialization/equality bug");
-            } else {
-                logln("NumberFormat serialization/equality is OKAY.");
-            }
-        }
-
-    // Change the values in the byte stream so that min > max.
-    // Numberformat should catch this and throw an exception.
-        for (int i = 0; i < offsets.length; ++i) {
-            bytes[offsets[i]] = (byte)(4 - i);
-        }
-
-        {
-            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            try {
-                NumberFormat format = (NumberFormat) ois.readObject();
-                logln("format: " + format.format(1234.56)); //fix "The variable is never used"
-                errln("FAIL: Deserialized bogus NumberFormat with minXDigits > maxXDigits");
-            } catch (InvalidObjectException e) {
-                logln("Ok: " + e.getMessage());
-            }
-        }
-
-    // Set values so they are too high, but min <= max
-    // Format should pass the min <= max test, and DecimalFormat should reset to current maximum
-    // (for compatibility with versions streamed out before the maximums were imposed).
-        for (int i = 0; i < offsets.length; ++i) {
-            bytes[offsets[i]] = 4;
-        }
-
-        {
-            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            NumberFormat format = (NumberFormat) ois.readObject();
-            //For compatibility with previous version
-            if ((format.getMaximumIntegerDigits() != 309) 
-                || format.getMaximumFractionDigits() != 340) {
-                errln("FAIL: Deserialized bogus NumberFormat with values out of range," +
-                      " intMin: " + format.getMinimumIntegerDigits() +
-                      " intMax: " + format.getMaximumIntegerDigits() +
-                      " fracMin: " + format.getMinimumFractionDigits() +
-                      " fracMax: " + format.getMaximumFractionDigits());
-            } else {
-                logln("Ok: Digit count out of range");
-            }
-        }
-    }
-
-
     /**
      * Some DecimalFormatSymbols changes are not picked up by DecimalFormat.
      * This includes the minus sign, currency symbol, international currency
@@ -1553,7 +1466,7 @@ public class NumberRegressionTests extends TestFmwk {
                   fmt.getPositiveSuffix() + ", exp ^");
         }
         sym.setPercent('%');
-        
+
         fmt.applyPattern("#\u2030");
         sym.setPerMill('^');
         fmt.setDecimalFormatSymbols(sym);
@@ -1599,7 +1512,7 @@ public class NumberRegressionTests extends TestFmwk {
             System.out.println("\n        Test skipped for release 2.2");
             return;
         }
-        
+
         // Since the pattern logic has changed, make sure that patterns round
         // trip properly.  Test stream in/out integrity too.
         Locale[] avail = NumberFormat.getAvailableLocales();
@@ -1622,11 +1535,12 @@ public class NumberRegressionTests extends TestFmwk {
                     break;
                 }
                 DecimalFormat df = (DecimalFormat) nf;
-                
+
                 // Test toPattern/applyPattern round trip
                 String pat = df.toPattern();
                 DecimalFormatSymbols symb = new DecimalFormatSymbols(avail[i]);
                 DecimalFormat f2 = new DecimalFormat(pat, symb);
+                f2.setCurrency(df.getCurrency()); // Currency does not travel with the pattern string
                 if (!df.equals(f2)) {
                     errln("FAIL: " + avail[i] + " #" + j + " -> \"" + pat +
                           "\" -> \"" + f2.toPattern() + '"');
@@ -1636,24 +1550,32 @@ public class NumberRegressionTests extends TestFmwk {
                 pat = df.toLocalizedPattern();
                 try{
                     f2.applyLocalizedPattern(pat);
-                    
+
                     String s1 = f2.format(123456);
                     String s2 = df.format(123456);
                     if(!s1.equals(s2)){
                         errln("FAIL: " + avail[i] + " #" + j + " -> localized \"" + s2 +
                                 "\" -> \"" + s2 + '"'+ " in locale "+df.getLocale(ULocale.ACTUAL_LOCALE));
-  
+
                     }
-                    if (!df.equals(f2)) {
-                        errln("FAIL: " + avail[i] + " #" + j + " -> localized \"" + pat +
-                              "\" -> \"" + f2.toLocalizedPattern() + '"'+ " in locale "+df.getLocale(ULocale.ACTUAL_LOCALE));
-                        errln("s1: "+s1+" s2: "+s2);
-                    }
-                   
+
+                    // Equality of formatter objects is NOT guaranteed across toLocalizedPattern/applyLocalizedPattern.
+                    // However, equality of relevant properties is guaranteed.
+                    assertEquals("Localized FAIL on posPrefix", df.getPositivePrefix(), f2.getPositivePrefix());
+                    assertEquals("Localized FAIL on posSuffix", df.getPositiveSuffix(), f2.getPositiveSuffix());
+                    assertEquals("Localized FAIL on negPrefix", df.getNegativePrefix(), f2.getNegativePrefix());
+                    assertEquals("Localized FAIL on negSuffix", df.getNegativeSuffix(), f2.getNegativeSuffix());
+                    assertEquals("Localized FAIL on groupingSize", df.getGroupingSize(), f2.getGroupingSize());
+                    assertEquals("Localized FAIL on secondaryGroupingSize", df.getSecondaryGroupingSize(), f2.getSecondaryGroupingSize());
+                    assertEquals("Localized FAIL on minFrac", df.getMinimumFractionDigits(), f2.getMinimumFractionDigits());
+                    assertEquals("Localized FAIL on maxFrac", df.getMaximumFractionDigits(), f2.getMaximumFractionDigits());
+                    assertEquals("Localized FAIL on minInt", df.getMinimumIntegerDigits(), f2.getMinimumIntegerDigits());
+                    assertEquals("Localized FAIL on maxInt", df.getMaximumIntegerDigits(), f2.getMaximumIntegerDigits());
+
                 }catch(IllegalArgumentException ex){
-                    errln(ex.getMessage()+" for locale "+ df.getLocale(ULocale.ACTUAL_LOCALE));
+                    throw new AssertionError("For locale " + avail[i], ex);
                 }
-                
+
 
                 // Test writeObject/readObject round trip
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -1682,7 +1604,7 @@ public class NumberRegressionTests extends TestFmwk {
         sym = new DecimalFormatSymbols(Locale.US);
         for (int j=0; j<SPECIALS.length; ++j) {
             char special = SPECIALS[j];
-            String pat = "'" + special + "'#0'" + special + "'";
+            String pat = "'" + special + "'0'" + special + "'";
             try {
                 fmt = new DecimalFormat(pat, sym);
                 String pat2 = fmt.toPattern();
@@ -1713,7 +1635,7 @@ public class NumberRegressionTests extends TestFmwk {
             String str = Long.toString(DATA[i]);
             for (int m = 1; m <= 100; m++) {
                 fmt.setMultiplier(m);
-                long n = ((Number) fmt.parse(str)).longValue();
+                long n = fmt.parse(str).longValue();
                 if (n > 0 != DATA[i] > 0) {
                     errln("\"" + str + "\" parse(x " + fmt.getMultiplier() +
                           ") => " + n);
@@ -1735,15 +1657,15 @@ public class NumberRegressionTests extends TestFmwk {
             new Double(1.006), "1.01",
         };
         NumberFormat fmt = NumberFormat.getInstance(Locale.US);
-        fmt.setMaximumFractionDigits(2); 
+        fmt.setMaximumFractionDigits(2);
         for (int i=0; i<DATA.length; i+=2) {
             String s = fmt.format(((Double) DATA[i]).doubleValue());
             if (!s.equals(DATA[i+1])) {
-                errln("FAIL: Got " + s + ", exp " + DATA[i+1]); 
+                errln("FAIL: Got " + s + ", exp " + DATA[i+1]);
             }
         }
     }
-    
+
     /**
      * 4243011: Formatting .5 rounds to "1" instead of "0"
      */
@@ -1751,7 +1673,7 @@ public class NumberRegressionTests extends TestFmwk {
     public void Test4243011() {
         double DATA[] = {0.5, 1.5, 2.5, 3.5, 4.5};
         String EXPECTED[] = {"0.", "2.", "2.", "4.", "4."};
-        
+
         DecimalFormat format = new DecimalFormat("0.");
         for (int i = 0; i < DATA.length; i++) {
             String result = format.format(DATA[i]);
@@ -1762,7 +1684,7 @@ public class NumberRegressionTests extends TestFmwk {
             }
         }
     }
-    
+
     /**
      * 4243108: format(0.0) gives "0.1" if preceded by parse("99.99")
      */
@@ -1785,7 +1707,7 @@ public class NumberRegressionTests extends TestFmwk {
         } catch (ParseException e) {
             errln("Caught a ParseException:");
             e.printStackTrace();
-        }            
+        }
         result = f.format(0.0);
         if (result.equals("0")) {
             logln("OK: got " + result);
@@ -1793,7 +1715,7 @@ public class NumberRegressionTests extends TestFmwk {
             errln("FAIL: got " + result);
         }
     }
-    
+
     /**
      * 4330377: DecimalFormat engineering notation gives incorrect results
      */
@@ -1837,7 +1759,7 @@ public class NumberRegressionTests extends TestFmwk {
         }
         */
     }
-    
+
     /**
      * 4233840: NumberFormat does not round correctly
      */
@@ -1847,14 +1769,14 @@ public class NumberRegressionTests extends TestFmwk {
 
         NumberFormat nf = new DecimalFormat("0.##", new DecimalFormatSymbols(Locale.US));
     nf.setMinimumFractionDigits(2);
-    
+
     String result = nf.format(f);
-    
+
     if (!result.equals("0.01")) {
         errln("FAIL: input: " + f + ", expected: 0.01, got: " + result);
     }
     }
-    
+
     /**
      * 4241880: Decimal format doesnt round a double properly when the number is less than 1
      */
@@ -1916,22 +1838,28 @@ class MyNumberFormat extends NumberFormat {
      * For serialization
      */
     private static final long serialVersionUID = 1251303884737169952L;
-    public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
+    @Override
+  public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
-    public StringBuffer format(long number,StringBuffer toAppendTo, FieldPosition pos) {
+    @Override
+  public StringBuffer format(long number,StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
-    public Number parse(String text, ParsePosition parsePosition) {
+    @Override
+  public Number parse(String text, ParsePosition parsePosition) {
         return new Integer(0);
     }
-    public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+    @Override
+  public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
-    public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
+    @Override
+  public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
-    public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
+    @Override
+  public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
 }

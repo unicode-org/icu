@@ -30,6 +30,7 @@ import java.util.Locale;
 
 import com.ibm.icu.dev.test.format.MeasureUnitTest;
 import com.ibm.icu.dev.test.format.PluralRulesTest;
+import com.ibm.icu.dev.test.numbers.PropertiesTest;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
@@ -827,6 +828,7 @@ public class SerializableTestUtility {
         map.put("com.ibm.icu.util.MeasureUnit", new MeasureUnitTest.MeasureUnitHandler());
         map.put("com.ibm.icu.util.TimeUnit", new MeasureUnitTest.MeasureUnitHandler());
         map.put("com.ibm.icu.text.MeasureFormat", new MeasureUnitTest.MeasureFormatHandler());
+        map.put("com.ibm.icu.impl.number.Properties", new PropertiesTest.PropertiesHandler());
 
         map.put("com.ibm.icu.util.ICUException", new ICUExceptionHandler());
         map.put("com.ibm.icu.util.ICUUncheckedIOException", new ICUUncheckedIOExceptionHandler());
@@ -922,6 +924,11 @@ public class SerializableTestUtility {
 
             if (className.equals("com.ibm.icu.text.PluralRules$FixedDecimal")) {
                 // Known Issue: "10268", "Serializable interface is not implemented in PluralRules$FixedDecimal"
+                return;
+            }
+
+            if (className.equals("com.ibm.icu.text.DecimalFormat_ICU58")) {
+                // Do not test the legacy DecimalFormat class in ICU 59
                 return;
             }
 
