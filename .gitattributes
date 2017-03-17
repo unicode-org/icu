@@ -5292,9 +5292,9 @@ icu4c/source/tools/ctestfw/unicode/uperf.h svneol=native#text/plain%3Bcharset%3D
 icu4c/source/tools/ctestfw/unicode/utimer.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/ctestfw/uperf.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/escapesrc/escapesrc.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/tools/escapesrc/expect-simple.cpp -text
-icu4c/source/tools/escapesrc/test-nochange.cpp -text
-icu4c/source/tools/escapesrc/test-simple.cpp -text
+icu4c/source/tools/escapesrc/expect-simple.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/escapesrc/test-nochange.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/escapesrc/test-simple.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/genbrk/genbrk.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/genbrk/genbrk.vcxproj -text
 icu4c/source/tools/genccode/genccode.c svneol=native#text/plain%3Bcharset%3Dutf-8
