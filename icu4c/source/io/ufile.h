@@ -25,6 +25,8 @@
 
 #if !UCONFIG_NO_CONVERSION
 
+#include <stdio.h>
+
 #include "unicode/ucnv.h"
 #include "unicode/utrans.h"
 #include "locbund.h"

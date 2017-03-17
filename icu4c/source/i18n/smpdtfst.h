@@ -16,6 +16,7 @@
 #ifndef SMPDTFST_H
 #define SMPDTFST_H
 
+#include "unicode/uobject.h"
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
