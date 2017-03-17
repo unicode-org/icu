@@ -15,6 +15,9 @@
 #define __DTPTNGEN_IMPL_H__
 
 #include "unicode/udatpg.h"
+
+#include "unicode/strenum.h"
+#include "unicode/unistr.h"
 #include "uvector.h"
 
 // TODO(claireho): Split off Builder class.
