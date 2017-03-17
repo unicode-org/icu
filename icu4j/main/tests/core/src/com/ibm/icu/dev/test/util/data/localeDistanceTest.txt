@@ -1,0 +1,66 @@
+# © 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html#License
+#
+# Data-driven test for XLocaleDistance.
+# Format
+# • supported ; desired ; dist(s,d) ; dist(d,x)
+# • argument 4 only used when different
+# • 100 = fail
+# A line starting with @debug will reach a statement in the test code where you can put a breakpoint for debugging
+# The test code also supports reformatting this file, by setting the REFORMAT flag.
+
+en-CA ; en-CA ; 0 
+ar-MK ; en-CA ; 100
+
+iw ; 	he ; 	0
+zh ; 	cmn ; 	0
+
+# fallback languages get closer distances, between script (40) and region (4)
+ 
+@debug
+to ; 	en ; 	14 ; 	100
+no ; 	no-DE ; 	4
+nn ; 	no ; 	10
+no-DE ; 	nn ; 	14
+no ; 	no ; 	0
+no ; 	da ; 	12
+da ; 	zh-Hant ; 	100
+zh-Hant ; 	zh-Hans ; 	23 ; 	19
+zh-Hans ; 	en ; 	100
+
+en-US ; 	en-AU ; 	5  # across clusters
+en-VI ; 	en-GU ; 	4	# within cluster
+en-AU ; 	en-CA ; 	4	# within cluster
+
+# testScript
+en-CA ; 	en-Cyrl ; 	100
+en-Cyrl ; 	es-MX ; 	100
+
+hr ; 	sr ; 	100
+#hr ; 	sr-Latn ; 	8
+sr ; 	sr-Latn ; 	5
+
+# test419
+# Should be as good as any in cluster
+es-MX ; 	es-AR ; 	4
+@debug
+es-MX ; 	es-419 ; 	4
+es-MX ; 	es-MX ; 	0
+es-MX ; 	es-ES ; 	5
+es-MX ; 	es-PT ; 	5
+es-MX ; 	es-150 ; 	5
+es-419 ; 	es-AR ; 	4
+es-419 ; 	es-419 ; 	0
+es-419 ; 	es-MX ; 	4
+es-419 ; 	es-ES ; 	5
+es-419 ; 	es-PT ; 	5
+es-419 ; 	es-150 ; 	5
+es-ES ; 	es-AR ; 	5
+es-ES ; 	es-419 ; 	5
+es-ES ; 	es-MX ; 	5
+es-ES ; 	es-ES ; 	0
+es-ES ; 	es-PT ; 	4
+es-419 ; 	es-150 ; 	5
+
+# testEuEc
+xx-Xxxx-EC; xx-Xxxx-EU; 4
