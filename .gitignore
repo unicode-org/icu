@@ -902,6 +902,7 @@ icu4j/.project
 icu4j/build-local.properties
 icu4j/demos/out
 icu4j/doc
+icu4j/eclipse
 icu4j/eclipse-build/out
 icu4j/lib/*.jar
 icu4j/main/classes/charset/out
