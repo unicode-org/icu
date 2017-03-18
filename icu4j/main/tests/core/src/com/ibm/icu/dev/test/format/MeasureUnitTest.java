@@ -30,6 +30,7 @@ import java.util.TreeMap;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.serializable.FormatHandler;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.Utility;
@@ -2035,6 +2036,13 @@ public class MeasureUnitTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void testBug11966() {
+        Locale locale = new Locale("en", "AU");
+        MeasureFormat.getInstance(locale, MeasureFormat.FormatWidth.WIDE);
+        // Should not throw an exception.
+    }
+
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
     // for MeasureFormat during the release process.
     static Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> getUnitsToPerParts() {
@@ -2528,6 +2536,8 @@ public class MeasureUnitTest extends TestFmwk {
 
     public static class MeasureFormatHandler  implements SerializableTestUtility.Handler
     {
+        FormatHandler.NumberFormatHandler nfh = new FormatHandler.NumberFormatHandler();
+
         @Override
         public Object[] getTestObjects()
         {
@@ -2547,8 +2557,7 @@ public class MeasureUnitTest extends TestFmwk {
             MeasureFormat b1 = (MeasureFormat) b;
             return a1.getLocale().equals(b1.getLocale())
                     && a1.getWidth().equals(b1.getWidth())
-                    && a1.getNumberFormat().equals(b1.getNumberFormat())
-                    ;
+                    && nfh.hasSameBehavior(a1.getNumberFormat(), b1.getNumberFormat());
         }
     }
 }
