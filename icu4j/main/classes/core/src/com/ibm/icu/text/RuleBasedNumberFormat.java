@@ -1267,7 +1267,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     public StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
-        if (MIN_VALUE.compareTo(number) > 0 || MAX_VALUE.compareTo(number) < 0) {
+        if (MIN_VALUE.compareTo(number) >= 0 || MAX_VALUE.compareTo(number) <= 0) {
             // We're outside of our normal range that this framework can handle.
             // The DecimalFormat will provide more accurate results.
             return getDecimalFormat().format(number, toAppendTo, pos);

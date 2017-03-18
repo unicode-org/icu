@@ -674,7 +674,19 @@ public class Currency extends MeasureUnit {
      */
     @Deprecated
     public static String parse(ULocale locale, String text, int type, ParsePosition pos) {
-        List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
+        List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = CURRENCY_NAME_CACHE.get(locale);
+        if (currencyTrieVec == null) {
+            TextTrieMap<CurrencyStringInfo> currencyNameTrie =
+                new TextTrieMap<CurrencyStringInfo>(true);
+            TextTrieMap<CurrencyStringInfo> currencySymbolTrie =
+                new TextTrieMap<CurrencyStringInfo>(false);
+            currencyTrieVec = new ArrayList<TextTrieMap<CurrencyStringInfo>>();
+            currencyTrieVec.add(currencySymbolTrie);
+            currencyTrieVec.add(currencyNameTrie);
+            setupCurrencyTrieVec(locale, currencyTrieVec);
+            CURRENCY_NAME_CACHE.put(locale, currencyTrieVec);
+        }
+
         int maxLength = 0;
         String isoResult = null;
 
@@ -697,37 +709,6 @@ public class Currency extends MeasureUnit {
         int start = pos.getIndex();
         pos.setIndex(start + maxLength);
         return isoResult;
-    }
-
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static TextTrieMap<CurrencyStringInfo>.ParseState openParseState(
-        ULocale locale, int startingCp, int type) {
-        List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
-        if (type == Currency.LONG_NAME) {
-            return currencyTrieVec.get(0).openParseState(startingCp);
-        } else {
-            return currencyTrieVec.get(1).openParseState(startingCp);
-        }
-    }
-
-    private static List<TextTrieMap<CurrencyStringInfo>> getCurrencyTrieVec(ULocale locale) {
-        List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = CURRENCY_NAME_CACHE.get(locale);
-        if (currencyTrieVec == null) {
-            TextTrieMap<CurrencyStringInfo> currencyNameTrie =
-                new TextTrieMap<CurrencyStringInfo>(true);
-            TextTrieMap<CurrencyStringInfo> currencySymbolTrie =
-                new TextTrieMap<CurrencyStringInfo>(false);
-            currencyTrieVec = new ArrayList<TextTrieMap<CurrencyStringInfo>>();
-            currencyTrieVec.add(currencySymbolTrie);
-            currencyTrieVec.add(currencyNameTrie);
-            setupCurrencyTrieVec(locale, currencyTrieVec);
-            CURRENCY_NAME_CACHE.put(locale, currencyTrieVec);
-        }
-        return currencyTrieVec;
     }
 
     private static void setupCurrencyTrieVec(ULocale locale,
@@ -753,12 +734,7 @@ public class Currency extends MeasureUnit {
         }
     }
 
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static final class CurrencyStringInfo {
+    private static final class CurrencyStringInfo {
         private String isoCode;
         private String currencyString;
 

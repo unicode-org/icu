@@ -43,45 +43,45 @@ import com.ibm.icu.util.ULocale;
  * <p>
  * In addition each attribute is listed in the fieldOrdering static array which specifies
  * The order that attributes are printed whenever there is a test failure.
- * <p>
+ * <p> 
  * To add a new attribute, first create a public field for it.
  * Next, add the attribute name to the fieldOrdering array.
  * Finally, create a setter method for it.
- *
+ * 
  * @author rocketman
  */
-public class DataDrivenNumberFormatTestData {
-
+public class NumberFormatTestData {
+    
     /**
      * The locale.
      */
     public ULocale locale = null;
-
+    
     /**
      * The currency.
      */
     public Currency currency = null;
-
+    
     /**
      * The pattern to initialize the formatter, for example 0.00"
      */
     public String pattern = null;
-
+    
     /**
      * The value to format as a string. For example 1234.5 would be "1234.5"
      */
     public String format = null;
-
+    
     /**
      * The formatted value.
      */
     public String output = null;
-
+    
     /**
      * Field for arbitrary comments.
      */
     public String comment = null;
-
+    
     public Integer minIntegerDigits = null;
     public Integer maxIntegerDigits = null;
     public Integer minFractionDigits = null;
@@ -117,22 +117,21 @@ public class DataDrivenNumberFormatTestData {
     public String plural = null;
     public Integer parseIntegerOnly = null;
     public Integer decimalPatternMatchRequired = null;
-    public Integer parseCaseSensitive = null;
     public Integer parseNoExponent = null;
     public String outputCurrency = null;
-
-
-
+    
+    
+    
     /**
      * nothing or empty means that test ought to work for both C and JAVA;
      * "C" means test is known to fail in C. "J" means test is known to fail in JAVA.
      * "CJ" means test is known to fail for both languages.
      */
     public String breaks = null;
-
+    
     private static Map<String, Integer> roundingModeMap =
             new HashMap<String, Integer>();
-
+    
     static {
         roundingModeMap.put("ceiling", BigDecimal.ROUND_CEILING);
         roundingModeMap.put("floor", BigDecimal.ROUND_FLOOR);
@@ -143,18 +142,18 @@ public class DataDrivenNumberFormatTestData {
         roundingModeMap.put("halfUp", BigDecimal.ROUND_HALF_UP);
         roundingModeMap.put("unnecessary", BigDecimal.ROUND_UNNECESSARY);
     }
-
+    
     private static Map<String, Currency.CurrencyUsage> currencyUsageMap =
             new HashMap<String, Currency.CurrencyUsage>();
-
+    
     static {
         currencyUsageMap.put("standard", Currency.CurrencyUsage.STANDARD);
         currencyUsageMap.put("cash", Currency.CurrencyUsage.CASH);
     }
-
+    
     private static Map<String, Integer> padPositionMap =
             new HashMap<String, Integer>();
-
+    
     static {
         // TODO: Fix so that it doesn't depend on DecimalFormat.
         padPositionMap.put("beforePrefix", DecimalFormat.PAD_BEFORE_PREFIX);
@@ -162,10 +161,10 @@ public class DataDrivenNumberFormatTestData {
         padPositionMap.put("beforeSuffix", DecimalFormat.PAD_BEFORE_SUFFIX);
         padPositionMap.put("afterSuffix", DecimalFormat.PAD_AFTER_SUFFIX);
     }
-
+    
     private static Map<String, Integer> formatStyleMap =
             new HashMap<String, Integer>();
-
+    
     static {
         formatStyleMap.put("decimal", NumberFormat.NUMBERSTYLE);
         formatStyleMap.put("currency", NumberFormat.CURRENCYSTYLE);
@@ -176,7 +175,7 @@ public class DataDrivenNumberFormatTestData {
         formatStyleMap.put("currencyAccounting", NumberFormat.ACCOUNTINGCURRENCYSTYLE);
         formatStyleMap.put("cashCurrency", NumberFormat.CASHCURRENCYSTYLE);
     }
-
+    
     // Add any new fields here. On test failures, fields are printed in the same order they
     // appear here.
     private static String[] fieldOrdering = {
@@ -225,16 +224,16 @@ public class DataDrivenNumberFormatTestData {
         "parseNoExponent",
         "outputCurrency"
     };
-
+    
     static {
         HashSet<String> set = new HashSet<String>();
         for (String s : fieldOrdering) {
             if (!set.add(s)) {
-                throw new ExceptionInInitializerError(s + "is a duplicate field.");
+                throw new ExceptionInInitializerError(s + "is a duplicate field.");    
             }
         }
     }
-
+    
     private static <T> T fromString(Map<String, T> map, String key) {
         T value = map.get(key);
         if (value == null) {
@@ -242,226 +241,222 @@ public class DataDrivenNumberFormatTestData {
         }
         return value;
     }
-
+    
     // start field setters.
     // add setter for each new field in this block.
-
+    
     public void setLocale(String value) {
         locale = new ULocale(value);
     }
-
+    
     public void setCurrency(String value) {
         currency = Currency.getInstance(value);
     }
-
+    
     public void setPattern(String value) {
         pattern = value;
     }
-
+    
     public void setFormat(String value) {
         format = value;
     }
-
+    
     public void setOutput(String value) {
         output = value;
     }
-
+    
     public void setComment(String value) {
         comment = value;
     }
-
+    
     public void setMinIntegerDigits(String value) {
         minIntegerDigits = Integer.valueOf(value);
     }
-
+    
     public void setMaxIntegerDigits(String value) {
         maxIntegerDigits = Integer.valueOf(value);
     }
-
+    
     public void setMinFractionDigits(String value) {
         minFractionDigits = Integer.valueOf(value);
     }
-
+    
     public void setMaxFractionDigits(String value) {
         maxFractionDigits = Integer.valueOf(value);
     }
-
+    
     public void setMinGroupingDigits(String value) {
         minGroupingDigits = Integer.valueOf(value);
     }
-
+    
     public void setBreaks(String value) {
         breaks = value;
     }
-
+    
     public void setUseSigDigits(String value) {
         useSigDigits = Integer.valueOf(value);
     }
-
+    
     public void setMinSigDigits(String value) {
         minSigDigits = Integer.valueOf(value);
     }
-
+    
     public void setMaxSigDigits(String value) {
         maxSigDigits = Integer.valueOf(value);
     }
-
+    
     public void setUseGrouping(String value) {
         useGrouping = Integer.valueOf(value);
     }
-
+    
     public void setMultiplier(String value) {
         multiplier = Integer.valueOf(value);
     }
-
+    
     public void setRoundingIncrement(String value) {
         roundingIncrement = Double.valueOf(value);
     }
-
+    
     public void setFormatWidth(String value) {
         formatWidth = Integer.valueOf(value);
     }
-
+    
     public void setPadCharacter(String value) {
         padCharacter = value;
     }
-
+    
     public void setUseScientific(String value) {
         useScientific = Integer.valueOf(value);
     }
-
+    
     public void setGrouping(String value) {
         grouping = Integer.valueOf(value);
     }
-
+    
     public void setGrouping2(String value) {
         grouping2 = Integer.valueOf(value);
     }
-
+    
     public void setRoundingMode(String value) {
         roundingMode = fromString(roundingModeMap, value);
     }
-
+    
     public void setCurrencyUsage(String value) {
         currencyUsage = fromString(currencyUsageMap, value);
     }
-
+    
     public void setMinimumExponentDigits(String value) {
         minimumExponentDigits = Integer.valueOf(value);
     }
-
+    
     public void setExponentSignAlwaysShown(String value) {
         exponentSignAlwaysShown = Integer.valueOf(value);
     }
-
+    
     public void setDecimalSeparatorAlwaysShown(String value) {
         decimalSeparatorAlwaysShown = Integer.valueOf(value);
     }
-
+    
     public void setPadPosition(String value) {
         padPosition = fromString(padPositionMap, value);
     }
-
+    
     public void setPositivePrefix(String value) {
         positivePrefix = value;
     }
-
+    
     public void setPositiveSuffix(String value) {
         positiveSuffix = value;
     }
-
+    
     public void setNegativePrefix(String value) {
         negativePrefix = value;
     }
-
+    
     public void setNegativeSuffix(String value) {
         negativeSuffix = value;
     }
-
+    
     public void setLocalizedPattern(String value) {
         localizedPattern = value;
     }
-
+    
     public void setToPattern(String value) {
         toPattern = value;
     }
-
+    
     public void setToLocalizedPattern(String value) {
         toLocalizedPattern = value;
     }
-
+    
     public void setStyle(String value) {
         style = fromString(formatStyleMap, value);
     }
-
+    
     public void setParse(String value) {
         parse = value;
     }
-
+    
     public void setLenient(String value) {
         lenient = Integer.valueOf(value);
     }
-
+    
     public void setPlural(String value) {
         plural = value;
     }
-
+    
     public void setParseIntegerOnly(String value) {
         parseIntegerOnly = Integer.valueOf(value);
     }
-
-    public void setParseCaseSensitive(String value) {
-        parseCaseSensitive = Integer.valueOf(value);
-    }
-
+    
     public void setDecimalPatternMatchRequired(String value) {
         decimalPatternMatchRequired = Integer.valueOf(value);
     }
-
+    
     public void setParseNoExponent(String value) {
         parseNoExponent = Integer.valueOf(value);
     }
-
+    
     public void setOutputCurrency(String value) {
         outputCurrency = value;
     }
-
+    
     // end field setters.
-
+    
     // start of field clearers
     // Add clear methods that can be set in one test and cleared
     // in the next i.e the breaks field.
-
+    
     public void clearBreaks() {
         breaks = null;
     }
-
+    
     public void clearUseGrouping() {
         useGrouping = null;
     }
-
+    
     public void clearGrouping2() {
         grouping2 = null;
     }
-
+    
     public void clearGrouping() {
         grouping = null;
     }
-
+    
     public void clearMinGroupingDigits() {
         minGroupingDigits = null;
     }
-
+    
     public void clearUseScientific() {
         useScientific = null;
     }
-
+    
     public void clearDecimalSeparatorAlwaysShown() {
         decimalSeparatorAlwaysShown = null;
     }
-
+    
     // end field clearers
-
+    
     public void setField(String fieldName, String valueString)
             throws NoSuchMethodException {
         Method m = getClass().getMethod(
@@ -474,7 +469,7 @@ public class DataDrivenNumberFormatTestData {
             throw new RuntimeException(e);
         }
     }
-
+    
     public void clearField(String fieldName)
             throws NoSuchMethodException {
         Method m = getClass().getMethod(fieldToClearer(fieldName));
@@ -486,9 +481,8 @@ public class DataDrivenNumberFormatTestData {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-  public String toString() {
+    
+    public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("{");
         boolean first = true;
@@ -523,7 +517,7 @@ public class DataDrivenNumberFormatTestData {
                 + Character.toUpperCase(fieldName.charAt(0))
                 + fieldName.substring(1);
     }
-
+    
     private static String fieldToClearer(String fieldName) {
         return "clear"
                 + Character.toUpperCase(fieldName.charAt(0))
