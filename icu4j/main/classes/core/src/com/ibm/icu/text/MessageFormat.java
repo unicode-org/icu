@@ -38,7 +38,7 @@ import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.MessagePattern.ArgType;
 import com.ibm.icu.text.MessagePattern.Part;
-import com.ibm.icu.text.PluralRules.IFixedDecimal;
+import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
@@ -2108,7 +2108,7 @@ public class MessageFormat extends UFormat {
             assert context.number.doubleValue() == number;  // argument number minus the offset
             context.numberString = context.formatter.format(context.number);
             if(context.formatter instanceof DecimalFormat) {
-                IFixedDecimal dec = ((DecimalFormat)context.formatter).getFixedDecimal(number);
+                FixedDecimal dec = ((DecimalFormat)context.formatter).getFixedDecimal(number);
                 return rules.select(dec);
             } else {
                 return rules.select(number);

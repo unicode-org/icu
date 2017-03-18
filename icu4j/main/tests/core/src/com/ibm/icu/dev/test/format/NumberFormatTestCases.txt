@@ -18,12 +18,12 @@ rt:  "0.###"  1.0         "1"
 # Basics
 fp:  "0.####" 0.10005     "0.1"        0.1
 fp:  -        0.10006     "0.1001"     0.1001
-pat: -        "0.####"
+pat: -        "#0.####"
 fp:  "#.####" 0.10005     "0.1"        0.1
-pat: -        "0.####"
+pat: -        "#0.####"
 
 rt:  "0"      1234        "1234"
-pat: -        "0"
+pat: -        "#0"
 
 # Significant digits                                                  
 fp:  "@@@"    1.234567    "1.23"       1.23
@@ -68,8 +68,7 @@ pat: "##,@@##" "#,@@##"
 pat: "##@@##"  "@@##"
 
 pat: "@@.@@"  err  # decimal sep. disallowed in sig. digits
-# The new pattern parser treats this the same as "@@#"
-#pat: "@#@"    err  # only one cluster of sig. digits
+pat: "@#@"    err  # only one cluster of sig. digits
 pat: "@@0"    err  # either @ or 0, not both
 
 # NumberRegression/Test4140009

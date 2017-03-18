@@ -18,8 +18,6 @@ import java.util.Map;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
-import com.ibm.icu.text.PluralRules.IFixedDecimal;
-import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -556,8 +554,8 @@ public class PluralFormat extends UFormat {
     private final class PluralSelectorAdapter implements PluralSelector {
         @Override
         public String select(Object context, double number) {
-            IFixedDecimal dec = (IFixedDecimal) context;
-            assert dec.getPluralOperand(Operand.n) == Math.abs(number);
+            FixedDecimal dec = (FixedDecimal) context;
+            assert dec.source == (dec.isNegative ? -number : number);
             return pluralRules.select(dec);
         }
     }
@@ -620,7 +618,7 @@ public class PluralFormat extends UFormat {
         } else {
             numberString = numberFormat.format(numberMinusOffset);
         }
-        IFixedDecimal dec;
+        FixedDecimal dec;
         if(numberFormat instanceof DecimalFormat) {
             dec = ((DecimalFormat) numberFormat).getFixedDecimal(numberMinusOffset);
         } else {

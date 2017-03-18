@@ -232,11 +232,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Returns the array of strings used as digits, in order from 0 through 9
      * Package private method - doesn't create a defensively copy.
      * @return the array of digit strings
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    public String[] getDigitStringsLocal() {
+    String[] getDigitStringsLocal() {
         return digitStrings;
     }
 
@@ -1321,9 +1318,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         setMonetaryGroupingSeparatorString(numberElements[11]);
         setExponentMultiplicationSign(numberElements[12]);
 
-        digit = '#';  // Localized pattern character no longer in CLDR
-        padEscape = '*';
-        sigDigit  = '@';
+        digit = DecimalFormat.PATTERN_DIGIT;  // Localized pattern character no longer in CLDR
+        padEscape = DecimalFormat.PATTERN_PAD_ESCAPE;
+        sigDigit  = DecimalFormat.PATTERN_SIGNIFICANT_DIGIT;
 
 
         CurrencyDisplayInfo info = CurrencyData.provider.getInstance(locale, true);
@@ -1451,8 +1448,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             exponential = 'E';
         }
         if (serialVersionOnStream < 2) {
-            padEscape = '*';
-            plusSign = '+';
+            padEscape = DecimalFormat.PATTERN_PAD_ESCAPE;
+            plusSign = DecimalFormat.PATTERN_PLUS_SIGN;
             exponentSeparator = String.valueOf(exponential);
             // Although we read the exponential field on stream to create the
             // exponentSeparator, we don't do the reverse, since scientific
@@ -1530,7 +1527,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
                 groupingSeparatorString = String.valueOf(groupingSeparator);
             }
             if (percentString == null) {
-                percentString = String.valueOf(percent);
+                percentString = String.valueOf(percentString);
             }
             if (perMillString == null) {
                 perMillString = String.valueOf(perMill);

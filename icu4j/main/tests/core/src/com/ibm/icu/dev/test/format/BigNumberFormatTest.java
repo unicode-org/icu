@@ -48,11 +48,11 @@ public class BigNumberFormatTest extends TestFmwk {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat f = new DecimalFormat("#,##,###", US);
         expect(f, new Long(123456789), "12,34,56,789");
-        expectPat(f, "#,##,##0");
+        expectPat(f, "#,##,###");
         f.applyPattern("#,###");
         f.setSecondaryGroupingSize(4);
         expect(f, new Long(123456789), "12,3456,789");
-        expectPat(f, "#,####,##0");
+        expectPat(f, "#,####,###");
 
         // On Sun JDK 1.2-1.3, the hi_IN locale uses '0' for a zero digit,
         // but on IBM JDK 1.2-1.3, the locale uses U+0966.
@@ -144,7 +144,7 @@ public class BigNumberFormatTest extends TestFmwk {
 
         fmt.setFormatWidth(16);
         //              12  34567890123456
-        expectPat(fmt, "AA*^#####,##0.00ZZ");
+        expectPat(fmt, "AA*^#,###,##0.00ZZ");
     }
 
     private void expectPat(DecimalFormat fmt, String exp) {
@@ -227,16 +227,16 @@ public class BigNumberFormatTest extends TestFmwk {
         expect(new DecimalFormat[] { new DecimalFormat("#E0", US),
                                      new DecimalFormat("##E0", US),
                                      new DecimalFormat("####E0", US),
-                                     new DecimalFormat("0E0", US),
-                                     new DecimalFormat("00E0", US),
-                                     new DecimalFormat("000E0", US),
+                                     new DecimalFormat("0E0", US),    
+                                     new DecimalFormat("00E0", US),   
+                                     new DecimalFormat("000E0", US), 
                                    },
                new Long(45678000),
                new String[] { "4.5678E7",
                               "45.678E6",
                               "4567.8E4",
                               "5E7",
-                              "46E6",
+                              "46E6",  
                               "457E5",
                             }
                );
@@ -285,13 +285,13 @@ public class BigNumberFormatTest extends TestFmwk {
                    new Long(-1000000000), "(1,000,000,000.00)",
                });
     }
-
+    
     private void expect(NumberFormat fmt, Object[] data) {
         for (int i=0; i<data.length; i+=2) {
             expect(fmt, (Number) data[i], (String) data[i+1]);
         }
     }
-
+    
     private void expect(Object fmto, Object numo, Object expo) {
         NumberFormat fmt = null, fmts[] = null;
         Number num = null, nums[] = null;
@@ -400,7 +400,7 @@ public class BigNumberFormatTest extends TestFmwk {
         if (!s.equals("-0.1")) {
             errln("FAIL");
         }
-    }
+    }        
 
     @Test
     public void TestBigDecimalJ28() {

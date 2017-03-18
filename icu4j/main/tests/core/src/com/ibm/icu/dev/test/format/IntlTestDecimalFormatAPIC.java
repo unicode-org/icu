@@ -228,7 +228,7 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         s2 = pat.toPattern();
         logln("Extracted pattern is " + s2);
         if (!s2.equals(p1)) {
-            errln("ERROR: toPattern() result did not match pattern applied: " + p1 + " vs " + s2);
+            errln("ERROR: toPattern() result did not match pattern applied");
         }
 
         String p2 = new String("#,##0.0# FF;(#,##0.0# FF)");
@@ -237,7 +237,9 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         String s3;
         s3 = pat.toLocalizedPattern();
         logln("Extracted pattern is " + s3);
-        assertEquals("ERROR: toLocalizedPattern() result did not match pattern applied", p2, s3);
+        if (!s3.equals(p2)) {
+            errln("ERROR: toLocalizedPattern() result did not match pattern applied");
+        }
 
         // ======= Test getStaticClassID()
 

@@ -1,15 +1,9 @@
-/*.jar
 /.git
-/ShanesDecimalFormat
-/android
-/dcfmtb
-/dd1
 icu4c/bin
 icu4c/bin64
 icu4c/include
 icu4c/lib
 icu4c/lib64
-icu4c/source/.vscode
 icu4c/source/Doxyfile
 icu4c/source/Makefile
 icu4c/source/README
@@ -25,7 +19,6 @@ icu4c/source/allinone/Debug
 icu4c/source/allinone/ipch
 icu4c/source/autom4te.cache
 icu4c/source/bin
-icu4c/source/browse.VC.db
 icu4c/source/common/*.ao
 icu4c/source/common/*.d
 icu4c/source/common/*.o
@@ -149,7 +142,6 @@ icu4c/source/layoutex/x64
 icu4c/source/layoutex/x86
 icu4c/source/lib
 icu4c/source/perf-*.xml
-icu4c/source/runShaneConfigureICU.sh
 icu4c/source/samples/*.opensdf
 icu4c/source/samples/*.sdf
 icu4c/source/samples/Makefile
@@ -373,8 +365,6 @@ icu4c/source/samples/ustring/ustring.out
 icu4c/source/samples/ustring/ustring.vcproj.*.*.user
 icu4c/source/samples/ustring/x64
 icu4c/source/samples/ustring/x86
-icu4c/source/shane.cpp
-icu4c/source/shane.exe
 icu4c/source/stubdata/*.ao
 icu4c/source/stubdata/*.d
 icu4c/source/stubdata/*.o
@@ -907,7 +897,6 @@ icu4j/.project
 icu4j/build-local.properties
 icu4j/demos/out
 icu4j/doc
-icu4j/eclipse
 icu4j/eclipse-build/out
 icu4j/lib/*.jar
 icu4j/main/classes/charset/out
