@@ -105,6 +105,85 @@ public class TextTrieMap<V> {
         }
     }
 
+    /**
+     * Creates an object that consumes code points one at a time and returns intermediate prefix
+     * matches.  Returns null if no match exists.
+     *
+     * @return An instance of {@link ParseState}, or null if the starting code point is not a
+     * prefix for any entry in the trie.
+     */
+    public ParseState openParseState(int startingCp) {
+      // Check to see whether this is a valid starting character.  If not, return null.
+      if (_ignoreCase) {
+        startingCp = UCharacter.foldCase(startingCp, true);
+      }
+      int count = Character.charCount(startingCp);
+      char ch1 = (count == 1) ? (char) startingCp : Character.highSurrogate(startingCp);
+      if (!_root.hasChildFor(ch1)) {
+        return null;
+      }
+
+      return new ParseState(_root);
+    }
+
+    /**
+     * ParseState is mutable, not thread-safe, and intended to be used internally by parsers for
+     * consuming values from this trie.
+     */
+    public class ParseState {
+      private Node node;
+      private int offset;
+      private Node.StepResult result;
+
+      ParseState(Node start) {
+        node = start;
+        offset = 0;
+        result = start.new StepResult();
+      }
+
+      /**
+       * Consumes a code point and walk to the next node in the trie.
+       *
+       * @param cp The code point to consume.
+       */
+      public void accept(int cp) {
+        assert node != null;
+        if (_ignoreCase) {
+          cp = UCharacter.foldCase(cp, true);
+        }
+        int count = Character.charCount(cp);
+        char ch1 = (count == 1) ? (char) cp : Character.highSurrogate(cp);
+        node.takeStep(ch1, offset, result);
+        if (count == 2 && result.node != null) {
+          char ch2 = Character.lowSurrogate(cp);
+          result.node.takeStep(ch2, result.offset, result);
+        }
+        node = result.node;
+        offset = result.offset;
+      }
+
+      /**
+       * Gets the exact prefix matches for all code points that have been consumed so far.
+       *
+       * @return The matches.
+       */
+      public Iterator<V> getCurrentMatches() {
+        if (node != null && offset == node.charCount()) {
+          return node.values();
+        }
+        return null;
+      }
+
+      /**
+       * Checks whether any more code points can be consumed.
+       *
+       * @return true if no more code points can be consumed; false otherwise.
+       */
+      public boolean atEnd() {
+        return node == null || (node.charCount() == offset && node._children == null);
+      }
+    }
+
     public static class CharIterator implements Iterator<Character> {
         private boolean _ignoreCase;
         private CharSequence _text;
@@ -234,6 +313,21 @@ public class TextTrieMap<V> {
             _children = children;
         }
 
+        public int charCount() {
+          return _text == null ? 0 : _text.length;
+        }
+
+        public boolean hasChildFor(char ch) {
+          for (int i=0; _children != null && i < _children.size(); i++) {
+            Node child = _children.get(i);
+            if (ch < child._text[0]) break;
+            if (ch == child._text[0]) {
+              return true;
+            }
+          }
+          return false;
+        }
+
         public Iterator<V> values() {
             if (_values == null) {
                 return null;
@@ -270,6 +364,37 @@ public class TextTrieMap<V> {
                 }
             }
             return match;
+        }
+
+        public class StepResult {
+          public Node node;
+          public int offset;
+        }
+        public void takeStep(char ch, int offset, StepResult result) {
+          assert offset <= charCount();
+          if (offset == charCount()) {
+            // Go to a child node
+            for (int i=0; _children != null && i < _children.size(); i++) {
+              Node child = _children.get(i);
+              if (ch < child._text[0]) break;
+              if (ch == child._text[0]) {
+                // Found a matching child node
+                result.node = child;
+                result.offset = 1;
+                return;
+              }
+            }
+            // No matching children; fall through
+          } else if (_text[offset] == ch) {
+            // Return to this node; increase offset
+            result.node = this;
+            result.offset = offset + 1;
+            return;
+          }
+          // No matches
+          result.node = null;
+          result.offset = -1;
+          return;
         }
 
         private void add(char[] text, int offset, V value) {

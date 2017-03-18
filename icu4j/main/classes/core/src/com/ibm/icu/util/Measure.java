@@ -43,7 +43,7 @@ public class Measure {
      */
     public Measure(Number number, MeasureUnit unit) {
         if (number == null || unit == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("Number and MeasureUnit must not be null");
         }
         this.number = number;
         this.unit = unit;
