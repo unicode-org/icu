@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
+// TODO: enable in Java 8: import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -105,10 +105,13 @@ public class PropertiesTest {
 
       // Check for parameter name equality.
       // The parameter name is not always available, depending on compiler settings.
+      // TODO: Enable in Java 8
+      /*
       Parameter param = setter.getParameters()[0];
       if (!param.getName().subSequence(0, 3).equals("arg")) {
         assertEquals("Parameter name should equal field name", field.getName(), param.getName());
       }
+      */
 
       try {
         // Check for default value (should be null for objects)
