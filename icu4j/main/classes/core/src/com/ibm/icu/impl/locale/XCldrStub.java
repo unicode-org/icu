@@ -164,6 +164,10 @@ public class XCldrStub {
         public Iterator<Entry<K, V>> iterator() {
             return this;
         }
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private static class ReusableEntry<K,V> implements Entry<K,V> {
