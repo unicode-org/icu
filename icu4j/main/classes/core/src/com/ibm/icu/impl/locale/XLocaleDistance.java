@@ -18,7 +18,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.function.Predicate;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Row;
@@ -30,6 +29,7 @@ import com.ibm.icu.impl.locale.XCldrStub.ImmutableSet;
 import com.ibm.icu.impl.locale.XCldrStub.LinkedHashMultimap;
 import com.ibm.icu.impl.locale.XCldrStub.Multimap;
 import com.ibm.icu.impl.locale.XCldrStub.Multimaps;
+import com.ibm.icu.impl.locale.XCldrStub.Predicate;
 import com.ibm.icu.impl.locale.XCldrStub.Splitter;
 import com.ibm.icu.impl.locale.XCldrStub.TreeMultimap;
 import com.ibm.icu.impl.locale.XLikelySubtags.LSR;
