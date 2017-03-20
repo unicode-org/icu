@@ -242,18 +242,18 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {-1f, "-1"},
             {-12f, "-12"},
             {-123f, "-120"},
-            {-1234f, "elfu\u00a0-1.2"},
-            {-12345f, "elfu\u00a0-12"},
-            {-123456f, "elfu\u00A0-120"},
-            {-1234567f, "M-1.2"},
-            {-12345678f, "M-12"},
-            {-123456789f, "M-120"},
-            {-1234567890f, "B-1.2"},
-            {-12345678901f, "B-12"},
-            {-123456789012f, "B-120"},
-            {-1234567890123f, "T-1.2"},
-            {-12345678901234f, "T-12"},
-            {-12345678901234567890f, "T-12,000,000"},
+            {-1234f, "-elfu\u00a01.2"}, // minus sign should precede numeric portion; CLDR 31 has incorrect data until ICU4C can handle
+            {-12345f, "-elfu\u00a012"}, // per above
+            {-123456f, "-elfu\u00a0120"}, // per above
+            {-1234567f, "-M1.2"}, // per above
+            {-12345678f, "-M12"}, // per above
+            {-123456789f, "-M120"}, // per above
+            {-1234567890f, "-B1.2"}, // per above
+            {-12345678901f, "-B12"}, // per above
+            {-123456789012f, "-B120"}, // per above
+            {-1234567890123f, "-T1.2"}, // per above
+            {-12345678901234f, "-T12"}, // per above
+            {-12345678901234567890f, "-T12,000,000"}, // per above
     };
 
     Object[][] TestACoreCompactFormatList = {
