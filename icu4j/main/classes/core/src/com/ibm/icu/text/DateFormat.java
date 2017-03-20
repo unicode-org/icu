@@ -455,8 +455,7 @@ public abstract class DateFormat extends UFormat {
      * {@icu} FieldPosition selector for 'b' field alignment.
      * No related Calendar field.
      * This displays the fixed day period (am/pm/midnight/noon).
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     final static int AM_PM_MIDNIGHT_NOON_FIELD = 35;
 
@@ -464,8 +463,7 @@ public abstract class DateFormat extends UFormat {
      * {@icu} FieldPosition selector for 'B' field alignment.
      * No related Calendar field.
      * This displays the flexible day period.
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     final static int FLEXIBLE_DAY_PERIOD_FIELD = 36;
 

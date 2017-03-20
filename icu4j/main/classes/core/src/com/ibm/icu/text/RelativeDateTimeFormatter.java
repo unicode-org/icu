@@ -299,106 +299,91 @@ public final class RelativeDateTimeFormatter {
         /**
          * Specifies that relative unit is year, e.g. "last year",
          * "in 5 years".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         YEAR,
         /**
          * Specifies that relative unit is quarter, e.g. "last quarter",
          * "in 5 quarters".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         QUARTER,
         /**
          * Specifies that relative unit is month, e.g. "last month",
          * "in 5 months".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         MONTH,
         /**
          * Specifies that relative unit is week, e.g. "last week",
          * "in 5 weeks".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         WEEK,
         /**
          * Specifies that relative unit is day, e.g. "yesterday",
          * "in 5 days".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         DAY,
         /**
          * Specifies that relative unit is hour, e.g. "1 hour ago",
          * "in 5 hours".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         HOUR,
         /**
          * Specifies that relative unit is minute, e.g. "1 minute ago",
          * "in 5 minutes".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         MINUTE,
         /**
          * Specifies that relative unit is second, e.g. "1 second ago",
          * "in 5 seconds".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         SECOND,
         /**
          * Specifies that relative unit is Sunday, e.g. "last Sunday",
          * "this Sunday", "next Sunday", "in 5 Sundays".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         SUNDAY,
         /**
          * Specifies that relative unit is Monday, e.g. "last Monday",
          * "this Monday", "next Monday", "in 5 Mondays".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         MONDAY,
         /**
          * Specifies that relative unit is Tuesday, e.g. "last Tuesday",
          * "this Tuesday", "next Tuesday", "in 5 Tuesdays".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         TUESDAY,
         /**
          * Specifies that relative unit is Wednesday, e.g. "last Wednesday",
          * "this Wednesday", "next Wednesday", "in 5 Wednesdays".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         WEDNESDAY,
         /**
          * Specifies that relative unit is Thursday, e.g. "last Thursday",
          * "this Thursday", "next Thursday", "in 5 Thursdays".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         THURSDAY,
         /**
          * Specifies that relative unit is Friday, e.g. "last Friday",
          * "this Friday", "next Friday", "in 5 Fridays".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         FRIDAY,
         /**
          * Specifies that relative unit is Saturday, e.g. "last Saturday",
          * "this Saturday", "next Saturday", "in 5 Saturdays".
-         * @draft ICU 57
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 57
          */
         SATURDAY,
     }
@@ -544,8 +529,7 @@ public final class RelativeDateTimeFormatter {
      *                  date, e.g. RelativeDateTimeUnit.WEEK,
      *                  RelativeDateTimeUnit.FRIDAY.
      * @return          The formatted string (may be empty in case of error)
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public String formatNumeric(double offset, RelativeDateTimeUnit unit) {
         // TODO:
@@ -625,8 +609,7 @@ public final class RelativeDateTimeFormatter {
      *                  date, e.g. RelativeDateTimeUnit.WEEK,
      *                  RelativeDateTimeUnit.FRIDAY.
      * @return          The formatted string (may be empty in case of error)
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public String format(double offset, RelativeDateTimeUnit unit) {
         // TODO:
