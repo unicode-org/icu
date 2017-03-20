@@ -1573,7 +1573,8 @@ public class NumberRegressionTests extends TestFmwk {
                     assertEquals("Localized FAIL on maxInt", df.getMaximumIntegerDigits(), f2.getMaximumIntegerDigits());
 
                 }catch(IllegalArgumentException ex){
-                    throw new AssertionError("For locale " + avail[i], ex);
+                    //throw new AssertionError("For locale " + avail[i], ex);
+                    throw new AssertionError("For locale " + avail[i] + ": " + ex.getMessage());
                 }
 
 

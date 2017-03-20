@@ -8,7 +8,7 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 import org.junit.Test;
 
@@ -404,8 +404,9 @@ public class FormatQuantityTest extends TestFmwk {
 
     // Generate random doubles
     String alert = "UNEXPECTED FAILURE: PLEASE REPORT THIS MESSAGE TO THE ICU TEAM: ";
+    Random rnd = new Random();
     for (int i = 0; i < 1000000; i++) {
-      double d = Double.longBitsToDouble(ThreadLocalRandom.current().nextLong());
+      double d = Double.longBitsToDouble(rnd.nextLong());
       if (Double.isNaN(d) || Double.isInfinite(d)) continue;
       checkDoubleBehavior(d, false, alert);
     }

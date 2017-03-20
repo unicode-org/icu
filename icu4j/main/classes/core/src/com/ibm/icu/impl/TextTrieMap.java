@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UTF16;
 
 /**
  * TextTrieMap is a trie implementation for supporting
@@ -118,7 +119,7 @@ public class TextTrieMap<V> {
         startingCp = UCharacter.foldCase(startingCp, true);
       }
       int count = Character.charCount(startingCp);
-      char ch1 = (count == 1) ? (char) startingCp : Character.highSurrogate(startingCp);
+      char ch1 = (count == 1) ? (char) startingCp : UTF16.getLeadSurrogate(startingCp);
       if (!_root.hasChildFor(ch1)) {
         return null;
       }
@@ -152,10 +153,10 @@ public class TextTrieMap<V> {
           cp = UCharacter.foldCase(cp, true);
         }
         int count = Character.charCount(cp);
-        char ch1 = (count == 1) ? (char) cp : Character.highSurrogate(cp);
+        char ch1 = (count == 1) ? (char) cp : UTF16.getLeadSurrogate(cp);
         node.takeStep(ch1, offset, result);
         if (count == 2 && result.node != null) {
-          char ch2 = Character.lowSurrogate(cp);
+          char ch2 = UTF16.getTrailSurrogate(cp);
           result.node.takeStep(ch2, result.offset, result);
         }
         node = result.node;

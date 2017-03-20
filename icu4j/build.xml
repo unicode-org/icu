@@ -292,6 +292,7 @@
         <include name="**/*Test*"/>
         <exclude name="**/*Fmwk*"/>
         <exclude name="**/*TestUtility*"/>
+        <exclude name="**/*TestHelper*"/>
         <exclude name="**/*TestCase*"/>
         <exclude name="**/*TestData*"/>
         <exclude name="**/*TestSample*"/>

@@ -4903,7 +4903,8 @@ public class NumberFormatTest extends TestFmwk {
                          new CurrencyAmount(2.34, Currency.getInstance("XSU")), result);
             // pass
         } catch (Exception e) {
-            throw new AssertionError("Should have been able to parse XSU", e);
+            //throw new AssertionError("Should have been able to parse XSU", e);
+            throw new AssertionError("Should have been able to parse XSU: " + e.getMessage());
         }
     }
 

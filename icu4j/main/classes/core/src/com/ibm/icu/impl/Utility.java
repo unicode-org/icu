@@ -10,6 +10,7 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -1806,5 +1807,45 @@ public final class Utility {
             buffer.appendCodePoint(cp);
         }
         return buffer.toString();
+    }
+
+    /**
+     * This implementation is equivalent to Java 7+ Objects#equals(Object a, Object b)
+     *
+     * @param a an object
+     * @param b an object to be compared with a for equality
+     * @return true if the arguments are equal to each other and false otherwise
+     */
+    public static boolean equals(Object a, Object b) {
+        return (a == b)
+                || (a != null && b != null && a.equals(b));
+    }
+
+    /**
+     * This implementation is equivalent to Java 7+ Objects#hash(Object... values)
+     * @param values the values to be hashed
+     * @return a hash value of the sequence of input values
+     */
+    public static int hash(Object... values) {
+        return Arrays.hashCode(values);
+    }
+
+    /**
+     * This implementation is equivalent to Java 7+ Objects#hashCode(Object o)
+     * @param o an object
+     * @return a hash value of a non-null argument and 0 for null argument
+     */
+    public static int hashCode(Object o) {
+        return o == null ? 0 : o.hashCode();
+    }
+
+    /**
+     * This implementation is equivalent to Java 7+ Objects#toString(Object o)
+     * @param o an object
+     * @return the result of calling toStirng for a non-null argument and "null" for a
+     * null argument
+     */
+    public static String toString(Object o) {
+        return o == null ? "null" : o.toString();
     }
 }

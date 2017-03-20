@@ -8,12 +8,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.XCldrStub.HashMultimap;
 import com.ibm.icu.impl.locale.XCldrStub.Multimap;
 import com.ibm.icu.impl.locale.XCldrStub.Multimaps;
@@ -206,7 +206,7 @@ public class XLikelySubtags {
         }
         @Override
         public int hashCode() {
-            return Objects.hash(language, script, region);
+            return Utility.hash(language, script, region);
         }
     }
 
@@ -483,7 +483,7 @@ public class XLikelySubtags {
             if (value instanceof Map) {
                 show((Map)value, indent+"\t", output);
             } else {
-                output.append("\t" + Objects.toString(value)).append("\n");
+                output.append("\t" + Utility.toString(value)).append("\n");
             }
             first = indent;
         }

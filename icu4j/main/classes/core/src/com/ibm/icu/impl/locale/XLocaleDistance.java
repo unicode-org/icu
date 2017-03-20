@@ -14,7 +14,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -22,6 +21,7 @@ import java.util.TreeSet;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R4;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.XCldrStub.CollectionUtilities;
 import com.ibm.icu.impl.locale.XCldrStub.ImmutableMap;
 import com.ibm.icu.impl.locale.XCldrStub.ImmutableMultimap;
@@ -357,11 +357,11 @@ public class XLocaleDistance {
                 return false;
             }
             StringDistanceNode other = (StringDistanceNode) obj;
-            return distance == other.distance && Objects.equals(distanceTable, other.distanceTable);
+            return distance == other.distance && Utility.equals(distanceTable, other.distanceTable);
         }
         @Override
         public int hashCode() {
-            return distance ^ Objects.hashCode(distanceTable);
+            return distance ^ Utility.hashCode(distanceTable);
         }
 
         StringDistanceNode(int distance) {
