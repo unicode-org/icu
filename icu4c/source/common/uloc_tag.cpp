@@ -923,7 +923,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
         char extBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
         char *pExtBuf = extBuf;
         int32_t extBufCapacity = sizeof(extBuf);
-        const char *bcpKey, *bcpValue;
+        const char *bcpKey=nullptr, *bcpValue=nullptr;
         UErrorCode tmpStatus = U_ZERO_ERROR;
         int32_t keylen;
         UBool isBcpUExt;

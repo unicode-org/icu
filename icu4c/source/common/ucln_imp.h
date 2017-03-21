@@ -121,7 +121,9 @@ U_CAPI void U_EXPORT2 UCLN_FINI ()
 /* READ READ READ READ!    Are you getting compilation errors from windows.h?
           Any source file which includes this (ucln_imp.h) header MUST 
           be defined with language extensions ON. */
+#ifndef WIN32_LEAN_AND_MEAN
 #   define WIN32_LEAN_AND_MEAN
+#endif
 #   define VC_EXTRALEAN
 #   define NOUSER
 #   define NOSERVICE
