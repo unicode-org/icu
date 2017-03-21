@@ -687,12 +687,19 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
 /* _M_IA64 should be defined in windows.h */
 #   if defined(_M_IA64)
         *pCPU=IMAGE_FILE_MACHINE_IA64;
+        *pBits = 64;
 #   elif defined(_M_AMD64)
-        *pCPU=IMAGE_FILE_MACHINE_AMD64;
+// link.exe does not really care about the .obj machine type and this will
+// allow us to build a dll for both ARM & x64 with an amd64 built tool
+// ARM is same as x64 except for first 2 bytes of object file
+        *pCPU = IMAGE_FILE_MACHINE_UNKNOWN;
+        // *pCPU = IMAGE_FILE_MACHINE_ARMNT;   // If we wanted to be explicit
+        // *pCPU = IMAGE_FILE_MACHINE_AMD64;   // We would use one of these names
+        *pBits = 64;                           // Doesn't seem to be used for anything interesting?
 #   else
-        *pCPU=IMAGE_FILE_MACHINE_I386;
+        *pCPU=IMAGE_FILE_MACHINE_I386;    // We would use one of these names
+        *pBits = 32;
 #   endif
-        *pBits= *pCPU==IMAGE_FILE_MACHINE_I386 ? 32 : 64;
         *pIsBigEndian=FALSE;
 #else
 #   error "Unknown platform for CAN_GENERATE_OBJECTS."
@@ -1030,7 +1037,14 @@ writeObjectCode(const char *filename, const char *destdir, const char *optEntryP
 
     /* deal with options, files and the entry point name */
     getArchitecture(&cpu, &bits, &makeBigEndian, optMatchArch);
-    printf("genccode: --match-arch cpu=%hu bits=%hu big-endian=%d\n", cpu, bits, makeBigEndian);
+    if (optMatchArch)
+    {
+        printf("genccode: --match-arch cpu=%hu bits=%hu big-endian=%d\n", cpu, bits, makeBigEndian);
+    }
+    else
+    {
+        printf("genccode: using architecture cpu=%hu bits=%hu big-endian=%d\n", cpu, bits, makeBigEndian);
+    }
 #if U_PLATFORM_HAS_WIN32_API
     if(cpu==IMAGE_FILE_MACHINE_I386) {
         entryOffset=1;

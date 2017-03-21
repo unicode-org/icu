@@ -607,6 +607,10 @@ public:
      * @return the new position
      * @stable ICU 2.0
      */
+#ifdef move32
+     // One of the system headers right now is sometimes defining a conflicting macro we don't use
+#undef move32
+#endif
     virtual int32_t      move32(int32_t delta, EOrigin origin) = 0;
 
     /**

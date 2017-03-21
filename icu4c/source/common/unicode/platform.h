@@ -234,6 +234,18 @@
 #endif
 
 /**
+ * \def U_PLATFORM_HAS_WINUWP_API
+ * Defines whether target is intended for Universal Windows Platform API
+ * Set to 1 for Windows10 Release Solution Configuration
+ * @internal
+ */
+#ifdef U_PLATFORM_HAS_WINUWP_API
+    /* Use the predefined value. */
+#else
+#   define U_PLATFORM_HAS_WINUWP_API 0
+#endif
+
+/**
  * \def U_PLATFORM_IMPLEMENTS_POSIX
  * Defines whether the platform implements (most of) the POSIX API.
  * Set to 1 for Cygwin and most other platforms.

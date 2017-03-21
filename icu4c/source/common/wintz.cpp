@@ -14,7 +14,8 @@
 #include "unicode/utypes.h"
 
 // This file contains only desktop Windows behavior
-#if U_PLATFORM_HAS_WIN32_API
+// Windows UWP calls Windows::Globalization directly, so this isn't needed there.
+#if U_PLATFORM_HAS_WIN32_API && (U_PLATFORM_HAS_WINUWP_API == 0)
 
 #include "wintz.h"
 #include "cmemory.h"
@@ -23,7 +24,9 @@
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 
+#ifndef WIN32_LEAN_AND_MEAN
 #   define WIN32_LEAN_AND_MEAN
+#endif
 #   define VC_EXTRALEAN
 #   define NOUSER
 #   define NOSERVICE
@@ -378,4 +381,4 @@ uprv_detectWindowsTimeZone()
     return icuid;
 }
 
-#endif /* U_PLATFORM_HAS_WIN32_API */
+#endif /* U_PLATFORM_HAS_WIN32_API && (U_PLATFORM_HAS_WINUWP_API == 0) */

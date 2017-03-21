@@ -28,7 +28,9 @@
 /* memory-mapping base definitions ------------------------------------------ */
 
 #if MAP_IMPLEMENTATION==MAP_WIN32
+#ifndef WIN32_LEAN_AND_MEAN
 #   define WIN32_LEAN_AND_MEAN
+#endif
 #   define VC_EXTRALEAN
 #   define NOUSER
 #   define NOSERVICE
@@ -107,17 +109,42 @@
         UDataMemory_init(pData); /* Clear the output struct.        */
 
         /* open the input file */
+#if U_PLATFORM_HAS_WINUWP_API == 0
         file=CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL,
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL|FILE_FLAG_RANDOM_ACCESS, NULL);
+#else
+        // First we need to go from char to UTF-16
+        // u_UCharsToChars could work but it requires length.
+        WCHAR utf16Path[MAX_PATH];
+        int i;
+        for (i = 0; i < UPRV_LENGTHOF(utf16Path); i++)
+        {
+            utf16Path[i] = path[i];
+            if (path[i] == '\0')
+            {
+                break;
+            }
+        }
+        if (i >= UPRV_LENGTHOF(utf16Path))
+        {
+            // Ran out of room, unlikely but be safe
+            utf16Path[UPRV_LENGTHOF(utf16Path) - 1] = '\0';
+        }
+
+        // TODO: Is it worth setting extended parameters to specify random access?
+        file = CreateFile2(utf16Path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, NULL);
+#endif
         if(file==INVALID_HANDLE_VALUE) {
             return FALSE;
         }
 
         /* Declare and initialize a security descriptor.
            This is required for multiuser systems on Windows 2000 SP4 and beyond */
+        // TODO: UWP does not have this function and I do not think it is required?
+#if U_PLATFORM_HAS_WINUWP_API == 0
         if (InitializeSecurityDescriptor(&securityDesc, SECURITY_DESCRIPTOR_REVISION)) {
-            /* give the security descriptor a Null Dacl done using the  "TRUE, (PACL)NULL" here	*/
+            /* give the security descriptor a Null Dacl done using the  "TRUE, (PACL)NULL" here */
             if (SetSecurityDescriptorDacl(&securityDesc, TRUE, (PACL)NULL, FALSE)) {
                 /* Make the security attributes point to the security descriptor */
                 uprv_memset(&mappingAttributes, 0, sizeof(mappingAttributes));
@@ -132,6 +159,9 @@
 
         /* create an unnamed Windows file-mapping object for the specified file */
         map=CreateFileMapping(file, mappingAttributesPtr, PAGE_READONLY, 0, 0, NULL);
+#else
+        map = CreateFileMappingFromApp(file, NULL, PAGE_READONLY, 0, NULL);
+#endif
         CloseHandle(file);
         if(map==NULL) {
             return FALSE;

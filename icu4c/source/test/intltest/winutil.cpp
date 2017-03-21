@@ -36,6 +36,7 @@ static Win32Utilities::LCIDRecord *lcidRecords = NULL;
 static int32_t lcidCount  = 0;
 static int32_t lcidMax = 0;
 
+// TODO: Note that this test will skip locale names and only hit locales with assigned LCIDs
 BOOL CALLBACK EnumLocalesProc(LPSTR lpLocaleString)
 {
     char localeID[ULOC_FULLNAME_CAPACITY];
@@ -70,6 +71,7 @@ BOOL CALLBACK EnumLocalesProc(LPSTR lpLocaleString)
     return TRUE;
 }
 
+// TODO: Note that this test will skip locale names and only hit locales with assigned LCIDs
 Win32Utilities::LCIDRecord *Win32Utilities::getLocales(int32_t &localeCount)
 {
     LCIDRecord *result;
