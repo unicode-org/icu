@@ -1828,27 +1828,38 @@ static void TestKeywordVariantParsing(void)
     static const struct {
         const char *localeID;
         const char *keyword;
-        const char *expectedValue;
+        const char *expectedValue; /* NULL if failure is expected */
     } testCases[] = {
-        { "de_DE@  C o ll A t i o n   = Phonebook   ", "c o ll a t i o n", "Phonebook" },
+        { "de_DE@  C o ll A t i o n   = Phonebook   ", "c o ll a t i o n", NULL }, /* malformed key name */
         { "de_DE", "collation", ""},
         { "de_DE@collation=PHONEBOOK", "collation", "PHONEBOOK" },
         { "de_DE@currency = euro; CoLLaTion   = PHONEBOOk", "collatiON", "PHONEBOOk" },
     };
     
-    UErrorCode status = U_ZERO_ERROR;
-    
+    UErrorCode status;
     int32_t i = 0;
     int32_t resultLen = 0;
     char buffer[256];
     
     for(i = 0; i < UPRV_LENGTHOF(testCases); i++) {
         *buffer = 0;
+        status = U_ZERO_ERROR;
         resultLen = uloc_getKeywordValue(testCases[i].localeID, testCases[i].keyword, buffer, 256, &status);
         (void)resultLen;    /* Suppress set but not used warning. */
-        if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
-            log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
-                testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+        if (testCases[i].expectedValue) {
+            /* expect success */
+            if (U_FAILURE(status)) {
+                log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Instead got status %s\n",
+                    testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, u_errorName(status));
+            } else if (uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
+                log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Instead got \"%s\"\n",
+                    testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+            }
+        } else if (U_SUCCESS(status)) {
+            /* expect failure */
+            log_err("Expected failure but got success from \"%s\" for keyword \"%s\". Got \"%s\"\n",
+                testCases[i].localeID, testCases[i].keyword, buffer);
+            
         }
     }
 }
@@ -1901,7 +1912,40 @@ static const struct {
   /* 4. removal of only item */
   { "de@collation=phonebook", "collation", NULL, "de" },
 #endif
-  { "de@collation=phonebook", "Currency", "CHF", "de@collation=phonebook;currency=CHF" }
+  { "de@collation=phonebook", "Currency", "CHF", "de@collation=phonebook;currency=CHF" },
+  /* cases with legal extra spacing */
+  /*31*/{ "en_US@ calendar = islamic", "calendar", "japanese", "en_US@calendar=japanese" },
+  /*32*/{ "en_US@ calendar = gregorian ; collation = phonebook", "calendar", "japanese", "en_US@calendar=japanese;collation=phonebook" },
+  /*33*/{ "en_US@ calendar = islamic", "currency", "CHF", "en_US@calendar=islamic;currency=CHF" },
+  /*34*/{ "en_US@ currency = CHF", "calendar", "japanese", "en_US@calendar=japanese;currency=CHF" },
+  /* cases in which setKeywordValue expected to fail (implied by NULL for expected); locale need not be canonical */
+  /*35*/{ "en_US@calendar=gregorian;", "calendar", "japanese", NULL },
+  /*36*/{ "en_US@calendar=gregorian;=", "calendar", "japanese", NULL },
+  /*37*/{ "en_US@calendar=gregorian;currency=", "calendar", "japanese", NULL },
+  /*38*/{ "en_US@=", "calendar", "japanese", NULL },
+  /*39*/{ "en_US@=;", "calendar", "japanese", NULL },
+  /*40*/{ "en_US@= ", "calendar", "japanese", NULL },
+  /*41*/{ "en_US@ =", "calendar", "japanese", NULL },
+  /*42*/{ "en_US@ = ", "calendar", "japanese", NULL },
+  /*43*/{ "en_US@=;calendar=gregorian", "calendar", "japanese", NULL },
+  /*44*/{ "en_US@= calen dar = gregorian", "calendar", "japanese", NULL },
+  /*45*/{ "en_US@= calendar = greg orian", "calendar", "japanese", NULL },
+  /*46*/{ "en_US@=;cal...endar=gregorian", "calendar", "japanese", NULL },
+  /*47*/{ "en_US@=;calendar=greg...orian", "calendar", "japanese", NULL },
+  /*48*/{ "en_US@calendar=gregorian", "cale ndar", "japanese", NULL },
+  /*49*/{ "en_US@calendar=gregorian", "calendar", "japa..nese", NULL },
+  /* cases in which getKeywordValue and setKeyword expected to fail (implied by NULL for value and expected) */
+  /*50*/{ "en_US@=", "calendar", NULL, NULL },
+  /*51*/{ "en_US@=;", "calendar", NULL, NULL },
+  /*52*/{ "en_US@= ", "calendar", NULL, NULL },
+  /*53*/{ "en_US@ =", "calendar", NULL, NULL },
+  /*54*/{ "en_US@ = ", "calendar", NULL, NULL },
+  /*55*/{ "en_US@=;calendar=gregorian", "calendar", NULL, NULL },
+  /*56*/{ "en_US@= calen dar = gregorian", "calendar", NULL, NULL },
+  /*57*/{ "en_US@= calendar = greg orian", "calendar", NULL, NULL },
+  /*58*/{ "en_US@=;cal...endar=gregorian", "calendar", NULL, NULL },
+  /*59*/{ "en_US@=;calendar=greg...orian", "calendar", NULL, NULL },
+  /*60*/{ "en_US@calendar=gregorian", "cale ndar", NULL, NULL },
 };
 
 
@@ -1914,31 +1958,59 @@ static void TestKeywordSet(void)
     char cbuffer[1024];
 
     for(i = 0; i < UPRV_LENGTHOF(kwSetTestCases); i++) {
-        UErrorCode status = U_ZERO_ERROR;
-        memset(buffer,'%',1023);
-        strcpy(buffer, kwSetTestCases[i].l);
+      UErrorCode status = U_ZERO_ERROR;
+      memset(buffer,'%',1023);
+      strcpy(buffer, kwSetTestCases[i].l);
 
+      if (kwSetTestCases[i].x != NULL) {
         uloc_canonicalize(kwSetTestCases[i].l, cbuffer, 1023, &status);
         if(strcmp(buffer,cbuffer)) {
           log_verbose("note: [%d] wasn't canonical, should be: '%s' not '%s'. Won't check for canonicity in output.\n", i, cbuffer, buffer);
         }
-          /* sanity check test case results for canonicity */
+        /* sanity check test case results for canonicity */
         uloc_canonicalize(kwSetTestCases[i].x, cbuffer, 1023, &status);
         if(strcmp(kwSetTestCases[i].x,cbuffer)) {
           log_err("%s:%d: ERROR: kwSetTestCases[%d].x = '%s', should be %s (must be canonical)\n", __FILE__, __LINE__, i, kwSetTestCases[i].x, cbuffer);
         }
 
+        status = U_ZERO_ERROR;
         resultLen = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, 1023, &status);
         if(U_FAILURE(status)) {
-          log_err("Err on test case %d: got error %s\n", i, u_errorName(status));
-          continue;
-        }
-        if(strcmp(buffer,kwSetTestCases[i].x) || ((int32_t)strlen(buffer)!=resultLen)) {
-          log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
+          log_err("Err on test case %d for setKeywordValue: got error %s\n", i, u_errorName(status));
+        } else if(strcmp(buffer,kwSetTestCases[i].x) || ((int32_t)strlen(buffer)!=resultLen)) {
+          log_err("FAIL: #%d setKeywordValue: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
                   kwSetTestCases[i].v, buffer, resultLen, kwSetTestCases[i].x, strlen(buffer));
         } else {
           log_verbose("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,buffer);
         }
+
+        if (kwSetTestCases[i].v != NULL && kwSetTestCases[i].v[0] != 0) {
+          status = U_ZERO_ERROR;
+          resultLen = uloc_getKeywordValue(kwSetTestCases[i].x, kwSetTestCases[i].k, buffer, 1023, &status);
+          if(U_FAILURE(status)) {
+            log_err("Err on test case %d for getKeywordValue: got error %s\n", i, u_errorName(status));
+          } else if (resultLen != uprv_strlen(kwSetTestCases[i].v) || uprv_strcmp(buffer, kwSetTestCases[i].v) != 0) {
+            log_err("FAIL: #%d getKeywordValue: got %s (%d) expected %s (%d)\n", i, buffer, resultLen,
+                    kwSetTestCases[i].v, uprv_strlen(kwSetTestCases[i].v));
+          }
+        }
+      } else {
+        /* test cases expected to result in error */
+        status = U_ZERO_ERROR;
+        resultLen = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, 1023, &status);
+        if(U_SUCCESS(status)) {
+          log_err("Err on test case %d for setKeywordValue: expected to fail but succeeded, got %s (%d)\n", i, buffer, resultLen);
+        }
+
+        if (kwSetTestCases[i].v == NULL) {
+          status = U_ZERO_ERROR;
+          strcpy(cbuffer, kwSetTestCases[i].l);
+          resultLen = uloc_getKeywordValue(cbuffer, kwSetTestCases[i].k, buffer, 1023, &status);
+          if(U_SUCCESS(status)) {
+            log_err("Err on test case %d for getKeywordValue: expected to fail but succeeded\n", i);
+          }
+        }
+      }
     }
 }
 
