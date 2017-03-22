@@ -466,8 +466,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: milligram-per-deciliter
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-per-deciliter");
 
@@ -505,8 +504,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of consumption: mile-per-gallon-imperial
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static final MeasureUnit MILE_PER_GALLON_IMPERIAL = MeasureUnit.internalGetInstance("consumption", "mile-per-gallon-imperial");
 
@@ -1127,8 +1125,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: gallon-imperial
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static final MeasureUnit GALLON_IMPERIAL = MeasureUnit.internalGetInstance("volume", "gallon-imperial");
 
