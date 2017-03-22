@@ -117,7 +117,7 @@
         // First we need to go from char to UTF-16
         // u_UCharsToChars could work but it requires length.
         WCHAR utf16Path[MAX_PATH];
-        int i;
+        int32_t i;
         for (i = 0; i < UPRV_LENGTHOF(utf16Path); i++)
         {
             utf16Path[i] = path[i];

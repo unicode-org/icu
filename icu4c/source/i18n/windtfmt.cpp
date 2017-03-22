@@ -109,7 +109,7 @@ static UErrorCode GetEquivalentWindowsLocaleName(const Locale& locale, UnicodeSt
         // Need it to be UTF-16, not 8-bit
         // TODO: This seems like a good thing for a helper
         wchar_t bcp47Tag[LOCALE_NAME_MAX_LENGTH] = {};
-        int i;
+        int32_t i;
         for (i = 0; i < UPRV_LENGTHOF(bcp47Tag); i++)
         {
             if (asciiBCP47Tag[i] == '\0')
