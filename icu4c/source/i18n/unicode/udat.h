@@ -763,21 +763,19 @@ typedef enum UDateFormatField {
     UDAT_RELATED_YEAR_FIELD = 34,
 #endif  /* U_HIDE_INTERNAL_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * FieldPosition selector for 'b' field alignment.
      * Displays midnight and noon for 12am and 12pm, respectively, if available;
      * otherwise fall back to AM / PM.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UDAT_AM_PM_MIDNIGHT_NOON_FIELD = 35,
 
     /* FieldPosition selector for 'B' field alignment.
      * Displays flexible day periods, such as "in the morning", if available.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UDAT_FLEXIBLE_DAY_PERIOD_FIELD = 36,
-#endif /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**
