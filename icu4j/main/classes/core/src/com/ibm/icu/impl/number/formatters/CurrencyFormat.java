@@ -13,6 +13,7 @@ import com.ibm.icu.impl.number.Rounder;
 import com.ibm.icu.impl.number.modifiers.GeneralPluralModifier;
 import com.ibm.icu.impl.number.rounders.IncrementRounder;
 import com.ibm.icu.impl.number.rounders.MagnitudeRounder;
+import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
@@ -288,6 +289,9 @@ public class CurrencyFormat {
       };
 
   public static Rounder getCurrencyRounder(DecimalFormatSymbols symbols, IProperties properties) {
+    if (SignificantDigitsRounder.useSignificantDigits(properties)) {
+      return SignificantDigitsRounder.getInstance(properties);
+    }
     Properties cprops = threadLocalProperties.get().clear();
     populateCurrencyRounderProperties(cprops, symbols, properties);
     if (cprops.getRoundingIncrement() != null) {

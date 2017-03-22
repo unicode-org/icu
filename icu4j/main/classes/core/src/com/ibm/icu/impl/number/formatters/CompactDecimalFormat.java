@@ -4,6 +4,7 @@ package com.ibm.icu.impl.number.formatters;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -67,16 +68,45 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
     return new CompactDecimalFormat(symbols, properties);
   }
 
+  private static final int DEFAULT_MIN_SIG = 1;
+  private static final int DEFAULT_MAX_SIG = 2;
+  private static final SignificantDigitsMode DEFAULT_SIG_MODE =
+      SignificantDigitsMode.OVERRIDE_MAXIMUM_FRACTION;
+
+  private static final ThreadLocal<Properties> threadLocalProperties =
+      new ThreadLocal<Properties>() {
+        @Override
+        protected Properties initialValue() {
+          return new Properties();
+        }
+      };
+
   private static Rounder getRounder(IProperties properties) {
     // Use rounding settings if they were specified, or else use the default CDF rounder.
-    Rounder rounder = RoundingFormat.getDefaultOrNull(properties);
+    // TODO: Detecting and overriding significant digits here is a bit of a hack, since detection
+    // is also performed in the "RoundingFormat.getDefaultOrNull" method.
+    // It would be more elegant to call some sort of "fallback" copy method.
+    Rounder rounder = null;
+    if (!SignificantDigitsRounder.useSignificantDigits(properties)) {
+      rounder = RoundingFormat.getDefaultOrNull(properties);
+    }
     if (rounder == null) {
-      rounder =
-          SignificantDigitsRounder.getInstance(
-              SignificantDigitsRounder.getThreadLocalProperties()
-                  .setMinimumSignificantDigits(1)
-                  .setMaximumSignificantDigits(2)
-                  .setSignificantDigitsMode(SignificantDigitsMode.OVERRIDE_MAXIMUM_FRACTION));
+      int _minSig = properties.getMinimumSignificantDigits();
+      int _maxSig = properties.getMaximumSignificantDigits();
+      SignificantDigitsMode _mode = properties.getSignificantDigitsMode();
+      Properties rprops = threadLocalProperties.get().clear();
+      // Settings needing possible override:
+      rprops.setMinimumSignificantDigits(_minSig > 0 ? _minSig : DEFAULT_MIN_SIG);
+      rprops.setMaximumSignificantDigits(_maxSig > 0 ? _maxSig : DEFAULT_MAX_SIG);
+      rprops.setSignificantDigitsMode(_mode != null ? _mode : DEFAULT_SIG_MODE);
+      // TODO: Should copyFrom() be used instead?  It requires a cast.
+      // Settings to copy verbatim:
+      rprops.setRoundingMode(properties.getRoundingMode());
+      rprops.setMinimumFractionDigits(properties.getMinimumFractionDigits());
+      rprops.setMaximumFractionDigits(properties.getMaximumFractionDigits());
+      rprops.setMinimumIntegerDigits(properties.getMinimumIntegerDigits());
+      rprops.setMaximumIntegerDigits(properties.getMaximumIntegerDigits());
+      rounder = SignificantDigitsRounder.getInstance(rprops);
     }
     return rounder;
   }
@@ -101,17 +131,31 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
     ULocale ulocale = symbols.getULocale();
     CompactDecimalDataSink sink = new CompactDecimalDataSink(data, symbols, fingerprint);
     String nsName = NumberingSystem.getInstance(ulocale).getName();
-    ICUResourceBundle r =
+    ICUResourceBundle rb =
         (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, ulocale);
-    r.getAllItemsWithFallback("NumberElements/" + nsName, sink);
+    internalPopulateData(nsName, rb, sink, data);
+    if (data.isEmpty() && fingerprint.compactStyle == CompactStyle.LONG) {
+      // No long data is available; load short data instead
+      sink.compactStyle = CompactStyle.SHORT;
+      internalPopulateData(nsName, rb, sink, data);
+    }
+    threadLocalDataCache.get().put(fingerprint, data);
+    return data;
+  }
+
+  private static void internalPopulateData(
+      String nsName, ICUResourceBundle rb, CompactDecimalDataSink sink, CompactDecimalData data) {
+    try {
+      rb.getAllItemsWithFallback("NumberElements/" + nsName, sink);
+    } catch (MissingResourceException e) {
+      // Fall back to latn
+    }
     if (data.isEmpty() && !nsName.equals("latn")) {
-      r.getAllItemsWithFallback("NumberElements/latn", sink);
+      rb.getAllItemsWithFallback("NumberElements/latn", sink);
     }
     if (sink.exception != null) {
       throw sink.exception;
     }
-    threadLocalDataCache.get().put(fingerprint, data);
-    return data;
   }
 
   private static PositiveNegativeModifier getDefaultMod(
@@ -302,7 +346,7 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
         currencySymbol = CurrencyFormat.getCurrencySymbol(symbols, properties);
       } else {
         compactType = CompactType.DECIMAL;
-        currencySymbol = symbols.getCurrencySymbol(); // fallback; should remain unused
+        currencySymbol = ""; // fallback; should remain unused
       }
       compactStyle = properties.getCompactStyle();
       uloc = symbols.getULocale();
@@ -337,12 +381,12 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
 
   private static final class CompactDecimalDataSink extends UResource.Sink {
 
-    final CompactDecimalData data;
-    final DecimalFormatSymbols symbols;
-    final CompactStyle compactStyle;
-    final CompactType compactType;
-    final String currencySymbol;
-    final PNAffixGenerator pnag;
+    CompactDecimalData data;
+    DecimalFormatSymbols symbols;
+    CompactStyle compactStyle;
+    CompactType compactType;
+    String currencySymbol;
+    PNAffixGenerator pnag;
     IllegalArgumentException exception;
 
     /*

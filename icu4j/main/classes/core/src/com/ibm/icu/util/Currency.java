@@ -762,15 +762,30 @@ public class Currency extends MeasureUnit {
         private String isoCode;
         private String currencyString;
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         public CurrencyStringInfo(String isoCode, String currencyString) {
             this.isoCode = isoCode;
             this.currencyString = currencyString;
         }
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         public String getISOCode() {
             return isoCode;
         }
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         @SuppressWarnings("unused")
         public String getCurrencyString() {
             return currencyString;

@@ -1044,7 +1044,8 @@ public abstract class NumberFormat extends UFormat {
     // ===== End of factory stuff =====
 
     /**
-     * Overrides hashCode.
+     * {@inheritDoc}
+     *
      * @stable ICU 2.0
      */
     @Override

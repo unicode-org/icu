@@ -418,18 +418,73 @@ public class PluralRules implements Serializable {
      */
     @Deprecated
     public static enum Operand {
-        /** The double value of the entire number. */
+        /**
+         * The double value of the entire number.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         n,
-        /** The integer value, with the fraction digits truncated off. */
+
+        /**
+         * The integer value, with the fraction digits truncated off.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         i,
-        /** All visible fraction digits as an integer, including trailing zeros. */
+
+        /**
+         * All visible fraction digits as an integer, including trailing zeros.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         f,
-        /** Visible fraction digits, not including trailing zeros. */
+
+        /**
+         * Visible fraction digits as an integer, not including trailing zeros.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         t,
-        /** Number of visible fraction digits. */
+
+        /**
+         * Number of visible fraction digits.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         v,
+
+        /**
+         * Number of visible fraction digits, not including trailing zeros.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         w,
-        /* deprecated */
+
+        /**
+         * THIS OPERAND IS DEPRECATED AND HAS BEEN REMOVED FROM THE SPEC.
+         *
+         * <p>Returns the integer value, but will fail if the number has fraction digits.
+         * That is, using "j" instead of "i" is like implicitly adding "v is 0".
+         *
+         * <p>For example, "j is 3" is equivalent to "i is 3 and v is 0": it matches
+         * "3" but not "3.1" or "3.0".
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         j;
     }
 
@@ -439,8 +494,28 @@ public class PluralRules implements Serializable {
      */
     @Deprecated
     public static interface IFixedDecimal {
+        /**
+         * Returns the value corresponding to the specified operand (n, i, f, t, v, or w).
+         * If the operand is 'n', returns a double; otherwise, returns an integer.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         public double getPluralOperand(Operand operand);
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         public boolean isNaN();
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         public boolean isInfinite();
     }
 
@@ -744,6 +819,8 @@ public class PluralRules implements Serializable {
         }
 
         /**
+         * {@inheritDoc}
+         *
          * @internal
          * @deprecated This API is ICU internal only.
          */
@@ -751,12 +828,13 @@ public class PluralRules implements Serializable {
         @Deprecated
         public double getPluralOperand(Operand operand) {
             switch(operand) {
-            default: return source;
+            case n: return source;
             case i: return integerValue;
             case f: return decimalDigits;
             case t: return decimalDigitsWithoutTrailingZeros;
             case v: return visibleDecimalDigitCount;
             case w: return visibleDecimalDigitCountWithoutTrailingZeros;
+            default: return source;
             }
         }
 
@@ -904,17 +982,25 @@ public class PluralRules implements Serializable {
             throw new NotSerializableException();
         }
 
-        /* (non-Javadoc)
-         * @see com.ibm.icu.text.PluralRules.IFixedDecimal#isNaN()
+        /**
+         * {@inheritDoc}
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         @Override
         public boolean isNaN() {
             return Double.isNaN(source);
         }
 
-        /* (non-Javadoc)
-         * @see com.ibm.icu.text.PluralRules.IFixedDecimal#isInfinite()
+        /**
+         * {@inheritDoc}
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         @Override
         public boolean isInfinite() {
             return Double.isInfinite(source);

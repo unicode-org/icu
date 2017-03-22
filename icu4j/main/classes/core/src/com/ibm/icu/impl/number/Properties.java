@@ -617,7 +617,7 @@ public class Properties
     int count = ois.readInt();
 
     // 2) Read each field by its name and value
-    for (int i=0; i<count; i++) {
+    for (int i = 0; i < count; i++) {
       String name = (String) ois.readObject();
       Object value = ois.readObject();
 
@@ -917,6 +917,16 @@ public class Properties
   public String toString() {
     StringBuilder result = new StringBuilder();
     result.append("<Properties");
+    toStringBare(result);
+    result.append(">");
+    return result.toString();
+  }
+
+  /**
+   * Appends a string containing properties that differ from the default, but without being
+   * surrounded by &lt;Properties&gt;.
+   */
+  public void toStringBare(StringBuilder result) {
     Field[] fields = Properties.class.getDeclaredFields();
     for (Field field : fields) {
       Object myValue, defaultValue;
@@ -938,8 +948,6 @@ public class Properties
         result.append(" " + field.getName() + ":" + myValue);
       }
     }
-    result.append(">");
-    return result.toString();
   }
 
   /**

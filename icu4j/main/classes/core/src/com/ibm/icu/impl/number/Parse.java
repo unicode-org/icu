@@ -13,13 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.TextTrieMap;
-import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.formatters.BigDecimalMultiplier;
 import com.ibm.icu.impl.number.formatters.CurrencyFormat;
 import com.ibm.icu.impl.number.formatters.MagnitudeMultiplier;
 import com.ibm.icu.impl.number.formatters.PaddingFormat;
 import com.ibm.icu.impl.number.formatters.PositiveDecimalFormat;
 import com.ibm.icu.impl.number.formatters.PositiveNegativeAffixFormat;
+import com.ibm.icu.impl.number.formatters.ScientificFormat;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -102,7 +102,8 @@ public class Parse {
           CurrencyFormat.ICurrencyProperties,
           BigDecimalMultiplier.IProperties,
           MagnitudeMultiplier.IProperties,
-          PositiveDecimalFormat.IProperties {
+          PositiveDecimalFormat.IProperties,
+          ScientificFormat.IProperties {
 
     boolean DEFAULT_PARSE_INTEGER_ONLY = false;
 
@@ -199,7 +200,7 @@ public class Parse {
   }
 
   /**
-   * @see #parse(String, ParsePosition, ParseMode, boolean, boolean, IProperties,
+   * @see Parse#parse(String, ParsePosition, ParseMode, boolean, boolean, IProperties,
    *     DecimalFormatSymbols)
    */
   private static enum StateName {
@@ -303,6 +304,7 @@ public class Parse {
     boolean sawPrefix;
     boolean sawSuffix;
     boolean sawDecimalPoint;
+    boolean sawExponentDigit;
 
     // Data for intermediate parsing steps:
     StateName returnTo1;
@@ -310,6 +312,7 @@ public class Parse {
     // For string literals:
     CharSequence currentString;
     int currentOffset;
+    boolean currentTrailing;
     // For affix patterns:
     CharSequence currentAffixPattern;
     long currentStepwiseParserTag;
@@ -349,12 +352,14 @@ public class Parse {
       sawPrefix = false;
       sawSuffix = false;
       sawDecimalPoint = false;
+      sawExponentDigit = false;
 
       // Data for intermediate parsing steps:
       returnTo1 = null;
       returnTo2 = null;
       currentString = null;
       currentOffset = 0;
+      currentTrailing = false;
       currentAffixPattern = null;
       currentStepwiseParserTag = 0L;
       currentCurrencyTrieState = null;
@@ -404,12 +409,14 @@ public class Parse {
       sawPrefix = other.sawPrefix;
       sawSuffix = other.sawSuffix;
       sawDecimalPoint = other.sawDecimalPoint;
+      sawExponentDigit = other.sawExponentDigit;
 
       // Data for intermediate parsing steps:
       returnTo1 = other.returnTo1;
       returnTo2 = other.returnTo2;
       currentString = other.currentString;
       currentOffset = other.currentOffset;
+      currentTrailing = other.currentTrailing;
       currentAffixPattern = other.currentAffixPattern;
       currentStepwiseParserTag = other.currentStepwiseParserTag;
       currentCurrencyTrieState = other.currentCurrencyTrieState;
@@ -427,6 +434,7 @@ public class Parse {
      */
     void appendDigit(byte digit, DigitType type) {
       if (type == DigitType.EXPONENT) {
+        sawExponentDigit = true;
         int newExponent = exponent * 10 + digit;
         if (newExponent < exponent) {
           // overflow
@@ -606,7 +614,11 @@ public class Parse {
     int groupingCp2;
     SeparatorType decimalType1;
     SeparatorType decimalType2;
+    // TODO(sffc): Remove this field if it is not necessary.
+    @SuppressWarnings("unused")
     SeparatorType groupingType1;
+    // TODO(sffc): Remove this field if it is not necessary.
+    @SuppressWarnings("unused")
     SeparatorType groupingType2;
     TextTrieMap<Byte> digitTrie;
     Set<AffixHolder> affixHolders = new HashSet<AffixHolder>();
@@ -1299,6 +1311,12 @@ public class Parse {
             continue;
           }
 
+          // Check for scientific notation.
+          if (properties.getMinimumExponentDigits() > 0 && !item.sawExponentDigit) {
+            if (DEBUGGING) System.out.println("-> reject due to lack of exponent");
+            continue;
+          }
+
           // Check that grouping sizes are valid.
           int grouping1 = properties.getGroupingSize();
           int grouping2 = properties.getSecondaryGroupingSize();
@@ -1621,7 +1639,7 @@ public class Parse {
 
   private static void acceptNan(int cp, StateName nextName, ParserState state, StateItem item) {
     CharSequence nan = state.symbols.getNaN();
-    long added = acceptString(cp, nextName, null, state, item, nan, 0);
+    long added = acceptString(cp, nextName, null, state, item, nan, 0, false);
 
     // Set state in the items that were added by the function call
     for (int i = Long.numberOfTrailingZeros(added); (1L << i) <= added; i++) {
@@ -1634,7 +1652,7 @@ public class Parse {
   private static void acceptInfinity(
       int cp, StateName nextName, ParserState state, StateItem item) {
     CharSequence inf = state.symbols.getInfinity();
-    long added = acceptString(cp, nextName, null, state, item, inf, 0);
+    long added = acceptString(cp, nextName, null, state, item, inf, 0, false);
 
     // Set state in the items that were added by the function call
     for (int i = Long.numberOfTrailingZeros(added); (1L << i) <= added; i++) {
@@ -1647,7 +1665,7 @@ public class Parse {
   private static void acceptExponentSeparator(
       int cp, StateName nextName, ParserState state, StateItem item) {
     CharSequence exp = state.symbols.getExponentSeparator();
-    acceptString(cp, nextName, null, state, item, exp, 0);
+    acceptString(cp, nextName, null, state, item, exp, 0, true);
   }
 
   private static void acceptPrefix(int cp, StateName nextName, ParserState state, StateItem item) {
@@ -1676,7 +1694,7 @@ public class Parse {
     if (holder == null) return;
     String str = prefix ? holder.p : holder.s;
     if (holder.strings) {
-      long added = acceptString(cp, nextName, null, state, item, str, 0);
+      long added = acceptString(cp, nextName, null, state, item, str, 0, false);
       // At most one item can be added upon consuming a string.
       if (added != 0) {
         int i = state.lastInsertedIndex();
@@ -1705,7 +1723,14 @@ public class Parse {
 
   private static void acceptStringOffset(int cp, ParserState state, StateItem item) {
     acceptString(
-        cp, item.returnTo1, item.returnTo2, state, item, item.currentString, item.currentOffset);
+        cp,
+        item.returnTo1,
+        item.returnTo2,
+        state,
+        item,
+        item.currentString,
+        item.currentOffset,
+        item.currentTrailing);
   }
 
   /**
@@ -1719,6 +1744,8 @@ public class Parse {
    * @param returnTo1 The state to return to after reaching the end of the string.
    * @param returnTo2 The state to save in <code>returnTo1</code> after reaching the end of the
    *     string. Set to null if returning to the main state loop.
+   * @param trailing true if this string should be ignored for the purposes of recording trailing
+   *     code points; false if it trailing count should be reset after reading the string.
    * @param state The current {@link ParserState}
    * @param item The current {@link StateItem}
    * @param str The string against which to check for a match.
@@ -1733,7 +1760,8 @@ public class Parse {
       ParserState state,
       StateItem item,
       CharSequence str,
-      int offset) {
+      int offset,
+      boolean trailing) {
     if (str == null || str.length() == 0) return 0L;
 
     // Fast path for fast mode
@@ -1771,10 +1799,11 @@ public class Parse {
         next.returnTo2 = returnTo2;
         next.currentString = str;
         next.currentOffset = offset;
+        next.currentTrailing = trailing;
       } else {
         // We've reached the end of the string.
         next.name = returnTo1;
-        next.trailingCount = 0;
+        if (!trailing) next.trailingCount = 0;
         next.returnTo1 = returnTo2;
         next.returnTo2 = null;
       }
@@ -1832,9 +1861,11 @@ public class Parse {
           resolvedPlusSign = true;
           break;
         case AffixPatternUtils.TYPE_PERCENT:
+          resolvedCp = '%'; // accept ASCII percent as well as locale percent
           resolvedStr = state.symbols.getPercentString();
           break;
         case AffixPatternUtils.TYPE_PERMILLE:
+          resolvedCp = '‰'; // accept ASCII permille as well as locale permille
           resolvedStr = state.symbols.getPerMillString();
           break;
         case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
@@ -1905,9 +1936,10 @@ public class Parse {
       // String symbol
       if (hasNext) {
         added |=
-            acceptString(cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item, resolvedStr, 0);
+            acceptString(
+                cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item, resolvedStr, 0, false);
       } else {
-        added |= acceptString(cp, returnTo, null, state, item, resolvedStr, 0);
+        added |= acceptString(cp, returnTo, null, state, item, resolvedStr, 0, false);
       }
     }
     if (resolvedCurrency) {
@@ -1965,8 +1997,8 @@ public class Parse {
       str1 = state.symbols.getCurrencySymbol();
       str2 = state.symbols.getInternationalCurrencySymbol();
     }
-    added |= acceptString(cp, returnTo1, returnTo2, state, item, str1, 0);
-    added |= acceptString(cp, returnTo1, returnTo2, state, item, str2, 0);
+    added |= acceptString(cp, returnTo1, returnTo2, state, item, str1, 0, false);
+    added |= acceptString(cp, returnTo1, returnTo2, state, item, str2, 0, false);
     for (int i = Long.numberOfTrailingZeros(added); (1L << i) <= added; i++) {
       if (((1L << i) & added) != 0) {
         state.getItem(i).sawCurrency = true;

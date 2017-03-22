@@ -4683,7 +4683,9 @@ public class NumberFormatTest extends TestFmwk {
         NumberFormat fmt = NumberFormat.getInstance(new ULocale("en"));
         fmt.setMinimumIntegerDigits(10);
         FieldPosition pos = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
-        fmt.format(1234, new StringBuffer(), pos);
+        StringBuffer sb = new StringBuffer();
+        fmt.format(1234567, sb, pos);
+        assertEquals("Should have multiple grouping separators", "0,001,234,567", sb.toString());
         assertEquals("FieldPosition should report the first occurence", 1, pos.getBeginIndex());
         assertEquals("FieldPosition should report the first occurence", 2, pos.getEndIndex());
     }
@@ -4941,6 +4943,27 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13055() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
+        df.setMaximumFractionDigits(0);
+        df.setRoundingMode(BigDecimal.ROUND_HALF_EVEN);
+        assertEquals("Should round percent toward even number", "216%", df.format(2.155));
+    }
+
+    @Test
+    public void Test13056() {
+        DecimalFormat df = new DecimalFormat("#,##0");
+        assertEquals("Primary grouping should return 3", 3, df.getGroupingSize());
+        assertEquals("Secondary grouping should return 0", 0, df.getSecondaryGroupingSize());
+        df.setSecondaryGroupingSize(3);
+        assertEquals("Primary grouping should still return 3", 3, df.getGroupingSize());
+        assertEquals("Secondary grouping should still return 0", 0, df.getSecondaryGroupingSize());
+        df.setGroupingSize(4);
+        assertEquals("Primary grouping should return 4", 4, df.getGroupingSize());
+        assertEquals("Secondary should remember explicit setting and return 3", 3, df.getSecondaryGroupingSize());
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);
@@ -5015,6 +5038,89 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Rounding mode from icu.math and java.math should be the same", df1, df2);
         df2.setRoundingMode(java.math.RoundingMode.CEILING.ordinal());
         assertEquals("Rounding mode ordinal from java.math.RoundingMode should be the same", df1, df2);
+    }
+
+    @Test
+    public void testCurrencySignificantDigits() {
+        ULocale locale = new ULocale("en-US");
+        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+        df.setMaximumSignificantDigits(2);
+        String result = df.format(1234);
+        assertEquals("Currency rounding should obey significant digits", "$1,200", result);
+    }
+
+    @Test
+    public void testParseStrictScientific() {
+        // See ticket #13057
+        DecimalFormat df = (DecimalFormat) NumberFormat.getScientificInstance();
+        df.setParseStrict(true);
+        ParsePosition ppos = new ParsePosition(0);
+        Number result0 = df.parse("123E4", ppos);
+        assertEquals("Should accept number with exponent", 1230000L, result0);
+        assertEquals("Should consume the whole number", 5, ppos.getIndex());
+        ppos.setIndex(0);
+        result0 = df.parse("123", ppos);
+        assertNull("Should reject number without exponent", result0);
+        ppos.setIndex(0);
+        CurrencyAmount result1 = df.parseCurrency("USD123", ppos);
+        assertNull("Should reject currency without exponent", result1);
+    }
+
+    @Test
+    public void testParseLenientScientific() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getScientificInstance();
+        ParsePosition ppos = new ParsePosition(0);
+        Number result0 = df.parse("123E", ppos);
+        assertEquals("Should parse the number in lenient mode", 123L, result0);
+        assertEquals("Should stop before the E", 3, ppos.getIndex());
+        DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
+        dfs.setExponentSeparator("EE");
+        df.setDecimalFormatSymbols(dfs);
+        ppos.setIndex(0);
+        result0 = df.parse("123EE", ppos);
+        assertEquals("Should parse the number in lenient mode", 123L, result0);
+        assertEquals("Should stop before the EE", 3, ppos.getIndex());
+    }
+
+    @Test
+    public void testParseAcceptAsciiPercentPermilleFallback() {
+        ULocale loc = new ULocale("ar");
+        DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance(loc);
+        ParsePosition ppos = new ParsePosition(0);
+        Number result = df.parse("42%", ppos);
+        assertEquals("Should parse as 0.42 even in ar", new BigDecimal("0.42"), result);
+        assertEquals("Should consume the entire string even in ar", 3, ppos.getIndex());
+        // TODO: Is there a better way to make a localized permille formatter?
+        df.applyPattern(df.toPattern().replace("%", "‰"));
+        ppos.setIndex(0);
+        result = df.parse("42‰", ppos);
+        assertEquals("Should parse as 0.042 even in ar", new BigDecimal("0.042"), result);
+        assertEquals("Should consume the entire string even in ar", 3, ppos.getIndex());
+    }
+
+    @Test
+    public void testParseSubtraction() {
+        // TODO: Is this a case we need to support? It prevents us from automatically parsing
+        // minus signs that appear after the number, like  in "12-" vs "-12".
+        DecimalFormat df = new DecimalFormat();
+        String str = "12 - 5";
+        ParsePosition ppos = new ParsePosition(0);
+        Number n1 = df.parse(str, ppos);
+        Number n2 = df.parse(str, ppos);
+        assertEquals("Should parse 12 and -5", 7, n1.intValue() + n2.intValue());
+    }
+
+    @Test
+    public void testMultiCodePointPaddingInPattern() {
+        DecimalFormat df = new DecimalFormat("a*'நி'###0b");
+        String result = df.format(12);
+        assertEquals("Multi-codepoint padding should not be split", "aநிநி12b", result);
+        df = new DecimalFormat("a*😁###0b");
+        result = df.format(12);
+        assertEquals("Single-codepoint padding should not be split", "a😁😁12b", result);
+        df = new DecimalFormat("a*''###0b");
+        result = df.format(12);
+        assertEquals("Quote should be escapable in padding syntax", "a''12b", result);
     }
 
     @Test

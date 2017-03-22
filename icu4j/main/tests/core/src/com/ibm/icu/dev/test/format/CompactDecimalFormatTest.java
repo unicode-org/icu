@@ -554,6 +554,66 @@ public class CompactDecimalFormatTest extends TestFmwk {
     }
 
     @Test
+    public void TestLongShortFallback() {
+        // smn, dz have long but not short
+        // es_US, es_GT, es_419, ee have short but not long
+        ULocale[] locs = new ULocale[] {
+            new ULocale("smn"),
+            new ULocale("es_US"),
+            new ULocale("es_GT"),
+            new ULocale("es_419"),
+            new ULocale("ee"),
+        };
+        double number = 12345.0;
+        // These expected values are the same in both ICU 58 and 59.
+        String[][] expectedShortLong = new String[][] {
+            { "12K", "12 tuhháát" },
+            { "12k", "12 mil" },
+            { "12k", "12 mil" },
+            { "12k", "12 mil" },
+            { "12K", "12K" },
+        };
+
+        for (int i=0; i<locs.length; i++) {
+            ULocale loc = locs[i];
+            String expectedShort = expectedShortLong[i][0];
+            String expectedLong = expectedShortLong[i][1];
+            CompactDecimalFormat cdfShort = CompactDecimalFormat.getInstance(loc, CompactStyle.SHORT);
+            CompactDecimalFormat cdfLong = CompactDecimalFormat.getInstance(loc, CompactStyle.LONG);
+            String actualShort = cdfShort.format(number);
+            String actualLong = cdfLong.format(number);
+            assertEquals("Short, locale " + loc, expectedShort, actualShort);
+            assertEquals("Long, locale " + loc, expectedLong, actualLong);
+        }
+    }
+
+    @Test
+    public void TestLocales() {
+        // Run a CDF over all locales to make sure there are no unexpected exceptions.
+        ULocale[] locs = ULocale.getAvailableLocales();
+        for (ULocale loc : locs) {
+            CompactDecimalFormat cdfShort = CompactDecimalFormat.getInstance(loc, CompactStyle.SHORT);
+            CompactDecimalFormat cdfLong = CompactDecimalFormat.getInstance(loc, CompactStyle.LONG);
+            for (double d = 12345.0; d > 0.01; d /= 10) {
+                String s1 = cdfShort.format(d);
+                String s2 = cdfLong.format(d);
+                assertNotNull("Short " + loc, s1);
+                assertNotNull("Long " + loc, s2);
+                assertNotEquals("Short " + loc, 0, s1.length());
+                assertNotEquals("Long " + loc, 0, s2.length());
+            }
+        }
+    }
+
+    @Test
+    public void TestDigitDisplay() {
+        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(ULocale.US, CompactStyle.SHORT);
+        cdf.setMinimumSignificantDigits(2);
+        String actual = cdf.format(70123.45678);
+        assertEquals("Should not display any extra fraction digits", "70K", actual);
+    }
+
+    @Test
     public void TestBug12422() {
         CompactDecimalFormat cdf;
         String result;

@@ -86,12 +86,13 @@ public class PositiveDecimalFormat implements Format.TargetFormat {
   }
 
   public static boolean allowsDecimalPoint(IProperties properties) {
-    return properties.getDecimalSeparatorAlwaysShown() || properties.getMaximumFractionDigits() != 0;
+    return properties.getDecimalSeparatorAlwaysShown()
+        || properties.getMaximumFractionDigits() != 0;
   }
 
   // Properties
   private final boolean alwaysShowDecimal;
-  private final int groupingSize;
+  private final int primaryGroupingSize;
   private final int secondaryGroupingSize;
   private final int minimumGroupingDigits;
 
@@ -104,14 +105,10 @@ public class PositiveDecimalFormat implements Format.TargetFormat {
   private final int codePointZero;
 
   public PositiveDecimalFormat(DecimalFormatSymbols symbols, IProperties properties) {
-    groupingSize =
-        (properties.getGroupingSize() < 0)
-            ? properties.getSecondaryGroupingSize()
-            : properties.getGroupingSize();
-    secondaryGroupingSize =
-        (properties.getSecondaryGroupingSize() < 0)
-            ? properties.getGroupingSize()
-            : properties.getSecondaryGroupingSize();
+    int _primary = properties.getGroupingSize();
+    int _secondary = properties.getSecondaryGroupingSize();
+    primaryGroupingSize = _primary > 0 ? _primary : _secondary > 0 ? _secondary : 0;
+    secondaryGroupingSize = _secondary > 0 ? _secondary : primaryGroupingSize;
 
     minimumGroupingDigits = properties.getMinimumGroupingDigits();
     alwaysShowDecimal = properties.getDecimalSeparatorAlwaysShown();
@@ -167,7 +164,9 @@ public class PositiveDecimalFormat implements Format.TargetFormat {
 
       // Add the decimal point
       if (input.getLowerDisplayMagnitude() < 0 || alwaysShowDecimal) {
-        length += string.insert(startIndex + length, decimalSeparator, NumberFormat.Field.DECIMAL_SEPARATOR);
+        length +=
+            string.insert(
+                startIndex + length, decimalSeparator, NumberFormat.Field.DECIMAL_SEPARATOR);
       }
 
       // Add the fraction digits
@@ -182,12 +181,16 @@ public class PositiveDecimalFormat implements Format.TargetFormat {
     int integerCount = input.getUpperDisplayMagnitude() + 1;
     for (int i = 0; i < integerCount; i++) {
       // Add grouping separator
-      if (groupingSize > 0 && i == groupingSize && integerCount - i >= minimumGroupingDigits) {
-        length += string.insert(startIndex, groupingSeparator, NumberFormat.Field.GROUPING_SEPARATOR);
+      if (primaryGroupingSize > 0
+          && i == primaryGroupingSize
+          && integerCount - i >= minimumGroupingDigits) {
+        length +=
+            string.insert(startIndex, groupingSeparator, NumberFormat.Field.GROUPING_SEPARATOR);
       } else if (secondaryGroupingSize > 0
-          && i > groupingSize
-          && (i - groupingSize) % secondaryGroupingSize == 0) {
-        length += string.insert(startIndex, groupingSeparator, NumberFormat.Field.GROUPING_SEPARATOR);
+          && i > primaryGroupingSize
+          && (i - primaryGroupingSize) % secondaryGroupingSize == 0) {
+        length +=
+            string.insert(startIndex, groupingSeparator, NumberFormat.Field.GROUPING_SEPARATOR);
       }
 
       // Get and append the next digit value
@@ -219,9 +222,13 @@ public class PositiveDecimalFormat implements Format.TargetFormat {
 
   @Override
   public void export(Properties properties) {
+    // For backwards compatibility, export 0 as secondary grouping if primary and secondary are the same
+    int effectiveSecondaryGroupingSize =
+        secondaryGroupingSize == primaryGroupingSize ? 0 : secondaryGroupingSize;
+
     properties.setDecimalSeparatorAlwaysShown(alwaysShowDecimal);
-    properties.setGroupingSize(groupingSize);
-    properties.setSecondaryGroupingSize(secondaryGroupingSize);
+    properties.setGroupingSize(primaryGroupingSize);
+    properties.setSecondaryGroupingSize(effectiveSecondaryGroupingSize);
     properties.setMinimumGroupingDigits(minimumGroupingDigits);
   }
 }
