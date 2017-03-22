@@ -61,7 +61,7 @@
  * http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
  *
  * <P>
- * The second option includes an additonal <STRONG>ISO Country
+ * The second option includes an additional <STRONG>ISO Country
  * Code.</STRONG> These codes are the upper-case two-letter codes
  * as defined by ISO-3166.
  * You can find a full list of these codes at a number of sites, such as:
@@ -69,7 +69,7 @@
  * http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
  *
  * <P>
- * The third option requires another additonal information--the 
+ * The third option requires another additional information--the 
  * <STRONG>Variant.</STRONG>
  * The Variant codes are vendor and browser-specific.
  * For example, use WIN for Windows, MAC for Macintosh, and POSIX for POSIX.
@@ -157,7 +157,7 @@
  * <STRONG>just</STRONG> a mechanism for identifying these services.
  *
  * <P>
- * Each international serivce that performs locale-sensitive operations 
+ * Each international service that performs locale-sensitive operations 
  * allows you
  * to get all the available objects of that type. You can sift
  * through these objects by language, country, or variant,
@@ -580,7 +580,7 @@ uloc_getDisplayLanguage(const char* locale,
  *                 if the locale's language code is "en", passing Locale::getFrench() for
  *                 inLocale would result in "", while passing Locale::getGerman()
  *                 for inLocale would result in "". NULL may be used to specify the default.
- * @param script the displayable country code for localeID
+ * @param script the displayable script for the localeID
  * @param scriptCapacity the size of the script buffer to store the  
  * displayable script code with
  * @param status error information if retrieving the displayable script code failed
