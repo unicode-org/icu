@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.impl.number.Rounder;
+import com.ibm.icu.impl.number.Rounder.IBasicRoundingProperties;
 
 public class SignificantDigitsRounder extends Rounder {
 
