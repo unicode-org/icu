@@ -556,7 +556,6 @@ public class PatternString {
       int exponentDigits = 0;
       boolean hasPercentSign = false;
       boolean hasPerMilleSign = false;
-      boolean hasCurrencySign = false;
 
       StringBuilder padding = new StringBuilder();
       StringBuilder prefix = new StringBuilder();
@@ -690,7 +689,7 @@ public class PatternString {
             break;
 
           case '¤':
-            result.hasCurrencySign = true;
+            // no need to record that we saw it
             break;
         }
         consumeLiteral(state, destination);

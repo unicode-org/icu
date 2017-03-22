@@ -418,7 +418,11 @@ public class DecimalFormat extends NumberFormat {
   //                               FORMAT AND PARSE APIS                                 //
   //=====================================================================================//
 
-  /** @stable ICU 2.0 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 2.0
+   */
   @Override
   public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition) {
     FormatQuantity4 fq = new FormatQuantity4(number);
@@ -427,7 +431,11 @@ public class DecimalFormat extends NumberFormat {
     return result;
   }
 
-  /** @stable ICU 2.0 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 2.0
+   */
   @Override
   public StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition) {
     FormatQuantity4 fq = new FormatQuantity4(number);
@@ -436,7 +444,11 @@ public class DecimalFormat extends NumberFormat {
     return result;
   }
 
-  /** @stable ICU 2.0 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 2.0
+   */
   @Override
   public StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition) {
     FormatQuantity4 fq = new FormatQuantity4(number);
@@ -445,7 +457,11 @@ public class DecimalFormat extends NumberFormat {
     return result;
   }
 
-  /** @stable ICU 2.0 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 2.0
+   */
   @Override
   public StringBuffer format(
       java.math.BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
@@ -455,7 +471,11 @@ public class DecimalFormat extends NumberFormat {
     return result;
   }
 
-  /** @stable ICU 2.0 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 2.0
+   */
   @Override
   public StringBuffer format(BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
     FormatQuantity4 fq = new FormatQuantity4(number.toBigDecimal());
@@ -464,7 +484,11 @@ public class DecimalFormat extends NumberFormat {
     return result;
   }
 
-  /** @stable ICU 3.6 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 3.6
+   */
   @Override
   public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
     if (!(obj instanceof Number)) throw new IllegalArgumentException();
@@ -474,7 +498,7 @@ public class DecimalFormat extends NumberFormat {
     return result;
   }
 
-  protected static final ThreadLocal<Properties> threadLocalCurrencyProperties =
+  private static final ThreadLocal<Properties> threadLocalCurrencyProperties =
       new ThreadLocal<Properties>() {
         @Override
         protected Properties initialValue() {
@@ -482,24 +506,42 @@ public class DecimalFormat extends NumberFormat {
         }
       };
 
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 3.0
+   */
   @Override
   public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
     // TODO: This is ugly (although not as ugly as it was in ICU 58).
     // Currency should be a free parameter, not in property bag. Fix in ICU 60.
     Properties cprops = threadLocalCurrencyProperties.get();
+    SingularFormat fmt = null;
     synchronized (this) {
-      cprops.copyFrom(properties);
+      // Use the pre-compiled formatter if possible.  Otherwise, copy the properties
+      // and build our own formatter.
+      // TODO: Consider using a static format path here.
+      if (currAmt.getCurrency().equals(properties.getCurrency())) {
+        fmt = formatter;
+      } else {
+        cprops.copyFrom(properties);
+      }
     }
-    cprops.setCurrency(currAmt.getCurrency());
+    if (fmt == null) {
+      cprops.setCurrency(currAmt.getCurrency());
+      fmt = Endpoint.fromBTA(cprops, symbols);
+    }
     FormatQuantity4 fq = new FormatQuantity4(currAmt.getNumber());
-    // TODO: Use a static format path here
-    SingularFormat fmt = Endpoint.fromBTA(cprops, symbols);
     fmt.format(fq, toAppendTo, pos);
     fq.populateUFieldPosition(pos);
     return toAppendTo;
   }
 
-  /** @stable ICU 2.0 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 2.0
+   */
   @Override
   public Number parse(String text, ParsePosition parsePosition) {
     // Backwards compatibility: use currency parse mode if this is a currency instance
@@ -511,7 +553,11 @@ public class DecimalFormat extends NumberFormat {
     return result;
   }
 
-  /** @stable ICU 49 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 49
+   */
   @Override
   public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
     try {
@@ -1922,7 +1968,11 @@ public class DecimalFormat extends NumberFormat {
     return properties.equals(other.properties) && symbols.equals(other.symbols);
   }
 
-  /** @stable ICU 2.0 */
+  /**
+   * {@inheritDoc}
+   *
+   * @stable ICU 2.0
+   */
   @Override
   public synchronized int hashCode() {
     return properties.hashCode();
@@ -1936,9 +1986,26 @@ public class DecimalFormat extends NumberFormat {
         }
       };
 
+  /**
+   * Returns the default value of toString() with extra DecimalFormat-specific information appended
+   * to the end of the string. This extra information is intended for debugging purposes, and the
+   * format is not guaranteed to be stable.
+   *
+   * @stable ICU 2.0
+   */
   @Override
-  public synchronized String toString() {
-    return "<DecimalFormat " + symbols.toString() + " " + properties.toString() + ">";
+  public String toString() {
+    StringBuilder result = new StringBuilder();
+    result.append(getClass().getName());
+    result.append("@");
+    result.append(Integer.toHexString(hashCode()));
+    result.append(" { symbols@");
+    result.append(Integer.toHexString(symbols.hashCode()));
+    synchronized (this) {
+      properties.toStringBare(result);
+    }
+    result.append(" }");
+    return result.toString();
   }
 
   /**
@@ -2027,7 +2094,17 @@ public class DecimalFormat extends NumberFormat {
     refreshFormatter();
   }
 
+  /**
+   * @internal
+   * @deprecated This API is ICU internal only.
+   */
+  @Deprecated
   public static interface PropertySetter {
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     public void set(Properties props);
   }
 

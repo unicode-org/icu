@@ -230,24 +230,6 @@ public abstract class Rounder extends Format.BeforeFormat {
     input.setIntegerFractionLength(minInt, maxInt, minFrac, maxFrac);
   }
 
-  private static final ThreadLocal<Properties> threadLocalProperties =
-      new ThreadLocal<Properties>() {
-        @Override
-        protected Properties initialValue() {
-          return new Properties();
-        }
-      };
-
-  /**
-   * Gets a thread-local property bag that can be used to deliver properties to a constructor.
-   * Rounders themselves are guaranteed to not internally use a copy of this property bag.
-   *
-   * @return A clean, thread-local property bag.
-   */
-  public static Properties getThreadLocalProperties() {
-    return threadLocalProperties.get().clear();
-  }
-
   @Override
   public void before(FormatQuantity input, ModifierHolder mods) {
     apply(input);

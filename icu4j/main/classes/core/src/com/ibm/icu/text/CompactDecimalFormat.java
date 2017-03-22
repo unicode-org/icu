@@ -9,19 +9,11 @@
 
 package com.ibm.icu.text;
 
-import java.io.IOException;
-import java.io.NotSerializableException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.text.AttributedCharacterIterator;
-import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import com.ibm.icu.impl.number.FormatQuantity4;
 import com.ibm.icu.impl.number.Properties;
+import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -55,7 +47,7 @@ import com.ibm.icu.util.ULocale;
  */
 public class CompactDecimalFormat extends DecimalFormat {
 
-    private static final long serialVersionUID = 4716293295276629682L;
+  private static final long serialVersionUID = 4716293295276629682L;
 
   /**
    * Style parameter for CompactDecimalFormat.
@@ -123,109 +115,6 @@ public class CompactDecimalFormat extends DecimalFormat {
   }
 
   /**
-   * {@inheritDoc}
-   *
-   * @stable ICU 49
-   */
-  @Override
-  public boolean equals(Object obj) {
-    return super.equals(obj);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @stable ICU 49
-   */
-  @Override
-  public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, toAppendTo, pos);
-    fq.populateUFieldPosition(pos);
-    return toAppendTo;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @stable ICU 50
-   */
-  @Override
-  public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
-    if (!(obj instanceof Number)) throw new IllegalArgumentException();
-    Number number = (Number) obj;
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    AttributedCharacterIterator result = formatter.formatToCharacterIterator(fq);
-    return result;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @stable ICU 49
-   */
-  @Override
-  public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, toAppendTo, pos);
-    fq.populateUFieldPosition(pos);
-    return toAppendTo;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @stable ICU 49
-   */
-  @Override
-  public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, toAppendTo, pos);
-    fq.populateUFieldPosition(pos);
-    return toAppendTo;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @stable ICU 49
-   */
-  @Override
-  public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, toAppendTo, pos);
-    fq.populateUFieldPosition(pos);
-    return toAppendTo;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @stable ICU 49
-   */
-  @Override
-  public StringBuffer format(
-      com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
-    FormatQuantity4 fq = new FormatQuantity4(number.toBigDecimal());
-    formatter.format(fq, toAppendTo, pos);
-    fq.populateUFieldPosition(pos);
-    return toAppendTo;
-  }
-
-//  /**
-//   * {@inheritDoc}
-//   *
-//   * @internal ICU 57 technology preview
-//   * @deprecated This API might change or be removed in a future release.
-//   */
-//  @Override
-//  @Deprecated
-//  public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
-//    // TODO(sffc)
-//    throw new UnsupportedOperationException();
-//  }
-
-  /**
    * Parsing is currently unsupported, and throws an UnsupportedOperationException.
    *
    * @stable ICU 49
@@ -235,13 +124,13 @@ public class CompactDecimalFormat extends DecimalFormat {
     throw new UnsupportedOperationException();
   }
 
-  // DISALLOW Serialization, at least while draft
-
-  private void writeObject(ObjectOutputStream out) throws IOException {
-    throw new NotSerializableException();
-  }
-
-  private void readObject(ObjectInputStream in) throws IOException {
-    throw new NotSerializableException();
+  /**
+   * Parsing is currently unsupported, and throws an UnsupportedOperationException.
+   *
+   * @stable ICU 49
+   */
+  @Override
+  public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
+    throw new UnsupportedOperationException();
   }
 }
