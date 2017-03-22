@@ -19,8 +19,6 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
-#ifndef U_HIDE_DRAFT_API
-
 U_NAMESPACE_BEGIN
 
 /**
@@ -49,13 +47,13 @@ U_NAMESPACE_BEGIN
  *
  * @see MessageFormat
  * @see UMessagePatternApostropheMode
- * @draft ICU 57
+ * @stable ICU 57
  */
 class U_COMMON_API SimpleFormatter U_FINAL : public UMemory {
 public:
     /**
      * Default constructor.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     SimpleFormatter() : compiledPattern((char16_t)0) {}
 
@@ -66,7 +64,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      *                  Set to U_ILLEGAL_ARGUMENT_ERROR for bad argument syntax.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     SimpleFormatter(const UnicodeString& pattern, UErrorCode &errorCode) {
         applyPattern(pattern, errorCode);
@@ -84,7 +82,7 @@ public:
      *                  Must fulfill U_SUCCESS before the function call.
      *                  Set to U_ILLEGAL_ARGUMENT_ERROR for bad argument syntax and
      *                  too few or too many arguments.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     SimpleFormatter(const UnicodeString& pattern, int32_t min, int32_t max,
                     UErrorCode &errorCode) {
@@ -93,20 +91,20 @@ public:
 
     /**
      * Copy constructor.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     SimpleFormatter(const SimpleFormatter& other)
             : compiledPattern(other.compiledPattern) {}
 
     /**
      * Assignment operator.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     SimpleFormatter &operator=(const SimpleFormatter& other);
 
     /**
      * Destructor.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     ~SimpleFormatter();
 
@@ -118,7 +116,7 @@ public:
      *                  Must fulfill U_SUCCESS before the function call.
      *                  Set to U_ILLEGAL_ARGUMENT_ERROR for bad argument syntax.
      * @return TRUE if U_SUCCESS(errorCode).
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UBool applyPattern(const UnicodeString &pattern, UErrorCode &errorCode) {
         return applyPatternMinMaxArguments(pattern, 0, INT32_MAX, errorCode);
@@ -137,14 +135,14 @@ public:
      *                  Set to U_ILLEGAL_ARGUMENT_ERROR for bad argument syntax and
      *                  too few or too many arguments.
      * @return TRUE if U_SUCCESS(errorCode).
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UBool applyPatternMinMaxArguments(const UnicodeString &pattern,
                                       int32_t min, int32_t max, UErrorCode &errorCode);
 
     /**
      * @return The max argument number + 1.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     int32_t getArgumentLimit() const {
         return getArgumentLimit(compiledPattern.getBuffer(), compiledPattern.length());
@@ -160,7 +158,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return appendTo
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UnicodeString &format(
             const UnicodeString &value0,
@@ -177,7 +175,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return appendTo
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UnicodeString &format(
             const UnicodeString &value0,
@@ -196,7 +194,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return appendTo
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UnicodeString &format(
             const UnicodeString &value0,
@@ -221,7 +219,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return appendTo
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UnicodeString &formatAndAppend(
             const UnicodeString *const *values, int32_t valuesLength,
@@ -247,7 +245,7 @@ public:
      * @param errorCode ICU error code in/out parameter.
      *                  Must fulfill U_SUCCESS before the function call.
      * @return result
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UnicodeString &formatAndReplace(
             const UnicodeString *const *values, int32_t valuesLength,
@@ -257,7 +255,7 @@ public:
     /**
      * Returns the pattern text with none of the arguments.
      * Like formatting with all-empty string values.
-     * @draft ICU 57
+     * @stable ICU 57
      */
     UnicodeString getTextWithNoArguments() const {
         return getTextWithNoArguments(compiledPattern.getBuffer(), compiledPattern.length());
@@ -291,7 +289,5 @@ private:
 };
 
 U_NAMESPACE_END
-
-#endif /* U_HIDE_DRAFT_API */
 
 #endif  // __SIMPLEFORMATTER_H__
