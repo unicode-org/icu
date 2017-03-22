@@ -32,8 +32,7 @@ import com.ibm.icu.impl.SimpleFormatterImpl;
  *
  * @see MessageFormat
  * @see MessagePattern.ApostropheMode
- * @draft ICU 57
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 57
  */
 public final class SimpleFormatter {
     // For internal use in Java, use SimpleFormatterImpl directly instead:
@@ -57,8 +56,7 @@ public final class SimpleFormatter {
      * @param pattern The pattern string.
      * @return The new SimpleFormatter object.
      * @throws IllegalArgumentException for bad argument syntax.
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static SimpleFormatter compile(CharSequence pattern) {
         return compileMinMaxArguments(pattern, 0, Integer.MAX_VALUE);
@@ -74,8 +72,7 @@ public final class SimpleFormatter {
      * @param max The pattern must have at most this many arguments.
      * @return The new SimpleFormatter object.
      * @throws IllegalArgumentException for bad argument syntax and too few or too many arguments.
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static SimpleFormatter compileMinMaxArguments(CharSequence pattern, int min, int max) {
         StringBuilder sb = new StringBuilder();
@@ -85,8 +82,7 @@ public final class SimpleFormatter {
 
     /**
      * @return The max argument number + 1.
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public int getArgumentLimit() {
         return SimpleFormatterImpl.getArgumentLimit(compiledPattern);
@@ -94,8 +90,7 @@ public final class SimpleFormatter {
 
     /**
      * Formats the given values.
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public String format(CharSequence... values) {
         return SimpleFormatterImpl.formatCompiledPattern(compiledPattern, values);
@@ -114,8 +109,7 @@ public final class SimpleFormatter {
      *               values.length must be at least getArgumentLimit().
      *               Can be null if getArgumentLimit()==0.
      * @return appendTo
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public StringBuilder formatAndAppend(
             StringBuilder appendTo, int[] offsets, CharSequence... values) {
@@ -136,8 +130,7 @@ public final class SimpleFormatter {
      *               An argument value may be the same object as result.
      *               values.length must be at least getArgumentLimit().
      * @return result
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public StringBuilder formatAndReplace(
             StringBuilder result, int[] offsets, CharSequence... values) {
@@ -147,8 +140,7 @@ public final class SimpleFormatter {
     /**
      * Returns a string similar to the original pattern, only for debugging.
      *
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     @Override
     public String toString() {
@@ -163,8 +155,7 @@ public final class SimpleFormatter {
      * Returns the pattern text with none of the arguments.
      * Like formatting with all-empty string values.
      *
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public String getTextWithNoArguments() {
         return SimpleFormatterImpl.getTextWithNoArguments(compiledPattern);
