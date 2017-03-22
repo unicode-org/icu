@@ -943,9 +943,11 @@
     "HowToBuildWindowsCommandLine"><strong>Using MSDEV At The Command Line
     Note:</strong></a> You can build ICU from the command line. Assuming that you
     have properly installed Microsoft Visual C++ to support command line
-    execution, you can run the following command, 'devenv.com
-    <i>&lt;ICU&gt;</i>\source\allinone\allinone.sln /build "Win32|Release"'. You can also
-    use Cygwin with this compiler to build ICU, and you can refer to the <a href=
+    execution, you can run the following command to build the 32-bit Release version:
+    <code>'devenv.com <i>&lt;ICU&gt;</i>\source\allinone\allinone.sln /build "Release|Win32"'</code>.
+    Or to build the 64-bit Release version from the command line: 
+    <code>'devenv.com <i>&lt;ICU&gt;</i>\source\allinone\allinone.sln /build "Release|x64"'</code>.
+    <br />You can also use Cygwin with this compiler to build ICU, and you can refer to the <a href=
     "#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
     section for more details.</p>
 
