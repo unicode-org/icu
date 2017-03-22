@@ -106,6 +106,8 @@ public class LocaleValidityChecker {
                 case u:
                     if (!isValidU(locale, datatype, locale.getExtension(c), where)) return false;
                     break;
+                default:
+                    break;
                 }
             } catch (Exception e) {
                 return where.set(Datatype.illegal, c+"");
@@ -201,6 +203,8 @@ public class LocaleValidityChecker {
                         seen.clear();
                     }
                     break;
+                default:
+                    break;
                 }
                 switch (specialCase) {
                 case anything:
@@ -233,6 +237,8 @@ public class LocaleValidityChecker {
                         return false;
                     }
                     continue;
+                default:
+                    break;
                 }
 
                 // en-u-sd-usca
