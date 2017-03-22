@@ -1116,7 +1116,7 @@ uprv_convertToPosix(uint32_t hostid, char *posixID, int32_t posixIDCapacity, UEr
         // Note: LOCALE_ALLOW_NEUTRAL_NAMES was enabled in Windows7+, prior versions did not handle neutral (no-region) locale names.
         tmpLen = LCIDToLocaleName(hostid, (PWSTR)windowsLocaleName, UPRV_LENGTHOF(windowsLocaleName), LOCALE_ALLOW_NEUTRAL_NAMES);
         if (tmpLen > 1) {
-            int i = 0;
+            int32_t i = 0;
             // Only need to look up in table if have _, eg for de-de_phoneb type alternate sort.
             bLookup = FALSE;
             for (i = 0; i < UPRV_LENGTHOF(locName); i++)
@@ -1253,7 +1253,7 @@ uprv_convertToLCIDPlatform(const char* localeID)
     {
         // Need it to be UTF-16, not 8-bit
         wchar_t bcp47Tag[LOCALE_NAME_MAX_LENGTH] = {};
-        int i;
+        int32_t i;
         for (i = 0; i < UPRV_LENGTHOF(bcp47Tag); i++)
         {
             if (asciiBCP47Tag[i] == '\0')
