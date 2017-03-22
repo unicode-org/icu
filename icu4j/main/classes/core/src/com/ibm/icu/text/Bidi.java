@@ -3840,7 +3840,7 @@ public class Bidi {
      *
      * <p>This method takes a piece of plain text containing one or more paragraphs,
      * with or without externally specified embedding levels from <i>styled</i>
-     * text and computes the left-right-directionality of each character.<p>
+     * text and computes the left-right-directionality of each character.</p>
      *
      * <p>If the entire text is all of the same directionality, then
      * the method may not perform all the steps described by the algorithm,
@@ -3849,7 +3849,7 @@ public class Bidi {
      * For example, in pure LTR text with numbers the numbers would get
      * a resolved level of 2 higher than the surrounding text according to
      * the algorithm. This implementation may set all resolved levels to
-     * the same value in such a case.<p>
+     * the same value in such a case.</p>
      *
      * <p>The text can be composed of multiple paragraphs. Occurrence of a block
      * separator in the text terminates a paragraph, and whatever comes next starts
@@ -3926,7 +3926,7 @@ public class Bidi {
      *
      * <p>This method takes a piece of plain text containing one or more paragraphs,
      * with or without externally specified embedding levels from <i>styled</i>
-     * text and computes the left-right-directionality of each character.<p>
+     * text and computes the left-right-directionality of each character.</p>
      *
      * <p>If the entire text is all of the same directionality, then
      * the method may not perform all the steps described by the algorithm,
@@ -3935,7 +3935,7 @@ public class Bidi {
      * For example, in pure LTR text with numbers the numbers would get
      * a resolved level of 2 higher than the surrounding text according to
      * the algorithm. This implementation may set all resolved levels to
-     * the same value in such a case.<p>
+     * the same value in such a case.</p>
      *
      * <p>The text can be composed of multiple paragraphs. Occurrence of a block
      * separator in the text terminates a paragraph, and whatever comes next starts
@@ -5324,7 +5324,7 @@ public class Bidi {
      * Positive values from 1 to {@link #MAX_EXPLICIT_LEVEL} indicate embeddings.
      * Where values are zero, the base embedding level
      * as determined by the base direction is assumed,
-     * except for paragraph separators which remain at 0 to prevent reordering of paragraphs.<p>
+     * except for paragraph separators which remain at 0 to prevent reordering of paragraphs.</p>
      *
      * <p>Note: This constructor calls setPara() internally,
      * after converting the java.text.Bidi-style embeddings with negative overrides
