@@ -208,10 +208,27 @@ endif
 %.o: $(srcdir)/%.c
 	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
+# This causes escapesrc to be built before other ICU targets.
+NEED_ESCAPING=YES
+
+ifneq ($(SKIP_ESCAPING),)
 %.$(STATIC_O): $(srcdir)/%.cpp
 	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+else
+# convert *.cpp files to _*.cpp with \u / \U escaping
+CLEANFILES += _*.cpp
+
+# the actual escaping
+_%.cpp: $(srcdir)/%.cpp
+	@$(BINDIR)/escapesrc$(EXEEXT) $< $@
+
+%.$(STATIC_O): _%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: _%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+endif
 
 ## Dependency rules
 %.d : %.u
