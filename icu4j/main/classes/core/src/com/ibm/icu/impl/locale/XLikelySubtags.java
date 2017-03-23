@@ -116,26 +116,26 @@ public class XLikelySubtags {
         // #1 is language
         // #2 is script
         // #3 is region
-//        static final String pat =
-//                "language_id = (unicode_language_subtag)"
-//                        + "(?:sep(unicode_script_subtag))?"
-//                        + "(?:sep(unicode_region_subtag))?;\n"
-//                        + "unicode_language_subtag = alpha{2,3}|alpha{5,8};\n"
-//                        + "unicode_script_subtag = alpha{4};\n"
-//                        + "unicode_region_subtag  = alpha{2}|digit{3};\n"
-//                        + "sep    = [-_];\n"
-//                        + "digit  = [0-9];\n"
-//                        + "alpha   = [A-Za-z];\n"
-//                        ;
-//        static {
-//            System.out.println(pat);
-//            System.out.println(new UnicodeRegex().compileBnf(pat));
-//        }
-//        static final Pattern LANGUAGE_PATTERN = Pattern.compile(
-//                "([a-zA-Z0-9]+)" // (?:[-_]([a-zA-Z0-9]+))?(?:[-_]([a-zA-Z0-9]+))?"
-//                //new UnicodeRegex().compileBnf(pat)
-//                );
-//
+        //        static final String pat =
+        //                "language_id = (unicode_language_subtag)"
+        //                        + "(?:sep(unicode_script_subtag))?"
+        //                        + "(?:sep(unicode_region_subtag))?;\n"
+        //                        + "unicode_language_subtag = alpha{2,3}|alpha{5,8};\n"
+        //                        + "unicode_script_subtag = alpha{4};\n"
+        //                        + "unicode_region_subtag  = alpha{2}|digit{3};\n"
+        //                        + "sep    = [-_];\n"
+        //                        + "digit  = [0-9];\n"
+        //                        + "alpha   = [A-Za-z];\n"
+        //                        ;
+        //        static {
+        //            System.out.println(pat);
+        //            System.out.println(new UnicodeRegex().compileBnf(pat));
+        //        }
+        //        static final Pattern LANGUAGE_PATTERN = Pattern.compile(
+        //                "([a-zA-Z0-9]+)" // (?:[-_]([a-zA-Z0-9]+))?(?:[-_]([a-zA-Z0-9]+))?"
+        //                //new UnicodeRegex().compileBnf(pat)
+        //                );
+        //
         // TODO: fix this to check for format. Not required, since this is only called internally, but safer for the future.
         static LSR from(String languageIdentifier) {
             String[] parts = languageIdentifier.split("[-_]");
@@ -197,16 +197,13 @@ public class XLikelySubtags {
         }
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) {
-                return false;
-            }
-            if (!(obj instanceof LSR)) {
-                return false;
-            }
-            LSR other = (LSR) obj;
-            return language.equals(other.language)
+            LSR other;
+            return this == obj ||
+                    (obj != null
+                    && obj.getClass() == this.getClass()
+                    && language.equals((other = (LSR) obj).language)
                     && script.equals(other.script)
-                    && region.equals(other.region);
+                    && region.equals(other.region));
         }
         @Override
         public int hashCode() {
@@ -247,8 +244,8 @@ public class XLikelySubtags {
 
         Maker maker = Maker.TREEMAP;
         Map<String, Map<String, Map<String, LSR>>> result = maker.make();
-//        Splitter bar = Splitter.on('_');
-//        int last = -1;
+        //        Splitter bar = Splitter.on('_');
+        //        int last = -1;
         // set the base data
         Map<LSR,LSR> internCache = new HashMap<LSR,LSR>();
         for (Entry<String, String> sourceTarget : rawData.entrySet()) {
@@ -265,13 +262,13 @@ public class XLikelySubtags {
             set(result, language, script, region, languageTarget, scriptTarget, regionTarget, internCache);
             // now add aliases
             Collection<String> languageAliases = LSR.LANGUAGE_ALIASES.getAliases(language);
-//            if (languageAliases.isEmpty()) {
-//                languageAliases = Collections.singleton(language);
-//            }
+            //            if (languageAliases.isEmpty()) {
+            //                languageAliases = Collections.singleton(language);
+            //            }
             Collection<String> regionAliases = LSR.REGION_ALIASES.getAliases(region);
-//            if (regionAliases.isEmpty()) {
-//                regionAliases = Collections.singleton(region);
-//            }
+            //            if (regionAliases.isEmpty()) {
+            //                regionAliases = Collections.singleton(region);
+            //            }
             for (String languageAlias : languageAliases) {
                 for (String regionAlias : regionAliases) {
                     if (languageAlias.equals(language) && regionAlias.equals(region)) {
@@ -320,34 +317,34 @@ public class XLikelySubtags {
         return result;
     }
 
-//    private void getAliasInfo(Map<String, R2<List<String>, String>> aliasInfo, Multimap<String, String> canonicalToAlias) {
-//        for (Entry<String, R2<List<String>, String>> e : aliasInfo.entrySet()) {
-//            final String alias = e.getKey();
-//            if (alias.contains("_")) {
-//                continue; // only do simple aliasing
-//            }
-//            String canonical = getCanonical(e.getValue());
-//            canonicalToAlias.put(canonical, alias);
-//        }
-//    }
+    //    private void getAliasInfo(Map<String, R2<List<String>, String>> aliasInfo, Multimap<String, String> canonicalToAlias) {
+    //        for (Entry<String, R2<List<String>, String>> e : aliasInfo.entrySet()) {
+    //            final String alias = e.getKey();
+    //            if (alias.contains("_")) {
+    //                continue; // only do simple aliasing
+    //            }
+    //            String canonical = getCanonical(e.getValue());
+    //            canonicalToAlias.put(canonical, alias);
+    //        }
+    //    }
 
-//    private static String getCanonical(R2<List<String>, String> aliasAndReason) {
-//        if (aliasAndReason == null) {
-//            return null;
-//        }
-//        if (aliasAndReason.get1().equals("overlong")) {
-//            return null;
-//        }
-//        List<String> value = aliasAndReason.get0();
-//        if (value.size() != 1) {
-//            return null;
-//        }
-//        final String canonical = value.iterator().next();
-//        if (canonical.contains("_")) {
-//            return null; // only do simple aliasing
-//        }
-//        return canonical;
-//    }
+    //    private static String getCanonical(R2<List<String>, String> aliasAndReason) {
+    //        if (aliasAndReason == null) {
+    //            return null;
+    //        }
+    //        if (aliasAndReason.get1().equals("overlong")) {
+    //            return null;
+    //        }
+    //        List<String> value = aliasAndReason.get0();
+    //        if (value.size() != 1) {
+    //            return null;
+    //        }
+    //        final String canonical = value.iterator().next();
+    //        if (canonical.contains("_")) {
+    //            return null; // only do simple aliasing
+    //        }
+    //        return canonical;
+    //    }
 
     private void set(Map<String, Map<String, Map<String, LSR>>> langTable, final String language, final String script, final String region,
             final String languageTarget, final String scriptTarget, final String regionTarget, Map<LSR, LSR> internCache) {
@@ -363,10 +360,10 @@ public class XLikelySubtags {
     private void set(Map<String, Map<String, Map<String, LSR>>> langTable, final String language, final String script, final String region, LSR newValue) {
         Map<String, Map<String, LSR>> scriptTable = Maker.TREEMAP.getSubtable(langTable, language);
         Map<String, LSR> regionTable = Maker.TREEMAP.getSubtable(scriptTable, script);
-//        LSR oldValue = regionTable.get(region);
-//        if (oldValue != null) {
-//            int debug = 0;
-//        }
+        //        LSR oldValue = regionTable.get(region);
+        //        if (oldValue != null) {
+        //            int debug = 0;
+        //        }
         regionTable.put(region, newValue);
     }
 

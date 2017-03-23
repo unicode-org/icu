@@ -83,7 +83,7 @@ public class XLocaleDistance {
         ICUResourceBundle languageMatchingInfo = suppData.findTopLevel("languageMatchingInfo");
         ICUResourceBundle writtenParadigmLocales = (ICUResourceBundle) languageMatchingInfo.get("written")
                 .get("paradigmLocales");
-//      paradigmLocales{ "en", "en-GB",... }
+        //      paradigmLocales{ "en", "en-GB",... }
         HashSet<String> paradigmLocales = new HashSet<String>(Arrays.asList(writtenParadigmLocales.getStringArray()));
         return Collections.unmodifiableSet(paradigmLocales);
     }
@@ -94,7 +94,7 @@ public class XLocaleDistance {
         ICUResourceBundle languageMatchingInfo = suppData.findTopLevel("languageMatchingInfo");
         ICUResourceBundle writtenMatchVariables = (ICUResourceBundle) languageMatchingInfo.get("written")
                 .get("matchVariable");
-//        matchVariable{ americas{"019"} cnsar{"HK+MO"} ...}
+        //        matchVariable{ americas{"019"} cnsar{"HK+MO"} ...}
 
         HashMap<String,String> matchVariables = new HashMap<String,String>();
         for (Enumeration<String> enumer = writtenMatchVariables.getKeys(); enumer.hasMoreElements(); ) {
@@ -140,17 +140,17 @@ public class XLocaleDistance {
         .putAll("QO", "AQ", "BV", "CC", "CX", "GS", "HM", "IO", "TF", "UM", "AC", "CP", "DG", "TA")
         ;
         //Can't use following, because data from CLDR is discarded
-//        ICUResourceBundle suppData = LocaleMatcher.getICUSupplementalData();
-//        UResourceBundle territoryContainment = suppData.get("territoryContainment");
-//        for (int i = 0 ; i < territoryContainment.getSize(); i++) {
-//            UResourceBundle mapping = territoryContainment.get(i);
-//            String parent = mapping.getKey();
-//            for (int j = 0 ; j < mapping.getSize(); j++) {
-//                String child = mapping.getString(j);
-//                containment.put(parent,child);
-//                System.out.println(parent + " => " + child);
-//            }
-//        }
+        //        ICUResourceBundle suppData = LocaleMatcher.getICUSupplementalData();
+        //        UResourceBundle territoryContainment = suppData.get("territoryContainment");
+        //        for (int i = 0 ; i < territoryContainment.getSize(); i++) {
+        //            UResourceBundle mapping = territoryContainment.get(i);
+        //            String parent = mapping.getKey();
+        //            for (int j = 0 ; j < mapping.getSize(); j++) {
+        //                String child = mapping.getString(j);
+        //                containment.put(parent,child);
+        //                System.out.println(parent + " => " + child);
+        //            }
+        //        }
         TreeMultimap<String,String> containmentResolved = TreeMultimap.create();
         fill("001", containment, containmentResolved);
         return ImmutableMultimap.copyOf(containmentResolved);
@@ -173,8 +173,8 @@ public class XLocaleDistance {
     static final Multimap<String,String> CONTAINER_TO_CONTAINED;
     static final Multimap<String,String> CONTAINER_TO_CONTAINED_FINAL;
     static {
-//         Multimap<String, String> containerToContainedTemp = xGetContainment();
-//         fill(Region.getInstance("001"), containerToContainedTemp);
+        //         Multimap<String, String> containerToContainedTemp = xGetContainment();
+        //         fill(Region.getInstance("001"), containerToContainedTemp);
 
         CONTAINER_TO_CONTAINED = xGetContainment();
         Multimap<String, String> containerToFinalContainedBuilder = TreeMultimap.create();
@@ -235,12 +235,10 @@ public class XLocaleDistance {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof DistanceNode)) {
-                return false;
-            }
-            DistanceNode other = (DistanceNode) obj;
-            return distance == other.distance
-                    && this.getClass().equals(other.getClass());
+            return this == obj ||
+                    (obj != null
+                    && obj.getClass() == this.getClass()
+                    && distance == ((DistanceNode) obj).distance);
         }
         @Override
         public int hashCode() {
@@ -334,14 +332,10 @@ public class XLocaleDistance {
         }
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof IdMakerFull)) {
-                return false;
-            }
-            IdMakerFull<?> other = (IdMakerFull<?>) obj;
-            return intToObject.equals(other.intToObject);
+            return this == obj ||
+                    (obj != null
+                    && obj.getClass() == this.getClass()
+                    && intToObject.equals(((IdMakerFull<?>) obj).intToObject));
         }
         @Override
         public int hashCode() {
@@ -359,16 +353,13 @@ public class XLocaleDistance {
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof StringDistanceNode)) {
-                return false;
-            }
-            StringDistanceNode other = (StringDistanceNode) obj;
-            return distance == other.distance
+            StringDistanceNode other;
+            return this == obj ||
+                    (obj != null
+                    && obj.getClass() == this.getClass()
+                    && distance == (other = (StringDistanceNode) obj).distance
                     && Utility.equals(distanceTable, other.distanceTable)
-                    && super.equals(other);
+                    && super.equals(other));
         }
         @Override
         public int hashCode() {
@@ -438,11 +429,10 @@ public class XLocaleDistance {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof StringDistanceTable)) {
-                return false;
-            }
-            StringDistanceTable other = (StringDistanceTable) obj;
-            return subtables.equals(other.subtables);
+            return this == obj ||
+                    (obj != null
+                    && obj.getClass() == this.getClass()
+                    && subtables.equals(((StringDistanceTable) obj).subtables));
         }
         @Override
         public int hashCode() {
@@ -927,9 +917,9 @@ public class XLocaleDistance {
             //                        + "\" distance=\""
             //                        + rule[2]
             //                            + "\"/>");
-//            if (rule[0].equals("en_*_*") || rule[1].equals("*_*_*")) {
-//                int debug = 0;
-//            }
+            //            if (rule[0].equals("en_*_*") || rule[1].equals("*_*_*")) {
+            //                int debug = 0;
+            //            }
             List<String> desiredBase = new ArrayList<String>(bar.splitToList(rule[0]));
             List<String> supportedBase = new ArrayList<String>(bar.splitToList(rule[1]));
             Integer distance = 100-Integer.parseInt(rule[2]);
