@@ -872,6 +872,8 @@
       <li>Microsoft Windows</li>
 
       <li>Microsoft Visual C++ (see the ICU download page for the currently compatible version)</li>
+      
+      <li><i><b>Optional:</b></i> A version of the Windows 10 SDK (if you want to build the UWP projects)</li>
     </ul>
         <p class="note"><a href="#HowToBuildCygwin">Cygwin</a> is required if using a version of MSVC other than the one
         compatible with the supplied project files or if other compilers are used to build ICU. (e.g. GCC)</p>
@@ -893,6 +895,11 @@
       tools, and the test suite projects). Please see the <a href=
       "#HowToBuildWindowsCommandLine">command line note below</a> if you want to
       build from the command line instead.</li>
+
+      <li>You may need to re-target the UWP projects to the version of the SDK that you have installed. In Visual Studio you can
+      right-click on the UWP projects and select the option 'Retarget SDK Version'. Note: You do not need to have a copy of 
+      the Windows 10 SDK installed in order to build the non-UWP projects in Visual Studio. If the SDK is not installed then the
+      UWP projects will simply not be loaded.</li>
 
       <li>Set the active platform to "Win32" or "x64" (See <a href="#HowToBuildWindowsPlatform">Windows platform note</a> below)
       and configuration to "Debug" or "Release" (See <a href="#HowToBuildWindowsConfig">Windows configuration note</a> below).</li>
