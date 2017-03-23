@@ -5191,6 +5191,7 @@ icu4c/source/test/testdata/conversion.txt svneol=native#text/plain
 icu4c/source/test/testdata/csdetest.xml svneol=native#text/xml%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/dcfmtest.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/default.txt svneol=native#text/plain
+icu4c/source/test/testdata/emoji-test.txt svneol=native#text/plain
 icu4c/source/test/testdata/encoded.utf16be -text
 icu4c/source/test/testdata/format.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/testdata/icuio.txt svneol=native#text/plain

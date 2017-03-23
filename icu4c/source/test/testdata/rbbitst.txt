@@ -37,7 +37,7 @@
 #   Temp debugging tests
 <locale en>
 <word>
-<data><0>ク<400>ライアン<400>ト<400>サーバー<400></data>
+<data><0>１•２•３•４•</data>
 # <data><0>ク<400>ライアン<400>トサーバー<400></data>
 
 ## FILTERED BREAK TESTS

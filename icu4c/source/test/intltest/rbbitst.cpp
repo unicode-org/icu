@@ -36,6 +36,7 @@
 
 #include "charstr.h"
 #include "cmemory.h"
+#include "cstr.h"
 #include "intltest.h"
 #include "rbbitst.h"
 #include "utypeinfo.h"  // for 'typeid' to work
@@ -105,6 +106,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug12797);
     TESTCASE_AUTO(TestBug12918);
     TESTCASE_AUTO(TestBug12932);
+    TESTCASE_AUTO(TestEmoji);
     TESTCASE_AUTO_END;
 }
 
@@ -1948,28 +1950,31 @@ static uint32_t m_rand()
 
 
 //
-// Data for Extended Pictographic scraped from CLDR common/properties/ExtendedPictographic.txt, r12773
+// Data for Extended Pictographic scraped from CLDR common/properties/ExtendedPictographic.txt, r13267
 //
-static const char *gExtended_Pict = "["
-    "\\U0001F774-\\U0001F77F\\u2700-\\u2701\\u2703-\\u2704\\u270E\\u2710-\\u2711\\u2765-\\u2767\\U0001F030-\\U0001F093"
-    "\\U0001F094-\\U0001F09F\\U0001F10D-\\U0001F10F\\U0001F12F\\U0001F16C-\\U0001F16F\\U0001F1AD-\\U0001F1E5"
-    "\\U0001F203-\\U0001F20F\\U0001F23C-\\U0001F23F\\U0001F249-\\U0001F24F\\U0001F252-\\U0001F2FF\\U0001F7D5-\\U0001F7FF"
-    "\\U0001F000-\\U0001F003\\U0001F005-\\U0001F02B\\U0001F02C-\\U0001F02F\\U0001F322-\\U0001F323\\U0001F394-\\U0001F395"
-    "\\U0001F398\\U0001F39C-\\U0001F39D\\U0001F3F1-\\U0001F3F2\\U0001F3F6\\U0001F4FE\\U0001F53E-\\U0001F548"
-    "\\U0001F54F\\U0001F568-\\U0001F56E\\U0001F571-\\U0001F572\\U0001F57B-\\U0001F586\\U0001F588-\\U0001F589"
-    "\\U0001F58E-\\U0001F58F\\U0001F591-\\U0001F594\\U0001F597-\\U0001F5A3\\U0001F5A6-\\U0001F5A7\\U0001F5A9-\\U0001F5B0"
-    "\\U0001F5B3-\\U0001F5BB\\U0001F5BD-\\U0001F5C1\\U0001F5C5-\\U0001F5D0\\U0001F5D4-\\U0001F5DB\\U0001F5DF-\\U0001F5E0"
-    "\\U0001F5E2\\U0001F5E4-\\U0001F5E7\\U0001F5E9-\\U0001F5EE\\U0001F5F0-\\U0001F5F2\\U0001F5F4-\\U0001F5F9"
-    "\\u2605\\u2607-\\u260D\\u260F-\\u2610\\u2612\\u2616-\\u2617\\u2619-\\u261C\\u261E-\\u261F\\u2621\\u2624-\\u2625"
-    "\\u2627-\\u2629\\u262B-\\u262D\\u2630-\\u2637\\u263B-\\u2647\\u2654-\\u265F\\u2661-\\u2662\\u2664\\u2667"
-    "\\u2669-\\u267A\\u267C-\\u267E\\u2680-\\u2691\\u2695\\u2698\\u269A\\u269D-\\u269F\\u26A2-\\u26A9\\u26AC-\\u26AF"
-    "\\u26B2-\\u26BC\\u26BF-\\u26C3\\u26C6-\\u26C7\\u26C9-\\u26CD\\u26D0\\u26D2\\u26D5-\\u26E8\\u26EB-\\u26EF"
-    "\\u26F6\\u26FB-\\u26FC\\u26FE-\\u26FF\\u2388\\U0001FA00-\\U0001FFFD\\U0001F0A0-\\U0001F0AE\\U0001F0B1-\\U0001F0BF"
-    "\\U0001F0C1-\\U0001F0CF\\U0001F0D1-\\U0001F0F5\\U0001F0AF-\\U0001F0B0\\U0001F0C0\\U0001F0D0\\U0001F0F6-\\U0001F0FF"
-    "\\U0001F80C-\\U0001F80F\\U0001F848-\\U0001F84F\\U0001F85A-\\U0001F85F\\U0001F888-\\U0001F88F\\U0001F8AE-\\U0001F8FF"
-    "\\U0001F900-\\U0001F90F\\U0001F91F\\U0001F928-\\U0001F92F\\U0001F931-\\U0001F932\\U0001F93F\\U0001F94C-\\U0001F94F"
-    "\\U0001F95F-\\U0001F97F\\U0001F992-\\U0001F9BF\\U0001F9C1-\\U0001F9FF\\U0001F6C6-\\U0001F6CA\\U0001F6E6-\\U0001F6E8"
-    "\\U0001F6EA\\U0001F6F1-\\U0001F6F2\\U0001F6D3-\\U0001F6DF\\U0001F6ED-\\U0001F6EF\\U0001F6F7-\\U0001F6FF"
+static const char16_t *gExtended_Pict = u"["
+    "\\U0001F774-\\U0001F77F\\U00002700-\\U00002701\\U00002703-\\U00002704\\U0000270E\\U00002710-\\U00002711\\U00002765-\\U00002767"
+    "\\U0001F030-\\U0001F093\\U0001F094-\\U0001F09F\\U0001F10D-\\U0001F10F\\U0001F12F\\U0001F16C-\\U0001F16F\\U0001F1AD-\\U0001F1E5"
+    "\\U0001F260-\\U0001F265\\U0001F203-\\U0001F20F\\U0001F23C-\\U0001F23F\\U0001F249-\\U0001F24F\\U0001F252-\\U0001F25F"
+    "\\U0001F266-\\U0001F2FF\\U0001F7D5-\\U0001F7FF\\U0001F000-\\U0001F003\\U0001F005-\\U0001F02B\\U0001F02C-\\U0001F02F"
+    "\\U0001F322-\\U0001F323\\U0001F394-\\U0001F395\\U0001F398\\U0001F39C-\\U0001F39D\\U0001F3F1-\\U0001F3F2\\U0001F3F6"
+    "\\U0001F4FE\\U0001F53E-\\U0001F548\\U0001F54F\\U0001F568-\\U0001F56E\\U0001F571-\\U0001F572\\U0001F57B-\\U0001F586"
+    "\\U0001F588-\\U0001F589\\U0001F58E-\\U0001F58F\\U0001F591-\\U0001F594\\U0001F597-\\U0001F5A3\\U0001F5A6-\\U0001F5A7"
+    "\\U0001F5A9-\\U0001F5B0\\U0001F5B3-\\U0001F5BB\\U0001F5BD-\\U0001F5C1\\U0001F5C5-\\U0001F5D0\\U0001F5D4-\\U0001F5DB"
+    "\\U0001F5DF-\\U0001F5E0\\U0001F5E2\\U0001F5E4-\\U0001F5E7\\U0001F5E9-\\U0001F5EE\\U0001F5F0-\\U0001F5F2\\U0001F5F4-\\U0001F5F9"
+    "\\U00002605\\U00002607-\\U0000260D\\U0000260F-\\U00002610\\U00002612\\U00002616-\\U00002617\\U00002619-\\U0000261C"
+    "\\U0000261E-\\U0000261F\\U00002621\\U00002624-\\U00002625\\U00002627-\\U00002629\\U0000262B-\\U0000262D\\U00002630-\\U00002637"
+    "\\U0000263B-\\U00002647\\U00002654-\\U0000265F\\U00002661-\\U00002662\\U00002664\\U00002667\\U00002669-\\U0000267A"
+    "\\U0000267C-\\U0000267E\\U00002680-\\U00002691\\U00002695\\U00002698\\U0000269A\\U0000269D-\\U0000269F\\U000026A2-\\U000026A9"
+    "\\U000026AC-\\U000026AF\\U000026B2-\\U000026BC\\U000026BF-\\U000026C3\\U000026C6-\\U000026C7\\U000026C9-\\U000026CD"
+    "\\U000026D0\\U000026D2\\U000026D5-\\U000026E8\\U000026EB-\\U000026EF\\U000026F6\\U000026FB-\\U000026FC\\U000026FE-\\U000026FF"
+    "\\U00002388\\U0001FA00-\\U0001FFFD\\U0001F0A0-\\U0001F0AE\\U0001F0B1-\\U0001F0BF\\U0001F0C1-\\U0001F0CF\\U0001F0D1-\\U0001F0F5"
+    "\\U0001F0AF-\\U0001F0B0\\U0001F0C0\\U0001F0D0\\U0001F0F6-\\U0001F0FF\\U0001F80C-\\U0001F80F\\U0001F848-\\U0001F84F"
+    "\\U0001F85A-\\U0001F85F\\U0001F888-\\U0001F88F\\U0001F8AE-\\U0001F8FF\\U0001F900-\\U0001F90B\\U0001F91F\\U0001F928-\\U0001F92F"
+    "\\U0001F931-\\U0001F932\\U0001F94C\\U0001F95F-\\U0001F96B\\U0001F992-\\U0001F997\\U0001F9D0-\\U0001F9E6\\U0001F90C-\\U0001F90F"
+    "\\U0001F93F\\U0001F94D-\\U0001F94F\\U0001F96C-\\U0001F97F\\U0001F998-\\U0001F9BF\\U0001F9C1-\\U0001F9CF\\U0001F9E7-\\U0001F9FF"
+    "\\U0001F6C6-\\U0001F6CA\\U0001F6D3-\\U0001F6D4\\U0001F6E6-\\U0001F6E8\\U0001F6EA\\U0001F6F1-\\U0001F6F2\\U0001F6F7-\\U0001F6F8"
+    "\\U0001F6D5-\\U0001F6DF\\U0001F6ED-\\U0001F6EF\\U0001F6F9-\\U0001F6FF"
     "]";
 
 //------------------------------------------------------------------------------------------
@@ -2039,7 +2044,7 @@ RBBICharMonkey::RBBICharMonkey() {
 
     fEmojiBaseSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EB}\\U0001F3C2\\U0001F3C7\\U0001F3CC\\U0001F46A-\\U0001F46D\\U0001F46F\\U0001F574\\U0001F6CC]"), status);
     fEmojiModifierSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EM}]"), status);
-    fExtendedPictSet  = new UnicodeSet(UnicodeString(gExtended_Pict, -1, US_INV), status);
+    fExtendedPictSet  = new UnicodeSet(gExtended_Pict, status);
     fEBGSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EBG}]"), status);
     fEmojiNRKSet      = new UnicodeSet(UNICODE_STRING_SIMPLE(
                 "[[\\p{Emoji}]-[\\p{Grapheme_Cluster_Break = Regional_Indicator}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]"), status);
@@ -2302,42 +2307,43 @@ RBBIWordMonkey::RBBIWordMonkey()
 
     fSets            = new UVector(status);
 
-    fCRSet            = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = CR}]"),           status);
-    fLFSet            = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = LF}]"),           status);
-    fNewlineSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Newline}]"),      status);
-    fKatakanaSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Katakana}]"),     status);
-    fRegionalIndicatorSet =  new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Regional_Indicator}]"), status);
-    fHebrew_LetterSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Hebrew_Letter}]"), status);
-    fALetterSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ALetter}]"), status);
-    fSingle_QuoteSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Single_Quote}]"),    status);
-    fDouble_QuoteSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Double_Quote}]"),    status);
-    fMidNumLetSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidNumLet}]"),    status);
-    fMidLetterSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidLetter}]"),    status);
-    fMidNumSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidNum}]"),       status);
-    fNumericSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Numeric}]"),      status);
-    fFormatSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Format}]"),       status);
-    fExtendNumLetSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ExtendNumLet}]"), status);
-    fExtendSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Extend}]"),       status);
+    fCRSet            = new UnicodeSet(u"[\\p{Word_Break = CR}]",           status);
+    fLFSet            = new UnicodeSet(u"[\\p{Word_Break = LF}]",           status);
+    fNewlineSet       = new UnicodeSet(u"[\\p{Word_Break = Newline}]",      status);
+    fKatakanaSet      = new UnicodeSet(u"[\\p{Word_Break = Katakana}]",     status);
+    fRegionalIndicatorSet =  new UnicodeSet(u"[\\p{Word_Break = Regional_Indicator}]", status);
+    fHebrew_LetterSet = new UnicodeSet(u"[\\p{Word_Break = Hebrew_Letter}]", status);
+    fALetterSet       = new UnicodeSet(u"[\\p{Word_Break = ALetter}]", status);
+    fSingle_QuoteSet  = new UnicodeSet(u"[\\p{Word_Break = Single_Quote}]",    status);
+    fDouble_QuoteSet  = new UnicodeSet(u"[\\p{Word_Break = Double_Quote}]",    status);
+    fMidNumLetSet     = new UnicodeSet(u"[\\p{Word_Break = MidNumLet}]",    status);
+    fMidLetterSet     = new UnicodeSet(u"[\\p{Word_Break = MidLetter}]",    status);
+    fMidNumSet        = new UnicodeSet(u"[\\p{Word_Break = MidNum}]",       status);
+    fNumericSet       = new UnicodeSet(u"[\\p{Word_Break = Numeric}]",      status);
+    fFormatSet        = new UnicodeSet(u"[\\p{Word_Break = Format}]",       status);
+    fExtendNumLetSet  = new UnicodeSet(u"[\\p{Word_Break = ExtendNumLet}]", status);
+    fExtendSet        = new UnicodeSet(u"[\\p{Word_Break = Extend}]",       status);
 
-    fEBaseSet         = new UnicodeSet(UNICODE_STRING_SIMPLE(
-            "[\\p{Word_Break = EB}\\U0001F3C2\\U0001F3C7\\U0001F3CC\\U0001F46A-\\U0001F46D\\U0001F46F\\U0001F574\\U0001F6CC]"), status);
-    fEBGSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = EBG}]"),          status);
-    fEModifierSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = EM}]"),           status);
-    fZWJSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ZWJ}]"),          status);
-    fExtendedPictSet  = new UnicodeSet(UnicodeString(gExtended_Pict, -1, US_INV), status);
-    fEmojiNRKSet      = new UnicodeSet(UNICODE_STRING_SIMPLE(
-            "[[\\p{Emoji}]-[\\p{Word_Break = Regional_Indicator}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]"), status);
+    fEBaseSet         = new UnicodeSet(
+            u"[\\p{Word_Break = EB}\\U0001F3C2\\U0001F3C7\\U0001F3CC\\U0001F46A-\\U0001F46D\\U0001F46F\\U0001F574\\U0001F6CC]", status);
+    fEBGSet           = new UnicodeSet(u"[\\p{Word_Break = EBG}]",          status);
+    fEModifierSet     = new UnicodeSet(u"[\\p{Word_Break = EM}]",           status);
+    fZWJSet           = new UnicodeSet(u"[\\p{Word_Break = ZWJ}]",          status);
+    fExtendedPictSet  = new UnicodeSet(gExtended_Pict, status);
+    fEmojiNRKSet      = new UnicodeSet(
+            u"[[\\p{Emoji}]-[\\p{Word_Break = Regional_Indicator}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]", status);
 
-    fDictionarySet = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]"), status);
+    fDictionarySet = new UnicodeSet(u"[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]", status);
     fDictionarySet->addAll(*fKatakanaSet);
-    fDictionarySet->addAll(UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{LineBreak = Complex_Context}]"), status));
+    fDictionarySet->addAll(UnicodeSet(u"[\\p{LineBreak = Complex_Context}]", status));
 
     fALetterSet->removeAll(*fDictionarySet);
 
     fOtherSet        = new UnicodeSet();
     if(U_FAILURE(status)) {
-      deferredStatus = status;
-      return;
+        IntlTest::gTest->errln("%s:%d %s", __FILE__, __LINE__, u_errorName(status));
+        deferredStatus = status;
+        return;
     }
 
     fOtherSet->complement();
@@ -3080,7 +3086,7 @@ RBBILineMonkey::RBBILineMonkey() :
     fEM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EM}]"), status);
     fZJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
     fEmojiNRK = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Emoji}]-[\\p{Line_break=RI}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]"), status);
-    fExtendedPict = new UnicodeSet(UnicodeString(gExtended_Pict, -1, US_INV), status);
+    fExtendedPict = new UnicodeSet(gExtended_Pict, status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -4690,6 +4696,92 @@ void RBBITest::TestBug12932() {
     if (status != U_BRK_RULE_SYNTAX) {
         errln("%s:%d expected U_BRK_RULE_SYNTAX, got %s",
                 __FILE__, __LINE__, u_errorName(status));
+    }
+}
+
+
+// Emoji Test. Verify that the sequences defined in the Unicode data file emoji-test.txt
+//             remain undevided by ICU char, word and line break.
+void RBBITest::TestEmoji() {
+    UErrorCode  status = U_ZERO_ERROR;
+
+    CharString testFileName;
+    testFileName.append(IntlTest::getSourceTestData(status), status);
+    testFileName.appendPathPart("emoji-test.txt", status);
+    if (U_FAILURE(status)) {
+        errln("%s:%s %s while opening emoji-test.txt", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    logln("Opening data file %s\n", testFileName.data());
+
+    int    len;
+    UChar *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
+    if (U_FAILURE(status) || testFile == NULL) {
+        errln("%s:%s %s while opening emoji-test.txt", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    UnicodeString testFileAsString(TRUE, testFile, len);
+    RegexMatcher lineMatcher(u"^.*?$", testFileAsString, UREGEX_MULTILINE, status);
+    RegexMatcher hexMatcher(u"\\s*([a-f0-9]*)", UREGEX_CASE_INSENSITIVE, status);
+    //           hexMatcher group(1) is a hex number, or empty string if no hex number present.
+    int32_t lineNumber = 0;
+
+    LocalPointer<BreakIterator> charBreaks(BreakIterator::createCharacterInstance(Locale::getEnglish(), status), status);
+    LocalPointer<BreakIterator> wordBreaks(BreakIterator::createWordInstance(Locale::getEnglish(), status), status);
+    LocalPointer<BreakIterator> lineBreaks(BreakIterator::createLineInstance(Locale::getEnglish(), status), status);
+    if (U_FAILURE(status)) {
+        errln("%s:%s %s while opening break iterators", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+
+    while (lineMatcher.find()) {
+        ++lineNumber;
+        UnicodeString line = lineMatcher.group(status);
+        hexMatcher.reset(line);
+        UnicodeString testString;   // accumulates the emoji sequence.
+        while (hexMatcher.find() && hexMatcher.group(1, status).length() > 0) {
+            UnicodeString hex = hexMatcher.group(1, status);
+            if (hex.length() > 8) {
+                errln("%s:%d emoji-test.txt:%d invalid code point %s", __FILE__, __LINE__, lineNumber, CStr(hex)());
+                break;
+            }
+            CharString hex8;
+            hex8.appendInvariantChars(hex, status);
+            UChar32 c = (UChar32)strtol(hex8.data(), NULL, 16);
+            if (c<=0x10ffff) {
+                testString.append(c);
+            } else {
+                errln("%s:%d emoji-test.txt:%d Error: Unicode Character %s value out of range.",
+                        __FILE__, __LINE__, lineNumber, hex8.data());
+                break;
+            }
+        }
+        if (testString.length() > 1) {
+            charBreaks->setText(testString);
+            charBreaks->first();
+            int32_t firstBreak = charBreaks->next();
+            if (testString.length() != firstBreak) {
+                if (logKnownIssue("13058", "%s:%d", __FILE__, __LINE__)) {
+                    continue;
+                }
+                errln("%s:%d emoji-test.txt:%d Error, uexpected break at offset %d",
+                        __FILE__, __LINE__, lineNumber, firstBreak);
+            }
+            wordBreaks->setText(testString);
+            wordBreaks->first();
+            firstBreak = wordBreaks->next();
+            if (testString.length() != firstBreak) {
+                errln("%s:%d emoji-test.txt:%d Error, uexpected break at offset %d",
+                        __FILE__, __LINE__, lineNumber, firstBreak);
+            }
+            lineBreaks->setText(testString);
+            lineBreaks->first();
+            firstBreak = lineBreaks->next();
+            if (testString.length() != firstBreak) {
+                errln("%s:%d emoji-test.txt:%d Error, uexpected break at offset %d",
+                        __FILE__, __LINE__, lineNumber, firstBreak);
+            }
+        }
     }
 }
 
