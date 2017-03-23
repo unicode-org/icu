@@ -1,5 +1,4 @@
-﻿# Copyright (C) 2016 and later: Unicode, Inc. and others. TODO: remove this line, temporarily needed for copyright scanner
-# GraphemeBreakTest-10.0.0.txt
+﻿# GraphemeBreakTest-10.0.0.txt
 # Date: 2017-02-16, 00:24:15 GMT
 # © 2017 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
