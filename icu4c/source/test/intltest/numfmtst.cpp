@@ -3245,7 +3245,7 @@ void NumberFormatTest::TestHostClone()
     UDate now = Calendar::getNow();
     NumberFormat *full = NumberFormat::createInstance(loc, status);
     if (full == NULL || U_FAILURE(status)) {
-        dataerrln("FAIL: Can't create Relative date instance - %s", u_errorName(status));
+        dataerrln("FAIL: Can't create NumberFormat date instance - %s", u_errorName(status));
         return;
     }
     UnicodeString result1;
