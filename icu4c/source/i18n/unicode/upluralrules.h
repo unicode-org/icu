@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/localpointer.h"
+#include "unicode/uenum.h"
 #ifndef U_HIDE_INTERNAL_API
 #include "unicode/unum.h"
 #endif  /* U_HIDE_INTERNAL_API */
@@ -173,6 +174,22 @@ uplrules_selectWithFormat(const UPluralRules *uplrules,
                           UErrorCode *status);
 
 #endif  /* U_HIDE_INTERNAL_API */
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Creates a string enumeration of all plural rule keywords used in this
+ * UPluralRules object. The rule "other" is always present by default.
+ * @param uplrules The UPluralRules object specifying the rules for
+ *        a given locale.
+ * @param status A pointer to a UErrorCode to receive any errors.
+ * @return a string enumeration over plural rule keywords, or NULL
+ * upon error. The caller is responsible for closing the result.
+ * @draft ICU 59
+ */
+U_DRAFT UEnumeration* U_EXPORT2
+uplrules_getKeywords(const UPluralRules *uplrules,
+                     UErrorCode *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

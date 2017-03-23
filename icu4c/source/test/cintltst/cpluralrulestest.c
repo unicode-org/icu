@@ -12,11 +12,14 @@
 
 #include "unicode/upluralrules.h"
 #include "unicode/ustring.h"
+#include "unicode/uenum.h"
 #include "cintltst.h"
 #include "cmemory.h"
+#include "cstring.h"
 
 static void TestPluralRules(void);
 static void TestOrdinalRules(void);
+static void TestGetKeywords(void);
 
 void addPluralRulesTest(TestNode** root);
 
@@ -26,6 +29,7 @@ void addPluralRulesTest(TestNode** root)
 {
     TESTCASE(TestPluralRules);
     TESTCASE(TestOrdinalRules);
+    TESTCASE(TestGetKeywords);
 }
 
 typedef struct {
@@ -137,6 +141,115 @@ static void TestOrdinalRules() {
         log_data_err("uplrules_select(en-ordinal, 2) failed - %s\n", u_errorName(errorCode));
     }
     uplrules_close(upr);
+}
+
+/* items for TestGetKeywords */
+
+/* all possible plural keywords, in alphabetical order */
+static const char* knownKeywords[] = {
+    "few",
+    "many",
+    "one",
+    "other",
+    "two",
+    "zero"
+};
+enum {
+    kNumKeywords = UPRV_LENGTHOF(knownKeywords)
+};
+
+/* Return the index of keyword in knownKeywords[], or -1 if not found */
+static int32_t getKeywordIndex(const char* keyword) {
+    int32_t i, compare;
+    for (i = 0; i < kNumKeywords && (compare = uprv_strcmp(keyword,knownKeywords[i])) >= 0; i++) {
+        if (compare == 0) {
+        	return i;
+        }
+    }
+    return -1;
+}
+
+typedef struct {
+    const char* locale;
+    const char* keywords[kNumKeywords + 1];
+} KeywordsForLang;
+
+static const KeywordsForLang getKeywordsItems[] = {
+    { "zh", { "other" } },
+    { "en", { "one", "other" } },
+    { "fr", { "one", "other" } },
+    { "lv", { "zero", "one", "other" } },
+    { "hr", { "one", "few", "other" } },
+    { "sl", { "one", "two", "few", "other" } },
+    { "he", { "one", "two", "many", "other" } },
+    { "cs", { "one", "few", "many", "other" } },
+    { "ar", { "zero", "one", "two", "few", "many" , "other" } },
+    { NULL, { NULL } }
+};
+
+static void TestGetKeywords() {
+    /*
+     * We don't know the order in which the enumeration will return keywords,
+     * so we have an array with known keywords in a fixed order and then
+     * parallel arrays of flags for expected and actual results that indicate
+     * which keywords are expected to be or actually are found.
+     */
+    const KeywordsForLang* itemPtr = getKeywordsItems;
+    for (; itemPtr->locale != NULL; itemPtr++) {
+        UPluralRules* uplrules;
+        UEnumeration* uenum;
+        UBool expectKeywords[kNumKeywords];
+        UBool getKeywords[kNumKeywords];
+        int32_t i, iKnown;
+        UErrorCode status = U_ZERO_ERROR;
+        
+        /* initialize arrays for expected and get results */
+        for (i = 0; i < kNumKeywords; i++) {
+            expectKeywords[i] = FALSE;
+            getKeywords[i] = FALSE;
+        }
+        for (i = 0; i < kNumKeywords && itemPtr->keywords[i] != NULL; i++) {
+            iKnown = getKeywordIndex(itemPtr->keywords[i]);
+            if (iKnown >= 0) {
+                expectKeywords[iKnown] = TRUE;
+            }
+        }
+        
+        uplrules = uplrules_openForType(itemPtr->locale, UPLURAL_TYPE_CARDINAL, &status);
+        if (U_FAILURE(status)) {
+            log_err("FAIL: uplrules_openForType for locale %s, UPLURAL_TYPE_CARDINAL: %s\n", itemPtr->locale, myErrorName(status) );
+            continue;
+        }
+        uenum = uplrules_getKeywords(uplrules, &status);
+        if (U_FAILURE(status)) {
+            log_err("FAIL: uplrules_getKeywords for locale %s: %s\n", itemPtr->locale, myErrorName(status) );
+        } else {
+            const char* keyword;
+            int32_t keywordLen, keywordCount = 0;
+            while ((keyword = uenum_next(uenum, &keywordLen, &status)) != NULL && U_SUCCESS(status)) {
+                iKnown = getKeywordIndex(keyword);
+                if (iKnown < 0) {
+                    log_err("FAIL: uplrules_getKeywords for locale %s, unknown keyword %s\n", itemPtr->locale, keyword );
+                } else {
+                    getKeywords[iKnown] = TRUE;
+                }
+                keywordCount++;
+            }
+            if (keywordCount > kNumKeywords) {
+                log_err("FAIL: uplrules_getKeywords for locale %s, got too many keywords %d\n", itemPtr->locale, keywordCount );
+            }
+            if (uprv_memcmp(expectKeywords, getKeywords, kNumKeywords) != 0) {
+                log_err("FAIL: uplrules_getKeywords for locale %s, got wrong keyword set; with reference to knownKeywords:\n"
+                        "        expected { %d %d %d %d %d %d },\n"
+                        "        got      { %d %d %d %d %d %d }\n", itemPtr->locale, 
+                        expectKeywords[0], expectKeywords[1], expectKeywords[2], expectKeywords[3], expectKeywords[4], expectKeywords[5],
+                        getKeywords[0], getKeywords[1], getKeywords[2], getKeywords[3], getKeywords[4], getKeywords[5] );
+            }
+            uenum_close(uenum);
+        }
+        
+        uplrules_close(uplrules);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
