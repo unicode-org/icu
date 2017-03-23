@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
@@ -245,6 +245,15 @@
     applications migrating from previous ICU releases</em>.
     For more news about this release, as well as late-breaking news, see the
     <a href="http://site.icu-project.org/download/57">ICU download page</a>.</p>
+
+    <h3>New for 59 RC</h3>
+    <p>Windows build changes: Building the UWP projects in Visual Studio requires Visual Studio
+    2015 Update 3 with a version of the Windows 10 SDK installed. You may need to re-target the
+    UWP projects to the version of the SDK that you have installed. (In Visual Studio you can
+    right-click on the projects and select the option 'Retarget SDK Version').</p>
+    <p>Note: You do not need to have a copy of the Windows 10 SDK installed in order to build
+    the non-UWP projects in Visual Studio. If the SDK is not installed then the UWP projects
+     will simply not be loaded.</p>
 
     <h3>New for 59 Milestone 1</h3>
     <ul>
