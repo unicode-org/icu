@@ -1619,20 +1619,7 @@ public final class UCharacterTest extends TestFmwk
 
             /*
              * Verify default Bidi classes.
-             * For recent Unicode versions, see UCD.html.
-             *
-             * For older Unicode versions:
-             * See table 3-7 "Bidirectional Character Types" in UAX #9.
-             * http://www.unicode.org/reports/tr9/
-             *
-             * See also DerivedBidiClass.txt for Cn code points!
-             *
-             * Unicode 4.0.1/Public Review Issue #28 (http://www.unicode.org/review/resolved-pri.html)
-             * changed some default values.
-             * In particular, non-characters and unassigned Default Ignorable Code Points
-             * change from L to BN.
-             *
-             * UCD.html version 4.0.1 does not yet reflect these changes.
+             * See DerivedBidiClass.txt, especially for unassigned code points.
              */
             if (result.value == UCharacterCategory.UNASSIGNED
                 || result.value == UCharacterCategory.PRIVATE_USE) {
@@ -1648,6 +1635,8 @@ public final class UCharacterTest extends TestFmwk
                                 shouldBeDir=defaultBidi[i][1];
                             }
 
+                            // TODO: Remove this version check, see ticket #13061.
+                            if (VersionInfo.ICU_VERSION.getMajor() != 59)
                             if (UCharacter.getDirection(c) != shouldBeDir
                                 || UCharacter.getIntPropertyValue(c,
                                                           UProperty.BIDI_CLASS)

@@ -7112,6 +7112,7 @@ tools/trac/IcuCodeTools/0.12/license.html -text svneol=unset#text/html
 tools/trac/IcuCodeTools/0.12/readme.txt -text
 tools/trac/IcuCodeTools/0.12/setup.cfg -text
 tools/trac/IcuCodeTools/0.12/setup.py -text
+tools/unicode/c/genprops/pnames_data.h svneol=native#text/plain%3Bcharset%3Dutf-8
 tools/unicode/c/genregexcasing/readme.txt svneol=native#text/plain
 tools/unicodetools/com/ibm/rbm/docs/RBReporter.html svneol=native#text/html
 tools/unicodetools/com/ibm/rbm/docs/faq.html svneol=native#text/html

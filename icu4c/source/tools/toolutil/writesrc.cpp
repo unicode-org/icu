@@ -74,7 +74,7 @@ U_CAPI FILE * U_EXPORT2
 usrc_create(const char *path, const char *filename, const char *generator) {
     // TODO: Add parameter for the first year this file was generated, not before 2016.
     static const char *header=
-        "// Copyright (C) 2016 and later: Unicode, Inc. and others.\n"
+        "// © 2016 and later: Unicode, Inc. and others.\n"
         "// License & terms of use: http://www.unicode.org/copyright.html\n"
         "//\n"
         "// Copyright (C) 1999-2016, International Business Machines\n"
