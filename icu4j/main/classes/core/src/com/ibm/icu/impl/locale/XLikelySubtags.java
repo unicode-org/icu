@@ -30,10 +30,10 @@ public class XLikelySubtags {
         return DEFAULT;
     }
 
+    @SuppressWarnings("unchecked")
     static abstract class Maker {
         abstract <V> V make();
 
-        @SuppressWarnings("unchecked")
         public <K,V> V getSubtable(Map<K, V> langTable, final K language) {
             V scriptTable = langTable.get(language);
             if (scriptTable == null) {
@@ -44,7 +44,6 @@ public class XLikelySubtags {
 
         static final Maker HASHMAP = new Maker() {
             @Override
-            @SuppressWarnings("unchecked")
             public Map<Object,Object> make() {
                 return new HashMap<Object,Object>();
             }
@@ -52,7 +51,6 @@ public class XLikelySubtags {
 
         static final Maker TREEMAP = new Maker() {
             @Override
-            @SuppressWarnings("unchecked")
             public Map<Object,Object> make() {
                 return new TreeMap<Object,Object>();
             }
@@ -199,6 +197,12 @@ public class XLikelySubtags {
         }
         @Override
         public boolean equals(Object obj) {
+            if (this == obj) {
+                return false;
+            }
+            if (!(obj instanceof LSR)) {
+                return false;
+            }
             LSR other = (LSR) obj;
             return language.equals(other.language)
                     && script.equals(other.script)
@@ -359,17 +363,15 @@ public class XLikelySubtags {
     private void set(Map<String, Map<String, Map<String, LSR>>> langTable, final String language, final String script, final String region, LSR newValue) {
         Map<String, Map<String, LSR>> scriptTable = Maker.TREEMAP.getSubtable(langTable, language);
         Map<String, LSR> regionTable = Maker.TREEMAP.getSubtable(scriptTable, script);
-        LSR oldValue = regionTable.get(region);
-        if (oldValue != null) {
-            int debug = 0;
-        }
+//        LSR oldValue = regionTable.get(region);
+//        if (oldValue != null) {
+//            int debug = 0;
+//        }
         regionTable.put(region, newValue);
     }
 
     /**
      * Convenience methods
-     * @param source
-     * @return
      */
     public LSR maximize(String source) {
         return maximize(ULocale.forLanguageTag(source));
@@ -438,6 +440,7 @@ public class XLikelySubtags {
         }
     }
 
+    @SuppressWarnings("unused")
     private LSR minimizeSubtags(String languageIn, String scriptIn, String regionIn, Minimize fieldToFavor) {
         LSR result = maximize(languageIn, scriptIn, regionIn);
 
@@ -456,7 +459,7 @@ public class XLikelySubtags {
         if (result.script.equals(value00.script)) { //script is default
             if (result.region.equals(value00.region)) {
                 return result.replace(null, "", "");
-            } else if (fieldToFavor == fieldToFavor.FAVOR_REGION) {
+            } else if (fieldToFavor == Minimize.FAVOR_REGION) {
                 return result.replace(null, "", null);
             } else {
                 favorRegionOk = true;
@@ -474,14 +477,14 @@ public class XLikelySubtags {
         return result;
     }
 
-    private static <V> StringBuilder show(Map<String,V> map, String indent, StringBuilder output) {
+    private static StringBuilder show(Map<?,?> map, String indent, StringBuilder output) {
         String first = indent.isEmpty() ? "" : "\t";
-        for (Entry<String,V> e : map.entrySet()) {
-            String key = e.getKey();
-            V value = e.getValue();
+        for (Entry<?,?> e : map.entrySet()) {
+            String key = e.getKey().toString();
+            Object value = e.getValue();
             output.append(first + (key.isEmpty() ? "∅" : key));
             if (value instanceof Map) {
-                show((Map)value, indent+"\t", output);
+                show((Map<?,?>)value, indent+"\t", output);
             } else {
                 output.append("\t" + Utility.toString(value)).append("\n");
             }

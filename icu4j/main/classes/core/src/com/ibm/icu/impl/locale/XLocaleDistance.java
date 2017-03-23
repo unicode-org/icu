@@ -77,6 +77,7 @@ public class XLocaleDistance {
         return Collections.unmodifiableList(distanceList);
     }
 
+    @SuppressWarnings("unused")
     private static Set<String> xGetParadigmLocales() {
         ICUResourceBundle suppData = LocaleMatcher.getICUSupplementalData();
         ICUResourceBundle languageMatchingInfo = suppData.findTopLevel("languageMatchingInfo");
@@ -87,6 +88,7 @@ public class XLocaleDistance {
         return Collections.unmodifiableSet(paradigmLocales);
     }
 
+    @SuppressWarnings("unused")
     private static Map<String, String> xGetMatchVariables() {
         ICUResourceBundle suppData = LocaleMatcher.getICUSupplementalData();
         ICUResourceBundle languageMatchingInfo = suppData.findTopLevel("languageMatchingInfo");
@@ -237,7 +239,8 @@ public class XLocaleDistance {
                 return false;
             }
             DistanceNode other = (DistanceNode) obj;
-            return distance == other.distance;
+            return distance == other.distance
+                    && this.getClass().equals(other.getClass());
         }
         @Override
         public int hashCode() {
@@ -331,10 +334,13 @@ public class XLocaleDistance {
         }
         @Override
         public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
             if (!(obj instanceof IdMakerFull)) {
                 return false;
             }
-            IdMakerFull<T> other = (IdMakerFull) obj;
+            IdMakerFull<?> other = (IdMakerFull<?>) obj;
             return intToObject.equals(other.intToObject);
         }
         @Override
@@ -353,11 +359,16 @@ public class XLocaleDistance {
 
         @Override
         public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
             if (!(obj instanceof StringDistanceNode)) {
                 return false;
             }
             StringDistanceNode other = (StringDistanceNode) obj;
-            return distance == other.distance && Utility.equals(distanceTable, other.distanceTable);
+            return distance == other.distance
+                    && Utility.equals(distanceTable, other.distanceTable)
+                    && super.equals(other);
         }
         @Override
         public int hashCode() {
@@ -400,6 +411,7 @@ public class XLocaleDistance {
         defaultRegionDistance = regionNode.distance;
     }
 
+    @SuppressWarnings("rawtypes")
     private static Map newMap() { // for debugging
         return new TreeMap();
     }
@@ -414,6 +426,7 @@ public class XLocaleDistance {
         StringDistanceTable(Map<String, Map<String, DistanceNode>> tables) {
             subtables = tables;
         }
+        @SuppressWarnings("unchecked")
         StringDistanceTable() {
             this(newMap());
         }
@@ -466,11 +479,13 @@ public class XLocaleDistance {
             for (Entry<String, Map<String, DistanceNode>> e1 : other.subtables.entrySet()) {
                 for (Entry<String, DistanceNode> e2 : e1.getValue().entrySet()) {
                     DistanceNode value = e2.getValue();
+                    @SuppressWarnings("unused")
                     DistanceNode subNode = addSubtable(e1.getKey(), e2.getKey(), value.distance);
                 }
             }
         }
 
+        @SuppressWarnings("unchecked")
         DistanceNode addSubtable(String desired, String supported, int distance) {
             Map<String, DistanceNode> sub2 = subtables.get(desired);
             if (sub2 == null) {
@@ -503,7 +518,6 @@ public class XLocaleDistance {
         public void addSubtables(
                 String desired, String supported,
                 Predicate<DistanceNode> action) {
-            int count = 0;
             DistanceNode node = getNode(desired, supported);
             if (node == null) {
                 // get the distance it would have
@@ -523,6 +537,7 @@ public class XLocaleDistance {
                 int percentage) {
 
             // add to all the values that have the matching desiredLang and supportedLang
+            @SuppressWarnings("unused")
             boolean haveKeys = false;
             for (Entry<String, Map<String, DistanceNode>> e1 : subtables.entrySet()) {
                 String key1 = e1.getKey();
@@ -552,6 +567,7 @@ public class XLocaleDistance {
                 int percentage) {
 
             // add to all the values that have the matching desiredLang and supportedLang
+            @SuppressWarnings("unused")
             boolean haveKeys = false;
             for (Entry<String, Map<String, DistanceNode>> e1 : subtables.entrySet()) {
                 String key1 = e1.getKey();
@@ -718,10 +734,6 @@ public class XLocaleDistance {
     /**
      * Returns distance, from 0 to ABOVE_THRESHOLD.
      * ULocales must be in canonical, addLikelySubtags format. Returns distance
-     * @param desired
-     * @param supported
-     * @param distanceOption
-     * @return
      */
     public int distanceRaw(LSR desired, LSR supported, int threshold, DistanceOption distanceOption) {
         return distanceRaw(desired.language, supported.language,
@@ -870,6 +882,7 @@ public class XLocaleDistance {
 
         Splitter bar = Splitter.on('_');
 
+        @SuppressWarnings({"unchecked", "rawtypes"})
         List<Row.R4<List<String>, List<String>, Integer, Boolean>>[] sorted = new ArrayList[3];
         sorted[0] = new ArrayList<Row.R4<List<String>, List<String>, Integer, Boolean>>();
         sorted[1] = new ArrayList<Row.R4<List<String>, List<String>, Integer, Boolean>>();
@@ -892,7 +905,6 @@ public class XLocaleDistance {
         }
 
         for (List<Row.R4<List<String>, List<String>, Integer, Boolean>> item1 : sorted) {
-            int debug = 0;
             for (Row.R4<List<String>, List<String>, Integer, Boolean> item2 : item1) {
                 List<String> desired = item2.get0();
                 List<String> supported = item2.get1();
@@ -915,9 +927,9 @@ public class XLocaleDistance {
             //                        + "\" distance=\""
             //                        + rule[2]
             //                            + "\"/>");
-            if (rule[0].equals("en_*_*") || rule[1].equals("*_*_*")) {
-                int debug = 0;
-            }
+//            if (rule[0].equals("en_*_*") || rule[1].equals("*_*_*")) {
+//                int debug = 0;
+//            }
             List<String> desiredBase = new ArrayList<String>(bar.splitToList(rule[0]));
             List<String> supportedBase = new ArrayList<String>(bar.splitToList(rule[1]));
             Integer distance = 100-Integer.parseInt(rule[2]);
@@ -946,7 +958,7 @@ public class XLocaleDistance {
 
         DEFAULT = new XLocaleDistance(defaultDistanceTable.compact(), defaultRegionMapper);
 
-        if (false && PRINT_OVERRIDES) {
+        if (PRINT_OVERRIDES) {
             System.out.println(defaultRegionMapper);
             System.out.println(defaultDistanceTable);
             throw new IllegalArgumentException();
@@ -970,23 +982,28 @@ public class XLocaleDistance {
 
     private static String fixedName(List<String> match) {
         List<String> alt = new ArrayList<String>(match);
+        int size = alt.size();
+        assert size >= 1 && size <= 3;
+
         StringBuilder result = new StringBuilder();
-        switch(alt.size()) {
-        case 3:
+
+        if (size >= 3) {
             String region = alt.get(2);
             if (region.equals("*") || region.startsWith("$")) {
                 result.append(region);
             } else {
                 result.append(english.regionDisplayName(region));
             }
-        case 2:
+        }
+        if (size >= 2) {
             String script = alt.get(1);
             if (script.equals("*")) {
                 result.insert(0, script);
             } else {
                 result.insert(0, english.scriptDisplayName(script));
             }
-        case 1:
+        }
+        if (size >= 1) {
             String language = alt.get(0);
             if (language.equals("*")) {
                 result.insert(0, language);
@@ -1056,8 +1073,6 @@ public class XLocaleDistance {
         final Map<String,String> regionToPartition;
         /**
          * Used to support es_419 compared to es_AR, etc.
-         * @param variableToPartitionIn
-         * @param regionToPartitionIn
          */
         final Multimap<String,String> macroToPartitions;
         /**
@@ -1285,9 +1300,10 @@ public class XLocaleDistance {
             }
             return new StringDistanceTable(compact(item.subtables, 0));
         }
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         <K,T> Map<K,T> compact(Map<K,T> item, int level) {
             if (toId(item) != null) {
-                return (Map<K,T>)intern(item);
+                return (Map<K, T>) intern(item);
             }
             Map<K,T> copy = new LinkedHashMap<K,T>();
             for (Entry<K,T> entry : item.entrySet()) {
