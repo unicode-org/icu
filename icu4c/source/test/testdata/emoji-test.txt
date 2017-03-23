@@ -1,6 +1,5 @@
 # emoji-test.txt
 # Date: 2017-02-18, 15:26:57 GMT
-# © 2016 and later: Unicode, Inc. and others.
 # © 2017 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
