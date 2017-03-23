@@ -51,6 +51,7 @@ public class XLocaleDistanceTest extends TestFmwk {
     }
 
     // @ Test Disabled because of Linux; need to investigate.
+    @SuppressWarnings("unused")
     public void testTiming() {
         List<Arguments> testArgs = new ArrayList<Arguments>();
         for (List<String> line : tfh.getLines()) {

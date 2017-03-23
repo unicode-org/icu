@@ -111,8 +111,21 @@ public class XCldrStub {
         }
         @Override
         public boolean equals(Object obj) {
-            Multimap<K,V> other = (Multimap) obj;
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof Multimap)) {
+                return false;
+            }
+            Multimap<?,?> other = (Multimap<?,?>) obj;
             return map.equals(other.map);
+        }
+
+        @Override
+        public int hashCode() {
+            // Not designed, return an arbitrary constant -123 for now
+            assert false;
+            return -123;
         }
     }
 
@@ -215,21 +228,21 @@ public class XCldrStub {
     }
 
 
-    public static class Counter<T> implements Iterable<T>{
-        private Map<T,Long> data;
-        @Override
-        public Iterator<T> iterator() {
-            return data.keySet().iterator();
-        }
-        public long get(T s) {
-            Long result = data.get(s);
-            return result != null ? result : 0L;
-        }
-        public void add(T item, int count) {
-            Long result = data.get(item);
-            data.put(item, result == null ? count : result + count);
-        }
-    }
+//    public static class Counter<T> implements Iterable<T>{
+//        private Map<T,Long> data;
+//        @Override
+//        public Iterator<T> iterator() {
+//            return data.keySet().iterator();
+//        }
+//        public long get(T s) {
+//            Long result = data.get(s);
+//            return result != null ? result : 0L;
+//        }
+//        public void add(T item, int count) {
+//            Long result = data.get(item);
+//            data.put(item, result == null ? count : result + count);
+//        }
+//    }
 
     public static <T> String join(T[] source, String separator) {
         StringBuilder result = new StringBuilder();
@@ -362,7 +375,8 @@ public class XCldrStub {
             }
         }
         public static String getRelativeFileName(Class<?> class1, String filename) {
-            URL resource = class1.getResource(filename);
+            URL resource = class1 == null ?
+                    FileUtilities.class.getResource(filename) : class1.getResource(filename);
             String resourceString = resource.toString();
             if (resourceString.startsWith("file:")) {
                 return resourceString.substring(5);

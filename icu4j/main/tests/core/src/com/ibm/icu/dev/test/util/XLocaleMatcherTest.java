@@ -48,6 +48,7 @@ public class XLocaleMatcherTest extends TestFmwk {
         return new XLocaleMatcher(LocalePriorityList.add(string).build());
     }
 
+    @SuppressWarnings("unused")
     private XLocaleMatcher newXLocaleMatcher(LocalePriorityList string, int d) {
         return XLocaleMatcher.builder().setSupportedLocales(string).setThresholdDistance(d).build();
     }
@@ -272,6 +273,7 @@ public class XLocaleMatcherTest extends TestFmwk {
 
     private static final Splitter COMMA_SPACE = Splitter.on(Pattern.compile(",\\s*|\\s+")).trimResults();
     private static final Joiner JOIN_COMMA_SPACE = Joiner.on(", ");
+    @SuppressWarnings("unused")
     private static final UnicodeSet DIGITS = new UnicodeSet("[0-9]").freeze();
 
     class MyTestFileHandler extends DataDrivenTestHelper {
