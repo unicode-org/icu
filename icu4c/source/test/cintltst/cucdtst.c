@@ -1017,9 +1017,12 @@ unicodeDataLineFn(void *context,
     /* get BiDi category, field 4 */
     *fields[4][1]=0;
     i=MakeDir(fields[4][0]);
+#if U_ICU_VERSION_MAJOR_NUM!=59
+    // TODO: Remove this version check, see ticket #13061.
     if(i!=u_charDirection(c) || i!=u_getIntPropertyValue(c, UCHAR_BIDI_CLASS)) {
         log_err("error: u_charDirection(U+%04lx)==%u instead of %u (%s)\n", c, u_charDirection(c), MakeDir(fields[4][0]), fields[4][0]);
     }
+#endif
 
     /* get Decomposition_Type & Decomposition_Mapping, field 5 */
     d=NULL;
@@ -1260,20 +1263,7 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
 
     /*
      * Verify default Bidi classes.
-     * For recent Unicode versions, see UCD.html.
-     *
-     * For older Unicode versions:
-     * See table 3-7 "Bidirectional Character Types" in UAX #9.
-     * http://www.unicode.org/reports/tr9/
-     *
-     * See also DerivedBidiClass.txt for Cn code points!
-     *
-     * Unicode 4.0.1/Public Review Issue #28 (http://www.unicode.org/review/resolved-pri.html)
-     * changed some default values.
-     * In particular, non-characters and unassigned Default Ignorable Code Points
-     * change from L to BN.
-     *
-     * UCD.html version 4.0.1 does not yet reflect these changes.
+     * See DerivedBidiClass.txt, especially for unassigned code points.
      */
     if(type==U_UNASSIGNED || type==U_PRIVATE_USE_CHAR) {
         /* enumerate the intersections of defaultBidi ranges with [start..limit[ */
@@ -1287,12 +1277,15 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
                         shouldBeDir=(UCharDirection)defaultBidi[i][1];
                     }
 
+#if U_ICU_VERSION_MAJOR_NUM!=59
+// TODO: Remove this version check, see ticket #13061.
                     if( u_charDirection(c)!=shouldBeDir ||
                         u_getIntPropertyValue(c, UCHAR_BIDI_CLASS)!=shouldBeDir
                     ) {
                         log_err("error: u_charDirection(unassigned/PUA U+%04lx)=%s should be %s\n",
                             c, dirStrings[u_charDirection(c)], dirStrings[shouldBeDir]);
                     }
+#endif
                     ++c;
                 }
             }
