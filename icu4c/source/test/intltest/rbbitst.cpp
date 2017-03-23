@@ -1695,10 +1695,11 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
         return FALSE;
     }
 
-#if (U_CPLUSPLUS_VERSION >= 11)
-    for (const UChar *badCase: badTestCases) {
+#if ((U_PLATFORM == U_PF_OS390) || (U_PLATFORM == U_PF_AIX)) && (U_CPLUSPLUS_VERSION < 11)
+    for (int n=0; n<UPRV_LENGTHOF(badTestCases); n++) {
+      const UChar *badCase = badTestCases[n];
 #else
-    for (const UChar *badCase = badTestCases[0]; badCase < badTestCases[UPRV_LENGTHOF(badTestCases)]; badCase++) {
+      for (const UChar *badCase: badTestCases) {
 #endif
         if (testCase == UnicodeString(badCase)) {
             return logKnownIssue("7270");
