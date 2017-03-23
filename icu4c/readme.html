@@ -247,13 +247,10 @@
     <a href="http://site.icu-project.org/download/57">ICU download page</a>.</p>
 
     <h3>New for 59 RC</h3>
-    <p>Windows build changes: Building the UWP projects in Visual Studio requires Visual Studio
-    2015 Update 3 with a version of the Windows 10 SDK installed. You may need to re-target the
-    UWP projects to the version of the SDK that you have installed. (In Visual Studio you can
-    right-click on the projects and select the option 'Retarget SDK Version').</p>
-    <p>Note: You do not need to have a copy of the Windows 10 SDK installed in order to build
-    the non-UWP projects in Visual Studio. If the SDK is not installed then the UWP projects
-     will simply not be loaded.</p>
+    <ul>
+    	<li>Windows XP and Windows Vista are no longer supported. (The minimum supported version is Windows 7).</li>
+        <li>Building the Visual Studio UWP projects requires Visual Studio 2015 Update 3 with a version of the Windows 10 SDK installed.</li>
+    </ul>
 
     <h3>New for 59 Milestone 1</h3>
     <ul>
@@ -263,12 +260,6 @@
         <li>The type of UChar is char16_t, on all platforms. This is no longer configurable.
             This change may affect Windows code with assumptions that UChar was wchar_t, and thus
             type compatible with other Windows code expecting wchar_t strings.</li>
-    </ul>
-
-    <h3>Upcoming changes</h3>
-    <p>Please note the following changes planned for an upcoming ICU4C release (likely ICU 59):</p>
-    <ul>
-    	<li>Support for Windows XP will be removed.</li>
     </ul>
 
     <h2><a name="RecentPreviousChanges" href="#RecentPreviousChanges" id="RecentPreviousChanges">Changes in recent
