@@ -111,21 +111,15 @@ public class XCldrStub {
         }
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (!(obj instanceof Multimap)) {
-                return false;
-            }
-            Multimap<?,?> other = (Multimap<?,?>) obj;
-            return map.equals(other.map);
+            return this == obj ||
+                    (obj != null
+                    && obj.getClass() == this.getClass()
+                    && map.equals(((Multimap<?,?>) obj).map));
         }
 
         @Override
         public int hashCode() {
-            // Not designed, return an arbitrary constant -123 for now
-            assert false;
-            return -123;
+            return map.hashCode();
         }
     }
 
@@ -228,21 +222,21 @@ public class XCldrStub {
     }
 
 
-//    public static class Counter<T> implements Iterable<T>{
-//        private Map<T,Long> data;
-//        @Override
-//        public Iterator<T> iterator() {
-//            return data.keySet().iterator();
-//        }
-//        public long get(T s) {
-//            Long result = data.get(s);
-//            return result != null ? result : 0L;
-//        }
-//        public void add(T item, int count) {
-//            Long result = data.get(item);
-//            data.put(item, result == null ? count : result + count);
-//        }
-//    }
+    //    public static class Counter<T> implements Iterable<T>{
+    //        private Map<T,Long> data;
+    //        @Override
+    //        public Iterator<T> iterator() {
+    //            return data.keySet().iterator();
+    //        }
+    //        public long get(T s) {
+    //            Long result = data.get(s);
+    //            return result != null ? result : 0L;
+    //        }
+    //        public void add(T item, int count) {
+    //            Long result = data.get(item);
+    //            data.put(item, result == null ? count : result + count);
+    //        }
+    //    }
 
     public static <T> String join(T[] source, String separator) {
         StringBuilder result = new StringBuilder();
@@ -368,23 +362,23 @@ public class XCldrStub {
                     canonicalName = new File(relativeFileName).getCanonicalPath();
                 } catch (Exception e1) {
                     throw new ICUUncheckedIOException("Couldn't open file: " + file + "; relative to class: "
-                        + className, e);
+                            + className, e);
                 }
                 throw new ICUUncheckedIOException("Couldn't open file " + file + "; in path " + canonicalName + "; relative to class: "
-                    + className, e);
+                        + className, e);
             }
         }
         public static String getRelativeFileName(Class<?> class1, String filename) {
             URL resource = class1 == null ?
                     FileUtilities.class.getResource(filename) : class1.getResource(filename);
-            String resourceString = resource.toString();
-            if (resourceString.startsWith("file:")) {
-                return resourceString.substring(5);
-            } else if (resourceString.startsWith("jar:file:")) {
-                return resourceString.substring(9);
-            } else {
-                throw new ICUUncheckedIOException("File not found: " + resourceString);
-            }
+                    String resourceString = resource.toString();
+                    if (resourceString.startsWith("file:")) {
+                        return resourceString.substring(5);
+                    } else if (resourceString.startsWith("jar:file:")) {
+                        return resourceString.substring(9);
+                    } else {
+                        throw new ICUUncheckedIOException("File not found: " + resourceString);
+                    }
         }
     }
 
