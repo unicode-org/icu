@@ -179,11 +179,13 @@ void ListFormatterTest::TestNynorsk() {
 // has only partial data for the listPattern element (overriding
 // some of the parent data). #12994
 void ListFormatterTest::TestChineseTradHK() {
+    UnicodeString and_string = UnicodeString("\\u53CA", -1, US_INV).unescape();
+    UnicodeString comma_string = UnicodeString("\\u3001", -1, US_INV).unescape();
     UnicodeString results[4] = {
         one,
-        one + "\u53CA" + two,
-        one + "\u3001" + two + "\u53CA" + three,
-        one + "\u3001" + two + "\u3001" + three + "\u53CA" + four
+        one + and_string + two,
+        one + comma_string + two + and_string + three,
+        one + comma_string + two + comma_string + three + and_string + four
     };
 
     CheckFourCases("zh_Hant_HK", one, two, three, four, results);
