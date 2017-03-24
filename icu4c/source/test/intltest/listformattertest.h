@@ -33,6 +33,9 @@ class ListFormatterTest : public IntlTest {
     void TestBogus();
     void TestEnglish();
     void TestEnglishUS();
+    void TestEnglishGB();
+    void TestNynorsk();
+    void TestChineseTradHK();
     void TestRussian();
     void TestMalayalam();
     void TestZulu();
