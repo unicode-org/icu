@@ -49,9 +49,6 @@ public class ScientificFormat extends Format.BeforeFormat implements Rounder.Mul
      * @return The property bag, for chaining.
      */
     public IProperties setMinimumExponentDigits(int minimumExponentDigits);
-
-    @Override
-    public IProperties clone();
   }
 
   public static boolean useScientificNotation(IProperties properties) {

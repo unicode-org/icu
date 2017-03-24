@@ -247,7 +247,7 @@ public class FormatQuantity1 implements FormatQuantity {
   }
 
   @Override
-  public FormatQuantity clone() {
+  public FormatQuantity1 createCopy() {
     return new FormatQuantity1(this);
   }
 
@@ -675,7 +675,7 @@ public class FormatQuantity1 implements FormatQuantity {
 
   private int fractionCount() {
     // TODO: This is temporary.
-    FormatQuantity1 copy = (FormatQuantity1) this.clone();
+    FormatQuantity1 copy = new FormatQuantity1(this);
     int fractionCount = 0;
     while (copy.hasNextFraction()) {
       copy.nextFraction();
@@ -707,7 +707,7 @@ public class FormatQuantity1 implements FormatQuantity {
   @Override
   public byte getDigit(int magnitude) {
     // TODO: This is temporary.
-    FormatQuantity1 copy = (FormatQuantity1) this.clone();
+    FormatQuantity1 copy = new FormatQuantity1(this);
     if (magnitude < 0) {
       for (int p = -1; p > magnitude; p--) {
         copy.nextFraction();

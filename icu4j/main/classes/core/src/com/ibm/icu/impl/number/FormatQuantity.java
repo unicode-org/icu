@@ -167,7 +167,12 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
    */
   public int getLowerDisplayMagnitude();
 
-  public FormatQuantity clone();
+  /**
+   * Like clone, but without the restrictions of the Cloneable interface clone.
+   *
+   * @return A copy of this instance which can be mutated without affecting this instance.
+   */
+  public FormatQuantity createCopy();
 
   public void copyFrom(FormatQuantity other);
 

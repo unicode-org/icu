@@ -50,13 +50,30 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
   protected static final int INFINITY_FLAG = 2;
   protected static final int NAN_FLAG = 4;
 
+  // The following three fields relate to the double-to-ascii fast path algorithm.
+  // When a double is given to FormatQuantityBCD, it is converted to using a fast algorithm. The
+  // fast algorithm guarantees correctness to only the first ~12 digits of the double. The process
+  // of rounding the number ensures that the converted digits are correct, falling back to a slow-
+  // path algorithm if required.  Therefore, if a FormatQuantity is constructed from a double, it
+  // is *required* that roundToMagnitude(), roundToIncrement(), or roundToInfinity() is called. If
+  // you don't round, assertions will fail in certain other methods if you try calling them.
+
   /**
    * The original number provided by the user and which is represented in BCD. Used when we need to
    * re-compute the BCD for an exact double representation.
    */
   protected double origDouble;
 
+  /**
+   * The change in magnitude relative to the original double. Used when we need to re-compute the
+   * BCD for an exact double representation.
+   */
   protected int origDelta;
+
+  /**
+   * Whether the value in the BCD comes from the double fast path without having been rounded to
+   * ensure correctness
+   */
   protected boolean isApproximate;
 
   // Four positions: left optional '(', left required '[', right required ']', right optional ')'.
@@ -209,6 +226,10 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   @Override
   public double getPluralOperand(Operand operand) {
+    // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+    // See the comment at the top of this file explaining the "isApproximate" field.
+    assert !isApproximate;
+
     switch (operand) {
       case i:
         return toLong();
@@ -241,6 +262,10 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   @Override
   public int getUpperDisplayMagnitude() {
+    // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+    // See the comment at the top of this file explaining the "isApproximate" field.
+    assert !isApproximate;
+
     int magnitude = scale + precision;
     int result = (lReqPos > magnitude) ? lReqPos : (lOptPos < magnitude) ? lOptPos : magnitude;
     return result - 1;
@@ -248,6 +273,10 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   @Override
   public int getLowerDisplayMagnitude() {
+    // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+    // See the comment at the top of this file explaining the "isApproximate" field.
+    assert !isApproximate;
+
     int magnitude = scale;
     int result = (rReqPos < magnitude) ? rReqPos : (rOptPos > magnitude) ? rOptPos : magnitude;
     return result;
@@ -255,6 +284,10 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   @Override
   public byte getDigit(int magnitude) {
+    // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+    // See the comment at the top of this file explaining the "isApproximate" field.
+    assert !isApproximate;
+
     return getDigitPos(magnitude - scale);
   }
 
@@ -287,7 +320,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
   }
 
   @Override
-  public FormatQuantity clone() {
+  public FormatQuantity createCopy() {
     if (this instanceof FormatQuantity2) {
       return new FormatQuantity2((FormatQuantity2) this);
     } else if (this instanceof FormatQuantity3) {
@@ -295,7 +328,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
     } else if (this instanceof FormatQuantity4) {
       return new FormatQuantity4((FormatQuantity4) this);
     } else {
-      throw new IllegalArgumentException("Don't know how to clone " + this.getClass());
+      throw new IllegalArgumentException("Don't know how to copy " + this.getClass());
     }
   }
 
@@ -385,13 +418,6 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
       flags |= INFINITY_FLAG;
     } else if (n != 0) {
       _setToDoubleFast(n);
-
-      // TODO: Remove this when finished testing.
-      //      isApproximate = true;
-      //      origDouble = n;
-      //      origDelta = 0;
-      //      convertToAccurateDouble();
-
       compact();
     }
   }

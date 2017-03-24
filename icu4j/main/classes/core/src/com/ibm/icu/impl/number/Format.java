@@ -40,7 +40,7 @@ public abstract class Format {
     int length = process(inputDeque, modDeque, sb, 0);
 
     // Resolve remaining affixes
-    length += modDeque.applyAll(sb, 0, length);
+    modDeque.applyAll(sb, 0, length);
     return sb.toString();
   }
 
@@ -148,7 +148,7 @@ public abstract class Format {
       ModifierHolder mods = threadLocalModifierHolder.get().clear();
       NumberStringBuilder sb = threadLocalStringBuilder.get().clear();
       int length = process(input, mods, sb, 0);
-      length += mods.applyAll(sb, 0, length);
+      mods.applyAll(sb, 0, length);
       return sb.toString();
     }
 
