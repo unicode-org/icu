@@ -3086,8 +3086,7 @@ RBBILineMonkey::RBBILineMonkey() :
     fRI    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=RI}]"), status);
     fSG    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\ud800-\\udfff]"), status);
     fXX    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=XX}]"), status);
-    fEB    = new UnicodeSet(UNICODE_STRING_SIMPLE(
-            "[\\p{Line_break=EB}\\U0001F3C2\\U0001F3C7\\U0001F3CC\\U0001F46A-\\U0001F46D\\U0001F46F\\U0001F574\\U0001F6CC]"), status);
+    fEB    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EB}]"), status);
     fEM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EM}]"), status);
     fZJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
     fEmojiNRK = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Emoji}]-[\\p{Line_break=RI}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]"), status);
@@ -4725,7 +4724,9 @@ void RBBITest::TestEmoji() {
         errln("%s:%s %s while opening emoji-test.txt", __FILE__, __LINE__, u_errorName(status));
         return;
     }
-    UnicodeString testFileAsString(TRUE, testFile, len);
+    UnicodeString testFileAsString(testFile, len);
+    delete [] testFile;
+
     RegexMatcher lineMatcher(u"^.*?$", testFileAsString, UREGEX_MULTILINE, status);
     RegexMatcher hexMatcher(u"\\s*([a-f0-9]*)", UREGEX_CASE_INSENSITIVE, status);
     //           hexMatcher group(1) is a hex number, or empty string if no hex number present.

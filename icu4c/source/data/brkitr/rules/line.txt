@@ -38,7 +38,7 @@ $CL = [:LineBreak =  Close_Punctuation:];
 # $CM = [:LineBreak =  Combining_Mark:];
 $CP = [:LineBreak =  Close_Parenthesis:];
 $CR = [:LineBreak =  Carriage_Return:];
-$EB = [[:LineBreak =  EB:]\U0001F3C2\U0001F3C7\U0001F3CC\U0001F46A-\U0001F46D\U0001F46F\U0001F574\U0001F6CC];
+$EB = [:LineBreak =  EB:];
 $EM = [:LineBreak =  EM:];
 $EX = [:LineBreak =  Exclamation:];
 $GL = [:LineBreak =  Glue:];
