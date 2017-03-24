@@ -157,6 +157,8 @@ class U_COMMON_API ListFormatter : public UObject{
   private:
     static void initializeHash(UErrorCode& errorCode);
     static const ListFormatInternal* getListFormatInternal(const Locale& locale, const char *style, UErrorCode& errorCode);
+    struct ListPatternsSink;
+    static ListFormatInternal* loadListFormatInternal(const Locale& locale, const char* style, UErrorCode& errorCode);
 
     ListFormatter();
 

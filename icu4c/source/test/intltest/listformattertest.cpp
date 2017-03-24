@@ -147,6 +147,48 @@ void ListFormatterTest::TestEnglishUS() {
     CheckFourCases("en_US", one, two, three, four, results);
 }
 
+// Tests resource loading and inheritance when region sublocale
+// has only partial data for the listPattern element (overriding
+// some of the parent data). #12994
+void ListFormatterTest::TestEnglishGB() {
+    UnicodeString results[4] = {
+        one,
+        one + " and " + two,
+        one + ", " + two + " and " + three,
+        one + ", " + two + ", " + three + " and " + four
+    };
+
+    CheckFourCases("en_GB", one, two, three, four, results);
+}
+
+// Tests resource loading and inheritance when region sublocale
+// has only partial data for the listPattern element (overriding
+// some of the parent data). #12994
+void ListFormatterTest::TestNynorsk() {
+    UnicodeString results[4] = {
+        one,
+        one + " og " + two,
+        one + ", " + two + " og " + three,
+        one + ", " + two + ", " + three + " og " + four
+    };
+
+    CheckFourCases("nn", one, two, three, four, results);
+}
+
+// Tests resource loading and inheritance when region sublocale
+// has only partial data for the listPattern element (overriding
+// some of the parent data). #12994
+void ListFormatterTest::TestChineseTradHK() {
+    UnicodeString results[4] = {
+        one,
+        one + "\u53CA" + two,
+        one + "\u3001" + two + "\u53CA" + three,
+        one + "\u3001" + two + "\u3001" + three + "\u53CA" + four
+    };
+
+    CheckFourCases("zh_Hant_HK", one, two, three, four, results);
+}
+
 // Formatting in Russian.
 // "\\u0438" is used before the last element, and all elements up to (but not including) the penultimate are followed by a comma.
 void ListFormatterTest::TestRussian() {
@@ -229,6 +271,9 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
         case 6: name = "TestZulu"; if (exec) TestZulu(); break;
         case 7: name = "TestOutOfOrderPatterns"; if (exec) TestOutOfOrderPatterns(); break;
         case 8: name = "Test9946"; if (exec) Test9946(); break;
+        case 9: name = "TestEnglishGB"; if (exec) TestEnglishGB(); break;
+        case 10: name = "TestNynorsk"; if (exec) TestNynorsk(); break;
+        case 11: name = "TestChineseTradHK"; if (exec) TestChineseTradHK(); break;
 
         default: name = ""; break;
     }
