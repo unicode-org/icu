@@ -159,7 +159,7 @@ public class FormatQuantityTest extends TestFmwk {
 
   private static void testFormatQuantityExpectedOutput(FormatQuantity rq, String expected) {
     StringBuilder sb = new StringBuilder();
-    FormatQuantity q0 = rq.clone();
+    FormatQuantity q0 = rq.createCopy();
     // Force an accurate double
     q0.roundToInfinity();
     q0.setIntegerFractionLength(1, Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
@@ -181,48 +181,48 @@ public class FormatQuantityTest extends TestFmwk {
       new MathContext(3, RoundingMode.HALF_UP);
 
   private static void testFormatQuantityRounding(FormatQuantity rq0, FormatQuantity rq1) {
-    FormatQuantity q0 = rq0.clone();
-    FormatQuantity q1 = rq1.clone();
+    FormatQuantity q0 = rq0.createCopy();
+    FormatQuantity q1 = rq1.createCopy();
     q0.roundToMagnitude(-1, MATH_CONTEXT_HALF_EVEN);
     q1.roundToMagnitude(-1, MATH_CONTEXT_HALF_EVEN);
     testFormatQuantityBehavior(q0, q1);
 
-    q0 = rq0.clone();
-    q1 = rq1.clone();
+    q0 = rq0.createCopy();
+    q1 = rq1.createCopy();
     q0.roundToMagnitude(-1, MATH_CONTEXT_CEILING);
     q1.roundToMagnitude(-1, MATH_CONTEXT_CEILING);
     testFormatQuantityBehavior(q0, q1);
 
-    q0 = rq0.clone();
-    q1 = rq1.clone();
+    q0 = rq0.createCopy();
+    q1 = rq1.createCopy();
     q0.roundToMagnitude(-1, MATH_CONTEXT_PRECISION);
     q1.roundToMagnitude(-1, MATH_CONTEXT_PRECISION);
     testFormatQuantityBehavior(q0, q1);
   }
 
   private static void testFormatQuantityRoundingInterval(FormatQuantity rq0, FormatQuantity rq1) {
-    FormatQuantity q0 = rq0.clone();
-    FormatQuantity q1 = rq1.clone();
+    FormatQuantity q0 = rq0.createCopy();
+    FormatQuantity q1 = rq1.createCopy();
     q0.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_HALF_EVEN);
     q1.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_HALF_EVEN);
     testFormatQuantityBehavior(q0, q1);
 
-    q0 = rq0.clone();
-    q1 = rq1.clone();
+    q0 = rq0.createCopy();
+    q1 = rq1.createCopy();
     q0.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_CEILING);
     q1.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_CEILING);
     testFormatQuantityBehavior(q0, q1);
   }
 
   private static void testFormatQuantityMath(FormatQuantity rq0, FormatQuantity rq1) {
-    FormatQuantity q0 = rq0.clone();
-    FormatQuantity q1 = rq1.clone();
+    FormatQuantity q0 = rq0.createCopy();
+    FormatQuantity q1 = rq1.createCopy();
     q0.adjustMagnitude(-3);
     q1.adjustMagnitude(-3);
     testFormatQuantityBehavior(q0, q1);
 
-    q0 = rq0.clone();
-    q1 = rq1.clone();
+    q0 = rq0.createCopy();
+    q1 = rq1.createCopy();
     q0.multiplyBy(new BigDecimal("3.14159"));
     q1.multiplyBy(new BigDecimal("3.14159"));
     testFormatQuantityBehavior(q0, q1);
@@ -231,8 +231,8 @@ public class FormatQuantityTest extends TestFmwk {
   private static void testFormatQuantityWithFormats(
       FormatQuantity rq0, FormatQuantity rq1, List<Format> formats) {
     for (Format format : formats) {
-      FormatQuantity q0 = rq0.clone();
-      FormatQuantity q1 = rq1.clone();
+      FormatQuantity q0 = rq0.createCopy();
+      FormatQuantity q1 = rq1.createCopy();
       String s1 = format.format(q0);
       String s2 = format.format(q1);
       assertEquals("Different output from formatter (" + q0 + ", " + q1 + ")", s1, s2);
@@ -240,8 +240,8 @@ public class FormatQuantityTest extends TestFmwk {
   }
 
   private static void testFormatQuantityBehavior(FormatQuantity rq0, FormatQuantity rq1) {
-    FormatQuantity q0 = rq0.clone();
-    FormatQuantity q1 = rq1.clone();
+    FormatQuantity q0 = rq0.createCopy();
+    FormatQuantity q1 = rq1.createCopy();
 
     assertEquals("Different sign (" + q0 + ", " + q1 + ")", q0.isNegative(), q1.isNegative());
 
@@ -249,11 +249,6 @@ public class FormatQuantityTest extends TestFmwk {
         "Different fingerprint (" + q0 + ", " + q1 + ")",
         q0.getPositionFingerprint(),
         q1.getPositionFingerprint());
-
-    assertEquals(
-        "Different upper range of digits (" + q0 + ", " + q1 + ")",
-        q0.getUpperDisplayMagnitude(),
-        q1.getUpperDisplayMagnitude());
 
     assertDoubleEquals(
         "Different double values (" + q0 + ", " + q1 + ")", q0.toDouble(), q1.toDouble());
@@ -263,11 +258,19 @@ public class FormatQuantityTest extends TestFmwk {
         q0.toBigDecimal(),
         q1.toBigDecimal());
 
-    int equalityDigits = Math.min(q0.maxRepresentableDigits(), q1.maxRepresentableDigits());
-    for (int m = q0.getUpperDisplayMagnitude(), i = 0;
-        m >= Math.min(q0.getLowerDisplayMagnitude(), q1.getLowerDisplayMagnitude())
-            && i < equalityDigits;
-        m--, i++) {
+    q0.roundToInfinity();
+    q1.roundToInfinity();
+
+    assertEquals(
+        "Different lower display magnitude",
+        q0.getLowerDisplayMagnitude(),
+        q1.getLowerDisplayMagnitude());
+    assertEquals(
+        "Different upper display magnitude",
+        q0.getUpperDisplayMagnitude(),
+        q1.getUpperDisplayMagnitude());
+
+    for (int m = q0.getUpperDisplayMagnitude(); m >= q0.getLowerDisplayMagnitude(); m--) {
       assertEquals(
           "Different digit at magnitude " + m + " (" + q0 + ", " + q1 + ")",
           q0.getDigit(m),
@@ -341,6 +344,10 @@ public class FormatQuantityTest extends TestFmwk {
       assertBigDecimalEquals("Failed on append", expected.toString(), fq.toBigDecimal());
       assertNull("Failed health check", fq.checkHealth());
     }
+    fq.appendDigit((byte) 9, 2, false);
+    expected.append("009");
+    assertBigDecimalEquals("Failed on append", expected.toString(), fq.toBigDecimal());
+    assertNull("Failed health check", fq.checkHealth());
   }
 
   @Test

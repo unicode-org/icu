@@ -7,7 +7,6 @@ import java.math.RoundingMode;
 import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.impl.number.Rounder;
-import com.ibm.icu.impl.number.Rounder.IBasicRoundingProperties;
 
 public class SignificantDigitsRounder extends Rounder {
 
@@ -17,7 +16,7 @@ public class SignificantDigitsRounder extends Rounder {
     ENSURE_MINIMUM_SIGNIFICANT
   };
 
-  public static interface IProperties extends IBasicRoundingProperties {
+  public static interface IProperties extends Rounder.IBasicRoundingProperties {
 
     static int DEFAULT_MINIMUM_SIGNIFICANT_DIGITS = -1;
 

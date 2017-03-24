@@ -10,6 +10,9 @@ package com.ibm.icu.text;
 
 import java.math.BigInteger;
 
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
+
 /**
  * <code>DigitList</code> handles the transcoding between numeric values and
  * strings of characters.  It only represents non-negative numbers.  The
@@ -43,7 +46,7 @@ import java.math.BigInteger;
  * @version      1.18 08/12/98
  * @author       Mark Davis, Alan Liu
  * */
-final class DigitList {
+public final class DigitList {
     /**
      * The maximum number of significant digits in an IEEE 754 double, that
      * is, in a Java double.  This must not be increased, or garbage digits
@@ -114,11 +117,11 @@ final class DigitList {
         ensureCapacity(count+1, count);
         digits[count++] = (byte) digit;
     }
-    
+
     public byte getDigitValue(int i) {
         return (byte) (digits[i] - '0');
     }
-    
+
     /**
      * Utility routine to get the value of the digit list
      * If (count == 0) this throws a NumberFormatException, which
@@ -203,7 +206,7 @@ final class DigitList {
             }
             for (int i = n; i < text.length; ++i) {
                 text[i] = '0';
-            } 
+            }
             return new BigInteger(new String(text));
         }
     }
@@ -253,9 +256,9 @@ final class DigitList {
         long scale = (long)count - (long)decimalAt;
         if (scale > 0) {
             int numDigits = count;
-            if (scale > (long)Integer.MAX_VALUE) {
+            if (scale > Integer.MAX_VALUE) {
                 // try to reduce the scale
-                long numShift = scale - (long)Integer.MAX_VALUE;
+                long numShift = scale - Integer.MAX_VALUE;
                 if (numShift < count) {
                     numDigits -= numShift;
                 } else {
@@ -529,9 +532,9 @@ final class DigitList {
         }
     }
 
-    // Value to indicate that rounding was done. 
+    // Value to indicate that rounding was done.
     private boolean didRound = false;
-    
+
     /**
      * Indicates if last digit set was rounded or not.
      * true indicates it was rounded.
@@ -540,7 +543,7 @@ final class DigitList {
     public boolean wasRounded() {
         return didRound;
     }
-    
+
     /**
      * Utility routine to set the value of the digit list from a long
      */
@@ -567,7 +570,7 @@ final class DigitList {
         // be represented by DigitList.
         // [NEW] Faster implementation
         didRound = false;
-        
+
         if (source <= 0) {
             if (source == Long.MIN_VALUE) {
                 decimalAt = count = MAX_LONG_DIGITS;
@@ -580,7 +583,7 @@ final class DigitList {
             int left = MAX_LONG_DIGITS;
             int right;
             while (source > 0) {
-                digits[--left] = (byte) (((long) '0') + (source % 10));
+                digits[--left] = (byte) (('0') + (source % 10));
                 source /= 10;
             }
             decimalAt = MAX_LONG_DIGITS-left;
@@ -590,7 +593,7 @@ final class DigitList {
             for (right = MAX_LONG_DIGITS - 1; digits[right] == (byte) '0'; --right) {}
             count = right - left + 1;
             System.arraycopy(digits, left, digits, 0, count);
-        }        
+        }
         if (maximumDigits > 0) round(maximumDigits);
     }
 
@@ -607,7 +610,7 @@ final class DigitList {
 
         count = decimalAt = stringDigits.length();
         didRound = false;
-        
+
         // Don't copy trailing zeros
         while (count > 1 && stringDigits.charAt(count - 1) == '0') --count;
 
@@ -797,7 +800,8 @@ final class DigitList {
     /**
      * equality test between two digit lists.
      */
-    public boolean equals(Object obj) {
+    @Override
+  public boolean equals(Object obj) {
         if (this == obj)                      // quick check
             return true;
         if (!(obj instanceof DigitList))         // (1) same object?
@@ -815,7 +819,8 @@ final class DigitList {
     /**
      * Generates the hash code for the digit list.
      */
-    public int hashCode() {
+    @Override
+  public int hashCode() {
         int hashcode = decimalAt;
 
         for (int i = 0; i < count; i++)
@@ -824,7 +829,8 @@ final class DigitList {
         return hashcode;
     }
 
-    public String toString()
+    @Override
+  public String toString()
     {
         if (isZero()) return "0";
         StringBuilder buf = new StringBuilder("0.");

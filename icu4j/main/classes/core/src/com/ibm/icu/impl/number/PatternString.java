@@ -780,7 +780,7 @@ public class PatternString {
             result.totalIntegerDigits += 1;
             result.minimumIntegerDigits += 1;
             // no change to result.minimumSignificantDigits
-            result.maximumSignificantDigits += (seenSignificantDigitMarker ? 1 : 0);
+            // no change to result.maximumSignificantDigits
             result.rounding.appendDigit((byte) (state.peek() - '0'), 0, true);
             break;
 

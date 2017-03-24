@@ -114,7 +114,7 @@ public class NumberStringBuilderTest {
         assertEquals(fields[2], NumberFormat.Field.INTEGER);
       }
 
-      sb.append(sb.clone());
+      sb.append(new NumberStringBuilder(sb));
       sb.append(sb.toCharArray(), sb.toFieldArray());
       int numNull = 0;
       int numCurr = 0;

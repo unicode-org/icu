@@ -355,8 +355,8 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
     @Override
     public boolean equals(Object _other) {
       if (_other == null) return false;
-      if (this == _other) return true;
       CompactDecimalFingerprint other = (CompactDecimalFingerprint) _other;
+      if (this == other) return true;
       if (compactStyle != other.compactStyle) return false;
       if (compactType != other.compactType) return false;
       if (currencySymbol != other.currencySymbol) {

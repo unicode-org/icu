@@ -620,6 +620,7 @@ public class Parse {
     // TODO(sffc): Remove this field if it is not necessary.
     @SuppressWarnings("unused")
     SeparatorType groupingType2;
+
     TextTrieMap<Byte> digitTrie;
     Set<AffixHolder> affixHolders = new HashSet<AffixHolder>();
 
@@ -824,14 +825,15 @@ public class Parse {
         new ConcurrentHashMap<ULocale, CurrencyAffixPatterns>();
 
     static void addToState(ULocale uloc, ParserState state) {
-      if (!currencyAffixPatterns.containsKey(uloc)) {
+      CurrencyAffixPatterns value = currencyAffixPatterns.get(uloc);
+      if (value == null) {
         // There can be multiple threads computing the same CurrencyAffixPatterns simultaneously,
         // but that scenario is harmless.
-        CurrencyAffixPatterns value = new CurrencyAffixPatterns(uloc);
-        currencyAffixPatterns.put(uloc, value);
+        CurrencyAffixPatterns newValue = new CurrencyAffixPatterns(uloc);
+        currencyAffixPatterns.putIfAbsent(uloc, newValue);
+        value = currencyAffixPatterns.get(uloc);
       }
-      CurrencyAffixPatterns instance = currencyAffixPatterns.get(uloc);
-      state.affixHolders.addAll(instance.set);
+      state.affixHolders.addAll(value.set);
     }
 
     private CurrencyAffixPatterns(ULocale uloc) {

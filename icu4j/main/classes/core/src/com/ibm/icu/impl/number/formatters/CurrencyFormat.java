@@ -93,8 +93,6 @@ public class CurrencyFormat {
      */
     @Deprecated
     public IProperties setCurrencyPluralInfo(CurrencyPluralInfo currencyPluralInfo);
-
-    public IProperties clone();
   }
 
   public static interface IProperties

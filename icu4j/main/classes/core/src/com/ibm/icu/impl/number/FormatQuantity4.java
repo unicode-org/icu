@@ -18,7 +18,7 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
 
   private long bcdLong = 0L;
 
-  private boolean usingBytes = false;;
+  private boolean usingBytes = false;
 
   @Override
   public int maxRepresentableDigits() {
@@ -281,7 +281,8 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
   }
 
   private void ensureCapacity(int capacity) {
-    if (bcdBytes == null && capacity > 0) {
+    if (capacity == 0) return;
+    if (bcdBytes == null) {
       bcdBytes = new byte[capacity];
     } else if (bcdBytes.length < capacity) {
       byte[] bcd1 = new byte[capacity * 2];

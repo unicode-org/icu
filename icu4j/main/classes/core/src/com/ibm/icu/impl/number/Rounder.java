@@ -201,7 +201,8 @@ public abstract class Rounder extends Format.BeforeFormat {
    * @return The multiplier that was chosen to best fit the input.
    */
   public int chooseMultiplierAndApply(FormatQuantity input, MultiplierGenerator mg) {
-    FormatQuantity copy = input.clone();
+    // TODO: Avoid the object creation here.
+    FormatQuantity copy = input.createCopy();
 
     int magnitude = input.getMagnitude();
     int multiplier = mg.getMultiplier(magnitude);

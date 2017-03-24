@@ -29,6 +29,14 @@ public class NumberStringBuilder implements CharSequence {
     length = 0;
   }
 
+  public NumberStringBuilder(NumberStringBuilder source) {
+    this(source.chars.length);
+    zero = source.zero;
+    length = source.length;
+    System.arraycopy(source.chars, zero, chars, zero, length);
+    System.arraycopy(source.fields, zero, fields, zero, length);
+  }
+
   @Override
   public int length() {
     return length;
@@ -155,7 +163,9 @@ public class NumberStringBuilder implements CharSequence {
    *     NumberStringBuilder}.
    */
   public int insert(int index, NumberStringBuilder other) {
-    assert this != other;
+    if (this == other) {
+      throw new IllegalArgumentException("Cannot call insert/append on myself");
+    }
     int count = other.length;
     if (count == 0) return 0; // nothing to insert
     int position = prepareForInsert(index, count);
@@ -220,7 +230,7 @@ public class NumberStringBuilder implements CharSequence {
     if (start < 0 || end > length || end < start) {
       throw new IndexOutOfBoundsException();
     }
-    NumberStringBuilder other = this.clone();
+    NumberStringBuilder other = new NumberStringBuilder(this);
     other.zero = zero + start;
     other.length = end - start;
     return other;
@@ -391,16 +401,6 @@ public class NumberStringBuilder implements CharSequence {
       as.addAttribute(current, current, currentStart, length);
     }
     return as.getIterator();
-  }
-
-  @Override
-  public NumberStringBuilder clone() {
-    NumberStringBuilder other = new NumberStringBuilder(chars.length);
-    other.zero = zero;
-    other.length = length;
-    System.arraycopy(chars, zero, other.chars, zero, length);
-    System.arraycopy(fields, zero, other.fields, zero, length);
-    return other;
   }
 
   public NumberStringBuilder clear() {
