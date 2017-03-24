@@ -99,6 +99,7 @@ public final class FormatQuantity3 extends FormatQuantityBCD {
 
   @Override
   protected void readIntToBcd(int n) {
+    assert n != 0;
     int i = 0;
     for (; n != 0L; n /= 10L, i++) {
       bcd[i] = (byte) (n % 10);
@@ -112,6 +113,7 @@ public final class FormatQuantity3 extends FormatQuantityBCD {
 
   @Override
   protected void readLongToBcd(long n) {
+    assert n != 0;
     if (n == Long.MIN_VALUE) {
       // Can't consume via the normal path.
       System.arraycopy(LONG_MIN_VALUE, 0, bcd, 0, LONG_MIN_VALUE.length);
@@ -129,6 +131,7 @@ public final class FormatQuantity3 extends FormatQuantityBCD {
 
   @Override
   protected void readBigIntegerToBcd(BigInteger n) {
+    assert n.signum() != 0;
     int i = 0;
     for (; n.signum() != 0; i++) {
       BigInteger[] temp = n.divideAndRemainder(BigInteger.TEN);

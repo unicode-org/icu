@@ -81,8 +81,8 @@ public class ConstantAffixModifier extends Modifier.BaseModifier implements Affi
   public boolean contentEquals(CharSequence _prefix, CharSequence _suffix) {
     if (_prefix == null && !prefix.isEmpty()) return false;
     if (_suffix == null && !suffix.isEmpty()) return false;
-    if (prefix.length() != _prefix.length()) return false;
-    if (suffix.length() != _suffix.length()) return false;
+    if (_prefix != null && prefix.length() != _prefix.length()) return false;
+    if (_suffix != null && suffix.length() != _suffix.length()) return false;
     for (int i = 0; i < prefix.length(); i++) {
       if (prefix.charAt(i) != _prefix.charAt(i)) return false;
     }

@@ -457,8 +457,11 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
       for (; i <= -22; i += 22) n /= 1e22;
       n /= DOUBLE_MULTIPLIERS[-i];
     }
-    _setToLong(Math.round(n));
-    scale -= fracLength;
+    long result = Math.round(n);
+    if (result != 0) {
+      _setToLong(result);
+      scale -= fracLength;
+    }
   }
 
   /**

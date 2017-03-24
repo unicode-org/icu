@@ -155,6 +155,7 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
 
   @Override
   protected void readIntToBcd(int n) {
+    assert n != 0;
     // ints always fit inside the long implementation.
     long result = 0L;
     int i = 16;
@@ -169,6 +170,7 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
 
   @Override
   protected void readLongToBcd(long n) {
+    assert n != 0;
     if (n >= 10000000000000000L) {
       ensureCapacity();
       int i = 0;
@@ -194,6 +196,7 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
 
   @Override
   protected void readBigIntegerToBcd(BigInteger n) {
+    assert n.signum() != 0;
     ensureCapacity(); // allocate initial byte array
     int i = 0;
     for (; n.signum() != 0; i++) {
