@@ -1683,25 +1683,30 @@ void RBBITest::TestUnicodeFiles() {
 // See ticket #7270.
 
 UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *fileName) {
-    static const UChar *badTestCases[] = {                     // Line Numbers from Unicode 7.0.0 file.
-        u"\u200B\u0020}",   // Line 5198
-        u"\u200B\u0020)",   // Line 5202
-        u"\u200B\u0020!",   // Line 5214
-        u"\u200B\u0020,",   // Line 5246
-        u"\u200B\u0020/",   // Line 5298
-        u"\u200B\u0020\u2060"    // Line 5302
-    };
-    if (strcmp(fileName, "LineBreakTest.txt") != 0) {
-        return FALSE;
-    }
+    static struct TestCase {
+        const char *fFileName;
+        const UChar *fString;
+    } badTestCases[] = {                                // Line Numbers from Unicode 7.0.0 file.
+        {"LineBreakTest.txt", u"\u200B\u0020}"},        // Line 5198
+        {"LineBreakTest.txt", u"\u200B\u0020)"},        // Line 5202
+        {"LineBreakTest.txt", u"\u200B\u0020!"},        // Line 5214
+        {"LineBreakTest.txt", u"\u200B\u0020,"},        // Line 5246
+        {"LineBreakTest.txt", u"\u200B\u0020/"},        // Line 5298
+        {"LineBreakTest.txt", u"\u200B\u0020\u2060"},   // Line 5302
+                                                        // Line Numbers from pre-release verion of GraphemeBreakTest-10.0.0.txt
+        {"GraphemeBreakTest.txt", u"\u200D\u2640"},     // Line 656, old GB 11 test ZWJ x GAZ
+        {"GraphemeBreakTest.txt", u"\u200D\U0001F466"}, // Line 658, old GB 11 test ZWJ x EBG
+        {"GraphemeBreakTest.txt", u"\u200D\U0001F466\U0001F3FB"}, // Line 842, old GB 11 test ZWJ x EBG x EModifier
 
-#if ((U_PLATFORM == U_PF_OS390) || (U_PLATFORM == U_PF_AIX)) && (U_CPLUSPLUS_VERSION < 11)
+                                                        // Line Numbers from pre-release verion of WordBreakTest-10.0.0.txt
+        {"WordBreakTest.txt", u"\u200D\u261D"},         // Line 1356, ZWJ x EmojiNRK
+        {"WordBreakTest.txt", u"\u200D\U0001F3FB"},     // Line 1358, ZWJ x EmojiNRK
+    };
+
     for (int n=0; n<UPRV_LENGTHOF(badTestCases); n++) {
-      const UChar *badCase = badTestCases[n];
-#else
-      for (const UChar *badCase: badTestCases) {
-#endif
-        if (testCase == UnicodeString(badCase)) {
+        const TestCase &badCase = badTestCases[n];
+        if (!strcmp(fileName, badCase.fFileName) &&
+                testCase == UnicodeString(badCase.fString)) {
             return logKnownIssue("7270");
         }
     }
@@ -2043,7 +2048,7 @@ RBBICharMonkey::RBBICharMonkey() {
     fHangulSet->addAll(*fLVSet);
     fHangulSet->addAll(*fLVTSet);
 
-    fEmojiBaseSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EB}\\U0001F3C2\\U0001F3C7\\U0001F3CC\\U0001F46A-\\U0001F46D\\U0001F46F\\U0001F574\\U0001F6CC]"), status);
+    fEmojiBaseSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EB}]"), status);
     fEmojiModifierSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EM}]"), status);
     fExtendedPictSet  = new UnicodeSet(gExtended_Pict, status);
     fEBGSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EBG}]"), status);
@@ -2325,8 +2330,7 @@ RBBIWordMonkey::RBBIWordMonkey()
     fExtendNumLetSet  = new UnicodeSet(u"[\\p{Word_Break = ExtendNumLet}]", status);
     fExtendSet        = new UnicodeSet(u"[\\p{Word_Break = Extend}]",       status);
 
-    fEBaseSet         = new UnicodeSet(
-            u"[\\p{Word_Break = EB}\\U0001F3C2\\U0001F3C7\\U0001F3CC\\U0001F46A-\\U0001F46D\\U0001F46F\\U0001F574\\U0001F6CC]", status);
+    fEBaseSet         = new UnicodeSet(u"[\\p{Word_Break = EB}]",           status);
     fEBGSet           = new UnicodeSet(u"[\\p{Word_Break = EBG}]",          status);
     fEModifierSet     = new UnicodeSet(u"[\\p{Word_Break = EM}]",           status);
     fZWJSet           = new UnicodeSet(u"[\\p{Word_Break = ZWJ}]",          status);
@@ -4757,32 +4761,21 @@ void RBBITest::TestEmoji() {
                 break;
             }
         }
-        if (testString.length() > 1) {
-            charBreaks->setText(testString);
-            charBreaks->first();
-            int32_t firstBreak = charBreaks->next();
-            if (testString.length() != firstBreak) {
-                if (logKnownIssue("13058", "%s:%d", __FILE__, __LINE__)) {
-                    continue;
+        // Local function check()
+        auto check = [=](const char *breakType, BreakIterator *bi) -> void {
+            if (testString.length() > 1) {
+                bi->setText(testString);
+                bi->first();
+                int32_t firstBreak = bi->next();
+                if (testString.length() != firstBreak) {
+                    errln("%s:%d checking %s. emoji-test.txt:%d Error, uexpected break at offset %d",
+                            __FILE__, __LINE__, breakType, lineNumber, firstBreak);
                 }
-                errln("%s:%d emoji-test.txt:%d Error, uexpected break at offset %d",
-                        __FILE__, __LINE__, lineNumber, firstBreak);
             }
-            wordBreaks->setText(testString);
-            wordBreaks->first();
-            firstBreak = wordBreaks->next();
-            if (testString.length() != firstBreak) {
-                errln("%s:%d emoji-test.txt:%d Error, uexpected break at offset %d",
-                        __FILE__, __LINE__, lineNumber, firstBreak);
-            }
-            lineBreaks->setText(testString);
-            lineBreaks->first();
-            firstBreak = lineBreaks->next();
-            if (testString.length() != firstBreak) {
-                errln("%s:%d emoji-test.txt:%d Error, uexpected break at offset %d",
-                        __FILE__, __LINE__, lineNumber, firstBreak);
-            }
-        }
+        };
+        check("charBreaks", charBreaks.getAlias());
+        check("wordBreaks", wordBreaks.getAlias());
+        check("lineBreaks", lineBreaks.getAlias());
     }
 }
 

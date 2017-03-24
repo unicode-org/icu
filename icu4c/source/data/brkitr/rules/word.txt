@@ -10,6 +10,7 @@
 #      See Unicode Standard Annex #29.
 #      These rules are based on UAX #29 Revision 29 for Unicode Version 9.0
 #      with additions for Emoji Sequences from https://goo.gl/cluFCn
+#      Plus additional characters introduces with Emoji 5, http://www.unicode.org/reports/tr51/proposed.html
 #
 # Note:  Updates to word.txt will usually need to be merged into
 #        word_POSIX.txt also.
@@ -44,7 +45,7 @@ $MidLetter          = [\p{Word_Break = MidLetter}];
 $MidNum             = [\p{Word_Break = MidNum}];
 $Numeric            = [\p{Word_Break = Numeric}];
 $ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
-$E_Base             = [\p{Word_Break = EB}\U0001F3C2\U0001F3C7\U0001F3CC\U0001F46A-\U0001F46D\U0001F46F\U0001F574\U0001F6CC];
+$E_Base             = [\p{Word_Break = EB}];
 $E_Modifier         = [\p{Word_Break = EM}];
 
 # Data for Extended Pictographic scraped from CLDR common/properties/ExtendedPictographic.txt, r13267

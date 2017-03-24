@@ -9,7 +9,8 @@
 #   ICU Character Break Rules, also known as Grapheme Cluster Boundaries
 #      See Unicode Standard Annex #29.
 #      These rules are based on UAX #29 Revision 29 for Unicode Version 9.0
-#      plus proposed updates for Emoji 4.0 from https://goo.gl/cluFCn
+#      Plus revisions to rule GB 11 from http://unicode.org/cldr/trac/ticket/10088
+#      Plus additional characters introduces with Emoji 5, http://www.unicode.org/reports/tr51/proposed.html
 
 #
 #  Character Class Definitions.
@@ -35,7 +36,7 @@ $LVT         = [\p{Grapheme_Cluster_Break = LVT}];
 
 # Emoji defintions
 
-$E_Base      = [[\p{Grapheme_Cluster_Break = EB}] \U0001F3C2\U0001F3C7\U0001F3CC\U0001F46A-\U0001F46D\U0001F46F\U0001F574\U0001F6CC];
+$E_Base      = [\p{Grapheme_Cluster_Break = EB}];
 $E_Modifier  = [\p{Grapheme_Cluster_Break = EM}];
 
 # Data for Extended Pictographic scraped from CLDR common/properties/ExtendedPictographic.txt, r13267
