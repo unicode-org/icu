@@ -885,7 +885,7 @@ public class DecimalFormat extends NumberFormat {
    * number, and rounds to the closest even number if at the midpoint.
    *
    * <p>For more detail on rounding modes, see <a
-   * href="​http://userguide.icu-project.org/formatparse/numbers/rounding-modes">the ICU User
+   * href="http://userguide.icu-project.org/formatparse/numbers/rounding-modes">the ICU User
    * Guide</a>.
    *
    * <p>For backwards compatibility, the rounding mode is specified as an int argument, which can be
