@@ -4762,21 +4762,30 @@ void RBBITest::TestEmoji() {
                 break;
             }
         }
-        // Local function check()
-        auto check = [=](const char *breakType, BreakIterator *bi) -> void {
-            if (testString.length() > 1) {
-                bi->setText(testString);
-                bi->first();
-                int32_t firstBreak = bi->next();
-                if (testString.length() != firstBreak) {
-                    errln("%s:%d checking %s. emoji-test.txt:%d Error, uexpected break at offset %d",
-                            __FILE__, __LINE__, breakType, lineNumber, firstBreak);
-                }
+
+        if (testString.length() > 1) {
+            charBreaks->setText(testString);
+            charBreaks->first();
+            int32_t firstBreak = charBreaks->next();
+            if (testString.length() != firstBreak) {
+                errln("%s:%d  emoji-test.txt:%d Error, uexpected break at offset %d",
+                        __FILE__, __LINE__, lineNumber, firstBreak);
             }
-        };
-        check("charBreaks", charBreaks.getAlias());
-        check("wordBreaks", wordBreaks.getAlias());
-        check("lineBreaks", lineBreaks.getAlias());
+            wordBreaks->setText(testString);
+            wordBreaks->first();
+            firstBreak = wordBreaks->next();
+            if (testString.length() != firstBreak) {
+                errln("%s:%d  emoji-test.txt:%d Error, uexpected break at offset %d",
+                        __FILE__, __LINE__, lineNumber, firstBreak);
+            }
+            lineBreaks->setText(testString);
+            lineBreaks->first();
+            firstBreak = lineBreaks->next();
+            if (testString.length() != firstBreak) {
+                errln("%s:%d  emoji-test.txt:%d Error, uexpected break at offset %d",
+                        __FILE__, __LINE__, lineNumber, firstBreak);
+            }
+        }
     }
 }
 
