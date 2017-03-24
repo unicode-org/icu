@@ -188,33 +188,25 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         pat.setPositivePrefix("+");
         posPrefix = pat.getPositivePrefix();
         logln("Positive prefix (should be +): " + posPrefix);
-        if(posPrefix != "+") {
-            errln("ERROR: setPositivePrefix() failed");
-        }
+        assertEquals("ERROR: setPositivePrefix() failed", "+", posPrefix);
 
         String negPrefix;
         pat.setNegativePrefix("-");
         negPrefix = pat.getNegativePrefix();
         logln("Negative prefix (should be -): " + negPrefix);
-        if(negPrefix != "-") {
-            errln("ERROR: setNegativePrefix() failed");
-        }
+        assertEquals("ERROR: setNegativePrefix() failed", "-", negPrefix);
 
         String posSuffix;
         pat.setPositiveSuffix("_");
         posSuffix = pat.getPositiveSuffix();
         logln("Positive suffix (should be _): " + posSuffix);
-        if(posSuffix != "_") {
-            errln("ERROR: setPositiveSuffix() failed");
-        }
+        assertEquals("ERROR: setPositiveSuffix() failed", "_", posSuffix);
 
         String negSuffix;
         pat.setNegativeSuffix("~");
         negSuffix = pat.getNegativeSuffix();
         logln("Negative suffix (should be ~): " + negSuffix);
-        if(negSuffix != "~") {
-            errln("ERROR: setNegativeSuffix() failed");
-        }
+        assertEquals("ERROR: setNegativeSuffix() failed", "~", negSuffix);
 
         long multiplier = 0;
         pat.setMultiplier(8);
