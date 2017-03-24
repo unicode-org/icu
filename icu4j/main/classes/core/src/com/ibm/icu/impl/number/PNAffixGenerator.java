@@ -52,6 +52,8 @@ public class PNAffixGenerator {
   private NumberStringBuilder sb2 = new NumberStringBuilder();
   private NumberStringBuilder sb3 = new NumberStringBuilder();
   private NumberStringBuilder sb4 = new NumberStringBuilder();
+  private NumberStringBuilder sb5 = new NumberStringBuilder();
+  private NumberStringBuilder sb6 = new NumberStringBuilder();
 
   /**
    * Generates modifiers using default currency symbols.
@@ -110,7 +112,7 @@ public class PNAffixGenerator {
       PositiveNegativeAffixFormat.IProperties properties) {
 
     // Use a different code path for handling affixes with "always show plus sign"
-    if (properties.getPlusSignAlwaysShown()) {
+    if (properties.getSignAlwaysShown()) {
       return getModifiersWithPlusSign(symbols, curr1, curr2, curr3, properties);
     }
 
@@ -213,74 +215,57 @@ public class PNAffixGenerator {
 
   private void setPositiveResult(
       NumberStringBuilder prefix, NumberStringBuilder suffix, IProperties properties) {
-    if (properties.getPositivePrefix() != null || properties.getPositiveSuffix() != null) {
-      // Override with custom affixes
-      String _prefix = properties.getPositivePrefix();
-      String _suffix = properties.getPositiveSuffix();
-      if (_prefix == null) _prefix = "";
-      if (_suffix == null) _suffix = "";
-      if (_prefix.length() == 0 && _suffix.length() == 0) {
-        resultInstance.positive = ConstantAffixModifier.EMPTY;
-        return;
-      }
-      if (resultInstance.positive != null
-          && (resultInstance.positive instanceof ConstantAffixModifier)
-          && ((ConstantAffixModifier) resultInstance.positive).contentEquals(_prefix, _suffix)) {
-        // Use the cached modifier
-        return;
-      }
-      resultInstance.positive =
-          new ConstantAffixModifier(_prefix, _suffix, null, false);
-    } else {
-      // Use pattern affixes
-      if (prefix.length() == 0 && suffix.length() == 0) {
-        resultInstance.positive = ConstantAffixModifier.EMPTY;
-        return;
-      }
-      if (resultInstance.positive != null
-          && (resultInstance.positive instanceof ConstantMultiFieldModifier)
-          && ((ConstantMultiFieldModifier) resultInstance.positive).contentEquals(prefix, suffix)) {
-        // Use the cached modifier
-        return;
-      }
-      resultInstance.positive = new ConstantMultiFieldModifier(prefix, suffix, false);
+    // Override with custom affixes. We need to put these into NumberStringBuilders so that they
+    // have the same datatype as the incoming prefix and suffix (important when testing for field
+    // equality in contentEquals).
+    // TODO: It is a little inefficient that we copy String -> NumberStringBuilder -> Modifier.
+    // Consider re-working the logic so that fewer copies are required.
+    String _prefix = properties.getPositivePrefix();
+    String _suffix = properties.getPositiveSuffix();
+    if (_prefix != null) {
+      prefix = sb5.clear();
+      prefix.append(_prefix, null);
     }
+    if (_suffix != null) {
+      suffix = sb6.clear();
+      suffix.append(_suffix, null);
+    }
+    if (prefix.length() == 0 && suffix.length() == 0) {
+      resultInstance.positive = ConstantAffixModifier.EMPTY;
+      return;
+    }
+    if (resultInstance.positive != null
+        && (resultInstance.positive instanceof ConstantMultiFieldModifier)
+        && ((ConstantMultiFieldModifier) resultInstance.positive).contentEquals(prefix, suffix)) {
+      // Use the cached modifier
+      return;
+    }
+    resultInstance.positive = new ConstantMultiFieldModifier(prefix, suffix, false);
   }
 
   private void setNegativeResult(
       NumberStringBuilder prefix, NumberStringBuilder suffix, IProperties properties) {
-    if (properties.getNegativePrefix() != null || properties.getNegativeSuffix() != null) {
-      // Override with custom affixes
-      String _prefix = properties.getNegativePrefix();
-      String _suffix = properties.getNegativeSuffix();
-      if (_prefix == null) _prefix = "";
-      if (_suffix == null) _suffix = "";
-      if (_prefix.length() == 0 && _suffix.length() == 0) {
-        resultInstance.negative = ConstantAffixModifier.EMPTY;
-        return;
-      }
-      if (resultInstance.negative != null
-          && (resultInstance.negative instanceof ConstantAffixModifier)
-          && ((ConstantAffixModifier) resultInstance.negative).contentEquals(_prefix, _suffix)) {
-        // Use the cached modifier
-        return;
-      }
-      resultInstance.negative =
-          new ConstantAffixModifier(_prefix, _suffix, null, false);
-    } else {
-      // Use pattern affixes
-      if (prefix.length() == 0 && suffix.length() == 0) {
-        resultInstance.negative = ConstantAffixModifier.EMPTY;
-        return;
-      }
-      if (resultInstance.negative != null
-          && (resultInstance.negative instanceof ConstantMultiFieldModifier)
-          && ((ConstantMultiFieldModifier) resultInstance.negative).contentEquals(prefix, suffix)) {
-        // Use the cached modifier
-        return;
-      }
-      resultInstance.negative = new ConstantMultiFieldModifier(prefix, suffix, false);
+    String _prefix = properties.getNegativePrefix();
+    String _suffix = properties.getNegativeSuffix();
+    if (_prefix != null) {
+      prefix = sb5.clear();
+      prefix.append(_prefix, null);
     }
+    if (_suffix != null) {
+      suffix = sb6.clear();
+      suffix.append(_suffix, null);
+    }
+    if (prefix.length() == 0 && suffix.length() == 0) {
+      resultInstance.negative = ConstantAffixModifier.EMPTY;
+      return;
+    }
+    if (resultInstance.negative != null
+        && (resultInstance.negative instanceof ConstantMultiFieldModifier)
+        && ((ConstantMultiFieldModifier) resultInstance.negative).contentEquals(prefix, suffix)) {
+      // Use the cached modifier
+      return;
+    }
+    resultInstance.negative = new ConstantMultiFieldModifier(prefix, suffix, false);
   }
 
   /** A null-safe equals method for CharSequences. */

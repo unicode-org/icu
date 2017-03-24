@@ -726,7 +726,7 @@ public class Parse {
       AffixHolder ps = fromPropertiesPositiveString(properties);
       AffixHolder ns = fromPropertiesNegativeString(properties);
       if (pp == null && ps == null) {
-        if (properties.getPlusSignAlwaysShown()) {
+        if (properties.getSignAlwaysShown()) {
           state.affixHolders.add(DEFAULT_POSITIVE);
         } else {
           state.affixHolders.add(EMPTY_POSITIVE);

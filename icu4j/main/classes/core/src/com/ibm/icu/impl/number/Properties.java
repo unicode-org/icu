@@ -28,9 +28,9 @@ import com.ibm.icu.impl.number.formatters.ScientificFormat;
 import com.ibm.icu.impl.number.rounders.IncrementRounder;
 import com.ibm.icu.impl.number.rounders.MagnitudeRounder;
 import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
-import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder.SignificantDigitsMode;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
+import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -106,7 +106,6 @@ public class Properties
   private transient boolean parseIntegerOnly;
   private transient ParseMode parseMode;
   private transient boolean parseToBigDecimal;
-  private transient boolean plusSignAlwaysShown;
   private transient String positivePrefix;
   private transient String positivePrefixPattern;
   private transient String positiveSuffix;
@@ -114,6 +113,7 @@ public class Properties
   private transient BigDecimal roundingIncrement;
   private transient RoundingMode roundingMode;
   private transient int secondaryGroupingSize;
+  private transient boolean signAlwaysShown;
   private transient SignificantDigitsMode significantDigitsMode;
 
   /*--------------------------------------------------------------------------------------------+/
@@ -164,7 +164,6 @@ public class Properties
     parseMode = DEFAULT_PARSE_MODE;
     parseNoExponent = DEFAULT_PARSE_NO_EXPONENT;
     parseToBigDecimal = DEFAULT_PARSE_TO_BIG_DECIMAL;
-    plusSignAlwaysShown = DEFAULT_PLUS_SIGN_ALWAYS_SHOWN;
     positivePrefix = DEFAULT_POSITIVE_PREFIX;
     positivePrefixPattern = DEFAULT_POSITIVE_PREFIX_PATTERN;
     positiveSuffix = DEFAULT_POSITIVE_SUFFIX;
@@ -172,6 +171,7 @@ public class Properties
     roundingIncrement = DEFAULT_ROUNDING_INCREMENT;
     roundingMode = DEFAULT_ROUNDING_MODE;
     secondaryGroupingSize = DEFAULT_SECONDARY_GROUPING_SIZE;
+    signAlwaysShown = DEFAULT_SIGN_ALWAYS_SHOWN;
     significantDigitsMode = DEFAULT_SIGNIFICANT_DIGITS_MODE;
     return this;
   }
@@ -211,7 +211,6 @@ public class Properties
     parseMode = other.parseMode;
     parseNoExponent = other.parseNoExponent;
     parseToBigDecimal = other.parseToBigDecimal;
-    plusSignAlwaysShown = other.plusSignAlwaysShown;
     positivePrefix = other.positivePrefix;
     positivePrefixPattern = other.positivePrefixPattern;
     positiveSuffix = other.positiveSuffix;
@@ -219,6 +218,7 @@ public class Properties
     roundingIncrement = other.roundingIncrement;
     roundingMode = other.roundingMode;
     secondaryGroupingSize = other.secondaryGroupingSize;
+    signAlwaysShown = other.signAlwaysShown;
     significantDigitsMode = other.significantDigitsMode;
     return this;
   }
@@ -259,7 +259,6 @@ public class Properties
     eq = eq && _equalsHelper(parseMode, other.parseMode);
     eq = eq && _equalsHelper(parseNoExponent, other.parseNoExponent);
     eq = eq && _equalsHelper(parseToBigDecimal, other.parseToBigDecimal);
-    eq = eq && _equalsHelper(plusSignAlwaysShown, other.plusSignAlwaysShown);
     eq = eq && _equalsHelper(positivePrefix, other.positivePrefix);
     eq = eq && _equalsHelper(positivePrefixPattern, other.positivePrefixPattern);
     eq = eq && _equalsHelper(positiveSuffix, other.positiveSuffix);
@@ -267,6 +266,7 @@ public class Properties
     eq = eq && _equalsHelper(roundingIncrement, other.roundingIncrement);
     eq = eq && _equalsHelper(roundingMode, other.roundingMode);
     eq = eq && _equalsHelper(secondaryGroupingSize, other.secondaryGroupingSize);
+    eq = eq && _equalsHelper(signAlwaysShown, other.signAlwaysShown);
     eq = eq && _equalsHelper(significantDigitsMode, other.significantDigitsMode);
     return eq;
   }
@@ -321,7 +321,6 @@ public class Properties
     hashCode ^= _hashCodeHelper(parseMode);
     hashCode ^= _hashCodeHelper(parseNoExponent);
     hashCode ^= _hashCodeHelper(parseToBigDecimal);
-    hashCode ^= _hashCodeHelper(plusSignAlwaysShown);
     hashCode ^= _hashCodeHelper(positivePrefix);
     hashCode ^= _hashCodeHelper(positivePrefixPattern);
     hashCode ^= _hashCodeHelper(positiveSuffix);
@@ -329,6 +328,7 @@ public class Properties
     hashCode ^= _hashCodeHelper(roundingIncrement);
     hashCode ^= _hashCodeHelper(roundingMode);
     hashCode ^= _hashCodeHelper(secondaryGroupingSize);
+    hashCode ^= _hashCodeHelper(signAlwaysShown);
     hashCode ^= _hashCodeHelper(significantDigitsMode);
     return hashCode;
   }
@@ -554,8 +554,8 @@ public class Properties
   }
 
   @Override
-  public boolean getPlusSignAlwaysShown() {
-    return plusSignAlwaysShown;
+  public boolean getSignAlwaysShown() {
+    return signAlwaysShown;
   }
 
   @Override
@@ -860,8 +860,8 @@ public class Properties
   }
 
   @Override
-  public Properties setPlusSignAlwaysShown(boolean plusSignAlwaysShown) {
-    this.plusSignAlwaysShown = plusSignAlwaysShown;
+  public Properties setSignAlwaysShown(boolean signAlwaysShown) {
+    this.signAlwaysShown = signAlwaysShown;
     return this;
   }
 

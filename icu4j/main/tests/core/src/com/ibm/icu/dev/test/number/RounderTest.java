@@ -10,7 +10,7 @@ import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.FormatQuantity4;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
-import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder.SignificantDigitsMode;
+import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 
 public class RounderTest {
 

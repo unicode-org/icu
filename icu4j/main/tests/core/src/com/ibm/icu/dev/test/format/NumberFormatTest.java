@@ -41,11 +41,11 @@ import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
-import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder.SignificantDigitsMode;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.MeasureFormat;
@@ -4833,7 +4833,7 @@ public class NumberFormatTest extends TestFmwk {
         df.setPositiveSuffix("0K");
         df.setNegativeSuffix("0N");
         expect2(df, 123, "1230K");
-        expect2(df, -123, "1230N");
+        expect2(df, -123, "-1230N");
     }
 
     @Test
@@ -5111,6 +5111,13 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void testSetPrefixDefaultSuffix() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
+        df.setPositivePrefix("+");
+        assertEquals("Should have manual plus sign and auto percent sign", "+100%", df.format(1));
+    }
+
+    @Test
     public void testMultiCodePointPaddingInPattern() {
         DecimalFormat df = new DecimalFormat("a*'நி'###0b");
         String result = df.format(12);
@@ -5228,6 +5235,68 @@ public class NumberFormatTest extends TestFmwk {
                 df.parse(inp, actualSensitive);
                 assertEquals("Sensitive, pattern "+p+", input "+i,
                         expectedParsePositions[p*2+1][i], actualSensitive.getIndex());
+            }
+        }
+    }
+
+    @Test
+    public void testPlusSignAlwaysShown() {
+        double[] numbers = {0.012, 5.78, 0, -0.012, -5.78};
+        ULocale[] locs = {new ULocale("en-US"), new ULocale("ar-EG"), new ULocale("es-CL")};
+        String[][][] expecteds = {
+                // en-US
+                {
+                    // decimal
+                    { "+0.012", "+5.78", "+0", "-0.012", "-5.78" },
+                    // currency
+                    { "+$0.01", "+$5.78", "+$0.00", "-$0.01", "-$5.78" }
+                },
+                // ar-EG (interesting because the plus sign string starts with \u061C)
+                {
+                    // decimal
+                    {
+                        "\u061C+\u0660\u066B\u0660\u0661\u0662", // "؜+٠٫٠١٢"
+                        "\u061C+\u0665\u066B\u0667\u0668", // "؜+٥٫٧٨"
+                        "\u061C+\u0660", // "؜+٠"
+                        "\u061C-\u0660\u066B\u0660\u0661\u0662", // "؜-٠٫٠١٢"
+                        "\u061C-\u0665\u066B\u0667\u0668", // "؜-٥٫٧٨"
+                    },
+                    // currency (\062C.\0645.\200F is the currency sign in ar for EGP)
+                    {
+                        "\u061C+\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
+                        "\u061C+\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F",
+                        "\u061C+\u0660\u066B\u0660\u0660\u00A0\u062C.\u0645.\u200F",
+                        "\u061C-\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
+                        "\u061C-\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F"
+                    }
+                },
+                // es-CL (interesting because of position of sign in currency)
+                {
+                    // decimal
+                    { "+0,012", "+5,78", "+0", "-0,012", "-5,78" },
+                    // currency (note: rounding for es-CL's currency, CLP, is 0 fraction digits)
+                    { "$+0", "$+6", "$+0", "$-0", "$-6" }
+                }
+        };
+
+        for (int i=0; i<locs.length; i++) {
+            ULocale loc = locs[i];
+            DecimalFormat df1 = (DecimalFormat) NumberFormat.getNumberInstance(loc);
+            assertFalse("Default should be false", df1.getSignAlwaysShown());
+            df1.setSignAlwaysShown(true);
+            assertTrue("Getter should now return true", df1.getSignAlwaysShown());
+            DecimalFormat df2 = (DecimalFormat) NumberFormat.getCurrencyInstance(loc);
+            assertFalse("Default should be false", df2.getSignAlwaysShown());
+            df2.setSignAlwaysShown(true);
+            assertTrue("Getter should now return true", df2.getSignAlwaysShown());
+            for (int j=0; j<2; j++) {
+                DecimalFormat df = (j == 0) ? df1 : df2;
+                for (int k=0; k<numbers.length; k++) {
+                    double d = numbers[k];
+                    String exp = expecteds[i][j][k];
+                    String act = df.format(d);
+                    assertEquals("Locale " + loc + ", type " + j + ", " + d, exp, act);
+                }
             }
         }
     }
