@@ -614,6 +614,19 @@ public class CompactDecimalFormatTest extends TestFmwk {
     }
 
     @Test
+    public void TestLocaleGroupingForLargeNumbers() {
+        ULocale[] locs = {new ULocale("en"), new ULocale("it"), new ULocale("en_US_POSIX"), new ULocale("en-IN")};
+        String[] expecteds = {"5,800,000T", "5.800.000 Bln", "5800000T", "58,00,000T"};
+        for (int i=0; i<locs.length; i++) {
+            ULocale loc = locs[i];
+            String exp = expecteds[i];
+            CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(loc, CompactStyle.SHORT);
+            String act = cdf.format(5.8e18);
+            assertEquals("Grouping sizes for very large numbers: " + loc, exp, act);
+        }
+    }
+
+    @Test
     public void TestBug12422() {
         CompactDecimalFormat cdf;
         String result;

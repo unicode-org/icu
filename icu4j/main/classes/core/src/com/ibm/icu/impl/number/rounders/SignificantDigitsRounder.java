@@ -7,14 +7,9 @@ import java.math.RoundingMode;
 import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.impl.number.Rounder;
+import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 
 public class SignificantDigitsRounder extends Rounder {
-
-  public static enum SignificantDigitsMode {
-    OVERRIDE_MAXIMUM_FRACTION,
-    RESPECT_MAXIMUM_FRACTION,
-    ENSURE_MINIMUM_SIGNIFICANT
-  };
 
   public static interface IProperties extends Rounder.IBasicRoundingProperties {
 

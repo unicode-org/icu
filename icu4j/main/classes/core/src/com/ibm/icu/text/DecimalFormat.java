@@ -24,7 +24,6 @@ import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
 import com.ibm.icu.impl.number.formatters.PositiveDecimalFormat;
 import com.ibm.icu.impl.number.formatters.ScientificFormat;
 import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
-import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder.SignificantDigitsMode;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
@@ -736,6 +735,34 @@ public class DecimalFormat extends NumberFormat {
    */
   public synchronized void setNegativeSuffix(String suffix) {
     properties.setNegativeSuffix(suffix);
+    refreshFormatter();
+  }
+
+  /**
+   * @return Whether the sign is being shown on positive numbers.
+   * @see #setSignAlwaysShown
+   * @category Affixes
+   * @internal
+   * @deprecated This API is technical preview.
+   */
+  @Deprecated
+  public synchronized boolean getSignAlwaysShown() {
+    // This is not in the exported properties
+    return properties.getSignAlwaysShown();
+  }
+
+  /**
+   * Sets whether to always shown the plus sign ('+' in <em>en</em>) on positive numbers. The rules
+   * in UTS #35 section 3.2.1 will be followed to ensure a locale-aware placement of the sign.
+   *
+   * @param value true to always show a sign; false to hide the sign on positive numbers.
+   * @category Affixes
+   * @internal
+   * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
+   */
+  @Deprecated
+  public synchronized void setSignAlwaysShown(boolean value) {
+    properties.setSignAlwaysShown(value);
     refreshFormatter();
   }
 
@@ -2101,6 +2128,46 @@ public class DecimalFormat extends NumberFormat {
      */
     @Deprecated
     public void set(Properties props);
+  }
+
+  /**
+   * An enum containing the choices for significant digits modes.
+   *
+   * @see #setSignificantDigitsMode
+   * @internal
+   * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
+   */
+  @Deprecated
+  public static enum SignificantDigitsMode {
+    /**
+     * Respect significant digits counts, ignoring the fraction length.
+     *
+     * @see #setSignificantDigitsMode
+     * @internal
+     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
+     */
+    @Deprecated
+    OVERRIDE_MAXIMUM_FRACTION,
+
+    /**
+     * Respect the fraction length, overriding significant digits counts if necessary.
+     *
+     * @see #setSignificantDigitsMode
+     * @internal
+     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
+     */
+    @Deprecated
+    RESPECT_MAXIMUM_FRACTION,
+
+    /**
+     * Respect minimum significant digits, overriding fraction length if necessary.
+     *
+     * @see #setSignificantDigitsMode
+     * @internal
+     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
+     */
+    @Deprecated
+    ENSURE_MINIMUM_SIGNIFICANT
   }
 
   /**
