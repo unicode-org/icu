@@ -233,7 +233,7 @@ public class DecimalFormat extends NumberFormat {
    * Custom serialization: save property bag and symbols; the formatter object can be re-created
    * from just that amount of information.
    */
-  private void writeObject(ObjectOutputStream oos) throws IOException {
+  private synchronized void writeObject(ObjectOutputStream oos) throws IOException {
     // ICU 59 custom serialization.
     // Write class metadata and serialVersionOnStream field:
     oos.defaultWriteObject();
@@ -498,14 +498,6 @@ public class DecimalFormat extends NumberFormat {
     return result;
   }
 
-  private static final ThreadLocal<Properties> threadLocalCurrencyProperties =
-      new ThreadLocal<Properties>() {
-        @Override
-        protected Properties initialValue() {
-          return new Properties();
-        }
-      };
-
   /**
    * {@inheritDoc}
    *
@@ -515,7 +507,7 @@ public class DecimalFormat extends NumberFormat {
   public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
     // TODO: This is ugly (although not as ugly as it was in ICU 58).
     // Currency should be a free parameter, not in property bag. Fix in ICU 60.
-    Properties cprops = threadLocalCurrencyProperties.get();
+    Properties cprops = threadLocalProperties.get();
     SingularFormat fmt = null;
     synchronized (this) {
       // Use the pre-compiled formatter if possible.  Otherwise, copy the properties
@@ -544,8 +536,12 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public Number parse(String text, ParsePosition parsePosition) {
+    Properties pprops = threadLocalProperties.get();
+    synchronized (this) {
+      pprops.copyFrom(properties);
+    }
     // Backwards compatibility: use currency parse mode if this is a currency instance
-    Number result = Parse.parse(text, parsePosition, properties, symbols);
+    Number result = Parse.parse(text, parsePosition, pprops, symbols);
     // Backwards compatibility: return com.ibm.icu.math.BigDecimal
     if (result instanceof java.math.BigDecimal) {
       result = new com.ibm.icu.math.BigDecimal((java.math.BigDecimal) result);
@@ -1711,7 +1707,7 @@ public class DecimalFormat extends NumberFormat {
    * @category Currency
    * @stable ICU 4.2
    */
-  public CurrencyPluralInfo getCurrencyPluralInfo() {
+  public synchronized CurrencyPluralInfo getCurrencyPluralInfo() {
     // CurrencyPluralInfo also is not exported.
     return properties.getCurrencyPluralInfo();
   }
@@ -1727,7 +1723,7 @@ public class DecimalFormat extends NumberFormat {
    * @category Currency
    * @stable ICU 4.2
    */
-  public void setCurrencyPluralInfo(CurrencyPluralInfo newInfo) {
+  public synchronized void setCurrencyPluralInfo(CurrencyPluralInfo newInfo) {
     properties.setCurrencyPluralInfo(newInfo);
     refreshFormatter();
   }
@@ -1978,14 +1974,6 @@ public class DecimalFormat extends NumberFormat {
     return properties.hashCode();
   }
 
-  private static final ThreadLocal<Properties> threadLocalToPatternProperties =
-      new ThreadLocal<Properties>() {
-        @Override
-        protected Properties initialValue() {
-          return new Properties();
-        }
-      };
-
   /**
    * Returns the default value of toString() with extra DecimalFormat-specific information appended
    * to the end of the string. This extra information is intended for debugging purposes, and the
@@ -2027,8 +2015,7 @@ public class DecimalFormat extends NumberFormat {
     // to keep affix patterns intact.  In particular, pull rounding properties
     // so that CurrencyUsage is reflected properly.
     // TODO: Consider putting this logic in PatternString.java instead.
-    Properties tprops = threadLocalToPatternProperties.get();
-    tprops.copyFrom(properties);
+    Properties tprops = threadLocalProperties.get().copyFrom(properties);
     if (com.ibm.icu.impl.number.formatters.CurrencyFormat.useCurrency(properties)) {
       tprops.setMinimumFractionDigits(exportedProperties.getMinimumFractionDigits());
       tprops.setMaximumFractionDigits(exportedProperties.getMaximumFractionDigits());
@@ -2059,6 +2046,14 @@ public class DecimalFormat extends NumberFormat {
     formatter.format(fq);
     return fq;
   }
+
+  private static final ThreadLocal<Properties> threadLocalProperties =
+      new ThreadLocal<Properties>() {
+        @Override
+        protected Properties initialValue() {
+          return new Properties();
+        }
+      };
 
   /** Rebuilds the formatter object from the property bag. */
   void refreshFormatter() {

@@ -85,6 +85,7 @@ public final class FormatQuantity2 extends FormatQuantityBCD {
 
   @Override
   protected void readIntToBcd(int n) {
+    assert n != 0;
     long result = 0L;
     int i = 16;
     for (; n != 0; n /= 10, i--) {
@@ -98,6 +99,7 @@ public final class FormatQuantity2 extends FormatQuantityBCD {
 
   @Override
   protected void readLongToBcd(long n) {
+    assert n != 0;
     long result = 0L;
     int i = 16;
     for (; n != 0L; n /= 10L, i--) {
@@ -111,6 +113,7 @@ public final class FormatQuantity2 extends FormatQuantityBCD {
 
   @Override
   protected void readBigIntegerToBcd(BigInteger n) {
+    assert n.signum() != 0;
     long result = 0L;
     int i = 16;
     for (; n.signum() != 0; i--) {
