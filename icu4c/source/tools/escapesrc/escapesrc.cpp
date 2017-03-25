@@ -157,21 +157,27 @@ bool fixu8(std::string &linestr, size_t origpos, size_t &endpos) {
   outstr += '\"'; // local encoding
   for(;pos<endpos;pos++) {
     char c = linestr[pos];
-    if(c == kBKSLASH) {
+    if(c == '\\') {
       char c2 = linestr[++pos];
       switch(c2) {
-      case kQUOT:
-      case kDBLQ:
+      case '\'':
+      case '"':
+#if (U_CHARSET_FAMILY == U_EBCDIC_FAMILY)
+        c2 = cp1047_to_8859(c2);
+#endif
         appendByte(outstr, c2);
         break;
-      case kL_U:
+      case 'u':
         appendUtf8(outstr, linestr, pos, 4);
         break;
-      case kU_U:
+      case 'U':
         appendUtf8(outstr, linestr, pos, 8);
         break;
       }
     } else {
+#if (U_CHARSET_FAMILY == U_EBCDIC_FAMILY)
+      c = cp1047_to_8859(c);
+#endif
       appendByte(outstr, c);
     }
   }
@@ -235,20 +241,21 @@ bool fixAt(std::string &linestr, size_t pos) {
       if(linestr[pos] == '\\') continue;
       // some other escape… ignore
     } else {
+      size_t old_pos = pos;
+      int32_t i = pos;
 #if (U_CHARSET_FAMILY == U_EBCDIC_FAMILY)
       // mogrify 1-4 bytes from 1047 'back' to utf-8
       char old_byte = linestr[pos];
       linestr[pos] = cp1047_to_8859(linestr[pos]);
       // how many more?
       int32_t trail = U8_COUNT_TRAIL_BYTES(linestr[pos]);
-      for(size_t pos2 = pos+1; trail>0; pos++,trail--) {
+      for(size_t pos2 = pos+1; trail>0; pos2++,trail--) {
         linestr[pos2] = cp1047_to_8859(linestr[pos2]);
       }
 #endif
       
       // Proceed to decode utf-8
       const uint8_t *s = (const uint8_t*) (linestr.c_str());
-      int32_t i = pos;
       int32_t length = linestr.size();
       UChar32 c;
       if(U8_IS_SINGLE((uint8_t)s[i]) && oldIllegal[s[i]]) {
@@ -263,7 +270,7 @@ bool fixAt(std::string &linestr, size_t pos) {
         U8_NEXT(s, i, length, c);
       }
       if(c<0) {
-        fprintf(stderr, "Illegal utf-8 sequence\n");
+        fprintf(stderr, "Illegal utf-8 sequence at Column: %d\n", old_pos);
         fprintf(stderr, "Line: >>%s<<\n", linestr.c_str());
         return true;
       }
