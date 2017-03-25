@@ -97,6 +97,34 @@ public class AffixPatternUtilsTest {
   }
 
   @Test
+  public void testContainsReplaceType() {
+    Object[][] cases = {
+      {"", false, ""},
+      {"-", true, "+"},
+      {"-a", true, "+a"},
+      {"a-", true, "a+"},
+      {"a-b", true, "a+b"},
+      {"--", true, "++"},
+      {"x", false, "x"}
+    };
+
+    for (Object[] cas : cases) {
+      String input = (String) cas[0];
+      boolean hasMinusSign = (Boolean) cas[1];
+      String output = (String) cas[2];
+
+      assertEquals(
+          "Contains on input " + input,
+          hasMinusSign,
+          AffixPatternUtils.containsType(input, AffixPatternUtils.TYPE_MINUS_SIGN));
+      assertEquals(
+          "Replace on input" + input,
+          output,
+          AffixPatternUtils.replaceType(input, AffixPatternUtils.TYPE_MINUS_SIGN, '+'));
+    }
+  }
+
+  @Test
   public void testInvalid() {
     String[] invalidExamples = {"'", "x'", "'x", "'x''", "''x'"};
     DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(new ULocale("en_US"));

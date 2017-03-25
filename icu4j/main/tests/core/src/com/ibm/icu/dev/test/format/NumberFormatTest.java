@@ -4302,6 +4302,10 @@ public class NumberFormatTest extends TestFmwk {
             int end = iterator.getRunLimit();
             Iterator it = iterator.getAttributes().keySet().iterator();
             AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) it.next();
+            // For positions with both INTEGER and GROUPING attributes, we want the GROUPING attribute.
+            if (it.hasNext() && attribute.equals(NumberFormat.Field.INTEGER)) {
+                attribute = (AttributedCharacterIterator.Attribute) it.next();
+            }
             Object value = iterator.getAttribute(attribute);
             result.add(new FieldContainer(start, end, attribute, value));
             iterator.setIndex(end);
@@ -5131,6 +5135,36 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void testParseAmbiguousAffixes() {
+        BigDecimal positive = new BigDecimal("0.0567");
+        BigDecimal negative = new BigDecimal("-0.0567");
+        DecimalFormat df = new DecimalFormat();
+        df.setParseBigDecimal(true);
+
+        String[] patterns = { "+0.00%;-0.00%", "+0.00%;0.00%", "0.00%;-0.00%" };
+        String[] inputs = { "+5.67%", "-5.67%", "5.67%" };
+        boolean[][] expectedPositive = {
+                { true, false, true },
+                { true, false, false },
+                { true, false, true }
+        };
+
+        for (int i=0; i<patterns.length; i++) {
+            String pattern = patterns[i];
+            df.applyPattern(pattern);
+            for (int j=0; j<inputs.length; j++) {
+                String input = inputs[j];
+                ParsePosition ppos = new ParsePosition(0);
+                Number actual = df.parse(input, ppos);
+                BigDecimal expected = expectedPositive[i][j] ? positive : negative;
+                String message = "Pattern " + pattern + " with input " + input;
+                assertEquals(message, expected, actual);
+                assertEquals(message, input.length(), ppos.getIndex());
+            }
+        }
+    }
+
+    @Test
     public void testSignificantDigitsMode() {
         String[][] allExpected = {
               {"12340.0", "12340.0", "12340.0"},
@@ -5240,7 +5274,7 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    public void testPlusSignAlwaysShown() {
+    public void testPlusSignAlwaysShown() throws ParseException {
         double[] numbers = {0.012, 5.78, 0, -0.012, -5.78};
         ULocale[] locs = {new ULocale("en-US"), new ULocale("ar-EG"), new ULocale("es-CL")};
         String[][][] expecteds = {
@@ -5296,6 +5330,19 @@ public class NumberFormatTest extends TestFmwk {
                     String exp = expecteds[i][j][k];
                     String act = df.format(d);
                     assertEquals("Locale " + loc + ", type " + j + ", " + d, exp, act);
+                    BigDecimal parsedExp = BigDecimal.valueOf(d);
+                    if (j == 1) {
+                        // Currency-round expected parse output
+                        int scale = (i == 2) ? 0 : 2;
+                        parsedExp = parsedExp.setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+                    }
+                    Number parsedNum = df.parse(exp);
+                    BigDecimal parsedAct = (parsedNum.getClass() == BigDecimal.class)
+                            ? (BigDecimal) parsedNum
+                            : BigDecimal.valueOf(parsedNum.doubleValue());
+                    assertEquals(
+                            "Locale " + loc + ", type " + j + ", " + d + ", " + parsedExp + " => " + parsedAct,
+                            0, parsedExp.compareTo(parsedAct));
                 }
             }
         }
