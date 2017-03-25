@@ -717,41 +717,53 @@ public class Parse {
 
     static final AffixHolder EMPTY_POSITIVE = new AffixHolder("", "", true, false);
     static final AffixHolder EMPTY_NEGATIVE = new AffixHolder("", "", true, true);
-    static final AffixHolder DEFAULT_POSITIVE = new AffixHolder("+", "", false, false);
-    static final AffixHolder DEFAULT_NEGATIVE = new AffixHolder("-", "", false, true);
 
     static void addToState(ParserState state, IProperties properties) {
       AffixHolder pp = fromPropertiesPositivePattern(properties);
       AffixHolder np = fromPropertiesNegativePattern(properties);
       AffixHolder ps = fromPropertiesPositiveString(properties);
       AffixHolder ns = fromPropertiesNegativeString(properties);
-      if (pp == null && ps == null) {
-        if (properties.getSignAlwaysShown()) {
-          state.affixHolders.add(DEFAULT_POSITIVE);
-        } else {
-          state.affixHolders.add(EMPTY_POSITIVE);
-        }
-      } else {
-        if (pp != null) state.affixHolders.add(pp);
-        if (ps != null) state.affixHolders.add(ps);
-      }
-      if (np == null && ns == null) {
-        state.affixHolders.add(DEFAULT_NEGATIVE);
-      } else {
-        if (np != null) state.affixHolders.add(np);
-        if (ns != null) state.affixHolders.add(ns);
-      }
+      if (pp != null) state.affixHolders.add(pp);
+      if (ps != null) state.affixHolders.add(ps);
+      if (np != null) state.affixHolders.add(np);
+      if (ns != null) state.affixHolders.add(ns);
     }
 
     static AffixHolder fromPropertiesPositivePattern(IProperties properties) {
       String ppp = properties.getPositivePrefixPattern();
       String psp = properties.getPositiveSuffixPattern();
+      if (properties.getSignAlwaysShown()) {
+        // TODO: This logic is somewhat duplicated from PNAffixGenerator.
+        boolean foundSign = false;
+        String npp = properties.getNegativePrefixPattern();
+        String nsp = properties.getNegativeSuffixPattern();
+        if (AffixPatternUtils.containsType(npp, AffixPatternUtils.TYPE_MINUS_SIGN)) {
+          foundSign = true;
+          ppp = AffixPatternUtils.replaceType(npp, AffixPatternUtils.TYPE_MINUS_SIGN, '+');
+        }
+        if (AffixPatternUtils.containsType(nsp, AffixPatternUtils.TYPE_MINUS_SIGN)) {
+          foundSign = true;
+          psp = AffixPatternUtils.replaceType(nsp, AffixPatternUtils.TYPE_MINUS_SIGN, '+');
+        }
+        if (!foundSign) {
+          ppp = "+" + ppp;
+        }
+      }
       return getInstance(ppp, psp, false, false);
     }
 
     static AffixHolder fromPropertiesNegativePattern(IProperties properties) {
       String npp = properties.getNegativePrefixPattern();
       String nsp = properties.getNegativeSuffixPattern();
+      if (npp == null && nsp == null) {
+        npp = properties.getPositivePrefixPattern();
+        nsp = properties.getPositiveSuffixPattern();
+        if (npp == null) {
+          npp = "-";
+        } else {
+          npp = "-" + npp;
+        }
+      }
       return getInstance(npp, nsp, false, true);
     }
 
@@ -768,7 +780,7 @@ public class Parse {
     }
 
     static AffixHolder getInstance(String p, String s, boolean strings, boolean negative) {
-      if (p == null && s == null) return null;
+      if (p == null && s == null) return negative ? EMPTY_NEGATIVE : EMPTY_POSITIVE;
       if (p == null) p = "";
       if (s == null) s = "";
       if (p.length() == 0 && s.length() == 0) return negative ? EMPTY_NEGATIVE : EMPTY_POSITIVE;
@@ -1251,9 +1263,9 @@ public class Parse {
             break;
 
           case INSIDE_AFFIX_PATTERN:
-            acceptAffixPatternOffset(cp, state, item);
+            long added = acceptAffixPatternOffset(cp, state, item);
             // Accept arbitrary bidi and whitespace (if lenient) in the middle of affixes.
-            if (state.length == 0 && isIgnorable(cp, state)) {
+            if (added == 0L && isIgnorable(cp, state)) {
               state.getNext().copyFrom(item, item.name, cp);
             }
             break;
@@ -1529,10 +1541,32 @@ public class Parse {
    */
   private static void acceptMinusOrPlusSign(
       int cp, StateName nextName, ParserState state, StateItem item, boolean exponent) {
-    acceptMinusOrPlusSign(cp, nextName, null, state, item, exponent);
+    acceptMinusSign(cp, nextName, null, state, item, exponent);
+    acceptPlusSign(cp, nextName, null, state, item, exponent);
   }
 
-  private static void acceptMinusOrPlusSign(
+  private static long acceptMinusSign(
+      int cp,
+      StateName returnTo1,
+      StateName returnTo2,
+      ParserState state,
+      StateItem item,
+      boolean exponent) {
+    if (UNISET_MINUS.contains(cp)) {
+      StateItem next = state.getNext().copyFrom(item, returnTo1, -1);
+      next.returnTo1 = returnTo2;
+      if (exponent) {
+        next.sawNegativeExponent = true;
+      } else {
+        next.sawNegative = true;
+      }
+      return 1L << state.lastInsertedIndex();
+    } else {
+      return 0L;
+    }
+  }
+
+  private static long acceptPlusSign(
       int cp,
       StateName returnTo1,
       StateName returnTo2,
@@ -1542,14 +1576,9 @@ public class Parse {
     if (UNISET_PLUS.contains(cp)) {
       StateItem next = state.getNext().copyFrom(item, returnTo1, -1);
       next.returnTo1 = returnTo2;
-    } else if (UNISET_MINUS.contains(cp)) {
-      StateItem next = state.getNext().copyFrom(item, returnTo1, -1);
-      next.returnTo1 = returnTo2;
-      if (exponent) {
-        next.sawNegativeExponent = true;
-      } else {
-        next.sawNegative = true;
-      }
+      return 1L << state.lastInsertedIndex();
+    } else {
+      return 0L;
     }
   }
 
@@ -1700,27 +1729,31 @@ public class Parse {
       // At most one item can be added upon consuming a string.
       if (added != 0) {
         int i = state.lastInsertedIndex();
-        // The following six lines are duplicated below; not enough for their own function.
-        state.getItem(i).affix = holder;
-        if (prefix) state.getItem(i).sawPrefix = true;
-        if (!prefix) state.getItem(i).sawSuffix = true;
-        if (holder.negative) state.getItem(i).sawNegative = true;
-        state.getItem(i).score++; // reward for consuming a prefix/suffix.
+        recordAffixHolder(holder, state.getItem(i), prefix);
       }
     } else {
       long added = acceptAffixPattern(cp, nextName, state, item, str, 0);
       // Multiple items can be added upon consuming an affix pattern.
       for (int i = Long.numberOfTrailingZeros(added); (1L << i) <= added; i++) {
         if (((1L << i) & added) != 0) {
-          // The following six lines are duplicated above; not enough for their own function.
-          state.getItem(i).affix = holder;
-          if (prefix) state.getItem(i).sawPrefix = true;
-          if (!prefix) state.getItem(i).sawSuffix = true;
-          if (holder.negative) state.getItem(i).sawNegative = true;
-          state.getItem(i).score++; // reward for consuming a prefix/suffix.
+          recordAffixHolder(holder, state.getItem(i), prefix);
         }
       }
     }
+  }
+
+  private static void recordAffixHolder(AffixHolder holder, StateItem next, boolean prefix) {
+    next.affix = holder;
+    if (prefix) next.sawPrefix = true;
+    if (!prefix) next.sawSuffix = true;
+    if (holder.negative) next.sawNegative = true;
+    // 10 point reward for consuming a prefix/suffix:
+    next.score += 10;
+    // 1 point reward for positive holders (if there is ambiguity, we want to favor positive):
+    if (!holder.negative) next.score += 1;
+    // 5 point reward for affix holders that have an empty prefix or suffix (we won't see them again):
+    if (!next.sawPrefix && holder.p.isEmpty()) next.score += 5;
+    if (!next.sawSuffix && holder.s.isEmpty()) next.score += 5;
   }
 
   private static void acceptStringOffset(int cp, ParserState state, StateItem item) {
@@ -1814,8 +1847,8 @@ public class Parse {
     return 0L;
   }
 
-  private static void acceptAffixPatternOffset(int cp, ParserState state, StateItem item) {
-    acceptAffixPattern(
+  private static long acceptAffixPatternOffset(int cp, ParserState state, StateItem item) {
+    return acceptAffixPattern(
         cp, item.returnTo1, state, item, item.currentAffixPattern, item.currentStepwiseParserTag);
   }
 
@@ -1863,12 +1896,16 @@ public class Parse {
           resolvedPlusSign = true;
           break;
         case AffixPatternUtils.TYPE_PERCENT:
-          resolvedCp = '%'; // accept ASCII percent as well as locale percent
           resolvedStr = state.symbols.getPercentString();
+          if (resolvedStr.length() != 1 || resolvedStr.charAt(0) != '%') {
+            resolvedCp = '%'; // accept ASCII percent as well as locale percent
+          }
           break;
         case AffixPatternUtils.TYPE_PERMILLE:
-          resolvedCp = '‰'; // accept ASCII permille as well as locale permille
           resolvedStr = state.symbols.getPerMillString();
+          if (resolvedStr.length() != 1 || resolvedStr.charAt(0) != '‰') {
+            resolvedCp = '‰'; // accept ASCII permille as well as locale permille
+          }
           break;
         case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
         case AffixPatternUtils.TYPE_CURRENCY_DOUBLE:
@@ -1911,22 +1948,29 @@ public class Parse {
       }
       added |= 1L << state.lastInsertedIndex();
     }
-    if (resolvedMinusSign || resolvedPlusSign) {
-      // Sign
+    if (resolvedMinusSign) {
       if (hasNext) {
-        acceptMinusOrPlusSign(cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item, false);
+        added |= acceptMinusSign(cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item, false);
       } else {
-        acceptMinusOrPlusSign(cp, returnTo, null, state, item, false);
+        added |= acceptMinusSign(cp, returnTo, null, state, item, false);
       }
-      // Decide whether to accept a custom string
-      if (resolvedMinusSign) {
+      if (added == 0L) {
+        // Attempt to accept custom minus sign string
         String mss = state.symbols.getMinusSignString();
         int mssCp = Character.codePointAt(mss, 0);
         if (mss.length() != Character.charCount(mssCp) || !UNISET_MINUS.contains(mssCp)) {
           resolvedStr = mss;
         }
       }
-      if (resolvedPlusSign) {
+    }
+    if (resolvedPlusSign) {
+      if (hasNext) {
+        added |= acceptPlusSign(cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item, false);
+      } else {
+        added |= acceptPlusSign(cp, returnTo, null, state, item, false);
+      }
+      if (added == 0L) {
+        // Attempt to accept custom plus sign string
         String pss = state.symbols.getPlusSignString();
         int pssCp = Character.codePointAt(pss, 0);
         if (pss.length() != Character.charCount(pssCp) || !UNISET_MINUS.contains(pssCp)) {

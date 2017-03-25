@@ -116,10 +116,10 @@ public class PNAffixGenerator {
       return getModifiersWithPlusSign(symbols, curr1, curr2, curr3, properties);
     }
 
-    CharSequence ppp = properties.getPositivePrefixPattern();
-    CharSequence psp = properties.getPositiveSuffixPattern();
-    CharSequence npp = properties.getNegativePrefixPattern();
-    CharSequence nsp = properties.getNegativeSuffixPattern();
+    String ppp = properties.getPositivePrefixPattern();
+    String psp = properties.getPositiveSuffixPattern();
+    String npp = properties.getNegativePrefixPattern();
+    String nsp = properties.getNegativeSuffixPattern();
 
     // Set sb1/sb2 to the positive prefix/suffix.
     sb1.clear();
@@ -151,10 +151,10 @@ public class PNAffixGenerator {
       String curr3,
       IProperties properties) {
 
-    CharSequence ppp = properties.getPositivePrefixPattern();
-    CharSequence psp = properties.getPositiveSuffixPattern();
-    CharSequence npp = properties.getNegativePrefixPattern();
-    CharSequence nsp = properties.getNegativeSuffixPattern();
+    String ppp = properties.getPositivePrefixPattern();
+    String psp = properties.getPositiveSuffixPattern();
+    String npp = properties.getNegativePrefixPattern();
+    String nsp = properties.getNegativeSuffixPattern();
 
     // There are three cases, listed below with their expected outcomes.
     // TODO: Should we handle the cases when the positive subpattern has a '+' already?

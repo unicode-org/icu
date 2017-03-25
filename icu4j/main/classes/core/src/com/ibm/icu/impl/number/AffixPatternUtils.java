@@ -96,45 +96,6 @@ public class AffixPatternUtils {
   public static final int TYPE_CURRENCY_OVERFLOW = -15;
 
   /**
-   * Checks whether the specified affix pattern has any unquoted currency symbols ("¤").
-   *
-   * @param patternString The string to check for currency symbols.
-   * @return true if the literal has at least one unquoted currency symbol; false otherwise.
-   */
-  public static boolean hasCurrencySymbols(CharSequence patternString) {
-    if (patternString == null) return false;
-    int offset = 0;
-    int state = STATE_BASE;
-    boolean result = false;
-    for (; offset < patternString.length(); ) {
-      int cp = Character.codePointAt(patternString, offset);
-      switch (state) {
-        case STATE_BASE:
-          if (cp == '¤') {
-            result = true;
-          } else if (cp == '\'') {
-            state = STATE_INSIDE_QUOTE;
-          }
-          break;
-        case STATE_INSIDE_QUOTE:
-          if (cp == '\'') {
-            state = STATE_BASE;
-          }
-          break;
-        default:
-          throw new AssertionError();
-      }
-      offset += Character.charCount(cp);
-    }
-
-    if (state == STATE_INSIDE_QUOTE) {
-      throw new IllegalArgumentException("Unterminated quote: \"" + patternString + "\"");
-    } else {
-      return result;
-    }
-  }
-
-  /**
    * Estimates the number of code points present in an unescaped version of the affix pattern string
    * (one that would be returned by {@link #unescape}), assuming that all interpolated symbols
    * consume one code point and that currencies consume as many code points as their symbol width.
@@ -325,6 +286,70 @@ public class AffixPatternUtils {
           break;
       }
     }
+  }
+
+  /**
+   * Checks whether the given affix pattern contains at least one token of the given type, which is
+   * one of the constants "TYPE_" in {@link AffixPatternUtils}.
+   *
+   * @param affixPattern The affix pattern to check.
+   * @param type The token type.
+   * @return true if the affix pattern contains the given token type; false otherwise.
+   */
+  public static boolean containsType(CharSequence affixPattern, int type) {
+    if (affixPattern == null || affixPattern.length() == 0) return false;
+    long tag = 0L;
+    while (hasNext(tag, affixPattern)) {
+      tag = nextToken(tag, affixPattern);
+      if (getTypeOrCp(tag) == type) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Checks whether the specified affix pattern has any unquoted currency symbols ("¤").
+   *
+   * @param affixPattern The string to check for currency symbols.
+   * @return true if the literal has at least one unquoted currency symbol; false otherwise.
+   */
+  public static boolean hasCurrencySymbols(CharSequence affixPattern) {
+    if (affixPattern == null || affixPattern.length() == 0) return false;
+    long tag = 0L;
+    while (hasNext(tag, affixPattern)) {
+      tag = nextToken(tag, affixPattern);
+      int typeOrCp = getTypeOrCp(tag);
+      if (typeOrCp == AffixPatternUtils.TYPE_CURRENCY_SINGLE
+          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_DOUBLE
+          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_TRIPLE
+          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_OVERFLOW) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Replaces all occurrences of tokens with the given type with the given replacement char.
+   *
+   * @param affixPattern The source affix pattern (does not get modified).
+   * @param type The token type.
+   * @param replacementChar The char to substitute in place of chars of the given token type.
+   * @return A string containing the new affix pattern.
+   */
+  public static String replaceType(CharSequence affixPattern, int type, char replacementChar) {
+    if (affixPattern == null || affixPattern.length() == 0) return "";
+    char[] chars = affixPattern.toString().toCharArray();
+    long tag = 0L;
+    while (hasNext(tag, affixPattern)) {
+      tag = nextToken(tag, affixPattern);
+      if (getTypeOrCp(tag) == type) {
+        int offset = getOffset(tag);
+        chars[offset - 1] = replacementChar;
+      }
+    }
+    return new String(chars);
   }
 
   /**
