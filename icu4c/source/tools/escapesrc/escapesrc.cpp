@@ -251,6 +251,9 @@ bool fixAt(std::string &linestr, size_t pos) {
       int32_t trail = U8_COUNT_TRAIL_BYTES(linestr[pos]);
       for(size_t pos2 = pos+1; trail>0; pos2++,trail--) {
         linestr[pos2] = cp1047_to_8859(linestr[pos2]);
+        if(linestr[pos2] == 0x0A) {
+          linestr[pos2] = 0x85; // NL is ambiguous here
+        }
       }
 #endif
       
