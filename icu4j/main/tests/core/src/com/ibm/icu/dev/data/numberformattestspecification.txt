@@ -869,7 +869,8 @@ begin
 parse	output	breaks
 12.34	12.34
 -12.34	-12.34
-+12.34	12.34	JK
+// The following case passes only when setSignAlwaysShown is enabled
++12.34	fail
 $12.34	fail
 
 test parse integer only

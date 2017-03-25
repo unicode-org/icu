@@ -770,12 +770,14 @@ public class Parse {
     static AffixHolder fromPropertiesPositiveString(IProperties properties) {
       String pp = properties.getPositivePrefix();
       String ps = properties.getPositiveSuffix();
+      if (pp == null && ps == null) return null;
       return getInstance(pp, ps, true, false);
     }
 
     static AffixHolder fromPropertiesNegativeString(IProperties properties) {
       String np = properties.getNegativePrefix();
       String ns = properties.getNegativeSuffix();
+      if (np == null && ns == null) return null;
       return getInstance(np, ns, true, true);
     }
 
