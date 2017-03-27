@@ -779,11 +779,14 @@ void StringCaseTest::TestMalformedUTF8() {
     }
     char src[1] = { (char)0x85 };  // malformed UTF-8
     char dest[3] = { 0, 0, 0 };
-    int32_t destLength = ucasemap_utf8ToTitle(csm.getAlias(), dest, 3, src, 1, errorCode);
+    int32_t destLength;
+#if !UCONFIG_NO_BREAK_ITERATION
+    destLength = ucasemap_utf8ToTitle(csm.getAlias(), dest, 3, src, 1, errorCode);
     if (errorCode.isFailure() || destLength != 1 || dest[0] != src[0]) {
         errln("ucasemap_utf8ToTitle(\\x85) failed: %s destLength=%d dest[0]=0x%02x",
               errorCode.errorName(), (int)destLength, dest[0]);
     }
+#endif
 
     errorCode.reset();
     dest[0] = 0;
@@ -821,22 +824,27 @@ void StringCaseTest::TestBufferOverflow() {
     }
 
     UnicodeString data("hello world");
-    int32_t result = ucasemap_toTitle(csm.getAlias(), NULL, 0, data.getBuffer(), data.length(), errorCode);
+    int32_t result;
+#if !UCONFIG_NO_BREAK_ITERATION
+    result = ucasemap_toTitle(csm.getAlias(), NULL, 0, data.getBuffer(), data.length(), errorCode);
     if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != data.length()) {
         errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
               "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",
               __FILE__, __LINE__, data.length(), errorCode.errorName(), result);
     }
+#endif
     errorCode.reset();
 
     std::string data_utf8;
     data.toUTF8String(data_utf8);
+#if !UCONFIG_NO_BREAK_ITERATION
     result = ucasemap_utf8ToTitle(csm.getAlias(), NULL, 0, data_utf8.c_str(), data_utf8.length(), errorCode);
     if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != (int32_t)data_utf8.length()) {
         errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
               "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",
               __FILE__, __LINE__, data_utf8.length(), errorCode.errorName(), result);
     }
+#endif
     errorCode.reset();
 }
 
@@ -994,6 +1002,8 @@ void StringCaseTest::TestCaseMapWithEdits() {
             TRUE, errorCode);
 
     edits.reset();
+
+#if !UCONFIG_NO_BREAK_ITERATION
     length = CaseMap::toTitle("nl",
                               UCASEMAP_OMIT_UNCHANGED_TEXT |
                               U_TITLECASE_NO_BREAK_ADJUSTMENT |
@@ -1010,6 +1020,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
             edits.getFineIterator(), edits.getFineIterator(),
             titleExpectedChanges, UPRV_LENGTHOF(titleExpectedChanges),
             TRUE, errorCode);
+#endif
 
     edits.reset();
     length = CaseMap::fold(UCASEMAP_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
@@ -1067,6 +1078,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             TRUE, errorCode);
 
     edits.reset();
+#if !UCONFIG_NO_BREAK_ITERATION
     length = CaseMap::utf8ToTitle("nl",
                                   UCASEMAP_OMIT_UNCHANGED_TEXT |
                                   U_TITLECASE_NO_BREAK_ADJUSTMENT |
@@ -1084,6 +1096,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             edits.getFineIterator(), edits.getFineIterator(),
             titleExpectedChanges, UPRV_LENGTHOF(titleExpectedChanges),
             TRUE, errorCode);
+#endif
 
     edits.reset();
     length = CaseMap::utf8Fold(UCASEMAP_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
