@@ -1462,11 +1462,21 @@ public abstract class NumberFormat extends UFormat {
      * @param choice the pattern format.
      * @return the pattern
      * @stable ICU 3.2
+     */
+    protected static String getPattern(ULocale forLocale, int choice) {
+        return getPatternForStyle(forLocale, choice);
+    }
+
+    /**
+     * Returns the pattern for the provided locale and choice.
+     * @param forLocale the locale of the data.
+     * @param choice the pattern format.
+     * @return the pattern
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static String getPattern(ULocale forLocale, int choice) {
+    public static String getPatternForStyle(ULocale forLocale, int choice) {
         /* for ISOCURRENCYSTYLE and PLURALCURRENCYSTYLE,
          * the pattern is the same as the pattern of CURRENCYSTYLE
          * but by replacing the single currency sign with
