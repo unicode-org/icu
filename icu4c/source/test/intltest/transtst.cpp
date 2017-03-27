@@ -243,7 +243,8 @@ void TransliteratorTest::TestInstantiation() {
         if (t == 0) {
 #if UCONFIG_NO_BREAK_ITERATION
             // If UCONFIG_NO_BREAK_ITERATION is on, then only Thai should fail.
-            if (id.compare((UnicodeString)"Thai-Latin") != 0)
+            if (id.compare((UnicodeString)"Thai-Latn") != 0 &&
+                id.compare((UnicodeString)"Thai-Latin") != 0)
 #endif
                 dataerrln(UnicodeString("FAIL: Couldn't create ") + id +
                       /*", parse error " + parseError.code +*/

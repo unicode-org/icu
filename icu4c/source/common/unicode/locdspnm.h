@@ -20,6 +20,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/locid.h"
+#include "unicode/strenum.h"
 #include "unicode/uscript.h"
 #include "unicode/uldnames.h"
 #include "unicode/udisplaycontext.h"
