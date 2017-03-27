@@ -12,6 +12,8 @@
 
 #include "digitlst.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -35,4 +37,5 @@ static const int64_t MAX_INT64_IN_DOUBLE = 0x001FFFFFFFFFFFFFLL;
 
 U_NAMESPACE_END
 
+#endif // #if !UCONFIG_NO_FORMATTING
 #endif
