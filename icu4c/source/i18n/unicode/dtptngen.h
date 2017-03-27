@@ -27,6 +27,7 @@ U_NAMESPACE_BEGIN
  */
 
 
+class CharString;
 class Hashtable;
 class FormatParser;
 class DateTimeMatcher;
