@@ -852,7 +852,7 @@ public class Parse {
 
     private CurrencyAffixPatterns(ULocale uloc) {
       // Get the basic currency pattern.
-      String pattern = NumberFormat.getPattern(uloc, NumberFormat.CURRENCYSTYLE);
+      String pattern = NumberFormat.getPatternForStyle(uloc, NumberFormat.CURRENCYSTYLE);
       addPattern(pattern);
 
       // Get the currency plural patterns.

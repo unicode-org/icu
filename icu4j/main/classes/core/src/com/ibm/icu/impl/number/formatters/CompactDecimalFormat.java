@@ -163,9 +163,9 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
     ULocale uloc = symbols.getULocale();
     String pattern;
     if (fingerprint.compactType == CompactType.CURRENCY) {
-      pattern = NumberFormat.getPattern(uloc, NumberFormat.CURRENCYSTYLE);
+      pattern = NumberFormat.getPatternForStyle(uloc, NumberFormat.CURRENCYSTYLE);
     } else {
-      pattern = NumberFormat.getPattern(uloc, NumberFormat.NUMBERSTYLE);
+      pattern = NumberFormat.getPatternForStyle(uloc, NumberFormat.NUMBERSTYLE);
     }
     // TODO: Clean this up; avoid the extra object creations.
     // TODO: Currency may also need to override grouping settings, not just affixes.
