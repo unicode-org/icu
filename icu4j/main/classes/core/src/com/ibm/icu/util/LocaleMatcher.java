@@ -864,7 +864,7 @@ public class LocaleMatcher {
     transient ULocale xDefaultLanguage = null;
     transient boolean xFavorScript = false;
 
-    /*
+    /**
      * Returns the distance between the two languages, using the new CLDR syntax (see getBestMatch).
      * The values are not necessarily symmetric.
      * @param desired A locale desired by the user
