@@ -1125,7 +1125,9 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
 
 
 void RBBITest::TestExtended() {
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+  // Skip test for now when UCONFIG_NO_FILTERED_BREAK_ITERATION is set. This
+  // data driven test closely entangles filtered and regular data.
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FILTERED_BREAK_ITERATION
     UErrorCode      status  = U_ZERO_ERROR;
     Locale          locale("");
 

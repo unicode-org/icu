@@ -68,7 +68,9 @@ void addBrkIterAPITest(TestNode** root)
     addTest(root, &TestBreakIteratorTailoring, "tstxtbd/cbiapts/TestBreakIteratorTailoring");
     addTest(root, &TestBreakIteratorRefresh, "tstxtbd/cbiapts/TestBreakIteratorRefresh");
     addTest(root, &TestBug11665, "tstxtbd/cbiapts/TestBug11665");
+#if !UCONFIG_NO_FILTERED_BREAK_ITERATION
     addTest(root, &TestBreakIteratorSuppressions, "tstxtbd/cbiapts/TestBreakIteratorSuppressions");
+#endif
 }
 
 #define CLONETEST_ITERATOR_COUNT 2
