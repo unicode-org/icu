@@ -12,6 +12,20 @@
 <hr/>
 <h2>Removed from ICU4J 58.1</h2>
 
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+CompactDecimalFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public boolean <i>equals</i>(java.lang.Object)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(BigDecimal, java.lang.StringBuffer, java.text.FieldPosition)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(double, java.lang.StringBuffer, java.text.FieldPosition)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(java.math.BigDecimal, java.lang.StringBuffer, java.text.FieldPosition)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(java.math.BigInteger, java.lang.StringBuffer, java.text.FieldPosition)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(long, java.lang.StringBuffer, java.text.FieldPosition)</li>
+<li><span style='color:green'>(stable)</span> public java.text.AttributedCharacterIterator <i>formatToCharacterIterator</i>(java.lang.Object)</li>
+</ul>
+</ul>
+
 <h3>Package com.ibm.icu.util</h3>
 <ul>
 MeasureUnit
@@ -98,10 +112,12 @@ MeasureUnit
 <li><span style='color:orange'>(draft)</span> public static final class <i>CaseMap.Lower</i></li>
 <li><span style='color:orange'>(draft)</span> public static final class <i>CaseMap.Title</i></li>
 <li><span style='color:orange'>(draft)</span> public static final class <i>CaseMap.Upper</i></li>
-<li><span style='color:orange'>(draft)</span> public static interface <i>DecimalFormat.PropertySetter</i></li>
-<li><span style='color:gray'>(deprecated)</span> public class <i>DecimalFormat_ICU58</i></li>
 <li><span style='color:orange'>(draft)</span> public final class <i>Edits</i></li>
 <li><span style='color:orange'>(draft)</span> public static final class <i>Edits.Iterator</i></li>
+CompactDecimalFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public CurrencyAmount <i>parseCurrency</i>(java.lang.CharSequence, java.text.ParsePosition)</li>
+</ul>
 DateFormat
 <ul>
 <li><span style='color:green'>(stable)</span> public static final int AM_PM_MIDNIGHT_NOON_FIELD</li>
@@ -109,8 +125,7 @@ DateFormat
 </ul>
 DecimalFormat
 <ul>
-<li><span style='color:orange'>(draft)</span> protected static final java.lang.ThreadLocal&lt;number.Properties&gt; threadLocalCurrencyProperties</li>
-<li><span style='color:orange'>(draft)</span> public java.lang.StringBuffer <i>format</i>(CurrencyAmount, java.lang.StringBuffer, java.text.FieldPosition)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(CurrencyAmount, java.lang.StringBuffer, java.text.FieldPosition)</li>
 <li><span style='color:green'>(stable)</span> public synchronized Currency <i>getCurrency</i>()</li>
 <li><span style='color:green'>(stable)</span> public synchronized int <i>getMaximumFractionDigits</i>()</li>
 <li><span style='color:green'>(stable)</span> public synchronized int <i>getMaximumIntegerDigits</i>()</li>
@@ -122,43 +137,12 @@ DecimalFormat
 <li><span style='color:green'>(stable)</span> public synchronized void <i>setGroupingUsed</i>(boolean)</li>
 <li><span style='color:green'>(stable)</span> public synchronized void <i>setParseIntegerOnly</i>(boolean)</li>
 <li><span style='color:green'>(stable)</span> public synchronized void <i>setParseStrict</i>(boolean)</li>
-<li><span style='color:orange'>(draft)</span> public synchronized java.lang.String <i>toString</i>()</li>
-</ul>
-PluralRules.FixedDecimal
-<ul>
-<li><span style='color:orange'>(draft)</span> public boolean <i>isInfinite</i>()</li>
-<li><span style='color:orange'>(draft)</span> public boolean <i>isNaN</i>()</li>
-</ul>
-PluralRules.IFixedDecimal
-<ul>
-<li><span style='color:orange'>(draft)</span> public double <i>getPluralOperand</i>(PluralRules.Operand)</li>
-<li><span style='color:orange'>(draft)</span> public boolean <i>isInfinite</i>()</li>
-<li><span style='color:orange'>(draft)</span> public boolean <i>isNaN</i>()</li>
-</ul>
-PluralRules.Operand
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final PluralRules.Operand f</li>
-<li><span style='color:orange'>(draft)</span> public static final PluralRules.Operand i</li>
-<li><span style='color:orange'>(draft)</span> public static final PluralRules.Operand j</li>
-<li><span style='color:orange'>(draft)</span> public static final PluralRules.Operand n</li>
-<li><span style='color:orange'>(draft)</span> public static final PluralRules.Operand t</li>
-<li><span style='color:orange'>(draft)</span> public static final PluralRules.Operand v</li>
-<li><span style='color:orange'>(draft)</span> public static final PluralRules.Operand w</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>toString</i>()</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-Currency.CurrencyStringInfo
-<ul>
-<li><span style='color:orange'>(draft)</span> public <i>Currency.CurrencyStringInfo</i>(java.lang.String, java.lang.String)</li>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getCurrencyString</i>()</li>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getISOCode</i>()</li>
-</ul>
-LocaleMatcher
-<ul>
-<li><span style='color:orange'>(draft)</span> public int <i>distance</i>(ULocale, ULocale)</li>
-</ul>
 MeasureUnit
 <ul>
 <li><span style='color:orange'>(draft)</span> public static final MeasureUnit POINT</li>
@@ -166,6 +150,6 @@ MeasureUnit
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Mar 22 17:07:56 EDT 2017<br/>© 2017 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Mar 27 15:47:02 EDT 2017<br/>© 2017 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
 </body>
 </html>
