@@ -4829,6 +4829,13 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat fmt2 = new DecimalFormat(newPattern);
         fmt2.setCurrency(Currency.getInstance("USD"));
         assertEquals("Triple currency sign pattern should round-trip", "US dollars 12.34", fmt2.format(12.34));
+
+        String quotedPattern = "\u00a4\u00a4'\u00a4' 0.00";
+        DecimalFormat fmt3 = new DecimalFormat(quotedPattern);
+        assertEquals("Should be treated as double currency sign", "USD\u00a4 12.34", fmt3.format(12.34));
+
+        String outQuotedPattern = fmt3.toPattern();
+        assertEquals("Double currency sign with quoted sign should round-trip", quotedPattern, outQuotedPattern);
     }
 
     @Test

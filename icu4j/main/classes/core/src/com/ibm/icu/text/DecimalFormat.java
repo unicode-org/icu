@@ -755,6 +755,22 @@ public class DecimalFormat extends NumberFormat {
    * Sets whether to always shown the plus sign ('+' in <em>en</em>) on positive numbers. The rules
    * in UTS #35 section 3.2.1 will be followed to ensure a locale-aware placement of the sign.
    *
+   * <p>More specifically, the following strategy will be used to place the plus sign:
+   *
+   * <ol>
+   *   <li><em>Patterns without a negative subpattern:</em> The locale's plus sign will be prepended
+   *       to the positive prefix.
+   *   <li><em>Patterns with a negative subpattern without a '-' sign (e.g., accounting):</em> The
+   *       locale's plus sign will be prepended to the positive prefix, as in case 1.
+   *   <li><em>Patterns with a negative subpattern that has a '-' sign:</em> The locale's plus sign
+   *       will substitute the '-' in the negative subpattern. The positive subpattern will be
+   *       unused.
+   * </ol>
+   *
+   * This method is designed to be used <em>instead of</em> applying a pattern containing an
+   * explicit plus sign, such as "+0;-0". The behavior when combining this method with explicit plus
+   * signs in the pattern is undefined.
+   *
    * @param value true to always show a sign; false to hide the sign on positive numbers.
    * @category Affixes
    * @internal
