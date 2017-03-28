@@ -479,6 +479,7 @@ public abstract class NumberFormat extends UFormat {
      * would stop at the "." character.  The decimal separator accepted
      * by the parse operation is locale-dependent and determined by the
      * subclass.
+     *
      * @return true if this will parse integers only
      * @stable ICU 2.0
      */
@@ -487,7 +488,13 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * Sets whether or not numbers should be parsed as integers only.
+     * Sets whether to ignore the fraction part of a number when parsing
+     * (defaults to false). If a string contains a decimal point, parsing will stop before the decimal
+     * point. Note that determining whether a character is a decimal point depends on the locale.
+     *
+     * <p>For example, in <em>en-US</em>, parsing the string "123.45" will return the number 123 and
+     * parse position 3.
+     *
      * @param value true if this should parse integers only
      * @see #isParseIntegerOnly
      * @stable ICU 2.0
@@ -503,7 +510,7 @@ public abstract class NumberFormat extends UFormat {
      * to lenient mode (examples use the pattern "#,##0.#"):<ul>
      * <li>The presence and position of special symbols, including currency, must match the
      * pattern.<br>
-     * '123-' fails (the minus sign is expected in the prefix, not suffix)</li>
+     * '+123' fails (there is no plus sign in the pattern)</li>
      * <li>Leading or doubled grouping separators<br>
      * ',123' and '1,,234" fail</li>
      * <li>Groups of incorrect length when grouping is used<br>
