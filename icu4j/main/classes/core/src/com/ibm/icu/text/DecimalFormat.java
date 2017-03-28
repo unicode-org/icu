@@ -32,8 +32,186 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Category;
 
-/** @stable ICU 2.0 */
+/**
+ * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_} <code>DecimalFormat</code> is the primary
+ * concrete subclass of {@link NumberFormat}. It has a variety of features designed to make it
+ * possible to parse and format numbers in any locale, including support for Western, Arabic, or
+ * Indic digits. It supports different flavors of numbers, including integers ("123"), fixed-point
+ * numbers ("123.4"), scientific notation ("1.23E4"), percentages ("12%"), and currency amounts
+ * ("$123.00", "USD123.00", "123.00 US dollars"). All of these flavors can be easily localized.
+ *
+ * <p>To obtain a number formatter for a specific locale (including the default locale), call one of
+ * NumberFormat's factory methods such as {@link NumberFormat#getInstance}. Do not call
+ * DecimalFormat constructors directly unless you know what you are doing.
+ *
+ * <p>DecimalFormat aims to comply with the specification <a
+ * href="http://unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns">UTS #35</a>. Read
+ * the specification for more information on how all the properties in DecimalFormat fit together.
+ *
+ * <h3>Example Usage</h3>
+ *
+ * <p>Customize settings on a DecimalFormat instance from the NumberFormat factory:
+ *
+ * <blockquote>
+ *
+ * <pre>
+ * NumberFormat f = NumberFormat.getInstance(loc);
+ * if (f instanceof DecimalFormat) {
+ *     ((DecimalFormat) f).setDecimalSeparatorAlwaysShown(true);
+ *     ((DecimalFormat) f).setMinimumGroupingDigits(2);
+ * }
+ * </pre>
+ *
+ * </blockquote>
+ *
+ * <p>Quick and dirty print out a number using the localized number, currency, and percent format
+ * for each locale:
+ *
+ * <blockquote>
+ *
+ * <pre>
+ * for (ULocale uloc : ULocale.getAvailableLocales()) {
+ *     System.out.print(uloc + ":\t");
+ *     System.out.print(NumberFormat.getInstance(uloc).format(1.23));
+ *     System.out.print("\t");
+ *     System.out.print(NumberFormat.getCurrencyInstance(uloc).format(1.23));
+ *     System.out.print("\t");
+ *     System.out.print(NumberFormat.getPercentInstance(uloc).format(1.23));
+ *     System.out.println();
+ * }
+ * </pre>
+ *
+ * </blockquote>
+ *
+ * <h3>Properties and Symbols</h3>
+ *
+ * <p>A DecimalFormat object encapsulates a set of <em>properties</em> and a set of
+ * <em>symbols</em>. Grouping size, rounding mode, and affixes are examples of properties. Locale
+ * digits and the characters used for grouping and decimal separators are examples of symbols.
+ *
+ * <p>To set a custom set of symbols, use {@link #setDecimalFormatSymbols}. Use the various other
+ * setters in this class to set custom values for the properties.
+ *
+ * <h3>Rounding</h3>
+ *
+ * <p>DecimalFormat provides three main strategies to specify the position at which numbers should
+ * be rounded:
+ *
+ * <ol>
+ *   <li><strong>Magnitude:</strong> Display a fixed number of fraction digits; this is the most
+ *       common form.
+ *   <li><strong>Increment:</strong> Round numbers to the closest multiple of a certain increment,
+ *       such as 0.05. This is common in currencies.
+ *   <li><strong>Significant Digits:</strong> Round numbers such that a fixed number of nonzero
+ *       digits are shown. This is most common in scientific notation.
+ * </ol>
+ *
+ * It is possible to specify both a magnitude and a number of significant digits. If used together,
+ * the <em>significant digits mode</em> determines how conflicts between fraction digits and
+ * signiciant digits are resolved. For more information, see {@link #setSignificantDigitsMode}.
+ *
+ * <p>It is also possible to specify the <em>rounding mode</em> to use. The default rounding mode is
+ * "half even", which rounds numbers to their closest increment, with ties broken in favor of
+ * trailing numbers being even. For more information, see {@link #setRoundingMode} and <a
+ * href="http://userguide.icu-project.org/formatparse/numbers/rounding-modes">the ICU User
+ * Guide</a>.
+ *
+ * <h3>Pattern Strings</h3>
+ *
+ * <p>A <em>pattern string</em> is a way to serialize some of the available properties for decimal
+ * formatting. However, not all properties are capable of being serialized into a pattern string;
+ * see {@link #applyPattern} for more information.
+ *
+ * <p>Most users should not need to interface with pattern strings directly.
+ *
+ * <p>ICU DecimalFormat aims to follow the specification for pattern strings in <a
+ * href="http://unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns">UTS #35</a>.
+ * Refer to that specification for more information on pattern string syntax.
+ *
+ * <h4>Pattern String BNF</h4>
+ *
+ * The following BNF is used when parsing the pattern string into property values:
+ *
+ * <pre>
+ * pattern    := subpattern (';' subpattern)?
+ * subpattern := prefix? number exponent? suffix?
+ * number     := (integer ('.' fraction)?) | sigDigits
+ * prefix     := '&#92;u0000'..'&#92;uFFFD' - specialCharacters
+ * suffix     := '&#92;u0000'..'&#92;uFFFD' - specialCharacters
+ * integer    := '#'* '0'* '0'
+ * fraction   := '0'* '#'*
+ * sigDigits  := '#'* '@' '@'* '#'*
+ * exponent   := 'E' '+'? '0'* '0'
+ * padSpec    := '*' padChar
+ * padChar    := '&#92;u0000'..'&#92;uFFFD' - quote
+ * &#32;
+ * Notation:
+ *   X*       0 or more instances of X
+ *   X?       0 or 1 instances of X
+ *   X|Y      either X or Y
+ *   C..D     any character from C up to D, inclusive
+ *   S-T      characters in S, except those in T
+ * </pre>
+ *
+ * The first subpattern is for positive numbers. The second (optional) subpattern is for negative
+ * numbers.
+ *
+ * <p>Not indicated in the BNF syntax above:
+ *
+ * <ul>
+ *   <li>The grouping separator ',' can occur inside the integer and sigDigits elements, between any
+ *       two pattern characters of that element, as long as the integer or sigDigits element is not
+ *       followed by the exponent element.
+ *   <li>Two grouping intervals are recognized: That between the decimal point and the first
+ *       grouping symbol, and that between the first and second grouping symbols. These intervals
+ *       are identical in most locales, but in some locales they differ. For example, the pattern
+ *       &quot;#,##,###&quot; formats the number 123456789 as &quot;12,34,56,789&quot;.
+ *   <li>The pad specifier <code>padSpec</code> may appear before the prefix, after the prefix,
+ *       before the suffix, after the suffix, or not at all.
+ *   <li>In place of '0', the digits '1' through '9' may be used to indicate a rounding increment.
+ * </ul>
+ *
+ * <h3>Parsing</h3>
+ *
+ * DecimalFormat aims to be able to parse anything that it can output as a formatted string.
+ *
+ * <p>There are two primary parse modes: <em>lenient</em> and <em>strict</em>. Lenient mode should
+ * be used if the goal is to parse user input to a number; strict mode should be used if the goal is
+ * validation. For more information, see {@link #setParseStrict}.
+ *
+ * <p><code>DecimalFormat</code> parses all Unicode characters that represent decimal digits, as
+ * defined by {@link UCharacter#digit}. In addition, <code>DecimalFormat</code> also recognizes as
+ * digits the ten consecutive characters starting with the localized zero digit defined in the
+ * {@link DecimalFormatSymbols} object. During formatting, the {@link DecimalFormatSymbols}-based
+ * digits are output.
+ *
+ * <p>During parsing, grouping separators are ignored.
+ *
+ * <p>For currency parsing, the formatter is able to parse every currency style formats no matter
+ * which style the formatter is constructed with. For example, a formatter instance gotten from
+ * NumberFormat.getInstance(ULocale, NumberFormat.CURRENCYSTYLE) can parse formats such as "USD1.00"
+ * and "3.00 US dollars".
+ *
+ * <p>If {@link #parse(String, ParsePosition)} fails to parse a string, it returns <code>null</code>
+ * and leaves the parse position unchanged. The convenience method {@link #parse(String)} indicates
+ * parse failure by throwing a {@link java.text.ParseException}.
+ * </ul>
+ *
+ * <h3>Thread Safety and Best Practices</h3>
+ *
+ * <p>Starting with ICU 59, instance of DecimalFormat are thread-safe.
+ *
+ * <p>Under the hood, DecimalFormat maintains an immutable formatter object that is used whenever
+ * one of the {@link #format} methods is called. This immutable formatter object is rebuilt whenever
+ * any of the property setters are called. It is therefore best practice to call property setters
+ * only during construction and not when formatting numbers online.
+ *
+ * @see java.text.Format
+ * @see NumberFormat
+ * @stable ICU 2.0
+ */
 public class DecimalFormat extends NumberFormat {
 
   /** New serialization in ICU 59: declare different version from ICU 58. */
@@ -84,11 +262,26 @@ public class DecimalFormat extends NumberFormat {
   //                                    CONSTRUCTORS                                     //
   //=====================================================================================//
 
-  /** @stable ICU 2.0 */
+  /**
+   * Creates a DecimalFormat based on the number pattern and symbols for the default locale. This is
+   * a convenient way to obtain a DecimalFormat instance when internationalization is not the main
+   * concern.
+   *
+   * <p>Most users should call the factory methods on NumberFormat, such as {@link
+   * NumberFormat#getNumberInstance}, which return localized formatter objects, instead of the
+   * DecimalFormat constructors.
+   *
+   * @see NumberFormat#getInstance
+   * @see NumberFormat#getNumberInstance
+   * @see NumberFormat#getCurrencyInstance
+   * @see NumberFormat#getPercentInstance
+   * @see Category#FORMAT
+   * @stable ICU 2.0
+   */
   public DecimalFormat() {
     // Use the locale's default pattern
     ULocale def = ULocale.getDefault(ULocale.Category.FORMAT);
-    String pattern = getPattern(def, 0);
+    String pattern = getPattern(def, NumberFormat.NUMBERSTYLE);
     symbols = getDefaultSymbols();
     properties = new Properties();
     exportedProperties = new Properties();
@@ -98,7 +291,26 @@ public class DecimalFormat extends NumberFormat {
     refreshFormatter();
   }
 
-  /** @stable ICU 2.0 */
+  /**
+   * Creates a DecimalFormat based on the given pattern, using symbols for the default locale. This
+   * is a convenient way to obtain a DecimalFormat instance when internationalization is not the
+   * main concern.
+   *
+   * <p>Most users should call the factory methods on NumberFormat, such as {@link
+   * NumberFormat#getNumberInstance}, which return localized formatter objects, instead of the
+   * DecimalFormat constructors.
+   *
+   * @param pattern A pattern string such as "#,##0.00" conforming to <a
+   *     href="http://unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns">UTS
+   *     #35</a>.
+   * @throws IllegalArgumentException if the given pattern is invalid.
+   * @see NumberFormat#getInstance
+   * @see NumberFormat#getNumberInstance
+   * @see NumberFormat#getCurrencyInstance
+   * @see NumberFormat#getPercentInstance
+   * @see Category#FORMAT
+   * @stable ICU 2.0
+   */
   public DecimalFormat(String pattern) {
     symbols = getDefaultSymbols();
     properties = new Properties();
@@ -109,7 +321,26 @@ public class DecimalFormat extends NumberFormat {
     refreshFormatter();
   }
 
-  /** @stable ICU 2.0 */
+  /**
+   * Creates a DecimalFormat based on the given pattern and symbols. Use this constructor if you
+   * want complete control over the behavior of the formatter.
+   *
+   * <p>Most users should call the factory methods on NumberFormat, such as {@link
+   * NumberFormat#getNumberInstance}, which return localized formatter objects, instead of the
+   * DecimalFormat constructors.
+   *
+   * @param pattern A pattern string such as "#,##0.00" conforming to <a
+   *     href="http://unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns">UTS
+   *     #35</a>.
+   * @param symbols The set of symbols to be used.
+   * @exception IllegalArgumentException if the given pattern is invalid
+   * @see NumberFormat#getInstance
+   * @see NumberFormat#getNumberInstance
+   * @see NumberFormat#getCurrencyInstance
+   * @see NumberFormat#getPercentInstance
+   * @see DecimalFormatSymbols
+   * @stable ICU 2.0
+   */
   public DecimalFormat(String pattern, DecimalFormatSymbols symbols) {
     this.symbols = (DecimalFormatSymbols) symbols.clone();
     properties = new Properties();
@@ -120,12 +351,29 @@ public class DecimalFormat extends NumberFormat {
     refreshFormatter();
   }
 
-  /** @stable ICU 4.2 */
+  /**
+   * Creates a DecimalFormat based on the given pattern and symbols, with additional control over
+   * the behavior of currency. The style argument determines whether currency rounding rules should
+   * override the pattern, and the {@link CurrencyPluralInfo} object is used for customizing the
+   * plural forms used for currency long names.
+   *
+   * <p>Most users should call the factory methods on NumberFormat, such as {@link
+   * NumberFormat#getNumberInstance}, which return localized formatter objects, instead of the
+   * DecimalFormat constructors.
+   *
+   * @param pattern a non-localized pattern string
+   * @param symbols the set of symbols to be used
+   * @param infoInput the information used for currency plural format, including currency plural
+   *     patterns and plural rules.
+   * @param style the decimal formatting style, it is one of the following values:
+   *     NumberFormat.NUMBERSTYLE; NumberFormat.CURRENCYSTYLE; NumberFormat.PERCENTSTYLE;
+   *     NumberFormat.SCIENTIFICSTYLE; NumberFormat.INTEGERSTYLE; NumberFormat.ISOCURRENCYSTYLE;
+   *     NumberFormat.PLURALCURRENCYSTYLE;
+   * @stable ICU 4.2
+   */
   public DecimalFormat(
       String pattern, DecimalFormatSymbols symbols, CurrencyPluralInfo infoInput, int style) {
-    this.symbols = (DecimalFormatSymbols) symbols.clone();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    this(pattern, symbols, style);
     properties.setCurrencyPluralInfo(infoInput);
     refreshFormatter();
   }
@@ -199,6 +447,7 @@ public class DecimalFormat extends NumberFormat {
 
   /**
    * Converts the given string to standard notation and then parses it using {@link #applyPattern}.
+   * This method is provided for backwards compatibility and should not be used in new projects.
    *
    * <p>Localized notation means that instead of using generic placeholders in the pattern, you use
    * the corresponding locale-specific characters instead. For example, in locale <em>fr-FR</em>,
@@ -739,11 +988,12 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether the sign is being shown on positive numbers.
+   * {@icu} Returns whether the sign is being shown on positive numbers.
+   *
    * @see #setSignAlwaysShown
    * @category Affixes
    * @internal
-   * @deprecated This API is technical preview.
+   * @deprecated ICU 59: This API is a technical preview. It may change in an upcoming release.
    */
   @Deprecated
   public synchronized boolean getSignAlwaysShown() {
@@ -783,7 +1033,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The multiplier being applied to numbers before they are formatted.
+   * Returns the multiplier being applied to numbers before they are formatted.
+   *
    * @see #setMultiplier
    * @category Multipliers
    * @stable ICU 2.0
@@ -836,7 +1087,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The increment to which numbers are being rounded.
+   * {@icu} Returns the increment to which numbers are being rounded.
+   *
    * @see #setRoundingIncrement
    * @category Rounding
    * @stable ICU 2.0
@@ -846,9 +1098,9 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Sets an increment, or interval, to which numbers
-   * are rounded. For example, a rounding increment of 0.05 will cause the number 1.23 to be rounded
-   * to 1.25 in the default rounding mode.
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Sets an increment, or interval, to which
+   * numbers are rounded. For example, a rounding increment of 0.05 will cause the number 1.23 to be
+   * rounded to 1.25 in the default rounding mode.
    *
    * <p>The rounding increment can be specified via the pattern string: for example, the pattern
    * "#,##0.05" encodes a rounding increment of 0.05.
@@ -879,7 +1131,7 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Overload of {@link
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Overload of {@link
    * #setRoundingIncrement(java.math.BigDecimal)}.
    *
    * @param increment The increment to which numbers are to be rounded.
@@ -893,7 +1145,7 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Overload of {@link
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Overload of {@link
    * #setRoundingIncrement(java.math.BigDecimal)}.
    *
    * @param increment The increment to which numbers are to be rounded.
@@ -911,7 +1163,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The rounding mode being used to round numbers.
+   * Returns the rounding mode being used to round numbers.
+   *
    * @see #setRoundingMode
    * @category Rounding
    * @stable ICU 2.0
@@ -951,7 +1204,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The {@link java.math.MathContext} being used to round numbers.
+   * {@icu} Returns the {@link java.math.MathContext} being used to round numbers.
+   *
    * @see #setMathContext
    * @category Rounding
    * @stable ICU 4.2
@@ -963,8 +1217,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Sets the {@link java.math.MathContext} used to
-   * round numbers. A "math context" encodes both a rounding mode and a number of significant
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Sets the {@link java.math.MathContext} used
+   * to round numbers. A "math context" encodes both a rounding mode and a number of significant
    * digits.
    *
    * <p>This method is provided for users who require their output to conform to a standard math
@@ -986,7 +1240,8 @@ public class DecimalFormat extends NumberFormat {
   private transient int icuMathContextForm = MathContext.PLAIN;
 
   /**
-   * @return The {@link com.ibm.icu.math.MathContext} being used to round numbers.
+   * {@icu} Returns the {@link com.ibm.icu.math.MathContext} being used to round numbers.
+   *
    * @see #setMathContext
    * @category Rounding
    * @stable ICU 4.2
@@ -1001,8 +1256,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Overload of {@link #setMathContext} for {@link
-   * com.ibm.icu.math.MathContext}.
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Overload of {@link #setMathContext} for
+   * {@link com.ibm.icu.math.MathContext}.
    *
    * @param mathContextICU The MathContext to use when rounding numbers.
    * @see #setMathContext(java.math.MathContext)
@@ -1026,7 +1281,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The effective minimum number of digits before the decimal separator.
+   * Returns the effective minimum number of digits before the decimal separator.
+   *
    * @see #setMinimumIntegerDigits
    * @category Rounding
    * @stable ICU 2.0
@@ -1059,7 +1315,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The effective maximum number of digits before the decimal separator.
+   * Returns the effective maximum number of digits before the decimal separator.
+   *
    * @see #setMaximumIntegerDigits
    * @category Rounding
    * @stable ICU 2.0
@@ -1091,7 +1348,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The effective minimum number of integer digits after the decimal separator.
+   * Returns the effective minimum number of integer digits after the decimal separator.
+   *
    * @see #setMaximumIntegerDigits
    * @category Rounding
    * @stable ICU 2.0
@@ -1130,7 +1388,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The effective maximum number of integer digits after the decimal separator.
+   * Returns the effective maximum number of integer digits after the decimal separator.
+   *
    * @see #setMaximumIntegerDigits
    * @category Rounding
    * @stable ICU 2.0
@@ -1165,7 +1424,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether significant digits are being used in rounding.
+   * {@icu} Returns whether significant digits are being used in rounding.
+   *
    * @see #setSignificantDigitsUsed
    * @category Rounding
    * @stable ICU 3.0
@@ -1175,8 +1435,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Sets whether significant digits are to be used in
-   * rounding.
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Sets whether significant digits are to be
+   * used in rounding.
    *
    * <p>Calling <code>df.setSignificantDigitsUsed(true)</code> is functionally equivalent to:
    *
@@ -1203,7 +1463,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The effective minimum number of significant digits displayed.
+   * {@icu} Returns the effective minimum number of significant digits displayed.
+   *
    * @see #setMinimumSignificantDigits
    * @category Rounding
    * @stable ICU 3.0
@@ -1213,9 +1474,9 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Sets the minimum number of significant digits to be
-   * displayed. If the number of significant digits is less than this value, the number will be
-   * padded with zeros as necessary.
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Sets the minimum number of significant
+   * digits to be displayed. If the number of significant digits is less than this value, the number
+   * will be padded with zeros as necessary.
    *
    * <p>For example, if minimum significant digits is 3 and the number is 1.2, the number will be
    * printed as "1.20".
@@ -1231,7 +1492,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The effective maximum number of significant digits displayed.
+   * {@icu} Returns the effective maximum number of significant digits displayed.
+   *
    * @see #setMaximumSignificantDigits
    * @category Rounding
    * @stable ICU 3.0
@@ -1241,9 +1503,9 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Sets the maximum number of significant digits to be
-   * displayed. If the number of significant digits in the number exceeds this value, the number
-   * will be rounded according to the current rounding mode.
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Sets the maximum number of significant
+   * digits to be displayed. If the number of significant digits in the number exceeds this value,
+   * the number will be rounded according to the current rounding mode.
    *
    * <p>For example, if maximum significant digits is 3 and the number is 12345, the number will be
    * printed as "12300".
@@ -1265,7 +1527,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The current significant digits mode.
+   * {@icu} Returns the current significant digits mode.
+   *
    * @see #setSignificantDigitsMode
    * @category Rounding
    * @internal
@@ -1277,7 +1540,7 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Rounding and Digit Limits:</strong> Sets the strategy used for resolving
+   * {@icu} <strong>Rounding and Digit Limits:</strong> Sets the strategy used for resolving
    * minimum/maximum significant digits when minimum/maximum integer and/or fraction digits are
    * specified. There are three modes:
    *
@@ -1318,7 +1581,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The minimum number of characters in formatted output.
+   * Returns the minimum number of characters in formatted output.
+   *
    * @see #setFormatWidth
    * @category Padding
    * @stable ICU 2.0
@@ -1353,7 +1617,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The character used for padding.
+   * {@icu} Returns the character used for padding.
+   *
    * @see #setPadCharacter
    * @category Padding
    * @stable ICU 2.0
@@ -1368,8 +1633,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Padding:</strong> Sets the character used to pad numbers that are narrower than the
-   * width specified in {@link #setFormatWidth}.
+   * {@icu} <strong>Padding:</strong> Sets the character used to pad numbers that are narrower than
+   * the width specified in {@link #setFormatWidth}.
    *
    * <p>In the pattern string, the padding character is the token that follows '*' before or after
    * the prefix or suffix.
@@ -1385,7 +1650,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The position used for padding.
+   * {@icu} Returns the position used for padding.
+   *
    * @see #setPadPosition
    * @category Padding
    * @stable ICU 2.0
@@ -1396,9 +1662,9 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Padding:</strong> Sets the position where to insert the pad character when narrower
-   * than the width specified in {@link #setFormatWidth}. For example, consider the pattern "P123S"
-   * with padding width 8 and padding char "*". The four positions are:
+   * {@icu} <strong>Padding:</strong> Sets the position where to insert the pad character when
+   * narrower than the width specified in {@link #setFormatWidth}. For example, consider the pattern
+   * "P123S" with padding width 8 and padding char "*". The four positions are:
    *
    * <ul>
    *   <li>{@link DecimalFormat#PAD_BEFORE_PREFIX} ⇒ "***P123S"
@@ -1418,7 +1684,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether scientific (exponential) notation is enabled on this formatter.
+   * {@icu} Returns whether scientific (exponential) notation is enabled on this formatter.
+   *
    * @see #setScientificNotation
    * @category ScientificNotation
    * @stable ICU 2.0
@@ -1428,10 +1695,10 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Scientific Notation:</strong> Sets whether this formatter should print in scientific
-   * (exponential) notation. For example, if scientific notation is enabled, the number 123000 will
-   * be printed as "1.23E5" in locale <em>en-US</em>. A locale-specific symbol is used as the
-   * exponent separator.
+   * {@icu} <strong>Scientific Notation:</strong> Sets whether this formatter should print in
+   * scientific (exponential) notation. For example, if scientific notation is enabled, the number
+   * 123000 will be printed as "1.23E5" in locale <em>en-US</em>. A locale-specific symbol is used
+   * as the exponent separator.
    *
    * <p>Calling <code>df.setScientificNotation(true)</code> is functionally equivalent to calling
    * <code>df.setMinimumExponentDigits(1)</code>.
@@ -1451,7 +1718,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The minimum number of digits printed in the exponent in scientific notation.
+   * {@icu} Returns the minimum number of digits printed in the exponent in scientific notation.
+   *
    * @see #setMinimumExponentDigits
    * @category ScientificNotation
    * @stable ICU 2.0
@@ -1461,9 +1729,9 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Scientific Notation:</strong> Sets the minimum number of digits to be printed in the
-   * exponent. For example, if minimum exponent digits is 3, the number 123000 will be printed as
-   * "1.23E005".
+   * {@icu} <strong>Scientific Notation:</strong> Sets the minimum number of digits to be printed in
+   * the exponent. For example, if minimum exponent digits is 3, the number 123000 will be printed
+   * as "1.23E005".
    *
    * <p>This setting corresponds to the number of zeros after the 'E' in a pattern string such as
    * "0.00E000".
@@ -1478,7 +1746,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether the sign (plus or minus) is always printed in scientific notation.
+   * {@icu} Returns whether the sign (plus or minus) is always printed in scientific notation.
+   *
    * @see #setExponentSignAlwaysShown
    * @category ScientificNotation
    * @stable ICU 2.0
@@ -1488,8 +1757,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Scientific Notation:</strong> Sets whether the sign (plus or minus) is always to be
-   * shown in the exponent in scientific notation. For example, if this setting is enabled, the
+   * {@icu} <strong>Scientific Notation:</strong> Sets whether the sign (plus or minus) is always to
+   * be shown in the exponent in scientific notation. For example, if this setting is enabled, the
    * number 123000 will be printed as "1.23E+5" in locale <em>en-US</em>. The number 0.0000123 will
    * always be printed as "1.23E-5" in locale <em>en-US</em> whether or not this setting is enabled.
    *
@@ -1506,7 +1775,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether or not grouping separators are to be printed in the output.
+   * Returns whether or not grouping separators are being printed in the output.
+   *
    * @see #setGroupingUsed
    * @category Separators
    * @stable ICU 2.0
@@ -1546,7 +1816,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The primary grouping size in use.
+   * Returns the primary grouping size in use.
+   *
    * @see #setGroupingSize
    * @category Separators
    * @stable ICU 2.0
@@ -1577,7 +1848,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The secondary grouping size in use.
+   * {@icu} Returns the secondary grouping size in use.
+   *
    * @see #setSecondaryGroupingSize
    * @category Separators
    * @stable ICU 2.0
@@ -1587,7 +1859,7 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Grouping:</strong> Sets the secondary grouping size (distance between grouping
+   * {@icu} <strong>Grouping:</strong> Sets the secondary grouping size (distance between grouping
    * separators after the first separator) used when formatting large numbers. In many south Asian
    * locales, this is set to 2.
    *
@@ -1608,7 +1880,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The minimum number of digits before grouping is triggered.
+   * {@icu} Returns the minimum number of digits before grouping is triggered.
+   *
    * @see #setMinimumGroupingDigits
    * @category Separators
    * @internal
@@ -1620,9 +1893,9 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Sets the minimum number of digits that must be before the first grouping separator in order for
-   * the grouping separator to be printed. For example, if minimum grouping digits is set to 2, in
-   * <em>en-US</em>, 1234 will be printed as "1234" and 12345 will be printed as "12,345".
+   * {@icu} Sets the minimum number of digits that must be before the first grouping separator in
+   * order for the grouping separator to be printed. For example, if minimum grouping digits is set
+   * to 2, in <em>en-US</em>, 1234 will be printed as "1234" and 12345 will be printed as "12,345".
    *
    * @param number The minimum number of digits before grouping is triggered.
    * @category Separators
@@ -1636,7 +1909,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether the decimal separator is shown on integers.
+   * Returns whether the decimal separator is shown on integers.
+   *
    * @see #setDecimalSeparatorAlwaysShown
    * @category Separators
    * @stable ICU 2.0
@@ -1663,7 +1937,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The user-specified currency. May be null.
+   * Returns the user-specified currency. May be null.
+   *
    * @see #setCurrency
    * @see DecimalFormatSymbols#getCurrency
    * @category Currency
@@ -1703,7 +1978,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The strategy for rounding currency amounts.
+   * {@icu} Returns the strategy for rounding currency amounts.
+   *
    * @see #setCurrencyUsage
    * @category Currency
    * @stable ICU 54
@@ -1719,7 +1995,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Sets the currency-dependent strategy to use when rounding numbers. There are two strategies:
+   * {@icu} Sets the currency-dependent strategy to use when rounding numbers. There are two
+   * strategies:
    *
    * <ul>
    *   <li>STANDARD: When the amount displayed is intended for banking statements or electronic
@@ -1745,7 +2022,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return The current instance of CurrencyPluralInfo.
+   * {@icu} Returns the current instance of CurrencyPluralInfo.
+   *
    * @see #setCurrencyPluralInfo
    * @category Currency
    * @stable ICU 4.2
@@ -1756,8 +2034,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Sets a custom instance of CurrencyPluralInfo. CurrencyPluralInfo generates pattern strings for
-   * printing currency long names.
+   * {@icu} Sets a custom instance of CurrencyPluralInfo. CurrencyPluralInfo generates pattern
+   * strings for printing currency long names.
    *
    * <p><strong>Most users should not call this method directly.</strong> You should instead create
    * your formatter via <code>NumberFormat.getInstance(NumberFormat.PLURALCURRENCYSTYLE)</code>.
@@ -1772,7 +2050,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether {@link #parse} will always return a BigDecimal
+   * Returns whether {@link #parse} will always return a BigDecimal.
+   *
    * @see #setParseBigDecimal
    * @category Parsing
    * @stable ICU 3.6
@@ -1804,7 +2083,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Always 1000, the default prior to ICU 59.
+   * Always returns 1000, the default prior to ICU 59.
+   *
    * @category Parsing
    * @deprecated Setting max parse digits has no effect since ICU4J 59.
    */
@@ -1847,7 +2127,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether parsing should stop before encountering a decimal point and fraction part.
+   * {@inheritDoc}
+   *
    * @see #setParseIntegerOnly
    * @category Parsing
    * @stable ICU 2.0
@@ -1858,12 +2139,7 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Parsing:</strong> Whether to ignore the fraction part of a number when parsing
-   * (defaults to false). If a string contains a decimal point, parsing will stop before the decimal
-   * point. Note that determining whether a character is a decimal point depends on the locale.
-   *
-   * <p>For example, in <em>en-US</em>, parsing the string "123.45" will return the number 123 and
-   * parse position 3.
+   * <strong>Parsing:</strong> {@inheritDocs}
    *
    * <p>This is functionally equivalent to calling {@link #setDecimalPatternMatchRequired} and a
    * pattern without a decimal point.
@@ -1880,7 +2156,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether the presence of a decimal point must match the pattern.
+   * {@icu} Returns whether the presence of a decimal point must match the pattern.
+   *
    * @see #setDecimalPatternMatchRequired
    * @category Parsing
    * @stable ICU 54
@@ -1890,10 +2167,10 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Parsing:</strong> This method is used to either <em>require</em> or <em>forbid</em> the
-   * presence of a decimal point in the string being parsed (disabled by default). This feature was
-   * designed to be an extra layer of strictness on top of strict parsing, although it can be used
-   * in either lenient mode or strict mode.
+   * {@icu} <strong>Parsing:</strong> This method is used to either <em>require</em> or
+   * <em>forbid</em> the presence of a decimal point in the string being parsed (disabled by
+   * default). This feature was designed to be an extra layer of strictness on top of strict
+   * parsing, although it can be used in either lenient mode or strict mode.
    *
    * <p>To <em>require</em> a decimal point, call this method in combination with either a pattern
    * containing a decimal point or with {@link #setDecimalSeparatorAlwaysShown}.
@@ -1930,7 +2207,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether to ignore exponents when parsing.
+   * {@icu} Returns whether to ignore exponents when parsing.
+   *
    * @see #setParseNoExponent
    * @category Parsing
    * @internal
@@ -1942,8 +2220,9 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Specifies whether to stop parsing when an exponent separator is encountered. For example,
-   * parses "123E4" to 123 (with parse position 3) instead of 1230000 (with parse position 5).
+   * {@icu} Specifies whether to stop parsing when an exponent separator is encountered. For
+   * example, parses "123E4" to 123 (with parse position 3) instead of 1230000 (with parse position
+   * 5).
    *
    * @param value true to prevent exponents from being parsed; false to allow them to be parsed.
    * @category Parsing
@@ -1957,7 +2236,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * @return Whether to force case (uppercase/lowercase) to match when parsing.
+   * {@icu} Returns whether to force case (uppercase/lowercase) to match when parsing.
+   *
    * @see #setParseNoExponent
    * @category Parsing
    * @internal
@@ -1969,8 +2249,8 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Specifies whether parsing should require cases to match in affixes, exponent separators, and
-   * currency codes. Case mapping is performed for each code point using {@link
+   * {@icu} Specifies whether parsing should require cases to match in affixes, exponent separators,
+   * and currency codes. Case mapping is performed for each code point using {@link
    * UCharacter#foldCase}.
    *
    * @param value true to force case (uppercase/lowercase) to match when parsing; false to ignore
@@ -2014,7 +2294,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized int hashCode() {
-    return properties.hashCode();
+    return properties.hashCode() ^ symbols.hashCode();
   }
 
   /**
@@ -2069,7 +2349,8 @@ public class DecimalFormat extends NumberFormat {
 
   /**
    * Calls {@link #toPattern} and converts the string to localized notation. For more information on
-   * localized notation, see {@link #applyLocalizedPattern}.
+   * localized notation, see {@link #applyLocalizedPattern}. This method is provided for backwards
+   * compatibility and should not be used in new projects.
    *
    * @return A decimal format pattern string in localized notation.
    * @stable ICU 2.0
@@ -2158,7 +2439,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Respect significant digits counts, ignoring the fraction length.
      *
-     * @see #setSignificantDigitsMode
+     * @see DecimalFormat#setSignificantDigitsMode
      * @internal
      * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
      */
@@ -2168,7 +2449,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Respect the fraction length, overriding significant digits counts if necessary.
      *
-     * @see #setSignificantDigitsMode
+     * @see DecimalFormat#setSignificantDigitsMode
      * @internal
      * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
      */
@@ -2178,7 +2459,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Respect minimum significant digits, overriding fraction length if necessary.
      *
-     * @see #setSignificantDigitsMode
+     * @see DecimalFormat#setSignificantDigitsMode
      * @internal
      * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
      */

@@ -70,7 +70,7 @@ public class CompactDecimalFormat extends DecimalFormat {
   }
 
   /**
-   * Create a CompactDecimalFormat appropriate for a locale. The result may be affected by the
+   * Creates a CompactDecimalFormat appropriate for a locale. The result may be affected by the
    * number system in the locale, such as ar-u-nu-latn.
    *
    * @param locale the desired locale
@@ -82,7 +82,7 @@ public class CompactDecimalFormat extends DecimalFormat {
   }
 
   /**
-   * Create a CompactDecimalFormat appropriate for a locale. The result may be affected by the
+   * Creates a CompactDecimalFormat appropriate for a locale. The result may be affected by the
    * number system in the locale, such as ar-u-nu-latn.
    *
    * @param locale the desired locale
