@@ -175,7 +175,7 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * <h3>Parsing</h3>
  *
- * DecimalFormat aims to be able to parse anything that it can output as a formatted string.
+ * <p>DecimalFormat aims to be able to parse anything that it can output as a formatted string.
  *
  * <p>There are two primary parse modes: <em>lenient</em> and <em>strict</em>. Lenient mode should
  * be used if the goal is to parse user input to a number; strict mode should be used if the goal is
@@ -197,7 +197,6 @@ import com.ibm.icu.util.ULocale.Category;
  * <p>If {@link #parse(String, ParsePosition)} fails to parse a string, it returns <code>null</code>
  * and leaves the parse position unchanged. The convenience method {@link #parse(String)} indicates
  * parse failure by throwing a {@link java.text.ParseException}.
- * </ul>
  *
  * <h3>Thread Safety and Best Practices</h3>
  *
