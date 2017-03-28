@@ -1,9 +1,14 @@
 /.git
 icu4c/bin
+icu4c/bin32uwp
 icu4c/bin64
+icu4c/bin64uwp
+icu4c/commondata
 icu4c/include
 icu4c/lib
+icu4c/lib32uwp
 icu4c/lib64
+icu4c/lib64uwp
 icu4c/source/Doxyfile
 icu4c/source/Makefile
 icu4c/source/README
@@ -61,6 +66,7 @@ icu4c/source/data/Makefile
 icu4c/source/data/Release
 icu4c/source/data/build-dir
 icu4c/source/data/build-local
+icu4c/source/data/data
 icu4c/source/data/icupkg.inc
 icu4c/source/data/in
 icu4c/source/data/makedata.vcproj.*.*.user
