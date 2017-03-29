@@ -144,7 +144,7 @@ library: common
     unistr_props unistr_case unistr_case_locale unistr_titlecase_brkiter unistr_cnv
     cstr
     uniset_core uniset_props uniset_closure usetiter uset uset_props
-    uiter
+    uiter edits
     ucasemap ucasemap_titlecase_brkiter script_runs
     uprops ubidi_props ucase uscript uscript_props
     ubidi ushape ubiditransform
@@ -461,6 +461,11 @@ group: ustr_titlecase_brkiter
     breakiterator
     ustring_case_locale ucase
 
+group: edits
+    edits.o
+  deps
+    platform
+
 group: ucasemap_titlecase_brkiter
     ucasemap_titlecase_brkiter.o
   deps
@@ -469,7 +474,7 @@ group: ucasemap_titlecase_brkiter
 group: ucasemap
     ucasemap.o
   deps
-    ustring_case
+    ustring_case ustring_case_locale
     resourcebundle  # uloc_getName() etc.
 
 group: ustring_case_locale
@@ -481,7 +486,7 @@ group: ustring_case_locale
 group: ustring_case
     ustrcase.o
   deps
-    ucase
+    ucase edits
 
 group: ucase
     ucase.o
@@ -863,6 +868,8 @@ group: formatting
     decfmtst.o decimfmt.o decimalformatpattern.o compactdecimalformat.o
     numfmt.o unum.o
     winnmfmt.o
+    # pluralrules
+    standardplural.o plurrule.o upluralrules.o
     # scientificnumberformatter - would depend on dcfmtsym, so would be circular.
     scientificnumberformatter.o
     # rbnf
@@ -884,7 +891,7 @@ group: formatting
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
     digitlist formattable format
-    dayperiodrules pluralrules
+    dayperiodrules
     collation collation_builder  # for rbnf
     common
     floating_point  # sqrt() for astro.o
@@ -917,14 +924,6 @@ group: format
     format.o fphdlimp.o fpositer.o ufieldpositer.o
   deps
     resourcebundle parsepos uvector32
-
-group: pluralrules
-    standardplural.o plurrule.o upluralrules.o
-  deps
-    digitlist  # plurals depend on decimals
-    patternprops resourcebundle uvector uvector32 unifiedcache
-    unistr_case_locale
-    uclean_i18n
 
 group: regex_cnv
     uregexc.o
