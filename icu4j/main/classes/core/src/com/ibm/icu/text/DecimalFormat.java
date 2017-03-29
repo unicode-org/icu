@@ -570,8 +570,6 @@ public class DecimalFormat extends NumberFormat {
           setSignificantDigitsUsed(fieldGetter.get("useSignificantDigits", false));
         } else if (name.equals("currencyPluralInfo")) {
           setCurrencyPluralInfo((CurrencyPluralInfo) fieldGetter.get("currencyPluralInfo", null));
-        } else if (name.equals("currencyUsage")) {
-          setCurrencyUsage((CurrencyUsage) fieldGetter.get("currencyUsage", null));
         } else if (name.equals("mathContext")) {
           setMathContextICU((MathContext) fieldGetter.get("mathContext", null));
         } else if (name.equals("negPrefixPattern")) {
@@ -602,6 +600,7 @@ public class DecimalFormat extends NumberFormat {
           // "attributes"
           // "currencyChoice"
           // "formatPattern"
+          // "currencyUsage" => ignore this because the old code puts currencyUsage directly into min/max fraction.
         }
       }
       // Resolve affixes
