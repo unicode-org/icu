@@ -198,6 +198,15 @@ import com.ibm.icu.util.ULocale.Category;
  * and leaves the parse position unchanged. The convenience method {@link #parse(String)} indicates
  * parse failure by throwing a {@link java.text.ParseException}.
  *
+ * <p>Under the hood, a state table parsing engine is used. To debug a parsing failure during
+ * development, use the following pattern to print details about the state table transitions:
+ *
+ * <pre>
+ * com.ibm.icu.impl.number.Parse.DEBUGGING = true;
+ * df.parse("123.45", ppos);
+ * com.ibm.icu.impl.number.Parse.DEBUGGING = false;
+ * </pre>
+ *
  * <h3>Thread Safety and Best Practices</h3>
  *
  * <p>Starting with ICU 59, instance of DecimalFormat are thread-safe.
