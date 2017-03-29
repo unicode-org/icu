@@ -66,7 +66,7 @@ typedef enum UDateRelativeDateTimeFormatterStyle {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_STYLE_COUNT
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } UDateRelativeDateTimeFormatterStyle;
 
 /**
@@ -171,7 +171,7 @@ typedef enum URelativeDateTimeUnit {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_REL_UNIT_COUNT
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } URelativeDateTimeUnit;
 
 /**
@@ -179,7 +179,7 @@ typedef enum URelativeDateTimeUnit {
  * @stable ICU 57
  */
 struct URelativeDateTimeFormatter;
-typedef struct URelativeDateTimeFormatter URelativeDateTimeFormatter;  /**< C typedef for struct URelativeDateTimeFormatter. @draft ICU 57 */
+typedef struct URelativeDateTimeFormatter URelativeDateTimeFormatter;  /**< C typedef for struct URelativeDateTimeFormatter. @stable ICU 57 */
 
 
 /**

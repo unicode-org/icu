@@ -30,6 +30,8 @@ U_NAMESPACE_BEGIN
 #   define U_ALIASING_BARRIER(ptr) asm volatile("" : : "rm"(ptr) : "memory")
 #endif
 
+// Do not use #ifndef U_HIDE_DRAFT_API for the following class, it
+// is now used in place of UChar* in several stable C++ methods
 /**
  * char16_t * wrapper with implicit conversion from distinct but bit-compatible pointer types.
  * @draft ICU 59
@@ -135,6 +137,8 @@ char16_t *Char16Ptr::get() const { return u.cp; }
 
 #endif
 
+// Do not use #ifndef U_HIDE_DRAFT_API for the following class, it is
+// now used in place of const UChar* in several stable C++ methods
 /**
  * const char16_t * wrapper with implicit conversion from distinct but bit-compatible pointer types.
  * @draft ICU 59

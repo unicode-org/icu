@@ -425,8 +425,8 @@ enum UCalendarDateFields {
    */
   UCAL_IS_LEAP_MONTH,
 
-    // Do not conditionalize with #ifndef U_HIDE_DEPRECATED_API,
-    // it is needed for layout of Calendar, DateFormat, and other objects
+    /* Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
+     * it is needed for layout of Calendar, DateFormat, and other objects */
     /**
      * One more than the highest normal UCalendarDateFields value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.

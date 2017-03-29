@@ -795,7 +795,7 @@ typedef enum UDateFormatField {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_FIELD_COUNT = 38
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } UDateFormatField;
 
 
@@ -900,8 +900,8 @@ typedef enum UDateFormatBooleanAttribute {
      */
     UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH = 3,
 
-    // Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
-    // it is needed for layout of DateFormat object.
+    /* Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
+     * it is needed for layout of DateFormat object. */
     /**
      * One more than the highest normal UDateFormatBooleanAttribute value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.

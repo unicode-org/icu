@@ -55,7 +55,7 @@ typedef enum ULocaleDataExemplarSetType  {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     ULOCDATA_ES_COUNT=4
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } ULocaleDataExemplarSetType;
 
 /** The possible types of delimiters.
@@ -76,7 +76,7 @@ typedef enum ULocaleDataDelimiterType {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     ULOCDATA_DELIMITER_COUNT = 4
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } ULocaleDataDelimiterType;
 
 /**
@@ -207,7 +207,7 @@ typedef enum UMeasurementSystem {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UMS_LIMIT
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } UMeasurementSystem;
 
 /**
