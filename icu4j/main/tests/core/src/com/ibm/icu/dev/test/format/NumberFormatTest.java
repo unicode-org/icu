@@ -5193,6 +5193,16 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void testCustomCurrencyUsageOverridesPattern() {
+        DecimalFormat df = new DecimalFormat("#,##0.###");
+        expect2(df, 1234, "1,234");
+        df.setCurrencyUsage(CurrencyUsage.STANDARD);
+        expect2(df, 1234, "1,234.00");
+        df.setCurrencyUsage(null);
+        expect2(df, 1234, "1,234");
+    }
+
+    @Test
     public void testSignificantDigitsMode() {
         String[][] allExpected = {
               {"12340.0", "12340.0", "12340.0"},
