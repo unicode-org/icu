@@ -5203,6 +5203,20 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void testCurrencyUsageFractionOverrides() {
+        NumberFormat df = DecimalFormat.getCurrencyInstance(ULocale.US);
+        expect2(df, 35.0, "$35.00");
+        df.setMinimumFractionDigits(3);
+        expect2(df, 35.0, "$35.000");
+        df.setMaximumFractionDigits(3);
+        expect2(df, 35.0, "$35.000");
+        df.setMinimumFractionDigits(-1);
+        expect2(df, 35.0, "$35.00");
+        df.setMaximumFractionDigits(1);
+        expect2(df, 35.0, "$35.0");
+    }
+
+    @Test
     public void testSignificantDigitsMode() {
         String[][] allExpected = {
               {"12340.0", "12340.0", "12340.0"},
