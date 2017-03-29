@@ -10,9 +10,6 @@ package com.ibm.icu.text;
 
 import java.math.BigInteger;
 
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
-
 /**
  * <code>DigitList</code> handles the transcoding between numeric values and
  * strings of characters.  It only represents non-negative numbers.  The
