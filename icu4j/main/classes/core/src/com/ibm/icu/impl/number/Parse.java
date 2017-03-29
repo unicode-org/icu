@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.impl.number.formatters.BigDecimalMultiplier;
@@ -1129,7 +1130,7 @@ public class Parse {
             }
             acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
             if (state.length > 0 && mode == ParseMode.FAST) break;
-            acceptBidi(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+            acceptBidi(cp, StateName.BEFORE_SUFFIX, state, item);
             if (state.length > 0 && mode == ParseMode.FAST) break;
             acceptPadding(cp, StateName.BEFORE_SUFFIX, state, item);
             if (state.length > 0 && mode == ParseMode.FAST) break;
@@ -1155,7 +1156,7 @@ public class Parse {
             // We encountered a decimal point
             acceptFractionDigit(cp, StateName.AFTER_FRACTION_DIGIT, state, item);
             if (state.length > 0 && mode == ParseMode.FAST) break;
-            acceptBidi(cp, StateName.AFTER_FRACTION_DIGIT, state, item);
+            acceptBidi(cp, StateName.BEFORE_SUFFIX, state, item);
             if (state.length > 0 && mode == ParseMode.FAST) break;
             acceptPadding(cp, StateName.BEFORE_SUFFIX, state, item);
             if (state.length > 0 && mode == ParseMode.FAST) break;
@@ -1184,7 +1185,7 @@ public class Parse {
             break;
 
           case AFTER_EXPONENT_DIGIT:
-            acceptBidi(cp, StateName.AFTER_EXPONENT_DIGIT, state, item);
+            acceptBidi(cp, StateName.BEFORE_SUFFIX_SEEN_EXPONENT, state, item);
             acceptPadding(cp, StateName.BEFORE_SUFFIX_SEEN_EXPONENT, state, item);
             acceptExponentDigit(cp, StateName.AFTER_EXPONENT_DIGIT, state, item);
             if (mode == ParseMode.LENIENT || mode == ParseMode.STRICT) {
@@ -1257,17 +1258,17 @@ public class Parse {
             break;
 
           case INSIDE_STRING:
-            acceptStringOffset(cp, state, item);
+            long added0 = acceptStringOffset(cp, state, item);
             // Accept arbitrary bidi in the middle of strings.
-            if (state.length == 0 && UNISET_BIDI.contains(cp)) {
+            if (added0 == 0L && UNISET_BIDI.contains(cp)) {
               state.getNext().copyFrom(item, item.name, cp);
             }
             break;
 
           case INSIDE_AFFIX_PATTERN:
-            long added = acceptAffixPatternOffset(cp, state, item);
-            // Accept arbitrary bidi and whitespace (if lenient) in the middle of affixes.
-            if (added == 0L && isIgnorable(cp, state)) {
+            long added1 = acceptAffixPatternOffset(cp, state, item);
+            // Accept arbitrary bidi and whitespace (if lenient) in the middle of affix patterns.
+            if (added1 == 0L && isIgnorable(cp, state)) {
               state.getNext().copyFrom(item, item.name, cp);
             }
             break;
@@ -1758,8 +1759,8 @@ public class Parse {
     if (!next.sawSuffix && holder.s.isEmpty()) next.score += 5;
   }
 
-  private static void acceptStringOffset(int cp, ParserState state, StateItem item) {
-    acceptString(
+  private static long acceptStringOffset(int cp, ParserState state, StateItem item) {
+    return acceptString(
         cp,
         item.returnTo1,
         item.returnTo2,
@@ -1813,20 +1814,20 @@ public class Parse {
       referenceCp = Character.codePointAt(str, offset);
       count = Character.charCount(referenceCp);
       equals = codePointEquals(cp, referenceCp, state);
-      if (!UNISET_BIDI.contains(cp)) break;
+      if (!UNISET_BIDI.contains(referenceCp)) break;
     }
 
     if (equals) {
       // Matches first code point of the string
       StateItem next = state.getNext().copyFrom(item, null, cp);
 
-      // Skip over ignorable code points in the middle of the string.
+      // Skip over bidi code points in the middle or end of the string.
       // They will be accepted in the main loop.
       offset += count;
       for (; offset < str.length(); offset += count) {
         referenceCp = Character.codePointAt(str, offset);
         count = Character.charCount(referenceCp);
-        if (!UNISET_BIDI.contains(cp)) break;
+        if (!UNISET_BIDI.contains(referenceCp)) break;
       }
 
       if (offset < str.length()) {
@@ -1879,7 +1880,7 @@ public class Parse {
       tag = AffixPatternUtils.nextToken(tag, str);
       typeOrCp = AffixPatternUtils.getTypeOrCp(tag);
       hasNext = AffixPatternUtils.hasNext(tag, str);
-      if (typeOrCp < 0 || !isIgnorable(typeOrCp, state)) break;
+      if (typeOrCp < 0 || !isPatternIgnorable(typeOrCp, state)) break;
     }
 
     // Convert from the returned tag to a code point, string, or currency to check
@@ -1926,18 +1927,16 @@ public class Parse {
     while (hasNext) {
       long futureTag = AffixPatternUtils.nextToken(tag, str);
       int futureTypeOrCp = AffixPatternUtils.getTypeOrCp(futureTag);
-      if (futureTypeOrCp < 0 || !isIgnorable(futureTypeOrCp, state)) break;
+      if (futureTypeOrCp < 0 || !isPatternIgnorable(futureTypeOrCp, state)) break;
       tag = futureTag;
       typeOrCp = futureTypeOrCp;
       hasNext = AffixPatternUtils.hasNext(tag, str);
     }
 
     long added = 0L;
-    if (resolvedCp >= 0) {
+    if (resolvedCp >= 0 && codePointEquals(cp, resolvedCp, state)) {
       // Code point
-      if (!codePointEquals(cp, resolvedCp, state)) return 0L;
       StateItem next = state.getNext().copyFrom(item, null, cp);
-
       if (hasNext) {
         // Additional tokens in affix string.
         next.name = StateName.INSIDE_AFFIX_PATTERN;
@@ -1948,6 +1947,7 @@ public class Parse {
         next.trailingCount = 0;
         next.returnTo1 = null;
       }
+      next.score += 1; // reward for consuming code point from pattern
       added |= 1L << state.lastInsertedIndex();
     }
     if (resolvedMinusSign) {
@@ -2180,11 +2180,26 @@ public class Parse {
    *
    * @param cp The code point to test. Returns false if cp is negative.
    * @param state The current {@link ParserState}, used for determining strict mode.
-   * @return true if cp is bidi or whitespace in lenient mode; false otherwise.
+   * @return true if cp is ignorable; false otherwise.
    */
   private static boolean isIgnorable(int cp, ParserState state) {
     if (cp < 0) return false;
     if (UNISET_BIDI.contains(cp)) return true;
     return state.mode == ParseMode.LENIENT && UNISET_WHITESPACE.contains(cp);
+  }
+
+  /**
+   * Checks whether the given code point is "ignorable" in pattern syntax. This includes all
+   * characters that are normally ignorable in {@link #isIgnorable} plus characters having the
+   * Pattern_White_Space property.
+   *
+   * @param cp The code point to test. Returns false if cp is negative.
+   * @param state The current {@link ParserState}, used for determining strict mode.
+   * @return true if cp is ignorable; false otherwise.
+   */
+  private static boolean isPatternIgnorable(int cp, ParserState state) {
+    if (cp < 0) return false;
+    if (state.mode == ParseMode.LENIENT && PatternProps.isWhiteSpace(cp)) return true;
+    return isIgnorable(cp, state);
   }
 }

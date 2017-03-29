@@ -4850,13 +4850,16 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void Test11839() {
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(ULocale.ENGLISH);
-        dfs.setMinusSign('∸');
-        dfs.setPlusSign('∔'); //  ∔  U+2214 DOT PLUS
+        dfs.setMinusSignString("a∸");
+        dfs.setPlusSignString("b∔"); //  ∔  U+2214 DOT PLUS
         DecimalFormat df = new DecimalFormat("0.00+;0.00-", dfs);
         String result = df.format(-1.234);
-        assertEquals("Locale-specific minus sign should be used", "1.23∸", result);
+        assertEquals("Locale-specific minus sign should be used", "1.23a∸", result);
         result = df.format(1.234);
-        assertEquals("Locale-specific plus sign should be used", "1.23∔", result);
+        assertEquals("Locale-specific plus sign should be used", "1.23b∔", result);
+        // Test round-trip with parse
+        expect2(df, -456, "456.00a∸");
+        expect2(df, 456, "456.00b∔");
     }
 
     @Test
@@ -5169,6 +5172,24 @@ public class NumberFormatTest extends TestFmwk {
                 assertEquals(message, input.length(), ppos.getIndex());
             }
         }
+    }
+
+    @Test
+    public void testParseIgnorables() {
+        // Also see the test case "test parse ignorables" in numberformattestspecification.txt
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
+        dfs.setPercentString("\u200E%\u200E");
+        DecimalFormat df = new DecimalFormat("0%;-0a", dfs);
+        ParsePosition ppos = new ParsePosition(0);
+        Number result = df.parse("42\u200E%\u200E ", ppos);
+        assertEquals("Should parse as percentage", new BigDecimal("0.42"), result);
+        // NOTE: This behavior is specified only in 59. It is probably okay if it changes in the future.
+        assertEquals("Should not consume the trailing bidi even though it is in the symbol", 4, ppos.getIndex());
+        ppos.setIndex(0);
+        result = df.parse("-42a\u200E ", ppos);
+        assertEquals("Should parse as percent", new BigDecimal("-0.42"), result);
+        // NOTE: This behavior is specified only in 59. It is probably okay if it changes in the future.
+        assertEquals("Should not consume the trailing bidi or whitespace", 4, ppos.getIndex());
     }
 
     @Test

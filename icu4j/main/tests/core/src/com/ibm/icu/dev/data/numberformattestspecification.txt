@@ -1439,3 +1439,62 @@ parse	output	breaks
 // K and J return null
  9 999	9999	JK
 
+test parse ignorables
+set locale ar
+// Note: Prefixes contain RLMs, as do some of the test cases.
+set pattern x a‎b0c df 
+set negativePrefix y g‎h
+set negativeSuffix i jk 
+begin
+parse	output	breaks
+x a‎b56c df 	56
+x  a‎b56c df 	56	K
+x ab56c df 	56	K
+x ab56c df	56	JK
+x ab56c df  	56	K
+x ab56	56	JK
+x a b56	56	JK
+56cdf	56	JK
+56c df	56	JK
+56cd f	56	JK
+56c‎d‎f	56	JK
+56cdf 	56	JK
+56c d‎f 	56	JK
+56‎c df 	56	JK
+y g‎h56i jk 	-56
+y  g‎h56i jk 	-56	KS
+y gh56i jk 	-56	K
+y gh56i jk	-56	JK
+y gh56i jk  	-56	K
+y gh56	-56	JK
+y g h56	-56	JKS
+// S stops parsing at the 'i' for these and returns -56
+56ijk	-56	JK
+56i jk	-56	JK
+56ij k	-56	JK
+56i‎j‎k	-56	JK
+56ijk 	-56	JK
+56i j‎k 	-56	JK
+56‎i jk 	-56	JK
+// S gets 56 (accepts ' ' gs grouping); J and K get null
+5 6	5	JKS
+5‎6	5	JK
+
+test parse spaces in grouping
+// This test gives the ideal behavior of these cases, which
+// none of the implementations currently support.
+set locale en
+set pattern #,##0
+begin
+parse	output	breaks
+// J and S get "12" here
+1 2	1	JS
+1 23	1	JS
+// K gets 1 here; doesn't pick up the grouping separator
+1 234	1234	K
+
+
+
+
+
+
