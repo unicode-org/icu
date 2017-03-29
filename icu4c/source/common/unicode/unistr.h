@@ -3006,6 +3006,10 @@ public:
    */
   UNISTR_FROM_STRING_EXPLICIT UnicodeString(const char16_t *text);
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
 #if !U_CHAR16_IS_TYPEDEF
   /**
    * uint16_t * constructor.
@@ -3021,6 +3025,10 @@ public:
       UnicodeString(ConstChar16Ptr(text)) {}
 #endif
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
    * wchar_t * constructor.
@@ -3037,6 +3045,10 @@ public:
       UnicodeString(ConstChar16Ptr(text)) {}
 #endif
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
   /**
    * nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.
@@ -3059,6 +3071,10 @@ public:
   UnicodeString(const char16_t *text,
         int32_t textLength);
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
 #if !U_CHAR16_IS_TYPEDEF
   /**
    * uint16_t * constructor.
@@ -3071,6 +3087,10 @@ public:
       UnicodeString(ConstChar16Ptr(text), length) {}
 #endif
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
    * wchar_t * constructor.
@@ -3084,6 +3104,10 @@ public:
       UnicodeString(ConstChar16Ptr(text), length) {}
 #endif
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
   /**
    * nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.
@@ -3139,6 +3163,10 @@ public:
    */
   UnicodeString(char16_t *buffer, int32_t buffLength, int32_t buffCapacity);
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
 #if !U_CHAR16_IS_TYPEDEF
   /**
    * Writable-aliasing uint16_t * constructor.
@@ -3152,6 +3180,10 @@ public:
       UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
 #endif
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
 #if U_SIZEOF_WCHAR_T==2 || defined(U_IN_DOXYGEN)
   /**
    * Writable-aliasing wchar_t * constructor.
@@ -3166,6 +3198,10 @@ public:
       UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
 #endif
 
+  /*
+   * Do not use #ifndef U_HIDE_DRAFT_API for the following constructor,
+   * it should always be available regardless of U_HIDE_DRAFT_API status
+   */
   /**
    * Writable-aliasing nullptr_t constructor.
    * Effectively the same as the default constructor, makes an empty string object.

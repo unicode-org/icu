@@ -250,7 +250,7 @@ typedef enum UNumberFormatStyle {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UNUM_FORMAT_STYLE_COUNT=17,
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Default format
@@ -327,8 +327,8 @@ enum UCurrencySpacing {
     /** @stable ICU 4.8 */
     UNUM_CURRENCY_INSERT,
 
-    // Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
-    // it is needed for layout of DecimalFormatSymbols object.
+    /* Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
+     * it is needed for layout of DecimalFormatSymbols object. */
     /**
      * One more than the highest normal UCurrencySpacing value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
@@ -372,7 +372,7 @@ typedef enum UNumberFormatFields {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UNUM_FIELD_COUNT
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } UNumberFormatFields;
 
 
@@ -1345,7 +1345,7 @@ typedef enum UNumberFormatSymbol {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
   UNUM_FORMAT_SYMBOL_COUNT = 28
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } UNumberFormatSymbol;
 
 /**

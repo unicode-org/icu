@@ -196,7 +196,7 @@ typedef enum {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     USEARCH_ATTRIBUTE_COUNT = 3
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } USearchAttribute;
 
 /**
@@ -272,7 +272,7 @@ typedef enum {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     USEARCH_ATTRIBUTE_VALUE_COUNT
-#endif  // U_HIDE_DEPRECATED_API
+#endif  /* U_HIDE_DEPRECATED_API */
 } USearchAttributeValue;
 
 /* open and close ------------------------------------------------------ */

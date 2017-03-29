@@ -86,8 +86,8 @@ typedef enum UDateTimePatternField {
     /** @stable ICU 3.8 */
     UDATPG_ZONE_FIELD,
 
-    // Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
-    // it is needed for layout of DateTimePatternGenerator object.
+    /* Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
+     * it is needed for layout of DateTimePatternGenerator object. */
     /**
      * One more than the highest normal UDateTimePatternField value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
