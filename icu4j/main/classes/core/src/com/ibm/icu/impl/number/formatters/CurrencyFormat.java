@@ -107,6 +107,7 @@ public class CurrencyFormat {
   public static boolean useCurrency(IProperties properties) {
     return ((properties.getCurrency() != null)
         || properties.getCurrencyPluralInfo() != null
+        || properties.getCurrencyUsage() != null
         || AffixPatternUtils.hasCurrencySymbols(properties.getPositivePrefixPattern())
         || AffixPatternUtils.hasCurrencySymbols(properties.getPositiveSuffixPattern())
         || AffixPatternUtils.hasCurrencySymbols(properties.getNegativePrefixPattern())
@@ -242,25 +243,25 @@ public class CurrencyFormat {
       currency = DEFAULT_CURRENCY;
     }
 
-    Currency.CurrencyUsage currencyUsage = properties.getCurrencyUsage();
-    if (currencyUsage == null) {
-      currencyUsage = CurrencyUsage.STANDARD;
-    }
+    CurrencyUsage _currencyUsage = properties.getCurrencyUsage();
+    int _minFrac = properties.getMinimumFractionDigits();
+    int _maxFrac = properties.getMaximumFractionDigits();
 
-    double incrementDouble = currency.getRoundingIncrement(currencyUsage);
-    int fractionDigits = currency.getDefaultFractionDigits(currencyUsage);
+    CurrencyUsage effectiveCurrencyUsage =
+        (_currencyUsage != null) ? _currencyUsage : CurrencyUsage.STANDARD;
+    double incrementDouble = currency.getRoundingIncrement(effectiveCurrencyUsage);
+    int fractionDigits = currency.getDefaultFractionDigits(effectiveCurrencyUsage);
 
     destination.setRoundingMode(properties.getRoundingMode());
     destination.setMinimumIntegerDigits(properties.getMinimumIntegerDigits());
     destination.setMaximumIntegerDigits(properties.getMaximumIntegerDigits());
 
-    int _minFrac = properties.getMinimumFractionDigits();
-    int _maxFrac = properties.getMaximumFractionDigits();
-    if (_minFrac >= 0 || _maxFrac >= 0) {
-      // User override
+    if (_currencyUsage == null && (_minFrac >= 0 || _maxFrac >= 0)) {
+      // User override of fraction length
       destination.setMinimumFractionDigits(_minFrac);
       destination.setMaximumFractionDigits(_maxFrac);
     } else {
+      // Currency rounding
       destination.setMinimumFractionDigits(fractionDigits);
       destination.setMaximumFractionDigits(fractionDigits);
     }
