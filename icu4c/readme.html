@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
@@ -44,7 +44,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2017-Mar-04<br/>
+    <p>Last updated: 2017-Mar-28<br/>
       Copyright &copy; 2016 and later: Unicode, Inc. and others. License &amp; terms of use:
       <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a><br/>
       Copyright &copy; 1997-2016 International Business Machines Corporation and others.
@@ -235,6 +235,18 @@
     <h2><a name="News" href="#News" id="News">What is new in this
     release?</a></h2>
 
+    <h3>Important changes</h3>
+    <ul>
+        <li>All source files are UTF-8 encoded. On platforms where the native charset is not UTF-8,
+            including Windows, check the settings of your editor before working with the source.</li>
+    	<li>Compiler support for C++11 is now required for building the ICU libraries.</li>
+        <li>The type of UChar is char16_t, on all platforms. This is no longer configurable.
+            This change may affect Windows code with assumptions that UChar was wchar_t, and thus
+            type compatible with other Windows code expecting wchar_t strings.</li>
+    	<li>Windows XP and Windows Vista are no longer supported. (The minimum supported version is Windows 7).</li>
+        <li>Building the Visual Studio UWP projects requires Visual Studio 2015 Update 3 with a version of the Windows 10 SDK installed.</li>
+    </ul>
+
     <h3>API Changes</h3>
     <p>See the <a href="APIChangeReport.html">API Change Report</a> for a complete
       list of APIs added, removed, or changed in this release.</p>
@@ -245,22 +257,6 @@
     applications migrating from previous ICU releases</em>.
     For more news about this release, as well as late-breaking news, see the
     <a href="http://site.icu-project.org/download/57">ICU download page</a>.</p>
-
-    <h3>New for 59 RC</h3>
-    <ul>
-    	<li>Windows XP and Windows Vista are no longer supported. (The minimum supported version is Windows 7).</li>
-        <li>Building the Visual Studio UWP projects requires Visual Studio 2015 Update 3 with a version of the Windows 10 SDK installed.</li>
-    </ul>
-
-    <h3>New for 59 Milestone 1</h3>
-    <ul>
-    	<li>Compiler support for C++11 is required for building the ICU libraries.</li>
-        <li>All source files are UTF-8 encoded. On platforms where the native charset is not UTF-8,
-            including Windows, check the settings of your editor before working with the source.</li>
-        <li>The type of UChar is char16_t, on all platforms. This is no longer configurable.
-            This change may affect Windows code with assumptions that UChar was wchar_t, and thus
-            type compatible with other Windows code expecting wchar_t strings.</li>
-    </ul>
 
     <h2><a name="RecentPreviousChanges" href="#RecentPreviousChanges" id="RecentPreviousChanges">Changes in recent
     previous releases</a></h2>
@@ -516,12 +512,31 @@
             <li><b>brkitr/</b> Data files for character, word, sentence, title
             casing and line boundary analysis.</li>
 
+            <li><b>coll/</b> Data for collation tailorings. The makefile
+            <b>colfiles.mk</b> contains the list of resource bundle files.</li>
+
             <li><b>locales/</b> These .txt files contain ICU language and
             culture-specific localization data. Two special bundles are
             <b>root</b>, which is the fallback data and parent of other bundles,
             and <b>index</b>, which contains a list of installed bundles. The
             makefile <b>resfiles.mk</b> contains the list of resource bundle
-            files.</li>
+            files. Some of the locale data is split out into the type-specific
+            directories curr, lang, region, unit, and zone, described below.</li>
+
+            <li><b>curr/</b> Locale data for currency symbols and names (including
+            plural forms), with its own makefile <b>resfiles.mk</b>.</li>
+
+            <li><b>lang/</b> Locale data for names of languages, scripts, and locale
+            key names and values, with its own makefile <b>resfiles.mk</b>.</li>
+
+            <li><b>region/</b> Locale data for names of regions, with its own
+            makefile <b>resfiles.mk</b>.</li>
+
+            <li><b>unit/</b> Locale data for measurement unit patterns and names, 
+            with its own makefile <b>resfiles.mk</b>.</li>
+
+            <li><b>zone/</b> Locale data for time zone names, with its own
+            makefile <b>resfiles.mk</b>.</li>
 
             <li><b>mappings/</b> Here are the code page converter tables. These
             .ucm files contain mappings to and from Unicode. These are compiled
@@ -543,9 +558,9 @@
             information.</li>
 
             <li><b>misc/</b> The misc directory contains other data files which
-            did not fit into the above categories. Currently it only contains
-            time zone information, and a name preperation file for <a href=
-            "http://www.ietf.org/rfc/rfc3490.txt">IDNA</a>.</li>
+            did not fit into the above categories, including time zone
+            information, region-specific data, and other data derived from CLDR
+            supplemental data.</li>
 
             <li><b>out/</b> This directory contains the assembled memory mapped
             files.</li>
@@ -1677,7 +1692,7 @@ gnumake</pre>
     <p>In order to avoid synchronization and threading issues, developers are
     <strong>suggested</strong> to strictly follow the compiling and linking
     guidelines for multithreaded applications, specified in the following
-    document from Sun Microsystems. Most notably, pay strict attention to the
+    SUn Solaris document available from Oracle. Most notably, pay strict attention to the
     following statements from Sun:</p>
 
     <blockquote>
@@ -1691,10 +1706,15 @@ gnumake</pre>
     <p>Failure to do this may cause spurious lock conflicts, recursive mutex
     failure, and deadlock.</p>
 
-    <p>Source: "<i>Solaris Multithreaded Programming Guide, Compiling and
-    Debugging</i>", Sun Microsystems, Inc., Apr 2004<br />
+    <p>Source: "<i>Multithreaded Programming Guide, Compiling and
+    Debugging</i>", Sun Microsystems, 2002 <br />
      <a href=
-    "http://docs.sun.com/app/docs/doc/816-5137/6mba5vpke?a=view">http://docs.sun.com/app/docs/doc/816-5137/6mba5vpke?a=view</a></p>
+    "https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html">https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html</a></p>
+
+    <p>Note, a version of that chapter from a 2008 document update covering both Solaris 9
+    and Solaris 10 is available here:<br />
+     <a href=
+    "http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html">http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html</a></p>
 
     <h3><a name="ImportantNotesWindows" href="#ImportantNotesWindows" id=
     "ImportantNotesWindows">Windows Platform</a></h3>
