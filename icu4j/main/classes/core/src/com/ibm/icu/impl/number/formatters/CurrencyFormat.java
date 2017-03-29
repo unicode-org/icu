@@ -258,8 +258,16 @@ public class CurrencyFormat {
 
     if (_currencyUsage == null && (_minFrac >= 0 || _maxFrac >= 0)) {
       // User override of fraction length
-      destination.setMinimumFractionDigits(_minFrac);
-      destination.setMaximumFractionDigits(_maxFrac);
+      if (_minFrac < 0) {
+        destination.setMinimumFractionDigits(fractionDigits < _maxFrac ? fractionDigits : _maxFrac);
+        destination.setMaximumFractionDigits(_maxFrac);
+      } else if (_maxFrac < 0) {
+        destination.setMinimumFractionDigits(_minFrac);
+        destination.setMaximumFractionDigits(fractionDigits > _minFrac ? fractionDigits : _minFrac);
+      } else {
+        destination.setMinimumFractionDigits(_minFrac);
+        destination.setMaximumFractionDigits(_maxFrac);
+      }
     } else {
       // Currency rounding
       destination.setMinimumFractionDigits(fractionDigits);

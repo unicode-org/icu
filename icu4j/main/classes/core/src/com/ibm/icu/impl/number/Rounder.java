@@ -167,13 +167,13 @@ public abstract class Rounder extends Format.BeforeFormat {
     // For backwards compatibility, minimum overrides maximum if the two conflict.
     // The following logic ensures that there is always a minimum of at least one digit.
     if (_minInt == 0 && _maxFrac != 0) {
-      // Force a digit to the right of the decimal point.
+      // Force a digit after the decimal point.
       minFrac = _minFrac <= 0 ? 1 : _minFrac;
       maxFrac = _maxFrac < 0 ? Integer.MAX_VALUE : _maxFrac < minFrac ? minFrac : _maxFrac;
       minInt = 0;
       maxInt = _maxInt < 0 ? Integer.MAX_VALUE : _maxInt;
     } else {
-      // Force a digit to the left of the decimal point.
+      // Force a digit before the decimal point.
       minFrac = _minFrac < 0 ? 0 : _minFrac;
       maxFrac = _maxFrac < 0 ? Integer.MAX_VALUE : _maxFrac < minFrac ? minFrac : _maxFrac;
       minInt = _minInt <= 0 ? 1 : _minInt;
