@@ -1597,6 +1597,10 @@ void DateIntervalFormatTest::testTicket11669() {
 void DateIntervalFormatTest::testTicket12065() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DateIntervalFormat> formatter(DateIntervalFormat::createInstance(UDAT_YEAR_MONTH_DAY, Locale::getEnglish(), status), status);
+    if (formatter.isNull()) {
+        dataerrln("FAIL: DateIntervalFormat::createInstance failed for Locale::getEnglish()");
+        return;
+    }
     LocalPointer<DateIntervalFormat> clone(dynamic_cast<DateIntervalFormat *>(formatter->clone()));
     if (*formatter != *clone) {
         errln("%s:%d DateIntervalFormat and clone are not equal.", __FILE__, __LINE__);

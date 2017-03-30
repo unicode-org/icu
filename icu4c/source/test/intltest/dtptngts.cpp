@@ -1098,6 +1098,10 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
 
     for (int32_t i = 0; i < numLocales; ++i) {
         DateTimePatternGenerator *gen = DateTimePatternGenerator::createInstance(Locale(tests[i][0]), status);
+        if (gen == NULL) {
+            dataerrln("FAIL: DateTimePatternGenerator::createInstance failed for %s", tests[i][0]);
+            return;
+        }
         UnicodeString pattern = gen->getBestPattern(tests[i][1], status);
         UnicodeString expectedPattern = tests[i][2];
 
