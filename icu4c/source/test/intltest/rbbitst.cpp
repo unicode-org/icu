@@ -4671,7 +4671,7 @@ void RBBITest::TestBug12918() {
     UErrorCode status = U_ZERO_ERROR;
     UBreakIterator* iter = ubrk_open(UBRK_WORD, NULL, crasherString, -1, &status);
     if (U_FAILURE(status)) {
-        errln("%s:%d status = %s", __FILE__, __LINE__, u_errorName(status));
+        dataerrln("%s:%d status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
     }
     ubrk_first(iter);
@@ -4738,7 +4738,7 @@ void RBBITest::TestEmoji() {
     LocalPointer<BreakIterator> wordBreaks(BreakIterator::createWordInstance(Locale::getEnglish(), status), status);
     LocalPointer<BreakIterator> lineBreaks(BreakIterator::createLineInstance(Locale::getEnglish(), status), status);
     if (U_FAILURE(status)) {
-        errln("%s:%s %s while opening break iterators", __FILE__, __LINE__, u_errorName(status));
+        dataerrln("%s:%d %s while opening break iterators", __FILE__, __LINE__, u_errorName(status));
         return;
     }
 

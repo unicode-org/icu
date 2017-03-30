@@ -1239,6 +1239,10 @@ TimeZoneFormatTest::TestFormatCustomZone(void) {
 
         UErrorCode status = U_ZERO_ERROR;
         LocalPointer<TimeZoneFormat> tzfmt(TimeZoneFormat::createInstance(Locale("en"), status));
+        if (tzfmt.isNull()) {
+            dataerrln("FAIL: TimeZoneFormat::createInstance failed for en");
+            return;
+        }
         UnicodeString tzstr;
         UnicodeString expected = UnicodeString(TESTDATA[i].expected, -1, US_INV).unescape();
 

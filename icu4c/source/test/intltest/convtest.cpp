@@ -1023,6 +1023,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
     // open the converter
     IcuTestErrorCode errorCode(*this, "ToUnicodeCase");
     LocalUConverterPointer cnv(cnv_open(cc.charset, errorCode));
+    // with no data, the above crashes with "pointer being freed was not allocated" for charset "x11-compound-text", see #13078
     if(errorCode.isFailure()) {
         errcheckln(errorCode, "toUnicode[%d](%s cb=\"%s\" fb=%d flush=%d) ucnv_open() failed - %s",
                 cc.caseNr, cc.charset, cc.cbopt, cc.fallbacks, cc.finalFlush, errorCode.errorName());

@@ -1067,9 +1067,15 @@ void RBBIAPITest::TestRoundtripRules() {
 void RBBIAPITest::TestGetBinaryRules() {
     UErrorCode status=U_ZERO_ERROR;
     LocalPointer<BreakIterator> bi(BreakIterator::createLineInstance(Locale::getEnglish(), status));
-    TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        dataerrln("FAIL: BreakIterator::createLineInstance for Locale::getEnglish(): %s", u_errorName(status));
+        return;
+    }
     RuleBasedBreakIterator *rbbi = dynamic_cast<RuleBasedBreakIterator *>(bi.getAlias());
-    TEST_ASSERT(rbbi != NULL);
+    if (rbbi == NULL) {
+        dataerrln("FAIL: RuleBasedBreakIterator is NULL");
+        return;
+    }
 
     // Check that the new line break iterator is nominally functional.
     UnicodeString helloWorld("Hello, World!");
