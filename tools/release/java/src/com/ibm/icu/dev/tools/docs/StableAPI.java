@@ -465,8 +465,9 @@ public class StableAPI {
         public String version;
         public String file;
         public String comparableName;
+        public String comparablePrototype;
         public boolean equals(Function right){
-            return this.prototype.equals(right.prototype);
+            return this.comparablePrototype.equals(right.comparablePrototype);
         }
         static Function fromXml(Node n){
             Function f = new Function();
@@ -483,6 +484,13 @@ public class StableAPI {
             f.purifyPrototype();
 
             f.simplifyPrototype();
+
+            f.comparablePrototype = f.prototype;
+            // Modify the prototype here, but don't display it to the user. ( Char16Ptr --> char16_t* etc )
+            for(int i=0; i<aliasList.length; i+=2) {
+                f.comparablePrototype = f.comparablePrototype.replaceAll(aliasList[i+0], aliasList[i+1]);
+            }
+
 
             if(f.file == null) {
             	f.file = "{null}";
@@ -521,6 +529,17 @@ public class StableAPI {
         static private String simplifyList[] = {
             "[ ]*=[ ]*0[ ]*$", "",      // remove pure virtual - TODO: notify about this difference, separately
             "\\)[ ]*const[ ]*$", ")",  // TODO: notify about this difference, separately - remove const from function type
+        };
+
+        /**
+         * This list is applied only for comparisons.
+         * The resulting string is NOT shown to the user.
+         * These should be ignored as far as changes go.   func(UChar) === func(char16_t)
+         */
+        static private String aliasList[] = {
+            "UChar", "char16_t",
+            "ConstChar16Ptr", "const char16_t*",
+            "Char16Ptr", "char16_t*",
         };
 
         /**
@@ -632,11 +651,15 @@ public class StableAPI {
 //            ele.setAttribute("status", status);
 //            return ele;
 //        }
+
+        /**
+         * @Override
+         */
 		public int compareTo(Function o) {
 			return comparableName.compareTo(((Function)o).comparableName);
 		}
 		public String comparableName() {
-			return file+"|"+prototype+"|"+status+"|"+version+"|"+id;
+			return file+"|"+comparablePrototype+"|"+status+"|"+version+"|"+id;
 		}
     }
 
