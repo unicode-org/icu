@@ -46,9 +46,7 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
 
         logln("Percent test " + localeName);
         fNumberFormat = NumberFormat.getPercentInstance(locale);
-        if (!locale.getLanguage().equals("fa") && !logKnownIssue("13088", "Negative number with percent cannot be parsed in Persian locale")) {
-            _testFormat();
-        }
+        _testFormat();
 
         if (locale.toString().compareTo("en_US_POSIX") != 0 ) {
            logln("Scientific test " + localeName);

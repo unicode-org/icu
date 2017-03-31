@@ -2214,7 +2214,9 @@ public class Parse {
                 : AffixPatternUtils.nextToken(nextOffsetOrTag, str);
         if (firstOffsetOrTag == 0L) firstOffsetOrTag = nextOffsetOrTag;
         if (isString ? nextOffsetOrTag >= str.length() : nextOffsetOrTag < 0) {
-          nextTypeOrCp = -1;
+          // Integer.MIN_VALUE is an invalid value for either a type or a cp;
+          // use it to indicate the end of the string.
+          nextTypeOrCp = Integer.MIN_VALUE;
           break;
         }
         nextTypeOrCp =
@@ -2224,7 +2226,7 @@ public class Parse {
         if (!isIgnorable(nextTypeOrCp, state)) break;
       }
 
-      if (nextTypeOrCp == -1) {
+      if (nextTypeOrCp == Integer.MIN_VALUE) {
         // Run at end or string that contains only ignorable characters.
         if (codePointEquals(cp, typeOrCp, state)) {
           // Step forward and also exit the string if not at very end.
@@ -2251,6 +2253,9 @@ public class Parse {
       } else if (offsetOrTag == 0) {
         // Run at beginning. Go to nonignorable cp.
         // FALL THROUGH
+        // TODO: This branch doesn't work on affix patterns since offsetOrTag != 0 for the first
+        // element. This is harmless except for possible performance implications of evaluating
+        // the third case instead of the second.
       } else {
         // Run in middle.
         if (isIgnorable(cp, state)) {
@@ -2267,7 +2272,7 @@ public class Parse {
       }
 
       // Fall through to the nonignorable code point found above.
-      assert nextTypeOrCp != -1;
+      assert nextTypeOrCp != Integer.MIN_VALUE;
       typeOrCp = nextTypeOrCp;
       offsetOrTag = nextOffsetOrTag;
     }
