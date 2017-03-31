@@ -4985,6 +4985,14 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13088() {
+        ULocale loc = new ULocale("fa");
+        double num = -12.34;
+        NumberFormat numfmt = NumberFormat.getPercentInstance(loc);
+        expect2(numfmt, num, "‎٪ ‎−۱٬۲۳۴");
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);
