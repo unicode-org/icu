@@ -358,10 +358,8 @@ public class AffixPatternUtils {
    * @param tag A bitmask used for keeping track of state from token to token. The initial value
    *     should be 0L.
    * @param patternString The affix pattern.
-   * @return The bitmask tag to pass to the next call of this method to retrieve the following
-   *     token.
-   * @throws IllegalArgumentException If there are no tokens left or if there is a syntax error in
-   *     the pattern string.
+   * @return The bitmask tag to pass to the next call of this method to retrieve the following token
+   *     (never negative), or -1 if there were no more tokens in the affix pattern.
    * @see #hasNext
    */
   public static long nextToken(long tag, CharSequence patternString) {
@@ -461,16 +459,16 @@ public class AffixPatternUtils {
     // End of string
     switch (state) {
       case STATE_BASE:
-        // We shouldn't get here if hasNext() was followed.
-        throw new IllegalArgumentException();
+        // No more tokens in string.
+        return -1L;
       case STATE_FIRST_QUOTE:
       case STATE_INSIDE_QUOTE:
         // For consistent behavior with the JDK and ICU 58, throw an exception here.
         throw new IllegalArgumentException(
             "Unterminated quote in pattern affix: \"" + patternString + "\"");
       case STATE_AFTER_QUOTE:
-        // We shouldn't get here if hasNext() was followed.
-        throw new IllegalArgumentException();
+        // No more tokens in string.
+        return -1L;
       case STATE_FIRST_CURR:
         return makeTag(offset, TYPE_CURRENCY_SINGLE, STATE_BASE, 0);
       case STATE_SECOND_CURR:
@@ -493,6 +491,7 @@ public class AffixPatternUtils {
    * @return true if there are more tokens to consume; false otherwise.
    */
   public static boolean hasNext(long tag, CharSequence string) {
+    assert tag >= 0;
     int state = getState(tag);
     int offset = getOffset(tag);
     // Special case: the last character in string is an end quote.
@@ -518,6 +517,7 @@ public class AffixPatternUtils {
    *     code point.
    */
   public static int getTypeOrCp(long tag) {
+    assert tag >= 0;
     int type = getType(tag);
     return (type == 0) ? getCodePoint(tag) : -type;
   }
@@ -528,6 +528,7 @@ public class AffixPatternUtils {
     tag |= (-(long) type) << 32;
     tag |= ((long) state) << 36;
     tag |= ((long) cp) << 40;
+    assert tag >= 0;
     return tag;
   }
 

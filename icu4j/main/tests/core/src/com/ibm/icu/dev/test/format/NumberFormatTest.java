@@ -4978,6 +4978,13 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13074() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(new ULocale("bg-BG"));
+        String result = df.format(987654.321);
+        assertEquals("Locale 'bg' should not use monetary grouping", "987654,32 лв.", result);
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);
@@ -5179,17 +5186,21 @@ public class NumberFormatTest extends TestFmwk {
         // Also see the test case "test parse ignorables" in numberformattestspecification.txt
         DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance();
         dfs.setPercentString("\u200E%\u200E");
-        DecimalFormat df = new DecimalFormat("0%;-0a", dfs);
+        DecimalFormat df = new DecimalFormat("0 %;-0a", dfs);
         ParsePosition ppos = new ParsePosition(0);
         Number result = df.parse("42\u200E%\u200E ", ppos);
         assertEquals("Should parse as percentage", new BigDecimal("0.42"), result);
-        // NOTE: This behavior is specified only in 59. It is probably okay if it changes in the future.
-        assertEquals("Should not consume the trailing bidi even though it is in the symbol", 4, ppos.getIndex());
+        assertEquals("Should consume the trailing bidi since it is in the symbol", 5, ppos.getIndex());
         ppos.setIndex(0);
         result = df.parse("-42a\u200E ", ppos);
         assertEquals("Should parse as percent", new BigDecimal("-0.42"), result);
-        // NOTE: This behavior is specified only in 59. It is probably okay if it changes in the future.
         assertEquals("Should not consume the trailing bidi or whitespace", 4, ppos.getIndex());
+
+        // A few more cases based on the docstring:
+        expect(df, "42%", 0.42);
+        expect(df, "42 %", 0.42);
+        expect(df, "42   %", 0.42);
+        expect(df, "42\u00A0%", 0.42);
     }
 
     @Test
@@ -5214,6 +5225,88 @@ public class NumberFormatTest extends TestFmwk {
         expect2(df, 35.0, "$35.00");
         df.setMaximumFractionDigits(1);
         expect2(df, 35.0, "$35.0");
+    }
+
+    @Test
+    public void testParseGroupingMode() {
+        ULocale[] locales = {         // GROUPING   DECIMAL
+                new ULocale("en-US"), // comma      period
+                new ULocale("fr-FR"), // space      comma
+                new ULocale("de-CH"), // apostrophe period
+                new ULocale("es-PY")  // period     comma
+        };
+        String[] inputs = {
+                "12,345.67",
+                "12 345,67",
+                "12'345.67",
+                "12.345,67",
+                "12,345",
+                "12 345",
+                "12'345",
+                "12.345"
+        };
+        BigDecimal[] outputs = {
+                new BigDecimal("12345.67"),
+                new BigDecimal("12345.67"),
+                new BigDecimal("12345.67"),
+                new BigDecimal("12345.67"),
+                new BigDecimal("12345"),
+                new BigDecimal("12345"),
+                new BigDecimal("12345"),
+                new BigDecimal("12345")
+        };
+        int[][] expecteds = {
+                // 0 => works in neither default nor restricted
+                // 1 => works in default but not restricted
+                // 2 => works in restricted but not default (should not happen)
+                // 3 => works in both default and restricted
+                //
+                // C=comma, P=period, S=space, A=apostrophe
+                // C+P    S+C    A+P    P+C    C-only  S-only   A-only   P-only
+                {  3,     0,     1,     0,     3,      1,       1,       0  }, // => en-US
+                {  0,     3,     0,     1,     0,      3,       3,       1  }, // => fr-FR
+                {  1,     0,     3,     0,     1,      3,       3,       0  }, // => de-CH
+                {  0,     1,     0,     3,     0,      1,       1,       3  }  // => es-PY
+        };
+
+        for (int i=0; i<locales.length; i++) {
+            ULocale loc = locales[i];
+            DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(loc);
+            df.setParseBigDecimal(true);
+            for (int j=0; j<inputs.length; j++) {
+                String input = inputs[j];
+                BigDecimal output = outputs[j];
+                int expected = expecteds[i][j];
+
+                // TODO(sffc): Uncomment after ICU 60 API proposal
+                //df.setParseGroupingMode(null);
+                //assertEquals("Getter should return null", null, df.getParseGroupingMode());
+                ParsePosition ppos = new ParsePosition(0);
+                Number result = df.parse(input, ppos);
+                boolean actualNull = output.equals(result) && (ppos.getIndex() == input.length());
+                assertEquals("Locale " + loc + ", string \"" + input + "\", DEFAULT, "
+                        + "actual result: " + result + " (ppos: " + ppos.getIndex() + ")",
+                        (expected & 1) != 0, actualNull);
+
+                // TODO(sffc): Uncomment after ICU 60 API proposal
+                //df.setParseGroupingMode(GroupingMode.DEFAULT);
+                //assertEquals("Getter should return new value", GroupingMode.DEFAULT, df.getParseGroupingMode());
+                //ppos = new ParsePosition(0);
+                //result = df.parse(input, ppos);
+                //boolean actualDefault = output.equals(result) && (ppos.getIndex() == input.length());
+                //assertEquals("Result from null should be the same as DEFAULT", actualNull, actualDefault);
+
+                // TODO(sffc): Uncomment after ICU 60 API proposal
+                //df.setParseGroupingMode(GroupingMode.RESTRICTED);
+                //assertEquals("Getter should return new value", GroupingMode.RESTRICTED, df.getParseGroupingMode());
+                //ppos = new ParsePosition(0);
+                //result = df.parse(input, ppos);
+                //boolean actualRestricted = output.equals(result) && (ppos.getIndex() == input.length());
+                //assertEquals("Locale " + loc + ", string \"" + input + "\", RESTRICTED, "
+                //        + "actual result: " + result + " (ppos: " + ppos.getIndex() + ")",
+                //        (expected & 2) != 0, actualRestricted);
+            }
+        }
     }
 
     @Test

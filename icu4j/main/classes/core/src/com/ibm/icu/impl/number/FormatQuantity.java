@@ -177,9 +177,7 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
   public void copyFrom(FormatQuantity other);
 
   /**
-   * This method is for internal testing only and should be removed before release.
-   *
-   * @internal
+   * This method is for internal testing only.
    */
   public long getPositionFingerprint();
 }

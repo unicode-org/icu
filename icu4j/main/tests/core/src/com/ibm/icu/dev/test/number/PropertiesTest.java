@@ -27,6 +27,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
+import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternString;
 import com.ibm.icu.impl.number.Properties;
@@ -246,6 +247,11 @@ public class PropertiesTest {
     } else if (type == CurrencyUsage.class) {
       if (seed == 0) return null;
       CurrencyUsage[] values = CurrencyUsage.values();
+      return values[seed % values.length];
+
+    } else if (type == GroupingMode.class) {
+      if (seed == 0) return null;
+      GroupingMode[] values = GroupingMode.values();
       return values[seed % values.length];
 
     } else if (type == FormatWidth.class) {

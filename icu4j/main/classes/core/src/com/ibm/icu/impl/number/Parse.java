@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.impl.number.formatters.BigDecimalMultiplier;
@@ -198,6 +197,59 @@ public class Parse {
      * @return The property bag, for chaining.
      */
     public IProperties setParseCaseSensitive(boolean parseCaseSensitive);
+
+    GroupingMode DEFAULT_PARSE_GROUPING_MODE = null;
+
+    /** @see #setParseGroupingMode */
+    public GroupingMode getParseGroupingMode();
+
+    /**
+     * Sets the strategy used during parsing when a code point needs to be interpreted as either a
+     * decimal separator or a grouping separator.
+     *
+     * <p>The comma, period, space, and apostrophe have different meanings in different locales. For
+     * example, in <em>en-US</em> and most American locales, the period is used as a decimal
+     * separator, but in <em>es-PY</em> and most European locales, it is used as a grouping
+     * separator.
+     *
+     * <p>Suppose you are in <em>fr-FR</em> the parser encounters the string "1.234". In
+     * <em>fr-FR</em>, the grouping is a space and the decimal is a comma. The <em>grouping
+     * mode</em> is a mechanism to let you specify whether to accept the string as 1234
+     * (GroupingMode.DEFAULT) or whether to reject it since the separators don't match
+     * (GroupingMode.RESTRICTED).
+     *
+     * <p>When resolving grouping separators, it is the <em>equivalence class</em> of separators
+     * that is considered. For example, a period is seen as equal to a fixed set of other
+     * period-like characters.
+     *
+     * @param parseGroupingMode The {@link GroupingMode} to use; either DEFAULT or RESTRICTED.
+     * @return The property bag, for chaining.
+     */
+    public IProperties setParseGroupingMode(GroupingMode parseGroupingMode);
+  }
+
+  /**
+   * An enum containing the choices for strategy in parsing when choosing between grouping and
+   * decimal separators.
+   */
+  public static enum GroupingMode {
+    /**
+     * Accept decimal equivalents as decimals, and if that fails, accept all equivalence classes
+     * (periods, commas, and whitespace-like) as grouping. This is a more lenient strategy.
+     *
+     * <p>For example, if the formatter's current locale is <em>fr-FR</em>, then "1.234" will parse
+     * as 1234, even though <em>fr-FR</em> does not use a period as the grouping separator.
+     */
+    DEFAULT,
+
+    /**
+     * Accept decimal equivalents as decimals and grouping equivalents as grouping. This strategy is
+     * more strict.
+     *
+     * <p>For example, if the formatter's current locale is <em>fr-FR</em>, then "1.234" will fail
+     * to parse since <em>fr-FR</em> does not use a period as the grouping separator.
+     */
+    RESTRICTED
   }
 
   /**
@@ -323,6 +375,14 @@ public class Parse {
     TextTrieMap<Byte>.ParseState currentDigitTrieState;
     DigitType currentDigitType;
 
+    // Identification for path tracing:
+    final char id;
+    String path;
+
+    StateItem(char _id) {
+      id = _id;
+    }
+
     /**
      * Clears the instance so that it can be re-used.
      *
@@ -366,6 +426,10 @@ public class Parse {
       currentCurrencyTrieState = null;
       currentDigitTrieState = null;
       currentDigitType = null;
+
+      // Identification for path tracing:
+      // id is constant and is not cleared
+      path = "";
 
       return this;
     }
@@ -423,6 +487,11 @@ public class Parse {
       currentCurrencyTrieState = other.currentCurrencyTrieState;
       currentDigitTrieState = other.currentDigitTrieState;
       currentDigitType = other.currentDigitType;
+
+      // Record source node if debugging
+      if (DEBUGGING) {
+        path = other.path + other.id;
+      }
 
       return this;
     }
@@ -546,7 +615,9 @@ public class Parse {
     @Override
     public String toString() {
       StringBuilder sb = new StringBuilder();
-      sb.append("<ParserStateItem ");
+      sb.append("[");
+      sb.append(path);
+      sb.append("] ");
       sb.append(name.name());
       if (name == StateName.INSIDE_STRING) {
         sb.append("{");
@@ -559,7 +630,7 @@ public class Parse {
         sb.append("{");
         sb.append(currentAffixPattern);
         sb.append(":");
-        sb.append(AffixPatternUtils.getOffset(currentStepwiseParserTag));
+        sb.append(AffixPatternUtils.getOffset(currentStepwiseParserTag) - 1);
         sb.append("}");
       }
       sb.append(" ");
@@ -576,13 +647,14 @@ public class Parse {
       sb.append(sawPrefix ? 1 : 0);
       sb.append(sawSuffix ? 1 : 0);
       sb.append(sawDecimalPoint ? 1 : 0);
+      sb.append(" trailing:");
+      sb.append(trailingCount);
       sb.append(" score:");
       sb.append(score);
       sb.append(" affix:");
       sb.append(affix);
       sb.append(" currency:");
       sb.append(isoCode);
-      sb.append(">");
       return sb.toString();
     }
   }
@@ -607,6 +679,7 @@ public class Parse {
     ParseMode mode;
     boolean caseSensitive;
     boolean parseCurrency;
+    GroupingMode groupingMode;
 
     // Other pre-computed fields:
     int decimalCp1;
@@ -615,11 +688,7 @@ public class Parse {
     int groupingCp2;
     SeparatorType decimalType1;
     SeparatorType decimalType2;
-    // TODO(sffc): Remove this field if it is not necessary.
-    @SuppressWarnings("unused")
     SeparatorType groupingType1;
-    // TODO(sffc): Remove this field if it is not necessary.
-    @SuppressWarnings("unused")
     SeparatorType groupingType2;
 
     TextTrieMap<Byte> digitTrie;
@@ -627,8 +696,8 @@ public class Parse {
 
     ParserState() {
       for (int i = 0; i < items.length; i++) {
-        items[i] = new StateItem();
-        prevItems[i] = new StateItem();
+        items[i] = new StateItem((char) ('A' + i));
+        prevItems[i] = new StateItem((char) ('A' + i));
       }
     }
 
@@ -710,6 +779,10 @@ public class Parse {
     }
   }
 
+  /**
+   * A wrapper for affixes. Affixes can be string-based or pattern-based, and they can come from
+   * several sources, including the property bag and the locale paterns from CLDR data.
+   */
   private static class AffixHolder {
     final String p; // prefix
     final String s; // suffix
@@ -904,6 +977,8 @@ public class Parse {
     }
     if (!requiresTrie) return null;
 
+    // TODO: Consider caching the tries so they don't need to be re-created run to run.
+    // (Low-priority since multi-character digits are rare in practice)
     TextTrieMap<Byte> trieMap = new TextTrieMap<Byte>(false);
     for (int i = 0; i < 10; i++) {
       trieMap.put(digitStrings[i], (byte) i);
@@ -1022,6 +1097,8 @@ public class Parse {
     state.symbols = symbols;
     state.mode = mode;
     state.parseCurrency = parseCurrency;
+    state.groupingMode = properties.getParseGroupingMode();
+    if (state.groupingMode == null) state.groupingMode = GroupingMode.DEFAULT;
     state.caseSensitive = properties.getParseCaseSensitive();
     state.decimalCp1 = Character.codePointAt(symbols.getDecimalSeparatorString(), 0);
     state.decimalCp2 = Character.codePointAt(symbols.getMonetaryDecimalSeparatorString(), 0);
@@ -1057,7 +1134,7 @@ public class Parse {
       for (int i = 0; i < state.prevLength; i++) {
         StateItem item = state.prevItems[i];
         if (DEBUGGING) {
-          System.out.println(":" + offset + " " + item);
+          System.out.println(":" + offset + item.id + " " + item);
         }
 
         // In the switch statement below, if you see a line like:
@@ -1258,19 +1335,11 @@ public class Parse {
             break;
 
           case INSIDE_STRING:
-            long added0 = acceptStringOffset(cp, state, item);
-            // Accept arbitrary bidi in the middle of strings.
-            if (added0 == 0L && UNISET_BIDI.contains(cp)) {
-              state.getNext().copyFrom(item, item.name, cp);
-            }
+            acceptStringOffset(cp, state, item);
             break;
 
           case INSIDE_AFFIX_PATTERN:
-            long added1 = acceptAffixPatternOffset(cp, state, item);
-            // Accept arbitrary bidi and whitespace (if lenient) in the middle of affix patterns.
-            if (added1 == 0L && isIgnorable(cp, state)) {
-              state.getNext().copyFrom(item, item.name, cp);
-            }
+            acceptAffixPatternOffset(cp, state, item);
             break;
         }
       }
@@ -1389,10 +1458,13 @@ public class Parse {
         }
 
         // If we get here, then this candidate is acceptable.
-        // Use the earliest candidate in the list, or the one with the highest score.
+        // Use the earliest candidate in the list, or the one with the highest score, or the
+        // one with the fewest trailing digits.
         if (best == null) {
           best = item;
         } else if (item.score > best.score) {
+          best = item;
+        } else if (item.trailingCount < best.trailingCount) {
           best = item;
         }
       }
@@ -1484,10 +1556,6 @@ public class Parse {
    * and sets its state name to one determined by <code>type</code>. Also copies the digit into a
    * field in the new item determined by <code>type</code>.
    *
-   * <p>This function guarantees that it will add no more than one {@link StateItem} to the {@link
-   * ParserState}. This means that {@link ParserState#lastInsertedIndex()} can be called to access
-   * the {@link StateItem} that was inserted.
-   *
    * @param cp The code point to check.
    * @param nextName The state to set if a digit is accepted.
    * @param state The state object to update.
@@ -1524,12 +1592,23 @@ public class Parse {
       }
     }
 
-    // Save state:
-    if (next != null) {
-      next.appendDigit(digit, type);
-      if (type == DigitType.INTEGER && (next.groupingWidths & 0xf) < 15) {
-        next.groupingWidths++;
-      }
+    // Save state
+    recordDigit(next, digit, type);
+  }
+
+  /**
+   * Helper function for {@link acceptDigit} and {@link acceptDigitTrie} to save a complete digit in
+   * a state item and update grouping widths.
+   *
+   * @param next The new StateItem
+   * @param digit The digit to record
+   * @param type The type of the digit to record (INTEGER, FRACTION, or EXPONENT)
+   */
+  private static void recordDigit(StateItem next, byte digit, DigitType type) {
+    if (next == null) return;
+    next.appendDigit(digit, type);
+    if (type == DigitType.INTEGER && (next.groupingWidths & 0xf) < 15) {
+      next.groupingWidths++;
     }
   }
 
@@ -1603,21 +1682,29 @@ public class Parse {
       // First time seeing a grouping separator.
       SeparatorType cpType = SeparatorType.fromCp(cp, state.mode);
 
-      // Always accept if exactly the same as the locale symbol.
-      // Otherwise, reject if UNKNOWN or in the same class as the decimal separator.
+      // Always accept if exactly the same as the locale grouping separator.
       if (cp != state.groupingCp1 && cp != state.groupingCp2) {
+        // Reject if not in one of the three primary equivalence classes.
         if (cpType == SeparatorType.UNKNOWN) {
           return;
         }
-        if (cpType == SeparatorType.COMMA_LIKE
-            && (state.decimalType1 == SeparatorType.COMMA_LIKE
-                || state.decimalType2 == SeparatorType.COMMA_LIKE)) {
-          return;
-        }
-        if (cpType == SeparatorType.PERIOD_LIKE
-            && (state.decimalType1 == SeparatorType.PERIOD_LIKE
-                || state.decimalType2 == SeparatorType.PERIOD_LIKE)) {
-          return;
+        if (state.groupingMode == GroupingMode.RESTRICTED) {
+          // Reject if not in the same class as the locale grouping separator.
+          if (cpType != state.groupingType1 || cpType != state.groupingType2) {
+            return;
+          }
+        } else {
+          // Reject if in the same class as the decimal separator.
+          if (cpType == SeparatorType.COMMA_LIKE
+              && (state.decimalType1 == SeparatorType.COMMA_LIKE
+                  || state.decimalType2 == SeparatorType.COMMA_LIKE)) {
+            return;
+          }
+          if (cpType == SeparatorType.PERIOD_LIKE
+              && (state.decimalType1 == SeparatorType.PERIOD_LIKE
+                  || state.decimalType2 == SeparatorType.PERIOD_LIKE)) {
+            return;
+          }
         }
       }
 
@@ -1727,36 +1814,30 @@ public class Parse {
       boolean prefix) {
     if (holder == null) return;
     String str = prefix ? holder.p : holder.s;
+    long added;
     if (holder.strings) {
-      long added = acceptString(cp, nextName, null, state, item, str, 0, false);
-      // At most one item can be added upon consuming a string.
-      if (added != 0) {
-        int i = state.lastInsertedIndex();
-        recordAffixHolder(holder, state.getItem(i), prefix);
-      }
+      added = acceptString(cp, nextName, null, state, item, str, 0, false);
     } else {
-      long added = acceptAffixPattern(cp, nextName, state, item, str, 0);
-      // Multiple items can be added upon consuming an affix pattern.
-      for (int i = Long.numberOfTrailingZeros(added); (1L << i) <= added; i++) {
-        if (((1L << i) & added) != 0) {
-          recordAffixHolder(holder, state.getItem(i), prefix);
-        }
+      added =
+          acceptAffixPattern(cp, nextName, state, item, str, AffixPatternUtils.nextToken(0, str));
+    }
+    // Record state in the added entries
+    for (int i = Long.numberOfTrailingZeros(added); (1L << i) <= added; i++) {
+      if (((1L << i) & added) != 0) {
+        StateItem next = state.getItem(i);
+        next.affix = holder;
+        if (prefix) next.sawPrefix = true;
+        if (!prefix) next.sawSuffix = true;
+        if (holder.negative) next.sawNegative = true;
+        // 10 point reward for consuming a prefix/suffix:
+        next.score += 10;
+        // 1 point reward for positive holders (if there is ambiguity, we want to favor positive):
+        if (!holder.negative) next.score += 1;
+        // 5 point reward for affix holders that have an empty prefix or suffix (we won't see them again):
+        if (!next.sawPrefix && holder.p.isEmpty()) next.score += 5;
+        if (!next.sawSuffix && holder.s.isEmpty()) next.score += 5;
       }
     }
-  }
-
-  private static void recordAffixHolder(AffixHolder holder, StateItem next, boolean prefix) {
-    next.affix = holder;
-    if (prefix) next.sawPrefix = true;
-    if (!prefix) next.sawSuffix = true;
-    if (holder.negative) next.sawNegative = true;
-    // 10 point reward for consuming a prefix/suffix:
-    next.score += 10;
-    // 1 point reward for positive holders (if there is ambiguity, we want to favor positive):
-    if (!holder.negative) next.score += 1;
-    // 5 point reward for affix holders that have an empty prefix or suffix (we won't see them again):
-    if (!next.sawPrefix && holder.p.isEmpty()) next.score += 5;
-    if (!next.sawSuffix && holder.s.isEmpty()) next.score += 5;
   }
 
   private static long acceptStringOffset(int cp, ParserState state, StateItem item) {
@@ -1773,81 +1854,108 @@ public class Parse {
 
   /**
    * Accepts a code point if the code point is compatible with the string at the given offset.
+   * Handles runs of ignorable characters.
    *
-   * <p>This method will add no more than one {@link StateItem} to the {@link ParserState}, which
-   * means that at most one bit will be set in the return value, corresponding to the return value
-   * of {@link ParserState#lastInsertedIndex()}.
+   * <p>This method will add either one or two {@link StateItem} to the {@link ParserState}.
    *
    * @param cp The current code point, which will be checked for a match to the string.
-   * @param returnTo1 The state to return to after reaching the end of the string.
-   * @param returnTo2 The state to save in <code>returnTo1</code> after reaching the end of the
-   *     string. Set to null if returning to the main state loop.
+   * @param ret1 The state to return to after reaching the end of the string.
+   * @param ret2 The state to save in <code>returnTo1</code> after reaching the end of the string.
+   *     Set to null if returning to the main state loop.
    * @param trailing true if this string should be ignored for the purposes of recording trailing
    *     code points; false if it trailing count should be reset after reading the string.
    * @param state The current {@link ParserState}
    * @param item The current {@link StateItem}
    * @param str The string against which to check for a match.
    * @param offset The number of chars into the string. Initial value should be 0.
+   * @param trailing false if this string is strong and should reset trailing count to zero when it
+   *     is fully consumed.
    * @return A bitmask where the bits correspond to the items that were added. Set to 0L if no items
    *     were added.
    */
   private static long acceptString(
       int cp,
-      StateName returnTo1,
-      StateName returnTo2,
+      StateName ret1,
+      StateName ret2,
       ParserState state,
       StateItem item,
       CharSequence str,
       int offset,
       boolean trailing) {
     if (str == null || str.length() == 0) return 0L;
+    return acceptStringOrAffixPatternWithIgnorables(
+        cp, ret1, ret2, state, item, str, offset, trailing, true);
+  }
 
-    // Fast path for fast mode
-    if (state.mode == ParseMode.FAST && Character.codePointAt(str, offset) != cp) return 0L;
-
-    // Skip over bidi code points at the beginning of the string.
-    // They will be accepted in the main loop.
-    int count = 0;
-    int referenceCp = -1;
-    boolean equals = false;
-    for (; offset < str.length(); offset += count) {
-      referenceCp = Character.codePointAt(str, offset);
-      count = Character.charCount(referenceCp);
-      equals = codePointEquals(cp, referenceCp, state);
-      if (!UNISET_BIDI.contains(referenceCp)) break;
-    }
-
-    if (equals) {
-      // Matches first code point of the string
-      StateItem next = state.getNext().copyFrom(item, null, cp);
-
-      // Skip over bidi code points in the middle or end of the string.
-      // They will be accepted in the main loop.
-      offset += count;
-      for (; offset < str.length(); offset += count) {
-        referenceCp = Character.codePointAt(str, offset);
-        count = Character.charCount(referenceCp);
-        if (!UNISET_BIDI.contains(referenceCp)) break;
+  private static long acceptStringNonIgnorable(
+      int cp,
+      StateName ret1,
+      StateName ret2,
+      ParserState state,
+      StateItem item,
+      CharSequence str,
+      boolean trailing,
+      int referenceCp,
+      long firstOffsetOrTag,
+      long nextOffsetOrTag) {
+    long added = 0L;
+    int firstOffset = (int) firstOffsetOrTag;
+    int nextOffset = (int) nextOffsetOrTag;
+    if (codePointEquals(referenceCp, cp, state)) {
+      if (firstOffset < str.length()) {
+        added |= acceptStringHelper(cp, ret1, ret2, state, item, str, firstOffset, trailing);
       }
-
-      if (offset < str.length()) {
-        // String has more interesting code points.
-        next.name = StateName.INSIDE_STRING;
-        next.returnTo1 = returnTo1;
-        next.returnTo2 = returnTo2;
-        next.currentString = str;
-        next.currentOffset = offset;
-        next.currentTrailing = trailing;
-      } else {
-        // We've reached the end of the string.
-        next.name = returnTo1;
-        if (!trailing) next.trailingCount = 0;
-        next.returnTo1 = returnTo2;
-        next.returnTo2 = null;
+      if (nextOffset >= str.length()) {
+        added |= acceptStringHelper(cp, ret1, ret2, state, item, str, nextOffset, trailing);
       }
-      return 1L << state.lastInsertedIndex();
+      return added;
+    } else {
+      return 0L;
     }
-    return 0L;
+  }
+
+  /**
+   * Internal method that is used to step to the next code point of a string or exit the string if
+   * at the end.
+   *
+   * @param cp See {@link #acceptString}
+   * @param returnTo1 See {@link #acceptString}
+   * @param returnTo2 See {@link #acceptString}
+   * @param state See {@link #acceptString}
+   * @param item See {@link #acceptString}
+   * @param str See {@link #acceptString}
+   * @param newOffset The offset at which the next step should start. If past the end of the string,
+   *     exit the string and return to the outer loop.
+   * @param trailing See {@link #acceptString}
+   * @return Bitmask containing one entry, the one that was added.
+   */
+  private static long acceptStringHelper(
+      int cp,
+      StateName returnTo1,
+      StateName returnTo2,
+      ParserState state,
+      StateItem item,
+      CharSequence str,
+      int newOffset,
+      boolean trailing) {
+    StateItem next = state.getNext().copyFrom(item, null, cp);
+    next.score += 1; // reward for consuming a cp from string
+    if (newOffset < str.length()) {
+      // String has more code points.
+      next.name = StateName.INSIDE_STRING;
+      next.returnTo1 = returnTo1;
+      next.returnTo2 = returnTo2;
+      next.currentString = str;
+      next.currentOffset = newOffset;
+      next.currentTrailing = trailing;
+    } else {
+      // We've reached the end of the string.
+      next.name = returnTo1;
+      if (!trailing) next.trailingCount = 0;
+      next.returnTo1 = returnTo2;
+      next.returnTo2 = null;
+    }
+    return 1L << state.lastInsertedIndex();
   }
 
   private static long acceptAffixPatternOffset(int cp, ParserState state, StateItem item) {
@@ -1869,19 +1977,21 @@ public class Parse {
    *     were added.
    */
   private static long acceptAffixPattern(
-      int cp, StateName returnTo, ParserState state, StateItem item, CharSequence str, long tag) {
+      int cp, StateName ret1, ParserState state, StateItem item, CharSequence str, long tag) {
     if (str == null || str.length() == 0) return 0L;
+    return acceptStringOrAffixPatternWithIgnorables(
+        cp, ret1, null, state, item, str, tag, false, false);
+  }
 
-    // Skip over ignorable code points at the beginning of the affix pattern.
-    // They will be accepted in the main loop.
-    int typeOrCp = 0;
-    boolean hasNext = true;
-    while (hasNext) {
-      tag = AffixPatternUtils.nextToken(tag, str);
-      typeOrCp = AffixPatternUtils.getTypeOrCp(tag);
-      hasNext = AffixPatternUtils.hasNext(tag, str);
-      if (typeOrCp < 0 || !isPatternIgnorable(typeOrCp, state)) break;
-    }
+  private static long acceptAffixPatternNonIgnorable(
+      int cp,
+      StateName returnTo,
+      ParserState state,
+      StateItem item,
+      CharSequence str,
+      int typeOrCp,
+      long firstTag,
+      long nextTag) {
 
     // Convert from the returned tag to a code point, string, or currency to check
     int resolvedCp = -1;
@@ -1922,42 +2032,24 @@ public class Parse {
       resolvedCp = typeOrCp;
     }
 
-    // Skip over ignorable code points in the middle of the affix pattern.
-    // They will be accepted in the main loop.
-    while (hasNext) {
-      long futureTag = AffixPatternUtils.nextToken(tag, str);
-      int futureTypeOrCp = AffixPatternUtils.getTypeOrCp(futureTag);
-      if (futureTypeOrCp < 0 || !isPatternIgnorable(futureTypeOrCp, state)) break;
-      tag = futureTag;
-      typeOrCp = futureTypeOrCp;
-      hasNext = AffixPatternUtils.hasNext(tag, str);
-    }
-
     long added = 0L;
     if (resolvedCp >= 0 && codePointEquals(cp, resolvedCp, state)) {
-      // Code point
-      StateItem next = state.getNext().copyFrom(item, null, cp);
-      if (hasNext) {
-        // Additional tokens in affix string.
-        next.name = StateName.INSIDE_AFFIX_PATTERN;
-        next.returnTo1 = returnTo;
-      } else {
-        // Reached last token in affix string.
-        next.name = returnTo;
-        next.trailingCount = 0;
-        next.returnTo1 = null;
+      if (firstTag >= 0) {
+        added |= acceptAffixPatternHelper(cp, returnTo, state, item, str, firstTag);
       }
-      next.score += 1; // reward for consuming code point from pattern
-      added |= 1L << state.lastInsertedIndex();
+      if (nextTag < 0) {
+        added |= acceptAffixPatternHelper(cp, returnTo, state, item, str, nextTag);
+      }
     }
     if (resolvedMinusSign) {
-      if (hasNext) {
+      if (firstTag >= 0) {
         added |= acceptMinusSign(cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item, false);
-      } else {
+      }
+      if (nextTag < 0) {
         added |= acceptMinusSign(cp, returnTo, null, state, item, false);
       }
       if (added == 0L) {
-        // Attempt to accept custom minus sign string
+        // Also attempt to accept custom minus sign string
         String mss = state.symbols.getMinusSignString();
         int mssCp = Character.codePointAt(mss, 0);
         if (mss.length() != Character.charCount(mssCp) || !UNISET_MINUS.contains(mssCp)) {
@@ -1966,13 +2058,14 @@ public class Parse {
       }
     }
     if (resolvedPlusSign) {
-      if (hasNext) {
+      if (firstTag >= 0) {
         added |= acceptPlusSign(cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item, false);
-      } else {
+      }
+      if (nextTag < 0) {
         added |= acceptPlusSign(cp, returnTo, null, state, item, false);
       }
       if (added == 0L) {
-        // Attempt to accept custom plus sign string
+        // Also attempt to accept custom plus sign string
         String pss = state.symbols.getPlusSignString();
         int pssCp = Character.codePointAt(pss, 0);
         if (pss.length() != Character.charCount(pssCp) || !UNISET_MINUS.contains(pssCp)) {
@@ -1981,20 +2074,20 @@ public class Parse {
       }
     }
     if (resolvedStr != null) {
-      // String symbol
-      if (hasNext) {
+      if (firstTag >= 0) {
         added |=
             acceptString(
                 cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item, resolvedStr, 0, false);
-      } else {
+      }
+      if (nextTag < 0) {
         added |= acceptString(cp, returnTo, null, state, item, resolvedStr, 0, false);
       }
     }
     if (resolvedCurrency) {
-      // Currency symbol
-      if (hasNext) {
+      if (firstTag >= 0) {
         added |= acceptCurrency(cp, StateName.INSIDE_AFFIX_PATTERN, returnTo, state, item);
-      } else {
+      }
+      if (nextTag < 0) {
         added |= acceptCurrency(cp, returnTo, null, state, item);
       }
     }
@@ -2003,10 +2096,211 @@ public class Parse {
     for (int i = Long.numberOfTrailingZeros(added); (1L << i) <= added; i++) {
       if (((1L << i) & added) != 0) {
         state.getItem(i).currentAffixPattern = str;
-        state.getItem(i).currentStepwiseParserTag = tag;
+        state.getItem(i).currentStepwiseParserTag = firstTag;
       }
     }
     return added;
+  }
+
+  /**
+   * Internal method that is used to step to the next token of a affix pattern or exit the affix
+   * pattern if at the end.
+   *
+   * @param cp See {@link #acceptAffixPattern}
+   * @param returnTo1 See {@link #acceptAffixPattern}
+   * @param state See {@link #acceptAffixPattern}
+   * @param item See {@link #acceptAffixPattern}
+   * @param str See {@link #acceptAffixPattern}
+   * @param newOffset The tag corresponding to the next token in the affix pattern that should be
+   *     recorded and consumed in a future call to {@link #acceptAffixPatternOffset}.
+   * @return Bitmask containing one entry, the one that was added.
+   */
+  private static long acceptAffixPatternHelper(
+      int cp,
+      StateName returnTo,
+      ParserState state,
+      StateItem item,
+      CharSequence str,
+      long newTag) {
+    StateItem next = state.getNext().copyFrom(item, null, cp);
+    next.score += 1; // reward for consuming a cp from pattern
+    if (newTag >= 0) {
+      // Additional tokens in affix string.
+      next.name = StateName.INSIDE_AFFIX_PATTERN;
+      next.returnTo1 = returnTo;
+      next.currentAffixPattern = str;
+      next.currentStepwiseParserTag = newTag;
+    } else {
+      // Reached last token in affix string.
+      next.name = returnTo;
+      next.trailingCount = 0;
+      next.returnTo1 = null;
+    }
+    return 1L << state.lastInsertedIndex();
+  }
+
+  /**
+   * Consumes tokens from a string or affix pattern following ICU's rules for handling of whitespace
+   * and bidi control characters (collectively called "ignorables"). The methods {@link
+   * #acceptStringHelper}, {@link #acceptAffixPatternHelper}, {@link #acceptStringNonIgnorable}, and
+   * {@link #acceptAffixPatternNonIgnorable} will be called by this method to actually add parse
+   * paths.
+   *
+   * <p>In the "NonIgnorable" functions, two arguments are passed: firstOffsetOrTag and
+   * nextOffsetOrTag. These two arguments should add parse paths according to the following rules:
+   *
+   * <pre>
+   * if (firstOffsetOrTag is valid or inside string boundary) {
+   *   // Add parse path going to firstOffsetOrTag
+   * }
+   * if (nextOffsetOrTag is invalid or beyond string boundary) {
+   *   // Add parse path leaving the string
+   * }
+   * </pre>
+   *
+   * <p>Note that there may be multiple parse paths added by these lines. This is important in order
+   * to properly handle runs of ignorables.
+   *
+   * @param cp See {@link #acceptString} and {@link #acceptAffixPattern}
+   * @param ret1 See {@link #acceptString} and {@link #acceptAffixPattern}
+   * @param ret2 See {@link #acceptString} (affix pattern can pass null)
+   * @param state See {@link #acceptString} and {@link #acceptAffixPattern}
+   * @param item See {@link #acceptString} and {@link #acceptAffixPattern}
+   * @param str See {@link #acceptString} and {@link #acceptAffixPattern}
+   * @param offsetOrTag The current int offset for strings, or the current tag for affix patterns.
+   * @param trailing See {@link #acceptString} (affix patterns can pass false)
+   * @param isString true if the parameters correspond to a string; false if they correspond to an
+   *     affix pattern.
+   * @return A bitmask containing the entries that were added.
+   */
+  private static long acceptStringOrAffixPatternWithIgnorables(
+      int cp,
+      StateName ret1,
+      StateName ret2 /* String only */,
+      ParserState state,
+      StateItem item,
+      CharSequence str,
+      long offsetOrTag /* offset for string; tag for affix pattern */,
+      boolean trailing /* String only */,
+      boolean isString) {
+
+    // Runs of ignorables (whitespace and bidi control marks) can occur at the beginning, middle,
+    // or end of the reference string, or a run across the entire string.
+    //
+    // - A run at the beginning is treated as if it did not exist; we let the main loop accept
+    //   ignorables in this case.
+    // - A run in the middle corresponds to a run of length *zero or more* in the input.
+    // - A run at the end need to be matched exactly.
+    // - A string that contains only ignorable characters also needs to be matched exactly.
+    //
+    // Because the behavior differs, we need logic here to determine which case we have.
+
+    int typeOrCp =
+        isString
+            ? Character.codePointAt(str, (int) offsetOrTag)
+            : AffixPatternUtils.getTypeOrCp(offsetOrTag);
+
+    if (isIgnorable(typeOrCp, state)) {
+      // Look for the next nonignorable code point
+      int nextTypeOrCp = typeOrCp;
+      long prevOffsetOrTag;
+      long nextOffsetOrTag = offsetOrTag;
+      long firstOffsetOrTag = 0L;
+      while (true) {
+        prevOffsetOrTag = nextOffsetOrTag;
+        nextOffsetOrTag =
+            isString
+                ? nextOffsetOrTag + Character.charCount(nextTypeOrCp)
+                : AffixPatternUtils.nextToken(nextOffsetOrTag, str);
+        if (firstOffsetOrTag == 0L) firstOffsetOrTag = nextOffsetOrTag;
+        if (isString ? nextOffsetOrTag >= str.length() : nextOffsetOrTag < 0) {
+          nextTypeOrCp = -1;
+          break;
+        }
+        nextTypeOrCp =
+            isString
+                ? Character.codePointAt(str, (int) nextOffsetOrTag)
+                : AffixPatternUtils.getTypeOrCp(nextOffsetOrTag);
+        if (!isIgnorable(nextTypeOrCp, state)) break;
+      }
+
+      if (nextTypeOrCp == -1) {
+        // Run at end or string that contains only ignorable characters.
+        if (codePointEquals(cp, typeOrCp, state)) {
+          // Step forward and also exit the string if not at very end.
+          // RETURN
+          long added = 0L;
+          added |=
+              isString
+                  ? acceptStringHelper(
+                      cp, ret1, ret2, state, item, str, (int) firstOffsetOrTag, trailing)
+                  : acceptAffixPatternHelper(cp, ret1, state, item, str, firstOffsetOrTag);
+          if (firstOffsetOrTag != nextOffsetOrTag) {
+            added |=
+                isString
+                    ? acceptStringHelper(
+                        cp, ret1, ret2, state, item, str, (int) nextOffsetOrTag, trailing)
+                    : acceptAffixPatternHelper(cp, ret1, state, item, str, nextOffsetOrTag);
+          }
+          return added;
+        } else {
+          // Code point does not exactly match the run at end.
+          // RETURN
+          return 0L;
+        }
+      } else if (offsetOrTag == 0) {
+        // Run at beginning. Go to nonignorable cp.
+        // FALL THROUGH
+      } else {
+        // Run in middle.
+        if (isIgnorable(cp, state)) {
+          // Consume the ignorable.
+          // RETURN
+          return isString
+              ? acceptStringHelper(
+                  cp, ret1, ret2, state, item, str, (int) prevOffsetOrTag, trailing)
+              : acceptAffixPatternHelper(cp, ret1, state, item, str, prevOffsetOrTag);
+        } else {
+          // Go to nonignorable cp.
+          // FALL THROUGH
+        }
+      }
+
+      // Fall through to the nonignorable code point found above.
+      assert nextTypeOrCp != -1;
+      typeOrCp = nextTypeOrCp;
+      offsetOrTag = nextOffsetOrTag;
+    }
+    assert !isIgnorable(typeOrCp, state);
+
+    // Look for the next nonignorable code point after this nonignorable code point
+    // to determine if we are at the end of the string.
+    int nextTypeOrCp = typeOrCp;
+    long nextOffsetOrTag = offsetOrTag;
+    long firstOffsetOrTag = 0L;
+    while (true) {
+      nextOffsetOrTag =
+          isString
+              ? nextOffsetOrTag + Character.charCount(nextTypeOrCp)
+              : AffixPatternUtils.nextToken(nextOffsetOrTag, str);
+      if (firstOffsetOrTag == 0L) firstOffsetOrTag = nextOffsetOrTag;
+      if (isString ? nextOffsetOrTag >= str.length() : nextOffsetOrTag < 0) {
+        nextTypeOrCp = -1;
+        break;
+      }
+      nextTypeOrCp =
+          isString
+              ? Character.codePointAt(str, (int) nextOffsetOrTag)
+              : AffixPatternUtils.getTypeOrCp(nextOffsetOrTag);
+      if (!isIgnorable(nextTypeOrCp, state)) break;
+    }
+
+    // Nonignorable logic.
+    return isString
+        ? acceptStringNonIgnorable(
+            cp, ret1, ret2, state, item, str, trailing, typeOrCp, firstOffsetOrTag, nextOffsetOrTag)
+        : acceptAffixPatternNonIgnorable(
+            cp, ret1, state, item, str, typeOrCp, firstOffsetOrTag, nextOffsetOrTag);
   }
 
   /**
@@ -2145,7 +2439,7 @@ public class Parse {
       byte digit = currentMatches.next();
       StateItem next = state.getNext().copyFrom(item, returnTo1, -1);
       next.returnTo1 = null;
-      next.appendDigit(digit, type);
+      recordDigit(next, digit, type);
       added |= 1L << state.lastInsertedIndex();
     }
     if (!trieState.atEnd()) {
@@ -2175,10 +2469,12 @@ public class Parse {
   }
 
   /**
-   * Checks whether the given code point is "ignorable" and should be skipped. BiDi characters are
-   * always ignorable, and whitespace is ignorable in lenient mode.
+   * Checks whether the given code point is "ignorable" and should be skipped. BiDi control marks
+   * are always ignorable, and whitespace is ignorable in lenient mode.
    *
-   * @param cp The code point to test. Returns false if cp is negative.
+   * <p>Returns false if cp is negative.
+   *
+   * @param cp The code point to test.
    * @param state The current {@link ParserState}, used for determining strict mode.
    * @return true if cp is ignorable; false otherwise.
    */
@@ -2186,20 +2482,5 @@ public class Parse {
     if (cp < 0) return false;
     if (UNISET_BIDI.contains(cp)) return true;
     return state.mode == ParseMode.LENIENT && UNISET_WHITESPACE.contains(cp);
-  }
-
-  /**
-   * Checks whether the given code point is "ignorable" in pattern syntax. This includes all
-   * characters that are normally ignorable in {@link #isIgnorable} plus characters having the
-   * Pattern_White_Space property.
-   *
-   * @param cp The code point to test. Returns false if cp is negative.
-   * @param state The current {@link ParserState}, used for determining strict mode.
-   * @return true if cp is ignorable; false otherwise.
-   */
-  private static boolean isPatternIgnorable(int cp, ParserState state) {
-    if (cp < 0) return false;
-    if (state.mode == ParseMode.LENIENT && PatternProps.isWhiteSpace(cp)) return true;
-    return isIgnorable(cp, state);
   }
 }

@@ -13,6 +13,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
+import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.formatters.BigDecimalMultiplier;
 import com.ibm.icu.impl.number.formatters.CompactDecimalFormat;
@@ -102,9 +103,10 @@ public class Properties
   private transient PadPosition padPosition;
   private transient String padString;
   private transient boolean parseCaseSensitive;
-  private transient boolean parseNoExponent;
+  private transient GroupingMode parseGroupingMode;
   private transient boolean parseIntegerOnly;
   private transient ParseMode parseMode;
+  private transient boolean parseNoExponent;
   private transient boolean parseToBigDecimal;
   private transient String positivePrefix;
   private transient String positivePrefixPattern;
@@ -160,6 +162,7 @@ public class Properties
     padPosition = DEFAULT_PAD_POSITION;
     padString = DEFAULT_PAD_STRING;
     parseCaseSensitive = DEFAULT_PARSE_CASE_SENSITIVE;
+    parseGroupingMode = DEFAULT_PARSE_GROUPING_MODE;
     parseIntegerOnly = DEFAULT_PARSE_INTEGER_ONLY;
     parseMode = DEFAULT_PARSE_MODE;
     parseNoExponent = DEFAULT_PARSE_NO_EXPONENT;
@@ -207,6 +210,7 @@ public class Properties
     padPosition = other.padPosition;
     padString = other.padString;
     parseCaseSensitive = other.parseCaseSensitive;
+    parseGroupingMode = other.parseGroupingMode;
     parseIntegerOnly = other.parseIntegerOnly;
     parseMode = other.parseMode;
     parseNoExponent = other.parseNoExponent;
@@ -255,6 +259,7 @@ public class Properties
     eq = eq && _equalsHelper(padPosition, other.padPosition);
     eq = eq && _equalsHelper(padString, other.padString);
     eq = eq && _equalsHelper(parseCaseSensitive, other.parseCaseSensitive);
+    eq = eq && _equalsHelper(parseGroupingMode, other.parseGroupingMode);
     eq = eq && _equalsHelper(parseIntegerOnly, other.parseIntegerOnly);
     eq = eq && _equalsHelper(parseMode, other.parseMode);
     eq = eq && _equalsHelper(parseNoExponent, other.parseNoExponent);
@@ -317,6 +322,7 @@ public class Properties
     hashCode ^= _hashCodeHelper(padPosition);
     hashCode ^= _hashCodeHelper(padString);
     hashCode ^= _hashCodeHelper(parseCaseSensitive);
+    hashCode ^= _hashCodeHelper(parseGroupingMode);
     hashCode ^= _hashCodeHelper(parseIntegerOnly);
     hashCode ^= _hashCodeHelper(parseMode);
     hashCode ^= _hashCodeHelper(parseNoExponent);
@@ -534,6 +540,11 @@ public class Properties
   }
 
   @Override
+  public GroupingMode getParseGroupingMode() {
+    return parseGroupingMode;
+  }
+
+  @Override
   public boolean getParseIntegerOnly() {
     return parseIntegerOnly;
   }
@@ -551,11 +562,6 @@ public class Properties
   @Override
   public boolean getParseToBigDecimal() {
     return parseToBigDecimal;
-  }
-
-  @Override
-  public boolean getSignAlwaysShown() {
-    return signAlwaysShown;
   }
 
   @Override
@@ -591,6 +597,11 @@ public class Properties
   @Override
   public int getSecondaryGroupingSize() {
     return secondaryGroupingSize;
+  }
+
+  @Override
+  public boolean getSignAlwaysShown() {
+    return signAlwaysShown;
   }
 
   @Override
@@ -836,6 +847,12 @@ public class Properties
   }
 
   @Override
+  public Properties setParseGroupingMode(GroupingMode parseGroupingMode) {
+    this.parseGroupingMode = parseGroupingMode;
+    return this;
+  }
+
+  @Override
   public Properties setParseIntegerOnly(boolean parseIntegerOnly) {
     this.parseIntegerOnly = parseIntegerOnly;
     return this;
@@ -856,12 +873,6 @@ public class Properties
   @Override
   public Properties setParseToBigDecimal(boolean parseToBigDecimal) {
     this.parseToBigDecimal = parseToBigDecimal;
-    return this;
-  }
-
-  @Override
-  public Properties setSignAlwaysShown(boolean signAlwaysShown) {
-    this.signAlwaysShown = signAlwaysShown;
     return this;
   }
 
@@ -904,6 +915,12 @@ public class Properties
   @Override
   public Properties setSecondaryGroupingSize(int secondaryGroupingSize) {
     this.secondaryGroupingSize = secondaryGroupingSize;
+    return this;
+  }
+
+  @Override
+  public Properties setSignAlwaysShown(boolean signAlwaysShown) {
+    this.signAlwaysShown = signAlwaysShown;
     return this;
   }
 
