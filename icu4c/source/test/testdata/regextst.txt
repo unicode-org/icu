@@ -1355,6 +1355,13 @@
 "[^\u0000-\U0010ffff]bc?"       "bc no match"
 "[^\u0000-\U0010ffff]?bc?"      "<0>bc</0> has a match"
 
+# Bug #12160  Hit End behavior after find fails to find.
+#             To match Java, should be true if find fails to find.
+#
+"abc"                  Z        "<0>abc</0> abc abc xyz"
+"abc"                  Z2       "abc <0>abc</0> abc xyz"
+"abc"                  Z3       "abc abc <0>abc</0> xyz"
+"abc"                  z4       "abc abc abc xyz"
 
 #  Random debugging, Temporary
 #
