@@ -134,8 +134,6 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * The following BNF is used when parsing the pattern string into property values:
  *
- * <p>
- *
  * <pre>
  * pattern    := subpattern (';' subpattern)?
  * subpattern := prefix? number exponent? suffix?
