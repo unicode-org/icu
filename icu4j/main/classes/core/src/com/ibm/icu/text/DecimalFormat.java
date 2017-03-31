@@ -108,9 +108,9 @@ import com.ibm.icu.util.ULocale.Category;
  *       digits are shown. This is most common in scientific notation.
  * </ol>
  *
- * It is possible to specify both a magnitude and a number of significant digits. If used together,
- * the <em>significant digits mode</em> determines how conflicts between fraction digits and
- * signiciant digits are resolved. For more information, see {@link #setSignificantDigitsMode}.
+ * <p>It is possible to specify both a magnitude and a number of significant digits. If used
+ * together, the <em>significant digits mode</em> determines how conflicts between fraction digits
+ * and signiciant digits are resolved. For more information, see {@link #setSignificantDigitsMode}.
  *
  * <p>It is also possible to specify the <em>rounding mode</em> to use. The default rounding mode is
  * "half even", which rounds numbers to their closest increment, with ties broken in favor of
@@ -134,6 +134,8 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * The following BNF is used when parsing the pattern string into property values:
  *
+ * <p>
+ *
  * <pre>
  * pattern    := subpattern (';' subpattern)?
  * subpattern := prefix? number exponent? suffix?
@@ -155,7 +157,7 @@ import com.ibm.icu.util.ULocale.Category;
  *   S-T      characters in S, except those in T
  * </pre>
  *
- * The first subpattern is for positive numbers. The second (optional) subpattern is for negative
+ * <p>The first subpattern is for positive numbers. The second (optional) subpattern is for negative
  * numbers.
  *
  * <p>Not indicated in the BNF syntax above:
@@ -179,7 +181,7 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * <p>There are two primary parse modes: <em>lenient</em> and <em>strict</em>. Lenient mode should
  * be used if the goal is to parse user input to a number; strict mode should be used if the goal is
- * validation. For more information, see {@link #setParseStrict}.
+ * validation. The default is lenient mode. For more information, see {@link #setParseStrict}.
  *
  * <p><code>DecimalFormat</code> parses all Unicode characters that represent decimal digits, as
  * defined by {@link UCharacter#digit}. In addition, <code>DecimalFormat</code> also recognizes as
@@ -187,12 +189,21 @@ import com.ibm.icu.util.ULocale.Category;
  * {@link DecimalFormatSymbols} object. During formatting, the {@link DecimalFormatSymbols}-based
  * digits are output.
  *
- * <p>During parsing, grouping separators are ignored.
+ * <p>Grouping separators are ignored in lenient mode (default). In strict mode, grouping separators
+ * must match the locale-specified grouping sizes.
  *
- * <p>For currency parsing, the formatter is able to parse every currency style formats no matter
- * which style the formatter is constructed with. For example, a formatter instance gotten from
- * NumberFormat.getInstance(ULocale, NumberFormat.CURRENCYSTYLE) can parse formats such as "USD1.00"
- * and "3.00 US dollars".
+ * <p>When using {@link #parseCurrency}, all currencies are accepted, not just the currency
+ * currently set in the formatter. In addition, the formatter is able to parse every currency style
+ * format for a particular locale no matter which style the formatter is constructed with. For
+ * example, a formatter instance gotten from NumberFormat.getInstance(ULocale,
+ * NumberFormat.CURRENCYSTYLE) can parse both "USD1.00" and "3.00 US dollars".
+ *
+ * <p>Whitespace characters (lenient mode) and bidi control characters (lenient and strict mode),
+ * collectively called "ignorables", do not need to match in identity or quantity between the
+ * pattern string and the input string. For example, the pattern "# %" matches "35 %" (with a single
+ * space), "35%" (with no space), "35&nbsp;%" (with a non-breaking space), and "35&nbsp; %" (with
+ * multiple spaces). Arbitrary ignorables are also allowed at boundaries between the parts of the
+ * number: prefix, number, exponent separator, and suffix.
  *
  * <p>If {@link #parse(String, ParsePosition)} fails to parse a string, it returns <code>null</code>
  * and leaves the parse position unchanged. The convenience method {@link #parse(String)} indicates
@@ -209,10 +220,9 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * <h3>Thread Safety and Best Practices</h3>
  *
- * <p>Starting with ICU 59, instance of DecimalFormat are thread-safe.
+ * <p>Starting with ICU 59, instances of DecimalFormat are thread-safe.
  *
- * <p>Under the hood, DecimalFormat maintains an immutable formatter object that is used whenever
- * one of the {@link #format} methods is called. This immutable formatter object is rebuilt whenever
+ * <p>Under the hood, DecimalFormat maintains an immutable formatter object that is rebuilt whenever
  * any of the property setters are called. It is therefore best practice to call property setters
  * only during construction and not when formatting numbers online.
  *
@@ -2271,6 +2281,43 @@ public class DecimalFormat extends NumberFormat {
     properties.setParseCaseSensitive(value);
     refreshFormatter();
   }
+
+  // TODO(sffc): Uncomment for ICU 60 API proposal.
+  //
+  //  /**
+  //   * {@icu} Returns the strategy used for choosing between grouping and decimal separators when
+  //   * parsing.
+  //   *
+  //   * @see #setParseGroupingMode
+  //   * @category Parsing
+  //   */
+  //  public synchronized GroupingMode getParseGroupingMode() {
+  //    return properties.getParseGroupingMode();
+  //  }
+  //
+  //  /**
+  //   * {@icu} Sets the strategy used during parsing when a code point needs to be interpreted as
+  //   * either a decimal separator or a grouping separator.
+  //   *
+  //   * <p>The comma, period, space, and apostrophe have different meanings in different locales. For
+  //   * example, in <em>en-US</em> and most American locales, the period is used as a decimal
+  //   * separator, but in <em>es-PY</em> and most European locales, it is used as a grouping separator.
+  //   *
+  //   * Suppose you are in <em>fr-FR</em> the parser encounters the string "1.234".  In <em>fr-FR</em>,
+  //   * the grouping is a space and the decimal is a comma.  The <em>grouping mode</em> is a mechanism
+  //   * to let you specify whether to accept the string as 1234 (GroupingMode.DEFAULT) or whether to reject it since the separators
+  //   * don't match (GroupingMode.RESTRICTED).
+  //   *
+  //   * When resolving grouping separators, it is the <em>equivalence class</em> of separators that is considered.
+  //   * For example, a period is seen as equal to a fixed set of other period-like characters.
+  //   *
+  //   * @param groupingMode The strategy to use; either DEFAULT or RESTRICTED.
+  //   * @category Parsing
+  //   */
+  //  public synchronized void setParseGroupingMode(GroupingMode groupingMode) {
+  //    properties.setParseGroupingMode(groupingMode);
+  //    refreshFormatter();
+  //  }
 
   //=====================================================================================//
   //                                     UTILITIES                                       //

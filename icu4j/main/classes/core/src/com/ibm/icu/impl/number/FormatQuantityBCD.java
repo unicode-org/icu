@@ -135,25 +135,11 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   @Override
   public void setIntegerFractionLength(int minInt, int maxInt, int minFrac, int maxFrac) {
-    // Graceful failures for bogus input
-    minInt = Math.max(0, minInt);
-    maxInt = Math.max(0, maxInt);
-    minFrac = Math.max(0, minFrac);
-    maxFrac = Math.max(0, maxFrac);
-
-    // The minima must be less than or equal to the maxima
-    if (maxInt < minInt) {
-      minInt = maxInt;
-    }
-    if (maxFrac < minFrac) {
-      minFrac = maxFrac;
-    }
-
-    // Displaying neither integer nor fraction digits is not allowed
-    if (maxInt == 0 && maxFrac == 0) {
-      maxInt = Integer.MAX_VALUE;
-      maxFrac = Integer.MAX_VALUE;
-    }
+    // Validation should happen outside of FormatQuantity, e.g., in the Rounder class.
+    assert minInt >= 0;
+    assert maxInt >= minInt;
+    assert minFrac >= 0;
+    assert maxFrac >= minFrac;
 
     // Save values into internal state
     // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
@@ -445,6 +431,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
     origDouble = n;
     origDelta = 0;
 
+    // 3.3219... is log2(10)
     int fracLength = (int) ((52 - exponent) / 3.32192809489);
     if (fracLength >= 0) {
       int i = fracLength;
@@ -601,15 +588,15 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
     double result = tempLong;
     int _scale = scale + lostDigits;
     if (_scale >= 0) {
+      // 1e22 is the largest exact double.
       int i = _scale;
-      for (; i >= 9; i -= 9) result *= 1000000000;
-      for (; i >= 3; i -= 3) result *= 1000;
-      for (; i >= 1; i -= 1) result *= 10;
+      for (; i >= 22; i -= 22) result *= 1e22;
+      result *= DOUBLE_MULTIPLIERS[i];
     } else {
+      // 1e22 is the largest exact double.
       int i = _scale;
-      for (; i <= -9; i += 9) result /= 1000000000;
-      for (; i <= -3; i += 3) result /= 1000;
-      for (; i <= -1; i += 1) result /= 10;
+      for (; i <= -22; i += 22) result /= 1e22;
+      result /= DOUBLE_MULTIPLIERS[-i];
     }
     if (isNegative()) result = -result;
     return result;
@@ -626,24 +613,25 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   protected double toDoubleFromOriginal() {
     double result = origDouble;
-    double delta = origDelta;
+    int delta = origDelta;
     if (delta >= 0) {
-      for (; delta >= 9; delta -= 9) result *= 1000000000;
-      for (; delta >= 3; delta -= 3) result *= 1000;
-      for (; delta >= 1; delta -= 1) result *= 10;
+      // 1e22 is the largest exact double.
+      for (; delta >= 22; delta -= 22) result *= 1e22;
+      result *= DOUBLE_MULTIPLIERS[delta];
     } else {
-      for (; delta <= -9; delta += 9) result /= 1000000000;
-      for (; delta <= -3; delta += 3) result /= 1000;
-      for (; delta <= -1; delta += 1) result /= 10;
+      // 1e22 is the largest exact double.
+      for (; delta <= -22; delta += 22) result /= 1e22;
+      result /= DOUBLE_MULTIPLIERS[-delta];
     }
     if (isNegative()) result *= -1;
     return result;
   }
 
   private static int safeSubtract(int a, int b) {
-    if (b < 0 && a - b < a) return Integer.MAX_VALUE;
-    if (b > 0 && a - b > a) return Integer.MIN_VALUE;
-    return a - b;
+    int diff = a - b;
+    if (b < 0 && diff < a) return Integer.MAX_VALUE;
+    if (b > 0 && diff > a) return Integer.MIN_VALUE;
+    return diff;
   }
 
   @Override
