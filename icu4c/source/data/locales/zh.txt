@@ -192,7 +192,7 @@ zh{
             patternsShort{
                 currencyFormat{
                     1000{
-                        other{"¤0"}
+                        other{"0"}
                     }
                     10000{
                         other{"¤0万"}
@@ -294,7 +294,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.1.33.67"}
+    Version{"2.1.33.94"}
     calendar{
         buddhist{
             DateTimePatterns{
