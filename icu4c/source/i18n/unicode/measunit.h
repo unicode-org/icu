@@ -401,8 +401,8 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilePerGallonImperial(UErrorCode &status);
 
-    /**
-     * @draft ICU 58, withdrawn
+    /*
+     * The following were draft ICU 58, but have been withdrawn:
      * static MeasureUnit *createEast(UErrorCode &status);
      * static MeasureUnit *createNorth(UErrorCode &status);
      * static MeasureUnit *createSouth(UErrorCode &status);
