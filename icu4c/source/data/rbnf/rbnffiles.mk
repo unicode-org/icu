@@ -1,17 +1,17 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-RBNF_CLDR_VERSION = %version%
+RBNF_CLDR_VERSION = 31.0.1
 # A list of txt's to build
 # Note:
 #
 #   If you are thinking of modifying this file, READ THIS.
 #
 # Instead of changing this file [unless you want to check it back in],
-# you should consider creating a '%local%' file in this same directory.
+# you should consider creating a 'rbnflocal.mk' file in this same directory.
 # Then, you can have your local changes remain even if you upgrade or
 # reconfigure ICU.
 #
-# Example '%local%' files:
+# Example 'rbnflocal.mk' files:
 #
 #  * To add an additional locale to the list:
 #    _____________________________________________________

@@ -142,11 +142,29 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {123456789012345f, "120兆"},
     };
 
+    Object[][] ChineseTestData = {
+            {1f, "1"},
+            {12f, "12"},
+            {123f, "120"},
+            {1234f, "1200"},
+            {12345f, "1.2万"},
+            {123456f, "12万"},
+            {1234567f, "120万"},
+            {12345678f, "1200万"},
+            {123456789f, "1.2亿"},
+            {1234567890f, "12亿"},
+            {12345678901f, "120亿"},
+            {123456789012f, "1200亿"},
+            {1234567890123f, "1.2兆"},
+            {12345678901234f, "12兆"},
+            {123456789012345f, "120兆"},
+    };
+
     Object[][] ChineseCurrencyTestData = {
             {new CurrencyAmount(1f, Currency.getInstance("CNY")), "￥1"},
             {new CurrencyAmount(12f, Currency.getInstance("CNY")), "￥12"},
             {new CurrencyAmount(123f, Currency.getInstance("CNY")), "￥120"},
-            {new CurrencyAmount(1234f, Currency.getInstance("CNY")), "￥1.2千"},
+            {new CurrencyAmount(1234f, Currency.getInstance("CNY")), "￥1200"},
             {new CurrencyAmount(12345f, Currency.getInstance("CNY")), "￥1.2万"},
             {new CurrencyAmount(123456f, Currency.getInstance("CNY")), "￥12万"},
             {new CurrencyAmount(1234567f, Currency.getInstance("CNY")), "￥120万"},
@@ -242,18 +260,18 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {-1f, "-1"},
             {-12f, "-12"},
             {-123f, "-120"},
-            {-1234f, "-elfu\u00a01.2"}, // minus sign should precede numeric portion; CLDR 31 has incorrect data until ICU4C can handle
-            {-12345f, "-elfu\u00a012"}, // per above
-            {-123456f, "-elfu\u00a0120"}, // per above
-            {-1234567f, "-M1.2"}, // per above
-            {-12345678f, "-M12"}, // per above
-            {-123456789f, "-M120"}, // per above
-            {-1234567890f, "-B1.2"}, // per above
-            {-12345678901f, "-B12"}, // per above
-            {-123456789012f, "-B120"}, // per above
-            {-1234567890123f, "-T1.2"}, // per above
-            {-12345678901234f, "-T12"}, // per above
-            {-12345678901234567890f, "-T12,000,000"}, // per above
+            {-1234f, "elfu\u00a0-1.2"},
+            {-12345f, "elfu\u00a0-12"},
+            {-123456f, "elfu\u00a0-120"},
+            {-1234567f, "M-1.2"},
+            {-12345678f, "M-12"},
+            {-123456789f, "M-120"},
+            {-1234567890f, "B-1.2"},
+            {-12345678901f, "B-12"},
+            {-123456789012f, "B-120"},
+            {-1234567890123f, "T-1.2"},
+            {-12345678901234f, "T-12"},
+            {-12345678901234567890f, "T-12,000,000"},
     };
 
     Object[][] TestACoreCompactFormatList = {
@@ -402,7 +420,12 @@ public class CompactDecimalFormatTest extends TestFmwk {
         checkLocale(ULocale.JAPANESE, CompactStyle.SHORT, JapaneseTestData);
     }
 
-    @Test
+     @Test
+    public void TestChineseShort() {
+        checkLocale(ULocale.CHINESE, CompactStyle.SHORT, ChineseTestData);
+    }
+
+   @Test
     public void TestSwahiliShort() {
         checkLocale(ULocale.forLanguageTag("sw"), CompactStyle.SHORT, SwahiliTestData);
     }

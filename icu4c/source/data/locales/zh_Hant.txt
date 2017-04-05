@@ -121,7 +121,7 @@ zh_Hant{
             patternsLong{
                 decimalFormat{
                     1000{
-                        other{"0千"}
+                        other{"0"}
                     }
                     10000{
                         other{"0萬"}
@@ -161,7 +161,7 @@ zh_Hant{
             patternsShort{
                 currencyFormat{
                     1000{
-                        other{"¤0千"}
+                        other{"¤0"}
                     }
                     10000{
                         other{"¤0萬"}
@@ -199,7 +199,7 @@ zh_Hant{
                 }
                 decimalFormat{
                     1000{
-                        other{"0千"}
+                        other{"0"}
                     }
                     10000{
                         other{"0萬"}
@@ -262,7 +262,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.33.67"}
     calendar{
         buddhist{
             DateTimePatterns{
