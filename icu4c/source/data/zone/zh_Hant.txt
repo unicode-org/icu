@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant{
     %%Parent{"root"}
-    Version{"2.1.32.59"}
+    Version{"2.1.33.67"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比讓"}
