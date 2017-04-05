@@ -1009,7 +1009,7 @@
     <ResourceCompile Include="i18n.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\common\common UWP.vcxproj">
+    <ProjectReference Include="..\common\common_uwp.vcxproj">
       <Project>{C10CF34B-3F79-430E-AD38-5A32DC0589C2}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
