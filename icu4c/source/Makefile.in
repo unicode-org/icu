@@ -327,9 +327,10 @@ $(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_srcdir)/config
 	-$(RMV) $@
 	$(INSTALL_SCRIPT) $(top_srcdir)/config/icu-config-top $@
 	chmod u+w $@
+	@echo "# Following from icu/icu4c/source/config/Makefile.inc" >> $@
+	LC_ALL=C $(SED) -f $(top_srcdir)/config/make2sh.sed < $(top_builddir)/config/Makefile.inc | grep -v '#M#' | uniq >> $@
 	@echo "# Following from @platform_make_fragment@" >> $@
-	LC_ALL=C sed -f $(top_srcdir)/config/make2sh.sed < $(top_builddir)/config/Makefile.inc | grep -v '#M#' | uniq >> $@
-	LC_ALL=C sed -f $(top_srcdir)/config/make2sh.sed < @platform_make_fragment@ | grep -v '#M#' | uniq >> $@
+	LC_ALL=C $(SED) -f $(top_srcdir)/config/make2sh.sed < @platform_make_fragment@ | grep -v '#M#' | uniq >> $@
 	cat $(top_srcdir)/config/icu-config-bottom >> $@
 	chmod u-w $@
 
