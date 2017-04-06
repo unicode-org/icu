@@ -371,6 +371,9 @@ AC_SUBST(U_DEFAULT_SHOW_DRAFT)
 
 AC_PROG_RANLIB
 
+# need sed
+AC_PROG_SED
+
 # look for 'ar' the proper way
 AC_CHECK_TOOL(AR, ar, false)
 
