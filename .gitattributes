@@ -5,7 +5,6 @@ icu4c/icu4c.css -text svneol=unset#text/css
 icu4c/license.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/readme.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/source/aclocal.m4 -text
-icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/appendable.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/bmpset.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/bmpset.h svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -6987,11 +6986,6 @@ icu4j/tools/misc/src/com/ibm/icu/dev/tool/translit/WriteIndicCharts.java svneol=
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/translit/genIndexFilters.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/translit/indicExceptions.txt svneol=native#text/plain
 icu4j/tools/misc/src/com/ibm/icu/dev/tool/translit/rbtTemplate.txt svneol=native#text/plain
-tools/currency/.classpath -text
-tools/currency/.project -text
-tools/currency/.settings/org.eclipse.core.resources.prefs -text
-tools/currency/.settings/org.eclipse.jdt.core.prefs -text
-tools/currency/.settings/org.eclipse.jdt.ui.prefs -text
 tools/currency/build.xml svneol=native#text/xml
 tools/currency/readme.txt svneol=native#text/plain
 tools/currency/src/com/ibm/icu/dev/tool/currency/CurrencyDataEntry.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -7075,7 +7069,6 @@ tools/release/java/.project -text
 tools/release/java/Makefile -text
 tools/release/java/build.xml svneol=native#text/xml
 tools/release/java/icu4c.css -text
-tools/release/java/lib/LICENSE.txt -text
 tools/release/java/lib/README.TXT -text
 tools/release/java/lib/serializer.jar -text
 tools/release/java/lib/xalan.jar -text
