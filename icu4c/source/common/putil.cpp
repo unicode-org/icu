@@ -43,6 +43,9 @@
 // Must be before any other #includes.
 #include "uposixdefs.h"
 
+// First, the platform type. Need this for U_PLATFORM.
+#include "unicode/platform.h"
+
 #if U_PLATFORM == U_PF_MINGW && defined __STRICT_ANSI__
 /* tzset isn't defined in strict ANSI on MinGW. */
 #undef __STRICT_ANSI__
@@ -57,8 +60,7 @@
 #include <sys/time.h>
 #endif
 
-/* include ICU headers */
-#include "unicode/utypes.h"
+/* include the rest of the ICU headers */
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "putilimp.h"
