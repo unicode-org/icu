@@ -25,7 +25,7 @@
 #include "caltest.h"  // for fieldName
 #include <stdio.h> // for sprintf
 
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
 #include "windttst.h"
 #endif
 
@@ -2374,7 +2374,7 @@ void DateFormatTest::TestZTimeZoneParsing(void) {
 
 void DateFormatTest::TestHost(void)
 {
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
     Win32DateTimeTest::testLocales(this);
 #endif
 }
