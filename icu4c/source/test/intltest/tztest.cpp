@@ -138,8 +138,11 @@ TimeZoneTest::TestGenericAPI()
     }
 
     TimeZone* hostZone = TimeZone::detectHostTimeZone();
+    int32_t hostZoneRawOffset = hostZone->getRawOffset();
+    logln("hostZone->getRawOffset() = %d , tzoffset = %d", hostZoneRawOffset, tzoffset * (-1000));
+
     /* Host time zone's offset should match the offset returned by uprv_timezone() */
-    if (hostZone->getRawOffset() != tzoffset * (-1000)) {
+    if (hostZoneRawOffset != tzoffset * (-1000)) {
         errln("FAIL: detectHostTimeZone()'s raw offset != host timezone's offset");
     }
     delete hostZone;
