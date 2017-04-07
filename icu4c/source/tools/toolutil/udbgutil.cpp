@@ -351,8 +351,10 @@ int32_t udbg_enumByName(UDebugEnumType type, const char *value) {
  */
 U_CAPI const char *udbg_getPlatform(void)
 {
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
     return "Windows";
+#elif U_PLATFORM == U_PF_CYGWIN
+    return "Cygwin";
 #elif U_PLATFORM == U_PF_UNKNOWN
     return "unknown";
 #elif U_PLATFORM == U_PF_DARWIN
