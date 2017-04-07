@@ -43,6 +43,20 @@
 // Must be before any other #includes.
 #include "uposixdefs.h"
 
+#if U_PLATFORM == U_PF_MINGW && defined __STRICT_ANSI__
+/* tzset isn't defined in strict ANSI on MinGW. */
+#undef __STRICT_ANSI__
+#endif
+
+/*
+ * Cygwin with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
+ */
+#include <time.h>
+
+#if !U_PLATFORM_USES_ONLY_WIN32_API
+#include <sys/time.h>
+#endif
+
 /* include ICU headers */
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
@@ -117,20 +131,6 @@ using namespace Microsoft::WRL::Wrappers;
 #   endif
 #elif U_PLATFORM == U_PF_QNX
 #   include <sys/neutrino.h>
-#endif
-
-#if (U_PF_MINGW <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(__STRICT_ANSI__)
-/* tzset isn't defined in strict ANSI on Cygwin and MinGW. */
-#undef __STRICT_ANSI__
-#endif
-
-/*
- * Cygwin with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
- */
-#include <time.h>
-
-#if !U_PLATFORM_USES_ONLY_WIN32_API
-#include <sys/time.h>
 #endif
 
 /*
