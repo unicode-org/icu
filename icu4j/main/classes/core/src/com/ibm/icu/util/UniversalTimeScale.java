@@ -138,8 +138,9 @@ public final class UniversalTimeScale
     /**
      * This is the first unused time scale value.
      *
-     * @stable ICU 3.2
+     * @deprecated ICU 59
      */
+    @Deprecated
     public static final int MAX_SCALE = 10;
     
     /**
