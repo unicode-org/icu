@@ -15,7 +15,7 @@
 
 // This file contains only desktop Windows behavior
 // Windows UWP calls Windows::Globalization directly, so this isn't needed there.
-#if U_PLATFORM_HAS_WIN32_API && (U_PLATFORM_HAS_WINUWP_API == 0)
+#if U_PLATFORM_USES_ONLY_WIN32_API && (U_PLATFORM_HAS_WINUWP_API == 0)
 
 #include "wintz.h"
 #include "cmemory.h"
@@ -381,4 +381,4 @@ uprv_detectWindowsTimeZone()
     return icuid;
 }
 
-#endif /* U_PLATFORM_HAS_WIN32_API && (U_PLATFORM_HAS_WINUWP_API == 0) */
+#endif /* U_PLATFORM_USES_ONLY_WIN32_API && (U_PLATFORM_HAS_WINUWP_API == 0) */
