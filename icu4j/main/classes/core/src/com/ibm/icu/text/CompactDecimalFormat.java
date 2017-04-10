@@ -12,6 +12,7 @@ package com.ibm.icu.text;
 import java.text.ParsePosition;
 import java.util.Locale;
 
+import com.ibm.icu.impl.number.PatternString;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -106,7 +107,7 @@ public class CompactDecimalFormat extends DecimalFormat {
     properties = new Properties();
     properties.setCompactStyle(style);
     exportedProperties = new Properties();
-    setPropertiesFromPattern(pattern, true);
+    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_NEVER);
     if (style == CompactStyle.SHORT) {
       // TODO: This was setGroupingUsed(false) in ICU 58. Is it okay that I changed it for ICU 59?
       properties.setMinimumGroupingDigits(2);

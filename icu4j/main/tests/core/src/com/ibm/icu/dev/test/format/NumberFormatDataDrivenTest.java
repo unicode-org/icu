@@ -448,7 +448,12 @@ public class NumberFormatDataDrivenTest {
         public String format(DataDrivenNumberFormatTestData tuple) {
           String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
           ULocale locale = (tuple.locale == null) ? ULocale.ENGLISH : tuple.locale;
-          Properties properties = PatternString.parseToProperties(pattern, tuple.currency != null);
+          Properties properties =
+              PatternString.parseToProperties(
+                  pattern,
+                  tuple.currency != null
+                      ? PatternString.IGNORE_ROUNDING_ALWAYS
+                      : PatternString.IGNORE_ROUNDING_IF_CURRENCY);
           propertiesFromTuple(tuple, properties);
           Format fmt = Endpoint.fromBTA(properties, locale);
           FormatQuantity q1, q2, q3;
@@ -513,7 +518,12 @@ public class NumberFormatDataDrivenTest {
           final Properties properties;
           DecimalFormat df;
           try {
-            properties = PatternString.parseToProperties(pattern, tuple.currency != null);
+            properties =
+                PatternString.parseToProperties(
+                    pattern,
+                    tuple.currency != null
+                        ? PatternString.IGNORE_ROUNDING_ALWAYS
+                        : PatternString.IGNORE_ROUNDING_IF_CURRENCY);
             propertiesFromTuple(tuple, properties);
             // TODO: Use PatternString.propertiesToString() directly. (How to deal with CurrencyUsage?)
             df = new DecimalFormat();
@@ -559,7 +569,12 @@ public class NumberFormatDataDrivenTest {
           ParsePosition ppos = new ParsePosition(0);
           Number actual;
           try {
-            properties = PatternString.parseToProperties(pattern, tuple.currency != null);
+            properties =
+                PatternString.parseToProperties(
+                    pattern,
+                    tuple.currency != null
+                        ? PatternString.IGNORE_ROUNDING_ALWAYS
+                        : PatternString.IGNORE_ROUNDING_IF_CURRENCY);
             propertiesFromTuple(tuple, properties);
             actual =
                 Parse.parse(
@@ -613,7 +628,12 @@ public class NumberFormatDataDrivenTest {
           ParsePosition ppos = new ParsePosition(0);
           CurrencyAmount actual;
           try {
-            properties = PatternString.parseToProperties(pattern, tuple.currency != null);
+            properties =
+                PatternString.parseToProperties(
+                    pattern,
+                    tuple.currency != null
+                        ? PatternString.IGNORE_ROUNDING_ALWAYS
+                        : PatternString.IGNORE_ROUNDING_IF_CURRENCY);
             propertiesFromTuple(tuple, properties);
             actual =
                 Parse.parseCurrency(

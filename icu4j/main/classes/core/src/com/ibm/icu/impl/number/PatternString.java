@@ -19,18 +19,19 @@ public class PatternString {
    * @param pattern The pattern string, like "#,##0.00"
    * @param ignoreRounding Whether to leave out rounding information (minFrac, maxFrac, and rounding
    *     increment) when parsing the pattern. This may be desirable if a custom rounding mode, such
-   *     as CurrencyUsage, is to be used instead.
+   *     as CurrencyUsage, is to be used instead. One of {@link #IGNORE_ROUNDING_ALWAYS}, {@link
+   *     #IGNORE_ROUNDING_IF_CURRENCY}, or {@link #IGNORE_ROUNDING_NEVER}.
    * @return A property bag object.
    * @throws IllegalArgumentException If there is a syntax error in the pattern string.
    */
-  public static Properties parseToProperties(String pattern, boolean ignoreRounding) {
+  public static Properties parseToProperties(String pattern, int ignoreRounding) {
     Properties properties = new Properties();
     LdmlDecimalPatternParser.parse(pattern, properties, ignoreRounding);
     return properties;
   }
 
   public static Properties parseToProperties(String pattern) {
-    return parseToProperties(pattern, false);
+    return parseToProperties(pattern, PatternString.IGNORE_ROUNDING_NEVER);
   }
 
   /**
@@ -43,16 +44,17 @@ public class PatternString {
    * @param properties The property bag object to overwrite.
    * @param ignoreRounding Whether to leave out rounding information (minFrac, maxFrac, and rounding
    *     increment) when parsing the pattern. This may be desirable if a custom rounding mode, such
-   *     as CurrencyUsage, is to be used instead.
+   *     as CurrencyUsage, is to be used instead. One of {@link #IGNORE_ROUNDING_ALWAYS}, {@link
+   *     #IGNORE_ROUNDING_IF_CURRENCY}, or {@link #IGNORE_ROUNDING_NEVER}.
    * @throws IllegalArgumentException If there was a syntax error in the pattern string.
    */
   public static void parseToExistingProperties(
-      String pattern, Properties properties, boolean ignoreRounding) {
+      String pattern, Properties properties, int ignoreRounding) {
     LdmlDecimalPatternParser.parse(pattern, properties, ignoreRounding);
   }
 
   public static void parseToExistingProperties(String pattern, Properties properties) {
-    parseToExistingProperties(pattern, properties, false);
+    parseToExistingProperties(pattern, properties, PatternString.IGNORE_ROUNDING_NEVER);
   }
 
   /**
@@ -384,6 +386,10 @@ public class PatternString {
     return result.toString();
   }
 
+  public static final int IGNORE_ROUNDING_NEVER = 0;
+  public static final int IGNORE_ROUNDING_IF_CURRENCY = 1;
+  public static final int IGNORE_ROUNDING_ALWAYS = 2;
+
   /** Implements a recursive descent parser for decimal format patterns. */
   static class LdmlDecimalPatternParser {
 
@@ -396,9 +402,19 @@ public class PatternString {
       SubpatternParseResult negative = null;
 
       /** Finalizes the temporary data stored in the PatternParseResult to the Builder. */
-      void saveToProperties(Properties properties, boolean ignoreRounding) {
+      void saveToProperties(Properties properties, int _ignoreRounding) {
         // Translate from PatternState to Properties.
         // Note that most data from "negative" is ignored per the specification of DecimalFormat.
+
+        boolean ignoreRounding;
+        if (_ignoreRounding == IGNORE_ROUNDING_NEVER) {
+          ignoreRounding = false;
+        } else if (_ignoreRounding == IGNORE_ROUNDING_IF_CURRENCY) {
+          ignoreRounding = positive.hasCurrencySign;
+        } else {
+          assert _ignoreRounding == IGNORE_ROUNDING_ALWAYS;
+          ignoreRounding = true;
+        }
 
         // Grouping settings
         if (positive.groupingSizes[1] != -1) {
@@ -556,6 +572,7 @@ public class PatternString {
       int exponentDigits = 0;
       boolean hasPercentSign = false;
       boolean hasPerMilleSign = false;
+      boolean hasCurrencySign = false;
 
       StringBuilder padding = new StringBuilder();
       StringBuilder prefix = new StringBuilder();
@@ -588,23 +605,17 @@ public class PatternString {
 
       IllegalArgumentException toParseException(String message) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Unexpected character in decimal format pattern: '");
+        sb.append("Malformed pattern for ICU DecimalFormat: \"");
         sb.append(pattern);
-        sb.append("': ");
+        sb.append("\": ");
         sb.append(message);
-        sb.append(": ");
-        if (peek() == -1) {
-          sb.append("EOL");
-        } else {
-          sb.append("'");
-          sb.append(Character.toChars(peek()));
-          sb.append("'");
-        }
+        sb.append(" at position ");
+        sb.append(offset);
         return new IllegalArgumentException(sb.toString());
       }
     }
 
-    static void parse(String pattern, Properties properties, boolean ignoreRounding) {
+    static void parse(String pattern, Properties properties, int ignoreRounding) {
       if (pattern == null || pattern.length() == 0) {
         // Backwards compatibility requires that we reset to the default values.
         // TODO: Only overwrite the properties that "saveToProperties" normally touches?
@@ -629,7 +640,7 @@ public class PatternString {
         consumeSubpattern(state, result.negative);
       }
       if (state.peek() != -1) {
-        throw state.toParseException("pattern");
+        throw state.toParseException("Found unquoted special character");
       }
     }
 
@@ -689,7 +700,7 @@ public class PatternString {
             break;
 
           case '¤':
-            // no need to record that we saw it
+            result.hasCurrencySign = true;
             break;
         }
         consumeLiteral(state, destination);
@@ -698,12 +709,12 @@ public class PatternString {
 
     private static void consumeLiteral(ParserState state, StringBuilder destination) {
       if (state.peek() == -1) {
-        throw state.toParseException("expected unquoted literal but found end of string");
+        throw state.toParseException("Expected unquoted literal but found EOL");
       } else if (state.peek() == '\'') {
         destination.appendCodePoint(state.next()); // consume the starting quote
         while (state.peek() != '\'') {
           if (state.peek() == -1) {
-            throw state.toParseException("expected quoted literal but found end of string");
+            throw state.toParseException("Expected quoted literal but found EOL");
           } else {
             destination.appendCodePoint(state.next()); // consume a quoted character
           }
@@ -751,7 +762,7 @@ public class PatternString {
 
           case '@':
             seenSignificantDigitMarker = true;
-            if (seenDigit) throw state.toParseException("Can't mix @ and 0 in pattern");
+            if (seenDigit) throw state.toParseException("Cannot mix 0 and @");
             result.paddingWidth += 1;
             result.groupingSizes[0] += 1;
             result.totalIntegerDigits += 1;
@@ -772,8 +783,7 @@ public class PatternString {
           case '8':
           case '9':
             seenDigit = true;
-            if (seenSignificantDigitMarker)
-              throw state.toParseException("Can't mix @ and 0 in pattern");
+            if (seenSignificantDigitMarker) throw state.toParseException("Cannot mix @ and 0");
             // TODO: Crash here if we've seen the significant digit marker? See NumberFormatTestCases.txt
             result.paddingWidth += 1;
             result.groupingSizes[0] += 1;
