@@ -28,6 +28,8 @@
 #include "winutil.h"
 #include "windttst.h"
 
+#include "dtfmttst.h"
+
 #include "cmemory.h"
 #include "cstring.h"
 #include "locmap.h"
@@ -66,7 +68,7 @@ static const char *getCalendarType(int32_t type)
     }
 }
 
-void Win32DateTimeTest::testLocales(TestLog *log)
+void Win32DateTimeTest::testLocales(DateFormatTest *log)
 {
     SYSTEMTIME winNow;
     UDate icuNow = 0;
@@ -115,6 +117,21 @@ void Win32DateTimeTest::testLocales(TestLog *log)
 
         // NULL localeID means ICU didn't recognize this locale
         if (lcidRecords[i].localeID == NULL) {
+            continue;
+        }
+
+        // Some locales have had their names change over various OS releases; skip them in the test for now.
+        int32_t failingLocaleLCIDs[] = {
+            0x040a, /* es-ES_tradnl;es-ES-u-co-trad; */
+            0x048c, /* fa-AF;prs-AF;prs-Arab-AF; */
+            0x046b, /* qu-BO;quz-BO;quz-Latn-BO; */
+            0x086b, /* qu-EC;quz-EC;quz-Latn-EC; */
+            0x0c6b, /* qu-PE;quz-PE;quz-Latn-PE; */
+            0x0492  /* ckb-IQ;ku-Arab-IQ; */
+        };
+        bool skip = (std::find(std::begin(failingLocaleLCIDs), std::end(failingLocaleLCIDs), lcidRecords[i].lcid) != std::end(failingLocaleLCIDs));
+        if (skip && log->logKnownIssue("13119", "Windows '@compat=host' fails on down-level versions of the OS")) {
+            log->logln("ticket:13119 - Skipping LCID = 0x%04x", lcidRecords[i].lcid);
             continue;
         }
 

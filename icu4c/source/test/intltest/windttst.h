@@ -25,12 +25,12 @@
  * \brief C++ API: Format dates using Windows API.
  */
 
-class TestLog;
+class DateFormatTest;
 
 class Win32DateTimeTest
 {
 public:
-    static void testLocales(TestLog *log);
+    static void testLocales(DateFormatTest *log);
 
 private:
     Win32DateTimeTest();
