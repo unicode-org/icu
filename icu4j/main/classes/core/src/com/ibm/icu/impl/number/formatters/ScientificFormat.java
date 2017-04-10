@@ -142,15 +142,18 @@ public class ScientificFormat extends Format.BeforeFormat implements Rounder.Mul
   private ScientificFormat(DecimalFormatSymbols symbols, IProperties properties, Rounder rounder) {
     exponentShowPlusSign = properties.getExponentSignAlwaysShown();
     exponentDigits = Math.max(1, properties.getMinimumExponentDigits());
+
+    // Calculate minInt/maxInt for the purposes of engineering notation:
+    //   0 <= minInt <= maxInt < 8
+    // The values are validated separately for rounding. This scheme needs to prevent OOM issues
+    // (see #13118). Note that the bound 8 on integer digits is historic.
     int _maxInt = properties.getMaximumIntegerDigits();
     int _minInt = properties.getMinimumIntegerDigits();
-    // Special behavior:
-    if (_maxInt > 8) {
-      _maxInt = _minInt;
-    }
-    maxInt = _maxInt < 0 ? Integer.MAX_VALUE : _maxInt;
-    minInt = _minInt < 0 ? 0 : _minInt < maxInt ? _minInt : maxInt;
-    interval = Math.max(1, maxInt);
+    minInt = _minInt < 0 ? 0 : _minInt >= 8 ? 1 : _minInt;
+    maxInt = _maxInt < _minInt ? _minInt : _maxInt >= 8 ? _minInt : _maxInt;
+    assert 0 <= minInt && minInt <= maxInt && maxInt < 8;
+
+    interval = maxInt < 1 ? 1 : maxInt;
     this.rounder = rounder;
     digitStrings = symbols.getDigitStrings(); // makes a copy
 

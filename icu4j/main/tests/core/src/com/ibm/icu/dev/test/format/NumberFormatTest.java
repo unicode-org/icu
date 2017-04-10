@@ -4993,6 +4993,17 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13118() {
+        DecimalFormat df = new DecimalFormat("@@@");
+        df.setScientificNotation(true);
+        for (double d=12345.67; d>1e-6; d/=10) {
+            String result = df.format(d);
+            assertEquals("Should produce a string of expected length on " + d,
+                    d > 1 ? 6 : 7, result.length());
+        }
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);
