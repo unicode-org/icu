@@ -13,7 +13,6 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-import com.ibm.icu.impl.number.AffixPatternUtils;
 import com.ibm.icu.impl.number.Endpoint;
 import com.ibm.icu.impl.number.Format.SingularFormat;
 import com.ibm.icu.impl.number.FormatQuantity4;
@@ -302,8 +301,7 @@ public class DecimalFormat extends NumberFormat {
     properties = new Properties();
     exportedProperties = new Properties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    boolean ignorePatternRounding = AffixPatternUtils.hasCurrencySymbols(pattern);
-    setPropertiesFromPattern(pattern, ignorePatternRounding);
+    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -332,8 +330,7 @@ public class DecimalFormat extends NumberFormat {
     properties = new Properties();
     exportedProperties = new Properties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    boolean ignorePatternRounding = AffixPatternUtils.hasCurrencySymbols(pattern);
-    setPropertiesFromPattern(pattern, ignorePatternRounding);
+    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -362,8 +359,7 @@ public class DecimalFormat extends NumberFormat {
     properties = new Properties();
     exportedProperties = new Properties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    boolean ignorePatternRounding = AffixPatternUtils.hasCurrencySymbols(pattern);
-    setPropertiesFromPattern(pattern, ignorePatternRounding);
+    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -405,11 +401,10 @@ public class DecimalFormat extends NumberFormat {
         || choice == ACCOUNTINGCURRENCYSTYLE
         || choice == CASHCURRENCYSTYLE
         || choice == STANDARDCURRENCYSTYLE
-        || choice == PLURALCURRENCYSTYLE
-        || AffixPatternUtils.hasCurrencySymbols(pattern)) {
-      setPropertiesFromPattern(pattern, true);
+        || choice == PLURALCURRENCYSTYLE) {
+      setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_ALWAYS);
     } else {
-      setPropertiesFromPattern(pattern, false);
+      setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
     }
     refreshFormatter();
   }
@@ -450,7 +445,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void applyPattern(String pattern) {
-    setPropertiesFromPattern(pattern, false);
+    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_NEVER);
     // Backwards compatibility: clear out user-specified prefix and suffix,
     // as well as CurrencyPluralInfo.
     properties.setPositivePrefix(null);
@@ -2447,11 +2442,14 @@ public class DecimalFormat extends NumberFormat {
    * Updates the property bag with settings from the given pattern.
    *
    * @param pattern The pattern string to parse.
-   * @param ignoreRounding Whether to read rounding information from the string. Set to false if
-   *     CurrencyUsage is to be used instead.
+   * @param ignoreRounding Whether to leave out rounding information (minFrac, maxFrac, and rounding
+   *     increment) when parsing the pattern. This may be desirable if a custom rounding mode, such
+   *     as CurrencyUsage, is to be used instead. One of {@link
+   *     PatternString#IGNORE_ROUNDING_ALWAYS}, {@link PatternString#IGNORE_ROUNDING_IF_CURRENCY},
+   *     or {@link PatternString#IGNORE_ROUNDING_NEVER}.
    * @see PatternString#parseToExistingProperties
    */
-  void setPropertiesFromPattern(String pattern, boolean ignoreRounding) {
+  void setPropertiesFromPattern(String pattern, int ignoreRounding) {
     PatternString.parseToExistingProperties(pattern, properties, ignoreRounding);
   }
 

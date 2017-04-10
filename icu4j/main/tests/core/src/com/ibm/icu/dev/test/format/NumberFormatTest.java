@@ -4993,6 +4993,31 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13113() {
+        String[][] cases = {
+                {"'", "quoted literal"},
+                {"ab#c'd", "quoted literal"},
+                {"ab#c*", "unquoted literal"},
+                {"0#", "# cannot follow 0"},
+                {".#0", "0 cannot follow #"},
+                {"@0", "Cannot mix @ and 0"},
+                {"0@", "Cannot mix 0 and @"},
+                {"#x#", "unquoted special character"}
+        };
+        for (String[] cas : cases) {
+            try {
+                new DecimalFormat(cas[0]);
+                fail("Should have thrown on malformed pattern");
+            } catch (IllegalArgumentException ex) {
+                assertTrue("Exception should contain \"Malformed pattern\": " + ex.getMessage(),
+                        ex.getMessage().contains("Malformed pattern"));
+                assertTrue("Exception should contain \"" + cas[1] + "\"" + ex.getMessage(),
+                        ex.getMessage().contains(cas[1]));
+            }
+        }
+    }
+
+    @Test
     public void Test13118() {
         DecimalFormat df = new DecimalFormat("@@@");
         df.setScientificNotation(true);
