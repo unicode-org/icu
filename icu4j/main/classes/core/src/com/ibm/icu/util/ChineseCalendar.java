@@ -169,7 +169,7 @@ public class ChineseCalendar extends Calendar {
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field.
      * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field.
      *                  The value is 0-based. e.g., 0 for January.
-     * @param isLeapMonth The value used to set the Chinese calendar's (@link #IS_LEAP_MONTH)
+     * @param isLeapMonth The value used to set the Chinese calendar's {@link #IS_LEAP_MONTH}
      *                  time field.
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
      * @see Category#FORMAT
@@ -227,7 +227,7 @@ public class ChineseCalendar extends Calendar {
      * @param year      The value used to set the calendar's {@link #YEAR YEAR} time field. 
      * @param month     The value used to set the calendar's {@link #MONTH MONTH} time field. 
      *                  The value is 0-based. e.g., 0 for January. 
-     * @param isLeapMonth The value used to set the Chinese calendar's (@link #IS_LEAP_MONTH) 
+     * @param isLeapMonth The value used to set the Chinese calendar's {@link #IS_LEAP_MONTH}
      *                  time field. 
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
      * @see Category#FORMAT

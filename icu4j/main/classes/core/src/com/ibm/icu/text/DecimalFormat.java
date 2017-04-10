@@ -2154,7 +2154,7 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * <strong>Parsing:</strong> {@inheritDocs}
+   * <strong>Parsing:</strong> {@inheritDoc}
    *
    * <p>This is functionally equivalent to calling {@link #setDecimalPatternMatchRequired} and a
    * pattern without a decimal point.
