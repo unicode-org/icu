@@ -292,8 +292,7 @@ public final class RelativeDateTimeFormatter {
     /**
      * Represents the unit for formatting a relative date. e.g "in 5 days"
      * or "next year"
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static enum RelativeDateTimeUnit {
         /**
