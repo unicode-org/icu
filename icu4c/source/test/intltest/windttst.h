@@ -16,7 +16,7 @@
 
 #include "unicode/utypes.h"
 
-#if U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_USES_ONLY_WIN32_API
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -38,6 +38,6 @@ private:
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
-#endif // U_PLATFORM_HAS_WIN32_API
+#endif // U_PLATFORM_USES_ONLY_WIN32_API
 
 #endif // __WINDTTST

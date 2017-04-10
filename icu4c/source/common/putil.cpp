@@ -43,8 +43,24 @@
 // Must be before any other #includes.
 #include "uposixdefs.h"
 
-/* include ICU headers */
-#include "unicode/utypes.h"
+// First, the platform type. Need this for U_PLATFORM.
+#include "unicode/platform.h"
+
+#if U_PLATFORM == U_PF_MINGW && defined __STRICT_ANSI__
+/* tzset isn't defined in strict ANSI on MinGW. */
+#undef __STRICT_ANSI__
+#endif
+
+/*
+ * Cygwin with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
+ */
+#include <time.h>
+
+#if !U_PLATFORM_USES_ONLY_WIN32_API
+#include <sys/time.h>
+#endif
+
+/* include the rest of the ICU headers */
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "putilimp.h"
@@ -117,20 +133,6 @@ using namespace Microsoft::WRL::Wrappers;
 #   endif
 #elif U_PLATFORM == U_PF_QNX
 #   include <sys/neutrino.h>
-#endif
-
-#if (U_PF_MINGW <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(__STRICT_ANSI__)
-/* tzset isn't defined in strict ANSI on Cygwin and MinGW. */
-#undef __STRICT_ANSI__
-#endif
-
-/*
- * Cygwin with GCC requires inclusion of time.h after the above disabling strict asci mode statement.
- */
-#include <time.h>
-
-#if !U_PLATFORM_USES_ONLY_WIN32_API
-#include <sys/time.h>
 #endif
 
 /*
@@ -666,7 +668,7 @@ uprv_timezone()
 /* Note that U_TZNAME does *not* have to be tzname, but if it is,
    some platforms need to have it declared here. */
 
-#if defined(U_TZNAME) && (U_PLATFORM == U_PF_IRIX || U_PLATFORM_IS_DARWIN_BASED || (U_PLATFORM == U_PF_CYGWIN && !U_PLATFORM_USES_ONLY_WIN32_API))
+#if defined(U_TZNAME) && (U_PLATFORM == U_PF_IRIX || U_PLATFORM_IS_DARWIN_BASED)
 /* RS6000 and others reject char **tzname.  */
 extern U_IMPORT char *U_TZNAME[];
 #endif
