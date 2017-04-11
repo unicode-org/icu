@@ -453,7 +453,7 @@ public class NumberFormatDataDrivenTest {
                   pattern,
                   tuple.currency != null
                       ? PatternString.IGNORE_ROUNDING_ALWAYS
-                      : PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+                      : PatternString.IGNORE_ROUNDING_NEVER);
           propertiesFromTuple(tuple, properties);
           Format fmt = Endpoint.fromBTA(properties, locale);
           FormatQuantity q1, q2, q3;
@@ -523,7 +523,7 @@ public class NumberFormatDataDrivenTest {
                     pattern,
                     tuple.currency != null
                         ? PatternString.IGNORE_ROUNDING_ALWAYS
-                        : PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+                        : PatternString.IGNORE_ROUNDING_NEVER);
             propertiesFromTuple(tuple, properties);
             // TODO: Use PatternString.propertiesToString() directly. (How to deal with CurrencyUsage?)
             df = new DecimalFormat();
@@ -574,7 +574,7 @@ public class NumberFormatDataDrivenTest {
                     pattern,
                     tuple.currency != null
                         ? PatternString.IGNORE_ROUNDING_ALWAYS
-                        : PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+                        : PatternString.IGNORE_ROUNDING_NEVER);
             propertiesFromTuple(tuple, properties);
             actual =
                 Parse.parse(
@@ -633,7 +633,7 @@ public class NumberFormatDataDrivenTest {
                     pattern,
                     tuple.currency != null
                         ? PatternString.IGNORE_ROUNDING_ALWAYS
-                        : PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+                        : PatternString.IGNORE_ROUNDING_NEVER);
             propertiesFromTuple(tuple, properties);
             actual =
                 Parse.parseCurrency(
