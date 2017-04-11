@@ -14,23 +14,23 @@ h3.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J 59RC</h2>
-(Last Update: 2017-Mar-31)
+<h2>Read Me for ICU4J 59.1</h2>
+(Last Update: 2017-Apr-11)
 <hr size="2" width="100%">
 
 <p>
-<!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality. -->
+<b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality.
 <!-- <b>Note:</b> This is a development release of ICU4J 59.
 The contents of this document may not reflect the recent changes done
 for ICU 59 development. This milestone is intended for those wishing
 to get an early look at ICU4J 59 new features and API changes. It is not
 recommended for production use. -->
-<b>Note:</b> This is a release candidate of ICU4J 59.
+<!-- <b>Note:</b> This is a release candidate of ICU4J 59.
 The contents of this document may not reflect the recent changes done
 for ICU 59 development. This release candidate is intended for those
 wishing to verify ICU 59 integration before final release. It is not
-recommended for production use.
+recommended for production use. -->
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -104,6 +104,12 @@ Calendars</b></a> &#8211; Arabic, Buddhist, Chinese, Hebrew, Japanese, Ethiopic,
 &nbsp;&nbsp;&nbsp;&nbsp;Required for correct presentation of dates in
 certain countries</li>
   <li><a
+ href="http://www.icu-project.org/userguide/formatNumbers.html"><b>Date
+Format
+Enhancements</b></a> &#8211; Date/time pattern generator, Relative date formatting, etc.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Enhancements to the normal Java date
+formatting.</li>
+  <li><a
  href="http://www.icu-project.org/userguide/formatNumbers.html"><b>Number
 Format
 Enhancements</b></a> &#8211; Scientific Notation, Spelled-out, Compact decimal format, etc.<br>
@@ -137,14 +143,13 @@ found in ICU4J.</p>
 <h2 class="doc"><a name="changes"></a>Changes In This Release</h2>
 
 <p>See the <a href="https://sites.google.com/site/icusite/download/59">ICU 59 download page</a>
-about new features in this release.
-The list of API changes since the previous ICU4J release is available
+about new features in this release.</p>
+<p>The list of API changes since the previous ICU4J release is available
 <a href="http://source.icu-project.org/repos/icu/tags/release-59-rc/icu4j/APIChangeReport.html">here</a>.</p>
 
-    <!-- ICU 59 items -->
-    <!-- <h3>[Subject]</h3> -->
-
-    <!-- end ICU 59 items -->
+<!-- ICU 59 items -->
+<!-- <h3>[Subject]</h3> -->
+<!-- end ICU 59 items -->
 
 <h2 class="doc"><a name="license"></a>License Information</h2>
 <p>
@@ -849,20 +854,18 @@ The files in <tt>icudata.jar</tt> get extracted to <tt>com/ibm/icu/impl/data</tt
 in the build output directory by some build targets.
 </p>
 <h3 class="doc"><a name="resourcesICU4C">Building ICU4J Resources from ICU4C</a></h3>
-ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_root</I>/source/data for the procedures.
+ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in icu4c/source/data for the procedures.
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-31'</li>
-    <li>Checkout ICU4C with tag 'release-59-1'</li>
-    <li>Checkout ICU4J with tag 'release-59-1'</li>
-    <li>cd to <I>$icu4c_root</I>/source/data directory</li>
-    <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
+    <li>Checkout or download CLDR version 'release-31-0-1'</li>
+    <li>Checkout ICU with tag 'release-59-1'</li>
+    <li>cd to icu4c/source/data directory</li>
+    <li>Follow the instructions in icu4c/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
     <li>Run ICU4C tests to verify that the new data is good.</li>
-    <li>Build ICU4J data from ICU4C data by following the procedures in <I>$icu4c_root</I>/source/data/icu4j-readme.txt</li>
-    <li>cd to <I>$icu4j_root</I> dir</li>
-
+    <li>Build ICU4J data from ICU4C data by following the procedures in icu4j/source/data/icu4j-readme.txt</li>
+    <li>cd to icu4j dir</li>
     <li>Build and test icu4j</li>
 </ol>
 
