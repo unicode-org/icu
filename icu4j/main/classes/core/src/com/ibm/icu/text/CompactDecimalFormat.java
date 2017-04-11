@@ -107,7 +107,7 @@ public class CompactDecimalFormat extends DecimalFormat {
     properties = new Properties();
     properties.setCompactStyle(style);
     exportedProperties = new Properties();
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_NEVER);
+    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_ALWAYS);
     if (style == CompactStyle.SHORT) {
       // TODO: This was setGroupingUsed(false) in ICU 58. Is it okay that I changed it for ICU 59?
       properties.setMinimumGroupingDigits(2);
