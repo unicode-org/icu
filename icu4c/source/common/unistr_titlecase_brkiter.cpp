@@ -50,7 +50,11 @@ UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t 
       return *this;
     }
   }
-  bi->setText(*this);
+  // Because the "this" string is both the source and the destination,
+  // make a copy of the original source for use by the break iterator.
+  // See tickets #13127 and #13128
+  UnicodeString copyOfInput(*this);
+  bi->setText(copyOfInput);
   caseMap(ustrcase_getCaseLocale(locale.getBaseName()), options, bi, ustrcase_internalToTitle);
   if(titleIter==NULL) {
     delete bi;
