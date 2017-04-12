@@ -28,6 +28,7 @@
 #include "unicode/ubrk.h"
 #include "unicode/unistr.h"
 #include "unicode/ucasemap.h"
+#include "unicode/ustring.h"
 #include "ucase.h"
 #include "ustrtest.h"
 #include "unicode/tstdtmod.h"
@@ -62,6 +63,7 @@ public:
     void TestCaseMapUTF8WithEdits();
     void TestLongUnicodeString();
     void TestBug13127();
+    void TestInPlaceTitle();
 
 private:
     void assertGreekUpper(const char16_t *s, const char16_t *expected);
@@ -90,7 +92,6 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestCaseConversion);
 #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     TESTCASE_AUTO(TestCasing);
-    TESTCASE_AUTO(TestBug13127);
 #endif
     TESTCASE_AUTO(TestFullCaseFoldingIterator);
     TESTCASE_AUTO(TestGreekUpper);
@@ -101,6 +102,10 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestCaseMapWithEdits);
     TESTCASE_AUTO(TestCaseMapUTF8WithEdits);
     TESTCASE_AUTO(TestLongUnicodeString);
+#if !UCONFIG_NO_BREAK_ITERATION
+    TESTCASE_AUTO(TestBug13127);
+    TESTCASE_AUTO(TestInPlaceTitle);
+#endif
     TESTCASE_AUTO_END;
 }
 
@@ -1146,4 +1151,14 @@ void StringCaseTest::TestBug13127() {
     const char16_t *s16 = u"日本語";
     UnicodeString s(TRUE, s16, -1);
     s.toTitle(0, Locale::getEnglish());
+}
+
+void StringCaseTest::TestInPlaceTitle() {
+    // Similar to TestBug13127. u_strToTitle() can modify the buffer in-place.
+    IcuTestErrorCode errorCode(*this, "TestInPlaceTitle");
+    char16_t s[32] = u"ß ß ß日本語 abcdef";
+    const char16_t *expected = u"Ss Ss Ss日本語 Abcdef";
+    int32_t length = u_strToTitle(s, UPRV_LENGTHOF(s), s, -1, nullptr, "", errorCode);
+    assertEquals("u_strToTitle(in-place) length", u_strlen(expected), length);
+    assertEquals("u_strToTitle(in-place)", expected, s);
 }
