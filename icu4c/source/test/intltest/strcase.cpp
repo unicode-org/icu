@@ -61,6 +61,7 @@ public:
     void TestCaseMapWithEdits();
     void TestCaseMapUTF8WithEdits();
     void TestLongUnicodeString();
+    void TestBug13127();
 
 private:
     void assertGreekUpper(const char16_t *s, const char16_t *expected);
@@ -89,6 +90,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestCaseConversion);
 #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     TESTCASE_AUTO(TestCasing);
+    TESTCASE_AUTO(TestBug13127);
 #endif
     TESTCASE_AUTO(TestFullCaseFoldingIterator);
     TESTCASE_AUTO(TestGreekUpper);
@@ -1137,4 +1139,11 @@ void StringCaseTest::TestLongUnicodeString() {
         u"AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDDDDDDDDDDEEEEEEEEEEF", 6 * 51);
     s.toUpper(Locale::getRoot());
     assertEquals("string length 306", expected, s);
+}
+
+void StringCaseTest::TestBug13127() {
+    // Test case crashed when the bug was present.
+    const char16_t *s16 = u"日本語";
+    UnicodeString s(TRUE, s16, -1);
+    s.toTitle(0, Locale::getEnglish());
 }
