@@ -57,7 +57,7 @@
     <property name="icu4j.api.doc.window.title" value="ICU4J ${api.doc.version}"/>
     <property name="icu4j.api.doc.header" value="ICU4J ${api.doc.version}"/>
     <property name="icu4j.api.doc.jdk.link" value="http://docs.oracle.com/javase/8/docs/api/"/>
-    <property name="icu4j.api.doc.copyright.footer" value="&lt;font size=-1&gt;Copyright &#x00A9; ${current.year} Unicode, Inc. and others.&lt;/font&gt;"/>
+    <property name="icu4j.api.doc.copyright.footer" value="&lt;font size=-1&gt;Copyright &#x00A9; 2016 Unicode, Inc. and others.&lt;/font&gt;"/>
 
     <!-- directories -->
     <property name="release.dir" value="release"/>
