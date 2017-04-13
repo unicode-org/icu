@@ -63,13 +63,14 @@ $(DISTY_FILE_TGZ) $(DISTY_FILE_ZIP) $(DISTY_DATA_ZIP):  $(DISTY_DAT) $(DISTY_TMP
 	echo exporting $(SVNVER)
 	svn export -r $(shell echo $(SVNVER) | tr -d 'a-zA-Z' ) $(SVNURL) "$(DISTY_TMP)/icu"
 	( cd $(DISTY_TMP)/icu/source ; zip -rlq $(DISTY_DATA_ZIP) data )
-	$(RMV) $(DISTY_RMDIR)
 	$(MKINSTALLDIRS) $(DISTY_IN)
 	echo DISTY_DAT=$(DISTY_DAT)
 	cp $(DISTY_DAT) $(DISTY_IN)
 	( cd $(DISTY_TMP)/icu ; python as_is/bomlist.py > as_is/bomlist.txt || rm -f as_is/bomlist.txt )
-	( cd $(DISTY_TMP) ; tar cfpz $(DISTY_FILE_TGZ) icu )
 	( cd $(DISTY_TMP) ; zip -rlq $(DISTY_FILE_ZIP) icu )
+	$(RMV) $(DISTY_RMDIR)
+	( cd $(DISTY_TMP)/icu ; python as_is/bomlist.py > as_is/bomlist.txt || rm -f as_is/bomlist.txt )
+	( cd $(DISTY_TMP) ; tar cfpz $(DISTY_FILE_TGZ) icu )
 	ls -l $(DISTY_FILE)
 
 dist-local: $(DISTY_FILES)
