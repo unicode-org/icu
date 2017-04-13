@@ -23,7 +23,7 @@
         milestone - if the release note is a milestone release
 -->
 
-  <body class="rc">
+  <body>
   <!-- <body> -->
     <p class="only-draft"><b>Note:</b> This is a draft readme.</p>
 
@@ -44,7 +44,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2017-Mar-29<br/>
+    <p>Last updated: 2017-Apr-12<br/>
       Copyright &copy; 2016 and later: Unicode, Inc. and others. License &amp; terms of use:
       <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a><br/>
       Copyright &copy; 1997-2016 International Business Machines Corporation and others.
@@ -744,9 +744,9 @@
     <ul>
       <li>Microsoft Windows</li>
 
-      <li>Microsoft Visual C++ (see the ICU download page for the currently compatible version)</li>
+      <li>Microsoft Visual C++ (part of <a href="https://www.visualstudio.com/">Visual Studio</a>) (see the ICU download page for the currently compatible version)</li>
       
-      <li><i><b>Optional:</b></i> A version of the Windows 10 SDK (if you want to build the UWP projects)</li>
+      <li><i><b>Optional:</b></i> A version of the <a href="https://developer.microsoft.com/windows/downloads">Windows 10 SDK</a> (if you want to build the UWP projects)</li>
     </ul>
         <p class="note"><a href="#HowToBuildCygwin">Cygwin</a> is required if using a version of MSVC other than the one
         compatible with the supplied project files or if other compilers are used to build ICU. (e.g. GCC)</p>
@@ -1131,9 +1131,9 @@
       configure option.</li>
 
       <li>The latest versions of z/OS use <a
-      href="http://www.ibm.com/support/docview.wss?uid=swg2120240">XPLINK
+      href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.2.0/com.ibm.zos.v2r2.cbcux01/oebind6.htm">XPLINK
       version (C128) of the C++ standard library</a> by default. You may see <a
-      href="http://www.ibm.com/support/docview.wss?uid=swg21376279">an
+      href="https://www.ibm.com/support/knowledgecenter/SSLTBW_2.2.0/com.ibm.zos.v2r2.cbcux01/oebind5.htm">an
       error</a> when running with XPLINK disabled. To avoid this error,
       set the following environment variable or similar:
 
@@ -1307,7 +1307,7 @@ cd ../../..</samp></pre>
       <li>Test ICU. <pre><samp>gmake check</samp></pre>
         (The <tt> QIBM_MULTI_THREADED=Y</tt> flag will be automatically applied to intltest -
           you can look at the <a href=
-      "http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/apis/concept4.htm">
+      "https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_73/rzahw/rzahwceeco.htm">
       iSeries Information Center</a> for more details regarding the running of multiple threads
       on IBM i.)</li>
     </ol>
