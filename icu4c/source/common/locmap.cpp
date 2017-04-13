@@ -1213,6 +1213,8 @@ uprv_convertToLCIDPlatform(const char* localeID)
             }
         }
     }
+#else
+    (void)localeID; // Suppress unused variable warning.
 #endif /* USE_WINDOWS_LCID_MAPPING_API */
 
     // No found, or not implemented on platforms without native name->lcid conversion
