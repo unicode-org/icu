@@ -17,7 +17,11 @@ subdir = tools
 
 SUBDIRS = toolutil ctestfw makeconv genrb genbrk \
 gencnval gensprep icuinfo genccode gencmn icupkg pkgdata \
-gentest gennorm2 gencfu gendict escapesrc
+gentest gennorm2 gencfu gendict
+
+ifneq (@platform_make_fragment_name@,mh-cygwin-msvc)
+SUBDIRS += escapesrc
+endif
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local	\
