@@ -335,6 +335,7 @@ const NumberFormatTestTupleFieldData gFieldData[] = {
     FIELD_INIT(parseIntegerOnly, &gIntOps),
     FIELD_INIT(decimalPatternMatchRequired, &gIntOps),
     FIELD_INIT(parseNoExponent, &gIntOps),
+    FIELD_INIT(parseCaseSensitive, &gIntOps),
     FIELD_INIT(outputCurrency, &gStrOps)
 };
 

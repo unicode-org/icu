@@ -64,6 +64,7 @@ enum ENumberFormatTestTupleField {
     kPlural,
     kParseIntegerOnly,
     kDecimalPatternMatchRequired,
+    kParseCaseSensitive,
     kParseNoExponent,
     kOutputCurrency,
     kNumberFormatTestTupleFieldCount
@@ -127,6 +128,7 @@ public:
     int32_t parseIntegerOnly;
     int32_t decimalPatternMatchRequired;
     int32_t parseNoExponent;
+    int32_t parseCaseSensitive;
     UnicodeString outputCurrency;
 
     UBool localeFlag;
@@ -172,6 +174,7 @@ public:
     UBool parseIntegerOnlyFlag;
     UBool decimalPatternMatchRequiredFlag;
     UBool parseNoExponentFlag;
+    UBool parseCaseSensitiveFlag;
     UBool outputCurrencyFlag;
 
     NumberFormatTestTuple() {

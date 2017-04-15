@@ -201,17 +201,18 @@ set pattern #,##0.000E0
 begin
 format	output	breaks
 // J throws an IllegalArgumentException when parsing the pattern.
-1	1.000E0	J
-11	11.00E0	J
-111	111.0E0	J
+// C sets error code to U_MALFORMED_EXPONENTIAL_PATTERN.
+1	1.000E0	CJ
+11	11.00E0	CJ
+111	111.0E0	CJ
 // K doesn't print the grouping separator ("1111E0")
-1111	1,111E0	JK
+1111	1,111E0	CJK
 // K prints too many digits ("1.1111E4")
-11111	1.111E4	JK
-111111	11.11E4	JK
-1111111	111.1E4	JK
-11111111	1,111E4	JK
-111111111	1.111E8	JK
+11111	1.111E4	CJK
+111111	11.11E4	CJK
+1111111	111.1E4	CJK
+11111111	1,111E4	CJK
+111111111	1.111E8	CJK
 
 test percents
 set locale fr
@@ -258,7 +259,8 @@ $**####,##0	1234	$***1\u00a0234	K
 // In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
 \u00a4\u00a4 **####0.00	433.0	EUR *433,00	JK
 // In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
-\u00a4\u00a4 **#######0	433.0	EUR ****433	JK
+// S fails this one because the test code bypasses CurrencyUsage
+\u00a4\u00a4 **#######0	433.0	EUR *433,00	JKS
 
 test padding and currencies
 begin
@@ -536,7 +538,7 @@ set pattern \u00a4\u00a4 0
 begin
 format	currency	currencyUsage	output	breaks
 0.37	CHF	standard	CHF 0.37	K
-0.37	CHF	cash	CHF 0.35	CK
+0.37	CHF	cash	CHF 0.35	K
 1.234	CZK	standard	CZK 1.23	K
 1.234	CZK	cash	CZK 1
 
@@ -545,13 +547,14 @@ set locale en
 begin
 currency	currencyUsage	toPattern	breaks
 // These work in J, but it prepends an extra hash sign to the pattern.
+// C does not print the currency rounding information in the pattern.
 // K does not support this feature.
-USD	standard	0.00	JK
-CHF	standard	0.00	JK
-CZK	standard	0.00	JK
-USD	cash	0.00	JK
-CHF	cash	0.05	JK
-CZK	cash	0	JK
+USD	standard	0.00	CJK
+CHF	standard	0.00	CJK
+CZK	standard	0.00	CJK
+USD	cash	0.00	CJK
+CHF	cash	0.05	CJK
+CZK	cash	0	CJK
 
 test currency rounding
 set locale en
@@ -674,7 +677,7 @@ pattern	toPattern	breaks
 // All of the "S" failures in this section are because of functionally equivalent patterns
 // JDK doesn't support any patterns with padding or both negative prefix and suffix
 // Breaks ICU4J See ticket 11671
-**0,000	**0,000		JK
+**0,000	**0,000	JK
 **##0,000	**##0,000	K
 **###0,000	**###0,000	K
 **####0,000	**#,##0,000	KS
@@ -718,7 +721,7 @@ parse	output	breaks
 5,347.25	5347.25	JK
 (5,347.25	-5347.25	J
 // S is successful at parsing this as -5347.25 in lenient mode
--5,347.25	fail	S
+-5,347.25	-5347.25	CJK
 +3.52E4	35200
 (34.8E-3)	-0.0348
 // JDK stops parsing at the spaces. JDK doesn't see space as a grouping separator
@@ -727,7 +730,7 @@ parse	output	breaks
 // J doesn't allow trailing separators before E but C does
 (34,,25,E-1)	-342.5	J
 (34  25 E-1)	-342.5	JK
-(34,,25 E-1)	-342.5	JK
+(34,,25 E-1)	-342.5	CJK
 // Spaces are not allowed after exponent symbol
 // C parses up to the E but J bails
 (34  25E -1)	-3425	JK
@@ -809,15 +812,17 @@ parse	output	breaks
 (65347.25)	-65347.25
 (65,347.25)	-65347.25
 // JDK does allow separators in the wrong place and parses as -5347.25
+// C parses as -65347.25?
 (53,47.25)	fail	K
-// strict requires prefix or suffix
-65,347.25	fail
+// strict requires prefix or suffix, except in C
+65,347.25	fail	
 +3.52E4	35200
 (34.8E-3)	-0.0348
 (3425E-1)	-342.5
 // Strict doesn't allow separators in sci notation.
 (63,425)	-63425
 // JDK and S allow separators in sci notation and parses as -342.5
+// C passes
 (63,425E-1)	fail	KS
 // Both prefix and suffix needed for strict.
 // JDK accepts this and parses as -342.5
@@ -842,8 +847,8 @@ parse	output	breaks
 +1,234.5	1234.5
 // Comma after decimal means parse to a comma
 +1,23,456.78,9	123456.78
-// J fails upon seeing the second decimal point
-+1,23,456.78.9	123456.78	J
+// C and J fail upon seeing the second decimal point
++1,23,456.78.9	123456.78	CJ
 +79	79
 +79	79
 + 79	fail
@@ -856,10 +861,10 @@ set pattern #E0
 set lenient 0
 begin
 parse	output	breaks
-123	fail	JK
+123	fail	CJK
 123E1	1230
 123E0	123
-123E	fail	JK
+123E	fail	CJK
 
 test parse strict without prefix/suffix
 set locale en
@@ -959,28 +964,25 @@ parse	output
 test parse with locale symbols
 // The grouping separator in it_CH is an apostrophe
 set locale it_CH
-set pattern #
+set pattern #,##0
 begin
 parse	output	breaks
 १३	13	
 १३.३१‍	13.31	
-// J and K stop parsing at the apostrophe
-123'456	123456	JK
-524'1.3	5241.3	JK
-३'१‍	31	JK
+123'456	123456
+524'1.3	5241.3
+३'१‍	31
 
 test parse with European-style comma/period
 set locale pt
-set pattern #
+set pattern #,##0
 begin
 parse	output	breaks
-// J and K get 123
-123.456	123456	JK
+123.456	123456
 123,456	123.456
 987,654.321	987.654
 987,654 321	987.654
-// J and K get 987
-987.654,321	987654.321	JK
+987.654,321	987654.321
 
 test select
 set locale sr
@@ -1342,14 +1344,14 @@ begin
 pattern	parse	output	breaks
 // K doesn't support this feature.
 0	123	123
-0	123.	fail	JK
-0	1.23	fail	JK
+0	123.	fail	CJK
+0	1.23	fail	CJK
 0	-513	-513
-0	-513.	fail	JK
-0	-5.13	fail	JK
+0	-513.	fail	CJK
+0	-5.13	fail	CJK
 0.0	123	fail	K
-0.0	123.	123
-0.0	1.23	1.23
+0.0	123.	123	C
+0.0	1.23	1.23	C
 0.0	-513	fail	K
 0.0	-513.	-513
 0.0	-5.13	-5.13
@@ -1363,8 +1365,8 @@ parse	output	breaks
 - 123	-123	JK
  -123	-123	JK
  - 123	-123	JK
-123-	-123	JKS
-123 -	-123	JKS
+123-	-123	CJKS
+123 -	-123	CJKS
 
 test parse case sensitive
 set locale en
@@ -1377,17 +1379,17 @@ Aa1.23	0	1.23
 AA1.23	1	fail
 // J and K do not support case-insensitive parsing for prefix/suffix.
 // J supports it for the exponent separator, but not K.
-AA1.23	0	1.23	JK
+AA1.23	0	1.23	CJK
 aa1.23	1	fail
-aa1.23	0	1.23	JK
+aa1.23	0	1.23	CJK
 Aa1.23E3	1	1230
 Aa1.23E3	0	1230
-Aa1.23e3	1	1.23	J
+Aa1.23e3	1	1.23	CJ
 Aa1.23e3	0	1230	K
 NaN	1	NaN	K
 NaN	0	NaN	K
 nan	1	fail
-nan	0	NaN	JK
+nan	0	NaN	CJK
 
 test parse infinity and scientific notation overflow
 set locale en
@@ -1415,29 +1417,30 @@ set minFractionDigits 2
 set roundingMode halfDown
 begin
 maxFractionDigits	format	output	breaks
-100	987654321987654321	987654321987654321.00
-100	987654321.987654321	987654321.987654321
-100	9999999999999.9950000000001	9999999999999.9950000000001
-2	9999999999999.9950000000001	10000000000000.00
+// C has trouble formatting too many digits (#11318)
+100	987654321987654321	987654321987654321.00	C
+100	987654321.987654321	987654321.987654321	C
+100	9999999999999.9950000000001	9999999999999.9950000000001	C
+2	9999999999999.9950000000001	10000000000000.00	C
 2	9999999.99499999	9999999.99
 // K doesn't support halfDowm rounding mode?
 2	9999999.995	9999999.99	K
 2	9999999.99500001	10000000.00
-100	56565656565656565656565656565656565656565656565656565656565656	56565656565656565656565656565656565656565656565656565656565656.00
-100	454545454545454545454545454545.454545454545454545454545454545	454545454545454545454545454545.454545454545454545454545454545
+100	56565656565656565656565656565656565656565656565656565656565656	56565656565656565656565656565656565656565656565656565656565656.00	C
+100	454545454545454545454545454545.454545454545454545454545454545	454545454545454545454545454545.454545454545454545454545454545	C
 100	0.0000000000000000000123	0.0000000000000000000123
-100	-78787878787878787878787878787878	-78787878787878787878787878787878.00
-100	-8989898989898989898989.8989898989898989	-8989898989898989898989.8989898989898989
+100	-78787878787878787878787878787878	-78787878787878787878787878787878.00	C
+100	-8989898989898989898989.8989898989898989	-8989898989898989898989.8989898989898989	C
 
 test ticket 11230
 set locale en
-set pattern ###
+set pattern #,##0
 begin
 parse	output	breaks
-// K and J return null; S returns 99
- 9 9	9	JKS
-// K and J return null
- 9 999	9999	JK
+// K and J return null; S and C return 99
+ 9 9	9	CJKS
+// K returns null
+ 9 999	9999	K
 
 test parse ignorables
 set locale ar
@@ -1468,16 +1471,17 @@ y gh56i jk	-56	JK
 y gh56i jk  	-56	K
 y gh56	-56	JK
 y g h56	-56	JK
-// S stops parsing at the 'i' for these and returns -56
-56ijk	-56	JK
-56i jk	-56	JK
-56ij k	-56	JK
-56i‎j‎k	-56	JK
-56ijk 	-56	JK
-56i j‎k 	-56	JK
-56‎i jk 	-56	JK
-// S gets 56 (accepts ' ' gs grouping); J and K get null
-5 6	fail	S
+// S stops parsing after the 'i' for these and returns -56
+// C stops before the 'i' and gets 56
+56ijk	-56	CJK
+56i jk	-56	CJK
+56ij k	-56	CJK
+56i‎j‎k	-56	CJK
+56ijk 	-56	CJK
+56i j‎k 	-56	CJK
+56‎i jk 	-56	CJK
+// S and C get 56 (accepts ' ' gs grouping); J and K get null
+5 6	fail	CS
 5‎6	5	JK
 
 test parse spaces in grouping
@@ -1487,9 +1491,9 @@ set locale en
 set pattern #,##0
 begin
 parse	output	breaks
-// J and S get "12" here
-1 2	1	JS
-1 23	1	JS
+// C, J and S get "12" here
+1 2	1	CJS
+1 23	1	CJS
 // K gets 1 here; doesn't pick up the grouping separator
 1 234	1234	K
 
