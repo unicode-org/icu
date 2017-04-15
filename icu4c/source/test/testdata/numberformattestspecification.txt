@@ -1497,6 +1497,105 @@ parse	output	breaks
 // K gets 1 here; doesn't pick up the grouping separator
 1 234	1234	K
 
+test rounding increment significant digits
+// This test is for #13111
+set locale en
+set pattern 0.1
+set useSigDigits 1
+set maxSigDigits 2
+begin
+format	output	breaks
+// C and J get "1"
+// K gets "1.1" (??)
+0.975	0.98	CJK
+
+test lenient parse currency match
+// This test is for #13112
+set locale en
+set pattern ¤#,##0.00
+begin
+parse	output	breaks
+// J and K get null
+1.23!@#$%^	1.23	JK
+
+test percentage parsing multiplier
+// This test is for #13114
+set locale en
+set pattern 0%
+begin
+parse	output	breaks
+55%	0.55
+// J and K get null
+55	0.55	JK
+
+test trailing grouping separators in pattern
+// This test is for #13115
+set locale en
+begin
+pattern	format	output	breaks
+$0M	123456	$123456M
+// C, J, and K reject the pattern as malformed.
+// S accepts it and prints no grouping.
+$0,M	123456	$123456M	CJK
+$0,,M	123456	$123456M	CJK
+
+test empty negative subpattern
+// This test is for #13117
+set locale en
+begin
+pattern	format	output	breaks
+0	-15	-15
+// S treats the empty negative subpattern the same as "0"
+0;	-15	-15	S
+// C, J, and K still prepend a '-' even though the pattern says otherwise
+0;0	-15	15	CJK
+
+test percentage multiplier parsing
+// This test is for #13129
+set locale en
+set pattern 0%
+begin
+parse	output	breaks
+// S uses a MathContext of 16 digits when dividing by 100.
+9223372036854775807%	92233720368547758.07	S
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
