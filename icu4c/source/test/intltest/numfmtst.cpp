@@ -29,6 +29,7 @@
 #include "charstr.h"
 #include "putilimp.h"
 #include "winnmtst.h"
+#include <cmath>
 #include <float.h>
 #include <string.h>
 #include <stdlib.h>
@@ -231,6 +232,9 @@ static void adjustDecimalFormat(
             appendErrorMessage.append("Error setting parse no exponent flag.");
         }
     }
+    if (tuple.parseCaseSensitiveFlag) {
+        // TODO
+    }
 }
 
 static DecimalFormat *newDecimalFormat(
@@ -389,16 +393,33 @@ UBool NumberFormatTestDataDriven::isParsePass(
     ParsePosition ppos;
     fmtPtr->parse(tuple.parse, result, ppos);
     if (ppos.getIndex() == 0) {
-        if (tuple.output != "fail") {
-            appendErrorMessage.append("Parse failed but was expected to succeed.");
-            return FALSE;
-        }
-        return TRUE;
+        appendErrorMessage.append("Parse failed; got error index ");
+        appendErrorMessage = appendErrorMessage + ppos.getErrorIndex();
+        return FALSE;
     }
     UnicodeString resultStr(UnicodeString::fromUTF8(result.getDecimalNumber(status)));
     if (tuple.output == "fail") {
         appendErrorMessage.append(UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
-        return FALSE;
+        return TRUE; // TRUE because failure handling is in the test suite
+    }
+    if (tuple.output == "NaN") {
+        if (!std::isnan(result.getDouble())) {
+            appendErrorMessage.append("Expected NaN, but got: " + resultStr);
+            return FALSE;
+        }
+        return TRUE;
+    } else if (tuple.output == "Inf") {
+        if (!std::isinf(result.getDouble()) || result.getDouble() < 0) {
+            appendErrorMessage.append("Expected Inf, but got: " + resultStr);
+            return FALSE;
+        }
+        return TRUE;
+    } else if (tuple.output == "-Inf") {
+        if (!std::isinf(result.getDouble()) || result.getDouble() > 0) {
+            appendErrorMessage.append("Expected -Inf, but got: " + resultStr);
+            return FALSE;
+        }
+        return TRUE;
     }
     DigitList expected;
     strToDigitList(tuple.output, expected, status);
@@ -407,8 +428,7 @@ UBool NumberFormatTestDataDriven::isParsePass(
         return FALSE;
     }
     if (expected != *result.getDigitList()) {
-        appendErrorMessage.append(
-                    UnicodeString("Expected: ") + tuple.output + ", got: " + resultStr + ". ");
+        appendErrorMessage.append(UnicodeString("Expected: ") + tuple.output + ", but got: " + resultStr + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
         return FALSE;
     }
     return TRUE;
@@ -434,18 +454,16 @@ UBool NumberFormatTestDataDriven::isParseCurrencyPass(
     LocalPointer<CurrencyAmount> currAmt(
             fmtPtr->parseCurrency(tuple.parse, ppos));
     if (ppos.getIndex() == 0) {
-        if (tuple.output != "fail") {
-            appendErrorMessage.append("Parse failed but was expected to succeed.");
-            return FALSE;
-        }
-        return TRUE;
+        appendErrorMessage.append("Parse failed; got error index ");
+        appendErrorMessage = appendErrorMessage + ppos.getErrorIndex();
+        return FALSE;
     }
     UnicodeString currStr(currAmt->getISOCurrency());
     Formattable resultFormattable(currAmt->getNumber());
     UnicodeString resultStr(UnicodeString::fromUTF8(resultFormattable.getDecimalNumber(status)));
     if (tuple.output == "fail") {
         appendErrorMessage.append(UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
-        return FALSE;
+        return TRUE; // TRUE because failure handling is in the test suite
     }
     DigitList expected;
     strToDigitList(tuple.output, expected, status);
@@ -454,8 +472,7 @@ UBool NumberFormatTestDataDriven::isParseCurrencyPass(
         return FALSE;
     }
     if (expected != *currAmt->getNumber().getDigitList()) {
-        appendErrorMessage.append(
-                    UnicodeString("Expected: ") + tuple.output + ", got: " + resultStr + ". ");
+        appendErrorMessage.append(UnicodeString("Expected: ") + tuple.output + ", but got: " + resultStr + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
         return FALSE;
     }
     if (currStr != tuple.outputCurrency) {
@@ -8269,7 +8286,7 @@ void
 NumberFormatTest::TestDataDriven() {
     NumberFormatTestDataDriven dd;
     dd.setCaller(this);
-    dd.run("numberformattestspecification.txt", FALSE);
+    dd.run("numberformattestspecification.txt", TRUE);
 }
 
 
