@@ -1534,10 +1534,9 @@ set locale en
 begin
 pattern	format	output	breaks
 $0M	123456	$123456M
-// C, J, and K reject the pattern as malformed.
-// S accepts it and prints no grouping.
-$0,M	123456	$123456M	CJK
-$0,,M	123456	$123456M	CJK
+// The following patterns are rejected as malformed.
+$0,M	123456	fail
+$0,,M	123456	fail
 
 test empty negative subpattern
 // This test is for #13117
