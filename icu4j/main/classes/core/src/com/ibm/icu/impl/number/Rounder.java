@@ -204,11 +204,14 @@ public abstract class Rounder extends Format.BeforeFormat {
     // TODO: Avoid the object creation here.
     FormatQuantity copy = input.createCopy();
 
+    assert !input.isZero();
     int magnitude = input.getMagnitude();
     int multiplier = mg.getMultiplier(magnitude);
     input.adjustMagnitude(multiplier);
     apply(input);
-    if (input.getMagnitude() == magnitude + multiplier + 1) {
+
+    // If the number turned to zero when rounding, do not re-attempt the rounding.
+    if (!input.isZero() && input.getMagnitude() == magnitude + multiplier + 1) {
       magnitude += 1;
       input.copyFrom(copy);
       multiplier = mg.getMultiplier(magnitude);

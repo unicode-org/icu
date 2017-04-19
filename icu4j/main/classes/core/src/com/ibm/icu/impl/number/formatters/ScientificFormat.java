@@ -188,6 +188,7 @@ public class ScientificFormat extends Format.BeforeFormat implements Rounder.Mul
       rounder.apply(input);
       exponent = 0;
     } else {
+      // TODO: Revisit chooseMultiplierAndApply
       exponent = -rounder.chooseMultiplierAndApply(input, this);
     }
 
