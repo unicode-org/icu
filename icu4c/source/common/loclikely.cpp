@@ -1281,7 +1281,7 @@ uloc_minimizeSubtags(const char*    localeID,
 
 // Pairs of (language subtag, + or -) for finding out fast if common languages
 // are LTR (minus) or RTL (plus).
-static const char* LANG_DIR_STRING =
+static const char LANG_DIR_STRING[] =
         "root-en-es-pt-zh-ja-ko-de-fr-it-ar+he+fa+ru-nl-pl-th-tr-";
 
 // Implemented here because this calls uloc_addLikelySubtags().

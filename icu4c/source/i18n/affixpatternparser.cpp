@@ -22,12 +22,12 @@
 #include "uassert.h"
 #include "unistrappender.h"
 
-        static UChar gDefaultSymbols[] = {0xa4, 0xa4, 0xa4};
+static const UChar gDefaultSymbols[] = {0xa4, 0xa4, 0xa4};
 
-static UChar gPercent = 0x25;
-static UChar gPerMill = 0x2030;
-static UChar gNegative = 0x2D;
-static UChar gPositive = 0x2B;
+static const UChar gPercent = 0x25;
+static const UChar gPerMill = 0x2030;
+static const UChar gNegative = 0x2D;
+static const UChar gPositive = 0x2B;
 
 #define PACK_TOKEN_AND_LENGTH(t, l) ((UChar) (((t) << 8) | (l & 0xFF)))
 
