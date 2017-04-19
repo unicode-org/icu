@@ -221,8 +221,10 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
       magnitude = 0;
       rounder.apply(input);
     } else {
+      // TODO: Revisit chooseMultiplierAndApply
       int multiplier = rounder.chooseMultiplierAndApply(input, data);
-      magnitude = input.getMagnitude() - multiplier;
+      magnitude = input.isZero() ? 0 : input.getMagnitude();
+      magnitude -= multiplier;
     }
 
     StandardPlural plural = input.getStandardPlural(rules);

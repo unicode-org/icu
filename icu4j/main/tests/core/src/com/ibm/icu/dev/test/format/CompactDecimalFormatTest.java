@@ -750,4 +750,13 @@ public class CompactDecimalFormatTest extends TestFmwk {
         String s = cdf.format(-1500);
         assertEquals("Should work with negative numbers", "-1.5K", s);
     }
+
+    @Test
+    public void TestBug13156() {
+        ULocale loc = ULocale.ENGLISH;
+        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(loc, CompactStyle.SHORT);
+        cdf.setMaximumFractionDigits(1);
+        String result = cdf.format(0.01);
+        assertEquals("Should not throw exception on small number", "0", result);
+    }
 }
