@@ -636,8 +636,11 @@ public class PatternString {
       consumeSubpattern(state, result.positive);
       if (state.peek() == ';') {
         state.next(); // consume the ';'
-        result.negative = new SubpatternParseResult();
-        consumeSubpattern(state, result.negative);
+        // Don't consume the negative subpattern if it is empty (trailing ';')
+        if (state.peek() != -1) {
+          result.negative = new SubpatternParseResult();
+          consumeSubpattern(state, result.negative);
+        }
       }
       if (state.peek() != -1) {
         throw state.toParseException("Found unquoted special character");
