@@ -97,7 +97,9 @@ public class PatternStringTest {
 
   @Test
   public void testExceptionOnInvalid() {
-    String[] invalidPatterns = {"#.#.#", "0#", "0#.", ".#0", "0#.#0", "@0", "0@"};
+    String[] invalidPatterns = {
+      "#.#.#", "0#", "0#.", ".#0", "0#.#0", "@0", "0@", "0,", "0,,", "0,,0", "0,,0,"
+    };
 
     for (String pattern : invalidPatterns) {
       try {

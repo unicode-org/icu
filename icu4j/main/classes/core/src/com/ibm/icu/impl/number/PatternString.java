@@ -743,6 +743,7 @@ public class PatternString {
       boolean seenSignificantDigitMarker = false;
       boolean seenDigit = false;
 
+      outer:
       while (true) {
         switch (state.peek()) {
           case ',':
@@ -798,9 +799,17 @@ public class PatternString {
             break;
 
           default:
-            return;
+            break outer;
         }
         state.next(); // consume the symbol
+      }
+
+      // Disallow patterns with a trailing ',' or with two ',' next to each other
+      if (result.groupingSizes[0] == 0 && result.groupingSizes[1] != -1) {
+        throw state.toParseException("Trailing grouping separator is invalid");
+      }
+      if (result.groupingSizes[1] == 0 && result.groupingSizes[2] != -1) {
+        throw state.toParseException("Grouping width of zero is invalid");
       }
     }
 
