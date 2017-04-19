@@ -1545,8 +1545,7 @@ set locale en
 begin
 pattern	format	output	breaks
 0	-15	-15
-// S treats the empty negative subpattern the same as "0"
-0;	-15	-15	S
+0;	-15	-15
 // C, J, and K still prepend a '-' even though the pattern says otherwise
 0;0	-15	15	CJK
 

@@ -107,4 +107,11 @@ public class PatternStringTest {
       }
     }
   }
+
+  @Test
+  public void testBug13117() {
+    Properties expected = PatternString.parseToProperties("0");
+    Properties actual = PatternString.parseToProperties("0;");
+    assertEquals("Should not consume negative subpattern", expected, actual);
+  }
 }
