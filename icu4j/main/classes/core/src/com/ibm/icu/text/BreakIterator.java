@@ -180,30 +180,28 @@ import com.ibm.icu.util.ULocale;
  * public static int nextWordStartAfter(int pos, String text) {
  *     BreakIterator wb = BreakIterator.getWordInstance();
  *     wb.setText(text);
- *     int last = wb.following(pos);
- *     int current = wb.next();
- *     while (current != BreakIterator.DONE) {
- *         for (int p = last; p &lt; current; p++) {
- *             if (Character.isLetter(text.charAt(p)))
- *                 return last;
+ *     int wordStart = wb.following(pos);
+ *     for (;;) {
+ *         int wordLimit = wb.next();
+ *         if (wordLimit == BreakIterator.DONE) {
+ *             return BreakIterator.DONE;
  *         }
- *         last = current;
- *         current = wb.next();
- *     }
- *     return BreakIterator.DONE;
+ *         int wordStatus = wb.getRuleStatus();
+ *         if (wordStatus != BreakIterator.WORD_NONE) {
+ *             return wordStart;
+ *         }
+ *         wordStart = wordLimit;
+ *      }
  * }
  * </pre>
- * (The iterator returned by BreakIterator.getWordInstance() is unique in that
+ * The iterator returned by {@link #getWordInstance} is unique in that
  * the break positions it returns don't represent both the start and end of the
  * thing being iterated over.  That is, a sentence-break iterator returns breaks
  * that each represent the end of one sentence and the beginning of the next.
  * With the word-break iterator, the characters between two boundaries might be a
  * word, or they might be the punctuation or whitespace between two words.  The
- * above code uses a simple heuristic to determine which boundary is the beginning
- * of a word: If the characters between this boundary and the next boundary
- * include at least one letter (this can be an alphabetical letter, a CJK ideograph,
- * a Hangul syllable, a Kana character, etc.), then the text between this boundary
- * and the next is a word; otherwise, it's the material between words.)
+ * above code uses {@link #getRuleStatus} to identify and ignore boundaries associated
+ * with punctuation or other non-word characters.
  * </blockquote>
  *
  * @see CharacterIterator
