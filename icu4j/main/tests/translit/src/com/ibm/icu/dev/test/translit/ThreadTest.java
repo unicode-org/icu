@@ -20,7 +20,7 @@ import com.ibm.icu.text.Transliterator;
 
 public class ThreadTest extends TestFmwk {
     private ArrayList<Worker> threads = new ArrayList<Worker>();
-    private int iterationCount = 100000;
+    private int iterationCount = 50000;
     
     @Test
     public void TestThreads()  {
