@@ -183,33 +183,34 @@ void RBBIAPITest::TestgetRules()
 {
     UErrorCode status=U_ZERO_ERROR;
 
-    RuleBasedBreakIterator* bi1=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    RuleBasedBreakIterator* bi2=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+    LocalPointer<RuleBasedBreakIterator> bi1(
+            (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status), status);
+    LocalPointer<RuleBasedBreakIterator> bi2(
+            (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status), status);
     if(U_FAILURE(status)){
-        errcheckln(status, "FAIL: in construction - %s", u_errorName(status));
-        delete bi1;
-        delete bi2;
+        errcheckln(status, "%s:%d, FAIL: in construction - %s", __FILE__, __LINE__, u_errorName(status));
         return;
     }
 
+    logln((UnicodeString)"Testing getRules()");
 
+    UnicodeString text(u"Hello there");
+    bi1->setText(text);
 
-    logln((UnicodeString)"Testing toString()");
-
-    bi1->setText((UnicodeString)"Hello there");
-
-    RuleBasedBreakIterator* bi3 =(RuleBasedBreakIterator*)bi1->clone();
+    LocalPointer <RuleBasedBreakIterator> bi3((RuleBasedBreakIterator*)bi1->clone());
 
     UnicodeString temp=bi1->getRules();
     UnicodeString temp2=bi2->getRules();
     UnicodeString temp3=bi3->getRules();
     if( temp2.compare(temp3) ==0 || temp.compare(temp2) == 0 || temp.compare(temp3) != 0)
-        errln((UnicodeString)"ERROR: error in getRules() method");
+        errln("%s:%d ERROR: error in getRules() method", __FILE__, __LINE__);
 
-    delete bi1;
-    delete bi2;
-    delete bi3;
+    RuleBasedBreakIterator bi4;   // Default RuleBasedBreakIterator constructor gives empty shell with empty rules.
+    if (!bi4.getRules().isEmpty()) {
+        errln("%s:%d Empty string expected.", __FILE__, __LINE__);
+    }
 }
+
 void RBBIAPITest::TestHashCode()
 {
     UErrorCode status=U_ZERO_ERROR;

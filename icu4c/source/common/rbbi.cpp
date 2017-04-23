@@ -21,17 +21,16 @@
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"
 #include "unicode/uchriter.h"
-#include "unicode/udata.h"
 #include "unicode/uclean.h"
-#include "rbbidata.h"
-#include "rbbirb.h"
+#include "unicode/udata.h"
+#include "brkeng.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "umutex.h"
-#include "ucln_cmn.h"
-#include "brkeng.h"
-
+#include "rbbidata.h"
+#include "rbbirb.h"
 #include "uassert.h"
+#include "ucln_cmn.h"
+#include "umutex.h"
 #include "uvector.h"
 
 // if U_LOCAL_SERVICE_HOOK is defined, then localsvc.cpp is expected to be included.
@@ -94,13 +93,13 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    fData = new RBBIDataWrapper(data, RBBIDataWrapper::kDontAdopt, status); 
+    fData = new RBBIDataWrapper(data, RBBIDataWrapper::kDontAdopt, status);
     if (U_FAILURE(status)) {return;}
     if(fData == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-}    
+}
 
 
 //-------------------------------------------------------------------------------
@@ -184,7 +183,7 @@ RuleBasedBreakIterator::~RuleBasedBreakIterator() {
     fCharIter = NULL;
     delete fDCharIter;
     fDCharIter = NULL;
-    
+
     utext_close(fText);
 
     if (fData != NULL) {
@@ -377,38 +376,17 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
 
 
 UText *RuleBasedBreakIterator::getUText(UText *fillIn, UErrorCode &status) const {
-    UText *result = utext_clone(fillIn, fText, FALSE, TRUE, &status);  
+    UText *result = utext_clone(fillIn, fText, FALSE, TRUE, &status);
     return result;
 }
 
-
-
-/**
- * Returns the description used to create this iterator
- */
-const UnicodeString&
-RuleBasedBreakIterator::getRules() const {
-    if (fData != NULL) {
-        return fData->getRuleSourceString();
-    } else {
-        static const UnicodeString *s;
-        if (s == NULL) {
-            // TODO:  something more elegant here.
-            //        perhaps API should return the string by value.
-            //        Note:  thread unsafe init & leak are semi-ok, better than
-            //               what was before.  Sould be cleaned up, though.
-            s = new UnicodeString;
-        }
-        return *s;
-    }
-}
 
 //=======================================================================
 // BreakIterator overrides
 //=======================================================================
 
 /**
- * Return a CharacterIterator over the text being analyzed.  
+ * Return a CharacterIterator over the text being analyzed.
  */
 CharacterIterator&
 RuleBasedBreakIterator::getText() const {
@@ -422,7 +400,7 @@ RuleBasedBreakIterator::getText() const {
  */
 void
 RuleBasedBreakIterator::adoptText(CharacterIterator* newText) {
-    // If we are holding a CharacterIterator adopted from a 
+    // If we are holding a CharacterIterator adopted from a
     //   previous call to this function, delete it now.
     if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
         delete fCharIter;
@@ -431,7 +409,7 @@ RuleBasedBreakIterator::adoptText(CharacterIterator* newText) {
     fCharIter = newText;
     UErrorCode status = U_ZERO_ERROR;
     reset();
-    if (newText==NULL || newText->startIndex() != 0) {   
+    if (newText==NULL || newText->startIndex() != 0) {
         // startIndex !=0 wants to be an error, but there's no way to report it.
         // Make the iterator text be an empty string.
         fText = utext_openUChars(fText, NULL, 0, &status);
@@ -452,7 +430,7 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
     reset();
     fText = utext_openConstUnicodeString(fText, &newText, &status);
 
-    // Set up a character iterator on the string.  
+    // Set up a character iterator on the string.
     //   Needed in case someone calls getText().
     //  Can not, unfortunately, do this lazily on the (probably never)
     //  call to getText(), because getText is const.
@@ -780,7 +758,7 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     // old rule syntax
 
     utext_setNativeIndex(fText, offset);
-    if (offset==0 || 
+    if (offset==0 ||
         (offset==1  && utext_getNativeIndex(fText)==0)) {
         return next();
     }
@@ -879,7 +857,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
         //            to anyone how to work with just one safe table.
         utext_setNativeIndex(fText, offset);
         (void)UTEXT_NEXT32(fText);
-        
+
         // handle previous will give result <= offset
         handlePrevious(fData->fSafeRevTable);
 
@@ -953,7 +931,7 @@ int32_t RuleBasedBreakIterator::current(void) const {
     int32_t  pos = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     return pos;
 }
- 
+
 //=======================================================================
 // implementation
 //=======================================================================
@@ -1021,7 +999,7 @@ struct LookAheadResults {
 //-----------------------------------------------------------------------------------
 //
 //  handleNext(stateTable)
-//     This method is the actual implementation of the rbbi next() method. 
+//     This method is the actual implementation of the rbbi next() method.
 //     This method initializes the state machine to state 1
 //     and advances through the text character by character until we reach the end
 //     of the text or the state machine transitions to state 0.  We update our return
@@ -1032,7 +1010,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     int32_t             state;
     uint16_t            category        = 0;
     RBBIRunMode         mode;
-    
+
     RBBIStateTableRow  *row;
     UChar32             c;
     LookAheadResults    lookAheadMatches;
@@ -1052,7 +1030,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     fLastRuleStatusIndex = 0;
 
     // if we're already at the end of the text, return DONE.
-    initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(fText); 
+    initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(fText);
     result          = initialPosition;
     c               = UTEXT_NEXT32(fText);
     if (fData == NULL || c==U_SENTINEL) {
@@ -1064,8 +1042,8 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     row = (RBBIStateTableRow *)
             //(statetable->fTableData + (statetable->fRowLen * state));
             (tableData + tableRowLen * state);
-            
-    
+
+
     mode     = RBBI_RUN;
     if (statetable->fFlags & RBBI_BOF_REQUIRED) {
         category = 2;
@@ -1079,7 +1057,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
         if (c == U_SENTINEL) {
             // Reached end of input string.
             if (mode == RBBI_END) {
-                // We have already run the loop one last time with the 
+                // We have already run the loop one last time with the
                 //   character set to the psueudo {eof} value.  Now it is time
                 //   to unconditionally bail out.
                 break;
@@ -1149,7 +1127,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
 
         int16_t completedRule = row->fAccepting;
         if (completedRule > 0) {
-            // Lookahead match is completed.  
+            // Lookahead match is completed.
             int32_t lookaheadResult = lookAheadMatches.getPosition(completedRule);
             if (lookaheadResult >= 0) {
                 fLastRuleStatusIndex = row->fTagIdx;
@@ -1170,8 +1148,8 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
             //   longer match is possible, no matter what characters follow.
             break;
         }
-        
-        // Advance to the next character.  
+
+        // Advance to the next character.
         // If this is a beginning-of-input loop iteration, don't advance
         //    the input position.  The next iteration will be processing the
         //    first real input character.
@@ -1270,7 +1248,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
         if (c == U_SENTINEL) {
             // Reached end of input string.
             if (mode == RBBI_END) {
-                // We have already run the loop one last time with the 
+                // We have already run the loop one last time with the
                 //   character set to the psueudo {eof} value.  Now it is time
                 //   to unconditionally bail out.
                 if (result == initialPosition) {
@@ -1341,7 +1319,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
 
         int16_t completedRule = row->fAccepting;
         if (completedRule > 0) {
-            // Lookahead match is completed.  
+            // Lookahead match is completed.
             int32_t lookaheadResult = lookAheadMatches.getPosition(completedRule);
             if (lookaheadResult >= 0) {
                 UTEXT_SETNATIVEINDEX(fText, lookaheadResult);
@@ -1362,13 +1340,13 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
             break;
         }
 
-        // Move (backwards) to the next character to process.  
+        // Move (backwards) to the next character to process.
         // If this is a beginning-of-input loop iteration, don't advance
         //    the input position.  The next iteration will be processing the
         //    first real input character.
         if (mode == RBBI_RUN) {
             c = UTEXT_PREVIOUS32(fText);
-        } else {            
+        } else {
             if (mode == RBBI_START) {
                 mode = RBBI_RUN;
             }
@@ -1566,13 +1544,13 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     // Reset the old break cache first.
     reset();
 
-    // note: code segment below assumes that dictionary chars are in the 
+    // note: code segment below assumes that dictionary chars are in the
     // startPos-endPos range
     // value returned should be next character in sequence
     if ((endPos - startPos) <= 1) {
         return (reverse ? startPos : endPos);
     }
-    
+
     // Starting from the starting point, scan towards the proposed result,
     // looking for the first dictionary character (which may be the one
     // we're on, if we're starting in the middle of a range).
@@ -1580,7 +1558,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     if (reverse) {
         UTEXT_PREVIOUS32(fText);
     }
-    
+
     int32_t rangeStart = startPos;
     int32_t rangeEnd = endPos;
 
@@ -1592,7 +1570,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     UChar32     c = utext_current32(fText);
 
     UTRIE_GET16(&fData->fTrie, c, category);
-    
+
     // Is the character we're starting on a dictionary character? If so, we
     // need to back up to include the entire run; otherwise the results of
     // the break algorithm will differ depending on where we start. Since
@@ -1635,7 +1613,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
         }
         UTRIE_GET16(&fData->fTrie, c, category);
     }
-    
+
     // Loop through the text, looking for ranges of dictionary characters.
     // For each span, find the appropriate break engine, and ask it to find
     // any breaks within the span.
@@ -1655,22 +1633,22 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
         if (current >= rangeEnd) {
             break;
         }
-        
+
         // We now have a dictionary character. Get the appropriate language object
         // to deal with it.
         const LanguageBreakEngine *lbe = getLanguageBreakEngine(c);
-        
+
         // Ask the language object if there are any breaks. It will leave the text
         // pointer on the other side of its range, ready to search for the next one.
         if (lbe != NULL) {
             foundBreakCount += lbe->findBreaks(fText, rangeStart, rangeEnd, FALSE, fBreakType, breaks);
         }
-        
+
         // Reload the loop variables for the next go-round
         c = utext_current32(fText);
         UTRIE_GET16(&fData->fTrie, c, category);
     }
-    
+
     // If we found breaks, build a new break cache. The first and last entries must
     // be the original starting and ending position.
     if (foundBreakCount > 0) {
@@ -1717,19 +1695,22 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
 U_NAMESPACE_END
 
 
-static icu::UStack *gLanguageBreakFactories = NULL;
+static icu::UStack *gLanguageBreakFactories = nullptr;
+static const icu::UnicodeString *gEmptyString = nullptr;
 static icu::UInitOnce gLanguageBreakFactoriesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gRBBIInitOnce = U_INITONCE_INITIALIZER;
 
 /**
- * Release all static memory held by breakiterator.  
+ * Release all static memory held by breakiterator.
  */
 U_CDECL_BEGIN
-static UBool U_CALLCONV breakiterator_cleanup_dict(void) {
-    if (gLanguageBreakFactories) {
-        delete gLanguageBreakFactories;
-        gLanguageBreakFactories = NULL;
-    }
+static UBool U_CALLCONV rbbi_cleanup(void) {
+    delete gLanguageBreakFactories;
+    gLanguageBreakFactories = nullptr;
+    delete gEmptyString;
+    gEmptyString = nullptr;
     gLanguageBreakFactoriesInitOnce.reset();
+    gRBBIInitOnce.reset();
     return TRUE;
 }
 U_CDECL_END
@@ -1740,6 +1721,11 @@ static void U_CALLCONV _deleteFactory(void *obj) {
 }
 U_CDECL_END
 U_NAMESPACE_BEGIN
+
+static void U_CALLCONV rbbiInit() {
+    gEmptyString = new UnicodeString();
+    ucln_common_registerCleanup(UCLN_COMMON_RBBI, rbbi_cleanup);
+}
 
 static void U_CALLCONV initLanguageFactories() {
     UErrorCode status = U_ZERO_ERROR;
@@ -1755,7 +1741,7 @@ static void U_CALLCONV initLanguageFactories() {
         }
 #endif
     }
-    ucln_common_registerCleanup(UCLN_COMMON_BREAKITERATOR_DICT, breakiterator_cleanup_dict);
+    ucln_common_registerCleanup(UCLN_COMMON_RBBI, rbbi_cleanup);
 }
 
 
@@ -1766,7 +1752,7 @@ getLanguageBreakEngineFromFactory(UChar32 c, int32_t breakType)
     if (gLanguageBreakFactories == NULL) {
         return NULL;
     }
-    
+
     int32_t i = gLanguageBreakFactories->size();
     const LanguageBreakEngine *lbe = NULL;
     while (--i >= 0) {
@@ -1790,7 +1776,7 @@ const LanguageBreakEngine *
 RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
     const LanguageBreakEngine *lbe = NULL;
     UErrorCode status = U_ZERO_ERROR;
-    
+
     if (fLanguageBreakEngines == NULL) {
         fLanguageBreakEngines = new UStack(status);
         if (fLanguageBreakEngines == NULL || U_FAILURE(status)) {
@@ -1799,7 +1785,7 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
             return NULL;
         }
     }
-    
+
     int32_t i = fLanguageBreakEngines->size();
     while (--i >= 0) {
         lbe = (const LanguageBreakEngine *)(fLanguageBreakEngines->elementAt(i));
@@ -1807,11 +1793,11 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
             return lbe;
         }
     }
-    
+
     // No existing dictionary took the character. See if a factory wants to
     // give us a new LanguageBreakEngine for this character.
     lbe = getLanguageBreakEngineFromFactory(c, fBreakType);
-    
+
     // If we got one, use it and push it on our stack.
     if (lbe != NULL) {
         fLanguageBreakEngines->push((void *)lbe, status);
@@ -1819,7 +1805,7 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
         // return it even if the push fails.
         return lbe;
     }
-    
+
     // No engine is forthcoming for this character. Add it to the
     // reject set. Create the reject break engine if needed.
     if (fUnhandledBreakEngine == NULL) {
@@ -1837,11 +1823,11 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
             return NULL;
         }
     }
-    
+
     // Tell the reject engine about the character; at its discretion, it may
     // add more than just the one character.
     fUnhandledBreakEngine->handleCharacter(c, fBreakType);
-        
+
     return fUnhandledBreakEngine;
 }
 
@@ -1854,6 +1840,21 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
 void RuleBasedBreakIterator::setBreakType(int32_t type) {
     fBreakType = type;
     reset();
+}
+
+
+/**
+ * Returns the description used to create this iterator
+ */
+
+const UnicodeString&
+RuleBasedBreakIterator::getRules() const {
+    if (fData != NULL) {
+        return fData->getRuleSourceString();
+    } else {
+        umtx_initOnce(gRBBIInitOnce, &rbbiInit);
+        return *gEmptyString;
+    }
 }
 
 U_NAMESPACE_END
