@@ -196,8 +196,8 @@ enum {
 /*
  * Properties in vector word 2
  * Bits
- * 31..28   http://www.unicode.org/reports/tr51/#Emoji_Properties
- * 27..26   reserved
+ * 31..27   http://www.unicode.org/reports/tr51/#Emoji_Properties
+ *     26   reserved
  * 25..20   Line Break
  * 19..15   Sentence Break
  * 14..10   Word Break
@@ -205,7 +205,8 @@ enum {
  *  4.. 0   Decomposition Type
  */
 enum {
-    UPROPS_2_EMOJI=28,
+    UPROPS_2_EMOJI_COMPONENT=27,
+    UPROPS_2_EMOJI,
     UPROPS_2_EMOJI_PRESENTATION,
     UPROPS_2_EMOJI_MODIFIER,
     UPROPS_2_EMOJI_MODIFIER_BASE

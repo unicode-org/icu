@@ -1,3 +1,5 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *
@@ -45,7 +47,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 7.3 .
+The following is a description of format version 7.4 .
 
 Data contents:
 
@@ -258,6 +260,12 @@ http://www.unicode.org/reports/tr51/#Emoji_Properties
 
 ICU 58 adds fraction-20 numeric values for new Unicode 9 Malayalam fraction characters.
 
+--- Changes in format version 7.4 ---
+
+ICU 60 adds the Emoji_Component property to vector word 2, for emoji 5.
+http://bugs.icu-project.org/trac/ticket/13062
+http://www.unicode.org/reports/tr51/#Emoji_Properties
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -273,8 +281,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 7, 3, 0, 0 },                             /* formatVersion */
-    { 8, 0, 0, 0 }                              /* dataVersion */
+    { 7, 4, 0, 0 },                             /* formatVersion */
+    { 10, 0, 0, 0 }                             /* dataVersion */
 };
 
 class CorePropsBuilder : public PropsBuilder {
@@ -568,6 +576,7 @@ propToBinaries[]={
     { UCHAR_EMOJI_PRESENTATION,             2, UPROPS_2_EMOJI_PRESENTATION },
     { UCHAR_EMOJI_MODIFIER,                 2, UPROPS_2_EMOJI_MODIFIER },
     { UCHAR_EMOJI_MODIFIER_BASE,            2, UPROPS_2_EMOJI_MODIFIER_BASE },
+    { UCHAR_EMOJI_COMPONENT,                2, UPROPS_2_EMOJI_COMPONENT },
 };
 
 struct PropToEnum {

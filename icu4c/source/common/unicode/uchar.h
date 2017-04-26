@@ -427,12 +427,19 @@ typedef enum UProperty {
      * @stable ICU 57
      */
     UCHAR_EMOJI_MODIFIER_BASE=60,
+    /**
+     * Binary property Emoji_Component.
+     * See http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *
+     * @stable ICU 60
+     */
+    UCHAR_EMOJI_COMPONENT=61,
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the last constant for binary Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UCHAR_BINARY_LIMIT=61,
+    UCHAR_BINARY_LIMIT,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** Enumerated property Bidi_Class.

@@ -64,12 +64,14 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
 
 - ticket:12985: Unicode 10
 - ticket:13061: undo hacks from emoji 5.0 update
+- ticket:13062: add Emoji_Component property
 - ^/branches/markus/uni10
 
 *** CLDR Trac
 
 - cldrbug 10055: Unicode 10
 - cldrbug 9882: Unicode 10 script metadata
+- cldrbug 10219: numbering systems for Unicode 10
 
 *** Unicode version numbers
 - makedata.mak
@@ -205,7 +207,7 @@ $ICU_SRC/tools/unicode/c/icudefs.txt:
 # Location (--prefix) of where ICU was installed.
 set(ICU_INST_DIR /usr/local/google/home/mscherer/svn.icu/trunk/inst/icu4c)
 # Location of the ICU4C source tree.
-set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/svn.icu/trunk/src/icu4c)
+set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/svn.icu/uni10/src/icu4c)
 
   $ICU_ROOT/dbg/tools/unicode/c$
     cmake ../../../../src/tools/unicode/c

@@ -35,6 +35,7 @@ property;String;dm;Decomposition_Mapping
 property;Enumerated;dt;Decomposition_Type
 property;Enumerated;ea;East_Asian_Width
 property;Binary;Emoji;Emoji
+property;Binary;Emoji_Component;Emoji_Component
 property;Binary;Emoji_Modifier;Emoji_Modifier
 property;Binary;Emoji_Modifier_Base;Emoji_Modifier_Base
 property;Binary;Emoji_Presentation;Emoji_Presentation
@@ -1207,30 +1208,30 @@ cp;001F;bc=S;ea=N;GCB=CN;-Gr_Base;lb=CM;Name_Alias=control=INFORMATION SEPARATOR
 cp;0020;bc=WS;gc=Zs;lb=SP;na=SPACE;Name_Alias=abbreviation=SP;Pat_WS;SB=SP;WSpace
 cp;0021;bc=ON;gc=Po;lb=EX;na=EXCLAMATION MARK;Pat_Syn;SB=ST;STerm;Term
 cp;0022;bc=ON;gc=Po;lb=QU;na=QUOTATION MARK;Pat_Syn;QMark;SB=CL;WB=DQ
-cp;0023;bc=ET;Emoji;gc=Po;na=NUMBER SIGN;Pat_Syn
+cp;0023;bc=ET;Emoji;Emoji_Component;gc=Po;na=NUMBER SIGN;Pat_Syn
 cp;0024;bc=ET;gc=Sc;lb=PR;na=DOLLAR SIGN;Pat_Syn
 cp;0025;bc=ET;gc=Po;lb=PO;na=PERCENT SIGN;Pat_Syn
 cp;0026;bc=ON;gc=Po;na=AMPERSAND;Pat_Syn
 cp;0027;bc=ON;CI;gc=Po;lb=QU;na=APOSTROPHE;Pat_Syn;QMark;SB=CL;WB=SQ
 cp;0028;bc=ON;Bidi_M;bmg=0029;bpb=0029;bpt=o;gc=Ps;lb=OP;na=LEFT PARENTHESIS;Pat_Syn;SB=CL
 cp;0029;bc=ON;Bidi_M;bmg=0028;bpb=0028;bpt=c;gc=Pe;lb=CP;na=RIGHT PARENTHESIS;Pat_Syn;SB=CL
-cp;002A;bc=ON;Emoji;gc=Po;na=ASTERISK;Pat_Syn
+cp;002A;bc=ON;Emoji;Emoji_Component;gc=Po;na=ASTERISK;Pat_Syn
 cp;002B;bc=ES;gc=Sm;lb=PR;Math;na=PLUS SIGN;Pat_Syn
 cp;002C;bc=CS;gc=Po;lb=IS;na=COMMA;Pat_Syn;SB=SC;Term;WB=MN
 cp;002D;bc=ES;Dash;gc=Pd;Hyphen;InSC=Consonant_Placeholder;lb=HY;na=HYPHEN-MINUS;Pat_Syn;SB=SC
 cp;002E;bc=CS;CI;gc=Po;lb=IS;na=FULL STOP;Pat_Syn;SB=AT;STerm;Term;WB=MB
 cp;002F;bc=CS;gc=Po;lb=SY;na=SOLIDUS;Pat_Syn
 # ASCII digits
-cp;0030;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT ZERO;nt=De;nv=0;SB=NU;WB=NU;XIDC
-cp;0031;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT ONE;nt=De;nv=1;SB=NU;WB=NU;XIDC
-cp;0032;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT TWO;nt=De;nv=2;SB=NU;WB=NU;XIDC
-cp;0033;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT THREE;nt=De;nv=3;SB=NU;WB=NU;XIDC
-cp;0034;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT FOUR;nt=De;nv=4;SB=NU;WB=NU;XIDC
-cp;0035;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT FIVE;nt=De;nv=5;SB=NU;WB=NU;XIDC
-cp;0036;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT SIX;nt=De;nv=6;SB=NU;WB=NU;XIDC
-cp;0037;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT SEVEN;nt=De;nv=7;SB=NU;WB=NU;XIDC
-cp;0038;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=NU;XIDC
-cp;0039;AHex;bc=EN;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;XIDC
+cp;0030;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT ZERO;nt=De;nv=0;SB=NU;WB=NU;XIDC
+cp;0031;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT ONE;nt=De;nv=1;SB=NU;WB=NU;XIDC
+cp;0032;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT TWO;nt=De;nv=2;SB=NU;WB=NU;XIDC
+cp;0033;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT THREE;nt=De;nv=3;SB=NU;WB=NU;XIDC
+cp;0034;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT FOUR;nt=De;nv=4;SB=NU;WB=NU;XIDC
+cp;0035;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT FIVE;nt=De;nv=5;SB=NU;WB=NU;XIDC
+cp;0036;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT SIX;nt=De;nv=6;SB=NU;WB=NU;XIDC
+cp;0037;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT SEVEN;nt=De;nv=7;SB=NU;WB=NU;XIDC
+cp;0038;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=NU;XIDC
+cp;0039;AHex;bc=EN;Emoji;Emoji_Component;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;XIDC
 # ASCII punctuation and symbols
 cp;003A;bc=CS;CI;gc=Po;lb=IS;na=COLON;Pat_Syn;SB=SC;Term;WB=ML
 cp;003B;bc=ON;gc=Po;lb=IS;na=SEMICOLON;Pat_Syn;Term;WB=MN
@@ -34106,32 +34107,32 @@ cp;1F1AB;age=9.0;na=SQUARED UHD
 cp;1F1AC;age=9.0;na=SQUARED VOD
 cp;1F1AD..1F1E5;age=NA;ea=N;gc=Cn;-Gr_Base;lb=ID;sc=Zzzz
 # Regional indicator symbols
-cp;1F1E6;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER A;RI;WB=RI
-cp;1F1E7;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER B;RI;WB=RI
-cp;1F1E8;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER C;RI;WB=RI
-cp;1F1E9;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER D;RI;WB=RI
-cp;1F1EA;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER E;RI;WB=RI
-cp;1F1EB;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER F;RI;WB=RI
-cp;1F1EC;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER G;RI;WB=RI
-cp;1F1ED;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER H;RI;WB=RI
-cp;1F1EE;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER I;RI;WB=RI
-cp;1F1EF;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER J;RI;WB=RI
-cp;1F1F0;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER K;RI;WB=RI
-cp;1F1F1;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER L;RI;WB=RI
-cp;1F1F2;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER M;RI;WB=RI
-cp;1F1F3;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER N;RI;WB=RI
-cp;1F1F4;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER O;RI;WB=RI
-cp;1F1F5;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER P;RI;WB=RI
-cp;1F1F6;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER Q;RI;WB=RI
-cp;1F1F7;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER R;RI;WB=RI
-cp;1F1F8;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER S;RI;WB=RI
-cp;1F1F9;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER T;RI;WB=RI
-cp;1F1FA;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER U;RI;WB=RI
-cp;1F1FB;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER V;RI;WB=RI
-cp;1F1FC;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER W;RI;WB=RI
-cp;1F1FD;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER X;RI;WB=RI
-cp;1F1FE;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER Y;RI;WB=RI
-cp;1F1FF;ea=N;Emoji;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER Z;RI;WB=RI
+cp;1F1E6;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER A;RI;WB=RI
+cp;1F1E7;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER B;RI;WB=RI
+cp;1F1E8;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER C;RI;WB=RI
+cp;1F1E9;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER D;RI;WB=RI
+cp;1F1EA;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER E;RI;WB=RI
+cp;1F1EB;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER F;RI;WB=RI
+cp;1F1EC;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER G;RI;WB=RI
+cp;1F1ED;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER H;RI;WB=RI
+cp;1F1EE;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER I;RI;WB=RI
+cp;1F1EF;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER J;RI;WB=RI
+cp;1F1F0;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER K;RI;WB=RI
+cp;1F1F1;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER L;RI;WB=RI
+cp;1F1F2;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER M;RI;WB=RI
+cp;1F1F3;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER N;RI;WB=RI
+cp;1F1F4;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER O;RI;WB=RI
+cp;1F1F5;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER P;RI;WB=RI
+cp;1F1F6;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER Q;RI;WB=RI
+cp;1F1F7;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER R;RI;WB=RI
+cp;1F1F8;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER S;RI;WB=RI
+cp;1F1F9;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER T;RI;WB=RI
+cp;1F1FA;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER U;RI;WB=RI
+cp;1F1FB;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER V;RI;WB=RI
+cp;1F1FC;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER W;RI;WB=RI
+cp;1F1FD;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER X;RI;WB=RI
+cp;1F1FE;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER Y;RI;WB=RI
+cp;1F1FF;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER Z;RI;WB=RI
 
 block;1F200..1F2FF;age=5.2;blk=Enclosed_Ideographic_Sup;CWKCF;dt=Sqr;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy
 # 1F200..1F2FF Enclosed Ideographic Supplement
@@ -34489,11 +34490,11 @@ cp;1F3F9;age=8.0;na=BOW AND ARROW
 # Miscellaneous symbol
 cp;1F3FA;age=8.0;na=AMPHORA
 # Emoji modifiers
-cp;1F3FB;age=8.0;CI;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-1-2;WB=EM
-cp;1F3FC;age=8.0;CI;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-3;WB=EM
-cp;1F3FD;age=8.0;CI;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-4;WB=EM
-cp;1F3FE;age=8.0;CI;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-5;WB=EM
-cp;1F3FF;age=8.0;CI;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-6;WB=EM
+cp;1F3FB;age=8.0;CI;Emoji_Component;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-1-2;WB=EM
+cp;1F3FC;age=8.0;CI;Emoji_Component;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-3;WB=EM
+cp;1F3FD;age=8.0;CI;Emoji_Component;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-4;WB=EM
+cp;1F3FE;age=8.0;CI;Emoji_Component;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-5;WB=EM
+cp;1F3FF;age=8.0;CI;Emoji_Component;Emoji_Modifier;gc=Sk;GCB=EM;lb=EM;na=EMOJI MODIFIER FITZPATRICK TYPE-6;WB=EM
 # Animal symbols
 cp;1F400;na=RAT
 cp;1F401;na=MOUSE

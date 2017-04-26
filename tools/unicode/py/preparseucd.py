@@ -76,8 +76,6 @@ _ignored_properties = set((
   "XO_NFD",
   "XO_NFKC",
   "XO_NFKD",
-  # TODO: ICU 60 should support this after UTS #51 Emoji 5.0 is released.
-  "Emoji_Component",
   # ICU does not (yet) support Vertical_Orientation.
   "vo",
   # ICU does not use Unihan properties.
@@ -528,6 +526,7 @@ def ParsePropertyAliases(in_file):
   AddBinaryProperty("Emoji_Presentation", "Emoji_Presentation")
   AddBinaryProperty("Emoji_Modifier", "Emoji_Modifier")
   AddBinaryProperty("Emoji_Modifier_Base", "Emoji_Modifier_Base")
+  AddBinaryProperty("Emoji_Component", "Emoji_Component")
   # C/POSIX character classes that do not have Unicode property [value] aliases.
   # See uchar.h.
   AddPOSIXBinaryProperty("alnum")
