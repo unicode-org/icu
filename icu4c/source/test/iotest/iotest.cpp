@@ -698,9 +698,7 @@ static void addAllTests(TestNode** root) {
     addTest(root, &DataDrivenPrintfPrecision, "datadriv/DataDrivenPrintfPrecision");
     addTest(root, &DataDrivenScanf, "datadriv/DataDrivenScanf");
 #endif
-#if U_IOSTREAM_SOURCE >= 199711
     addStreamTests(root);
-#endif
 }
 
 /* returns the path to icu/source/data/out */

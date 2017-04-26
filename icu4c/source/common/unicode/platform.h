@@ -330,31 +330,6 @@
 #   define U_HAVE_INTTYPES_H U_HAVE_STDINT_H
 #endif
 
-/**
- * \def U_IOSTREAM_SOURCE
- * Defines what support for C++ streams is available.
- *
- * If U_IOSTREAM_SOURCE is set to 199711, then &lt;iostream&gt; is available
- * (the ISO/IEC C++ FDIS was published in November 1997), and then
- * one should qualify streams using the std namespace in ICU header
- * files.
- * Starting with ICU 49, this is the only supported version.
- *
- * If U_IOSTREAM_SOURCE is set to 198506, then &lt;iostream.h&gt; is
- * available instead (in June 1985 Stroustrup published
- * "An Extensible I/O Facility for C++" at the summer USENIX conference).
- * Starting with ICU 49, this version is not supported any more.
- *
- * If U_IOSTREAM_SOURCE is 0 (or any value less than 199711),
- * then C++ streams are not available and
- * support for them will be silently suppressed in ICU.
- *
- * @internal
- */
-#ifndef U_IOSTREAM_SOURCE
-#define U_IOSTREAM_SOURCE 199711
-#endif
-
 /*===========================================================================*/
 /** @{ Compiler and environment features                                     */
 /*===========================================================================*/
