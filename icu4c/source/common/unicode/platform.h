@@ -506,22 +506,6 @@ namespace std {
 #endif
 
 /**
- * \def U_HAVE_RVALUE_REFERENCES
- * Set to 1 if the compiler supports rvalue references.
- * C++11 feature, necessary for move constructor & move assignment.
- * @internal
- */
-#ifdef U_HAVE_RVALUE_REFERENCES
-    /* Use the predefined value. */
-#elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_rvalue_references) \
-        || defined(__GXX_EXPERIMENTAL_CXX0X__) \
-        || (defined(_MSC_VER) && _MSC_VER >= 1600)  /* Visual Studio 2010 */
-#   define U_HAVE_RVALUE_REFERENCES 1
-#else
-#   define U_HAVE_RVALUE_REFERENCES 0
-#endif
-
-/**
  * \def U_NOEXCEPT
  * "noexcept" if supported, otherwise empty.
  * Some code, especially STL containers, uses move semantics of objects only

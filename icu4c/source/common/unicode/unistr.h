@@ -1901,7 +1901,6 @@ public:
    */
   UnicodeString &fastCopyFrom(const UnicodeString &src);
 
-#if U_HAVE_RVALUE_REFERENCES
   /**
    * Move assignment operator, might leave src in bogus state.
    * This string will have the same contents and state that the source string had.
@@ -1913,7 +1912,7 @@ public:
   UnicodeString &operator=(UnicodeString &&src) U_NOEXCEPT {
     return moveFrom(src);
   }
-#endif
+
   // do not use #ifndef U_HIDE_DRAFT_API for moveFrom, needed by non-draft API
   /**
    * Move assignment, might leave src in bogus state.
@@ -3360,7 +3359,6 @@ public:
    */
   UnicodeString(const UnicodeString& that);
 
-#if U_HAVE_RVALUE_REFERENCES
   /**
    * Move constructor, might leave src in bogus state.
    * This string will have the same contents and state that the source string had.
@@ -3368,7 +3366,6 @@ public:
    * @stable ICU 56
    */
   UnicodeString(UnicodeString &&src) U_NOEXCEPT;
-#endif
 
   /**
    * 'Substring' constructor from tail of source string.

@@ -375,7 +375,6 @@ void LocalPointerTest::TestLocalPointerMoveSwap() {
     if(s3.getAlias() != p1 || s1.isValid()) {
         errln("LocalPointer.moveFrom() did not move");
     }
-#if U_HAVE_RVALUE_REFERENCES
     infoln("TestLocalPointerMoveSwap() with rvalue references");
     s1 = static_cast<LocalPointer<UnicodeString> &&>(s3);
     if(s1.getAlias() != p1 || s3.isValid()) {
@@ -385,9 +384,6 @@ void LocalPointerTest::TestLocalPointerMoveSwap() {
     if(s4.getAlias() != p2 || s2.isValid()) {
         errln("LocalPointer move constructor did not move");
     }
-#else
-    infoln("TestLocalPointerMoveSwap() without rvalue references");
-#endif
 
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
@@ -472,7 +468,6 @@ void LocalPointerTest::TestLocalArrayMoveSwap() {
     if(a3.getAlias() != p1 || a1.isValid()) {
         errln("LocalArray.moveFrom() did not move");
     }
-#if U_HAVE_RVALUE_REFERENCES
     infoln("TestLocalArrayMoveSwap() with rvalue references");
     a1 = static_cast<LocalArray<UnicodeString> &&>(a3);
     if(a1.getAlias() != p1 || a3.isValid()) {
@@ -482,9 +477,6 @@ void LocalPointerTest::TestLocalArrayMoveSwap() {
     if(a4.getAlias() != p2 || a2.isValid()) {
         errln("LocalArray move constructor did not move");
     }
-#else
-    infoln("TestLocalArrayMoveSwap() without rvalue references");
-#endif
 
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
@@ -644,7 +636,6 @@ void LocalPointerTest::TestLocalXyzPointerMoveSwap() {
     if(f3.getAlias() != p1 || f1.isValid()) {
         errln("LocalUNormalizer2Pointer.moveFrom() did not move");
     }
-#if U_HAVE_RVALUE_REFERENCES
     infoln("TestLocalXyzPointerMoveSwap() with rvalue references");
     f1 = static_cast<LocalUNormalizer2Pointer &&>(f3);
     if(f1.getAlias() != p1 || f3.isValid()) {
@@ -654,9 +645,6 @@ void LocalPointerTest::TestLocalXyzPointerMoveSwap() {
     if(f4.getAlias() != p2 || f2.isValid()) {
         errln("LocalUNormalizer2Pointer move constructor did not move");
     }
-#else
-    infoln("TestLocalXyzPointerMoveSwap() without rvalue references");
-#endif
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
