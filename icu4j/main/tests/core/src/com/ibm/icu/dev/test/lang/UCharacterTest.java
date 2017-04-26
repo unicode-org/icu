@@ -1542,6 +1542,8 @@ public final class UCharacterTest extends TestFmwk
             { 0x0590, UCharacterDirection.LEFT_TO_RIGHT },
             { 0x0600, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x07C0, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x0860, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x0870, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },  // Unicode 10 changes U+0860..U+086F from R to AL.
             { 0x08A0, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x0900, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+08A0..U+08FF from R to AL */
             { 0x20A0, UCharacterDirection.LEFT_TO_RIGHT },
@@ -1635,8 +1637,6 @@ public final class UCharacterTest extends TestFmwk
                                 shouldBeDir=defaultBidi[i][1];
                             }
 
-                            // TODO: Remove this version check, see ticket #13061.
-                            if (VersionInfo.ICU_VERSION.getMajor() != 59)
                             if (UCharacter.getDirection(c) != shouldBeDir
                                 || UCharacter.getIntPropertyValue(c,
                                                           UProperty.BIDI_CLASS)
