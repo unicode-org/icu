@@ -41,7 +41,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "9.0"
+#define U_UNICODE_VERSION "10.0"
 
 /**
  * \file
@@ -1647,6 +1647,23 @@ enum UBlockCode {
     /** @stable ICU 58 */
     UBLOCK_TANGUT_COMPONENTS = 273, /*[18800]*/
 
+    // New blocks in Unicode 10.0
+
+    /** @stable ICU 60 */
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F = 274, /*[2CEB0]*/
+    /** @stable ICU 60 */
+    UBLOCK_KANA_EXTENDED_A = 275, /*[1B100]*/
+    /** @stable ICU 60 */
+    UBLOCK_MASARAM_GONDI = 276, /*[11D00]*/
+    /** @stable ICU 60 */
+    UBLOCK_NUSHU = 277, /*[1B170]*/
+    /** @stable ICU 60 */
+    UBLOCK_SOYOMBO = 278, /*[11A50]*/
+    /** @stable ICU 60 */
+    UBLOCK_SYRIAC_SUPPLEMENT = 279, /*[0860]*/
+    /** @stable ICU 60 */
+    UBLOCK_ZANABAZAR_SQUARE = 280, /*[11A00]*/
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UBlockCode value.
@@ -1654,7 +1671,7 @@ enum UBlockCode {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UBLOCK_COUNT = 274,
+    UBLOCK_COUNT = 281,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** @stable ICU 2.0 */
@@ -1930,6 +1947,19 @@ typedef enum UJoiningGroup {
     U_JG_AFRICAN_FEH,  /**< @stable ICU 58 */
     U_JG_AFRICAN_NOON,  /**< @stable ICU 58 */
     U_JG_AFRICAN_QAF,  /**< @stable ICU 58 */
+
+    U_JG_MALAYALAM_BHA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_JA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_LLA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_LLLA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_NGA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_NNA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_NNNA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_NYA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_RA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_SSA,  /**< @stable ICU 60 */
+    U_JG_MALAYALAM_TTA,  /**< @stable ICU 60 */
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UJoiningGroup value.
