@@ -3474,6 +3474,21 @@ const char* const basic_maximize_data[][2] = {
   }, {
      "de_Latn_DE_u_co_phonebk",
      "de_Latn_DE_U_CO_PHONEBK"
+  }, {
+    "_Arab@em=emoji",
+    "ar_Arab_EG@em=emoji"
+  }, {
+    "_Latn@em=emoji",
+    "en_Latn_US@em=emoji"
+  }, {
+    "_Latn_DE@em=emoji",
+    "de_Latn_DE@em=emoji"
+  }, {
+    "_Zzzz_DE@em=emoji",
+    "de_Latn_DE@em=emoji"
+  }, {
+    "_DE@em=emoji",
+    "de_Latn_DE@em=emoji"
   }
 };
 
@@ -6022,6 +6037,11 @@ static const struct {
     {"en-u-baz-ca-islamic-civil",   "en@attribute=baz;calendar=islamic-civil",  FULL_LENGTH},
     {"en-a-bar-u-ca-islamic-civil-x-u-foo", "en@a=bar;calendar=islamic-civil;x=u-foo",  FULL_LENGTH},
     {"en-a-bar-u-baz-ca-islamic-civil-x-u-foo", "en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",    FULL_LENGTH},
+    {"und-Arab-u-em-emoji", "_Arab@em=emoji", FULL_LENGTH},
+    {"und-Latn-u-em-emoji", "_Latn@em=emoji", FULL_LENGTH},
+    {"und-Latn-DE-u-em-emoji", "_Latn_DE@em=emoji", FULL_LENGTH},
+    {"und-Zzzz-DE-u-em-emoji", "_Zzzz_DE@em=emoji", FULL_LENGTH},
+    {"und-DE-u-em-emoji", "_DE@em=emoji", FULL_LENGTH},
     {NULL,          NULL,           0}
 };
 
