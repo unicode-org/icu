@@ -1161,6 +1161,23 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 58 */
         public static final int TANGUT_COMPONENTS_ID = 273; /*[18800]*/
 
+        // New blocks in Unicode 10.0
+
+        /** @stable ICU 60 */
+        public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F_ID = 274; /*[2CEB0]*/
+        /** @stable ICU 60 */
+        public static final int KANA_EXTENDED_A_ID = 275; /*[1B100]*/
+        /** @stable ICU 60 */
+        public static final int MASARAM_GONDI_ID = 276; /*[11D00]*/
+        /** @stable ICU 60 */
+        public static final int NUSHU_ID = 277; /*[1B170]*/
+        /** @stable ICU 60 */
+        public static final int SOYOMBO_ID = 278; /*[11A50]*/
+        /** @stable ICU 60 */
+        public static final int SYRIAC_SUPPLEMENT_ID = 279; /*[0860]*/
+        /** @stable ICU 60 */
+        public static final int ZANABAZAR_SQUARE_ID = 280; /*[11A00]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1168,7 +1185,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 274;
+        public static final int COUNT = 281;
 
         // blocks objects ---------------------------------------------------
 
@@ -2426,6 +2443,28 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock TANGUT_COMPONENTS =
                 new UnicodeBlock("TANGUT_COMPONENTS", TANGUT_COMPONENTS_ID); /*[18800]*/
 
+        // New blocks in Unicode 10.0
+
+        /** @stable ICU 60 */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F =
+                new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F", CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F_ID); /*[2CEB0]*/
+        /** @stable ICU 60 */
+        public static final UnicodeBlock KANA_EXTENDED_A =
+                new UnicodeBlock("KANA_EXTENDED_A", KANA_EXTENDED_A_ID); /*[1B100]*/
+        /** @stable ICU 60 */
+        public static final UnicodeBlock MASARAM_GONDI =
+                new UnicodeBlock("MASARAM_GONDI", MASARAM_GONDI_ID); /*[11D00]*/
+        /** @stable ICU 60 */
+        public static final UnicodeBlock NUSHU = new UnicodeBlock("NUSHU", NUSHU_ID); /*[1B170]*/
+        /** @stable ICU 60 */
+        public static final UnicodeBlock SOYOMBO = new UnicodeBlock("SOYOMBO", SOYOMBO_ID); /*[11A50]*/
+        /** @stable ICU 60 */
+        public static final UnicodeBlock SYRIAC_SUPPLEMENT =
+                new UnicodeBlock("SYRIAC_SUPPLEMENT", SYRIAC_SUPPLEMENT_ID); /*[0860]*/
+        /** @stable ICU 60 */
+        public static final UnicodeBlock ZANABAZAR_SQUARE =
+                new UnicodeBlock("ZANABAZAR_SQUARE", ZANABAZAR_SQUARE_ID); /*[11A00]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -3031,6 +3070,29 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 58 */
         public static final int AFRICAN_QAF = 88;
 
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_BHA = 89;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_JA = 90;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_LLA = 91;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_LLLA = 92;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_NGA = 93;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_NNA = 94;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_NNNA = 95;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_NYA = 96;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_RA = 97;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_SSA = 98;
+        /** @stable ICU 60 */
+        public static final int MALAYALAM_TTA = 99;
+
         /**
          * One more than the highest normal JoiningGroup value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.JoiningGroup).
@@ -3038,7 +3100,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 89;
+        public static final int COUNT = 100;
     }
 
     /**

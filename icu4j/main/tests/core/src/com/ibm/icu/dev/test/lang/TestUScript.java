@@ -90,12 +90,12 @@ public class TestUScript extends TestFmwk {
             }
         }
         reportDataErrors(numErrors);
-        
-        // 
-        ULocale defaultLoc = ULocale.getDefault(); 
+
+        //
+        ULocale defaultLoc = ULocale.getDefault();
         ULocale esperanto = new ULocale("eo_DE");
         ULocale.setDefault(esperanto);
-        int[] code = UScript.getCode(esperanto); 
+        int[] code = UScript.getCode(esperanto);
         if(code != null){
             if( code[0] != UScript.LATIN){
                 errln("Did not get the expected script code for Esperanto");
@@ -157,7 +157,7 @@ public class TestUScript extends TestFmwk {
         int numErrors = 0;
         for(int i=0; i<testNames.length;i++){
             int[] code = UScript.getCode(testNames[i]);
-            int[] expt = (int[]) expected[i];
+            int[] expt = expected[i];
             if(code!=null){
                 for(int j =0; j< code.length;j++){
                     if(code[j]!=expt[j]){
@@ -171,7 +171,7 @@ public class TestUScript extends TestFmwk {
             }
         }
         reportDataErrors(numErrors);
-        
+
         //cover UScript.getCode(Locale)
         Locale[] testLocales = new Locale[] {
             Locale.JAPANESE,
@@ -183,7 +183,7 @@ public class TestUScript extends TestFmwk {
         for(int i=0; i<testNames.length;i++){
             logln("  Testing locale: " + testLocales[i].getDisplayName());
             int[] code = UScript.getCode(testLocales[i]);
-            int[] expt = (int[]) expected[i];
+            int[] expt = expected[i];
             if(code!=null){
                 for(int j =0; j< code.length;j++){
                     if(code[j]!=expt[j]){
@@ -196,7 +196,7 @@ public class TestUScript extends TestFmwk {
                 logln("  Error getting script code for name "+testNames[i]);
             }
         }
-        reportDataErrors(numErrors);                 
+        reportDataErrors(numErrors);
     }
 
     @Test
@@ -204,7 +204,7 @@ public class TestUScript extends TestFmwk {
 
         final String[] testNames={
             /* test locale */
-            "en", "en_US", "sr", "ta", "gu", "te_IN", 
+            "en", "en_US", "sr", "ta", "gu", "te_IN",
             "hi", "he", "ar",
             /* test abbr */
             "Hani", "Hang","Hebr","Hira",
@@ -334,7 +334,7 @@ public class TestUScript extends TestFmwk {
                 {0x0000FFBE, UScript.HANGUL },
                 {0x0000FFC7, UScript.HANGUL },
                 {0x0000FFCF, UScript.HANGUL },
-                {0x0000FFD7, UScript.HANGUL}, 
+                {0x0000FFD7, UScript.HANGUL},
                 {0x0000FFDC, UScript.HANGUL},
                 {0x00010300, UScript.OLD_ITALIC},
                 {0x00010330, UScript.GOTHIC},
@@ -347,7 +347,7 @@ public class TestUScript extends TestFmwk {
                 {0x0001D1AA, UScript.INHERITED},
                 {0x00020000, UScript.HAN},
                 {0x00000D02, UScript.MALAYALAM},
-                {0x00000D00, UScript.UNKNOWN},
+                {0x00050005, UScript.UNKNOWN},  // new Zzzz value in Unicode 5.0
                 {0x00000000, UScript.COMMON},
                 {0x0001D169, UScript.INHERITED },
                 {0x0001D182, UScript.INHERITED },
@@ -481,7 +481,8 @@ public class TestUScript extends TestFmwk {
         }
 
         if(UScript.getUsage(UScript.LATIN)!=ScriptUsage.RECOMMENDED ||
-                UScript.getUsage(UScript.YI)!=ScriptUsage.ASPIRATIONAL ||
+                // Unicode 10 gives up on "aspirational".
+                UScript.getUsage(UScript.YI)!=ScriptUsage.LIMITED_USE ||
                 UScript.getUsage(UScript.CHEROKEE)!=ScriptUsage.LIMITED_USE ||
                 UScript.getUsage(UScript.COPTIC)!=ScriptUsage.EXCLUDED ||
                 UScript.getUsage(UScript.CIRTH)!=ScriptUsage.NOT_ENCODED ||
@@ -626,8 +627,8 @@ public class TestUScript extends TestFmwk {
             "Geok", "Hans", "Hant", "Pahawh_Hmong", "Old_Hungarian", "Inds",
             "Javanese", "Kayah_Li", "Latf", "Latg",
             "Lepcha", "Linear_A", "Mandaic", "Maya", "Meroitic_Hieroglyphs",
-            "Nko", "Old_Turkic", "Old_Permic", "Phags_Pa", "Phoenician", 
-            "Miao", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
+            "Nko", "Old_Turkic", "Old_Permic", "Phags_Pa", "Phoenician",
+            "Miao", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform",
             "Zxxx", "Unknown",
             "Carian", "Jpan", "Tai_Tham", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "SignWriting", "Sundanese",
             "Moon", "Meetei_Mayek",
@@ -643,7 +644,7 @@ public class TestUScript extends TestFmwk {
             "Loma", "Mende_Kikakui", "Meroitic_Cursive",
             "Old_North_Arabian", "Nabataean", "Palmyrene", "Khudawadi", "Warang_Citi",
             /* new in ICU 4.8 */
-            "Afak", "Jurc", "Mro", "Nshu", "Sharada", "Sora_Sompeng", "Takri", "Tangut", "Wole",
+            "Afak", "Jurc", "Mro", "Nushu", "Sharada", "Sora_Sompeng", "Takri", "Tangut", "Wole",
             /* new in ICU 49 */
             "Anatolian_Hieroglyphs", "Khojki", "Tirhuta",
             /* new in ICU 52 */
@@ -651,7 +652,9 @@ public class TestUScript extends TestFmwk {
             /* new in ICU 54 */
             "Ahom", "Hatran", "Modi", "Multani", "Pau_Cin_Hau", "Siddham",
             // new in ICU 58
-            "Adlam", "Bhaiksuki", "Marchen", "Newa", "Osage", "Hanb", "Jamo", "Zsye"
+            "Adlam", "Bhaiksuki", "Marchen", "Newa", "Osage", "Hanb", "Jamo", "Zsye",
+            // new in ICU 60
+            "Masaram_Gondi", "Soyombo", "Zanabazar_Square"
         };
         String[] expectedShort = new String[]{
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp",
@@ -679,7 +682,9 @@ public class TestUScript extends TestFmwk {
             /* new in ICU 54 */
             "Ahom", "Hatr", "Modi", "Mult", "Pauc", "Sidd",
             // new in ICU 58
-            "Adlm", "Bhks", "Marc", "Newa", "Osge", "Hanb", "Jamo", "Zsye"
+            "Adlm", "Bhks", "Marc", "Newa", "Osge", "Hanb", "Jamo", "Zsye",
+            // new in ICU 60
+            "Gonm", "Soyo", "Zanb"
         };
         if(expectedLong.length!=(UScript.CODE_LIMIT-UScript.BALINESE)) {
             errln("need to add new script codes in lang.TestUScript.java!");

@@ -48,7 +48,7 @@ _scripts_only_in_iso15924 = (
     "Egyd", "Egyh", "Geok",
     "Hanb", "Hans", "Hant",
     "Inds", "Jamo", "Jpan", "Jurc", "Kore", "Kpel", "Latf", "Latg", "Loma",
-    "Maya", "Moon", "Nkgb", "Nshu", "Phlv", "Roro",
+    "Maya", "Moon", "Nkgb", "Phlv", "Roro",
     "Sara", "Syre", "Syrj", "Syrn",
     "Teng", "Visp", "Wole", "Zmth", "Zsye", "Zsym", "Zxxx"
 )
@@ -78,6 +78,8 @@ _ignored_properties = set((
   "XO_NFKD",
   # TODO: ICU 60 should support this after UTS #51 Emoji 5.0 is released.
   "Emoji_Component",
+  # ICU does not (yet) support Vertical_Orientation.
+  "vo",
   # ICU does not use Unihan properties.
   "cjkAccountingNumeric",
   "cjkOtherNumeric",
