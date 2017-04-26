@@ -194,7 +194,7 @@ void TestMessageFormat::testBug2()
 }
 
 #if 0
-#if defined(_DEBUG) && U_IOSTREAM_SOURCE >= 199711
+#if defined(_DEBUG)
 //----------------------------------------------------
 // console I/O
 //----------------------------------------------------
@@ -245,7 +245,7 @@ operator<<( IntlTest&           stream,
     }
     return stream;
 }
-#endif /* defined(_DEBUG) && U_IOSTREAM_SOURCE >= 199711 */
+#endif /* defined(_DEBUG) */
 #endif
 
 void TestMessageFormat::PatternTest() 

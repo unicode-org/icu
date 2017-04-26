@@ -23,7 +23,6 @@
 #include "cmemory.h"
 #include "iotest.h"
 
-#if U_IOSTREAM_SOURCE >= 199711
 #if defined(__GNUC__) && __GNUC__ >= 4
 #define USE_SSTREAM 1
 #include <sstream>
@@ -322,4 +321,3 @@ U_CFUNC void addStreamTests(TestNode** root) {
     addTest(root, &TestStream, "stream/TestStream");
     addTest(root, &TestStreamEOF, "stream/TestStreamEOF");
 }
-#endif
