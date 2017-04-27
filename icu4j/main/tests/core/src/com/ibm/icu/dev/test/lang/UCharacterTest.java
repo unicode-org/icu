@@ -1719,6 +1719,8 @@ public final class UCharacterTest extends TestFmwk
     @Test
     public void TestAdditionalProperties()
     {
+        final int FALSE = 0;
+        final int TRUE = 1;
         // test data for hasBinaryProperty()
         int props[][] = { // code point, property
             { 0x0627, UProperty.ALPHABETIC, 1 },
@@ -2133,6 +2135,13 @@ public final class UCharacterTest extends TestFmwk
             { 0x10AC1, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.MANICHAEAN_BETH },
             { 0x10AEF, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.MANICHAEAN_HUNDRED },
             { 0x10AF0, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.NO_JOINING_GROUP },
+
+            { -1, 0xa00, 0 },  // version break for Unicode 10
+
+            { 0x1F1E5, UProperty.REGIONAL_INDICATOR, FALSE },
+            { 0x1F1E7, UProperty.REGIONAL_INDICATOR, TRUE },
+            { 0x1F1FF, UProperty.REGIONAL_INDICATOR, TRUE },
+            { 0x1F200, UProperty.REGIONAL_INDICATOR, FALSE },
 
             /* undefined UProperty values */
             { 0x61, 0x4a7, 0 },

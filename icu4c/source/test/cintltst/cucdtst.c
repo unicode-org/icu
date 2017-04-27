@@ -2674,6 +2674,13 @@ TestAdditionalProperties() {
         { 0x10AEF, UCHAR_JOINING_GROUP, U_JG_MANICHAEAN_HUNDRED },
         { 0x10AF0, UCHAR_JOINING_GROUP, U_JG_NO_JOINING_GROUP },
 
+        { -1, 0xa00, 0 },  // version break for Unicode 10
+
+        { 0x1F1E5, UCHAR_REGIONAL_INDICATOR, FALSE },
+        { 0x1F1E7, UCHAR_REGIONAL_INDICATOR, TRUE },
+        { 0x1F1FF, UCHAR_REGIONAL_INDICATOR, TRUE },
+        { 0x1F200, UCHAR_REGIONAL_INDICATOR, FALSE },
+
         /* undefined UProperty values */
         { 0x61, 0x4a7, 0 },
         { 0x234bc, 0x15ed, 0 }
