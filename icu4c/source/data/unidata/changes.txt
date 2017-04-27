@@ -164,9 +164,9 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
   -> fix expectedLong names in cucdapi.c/TestUScriptCodeAPI()
       and in com.ibm.icu.dev.test.lang.TestUScript.java
 
-TODO
-
 * New properties as shown in PropertyValueAliases.txt changes
+- boolean Emoji_Component from emoji 5
+  -> uchar.h & UProperty.java
 - boolean
     # Regional_Indicator (RI)
 
@@ -174,6 +174,13 @@ TODO
     RI ; Y                                ; Yes                              ; T                                ; True
   -> uchar.h & UProperty.java
   -> single immutable range, to be hardcoded
+- boolean
+    # Prepended_Concatenation_Mark (PCM)
+
+    PCM; N                                ; No                               ; F                                ; False
+    PCM; Y                                ; Yes                              ; T                                ; True
+  -> was new in Unicode 9
+  -> uchar.h & UProperty.java
 - enumerated
     # Vertical_Orientation (vo)
 
@@ -314,7 +321,7 @@ TODO: cross-link with Unicode tools site
 * update Java data files
 - refresh just the UCD/UCA-related/derived files, just to be safe
 - see (ICU4C)/source/data/icu4j-readme.txt
-- mkdir /tmp/icu4j
+- mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
 - $ICU_ROOT/dbg/icu4c$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
   output:
     ...

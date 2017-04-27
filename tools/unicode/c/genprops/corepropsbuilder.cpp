@@ -262,6 +262,8 @@ ICU 58 adds fraction-20 numeric values for new Unicode 9 Malayalam fraction char
 
 --- Changes in format version 7.4 ---
 
+ICU 60 adds the Prepended_Concatenation_Mark property to vector word 1.
+
 ICU 60 adds the Emoji_Component property to vector word 2, for emoji 5.
 http://bugs.icu-project.org/trac/ticket/13062
 http://www.unicode.org/reports/tr51/#Emoji_Properties
@@ -577,6 +579,7 @@ propToBinaries[]={
     { UCHAR_EMOJI_MODIFIER,                 2, UPROPS_2_EMOJI_MODIFIER },
     { UCHAR_EMOJI_MODIFIER_BASE,            2, UPROPS_2_EMOJI_MODIFIER_BASE },
     { UCHAR_EMOJI_COMPONENT,                2, UPROPS_2_EMOJI_COMPONENT },
+    { UCHAR_PREPENDED_CONCATENATION_MARK,   1, UPROPS_PREPENDED_CONCATENATION_MARK },
 };
 
 struct PropToEnum {

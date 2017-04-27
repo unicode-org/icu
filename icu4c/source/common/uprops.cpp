@@ -283,6 +283,7 @@ static const BinaryProperty binProps[UCHAR_BINARY_LIMIT]={
     { 2,                U_MASK(UPROPS_2_EMOJI_MODIFIER_BASE), defaultContains },
     { 2,                U_MASK(UPROPS_2_EMOJI_COMPONENT), defaultContains },
     { 2,                0, isRegionalIndicator },
+    { 1,                U_MASK(UPROPS_PREPENDED_CONCATENATION_MARK), defaultContains },
 };
 
 U_CAPI UBool U_EXPORT2

@@ -189,7 +189,7 @@ enum {
     UPROPS_VARIATION_SELECTOR,
     UPROPS_PATTERN_SYNTAX,                      /* new in ICU 3.4 and Unicode 4.1 */
     UPROPS_PATTERN_WHITE_SPACE,
-    UPROPS_RESERVED,                            /* reserved & unused */
+    UPROPS_PREPENDED_CONCATENATION_MARK,        // new in ICU 60 and Unicode 10
     UPROPS_BINARY_1_TOP                         /* ==32 - full! */
 };
 
