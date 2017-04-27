@@ -405,6 +405,13 @@ public final class UCharacterProperty
         new BinaryProperty(2, 1<<PROPS_2_EMOJI_MODIFIER),
         new BinaryProperty(2, 1<<PROPS_2_EMOJI_MODIFIER_BASE),
         new BinaryProperty(2, 1<<PROPS_2_EMOJI_COMPONENT),
+        new BinaryProperty(SRC_PROPSVEC) {  // REGIONAL_INDICATOR
+            // Property starts are a subset of lb=RI etc.
+            @Override
+            boolean contains(int c) {
+                return 0x1F1E6<=c && c<=0x1F1FF;
+            }
+        },
     };
 
     public boolean hasBinaryProperty(int c, int which) {

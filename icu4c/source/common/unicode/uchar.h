@@ -434,6 +434,11 @@ typedef enum UProperty {
      * @stable ICU 60
      */
     UCHAR_EMOJI_COMPONENT=61,
+    /**
+     * Binary property Regional_Indicator.
+     * @stable ICU 60
+     */
+    UCHAR_REGIONAL_INDICATOR=62,
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the last constant for binary Unicode properties.

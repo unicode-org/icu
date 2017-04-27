@@ -549,13 +549,19 @@ public interface UProperty
      * @stable ICU 60
      */
     public static final int EMOJI_COMPONENT=61;
+    /**
+     * Binary property Regional_Indicator.
+     *
+     * @stable ICU 60
+     */
+    public static final int REGIONAL_INDICATOR=62;
 
     /**
      * One more than the last constant for binary Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int BINARY_LIMIT = 62;
+    public static final int BINARY_LIMIT = 63;
 
     /**
      * Enumerated property Bidi_Class.
