@@ -2681,6 +2681,10 @@ TestAdditionalProperties() {
         { 0x1F1FF, UCHAR_REGIONAL_INDICATOR, TRUE },
         { 0x1F200, UCHAR_REGIONAL_INDICATOR, FALSE },
 
+        { 0x0600, UCHAR_PREPENDED_CONCATENATION_MARK, TRUE },
+        { 0x0606, UCHAR_PREPENDED_CONCATENATION_MARK, FALSE },
+        { 0x110BD, UCHAR_PREPENDED_CONCATENATION_MARK, TRUE },
+
         /* undefined UProperty values */
         { 0x61, 0x4a7, 0 },
         { 0x234bc, 0x15ed, 0 }

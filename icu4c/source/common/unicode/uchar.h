@@ -148,8 +148,9 @@ U_CDECL_BEGIN
  *
  * The properties APIs are intended to reflect Unicode properties as defined
  * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
- * For details about the properties see http://www.unicode.org/ucd/ .
- * For names of Unicode properties see the UCD file PropertyAliases.txt.
+ *
+ * For details about the properties see
+ * UAX #44: Unicode Character Database (http://www.unicode.org/reports/tr44/).
  *
  * Important: If ICU is built with UCD files from Unicode versions below, e.g., 3.2,
  * then properties marked with "new in Unicode 3.2" are not or not fully available.
@@ -439,6 +440,11 @@ typedef enum UProperty {
      * @stable ICU 60
      */
     UCHAR_REGIONAL_INDICATOR=62,
+    /**
+     * Binary property Prepended_Concatenation_Mark.
+     * @stable ICU 60
+     */
+    UCHAR_PREPENDED_CONCATENATION_MARK=63,
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the last constant for binary Unicode properties.

@@ -412,6 +412,7 @@ public final class UCharacterProperty
                 return 0x1F1E6<=c && c<=0x1F1FF;
             }
         },
+        new BinaryProperty(1, 1<<PREPENDED_CONCATENATION_MARK),
     };
 
     public boolean hasBinaryProperty(int c, int which) {
@@ -1159,6 +1160,7 @@ public final class UCharacterProperty
     private static final int VARIATION_SELECTOR_PROPERTY_ = 28;
     private static final int PATTERN_SYNTAX = 29;                   /* new in ICU 3.4 and Unicode 4.1 */
     private static final int PATTERN_WHITE_SPACE = 30;
+    private static final int PREPENDED_CONCATENATION_MARK = 31;     // new in ICU 60 and Unicode 10
 
     /*
      * Properties in vector word 2
