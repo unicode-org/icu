@@ -23,6 +23,7 @@ import com.ibm.icu.impl.number.modifiers.ConstantAffixModifier;
 import com.ibm.icu.impl.number.modifiers.PositiveNegativeAffixModifier;
 import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
+import com.ibm.icu.text.CompactDecimalFormat.CompactType;
 import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
@@ -324,12 +325,6 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
     private static final int modIndex(int magnitude, StandardPlural plural, boolean isNegative) {
       return magnitude * StandardPlural.COUNT * 2 + plural.ordinal() * 2 + (isNegative ? 1 : 0);
     }
-  }
-
-  // Should this be public or internal?
-  static enum CompactType {
-    DECIMAL,
-    CURRENCY
   }
 
   static class CompactDecimalFingerprint {
