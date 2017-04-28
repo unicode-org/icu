@@ -108,6 +108,7 @@ property;String;Turkic_Case_Folding;Turkic_Case_Folding
 property;String;uc;Uppercase_Mapping
 property;Binary;UIdeo;Unified_Ideograph
 property;Binary;Upper;Uppercase
+property;Enumerated;vo;Vertical_Orientation
 property;Binary;VS;Variation_Selector
 property;Enumerated;WB;Word_Break
 property;Binary;WSpace;White_Space;space
@@ -1144,6 +1145,10 @@ value;tccc;8;KV;Kana_Voicing
 value;tccc;84;CCC84;CCC84
 value;tccc;9;VR;Virama
 value;tccc;91;CCC91;CCC91
+value;vo;R;Rotated
+value;vo;Tr;Transformed_Rotated
+value;vo;Tu;Transformed_Upright
+value;vo;U;Upright
 value;WB;CR;CR
 value;WB;DQ;Double_Quote
 value;WB;EB;E_Base
@@ -1167,7 +1172,7 @@ value;WB;SQ;Single_Quote
 value;WB;XX;Other
 value;WB;ZWJ;ZWJ
 
-defaults;0000..10FFFF;age=NA;bc=L;blk=NB;bpt=n;cf=<code point>;dm=<code point>;dt=None;ea=N;FC_NFKC=<code point>;gc=Cn;GCB=XX;gcm=Cn;hst=NA;InPC=NA;InSC=Other;jg=No_Joining_Group;jt=U;lb=XX;lc=<code point>;NFC_QC=Y;NFD_QC=Y;NFKC_CF=<code point>;NFKC_QC=Y;NFKD_QC=Y;nt=None;SB=XX;sc=Zzzz;scf=<code point>;scx=<script>;slc=<code point>;stc=<code point>;suc=<code point>;tc=<code point>;uc=<code point>;WB=XX
+defaults;0000..10FFFF;age=NA;bc=L;blk=NB;bpt=n;cf=<code point>;dm=<code point>;dt=None;ea=N;FC_NFKC=<code point>;gc=Cn;GCB=XX;gcm=Cn;hst=NA;InPC=NA;InSC=Other;jg=No_Joining_Group;jt=U;lb=XX;lc=<code point>;NFC_QC=Y;NFD_QC=Y;NFKC_CF=<code point>;NFKC_QC=Y;NFKD_QC=Y;nt=None;SB=XX;sc=Zzzz;scf=<code point>;scx=<script>;slc=<code point>;stc=<code point>;suc=<code point>;tc=<code point>;uc=<code point>;vo=R;WB=XX
 
 block;0000..007F;age=1.1;blk=ASCII;ea=Na;gc=Cc;Gr_Base;lb=AL;sc=Zyyy
 # 0000..007F C0 Controls and Basic Latin (Basic Latin)
@@ -1352,17 +1357,17 @@ cp;00A3;-Alpha;bc=ET;-Cased;ea=Na;gc=Sc;-IDC;-IDS;lb=PR;na=POUND SIGN;NFKD_QC=Y;
 cp;00A4;-Alpha;bc=ET;-Cased;ea=A;gc=Sc;-IDC;-IDS;lb=PR;na=CURRENCY SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
 cp;00A5;-Alpha;bc=ET;-Cased;ea=Na;gc=Sc;-IDC;-IDS;lb=PR;na=YEN SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
 cp;00A6;-Alpha;bc=ON;-Cased;ea=Na;gc=So;-IDC;-IDS;na=BROKEN BAR;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
-cp;00A7;-Alpha;bc=ON;-Cased;ea=A;gc=Po;-IDC;-IDS;lb=AI;na=SECTION SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
+cp;00A7;-Alpha;bc=ON;-Cased;ea=A;gc=Po;-IDC;-IDS;lb=AI;na=SECTION SIGN;NFKD_QC=Y;Pat_Syn;vo=U;WB=XX;-XIDC;-XIDS
 cp;00A8;-Alpha;bc=ON;-Cased;CI;CWKCF;Dia;dm=0020 0308;dt=Com;ea=A;gc=Sk;-IDC;-IDS;lb=AI;na=DIAERESIS;NFKC_CF=0020 0308;NFKC_QC=N;WB=XX;-XIDC;-XIDS
-cp;00A9;-Alpha;bc=ON;-Cased;Emoji;gc=So;-IDC;-IDS;na=COPYRIGHT SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
+cp;00A9;-Alpha;bc=ON;-Cased;Emoji;gc=So;-IDC;-IDS;na=COPYRIGHT SIGN;NFKD_QC=Y;Pat_Syn;vo=U;WB=XX;-XIDC;-XIDS
 cp;00AA;CWKCF;dm=0061;dt=Sup;ea=A;gc=Lo;lb=AI;Lower;na=FEMININE ORDINAL INDICATOR;NFKC_CF=0061;NFKC_QC=N;SB=LO;sc=Latn
 cp;00AB;-Alpha;bc=ON;Bidi_M;bmg=00BB;-Cased;gc=Pi;-IDC;-IDS;lb=QU;na=LEFT-POINTING DOUBLE ANGLE QUOTATION MARK;NFKD_QC=Y;Pat_Syn;QMark;SB=CL;WB=XX;-XIDC;-XIDS
 cp;00AC;-Alpha;bc=ON;-Cased;ea=Na;gc=Sm;-IDC;-IDS;Math;na=NOT SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
 cp;00AD;-Alpha;bc=BN;-Cased;CI;CWKCF;DI;ea=A;gc=Cf;GCB=CN;-Gr_Base;Hyphen;-IDC;-IDS;jt=T;lb=BA;na=SOFT HYPHEN;Name_Alias=abbreviation=SHY;NFKC_CF=;NFKD_QC=Y;SB=FO;WB=FO;-XIDC;-XIDS
-cp;00AE;-Alpha;bc=ON;-Cased;ea=A;Emoji;gc=So;-IDC;-IDS;na=REGISTERED SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
+cp;00AE;-Alpha;bc=ON;-Cased;ea=A;Emoji;gc=So;-IDC;-IDS;na=REGISTERED SIGN;NFKD_QC=Y;Pat_Syn;vo=U;WB=XX;-XIDC;-XIDS
 cp;00AF;-Alpha;bc=ON;-Cased;CI;CWKCF;Dia;dm=0020 0304;dt=Com;ea=Na;gc=Sk;-IDC;-IDS;na=MACRON;NFKC_CF=0020 0304;NFKC_QC=N;WB=XX;-XIDC;-XIDS
 cp;00B0;-Alpha;bc=ET;-Cased;ea=A;gc=So;-IDC;-IDS;lb=PO;na=DEGREE SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
-cp;00B1;-Alpha;bc=ET;-Cased;ea=A;gc=Sm;-IDC;-IDS;lb=PR;Math;na=PLUS-MINUS SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
+cp;00B1;-Alpha;bc=ET;-Cased;ea=A;gc=Sm;-IDC;-IDS;lb=PR;Math;na=PLUS-MINUS SIGN;NFKD_QC=Y;Pat_Syn;vo=U;WB=XX;-XIDC;-XIDS
 cp;00B2;-Alpha;bc=EN;-Cased;CWKCF;dm=0032;dt=Sup;ea=A;gc=No;-IDC;-IDS;InSC=Syllable_Modifier;lb=AI;na=SUPERSCRIPT TWO;NFKC_CF=0032;NFKC_QC=N;nt=Di;nv=2;WB=XX;-XIDC;-XIDS
 cp;00B3;-Alpha;bc=EN;-Cased;CWKCF;dm=0033;dt=Sup;ea=A;gc=No;-IDC;-IDS;InSC=Syllable_Modifier;lb=AI;na=SUPERSCRIPT THREE;NFKC_CF=0033;NFKC_QC=N;nt=Di;nv=3;WB=XX;-XIDC;-XIDS
 cp;00B4;-Alpha;bc=ON;-Cased;CI;CWKCF;Dia;dm=0020 0301;dt=Com;ea=A;gc=Sk;-IDC;-IDS;lb=BB;na=ACUTE ACCENT;NFKC_CF=0020 0301;NFKC_QC=N;WB=XX;-XIDC;-XIDS
@@ -1374,9 +1379,9 @@ cp;00B9;-Alpha;bc=EN;-Cased;CWKCF;dm=0031;dt=Sup;ea=A;gc=No;-IDC;-IDS;lb=AI;na=S
 cp;00BA;CWKCF;dm=006F;dt=Sup;ea=A;gc=Lo;lb=AI;Lower;na=MASCULINE ORDINAL INDICATOR;NFKC_CF=006F;NFKC_QC=N;SB=LO;sc=Latn
 cp;00BB;-Alpha;bc=ON;Bidi_M;bmg=00AB;-Cased;gc=Pf;-IDC;-IDS;lb=QU;na=RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK;NFKD_QC=Y;Pat_Syn;QMark;SB=CL;WB=XX;-XIDC;-XIDS
 # Vulgar fractions
-cp;00BC;-Alpha;bc=ON;-Cased;CWKCF;dm=0031 2044 0034;dt=Fra;ea=A;gc=No;-IDC;-IDS;lb=AI;na=VULGAR FRACTION ONE QUARTER;NFKC_CF=0031 2044 0034;NFKC_QC=N;nt=Nu;nv=1/4;WB=XX;-XIDC;-XIDS
-cp;00BD;-Alpha;bc=ON;-Cased;CWKCF;dm=0031 2044 0032;dt=Fra;ea=A;gc=No;-IDC;-IDS;lb=AI;na=VULGAR FRACTION ONE HALF;NFKC_CF=0031 2044 0032;NFKC_QC=N;nt=Nu;nv=1/2;WB=XX;-XIDC;-XIDS
-cp;00BE;-Alpha;bc=ON;-Cased;CWKCF;dm=0033 2044 0034;dt=Fra;ea=A;gc=No;-IDC;-IDS;lb=AI;na=VULGAR FRACTION THREE QUARTERS;NFKC_CF=0033 2044 0034;NFKC_QC=N;nt=Nu;nv=3/4;WB=XX;-XIDC;-XIDS
+cp;00BC;-Alpha;bc=ON;-Cased;CWKCF;dm=0031 2044 0034;dt=Fra;ea=A;gc=No;-IDC;-IDS;lb=AI;na=VULGAR FRACTION ONE QUARTER;NFKC_CF=0031 2044 0034;NFKC_QC=N;nt=Nu;nv=1/4;vo=U;WB=XX;-XIDC;-XIDS
+cp;00BD;-Alpha;bc=ON;-Cased;CWKCF;dm=0031 2044 0032;dt=Fra;ea=A;gc=No;-IDC;-IDS;lb=AI;na=VULGAR FRACTION ONE HALF;NFKC_CF=0031 2044 0032;NFKC_QC=N;nt=Nu;nv=1/2;vo=U;WB=XX;-XIDC;-XIDS
+cp;00BE;-Alpha;bc=ON;-Cased;CWKCF;dm=0033 2044 0034;dt=Fra;ea=A;gc=No;-IDC;-IDS;lb=AI;na=VULGAR FRACTION THREE QUARTERS;NFKC_CF=0033 2044 0034;NFKC_QC=N;nt=Nu;nv=3/4;vo=U;WB=XX;-XIDC;-XIDS
 # Punctuation
 cp;00BF;-Alpha;bc=ON;-Cased;ea=A;gc=Po;-IDC;-IDS;lb=OP;na=INVERTED QUESTION MARK;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
 # Letters
@@ -1404,7 +1409,7 @@ cp;00D4;cf=00F4;CWCF;CWCM;CWKCF;CWL;dm=004F 0302;dt=Can;gc=Lu;na=LATIN CAPITAL L
 cp;00D5;cf=00F5;CWCF;CWCM;CWKCF;CWL;dm=004F 0303;dt=Can;gc=Lu;na=LATIN CAPITAL LETTER O WITH TILDE;NFD_QC=N;NFKC_CF=00F5;SB=UP;sc=Latn;scf=00F5;slc=00F5;Upper
 cp;00D6;cf=00F6;CWCF;CWCM;CWKCF;CWL;dm=004F 0308;dt=Can;gc=Lu;na=LATIN CAPITAL LETTER O WITH DIAERESIS;NFD_QC=N;NFKC_CF=00F6;SB=UP;sc=Latn;scf=00F6;slc=00F6;Upper
 # Mathematical operator
-cp;00D7;-Alpha;bc=ON;-Cased;ea=A;gc=Sm;-IDC;-IDS;InSC=Consonant_Placeholder;lb=AI;Math;na=MULTIPLICATION SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
+cp;00D7;-Alpha;bc=ON;-Cased;ea=A;gc=Sm;-IDC;-IDS;InSC=Consonant_Placeholder;lb=AI;Math;na=MULTIPLICATION SIGN;NFKD_QC=Y;Pat_Syn;vo=U;WB=XX;-XIDC;-XIDS
 # Letters
 cp;00D8;cf=00F8;CWCF;CWCM;CWKCF;CWL;ea=A;gc=Lu;na=LATIN CAPITAL LETTER O WITH STROKE;NFKC_CF=00F8;NFKD_QC=Y;SB=UP;sc=Latn;scf=00F8;slc=00F8;Upper
 cp;00D9;cf=00F9;CWCF;CWCM;CWKCF;CWL;dm=0055 0300;dt=Can;gc=Lu;na=LATIN CAPITAL LETTER U WITH GRAVE;NFD_QC=N;NFKC_CF=00F9;SB=UP;sc=Latn;scf=00F9;slc=00F9;Upper
@@ -1438,7 +1443,7 @@ cp;00F4;CWCM;CWT;CWU;dm=006F 0302;dt=Can;Lower;na=LATIN SMALL LETTER O WITH CIRC
 cp;00F5;CWCM;CWT;CWU;dm=006F 0303;dt=Can;Lower;na=LATIN SMALL LETTER O WITH TILDE;NFD_QC=N;SB=LO;sc=Latn;stc=00D5;suc=00D5
 cp;00F6;CWCM;CWT;CWU;dm=006F 0308;dt=Can;Lower;na=LATIN SMALL LETTER O WITH DIAERESIS;NFD_QC=N;SB=LO;sc=Latn;stc=00D6;suc=00D6
 # Mathematical operator
-cp;00F7;-Alpha;bc=ON;-Cased;ea=A;gc=Sm;-IDC;-IDS;lb=AI;Math;na=DIVISION SIGN;NFKD_QC=Y;Pat_Syn;WB=XX;-XIDC;-XIDS
+cp;00F7;-Alpha;bc=ON;-Cased;ea=A;gc=Sm;-IDC;-IDS;lb=AI;Math;na=DIVISION SIGN;NFKD_QC=Y;Pat_Syn;vo=U;WB=XX;-XIDC;-XIDS
 # Letters
 cp;00F8;CWCM;CWT;CWU;ea=A;Lower;na=LATIN SMALL LETTER O WITH STROKE;NFKD_QC=Y;SB=LO;sc=Latn;stc=00D8;suc=00D8
 cp;00F9;CWCM;CWT;CWU;dm=0075 0300;dt=Can;ea=A;Lower;na=LATIN SMALL LETTER U WITH GRAVE;NFD_QC=N;SB=LO;sc=Latn;stc=00D9;suc=00D9
@@ -1977,8 +1982,8 @@ cp;02E7;na=MODIFIER LETTER MID TONE BAR;WB=XX
 cp;02E8;na=MODIFIER LETTER LOW TONE BAR;WB=XX
 cp;02E9;na=MODIFIER LETTER EXTRA-LOW TONE BAR;WB=XX
 # Extended Bopomofo tone marks
-cp;02EA;age=3.0;na=MODIFIER LETTER YIN DEPARTING TONE MARK;sc=Bopo;WB=XX
-cp;02EB;age=3.0;na=MODIFIER LETTER YANG DEPARTING TONE MARK;sc=Bopo;WB=XX
+cp;02EA;age=3.0;na=MODIFIER LETTER YIN DEPARTING TONE MARK;sc=Bopo;vo=U;WB=XX
+cp;02EB;age=3.0;na=MODIFIER LETTER YANG DEPARTING TONE MARK;sc=Bopo;vo=U;WB=XX
 # IPA modifiers
 cp;02EC;age=3.0;Alpha;gc=Lm;IDC;IDS;na=MODIFIER LETTER VOICING;SB=LE;XIDC;XIDS
 cp;02ED;age=3.0;na=MODIFIER LETTER UNASPIRATED
@@ -5615,7 +5620,7 @@ cp;10FD;age=6.1;na=GEORGIAN LETTER AEN
 cp;10FE;age=6.1;na=GEORGIAN LETTER HARD SIGN
 cp;10FF;age=6.1;na=GEORGIAN LETTER LABIAL SIGN
 
-block;1100..11FF;age=1.1;Alpha;blk=Jamo;gc=Lo;GCB=L;Gr_Base;IDC;IDS;lb=JL;SB=LE;sc=Hang;WB=LE;XIDC;XIDS
+block;1100..11FF;age=1.1;Alpha;blk=Jamo;gc=Lo;GCB=L;Gr_Base;IDC;IDS;lb=JL;SB=LE;sc=Hang;vo=U;WB=LE;XIDC;XIDS
 # 1100..11FF Hangul Jamo
 # Initial consonants
 cp;1100;ea=W;na=HANGUL CHOSEONG KIYEOK
@@ -6396,10 +6401,10 @@ cp;13FC;age=8.0;cf=13F4;CWCF;CWKCF;-CWL;CWT;CWU;gc=Ll;Lower;na=CHEROKEE SMALL LE
 cp;13FD;age=8.0;cf=13F5;CWCF;CWKCF;-CWL;CWT;CWU;gc=Ll;Lower;na=CHEROKEE SMALL LETTER MV;NFKC_CF=13F5;SB=LO;scf=13F5;stc=13F5;suc=13F5;-Upper
 cp;13FE..13FF;age=NA;-Alpha;-Cased;-CWCM;-CWL;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;-Upper;WB=XX;-XIDC;-XIDS
 
-block;1400..167F;age=3.0;Alpha;blk=UCAS;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Cans;WB=LE;XIDC;XIDS
+block;1400..167F;age=3.0;Alpha;blk=UCAS;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Cans;vo=U;WB=LE;XIDC;XIDS
 # 1400..167F Unified Canadian Aboriginal Syllabics
 # Punctuation
-cp;1400;age=5.2;-Alpha;bc=ON;Dash;gc=Pd;-IDC;-IDS;lb=BA;na=CANADIAN SYLLABICS HYPHEN;SB=XX;WB=XX;-XIDC;-XIDS
+cp;1400;age=5.2;-Alpha;bc=ON;Dash;gc=Pd;-IDC;-IDS;lb=BA;na=CANADIAN SYLLABICS HYPHEN;SB=XX;vo=R;WB=XX;-XIDC;-XIDS
 # Syllables
 cp;1401;na=CANADIAN SYLLABICS E
 cp;1402;na=CANADIAN SYLLABICS AAI
@@ -7602,7 +7607,7 @@ cp;18A9;bc=NSM;ccc=228;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=CM;na=MONGOL
 cp;18AA;age=5.1;na=MONGOLIAN LETTER MANCHU ALI GALI LHA
 cp;18AB..18AF;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;jt=U;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;18B0..18FF;age=5.2;Alpha;blk=UCAS_Ext;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Cans;WB=LE;XIDC;XIDS
+block;18B0..18FF;age=5.2;Alpha;blk=UCAS_Ext;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Cans;vo=U;WB=LE;XIDC;XIDS
 # 18B0..18FF Unified Canadian Aboriginal Syllabics Extended
 # Syllables for Moose Cree
 cp;18B0;na=CANADIAN SYLLABICS OY
@@ -9493,7 +9498,7 @@ cp;2013;Dash;ea=A;gc=Pd;InSC=Consonant_Placeholder;lb=BA;na=EN DASH;SB=SC
 cp;2014;Dash;ea=A;gc=Pd;InSC=Consonant_Placeholder;lb=B2;na=EM DASH;SB=SC
 cp;2015;Dash;ea=A;gc=Pd;lb=AI;na=HORIZONTAL BAR
 # General punctuation
-cp;2016;ea=A;lb=AI;Math;na=DOUBLE VERTICAL LINE
+cp;2016;ea=A;lb=AI;Math;na=DOUBLE VERTICAL LINE;vo=U
 cp;2017;CWKCF;dm=0020 0333;dt=Com;na=DOUBLE LOW LINE;NFKC_CF=0020 0333;NFKC_QC=N;NFKD_QC=N
 # Quotation marks and apostrophe
 cp;2018;CI;ea=A;gc=Pi;lb=QU;na=LEFT SINGLE QUOTATION MARK;QMark;SB=CL;WB=MB
@@ -9505,8 +9510,8 @@ cp;201D;ea=A;gc=Pf;lb=QU;na=RIGHT DOUBLE QUOTATION MARK;QMark;SB=CL
 cp;201E;gc=Ps;lb=OP;na=DOUBLE LOW-9 QUOTATION MARK;QMark;SB=CL
 cp;201F;gc=Pi;lb=QU;na=DOUBLE HIGH-REVERSED-9 QUOTATION MARK;QMark;SB=CL
 # General punctuation
-cp;2020;ea=A;lb=AI;na=DAGGER
-cp;2021;ea=A;lb=AI;na=DOUBLE DAGGER
+cp;2020;ea=A;lb=AI;na=DAGGER;vo=U
+cp;2021;ea=A;lb=AI;na=DOUBLE DAGGER;vo=U
 cp;2022;ea=A;na=BULLET
 cp;2023;na=TRIANGULAR BULLET
 cp;2024;CI;CWKCF;dm=002E;dt=Com;ea=A;lb=IN;na=ONE DOT LEADER;NFKC_CF=002E;NFKC_QC=N;NFKD_QC=N;SB=AT;WB=MB
@@ -9523,8 +9528,8 @@ cp;202D;bc=LRO;Bidi_C;CI;CWKCF;DI;gc=Cf;GCB=CN;-Gr_Base;jt=T;lb=CM;na=LEFT-TO-RI
 cp;202E;bc=RLO;Bidi_C;CI;CWKCF;DI;gc=Cf;GCB=CN;-Gr_Base;jt=T;lb=CM;na=RIGHT-TO-LEFT OVERRIDE;Name_Alias=abbreviation=RLO;NFKC_CF=;-Pat_Syn;SB=FO;WB=FO
 cp;202F;age=3.0;bc=CS;CWKCF;dm=0020;dt=Nb;gc=Zs;lb=GL;na=NARROW NO-BREAK SPACE;Name_Alias=abbreviation=NNBSP;NFKC_CF=0020;NFKC_QC=N;NFKD_QC=N;-Pat_Syn;SB=SP;WB=EX;WSpace
 # General punctuation
-cp;2030;bc=ET;ea=A;lb=PO;na=PER MILLE SIGN
-cp;2031;bc=ET;lb=PO;na=PER TEN THOUSAND SIGN
+cp;2030;bc=ET;ea=A;lb=PO;na=PER MILLE SIGN;vo=U
+cp;2031;bc=ET;lb=PO;na=PER TEN THOUSAND SIGN;vo=U
 cp;2032;bc=ET;ea=A;lb=PO;Math;na=PRIME
 cp;2033;bc=ET;CWKCF;dm=2032 2032;dt=Com;ea=A;lb=PO;Math;na=DOUBLE PRIME;NFKC_CF=2032 2032;NFKC_QC=N;NFKD_QC=N
 cp;2034;bc=ET;CWKCF;dm=2032 2032 2032;dt=Com;lb=PO;Math;na=TRIPLE PRIME;NFKC_CF=2032 2032 2032;NFKC_QC=N;NFKD_QC=N
@@ -9536,24 +9541,24 @@ cp;2038;na=CARET
 cp;2039;Bidi_M;bmg=203A;gc=Pi;lb=QU;na=SINGLE LEFT-POINTING ANGLE QUOTATION MARK;QMark;SB=CL
 cp;203A;Bidi_M;bmg=2039;gc=Pf;lb=QU;na=SINGLE RIGHT-POINTING ANGLE QUOTATION MARK;QMark;SB=CL
 # General punctuation
-cp;203B;ea=A;lb=AI;na=REFERENCE MARK
+cp;203B;ea=A;lb=AI;na=REFERENCE MARK;vo=U
 # Double punctuation for vertical text
-cp;203C;CWKCF;dm=0021 0021;dt=Com;Emoji;lb=NS;na=DOUBLE EXCLAMATION MARK;NFKC_CF=0021 0021;NFKC_QC=N;NFKD_QC=N;SB=ST;STerm;Term
+cp;203C;CWKCF;dm=0021 0021;dt=Com;Emoji;lb=NS;na=DOUBLE EXCLAMATION MARK;NFKC_CF=0021 0021;NFKC_QC=N;NFKD_QC=N;SB=ST;STerm;Term;vo=U
 # General punctuation
 cp;203D;lb=NS;na=INTERROBANG;SB=ST;STerm;Term
 cp;203E;CWKCF;dm=0020 0305;dt=Com;ea=A;na=OVERLINE;NFKC_CF=0020 0305;NFKC_QC=N;NFKD_QC=N
 cp;203F;gc=Pc;IDC;na=UNDERTIE;-Pat_Syn;WB=EX;XIDC
 cp;2040;gc=Pc;IDC;Math;na=CHARACTER TIE;-Pat_Syn;WB=EX;XIDC
 cp;2041;na=CARET INSERTION POINT
-cp;2042;na=ASTERISM
+cp;2042;na=ASTERISM;vo=U
 cp;2043;na=HYPHEN BULLET
 cp;2044;bc=CS;gc=Sm;lb=IS;Math;na=FRACTION SLASH;WB=MN
 cp;2045;Bidi_M;bmg=2046;bpb=2046;bpt=o;gc=Ps;lb=OP;na=LEFT SQUARE BRACKET WITH QUILL;SB=CL
 cp;2046;Bidi_M;bmg=2045;bpb=2045;bpt=c;gc=Pe;lb=CL;na=RIGHT SQUARE BRACKET WITH QUILL;SB=CL
 # Double punctuation for vertical text
-cp;2047;age=3.2;CWKCF;dm=003F 003F;dt=Com;lb=NS;na=DOUBLE QUESTION MARK;NFKC_CF=003F 003F;NFKC_QC=N;NFKD_QC=N;SB=ST;STerm;Term
-cp;2048;age=3.0;CWKCF;dm=003F 0021;dt=Com;lb=NS;na=QUESTION EXCLAMATION MARK;NFKC_CF=003F 0021;NFKC_QC=N;NFKD_QC=N;SB=ST;STerm;Term
-cp;2049;age=3.0;CWKCF;dm=0021 003F;dt=Com;Emoji;lb=NS;na=EXCLAMATION QUESTION MARK;NFKC_CF=0021 003F;NFKC_QC=N;NFKD_QC=N;SB=ST;STerm;Term
+cp;2047;age=3.2;CWKCF;dm=003F 003F;dt=Com;lb=NS;na=DOUBLE QUESTION MARK;NFKC_CF=003F 003F;NFKC_QC=N;NFKD_QC=N;SB=ST;STerm;Term;vo=U
+cp;2048;age=3.0;CWKCF;dm=003F 0021;dt=Com;lb=NS;na=QUESTION EXCLAMATION MARK;NFKC_CF=003F 0021;NFKC_QC=N;NFKD_QC=N;SB=ST;STerm;Term;vo=U
+cp;2049;age=3.0;CWKCF;dm=0021 003F;dt=Com;Emoji;lb=NS;na=EXCLAMATION QUESTION MARK;NFKC_CF=0021 003F;NFKC_QC=N;NFKD_QC=N;SB=ST;STerm;Term;vo=U
 # General punctuation
 cp;204A;age=3.0;na=TIRONIAN SIGN ET
 cp;204B;age=3.0;na=REVERSED PILCROW SIGN
@@ -9562,7 +9567,7 @@ cp;204D;age=3.0;na=BLACK RIGHTWARDS BULLET
 cp;204E;age=3.2;na=LOW ASTERISK
 cp;204F;age=3.2;na=REVERSED SEMICOLON
 cp;2050;age=3.2;na=CLOSE UP
-cp;2051;age=3.2;na=TWO ASTERISKS ALIGNED VERTICALLY
+cp;2051;age=3.2;na=TWO ASTERISKS ALIGNED VERTICALLY;vo=U
 cp;2052;age=3.2;gc=Sm;Math;na=COMMERCIAL MINUS SIGN
 cp;2053;age=4.0;Dash;na=SWUNG DASH
 cp;2054;age=4.0;gc=Pc;IDC;na=INVERTED UNDERTIE;-Pat_Syn;WB=EX;XIDC
@@ -9588,7 +9593,7 @@ cp;2061;age=3.2;bc=BN;CI;CWKCF;DI;gc=Cf;GCB=CN;-Gr_Base;jt=T;Math;na=FUNCTION AP
 cp;2062;age=3.2;bc=BN;CI;CWKCF;DI;gc=Cf;GCB=CN;-Gr_Base;jt=T;Math;na=INVISIBLE TIMES;NFKC_CF=;-Pat_Syn;SB=FO;WB=FO
 cp;2063;age=3.2;bc=BN;CI;CWKCF;DI;gc=Cf;GCB=CN;-Gr_Base;jt=T;Math;na=INVISIBLE SEPARATOR;NFKC_CF=;-Pat_Syn;SB=FO;WB=FO
 cp;2064;age=5.1;bc=BN;CI;CWKCF;DI;gc=Cf;GCB=CN;-Gr_Base;jt=T;Math;na=INVISIBLE PLUS;NFKC_CF=;-Pat_Syn;SB=FO;WB=FO
-cp;2065;age=NA;bc=BN;CWKCF;DI;gc=Cn;GCB=CN;-Gr_Base;lb=XX;NFKC_CF=;-Pat_Syn;sc=Zzzz
+cp;2065;age=NA;bc=BN;CWKCF;DI;gc=Cn;GCB=CN;-Gr_Base;lb=XX;NFKC_CF=;-Pat_Syn;sc=Zzzz;vo=U
 # Format characters
 cp;2066;age=6.3;bc=LRI;Bidi_C;CI;CWKCF;DI;gc=Cf;GCB=CN;-Gr_Base;lb=CM;na=LEFT-TO-RIGHT ISOLATE;Name_Alias=abbreviation=LRI;NFKC_CF=;-Pat_Syn;SB=FO;WB=FO
 cp;2067;age=6.3;bc=RLI;Bidi_C;CI;CWKCF;DI;gc=Cf;GCB=CN;-Gr_Base;lb=CM;na=RIGHT-TO-LEFT ISOLATE;Name_Alias=abbreviation=RLI;NFKC_CF=;-Pat_Syn;SB=FO;WB=FO
@@ -9707,16 +9712,16 @@ cp;20DA;ccc=1;na=COMBINING ANTICLOCKWISE RING OVERLAY
 cp;20DB;na=COMBINING THREE DOTS ABOVE
 cp;20DC;na=COMBINING FOUR DOTS ABOVE
 # Enclosing diacritics
-cp;20DD;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING CIRCLE;-XIDC
-cp;20DE;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING SQUARE;-XIDC
-cp;20DF;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING DIAMOND;-XIDC
-cp;20E0;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING CIRCLE BACKSLASH;-XIDC
+cp;20DD;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING CIRCLE;vo=U;-XIDC
+cp;20DE;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING SQUARE;vo=U;-XIDC
+cp;20DF;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING DIAMOND;vo=U;-XIDC
+cp;20E0;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING CIRCLE BACKSLASH;vo=U;-XIDC
 # Additional diacritical mark for symbols
 cp;20E1;na=COMBINING LEFT RIGHT ARROW ABOVE
 # Additional enclosing diacritics
-cp;20E2;age=3.0;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING SCREEN;-XIDC
-cp;20E3;age=3.0;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING KEYCAP;-XIDC
-cp;20E4;age=3.2;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING UPWARD POINTING TRIANGLE;-XIDC
+cp;20E2;age=3.0;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING SCREEN;vo=U;-XIDC
+cp;20E3;age=3.0;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING KEYCAP;vo=U;-XIDC
+cp;20E4;age=3.2;ccc=0;gc=Me;-IDC;-Math;na=COMBINING ENCLOSING UPWARD POINTING TRIANGLE;vo=U;-XIDC
 # Additional diacritical marks for symbols
 cp;20E5;age=3.2;ccc=1;na=COMBINING REVERSE SOLIDUS OVERLAY
 cp;20E6;age=3.2;ccc=1;na=COMBINING DOUBLE VERTICAL STROKE OVERLAY
@@ -9732,12 +9737,12 @@ cp;20EF;age=5.0;ccc=220;na=COMBINING RIGHT ARROW BELOW
 cp;20F0;age=5.1;-Math;na=COMBINING ASTERISK ABOVE;scx=Deva Gran Latn
 cp;20F1..20FF;age=NA;bc=L;ccc=0;-CI;gc=Cn;GCB=XX;-Gr_Ext;-IDC;jt=U;lb=XX;-Math;SB=XX;sc=Zzzz;WB=XX;-XIDC
 
-block;2100..214F;age=1.1;Alpha;blk=Letterlike_Symbols;Cased;CWKCF;dt=Font;gc=Lu;Gr_Base;IDC;IDS;lb=AL;Math;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;WB=LE;XIDC;XIDS
+block;2100..214F;age=1.1;Alpha;blk=Letterlike_Symbols;Cased;CWKCF;dt=Font;gc=Lu;Gr_Base;IDC;IDS;lb=AL;Math;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;vo=U;WB=LE;XIDC;XIDS
 # 2100..214F Letterlike Symbols
 # Letterlike symbols
 cp;2100;-Alpha;bc=ON;-Cased;dm=0061 002F 0063;dt=Com;gc=So;-IDC;-IDS;-Math;na=ACCOUNT OF;NFKC_CF=0061 002F 0063;WB=XX;-XIDC;-XIDS
 cp;2101;-Alpha;bc=ON;-Cased;dm=0061 002F 0073;dt=Com;gc=So;-IDC;-IDS;-Math;na=ADDRESSED TO THE SUBJECT;NFKC_CF=0061 002F 0073;WB=XX;-XIDC;-XIDS
-cp;2102;dm=0043;FC_NFKC=0063;na=DOUBLE-STRUCK CAPITAL C;NFKC_CF=0063;SB=UP;Upper
+cp;2102;dm=0043;FC_NFKC=0063;na=DOUBLE-STRUCK CAPITAL C;NFKC_CF=0063;SB=UP;Upper;vo=R
 cp;2103;-Alpha;bc=ON;-Cased;dm=00B0 0043;dt=Com;ea=A;FC_NFKC=00B0 0063;gc=So;-IDC;-IDS;lb=PO;-Math;na=DEGREE CELSIUS;NFKC_CF=00B0 0063;WB=XX;-XIDC;-XIDS
 cp;2104;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=CENTRE LINE SYMBOL;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
 cp;2105;-Alpha;bc=ON;-Cased;dm=0063 002F 006F;dt=Com;ea=A;gc=So;-IDC;-IDS;lb=AI;-Math;na=CARE OF;NFKC_CF=0063 002F 006F;WB=XX;-XIDC;-XIDS
@@ -9745,49 +9750,49 @@ cp;2106;-Alpha;bc=ON;-Cased;dm=0063 002F 0075;dt=Com;gc=So;-IDC;-IDS;-Math;na=CA
 cp;2107;dm=0190;dt=Com;FC_NFKC=025B;na=EULER CONSTANT;NFKC_CF=025B;SB=UP;Upper
 cp;2108;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=SCRUPLE;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
 cp;2109;-Alpha;bc=ON;-Cased;dm=00B0 0046;dt=Com;ea=A;FC_NFKC=00B0 0066;gc=So;-IDC;-IDS;lb=PO;-Math;na=DEGREE FAHRENHEIT;NFKC_CF=00B0 0066;WB=XX;-XIDC;-XIDS
-cp;210A;dm=0067;gc=Ll;Lower;na=SCRIPT SMALL G;NFKC_CF=0067;SB=LO
-cp;210B;dm=0048;FC_NFKC=0068;na=SCRIPT CAPITAL H;NFKC_CF=0068;SB=UP;Upper
-cp;210C;dm=0048;FC_NFKC=0068;na=BLACK-LETTER CAPITAL H;NFKC_CF=0068;SB=UP;Upper
-cp;210D;dm=0048;FC_NFKC=0068;na=DOUBLE-STRUCK CAPITAL H;NFKC_CF=0068;SB=UP;Upper
-cp;210E;dm=0068;gc=Ll;Lower;na=PLANCK CONSTANT;NFKC_CF=0068;SB=LO
+cp;210A;dm=0067;gc=Ll;Lower;na=SCRIPT SMALL G;NFKC_CF=0067;SB=LO;vo=R
+cp;210B;dm=0048;FC_NFKC=0068;na=SCRIPT CAPITAL H;NFKC_CF=0068;SB=UP;Upper;vo=R
+cp;210C;dm=0048;FC_NFKC=0068;na=BLACK-LETTER CAPITAL H;NFKC_CF=0068;SB=UP;Upper;vo=R
+cp;210D;dm=0048;FC_NFKC=0068;na=DOUBLE-STRUCK CAPITAL H;NFKC_CF=0068;SB=UP;Upper;vo=R
+cp;210E;dm=0068;gc=Ll;Lower;na=PLANCK CONSTANT;NFKC_CF=0068;SB=LO;vo=R
 cp;210F;dm=0127;gc=Ll;Lower;na=PLANCK CONSTANT OVER TWO PI;NFKC_CF=0127;SB=LO
-cp;2110;dm=0049;FC_NFKC=0069;na=SCRIPT CAPITAL I;NFKC_CF=0069;SB=UP;Upper
-cp;2111;dm=0049;FC_NFKC=0069;na=BLACK-LETTER CAPITAL I;NFKC_CF=0069;SB=UP;Upper
-cp;2112;dm=004C;FC_NFKC=006C;na=SCRIPT CAPITAL L;NFKC_CF=006C;SB=UP;Upper
+cp;2110;dm=0049;FC_NFKC=0069;na=SCRIPT CAPITAL I;NFKC_CF=0069;SB=UP;Upper;vo=R
+cp;2111;dm=0049;FC_NFKC=0069;na=BLACK-LETTER CAPITAL I;NFKC_CF=0069;SB=UP;Upper;vo=R
+cp;2112;dm=004C;FC_NFKC=006C;na=SCRIPT CAPITAL L;NFKC_CF=006C;SB=UP;Upper;vo=R
 cp;2113;dm=006C;ea=A;gc=Ll;lb=AI;Lower;na=SCRIPT SMALL L;NFKC_CF=006C;SB=LO
 cp;2114;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=L B BAR SYMBOL;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;2115;dm=004E;FC_NFKC=006E;na=DOUBLE-STRUCK CAPITAL N;NFKC_CF=006E;SB=UP;Upper
+cp;2115;dm=004E;FC_NFKC=006E;na=DOUBLE-STRUCK CAPITAL N;NFKC_CF=006E;SB=UP;Upper;vo=R
 cp;2116;-Alpha;bc=ON;-Cased;dm=004E 006F;dt=Com;ea=A;FC_NFKC=006E 006F;gc=So;-IDC;-IDS;lb=PR;-Math;na=NUMERO SIGN;NFKC_CF=006E 006F;WB=XX;-XIDC;-XIDS
 cp;2117;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=SOUND RECORDING COPYRIGHT;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;2118;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;na=SCRIPT CAPITAL P;Name_Alias=correction=WEIERSTRASS ELLIPTIC FUNCTION;NFKC_QC=Y;NFKD_QC=Y;WB=XX
-cp;2119;dm=0050;FC_NFKC=0070;na=DOUBLE-STRUCK CAPITAL P;NFKC_CF=0070;SB=UP;Upper
-cp;211A;dm=0051;FC_NFKC=0071;na=DOUBLE-STRUCK CAPITAL Q;NFKC_CF=0071;SB=UP;Upper
-cp;211B;dm=0052;FC_NFKC=0072;na=SCRIPT CAPITAL R;NFKC_CF=0072;SB=UP;Upper
-cp;211C;dm=0052;FC_NFKC=0072;na=BLACK-LETTER CAPITAL R;NFKC_CF=0072;SB=UP;Upper
-cp;211D;dm=0052;FC_NFKC=0072;na=DOUBLE-STRUCK CAPITAL R;NFKC_CF=0072;SB=UP;Upper
+cp;2118;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;na=SCRIPT CAPITAL P;Name_Alias=correction=WEIERSTRASS ELLIPTIC FUNCTION;NFKC_QC=Y;NFKD_QC=Y;vo=R;WB=XX
+cp;2119;dm=0050;FC_NFKC=0070;na=DOUBLE-STRUCK CAPITAL P;NFKC_CF=0070;SB=UP;Upper;vo=R
+cp;211A;dm=0051;FC_NFKC=0071;na=DOUBLE-STRUCK CAPITAL Q;NFKC_CF=0071;SB=UP;Upper;vo=R
+cp;211B;dm=0052;FC_NFKC=0072;na=SCRIPT CAPITAL R;NFKC_CF=0072;SB=UP;Upper;vo=R
+cp;211C;dm=0052;FC_NFKC=0072;na=BLACK-LETTER CAPITAL R;NFKC_CF=0072;SB=UP;Upper;vo=R
+cp;211D;dm=0052;FC_NFKC=0072;na=DOUBLE-STRUCK CAPITAL R;NFKC_CF=0072;SB=UP;Upper;vo=R
 cp;211E;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=PRESCRIPTION TAKE;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
 cp;211F;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=RESPONSE;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
 cp;2120;-Alpha;bc=ON;-Cased;dm=0053 004D;dt=Sup;FC_NFKC=0073 006D;gc=So;-IDC;-IDS;-Math;na=SERVICE MARK;NFKC_CF=0073 006D;WB=XX;-XIDC;-XIDS
 cp;2121;-Alpha;bc=ON;-Cased;dm=0054 0045 004C;dt=Com;ea=A;FC_NFKC=0074 0065 006C;gc=So;-IDC;-IDS;lb=AI;-Math;na=TELEPHONE SIGN;NFKC_CF=0074 0065 006C;WB=XX;-XIDC;-XIDS
 cp;2122;-Alpha;bc=ON;-Cased;dm=0054 004D;dt=Sup;ea=A;Emoji;FC_NFKC=0074 006D;gc=So;-IDC;-IDS;lb=AI;-Math;na=TRADE MARK SIGN;NFKC_CF=0074 006D;WB=XX;-XIDC;-XIDS
 cp;2123;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=VERSICLE;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;2124;dm=005A;FC_NFKC=007A;na=DOUBLE-STRUCK CAPITAL Z;NFKC_CF=007A;SB=UP;Upper
+cp;2124;dm=005A;FC_NFKC=007A;na=DOUBLE-STRUCK CAPITAL Z;NFKC_CF=007A;SB=UP;Upper;vo=R
 cp;2125;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=OUNCE SIGN;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;2126;cf=03C9;Comp_Ex;CWCF;CWCM;CWL;dm=03A9;dt=Can;ea=A;-Math;na=OHM SIGN;NFC_QC=N;NFD_QC=N;NFKC_CF=03C9;SB=UP;sc=Grek;scf=03C9;slc=03C9;Upper
+cp;2126;cf=03C9;Comp_Ex;CWCF;CWCM;CWL;dm=03A9;dt=Can;ea=A;-Math;na=OHM SIGN;NFC_QC=N;NFD_QC=N;NFKC_CF=03C9;SB=UP;sc=Grek;scf=03C9;slc=03C9;Upper;vo=R
 cp;2127;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=INVERTED OHM SIGN;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;2128;dm=005A;FC_NFKC=007A;na=BLACK-LETTER CAPITAL Z;NFKC_CF=007A;SB=UP;Upper
+cp;2128;dm=005A;FC_NFKC=007A;na=BLACK-LETTER CAPITAL Z;NFKC_CF=007A;SB=UP;Upper;vo=R
 cp;2129;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;na=TURNED GREEK SMALL LETTER IOTA;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;212A;cf=006B;Comp_Ex;CWCF;CWCM;CWL;dm=004B;dt=Can;-Math;na=KELVIN SIGN;NFC_QC=N;NFD_QC=N;NFKC_CF=006B;SB=UP;sc=Latn;scf=006B;slc=006B;Upper
-cp;212B;cf=00E5;Comp_Ex;CWCF;CWCM;CWL;dm=00C5;dt=Can;ea=A;lb=AI;-Math;na=ANGSTROM SIGN;NFC_QC=N;NFD_QC=N;NFKC_CF=00E5;SB=UP;sc=Latn;scf=00E5;slc=00E5;Upper
-cp;212C;dm=0042;FC_NFKC=0062;na=SCRIPT CAPITAL B;NFKC_CF=0062;SB=UP;Upper
-cp;212D;dm=0043;FC_NFKC=0063;na=BLACK-LETTER CAPITAL C;NFKC_CF=0063;SB=UP;Upper
+cp;212A;cf=006B;Comp_Ex;CWCF;CWCM;CWL;dm=004B;dt=Can;-Math;na=KELVIN SIGN;NFC_QC=N;NFD_QC=N;NFKC_CF=006B;SB=UP;sc=Latn;scf=006B;slc=006B;Upper;vo=R
+cp;212B;cf=00E5;Comp_Ex;CWCF;CWCM;CWL;dm=00C5;dt=Can;ea=A;lb=AI;-Math;na=ANGSTROM SIGN;NFC_QC=N;NFD_QC=N;NFKC_CF=00E5;SB=UP;sc=Latn;scf=00E5;slc=00E5;Upper;vo=R
+cp;212C;dm=0042;FC_NFKC=0062;na=SCRIPT CAPITAL B;NFKC_CF=0062;SB=UP;Upper;vo=R
+cp;212D;dm=0043;FC_NFKC=0063;na=BLACK-LETTER CAPITAL C;NFKC_CF=0063;SB=UP;Upper;vo=R
 cp;212E;-Alpha;bc=ET;-Cased;-CWKCF;dt=None;gc=So;-Math;na=ESTIMATED SYMBOL;NFKC_QC=Y;NFKD_QC=Y;WB=XX
-cp;212F;dm=0065;gc=Ll;Lower;na=SCRIPT SMALL E;NFKC_CF=0065;SB=LO
-cp;2130;dm=0045;FC_NFKC=0065;na=SCRIPT CAPITAL E;NFKC_CF=0065;SB=UP;Upper
-cp;2131;dm=0046;FC_NFKC=0066;na=SCRIPT CAPITAL F;NFKC_CF=0066;SB=UP;Upper
-cp;2132;cf=214E;CWCF;CWCM;CWL;dt=None;-Math;na=TURNED CAPITAL F;NFKC_CF=214E;NFKC_QC=Y;NFKD_QC=Y;SB=UP;sc=Latn;scf=214E;slc=214E;Upper
-cp;2133;dm=004D;FC_NFKC=006D;na=SCRIPT CAPITAL M;NFKC_CF=006D;SB=UP;Upper
-cp;2134;dm=006F;gc=Ll;Lower;na=SCRIPT SMALL O;NFKC_CF=006F;SB=LO
+cp;212F;dm=0065;gc=Ll;Lower;na=SCRIPT SMALL E;NFKC_CF=0065;SB=LO;vo=R
+cp;2130;dm=0045;FC_NFKC=0065;na=SCRIPT CAPITAL E;NFKC_CF=0065;SB=UP;Upper;vo=R
+cp;2131;dm=0046;FC_NFKC=0066;na=SCRIPT CAPITAL F;NFKC_CF=0066;SB=UP;Upper;vo=R
+cp;2132;cf=214E;CWCF;CWCM;CWL;dt=None;-Math;na=TURNED CAPITAL F;NFKC_CF=214E;NFKC_QC=Y;NFKD_QC=Y;SB=UP;sc=Latn;scf=214E;slc=214E;Upper;vo=R
+cp;2133;dm=004D;FC_NFKC=006D;na=SCRIPT CAPITAL M;NFKC_CF=006D;SB=UP;Upper;vo=R
+cp;2134;dm=006F;gc=Ll;Lower;na=SCRIPT SMALL O;NFKC_CF=006F;SB=LO;vo=R
 # Hebrew letterlike math symbols
 cp;2135;-Cased;dm=05D0;dt=Com;gc=Lo;na=ALEF SYMBOL;NFKC_CF=05D0;SB=LE
 cp;2136;-Cased;dm=05D1;dt=Com;gc=Lo;na=BET SYMBOL;NFKC_CF=05D1;SB=LE
@@ -9802,12 +9807,12 @@ cp;213D;age=3.2;dm=03B3;gc=Ll;Lower;na=DOUBLE-STRUCK SMALL GAMMA;NFKC_CF=03B3;SB
 cp;213E;age=3.2;dm=0393;FC_NFKC=03B3;na=DOUBLE-STRUCK CAPITAL GAMMA;NFKC_CF=03B3;SB=UP;Upper
 cp;213F;age=3.2;dm=03A0;FC_NFKC=03C0;na=DOUBLE-STRUCK CAPITAL PI;NFKC_CF=03C0;SB=UP;Upper
 # Double-struck large operator
-cp;2140;age=3.2;-Alpha;bc=ON;Bidi_M;-Cased;dm=2211;gc=Sm;-IDC;-IDS;na=DOUBLE-STRUCK N-ARY SUMMATION;NFKC_CF=2211;WB=XX;-XIDC;-XIDS
+cp;2140;age=3.2;-Alpha;bc=ON;Bidi_M;-Cased;dm=2211;gc=Sm;-IDC;-IDS;na=DOUBLE-STRUCK N-ARY SUMMATION;NFKC_CF=2211;vo=R;WB=XX;-XIDC;-XIDS
 # Additional letterlike symbols
-cp;2141;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=TURNED SANS-SERIF CAPITAL G;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;2142;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=TURNED SANS-SERIF CAPITAL L;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;2143;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=REVERSED SANS-SERIF CAPITAL L;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;2144;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=TURNED SANS-SERIF CAPITAL Y;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
+cp;2141;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=TURNED SANS-SERIF CAPITAL G;NFKC_QC=Y;NFKD_QC=Y;vo=R;WB=XX;-XIDC;-XIDS
+cp;2142;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=TURNED SANS-SERIF CAPITAL L;NFKC_QC=Y;NFKD_QC=Y;vo=R;WB=XX;-XIDC;-XIDS
+cp;2143;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=REVERSED SANS-SERIF CAPITAL L;NFKC_QC=Y;NFKD_QC=Y;vo=R;WB=XX;-XIDC;-XIDS
+cp;2144;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=TURNED SANS-SERIF CAPITAL Y;NFKC_QC=Y;NFKD_QC=Y;vo=R;WB=XX;-XIDC;-XIDS
 # Double-struck italic math symbols
 cp;2145;age=3.2;dm=0044;FC_NFKC=0064;na=DOUBLE-STRUCK ITALIC CAPITAL D;NFKC_CF=0064;SB=UP;Upper
 cp;2146;age=3.2;dm=0064;gc=Ll;Lower;na=DOUBLE-STRUCK ITALIC SMALL D;NFKC_CF=0064;SB=LO
@@ -9816,15 +9821,15 @@ cp;2148;age=3.2;dm=0069;gc=Ll;Lower;na=DOUBLE-STRUCK ITALIC SMALL I;NFKC_CF=0069
 cp;2149;age=3.2;dm=006A;gc=Ll;Lower;na=DOUBLE-STRUCK ITALIC SMALL J;NFKC_CF=006A;SB=LO;SD
 # Additional letterlike symbols
 cp;214A;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=PROPERTY LINE;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
-cp;214B;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=TURNED AMPERSAND;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
+cp;214B;age=3.2;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=TURNED AMPERSAND;NFKC_QC=Y;NFKD_QC=Y;vo=R;WB=XX;-XIDC;-XIDS
 cp;214C;age=4.1;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=PER SIGN;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
 cp;214D;age=5.0;-Alpha;bc=ON;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=AKTIESELSKAB;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
 # Lowercase Claudian letter
-cp;214E;age=5.0;CWCM;-CWKCF;CWT;CWU;dt=None;gc=Ll;Lower;-Math;na=TURNED SMALL F;NFKC_QC=Y;NFKD_QC=Y;SB=LO;sc=Latn;stc=2132;suc=2132
+cp;214E;age=5.0;CWCM;-CWKCF;CWT;CWU;dt=None;gc=Ll;Lower;-Math;na=TURNED SMALL F;NFKC_QC=Y;NFKD_QC=Y;SB=LO;sc=Latn;stc=2132;suc=2132;vo=R
 # Biblical editorial symbol
 cp;214F;age=5.1;-Alpha;-Cased;-CWKCF;dt=None;gc=So;-IDC;-IDS;-Math;na=SYMBOL FOR SAMARITAN SOURCE;NFKC_QC=Y;NFKD_QC=Y;WB=XX;-XIDC;-XIDS
 
-block;2150..218F;age=1.1;Alpha;blk=Number_Forms;Cased;CWCM;CWKCF;dt=Com;gc=Nl;Gr_Base;IDC;IDS;lb=AL;NFKC_QC=N;NFKD_QC=N;nt=Nu;sc=Latn;WB=LE;XIDC;XIDS
+block;2150..218F;age=1.1;Alpha;blk=Number_Forms;Cased;CWCM;CWKCF;dt=Com;gc=Nl;Gr_Base;IDC;IDS;lb=AL;NFKC_QC=N;NFKD_QC=N;nt=Nu;sc=Latn;vo=U;WB=LE;XIDC;XIDS
 # 2150..218F Number Forms
 # Fractions
 cp;2150;age=5.2;-Alpha;bc=ON;-Cased;-CWCM;dm=0031 2044 0037;dt=Fra;gc=No;-IDC;-IDS;na=VULGAR FRACTION ONE SEVENTH;NFKC_CF=0031 2044 0037;nv=1/7;sc=Zyyy;WB=XX;-XIDC;-XIDS
@@ -9891,8 +9896,8 @@ cp;2188;age=5.1;-Cased;-CWCM;-CWKCF;dt=None;na=ROMAN NUMERAL ONE HUNDRED THOUSAN
 # Fraction
 cp;2189;age=5.2;-Alpha;bc=ON;-Cased;-CWCM;dm=0030 2044 0033;dt=Fra;ea=A;gc=No;-IDC;-IDS;lb=AI;na=VULGAR FRACTION ZERO THIRDS;NFKC_CF=0030 2044 0033;nv=0;sc=Zyyy;WB=XX;-XIDC;-XIDS
 # Turned digits
-cp;218A;age=8.0;-Alpha;bc=ON;-Cased;-CWCM;-CWKCF;dt=None;gc=So;-IDC;-IDS;na=TURNED DIGIT TWO;NFKC_QC=Y;NFKD_QC=Y;nt=None;sc=Zyyy;WB=XX;-XIDC;-XIDS
-cp;218B;age=8.0;-Alpha;bc=ON;-Cased;-CWCM;-CWKCF;dt=None;gc=So;-IDC;-IDS;na=TURNED DIGIT THREE;NFKC_QC=Y;NFKD_QC=Y;nt=None;sc=Zyyy;WB=XX;-XIDC;-XIDS
+cp;218A;age=8.0;-Alpha;bc=ON;-Cased;-CWCM;-CWKCF;dt=None;gc=So;-IDC;-IDS;na=TURNED DIGIT TWO;NFKC_QC=Y;NFKD_QC=Y;nt=None;sc=Zyyy;vo=R;WB=XX;-XIDC;-XIDS
+cp;218B;age=8.0;-Alpha;bc=ON;-Cased;-CWCM;-CWKCF;dt=None;gc=So;-IDC;-IDS;na=TURNED DIGIT THREE;NFKC_QC=Y;NFKD_QC=Y;nt=None;sc=Zyyy;vo=R;WB=XX;-XIDC;-XIDS
 cp;218C..218F;age=NA;-Alpha;-Cased;-CWCM;-CWKCF;dt=None;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;NFKC_QC=Y;NFKD_QC=Y;nt=None;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
 block;2190..21FF;age=1.1;bc=ON;blk=Arrows;gc=So;Gr_Base;lb=AL;Math;Pat_Syn;sc=Zyyy
@@ -10058,7 +10063,7 @@ cp;221B;na=CUBE ROOT
 cp;221C;na=FOURTH ROOT
 cp;221D;ea=A;lb=AI;na=PROPORTIONAL TO
 # Miscellaneous mathematical symbol
-cp;221E;-Bidi_M;ea=A;lb=AI;na=INFINITY
+cp;221E;-Bidi_M;ea=A;lb=AI;na=INFINITY;vo=U
 # Angles
 cp;221F;ea=A;lb=AI;na=RIGHT ANGLE
 cp;2220;ea=A;lb=AI;na=ANGLE
@@ -10085,8 +10090,8 @@ cp;2231;na=CLOCKWISE INTEGRAL
 cp;2232;na=CLOCKWISE CONTOUR INTEGRAL
 cp;2233;na=ANTICLOCKWISE CONTOUR INTEGRAL
 # Miscellaneous mathematical symbols
-cp;2234;-Bidi_M;ea=A;lb=AI;na=THEREFORE
-cp;2235;-Bidi_M;ea=A;lb=AI;na=BECAUSE
+cp;2234;-Bidi_M;ea=A;lb=AI;na=THEREFORE;vo=U
+cp;2235;-Bidi_M;ea=A;lb=AI;na=BECAUSE;vo=U
 # Relations
 cp;2236;-Bidi_M;ea=A;lb=AI;na=RATIO
 cp;2237;-Bidi_M;ea=A;lb=AI;na=PROPORTION
@@ -10317,43 +10322,43 @@ cp;22FF;age=3.2;na=Z NOTATION BAG MEMBERSHIP
 block;2300..23FF;age=1.1;bc=ON;blk=Misc_Technical;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy
 # 2300..23FF Miscellaneous Technical
 # Miscellaneous technical
-cp;2300;na=DIAMETER SIGN
-cp;2301;age=3.0;na=ELECTRIC ARROW
-cp;2302;na=HOUSE
-cp;2303;na=UP ARROWHEAD
-cp;2304;na=DOWN ARROWHEAD
-cp;2305;na=PROJECTIVE
-cp;2306;na=PERSPECTIVE
-cp;2307;na=WAVY LINE
+cp;2300;na=DIAMETER SIGN;vo=U
+cp;2301;age=3.0;na=ELECTRIC ARROW;vo=U
+cp;2302;na=HOUSE;vo=U
+cp;2303;na=UP ARROWHEAD;vo=U
+cp;2304;na=DOWN ARROWHEAD;vo=U
+cp;2305;na=PROJECTIVE;vo=U
+cp;2306;na=PERSPECTIVE;vo=U
+cp;2307;na=WAVY LINE;vo=U
 # Ceilings and floors
 cp;2308;Bidi_M;bmg=2309;bpb=2309;bpt=o;gc=Ps;lb=OP;Math;na=LEFT CEILING;SB=CL
 cp;2309;Bidi_M;bmg=2308;bpb=2308;bpt=c;gc=Pe;lb=CL;Math;na=RIGHT CEILING;SB=CL
 cp;230A;Bidi_M;bmg=230B;bpb=230B;bpt=o;gc=Ps;lb=OP;Math;na=LEFT FLOOR;SB=CL
 cp;230B;Bidi_M;bmg=230A;bpb=230A;bpt=c;gc=Pe;lb=CL;Math;na=RIGHT FLOOR;SB=CL
 # Crops
-cp;230C;na=BOTTOM RIGHT CROP
-cp;230D;na=BOTTOM LEFT CROP
-cp;230E;na=TOP RIGHT CROP
-cp;230F;na=TOP LEFT CROP
+cp;230C;na=BOTTOM RIGHT CROP;vo=U
+cp;230D;na=BOTTOM LEFT CROP;vo=U
+cp;230E;na=TOP RIGHT CROP;vo=U
+cp;230F;na=TOP LEFT CROP;vo=U
 # Miscellaneous technical
-cp;2310;na=REVERSED NOT SIGN
-cp;2311;na=SQUARE LOZENGE
-cp;2312;ea=A;lb=AI;na=ARC
-cp;2313;na=SEGMENT
-cp;2314;na=SECTOR
-cp;2315;na=TELEPHONE RECORDER
-cp;2316;na=POSITION INDICATOR
-cp;2317;na=VIEWDATA SQUARE
-cp;2318;na=PLACE OF INTEREST SIGN
-cp;2319;na=TURNED NOT SIGN
+cp;2310;na=REVERSED NOT SIGN;vo=U
+cp;2311;na=SQUARE LOZENGE;vo=U
+cp;2312;ea=A;lb=AI;na=ARC;vo=U
+cp;2313;na=SEGMENT;vo=U
+cp;2314;na=SECTOR;vo=U
+cp;2315;na=TELEPHONE RECORDER;vo=U
+cp;2316;na=POSITION INDICATOR;vo=U
+cp;2317;na=VIEWDATA SQUARE;vo=U
+cp;2318;na=PLACE OF INTEREST SIGN;vo=U
+cp;2319;na=TURNED NOT SIGN;vo=U
 # User interface symbols
-cp;231A;ea=W;Emoji;Emoji_Presentation;lb=ID;na=WATCH
-cp;231B;ea=W;Emoji;Emoji_Presentation;lb=ID;na=HOURGLASS
+cp;231A;ea=W;Emoji;Emoji_Presentation;lb=ID;na=WATCH;vo=U
+cp;231B;ea=W;Emoji;Emoji_Presentation;lb=ID;na=HOURGLASS;vo=U
 # Quine corners
-cp;231C;na=TOP LEFT CORNER
-cp;231D;na=TOP RIGHT CORNER
-cp;231E;na=BOTTOM LEFT CORNER
-cp;231F;na=BOTTOM RIGHT CORNER
+cp;231C;na=TOP LEFT CORNER;vo=U
+cp;231D;na=TOP RIGHT CORNER;vo=U
+cp;231E;na=BOTTOM LEFT CORNER;vo=U
+cp;231F;na=BOTTOM RIGHT CORNER;vo=U
 # Integral pieces
 cp;2320;Bidi_M;gc=Sm;Math;na=TOP HALF INTEGRAL
 cp;2321;Bidi_M;gc=Sm;Math;na=BOTTOM HALF INTEGRAL
@@ -10361,16 +10366,16 @@ cp;2321;Bidi_M;gc=Sm;Math;na=BOTTOM HALF INTEGRAL
 cp;2322;na=FROWN
 cp;2323;na=SMILE
 # Keyboard symbols
-cp;2324;na=UP ARROWHEAD BETWEEN TWO HORIZONTAL BARS
-cp;2325;na=OPTION KEY
-cp;2326;na=ERASE TO THE RIGHT
-cp;2327;na=X IN A RECTANGLE BOX
-cp;2328;Emoji;na=KEYBOARD
+cp;2324;na=UP ARROWHEAD BETWEEN TWO HORIZONTAL BARS;vo=U
+cp;2325;na=OPTION KEY;vo=U
+cp;2326;na=ERASE TO THE RIGHT;vo=U
+cp;2327;na=X IN A RECTANGLE BOX;vo=U
+cp;2328;Emoji;na=KEYBOARD;vo=U
 # Deprecated angle brackets
-cp;2329;Bidi_M;bmg=232A;bpb=232A;bpt=o;Comp_Ex;CWKCF;Dep;dm=3008;dt=Can;ea=W;gc=Ps;lb=OP;na=LEFT-POINTING ANGLE BRACKET;NFC_QC=N;NFD_QC=N;NFKC_CF=3008;NFKC_QC=N;NFKD_QC=N;SB=CL
-cp;232A;Bidi_M;bmg=2329;bpb=2329;bpt=c;Comp_Ex;CWKCF;Dep;dm=3009;dt=Can;ea=W;gc=Pe;lb=CL;na=RIGHT-POINTING ANGLE BRACKET;NFC_QC=N;NFD_QC=N;NFKC_CF=3009;NFKC_QC=N;NFKD_QC=N;SB=CL
+cp;2329;Bidi_M;bmg=232A;bpb=232A;bpt=o;Comp_Ex;CWKCF;Dep;dm=3008;dt=Can;ea=W;gc=Ps;lb=OP;na=LEFT-POINTING ANGLE BRACKET;NFC_QC=N;NFD_QC=N;NFKC_CF=3008;NFKC_QC=N;NFKD_QC=N;SB=CL;vo=Tr
+cp;232A;Bidi_M;bmg=2329;bpb=2329;bpt=c;Comp_Ex;CWKCF;Dep;dm=3009;dt=Can;ea=W;gc=Pe;lb=CL;na=RIGHT-POINTING ANGLE BRACKET;NFC_QC=N;NFD_QC=N;NFKC_CF=3009;NFKC_QC=N;NFKD_QC=N;SB=CL;vo=Tr
 # Keyboard symbol
-cp;232B;na=ERASE TO THE LEFT
+cp;232B;na=ERASE TO THE LEFT;vo=U
 # Chemistry symbol
 cp;232C;na=BENZENE RING
 # Drafting symbols
@@ -10458,40 +10463,40 @@ cp;237B;age=3.0;na=NOT CHECK MARK
 # Miscellaneous technical
 cp;237C;age=3.2;gc=Sm;Math;na=RIGHT ANGLE WITH DOWNWARDS ZIGZAG ARROW
 # Graphics for control codes
-cp;237D;age=3.0;na=SHOULDERED OPEN BOX
-cp;237E;age=3.0;na=BELL SYMBOL
-cp;237F;age=3.0;na=VERTICAL LINE WITH MIDDLE DOT
+cp;237D;age=3.0;na=SHOULDERED OPEN BOX;vo=U
+cp;237E;age=3.0;na=BELL SYMBOL;vo=U
+cp;237F;age=3.0;na=VERTICAL LINE WITH MIDDLE DOT;vo=U
 # Keyboard symbols from ISO 9995-7
-cp;2380;age=3.0;na=INSERTION SYMBOL
-cp;2381;age=3.0;na=CONTINUOUS UNDERLINE SYMBOL
-cp;2382;age=3.0;na=DISCONTINUOUS UNDERLINE SYMBOL
-cp;2383;age=3.0;na=EMPHASIS SYMBOL
-cp;2384;age=3.0;na=COMPOSITION SYMBOL
-cp;2385;age=3.0;na=WHITE SQUARE WITH CENTRE VERTICAL LINE
-cp;2386;age=3.0;na=ENTER SYMBOL
-cp;2387;age=3.0;na=ALTERNATIVE KEY SYMBOL
-cp;2388;age=3.0;na=HELM SYMBOL
-cp;2389;age=3.0;na=CIRCLED HORIZONTAL BAR WITH NOTCH
-cp;238A;age=3.0;na=CIRCLED TRIANGLE DOWN
-cp;238B;age=3.0;na=BROKEN CIRCLE WITH NORTHWEST ARROW
-cp;238C;age=3.0;na=UNDO SYMBOL
+cp;2380;age=3.0;na=INSERTION SYMBOL;vo=U
+cp;2381;age=3.0;na=CONTINUOUS UNDERLINE SYMBOL;vo=U
+cp;2382;age=3.0;na=DISCONTINUOUS UNDERLINE SYMBOL;vo=U
+cp;2383;age=3.0;na=EMPHASIS SYMBOL;vo=U
+cp;2384;age=3.0;na=COMPOSITION SYMBOL;vo=U
+cp;2385;age=3.0;na=WHITE SQUARE WITH CENTRE VERTICAL LINE;vo=U
+cp;2386;age=3.0;na=ENTER SYMBOL;vo=U
+cp;2387;age=3.0;na=ALTERNATIVE KEY SYMBOL;vo=U
+cp;2388;age=3.0;na=HELM SYMBOL;vo=U
+cp;2389;age=3.0;na=CIRCLED HORIZONTAL BAR WITH NOTCH;vo=U
+cp;238A;age=3.0;na=CIRCLED TRIANGLE DOWN;vo=U
+cp;238B;age=3.0;na=BROKEN CIRCLE WITH NORTHWEST ARROW;vo=U
+cp;238C;age=3.0;na=UNDO SYMBOL;vo=U
 # Electrotechnical symbols from IR 181
-cp;238D;age=3.0;na=MONOSTABLE SYMBOL
-cp;238E;age=3.0;na=HYSTERESIS SYMBOL
-cp;238F;age=3.0;na=OPEN-CIRCUIT-OUTPUT H-TYPE SYMBOL
-cp;2390;age=3.0;na=OPEN-CIRCUIT-OUTPUT L-TYPE SYMBOL
-cp;2391;age=3.0;na=PASSIVE-PULL-DOWN-OUTPUT SYMBOL
-cp;2392;age=3.0;na=PASSIVE-PULL-UP-OUTPUT SYMBOL
-cp;2393;age=3.0;na=DIRECT CURRENT SYMBOL FORM TWO
-cp;2394;age=3.0;na=SOFTWARE-FUNCTION SYMBOL
+cp;238D;age=3.0;na=MONOSTABLE SYMBOL;vo=U
+cp;238E;age=3.0;na=HYSTERESIS SYMBOL;vo=U
+cp;238F;age=3.0;na=OPEN-CIRCUIT-OUTPUT H-TYPE SYMBOL;vo=U
+cp;2390;age=3.0;na=OPEN-CIRCUIT-OUTPUT L-TYPE SYMBOL;vo=U
+cp;2391;age=3.0;na=PASSIVE-PULL-DOWN-OUTPUT SYMBOL;vo=U
+cp;2392;age=3.0;na=PASSIVE-PULL-UP-OUTPUT SYMBOL;vo=U
+cp;2393;age=3.0;na=DIRECT CURRENT SYMBOL FORM TWO;vo=U
+cp;2394;age=3.0;na=SOFTWARE-FUNCTION SYMBOL;vo=U
 # APL
-cp;2395;age=3.0;bc=L;na=APL FUNCTIONAL SYMBOL QUAD
+cp;2395;age=3.0;bc=L;na=APL FUNCTIONAL SYMBOL QUAD;vo=U
 # Keyboard symbols from ISO 9995-7
-cp;2396;age=3.0;na=DECIMAL SEPARATOR KEY SYMBOL
-cp;2397;age=3.0;na=PREVIOUS PAGE
-cp;2398;age=3.0;na=NEXT PAGE
-cp;2399;age=3.0;na=PRINT SCREEN SYMBOL
-cp;239A;age=3.0;na=CLEAR SCREEN SYMBOL
+cp;2396;age=3.0;na=DECIMAL SEPARATOR KEY SYMBOL;vo=U
+cp;2397;age=3.0;na=PREVIOUS PAGE;vo=U
+cp;2398;age=3.0;na=NEXT PAGE;vo=U
+cp;2399;age=3.0;na=PRINT SCREEN SYMBOL;vo=U
+cp;239A;age=3.0;na=CLEAR SCREEN SYMBOL;vo=U
 # Bracket pieces
 cp;239B;age=3.2;gc=Sm;Math;na=LEFT PARENTHESIS UPPER HOOK
 cp;239C;age=3.2;gc=Sm;Math;na=LEFT PARENTHESIS EXTENSION
@@ -10535,41 +10540,41 @@ cp;23BB;age=3.2;na=HORIZONTAL SCAN LINE-3
 cp;23BC;age=3.2;na=HORIZONTAL SCAN LINE-7
 cp;23BD;age=3.2;na=HORIZONTAL SCAN LINE-9
 # Dentistry notation symbols
-cp;23BE;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND TOP RIGHT
-cp;23BF;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND BOTTOM RIGHT
-cp;23C0;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL WITH CIRCLE
-cp;23C1;age=3.2;na=DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH CIRCLE
-cp;23C2;age=3.2;na=DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH CIRCLE
-cp;23C3;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL WITH TRIANGLE
-cp;23C4;age=3.2;na=DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH TRIANGLE
-cp;23C5;age=3.2;na=DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH TRIANGLE
-cp;23C6;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND WAVE
-cp;23C7;age=3.2;na=DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH WAVE
-cp;23C8;age=3.2;na=DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH WAVE
-cp;23C9;age=3.2;na=DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL
-cp;23CA;age=3.2;na=DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL
-cp;23CB;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND TOP LEFT
-cp;23CC;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND BOTTOM LEFT
+cp;23BE;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND TOP RIGHT;vo=U
+cp;23BF;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND BOTTOM RIGHT;vo=U
+cp;23C0;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL WITH CIRCLE;vo=U
+cp;23C1;age=3.2;na=DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH CIRCLE;vo=U
+cp;23C2;age=3.2;na=DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH CIRCLE;vo=U
+cp;23C3;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL WITH TRIANGLE;vo=U
+cp;23C4;age=3.2;na=DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH TRIANGLE;vo=U
+cp;23C5;age=3.2;na=DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH TRIANGLE;vo=U
+cp;23C6;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND WAVE;vo=U
+cp;23C7;age=3.2;na=DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL WITH WAVE;vo=U
+cp;23C8;age=3.2;na=DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL WITH WAVE;vo=U
+cp;23C9;age=3.2;na=DENTISTRY SYMBOL LIGHT DOWN AND HORIZONTAL;vo=U
+cp;23CA;age=3.2;na=DENTISTRY SYMBOL LIGHT UP AND HORIZONTAL;vo=U
+cp;23CB;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND TOP LEFT;vo=U
+cp;23CC;age=3.2;na=DENTISTRY SYMBOL LIGHT VERTICAL AND BOTTOM LEFT;vo=U
 # Miscellaneous technical
-cp;23CD;age=3.2;na=SQUARE FOOT
+cp;23CD;age=3.2;na=SQUARE FOOT;vo=U
 # Keyboard and UI symbols
 cp;23CE;age=3.2;na=RETURN SYMBOL
-cp;23CF;age=4.0;Emoji;na=EJECT SYMBOL
+cp;23CF;age=4.0;Emoji;na=EJECT SYMBOL;vo=U
 # Special character extension
 cp;23D0;age=4.0;Math;na=VERTICAL LINE EXTENSION
 # Metrical symbols
-cp;23D1;age=4.1;na=METRICAL BREVE
-cp;23D2;age=4.1;na=METRICAL LONG OVER SHORT
-cp;23D3;age=4.1;na=METRICAL SHORT OVER LONG
-cp;23D4;age=4.1;na=METRICAL LONG OVER TWO SHORTS
-cp;23D5;age=4.1;na=METRICAL TWO SHORTS OVER LONG
-cp;23D6;age=4.1;na=METRICAL TWO SHORTS JOINED
-cp;23D7;age=4.1;na=METRICAL TRISEME
-cp;23D8;age=4.1;na=METRICAL TETRASEME
-cp;23D9;age=4.1;na=METRICAL PENTASEME
+cp;23D1;age=4.1;na=METRICAL BREVE;vo=U
+cp;23D2;age=4.1;na=METRICAL LONG OVER SHORT;vo=U
+cp;23D3;age=4.1;na=METRICAL SHORT OVER LONG;vo=U
+cp;23D4;age=4.1;na=METRICAL LONG OVER TWO SHORTS;vo=U
+cp;23D5;age=4.1;na=METRICAL TWO SHORTS OVER LONG;vo=U
+cp;23D6;age=4.1;na=METRICAL TWO SHORTS JOINED;vo=U
+cp;23D7;age=4.1;na=METRICAL TRISEME;vo=U
+cp;23D8;age=4.1;na=METRICAL TETRASEME;vo=U
+cp;23D9;age=4.1;na=METRICAL PENTASEME;vo=U
 # Electrotechnical symbols
-cp;23DA;age=4.1;na=EARTH GROUND
-cp;23DB;age=4.1;na=FUSE
+cp;23DA;age=4.1;na=EARTH GROUND;vo=U
+cp;23DB;age=4.1;na=FUSE;vo=U
 # Horizontal brackets
 cp;23DC;age=5.0;gc=Sm;Math;na=TOP PARENTHESIS
 cp;23DD;age=5.0;gc=Sm;Math;na=BOTTOM PARENTHESIS
@@ -10578,44 +10583,44 @@ cp;23DF;age=5.0;gc=Sm;Math;na=BOTTOM CURLY BRACKET
 cp;23E0;age=5.0;gc=Sm;Math;na=TOP TORTOISE SHELL BRACKET
 cp;23E1;age=5.0;gc=Sm;Math;na=BOTTOM TORTOISE SHELL BRACKET
 # Miscellaneous technical
-cp;23E2;age=5.0;Math;na=WHITE TRAPEZIUM
+cp;23E2;age=5.0;Math;na=WHITE TRAPEZIUM;vo=U
 # Chemistry symbol
-cp;23E3;age=5.0;na=BENZENE RING WITH CIRCLE
+cp;23E3;age=5.0;na=BENZENE RING WITH CIRCLE;vo=U
 # Miscellaneous technical
-cp;23E4;age=5.0;na=STRAIGHTNESS
-cp;23E5;age=5.0;na=FLATNESS
-cp;23E6;age=5.0;na=AC CURRENT
-cp;23E7;age=5.0;na=ELECTRICAL INTERSECTION
-cp;23E8;age=5.2;na=DECIMAL EXPONENT SYMBOL
+cp;23E4;age=5.0;na=STRAIGHTNESS;vo=U
+cp;23E5;age=5.0;na=FLATNESS;vo=U
+cp;23E6;age=5.0;na=AC CURRENT;vo=U
+cp;23E7;age=5.0;na=ELECTRICAL INTERSECTION;vo=U
+cp;23E8;age=5.2;na=DECIMAL EXPONENT SYMBOL;vo=U
 # User interface symbols
-cp;23E9;age=6.0;ea=W;Emoji;Emoji_Presentation;na=BLACK RIGHT-POINTING DOUBLE TRIANGLE
-cp;23EA;age=6.0;ea=W;Emoji;Emoji_Presentation;na=BLACK LEFT-POINTING DOUBLE TRIANGLE
-cp;23EB;age=6.0;ea=W;Emoji;Emoji_Presentation;na=BLACK UP-POINTING DOUBLE TRIANGLE
-cp;23EC;age=6.0;ea=W;Emoji;Emoji_Presentation;na=BLACK DOWN-POINTING DOUBLE TRIANGLE
-cp;23ED;age=6.0;Emoji;na=BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR
-cp;23EE;age=6.0;Emoji;na=BLACK LEFT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR
-cp;23EF;age=6.0;Emoji;na=BLACK RIGHT-POINTING TRIANGLE WITH DOUBLE VERTICAL BAR
-cp;23F0;age=6.0;ea=W;Emoji;Emoji_Presentation;lb=ID;na=ALARM CLOCK
-cp;23F1;age=6.0;Emoji;lb=ID;na=STOPWATCH
-cp;23F2;age=6.0;Emoji;lb=ID;na=TIMER CLOCK
-cp;23F3;age=6.0;ea=W;Emoji;Emoji_Presentation;lb=ID;na=HOURGLASS WITH FLOWING SAND
-cp;23F4;age=7.0;na=BLACK MEDIUM LEFT-POINTING TRIANGLE
-cp;23F5;age=7.0;na=BLACK MEDIUM RIGHT-POINTING TRIANGLE
-cp;23F6;age=7.0;na=BLACK MEDIUM UP-POINTING TRIANGLE
-cp;23F7;age=7.0;na=BLACK MEDIUM DOWN-POINTING TRIANGLE
-cp;23F8;age=7.0;Emoji;na=DOUBLE VERTICAL BAR
-cp;23F9;age=7.0;Emoji;na=BLACK SQUARE FOR STOP
-cp;23FA;age=7.0;Emoji;na=BLACK CIRCLE FOR RECORD
+cp;23E9;age=6.0;ea=W;Emoji;Emoji_Presentation;na=BLACK RIGHT-POINTING DOUBLE TRIANGLE;vo=U
+cp;23EA;age=6.0;ea=W;Emoji;Emoji_Presentation;na=BLACK LEFT-POINTING DOUBLE TRIANGLE;vo=U
+cp;23EB;age=6.0;ea=W;Emoji;Emoji_Presentation;na=BLACK UP-POINTING DOUBLE TRIANGLE;vo=U
+cp;23EC;age=6.0;ea=W;Emoji;Emoji_Presentation;na=BLACK DOWN-POINTING DOUBLE TRIANGLE;vo=U
+cp;23ED;age=6.0;Emoji;na=BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR;vo=U
+cp;23EE;age=6.0;Emoji;na=BLACK LEFT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR;vo=U
+cp;23EF;age=6.0;Emoji;na=BLACK RIGHT-POINTING TRIANGLE WITH DOUBLE VERTICAL BAR;vo=U
+cp;23F0;age=6.0;ea=W;Emoji;Emoji_Presentation;lb=ID;na=ALARM CLOCK;vo=U
+cp;23F1;age=6.0;Emoji;lb=ID;na=STOPWATCH;vo=U
+cp;23F2;age=6.0;Emoji;lb=ID;na=TIMER CLOCK;vo=U
+cp;23F3;age=6.0;ea=W;Emoji;Emoji_Presentation;lb=ID;na=HOURGLASS WITH FLOWING SAND;vo=U
+cp;23F4;age=7.0;na=BLACK MEDIUM LEFT-POINTING TRIANGLE;vo=U
+cp;23F5;age=7.0;na=BLACK MEDIUM RIGHT-POINTING TRIANGLE;vo=U
+cp;23F6;age=7.0;na=BLACK MEDIUM UP-POINTING TRIANGLE;vo=U
+cp;23F7;age=7.0;na=BLACK MEDIUM DOWN-POINTING TRIANGLE;vo=U
+cp;23F8;age=7.0;Emoji;na=DOUBLE VERTICAL BAR;vo=U
+cp;23F9;age=7.0;Emoji;na=BLACK SQUARE FOR STOP;vo=U
+cp;23FA;age=7.0;Emoji;na=BLACK CIRCLE FOR RECORD;vo=U
 # Power symbols from ISO 7000:2012
-cp;23FB;age=9.0;na=POWER SYMBOL
-cp;23FC;age=9.0;na=POWER ON-OFF SYMBOL
-cp;23FD;age=9.0;na=POWER ON SYMBOL
+cp;23FB;age=9.0;na=POWER SYMBOL;vo=U
+cp;23FC;age=9.0;na=POWER ON-OFF SYMBOL;vo=U
+cp;23FD;age=9.0;na=POWER ON SYMBOL;vo=U
 # Power symbol from IEEE 1621-2004
-cp;23FE;age=9.0;na=POWER SLEEP SYMBOL
+cp;23FE;age=9.0;na=POWER SLEEP SYMBOL;vo=U
 # Miscellaneous symbol
-cp;23FF;age=10.0;na=OBSERVER EYE SYMBOL
+cp;23FF;age=10.0;na=OBSERVER EYE SYMBOL;vo=U
 
-block;2400..243F;age=1.1;bc=ON;blk=Control_Pictures;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy
+block;2400..243F;age=1.1;bc=ON;blk=Control_Pictures;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy;vo=U
 # 2400..243F Control Pictures
 # Graphic pictures for control codes
 cp;2400;na=SYMBOL FOR NULL
@@ -10654,7 +10659,7 @@ cp;2420;na=SYMBOL FOR SPACE
 cp;2421;na=SYMBOL FOR DELETE
 # Specific symbols for space
 cp;2422;na=BLANK SYMBOL
-cp;2423;na=OPEN BOX
+cp;2423;na=OPEN BOX;vo=R
 # Graphic picture for control code
 cp;2424;na=SYMBOL FOR NEWLINE
 # Keyboard symbol
@@ -10663,7 +10668,7 @@ cp;2425;age=3.0;na=SYMBOL FOR DELETE FORM TWO
 cp;2426;age=3.0;na=SYMBOL FOR SUBSTITUTE FORM TWO
 cp;2427..243F;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
 
-block;2440..245F;age=1.1;bc=ON;blk=OCR;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy
+block;2440..245F;age=1.1;bc=ON;blk=OCR;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy;vo=U
 # 2440..245F Optical Character Recognition
 # OCR-A
 cp;2440;na=OCR HOOK
@@ -10681,7 +10686,7 @@ cp;2449;na=OCR CUSTOMER ACCOUNT NUMBER;Name_Alias=correction=MICR DASH SYMBOL
 cp;244A;na=OCR DOUBLE BACKSLASH
 cp;244B..245F;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
 
-block;2460..24FF;age=1.1;blk=Enclosed_Alphanum;CWKCF;dt=Enc;ea=A;gc=No;Gr_Base;lb=AI;NFKC_QC=N;NFKD_QC=N;sc=Zyyy
+block;2460..24FF;age=1.1;blk=Enclosed_Alphanum;CWKCF;dt=Enc;ea=A;gc=No;Gr_Base;lb=AI;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;vo=U
 # 2460..24FF Enclosed Alphanumerics
 # Circled numbers
 cp;2460;bc=ON;dm=0031;na=CIRCLED DIGIT ONE;NFKC_CF=0031;nt=Di;nv=1
@@ -11033,7 +11038,7 @@ cp;259D;age=3.2;ea=N;lb=AL;na=QUADRANT UPPER RIGHT
 cp;259E;age=3.2;ea=N;lb=AL;na=QUADRANT UPPER RIGHT AND LOWER LEFT
 cp;259F;age=3.2;ea=N;lb=AL;na=QUADRANT UPPER RIGHT AND LOWER LEFT AND LOWER RIGHT
 
-block;25A0..25FF;age=1.1;bc=ON;blk=Geometric_Shapes;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy
+block;25A0..25FF;age=1.1;bc=ON;blk=Geometric_Shapes;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy;vo=U
 # 25A0..25FF Geometric Shapes
 # Geometric shapes
 cp;25A0;ea=A;lb=AI;Math;na=BLACK SQUARE
@@ -11135,7 +11140,7 @@ cp;25FD;age=3.2;ea=W;Emoji;Emoji_Presentation;gc=Sm;Math;na=WHITE MEDIUM SMALL S
 cp;25FE;age=3.2;ea=W;Emoji;Emoji_Presentation;gc=Sm;Math;na=BLACK MEDIUM SMALL SQUARE
 cp;25FF;age=3.2;gc=Sm;Math;na=LOWER RIGHT TRIANGLE
 
-block;2600..26FF;age=1.1;bc=ON;blk=Misc_Symbols;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy
+block;2600..26FF;age=1.1;bc=ON;blk=Misc_Symbols;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy;vo=U
 # 2600..26FF Miscellaneous Symbols
 # Weather and astrological symbols
 cp;2600;Emoji;lb=ID;na=BLACK SUN WITH RAYS
@@ -11170,12 +11175,12 @@ cp;2617;age=3.2;lb=AI;na=BLACK SHOGI PIECE
 cp;2618;age=4.1;Emoji;lb=ID;na=SHAMROCK
 cp;2619;age=3.0;na=REVERSED ROTATED FLORAL HEART BULLET
 # Pointing hand symbols
-cp;261A;lb=ID;na=BLACK LEFT POINTING INDEX
-cp;261B;lb=ID;na=BLACK RIGHT POINTING INDEX
-cp;261C;ea=A;lb=ID;na=WHITE LEFT POINTING INDEX
-cp;261D;Emoji;Emoji_Modifier_Base;GCB=EB;lb=EB;na=WHITE UP POINTING INDEX;WB=EB
-cp;261E;ea=A;lb=ID;na=WHITE RIGHT POINTING INDEX
-cp;261F;lb=ID;na=WHITE DOWN POINTING INDEX
+cp;261A;lb=ID;na=BLACK LEFT POINTING INDEX;vo=R
+cp;261B;lb=ID;na=BLACK RIGHT POINTING INDEX;vo=R
+cp;261C;ea=A;lb=ID;na=WHITE LEFT POINTING INDEX;vo=R
+cp;261D;Emoji;Emoji_Modifier_Base;GCB=EB;lb=EB;na=WHITE UP POINTING INDEX;vo=R;WB=EB
+cp;261E;ea=A;lb=ID;na=WHITE RIGHT POINTING INDEX;vo=R
+cp;261F;lb=ID;na=WHITE DOWN POINTING INDEX;vo=R
 # Warning signs
 cp;2620;Emoji;na=SKULL AND CROSSBONES
 cp;2621;na=CAUTION SIGN
@@ -11441,7 +11446,7 @@ cp;26FD;age=5.2;ea=W;Emoji;Emoji_Presentation;lb=ID;na=FUEL PUMP
 cp;26FE;age=5.2;ea=A;lb=ID;na=CUP ON BLACK SQUARE
 cp;26FF;age=5.2;ea=A;lb=ID;na=WHITE FLAG WITH HORIZONTAL MIDDLE BLACK STRIPE
 
-block;2700..27BF;age=1.1;bc=ON;blk=Dingbats;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy
+block;2700..27BF;age=1.1;bc=ON;blk=Dingbats;gc=So;Gr_Base;lb=AL;Pat_Syn;sc=Zyyy;vo=U
 # 2700..27BF Dingbats
 # Miscellaneous
 cp;2700;age=7.0;lb=ID;na=BLACK SAFETY SCISSORS
@@ -11556,20 +11561,20 @@ cp;2765;na=ROTATED HEAVY BLACK HEART BULLET
 cp;2766;na=FLORAL HEART
 cp;2767;na=ROTATED FLORAL HEART BULLET
 # Ornamental brackets
-cp;2768;age=3.2;Bidi_M;bmg=2769;bpb=2769;bpt=o;gc=Ps;lb=OP;na=MEDIUM LEFT PARENTHESIS ORNAMENT;SB=CL
-cp;2769;age=3.2;Bidi_M;bmg=2768;bpb=2768;bpt=c;gc=Pe;lb=CL;na=MEDIUM RIGHT PARENTHESIS ORNAMENT;SB=CL
-cp;276A;age=3.2;Bidi_M;bmg=276B;bpb=276B;bpt=o;gc=Ps;lb=OP;na=MEDIUM FLATTENED LEFT PARENTHESIS ORNAMENT;SB=CL
-cp;276B;age=3.2;Bidi_M;bmg=276A;bpb=276A;bpt=c;gc=Pe;lb=CL;na=MEDIUM FLATTENED RIGHT PARENTHESIS ORNAMENT;SB=CL
-cp;276C;age=3.2;Bidi_M;bmg=276D;bpb=276D;bpt=o;gc=Ps;lb=OP;na=MEDIUM LEFT-POINTING ANGLE BRACKET ORNAMENT;SB=CL
-cp;276D;age=3.2;Bidi_M;bmg=276C;bpb=276C;bpt=c;gc=Pe;lb=CL;na=MEDIUM RIGHT-POINTING ANGLE BRACKET ORNAMENT;SB=CL
-cp;276E;age=3.2;Bidi_M;bmg=276F;bpb=276F;bpt=o;gc=Ps;lb=OP;na=HEAVY LEFT-POINTING ANGLE QUOTATION MARK ORNAMENT;SB=CL
-cp;276F;age=3.2;Bidi_M;bmg=276E;bpb=276E;bpt=c;gc=Pe;lb=CL;na=HEAVY RIGHT-POINTING ANGLE QUOTATION MARK ORNAMENT;SB=CL
-cp;2770;age=3.2;Bidi_M;bmg=2771;bpb=2771;bpt=o;gc=Ps;lb=OP;na=HEAVY LEFT-POINTING ANGLE BRACKET ORNAMENT;SB=CL
-cp;2771;age=3.2;Bidi_M;bmg=2770;bpb=2770;bpt=c;gc=Pe;lb=CL;na=HEAVY RIGHT-POINTING ANGLE BRACKET ORNAMENT;SB=CL
-cp;2772;age=3.2;Bidi_M;bmg=2773;bpb=2773;bpt=o;gc=Ps;lb=OP;na=LIGHT LEFT TORTOISE SHELL BRACKET ORNAMENT;SB=CL
-cp;2773;age=3.2;Bidi_M;bmg=2772;bpb=2772;bpt=c;gc=Pe;lb=CL;na=LIGHT RIGHT TORTOISE SHELL BRACKET ORNAMENT;SB=CL
-cp;2774;age=3.2;Bidi_M;bmg=2775;bpb=2775;bpt=o;gc=Ps;lb=OP;na=MEDIUM LEFT CURLY BRACKET ORNAMENT;SB=CL
-cp;2775;age=3.2;Bidi_M;bmg=2774;bpb=2774;bpt=c;gc=Pe;lb=CL;na=MEDIUM RIGHT CURLY BRACKET ORNAMENT;SB=CL
+cp;2768;age=3.2;Bidi_M;bmg=2769;bpb=2769;bpt=o;gc=Ps;lb=OP;na=MEDIUM LEFT PARENTHESIS ORNAMENT;SB=CL;vo=R
+cp;2769;age=3.2;Bidi_M;bmg=2768;bpb=2768;bpt=c;gc=Pe;lb=CL;na=MEDIUM RIGHT PARENTHESIS ORNAMENT;SB=CL;vo=R
+cp;276A;age=3.2;Bidi_M;bmg=276B;bpb=276B;bpt=o;gc=Ps;lb=OP;na=MEDIUM FLATTENED LEFT PARENTHESIS ORNAMENT;SB=CL;vo=R
+cp;276B;age=3.2;Bidi_M;bmg=276A;bpb=276A;bpt=c;gc=Pe;lb=CL;na=MEDIUM FLATTENED RIGHT PARENTHESIS ORNAMENT;SB=CL;vo=R
+cp;276C;age=3.2;Bidi_M;bmg=276D;bpb=276D;bpt=o;gc=Ps;lb=OP;na=MEDIUM LEFT-POINTING ANGLE BRACKET ORNAMENT;SB=CL;vo=R
+cp;276D;age=3.2;Bidi_M;bmg=276C;bpb=276C;bpt=c;gc=Pe;lb=CL;na=MEDIUM RIGHT-POINTING ANGLE BRACKET ORNAMENT;SB=CL;vo=R
+cp;276E;age=3.2;Bidi_M;bmg=276F;bpb=276F;bpt=o;gc=Ps;lb=OP;na=HEAVY LEFT-POINTING ANGLE QUOTATION MARK ORNAMENT;SB=CL;vo=R
+cp;276F;age=3.2;Bidi_M;bmg=276E;bpb=276E;bpt=c;gc=Pe;lb=CL;na=HEAVY RIGHT-POINTING ANGLE QUOTATION MARK ORNAMENT;SB=CL;vo=R
+cp;2770;age=3.2;Bidi_M;bmg=2771;bpb=2771;bpt=o;gc=Ps;lb=OP;na=HEAVY LEFT-POINTING ANGLE BRACKET ORNAMENT;SB=CL;vo=R
+cp;2771;age=3.2;Bidi_M;bmg=2770;bpb=2770;bpt=c;gc=Pe;lb=CL;na=HEAVY RIGHT-POINTING ANGLE BRACKET ORNAMENT;SB=CL;vo=R
+cp;2772;age=3.2;Bidi_M;bmg=2773;bpb=2773;bpt=o;gc=Ps;lb=OP;na=LIGHT LEFT TORTOISE SHELL BRACKET ORNAMENT;SB=CL;vo=R
+cp;2773;age=3.2;Bidi_M;bmg=2772;bpb=2772;bpt=c;gc=Pe;lb=CL;na=LIGHT RIGHT TORTOISE SHELL BRACKET ORNAMENT;SB=CL;vo=R
+cp;2774;age=3.2;Bidi_M;bmg=2775;bpb=2775;bpt=o;gc=Ps;lb=OP;na=MEDIUM LEFT CURLY BRACKET ORNAMENT;SB=CL;vo=R
+cp;2775;age=3.2;Bidi_M;bmg=2774;bpb=2774;bpt=c;gc=Pe;lb=CL;na=MEDIUM RIGHT CURLY BRACKET ORNAMENT;SB=CL;vo=R
 # Dingbat circled digits
 cp;2776;ea=A;gc=No;lb=AI;na=DINGBAT NEGATIVE CIRCLED DIGIT ONE;nt=Di;nv=1;-Pat_Syn
 cp;2777;ea=A;gc=No;lb=AI;na=DINGBAT NEGATIVE CIRCLED DIGIT TWO;nt=Di;nv=2;-Pat_Syn
@@ -11602,55 +11607,55 @@ cp;2791;gc=No;lb=AI;na=DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT EIGHT;nt=Di;nv=
 cp;2792;gc=No;lb=AI;na=DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT NINE;nt=Di;nv=9;-Pat_Syn
 cp;2793;gc=No;lb=AI;na=DINGBAT NEGATIVE CIRCLED SANS-SERIF NUMBER TEN;nt=Nu;nv=10;-Pat_Syn
 # Dingbat arrow
-cp;2794;na=HEAVY WIDE-HEADED RIGHTWARDS ARROW
+cp;2794;na=HEAVY WIDE-HEADED RIGHTWARDS ARROW;vo=R
 # Heavy variants of arithmetic symbols
-cp;2795;age=6.0;ea=W;Emoji;Emoji_Presentation;na=HEAVY PLUS SIGN
-cp;2796;age=6.0;ea=W;Emoji;Emoji_Presentation;na=HEAVY MINUS SIGN
-cp;2797;age=6.0;ea=W;Emoji;Emoji_Presentation;na=HEAVY DIVISION SIGN
+cp;2795;age=6.0;ea=W;Emoji;Emoji_Presentation;na=HEAVY PLUS SIGN;vo=R
+cp;2796;age=6.0;ea=W;Emoji;Emoji_Presentation;na=HEAVY MINUS SIGN;vo=R
+cp;2797;age=6.0;ea=W;Emoji;Emoji_Presentation;na=HEAVY DIVISION SIGN;vo=R
 # Dingbat arrows
-cp;2798;na=HEAVY SOUTH EAST ARROW
-cp;2799;na=HEAVY RIGHTWARDS ARROW
-cp;279A;na=HEAVY NORTH EAST ARROW
-cp;279B;na=DRAFTING POINT RIGHTWARDS ARROW
-cp;279C;na=HEAVY ROUND-TIPPED RIGHTWARDS ARROW
-cp;279D;na=TRIANGLE-HEADED RIGHTWARDS ARROW
-cp;279E;na=HEAVY TRIANGLE-HEADED RIGHTWARDS ARROW
-cp;279F;na=DASHED TRIANGLE-HEADED RIGHTWARDS ARROW
-cp;27A0;na=HEAVY DASHED TRIANGLE-HEADED RIGHTWARDS ARROW
-cp;27A1;Emoji;na=BLACK RIGHTWARDS ARROW
-cp;27A2;na=THREE-D TOP-LIGHTED RIGHTWARDS ARROWHEAD
-cp;27A3;na=THREE-D BOTTOM-LIGHTED RIGHTWARDS ARROWHEAD
-cp;27A4;na=BLACK RIGHTWARDS ARROWHEAD
-cp;27A5;na=HEAVY BLACK CURVED DOWNWARDS AND RIGHTWARDS ARROW
-cp;27A6;na=HEAVY BLACK CURVED UPWARDS AND RIGHTWARDS ARROW
-cp;27A7;na=SQUAT BLACK RIGHTWARDS ARROW
-cp;27A8;na=HEAVY CONCAVE-POINTED BLACK RIGHTWARDS ARROW
-cp;27A9;na=RIGHT-SHADED WHITE RIGHTWARDS ARROW
-cp;27AA;na=LEFT-SHADED WHITE RIGHTWARDS ARROW
-cp;27AB;na=BACK-TILTED SHADOWED WHITE RIGHTWARDS ARROW
-cp;27AC;na=FRONT-TILTED SHADOWED WHITE RIGHTWARDS ARROW
-cp;27AD;na=HEAVY LOWER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW
-cp;27AE;na=HEAVY UPPER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW
-cp;27AF;na=NOTCHED LOWER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW
+cp;2798;na=HEAVY SOUTH EAST ARROW;vo=R
+cp;2799;na=HEAVY RIGHTWARDS ARROW;vo=R
+cp;279A;na=HEAVY NORTH EAST ARROW;vo=R
+cp;279B;na=DRAFTING POINT RIGHTWARDS ARROW;vo=R
+cp;279C;na=HEAVY ROUND-TIPPED RIGHTWARDS ARROW;vo=R
+cp;279D;na=TRIANGLE-HEADED RIGHTWARDS ARROW;vo=R
+cp;279E;na=HEAVY TRIANGLE-HEADED RIGHTWARDS ARROW;vo=R
+cp;279F;na=DASHED TRIANGLE-HEADED RIGHTWARDS ARROW;vo=R
+cp;27A0;na=HEAVY DASHED TRIANGLE-HEADED RIGHTWARDS ARROW;vo=R
+cp;27A1;Emoji;na=BLACK RIGHTWARDS ARROW;vo=R
+cp;27A2;na=THREE-D TOP-LIGHTED RIGHTWARDS ARROWHEAD;vo=R
+cp;27A3;na=THREE-D BOTTOM-LIGHTED RIGHTWARDS ARROWHEAD;vo=R
+cp;27A4;na=BLACK RIGHTWARDS ARROWHEAD;vo=R
+cp;27A5;na=HEAVY BLACK CURVED DOWNWARDS AND RIGHTWARDS ARROW;vo=R
+cp;27A6;na=HEAVY BLACK CURVED UPWARDS AND RIGHTWARDS ARROW;vo=R
+cp;27A7;na=SQUAT BLACK RIGHTWARDS ARROW;vo=R
+cp;27A8;na=HEAVY CONCAVE-POINTED BLACK RIGHTWARDS ARROW;vo=R
+cp;27A9;na=RIGHT-SHADED WHITE RIGHTWARDS ARROW;vo=R
+cp;27AA;na=LEFT-SHADED WHITE RIGHTWARDS ARROW;vo=R
+cp;27AB;na=BACK-TILTED SHADOWED WHITE RIGHTWARDS ARROW;vo=R
+cp;27AC;na=FRONT-TILTED SHADOWED WHITE RIGHTWARDS ARROW;vo=R
+cp;27AD;na=HEAVY LOWER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW;vo=R
+cp;27AE;na=HEAVY UPPER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW;vo=R
+cp;27AF;na=NOTCHED LOWER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW;vo=R
 # Miscellaneous
-cp;27B0;age=6.0;ea=W;Emoji;Emoji_Presentation;na=CURLY LOOP
+cp;27B0;age=6.0;ea=W;Emoji;Emoji_Presentation;na=CURLY LOOP;vo=R
 # Dingbat arrows
-cp;27B1;na=NOTCHED UPPER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW
-cp;27B2;na=CIRCLED HEAVY WHITE RIGHTWARDS ARROW
-cp;27B3;na=WHITE-FEATHERED RIGHTWARDS ARROW
-cp;27B4;na=BLACK-FEATHERED SOUTH EAST ARROW
-cp;27B5;na=BLACK-FEATHERED RIGHTWARDS ARROW
-cp;27B6;na=BLACK-FEATHERED NORTH EAST ARROW
-cp;27B7;na=HEAVY BLACK-FEATHERED SOUTH EAST ARROW
-cp;27B8;na=HEAVY BLACK-FEATHERED RIGHTWARDS ARROW
-cp;27B9;na=HEAVY BLACK-FEATHERED NORTH EAST ARROW
-cp;27BA;na=TEARDROP-BARBED RIGHTWARDS ARROW
-cp;27BB;na=HEAVY TEARDROP-SHANKED RIGHTWARDS ARROW
-cp;27BC;na=WEDGE-TAILED RIGHTWARDS ARROW
-cp;27BD;na=HEAVY WEDGE-TAILED RIGHTWARDS ARROW
-cp;27BE;na=OPEN-OUTLINED RIGHTWARDS ARROW
+cp;27B1;na=NOTCHED UPPER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW;vo=R
+cp;27B2;na=CIRCLED HEAVY WHITE RIGHTWARDS ARROW;vo=R
+cp;27B3;na=WHITE-FEATHERED RIGHTWARDS ARROW;vo=R
+cp;27B4;na=BLACK-FEATHERED SOUTH EAST ARROW;vo=R
+cp;27B5;na=BLACK-FEATHERED RIGHTWARDS ARROW;vo=R
+cp;27B6;na=BLACK-FEATHERED NORTH EAST ARROW;vo=R
+cp;27B7;na=HEAVY BLACK-FEATHERED SOUTH EAST ARROW;vo=R
+cp;27B8;na=HEAVY BLACK-FEATHERED RIGHTWARDS ARROW;vo=R
+cp;27B9;na=HEAVY BLACK-FEATHERED NORTH EAST ARROW;vo=R
+cp;27BA;na=TEARDROP-BARBED RIGHTWARDS ARROW;vo=R
+cp;27BB;na=HEAVY TEARDROP-SHANKED RIGHTWARDS ARROW;vo=R
+cp;27BC;na=WEDGE-TAILED RIGHTWARDS ARROW;vo=R
+cp;27BD;na=HEAVY WEDGE-TAILED RIGHTWARDS ARROW;vo=R
+cp;27BE;na=OPEN-OUTLINED RIGHTWARDS ARROW;vo=R
 # Miscellaneous
-cp;27BF;age=6.0;ea=W;Emoji;Emoji_Presentation;na=DOUBLE CURLY LOOP
+cp;27BF;age=6.0;ea=W;Emoji;Emoji_Presentation;na=DOUBLE CURLY LOOP;vo=R
 
 block;27C0..27EF;age=3.2;bc=ON;Bidi_M;blk=Misc_Math_Symbols_A;gc=Sm;Gr_Base;lb=AL;Math;Pat_Syn;sc=Zyyy
 # 27C0..27EF Miscellaneous Mathematical Symbols-A
@@ -12590,43 +12595,43 @@ cp;2B0F;age=4.1;na=RIGHTWARDS ARROW WITH TIP UPWARDS
 cp;2B10;age=4.1;na=LEFTWARDS ARROW WITH TIP DOWNWARDS
 cp;2B11;age=4.1;na=LEFTWARDS ARROW WITH TIP UPWARDS
 # Squares
-cp;2B12;age=4.1;na=SQUARE WITH TOP HALF BLACK
-cp;2B13;age=4.1;na=SQUARE WITH BOTTOM HALF BLACK
-cp;2B14;age=5.0;na=SQUARE WITH UPPER RIGHT DIAGONAL HALF BLACK
-cp;2B15;age=5.0;na=SQUARE WITH LOWER LEFT DIAGONAL HALF BLACK
+cp;2B12;age=4.1;na=SQUARE WITH TOP HALF BLACK;vo=U
+cp;2B13;age=4.1;na=SQUARE WITH BOTTOM HALF BLACK;vo=U
+cp;2B14;age=5.0;na=SQUARE WITH UPPER RIGHT DIAGONAL HALF BLACK;vo=U
+cp;2B15;age=5.0;na=SQUARE WITH LOWER LEFT DIAGONAL HALF BLACK;vo=U
 # Diamonds
-cp;2B16;age=5.0;na=DIAMOND WITH LEFT HALF BLACK
-cp;2B17;age=5.0;na=DIAMOND WITH RIGHT HALF BLACK
-cp;2B18;age=5.0;na=DIAMOND WITH TOP HALF BLACK
-cp;2B19;age=5.0;na=DIAMOND WITH BOTTOM HALF BLACK
+cp;2B16;age=5.0;na=DIAMOND WITH LEFT HALF BLACK;vo=U
+cp;2B17;age=5.0;na=DIAMOND WITH RIGHT HALF BLACK;vo=U
+cp;2B18;age=5.0;na=DIAMOND WITH TOP HALF BLACK;vo=U
+cp;2B19;age=5.0;na=DIAMOND WITH BOTTOM HALF BLACK;vo=U
 # Squares
-cp;2B1A;age=5.0;na=DOTTED SQUARE
-cp;2B1B;age=5.1;ea=W;Emoji;Emoji_Presentation;na=BLACK LARGE SQUARE
-cp;2B1C;age=5.1;ea=W;Emoji;Emoji_Presentation;na=WHITE LARGE SQUARE
-cp;2B1D;age=5.1;na=BLACK VERY SMALL SQUARE
-cp;2B1E;age=5.1;na=WHITE VERY SMALL SQUARE
+cp;2B1A;age=5.0;na=DOTTED SQUARE;vo=U
+cp;2B1B;age=5.1;ea=W;Emoji;Emoji_Presentation;na=BLACK LARGE SQUARE;vo=U
+cp;2B1C;age=5.1;ea=W;Emoji;Emoji_Presentation;na=WHITE LARGE SQUARE;vo=U
+cp;2B1D;age=5.1;na=BLACK VERY SMALL SQUARE;vo=U
+cp;2B1E;age=5.1;na=WHITE VERY SMALL SQUARE;vo=U
 # Pentagons
-cp;2B1F;age=5.1;na=BLACK PENTAGON
-cp;2B20;age=5.0;na=WHITE PENTAGON
+cp;2B1F;age=5.1;na=BLACK PENTAGON;vo=U
+cp;2B20;age=5.0;na=WHITE PENTAGON;vo=U
 # Hexagons
-cp;2B21;age=5.0;na=WHITE HEXAGON
-cp;2B22;age=5.0;na=BLACK HEXAGON
-cp;2B23;age=5.0;na=HORIZONTAL BLACK HEXAGON
+cp;2B21;age=5.0;na=WHITE HEXAGON;vo=U
+cp;2B22;age=5.0;na=BLACK HEXAGON;vo=U
+cp;2B23;age=5.0;na=HORIZONTAL BLACK HEXAGON;vo=U
 # Circle
-cp;2B24;age=5.1;na=BLACK LARGE CIRCLE
+cp;2B24;age=5.1;na=BLACK LARGE CIRCLE;vo=U
 # Diamonds and lozenges
-cp;2B25;age=5.1;na=BLACK MEDIUM DIAMOND
-cp;2B26;age=5.1;na=WHITE MEDIUM DIAMOND
-cp;2B27;age=5.1;na=BLACK MEDIUM LOZENGE
-cp;2B28;age=5.1;na=WHITE MEDIUM LOZENGE
-cp;2B29;age=5.1;na=BLACK SMALL DIAMOND
-cp;2B2A;age=5.1;na=BLACK SMALL LOZENGE
-cp;2B2B;age=5.1;na=WHITE SMALL LOZENGE
+cp;2B25;age=5.1;na=BLACK MEDIUM DIAMOND;vo=U
+cp;2B26;age=5.1;na=WHITE MEDIUM DIAMOND;vo=U
+cp;2B27;age=5.1;na=BLACK MEDIUM LOZENGE;vo=U
+cp;2B28;age=5.1;na=WHITE MEDIUM LOZENGE;vo=U
+cp;2B29;age=5.1;na=BLACK SMALL DIAMOND;vo=U
+cp;2B2A;age=5.1;na=BLACK SMALL LOZENGE;vo=U
+cp;2B2B;age=5.1;na=WHITE SMALL LOZENGE;vo=U
 # Ellipses
-cp;2B2C;age=5.1;na=BLACK HORIZONTAL ELLIPSE
-cp;2B2D;age=5.1;na=WHITE HORIZONTAL ELLIPSE
-cp;2B2E;age=5.1;na=BLACK VERTICAL ELLIPSE
-cp;2B2F;age=5.1;na=WHITE VERTICAL ELLIPSE
+cp;2B2C;age=5.1;na=BLACK HORIZONTAL ELLIPSE;vo=U
+cp;2B2D;age=5.1;na=WHITE HORIZONTAL ELLIPSE;vo=U
+cp;2B2E;age=5.1;na=BLACK VERTICAL ELLIPSE;vo=U
+cp;2B2F;age=5.1;na=WHITE VERTICAL ELLIPSE;vo=U
 # Mathematical arrows
 cp;2B30;age=5.1;gc=Sm;Math;na=LEFT ARROW WITH SMALL CIRCLE
 cp;2B31;age=5.1;gc=Sm;Math;na=THREE LEFTWARDS ARROWS
@@ -12663,19 +12668,19 @@ cp;2B4D;na=DOWNWARDS TRIANGLE-HEADED ZIGZAG ARROW
 cp;2B4E;na=SHORT SLANTED NORTH ARROW
 cp;2B4F;na=SHORT BACKSLANTED SOUTH ARROW
 # Stars
-cp;2B50;age=5.1;ea=W;Emoji;Emoji_Presentation;na=WHITE MEDIUM STAR
-cp;2B51;age=5.1;na=BLACK SMALL STAR
-cp;2B52;age=5.1;na=WHITE SMALL STAR
+cp;2B50;age=5.1;ea=W;Emoji;Emoji_Presentation;na=WHITE MEDIUM STAR;vo=U
+cp;2B51;age=5.1;na=BLACK SMALL STAR;vo=U
+cp;2B52;age=5.1;na=WHITE SMALL STAR;vo=U
 # Pentagons
-cp;2B53;age=5.1;na=BLACK RIGHT-POINTING PENTAGON
-cp;2B54;age=5.1;na=WHITE RIGHT-POINTING PENTAGON
+cp;2B53;age=5.1;na=BLACK RIGHT-POINTING PENTAGON;vo=U
+cp;2B54;age=5.1;na=WHITE RIGHT-POINTING PENTAGON;vo=U
 # Traffic sign from ARIB STD B24
-cp;2B55;age=5.2;ea=W;Emoji;Emoji_Presentation;lb=AI;na=HEAVY LARGE CIRCLE
+cp;2B55;age=5.2;ea=W;Emoji;Emoji_Presentation;lb=AI;na=HEAVY LARGE CIRCLE;vo=U
 # Dictionary and map symbols from ARIB STD B24
-cp;2B56;age=5.2;ea=A;lb=AI;na=HEAVY OVAL WITH OVAL INSIDE
-cp;2B57;age=5.2;ea=A;lb=AI;na=HEAVY CIRCLE WITH CIRCLE INSIDE
-cp;2B58;age=5.2;ea=A;lb=AI;na=HEAVY CIRCLE
-cp;2B59;age=5.2;ea=A;lb=AI;na=HEAVY CIRCLED SALTIRE
+cp;2B56;age=5.2;ea=A;lb=AI;na=HEAVY OVAL WITH OVAL INSIDE;vo=U
+cp;2B57;age=5.2;ea=A;lb=AI;na=HEAVY CIRCLE WITH CIRCLE INSIDE;vo=U
+cp;2B58;age=5.2;ea=A;lb=AI;na=HEAVY CIRCLE;vo=U
+cp;2B59;age=5.2;ea=A;lb=AI;na=HEAVY CIRCLED SALTIRE;vo=U
 # Intonation marks for Lithuanian dialectology
 cp;2B5A;na=SLANTED NORTH ARROW WITH HOOKED HEAD
 cp;2B5B;na=BACKSLANTED SOUTH ARROW WITH HOOKED TAIL
@@ -12782,43 +12787,43 @@ cp;2BB5;na=RIBBON ARROW RIGHT UP
 cp;2BB6;na=RIBBON ARROW LEFT DOWN
 cp;2BB7;na=RIBBON ARROW RIGHT DOWN
 # Keyboard symbols
-cp;2BB8;na=UPWARDS WHITE ARROW FROM BAR WITH HORIZONTAL BAR
-cp;2BB9;na=UP ARROWHEAD IN A RECTANGLE BOX
-cp;2BBA..2BBC;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
+cp;2BB8;na=UPWARDS WHITE ARROW FROM BAR WITH HORIZONTAL BAR;vo=U
+cp;2BB9;na=UP ARROWHEAD IN A RECTANGLE BOX;vo=U
+cp;2BBA..2BBC;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz;vo=U
 # Geometric symbols
-cp;2BBD;na=BALLOT BOX WITH LIGHT X
-cp;2BBE;na=CIRCLED X
-cp;2BBF;na=CIRCLED BOLD X
+cp;2BBD;na=BALLOT BOX WITH LIGHT X;vo=U
+cp;2BBE;na=CIRCLED X;vo=U
+cp;2BBF;na=CIRCLED BOLD X;vo=U
 # Centred geometric shapes
-cp;2BC0;na=BLACK SQUARE CENTRED
-cp;2BC1;na=BLACK DIAMOND CENTRED
-cp;2BC2;na=TURNED BLACK PENTAGON
-cp;2BC3;na=HORIZONTAL BLACK OCTAGON
-cp;2BC4;na=BLACK OCTAGON
-cp;2BC5;na=BLACK MEDIUM UP-POINTING TRIANGLE CENTRED
-cp;2BC6;na=BLACK MEDIUM DOWN-POINTING TRIANGLE CENTRED
-cp;2BC7;na=BLACK MEDIUM LEFT-POINTING TRIANGLE CENTRED
-cp;2BC8;na=BLACK MEDIUM RIGHT-POINTING TRIANGLE CENTRED
-cp;2BC9;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
+cp;2BC0;na=BLACK SQUARE CENTRED;vo=U
+cp;2BC1;na=BLACK DIAMOND CENTRED;vo=U
+cp;2BC2;na=TURNED BLACK PENTAGON;vo=U
+cp;2BC3;na=HORIZONTAL BLACK OCTAGON;vo=U
+cp;2BC4;na=BLACK OCTAGON;vo=U
+cp;2BC5;na=BLACK MEDIUM UP-POINTING TRIANGLE CENTRED;vo=U
+cp;2BC6;na=BLACK MEDIUM DOWN-POINTING TRIANGLE CENTRED;vo=U
+cp;2BC7;na=BLACK MEDIUM LEFT-POINTING TRIANGLE CENTRED;vo=U
+cp;2BC8;na=BLACK MEDIUM RIGHT-POINTING TRIANGLE CENTRED;vo=U
+cp;2BC9;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz;vo=U
 # Half circles
-cp;2BCA;na=TOP HALF BLACK CIRCLE
-cp;2BCB;na=BOTTOM HALF BLACK CIRCLE
+cp;2BCA;na=TOP HALF BLACK CIRCLE;vo=U
+cp;2BCB;na=BOTTOM HALF BLACK CIRCLE;vo=U
 # Cusp shapes
-cp;2BCC;na=LIGHT FOUR POINTED BLACK CUSP
-cp;2BCD;na=ROTATED LIGHT FOUR POINTED BLACK CUSP
-cp;2BCE;na=WHITE FOUR POINTED CUSP
-cp;2BCF;na=ROTATED WHITE FOUR POINTED CUSP
+cp;2BCC;na=LIGHT FOUR POINTED BLACK CUSP;vo=U
+cp;2BCD;na=ROTATED LIGHT FOUR POINTED BLACK CUSP;vo=U
+cp;2BCE;na=WHITE FOUR POINTED CUSP;vo=U
+cp;2BCF;na=ROTATED WHITE FOUR POINTED CUSP;vo=U
 # Miscellaneous symbols
-cp;2BD0;na=SQUARE POSITION INDICATOR
-cp;2BD1;na=UNCERTAINTY SIGN
+cp;2BD0;na=SQUARE POSITION INDICATOR;vo=U
+cp;2BD1;na=UNCERTAINTY SIGN;vo=U
 cp;2BD2;age=10.0;na=GROUP MARK
-cp;2BD3..2BEB;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
+cp;2BD3..2BEB;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz;vo=U
 # Two-headed arrow symbols
 cp;2BEC;age=8.0;na=LEFTWARDS TWO-HEADED ARROW WITH TRIANGLE ARROWHEADS
 cp;2BED;age=8.0;na=UPWARDS TWO-HEADED ARROW WITH TRIANGLE ARROWHEADS
 cp;2BEE;age=8.0;na=RIGHTWARDS TWO-HEADED ARROW WITH TRIANGLE ARROWHEADS
 cp;2BEF;age=8.0;na=DOWNWARDS TWO-HEADED ARROW WITH TRIANGLE ARROWHEADS
-cp;2BF0..2BFF;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
+cp;2BF0..2BFF;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz;vo=U
 
 block;2C00..2C5F;age=4.1;Alpha;blk=Glagolitic;Cased;CWCM;gc=Ll;Gr_Base;IDC;IDS;lb=AL;SB=LO;sc=Glag;WB=LE;XIDC;XIDS
 # 2C00..2C5F Glagolitic
@@ -13446,7 +13451,7 @@ cp;2E48;age=10.0;na=LOW KAVYKA WITH DOT
 cp;2E49;age=10.0;na=DOUBLE STACKED COMMA
 cp;2E4A..2E7F;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
 
-block;2E80..2EFF;age=3.0;bc=ON;blk=CJK_Radicals_Sup;ea=W;gc=So;Gr_Base;lb=ID;Radical;sc=Hani
+block;2E80..2EFF;age=3.0;bc=ON;blk=CJK_Radicals_Sup;ea=W;gc=So;Gr_Base;lb=ID;Radical;sc=Hani;vo=U
 # 2E80..2EFF CJK Radicals Supplement
 # CJK radicals supplement
 cp;2E80;na=CJK RADICAL REPEAT
@@ -13567,7 +13572,7 @@ cp;2EF2;na=CJK RADICAL J-SIMPLIFIED TURTLE
 cp;2EF3;CWKCF;dm=9F9F;dt=Com;na=CJK RADICAL C-SIMPLIFIED TURTLE;NFKC_CF=9F9F;NFKC_QC=N;NFKD_QC=N
 cp;2EF4..2EFF;age=NA;bc=L;ea=N;gc=Cn;-Gr_Base;lb=XX;-Radical;sc=Zzzz
 
-block;2F00..2FDF;age=3.0;bc=ON;blk=Kangxi;CWKCF;dt=Com;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;Radical;sc=Hani
+block;2F00..2FDF;age=3.0;bc=ON;blk=Kangxi;CWKCF;dt=Com;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;Radical;sc=Hani;vo=U
 # 2F00..2FDF Kangxi Radicals
 # Kangxi radicals
 cp;2F00;dm=4E00;na=KANGXI RADICAL ONE;NFKC_CF=4E00
@@ -13785,8 +13790,9 @@ cp;2FD3;dm=9F8D;na=KANGXI RADICAL DRAGON;NFKC_CF=9F8D
 cp;2FD4;dm=9F9C;na=KANGXI RADICAL TURTLE;NFKC_CF=9F9C
 cp;2FD5;dm=9FA0;na=KANGXI RADICAL FLUTE;NFKC_CF=9FA0
 cp;2FD6..2FDF;age=NA;bc=L;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;lb=XX;NFKC_QC=Y;NFKD_QC=Y;-Radical;sc=Zzzz
+cp;2FE0..2FEF;vo=U
 
-block;2FF0..2FFF;age=3.0;bc=ON;blk=IDC;ea=W;gc=So;Gr_Base;IDSB;lb=ID;sc=Zyyy
+block;2FF0..2FFF;age=3.0;bc=ON;blk=IDC;ea=W;gc=So;Gr_Base;IDSB;lb=ID;sc=Zyyy;vo=U
 # 2FF0..2FFF Ideographic Description Characters
 # Ideographic description characters
 cp;2FF0;na=IDEOGRAPHIC DESCRIPTION CHARACTER LEFT TO RIGHT
@@ -13803,47 +13809,47 @@ cp;2FFA;na=IDEOGRAPHIC DESCRIPTION CHARACTER SURROUND FROM LOWER LEFT
 cp;2FFB;na=IDEOGRAPHIC DESCRIPTION CHARACTER OVERLAID
 cp;2FFC..2FFF;age=NA;bc=L;ea=N;gc=Cn;-Gr_Base;-IDSB;lb=XX;sc=Zzzz
 
-block;3000..303F;age=1.1;bc=ON;blk=CJK_Symbols;ea=W;gc=Nl;Gr_Base;lb=ID;SB=LE;sc=Zyyy
+block;3000..303F;age=1.1;bc=ON;blk=CJK_Symbols;ea=W;gc=Nl;Gr_Base;lb=ID;SB=LE;sc=Zyyy;vo=U
 # 3000..303F CJK Symbols and Punctuation
 # CJK symbols and punctuation
 cp;3000;bc=WS;CWKCF;dm=0020;dt=Wide;ea=F;gc=Zs;lb=BA;na=IDEOGRAPHIC SPACE;NFKC_CF=0020;NFKC_QC=N;NFKD_QC=N;SB=SP;WSpace
-cp;3001;gc=Po;lb=CL;na=IDEOGRAPHIC COMMA;Pat_Syn;SB=SC;scx=Bopo Hang Hani Hira Kana Yiii;Term
-cp;3002;gc=Po;lb=CL;na=IDEOGRAPHIC FULL STOP;Pat_Syn;SB=ST;scx=Bopo Hang Hani Hira Kana Yiii;STerm;Term
+cp;3001;gc=Po;lb=CL;na=IDEOGRAPHIC COMMA;Pat_Syn;SB=SC;scx=Bopo Hang Hani Hira Kana Yiii;Term;vo=Tu
+cp;3002;gc=Po;lb=CL;na=IDEOGRAPHIC FULL STOP;Pat_Syn;SB=ST;scx=Bopo Hang Hani Hira Kana Yiii;STerm;Term;vo=Tu
 cp;3003;gc=Po;na=DITTO MARK;Pat_Syn;SB=XX;scx=Bopo Hang Hani Hira Kana
 cp;3004;gc=So;na=JAPANESE INDUSTRIAL STANDARD SYMBOL;SB=XX
 cp;3005;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;lb=NS;na=IDEOGRAPHIC ITERATION MARK;sc=Hani;WB=LE;XIDC;XIDS
 cp;3006;Alpha;bc=L;gc=Lo;IDC;Ideo;IDS;na=IDEOGRAPHIC CLOSING MARK;scx=Hani;XIDC;XIDS
 cp;3007;Alpha;bc=L;IDC;Ideo;IDS;na=IDEOGRAPHIC NUMBER ZERO;nt=Nu;nv=0;sc=Hani;XIDC;XIDS
 # CJK angle brackets
-cp;3008;Bidi_M;bmg=3009;bpb=3009;bpt=o;gc=Ps;lb=OP;na=LEFT ANGLE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;3009;Bidi_M;bmg=3008;bpb=3008;bpt=c;gc=Pe;lb=CL;na=RIGHT ANGLE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;300A;Bidi_M;bmg=300B;bpb=300B;bpt=o;gc=Ps;lb=OP;na=LEFT DOUBLE ANGLE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;300B;Bidi_M;bmg=300A;bpb=300A;bpt=c;gc=Pe;lb=CL;na=RIGHT DOUBLE ANGLE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
+cp;3008;Bidi_M;bmg=3009;bpb=3009;bpt=o;gc=Ps;lb=OP;na=LEFT ANGLE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;3009;Bidi_M;bmg=3008;bpb=3008;bpt=c;gc=Pe;lb=CL;na=RIGHT ANGLE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;300A;Bidi_M;bmg=300B;bpb=300B;bpt=o;gc=Ps;lb=OP;na=LEFT DOUBLE ANGLE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;300B;Bidi_M;bmg=300A;bpb=300A;bpt=c;gc=Pe;lb=CL;na=RIGHT DOUBLE ANGLE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
 # CJK corner brackets
-cp;300C;Bidi_M;bmg=300D;bpb=300D;bpt=o;gc=Ps;lb=OP;na=LEFT CORNER BRACKET;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;300D;Bidi_M;bmg=300C;bpb=300C;bpt=c;gc=Pe;lb=CL;na=RIGHT CORNER BRACKET;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;300E;Bidi_M;bmg=300F;bpb=300F;bpt=o;gc=Ps;lb=OP;na=LEFT WHITE CORNER BRACKET;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;300F;Bidi_M;bmg=300E;bpb=300E;bpt=c;gc=Pe;lb=CL;na=RIGHT WHITE CORNER BRACKET;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
+cp;300C;Bidi_M;bmg=300D;bpb=300D;bpt=o;gc=Ps;lb=OP;na=LEFT CORNER BRACKET;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;300D;Bidi_M;bmg=300C;bpb=300C;bpt=c;gc=Pe;lb=CL;na=RIGHT CORNER BRACKET;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;300E;Bidi_M;bmg=300F;bpb=300F;bpt=o;gc=Ps;lb=OP;na=LEFT WHITE CORNER BRACKET;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;300F;Bidi_M;bmg=300E;bpb=300E;bpt=c;gc=Pe;lb=CL;na=RIGHT WHITE CORNER BRACKET;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
 # CJK brackets
-cp;3010;Bidi_M;bmg=3011;bpb=3011;bpt=o;gc=Ps;lb=OP;na=LEFT BLACK LENTICULAR BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;3011;Bidi_M;bmg=3010;bpb=3010;bpt=c;gc=Pe;lb=CL;na=RIGHT BLACK LENTICULAR BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
+cp;3010;Bidi_M;bmg=3011;bpb=3011;bpt=o;gc=Ps;lb=OP;na=LEFT BLACK LENTICULAR BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;3011;Bidi_M;bmg=3010;bpb=3010;bpt=c;gc=Pe;lb=CL;na=RIGHT BLACK LENTICULAR BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
 # CJK symbols
 cp;3012;gc=So;na=POSTAL MARK;Pat_Syn;SB=XX
 cp;3013;gc=So;na=GETA MARK;Pat_Syn;SB=XX;scx=Bopo Hang Hani Hira Kana
 # CJK brackets
-cp;3014;Bidi_M;bmg=3015;bpb=3015;bpt=o;gc=Ps;lb=OP;na=LEFT TORTOISE SHELL BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;3015;Bidi_M;bmg=3014;bpb=3014;bpt=c;gc=Pe;lb=CL;na=RIGHT TORTOISE SHELL BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;3016;Bidi_M;bmg=3017;bpb=3017;bpt=o;gc=Ps;lb=OP;na=LEFT WHITE LENTICULAR BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;3017;Bidi_M;bmg=3016;bpb=3016;bpt=c;gc=Pe;lb=CL;na=RIGHT WHITE LENTICULAR BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;3018;Bidi_M;bmg=3019;bpb=3019;bpt=o;gc=Ps;lb=OP;na=LEFT WHITE TORTOISE SHELL BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;3019;Bidi_M;bmg=3018;bpb=3018;bpt=c;gc=Pe;lb=CL;na=RIGHT WHITE TORTOISE SHELL BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;301A;Bidi_M;bmg=301B;bpb=301B;bpt=o;gc=Ps;lb=OP;na=LEFT WHITE SQUARE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
-cp;301B;Bidi_M;bmg=301A;bpb=301A;bpt=c;gc=Pe;lb=CL;na=RIGHT WHITE SQUARE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii
+cp;3014;Bidi_M;bmg=3015;bpb=3015;bpt=o;gc=Ps;lb=OP;na=LEFT TORTOISE SHELL BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;3015;Bidi_M;bmg=3014;bpb=3014;bpt=c;gc=Pe;lb=CL;na=RIGHT TORTOISE SHELL BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;3016;Bidi_M;bmg=3017;bpb=3017;bpt=o;gc=Ps;lb=OP;na=LEFT WHITE LENTICULAR BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;3017;Bidi_M;bmg=3016;bpb=3016;bpt=c;gc=Pe;lb=CL;na=RIGHT WHITE LENTICULAR BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;3018;Bidi_M;bmg=3019;bpb=3019;bpt=o;gc=Ps;lb=OP;na=LEFT WHITE TORTOISE SHELL BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;3019;Bidi_M;bmg=3018;bpb=3018;bpt=c;gc=Pe;lb=CL;na=RIGHT WHITE TORTOISE SHELL BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;301A;Bidi_M;bmg=301B;bpb=301B;bpt=o;gc=Ps;lb=OP;na=LEFT WHITE SQUARE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
+cp;301B;Bidi_M;bmg=301A;bpb=301A;bpt=c;gc=Pe;lb=CL;na=RIGHT WHITE SQUARE BRACKET;Pat_Syn;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;vo=Tr
 # CJK symbols and punctuation
-cp;301C;Dash;gc=Pd;lb=NS;na=WAVE DASH;Pat_Syn;SB=XX;scx=Bopo Hang Hani Hira Kana
-cp;301D;gc=Ps;lb=OP;na=REVERSED DOUBLE PRIME QUOTATION MARK;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana
-cp;301E;gc=Pe;lb=CL;na=DOUBLE PRIME QUOTATION MARK;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana
-cp;301F;gc=Pe;lb=CL;na=LOW DOUBLE PRIME QUOTATION MARK;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana
+cp;301C;Dash;gc=Pd;lb=NS;na=WAVE DASH;Pat_Syn;SB=XX;scx=Bopo Hang Hani Hira Kana;vo=Tr
+cp;301D;gc=Ps;lb=OP;na=REVERSED DOUBLE PRIME QUOTATION MARK;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana;vo=Tr
+cp;301E;gc=Pe;lb=CL;na=DOUBLE PRIME QUOTATION MARK;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana;vo=Tr
+cp;301F;gc=Pe;lb=CL;na=LOW DOUBLE PRIME QUOTATION MARK;Pat_Syn;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana;vo=Tr
 cp;3020;gc=So;na=POSTAL MARK FACE;Pat_Syn;SB=XX
 # Suzhou numerals
 cp;3021;Alpha;bc=L;IDC;Ideo;IDS;na=HANGZHOU NUMERAL ONE;nt=Nu;nv=1;sc=Hani;XIDC;XIDS
@@ -13863,7 +13869,7 @@ cp;302D;bc=NSM;ccc=222;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;IDC;jt=T;lb=CM;na=IDE
 cp;302E;bc=L;ccc=224;Dia;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;IDC;lb=CM;na=HANGUL SINGLE DOT TONE MARK;SB=EX;sc=Hang;WB=Extend;XIDC
 cp;302F;bc=L;ccc=224;Dia;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;IDC;lb=CM;na=HANGUL DOUBLE DOT TONE MARK;SB=EX;sc=Hang;WB=Extend;XIDC
 # Other CJK symbols
-cp;3030;Dash;Emoji;gc=Pd;na=WAVY DASH;Pat_Syn;SB=XX;scx=Bopo Hang Hani Hira Kana
+cp;3030;Dash;Emoji;gc=Pd;na=WAVY DASH;Pat_Syn;SB=XX;scx=Bopo Hang Hani Hira Kana;vo=Tr
 cp;3031;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;na=VERTICAL KANA REPEAT MARK;scx=Hira Kana;WB=KA;XIDC;XIDS
 cp;3032;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;na=VERTICAL KANA REPEAT WITH VOICED SOUND MARK;scx=Hira Kana;WB=KA;XIDC;XIDS
 cp;3033;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;na=VERTICAL KANA REPEAT MARK UPPER HALF;scx=Hira Kana;WB=KA;XIDC;XIDS
@@ -13883,19 +13889,19 @@ cp;303D;age=3.2;Emoji;gc=Po;na=PART ALTERNATION MARK;SB=XX;scx=Hani Hira Kana
 cp;303E;age=3.0;gc=So;na=IDEOGRAPHIC VARIATION INDICATOR;SB=XX;scx=Hani
 cp;303F;ea=N;gc=So;na=IDEOGRAPHIC HALF FILL SPACE;SB=XX;scx=Hani
 
-block;3040..309F;age=1.1;Alpha;blk=Hiragana;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Hira;XIDC;XIDS
+block;3040..309F;age=1.1;Alpha;blk=Hiragana;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Hira;vo=U;XIDC;XIDS
 # 3040..309F Hiragana
 cp;3040;age=NA;-Alpha;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;-XIDC;-XIDS
 # Hiragana letters
-cp;3041;lb=CJ;na=HIRAGANA LETTER SMALL A
+cp;3041;lb=CJ;na=HIRAGANA LETTER SMALL A;vo=Tu
 cp;3042;na=HIRAGANA LETTER A
-cp;3043;lb=CJ;na=HIRAGANA LETTER SMALL I
+cp;3043;lb=CJ;na=HIRAGANA LETTER SMALL I;vo=Tu
 cp;3044;na=HIRAGANA LETTER I
-cp;3045;lb=CJ;na=HIRAGANA LETTER SMALL U
+cp;3045;lb=CJ;na=HIRAGANA LETTER SMALL U;vo=Tu
 cp;3046;na=HIRAGANA LETTER U
-cp;3047;lb=CJ;na=HIRAGANA LETTER SMALL E
+cp;3047;lb=CJ;na=HIRAGANA LETTER SMALL E;vo=Tu
 cp;3048;na=HIRAGANA LETTER E
-cp;3049;lb=CJ;na=HIRAGANA LETTER SMALL O
+cp;3049;lb=CJ;na=HIRAGANA LETTER SMALL O;vo=Tu
 cp;304A;na=HIRAGANA LETTER O
 cp;304B;na=HIRAGANA LETTER KA
 cp;304C;dm=304B 3099;dt=Can;na=HIRAGANA LETTER GA;NFD_QC=N;NFKD_QC=N
@@ -13921,7 +13927,7 @@ cp;305F;na=HIRAGANA LETTER TA
 cp;3060;dm=305F 3099;dt=Can;na=HIRAGANA LETTER DA;NFD_QC=N;NFKD_QC=N
 cp;3061;na=HIRAGANA LETTER TI
 cp;3062;dm=3061 3099;dt=Can;na=HIRAGANA LETTER DI;NFD_QC=N;NFKD_QC=N
-cp;3063;lb=CJ;na=HIRAGANA LETTER SMALL TU
+cp;3063;lb=CJ;na=HIRAGANA LETTER SMALL TU;vo=Tu
 cp;3064;na=HIRAGANA LETTER TU
 cp;3065;dm=3064 3099;dt=Can;na=HIRAGANA LETTER DU;NFD_QC=N;NFKD_QC=N
 cp;3066;na=HIRAGANA LETTER TE
@@ -13953,18 +13959,18 @@ cp;307F;na=HIRAGANA LETTER MI
 cp;3080;na=HIRAGANA LETTER MU
 cp;3081;na=HIRAGANA LETTER ME
 cp;3082;na=HIRAGANA LETTER MO
-cp;3083;lb=CJ;na=HIRAGANA LETTER SMALL YA
+cp;3083;lb=CJ;na=HIRAGANA LETTER SMALL YA;vo=Tu
 cp;3084;na=HIRAGANA LETTER YA
-cp;3085;lb=CJ;na=HIRAGANA LETTER SMALL YU
+cp;3085;lb=CJ;na=HIRAGANA LETTER SMALL YU;vo=Tu
 cp;3086;na=HIRAGANA LETTER YU
-cp;3087;lb=CJ;na=HIRAGANA LETTER SMALL YO
+cp;3087;lb=CJ;na=HIRAGANA LETTER SMALL YO;vo=Tu
 cp;3088;na=HIRAGANA LETTER YO
 cp;3089;na=HIRAGANA LETTER RA
 cp;308A;na=HIRAGANA LETTER RI
 cp;308B;na=HIRAGANA LETTER RU
 cp;308C;na=HIRAGANA LETTER RE
 cp;308D;na=HIRAGANA LETTER RO
-cp;308E;lb=CJ;na=HIRAGANA LETTER SMALL WA
+cp;308E;lb=CJ;na=HIRAGANA LETTER SMALL WA;vo=Tu
 cp;308F;na=HIRAGANA LETTER WA
 cp;3090;na=HIRAGANA LETTER WI
 cp;3091;na=HIRAGANA LETTER WE
@@ -13972,34 +13978,34 @@ cp;3092;na=HIRAGANA LETTER WO
 cp;3093;na=HIRAGANA LETTER N
 cp;3094;dm=3046 3099;dt=Can;na=HIRAGANA LETTER VU;NFD_QC=N;NFKD_QC=N
 # Small letters
-cp;3095;age=3.2;lb=CJ;na=HIRAGANA LETTER SMALL KA
-cp;3096;age=3.2;lb=CJ;na=HIRAGANA LETTER SMALL KE
+cp;3095;age=3.2;lb=CJ;na=HIRAGANA LETTER SMALL KA;vo=Tu
+cp;3096;age=3.2;lb=CJ;na=HIRAGANA LETTER SMALL KE;vo=Tu
 cp;3097..3098;age=NA;-Alpha;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;-XIDC;-XIDS
 # Voicing marks
 cp;3099;-Alpha;bc=NSM;ccc=8;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=CM;na=COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK;NFC_QC=M;NFKC_QC=M;SB=EX;sc=Zinh;scx=Hira Kana;WB=Extend;-XIDS
 cp;309A;-Alpha;bc=NSM;ccc=8;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=CM;na=COMBINING KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK;NFC_QC=M;NFKC_QC=M;SB=EX;sc=Zinh;scx=Hira Kana;WB=Extend;-XIDS
-cp;309B;-Alpha;bc=ON;CI;CWKCF;Dia;dm=0020 3099;dt=Com;gc=Sk;lb=NS;na=KATAKANA-HIRAGANA VOICED SOUND MARK;NFKC_CF=0020 3099;NFKC_QC=N;NFKD_QC=N;SB=XX;sc=Zyyy;scx=Hira Kana;WB=KA;-XIDC;-XIDS
-cp;309C;-Alpha;bc=ON;CI;CWKCF;Dia;dm=0020 309A;dt=Com;gc=Sk;lb=NS;na=KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK;NFKC_CF=0020 309A;NFKC_QC=N;NFKD_QC=N;SB=XX;sc=Zyyy;scx=Hira Kana;WB=KA;-XIDC;-XIDS
+cp;309B;-Alpha;bc=ON;CI;CWKCF;Dia;dm=0020 3099;dt=Com;gc=Sk;lb=NS;na=KATAKANA-HIRAGANA VOICED SOUND MARK;NFKC_CF=0020 3099;NFKC_QC=N;NFKD_QC=N;SB=XX;sc=Zyyy;scx=Hira Kana;vo=Tu;WB=KA;-XIDC;-XIDS
+cp;309C;-Alpha;bc=ON;CI;CWKCF;Dia;dm=0020 309A;dt=Com;gc=Sk;lb=NS;na=KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK;NFKC_CF=0020 309A;NFKC_QC=N;NFKD_QC=N;SB=XX;sc=Zyyy;scx=Hira Kana;vo=Tu;WB=KA;-XIDC;-XIDS
 # Iteration marks
 cp;309D;CI;Ext;gc=Lm;lb=NS;na=HIRAGANA ITERATION MARK
 cp;309E;CI;dm=309D 3099;dt=Can;Ext;gc=Lm;lb=NS;na=HIRAGANA VOICED ITERATION MARK;NFD_QC=N;NFKD_QC=N
 # Hiragana digraph
 cp;309F;age=3.2;CWKCF;dm=3088 308A;dt=Vert;na=HIRAGANA DIGRAPH YORI;NFKC_CF=3088 308A;NFKC_QC=N;NFKD_QC=N
 
-block;30A0..30FF;age=1.1;Alpha;blk=Katakana;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Kana;WB=KA;XIDC;XIDS
+block;30A0..30FF;age=1.1;Alpha;blk=Katakana;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Kana;vo=U;WB=KA;XIDC;XIDS
 # 30A0..30FF Katakana
 # Katakana punctuation
-cp;30A0;age=3.2;-Alpha;bc=ON;Dash;gc=Pd;-IDC;-IDS;lb=NS;na=KATAKANA-HIRAGANA DOUBLE HYPHEN;SB=XX;sc=Zyyy;scx=Hira Kana;-XIDC;-XIDS
+cp;30A0;age=3.2;-Alpha;bc=ON;Dash;gc=Pd;-IDC;-IDS;lb=NS;na=KATAKANA-HIRAGANA DOUBLE HYPHEN;SB=XX;sc=Zyyy;scx=Hira Kana;vo=Tr;-XIDC;-XIDS
 # Katakana letters
-cp;30A1;lb=CJ;na=KATAKANA LETTER SMALL A
+cp;30A1;lb=CJ;na=KATAKANA LETTER SMALL A;vo=Tu
 cp;30A2;na=KATAKANA LETTER A
-cp;30A3;lb=CJ;na=KATAKANA LETTER SMALL I
+cp;30A3;lb=CJ;na=KATAKANA LETTER SMALL I;vo=Tu
 cp;30A4;na=KATAKANA LETTER I
-cp;30A5;lb=CJ;na=KATAKANA LETTER SMALL U
+cp;30A5;lb=CJ;na=KATAKANA LETTER SMALL U;vo=Tu
 cp;30A6;na=KATAKANA LETTER U
-cp;30A7;lb=CJ;na=KATAKANA LETTER SMALL E
+cp;30A7;lb=CJ;na=KATAKANA LETTER SMALL E;vo=Tu
 cp;30A8;na=KATAKANA LETTER E
-cp;30A9;lb=CJ;na=KATAKANA LETTER SMALL O
+cp;30A9;lb=CJ;na=KATAKANA LETTER SMALL O;vo=Tu
 cp;30AA;na=KATAKANA LETTER O
 cp;30AB;na=KATAKANA LETTER KA
 cp;30AC;dm=30AB 3099;dt=Can;na=KATAKANA LETTER GA;NFD_QC=N;NFKD_QC=N
@@ -14025,7 +14031,7 @@ cp;30BF;na=KATAKANA LETTER TA
 cp;30C0;dm=30BF 3099;dt=Can;na=KATAKANA LETTER DA;NFD_QC=N;NFKD_QC=N
 cp;30C1;na=KATAKANA LETTER TI
 cp;30C2;dm=30C1 3099;dt=Can;na=KATAKANA LETTER DI;NFD_QC=N;NFKD_QC=N
-cp;30C3;lb=CJ;na=KATAKANA LETTER SMALL TU
+cp;30C3;lb=CJ;na=KATAKANA LETTER SMALL TU;vo=Tu
 cp;30C4;na=KATAKANA LETTER TU
 cp;30C5;dm=30C4 3099;dt=Can;na=KATAKANA LETTER DU;NFD_QC=N;NFKD_QC=N
 cp;30C6;na=KATAKANA LETTER TE
@@ -14057,40 +14063,40 @@ cp;30DF;na=KATAKANA LETTER MI
 cp;30E0;na=KATAKANA LETTER MU
 cp;30E1;na=KATAKANA LETTER ME
 cp;30E2;na=KATAKANA LETTER MO
-cp;30E3;lb=CJ;na=KATAKANA LETTER SMALL YA
+cp;30E3;lb=CJ;na=KATAKANA LETTER SMALL YA;vo=Tu
 cp;30E4;na=KATAKANA LETTER YA
-cp;30E5;lb=CJ;na=KATAKANA LETTER SMALL YU
+cp;30E5;lb=CJ;na=KATAKANA LETTER SMALL YU;vo=Tu
 cp;30E6;na=KATAKANA LETTER YU
-cp;30E7;lb=CJ;na=KATAKANA LETTER SMALL YO
+cp;30E7;lb=CJ;na=KATAKANA LETTER SMALL YO;vo=Tu
 cp;30E8;na=KATAKANA LETTER YO
 cp;30E9;na=KATAKANA LETTER RA
 cp;30EA;na=KATAKANA LETTER RI
 cp;30EB;na=KATAKANA LETTER RU
 cp;30EC;na=KATAKANA LETTER RE
 cp;30ED;na=KATAKANA LETTER RO
-cp;30EE;lb=CJ;na=KATAKANA LETTER SMALL WA
+cp;30EE;lb=CJ;na=KATAKANA LETTER SMALL WA;vo=Tu
 cp;30EF;na=KATAKANA LETTER WA
 cp;30F0;na=KATAKANA LETTER WI
 cp;30F1;na=KATAKANA LETTER WE
 cp;30F2;na=KATAKANA LETTER WO
 cp;30F3;na=KATAKANA LETTER N
 cp;30F4;dm=30A6 3099;dt=Can;na=KATAKANA LETTER VU;NFD_QC=N;NFKD_QC=N
-cp;30F5;lb=CJ;na=KATAKANA LETTER SMALL KA
-cp;30F6;lb=CJ;na=KATAKANA LETTER SMALL KE
+cp;30F5;lb=CJ;na=KATAKANA LETTER SMALL KA;vo=Tu
+cp;30F6;lb=CJ;na=KATAKANA LETTER SMALL KE;vo=Tu
 cp;30F7;dm=30EF 3099;dt=Can;na=KATAKANA LETTER VA;NFD_QC=N;NFKD_QC=N
 cp;30F8;dm=30F0 3099;dt=Can;na=KATAKANA LETTER VI;NFD_QC=N;NFKD_QC=N
 cp;30F9;dm=30F1 3099;dt=Can;na=KATAKANA LETTER VE;NFD_QC=N;NFKD_QC=N
 cp;30FA;dm=30F2 3099;dt=Can;na=KATAKANA LETTER VO;NFD_QC=N;NFKD_QC=N
 # Conjunction and length marks
 cp;30FB;-Alpha;bc=ON;gc=Po;Hyphen;-IDC;-IDS;lb=NS;na=KATAKANA MIDDLE DOT;SB=XX;sc=Zyyy;scx=Bopo Hang Hani Hira Kana Yiii;WB=XX;-XIDC;-XIDS
-cp;30FC;CI;Dia;Ext;gc=Lm;lb=CJ;na=KATAKANA-HIRAGANA PROLONGED SOUND MARK;sc=Zyyy;scx=Hira Kana
+cp;30FC;CI;Dia;Ext;gc=Lm;lb=CJ;na=KATAKANA-HIRAGANA PROLONGED SOUND MARK;sc=Zyyy;scx=Hira Kana;vo=Tr
 # Iteration marks
 cp;30FD;CI;Ext;gc=Lm;lb=NS;na=KATAKANA ITERATION MARK
 cp;30FE;CI;dm=30FD 3099;dt=Can;Ext;gc=Lm;lb=NS;na=KATAKANA VOICED ITERATION MARK;NFD_QC=N;NFKD_QC=N
 # Katakana digraph
 cp;30FF;age=3.2;CWKCF;dm=30B3 30C8;dt=Vert;na=KATAKANA DIGRAPH KOTO;NFKC_CF=30B3 30C8;NFKC_QC=N;NFKD_QC=N
 
-block;3100..312F;age=1.1;Alpha;blk=Bopomofo;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Bopo;WB=LE;XIDC;XIDS
+block;3100..312F;age=1.1;Alpha;blk=Bopomofo;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Bopo;vo=U;WB=LE;XIDC;XIDS
 # 3100..312F Bopomofo
 cp;3100..3104;age=NA;-Alpha;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 # Based on GB 2312
@@ -14128,7 +14134,7 @@ cp;3123;na=BOPOMOFO LETTER EN
 cp;3124;na=BOPOMOFO LETTER ANG
 cp;3125;na=BOPOMOFO LETTER ENG
 cp;3126;na=BOPOMOFO LETTER ER
-cp;3127;na=BOPOMOFO LETTER I
+cp;3127;na=BOPOMOFO LETTER I;vo=Tu
 cp;3128;na=BOPOMOFO LETTER U
 cp;3129;na=BOPOMOFO LETTER IU
 # Dialect (non-Mandarin) letters
@@ -14140,7 +14146,7 @@ cp;312D;age=5.1;na=BOPOMOFO LETTER IH
 cp;312E;age=10.0;na=BOPOMOFO LETTER O WITH DOT ABOVE
 cp;312F;age=NA;-Alpha;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;3130..318F;age=1.1;Alpha;blk=Compat_Jamo;CWKCF;dt=Com;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;NFKC_QC=N;NFKD_QC=N;SB=LE;sc=Hang;WB=LE;XIDC;XIDS
+block;3130..318F;age=1.1;Alpha;blk=Compat_Jamo;CWKCF;dt=Com;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;NFKC_QC=N;NFKD_QC=N;SB=LE;sc=Hang;vo=U;WB=LE;XIDC;XIDS
 # 3130..318F Hangul Compatibility Jamo
 cp;3130;age=NA;-Alpha;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;NFKC_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 # Consonant letters
@@ -14244,7 +14250,7 @@ cp;318D;dm=119E;na=HANGUL LETTER ARAEA;NFKC_CF=119E
 cp;318E;dm=11A1;na=HANGUL LETTER ARAEAE;NFKC_CF=11A1
 cp;318F;age=NA;-Alpha;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;NFKC_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;3190..319F;age=1.1;blk=Kanbun;CWKCF;dt=Sup;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;scx=Hani
+block;3190..319F;age=1.1;blk=Kanbun;CWKCF;dt=Sup;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;scx=Hani;vo=U
 # 3190..319F Kanbun
 # Tateten
 cp;3190;-CWKCF;dt=None;na=IDEOGRAPHIC ANNOTATION LINKING MARK;NFKC_QC=Y;NFKD_QC=Y
@@ -14265,7 +14271,7 @@ cp;319D;dm=5929;na=IDEOGRAPHIC ANNOTATION HEAVEN MARK;NFKC_CF=5929
 cp;319E;dm=5730;na=IDEOGRAPHIC ANNOTATION EARTH MARK;NFKC_CF=5730
 cp;319F;dm=4EBA;na=IDEOGRAPHIC ANNOTATION MAN MARK;NFKC_CF=4EBA
 
-block;31A0..31BF;age=3.0;Alpha;blk=Bopomofo_Ext;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Bopo;WB=LE;XIDC;XIDS
+block;31A0..31BF;age=3.0;Alpha;blk=Bopomofo_Ext;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Bopo;vo=U;WB=LE;XIDC;XIDS
 # 31A0..31BF Bopomofo Extended
 # Extended Bopomofo for Minnan and Hakka
 cp;31A0;na=BOPOMOFO LETTER BU
@@ -14298,7 +14304,7 @@ cp;31B9;age=6.0;na=BOPOMOFO LETTER LH
 cp;31BA;age=6.0;na=BOPOMOFO LETTER ZY
 cp;31BB..31BF;age=NA;-Alpha;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;31C0..31EF;age=5.1;bc=ON;blk=CJK_Strokes;ea=W;gc=So;Gr_Base;lb=ID;sc=Zyyy;scx=Hani
+block;31C0..31EF;age=5.1;bc=ON;blk=CJK_Strokes;ea=W;gc=So;Gr_Base;lb=ID;sc=Zyyy;scx=Hani;vo=U
 # 31C0..31EF CJK Strokes
 # CJK strokes
 cp;31C0;age=4.1;na=CJK STROKE T
@@ -14339,7 +14345,7 @@ cp;31E2;na=CJK STROKE PG
 cp;31E3;na=CJK STROKE Q
 cp;31E4..31EF;age=NA;bc=L;ea=N;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz;scx=<script>
 
-block;31F0..31FF;age=3.2;Alpha;blk=Katakana_Ext;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=CJ;SB=LE;sc=Kana;WB=KA;XIDC;XIDS
+block;31F0..31FF;age=3.2;Alpha;blk=Katakana_Ext;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=CJ;SB=LE;sc=Kana;vo=Tu;WB=KA;XIDC;XIDS
 # 31F0..31FF Katakana Phonetic Extensions
 # Phonetic extensions for Ainu
 cp;31F0;na=KATAKANA LETTER SMALL KU
@@ -14359,7 +14365,7 @@ cp;31FD;na=KATAKANA LETTER SMALL RU
 cp;31FE;na=KATAKANA LETTER SMALL RE
 cp;31FF;na=KATAKANA LETTER SMALL RO
 
-block;3200..32FF;age=1.1;blk=Enclosed_CJK;CWKCF;dt=Enc;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy
+block;3200..32FF;age=1.1;blk=Enclosed_CJK;CWKCF;dt=Enc;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;vo=U
 # 3200..32FF Enclosed CJK Letters and Months
 # Parenthesized Hangul letters
 cp;3200;dm=0028 1100 0029;dt=Com;na=PARENTHESIZED HANGUL KIYEOK;NFKC_CF=0028 1100 0029;sc=Hang
@@ -14636,97 +14642,97 @@ cp;32FD;dm=30F1;na=CIRCLED KATAKANA WE;NFKC_CF=30F1;sc=Kana;WB=KA
 cp;32FE;dm=30F2;na=CIRCLED KATAKANA WO;NFKC_CF=30F2;sc=Kana;WB=KA
 cp;32FF;age=NA;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;lb=XX;NFKC_QC=Y;NFKD_QC=Y;sc=Zzzz
 
-block;3300..33FF;age=1.1;blk=CJK_Compat;CWKCF;dt=Sqr;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy
+block;3300..33FF;age=1.1;blk=CJK_Compat;CWKCF;dt=Sqr;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;vo=U
 # 3300..33FF CJK Compatibility
 # Squared Katakana words
-cp;3300;dm=30A2 30D1 30FC 30C8;na=SQUARE APAATO;NFKC_CF=30A2 30D1 30FC 30C8;sc=Kana;WB=KA
-cp;3301;dm=30A2 30EB 30D5 30A1;na=SQUARE ARUHUA;NFKC_CF=30A2 30EB 30D5 30A1;sc=Kana;WB=KA
-cp;3302;dm=30A2 30F3 30DA 30A2;na=SQUARE ANPEA;NFKC_CF=30A2 30F3 30DA 30A2;sc=Kana;WB=KA
-cp;3303;dm=30A2 30FC 30EB;na=SQUARE AARU;NFKC_CF=30A2 30FC 30EB;sc=Kana;WB=KA
-cp;3304;dm=30A4 30CB 30F3 30B0;na=SQUARE ININGU;NFKC_CF=30A4 30CB 30F3 30B0;sc=Kana;WB=KA
-cp;3305;dm=30A4 30F3 30C1;na=SQUARE INTI;NFKC_CF=30A4 30F3 30C1;sc=Kana;WB=KA
-cp;3306;dm=30A6 30A9 30F3;na=SQUARE UON;NFKC_CF=30A6 30A9 30F3;sc=Kana;WB=KA
-cp;3307;dm=30A8 30B9 30AF 30FC 30C9;na=SQUARE ESUKUUDO;NFKC_CF=30A8 30B9 30AF 30FC 30C9;sc=Kana;WB=KA
-cp;3308;dm=30A8 30FC 30AB 30FC;na=SQUARE EEKAA;NFKC_CF=30A8 30FC 30AB 30FC;sc=Kana;WB=KA
-cp;3309;dm=30AA 30F3 30B9;na=SQUARE ONSU;NFKC_CF=30AA 30F3 30B9;sc=Kana;WB=KA
-cp;330A;dm=30AA 30FC 30E0;na=SQUARE OOMU;NFKC_CF=30AA 30FC 30E0;sc=Kana;WB=KA
-cp;330B;dm=30AB 30A4 30EA;na=SQUARE KAIRI;NFKC_CF=30AB 30A4 30EA;sc=Kana;WB=KA
-cp;330C;dm=30AB 30E9 30C3 30C8;na=SQUARE KARATTO;NFKC_CF=30AB 30E9 30C3 30C8;sc=Kana;WB=KA
-cp;330D;dm=30AB 30ED 30EA 30FC;na=SQUARE KARORII;NFKC_CF=30AB 30ED 30EA 30FC;sc=Kana;WB=KA
-cp;330E;dm=30AC 30ED 30F3;na=SQUARE GARON;NFKC_CF=30AC 30ED 30F3;sc=Kana;WB=KA
-cp;330F;dm=30AC 30F3 30DE;na=SQUARE GANMA;NFKC_CF=30AC 30F3 30DE;sc=Kana;WB=KA
-cp;3310;dm=30AE 30AC;na=SQUARE GIGA;NFKC_CF=30AE 30AC;sc=Kana;WB=KA
-cp;3311;dm=30AE 30CB 30FC;na=SQUARE GINII;NFKC_CF=30AE 30CB 30FC;sc=Kana;WB=KA
-cp;3312;dm=30AD 30E5 30EA 30FC;na=SQUARE KYURII;NFKC_CF=30AD 30E5 30EA 30FC;sc=Kana;WB=KA
-cp;3313;dm=30AE 30EB 30C0 30FC;na=SQUARE GIRUDAA;NFKC_CF=30AE 30EB 30C0 30FC;sc=Kana;WB=KA
-cp;3314;dm=30AD 30ED;na=SQUARE KIRO;NFKC_CF=30AD 30ED;sc=Kana;WB=KA
-cp;3315;dm=30AD 30ED 30B0 30E9 30E0;na=SQUARE KIROGURAMU;NFKC_CF=30AD 30ED 30B0 30E9 30E0;sc=Kana;WB=KA
-cp;3316;dm=30AD 30ED 30E1 30FC 30C8 30EB;na=SQUARE KIROMEETORU;NFKC_CF=30AD 30ED 30E1 30FC 30C8 30EB;sc=Kana;WB=KA
-cp;3317;dm=30AD 30ED 30EF 30C3 30C8;na=SQUARE KIROWATTO;NFKC_CF=30AD 30ED 30EF 30C3 30C8;sc=Kana;WB=KA
-cp;3318;dm=30B0 30E9 30E0;na=SQUARE GURAMU;NFKC_CF=30B0 30E9 30E0;sc=Kana;WB=KA
-cp;3319;dm=30B0 30E9 30E0 30C8 30F3;na=SQUARE GURAMUTON;NFKC_CF=30B0 30E9 30E0 30C8 30F3;sc=Kana;WB=KA
-cp;331A;dm=30AF 30EB 30BC 30A4 30ED;na=SQUARE KURUZEIRO;NFKC_CF=30AF 30EB 30BC 30A4 30ED;sc=Kana;WB=KA
-cp;331B;dm=30AF 30ED 30FC 30CD;na=SQUARE KUROONE;NFKC_CF=30AF 30ED 30FC 30CD;sc=Kana;WB=KA
-cp;331C;dm=30B1 30FC 30B9;na=SQUARE KEESU;NFKC_CF=30B1 30FC 30B9;sc=Kana;WB=KA
-cp;331D;dm=30B3 30EB 30CA;na=SQUARE KORUNA;NFKC_CF=30B3 30EB 30CA;sc=Kana;WB=KA
-cp;331E;dm=30B3 30FC 30DD;na=SQUARE KOOPO;NFKC_CF=30B3 30FC 30DD;sc=Kana;WB=KA
-cp;331F;dm=30B5 30A4 30AF 30EB;na=SQUARE SAIKURU;NFKC_CF=30B5 30A4 30AF 30EB;sc=Kana;WB=KA
-cp;3320;dm=30B5 30F3 30C1 30FC 30E0;na=SQUARE SANTIIMU;NFKC_CF=30B5 30F3 30C1 30FC 30E0;sc=Kana;WB=KA
-cp;3321;dm=30B7 30EA 30F3 30B0;na=SQUARE SIRINGU;NFKC_CF=30B7 30EA 30F3 30B0;sc=Kana;WB=KA
-cp;3322;dm=30BB 30F3 30C1;na=SQUARE SENTI;NFKC_CF=30BB 30F3 30C1;sc=Kana;WB=KA
-cp;3323;dm=30BB 30F3 30C8;na=SQUARE SENTO;NFKC_CF=30BB 30F3 30C8;sc=Kana;WB=KA
-cp;3324;dm=30C0 30FC 30B9;na=SQUARE DAASU;NFKC_CF=30C0 30FC 30B9;sc=Kana;WB=KA
-cp;3325;dm=30C7 30B7;na=SQUARE DESI;NFKC_CF=30C7 30B7;sc=Kana;WB=KA
-cp;3326;dm=30C9 30EB;na=SQUARE DORU;NFKC_CF=30C9 30EB;sc=Kana;WB=KA
-cp;3327;dm=30C8 30F3;na=SQUARE TON;NFKC_CF=30C8 30F3;sc=Kana;WB=KA
-cp;3328;dm=30CA 30CE;na=SQUARE NANO;NFKC_CF=30CA 30CE;sc=Kana;WB=KA
-cp;3329;dm=30CE 30C3 30C8;na=SQUARE NOTTO;NFKC_CF=30CE 30C3 30C8;sc=Kana;WB=KA
-cp;332A;dm=30CF 30A4 30C4;na=SQUARE HAITU;NFKC_CF=30CF 30A4 30C4;sc=Kana;WB=KA
-cp;332B;dm=30D1 30FC 30BB 30F3 30C8;na=SQUARE PAASENTO;NFKC_CF=30D1 30FC 30BB 30F3 30C8;sc=Kana;WB=KA
-cp;332C;dm=30D1 30FC 30C4;na=SQUARE PAATU;NFKC_CF=30D1 30FC 30C4;sc=Kana;WB=KA
-cp;332D;dm=30D0 30FC 30EC 30EB;na=SQUARE BAARERU;NFKC_CF=30D0 30FC 30EC 30EB;sc=Kana;WB=KA
-cp;332E;dm=30D4 30A2 30B9 30C8 30EB;na=SQUARE PIASUTORU;NFKC_CF=30D4 30A2 30B9 30C8 30EB;sc=Kana;WB=KA
-cp;332F;dm=30D4 30AF 30EB;na=SQUARE PIKURU;NFKC_CF=30D4 30AF 30EB;sc=Kana;WB=KA
-cp;3330;dm=30D4 30B3;na=SQUARE PIKO;NFKC_CF=30D4 30B3;sc=Kana;WB=KA
-cp;3331;dm=30D3 30EB;na=SQUARE BIRU;NFKC_CF=30D3 30EB;sc=Kana;WB=KA
-cp;3332;dm=30D5 30A1 30E9 30C3 30C9;na=SQUARE HUARADDO;NFKC_CF=30D5 30A1 30E9 30C3 30C9;sc=Kana;WB=KA
-cp;3333;dm=30D5 30A3 30FC 30C8;na=SQUARE HUIITO;NFKC_CF=30D5 30A3 30FC 30C8;sc=Kana;WB=KA
-cp;3334;dm=30D6 30C3 30B7 30A7 30EB;na=SQUARE BUSSYERU;NFKC_CF=30D6 30C3 30B7 30A7 30EB;sc=Kana;WB=KA
-cp;3335;dm=30D5 30E9 30F3;na=SQUARE HURAN;NFKC_CF=30D5 30E9 30F3;sc=Kana;WB=KA
-cp;3336;dm=30D8 30AF 30BF 30FC 30EB;na=SQUARE HEKUTAARU;NFKC_CF=30D8 30AF 30BF 30FC 30EB;sc=Kana;WB=KA
-cp;3337;dm=30DA 30BD;na=SQUARE PESO;NFKC_CF=30DA 30BD;sc=Kana;WB=KA
-cp;3338;dm=30DA 30CB 30D2;na=SQUARE PENIHI;NFKC_CF=30DA 30CB 30D2;sc=Kana;WB=KA
-cp;3339;dm=30D8 30EB 30C4;na=SQUARE HERUTU;NFKC_CF=30D8 30EB 30C4;sc=Kana;WB=KA
-cp;333A;dm=30DA 30F3 30B9;na=SQUARE PENSU;NFKC_CF=30DA 30F3 30B9;sc=Kana;WB=KA
-cp;333B;dm=30DA 30FC 30B8;na=SQUARE PEEZI;NFKC_CF=30DA 30FC 30B8;sc=Kana;WB=KA
-cp;333C;dm=30D9 30FC 30BF;na=SQUARE BEETA;NFKC_CF=30D9 30FC 30BF;sc=Kana;WB=KA
-cp;333D;dm=30DD 30A4 30F3 30C8;na=SQUARE POINTO;NFKC_CF=30DD 30A4 30F3 30C8;sc=Kana;WB=KA
-cp;333E;dm=30DC 30EB 30C8;na=SQUARE BORUTO;NFKC_CF=30DC 30EB 30C8;sc=Kana;WB=KA
-cp;333F;dm=30DB 30F3;na=SQUARE HON;NFKC_CF=30DB 30F3;sc=Kana;WB=KA
-cp;3340;dm=30DD 30F3 30C9;na=SQUARE PONDO;NFKC_CF=30DD 30F3 30C9;sc=Kana;WB=KA
-cp;3341;dm=30DB 30FC 30EB;na=SQUARE HOORU;NFKC_CF=30DB 30FC 30EB;sc=Kana;WB=KA
-cp;3342;dm=30DB 30FC 30F3;na=SQUARE HOON;NFKC_CF=30DB 30FC 30F3;sc=Kana;WB=KA
-cp;3343;dm=30DE 30A4 30AF 30ED;na=SQUARE MAIKURO;NFKC_CF=30DE 30A4 30AF 30ED;sc=Kana;WB=KA
-cp;3344;dm=30DE 30A4 30EB;na=SQUARE MAIRU;NFKC_CF=30DE 30A4 30EB;sc=Kana;WB=KA
-cp;3345;dm=30DE 30C3 30CF;na=SQUARE MAHHA;NFKC_CF=30DE 30C3 30CF;sc=Kana;WB=KA
-cp;3346;dm=30DE 30EB 30AF;na=SQUARE MARUKU;NFKC_CF=30DE 30EB 30AF;sc=Kana;WB=KA
-cp;3347;dm=30DE 30F3 30B7 30E7 30F3;na=SQUARE MANSYON;NFKC_CF=30DE 30F3 30B7 30E7 30F3;sc=Kana;WB=KA
-cp;3348;dm=30DF 30AF 30ED 30F3;na=SQUARE MIKURON;NFKC_CF=30DF 30AF 30ED 30F3;sc=Kana;WB=KA
-cp;3349;dm=30DF 30EA;na=SQUARE MIRI;NFKC_CF=30DF 30EA;sc=Kana;WB=KA
-cp;334A;dm=30DF 30EA 30D0 30FC 30EB;na=SQUARE MIRIBAARU;NFKC_CF=30DF 30EA 30D0 30FC 30EB;sc=Kana;WB=KA
-cp;334B;dm=30E1 30AC;na=SQUARE MEGA;NFKC_CF=30E1 30AC;sc=Kana;WB=KA
-cp;334C;dm=30E1 30AC 30C8 30F3;na=SQUARE MEGATON;NFKC_CF=30E1 30AC 30C8 30F3;sc=Kana;WB=KA
-cp;334D;dm=30E1 30FC 30C8 30EB;na=SQUARE MEETORU;NFKC_CF=30E1 30FC 30C8 30EB;sc=Kana;WB=KA
-cp;334E;dm=30E4 30FC 30C9;na=SQUARE YAADO;NFKC_CF=30E4 30FC 30C9;sc=Kana;WB=KA
-cp;334F;dm=30E4 30FC 30EB;na=SQUARE YAARU;NFKC_CF=30E4 30FC 30EB;sc=Kana;WB=KA
-cp;3350;dm=30E6 30A2 30F3;na=SQUARE YUAN;NFKC_CF=30E6 30A2 30F3;sc=Kana;WB=KA
-cp;3351;dm=30EA 30C3 30C8 30EB;na=SQUARE RITTORU;NFKC_CF=30EA 30C3 30C8 30EB;sc=Kana;WB=KA
-cp;3352;dm=30EA 30E9;na=SQUARE RIRA;NFKC_CF=30EA 30E9;sc=Kana;WB=KA
-cp;3353;dm=30EB 30D4 30FC;na=SQUARE RUPII;NFKC_CF=30EB 30D4 30FC;sc=Kana;WB=KA
-cp;3354;dm=30EB 30FC 30D6 30EB;na=SQUARE RUUBURU;NFKC_CF=30EB 30FC 30D6 30EB;sc=Kana;WB=KA
-cp;3355;dm=30EC 30E0;na=SQUARE REMU;NFKC_CF=30EC 30E0;sc=Kana;WB=KA
-cp;3356;dm=30EC 30F3 30C8 30B2 30F3;na=SQUARE RENTOGEN;NFKC_CF=30EC 30F3 30C8 30B2 30F3;sc=Kana;WB=KA
-cp;3357;dm=30EF 30C3 30C8;na=SQUARE WATTO;NFKC_CF=30EF 30C3 30C8;sc=Kana;WB=KA
+cp;3300;dm=30A2 30D1 30FC 30C8;na=SQUARE APAATO;NFKC_CF=30A2 30D1 30FC 30C8;sc=Kana;vo=Tu;WB=KA
+cp;3301;dm=30A2 30EB 30D5 30A1;na=SQUARE ARUHUA;NFKC_CF=30A2 30EB 30D5 30A1;sc=Kana;vo=Tu;WB=KA
+cp;3302;dm=30A2 30F3 30DA 30A2;na=SQUARE ANPEA;NFKC_CF=30A2 30F3 30DA 30A2;sc=Kana;vo=Tu;WB=KA
+cp;3303;dm=30A2 30FC 30EB;na=SQUARE AARU;NFKC_CF=30A2 30FC 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3304;dm=30A4 30CB 30F3 30B0;na=SQUARE ININGU;NFKC_CF=30A4 30CB 30F3 30B0;sc=Kana;vo=Tu;WB=KA
+cp;3305;dm=30A4 30F3 30C1;na=SQUARE INTI;NFKC_CF=30A4 30F3 30C1;sc=Kana;vo=Tu;WB=KA
+cp;3306;dm=30A6 30A9 30F3;na=SQUARE UON;NFKC_CF=30A6 30A9 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3307;dm=30A8 30B9 30AF 30FC 30C9;na=SQUARE ESUKUUDO;NFKC_CF=30A8 30B9 30AF 30FC 30C9;sc=Kana;vo=Tu;WB=KA
+cp;3308;dm=30A8 30FC 30AB 30FC;na=SQUARE EEKAA;NFKC_CF=30A8 30FC 30AB 30FC;sc=Kana;vo=Tu;WB=KA
+cp;3309;dm=30AA 30F3 30B9;na=SQUARE ONSU;NFKC_CF=30AA 30F3 30B9;sc=Kana;vo=Tu;WB=KA
+cp;330A;dm=30AA 30FC 30E0;na=SQUARE OOMU;NFKC_CF=30AA 30FC 30E0;sc=Kana;vo=Tu;WB=KA
+cp;330B;dm=30AB 30A4 30EA;na=SQUARE KAIRI;NFKC_CF=30AB 30A4 30EA;sc=Kana;vo=Tu;WB=KA
+cp;330C;dm=30AB 30E9 30C3 30C8;na=SQUARE KARATTO;NFKC_CF=30AB 30E9 30C3 30C8;sc=Kana;vo=Tu;WB=KA
+cp;330D;dm=30AB 30ED 30EA 30FC;na=SQUARE KARORII;NFKC_CF=30AB 30ED 30EA 30FC;sc=Kana;vo=Tu;WB=KA
+cp;330E;dm=30AC 30ED 30F3;na=SQUARE GARON;NFKC_CF=30AC 30ED 30F3;sc=Kana;vo=Tu;WB=KA
+cp;330F;dm=30AC 30F3 30DE;na=SQUARE GANMA;NFKC_CF=30AC 30F3 30DE;sc=Kana;vo=Tu;WB=KA
+cp;3310;dm=30AE 30AC;na=SQUARE GIGA;NFKC_CF=30AE 30AC;sc=Kana;vo=Tu;WB=KA
+cp;3311;dm=30AE 30CB 30FC;na=SQUARE GINII;NFKC_CF=30AE 30CB 30FC;sc=Kana;vo=Tu;WB=KA
+cp;3312;dm=30AD 30E5 30EA 30FC;na=SQUARE KYURII;NFKC_CF=30AD 30E5 30EA 30FC;sc=Kana;vo=Tu;WB=KA
+cp;3313;dm=30AE 30EB 30C0 30FC;na=SQUARE GIRUDAA;NFKC_CF=30AE 30EB 30C0 30FC;sc=Kana;vo=Tu;WB=KA
+cp;3314;dm=30AD 30ED;na=SQUARE KIRO;NFKC_CF=30AD 30ED;sc=Kana;vo=Tu;WB=KA
+cp;3315;dm=30AD 30ED 30B0 30E9 30E0;na=SQUARE KIROGURAMU;NFKC_CF=30AD 30ED 30B0 30E9 30E0;sc=Kana;vo=Tu;WB=KA
+cp;3316;dm=30AD 30ED 30E1 30FC 30C8 30EB;na=SQUARE KIROMEETORU;NFKC_CF=30AD 30ED 30E1 30FC 30C8 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3317;dm=30AD 30ED 30EF 30C3 30C8;na=SQUARE KIROWATTO;NFKC_CF=30AD 30ED 30EF 30C3 30C8;sc=Kana;vo=Tu;WB=KA
+cp;3318;dm=30B0 30E9 30E0;na=SQUARE GURAMU;NFKC_CF=30B0 30E9 30E0;sc=Kana;vo=Tu;WB=KA
+cp;3319;dm=30B0 30E9 30E0 30C8 30F3;na=SQUARE GURAMUTON;NFKC_CF=30B0 30E9 30E0 30C8 30F3;sc=Kana;vo=Tu;WB=KA
+cp;331A;dm=30AF 30EB 30BC 30A4 30ED;na=SQUARE KURUZEIRO;NFKC_CF=30AF 30EB 30BC 30A4 30ED;sc=Kana;vo=Tu;WB=KA
+cp;331B;dm=30AF 30ED 30FC 30CD;na=SQUARE KUROONE;NFKC_CF=30AF 30ED 30FC 30CD;sc=Kana;vo=Tu;WB=KA
+cp;331C;dm=30B1 30FC 30B9;na=SQUARE KEESU;NFKC_CF=30B1 30FC 30B9;sc=Kana;vo=Tu;WB=KA
+cp;331D;dm=30B3 30EB 30CA;na=SQUARE KORUNA;NFKC_CF=30B3 30EB 30CA;sc=Kana;vo=Tu;WB=KA
+cp;331E;dm=30B3 30FC 30DD;na=SQUARE KOOPO;NFKC_CF=30B3 30FC 30DD;sc=Kana;vo=Tu;WB=KA
+cp;331F;dm=30B5 30A4 30AF 30EB;na=SQUARE SAIKURU;NFKC_CF=30B5 30A4 30AF 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3320;dm=30B5 30F3 30C1 30FC 30E0;na=SQUARE SANTIIMU;NFKC_CF=30B5 30F3 30C1 30FC 30E0;sc=Kana;vo=Tu;WB=KA
+cp;3321;dm=30B7 30EA 30F3 30B0;na=SQUARE SIRINGU;NFKC_CF=30B7 30EA 30F3 30B0;sc=Kana;vo=Tu;WB=KA
+cp;3322;dm=30BB 30F3 30C1;na=SQUARE SENTI;NFKC_CF=30BB 30F3 30C1;sc=Kana;vo=Tu;WB=KA
+cp;3323;dm=30BB 30F3 30C8;na=SQUARE SENTO;NFKC_CF=30BB 30F3 30C8;sc=Kana;vo=Tu;WB=KA
+cp;3324;dm=30C0 30FC 30B9;na=SQUARE DAASU;NFKC_CF=30C0 30FC 30B9;sc=Kana;vo=Tu;WB=KA
+cp;3325;dm=30C7 30B7;na=SQUARE DESI;NFKC_CF=30C7 30B7;sc=Kana;vo=Tu;WB=KA
+cp;3326;dm=30C9 30EB;na=SQUARE DORU;NFKC_CF=30C9 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3327;dm=30C8 30F3;na=SQUARE TON;NFKC_CF=30C8 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3328;dm=30CA 30CE;na=SQUARE NANO;NFKC_CF=30CA 30CE;sc=Kana;vo=Tu;WB=KA
+cp;3329;dm=30CE 30C3 30C8;na=SQUARE NOTTO;NFKC_CF=30CE 30C3 30C8;sc=Kana;vo=Tu;WB=KA
+cp;332A;dm=30CF 30A4 30C4;na=SQUARE HAITU;NFKC_CF=30CF 30A4 30C4;sc=Kana;vo=Tu;WB=KA
+cp;332B;dm=30D1 30FC 30BB 30F3 30C8;na=SQUARE PAASENTO;NFKC_CF=30D1 30FC 30BB 30F3 30C8;sc=Kana;vo=Tu;WB=KA
+cp;332C;dm=30D1 30FC 30C4;na=SQUARE PAATU;NFKC_CF=30D1 30FC 30C4;sc=Kana;vo=Tu;WB=KA
+cp;332D;dm=30D0 30FC 30EC 30EB;na=SQUARE BAARERU;NFKC_CF=30D0 30FC 30EC 30EB;sc=Kana;vo=Tu;WB=KA
+cp;332E;dm=30D4 30A2 30B9 30C8 30EB;na=SQUARE PIASUTORU;NFKC_CF=30D4 30A2 30B9 30C8 30EB;sc=Kana;vo=Tu;WB=KA
+cp;332F;dm=30D4 30AF 30EB;na=SQUARE PIKURU;NFKC_CF=30D4 30AF 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3330;dm=30D4 30B3;na=SQUARE PIKO;NFKC_CF=30D4 30B3;sc=Kana;vo=Tu;WB=KA
+cp;3331;dm=30D3 30EB;na=SQUARE BIRU;NFKC_CF=30D3 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3332;dm=30D5 30A1 30E9 30C3 30C9;na=SQUARE HUARADDO;NFKC_CF=30D5 30A1 30E9 30C3 30C9;sc=Kana;vo=Tu;WB=KA
+cp;3333;dm=30D5 30A3 30FC 30C8;na=SQUARE HUIITO;NFKC_CF=30D5 30A3 30FC 30C8;sc=Kana;vo=Tu;WB=KA
+cp;3334;dm=30D6 30C3 30B7 30A7 30EB;na=SQUARE BUSSYERU;NFKC_CF=30D6 30C3 30B7 30A7 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3335;dm=30D5 30E9 30F3;na=SQUARE HURAN;NFKC_CF=30D5 30E9 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3336;dm=30D8 30AF 30BF 30FC 30EB;na=SQUARE HEKUTAARU;NFKC_CF=30D8 30AF 30BF 30FC 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3337;dm=30DA 30BD;na=SQUARE PESO;NFKC_CF=30DA 30BD;sc=Kana;vo=Tu;WB=KA
+cp;3338;dm=30DA 30CB 30D2;na=SQUARE PENIHI;NFKC_CF=30DA 30CB 30D2;sc=Kana;vo=Tu;WB=KA
+cp;3339;dm=30D8 30EB 30C4;na=SQUARE HERUTU;NFKC_CF=30D8 30EB 30C4;sc=Kana;vo=Tu;WB=KA
+cp;333A;dm=30DA 30F3 30B9;na=SQUARE PENSU;NFKC_CF=30DA 30F3 30B9;sc=Kana;vo=Tu;WB=KA
+cp;333B;dm=30DA 30FC 30B8;na=SQUARE PEEZI;NFKC_CF=30DA 30FC 30B8;sc=Kana;vo=Tu;WB=KA
+cp;333C;dm=30D9 30FC 30BF;na=SQUARE BEETA;NFKC_CF=30D9 30FC 30BF;sc=Kana;vo=Tu;WB=KA
+cp;333D;dm=30DD 30A4 30F3 30C8;na=SQUARE POINTO;NFKC_CF=30DD 30A4 30F3 30C8;sc=Kana;vo=Tu;WB=KA
+cp;333E;dm=30DC 30EB 30C8;na=SQUARE BORUTO;NFKC_CF=30DC 30EB 30C8;sc=Kana;vo=Tu;WB=KA
+cp;333F;dm=30DB 30F3;na=SQUARE HON;NFKC_CF=30DB 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3340;dm=30DD 30F3 30C9;na=SQUARE PONDO;NFKC_CF=30DD 30F3 30C9;sc=Kana;vo=Tu;WB=KA
+cp;3341;dm=30DB 30FC 30EB;na=SQUARE HOORU;NFKC_CF=30DB 30FC 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3342;dm=30DB 30FC 30F3;na=SQUARE HOON;NFKC_CF=30DB 30FC 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3343;dm=30DE 30A4 30AF 30ED;na=SQUARE MAIKURO;NFKC_CF=30DE 30A4 30AF 30ED;sc=Kana;vo=Tu;WB=KA
+cp;3344;dm=30DE 30A4 30EB;na=SQUARE MAIRU;NFKC_CF=30DE 30A4 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3345;dm=30DE 30C3 30CF;na=SQUARE MAHHA;NFKC_CF=30DE 30C3 30CF;sc=Kana;vo=Tu;WB=KA
+cp;3346;dm=30DE 30EB 30AF;na=SQUARE MARUKU;NFKC_CF=30DE 30EB 30AF;sc=Kana;vo=Tu;WB=KA
+cp;3347;dm=30DE 30F3 30B7 30E7 30F3;na=SQUARE MANSYON;NFKC_CF=30DE 30F3 30B7 30E7 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3348;dm=30DF 30AF 30ED 30F3;na=SQUARE MIKURON;NFKC_CF=30DF 30AF 30ED 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3349;dm=30DF 30EA;na=SQUARE MIRI;NFKC_CF=30DF 30EA;sc=Kana;vo=Tu;WB=KA
+cp;334A;dm=30DF 30EA 30D0 30FC 30EB;na=SQUARE MIRIBAARU;NFKC_CF=30DF 30EA 30D0 30FC 30EB;sc=Kana;vo=Tu;WB=KA
+cp;334B;dm=30E1 30AC;na=SQUARE MEGA;NFKC_CF=30E1 30AC;sc=Kana;vo=Tu;WB=KA
+cp;334C;dm=30E1 30AC 30C8 30F3;na=SQUARE MEGATON;NFKC_CF=30E1 30AC 30C8 30F3;sc=Kana;vo=Tu;WB=KA
+cp;334D;dm=30E1 30FC 30C8 30EB;na=SQUARE MEETORU;NFKC_CF=30E1 30FC 30C8 30EB;sc=Kana;vo=Tu;WB=KA
+cp;334E;dm=30E4 30FC 30C9;na=SQUARE YAADO;NFKC_CF=30E4 30FC 30C9;sc=Kana;vo=Tu;WB=KA
+cp;334F;dm=30E4 30FC 30EB;na=SQUARE YAARU;NFKC_CF=30E4 30FC 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3350;dm=30E6 30A2 30F3;na=SQUARE YUAN;NFKC_CF=30E6 30A2 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3351;dm=30EA 30C3 30C8 30EB;na=SQUARE RITTORU;NFKC_CF=30EA 30C3 30C8 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3352;dm=30EA 30E9;na=SQUARE RIRA;NFKC_CF=30EA 30E9;sc=Kana;vo=Tu;WB=KA
+cp;3353;dm=30EB 30D4 30FC;na=SQUARE RUPII;NFKC_CF=30EB 30D4 30FC;sc=Kana;vo=Tu;WB=KA
+cp;3354;dm=30EB 30FC 30D6 30EB;na=SQUARE RUUBURU;NFKC_CF=30EB 30FC 30D6 30EB;sc=Kana;vo=Tu;WB=KA
+cp;3355;dm=30EC 30E0;na=SQUARE REMU;NFKC_CF=30EC 30E0;sc=Kana;vo=Tu;WB=KA
+cp;3356;dm=30EC 30F3 30C8 30B2 30F3;na=SQUARE RENTOGEN;NFKC_CF=30EC 30F3 30C8 30B2 30F3;sc=Kana;vo=Tu;WB=KA
+cp;3357;dm=30EF 30C3 30C8;na=SQUARE WATTO;NFKC_CF=30EF 30C3 30C8;sc=Kana;vo=Tu;WB=KA
 # Telegraph symbols for hours
 cp;3358;dm=0030 70B9;dt=Com;na=IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR ZERO;NFKC_CF=0030 70B9;scx=Hani
 cp;3359;dm=0031 70B9;dt=Com;na=IDEOGRAPHIC TELEGRAPH SYMBOL FOR HOUR ONE;NFKC_CF=0031 70B9;scx=Hani
@@ -14765,12 +14771,12 @@ cp;3378;age=4.0;bc=ON;dm=0064 006D 00B2;na=SQUARE DM SQUARED;NFKC_CF=0064 006D 0
 cp;3379;age=4.0;bc=ON;dm=0064 006D 00B3;na=SQUARE DM CUBED;NFKC_CF=0064 006D 0033
 cp;337A;age=4.0;bc=ON;dm=0049 0055;FC_NFKC=0069 0075;na=SQUARE IU;NFKC_CF=0069 0075
 # Japanese era names
-cp;337B;dm=5E73 6210;na=SQUARE ERA NAME HEISEI;NFKC_CF=5E73 6210;scx=Hani
-cp;337C;dm=662D 548C;na=SQUARE ERA NAME SYOUWA;NFKC_CF=662D 548C;scx=Hani
-cp;337D;dm=5927 6B63;na=SQUARE ERA NAME TAISYOU;NFKC_CF=5927 6B63;scx=Hani
-cp;337E;dm=660E 6CBB;na=SQUARE ERA NAME MEIZI;NFKC_CF=660E 6CBB;scx=Hani
+cp;337B;dm=5E73 6210;na=SQUARE ERA NAME HEISEI;NFKC_CF=5E73 6210;scx=Hani;vo=Tu
+cp;337C;dm=662D 548C;na=SQUARE ERA NAME SYOUWA;NFKC_CF=662D 548C;scx=Hani;vo=Tu
+cp;337D;dm=5927 6B63;na=SQUARE ERA NAME TAISYOU;NFKC_CF=5927 6B63;scx=Hani;vo=Tu
+cp;337E;dm=660E 6CBB;na=SQUARE ERA NAME MEIZI;NFKC_CF=660E 6CBB;scx=Hani;vo=Tu
 # Japanese corporation
-cp;337F;dm=682A 5F0F 4F1A 793E;na=SQUARE CORPORATION;NFKC_CF=682A 5F0F 4F1A 793E;scx=Hani
+cp;337F;dm=682A 5F0F 4F1A 793E;na=SQUARE CORPORATION;NFKC_CF=682A 5F0F 4F1A 793E;scx=Hani;vo=Tu
 # Squared Latin abbreviations
 cp;3380;dm=0070 0041;FC_NFKC=0070 0061;na=SQUARE PA AMPS;NFKC_CF=0070 0061
 cp;3381;dm=006E 0041;FC_NFKC=006E 0061;na=SQUARE NA;NFKC_CF=006E 0061
@@ -14905,7 +14911,7 @@ cp;33FE;dm=0033 0031 65E5;dt=Com;na=IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTY-
 # Squared Latin abbreviation
 cp;33FF;age=4.0;bc=ON;dm=0067 0061 006C;na=SQUARE GAL;NFKC_CF=0067 0061 006C
 
-block;3400..4DBF;age=3.0;Alpha;blk=CJK_Ext_A;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Hani;UIdeo;XIDC;XIDS
+block;3400..4DBF;age=3.0;Alpha;blk=CJK_Ext_A;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Hani;UIdeo;vo=U;XIDC;XIDS
 # 3400..4DB5 CJK Unified Ideographs Extension A
 algnamesrange;3400..4DB5;han;CJK UNIFIED IDEOGRAPH-
 cp;3405;nt=Nu;nv=5
@@ -14914,7 +14920,7 @@ cp;382A;nt=Nu;nv=5
 cp;3B4D;nt=Nu;nv=7
 cp;4DB6..4DBF;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-Ideo;-IDS;SB=XX;sc=Zzzz;-UIdeo;-XIDC;-XIDS
 
-block;4DC0..4DFF;age=4.0;bc=ON;blk=Yijing;gc=So;Gr_Base;lb=AL;sc=Zyyy
+block;4DC0..4DFF;age=4.0;bc=ON;blk=Yijing;gc=So;Gr_Base;lb=AL;sc=Zyyy;vo=U
 # 4DC0..4DFF Yijing Hexagram Symbols
 # Yijing hexagram symbols
 cp;4DC0;na=HEXAGRAM FOR THE CREATIVE HEAVEN
@@ -14982,7 +14988,7 @@ cp;4DFD;na=HEXAGRAM FOR SMALL PREPONDERANCE
 cp;4DFE;na=HEXAGRAM FOR AFTER COMPLETION
 cp;4DFF;na=HEXAGRAM FOR BEFORE COMPLETION
 
-block;4E00..9FFF;age=1.1;Alpha;blk=CJK;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Hani;UIdeo;XIDC;XIDS
+block;4E00..9FFF;age=1.1;Alpha;blk=CJK;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Hani;UIdeo;vo=U;XIDC;XIDS
 # 4E00..9FEA CJK Unified Ideographs
 algnamesrange;4E00..9FEA;han;CJK UNIFIED IDEOGRAPH-
 cp;4E00;nt=Nu;nv=1
@@ -15044,7 +15050,7 @@ cp;9FCD..9FD5;age=8.0
 cp;9FD6..9FEA;age=10.0
 cp;9FEB..9FFF;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-Ideo;-IDS;SB=XX;sc=Zzzz;-UIdeo;-XIDC;-XIDS
 
-block;A000..A48F;age=3.0;Alpha;blk=Yi_Syllables;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Yiii;WB=LE;XIDC;XIDS
+block;A000..A48F;age=3.0;Alpha;blk=Yi_Syllables;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Yiii;vo=U;WB=LE;XIDC;XIDS
 # A000..A48F Yi Syllables
 # Syllables
 cp;A000;na=YI SYLLABLE IT
@@ -16216,7 +16222,7 @@ cp;A48B;na=YI SYLLABLE YYRX
 cp;A48C;na=YI SYLLABLE YYR
 cp;A48D..A48F;age=NA;-Alpha;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;A490..A4CF;age=3.0;bc=ON;blk=Yi_Radicals;ea=W;gc=So;Gr_Base;lb=ID;sc=Yiii
+block;A490..A4CF;age=3.0;bc=ON;blk=Yi_Radicals;ea=W;gc=So;Gr_Base;lb=ID;sc=Yiii;vo=U
 # A490..A4CF Yi Radicals
 # Yi radicals
 cp;A490;na=YI RADICAL QOT
@@ -17463,7 +17469,7 @@ cp;A954..A95E;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;InSC=Other;lb=XX;SB=XX;sc=Z
 # Punctuation
 cp;A95F;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;na=REJANG SECTION MARK;SB=XX;WB=XX;-XIDC;-XIDS
 
-block;A960..A97F;age=5.2;Alpha;blk=Jamo_Ext_A;ea=W;gc=Lo;GCB=L;Gr_Base;IDC;IDS;lb=JL;SB=LE;sc=Hang;WB=LE;XIDC;XIDS
+block;A960..A97F;age=5.2;Alpha;blk=Jamo_Ext_A;ea=W;gc=Lo;GCB=L;Gr_Base;IDC;IDS;lb=JL;SB=LE;sc=Hang;vo=U;WB=LE;XIDC;XIDS
 # A960..A97F Hangul Jamo Extended-A
 # Old initial consonants
 cp;A960;na=HANGUL CHOSEONG TIKEUT-MIEUM
@@ -18153,7 +18159,7 @@ cp;ABF8;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=MEETEI MAYEK DIGIT EIGHT;nt=De;nv
 cp;ABF9;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=MEETEI MAYEK DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 cp;ABFA..ABFF;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;InSC=Other;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;AC00..D7AF;age=2.0;Alpha;blk=Hangul;dt=Can;ea=W;gc=Lo;GCB=LV;Gr_Base;IDC;IDS;lb=H2;NFD_QC=N;NFKD_QC=N;SB=LE;sc=Hang;WB=LE;XIDC;XIDS
+block;AC00..D7AF;age=2.0;Alpha;blk=Hangul;dt=Can;ea=W;gc=Lo;GCB=LV;Gr_Base;IDC;IDS;lb=H2;NFD_QC=N;NFKD_QC=N;SB=LE;sc=Hang;vo=U;WB=LE;XIDC;XIDS
 # AC00..D7A3 Hangul Syllables
 algnamesrange;AC00..D7A3;hangul
 cp;AC01..AC1B;GCB=LVT;lb=H3
@@ -18557,7 +18563,7 @@ cp;D76D..D787;GCB=LVT;lb=H3
 cp;D789..D7A3;GCB=LVT;lb=H3
 cp;D7A4..D7AF;age=NA;-Alpha;dt=None;ea=N;gc=Cn;GCB=XX;-Gr_Base;-IDC;-IDS;lb=XX;NFD_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;D7B0..D7FF;age=5.2;Alpha;blk=Jamo_Ext_B;gc=Lo;GCB=T;Gr_Base;IDC;IDS;lb=JT;SB=LE;sc=Hang;WB=LE;XIDC;XIDS
+block;D7B0..D7FF;age=5.2;Alpha;blk=Jamo_Ext_B;gc=Lo;GCB=T;Gr_Base;IDC;IDS;lb=JT;SB=LE;sc=Hang;vo=U;WB=LE;XIDC;XIDS
 # D7B0..D7FF Hangul Jamo Extended-B
 # Old medial vowels
 cp;D7B0;GCB=V;lb=JV;na=HANGUL JUNGSEONG O-YEO
@@ -18645,10 +18651,10 @@ block;DB80..DBFF;age=2.0;blk=High_PU_Surrogates;gc=Cs;GCB=CN;lb=SG
 block;DC00..DFFF;age=2.0;blk=Low_Surrogates;gc=Cs;GCB=CN;lb=SG
 # DC00..DFFF Low Surrogates
 
-block;E000..F8FF;age=1.1;blk=PUA;ea=A;gc=Co
+block;E000..F8FF;age=1.1;blk=PUA;ea=A;gc=Co;vo=U
 # E000..F8FF Private Use Area
 
-block;F900..FAFF;age=1.1;Alpha;blk=CJK_Compat_Ideographs;Comp_Ex;CWKCF;dt=Can;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;NFC_QC=N;NFD_QC=N;NFKC_QC=N;NFKD_QC=N;SB=LE;sc=Hani;XIDC;XIDS
+block;F900..FAFF;age=1.1;Alpha;blk=CJK_Compat_Ideographs;Comp_Ex;CWKCF;dt=Can;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;NFC_QC=N;NFD_QC=N;NFKC_QC=N;NFKD_QC=N;SB=LE;sc=Hani;vo=U;XIDC;XIDS
 # F900..FAFF CJK Compatibility Ideographs
 # Pronunciation variants from KS X 1001:1998
 cp;F900;dm=8C48;na=CJK COMPATIBILITY IDEOGRAPH-F900;NFKC_CF=8C48
@@ -19854,7 +19860,7 @@ cp;FE0D;na=VARIATION SELECTOR-14;Name_Alias=abbreviation=VS14
 cp;FE0E;na=VARIATION SELECTOR-15;Name_Alias=abbreviation=VS15
 cp;FE0F;na=VARIATION SELECTOR-16;Name_Alias=abbreviation=VS16
 
-block;FE10..FE1F;age=4.1;bc=ON;blk=Vertical_Forms;CWKCF;dt=Vert;ea=W;gc=Po;Gr_Base;lb=CL;NFKC_QC=N;NFKD_QC=N;sc=Zyyy
+block;FE10..FE1F;age=4.1;bc=ON;blk=Vertical_Forms;CWKCF;dt=Vert;ea=W;gc=Po;Gr_Base;lb=CL;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;vo=U
 # FE10..FE1F Vertical Forms
 # Glyphs for vertical variants
 cp;FE10;dm=002C;lb=IS;na=PRESENTATION FORM FOR VERTICAL COMMA;NFKC_CF=002C;SB=SC;WB=MN
@@ -19892,7 +19898,7 @@ cp;FE2D;ccc=220;na=COMBINING CONJOINING MACRON BELOW
 cp;FE2E;age=8.0;na=COMBINING CYRILLIC TITLO LEFT HALF;sc=Cyrl
 cp;FE2F;age=8.0;na=COMBINING CYRILLIC TITLO RIGHT HALF;sc=Cyrl
 
-block;FE30..FE4F;age=1.1;bc=ON;blk=CJK_Compat_Forms;CWKCF;dt=Vert;ea=W;gc=Ps;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;SB=CL;sc=Zyyy
+block;FE30..FE4F;age=1.1;bc=ON;blk=CJK_Compat_Forms;CWKCF;dt=Vert;ea=W;gc=Ps;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;SB=CL;sc=Zyyy;vo=U
 # FE30..FE4F CJK Compatibility Forms
 # Glyphs for vertical variants
 cp;FE30;dm=2025;gc=Po;na=PRESENTATION FORM FOR VERTICAL TWO DOT LEADER;NFKC_CF=002E 002E;SB=XX
@@ -19923,40 +19929,40 @@ cp;FE46;age=3.2;-CWKCF;dt=None;gc=Po;na=WHITE SESAME DOT;NFKC_QC=Y;NFKD_QC=Y;Pat
 cp;FE47;age=4.0;dm=005B;lb=OP;na=PRESENTATION FORM FOR VERTICAL LEFT SQUARE BRACKET;NFKC_CF=005B
 cp;FE48;age=4.0;dm=005D;gc=Pe;lb=CL;na=PRESENTATION FORM FOR VERTICAL RIGHT SQUARE BRACKET;NFKC_CF=005D
 # Overscores and underscores
-cp;FE49;dm=203E;dt=Com;gc=Po;na=DASHED OVERLINE;NFKC_CF=0020 0305;SB=XX
-cp;FE4A;dm=203E;dt=Com;gc=Po;na=CENTRELINE OVERLINE;NFKC_CF=0020 0305;SB=XX
-cp;FE4B;dm=203E;dt=Com;gc=Po;na=WAVY OVERLINE;NFKC_CF=0020 0305;SB=XX
-cp;FE4C;dm=203E;dt=Com;gc=Po;na=DOUBLE WAVY OVERLINE;NFKC_CF=0020 0305;SB=XX
-cp;FE4D;dm=005F;dt=Com;gc=Pc;IDC;na=DASHED LOW LINE;NFKC_CF=005F;SB=XX;WB=EX;XIDC
-cp;FE4E;dm=005F;dt=Com;gc=Pc;IDC;na=CENTRELINE LOW LINE;NFKC_CF=005F;SB=XX;WB=EX;XIDC
-cp;FE4F;dm=005F;dt=Com;gc=Pc;IDC;na=WAVY LOW LINE;NFKC_CF=005F;SB=XX;WB=EX;XIDC
+cp;FE49;dm=203E;dt=Com;gc=Po;na=DASHED OVERLINE;NFKC_CF=0020 0305;SB=XX;vo=R
+cp;FE4A;dm=203E;dt=Com;gc=Po;na=CENTRELINE OVERLINE;NFKC_CF=0020 0305;SB=XX;vo=R
+cp;FE4B;dm=203E;dt=Com;gc=Po;na=WAVY OVERLINE;NFKC_CF=0020 0305;SB=XX;vo=R
+cp;FE4C;dm=203E;dt=Com;gc=Po;na=DOUBLE WAVY OVERLINE;NFKC_CF=0020 0305;SB=XX;vo=R
+cp;FE4D;dm=005F;dt=Com;gc=Pc;IDC;na=DASHED LOW LINE;NFKC_CF=005F;SB=XX;vo=R;WB=EX;XIDC
+cp;FE4E;dm=005F;dt=Com;gc=Pc;IDC;na=CENTRELINE LOW LINE;NFKC_CF=005F;SB=XX;vo=R;WB=EX;XIDC
+cp;FE4F;dm=005F;dt=Com;gc=Pc;IDC;na=WAVY LOW LINE;NFKC_CF=005F;SB=XX;vo=R;WB=EX;XIDC
 
-block;FE50..FE6F;age=1.1;bc=ON;blk=Small_Forms;CWKCF;dt=Sml;ea=W;gc=Po;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy
+block;FE50..FE6F;age=1.1;bc=ON;blk=Small_Forms;CWKCF;dt=Sml;ea=W;gc=Po;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;vo=U
 # FE50..FE6F Small Form Variants
 # Small form variants
-cp;FE50;bc=CS;dm=002C;lb=CL;na=SMALL COMMA;NFKC_CF=002C;SB=SC;Term;WB=MN
-cp;FE51;dm=3001;na=SMALL IDEOGRAPHIC COMMA;NFKC_CF=3001;SB=SC;Term
-cp;FE52;bc=CS;CI;dm=002E;lb=CL;na=SMALL FULL STOP;NFKC_CF=002E;SB=AT;STerm;Term;WB=MB
+cp;FE50;bc=CS;dm=002C;lb=CL;na=SMALL COMMA;NFKC_CF=002C;SB=SC;Term;vo=Tu;WB=MN
+cp;FE51;dm=3001;na=SMALL IDEOGRAPHIC COMMA;NFKC_CF=3001;SB=SC;Term;vo=Tu
+cp;FE52;bc=CS;CI;dm=002E;lb=CL;na=SMALL FULL STOP;NFKC_CF=002E;SB=AT;STerm;Term;vo=Tu;WB=MB
 cp;FE53;age=NA;bc=L;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;lb=XX;NFKC_QC=Y;NFKD_QC=Y;sc=Zzzz
 cp;FE54;dm=003B;lb=NS;na=SMALL SEMICOLON;NFKC_CF=003B;Term;WB=MN
 cp;FE55;bc=CS;CI;dm=003A;lb=NS;na=SMALL COLON;NFKC_CF=003A;SB=SC;Term;WB=ML
 cp;FE56;dm=003F;lb=EX;na=SMALL QUESTION MARK;NFKC_CF=003F;SB=ST;STerm;Term
 cp;FE57;dm=0021;lb=EX;na=SMALL EXCLAMATION MARK;NFKC_CF=0021;SB=ST;STerm;Term
-cp;FE58;Dash;dm=2014;gc=Pd;na=SMALL EM DASH;NFKC_CF=2014;SB=SC
-cp;FE59;Bidi_M;bmg=FE5A;bpb=FE5A;bpt=o;dm=0028;gc=Ps;lb=OP;na=SMALL LEFT PARENTHESIS;NFKC_CF=0028;SB=CL
-cp;FE5A;Bidi_M;bmg=FE59;bpb=FE59;bpt=c;dm=0029;gc=Pe;lb=CL;na=SMALL RIGHT PARENTHESIS;NFKC_CF=0029;SB=CL
-cp;FE5B;Bidi_M;bmg=FE5C;bpb=FE5C;bpt=o;dm=007B;gc=Ps;lb=OP;na=SMALL LEFT CURLY BRACKET;NFKC_CF=007B;SB=CL
-cp;FE5C;Bidi_M;bmg=FE5B;bpb=FE5B;bpt=c;dm=007D;gc=Pe;lb=CL;na=SMALL RIGHT CURLY BRACKET;NFKC_CF=007D;SB=CL
-cp;FE5D;Bidi_M;bmg=FE5E;bpb=FE5E;bpt=o;dm=3014;gc=Ps;lb=OP;na=SMALL LEFT TORTOISE SHELL BRACKET;NFKC_CF=3014;SB=CL
-cp;FE5E;Bidi_M;bmg=FE5D;bpb=FE5D;bpt=c;dm=3015;gc=Pe;lb=CL;na=SMALL RIGHT TORTOISE SHELL BRACKET;NFKC_CF=3015;SB=CL
+cp;FE58;Dash;dm=2014;gc=Pd;na=SMALL EM DASH;NFKC_CF=2014;SB=SC;vo=R
+cp;FE59;Bidi_M;bmg=FE5A;bpb=FE5A;bpt=o;dm=0028;gc=Ps;lb=OP;na=SMALL LEFT PARENTHESIS;NFKC_CF=0028;SB=CL;vo=Tr
+cp;FE5A;Bidi_M;bmg=FE59;bpb=FE59;bpt=c;dm=0029;gc=Pe;lb=CL;na=SMALL RIGHT PARENTHESIS;NFKC_CF=0029;SB=CL;vo=Tr
+cp;FE5B;Bidi_M;bmg=FE5C;bpb=FE5C;bpt=o;dm=007B;gc=Ps;lb=OP;na=SMALL LEFT CURLY BRACKET;NFKC_CF=007B;SB=CL;vo=Tr
+cp;FE5C;Bidi_M;bmg=FE5B;bpb=FE5B;bpt=c;dm=007D;gc=Pe;lb=CL;na=SMALL RIGHT CURLY BRACKET;NFKC_CF=007D;SB=CL;vo=Tr
+cp;FE5D;Bidi_M;bmg=FE5E;bpb=FE5E;bpt=o;dm=3014;gc=Ps;lb=OP;na=SMALL LEFT TORTOISE SHELL BRACKET;NFKC_CF=3014;SB=CL;vo=Tr
+cp;FE5E;Bidi_M;bmg=FE5D;bpb=FE5D;bpt=c;dm=3015;gc=Pe;lb=CL;na=SMALL RIGHT TORTOISE SHELL BRACKET;NFKC_CF=3015;SB=CL;vo=Tr
 cp;FE5F;bc=ET;dm=0023;na=SMALL NUMBER SIGN;NFKC_CF=0023
 cp;FE60;dm=0026;na=SMALL AMPERSAND;NFKC_CF=0026
 cp;FE61;dm=002A;Math;na=SMALL ASTERISK;NFKC_CF=002A
 cp;FE62;bc=ES;dm=002B;gc=Sm;Math;na=SMALL PLUS SIGN;NFKC_CF=002B
-cp;FE63;bc=ES;Dash;dm=002D;gc=Pd;Hyphen;Math;na=SMALL HYPHEN-MINUS;NFKC_CF=002D;SB=SC
-cp;FE64;Bidi_M;bmg=FE65;dm=003C;gc=Sm;Math;na=SMALL LESS-THAN SIGN;NFKC_CF=003C
-cp;FE65;Bidi_M;bmg=FE64;dm=003E;gc=Sm;Math;na=SMALL GREATER-THAN SIGN;NFKC_CF=003E
-cp;FE66;dm=003D;gc=Sm;Math;na=SMALL EQUALS SIGN;NFKC_CF=003D
+cp;FE63;bc=ES;Dash;dm=002D;gc=Pd;Hyphen;Math;na=SMALL HYPHEN-MINUS;NFKC_CF=002D;SB=SC;vo=R
+cp;FE64;Bidi_M;bmg=FE65;dm=003C;gc=Sm;Math;na=SMALL LESS-THAN SIGN;NFKC_CF=003C;vo=R
+cp;FE65;Bidi_M;bmg=FE64;dm=003E;gc=Sm;Math;na=SMALL GREATER-THAN SIGN;NFKC_CF=003E;vo=R
+cp;FE66;dm=003D;gc=Sm;Math;na=SMALL EQUALS SIGN;NFKC_CF=003D;vo=R
 cp;FE67;age=NA;bc=L;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;lb=XX;NFKC_QC=Y;NFKD_QC=Y;sc=Zzzz
 cp;FE68;dm=005C;Math;na=SMALL REVERSE SOLIDUS;NFKC_CF=005C
 cp;FE69;bc=ET;dm=0024;gc=Sc;lb=PR;na=SMALL DOLLAR SIGN;NFKC_CF=0024
@@ -20119,103 +20125,103 @@ block;FF00..FFEF;age=1.1;Alpha;blk=Half_And_Full_Forms;CWKCF;dt=Nar;ea=H;gc=Lo;G
 # FF00..FFEF Halfwidth and Fullwidth Forms
 cp;FF00;age=NA;-Alpha;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;NFKC_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 # Fullwidth ASCII variants
-cp;FF01;-Alpha;bc=ON;dm=0021;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=EX;na=FULLWIDTH EXCLAMATION MARK;NFKC_CF=0021;SB=ST;STerm;Term;WB=XX;-XIDC;-XIDS
-cp;FF02;-Alpha;bc=ON;dm=0022;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH QUOTATION MARK;NFKC_CF=0022;QMark;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF03;-Alpha;bc=ET;dm=0023;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH NUMBER SIGN;NFKC_CF=0023;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF04;-Alpha;bc=ET;dm=0024;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PR;na=FULLWIDTH DOLLAR SIGN;NFKC_CF=0024;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF05;-Alpha;bc=ET;dm=0025;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=PO;na=FULLWIDTH PERCENT SIGN;NFKC_CF=0025;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF06;-Alpha;bc=ON;dm=0026;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH AMPERSAND;NFKC_CF=0026;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF07;-Alpha;bc=ON;CI;dm=0027;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH APOSTROPHE;NFKC_CF=0027;QMark;SB=XX;WB=MB;-XIDC;-XIDS
-cp;FF08;-Alpha;bc=ON;Bidi_M;bmg=FF09;bpb=FF09;bpt=o;dm=0028;dt=Wide;ea=F;gc=Ps;-IDC;-IDS;lb=OP;na=FULLWIDTH LEFT PARENTHESIS;NFKC_CF=0028;SB=CL;WB=XX;-XIDC;-XIDS
-cp;FF09;-Alpha;bc=ON;Bidi_M;bmg=FF08;bpb=FF08;bpt=c;dm=0029;dt=Wide;ea=F;gc=Pe;-IDC;-IDS;lb=CL;na=FULLWIDTH RIGHT PARENTHESIS;NFKC_CF=0029;SB=CL;WB=XX;-XIDC;-XIDS
-cp;FF0A;-Alpha;bc=ON;dm=002A;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH ASTERISK;NFKC_CF=002A;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF0B;-Alpha;bc=ES;dm=002B;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH PLUS SIGN;NFKC_CF=002B;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF0C;-Alpha;bc=CS;dm=002C;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=CL;na=FULLWIDTH COMMA;NFKC_CF=002C;SB=SC;Term;WB=MN;-XIDC;-XIDS
+cp;FF01;-Alpha;bc=ON;dm=0021;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=EX;na=FULLWIDTH EXCLAMATION MARK;NFKC_CF=0021;SB=ST;STerm;Term;vo=Tu;WB=XX;-XIDC;-XIDS
+cp;FF02;-Alpha;bc=ON;dm=0022;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH QUOTATION MARK;NFKC_CF=0022;QMark;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF03;-Alpha;bc=ET;dm=0023;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH NUMBER SIGN;NFKC_CF=0023;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF04;-Alpha;bc=ET;dm=0024;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PR;na=FULLWIDTH DOLLAR SIGN;NFKC_CF=0024;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF05;-Alpha;bc=ET;dm=0025;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=PO;na=FULLWIDTH PERCENT SIGN;NFKC_CF=0025;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF06;-Alpha;bc=ON;dm=0026;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH AMPERSAND;NFKC_CF=0026;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF07;-Alpha;bc=ON;CI;dm=0027;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH APOSTROPHE;NFKC_CF=0027;QMark;SB=XX;vo=U;WB=MB;-XIDC;-XIDS
+cp;FF08;-Alpha;bc=ON;Bidi_M;bmg=FF09;bpb=FF09;bpt=o;dm=0028;dt=Wide;ea=F;gc=Ps;-IDC;-IDS;lb=OP;na=FULLWIDTH LEFT PARENTHESIS;NFKC_CF=0028;SB=CL;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FF09;-Alpha;bc=ON;Bidi_M;bmg=FF08;bpb=FF08;bpt=c;dm=0029;dt=Wide;ea=F;gc=Pe;-IDC;-IDS;lb=CL;na=FULLWIDTH RIGHT PARENTHESIS;NFKC_CF=0029;SB=CL;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FF0A;-Alpha;bc=ON;dm=002A;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH ASTERISK;NFKC_CF=002A;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF0B;-Alpha;bc=ES;dm=002B;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH PLUS SIGN;NFKC_CF=002B;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF0C;-Alpha;bc=CS;dm=002C;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=CL;na=FULLWIDTH COMMA;NFKC_CF=002C;SB=SC;Term;vo=Tu;WB=MN;-XIDC;-XIDS
 cp;FF0D;-Alpha;bc=ES;Dash;dm=002D;dt=Wide;ea=F;gc=Pd;Hyphen;-IDC;-IDS;na=FULLWIDTH HYPHEN-MINUS;NFKC_CF=002D;SB=SC;WB=XX;-XIDC;-XIDS
-cp;FF0E;-Alpha;bc=CS;CI;dm=002E;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=CL;na=FULLWIDTH FULL STOP;NFKC_CF=002E;SB=AT;STerm;Term;WB=MB;-XIDC;-XIDS
-cp;FF0F;-Alpha;bc=CS;dm=002F;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH SOLIDUS;NFKC_CF=002F;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF10;-Alpha;bc=EN;dm=0030;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT ZERO;NFKC_CF=0030;nt=De;nv=0;SB=XX;WB=XX;-XIDS
-cp;FF11;-Alpha;bc=EN;dm=0031;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT ONE;NFKC_CF=0031;nt=De;nv=1;SB=XX;WB=XX;-XIDS
-cp;FF12;-Alpha;bc=EN;dm=0032;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT TWO;NFKC_CF=0032;nt=De;nv=2;SB=XX;WB=XX;-XIDS
-cp;FF13;-Alpha;bc=EN;dm=0033;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT THREE;NFKC_CF=0033;nt=De;nv=3;SB=XX;WB=XX;-XIDS
-cp;FF14;-Alpha;bc=EN;dm=0034;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT FOUR;NFKC_CF=0034;nt=De;nv=4;SB=XX;WB=XX;-XIDS
-cp;FF15;-Alpha;bc=EN;dm=0035;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT FIVE;NFKC_CF=0035;nt=De;nv=5;SB=XX;WB=XX;-XIDS
-cp;FF16;-Alpha;bc=EN;dm=0036;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT SIX;NFKC_CF=0036;nt=De;nv=6;SB=XX;WB=XX;-XIDS
-cp;FF17;-Alpha;bc=EN;dm=0037;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT SEVEN;NFKC_CF=0037;nt=De;nv=7;SB=XX;WB=XX;-XIDS
-cp;FF18;-Alpha;bc=EN;dm=0038;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT EIGHT;NFKC_CF=0038;nt=De;nv=8;SB=XX;WB=XX;-XIDS
-cp;FF19;-Alpha;bc=EN;dm=0039;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT NINE;NFKC_CF=0039;nt=De;nv=9;SB=XX;WB=XX;-XIDS
-cp;FF1A;-Alpha;bc=CS;CI;dm=003A;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=NS;na=FULLWIDTH COLON;NFKC_CF=003A;SB=SC;Term;WB=ML;-XIDC;-XIDS
-cp;FF1B;-Alpha;bc=ON;dm=003B;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=NS;na=FULLWIDTH SEMICOLON;NFKC_CF=003B;SB=XX;Term;WB=MN;-XIDC;-XIDS
+cp;FF0E;-Alpha;bc=CS;CI;dm=002E;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=CL;na=FULLWIDTH FULL STOP;NFKC_CF=002E;SB=AT;STerm;Term;vo=Tu;WB=MB;-XIDC;-XIDS
+cp;FF0F;-Alpha;bc=CS;dm=002F;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH SOLIDUS;NFKC_CF=002F;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF10;-Alpha;bc=EN;dm=0030;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT ZERO;NFKC_CF=0030;nt=De;nv=0;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF11;-Alpha;bc=EN;dm=0031;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT ONE;NFKC_CF=0031;nt=De;nv=1;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF12;-Alpha;bc=EN;dm=0032;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT TWO;NFKC_CF=0032;nt=De;nv=2;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF13;-Alpha;bc=EN;dm=0033;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT THREE;NFKC_CF=0033;nt=De;nv=3;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF14;-Alpha;bc=EN;dm=0034;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT FOUR;NFKC_CF=0034;nt=De;nv=4;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF15;-Alpha;bc=EN;dm=0035;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT FIVE;NFKC_CF=0035;nt=De;nv=5;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF16;-Alpha;bc=EN;dm=0036;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT SIX;NFKC_CF=0036;nt=De;nv=6;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF17;-Alpha;bc=EN;dm=0037;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT SEVEN;NFKC_CF=0037;nt=De;nv=7;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF18;-Alpha;bc=EN;dm=0038;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT EIGHT;NFKC_CF=0038;nt=De;nv=8;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF19;-Alpha;bc=EN;dm=0039;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT NINE;NFKC_CF=0039;nt=De;nv=9;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF1A;-Alpha;bc=CS;CI;dm=003A;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=NS;na=FULLWIDTH COLON;NFKC_CF=003A;SB=SC;Term;vo=Tr;WB=ML;-XIDC;-XIDS
+cp;FF1B;-Alpha;bc=ON;dm=003B;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=NS;na=FULLWIDTH SEMICOLON;NFKC_CF=003B;SB=XX;Term;vo=Tr;WB=MN;-XIDC;-XIDS
 cp;FF1C;-Alpha;bc=ON;Bidi_M;bmg=FF1E;dm=003C;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH LESS-THAN SIGN;NFKC_CF=003C;SB=XX;WB=XX;-XIDC;-XIDS
 cp;FF1D;-Alpha;bc=ON;dm=003D;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH EQUALS SIGN;NFKC_CF=003D;SB=XX;WB=XX;-XIDC;-XIDS
 cp;FF1E;-Alpha;bc=ON;Bidi_M;bmg=FF1C;dm=003E;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH GREATER-THAN SIGN;NFKC_CF=003E;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF1F;-Alpha;bc=ON;dm=003F;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=EX;na=FULLWIDTH QUESTION MARK;NFKC_CF=003F;SB=ST;STerm;Term;WB=XX;-XIDC;-XIDS
-cp;FF20;-Alpha;bc=ON;dm=0040;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH COMMERCIAL AT;NFKC_CF=0040;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF21;Cased;cf=FF41;CWCF;CWCM;CWL;dm=0041;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER A;NFKC_CF=0061;SB=UP;sc=Latn;scf=FF41;slc=FF41;Upper
-cp;FF22;Cased;cf=FF42;CWCF;CWCM;CWL;dm=0042;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER B;NFKC_CF=0062;SB=UP;sc=Latn;scf=FF42;slc=FF42;Upper
-cp;FF23;Cased;cf=FF43;CWCF;CWCM;CWL;dm=0043;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER C;NFKC_CF=0063;SB=UP;sc=Latn;scf=FF43;slc=FF43;Upper
-cp;FF24;Cased;cf=FF44;CWCF;CWCM;CWL;dm=0044;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER D;NFKC_CF=0064;SB=UP;sc=Latn;scf=FF44;slc=FF44;Upper
-cp;FF25;Cased;cf=FF45;CWCF;CWCM;CWL;dm=0045;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER E;NFKC_CF=0065;SB=UP;sc=Latn;scf=FF45;slc=FF45;Upper
-cp;FF26;Cased;cf=FF46;CWCF;CWCM;CWL;dm=0046;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER F;NFKC_CF=0066;SB=UP;sc=Latn;scf=FF46;slc=FF46;Upper
-cp;FF27;Cased;cf=FF47;CWCF;CWCM;CWL;dm=0047;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER G;NFKC_CF=0067;SB=UP;sc=Latn;scf=FF47;slc=FF47;Upper
-cp;FF28;Cased;cf=FF48;CWCF;CWCM;CWL;dm=0048;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER H;NFKC_CF=0068;SB=UP;sc=Latn;scf=FF48;slc=FF48;Upper
-cp;FF29;Cased;cf=FF49;CWCF;CWCM;CWL;dm=0049;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER I;NFKC_CF=0069;SB=UP;sc=Latn;scf=FF49;slc=FF49;Upper
-cp;FF2A;Cased;cf=FF4A;CWCF;CWCM;CWL;dm=004A;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER J;NFKC_CF=006A;SB=UP;sc=Latn;scf=FF4A;slc=FF4A;Upper
-cp;FF2B;Cased;cf=FF4B;CWCF;CWCM;CWL;dm=004B;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER K;NFKC_CF=006B;SB=UP;sc=Latn;scf=FF4B;slc=FF4B;Upper
-cp;FF2C;Cased;cf=FF4C;CWCF;CWCM;CWL;dm=004C;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER L;NFKC_CF=006C;SB=UP;sc=Latn;scf=FF4C;slc=FF4C;Upper
-cp;FF2D;Cased;cf=FF4D;CWCF;CWCM;CWL;dm=004D;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER M;NFKC_CF=006D;SB=UP;sc=Latn;scf=FF4D;slc=FF4D;Upper
-cp;FF2E;Cased;cf=FF4E;CWCF;CWCM;CWL;dm=004E;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER N;NFKC_CF=006E;SB=UP;sc=Latn;scf=FF4E;slc=FF4E;Upper
-cp;FF2F;Cased;cf=FF4F;CWCF;CWCM;CWL;dm=004F;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER O;NFKC_CF=006F;SB=UP;sc=Latn;scf=FF4F;slc=FF4F;Upper
-cp;FF30;Cased;cf=FF50;CWCF;CWCM;CWL;dm=0050;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER P;NFKC_CF=0070;SB=UP;sc=Latn;scf=FF50;slc=FF50;Upper
-cp;FF31;Cased;cf=FF51;CWCF;CWCM;CWL;dm=0051;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER Q;NFKC_CF=0071;SB=UP;sc=Latn;scf=FF51;slc=FF51;Upper
-cp;FF32;Cased;cf=FF52;CWCF;CWCM;CWL;dm=0052;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER R;NFKC_CF=0072;SB=UP;sc=Latn;scf=FF52;slc=FF52;Upper
-cp;FF33;Cased;cf=FF53;CWCF;CWCM;CWL;dm=0053;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER S;NFKC_CF=0073;SB=UP;sc=Latn;scf=FF53;slc=FF53;Upper
-cp;FF34;Cased;cf=FF54;CWCF;CWCM;CWL;dm=0054;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER T;NFKC_CF=0074;SB=UP;sc=Latn;scf=FF54;slc=FF54;Upper
-cp;FF35;Cased;cf=FF55;CWCF;CWCM;CWL;dm=0055;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER U;NFKC_CF=0075;SB=UP;sc=Latn;scf=FF55;slc=FF55;Upper
-cp;FF36;Cased;cf=FF56;CWCF;CWCM;CWL;dm=0056;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER V;NFKC_CF=0076;SB=UP;sc=Latn;scf=FF56;slc=FF56;Upper
-cp;FF37;Cased;cf=FF57;CWCF;CWCM;CWL;dm=0057;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER W;NFKC_CF=0077;SB=UP;sc=Latn;scf=FF57;slc=FF57;Upper
-cp;FF38;Cased;cf=FF58;CWCF;CWCM;CWL;dm=0058;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER X;NFKC_CF=0078;SB=UP;sc=Latn;scf=FF58;slc=FF58;Upper
-cp;FF39;Cased;cf=FF59;CWCF;CWCM;CWL;dm=0059;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER Y;NFKC_CF=0079;SB=UP;sc=Latn;scf=FF59;slc=FF59;Upper
-cp;FF3A;Cased;cf=FF5A;CWCF;CWCM;CWL;dm=005A;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER Z;NFKC_CF=007A;SB=UP;sc=Latn;scf=FF5A;slc=FF5A;Upper
-cp;FF3B;-Alpha;bc=ON;Bidi_M;bmg=FF3D;bpb=FF3D;bpt=o;dm=005B;dt=Wide;ea=F;gc=Ps;-IDC;-IDS;lb=OP;na=FULLWIDTH LEFT SQUARE BRACKET;NFKC_CF=005B;SB=CL;WB=XX;-XIDC;-XIDS
-cp;FF3C;-Alpha;bc=ON;dm=005C;dt=Wide;ea=F;gc=Po;-IDC;-IDS;Math;na=FULLWIDTH REVERSE SOLIDUS;NFKC_CF=005C;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF3D;-Alpha;bc=ON;Bidi_M;bmg=FF3B;bpb=FF3B;bpt=c;dm=005D;dt=Wide;ea=F;gc=Pe;-IDC;-IDS;lb=CL;na=FULLWIDTH RIGHT SQUARE BRACKET;NFKC_CF=005D;SB=CL;WB=XX;-XIDC;-XIDS
-cp;FF3E;-Alpha;bc=ON;CI;Dia;dm=005E;dt=Wide;ea=F;gc=Sk;-IDC;-IDS;Math;na=FULLWIDTH CIRCUMFLEX ACCENT;NFKC_CF=005E;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF3F;-Alpha;bc=ON;dm=005F;dt=Wide;ea=F;gc=Pc;-IDS;na=FULLWIDTH LOW LINE;NFKC_CF=005F;SB=XX;WB=EX;-XIDS
-cp;FF40;-Alpha;bc=ON;CI;Dia;dm=0060;dt=Wide;ea=F;gc=Sk;-IDC;-IDS;na=FULLWIDTH GRAVE ACCENT;NFKC_CF=0060;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF41;Cased;CWCM;CWT;CWU;dm=0061;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER A;NFKC_CF=0061;SB=LO;sc=Latn;stc=FF21;suc=FF21
-cp;FF42;Cased;CWCM;CWT;CWU;dm=0062;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER B;NFKC_CF=0062;SB=LO;sc=Latn;stc=FF22;suc=FF22
-cp;FF43;Cased;CWCM;CWT;CWU;dm=0063;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER C;NFKC_CF=0063;SB=LO;sc=Latn;stc=FF23;suc=FF23
-cp;FF44;Cased;CWCM;CWT;CWU;dm=0064;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER D;NFKC_CF=0064;SB=LO;sc=Latn;stc=FF24;suc=FF24
-cp;FF45;Cased;CWCM;CWT;CWU;dm=0065;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER E;NFKC_CF=0065;SB=LO;sc=Latn;stc=FF25;suc=FF25
-cp;FF46;Cased;CWCM;CWT;CWU;dm=0066;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER F;NFKC_CF=0066;SB=LO;sc=Latn;stc=FF26;suc=FF26
-cp;FF47;Cased;CWCM;CWT;CWU;dm=0067;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER G;NFKC_CF=0067;SB=LO;sc=Latn;stc=FF27;suc=FF27
-cp;FF48;Cased;CWCM;CWT;CWU;dm=0068;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER H;NFKC_CF=0068;SB=LO;sc=Latn;stc=FF28;suc=FF28
-cp;FF49;Cased;CWCM;CWT;CWU;dm=0069;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER I;NFKC_CF=0069;SB=LO;sc=Latn;stc=FF29;suc=FF29
-cp;FF4A;Cased;CWCM;CWT;CWU;dm=006A;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER J;NFKC_CF=006A;SB=LO;sc=Latn;stc=FF2A;suc=FF2A
-cp;FF4B;Cased;CWCM;CWT;CWU;dm=006B;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER K;NFKC_CF=006B;SB=LO;sc=Latn;stc=FF2B;suc=FF2B
-cp;FF4C;Cased;CWCM;CWT;CWU;dm=006C;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER L;NFKC_CF=006C;SB=LO;sc=Latn;stc=FF2C;suc=FF2C
-cp;FF4D;Cased;CWCM;CWT;CWU;dm=006D;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER M;NFKC_CF=006D;SB=LO;sc=Latn;stc=FF2D;suc=FF2D
-cp;FF4E;Cased;CWCM;CWT;CWU;dm=006E;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER N;NFKC_CF=006E;SB=LO;sc=Latn;stc=FF2E;suc=FF2E
-cp;FF4F;Cased;CWCM;CWT;CWU;dm=006F;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER O;NFKC_CF=006F;SB=LO;sc=Latn;stc=FF2F;suc=FF2F
-cp;FF50;Cased;CWCM;CWT;CWU;dm=0070;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER P;NFKC_CF=0070;SB=LO;sc=Latn;stc=FF30;suc=FF30
-cp;FF51;Cased;CWCM;CWT;CWU;dm=0071;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER Q;NFKC_CF=0071;SB=LO;sc=Latn;stc=FF31;suc=FF31
-cp;FF52;Cased;CWCM;CWT;CWU;dm=0072;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER R;NFKC_CF=0072;SB=LO;sc=Latn;stc=FF32;suc=FF32
-cp;FF53;Cased;CWCM;CWT;CWU;dm=0073;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER S;NFKC_CF=0073;SB=LO;sc=Latn;stc=FF33;suc=FF33
-cp;FF54;Cased;CWCM;CWT;CWU;dm=0074;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER T;NFKC_CF=0074;SB=LO;sc=Latn;stc=FF34;suc=FF34
-cp;FF55;Cased;CWCM;CWT;CWU;dm=0075;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER U;NFKC_CF=0075;SB=LO;sc=Latn;stc=FF35;suc=FF35
-cp;FF56;Cased;CWCM;CWT;CWU;dm=0076;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER V;NFKC_CF=0076;SB=LO;sc=Latn;stc=FF36;suc=FF36
-cp;FF57;Cased;CWCM;CWT;CWU;dm=0077;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER W;NFKC_CF=0077;SB=LO;sc=Latn;stc=FF37;suc=FF37
-cp;FF58;Cased;CWCM;CWT;CWU;dm=0078;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER X;NFKC_CF=0078;SB=LO;sc=Latn;stc=FF38;suc=FF38
-cp;FF59;Cased;CWCM;CWT;CWU;dm=0079;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER Y;NFKC_CF=0079;SB=LO;sc=Latn;stc=FF39;suc=FF39
-cp;FF5A;Cased;CWCM;CWT;CWU;dm=007A;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER Z;NFKC_CF=007A;SB=LO;sc=Latn;stc=FF3A;suc=FF3A
-cp;FF5B;-Alpha;bc=ON;Bidi_M;bmg=FF5D;bpb=FF5D;bpt=o;dm=007B;dt=Wide;ea=F;gc=Ps;-IDC;-IDS;lb=OP;na=FULLWIDTH LEFT CURLY BRACKET;NFKC_CF=007B;SB=CL;WB=XX;-XIDC;-XIDS
-cp;FF5C;-Alpha;bc=ON;dm=007C;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH VERTICAL LINE;NFKC_CF=007C;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FF5D;-Alpha;bc=ON;Bidi_M;bmg=FF5B;bpb=FF5B;bpt=c;dm=007D;dt=Wide;ea=F;gc=Pe;-IDC;-IDS;lb=CL;na=FULLWIDTH RIGHT CURLY BRACKET;NFKC_CF=007D;SB=CL;WB=XX;-XIDC;-XIDS
-cp;FF5E;-Alpha;bc=ON;dm=007E;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH TILDE;NFKC_CF=007E;SB=XX;WB=XX;-XIDC;-XIDS
+cp;FF1F;-Alpha;bc=ON;dm=003F;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=EX;na=FULLWIDTH QUESTION MARK;NFKC_CF=003F;SB=ST;STerm;Term;vo=Tu;WB=XX;-XIDC;-XIDS
+cp;FF20;-Alpha;bc=ON;dm=0040;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH COMMERCIAL AT;NFKC_CF=0040;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF21;Cased;cf=FF41;CWCF;CWCM;CWL;dm=0041;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER A;NFKC_CF=0061;SB=UP;sc=Latn;scf=FF41;slc=FF41;Upper;vo=U
+cp;FF22;Cased;cf=FF42;CWCF;CWCM;CWL;dm=0042;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER B;NFKC_CF=0062;SB=UP;sc=Latn;scf=FF42;slc=FF42;Upper;vo=U
+cp;FF23;Cased;cf=FF43;CWCF;CWCM;CWL;dm=0043;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER C;NFKC_CF=0063;SB=UP;sc=Latn;scf=FF43;slc=FF43;Upper;vo=U
+cp;FF24;Cased;cf=FF44;CWCF;CWCM;CWL;dm=0044;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER D;NFKC_CF=0064;SB=UP;sc=Latn;scf=FF44;slc=FF44;Upper;vo=U
+cp;FF25;Cased;cf=FF45;CWCF;CWCM;CWL;dm=0045;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER E;NFKC_CF=0065;SB=UP;sc=Latn;scf=FF45;slc=FF45;Upper;vo=U
+cp;FF26;Cased;cf=FF46;CWCF;CWCM;CWL;dm=0046;dt=Wide;ea=F;gc=Lu;Hex;na=FULLWIDTH LATIN CAPITAL LETTER F;NFKC_CF=0066;SB=UP;sc=Latn;scf=FF46;slc=FF46;Upper;vo=U
+cp;FF27;Cased;cf=FF47;CWCF;CWCM;CWL;dm=0047;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER G;NFKC_CF=0067;SB=UP;sc=Latn;scf=FF47;slc=FF47;Upper;vo=U
+cp;FF28;Cased;cf=FF48;CWCF;CWCM;CWL;dm=0048;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER H;NFKC_CF=0068;SB=UP;sc=Latn;scf=FF48;slc=FF48;Upper;vo=U
+cp;FF29;Cased;cf=FF49;CWCF;CWCM;CWL;dm=0049;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER I;NFKC_CF=0069;SB=UP;sc=Latn;scf=FF49;slc=FF49;Upper;vo=U
+cp;FF2A;Cased;cf=FF4A;CWCF;CWCM;CWL;dm=004A;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER J;NFKC_CF=006A;SB=UP;sc=Latn;scf=FF4A;slc=FF4A;Upper;vo=U
+cp;FF2B;Cased;cf=FF4B;CWCF;CWCM;CWL;dm=004B;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER K;NFKC_CF=006B;SB=UP;sc=Latn;scf=FF4B;slc=FF4B;Upper;vo=U
+cp;FF2C;Cased;cf=FF4C;CWCF;CWCM;CWL;dm=004C;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER L;NFKC_CF=006C;SB=UP;sc=Latn;scf=FF4C;slc=FF4C;Upper;vo=U
+cp;FF2D;Cased;cf=FF4D;CWCF;CWCM;CWL;dm=004D;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER M;NFKC_CF=006D;SB=UP;sc=Latn;scf=FF4D;slc=FF4D;Upper;vo=U
+cp;FF2E;Cased;cf=FF4E;CWCF;CWCM;CWL;dm=004E;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER N;NFKC_CF=006E;SB=UP;sc=Latn;scf=FF4E;slc=FF4E;Upper;vo=U
+cp;FF2F;Cased;cf=FF4F;CWCF;CWCM;CWL;dm=004F;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER O;NFKC_CF=006F;SB=UP;sc=Latn;scf=FF4F;slc=FF4F;Upper;vo=U
+cp;FF30;Cased;cf=FF50;CWCF;CWCM;CWL;dm=0050;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER P;NFKC_CF=0070;SB=UP;sc=Latn;scf=FF50;slc=FF50;Upper;vo=U
+cp;FF31;Cased;cf=FF51;CWCF;CWCM;CWL;dm=0051;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER Q;NFKC_CF=0071;SB=UP;sc=Latn;scf=FF51;slc=FF51;Upper;vo=U
+cp;FF32;Cased;cf=FF52;CWCF;CWCM;CWL;dm=0052;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER R;NFKC_CF=0072;SB=UP;sc=Latn;scf=FF52;slc=FF52;Upper;vo=U
+cp;FF33;Cased;cf=FF53;CWCF;CWCM;CWL;dm=0053;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER S;NFKC_CF=0073;SB=UP;sc=Latn;scf=FF53;slc=FF53;Upper;vo=U
+cp;FF34;Cased;cf=FF54;CWCF;CWCM;CWL;dm=0054;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER T;NFKC_CF=0074;SB=UP;sc=Latn;scf=FF54;slc=FF54;Upper;vo=U
+cp;FF35;Cased;cf=FF55;CWCF;CWCM;CWL;dm=0055;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER U;NFKC_CF=0075;SB=UP;sc=Latn;scf=FF55;slc=FF55;Upper;vo=U
+cp;FF36;Cased;cf=FF56;CWCF;CWCM;CWL;dm=0056;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER V;NFKC_CF=0076;SB=UP;sc=Latn;scf=FF56;slc=FF56;Upper;vo=U
+cp;FF37;Cased;cf=FF57;CWCF;CWCM;CWL;dm=0057;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER W;NFKC_CF=0077;SB=UP;sc=Latn;scf=FF57;slc=FF57;Upper;vo=U
+cp;FF38;Cased;cf=FF58;CWCF;CWCM;CWL;dm=0058;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER X;NFKC_CF=0078;SB=UP;sc=Latn;scf=FF58;slc=FF58;Upper;vo=U
+cp;FF39;Cased;cf=FF59;CWCF;CWCM;CWL;dm=0059;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER Y;NFKC_CF=0079;SB=UP;sc=Latn;scf=FF59;slc=FF59;Upper;vo=U
+cp;FF3A;Cased;cf=FF5A;CWCF;CWCM;CWL;dm=005A;dt=Wide;ea=F;gc=Lu;na=FULLWIDTH LATIN CAPITAL LETTER Z;NFKC_CF=007A;SB=UP;sc=Latn;scf=FF5A;slc=FF5A;Upper;vo=U
+cp;FF3B;-Alpha;bc=ON;Bidi_M;bmg=FF3D;bpb=FF3D;bpt=o;dm=005B;dt=Wide;ea=F;gc=Ps;-IDC;-IDS;lb=OP;na=FULLWIDTH LEFT SQUARE BRACKET;NFKC_CF=005B;SB=CL;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FF3C;-Alpha;bc=ON;dm=005C;dt=Wide;ea=F;gc=Po;-IDC;-IDS;Math;na=FULLWIDTH REVERSE SOLIDUS;NFKC_CF=005C;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF3D;-Alpha;bc=ON;Bidi_M;bmg=FF3B;bpb=FF3B;bpt=c;dm=005D;dt=Wide;ea=F;gc=Pe;-IDC;-IDS;lb=CL;na=FULLWIDTH RIGHT SQUARE BRACKET;NFKC_CF=005D;SB=CL;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FF3E;-Alpha;bc=ON;CI;Dia;dm=005E;dt=Wide;ea=F;gc=Sk;-IDC;-IDS;Math;na=FULLWIDTH CIRCUMFLEX ACCENT;NFKC_CF=005E;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF3F;-Alpha;bc=ON;dm=005F;dt=Wide;ea=F;gc=Pc;-IDS;na=FULLWIDTH LOW LINE;NFKC_CF=005F;SB=XX;vo=Tr;WB=EX;-XIDS
+cp;FF40;-Alpha;bc=ON;CI;Dia;dm=0060;dt=Wide;ea=F;gc=Sk;-IDC;-IDS;na=FULLWIDTH GRAVE ACCENT;NFKC_CF=0060;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FF41;Cased;CWCM;CWT;CWU;dm=0061;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER A;NFKC_CF=0061;SB=LO;sc=Latn;stc=FF21;suc=FF21;vo=U
+cp;FF42;Cased;CWCM;CWT;CWU;dm=0062;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER B;NFKC_CF=0062;SB=LO;sc=Latn;stc=FF22;suc=FF22;vo=U
+cp;FF43;Cased;CWCM;CWT;CWU;dm=0063;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER C;NFKC_CF=0063;SB=LO;sc=Latn;stc=FF23;suc=FF23;vo=U
+cp;FF44;Cased;CWCM;CWT;CWU;dm=0064;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER D;NFKC_CF=0064;SB=LO;sc=Latn;stc=FF24;suc=FF24;vo=U
+cp;FF45;Cased;CWCM;CWT;CWU;dm=0065;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER E;NFKC_CF=0065;SB=LO;sc=Latn;stc=FF25;suc=FF25;vo=U
+cp;FF46;Cased;CWCM;CWT;CWU;dm=0066;dt=Wide;ea=F;gc=Ll;Hex;Lower;na=FULLWIDTH LATIN SMALL LETTER F;NFKC_CF=0066;SB=LO;sc=Latn;stc=FF26;suc=FF26;vo=U
+cp;FF47;Cased;CWCM;CWT;CWU;dm=0067;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER G;NFKC_CF=0067;SB=LO;sc=Latn;stc=FF27;suc=FF27;vo=U
+cp;FF48;Cased;CWCM;CWT;CWU;dm=0068;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER H;NFKC_CF=0068;SB=LO;sc=Latn;stc=FF28;suc=FF28;vo=U
+cp;FF49;Cased;CWCM;CWT;CWU;dm=0069;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER I;NFKC_CF=0069;SB=LO;sc=Latn;stc=FF29;suc=FF29;vo=U
+cp;FF4A;Cased;CWCM;CWT;CWU;dm=006A;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER J;NFKC_CF=006A;SB=LO;sc=Latn;stc=FF2A;suc=FF2A;vo=U
+cp;FF4B;Cased;CWCM;CWT;CWU;dm=006B;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER K;NFKC_CF=006B;SB=LO;sc=Latn;stc=FF2B;suc=FF2B;vo=U
+cp;FF4C;Cased;CWCM;CWT;CWU;dm=006C;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER L;NFKC_CF=006C;SB=LO;sc=Latn;stc=FF2C;suc=FF2C;vo=U
+cp;FF4D;Cased;CWCM;CWT;CWU;dm=006D;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER M;NFKC_CF=006D;SB=LO;sc=Latn;stc=FF2D;suc=FF2D;vo=U
+cp;FF4E;Cased;CWCM;CWT;CWU;dm=006E;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER N;NFKC_CF=006E;SB=LO;sc=Latn;stc=FF2E;suc=FF2E;vo=U
+cp;FF4F;Cased;CWCM;CWT;CWU;dm=006F;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER O;NFKC_CF=006F;SB=LO;sc=Latn;stc=FF2F;suc=FF2F;vo=U
+cp;FF50;Cased;CWCM;CWT;CWU;dm=0070;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER P;NFKC_CF=0070;SB=LO;sc=Latn;stc=FF30;suc=FF30;vo=U
+cp;FF51;Cased;CWCM;CWT;CWU;dm=0071;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER Q;NFKC_CF=0071;SB=LO;sc=Latn;stc=FF31;suc=FF31;vo=U
+cp;FF52;Cased;CWCM;CWT;CWU;dm=0072;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER R;NFKC_CF=0072;SB=LO;sc=Latn;stc=FF32;suc=FF32;vo=U
+cp;FF53;Cased;CWCM;CWT;CWU;dm=0073;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER S;NFKC_CF=0073;SB=LO;sc=Latn;stc=FF33;suc=FF33;vo=U
+cp;FF54;Cased;CWCM;CWT;CWU;dm=0074;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER T;NFKC_CF=0074;SB=LO;sc=Latn;stc=FF34;suc=FF34;vo=U
+cp;FF55;Cased;CWCM;CWT;CWU;dm=0075;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER U;NFKC_CF=0075;SB=LO;sc=Latn;stc=FF35;suc=FF35;vo=U
+cp;FF56;Cased;CWCM;CWT;CWU;dm=0076;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER V;NFKC_CF=0076;SB=LO;sc=Latn;stc=FF36;suc=FF36;vo=U
+cp;FF57;Cased;CWCM;CWT;CWU;dm=0077;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER W;NFKC_CF=0077;SB=LO;sc=Latn;stc=FF37;suc=FF37;vo=U
+cp;FF58;Cased;CWCM;CWT;CWU;dm=0078;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER X;NFKC_CF=0078;SB=LO;sc=Latn;stc=FF38;suc=FF38;vo=U
+cp;FF59;Cased;CWCM;CWT;CWU;dm=0079;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER Y;NFKC_CF=0079;SB=LO;sc=Latn;stc=FF39;suc=FF39;vo=U
+cp;FF5A;Cased;CWCM;CWT;CWU;dm=007A;dt=Wide;ea=F;gc=Ll;Lower;na=FULLWIDTH LATIN SMALL LETTER Z;NFKC_CF=007A;SB=LO;sc=Latn;stc=FF3A;suc=FF3A;vo=U
+cp;FF5B;-Alpha;bc=ON;Bidi_M;bmg=FF5D;bpb=FF5D;bpt=o;dm=007B;dt=Wide;ea=F;gc=Ps;-IDC;-IDS;lb=OP;na=FULLWIDTH LEFT CURLY BRACKET;NFKC_CF=007B;SB=CL;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FF5C;-Alpha;bc=ON;dm=007C;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH VERTICAL LINE;NFKC_CF=007C;SB=XX;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FF5D;-Alpha;bc=ON;Bidi_M;bmg=FF5B;bpb=FF5B;bpt=c;dm=007D;dt=Wide;ea=F;gc=Pe;-IDC;-IDS;lb=CL;na=FULLWIDTH RIGHT CURLY BRACKET;NFKC_CF=007D;SB=CL;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FF5E;-Alpha;bc=ON;dm=007E;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH TILDE;NFKC_CF=007E;SB=XX;vo=Tr;WB=XX;-XIDC;-XIDS
 # Fullwidth brackets
-cp;FF5F;age=3.2;-Alpha;bc=ON;Bidi_M;bmg=FF60;bpb=FF60;bpt=o;dm=2985;dt=Wide;ea=F;gc=Ps;-IDC;-IDS;lb=OP;na=FULLWIDTH LEFT WHITE PARENTHESIS;NFKC_CF=2985;SB=CL;WB=XX;-XIDC;-XIDS
-cp;FF60;age=3.2;-Alpha;bc=ON;Bidi_M;bmg=FF5F;bpb=FF5F;bpt=c;dm=2986;dt=Wide;ea=F;gc=Pe;-IDC;-IDS;lb=CL;na=FULLWIDTH RIGHT WHITE PARENTHESIS;NFKC_CF=2986;SB=CL;WB=XX;-XIDC;-XIDS
+cp;FF5F;age=3.2;-Alpha;bc=ON;Bidi_M;bmg=FF60;bpb=FF60;bpt=o;dm=2985;dt=Wide;ea=F;gc=Ps;-IDC;-IDS;lb=OP;na=FULLWIDTH LEFT WHITE PARENTHESIS;NFKC_CF=2985;SB=CL;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FF60;age=3.2;-Alpha;bc=ON;Bidi_M;bmg=FF5F;bpb=FF5F;bpt=c;dm=2986;dt=Wide;ea=F;gc=Pe;-IDC;-IDS;lb=CL;na=FULLWIDTH RIGHT WHITE PARENTHESIS;NFKC_CF=2986;SB=CL;vo=Tr;WB=XX;-XIDC;-XIDS
 # Halfwidth CJK punctuation
 cp;FF61;-Alpha;bc=ON;dm=3002;gc=Po;-IDC;-IDS;lb=CL;na=HALFWIDTH IDEOGRAPHIC FULL STOP;NFKC_CF=3002;SB=ST;scx=Bopo Hang Hani Hira Kana Yiii;STerm;Term;WB=XX;-XIDC;-XIDS
 cp;FF62;-Alpha;bc=ON;Bidi_M;bmg=FF63;bpb=FF63;bpt=o;dm=300C;gc=Ps;-IDC;-IDS;lb=OP;na=HALFWIDTH LEFT CORNER BRACKET;NFKC_CF=300C;QMark;SB=CL;scx=Bopo Hang Hani Hira Kana Yiii;WB=XX;-XIDC;-XIDS
@@ -20340,14 +20346,14 @@ cp;FFDB;dm=3162;na=HALFWIDTH HANGUL LETTER YI;NFKC_CF=1174;sc=Hang
 cp;FFDC;dm=3163;na=HALFWIDTH HANGUL LETTER I;NFKC_CF=1175;sc=Hang
 cp;FFDD..FFDF;age=NA;-Alpha;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;NFKC_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 # Fullwidth symbol variants
-cp;FFE0;-Alpha;bc=ET;dm=00A2;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PO;na=FULLWIDTH CENT SIGN;NFKC_CF=00A2;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FFE1;-Alpha;bc=ET;dm=00A3;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PR;na=FULLWIDTH POUND SIGN;NFKC_CF=00A3;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FFE2;-Alpha;bc=ON;dm=00AC;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH NOT SIGN;NFKC_CF=00AC;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FFE3;-Alpha;bc=ON;CI;Dia;dm=00AF;dt=Wide;ea=F;gc=Sk;-IDC;-IDS;na=FULLWIDTH MACRON;NFKC_CF=0020 0304;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FFE4;-Alpha;bc=ON;dm=00A6;dt=Wide;ea=F;gc=So;-IDC;-IDS;na=FULLWIDTH BROKEN BAR;NFKC_CF=00A6;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FFE5;-Alpha;bc=ET;dm=00A5;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PR;na=FULLWIDTH YEN SIGN;NFKC_CF=00A5;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FFE6;-Alpha;bc=ET;dm=20A9;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PR;na=FULLWIDTH WON SIGN;NFKC_CF=20A9;SB=XX;WB=XX;-XIDC;-XIDS
-cp;FFE7;age=NA;-Alpha;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;NFKC_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
+cp;FFE0;-Alpha;bc=ET;dm=00A2;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PO;na=FULLWIDTH CENT SIGN;NFKC_CF=00A2;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FFE1;-Alpha;bc=ET;dm=00A3;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PR;na=FULLWIDTH POUND SIGN;NFKC_CF=00A3;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FFE2;-Alpha;bc=ON;dm=00AC;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH NOT SIGN;NFKC_CF=00AC;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FFE3;-Alpha;bc=ON;CI;Dia;dm=00AF;dt=Wide;ea=F;gc=Sk;-IDC;-IDS;na=FULLWIDTH MACRON;NFKC_CF=0020 0304;SB=XX;vo=Tr;WB=XX;-XIDC;-XIDS
+cp;FFE4;-Alpha;bc=ON;dm=00A6;dt=Wide;ea=F;gc=So;-IDC;-IDS;na=FULLWIDTH BROKEN BAR;NFKC_CF=00A6;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FFE5;-Alpha;bc=ET;dm=00A5;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PR;na=FULLWIDTH YEN SIGN;NFKC_CF=00A5;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FFE6;-Alpha;bc=ET;dm=20A9;dt=Wide;ea=F;gc=Sc;-IDC;-IDS;lb=PR;na=FULLWIDTH WON SIGN;NFKC_CF=20A9;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
+cp;FFE7;age=NA;-Alpha;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;NFKC_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;vo=U;WB=XX;-XIDC;-XIDS
 # Halfwidth symbol variants
 cp;FFE8;-Alpha;bc=ON;dm=2502;gc=So;-IDC;-IDS;lb=AL;na=HALFWIDTH FORMS LIGHT VERTICAL;NFKC_CF=2502;SB=XX;WB=XX;-XIDC;-XIDS
 cp;FFE9;-Alpha;bc=ON;dm=2190;gc=Sm;-IDC;-IDS;lb=AL;Math;na=HALFWIDTH LEFTWARDS ARROW;NFKC_CF=2190;SB=XX;WB=XX;-XIDC;-XIDS
@@ -20360,14 +20366,14 @@ cp;FFEF;age=NA;-Alpha;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;NFKC_QC
 
 block;FFF0..FFFF;age=3.0;bc=ON;blk=Specials;gc=Cf;GCB=CN;lb=CM;sc=Zyyy
 # FFF0..FFFF Specials
-cp;FFF0..FFF8;age=NA;bc=BN;CWKCF;DI;gc=Cn;lb=XX;NFKC_CF=;sc=Zzzz
+cp;FFF0..FFF8;age=NA;bc=BN;CWKCF;DI;gc=Cn;lb=XX;NFKC_CF=;sc=Zzzz;vo=U
 # Interlinear annotation
 cp;FFF9;CI;jt=T;na=INTERLINEAR ANNOTATION ANCHOR;SB=FO;WB=FO
 cp;FFFA;CI;jt=T;na=INTERLINEAR ANNOTATION SEPARATOR;SB=FO;WB=FO
 cp;FFFB;CI;jt=T;na=INTERLINEAR ANNOTATION TERMINATOR;SB=FO;WB=FO
 # Replacement characters
-cp;FFFC;age=2.1;gc=So;GCB=XX;Gr_Base;lb=CB;na=OBJECT REPLACEMENT CHARACTER
-cp;FFFD;age=1.1;ea=A;gc=So;GCB=XX;Gr_Base;lb=AI;na=REPLACEMENT CHARACTER
+cp;FFFC;age=2.1;gc=So;GCB=XX;Gr_Base;lb=CB;na=OBJECT REPLACEMENT CHARACTER;vo=U
+cp;FFFD;age=1.1;ea=A;gc=So;GCB=XX;Gr_Base;lb=AI;na=REPLACEMENT CHARACTER;vo=U
 # Noncharacters
 cp;FFFE..FFFF;age=1.1;bc=BN;gc=Cn;GCB=XX;lb=XX;NChar;sc=Zzzz
 
@@ -22191,7 +22197,7 @@ cp;1093A..1093E;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;WB=XX
 cp;1093F;-Alpha;gc=Po;-IDC;-IDS;na=LYDIAN TRIANGULAR MARK;SB=XX;WB=XX;-XIDC;-XIDS
 cp;10940..1097F;bc=R
 
-block;10980..1099F;age=6.1;Alpha;bc=R;blk=Meroitic_Hieroglyphs;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Mero;WB=LE;XIDC;XIDS
+block;10980..1099F;age=6.1;Alpha;bc=R;blk=Meroitic_Hieroglyphs;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Mero;vo=U;WB=LE;XIDC;XIDS
 # 10980..1099F Meroitic Hieroglyphs
 # Vowel letters
 cp;10980;na=MEROITIC HIEROGLYPHIC LETTER A
@@ -23990,7 +23996,7 @@ cp;114D8;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=TIRHUTA DIGIT EIGHT;nt=De;nv=8;S
 cp;114D9;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=TIRHUTA DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 cp;114DA..114DF;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;InSC=Other;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;11580..115FF;age=7.0;Alpha;blk=Siddham;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Sidd;WB=LE;XIDC;XIDS
+block;11580..115FF;age=7.0;Alpha;blk=Siddham;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Sidd;vo=U;WB=LE;XIDC;XIDS
 # 11580..115FF Siddham
 # Independent vowels
 cp;11580;InSC=Vowel_Independent;na=SIDDHAM LETTER A
@@ -24448,7 +24454,7 @@ cp;118F3..118FE;age=NA;-Alpha;-Cased;-CWCM;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;
 # Sign
 cp;118FF;-Cased;-CWCM;gc=Lo;na=WARANG CITI OM;SB=LE
 
-block;11A00..11A4F;age=10.0;Alpha;blk=Zanabazar_Square;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Zanb;WB=LE;XIDC;XIDS
+block;11A00..11A4F;age=10.0;Alpha;blk=Zanabazar_Square;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Zanb;vo=U;WB=LE;XIDC;XIDS
 # 11A00..11A4F Zanabazar Square
 # Vowel letter
 cp;11A00;InSC=Vowel_Independent;na=ZANABAZAR SQUARE LETTER A
@@ -24538,7 +24544,7 @@ cp;11A46;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;na=ZANABAZAR SQUARE CLOSING DOUBLE-LI
 cp;11A47;-Alpha;bc=NSM;ccc=9;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Gr_Link;-IDS;InSC=Invisible_Stacker;jt=T;lb=CM;na=ZANABAZAR SQUARE SUBJOINER;SB=EX;WB=Extend;-XIDS
 cp;11A48..11A4F;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;InSC=Other;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;11A50..11AAF;age=10.0;Alpha;blk=Soyombo;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Soyo;WB=LE;XIDC;XIDS
+block;11A50..11AAF;age=10.0;Alpha;blk=Soyombo;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Soyo;vo=U;WB=LE;XIDC;XIDS
 # 11A50..11AAF Soyombo
 # Vowel letter
 cp;11A50;InSC=Vowel_Independent;na=SOYOMBO LETTER A
@@ -26242,7 +26248,7 @@ cp;12542;na=CUNEIFORM SIGN ZU OVER ZU PLUS SAR
 cp;12543;na=CUNEIFORM SIGN ZU5 TIMES THREE DISH TENU
 cp;12544..1254F;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;13000..1342F;age=5.2;Alpha;blk=Egyptian_Hieroglyphs;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Egyp;WB=LE;XIDC;XIDS
+block;13000..1342F;age=5.2;Alpha;blk=Egyptian_Hieroglyphs;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Egyp;vo=U;WB=LE;XIDC;XIDS
 # 13000..1342F Egyptian Hieroglyphs
 # A. Man and his occupations
 cp;13000;na=EGYPTIAN HIEROGLYPH A001
@@ -27345,7 +27351,7 @@ cp;1342D;na=EGYPTIAN HIEROGLYPH AA031
 cp;1342E;na=EGYPTIAN HIEROGLYPH AA032
 cp;1342F;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 
-block;14400..1467F;age=8.0;Alpha;blk=Anatolian_Hieroglyphs;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Hluw;WB=LE;XIDC;XIDS
+block;14400..1467F;age=8.0;Alpha;blk=Anatolian_Hieroglyphs;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Hluw;vo=U;WB=LE;XIDC;XIDS
 # 14400..1467F Anatolian Hieroglyphs
 # A. The human body and clothing
 cp;14400;na=ANATOLIAN HIEROGLYPH A001
@@ -28907,7 +28913,7 @@ cp;16F9D;CI;Dia;gc=Lm;na=MIAO LETTER REFORMED TONE-5
 cp;16F9E;CI;Dia;gc=Lm;na=MIAO LETTER REFORMED TONE-6
 cp;16F9F;CI;Dia;gc=Lm;na=MIAO LETTER REFORMED TONE-8
 
-block;16FE0..16FFF;Alpha;blk=Ideographic_Symbols;CI;ea=W;Ext;gc=Lm;Gr_Base;IDC;IDS;lb=NS;SB=LE;WB=LE;XIDC;XIDS
+block;16FE0..16FFF;Alpha;blk=Ideographic_Symbols;CI;ea=W;Ext;gc=Lm;Gr_Base;IDC;IDS;lb=NS;SB=LE;vo=U;WB=LE;XIDC;XIDS
 # 16FE0..16FFF Ideographic Symbols and Punctuation
 # Tangut mark
 cp;16FE0;age=9.0;na=TANGUT ITERATION MARK;sc=Tang
@@ -28915,12 +28921,12 @@ cp;16FE0;age=9.0;na=TANGUT ITERATION MARK;sc=Tang
 cp;16FE1;age=10.0;na=NUSHU ITERATION MARK;sc=Nshu
 cp;16FE2..16FFF;-Alpha;-CI;ea=N;-Ext;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;WB=XX;-XIDC;-XIDS
 
-block;17000..187FF;blk=Tangut
+block;17000..187FF;blk=Tangut;vo=U
 # 17000..187EC Tangut
 algnamesrange;17000..187EC;han;TANGUT IDEOGRAPH-
 cp;17000..187EC;age=9.0;Alpha;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Tang;XIDC;XIDS
 
-block;18800..18AFF;age=9.0;Alpha;blk=Tangut_Components;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Tang;XIDC;XIDS
+block;18800..18AFF;age=9.0;Alpha;blk=Tangut_Components;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Tang;vo=U;XIDC;XIDS
 # 18800..18AFF Tangut Components
 # One-stroke components
 cp;18800;na=TANGUT COMPONENT-001
@@ -29693,7 +29699,7 @@ cp;18AF1;na=TANGUT COMPONENT-754
 cp;18AF2;na=TANGUT COMPONENT-755
 cp;18AF3..18AFF;age=NA;-Alpha;ea=N;gc=Cn;-Gr_Base;-IDC;-Ideo;-IDS;lb=XX;SB=XX;sc=Zzzz;-XIDC;-XIDS
 
-block;1B000..1B0FF;age=10.0;Alpha;blk=Kana_Sup;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Hira;XIDC;XIDS
+block;1B000..1B0FF;age=10.0;Alpha;blk=Kana_Sup;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Hira;vo=U;XIDC;XIDS
 # 1B000..1B0FF Kana Supplement
 # Historic Katakana
 cp;1B000;age=6.0;na=KATAKANA LETTER ARCHAIC E;sc=Kana;WB=KA
@@ -29955,7 +29961,7 @@ cp;1B0FD;na=HENTAIGANA LETTER RU-6
 cp;1B0FE;na=HENTAIGANA LETTER RE-1
 cp;1B0FF;na=HENTAIGANA LETTER RE-2
 
-block;1B100..1B12F;age=10.0;Alpha;blk=Kana_Ext_A;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Hira;XIDC;XIDS
+block;1B100..1B12F;age=10.0;Alpha;blk=Kana_Ext_A;ea=W;gc=Lo;Gr_Base;IDC;IDS;lb=ID;SB=LE;sc=Hira;vo=U;XIDC;XIDS
 # 1B100..1B12F Kana Extended-A
 # Hentaigana
 cp;1B100;na=HENTAIGANA LETTER RE-3
@@ -29991,7 +29997,7 @@ cp;1B11D;na=HENTAIGANA LETTER N-MU-MO-1
 cp;1B11E;na=HENTAIGANA LETTER N-MU-MO-2
 cp;1B11F..1B12F;age=NA;-Alpha;ea=N;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;SB=XX;sc=Zzzz;-XIDC;-XIDS
 
-block;1B170..1B2FF;age=10.0;Alpha;blk=Nushu;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Nshu;XIDC;XIDS
+block;1B170..1B2FF;age=10.0;Alpha;blk=Nushu;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Nshu;vo=U;XIDC;XIDS
 # 1B170..1B2FF Nushu
 # One-stroke character
 cp;1B170;na=NUSHU CHARACTER-1B170
@@ -30586,7 +30592,7 @@ cp;1BCA2;na=SHORTHAND FORMAT DOWN STEP;NFKC_CF=
 cp;1BCA3;na=SHORTHAND FORMAT UP STEP;NFKC_CF=
 cp;1BCA4..1BCAF;age=NA;bc=L;-CI;-CWKCF;-DI;gc=Cn;GCB=XX;jt=U;lb=XX;SB=XX;sc=Zzzz;scx=<script>;WB=XX
 
-block;1D000..1D0FF;age=3.1;blk=Byzantine_Music;gc=So;Gr_Base;lb=AL;sc=Zyyy
+block;1D000..1D0FF;age=3.1;blk=Byzantine_Music;gc=So;Gr_Base;lb=AL;sc=Zyyy;vo=U
 # 1D000..1D0FF Byzantine Musical Symbols
 # Prosodies (Prosodics)
 cp;1D000;na=BYZANTINE MUSICAL SYMBOL PSILI
@@ -30851,7 +30857,7 @@ cp;1D0F4;na=BYZANTINE MUSICAL SYMBOL KLASMA KATO
 cp;1D0F5;na=BYZANTINE MUSICAL SYMBOL GORGON NEO KATO
 cp;1D0F6..1D0FF;age=NA;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
 
-block;1D100..1D1FF;age=3.1;blk=Music;gc=So;Gr_Base;lb=AL;sc=Zyyy
+block;1D100..1D1FF;age=3.1;blk=Music;gc=So;Gr_Base;lb=AL;sc=Zyyy;vo=U
 # 1D100..1D1FF Musical Symbols
 # Bars
 cp;1D100;na=MUSICAL SYMBOL SINGLE BARLINE
@@ -31202,7 +31208,7 @@ cp;1D244;bc=NSM;ccc=230;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;IDC;jt=T;lb=CM;na=COMBIN
 cp;1D245;na=GREEK MUSICAL LEIMMA
 cp;1D246..1D24F;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
 
-block;1D300..1D35F;age=4.0;bc=ON;blk=Tai_Xuan_Jing;gc=So;Gr_Base;lb=AL;sc=Zyyy
+block;1D300..1D35F;age=4.0;bc=ON;blk=Tai_Xuan_Jing;gc=So;Gr_Base;lb=AL;sc=Zyyy;vo=U
 # 1D300..1D35F Tai Xuan Jing Symbols
 # Monogram
 cp;1D300;na=MONOGRAM FOR EARTH
@@ -31296,7 +31302,7 @@ cp;1D355;na=TETRAGRAM FOR LABOURING
 cp;1D356;na=TETRAGRAM FOR FOSTERING
 cp;1D357..1D35F;age=NA;bc=L;gc=Cn;-Gr_Base;lb=XX;sc=Zzzz
 
-block;1D360..1D37F;age=5.0;blk=Counting_Rod;gc=No;Gr_Base;lb=AL;nt=Nu;sc=Zyyy;scx=Hani
+block;1D360..1D37F;age=5.0;blk=Counting_Rod;gc=No;Gr_Base;lb=AL;nt=Nu;sc=Zyyy;scx=Hani;vo=U
 # 1D360..1D37F Counting Rod Numerals
 # Counting rod units
 cp;1D360;na=COUNTING ROD UNIT DIGIT ONE;nv=1
@@ -32368,7 +32374,7 @@ cp;1D7FD;-Alpha;bc=EN;-Cased;dm=0037;gc=Nd;-IDS;lb=NU;na=MATHEMATICAL MONOSPACE 
 cp;1D7FE;-Alpha;bc=EN;-Cased;dm=0038;gc=Nd;-IDS;lb=NU;na=MATHEMATICAL MONOSPACE DIGIT EIGHT;NFKC_CF=0038;nt=De;nv=8;SB=NU;WB=NU;-XIDS
 cp;1D7FF;-Alpha;bc=EN;-Cased;dm=0039;gc=Nd;-IDS;lb=NU;na=MATHEMATICAL MONOSPACE DIGIT NINE;NFKC_CF=0039;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 
-block;1D800..1DAAF;age=8.0;blk=Sutton_SignWriting;gc=So;Gr_Base;lb=AL;sc=Sgnw
+block;1D800..1DAAF;age=8.0;blk=Sutton_SignWriting;gc=So;Gr_Base;lb=AL;sc=Sgnw;vo=U
 # 1D800..1DAAF Sutton SignWriting
 # Hand shapes with index finger
 cp;1D800;na=SIGNWRITING HAND-FIST INDEX
@@ -33648,7 +33654,7 @@ cp;1EEF1;-Alpha;bc=ON;-CWKCF;dt=None;gc=Sm;-IDC;-IDS;na=ARABIC MATHEMATICAL OPER
 cp;1EEF2..1EEFF;age=NA;-Alpha;-CWKCF;dt=None;gc=Cn;-Gr_Base;-IDC;-IDS;lb=XX;-Math;NFKC_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;WB=XX;-XIDC;-XIDS
 cp;1EF00..1EFFF;bc=R
 
-block;1F000..1F02F;age=5.1;bc=ON;blk=Mahjong;gc=So;Gr_Base;lb=ID;sc=Zyyy
+block;1F000..1F02F;age=5.1;bc=ON;blk=Mahjong;gc=So;Gr_Base;lb=ID;sc=Zyyy;vo=U
 # 1F000..1F02F Mahjong Tiles
 # Prevailing wind tiles
 cp;1F000;na=MAHJONG TILE EAST WIND
@@ -33704,7 +33710,7 @@ cp;1F02A;na=MAHJONG TILE JOKER
 cp;1F02B;na=MAHJONG TILE BACK
 cp;1F02C..1F02F;age=NA;bc=L;gc=Cn;-Gr_Base;sc=Zzzz
 
-block;1F030..1F09F;age=5.1;bc=ON;blk=Domino;gc=So;Gr_Base;lb=ID;sc=Zyyy
+block;1F030..1F09F;age=5.1;bc=ON;blk=Domino;gc=So;Gr_Base;lb=ID;sc=Zyyy;vo=U
 # 1F030..1F09F Domino Tiles
 # Horizontal tiles
 cp;1F030;na=DOMINO TILE HORIZONTAL BACK
@@ -33824,7 +33830,7 @@ cp;1F092;na=DOMINO TILE VERTICAL-06-05
 cp;1F093;na=DOMINO TILE VERTICAL-06-06
 cp;1F094..1F09F;age=NA;bc=L;gc=Cn;-Gr_Base;sc=Zzzz
 
-block;1F0A0..1F0FF;age=6.0;bc=ON;blk=Playing_Cards;gc=So;Gr_Base;lb=ID;sc=Zyyy
+block;1F0A0..1F0FF;age=6.0;bc=ON;blk=Playing_Cards;gc=So;Gr_Base;lb=ID;sc=Zyyy;vo=U
 # 1F0A0..1F0FF Playing Cards
 # Back of card
 cp;1F0A0;na=PLAYING CARD BACK
@@ -33922,7 +33928,7 @@ cp;1F0F4;age=7.0;na=PLAYING CARD TRUMP-20
 cp;1F0F5;age=7.0;na=PLAYING CARD TRUMP-21
 cp;1F0F6..1F0FF;age=NA;bc=L;gc=Cn;-Gr_Base;sc=Zzzz
 
-block;1F100..1F1FF;age=6.0;blk=Enclosed_Alphanum_Sup;ea=A;gc=So;Gr_Base;lb=AI;sc=Zyyy
+block;1F100..1F1FF;age=6.0;blk=Enclosed_Alphanum_Sup;ea=A;gc=So;Gr_Base;lb=AI;sc=Zyyy;vo=U
 # 1F100..1F1FF Enclosed Alphanumeric Supplement
 # Number with full stop
 cp;1F100;age=5.2;bc=EN;CWKCF;dm=0030 002E;dt=Com;gc=No;na=DIGIT ZERO FULL STOP;NFKC_CF=0030 002E;NFKC_QC=N;NFKD_QC=N;nt=Di;nv=0
@@ -34134,12 +34140,12 @@ cp;1F1FD;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL 
 cp;1F1FE;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER Y;RI;WB=RI
 cp;1F1FF;ea=N;Emoji;Emoji_Component;Emoji_Presentation;GCB=RI;lb=RI;na=REGIONAL INDICATOR SYMBOL LETTER Z;RI;WB=RI
 
-block;1F200..1F2FF;age=5.2;blk=Enclosed_Ideographic_Sup;CWKCF;dt=Sqr;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy
+block;1F200..1F2FF;age=5.2;blk=Enclosed_Ideographic_Sup;CWKCF;dt=Sqr;ea=W;gc=So;Gr_Base;lb=ID;NFKC_QC=N;NFKD_QC=N;sc=Zyyy;vo=U
 # 1F200..1F2FF Enclosed Ideographic Supplement
 # Squared hiragana from ARIB STD B24
-cp;1F200;dm=307B 304B;na=SQUARE HIRAGANA HOKA;NFKC_CF=307B 304B;sc=Hira
+cp;1F200;dm=307B 304B;na=SQUARE HIRAGANA HOKA;NFKC_CF=307B 304B;sc=Hira;vo=Tu
 # Squared katakana
-cp;1F201;age=6.0;dm=30B3 30B3;Emoji;Emoji_Presentation;na=SQUARED KATAKANA KOKO;NFKC_CF=30B3 30B3
+cp;1F201;age=6.0;dm=30B3 30B3;Emoji;Emoji_Presentation;na=SQUARED KATAKANA KOKO;NFKC_CF=30B3 30B3;vo=Tu
 cp;1F202;age=6.0;dm=30B5;Emoji;na=SQUARED KATAKANA SA;NFKC_CF=30B5
 cp;1F203..1F20F;age=NA;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;NFKC_QC=Y;NFKD_QC=Y;sc=Zzzz
 # Squared ideographs and kana from ARIB STD B24
@@ -34213,7 +34219,7 @@ cp;1F264;age=10.0;bc=ON;-CWKCF;dt=None;na=ROUNDED SYMBOL FOR SHUANGXI;NFKC_QC=Y;
 cp;1F265;age=10.0;bc=ON;-CWKCF;dt=None;na=ROUNDED SYMBOL FOR CAI;NFKC_QC=Y;NFKD_QC=Y
 cp;1F266..1F2FF;age=NA;-CWKCF;dt=None;ea=N;gc=Cn;-Gr_Base;NFKC_QC=Y;NFKD_QC=Y;sc=Zzzz
 
-block;1F300..1F5FF;age=6.0;bc=ON;blk=Misc_Pictographs;ea=W;Emoji;Emoji_Presentation;gc=So;Gr_Base;lb=ID;sc=Zyyy
+block;1F300..1F5FF;age=6.0;bc=ON;blk=Misc_Pictographs;ea=W;Emoji;Emoji_Presentation;gc=So;Gr_Base;lb=ID;sc=Zyyy;vo=U
 # 1F300..1F5FF Miscellaneous Symbols and Pictographs
 # Weather, landscape, and sky symbols
 cp;1F300;na=CYCLONE
@@ -35058,7 +35064,7 @@ cp;1F5FD;na=STATUE OF LIBERTY
 cp;1F5FE;na=SILHOUETTE OF JAPAN
 cp;1F5FF;na=MOYAI
 
-block;1F600..1F64F;age=6.0;bc=ON;blk=Emoticons;ea=W;Emoji;Emoji_Presentation;gc=So;Gr_Base;lb=ID;sc=Zyyy
+block;1F600..1F64F;age=6.0;bc=ON;blk=Emoticons;ea=W;Emoji;Emoji_Presentation;gc=So;Gr_Base;lb=ID;sc=Zyyy;vo=U
 # 1F600..1F64F Emoticons
 # Faces
 cp;1F600;age=6.1;na=GRINNING FACE
@@ -35145,7 +35151,7 @@ cp;1F64D;Emoji_Modifier_Base;GCB=EB;lb=EB;na=PERSON FROWNING;WB=EB
 cp;1F64E;Emoji_Modifier_Base;GCB=EB;lb=EB;na=PERSON WITH POUTING FACE;WB=EB
 cp;1F64F;Emoji_Modifier_Base;GCB=EB;lb=EB;na=PERSON WITH FOLDED HANDS;WB=EB
 
-block;1F650..1F67F;age=7.0;bc=ON;blk=Ornamental_Dingbats;gc=So;Gr_Base;lb=AL;sc=Zyyy
+block;1F650..1F67F;age=7.0;bc=ON;blk=Ornamental_Dingbats;gc=So;Gr_Base;lb=AL;sc=Zyyy;vo=U
 # 1F650..1F67F Ornamental Dingbats
 # Fleurons
 cp;1F650;na=NORTH WEST POINTING LEAF
@@ -35202,7 +35208,7 @@ cp;1F67D;na=VERY HEAVY REVERSE SOLIDUS
 cp;1F67E;na=CHECKER BOARD
 cp;1F67F;na=REVERSE CHECKER BOARD
 
-block;1F680..1F6FF;age=6.0;bc=ON;blk=Transport_And_Map;ea=W;Emoji;Emoji_Presentation;gc=So;Gr_Base;lb=ID;sc=Zyyy
+block;1F680..1F6FF;age=6.0;bc=ON;blk=Transport_And_Map;ea=W;Emoji;Emoji_Presentation;gc=So;Gr_Base;lb=ID;sc=Zyyy;vo=U
 # 1F680..1F6FF Transport and Map Symbols
 # Vehicles
 cp;1F680;GCB=GAZ;na=ROCKET;WB=GAZ
@@ -35323,7 +35329,7 @@ cp;1F6F7;age=10.0;na=SLED
 cp;1F6F8;age=10.0;na=FLYING SAUCER
 cp;1F6F9..1F6FF;age=NA;bc=L;ea=N;-Emoji;-Emoji_Presentation;gc=Cn;-Gr_Base;sc=Zzzz
 
-block;1F700..1F77F;age=6.0;bc=ON;blk=Alchemical;gc=So;Gr_Base;lb=AL;sc=Zyyy
+block;1F700..1F77F;age=6.0;bc=ON;blk=Alchemical;gc=So;Gr_Base;lb=AL;sc=Zyyy;vo=U
 # 1F700..1F77F Alchemical Symbols
 # Symbols for Aristotelian elements
 cp;1F700;na=ALCHEMICAL SYMBOL FOR QUINTESSENCE
@@ -35457,7 +35463,7 @@ cp;1F772;na=ALCHEMICAL SYMBOL FOR HALF DRAM
 cp;1F773;na=ALCHEMICAL SYMBOL FOR HALF OUNCE
 cp;1F774..1F77F;age=NA;bc=L;gc=Cn;-Gr_Base;lb=ID;sc=Zzzz
 
-block;1F780..1F7FF;age=7.0;bc=ON;blk=Geometric_Shapes_Ext;gc=So;Gr_Base;lb=AL;sc=Zyyy
+block;1F780..1F7FF;age=7.0;bc=ON;blk=Geometric_Shapes_Ext;gc=So;Gr_Base;lb=AL;sc=Zyyy;vo=U
 # 1F780..1F7FF Geometric Shapes Extended
 # Isosceles right triangles
 cp;1F780;na=BLACK LEFT-POINTING ISOSCELES RIGHT TRIANGLE
@@ -35741,7 +35747,7 @@ cp;1F8AC;na=WHITE ARROW SHAFT WIDTH ONE
 cp;1F8AD;na=WHITE ARROW SHAFT WIDTH TWO THIRDS
 cp;1F8AE..1F8FF;age=NA;bc=L;gc=Cn;-Gr_Base;lb=ID;sc=Zzzz
 
-block;1F900..1F9FF;age=9.0;bc=ON;blk=Sup_Symbols_And_Pictographs;ea=W;Emoji;Emoji_Presentation;gc=So;Gr_Base;lb=ID;sc=Zyyy
+block;1F900..1F9FF;age=9.0;bc=ON;blk=Sup_Symbols_And_Pictographs;ea=W;Emoji;Emoji_Presentation;gc=So;Gr_Base;lb=ID;sc=Zyyy;vo=U
 # 1F900..1F9FF Supplemental Symbols and Pictographs
 # Typicon symbols
 cp;1F900;age=10.0;ea=N;-Emoji;-Emoji_Presentation;lb=AL;na=CIRCLED CROSS FORMEE WITH FOUR DOTS
@@ -35915,7 +35921,7 @@ cp;1FF80..1FFFD;lb=ID
 # Noncharacters
 cp;1FFFE..1FFFF;age=2.0;bc=BN;NChar
 
-block;20000..2A6DF;age=3.1;Alpha;blk=CJK_Ext_B;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Hani;UIdeo;XIDC;XIDS
+block;20000..2A6DF;age=3.1;Alpha;blk=CJK_Ext_B;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;SB=LE;sc=Hani;UIdeo;vo=U;XIDC;XIDS
 # 20000..2A6D6 CJK Unified Ideographs Extension B
 algnamesrange;20000..2A6D6;han;CJK UNIFIED IDEOGRAPH-
 cp;20001;nt=Nu;nv=7
@@ -35934,30 +35940,30 @@ cp;22998;nt=Nu;nv=3
 cp;23B1B;nt=Nu;nv=3
 cp;2626D;nt=Nu;nv=4
 cp;2A6D7..2A6DF;age=NA;-Alpha;gc=Cn;-Gr_Base;-IDC;-Ideo;-IDS;SB=XX;sc=Zzzz;-UIdeo;-XIDC;-XIDS
-cp;2A6E0..2A6FF;ea=W;lb=ID
+cp;2A6E0..2A6FF;ea=W;lb=ID;vo=U
 
-block;2A700..2B73F;blk=CJK_Ext_C;ea=W;lb=ID
+block;2A700..2B73F;blk=CJK_Ext_C;ea=W;lb=ID;vo=U
 # 2A700..2B734 CJK Unified Ideographs Extension C
 algnamesrange;2A700..2B734;han;CJK UNIFIED IDEOGRAPH-
 cp;2A700..2B734;age=5.2;Alpha;gc=Lo;Gr_Base;IDC;Ideo;IDS;SB=LE;sc=Hani;UIdeo;XIDC;XIDS
 
-block;2B740..2B81F;blk=CJK_Ext_D;ea=W;lb=ID
+block;2B740..2B81F;blk=CJK_Ext_D;ea=W;lb=ID;vo=U
 # 2B740..2B81D CJK Unified Ideographs Extension D
 algnamesrange;2B740..2B81D;han;CJK UNIFIED IDEOGRAPH-
 cp;2B740..2B81D;age=6.0;Alpha;gc=Lo;Gr_Base;IDC;Ideo;IDS;SB=LE;sc=Hani;UIdeo;XIDC;XIDS
 
-block;2B820..2CEAF;blk=CJK_Ext_E;ea=W;lb=ID
+block;2B820..2CEAF;blk=CJK_Ext_E;ea=W;lb=ID;vo=U
 # 2B820..2CEA1 CJK Unified Ideographs Extension E
 algnamesrange;2B820..2CEA1;han;CJK UNIFIED IDEOGRAPH-
 cp;2B820..2CEA1;age=8.0;Alpha;gc=Lo;Gr_Base;IDC;Ideo;IDS;SB=LE;sc=Hani;UIdeo;XIDC;XIDS
 
-block;2CEB0..2EBEF;blk=CJK_Ext_F;ea=W;lb=ID
+block;2CEB0..2EBEF;blk=CJK_Ext_F;ea=W;lb=ID;vo=U
 # 2CEB0..2EBE0 CJK Unified Ideographs Extension F
 algnamesrange;2CEB0..2EBE0;han;CJK UNIFIED IDEOGRAPH-
 cp;2CEB0..2EBE0;age=10.0;Alpha;gc=Lo;Gr_Base;IDC;Ideo;IDS;SB=LE;sc=Hani;UIdeo;XIDC;XIDS
-cp;2EBF0..2F7FF;ea=W;lb=ID
+cp;2EBF0..2F7FF;ea=W;lb=ID;vo=U
 
-block;2F800..2FA1F;age=3.1;Alpha;blk=CJK_Compat_Ideographs_Sup;Comp_Ex;CWKCF;dt=Can;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;NFC_QC=N;NFD_QC=N;NFKC_QC=N;NFKD_QC=N;SB=LE;sc=Hani;XIDC;XIDS
+block;2F800..2FA1F;age=3.1;Alpha;blk=CJK_Compat_Ideographs_Sup;Comp_Ex;CWKCF;dt=Can;ea=W;gc=Lo;Gr_Base;IDC;Ideo;IDS;lb=ID;NFC_QC=N;NFD_QC=N;NFKC_QC=N;NFKD_QC=N;SB=LE;sc=Hani;vo=U;XIDC;XIDS
 # 2F800..2FA1F CJK Compatibility Ideographs Supplement
 # Duplicate characters from CNS 11643-1992
 cp;2F800;dm=4E3D;na=CJK COMPATIBILITY IDEOGRAPH-2F800;NFKC_CF=4E3D
@@ -36503,14 +36509,14 @@ cp;2FA1B;dm=9F16;na=CJK COMPATIBILITY IDEOGRAPH-2FA1B;NFKC_CF=9F16
 cp;2FA1C;dm=9F3B;na=CJK COMPATIBILITY IDEOGRAPH-2FA1C;NFKC_CF=9F3B
 cp;2FA1D;dm=2A600;na=CJK COMPATIBILITY IDEOGRAPH-2FA1D;NFKC_CF=2A600
 cp;2FA1E..2FA1F;age=NA;-Alpha;-Comp_Ex;-CWKCF;dt=None;gc=Cn;-Gr_Base;-IDC;-Ideo;-IDS;NFC_QC=Y;NFD_QC=Y;NFKC_QC=Y;NFKD_QC=Y;SB=XX;sc=Zzzz;-XIDC;-XIDS
-cp;2FA20..2FF7F;ea=W;lb=ID
+cp;2FA20..2FF7F;ea=W;lb=ID;vo=U
 # 2FF80..2FFFF Unassigned
-cp;2FF80..2FFFD;ea=W;lb=ID
+cp;2FF80..2FFFD;ea=W;lb=ID;vo=U
 # Noncharacters
 cp;2FFFE..2FFFF;age=2.0;bc=BN;NChar
-cp;30000..3FF7F;ea=W;lb=ID
+cp;30000..3FF7F;ea=W;lb=ID;vo=U
 # 3FF80..3FFFF Unassigned
-cp;3FF80..3FFFD;ea=W;lb=ID
+cp;3FF80..3FFFD;ea=W;lb=ID;vo=U
 # Noncharacters
 cp;3FFFE..3FFFF;age=2.0;bc=BN;NChar
 # 4FF80..4FFFF Unassigned
@@ -36899,15 +36905,15 @@ cp;E01F0..E0FFF;bc=BN;CWKCF;DI;GCB=CN;NFKC_CF=
 cp;EFFFE..EFFFF;age=2.0;bc=BN;NChar
 
 block;F0000..FFFFF;age=2.0;blk=Sup_PUA_A
-cp;F0000..FFF7F;ea=A;gc=Co
+cp;F0000..FFF7F;ea=A;gc=Co;vo=U
 # FFF80..FFFFF Supplementary Private Use Area-A
-cp;FFF80..FFFFD;ea=A;gc=Co
+cp;FFF80..FFFFD;ea=A;gc=Co;vo=U
 # Noncharacters
 cp;FFFFE..FFFFF;bc=BN;NChar
 
 block;100000..10FFFF;age=2.0;blk=Sup_PUA_B
-cp;100000..10FF7F;ea=A;gc=Co
+cp;100000..10FF7F;ea=A;gc=Co;vo=U
 # 10FF80..10FFFF Supplementary Private Use Area-B
-cp;10FF80..10FFFD;ea=A;gc=Co
+cp;10FF80..10FFFD;ea=A;gc=Co;vo=U
 # Noncharacters
 cp;10FFFE..10FFFF;bc=BN;NChar

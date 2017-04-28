@@ -76,8 +76,6 @@ _ignored_properties = set((
   "XO_NFD",
   "XO_NFKC",
   "XO_NFKD",
-  # ICU does not (yet) support Vertical_Orientation.
-  "vo",
   # ICU does not use Unihan properties.
   "cjkAccountingNumeric",
   "cjkOtherNumeric",
@@ -809,6 +807,7 @@ def ParseLineBreak(in_file): ParseOneProperty(in_file, "lb")
 def ParseScripts(in_file): ParseOneProperty(in_file, "sc")
 def ParseScriptExtensions(in_file): ParseOneProperty(in_file, "scx")
 def ParseSentenceBreak(in_file): ParseOneProperty(in_file, "SB")
+def ParseVerticalOrientation(in_file): ParseOneProperty(in_file, "vo")
 def ParseWordBreak(in_file): ParseOneProperty(in_file, "WB")
 
 
@@ -1565,6 +1564,7 @@ _files = {
   "ScriptExtensions.txt": (DontCopy, ParseScriptExtensions),
   "SpecialCasing.txt": (CopyOnly, ParseSpecialCasing),
   "UnicodeData.txt": (CopyOnly, ParseUnicodeData, 2),
+  "VerticalOrientation.txt": (DontCopy, ParseVerticalOrientation),
   "WordBreakProperty.txt": (DontCopy, ParseWordBreak),
   "WordBreakTest.txt": (PrependBOM, "testdata"),
   # From www.unicode.org/Public/idna/<version>/
