@@ -114,6 +114,7 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
 - fix other errors
     Exception: no default values (@missing lines) for some Catalog or Enumerated properties: [u'vo'] 
   -> add vo=Vertical_Orientation to _ignored_properties
+  -> later removed again, parsing the file, even though we do not yet store data for runtime use
 
 * new constants for new property values
 - preparseucd.py error:
@@ -188,7 +189,7 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
     vo ; Tr                               ; Transformed_Rotated
     vo ; Tu                               ; Transformed_Upright
     vo ; U                                ; Upright
-  -> ignored for now
+  -> only pre-parsed for now, but not yet stored for runtime use
 
 * update Script metadata: SCRIPT_PROPS[] in uscript_props.cpp & UScript.ScriptMetadata
     (not strictly necessary for NOT_ENCODED scripts)
