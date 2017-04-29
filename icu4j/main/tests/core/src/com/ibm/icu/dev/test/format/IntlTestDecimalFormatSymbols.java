@@ -269,12 +269,16 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             "\uD801\uDCA0", "\uD801\uDCA1", "\uD801\uDCA2", "\uD801\uDCA3", "\uD801\uDCA4",
             "\uD801\uDCA5", "\uD801\uDCA6", "\uD801\uDCA7", "\uD801\uDCA8", "\uD801\uDCA9"
         };
+        final String[] differentDigitStrings = {"0", "b", "3", "d", "5", "f", "7", "h", "9", "j"};
 
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
 
         symbols.setDigitStrings(osmanyaDigitStrings);
         if (!Arrays.equals(symbols.getDigitStrings(), osmanyaDigitStrings)) {
             errln("ERROR: Osmanya digits (supplementary) should be set");
+        }
+        if (Character.codePointAt(osmanyaDigitStrings[0], 0) != symbols.getCodePointZero()) {
+            errln("ERROR: Code point zero be Osmanya code point zero");
         }
         if (defZero != symbols.getZeroDigit()) {
             errln("ERROR: Zero digit should be 0");
@@ -283,10 +287,21 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             errln("ERROR: Char digits should be Latin digits");
         }
 
+        symbols.setDigitStrings(differentDigitStrings);
+        if (!Arrays.equals(symbols.getDigitStrings(), differentDigitStrings)) {
+            errln("ERROR: Different digits should be set");
+        }
+        if (-1 != symbols.getCodePointZero()) {
+            errln("ERROR: Code point zero should be invalid");
+        }
+
         // Reset digits to Latin
         symbols.setZeroDigit(defZero);
         if (!Arrays.equals(symbols.getDigitStrings(), defDigitStrings)) {
             errln("ERROR: Latin digits should be set" + symbols.getDigitStrings()[0]);
+        }
+        if (defZero != symbols.getCodePointZero()) {
+            errln("ERROR: Code point zero be ASCII 0");
         }
     }
 }
