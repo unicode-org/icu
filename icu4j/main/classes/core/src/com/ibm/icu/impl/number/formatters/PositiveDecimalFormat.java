@@ -123,26 +123,14 @@ public class PositiveDecimalFormat implements Format.TargetFormat {
       decimalSeparator = symbols.getDecimalSeparatorString();
     }
 
-    // Check to see if we can use code points instead of strings (~15% format performance boost)
-    int _codePointZero = -1;
-    String[] _digitStrings = symbols.getDigitStringsLocal();
-    for (int i = 0; i < _digitStrings.length; i++) {
-      int cp = Character.codePointAt(_digitStrings[i], 0);
-      int cc = Character.charCount(cp);
-      if (cc != _digitStrings[i].length()) {
-        _codePointZero = -1;
-        break;
-      } else if (i == 0) {
-        _codePointZero = cp;
-      } else if (cp != _codePointZero + i) {
-        _codePointZero = -1;
-        break;
-      }
-    }
+    // Check to see if we can use code points instead of strings
+    int _codePointZero = symbols.getCodePointZero();
     if (_codePointZero != -1) {
+      // Fast Path (~9% faster than slow path when formatting long strings)
       digitStrings = null;
       codePointZero = _codePointZero;
     } else {
+      // Slow Path
       digitStrings = symbols.getDigitStrings(); // makes a copy
       codePointZero = -1;
     }
