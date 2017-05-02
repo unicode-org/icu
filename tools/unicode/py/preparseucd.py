@@ -133,7 +133,7 @@ _null_names = frozenset(("<none>", "NaN"))
 
 # Dictionary of explicit default property values.
 # Keyed by short property names.
-_defaults = {}
+_defaults = {"gc": "Cn"}
 
 # _null_values overridden by explicit _defaults.
 # Initialized after parsing is done.
@@ -945,58 +945,99 @@ def ParseBidiBrackets(in_file):
 
 # Postprocessing ----------------------------------------------------------- ***
 
+def PrintedSize(pname, value):
+  if isinstance(value, bool):
+    if value:
+      return len(pname) + 1  # ";pname"
+    else:
+      return len(pname) + 2  # ";-pname"
+  else:
+    return len(pname) + len(str(value)) + 2  # ";pname=value"
+
+
 def CompactBlock(b, i):
   assert b[0] == _starts[i]
+  b_props = b[2]  # Normally just blk from Blocks.txt.
+  # b_props["blk"] has not been canonicalized yet.
+  b_props["blk"] = _props[i]["blk"]
   orig_i = i
   # Count the number of occurrences of each property's value in this block.
-  # To minimize the output, count the number of ranges,
+  # To minimize the output, count the number of assigned ranges,
   # not the number of code points.
-  num_ranges_so_far = 0
+  num_ranges = 0
   prop_counters = {}
+  if "gc" in b_props:
+    b_is_unassigned = b_props["gc"] == "Cn"  # Unreachable with normal data.
+  else:
+    b_is_unassigned = _defaults["gc"] == "Cn"  # This is expected to be true.
   while True:
     start = _starts[i]
     if start > b[1]: break
     props = _props[i]
-    for (pname, value) in props.iteritems():
-      if pname in prop_counters:
-        counter = prop_counters[pname]
-      else:
-        counter = {_null_or_defaults[pname]: num_ranges_so_far}
-        prop_counters[pname] = counter
-      if value in counter:
-        counter[value] += 1
-      else:
-        counter[value] = 1
-    # Also count default values for properties that do not occur in a range.
-    for pname in prop_counters:
-      if pname not in props:
-        counter = prop_counters[pname]
-        value = _null_or_defaults[pname]
-        counter[value] += 1
-    num_ranges_so_far += 1
-    # Invariant: For each counter, the sum of counts must equal num_ranges_so_far.
+    if "gc" in props:
+      is_unassigned = props["gc"] == "Cn"
+    else:
+      is_unassigned = b_is_unassigned
+    if is_unassigned:
+      # Compact an unassigned range inside the block and
+      # mark it to be written with "unassigned".
+      # It falls back to default properties, not block properties,
+      # except for the blk=Block property.
+      assert props["blk"] == b_props["blk"]
+      del props["blk"]
+      for pname in props.keys():  # .keys() is a copy so we can del props[pname].
+        if props[pname] == _null_or_defaults[pname]: del props[pname]
+      # What remains are unusual default values for unassigned code points.
+      # For example, bc=R or lb=ID.
+      # See http://www.unicode.org/reports/tr44/#Default_Values_Table
+      props["unassigned"] = True
+    else:
+      for (pname, value) in props.iteritems():
+        if pname in prop_counters:
+          counter = prop_counters[pname]
+        else:
+          counter = {_null_or_defaults[pname]: num_ranges}
+          prop_counters[pname] = counter
+        if value in counter:
+          counter[value] += 1
+        else:
+          counter[value] = 1
+      # Also count default values for properties that do not occur in a range.
+      for pname in prop_counters:
+        if pname not in props:
+          counter = prop_counters[pname]
+          value = _null_or_defaults[pname]
+          counter[value] += 1
+      num_ranges += 1
+      # Invariant: For each counter, the sum of counts must equal num_ranges.
     i += 1
   # For each property that occurs within this block,
-  # set the most common value as a block property value.
-  b_props = b[2]
+  # set the value that reduces the file size the most as a block property value.
+  # This is usually the most common value.
   for (pname, counter) in prop_counters.iteritems():
+    default_value = _null_or_defaults[pname]
+    default_size = PrintedSize(pname, default_value) * counter[default_value]
     max_value = None
     max_count = 0
-    num_unique = 0
+    max_savings = 0
     for (value, count) in counter.iteritems():
-      if count > max_count:
-        max_value = value
-        max_count = count
-      if count == 1: num_unique += 1
-    if max_value != _null_or_defaults[pname]:
-      # Avoid picking randomly among several unique values.
-      # Do not compress uncompressible properties,
-      # with an exception for many empty-string values in a block
-      # (NFCK_CF='' for tags and variation selectors).
-      if ((max_count > 1 or num_unique == 1) and
-          ((pname not in _uncompressible_props) or
-            (max_value == '' and max_count >= 12))):
-        b_props[pname] = max_value
+      if value != default_value and count > 1:
+        # Does the file get smaller by setting the block default?
+        # We save writing the block value as often as it occurs,
+        # minus once for writing it for the block,
+        # minus writing the default value instead.
+        savings = PrintedSize(pname, value) * (count - 1) - default_size
+        if savings > max_savings:
+          max_value = value
+          max_count = count
+          max_savings = savings
+    # Do not compress uncompressible properties,
+    # with an exception for many empty-string values in a block
+    # (NFCK_CF='' for tags and variation selectors).
+    if (max_savings > 0 and
+        ((pname not in _uncompressible_props) or
+          (max_value == '' and max_count >= 12))):
+      b_props[pname] = max_value
   # For each range and property, remove the default+block value
   # but set the default value if that property was not set
   # (i.e., it used to inherit the default value).
@@ -1007,13 +1048,20 @@ def CompactBlock(b, i):
     start = _starts[i]
     if start > b[1]: break
     props = _props[i]
-    for pname in prop_counters:
-      if pname in props:
-        if props[pname] == b_defaults[pname]: del props[pname]
-      elif pname in b_props:
-        # b_props only has non-default values.
-        # Set the default value if it used to be inherited.
-        props[pname] = _null_or_defaults[pname]
+    if "unassigned" not in props:
+      # Compact an assigned range inside the block.
+      for pname in prop_counters:
+        if pname in props:
+          if props[pname] == b_defaults[pname]: del props[pname]
+        elif pname in b_props:
+          # b_props only has non-default values.
+          # Set the default value if it used to be inherited.
+          props[pname] = _null_or_defaults[pname]
+      # If there is only one assigned range, then move all of its properties
+      # to the block.
+      if num_ranges == 1:
+        b_props.update(props)
+        props.clear()
     i += 1
   # Return the _starts index of the first range after this block.
   return i
@@ -1021,12 +1069,22 @@ def CompactBlock(b, i):
 
 def CompactNonBlock(limit, i):
   """Remove default property values from between-block ranges."""
+  default_is_unassigned = _defaults["gc"] == "Cn"  # This is expected to be true.
   while True:
     start = _starts[i]
     if start >= limit: break
     props = _props[i]
+    if "gc" in props:
+      is_unassigned = props["gc"] == "Cn"
+    else:
+      is_unassigned = default_is_unassigned
     for pname in props.keys():  # .keys() is a copy so we can del props[pname].
       if props[pname] == _null_or_defaults[pname]: del props[pname]
+    assert "blk" not in props
+    # If there are no props left, then nothing will be printed.
+    # Otherwise, add "unassigned" for more obvious output.
+    if props and is_unassigned:
+      props["unassigned"] = True
     i += 1
   # Return the _starts index of the first range after this block.
   return i
@@ -1038,7 +1096,10 @@ def CompactBlocks():
   and removes default+block values from code point properties."""
   # Ensure that there is a boundary in _starts for each block
   # so that the simple mixing method below works.
-  for b in _blocks: AddBoundary(b[0])
+  for b in _blocks:
+    AddBoundary(b[0])
+    limit = b[1] + 1
+    if limit <= 0x10ffff: AddBoundary(limit)
   # Walk through ranges and blocks together.
   i = 0
   for b in _blocks:
@@ -1125,28 +1186,22 @@ def WritePreparsedUCD(out_file):
   for r in _alg_names_ranges: AddBoundary(r[0])
   for h in _h1: AddBoundary(h[0])
   for h in _h2: AddBoundary(h[0])
-  # Write the preparsed data.
-  # TODO: doc syntax
-  # - ppucd.txt = preparsed UCD
-  # - Only whole-line comments starting with #, no inline comments.
-  # - defaults must precede any block or cp lines
-  # - block;a..b must precede any cp lines with code points in a..b
-  # - Some code may require that all cp lines with code points in a..b
-  #   appear between block;a..b and the next block line.
-  # - block lines are not required; cp lines can have data for
-  #   ranges outside of blocks.
+  # Write the preparsed data. ppucd.txt = preparsed UCD
+  # Syntax: http://site.icu-project.org/design/props/ppucd
   WriteFieldsRangeProps(["defaults"], 0, 0x10ffff, _defaults, out_file)
   i_blocks = 0
   i_alg = 0
   i_h1 = 0
   i_h2 = 0
+  b_end = -1
   for i in xrange(len(_starts) - 1):
     start = _starts[i]
     end = _starts[i + 1] - 1
     # Block with default properties.
     if i_blocks < len(_blocks) and start == _blocks[i_blocks][0]:
       b = _blocks[i_blocks]
-      WriteFieldsRangeProps(["\nblock"], b[0], b[1], b[2], out_file)
+      b_end = b[1]
+      WriteFieldsRangeProps(["\nblock"], b[0], b_end, b[2], out_file)
       i_blocks += 1
     # NamesList h1 heading (for [most of] a block).
     if i_h1 < len(_h1) and start == _h1[i_h1][0]:
@@ -1170,7 +1225,18 @@ def WritePreparsedUCD(out_file):
     props = _props[i]
     # Omit ranges with only default+block properties.
     if props:
-      WriteFieldsRangeProps(["cp"], start, end, props, out_file)
+      if start > b_end and b_end >= 0:
+        # First range with values after the last block.
+        # Separate it visually from the block lines.
+        out_file.write("\n# No block\n")
+        b_end = -1
+      if "unassigned" in props:
+        # Do not output "unassigned" as a property.
+        del props["unassigned"]
+        line_type = "unassigned"
+      else:
+        line_type = "cp"
+      WriteFieldsRangeProps([line_type], start, end, props, out_file)
 
 # Write Normalizer2 input files -------------------------------------------- ***
 # Ported from gennorm/store.c.
@@ -2076,10 +2142,20 @@ def WritePNamesDataHeader(out_path):
 
 def main():
   global _null_or_defaults
-  if len(sys.argv) < 3:
+  only_ppucd = False
+  if len(sys.argv) == 3:
+    (ucd_root, icu_src_root) = sys.argv[1:3]
+    ppucd_path = None
+  elif len(sys.argv) == 4 and sys.argv[2] == "--only_ppucd":
+    # For debugging:
+    # preparseucd.py  path/to/UCD/root  --only_ppucd  path/to/ppucd/outputfile
+    ucd_root = sys.argv[1]
+    ppucd_path = sys.argv[3]
+    only_ppucd = True
+    icu_src_root = "/tmp/ppucd"
+  else:
     print ("Usage: %s  path/to/UCD/root  path/to/ICU/src/root" % sys.argv[0])
     return
-  (ucd_root, icu_src_root) = sys.argv[1:3]
   icu4c_src_root = os.path.join(icu_src_root, "icu4c")
   icu_tools_root = os.path.join(icu_src_root, "tools")
   source_files = []
@@ -2109,24 +2185,28 @@ def main():
   if pnv:
     raise Exception("no default values (@missing lines) for " +
                     "some Catalog or Enumerated properties: %s " % pnv)
-  # Write Normalizer2 input text files.
-  # Do this before compacting the data so that we need not handle fallbacks.
   unidata_path = os.path.join(icu4c_src_root, "source", "data", "unidata")
-  norm2_path = os.path.join(unidata_path, "norm2")
-  if not os.path.exists(norm2_path): os.makedirs(norm2_path)
-  WriteNorm2(norm2_path)
+  if not only_ppucd:
+    # Write Normalizer2 input text files.
+    # Do this before compacting the data so that we need not handle fallbacks.
+    norm2_path = os.path.join(unidata_path, "norm2")
+    if not os.path.exists(norm2_path): os.makedirs(norm2_path)
+    WriteNorm2(norm2_path)
   # Optimize block vs. cp properties.
   CompactBlocks()
   # Write the ppucd.txt output file.
   # Use US-ASCII so that ICU tests can parse it in the platform charset,
   # which may be EBCDIC.
   # Fix up non-ASCII data (NamesList.txt headings) to fit.
-  out_path = os.path.join(unidata_path, "ppucd.txt")
-  with codecs.open(out_path, "w", "US-ASCII") as out_file:
+  if not ppucd_path:
+    ppucd_path = os.path.join(unidata_path, "ppucd.txt")
+  with codecs.open(ppucd_path, "w", "US-ASCII") as out_file:
     WritePreparsedUCD(out_file)
     out_file.flush()
 
   # TODO: PrintNameStats()
+
+  if only_ppucd: return
 
   # ICU data for property & value names API
   ParseUCharHeader(icu4c_src_root)

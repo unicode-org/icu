@@ -98,6 +98,9 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
 * process and/or copy files
 - $ICU_SRC/tools/unicode$ py/preparseucd.py $UNICODE_DATA $ICU_SRC
   + This writes files (especially ppucd.txt) to the ICU4C unidata and testdata subfolders.
+  + For debugging, and tweaking how ppucd.txt is written,
+    the tool has an --only_ppucd option:
+    py/preparseucd.py $UNICODE_DATA --only_ppucd path/to/ppucd/outputfile
 
 - cp $UNICODE_DATA/security/confusables.txt $ICU4C_UNIDATA
 
