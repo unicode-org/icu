@@ -815,6 +815,7 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
     try {
+      // TODO(sffc): Make this thread-safe
       CurrencyAmount result = Parse.parseCurrency(text, parsePosition, properties, symbols);
       if (result == null) return null;
       Number number = result.getNumber();
