@@ -2187,9 +2187,8 @@ public class Parse {
     // Runs of ignorables (whitespace and bidi control marks) can occur at the beginning, middle,
     // or end of the reference string, or a run across the entire string.
     //
-    // - A run at the beginning is treated as if it did not exist; we let the main loop accept
-    //   ignorables in this case.
-    // - A run in the middle corresponds to a run of length *zero or more* in the input.
+    // - A run at the beginning or in the middle corresponds to a run of length *zero or more*
+    //   in the input.
     // - A run at the end need to be matched exactly.
     // - A string that contains only ignorable characters also needs to be matched exactly.
     //
@@ -2250,14 +2249,8 @@ public class Parse {
           // RETURN
           return 0L;
         }
-      } else if (offsetOrTag == 0) {
-        // Run at beginning. Go to nonignorable cp.
-        // FALL THROUGH
-        // TODO: This branch doesn't work on affix patterns since offsetOrTag != 0 for the first
-        // element. This is harmless except for possible performance implications of evaluating
-        // the third case instead of the second.
       } else {
-        // Run in middle.
+        // Run at beginning or in middle.
         if (isIgnorable(cp, state)) {
           // Consume the ignorable.
           // RETURN

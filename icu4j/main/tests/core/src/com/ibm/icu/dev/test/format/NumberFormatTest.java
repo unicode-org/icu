@@ -4985,17 +4985,20 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    public void Test13088() {
+    public void Test13088and13162() {
         ULocale loc = new ULocale("fa");
-        String pattern = "%\u00A0#,##0;%\u00A0-#,##0";
+        String pattern1 = "%\u00A0#,##0;%\u00A0-#,##0";
         double num = -12.34;
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(loc);
         // If the symbols ever change in locale data, please call the setters so that this test
         // continues to use the old symbols.
         assertEquals("Checking for expected symbols", "‎−", symbols.getMinusSignString());
         assertEquals("Checking for expected symbols", "‎٪", symbols.getPercentString());
-        DecimalFormat numfmt = new DecimalFormat(pattern, symbols);
+        DecimalFormat numfmt = new DecimalFormat(pattern1, symbols);
         expect2(numfmt, num, "‎٪ ‎−۱٬۲۳۴");
+        String pattern2 = "%#,##0;%-#,##0";
+        numfmt = new DecimalFormat(pattern2, symbols);
+        expect2(numfmt, num, "‎٪‎−۱٬۲۳۴");
     }
 
     @Test
