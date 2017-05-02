@@ -777,6 +777,29 @@ public class Parse {
       assert i >= 0 && i < length;
       return items[i];
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<ParseState mode:");
+        sb.append(mode);
+        sb.append(" caseSensitive:");
+        sb.append(caseSensitive);
+        sb.append(" parseCurrency:");
+        sb.append(parseCurrency);
+        sb.append(" groupingMode:");
+        sb.append(groupingMode);
+        sb.append(" decimalCps:");
+        sb.append((char)decimalCp1);
+        sb.append((char)decimalCp2);
+        sb.append(" groupingCps:");
+        sb.append((char)groupingCp1);
+        sb.append((char)groupingCp2);
+        sb.append(" affixes:");
+        sb.append(affixHolders);
+        sb.append(">");
+        return sb.toString();
+    }
   }
 
   /**
@@ -1122,7 +1145,7 @@ public class Parse {
     if (DEBUGGING) {
       System.out.println("Parsing: " + input);
       System.out.println(properties);
-      System.out.println(state.affixHolders);
+      System.out.println(state);
     }
 
     // Start walking through the string, one codepoint at a time. Backtracking is not allowed. This
