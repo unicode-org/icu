@@ -52,7 +52,7 @@ ubrk_swap(const UDataSwapper *ds,
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "umutex.h"
-#include "utrie.h"
+#include "utrie2.h"
 
 U_NAMESPACE_BEGIN
 
@@ -181,7 +181,7 @@ public:
     /* number of int32_t values in the rule status table.   Used to sanity check indexing */
     int32_t             fStatusMaxIdx;
 
-    UTrie               fTrie;
+    UTrie2              *fTrie;
 
 private:
     u_atomic_int32_t    fRefCount;
