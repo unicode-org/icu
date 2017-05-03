@@ -51,7 +51,7 @@ http://www.unicode.org/reports/tr44/tr44-19.html
 
 * Command-line environment setup
 
-UNICODE_DATA=~/unidata/uni10/20170418
+UNICODE_DATA=~/unidata/uni10/20170503
 CLDR_SRC=~/svn.cldr/uni10
 ICU_ROOT=~/svn.icu/uni10
 ICU_SRC=$ICU_ROOT/src
@@ -92,7 +92,7 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
 - download emoji 5.0 files into $UNICODE_DATA/emoji
 
 * for manual diffs: remove version suffixes from the file names
-  ~/unidata$ ./desuffixucd.py uni10/20170418
+  ~$ unidata/desuffixucd.py $UNICODE_DATA
   (see https://sites.google.com/site/unicodetools/inputdata)
 
 * process and/or copy files
@@ -377,8 +377,6 @@ or
     cp $UNICODE_DATA/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
 
 * run & fix ICU4J tests
-
-TODO
 
 *** API additions
 - send notice to icu-design about new born-@stable API (enum constants etc.)
