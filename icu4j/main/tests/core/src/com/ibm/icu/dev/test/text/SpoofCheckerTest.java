@@ -469,9 +469,9 @@ public class SpoofCheckerTest extends TestFmwk {
         // The spoof checker should only return those tests that the user requested.  This test makes sure that
         // the checker doesn't return anything the user doesn't want.  This test started passing in ICU 58.
 
-        String latn = "desordeado";
-        String cyrl = "ԁеѕогԁеаԁо";
-        String mixed = "dеѕогdeаdo";
+        String latn = "horario";
+        String cyrl = "һогагіо";
+        String mixed = "һоrarіо";
 
         Object[][] tests = {
                 // string 1, string 2, checks for spoof checker, expected output
