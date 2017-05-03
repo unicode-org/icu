@@ -12,6 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{655F4481-B461-4DF0-AF10-0D01114A26C1}</ProjectGuid>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <RootNamespace>icuzdump</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
