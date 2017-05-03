@@ -279,7 +279,7 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/svn.icu/uni10/src/icu4c)
 - rebuild ICU4C
 
 * Unihan collators
-TODO: cross-link with Unicode tools site
+    https://sites.google.com/site/unicodetools/unihan
 - run Unicode Tools
     org.unicode.draft.GenerateUnihanCollators
   with VM arguments
