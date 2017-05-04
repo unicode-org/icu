@@ -1287,7 +1287,7 @@ public final class UScript {
         private static final int UNKNOWN = 1 << 21;
         private static final int EXCLUSION = 2 << 21;
         private static final int LIMITED_USE = 3 << 21;
-        private static final int ASPIRATIONAL = 4 << 21;
+        // vate static final int ASPIRATIONAL = 4 << 21; -- not used any more since Unicode 10
         private static final int RECOMMENDED = 5 << 21;
 
         // Bits 31..24: Single-bit flags

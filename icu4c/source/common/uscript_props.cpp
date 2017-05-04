@@ -33,7 +33,7 @@ namespace {
 const int32_t UNKNOWN = 1 << 21;
 const int32_t EXCLUSION = 2 << 21;
 const int32_t LIMITED_USE = 3 << 21;
-const int32_t ASPIRATIONAL = 4 << 21;
+// st int32_t ASPIRATIONAL = 4 << 21; -- not used any more since Unicode 10
 const int32_t RECOMMENDED = 5 << 21;
 
 // Bits 31..24: Single-bit flags
