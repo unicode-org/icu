@@ -13,10 +13,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUBinary.Authenticate;
-import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.Trie2;
 
 /**
 * <p>Internal class used for Rule Based Break Iterators</p>
@@ -33,7 +32,7 @@ final class RBBIDataWrapper {
     short          fRTable[];
     short          fSFTable[];
     short          fSRTable[];
-    CharTrie       fTrie;
+    Trie2          fTrie;
     String         fRuleSource;
     int            fStatusTable[];
 
@@ -146,19 +145,6 @@ final class RBBIDataWrapper {
     int getRowIndex(int state){
         return ROW_DATA + state * (fHeader.fCatCount + 4);
     }
-
-    static class TrieFoldingFunc implements  Trie.DataManipulate {
-        @Override
-        public int getFoldingOffset(int data) {
-            if ((data & 0x8000) != 0) {
-                return data & 0x7fff;
-            } else {
-                return 0;
-            }
-        }
-    }
-    static TrieFoldingFunc  fTrieFoldingFunc = new TrieFoldingFunc();
-
 
     RBBIDataWrapper() {
     }
@@ -286,7 +272,7 @@ final class RBBIDataWrapper {
                                                 //  as we don't go more than 100 bytes past the
                                                 //  past the end of the TRIE.
 
-        This.fTrie = new CharTrie(bytes, fTrieFoldingFunc);  // Deserialize the TRIE, leaving buffer
+        This.fTrie = Trie2.createFromSerialized(bytes);  // Deserialize the TRIE, leaving buffer
                                                 //  at an unknown position, preceding the
                                                 //  padding between TRIE and following section.
 
@@ -461,7 +447,7 @@ final class RBBIDataWrapper {
         out.println("\nCharacter Categories");
         out.println("--------------------");
         for (char32 = 0; char32<=0x10ffff; char32++) {
-            category = fTrie.getCodePointValue(char32);
+            category = fTrie.get(char32);
             category &= ~0x4000;            // Mask off dictionary bit.
             if (category < 0 || category > fHeader.fCatCount) {
                 out.println("Error, bad category " + Integer.toHexString(category) +

@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
@@ -495,7 +495,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         DictionaryBreakEngine.DequeI breaks = new DictionaryBreakEngine.DequeI();
         int     foundBreakCount = 0;
         int     c = CharacterIteration.current32(fText);
-        category = (short)fRData.fTrie.getCodePointValue(c);
+        category = (short)fRData.fTrie.get(c);
 
         // Is the character we're starting on a dictionary character? If so, we
         // need to back up to include the entire run; otherwise the results of
@@ -507,7 +507,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 do {
                     CharacterIteration.next32(fText);
                     c = CharacterIteration.current32(fText);
-                    category = (short)fRData.fTrie.getCodePointValue(c);
+                    category = (short)fRData.fTrie.get(c);
                 } while (c != CharacterIteration.DONE32 && ((category & 0x4000)) != 0);
 
                 // Back up to the last dictionary character
@@ -524,7 +524,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             else {
                 do {
                     c = CharacterIteration.previous32(fText);
-                    category = (short)fRData.fTrie.getCodePointValue(c);
+                    category = (short)fRData.fTrie.get(c);
                 }
                 while (c != CharacterIteration.DONE32 && ((category & 0x4000) != 0));
                 // Back up to the last dictionary character
@@ -538,7 +538,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 }
                 rangeStart = fText.getIndex();
             }
-            category = (short)fRData.fTrie.getCodePointValue(c);
+            category = (short)fRData.fTrie.get(c);
         }
 
 
@@ -550,14 +550,14 @@ public class RuleBasedBreakIterator extends BreakIterator {
         if (reverse) {
             fText.setIndex(rangeStart);
             c = CharacterIteration.current32(fText);
-            category = (short)fRData.fTrie.getCodePointValue(c);
+            category = (short)fRData.fTrie.get(c);
         }
         LanguageBreakEngine lbe = null;
         while(true) {
             while((current = fText.getIndex()) < rangeEnd && (category & 0x4000) == 0) {
                 CharacterIteration.next32(fText);
                 c = CharacterIteration.current32(fText);
-                category = (short)fRData.fTrie.getCodePointValue(c);
+                category = (short)fRData.fTrie.get(c);
             }
             if (current >= rangeEnd) {
                 break;
@@ -577,7 +577,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
             // Reload the loop variables for the next go-round
             c = CharacterIteration.current32(fText);
-            category = (short)fRData.fTrie.getCodePointValue(c);
+            category = (short)fRData.fTrie.get(c);
         }
 
         // If we found breaks, build a new break cache. The first and last entries must
@@ -1285,7 +1285,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
         // caches for quicker access
         CharacterIterator text = fText;
-        CharTrie trie = fRData.fTrie;
+        Trie2 trie = fRData.fTrie;
 
         // Set up the starting char
         int c               = text.current();
@@ -1338,7 +1338,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 // look up the current character's character category, which tells us
                 // which column in the state table to look at.
                 //
-                category = (short) trie.getCodePointValue(c);
+                category = (short) trie.get(c);
 
                 // Check the dictionary bit in the character's category.
                 //    Counter is only used by dictionary based iterators (subclasses).
@@ -1504,7 +1504,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 // look up the current character's category, which tells us
                 // which column in the state table to look at.
                 //
-                category = (short) fRData.fTrie.getCodePointValue(c);
+                category = (short) fRData.fTrie.get(c);
 
                 // Check the dictionary bit in the character's category.
                 //    Counter is only used by dictionary based iterators (subclasses).
