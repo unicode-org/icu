@@ -1257,6 +1257,19 @@ LocaleTest::TestEuroSupport()
     if (invalidLen || U_SUCCESS(status)) {
         errln("Fail: en_QQ didn't return NULL");
     }
+
+    // The currency keyword value is as long as the destination buffer.
+    // It should detect the overflow internally, and default to the locale's currency.
+    tmp[0] = u'¤';
+    status = U_ZERO_ERROR;
+    int32_t length = ucurr_forLocale("en_US@currency=euro", tmp, 4, &status);
+    if (U_FAILURE(status) || dollarStr != UnicodeString(tmp, length)) {
+        if (U_SUCCESS(status) && tmp[0] == u'¤') {
+            errln("Fail: ucurr_forLocale(en_US@currency=euro) succeeded without writing output");
+        } else {
+            errln("Fail: ucurr_forLocale(en_US@currency=euro) != USD - %s", u_errorName(status));
+        }
+    }
 }
 
 #endif
