@@ -2470,6 +2470,41 @@ void CollationAPITest::TestBadKeywords() {
     }
 }
 
+void CollationAPITest::TestGapTooSmall() {
+    IcuTestErrorCode errorCode(*this, "TestGapTooSmall");
+    // Try to tailor >20k characters into a too-small primary gap between symbols
+    // that have 3-byte primary weights.
+    // In FractionalUCA.txt:
+    // 263A; [0C BA D0, 05, 05]  # Zyyy So  [084A.0020.0002]  * WHITE SMILING FACE
+    // 263B; [0C BA D7, 05, 05]  # Zyyy So  [084B.0020.0002]  * BLACK SMILING FACE
+    {
+        RuleBasedCollator(u"&☺<*\u4E00-\u9FFF", errorCode);
+        if(errorCode.isSuccess()) {
+            errln("no exception for primary-gap overflow");
+        } else if(errorCode.get() == U_BUFFER_OVERFLOW_ERROR) {
+            // This is the expected error.
+            // assertTrue("exception message mentions 'gap'", e.getMessage().contains("gap"));
+        } else {
+            errln("unexpected error for primary-gap overflow: %s", errorCode.errorName());
+        }
+        errorCode.reset();
+    }
+
+    // CLDR 32/ICU 60 FractionalUCA.txt makes room at the end of the symbols range
+    // for several 2-byte primaries, or a large number of 3-byters.
+    // The reset point is primary-before what should be
+    // the special currency-first-primary contraction,
+    // which is hopefully fairly stable, but not guaranteed stable.
+    // In FractionalUCA.txt:
+    // FDD1 20AC; [0D 70 02, 05, 05]  # CURRENCY first primary
+    {
+        RuleBasedCollator coll(u"&[before 1]\uFDD1€<*\u4E00-\u9FFF", errorCode);
+        assertTrue("tailored Han before currency", coll.compare(u"\u4E00", u"$", errorCode) < 0);
+        errorCode.logIfFailureAndReset(
+            "unexpected exception for tailoring many characters at the end of symbols");
+    }
+}
+
  void CollationAPITest::dump(UnicodeString msg, RuleBasedCollator* c, UErrorCode& status) {
     const char* bigone = "One";
     const char* littleone = "one";
@@ -2512,6 +2547,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestCloneBinary);
     TESTCASE_AUTO(TestIterNumeric);
     TESTCASE_AUTO(TestBadKeywords);
+    TESTCASE_AUTO(TestGapTooSmall);
     TESTCASE_AUTO_END;
 }
 

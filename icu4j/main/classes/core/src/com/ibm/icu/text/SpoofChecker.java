@@ -46,8 +46,8 @@ import com.ibm.icu.util.ULocale;
  * <a href="http://unicode.org/reports/tr39">Unicode Technical Standard #39</a>, has two main functions:
  *
  * <ol>
- * <li>Checking whether two strings are visually <em>confusable</em> with each other, such as "desordenado" and
- * "ԁеѕогԁепаԁо".</li>
+ * <li>Checking whether two strings are visually <em>confusable</em> with each other, such as "desparejado" and
+ * "ԁеѕрагејаԁо".</li>
  * <li>Checking whether an individual string is likely to be an attempt at confusing the reader (<em>spoof
  * detection</em>), such as "pаypаl" spelled with Cyrillic 'а' characters.</li>
  * </ol>
@@ -65,7 +65,7 @@ import com.ibm.icu.util.ULocale;
  * <pre>
  * <code>
  * SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CONFUSABLE).build();
- * int result = sc.areConfusable("desordenado", "ԁеѕогԁепаԁо");
+ * int result = sc.areConfusable("desparejado", "ԁеѕрагејаԁо");
  * System.out.println(result != 0);  // true
  * </code>
  * </pre>
@@ -89,7 +89,7 @@ import com.ibm.icu.util.ULocale;
  * <pre>
  * <code>
  * SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CONFUSABLE).build();
- * boolean result = sc.getSkeleton("desordenado").equals(sc.getSkeleton("ԁеѕогԁепаԁо"));
+ * boolean result = sc.getSkeleton("desparejado").equals(sc.getSkeleton("ԁеѕрагејаԁо"));
  * System.out.println(result);  // true
  * </code>
  * </pre>
