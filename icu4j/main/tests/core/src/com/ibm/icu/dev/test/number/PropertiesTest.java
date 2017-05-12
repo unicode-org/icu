@@ -21,7 +21,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
@@ -258,6 +260,20 @@ public class PropertiesTest {
       if (seed == 0) return null;
       FormatWidth[] values = FormatWidth.values();
       return values[seed % values.length];
+
+    } else if (type == Map.class) {
+      // Map<String,Map<String,String>> for compactCustomData property
+      if (seed == 0) return null;
+      Map<String, Map<String, String>> outer = new HashMap<String, Map<String, String>>();
+      Map<String, String> inner = new HashMap<String, String>();
+      inner.put("one", "0 thousand");
+      StringBuilder magnitudeKey = new StringBuilder();
+      magnitudeKey.append("1000");
+      for (int i = 0; i < seed % 9; i++) {
+        magnitudeKey.append("0");
+      }
+      outer.put(magnitudeKey.toString(), inner);
+      return outer;
 
     } else if (type == MathContext.class) {
       if (seed == 0) return null;

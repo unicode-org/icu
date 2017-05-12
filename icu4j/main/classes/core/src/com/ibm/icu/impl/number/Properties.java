@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
@@ -73,6 +74,7 @@ public class Properties
   /| or #equals(), but it will NOT catch if you forget to add it to #hashCode().                |/
   /+--------------------------------------------------------------------------------------------*/
 
+  private transient Map<String, Map<String, String>> compactCustomData;
   private transient CompactStyle compactStyle;
   private transient Currency currency;
   private transient CurrencyPluralInfo currencyPluralInfo;
@@ -132,6 +134,7 @@ public class Properties
   }
 
   private Properties _clear() {
+    compactCustomData = DEFAULT_COMPACT_CUSTOM_DATA;
     compactStyle = DEFAULT_COMPACT_STYLE;
     currency = DEFAULT_CURRENCY;
     currencyPluralInfo = DEFAULT_CURRENCY_PLURAL_INFO;
@@ -180,6 +183,7 @@ public class Properties
   }
 
   private Properties _copyFrom(Properties other) {
+    compactCustomData = other.compactCustomData;
     compactStyle = other.compactStyle;
     currency = other.currency;
     currencyPluralInfo = other.currencyPluralInfo;
@@ -229,6 +233,7 @@ public class Properties
 
   private boolean _equals(Properties other) {
     boolean eq = true;
+    eq = eq && _equalsHelper(compactCustomData, other.compactCustomData);
     eq = eq && _equalsHelper(compactStyle, other.compactStyle);
     eq = eq && _equalsHelper(currency, other.currency);
     eq = eq && _equalsHelper(currencyPluralInfo, other.currencyPluralInfo);
@@ -292,6 +297,7 @@ public class Properties
 
   private int _hashCode() {
     int hashCode = 0;
+    hashCode ^= _hashCodeHelper(compactCustomData);
     hashCode ^= _hashCodeHelper(compactStyle);
     hashCode ^= _hashCodeHelper(currency);
     hashCode ^= _hashCodeHelper(currencyPluralInfo);
@@ -386,6 +392,13 @@ public class Properties
     return _equals((Properties) other);
   }
 
+  /// BEGIN GETTERS/SETTERS ///
+
+  @Override
+  public Map<String, Map<String, String>> getCompactCustomData() {
+    return compactCustomData;
+  }
+
   @Override
   public CompactStyle getCompactStyle() {
     return compactStyle;
@@ -395,8 +408,6 @@ public class Properties
   public Currency getCurrency() {
     return currency;
   }
-
-  /// BEGIN GETTERS/SETTERS ///
 
   @Override
   @Deprecated
@@ -658,6 +669,12 @@ public class Properties
         throw new AssertionError(e);
       }
     }
+  }
+
+  @Override
+  public Properties setCompactCustomData(Map<String, Map<String, String>> compactCustomData) {
+    this.compactCustomData = compactCustomData;
+    return this;
   }
 
   @Override
