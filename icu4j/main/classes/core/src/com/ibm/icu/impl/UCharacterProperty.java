@@ -404,6 +404,15 @@ public final class UCharacterProperty
         new BinaryProperty(2, 1<<PROPS_2_EMOJI_PRESENTATION),
         new BinaryProperty(2, 1<<PROPS_2_EMOJI_MODIFIER),
         new BinaryProperty(2, 1<<PROPS_2_EMOJI_MODIFIER_BASE),
+        new BinaryProperty(2, 1<<PROPS_2_EMOJI_COMPONENT),
+        new BinaryProperty(SRC_PROPSVEC) {  // REGIONAL_INDICATOR
+            // Property starts are a subset of lb=RI etc.
+            @Override
+            boolean contains(int c) {
+                return 0x1F1E6<=c && c<=0x1F1FF;
+            }
+        },
+        new BinaryProperty(1, 1<<PREPENDED_CONCATENATION_MARK),
     };
 
     public boolean hasBinaryProperty(int c, int which) {
@@ -1151,18 +1160,20 @@ public final class UCharacterProperty
     private static final int VARIATION_SELECTOR_PROPERTY_ = 28;
     private static final int PATTERN_SYNTAX = 29;                   /* new in ICU 3.4 and Unicode 4.1 */
     private static final int PATTERN_WHITE_SPACE = 30;
+    private static final int PREPENDED_CONCATENATION_MARK = 31;     // new in ICU 60 and Unicode 10
 
     /*
      * Properties in vector word 2
      * Bits
-     * 31..28   http://www.unicode.org/reports/tr51/#Emoji_Properties
-     * 27..26   reserved
+     * 31..27   http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *     26   reserved
      * 25..20   Line Break
      * 19..15   Sentence Break
      * 14..10   Word Break
      *  9.. 5   Grapheme Cluster Break
      *  4.. 0   Decomposition Type
      */
+    private static final int PROPS_2_EMOJI_COMPONENT = 27;
     private static final int PROPS_2_EMOJI = 28;
     private static final int PROPS_2_EMOJI_PRESENTATION = 29;
     private static final int PROPS_2_EMOJI_MODIFIER = 30;

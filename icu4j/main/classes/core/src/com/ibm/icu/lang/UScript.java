@@ -998,13 +998,29 @@ public final class UScript {
     public static final int SYMBOLS_EMOJI = 174; /* Zsye */
 
     /**
+     * ISO 15924 script code
+     * @stable ICU 60
+     */
+    public static final int MASARAM_GONDI = 175; /* Gonm */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 60
+     */
+    public static final int SOYOMBO = 176; /* Soyo */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 60
+     */
+    public static final int ZANABAZAR_SQUARE = 177; /* Zanb */
+
+    /**
      * One more than the highest normal UScript code.
      * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT).
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int CODE_LIMIT   = 175;
+    public static final int CODE_LIMIT   = 178;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
@@ -1271,7 +1287,7 @@ public final class UScript {
         private static final int UNKNOWN = 1 << 21;
         private static final int EXCLUSION = 2 << 21;
         private static final int LIMITED_USE = 3 << 21;
-        private static final int ASPIRATIONAL = 4 << 21;
+        // vate static final int ASPIRATIONAL = 4 << 21; -- not used any more since Unicode 10
         private static final int RECOMMENDED = 5 << 21;
 
         // Bits 31..24: Single-bit flags
@@ -1310,7 +1326,7 @@ public final class UScript {
             0x0EA5 | RECOMMENDED | LB_LETTERS,  // Laoo
             0x004C | RECOMMENDED | CASED,  // Latn
             0x0D15 | RECOMMENDED,  // Mlym
-            0x1826 | ASPIRATIONAL,  // Mong
+            0x1826 | LIMITED_USE,  // Mong
             0x1000 | RECOMMENDED | LB_LETTERS,  // Mymr
             0x168F | EXCLUSION,  // Ogam
             0x10300 | EXCLUSION,  // Ital
@@ -1323,8 +1339,8 @@ public final class UScript {
             0x078C | RECOMMENDED | RTL,  // Thaa
             0x0E17 | RECOMMENDED | LB_LETTERS,  // Thai
             0x0F40 | RECOMMENDED,  // Tibt
-            0x14C0 | ASPIRATIONAL,  // Cans
-            0xA288 | ASPIRATIONAL | LB_LETTERS,  // Yiii
+            0x14C0 | LIMITED_USE,  // Cans
+            0xA288 | LIMITED_USE | LB_LETTERS,  // Yiii
             0x1703 | EXCLUSION,  // Tglg
             0x1723 | EXCLUSION,  // Hano
             0x1743 | EXCLUSION,  // Buhd
@@ -1343,7 +1359,7 @@ public final class UScript {
             0x10A00 | EXCLUSION | RTL,  // Khar
             0xA800 | LIMITED_USE,  // Sylo
             0x1980 | LIMITED_USE | LB_LETTERS,  // Talu
-            0x2D30 | ASPIRATIONAL,  // Tfng
+            0x2D30 | LIMITED_USE,  // Tfng
             0x103A0 | EXCLUSION,  // Xpeo
             0x1B05 | LIMITED_USE,  // Bali
             0x1BC0 | LIMITED_USE,  // Batk
@@ -1375,7 +1391,7 @@ public final class UScript {
             0x1036B | EXCLUSION,  // Perm
             0xA840 | EXCLUSION,  // Phag
             0x10900 | EXCLUSION | RTL,  // Phnx
-            0x16F00 | ASPIRATIONAL,  // Plrd
+            0x16F00 | LIMITED_USE,  // Plrd
             0,
             0,
             0,
@@ -1433,7 +1449,7 @@ public final class UScript {
             0,
             0,
             0x16A4F | EXCLUSION,  // Mroo
-            0,
+            0x1B1C4 | EXCLUSION | LB_LETTERS,  // Nshu
             0x11183 | EXCLUSION,  // Shrd
             0x110D0 | EXCLUSION,  // Sora
             0x11680 | EXCLUSION,  // Takr
@@ -1458,6 +1474,9 @@ public final class UScript {
             0x5B57 | RECOMMENDED | LB_LETTERS,  // Hanb
             0x1112 | RECOMMENDED,  // Jamo
             0,
+            0x11D10 | EXCLUSION,  // Gonm
+            0x11A5C | EXCLUSION,  // Soyo
+            0x11A0B | EXCLUSION,  // Zanb
             // End copy-paste from parsescriptmetadata.py
         };
 

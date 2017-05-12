@@ -1,5 +1,5 @@
 ﻿# SentenceBreakTest-10.0.0.txt
-# Date: 2017-02-14, 04:26:30 GMT
+# Date: 2017-04-14, 05:40:43 GMT
 # © 2017 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
@@ -7,17 +7,18 @@
 # Unicode Character Database
 #   For documentation, see http://www.unicode.org/reports/tr44/
 #
-# Default Sentence Break Test
+# Default Sentence_Break Test
 #
 # Format:
-# <string> (# <comment>)? 
-#  <string> contains hex Unicode code points, with 
-#	÷ wherever there is a break opportunity, and 
+# <string> (# <comment>)?
+#  <string> contains hex Unicode code points, with
+#	÷ wherever there is a break opportunity, and
 #	× wherever there is not.
 #  <comment> the format can change, but currently it shows:
 #	- the sample character name
 #	- (x) the Sentence_Break property value for the sample character
-#	- [x] the rule that determines whether there is a break or not
+#	- [x] the rule that determines whether there is a break or not,
+#	   as listed in the Rules section of SentenceBreakTest.html
 #
 # These samples may be extended or changed in the future.
 #

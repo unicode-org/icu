@@ -20,14 +20,18 @@ import java.text.AttributedCharacterIterator;
 import java.text.CharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormat.PropertySetter;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
@@ -647,6 +651,27 @@ public class CompactDecimalFormatTest extends TestFmwk {
             String act = cdf.format(5.8e18);
             assertEquals("Grouping sizes for very large numbers: " + loc, exp, act);
         }
+    }
+
+    @Test
+    public void TestCustomData() {
+        final Map<String,Map<String,String>> customData = new HashMap<String,Map<String,String>>();
+        Map<String,String> inner = new HashMap<String,String>();
+        inner.put("one", "0 qwerty");
+        inner.put("other", "0 dvorak");
+        customData.put("1000", inner);
+        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(ULocale.ENGLISH, CompactStyle.SHORT);
+        cdf.setProperties(new PropertySetter() {
+            @Override
+            public void set(Properties props) {
+                props.setCompactCustomData(customData);
+            }
+        });
+        assertEquals("Below custom range", "120", cdf.format(123));
+        assertEquals("Plural form one", "1 qwerty", cdf.format(1000));
+        assertEquals("Plural form other", "1.2 dvorak", cdf.format(1234));
+        assertEquals("Above custom range", "12 dvorak", cdf.format(12345));
+        assertEquals("Negative number", "-1 qwerty", cdf.format(-1000));
     }
 
     @Test

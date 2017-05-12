@@ -1,3 +1,5 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *
@@ -358,6 +360,10 @@ static const struct {
     { 0x14400, USCRIPT_ANATOLIAN_HIEROGLYPHS },
     { 0x18229, USCRIPT_TANGUT },
     { 0x5B57, USCRIPT_HAN },
+    { 0x11D10, USCRIPT_MASARAM_GONDI },
+    { 0x11A0B, USCRIPT_ZANABAZAR_SQUARE },
+    { 0x11A5C, USCRIPT_SOYOMBO },
+    { 0x1B1C4, USCRIPT_NUSHU },
     { 0xFDD0, USCRIPT_UNKNOWN }  // unassigned-implicit primary weights
 };
 

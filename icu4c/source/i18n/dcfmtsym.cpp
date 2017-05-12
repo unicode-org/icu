@@ -433,12 +433,13 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status, UBool us
     UErrorCode internalStatus = U_ZERO_ERROR; // don't propagate failures out
     UChar curriso[4];
     UnicodeString tempStr;
-    ucurr_forLocale(locStr, curriso, 4, &internalStatus);
-
-    uprv_getStaticCurrencyName(curriso, locStr, tempStr, internalStatus);
-    if (U_SUCCESS(internalStatus)) {
-        fSymbols[kIntlCurrencySymbol].setTo(curriso, -1);
-        fSymbols[kCurrencySymbol] = tempStr;
+    int32_t currisoLength = ucurr_forLocale(locStr, curriso, UPRV_LENGTHOF(curriso), &internalStatus);
+    if (U_SUCCESS(internalStatus) && currisoLength == 3) {
+        uprv_getStaticCurrencyName(curriso, locStr, tempStr, internalStatus);
+        if (U_SUCCESS(internalStatus)) {
+            fSymbols[kIntlCurrencySymbol].setTo(curriso, currisoLength);
+            fSymbols[kCurrencySymbol] = tempStr;
+        }
     }
     /* else use the default values. */
 
