@@ -45,6 +45,14 @@ public class Endpoint {
   //    return format;
   //  }
 
+  public static interface IProperties {
+    static PluralRules DEFAULT_PLURAL_RULES = null;
+
+    public PluralRules getPluralRules();
+
+    public IProperties setPluralRules(PluralRules pluralRules);
+  }
+
   public static Format fromBTA(Properties properties) {
     return fromBTA(properties, getSymbols());
   }
@@ -102,8 +110,8 @@ public class Endpoint {
       if (CompactDecimalFormat.useCompactDecimalFormat(properties)) {
         format.addBeforeFormat(CompactDecimalFormat.getInstance(symbols, properties));
       } else if (ScientificFormat.useScientificNotation(properties)) {
-          // TODO: Should the currency rounder or scientific rounder be used in this case?
-          // For now, default to using the scientific rounder.
+        // TODO: Should the currency rounder or scientific rounder be used in this case?
+        // For now, default to using the scientific rounder.
         format.addBeforeFormat(PositiveNegativeAffixFormat.getInstance(symbols, properties));
         format.addBeforeFormat(ScientificFormat.getInstance(symbols, properties));
       } else {
@@ -270,6 +278,10 @@ public class Endpoint {
       };
 
   private static PluralRules getPluralRules(ULocale uLocale, Properties properties) {
+    if (properties.getPluralRules() != null) {
+      return properties.getPluralRules();
+    }
+
     // Backwards compatibility: CurrencyPluralInfo wraps its own copy of PluralRules
     if (properties.getCurrencyPluralInfo() != null) {
       return properties.getCurrencyPluralInfo().getPluralRules();
