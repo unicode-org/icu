@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
@@ -33,6 +34,7 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
+import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.MeasureUnit;
@@ -52,7 +54,8 @@ public class Properties
         Parse.IProperties,
         IncrementRounder.IProperties,
         MagnitudeRounder.IProperties,
-        SignificantDigitsRounder.IProperties {
+        SignificantDigitsRounder.IProperties,
+        Endpoint.IProperties {
 
   private static final Properties DEFAULT = new Properties();
 
@@ -73,6 +76,7 @@ public class Properties
   /| or #equals(), but it will NOT catch if you forget to add it to #hashCode().                |/
   /+--------------------------------------------------------------------------------------------*/
 
+  private transient Map<String, Map<String, String>> compactCustomData;
   private transient CompactStyle compactStyle;
   private transient Currency currency;
   private transient CurrencyPluralInfo currencyPluralInfo;
@@ -108,6 +112,7 @@ public class Properties
   private transient ParseMode parseMode;
   private transient boolean parseNoExponent;
   private transient boolean parseToBigDecimal;
+  private transient PluralRules pluralRules;
   private transient String positivePrefix;
   private transient String positivePrefixPattern;
   private transient String positiveSuffix;
@@ -132,6 +137,7 @@ public class Properties
   }
 
   private Properties _clear() {
+    compactCustomData = DEFAULT_COMPACT_CUSTOM_DATA;
     compactStyle = DEFAULT_COMPACT_STYLE;
     currency = DEFAULT_CURRENCY;
     currencyPluralInfo = DEFAULT_CURRENCY_PLURAL_INFO;
@@ -167,6 +173,7 @@ public class Properties
     parseMode = DEFAULT_PARSE_MODE;
     parseNoExponent = DEFAULT_PARSE_NO_EXPONENT;
     parseToBigDecimal = DEFAULT_PARSE_TO_BIG_DECIMAL;
+    pluralRules = DEFAULT_PLURAL_RULES;
     positivePrefix = DEFAULT_POSITIVE_PREFIX;
     positivePrefixPattern = DEFAULT_POSITIVE_PREFIX_PATTERN;
     positiveSuffix = DEFAULT_POSITIVE_SUFFIX;
@@ -180,6 +187,7 @@ public class Properties
   }
 
   private Properties _copyFrom(Properties other) {
+    compactCustomData = other.compactCustomData;
     compactStyle = other.compactStyle;
     currency = other.currency;
     currencyPluralInfo = other.currencyPluralInfo;
@@ -215,6 +223,7 @@ public class Properties
     parseMode = other.parseMode;
     parseNoExponent = other.parseNoExponent;
     parseToBigDecimal = other.parseToBigDecimal;
+    pluralRules = other.pluralRules;
     positivePrefix = other.positivePrefix;
     positivePrefixPattern = other.positivePrefixPattern;
     positiveSuffix = other.positiveSuffix;
@@ -229,6 +238,7 @@ public class Properties
 
   private boolean _equals(Properties other) {
     boolean eq = true;
+    eq = eq && _equalsHelper(compactCustomData, other.compactCustomData);
     eq = eq && _equalsHelper(compactStyle, other.compactStyle);
     eq = eq && _equalsHelper(currency, other.currency);
     eq = eq && _equalsHelper(currencyPluralInfo, other.currencyPluralInfo);
@@ -264,6 +274,7 @@ public class Properties
     eq = eq && _equalsHelper(parseMode, other.parseMode);
     eq = eq && _equalsHelper(parseNoExponent, other.parseNoExponent);
     eq = eq && _equalsHelper(parseToBigDecimal, other.parseToBigDecimal);
+    eq = eq && _equalsHelper(pluralRules, other.pluralRules);
     eq = eq && _equalsHelper(positivePrefix, other.positivePrefix);
     eq = eq && _equalsHelper(positivePrefixPattern, other.positivePrefixPattern);
     eq = eq && _equalsHelper(positiveSuffix, other.positiveSuffix);
@@ -292,6 +303,7 @@ public class Properties
 
   private int _hashCode() {
     int hashCode = 0;
+    hashCode ^= _hashCodeHelper(compactCustomData);
     hashCode ^= _hashCodeHelper(compactStyle);
     hashCode ^= _hashCodeHelper(currency);
     hashCode ^= _hashCodeHelper(currencyPluralInfo);
@@ -327,6 +339,7 @@ public class Properties
     hashCode ^= _hashCodeHelper(parseMode);
     hashCode ^= _hashCodeHelper(parseNoExponent);
     hashCode ^= _hashCodeHelper(parseToBigDecimal);
+    hashCode ^= _hashCodeHelper(pluralRules);
     hashCode ^= _hashCodeHelper(positivePrefix);
     hashCode ^= _hashCodeHelper(positivePrefixPattern);
     hashCode ^= _hashCodeHelper(positiveSuffix);
@@ -386,6 +399,13 @@ public class Properties
     return _equals((Properties) other);
   }
 
+  /// BEGIN GETTERS/SETTERS ///
+
+  @Override
+  public Map<String, Map<String, String>> getCompactCustomData() {
+    return compactCustomData;
+  }
+
   @Override
   public CompactStyle getCompactStyle() {
     return compactStyle;
@@ -395,8 +415,6 @@ public class Properties
   public Currency getCurrency() {
     return currency;
   }
-
-  /// BEGIN GETTERS/SETTERS ///
 
   @Override
   @Deprecated
@@ -565,6 +583,11 @@ public class Properties
   }
 
   @Override
+  public PluralRules getPluralRules() {
+    return pluralRules;
+  }
+
+  @Override
   public String getPositivePrefix() {
     return positivePrefix;
   }
@@ -658,6 +681,13 @@ public class Properties
         throw new AssertionError(e);
       }
     }
+  }
+
+  @Override
+  public Properties setCompactCustomData(Map<String, Map<String, String>> compactCustomData) {
+    // TODO: compactCustomData is not immutable.
+    this.compactCustomData = compactCustomData;
+    return this;
   }
 
   @Override
@@ -873,6 +903,12 @@ public class Properties
   @Override
   public Properties setParseToBigDecimal(boolean parseToBigDecimal) {
     this.parseToBigDecimal = parseToBigDecimal;
+    return this;
+  }
+
+  @Override
+  public Properties setPluralRules(PluralRules pluralRules) {
+    this.pluralRules = pluralRules;
     return this;
   }
 

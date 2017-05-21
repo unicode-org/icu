@@ -177,18 +177,22 @@ appendResult(uint8_t *dest, int32_t destIndex, int32_t destCapacity,
     } else {
         if(result<=UCASE_MAX_STRING_LENGTH) {
             // string: "result" is the UTF-16 length
-            errorCode=U_ZERO_ERROR;
-            if(destIndex<destCapacity) {
-                u_strToUTF8((char *)(dest+destIndex), destCapacity-destIndex, &length,
-                            s, result, &errorCode);
+            if(result==0) {
+                length=0;
             } else {
-                u_strToUTF8(NULL, 0, &length, s, result, &errorCode);
-            }
-            if(U_FAILURE(errorCode) && errorCode != U_BUFFER_OVERFLOW_ERROR) {
-                return -1;
-            }
-            if(length>(INT32_MAX-destIndex)) {
-                return -1;  // integer overflow
+                errorCode=U_ZERO_ERROR;
+                if(destIndex<destCapacity) {
+                    u_strToUTF8((char *)(dest+destIndex), destCapacity-destIndex, &length,
+                                s, result, &errorCode);
+                } else {
+                    u_strToUTF8(NULL, 0, &length, s, result, &errorCode);
+                }
+                if(U_FAILURE(errorCode) && errorCode != U_BUFFER_OVERFLOW_ERROR) {
+                    return -1;
+                }
+                if(length>(INT32_MAX-destIndex)) {
+                    return -1;  // integer overflow
+                }
             }
             if(edits!=NULL) {
                 edits->addReplace(cpLength, length);

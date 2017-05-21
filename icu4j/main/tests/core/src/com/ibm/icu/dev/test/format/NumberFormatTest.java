@@ -41,10 +41,13 @@ import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
+import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.CompactDecimalFormat;
+import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormat.PropertySetter;
 import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DisplayContext;
@@ -53,6 +56,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.text.NumberingSystem;
+import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -5544,5 +5548,26 @@ public class NumberFormatTest extends TestFmwk {
                 }
             }
         }
+    }
+
+    @Test
+    public void TestCurrencyPluralInfoAndCustomPluralRules() throws ParseException {
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        final PluralRules rules = PluralRules.parseDescription("one: n is 1; few: n in 2..4");
+        CurrencyPluralInfo info = CurrencyPluralInfo.getInstance(ULocale.ENGLISH);
+        info.setCurrencyPluralPattern("one", "0 qwerty");
+        info.setCurrencyPluralPattern("few", "0 dvorak");
+        DecimalFormat df = new DecimalFormat("#", symbols, info, NumberFormat.CURRENCYSTYLE);
+        df.setCurrency(Currency.getInstance("USD"));
+        df.setProperties(new PropertySetter(){
+            @Override
+            public void set(Properties props) {
+                props.setPluralRules(rules);
+            }
+        });
+
+        assertEquals("Plural one", "1.00 qwerty", df.format(1));
+        assertEquals("Plural few", "3.00 dvorak", df.format(3));
+        assertEquals("Plural other", "5.80 US dollars", df.format(5.8));
     }
 }

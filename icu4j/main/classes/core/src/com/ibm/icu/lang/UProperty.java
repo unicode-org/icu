@@ -17,9 +17,8 @@ package com.ibm.icu.lang;
  * <p>The properties APIs are intended to reflect Unicode properties as
  * defined in the Unicode Character Database (UCD) and Unicode Technical
  * Reports (UTR).
- * <p>For details about the properties see <a href=http://www.unicode.org>
- * http://www.unicode.org</a>.
- * <p>For names of Unicode properties see the UCD file PropertyAliases.txt.
+ * <p>For details about the properties see
+ * <a href="http://www.unicode.org/reports/tr44/">UAX #44: Unicode Character Database</a>.
  *
  * <p>Important: If ICU is built with UCD files from Unicode versions below
  * 3.2, then properties marked with "new" are not or not fully
@@ -518,41 +517,56 @@ public interface UProperty
      * Binary property Emoji.
      * See http://www.unicode.org/reports/tr51/#Emoji_Properties
      *
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static final int EMOJI=57;
     /**
      * Binary property Emoji_Presentation.
      * See http://www.unicode.org/reports/tr51/#Emoji_Properties
      *
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static final int EMOJI_PRESENTATION=58;
     /**
      * Binary property Emoji_Modifier.
      * See http://www.unicode.org/reports/tr51/#Emoji_Properties
      *
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static final int EMOJI_MODIFIER=59;
     /**
      * Binary property Emoji_Modifier_Base.
      * See http://www.unicode.org/reports/tr51/#Emoji_Properties
      *
-     * @draft ICU 57
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 57
      */
     public static final int EMOJI_MODIFIER_BASE=60;
+    /**
+     * Binary property Emoji_Component.
+     * See http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *
+     * @stable ICU 60
+     */
+    public static final int EMOJI_COMPONENT=61;
+    /**
+     * Binary property Regional_Indicator.
+     *
+     * @stable ICU 60
+     */
+    public static final int REGIONAL_INDICATOR=62;
+    /**
+     * Binary property Prepended_Concatenation_Mark.
+     *
+     * @stable ICU 60
+     */
+    public static final int PREPENDED_CONCATENATION_MARK=63;
 
     /**
      * One more than the last constant for binary Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int BINARY_LIMIT = 61;
+    public static final int BINARY_LIMIT = 64;
 
     /**
      * Enumerated property Bidi_Class.

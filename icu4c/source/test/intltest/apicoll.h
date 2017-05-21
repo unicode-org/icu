@@ -173,6 +173,7 @@ public:
     void TestCloneBinary();
     void TestIterNumeric();
     void TestBadKeywords();
+    void TestGapTooSmall();
 
 private:
     // If this is too small for the test data, just increase it.
