@@ -1655,4 +1655,35 @@ public class CollationAPITest extends TestFmwk {
             errln("Collator.getInstance(" + localeID + ") did not fail as expected - " + other);
         }
     }
+
+    @Test
+    public void TestGapTooSmall() {
+        // Try to tailor >20k characters into a too-small primary gap between symbols
+        // that have 3-byte primary weights.
+        // In FractionalUCA.txt:
+        // 263A; [0C BA D0, 05, 05]  # Zyyy So  [084A.0020.0002]  * WHITE SMILING FACE
+        // 263B; [0C BA D7, 05, 05]  # Zyyy So  [084B.0020.0002]  * BLACK SMILING FACE
+        try {
+            new RuleBasedCollator("&☺<*\u4E00-\u9FFF");
+            errln("no exception for primary-gap overflow");
+        } catch (UnsupportedOperationException e) {
+            assertTrue("exception message mentions 'gap'", e.getMessage().contains("gap"));
+        } catch (Exception e) {
+            errln("unexpected exception for primary-gap overflow: " + e);
+        }
+
+        // CLDR 32/ICU 60 FractionalUCA.txt makes room at the end of the symbols range
+        // for several 2-byte primaries, or a large number of 3-byters.
+        // The reset point is primary-before what should be
+        // the special currency-first-primary contraction,
+        // which is hopefully fairly stable, but not guaranteed stable.
+        // In FractionalUCA.txt:
+        // FDD1 20AC; [0D 70 02, 05, 05]  # CURRENCY first primary
+        try {
+            Collator coll = new RuleBasedCollator("&[before 1]\uFDD1€<*\u4E00-\u9FFF");
+            assertTrue("tailored Han before currency", coll.compare("\u4E00", "$") < 0);
+        } catch (Exception e) {
+            errln("unexpected exception for tailoring many characters at the end of symbols: " + e);
+        }
+    }
 }

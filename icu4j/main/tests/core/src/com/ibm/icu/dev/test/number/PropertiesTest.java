@@ -21,7 +21,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
@@ -37,6 +39,7 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
+import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.MeasureUnit;
@@ -259,6 +262,20 @@ public class PropertiesTest {
       FormatWidth[] values = FormatWidth.values();
       return values[seed % values.length];
 
+    } else if (type == Map.class) {
+      // Map<String,Map<String,String>> for compactCustomData property
+      if (seed == 0) return null;
+      Map<String, Map<String, String>> outer = new HashMap<String, Map<String, String>>();
+      Map<String, String> inner = new HashMap<String, String>();
+      inner.put("one", "0 thousand");
+      StringBuilder magnitudeKey = new StringBuilder();
+      magnitudeKey.append("1000");
+      for (int i = 0; i < seed % 9; i++) {
+        magnitudeKey.append("0");
+      }
+      outer.put(magnitudeKey.toString(), inner);
+      return outer;
+
     } else if (type == MathContext.class) {
       if (seed == 0) return null;
       RoundingMode[] modes = RoundingMode.values();
@@ -278,6 +295,11 @@ public class PropertiesTest {
       if (seed == 0) return null;
       ParseMode[] values = ParseMode.values();
       return values[seed % values.length];
+
+    } else if (type == PluralRules.class) {
+      if (seed == 0) return null;
+      ULocale[] locales = PluralRules.getAvailableULocales();
+      return PluralRules.forLocale(locales[seed % locales.length]);
 
     } else if (type == RoundingMode.class) {
       if (seed == 0) return null;

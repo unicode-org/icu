@@ -49,6 +49,39 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
      * @return The property bag, for chaining.
      */
     public IProperties setCompactStyle(CompactStyle compactStyle);
+
+    static Map<String, Map<String, String>> DEFAULT_COMPACT_CUSTOM_DATA = null;
+
+    /** @see #setCompactCustomData */
+    public Map<String, Map<String, String>> getCompactCustomData();
+
+    /**
+     * Specifies custom data to be used instead of CLDR data when constructing a
+     * CompactDecimalFormat. The argument should be a map with the following structure:
+     *
+     * <pre>
+     * {
+     *   "1000": {
+     *     "one": "0 thousand",
+     *     "other": "0 thousand"
+     *   },
+     *   "10000": {
+     *     "one": "00 thousand",
+     *     "other": "00 thousand"
+     *   },
+     *   // ...
+     * }
+     * </pre>
+     *
+     * This API endpoint is used by the CLDR Survey Tool.
+     *
+     * @param compactCustomData A map with the above structure.
+     * @return The property bag, for chaining.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public IProperties setCompactCustomData(Map<String, Map<String, String>> compactCustomData);
   }
 
   public static boolean useCompactDecimalFormat(IProperties properties) {
@@ -179,7 +212,12 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
   private CompactDecimalFormat(DecimalFormatSymbols symbols, IProperties properties) {
     CompactDecimalFingerprint fingerprint = new CompactDecimalFingerprint(symbols, properties);
     this.rounder = getRounder(properties);
-    this.data = getData(symbols, fingerprint);
+    // Short-circuit and use custom data if provided
+    if (properties.getCompactCustomData() != null) {
+      this.data = createDataFromCustom(symbols, fingerprint, properties.getCompactCustomData());
+    } else {
+      this.data = getData(symbols, fingerprint);
+    }
     this.defaultMod = getDefaultMod(symbols, fingerprint);
     this.style = properties.getCompactStyle(); // for exporting only
   }
@@ -491,5 +529,35 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
         }
       }
     }
+  }
+
+  /**
+   * Uses data from the custom powersToPluralsToPatterns map instead of an ICUResourceBundle to
+   * populate an instance of CompactDecimalData.
+   */
+  static CompactDecimalData createDataFromCustom(
+      DecimalFormatSymbols symbols,
+      CompactDecimalFingerprint fingerprint,
+      Map<String, Map<String, String>> powersToPluralsToPatterns) {
+    CompactDecimalData data = new CompactDecimalData();
+    PNAffixGenerator pnag = PNAffixGenerator.getThreadLocalInstance();
+    for (Map.Entry<String, Map<String, String>> magnitudeEntry :
+        powersToPluralsToPatterns.entrySet()) {
+      byte magnitude = (byte) (magnitudeEntry.getKey().length() - 1);
+      for (Map.Entry<String, String> pluralEntry : magnitudeEntry.getValue().entrySet()) {
+        StandardPlural plural = StandardPlural.fromString(pluralEntry.getKey().toString());
+        String patternString = pluralEntry.getValue().toString();
+        Properties properties = PatternString.parseToProperties(patternString);
+        byte _multiplier = (byte) -(magnitude - properties.getMinimumIntegerDigits() + 1);
+        if (_multiplier != data.setOrGetMultiplier(magnitude, _multiplier)) {
+          throw new IllegalArgumentException(
+              "Different number of zeros for same power of ten in custom compact decimal format data");
+        }
+        PNAffixGenerator.Result result =
+            pnag.getModifiers(symbols, fingerprint.currencySymbol, properties);
+        data.setModifiers(result.positive, result.negative, magnitude, plural);
+      }
+    }
+    return data;
   }
 }
