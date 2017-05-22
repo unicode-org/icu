@@ -35,6 +35,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(2, testAllFieldPatterns);
         TESTCASE(3, testStaticGetSkeleton);
         TESTCASE(4, testC);
+        TESTCASE(5, testSkeletonsWithDayPeriods);
         default: name = ""; break;
     }
 }
@@ -976,13 +977,17 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
         { 'e',  {1,2,3,4,5,6},  "Eec"  }, // local day of week
         { 'c',  {1,2,3,4,5,6},  "Eec"  }, // standalone local day of week
         // day period
-    //  { 'a',  {1,0},          "a"    }, // am or pm   // not clear this one is supposed to work (it doesn't)
+        { 'a',  {1,2,3,4,5,0},  "a"    }, // am or pm
+        { 'b',  {1,2,3,4,5,0},  "b"    }, // dayPeriod AM/PM/noon
+        { 'B',  {1,2,3,4,5,0},  "B"    }, // dayPeriod ranges
         // hour
         { 'h',  {1,2,0},        "hK"   }, // 12 (1-12)
         { 'H',  {1,2,0},        "Hk"   }, // 24 (0-23)
         { 'K',  {1,2,0},        "hK"   }, // 12 (0-11)
         { 'k',  {1,2,0},        "Hk"   }, // 24 (1-24)
         { 'j',  {1,2,0},        "hHKk" }, // locale default
+        { 'J',  {1,2,0},        "hHKk" }, // locale default, without any dayPeriod
+        { 'C',  {1,2,0},        "hHKk" }, // locale allowed first entry, possibly with b or B
         // minute
         { 'm',  {1,2,0},        "m"    }, // x
         // second & fractions
@@ -1112,6 +1117,66 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
         assertEquals(message, expectedPattern, pattern);
         delete gen;
     }
+}
+
+enum { kCharBufMax = 31 };
+void IntlTestDateTimePatternGeneratorAPI::testSkeletonsWithDayPeriods() {
+    const char * patterns[] = {
+        // since icu4c getEmptyInstance does not call addCanonicalItems (unlike J), set these here:
+        "a",    // should get skeleton a
+        "H",    // should get skeleton H
+        "m",    // should get skeleton m
+        "s",    // should get skeleton s
+        // patterns from which to construct sample data for a locale
+        //"H",    // should get skeleton H
+        "h a",  // should get skeleton ah
+        "B h",  // should get skeleton Bh
+    };
+    const char* testItems[][2] = {
+        // sample requested skeletons and results
+        // skel  pattern
+        { "H",  "H"},
+        { "aH", "H"},
+        { "BH", "H"},
+        { "h",  "h a"},
+        { "ah", "h a"},
+        { "bh", "h b"},
+        { "Bh", "B h"},
+        { "a",  "a"},
+        { "b",  "b"},
+        { "B",  "B"}
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    DateTimePatternGenerator *gen = DateTimePatternGenerator::createEmptyInstance(status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: createEmptyInstance fails, status: %s", u_errorName(status));
+    } else {
+        int32_t i, len = UPRV_LENGTHOF(patterns);
+        for (i = 0; i < len; i++) {
+            UnicodeString conflictingPattern;
+            (void)gen->addPattern(UnicodeString(patterns[i]), TRUE, conflictingPattern, status);
+            if (U_FAILURE(status)) {
+                errln("ERROR: addPattern %s fail, status: %s", patterns[i], u_errorName(status));
+                break;
+            }
+        }
+        if (U_SUCCESS(status)) {
+            len = UPRV_LENGTHOF(testItems);
+            for (i = 0; i < len; i++) {
+                status = U_ZERO_ERROR;
+                UnicodeString result = gen->getBestPattern(UnicodeString(testItems[i][0]), status);
+                if (U_FAILURE(status)) {
+                    errln("ERROR: getBestPattern %s fail, status: %s", testItems[i][0], u_errorName(status));
+                } else if (result != UnicodeString(testItems[i][1])) {
+                    char charResult[kCharBufMax+1];
+                    result.extract(0, result.length(), charResult, kCharBufMax);
+                    charResult[kCharBufMax] = 0; // ensure termination
+                    errln("ERROR: getBestPattern %s, expected %s, got %s", testItems[i][0], testItems[i][1], charResult);
+                }
+            }
+        }
+    }
+    delete gen;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

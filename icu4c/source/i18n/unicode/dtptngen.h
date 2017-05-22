@@ -206,11 +206,11 @@ public:
      * @return conflicting status.  The value could be UDATPG_NO_CONFLICT,
      *                             UDATPG_BASE_CONFLICT or UDATPG_CONFLICT.
      * @stable ICU 3.8
-	 * <p>
-	 * <h4>Sample code</h4>
-	 * \snippet samples/dtptngsample/dtptngsample.cpp getBestPatternExample1
-	 * \snippet samples/dtptngsample/dtptngsample.cpp addPatternExample
-	 * <p>
+     * <p>
+     * <h4>Sample code</h4>
+     * \snippet samples/dtptngsample/dtptngsample.cpp getBestPatternExample1
+     * \snippet samples/dtptngsample/dtptngsample.cpp addPatternExample
+     * <p>
      */
     UDateTimePatternConflict addPattern(const UnicodeString& pattern,
                                         UBool override,
@@ -312,11 +312,11 @@ public:
      * @return bestPattern
      *            The best pattern found from the given skeleton.
      * @stable ICU 3.8
-	 * <p>
-	 * <h4>Sample code</h4>
-	 * \snippet samples/dtptngsample/dtptngsample.cpp getBestPatternExample1
-	 * \snippet samples/dtptngsample/dtptngsample.cpp getBestPatternExample
-	 * <p>
+     * <p>
+     * <h4>Sample code</h4>
+     * \snippet samples/dtptngsample/dtptngsample.cpp getBestPatternExample1
+     * \snippet samples/dtptngsample/dtptngsample.cpp getBestPatternExample
+     * <p>
      */
      UnicodeString getBestPattern(const UnicodeString& skeleton, UErrorCode& status);
 
@@ -360,11 +360,11 @@ public:
      *               which must not indicate a failure before the function call.
      * @return pattern adjusted to match the skeleton fields widths and subtypes.
      * @stable ICU 3.8
-	 * <p>
-	 * <h4>Sample code</h4>
-	 * \snippet samples/dtptngsample/dtptngsample.cpp getBestPatternExample1
-	 * \snippet samples/dtptngsample/dtptngsample.cpp replaceFieldTypesExample
-	 * <p>
+     * <p>
+     * <h4>Sample code</h4>
+     * \snippet samples/dtptngsample/dtptngsample.cpp getBestPatternExample1
+     * \snippet samples/dtptngsample/dtptngsample.cpp replaceFieldTypesExample
+     * <p>
      */
      UnicodeString replaceFieldTypes(const UnicodeString& pattern,
                                      const UnicodeString& skeleton,
@@ -526,9 +526,8 @@ private:
     enum {
         kDTPGNoFlags = 0,
         kDTPGFixFractionalSeconds = 1,
-        kDTPGSkeletonUsesCapJ = 2,
-        kDTPGSkeletonUsesLowB = 3,
-        kDTPGSkeletonUsesCapB = 4
+        kDTPGSkeletonUsesCapJ = 2
+        // with #13183, no longer need flags for b, B
     };
 
     void initData(const Locale &locale, UErrorCode &status);

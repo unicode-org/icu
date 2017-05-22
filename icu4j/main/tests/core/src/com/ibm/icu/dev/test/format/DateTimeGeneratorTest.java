@@ -71,6 +71,46 @@ public class DateTimeGeneratorTest extends TestFmwk {
     }
 
     @Test
+    public void TestSkeletonsWithDayPeriods() {
+        String[][] dataItems = {
+                // sample data in a locale (base is not in locale, just here for test)
+                // skel (base) pattern
+                { "aH", "H",  "H"  }, // should ignore a
+                { "h",  "ah", "h a"},
+                { "Bh", "Bh", "B h"},
+        };
+        String[][] testItems = {
+                // sample requested skeletons and results
+                // skel  pattern
+                { "H",  "H"},
+                { "aH", "H"},
+                { "BH", "H"},
+                { "h",  "h a"},
+                { "ah", "h a"},
+                { "bh", "h b"},
+                { "Bh", "B h"},
+                { "a",  "a"},
+                { "b",  "b"},
+                { "B",  "B"},
+        };
+        DateTimePatternGenerator gen = DateTimePatternGenerator.getEmptyInstance();
+        DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
+        for (String[] dataItem : dataItems) {
+            gen.addPatternWithSkeleton(dataItem[2], dataItem[0], true, returnInfo);
+            String base = gen.getBaseSkeleton(dataItem[0]);
+            if (!base.equals(dataItem[1])) {
+                 errln("getBaseSkeleton for skeleton " + dataItem[0] + ", expected " + dataItem[1] +  ", got " + base);
+            }
+        }
+        for (String[] testItem : testItems) {
+            String pattern = gen.getBestPattern(testItem[0]);
+            if (!pattern.equals(testItem[1])) {
+                 errln("getBestPattern  for skeleton " + testItem[0] + ", expected " + testItem[1] +  ", got " + pattern);
+            }
+        }
+    }
+
+    @Test
     public void TestSimple() {
         // some simple use cases
         ULocale locale = ULocale.GERMANY;
@@ -587,7 +627,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
     @Test
     public void TestVariableCharacters() {
-        UnicodeSet valid = new UnicodeSet("[G y Y u U r Q q M L l w W d D F g E e c a h H K k m s S A z Z O v V X x]");
+        UnicodeSet valid = new UnicodeSet("[G y Y u U r Q q M L l w W d D F g E e c a b B h H K k m s S A z Z O v V X x]");
         for (char c = 0; c < 0xFF; ++c) {
             boolean works = false;
             try {

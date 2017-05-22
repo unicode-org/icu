@@ -134,15 +134,18 @@ U_NAMESPACE_BEGIN
 // class DateTimePatternGenerator
 // *****************************************************************************
 static const UChar Canonical_Items[] = {
-    // GyQMwWEdDFHmsSv
-    CAP_G, LOW_Y, CAP_Q, CAP_M, LOW_W, CAP_W, CAP_E, LOW_D, CAP_D, CAP_F,
+    // GyQMwWEDFdaHmsSv
+    CAP_G, LOW_Y, CAP_Q, CAP_M, LOW_W, CAP_W, CAP_E,
+    CAP_D, CAP_F, LOW_D, LOW_A, // The UDATPG_x_FIELD constants and these fields have a different order than in ICU4J
     CAP_H, LOW_M, LOW_S, CAP_S, LOW_V, 0
 };
 
 static const dtTypeElem dtTypes[] = {
     // patternChar, field, type, minLen, weight
     {CAP_G, UDATPG_ERA_FIELD, DT_SHORT, 1, 3,},
-    {CAP_G, UDATPG_ERA_FIELD, DT_LONG, 4, 0},
+    {CAP_G, UDATPG_ERA_FIELD, DT_LONG,  4, 0},
+    {CAP_G, UDATPG_ERA_FIELD, DT_NARROW, 5, 0},
+
     {LOW_Y, UDATPG_YEAR_FIELD, DT_NUMERIC, 1, 20},
     {CAP_Y, UDATPG_YEAR_FIELD, DT_NUMERIC + DT_DELTA, 1, 20},
     {LOW_U, UDATPG_YEAR_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 20},
@@ -150,12 +153,16 @@ static const dtTypeElem dtTypes[] = {
     {CAP_U, UDATPG_YEAR_FIELD, DT_SHORT, 1, 3},
     {CAP_U, UDATPG_YEAR_FIELD, DT_LONG, 4, 0},
     {CAP_U, UDATPG_YEAR_FIELD, DT_NARROW, 5, 0},
+
     {CAP_Q, UDATPG_QUARTER_FIELD, DT_NUMERIC, 1, 2},
     {CAP_Q, UDATPG_QUARTER_FIELD, DT_SHORT, 3, 0},
     {CAP_Q, UDATPG_QUARTER_FIELD, DT_LONG, 4, 0},
+    {CAP_Q, UDATPG_QUARTER_FIELD, DT_NARROW, 5, 0},
     {LOW_Q, UDATPG_QUARTER_FIELD, DT_NUMERIC + DT_DELTA, 1, 2},
-    {LOW_Q, UDATPG_QUARTER_FIELD, DT_SHORT + DT_DELTA, 3, 0},
-    {LOW_Q, UDATPG_QUARTER_FIELD, DT_LONG + DT_DELTA, 4, 0},
+    {LOW_Q, UDATPG_QUARTER_FIELD, DT_SHORT - DT_DELTA, 3, 0},
+    {LOW_Q, UDATPG_QUARTER_FIELD, DT_LONG - DT_DELTA, 4, 0},
+    {LOW_Q, UDATPG_QUARTER_FIELD, DT_NARROW - DT_DELTA, 5, 0},
+
     {CAP_M, UDATPG_MONTH_FIELD, DT_NUMERIC, 1, 2},
     {CAP_M, UDATPG_MONTH_FIELD, DT_SHORT, 3, 0},
     {CAP_M, UDATPG_MONTH_FIELD, DT_LONG, 4, 0},
@@ -165,32 +172,66 @@ static const dtTypeElem dtTypes[] = {
     {CAP_L, UDATPG_MONTH_FIELD, DT_LONG - DT_DELTA, 4, 0},
     {CAP_L, UDATPG_MONTH_FIELD, DT_NARROW - DT_DELTA, 5, 0},
     {LOW_L, UDATPG_MONTH_FIELD, DT_NUMERIC + DT_DELTA, 1, 1},
+
     {LOW_W, UDATPG_WEEK_OF_YEAR_FIELD, DT_NUMERIC, 1, 2},
-    {CAP_W, UDATPG_WEEK_OF_MONTH_FIELD, DT_NUMERIC + DT_DELTA, 1, 0},
+
+    {CAP_W, UDATPG_WEEK_OF_MONTH_FIELD, DT_NUMERIC, 1, 0},
+
     {CAP_E, UDATPG_WEEKDAY_FIELD, DT_SHORT, 1, 3},
     {CAP_E, UDATPG_WEEKDAY_FIELD, DT_LONG, 4, 0},
     {CAP_E, UDATPG_WEEKDAY_FIELD, DT_NARROW, 5, 0},
+    {CAP_E, UDATPG_WEEKDAY_FIELD, DT_SHORTER, 6, 0},
     {LOW_C, UDATPG_WEEKDAY_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 2},
     {LOW_C, UDATPG_WEEKDAY_FIELD, DT_SHORT - 2*DT_DELTA, 3, 0},
     {LOW_C, UDATPG_WEEKDAY_FIELD, DT_LONG - 2*DT_DELTA, 4, 0},
     {LOW_C, UDATPG_WEEKDAY_FIELD, DT_NARROW - 2*DT_DELTA, 5, 0},
+    {LOW_C, UDATPG_WEEKDAY_FIELD, DT_SHORTER - 2*DT_DELTA, 6, 0},
     {LOW_E, UDATPG_WEEKDAY_FIELD, DT_NUMERIC + DT_DELTA, 1, 2}, // LOW_E is currently not used in CLDR data, should not be canonical
     {LOW_E, UDATPG_WEEKDAY_FIELD, DT_SHORT - DT_DELTA, 3, 0},
     {LOW_E, UDATPG_WEEKDAY_FIELD, DT_LONG - DT_DELTA, 4, 0},
     {LOW_E, UDATPG_WEEKDAY_FIELD, DT_NARROW - DT_DELTA, 5, 0},
+    {LOW_E, UDATPG_WEEKDAY_FIELD, DT_SHORTER - DT_DELTA, 6, 0},
+
     {LOW_D, UDATPG_DAY_FIELD, DT_NUMERIC, 1, 2},
-    {CAP_D, UDATPG_DAY_OF_YEAR_FIELD, DT_NUMERIC + DT_DELTA, 1, 3},
-    {CAP_F, UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 0},
-    {LOW_G, UDATPG_DAY_FIELD, DT_NUMERIC + 3*DT_DELTA, 1, 20}, // really internal use, so we don't care
-    {LOW_A, UDATPG_DAYPERIOD_FIELD, DT_SHORT, 1, 0},
+    {LOW_G, UDATPG_DAY_FIELD, DT_NUMERIC + DT_DELTA, 1, 20}, // really internal use, so we don't care
+
+    {CAP_D, UDATPG_DAY_OF_YEAR_FIELD, DT_NUMERIC, 1, 3},
+
+    {CAP_F, UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, DT_NUMERIC, 1, 0},
+
+    {LOW_A, UDATPG_DAYPERIOD_FIELD, DT_SHORT, 1, 3},
+    {LOW_A, UDATPG_DAYPERIOD_FIELD, DT_LONG, 4, 0},
+    {LOW_A, UDATPG_DAYPERIOD_FIELD, DT_NARROW, 5, 0},
+    {LOW_B, UDATPG_DAYPERIOD_FIELD, DT_SHORT - DT_DELTA, 1, 3},
+    {LOW_B, UDATPG_DAYPERIOD_FIELD, DT_LONG - DT_DELTA, 4, 0},
+    {LOW_B, UDATPG_DAYPERIOD_FIELD, DT_NARROW - DT_DELTA, 5, 0},
+    // b needs to be closer to a than to B, so we make this 3*DT_DELTA
+    {CAP_B, UDATPG_DAYPERIOD_FIELD, DT_SHORT - 3*DT_DELTA, 1, 3},
+    {CAP_B, UDATPG_DAYPERIOD_FIELD, DT_LONG - 3*DT_DELTA, 4, 0},
+    {CAP_B, UDATPG_DAYPERIOD_FIELD, DT_NARROW - 3*DT_DELTA, 5, 0},
+
     {CAP_H, UDATPG_HOUR_FIELD, DT_NUMERIC + 10*DT_DELTA, 1, 2}, // 24 hour
     {LOW_K, UDATPG_HOUR_FIELD, DT_NUMERIC + 11*DT_DELTA, 1, 2}, // 24 hour
     {LOW_H, UDATPG_HOUR_FIELD, DT_NUMERIC, 1, 2}, // 12 hour
     {CAP_K, UDATPG_HOUR_FIELD, DT_NUMERIC + DT_DELTA, 1, 2}, // 12 hour
+    // The C code has had versions of the following 3, keep & update. Should not need these, but...
+    // Without these, certain tests using e.g. staticGetSkeleton fail because j/J in patterns
+    // get skipped instead of mapped to the right hour chars, for example in
+    //   DateFormatTest::TestPatternFromSkeleton
+    //   IntlTestDateTimePatternGeneratorAPI:: testStaticGetSkeleton
+    //   DateIntervalFormatTest::testTicket11985
+    // Need to investigate better handling of jJC replacement e.g. in staticGetSkeleton.
+    {CAP_J, UDATPG_HOUR_FIELD, DT_NUMERIC + 5*DT_DELTA, 1, 2}, // 12/24 hour no AM/PM
+    {LOW_J, UDATPG_HOUR_FIELD, DT_NUMERIC + 6*DT_DELTA, 1, 6}, // 12/24 hour
+    {CAP_C, UDATPG_HOUR_FIELD, DT_NUMERIC + 7*DT_DELTA, 1, 6}, // 12/24 hour with preferred dayPeriods for 12
+
     {LOW_M, UDATPG_MINUTE_FIELD, DT_NUMERIC, 1, 2},
+
     {LOW_S, UDATPG_SECOND_FIELD, DT_NUMERIC, 1, 2},
-    {CAP_S, UDATPG_FRACTIONAL_SECOND_FIELD, DT_NUMERIC + DT_DELTA, 1, 1000},
-    {CAP_A, UDATPG_SECOND_FIELD, DT_NUMERIC + 2*DT_DELTA, 1, 1000},
+    {CAP_A, UDATPG_SECOND_FIELD, DT_NUMERIC + DT_DELTA, 1, 1000},
+
+    {CAP_S, UDATPG_FRACTIONAL_SECOND_FIELD, DT_NUMERIC, 1, 1000},
+
     {LOW_V, UDATPG_ZONE_FIELD, DT_SHORT - 2*DT_DELTA, 1, 0},
     {LOW_V, UDATPG_ZONE_FIELD, DT_LONG - 2*DT_DELTA, 4, 0},
     {LOW_Z, UDATPG_ZONE_FIELD, DT_SHORT, 1, 3},
@@ -202,24 +243,27 @@ static const dtTypeElem dtTypes[] = {
     {CAP_O, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 4, 0},
     {CAP_V, UDATPG_ZONE_FIELD, DT_SHORT - DT_DELTA, 1, 0},
     {CAP_V, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 2, 0},
+    {CAP_V, UDATPG_ZONE_FIELD, DT_LONG-1 - DT_DELTA, 3, 0},
+    {CAP_V, UDATPG_ZONE_FIELD, DT_LONG-2 - DT_DELTA, 4, 0},
     {CAP_X, UDATPG_ZONE_FIELD, DT_NARROW - DT_DELTA, 1, 0},
     {CAP_X, UDATPG_ZONE_FIELD, DT_SHORT - DT_DELTA, 2, 0},
     {CAP_X, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 4, 0},
     {LOW_X, UDATPG_ZONE_FIELD, DT_NARROW - DT_DELTA, 1, 0},
     {LOW_X, UDATPG_ZONE_FIELD, DT_SHORT - DT_DELTA, 2, 0},
     {LOW_X, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 4, 0},
-    {LOW_J, UDATPG_HOUR_FIELD, DT_NUMERIC, 1, 2}, // 12/24 hour
-    {CAP_J, UDATPG_HOUR_FIELD, DT_NUMERIC, 1, 2}, // 12/24 hour no AM/PM
+
     {0, UDATPG_FIELD_COUNT, 0, 0, 0} , // last row of dtTypes[]
  };
 
 static const char* const CLDR_FIELD_APPEND[] = {
-    "Era", "Year", "Quarter", "Month", "Week", "*", "Day-Of-Week", "Day", "*", "*", "*",
+    "Era", "Year", "Quarter", "Month", "Week", "*", "Day-Of-Week",
+    "*", "*", "Day", "*", // The UDATPG_x_FIELD constants and these fields have a different order than in ICU4J
     "Hour", "Minute", "Second", "*", "Timezone"
 };
 
 static const char* const CLDR_FIELD_NAME[] = {
-    "era", "year", "quarter", "month", "week", "*", "weekday", "*", "*", "day", "dayperiod",
+    "era", "year", "quarter", "month", "week", "weekOfMonth", "weekday",
+    "dayOfYear", "weekdayOfMonth", "day", "dayperiod", // The UDATPG_x_FIELD constants and these fields have a different order than in ICU4J
     "hour", "minute", "second", "*", "zone"
 };
 
@@ -988,10 +1032,11 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
                     patternFormCopy.setCharAt(patPos, LOW_H);
                 }
 
+                // in #13183 just add to skeleton, no longer need to set special flags
                 if (preferred == ALLOWED_HOUR_FORMAT_HB || preferred == ALLOWED_HOUR_FORMAT_hB) {
-                    flags |= kDTPGSkeletonUsesCapB;
+                    patternFormCopy.append('B');
                 } else if (preferred == ALLOWED_HOUR_FORMAT_Hb || preferred == ALLOWED_HOUR_FORMAT_hb) {
-                    flags |= kDTPGSkeletonUsesLowB;
+                    patternFormCopy.append('b');
                 }
             } else if (patChr == CAP_J) {
                 // Get pattern for skeleton with H, then replace H or k
@@ -1299,17 +1344,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
             const dtTypeElem *row = &dtTypes[canonicalIndex];
             int32_t typeValue = row->field;
 
-            // Handle special day periods.
-            if (typeValue == UDATPG_DAYPERIOD_FIELD && flags != 0) {
-                UChar c = NONE;  // '0'
-                if (flags & kDTPGSkeletonUsesCapB) { c = CAP_B; }
-                if (flags & kDTPGSkeletonUsesLowB) { c = LOW_B; }
-
-                if (c != NONE) {
-                    for (int32_t i = 0; i < field.length(); ++i)
-                    field.setCharAt(i, c);
-                }
-            }
+            // handle day periods - with #13183, no longer need special handling here, integrated with normal types
 
             if ((flags & kDTPGFixFractionalSeconds) != 0 && typeValue == UDATPG_SECOND_FIELD) {
                 field += decimal;
@@ -1844,9 +1879,7 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
     fp->set(pattern);
     for (i=0; i < fp->itemNumber; i++) {
         const UnicodeString& value = fp->items[i];
-        if ( value.charAt(0) == LOW_A ) {
-            continue;  // skip 'a'
-        }
+        // don't skip 'a' anymore, dayPeriod handled specially below
 
         if ( fp->isQuoteLiteral(value) ) {
             UnicodeString quoteLiteral;
@@ -1861,13 +1894,36 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
         int32_t field = row->field;
         skeletonResult.original.populate(field, value);
         UChar repeatChar = row->patternChar;
-        int32_t repeatCount = row->minLen; // #7930 removes cap at 3
+        int32_t repeatCount = row->minLen;
         skeletonResult.baseOriginal.populate(field, repeatChar, repeatCount);
         int16_t subField = row->type;
         if ( row->type > 0) {
             subField += value.length();
         }
         skeletonResult.type[field] = subField;
+    }
+    // #13183, handle special behavior for day period characters (a, b, B)
+    if (!skeletonResult.original.isFieldEmpty(UDATPG_HOUR_FIELD)) {
+        if (skeletonResult.original.getFieldChar(UDATPG_HOUR_FIELD)==LOW_H || skeletonResult.original.getFieldChar(UDATPG_HOUR_FIELD)==CAP_K) {
+            // We have a skeleton with 12-hour-cycle format
+            if (skeletonResult.original.isFieldEmpty(UDATPG_DAYPERIOD_FIELD)) {
+                // But we do not have a day period in the skeleton; add the default DAYPERIOD (currently "a")
+                for (i = 0; dtTypes[i].patternChar != 0; i++) {
+                    if ( dtTypes[i].field == UDATPG_DAYPERIOD_FIELD ) {
+                        // first entry for UDATPG_DAYPERIOD_FIELD
+                        skeletonResult.original.populate(UDATPG_DAYPERIOD_FIELD, dtTypes[i].patternChar, dtTypes[i].minLen);
+                        skeletonResult.baseOriginal.populate(UDATPG_DAYPERIOD_FIELD, dtTypes[i].patternChar, dtTypes[i].minLen);
+                        skeletonResult.type[UDATPG_DAYPERIOD_FIELD] = dtTypes[i].type;
+                        break;
+                    }
+                }
+            }
+        } else {
+            // Skeleton has 24-hour-cycle hour format and has dayPeriod, delete dayPeriod (i.e. ignore it)
+            skeletonResult.original.clearField(UDATPG_DAYPERIOD_FIELD);
+            skeletonResult.baseOriginal.clearField(UDATPG_DAYPERIOD_FIELD);
+            skeletonResult.type[UDATPG_DAYPERIOD_FIELD] = NONE;
+        }
     }
     copyFrom(skeletonResult);
 }
