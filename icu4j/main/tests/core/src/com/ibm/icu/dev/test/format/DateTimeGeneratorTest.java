@@ -57,8 +57,12 @@ public class DateTimeGeneratorTest extends TestFmwk {
         String[][] tests = {
                 // These may change with actual data for Bhmm/bhmm skeletons
                 {"zh", "Cm", "h:mm B"},
+                {"zh", "CCCm", "h:mm BBBB"},
+                {"zh", "CCCCCm", "h:mm BBBBB"},
                 {"de", "Cm", "HH:mm"},
                 {"en", "Cm", "h:mm a"},
+                {"en", "CCCm", "h:mm aaaa"},
+                {"en", "CCCCCm", "h:mm aaaaa"},
                 {"en-BN", "Cm", "h:mm b"},
                 {"gu-IN", "Cm", "h:mm B"},
                 {"und-IN", "Cm", "h:mm a"},
@@ -82,17 +86,18 @@ public class DateTimeGeneratorTest extends TestFmwk {
         };
         String[][] testItems = {
                 // sample requested skeletons and results
-                // skel  pattern
-                { "H",  "H"},
-                { "aH", "H"},
-                { "BH", "H"},
-                { "h",  "h a"},
-                { "ah", "h a"},
-                { "bh", "h b"},
-                { "Bh", "B h"},
-                { "a",  "a"},
-                { "b",  "b"},
-                { "B",  "B"},
+                // skel    pattern
+                { "H",     "H"},
+                { "aH",    "H"},
+                { "BH",    "H"},
+                { "h",     "h a"},
+                { "ah",    "h a"},
+                { "bh",    "h b"},
+                { "Bh",    "B h"},
+                { "BBBBh", "BBBB h"},
+                { "a",     "a"},
+                { "b",     "b"},
+                { "B",     "B"},
         };
         DateTimePatternGenerator gen = DateTimePatternGenerator.getEmptyInstance();
         DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
