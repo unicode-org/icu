@@ -1007,48 +1007,13 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     int32_t timeMask=(1<<UDATPG_FIELD_COUNT) - 1 - dateMask;
 
     // Replace hour metacharacters 'j', 'C' and 'J', set flags as necessary
-    UnicodeString patternFormCopy = UnicodeString(patternForm);
-    int32_t patPos, patLen = patternFormCopy.length();
-    UBool inQuoted = FALSE;
-    for (patPos = 0; patPos < patLen; patPos++) {
-        UChar patChr = patternFormCopy.charAt(patPos);
-        if (patChr == SINGLE_QUOTE) {
-            inQuoted = !inQuoted;
-        } else if (!inQuoted) {
-            if (patChr == LOW_J) {
-                patternFormCopy.setCharAt(patPos, fDefaultHourFormatChar);
-            } else if (patChr == CAP_C) {
-                AllowedHourFormat preferred;
-                if (fAllowedHourFormats[0] != ALLOWED_HOUR_FORMAT_UNKNOWN) {
-                    preferred = (AllowedHourFormat)fAllowedHourFormats[0];
-                } else {
-                    status = U_INVALID_FORMAT_ERROR;
-                    return UnicodeString();
-                }
-
-                if (preferred == ALLOWED_HOUR_FORMAT_H || preferred == ALLOWED_HOUR_FORMAT_HB || preferred == ALLOWED_HOUR_FORMAT_Hb) {
-                    patternFormCopy.setCharAt(patPos, CAP_H);
-                } else {
-                    patternFormCopy.setCharAt(patPos, LOW_H);
-                }
-
-                // in #13183 just add to skeleton, no longer need to set special flags
-                if (preferred == ALLOWED_HOUR_FORMAT_HB || preferred == ALLOWED_HOUR_FORMAT_hB) {
-                    patternFormCopy.append('B');
-                } else if (preferred == ALLOWED_HOUR_FORMAT_Hb || preferred == ALLOWED_HOUR_FORMAT_hb) {
-                    patternFormCopy.append('b');
-                }
-            } else if (patChr == CAP_J) {
-                // Get pattern for skeleton with H, then replace H or k
-                // with fDefaultHourFormatChar (if different)
-                patternFormCopy.setCharAt(patPos, CAP_H);
-                flags |= kDTPGSkeletonUsesCapJ;
-            }
-        }
+    UnicodeString patternFormMapped = mapSkeletonMetacharacters(patternForm, &flags, status);
+    if (U_FAILURE(status)) {
+        return UnicodeString();
     }
 
     resultPattern.remove();
-    dtMatcher->set(patternFormCopy, fp);
+    dtMatcher->set(patternFormMapped, fp);
     const PtnSkeleton* specifiedSkeleton=NULL;
     bestPattern=getBestRaw(*dtMatcher, -1, distanceInfo, &specifiedSkeleton);
     if ( distanceInfo->missingFieldMask==0 && distanceInfo->extraFieldMask==0 ) {
@@ -1075,6 +1040,82 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     dtFormat=getDateTimeFormat();
     SimpleFormatter(dtFormat, 2, 2, status).format(timePattern, datePattern, resultPattern, status);
     return resultPattern;
+}
+
+/*
+ * Map a skeleton that may have metacharacters jJC to one without, by replacing
+ * the metacharacters with locale-appropriate fields of of h/H/k/K and of a/b/B
+ * (depends on fDefaultHourFormatChar and fAllowedHourFormats being set, which in
+ * turn depends on initData having been run). This method also updates the flags
+ * as necessary. Returns the updated skeleton.
+ */
+UnicodeString
+DateTimePatternGenerator::mapSkeletonMetacharacters(const UnicodeString& patternForm, int32_t* flags, UErrorCode& status) {
+    UnicodeString patternFormMapped;
+    patternFormMapped.remove();
+    UBool inQuoted = FALSE;
+    int32_t patPos, patLen = patternForm.length();
+    for (patPos = 0; patPos < patLen; patPos++) {
+        UChar patChr = patternForm.charAt(patPos);
+        if (patChr == SINGLE_QUOTE) {
+            inQuoted = !inQuoted;
+        } else if (!inQuoted) {
+            // Handle special mappings for 'j' and 'C' in which fields lengths
+            // 1,3,5 => hour field length 1
+            // 2,4,6 => hour field length 2
+            // 1,2 => abbreviated dayPeriod (field length 1..3)
+            // 3,4 => long dayPeriod (field length 4)
+            // 5,6 => narrow dayPeriod (field length 5)
+            if (patChr == LOW_J || patChr == CAP_C) {
+                int32_t extraLen = 0; // 1 less than total field length
+                while (patPos+1 < patLen && patternForm.charAt(patPos+1)==patChr) {
+                    extraLen++;
+                    patPos++;
+                }
+                int32_t hourLen = 1 + (extraLen & 1);
+                int32_t dayPeriodLen = (extraLen < 2)? 1: 3 + (extraLen >> 1);
+                UChar hourChar = LOW_H;
+                UChar dayPeriodChar = LOW_A;
+                if (patChr == LOW_J) {
+                    hourChar = fDefaultHourFormatChar;
+                } else {
+                    AllowedHourFormat preferred;
+                    if (fAllowedHourFormats[0] != ALLOWED_HOUR_FORMAT_UNKNOWN) {
+                        preferred = (AllowedHourFormat)fAllowedHourFormats[0];
+                    } else {
+                        status = U_INVALID_FORMAT_ERROR;
+                        return UnicodeString();
+                    }
+                    if (preferred == ALLOWED_HOUR_FORMAT_H || preferred == ALLOWED_HOUR_FORMAT_HB || preferred == ALLOWED_HOUR_FORMAT_Hb) {
+                        hourChar = CAP_H;
+                    }
+                    // in #13183 just add b/B to skeleton, no longer need to set special flags
+                    if (preferred == ALLOWED_HOUR_FORMAT_HB || preferred == ALLOWED_HOUR_FORMAT_hB) {
+                        dayPeriodChar = CAP_B;
+                    } else if (preferred == ALLOWED_HOUR_FORMAT_Hb || preferred == ALLOWED_HOUR_FORMAT_hb) {
+                        dayPeriodChar = LOW_B;
+                    }
+                }
+                if (hourChar==CAP_H || hourChar==LOW_K) {
+                    dayPeriodLen = 0;
+                }
+                while (dayPeriodLen-- > 0) {
+                    patternFormMapped.append(dayPeriodChar);
+                }
+                while (hourLen-- > 0) {
+                    patternFormMapped.append(hourChar);
+                }
+            } else if (patChr == CAP_J) {
+                // Get pattern for skeleton with H, then replace H or k
+                // with fDefaultHourFormatChar (if different)
+                patternFormMapped.append(CAP_H);
+                *flags |= kDTPGSkeletonUsesCapJ;
+            } else {
+                patternFormMapped.append(patChr);
+            }
+        }
+    }
+    return patternFormMapped;
 }
 
 UnicodeString

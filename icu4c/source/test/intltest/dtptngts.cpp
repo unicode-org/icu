@@ -1090,13 +1090,18 @@ void IntlTestDateTimePatternGeneratorAPI::testStaticGetSkeleton(/*char *par*/)
 
 void IntlTestDateTimePatternGeneratorAPI::testC() {
     UErrorCode status = U_ZERO_ERROR;
-    const int32_t numLocales = 6;
+    const int32_t numLocales = 11;
 
     const char* tests[numLocales][3] = {
             // These may change with actual data for Bhmm/bhmm skeletons
             {"zh", "Cm", "h:mm B"},
+            {"zh", "CCCm", "h:mm BBBB"},
+            {"zh", "CCCCCm", "h:mm BBBBB"},
+            {"zh", "Cm", "h:mm B"},
             {"de", "Cm", "HH:mm"},
             {"en", "Cm", "h:mm a"},
+            {"en", "CCCm", "h:mm aaaa"},
+            {"en", "CCCCCm", "h:mm aaaaa"},
             {"en-BN", "Cm", "h:mm b"},
             {"gu-IN", "Cm", "h:mm B"},
             {"und-IN", "Cm", "h:mm a"},
@@ -1135,17 +1140,18 @@ void IntlTestDateTimePatternGeneratorAPI::testSkeletonsWithDayPeriods() {
     };
     const char* testItems[][2] = {
         // sample requested skeletons and results
-        // skel  pattern
-        { "H",  "H"},
-        { "aH", "H"},
-        { "BH", "H"},
-        { "h",  "h a"},
-        { "ah", "h a"},
-        { "bh", "h b"},
-        { "Bh", "B h"},
-        { "a",  "a"},
-        { "b",  "b"},
-        { "B",  "B"}
+        // skel    pattern
+        { "H",     "H"},
+        { "aH",    "H"},
+        { "BH",    "H"},
+        { "h",     "h a"},
+        { "ah",    "h a"},
+        { "bh",    "h b"},
+        { "Bh",    "B h"},
+        { "BBBBh", "BBBB h"},
+        { "a",     "a"},
+        { "b",     "b"},
+        { "B",     "B"}
     };
     UErrorCode status = U_ZERO_ERROR;
     DateTimePatternGenerator *gen = DateTimePatternGenerator::createEmptyInstance(status);

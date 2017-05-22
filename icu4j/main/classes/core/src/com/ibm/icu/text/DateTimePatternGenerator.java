@@ -549,35 +549,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private String getBestPattern(String skeleton, DateTimeMatcher skipMatcher, int options) {
         EnumSet<DTPGflags> flags = EnumSet.noneOf(DTPGflags.class);
         // Replace hour metacharacters 'j', 'C', and 'J', set flags as necessary
-        StringBuilder skeletonCopy = new StringBuilder(skeleton);
-        boolean inQuoted = false;
-        for (int patPos = 0; patPos < skeleton.length(); patPos++) {
-            char patChr = skeleton.charAt(patPos);
-            if (patChr == '\'') {
-                inQuoted = !inQuoted;
-            } else if (!inQuoted) {
-                if (patChr == 'j') {
-                    skeletonCopy.setCharAt(patPos, defaultHourFormatChar);
-                } else if (patChr == 'C') {
-                    String preferred = allowedHourFormats[0];
-                    skeletonCopy.setCharAt(patPos, preferred.charAt(0));
-                    // add to skeleton with #13183, no longer need to set special flags
-                    char last = preferred.charAt(preferred.length()-1);
-                    if (last=='b' || last=='B') {
-                        skeletonCopy.append(last);
-                    }
-                } else if (patChr == 'J') {
-                    // Get pattern for skeleton with H, then (in adjustFieldTypes)
-                    // replace H or k with defaultHourFormatChar
-                    skeletonCopy.setCharAt(patPos, 'H');
-                    flags.add(DTPGflags.SKELETON_USES_CAP_J);
-                }
-            }
-        }
-
+        String skeletonMapped = mapSkeletonMetacharacters(skeleton, flags);
         String datePattern, timePattern;
         synchronized(this) {
-            current.set(skeletonCopy.toString(), fp, false);
+            current.set(skeletonMapped, fp, false);
             PatternWithMatcher bestWithMatcher = getBestRaw(current, -1, _distanceInfo, skipMatcher);
             if (_distanceInfo.missingFieldMask == 0 && _distanceInfo.extraFieldMask == 0) {
                 // we have a good item. Adjust the field types
@@ -594,6 +569,70 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         if (timePattern == null) return datePattern;
         return SimpleFormatterImpl.formatRawPattern(
                 getDateTimeFormat(), 2, 2, timePattern, datePattern);
+    }
+
+    /*
+     * Map a skeleton that may have metacharacters jJC to one without, by replacing
+     * the metacharacters with locale-appropriate fields of of h/H/k/K and of a/b/B
+     * (depends on defaultHourFormatChar and allowedHourFormats being set, which in
+     * turn depends on initData having been run). This method also updates the flags
+     * as necessary. Returns the updated skeleton.
+     */
+    private String mapSkeletonMetacharacters(String skeleton, EnumSet<DTPGflags> flags) {
+        StringBuilder skeletonCopy = new StringBuilder();
+        boolean inQuoted = false;
+        for (int patPos = 0; patPos < skeleton.length(); patPos++) {
+            char patChr = skeleton.charAt(patPos);
+            if (patChr == '\'') {
+                inQuoted = !inQuoted;
+            } else if (!inQuoted) {
+                // Handle special mappings for 'j' and 'C' in which fields lengths
+                // 1,3,5 => hour field length 1
+                // 2,4,6 => hour field length 2
+                // 1,2 => abbreviated dayPeriod (field length 1..3)
+                // 3,4 => long dayPeriod (field length 4)
+                // 5,6 => narrow dayPeriod (field length 5)
+                if (patChr == 'j' || patChr == 'C') {
+                    int extraLen = 0; // 1 less than total field length
+                    while (patPos+1 < skeleton.length() && skeleton.charAt(patPos+1) == patChr) {
+                        extraLen++;
+                        patPos++;
+                    }
+                    int hourLen = 1 + (extraLen & 1);
+                    int dayPeriodLen = (extraLen < 2)? 1: 3 + (extraLen >> 1);
+                    char hourChar = 'h';
+                    char dayPeriodChar = 'a';
+                    if (patChr == 'j') {
+                        hourChar = defaultHourFormatChar;
+                    } else { // patChr == 'C'
+                        String preferred = allowedHourFormats[0];
+                        hourChar = preferred.charAt(0);
+                        // in #13183 just add b/B to skeleton, no longer need to set special flags
+                        char last = preferred.charAt(preferred.length()-1);
+                        if (last=='b' || last=='B') {
+                            dayPeriodChar = last;
+                        }
+                    }
+                    if (hourChar=='H' || hourChar=='k') {
+                        dayPeriodLen = 0;
+                    }
+                    while (dayPeriodLen-- > 0) {
+                        skeletonCopy.append(dayPeriodChar);
+                    }
+                     while (hourLen-- > 0) {
+                        skeletonCopy.append(hourChar);
+                    }
+                } else if (patChr == 'J') {
+                    // Get pattern for skeleton with H, then (in adjustFieldTypes)
+                    // replace H or k with defaultHourFormatChar
+                    skeletonCopy.append('H');
+                    flags.add(DTPGflags.SKELETON_USES_CAP_J);
+                } else {
+                    skeletonCopy.append(patChr);
+                }
+            }
+        }
+        return skeletonCopy.toString();
     }
 
     /**
