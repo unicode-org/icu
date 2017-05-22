@@ -55,7 +55,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
     @Test
     public void TestC() {
         String[][] tests = {
-                {"zh", "Cm", "Bh:mm"},
+                // These may change with actual data for Bhmm/bhmm skeletons
+                {"zh", "Cm", "h:mm B"},
                 {"de", "Cm", "HH:mm"},
                 {"en", "Cm", "h:mm a"},
                 {"en-BN", "Cm", "h:mm b"},

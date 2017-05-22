@@ -1093,7 +1093,8 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
     const int32_t numLocales = 6;
 
     const char* tests[numLocales][3] = {
-            {"zh", "Cm", "Bh:mm"},
+            // These may change with actual data for Bhmm/bhmm skeletons
+            {"zh", "Cm", "h:mm B"},
             {"de", "Cm", "HH:mm"},
             {"en", "Cm", "h:mm a"},
             {"en-BN", "Cm", "h:mm b"},
