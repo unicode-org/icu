@@ -373,7 +373,7 @@ or
     cd $ICU_SRC/icu4c/source/data/unidata
     cp confusables.txt confusablesWholeScript.txt NormalizationCorrections.txt NormalizationTest.txt SpecialCasing.txt UnicodeData.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
     cd ../../test/testdata
-    cp BidiCharacterTest.txt BidiTest.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
+    cp BidiCharacterTest.txt BidiTest.txt IdnaTest.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
     cp $UNICODE_DATA/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
 
 * run & fix ICU4J tests
