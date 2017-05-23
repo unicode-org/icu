@@ -633,7 +633,12 @@ en{
                 Year{"{0} {1}"}
             }
             availableFormats{
+                Bh{"h B"}
+                Bhm{"h:mm B"}
+                Bhms{"h:mm:ss B"}
                 E{"ccc"}
+                EBhm{"E h:mm B"}
+                EBhms{"E h:mm:ss B"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"d E"}
