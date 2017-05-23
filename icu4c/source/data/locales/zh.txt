@@ -1133,7 +1133,12 @@ zh{
                 Timezone{"{1}{0}"}
             }
             availableFormats{
+                Bh{"Bh时"}
+                Bhm{"Bh:mm"}
+                Bhms{"Bh:mm:ss"}
                 E{"ccc"}
+                EBhm{"EBh:mm"}
+                EBms{"EBh:mm:ss"}
                 EHm{"EHH:mm"}
                 EHms{"EHH:mm:ss"}
                 Ed{"d日E"}
