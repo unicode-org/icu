@@ -55,18 +55,90 @@ public class DateTimeGeneratorTest extends TestFmwk {
     @Test
     public void TestC() {
         String[][] tests = {
-                {"zh", "Cm", "Bh:mm"},
-                {"de", "Cm", "HH:mm"},
-                {"en", "Cm", "h:mm a"},
-                {"en-BN", "Cm", "h:mm b"},
-                {"gu-IN", "Cm", "h:mm B"},
-                {"und-IN", "Cm", "h:mm a"},
+                // These may change with actual data for Bhmm/bhmm skeletons
+                {"zh",     "Cm",      "Bh:mm"},
+                {"zh",     "CCm",     "Bhh:mm"},
+                {"zh",     "CCCm",    "BBBBh:mm"},
+                {"zh",     "CCCCm",   "BBBBhh:mm"},
+                {"zh",     "CCCCCm",  "BBBBBh:mm"},
+                {"zh",     "CCCCCCm", "BBBBBhh:mm"},
+                {"de",     "Cm",      "HH:mm"},
+                {"de",     "CCm",     "HH:mm"},
+                {"de",     "CCCm",    "HH:mm"},
+                {"de",     "CCCCm",   "HH:mm"},
+                {"en",     "Cm",      "h:mm a"},
+                {"en",     "CCm",     "hh:mm a"},
+                {"en",     "CCCm",    "h:mm aaaa"},
+                {"en",     "CCCCm",   "hh:mm aaaa"},
+                {"en",     "CCCCCm",  "h:mm aaaaa"},
+                {"en",     "CCCCCCm", "hh:mm aaaaa"},
+                {"en-BN",  "Cm",      "h:mm b"},
+                {"gu-IN",  "Cm",      "h:mm B"},
+                {"und-IN", "Cm",      "h:mm a"},
         };
         for (String[] test : tests) {
             DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(ULocale.forLanguageTag(test[0]));
             String skeleton = test[1];
-            String pattern = gen.getBestPattern(skeleton);
+            int options = DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH;
+            String pattern = gen.getBestPattern(skeleton, options);
             assertEquals(test[0] + "/" + skeleton, test[2], pattern);
+        }
+    }
+
+    @Test
+    public void TestSkeletonsWithDayPeriods() {
+        String[][] dataItems = {
+                // sample data in a locale (base is not in locale, just here for test)
+                // skel (base) pattern
+                { "aH", "H",  "H"  }, // should ignore a
+                { "h",  "ah", "h a"},
+                { "Bh", "Bh", "B h"},
+        };
+        String[][] testItems = {
+                // sample requested skeletons and results
+                // skel     pattern
+                { "H",      "H"},
+                { "HH",     "HH"},
+                { "aH",     "H"},
+                { "aHH",    "HH"},
+                { "BH",     "H"},
+                { "BHH",    "HH"},
+                { "BBBBH",  "H"},
+                { "h",      "h a"},
+                { "hh",     "hh a"},
+                { "ah",     "h a"},
+                { "ahh",    "hh a"},
+                { "aaaah",  "h aaaa"},
+                { "aaaahh", "hh aaaa"},
+                { "bh",     "h b"},
+                { "bhh",    "hh b"},
+                { "bbbbh",  "h bbbb"},
+                { "Bh",     "B h"},
+                { "Bhh",    "B hh"},
+                { "BBBBh",  "BBBB h"},
+                { "BBBBhh", "BBBB hh"},
+                { "a",      "a"},
+                { "aaaaa",  "aaaaa"},
+                { "b",      "b"},
+                { "bbbb",   "bbbb"},
+                { "B",      "B"},
+                { "BBBB",  "BBBB"},
+        };
+        DateTimePatternGenerator gen = DateTimePatternGenerator.getEmptyInstance();
+        DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
+        for (String[] dataItem : dataItems) {
+            gen.addPatternWithSkeleton(dataItem[2], dataItem[0], true, returnInfo);
+            String base = gen.getBaseSkeleton(dataItem[0]);
+            if (!base.equals(dataItem[1])) {
+                 errln("getBaseSkeleton for skeleton " + dataItem[0] + ", expected " + dataItem[1] +  ", got " + base);
+            }
+        }
+        for (String[] testItem : testItems) {
+            int options = DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH;
+            String pattern = gen.getBestPattern(testItem[0], options);
+            if (!pattern.equals(testItem[1])) {
+                 errln("getBestPattern  for skeleton " + testItem[0] + ", expected " + testItem[1] +  ", got " + pattern);
+            }
         }
     }
 
@@ -587,7 +659,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
     @Test
     public void TestVariableCharacters() {
-        UnicodeSet valid = new UnicodeSet("[G y Y u U r Q q M L l w W d D F g E e c a h H K k m s S A z Z O v V X x]");
+        UnicodeSet valid = new UnicodeSet("[G y Y u U r Q q M L l w W d D F g E e c a b B h H K k m s S A z Z O v V X x]");
         for (char c = 0; c < 0xFF; ++c) {
             boolean works = false;
             try {
