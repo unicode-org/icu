@@ -1015,8 +1015,8 @@ UTS46::checkLabelBiDi(const UChar *label, int32_t labelLength, IDNAInfo &info) c
     ) {
         info.isOkBiDi=FALSE;
     }
-    // Get the directionalities of the intervening characters.
-    uint32_t mask=0;
+    // Add the directionalities of the intervening characters.
+    uint32_t mask=firstMask|lastMask;
     while(i<labelLength) {
         U16_NEXT_UNSAFE(label, i, c);
         mask|=U_MASK(u_charDirection(c));
@@ -1045,7 +1045,7 @@ UTS46::checkLabelBiDi(const UChar *label, int32_t labelLength, IDNAInfo &info) c
     // label. [...]
     // The following rule, consisting of six conditions, applies to labels
     // in BIDI domain names.
-    if(((firstMask|mask|lastMask)&R_AL_AN_MASK)!=0) {
+    if((mask&R_AL_AN_MASK)!=0) {
         info.isBiDi=TRUE;
     }
 }

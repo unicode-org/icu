@@ -1493,65 +1493,63 @@ _code_point_re = re.compile("\s*([0-9a-fA-F]+)\s*;")
 
 def CopyAndStripWithOptionalMerge(s, t, do_merge):
   # TODO: We do not seem to need the do_merge argument and logic any more.
-  # TODO: With Python 2.7+, combine the two with statements into one.
-  with open(s, "r") as in_file:
-    with open(t, "w") as out_file:
-      first = -1  # First code point with first_data.
-      last = -1  # Last code point with first_data.
-      first_data = ""  # Common data for code points [first..last].
-      for line in in_file:
-        match = _strip_re.match(line)
+  with open(s, "r") as in_file, open(t, "w") as out_file:
+    first = -1  # First code point with first_data.
+    last = -1  # Last code point with first_data.
+    first_data = ""  # Common data for code points [first..last].
+    for line in in_file:
+      match = _strip_re.match(line)
+      if match:
+        line = match.group(1)
+      else:
+        line = line.rstrip()
+      if do_merge:
+        match = _code_point_re.match(line)
         if match:
-          line = match.group(1)
+          c = int(match.group(1), 16)
+          data = line[match.end() - 1:]
         else:
-          line = line.rstrip()
-        if do_merge:
-          match = _code_point_re.match(line)
-          if match:
-            c = int(match.group(1), 16)
-            data = line[match.end() - 1:]
+          c = -1
+          data = ""
+        if last >= 0 and (c != (last + 1) or data != first_data):
+          # output the current range
+          if first == last:
+            out_file.write("%04X%s\n" % (first, first_data))
           else:
-            c = -1
-            data = ""
-          if last >= 0 and (c != (last + 1) or data != first_data):
-            # output the current range
-            if first == last:
-              out_file.write("%04X%s\n" % (first, first_data))
-            else:
-              out_file.write("%04X..%04X%s\n" % (first, last, first_data))
-            first = -1
-            last = -1
-            first_data = ""
-          if c < 0:
-            # no data on this line, output as is
-            out_file.write(line)
-            out_file.write("\n")
-          else:
-            # data on this line, store for possible range compaction
-            if last < 0:
-              # set as the first line in a possible range
-              first = c
-              last = c
-              first_data = data
-            else:
-              # must be c == (last + 1) and data == first_data
-              # because of previous conditions
-              # continue with the current range
-              last = c
-        else:
-          # Only strip, don't merge: just output the stripped line.
+            out_file.write("%04X..%04X%s\n" % (first, last, first_data))
+          first = -1
+          last = -1
+          first_data = ""
+        if c < 0:
+          # no data on this line, output as is
           out_file.write(line)
           out_file.write("\n")
-      if do_merge and last >= 0:
-        # output the last range in the file
-        if first == last:
-          out_file.write("%04X%s\n" % (first, first_data))
         else:
-          out_file.write("%04X..%04X%s\n" % (first, last, first_data))
-        first = -1
-        last = -1
-        first_data = ""
-      out_file.flush()
+          # data on this line, store for possible range compaction
+          if last < 0:
+            # set as the first line in a possible range
+            first = c
+            last = c
+            first_data = data
+          else:
+            # must be c == (last + 1) and data == first_data
+            # because of previous conditions
+            # continue with the current range
+            last = c
+      else:
+        # Only strip, don't merge: just output the stripped line.
+        out_file.write(line)
+        out_file.write("\n")
+    if do_merge and last >= 0:
+      # output the last range in the file
+      if first == last:
+        out_file.write("%04X%s\n" % (first, first_data))
+      else:
+        out_file.write("%04X..%04X%s\n" % (first, last, first_data))
+      first = -1
+      last = -1
+      first_data = ""
+    out_file.flush()
   return t
 
 
@@ -1571,11 +1569,9 @@ def CopyAndStripAndMerge(s, t):
 
 
 def PrependBOM(s, t):
-  # TODO: With Python 2.7+, combine the two with statements into one.
-  with open(s, "r") as in_file:
-    with open(t, "w") as out_file:
-      out_file.write("\xef\xbb\xbf")  # UTF-8 BOM for ICU svn
-      shutil.copyfileobj(in_file, out_file)
+  with open(s, "r") as in_file, open(t, "w") as out_file:
+    out_file.write("\xef\xbb\xbf")  # UTF-8 BOM for ICU svn
+    shutil.copyfileobj(in_file, out_file)
   return t
 
 
@@ -1613,6 +1609,7 @@ _files = {
   "emoji-data.txt": (DontCopy, ParseNamedProperties),
   "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
   "GraphemeBreakTest.txt": (PrependBOM, "testdata"),
+  "IdnaTest.txt": (CopyOnly, "testdata"),
   "IndicPositionalCategory.txt": (DontCopy, ParseIndicPositionalCategory),
   "IndicSyllabicCategory.txt": (DontCopy, ParseIndicSyllabicCategory),
   "LineBreak.txt": (DontCopy, ParseLineBreak),

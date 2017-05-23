@@ -8,16 +8,21 @@
 */
 package com.ibm.icu.dev.test.normalizer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.IDNA;
 
 /**
@@ -413,8 +418,11 @@ public class UTS46Test extends TestFmwk {
         { "\u05D07\u05EA", "B", "\u05D07\u05EA", "" },
         { "\u05D0\u0667\u05EA", "B", "\u05D0\u0667\u05EA", "" },  // Arabic 7 in the middle
         { "a7\u0667z", "B", "a7\u0667z", "UIDNA_ERROR_BIDI" },  // AN digit in LTR
+        { "a7\u0667", "B", "a7\u0667", "UIDNA_ERROR_BIDI" },  // AN digit in LTR
         { "\u05D07\u0667\u05EA", "B",  // mixed EN/AN digits in RTL
           "\u05D07\u0667\u05EA", "UIDNA_ERROR_BIDI" },
+        { "\u05D07\u0667", "B",  // mixed EN/AN digits in RTL
+          "\u05D07\u0667", "UIDNA_ERROR_BIDI" },
         // ZWJ
         { "\u0BB9\u0BCD\u200D", "N", "\u0BB9\u0BCD\u200D", "" },  // Virama+ZWJ
         { "\u0BB9\u200D", "N", "\u0BB9\u200D", "UIDNA_ERROR_CONTEXTJ" },  // no Virama
@@ -713,6 +721,88 @@ public class UTS46Test extends TestFmwk {
                     continue;
                 }
             }
+        }
+    }
+
+    private void checkIdnaTestResult(String line, String type,
+            String expected, CharSequence result, IDNA.Info info) {
+        // An error in toUnicode or toASCII is indicated by a value in square brackets,
+        // such as "[B5 B6]".
+        boolean expectedHasErrors = !expected.isEmpty() && expected.charAt(0) == '[';
+        if (expectedHasErrors != info.hasErrors()) {
+            errln(String.format(
+                    "%s  expected errors %b != %b = actual has errors: %s\n    %s",
+                    type, expectedHasErrors, info.hasErrors(), info.getErrors(), line));
+        }
+        if (!expectedHasErrors && !UTF16Plus.equal(expected, result)) {
+            errln(String.format("%s  expected != actual\n    %s", type, line));
+            errln("    " + expected);
+            errln("    " + result);
+        }
+    }
+
+    @Test
+    public void IdnaTest() throws IOException {
+        BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTest.txt");
+        Pattern semi = Pattern.compile(";");
+        try {
+            String line;
+            while ((line = idnaTestFile.readLine()) != null) {
+                // Remove trailing comments and whitespace.
+                int commentStart = line.indexOf('#');
+                if (commentStart >= 0) {
+                    line = line.substring(0, commentStart);
+                }
+                String[] fields = semi.split(line, -1);
+                if (fields.length <= 1) {
+                    continue;  // Skip empty and comment-only lines.
+                }
+
+                // Column 1: type - T for transitional, N for nontransitional, B for both
+                String type = fields[0].trim();
+                char typeChar;
+                if (type.length() != 1 ||
+                        ((typeChar = type.charAt(0)) != 'B' && typeChar != 'N' && typeChar != 'T')) {
+                    errln("empty or unknown type field: " + line);
+                    return;
+                }
+
+                // Column 2: source - the source string to be tested
+                String source16 = Utility.unescape(fields[1].trim());
+
+                // Column 3: toUnicode - the result of applying toUnicode to the source.
+                // A blank value means the same as the source value.
+                String unicode16 = Utility.unescape(fields[2].trim());
+                if (unicode16.isEmpty()) {
+                    unicode16 = source16;
+                }
+
+                // Column 4: toASCII - the result of applying toASCII to the source, using the specified type.
+                // A blank value means the same as the toUnicode value.
+                String ascii16 = Utility.unescape(fields[3].trim());
+                if (ascii16.isEmpty()) {
+                    ascii16 = unicode16;
+                }
+
+                // Column 5: NV8 - present if the toUnicode value would not be a valid domain name under IDNA2008. Not a normative field.
+                // Ignored as long as we do not implement and test vanilla IDNA2008.
+
+                // ToASCII/ToUnicode, transitional/nontransitional
+                StringBuilder uN, aN, aT;
+                IDNA.Info uNInfo, aNInfo, aTInfo;
+                nontrans.nameToUnicode(source16, uN = new StringBuilder(), uNInfo = new IDNA.Info());
+                checkIdnaTestResult(line, "toUnicodeNontrans", unicode16, uN, uNInfo);
+                if (typeChar == 'T' || typeChar == 'B') {
+                    trans.nameToASCII(source16, aT = new StringBuilder(), aTInfo = new IDNA.Info());
+                    checkIdnaTestResult(line, "toASCIITrans", ascii16, aT, aTInfo);
+                }
+                if (typeChar == 'N' || typeChar == 'B') {
+                    nontrans.nameToASCII(source16, aN = new StringBuilder(), aNInfo = new IDNA.Info());
+                    checkIdnaTestResult(line, "toASCIINontrans", ascii16, aN, aNInfo);
+                }
+            }
+        } finally {
+            idnaTestFile.close();
         }
     }
 
