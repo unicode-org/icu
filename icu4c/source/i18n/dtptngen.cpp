@@ -1917,6 +1917,10 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
     for (i=0; i<UDATPG_FIELD_COUNT; ++i) {
         skeletonResult.type[i] = NONE;
     }
+    skeletonResult.original.clear();
+    skeletonResult.baseOriginal.clear();
+    skeletonResult.addedDefaultDayPeriod = FALSE;
+
     fp->set(pattern);
     for (i=0; i < fp->itemNumber; i++) {
         const UnicodeString& value = fp->items[i];
@@ -1955,6 +1959,7 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
                         skeletonResult.original.populate(UDATPG_DAYPERIOD_FIELD, dtTypes[i].patternChar, dtTypes[i].minLen);
                         skeletonResult.baseOriginal.populate(UDATPG_DAYPERIOD_FIELD, dtTypes[i].patternChar, dtTypes[i].minLen);
                         skeletonResult.type[UDATPG_DAYPERIOD_FIELD] = dtTypes[i].type;
+                        skeletonResult.addedDefaultDayPeriod = TRUE;
                         break;
                     }
                 }
@@ -2387,13 +2392,27 @@ PtnSkeleton::equals(const PtnSkeleton& other) const  {
 UnicodeString
 PtnSkeleton::getSkeleton() const {
     UnicodeString result;
-    return original.appendTo(result);
+    result = original.appendTo(result);
+    int32_t pos;
+    if (addedDefaultDayPeriod && (pos = result.indexOf(LOW_A)) >= 0) {
+        // for backward compatibility: if DateTimeMatcher.set added a single 'a' that
+        // was not in the provided skeleton, remove it here before returning skeleton.
+        result.remove(pos, 1);
+    }
+    return result;
 }
 
 UnicodeString
 PtnSkeleton::getBaseSkeleton() const {
     UnicodeString result;
-    return baseOriginal.appendTo(result);
+    result = baseOriginal.appendTo(result);
+    int32_t pos;
+    if (addedDefaultDayPeriod && (pos = result.indexOf(LOW_A)) >= 0) {
+        // for backward compatibility: if DateTimeMatcher.set added a single 'a' that
+        // was not in the provided skeleton, remove it here before returning skeleton.
+        result.remove(pos, 1);
+    }
+    return result;
 }
 
 UChar

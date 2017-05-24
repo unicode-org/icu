@@ -356,6 +356,16 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("MMMMMd"),
     };
 
+    const char* testGetSkeletonAndBase[][3] = {
+        // pattern       skeleton    baseSkeleton
+        { "dd-MMM",     "MMMdd",    "MMMd" },
+        { "dd/MMMM/yy", "yyMMMMdd", "yMMMMd" },
+        { "h",          "h",        "h" },
+        { "ah",         "ah",       "ah" },
+        { "aaaah",      "aaaah",    "aaaah" },
+        { "Bh",         "Bh",       "Bh" }
+    };
+
     UnicodeString newDecimal(" "); // space
     UnicodeString newAppendItemName("hrs.");
     UnicodeString newAppendItemFormat("{1} {0}");
@@ -511,34 +521,25 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
 
     // ======== Test getSkeleton and getBaseSkeleton
-    status = U_ZERO_ERROR;
-    pattern = UnicodeString("dd-MMM");
-    UnicodeString expectedSkeleton = UnicodeString("MMMdd");
-    UnicodeString expectedBaseSkeleton = UnicodeString("MMMd");
-    UnicodeString retSkeleton = gen->getSkeleton(pattern, status);
-    if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
-         errln("ERROR: Unexpected result from getSkeleton().\n");
-         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
-    }
-    retSkeleton = gen->getBaseSkeleton(pattern, status);
-    if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
-         errln("ERROR: Unexpected result from getBaseSkeleton().\n");
-         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
+    
+    int32_t i, count = UPRV_LENGTHOF(testGetSkeletonAndBase);
+    for (i = 0; i < count; i++) {
+        status = U_ZERO_ERROR;
+        pattern                            = UnicodeString(testGetSkeletonAndBase[i][0]);
+        UnicodeString expectedSkeleton     = UnicodeString(testGetSkeletonAndBase[i][1]);
+        UnicodeString expectedBaseSkeleton = UnicodeString(testGetSkeletonAndBase[i][2]);
+        UnicodeString retSkeleton = gen->getSkeleton(pattern, status);
+		if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
+			 errln("ERROR: Unexpected result from getSkeleton().\n");
+			 errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
+		}
+		retSkeleton = gen->getBaseSkeleton(pattern, status);
+		if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
+			 errln("ERROR: Unexpected result from getBaseSkeleton().\n");
+			 errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
+		}
     }
 
-    pattern = UnicodeString("dd/MMMM/yy");
-    expectedSkeleton = UnicodeString("yyMMMMdd");
-    expectedBaseSkeleton = UnicodeString("yMMMMd");
-    retSkeleton = gen->getSkeleton(pattern, status);
-    if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
-         errln("ERROR: Unexpected result from getSkeleton().\n");
-         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
-    }
-    retSkeleton = gen->getBaseSkeleton(pattern, status);
-    if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
-         errln("ERROR: Unexpected result from getBaseSkeleton().\n");
-         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
-    }
     delete format;
     delete zone;
     delete gen;
@@ -711,7 +712,6 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         return;
     }
     UChar newChar;
-    int32_t i;
     for (i=0; i<10; ++i) {
         UnicodeString randomSkeleton;
         int32_t len = rand() % 20;
@@ -771,7 +771,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
     UnicodeString returnPattern, *ptrSkeleton;
     ptrSkeletonEnum->reset(status);
-    int32_t count=ptrSkeletonEnum->count(status);
+    count=ptrSkeletonEnum->count(status);
     for (i=0; i<count; ++i) {
         ptrSkeleton = (UnicodeString *)ptrSkeletonEnum->snext(status);
         returnPattern = test->getPatternForSkeleton(*ptrSkeleton);
@@ -1137,14 +1137,14 @@ enum { kCharBufMax = 31 };
 void IntlTestDateTimePatternGeneratorAPI::testSkeletonsWithDayPeriods() {
     const char * patterns[] = {
         // since icu4c getEmptyInstance does not call addCanonicalItems (unlike J), set these here:
-        "a",    // should get skeleton a
-        "H",    // should get skeleton H
-        "m",    // should get skeleton m
-        "s",    // should get skeleton s
+        "a",    // should get internal skeleton a
+        "H",    // should get internalskeleton H
+        "m",    // should get internalskeleton m
+        "s",    // should get internalskeleton s
         // patterns from which to construct sample data for a locale
-        //"H",    // should get skeleton H
-        "h a",  // should get skeleton ah
-        "B h",  // should get skeleton Bh
+        //"H",  // should get internalskeleton H
+        "h a",  // should get internalskeleton ah
+        "B h",  // should get internalskeleton Bh
     };
     const char* testItems[][2] = {
         // sample requested skeletons and results

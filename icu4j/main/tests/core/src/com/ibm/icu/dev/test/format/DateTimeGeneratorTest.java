@@ -91,7 +91,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 // sample data in a locale (base is not in locale, just here for test)
                 // skel (base) pattern
                 { "aH", "H",  "H"  }, // should ignore a
-                { "h",  "ah", "h a"},
+                { "h",  "h",  "h a"},
                 { "Bh", "Bh", "B h"},
         };
         String[][] testItems = {
@@ -871,8 +871,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
     @Test
     public void TestGetSkeleton(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
-        String[] cases = {"MMDD","MMMDD","MMM-DD","DD/MMM","ddM","MMMMd"};
-        String[] results = {"MMDD","MMMDD","MMMDD","MMMDD","Mdd","MMMMd"};
+        String[] cases = {"MMDD","MMMDD","MMM-DD","DD/MMM","ddM","MMMMd","h","ah","aaaah","Bh"};
+        String[] results = {"MMDD","MMMDD","MMMDD","MMMDD","Mdd","MMMMd","h","ah","aaaah","Bh"};
         for(int i=0; i<cases.length; i++){
             if(!dtpg.getSkeleton(cases[i]).equals(results[i])){
                 errln("DateTimePatternGenerator.getSkeleton(String) did " +

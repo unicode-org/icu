@@ -156,6 +156,7 @@ public:
     int32_t type[UDATPG_FIELD_COUNT];
     SkeletonFields original;
     SkeletonFields baseOriginal;
+    UBool addedDefaultDayPeriod;
 
     PtnSkeleton();
     PtnSkeleton(const PtnSkeleton& other);
