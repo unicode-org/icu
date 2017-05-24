@@ -2353,19 +2353,30 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         @Override
         public String toString() {
-            return appendTo(new StringBuilder()).toString();
+            return appendTo(new StringBuilder(), false, false).toString();
+        }
+
+        public String toString(boolean skipDayPeriod) {
+            return appendTo(new StringBuilder(), false, skipDayPeriod).toString();
         }
 
         public String toCanonicalString() {
-            return appendTo(new StringBuilder(), true).toString();
+            return appendTo(new StringBuilder(), true, false).toString();
+        }
+
+        public String toCanonicalString(boolean skipDayPeriod) {
+            return appendTo(new StringBuilder(), true, skipDayPeriod).toString();
         }
 
         public StringBuilder appendTo(StringBuilder sb) {
-            return appendTo(sb, false);
+            return appendTo(sb, false, false);
         }
 
-        private StringBuilder appendTo(StringBuilder sb, boolean canonical) {
+        private StringBuilder appendTo(StringBuilder sb, boolean canonical, boolean skipDayPeriod) {
             for (int i=0; i<TYPE_LIMIT; ++i) {
+                if (skipDayPeriod && i == DAYPERIOD) {
+                    continue;
+                }
                 appendFieldTo(i, sb, canonical);
             }
             return sb;
@@ -2421,6 +2432,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         private int[] type = new int[TYPE_LIMIT];
         private SkeletonFields original = new SkeletonFields();
         private SkeletonFields baseOriginal = new SkeletonFields();
+        private boolean addedDefaultDayPeriod = false;
 
         // just for testing; fix to make multi-threaded later
         // private static FormatParser fp = new FormatParser();
@@ -2431,18 +2443,27 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         @Override
         public String toString() {
-            return original.toString();
+            // for backward compatibility: addedDefaultDayPeriod true => DateTimeMatcher.set
+            // added a single 'a' that was not in the provided skeleton, and it will be
+            // removed when generating the skeleton to return.
+            return original.toString(addedDefaultDayPeriod);
         }
 
         // returns a string like toString but using the canonical character for most types,
         // e.g. M for M or L, E for E or c, y for y or U, etc. The hour field is canonicalized
         // to 'H' (for 24-hour types) or 'h' (for 12-hour types)
         public String toCanonicalString() {
-            return original.toCanonicalString();
+            // for backward compatibility: addedDefaultDayPeriod true => DateTimeMatcher.set
+            // added a single 'a' that was not in the provided skeleton, and it will be
+            // removed when generating the skeleton to return.
+            return original.toCanonicalString(addedDefaultDayPeriod);
         }
 
         String getBasePattern() {
-            return baseOriginal.toString();
+            // for backward compatibility: addedDefaultDayPeriod true => DateTimeMatcher.set
+            // added a single 'a' that was not in the provided skeleton, and it will be
+            // removed when generating the skeleton to return.
+            return baseOriginal.toString(addedDefaultDayPeriod);
         }
 
         DateTimeMatcher set(String pattern, FormatParser fp, boolean allowDuplicateFields) {
@@ -2450,6 +2471,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             Arrays.fill(type, NONE);
             original.clear();
             baseOriginal.clear();
+            addedDefaultDayPeriod = false;
 
             fp.set(pattern);
             for (Object obj : fp.getItems()) {
@@ -2499,6 +2521,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                                 original.populate(DAYPERIOD, (char)row[0], row[3]);
                                 baseOriginal.populate(DAYPERIOD, (char)row[0], row[3]);
                                 type[DAYPERIOD] = row[2];
+                                addedDefaultDayPeriod = true;
                                 break;
                             }
                         }
