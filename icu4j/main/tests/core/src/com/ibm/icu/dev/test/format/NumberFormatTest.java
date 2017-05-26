@@ -5285,6 +5285,33 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void testParseVeryVeryLargeExponent() {
+        DecimalFormat df = new DecimalFormat();
+        ParsePosition ppos = new ParsePosition(0);
+
+        Object[][] cases = {
+                {"1.2E+1234567890", Double.POSITIVE_INFINITY},
+                {"1.2E+999999999", new com.ibm.icu.math.BigDecimal("1.2E+999999999")},
+                {"1.2E+1000000000", Double.POSITIVE_INFINITY},
+                {"-1.2E+999999999", new com.ibm.icu.math.BigDecimal("-1.2E+999999999")},
+                {"-1.2E+1000000000", Double.NEGATIVE_INFINITY},
+                {"1.2E-999999999", new com.ibm.icu.math.BigDecimal("1.2E-999999999")},
+                {"1.2E-1000000000", 0.0},
+                {"-1.2E-999999999", new com.ibm.icu.math.BigDecimal("-1.2E-999999999")},
+                {"-1.2E-1000000000", -0.0},
+
+        };
+
+        for (Object[] cas : cases) {
+            ppos.setIndex(0);
+            String input = (String) cas[0];
+            Number expected = (Number) cas[1];
+            Number actual = df.parse(input, ppos);
+            assertEquals(input, expected, actual);
+        }
+    }
+
+    @Test
     public void testParseGroupingMode() {
         ULocale[] locales = {         // GROUPING   DECIMAL
                 new ULocale("en-US"), // comma      period
