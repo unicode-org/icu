@@ -1809,6 +1809,8 @@ The leftmost codepage (.xxx) wins.
         }
 
         // Now normalize the resulting name
+        correctedPOSIXLocale = static_cast<char *>(uprv_malloc(POSIX_LOCALE_CAPACITY + 1));
+        /* TODO: Should we just exit on memory allocation failure? */
         if (correctedPOSIXLocale)
         {
             int32_t posixLen = uloc_canonicalize(modifiedWindowsLocale, correctedPOSIXLocale, POSIX_LOCALE_CAPACITY, &status);
