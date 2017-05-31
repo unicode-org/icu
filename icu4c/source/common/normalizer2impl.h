@@ -35,6 +35,9 @@ U_NAMESPACE_BEGIN
 
 struct CanonIterData;
 
+class ByteSink;
+class Edits;
+
 class U_COMMON_API Hangul {
 public:
     /* Korean Hangul and Jamo constants */
@@ -135,6 +138,7 @@ public:
     uint8_t getLastCC() const { return lastCC; }
 
     UBool equals(const UChar *start, const UChar *limit) const;
+    UBool equals(const uint8_t *otherStart, const uint8_t *otherLimit) const;
 
     // For Hangul composition, replacing the Leading consonant Jamo with the syllable.
     void setLastChar(UChar c) {
@@ -457,6 +461,12 @@ public:
                           UnicodeString &safeMiddle,
                           ReorderingBuffer &buffer,
                           UErrorCode &errorCode) const;
+
+    UBool composeUTF8(uint32_t options,
+                      const uint8_t *src, const uint8_t *limit,
+                      UBool onlyContiguous, UBool doCompose,
+                      ByteSink &sink, icu::Edits *edits, UErrorCode &errorCode) const;
+
     const UChar *makeFCD(const UChar *src, const UChar *limit,
                          ReorderingBuffer *buffer, UErrorCode &errorCode) const;
     void makeFCDAndAppend(const UChar *src, const UChar *limit,
@@ -568,12 +578,21 @@ private:
     UBool decompose(UChar32 c, uint16_t norm16,
                     ReorderingBuffer &buffer, UErrorCode &errorCode) const;
 
+    const uint8_t *decomposeShort(const uint8_t *src, const uint8_t *limit,
+                                  UBool stopAtCompBoundary, ReorderingBuffer &buffer,
+                                  UErrorCode &errorCode) const;
+
     static int32_t combine(const uint16_t *list, UChar32 trail);
     void addComposites(const uint16_t *list, UnicodeSet &set) const;
     void recompose(ReorderingBuffer &buffer, int32_t recomposeStartIndex,
                    UBool onlyContiguous) const;
 
+    int32_t getCompProps(const uint8_t *src, const uint8_t *limit,
+                         uint16_t norm16, UBool onlyContiguous) const;
+
     UBool hasCompBoundaryBefore(UChar32 c, uint16_t norm16) const;
+    UBool hasCompBoundaryBefore(const uint8_t *src, const uint8_t *limit) const;
+
     const UChar *findPreviousCompBoundary(const UChar *start, const UChar *p) const;
     const UChar *findNextCompBoundary(const UChar *p, const UChar *limit) const;
 

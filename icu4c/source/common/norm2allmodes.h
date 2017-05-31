@@ -18,6 +18,7 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
+#include "unicode/edits.h"
 #include "unicode/normalizer2.h"
 #include "unicode/unistr.h"
 #include "cpputils.h"
@@ -228,6 +229,22 @@ private:
         impl.compose(src, limit, onlyContiguous, TRUE, buffer, errorCode);
     }
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
+
+    void
+    normalizeUTF8(uint32_t options, StringPiece src, ByteSink &sink,
+                  Edits *edits, UErrorCode &errorCode) const override {
+        if (U_FAILURE(errorCode)) {
+            return;
+        }
+        if (edits != nullptr) {
+            edits->reset();
+        }
+        const uint8_t *s = reinterpret_cast<const uint8_t *>(src.data());
+        impl.composeUTF8(options, s, s + src.length(),
+                         onlyContiguous, TRUE, sink, edits, errorCode);
+        sink.Flush();
+    }
+
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,

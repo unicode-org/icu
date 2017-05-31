@@ -14,6 +14,7 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
+#include "unicode/normalizer2.h"
 #include "unicode/normlzr.h"
 #include "intltest.h"
 
@@ -21,6 +22,7 @@ typedef struct _FileStream FileStream;
 
 class NormalizerConformanceTest : public IntlTest {
     Normalizer normalizer;
+    const Normalizer2 *nfc, *nfd, *nfkc, *nfkd;
 
  public:
     NormalizerConformanceTest();
@@ -63,6 +65,11 @@ class NormalizerConformanceTest : public IntlTest {
                            int32_t options,
                            UErrorCode &status);
 
+    UBool checkNorm(UNormalizationMode mode, int32_t options,
+                    const Normalizer2 *norm2,
+                    const UnicodeString &s, const UnicodeString &exp,
+                    int32_t field);
+
     void iterativeNorm(const UnicodeString& str,
                        UNormalizationMode mode, int32_t options,
                        UnicodeString& result,
@@ -70,18 +77,18 @@ class NormalizerConformanceTest : public IntlTest {
 
     /**
      * @param op name of normalization form, e.g., "KC"
+     * @param op2 name of test case variant, e.g., "(-1)"
      * @param s string being normalized
      * @param got value received
      * @param exp expected value
      * @param msg description of this test
      * @param return true if got == exp
      */
-    UBool assertEqual(const char *op,
+    UBool assertEqual(const char *op, const char *op2,
                       const UnicodeString& s,
                       const UnicodeString& got,
                       const UnicodeString& exp,
-                      const char *msg,
-                      int32_t field);
+                      const char *msg);
 
     /**
      * Split a string into pieces based on the given delimiter

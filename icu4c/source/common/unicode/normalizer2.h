@@ -28,11 +28,14 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
+#include "unicode/stringpiece.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "unicode/unorm2.h"
 
 U_NAMESPACE_BEGIN
+
+class ByteSink;
 
 /**
  * Unicode normalization functionality for standard Unicode normalization or
@@ -215,6 +218,34 @@ public:
     normalize(const UnicodeString &src,
               UnicodeString &dest,
               UErrorCode &errorCode) const = 0;
+
+    /**
+     * Normalizes a UTF-8 string and optionally records how source substrings
+     * relate to changed and unchanged result substrings.
+     *
+     * Currently implemented completely only for "compose" modes,
+     * such as for NFC, NFKC, and NFKC_Casefold
+     * (UNORM2_COMPOSE and UNORM2_COMPOSE_CONTIGUOUS).
+     * Otherwise currently converts to & from UTF-16 and does not support edits.
+     *
+     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT.
+     * @param src       Source UTF-8 string.
+     * @param sink      A ByteSink to which the normalized UTF-8 result string is written.
+     *                  sink.Flush() is called at the end.
+     * @param edits     Records edits for index mapping, working with styled text,
+     *                  and getting only changes (if any).
+     *                  The Edits contents is undefined if any error occurs.
+     *                  This function calls edits->reset() first. edits can be nullptr.
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @internal ICU 60 technology preview, may be changed or removed in the future
+     */
+    virtual void
+    normalizeUTF8(uint32_t options, StringPiece src, ByteSink &sink,
+                  Edits *edits, UErrorCode &errorCode) const;
+
     /**
      * Appends the normalized form of the second string to the first string
      * (merging them at the boundary) and returns the first string.
