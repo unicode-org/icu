@@ -13,7 +13,7 @@
 
   <groupId>com.ibm.icu</groupId>
   <artifactId>icu4j</artifactId>
-  <version>59.1</version>
+  <version>60-SNAPSHOT</version>
 
   <name>ICU4J</name>
   <description>

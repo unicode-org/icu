@@ -12,10 +12,10 @@
 
 ##############################################################################
 # Keep the following in sync with the version - see common/unicode/uvernum.h
-U_ICUDATA_NAME=icudt59
+U_ICUDATA_NAME=icudt60
 ##############################################################################
 !IF "$(UWP)" == "UWP"
-U_ICUDATA_NAME=icudt
+U_ICUDATA_NAME=icudt60
 !ENDIF
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=10.0
