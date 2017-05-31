@@ -113,7 +113,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <OutputFile>..\..\..\bin\icutu59.dll</OutputFile>
+      <OutputFile>..\..\..\bin\icutu60.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\..\..\..\lib\icutu.pdb</ProgramDatabaseFile>
@@ -158,7 +158,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <OutputFile>..\..\..\bin\icutu59d.dll</OutputFile>
+      <OutputFile>..\..\..\bin\icutu60d.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -201,7 +201,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <OutputFile>..\..\..\bin64\icutu59.dll</OutputFile>
+      <OutputFile>..\..\..\bin64\icutu60.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\..\..\..\lib64\icutu.pdb</ProgramDatabaseFile>
@@ -244,7 +244,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <OutputFile>..\..\..\bin64\icutu59d.dll</OutputFile>
+      <OutputFile>..\..\..\bin64\icutu60d.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
