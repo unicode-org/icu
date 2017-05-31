@@ -11,7 +11,10 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
+#include <string>
+#include "unicode/bytestream.h"
 #include "unicode/uchar.h"
+#include "unicode/normalizer2.h"
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
 #include "unicode/putil.h"
@@ -19,32 +22,28 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "normconf.h"
+#include "uassert.h"
 #include <stdio.h>
 
-#define CASE(id,test,exec) case id:                          \
-                          name = #test;                 \
-                          if (exec) {                   \
-                              logln(#test "---");       \
-                              logln((UnicodeString)""); \
-                              test();                   \
-                          }                             \
-                          break
-
 void NormalizerConformanceTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/) {
-    switch (index) {
-        CASE(0, TestConformance, exec);
-#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
-        CASE(1, TestConformance32, exec);
-#endif
-        // CASE(2, TestCase6);
-        default: name = ""; break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestConformance);
+    TESTCASE_AUTO(TestConformance32);
+    TESTCASE_AUTO(TestCase6);
+    TESTCASE_AUTO_END;
 }
 
 #define FIELD_COUNT 5
 
 NormalizerConformanceTest::NormalizerConformanceTest() :
-    normalizer(UnicodeString(), UNORM_NFC) {}
+        normalizer(UnicodeString(), UNORM_NFC) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    nfc = Normalizer2::getNFCInstance(errorCode);
+    nfd = Normalizer2::getNFDInstance(errorCode);
+    nfkc = Normalizer2::getNFKCInstance(errorCode);
+    nfkd = Normalizer2::getNFKDInstance(errorCode);
+    U_ASSERT(U_SUCCESS(errorCode));
+}
 
 NormalizerConformanceTest::~NormalizerConformanceTest() {}
 
@@ -300,56 +299,17 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
                                                   int32_t options,
                                                   UErrorCode &status) {
     UBool pass = TRUE, result;
-    //UErrorCode status = U_ZERO_ERROR;
     UnicodeString out, fcd;
     int32_t fieldNum;
 
     for (int32_t i=0; i<FIELD_COUNT; ++i) {
         fieldNum = i+1;
         if (i<3) {
-            Normalizer::normalize(field[i], UNORM_NFC, options, out, status);
-            if (U_FAILURE(status)) {
-                dataerrln("Error running normalize UNORM_NFC: %s", u_errorName(status));
-            } else {
-                pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c", fieldNum);
-                iterativeNorm(field[i], UNORM_NFC, options, out, +1);
-                pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c", fieldNum);
-                iterativeNorm(field[i], UNORM_NFC, options, out, -1);
-                pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c", fieldNum);
-            }
-
-            Normalizer::normalize(field[i], UNORM_NFD, options, out, status);
-            if (U_FAILURE(status)) {
-                dataerrln("Error running normalize UNORM_NFD: %s", u_errorName(status));
-            } else {
-                pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c", fieldNum);
-                iterativeNorm(field[i], UNORM_NFD, options, out, +1);
-                pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c", fieldNum);
-                iterativeNorm(field[i], UNORM_NFD, options, out, -1);
-                pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c", fieldNum);
-            }
+            pass &= checkNorm(UNORM_NFC, options, nfc, field[i], field[1], fieldNum);
+            pass &= checkNorm(UNORM_NFD, options, nfd, field[i], field[2], fieldNum);
         }
-        Normalizer::normalize(field[i], UNORM_NFKC, options, out, status);
-        if (U_FAILURE(status)) {
-            dataerrln("Error running normalize UNORM_NFKC: %s", u_errorName(status));
-        } else {
-            pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c", fieldNum);
-            iterativeNorm(field[i], UNORM_NFKC, options, out, +1);
-            pass &= assertEqual("KC(+1)", field[i], out, field[3], "c4!=KC(c", fieldNum);
-            iterativeNorm(field[i], UNORM_NFKC, options, out, -1);
-            pass &= assertEqual("KC(-1)", field[i], out, field[3], "c4!=KC(c", fieldNum);
-        }
-
-        Normalizer::normalize(field[i], UNORM_NFKD, options, out, status);
-        if (U_FAILURE(status)) {
-            dataerrln("Error running normalize UNORM_NFKD: %s", u_errorName(status));
-        } else {
-            pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c", fieldNum);
-            iterativeNorm(field[i], UNORM_NFKD, options, out, +1);
-            pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
-            iterativeNorm(field[i], UNORM_NFKD, options, out, -1);
-            pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
-        }
+        pass &= checkNorm(UNORM_NFKC, options, nfkc, field[i], field[3], fieldNum);
+        pass &= checkNorm(UNORM_NFKD, options, nfkd, field[i], field[4], fieldNum);
     }
     compare(field[1],field[2]);
     compare(field[0],field[1]);
@@ -444,6 +404,66 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
     return pass;
 }
 
+static const char *const kModeStrings[UNORM_MODE_COUNT] = {
+    "?", "D", "KD", "C", "KC", "FCD"
+};
+
+static const char *const kMessages[UNORM_MODE_COUNT] = {
+    "?!=?", "c3!=D(c%d)", "c5!=KC(c%d)", "c2!=C(c%d)", "c4!=KC(c%d)", "FCD"
+};
+
+UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t options,
+                                           const Normalizer2 *norm2,
+                                           const UnicodeString &s, const UnicodeString &exp,
+                                           int32_t field) {
+    const char *modeString = kModeStrings[mode];
+    char msg[20];
+    snprintf(msg, sizeof(msg), kMessages[mode], field);
+    UnicodeString out;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    Normalizer::normalize(s, mode, options, out, errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln("Error running normalize UNORM_NF%s: %s", modeString, u_errorName(errorCode));
+        return FALSE;
+    }
+    if (!assertEqual(modeString, "", s, out, exp, msg)) {
+        return FALSE;
+    }
+
+    iterativeNorm(s, mode, options, out, +1);
+    if (!assertEqual(modeString, "(+1)", s, out, exp, msg)) {
+        return FALSE;
+    }
+
+    iterativeNorm(s, mode, options, out, -1);
+    if (!assertEqual(modeString, "(-1)", s, out, exp, msg)) {
+        return FALSE;
+    }
+
+    if (norm2 == nullptr || options != 0) {
+        return TRUE;
+    }
+
+    std::string s8;
+    s.toUTF8String(s8);
+    std::string exp8;
+    exp.toUTF8String(exp8);
+    std::string out8;
+    StringByteSink<std::string> sink(&out8);
+    norm2->normalizeUTF8(0, s8, sink, nullptr, errorCode);
+    if (U_FAILURE(errorCode)) {
+        errln("Normalizer2.%s.normalizeUTF8(%s) failed: %s",
+              modeString, s8.c_str(), u_errorName(errorCode));
+        return FALSE;
+    }
+    if (out8 != exp8) {
+        errln("Normalizer2.%s.normalizeUTF8(%s)=%s != %s",
+              modeString, s8.c_str(), out8.c_str(), exp8.c_str());
+        return FALSE;
+    }
+    return TRUE;
+}
+
 /**
  * Do a normalization using the iterative API in the given direction.
  * @param dir either +1 or -1
@@ -475,21 +495,11 @@ void NormalizerConformanceTest::iterativeNorm(const UnicodeString& str,
     }
 }
 
-/**
- * @param op name of normalization form, e.g., "KC"
- * @param s string being normalized
- * @param got value received
- * @param exp expected value
- * @param msg description of this test
- * @param return true if got == exp
- */
-UBool NormalizerConformanceTest::assertEqual(const char *op,
+UBool NormalizerConformanceTest::assertEqual(const char *op, const char *op2,
                                              const UnicodeString& s,
                                              const UnicodeString& got,
                                              const UnicodeString& exp,
-                                             const char *msg,
-                                             int32_t field)
-{
+                                             const char *msg) {
     if (exp == got)
         return TRUE;
 
@@ -509,7 +519,7 @@ UBool NormalizerConformanceTest::assertEqual(const char *op,
     expPretty.extract(0, expPretty.length(), expChars, expPretty.length() + 1);
     expChars[expPretty.length()] = 0;
 
-    errln("    %s%d)%s(%s)=%s, exp. %s", msg, field, op, sChars, gotChars, expChars);
+    errln("    %s: %s%s(%s)=%s, exp. %s", msg, op, op2, sChars, gotChars, expChars);
 
     delete []sChars;
     delete []gotChars;
