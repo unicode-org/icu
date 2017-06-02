@@ -13,6 +13,7 @@
 
 #include <string>
 #include "unicode/bytestream.h"
+#include "unicode/edits.h"
 #include "unicode/uchar.h"
 #include "unicode/normalizer2.h"
 #include "unicode/normlzr.h"
@@ -449,8 +450,10 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
     std::string exp8;
     exp.toUTF8String(exp8);
     std::string out8;
+    Edits edits;
+    Edits *editsPtr = (mode == UNORM_NFC || mode == UNORM_NFKC) ? &edits : nullptr;
     StringByteSink<std::string> sink(&out8);
-    norm2->normalizeUTF8(0, s8, sink, nullptr, errorCode);
+    norm2->normalizeUTF8(0, s8, sink, editsPtr, errorCode);
     if (U_FAILURE(errorCode)) {
         errln("Normalizer2.%s.normalizeUTF8(%s) failed: %s",
               modeString, s8.c_str(), u_errorName(errorCode));
@@ -461,7 +464,20 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
               modeString, s8.c_str(), out8.c_str(), exp8.c_str());
         return FALSE;
     }
-    return TRUE;
+    if (editsPtr == nullptr) {
+        return TRUE;
+    }
+
+    // Do the Edits cover the entire input & output?
+    UBool pass = TRUE;
+    pass &= assertEquals("edits.hasChanges()", (UBool)(s8 != out8), edits.hasChanges());
+    pass &= assertEquals("edits.lengthDelta()",
+                         (int32_t)(out8.length() - s8.length()), edits.lengthDelta());
+    Edits::Iterator iter = edits.getCoarseIterator();
+    while (iter.next(errorCode)) {}
+    pass &= assertEquals("edits source length", s8.length(), iter.sourceIndex());
+    pass &= assertEquals("edits destination length", out8.length(), iter.destinationIndex());
+    return pass;
 }
 
 /**
