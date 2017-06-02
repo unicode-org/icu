@@ -52,10 +52,10 @@ http://www.unicode.org/reports/tr44/tr44-19.html
 * Command-line environment setup
 
 UNICODE_DATA=~/unidata/uni10/20170503
-CLDR_SRC=~/svn.cldr/uni10
-ICU_ROOT=~/svn.icu/uni10
+CLDR_SRC=~/svn.cldr/trunk
+ICU_ROOT=~/svn.icu/trunk
 ICU_SRC=$ICU_ROOT/src
-ICUDT=icudt59b
+ICUDT=icudt60b
 ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
 ICU4C_UNIDATA=$ICU_SRC/icu4c/source/data/unidata
 export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
