@@ -13,6 +13,7 @@
 #include "unicode/uchar.h"
 #include "unicode/errorcode.h"
 #include "unicode/normlzr.h"
+#include "unicode/ucasemap.h"  // UCASEMAP_OMIT_UNCHANGED_TEXT
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/schriter.h"
@@ -20,48 +21,41 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "normalizer2impl.h"
+#include "testutil.h"
 #include "tstnorm.h"
 
 #define ARRAY_LENGTH(array) UPRV_LENGTHOF(array)
 
-#define CASE(id,test) case id:                          \
-                          name = #test;                 \
-                          if (exec) {                   \
-                              logln(#test "---");       \
-                              logln((UnicodeString)""); \
-                              test();                   \
-                          }                             \
-                          break
-
-static UErrorCode status = U_ZERO_ERROR;
-
 void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
                                          const char* &name, char* /*par*/) {
-    switch (index) {
-        CASE(0,TestDecomp);
-        CASE(1,TestCompatDecomp);
-        CASE(2,TestCanonCompose);
-        CASE(3,TestCompatCompose);
-        CASE(4,TestPrevious);
-        CASE(5,TestHangulDecomp);
-        CASE(6,TestHangulCompose);
-        CASE(7,TestTibetan);
-        CASE(8,TestCompositionExclusion);
-        CASE(9,TestZeroIndex);
-        CASE(10,TestVerisign);
-        CASE(11,TestPreviousNext);
-        CASE(12,TestNormalizerAPI);
-        CASE(13,TestConcatenate);
-        CASE(14,FindFoldFCDExceptions);
-        CASE(15,TestCompare);
-        CASE(16,TestSkippable);
-#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
-        CASE(17,TestCustomComp);
-        CASE(18,TestCustomFCC);
-#endif
-        CASE(19,TestFilteredNormalizer2Coverage);
-        default: name = ""; break;
+    if(exec) {
+        logln("TestSuite BasicNormalizerTest: ");
     }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestDecomp);
+    TESTCASE_AUTO(TestCompatDecomp);
+    TESTCASE_AUTO(TestCanonCompose);
+    TESTCASE_AUTO(TestCompatCompose);
+    TESTCASE_AUTO(TestPrevious);
+    TESTCASE_AUTO(TestHangulDecomp);
+    TESTCASE_AUTO(TestHangulCompose);
+    TESTCASE_AUTO(TestTibetan);
+    TESTCASE_AUTO(TestCompositionExclusion);
+    TESTCASE_AUTO(TestZeroIndex);
+    TESTCASE_AUTO(TestVerisign);
+    TESTCASE_AUTO(TestPreviousNext);
+    TESTCASE_AUTO(TestNormalizerAPI);
+    TESTCASE_AUTO(TestConcatenate);
+    TESTCASE_AUTO(FindFoldFCDExceptions);
+    TESTCASE_AUTO(TestCompare);
+    TESTCASE_AUTO(TestSkippable);
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
+    TESTCASE_AUTO(TestCustomComp);
+    TESTCASE_AUTO(TestCustomFCC);
+#endif
+    TESTCASE_AUTO(TestFilteredNormalizer2Coverage);
+    TESTCASE_AUTO(TestNormalizeUTF8WithEdits);
+    TESTCASE_AUTO_END;
 }
 
 /**
@@ -315,6 +309,7 @@ void BasicNormalizerTest::TestCompositionExclusion(void) {
         "\\uFB3B\\uFB3C\\uFB3E\\uFB40\\uFB41\\uFB43\\uFB44\\uFB46"
         "\\uFB47\\uFB48\\uFB49\\uFB4A\\uFB4B\\uFB4C\\uFB4D\\uFB4E"
         );
+    UErrorCode status = U_ZERO_ERROR;
     for (int32_t i=0; i<EXCLUDED.length(); ++i) {
         UnicodeString a(EXCLUDED.charAt(i));
         UnicodeString b;
@@ -508,6 +503,7 @@ inline static void insert(UnicodeString& dest, int pos, UChar32 ch)
 void BasicNormalizerTest::backAndForth(Normalizer* iter, const UnicodeString& input)
 {
     UChar32 ch;
+    UErrorCode status = U_ZERO_ERROR;
     iter->setText(input, status);
 
     // Run through the iterator forwards and stick it into a StringBuffer
@@ -532,6 +528,7 @@ void BasicNormalizerTest::staticTest(UNormalizationMode mode, int options,
                      UnicodeString tests[][3], int length,
                      int outCol)
 {
+    UErrorCode status = U_ZERO_ERROR;
     for (int i = 0; i < length; i++)
     {
         UnicodeString& input = tests[i][0];
@@ -554,6 +551,7 @@ void BasicNormalizerTest::iterateTest(Normalizer* iter,
                                       UnicodeString tests[][3], int length,
                                       int outCol)
 {
+    UErrorCode status = U_ZERO_ERROR;
     for (int i = 0; i < length; i++)
     {
         UnicodeString& input = tests[i][0];
@@ -1489,7 +1487,7 @@ BasicNormalizerTest::TestFilteredNormalizer2Coverage() {
     UErrorCode errorCode = U_ZERO_ERROR;
     const Normalizer2 *nfcNorm2=Normalizer2::getNFCInstance(errorCode);
     if (U_FAILURE(errorCode)) {
-        dataerrln("Normalizer2::getNFCInstance() call failed - %s", u_errorName(status));
+        dataerrln("Normalizer2::getNFCInstance() call failed - %s", u_errorName(errorCode));
         return;
     }
     UnicodeSet filter(UNICODE_STRING_SIMPLE("[^\\u00a0-\\u00ff\\u0310-\\u031f]"), errorCode);
@@ -1523,6 +1521,53 @@ BasicNormalizerTest::TestFilteredNormalizer2Coverage() {
     if (U_FAILURE(errorCode)) {
         errln("FilteredNormalizer2.append() failed.");
     }
+}
+
+void
+BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
+    IcuTestErrorCode errorCode(*this, "TestNormalizeUTF8WithEdits");
+    const Normalizer2 *nfkc_cf=Normalizer2::getNFKCCasefoldInstance(errorCode);
+    if(errorCode.logDataIfFailureAndReset("Normalizer2::getNFKCCasefoldInstance() call failed")) {
+        return;
+    }
+    static const char *const src =
+        u8"  AÄA\u0308A\u0308\u0323Ä\u0323,\u1100\u1161가\u11A8가\u3133  ";
+    std::string expected = u8"  aääạ\u0308ạ\u0308,가각갃  ";
+    std::string result;
+    StringByteSink<std::string> sink(&result);
+    Edits edits;
+    nfkc_cf->normalizeUTF8(0, src, sink, &edits, errorCode);
+    assertSuccess("normalizeUTF8 with Edits", errorCode.get());
+    assertEquals("normalizeUTF8 with Edits", expected.c_str(), result.c_str());
+    static const EditChange expectedChanges[] = {
+        { FALSE, 2, 2 },  // 2 spaces
+        { TRUE, 1, 1 },  // A→a
+        { TRUE, 2, 2 },  // Ä→ä
+        { TRUE, 3, 2 },  // A\u0308→ä
+        { TRUE, 5, 5 },  // A\u0308\u0323→ạ\u0308
+        { TRUE, 4, 5 },  // Ä\u0323→ ạ\u0308
+        { FALSE, 1, 1 },  // comma
+        { TRUE, 6, 3 },  // \u1100\u1161→ 가
+        { TRUE, 6, 3 },  // 가\u11A8→ 각
+        { TRUE, 6, 3 },  // 가\u3133→ 갃
+        { FALSE, 2, 2 }  // 2 spaces
+    };
+    TestUtility::checkEditsIter(*this, u"normalizeUTF8 with Edits",
+            edits.getFineIterator(), edits.getFineIterator(),
+            expectedChanges, UPRV_LENGTHOF(expectedChanges),
+            TRUE, errorCode);
+
+    // Omit unchanged text.
+    expected = u8"aääạ\u0308ạ\u0308가각갃";
+    result.clear();
+    edits.reset();
+    nfkc_cf->normalizeUTF8(UCASEMAP_OMIT_UNCHANGED_TEXT, src, sink, &edits, errorCode);
+    assertSuccess("normalizeUTF8 omit unchanged", errorCode.get());
+    assertEquals("normalizeUTF8 omit unchanged", expected.c_str(), result.c_str());
+    TestUtility::checkEditsIter(*this, u"normalizeUTF8 omit unchanged",
+            edits.getFineIterator(), edits.getFineIterator(),
+            expectedChanges, UPRV_LENGTHOF(expectedChanges),
+            TRUE, errorCode);
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */

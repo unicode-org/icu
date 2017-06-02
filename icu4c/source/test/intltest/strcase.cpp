@@ -33,11 +33,7 @@
 #include "ustrtest.h"
 #include "unicode/tstdtmod.h"
 #include "cmemory.h"
-
-struct EditChange {
-    UBool change;
-    int32_t oldLength, newLength;
-};
+#include "testutil.h"
 
 class StringCaseTest: public IntlTest {
 public:
@@ -67,10 +63,6 @@ public:
 
 private:
     void assertGreekUpper(const char16_t *s, const char16_t *expected);
-    void checkEditsIter(
-        const UnicodeString &name, Edits::Iterator ei1, Edits::Iterator ei2,  // two equal iterators
-        const EditChange expected[], int32_t expLength, UBool withUnchanged,
-        UErrorCode &errorCode);
 
     Locale GREEK_LOCALE_;
 };
@@ -855,64 +847,6 @@ void StringCaseTest::TestBufferOverflow() {
     errorCode.reset();
 }
 
-void StringCaseTest::checkEditsIter(
-        const UnicodeString &name,
-        Edits::Iterator ei1, Edits::Iterator ei2,  // two equal iterators
-        const EditChange expected[], int32_t expLength, UBool withUnchanged,
-        UErrorCode &errorCode) {
-    assertFalse(name, ei2.findSourceIndex(-1, errorCode));
-
-    int32_t expSrcIndex = 0;
-    int32_t expDestIndex = 0;
-    int32_t expReplIndex = 0;
-    for (int32_t expIndex = 0; expIndex < expLength; ++expIndex) {
-        const EditChange &expect = expected[expIndex];
-        UnicodeString msg = UnicodeString(name).append(u' ') + expIndex;
-        if (withUnchanged || expect.change) {
-            assertTrue(msg, ei1.next(errorCode));
-            assertEquals(msg, expect.change, ei1.hasChange());
-            assertEquals(msg, expect.oldLength, ei1.oldLength());
-            assertEquals(msg, expect.newLength, ei1.newLength());
-            assertEquals(msg, expSrcIndex, ei1.sourceIndex());
-            assertEquals(msg, expDestIndex, ei1.destinationIndex());
-            assertEquals(msg, expReplIndex, ei1.replacementIndex());
-        }
-
-        if (expect.oldLength > 0) {
-            assertTrue(msg, ei2.findSourceIndex(expSrcIndex, errorCode));
-            assertEquals(msg, expect.change, ei2.hasChange());
-            assertEquals(msg, expect.oldLength, ei2.oldLength());
-            assertEquals(msg, expect.newLength, ei2.newLength());
-            assertEquals(msg, expSrcIndex, ei2.sourceIndex());
-            assertEquals(msg, expDestIndex, ei2.destinationIndex());
-            assertEquals(msg, expReplIndex, ei2.replacementIndex());
-            if (!withUnchanged) {
-                // For some iterators, move past the current range
-                // so that findSourceIndex() has to look before the current index.
-                ei2.next(errorCode);
-                ei2.next(errorCode);
-            }
-        }
-
-        expSrcIndex += expect.oldLength;
-        expDestIndex += expect.newLength;
-        if (expect.change) {
-            expReplIndex += expect.newLength;
-        }
-    }
-    // TODO: remove casts from u"" when merging into trunk
-    UnicodeString msg = UnicodeString(name).append(u" end");
-    assertFalse(msg, ei1.next(errorCode));
-    assertFalse(msg, ei1.hasChange());
-    assertEquals(msg, 0, ei1.oldLength());
-    assertEquals(msg, 0, ei1.newLength());
-    assertEquals(msg, expSrcIndex, ei1.sourceIndex());
-    assertEquals(msg, expDestIndex, ei1.destinationIndex());
-    assertEquals(msg, expReplIndex, ei1.replacementIndex());
-
-    assertFalse(name, ei2.findSourceIndex(expSrcIndex, errorCode));
-}
-
 void StringCaseTest::TestEdits() {
     IcuTestErrorCode errorCode(*this, "TestEdits");
     Edits edits;
@@ -941,10 +875,10 @@ void StringCaseTest::TestEdits() {
             { FALSE, 10003, 10003 },
             { TRUE, 103103, 104013 }
     };
-    checkEditsIter(u"coarse",
+    TestUtility::checkEditsIter(*this, u"coarse",
             edits.getCoarseIterator(), edits.getCoarseIterator(),
             coarseExpectedChanges, UPRV_LENGTHOF(coarseExpectedChanges), TRUE, errorCode);
-    checkEditsIter(u"coarse changes",
+    TestUtility::checkEditsIter(*this, u"coarse changes",
             edits.getCoarseChangesIterator(), edits.getCoarseChangesIterator(),
             coarseExpectedChanges, UPRV_LENGTHOF(coarseExpectedChanges), FALSE, errorCode);
 
@@ -958,10 +892,10 @@ void StringCaseTest::TestEdits() {
             { TRUE, 3000, 4000 },
             { TRUE, 100000, 100000 }
     };
-    checkEditsIter(u"fine",
+    TestUtility::checkEditsIter(*this, u"fine",
             edits.getFineIterator(), edits.getFineIterator(),
             fineExpectedChanges, UPRV_LENGTHOF(fineExpectedChanges), TRUE, errorCode);
-    checkEditsIter(u"fine changes",
+    TestUtility::checkEditsIter(*this, u"fine changes",
             edits.getFineChangesIterator(), edits.getFineChangesIterator(),
             fineExpectedChanges, UPRV_LENGTHOF(fineExpectedChanges), FALSE, errorCode);
 
@@ -986,7 +920,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
             { TRUE, 1, 1 },
             { FALSE, 2, 2 }
     };
-    checkEditsIter(u"toLower(IstanBul)",
+    TestUtility::checkEditsIter(*this, u"toLower(IstanBul)",
             edits.getFineIterator(), edits.getFineIterator(),
             lowerExpectedChanges, UPRV_LENGTHOF(lowerExpectedChanges),
             TRUE, errorCode);
@@ -1003,7 +937,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
             { TRUE, 1, 1 },
             { TRUE, 1, 1 }
     };
-    checkEditsIter(u"toUpper(Πατάτα)",
+    TestUtility::checkEditsIter(*this, u"toUpper(Πατάτα)",
             edits.getFineIterator(), edits.getFineIterator(),
             upperExpectedChanges, UPRV_LENGTHOF(upperExpectedChanges),
             TRUE, errorCode);
@@ -1023,7 +957,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
             { TRUE, 1, 1 },
             { FALSE, 10, 10 }
     };
-    checkEditsIter(u"toTitle(IjssEL IglOo)",
+    TestUtility::checkEditsIter(*this, u"toTitle(IjssEL IglOo)",
             edits.getFineIterator(), edits.getFineIterator(),
             titleExpectedChanges, UPRV_LENGTHOF(titleExpectedChanges),
             TRUE, errorCode);
@@ -1040,14 +974,14 @@ void StringCaseTest::TestCaseMapWithEdits() {
             { TRUE, 1, 1 },
             { FALSE, 2, 2 }
     };
-    checkEditsIter(u"foldCase(IßtanBul)",
+    TestUtility::checkEditsIter(*this, u"foldCase(IßtanBul)",
             edits.getFineIterator(), edits.getFineIterator(),
             foldExpectedChanges, UPRV_LENGTHOF(foldExpectedChanges),
             TRUE, errorCode);
 }
 
 void StringCaseTest::TestCaseMapUTF8WithEdits() {
-    IcuTestErrorCode errorCode(*this, "TestEdits");
+    IcuTestErrorCode errorCode(*this, "TestCaseMapUTF8WithEdits");
     char dest[50];
     Edits edits;
 
@@ -1061,7 +995,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             { TRUE, 1, 1 },
             { FALSE, 2, 2 }
     };
-    checkEditsIter(u"toLower(IstanBul)",
+    TestUtility::checkEditsIter(*this, u"toLower(IstanBul)",
             edits.getFineIterator(), edits.getFineIterator(),
             lowerExpectedChanges, UPRV_LENGTHOF(lowerExpectedChanges),
             TRUE, errorCode);
@@ -1079,7 +1013,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             { TRUE, 2, 2 },
             { TRUE, 2, 2 }
     };
-    checkEditsIter(u"toUpper(Πατάτα)",
+    TestUtility::checkEditsIter(*this, u"toUpper(Πατάτα)",
             edits.getFineIterator(), edits.getFineIterator(),
             upperExpectedChanges, UPRV_LENGTHOF(upperExpectedChanges),
             TRUE, errorCode);
@@ -1099,7 +1033,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             { TRUE, 1, 1 },
             { FALSE, 10, 10 }
     };
-    checkEditsIter(u"toTitle(IjssEL IglOo)",
+    TestUtility::checkEditsIter(*this, u"toTitle(IjssEL IglOo)",
             edits.getFineIterator(), edits.getFineIterator(),
             titleExpectedChanges, UPRV_LENGTHOF(titleExpectedChanges),
             TRUE, errorCode);
@@ -1117,7 +1051,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             { TRUE, 1, 1 },
             { FALSE, 2, 2 }
     };
-    checkEditsIter(u"foldCase(IßtanBul)",
+    TestUtility::checkEditsIter(*this, u"foldCase(IßtanBul)",
             edits.getFineIterator(), edits.getFineIterator(),
             foldExpectedChanges, UPRV_LENGTHOF(foldExpectedChanges),
             TRUE, errorCode);
