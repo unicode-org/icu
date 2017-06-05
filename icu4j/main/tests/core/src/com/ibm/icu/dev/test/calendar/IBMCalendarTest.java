@@ -1963,6 +1963,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         }
     }
 
+    @Test
     public void TestSimpleDateFormatCoverage() {
 
         class StubSimpleDateFormat extends SimpleDateFormat {

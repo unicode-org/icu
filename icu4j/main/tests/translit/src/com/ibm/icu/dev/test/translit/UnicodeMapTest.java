@@ -316,6 +316,7 @@ public class UnicodeMapTest extends TestFmwk {
     static String[] TEST_VALUES = {"A", "B", "C", "D", "E", "F"};
     static Random random = new Random(12345);
 
+    @Test
     public void TestUnicodeMapRandom() {
         // do random change to both, then compare
         random.setSeed(12345); // reproducible results
@@ -341,6 +342,7 @@ public class UnicodeMapTest extends TestFmwk {
     private static final int SET_LIMIT = 0x10FFFF;
     private static final int propEnum = UProperty.GENERAL_CATEGORY;
 
+    @Test
     public void TestUnicodeMapGeneralCategory() {
         logln("Setting General Category");
         UnicodeMap<String> map1 = new UnicodeMap();
@@ -377,6 +379,7 @@ public class UnicodeMapTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestAUnicodeMap2() {
         UnicodeMap foo = new UnicodeMap();
         @SuppressWarnings("unused")
@@ -385,6 +388,7 @@ public class UnicodeMapTest extends TestFmwk {
         Set fii = foo.stringKeys(); // make sure doesn't NPE
     }
 
+    @Test
     public void TestAUnicodeMapInverse() {
         UnicodeMap<Character> foo1 = new UnicodeMap<Character>()
                 .putAll('a', 'z', 'b')
