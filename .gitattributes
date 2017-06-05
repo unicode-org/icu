@@ -5265,9 +5265,13 @@ icu4c/source/tools/gencolusb/README.md -text
 icu4c/source/tools/gencolusb/extract_unsafe_backwards.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/gencolusb/verify_uset.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/gendict/gendict.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/gennorm2/extradata.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/gennorm2/extradata.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/gennorm2/gennorm2.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/gennorm2/n2builder.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/gennorm2/n2builder.h svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/gennorm2/norms.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/tools/gennorm2/norms.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/genrb/derb.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/genrb/errmsg.c svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/tools/genrb/errmsg.h svneol=native#text/plain%3Bcharset%3Dutf-8

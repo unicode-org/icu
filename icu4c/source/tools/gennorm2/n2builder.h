@@ -28,15 +28,11 @@
 #include "normalizer2impl.h"  // for IX_COUNT
 #include "toolutil.h"
 #include "utrie2.h"
+#include "norms.h"
 
 U_NAMESPACE_BEGIN
 
 extern UBool beVerbose, haveCopyright;
-
-struct Norm;
-
-class BuilderReorderingBuffer;
-class ExtraDataWriter;
 
 class Normalizer2DataBuilder {
 public:
@@ -69,42 +65,36 @@ public:
     void writeCSourceFile(const char *filename);
 
 private:
-    friend class CompositionBuilder;
-    friend class Decomposer;
-    friend class ExtraDataWriter;
     friend class Norm16Writer;
 
-    // No copy constructor nor assignment operator.
-    Normalizer2DataBuilder(const Normalizer2DataBuilder &other);
-    Normalizer2DataBuilder &operator=(const Normalizer2DataBuilder &other);
+    Normalizer2DataBuilder(const Normalizer2DataBuilder &other) = delete;
+    Normalizer2DataBuilder &operator=(const Normalizer2DataBuilder &other) = delete;
 
-    Norm *allocNorm();
-    Norm *getNorm(UChar32 c);
-    Norm *createNorm(UChar32 c);
     Norm *checkNormForMapping(Norm *p, UChar32 c);  // check for permitted overrides
 
-    const Norm &getNormRef(UChar32 c) const;
-    uint8_t getCC(UChar32 c) const;
-    UBool combinesWithCCBetween(const Norm &norm, uint8_t lowCC, uint8_t highCC) const;
-    UChar32 combine(const Norm &norm, UChar32 trail) const;
-
-    void addComposition(UChar32 start, UChar32 end, uint32_t value);
-    UBool decompose(UChar32 start, UChar32 end, uint32_t value);
-    void reorder(Norm *p, BuilderReorderingBuffer &buffer);
+    /**
+     * Computes the MAPPING_NO_COMP_BOUNDARY_AFTER flag for a character's mapping
+     * (especially for a "YesNo" which has a round-trip mapping).
+     * This flag is used in Normalizer2Impl::hasCompBoundaryAfter().
+     *
+     * Modifies the buffer (partially composes it).
+     *
+     * A starter character with a mapping does not have a composition boundary after it
+     * if the character itself combines-forward (which is tested by the caller of this function),
+     * or it is deleted (mapped to the empty string),
+     * or its mapping contains no starter,
+     * or the last starter combines-forward.
+     */
     UBool hasNoCompBoundaryAfter(BuilderReorderingBuffer &buffer);
     void setHangulData();
-    int32_t writeMapping(UChar32 c, const Norm *p, UnicodeString &dataString);
-    void writeCompositions(UChar32 c, const Norm *p, UnicodeString &dataString);
-    void writeExtraData(UChar32 c, uint32_t value, ExtraDataWriter &writer);
+
     int32_t getCenterNoNoDelta() {
         return indexes[Normalizer2Impl::IX_MIN_MAYBE_YES]-Normalizer2Impl::MAX_DELTA-1;
     }
-    void writeNorm16(UChar32 start, UChar32 end, uint32_t value);
+    void writeNorm16(UChar32 start, UChar32 end, Norm &norm);
     void processData();
 
-    UTrie2 *normTrie;
-    UToolMemory *normMem;
-    Norm *norms;
+    Norms norms;
 
     int32_t phase;
     OverrideHandling overrideHandling;
