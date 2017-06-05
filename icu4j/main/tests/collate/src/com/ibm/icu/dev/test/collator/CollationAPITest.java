@@ -1294,6 +1294,7 @@ public class CollationAPITest extends TestFmwk {
         }
     }
 
+    @Test
     public final void TestGetAll() {
         Locale[] list = Collator.getAvailableLocales();
         int errorCount = 0;

@@ -868,6 +868,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
     }
 
+    @Test
     public void TestCoverage(){
         UResourceBundle bundle;
         bundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME);

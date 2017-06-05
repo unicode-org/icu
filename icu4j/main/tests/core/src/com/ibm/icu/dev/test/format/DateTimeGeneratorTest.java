@@ -886,6 +886,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
     /* Tests the method
      *        public String getCanonicalSkeletonAllowingDuplicates(String pattern)
      */
+    @Test
     public void TestGetCanonicalSkeletonAllowingDuplicates(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
         String[] cases = {"GyQMwEdaHmsSv","LegH","Legh"};

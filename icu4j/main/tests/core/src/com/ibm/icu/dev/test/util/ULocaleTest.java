@@ -1175,6 +1175,7 @@ public class ULocaleTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestDisplayLanguageWithDialectCoverage() {
         // Coverage test. Implementation is in class LocaleDisplayNames.
         assertFalse("en in system default locale: anything but empty",
@@ -1187,6 +1188,7 @@ public class ULocaleTest extends TestFmwk {
                 ULocale.getDisplayLanguageWithDialect("en", "de"));
     }
 
+    @Test
     public void TestDisplayNameWithDialectCoverage() {
         // Coverage test. Implementation is in class LocaleDisplayNames.
         assertFalse("en-GB in system default locale: anything but empty",
@@ -1199,6 +1201,7 @@ public class ULocaleTest extends TestFmwk {
                 ULocale.getDisplayNameWithDialect("en-GB", "de"));
     }
 
+    @Test
     public void TestDisplayScriptCoverage() {
         // Coverage test. Implementation is in class LocaleDisplayNames.
         assertFalse("zh-Hans in system default locale: anything but empty",

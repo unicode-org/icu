@@ -3076,6 +3076,7 @@ public class NumberFormatTest extends TestFmwk {
     /*
      * Coverage tests for the implementation of abstract format methods not being called otherwise
      */
+    @Test
     public void TestFormatAbstractImplCoverage() {
         NumberFormat df = DecimalFormat.getInstance(Locale.ENGLISH);
         NumberFormat cdf = CompactDecimalFormat.getInstance(Locale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
