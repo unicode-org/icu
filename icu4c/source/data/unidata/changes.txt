@@ -12,6 +12,15 @@
 *   created by: Markus W. Scherer
 *
 * change log for Unicode updates
+*
+* For each new Unicode version, during the beta period,
+* I copy the change log for the previous version to the top of this file.
+* I adjust the versions, tickets, URLs, and paths.
+* I work my way through the steps listed in the log, top to bottom,
+* adjusting the log as necessary.
+* I report problems to the UTC and/or CLDR and/or ICU.
+* Before the data is final, I "turn the crank" several more times,
+* using appropriate subsets of the steps.
 
 ---------------------------------------------------------------------------- ***
 
@@ -51,9 +60,9 @@ http://www.unicode.org/reports/tr44/tr44-19.html
 
 * Command-line environment setup
 
-UNICODE_DATA=~/unidata/uni10/20170503
-CLDR_SRC=~/svn.cldr/trunk
-ICU_ROOT=~/svn.icu/trunk
+UNICODE_DATA=~/unidata/uni10/20170605
+CLDR_SRC=~/svn.cldr/uni10
+ICU_ROOT=~/svn.icu/uni10
 ICU_SRC=$ICU_ROOT/src
 ICUDT=icudt60b
 ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
@@ -329,17 +338,17 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/svn.icu/uni10/src/icu4c)
 - $ICU_ROOT/dbg/icu4c$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
   output:
     ...
-    Unicode .icu files built to ./out/build/icudt59l
+    Unicode .icu files built to ./out/build/icudt60l
     echo timestamp > uni-core-data
-    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt59b
-    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt59b
+    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt60b
+    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt60b
     echo pnames.icu uprops.icu ucase.icu ubidi.icu nfc.nrm > ./out/icu4j/add.txt
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt59l.dat ./out/icu4j/icudt59b.dat -a ./out/icu4j/add.txt -s ./out/build/icudt59l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt59b
-    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt59b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt59b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt59b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt59b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt59b"
-    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt59b/
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt60l.dat ./out/icu4j/icudt60b.dat -a ./out/icu4j/add.txt -s ./out/build/icudt60l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt60b
+    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt60b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt60b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt60b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt60b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt60b"
+    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt60b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icudata.jar /tmp/icu4j/main/shared/data
-    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt59b/
+    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt60b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
     make[1]: Leaving directory `/usr/local/google/home/mscherer/svn.icu/uni10/dbg/icu4c/data'
