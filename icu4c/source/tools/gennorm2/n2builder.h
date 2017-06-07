@@ -77,8 +77,6 @@ private:
      * (especially for a "YesNo" which has a round-trip mapping).
      * This flag is used in Normalizer2Impl::hasCompBoundaryAfter().
      *
-     * Modifies the buffer (partially composes it).
-     *
      * A starter character with a mapping does not have a composition boundary after it
      * if the character itself combines-forward (which is tested by the caller of this function),
      * or it is deleted (mapped to the empty string),

@@ -208,7 +208,7 @@ void Normalizer2DataBuilder::removeMapping(UChar32 c) {
 
 UBool Normalizer2DataBuilder::hasNoCompBoundaryAfter(const BuilderReorderingBuffer &buffer) {
     if(buffer.isEmpty()) {
-        return TRUE;  // maps-to-empty-string is no boundary of any kind
+        return TRUE;  // Maps-to-empty-string is no boundary of any kind.
     }
     int32_t lastStarterIndex=buffer.lastStarterIndex();
     if(lastStarterIndex<0) {
@@ -223,31 +223,37 @@ UBool Normalizer2DataBuilder::hasNoCompBoundaryAfter(const BuilderReorderingBuff
         return lastStarterIndex==buffer.length()-1;
     }
     // Note: There can be no Hangul syllable in the fully decomposed mapping.
-    const Norm *starterNorm=&norms.getNormRef(starter);
-    if(starterNorm->compositions==NULL) {
-        return FALSE;  // the last starter does not combine forward
+    const Norm *starterNorm=norms.getNorm(starter);
+    if(starterNorm==nullptr || starterNorm->compositions==nullptr) {
+        return FALSE;  // The last starter does not combine forward.
     }
     // Compose as far as possible, and see if further compositions are possible.
     uint8_t prevCC=0;
     for(int32_t combMarkIndex=lastStarterIndex+1; combMarkIndex<buffer.length(); ++combMarkIndex) {
         uint8_t cc=buffer.ccAt(combMarkIndex);  // !=0 because after last starter
         if(norms.combinesWithCCBetween(*starterNorm, prevCC, cc)) {
+            // The starter combines with a mark that reorders before the current one.
             return TRUE;
         }
         if(prevCC<cc && (starter=starterNorm->combine(buffer.charAt(combMarkIndex)))>=0) {
-            starterNorm=&norms.getNormRef(starter);
-            if(starterNorm->compositions==NULL) {
-                return FALSE;  // the composite does not combine further
+            // The starter combines with this mark into a composite replacement starter.
+            starterNorm=norms.getNorm(starter);
+            if(starterNorm==nullptr || starterNorm->compositions==nullptr) {
+                return FALSE;  // The composite does not combine further.
             }
             // Keep prevCC because we "removed" the combining mark.
         } else {
             prevCC=cc;
         }
     }
-    // TRUE if the final, forward-combining starter is at the end.
-    return prevCC==0;
-    // TODO?! prevCC==0 || norms.combinesWithCCBetween(*starterNorm, prevCC, int32_t! 0x100)
-    // TODO?! actually, should check if it combines with any cc not seen here
+    if(prevCC==0) {
+        return TRUE;  // forward-combining starter at the very end
+    }
+    if(norms.combinesWithCCBetween(*starterNorm, prevCC, 256)) {
+        // The starter combines with another mark.
+        return TRUE;
+    }
+    return FALSE;
 }
 
 void Normalizer2DataBuilder::postProcess(Norm &norm) {
