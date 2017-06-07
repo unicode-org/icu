@@ -131,7 +131,7 @@ void Norms::reorder(UnicodeString &mapping, BuilderReorderingBuffer &buffer) con
     }
 }
 
-UBool Norms::combinesWithCCBetween(const Norm &norm, uint8_t lowCC, uint8_t highCC) const {
+UBool Norms::combinesWithCCBetween(const Norm &norm, uint8_t lowCC, int32_t highCC) const {
     if((highCC-lowCC)>=2) {
         int32_t length;
         const CompositionPair *pairs=norm.getCompositionPairs(length);

@@ -156,7 +156,9 @@ public:
     uint8_t getCC(UChar32 c) const { return getNormRef(c).cc; }
 
     void reorder(UnicodeString &mapping, BuilderReorderingBuffer &buffer) const;
-    UBool combinesWithCCBetween(const Norm &norm, uint8_t lowCC, uint8_t highCC) const;
+
+    // int32_t highCC not uint8_t so that we can pass in 256 as the upper limit.
+    UBool combinesWithCCBetween(const Norm &norm, uint8_t lowCC, int32_t highCC) const;
 
     class Enumerator {
     public:
