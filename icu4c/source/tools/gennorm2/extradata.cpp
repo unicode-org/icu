@@ -25,14 +25,7 @@ ExtraData::ExtraData(Norms &n, UBool fast) :
         Norms::Enumerator(n),
         yesYesCompositions(1000, (UChar32)0xffff, 2),  // 0=inert, 1=Jamo L, 2=start of compositions
         yesNoMappingsAndCompositions(1000, (UChar32)0, 1),  // 0=Hangul, 1=start of normal data
-        optimizeFast(fast) {
-    memset(smallFCD, 0, sizeof(smallFCD));
-}
-
-void ExtraData::setSmallFCD(UChar32 c) {
-    UChar32 lead= c<=0xffff ? c : U16_LEAD(c);
-    smallFCD[lead>>8]|=(uint8_t)1<<((lead>>5)&7);
-}
+        optimizeFast(fast) {}
 
 int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &dataString) {
     UnicodeString &m=*norm.mapping;
@@ -44,26 +37,8 @@ int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &data
                 (long)c, Normalizer2Impl::MAPPING_LENGTH_MASK);
         exit(U_INVALID_FORMAT_ERROR);
     }
-    int32_t leadCC, trailCC;
-    if(length==0) {
-        leadCC=trailCC=0;
-    } else {
-        leadCC=norms.getCC(m.char32At(0));
-        trailCC=norms.getCC(m.char32At(length-1));
-    }
-    if(c<Normalizer2Impl::MIN_CCC_LCCC_CP && (norm.cc!=0 || leadCC!=0)) {
-        fprintf(stderr,
-                "gennorm2 error: "
-                "U+%04lX below U+0300 has ccc!=0 or lccc!=0, not supported by ICU\n",
-                (long)c);
-        exit(U_INVALID_FORMAT_ERROR);
-    }
-    // Write small-FCD data.
-    if((leadCC|trailCC)!=0) {
-        setSmallFCD(c);
-    }
     // Write the mapping & raw mapping extraData.
-    int32_t firstUnit=length|(trailCC<<8);
+    int32_t firstUnit=length|(norm.trailCC<<8);
     int32_t preMappingLength=0;
     if(norm.rawMapping!=NULL) {
         UnicodeString &rm=*norm.rawMapping;
@@ -98,7 +73,7 @@ int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &data
         }
         firstUnit|=Normalizer2Impl::MAPPING_HAS_RAW_MAPPING;
     }
-    int32_t cccLccc=norm.cc|(leadCC<<8);
+    int32_t cccLccc=norm.cc|(norm.leadCC<<8);
     if(cccLccc!=0) {
         dataString.append((UChar)cccLccc);
         ++preMappingLength;
@@ -187,65 +162,31 @@ void ExtraData::rangeHandler(UChar32 start, UChar32 end, Norm &norm) {
                 (long)start, (long)end);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
+    if(norm.error!=nullptr) {
+        fprintf(stderr, "gennorm2 error: U+%04lX %s\n", (long)start, norm.error);
+        exit(U_INVALID_FORMAT_ERROR);
+    }
     writeExtraData(start, norm);
 }
 
 void ExtraData::writeExtraData(UChar32 c, Norm &norm) {
-    if(!norm.hasMapping()) {
-        // Write small-FCD data.
-        // There is similar code in writeMapping() for characters that do have a mapping.
-        if(norm.cc!=0) {
-            if(c<Normalizer2Impl::MIN_CCC_LCCC_CP) {
-                fprintf(stderr,
-                        "gennorm2 error: "
-                        "U+%04lX below U+0300 has ccc!=0, not supported by ICU\n",
-                        (long)c);
-                exit(U_INVALID_FORMAT_ERROR);
-            }
-            setSmallFCD(c);
-        }
-    }
-    if(norm.combinesBack) {
-        if(norm.hasMapping()) {
-            fprintf(stderr,
-                    "gennorm2 error: "
-                    "U+%04lX combines-back and decomposes, not possible in Unicode normalization\n",
-                    (long)c);
-            exit(U_INVALID_FORMAT_ERROR);
-        }
-        if(norm.compositions!=NULL) {
-            norm.offset=
-                (maybeYesCompositions.length()<<Norm::OFFSET_SHIFT)|
-                Norm::OFFSET_MAYBE_YES;
-            writeCompositions(c, norm, maybeYesCompositions);
-        }
-    } else if(!norm.hasMapping()) {
-        if(norm.compositions!=NULL) {
-            norm.offset=
-                (yesYesCompositions.length()<<Norm::OFFSET_SHIFT)|
-                Norm::OFFSET_YES_YES;
-            writeCompositions(c, norm, yesYesCompositions);
-        }
-    } else if(norm.mappingType==Norm::ROUND_TRIP) {
-        if(norm.compositions!=NULL) {
-            int32_t offset=yesNoMappingsAndCompositions.length()+
-                           writeMapping(c, norm, yesNoMappingsAndCompositions);
-            norm.offset=(offset<<Norm::OFFSET_SHIFT)|Norm::OFFSET_YES_NO_MAPPING_AND_COMPOSITION;
-            writeCompositions(c, norm, yesNoMappingsAndCompositions);
-        } else {
-            int32_t offset=yesNoMappingsOnly.length()+
-                           writeMapping(c, norm, yesNoMappingsOnly);
-            norm.offset=(offset<<Norm::OFFSET_SHIFT)|Norm::OFFSET_YES_NO_MAPPING_ONLY;
-        }
-    } else /* one-way */ {
-        if(norm.compositions!=NULL) {
-            fprintf(stderr,
-                    "gennorm2 error: "
-                    "U+%04lX combines-forward and has a one-way mapping, "
-                    "not possible in Unicode normalization\n",
-                    (long)c);
-            exit(U_INVALID_FORMAT_ERROR);
-        }
+    switch(norm.type) {
+    case Norm::INERT:
+        break;  // no extra data
+    case Norm::YES_YES_COMBINES_FWD:
+        norm.offset=yesYesCompositions.length();
+        writeCompositions(c, norm, yesYesCompositions);
+        break;
+    case Norm::YES_NO_COMBINES_FWD:
+        norm.offset=yesNoMappingsAndCompositions.length()+
+                writeMapping(c, norm, yesNoMappingsAndCompositions);
+        writeCompositions(c, norm, yesNoMappingsAndCompositions);
+        break;
+    case Norm::YES_NO_MAPPING_ONLY:
+        norm.offset=yesNoMappingsOnly.length()+
+                writeMapping(c, norm, yesNoMappingsOnly);
+        break;
+    case Norm::NO_NO:
         if(norm.cc==0 && !optimizeFast) {
             // Try a compact, algorithmic encoding.
             // Only for ccc=0, because we can't store additional information
@@ -260,15 +201,25 @@ void ExtraData::writeExtraData(UChar32 c, Norm &norm) {
                     (!norm.hasNoCompBoundaryAfter || 1!=norm.mapping->countChar32())) {
                 int32_t delta=norm.mappingCP-c;
                 if(-Normalizer2Impl::MAX_DELTA<=delta && delta<=Normalizer2Impl::MAX_DELTA) {
-                    norm.offset=(delta<<Norm::OFFSET_SHIFT)|Norm::OFFSET_DELTA;
+                    norm.type=Norm::NO_NO_DELTA;
+                    norm.offset=delta;
+                    break;
                 }
             }
         }
-        if(norm.offset==0) {
-            // TODO: minMappingNotCompYes, minMappingNoCompBoundaryBefore
-            int32_t offset=writeNoNoMapping(c, norm, noNoMappings, previousNoNoMappings);
-            norm.offset=(offset<<Norm::OFFSET_SHIFT)|Norm::OFFSET_NO_NO;
-        }
+        // TODO: minMappingNotCompYes, minMappingNoCompBoundaryBefore
+        norm.offset=writeNoNoMapping(c, norm, noNoMappings, previousNoNoMappings);
+        break;
+    case Norm::MAYBE_YES_COMBINES_FWD:
+        norm.offset=maybeYesCompositions.length();
+        writeCompositions(c, norm, maybeYesCompositions);
+        break;
+    case Norm::MAYBE_YES_SIMPLE:
+        break;  // no extra data
+    case Norm::YES_YES_WITH_CC:
+        break;  // no extra data
+    default:  // Should not occur.
+        exit(U_INTERNAL_PROGRAM_ERROR);
     }
 }
 

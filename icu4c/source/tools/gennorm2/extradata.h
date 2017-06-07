@@ -37,10 +37,8 @@ public:
     UnicodeString yesNoMappingsAndCompositions;
     UnicodeString yesNoMappingsOnly;
     UnicodeString noNoMappings;
-    uint8_t smallFCD[0x100];
 
 private:
-    void setSmallFCD(UChar32 c);
     /**
      * Requires norm.hasMapping().
      * Returns the offset of the "first unit" from the beginning of the extraData for c.
