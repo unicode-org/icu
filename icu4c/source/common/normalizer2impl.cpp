@@ -2645,12 +2645,13 @@ unorm2_swap(const UDataSwapper *ds,
 
     /* check data format and format version */
     pInfo=(const UDataInfo *)((const char *)inData+4);
+    uint8_t formatVersion0=pInfo->formatVersion[0];
     if(!(
         pInfo->dataFormat[0]==0x4e &&   /* dataFormat="Nrm2" */
         pInfo->dataFormat[1]==0x72 &&
         pInfo->dataFormat[2]==0x6d &&
         pInfo->dataFormat[3]==0x32 &&
-        (pInfo->formatVersion[0]==1 || pInfo->formatVersion[0]==2)
+        (formatVersion0==1 || formatVersion0==2)
     )) {
         udata_printError(ds, "unorm2_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized as Normalizer2 data\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],
@@ -2664,10 +2665,16 @@ unorm2_swap(const UDataSwapper *ds,
     outBytes=(uint8_t *)outData+headerSize;
 
     inIndexes=(const int32_t *)inBytes;
+    int32_t minIndexesLength;
+    if(formatVersion0==1) {
+        minIndexesLength=Normalizer2Impl::IX_MIN_MAYBE_YES+1;
+    } else {
+        minIndexesLength=Normalizer2Impl::IX_MIN_YES_NO_MAPPINGS_ONLY+1;
+    }
 
     if(length>=0) {
         length-=headerSize;
-        if(length<(int32_t)sizeof(indexes)) {
+        if(length<minIndexesLength*4) {
             udata_printError(ds, "unorm2_swap(): too few bytes (%d after header) for Normalizer2 data\n",
                              length);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
