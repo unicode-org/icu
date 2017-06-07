@@ -5,7 +5,7 @@
 * Copyright (C) 2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 *******************************************************************************
-* loadednormalizer2impl.h
+* norm2allmodes.h
 *
 * created on: 2014sep07
 * created by: Markus W. Scherer

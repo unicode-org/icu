@@ -90,16 +90,17 @@ int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &data
 int32_t ExtraData::writeNoNoMapping(UChar32 c, const Norm &norm,
                                     UnicodeString &dataString,
                                     Hashtable &previousMappings) {
-    int32_t oldLength=dataString.length();
-    int32_t offset=oldLength+writeMapping(c, norm, dataString);
-    UnicodeString newMapping=dataString.tempSubString(oldLength);
+    UnicodeString newMapping;
+    int32_t offset=writeMapping(c, norm, newMapping);
     int32_t previousOffset=previousMappings.geti(newMapping);
     if(previousOffset!=0) {
-        // Duplicate, remove the new units and point to the old ones.
-        dataString.truncate(oldLength);
+        // Duplicate, point to the identical mapping that has already been stored.
         offset=previousOffset-1;
     } else {
-        // Enter this new mapping into the hashtable, avoiding value 0 which is "not found".
+        // Append this new mapping and
+        // enter it into the hashtable, avoiding value 0 which is "not found".
+        offset=dataString.length()+offset;
+        dataString.append(newMapping);
         IcuToolErrorCode errorCode("gennorm2/writeExtraData()/Hashtable.puti()");
         previousMappings.puti(newMapping, offset+1, errorCode);
     }

@@ -428,7 +428,7 @@ public final class Normalizer2Impl {
         try {
             dataVersion=ICUBinary.readHeaderAndDataVersion(bytes, DATA_FORMAT, IS_ACCEPTABLE);
             int indexesLength=bytes.getInt()/4;  // inIndexes[IX_NORM_TRIE_OFFSET]/4
-            if(indexesLength<=IX_MIN_MAYBE_YES) {
+            if(indexesLength<=IX_MIN_YES_NO_MAPPINGS_ONLY) {
                 throw new ICUUncheckedIOException("Normalizer2 data: not enough indexes");
             }
             int[] inIndexes=new int[indexesLength];
