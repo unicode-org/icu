@@ -85,13 +85,15 @@ private:
      * or its mapping contains no starter,
      * or the last starter combines-forward.
      */
-    UBool hasNoCompBoundaryAfter(BuilderReorderingBuffer &buffer);
-    void setHangulData();
+    UBool hasNoCompBoundaryAfter(const BuilderReorderingBuffer &buffer);
+    void postProcess(Norm &norm);
 
+    void setSmallFCD(UChar32 c);
     int32_t getCenterNoNoDelta() {
         return indexes[Normalizer2Impl::IX_MIN_MAYBE_YES]-Normalizer2Impl::MAX_DELTA-1;
     }
     void writeNorm16(UChar32 start, UChar32 end, Norm &norm);
+    void setHangulData();
     void processData();
 
     Norms norms;

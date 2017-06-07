@@ -40,8 +40,7 @@ public:
     UBool didReorder() const { return fDidReorder; }
 
     void append(UChar32 c, uint8_t cc);
-    void toString(UnicodeString &dest);
-    void setComposite(UChar32 composite, int32_t combMarkIndex);
+    void toString(UnicodeString &dest) const;
 
 private:
     int32_t fArray[Normalizer2Impl::MAPPING_LENGTH_MASK];
@@ -88,28 +87,54 @@ struct Norm {
     MappingType mappingType;
 
     UVector32 *compositions;  // (trail, composite) pairs
-    uint8_t cc;
+    uint8_t cc, leadCC, trailCC;
     UBool combinesBack;
     UBool hasNoCompBoundaryAfter;
 
-    enum OffsetType {
-        OFFSET_NONE,
-        // Composition for back-combining character. Allowed, but not normally used.
-        OFFSET_MAYBE_YES,
-        // Composition for a starter that does not have a decomposition mapping.
-        OFFSET_YES_YES,
-        // Round-trip mapping & composition for a starter.
-        OFFSET_YES_NO_MAPPING_AND_COMPOSITION,
-        // Round-trip mapping for a starter that itself does not combine-forward.
-        OFFSET_YES_NO_MAPPING_ONLY,
+    /**
+     * Overall type of normalization properties.
+     * Set after most processing is done.
+     *
+     * Corresponds to the rows in the chart on
+     * http://site.icu-project.org/design/normalization/custom
+     * in numerical (but reverse visual) order.
+     *
+     * YES_NO means composition quick check=yes, decomposition QC=no -- etc.
+     */
+    enum Type {
+        /** Initial value until most processing is done. */
+        UNKNOWN,
+        /** No mapping, does not combine, ccc=0. */
+        INERT,
+        /** Starter, no mapping, has compositions. */
+        YES_YES_COMBINES_FWD,
+        /** Starter with a round-trip mapping and compositions. */
+        YES_NO_COMBINES_FWD,
+        /** Starter with a round-trip mapping but no compositions. */
+        YES_NO_MAPPING_ONLY,
         // TODO: minMappingNotCompYes, minMappingNoCompBoundaryBefore
-        // One-way mapping.
-        OFFSET_NO_NO,
-        // Delta for an algorithmic one-way mapping.
-        OFFSET_DELTA
-    };
-    enum { OFFSET_SHIFT=4, OFFSET_MASK=(1<<OFFSET_SHIFT)-1 };
+        /** Has a one-way mapping. */
+        NO_NO,
+        /** Has an algorithmic one-way mapping to a single code point. */
+        NO_NO_DELTA,
+        /**
+         * Combines both backward and forward, has compositions.
+         * Allowed, but not normally used.
+         */
+        MAYBE_YES_COMBINES_FWD,
+        /** Combines only backward. */
+        MAYBE_YES_SIMPLE,
+        /** Non-zero ccc but does not combine backward. */
+        YES_YES_WITH_CC
+    } type;
+    /** Offset into the type's part of the extra data, or the algorithmic-mapping delta. */
     int32_t offset;
+
+    /**
+     * Error string set by processing functions that do not have access
+     * to the code point, deferred for readable reporting.
+     */
+    const char *error;
 };
 
 class Norms {
@@ -130,7 +155,7 @@ public:
     const Norm &getNormRef(UChar32 c) const;
     uint8_t getCC(UChar32 c) const { return getNormRef(c).cc; }
 
-    void reorder(Norm &norm, BuilderReorderingBuffer &buffer) const;
+    void reorder(UnicodeString &mapping, BuilderReorderingBuffer &buffer) const;
     UBool combinesWithCCBetween(const Norm &norm, uint8_t lowCC, uint8_t highCC) const;
 
     class Enumerator {

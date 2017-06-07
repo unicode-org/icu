@@ -43,20 +43,10 @@ void BuilderReorderingBuffer::append(UChar32 c, uint8_t cc) {
     fDidReorder=TRUE;
 }
 
-void BuilderReorderingBuffer::toString(UnicodeString &dest) {
+void BuilderReorderingBuffer::toString(UnicodeString &dest) const {
     dest.remove();
     for(int32_t i=0; i<fLength; ++i) {
         dest.append(charAt(i));
-    }
-}
-
-void BuilderReorderingBuffer::setComposite(UChar32 composite, int32_t combMarkIndex) {
-    fArray[fLastStarterIndex]=composite<<8;
-    // Remove the combining mark that contributed to the composite.
-    --fLength;
-    while(combMarkIndex<fLength) {
-        fArray[combMarkIndex]=fArray[combMarkIndex+1];
-        ++combMarkIndex;
     }
 }
 
@@ -77,7 +67,9 @@ UChar32 Norm::combine(UChar32 trail) const {
 Norms::Norms(UErrorCode &errorCode) {
     normTrie=utrie2_open(0, 0, &errorCode);
     normMem=utm_open("gennorm2 normalization structs", 10000, 0x110100, sizeof(Norm));
-    norms=allocNorm();  // unused Norm struct at index 0
+    // Default "inert" Norm struct at index 0. Practically immutable.
+    norms=allocNorm();
+    norms->type=Norm::INERT;
 }
 
 Norms::~Norms() {
@@ -122,13 +114,12 @@ Norm *Norms::createNorm(UChar32 c) {
     }
 }
 
-void Norms::reorder(Norm &norm, BuilderReorderingBuffer &buffer) const {
-    UnicodeString &m=*norm.mapping;
-    int32_t length=m.length();
+void Norms::reorder(UnicodeString &mapping, BuilderReorderingBuffer &buffer) const {
+    int32_t length=mapping.length();
     if(length>Normalizer2Impl::MAPPING_LENGTH_MASK) {
         return;  // writeMapping() will complain about it and print the code point.
     }
-    const UChar *s=toUCharPtr(m.getBuffer());
+    const char16_t *s=mapping.getBuffer();
     int32_t i=0;
     UChar32 c;
     while(i<length) {
@@ -136,7 +127,7 @@ void Norms::reorder(Norm &norm, BuilderReorderingBuffer &buffer) const {
         buffer.append(c, getCC(c));
     }
     if(buffer.didReorder()) {
-        buffer.toString(m);
+        buffer.toString(mapping);
     }
 }
 
