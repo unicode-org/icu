@@ -23,6 +23,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
+#include "unicode/stringoptions.h"
 #include "unicode/ustring.h"
 
 /**
@@ -143,56 +144,6 @@ ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode);
  */
 U_STABLE void U_EXPORT2
 ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
-
-/**
- * Do not lowercase non-initial parts of words when titlecasing.
- * Option bit for titlecasing APIs that take an options bit set.
- *
- * By default, titlecasing will titlecase the first cased character
- * of a word and lowercase all other characters.
- * With this option, the other characters will not be modified.
- *
- * @see ucasemap_setOptions
- * @see ucasemap_toTitle
- * @see ucasemap_utf8ToTitle
- * @see UnicodeString::toTitle
- * @stable ICU 3.8
- */
-#define U_TITLECASE_NO_LOWERCASE 0x100
-
-/**
- * Do not adjust the titlecasing indexes from BreakIterator::next() indexes;
- * titlecase exactly the characters at breaks from the iterator.
- * Option bit for titlecasing APIs that take an options bit set.
- *
- * By default, titlecasing will take each break iterator index,
- * adjust it by looking for the next cased character, and titlecase that one.
- * Other characters are lowercased.
- *
- * This follows Unicode 4 & 5 section 3.13 Default Case Operations:
- *
- * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
- * #29, "Text Boundaries." Between each pair of word boundaries, find the first
- * cased character F. If F exists, map F to default_title(F); then map each
- * subsequent character C to default_lower(C).
- *
- * @see ucasemap_setOptions
- * @see ucasemap_toTitle
- * @see ucasemap_utf8ToTitle
- * @see UnicodeString::toTitle
- * @see U_TITLECASE_NO_LOWERCASE
- * @stable ICU 3.8
- */
-#define U_TITLECASE_NO_BREAK_ADJUSTMENT 0x200
-
-/**
- * Omit unchanged text when case-mapping or normalizing with Edits.
- *
- * @see CaseMap
- * @see Edits
- * @draft ICU 60
- */
-#define U_OMIT_UNCHANGED_TEXT 0x4000
 
 #if !UCONFIG_NO_BREAK_ITERATION
 

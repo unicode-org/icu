@@ -11,15 +11,6 @@
 #include "unicode/ucasemap.h"
 #include "ucase.h"
 
-#ifndef U_COMPARE_IGNORE_CASE
-/* see also unorm.h */
-/**
- * Option bit for unorm_compare:
- * Perform case-insensitive comparison.
- */
-#define U_COMPARE_IGNORE_CASE       0x10000
-#endif
-
 /**
  * Internal API, used by u_strcasecmp() etc.
  * Compare strings case-insensitively,

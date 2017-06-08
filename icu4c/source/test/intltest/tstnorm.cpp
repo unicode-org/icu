@@ -13,7 +13,7 @@
 #include "unicode/uchar.h"
 #include "unicode/errorcode.h"
 #include "unicode/normlzr.h"
-#include "unicode/ucasemap.h"  // U_OMIT_UNCHANGED_TEXT
+#include "unicode/stringoptions.h"
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/schriter.h"

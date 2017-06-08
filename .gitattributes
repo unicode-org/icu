@@ -252,6 +252,7 @@ icu4c/source/common/unicode/schriter.h svneol=native#text/plain%3Bcharset%3Dutf-
 icu4c/source/common/unicode/simpleformatter.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/std_string.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/strenum.h svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/common/unicode/stringoptions.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/stringpiece.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/stringtriebuilder.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/unicode/symtable.h svneol=native#text/plain%3Bcharset%3Dutf-8
