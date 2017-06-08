@@ -1155,15 +1155,13 @@ public class DateTimeGeneratorTest extends TestFmwk {
     /* Tests the constructor
      *    public VariableField(String string)
      */
-    //TODO(junit) why is this "unused"
-    @SuppressWarnings("unused")
     @Test
     public void TestVariableField_String(){
         String[] cases = {"d","mm","aa"};
         String[] invalid = {null,"","dummy"};
         for(int i=0; i<cases.length; i++){
             try{
-                VariableField vf = new VariableField(cases[i]);
+                new VariableField(cases[i]);
             } catch(Exception e){
                 errln("VariableField constructor was not suppose to return " +
                         "an exception when created when passing " + cases[i]);
@@ -1171,7 +1169,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         }
         for(int i=0; i<invalid.length; i++){
             try{
-                VariableField vf = new VariableField(invalid[i]);
+                new VariableField(invalid[i]);
                 errln("VariableField constructor was suppose to return " +
                         "an exception when created when passing " + invalid[i]);
             } catch(Exception e){}
