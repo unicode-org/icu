@@ -164,7 +164,7 @@ appendResult(uint8_t *dest, int32_t destIndex, int32_t destCapacity,
         /* (not) original code point */
         if(edits!=NULL) {
             edits->addUnchanged(cpLength);
-            if(options & UCASEMAP_OMIT_UNCHANGED_TEXT) {
+            if(options & U_OMIT_UNCHANGED_TEXT) {
                 return destIndex;
             }
         }
@@ -282,7 +282,7 @@ appendUnchanged(uint8_t *dest, int32_t destIndex, int32_t destCapacity,
     if(length>0) {
         if(edits!=NULL) {
             edits->addUnchanged(length);
-            if(options & UCASEMAP_OMIT_UNCHANGED_TEXT) {
+            if(options & U_OMIT_UNCHANGED_TEXT) {
                 return destIndex;
             }
         }
@@ -666,7 +666,7 @@ int32_t toUpper(uint32_t options,
                         edits->addUnchanged(oldLength);
                     }
                     // Write unchanged text?
-                    change = (options & UCASEMAP_OMIT_UNCHANGED_TEXT) == 0;
+                    change = (options & U_OMIT_UNCHANGED_TEXT) == 0;
                 }
             }
 

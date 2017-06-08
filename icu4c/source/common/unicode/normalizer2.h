@@ -228,7 +228,7 @@ public:
      * (UNORM2_COMPOSE and UNORM2_COMPOSE_CONTIGUOUS).
      * Otherwise currently converts to & from UTF-16 and does not support edits.
      *
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
      * @param src       Source UTF-8 string.
      * @param sink      A ByteSink to which the normalized UTF-8 result string is written.
      *                  sink.Flush() is called at the end.

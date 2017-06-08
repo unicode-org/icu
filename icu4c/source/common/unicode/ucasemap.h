@@ -186,13 +186,13 @@ ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
 #define U_TITLECASE_NO_BREAK_ADJUSTMENT 0x200
 
 /**
- * Omit unchanged text when case-mapping with Edits.
+ * Omit unchanged text when case-mapping or normalizing with Edits.
  *
  * @see CaseMap
  * @see Edits
- * @draft ICU 59
+ * @draft ICU 60
  */
-#define UCASEMAP_OMIT_UNCHANGED_TEXT 0x4000
+#define U_OMIT_UNCHANGED_TEXT 0x4000
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
