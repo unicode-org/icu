@@ -23,7 +23,7 @@
 #include "unicode/bytestream.h"
 #include "unicode/edits.h"
 #include "unicode/normalizer2.h"
-#include "unicode/ucasemap.h"  // U_OMIT_UNCHANGED_TEXT
+#include "unicode/stringoptions.h"
 #include "unicode/udata.h"
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
