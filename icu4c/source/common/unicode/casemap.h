@@ -36,7 +36,7 @@ public:
      * The source string and the destination buffer must not overlap.
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
@@ -71,7 +71,7 @@ public:
      * The source string and the destination buffer must not overlap.
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
@@ -112,7 +112,7 @@ public:
      * all others. (This can be modified with options bits.)
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT,
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
      *                  U_TITLECASE_NO_LOWERCASE, U_TITLECASE_NO_BREAK_ADJUSTMENT.
      * @param iter      A break iterator to find the first characters of words that are to be titlecased.
      *                  It is set to the source string (setText())
@@ -159,7 +159,7 @@ public:
      * The result may be longer or shorter than the original.
      * The source string and the destination buffer must not overlap.
      *
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT,
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
      *                  U_FOLD_CASE_DEFAULT, U_FOLD_CASE_EXCLUDE_SPECIAL_I.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
@@ -195,7 +195,7 @@ public:
      * The source string and the destination buffer must not overlap.
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
@@ -230,7 +230,7 @@ public:
      * The source string and the destination buffer must not overlap.
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
@@ -271,7 +271,7 @@ public:
      * all others. (This can be modified with options bits.)
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT,
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
      *                  U_TITLECASE_NO_LOWERCASE, U_TITLECASE_NO_BREAK_ADJUSTMENT.
      * @param iter      A break iterator to find the first characters of words that are to be titlecased.
      *                  It is set to the source string (setText())
@@ -317,7 +317,7 @@ public:
      * The result may be longer or shorter than the original.
      * The source string and the destination buffer must not overlap.
      *
-     * @param options   Options bit set, usually 0. See UCASEMAP_OMIT_UNCHANGED_TEXT,
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
      *                  U_FOLD_CASE_DEFAULT, U_FOLD_CASE_EXCLUDE_SPECIAL_I.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.

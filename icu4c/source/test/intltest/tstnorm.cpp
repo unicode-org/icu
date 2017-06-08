@@ -13,7 +13,7 @@
 #include "unicode/uchar.h"
 #include "unicode/errorcode.h"
 #include "unicode/normlzr.h"
-#include "unicode/ucasemap.h"  // UCASEMAP_OMIT_UNCHANGED_TEXT
+#include "unicode/ucasemap.h"  // U_OMIT_UNCHANGED_TEXT
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/schriter.h"
@@ -1561,7 +1561,7 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
     expected = u8"aääạ\u0308ạ\u0308가각갃";
     result.clear();
     edits.reset();
-    nfkc_cf->normalizeUTF8(UCASEMAP_OMIT_UNCHANGED_TEXT, src, sink, &edits, errorCode);
+    nfkc_cf->normalizeUTF8(U_OMIT_UNCHANGED_TEXT, src, sink, &edits, errorCode);
     assertSuccess("normalizeUTF8 omit unchanged", errorCode.get());
     assertEquals("normalizeUTF8 omit unchanged", expected.c_str(), result.c_str());
     TestUtility::checkEditsIter(*this, u"normalizeUTF8 omit unchanged",

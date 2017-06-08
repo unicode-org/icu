@@ -23,7 +23,7 @@
 #include "unicode/bytestream.h"
 #include "unicode/edits.h"
 #include "unicode/normalizer2.h"
-#include "unicode/ucasemap.h"  // UCASEMAP_OMIT_UNCHANGED_TEXT
+#include "unicode/ucasemap.h"  // U_OMIT_UNCHANGED_TEXT
 #include "unicode/udata.h"
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
@@ -199,7 +199,7 @@ appendUnchanged(const uint8_t *s, const uint8_t *limit,
         if (edits != nullptr) {
             edits->addUnchanged(length);
         }
-        if ((options & UCASEMAP_OMIT_UNCHANGED_TEXT) ==0) {
+        if ((options & U_OMIT_UNCHANGED_TEXT) ==0) {
             sink.Append(reinterpret_cast<const char *>(s), length);
         }
     }

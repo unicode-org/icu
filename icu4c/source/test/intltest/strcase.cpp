@@ -911,7 +911,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
     UChar dest[20];
     Edits edits;
 
-    int32_t length = CaseMap::toLower("tr", UCASEMAP_OMIT_UNCHANGED_TEXT,
+    int32_t length = CaseMap::toLower("tr", U_OMIT_UNCHANGED_TEXT,
                                       u"IstanBul", 8, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toLower(IstanBul)", UnicodeString(u"ıb"), UnicodeString(TRUE, dest, length));
     static const EditChange lowerExpectedChanges[] = {
@@ -926,7 +926,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
             TRUE, errorCode);
 
     edits.reset();
-    length = CaseMap::toUpper("el", UCASEMAP_OMIT_UNCHANGED_TEXT,
+    length = CaseMap::toUpper("el", U_OMIT_UNCHANGED_TEXT,
                               u"Πατάτα", 6, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toUpper(Πατάτα)", UnicodeString(u"ΑΤΑΤΑ"), UnicodeString(TRUE, dest, length));
     static const EditChange upperExpectedChanges[] = {
@@ -946,7 +946,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
 
 #if !UCONFIG_NO_BREAK_ITERATION
     length = CaseMap::toTitle("nl",
-                              UCASEMAP_OMIT_UNCHANGED_TEXT |
+                              U_OMIT_UNCHANGED_TEXT |
                               U_TITLECASE_NO_BREAK_ADJUSTMENT |
                               U_TITLECASE_NO_LOWERCASE,
                               NULL, u"IjssEL IglOo", 12,
@@ -964,7 +964,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
 #endif
 
     edits.reset();
-    length = CaseMap::fold(UCASEMAP_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+    length = CaseMap::fold(U_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
                            u"IßtanBul", 8, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ıssb"), UnicodeString(TRUE, dest, length));
     static const EditChange foldExpectedChanges[] = {
@@ -985,7 +985,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
     char dest[50];
     Edits edits;
 
-    int32_t length = CaseMap::utf8ToLower("tr", UCASEMAP_OMIT_UNCHANGED_TEXT,
+    int32_t length = CaseMap::utf8ToLower("tr", U_OMIT_UNCHANGED_TEXT,
                                           u8"IstanBul", 8, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toLower(IstanBul)", UnicodeString(u"ıb"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
@@ -1001,7 +1001,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             TRUE, errorCode);
 
     edits.reset();
-    length = CaseMap::utf8ToUpper("el", UCASEMAP_OMIT_UNCHANGED_TEXT,
+    length = CaseMap::utf8ToUpper("el", U_OMIT_UNCHANGED_TEXT,
                                   u8"Πατάτα", 6 * 2, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toUpper(Πατάτα)", UnicodeString(u"ΑΤΑΤΑ"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
@@ -1021,7 +1021,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
     edits.reset();
 #if !UCONFIG_NO_BREAK_ITERATION
     length = CaseMap::utf8ToTitle("nl",
-                                  UCASEMAP_OMIT_UNCHANGED_TEXT |
+                                  U_OMIT_UNCHANGED_TEXT |
                                   U_TITLECASE_NO_BREAK_ADJUSTMENT |
                                   U_TITLECASE_NO_LOWERCASE,
                                   NULL, u8"IjssEL IglOo", 12,
@@ -1040,7 +1040,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
 #endif
 
     edits.reset();
-    length = CaseMap::utf8Fold(UCASEMAP_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+    length = CaseMap::utf8Fold(U_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
                                u8"IßtanBul", 1 + 2 + 6, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ıssb"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
