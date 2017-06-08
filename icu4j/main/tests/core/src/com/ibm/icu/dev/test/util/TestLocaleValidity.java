@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -201,8 +200,6 @@ public class TestLocaleValidity extends TestFmwk {
         }
     }
 
-    // TODO(junit): turned off for failure - need to investigate
-    @Ignore
     @Test
     public void testMissing() {
         String[][] tests = {
