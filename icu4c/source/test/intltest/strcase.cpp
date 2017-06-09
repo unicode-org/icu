@@ -19,6 +19,7 @@
 */
 
 #include "unicode/std_string.h"
+#include "unicode/brkiter.h"
 #include "unicode/casemap.h"
 #include "unicode/edits.h"
 #include "unicode/uchar.h"
@@ -49,6 +50,7 @@ public:
                         int32_t whichCase,
                         void *iter, const char *localeID, uint32_t options);
     void TestCasing();
+    void TestTitleOptions();
     void TestFullCaseFoldingIterator();
     void TestGreekUpper();
     void TestLongUpper();
@@ -84,6 +86,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestCaseConversion);
 #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     TESTCASE_AUTO(TestCasing);
+    TESTCASE_AUTO(TestTitleOptions);
 #endif
     TESTCASE_AUTO(TestFullCaseFoldingIterator);
     TESTCASE_AUTO(TestGreekUpper);
@@ -591,6 +594,59 @@ StringCaseTest::TestCasing() {
         dataerrln("UnicodeString::toTitle(NULL) failed.");
     }
 #endif
+}
+
+void
+StringCaseTest::TestTitleOptions() {
+    // New options in ICU 60.
+    TestCasingImpl(u"ʻcAt! ʻeTc.", u"ʻCat! ʻetc.", TEST_TITLE,
+                   nullptr, "", U_TITLECASE_WHOLE_STRING);
+    TestCasingImpl(u"a ʻCaT. A ʻdOg! ʻeTc.", u"A ʻCaT. A ʻdOg! ʻETc.", TEST_TITLE,
+                   nullptr, "", U_TITLECASE_SENTENCES|U_TITLECASE_NO_LOWERCASE);
+    TestCasingImpl(u"49eRs", u"49ers", TEST_TITLE,
+                   nullptr, "", U_TITLECASE_WHOLE_STRING);
+    TestCasingImpl(u"«丰(aBc)»", u"«丰(abc)»", TEST_TITLE,
+                   nullptr, "", U_TITLECASE_WHOLE_STRING);
+    TestCasingImpl(u"49eRs", u"49Ers", TEST_TITLE,
+                   nullptr, "", U_TITLECASE_WHOLE_STRING|U_TITLECASE_ADJUST_TO_CASED);
+    TestCasingImpl(u"«丰(aBc)»", u"«丰(Abc)»", TEST_TITLE,
+                   nullptr, "", U_TITLECASE_WHOLE_STRING|U_TITLECASE_ADJUST_TO_CASED);
+    TestCasingImpl(u" john. Smith", u" John. Smith", TEST_TITLE,
+                   nullptr, "", U_TITLECASE_WHOLE_STRING|U_TITLECASE_NO_LOWERCASE);
+    TestCasingImpl(u" john. Smith", u" john. smith", TEST_TITLE,
+                   nullptr, "", U_TITLECASE_WHOLE_STRING|U_TITLECASE_NO_BREAK_ADJUSTMENT);
+    TestCasingImpl(u"«ijs»", u"«IJs»", TEST_TITLE,
+                   nullptr, "nl-BE", U_TITLECASE_WHOLE_STRING);
+    TestCasingImpl(u"«ijs»", u"«İjs»", TEST_TITLE,
+                   nullptr, "tr-DE", U_TITLECASE_WHOLE_STRING);
+
+    // Test conflicting settings.
+    // If & when we add more options, then the ORed combinations may become
+    // indistinguishable from valid values.
+    IcuTestErrorCode errorCode(*this, "TestTitleOptions");
+    CaseMap::toTitle("", U_TITLECASE_NO_BREAK_ADJUSTMENT|U_TITLECASE_ADJUST_TO_CASED, nullptr,
+                     u"", 0, nullptr, 0, nullptr, errorCode);
+    if (errorCode.get() != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("CaseMap::toTitle(multiple adjustment options) -> %s not illegal argument",
+              errorCode.errorName());
+    }
+    errorCode.reset();
+    CaseMap::toTitle("", U_TITLECASE_WHOLE_STRING|U_TITLECASE_SENTENCES, nullptr,
+                     u"", 0, nullptr, 0, nullptr, errorCode);
+    if (errorCode.get() != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("CaseMap::toTitle(multiple iterator options) -> %s not illegal argument",
+              errorCode.errorName());
+    }
+    errorCode.reset();
+    LocalPointer<BreakIterator> iter(
+        BreakIterator::createCharacterInstance(Locale::getRoot(), errorCode));
+    CaseMap::toTitle("", U_TITLECASE_WHOLE_STRING, iter.getAlias(),
+                     u"", 0, nullptr, 0, nullptr, errorCode);
+    if (errorCode.get() != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("CaseMap::toTitle(iterator option + iterator) -> %s not illegal argument",
+              errorCode.errorName());
+    }
+    errorCode.reset();
 }
 
 void

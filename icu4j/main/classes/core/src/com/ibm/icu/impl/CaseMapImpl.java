@@ -3,11 +3,15 @@
 package com.ibm.icu.impl;
 
 import java.io.IOException;
+import java.text.CharacterIterator;
+import java.util.Locale;
 
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Edits;
 import com.ibm.icu.util.ICUUncheckedIOException;
+import com.ibm.icu.util.ULocale;
 
 public final class CaseMapImpl {
     /**
@@ -134,10 +138,191 @@ public final class CaseMapImpl {
         protected int dir; // 0=initial state  >0=forward  <0=backward
     }
 
+    public static final int TITLECASE_WHOLE_STRING = 0x20;
+    public static final int TITLECASE_SENTENCES = 0x40;
+
+    /**
+     * Bit mask for the titlecasing iterator options bit field.
+     * Currently only 3 out of 8 values are used:
+     * 0 (words), TITLECASE_WHOLE_STRING, TITLECASE_SENTENCES.
+     * See stringoptions.h.
+     * @internal
+     */
+    private static final int TITLECASE_ITERATOR_MASK = 0xe0;
+
+    public static final int TITLECASE_ADJUST_TO_CASED = 0x400;
+
+    /**
+     * Bit mask for the titlecasing index adjustment options bit set.
+     * Currently two bits are defined:
+     * TITLECASE_NO_BREAK_ADJUSTMENT, TITLECASE_ADJUST_TO_CASED.
+     * See stringoptions.h.
+     * @internal
+     */
+    private static final int TITLECASE_ADJUSTMENT_MASK = 0x600;
+
+    public static int addTitleAdjustmentOption(int options, int newOption) {
+        int adjOptions = options & TITLECASE_ADJUSTMENT_MASK;
+        if (adjOptions !=0 && adjOptions != newOption) {
+            throw new IllegalArgumentException("multiple titlecasing index adjustment options");
+        }
+        return options | newOption;
+    }
+
+    private static final int LNS =
+            (1 << UCharacterCategory.UPPERCASE_LETTER) |
+            (1 << UCharacterCategory.LOWERCASE_LETTER) |
+            (1 << UCharacterCategory.TITLECASE_LETTER) |
+            // Not MODIFIER_LETTER: We count only cased modifier letters.
+            (1 << UCharacterCategory.OTHER_LETTER) |
+
+            (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER) |
+            (1 << UCharacterCategory.LETTER_NUMBER) |
+            (1 << UCharacterCategory.OTHER_NUMBER) |
+
+            (1 << UCharacterCategory.MATH_SYMBOL) |
+            (1 << UCharacterCategory.CURRENCY_SYMBOL) |
+            (1 << UCharacterCategory.MODIFIER_SYMBOL) |
+            (1 << UCharacterCategory.OTHER_SYMBOL) |
+
+            (1 << UCharacterCategory.PRIVATE_USE);
+
+    private static boolean isLNS(int c) {
+        // Letter, number, symbol,
+        // or a private use code point because those are typically used as letters or numbers.
+        // Consider modifier letters only if they are cased.
+        int gc = UCharacterProperty.INSTANCE.getType(c);
+        return ((1 << gc) & LNS) != 0 ||
+                (gc == UCharacterCategory.MODIFIER_LETTER &&
+                    UCaseProps.INSTANCE.getType(c) != UCaseProps.NONE);
+    }
+
+    public static int addTitleIteratorOption(int options, int newOption) {
+        int iterOptions = options & TITLECASE_ITERATOR_MASK;
+        if (iterOptions !=0 && iterOptions != newOption) {
+            throw new IllegalArgumentException("multiple titlecasing iterator options");
+        }
+        return options | newOption;
+    }
+
+    public static BreakIterator getTitleBreakIterator(
+            Locale locale, int options, BreakIterator iter) {
+        options &= TITLECASE_ITERATOR_MASK;
+        if (options != 0 && iter != null) {
+            throw new IllegalArgumentException(
+                    "titlecasing iterator option together with an explicit iterator");
+        }
+        if (iter == null) {
+            switch (options) {
+            case 0:
+                iter = BreakIterator.getWordInstance(locale);
+                break;
+            case TITLECASE_WHOLE_STRING:
+                iter = new WholeStringBreakIterator();
+                break;
+            case TITLECASE_SENTENCES:
+                iter = BreakIterator.getSentenceInstance(locale);
+                break;
+            default:
+                throw new IllegalArgumentException("unknown titlecasing iterator option");
+            }
+        }
+        return iter;
+    }
+
+    public static BreakIterator getTitleBreakIterator(
+            ULocale locale, int options, BreakIterator iter) {
+        options &= TITLECASE_ITERATOR_MASK;
+        if (options != 0 && iter != null) {
+            throw new IllegalArgumentException(
+                    "titlecasing iterator option together with an explicit iterator");
+        }
+        if (iter == null) {
+            switch (options) {
+            case 0:
+                iter = BreakIterator.getWordInstance(locale);
+                break;
+            case TITLECASE_WHOLE_STRING:
+                iter = new WholeStringBreakIterator();
+                break;
+            case TITLECASE_SENTENCES:
+                iter = BreakIterator.getSentenceInstance(locale);
+                break;
+            default:
+                throw new IllegalArgumentException("unknown titlecasing iterator option");
+            }
+        }
+        return iter;
+    }
+
     /**
      * Omit unchanged text when case-mapping with Edits.
      */
     public static final int OMIT_UNCHANGED_TEXT = 0x4000;
+
+    private static final class WholeStringBreakIterator extends BreakIterator {
+        private int length;
+
+        private static void notImplemented() {
+            throw new UnsupportedOperationException("should not occur");
+        }
+
+        @Override
+        public int first() {
+            return 0;
+        }
+
+        @Override
+        public int last() {
+            notImplemented();
+            return 0;
+        }
+
+        @Override
+        public int next(int n) {
+            notImplemented();
+            return 0;
+        }
+
+        @Override
+        public int next() {
+            return length;
+        }
+
+        @Override
+        public int previous() {
+            notImplemented();
+            return 0;
+        }
+
+        @Override
+        public int following(int offset) {
+            notImplemented();
+            return 0;
+        }
+
+        @Override
+        public int current() {
+            notImplemented();
+            return 0;
+        }
+
+        @Override
+        public CharacterIterator getText() {
+            notImplemented();
+            return null;
+        }
+
+        @Override
+        public void setText(CharacterIterator newText) {
+            length = newText.getEndIndex();
+        }
+
+        @Override
+        public void setText(String newText) {
+            length = newText.length();
+        }
+    }
 
     private static int appendCodePoint(Appendable a, int c) throws IOException {
         if (c <= Character.MAX_VALUE) {
@@ -266,32 +451,33 @@ public final class CaseMapImpl {
                 }
 
                 /*
-                 * Unicode 4 & 5 section 3.13 Default Case Operations:
-                 *
-                 * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
-                 * #29, "Text Boundaries." Between each pair of word boundaries, find the first
-                 * cased character F. If F exists, map F to default_title(F); then map each
-                 * subsequent character C to default_lower(C).
-                 *
-                 * In this implementation, segment [prev..index[ into 3 parts:
-                 * a) uncased characters (copy as-is) [prev..titleStart[
-                 * b) first case letter (titlecase)         [titleStart..titleLimit[
+                 * Segment [prev..index[ into 3 parts:
+                 * a) skipped characters (copy as-is) [prev..titleStart[
+                 * b) first letter (titlecase)              [titleStart..titleLimit[
                  * c) subsequent characters (lowercase)                 [titleLimit..index[
                  */
                 if(prev<index) {
-                    // find and copy uncased characters [prev..titleStart[
+                    // Find and copy skipped characters [prev..titleStart[
                     int titleStart=prev;
                     iter.setLimit(index);
                     int c=iter.nextCaseMapCP();
-                    if((options&UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT)==0
-                            && UCaseProps.NONE==UCaseProps.INSTANCE.getType(c)) {
-                        // Adjust the titlecasing index (titleStart) to the next cased character.
-                        while((c=iter.nextCaseMapCP())>=0
-                                && UCaseProps.NONE==UCaseProps.INSTANCE.getType(c)) {}
+                    if ((options&UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT)==0) {
+                        // Adjust the titlecasing index to the next cased character,
+                        // or to the next letter/number/symbol/private use.
+                        // Stop with titleStart<titleLimit<=index
+                        // if there is a character to be titlecased,
+                        // or else stop with titleStart==titleLimit==index.
+                        boolean toCased = (options&CaseMapImpl.TITLECASE_ADJUST_TO_CASED) != 0;
+                        while ((toCased ?
+                                    UCaseProps.NONE==UCaseProps.INSTANCE.getType(c) :
+                                        !CaseMapImpl.isLNS(c)) &&
+                                (c=iter.nextCaseMapCP())>=0) {}
                         // If c<0 then we have only uncased characters in [prev..index[
                         // and stopped with titleStart==titleLimit==index.
                         titleStart=iter.getCPStart();
-                        appendUnchanged(src, prev, titleStart-prev, dest, options, edits);
+                        if (prev < titleStart) {
+                            appendUnchanged(src, prev, titleStart-prev, dest, options, edits);
+                        }
                     }
 
                     if(titleStart<index) {

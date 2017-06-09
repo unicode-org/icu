@@ -202,7 +202,7 @@ ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode
  * The standard titlecase iterator for the root locale implements the
  * algorithm of Unicode TR 21.
  *
- * This function uses only the setUText(), first(), next() and close() methods of the
+ * This function uses only the setText(), first() and next() methods of the
  * provided break iterator.
  *
  * The result may be longer or shorter than the original.

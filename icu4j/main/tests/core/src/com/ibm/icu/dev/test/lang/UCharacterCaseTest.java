@@ -343,6 +343,63 @@ public final class UCharacterCaseTest extends TestFmwk
          }
     }
 
+    // Not a @Test. See ICU4C intltest strcase.cpp TestCasingImpl().
+    void TestCasingImpl(String input, String output, CaseMap.Title toTitle, Locale locale) {
+        String result = toTitle.apply(locale, null, input, new StringBuilder(), null).toString();
+        assertEquals("toTitle(" + input + ')', output, result);
+    }
+
+    @Test
+    public void TestTitleOptions() {
+        Locale root = Locale.ROOT;
+        // New options in ICU 60.
+        TestCasingImpl("ʻcAt! ʻeTc.", "ʻCat! ʻetc.",
+                CaseMap.toTitle().wholeString(), root);
+        TestCasingImpl("a ʻCaT. A ʻdOg! ʻeTc.", "A ʻCaT. A ʻdOg! ʻETc.",
+                CaseMap.toTitle().sentences().noLowercase(), root);
+        TestCasingImpl("49eRs", "49ers",
+                CaseMap.toTitle().wholeString(), root);
+        TestCasingImpl("«丰(aBc)»", "«丰(abc)»",
+                CaseMap.toTitle().wholeString(), root);
+        TestCasingImpl("49eRs", "49Ers",
+                CaseMap.toTitle().wholeString().adjustToCased(), root);
+        TestCasingImpl("«丰(aBc)»", "«丰(Abc)»",
+                CaseMap.toTitle().wholeString().adjustToCased(), root);
+        TestCasingImpl(" john. Smith", " John. Smith",
+                CaseMap.toTitle().wholeString().noLowercase(), root);
+        TestCasingImpl(" john. Smith", " john. smith",
+                CaseMap.toTitle().wholeString().noBreakAdjustment(), root);
+        TestCasingImpl("«ijs»", "«IJs»",
+                CaseMap.toTitle().wholeString(), new Locale("nl", "BE"));
+        TestCasingImpl("«ijs»", "«İjs»",
+                CaseMap.toTitle().wholeString(), new Locale("tr", "DE"));
+
+        // Test conflicting settings.
+        // If & when we add more options, then the ORed combinations may become
+        // indistinguishable from valid values.
+        try {
+            CaseMap.toTitle().noBreakAdjustment().adjustToCased().
+                    apply(root, null, "", new StringBuilder(), null);
+            fail("CaseMap.toTitle(multiple adjustment options) " +
+                    "did not throw an IllegalArgumentException");
+        } catch(IllegalArgumentException expected) {
+        }
+        try {
+            CaseMap.toTitle().wholeString().sentences().
+                    apply(root, null, "", new StringBuilder(), null);
+            fail("CaseMap.toTitle(multiple iterator options) " +
+                    "did not throw an IllegalArgumentException");
+        } catch(IllegalArgumentException expected) {
+        }
+        BreakIterator iter = BreakIterator.getCharacterInstance(root);
+        try {
+            CaseMap.toTitle().wholeString().apply(root, iter, "", new StringBuilder(), null);
+            fail("CaseMap.toTitle(iterator option + iterator) " +
+                    "did not throw an IllegalArgumentException");
+        } catch(IllegalArgumentException expected) {
+        }
+    }
+
     @Test
     public void TestDutchTitle() {
         ULocale LOC_DUTCH = new ULocale("nl");
