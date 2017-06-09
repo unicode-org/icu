@@ -113,7 +113,9 @@ public:
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
      * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
-     *                  U_TITLECASE_NO_LOWERCASE, U_TITLECASE_NO_BREAK_ADJUSTMENT.
+     *                  U_TITLECASE_NO_LOWERCASE,
+     *                  U_TITLECASE_NO_BREAK_ADJUSTMENT, U_TITLECASE_ADJUST_TO_CASED,
+     *                  U_TITLECASE_WHOLE_STRING, U_TITLECASE_SENTENCES.
      * @param iter      A break iterator to find the first characters of words that are to be titlecased.
      *                  It is set to the source string (setText())
      *                  and used one or more times for iteration (first() and next()).
@@ -272,9 +274,11 @@ public:
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
      * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
-     *                  U_TITLECASE_NO_LOWERCASE, U_TITLECASE_NO_BREAK_ADJUSTMENT.
+     *                  U_TITLECASE_NO_LOWERCASE,
+     *                  U_TITLECASE_NO_BREAK_ADJUSTMENT, U_TITLECASE_ADJUST_TO_CASED,
+     *                  U_TITLECASE_WHOLE_STRING, U_TITLECASE_SENTENCES.
      * @param iter      A break iterator to find the first characters of words that are to be titlecased.
-     *                  It is set to the source string (setText())
+     *                  It is set to the source string (setUText())
      *                  and used one or more times for iteration (first() and next()).
      *                  If NULL, then a word break iterator for the locale is used
      *                  (or something equivalent).

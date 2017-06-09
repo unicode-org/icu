@@ -237,7 +237,7 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
                          const UChar *src, int32_t srcLength,
                          icu::Edits *edits,
                          UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) {
+    if (!ustrcase_checkTitleAdjustmentOptions(options, errorCode)) {
         return 0;
     }
 
@@ -264,45 +264,38 @@ ustrcase_internalToTitle(int32_t caseLocale, uint32_t options, BreakIterator *it
         }
 
         /*
-         * Unicode 4 & 5 section 3.13 Default Case Operations:
-         *
-         * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
-         * #29, "Text Boundaries." Between each pair of word boundaries, find the first
-         * cased character F. If F exists, map F to default_title(F); then map each
-         * subsequent character C to default_lower(C).
-         *
-         * In this implementation, segment [prev..index[ into 3 parts:
-         * a) uncased characters (copy as-is) [prev..titleStart[
-         * b) first case letter (titlecase)         [titleStart..titleLimit[
+         * Segment [prev..index[ into 3 parts:
+         * a) skipped characters (copy as-is) [prev..titleStart[
+         * b) first letter (titlecase)              [titleStart..titleLimit[
          * c) subsequent characters (lowercase)                 [titleLimit..index[
          */
         if(prev<index) {
-            /* find and copy uncased characters [prev..titleStart[ */
+            // Find and copy skipped characters [prev..titleStart[
             int32_t titleStart=prev;
             int32_t titleLimit=prev;
             UChar32 c;
             U16_NEXT(src, titleLimit, index, c);
-            if((options&U_TITLECASE_NO_BREAK_ADJUSTMENT)==0 && UCASE_NONE==ucase_getType(c)) {
-                /* Adjust the titlecasing index (titleStart) to the next cased character. */
-                for(;;) {
+            if ((options&U_TITLECASE_NO_BREAK_ADJUSTMENT)==0) {
+                // Adjust the titlecasing index to the next cased character,
+                // or to the next letter/number/symbol/private use.
+                // Stop with titleStart<titleLimit<=index
+                // if there is a character to be titlecased,
+                // or else stop with titleStart==titleLimit==index.
+                UBool toCased = (options&U_TITLECASE_ADJUST_TO_CASED) != 0;
+                while (toCased ? UCASE_NONE==ucase_getType(c) : !ustrcase_isLNS(c)) {
                     titleStart=titleLimit;
                     if(titleLimit==index) {
-                        /*
-                         * only uncased characters in [prev..index[
-                         * stop with titleStart==titleLimit==index
-                         */
                         break;
                     }
                     U16_NEXT(src, titleLimit, index, c);
-                    if(UCASE_NONE!=ucase_getType(c)) {
-                        break; /* cased letter at [titleStart..titleLimit[ */
-                    }
                 }
-                destIndex=appendUnchanged(dest, destIndex, destCapacity,
-                                          src+prev, titleStart-prev, options, edits);
-                if(destIndex<0) {
-                    errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-                    return 0;
+                if (prev < titleStart) {
+                    destIndex=appendUnchanged(dest, destIndex, destCapacity,
+                                              src+prev, titleStart-prev, options, edits);
+                    if(destIndex<0) {
+                        errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                        return 0;
+                    }
                 }
             }
 

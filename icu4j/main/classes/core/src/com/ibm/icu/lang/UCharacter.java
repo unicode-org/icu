@@ -5185,21 +5185,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toTitleCase(ULocale locale, String str,
             BreakIterator titleIter, int options) {
-        if(titleIter == null) {
-            if (locale == null) {
-                locale = ULocale.getDefault();
-            }
-            titleIter = BreakIterator.getWordInstance(locale);
+        if (titleIter == null && locale == null) {
+            locale = ULocale.getDefault();
         }
+        titleIter = CaseMapImpl.getTitleBreakIterator(locale, options, titleIter);
         titleIter.setText(str);
         return toTitleCase(getCaseLocale(locale), options, titleIter, str);
     }
-
-
-    private static final int BREAK_MASK =
-            (1<<UCharacterCategory.DECIMAL_DIGIT_NUMBER)
-            | (1<<UCharacterCategory.OTHER_LETTER)
-            | (1<<UCharacterCategory.MODIFIER_LETTER);
 
     /**
      * Return a string with just the first word titlecased, for menus and UI, etc. This does not affect most of the string,
@@ -5225,49 +5217,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     @Deprecated
     public static String toTitleFirst(ULocale locale, String str) {
-        int c = 0;
-        for (int i = 0; i < str.length(); i += UCharacter.charCount(c)) {
-            c = UCharacter.codePointAt(str, i);
-            int propertyMask = UCharacter.getIntPropertyValue(c, UProperty.GENERAL_CATEGORY_MASK);
-            if ((propertyMask & BREAK_MASK) != 0) { // handle "49ers", initial CJK
-                break;
-            }
-            if (UCaseProps.INSTANCE.getType(c) == UCaseProps.NONE) {
-                continue;
-            }
-
-            // we now have the first cased character
-            // What we really want is something like:
-            // String titled = UCharacter.toTitleCase(locale, str, i, outputCharsTaken);
-            // That is, just give us the titlecased string, for the locale, at i and following,
-            // and tell us how many characters are replaced.
-            // The following won't work completely: it needs some more substantial changes to UCaseProps
-
-            String substring = str.substring(i, i+UCharacter.charCount(c));
-            String titled = UCharacter.toTitleCase(locale, substring, BreakIterator.getSentenceInstance(locale), 0);
-
-            // skip if no change
-            if (titled.codePointAt(0) == c) {
-                // Using 0 is safe, since any change in titling will not have first initial character
-                break;
-            }
-            StringBuilder result = new StringBuilder(str.length()).append(str, 0, i);
-            int startOfSuffix;
-
-            // handle dutch, but check first for 'i', since that's faster. Should be built into UCaseProps.
-
-            if (c == 'i' && locale.getLanguage().equals("nl") && i < str.length() && str.charAt(i+1) == 'j') {
-                result.append("IJ");
-                startOfSuffix = 2;
-            } else {
-                result.append(titled);
-                startOfSuffix = i + UCharacter.charCount(c);
-            }
-
-            // add the remainder, and return
-            return result.append(str, startOfSuffix, str.length()).toString();
-        }
-        return str; // no change
+        return toTitleCase(locale, str, null,
+                CaseMapImpl.TITLECASE_WHOLE_STRING|TITLECASE_NO_LOWERCASE);
+        // TODO: Remove this function.
+        // Move something like the following helper function into CLDR.
+        // private static final CaseMap.Title TO_TITLE_WHOLE_STRING_NO_LOWERCASE =
+        //         CaseMap.toTitle().wholeString().noLowercase();
+        // return TO_TITLE_WHOLE_STRING_NO_LOWERCASE.apply(
+        //         locale.toLocale(), null, str, new StringBuilder(), null).toString();
     }
 
     /**
@@ -5295,9 +5252,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String toTitleCase(Locale locale, String str,
             BreakIterator titleIter,
             int options) {
-        if(titleIter == null) {
-            titleIter = BreakIterator.getWordInstance(locale);
+        if (titleIter == null && locale == null) {
+            locale = Locale.getDefault();
         }
+        titleIter = CaseMapImpl.getTitleBreakIterator(locale, options, titleIter);
         titleIter.setText(str);
         return toTitleCase(getCaseLocale(locale), options, titleIter, str);
     }

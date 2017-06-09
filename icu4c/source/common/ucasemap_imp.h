@@ -9,7 +9,26 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucasemap.h"
+#include "unicode/uchar.h"
 #include "ucase.h"
+
+/**
+ * Bit mask for the titlecasing iterator options bit field.
+ * Currently only 3 out of 8 values are used:
+ * 0 (words), U_TITLECASE_WHOLE_STRING, U_TITLECASE_SENTENCES.
+ * See stringoptions.h.
+ * @internal
+ */
+#define U_TITLECASE_ITERATOR_MASK 0xe0
+
+/**
+ * Bit mask for the titlecasing index adjustment options bit set.
+ * Currently two bits are defined:
+ * U_TITLECASE_NO_BREAK_ADJUSTMENT, U_TITLECASE_ADJUST_TO_CASED.
+ * See stringoptions.h.
+ * @internal
+ */
+#define U_TITLECASE_ADJUSTMENT_MASK 0x600
 
 /**
  * Internal API, used by u_strcasecmp() etc.
@@ -23,7 +42,7 @@ u_strcmpFold(const UChar *s1, int32_t length1,
              UErrorCode *pErrorCode);
 
 /**
- * Interanl API, used for detecting length of
+ * Internal API, used for detecting length of
  * shared prefix case-insensitively.
  * @param s1            input string 1
  * @param length1       length of string 1, or -1 (NULL terminated)
@@ -51,6 +70,40 @@ U_CFUNC UBool
 uprv_haveProperties(UErrorCode *pErrorCode);
 
 #ifdef __cplusplus
+
+U_NAMESPACE_BEGIN
+
+/** Returns TRUE if the options are valid. Otherwise FALSE, and sets an error. */
+inline UBool ustrcase_checkTitleAdjustmentOptions(uint32_t options, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return FALSE; }
+    if ((options & U_TITLECASE_ADJUSTMENT_MASK) == U_TITLECASE_ADJUSTMENT_MASK) {
+        // Both options together.
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    }
+    return TRUE;
+}
+
+inline UBool ustrcase_isLNS(UChar32 c) {
+    // Letter, number, symbol,
+    // or a private use code point because those are typically used as letters or numbers.
+    // Consider modifier letters only if they are cased.
+    const uint32_t LNS = (U_GC_L_MASK|U_GC_N_MASK|U_GC_S_MASK|U_GC_CO_MASK) & ~U_GC_LM_MASK;
+    int gc = u_charType(c);
+    return (U_MASK(gc) & LNS) != 0 || (gc == U_MODIFIER_LETTER && ucase_getType(c) != UCASE_NONE);
+}
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
+/** Returns nullptr if error. Pass in either locale or locID, not both. */
+U_CFUNC
+BreakIterator *ustrcase_getTitleBreakIterator(
+        const Locale *locale, const char *locID, uint32_t options, BreakIterator *iter,
+        LocalPointer<BreakIterator> &ownedIter, UErrorCode &errorCode);
+
+#endif
+
+U_NAMESPACE_END
 
 #include "unicode/unistr.h"  // for UStringCaseMapper
 
