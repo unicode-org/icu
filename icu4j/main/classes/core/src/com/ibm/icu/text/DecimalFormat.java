@@ -802,7 +802,7 @@ public class DecimalFormat extends NumberFormat {
     Number result = Parse.parse(text, parsePosition, pprops, symbols);
     // Backwards compatibility: return com.ibm.icu.math.BigDecimal
     if (result instanceof java.math.BigDecimal) {
-      result = new com.ibm.icu.math.BigDecimal((java.math.BigDecimal) result);
+      result = safeConvertBigDecimal((java.math.BigDecimal) result);
     }
     return result;
   }
@@ -821,7 +821,7 @@ public class DecimalFormat extends NumberFormat {
       Number number = result.getNumber();
       // Backwards compatibility: return com.ibm.icu.math.BigDecimal
       if (number instanceof java.math.BigDecimal) {
-        number = new com.ibm.icu.math.BigDecimal((java.math.BigDecimal) number);
+        number = safeConvertBigDecimal((java.math.BigDecimal) number);
         result = new CurrencyAmount(number, result.getCurrency());
       }
       return result;
@@ -2437,6 +2437,29 @@ public class DecimalFormat extends NumberFormat {
     formatter = Endpoint.fromBTA(properties, symbols);
     exportedProperties.clear();
     formatter.export(exportedProperties);
+  }
+
+  /**
+   * Converts a java.math.BigDecimal to a com.ibm.icu.math.BigDecimal with fallback for numbers
+   * outside of the range supported by com.ibm.icu.math.BigDecimal.
+   *
+   * @param number
+   * @return
+   */
+  private Number safeConvertBigDecimal(java.math.BigDecimal number) {
+    try {
+      return new com.ibm.icu.math.BigDecimal(number);
+    } catch (NumberFormatException e) {
+      if (number.signum() > 0 && number.scale() < 0) {
+        return Double.POSITIVE_INFINITY;
+      } else if (number.scale() < 0) {
+        return Double.NEGATIVE_INFINITY;
+      } else if (number.signum() < 0) {
+        return -0.0;
+      } else {
+        return 0.0;
+      }
+    }
   }
 
   /**

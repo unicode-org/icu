@@ -2146,54 +2146,6 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    // TODO(junit): orphan method
-    public void convertAllTest(ByteBuffer bSource, CharBuffer uSource) throws Exception {
-        String encoding = "UTF-16";
-        CharsetDecoder decoder = null;
-        CharsetEncoder encoder = null;
-        try {
-            CharsetProviderICU provider = new CharsetProviderICU();
-            Charset charset = provider.charsetForName(encoding);
-            decoder = charset.newDecoder();
-            encoder = charset.newEncoder();
-        } catch(MissingResourceException ex) {
-            warnln("Could not load charset data: " + encoding);
-            return;
-        }
-        {
-            try {
-                decoder.reset();
-                ByteBuffer mySource = bSource.duplicate();
-                CharBuffer myTarget = decoder.decode(mySource);
-                if (!equals(myTarget, uSource)) {
-                    errln(
-                        "--Test convertAll() "
-                            + encoding
-                            + " to Unicode  --FAILED");
-                }
-            } catch (Exception e) {
-                //e.printStackTrace();
-                errln(e.getMessage());
-            }
-        }
-        {
-            try {
-                encoder.reset();
-                CharBuffer mySource = CharBuffer.wrap(uSource);
-                ByteBuffer myTarget = encoder.encode(mySource);
-                if (!equals(myTarget, bSource)) {
-                    errln(
-                        "--Test convertAll() "
-                            + encoding
-                            + " to Unicode  --FAILED");
-                }
-            } catch (Exception e) {
-                //e.printStackTrace();
-                errln("encoder.encode() failed "+ e.getMessage()+" "+e.toString());
-            }
-        }
-
-    }
 
     //TODO
     /*

@@ -5022,6 +5022,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("hh bbbbb | 00:30:00", "12 a", sdf.format(k003000));
     }
 
+    @Test
     public void TestFlexibleDayPeriod() {
         // Some times on 2015-11-13.
         long k000000 = 1447372800000L;
@@ -5120,6 +5121,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("hh BBBBB | 00:30:00", "12 at night", sdf.format(k003000));
     }
 
+    @Test
     public void TestDayPeriodWithLocales() {
         // Some times on 2015-11-13 (UTC+0).
         long k000000 = 1447372800000L;
@@ -5195,6 +5197,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("hh:mm:ss BBBB | 01:00:00 | es", "01:00:00 de la madrugada", sdf.format(k010000));
     }
 
+    @Test
     public void TestMinuteSecondFieldsInOddPlaces() {
         // Some times on 2015-11-13 (UTC+0).
         long k000000 = 1447372800000L;
@@ -5262,6 +5265,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("BBBB hh:mm:ss | 00:00:30", "at night 12:00:30", sdf.format(k000030));
     }
 
+    @Test
     public void TestDayPeriodParsing() throws ParseException {
         // Some times on 2015-11-13 (UTC+0).
         Date k000000 = new Date(1447372800000L);

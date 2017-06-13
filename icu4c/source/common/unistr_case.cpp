@@ -162,7 +162,7 @@ UnicodeString::caseMap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITER
       iter->setText(oldString);
     }
 #endif
-    stringCaseMapper(caseLocale, options | UCASEMAP_OMIT_UNCHANGED_TEXT, UCASEMAP_BREAK_ITERATOR
+    stringCaseMapper(caseLocale, options | U_OMIT_UNCHANGED_TEXT, UCASEMAP_BREAK_ITERATOR
                      replacementChars, UPRV_LENGTHOF(replacementChars),
                      oldArray, oldLength, &edits, errorCode);
     if (U_SUCCESS(errorCode)) {

@@ -586,8 +586,8 @@ public final class UTS46 extends IDNA {
         ) {
             setNotOkBiDi(info);
         }
-        // Get the directionalities of the intervening characters.
-        int mask=0;
+        // Add the directionalities of the intervening characters.
+        int mask=firstMask|lastMask;
         while(i<labelLimit) {
             c=Character.codePointAt(label, i);
             i+=Character.charCount(c);
@@ -617,7 +617,7 @@ public final class UTS46 extends IDNA {
         // label. [...]
         // The following rule, consisting of six conditions, applies to labels
         // in BIDI domain names.
-        if(((firstMask|mask|lastMask)&R_AL_AN_MASK)!=0) {
+        if((mask&R_AL_AN_MASK)!=0) {
             setBiDi(info);
         }
     }

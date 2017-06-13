@@ -249,11 +249,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="extradata.cpp" />
     <ClCompile Include="gennorm2.cpp" />
     <ClCompile Include="n2builder.cpp" />
+    <ClCompile Include="norms.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="extradata.h" />
     <ClInclude Include="n2builder.h" />
+    <ClInclude Include="norms.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\common\common.vcxproj">

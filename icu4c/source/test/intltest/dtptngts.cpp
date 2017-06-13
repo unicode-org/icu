@@ -35,6 +35,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(2, testAllFieldPatterns);
         TESTCASE(3, testStaticGetSkeleton);
         TESTCASE(4, testC);
+        TESTCASE(5, testSkeletonsWithDayPeriods);
         default: name = ""; break;
     }
 }
@@ -355,6 +356,16 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("MMMMMd"),
     };
 
+    const char* testGetSkeletonAndBase[][3] = {
+        // pattern       skeleton    baseSkeleton
+        { "dd-MMM",     "MMMdd",    "MMMd" },
+        { "dd/MMMM/yy", "yyMMMMdd", "yMMMMd" },
+        { "h",          "h",        "h" },
+        { "ah",         "ah",       "ah" },
+        { "aaaah",      "aaaah",    "aaaah" },
+        { "Bh",         "Bh",       "Bh" }
+    };
+
     UnicodeString newDecimal(" "); // space
     UnicodeString newAppendItemName("hrs.");
     UnicodeString newAppendItemFormat("{1} {0}");
@@ -510,34 +521,25 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
 
     // ======== Test getSkeleton and getBaseSkeleton
-    status = U_ZERO_ERROR;
-    pattern = UnicodeString("dd-MMM");
-    UnicodeString expectedSkeleton = UnicodeString("MMMdd");
-    UnicodeString expectedBaseSkeleton = UnicodeString("MMMd");
-    UnicodeString retSkeleton = gen->getSkeleton(pattern, status);
-    if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
-         errln("ERROR: Unexpected result from getSkeleton().\n");
-         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
-    }
-    retSkeleton = gen->getBaseSkeleton(pattern, status);
-    if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
-         errln("ERROR: Unexpected result from getBaseSkeleton().\n");
-         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
+    
+    int32_t i, count = UPRV_LENGTHOF(testGetSkeletonAndBase);
+    for (i = 0; i < count; i++) {
+        status = U_ZERO_ERROR;
+        pattern                            = UnicodeString(testGetSkeletonAndBase[i][0]);
+        UnicodeString expectedSkeleton     = UnicodeString(testGetSkeletonAndBase[i][1]);
+        UnicodeString expectedBaseSkeleton = UnicodeString(testGetSkeletonAndBase[i][2]);
+        UnicodeString retSkeleton = gen->getSkeleton(pattern, status);
+		if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
+			 errln("ERROR: Unexpected result from getSkeleton().\n");
+			 errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
+		}
+		retSkeleton = gen->getBaseSkeleton(pattern, status);
+		if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
+			 errln("ERROR: Unexpected result from getBaseSkeleton().\n");
+			 errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
+		}
     }
 
-    pattern = UnicodeString("dd/MMMM/yy");
-    expectedSkeleton = UnicodeString("yyMMMMdd");
-    expectedBaseSkeleton = UnicodeString("yMMMMd");
-    retSkeleton = gen->getSkeleton(pattern, status);
-    if(U_FAILURE(status) || retSkeleton != expectedSkeleton ) {
-         errln("ERROR: Unexpected result from getSkeleton().\n");
-         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected: ") + expectedSkeleton );
-    }
-    retSkeleton = gen->getBaseSkeleton(pattern, status);
-    if(U_FAILURE(status) || retSkeleton !=  expectedBaseSkeleton) {
-         errln("ERROR: Unexpected result from getBaseSkeleton().\n");
-         errln(UnicodeString(" Got: ") + retSkeleton + UnicodeString(" Expected:")+ expectedBaseSkeleton);
-    }
     delete format;
     delete zone;
     delete gen;
@@ -710,7 +712,6 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         return;
     }
     UChar newChar;
-    int32_t i;
     for (i=0; i<10; ++i) {
         UnicodeString randomSkeleton;
         int32_t len = rand() % 20;
@@ -770,7 +771,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
     UnicodeString returnPattern, *ptrSkeleton;
     ptrSkeletonEnum->reset(status);
-    int32_t count=ptrSkeletonEnum->count(status);
+    count=ptrSkeletonEnum->count(status);
     for (i=0; i<count; ++i) {
         ptrSkeleton = (UnicodeString *)ptrSkeletonEnum->snext(status);
         returnPattern = test->getPatternForSkeleton(*ptrSkeleton);
@@ -976,13 +977,17 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
         { 'e',  {1,2,3,4,5,6},  "Eec"  }, // local day of week
         { 'c',  {1,2,3,4,5,6},  "Eec"  }, // standalone local day of week
         // day period
-    //  { 'a',  {1,0},          "a"    }, // am or pm   // not clear this one is supposed to work (it doesn't)
+        { 'a',  {1,2,3,4,5,0},  "a"    }, // am or pm
+        { 'b',  {1,2,3,4,5,0},  "b"    }, // dayPeriod AM/PM/noon
+        { 'B',  {1,2,3,4,5,0},  "B"    }, // dayPeriod ranges
         // hour
         { 'h',  {1,2,0},        "hK"   }, // 12 (1-12)
         { 'H',  {1,2,0},        "Hk"   }, // 24 (0-23)
         { 'K',  {1,2,0},        "hK"   }, // 12 (0-11)
         { 'k',  {1,2,0},        "Hk"   }, // 24 (1-24)
         { 'j',  {1,2,0},        "hHKk" }, // locale default
+        { 'J',  {1,2,0},        "hHKk" }, // locale default, without any dayPeriod
+        { 'C',  {1,2,0},        "hHKk" }, // locale allowed first entry, possibly with b or B
         // minute
         { 'm',  {1,2,0},        "m"    }, // x
         // second & fractions
@@ -1084,25 +1089,39 @@ void IntlTestDateTimePatternGeneratorAPI::testStaticGetSkeleton(/*char *par*/)
 }
 
 void IntlTestDateTimePatternGeneratorAPI::testC() {
-    UErrorCode status = U_ZERO_ERROR;
-    const int32_t numLocales = 6;
-
-    const char* tests[numLocales][3] = {
-            {"zh", "Cm", "Bh:mm"},
-            {"de", "Cm", "HH:mm"},
-            {"en", "Cm", "h:mm a"},
-            {"en-BN", "Cm", "h:mm b"},
-            {"gu-IN", "Cm", "h:mm B"},
-            {"und-IN", "Cm", "h:mm a"},
+    const char* tests[][3] = {
+            // These may change with actual data for Bhmm/bhmm skeletons
+            {"zh",     "Cm",      "Bh:mm"},
+            {"zh",     "CCm",     "Bhh:mm"},
+            {"zh",     "CCCm",    "BBBBh:mm"},
+            {"zh",     "CCCCm",   "BBBBhh:mm"},
+            {"zh",     "CCCCCm",  "BBBBBh:mm"},
+            {"zh",     "CCCCCCm", "BBBBBhh:mm"},
+            {"de",     "Cm",      "HH:mm"},
+            {"de",     "CCm",     "HH:mm"},
+            {"de",     "CCCm",    "HH:mm"},
+            {"de",     "CCCCm",   "HH:mm"},
+            {"en",     "Cm",      "h:mm a"},
+            {"en",     "CCm",     "hh:mm a"},
+            {"en",     "CCCm",    "h:mm aaaa"},
+            {"en",     "CCCCm",   "hh:mm aaaa"},
+            {"en",     "CCCCCm",  "h:mm aaaaa"},
+            {"en",     "CCCCCCm", "hh:mm aaaaa"},
+            {"en-BN",  "Cm",      "h:mm b"},
+            {"gu-IN",  "Cm",      "h:mm B"},
+            {"und-IN", "Cm",      "h:mm a"}
     };
 
-    for (int32_t i = 0; i < numLocales; ++i) {
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t numTests = UPRV_LENGTHOF(tests);
+    for (int32_t i = 0; i < numTests; ++i) {
         DateTimePatternGenerator *gen = DateTimePatternGenerator::createInstance(Locale(tests[i][0]), status);
         if (gen == NULL) {
             dataerrln("FAIL: DateTimePatternGenerator::createInstance failed for %s", tests[i][0]);
             return;
         }
-        UnicodeString pattern = gen->getBestPattern(tests[i][1], status);
+        UDateTimePatternMatchOptions options = UDATPG_MATCH_HOUR_FIELD_LENGTH;
+        UnicodeString pattern = gen->getBestPattern(tests[i][1], options, status);
         UnicodeString expectedPattern = tests[i][2];
 
         char message[100] = "\0";
@@ -1112,6 +1131,83 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
         assertEquals(message, expectedPattern, pattern);
         delete gen;
     }
+}
+
+enum { kCharBufMax = 31 };
+void IntlTestDateTimePatternGeneratorAPI::testSkeletonsWithDayPeriods() {
+    const char * patterns[] = {
+        // since icu4c getEmptyInstance does not call addCanonicalItems (unlike J), set these here:
+        "a",    // should get internal skeleton a
+        "H",    // should get internalskeleton H
+        "m",    // should get internalskeleton m
+        "s",    // should get internalskeleton s
+        // patterns from which to construct sample data for a locale
+        //"H",  // should get internalskeleton H
+        "h a",  // should get internalskeleton ah
+        "B h",  // should get internalskeleton Bh
+    };
+    const char* testItems[][2] = {
+        // sample requested skeletons and results
+        // skel     pattern
+        { "H",      "H"},
+        { "HH",     "HH"},
+        { "aH",     "H"},
+        { "aHH",    "HH"},
+        { "BH",     "H"},
+        { "BHH",    "HH"},
+        { "BBBBH",  "H"},
+        { "h",      "h a"},
+        { "hh",     "hh a"},
+        { "ah",     "h a"},
+        { "ahh",    "hh a"},
+        { "aaaah",  "h aaaa"},
+        { "aaaahh", "hh aaaa"},
+        { "bh",     "h b"},
+        { "bhh",    "hh b"},
+        { "bbbbh",  "h bbbb"},
+        { "Bh",     "B h"},
+        { "Bhh",    "B hh"},
+        { "BBBBh",  "BBBB h"},
+        { "BBBBhh", "BBBB hh"},
+        { "a",      "a"},
+        { "aaaaa",  "aaaaa"},
+        { "b",      "b"},
+        { "bbbb",   "bbbb"},
+        { "B",      "B"},
+        { "BBBB",  "BBBB"},
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    DateTimePatternGenerator *gen = DateTimePatternGenerator::createEmptyInstance(status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: createEmptyInstance fails, status: %s", u_errorName(status));
+    } else {
+        int32_t i, len = UPRV_LENGTHOF(patterns);
+        for (i = 0; i < len; i++) {
+            UnicodeString conflictingPattern;
+            (void)gen->addPattern(UnicodeString(patterns[i]), TRUE, conflictingPattern, status);
+            if (U_FAILURE(status)) {
+                errln("ERROR: addPattern %s fail, status: %s", patterns[i], u_errorName(status));
+                break;
+            }
+        }
+        if (U_SUCCESS(status)) {
+            len = UPRV_LENGTHOF(testItems);
+            for (i = 0; i < len; i++) {
+                status = U_ZERO_ERROR;
+                UDateTimePatternMatchOptions options = UDATPG_MATCH_HOUR_FIELD_LENGTH;
+                UnicodeString result = gen->getBestPattern(UnicodeString(testItems[i][0]), options, status);
+                if (U_FAILURE(status)) {
+                    errln("ERROR: getBestPattern %s fail, status: %s", testItems[i][0], u_errorName(status));
+                } else if (result != UnicodeString(testItems[i][1])) {
+                    char charResult[kCharBufMax+1];
+                    result.extract(0, result.length(), charResult, kCharBufMax);
+                    charResult[kCharBufMax] = 0; // ensure termination
+                    errln("ERROR: getBestPattern %s, expected %s, got %s", testItems[i][0], testItems[i][1], charResult);
+                }
+            }
+        }
+    }
+    delete gen;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

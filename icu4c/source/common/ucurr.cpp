@@ -588,7 +588,7 @@ ucurr_forLocale(const char* locale,
         idDelim[0] = 0;
     }
 
-    const UChar* s;  // Currency code from data file.
+    const UChar* s = NULL;  // Currency code from data file.
     if (id[0] == 0) {
         // No point looking in the data for an empty string.
         // This is what we would get.

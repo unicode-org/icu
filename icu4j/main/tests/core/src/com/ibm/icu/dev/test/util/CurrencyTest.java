@@ -866,7 +866,6 @@ public class CurrencyTest extends TestFmwk {
         Currency currency = Currency.getInstance(ULocale.JAPAN);
         // It appears as though this always returns 0 irrespective of the currency or usage.
         double roundingIncrement = currency.getRoundingIncrement(Currency.CurrencyUsage.CASH);
-        // TODO: replace the JUnit import with TestFmwk assertEquals.
         assertEquals("Rounding increment not zero", 0.0, roundingIncrement, 0.0);
     }
 

@@ -678,6 +678,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     // Coverage tests for other versions of the parse() method. All of them end up
     // calling the full parse() method tested on the TestParse() test.
+    @Test
     public void TestParseCoverage() {
         TimeZone expectedTZ = TimeZone.getTimeZone("America/Los_Angeles");
         TimeZoneFormat fmt = TimeZoneFormat.getInstance(ULocale.ENGLISH);
@@ -1050,6 +1051,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     // Tests format(Object, StringBuffer, FieldPosition):StringBuffer method
     // inherited from Format class
+    @Test
     public void TestInheritedFormat() {
         TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar cal = Calendar.getInstance(tz);
