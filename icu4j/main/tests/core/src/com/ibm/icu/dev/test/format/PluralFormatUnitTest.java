@@ -85,6 +85,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         }
     }
 
+    @Test
     public void TestEquals() {
         // There is neither clone() nor a copy constructor.
         PluralFormat de_fee_1 = new PluralFormat(ULocale.GERMAN, PluralType.CARDINAL, "other{fee}");
@@ -97,6 +98,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertFalse("different locales", de_fee_1.equals(fr_fee));
     }
 
+    @Test
     public void TestApplyPatternAndFormat() {
         // Create rules for testing.
         PluralRules oddAndEven =  PluralRules.createRules("odd: n mod 2 is 1");

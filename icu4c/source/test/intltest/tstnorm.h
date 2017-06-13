@@ -47,6 +47,7 @@ public:
     void TestCustomComp();
     void TestCustomFCC();
     void TestFilteredNormalizer2Coverage();
+    void TestNormalizeUTF8WithEdits();
 
 private:
     UnicodeString canonTests[24][3];

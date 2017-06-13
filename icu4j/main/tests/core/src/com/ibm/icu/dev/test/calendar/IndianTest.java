@@ -280,6 +280,7 @@ public class IndianTest extends CalendarTestFmwk
         }
     }
 
+    @Test
     public void TestCoverage12424() {
         class StubCalendar extends IndianCalendar {   
             private static final long serialVersionUID = 1L;

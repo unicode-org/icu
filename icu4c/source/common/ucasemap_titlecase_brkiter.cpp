@@ -42,11 +42,8 @@ int32_t CaseMap::utf8ToTitle(
     UText utext=UTEXT_INITIALIZER;
     utext_openUTF8(&utext, src, srcLength, &errorCode);
     LocalPointer<BreakIterator> ownedIter;
+    iter = ustrcase_getTitleBreakIterator(nullptr, locale, options, iter, ownedIter, errorCode);
     if(iter==NULL) {
-        iter=BreakIterator::createWordInstance(Locale(locale), errorCode);
-        ownedIter.adoptInstead(iter);
-    }
-    if(U_FAILURE(errorCode)) {
         utext_close(&utext);
         return 0;
     }
@@ -88,11 +85,18 @@ ucasemap_utf8ToTitle(UCaseMap *csm,
     }
     UText utext=UTEXT_INITIALIZER;
     utext_openUTF8(&utext, (const char *)src, srcLength, pErrorCode);
-    if(csm->iter==NULL) {
-        csm->iter=BreakIterator::createWordInstance(Locale(csm->locale), *pErrorCode);
-    }
     if (U_FAILURE(*pErrorCode)) {
         return 0;
+    }
+    if(csm->iter==NULL) {
+        LocalPointer<BreakIterator> ownedIter;
+        BreakIterator *iter = ustrcase_getTitleBreakIterator(
+            nullptr, csm->locale, csm->options, nullptr, ownedIter, *pErrorCode);
+        if (iter == nullptr) {
+            utext_close(&utext);
+            return 0;
+        }
+        csm->iter = ownedIter.orphan();
     }
     csm->iter->setText(&utext, *pErrorCode);
     int32_t length=ucasemap_mapUTF8(

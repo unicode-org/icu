@@ -1960,7 +1960,7 @@ public abstract class DateFormat extends UFormat {
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
                                                  int timeStyle, Locale locale)
     {
-        return getDateTimeInstance(dateStyle, timeStyle, ULocale.forLocale(locale));
+        return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.forLocale(locale));
     }
 
     /**

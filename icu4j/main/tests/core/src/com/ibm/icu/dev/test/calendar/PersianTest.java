@@ -125,6 +125,7 @@ public class PersianTest extends CalendarTestFmwk {
         }
     }
 
+    @Test
     public void TestCoverage12424() {
         class StubCalendar extends PersianCalendar {   
             private static final long serialVersionUID = 1L;

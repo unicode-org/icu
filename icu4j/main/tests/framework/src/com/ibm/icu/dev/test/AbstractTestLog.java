@@ -112,26 +112,6 @@ public abstract class AbstractTestLog implements TestLog {
      */
     //public abstract void msg(String message, int level, boolean incCount, boolean newln);
 
-    /**
-     * Not sure if this class is useful.  This lets you log without first testing
-     * if logging is enabled.  The Delegating log will either silently ignore the
-     * message, if the delegate is null, or forward it to the delegate.
-     */
-    public static final class DelegatingLog extends AbstractTestLog {
-        private TestLog delegate;
-
-        public DelegatingLog(TestLog delegate) {
-            this.delegate = delegate;
-        }
-
-        public void msg(String message, int level, boolean incCount, boolean newln) {
-            if (delegate != null) {
-                // TODO(junit): figure out what to do with this message call
-                TestFmwk.msg(message, level, incCount, newln);
-                //delegate.msg(message, level, incCount, newln);
-            }
-        }
-    }
     public boolean isDateAtLeast(int year, int month, int day){
         Date now = new Date();
         Calendar c = new GregorianCalendar(year, month, day);

@@ -20,6 +20,7 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
+#include "unicode/edits.h"
 #include "unicode/normalizer2.h"
 #include "unicode/unistr.h"
 #include "unicode/unorm.h"
@@ -41,6 +42,20 @@ U_NAMESPACE_BEGIN
 // Public API dispatch via Normalizer2 subclasses -------------------------- ***
 
 Normalizer2::~Normalizer2() {}
+
+void
+Normalizer2::normalizeUTF8(uint32_t /*options*/, StringPiece src, ByteSink &sink,
+                           Edits *edits, UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    if (edits != nullptr) {
+        errorCode = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    UnicodeString src16 = UnicodeString::fromUTF8(src);
+    normalize(src16, errorCode).toUTF8(sink);
+}
 
 UBool
 Normalizer2::getRawDecomposition(UChar32, UnicodeString &) const {
@@ -74,6 +89,19 @@ class NoopNormalizer2 : public Normalizer2 {
         }
         return dest;
     }
+    void
+    normalizeUTF8(uint32_t /*options*/, StringPiece src, ByteSink &sink,
+                  Edits *edits, UErrorCode &errorCode) const override {
+        if(U_SUCCESS(errorCode)) {
+            sink.Append(src.data(), src.length());
+            if (edits != nullptr) {
+                edits->reset();
+                edits->addUnchanged(src.length());
+            }
+            sink.Flush();
+        }
+    }
+
     virtual UnicodeString &
     normalizeSecondAndAppend(UnicodeString &first,
                              const UnicodeString &second,

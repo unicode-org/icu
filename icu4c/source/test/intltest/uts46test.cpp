@@ -26,8 +26,10 @@
 #include "unicode/stringpiece.h"
 #include "unicode/uidna.h"
 #include "unicode/unistr.h"
-#include "intltest.h"
+#include "charstr.h"
 #include "cmemory.h"
+#include "intltest.h"
+#include "uparse.h"
 
 class UTS46Test : public IntlTest {
 public:
@@ -38,6 +40,13 @@ public:
     void TestAPI();
     void TestNotSTD3();
     void TestSomeCases();
+    void IdnaTest();
+
+    void checkIdnaTestResult(const char *line, const char *type,
+                             const UnicodeString &expected, const UnicodeString &result,
+                             const IDNAInfo &info);
+    void idnaTestOneLine(char *fields[][2], UErrorCode &errorCode);
+
 private:
     IDNA *trans, *nontrans;
 };
@@ -74,6 +83,7 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestAPI);
     TESTCASE_AUTO(TestNotSTD3);
     TESTCASE_AUTO(TestSomeCases);
+    TESTCASE_AUTO(IdnaTest);
     TESTCASE_AUTO_END;
 }
 
@@ -517,8 +527,11 @@ static const TestCase testCases[]={
     { "\\u05D07\\u05EA", "B", "\\u05D07\\u05EA", 0 },
     { "\\u05D0\\u0667\\u05EA", "B", "\\u05D0\\u0667\\u05EA", 0 },  // Arabic 7 in the middle
     { "a7\\u0667z", "B", "a7\\u0667z", UIDNA_ERROR_BIDI },  // AN digit in LTR
+    { "a7\\u0667", "B", "a7\\u0667", UIDNA_ERROR_BIDI },  // AN digit in LTR
     { "\\u05D07\\u0667\\u05EA", "B",  // mixed EN/AN digits in RTL
       "\\u05D07\\u0667\\u05EA", UIDNA_ERROR_BIDI },
+    { "\\u05D07\\u0667", "B",  // mixed EN/AN digits in RTL
+      "\\u05D07\\u0667", UIDNA_ERROR_BIDI },
     // ZWJ
     { "\\u0BB9\\u0BCD\\u200D", "N", "\\u0BB9\\u0BCD\\u200D", 0 },  // Virama+ZWJ
     { "\\u0BB9\\u200D", "N", "\\u0BB9\\u200D", UIDNA_ERROR_CONTEXTJ },  // no Virama
@@ -878,6 +891,119 @@ void UTS46Test::TestSomeCases() {
                   testCase.o, (int)i, testCase.s);
             continue;
         }
+    }
+}
+
+namespace {
+
+const int32_t kNumFields = 4;  // Will need 5 when we read NV8 from the optional fifth column.
+
+void U_CALLCONV
+idnaTestLineFn(void *context,
+               char *fields[][2], int32_t /* fieldCount */,
+               UErrorCode *pErrorCode) {
+    reinterpret_cast<UTS46Test *>(context)->idnaTestOneLine(fields, *pErrorCode);
+}
+
+}  // namespace
+
+void UTS46Test::checkIdnaTestResult(const char *line, const char *type,
+                                    const UnicodeString &expected, const UnicodeString &result,
+                                    const IDNAInfo &info) {
+    // An error in toUnicode or toASCII is indicated by a value in square brackets,
+    // such as "[B5 B6]".
+    UBool expectedHasErrors = !expected.isEmpty() && expected[0] == u'[';
+    if (expectedHasErrors != info.hasErrors()) {
+        errln("%s  expected errors %d != %d = actual has errors: %04lx\n    %s",
+              type, expectedHasErrors, info.hasErrors(), (long)info.getErrors(), line);
+    }
+    if (!expectedHasErrors && expected != result) {
+        errln("%s  expected != actual\n    %s", type, line);
+        errln(UnicodeString(u"    ") + expected);
+        errln(UnicodeString(u"    ") + result);
+    }
+}
+
+void UTS46Test::idnaTestOneLine(char *fields[][2], UErrorCode &errorCode) {
+    // Column 1: type - T for transitional, N for nontransitional, B for both
+    const char *typePtr = u_skipWhitespace(fields[0][0]);
+    const char *limit;
+    char typeChar;
+    if (typePtr == fields[0][1] ||
+            ((typeChar = *typePtr) != 'B' && typeChar != 'N' && typeChar != 'T') ||
+            (limit = u_skipWhitespace(typePtr + 1)) != fields[0][1]) {
+        errln("empty or unknown type field: %s", fields[0][0]);
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    // Column 2: source - the source string to be tested
+    int32_t length = (int32_t)(fields[1][1] - fields[1][0]);
+    UnicodeString source16 = UnicodeString::fromUTF8(StringPiece(fields[1][0], length)).
+        trim().unescape();
+
+    // Column 3: toUnicode - the result of applying toUnicode to the source.
+    // A blank value means the same as the source value.
+    length = (int32_t)(fields[2][1] - fields[2][0]);
+    UnicodeString unicode16 = UnicodeString::fromUTF8(StringPiece(fields[2][0], length)).
+        trim().unescape();
+    if (unicode16.isEmpty()) {
+        unicode16 = source16;
+    }
+
+    // Column 4: toASCII - the result of applying toASCII to the source, using the specified type.
+    // A blank value means the same as the toUnicode value.
+    length = (int32_t)(fields[3][1] - fields[3][0]);
+    UnicodeString ascii16 = UnicodeString::fromUTF8(StringPiece(fields[3][0], length)).
+        trim().unescape();
+    if (ascii16.isEmpty()) {
+        ascii16 = unicode16;
+    }
+
+    // Column 5: NV8 - present if the toUnicode value would not be a valid domain name under IDNA2008. Not a normative field.
+    // Ignored as long as we do not implement and test vanilla IDNA2008.
+
+    // ToASCII/ToUnicode, transitional/nontransitional
+    UnicodeString uN, aN, aT;
+    IDNAInfo uNInfo, aNInfo, aTInfo;
+    nontrans->nameToUnicode(source16, uN, uNInfo, errorCode);
+    checkIdnaTestResult(fields[0][0], "toUnicodeNontrans", unicode16, uN, uNInfo);
+    if (typeChar == 'T' || typeChar == 'B') {
+        trans->nameToASCII(source16, aT, aTInfo, errorCode);
+        checkIdnaTestResult(fields[0][0], "toASCIITrans", ascii16, aT, aTInfo);
+    }
+    if (typeChar == 'N' || typeChar == 'B') {
+        nontrans->nameToASCII(source16, aN, aNInfo, errorCode);
+        checkIdnaTestResult(fields[0][0], "toASCIINontrans", ascii16, aN, aNInfo);
+    }
+}
+
+// TODO: de-duplicate
+U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
+
+// http://www.unicode.org/Public/idna/latest/IdnaTest.txt
+void UTS46Test::IdnaTest() {
+    IcuTestErrorCode errorCode(*this, "IdnaTest");
+    const char *sourceTestDataPath = getSourceTestData(errorCode);
+    if (errorCode.logIfFailureAndReset("unable to find the source/test/testdata "
+                                       "folder (getSourceTestData())")) {
+        return;
+    }
+    CharString path(sourceTestDataPath, errorCode);
+    path.appendPathPart("IdnaTest.txt", errorCode);
+    LocalStdioFilePointer idnaTestFile(fopen(path.data(), "r"));
+    if (idnaTestFile.isNull()) {
+        errln("unable to open %s", path.data());
+        return;
+    }
+
+    // Columns (c1, c2,...) are separated by semicolons.
+    // Leading and trailing spaces and tabs in each column are ignored.
+    // Comments are indicated with hash marks.
+    char *fields[kNumFields][2];
+    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, idnaTestLineFn, this, errorCode);
+    if (errorCode.logIfFailureAndReset("error parsing IdnaTest.txt")) {
+        return;
     }
 }
 

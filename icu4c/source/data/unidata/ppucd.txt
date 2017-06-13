@@ -627,6 +627,7 @@ value;hst;NA;Not_Applicable
 value;hst;T;Trailing_Jamo
 value;hst;V;Vowel_Jamo
 value;InPC;Bottom;Bottom
+value;InPC;Bottom_And_Left;Bottom_And_Left
 value;InPC;Bottom_And_Right;Bottom_And_Right
 value;InPC;Left;Left
 value;InPC;Left_And_Right;Left_And_Right
@@ -3390,8 +3391,10 @@ cp;07EE;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=C
 cp;07EF;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=CM;na=NKO COMBINING LONG HIGH TONE;SB=EX;WB=Extend;-XIDS
 cp;07F0;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=CM;na=NKO COMBINING LONG LOW TONE;SB=EX;WB=Extend;-XIDS
 cp;07F1;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=CM;na=NKO COMBINING LONG RISING TONE;SB=EX;WB=Extend;-XIDS
+# Other diacritics
 cp;07F2;-Alpha;bc=NSM;ccc=220;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=CM;na=NKO COMBINING NASALIZATION MARK;SB=EX;WB=Extend;-XIDS
 cp;07F3;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;jt=T;lb=CM;na=NKO COMBINING DOUBLE DOT ABOVE;SB=EX;WB=Extend;-XIDS
+# Tonal apostrophes
 cp;07F4;CI;Dia;gc=Lm;jt=U;na=NKO HIGH TONE APOSTROPHE
 cp;07F5;CI;Dia;gc=Lm;jt=U;na=NKO LOW TONE APOSTROPHE
 # Symbol
@@ -4713,7 +4716,7 @@ unassigned;0D50..0D53
 cp;0D54;age=9.0;InSC=Consonant_Dead;na=MALAYALAM LETTER CHILLU M
 cp;0D55;age=9.0;InSC=Consonant_Dead;na=MALAYALAM LETTER CHILLU Y
 cp;0D56;age=9.0;InSC=Consonant_Dead;na=MALAYALAM LETTER CHILLU LLL
-# Various signs
+# Dependent vowel sign
 cp;0D57;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Right;InSC=Vowel_Dependent;lb=CM;na=MALAYALAM AU LENGTH MARK;NFC_QC=M;NFKC_QC=M;SB=EX;WB=Extend;-XIDS
 # Minor fractions
 cp;0D58;age=9.0;-Alpha;gc=No;-IDC;-IDS;InSC=Other;na=MALAYALAM FRACTION ONE ONE-HUNDRED-AND-SIXTIETH;nt=Nu;nv=1/160;SB=XX;WB=XX;-XIDC;-XIDS
@@ -8041,14 +8044,14 @@ cp;1A54;IDS;na=TAI THAM LETTER GREAT SA;XIDS
 # Consonant signs
 cp;1A55;gc=Mc;GCB=SM;InPC=Left;InSC=Consonant_Medial;na=TAI THAM CONSONANT SIGN MEDIAL RA;SB=EX;WB=Extend
 cp;1A56;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Medial;jt=T;na=TAI THAM CONSONANT SIGN MEDIAL LA;SB=EX;WB=Extend
-cp;1A57;gc=Mc;GCB=SM;InPC=Right;InSC=Consonant_Final;na=TAI THAM CONSONANT SIGN LA TANG LAI;SB=EX;WB=Extend
+cp;1A57;gc=Mc;GCB=SM;InPC=Right;InSC=Consonant_Subjoined;na=TAI THAM CONSONANT SIGN LA TANG LAI;SB=EX;WB=Extend
 cp;1A58;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Consonant_Final;jt=T;na=TAI THAM SIGN MAI KANG LAI;SB=EX;WB=Extend
 cp;1A59;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Consonant_Final;jt=T;na=TAI THAM CONSONANT SIGN FINAL NGA;SB=EX;WB=Extend
-cp;1A5A;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Consonant_Final;jt=T;na=TAI THAM CONSONANT SIGN LOW PA;SB=EX;WB=Extend
-cp;1A5B;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Final;jt=T;na=TAI THAM CONSONANT SIGN HIGH RATHA OR LOW PA;SB=EX;WB=Extend
-cp;1A5C;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Final;jt=T;na=TAI THAM CONSONANT SIGN MA;SB=EX;WB=Extend
-cp;1A5D;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Final;jt=T;na=TAI THAM CONSONANT SIGN BA;SB=EX;WB=Extend
-cp;1A5E;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Final;jt=T;na=TAI THAM CONSONANT SIGN SA;SB=EX;WB=Extend
+cp;1A5A;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Consonant_Succeeding_Repha;jt=T;na=TAI THAM CONSONANT SIGN LOW PA;SB=EX;WB=Extend
+cp;1A5B;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Subjoined;jt=T;na=TAI THAM CONSONANT SIGN HIGH RATHA OR LOW PA;SB=EX;WB=Extend
+cp;1A5C;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Subjoined;jt=T;na=TAI THAM CONSONANT SIGN MA;SB=EX;WB=Extend
+cp;1A5D;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Subjoined;jt=T;na=TAI THAM CONSONANT SIGN BA;SB=EX;WB=Extend
+cp;1A5E;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Subjoined;jt=T;na=TAI THAM CONSONANT SIGN SA;SB=EX;WB=Extend
 unassigned;1A5F
 # Sign
 cp;1A60;-Alpha;bc=NSM;ccc=9;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Gr_Link;InSC=Invisible_Stacker;jt=T;na=TAI THAM SIGN SAKOT;SB=EX;WB=Extend
@@ -8072,7 +8075,7 @@ cp;1A70;gc=Mc;GCB=SM;InPC=Left;InSC=Vowel_Dependent;na=TAI THAM VOWEL SIGN OO;SB
 cp;1A71;gc=Mc;GCB=SM;InPC=Left;InSC=Vowel_Dependent;na=TAI THAM VOWEL SIGN AI;SB=EX;WB=Extend
 cp;1A72;gc=Mc;GCB=SM;InPC=Left;InSC=Vowel_Dependent;na=TAI THAM VOWEL SIGN THAM AI;SB=EX;WB=Extend
 cp;1A73;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Vowel_Dependent;jt=T;na=TAI THAM VOWEL SIGN OA ABOVE;SB=EX;WB=Extend
-cp;1A74;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Vowel_Dependent;jt=T;na=TAI THAM SIGN MAI KANG;SB=EX;WB=Extend
+cp;1A74;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Bindu;jt=T;na=TAI THAM SIGN MAI KANG;SB=EX;WB=Extend
 # Tone marks
 cp;1A75;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Tone_Mark;jt=T;na=TAI THAM SIGN TONE-1;SB=EX;WB=Extend
 cp;1A76;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Tone_Mark;jt=T;na=TAI THAM SIGN TONE-2;SB=EX;WB=Extend
@@ -8080,7 +8083,7 @@ cp;1A77;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=
 cp;1A78;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Tone_Mark;jt=T;na=TAI THAM SIGN KHUEN TONE-4;SB=EX;WB=Extend
 cp;1A79;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Tone_Mark;jt=T;na=TAI THAM SIGN KHUEN TONE-5;SB=EX;WB=Extend
 # Other marks
-cp;1A7A;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Syllable_Modifier;jt=T;na=TAI THAM SIGN RA HAAM;SB=EX;WB=Extend
+cp;1A7A;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Pure_Killer;jt=T;na=TAI THAM SIGN RA HAAM;SB=EX;WB=Extend
 cp;1A7B;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Syllable_Modifier;jt=T;na=TAI THAM SIGN MAI SAM;SB=EX;WB=Extend
 cp;1A7C;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Syllable_Modifier;jt=T;na=TAI THAM SIGN KHUEN-LUE KARAN;SB=EX;WB=Extend
 unassigned;1A7D..1A7E
@@ -13872,13 +13875,15 @@ cp;302C;bc=NSM;ccc=232;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;IDC;jt=T;lb=CM;na=IDE
 cp;302D;bc=NSM;ccc=222;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;IDC;jt=T;lb=CM;na=IDEOGRAPHIC ENTERING TONE MARK;SB=EX;sc=Zinh;scx=Bopo Hani;WB=Extend;XIDC
 cp;302E;bc=L;ccc=224;Dia;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;IDC;lb=CM;na=HANGUL SINGLE DOT TONE MARK;SB=EX;sc=Hang;scx=<script>;WB=Extend;XIDC
 cp;302F;bc=L;ccc=224;Dia;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;IDC;lb=CM;na=HANGUL DOUBLE DOT TONE MARK;SB=EX;sc=Hang;scx=<script>;WB=Extend;XIDC
-# Other CJK symbols
+# Other CJK punctuation
 cp;3030;Dash;Emoji;gc=Pd;na=WAVY DASH;Pat_Syn;SB=XX;scx=Bopo Hang Hani Hira Kana;vo=Tr
+# Kana repeat marks
 cp;3031;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;na=VERTICAL KANA REPEAT MARK;scx=Hira Kana;WB=KA;XIDC;XIDS
 cp;3032;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;na=VERTICAL KANA REPEAT WITH VOICED SOUND MARK;scx=Hira Kana;WB=KA;XIDC;XIDS
 cp;3033;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;na=VERTICAL KANA REPEAT MARK UPPER HALF;scx=Hira Kana;WB=KA;XIDC;XIDS
 cp;3034;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;na=VERTICAL KANA REPEAT WITH VOICED SOUND MARK UPPER HALF;scx=Hira Kana;WB=KA;XIDC;XIDS
 cp;3035;Alpha;bc=L;CI;Ext;gc=Lm;IDC;IDS;lb=CM;na=VERTICAL KANA REPEAT MARK LOWER HALF;scx=Hira Kana;WB=KA;XIDC;XIDS
+# Other CJK symbols
 cp;3036;CWKCF;dm=3012;dt=Com;gc=So;na=CIRCLED POSTAL MARK;NFKC_CF=3012;NFKC_QC=N;NFKD_QC=N;SB=XX;scx=<script>
 cp;3037;gc=So;na=IDEOGRAPHIC TELEGRAPH LINE FEED SEPARATOR SYMBOL;SB=XX;scx=Bopo Hang Hani Hira Kana
 # Additional Suzhou numerals
@@ -17577,7 +17582,7 @@ cp;A9BC;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Vowel_Dependent;jt=
 # Dependent consonant signs
 cp;A9BD;gc=Mc;GCB=SM;InPC=Right;InSC=Consonant_Subjoined;lb=CM;na=JAVANESE CONSONANT SIGN KERET;SB=EX;WB=Extend
 cp;A9BE;gc=Mc;GCB=SM;InPC=Right;InSC=Consonant_Medial;lb=CM;na=JAVANESE CONSONANT SIGN PENGKAL;SB=EX;WB=Extend
-cp;A9BF;gc=Mc;GCB=SM;InPC=Right;InSC=Consonant_Medial;lb=CM;na=JAVANESE CONSONANT SIGN CAKRA;SB=EX;WB=Extend
+cp;A9BF;gc=Mc;GCB=SM;InPC=Bottom_And_Left;InSC=Consonant_Medial;lb=CM;na=JAVANESE CONSONANT SIGN CAKRA;SB=EX;WB=Extend
 # Sign
 cp;A9C0;-Alpha;ccc=9;Dia;gc=Mc;GCB=SM;Gr_Link;InPC=Bottom_And_Right;InSC=Virama;lb=CM;na=JAVANESE PANGKON;SB=EX;WB=Extend
 # Punctuation
@@ -24101,7 +24106,7 @@ block;11300..1137F;age=7.0;Alpha;blk=Grantha;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonan
 # 11300..1137F Grantha
 # Various signs
 cp;11300;age=8.0;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InSC=Bindu;jt=T;lb=CM;na=GRANTHA SIGN COMBINING ANUSVARA ABOVE;SB=EX;WB=Extend;-XIDS
-cp;11301;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Bindu;jt=T;lb=CM;na=GRANTHA SIGN CANDRABINDU;SB=EX;WB=Extend;-XIDS
+cp;11301;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Bindu;jt=T;lb=CM;na=GRANTHA SIGN CANDRABINDU;SB=EX;scx=Gran Taml;WB=Extend;-XIDS
 cp;11302;gc=Mc;GCB=SM;-IDS;InPC=Right;InSC=Bindu;lb=CM;na=GRANTHA SIGN ANUSVARA;SB=EX;WB=Extend;-XIDS
 cp;11303;gc=Mc;GCB=SM;-IDS;InPC=Right;InSC=Visarga;lb=CM;na=GRANTHA SIGN VISARGA;SB=EX;scx=Gran Taml;WB=Extend;-XIDS
 unassigned;11304
@@ -30531,6 +30536,7 @@ cp;1B1DA;na=NUSHU CHARACTER-1B1DA
 cp;1B1DB;na=NUSHU CHARACTER-1B1DB
 cp;1B1DC;na=NUSHU CHARACTER-1B1DC
 cp;1B1DD;na=NUSHU CHARACTER-1B1DD
+# Six-stroke characters
 cp;1B1DE;na=NUSHU CHARACTER-1B1DE
 cp;1B1DF;na=NUSHU CHARACTER-1B1DF
 cp;1B1E0;na=NUSHU CHARACTER-1B1E0
@@ -36322,6 +36328,7 @@ cp;1F9D5;Emoji_Modifier_Base;GCB=EB;lb=EB;na=PERSON WITH HEADSCARF;WB=EB
 cp;1F9D6;Emoji_Modifier_Base;GCB=EB;lb=EB;na=PERSON IN STEAMY ROOM;WB=EB
 cp;1F9D7;Emoji_Modifier_Base;GCB=EB;lb=EB;na=PERSON CLIMBING;WB=EB
 cp;1F9D8;Emoji_Modifier_Base;GCB=EB;lb=EB;na=PERSON IN LOTUS POSITION;WB=EB
+# Fantasy beings
 cp;1F9D9;Emoji_Modifier_Base;GCB=EB;lb=EB;na=MAGE;WB=EB
 cp;1F9DA;Emoji_Modifier_Base;GCB=EB;lb=EB;na=FAIRY;WB=EB
 cp;1F9DB;Emoji_Modifier_Base;GCB=EB;lb=EB;na=VAMPIRE;WB=EB

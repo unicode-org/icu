@@ -39,6 +39,7 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
+import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.MeasureUnit;
@@ -294,6 +295,11 @@ public class PropertiesTest {
       if (seed == 0) return null;
       ParseMode[] values = ParseMode.values();
       return values[seed % values.length];
+
+    } else if (type == PluralRules.class) {
+      if (seed == 0) return null;
+      ULocale[] locales = PluralRules.getAvailableULocales();
+      return PluralRules.forLocale(locales[seed % locales.length]);
 
     } else if (type == RoundingMode.class) {
       if (seed == 0) return null;
