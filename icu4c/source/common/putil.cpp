@@ -939,28 +939,28 @@ static CharString *gSearchTZFileResult = NULL;
  * This function is not thread safe - it uses a global, gSearchTZFileResult, to hold its results.
  */
 static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
-    DIR* dirp = opendir(path);
-    DIR* subDirp = NULL;
+    DIR* dirp = NULL;
     struct dirent* dirEntry = NULL;
-
     char* result = NULL;
+    UErrorCode status = U_ZERO_ERROR;
+
+    /* Save the current path */
+    CharString curpath(path, -1, status);
+    if (U_FAILURE(status)) {
+        goto cleanupAndReturn;
+    }
+
+    dirp = opendir(path);
     if (dirp == NULL) {
-        return result;
+        goto cleanupAndReturn;
     }
 
     if (gSearchTZFileResult == NULL) {
         gSearchTZFileResult = new CharString;
         if (gSearchTZFileResult == NULL) {
-            return NULL;
+            goto cleanupAndReturn;
         }
         ucln_common_registerCleanup(UCLN_COMMON_PUTIL, putil_cleanup);
-    }
-
-    /* Save the current path */
-    UErrorCode status = U_ZERO_ERROR;
-    CharString curpath(path, -1, status);
-    if (U_FAILURE(status)) {
-        return NULL;
     }
 
     /* Check each entry in the directory. */
@@ -971,15 +971,16 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
             CharString newpath(curpath, status);
             newpath.append(dirName, -1, status);
             if (U_FAILURE(status)) {
-                return NULL;
+                break;
             }
 
+            DIR* subDirp = NULL;
             if ((subDirp = opendir(newpath.data())) != NULL) {
                 /* If this new path is a directory, make a recursive call with the newpath. */
                 closedir(subDirp);
                 newpath.append('/', status);
                 if (U_FAILURE(status)) {
-                    return NULL;
+                    break;
                 }
                 result = searchForTZFile(newpath.data(), tzInfo);
                 /*
@@ -1003,7 +1004,7 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                     gSearchTZFileResult->clear();
                     gSearchTZFileResult->append(zoneid, -1, status);
                     if (U_FAILURE(status)) {
-                        return NULL;
+                        break;
                     }
                     result = gSearchTZFileResult->data();
                     /* Get out after the first one found. */
@@ -1012,7 +1013,11 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
             }
         }
     }
-    closedir(dirp);
+
+  cleanupAndReturn:
+    if (dirp) {
+        closedir(dirp);
+    }
     return result;
 }
 #endif
