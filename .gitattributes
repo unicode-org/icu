@@ -6151,7 +6151,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/TestCase.java svneol=nat
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml svneol=native#text/xml
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/charsetdet/TestCharsetDetector.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/cldr/TestCLDRVsICU.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/compression/DecompressionTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/compression/ExhaustiveTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/compression/package.html svneol=native#text/html
