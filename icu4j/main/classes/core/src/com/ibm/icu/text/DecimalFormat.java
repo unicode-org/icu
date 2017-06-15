@@ -888,6 +888,9 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void setPositivePrefix(String prefix) {
+    if (prefix == null) {
+      throw new NullPointerException();
+    }
     properties.setPositivePrefix(prefix);
     refreshFormatter();
   }
@@ -918,12 +921,15 @@ public class DecimalFormat extends NumberFormat {
    * <p>Using this method overrides the affix specified via the pattern, and unlike the pattern, the
    * string given to this method will be interpreted literally WITHOUT locale symbol substitutions.
    *
-   * @param suffix The literal string to prepend to negative numbers.
+   * @param prefix The literal string to prepend to negative numbers.
    * @category Affixes
    * @stable ICU 2.0
    */
-  public synchronized void setNegativePrefix(String suffix) {
-    properties.setNegativePrefix(suffix);
+  public synchronized void setNegativePrefix(String prefix) {
+    if (prefix == null) {
+      throw new NullPointerException();
+    }
+    properties.setNegativePrefix(prefix);
     refreshFormatter();
   }
 
@@ -958,6 +964,9 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void setPositiveSuffix(String suffix) {
+    if (suffix == null) {
+      throw new NullPointerException();
+    }
     properties.setPositiveSuffix(suffix);
     refreshFormatter();
   }
@@ -993,6 +1002,9 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void setNegativeSuffix(String suffix) {
+    if (suffix == null) {
+      throw new NullPointerException();
+    }
     properties.setNegativeSuffix(suffix);
     refreshFormatter();
   }
@@ -2473,6 +2485,9 @@ public class DecimalFormat extends NumberFormat {
    * @see PatternString#parseToExistingProperties
    */
   void setPropertiesFromPattern(String pattern, int ignoreRounding) {
+    if (pattern == null) {
+      throw new NullPointerException();
+    }
     PatternString.parseToExistingProperties(pattern, properties, ignoreRounding);
   }
 

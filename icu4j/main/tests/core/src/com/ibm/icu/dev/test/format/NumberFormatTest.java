@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.AttributedCharacterIterator;
@@ -5309,6 +5310,51 @@ public class NumberFormatTest extends TestFmwk {
             Number expected = (Number) cas[1];
             Number actual = df.parse(input, ppos);
             assertEquals(input, expected, actual);
+        }
+    }
+
+    @Test
+    public void testStringMethodsNPE() {
+        String[] npeMethods = {
+                "applyLocalizedPattern",
+                "applyPattern",
+                "setNegativePrefix",
+                "setNegativeSuffix",
+                "setPositivePrefix",
+                "setPositiveSuffix"
+        };
+        for (String npeMethod : npeMethods) {
+            DecimalFormat df = new DecimalFormat();
+            try {
+                DecimalFormat.class.getDeclaredMethod(npeMethod, String.class).invoke(df, (String) null);
+                fail("NullPointerException not thrown in method " + npeMethod);
+            } catch (InvocationTargetException e) {
+                assertTrue("Exception should be NullPointerException in method " + npeMethod,
+                        e.getCause() instanceof NullPointerException);
+            } catch (Exception e) {
+                // Other reflection exceptions
+                throw new AssertionError("Reflection error in method " + npeMethod, e);
+            }
+        }
+
+        // Also test the constructors
+        try {
+            new DecimalFormat(null);
+            fail("NullPointerException not thrown in 1-parameter constructor");
+        } catch (NullPointerException e) {
+            // Expected
+        }
+        try {
+            new DecimalFormat(null, new DecimalFormatSymbols());
+            fail("NullPointerException not thrown in 2-parameter constructor");
+        } catch (NullPointerException e) {
+            // Expected
+        }
+        try {
+            new DecimalFormat(null, new DecimalFormatSymbols(), CurrencyPluralInfo.getInstance(), 0);
+            fail("NullPointerException not thrown in 4-parameter constructor");
+        } catch (NullPointerException e) {
+            // Expected
         }
     }
 
