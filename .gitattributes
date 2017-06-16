@@ -6689,7 +6689,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ib
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ibm.icu.util.VTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/shaping/ArabicShapingRegTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/shaping/ArabicShapingTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/IDNAConformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/IDNAReference.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/NFS4StringPrep.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -6867,6 +6866,7 @@ icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/mt.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/res_index.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/root.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/package-info.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/shaping/ArabicShapingSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/dateintervalformat/DateIntervalFormatSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/datetimepatterngenerator/DateTimePatternGeneratorSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MessagePatternDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
