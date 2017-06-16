@@ -6082,7 +6082,6 @@ icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationTurkishTest.
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/Counter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/G7CollationTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/LotusCollationKoreanTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/TestComparator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/UCAConformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/format/GlobalizationPreferencesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/collate/src/com/ibm/icu/dev/test/format/RbnfLenientScannerTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
