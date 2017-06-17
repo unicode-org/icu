@@ -2083,19 +2083,12 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Whether to force {@link #parse} to always return a BigDecimal. By default, {@link #parse} will
-   * return different data types as follows:
+   * Whether to make {@link #parse} prefer returning a {@link com.ibm.icu.math.BigDecimal} when
+   * possible. For strings corresponding to return values of Infinity, -Infinity, NaN, and -0.0, a
+   * Double will be returned even if ParseBigDecimal is enabled.
    *
-   * <ol>
-   *   <li>If the number is an integer (has no fraction part), return a Long if possible, or else a
-   *       BigInteger.
-   *   <li>Otherwise, return a BigDecimal.
-   * </ol>
-   *
-   * If this setting is enabled, a BigDecimal will be returned even if the number is an integer.
-   *
-   * @param value true to cause {@link #parse} to always return a BigDecimal; false to let {@link
-   *     #parse} return different data types.
+   * @param value true to cause {@link #parse} to prefer BigDecimal; false to let {@link #parse}
+   *     return additional data types like Long or BigInteger.
    * @category Parsing
    * @stable ICU 3.6
    */

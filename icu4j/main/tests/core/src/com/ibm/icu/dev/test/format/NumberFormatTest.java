@@ -2802,11 +2802,18 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void TestParseReturnType() {
-        String[] defaultNonBigDecimals = {
-                "123",      // Long
-                "123.0",    // Long
-                "0.0",      // Long
-                "12345678901234567890"      // BigInteger
+        String[] defaultLong = {
+                "123",
+                "123.0",
+                "0.0",
+                "-9223372036854775808", // Min Long
+                "9223372036854775807" // Max Long
+        };
+
+        String[] defaultNonLong = {
+                "12345678901234567890",
+                "9223372036854775808",
+                "-9223372036854775809"
         };
 
         String[] doubles = {
@@ -2823,14 +2830,25 @@ public class NumberFormatTest extends TestFmwk {
         }
 
         // isParseBigDecimal() is false
-        for (int i = 0; i < defaultNonBigDecimals.length; i++) {
+        for (int i = 0; i < defaultLong.length; i++) {
             try {
-                Number n = nf.parse(defaultNonBigDecimals[i]);
-                if (n instanceof BigDecimal) {
-                    errln("FAIL: parse returns BigDecimal instance");
+                Number n = nf.parse(defaultLong[i]);
+                if (!(n instanceof Long)) {
+                    errln("FAIL: parse does not return Long instance");
                 }
             } catch (ParseException e) {
-                errln("parse of '" + defaultNonBigDecimals[i] + "' threw exception: " + e);
+                errln("parse of '" + defaultLong[i] + "' threw exception: " + e);
+            }
+        }
+        for (int i = 0; i < defaultNonLong.length; i++) {
+            try {
+                Number n = nf.parse(defaultNonLong[i]);
+                // For backwards compatibility with this test, BigDecimal is checked.
+                if ((n instanceof Long) || (n instanceof BigDecimal)) {
+                    errln("FAIL: parse returned a Long or a BigDecimal");
+                }
+            } catch (ParseException e) {
+                errln("parse of '" + defaultNonLong[i] + "' threw exception: " + e);
             }
         }
         // parse results for doubls must be always Double
@@ -2852,14 +2870,15 @@ public class NumberFormatTest extends TestFmwk {
         }
 
         // isParseBigDecimal() is true
-        for (int i = 0; i < defaultNonBigDecimals.length; i++) {
+        for (int i = 0; i < defaultLong.length + defaultNonLong.length; i++) {
+            String input = (i < defaultLong.length) ? defaultLong[i] : defaultNonLong[i - defaultLong.length];
             try {
-                Number n = nf.parse(defaultNonBigDecimals[i]);
+                Number n = nf.parse(input);
                 if (!(n instanceof BigDecimal)) {
                     errln("FAIL: parse does not return BigDecimal instance");
                 }
             } catch (ParseException e) {
-                errln("parse of '" + defaultNonBigDecimals[i] + "' threw exception: " + e);
+                errln("parse of '" + input + "' threw exception: " + e);
             }
         }
         // parse results for doubls must be always Double
