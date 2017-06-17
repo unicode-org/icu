@@ -413,13 +413,19 @@ public abstract class NumberFormat extends UFormat {
 
     /**
      * Returns a Long if possible (e.g., within the range [Long.MIN_VALUE,
-     * Long.MAX_VALUE] and with no decimals), otherwise a Double.
-     * If IntegerOnly is set, will stop at a decimal
+     * Long.MAX_VALUE] and with no decimals); otherwise, returns another type,
+     * such as a BigDecimal, BigInteger, or Double. The return type is not
+     * guaranteed other than for the Long case.
+     *
+     * <p>If IntegerOnly is set, will stop at a decimal
      * point (or equivalent; e.g., for rational numbers "1 2/3", will stop
      * after the 1).
-     * Does not throw an exception; if no object can be parsed, index is
+     *
+     * <p>Does not throw an exception; if no object can be parsed, index is
      * unchanged!
+     *
      * @see #isParseIntegerOnly
+     * @see DecimalFormat#setParseBigDecimal
      * @see java.text.Format#parseObject(String, ParsePosition)
      * @stable ICU 2.0
      */

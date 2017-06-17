@@ -294,6 +294,10 @@ public class Parse {
               "[\\ '\\u00A0\\u066C\\u2000-\\u200A\\u2018\\u2019\\u202F\\u205F\\u3000\\uFF07]")
           .freeze();
 
+  // For parse return value calculation.
+  private static final BigDecimal MIN_LONG_AS_BIG_DECIMAL = new BigDecimal(Long.MIN_VALUE);
+  private static final BigDecimal MAX_LONG_AS_BIG_DECIMAL = new BigDecimal(Long.MAX_VALUE);
+
   private enum SeparatorType {
     COMMA_LIKE,
     PERIOD_LIKE,
@@ -592,7 +596,8 @@ public class Parse {
       result = result.stripTrailingZeros();
       if (forceBigDecimal || result.scale() > 0) {
         return result;
-      } else if (-result.scale() + result.precision() <= 18) {
+      } else if (result.compareTo(MIN_LONG_AS_BIG_DECIMAL) >= 0
+          && result.compareTo(MAX_LONG_AS_BIG_DECIMAL) <= 0) {
         return result.longValueExact();
       } else {
         return result.toBigIntegerExact();
