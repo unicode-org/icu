@@ -18,6 +18,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -142,22 +144,19 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
         if (wordIter1.current() != 0)
             errln("ERROR:2 setText did not reset the iteration position to the beginning of the text, it is"
                     + wordIter1.current() + "\n");
-        //ICU4J has remove the method adoptText
-        /*
-        charIter1.adoptText(text1Clone);
-        if (wordIter1.getText() == charIter1.getText()
-            || wordIter1.getText() != text2
-            || charIter1.getText() != text1)
-            errln((UnicodeString) "ERROR:2 error is getText or setText()");
 
-        RuleBasedBreakIterator rb = (RuleBasedBreakIterator) wordIter1.clone();
-        rb.adoptText(text1);
-        if (rb.getText() != text1)
-            errln((UnicodeString) "ERROR:1 error in adoptText ");
-        rb.adoptText(text2);
-        if (rb.getText() != text2)
-            errln((UnicodeString) "ERROR:2 error in adoptText ");
-        */
+        // Test the CharSequence overload of setText() for a simple case.
+        BreakIterator lineIter = BreakIterator.getLineInstance(Locale.ENGLISH);
+        CharSequence csText = "Hello, World. ";
+        // Expected Line Brks  ^      ^      ^
+        //                     0123456789012345
+        List<Integer> expected = new ArrayList<Integer>();
+        expected.add(0); expected.add(7); expected.add(14);
+        lineIter.setText(csText);
+        for (int pos = lineIter.first(); pos != BreakIterator.DONE; pos = lineIter.next()) {
+            assertTrue("", expected.contains(pos));
+        }
+        assertEquals("", csText.length(), lineIter.current());
     }
 
     /**
@@ -458,7 +457,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-    /*Internal subroutine used for comparision of expected and acquired results */
+    /*Internal subroutine used for comparison of expected and acquired results */
     private void doTest(String testString, int start, int gotoffset, int expectedOffset, String expectedString) {
         String selected;
         String expected = expectedString;
