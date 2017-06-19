@@ -456,6 +456,29 @@ output	useGrouping
 12,345	1
 12345	0
 
+test grouping used setters in parsing
+set pattern #,##0
+begin
+locale	useGrouping	parse	output	breaks
+en_US	1	123,456	123456
+en_US	0	123,456	123
+en_US	1	123.456	123.456
+en_US	0	123.456	123.456
+fr_FR	1	123,456	123.456
+fr_FR	0	123,456	123.456
+// JDK returns 123 here; not sure why.
+fr_FR	1	123.456	123456	K
+fr_FR	0	123.456	123
+
+test no grouping in pattern with parsing
+set pattern 0
+begin
+locale	parse	output	breaks
+en_US	123,456	123
+en_US	123.456	123.456
+fr_FR	123,456	123.456
+fr_FR	123.456	123
+
 test grouping setters
 set locale en_US
 set pattern 0

@@ -697,8 +697,8 @@ public class NumberFormatDataDrivenTest {
             properties.setMaximumSignificantDigits(tuple.maxSigDigits);
           }
           if (tuple.useGrouping != null && tuple.useGrouping == 0) {
-            properties.setGroupingSize(Integer.MAX_VALUE);
-            properties.setSecondaryGroupingSize(Integer.MAX_VALUE);
+            properties.setGroupingSize(-1);
+            properties.setSecondaryGroupingSize(-1);
           }
           if (tuple.multiplier != null) {
             properties.setMultiplier(new BigDecimal(tuple.multiplier));
