@@ -1095,6 +1095,7 @@ public class Parse {
     if (mode == null) mode = ParseMode.LENIENT;
     boolean integerOnly = properties.getParseIntegerOnly();
     boolean ignoreExponent = properties.getParseNoExponent();
+    boolean ignoreGrouping = properties.getGroupingSize() < 0;
 
     // Set up the initial state
     ParserState state = threadLocalParseState.get().clear();
@@ -1175,8 +1176,10 @@ public class Parse {
               acceptPrefix(cp, StateName.AFTER_PREFIX, state, item);
             }
             if (mode == ParseMode.LENIENT || mode == ParseMode.FAST) {
-              acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
-              if (state.length > 0 && mode == ParseMode.FAST) break;
+              if (!ignoreGrouping) {
+                acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+                if (state.length > 0 && mode == ParseMode.FAST) break;
+              }
               if (parseCurrency) {
                 acceptCurrency(cp, StateName.BEFORE_PREFIX, state, item);
               }
@@ -1195,7 +1198,9 @@ public class Parse {
             }
             if (mode == ParseMode.LENIENT || mode == ParseMode.FAST) {
               acceptWhitespace(cp, StateName.AFTER_PREFIX, state, item);
-              acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+              if (!ignoreGrouping) {
+                acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+              }
               if (parseCurrency) {
                 acceptCurrency(cp, StateName.AFTER_PREFIX, state, item);
               }
@@ -1210,8 +1215,10 @@ public class Parse {
               acceptDecimalPoint(cp, StateName.AFTER_FRACTION_DIGIT, state, item);
               if (state.length > 0 && mode == ParseMode.FAST) break;
             }
-            acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
-            if (state.length > 0 && mode == ParseMode.FAST) break;
+            if (!ignoreGrouping) {
+              acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+              if (state.length > 0 && mode == ParseMode.FAST) break;
+            }
             acceptBidi(cp, StateName.BEFORE_SUFFIX, state, item);
             if (state.length > 0 && mode == ParseMode.FAST) break;
             acceptPadding(cp, StateName.BEFORE_SUFFIX, state, item);

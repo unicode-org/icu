@@ -4952,7 +4952,7 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void Test11739() {
         NumberFormat nf = NumberFormat.getCurrencyInstance(new ULocale("sr_BA"));
-        ((DecimalFormat) nf).applyPattern("0.0 ¤¤¤");
+        ((DecimalFormat) nf).applyPattern("#,##0.0 ¤¤¤");
         ParsePosition ppos = new ParsePosition(0);
         CurrencyAmount result = nf.parseCurrency("1.500 амерички долар", ppos);
         assertEquals("Should parse to 1500 USD", new CurrencyAmount(1500, Currency.getInstance("USD")), result);
