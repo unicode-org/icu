@@ -1483,10 +1483,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
         mainLoop: for (;;) {
             if (c == DONE32) {
                 // Reached end of input string.
-                if (mode == RBBI_END || fRData.fHeader.fVersion == 1) {
-                    // Either this is the old (ICU 3.2 and earlier) format data which
-                    // does not support explicit support for matching {eof}, or
-                    // we have already done the {eof} iteration.  Now is the time
+                if (mode == RBBI_END) {
+                    // We have already done the {eof} iteration.  Now is the time
                     // to unconditionally bail out.
                     if (result == initialPosition) {
                         // Ran off start, no match found.

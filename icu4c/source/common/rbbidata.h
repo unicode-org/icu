@@ -56,6 +56,9 @@ ubrk_swap(const UDataSwapper *ds,
 
 U_NAMESPACE_BEGIN
 
+// The current RBBI data format version.
+static const uint8_t RBBI_DATA_FORMAT_VERSION[] = {4, 0, 0, 0};
+
 /*  
  *   The following structs map exactly onto the raw data from ICU common data file. 
  */
@@ -151,6 +154,8 @@ public:
     RBBIDataWrapper(const RBBIDataHeader *data, enum EDontAdopt dontAdopt, UErrorCode &status);
     RBBIDataWrapper(UDataMemory* udm, UErrorCode &status);
     ~RBBIDataWrapper();
+
+    static UBool          isDataVersionAcceptable(const uint8_t version[]);
 
     void                  init0();
     void                  init(const RBBIDataHeader *data, UErrorCode &status);

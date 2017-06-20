@@ -54,9 +54,8 @@ RBBIDataWrapper::RBBIDataWrapper(UDataMemory* udm, UErrorCode &status) {
             dh->info.dataFormat[0] == 0x42 &&  // dataFormat="Brk "
             dh->info.dataFormat[1] == 0x72 &&
             dh->info.dataFormat[2] == 0x6b &&
-            dh->info.dataFormat[3] == 0x20)
-            // Note: info.fFormatVersion is duplicated in the RBBIDataHeader, and is
-            //       validated when checking that.
+            dh->info.dataFormat[3] == 0x20 &&
+            isDataVersionAcceptable(dh->info.formatVersion))
         ) {
         status = U_INVALID_FORMAT_ERROR;
         return;
@@ -66,6 +65,16 @@ RBBIDataWrapper::RBBIDataWrapper(UDataMemory* udm, UErrorCode &status) {
     init(rbbidh, status);
     fUDataMem = udm;
 }
+
+UBool RBBIDataWrapper::isDataVersionAcceptable(const uint8_t version[]) {
+    for (int i=0; i<UPRV_LENGTHOF(RBBI_DATA_FORMAT_VERSION); ++i) {
+        if (RBBI_DATA_FORMAT_VERSION[i] != version[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 //-----------------------------------------------------------------------------
 //
@@ -92,8 +101,7 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
         return;
     }
     fHeader = data;
-    if (fHeader->fMagic != 0xb1a0 || fHeader->fFormatVersion[0] != 3) 
-    {
+    if (fHeader->fMagic != 0xb1a0 || !isDataVersionAcceptable(fHeader->fFormatVersion)) {
         status = U_INVALID_FORMAT_ERROR;
         return;
     }
@@ -308,7 +316,7 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
            pInfo->dataFormat[1]==0x72 &&
            pInfo->dataFormat[2]==0x6b &&
            pInfo->dataFormat[3]==0x20 &&
-           pInfo->formatVersion[0]==3  )) {
+           RBBIDataWrapper::isDataVersionAcceptable(pInfo->formatVersion) )) {
         udata_printError(ds, "ubrk_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],
                          pInfo->dataFormat[2], pInfo->dataFormat[3],
@@ -329,17 +337,11 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //
     // Get the RRBI Data Header, and check that it appears to be OK.
     //
-    //    Note:  ICU 3.2 and earlier, RBBIDataHeader::fDataFormat was actually 
-    //           an int32_t with a value of 1.  Starting with ICU 3.4,
-    //           RBBI's fDataFormat matches the dataFormat field from the
-    //           UDataInfo header, four int8_t bytes.  The value is {3,1,0,0}
-    //
     const uint8_t  *inBytes =(const uint8_t *)inData+headerSize;
     RBBIDataHeader *rbbiDH = (RBBIDataHeader *)inBytes;
     if (ds->readUInt32(rbbiDH->fMagic) != 0xb1a0 || 
-        rbbiDH->fFormatVersion[0] != 3 ||
-        ds->readUInt32(rbbiDH->fLength)  <  sizeof(RBBIDataHeader)) 
-    {
+            !RBBIDataWrapper::isDataVersionAcceptable(rbbiDH->fFormatVersion) ||
+            ds->readUInt32(rbbiDH->fLength)  <  sizeof(RBBIDataHeader)) {
         udata_printError(ds, "ubrk_swap(): RBBI Data header is invalid.\n");
         *status=U_UNSUPPORTED_ERROR;
         return 0;
