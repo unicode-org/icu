@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.AttributedCharacterIterator;
@@ -3371,7 +3372,7 @@ public class NumberFormatTest extends TestFmwk {
         // For valid array, it is displayed as {min value, max value}
         // Tests when "if (minimumIntegerDigits > maximumIntegerDigits)" is true
         int[][] cases = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 2, 0 }, { 2, 1 }, { 10, 0 } };
-        int[] expectedMax = { 1, 1, 1, 2, 2, 10 };
+        int[] expectedMax = { 1, 1, 0, 0, 1, 0 };
         if (cases.length != expectedMax.length) {
             errln("Can't continue test case method TestSetMinimumIntegerDigits "
                     + "since the test case arrays are unequal.");
@@ -4749,6 +4750,49 @@ public class NumberFormatTest extends TestFmwk {
         String currAcctPatn = currAcctFormat.toPattern();
         if (currAcctPatn==null || currAcctPatn.length() == 0) {
             errln("locale ar, toPattern for ACCOUNTINGCURRENCYSTYLE returns null or 0-length string");
+        }
+    }
+
+    @Test
+    public void TestMinMaxOverrides()
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+                NoSuchMethodException, SecurityException {
+        Class<?>[] baseClasses = {NumberFormat.class, NumberFormat.class, DecimalFormat.class};
+        String[] names = {"Integer", "Fraction", "Significant"};
+        for (int i = 0; i < 3; i++) {
+            DecimalFormat df = new DecimalFormat();
+            Class<?> base = baseClasses[i];
+            String name = names[i];
+            Method getMinimum = base.getDeclaredMethod("getMinimum" + name + "Digits");
+            Method setMinimum = base.getDeclaredMethod("setMinimum" + name + "Digits", Integer.TYPE);
+            Method getMaximum = base.getDeclaredMethod("getMaximum" + name + "Digits");
+            Method setMaximum = base.getDeclaredMethod("setMaximum" + name + "Digits", Integer.TYPE);
+
+            // Check max overrides min
+            setMinimum.invoke(df, 2);
+            assertEquals(name + " getMin A", 2, getMinimum.invoke(df));
+            setMaximum.invoke(df, 3);
+            assertEquals(name + " getMin B", 2, getMinimum.invoke(df));
+            assertEquals(name + " getMax B", 3, getMaximum.invoke(df));
+            setMaximum.invoke(df, 2);
+            assertEquals(name + " getMin C", 2, getMinimum.invoke(df));
+            assertEquals(name + " getMax C", 2, getMaximum.invoke(df));
+            setMaximum.invoke(df, 1);
+            assertEquals(name + " getMin D", 1, getMinimum.invoke(df));
+            assertEquals(name + " getMax D", 1, getMaximum.invoke(df));
+
+            // Check min overrides max
+            setMaximum.invoke(df, 2);
+            assertEquals(name + " getMax E", 2, getMaximum.invoke(df));
+            setMinimum.invoke(df, 1);
+            assertEquals(name + " getMin F", 1, getMinimum.invoke(df));
+            assertEquals(name + " getMax F", 2, getMaximum.invoke(df));
+            setMinimum.invoke(df, 2);
+            assertEquals(name + " getMin G", 2, getMinimum.invoke(df));
+            assertEquals(name + " getMax G", 2, getMaximum.invoke(df));
+            setMinimum.invoke(df, 3);
+            assertEquals(name + " getMin H", 3, getMinimum.invoke(df));
+            assertEquals(name + " getMax H", 3, getMaximum.invoke(df));
         }
     }
 

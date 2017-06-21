@@ -1326,12 +1326,21 @@ public class DecimalFormat extends NumberFormat {
    * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
    * pattern except in scientific notation.
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * @param value The minimum number of digits before the decimal separator.
    * @category Rounding
    * @stable ICU 2.0
    */
   @Override
   public synchronized void setMinimumIntegerDigits(int value) {
+    // For backwards compatibility, conflicting min/max need to keep the most recent setting.
+    int max = properties.getMaximumIntegerDigits();
+    if (max >= 0 && max < value) {
+      properties.setMaximumIntegerDigits(value);
+    }
     properties.setMinimumIntegerDigits(value);
     refreshFormatter();
   }
@@ -1359,12 +1368,20 @@ public class DecimalFormat extends NumberFormat {
    * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
    * pattern except in scientific notation.
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * @param value The maximum number of digits before the decimal separator.
    * @category Rounding
    * @stable ICU 2.0
    */
   @Override
   public synchronized void setMaximumIntegerDigits(int value) {
+    int min = properties.getMinimumIntegerDigits();
+    if (min >= 0 && min > value) {
+      properties.setMinimumIntegerDigits(value);
+    }
     properties.setMaximumIntegerDigits(value);
     refreshFormatter();
   }
@@ -1393,6 +1410,10 @@ public class DecimalFormat extends NumberFormat {
    * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
    * pattern except in scientific notation.
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * <p>See {@link #setRoundingIncrement} and {@link #setMaximumSignificantDigits} for two other
    * ways of specifying rounding strategies.
    *
@@ -1405,6 +1426,10 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized void setMinimumFractionDigits(int value) {
+    int max = properties.getMaximumFractionDigits();
+    if (max >= 0 && max < value) {
+      properties.setMaximumFractionDigits(value);
+    }
     properties.setMinimumFractionDigits(value);
     refreshFormatter();
   }
@@ -1434,6 +1459,10 @@ public class DecimalFormat extends NumberFormat {
    * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
    * pattern except in scientific notation.
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * @param value The maximum number of integer digits after the decimal separator.
    * @see #setRoundingMode
    * @category Rounding
@@ -1441,6 +1470,10 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized void setMaximumFractionDigits(int value) {
+    int min = properties.getMinimumFractionDigits();
+    if (min >= 0 && min > value) {
+      properties.setMinimumFractionDigits(value);
+    }
     properties.setMaximumFractionDigits(value);
     refreshFormatter();
   }
@@ -1503,12 +1536,20 @@ public class DecimalFormat extends NumberFormat {
    * <p>For example, if minimum significant digits is 3 and the number is 1.2, the number will be
    * printed as "1.20".
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * @param value The minimum number of significant digits to display.
    * @see #setSignificantDigitsMode
    * @category Rounding
    * @stable ICU 3.0
    */
   public synchronized void setMinimumSignificantDigits(int value) {
+    int max = properties.getMaximumSignificantDigits();
+    if (max >= 0 && max < value) {
+      properties.setMaximumSignificantDigits(value);
+    }
     properties.setMinimumSignificantDigits(value);
     refreshFormatter();
   }
@@ -1532,6 +1573,10 @@ public class DecimalFormat extends NumberFormat {
    * <p>For example, if maximum significant digits is 3 and the number is 12345, the number will be
    * printed as "12300".
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * <p>See {@link #setRoundingIncrement} and {@link #setMaximumFractionDigits} for two other ways
    * of specifying rounding strategies.
    *
@@ -1544,6 +1589,10 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 3.0
    */
   public synchronized void setMaximumSignificantDigits(int value) {
+    int min = properties.getMinimumSignificantDigits();
+    if (min >= 0 && min > value) {
+      properties.setMinimumSignificantDigits(value);
+    }
     properties.setMaximumSignificantDigits(value);
     refreshFormatter();
   }
