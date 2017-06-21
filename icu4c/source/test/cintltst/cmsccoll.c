@@ -793,7 +793,7 @@ static void TestJ784(void) {
 }
 #endif
 
-static void TestJ831(void) {
+static void TestUpperCaseFirst(void) {
   const static char *data[] = {
     "I",
       "i",
@@ -5891,7 +5891,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestEmptyRule);
     /*TEST(TestJ784);*/ /* 'zh' locale has changed - now it is getting tested by TestBeforePinyin */
     TEST(TestJ815);
-    TEST(TestJ831);
+    TEST(TestUpperCaseFirst);
     TEST(TestBefore);
     TEST(TestHangulTailoring);
     TEST(TestUCARules);
