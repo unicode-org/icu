@@ -753,7 +753,10 @@ public class NumberFormatDataDrivenTest {
             properties.setNegativeSuffix(tuple.negativeSuffix);
           }
           if (tuple.localizedPattern != null) {
-            // TODO
+            DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(tuple.locale);
+            String converted =
+                PatternString.convertLocalized(tuple.localizedPattern, symbols, false);
+            PatternString.parseToExistingProperties(converted, properties);
           }
           if (tuple.lenient != null) {
             properties.setParseMode(tuple.lenient == 0 ? ParseMode.STRICT : ParseMode.LENIENT);

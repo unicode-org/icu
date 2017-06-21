@@ -693,6 +693,18 @@ en	#0%	0.4376	44%
 // This next test breaks JDK. JDK doesn't multiply by 100.
 fa	\u0025\u00a0\u0023\u0030	0.4376	\u200e\u066a\u00a0\u06f4\u06f4	K
 
+test localized pattern basic symbol coverage
+begin
+locale	localizedPattern	toPattern	breaks
+it	#.##0,00	#,##0.00
+// JDK either doesn't know sl uses this character for minus sign
+// or doesn't support minus sign in localized pattern
+sl	#.##0;#.##0−	#,##0;#,##0-	K
+// JDK does not have data for "×10^" in this locale
+en_SE	0,00×10^0;0,00×10^0-	0.00E0;0.00E0-	K
+// JDK does not seem to transform the digits in localized patterns
+ar_SA	#\u066C##\u0660\u066B\u0660\u0660\u061Ba#	#,##0.00;a#,##0.00	K
+
 test toPattern
 set locale en
 begin
