@@ -847,7 +847,6 @@ parse	output	breaks
 (65347.25)	-65347.25
 (65,347.25)	-65347.25
 // JDK does allow separators in the wrong place and parses as -5347.25
-// C parses as -65347.25?
 (53,47.25)	fail	K
 // strict requires prefix or suffix, except in C
 65,347.25	fail	
