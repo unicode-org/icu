@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.text.DateFormat;
@@ -2077,16 +2076,15 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertTrue("many parts", pattern.countParts() > 10);
     }
 
-    // TODO(junit): turned off for failure - need to investigate
-    @Ignore
+    // This is mostly a code coverage test with verification minimized to what can be plausibly assumed: different
+    // hash values for distinctly different objects.
     @Test
     public void TestDateFormatHashCode() {
-        DateFormat testDF = DateFormat.getDateInstance(DateFormat.DEFAULT, ULocale.GERMAN);
-        NumberFormat testNF = testDF.getNumberFormat();
+        DateFormat testDF1 = DateFormat.getDateInstance(DateFormat.DEFAULT, ULocale.GERMAN);
+        DateFormat testDF2 = DateFormat.getDateInstance(DateFormat.DEFAULT, ULocale.FRENCH);
 
-        int expectedResult =
-                testNF.getMaximumIntegerDigits() * 37 + testNF.getMaximumFractionDigits();
-        int actualHashResult = testDF.hashCode();
-        assertEquals("DateFormat hashCode", expectedResult, actualHashResult);
+        int actualHashResult1 = testDF1.hashCode();
+        int actualHashResult2 = testDF2.hashCode();
+        assertNotEquals("DateFormat hashCode() test: really the same hashcode?", actualHashResult1, actualHashResult2);
     }
 }
