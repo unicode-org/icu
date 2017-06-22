@@ -9,6 +9,8 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "unicode/errorcode.h"
 #include "unicode/unistr.h"
 #include "unicode/utf16.h"
