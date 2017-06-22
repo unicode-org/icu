@@ -583,7 +583,7 @@ public class Parse {
 
       // We need to use a math context in order to prevent non-terminating decimal expansions.
       // This is only used when dividing by the multiplier.
-      MathContext mc = RoundingUtils.getMathContextOr16Digits(properties);
+      MathContext mc = RoundingUtils.getMathContextOr34Digits(properties);
 
       // Construct the output number.
       // This is the only step during fast-mode parsing that incurs object creations.

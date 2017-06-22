@@ -1588,8 +1588,7 @@ set locale en
 set pattern 0%
 begin
 parse	output	breaks
-// S uses a MathContext of 16 digits when dividing by 100.
-9223372036854775807%	92233720368547758.07	S
+9223372036854775807%	92233720368547758.07
 
 
 
