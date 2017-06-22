@@ -357,6 +357,7 @@ en{
         ln{"Lingala"}
         lo{"Lao"}
         lol{"Mongo"}
+        lou{"Louisiana Creole"}
         loz{"Lozi"}
         lrc{"Northern Luri"}
         lt{"Lithuanian"}
@@ -711,6 +712,7 @@ en{
         Geok{"Georgian Khutsuri"}
         Geor{"Georgian"}
         Glag{"Glagolitic"}
+        Gonm{"Masaram Gondi"}
         Goth{"Gothic"}
         Gran{"Grantha"}
         Grek{"Greek"}
@@ -809,6 +811,7 @@ en{
         Sind{"Khudawadi"}
         Sinh{"Sinhala"}
         Sora{"Sora Sompeng"}
+        Soyo{"Soyombo"}
         Sund{"Sundanese"}
         Sylo{"Syloti Nagri"}
         Syrc{"Syriac"}
@@ -838,6 +841,7 @@ en{
         Xpeo{"Old Persian"}
         Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
+        Zanb{"Zanabazar Square"}
         Zinh{"Inherited"}
         Zmth{"Mathematical Notation"}
         Zsye{"Emoji"}
@@ -1076,6 +1080,7 @@ en{
             finance{"Financial Numerals"}
             fullwide{"Full-Width Digits"}
             geor{"Georgian Numerals"}
+            gonm{"Masaram Gondi digits"}
             grek{"Greek Numerals"}
             greklow{"Greek Lowercase Numerals"}
             gujr{"Gujarati Digits"}
@@ -1220,7 +1225,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.6"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

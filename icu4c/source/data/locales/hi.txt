@@ -235,7 +235,7 @@ hi{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         ethiopic{
             monthNames{
@@ -486,8 +486,8 @@ hi{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"y का सप्ताह w"}
-                    other{"y का सप्ताह w"}
+                    one{"Y का सप्ताह w"}
+                    other{"Y का सप्ताह w"}
                 }
             }
             dayNames{

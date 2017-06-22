@@ -212,7 +212,7 @@ gl{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -451,8 +451,8 @@ gl{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'de' y"}
                 yw{
-                    one{"w.'ª' 'semana' 'de' y"}
-                    other{"w.'ª' 'semana' 'de' y"}
+                    one{"w.'ª' 'semana' 'de' Y"}
+                    other{"w.'ª' 'semana' 'de' Y"}
                 }
             }
             dayNames{

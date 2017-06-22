@@ -229,7 +229,7 @@ sv{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -704,8 +704,8 @@ sv{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'vecka' w, y"}
-                    other{"'vecka' w, y"}
+                    one{"'vecka' w, Y"}
+                    other{"'vecka' w, Y"}
                 }
             }
             dayNames{

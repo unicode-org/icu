@@ -339,6 +339,7 @@ sv{
         ln{"lingala"}
         lo{"laotiska"}
         lol{"mongo"}
+        lou{"louisiana-kreol"}
         loz{"lozi"}
         lrc{"nordluri"}
         lt{"litauiska"}
@@ -1081,7 +1082,7 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — alla"}
         category-list{"{0}: {1}"}

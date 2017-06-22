@@ -230,7 +230,7 @@ ast{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.51"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1144,8 +1144,8 @@ ast{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'de' y"}
                 yw{
-                    one{"'selmana' w 'de' y"}
-                    other{"'selmana' w 'de' y"}
+                    one{"'selmana' w 'de' Y"}
+                    other{"'selmana' w 'de' Y"}
                 }
             }
             dayNames{

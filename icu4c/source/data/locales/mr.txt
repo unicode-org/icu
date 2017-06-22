@@ -240,7 +240,7 @@ mr{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -468,8 +468,8 @@ mr{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"y चा w रा आठवडा"}
-                    other{"y चा w रा आठवडा"}
+                    one{"Y चा w रा आठवडा"}
+                    other{"Y चा w रा आठवडा"}
                 }
             }
             dayNames{

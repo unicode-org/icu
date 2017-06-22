@@ -294,7 +294,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.1.33.94"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -972,6 +972,9 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
+                Bh{"Bh时"}
+                Bhm{"Bh:mm"}
+                Bhms{"Bh:mm:ss"}
                 E{"ccc"}
                 Ed{"d日E"}
                 Gy{"Gy年"}
@@ -1138,7 +1141,7 @@ zh{
                 Bhms{"Bh:mm:ss"}
                 E{"ccc"}
                 EBhm{"EBh:mm"}
-                EBms{"EBh:mm:ss"}
+                EBhms{"EBh:mm:ss"}
                 EHm{"EHH:mm"}
                 EHms{"EHH:mm:ss"}
                 Ed{"d日E"}
@@ -1183,7 +1186,7 @@ zh{
                 yQQQ{"y年第Q季度"}
                 yQQQQ{"y年第Q季度"}
                 yw{
-                    other{"y年第w周"}
+                    other{"Y年第w周"}
                 }
             }
             dayNames{

@@ -200,7 +200,7 @@ is{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -429,8 +429,8 @@ is{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'viku' w 'af' y"}
-                    other{"'viku' w 'af' y"}
+                    one{"'viku' w 'af' Y"}
+                    other{"'viku' w 'af' Y"}
                 }
             }
             dayNames{

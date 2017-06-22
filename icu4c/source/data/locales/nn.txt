@@ -36,7 +36,7 @@ nn{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.45"}
     calendar{
         generic{
             DateTimePatterns{
@@ -264,8 +264,8 @@ nn{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'veke' w 'i' y"}
-                    other{"'veke' w 'i' y"}
+                    one{"'veke' w 'i' Y"}
+                    other{"'veke' w 'i' Y"}
                 }
             }
             dayNames{

@@ -215,7 +215,7 @@ az{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -400,8 +400,8 @@ az{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"y, w 'həftə'"}
-                    other{"y, w 'həftə'"}
+                    one{"Y, w 'həftə'"}
+                    other{"Y, w 'həftə'"}
                 }
             }
             dayNames{

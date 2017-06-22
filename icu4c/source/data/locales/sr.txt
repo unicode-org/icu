@@ -247,7 +247,7 @@ sr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.73"}
+    Version{"2.1.34.51"}
     calendar{
         buddhist{
             eras{
@@ -531,9 +531,9 @@ sr{
                 yQQQ{"QQQ y."}
                 yQQQQ{"QQQQ y."}
                 yw{
-                    few{"w. 'седмица' 'у' y."}
-                    one{"w. 'седмица' 'у' y."}
-                    other{"w. 'седмица' 'у' y."}
+                    few{"w. 'седмица' 'у' Y."}
+                    one{"w. 'седмица' 'у' Y."}
+                    other{"w. 'седмица' 'у' Y."}
                 }
             }
             dayNames{

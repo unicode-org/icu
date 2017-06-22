@@ -336,6 +336,7 @@ fr{
         ln{"lingala"}
         lo{"lao"}
         lol{"mongo"}
+        lou{"créole louisianais"}
         loz{"lozi"}
         lrc{"lori du Nord"}
         lt{"lituanien"}
@@ -962,7 +963,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — tout"}
         category-list{"{0}: {1}"}

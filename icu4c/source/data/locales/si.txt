@@ -218,7 +218,7 @@ si{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.33.28"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -442,8 +442,8 @@ si{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"y සතිය w"}
-                    other{"y සතිය w"}
+                    one{"Y සතිය w"}
+                    other{"Y සතිය w"}
                 }
             }
             dayNames{

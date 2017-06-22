@@ -2570,6 +2570,16 @@ root {
             }
         }
 
+        blt-fonipa-t-blt {
+            alias {"blt-blt_FONIPA"}
+        }
+        blt-blt_FONIPA {
+            file {
+                resource:process(transliterator) {"blt_blt_FONIPA.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         am-t-ch {
             alias {"ch-am"}
         }
@@ -2716,6 +2726,16 @@ root {
         cs_FONIPA-ko {
             file {
                 resource:process(transliterator) {"cs_FONIPA_ko.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        cy-fonipa-t-cy {
+            alias {"cy-cy_FONIPA"}
+        }
+        cy-cy_FONIPA {
+            file {
+                resource:process(transliterator) {"cy_cy_FONIPA.txt"}
                 direction {"FORWARD"}
             }
         }

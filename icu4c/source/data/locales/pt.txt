@@ -215,7 +215,7 @@ pt{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -697,8 +697,8 @@ pt{
                 yQQQ{"QQQ 'de' y"}
                 yQQQQ{"QQQQ 'de' y"}
                 yw{
-                    one{"w'ª' 'semana' 'de' y"}
-                    other{"w'ª' 'semana' 'de' y"}
+                    one{"w'ª' 'semana' 'de' Y"}
+                    other{"w'ª' 'semana' 'de' Y"}
                 }
             }
             dayNames{

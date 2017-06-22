@@ -208,7 +208,7 @@ et{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         chinese{
             cyclicNameSets{
@@ -490,8 +490,8 @@ et{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"y (w. 'nädal')"}
-                    other{"y (w. 'nädal')"}
+                    one{"Y (w. 'nädal')"}
+                    other{"Y (w. 'nädal')"}
                 }
             }
             dayNames{

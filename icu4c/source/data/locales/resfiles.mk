@@ -1,6 +1,6 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-GENRB_CLDR_VERSION = 31.0.1
+GENRB_CLDR_VERSION = 32
 # A list of txt's to build
 # Note:
 #
@@ -33,8 +33,8 @@ GENRB_SYNTHETIC_ALIAS = ars.txt az_AZ.txt bs_BA.txt en_NH.txt\
  sh_YU.txt shi_MA.txt sr_BA.txt sr_CS.txt sr_Cyrl_CS.txt\
  sr_Cyrl_YU.txt sr_Latn_CS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt\
  sr_XK.txt sr_YU.txt th_TH_TRADITIONAL.txt tl.txt tl_PH.txt\
- uz_AF.txt uz_UZ.txt vai_LR.txt zh_CN.txt zh_HK.txt\
- zh_MO.txt zh_SG.txt zh_TW.txt
+ uz_AF.txt uz_UZ.txt vai_LR.txt yue_CN.txt yue_HK.txt\
+ zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.
@@ -181,8 +181,8 @@ GENRB_SOURCE = af.txt af_NA.txt af_ZA.txt agq.txt\
  vi.txt vi_VN.txt vun.txt vun_TZ.txt wae.txt\
  wae_CH.txt xog.txt xog_UG.txt yav.txt yav_CM.txt\
  yi.txt yi_001.txt yo.txt yo_BJ.txt yo_NG.txt\
- yue.txt yue_HK.txt zgh.txt zgh_MA.txt zh.txt\
- zh_Hans.txt zh_Hans_CN.txt zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt\
- zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt zu.txt\
- zu_ZA.txt
+ yue.txt yue_Hans.txt yue_Hans_CN.txt yue_Hant.txt yue_Hant_HK.txt\
+ zgh.txt zgh_MA.txt zh.txt zh_Hans.txt zh_Hans_CN.txt\
+ zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt\
+ zh_Hant_MO.txt zh_Hant_TW.txt zu.txt zu_ZA.txt
 
