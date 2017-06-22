@@ -1241,11 +1241,14 @@ public class DecimalFormat extends NumberFormat {
   /**
    * {@icu} <strong>Rounding and Digit Limits:</strong> Sets the {@link java.math.MathContext} used
    * to round numbers. A "math context" encodes both a rounding mode and a number of significant
-   * digits.
+   * digits. Most users should call {@link #setRoundingMode} and/or {@link
+   * #setMaximumSignificantDigits} instead of this method.
    *
-   * <p>This method is provided for users who require their output to conform to a standard math
-   * context. <strong>Most users should call {@link #setRoundingMode} and/or {@link
-   * #setMaximumSignificantDigits} instead of this method.</strong>
+   * <p>When formatting, since no division is ever performed, the default MathContext is unlimited
+   * significant digits. However, when division occurs during parsing to correct for percentages and
+   * multipliers, a MathContext of 34 digits, the IEEE 754R Decimal128 standard, is used by default.
+   * If you require more than 34 digits when parsing, you can set a custom MathContext using this
+   * method.
    *
    * @param mathContext The MathContext to use when rounding numbers.
    * @see java.math.MathContext

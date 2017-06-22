@@ -4797,6 +4797,53 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void TestSetMathContext() throws ParseException {
+        java.math.MathContext fourDigits = new java.math.MathContext(4);
+        java.math.MathContext unlimitedCeiling = new java.math.MathContext(0, RoundingMode.CEILING);
+
+        // Test rounding
+        DecimalFormat df = new DecimalFormat();
+        assertEquals("Default format", "9,876.543", df.format(9876.5432));
+        df.setMathContext(fourDigits);
+        assertEquals("Format with fourDigits", "9,877", df.format(9876.5432));
+        df.setMathContext(unlimitedCeiling);
+        assertEquals("Format with unlimitedCeiling", "9,876.544", df.format(9876.5432));
+
+        // Test multiplication
+        df = new DecimalFormat("0.000%");
+        assertEquals("Default multiplication", "12.001%", df.format(0.120011));
+        df.setMathContext(fourDigits);
+        assertEquals("Multiplication with fourDigits", "12.000%", df.format(0.120011));
+        df.setMathContext(unlimitedCeiling);
+        assertEquals("Multiplication with unlimitedCeiling", "12.002%", df.format(0.120011));
+
+        // Test simple division
+        df = new DecimalFormat("0%");
+        assertEquals("Default division", 0.12001, df.parse("12.001%").doubleValue());
+        df.setMathContext(fourDigits);
+        assertEquals("Division with fourDigits", 0.12, df.parse("12.001%").doubleValue());
+        df.setMathContext(unlimitedCeiling);
+        assertEquals("Division with unlimitedCeiling", 0.12001, df.parse("12.001%").doubleValue());
+
+        // Test extreme division
+        df = new DecimalFormat();
+        df.setMultiplier(1000000007); // prime number
+        String hugeNumberString = "9876543212345678987654321234567898765432123456789"; // 49 digits
+        BigInteger huge34Digits = new BigInteger("9876543143209876985185182338271622000000");
+        BigInteger huge4Digits = new BigInteger("9877000000000000000000000000000000000000");
+        assertEquals("Default extreme division", huge34Digits, df.parse(hugeNumberString));
+        df.setMathContext(fourDigits);
+        assertEquals("Extreme division with fourDigits", huge4Digits, df.parse(hugeNumberString));
+        df.setMathContext(unlimitedCeiling);
+        try {
+            df.parse(hugeNumberString);
+            fail("Extreme division with unlimitedCeiling should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            // expected
+        }
+    }
+
+    @Test
     public void Test10436() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
         df.setRoundingMode(MathContext.ROUND_CEILING);
