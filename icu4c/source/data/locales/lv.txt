@@ -249,7 +249,7 @@ lv{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -477,9 +477,9 @@ lv{
                 yQQQ{"y. 'g'. QQQ"}
                 yQQQQ{"y. 'g'. QQQQ"}
                 yw{
-                    one{"y. 'g'. w. 'nedēļa'"}
-                    other{"y. 'g'. w. 'nedēļa'"}
-                    zero{"y. 'g'. w. 'nedēļa'"}
+                    one{"Y. 'g'. w. 'nedēļa'"}
+                    other{"Y. 'g'. w. 'nedēļa'"}
+                    zero{"Y. 'g'. w. 'nedēļa'"}
                 }
             }
             dayNames{

@@ -213,7 +213,7 @@ fr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -659,8 +659,8 @@ fr{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'semaine' w 'de' y"}
-                    other{"'semaine' w 'de' y"}
+                    one{"'semaine' w 'de' Y"}
+                    other{"'semaine' w 'de' Y"}
                 }
             }
             dayNames{

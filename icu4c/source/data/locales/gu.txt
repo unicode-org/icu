@@ -248,7 +248,7 @@ gu{
         minimumGroupingDigits{"1"}
         native{"gujr"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -476,8 +476,8 @@ gu{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"y ના w અઠવાડિયા"}
-                    other{"y ના w અઠવાડિયા"}
+                    one{"Y ના w અઠવાડિયા"}
+                    other{"Y ના w અઠવાડિયા"}
                 }
             }
             dayNames{

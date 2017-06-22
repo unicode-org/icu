@@ -690,7 +690,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.45"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

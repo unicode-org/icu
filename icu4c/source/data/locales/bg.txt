@@ -209,7 +209,7 @@ bg{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.33.75"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -469,8 +469,8 @@ bg{
                 yQQQ{"QQQ y 'г'."}
                 yQQQQ{"QQQQ y 'г'."}
                 yw{
-                    one{"'седмица' w 'от' y 'г'."}
-                    other{"'седмица' w 'от' y 'г'."}
+                    one{"'седмица' w 'от' Y 'г'."}
+                    other{"'седмица' w 'от' Y 'г'."}
                 }
             }
             dayNames{

@@ -54,7 +54,7 @@ ckb{
         minimumGroupingDigits{"1"}
         native{"arab"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.34.45"}
     calendar{
         generic{
             DateTimePatterns{
@@ -245,8 +245,8 @@ ckb{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"هەفتەی w ی y"}
-                    other{"هەفتەی w ی y"}
+                    one{"هەفتەی w ی Y"}
+                    other{"هەفتەی w ی Y"}
                 }
             }
             dayNames{

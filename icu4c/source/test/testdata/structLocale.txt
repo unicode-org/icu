@@ -26232,6 +26232,12 @@ structLocale:table(nofallback){
         lines{""}
     }
     listPattern{
+        or{
+            2{""}
+            end{""}
+            middle{""}
+            start{""}
+        }
         standard{
             2{""}
             end{""}

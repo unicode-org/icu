@@ -91,7 +91,7 @@ zh_Hant_HK{
             }
         }
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.34.51"}
     calendar{
         buddhist{
             availableFormats{
@@ -321,7 +321,7 @@ zh_Hant_HK{
                 yMMMEd{"y年M月d日E"}
                 yMd{"d/M/y"}
                 yw{
-                    other{"y年第w週"}
+                    other{"Y年第w週"}
                 }
             }
             eras{

@@ -220,7 +220,7 @@ hu{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -446,6 +446,9 @@ hu{
                 "{1} {0}",
             }
             availableFormats{
+                Bh{"B h"}
+                Bhm{"B h:mm"}
+                Bhms{"B h:mm:ss"}
                 E{"ccc"}
                 Ed{"d., E"}
                 Gy{"G y."}
@@ -607,7 +610,12 @@ hu{
                 Timezone{"{0} {1}"}
             }
             availableFormats{
+                Bh{"B h"}
+                Bhm{"B h:mm"}
+                Bhms{"B h:mm:ss"}
                 E{"ccc"}
+                EBhm{"E h:mm B"}
+                EBhms{"E h:mm:ss B"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"d., E"}
@@ -652,8 +660,8 @@ hu{
                 yQQQ{"y. QQQ"}
                 yQQQQ{"y. QQQQ"}
                 yw{
-                    one{"y w. 'hete'"}
-                    other{"y w. 'hete'"}
+                    one{"Y w. 'hete'"}
+                    other{"Y w. 'hete'"}
                 }
             }
             dayNames{

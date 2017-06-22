@@ -330,6 +330,7 @@ zh_Hant{
         ln{"林加拉文"}
         lo{"寮文"}
         lol{"芒戈文"}
+        lou{"路易斯安那克里奧爾文"}
         loz{"洛齊文"}
         lrc{"北盧爾文"}
         lt{"立陶宛文"}
@@ -1025,7 +1026,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.1.33.94"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — 全部"}
         category-list{"{0}: {1}"}

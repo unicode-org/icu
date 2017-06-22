@@ -219,7 +219,7 @@ sq{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -414,8 +414,8 @@ sq{
                 yQQQ{"QQQ, y"}
                 yQQQQ{"QQQQ, y"}
                 yw{
-                    one{"'java' w 'e' y"}
-                    other{"'java' w 'e' y"}
+                    one{"'java' w 'e' Y"}
+                    other{"'java' w 'e' Y"}
                 }
             }
             dayNames{

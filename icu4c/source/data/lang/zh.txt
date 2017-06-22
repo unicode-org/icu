@@ -164,6 +164,7 @@ zh{
         fo{"法罗文"}
         fon{"丰文"}
         fr{"法语"}
+        frc{"卡津法语"}
         frm{"中古法文"}
         fro{"古法文"}
         frr{"北弗里西亚文"}
@@ -290,6 +291,7 @@ zh{
         ln{"林加拉文"}
         lo{"老挝语"}
         lol{"蒙戈文"}
+        lou{"路易斯安那克里奥尔语"}
         loz{"洛齐文"}
         lrc{"北卢尔文"}
         lt{"立陶宛语"}
@@ -954,7 +956,7 @@ zh{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.1.33.94"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — 全部"}
         category-list{"{0}: {1}"}
