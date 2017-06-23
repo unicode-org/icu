@@ -24,7 +24,6 @@
 #include "nfrlist.h"
 #include "patternprops.h"
 #include "putilimp.h"
-#include "uassert.h"
 
 #ifdef RBNF_DEBUG
 #include "cmemory.h"
@@ -837,18 +836,11 @@ uint64_t util64_pow(uint32_t base, uint16_t exponent)  {
     }
     uint64_t result = 1;
     uint64_t pow = base;
-    UBool safe = TRUE;
-    while (exponent > 0) {
-        U_ASSERT(safe);
-        if ((exponent & 1) == 1) {
+    while (exponent > 0) { 
+        if ((exponent & 1) == 1) { 
             result *= pow; 
         } 
-        if (pow >= 0x100000000L) {
-            // The next step will push us out of bounds
-            safe = FALSE;
-        } else {
-            pow *= pow;
-        }
+        pow *= pow; 
         exponent >>= 1; 
     } 
     return result;
