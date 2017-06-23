@@ -5195,6 +5195,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         sdf.applyPattern("hh:mm:ss BBBB");
         assertEquals("hh:mm:ss BBBB | 01:00:00 | es", "01:00:00 de la madrugada", sdf.format(k010000));
+
+        // #13215: for locales with keywords, check hang in DayPeriodRules.getInstance(ULocale),
+        // which is called in SimpleDateFormat.format for patterns that include 'B'.
+        sdf = new SimpleDateFormat("", new ULocale("en@calendar=buddhist"));
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        sdf.applyPattern("hh:mm:ss BBBB");
+        assertEquals("hh:mm:ss BBBB | 01:00:00 | en@calendar=buddhist", "01:00:00 at night", sdf.format(k010000));
     }
 
     @Test
