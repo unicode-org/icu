@@ -2684,6 +2684,9 @@ void NumberFormatRegressionTest::TestJ691(void) {
 
     // *** Here's the key: We don't want to have to do THIS:
     // nf->setParseIntegerOnly(TRUE);
+    // or this (with changes to fr_CH per cldrbug:9370):
+    // nf->setGroupingUsed(FALSE);
+    // so they are done in DateFormat::adoptNumberFormat
 
     // create the DateFormat
     DateFormat *df = DateFormat::createDateInstance(DateFormat::kShort, loc);
