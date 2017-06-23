@@ -73,8 +73,9 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         // *** Here's the key: We don't want to have to do THIS:
         //nf.setParseIntegerOnly(true);
-        // However with changes to fr_CH per cldrbug:9370 we have to do the following:
-        nf.setGroupingUsed(false);
+        // or this (with changes to fr_CH per cldrbug:9370):
+        //nf.setGroupingUsed(false);
+        // so they are done in DateFormat.setNumberFormat
     
         // create the DateFormat
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc);
