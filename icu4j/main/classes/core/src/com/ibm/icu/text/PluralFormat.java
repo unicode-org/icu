@@ -19,7 +19,6 @@ import java.util.Map;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
-import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -557,7 +556,6 @@ public class PluralFormat extends UFormat {
         @Override
         public String select(Object context, double number) {
             IFixedDecimal dec = (IFixedDecimal) context;
-            assert dec.getPluralOperand(Operand.n) == Math.abs(number);
             return pluralRules.select(dec);
         }
     }
