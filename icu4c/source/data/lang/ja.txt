@@ -334,6 +334,7 @@ ja{
         ln{"リンガラ語"}
         lo{"ラオ語"}
         lol{"モンゴ語"}
+        lou{"ルイジアナ・クレオール語"}
         loz{"ロジ語"}
         lrc{"北ロル語"}
         lt{"リトアニア語"}
@@ -1044,7 +1045,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — すべて"}
         category-list{"{0}: {1}"}

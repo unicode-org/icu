@@ -262,6 +262,10 @@ en{
             "CLP",
             "Chilean Peso",
         }
+        CNH{
+            "CNH",
+            "Chinese Yuan (offshore)",
+        }
         CNX{
             "CNX",
             "Chinese People’s Bank Dollar",
@@ -1456,6 +1460,10 @@ en{
             one{"Chilean peso"}
             other{"Chilean pesos"}
         }
+        CNH{
+            one{"Chinese yuan (offshore)"}
+            other{"Chinese yuan (offshore)"}
+        }
         CNX{
             one{"Chinese People’s Bank dollar"}
             other{"Chinese People’s Bank dollars"}
@@ -2393,5 +2401,5 @@ en{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.6"}
 }

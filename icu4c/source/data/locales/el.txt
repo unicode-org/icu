@@ -213,7 +213,7 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -446,8 +446,8 @@ el{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"εβδομάδα w του y"}
-                    other{"εβδομάδα w του y"}
+                    one{"εβδομάδα w του Y"}
+                    other{"εβδομάδα w του Y"}
                 }
             }
             dayNames{

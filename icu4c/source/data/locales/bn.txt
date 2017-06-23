@@ -235,7 +235,7 @@ bn{
         minimumGroupingDigits{"1"}
         native{"beng"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -465,8 +465,8 @@ bn{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"y এর wতম সপ্তাহ"}
-                    other{"y এর wতম সপ্তাহ"}
+                    one{"Y এর wতম সপ্তাহ"}
+                    other{"Y এর wতম সপ্তাহ"}
                 }
             }
             dayNames{

@@ -14,6 +14,7 @@ import java.text.StringCharacterIterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.CSCharacterIterator;
 import com.ibm.icu.impl.CacheValue;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
@@ -511,6 +512,19 @@ public abstract class BreakIterator implements Cloneable
     public void setText(String newText)
     {
         setText(new StringCharacterIterator(newText));
+    }
+
+    /**
+     * Sets the iterator to analyze a new piece of text.  The new
+     * piece of text is passed in as a CharSequence, and the current
+     * iteration position is reset to the beginning of the text.
+     * (The old text is dropped.)
+     * @param newText A CharSequence containing the text to analyze with
+     * this BreakIterator.
+     * @draft ICU 60
+     */
+    public void setText(CharSequence newText) {
+        setText(new CSCharacterIterator(newText));
     }
 
     /**

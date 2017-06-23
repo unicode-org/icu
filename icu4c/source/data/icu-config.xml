@@ -740,7 +740,10 @@
 		<include locales="yo_BJ"/>
 		<include locales="yo_NG"/>
 		<include locales="yue"/>
-		<include locales="yue_HK"/>
+ 		<include locales="yue_Hans"/>
+ 		<include locales="yue_Hans_CN"/>
+ 		<include locales="yue_Hant"/>
+ 		<include locales="yue_Hant_HK"/>
 		<include locales="zgh"/>
 		<include locales="zgh_MA"/>
 		<include locales="zh"/>

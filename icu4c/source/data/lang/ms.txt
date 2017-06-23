@@ -149,6 +149,7 @@ ms{
         fr{"Perancis"}
         fr_CA{"Perancis Kanada"}
         fr_CH{"Perancis Switzerland"}
+        frc{"Perancis Cajun"}
         fur{"Friulian"}
         fy{"Frisian Barat"}
         ga{"Ireland"}
@@ -255,6 +256,7 @@ ms{
         lkt{"Lakota"}
         ln{"Lingala"}
         lo{"Laos"}
+        lou{"Kreol Louisiana"}
         loz{"Lozi"}
         lrc{"Luri Utara"}
         lt{"Lithuania"}
@@ -667,7 +669,7 @@ ms{
             vaii{"Digit Vai"}
         }
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — Semua"}
         category-list{"{0}: {1}"}

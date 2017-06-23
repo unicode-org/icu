@@ -1841,7 +1841,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"31.0.1"}
+    cldrVersion{"32"}
     codeMappings{
         {
             "AA",
@@ -3493,6 +3493,10 @@ supplementalData:table(nofallback){
             "152",
         }
         {
+            "CNH",
+            "156",
+        }
+        {
             "CNY",
             "156",
         }
@@ -4104,6 +4108,7 @@ supplementalData:table(nofallback){
                 "CHE",
                 "CHW",
                 "CLE~F",
+                "CNH",
                 "CNX",
                 "COU",
                 "CSD",
@@ -7200,6 +7205,7 @@ supplementalData:table(nofallback){
                 "Ethi",
                 "Geor",
                 "Glag",
+                "Gonm",
                 "Goth",
                 "Gran",
                 "Grek",
@@ -7256,6 +7262,7 @@ supplementalData:table(nofallback){
                 "Nbat",
                 "Newa",
                 "Nkoo",
+                "Nshu",
                 "Ogam",
                 "Olck",
                 "Orkh",
@@ -7283,6 +7290,7 @@ supplementalData:table(nofallback){
                 "Sind",
                 "Sinh",
                 "Sora",
+                "Soyo",
                 "Sund",
                 "Sylo",
                 "Syrc",
@@ -7306,6 +7314,7 @@ supplementalData:table(nofallback){
                 "Xpeo",
                 "Xsux",
                 "Yiii",
+                "Zanb",
                 "Zinh",
                 "Zyyy",
             }
@@ -36054,7 +36063,7 @@ supplementalData:table(nofallback){
         }
         RU:intvector{
             2,
-            1,
+            4,
             7,
             0,
             1,

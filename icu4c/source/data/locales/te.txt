@@ -237,7 +237,7 @@ te{
             }
         }
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -465,8 +465,8 @@ te{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"y wవ వారం"}
-                    other{"y wవ వారం"}
+                    one{"Y wవ వారం"}
+                    other{"Y wవ వారం"}
                 }
             }
             dayNames{

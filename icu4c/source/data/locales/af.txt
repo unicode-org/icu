@@ -212,7 +212,7 @@ af{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -438,8 +438,8 @@ af{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'week' w 'van' y"}
-                    other{"'week' w 'van' y"}
+                    one{"'week' w 'van' Y"}
+                    other{"'week' w 'van' Y"}
                 }
             }
             dayNames{

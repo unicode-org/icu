@@ -169,6 +169,7 @@ sk{
         fr{"francúzština"}
         fr_CA{"francúzština (kanadská)"}
         fr_CH{"francúzština (švajčiarska)"}
+        frc{"francúzština (Cajun)"}
         frm{"stredná francúzština"}
         fro{"stará francúzština"}
         frr{"severná frízština"}
@@ -292,6 +293,7 @@ sk{
         ln{"lingalčina"}
         lo{"laoština"}
         lol{"mongo"}
+        lou{"kreolčina (Louisiana)"}
         loz{"lozi"}
         lrc{"severné luri"}
         lt{"litovčina"}
@@ -755,7 +757,7 @@ sk{
     Variants{
         SCOTLAND{"škótska štandardná angličtina"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} – všetko"}
         category-list{"{0}: {1}"}

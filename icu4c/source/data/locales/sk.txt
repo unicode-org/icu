@@ -286,7 +286,7 @@ sk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         generic{
             DateTimePatterns{
@@ -523,10 +523,10 @@ sk{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"w. 'týždeň' 'v' 'roku' y"}
-                    many{"w. 'týždeň' 'v' 'roku' y"}
-                    one{"w. 'týždeň' 'v' 'roku' y"}
-                    other{"w. 'týždeň' 'v' 'roku' y"}
+                    few{"w. 'týždeň' 'v' 'roku' Y"}
+                    many{"w. 'týždeň' 'v' 'roku' Y"}
+                    one{"w. 'týždeň' 'v' 'roku' Y"}
+                    other{"w. 'týždeň' 'v' 'roku' Y"}
                 }
             }
             dayNames{

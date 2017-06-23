@@ -874,7 +874,7 @@ lo{
         VALLADER{"ວັລລາເດີ"}
         WADEGILE{"ການຖອດອັກສອນແບບເວດ-ໄຈລ໌"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.51"}
     characterLabelPattern{
         all{"{0} — ທັງໝົດ"}
         category-list{"{0}: {1}"}

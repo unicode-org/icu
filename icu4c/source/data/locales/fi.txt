@@ -213,7 +213,7 @@ fi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -526,8 +526,8 @@ fi{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'vuoden' y 'viikko' w"}
-                    other{"'vuoden' y 'viikko' w"}
+                    one{"'vuoden' Y 'viikko' w"}
+                    other{"'vuoden' Y 'viikko' w"}
                 }
             }
             dayNames{

@@ -211,7 +211,7 @@ ky{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -396,8 +396,8 @@ ky{
                 yQQQ{"y-'ж'., QQQ"}
                 yQQQQ{"y-'ж'., QQQQ"}
                 yw{
-                    one{"y-'жылдын' w-'аптасы'"}
-                    other{"y-'жылдын' w-'аптасы'"}
+                    one{"Y-'жылдын' w-'аптасы'"}
+                    other{"Y-'жылдын' w-'аптасы'"}
                 }
             }
             dayNames{

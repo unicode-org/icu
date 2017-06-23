@@ -215,7 +215,7 @@ ca{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -704,8 +704,8 @@ ca{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'setmana' w 'de' y"}
-                    other{"'setmana' w 'de' y"}
+                    one{"'setmana' w 'de' Y"}
+                    other{"'setmana' w 'de' Y"}
                 }
             }
             dayNames{
