@@ -1590,7 +1590,7 @@ public final class Normalizer implements Cloneable {
      * <tt>String</tt> over which this <tt>Normalizer</tt> is iterating
      * @deprecated ICU 2.2. Use startIndex() instead.
      * @return The codepoint as an int
-     * @see #index
+     * @see #startIndex
      */
     @Deprecated
     public int getBeginIndex() {

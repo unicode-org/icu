@@ -90,167 +90,121 @@ public class PositiveDecimalFormat implements Format.TargetFormat {
         || properties.getMaximumFractionDigits() != 0;
   }
 
-  private static class ParameterStruct {
+  // Properties
+  private final boolean alwaysShowDecimal;
+  private final int primaryGroupingSize;
+  private final int secondaryGroupingSize;
+  private final int minimumGroupingDigits;
 
-    // Properties
-    boolean alwaysShowDecimal;
-    int primaryGroupingSize;
-    int secondaryGroupingSize;
-    int minimumGroupingDigits;
-
-    // Symbols
-    String infinityString;
-    String nanString;
-    String groupingSeparator;
-    String decimalSeparator;
-    String[] digitStrings;
-    int codePointZero;
-
-    void setProperties(DecimalFormatSymbols symbols, IProperties properties) {
-      int _primary = properties.getGroupingSize();
-      int _secondary = properties.getSecondaryGroupingSize();
-      primaryGroupingSize = _primary > 0 ? _primary : _secondary > 0 ? _secondary : 0;
-      secondaryGroupingSize = _secondary > 0 ? _secondary : primaryGroupingSize;
-
-      minimumGroupingDigits = properties.getMinimumGroupingDigits();
-      alwaysShowDecimal = properties.getDecimalSeparatorAlwaysShown();
-      infinityString = symbols.getInfinity();
-      nanString = symbols.getNaN();
-
-      if (CurrencyFormat.useCurrency(properties)) {
-        groupingSeparator = symbols.getMonetaryGroupingSeparatorString();
-        decimalSeparator = symbols.getMonetaryDecimalSeparatorString();
-      } else {
-        groupingSeparator = symbols.getGroupingSeparatorString();
-        decimalSeparator = symbols.getDecimalSeparatorString();
-      }
-
-      // Check to see if we can use code points instead of strings
-      int _codePointZero = symbols.getCodePointZero();
-      if (_codePointZero != -1) {
-        // Fast Path (9-25% faster than slow path when formatting long strings)
-        digitStrings = null;
-        codePointZero = _codePointZero;
-      } else {
-        // Slow Path
-        digitStrings = symbols.getDigitStrings(); // makes a copy
-        codePointZero = -1;
-      }
-    }
-  }
-
-  private static class TransientStruct {
-    FormatQuantity input;
-    NumberStringBuilder string;
-    int index;
-    ParameterStruct params;
-  }
-
-  private final ParameterStruct params;
+  // Symbols
+  private final String infinityString;
+  private final String nanString;
+  private final String groupingSeparator;
+  private final String decimalSeparator;
+  private final String[] digitStrings;
+  private final int codePointZero;
 
   public PositiveDecimalFormat(DecimalFormatSymbols symbols, IProperties properties) {
-    params = new ParameterStruct();
-    params.setProperties(symbols, properties);
+    int _primary = properties.getGroupingSize();
+    int _secondary = properties.getSecondaryGroupingSize();
+    primaryGroupingSize = _primary > 0 ? _primary : _secondary > 0 ? _secondary : 0;
+    secondaryGroupingSize = _secondary > 0 ? _secondary : primaryGroupingSize;
+
+    minimumGroupingDigits = properties.getMinimumGroupingDigits();
+    alwaysShowDecimal = properties.getDecimalSeparatorAlwaysShown();
+    infinityString = symbols.getInfinity();
+    nanString = symbols.getNaN();
+
+    if (CurrencyFormat.useCurrency(properties)) {
+      groupingSeparator = symbols.getMonetaryGroupingSeparatorString();
+      decimalSeparator = symbols.getMonetaryDecimalSeparatorString();
+    } else {
+      groupingSeparator = symbols.getGroupingSeparatorString();
+      decimalSeparator = symbols.getDecimalSeparatorString();
+    }
+
+    // Check to see if we can use code points instead of strings
+    int _codePointZero = symbols.getCodePointZero();
+    if (_codePointZero != -1) {
+      // Fast Path (~9% faster than slow path when formatting long strings)
+      digitStrings = null;
+      codePointZero = _codePointZero;
+    } else {
+      // Slow Path
+      digitStrings = symbols.getDigitStrings(); // makes a copy
+      codePointZero = -1;
+    }
   }
-
-  //    private static void apply(
-  //        FormatQuantity input,
-  //        NumberStringBuilder string,
-  //        int startIndex,
-  //        DecimalFormatSymbols symbols,
-  //        IProperties properties) {
-  //
-  //    }
-
-  private static final ThreadLocal<TransientStruct> threadLocalTransientStruct =
-      new ThreadLocal<TransientStruct>() {
-        @Override
-        protected TransientStruct initialValue() {
-          return new TransientStruct();
-        }
-      };
-
-  private static final TransientStruct staticTransientStruct = new TransientStruct();
 
   @Override
   public int target(FormatQuantity input, NumberStringBuilder string, int startIndex) {
-    //    TransientStruct trans = staticTransientStruct;
-    TransientStruct trans = threadLocalTransientStruct.get();
-    trans.input = input;
-    trans.string = string;
-    trans.index = startIndex;
-    trans.params = params;
-    target(trans);
-    return trans.index - startIndex;
-  }
+    int length = 0;
 
-  private static void target(TransientStruct trans) {
-    if (trans.input.isInfinite()) {
-      trans.index +=
-          trans.string.insert(trans.index, trans.params.infinityString, NumberFormat.Field.INTEGER);
+    if (input.isInfinite()) {
+      length += string.insert(startIndex, infinityString, NumberFormat.Field.INTEGER);
 
-    } else if (trans.input.isNaN()) {
-      trans.index +=
-          trans.string.insert(trans.index, trans.params.nanString, NumberFormat.Field.INTEGER);
+    } else if (input.isNaN()) {
+      length += string.insert(startIndex, nanString, NumberFormat.Field.INTEGER);
 
     } else {
       // Add the integer digits
-      trans.index += addIntegerDigits(trans);
+      length += addIntegerDigits(input, string, startIndex);
 
       // Add the decimal point
-      if (trans.input.getLowerDisplayMagnitude() < 0 || trans.params.alwaysShowDecimal) {
-        trans.index +=
-            trans.string.insert(
-                trans.index, trans.params.decimalSeparator, NumberFormat.Field.DECIMAL_SEPARATOR);
+      if (input.getLowerDisplayMagnitude() < 0 || alwaysShowDecimal) {
+        length +=
+            string.insert(
+                startIndex + length, decimalSeparator, NumberFormat.Field.DECIMAL_SEPARATOR);
       }
 
       // Add the fraction digits
-      trans.index += addFractionDigits(trans);
+      length += addFractionDigits(input, string, startIndex + length);
     }
+
+    return length;
   }
 
-  private static int addIntegerDigits(TransientStruct trans) {
+  private int addIntegerDigits(FormatQuantity input, NumberStringBuilder string, int startIndex) {
     int length = 0;
-    int integerCount = trans.input.getUpperDisplayMagnitude() + 1;
+    int integerCount = input.getUpperDisplayMagnitude() + 1;
     for (int i = 0; i < integerCount; i++) {
       // Add grouping separator
-      if (trans.params.primaryGroupingSize > 0
-          && i == trans.params.primaryGroupingSize
-          && integerCount - i >= trans.params.minimumGroupingDigits) {
+      if (primaryGroupingSize > 0
+          && i == primaryGroupingSize
+          && integerCount - i >= minimumGroupingDigits) {
         length +=
-            trans.string.insert(
-                trans.index, trans.params.groupingSeparator, NumberFormat.Field.GROUPING_SEPARATOR);
-      } else if (trans.params.secondaryGroupingSize > 0
-          && i > trans.params.primaryGroupingSize
-          && (i - trans.params.primaryGroupingSize) % trans.params.secondaryGroupingSize == 0) {
+            string.insert(startIndex, groupingSeparator, NumberFormat.Field.GROUPING_SEPARATOR);
+      } else if (secondaryGroupingSize > 0
+          && i > primaryGroupingSize
+          && (i - primaryGroupingSize) % secondaryGroupingSize == 0) {
         length +=
-            trans.string.insert(
-                trans.index, trans.params.groupingSeparator, NumberFormat.Field.GROUPING_SEPARATOR);
+            string.insert(startIndex, groupingSeparator, NumberFormat.Field.GROUPING_SEPARATOR);
       }
 
       // Get and append the next digit value
-      byte nextDigit = trans.input.getDigit(i);
-      length += addDigit(nextDigit, trans.index, NumberFormat.Field.INTEGER, trans);
+      byte nextDigit = input.getDigit(i);
+      length += addDigit(nextDigit, string, startIndex, NumberFormat.Field.INTEGER);
     }
+
     return length;
   }
 
-  private static int addFractionDigits(TransientStruct trans) {
+  private int addFractionDigits(FormatQuantity input, NumberStringBuilder string, int index) {
     int length = 0;
-    int fractionCount = -trans.input.getLowerDisplayMagnitude();
+    int fractionCount = -input.getLowerDisplayMagnitude();
     for (int i = 0; i < fractionCount; i++) {
       // Get and append the next digit value
-      byte nextDigit = trans.input.getDigit(-i - 1);
-      length += addDigit(nextDigit, trans.index + length, NumberFormat.Field.FRACTION, trans);
+      byte nextDigit = input.getDigit(-i - 1);
+      length += addDigit(nextDigit, string, index + length, NumberFormat.Field.FRACTION);
     }
     return length;
   }
 
-  private static int addDigit(byte digit, int index, Field field, TransientStruct trans) {
-    if (trans.params.codePointZero != -1) {
-      return trans.string.insertCodePoint(index, trans.params.codePointZero + digit, field);
+  private int addDigit(byte digit, NumberStringBuilder outputString, int index, Field field) {
+    if (codePointZero != -1) {
+      return outputString.insertCodePoint(index, codePointZero + digit, field);
     } else {
-      return trans.string.insert(index, trans.params.digitStrings[digit], field);
+      return outputString.insert(index, digitStrings[digit], field);
     }
   }
 
@@ -258,13 +212,11 @@ public class PositiveDecimalFormat implements Format.TargetFormat {
   public void export(Properties properties) {
     // For backwards compatibility, export 0 as secondary grouping if primary and secondary are the same
     int effectiveSecondaryGroupingSize =
-        params.secondaryGroupingSize == params.primaryGroupingSize
-            ? 0
-            : params.secondaryGroupingSize;
+        secondaryGroupingSize == primaryGroupingSize ? 0 : secondaryGroupingSize;
 
-    properties.setDecimalSeparatorAlwaysShown(params.alwaysShowDecimal);
-    properties.setGroupingSize(params.primaryGroupingSize);
+    properties.setDecimalSeparatorAlwaysShown(alwaysShowDecimal);
+    properties.setGroupingSize(primaryGroupingSize);
     properties.setSecondaryGroupingSize(effectiveSecondaryGroupingSize);
-    properties.setMinimumGroupingDigits(params.minimumGroupingDigits);
+    properties.setMinimumGroupingDigits(minimumGroupingDigits);
   }
 }
