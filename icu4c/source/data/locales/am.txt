@@ -218,7 +218,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -870,8 +870,8 @@ am{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'week' w 'of' y"}
-                    other{"'week' w 'of' y"}
+                    one{"'week' w 'of' Y"}
+                    other{"'week' w 'of' Y"}
                 }
             }
             dayNames{

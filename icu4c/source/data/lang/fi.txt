@@ -192,7 +192,7 @@ fi{
         fr{"ranska"}
         fr_CA{"kanadanranska"}
         fr_CH{"sveitsinranska"}
-        frc{"cajun"}
+        frc{"cajunranska"}
         frm{"keskiranska"}
         fro{"muinaisranska"}
         frp{"arpitaani"}
@@ -339,6 +339,7 @@ fi{
         ln{"lingala"}
         lo{"lao"}
         lol{"mongo"}
+        lou{"louisianankreoli"}
         loz{"lozi"}
         lrc{"pohjoisluri"}
         lt{"liettua"}
@@ -1106,7 +1107,7 @@ fi{
     Variants%secondary{
         FONUPA{"suomalais-ugrilainen tarkekirjoitus"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} – Kaikki"}
         category-list{"{0}: {1}"}

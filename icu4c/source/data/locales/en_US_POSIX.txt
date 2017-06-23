@@ -4,9 +4,9 @@ en_US_POSIX{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤ #0.00"}
-                decimalFormat{"#0.######"}
-                percentFormat{"#0%"}
+                currencyFormat{"¤ 0.00"}
+                decimalFormat{"0.######"}
+                percentFormat{"0%"}
                 scientificFormat{"0.000000E+000"}
             }
             symbols{
@@ -15,5 +15,5 @@ en_US_POSIX{
             }
         }
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.34.52"}
 }

@@ -35,7 +35,7 @@ yo{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.34.45"}
     calendar{
         generic{
             DateTimePatterns{
@@ -153,7 +153,7 @@ yo{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    other{"'week' w 'of' y"}
+                    other{"'week' w 'of' Y"}
                 }
             }
             dayNames{

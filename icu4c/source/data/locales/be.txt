@@ -286,7 +286,7 @@ be{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.51"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -518,10 +518,10 @@ be{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"w 'тыдзень' y"}
-                    many{"w 'тыдзень' y"}
-                    one{"w 'тыдзень' y"}
-                    other{"w 'тыдзень' y"}
+                    few{"w 'тыдзень' Y"}
+                    many{"w 'тыдзень' Y"}
+                    one{"w 'тыдзень' Y"}
+                    other{"w 'тыдзень' Y"}
                 }
             }
             dayNames{

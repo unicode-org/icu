@@ -250,7 +250,7 @@ hr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -651,9 +651,9 @@ hr{
                 yQQQ{"QQQ y."}
                 yQQQQ{"QQQQ y."}
                 yw{
-                    few{"w. 'tjedan' 'u' y."}
-                    one{"w. 'tjedan' 'u' y."}
-                    other{"w. 'tjedan' 'u' y."}
+                    few{"w. 'tjedan' 'u' Y."}
+                    one{"w. 'tjedan' 'u' Y."}
+                    other{"w. 'tjedan' 'u' Y."}
                 }
             }
             dayNames{

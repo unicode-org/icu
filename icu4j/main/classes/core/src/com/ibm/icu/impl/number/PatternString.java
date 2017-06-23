@@ -278,6 +278,11 @@ public class PatternString {
    * pattern "0.000" means "decimal" in standard notation (as it does in every other locale), but it
    * means "grouping" in localized notation.
    *
+   * <p>A greedy string-substitution strategy is used to substitute locale symbols. If two symbols
+   * are ambiguous or have the same prefix, the result is not well-defined.
+   *
+   * <p>Locale symbols are not allowed to contain the ASCII quote character.
+   *
    * @param input The pattern to convert.
    * @param symbols The symbols corresponding to the localized pattern.
    * @param toLocalized true to convert from standard to localized notation; false to convert from
@@ -288,100 +293,136 @@ public class PatternString {
    */
   @Deprecated
   public static String convertLocalized(
-      CharSequence input, DecimalFormatSymbols symbols, boolean toLocalized) {
+      String input, DecimalFormatSymbols symbols, boolean toLocalized) {
     if (input == null) return null;
 
-    /// This is not the prettiest function in the world, but it gets the job done. ///
-
-    // Construct a table of code points to be converted between localized and standard.
-    int[][] table = new int[6][2];
+    // Construct a table of strings to be converted between localized and standard.
+    String[][] table = new String[21][2];
     int standIdx = toLocalized ? 0 : 1;
     int localIdx = toLocalized ? 1 : 0;
-    table[0][standIdx] = '%';
-    table[0][localIdx] = symbols.getPercent();
-    table[1][standIdx] = '‰';
-    table[1][localIdx] = symbols.getPerMill();
-    table[2][standIdx] = '.';
-    table[2][localIdx] = symbols.getDecimalSeparator();
-    table[3][standIdx] = ',';
-    table[3][localIdx] = symbols.getGroupingSeparator();
-    table[4][standIdx] = '-';
-    table[4][localIdx] = symbols.getMinusSign();
-    table[5][standIdx] = '+';
-    table[5][localIdx] = symbols.getPlusSign();
+    table[0][standIdx] = "%";
+    table[0][localIdx] = symbols.getPercentString();
+    table[1][standIdx] = "‰";
+    table[1][localIdx] = symbols.getPerMillString();
+    table[2][standIdx] = ".";
+    table[2][localIdx] = symbols.getDecimalSeparatorString();
+    table[3][standIdx] = ",";
+    table[3][localIdx] = symbols.getGroupingSeparatorString();
+    table[4][standIdx] = "-";
+    table[4][localIdx] = symbols.getMinusSignString();
+    table[5][standIdx] = "+";
+    table[5][localIdx] = symbols.getPlusSignString();
+    table[6][standIdx] = ";";
+    table[6][localIdx] = Character.toString(symbols.getPatternSeparator());
+    table[7][standIdx] = "@";
+    table[7][localIdx] = Character.toString(symbols.getSignificantDigit());
+    table[8][standIdx] = "E";
+    table[8][localIdx] = symbols.getExponentSeparator();
+    table[9][standIdx] = "*";
+    table[9][localIdx] = Character.toString(symbols.getPadEscape());
+    table[10][standIdx] = "#";
+    table[10][localIdx] = Character.toString(symbols.getDigit());
+    for (int i = 0; i < 10; i++) {
+      table[11 + i][standIdx] = Character.toString((char) ('0' + i));
+      table[11 + i][localIdx] = symbols.getDigitStringsLocal()[i];
+    }
 
-    // Special case: localIdx characters are NOT allowed to be quotes, like in de_CH.
-    // Use '’' instead.
+    // Special case: quotes are NOT allowed to be in any localIdx strings.
+    // Substitute them with '’' instead.
     for (int i = 0; i < table.length; i++) {
-      if (table[i][localIdx] == '\'') {
-        table[i][localIdx] = '’';
-      }
+      table[i][localIdx] = table[i][localIdx].replace('\'', '’');
     }
 
-    // Iterate through the string and convert
-    int offset = 0;
-    int state = 0;
+    // Iterate through the string and convert.
+    // State table:
+    //  0 => base state
+    //  1 => first char inside a quoted sequence in input and output string
+    //  2 => inside a quoted sequence in input and output string
+    //  3 => first char after a close quote in input string;
+    //       close quote still needs to be written to output string
+    //  4 => base state in input string; inside quoted sequence in output string
+    //  5 => first char inside a quoted sequence in input string;
+    //       inside quoted sequence in output string
     StringBuilder result = new StringBuilder();
-    for (; offset < input.length(); ) {
-      int cp = Character.codePointAt(input, offset);
-      int cpToAppend = cp;
+    int state = 0;
+    outer:
+    for (int offset = 0; offset < input.length(); offset++) {
+      char ch = input.charAt(offset);
 
-      if (state == 1 || state == 3 || state == 4) {
-        // Inside user-specified quote
-        if (cp == '\'') {
-          if (state == 1) {
-            state = 0;
-          } else if (state == 3) {
-            state = 2;
-            cpToAppend = -1;
-          } else {
-            state = 2;
-          }
-        }
-      } else {
-        // Base state or inside special character quote
-        if (cp == '\'') {
-          if (state == 2 && offset + 1 < input.length()) {
-            int nextCp = Character.codePointAt(input, offset + 1);
-            if (nextCp == '\'') {
-              // escaped quote
-              state = 4;
-            } else {
-              // begin user-specified quote sequence
-              // we are already in a quote sequence, so omit the opening quote
-              state = 3;
-              cpToAppend = -1;
-            }
-          } else {
-            state = 1;
-          }
+      // Handle a quote character (state shift)
+      if (ch == '\'') {
+        if (state == 0) {
+          result.append('\'');
+          state = 1;
+          continue;
+        } else if (state == 1) {
+          result.append('\'');
+          state = 0;
+          continue;
+        } else if (state == 2) {
+          state = 3;
+          continue;
+        } else if (state == 3) {
+          result.append('\'');
+          result.append('\'');
+          state = 1;
+          continue;
+        } else if (state == 4) {
+          state = 5;
+          continue;
         } else {
-          boolean needsSpecialQuote = false;
-          for (int i = 0; i < table.length; i++) {
-            if (table[i][0] == cp) {
-              cpToAppend = table[i][1];
-              needsSpecialQuote = false; // in case an earlier translation triggered it
-              break;
-            } else if (table[i][1] == cp) {
-              needsSpecialQuote = true;
-            }
-          }
-          if (state == 0 && needsSpecialQuote) {
-            state = 2;
-            result.appendCodePoint('\'');
-          } else if (state == 2 && !needsSpecialQuote) {
-            state = 0;
-            result.appendCodePoint('\'');
-          }
+          assert state == 5;
+          result.append('\'');
+          result.append('\'');
+          state = 4;
+          continue;
         }
       }
-      if (cpToAppend != -1) {
-        result.appendCodePoint(cpToAppend);
+
+      if (state == 0 || state == 3 || state == 4) {
+        for (String[] pair : table) {
+          // Perform a greedy match on this symbol string
+          if (input.regionMatches(offset, pair[0], 0, pair[0].length())) {
+            // Skip ahead past this region for the next iteration
+            offset += pair[0].length() - 1;
+            if (state == 3 || state == 4) {
+              result.append('\'');
+              state = 0;
+            }
+            result.append(pair[1]);
+            continue outer;
+          }
+        }
+        // No replacement found.  Check if a special quote is necessary
+        for (String[] pair : table) {
+          if (input.regionMatches(offset, pair[1], 0, pair[1].length())) {
+            if (state == 0) {
+              result.append('\'');
+              state = 4;
+            }
+            result.append(ch);
+            continue outer;
+          }
+        }
+        // Still nothing.  Copy the char verbatim.  (Add a close quote if necessary)
+        if (state == 3 || state == 4) {
+          result.append('\'');
+          state = 0;
+        }
+        result.append(ch);
+      } else {
+        assert state == 1 || state == 2 || state == 5;
+        result.append(ch);
+        state = 2;
       }
-      offset += Character.charCount(cp);
     }
-    if (state == 2) {
-      result.appendCodePoint('\'');
+    // Resolve final quotes
+    if (state == 3 || state == 4) {
+      result.append('\'');
+      state = 0;
+    }
+    if (state != 0) {
+      throw new IllegalArgumentException("Malformed localized pattern: unterminated quote");
     }
     return result.toString();
   }

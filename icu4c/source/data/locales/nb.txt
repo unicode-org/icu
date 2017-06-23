@@ -245,7 +245,7 @@ nb{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             availableFormats{
@@ -1052,8 +1052,8 @@ nb{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'uke' w 'i' y"}
-                    other{"'uke' w 'i' y"}
+                    one{"'uke' w 'i' Y"}
+                    other{"'uke' w 'i' Y"}
                 }
             }
             dayNames{

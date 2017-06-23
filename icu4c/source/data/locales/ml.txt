@@ -238,7 +238,7 @@ ml{
         }
         native{"mlym"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -471,8 +471,8 @@ ml{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"y-ലെ ആഴ്ച w"}
-                    other{"y-ലെ ആഴ്ച w"}
+                    one{"Y-ലെ ആഴ്ച w"}
+                    other{"Y-ലെ ആഴ്ച w"}
                 }
             }
             dayNames{

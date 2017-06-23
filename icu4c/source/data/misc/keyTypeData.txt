@@ -229,6 +229,7 @@ keyTypeData:table(nofallback){
             cle{""}
             clf{""}
             clp{""}
+            cnh{""}
             cnx{""}
             cny{""}
             cop{""}
@@ -608,6 +609,7 @@ keyTypeData:table(nofallback){
             finance{""}
             fullwide{""}
             geor{""}
+            gonm{""}
             grek{""}
             greklow{""}
             gujr{""}

@@ -335,6 +335,7 @@ it{
         ln{"lingala"}
         lo{"lao"}
         lol{"lolo bantu"}
+        lou{"creolo della Louisiana"}
         loz{"lozi"}
         lrc{"luri settentrionale"}
         lt{"lituano"}
@@ -1017,7 +1018,7 @@ it{
         VALENCIA{"valenziano"}
         WADEGILE{"romanizzazione Wade-Giles"}
     }
-    Version{"2.1.32.60"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — Tutto"}
         category-list{"{0}: {1}"}

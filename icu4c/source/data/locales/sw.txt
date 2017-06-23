@@ -207,7 +207,7 @@ sw{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.33.73"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{

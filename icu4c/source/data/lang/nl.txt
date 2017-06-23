@@ -327,6 +327,7 @@ nl{
         ln{"Lingala"}
         lo{"Laotiaans"}
         lol{"Mongo"}
+        lou{"Louisiana-Creools"}
         loz{"Lozi"}
         lrc{"Noordelijk Luri"}
         lt{"Litouws"}
@@ -1099,7 +1100,7 @@ nl{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — alle"}
         category-list{"{0}: {1}"}

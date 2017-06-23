@@ -211,7 +211,7 @@ mn{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -435,8 +435,8 @@ mn{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y 'оны' QQQQ"}
                 yw{
-                    one{"y'жилийн' w 'долоо' 'хоног'"}
-                    other{"y 'жилийн' w 'долоо' 'хоног'"}
+                    one{"Y'жилийн' w 'долоо' 'хоног'"}
+                    other{"Y 'жилийн' w 'долоо' 'хоног'"}
                 }
             }
             dayNames{

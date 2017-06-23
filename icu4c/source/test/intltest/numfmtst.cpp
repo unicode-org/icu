@@ -233,7 +233,7 @@ static void adjustDecimalFormat(
         }
     }
     if (tuple.parseCaseSensitiveFlag) {
-        // TODO
+        // TODO: Fill this in when support is added in ICU4C
     }
 }
 

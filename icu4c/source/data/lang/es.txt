@@ -169,6 +169,7 @@ es{
         fr{"francés"}
         fr_CA{"francés canadiense"}
         fr_CH{"francés suizo"}
+        frc{"francés cajún"}
         frm{"francés medio"}
         fro{"francés antiguo"}
         frr{"frisón septentrional"}
@@ -295,6 +296,7 @@ es{
         ln{"lingala"}
         lo{"lao"}
         lol{"mongo"}
+        lou{"criollo de Luisiana"}
         loz{"lozi"}
         lrc{"lorí septentrional"}
         lt{"lituano"}
@@ -845,7 +847,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — Todo"}
         category-list{"{0}: {1}"}

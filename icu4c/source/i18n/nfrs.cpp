@@ -831,12 +831,12 @@ int64_t util64_fromDouble(double d) {
     return result;
 }
 
-int64_t util64_pow(int32_t base, uint16_t exponent)  { 
+uint64_t util64_pow(uint32_t base, uint16_t exponent)  { 
     if (base == 0) {
         return 0;
     }
-    int64_t result = 1;
-    int64_t pow = base;
+    uint64_t result = 1;
+    uint64_t pow = base;
     UBool safe = TRUE;
     while (exponent > 0) {
         U_ASSERT(safe);
@@ -1035,4 +1035,3 @@ U_NAMESPACE_END
 
 /* U_HAVE_RBNF */
 #endif
-

@@ -287,7 +287,7 @@ he{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         generic{
             DateTimePatterns{
@@ -514,10 +514,10 @@ he{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    many{"שבוע w בשנת y"}
-                    one{"שבוע w בשנת y"}
-                    other{"שבוע w בשנת y"}
-                    two{"שבוע w בשנת y"}
+                    many{"שבוע w בשנת Y"}
+                    one{"שבוע w בשנת Y"}
+                    other{"שבוע w בשנת Y"}
+                    two{"שבוע w בשנת Y"}
                 }
             }
             dayNames{

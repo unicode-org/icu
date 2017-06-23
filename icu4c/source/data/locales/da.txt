@@ -209,7 +209,7 @@ da{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -454,8 +454,8 @@ da{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'uge' w 'i' y"}
-                    other{"'uge' w 'i' y"}
+                    one{"'uge' w 'i' Y"}
+                    other{"'uge' w 'i' Y"}
                 }
             }
             dayNames{

@@ -162,7 +162,7 @@ eu{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         buddhist{
             eras{
@@ -400,8 +400,8 @@ eu{
                 yQQQ{"y('e')'ko' QQQ"}
                 yQQQQ{"y('e')'ko' QQQQ"}
                 yw{
-                    one{"y 'urteko' w 'astea'"}
-                    other{"w/y 'astea'"}
+                    one{"Y 'urteko' w 'astea'"}
+                    other{"w/Y 'astea'"}
                 }
             }
             dayNames{
@@ -925,7 +925,7 @@ eu{
             }
         }
         dayperiod{
-            dn{"AM//PM"}
+            dn{"AM/PM"}
         }
         era{
             dn{"aroa"}

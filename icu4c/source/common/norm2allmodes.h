@@ -225,7 +225,7 @@ public:
 private:
     virtual void
     normalize(const UChar *src, const UChar *limit,
-              ReorderingBuffer &buffer, UErrorCode &errorCode) const {
+              ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.compose(src, limit, onlyContiguous, TRUE, buffer, errorCode);
     }
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
@@ -248,12 +248,12 @@ private:
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
-                       ReorderingBuffer &buffer, UErrorCode &errorCode) const {
+                       ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.composeAndAppend(src, limit, doNormalize, onlyContiguous, safeMiddle, buffer, errorCode);
     }
 
     virtual UBool
-    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const {
+    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             return FALSE;
         }
@@ -270,7 +270,7 @@ private:
         return impl.compose(sArray, sArray+s.length(), onlyContiguous, FALSE, buffer, errorCode);
     }
     virtual UNormalizationCheckResult
-    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const {
+    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
             return UNORM_MAYBE;
         }
@@ -284,20 +284,20 @@ private:
         return qcResult;
     }
     virtual const UChar *
-    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &) const {
+    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &) const override {
         return impl.composeQuickCheck(src, limit, onlyContiguous, NULL);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
-    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const {
+    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const override {
         return impl.getCompQuickCheck(impl.getNorm16(c));
     }
-    virtual UBool hasBoundaryBefore(UChar32 c) const {
+    virtual UBool hasBoundaryBefore(UChar32 c) const override {
         return impl.hasCompBoundaryBefore(c);
     }
-    virtual UBool hasBoundaryAfter(UChar32 c) const {
+    virtual UBool hasBoundaryAfter(UChar32 c) const override {
         return impl.hasCompBoundaryAfter(c, onlyContiguous, FALSE);
     }
-    virtual UBool isInert(UChar32 c) const {
+    virtual UBool isInert(UChar32 c) const override {
         return impl.hasCompBoundaryAfter(c, onlyContiguous, TRUE);
     }
 

@@ -185,7 +185,7 @@ cs{
         fo{"faerština"}
         fon{"fonština"}
         fr{"francouzština"}
-        frc{"francouzština (kajunská)"}
+        frc{"francouzština (cajunská)"}
         frm{"francouzština (středověká)"}
         fro{"francouzština (stará)"}
         frp{"franko-provensálština"}
@@ -332,6 +332,7 @@ cs{
         ln{"lingalština"}
         lo{"laoština"}
         lol{"mongština"}
+        lou{"kreolština (Louisiana)"}
         loz{"lozština"}
         lrc{"lúrština (severní)"}
         lt{"litevština"}
@@ -957,7 +958,7 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} – vše"}
         category-list{"{0}: {1}"}

@@ -296,7 +296,7 @@ cs{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             availableFormats{
@@ -1502,10 +1502,10 @@ cs{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"w. 'týden' 'roku' y"}
-                    many{"w. 'týden' 'roku' y"}
-                    one{"w. 'týden' 'roku' y"}
-                    other{"w. 'týden' 'roku' y"}
+                    few{"w. 'týden' 'roku' Y"}
+                    many{"w. 'týden' 'roku' Y"}
+                    one{"w. 'týden' 'roku' Y"}
+                    other{"w. 'týden' 'roku' Y"}
                 }
             }
             dayNames{

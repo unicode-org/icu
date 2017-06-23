@@ -697,8 +697,8 @@ public class NumberFormatDataDrivenTest {
             properties.setMaximumSignificantDigits(tuple.maxSigDigits);
           }
           if (tuple.useGrouping != null && tuple.useGrouping == 0) {
-            properties.setGroupingSize(Integer.MAX_VALUE);
-            properties.setSecondaryGroupingSize(Integer.MAX_VALUE);
+            properties.setGroupingSize(-1);
+            properties.setSecondaryGroupingSize(-1);
           }
           if (tuple.multiplier != null) {
             properties.setMultiplier(new BigDecimal(tuple.multiplier));
@@ -753,7 +753,10 @@ public class NumberFormatDataDrivenTest {
             properties.setNegativeSuffix(tuple.negativeSuffix);
           }
           if (tuple.localizedPattern != null) {
-            // TODO
+            DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(tuple.locale);
+            String converted =
+                PatternString.convertLocalized(tuple.localizedPattern, symbols, false);
+            PatternString.parseToExistingProperties(converted, properties);
           }
           if (tuple.lenient != null) {
             properties.setParseMode(tuple.lenient == 0 ? ParseMode.STRICT : ParseMode.LENIENT);
