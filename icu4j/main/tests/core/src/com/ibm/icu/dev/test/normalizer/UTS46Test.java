@@ -743,7 +743,7 @@ public class UTS46Test extends TestFmwk {
 
     @Test
     public void IdnaTest() throws IOException {
-        BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTest.txt");
+        BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTest.txt", "UTF-8");
         Pattern semi = Pattern.compile(";");
         try {
             String line;
