@@ -5497,7 +5497,7 @@ public class NumberFormatTest extends TestFmwk {
                         e.getCause() instanceof NullPointerException);
             } catch (Exception e) {
                 // Other reflection exceptions
-                throw new AssertionError("Reflection error in method " + npeMethod, e);
+                throw new AssertionError("Reflection error in method " + npeMethod + ": " + e.getMessage());
             }
         }
 
