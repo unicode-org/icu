@@ -27,7 +27,6 @@ import java.util.SortedMap;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestLog;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
