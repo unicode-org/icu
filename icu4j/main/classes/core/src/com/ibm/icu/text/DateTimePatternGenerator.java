@@ -2360,6 +2360,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return appendTo(new StringBuilder(), false, skipDayPeriod).toString();
         }
 
+        @SuppressWarnings("unused")
         public String toCanonicalString() {
             return appendTo(new StringBuilder(), true, false).toString();
         }
@@ -2368,6 +2369,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return appendTo(new StringBuilder(), true, skipDayPeriod).toString();
         }
 
+        @SuppressWarnings("unused")
         public StringBuilder appendTo(StringBuilder sb) {
             return appendTo(sb, false, false);
         }
