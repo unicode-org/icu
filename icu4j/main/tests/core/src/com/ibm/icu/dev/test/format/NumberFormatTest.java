@@ -687,6 +687,22 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void TestJavaCurrencyConversion() {
+        java.util.Currency gbpJava = java.util.Currency.getInstance("GBP");
+        Currency gbpIcu = Currency.getInstance("GBP");
+        assertEquals("ICU should equal API value", gbpIcu, Currency.fromJavaCurrency(gbpJava));
+        assertEquals("Java should equal API value", gbpJava, gbpIcu.toJavaCurrency());
+        // Test CurrencyAmount constructors
+        CurrencyAmount ca1 = new CurrencyAmount(123.45, gbpJava);
+        CurrencyAmount ca2 = new CurrencyAmount(123.45, gbpIcu);
+        assertEquals("CurrencyAmount from both Double constructors should be equal", ca1, ca2);
+        // Coverage for the Number constructor
+        ca1 = new CurrencyAmount(new BigDecimal("543.21"), gbpJava);
+        ca2 = new CurrencyAmount(new BigDecimal("543.21"), gbpIcu);
+        assertEquals("CurrencyAmount from both Number constructors should be equal", ca1, ca2);
+    }
+
+    @Test
     public void TestCurrencyIsoPluralFormat() {
         String[][] DATA = {
                 // the data are:
@@ -3554,12 +3570,12 @@ public class NumberFormatTest extends TestFmwk {
         CurrencyAmount ca, cb;
 
         try {
-            ca = new CurrencyAmount(null, null);
+            ca = new CurrencyAmount(null, (Currency) null);
             errln("NullPointerException should have been thrown.");
         } catch (NullPointerException ex) {
         }
         try {
-            ca = new CurrencyAmount(new Integer(0), null);
+            ca = new CurrencyAmount(new Integer(0), (Currency) null);
             errln("NullPointerException should have been thrown.");
         } catch (NullPointerException ex) {
         }
