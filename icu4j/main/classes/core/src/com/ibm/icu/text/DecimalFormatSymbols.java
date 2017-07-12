@@ -185,8 +185,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Sets the character used for zero.
      * <p>
-     * <b>Note:</b> When the specified zeroDigit is a Unicode decimal digit character
-     * (category:Nd) and the number value is 0, then this method propagate digit 1 to
+     * <b>Note:</b> This method propagates digit 1 to
      * digit 9 by incrementing code point one by one.
      *
      * @param zeroDigit the zero character.
@@ -205,15 +204,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         digitStrings[0] = String.valueOf(zeroDigit);
         digits[0] = zeroDigit;
 
-        // Propagate digit 1 - 9 only when the input zeroDigit is a
-        // Unicode number and its integer value is 0.
-
-        if (Character.digit(zeroDigit, 10) == 0) {
-            for (int i = 1; i < 10; i++) {
-                char d = (char)(zeroDigit + i);
-                digitStrings[i] = String.valueOf(d);
-                digits[i] = d;
-            }
+        // Always propagate to digits 1-9 for JDK and ICU4C consistency.
+        for (int i = 1; i < 10; i++) {
+            char d = (char)(zeroDigit + i);
+            digitStrings[i] = String.valueOf(d);
+            digits[i] = d;
         }
     }
 
