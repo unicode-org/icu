@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
@@ -258,6 +259,24 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         if (!df.equals(df2) || df.hashCode() != df2.hashCode()) {
             errln("decimal format symbols clone, equals, or hashCode failed");
         }
+    }
+
+    @Test
+    public void testPropagateZeroDigit() {
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setZeroDigit('\u1040');
+        DecimalFormat df = new DecimalFormat("0");
+        df.setDecimalFormatSymbols(dfs);
+        assertEquals("Should propagate char with number property zero",
+                '\u1041', dfs.getDigits()[1]);
+        assertEquals("Should propagate char with number property zero",
+                "\u1044\u1040\u1041\u1042\u1043", df.format(40123));
+        dfs.setZeroDigit('a');
+        df.setDecimalFormatSymbols(dfs);
+        assertEquals("Should propagate char WITHOUT number property zero",
+                'b', dfs.getDigits()[1]);
+        assertEquals("Should propagate char WITHOUT number property zero",
+                "eabcd", df.format(40123));
     }
 
     @Test
