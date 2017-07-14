@@ -223,8 +223,10 @@ public abstract class Normalizer2 {
             if(spanLength==src.length()) {
                 return (String)src;
             }
-            StringBuilder sb=new StringBuilder(src.length()).append(src, 0, spanLength);
-            return normalizeSecondAndAppend(sb, src.subSequence(spanLength, src.length())).toString();
+            if (spanLength != 0) {
+                StringBuilder sb=new StringBuilder(src.length()).append(src, 0, spanLength);
+                return normalizeSecondAndAppend(sb, src.subSequence(spanLength, src.length())).toString();
+            }
         }
         return normalize(src, new StringBuilder(src.length())).toString();
     }

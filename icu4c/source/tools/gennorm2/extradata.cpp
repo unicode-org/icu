@@ -26,19 +26,20 @@ U_NAMESPACE_BEGIN
 ExtraData::ExtraData(Norms &n, UBool fast) :
         Norms::Enumerator(n),
         yesYesCompositions(1000, (UChar32)0xffff, 2),  // 0=inert, 1=Jamo L, 2=start of compositions
-        yesNoMappingsAndCompositions(1000, (UChar32)0, 1),  // 0=Hangul, 1=start of normal data
-        optimizeFast(fast) {}
+        yesNoMappingsAndCompositions(1000, (UChar32)0, 1),  // 0=Hangul LV, 1=start of normal data
+        yesNoMappingsOnly(1000, (UChar32)0, 1),  // 0=Hangul LVT, 1=start of normal data
+        optimizeFast(fast) {
+    // Hangul LV algorithmically decomposes to two Jamo.
+    // Some code may harmlessly read this firstUnit.
+    yesNoMappingsAndCompositions.setCharAt(0, 2);
+    // Hangul LVT algorithmically decomposes to three Jamo.
+    // Some code may harmlessly read this firstUnit.
+    yesNoMappingsOnly.setCharAt(0, 3);
+}
 
 int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &dataString) {
     UnicodeString &m=*norm.mapping;
     int32_t length=m.length();
-    if(length>Normalizer2Impl::MAPPING_LENGTH_MASK) {
-        fprintf(stderr,
-                "gennorm2 error: "
-                "mapping for U+%04lX longer than maximum of %d\n",
-                (long)c, Normalizer2Impl::MAPPING_LENGTH_MASK);
-        exit(U_INVALID_FORMAT_ERROR);
-    }
     // Write the mapping & raw mapping extraData.
     int32_t firstUnit=length|(norm.trailCC<<8);
     int32_t preMappingLength=0;
@@ -81,9 +82,6 @@ int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &data
         ++preMappingLength;
         firstUnit|=Normalizer2Impl::MAPPING_HAS_CCC_LCCC_WORD;
     }
-    if(norm.hasNoCompBoundaryAfter) {
-        firstUnit|=Normalizer2Impl::MAPPING_NO_COMP_BOUNDARY_AFTER;
-    }
     dataString.append((UChar)firstUnit);
     dataString.append(m);
     return preMappingLength;
@@ -107,6 +105,22 @@ int32_t ExtraData::writeNoNoMapping(UChar32 c, const Norm &norm,
         previousMappings.puti(newMapping, offset+1, errorCode);
     }
     return offset;
+}
+
+UBool ExtraData::setNoNoDelta(UChar32 c, Norm &norm) const {
+    // Try a compact, algorithmic encoding to a single compYesAndZeroCC code point.
+    // Do not map from ASCII to non-ASCII.
+    if(norm.mappingCP>=0 &&
+            !(c<=0x7f && norm.mappingCP>0x7f) &&
+            norms.getNormRef(norm.mappingCP).type<Norm::NO_NO_COMP_YES) {
+        int32_t delta=norm.mappingCP-c;
+        if(-Normalizer2Impl::MAX_DELTA<=delta && delta<=Normalizer2Impl::MAX_DELTA) {
+            norm.type=Norm::NO_NO_DELTA;
+            norm.offset=delta;
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 void ExtraData::writeCompositions(UChar32 c, const Norm &norm, UnicodeString &dataString) {
@@ -189,29 +203,27 @@ void ExtraData::writeExtraData(UChar32 c, Norm &norm) {
         norm.offset=yesNoMappingsOnly.length()+
                 writeMapping(c, norm, yesNoMappingsOnly);
         break;
-    case Norm::NO_NO:
-        if(norm.cc==0 && !optimizeFast) {
-            // Try a compact, algorithmic encoding.
-            // Only for ccc=0, because we can't store additional information
-            // and we do not recursively follow an algorithmic encoding for access to the ccc.
-            //
-            // Also, if hasNoCompBoundaryAfter is set, we can only use the algorithmic encoding
-            // if the mappingCP decomposes further, to ensure that there is a place to store it.
-            // We want to see that the final mapping does not have exactly 1 code point,
-            // or else we would have to recursively ensure that the final mapping is stored
-            // in normal extraData.
-            if(norm.mappingCP>=0 &&
-                    (!norm.hasNoCompBoundaryAfter || 1!=norm.mapping->countChar32())) {
-                int32_t delta=norm.mappingCP-c;
-                if(-Normalizer2Impl::MAX_DELTA<=delta && delta<=Normalizer2Impl::MAX_DELTA) {
-                    norm.type=Norm::NO_NO_DELTA;
-                    norm.offset=delta;
-                    break;
-                }
-            }
+    case Norm::NO_NO_COMP_YES:
+        if(!optimizeFast && setNoNoDelta(c, norm)) {
+            break;
         }
-        // TODO: minMappingNotCompYes, minMappingNoCompBoundaryBefore
-        norm.offset=writeNoNoMapping(c, norm, noNoMappings, previousNoNoMappings);
+        norm.offset=writeNoNoMapping(c, norm, noNoMappingsCompYes, previousNoNoMappingsCompYes);
+        break;
+    case Norm::NO_NO_COMP_BOUNDARY_BEFORE:
+        if(!optimizeFast && setNoNoDelta(c, norm)) {
+            break;
+        }
+        norm.offset=writeNoNoMapping(
+            c, norm, noNoMappingsCompBoundaryBefore, previousNoNoMappingsCompBoundaryBefore);
+        break;
+    case Norm::NO_NO_COMP_NO_MAYBE_CC:
+        norm.offset=writeNoNoMapping(
+            c, norm, noNoMappingsCompNoMaybeCC, previousNoNoMappingsCompNoMaybeCC);
+        break;
+    case Norm::NO_NO_EMPTY:
+        // There can be multiple extra data entries for mappings to the empty string
+        // if they have different raw mappings.
+        norm.offset=writeNoNoMapping(c, norm, noNoMappingsEmpty, previousNoNoMappingsEmpty);
         break;
     case Norm::MAYBE_YES_COMBINES_FWD:
         norm.offset=maybeYesCompositions.length();

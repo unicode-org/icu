@@ -89,7 +89,7 @@ struct Norm {
     UVector32 *compositions;  // (trail, composite) pairs
     uint8_t cc, leadCC, trailCC;
     UBool combinesBack;
-    UBool hasNoCompBoundaryAfter;
+    UBool hasCompBoundaryBefore, hasCompBoundaryAfter;
 
     /**
      * Overall type of normalization properties.
@@ -112,9 +112,14 @@ struct Norm {
         YES_NO_COMBINES_FWD,
         /** Starter with a round-trip mapping but no compositions. */
         YES_NO_MAPPING_ONLY,
-        // TODO: minMappingNotCompYes, minMappingNoCompBoundaryBefore
-        /** Has a one-way mapping. */
-        NO_NO,
+        /** Has a one-way mapping which is comp-normalized. */
+        NO_NO_COMP_YES,
+        /** Has a one-way mapping which is not comp-normalized but has a comp boundary before. */
+        NO_NO_COMP_BOUNDARY_BEFORE,
+        /** Has a one-way mapping which does not have a comp boundary before. */
+        NO_NO_COMP_NO_MAYBE_CC,
+        /** Has a one-way mapping to the empty string. */
+        NO_NO_EMPTY,
         /** Has an algorithmic one-way mapping to a single code point. */
         NO_NO_DELTA,
         /**
@@ -149,11 +154,15 @@ public:
     Norm *allocNorm();
     /** Returns an existing Norm unit, or nullptr if c has no data. */
     Norm *getNorm(UChar32 c);
+    const Norm *getNorm(UChar32 c) const;
     /** Returns a Norm unit, creating a new one if necessary. */
     Norm *createNorm(UChar32 c);
     /** Returns an existing Norm unit, or an immutable empty object if c has no data. */
     const Norm &getNormRef(UChar32 c) const;
     uint8_t getCC(UChar32 c) const { return getNormRef(c).cc; }
+    UBool combinesBack(UChar32 c) const {
+        return Hangul::isJamoV(c) || Hangul::isJamoT(c) || getNormRef(c).combinesBack;
+    }
 
     void reorder(UnicodeString &mapping, BuilderReorderingBuffer &buffer) const;
 
