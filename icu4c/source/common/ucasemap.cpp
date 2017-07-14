@@ -820,7 +820,7 @@ ucasemap_mapUTF8(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_P
         return 0;
     }
 
-    if(edits!=NULL) {
+    if (edits != nullptr && (options & U_EDITS_NO_RESET) == 0) {
         edits->reset();
     }
     destLength=stringCaseMapper(caseLocale, options, UCASEMAP_BREAK_ITERATOR
