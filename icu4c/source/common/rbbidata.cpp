@@ -66,13 +66,8 @@ RBBIDataWrapper::RBBIDataWrapper(UDataMemory* udm, UErrorCode &status) {
     fUDataMem = udm;
 }
 
-UBool RBBIDataWrapper::isDataVersionAcceptable(const uint8_t version[]) {
-    for (int i=0; i<UPRV_LENGTHOF(RBBI_DATA_FORMAT_VERSION); ++i) {
-        if (RBBI_DATA_FORMAT_VERSION[i] != version[i]) {
-            return false;
-        }
-    }
-    return true;
+UBool RBBIDataWrapper::isDataVersionAcceptable(const UVersionInfo version) {
+    return RBBI_DATA_FORMAT_VERSION[0] == version[0];
 }
 
 
