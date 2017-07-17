@@ -51,6 +51,7 @@ ubrk_swap(const UDataSwapper *ds,
 
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
+#include "unicode/uversion.h"
 #include "umutex.h"
 #include "utrie2.h"
 
@@ -64,12 +65,9 @@ static const uint8_t RBBI_DATA_FORMAT_VERSION[] = {4, 0, 0, 0};
  */
 struct RBBIDataHeader {
     uint32_t         fMagic;           /*  == 0xbla0                                               */
-    uint8_t          fFormatVersion[4]; /* Data Format.  Same as the value in struct UDataInfo      */
+    UVersionInfo     fFormatVersion;   /* Data Format.  Same as the value in struct UDataInfo      */
                                        /*   if there is one associated with this data.             */
                                        /*     (version originates in rbbi, is copied to UDataInfo) */
-                                       /*   For ICU 3.2 and earlier, this field was                */
-                                       /*       uint32_t  fVersion                                 */
-                                       /*   with a value of 1.                                     */
     uint32_t         fLength;          /*  Total length in bytes of this RBBI Data,                */
                                        /*      including all sections, not just the header.        */
     uint32_t         fCatCount;        /*  Number of character categories.                         */
@@ -155,7 +153,7 @@ public:
     RBBIDataWrapper(UDataMemory* udm, UErrorCode &status);
     ~RBBIDataWrapper();
 
-    static UBool          isDataVersionAcceptable(const uint8_t version[]);
+    static UBool          isDataVersionAcceptable(const UVersionInfo version);
 
     void                  init0();
     void                  init(const RBBIDataHeader *data, UErrorCode &status);
