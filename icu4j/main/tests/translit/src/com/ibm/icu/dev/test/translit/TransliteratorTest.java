@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -144,6 +143,10 @@ public class TransliteratorTest extends TestFmwk {
             String id = (String) e.nextElement();
             checkRegistry(id);
         }
+        // Need to remove these test-specific transliterators in order not to interfere with other tests.
+        Transliterator.unregister("foo3");
+        Transliterator.unregister("foo2");
+        Transliterator.unregister("foo1");
     }
 
     private void checkRegistry (String id, String rules) {
@@ -2794,81 +2797,6 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-    // Check to see that incremental gets at least part way through a reasonable string.
-    // TODO(junit): should be working - also should be converted to parameterized test
-    @Ignore
-    @Test
-    public void TestIncrementalProgress() {
-        String latinTest = "The Quick Brown Fox.";
-        String devaTest = Transliterator.getInstance("Latin-Devanagari").transliterate(latinTest);
-        String kataTest = Transliterator.getInstance("Latin-Katakana").transliterate(latinTest);
-        String[][] tests = {
-                {"Any", latinTest},
-                {"Latin", latinTest},
-                {"Halfwidth", latinTest},
-                {"Devanagari", devaTest},
-                {"Katakana", kataTest},
-        };
-
-        Enumeration sources = Transliterator.getAvailableSources();
-        while(sources.hasMoreElements()) {
-            String source = (String) sources.nextElement();
-            String test = findMatch(source, tests);
-            if (test == null) {
-                logln("Skipping " + source + "-X");
-                continue;
-            }
-            Enumeration targets = Transliterator.getAvailableTargets(source);
-            while(targets.hasMoreElements()) {
-                String target = (String) targets.nextElement();
-                Enumeration variants = Transliterator.getAvailableVariants(source, target);
-                while(variants.hasMoreElements()) {
-                    String variant = (String) variants.nextElement();
-                    String id = source + "-" + target + "/" + variant;
-                    logln("id: " + id);
-
-                    Transliterator t = Transliterator.getInstance(id);
-                    CheckIncrementalAux(t, test);
-
-                    String rev = t.transliterate(test);
-                    Transliterator inv = t.getInverse();
-                    CheckIncrementalAux(inv, rev);
-                }
-            }
-        }
-    }
-
-    public String findMatch (String source, String[][] pairs) {
-        for (int i = 0; i < pairs.length; ++i) {
-            if (source.equalsIgnoreCase(pairs[i][0])) return pairs[i][1];
-        }
-        return null;
-    }
-
-    public void CheckIncrementalAux(Transliterator t, String input) {
-
-        Replaceable test = new ReplaceableString(input);
-        Transliterator.Position pos = new Transliterator.Position(0, test.length(), 0, test.length());
-        t.transliterate(test, pos);
-        boolean gotError = false;
-
-        // we have a few special cases. Any-Remove (pos.start = 0, but also = limit) and U+XXXXX?X?
-
-        if (pos.start == 0 && pos.limit != 0 && !t.getID().equals("Hex-Any/Unicode")) {
-            errln("No Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
-            gotError = true;
-        } else {
-            logln("PASS Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
-        }
-        t.finishTransliteration(test, pos);
-        if (pos.start != pos.limit) {
-            errln("Incomplete, " + t.getID() + ":  " + UtilityExtensions.formatInput(test, pos));
-            gotError = true;
-        }
-        if(!gotError){
-            //errln("FAIL: Did not get expected error");
-        }
-    }
 
     @Test
     public void TestFunction() {
