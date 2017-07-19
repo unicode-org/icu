@@ -25,17 +25,17 @@ class RBBIRuleBuilder {
     //   This is the main class for building (compiling) break rules into the tables
     //    required by the runtime RBBI engine.
     //
-    
+
     String fDebugEnv;              // controls debug trace output
     String fRules;                 // The rule string that we are compiling
     RBBIRuleScanner fScanner;      // The scanner.
 
-    
+
     //
     //  There are four separate parse trees generated, one for each of the
     //    forward rules, reverse rules, safe forward rules and safe reverse rules.
     //  This array references the root of each of the trees.
-    //  
+    //
     RBBINode[]         fTreeRoots = new RBBINode[4];
     static final int   fForwardTree = 0;  // Indexes into the above fTreeRoots array
     static final int   fReverseTree = 1;  //   for each of the trees.
@@ -69,7 +69,7 @@ class RBBIRuleBuilder {
                                                                                    //  Map Value is the runtime array index.
 
     List<Integer> fRuleStatusVals;        // List of Integer objects.  Has same layout as the
-                                          //   runtime array of status (tag) values - 
+                                          //   runtime array of status (tag) values -
                                           //     number of values in group 1
                                           //        first status value in group 1
                                           //        2nd status value in group 1
@@ -84,50 +84,50 @@ class RBBIRuleBuilder {
     //
     static final int U_BRK_ERROR_START = 0x10200;
     /**< Start of codes indicating Break Iterator failures */
-    
+
     static final int U_BRK_INTERNAL_ERROR = 0x10201;
     /**< An internal error (bug) was detected.             */
-    
+
     static final int U_BRK_HEX_DIGITS_EXPECTED = 0x10202;
     /**< Hex digits expected as part of a escaped char in a rule. */
-    
+
     static final int U_BRK_SEMICOLON_EXPECTED = 0x10203;
     /**< Missing ';' at the end of a RBBI rule.            */
-    
+
     static final int U_BRK_RULE_SYNTAX = 0x10204;
     /**< Syntax error in RBBI rule.                        */
-    
+
     static final int U_BRK_UNCLOSED_SET = 0x10205;
     /**< UnicodeSet witing an RBBI rule missing a closing ']'.  */
-    
+
     static final int U_BRK_ASSIGN_ERROR = 0x10206;
     /**< Syntax error in RBBI rule assignment statement.   */
-    
+
     static final int U_BRK_VARIABLE_REDFINITION = 0x10207;
     /**< RBBI rule $Variable redefined.                    */
-    
+
     static final int U_BRK_MISMATCHED_PAREN = 0x10208;
     /**< Mis-matched parentheses in an RBBI rule.          */
-    
+
     static final int U_BRK_NEW_LINE_IN_QUOTED_STRING = 0x10209;
     /**< Missing closing quote in an RBBI rule.            */
-    
+
     static final int U_BRK_UNDEFINED_VARIABLE = 0x1020a;
     /**< Use of an undefined $Variable in an RBBI rule.    */
-    
+
     static final int U_BRK_INIT_ERROR = 0x1020b;
     /**< Initialization failure.  Probable missing ICU Data. */
-    
+
     static final int U_BRK_RULE_EMPTY_SET = 0x1020c;
     /**< Rule contains an empty Unicode Set.               */
-    
+
     static final int U_BRK_UNRECOGNIZED_OPTION = 0x1020d;
     /**< !!option in RBBI rules not recognized.            */
-    
+
     static final int U_BRK_MALFORMED_RULE_TAG = 0x1020e;
     /**< The {nnn} tag on a rule is mal formed             */
     static final int U_BRK_MALFORMED_SET = 0x1020f;
-    
+
     static final int U_BRK_ERROR_LIMIT = 0x10210;
     /**< This must always be the last value to indicate the limit for Break Iterator failures */
 
@@ -196,7 +196,7 @@ class RBBIRuleBuilder {
         //
         int[] header = new int[RBBIDataWrapper.DH_SIZE];                 // sizeof struct RBBIDataHeader
         header[RBBIDataWrapper.DH_MAGIC]         = 0xb1a0;
-        header[RBBIDataWrapper.DH_FORMATVERSION] = 0x03010000;           // uint8_t fFormatVersion[4];
+        header[RBBIDataWrapper.DH_FORMATVERSION] = RBBIDataWrapper.FORMAT_VERSION;
         header[RBBIDataWrapper.DH_LENGTH]        = totalSize;            // fLength, the total size of all rule sections.
         header[RBBIDataWrapper.DH_CATCOUNT]      = fSetBuilder.getNumCharCategories(); // fCatCount.
         header[RBBIDataWrapper.DH_FTABLE]        = headerSize;           // fFTable
