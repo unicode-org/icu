@@ -32,8 +32,6 @@
 #include "unicode/uchriter.h"
 
 
-struct UTrie;
-
 U_NAMESPACE_BEGIN
 
 /** @internal */
