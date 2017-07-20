@@ -1720,7 +1720,7 @@ public:
    */
   template<typename StringClass>
   StringClass &toUTF8String(StringClass &result) const {
-    StringByteSink<StringClass> sbs(&result);
+    StringByteSink<StringClass> sbs(&result, length());
     toUTF8(sbs);
     return result;
   }
