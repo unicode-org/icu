@@ -9,6 +9,7 @@ import java.text.ParsePosition;
 
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.number.Endpoint;
 import com.ibm.icu.impl.number.Format;
 import com.ibm.icu.impl.number.FormatQuantity;
@@ -778,6 +779,9 @@ public class NumberFormatDataDrivenTest {
 
   @Test
   public void TestDataDrivenICU58() {
+    // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
+    if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
+
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", ICU58);
   }
