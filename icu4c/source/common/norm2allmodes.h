@@ -23,6 +23,7 @@
 #include "unicode/unistr.h"
 #include "cpputils.h"
 #include "normalizer2impl.h"
+#include "ustr_imp.h"  // U_EDITS_NO_RESET
 
 U_NAMESPACE_BEGIN
 
@@ -211,8 +212,8 @@ private:
     virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const {
         return impl.isDecompYes(impl.getNorm16(c)) ? UNORM_YES : UNORM_NO;
     }
-    virtual UBool hasBoundaryBefore(UChar32 c) const { return impl.hasDecompBoundary(c, TRUE); }
-    virtual UBool hasBoundaryAfter(UChar32 c) const { return impl.hasDecompBoundary(c, FALSE); }
+    virtual UBool hasBoundaryBefore(UChar32 c) const { return impl.hasDecompBoundaryBefore(c); }
+    virtual UBool hasBoundaryAfter(UChar32 c) const { return impl.hasDecompBoundaryAfter(c); }
     virtual UBool isInert(UChar32 c) const { return impl.isDecompInert(c); }
 };
 
@@ -236,12 +237,12 @@ private:
         if (U_FAILURE(errorCode)) {
             return;
         }
-        if (edits != nullptr) {
+        if (edits != nullptr && (options & U_EDITS_NO_RESET) == 0) {
             edits->reset();
         }
         const uint8_t *s = reinterpret_cast<const uint8_t *>(src.data());
-        impl.composeUTF8(options, s, s + src.length(),
-                         onlyContiguous, TRUE, sink, edits, errorCode);
+        impl.composeUTF8(options, onlyContiguous, s, s + src.length(),
+                         &sink, edits, errorCode);
         sink.Flush();
     }
 
@@ -295,10 +296,10 @@ private:
         return impl.hasCompBoundaryBefore(c);
     }
     virtual UBool hasBoundaryAfter(UChar32 c) const override {
-        return impl.hasCompBoundaryAfter(c, onlyContiguous, FALSE);
+        return impl.hasCompBoundaryAfter(c, onlyContiguous);
     }
     virtual UBool isInert(UChar32 c) const override {
-        return impl.hasCompBoundaryAfter(c, onlyContiguous, TRUE);
+        return impl.isCompInert(c, onlyContiguous);
     }
 
     const UBool onlyContiguous;

@@ -36,7 +36,7 @@ public class ConformanceTest extends TestFmwk {
     static  String[] moreCases ={
         // Markus 2001aug30
         "0061 0332 0308;00E4 0332;0061 0332 0308;00E4 0332;0061 0332 0308; # Markus 0",
-    
+
         // Markus 2001oct26 - test edge case for iteration: U+0f73.cc==0 but decomposition.lead.cc==129
         "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
     };
@@ -54,7 +54,7 @@ public class ConformanceTest extends TestFmwk {
     public void TestConformance_3_2() throws Exception{
         runConformance("unicode/NormalizationTest-3.2.0.txt",Normalizer.UNICODE_3_2);
     }
-    
+
     public void runConformance(String fileName, int options) throws Exception{
         String line = null;
         String[] fields = new String[5];
@@ -88,10 +88,10 @@ public class ConformanceTest extends TestFmwk {
 
                 // Parse out the fields
                 hexsplit(line, ';', fields, buf);
-                
+
                 // Remove a single code point from the "other" UnicodeSet
                 if(fields[0].length()==UTF16.moveCodePointOffset(fields[0],0, 1)) {
-                    c=UTF16.charAt(fields[0],0); 
+                    c=UTF16.charAt(fields[0],0);
                     if(0xac20<=c && c<=0xd73f) {
                         // not an exhaustive test run: skip most Hangul syllables
                         if(c==0xac20) {
@@ -132,7 +132,7 @@ public class ConformanceTest extends TestFmwk {
             logln("Total: " + passCount + " lines passed");
         }
     }
-    
+
     /**
      * Verify the conformance of the given line of the Unicode
      * normalization (UTR 15) test suite file.  For each line,
@@ -154,74 +154,16 @@ public class ConformanceTest extends TestFmwk {
         String out,fcd;
         int i=0;
         for (i=0; i<5; ++i) {
+            int fieldNum = i+1;
             if (i<3) {
-                out = Normalizer.normalize(field[i], Normalizer.NFC, options);
-                pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c" + (i+1));
-                
-                out = iterativeNorm(field[i], Normalizer.NFC, buf, +1,options);
-                pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c" + (i+1));
-                
-                out = iterativeNorm(field[i], Normalizer.NFC, buf, -1,options);
-                pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c" + (i+1));
-
-                out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFC, buf, +1,options);
-                pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c" + (i+1));
-                
-                out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFC, buf, -1,options);
-                pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c" + (i+1));
-                 
-                out = Normalizer.normalize(field[i], Normalizer.NFD);
-                pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c" + (i+1));
-                
-                out = iterativeNorm(field[i], Normalizer.NFD, buf, +1,options);
-                pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c" + (i+1));
-                
-                out = iterativeNorm(field[i], Normalizer.NFD, buf, -1,options);
-                pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c" + (i+1));
-
-                out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFD, buf, +1,options);
-                pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c" + (i+1));
-                
-                out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFD, buf, -1,options);
-                pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c" + (i+1));
-                
-                cross(field[2] /*NFD String*/, field[1]/*NFC String*/, Normalizer.NFC);
-                cross(field[1] /*NFC String*/, field[2]/*NFD String*/, Normalizer.NFD);
+                pass &= checkNorm(Normalizer.NFC, options, field[i], field[1], fieldNum);
+                pass &= checkNorm(Normalizer.NFD, options, field[i], field[2], fieldNum);
             }
-            out = Normalizer.normalize(field[i], Normalizer.NFKC,options);
-            pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c" + (i+1));
-            
-            out = iterativeNorm(field[i], Normalizer.NFKC, buf, +1,options);
-            pass &= assertEqual("KD(+1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
-            
-            out = iterativeNorm(field[i], Normalizer.NFKC, buf, -1,options);
-            pass &= assertEqual("KD(-1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
-
-            out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFKC, buf, +1,options);
-            pass &= assertEqual("KD(+1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
-            
-            out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFKC, buf, -1,options);
-            pass &= assertEqual("KD(-1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
-              
-
-            out = Normalizer.normalize(field[i], Normalizer.NFKD,options);
-            pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c" + (i+1));
-            
-            out = iterativeNorm(field[i], Normalizer.NFKD, buf, +1,options);
-            pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
-            
-            out = iterativeNorm(field[i], Normalizer.NFKD, buf, -1,options);
-            pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
-         
-            out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFKD, buf, +1,options);
-            pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
-            
-            out = iterativeNorm(new StringCharacterIterator(field[i]), Normalizer.NFKD, buf, -1,options);
-            pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
-            
+            pass &= checkNorm(Normalizer.NFKC, options, field[i], field[3], fieldNum);
+            pass &= checkNorm(Normalizer.NFKD, options, field[i], field[4], fieldNum);
             cross(field[4] /*NFKD String*/, field[3]/*NFKC String*/, Normalizer.NFKC);
             cross(field[3] /*NFKC String*/, field[4]/*NFKD String*/, Normalizer.NFKD);
-  
+
         }
         compare(field[1],field[2]);
         compare(field[0],field[1]);
@@ -243,7 +185,7 @@ public class ConformanceTest extends TestFmwk {
             errln("Normalizer error: quickCheck(NFKD(s), Normalizer.NFKD) is Normalizer.NO");
             pass = false;
         }
-    
+
         if(!Normalizer.isNormalized(field[1], Normalizer.NFC, options)) {
             errln("Normalizer error: isNormalized(NFC(s), Normalizer.NFC) is false");
             pass = false;
@@ -298,24 +240,24 @@ public class ConformanceTest extends TestFmwk {
             errln("Normalizer error: quickCheck(NFKD(s), Normalizer.FCD) is Normalizer.NO");
             pass = false;
         }
-        
+
         out = iterativeNorm(new StringCharacterIterator(field[0]), Normalizer.FCD, buf, +1,options);
         out = iterativeNorm(new StringCharacterIterator(field[0]), Normalizer.FCD, buf, -1,options);
-        
+
         out = iterativeNorm(new StringCharacterIterator(field[2]), Normalizer.FCD, buf, +1,options);
         out = iterativeNorm(new StringCharacterIterator(field[2]), Normalizer.FCD, buf, -1,options);
-        
+
         out = iterativeNorm(new StringCharacterIterator(field[4]), Normalizer.FCD, buf, +1,options);
         out = iterativeNorm(new StringCharacterIterator(field[4]), Normalizer.FCD, buf, -1,options);
-        
+
         out=Normalizer.normalize(fcd, Normalizer.NFD);
         if(!out.equals(field[2])) {
             errln("Normalizer error: NFD(FCD(s))!=NFD(s)");
             pass = false;
-        }    
+        }
         if (!pass) {
             errln("FAIL: " + line);
-        }     
+        }
         if(field[0]!=field[2]) {
             // two strings that are canonically equivalent must test
             // equal under a canonical caseless match
@@ -327,9 +269,57 @@ public class ConformanceTest extends TestFmwk {
                pass=false;
             }
         }
-        
+
         return pass;
     }
+
+    private static int getModeNumber(Normalizer.Mode mode) {
+        if (mode == Normalizer.NFD) { return 0; }
+        if (mode == Normalizer.NFKD) { return 1; }
+        if (mode == Normalizer.NFC) { return 2; }
+        if (mode == Normalizer.NFKC) { return 3; }
+        return -1;
+    }
+    private static final String[] kModeStrings = {
+        "D", "KD", "C", "KC"
+    };
+    private static final String[] kMessages = {
+        "c3!=D(c%d)", "c5!=KC(c%d)", "c2!=C(c%d)", "c4!=KC(c%d)"
+    };
+
+    boolean checkNorm(Normalizer.Mode mode, int options,  // Normalizer2 norm2,
+            String s, String exp, int field) throws Exception {
+        String modeString = kModeStrings[getModeNumber(mode)];
+        String msg = String.format(kMessages[getModeNumber(mode)], field);
+        StringBuffer buf = new StringBuffer();
+        String out = Normalizer.normalize(s, mode, options);
+        if (!assertEqual(modeString, "", s, out, exp, msg)) {
+            return false;
+        }
+
+        out = iterativeNorm(s, mode, buf, +1,options);
+        if (!assertEqual(modeString, "(+1)", s, out, exp, msg)) {
+            return false;
+        }
+
+        out = iterativeNorm(s, mode, buf, -1,options);
+        if (!assertEqual(modeString, "(-1)", s, out, exp, msg)) {
+            return false;
+        }
+
+        out = iterativeNorm(new StringCharacterIterator(s), mode, buf, +1,options);
+        if (!assertEqual(modeString, "(+1)", s, out, exp, msg)) {
+            return false;
+        }
+
+        out = iterativeNorm(new StringCharacterIterator(s), mode, buf, -1,options);
+        if (!assertEqual(modeString, "(-1)", s, out, exp, msg)) {
+            return false;
+        }
+
+        return true;
+    }
+
     // two strings that are canonically equivalent must test
     // equal under a canonical caseless match
     // see UAX #21 Case Mappings and Jitterbug 2021 and
@@ -339,26 +329,26 @@ public class ConformanceTest extends TestFmwk {
             if(Normalizer.compare(UTF16.charAt(s1,0),UTF16.charAt(s2,0),Normalizer.COMPARE_IGNORE_CASE)!=0){
                 errln("Normalizer.compare(int,int) failed for s1: "
                         +Utility.hex(s1) + " s2: " + Utility.hex(s2));
-            }    
+            }
         }
         if(s1.length()==1 && s2.length()>1){
             if(Normalizer.compare(UTF16.charAt(s1,0),s2,Normalizer.COMPARE_IGNORE_CASE)!=0){
                 errln("Normalizer.compare(int,String) failed for s1: "
                         +Utility.hex(s1) + " s2: " + Utility.hex(s2));
-            }    
+            }
         }
         if(s1.length()>1 && s2.length()>1){
             // TODO: Re-enable this tests after UTC fixes UAX 21
             if(Normalizer.compare(s1.toCharArray(),s2.toCharArray(),Normalizer.COMPARE_IGNORE_CASE)!=0){
                 errln("Normalizer.compare(char[],char[]) failed for s1: "
                         +Utility.hex(s1) + " s2: " + Utility.hex(s2));
-            }    
-        }    
+            }
+        }
     }
     private void cross(String s1, String s2,Normalizer.Mode mode){
         String result = Normalizer.normalize(s1,mode);
         if(!result.equals(s2)){
-            errln("cross test failed s1: " + Utility.hex(s1) + " s2: " 
+            errln("cross test failed s1: " + Utility.hex(s1) + " s2: "
                         +Utility.hex(s2));
         }
     }
@@ -389,7 +379,7 @@ public class ConformanceTest extends TestFmwk {
         }
         return buf.toString();
     }
-    
+
     /**
      * Do a normalization using the iterative API in the given direction.
      * @param str a Java StringCharacterIterator
@@ -421,18 +411,19 @@ public class ConformanceTest extends TestFmwk {
 
     /**
      * @param op name of normalization form, e.g., "KC"
+     * @param op2 name of test case variant, e.g., "(-1)"
      * @param s string being normalized
      * @param got value received
      * @param exp expected value
      * @param msg description of this test
      * @returns true if got == exp
      */
-    private boolean assertEqual(String op, String s, String got,
+    private boolean assertEqual(String op, String op2, String s, String got,
                                 String exp, String msg) {
         if (exp.equals(got)) {
             return true;
         }
-        errln(("      " + msg + ") " + op + "(" + s + ")=" + hex(got) +
+        errln(("      " + msg + ": " + op + op2 + '(' + s + ")=" + hex(got) +
                              ", exp. " + hex(exp)));
         return false;
     }
@@ -459,7 +450,7 @@ public class ConformanceTest extends TestFmwk {
             }
             // Our field is from pos..delim-1.
             buf.setLength(0);
-            
+
             String toHex = s.substring(pos,delim);
             pos = delim;
             int index = 0;
@@ -478,7 +469,7 @@ public class ConformanceTest extends TestFmwk {
                     index = spacePos+1;
                 }
             }
-            
+
             if (buf.length() < 1) {
                 throw new IllegalArgumentException("Empty field " + i + " in " + s);
             }
@@ -492,13 +483,13 @@ public class ConformanceTest extends TestFmwk {
             throw new IllegalArgumentException("Out of range hex " +
                                                 hex + " in " + s);
         }else if (hex > 0xFFFF){
-            buf.append((char)((hex>>10)+0xd7c0)); 
+            buf.append((char)((hex>>10)+0xd7c0));
             buf.append((char)((hex&0x3ff)|0xdc00));
         }else{
             buf.append((char) hex);
         }
     }
-            
+
     // Specific tests for debugging.  These are generally failures
     // taken from the conformance file, but culled out to make
     // debugging easier.  These can be eliminated without affecting
@@ -516,6 +507,6 @@ public class ConformanceTest extends TestFmwk {
         hexsplit(line, ';', fields, buf);
         checkConformance(fields, line,options);
     }
-    
+
 
 }

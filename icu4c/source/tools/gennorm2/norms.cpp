@@ -99,6 +99,14 @@ Norm *Norms::getNorm(UChar32 c) {
     return norms+i;
 }
 
+const Norm *Norms::getNorm(UChar32 c) const {
+    uint32_t i=utrie2_get32(normTrie, c);
+    if(i==0) {
+        return nullptr;
+    }
+    return norms+i;
+}
+
 const Norm &Norms::getNormRef(UChar32 c) const {
     return norms[utrie2_get32(normTrie, c)];
 }
@@ -118,9 +126,7 @@ Norm *Norms::createNorm(UChar32 c) {
 
 void Norms::reorder(UnicodeString &mapping, BuilderReorderingBuffer &buffer) const {
     int32_t length=mapping.length();
-    if(length>Normalizer2Impl::MAPPING_LENGTH_MASK) {
-        return;  // writeMapping() will complain about it and print the code point.
-    }
+    U_ASSERT(length<=Normalizer2Impl::MAPPING_LENGTH_MASK);
     const char16_t *s=mapping.getBuffer();
     int32_t i=0;
     UChar32 c;

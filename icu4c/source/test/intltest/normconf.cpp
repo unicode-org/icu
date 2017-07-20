@@ -406,11 +406,11 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
 }
 
 static const char *const kModeStrings[UNORM_MODE_COUNT] = {
-    "?", "D", "KD", "C", "KC", "FCD"
+    "?", "none", "D", "KD", "C", "KC", "FCD"
 };
 
 static const char *const kMessages[UNORM_MODE_COUNT] = {
-    "?!=?", "c3!=D(c%d)", "c5!=KC(c%d)", "c2!=C(c%d)", "c4!=KC(c%d)", "FCD"
+    "?!=?", "?!=?", "c3!=D(c%d)", "c5!=KC(c%d)", "c2!=C(c%d)", "c4!=KC(c%d)", "FCD"
 };
 
 UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t options,
@@ -450,6 +450,7 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
     std::string exp8;
     exp.toUTF8String(exp8);
     std::string out8;
+    out8.reserve(exp8.length());
     Edits edits;
     Edits *editsPtr = (mode == UNORM_NFC || mode == UNORM_NFKC) ? &edits : nullptr;
     StringByteSink<std::string> sink(&out8);

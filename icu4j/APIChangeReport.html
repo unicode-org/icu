@@ -4,161 +4,111 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- © 2017 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html#License -->
-<title>ICU4J API Comparison: ICU4J 58.1 with ICU4J 59.1</title>
+<title>ICU4J API Comparison: ICU4J 59.1 with ICU4J 60.0.1</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 58.1 with ICU4J 59.1</h1>
+<h1>ICU4J API Comparison: ICU4J 59.1 with ICU4J 60.0.1</h1>
 
 <hr/>
-<h2>Removed from ICU4J 58.1</h2>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-CompactDecimalFormat
-<ul>
-<li><span style='color:green'>(stable)</span> public boolean <i>equals</i>(java.lang.Object)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(BigDecimal, java.lang.StringBuffer, java.text.FieldPosition)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(double, java.lang.StringBuffer, java.text.FieldPosition)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(java.math.BigDecimal, java.lang.StringBuffer, java.text.FieldPosition)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(java.math.BigInteger, java.lang.StringBuffer, java.text.FieldPosition)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(long, java.lang.StringBuffer, java.text.FieldPosition)</li>
-<li><span style='color:green'>(stable)</span> public java.text.AttributedCharacterIterator <i>formatToCharacterIterator</i>(java.lang.Object)</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-MeasureUnit
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit EAST</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit NORTH</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit SOUTH</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit WEST</li>
-</ul>
-</ul>
-
+<h2>Removed from ICU4J 59.1</h2>
+<p>(no API removed)</p>
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 59.1</h2>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-DecimalFormat
-<ul>
-<li><span style='color:gray'>(deprecated)</span> public int <i>getParseMaxDigits</i>()</li>
-<li><span style='color:gray'>(deprecated)</span> public void <i>setParseMaxDigits</i>(int)</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-UniversalTimeScale
-<ul>
-<li><span style='color:gray'>(deprecated)</span> public static final int MAX_SCALE</li>
-</ul>
-</ul>
-
+<h2>Deprecated or Obsoleted in ICU4J 60.0.1</h2>
+<p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 59.1 (old, new)</h2>
+<h2>Changed in ICU4J 60.0.1 (old, new)</h2>
 <p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 59.1</h2>
+<h2>Promoted to stable in ICU4J 60.0.1</h2>
 
-<h3>Package com.ibm.icu.text</h3>
+<h3>Package com.ibm.icu.lang</h3>
 <ul>
-<li><span style='color:green'>(stable)</span> public final class <i>SimpleFormatter</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>RelativeDateTimeFormatter.RelativeDateTimeUnit</i></li>
-DateFormat.Field
+UProperty
 <ul>
-<li><span style='color:green'>(stable)</span> public static final DateFormat.Field AM_PM_MIDNIGHT_NOON</li>
-<li><span style='color:green'>(stable)</span> public static final DateFormat.Field FLEXIBLE_DAY_PERIOD</li>
-</ul>
-RelativeDateTimeFormatter
-<ul>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>format</i>(double, RelativeDateTimeFormatter.RelativeDateTimeUnit)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>formatNumeric</i>(double, RelativeDateTimeFormatter.RelativeDateTimeUnit)</li>
-</ul>
-RelativeDateTimeFormatter.RelativeDateTimeUnit
-<ul>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit DAY</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit FRIDAY</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit HOUR</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MINUTE</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MONDAY</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit MONTH</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit QUARTER</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SATURDAY</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SECOND</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit SUNDAY</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit THURSDAY</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit TUESDAY</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit WEDNESDAY</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit WEEK</li>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.RelativeDateTimeUnit YEAR</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-MeasureUnit
-<ul>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit GALLON_IMPERIAL</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit MILE_PER_GALLON_IMPERIAL</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit MILLIGRAM_PER_DECILITER</li>
+<li><span style='color:green'>(stable)</span> public static final int EMOJI</li>
+<li><span style='color:green'>(stable)</span> public static final int EMOJI_MODIFIER</li>
+<li><span style='color:green'>(stable)</span> public static final int EMOJI_MODIFIER_BASE</li>
+<li><span style='color:green'>(stable)</span> public static final int EMOJI_PRESENTATION</li>
 </ul>
 </ul>
 
 
 <hr/>
-<h2>Added in ICU4J 59.1</h2>
+<h2>Added in ICU4J 60.0.1</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter.JoiningGroup
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_BHA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_JA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_LLA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_LLLA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_NGA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_NNA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_NNNA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_NYA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_RA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_SSA</li>
+<li><span style='color:green'>(stable)</span> public static final int MALAYALAM_TTA</li>
+</ul>
+UCharacter.UnicodeBlock
+<ul>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F</li>
+<li><span style='color:green'>(stable)</span> public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock KANA_EXTENDED_A</li>
+<li><span style='color:green'>(stable)</span> public static final int KANA_EXTENDED_A_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MASARAM_GONDI</li>
+<li><span style='color:green'>(stable)</span> public static final int MASARAM_GONDI_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock NUSHU</li>
+<li><span style='color:green'>(stable)</span> public static final int NUSHU_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SOYOMBO</li>
+<li><span style='color:green'>(stable)</span> public static final int SOYOMBO_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SYRIAC_SUPPLEMENT</li>
+<li><span style='color:green'>(stable)</span> public static final int SYRIAC_SUPPLEMENT_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock ZANABAZAR_SQUARE</li>
+<li><span style='color:green'>(stable)</span> public static final int ZANABAZAR_SQUARE_ID</li>
+</ul>
+UProperty
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int EMOJI_COMPONENT</li>
+<li><span style='color:green'>(stable)</span> public static final int PREPENDED_CONCATENATION_MARK</li>
+<li><span style='color:green'>(stable)</span> public static final int REGIONAL_INDICATOR</li>
+</ul>
+UScript
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int MASARAM_GONDI</li>
+<li><span style='color:green'>(stable)</span> public static final int SOYOMBO</li>
+<li><span style='color:green'>(stable)</span> public static final int ZANABAZAR_SQUARE</li>
+</ul>
+</ul>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-<li><span style='color:orange'>(draft)</span> public abstract class <i>CaseMap</i></li>
-<li><span style='color:orange'>(draft)</span> public static final class <i>CaseMap.Fold</i></li>
-<li><span style='color:orange'>(draft)</span> public static final class <i>CaseMap.Lower</i></li>
-<li><span style='color:orange'>(draft)</span> public static final class <i>CaseMap.Title</i></li>
-<li><span style='color:orange'>(draft)</span> public static final class <i>CaseMap.Upper</i></li>
-<li><span style='color:orange'>(draft)</span> public final class <i>Edits</i></li>
-<li><span style='color:orange'>(draft)</span> public static final class <i>Edits.Iterator</i></li>
-CompactDecimalFormat
+BreakIterator
 <ul>
-<li><span style='color:green'>(stable)</span> public CurrencyAmount <i>parseCurrency</i>(java.lang.CharSequence, java.text.ParsePosition)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setText</i>(java.lang.CharSequence)</li>
 </ul>
-DateFormat
+CaseMap.Title
 <ul>
-<li><span style='color:green'>(stable)</span> public static final int AM_PM_MIDNIGHT_NOON_FIELD</li>
-<li><span style='color:green'>(stable)</span> public static final int FLEXIBLE_DAY_PERIOD_FIELD</li>
-</ul>
-DecimalFormat
-<ul>
-<li><span style='color:green'>(stable)</span> public java.lang.StringBuffer <i>format</i>(CurrencyAmount, java.lang.StringBuffer, java.text.FieldPosition)</li>
-<li><span style='color:green'>(stable)</span> public synchronized Currency <i>getCurrency</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized int <i>getMaximumFractionDigits</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized int <i>getMaximumIntegerDigits</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized int <i>getMinimumFractionDigits</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized int <i>getMinimumIntegerDigits</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized boolean <i>isGroupingUsed</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized boolean <i>isParseIntegerOnly</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized boolean <i>isParseStrict</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized void <i>setGroupingUsed</i>(boolean)</li>
-<li><span style='color:green'>(stable)</span> public synchronized void <i>setParseIntegerOnly</i>(boolean)</li>
-<li><span style='color:green'>(stable)</span> public synchronized void <i>setParseStrict</i>(boolean)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>toString</i>()</li>
+<li><span style='color:orange'>(draft)</span> public CaseMap.Title <i>adjustToCased</i>()</li>
+<li><span style='color:orange'>(draft)</span> public CaseMap.Title <i>sentences</i>()</li>
+<li><span style='color:orange'>(draft)</span> public CaseMap.Title <i>wholeString</i>()</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-MeasureUnit
+VersionInfo
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit POINT</li>
+<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_10_0</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Apr 10 10:43:02 EDT 2017<br/>© 2017 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Jun 26 00:19:22 EDT 2017<br/>© 2017 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
 </body>
 </html>
