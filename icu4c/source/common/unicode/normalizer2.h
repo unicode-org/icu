@@ -371,6 +371,30 @@ public:
      */
     virtual UBool
     isNormalized(const UnicodeString &s, UErrorCode &errorCode) const = 0;
+    /**
+     * Tests if the UTF-8 string is normalized.
+     * Internally, in cases where the quickCheck() method would return "maybe"
+     * (which is only possible for the two COMPOSE modes) this method
+     * resolves to "yes" or "no" to provide a definitive result,
+     * at the cost of doing more work in those cases.
+     *
+     * This works for all normalization modes,
+     * but it is currently optimized for UTF-8 only for "compose" modes,
+     * such as for NFC, NFKC, and NFKC_Casefold
+     * (UNORM2_COMPOSE and UNORM2_COMPOSE_CONTIGUOUS).
+     * For other modes it currently converts to UTF-16 and calls isNormalized().
+     *
+     * @param s UTF-8 input string
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return TRUE if s is normalized
+     * @draft ICU 60
+     */
+    virtual UBool
+    isNormalizedUTF8(StringPiece s, UErrorCode &errorCode) const;
+
 
     /**
      * Tests if the string is normalized.
@@ -641,6 +665,29 @@ public:
      */
     virtual UBool
     isNormalized(const UnicodeString &s, UErrorCode &errorCode) const override;
+    /**
+     * Tests if the UTF-8 string is normalized.
+     * Internally, in cases where the quickCheck() method would return "maybe"
+     * (which is only possible for the two COMPOSE modes) this method
+     * resolves to "yes" or "no" to provide a definitive result,
+     * at the cost of doing more work in those cases.
+     *
+     * This works for all normalization modes,
+     * but it is currently optimized for UTF-8 only for "compose" modes,
+     * such as for NFC, NFKC, and NFKC_Casefold
+     * (UNORM2_COMPOSE and UNORM2_COMPOSE_CONTIGUOUS).
+     * For other modes it currently converts to UTF-16 and calls isNormalized().
+     *
+     * @param s UTF-8 input string
+     * @param errorCode Standard ICU error code. Its input value must
+     *                  pass the U_SUCCESS() test, or else the function returns
+     *                  immediately. Check for U_FAILURE() on output or use with
+     *                  function chaining. (See User Guide for details.)
+     * @return TRUE if s is normalized
+     * @draft ICU 60
+     */
+    virtual UBool
+    isNormalizedUTF8(StringPiece s, UErrorCode &errorCode) const override;
     /**
      * Tests if the string is normalized.
      * For details see the Normalizer2 base class documentation.

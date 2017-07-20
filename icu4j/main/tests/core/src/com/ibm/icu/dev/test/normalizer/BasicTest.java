@@ -2855,6 +2855,19 @@ public class BasicTest extends TestFmwk {
     }
 
     @Test
+    public void TestComposeJamoTBase() {
+        // Algorithmic composition of Hangul syllables must not combine with JAMO_T_BASE = U+11A7
+        // which is not a conjoining Jamo Trailing consonant.
+        Normalizer2 nfkc = Normalizer2.getNFKCInstance();
+        String s = "\u1100\u1161\u11A7\u1100\u314F\u11A7가\u11A7";
+        String expected = "가\u11A7가\u11A7가\u11A7";
+        String result = nfkc.normalize(s);
+        assertEquals("normalize(LV+11A7)", expected, result);
+        assertFalse("isNormalized(LV+11A7)", nfkc.isNormalized(s));
+        assertTrue("isNormalized(normalized)", nfkc.isNormalized(result));
+    }
+
+    @Test
     public void TestNFC() {
         // Coverage tests.
         Normalizer2 nfc = Normalizer2.getNFCInstance();

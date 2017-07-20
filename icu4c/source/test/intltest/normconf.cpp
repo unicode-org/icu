@@ -280,6 +280,15 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
     }
 }
 
+namespace {
+
+UBool isNormalizedUTF8(const Normalizer2 &norm2, const UnicodeString &s, UErrorCode &errorCode) {
+    std::string s8;
+    return norm2.isNormalizedUTF8(s.toUTF8String(s8), errorCode);
+}
+
+}  // namespace
+
 /**
  * Verify the conformance of the given line of the Unicode
  * normalization (UTR 15) test suite file.  For each line,
@@ -342,17 +351,37 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
         dataerrln("Normalizer error: isNormalized(NFC(s), UNORM_NFC) is FALSE");
         pass = FALSE;
     }
-    if(field[0]!=field[1] && Normalizer::isNormalized(field[0], UNORM_NFC, options, status)) {
-        errln("Normalizer error: isNormalized(s, UNORM_NFC) is TRUE");
+    if(options==0 && !isNormalizedUTF8(*nfc, field[1], status)) {
+        dataerrln("Normalizer error: nfc.isNormalizedUTF8(NFC(s)) is FALSE");
         pass = FALSE;
+    }
+    if(field[0]!=field[1]) {
+        if(Normalizer::isNormalized(field[0], UNORM_NFC, options, status)) {
+            errln("Normalizer error: isNormalized(s, UNORM_NFC) is TRUE");
+            pass = FALSE;
+        }
+        if(isNormalizedUTF8(*nfc, field[0], status)) {
+            errln("Normalizer error: nfc.isNormalizedUTF8(s) is TRUE");
+            pass = FALSE;
+        }
     }
     if(!Normalizer::isNormalized(field[3], UNORM_NFKC, options, status)) {
         dataerrln("Normalizer error: isNormalized(NFKC(s), UNORM_NFKC) is FALSE");
         pass = FALSE;
     }
-    if(field[0]!=field[3] && Normalizer::isNormalized(field[0], UNORM_NFKC, options, status)) {
-        errln("Normalizer error: isNormalized(s, UNORM_NFKC) is TRUE");
+    if(options==0 && !isNormalizedUTF8(*nfkc, field[3], status)) {
+        dataerrln("Normalizer error: nfkc.isNormalizedUTF8(NFKC(s)) is FALSE");
         pass = FALSE;
+    }
+    if(field[0]!=field[3]) {
+        if(Normalizer::isNormalized(field[0], UNORM_NFKC, options, status)) {
+            errln("Normalizer error: isNormalized(s, UNORM_NFKC) is TRUE");
+            pass = FALSE;
+        }
+        if(options==0 && isNormalizedUTF8(*nfkc, field[0], status)) {
+            errln("Normalizer error: nfkc.isNormalizedUTF8(s) is TRUE");
+            pass = FALSE;
+        }
     }
 
     // test FCD quick check and "makeFCD"

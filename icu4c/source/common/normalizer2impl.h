@@ -420,20 +420,20 @@ public:
 
         // Norm16 value thresholds for quick check combinations and types of extra data.
 
-        // Mappings & compositions in [minYesNo..minYesNoMappingsOnly[.
+        /** Mappings & compositions in [minYesNo..minYesNoMappingsOnly[. */
         IX_MIN_YES_NO,
-        // Mappings are comp-normalized.
+        /** Mappings are comp-normalized. */
         IX_MIN_NO_NO,
         IX_LIMIT_NO_NO,
         IX_MIN_MAYBE_YES,
 
-        // Mappings only in [minYesNoMappingsOnly..minNoNo[.
+        /** Mappings only in [minYesNoMappingsOnly..minNoNo[. */
         IX_MIN_YES_NO_MAPPINGS_ONLY,
-        // Mappings are not comp-normalized but have a comp boundary before.
+        /** Mappings are not comp-normalized but have a comp boundary before. */
         IX_MIN_NO_NO_COMP_BOUNDARY_BEFORE,
-        // Mappings do not have a comp boundary before.
+        /** Mappings do not have a comp boundary before. */
         IX_MIN_NO_NO_COMP_NO_MAYBE_CC,
-        // Mappings to the empty string.
+        /** Mappings to the empty string. */
         IX_MIN_NO_NO_EMPTY,
 
         IX_MIN_LCCC_CP,

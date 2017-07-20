@@ -58,6 +58,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestLowMappingToEmpty_D);
     TESTCASE_AUTO(TestLowMappingToEmpty_FCD);
     TESTCASE_AUTO(TestNormalizeIllFormedText);
+    TESTCASE_AUTO(TestComposeJamoTBase);
     TESTCASE_AUTO_END;
 }
 
@@ -1566,6 +1567,9 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
             expectedChanges, UPRV_LENGTHOF(expectedChanges),
             TRUE, errorCode);
 
+    assertFalse("isNormalizedUTF8(source)", nfkc_cf->isNormalizedUTF8(src, errorCode));
+    assertTrue("isNormalizedUTF8(normalized)", nfkc_cf->isNormalizedUTF8(result, errorCode));
+
     // Omit unchanged text.
     expected = u8"aääạ\u0308ạ\u0308가각갃";
     result.clear();
@@ -1604,6 +1608,9 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
             edits.getFineIterator(), edits.getFineIterator(),
             filteredChanges, UPRV_LENGTHOF(filteredChanges),
             TRUE, errorCode);
+
+    assertFalse("filtered isNormalizedUTF8(source)", fn2.isNormalizedUTF8(src, errorCode));
+    assertTrue("filtered isNormalizedUTF8(normalized)", fn2.isNormalizedUTF8(result, errorCode));
 
     // Omit unchanged text.
     // Note that the result is not normalized because the inner normalizer
@@ -1709,6 +1716,34 @@ BasicNormalizerTest::TestNormalizeIllFormedText() {
     nfkc_cf->normalizeUTF8(0, src8, sink, nullptr, errorCode);
     assertSuccess("normalizeUTF8", errorCode.get());
     assertEquals("normalizeUTF8", expected8.c_str(), result8.c_str());
+}
+
+void
+BasicNormalizerTest::TestComposeJamoTBase() {
+    // Algorithmic composition of Hangul syllables must not combine with JAMO_T_BASE = U+11A7
+    // which is not a conjoining Jamo Trailing consonant.
+    IcuTestErrorCode errorCode(*this, "TestComposeJamoTBase");
+    const Normalizer2 *nfkc = Normalizer2::getNFKCInstance(errorCode);
+    if(errorCode.logDataIfFailureAndReset("Normalizer2::getNFKCInstance() call failed")) {
+        return;
+    }
+    UnicodeString s(u"\u1100\u1161\u11A7\u1100\u314F\u11A7가\u11A7");
+    UnicodeString expected(u"가\u11A7가\u11A7가\u11A7");
+    UnicodeString result = nfkc->normalize(s, errorCode);
+    assertSuccess("normalize(LV+11A7)", errorCode.get());
+    assertEquals("normalize(LV+11A7)", expected, result);
+    assertFalse("isNormalized(LV+11A7)", nfkc->isNormalized(s, errorCode));
+    assertTrue("isNormalized(normalized)", nfkc->isNormalized(result, errorCode));
+
+    std::string s8(u8"\u1100\u1161\u11A7\u1100\u314F\u11A7가\u11A7");
+    std::string expected8(u8"가\u11A7가\u11A7가\u11A7");
+    std::string result8;
+    StringByteSink<std::string> sink(&result8, expected8.length());
+    nfkc->normalizeUTF8(0, s8, sink, nullptr, errorCode);
+    assertSuccess("normalizeUTF8(LV+11A7)", errorCode.get());
+    assertEquals("normalizeUTF8(LV+11A7)", expected8.c_str(), result8.c_str());
+    assertFalse("isNormalizedUTF8(LV+11A7)", nfkc->isNormalizedUTF8(s8, errorCode));
+    assertTrue("isNormalizedUTF8(normalized)", nfkc->isNormalizedUTF8(result8, errorCode));
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */

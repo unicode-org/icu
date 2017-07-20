@@ -73,6 +73,11 @@ Normalizer2::getCombiningClass(UChar32 /*c*/) const {
     return 0;
 }
 
+UBool
+Normalizer2::isNormalizedUTF8(StringPiece s, UErrorCode &errorCode) const {
+    return U_SUCCESS(errorCode) && isNormalized(UnicodeString::fromUTF8(s), errorCode);
+}
+
 // Normalizer2 implementation for the old UNORM_NONE.
 class NoopNormalizer2 : public Normalizer2 {
     virtual ~NoopNormalizer2();
@@ -139,8 +144,12 @@ class NoopNormalizer2 : public Normalizer2 {
     }
     // No need to override the default getRawDecomposition().
     virtual UBool
-    isNormalized(const UnicodeString &, UErrorCode &) const override {
-        return TRUE;
+    isNormalized(const UnicodeString &, UErrorCode &errorCode) const override {
+        return U_SUCCESS(errorCode);
+    }
+    virtual UBool
+    isNormalizedUTF8(StringPiece, UErrorCode &errorCode) const override {
+        return U_SUCCESS(errorCode);
     }
     virtual UNormalizationCheckResult
     quickCheck(const UnicodeString &, UErrorCode &) const override {
