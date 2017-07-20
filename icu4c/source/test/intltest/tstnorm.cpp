@@ -1542,7 +1542,7 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
         u8"  AÄA\u0308A\u0308\u00ad\u0323Ä\u0323,\u00ad\u1100\u1161가\u11A8가\u3133  ";
     std::string expected = u8"  aääạ\u0308ạ\u0308,가각갃  ";
     std::string result;
-    StringByteSink<std::string> sink(&result);
+    StringByteSink<std::string> sink(&result, expected.length());
     Edits edits;
     nfkc_cf->normalizeUTF8(0, src, sink, &edits, errorCode);
     assertSuccess("normalizeUTF8 with Edits", errorCode.get());

@@ -450,10 +450,9 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
     std::string exp8;
     exp.toUTF8String(exp8);
     std::string out8;
-    out8.reserve(exp8.length());
     Edits edits;
     Edits *editsPtr = (mode == UNORM_NFC || mode == UNORM_NFKC) ? &edits : nullptr;
-    StringByteSink<std::string> sink(&out8);
+    StringByteSink<std::string> sink(&out8, exp8.length());
     norm2->normalizeUTF8(0, s8, sink, editsPtr, errorCode);
     if (U_FAILURE(errorCode)) {
         errln("Normalizer2.%s.normalizeUTF8(%s) failed: %s",
