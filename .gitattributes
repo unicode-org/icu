@@ -6256,6 +6256,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/IntlTestNumberFormatAPI.ja
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/IntlTestSimpleDateFormatAPI.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/ListFormatterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/MeasureUnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/MeasureUnitThreadTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/MessagePatternUtilTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/MessageRegressionTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatDataDrivenTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -6840,6 +6841,7 @@ icu4j/main/tests/translit/build.xml svneol=native#text/xml
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/AnyScriptTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/CompoundTransliteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ErrorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/IncrementalProgressTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/JamoTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/RegexUtilitiesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java svneol=native#text/plain%3Bcharset%3Dutf-8

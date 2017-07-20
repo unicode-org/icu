@@ -1654,6 +1654,7 @@
 #define ustr_hashICharsN U_ICU_ENTRY_POINT_RENAME(ustr_hashICharsN)
 #define ustr_hashUCharsN U_ICU_ENTRY_POINT_RENAME(ustr_hashUCharsN)
 #define ustrcase_getCaseLocale U_ICU_ENTRY_POINT_RENAME(ustrcase_getCaseLocale)
+#define ustrcase_getTitleBreakIterator U_ICU_ENTRY_POINT_RENAME(ustrcase_getTitleBreakIterator)
 #define ustrcase_internalFold U_ICU_ENTRY_POINT_RENAME(ustrcase_internalFold)
 #define ustrcase_internalToLower U_ICU_ENTRY_POINT_RENAME(ustrcase_internalToLower)
 #define ustrcase_internalToTitle U_ICU_ENTRY_POINT_RENAME(ustrcase_internalToTitle)

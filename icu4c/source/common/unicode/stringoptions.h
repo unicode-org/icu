@@ -182,6 +182,7 @@
 // ucasemap_imp.h #define U_TITLECASE_ITERATOR_MASK 0xe0
 // ucasemap_imp.h #define U_TITLECASE_ADJUSTMENT_MASK 0x600
 // ustr_imp.h #define _STRNCMP_STYLE 0x1000
+// ustr_imp.h #define U_EDITS_NO_RESET 0x2000
 // unormcmp.cpp #define _COMPARE_EQUIV 0x80000
 
 #endif  // __STRINGOPTIONS_H__

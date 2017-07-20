@@ -13,6 +13,7 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/brkiter.h"
 #include "unicode/coll.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include <stdio.h>
@@ -228,6 +229,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestCurrencyByDate);
     TESTCASE_AUTO(TestGetVariantWithKeywords);
     TESTCASE_AUTO(TestIsRightToLeft);
+    TESTCASE_AUTO(TestBug13277);
     TESTCASE_AUTO_END;
 }
 
@@ -2711,3 +2713,21 @@ void LocaleTest::TestBug11421() {
         }
     }
 }
+
+//  TestBug13277. The failure manifests as valgrind errors.
+//                See the trac ticket for details.
+//                
+
+void LocaleTest::TestBug13277() {
+    UErrorCode status = U_ZERO_ERROR;
+    CharString name("en-us-x-foo", -1, status);
+    while (name.length() < 152) {
+        name.append("-x-foo", -1, status);
+    }
+
+    while (name.length() < 160) {
+        name.append('z', status);
+        Locale loc(name.data(), nullptr, nullptr, nullptr);
+    }
+}
+

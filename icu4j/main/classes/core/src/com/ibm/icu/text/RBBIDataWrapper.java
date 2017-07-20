@@ -13,10 +13,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUBinary.Authenticate;
-import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.Trie2;
 
 /**
 * <p>Internal class used for Rule Based Break Iterators</p>
@@ -33,20 +32,20 @@ final class RBBIDataWrapper {
     short          fRTable[];
     short          fSFTable[];
     short          fSRTable[];
-    CharTrie       fTrie;
+    Trie2          fTrie;
     String         fRuleSource;
     int            fStatusTable[];
 
     private boolean isBigEndian;
 
-    static final int DATA_FORMAT = 0x42726b20;  // "Brk "
-    static final int FORMAT_VERSION = 0x03010000;  // 3.1
+    static final int DATA_FORMAT = 0x42726b20;     // "Brk "
+    static final int FORMAT_VERSION = 0x04000000;  // 4.0.0.0
 
     private static final class IsAcceptable implements Authenticate {
-        // @Override when we switch to Java 6
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0] == (FORMAT_VERSION >>> 24);
+            int intVersion = (version[0] << 24) + (version[1] << 16) + (version[2] << 8) + version[3];
+            return intVersion == FORMAT_VERSION;
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
@@ -105,7 +104,6 @@ final class RBBIDataWrapper {
      */
     final static class RBBIDataHeader {
         int         fMagic;         //  == 0xbla0
-        int         fVersion;       //  == 1 (for ICU 3.2 and earlier.
         byte[]      fFormatVersion; //  For ICU 3.4 and later.
         int         fLength;        //  Total length in bytes of this RBBI Data,
                                        //      including all sections, not just the header.
@@ -147,19 +145,6 @@ final class RBBIDataWrapper {
         return ROW_DATA + state * (fHeader.fCatCount + 4);
     }
 
-    static class TrieFoldingFunc implements  Trie.DataManipulate {
-        @Override
-        public int getFoldingOffset(int data) {
-            if ((data & 0x8000) != 0) {
-                return data & 0x7fff;
-            } else {
-                return 0;
-            }
-        }
-    }
-    static TrieFoldingFunc  fTrieFoldingFunc = new TrieFoldingFunc();
-
-
     RBBIDataWrapper() {
     }
 
@@ -176,10 +161,6 @@ final class RBBIDataWrapper {
         // Read in the RBBI data header...
         This.fHeader = new  RBBIDataHeader();
         This.fHeader.fMagic          = bytes.getInt();
-        // Read the same 4 bytes as an int and as a byte array: The data format could be
-        // the old fVersion=1 (TODO: probably not with a real ICU data header?)
-        // or the new fFormatVersion=3.x.
-        This.fHeader.fVersion        = bytes.getInt(bytes.position());
         This.fHeader.fFormatVersion[0] = bytes.get();
         This.fHeader.fFormatVersion[1] = bytes.get();
         This.fHeader.fFormatVersion[2] = bytes.get();
@@ -203,10 +184,7 @@ final class RBBIDataWrapper {
         ICUBinary.skipBytes(bytes, 6 * 4);    // uint32_t  fReserved[6];
 
 
-        if (This.fHeader.fMagic != 0xb1a0 ||
-                ! (This.fHeader.fVersion == 1  ||         // ICU 3.2 and earlier
-                   This.fHeader.fFormatVersion[0] == 3)   // ICU 3.4
-            ) {
+        if (This.fHeader.fMagic != 0xb1a0 || !IS_ACCEPTABLE.isDataVersionAcceptable(This.fHeader.fFormatVersion)) {
             throw new IOException("Break Iterator Rule Data Magic Number Incorrect, or unsupported data version.");
         }
 
@@ -286,7 +264,7 @@ final class RBBIDataWrapper {
                                                 //  as we don't go more than 100 bytes past the
                                                 //  past the end of the TRIE.
 
-        This.fTrie = new CharTrie(bytes, fTrieFoldingFunc);  // Deserialize the TRIE, leaving buffer
+        This.fTrie = Trie2.createFromSerialized(bytes);  // Deserialize the TRIE, leaving buffer
                                                 //  at an unknown position, preceding the
                                                 //  padding between TRIE and following section.
 
@@ -461,7 +439,7 @@ final class RBBIDataWrapper {
         out.println("\nCharacter Categories");
         out.println("--------------------");
         for (char32 = 0; char32<=0x10ffff; char32++) {
-            category = fTrie.getCodePointValue(char32);
+            category = fTrie.get(char32);
             category &= ~0x4000;            // Mask off dictionary bit.
             if (category < 0 || category > fHeader.fCatCount) {
                 out.println("Error, bad category " + Integer.toHexString(category) +

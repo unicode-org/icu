@@ -529,8 +529,10 @@ static const VariantMap VARIANT_MAP[] = {
 #define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == NULL && getShortestSubtagLength(localeID) == 1)
 /* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
 #define _ConvertBCP47(finalID, id, buffer, length,err) \
-        if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 || U_FAILURE(*err)) { \
+        if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 ||  \
+                U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) { \
             finalID=id; \
+            if (*err == U_STRING_NOT_TERMINATED_WARNING) { *err = U_BUFFER_OVERFLOW_ERROR; } \
         } else { \
             finalID=buffer; \
         }

@@ -30,6 +30,7 @@
 #include "normalizer2impl.h"
 #include "uassert.h"
 #include "ucln_cmn.h"
+#include "ustr_imp.h"  // U_EDITS_NO_RESET
 
 using icu::Normalizer2Impl;
 
@@ -90,13 +91,17 @@ class NoopNormalizer2 : public Normalizer2 {
         return dest;
     }
     virtual void
-    normalizeUTF8(uint32_t /*options*/, StringPiece src, ByteSink &sink,
+    normalizeUTF8(uint32_t options, StringPiece src, ByteSink &sink,
                   Edits *edits, UErrorCode &errorCode) const override {
         if(U_SUCCESS(errorCode)) {
-            sink.Append(src.data(), src.length());
             if (edits != nullptr) {
-                edits->reset();
+                if ((options & U_EDITS_NO_RESET) == 0) {
+                    edits->reset();
+                }
                 edits->addUnchanged(src.length());
+            }
+            if ((options & U_OMIT_UNCHANGED_TEXT) == 0) {
+                sink.Append(src.data(), src.length());
             }
             sink.Flush();
         }
