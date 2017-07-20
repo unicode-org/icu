@@ -162,7 +162,8 @@ public class FormatQuantityTest extends TestFmwk {
     FormatQuantity q0 = rq.createCopy();
     // Force an accurate double
     q0.roundToInfinity();
-    q0.setIntegerFractionLength(1, Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
+    q0.setIntegerLength(1, Integer.MAX_VALUE);
+    q0.setFractionLength(1, Integer.MAX_VALUE);
     for (int m = q0.getUpperDisplayMagnitude(); m >= q0.getLowerDisplayMagnitude(); m--) {
       sb.append(q0.getDigit(m));
       if (m == 0) sb.append('.');

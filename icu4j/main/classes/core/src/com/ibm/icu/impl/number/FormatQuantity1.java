@@ -229,6 +229,15 @@ public class FormatQuantity1 implements FormatQuantity {
   }
 
   public FormatQuantity1(BigDecimal decimal) {
+    setToBigDecimal(decimal);
+  }
+
+  public FormatQuantity1(FormatQuantity1 other) {
+    copyFrom(other);
+  }
+
+  @Override
+  public void setToBigDecimal(BigDecimal decimal) {
     if (decimal.compareTo(BigDecimal.ZERO) < 0) {
       setNegative(true);
       decimal = decimal.negate();
@@ -240,10 +249,6 @@ public class FormatQuantity1 implements FormatQuantity {
     } else {
       fallback = decimal;
     }
-  }
-
-  public FormatQuantity1(FormatQuantity1 other) {
-    copyFrom(other);
   }
 
   @Override
@@ -311,31 +316,35 @@ public class FormatQuantity1 implements FormatQuantity {
   }
 
   @Override
-  public void setIntegerFractionLength(int minInt, int maxInt, int minFrac, int maxFrac) {
+  public void setIntegerLength(int minInt, int maxInt) {
     // Graceful failures for bogus input
     minInt = Math.max(0, minInt);
     maxInt = Math.max(0, maxInt);
-    minFrac = Math.max(0, minFrac);
-    maxFrac = Math.max(0, maxFrac);
 
     // The minima must be less than or equal to the maxima
     if (maxInt < minInt) {
       minInt = maxInt;
-    }
-    if (maxFrac < minFrac) {
-      minFrac = maxFrac;
-    }
-
-    // Displaying neither integer nor fraction digits is not allowed
-    if (maxInt == 0 && maxFrac == 0) {
-      maxInt = Integer.MAX_VALUE;
-      maxFrac = Integer.MAX_VALUE;
     }
 
     // Save values into internal state
     // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
     lOptPos = maxInt;
     lReqPos = minInt;
+  }
+
+  @Override
+  public void setFractionLength(int minFrac, int maxFrac) {
+    // Graceful failures for bogus input
+    minFrac = Math.max(0, minFrac);
+    maxFrac = Math.max(0, maxFrac);
+
+    // The minima must be less than or equal to the maxima
+    if (maxFrac < minFrac) {
+      minFrac = maxFrac;
+    }
+
+    // Save values into internal state
+    // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
     rReqPos = -minFrac;
     rOptPos = -maxFrac;
   }

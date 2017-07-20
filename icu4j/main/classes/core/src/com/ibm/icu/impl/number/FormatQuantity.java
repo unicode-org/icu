@@ -21,17 +21,23 @@ import com.ibm.icu.text.PluralRules;
  * to be copied to every implementation?
  */
 public interface FormatQuantity extends PluralRules.IFixedDecimal {
-
   /**
-   * Sets the minimum and maximum digits that this {@link FormatQuantity} should generate. This
-   * method does not perform rounding.
+   * Sets the minimum and maximum integer digits that this {@link FormatQuantity} should generate.
+   * This method does not perform rounding.
    *
    * @param minInt The minimum number of integer digits.
    * @param maxInt The maximum number of integer digits.
+   */
+  public void setIntegerLength(int minInt, int maxInt);
+
+  /**
+   * Sets the minimum and maximum fraction digits that this {@link FormatQuantity} should generate.
+   * This method does not perform rounding.
+   *
    * @param minFrac The minimum number of fraction digits.
    * @param maxFrac The maximum number of fraction digits.
    */
-  public void setIntegerFractionLength(int minInt, int maxInt, int minFrac, int maxFrac);
+  public void setFractionLength(int minFrac, int maxFrac);
 
   /**
    * Rounds the number to a specified interval, such as 0.05.
@@ -99,6 +105,8 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
   public double toDouble();
 
   public BigDecimal toBigDecimal();
+
+  public void setToBigDecimal(BigDecimal input);
 
   public int maxRepresentableDigits();
 
@@ -176,8 +184,6 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
 
   public void copyFrom(FormatQuantity other);
 
-  /**
-   * This method is for internal testing only.
-   */
+  /** This method is for internal testing only. */
   public long getPositionFingerprint();
 }

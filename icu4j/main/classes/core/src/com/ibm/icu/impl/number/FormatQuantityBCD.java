@@ -134,17 +134,25 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
   }
 
   @Override
-  public void setIntegerFractionLength(int minInt, int maxInt, int minFrac, int maxFrac) {
+  public void setIntegerLength(int minInt, int maxInt) {
     // Validation should happen outside of FormatQuantity, e.g., in the Rounder class.
     assert minInt >= 0;
     assert maxInt >= minInt;
-    assert minFrac >= 0;
-    assert maxFrac >= minFrac;
 
     // Save values into internal state
     // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
     lOptPos = maxInt;
     lReqPos = minInt;
+  }
+
+  @Override
+  public void setFractionLength(int minFrac, int maxFrac) {
+    // Validation should happen outside of FormatQuantity, e.g., in the Rounder class.
+    assert minFrac >= 0;
+    assert maxFrac >= minFrac;
+
+    // Save values into internal state
+    // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
     rReqPos = -minFrac;
     rOptPos = -maxFrac;
   }
@@ -510,7 +518,8 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
    *
    * @param n The value to consume.
    */
-  public void setToBigDecimal(BigDecimal n) {
+  @Override
+public void setToBigDecimal(BigDecimal n) {
     setBcdToZero();
     flags = 0;
     if (n.signum() == -1) {

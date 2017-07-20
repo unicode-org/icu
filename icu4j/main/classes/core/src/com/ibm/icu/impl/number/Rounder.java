@@ -231,7 +231,8 @@ public abstract class Rounder extends Format.BeforeFormat {
    * @param input The digits being formatted.
    */
   protected void applyDefaults(FormatQuantity input) {
-    input.setIntegerFractionLength(minInt, maxInt, minFrac, maxFrac);
+    input.setIntegerLength(minInt, maxInt);
+    input.setFractionLength(minFrac, maxFrac);
   }
 
   @Override

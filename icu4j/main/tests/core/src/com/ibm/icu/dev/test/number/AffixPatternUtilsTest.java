@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import com.ibm.icu.impl.number.AffixPatternUtils;
+import com.ibm.icu.impl.number.AffixPatternUtils.SymbolProvider;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
@@ -63,6 +64,7 @@ public class AffixPatternUtilsTest {
       {"¤¤¤", true, 3, "long name"},
       {"¤¤¤¤", true, 4, "\uFFFD"},
       {"¤¤¤¤¤", true, 5, "\uFFFD"},
+      {"¤¤¤¤¤¤", true, 6, "\uFFFD"},
       {"¤¤¤a¤¤¤¤", true, 8, "long namea\uFFFD"},
       {"a¤¤¤¤b¤¤¤¤¤c", true, 12, "a\uFFFDb\uFFFDc"},
       {"¤!", true, 2, "$!"},
@@ -73,7 +75,8 @@ public class AffixPatternUtilsTest {
       {"'¤'", false, 1, "¤"},
       {"%", false, 1, "٪\u061C"},
       {"'%'", false, 1, "%"},
-      {"¤'-'%", true, 3, "$-٪\u061C"}
+      {"¤'-'%", true, 3, "$-٪\u061C"},
+      {"#0#@#*#;#", false, 9, "#0#@#*#;#"}
     };
 
     // ar_SA has an interesting percent sign and various Arabic letter marks
@@ -150,5 +153,40 @@ public class AffixPatternUtilsTest {
         // OK
       }
     }
+  }
+
+  @Test
+  public void testUnescapeWithSymbolProvider() {
+    String[][] cases = {
+      {"", ""},
+      {"-", "1"},
+      {"'-'", "-"},
+      {"- + % ‰ ¤ ¤¤ ¤¤¤ ¤¤¤¤ ¤¤¤¤¤", "1 2 3 4 5 6 7 8 9"},
+      {"'¤¤¤¤¤¤'", "¤¤¤¤¤¤"},
+      {"¤¤¤¤¤¤", "\uFFFD"}
+    };
+
+    SymbolProvider provider =
+        new SymbolProvider() {
+          @Override
+          public CharSequence getSymbol(int type) {
+            return Integer.toString(Math.abs(type));
+          }
+        };
+
+    NumberStringBuilder sb = new NumberStringBuilder();
+    for (String[] cas : cases) {
+      String input = cas[0];
+      String expected = cas[1];
+      sb.clear();
+      AffixPatternUtils.unescape(input, sb, 0, provider);
+      assertEquals("With symbol provider on <" + input + ">", expected, sb.toString());
+    }
+
+    // Test insertion position
+    sb.clear();
+    sb.append("abcdefg", null);
+    AffixPatternUtils.unescape("-+%", sb, 4, provider);
+    assertEquals("Symbol provider into middle", "abcd123efg", sb.toString());
   }
 }
