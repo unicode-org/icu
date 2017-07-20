@@ -51,6 +51,7 @@ public:
     void TestLowMappingToEmpty_D();
     void TestLowMappingToEmpty_FCD();
     void TestNormalizeIllFormedText();
+    void TestComposeJamoTBase();
 
 private:
     UnicodeString canonTests[24][3];

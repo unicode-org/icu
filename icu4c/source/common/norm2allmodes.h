@@ -270,6 +270,14 @@ private:
         }
         return impl.compose(sArray, sArray+s.length(), onlyContiguous, FALSE, buffer, errorCode);
     }
+    virtual UBool
+    isNormalizedUTF8(StringPiece sp, UErrorCode &errorCode) const override {
+        if(U_FAILURE(errorCode)) {
+            return FALSE;
+        }
+        const uint8_t *s = reinterpret_cast<const uint8_t *>(sp.data());
+        return impl.composeUTF8(0, onlyContiguous, s, s + sp.length(), nullptr, nullptr, errorCode);
+    }
     virtual UNormalizationCheckResult
     quickCheck(const UnicodeString &s, UErrorCode &errorCode) const override {
         if(U_FAILURE(errorCode)) {
