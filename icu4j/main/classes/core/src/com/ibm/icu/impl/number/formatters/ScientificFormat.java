@@ -198,7 +198,8 @@ public class ScientificFormat extends Format.BeforeFormat implements Rounder.Mul
     FormatQuantity exponentQ = FormatQuantitySelector.from(exponent);
     StringBuilder exponentSB = threadLocalStringBuilder.get();
     exponentSB.setLength(0);
-    exponentQ.setIntegerFractionLength(exponentDigits, Integer.MAX_VALUE, 0, 0);
+    exponentQ.setIntegerLength(exponentDigits, Integer.MAX_VALUE);
+    exponentQ.setFractionLength(0, 0);
     for (int i = exponentQ.getUpperDisplayMagnitude(); i >= 0; i--) {
       exponentSB.append(digitStrings[exponentQ.getDigit(i)]);
     }

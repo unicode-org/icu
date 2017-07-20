@@ -26,7 +26,7 @@ public class PatternString {
    */
   public static Properties parseToProperties(String pattern, int ignoreRounding) {
     Properties properties = new Properties();
-    LdmlDecimalPatternParser.parse(pattern, properties, ignoreRounding);
+    parse(pattern, properties, ignoreRounding);
     return properties;
   }
 
@@ -50,7 +50,7 @@ public class PatternString {
    */
   public static void parseToExistingProperties(
       String pattern, Properties properties, int ignoreRounding) {
-    LdmlDecimalPatternParser.parse(pattern, properties, ignoreRounding);
+    parse(pattern, properties, ignoreRounding);
   }
 
   public static void parseToExistingProperties(String pattern, Properties properties) {
@@ -431,487 +431,183 @@ public class PatternString {
   public static final int IGNORE_ROUNDING_IF_CURRENCY = 1;
   public static final int IGNORE_ROUNDING_ALWAYS = 2;
 
-  /** Implements a recursive descent parser for decimal format patterns. */
-  static class LdmlDecimalPatternParser {
-
-    /**
-     * An internal, intermediate data structure used for storing parse results before they are
-     * finalized into a DecimalFormatPattern.Builder.
-     */
-    private static class PatternParseResult {
-      SubpatternParseResult positive = new SubpatternParseResult();
-      SubpatternParseResult negative = null;
-
-      /** Finalizes the temporary data stored in the PatternParseResult to the Builder. */
-      void saveToProperties(Properties properties, int _ignoreRounding) {
-        // Translate from PatternState to Properties.
-        // Note that most data from "negative" is ignored per the specification of DecimalFormat.
-
-        boolean ignoreRounding;
-        if (_ignoreRounding == IGNORE_ROUNDING_NEVER) {
-          ignoreRounding = false;
-        } else if (_ignoreRounding == IGNORE_ROUNDING_IF_CURRENCY) {
-          ignoreRounding = positive.hasCurrencySign;
-        } else {
-          assert _ignoreRounding == IGNORE_ROUNDING_ALWAYS;
-          ignoreRounding = true;
-        }
-
-        // Grouping settings
-        if (positive.groupingSizes[1] != -1) {
-          properties.setGroupingSize(positive.groupingSizes[0]);
-        } else {
-          properties.setGroupingSize(Properties.DEFAULT_GROUPING_SIZE);
-        }
-        if (positive.groupingSizes[2] != -1) {
-          properties.setSecondaryGroupingSize(positive.groupingSizes[1]);
-        } else {
-          properties.setSecondaryGroupingSize(Properties.DEFAULT_SECONDARY_GROUPING_SIZE);
-        }
-
-        // For backwards compatibility, require that the pattern emit at least one min digit.
-        int minInt, minFrac;
-        if (positive.totalIntegerDigits == 0 && positive.maximumFractionDigits > 0) {
-          // patterns like ".##"
-          minInt = 0;
-          minFrac = Math.max(1, positive.minimumFractionDigits);
-        } else if (positive.minimumIntegerDigits == 0 && positive.minimumFractionDigits == 0) {
-          // patterns like "#.##"
-          minInt = 1;
-          minFrac = 0;
-        } else {
-          minInt = positive.minimumIntegerDigits;
-          minFrac = positive.minimumFractionDigits;
-        }
-
-        // Rounding settings
-        // Don't set basic rounding when there is a currency sign; defer to CurrencyUsage
-        if (positive.minimumSignificantDigits > 0) {
-          properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
-          properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
-          properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
-          properties.setMinimumSignificantDigits(positive.minimumSignificantDigits);
-          properties.setMaximumSignificantDigits(positive.maximumSignificantDigits);
-        } else if (!positive.rounding.isZero()) {
-          if (!ignoreRounding) {
-            properties.setMinimumFractionDigits(minFrac);
-            properties.setMaximumFractionDigits(positive.maximumFractionDigits);
-            properties.setRoundingIncrement(positive.rounding.toBigDecimal());
-          } else {
-            properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
-            properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
-            properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
-          }
-          properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
-          properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
-        } else {
-          if (!ignoreRounding) {
-            properties.setMinimumFractionDigits(minFrac);
-            properties.setMaximumFractionDigits(positive.maximumFractionDigits);
-            properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
-          } else {
-            properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
-            properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
-            properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
-          }
-          properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
-          properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
-        }
-
-        // If the pattern ends with a '.' then force the decimal point.
-        if (positive.hasDecimal && positive.maximumFractionDigits == 0) {
-          properties.setDecimalSeparatorAlwaysShown(true);
-        } else {
-          properties.setDecimalSeparatorAlwaysShown(false);
-        }
-
-        // Scientific notation settings
-        if (positive.exponentDigits > 0) {
-          properties.setExponentSignAlwaysShown(positive.exponentShowPlusSign);
-          properties.setMinimumExponentDigits(positive.exponentDigits);
-          if (positive.minimumSignificantDigits == 0) {
-            // patterns without '@' can define max integer digits, used for engineering notation
-            properties.setMinimumIntegerDigits(positive.minimumIntegerDigits);
-            properties.setMaximumIntegerDigits(positive.totalIntegerDigits);
-          } else {
-            // patterns with '@' cannot define max integer digits
-            properties.setMinimumIntegerDigits(1);
-            properties.setMaximumIntegerDigits(Properties.DEFAULT_MAXIMUM_INTEGER_DIGITS);
-          }
-        } else {
-          properties.setExponentSignAlwaysShown(Properties.DEFAULT_EXPONENT_SIGN_ALWAYS_SHOWN);
-          properties.setMinimumExponentDigits(Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS);
-          properties.setMinimumIntegerDigits(minInt);
-          properties.setMaximumIntegerDigits(Properties.DEFAULT_MAXIMUM_INTEGER_DIGITS);
-        }
-
-        // Padding settings
-        if (positive.padding.length() > 0) {
-          // The width of the positive prefix and suffix templates are included in the padding
-          int paddingWidth =
-              positive.paddingWidth
-                  + AffixPatternUtils.unescapedLength(positive.prefix)
-                  + AffixPatternUtils.unescapedLength(positive.suffix);
-          properties.setFormatWidth(paddingWidth);
-          if (positive.padding.length() == 1) {
-            properties.setPadString(positive.padding.toString());
-          } else if (positive.padding.length() == 2) {
-            if (positive.padding.charAt(0) == '\'') {
-              properties.setPadString("'");
-            } else {
-              properties.setPadString(positive.padding.toString());
-            }
-          } else {
-            properties.setPadString(
-                positive.padding.subSequence(1, positive.padding.length() - 1).toString());
-          }
-          assert positive.paddingLocation != null;
-          properties.setPadPosition(positive.paddingLocation);
-        } else {
-          properties.setFormatWidth(Properties.DEFAULT_FORMAT_WIDTH);
-          properties.setPadString(Properties.DEFAULT_PAD_STRING);
-          properties.setPadPosition(Properties.DEFAULT_PAD_POSITION);
-        }
-
-        // Set the affixes
-        // Always call the setter, even if the prefixes are empty, especially in the case of the
-        // negative prefix pattern, to prevent default values from overriding the pattern.
-        properties.setPositivePrefixPattern(positive.prefix.toString());
-        properties.setPositiveSuffixPattern(positive.suffix.toString());
-        if (negative != null) {
-          properties.setNegativePrefixPattern(negative.prefix.toString());
-          properties.setNegativeSuffixPattern(negative.suffix.toString());
-        } else {
-          properties.setNegativePrefixPattern(null);
-          properties.setNegativeSuffixPattern(null);
-        }
-
-        // Set the magnitude multiplier
-        if (positive.hasPercentSign) {
-          properties.setMagnitudeMultiplier(2);
-        } else if (positive.hasPerMilleSign) {
-          properties.setMagnitudeMultiplier(3);
-        } else {
-          properties.setMagnitudeMultiplier(Properties.DEFAULT_MAGNITUDE_MULTIPLIER);
-        }
-      }
+  static void parse(String pattern, Properties properties, int ignoreRounding) {
+    if (pattern == null || pattern.length() == 0) {
+      // Backwards compatibility requires that we reset to the default values.
+      // TODO: Only overwrite the properties that "saveToProperties" normally touches?
+      properties.clear();
+      return;
     }
 
-    private static class SubpatternParseResult {
-      int[] groupingSizes = new int[] {0, -1, -1};
-      int minimumIntegerDigits = 0;
-      int totalIntegerDigits = 0;
-      int minimumFractionDigits = 0;
-      int maximumFractionDigits = 0;
-      int minimumSignificantDigits = 0;
-      int maximumSignificantDigits = 0;
-      boolean hasDecimal = false;
-      int paddingWidth = 0;
-      PadPosition paddingLocation = null;
-      FormatQuantity4 rounding = new FormatQuantity4();
-      boolean exponentShowPlusSign = false;
-      int exponentDigits = 0;
-      boolean hasPercentSign = false;
-      boolean hasPerMilleSign = false;
-      boolean hasCurrencySign = false;
+    // TODO: Use whitespace characters from PatternProps
+    // TODO: Use thread locals here.
+    LdmlPatternInfo.PatternParseResult result = LdmlPatternInfo.parse(pattern);
+    saveToProperties(properties, result, ignoreRounding);
+  }
 
-      StringBuilder padding = new StringBuilder();
-      StringBuilder prefix = new StringBuilder();
-      StringBuilder suffix = new StringBuilder();
+  /** Finalizes the temporary data stored in the PatternParseResult to the Builder. */
+  private static void saveToProperties(
+      Properties properties, LdmlPatternInfo.PatternParseResult ppr, int _ignoreRounding) {
+    // Translate from PatternParseResult to Properties.
+    // Note that most data from "negative" is ignored per the specification of DecimalFormat.
+
+    LdmlPatternInfo.SubpatternParseResult positive = ppr.positive;
+    LdmlPatternInfo.SubpatternParseResult negative = ppr.negative;
+    String pattern = ppr.pattern;
+
+    boolean ignoreRounding;
+    if (_ignoreRounding == IGNORE_ROUNDING_NEVER) {
+      ignoreRounding = false;
+    } else if (_ignoreRounding == IGNORE_ROUNDING_IF_CURRENCY) {
+      ignoreRounding = positive.hasCurrencySign;
+    } else {
+      assert _ignoreRounding == IGNORE_ROUNDING_ALWAYS;
+      ignoreRounding = true;
     }
 
-    /** An internal class used for tracking the cursor during parsing of a pattern string. */
-    private static class ParserState {
-      final String pattern;
-      int offset;
-
-      ParserState(String pattern) {
-        this.pattern = pattern;
-        this.offset = 0;
-      }
-
-      int peek() {
-        if (offset == pattern.length()) {
-          return -1;
-        } else {
-          return pattern.codePointAt(offset);
-        }
-      }
-
-      int next() {
-        int codePoint = peek();
-        offset += Character.charCount(codePoint);
-        return codePoint;
-      }
-
-      IllegalArgumentException toParseException(String message) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Malformed pattern for ICU DecimalFormat: \"");
-        sb.append(pattern);
-        sb.append("\": ");
-        sb.append(message);
-        sb.append(" at position ");
-        sb.append(offset);
-        return new IllegalArgumentException(sb.toString());
-      }
+    // Grouping settings
+    short grouping1 = (short) (positive.groupingSizes & 0xffff);
+    short grouping2 = (short) ((positive.groupingSizes >>> 16) & 0xffff);
+    short grouping3 = (short) ((positive.groupingSizes >>> 32) & 0xffff);
+    if (grouping2 != -1) {
+      properties.setGroupingSize(grouping1);
+    } else {
+      properties.setGroupingSize(Properties.DEFAULT_GROUPING_SIZE);
+    }
+    if (grouping3 != -1) {
+      properties.setSecondaryGroupingSize(grouping2);
+    } else {
+      properties.setSecondaryGroupingSize(Properties.DEFAULT_SECONDARY_GROUPING_SIZE);
     }
 
-    static void parse(String pattern, Properties properties, int ignoreRounding) {
-      if (pattern == null || pattern.length() == 0) {
-        // Backwards compatibility requires that we reset to the default values.
-        // TODO: Only overwrite the properties that "saveToProperties" normally touches?
-        properties.clear();
-        return;
-      }
-
-      // TODO: Use whitespace characters from PatternProps
-      // TODO: Use thread locals here.
-      ParserState state = new ParserState(pattern);
-      PatternParseResult result = new PatternParseResult();
-      consumePattern(state, result);
-      result.saveToProperties(properties, ignoreRounding);
+    // For backwards compatibility, require that the pattern emit at least one min digit.
+    int minInt, minFrac;
+    if (positive.totalIntegerDigits == 0 && positive.maximumFractionDigits > 0) {
+      // patterns like ".##"
+      minInt = 0;
+      minFrac = Math.max(1, positive.minimumFractionDigits);
+    } else if (positive.minimumIntegerDigits == 0 && positive.minimumFractionDigits == 0) {
+      // patterns like "#.##"
+      minInt = 1;
+      minFrac = 0;
+    } else {
+      minInt = positive.minimumIntegerDigits;
+      minFrac = positive.minimumFractionDigits;
     }
 
-    private static void consumePattern(ParserState state, PatternParseResult result) {
-      // pattern := subpattern (';' subpattern)?
-      consumeSubpattern(state, result.positive);
-      if (state.peek() == ';') {
-        state.next(); // consume the ';'
-        // Don't consume the negative subpattern if it is empty (trailing ';')
-        if (state.peek() != -1) {
-          result.negative = new SubpatternParseResult();
-          consumeSubpattern(state, result.negative);
-        }
-      }
-      if (state.peek() != -1) {
-        throw state.toParseException("Found unquoted special character");
-      }
-    }
-
-    private static void consumeSubpattern(ParserState state, SubpatternParseResult result) {
-      // subpattern := literals? number exponent? literals?
-      consumePadding(state, result, PadPosition.BEFORE_PREFIX);
-      consumeAffix(state, result, result.prefix);
-      consumePadding(state, result, PadPosition.AFTER_PREFIX);
-      consumeFormat(state, result);
-      consumeExponent(state, result);
-      consumePadding(state, result, PadPosition.BEFORE_SUFFIX);
-      consumeAffix(state, result, result.suffix);
-      consumePadding(state, result, PadPosition.AFTER_SUFFIX);
-    }
-
-    private static void consumePadding(
-        ParserState state, SubpatternParseResult result, PadPosition paddingLocation) {
-      if (state.peek() != '*') {
-        return;
-      }
-      result.paddingLocation = paddingLocation;
-      state.next(); // consume the '*'
-      consumeLiteral(state, result.padding);
-    }
-
-    private static void consumeAffix(
-        ParserState state, SubpatternParseResult result, StringBuilder destination) {
-      // literals := { literal }
-      while (true) {
-        switch (state.peek()) {
-          case '#':
-          case '@':
-          case ';':
-          case '*':
-          case '.':
-          case ',':
-          case '0':
-          case '1':
-          case '2':
-          case '3':
-          case '4':
-          case '5':
-          case '6':
-          case '7':
-          case '8':
-          case '9':
-          case -1:
-            // Characters that cannot appear unquoted in a literal
-            return;
-
-          case '%':
-            result.hasPercentSign = true;
-            break;
-
-          case '‰':
-            result.hasPerMilleSign = true;
-            break;
-
-          case '¤':
-            result.hasCurrencySign = true;
-            break;
-        }
-        consumeLiteral(state, destination);
-      }
-    }
-
-    private static void consumeLiteral(ParserState state, StringBuilder destination) {
-      if (state.peek() == -1) {
-        throw state.toParseException("Expected unquoted literal but found EOL");
-      } else if (state.peek() == '\'') {
-        destination.appendCodePoint(state.next()); // consume the starting quote
-        while (state.peek() != '\'') {
-          if (state.peek() == -1) {
-            throw state.toParseException("Expected quoted literal but found EOL");
-          } else {
-            destination.appendCodePoint(state.next()); // consume a quoted character
-          }
-        }
-        destination.appendCodePoint(state.next()); // consume the ending quote
+    // Rounding settings
+    // Don't set basic rounding when there is a currency sign; defer to CurrencyUsage
+    if (positive.minimumSignificantDigits > 0) {
+      properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
+      properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
+      properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
+      properties.setMinimumSignificantDigits(positive.minimumSignificantDigits);
+      properties.setMaximumSignificantDigits(positive.maximumSignificantDigits);
+    } else if (positive.rounding != null) {
+      if (!ignoreRounding) {
+        properties.setMinimumFractionDigits(minFrac);
+        properties.setMaximumFractionDigits(positive.maximumFractionDigits);
+        properties.setRoundingIncrement(positive.rounding.toBigDecimal());
       } else {
-        // consume a non-quoted literal character
-        destination.appendCodePoint(state.next());
+        properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
+        properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
+        properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
       }
+      properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
+      properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
+    } else {
+      if (!ignoreRounding) {
+        properties.setMinimumFractionDigits(minFrac);
+        properties.setMaximumFractionDigits(positive.maximumFractionDigits);
+        properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
+      } else {
+        properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
+        properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
+        properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
+      }
+      properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
+      properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
     }
 
-    private static void consumeFormat(ParserState state, SubpatternParseResult result) {
-      consumeIntegerFormat(state, result);
-      if (state.peek() == '.') {
-        state.next(); // consume the decimal point
-        result.hasDecimal = true;
-        result.paddingWidth += 1;
-        consumeFractionFormat(state, result);
-      }
+    // If the pattern ends with a '.' then force the decimal point.
+    if (positive.hasDecimal && positive.maximumFractionDigits == 0) {
+      properties.setDecimalSeparatorAlwaysShown(true);
+    } else {
+      properties.setDecimalSeparatorAlwaysShown(false);
     }
 
-    private static void consumeIntegerFormat(ParserState state, SubpatternParseResult result) {
-      boolean seenSignificantDigitMarker = false;
-      boolean seenDigit = false;
+    // Scientific notation settings
+    if (positive.exponentDigits > 0) {
+      properties.setExponentSignAlwaysShown(positive.exponentShowPlusSign);
+      properties.setMinimumExponentDigits(positive.exponentDigits);
+      if (positive.minimumSignificantDigits == 0) {
+        // patterns without '@' can define max integer digits, used for engineering notation
+        properties.setMinimumIntegerDigits(positive.minimumIntegerDigits);
+        properties.setMaximumIntegerDigits(positive.totalIntegerDigits);
+      } else {
+        // patterns with '@' cannot define max integer digits
+        properties.setMinimumIntegerDigits(1);
+        properties.setMaximumIntegerDigits(Properties.DEFAULT_MAXIMUM_INTEGER_DIGITS);
+      }
+    } else {
+      properties.setExponentSignAlwaysShown(Properties.DEFAULT_EXPONENT_SIGN_ALWAYS_SHOWN);
+      properties.setMinimumExponentDigits(Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS);
+      properties.setMinimumIntegerDigits(minInt);
+      properties.setMaximumIntegerDigits(Properties.DEFAULT_MAXIMUM_INTEGER_DIGITS);
+    }
 
-      outer:
-      while (true) {
-        switch (state.peek()) {
-          case ',':
-            result.paddingWidth += 1;
-            result.groupingSizes[2] = result.groupingSizes[1];
-            result.groupingSizes[1] = result.groupingSizes[0];
-            result.groupingSizes[0] = 0;
-            break;
+    // Compute the affix patterns (required for both padding and affixes)
+    String posPrefix = ppr.getString(LdmlPatternInfo.PatternParseResult.POS_PREFIX);
+    String posSuffix = ppr.getString(LdmlPatternInfo.PatternParseResult.POS_SUFFIX);
 
-          case '#':
-            if (seenDigit) throw state.toParseException("# cannot follow 0 before decimal point");
-            result.paddingWidth += 1;
-            result.groupingSizes[0] += 1;
-            result.totalIntegerDigits += (seenSignificantDigitMarker ? 0 : 1);
-            // no change to result.minimumIntegerDigits
-            // no change to result.minimumSignificantDigits
-            result.maximumSignificantDigits += (seenSignificantDigitMarker ? 1 : 0);
-            result.rounding.appendDigit((byte) 0, 0, true);
-            break;
-
-          case '@':
-            seenSignificantDigitMarker = true;
-            if (seenDigit) throw state.toParseException("Cannot mix 0 and @");
-            result.paddingWidth += 1;
-            result.groupingSizes[0] += 1;
-            result.totalIntegerDigits += 1;
-            // no change to result.minimumIntegerDigits
-            result.minimumSignificantDigits += 1;
-            result.maximumSignificantDigits += 1;
-            result.rounding.appendDigit((byte) 0, 0, true);
-            break;
-
-          case '0':
-          case '1':
-          case '2':
-          case '3':
-          case '4':
-          case '5':
-          case '6':
-          case '7':
-          case '8':
-          case '9':
-            seenDigit = true;
-            if (seenSignificantDigitMarker) throw state.toParseException("Cannot mix @ and 0");
-            // TODO: Crash here if we've seen the significant digit marker? See NumberFormatTestCases.txt
-            result.paddingWidth += 1;
-            result.groupingSizes[0] += 1;
-            result.totalIntegerDigits += 1;
-            result.minimumIntegerDigits += 1;
-            // no change to result.minimumSignificantDigits
-            // no change to result.maximumSignificantDigits
-            result.rounding.appendDigit((byte) (state.peek() - '0'), 0, true);
-            break;
-
-          default:
-            break outer;
+    // Padding settings
+    if (positive.paddingEndpoints != 0) {
+      // The width of the positive prefix and suffix templates are included in the padding
+      int paddingWidth =
+          positive.paddingWidth
+              + AffixPatternUtils.unescapedLength(posPrefix)
+              + AffixPatternUtils.unescapedLength(posSuffix);
+      properties.setFormatWidth(paddingWidth);
+      String rawPaddingString = ppr.getString(LdmlPatternInfo.PatternParseResult.POS_PADDING);
+      if (rawPaddingString.length() == 1) {
+        properties.setPadString(rawPaddingString);
+      } else if (rawPaddingString.length() == 2) {
+        if (rawPaddingString.charAt(0) == '\'') {
+          properties.setPadString("'");
+        } else {
+          properties.setPadString(rawPaddingString);
         }
-        state.next(); // consume the symbol
+      } else {
+        properties.setPadString(rawPaddingString.substring(1, rawPaddingString.length() - 1));
       }
-
-      // Disallow patterns with a trailing ',' or with two ',' next to each other
-      if (result.groupingSizes[0] == 0 && result.groupingSizes[1] != -1) {
-        throw state.toParseException("Trailing grouping separator is invalid");
-      }
-      if (result.groupingSizes[1] == 0 && result.groupingSizes[2] != -1) {
-        throw state.toParseException("Grouping width of zero is invalid");
-      }
+      assert positive.paddingLocation != null;
+      properties.setPadPosition(positive.paddingLocation);
+    } else {
+      properties.setFormatWidth(Properties.DEFAULT_FORMAT_WIDTH);
+      properties.setPadString(Properties.DEFAULT_PAD_STRING);
+      properties.setPadPosition(Properties.DEFAULT_PAD_POSITION);
     }
 
-    private static void consumeFractionFormat(ParserState state, SubpatternParseResult result) {
-      int zeroCounter = 0;
-      boolean seenHash = false;
-      while (true) {
-        switch (state.peek()) {
-          case '#':
-            seenHash = true;
-            result.paddingWidth += 1;
-            // no change to result.minimumFractionDigits
-            result.maximumFractionDigits += 1;
-            zeroCounter++;
-            break;
-
-          case '0':
-          case '1':
-          case '2':
-          case '3':
-          case '4':
-          case '5':
-          case '6':
-          case '7':
-          case '8':
-          case '9':
-            if (seenHash) throw state.toParseException("0 cannot follow # after decimal point");
-            result.paddingWidth += 1;
-            result.minimumFractionDigits += 1;
-            result.maximumFractionDigits += 1;
-            if (state.peek() == '0') {
-              zeroCounter++;
-            } else {
-              result.rounding.appendDigit((byte) (state.peek() - '0'), zeroCounter, false);
-              zeroCounter = 0;
-            }
-            break;
-
-          default:
-            return;
-        }
-        state.next(); // consume the symbol
-      }
+    // Set the affixes
+    // Always call the setter, even if the prefixes are empty, especially in the case of the
+    // negative prefix pattern, to prevent default values from overriding the pattern.
+    properties.setPositivePrefixPattern(posPrefix);
+    properties.setPositiveSuffixPattern(posSuffix);
+    if (negative != null) {
+      properties.setNegativePrefixPattern(ppr.getString(LdmlPatternInfo.PatternParseResult.NEG_PREFIX));
+      properties.setNegativeSuffixPattern(ppr.getString(LdmlPatternInfo.PatternParseResult.NEG_SUFFIX));
+    } else {
+      properties.setNegativePrefixPattern(null);
+      properties.setNegativeSuffixPattern(null);
     }
 
-    private static void consumeExponent(ParserState state, SubpatternParseResult result) {
-      if (state.peek() != 'E') {
-        return;
-      }
-      state.next(); // consume the E
-      result.paddingWidth++;
-      if (state.peek() == '+') {
-        state.next(); // consume the +
-        result.exponentShowPlusSign = true;
-        result.paddingWidth++;
-      }
-      while (state.peek() == '0') {
-        state.next(); // consume the 0
-        result.exponentDigits += 1;
-        result.paddingWidth++;
-      }
+    // Set the magnitude multiplier
+    if (positive.hasPercentSign) {
+      properties.setMagnitudeMultiplier(2);
+    } else if (positive.hasPerMilleSign) {
+      properties.setMagnitudeMultiplier(3);
+    } else {
+      properties.setMagnitudeMultiplier(Properties.DEFAULT_MAGNITUDE_MULTIPLIER);
     }
   }
 }

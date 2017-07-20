@@ -35,21 +35,7 @@ import com.ibm.icu.text.NumberFormat.Field;
  *     case AffixPatternUtils.TYPE_PERCENT:
  *       // Current token is a percent sign.
  *       break;
- *     case AffixPatternUtils.TYPE_PERMILLE:
- *       // Current token is a permille sign.
- *       break;
- *     case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
- *       // Current token is a single currency sign.
- *       break;
- *     case AffixPatternUtils.TYPE_CURRENCY_DOUBLE:
- *       // Current token is a double currency sign.
- *       break;
- *     case AffixPatternUtils.TYPE_CURRENCY_TRIPLE:
- *       // Current token is a triple currency sign.
- *       break;
- *     case AffixPatternUtils.TYPE_CURRENCY_OVERFLOW:
- *       // Current token has four or more currency signs.
- *       break;
+ *     // ... other types ...
  *     default:
  *       // Current token is an arbitrary code point.
  *       // The variable typeOrCp is the code point.
@@ -67,8 +53,11 @@ public class AffixPatternUtils {
   private static final int STATE_FIRST_CURR = 4;
   private static final int STATE_SECOND_CURR = 5;
   private static final int STATE_THIRD_CURR = 6;
-  private static final int STATE_OVERFLOW_CURR = 7;
+  private static final int STATE_FOURTH_CURR = 7;
+  private static final int STATE_FIFTH_CURR = 8;
+  private static final int STATE_OVERFLOW_CURR = 9;
 
+  /** Represents a literal character; the value is stored in the code point field. */
   private static final int TYPE_CODEPOINT = 0;
 
   /** Represents a minus sign symbol '-'. */
@@ -92,7 +81,13 @@ public class AffixPatternUtils {
   /** Represents a triple currency symbol '¤¤¤'. */
   public static final int TYPE_CURRENCY_TRIPLE = -7;
 
-  /** Represents a sequence of four or more currency symbols. */
+  /** Represents a quadruple currency symbol '¤¤¤¤'. */
+  public static final int TYPE_CURRENCY_QUAD = -8;
+
+  /** Represents a quintuple currency symbol '¤¤¤¤¤'. */
+  public static final int TYPE_CURRENCY_QUINT = -9;
+
+  /** Represents a sequence of six or more currency symbols. */
   public static final int TYPE_CURRENCY_OVERFLOW = -15;
 
   /**
@@ -278,14 +273,76 @@ public class AffixPatternUtils {
         case TYPE_CURRENCY_TRIPLE:
           output.append(currency3, Field.CURRENCY);
           break;
+        case TYPE_CURRENCY_QUAD:
+          output.appendCodePoint('\uFFFD', Field.CURRENCY);
+          break;
+        case TYPE_CURRENCY_QUINT:
+          // TODO: Add support for narrow currency symbols here.
+          output.appendCodePoint('\uFFFD', Field.CURRENCY);
+          break;
         case TYPE_CURRENCY_OVERFLOW:
-          output.append("\uFFFD", Field.CURRENCY);
+          output.appendCodePoint('\uFFFD', Field.CURRENCY);
           break;
         default:
           output.appendCodePoint(typeOrCp, null);
           break;
       }
     }
+  }
+
+  private static final Field getFieldForType(int type) {
+    switch (type) {
+      case TYPE_MINUS_SIGN:
+        return Field.SIGN;
+      case TYPE_PLUS_SIGN:
+        return Field.SIGN;
+      case TYPE_PERCENT:
+        return Field.PERCENT;
+      case TYPE_PERMILLE:
+        return Field.PERMILLE;
+      case TYPE_CURRENCY_SINGLE:
+        return Field.CURRENCY;
+      case TYPE_CURRENCY_DOUBLE:
+        return Field.CURRENCY;
+      case TYPE_CURRENCY_TRIPLE:
+        return Field.CURRENCY;
+      case TYPE_CURRENCY_QUAD:
+        return Field.CURRENCY;
+      case TYPE_CURRENCY_QUINT:
+        return Field.CURRENCY;
+      case TYPE_CURRENCY_OVERFLOW:
+        return Field.CURRENCY;
+      default:
+        throw new AssertionError();
+    }
+  }
+
+  public static interface SymbolProvider {
+    public CharSequence getSymbol(int type);
+  }
+
+  public static int unescape(
+      CharSequence affixPattern,
+      NumberStringBuilder output,
+      int position,
+      SymbolProvider provider) {
+    // TODO: Is it worth removing this extra local object instantiation here?
+    NumberStringBuilder local = new NumberStringBuilder(10);
+    assert affixPattern != null;
+    long tag = 0L;
+    while (hasNext(tag, affixPattern)) {
+      tag = nextToken(tag, affixPattern);
+      int typeOrCp = getTypeOrCp(tag);
+      if (typeOrCp == TYPE_CURRENCY_OVERFLOW) {
+        // Don't go to the provider for this special case
+        local.appendCodePoint(0xFFFD, Field.CURRENCY);
+      } else if (typeOrCp < 0) {
+        local.append(provider.getSymbol(typeOrCp), getFieldForType(typeOrCp));
+      } else {
+        local.appendCodePoint(typeOrCp, null);
+      }
+    }
+    return output.insert(position, local);
   }
 
   /**
@@ -323,6 +380,8 @@ public class AffixPatternUtils {
       if (typeOrCp == AffixPatternUtils.TYPE_CURRENCY_SINGLE
           || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_DOUBLE
           || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_TRIPLE
+          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_QUAD
+          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_QUINT
           || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_OVERFLOW) {
         return true;
       }
@@ -437,12 +496,30 @@ public class AffixPatternUtils {
           }
         case STATE_THIRD_CURR:
           if (cp == '¤') {
-            state = STATE_OVERFLOW_CURR;
+            state = STATE_FOURTH_CURR;
             offset += count;
             // continue to the next code point
             break;
           } else {
             return makeTag(offset, TYPE_CURRENCY_TRIPLE, STATE_BASE, 0);
+          }
+        case STATE_FOURTH_CURR:
+          if (cp == '¤') {
+            state = STATE_FIFTH_CURR;
+            offset += count;
+            // continue to the next code point
+            break;
+          } else {
+            return makeTag(offset, TYPE_CURRENCY_QUAD, STATE_BASE, 0);
+          }
+        case STATE_FIFTH_CURR:
+          if (cp == '¤') {
+            state = STATE_OVERFLOW_CURR;
+            offset += count;
+            // continue to the next code point
+            break;
+          } else {
+            return makeTag(offset, TYPE_CURRENCY_QUINT, STATE_BASE, 0);
           }
         case STATE_OVERFLOW_CURR:
           if (cp == '¤') {
@@ -475,6 +552,10 @@ public class AffixPatternUtils {
         return makeTag(offset, TYPE_CURRENCY_DOUBLE, STATE_BASE, 0);
       case STATE_THIRD_CURR:
         return makeTag(offset, TYPE_CURRENCY_TRIPLE, STATE_BASE, 0);
+      case STATE_FOURTH_CURR:
+        return makeTag(offset, TYPE_CURRENCY_QUAD, STATE_BASE, 0);
+      case STATE_FIFTH_CURR:
+        return makeTag(offset, TYPE_CURRENCY_QUINT, STATE_BASE, 0);
       case STATE_OVERFLOW_CURR:
         return makeTag(offset, TYPE_CURRENCY_OVERFLOW, STATE_BASE, 0);
       default:
@@ -522,6 +603,17 @@ public class AffixPatternUtils {
     return (type == 0) ? getCodePoint(tag) : -type;
   }
 
+  /**
+   * Encodes the given values into a 64-bit tag.
+   *
+   * <ul>
+   *   <li>Bits 0-31 => offset (int32)
+   *   <li>Bits 32-35 => type (uint4)
+   *   <li>Bits 36-39 => state (uint4)
+   *   <li>Bits 40-60 => code point (uint21)
+   *   <li>Bits 61-63 => unused
+   * </ul>
+   */
   private static long makeTag(int offset, int type, int state, int cp) {
     long tag = 0L;
     tag |= offset;

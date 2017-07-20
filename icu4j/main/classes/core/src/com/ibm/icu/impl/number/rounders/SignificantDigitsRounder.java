@@ -180,17 +180,18 @@ public class SignificantDigitsRounder extends Rounder {
     switch (mode) {
       case OVERRIDE_MAXIMUM_FRACTION:
         // Ensure minSig is always displayed.
-        input.setIntegerFractionLength(
-            minInt, maxInt, Math.max(minFrac, -magMinSig), Integer.MAX_VALUE);
+        input.setIntegerLength(minInt, maxInt);
+        input.setFractionLength(Math.max(minFrac, -magMinSig), Integer.MAX_VALUE);
         break;
       case RESPECT_MAXIMUM_FRACTION:
         // Ensure minSig is displayed, unless doing so is in violation of maxFrac.
-        input.setIntegerFractionLength(
-            minInt, maxInt, Math.min(maxFrac, Math.max(minFrac, -magMinSig)), maxFrac);
+        input.setIntegerLength(minInt, maxInt);
+        input.setFractionLength(Math.min(maxFrac, Math.max(minFrac, -magMinSig)), maxFrac);
         break;
       case ENSURE_MINIMUM_SIGNIFICANT:
         // Follow minInt/minFrac, but ensure all digits are allowed to be visible.
-        input.setIntegerFractionLength(minInt, maxInt, minFrac, Integer.MAX_VALUE);
+        input.setIntegerLength(minInt, maxInt);
+        input.setFractionLength(minFrac, Integer.MAX_VALUE);
         break;
     }
   }

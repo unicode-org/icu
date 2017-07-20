@@ -162,4 +162,15 @@ public class RoundingUtils {
     }
     return mathContext;
   }
+
+  /**
+   * Gets a MathContext with unlimited precision and the specified RoundingMode. Equivalent to "new
+   * MathContext(0, roundingMode)", but pulls from a singleton to prevent object thrashing.
+   *
+   * @param roundingMode The {@link RoundingMode} to use.
+   * @return The corresponding {@link MathContext}.
+   */
+  public static MathContext mathContextUnlimited(RoundingMode roundingMode) {
+    return MATH_CONTEXT_BY_ROUNDING_MODE_UNLIMITED[roundingMode.ordinal()];
+  }
 }
