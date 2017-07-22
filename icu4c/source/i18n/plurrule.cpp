@@ -1665,7 +1665,7 @@ const char *PluralAvailableLocalesEnumeration::next(int32_t *resultLength, UErro
     }
     const char *result = ures_getKey(fRes);
     if (resultLength != NULL) {
-        *resultLength = uprv_strlen(result);
+        *resultLength = static_cast<int32_t>(uprv_strlen(result));
     }
     return result;
 }

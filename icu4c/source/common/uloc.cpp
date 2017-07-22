@@ -538,7 +538,7 @@ static const VariantMap VARIANT_MAP[] = {
         }
 /* Gets the size of the shortest subtag in the given localeID. */
 static int32_t getShortestSubtagLength(const char *localeID) {
-    int32_t localeIDLength = uprv_strlen(localeID);
+    int32_t localeIDLength = static_cast<int32_t>(uprv_strlen(localeID));
     int32_t length = localeIDLength;
     int32_t tmpLength = 0;
     int32_t i;
@@ -2488,7 +2488,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
 #if defined(ULOC_DEBUG)
         fprintf(stderr,"%02d: %s\n", i, acceptList[i]);
 #endif
-        while((l=uenum_next(availableLocales, NULL, status))) {
+        while((l=uenum_next(availableLocales, NULL, status)) != NULL) {
 #if defined(ULOC_DEBUG)
             fprintf(stderr,"  %s\n", l);
 #endif
@@ -2528,7 +2528,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
 #if defined(ULOC_DEBUG)
                 fprintf(stderr,"Try: [%s]", fallbackList[i]);
 #endif
-                while((l=uenum_next(availableLocales, NULL, status))) {
+                while((l=uenum_next(availableLocales, NULL, status)) != NULL) {
 #if defined(ULOC_DEBUG)
                     fprintf(stderr,"  %s\n", l);
 #endif

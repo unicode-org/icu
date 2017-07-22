@@ -320,7 +320,7 @@ TimeZoneFormat::TimeZoneFormat(const Locale& locale, UErrorCode& status)
     }
 
     const char* region = fLocale.getCountry();
-    int32_t regionLen = uprv_strlen(region);
+    int32_t regionLen = static_cast<int32_t>(uprv_strlen(region));
     if (regionLen == 0) {
         char loc[ULOC_FULLNAME_CAPACITY];
         uloc_addLikelySubtags(fLocale.getName(), loc, sizeof(loc), &status);
@@ -1812,7 +1812,9 @@ TimeZoneFormat::parseOffsetFields(const UnicodeString& text, int32_t start, UBoo
         // but it should be parsed as 00:10:20.
         int32_t tmpLen = 0;
         int32_t tmpSign = 1;
-        int32_t tmpH, tmpM, tmpS;
+        int32_t tmpH = 0;
+        int32_t tmpM = 0;
+        int32_t tmpS = 0;
 
         for (int32_t patidx = 0; PARSE_GMT_OFFSET_TYPES[patidx] >= 0; patidx++) {
             int32_t gmtPatType = PARSE_GMT_OFFSET_TYPES[patidx];
@@ -2752,7 +2754,7 @@ static void U_CALLCONV initZoneIdTrie(UErrorCode &status) {
     }
     StringEnumeration *tzenum = TimeZone::createEnumeration();
     const UnicodeString *id;
-    while ((id = tzenum->snext(status))) {
+    while ((id = tzenum->snext(status)) != NULL) {
         const UChar* uid = ZoneMeta::findTimeZoneID(*id);
         if (uid) {
             gZoneIdTrie->put(uid, const_cast<UChar *>(uid), status);
@@ -2799,7 +2801,7 @@ static void U_CALLCONV initShortZoneIdTrie(UErrorCode &status) {
             status = U_MEMORY_ALLOCATION_ERROR;
         } else {
             const UnicodeString *id;
-            while ((id = tzenum->snext(status))) {
+            while ((id = tzenum->snext(status)) != NULL) {
                 const UChar* uID = ZoneMeta::findTimeZoneID(*id);
                 const UChar* shortID = ZoneMeta::getShortID(*id);
                 if (shortID && uID) {
