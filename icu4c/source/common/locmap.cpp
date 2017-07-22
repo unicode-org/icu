@@ -1132,7 +1132,7 @@ uprv_convertToPosix(uint32_t hostid, char *posixID, int32_t posixIDCapacity, UEr
     }
 
     if (pPosixID) {
-        int32_t resLen = uprv_strlen(pPosixID);
+        int32_t resLen = static_cast<int32_t>(uprv_strlen(pPosixID));
         int32_t copyLen = resLen <= posixIDCapacity ? resLen : posixIDCapacity;
         uprv_memcpy(posixID, pPosixID, copyLen);
         if (resLen < posixIDCapacity) {
@@ -1206,7 +1206,7 @@ uprv_convertToLCIDPlatform(const char* localeID)
 
     char asciiBCP47Tag[LOCALE_NAME_MAX_LENGTH] = {};
     // this will change it from de_DE@collation=phonebook to de-DE-u-co-phonebk form
-    int32_t bcp47Len = uloc_toLanguageTag(mylocaleID, asciiBCP47Tag, UPRV_LENGTHOF(asciiBCP47Tag), FALSE, &myStatus);
+    (void)uloc_toLanguageTag(mylocaleID, asciiBCP47Tag, UPRV_LENGTHOF(asciiBCP47Tag), FALSE, &myStatus);
 
     if (U_SUCCESS(myStatus))
     {
