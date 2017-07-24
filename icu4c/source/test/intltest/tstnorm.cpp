@@ -1562,6 +1562,8 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
         { TRUE, 6, 3 },  // 가\u3133→ 갃
         { FALSE, 2, 2 }  // 2 spaces
     };
+    assertTrue("normalizeUTF8 with Edits hasChanges", edits.hasChanges());
+    assertEquals("normalizeUTF8 with Edits numberOfChanges", 9, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"normalizeUTF8 with Edits",
             edits.getFineIterator(), edits.getFineIterator(),
             expectedChanges, UPRV_LENGTHOF(expectedChanges),
@@ -1577,6 +1579,8 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
     nfkc_cf->normalizeUTF8(U_OMIT_UNCHANGED_TEXT, src, sink, &edits, errorCode);
     assertSuccess("normalizeUTF8 omit unchanged", errorCode.get());
     assertEquals("normalizeUTF8 omit unchanged", expected.c_str(), result.c_str());
+    assertTrue("normalizeUTF8 omit unchanged hasChanges", edits.hasChanges());
+    assertEquals("normalizeUTF8 omit unchanged numberOfChanges", 9, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"normalizeUTF8 omit unchanged",
             edits.getFineIterator(), edits.getFineIterator(),
             expectedChanges, UPRV_LENGTHOF(expectedChanges),
@@ -1604,6 +1608,8 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
         { TRUE, 6, 3 },  // 가\u3133→ 갃
         { FALSE, 2, 2 }  // 2 spaces
     };
+    assertTrue("filtered normalizeUTF8 hasChanges", edits.hasChanges());
+    assertEquals("filtered normalizeUTF8 numberOfChanges", 7, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"filtered normalizeUTF8",
             edits.getFineIterator(), edits.getFineIterator(),
             filteredChanges, UPRV_LENGTHOF(filteredChanges),
@@ -1621,6 +1627,8 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
     fn2.normalizeUTF8(U_OMIT_UNCHANGED_TEXT, src, sink, &edits, errorCode);
     assertSuccess("filtered normalizeUTF8 omit unchanged", errorCode.get());
     assertEquals("filtered normalizeUTF8 omit unchanged", expected.c_str(), result.c_str());
+    assertTrue("filtered normalizeUTF8 omit unchanged hasChanges", edits.hasChanges());
+    assertEquals("filtered normalizeUTF8 omit unchanged numberOfChanges", 7, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"filtered normalizeUTF8 omit unchanged",
             edits.getFineIterator(), edits.getFineIterator(),
             filteredChanges, UPRV_LENGTHOF(filteredChanges),

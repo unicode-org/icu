@@ -40,7 +40,7 @@ Edits::~Edits() {
 }
 
 void Edits::reset() {
-    length = delta = 0;
+    length = delta = numChanges = 0;
 }
 
 void Edits::addUnchanged(int32_t unchangedLength) {
@@ -76,6 +76,7 @@ void Edits::addReplace(int32_t oldLength, int32_t newLength) {
     if(oldLength == newLength && 0 < oldLength && oldLength <= MAX_SHORT_WIDTH) {
         // Replacement of short oldLength text units by same-length new text.
         // Merge into previous short-replacement record, if any.
+        ++numChanges;
         int32_t last = lastUnit();
         if(MAX_UNCHANGED < last && last < MAX_SHORT_CHANGE &&
                 (last >> 12) == oldLength && (last & 0xfff) < MAX_SHORT_CHANGE_LENGTH) {
@@ -93,6 +94,7 @@ void Edits::addReplace(int32_t oldLength, int32_t newLength) {
     if (oldLength == 0 && newLength == 0) {
         return;
     }
+    ++numChanges;
     int32_t newDelta = newLength - oldLength;
     if (newDelta != 0) {
         if ((newDelta > 0 && delta >= 0 && newDelta > (INT32_MAX - delta)) ||
@@ -180,18 +182,6 @@ UBool Edits::copyErrorTo(UErrorCode &outErrorCode) {
     if (U_SUCCESS(errorCode)) { return FALSE; }
     outErrorCode = errorCode;
     return TRUE;
-}
-
-UBool Edits::hasChanges() const {
-    if (delta != 0) {
-        return TRUE;
-    }
-    for (int32_t i = 0; i < length; ++i) {
-        if (array[i] > MAX_UNCHANGED) {
-            return TRUE;
-        }
-    }
-    return FALSE;
 }
 
 Edits::Iterator::Iterator(const uint16_t *a, int32_t len, UBool oc, UBool crs) :
@@ -308,39 +298,97 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
     return TRUE;
 }
 
-UBool Edits::Iterator::findSourceIndex(int32_t i, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode) || i < 0) { return FALSE; }
-    if (i < srcIndex) {
+int32_t Edits::Iterator::findIndex(int32_t i, UBool findSource, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode) || i < 0) { return -1; }
+    int32_t spanStart, spanLength;
+    if (findSource) {  // find source index
+        spanStart = srcIndex;
+        spanLength = oldLength_;
+    } else {  // find destination index
+        spanStart = destIndex;
+        spanLength = newLength_;
+    }
+    // If we are at the start or limit of an empty span, then we search from
+    // the start of the string so that we always return
+    // the first of several consecutive empty spans, for consistent results.
+    // We do not currently track the properties of the previous span,
+    // so for now we always reset if we are at the start of the current span.
+    if (i <= spanStart) {
         // Reset the iterator to the start.
         index = remaining = oldLength_ = newLength_ = srcIndex = replIndex = destIndex = 0;
-    } else if (i < (srcIndex + oldLength_)) {
+    } else if (i < (spanStart + spanLength)) {
         // The index is in the current span.
-        return TRUE;
+        return 0;
     }
     while (next(FALSE, errorCode)) {
-        if (i < (srcIndex + oldLength_)) {
-            // The index is in the current span.
-            return TRUE;
+        if (findSource) {
+            spanStart = srcIndex;
+            spanLength = oldLength_;
+        } else {
+            spanStart = destIndex;
+            spanLength = newLength_;
+        }
+        if (i == spanStart || i < (spanStart + spanLength)) {
+            // The index is in the current span, or at an empty one.
+            return 0;
         }
         if (remaining > 0) {
             // Is the index in one of the remaining compressed edits?
-            // srcIndex is the start of the current span, before the remaining ones.
-            int32_t len = (remaining + 1) * oldLength_;
-            if (i < (srcIndex + len)) {
-                int32_t n = (i - srcIndex) / oldLength_;  // 1 <= n <= remaining
-                len = n * oldLength_;
+            // spanStart is the start of the current span, before the remaining ones.
+            int32_t len = (remaining + 1) * spanLength;
+            if (i < (spanStart + len)) {
+                int32_t n = (i - spanStart) / spanLength;  // 1 <= n <= remaining
+                len = n * spanLength;
                 srcIndex += len;
                 replIndex += len;
                 destIndex += len;
                 remaining -= n;
-                return TRUE;
+                return 0;
             }
             // Make next() skip all of these edits at once.
             oldLength_ = newLength_ = len;
             remaining = 0;
         }
     }
-    return FALSE;
+    return 1;
+}
+
+int32_t Edits::Iterator::destinationIndexFromSourceIndex(int32_t i, UErrorCode &errorCode) {
+    int32_t where = findIndex(i, TRUE, errorCode);
+    if (where < 0) {
+        // Error or before the string.
+        return 0;
+    }
+    if (where > 0 || i == srcIndex) {
+        // At or after string length, or at start of the found span.
+        return destIndex;
+    }
+    if (changed) {
+        // In a change span, map to its end.
+        return destIndex + newLength_;
+    } else {
+        // In an unchanged span, offset 1:1 within it.
+        return destIndex + (i - srcIndex);
+    }
+}
+
+int32_t Edits::Iterator::sourceIndexFromDestinationIndex(int32_t i, UErrorCode &errorCode) {
+    int32_t where = findIndex(i, FALSE, errorCode);
+    if (where < 0) {
+        // Error or before the string.
+        return 0;
+    }
+    if (where > 0 || i == destIndex) {
+        // At or after string length, or at start of the found span.
+        return srcIndex;
+    }
+    if (changed) {
+        // In a change span, map to its end.
+        return srcIndex + oldLength_;
+    } else {
+        // In an unchanged span, offset within it.
+        return srcIndex + (i - destIndex);
+    }
 }
 
 U_NAMESPACE_END
