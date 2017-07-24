@@ -830,19 +830,22 @@ int64_t util64_fromDouble(double d) {
     return result;
 }
 
-uint64_t util64_pow(uint32_t base, uint16_t exponent)  { 
+uint64_t util64_pow(uint32_t base, uint16_t exponent)  {
     if (base == 0) {
         return 0;
     }
     uint64_t result = 1;
     uint64_t pow = base;
-    while (exponent > 0) { 
-        if ((exponent & 1) == 1) { 
-            result *= pow; 
-        } 
-        pow *= pow; 
-        exponent >>= 1; 
-    } 
+    while (true) {
+        if ((exponent & 1) == 1) {
+            result *= pow;
+        }
+        exponent >>= 1;
+        if (exponent == 0) {
+            break;
+        }
+        pow *= pow;
+    }
     return result;
 }
 
