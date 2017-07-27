@@ -36,7 +36,7 @@ public:
      * @draft ICU 59
      */
     Edits() :
-            array(stackArray), capacity(STACK_CAPACITY), length(0), delta(0),
+            array(stackArray), capacity(STACK_CAPACITY), length(0), delta(0), numChanges(0),
             errorCode(U_ZERO_ERROR) {}
     /**
      * Destructor.
@@ -66,6 +66,9 @@ public:
      * Sets the UErrorCode if an error occurred while recording edits.
      * Preserves older error codes in the outErrorCode.
      * Normally called from inside ICU string transformation functions, not user code.
+     * @param outErrorCode Set to an error code if it does not contain one already
+     *                  and an error occurred while recording edits.
+     *                  Otherwise unchanged.
      * @return TRUE if U_FAILURE(outErrorCode)
      * @draft ICU 59
      */
@@ -81,7 +84,13 @@ public:
      * @return TRUE if there are any change edits
      * @draft ICU 59
      */
-    UBool hasChanges() const;
+    UBool hasChanges() const { return numChanges != 0; }
+
+    /**
+     * @return the number of change edits
+     * @draft ICU 60
+     */
+    int32_t numberOfChanges() const { return numChanges; }
 
     /**
      * Access to the list of edits.
@@ -103,6 +112,9 @@ public:
 
         /**
          * Advances to the next edit.
+         * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
+         *                  or else the function returns immediately. Check for U_FAILURE()
+         *                  on output or use with function chaining. (See User Guide for details.)
          * @return TRUE if there is another edit
          * @draft ICU 59
          */
@@ -121,10 +133,86 @@ public:
          * if the source index is out of bounds for the source string.
          *
          * @param i source index
+         * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
+         *                  or else the function returns immediately. Check for U_FAILURE()
+         *                  on output or use with function chaining. (See User Guide for details.)
          * @return TRUE if the edit for the source index was found
          * @draft ICU 59
          */
-        UBool findSourceIndex(int32_t i, UErrorCode &errorCode);
+        UBool findSourceIndex(int32_t i, UErrorCode &errorCode) {
+            return findIndex(i, TRUE, errorCode) == 0;
+        }
+
+        /**
+         * Finds the edit that contains the destination index.
+         * The destination index may be found in a non-change
+         * even if normal iteration would skip non-changes.
+         * Normal iteration can continue from a found edit.
+         *
+         * The iterator state before this search logically does not matter.
+         * (It may affect the performance of the search.)
+         *
+         * The iterator state after this search is undefined
+         * if the source index is out of bounds for the source string.
+         *
+         * @param i destination index
+         * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
+         *                  or else the function returns immediately. Check for U_FAILURE()
+         *                  on output or use with function chaining. (See User Guide for details.)
+         * @return TRUE if the edit for the destination index was found
+         * @draft ICU 60
+         */
+        UBool findDestinationIndex(int32_t i, UErrorCode &errorCode) {
+            return findIndex(i, FALSE, errorCode) == 0;
+        }
+
+        /**
+         * Returns the destination index corresponding to the given source index.
+         * If the source index is inside a change edit (not at its start),
+         * then the destination index at the end of that edit is returned,
+         * since there is no information about index mapping inside a change edit.
+         *
+         * (This means that indexes to the start and middle of an edit,
+         * for example around a grapheme cluster, are mapped to indexes
+         * encompassing the entire edit.
+         * The alternative, mapping an interior index to the start,
+         * would map such an interval to an empty one.)
+         *
+         * This operation will usually but not always modify this object.
+         * The iterator state after this search is undefined.
+         *
+         * @param i source index
+         * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
+         *                  or else the function returns immediately. Check for U_FAILURE()
+         *                  on output or use with function chaining. (See User Guide for details.)
+         * @return destination index; undefined if i is not 0..string length
+         * @draft ICU 60
+         */
+        int32_t destinationIndexFromSourceIndex(int32_t i, UErrorCode &errorCode);
+
+        /**
+         * Returns the source index corresponding to the given destination index.
+         * If the destination index is inside a change edit (not at its start),
+         * then the source index at the end of that edit is returned,
+         * since there is no information about index mapping inside a change edit.
+         *
+         * (This means that indexes to the start and middle of an edit,
+         * for example around a grapheme cluster, are mapped to indexes
+         * encompassing the entire edit.
+         * The alternative, mapping an interior index to the start,
+         * would map such an interval to an empty one.)
+         *
+         * This operation will usually but not always modify this object.
+         * The iterator state after this search is undefined.
+         *
+         * @param i destination index
+         * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
+         *                  or else the function returns immediately. Check for U_FAILURE()
+         *                  on output or use with function chaining. (See User Guide for details.)
+         * @return source index; undefined if i is not 0..string length
+         * @draft ICU 60
+         */
+        int32_t sourceIndexFromDestinationIndex(int32_t i, UErrorCode &errorCode);
 
         /**
          * @return TRUE if this edit replaces oldLength() units with newLength() different ones.
@@ -170,6 +258,8 @@ public:
         void updateIndexes();
         UBool noNext();
         UBool next(UBool onlyChanges, UErrorCode &errorCode);
+        /** @return -1: error or i<0; 0: found; 1: i>=string length */
+        int32_t findIndex(int32_t i, UBool findSource, UErrorCode &errorCode);
 
         const uint16_t *array;
         int32_t index, length;
@@ -234,6 +324,7 @@ private:
     int32_t capacity;
     int32_t length;
     int32_t delta;
+    int32_t numChanges;
     UErrorCode errorCode;
     uint16_t stackArray[STACK_CAPACITY];
 };

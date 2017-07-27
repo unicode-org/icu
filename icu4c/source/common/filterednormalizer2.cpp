@@ -244,6 +244,31 @@ FilteredNormalizer2::isNormalized(const UnicodeString &s, UErrorCode &errorCode)
     return TRUE;
 }
 
+UBool
+FilteredNormalizer2::isNormalizedUTF8(StringPiece sp, UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode)) {
+        return FALSE;
+    }
+    const char *s = sp.data();
+    int32_t length = sp.length();
+    USetSpanCondition spanCondition = USET_SPAN_SIMPLE;
+    while (length > 0) {
+        int32_t spanLength = set.spanUTF8(s, length, spanCondition);
+        if (spanCondition == USET_SPAN_NOT_CONTAINED) {
+            spanCondition = USET_SPAN_SIMPLE;
+        } else {
+            if (!norm2.isNormalizedUTF8(StringPiece(s, spanLength), errorCode) ||
+                    U_FAILURE(errorCode)) {
+                return FALSE;
+            }
+            spanCondition = USET_SPAN_NOT_CONTAINED;
+        }
+        s += spanLength;
+        length -= spanLength;
+    }
+    return TRUE;
+}
+
 UNormalizationCheckResult
 FilteredNormalizer2::quickCheck(const UnicodeString &s, UErrorCode &errorCode) const {
     uprv_checkCanGetBuffer(s, errorCode);

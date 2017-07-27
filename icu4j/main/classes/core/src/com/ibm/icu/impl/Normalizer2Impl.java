@@ -901,20 +901,21 @@ public final class Normalizer2Impl {
     public static final int IX_MIN_COMP_NO_MAYBE_CP=9;
 
     // Norm16 value thresholds for quick check combinations and types of extra data.
-    // Mappings & compositions in [minYesNo..minYesNoMappingsOnly[.
+
+    /** Mappings & compositions in [minYesNo..minYesNoMappingsOnly[. */
     public static final int IX_MIN_YES_NO=10;
-    // Mappings are comp-normalized.
+    /** Mappings are comp-normalized. */
     public static final int IX_MIN_NO_NO=11;
     public static final int IX_LIMIT_NO_NO=12;
     public static final int IX_MIN_MAYBE_YES=13;
 
-    // Mappings only in [minYesNoMappingsOnly..minNoNo[.
+    /** Mappings only in [minYesNoMappingsOnly..minNoNo[. */
     public static final int IX_MIN_YES_NO_MAPPINGS_ONLY=14;
-    // Mappings are not comp-normalized but have a comp boundary before.
+    /** Mappings are not comp-normalized but have a comp boundary before. */
     public static final int IX_MIN_NO_NO_COMP_BOUNDARY_BEFORE=15;
-    // Mappings do not have a comp boundary before.
+    /** Mappings do not have a comp boundary before. */
     public static final int IX_MIN_NO_NO_COMP_NO_MAYBE_CC=16;
-    // Mappings to the empty string.
+    /** Mappings to the empty string. */
     public static final int IX_MIN_NO_NO_EMPTY=17;
 
     public static final int IX_MIN_LCCC_CP=18;

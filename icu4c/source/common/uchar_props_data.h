@@ -3601,7 +3601,7 @@ static const uint32_t propsVectors[6375]={
 0xe30000,0xa00b1596,0x7c00300,0xe30000,0xa040af86,0x6800400,0x962540};
 
 static const int32_t countPropsVectors=6375;
-static const int32_t propsVectorsColumns=3;
+static const int32_t propsVectorsColumns=3; /* The code assumes that this value is  > 0*/
 static const uint16_t scriptExtensions[198]={
 0x800e,0x8019,8,0x8059,8,2,8,0x8038,8,6,8,0x8019,3,0x800c,2,0x22,
 0x8025,2,0xe,2,0x22,0x54,0x79,0x7b,0x80a7,2,0x8022,2,0x8025,2,0x1b,4,
