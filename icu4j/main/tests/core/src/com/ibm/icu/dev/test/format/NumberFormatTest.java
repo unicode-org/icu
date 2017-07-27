@@ -1766,7 +1766,8 @@ public class NumberFormatTest extends TestFmwk {
                 new TestNumberingSystemItem( "ta_IN@numbers=finance",     1234.567, false, "1,234.567" ), // fall back to default per TR35
                 new TestNumberingSystemItem( "zh_TW@numbers=native",      1234.567, false, "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03" ),
                 new TestNumberingSystemItem( "zh_TW@numbers=traditional", 1234.567, true,  "\u4E00\u5343\u4E8C\u767E\u4E09\u5341\u56DB\u9EDE\u4E94\u516D\u4E03" ),
-                new TestNumberingSystemItem( "zh_TW@numbers=finance",     1234.567, true,  "\u58F9\u4EDF\u8CB3\u4F70\u53C3\u62FE\u8086\u9EDE\u4F0D\u9678\u67D2" )
+                new TestNumberingSystemItem( "zh_TW@numbers=finance",     1234.567, true,  "\u58F9\u4EDF\u8CB3\u4F70\u53C3\u62FE\u8086\u9EDE\u4F0D\u9678\u67D2" ),
+                new TestNumberingSystemItem( "en_US@numbers=mathsanb",    1234.567, false,  "𝟭,𝟮𝟯𝟰.𝟱𝟲𝟳" ), // ticket #13286
         };
 
 

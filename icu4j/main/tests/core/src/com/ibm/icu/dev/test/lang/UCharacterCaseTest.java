@@ -781,10 +781,13 @@ public final class UCharacterCaseTest extends TestFmwk
             String name, Edits.Iterator ei1, Edits.Iterator ei2,  // two equal iterators
             EditChange[] expected, boolean withUnchanged) {
         assertFalse(name, ei2.findSourceIndex(-1));
+        assertFalse(name, ei2.findDestinationIndex(-1));
 
         int expSrcIndex = 0;
         int expDestIndex = 0;
         int expReplIndex = 0;
+        int expSrcIndexFromDest = 0;  // for sourceIndexFromDestinationIndex()
+        int expDestIndexFromSrc = 0;  // for destinationIndexFromSourceIndex()
         for (int expIndex = 0; expIndex < expected.length; ++expIndex) {
             EditChange expect = expected[expIndex];
             String msg = name + ' ' + expIndex;
@@ -798,7 +801,7 @@ public final class UCharacterCaseTest extends TestFmwk
                 assertEquals(msg, expReplIndex, ei1.replacementIndex());
             }
 
-            if (expect.oldLength > 0) {
+            if (expect.oldLength > 0 && expDestIndex == expDestIndexFromSrc) {
                 assertTrue(msg, ei2.findSourceIndex(expSrcIndex));
                 assertEquals(msg, expect.change, ei2.hasChange());
                 assertEquals(msg, expect.oldLength, ei2.oldLength());
@@ -814,10 +817,60 @@ public final class UCharacterCaseTest extends TestFmwk
                 }
             }
 
-            expSrcIndex += expect.oldLength;
-            expDestIndex += expect.newLength;
+            if (expect.newLength > 0 && expSrcIndex == expSrcIndexFromDest) {
+                assertTrue(msg, ei2.findDestinationIndex(expDestIndex));
+                assertEquals(msg, expect.change, ei2.hasChange());
+                assertEquals(msg, expect.oldLength, ei2.oldLength());
+                assertEquals(msg, expect.newLength, ei2.newLength());
+                assertEquals(msg, expSrcIndex, ei2.sourceIndex());
+                assertEquals(msg, expDestIndex, ei2.destinationIndex());
+                assertEquals(msg, expReplIndex, ei2.replacementIndex());
+                if (!withUnchanged) {
+                    // For some iterators, move past the current range
+                    // so that findSourceIndex() has to look before the current index.
+                    ei2.next();
+                    ei2.next();
+                }
+            }
+
+            // Span starts.
+            assertEquals(name, expDestIndexFromSrc,
+                    ei2.destinationIndexFromSourceIndex(expSrcIndex));
+            assertEquals(name, expSrcIndexFromDest,
+                    ei2.sourceIndexFromDestinationIndex(expDestIndex));
+
+            // Inside unchanged span map offsets 1:1.
+            if (!expect.change && expect.oldLength >= 2) {
+                assertEquals(name, expDestIndex + 1,
+                        ei2.destinationIndexFromSourceIndex(expSrcIndex + 1));
+                assertEquals(name, expSrcIndex + 1,
+                        ei2.sourceIndexFromDestinationIndex(expDestIndex + 1));
+            }
+
+            // Inside change span map to the span limit.
+            int expSrcLimit = expSrcIndex + expect.oldLength;
+            int expDestLimit = expDestIndex + expect.newLength;
+            if (expect.change) {
+                if (expect.oldLength >= 2) {
+                    assertEquals(name, expDestLimit,
+                            ei2.destinationIndexFromSourceIndex(expSrcIndex + 1));
+                }
+                if (expect.newLength >= 2) {
+                    assertEquals(name, expSrcLimit,
+                            ei2.sourceIndexFromDestinationIndex(expDestIndex + 1));
+                }
+            }
+
+            expSrcIndex = expSrcLimit;
+            expDestIndex = expDestLimit;
             if (expect.change) {
                 expReplIndex += expect.newLength;
+            }
+            if (expect.newLength > 0) {
+                expSrcIndexFromDest = expSrcIndex;
+            }
+            if (expect.oldLength > 0) {
+                expDestIndexFromSrc = expDestIndex;
             }
         }
         String msg = name + " end";
@@ -830,18 +883,23 @@ public final class UCharacterCaseTest extends TestFmwk
         assertEquals(msg, expReplIndex, ei1.replacementIndex());
 
         assertFalse(name, ei2.findSourceIndex(expSrcIndex));
+        assertFalse(name, ei2.findDestinationIndex(expDestIndex));
+        assertEquals(name, expDestIndex, ei2.destinationIndexFromSourceIndex(expSrcIndex));
+        assertEquals(name, expSrcIndex, ei2.sourceIndexFromDestinationIndex(expDestIndex));
     }
 
     @Test
     public void TestEdits() {
         Edits edits = new Edits();
-        assertFalse("new Edits", edits.hasChanges());
+        assertFalse("new Edits hasChanges", edits.hasChanges());
+        assertEquals("new Edits numberOfChanges", 0, edits.numberOfChanges());
         assertEquals("new Edits", 0, edits.lengthDelta());
         edits.addUnchanged(1);  // multiple unchanged ranges are combined
         edits.addUnchanged(10000);  // too long, and they are split
         edits.addReplace(0, 0);
         edits.addUnchanged(2);
-        assertFalse("unchanged 10003", edits.hasChanges());
+        assertFalse("unchanged 10003 hasChanges", edits.hasChanges());
+        assertEquals("unchanged 10003 numberOfChanges", 0, edits.numberOfChanges());
         assertEquals("unchanged 10003", 0, edits.lengthDelta());
         edits.addReplace(1, 1);  // multiple short equal-length edits are compressed
         edits.addUnchanged(0);
@@ -851,7 +909,8 @@ public final class UCharacterCaseTest extends TestFmwk
         edits.addReplace(100, 0);
         edits.addReplace(3000, 4000);  // variable-length encoding
         edits.addReplace(100000, 100000);
-        assertTrue("some edits", edits.hasChanges());
+        assertTrue("some edits hasChanges", edits.hasChanges());
+        assertEquals("some edits numberOfChanges", 7, edits.numberOfChanges());
         assertEquals("some edits", 10 - 100 + 1000, edits.lengthDelta());
 
         EditChange[] coarseExpectedChanges = new EditChange[] {
@@ -883,7 +942,8 @@ public final class UCharacterCaseTest extends TestFmwk
                 fineExpectedChanges, false);
 
         edits.reset();
-        assertFalse("reset", edits.hasChanges());
+        assertFalse("reset hasChanges", edits.hasChanges());
+        assertEquals("reset numberOfChanges", 0, edits.numberOfChanges());
         assertEquals("reset", 0, edits.lengthDelta());
         Edits.Iterator ei = edits.getCoarseChangesIterator();
         assertFalse("reset then iterator", ei.next());

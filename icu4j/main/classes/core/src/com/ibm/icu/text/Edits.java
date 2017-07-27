@@ -36,6 +36,7 @@ public final class Edits {
     private char[] array;
     private int length;
     private int delta;
+    private int numChanges;
 
     /**
      * Constructs an empty object.
@@ -52,7 +53,7 @@ public final class Edits {
      * @provisional This API might change or be removed in a future release.
      */
     public void reset() {
-        length = delta = 0;
+        length = delta = numChanges = 0;
     }
 
     private void setLastUnit(int last) {
@@ -105,6 +106,7 @@ public final class Edits {
         if(oldLength == newLength && 0 < oldLength && oldLength <= MAX_SHORT_WIDTH) {
             // Replacement of short oldLength text units by same-length new text.
             // Merge into previous short-replacement record, if any.
+            ++numChanges;
             int last = lastUnit();
             if(MAX_UNCHANGED < last && last < MAX_SHORT_CHANGE &&
                     (last >> 12) == oldLength && (last & 0xfff) < MAX_SHORT_CHANGE_LENGTH) {
@@ -123,6 +125,7 @@ public final class Edits {
         if (oldLength == 0 && newLength == 0) {
             return;
         }
+        ++numChanges;
         int newDelta = newLength - oldLength;
         if (newDelta != 0) {
             if ((newDelta > 0 && delta >= 0 && newDelta > (Integer.MAX_VALUE - delta)) ||
@@ -202,17 +205,14 @@ public final class Edits {
      * @draft ICU 59
      * @provisional This API might change or be removed in a future release.
      */
-    public boolean hasChanges()  {
-        if (delta != 0) {
-            return true;
-        }
-        for (int i = 0; i < length; ++i) {
-            if (array[i] > MAX_UNCHANGED) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public boolean hasChanges()  { return numChanges != 0; }
+
+    /**
+     * @return the number of change edits
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int numberOfChanges() { return numChanges; }
 
     /**
      * Access to the list of edits.
@@ -374,38 +374,162 @@ public final class Edits {
          * @provisional This API might change or be removed in a future release.
          */
         public boolean findSourceIndex(int i) {
-            if (i < 0) { return false; }
-            if (i < srcIndex) {
+            return findIndex(i, true) == 0;
+        }
+
+        /**
+         * Finds the edit that contains the destination index.
+         * The destination index may be found in a non-change
+         * even if normal iteration would skip non-changes.
+         * Normal iteration can continue from a found edit.
+         *
+         * <p>The iterator state before this search logically does not matter.
+         * (It may affect the performance of the search.)
+         *
+         * <p>The iterator state after this search is undefined
+         * if the source index is out of bounds for the source string.
+         *
+         * @param i destination index
+         * @return true if the edit for the destination index was found
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public boolean findDestinationIndex(int i) {
+            return findIndex(i, false) == 0;
+        }
+
+        /** @return -1: error or i<0; 0: found; 1: i>=string length */
+        private int findIndex(int i, boolean findSource) {
+            if (i < 0) { return -1; }
+            int spanStart, spanLength;
+            if (findSource) {  // find source index
+                spanStart = srcIndex;
+                spanLength = oldLength_;
+            } else {  // find destination index
+                spanStart = destIndex;
+                spanLength = newLength_;
+            }
+            // If we are at the start or limit of an empty span, then we search from
+            // the start of the string so that we always return
+            // the first of several consecutive empty spans, for consistent results.
+            // We do not currently track the properties of the previous span,
+            // so for now we always reset if we are at the start of the current span.
+            if (i <= spanStart) {
                 // Reset the iterator to the start.
                 index = remaining = oldLength_ = newLength_ = srcIndex = replIndex = destIndex = 0;
-            } else if (i < (srcIndex + oldLength_)) {
+            } else if (i < (spanStart + spanLength)) {
                 // The index is in the current span.
-                return true;
+                return 0;
             }
             while (next(false)) {
-                if (i < (srcIndex + oldLength_)) {
-                    // The index is in the current span.
-                    return true;
+                if (findSource) {
+                    spanStart = srcIndex;
+                    spanLength = oldLength_;
+                } else {
+                    spanStart = destIndex;
+                    spanLength = newLength_;
+                }
+                if (i == spanStart || i < (spanStart + spanLength)) {
+                    // The index is in the current span, or at an empty one.
+                    return 0;
                 }
                 if (remaining > 0) {
                     // Is the index in one of the remaining compressed edits?
-                    // srcIndex is the start of the current span, before the remaining ones.
-                    int len = (remaining + 1) * oldLength_;
-                    if (i < (srcIndex + len)) {
-                        int n = (i - srcIndex) / oldLength_;  // 1 <= n <= remaining
-                        len = n * oldLength_;
+                    // spanStart is the start of the current span, before the remaining ones.
+                    int len = (remaining + 1) * spanLength;
+                    if (i < (spanStart + len)) {
+                        int n = (i - spanStart) / spanLength;  // 1 <= n <= remaining
+                        len = n * spanLength;
                         srcIndex += len;
                         replIndex += len;
                         destIndex += len;
                         remaining -= n;
-                        return true;
+                        return 0;
                     }
                     // Make next() skip all of these edits at once.
                     oldLength_ = newLength_ = len;
                     remaining = 0;
                 }
             }
-            return false;
+            return 1;
+        }
+
+        /**
+         * Returns the destination index corresponding to the given source index.
+         * If the source index is inside a change edit (not at its start),
+         * then the destination index at the end of that edit is returned,
+         * since there is no information about index mapping inside a change edit.
+         *
+         * <p>(This means that indexes to the start and middle of an edit,
+         * for example around a grapheme cluster, are mapped to indexes
+         * encompassing the entire edit.
+         * The alternative, mapping an interior index to the start,
+         * would map such an interval to an empty one.)
+         *
+         * <p>This operation will usually but not always modify this object.
+         * The iterator state after this search is undefined.
+         *
+         * @param i source index
+         * @return destination index; undefined if i is not 0..string length
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public int destinationIndexFromSourceIndex(int i) {
+            int where = findIndex(i, true);
+            if (where < 0) {
+                // Error or before the string.
+                return 0;
+            }
+            if (where > 0 || i == srcIndex) {
+                // At or after string length, or at start of the found span.
+                return destIndex;
+            }
+            if (changed) {
+                // In a change span, map to its end.
+                return destIndex + newLength_;
+            } else {
+                // In an unchanged span, offset 1:1 within it.
+                return destIndex + (i - srcIndex);
+            }
+        }
+
+        /**
+         * Returns the source index corresponding to the given destination index.
+         * If the destination index is inside a change edit (not at its start),
+         * then the source index at the end of that edit is returned,
+         * since there is no information about index mapping inside a change edit.
+         *
+         * <p>(This means that indexes to the start and middle of an edit,
+         * for example around a grapheme cluster, are mapped to indexes
+         * encompassing the entire edit.
+         * The alternative, mapping an interior index to the start,
+         * would map such an interval to an empty one.)
+         *
+         * <p>This operation will usually but not always modify this object.
+         * The iterator state after this search is undefined.
+         *
+         * @param i destination index
+         * @return source index; undefined if i is not 0..string length
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public int sourceIndexFromDestinationIndex(int i) {
+            int where = findIndex(i, false);
+            if (where < 0) {
+                // Error or before the string.
+                return 0;
+            }
+            if (where > 0 || i == destIndex) {
+                // At or after string length, or at start of the found span.
+                return srcIndex;
+            }
+            if (changed) {
+                // In a change span, map to its end.
+                return srcIndex + oldLength_;
+            } else {
+                // In an unchanged span, offset within it.
+                return srcIndex + (i - destIndex);
+            }
         }
 
         /**

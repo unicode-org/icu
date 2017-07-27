@@ -906,13 +906,15 @@ void StringCaseTest::TestBufferOverflow() {
 void StringCaseTest::TestEdits() {
     IcuTestErrorCode errorCode(*this, "TestEdits");
     Edits edits;
-    assertFalse("new Edits", edits.hasChanges());
+    assertFalse("new Edits hasChanges", edits.hasChanges());
+    assertEquals("new Edits numberOfChanges", 0, edits.numberOfChanges());
     assertEquals("new Edits", 0, edits.lengthDelta());
     edits.addUnchanged(1);  // multiple unchanged ranges are combined
     edits.addUnchanged(10000);  // too long, and they are split
     edits.addReplace(0, 0);
     edits.addUnchanged(2);
-    assertFalse("unchanged 10003", edits.hasChanges());
+    assertFalse("unchanged 10003 hasChanges", edits.hasChanges());
+    assertEquals("unchanged 10003 numberOfChanges", 0, edits.numberOfChanges());
     assertEquals("unchanged 10003", 0, edits.lengthDelta());
     edits.addReplace(1, 1);  // multiple short equal-length edits are compressed
     edits.addUnchanged(0);
@@ -922,7 +924,8 @@ void StringCaseTest::TestEdits() {
     edits.addReplace(100, 0);
     edits.addReplace(3000, 4000);  // variable-length encoding
     edits.addReplace(100000, 100000);
-    assertTrue("some edits", edits.hasChanges());
+    assertTrue("some edits hasChanges", edits.hasChanges());
+    assertEquals("some edits numberOfChanges", 7, edits.numberOfChanges());
     assertEquals("some edits", 10 - 100 + 1000, edits.lengthDelta());
     UErrorCode outErrorCode = U_ZERO_ERROR;
     assertFalse("edits done: copyErrorTo", edits.copyErrorTo(outErrorCode));
@@ -956,7 +959,8 @@ void StringCaseTest::TestEdits() {
             fineExpectedChanges, UPRV_LENGTHOF(fineExpectedChanges), FALSE, errorCode);
 
     edits.reset();
-    assertFalse("reset", edits.hasChanges());
+    assertFalse("reset hasChanges", edits.hasChanges());
+    assertEquals("reset numberOfChanges", 0, edits.numberOfChanges());
     assertEquals("reset", 0, edits.lengthDelta());
     Edits::Iterator ei = edits.getCoarseChangesIterator();
     assertFalse("reset then iterator", ei.next(errorCode));

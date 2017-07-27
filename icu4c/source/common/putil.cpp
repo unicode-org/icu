@@ -1050,7 +1050,7 @@ uprv_getWindowsTimeZone()
             hr = timezone->GetTimeZone(timezoneString.GetAddressOf());
             if (SUCCEEDED(hr))
             {
-                int32_t length = wcslen(timezoneString.GetRawBuffer(NULL));
+                int32_t length = static_cast<int32_t>(wcslen(timezoneString.GetRawBuffer(NULL)));
                 char* asciiId = (char*)uprv_calloc(length + 1, sizeof(char));
                 if (asciiId != nullptr)
                 {
@@ -1069,6 +1069,7 @@ uprv_getWindowsTimeZone()
 U_CAPI const char* U_EXPORT2
 uprv_tzname(int n)
 {
+    n; // Avoid unreferenced parameter warning.
     const char *tzid = NULL;
 #if U_PLATFORM_USES_ONLY_WIN32_API
 #if U_PLATFORM_HAS_WINUWP_API > 0
@@ -1292,7 +1293,7 @@ u_setDataDirectory(const char *directory) {
 #if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
         {
             char *p;
-            while(p = uprv_strchr(newDataDir, U_FILE_ALT_SEP_CHAR)) {
+            while((p = uprv_strchr(newDataDir, U_FILE_ALT_SEP_CHAR)) != NULL) {
                 *p = U_FILE_SEP_CHAR;
             }
         }
@@ -1450,7 +1451,7 @@ static void setTimeZoneFilesDir(const char *path, UErrorCode &status) {
     gTimeZoneFilesDirectory->append(path, status);
 #if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
     char *p = gTimeZoneFilesDirectory->data();
-    while (p = uprv_strchr(p, U_FILE_ALT_SEP_CHAR)) {
+    while ((p = uprv_strchr(p, U_FILE_ALT_SEP_CHAR)) != NULL) {
         *p = U_FILE_SEP_CHAR;
     }
 #endif
@@ -2333,19 +2334,16 @@ u_getVersion(UVersionInfo versionArray) {
  * icucfg.h dependent code 
  */
 
-#if U_ENABLE_DYLOAD
- 
-#if HAVE_DLOPEN && !U_PLATFORM_USES_ONLY_WIN32_API
+#if U_ENABLE_DYLOAD && HAVE_DLOPEN && !U_PLATFORM_USES_ONLY_WIN32_API
 
 #if HAVE_DLFCN_H
-
 #ifdef __MVS__
 #ifndef __SUSV3
 #define __SUSV3 1
 #endif
 #endif
 #include <dlfcn.h>
-#endif
+#endif /* HAVE_DLFCN_H */
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
@@ -2385,38 +2383,10 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   return uret.fp;
 }
 
-#else
+#elif U_ENABLE_DYLOAD && U_PLATFORM_USES_ONLY_WIN32_API && !U_PLATFORM_HAS_WINUWP_API
 
-/* null (nonexistent) implementation. */
-
-U_INTERNAL void * U_EXPORT2
-uprv_dl_open(const char *libName, UErrorCode *status) {
-  if(U_FAILURE(*status)) return NULL;
-  *status = U_UNSUPPORTED_ERROR;
-  return NULL;
-}
-
-U_INTERNAL void U_EXPORT2
-uprv_dl_close(void *lib, UErrorCode *status) {
-  if(U_FAILURE(*status)) return;
-  *status = U_UNSUPPORTED_ERROR;
-  return;
-}
-
-
-U_INTERNAL UVoidFunction* U_EXPORT2
-uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
-  if(U_SUCCESS(*status)) {
-    *status = U_UNSUPPORTED_ERROR;
-  }
-  return (UVoidFunction*)NULL;
-}
-
-
-
-#endif
-
-#elif U_PLATFORM_USES_ONLY_WIN32_API
+/* Windows API implementation. */
+// Note: UWP does not expose/allow these APIs, so the UWP version gets the null implementation. */
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
@@ -2443,7 +2413,6 @@ uprv_dl_close(void *lib, UErrorCode *status) {
   return;
 }
 
-
 U_INTERNAL UVoidFunction* U_EXPORT2
 uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   HMODULE handle = (HMODULE)lib;
@@ -2465,10 +2434,9 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   return addr;
 }
 
-
 #else
 
-/* No dynamic loading set. */
+/* No dynamic loading, null (nonexistent) implementation. */
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
@@ -2486,7 +2454,6 @@ uprv_dl_close(void *lib, UErrorCode *status) {
     return;
 }
 
-
 U_INTERNAL UVoidFunction* U_EXPORT2
 uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   (void)lib;
@@ -2497,7 +2464,7 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   return (UVoidFunction*)NULL;
 }
 
-#endif /* U_ENABLE_DYLOAD */
+#endif
 
 /*
  * Hey, Emacs, please set the following:

@@ -110,7 +110,7 @@ CollationLoader::loadRules(const char *localeID, const char *collationType,
     U_ASSERT(collationType != NULL && *collationType != 0);
     // Copy the type for lowercasing.
     char type[16];
-    int32_t typeLength = uprv_strlen(collationType);
+    int32_t typeLength = static_cast<int32_t>(uprv_strlen(collationType));
     if(typeLength >= UPRV_LENGTHOF(type)) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -318,7 +318,7 @@ CollationLoader::loadFromCollations(UErrorCode &errorCode) {
     // Load the collations/type tailoring, with type fallback.
     LocalUResourceBundlePointer localData(
             ures_getByKeyWithFallback(collations, type, NULL, &errorCode));
-    int32_t typeLength = uprv_strlen(type);
+    int32_t typeLength = static_cast<int32_t>(uprv_strlen(type));
     if(errorCode == U_MISSING_RESOURCE_ERROR) {
         errorCode = U_USING_DEFAULT_WARNING;
         typeFallback = TRUE;

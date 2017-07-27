@@ -298,7 +298,7 @@ unum_formatDecimal(const    UNumberFormat*  fmt,
     }
 
     if (length < 0) {
-        length = uprv_strlen(number);
+        length = static_cast<int32_t>(uprv_strlen(number));
     }
     StringPiece numSP(number, length);
     Formattable numFmtbl(numSP, *status);
