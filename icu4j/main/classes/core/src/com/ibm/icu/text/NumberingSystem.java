@@ -88,7 +88,7 @@ public class NumberingSystem {
         }
 
         if ( !isAlgorithmic_in ) {
-            if ( desc_in.length() != radix_in || !isValidDigitString(desc_in)) {
+            if ( desc_in.codePointCount(0, desc_in.length()) != radix_in || !isValidDigitString(desc_in)) {
                 throw new IllegalArgumentException("Invalid digit string for numbering system");
             }
         }
