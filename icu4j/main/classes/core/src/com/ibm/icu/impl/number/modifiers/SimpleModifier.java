@@ -30,12 +30,6 @@ public class SimpleModifier extends Modifier.BaseModifier {
   }
 
   @Override
-  public int length() {
-    // TODO: Make a separate method for computing the length only?
-    return formatAsPrefixSuffix(compiledPattern, null, -1, -1, field);
-  }
-
-  @Override
   public boolean isStrong() {
     return strong;
   }

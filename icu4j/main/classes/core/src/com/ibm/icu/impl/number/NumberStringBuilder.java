@@ -12,7 +12,21 @@ import java.util.Map;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.Field;
 
+/**
+ * A StringBuilder optimized for number formatting. It implements the following key features beyond
+ * a normal JDK StringBuilder:
+ *
+ * <ol>
+ *   <li>Efficient prepend as well as append.
+ *   <li>Keeps tracks of Fields in an efficient manner.
+ *   <li>String operations are fast-pathed to code point operations when possible.
+ * </ol>
+ */
 public class NumberStringBuilder implements CharSequence {
+
+  /** A constant, empty NumberStringBuilder. Do NOT call mutative operations on this. */
+  public static final NumberStringBuilder EMPTY = new NumberStringBuilder();
+
   private char[] chars;
   private Field[] fields;
   private int zero;
@@ -31,6 +45,10 @@ public class NumberStringBuilder implements CharSequence {
 
   public NumberStringBuilder(NumberStringBuilder source) {
     this(source.chars.length);
+    copyFrom(source);
+  }
+
+  public void copyFrom(NumberStringBuilder source) {
     zero = source.zero;
     length = source.length;
     System.arraycopy(source.chars, zero, chars, zero, length);
@@ -42,12 +60,23 @@ public class NumberStringBuilder implements CharSequence {
     return length;
   }
 
+  public int codePointCount() {
+    return Character.codePointCount(this, 0, length());
+  }
+
   @Override
   public char charAt(int index) {
     if (index < 0 || index > length) {
       throw new IndexOutOfBoundsException();
     }
     return chars[zero + index];
+  }
+
+  public Field fieldAt(int index) {
+    if (index < 0 || index > length) {
+      throw new IndexOutOfBoundsException();
+    }
+    return fields[zero + index];
   }
 
   /**
@@ -323,6 +352,16 @@ public class NumberStringBuilder implements CharSequence {
       if (fields[zero + i] != other.fields[other.zero + i]) return false;
     }
     return true;
+  }
+
+  @Override
+  public int hashCode() {
+    throw new UnsupportedOperationException("Don't call #hashCode() or #equals() on a mutable.");
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    throw new UnsupportedOperationException("Don't call #hashCode() or #equals() on a mutable.");
   }
 
   /**

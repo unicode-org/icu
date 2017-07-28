@@ -3,7 +3,7 @@
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.NumberFormat.Field;
+import com.ibm.icu.text.NumberFormat;
 
 /**
  * Performs manipulations on affix patterns: the prefix and suffix strings associated with a decimal
@@ -251,37 +251,38 @@ public class AffixPatternUtils {
     while (hasNext(tag, affixPattern)) {
       tag = nextToken(tag, affixPattern);
       int typeOrCp = getTypeOrCp(tag);
+      NumberFormat.Field field = (typeOrCp < 0) ? getFieldForType(typeOrCp) : null;
       switch (typeOrCp) {
         case TYPE_MINUS_SIGN:
-          output.append(minusSign, Field.SIGN);
+          output.append(minusSign, field);
           break;
         case TYPE_PLUS_SIGN:
-          output.append(symbols.getPlusSignString(), Field.SIGN);
+          output.append(symbols.getPlusSignString(), field);
           break;
         case TYPE_PERCENT:
-          output.append(symbols.getPercentString(), Field.PERCENT);
+          output.append(symbols.getPercentString(), field);
           break;
         case TYPE_PERMILLE:
-          output.append(symbols.getPerMillString(), Field.PERMILLE);
+          output.append(symbols.getPerMillString(), field);
           break;
         case TYPE_CURRENCY_SINGLE:
-          output.append(currency1, Field.CURRENCY);
+          output.append(currency1, field);
           break;
         case TYPE_CURRENCY_DOUBLE:
-          output.append(currency2, Field.CURRENCY);
+          output.append(currency2, field);
           break;
         case TYPE_CURRENCY_TRIPLE:
-          output.append(currency3, Field.CURRENCY);
+          output.append(currency3, field);
           break;
         case TYPE_CURRENCY_QUAD:
-          output.appendCodePoint('\uFFFD', Field.CURRENCY);
+          output.appendCodePoint('\uFFFD', field);
           break;
         case TYPE_CURRENCY_QUINT:
           // TODO: Add support for narrow currency symbols here.
-          output.appendCodePoint('\uFFFD', Field.CURRENCY);
+          output.appendCodePoint('\uFFFD', field);
           break;
         case TYPE_CURRENCY_OVERFLOW:
-          output.appendCodePoint('\uFFFD', Field.CURRENCY);
+          output.appendCodePoint('\uFFFD', field);
           break;
         default:
           output.appendCodePoint(typeOrCp, null);
@@ -290,28 +291,28 @@ public class AffixPatternUtils {
     }
   }
 
-  private static final Field getFieldForType(int type) {
+  public static final NumberFormat.Field getFieldForType(int type) {
     switch (type) {
       case TYPE_MINUS_SIGN:
-        return Field.SIGN;
+        return NumberFormat.Field.SIGN;
       case TYPE_PLUS_SIGN:
-        return Field.SIGN;
+        return NumberFormat.Field.SIGN;
       case TYPE_PERCENT:
-        return Field.PERCENT;
+        return NumberFormat.Field.PERCENT;
       case TYPE_PERMILLE:
-        return Field.PERMILLE;
+        return NumberFormat.Field.PERMILLE;
       case TYPE_CURRENCY_SINGLE:
-        return Field.CURRENCY;
+        return NumberFormat.Field.CURRENCY;
       case TYPE_CURRENCY_DOUBLE:
-        return Field.CURRENCY;
+        return NumberFormat.Field.CURRENCY;
       case TYPE_CURRENCY_TRIPLE:
-        return Field.CURRENCY;
+        return NumberFormat.Field.CURRENCY;
       case TYPE_CURRENCY_QUAD:
-        return Field.CURRENCY;
+        return NumberFormat.Field.CURRENCY;
       case TYPE_CURRENCY_QUINT:
-        return Field.CURRENCY;
+        return NumberFormat.Field.CURRENCY;
       case TYPE_CURRENCY_OVERFLOW:
-        return Field.CURRENCY;
+        return NumberFormat.Field.CURRENCY;
       default:
         throw new AssertionError();
     }
@@ -335,7 +336,7 @@ public class AffixPatternUtils {
       int typeOrCp = getTypeOrCp(tag);
       if (typeOrCp == TYPE_CURRENCY_OVERFLOW) {
         // Don't go to the provider for this special case
-        local.appendCodePoint(0xFFFD, Field.CURRENCY);
+        local.appendCodePoint(0xFFFD, NumberFormat.Field.CURRENCY);
       } else if (typeOrCp < 0) {
         local.append(provider.getSymbol(typeOrCp), getFieldForType(typeOrCp));
       } else {
@@ -377,12 +378,7 @@ public class AffixPatternUtils {
     while (hasNext(tag, affixPattern)) {
       tag = nextToken(tag, affixPattern);
       int typeOrCp = getTypeOrCp(tag);
-      if (typeOrCp == AffixPatternUtils.TYPE_CURRENCY_SINGLE
-          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_DOUBLE
-          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_TRIPLE
-          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_QUAD
-          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_QUINT
-          || typeOrCp == AffixPatternUtils.TYPE_CURRENCY_OVERFLOW) {
+      if (typeOrCp < 0 && getFieldForType(typeOrCp) == NumberFormat.Field.CURRENCY) {
         return true;
       }
     }

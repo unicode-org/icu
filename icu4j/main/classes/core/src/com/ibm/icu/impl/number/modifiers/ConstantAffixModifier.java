@@ -40,9 +40,7 @@ public class ConstantAffixModifier extends Modifier.BaseModifier implements Affi
     this.strong = strong;
   }
 
-  /**
-   * Constructs a new instance with an empty prefix, suffix, and field.
-   */
+  /** Constructs a new instance with an empty prefix, suffix, and field. */
   public ConstantAffixModifier() {
     prefix = "";
     suffix = "";
@@ -56,11 +54,6 @@ public class ConstantAffixModifier extends Modifier.BaseModifier implements Affi
     int length = output.insert(rightIndex, suffix, field);
     length += output.insert(leftIndex, prefix, field);
     return length;
-  }
-
-  @Override
-  public int length() {
-    return prefix.length() + suffix.length();
   }
 
   @Override
@@ -94,8 +87,7 @@ public class ConstantAffixModifier extends Modifier.BaseModifier implements Affi
 
   @Override
   public String toString() {
-    return String.format(
-        "<ConstantAffixModifier(%d) prefix:'%s' suffix:'%s'>", length(), prefix, suffix);
+    return String.format("<ConstantAffixModifier prefix:'%s' suffix:'%s'>", prefix, suffix);
   }
 
   @Override
