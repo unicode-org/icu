@@ -112,9 +112,7 @@ public class PaddingFormat implements AfterFormat {
 
   public static AfterFormat getInstance(IProperties properties) {
     return new PaddingFormat(
-        properties.getFormatWidth(),
-        properties.getPadString(),
-        properties.getPadPosition());
+        properties.getFormatWidth(), properties.getPadString(), properties.getPadPosition());
   }
 
   // Properties
@@ -122,19 +120,21 @@ public class PaddingFormat implements AfterFormat {
   private final String paddingString;
   private final PadPosition paddingLocation;
 
-  private PaddingFormat(
-      int paddingWidth, String paddingString, PadPosition paddingLocation) {
+  private PaddingFormat(int paddingWidth, String paddingString, PadPosition paddingLocation) {
     this.paddingWidth = paddingWidth > 0 ? paddingWidth : 10; // TODO: Is this a sensible default?
     this.paddingString = paddingString != null ? paddingString : FALLBACK_PADDING_STRING;
-    this.paddingLocation =
-        paddingLocation != null ? paddingLocation : PadPosition.BEFORE_PREFIX;
+    this.paddingLocation = paddingLocation != null ? paddingLocation : PadPosition.BEFORE_PREFIX;
   }
 
   @Override
   public int after(ModifierHolder mods, NumberStringBuilder string, int leftIndex, int rightIndex) {
 
     // TODO: Count code points instead of code units?
-    int requiredPadding = paddingWidth - (rightIndex - leftIndex) - mods.totalLength();
+    // TODO: Make this more efficient (less copying)
+    NumberStringBuilder copy1 = new NumberStringBuilder(string);
+    ModifierHolder copy2 = mods.createCopy();
+    copy2.applyAll(copy1, leftIndex, rightIndex);
+    int requiredPadding = paddingWidth - copy1.length();
 
     if (requiredPadding <= 0) {
       // Skip padding, but still apply modifiers to be consistent

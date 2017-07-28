@@ -17,6 +17,12 @@ public class ModifierHolder {
   //    private Modifier mod4 = null;
   //    private Modifier mod5 = null;
 
+  public ModifierHolder createCopy() {
+    ModifierHolder copy = new ModifierHolder();
+    copy.mods.addAll(mods);
+    return copy;
+  }
+
   public ModifierHolder clear() {
     //      mod1 = null;
     //      mod2 = null;
@@ -88,19 +94,5 @@ public class ModifierHolder {
       addedLength += mod.apply(string, leftIndex, rightIndex + addedLength);
     }
     return addedLength;
-  }
-
-  public int totalLength() {
-    int length = 0;
-    //      if (mod1 != null) length += mod1.length();
-    //      if (mod2 != null) length += mod2.length();
-    //      if (mod3 != null) length += mod3.length();
-    //      if (mod4 != null) length += mod4.length();
-    //      if (mod5 != null) length += mod5.length();
-    for (Modifier mod : mods) {
-      if (mod == null) continue;
-      length += mod.length();
-    }
-    return length;
   }
 }

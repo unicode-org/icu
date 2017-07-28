@@ -18,10 +18,10 @@ public class ConstantMultiFieldModifier extends Modifier.BaseModifier implements
   // TODO: Avoid making a new instance by default if prefix and suffix are empty
   public static final ConstantMultiFieldModifier EMPTY = new ConstantMultiFieldModifier();
 
-  private final char[] prefixChars;
-  private final char[] suffixChars;
-  private final Field[] prefixFields;
-  private final Field[] suffixFields;
+  protected final char[] prefixChars;
+  protected final char[] suffixChars;
+  protected final Field[] prefixFields;
+  protected final Field[] suffixFields;
   private final String prefix;
   private final String suffix;
   private final boolean strong;
@@ -56,11 +56,6 @@ public class ConstantMultiFieldModifier extends Modifier.BaseModifier implements
   }
 
   @Override
-  public int length() {
-    return prefixChars.length + suffixChars.length;
-  }
-
-  @Override
   public boolean isStrong() {
     return strong;
   }
@@ -82,8 +77,7 @@ public class ConstantMultiFieldModifier extends Modifier.BaseModifier implements
 
   @Override
   public String toString() {
-    return String.format(
-        "<ConstantMultiFieldModifier(%d) prefix:'%s' suffix:'%s'>", length(), prefix, suffix);
+    return String.format("<ConstantMultiFieldModifier prefix:'%s' suffix:'%s'>", prefix, suffix);
   }
 
   @Override

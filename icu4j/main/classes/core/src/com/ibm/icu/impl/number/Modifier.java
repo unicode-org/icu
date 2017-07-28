@@ -34,13 +34,6 @@ public interface Modifier {
   public int apply(NumberStringBuilder output, int leftIndex, int rightIndex);
 
   /**
-   * The number of characters that {@link #apply} would add to the string builder.
-   *
-   * @return The number of characters (UTF-16 code units) that would be added to a string builder.
-   */
-  public int length();
-
-  /**
    * Whether this modifier is strong. If a modifier is strong, it should always be applied
    * immediately and not allowed to bubble up. With regard to padding, strong modifiers are
    * considered to be on the inside of the prefix and suffix.
