@@ -195,13 +195,26 @@ BreakIterator::getAvailableLocales(int32_t& count)
 
 // ------------------------------------------
 //
-// Default constructor and destructor
+// Constructors, destructor and assignment operator
 //
 //-------------------------------------------
 
 BreakIterator::BreakIterator()
 {
     *validLocale = *actualLocale = 0;
+}
+
+BreakIterator::BreakIterator(const BreakIterator &other) : UObject(other) {
+    uprv_strncpy(actualLocale, other.actualLocale, sizeof(actualLocale));
+    uprv_strncpy(validLocale, other.validLocale, sizeof(validLocale));
+}
+
+BreakIterator &BreakIterator::operator =(const BreakIterator &other) {
+    if (this != &other) {
+        uprv_strncpy(actualLocale, other.actualLocale, sizeof(actualLocale));
+        uprv_strncpy(validLocale, other.validLocale, sizeof(validLocale));
+    }
+    return *this;
 }
 
 BreakIterator::~BreakIterator()
