@@ -6289,6 +6289,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/plurals.txt svneol=native#
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/CSCharacterIteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/CacheTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/iterator/TestUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/DataDrivenUScriptTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/TestUScript.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/TestUScriptRun.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
