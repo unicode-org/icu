@@ -957,4 +957,20 @@ public class RBBITest extends TestFmwk {
         }
     }
 
+    @Test
+    public void TestBug12519() {
+        RuleBasedBreakIterator biEn = (RuleBasedBreakIterator)BreakIterator.getWordInstance(ULocale.ENGLISH);
+        RuleBasedBreakIterator biFr = (RuleBasedBreakIterator)BreakIterator.getWordInstance(ULocale.FRANCE);
+        assertEquals("", ULocale.ENGLISH, biEn.getLocale(ULocale.VALID_LOCALE));
+        assertEquals("", ULocale.FRENCH, biFr.getLocale(ULocale.VALID_LOCALE));
+        assertEquals("Locales do not participate in BreakIterator equality.", biEn, biFr);
+
+        RuleBasedBreakIterator cloneEn = (RuleBasedBreakIterator)biEn.clone();
+        assertEquals("", biEn, cloneEn);
+        assertEquals("", ULocale.ENGLISH, cloneEn.getLocale(ULocale.VALID_LOCALE));
+
+        RuleBasedBreakIterator cloneFr = (RuleBasedBreakIterator)biFr.clone();
+        assertEquals("", biFr, cloneFr);
+        assertEquals("", ULocale.FRENCH, cloneFr.getLocale(ULocale.VALID_LOCALE));
+    }
 }

@@ -53,7 +53,6 @@
 #define TEST_ASSERT_SUCCESS(errcode) { if (U_FAILURE(errcode)) { \
     errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));}}
 
-
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -107,6 +106,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug12918);
     TESTCASE_AUTO(TestBug12932);
     TESTCASE_AUTO(TestEmoji);
+    TESTCASE_AUTO(TestBug12519);
     TESTCASE_AUTO_END;
 }
 
@@ -4791,6 +4791,40 @@ void RBBITest::TestEmoji() {
     }
 }
 
+
+// TestBug12519  -  Correct handling of Locales by assignment / copy / clone
+
+// WHERE Macro yields a literal string of the form "source_file_name:line number "
+// TODO: propose something equivalent as a test framework addition.
+
+#define WHERE __FILE__ ":" XLINE(__LINE__) " "
+#define XLINE(s) LINE(s)
+#define LINE(s) #s
+
+void RBBITest::TestBug12519() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<RuleBasedBreakIterator> biEn((RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status));
+    LocalPointer<RuleBasedBreakIterator> biFr((RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getFrance(), status));
+    assertSuccess(WHERE, status);
+    assertTrue(WHERE, Locale::getEnglish() == biEn->getLocale(ULOC_VALID_LOCALE, status));
+    assertTrue(WHERE, Locale::getFrench() == biFr->getLocale(ULOC_VALID_LOCALE, status));
+    assertTrue(WHERE "Locales do not participate in BreakIterator equality.", *biEn == *biFr);
+
+    LocalPointer<RuleBasedBreakIterator>cloneEn((RuleBasedBreakIterator *)biEn->clone());
+    assertTrue(WHERE, *biEn == *cloneEn);
+    assertTrue(WHERE, Locale::getEnglish() == cloneEn->getLocale(ULOC_VALID_LOCALE, status));
+
+    LocalPointer<RuleBasedBreakIterator>cloneFr((RuleBasedBreakIterator *)biFr->clone());
+    assertTrue(WHERE, *biFr == *cloneFr);
+    assertTrue(WHERE, Locale::getFrench() == cloneFr->getLocale(ULOC_VALID_LOCALE, status));
+
+    LocalPointer<RuleBasedBreakIterator>biDe((RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getGerman(), status));
+    UnicodeString text("Hallo Welt");
+    biDe->setText(text);
+    assertTrue(WHERE "before assignment of \"biDe = biFr\", they should be different, but are equal.", *biFr != *biDe);
+    *biDe = *biFr;
+    assertTrue(WHERE "after assignment of \"biDe = biFr\", they should be equal, but are not.", *biFr == *biDe);
+}
 
 //
 //  TestDebug    -  A place-holder test for debugging purposes.
