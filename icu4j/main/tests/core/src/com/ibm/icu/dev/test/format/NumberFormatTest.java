@@ -5228,6 +5228,13 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13289() {
+        DecimalFormat df = new DecimalFormat("#00.0#E0");
+        String result = df.format(0.00123);
+        assertEquals("Should ignore scientific minInt if maxInt>minInt", "1.23E-3", result);
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);
