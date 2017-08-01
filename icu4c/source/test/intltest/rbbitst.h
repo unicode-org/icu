@@ -41,11 +41,6 @@ public:
 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
-    /**
-     * Tests rule status return values
-     **/
-    void TestStatusReturn();
-
     void TestEmptyString();
     void TestGetAvailableLocales();
     void TestGetDisplayName();
