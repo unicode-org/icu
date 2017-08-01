@@ -358,14 +358,15 @@ minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	bre
 0	0	1	0	2.99792458E8	KS
 // JDK gives .2998E9
 0	0	0	4	2.998E8	KS
-// S correctly formats this as 29.979246E7.
+// According to the spec, if maxInt>minInt and minInt>1, then set
+// minInt to 1 for the purposes of engineering notation; see #13289
 // JDK uses 8 + 6 for significant digits instead of 2 + 6
-// J and C return 2.9979246E8.
-2	8	1	6	29.979246E7	CJK
+2	8	1	6	2.9979246E8	K
 // Treat max int digits > 8 as being the same as min int digits.
 // This behavior is not spelled out in the specification.
 // JDK fails here because it tries to use 9 + 6 = 15 sig digits.
-2	9	1	6	29.979246E7	K
+// C and J get 29.979246E7
+2	9	1	6	2.9979246E8	CJK
 
 test significant digits scientific
 set locale en
