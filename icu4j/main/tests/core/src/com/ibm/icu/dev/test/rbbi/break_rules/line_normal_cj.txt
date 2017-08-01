@@ -1,23 +1,38 @@
 ﻿#
 # Copyright (C) 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
-# Copyright (c) 2016, International Business Machines Corporation and others. All Rights Reserved.
-
-# file: line.txt
+# Copyright (c) 2016  International Business Machines Corporation and others. All Rights Reserved.
+#
+#  file:  line_normal_cj.txt
 #
 # Reference Line Break rules for intltest rbbi/RBBIMonkeyTest
 #
 # Note: Rule syntax and the monkey test itself are still a work in progress.
 #       They are expected to change with review and the addition of support for rule tailoring.
-
+#
+#         Line Breaking Rules
+#         Implement default line breaking as defined by
+#         Unicode Standard Annex #14 Revision 34 for Unicode 8.0
+#         http://www.unicode.org/reports/tr14/
+#         tailored as noted in 2nd paragraph below.
+#
+#         TODO:  Rule LB 8 remains as it was in Unicode 5.2
+#         This is only because of a limitation of ICU break engine implementation,
+#         not because the older behavior is desirable.
+#
+#         This tailors the line break behavior to correspond to CSS
+#         line-break=normal (BCP47 -u-lb-normal) as defined for Chinese & Japanese.
+#         It sets characters of class CJ to behave like ID.
+#         In addition, it allows breaks:
+#         * before hyphens 2010 & 2013 (both BA) and 301C, 30A0 (both NS)
 
 type = line;
-locale = en;
-
+locale = ja@lb=normal;
 
 AI = [:LineBreak =  Ambiguous:];
 AL = [:LineBreak =  Alphabetic:];
-BA = [:LineBreak =  Break_After:];
+BAX = [\u2010 \u2013];
+BA = [[:LineBreak =  Break_After:] - BAX];
 BB = [:LineBreak =  Break_Before:];
 BK = [:LineBreak =  Mandatory_Break:];
 B2 = [:LineBreak =  Break_Both:];
@@ -35,7 +50,7 @@ HL = [:LineBreak =  Hebrew_Letter:];
 HY = [:LineBreak =  Hyphen:];
 H2 = [:LineBreak =  H2:];
 H3 = [:LineBreak =  H3:];
-ID = [:LineBreak =  Ideographic:];
+ID = [[:LineBreak =  Ideographic:] CJ];  # CSS Normal tailoring: CJ resolves to ID
 IN = [:LineBreak =  Inseperable:];
 IS = [:LineBreak =  Infix_Numeric:];
 JL = [:LineBreak =  JL:];
@@ -43,7 +58,8 @@ JV = [:LineBreak =  JV:];
 JT = [:LineBreak =  JT:];
 LF = [:LineBreak =  Line_Feed:];
 NL = [:LineBreak =  Next_Line:];
-NS = [[:LineBreak =  Nonstarter:] CJ];   # CSS Strict tailoring: CJ resolves to NS.
+NSX = [\u301C \u30A0];
+NS = [[:LineBreak =  Nonstarter:] - NSX];
 NU = [:LineBreak =  Numeric:];
 OP = [:LineBreak =  Open_Punctuation:];
 PO = [:LineBreak =  Postfix_Numeric:];
@@ -86,6 +102,9 @@ LB6.1:      [^BK CR LF NL SP ZW] CM* (BK | CR | LF | NL);
 #                           "while only the prefix "OP CM SP" matches LB7.1
 LB14:        OP CM* SP* .;
 LB15:        QU CM* SP* OP;
+
+# Do not break between closing punctuation and $NS, even with intervening spaces
+# But DO allow a break between closing punctuation and $NSX, don't include it here
 LB16:        (CL | CP)CM* SP* NS;
 LB17:        B2 CM* SP* B2;
 
@@ -114,9 +133,9 @@ LB11.3:      WJ CM* [^CM];
 
 LB12:        GL CM* [^CM];
 
-LB12a:       [^SP BA HY] CM* GL;
+LB12a:       [^SP BA BAX HY] CM* GL;
 
-# LB 13 ICU Tailoring, matches tailoring example 8 from UAX 14.
+# LB 13 ICU Tailoring, matches tailoring exmaple 8 from UAX 14.
 #
 #   LB13.1   [^SP] CM* [CL CP EX IS SY]    # original UAX 14 rule.
 #   LB13.2   SP    CM* [CL CP EX IS SY]
@@ -143,8 +162,12 @@ LB20.1b:      CB CM* ÷;
 
 # Note: Rule 21a must come before 21 to prevent 21.1 from matching HL BA, then
 #       not picking up the continuing match after the BA from 21a.
-LB21a:       HL CM* (HY | BA) CM* [^CM CB];
+# TODO: For CJ tailorings (with BAX) does this rule want to include BAX? If so,
+#       should "HL BAX" not break when followed by a CB? Thats what the current
+#       rules do, which is why "[^CM CB]?" includes the ?.
+LB21a:       HL CM* (HY | BA | BAX) CM* [^CM CB]?;
 
+# DO allow breaks here before $BAXcm and $NSXcm, so don't include them
 LB21.1:      . CM* [BA HY NS];
 LB21.2:      BB CM* [^CM CB];
 
@@ -165,7 +188,7 @@ LB23a.2:     (ID | EB | EM) CM* PO;
 LB24.2:      (PR | PO) CM* (AL | HL);
 LB24.3:      (AL | HL | CM) CM* (PR | PO);
 
-# Numbers. Equivalent to Tailoring example 8 from UAX 14.
+# Numbers. Equivalent to Tailoring example 8 from UAx 14.
 LB25:        ((PR | PO)CM*)? ((OP | HY)CM*)? NU (CM*(NU | SY | IS))* (CM*(CL | CP))? (CM*(PR | PO))?;
 
 LB26.1:      JL CM* (JL | JV | H2 | H3);

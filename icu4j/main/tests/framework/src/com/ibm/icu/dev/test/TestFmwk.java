@@ -117,6 +117,38 @@ abstract public class TestFmwk extends AbstractTestLog {
         return new Random(getParams().getSeed());
     }
 
+    /**
+     * Integer Random number generator, produces positive int values.
+     * Similar to C++ std::minstd_rand, with the same algorithm & constants.
+     * Provided for compatibility with ICU4C.
+     * Get & set of the seed allows for reproducible monkey tests.
+     */
+    protected class ICU_Rand {
+        private int fLast;
+
+        public ICU_Rand(int seed) {
+            seed(seed);
+        }
+
+        public int next() {
+            fLast = (int)((fLast * 48271L) % 2147483647L);
+            return fLast;
+        }
+
+        public void seed(int seed) {
+            if (seed <= 0) {
+                seed = 1;
+            }
+            seed %= 2147483647;   // = 0x7FFFFFFF
+            fLast = seed > 0 ? seed : 1;
+        }
+
+        public int getSeed() {
+            return fLast;
+        }
+
+    }
+
     static final String ICU_TRAC_URL = "http://bugs.icu-project.org/trac/ticket/";
     static final String CLDR_TRAC_URL = "http://unicode.org/cldr/trac/ticket/";
     static final String CLDR_TICKET_PREFIX = "cldrbug:";

@@ -2,22 +2,43 @@
 # Copyright (C) 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 # Copyright (c) 2016, International Business Machines Corporation and others. All Rights Reserved.
-
-# file: line.txt
+#
+#  file:  line_loose_cj.txt
 #
 # Reference Line Break rules for intltest rbbi/RBBIMonkeyTest
 #
 # Note: Rule syntax and the monkey test itself are still a work in progress.
 #       They are expected to change with review and the addition of support for rule tailoring.
+#
+#         Line Breaking Rules
+#         Implement default line breaking as defined by
+#         Unicode Standard Annex #14 Revision 34 for Unicode 8.0
+#         http://www.unicode.org/reports/tr14/
+#         tailored as noted in 2nd paragraph below..
+#
+#         This tailors the line break behavior to correspond to CSS
+#         line-break=loose (BCP47 -u-lb-loose) as defined for Chinese & Japanese.
+#         It sets characters of class CJ to behave like ID.
+#         In addition, it allows breaks:
+#         * before hyphens 2010 & 2013 (both BA) and 301C, 30A0 (both NS)
+#         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
+#         * between characters of LineBreak class IN such as 2026
+#         * before some centered punct 203C, 2047, 2048, 2049, 30FB, FF1A, FF1B,
+#           FF65 (all NS) and FF01, FF1F (both EX).
+#         * before suffix characters with LineBreak class PO and EastAsianWidth A,F,W;
+#           this includes: 00B0 2030 2032 2033 2035 2103 2109 FE6A FF05 FFE0
+#         * after prefix characters with LineBreak class PR and EastAsianWidth A,F,W;
+#           this includes: 00A4 00B1 20AC 2116 FE69 FF04 FFE1 FFE5 FFE6
 
 
 type = line;
-locale = en;
+locale = ja@lb=loose;
 
 
 AI = [:LineBreak =  Ambiguous:];
-AL = [:LineBreak =  Alphabetic:];
-BA = [:LineBreak =  Break_After:];
+AL = [[:LineBreak =  Alphabetic:]];
+BAX = [\u2010 \u2013];
+BA = [[:LineBreak =  Break_After:] - BAX];
 BB = [:LineBreak =  Break_Before:];
 BK = [:LineBreak =  Mandatory_Break:];
 B2 = [:LineBreak =  Break_Both:];
@@ -29,13 +50,14 @@ CP = [:LineBreak =  Close_Parenthesis:];
 CR = [:LineBreak =  Carriage_Return:];
 EB = [:LineBreak =  EB:];
 EM = [:LineBreak =  EM:];
-EX = [:LineBreak =  Exclamation:];
+EXX = [\uFF01 \uFF1F];
+EX = [[:LineBreak =  Exclamation:] - EXX];
 GL = [:LineBreak =  Glue:];
 HL = [:LineBreak =  Hebrew_Letter:];
 HY = [:LineBreak =  Hyphen:];
 H2 = [:LineBreak =  H2:];
 H3 = [:LineBreak =  H3:];
-ID = [:LineBreak =  Ideographic:];
+ID = [[:LineBreak =  Ideographic:] CJ];  # CSS Loose tailoring: CJ resolves to ID
 IN = [:LineBreak =  Inseperable:];
 IS = [:LineBreak =  Infix_Numeric:];
 JL = [:LineBreak =  JL:];
@@ -43,11 +65,14 @@ JV = [:LineBreak =  JV:];
 JT = [:LineBreak =  JT:];
 LF = [:LineBreak =  Line_Feed:];
 NL = [:LineBreak =  Next_Line:];
-NS = [[:LineBreak =  Nonstarter:] CJ];   # CSS Strict tailoring: CJ resolves to NS.
+NSX = [\u301C \u30A0 \u3005 \u303B \u309D \u309E \u30FD \u30FE \u203C \u2047 \u2048 \u2049 \u30FB \uFF1A \uFF1B \uFF65];
+NS = [[:LineBreak =  Nonstarter:] - NSX];
 NU = [:LineBreak =  Numeric:];
 OP = [:LineBreak =  Open_Punctuation:];
-PO = [:LineBreak =  Postfix_Numeric:];
-PR = [:LineBreak =  Prefix_Numeric:];
+POX = [\u00B0 \u2030 \u2032 \u2033 \u2035 \u2103 \u2109 \uFE6A \uFF05 \uFFE0];
+PO = [[:LineBreak =  Postfix_Numeric:] - POX];
+PRX = [\u00A4 \u00B1 \u20AC \u2116 \uFE69 \uFF04 \uFFE1 \uFFE5 \uFFE6];
+PR = [[:LineBreak =  Prefix_Numeric:] - PRX];
 QU = [:LineBreak =  Quotation:];
 RI = [:LineBreak =  Regional_Indicator:];
 SA = [:LineBreak =  Complex_Context:];
@@ -114,9 +139,9 @@ LB11.3:      WJ CM* [^CM];
 
 LB12:        GL CM* [^CM];
 
-LB12a:       [^SP BA HY] CM* GL;
+LB12a:       [^SP BA BAX HY] CM* GL;
 
-# LB 13 ICU Tailoring, matches tailoring example 8 from UAX 14.
+# LB 13 ICU Tailoring, matches tailoring exmaple 8 from UAX 14.
 #
 #   LB13.1   [^SP] CM* [CL CP EX IS SY]    # original UAX 14 rule.
 #   LB13.2   SP    CM* [CL CP EX IS SY]
@@ -143,7 +168,10 @@ LB20.1b:      CB CM* ÷;
 
 # Note: Rule 21a must come before 21 to prevent 21.1 from matching HL BA, then
 #       not picking up the continuing match after the BA from 21a.
-LB21a:       HL CM* (HY | BA) CM* [^CM CB];
+# LB 21a Don't break after Hebrew + Hyphen
+#   HL (HY | BA) x
+
+LB21a:       HL CM* (HY | BA | BAX) CM* [^CM CB]?;
 
 LB21.1:      . CM* [BA HY NS];
 LB21.2:      BB CM* [^CM CB];
@@ -153,7 +181,7 @@ LB21b:       SY CM* HL;
 LB22.1:        (AL | HL | CM) CM* IN;   # The CM is from LB10, treat an unattached CM as AL.
 LB22.2:       EX CM* IN;
 LB22.3:       (ID | EB | EM) CM* IN;
-LB22.4:       IN CM* IN;
+# LB22.4:       IN CM* IN;  # delete this rule for CSS loose.
 LB22.5:       NU CM* IN;
 
 LB23.1:      (AL | HL | CM) CM* NU;
@@ -162,11 +190,12 @@ LB23.2:      NU CM* (AL | HL);
 LB23a.1:     PR CM* (ID | EB | EM);
 LB23a.2:     (ID | EB | EM) CM* PO;
 
-LB24.2:      (PR | PO) CM* (AL | HL);
-LB24.3:      (AL | HL | CM) CM* (PR | PO);
+LB24.2:      (PR | PO | POX) CM* (AL | HL);
+LB24.3:      (AL | HL | CM) CM* (PR | PO | POX);
 
-# Numbers. Equivalent to Tailoring example 8 from UAX 14.
-LB25:        ((PR | PO)CM*)? ((OP | HY)CM*)? NU (CM*(NU | SY | IS))* (CM*(CL | CP))? (CM*(PR | PO))?;
+# Numbers. Equivalent to Tailoring example 8 from UAx 14.
+#          Loose_cj tailoring: do not include $PRX at the beginning or $POX at the end.
+LB25:        ((PR | PO | POX)CM*)? ((OP | HY)CM*)? NU (CM*(NU | SY | IS))* (CM*(CL | CP))? (CM*(PR | PRX | PO))?;
 
 LB26.1:      JL CM* (JL | JV | H2 | H3);
 LB26.2:      (JV | H2) CM* (JV | JT);
