@@ -222,6 +222,13 @@ public class AffixPatternUtils {
     return output.length() - startLength;
   }
 
+  /** Version of {@link #escape} that returns a String. */
+  public static String escape(CharSequence input) {
+    StringBuilder sb = new StringBuilder();
+    escape(input, sb);
+    return sb.toString();
+  }
+
   /**
    * Executes the unescape state machine. Replaces the unquoted characters "-", "+", "%", and "‰"
    * with their localized equivalents. Replaces "¤", "¤¤", and "¤¤¤" with the three argument

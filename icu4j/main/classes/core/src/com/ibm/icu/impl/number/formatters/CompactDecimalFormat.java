@@ -24,7 +24,6 @@ import com.ibm.icu.impl.number.modifiers.PositiveNegativeAffixModifier;
 import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CompactDecimalFormat.CompactType;
-import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
@@ -104,8 +103,6 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
 
   private static final int DEFAULT_MIN_SIG = 1;
   private static final int DEFAULT_MAX_SIG = 2;
-  private static final SignificantDigitsMode DEFAULT_SIG_MODE =
-      SignificantDigitsMode.OVERRIDE_MAXIMUM_FRACTION;
 
   private static final ThreadLocal<Properties> threadLocalProperties =
       new ThreadLocal<Properties>() {
@@ -127,12 +124,10 @@ public class CompactDecimalFormat extends Format.BeforeFormat {
     if (rounder == null) {
       int _minSig = properties.getMinimumSignificantDigits();
       int _maxSig = properties.getMaximumSignificantDigits();
-      SignificantDigitsMode _mode = properties.getSignificantDigitsMode();
       Properties rprops = threadLocalProperties.get().clear();
       // Settings needing possible override:
       rprops.setMinimumSignificantDigits(_minSig > 0 ? _minSig : DEFAULT_MIN_SIG);
       rprops.setMaximumSignificantDigits(_maxSig > 0 ? _maxSig : DEFAULT_MAX_SIG);
-      rprops.setSignificantDigitsMode(_mode != null ? _mode : DEFAULT_SIG_MODE);
       // TODO: Should copyFrom() be used instead?  It requires a cast.
       // Settings to copy verbatim:
       rprops.setRoundingMode(properties.getRoundingMode());

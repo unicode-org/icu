@@ -7,7 +7,6 @@ import java.math.RoundingMode;
 import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.impl.number.Rounder;
-import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 
 public class SignificantDigitsRounder extends Rounder {
 
@@ -65,28 +64,13 @@ public class SignificantDigitsRounder extends Rounder {
      * @return The property bag, for chaining.
      */
     public IProperties setMaximumSignificantDigits(int maximumSignificantDigits);
-
-    static SignificantDigitsMode DEFAULT_SIGNIFICANT_DIGITS_MODE = null;
-
-    /** @see #setSignificantDigitsMode */
-    public SignificantDigitsMode getSignificantDigitsMode();
-
-    /**
-     * Sets the strategy used when reconciling significant digits versus integer and fraction
-     * lengths.
-     *
-     * @param significantDigitsMode One of the options from {@link SignificantDigitsMode}.
-     * @return The property bag, for chaining.
-     */
-    public IProperties setSignificantDigitsMode(SignificantDigitsMode significantDigitsMode);
   }
 
   public static boolean useSignificantDigits(IProperties properties) {
     return properties.getMinimumSignificantDigits()
             != IProperties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS
         || properties.getMaximumSignificantDigits()
-            != IProperties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS
-        || properties.getSignificantDigitsMode() != IProperties.DEFAULT_SIGNIFICANT_DIGITS_MODE;
+            != IProperties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS;
   }
 
   public static SignificantDigitsRounder getInstance(IProperties properties) {
@@ -95,7 +79,6 @@ public class SignificantDigitsRounder extends Rounder {
 
   private final int minSig;
   private final int maxSig;
-  private final SignificantDigitsMode mode;
 
   private SignificantDigitsRounder(IProperties properties) {
     super(properties);
@@ -103,8 +86,6 @@ public class SignificantDigitsRounder extends Rounder {
     int _maxSig = properties.getMaximumSignificantDigits();
     minSig = _minSig < 1 ? 1 : _minSig > 1000 ? 1000 : _minSig;
     maxSig = _maxSig < 0 ? 1000 : _maxSig < minSig ? minSig : _maxSig > 1000 ? 1000 : _maxSig;
-    SignificantDigitsMode _mode = properties.getSignificantDigitsMode();
-    mode = _mode == null ? SignificantDigitsMode.OVERRIDE_MAXIMUM_FRACTION : _mode;
   }
 
   @Override
@@ -123,47 +104,7 @@ public class SignificantDigitsRounder extends Rounder {
     magMaxSig = effectiveMag - maxSig;
 
     // Step 1: pick the rounding magnitude and apply.
-    int roundingMagnitude;
-    switch (mode) {
-      case OVERRIDE_MAXIMUM_FRACTION:
-        // Always round to maxSig.
-        // Of the six possible orders:
-        //    Case 1: minSig, maxSig, minFrac, maxFrac -- maxSig wins
-        //    Case 2: minSig, minFrac, maxSig, maxFrac -- maxSig wins
-        //    Case 3: minSig, minFrac, maxFrac, maxSig -- maxSig wins
-        //    Case 4: minFrac, minSig, maxSig, maxFrac -- maxSig wins
-        //    Case 5: minFrac, minSig, maxFrac, maxSig -- maxSig wins
-        //    Case 6: minFrac, maxFrac, minSig, maxSig -- maxSig wins
-        roundingMagnitude = magMaxSig;
-        break;
-      case RESPECT_MAXIMUM_FRACTION:
-        // Round to the strongest of maxFrac, maxInt, and maxSig.
-        // Of the six possible orders:
-        //    Case 1: minSig, maxSig, minFrac, maxFrac -- maxSig wins
-        //    Case 2: minSig, minFrac, maxSig, maxFrac -- maxSig wins
-        //    Case 3: minSig, minFrac, maxFrac, maxSig -- maxFrac wins --> differs from default
-        //    Case 4: minFrac, minSig, maxSig, maxFrac -- maxSig wins
-        //    Case 5: minFrac, minSig, maxFrac, maxSig -- maxFrac wins --> differs from default
-        //    Case 6: minFrac, maxFrac, minSig, maxSig -- maxFrac wins --> differs from default
-        //
-        // Math.max() picks the rounding magnitude farthest to the left (most significant).
-        // Math.min() picks the rounding magnitude farthest to the right (least significant).
-        roundingMagnitude = Math.max(-maxFrac, magMaxSig);
-        break;
-      case ENSURE_MINIMUM_SIGNIFICANT:
-        // Round to the strongest of maxFrac and maxSig, and always ensure minSig.
-        // Of the six possible orders:
-        //    Case 1: minSig, maxSig, minFrac, maxFrac -- maxSig wins
-        //    Case 2: minSig, minFrac, maxSig, maxFrac -- maxSig wins
-        //    Case 3: minSig, minFrac, maxFrac, maxSig -- maxFrac wins --> differs from default
-        //    Case 4: minFrac, minSig, maxSig, maxFrac -- maxSig wins
-        //    Case 5: minFrac, minSig, maxFrac, maxSig -- maxFrac wins --> differs from default
-        //    Case 6: minFrac, maxFrac, minSig, maxSig -- minSig wins --> differs from default
-        roundingMagnitude = Math.min(magMinSig, Math.max(-maxFrac, magMaxSig));
-        break;
-      default:
-        throw new AssertionError();
-    }
+    int roundingMagnitude = magMaxSig;
     input.roundToMagnitude(roundingMagnitude, mathContext);
 
     // In case magnitude changed:
@@ -177,23 +118,8 @@ public class SignificantDigitsRounder extends Rounder {
     magMaxSig = effectiveMag - maxSig;
 
     // Step 2: pick the number of visible digits.
-    switch (mode) {
-      case OVERRIDE_MAXIMUM_FRACTION:
-        // Ensure minSig is always displayed.
-        input.setIntegerLength(minInt, maxInt);
-        input.setFractionLength(Math.max(minFrac, -magMinSig), Integer.MAX_VALUE);
-        break;
-      case RESPECT_MAXIMUM_FRACTION:
-        // Ensure minSig is displayed, unless doing so is in violation of maxFrac.
-        input.setIntegerLength(minInt, maxInt);
-        input.setFractionLength(Math.min(maxFrac, Math.max(minFrac, -magMinSig)), maxFrac);
-        break;
-      case ENSURE_MINIMUM_SIGNIFICANT:
-        // Follow minInt/minFrac, but ensure all digits are allowed to be visible.
-        input.setIntegerLength(minInt, maxInt);
-        input.setFractionLength(minFrac, Integer.MAX_VALUE);
-        break;
-    }
+    input.setIntegerLength(minInt, maxInt);
+    input.setFractionLength(Math.max(minFrac, -magMinSig), Integer.MAX_VALUE);
   }
 
   @Override
@@ -201,6 +127,5 @@ public class SignificantDigitsRounder extends Rounder {
     super.export(properties);
     properties.setMinimumSignificantDigits(minSig);
     properties.setMaximumSignificantDigits(maxSig);
-    properties.setSignificantDigitsMode(mode);
   }
 }

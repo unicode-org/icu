@@ -32,7 +32,6 @@ import com.ibm.icu.impl.number.rounders.MagnitudeRounder;
 import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
-import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
@@ -121,7 +120,6 @@ public class Properties
   private transient RoundingMode roundingMode;
   private transient int secondaryGroupingSize;
   private transient boolean signAlwaysShown;
-  private transient SignificantDigitsMode significantDigitsMode;
 
   /*--------------------------------------------------------------------------------------------+/
   /| IMPORTANT!                                                                                 |/
@@ -182,7 +180,6 @@ public class Properties
     roundingMode = DEFAULT_ROUNDING_MODE;
     secondaryGroupingSize = DEFAULT_SECONDARY_GROUPING_SIZE;
     signAlwaysShown = DEFAULT_SIGN_ALWAYS_SHOWN;
-    significantDigitsMode = DEFAULT_SIGNIFICANT_DIGITS_MODE;
     return this;
   }
 
@@ -232,7 +229,6 @@ public class Properties
     roundingMode = other.roundingMode;
     secondaryGroupingSize = other.secondaryGroupingSize;
     signAlwaysShown = other.signAlwaysShown;
-    significantDigitsMode = other.significantDigitsMode;
     return this;
   }
 
@@ -283,7 +279,6 @@ public class Properties
     eq = eq && _equalsHelper(roundingMode, other.roundingMode);
     eq = eq && _equalsHelper(secondaryGroupingSize, other.secondaryGroupingSize);
     eq = eq && _equalsHelper(signAlwaysShown, other.signAlwaysShown);
-    eq = eq && _equalsHelper(significantDigitsMode, other.significantDigitsMode);
     return eq;
   }
 
@@ -348,7 +343,6 @@ public class Properties
     hashCode ^= _hashCodeHelper(roundingMode);
     hashCode ^= _hashCodeHelper(secondaryGroupingSize);
     hashCode ^= _hashCodeHelper(signAlwaysShown);
-    hashCode ^= _hashCodeHelper(significantDigitsMode);
     return hashCode;
   }
 
@@ -625,11 +619,6 @@ public class Properties
   @Override
   public boolean getSignAlwaysShown() {
     return signAlwaysShown;
-  }
-
-  @Override
-  public SignificantDigitsMode getSignificantDigitsMode() {
-    return significantDigitsMode;
   }
 
   @Override
@@ -957,12 +946,6 @@ public class Properties
   @Override
   public Properties setSignAlwaysShown(boolean signAlwaysShown) {
     this.signAlwaysShown = signAlwaysShown;
-    return this;
-  }
-
-  @Override
-  public Properties setSignificantDigitsMode(SignificantDigitsMode significantDigitsMode) {
-    this.significantDigitsMode = significantDigitsMode;
     return this;
   }
 

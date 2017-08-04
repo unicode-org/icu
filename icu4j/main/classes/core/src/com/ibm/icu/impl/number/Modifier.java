@@ -46,6 +46,9 @@ public interface Modifier {
    * Gets the prefix string associated with this modifier, defined as the string that will be
    * inserted at leftIndex when {@link #apply} is called.
    *
+   * <p>TODO: Change this to appendPrefixTo(), or remove it entirely and do something different at
+   * the call sites.
+   *
    * @return The prefix string. Will not be null.
    */
   public String getPrefix();
@@ -53,6 +56,9 @@ public interface Modifier {
   /**
    * Gets the prefix string associated with this modifier, defined as the string that will be
    * inserted at rightIndex when {@link #apply} is called.
+   *
+   * <p>TODO: Change this to appendPrefixTo(), or remove it entirely and do something different at
+   * the call sites.
    *
    * @return The suffix string. Will not be null.
    */
@@ -102,8 +108,8 @@ public interface Modifier {
   /**
    * A starter implementation with defaults for some of the basic methods.
    *
-   * <p>Implements {@link PositiveNegativeModifier} only so that instances of this class can be used when
-   * a {@link PositiveNegativeModifier} is required.
+   * <p>Implements {@link PositiveNegativeModifier} only so that instances of this class can be used
+   * when a {@link PositiveNegativeModifier} is required.
    */
   public abstract static class BaseModifier extends Format.BeforeFormat
       implements Modifier, PositiveNegativeModifier {

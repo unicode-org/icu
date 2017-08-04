@@ -161,7 +161,7 @@ public class NumberRegressionTests extends TestFmwk {
         try {
             logln(df.format(123, sBuf, fp).toString());
         } catch (Exception foo) {
-            errln("Test for bug 4088503 failed.");
+            errln("Test for bug 4088503 failed: " + foo);
         }
 
     }
@@ -963,6 +963,7 @@ public class NumberRegressionTests extends TestFmwk {
         Locale.setDefault(Locale.US);
         DecimalFormat df = new DecimalFormat();
         df.setPositivePrefix("+");
+        df.setNegativePrefix("-");
         double d = -0.0;
         logln("pattern: \"" + df.toPattern() + "\"");
         StringBuffer buffer = new StringBuffer();
@@ -999,6 +1000,7 @@ public class NumberRegressionTests extends TestFmwk {
     {
         Locale[] locales = NumberFormat.getAvailableLocales();
 
+        outer:
         for (int i = 0; i < locales.length; i++) {
             ICUResourceBundle rb = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,locales[i]);
 
@@ -1054,11 +1056,20 @@ public class NumberRegressionTests extends TestFmwk {
 
             String result2 = fmt2.format(1.111);
 
-            // NOTE: en_IN is a special case (ChoiceFormat currency display name)
-            if (!result1.equals(result2) &&
-                !locales[i].toString().equals("en_IN")) {
-                errln("Results for " + locales[i] + " differ: " +
-                      result1 + " vs " + result2);
+            // Currency spacing may have been added by the real DecimalFormat.  Account for that here.
+            if (!result1.equals(result2)) {
+                if (result1.length() == result2.length() + 1) {
+                    inner:
+                    for (int k=0; k<result2.length(); k++) {
+                        if (result1.charAt(k) != result2.charAt(k)) {
+                            if (result1.charAt(k) == '\u00A0') {
+                                continue outer; // currency spacing OK
+                            }
+                            break inner;
+                        }
+                    }
+                }
+                errln("Results for " + locales[i] + " differ: " + result1 + " vs " + result2);
             }
         }
     }
@@ -1483,9 +1494,9 @@ public class NumberRegressionTests extends TestFmwk {
         fmt.applyPattern("\u00A4#.00");
         sym.setCurrencySymbol("usd");
         fmt.setDecimalFormatSymbols(sym);
-        if (!fmt.format(12.5).equals("usd12.50")) {
+        if (!fmt.format(12.5).equals("usd 12.50")) {
             errln("FAIL: 12.5 x (currency=usd) -> " + fmt.format(12.5) +
-                  ", exp usd12.50");
+                  ", exp usd 12.50");
         }
         if (!fmt.getPositivePrefix().equals("usd")) {
             errln("FAIL: (currency=usd).getPositivePrefix -> " +
@@ -1496,9 +1507,9 @@ public class NumberRegressionTests extends TestFmwk {
         fmt.applyPattern("\u00A4\u00A4#.00");
         sym.setInternationalCurrencySymbol("DOL");
         fmt.setDecimalFormatSymbols(sym);
-        if (!fmt.format(12.5).equals("DOL12.50")) {
+        if (!fmt.format(12.5).equals("DOL 12.50")) {
             errln("FAIL: 12.5 x (intlcurrency=DOL) -> " + fmt.format(12.5) +
-                  ", exp DOL12.50");
+                  ", exp DOL 12.50");
         }
         if (!fmt.getPositivePrefix().equals("DOL")) {
             errln("FAIL: (intlcurrency=DOL).getPositivePrefix -> " +

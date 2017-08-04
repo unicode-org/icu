@@ -1660,9 +1660,9 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("Wide currency", "1.00 US dollars", mf.format(USD_1));
         assertEquals("Wide currency", "2.00 US dollars", mf.format(USD_2));
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
-        assertEquals("short currency", "-USD1.00", mf.format(USD_NEG_1));
-        assertEquals("short currency", "USD1.00", mf.format(USD_1));
-        assertEquals("short currency", "USD2.00", mf.format(USD_2));
+        assertEquals("short currency", "-USD 1.00", mf.format(USD_NEG_1));
+        assertEquals("short currency", "USD 1.00", mf.format(USD_1));
+        assertEquals("short currency", "USD 2.00", mf.format(USD_2));
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NARROW);
         assertEquals("narrow currency", "-$1.00", mf.format(USD_NEG_1));
         assertEquals("narrow currency", "$1.00", mf.format(USD_1));
@@ -1673,13 +1673,13 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("numeric currency", "$2.00", mf.format(USD_2));
 
         mf = MeasureFormat.getInstance(ULocale.JAPAN, FormatWidth.WIDE);
-        assertEquals("Wide currency", "-1.00\u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
-        assertEquals("Wide currency", "1.00\u7C73\u30C9\u30EB", mf.format(USD_1));
-        assertEquals("Wide currency", "2.00\u7C73\u30C9\u30EB", mf.format(USD_2));
+        assertEquals("Wide currency", "-1.00 \u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
+        assertEquals("Wide currency", "1.00 \u7C73\u30C9\u30EB", mf.format(USD_1));
+        assertEquals("Wide currency", "2.00 \u7C73\u30C9\u30EB", mf.format(USD_2));
 
         Measure CAD_1 = new Measure(1.0, Currency.getInstance("CAD"));
         mf = MeasureFormat.getInstance(ULocale.CANADA, FormatWidth.SHORT);
-        assertEquals("short currency", "CAD1.00", mf.format(CAD_1));
+        assertEquals("short currency", "CAD 1.00", mf.format(CAD_1));
     }
 
     @Test
@@ -1997,7 +1997,10 @@ public class MeasureUnitTest extends TestFmwk {
             }
         }
         for (String type : MeasureUnit.getAvailableTypes()) {
-            if (type.equals("currency") || type.equals("compound") || type.equals("coordinate")) {
+            if (type.equals("currency")
+                    || type.equals("compound")
+                    || type.equals("coordinate")
+                    || type.equals("dimensionless")) {
                 continue;
             }
             for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {

@@ -8,6 +8,8 @@ import com.ibm.icu.impl.number.formatters.PaddingFormat;
 import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
+import newapi.impl.AffixPatternProvider;
+
 /**
  * Handles parsing and creation of the compact pattern string representation of a decimal format.
  */
@@ -507,7 +509,8 @@ public class PatternString {
       if (!ignoreRounding) {
         properties.setMinimumFractionDigits(minFrac);
         properties.setMaximumFractionDigits(positive.maximumFractionDigits);
-        properties.setRoundingIncrement(positive.rounding.toBigDecimal());
+        properties.setRoundingIncrement(
+            positive.rounding.toBigDecimal().setScale(positive.minimumFractionDigits));
       } else {
         properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
         properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
@@ -557,8 +560,8 @@ public class PatternString {
     }
 
     // Compute the affix patterns (required for both padding and affixes)
-    String posPrefix = ppr.getString(LdmlPatternInfo.PatternParseResult.POS_PREFIX);
-    String posSuffix = ppr.getString(LdmlPatternInfo.PatternParseResult.POS_SUFFIX);
+    String posPrefix = ppr.getString(AffixPatternProvider.Flags.PREFIX);
+    String posSuffix = ppr.getString(0);
 
     // Padding settings
     if (positive.paddingEndpoints != 0) {
@@ -568,7 +571,7 @@ public class PatternString {
               + AffixPatternUtils.unescapedLength(posPrefix)
               + AffixPatternUtils.unescapedLength(posSuffix);
       properties.setFormatWidth(paddingWidth);
-      String rawPaddingString = ppr.getString(LdmlPatternInfo.PatternParseResult.POS_PADDING);
+      String rawPaddingString = ppr.getString(AffixPatternProvider.Flags.PADDING);
       if (rawPaddingString.length() == 1) {
         properties.setPadString(rawPaddingString);
       } else if (rawPaddingString.length() == 2) {
@@ -594,8 +597,11 @@ public class PatternString {
     properties.setPositivePrefixPattern(posPrefix);
     properties.setPositiveSuffixPattern(posSuffix);
     if (negative != null) {
-      properties.setNegativePrefixPattern(ppr.getString(LdmlPatternInfo.PatternParseResult.NEG_PREFIX));
-      properties.setNegativeSuffixPattern(ppr.getString(LdmlPatternInfo.PatternParseResult.NEG_SUFFIX));
+      properties.setNegativePrefixPattern(
+          ppr.getString(
+              AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN | AffixPatternProvider.Flags.PREFIX));
+      properties.setNegativeSuffixPattern(
+          ppr.getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN));
     } else {
       properties.setNegativePrefixPattern(null);
       properties.setNegativeSuffixPattern(null);
