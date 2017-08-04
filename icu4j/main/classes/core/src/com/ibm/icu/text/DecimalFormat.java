@@ -13,9 +13,6 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-import com.ibm.icu.impl.number.Endpoint;
-import com.ibm.icu.impl.number.Format.SingularFormat;
-import com.ibm.icu.impl.number.FormatQuantity4;
 import com.ibm.icu.impl.number.Parse;
 import com.ibm.icu.impl.number.PatternString;
 import com.ibm.icu.impl.number.Properties;
@@ -32,6 +29,12 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
+
+import newapi.NumberFormatter.LocalizedNumberFormatter;
+import newapi.NumberFormatter.NumberFormatterResult;
+import newapi.impl.MacroProps;
+import newapi.impl.NumberFormatterImpl;
+import newapi.impl.NumberPropertyMapper;
 
 /**
  * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_} <code>DecimalFormat</code> is the primary
@@ -107,9 +110,8 @@ import com.ibm.icu.util.ULocale.Category;
  *       digits are shown. This is most common in scientific notation.
  * </ol>
  *
- * <p>It is possible to specify both a magnitude and a number of significant digits. If used
- * together, the <em>significant digits mode</em> determines how conflicts between fraction digits
- * and signiciant digits are resolved. For more information, see {@link #setSignificantDigitsMode}.
+ * <p>It is not possible to specify more than one rounding strategy. For example, setting a rounding
+ * increment in conjunction with significant digits results in undefined behavior.
  *
  * <p>It is also possible to specify the <em>rounding mode</em> to use. The default rounding mode is
  * "half even", which rounds numbers to their closest increment, with ties broken in favor of
@@ -265,7 +267,7 @@ public class DecimalFormat extends NumberFormat {
    * #format} method uses the formatter directly without needing to synchronize. Volatile because
    * threads may read and write at the same time.
    */
-  transient volatile SingularFormat formatter;
+  transient volatile LocalizedNumberFormatter formatter;
 
   /**
    * The effective properties as exported from the formatter object. Volatile because threads may
@@ -683,9 +685,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    NumberFormatterResult output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -696,9 +698,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    NumberFormatterResult output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -709,9 +711,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    NumberFormatterResult output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -723,9 +725,9 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public StringBuffer format(
       java.math.BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    NumberFormatterResult output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -736,9 +738,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number.toBigDecimal());
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    NumberFormatterResult output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -751,9 +753,8 @@ public class DecimalFormat extends NumberFormat {
   public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
     if (!(obj instanceof Number)) throw new IllegalArgumentException();
     Number number = (Number) obj;
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    AttributedCharacterIterator result = formatter.formatToCharacterIterator(fq);
-    return result;
+    NumberFormatterResult output = formatter.format(number);
+    return output.toAttributedCharacterIterator();
   }
 
   /**
@@ -763,27 +764,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
-    // TODO: This is ugly (although not as ugly as it was in ICU 58).
-    // Currency should be a free parameter, not in property bag. Fix in ICU 60.
-    Properties cprops = threadLocalProperties.get();
-    SingularFormat fmt = null;
-    synchronized (this) {
-      // Use the pre-compiled formatter if possible.  Otherwise, copy the properties
-      // and build our own formatter.
-      // TODO: Consider using a static format path here.
-      if (currAmt.getCurrency().equals(properties.getCurrency())) {
-        fmt = formatter;
-      } else {
-        cprops.copyFrom(properties);
-      }
-    }
-    if (fmt == null) {
-      cprops.setCurrency(currAmt.getCurrency());
-      fmt = Endpoint.fromBTA(cprops, symbols);
-    }
-    FormatQuantity4 fq = new FormatQuantity4(currAmt.getNumber());
-    fmt.format(fq, toAppendTo, pos);
-    fq.populateUFieldPosition(pos);
+    NumberFormatterResult output = formatter.format(currAmt);
+    output.populateFieldPosition(pos, toAppendTo.length());
+    output.appendTo(toAppendTo);
     return toAppendTo;
   }
 
@@ -815,8 +798,11 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
     try {
-      // TODO(sffc): Make this thread-safe
-      CurrencyAmount result = Parse.parseCurrency(text, parsePosition, properties, symbols);
+      Properties pprops = threadLocalProperties.get();
+      synchronized (this) {
+        pprops.copyFrom(properties);
+      }
+      CurrencyAmount result = Parse.parseCurrency(text, parsePosition, pprops, symbols);
       if (result == null) return null;
       Number number = result.getNumber();
       // Backwards compatibility: return com.ibm.icu.math.BigDecimal
@@ -872,8 +858,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositivePrefix() {
-    String result = exportedProperties.getPositivePrefix();
-    return (result == null) ? "" : result;
+    return formatter.format(1).getPrefix();
   }
 
   /**
@@ -910,8 +895,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativePrefix() {
-    String result = exportedProperties.getNegativePrefix();
-    return (result == null) ? "" : result;
+    return formatter.format(-1).getPrefix();
   }
 
   /**
@@ -948,8 +932,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositiveSuffix() {
-    String result = exportedProperties.getPositiveSuffix();
-    return (result == null) ? "" : result;
+    return formatter.format(1).getSuffix();
   }
 
   /**
@@ -986,8 +969,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativeSuffix() {
-    String result = exportedProperties.getNegativeSuffix();
-    return (result == null) ? "" : result;
+    return formatter.format(-1).getSuffix();
   }
 
   /**
@@ -1516,7 +1498,6 @@ public class DecimalFormat extends NumberFormat {
     } else {
       properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
       properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
-      properties.setSignificantDigitsMode(null);
     }
     refreshFormatter();
   }
@@ -1545,7 +1526,6 @@ public class DecimalFormat extends NumberFormat {
    * and then you set maxInt=3, then minInt will be changed to 3.
    *
    * @param value The minimum number of significant digits to display.
-   * @see #setSignificantDigitsMode
    * @category Rounding
    * @stable ICU 3.0
    */
@@ -1588,7 +1568,6 @@ public class DecimalFormat extends NumberFormat {
    * @see #setRoundingMode
    * @see #setRoundingIncrement
    * @see #setMaximumFractionDigits
-   * @see #setSignificantDigitsMode
    * @category Rounding
    * @stable ICU 3.0
    */
@@ -1602,60 +1581,6 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * {@icu} Returns the current significant digits mode.
-   *
-   * @see #setSignificantDigitsMode
-   * @category Rounding
-   * @internal
-   * @deprecated ICU 59: This API is a technical preview. It may change in an upcoming release.
-   */
-  @Deprecated
-  public synchronized SignificantDigitsMode getSignificantDigitsMode() {
-    return exportedProperties.getSignificantDigitsMode();
-  }
-
-  /**
-   * {@icu} <strong>Rounding and Digit Limits:</strong> Sets the strategy used for resolving
-   * minimum/maximum significant digits when minimum/maximum integer and/or fraction digits are
-   * specified. There are three modes:
-   *
-   * <ul>
-   *   <li>Mode A: OVERRIDE_MAXIMUM_FRACTION. This is the default. Settings in maximum fraction are
-   *       ignored.
-   *   <li>Mode B: RESPECT_MAXIMUM_FRACTION. Round to maximum fraction even if doing so will prevent
-   *       minimum significant from being respected.
-   *   <li>Mode C: ENSURE_MINIMUM_SIGNIFICANT. Respect maximum fraction, but always ensure that
-   *       minimum significant digits are shown.
-   * </ul>
-   *
-   * <p>The following table illustrates the difference. Below, minFrac=1, maxFrac=2, minSig=3, and
-   * maxSig=4:
-   *
-   * <pre>
-   *   Mode A |   Mode B |   Mode C
-   * ---------+----------+----------
-   *  12340.0 |  12340.0 |  12340.0
-   *   1234.0 |   1234.0 |   1234.0
-   *    123.4 |    123.4 |    123.4
-   *    12.34 |    12.34 |    12.34
-   *    1.234 |     1.23 |     1.23
-   *   0.1234 |     0.12 |    0.123
-   *  0.01234 |     0.01 |   0.0123
-   * 0.001234 |     0.00 |  0.00123
-   * </pre>
-   *
-   * @param mode The significant digits mode to use.
-   * @category Rounding
-   * @internal
-   * @deprecated ICU 59: This API is a technical preview. It may change in an upcoming release.
-   */
-  @Deprecated
-  public synchronized void setSignificantDigitsMode(SignificantDigitsMode mode) {
-    properties.setSignificantDigitsMode(mode);
-    refreshFormatter();
-  }
-
-  /**
    * Returns the minimum number of characters in formatted output.
    *
    * @see #setFormatWidth
@@ -1663,7 +1588,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getFormatWidth() {
-    return exportedProperties.getFormatWidth();
+    return properties.getFormatWidth();
   }
 
   /**
@@ -1699,7 +1624,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized char getPadCharacter() {
-    CharSequence paddingString = exportedProperties.getPadString();
+    CharSequence paddingString = properties.getPadString();
     if (paddingString == null) {
       return '.'; // TODO: Is this the correct behavior?
     } else {
@@ -1732,7 +1657,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getPadPosition() {
-    PadPosition loc = exportedProperties.getPadPosition();
+    PadPosition loc = properties.getPadPosition();
     return (loc == null) ? PAD_BEFORE_PREFIX : loc.toOld();
   }
 
@@ -1800,7 +1725,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized byte getMinimumExponentDigits() {
-    return (byte) exportedProperties.getMinimumExponentDigits();
+    return (byte) properties.getMinimumExponentDigits();
   }
 
   /**
@@ -1828,7 +1753,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized boolean isExponentSignAlwaysShown() {
-    return exportedProperties.getExponentSignAlwaysShown();
+    return properties.getExponentSignAlwaysShown();
   }
 
   /**
@@ -1898,7 +1823,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getGroupingSize() {
-    return exportedProperties.getGroupingSize();
+    return properties.getGroupingSize();
   }
 
   /**
@@ -1930,7 +1855,12 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getSecondaryGroupingSize() {
-    return exportedProperties.getSecondaryGroupingSize();
+    int grouping1 = properties.getGroupingSize();
+    int grouping2 = properties.getSecondaryGroupingSize();
+    if (grouping1 == grouping2 || grouping2 < 0) {
+      return 0;
+    }
+    return properties.getSecondaryGroupingSize();
   }
 
   /**
@@ -1991,7 +1921,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized boolean isDecimalSeparatorAlwaysShown() {
-    return exportedProperties.getDecimalSeparatorAlwaysShown();
+    return properties.getDecimalSeparatorAlwaysShown();
   }
 
   /**
@@ -2471,9 +2401,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Deprecated
   public IFixedDecimal getFixedDecimal(double number) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq);
-    return fq;
+    return formatter.format(number).getFixedDecimal();
   }
 
   private static final ThreadLocal<Properties> threadLocalProperties =
@@ -2491,9 +2419,18 @@ public class DecimalFormat extends NumberFormat {
       // The only time when this happens is during legacy deserialization.
       return;
     }
-    formatter = Endpoint.fromBTA(properties, symbols);
-    exportedProperties.clear();
-    formatter.export(exportedProperties);
+    MacroProps macros = NumberPropertyMapper.oldToNew(properties, symbols, exportedProperties);
+    ULocale locale = this.getLocale(ULocale.ACTUAL_LOCALE);
+    if (locale == null) {
+      // Constructor
+      locale = symbols.getLocale(ULocale.ACTUAL_LOCALE);
+    }
+    if (locale == null) {
+      // Deserialization
+      locale = symbols.getULocale();
+    }
+    assert locale != null;
+    formatter = NumberFormatterImpl.fromMacros(macros).locale(locale);
   }
 
   /**
@@ -2559,46 +2496,6 @@ public class DecimalFormat extends NumberFormat {
      */
     @Deprecated
     public void set(Properties props);
-  }
-
-  /**
-   * An enum containing the choices for significant digits modes.
-   *
-   * @see #setSignificantDigitsMode
-   * @internal
-   * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
-   */
-  @Deprecated
-  public static enum SignificantDigitsMode {
-    /**
-     * Respect significant digits counts, ignoring the fraction length.
-     *
-     * @see DecimalFormat#setSignificantDigitsMode
-     * @internal
-     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
-     */
-    @Deprecated
-    OVERRIDE_MAXIMUM_FRACTION,
-
-    /**
-     * Respect the fraction length, overriding significant digits counts if necessary.
-     *
-     * @see DecimalFormat#setSignificantDigitsMode
-     * @internal
-     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
-     */
-    @Deprecated
-    RESPECT_MAXIMUM_FRACTION,
-
-    /**
-     * Respect minimum significant digits, overriding fraction length if necessary.
-     *
-     * @see DecimalFormat#setSignificantDigitsMode
-     * @internal
-     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
-     */
-    @Deprecated
-    ENSURE_MINIMUM_SIGNIFICANT
   }
 
   /**

@@ -59,8 +59,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         String pat = ",##0.0000";
         DecimalFormat dec = new DecimalFormat(pat);
         dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
-        double roundinginc = 0.0001;
-        dec.setRoundingIncrement(roundinginc);
+        dec.setRoundingIncrement(new java.math.BigDecimal("0.0001"));
         String str = dec.format(number);
         if (!str.equals(expected)) {
             errln("Fail: " + number + " x \"" + pat + "\" = \"" +

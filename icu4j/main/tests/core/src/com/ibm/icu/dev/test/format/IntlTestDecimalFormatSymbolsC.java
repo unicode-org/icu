@@ -124,7 +124,7 @@ public class IntlTestDecimalFormatSymbolsC extends com.ibm.icu.dev.test.TestFmwk
         sym.setPercent('P');
         verify(34.5, "00 %", sym, "3450 P");
         sym.setCurrencySymbol("D");
-        verify(34.5, "\u00a4##.##", sym, "D34.50");
+        verify(34.5, "\u00a4##.##", sym, "D 34.50");
         sym.setGroupingSeparator('|');
         verify(3456.5, "0,000.##", sym, "3|456S5");
     }

@@ -50,7 +50,6 @@ import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormat.PropertySetter;
-import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.text.DisplayContext;
@@ -500,13 +499,13 @@ public class NumberFormatTest extends TestFmwk {
                 // currency format using currency ISO name, such as "USD",
                 // currency format using plural name, such as "US dollars".
                 // for US locale
-                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "1234.56", "$1,234.56", "USD1,234.56", "US dollars1,234.56"},
-                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "-1234.56", "-$1,234.56", "-USD1,234.56", "-US dollars1,234.56"},
-                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "1", "$1.00", "USD1.00", "US dollars1.00"},
+                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "1234.56", "$1,234.56", "USD 1,234.56", "US dollars 1,234.56"},
+                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "-1234.56", "-$1,234.56", "-USD 1,234.56", "-US dollars 1,234.56"},
+                {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "1", "$1.00", "USD 1.00", "US dollars 1.00"},
                 // for CHINA locale
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1234.56", "\uFFE51,234.56", "CNY1,234.56", "\u4EBA\u6C11\u5E011,234.56"},
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "-1234.56", "(\uFFE51,234.56)", "(CNY1,234.56)", "(\u4EBA\u6C11\u5E011,234.56)"},
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1", "\uFFE51.00", "CNY1.00", "\u4EBA\u6C11\u5E011.00"}
+                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1234.56", "\uFFE51,234.56", "CNY 1,234.56", "\u4EBA\u6C11\u5E01 1,234.56"},
+                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "-1234.56", "(\uFFE51,234.56)", "(CNY 1,234.56)", "(\u4EBA\u6C11\u5E01 1,234.56)"},
+                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1", "\uFFE51.00", "CNY 1.00", "\u4EBA\u6C11\u5E01 1.00"}
         };
 
         String doubleCurrencyStr = "\u00A4\u00A4";
@@ -536,7 +535,7 @@ public class NumberFormatTest extends TestFmwk {
                 // 'j' number of currency sign.
                 String currencyFormatResult = DATA[i][2+j];
                 if (!s.equals(currencyFormatResult)) {
-                    errln("FAIL format: Expected " + currencyFormatResult);
+                    errln("FAIL format: Expected " + currencyFormatResult + " but got " + s);
                 }
                 try {
                     // mix style parsing
@@ -712,13 +711,13 @@ public class NumberFormatTest extends TestFmwk {
                 // format result using CURRENCYSTYLE,
                 // format result using ISOCURRENCYSTYLE,
                 // format result using PLURALCURRENCYSTYLE,
-                {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollars"},
-                {"en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars"},
-                {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD1,234.56", "-1,234.56 US dollars"},
-                {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00美元"},
-                {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56美元"},
-                {"zh_CN", "1", "CNY", "￥1.00", "CNY1.00", "1.00人民币"},
-                {"zh_CN", "1234.56", "CNY", "￥1,234.56", "CNY1,234.56", "1,234.56人民币"},
+                {"en_US", "1", "USD", "$1.00", "USD 1.00", "1.00 US dollars"},
+                {"en_US", "1234.56", "USD", "$1,234.56", "USD 1,234.56", "1,234.56 US dollars"},
+                {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD 1,234.56", "-1,234.56 US dollars"},
+                {"zh_CN", "1", "USD", "US$1.00", "USD 1.00", "1.00 美元"},
+                {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD 1,234.56", "1,234.56 美元"},
+                {"zh_CN", "1", "CNY", "￥1.00", "CNY 1.00", "1.00 人民币"},
+                {"zh_CN", "1234.56", "CNY", "￥1,234.56", "CNY 1,234.56", "1,234.56 人民币"},
                 {"ru_RU", "1", "RUB", "1,00 \u20BD", "1,00 RUB", "1,00 российского рубля"},
                 {"ru_RU", "2", "RUB", "2,00 \u20BD", "2,00 RUB", "2,00 российского рубля"},
                 {"ru_RU", "5", "RUB", "5,00 \u20BD", "5,00 RUB", "5,00 российского рубля"},
@@ -957,7 +956,7 @@ public class NumberFormatTest extends TestFmwk {
                 1234.56, "\u00A51,235"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                1234.56, "CHF1,234.56"); // no more 0.05 rounding here, see cldrbug 5548
+                1234.56, "CHF 1,234.56"); // no more 0.05 rounding here, see cldrbug 5548
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
                 1234.56, "$1,234.56");
@@ -1727,7 +1726,7 @@ public class NumberFormatTest extends TestFmwk {
         ULocale locale = new ULocale("th_TH@currency=QQQ");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
         String result = format.format(12.34f);
-        if (!"QQQ12.34".equals(result)) {
+        if (!"QQQ 12.34".equals(result)) {
             errln("got unexpected currency: " + result);
         }
     }
@@ -2255,13 +2254,13 @@ public class NumberFormatTest extends TestFmwk {
         nf.setCurrency(Currency.getInstance(new Locale("fr", "ch", "")));
         StringBuffer buffer2 = new StringBuffer();
         nf.format(amount, buffer2, cp);
-        assertEquals("CHF35.47", "CHF35.47", buffer2.toString());
+        assertEquals("CHF 35.47", "CHF 35.47", buffer2.toString());
         assertEquals("cp begin", 0, cp.getBeginIndex());
         assertEquals("cp end", 3, cp.getEndIndex());
 
         StringBuffer buffer20 = new StringBuffer();
         nf.format(negAmount, buffer20, cp);
-        assertEquals("-CHF34.57", "-CHF34.57", buffer20.toString());
+        assertEquals("-CHF 34.57", "-CHF 34.57", buffer20.toString());
         assertEquals("cp begin", 1, cp.getBeginIndex());
         assertEquals("cp end", 4, cp.getEndIndex());
 
@@ -2296,17 +2295,17 @@ public class NumberFormatTest extends TestFmwk {
         plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer7 = new StringBuffer();
         plCurrencyFmt.format(amount, buffer7, cp);
-        assertEquals("35.47スイス フラン", "35.47スイス フラン", buffer7.toString());
-        assertEquals("cp begin", 5, cp.getBeginIndex());
-        assertEquals("cp end", 12, cp.getEndIndex());
+        assertEquals("35.47 スイス フラン", "35.47 スイス フラン", buffer7.toString());
+        assertEquals("cp begin", 6, cp.getBeginIndex());
+        assertEquals("cp end", 13, cp.getEndIndex());
 
         // PLURALCURRENCYSTYLE for non-ASCII.
         plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "de"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer8 = new StringBuffer();
         plCurrencyFmt.format(negAmount, buffer8, cp);
-        assertEquals("-34.57ユーロ", "-34.57ユーロ", buffer8.toString());
-        assertEquals("cp begin", 6, cp.getBeginIndex());
-        assertEquals("cp end", 9, cp.getEndIndex());
+        assertEquals("-34.57 ユーロ", "-34.57 ユーロ", buffer8.toString());
+        assertEquals("cp begin", 7, cp.getBeginIndex());
+        assertEquals("cp end", 10, cp.getEndIndex());
 
         nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(Locale.JAPAN);
         nf.setCurrency(Currency.getInstance(new Locale("ja", "jp")));
@@ -2320,9 +2319,9 @@ public class NumberFormatTest extends TestFmwk {
         plCurrencyFmt = NumberFormat.getInstance(new Locale("ja", "ch"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer10 = new StringBuffer();
         plCurrencyFmt.format(negAmount, buffer10, cp);
-        assertEquals("-34.57スイス フラン", "-34.57スイス フラン", buffer10.toString());
-        assertEquals("cp begin", 6, cp.getBeginIndex());
-        assertEquals("cp end", 13, cp.getEndIndex());
+        assertEquals("-34.57 スイス フラン", "-34.57 スイス フラン", buffer10.toString());
+        assertEquals("cp begin", 7, cp.getBeginIndex());
+        assertEquals("cp end", 14, cp.getEndIndex());
 
         // Nagative value with PLURALCURRENCYSTYLE, Arabic digits.
         nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("ar", "eg"));
@@ -2362,11 +2361,11 @@ public class NumberFormatTest extends TestFmwk {
     public void TestRoundingPattern() {
         class TestRoundingPatternItem {
             String     pattern;
-            double     roundingIncrement;
+            BigDecimal roundingIncrement;
             double     testCase;
             String     expected;
 
-            TestRoundingPatternItem(String pattern, double roundingIncrement, double testCase, String expected) {
+            TestRoundingPatternItem(String pattern, BigDecimal roundingIncrement, double testCase, String expected) {
                 this.pattern = pattern;
                 this.roundingIncrement = roundingIncrement;
                 this.testCase = testCase;
@@ -2375,13 +2374,12 @@ public class NumberFormatTest extends TestFmwk {
         };
 
         TestRoundingPatternItem []tests = {
-                new TestRoundingPatternItem("##0.65", 0.65, 1.234, "1.30"),
-                new TestRoundingPatternItem("#50", 50.0, 1230, "1250")
+                new TestRoundingPatternItem("##0.65", new BigDecimal("0.65"), 1.234, "1.30"),
+                new TestRoundingPatternItem("#50", new BigDecimal("50"), 1230, "1250")
         };
 
         DecimalFormat df = (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         String result;
-        BigDecimal bd;
         for (int i = 0; i < tests.length; i++) {
             df.applyPattern(tests[i].pattern);
 
@@ -2391,9 +2389,7 @@ public class NumberFormatTest extends TestFmwk {
                 errln("String Pattern Rounding Test Failed: Pattern: \"" + tests[i].pattern + "\" Number: " + tests[i].testCase + " - Got: " + result + " Expected: " + tests[i].expected);
             }
 
-            bd = new BigDecimal(tests[i].roundingIncrement);
-
-            df.setRoundingIncrement(bd);
+            df.setRoundingIncrement(tests[i].roundingIncrement);
 
             result = df.format(tests[i].testCase);
 
@@ -4130,7 +4126,7 @@ public class NumberFormatTest extends TestFmwk {
         // * TWD switches from 0 decimals to 2; PKR still has 0, so change test to that
         // * CAD rounds to .05 in the cash style only.
         for (int i = 0; i < 2; i++) {
-            String original_expected = "PKR124";
+            String original_expected = "PKR 124";
             DecimalFormat custom = null;
             if (i == 0) {
                 custom = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=PKR"),
@@ -4153,7 +4149,7 @@ public class NumberFormatTest extends TestFmwk {
             }
 
             String cash_currency = custom.format(123.567);
-            String cash_currency_expected = "PKR124";
+            String cash_currency_expected = "PKR 124";
             assertEquals("Test Currency Context", cash_currency_expected, cash_currency);
         }
 
@@ -4195,7 +4191,7 @@ public class NumberFormatTest extends TestFmwk {
 
             fmt2.setCurrency(Currency.getInstance("PKR"));
             String PKR_changed = fmt2.format(123.567);
-            String PKR_changed_expected = "PKR124";
+            String PKR_changed_expected = "PKR 124";
             assertEquals("Test Currency Context", PKR_changed_expected, PKR_changed);
         }
     }
@@ -4744,7 +4740,7 @@ public class NumberFormatTest extends TestFmwk {
         fmt.setDecimalFormatSymbols(symbols);
         fmt.applyPattern("#,##0.0#");
         assertEquals("Custom decimal and grouping separator string with multiple characters",
-                fmt.format(1234567.89), "(1)^^(2)(3)(4)^^(5)(6)(7)~~(8)(9)");
+                "(1)^^(2)(3)(4)^^(5)(6)(7)~~(8)(9)", fmt.format(1234567.89));
 
         // Digits starting at U+1D7CE MATHEMATICAL BOLD DIGIT ZERO
         // These are all single code points, so parsing will work.
@@ -4917,7 +4913,7 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
         df.applyPattern("¤¤¤ 0");
         String result = df.getPositivePrefix();
-        assertEquals("Triple-currency should give long name on getPositivePrefix", "US dollars ", result);
+        assertEquals("Triple-currency should give long name on getPositivePrefix", "US dollar ", result);
     }
 
     @Test
@@ -5263,7 +5259,7 @@ public class NumberFormatTest extends TestFmwk {
         symbols.setCurrencySymbol("#");
         df.setDecimalFormatSymbols(symbols);
         String actual = df.format(123);
-        assertEquals("Should use '#' instad of '$'", "#123.00", actual);
+        assertEquals("Should use '#' instad of '$'", "# 123.00", actual);
     }
 
     @Test
@@ -5478,9 +5474,9 @@ public class NumberFormatTest extends TestFmwk {
         df.setMaximumFractionDigits(3);
         expect2(df, 35.0, "$35.000");
         df.setMinimumFractionDigits(-1);
+        expect2(df, 35.0, "$35");
+        df.setMaximumFractionDigits(-1);
         expect2(df, 35.0, "$35.00");
-        df.setMaximumFractionDigits(1);
-        expect2(df, 35.0, "$35.0");
     }
 
     @Test
@@ -5633,46 +5629,6 @@ public class NumberFormatTest extends TestFmwk {
                 //assertEquals("Locale " + loc + ", string \"" + input + "\", RESTRICTED, "
                 //        + "actual result: " + result + " (ppos: " + ppos.getIndex() + ")",
                 //        (expected & 2) != 0, actualRestricted);
-            }
-        }
-    }
-
-    @Test
-    public void testSignificantDigitsMode() {
-        String[][] allExpected = {
-              {"12340.0", "12340.0", "12340.0"},
-              {"1234.0", "1234.0", "1234.0"},
-              {"123.4", "123.4", "123.4"},
-              {"12.34", "12.34", "12.34"},
-              {"1.234", "1.23", "1.23"},
-              {"0.1234", "0.12", "0.123"},
-              {"0.01234", "0.01", "0.0123"},
-              {"0.001234", "0.00", "0.00123"}
-        };
-
-        DecimalFormat df = new DecimalFormat();
-        df.setMinimumFractionDigits(1);
-        df.setMaximumFractionDigits(2);
-        df.setMinimumSignificantDigits(3);
-        df.setMaximumSignificantDigits(4);
-        df.setGroupingUsed(false);
-
-        SignificantDigitsMode[] modes = new SignificantDigitsMode[] {
-                SignificantDigitsMode.OVERRIDE_MAXIMUM_FRACTION,
-                SignificantDigitsMode.RESPECT_MAXIMUM_FRACTION,
-                SignificantDigitsMode.ENSURE_MINIMUM_SIGNIFICANT
-        };
-
-        for (double d = 12340.0, i=0; d > 0.001; d /= 10, i++) {
-            for (int j=0; j<modes.length; j++) {
-                SignificantDigitsMode mode = modes[j];
-                df.setSignificantDigitsMode(mode);
-                String expected = allExpected[(int)i][j];
-                String actual = df.format(d);
-                assertEquals("Significant digits mode getter is broken",
-                        mode, df.getSignificantDigitsMode());
-                assertEquals("Significant digits output differs for "+i+", "+j,
-                        expected, actual);
             }
         }
     }

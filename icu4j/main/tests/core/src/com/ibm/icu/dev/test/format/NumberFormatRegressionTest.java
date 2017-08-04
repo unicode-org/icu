@@ -76,7 +76,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         // or this (with changes to fr_CH per cldrbug:9370):
         //nf.setGroupingUsed(false);
         // so they are done in DateFormat.setNumberFormat
-    
+
         // create the DateFormat
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc);
 
@@ -185,7 +185,8 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 String result = format.format(data);
                 assertEquals("Deserialization new version should read old version", expected[i], result);
             } catch (Exception e) {
-                warnln("FAIL: " + e.getMessage());
+                e.printStackTrace();
+                warnln("FAIL: " + e);
             }
         }
     }

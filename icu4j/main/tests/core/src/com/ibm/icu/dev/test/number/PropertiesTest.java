@@ -37,7 +37,6 @@ import com.ibm.icu.impl.number.formatters.CurrencyFormat.CurrencyStyle;
 import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
-import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
@@ -304,11 +303,6 @@ public class PropertiesTest {
     } else if (type == RoundingMode.class) {
       if (seed == 0) return null;
       RoundingMode[] values = RoundingMode.values();
-      return values[seed % values.length];
-
-    } else if (type == SignificantDigitsMode.class) {
-      if (seed == 0) return null;
-      SignificantDigitsMode[] values = SignificantDigitsMode.values();
       return values[seed % values.length];
 
     } else {

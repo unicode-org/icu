@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
@@ -28,6 +29,11 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+
+import newapi.NumberFormatter.LocalizedNumberFormatter;
+import newapi.impl.MacroProps;
+import newapi.impl.NumberFormatterImpl;
+import newapi.impl.NumberPropertyMapper;
 
 public class NumberFormatDataDrivenTest {
 
@@ -431,7 +437,7 @@ public class NumberFormatDataDrivenTest {
         }
       };
 
-  private DataDrivenNumberFormatTestUtility.CodeUnderTest Shane =
+  private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU59 =
       new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
 
         @Override
@@ -667,117 +673,154 @@ public class NumberFormatDataDrivenTest {
         public String select(DataDrivenNumberFormatTestData tuple) {
           return null;
         }
+      };
 
-        private void propertiesFromTuple(
-            DataDrivenNumberFormatTestData tuple, Properties properties) {
-          if (tuple.minIntegerDigits != null) {
-            properties.setMinimumIntegerDigits(tuple.minIntegerDigits);
+  static void propertiesFromTuple(DataDrivenNumberFormatTestData tuple, Properties properties) {
+    if (tuple.minIntegerDigits != null) {
+      properties.setMinimumIntegerDigits(tuple.minIntegerDigits);
+    }
+    if (tuple.maxIntegerDigits != null) {
+      properties.setMaximumIntegerDigits(tuple.maxIntegerDigits);
+    }
+    if (tuple.minFractionDigits != null) {
+      properties.setMinimumFractionDigits(tuple.minFractionDigits);
+    }
+    if (tuple.maxFractionDigits != null) {
+      properties.setMaximumFractionDigits(tuple.maxFractionDigits);
+    }
+    if (tuple.currency != null) {
+      properties.setCurrency(tuple.currency);
+    }
+    if (tuple.minGroupingDigits != null) {
+      properties.setMinimumGroupingDigits(tuple.minGroupingDigits);
+    }
+    if (tuple.useSigDigits != null) {
+      // TODO
+    }
+    if (tuple.minSigDigits != null) {
+      properties.setMinimumSignificantDigits(tuple.minSigDigits);
+    }
+    if (tuple.maxSigDigits != null) {
+      properties.setMaximumSignificantDigits(tuple.maxSigDigits);
+    }
+    if (tuple.useGrouping != null && tuple.useGrouping == 0) {
+      properties.setGroupingSize(-1);
+      properties.setSecondaryGroupingSize(-1);
+    }
+    if (tuple.multiplier != null) {
+      properties.setMultiplier(new BigDecimal(tuple.multiplier));
+    }
+    if (tuple.roundingIncrement != null) {
+      properties.setRoundingIncrement(new BigDecimal(tuple.roundingIncrement.toString()));
+    }
+    if (tuple.formatWidth != null) {
+      properties.setFormatWidth(tuple.formatWidth);
+    }
+    if (tuple.padCharacter != null && tuple.padCharacter.length() > 0) {
+      properties.setPadString(tuple.padCharacter.toString());
+    }
+    if (tuple.useScientific != null) {
+      properties.setMinimumExponentDigits(
+          tuple.useScientific != 0 ? 1 : Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS);
+    }
+    if (tuple.grouping != null) {
+      properties.setGroupingSize(tuple.grouping);
+    }
+    if (tuple.grouping2 != null) {
+      properties.setSecondaryGroupingSize(tuple.grouping2);
+    }
+    if (tuple.roundingMode != null) {
+      properties.setRoundingMode(RoundingMode.valueOf(tuple.roundingMode));
+    }
+    if (tuple.currencyUsage != null) {
+      properties.setCurrencyUsage(tuple.currencyUsage);
+    }
+    if (tuple.minimumExponentDigits != null) {
+      properties.setMinimumExponentDigits(tuple.minimumExponentDigits.byteValue());
+    }
+    if (tuple.exponentSignAlwaysShown != null) {
+      properties.setExponentSignAlwaysShown(tuple.exponentSignAlwaysShown != 0);
+    }
+    if (tuple.decimalSeparatorAlwaysShown != null) {
+      properties.setDecimalSeparatorAlwaysShown(tuple.decimalSeparatorAlwaysShown != 0);
+    }
+    if (tuple.padPosition != null) {
+      properties.setPadPosition(PadPosition.fromOld(tuple.padPosition));
+    }
+    if (tuple.positivePrefix != null) {
+      properties.setPositivePrefix(tuple.positivePrefix);
+    }
+    if (tuple.positiveSuffix != null) {
+      properties.setPositiveSuffix(tuple.positiveSuffix);
+    }
+    if (tuple.negativePrefix != null) {
+      properties.setNegativePrefix(tuple.negativePrefix);
+    }
+    if (tuple.negativeSuffix != null) {
+      properties.setNegativeSuffix(tuple.negativeSuffix);
+    }
+    if (tuple.localizedPattern != null) {
+      DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(tuple.locale);
+      String converted = PatternString.convertLocalized(tuple.localizedPattern, symbols, false);
+      PatternString.parseToExistingProperties(converted, properties);
+    }
+    if (tuple.lenient != null) {
+      properties.setParseMode(tuple.lenient == 0 ? ParseMode.STRICT : ParseMode.LENIENT);
+    }
+    if (tuple.parseIntegerOnly != null) {
+      properties.setParseIntegerOnly(tuple.parseIntegerOnly != 0);
+    }
+    if (tuple.parseCaseSensitive != null) {
+      properties.setParseCaseSensitive(tuple.parseCaseSensitive != 0);
+    }
+    if (tuple.decimalPatternMatchRequired != null) {
+      properties.setDecimalPatternMatchRequired(tuple.decimalPatternMatchRequired != 0);
+    }
+    if (tuple.parseNoExponent != null) {
+      properties.setParseNoExponent(tuple.parseNoExponent != 0);
+    }
+  }
+
+  private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU60 =
+      new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
+
+        @Override
+        public Character Id() {
+          return 'Q';
+        }
+
+        /**
+         * Runs a single formatting test. On success, returns null. On failure, returns the error.
+         * This implementation just returns null. Subclasses should override.
+         *
+         * @param tuple contains the parameters of the format test.
+         */
+        @Override
+        public String format(DataDrivenNumberFormatTestData tuple) {
+          String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
+          ULocale locale = (tuple.locale == null) ? ULocale.ENGLISH : tuple.locale;
+          Properties properties =
+              PatternString.parseToProperties(
+                  pattern,
+                  tuple.currency != null
+                      ? PatternString.IGNORE_ROUNDING_ALWAYS
+                      : PatternString.IGNORE_ROUNDING_NEVER);
+          propertiesFromTuple(tuple, properties);
+          DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
+          MacroProps macros = NumberPropertyMapper.oldToNew(properties, symbols, null);
+          LocalizedNumberFormatter fmt = NumberFormatterImpl.fromMacros(macros).locale(locale);
+          Number number = toNumber(tuple.format);
+          String expected = tuple.output;
+          String actual = fmt.format(number).toString();
+          if (!expected.equals(actual)) {
+            return "Expected \"" + expected + "\", got \"" + actual + "\"";
           }
-          if (tuple.maxIntegerDigits != null) {
-            properties.setMaximumIntegerDigits(tuple.maxIntegerDigits);
-          }
-          if (tuple.minFractionDigits != null) {
-            properties.setMinimumFractionDigits(tuple.minFractionDigits);
-          }
-          if (tuple.maxFractionDigits != null) {
-            properties.setMaximumFractionDigits(tuple.maxFractionDigits);
-          }
-          if (tuple.currency != null) {
-            properties.setCurrency(tuple.currency);
-          }
-          if (tuple.minGroupingDigits != null) {
-            properties.setMinimumGroupingDigits(tuple.minGroupingDigits);
-          }
-          if (tuple.useSigDigits != null) {
-            // TODO
-          }
-          if (tuple.minSigDigits != null) {
-            properties.setMinimumSignificantDigits(tuple.minSigDigits);
-          }
-          if (tuple.maxSigDigits != null) {
-            properties.setMaximumSignificantDigits(tuple.maxSigDigits);
-          }
-          if (tuple.useGrouping != null && tuple.useGrouping == 0) {
-            properties.setGroupingSize(-1);
-            properties.setSecondaryGroupingSize(-1);
-          }
-          if (tuple.multiplier != null) {
-            properties.setMultiplier(new BigDecimal(tuple.multiplier));
-          }
-          if (tuple.roundingIncrement != null) {
-            properties.setRoundingIncrement(new BigDecimal(tuple.roundingIncrement.toString()));
-          }
-          if (tuple.formatWidth != null) {
-            properties.setFormatWidth(tuple.formatWidth);
-          }
-          if (tuple.padCharacter != null && tuple.padCharacter.length() > 0) {
-            properties.setPadString(tuple.padCharacter.toString());
-          }
-          if (tuple.useScientific != null) {
-            properties.setMinimumExponentDigits(
-                tuple.useScientific != 0 ? 1 : Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS);
-          }
-          if (tuple.grouping != null) {
-            properties.setGroupingSize(tuple.grouping);
-          }
-          if (tuple.grouping2 != null) {
-            properties.setSecondaryGroupingSize(tuple.grouping2);
-          }
-          if (tuple.roundingMode != null) {
-            properties.setRoundingMode(RoundingMode.valueOf(tuple.roundingMode));
-          }
-          if (tuple.currencyUsage != null) {
-            properties.setCurrencyUsage(tuple.currencyUsage);
-          }
-          if (tuple.minimumExponentDigits != null) {
-            properties.setMinimumExponentDigits(tuple.minimumExponentDigits.byteValue());
-          }
-          if (tuple.exponentSignAlwaysShown != null) {
-            properties.setExponentSignAlwaysShown(tuple.exponentSignAlwaysShown != 0);
-          }
-          if (tuple.decimalSeparatorAlwaysShown != null) {
-            properties.setDecimalSeparatorAlwaysShown(tuple.decimalSeparatorAlwaysShown != 0);
-          }
-          if (tuple.padPosition != null) {
-            properties.setPadPosition(PadPosition.fromOld(tuple.padPosition));
-          }
-          if (tuple.positivePrefix != null) {
-            properties.setPositivePrefix(tuple.positivePrefix);
-          }
-          if (tuple.positiveSuffix != null) {
-            properties.setPositiveSuffix(tuple.positiveSuffix);
-          }
-          if (tuple.negativePrefix != null) {
-            properties.setNegativePrefix(tuple.negativePrefix);
-          }
-          if (tuple.negativeSuffix != null) {
-            properties.setNegativeSuffix(tuple.negativeSuffix);
-          }
-          if (tuple.localizedPattern != null) {
-            DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(tuple.locale);
-            String converted =
-                PatternString.convertLocalized(tuple.localizedPattern, symbols, false);
-            PatternString.parseToExistingProperties(converted, properties);
-          }
-          if (tuple.lenient != null) {
-            properties.setParseMode(tuple.lenient == 0 ? ParseMode.STRICT : ParseMode.LENIENT);
-          }
-          if (tuple.parseIntegerOnly != null) {
-            properties.setParseIntegerOnly(tuple.parseIntegerOnly != 0);
-          }
-          if (tuple.parseCaseSensitive != null) {
-            properties.setParseCaseSensitive(tuple.parseCaseSensitive != 0);
-          }
-          if (tuple.decimalPatternMatchRequired != null) {
-            properties.setDecimalPatternMatchRequired(tuple.decimalPatternMatchRequired != 0);
-          }
-          if (tuple.parseNoExponent != null) {
-            properties.setParseNoExponent(tuple.parseNoExponent != 0);
-          }
+          return null;
         }
       };
 
   @Test
+  @Ignore
   public void TestDataDrivenICU58() {
     // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
     if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
@@ -787,14 +830,22 @@ public class NumberFormatDataDrivenTest {
   }
 
   @Test
+  @Ignore
   public void TestDataDrivenJDK() {
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", JDK);
   }
 
   @Test
-  public void TestDataDrivenShane() {
+  @Ignore
+  public void TestDataDrivenICU59() {
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
-        "numberformattestspecification.txt", Shane);
+        "numberformattestspecification.txt", ICU59);
+  }
+
+  @Test
+  public void TestDataDrivenICU60() {
+    DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
+        "numberformattestspecification.txt", ICU60);
   }
 }

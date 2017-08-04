@@ -184,6 +184,9 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   @Override
   public void multiplyBy(BigDecimal multiplicand) {
+    if (isInfinite() || isZero() || isNaN()) {
+      return;
+    }
     BigDecimal temp = toBigDecimal();
     temp = temp.multiply(multiplicand);
     setToBigDecimal(temp);
@@ -519,7 +522,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
    * @param n The value to consume.
    */
   @Override
-public void setToBigDecimal(BigDecimal n) {
+  public void setToBigDecimal(BigDecimal n) {
     setBcdToZero();
     flags = 0;
     if (n.signum() == -1) {
