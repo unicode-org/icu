@@ -195,6 +195,8 @@ public class MeasureUnit implements Serializable {
             factory = CURRENCY_FACTORY;
         } else if ("duration".equals(type)) {
             factory = TIMEUNIT_FACTORY;
+        } else if ("dimensionless".equals(type)) {
+            factory = DIMENSIONLESS_FACTORY;
         } else {
             factory = UNIT_FACTORY;
         }
@@ -246,6 +248,13 @@ public class MeasureUnit implements Serializable {
         @Override
         public MeasureUnit create(String type, String subType) {
            return new TimeUnit(type, subType);
+        }
+    };
+
+    static Factory DIMENSIONLESS_FACTORY = new Factory() {
+        @Override
+        public MeasureUnit create(String type, String subType) {
+           return new Dimensionless(subType);
         }
     };
 
