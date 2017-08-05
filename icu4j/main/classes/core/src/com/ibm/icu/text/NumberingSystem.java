@@ -36,6 +36,8 @@ import com.ibm.icu.util.UResourceBundleIterator;
 public class NumberingSystem {
     private static final String[] OTHER_NS_KEYWORDS = { "native", "traditional", "finance" };
 
+    public static final NumberingSystem LATIN = lookupInstanceByName("latn");
+
     /**
      * Default constructor.  Returns a numbering system that uses the Western decimal
      * digits 0 through 9.

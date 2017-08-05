@@ -5974,6 +5974,7 @@ icu4j/main/classes/core/src/com/ibm/icu/util/DangiCalendar.java svneol=native#te
 icu4j/main/classes/core/src/com/ibm/icu/util/DateInterval.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/DateRule.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/DateTimeRule.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/util/Dimensionless.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/EasterHoliday.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/EthiopicCalendar.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/Freezable.java svneol=native#text/plain%3Bcharset%3Dutf-8
