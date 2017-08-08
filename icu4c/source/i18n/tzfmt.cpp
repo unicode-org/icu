@@ -2430,7 +2430,7 @@ TimeZoneFormat::parseOffsetPattern(const UnicodeString& pattern, OffsetFields re
                 isPrevQuote = TRUE;
                 if (itemType != GMTOffsetField::TEXT) {
                     if (GMTOffsetField::isValid(itemType, itemLength)) {
-                        GMTOffsetField* fld = GMTOffsetField::createTimeField(itemType, (uint8_t)itemLength, status);
+                        GMTOffsetField* fld = GMTOffsetField::createTimeField(itemType, static_cast<uint8_t>(itemLength), status);
                         result->addElement(fld, status);
                         if (U_FAILURE(status)) {
                             break;
@@ -2465,7 +2465,7 @@ TimeZoneFormat::parseOffsetPattern(const UnicodeString& pattern, OffsetFields re
                             }
                         } else {
                             if (GMTOffsetField::isValid(itemType, itemLength)) {
-                                GMTOffsetField* fld = GMTOffsetField::createTimeField(itemType, itemLength, status);
+                                GMTOffsetField* fld = GMTOffsetField::createTimeField(itemType, static_cast<uint8_t>(itemLength), status);
                                 result->addElement(fld, status);
                                 if (U_FAILURE(status)) {
                                     break;
@@ -2483,7 +2483,7 @@ TimeZoneFormat::parseOffsetPattern(const UnicodeString& pattern, OffsetFields re
                     // a string literal
                     if (itemType != GMTOffsetField::TEXT) {
                         if (GMTOffsetField::isValid(itemType, itemLength)) {
-                            GMTOffsetField* fld = GMTOffsetField::createTimeField(itemType, itemLength, status);
+                            GMTOffsetField* fld = GMTOffsetField::createTimeField(itemType, static_cast<uint8_t>(itemLength), status);
                             result->addElement(fld, status);
                             if (U_FAILURE(status)) {
                                 break;
@@ -2508,7 +2508,7 @@ TimeZoneFormat::parseOffsetPattern(const UnicodeString& pattern, OffsetFields re
             }
         } else {
             if (GMTOffsetField::isValid(itemType, itemLength)) {
-                GMTOffsetField* fld = GMTOffsetField::createTimeField(itemType, itemLength, status);
+                GMTOffsetField* fld = GMTOffsetField::createTimeField(itemType, static_cast<uint8_t>(itemLength), status);
                 result->addElement(fld, status);
             } else {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
