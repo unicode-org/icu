@@ -427,6 +427,7 @@ tzdbNames{
             ss{"LINT"}
         }
         "meta:Lord_Howe"{
+            sd{"LHDT"}
             ss{"LHST"}
         }
         "meta:Macau"{
