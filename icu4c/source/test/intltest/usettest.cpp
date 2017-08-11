@@ -67,35 +67,37 @@ UnicodeSetTest::~UnicodeSetTest() {
 void
 UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
                                const char* &name, char* /*par*/) {
-    // if (exec) logln((UnicodeString)"TestSuite UnicodeSetTest");
-    switch (index) {
-        CASE(0,TestPatterns);
-        CASE(1,TestAddRemove);
-        CASE(2,TestCategories);
-        CASE(3,TestCloneEqualHash);
-        CASE(4,TestMinimalRep);
-        CASE(5,TestAPI);
-        CASE(6,TestScriptSet);
-        CASE(7,TestPropertySet);
-        CASE(8,TestClone);
-        CASE(9,TestExhaustive);
-        CASE(10,TestToPattern);
-        CASE(11,TestIndexOf);
-        CASE(12,TestStrings);
-        CASE(13,Testj2268);
-        CASE(14,TestCloseOver);
-        CASE(15,TestEscapePattern);
-        CASE(16,TestInvalidCodePoint);
-        CASE(17,TestSymbolTable);
-        CASE(18,TestSurrogate);
-        CASE(19,TestPosixClasses);
-        CASE(20,TestIteration);
-        CASE(21,TestFreezable);
-        CASE(22,TestSpan);
-        CASE(23,TestStringSpan);
-        CASE(24,TestUCAUnsafeBackwards);
-        default: name = ""; break;
+    if (exec) {
+        logln(u"TestSuite UnicodeSetTest");
     }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestPatterns);
+    TESTCASE_AUTO(TestAddRemove);
+    TESTCASE_AUTO(TestCategories);
+    TESTCASE_AUTO(TestCloneEqualHash);
+    TESTCASE_AUTO(TestMinimalRep);
+    TESTCASE_AUTO(TestAPI);
+    TESTCASE_AUTO(TestScriptSet);
+    TESTCASE_AUTO(TestPropertySet);
+    TESTCASE_AUTO(TestClone);
+    TESTCASE_AUTO(TestExhaustive);
+    TESTCASE_AUTO(TestToPattern);
+    TESTCASE_AUTO(TestIndexOf);
+    TESTCASE_AUTO(TestStrings);
+    TESTCASE_AUTO(Testj2268);
+    TESTCASE_AUTO(TestCloseOver);
+    TESTCASE_AUTO(TestEscapePattern);
+    TESTCASE_AUTO(TestInvalidCodePoint);
+    TESTCASE_AUTO(TestSymbolTable);
+    TESTCASE_AUTO(TestSurrogate);
+    TESTCASE_AUTO(TestPosixClasses);
+    TESTCASE_AUTO(TestIteration);
+    TESTCASE_AUTO(TestFreezable);
+    TESTCASE_AUTO(TestSpan);
+    TESTCASE_AUTO(TestStringSpan);
+    TESTCASE_AUTO(TestUCAUnsafeBackwards);
+    TESTCASE_AUTO(TestIntOverflow);
+    TESTCASE_AUTO_END;
 }
 
 static const char NOT[] = "%%%%";
@@ -3924,4 +3926,13 @@ void UnicodeSetTest::TestUCAUnsafeBackwards() {
         checkRoundTrip(*unsafeBackwardSet);
     }
 #endif
+}
+
+void UnicodeSetTest::TestIntOverflow() {
+    // This test triggers undefined double->int conversion behavior
+    // if the implementation is not careful.
+    IcuTestErrorCode errorCode(*this, "TestIntOverflow");
+    UnicodeSet set(u"[:ccc=2222222222222222222:]", errorCode);
+    assertTrue("[:ccc=int_overflow:] -> empty set", set.isEmpty());
+    assertEquals("[:ccc=int_overflow:] -> illegal argument", U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
 }

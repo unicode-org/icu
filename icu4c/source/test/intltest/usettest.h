@@ -91,6 +91,7 @@ private:
     void TestStringSpan();
 
     void TestUCAUnsafeBackwards();
+    void TestIntOverflow();
 
 private:
 

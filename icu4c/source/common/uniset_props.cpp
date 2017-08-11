@@ -1009,9 +1009,10 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     p == UCHAR_LEAD_CANONICAL_COMBINING_CLASS) {
                     char* end;
                     double value = uprv_strtod(vname.data(), &end);
-                    v = (int32_t) value;
-                    if (v != value || v < 0 || *end != 0) {
-                        // non-integral or negative value, or trailing junk
+                    // Cast double->int only after range check.
+                    if (*end != 0 || value < 0 || 255 < value ||
+                            (v = (int32_t)value) != value) {
+                        // non-integral value or outside 0..255, or trailing junk
                         FAIL(ec);
                     }
                     // If the resultant set is empty then the numeric value
