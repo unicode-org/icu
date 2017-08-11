@@ -62,7 +62,7 @@ namespace {
 static const UChar *rootRules = NULL;
 static int32_t rootRulesLength = 0;
 static UResourceBundle *rootBundle = NULL;
-static UInitOnce gInitOnce = U_INITONCE_INITIALIZER;
+static UInitOnce gInitOnceUcolRes = U_INITONCE_INITIALIZER;
 
 }  // namespace
 
@@ -74,7 +74,7 @@ ucol_res_cleanup() {
     rootRulesLength = 0;
     ures_close(rootBundle);
     rootBundle = NULL;
-    gInitOnce.reset();
+    gInitOnceUcolRes.reset();
     return TRUE;
 }
 
@@ -97,7 +97,7 @@ U_CDECL_END
 void
 CollationLoader::appendRootRules(UnicodeString &s) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    umtx_initOnce(gInitOnce, CollationLoader::loadRootRules, errorCode);
+    umtx_initOnce(gInitOnceUcolRes, CollationLoader::loadRootRules, errorCode);
     if(U_SUCCESS(errorCode)) {
         s.append(rootRules, rootRulesLength);
     }

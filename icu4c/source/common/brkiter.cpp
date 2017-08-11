@@ -278,7 +278,7 @@ ICUBreakIteratorService::~ICUBreakIteratorService() {}
 // defined in ucln_cmn.h
 U_NAMESPACE_END
 
-static icu::UInitOnce gInitOnce;
+static icu::UInitOnce gInitOnceBrkiter;
 static icu::ICULocaleService* gService = NULL;
 
 
@@ -293,7 +293,7 @@ static UBool U_CALLCONV breakiterator_cleanup(void) {
         delete gService;
         gService = NULL;
     }
-    gInitOnce.reset();
+    gInitOnceBrkiter.reset();
 #endif
     return TRUE;
 }
@@ -309,7 +309,7 @@ initService(void) {
 static ICULocaleService*
 getService(void)
 {
-    umtx_initOnce(gInitOnce, &initService);
+    umtx_initOnce(gInitOnceBrkiter, &initService);
     return gService;
 }
 
@@ -319,7 +319,7 @@ getService(void)
 static inline UBool
 hasService(void)
 {
-    return !gInitOnce.isReset() && getService() != NULL;
+    return !gInitOnceBrkiter.isReset() && getService() != NULL;
 }
 
 // -------------------------------------
