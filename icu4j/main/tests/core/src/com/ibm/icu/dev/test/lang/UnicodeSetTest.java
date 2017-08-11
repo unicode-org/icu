@@ -1616,7 +1616,7 @@ public class UnicodeSetTest extends TestFmwk {
 
         TreeSet<UnicodeSet> sorted1 = new TreeSet<UnicodeSet>(new Comparator<UnicodeSet>(){
             @Override
-      public int compare(UnicodeSet o1, UnicodeSet o2) {
+            public int compare(UnicodeSet o1, UnicodeSet o2) {
                 // TODO Auto-generated method stub
                 return o1.compareTo(o2, ComparisonStyle.LONGER_FIRST);
             }});
@@ -1627,7 +1627,7 @@ public class UnicodeSetTest extends TestFmwk {
 
         sorted1 = new TreeSet<UnicodeSet>(new Comparator<UnicodeSet>(){
             @Override
-      public int compare(UnicodeSet o1, UnicodeSet o2) {
+            public int compare(UnicodeSet o1, UnicodeSet o2) {
                 // TODO Auto-generated method stub
                 return o1.compareTo(o2, ComparisonStyle.LEXICOGRAPHIC);
             }});
@@ -1934,7 +1934,7 @@ public class UnicodeSetTest extends TestFmwk {
          * @see com.ibm.icu.text.SymbolTable#lookup(java.lang.String)
          */
         @Override
-    public char[] lookup(String s) {
+        public char[] lookup(String s) {
             logln("TokenSymbolTable: lookup \"" + s + "\" => \"" +
                     new String((char[]) contents.get(s)) + "\"");
             return (char[])contents.get(s);
@@ -1944,7 +1944,7 @@ public class UnicodeSetTest extends TestFmwk {
          * @see com.ibm.icu.text.SymbolTable#lookupMatcher(int)
          */
         @Override
-    public UnicodeMatcher lookupMatcher(int ch) {
+        public UnicodeMatcher lookupMatcher(int ch) {
             return null;
         }
 
@@ -1953,7 +1953,7 @@ public class UnicodeSetTest extends TestFmwk {
      java.text.ParsePosition, int)
          */
         @Override
-    public String parseReference(String text, ParsePosition pos, int
+        public String parseReference(String text, ParsePosition pos, int
                 limit) {
             int cp;
             int start = pos.getIndex();
@@ -2591,9 +2591,6 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Check that there are no gaps, when we alternate spanning. That is, there
      * should only be a zero length span at the very start.
-     * @param longString
-     * @param us
-     * @param simple
      */
     private int checkSpan(String longString, UnicodeSet us, SpanCondition spanCondition) {
         int start = 0;
