@@ -92,6 +92,7 @@ private:
 
     void TestUCAUnsafeBackwards();
     void TestIntOverflow();
+    void TestUnusedCcc();
 
 private:
 

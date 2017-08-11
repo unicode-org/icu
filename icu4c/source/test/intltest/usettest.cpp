@@ -97,6 +97,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestStringSpan);
     TESTCASE_AUTO(TestUCAUnsafeBackwards);
     TESTCASE_AUTO(TestIntOverflow);
+    TESTCASE_AUTO(TestUnusedCcc);
     TESTCASE_AUTO_END;
 }
 
@@ -3934,5 +3935,34 @@ void UnicodeSetTest::TestIntOverflow() {
     IcuTestErrorCode errorCode(*this, "TestIntOverflow");
     UnicodeSet set(u"[:ccc=2222222222222222222:]", errorCode);
     assertTrue("[:ccc=int_overflow:] -> empty set", set.isEmpty());
-    assertEquals("[:ccc=int_overflow:] -> illegal argument", U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+    assertEquals("[:ccc=int_overflow:] -> illegal argument",
+                 U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+}
+
+void UnicodeSetTest::TestUnusedCcc() {
+    // All numeric ccc values 0..255 are valid, but many are unused.
+    IcuTestErrorCode errorCode(*this, "TestUnusedCcc");
+    UnicodeSet ccc2(u"[:ccc=2:]", errorCode);
+    assertSuccess("[:ccc=2:]", errorCode);
+    assertTrue("[:ccc=2:] -> empty set", ccc2.isEmpty());
+
+    UnicodeSet ccc255(u"[:ccc=255:]", errorCode);
+    assertSuccess("[:ccc=255:]", errorCode);
+    assertTrue("[:ccc=255:] -> empty set", ccc255.isEmpty());
+
+    // Non-integer values and values outside 0..255 are invalid.
+    UnicodeSet ccc_1(u"[:ccc=-1:]", errorCode);
+    assertEquals("[:ccc=-1:] -> illegal argument",
+                 U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+    assertTrue("[:ccc=-1:] -> empty set", ccc_1.isEmpty());
+
+    UnicodeSet ccc256(u"[:ccc=256:]", errorCode);
+    assertEquals("[:ccc=256:] -> illegal argument",
+                 U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+    assertTrue("[:ccc=256:] -> empty set", ccc256.isEmpty());
+
+    UnicodeSet ccc1_1(u"[:ccc=1.1:]", errorCode);
+    assertEquals("[:ccc=1.1:] -> illegal argument",
+                 U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+    assertTrue("[:ccc=1.1:] -> empty set", ccc1_1.isEmpty());
 }
