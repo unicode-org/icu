@@ -73,7 +73,6 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 #if !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestBug4153072);
 #endif
-    TESTCASE_AUTO(TestStatusReturn);
 #if !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestUnicodeFiles);
     TESTCASE_AUTO(TestEmptyString);
@@ -264,51 +263,6 @@ RBBITest::RBBITest() {
 
 
 RBBITest::~RBBITest() {
-}
-
-//-----------------------------------------------------------------------------------
-//
-//   Test for status {tag} return value from break rules.
-//        TODO:  a more thorough test.
-//
-//-----------------------------------------------------------------------------------
-void RBBITest::TestStatusReturn() {
-     UnicodeString rulesString1("$Letters = [:L:];\n"
-                                  "$Numbers = [:N:];\n"
-                                  "$Letters+{1};\n"
-                                  "$Numbers+{2};\n"
-                                  "Help\\ /me\\!{4};\n"
-                                  "[^$Letters $Numbers];\n"
-                                  "!.*;\n", -1, US_INV);
-     UnicodeString testString1  = "abc123..abc Help me Help me!";
-                                // 01234567890123456789012345678
-     int32_t bounds1[]   = {0, 3, 6, 7, 8, 11, 12, 16, 17, 19, 20, 25, 27, 28, -1};
-     int32_t brkStatus[] = {0, 1, 2, 0, 0,  1,  0,  1,  0,  1,  0,  4,  1,  0, -1};
-
-     UErrorCode status=U_ZERO_ERROR;
-     UParseError    parseError;
-
-     LocalPointer <BreakIterator> bi(new RuleBasedBreakIterator(rulesString1, parseError, status));
-     if(U_FAILURE(status)) {
-         dataerrln("%s:%d error in break iterator construction - %s", __FILE__, __LINE__,  u_errorName(status));
-         return;
-     }
-     int32_t  pos;
-     int32_t  i = 0;
-     bi->setText(testString1);
-     for (pos=bi->first(); pos!= BreakIterator::DONE; pos=bi->next()) {
-         if (pos != bounds1[i]) {
-             errln("%s:%d  expected break at %d, got %d\n", __FILE__, __LINE__, bounds1[i], pos);
-             break;
-         }
-
-         int tag = bi->getRuleStatus();
-         if (tag != brkStatus[i]) {
-             errln("%s:%d  break at %d, expected tag %d, got tag %d\n", __FILE__, __LINE__, pos, brkStatus[i], tag);
-             break;
-         }
-         i++;
-     }
 }
 
 
@@ -1131,33 +1085,26 @@ void RBBITest::TestExtended() {
     UErrorCode      status  = U_ZERO_ERROR;
     Locale          locale("");
 
-    UnicodeString       rules;
     TestParams          tp(status);
 
-    RegexMatcher      localeMatcher(UNICODE_STRING_SIMPLE("<locale *([\\p{L}\\p{Nd}_@&=-]*) *>"), 0, status);
+    RegexMatcher      localeMatcher(UnicodeString(u"<locale *([\\p{L}\\p{Nd}_@&=-]*) *>"), 0, status);
     if (U_FAILURE(status)) {
         dataerrln("Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(status));
     }
-
 
     //
     //  Open and read the test data file.
     //
     const char *testDataDirectory = IntlTest::getSourceTestData(status);
-    char testFileName[1000];
-    if (testDataDirectory == NULL || strlen(testDataDirectory) >= sizeof(testFileName)) {
-        errln("Can't open test data.  Path too long.");
-        return;
-    }
-    strcpy(testFileName, testDataDirectory);
-    strcat(testFileName, "rbbitst.txt");
+    CharString testFileName(testDataDirectory, -1, status);
+    testFileName.append("rbbitst.txt", -1, status);
 
     int    len;
-    UChar *testFile = ReadAndConvertFile(testFileName, len, "UTF-8", status);
+    UChar *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
     if (U_FAILURE(status)) {
-        return; /* something went wrong, error already output */
+        errln("%s:%d Error %s opening file rbbitst.txt", __FILE__, __LINE__, u_errorName(status));
+        return;
     }
-
 
     bool skipTest = false; // Skip this test?
 
@@ -1170,7 +1117,8 @@ void RBBITest::TestExtended() {
         PARSE_COMMENT,
         PARSE_TAG,
         PARSE_DATA,
-        PARSE_NUM
+        PARSE_NUM,
+        PARSE_RULES
     }
     parseState = PARSE_TAG;
 
@@ -1181,7 +1129,10 @@ void RBBITest::TestExtended() {
     int32_t    column   = 0;
     int32_t    charIdx  = 0;
 
-    int32_t    tagValue = 0;       // The numeric value of a <nnn> tag.
+    int32_t    tagValue = 0;             // The numeric value of a <nnn> tag.
+
+    UnicodeString       rules;           // Holds rules from a <rules> ... </rules> block
+    int32_t             rulesFirstLine;  // Line number of the start of current <rules> block
 
     for (charIdx = 0; charIdx < len; ) {
         status = U_ZERO_ERROR;
@@ -1215,38 +1166,47 @@ void RBBITest::TestExtended() {
             if (u_isUWhiteSpace(c)) {
                 break;
             }
-            if (testString.compare(charIdx-1, 6, "<word>") == 0) {
+            if (testString.compare(charIdx-1, 6, u"<word>") == 0) {
                 delete tp.bi;
                 tp.bi = BreakIterator::createWordInstance(locale,  status);
                 skipTest = false;
                 charIdx += 5;
                 break;
             }
-            if (testString.compare(charIdx-1, 6, "<char>") == 0) {
+            if (testString.compare(charIdx-1, 6, u"<char>") == 0) {
                 delete tp.bi;
                 tp.bi = BreakIterator::createCharacterInstance(locale,  status);
                 skipTest = false;
                 charIdx += 5;
                 break;
             }
-            if (testString.compare(charIdx-1, 6, "<line>") == 0) {
+            if (testString.compare(charIdx-1, 6, u"<line>") == 0) {
                 delete tp.bi;
                 tp.bi = BreakIterator::createLineInstance(locale,  status);
                 skipTest = false;
                 charIdx += 5;
                 break;
             }
-            if (testString.compare(charIdx-1, 6, "<sent>") == 0) {
+            if (testString.compare(charIdx-1, 6, u"<sent>") == 0) {
                 delete tp.bi;
                 tp.bi = BreakIterator::createSentenceInstance(locale,  status);
                 skipTest = false;
                 charIdx += 5;
                 break;
             }
-            if (testString.compare(charIdx-1, 7, "<title>") == 0) {
+            if (testString.compare(charIdx-1, 7, u"<title>") == 0) {
                 delete tp.bi;
                 tp.bi = BreakIterator::createTitleInstance(locale,  status);
                 charIdx += 6;
+                break;
+            }
+
+            if (testString.compare(charIdx-1, 7, u"<rules>") == 0 ||
+                testString.compare(charIdx-1, 10, u"<badrules>") == 0) {
+                charIdx = testString.indexOf(u'>', charIdx) + 1;
+                parseState = PARSE_RULES;
+                rules.remove();
+                rulesFirstLine = lineNum;
                 break;
             }
 
@@ -1261,7 +1221,7 @@ void RBBITest::TestExtended() {
                 TEST_ASSERT_SUCCESS(status);
                 break;
             }
-            if (testString.compare(charIdx-1, 6, "<data>") == 0) {
+            if (testString.compare(charIdx-1, 6, u"<data>") == 0) {
                 parseState = PARSE_DATA;
                 charIdx += 5;
                 tp.dataToBreak = "";
@@ -1278,6 +1238,33 @@ void RBBITest::TestExtended() {
             }
             break;
 
+        case PARSE_RULES:
+            if (testString.compare(charIdx-1, 8, u"</rules>") == 0) {
+                charIdx += 7;
+                parseState = PARSE_TAG;
+                delete tp.bi;
+                UParseError pe;
+                tp.bi = new RuleBasedBreakIterator(rules, pe, status);
+                skipTest = U_FAILURE(status);
+                if (U_FAILURE(status)) {
+                    errln("file rbbitst.txt: %d - Error %s creating break iterator from rules.",
+                        rulesFirstLine + pe.line - 1, u_errorName(status));
+                }
+            } else if (testString.compare(charIdx-1, 11, u"</badrules>") == 0) {
+                charIdx += 10;
+                parseState = PARSE_TAG;
+                UErrorCode ec = U_ZERO_ERROR;
+                UParseError pe;
+                RuleBasedBreakIterator bi(rules, pe, ec);
+                if (U_SUCCESS(ec)) {
+                    errln("file rbbitst.txt: %d - Expected, but did not get, a failure creating break iterator from rules.",
+                        rulesFirstLine + pe.line - 1);
+                }
+            } else {
+                rules.append(c);
+            }
+            break;
+
         case PARSE_DATA:
             if (c == u'•') {
                 int32_t  breakIdx = tp.dataToBreak.length();
@@ -1290,7 +1277,7 @@ void RBBITest::TestExtended() {
                 break;
             }
 
-            if (testString.compare(charIdx-1, 7, "</data>") == 0) {
+            if (testString.compare(charIdx-1, 7, u"</data>") == 0) {
                 // Add final entry to mappings from break location to source file position.
                 //  Need one extra because last break position returned is after the
                 //    last char in the data, not at the last char.
@@ -1316,7 +1303,7 @@ void RBBITest::TestExtended() {
                 break;
             }
 
-            if (testString.compare(charIdx-1, 3, UNICODE_STRING_SIMPLE("\\N{")) == 0) {
+            if (testString.compare(charIdx-1, 3, u"\\N{") == 0) {
                 // Named character, e.g. \N{COMBINING GRAVE ACCENT}
                 // Get the code point from the name and insert it into the test data.
                 //   (Damn, no API takes names in Unicode  !!!
@@ -1355,8 +1342,7 @@ void RBBITest::TestExtended() {
 
 
 
-
-            if (testString.compare(charIdx-1, 2, "<>") == 0) {
+            if (testString.compare(charIdx-1, 2, u"<>") == 0) {
                 charIdx++;
                 int32_t  breakIdx = tp.dataToBreak.length();
                 tp.expectedBreaks->setSize(breakIdx+1);
@@ -1469,13 +1455,25 @@ void RBBITest::TestExtended() {
 
 
         if (U_FAILURE(status)) {
-            dataerrln("ICU Error %s while parsing test file at line %d.",
+            errln("ICU Error %s while parsing test file at line %d.",
                 u_errorName(status), lineNum);
             status = U_ZERO_ERROR;
             goto end_test; // Stop the test
         }
 
     }
+
+    // Reached end of test file. Raise an error if parseState indicates that we are
+    //   within a block that should have been terminated.
+
+    if (parseState == PARSE_RULES) {
+        errln("rbbitst.txt:%d <rules> block beginning at line %d is not closed.",
+            lineNum, rulesFirstLine);
+    }
+    if (parseState == PARSE_DATA) {
+        errln("rbbitst.txt:%d <data> block not closed.", lineNum);
+    }
+
 
 end_test:
     delete [] testFile;
@@ -3762,16 +3760,16 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
     for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
         forward[count] = i;
         if (count < expectedcount && expected[count] != i) {
-            test->errln("break forward test failed: expected %d but got %d",
-                        expected[count], i);
+            test->errln("%s:%d break forward test failed: expected %d but got %d",
+                        __FILE__, __LINE__, expected[count], i);
             break;
         }
         count ++;
     }
     if (count != expectedcount) {
         printStringBreaks(ustr, expected, expectedcount);
-        test->errln("break forward test failed: missed %d match",
-                    expectedcount - count);
+        test->errln("%s:%d break forward test failed: missed %d match",
+                    __FILE__, __LINE__, expectedcount - count);
         return;
     }
     // testing boundaries
@@ -3779,13 +3777,15 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
         int j = expected[i - 1];
         if (!bi->isBoundary(j)) {
             printStringBreaks(ustr, expected, expectedcount);
-            test->errln("isBoundary() failed.  Expected boundary at position %d", j);
+            test->errln("%s:%d isBoundary() failed.  Expected boundary at position %d",
+                    __FILE__, __LINE__, j);
             return;
         }
         for (j = expected[i - 1] + 1; j < expected[i]; j ++) {
             if (bi->isBoundary(j)) {
                 printStringBreaks(ustr, expected, expectedcount);
-                test->errln("isBoundary() failed.  Not expecting boundary at position %d", j);
+                test->errln("%s:%d isBoundary() failed.  Not expecting boundary at position %d",
+                    __FILE__, __LINE__, j);
                 return;
             }
         }
@@ -3795,8 +3795,8 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
         count --;
         if (forward[count] != i) {
             printStringBreaks(ustr, expected, expectedcount);
-            test->errln("happy break test previous() failed: expected %d but got %d",
-                        forward[count], i);
+            test->errln("%s:%d happy break test previous() failed: expected %d but got %d",
+                        __FILE__, __LINE__, forward[count], i);
             break;
         }
     }
@@ -3811,9 +3811,12 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
         // int j = expected[i] + 1;
         int j = ustr.moveIndex32(expected[i], 1);
         for (; j <= expected[i + 1]; j ++) {
-            if (bi->preceding(j) != expected[i]) {
+            int32_t expectedPreceding = expected[i];
+            int32_t actualPreceding = bi->preceding(j);
+            if (actualPreceding != expectedPreceding) {
                 printStringBreaks(ustr, expected, expectedcount);
-                test->errln("preceding(): Not expecting boundary at position %d", j);
+                test->errln("%s:%d preceding(%d): expected %d, got %d",
+                        __FILE__, __LINE__, j, expectedPreceding, actualPreceding);
                 return;
             }
         }
@@ -3905,7 +3908,12 @@ void RBBITest::TestWordBoundary(void)
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     // BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
-    BreakIterator *bi = BreakIterator::createWordInstance(locale, status);
+    LocalPointer<BreakIterator> bi(BreakIterator::createWordInstance(locale, status), status);
+    if (U_FAILURE(status)) {
+        errcheckln(status, "%s:%d Creation of break iterator failed %s",
+                __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
     UChar         str[50];
     static const char *strlist[] =
     {
@@ -3940,43 +3948,44 @@ void RBBITest::TestWordBoundary(void)
     "\\u003b\\u0027\\u00b7\\u47a3",
     };
     int loop;
-    if (U_FAILURE(status)) {
-        errcheckln(status, "Creation of break iterator failed %s", u_errorName(status));
-        return;
-    }
     for (loop = 0; loop < UPRV_LENGTHOF(strlist); loop ++) {
-        // printf("looping %d\n", loop);
-        u_unescape(strlist[loop], str, 20);
+        u_unescape(strlist[loop], str, UPRV_LENGTHOF(str));
         UnicodeString ustr(str);
         int forward[50];
         int count = 0;
 
         bi->setText(ustr);
-        int prev = 0;
-        int i;
-        for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
-            forward[count ++] = i;
-            if (i > prev) {
-                int j;
-                for (j = prev + 1; j < i; j ++) {
-                    if (bi->isBoundary(j)) {
-                        printStringBreaks(ustr, forward, count);
-                        errln("happy boundary test failed: expected %d not a boundary",
-                               j);
-                        return;
-                    }
-                }
-            }
-            if (!bi->isBoundary(i)) {
-                printStringBreaks(ustr, forward, count);
-                errln("happy boundary test failed: expected %d a boundary",
-                       i);
+        int prev = -1;
+        for (int32_t boundary = bi->first(); boundary != BreakIterator::DONE; boundary = bi->next()) {
+            ++count;
+            if (count >= UPRV_LENGTHOF(forward)) {
+                errln("%s:%d too many breaks found. (loop, count, boundary) = (%d, %d, %d)",
+                        __FILE__, __LINE__, loop, count, boundary);
                 return;
             }
-            prev = i;
+            forward[count] = boundary;
+            if (boundary <= prev) {
+                errln("%s:%d bi::next() did not advance. (loop, prev, boundary) = (%d, %d, %d)\n",
+                        __FILE__, __LINE__, loop, prev, boundary);
+                break;
+            }
+            for (int32_t nonBoundary = prev + 1; nonBoundary < boundary; nonBoundary ++) {
+                if (bi->isBoundary(nonBoundary)) {
+                    printStringBreaks(ustr, forward, count);
+                    errln("%s:%d isBoundary(nonBoundary) failed. (loop, prev, nonBoundary, boundary) = (%d, %d, %d, %d)",
+                           __FILE__, __LINE__, loop, prev, nonBoundary, boundary);
+                    return;
+                }
+            }
+            if (!bi->isBoundary(boundary)) {
+                printStringBreaks(ustr, forward, count);
+                errln("%s:%d happy boundary test failed: expected %d a boundary",
+                       __FILE__, __LINE__, boundary);
+                return;
+            }
+            prev = boundary;
         }
     }
-    delete bi;
 }
 
 void RBBITest::TestLineBreaks(void)
