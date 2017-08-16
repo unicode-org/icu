@@ -403,7 +403,6 @@ public void TestExtended() {
 
     // Reached end of test file. Raise an error if parseState indicates that we are
     //   within a block that should have been terminated.
-
     if (parseState == PARSE_RULES) {
         errln(String.format("rbbitst.txt:%d <rules> block beginning at line %d is not closed.",
             lineNum, rulesFirstLine));
