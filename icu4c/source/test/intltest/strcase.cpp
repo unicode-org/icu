@@ -57,6 +57,8 @@ public:
     void TestMalformedUTF8();
     void TestBufferOverflow();
     void TestEdits();
+    void TestCopyMoveEdits();
+    void TestMergeEdits();
     void TestCaseMapWithEdits();
     void TestCaseMapUTF8WithEdits();
     void TestLongUnicodeString();
@@ -94,6 +96,8 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestMalformedUTF8);
     TESTCASE_AUTO(TestBufferOverflow);
     TESTCASE_AUTO(TestEdits);
+    TESTCASE_AUTO(TestCopyMoveEdits);
+    TESTCASE_AUTO(TestMergeEdits);
     TESTCASE_AUTO(TestCaseMapWithEdits);
     TESTCASE_AUTO(TestCaseMapUTF8WithEdits);
     TESTCASE_AUTO(TestLongUnicodeString);
@@ -964,6 +968,225 @@ void StringCaseTest::TestEdits() {
     assertEquals("reset", 0, edits.lengthDelta());
     Edits::Iterator ei = edits.getCoarseChangesIterator();
     assertFalse("reset then iterator", ei.next(errorCode));
+}
+
+void StringCaseTest::TestCopyMoveEdits() {
+    IcuTestErrorCode errorCode(*this, "TestCopyMoveEdits");
+    // Exceed the stack array capacity.
+    Edits a;
+    for (int32_t i = 0; i < 250; ++i) {
+        a.addReplace(i % 10, (i % 10) + 1);
+    }
+    assertEquals("a: many edits, length delta", 250, a.lengthDelta());
+
+    // copy
+    Edits b(a);
+    assertEquals("b: copy of many edits, length delta", 250, b.lengthDelta());
+    assertEquals("a remains: many edits, length delta", 250, a.lengthDelta());
+    TestUtility::checkEqualEdits(*this, u"b copy of a", a, b, errorCode);
+
+    // assign
+    Edits c;
+    c.addUnchanged(99);
+    c.addReplace(88, 77);
+    c = b;
+    assertEquals("c: assigned many edits, length delta", 250, c.lengthDelta());
+    assertEquals("b remains: many edits, length delta", 250, b.lengthDelta());
+    TestUtility::checkEqualEdits(*this, u"c = b", b, c, errorCode);
+
+    // move constructor empties object with heap array
+    Edits d(std::move(a));
+    assertEquals("d: move-constructed many edits, length delta", 250, d.lengthDelta());
+    assertFalse("a moved away: no more hasChanges", a.hasChanges());
+    TestUtility::checkEqualEdits(*this, u"d() <- a", d, b, errorCode);
+    Edits empty;
+    TestUtility::checkEqualEdits(*this, u"a moved away", empty, a, errorCode);
+
+    // move assignment empties object with heap array
+    Edits e;
+    e.addReplace(0, 1000);
+    e = std::move(b);
+    assertEquals("e: move-assigned many edits, length delta", 250, e.lengthDelta());
+    assertFalse("b moved away: no more hasChanges", b.hasChanges());
+    TestUtility::checkEqualEdits(*this, u"e <- b", e, c, errorCode);
+    TestUtility::checkEqualEdits(*this, u"b moved away", empty, b, errorCode);
+
+    // Edits::Iterator default constructor.
+    Edits::Iterator iter;
+    assertFalse("Edits::Iterator().next()", iter.next(errorCode));
+    assertSuccess("Edits::Iterator().next()", errorCode);
+    iter = e.getFineChangesIterator();
+    assertTrue("iter.next()", iter.next(errorCode));
+    assertSuccess("iter.next()", errorCode);
+    assertTrue("iter.hasChange()", iter.hasChange());
+    assertEquals("iter.newLength()", 1, iter.newLength());
+}
+
+void StringCaseTest::TestMergeEdits() {
+    // For debugging, set -v to see matching edits up to a failure.
+    IcuTestErrorCode errorCode(*this, "TestMergeEdits");
+    Edits ab, bc, ac, expected_ac;
+
+    // Simple: Two parallel non-changes.
+    ab.addUnchanged(2);
+    bc.addUnchanged(2);
+    expected_ac.addUnchanged(2);
+
+    // Simple: Two aligned changes.
+    ab.addReplace(3, 2);
+    bc.addReplace(2, 1);
+    expected_ac.addReplace(3, 1);
+
+    // Unequal non-changes.
+    ab.addUnchanged(5);
+    bc.addUnchanged(3);
+    expected_ac.addUnchanged(3);
+    // ab ahead by 2
+
+    // Overlapping changes accumulate until they share a boundary.
+    ab.addReplace(4, 3);
+    bc.addReplace(3, 2);
+    ab.addReplace(4, 3);
+    bc.addReplace(3, 2);
+    ab.addReplace(4, 3);
+    bc.addReplace(3, 2);
+    bc.addUnchanged(4);
+    expected_ac.addReplace(14, 8);
+    // bc ahead by 2
+
+    // Balance out intermediate-string lengths.
+    ab.addUnchanged(2);
+    expected_ac.addUnchanged(2);
+
+    // Insert something and delete it: Should disappear.
+    ab.addReplace(0, 5);
+    ab.addReplace(0, 2);
+    bc.addReplace(7, 0);
+
+    // Parallel change to make a new boundary.
+    ab.addReplace(1, 2);
+    bc.addReplace(2, 3);
+    expected_ac.addReplace(1, 3);
+
+    // Multiple ab deletions should remain separate at the boundary.
+    ab.addReplace(1, 0);
+    ab.addReplace(2, 0);
+    ab.addReplace(3, 0);
+    expected_ac.addReplace(1, 0);
+    expected_ac.addReplace(2, 0);
+    expected_ac.addReplace(3, 0);
+
+    // Unequal non-changes can be split for another boundary.
+    ab.addUnchanged(2);
+    bc.addUnchanged(1);
+    expected_ac.addUnchanged(1);
+    // ab ahead by 1
+
+    // Multiple bc insertions should create a boundary and remain separate.
+    bc.addReplace(0, 4);
+    bc.addReplace(0, 5);
+    bc.addReplace(0, 6);
+    expected_ac.addReplace(0, 4);
+    expected_ac.addReplace(0, 5);
+    expected_ac.addReplace(0, 6);
+    // ab ahead by 1
+
+    // Multiple ab deletions in the middle of a bc change are merged.
+    bc.addReplace(2, 2);
+    // bc ahead by 1
+    ab.addReplace(1, 0);
+    ab.addReplace(2, 0);
+    ab.addReplace(3, 0);
+    ab.addReplace(4, 1);
+    expected_ac.addReplace(11, 2);
+
+    // Multiple bc insertions in the middle of an ab change are merged.
+    ab.addReplace(5, 6);
+    bc.addReplace(3, 3);
+    // ab ahead by 3
+    bc.addReplace(0, 4);
+    bc.addReplace(0, 5);
+    bc.addReplace(0, 6);
+    bc.addReplace(3, 7);
+    expected_ac.addReplace(5, 25);
+
+    // Delete around a deletion.
+    ab.addReplace(4, 4);
+    ab.addReplace(3, 0);
+    ab.addUnchanged(2);
+    bc.addReplace(2, 2);
+    bc.addReplace(4, 0);
+    expected_ac.addReplace(9, 2);
+
+    // Insert into an insertion.
+    ab.addReplace(0, 2);
+    bc.addReplace(1, 1);
+    bc.addReplace(0, 8);
+    bc.addUnchanged(4);
+    expected_ac.addReplace(0, 10);
+    // bc ahead by 3
+
+    // Balance out intermediate-string lengths.
+    ab.addUnchanged(3);
+    expected_ac.addUnchanged(3);
+
+    // Deletions meet insertions.
+    // Output order is arbitrary in principle, but we expect insertions first
+    // and want to keep it that way.
+    ab.addReplace(2, 0);
+    ab.addReplace(4, 0);
+    ab.addReplace(6, 0);
+    bc.addReplace(0, 1);
+    bc.addReplace(0, 3);
+    bc.addReplace(0, 5);
+    expected_ac.addReplace(0, 1);
+    expected_ac.addReplace(0, 3);
+    expected_ac.addReplace(0, 5);
+    expected_ac.addReplace(2, 0);
+    expected_ac.addReplace(4, 0);
+    expected_ac.addReplace(6, 0);
+
+    // End with a non-change, so that further edits are never reordered.
+    ab.addUnchanged(1);
+    bc.addUnchanged(1);
+    expected_ac.addUnchanged(1);
+
+    ac.mergeAndAppend(ab, bc, errorCode);
+    assertSuccess("ab+bc", errorCode);
+    if (!TestUtility::checkEqualEdits(*this, u"ab+bc", expected_ac, ac, errorCode)) {
+        return;
+    }
+
+    // Append more Edits.
+    Edits ab2, bc2;
+    ab2.addUnchanged(5);
+    bc2.addReplace(1, 2);
+    bc2.addUnchanged(4);
+    expected_ac.addReplace(1, 2);
+    expected_ac.addUnchanged(4);
+    ac.mergeAndAppend(ab2, bc2, errorCode);
+    assertSuccess("ab2+bc2", errorCode);
+    if (!TestUtility::checkEqualEdits(*this, u"ab2+bc2", expected_ac, ac, errorCode)) {
+        return;
+    }
+
+    // Append empty edits.
+    Edits empty;
+    ac.mergeAndAppend(empty, empty, errorCode);
+    assertSuccess("empty+empty", errorCode);
+    if (!TestUtility::checkEqualEdits(*this, u"empty+empty", expected_ac, ac, errorCode)) {
+        return;
+    }
+
+    // Error: Append more edits with mismatched intermediate-string lengths.
+    Edits mismatch;
+    mismatch.addReplace(1, 1);
+    ac.mergeAndAppend(ab2, mismatch, errorCode);
+    assertEquals("ab2+mismatch", U_ILLEGAL_ARGUMENT_ERROR, errorCode.get());
+    errorCode.reset();
+    ac.mergeAndAppend(mismatch, bc2, errorCode);
+    assertEquals("mismatch+bc2", U_ILLEGAL_ARGUMENT_ERROR, errorCode.get());
+    errorCode.reset();
 }
 
 void StringCaseTest::TestCaseMapWithEdits() {
