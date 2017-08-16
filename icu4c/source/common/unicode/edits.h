@@ -37,7 +37,31 @@ public:
      */
     Edits() :
             array(stackArray), capacity(STACK_CAPACITY), length(0), delta(0), numChanges(0),
-            errorCode(U_ZERO_ERROR) {}
+            errorCode_(U_ZERO_ERROR) {}
+    /**
+     * Copy constructor.
+     * @param other source edits
+     * @draft ICU 60
+     */
+    Edits(const Edits &other) :
+            array(stackArray), capacity(STACK_CAPACITY), length(other.length),
+            delta(other.delta), numChanges(other.numChanges),
+            errorCode_(other.errorCode_) {
+        copyArray(other);
+    }
+    /**
+     * Move constructor, might leave src empty.
+     * This object will have the same contents that the source object had.
+     * @param src source edits
+     * @draft ICU 60
+     */
+    Edits(Edits &&src) U_NOEXCEPT :
+            array(stackArray), capacity(STACK_CAPACITY), length(src.length),
+            delta(src.delta), numChanges(src.numChanges),
+            errorCode_(src.errorCode_) {
+        moveArray(src);
+    }
+
     /**
      * Destructor.
      * @draft ICU 59
@@ -45,10 +69,28 @@ public:
     ~Edits();
 
     /**
+     * Assignment operator.
+     * @param other source edits
+     * @return *this
+     * @draft ICU 60
+     */
+    Edits &operator=(const Edits &other);
+
+    /**
+     * Move assignment operator, might leave src empty.
+     * This object will have the same contents that the source object had.
+     * The behavior is undefined if *this and src are the same object.
+     * @param src source edits
+     * @return *this
+     * @draft ICU 60
+     */
+    Edits &operator=(Edits &&src) U_NOEXCEPT;
+
+    /**
      * Resets the data but may not release memory.
      * @draft ICU 59
      */
-    void reset();
+    void reset() U_NOEXCEPT;
 
     /**
      * Adds a record for an unchanged segment of text.
@@ -99,6 +141,15 @@ public:
      * @draft ICU 59
      */
     struct U_COMMON_API Iterator U_FINAL : public UMemory {
+        /**
+         * Default constructor, empty iterator.
+         * @draft ICU 60
+         */
+        Iterator() :
+                array(nullptr), index(0), length(0),
+                remaining(0), onlyChanges_(FALSE), coarse(FALSE),
+                changed(FALSE), oldLength_(0), newLength_(0),
+                srcIndex(0), replIndex(0), destIndex(0) {}
         /**
          * Copy constructor.
          * @draft ICU 59
@@ -309,9 +360,39 @@ public:
         return Iterator(array, length, FALSE, FALSE);
     }
 
+    /**
+     * Merges the two input Edits and appends the result to this object.
+     *
+     * Consider two string transformations (for example, normalization and case mapping)
+     * where each records Edits in addition to writing an output string.<br>
+     * Edits ab reflect how substrings of input string a
+     * map to substrings of intermediate string b.<br>
+     * Edits bc reflect how substrings of intermediate string b
+     * map to substrings of output string c.<br>
+     * This function merges ab and bc such that the additional edits
+     * recorded in this object reflect how substrings of input string a
+     * map to substrings of output string c.
+     *
+     * If unrelated Edits are passed in where the output string of the first
+     * has a different length than the input string of the second,
+     * then a U_ILLEGAL_ARGUMENT_ERROR is reported.
+     *
+     * @param ab reflects how substrings of input string a
+     *     map to substrings of intermediate string b.
+     * @param bc reflects how substrings of intermediate string b
+     *     map to substrings of output string c.
+     * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
+     *                  or else the function returns immediately. Check for U_FAILURE()
+     *                  on output or use with function chaining. (See User Guide for details.)
+     * @return *this, with the merged edits appended
+     * @draft ICU 60
+     */
+    Edits &mergeAndAppend(const Edits &ab, const Edits &bc, UErrorCode &errorCode);
+
 private:
-    Edits(const Edits &) = delete;
-    Edits &operator=(const Edits &) = delete;
+    void releaseArray() U_NOEXCEPT;
+    Edits &copyArray(const Edits &other);
+    Edits &moveArray(Edits &src) U_NOEXCEPT;
 
     void setLastUnit(int32_t last) { array[length - 1] = (uint16_t)last; }
     int32_t lastUnit() const { return length > 0 ? array[length - 1] : 0xffff; }
@@ -325,7 +406,7 @@ private:
     int32_t length;
     int32_t delta;
     int32_t numChanges;
-    UErrorCode errorCode;
+    UErrorCode errorCode_;
     uint16_t stackArray[STACK_CAPACITY];
 };
 
