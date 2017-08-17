@@ -111,15 +111,15 @@ typedef size_t uintptr_t;
     /* Use the predefined value. */
 #elif U_PLATFORM == U_PF_ANDROID
 #   define U_TIMEZONE timezone
+#elif defined(__UCLIBC__)
+    // uClibc does not have __timezone or _timezone.
+#elif defined(_NEWLIB_VERSION)
+#   define U_TIMEZONE _timezone
+#elif defined(__GLIBC__)
+    // glibc
+#   define U_TIMEZONE __timezone
 #elif U_PLATFORM_IS_LINUX_BASED
-#   if defined(__UCLIBC__)
-       /* uClibc does not have __timezone or _timezone. */
-#   elif defined(_NEWLIB_VERSION)
-#      define U_TIMEZONE      _timezone
-#   elif defined(__GLIBC__)
-       /* glibc */
-#      define U_TIMEZONE      __timezone
-#   endif
+    // not defined
 #elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_TIMEZONE _timezone
 #elif U_PLATFORM == U_PF_BSD && !defined(__NetBSD__)
