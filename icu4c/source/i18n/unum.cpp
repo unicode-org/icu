@@ -507,20 +507,48 @@ U_CAPI int32_t U_EXPORT2
 unum_getAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
-  const NumberFormat* nf = reinterpret_cast<const NumberFormat*>(fmt);
-  if ( attr == UNUM_LENIENT_PARSE ) {
-    // Supported for all subclasses
-    return nf->isLenient();
-  }
+    const NumberFormat* nf = reinterpret_cast<const NumberFormat*>(fmt);
+    if (attr == UNUM_LENIENT_PARSE) {
+        // Supported for all subclasses
+        return nf->isLenient();
+    }
+    else if (attr == UNUM_MAX_INTEGER_DIGITS) {
+        return nf->getMaximumIntegerDigits();
+    }
+    else if (attr == UNUM_MIN_INTEGER_DIGITS) {
+        return nf->getMinimumIntegerDigits();
+    }
+    else if (attr == UNUM_INTEGER_DIGITS) {
+        // TODO: what should this return?
+        return nf->getMinimumIntegerDigits();
+    }
+    else if (attr == UNUM_MAX_FRACTION_DIGITS) {
+        return nf->getMaximumFractionDigits();
+    }
+    else if (attr == UNUM_MIN_FRACTION_DIGITS) {
+        return nf->getMinimumFractionDigits();
+    }
+    else if (attr == UNUM_FRACTION_DIGITS) {
+        // TODO: what should this return?
+        return nf->getMinimumFractionDigits();
+    }
 
-  // The remaining attributea are only supported for DecimalFormat
-  const DecimalFormat* df = dynamic_cast<const DecimalFormat*>(nf);
-  if (df != NULL) {
-    UErrorCode ignoredStatus = U_ZERO_ERROR;
-    return df->getAttribute( attr, ignoredStatus );
-  }
+    // DecimalFormat specific attributes
+    const DecimalFormat* df = dynamic_cast<const DecimalFormat*>(nf);
+    if (df != NULL) {
+        UErrorCode ignoredStatus = U_ZERO_ERROR;
+        return df->getAttribute(attr, ignoredStatus);
+    }
 
-  return -1;
+    // RuleBasedNumberFormat specific attributes
+    const RuleBasedNumberFormat* rbnf = dynamic_cast<const RuleBasedNumberFormat*>(nf);
+    if (rbnf != NULL) {
+        if (attr == UNUM_ROUNDING_MODE) {
+            return rbnf->getRoundingMode();
+        }
+    }
+
+    return -1;
 }
 
 U_CAPI void U_EXPORT2
@@ -528,18 +556,47 @@ unum_setAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             int32_t                 newValue)
 {
-  NumberFormat* nf = reinterpret_cast<NumberFormat*>(fmt);
-  if ( attr == UNUM_LENIENT_PARSE ) {
-    // Supported for all subclasses
-    // keep this here as the class may not be a DecimalFormat
-    return nf->setLenient(newValue != 0);
-  }
-  // The remaining attributea are only supported for DecimalFormat
-  DecimalFormat* df = dynamic_cast<DecimalFormat*>(nf);
-  if (df != NULL) {
-    UErrorCode ignoredStatus = U_ZERO_ERROR;
-    df->setAttribute(attr, newValue, ignoredStatus);
-  }
+    NumberFormat* nf = reinterpret_cast<NumberFormat*>(fmt);
+    if (attr == UNUM_LENIENT_PARSE) {
+        // Supported for all subclasses
+        // keep this here as the class may not be a DecimalFormat
+        return nf->setLenient(newValue != 0);
+    }
+    else if (attr == UNUM_MAX_INTEGER_DIGITS) {
+        return nf->setMaximumIntegerDigits(newValue);
+    }
+    else if (attr == UNUM_MIN_INTEGER_DIGITS) {
+        return nf->setMinimumIntegerDigits(newValue);
+    }
+    else if (attr == UNUM_INTEGER_DIGITS) {
+        nf->setMinimumIntegerDigits(newValue);
+        return nf->setMaximumIntegerDigits(newValue);
+    }
+    else if (attr == UNUM_MAX_FRACTION_DIGITS) {
+        return nf->setMaximumFractionDigits(newValue);
+    }
+    else if (attr == UNUM_MIN_FRACTION_DIGITS) {
+        return nf->setMinimumFractionDigits(newValue);
+    }
+    else if (attr == UNUM_FRACTION_DIGITS) {
+        nf->setMinimumFractionDigits(newValue);
+        return nf->setMaximumFractionDigits(newValue);
+    }
+
+    // DecimalFormat specific attributes
+    DecimalFormat* df = dynamic_cast<DecimalFormat*>(nf);
+    if (df != NULL) {
+        UErrorCode ignoredStatus = U_ZERO_ERROR;
+        df->setAttribute(attr, newValue, ignoredStatus);
+    }
+
+    // RuleBasedNumberFormat specific attributes
+    RuleBasedNumberFormat* rbnf = dynamic_cast<RuleBasedNumberFormat*>(nf);
+    if (rbnf != NULL) {
+        if (attr == UNUM_ROUNDING_MODE) {
+            return rbnf->setRoundingMode((DecimalFormat::ERoundingMode)newValue);
+        }
+    }
 }
 
 U_CAPI double U_EXPORT2

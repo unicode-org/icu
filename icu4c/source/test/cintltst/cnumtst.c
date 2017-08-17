@@ -64,6 +64,7 @@ static void TestCurrFmtNegSameAsPositive(void);
 static void TestVariousStylesAndAttributes(void);
 static void TestParseCurrPatternWithDecStyle(void);
 static void TestFormatForFields(void);
+static void TestRBNFRounding(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -79,6 +80,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestCurrencyRegression);
     TESTCASE(TestTextAttributeCrash);
     TESTCASE(TestRBNFFormat);
+    TESTCASE(TestRBNFRounding);
     TESTCASE(TestNBSPInPattern);
     TESTCASE(TestInt64Parse);
     TESTCASE(TestParseZero);
@@ -1789,6 +1791,48 @@ static void TestRBNFFormat() {
     for (i = 0; i < COUNT; ++i) {
         unum_close(formats[i]);
     }
+}
+
+static void TestRBNFRounding() {
+    UChar fmtbuf[FORMAT_BUF_CAPACITY];
+    UChar expectedBuf[FORMAT_BUF_CAPACITY];
+    int32_t len;
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat* fmt = unum_open(UNUM_SPELLOUT, NULL, 0, "en_US", NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "unable to open spellout -> %s\n", u_errorName(status));
+        return;
+    }
+    len = unum_formatDouble(fmt, 10.123456789, fmtbuf, FORMAT_BUF_CAPACITY, NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "unum_formatDouble 10.123456789 failed with %s\n", u_errorName(status));
+    }
+    u_uastrcpy(expectedBuf, "ten point one two three four five six seven eight nine");
+    if (u_strcmp(expectedBuf, fmtbuf) != 0) {
+        log_err("Wrong result for unrounded value\n");
+    }
+    unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 3);
+    if (unum_getAttribute(fmt, UNUM_MAX_FRACTION_DIGITS) != 3) {
+        log_err("UNUM_MAX_FRACTION_DIGITS was incorrectly ignored -> %d\n", unum_getAttribute(fmt, UNUM_MAX_FRACTION_DIGITS));
+    }
+    if (unum_getAttribute(fmt, UNUM_ROUNDING_MODE) != UNUM_ROUND_UNNECESSARY) {
+        log_err("UNUM_ROUNDING_MODE was set -> %d\n", unum_getAttribute(fmt, UNUM_ROUNDING_MODE));
+    }
+    unum_setAttribute(fmt, UNUM_ROUNDING_MODE, UNUM_ROUND_HALFUP);
+    if (unum_getAttribute(fmt, UNUM_ROUNDING_MODE) != UNUM_ROUND_HALFUP) {
+        log_err("UNUM_ROUNDING_MODE was not set -> %d\n", unum_getAttribute(fmt, UNUM_ROUNDING_MODE));
+    }
+    len = unum_formatDouble(fmt, 10.123456789, fmtbuf, FORMAT_BUF_CAPACITY, NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "unum_formatDouble 10.123456789 failed with %s\n", u_errorName(status));
+    }
+    u_uastrcpy(expectedBuf, "ten point one two three");
+    if (u_strcmp(expectedBuf, fmtbuf) != 0) {
+        char temp[512];
+        u_austrcpy(temp, fmtbuf);
+        log_err("Wrong result for rounded value. Got: %s\n", temp);
+    }
+    unum_close(fmt);
 }
 
 static void TestCurrencyRegression(void) {
