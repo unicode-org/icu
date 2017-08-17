@@ -718,6 +718,8 @@ public class TestIDNA extends TestFmwk {
         }
     }
 
+    // TODO(#13324): test turned off because it has dependency on translit.
+    @Ignore
     @Test
     public void TestCompareRefImpl() throws Exception {
         for (int i = 65; i < 0x10FFFF; i++) {
