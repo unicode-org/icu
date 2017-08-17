@@ -30,6 +30,7 @@
 #define U_HAVE_RBNF 1
 
 #include "unicode/dcfmtsym.h"
+#include "unicode/decimfmt.h"
 #include "unicode/fmtable.h"
 #include "unicode/locid.h"
 #include "unicode/numfmt.h"
@@ -1010,6 +1011,22 @@ public:
    */
   virtual void setContext(UDisplayContext value, UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Get the rounding mode.
+     * @return A rounding mode
+     * @draft ICU 60
+     */
+    virtual DecimalFormat::ERoundingMode getRoundingMode(void) const;
+
+    /**
+     * Set the rounding mode.
+     * @param roundingMode A rounding mode
+     * @draft ICU 60
+     */
+    virtual void setRoundingMode(DecimalFormat::ERoundingMode roundingMode);
+#endif  /* U_HIDE_DRAFT_API */
+
 public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -1059,7 +1076,6 @@ private:
     void dispose();
     void stripWhitespace(UnicodeString& src);
     void initDefaultRuleSet();
-    void format(double number, NFRuleSet& ruleSet);
     NFRuleSet* findRuleSet(const UnicodeString& name, UErrorCode& status) const;
 
     /* friend access */
@@ -1079,6 +1095,7 @@ private:
     PluralFormat *createPluralFormat(UPluralType pluralType, const UnicodeString &pattern, UErrorCode& status) const;
     UnicodeString& adjustForCapitalizationContext(int32_t startPos, UnicodeString& currentResult, UErrorCode& status) const;
     UnicodeString& format(int64_t number, NFRuleSet *ruleSet, UnicodeString& toAppendTo, UErrorCode& status) const;
+    void format(double number, NFRuleSet& rs, UnicodeString& toAppendTo, UErrorCode& status) const;
 
 private:
     NFRuleSet **ruleSets;
@@ -1090,6 +1107,7 @@ private:
     DecimalFormatSymbols* decimalFormatSymbols;
     NFRule *defaultInfinityRule;
     NFRule *defaultNaNRule;
+    DecimalFormat::ERoundingMode roundingMode;
     UBool lenient;
     UnicodeString* lenientParseRules;
     LocalizationInfo* localizations;
