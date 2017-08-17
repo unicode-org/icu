@@ -1011,7 +1011,9 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     double value = uprv_strtod(vname.data(), &end);
                     // Anything between 0 and 255 is valid even if unused.
                     // Cast double->int only after range check.
-                    if (*end != 0 || value < 0 || 255 < value ||
+                    // We catch NaN here because comparing it with both 0 and 255 will be false
+                    // (as are all comparisons with NaN).
+                    if (*end != 0 || !(0 <= value && value <= 255) ||
                             (v = (int32_t)value) != value) {
                         // non-integral value or outside 0..255, or trailing junk
                         FAIL(ec);
