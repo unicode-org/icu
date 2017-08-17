@@ -28,6 +28,7 @@ private:
      */
     void testSymbols(/*char *par*/);
     void testLastResortData();
+    void testNumberingSystem();
 
      /** helper functions**/
     void Verify(double value, const UnicodeString& pattern,
