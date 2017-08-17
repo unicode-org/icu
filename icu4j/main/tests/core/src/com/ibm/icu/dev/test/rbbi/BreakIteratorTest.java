@@ -63,7 +63,7 @@ public class BreakIteratorTest extends TestFmwk
         List<String> previousResults = _testLastAndPrevious(bi, text);
 
         logln("comparing forward and backward...");
-        //TODO(junit) - needs to be rewritten
+        // TODO(#13318): As part of clean-up, permanently remove the error count check.
         //int errs = getErrorCount();
         compareFragmentLists("forward iteration", "backward iteration", nextResults,
                         previousResults);
