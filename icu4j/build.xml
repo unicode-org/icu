@@ -435,7 +435,7 @@
         />
     </target>
 
-    <target name="coreCheck" depends="info, core, currdata, langdata, regiondata, translit, core-tests" description="Run only the core tests">
+    <target name="coreCheck" depends="info, core, currdata, langdata, regiondata, core-tests" description="Run only the core tests">
         <antcall target="_coreCheck"/>
         <fail message="test failed" if="icu-junit-failure" />
     </target>
