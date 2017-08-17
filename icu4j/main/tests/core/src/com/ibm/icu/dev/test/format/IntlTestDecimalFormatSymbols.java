@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
@@ -306,6 +307,42 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         symbols.setZeroDigit(defZero);
         if (!Arrays.equals(symbols.getDigitStrings(), defDigitStrings)) {
             errln("ERROR: Latin digits should be set" + symbols.getDigitStrings()[0]);
+        }
+    }
+
+    @Test
+    public void testNumberingSystem() {
+        Object[][] cases = {
+                {"en", "latn", "1,234.56", ';'},
+                {"en", "arab", "١٬٢٣٤٫٥٦", '؛'},
+                {"en", "mathsanb", "𝟭,𝟮𝟯𝟰.𝟱𝟲", ';'},
+                {"en", "mymr", "၁,၂၃၄.၅၆", ';'},
+                {"my", "latn", "1,234.56", ';'},
+                {"my", "arab", "١٬٢٣٤٫٥٦", '؛'},
+                {"my", "mathsanb", "𝟭,𝟮𝟯𝟰.𝟱𝟲", ';'},
+                {"my", "mymr", "၁,၂၃၄.၅၆", '၊'},
+                {"en@numbers=thai", "mymr", "၁,၂၃၄.၅၆", ';'}, // conflicting numbering system
+        };
+
+        for (Object[] cas : cases) {
+            ULocale loc = new ULocale((String) cas[0]);
+            NumberingSystem ns = NumberingSystem.getInstanceByName((String) cas[1]);
+            String expectedFormattedNumberString = (String) cas[2];
+            char expectedPatternSeparator = (Character) cas[3];
+
+            DecimalFormatSymbols dfs = DecimalFormatSymbols.forNumberingSystem(loc, ns);
+            DecimalFormat df = new DecimalFormat("#,##0.##", dfs);
+            String actual1 = df.format(1234.56);
+            assertEquals("1234.56 with " + loc + " and " + ns.getName(),
+                    expectedFormattedNumberString, actual1);
+            // The pattern separator is something that differs by numbering system in my@numbers=mymr.
+            char actual2 = dfs.getPatternSeparator();
+            assertEquals("Pattern separator with " + loc + " and " + ns.getName(),
+                    expectedPatternSeparator, actual2);
+
+            // Coverage for JDK Locale overload
+            DecimalFormatSymbols dfs2 = DecimalFormatSymbols.forNumberingSystem(loc.toLocale(), ns);
+            assertEquals("JDK Locale and ICU Locale should produce the same object", dfs, dfs2);
         }
     }
 }

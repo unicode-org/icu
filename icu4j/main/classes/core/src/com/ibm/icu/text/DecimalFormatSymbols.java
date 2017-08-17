@@ -53,7 +53,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public DecimalFormatSymbols() {
-        initialize(ULocale.getDefault(Category.FORMAT));
+        this(ULocale.getDefault(Category.FORMAT));
     }
 
     /**
@@ -62,7 +62,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public DecimalFormatSymbols(Locale locale) {
-        initialize(ULocale.forLocale(locale));
+        this(ULocale.forLocale(locale));
     }
 
     /**
@@ -71,7 +71,15 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 3.2
      */
     public DecimalFormatSymbols(ULocale locale) {
-        initialize(locale);
+        initialize(locale, null);
+    }
+
+    private DecimalFormatSymbols(Locale locale, NumberingSystem ns) {
+        this(ULocale.forLocale(locale), ns);
+    }
+
+    private DecimalFormatSymbols(ULocale locale, NumberingSystem ns) {
+        initialize(locale, ns);
     }
 
     /**
@@ -121,6 +129,46 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     public static DecimalFormatSymbols getInstance(ULocale locale) {
         return new DecimalFormatSymbols(locale);
+    }
+
+    /**
+     * {@icu} Returns a DecimalFormatSymbols instance for the given locale with digits and symbols
+     * corresponding to the given {@link NumberingSystem}.
+     *
+     * <p>This method behaves equivalently to {@link #getInstance} called with a locale having a
+     * "numbers=xxxx" keyword specifying the numbering system by name.
+     *
+     * <p>In this method, the NumberingSystem argument will be used even if the locale has its own
+     * "numbers=xxxx" keyword.
+     *
+     * @param locale the locale.
+     * @param ns the numbering system.
+     * @return A DecimalFormatSymbols instance.
+     * @provisional This API might change or be removed in a future release.
+     * @draft ICU 60
+     */
+    public static DecimalFormatSymbols forNumberingSystem(Locale locale, NumberingSystem ns) {
+        return new DecimalFormatSymbols(locale, ns);
+    }
+
+    /**
+     * {@icu} Returns a DecimalFormatSymbols instance for the given locale with digits and symbols
+     * corresponding to the given {@link NumberingSystem}.
+     *
+     * <p>This method behaves equivalently to {@link #getInstance} called with a locale having a
+     * "numbers=xxxx" keyword specifying the numbering system by name.
+     *
+     * <p>In this method, the NumberingSystem argument will be used even if the locale has its own
+     * "numbers=xxxx" keyword.
+     *
+     * @param locale the locale.
+     * @param ns the numbering system.
+     * @return A DecimalFormatSymbols instance.
+     * @provisional This API might change or be removed in a future release.
+     * @draft ICU 60
+     */
+    public static DecimalFormatSymbols forNumberingSystem(ULocale locale, NumberingSystem ns) {
+        return new DecimalFormatSymbols(locale, ns);
     }
 
     /**
@@ -1289,10 +1337,16 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Initializes the symbols from the locale data.
      */
-    private void initialize( ULocale locale ) {
+    private void initialize(ULocale locale, NumberingSystem ns) {
         this.requestedLocale = locale.toLocale();
         this.ulocale = locale;
-        CacheData data = cachedLocaleData.getInstance(locale, null /* unused */);
+
+        // TODO: The cache requires a single key, so we just save the NumberingSystem into the
+        // locale string. NumberingSystem is then decoded again in the loadData() method. It would
+        // be more efficient if we didn't have to serialize and deserialize the NumberingSystem.
+        ULocale keyLocale = (ns == null) ? locale : locale.setKeywordValue("numbers", ns.getName());
+        CacheData data = cachedLocaleData.getInstance(keyLocale, null /* unused */);
+
         setLocale(data.validLocale, data.validLocale);
         setDigitStrings(data.digits);
         String[] numberElements = data.numberElements;
