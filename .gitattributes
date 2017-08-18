@@ -6744,6 +6744,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ib
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ibm.icu.util.VTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/shaping/ArabicShapingRegTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/shaping/DataDrivenArabicShapingRegTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/IDNAConformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/IDNAReference.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/NFS4StringPrep.java svneol=native#text/plain%3Bcharset%3Dutf-8
