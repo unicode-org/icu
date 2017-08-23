@@ -532,20 +532,15 @@ unum_getAttribute(const UNumberFormat*          fmt,
         // TODO: what should this return?
         return nf->getMinimumFractionDigits();
     }
+    else if (attr == UNUM_ROUNDING_MODE) {
+        return nf->getRoundingMode();
+    }
 
-    // DecimalFormat specific attributes
+    // The remaining attributes are only supported for DecimalFormat
     const DecimalFormat* df = dynamic_cast<const DecimalFormat*>(nf);
     if (df != NULL) {
         UErrorCode ignoredStatus = U_ZERO_ERROR;
         return df->getAttribute(attr, ignoredStatus);
-    }
-
-    // RuleBasedNumberFormat specific attributes
-    const RuleBasedNumberFormat* rbnf = dynamic_cast<const RuleBasedNumberFormat*>(nf);
-    if (rbnf != NULL) {
-        if (attr == UNUM_ROUNDING_MODE) {
-            return rbnf->getRoundingMode();
-        }
     }
 
     return -1;
@@ -582,20 +577,15 @@ unum_setAttribute(    UNumberFormat*          fmt,
         nf->setMinimumFractionDigits(newValue);
         return nf->setMaximumFractionDigits(newValue);
     }
+    else if (attr == UNUM_ROUNDING_MODE) {
+        return nf->setRoundingMode((NumberFormat::ERoundingMode)newValue);
+    }
 
-    // DecimalFormat specific attributes
+    // The remaining attributes are only supported for DecimalFormat
     DecimalFormat* df = dynamic_cast<DecimalFormat*>(nf);
     if (df != NULL) {
         UErrorCode ignoredStatus = U_ZERO_ERROR;
         df->setAttribute(attr, newValue, ignoredStatus);
-    }
-
-    // RuleBasedNumberFormat specific attributes
-    RuleBasedNumberFormat* rbnf = dynamic_cast<RuleBasedNumberFormat*>(nf);
-    if (rbnf != NULL) {
-        if (attr == UNUM_ROUNDING_MODE) {
-            return rbnf->setRoundingMode((DecimalFormat::ERoundingMode)newValue);
-        }
     }
 }
 
