@@ -1011,7 +1011,6 @@ public:
    */
   virtual void setContext(UDisplayContext value, UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Get the rounding mode.
      * @return A rounding mode
@@ -1025,7 +1024,6 @@ public:
      * @draft ICU 60
      */
     virtual void setRoundingMode(DecimalFormat::ERoundingMode roundingMode);
-#endif  /* U_HIDE_DRAFT_API */
 
 public:
     /**
