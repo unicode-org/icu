@@ -63,6 +63,11 @@ public:
 
     void writeBinaryFile(const char *filename);
     void writeCSourceFile(const char *filename);
+    void writeDataFile(const char *filename, bool writeRemoved) const;
+
+    static void computeDiff(const Normalizer2DataBuilder &b1,
+                            const Normalizer2DataBuilder &b2,
+                            Normalizer2DataBuilder &diff);
 
 private:
     friend class Norm16Writer;
