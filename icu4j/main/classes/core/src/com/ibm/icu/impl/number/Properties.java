@@ -11,50 +11,20 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Map;
 
 import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
-import com.ibm.icu.impl.number.formatters.BigDecimalMultiplier;
-import com.ibm.icu.impl.number.formatters.CompactDecimalFormat;
-import com.ibm.icu.impl.number.formatters.CurrencyFormat;
-import com.ibm.icu.impl.number.formatters.CurrencyFormat.CurrencyStyle;
-import com.ibm.icu.impl.number.formatters.MagnitudeMultiplier;
-import com.ibm.icu.impl.number.formatters.MeasureFormat;
-import com.ibm.icu.impl.number.formatters.PaddingFormat;
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
-import com.ibm.icu.impl.number.formatters.PositiveDecimalFormat;
-import com.ibm.icu.impl.number.formatters.PositiveNegativeAffixFormat;
-import com.ibm.icu.impl.number.formatters.ScientificFormat;
-import com.ibm.icu.impl.number.rounders.IncrementRounder;
-import com.ibm.icu.impl.number.rounders.MagnitudeRounder;
-import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
-import com.ibm.icu.util.MeasureUnit;
 
-public class Properties
-    implements Cloneable,
-        Serializable,
-        PositiveDecimalFormat.IProperties,
-        PositiveNegativeAffixFormat.IProperties,
-        MagnitudeMultiplier.IProperties,
-        ScientificFormat.IProperties,
-        MeasureFormat.IProperties,
-        CompactDecimalFormat.IProperties,
-        PaddingFormat.IProperties,
-        BigDecimalMultiplier.IProperties,
-        CurrencyFormat.IProperties,
-        Parse.IProperties,
-        IncrementRounder.IProperties,
-        MagnitudeRounder.IProperties,
-        SignificantDigitsRounder.IProperties,
-        Endpoint.IProperties {
+public class Properties implements Cloneable, Serializable {
 
   private static final Properties DEFAULT = new Properties();
 
@@ -79,7 +49,6 @@ public class Properties
   private transient CompactStyle compactStyle;
   private transient Currency currency;
   private transient CurrencyPluralInfo currencyPluralInfo;
-  private transient CurrencyStyle currencyStyle;
   private transient CurrencyUsage currencyUsage;
   private transient boolean decimalPatternMatchRequired;
   private transient boolean decimalSeparatorAlwaysShown;
@@ -91,8 +60,6 @@ public class Properties
   private transient int maximumFractionDigits;
   private transient int maximumIntegerDigits;
   private transient int maximumSignificantDigits;
-  private transient FormatWidth measureFormatWidth;
-  private transient MeasureUnit measureUnit;
   private transient int minimumExponentDigits;
   private transient int minimumFractionDigits;
   private transient int minimumGroupingDigits;
@@ -134,52 +101,61 @@ public class Properties
     clear();
   }
 
+  /**
+   * Sets all properties to their defaults (unset).
+   *
+   * <p>All integers default to -1 EXCEPT FOR MAGNITUDE MULTIPLIER which has a default of 0 (since
+   * negative numbers are important).
+   *
+   * <p>All booleans default to false.
+   *
+   * <p>All non-primitive types default to null.
+   *
+   * @return The property bag, for chaining.
+   */
   private Properties _clear() {
-    compactCustomData = DEFAULT_COMPACT_CUSTOM_DATA;
-    compactStyle = DEFAULT_COMPACT_STYLE;
-    currency = DEFAULT_CURRENCY;
-    currencyPluralInfo = DEFAULT_CURRENCY_PLURAL_INFO;
-    currencyStyle = DEFAULT_CURRENCY_STYLE;
-    currencyUsage = DEFAULT_CURRENCY_USAGE;
-    decimalPatternMatchRequired = DEFAULT_DECIMAL_PATTERN_MATCH_REQUIRED;
-    decimalSeparatorAlwaysShown = DEFAULT_DECIMAL_SEPARATOR_ALWAYS_SHOWN;
-    exponentSignAlwaysShown = DEFAULT_EXPONENT_SIGN_ALWAYS_SHOWN;
-    formatWidth = DEFAULT_FORMAT_WIDTH;
-    groupingSize = DEFAULT_GROUPING_SIZE;
-    magnitudeMultiplier = DEFAULT_MAGNITUDE_MULTIPLIER;
-    mathContext = DEFAULT_MATH_CONTEXT;
-    maximumFractionDigits = DEFAULT_MAXIMUM_FRACTION_DIGITS;
-    maximumIntegerDigits = DEFAULT_MAXIMUM_INTEGER_DIGITS;
-    maximumSignificantDigits = DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS;
-    measureFormatWidth = DEFAULT_MEASURE_FORMAT_WIDTH;
-    measureUnit = DEFAULT_MEASURE_UNIT;
-    minimumExponentDigits = DEFAULT_MINIMUM_EXPONENT_DIGITS;
-    minimumFractionDigits = DEFAULT_MINIMUM_FRACTION_DIGITS;
-    minimumGroupingDigits = DEFAULT_MINIMUM_GROUPING_DIGITS;
-    minimumIntegerDigits = DEFAULT_MINIMUM_INTEGER_DIGITS;
-    minimumSignificantDigits = DEFAULT_MINIMUM_SIGNIFICANT_DIGITS;
-    multiplier = DEFAULT_MULTIPLIER;
-    negativePrefix = DEFAULT_NEGATIVE_PREFIX;
-    negativePrefixPattern = DEFAULT_NEGATIVE_PREFIX_PATTERN;
-    negativeSuffix = DEFAULT_NEGATIVE_SUFFIX;
-    negativeSuffixPattern = DEFAULT_NEGATIVE_SUFFIX_PATTERN;
-    padPosition = DEFAULT_PAD_POSITION;
-    padString = DEFAULT_PAD_STRING;
-    parseCaseSensitive = DEFAULT_PARSE_CASE_SENSITIVE;
-    parseGroupingMode = DEFAULT_PARSE_GROUPING_MODE;
-    parseIntegerOnly = DEFAULT_PARSE_INTEGER_ONLY;
-    parseMode = DEFAULT_PARSE_MODE;
-    parseNoExponent = DEFAULT_PARSE_NO_EXPONENT;
-    parseToBigDecimal = DEFAULT_PARSE_TO_BIG_DECIMAL;
-    pluralRules = DEFAULT_PLURAL_RULES;
-    positivePrefix = DEFAULT_POSITIVE_PREFIX;
-    positivePrefixPattern = DEFAULT_POSITIVE_PREFIX_PATTERN;
-    positiveSuffix = DEFAULT_POSITIVE_SUFFIX;
-    positiveSuffixPattern = DEFAULT_POSITIVE_SUFFIX_PATTERN;
-    roundingIncrement = DEFAULT_ROUNDING_INCREMENT;
-    roundingMode = DEFAULT_ROUNDING_MODE;
-    secondaryGroupingSize = DEFAULT_SECONDARY_GROUPING_SIZE;
-    signAlwaysShown = DEFAULT_SIGN_ALWAYS_SHOWN;
+    compactCustomData = null;
+    compactStyle = null;
+    currency = null;
+    currencyPluralInfo = null;
+    currencyUsage = null;
+    decimalPatternMatchRequired = false;
+    decimalSeparatorAlwaysShown = false;
+    exponentSignAlwaysShown = false;
+    formatWidth = -1;
+    groupingSize = -1;
+    magnitudeMultiplier = 0;
+    mathContext = null;
+    maximumFractionDigits = -1;
+    maximumIntegerDigits = -1;
+    maximumSignificantDigits = -1;
+    minimumExponentDigits = -1;
+    minimumFractionDigits = -1;
+    minimumGroupingDigits = -1;
+    minimumIntegerDigits = -1;
+    minimumSignificantDigits = -1;
+    multiplier = null;
+    negativePrefix = null;
+    negativePrefixPattern = null;
+    negativeSuffix = null;
+    negativeSuffixPattern = null;
+    padPosition = null;
+    padString = null;
+    parseCaseSensitive = false;
+    parseGroupingMode = null;
+    parseIntegerOnly = false;
+    parseMode = null;
+    parseNoExponent = false;
+    parseToBigDecimal = false;
+    pluralRules = null;
+    positivePrefix = null;
+    positivePrefixPattern = null;
+    positiveSuffix = null;
+    positiveSuffixPattern = null;
+    roundingIncrement = null;
+    roundingMode = null;
+    secondaryGroupingSize = -1;
+    signAlwaysShown = false;
     return this;
   }
 
@@ -188,7 +164,6 @@ public class Properties
     compactStyle = other.compactStyle;
     currency = other.currency;
     currencyPluralInfo = other.currencyPluralInfo;
-    currencyStyle = other.currencyStyle;
     currencyUsage = other.currencyUsage;
     decimalPatternMatchRequired = other.decimalPatternMatchRequired;
     decimalSeparatorAlwaysShown = other.decimalSeparatorAlwaysShown;
@@ -200,8 +175,6 @@ public class Properties
     maximumFractionDigits = other.maximumFractionDigits;
     maximumIntegerDigits = other.maximumIntegerDigits;
     maximumSignificantDigits = other.maximumSignificantDigits;
-    measureFormatWidth = other.measureFormatWidth;
-    measureUnit = other.measureUnit;
     minimumExponentDigits = other.minimumExponentDigits;
     minimumFractionDigits = other.minimumFractionDigits;
     minimumGroupingDigits = other.minimumGroupingDigits;
@@ -238,7 +211,6 @@ public class Properties
     eq = eq && _equalsHelper(compactStyle, other.compactStyle);
     eq = eq && _equalsHelper(currency, other.currency);
     eq = eq && _equalsHelper(currencyPluralInfo, other.currencyPluralInfo);
-    eq = eq && _equalsHelper(currencyStyle, other.currencyStyle);
     eq = eq && _equalsHelper(currencyUsage, other.currencyUsage);
     eq = eq && _equalsHelper(decimalPatternMatchRequired, other.decimalPatternMatchRequired);
     eq = eq && _equalsHelper(decimalSeparatorAlwaysShown, other.decimalSeparatorAlwaysShown);
@@ -250,8 +222,6 @@ public class Properties
     eq = eq && _equalsHelper(maximumFractionDigits, other.maximumFractionDigits);
     eq = eq && _equalsHelper(maximumIntegerDigits, other.maximumIntegerDigits);
     eq = eq && _equalsHelper(maximumSignificantDigits, other.maximumSignificantDigits);
-    eq = eq && _equalsHelper(measureFormatWidth, other.measureFormatWidth);
-    eq = eq && _equalsHelper(measureUnit, other.measureUnit);
     eq = eq && _equalsHelper(minimumExponentDigits, other.minimumExponentDigits);
     eq = eq && _equalsHelper(minimumFractionDigits, other.minimumFractionDigits);
     eq = eq && _equalsHelper(minimumGroupingDigits, other.minimumGroupingDigits);
@@ -302,7 +272,6 @@ public class Properties
     hashCode ^= _hashCodeHelper(compactStyle);
     hashCode ^= _hashCodeHelper(currency);
     hashCode ^= _hashCodeHelper(currencyPluralInfo);
-    hashCode ^= _hashCodeHelper(currencyStyle);
     hashCode ^= _hashCodeHelper(currencyUsage);
     hashCode ^= _hashCodeHelper(decimalPatternMatchRequired);
     hashCode ^= _hashCodeHelper(decimalSeparatorAlwaysShown);
@@ -314,8 +283,6 @@ public class Properties
     hashCode ^= _hashCodeHelper(maximumFractionDigits);
     hashCode ^= _hashCodeHelper(maximumIntegerDigits);
     hashCode ^= _hashCodeHelper(maximumSignificantDigits);
-    hashCode ^= _hashCodeHelper(measureFormatWidth);
-    hashCode ^= _hashCodeHelper(measureUnit);
     hashCode ^= _hashCodeHelper(minimumExponentDigits);
     hashCode ^= _hashCodeHelper(minimumFractionDigits);
     hashCode ^= _hashCodeHelper(minimumGroupingDigits);
@@ -395,228 +362,170 @@ public class Properties
 
   /// BEGIN GETTERS/SETTERS ///
 
-  @Override
   public Map<String, Map<String, String>> getCompactCustomData() {
     return compactCustomData;
   }
 
-  @Override
   public CompactStyle getCompactStyle() {
     return compactStyle;
   }
 
-  @Override
   public Currency getCurrency() {
     return currency;
   }
 
-  @Override
-  @Deprecated
   public CurrencyPluralInfo getCurrencyPluralInfo() {
     return currencyPluralInfo;
   }
 
-  @Override
-  public CurrencyStyle getCurrencyStyle() {
-    return currencyStyle;
-  }
-
-  @Override
   public CurrencyUsage getCurrencyUsage() {
     return currencyUsage;
   }
 
-  @Override
   public boolean getDecimalPatternMatchRequired() {
     return decimalPatternMatchRequired;
   }
 
-  @Override
   public boolean getDecimalSeparatorAlwaysShown() {
     return decimalSeparatorAlwaysShown;
   }
 
-  @Override
   public boolean getExponentSignAlwaysShown() {
     return exponentSignAlwaysShown;
   }
 
-  @Override
   public int getFormatWidth() {
     return formatWidth;
   }
 
-  @Override
   public int getGroupingSize() {
     return groupingSize;
   }
 
-  @Override
   public int getMagnitudeMultiplier() {
     return magnitudeMultiplier;
   }
 
-  @Override
   public MathContext getMathContext() {
     return mathContext;
   }
 
-  @Override
   public int getMaximumFractionDigits() {
     return maximumFractionDigits;
   }
 
-  @Override
   public int getMaximumIntegerDigits() {
     return maximumIntegerDigits;
   }
 
-  @Override
   public int getMaximumSignificantDigits() {
     return maximumSignificantDigits;
   }
 
-  @Override
-  public FormatWidth getMeasureFormatWidth() {
-    return measureFormatWidth;
-  }
-
-  @Override
-  public MeasureUnit getMeasureUnit() {
-    return measureUnit;
-  }
-
-  @Override
   public int getMinimumExponentDigits() {
     return minimumExponentDigits;
   }
 
-  @Override
   public int getMinimumFractionDigits() {
     return minimumFractionDigits;
   }
 
-  @Override
   public int getMinimumGroupingDigits() {
     return minimumGroupingDigits;
   }
 
-  @Override
   public int getMinimumIntegerDigits() {
     return minimumIntegerDigits;
   }
 
-  @Override
   public int getMinimumSignificantDigits() {
     return minimumSignificantDigits;
   }
 
-  @Override
   public BigDecimal getMultiplier() {
     return multiplier;
   }
 
-  @Override
   public String getNegativePrefix() {
     return negativePrefix;
   }
 
-  @Override
   public String getNegativePrefixPattern() {
     return negativePrefixPattern;
   }
 
-  @Override
   public String getNegativeSuffix() {
     return negativeSuffix;
   }
 
-  @Override
   public String getNegativeSuffixPattern() {
     return negativeSuffixPattern;
   }
 
-  @Override
   public PadPosition getPadPosition() {
     return padPosition;
   }
 
-  @Override
   public String getPadString() {
     return padString;
   }
 
-  @Override
   public boolean getParseCaseSensitive() {
     return parseCaseSensitive;
   }
 
-  @Override
   public GroupingMode getParseGroupingMode() {
     return parseGroupingMode;
   }
 
-  @Override
   public boolean getParseIntegerOnly() {
     return parseIntegerOnly;
   }
 
-  @Override
   public ParseMode getParseMode() {
     return parseMode;
   }
 
-  @Override
   public boolean getParseNoExponent() {
     return parseNoExponent;
   }
 
-  @Override
   public boolean getParseToBigDecimal() {
     return parseToBigDecimal;
   }
 
-  @Override
   public PluralRules getPluralRules() {
     return pluralRules;
   }
 
-  @Override
   public String getPositivePrefix() {
     return positivePrefix;
   }
 
-  @Override
   public String getPositivePrefixPattern() {
     return positivePrefixPattern;
   }
 
-  @Override
   public String getPositiveSuffix() {
     return positiveSuffix;
   }
 
-  @Override
   public String getPositiveSuffixPattern() {
     return positiveSuffixPattern;
   }
 
-  @Override
   public BigDecimal getRoundingIncrement() {
     return roundingIncrement;
   }
 
-  @Override
   public RoundingMode getRoundingMode() {
     return roundingMode;
   }
 
-  @Override
   public int getSecondaryGroupingSize() {
     return secondaryGroupingSize;
   }
 
-  @Override
   public boolean getSignAlwaysShown() {
     return signAlwaysShown;
   }
@@ -672,27 +581,65 @@ public class Properties
     }
   }
 
-  @Override
+  /**
+   * Specifies custom data to be used instead of CLDR data when constructing a CompactDecimalFormat.
+   * The argument should be a map with the following structure:
+   *
+   * <pre>
+   * {
+   *   "1000": {
+   *     "one": "0 thousand",
+   *     "other": "0 thousand"
+   *   },
+   *   "10000": {
+   *     "one": "00 thousand",
+   *     "other": "00 thousand"
+   *   },
+   *   // ...
+   * }
+   * </pre>
+   *
+   * This API endpoint is used by the CLDR Survey Tool.
+   *
+   * @param compactCustomData A map with the above structure.
+   * @return The property bag, for chaining.
+   */
   public Properties setCompactCustomData(Map<String, Map<String, String>> compactCustomData) {
     // TODO: compactCustomData is not immutable.
     this.compactCustomData = compactCustomData;
     return this;
   }
 
-  @Override
+  /**
+   * Use compact decimal formatting with the specified {@link CompactStyle}. CompactStyle.SHORT
+   * produces output like "10K" in locale <em>en-US</em>, whereas CompactStyle.LONG produces output
+   * like "10 thousand" in that locale.
+   *
+   * @param compactStyle The style of prefixes/suffixes to append.
+   * @return The property bag, for chaining.
+   */
   public Properties setCompactStyle(CompactStyle compactStyle) {
     this.compactStyle = compactStyle;
     return this;
   }
 
-  @Override
+  /**
+   * Use the specified currency to substitute currency placeholders ('¤') in the pattern string.
+   *
+   * @param currency The currency.
+   * @return The property bag, for chaining.
+   */
   public Properties setCurrency(Currency currency) {
     this.currency = currency;
     return this;
   }
 
-  @Override
-  @Deprecated
+  /**
+   * Use the specified {@link CurrencyPluralInfo} instance when formatting currency long names.
+   *
+   * @param currencyPluralInfo The currency plural info object.
+   * @return The property bag, for chaining.
+   */
   public Properties setCurrencyPluralInfo(CurrencyPluralInfo currencyPluralInfo) {
     // TODO: In order to maintain immutability, we have to perform a clone here.
     // It would be better to just retire CurrencyPluralInfo entirely.
@@ -703,247 +650,610 @@ public class Properties
     return this;
   }
 
-  @Override
-  public Properties setCurrencyStyle(CurrencyStyle currencyStyle) {
-    this.currencyStyle = currencyStyle;
-    return this;
-  }
-
-  @Override
+  /**
+   * Use the specified {@link CurrencyUsage} instance, which provides default rounding rules for the
+   * currency in two styles, CurrencyUsage.CASH and CurrencyUsage.STANDARD.
+   *
+   * <p>The CurrencyUsage specified here will not be used unless there is a currency placeholder in
+   * the pattern.
+   *
+   * @param currencyUsage The currency usage. Defaults to CurrencyUsage.STANDARD.
+   * @return The property bag, for chaining.
+   */
   public Properties setCurrencyUsage(CurrencyUsage currencyUsage) {
     this.currencyUsage = currencyUsage;
     return this;
   }
 
-  @Override
+  /**
+   * PARSING: Whether to require that the presence of decimal point matches the pattern. If a
+   * decimal point is not present, but the pattern contained a decimal point, parse will not
+   * succeed: null will be returned from <code>parse()</code>, and an error index will be set in the
+   * {@link ParsePosition}.
+   *
+   * @param decimalPatternMatchRequired true to set an error if decimal is not present
+   * @return The property bag, for chaining.
+   */
   public Properties setDecimalPatternMatchRequired(boolean decimalPatternMatchRequired) {
     this.decimalPatternMatchRequired = decimalPatternMatchRequired;
     return this;
   }
 
-  @Override
+  /**
+   * Sets whether to always show the decimal point, even if the number doesn't require one. For
+   * example, if always show decimal is true, the number 123 would be formatted as "123." in locale
+   * <em>en-US</em>.
+   *
+   * @param decimalSeparatorAlwaysShown Whether to show the decimal point when it is optional.
+   * @return The property bag, for chaining.
+   */
   public Properties setDecimalSeparatorAlwaysShown(boolean alwaysShowDecimal) {
     this.decimalSeparatorAlwaysShown = alwaysShowDecimal;
     return this;
   }
 
-  @Override
+  /**
+   * Sets whether to show the plus sign in the exponent part of numbers with a zero or positive
+   * exponent. For example, the number "1200" with the pattern "0.0E0" would be formatted as
+   * "1.2E+3" instead of "1.2E3" in <em>en-US</em>.
+   *
+   * @param exponentSignAlwaysShown Whether to show the plus sign in positive exponents.
+   * @return The property bag, for chaining.
+   */
   public Properties setExponentSignAlwaysShown(boolean exponentSignAlwaysShown) {
     this.exponentSignAlwaysShown = exponentSignAlwaysShown;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the minimum width of the string output by the formatting pipeline. For example, if padding
+   * is enabled and paddingWidth is set to 6, formatting the number "3.14159" with the pattern
+   * "0.00" will result in "··3.14" if '·' is your padding string.
+   *
+   * <p>If the number is longer than your padding width, the number will display as if no padding
+   * width had been specified, which may result in strings longer than the padding width.
+   *
+   * <p>Width is counted in UTF-16 code units.
+   *
+   * @param formatWidth The output width.
+   * @return The property bag, for chaining.
+   * @see #setPadPosition
+   * @see #setPadString
+   */
   public Properties setFormatWidth(int paddingWidth) {
     this.formatWidth = paddingWidth;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the number of digits between grouping separators. For example, the <em>en-US</em> locale
+   * uses a grouping size of 3, so the number 1234567 would be formatted as "1,234,567". For locales
+   * whose grouping sizes vary with magnitude, see {@link #setSecondaryGroupingSize(int)}.
+   *
+   * @param groupingSize The primary grouping size.
+   * @return The property bag, for chaining.
+   */
   public Properties setGroupingSize(int groupingSize) {
     this.groupingSize = groupingSize;
     return this;
   }
 
-  @Override
+  /**
+   * Multiply all numbers by this power of ten before formatting. Negative multipliers reduce the
+   * magnitude and make numbers smaller (closer to zero).
+   *
+   * @param magnitudeMultiplier The number of powers of ten to scale.
+   * @return The property bag, for chaining.
+   * @see #setMultiplier
+   */
   public Properties setMagnitudeMultiplier(int magnitudeMultiplier) {
     this.magnitudeMultiplier = magnitudeMultiplier;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the {@link MathContext} to be used during math and rounding operations. A MathContext
+   * encapsulates a RoundingMode and the number of significant digits in the output.
+   *
+   * @param mathContext The math context to use when rounding is required.
+   * @return The property bag, for chaining.
+   * @see MathContext
+   * @see #setRoundingMode
+   */
   public Properties setMathContext(MathContext mathContext) {
     this.mathContext = mathContext;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the maximum number of digits to display after the decimal point. If the number has fewer
+   * than this number of digits, the number will be rounded off using the rounding mode specified by
+   * {@link #setRoundingMode(RoundingMode)}. The pattern "#00.0#", for example, corresponds to 2
+   * maximum fraction digits, and the number 456.789 would be formatted as "456.79" in locale
+   * <em>en-US</em> with the default rounding mode. Note that the number 456.999 would be formatted
+   * as "457.0" given the same configurations.
+   *
+   * @param maximumFractionDigits The maximum number of fraction digits to output.
+   * @return The property bag, for chaining.
+   */
   public Properties setMaximumFractionDigits(int maximumFractionDigits) {
     this.maximumFractionDigits = maximumFractionDigits;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the maximum number of digits to display before the decimal point. If the number has more
+   * than this number of digits, the extra digits will be truncated. For example, if maximum integer
+   * digits is 2, and you attempt to format the number 1970, you will get "70" in locale
+   * <em>en-US</em>. It is not possible to specify the maximum integer digits using a pattern
+   * string, except in the special case of a scientific format pattern.
+   *
+   * @param maximumIntegerDigits The maximum number of integer digits to output.
+   * @return The property bag, for chaining.
+   */
   public Properties setMaximumIntegerDigits(int maximumIntegerDigits) {
     this.maximumIntegerDigits = maximumIntegerDigits;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the maximum number of significant digits to display. The number of significant digits is
+   * equal to the number of digits counted from the leftmost nonzero digit through the rightmost
+   * nonzero digit; for example, the number "2010" has 3 significant digits. If the number has more
+   * significant digits than specified here, the extra significant digits will be rounded off using
+   * the rounding mode specified by {@link #setRoundingMode(RoundingMode)}. For example, if maximum
+   * significant digits is 3, the number 1234.56 will be formatted as "1230" in locale
+   * <em>en-US</em> with the default rounding mode.
+   *
+   * <p>If both maximum significant digits and maximum integer/fraction digits are set at the same
+   * time, the behavior is undefined.
+   *
+   * <p>The number of significant digits can be specified in a pattern string using the '@'
+   * character. For example, the pattern "@@#" corresponds to a minimum of 2 and a maximum of 3
+   * significant digits.
+   *
+   * @param maximumSignificantDigits The maximum number of significant digits to display.
+   * @return The property bag, for chaining.
+   */
   public Properties setMaximumSignificantDigits(int maximumSignificantDigits) {
     this.maximumSignificantDigits = maximumSignificantDigits;
     return this;
   }
 
-  @Override
-  public Properties setMeasureFormatWidth(FormatWidth measureFormatWidth) {
-    this.measureFormatWidth = measureFormatWidth;
-    return this;
-  }
-
-  @Override
-  public Properties setMeasureUnit(MeasureUnit measureUnit) {
-    this.measureUnit = measureUnit;
-    return this;
-  }
-
-  @Override
+  /**
+   * Sets the minimum number of digits to display in the exponent. For example, the number "1200"
+   * with the pattern "0.0E00", which has 2 exponent digits, would be formatted as "1.2E03" in
+   * <em>en-US</em>.
+   *
+   * @param minimumExponentDigits The minimum number of digits to display in the exponent field.
+   * @return The property bag, for chaining.
+   */
   public Properties setMinimumExponentDigits(int exponentDigits) {
     this.minimumExponentDigits = exponentDigits;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the minimum number of digits to display after the decimal point. If the number has fewer
+   * than this number of digits, the number will be padded with zeros. The pattern "#00.0#", for
+   * example, corresponds to 1 minimum fraction digit, and the number 456 would be formatted as
+   * "456.0" in locale <em>en-US</em>.
+   *
+   * @param minimumFractionDigits The minimum number of fraction digits to output.
+   * @return The property bag, for chaining.
+   */
   public Properties setMinimumFractionDigits(int minimumFractionDigits) {
     this.minimumFractionDigits = minimumFractionDigits;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the minimum number of digits required to be beyond the first grouping separator in order
+   * to enable grouping. For example, if the minimum grouping digits is 2, then 1234 would be
+   * formatted as "1234" but 12345 would be formatted as "12,345" in <em>en-US</em>. Note that
+   * 1234567 would still be formatted as "1,234,567", not "1234,567".
+   *
+   * @param minimumGroupingDigits How many digits must appear before a grouping separator before
+   *     enabling grouping.
+   * @return The property bag, for chaining.
+   */
   public Properties setMinimumGroupingDigits(int minimumGroupingDigits) {
     this.minimumGroupingDigits = minimumGroupingDigits;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the minimum number of digits to display before the decimal point. If the number has fewer
+   * than this number of digits, the number will be padded with zeros. The pattern "#00.0#", for
+   * example, corresponds to 2 minimum integer digits, and the number 5.3 would be formatted as
+   * "05.3" in locale <em>en-US</em>.
+   *
+   * @param minimumIntegerDigits The minimum number of integer digits to output.
+   * @return The property bag, for chaining.
+   */
   public Properties setMinimumIntegerDigits(int minimumIntegerDigits) {
     this.minimumIntegerDigits = minimumIntegerDigits;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the minimum number of significant digits to display. If, after rounding to the number of
+   * significant digits specified by {@link #setMaximumSignificantDigits}, the number of remaining
+   * significant digits is less than the minimum, the number will be padded with zeros. For example,
+   * if minimum significant digits is 3, the number 5.8 will be formatted as "5.80" in locale
+   * <em>en-US</em>. Note that minimum significant digits is relevant only when numbers have digits
+   * after the decimal point.
+   *
+   * <p>If both minimum significant digits and minimum integer/fraction digits are set at the same
+   * time, both values will be respected, and the one that results in the greater number of padding
+   * zeros will be used. For example, formatting the number 73 with 3 minimum significant digits and
+   * 2 minimum fraction digits will produce "73.00".
+   *
+   * <p>The number of significant digits can be specified in a pattern string using the '@'
+   * character. For example, the pattern "@@#" corresponds to a minimum of 2 and a maximum of 3
+   * significant digits.
+   *
+   * @param minimumSignificantDigits The minimum number of significant digits to display.
+   * @return The property bag, for chaining.
+   */
   public Properties setMinimumSignificantDigits(int minimumSignificantDigits) {
     this.minimumSignificantDigits = minimumSignificantDigits;
     return this;
   }
 
-  @Override
+  /**
+   * Multiply all numbers by this amount before formatting.
+   *
+   * @param multiplier The amount to multiply by.
+   * @return The property bag, for chaining.
+   * @see #setMagnitudeMultiplier
+   */
   public Properties setMultiplier(BigDecimal multiplier) {
     this.multiplier = multiplier;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the prefix to prepend to negative numbers. The prefix will be interpreted literally. For
+   * example, if you set a negative prefix of <code>n</code>, then the number -123 will be formatted
+   * as "n123" in the locale <em>en-US</em>. Note that if the negative prefix is left unset, the
+   * locale's minus sign is used.
+   *
+   * <p>For more information on prefixes and suffixes, see {@link PositiveNegativeAffixFormat}.
+   *
+   * @param negativePrefix The CharSequence to prepend to negative numbers.
+   * @return The property bag, for chaining.
+   * @see PositiveNegativeAffixFormat
+   * @see #setNegativePrefixPattern
+   */
   public Properties setNegativePrefix(String negativePrefix) {
     this.negativePrefix = negativePrefix;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the prefix to prepend to negative numbers. Locale-specific symbols will be substituted
+   * into the string according to Unicode Technical Standard #35 (LDML).
+   *
+   * <p>For more information on prefixes and suffixes, see {@link PositiveNegativeAffixFormat}.
+   *
+   * @param negativePrefixPattern The CharSequence to prepend to negative numbers after locale
+   *     symbol substitutions take place.
+   * @return The property bag, for chaining.
+   * @see PositiveNegativeAffixFormat
+   * @see #setNegativePrefix
+   */
   public Properties setNegativePrefixPattern(String negativePrefixPattern) {
     this.negativePrefixPattern = negativePrefixPattern;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the suffix to append to negative numbers. The suffix will be interpreted literally. For
+   * example, if you set a suffix prefix of <code>n</code>, then the number -123 will be formatted
+   * as "-123n" in the locale <em>en-US</em>. Note that the minus sign is prepended by default
+   * unless otherwise specified in either the pattern string or in one of the {@link
+   * #setNegativePrefix} methods.
+   *
+   * <p>For more information on prefixes and suffixes, see {@link PositiveNegativeAffixFormat}.
+   *
+   * @param negativeSuffix The CharSequence to append to negative numbers.
+   * @return The property bag, for chaining.
+   * @see PositiveNegativeAffixFormat
+   * @see #setNegativeSuffixPattern
+   */
   public Properties setNegativeSuffix(String negativeSuffix) {
     this.negativeSuffix = negativeSuffix;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the suffix to append to negative numbers. Locale-specific symbols will be substituted into
+   * the string according to Unicode Technical Standard #35 (LDML).
+   *
+   * <p>For more information on prefixes and suffixes, see {@link PositiveNegativeAffixFormat}.
+   *
+   * @param negativeSuffixPattern The CharSequence to append to negative numbers after locale symbol
+   *     substitutions take place.
+   * @return The property bag, for chaining.
+   * @see PositiveNegativeAffixFormat
+   * @see #setNegativeSuffix
+   */
   public Properties setNegativeSuffixPattern(String negativeSuffixPattern) {
     this.negativeSuffixPattern = negativeSuffixPattern;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the location where the padding string is to be inserted to maintain the padding width: one
+   * of BEFORE_PREFIX, AFTER_PREFIX, BEFORE_SUFFIX, or AFTER_SUFFIX.
+   *
+   * <p>Must be used in conjunction with {@link #setFormatWidth}.
+   *
+   * @param padPosition The output width.
+   * @return The property bag, for chaining.
+   * @see #setFormatWidth
+   */
   public Properties setPadPosition(PadPosition paddingLocation) {
     this.padPosition = paddingLocation;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the string used for padding. The string should contain a single character or grapheme
+   * cluster.
+   *
+   * <p>Must be used in conjunction with {@link #setFormatWidth}.
+   *
+   * @param paddingString The padding string. Defaults to an ASCII space (U+0020).
+   * @return The property bag, for chaining.
+   * @see #setFormatWidth
+   */
   public Properties setPadString(String paddingString) {
     this.padString = paddingString;
     return this;
   }
 
-  @Override
+  /**
+   * Whether to require cases to match when parsing strings; default is true. Case sensitivity
+   * applies to prefixes, suffixes, the exponent separator, the symbol "NaN", and the infinity
+   * symbol. Grouping separators, decimal separators, and padding are always case-sensitive.
+   * Currencies are always case-insensitive.
+   *
+   * <p>This setting is ignored in fast mode. In fast mode, strings are always compared in a
+   * case-sensitive way.
+   *
+   * @param parseCaseSensitive true to be case-sensitive when parsing; false to allow any case.
+   * @return The property bag, for chaining.
+   */
   public Properties setParseCaseSensitive(boolean parseCaseSensitive) {
     this.parseCaseSensitive = parseCaseSensitive;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the strategy used during parsing when a code point needs to be interpreted as either a
+   * decimal separator or a grouping separator.
+   *
+   * <p>The comma, period, space, and apostrophe have different meanings in different locales. For
+   * example, in <em>en-US</em> and most American locales, the period is used as a decimal
+   * separator, but in <em>es-PY</em> and most European locales, it is used as a grouping separator.
+   *
+   * <p>Suppose you are in <em>fr-FR</em> the parser encounters the string "1.234". In
+   * <em>fr-FR</em>, the grouping is a space and the decimal is a comma. The <em>grouping mode</em>
+   * is a mechanism to let you specify whether to accept the string as 1234 (GroupingMode.DEFAULT)
+   * or whether to reject it since the separators don't match (GroupingMode.RESTRICTED).
+   *
+   * <p>When resolving grouping separators, it is the <em>equivalence class</em> of separators that
+   * is considered. For example, a period is seen as equal to a fixed set of other period-like
+   * characters.
+   *
+   * @param parseGroupingMode The {@link GroupingMode} to use; either DEFAULT or RESTRICTED.
+   * @return The property bag, for chaining.
+   */
   public Properties setParseGroupingMode(GroupingMode parseGroupingMode) {
     this.parseGroupingMode = parseGroupingMode;
     return this;
   }
 
-  @Override
+  /**
+   * Whether to ignore the fractional part of numbers. For example, parses "123.4" to "123" instead
+   * of "123.4".
+   *
+   * @param parseIntegerOnly true to parse integers only; false to parse integers with their
+   *     fraction parts
+   * @return The property bag, for chaining.
+   */
   public Properties setParseIntegerOnly(boolean parseIntegerOnly) {
     this.parseIntegerOnly = parseIntegerOnly;
     return this;
   }
 
-  @Override
+  /**
+   * Controls certain rules for how strict this parser is when reading strings. See {@link
+   * ParseMode#LENIENT} and {@link ParseMode#STRICT}.
+   *
+   * @param parseMode Either {@link ParseMode#LENIENT} or {@link ParseMode#STRICT}.
+   * @return The property bag, for chaining.
+   */
   public Properties setParseMode(ParseMode parseMode) {
     this.parseMode = parseMode;
     return this;
   }
 
-  @Override
+  /**
+   * Whether to ignore the exponential part of numbers. For example, parses "123E4" to "123" instead
+   * of "1230000".
+   *
+   * @param parseIgnoreExponent true to ignore exponents; false to parse them.
+   * @return The property bag, for chaining.
+   */
   public Properties setParseNoExponent(boolean parseNoExponent) {
     this.parseNoExponent = parseNoExponent;
     return this;
   }
 
-  @Override
+  /**
+   * Whether to always return a BigDecimal from {@link Parse#parse} and all other parse methods. By
+   * default, a Long or a BigInteger are returned when possible.
+   *
+   * @param parseToBigDecimal true to always return a BigDecimal; false to return a Long or a
+   *     BigInteger when possible.
+   * @return The property bag, for chaining.
+   */
   public Properties setParseToBigDecimal(boolean parseToBigDecimal) {
     this.parseToBigDecimal = parseToBigDecimal;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the PluralRules object to use instead of the default for the locale.
+   *
+   * @param pluralRules The object to reference.
+   * @return The property bag, for chaining.
+   */
   public Properties setPluralRules(PluralRules pluralRules) {
     this.pluralRules = pluralRules;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the prefix to prepend to positive numbers. The prefix will be interpreted literally. For
+   * example, if you set a positive prefix of <code>p</code>, then the number 123 will be formatted
+   * as "p123" in the locale <em>en-US</em>.
+   *
+   * <p>For more information on prefixes and suffixes, see {@link PositiveNegativeAffixFormat}.
+   *
+   * @param positivePrefix The CharSequence to prepend to positive numbers.
+   * @return The property bag, for chaining.
+   * @see PositiveNegativeAffixFormat
+   * @see #setPositivePrefixPattern
+   */
   public Properties setPositivePrefix(String positivePrefix) {
     this.positivePrefix = positivePrefix;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the prefix to prepend to positive numbers. Locale-specific symbols will be substituted
+   * into the string according to Unicode Technical Standard #35 (LDML).
+   *
+   * <p>For more information on prefixes and suffixes, see {@link PositiveNegativeAffixFormat}.
+   *
+   * @param positivePrefixPattern The CharSequence to prepend to positive numbers after locale
+   *     symbol substitutions take place.
+   * @return The property bag, for chaining.
+   * @see PositiveNegativeAffixFormat
+   * @see #setPositivePrefix
+   */
   public Properties setPositivePrefixPattern(String positivePrefixPattern) {
     this.positivePrefixPattern = positivePrefixPattern;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the suffix to append to positive numbers. The suffix will be interpreted literally. For
+   * example, if you set a positive suffix of <code>p</code>, then the number 123 will be formatted
+   * as "123p" in the locale <em>en-US</em>.
+   *
+   * <p>For more information on prefixes and suffixes, see {@link PositiveNegativeAffixFormat}.
+   *
+   * @param positiveSuffix The CharSequence to append to positive numbers.
+   * @return The property bag, for chaining.
+   * @see PositiveNegativeAffixFormat
+   * @see #setPositiveSuffixPattern
+   */
   public Properties setPositiveSuffix(String positiveSuffix) {
     this.positiveSuffix = positiveSuffix;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the suffix to append to positive numbers. Locale-specific symbols will be substituted into
+   * the string according to Unicode Technical Standard #35 (LDML).
+   *
+   * <p>For more information on prefixes and suffixes, see {@link PositiveNegativeAffixFormat}.
+   *
+   * @param positiveSuffixPattern The CharSequence to append to positive numbers after locale symbol
+   *     substitutions take place.
+   * @return The property bag, for chaining.
+   * @see PositiveNegativeAffixFormat
+   * @see #setPositiveSuffix
+   */
   public Properties setPositiveSuffixPattern(String positiveSuffixPattern) {
     this.positiveSuffixPattern = positiveSuffixPattern;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the increment to which to round numbers. For example, with a rounding interval of 0.05,
+   * the number 11.17 would be formatted as "11.15" in locale <em>en-US</em> with the default
+   * rounding mode.
+   *
+   * <p>You can use either a rounding increment or significant digits, but not both at the same
+   * time.
+   *
+   * <p>The rounding increment can be specified in a pattern string. For example, the pattern
+   * "#,##0.05" corresponds to a rounding interval of 0.05 with 1 minimum integer digit and a
+   * grouping size of 3.
+   *
+   * @param roundingIncrement The interval to which to round.
+   * @return The property bag, for chaining.
+   */
   public Properties setRoundingIncrement(BigDecimal roundingIncrement) {
     this.roundingIncrement = roundingIncrement;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the rounding mode, which determines under which conditions extra decimal places are
+   * rounded either up or down. See {@link RoundingMode} for details on the choices of rounding
+   * mode. The default if not set explicitly is {@link RoundingMode#HALF_EVEN}.
+   *
+   * <p>This setting is ignored if {@link #setMathContext} is used.
+   *
+   * @param roundingMode The rounding mode to use when rounding is required.
+   * @return The property bag, for chaining.
+   * @see RoundingMode
+   * @see #setMathContext
+   */
   public Properties setRoundingMode(RoundingMode roundingMode) {
     this.roundingMode = roundingMode;
     return this;
   }
 
-  @Override
+  /**
+   * Sets the number of digits between grouping separators higher than the least-significant
+   * grouping separator. For example, the locale <em>hi</em> uses a primary grouping size of 3 and a
+   * secondary grouping size of 2, so the number 1234567 would be formatted as "12,34,567".
+   *
+   * <p>The two levels of grouping separators can be specified in the pattern string. For example,
+   * the <em>hi</em> locale's default decimal format pattern is "#,##,##0.###".
+   *
+   * @param secondaryGroupingSize The secondary grouping size.
+   * @return The property bag, for chaining.
+   */
   public Properties setSecondaryGroupingSize(int secondaryGroupingSize) {
     this.secondaryGroupingSize = secondaryGroupingSize;
     return this;
   }
 
-  @Override
+  /**
+   * Sets whether to always display of a plus sign on positive numbers.
+   *
+   * <p>If the location of the negative sign is specified by the decimal format pattern (or by the
+   * negative prefix/suffix pattern methods), a plus sign is substituted into that location, in
+   * accordance with Unicode Technical Standard #35 (LDML) section 3.2.1. Otherwise, the plus sign
+   * is prepended to the number. For example, if the decimal format pattern <code>#;#-</code> is
+   * used, then formatting 123 would result in "123+" in the locale <em>en-US</em>.
+   *
+   * <p>This method should be used <em>instead of</em> setting the positive prefix/suffix. The
+   * behavior is undefined if alwaysShowPlusSign is set but the positive prefix/suffix already
+   * contains a plus sign.
+   *
+   * @param plusSignAlwaysShown Whether positive numbers should display a plus sign.
+   * @return The property bag, for chaining.
+   */
   public Properties setSignAlwaysShown(boolean signAlwaysShown) {
     this.signAlwaysShown = signAlwaysShown;
     return this;

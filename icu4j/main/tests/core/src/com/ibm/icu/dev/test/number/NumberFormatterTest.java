@@ -12,7 +12,7 @@ import java.util.Locale;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberingSystem;

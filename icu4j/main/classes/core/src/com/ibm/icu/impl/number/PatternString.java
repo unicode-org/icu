@@ -4,8 +4,7 @@ package com.ibm.icu.impl.number;
 
 import java.math.BigDecimal;
 
-import com.ibm.icu.impl.number.formatters.PaddingFormat;
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
 import newapi.impl.AffixPatternProvider;
@@ -105,17 +104,17 @@ public class PatternString {
 
     // Figure out the grouping sizes.
     int grouping1, grouping2, grouping;
-    if (groupingSize != Math.min(dosMax, Properties.DEFAULT_SECONDARY_GROUPING_SIZE)
-        && firstGroupingSize != Math.min(dosMax, Properties.DEFAULT_GROUPING_SIZE)
+    if (groupingSize != Math.min(dosMax, -1)
+        && firstGroupingSize != Math.min(dosMax, -1)
         && groupingSize != firstGroupingSize) {
       grouping = groupingSize;
       grouping1 = groupingSize;
       grouping2 = firstGroupingSize;
-    } else if (groupingSize != Math.min(dosMax, Properties.DEFAULT_SECONDARY_GROUPING_SIZE)) {
+    } else if (groupingSize != Math.min(dosMax, -1)) {
       grouping = groupingSize;
       grouping1 = 0;
       grouping2 = groupingSize;
-    } else if (firstGroupingSize != Math.min(dosMax, Properties.DEFAULT_GROUPING_SIZE)) {
+    } else if (firstGroupingSize != Math.min(dosMax, -1)) {
       grouping = groupingSize;
       grouping1 = 0;
       grouping2 = firstGroupingSize;
@@ -130,7 +129,7 @@ public class PatternString {
     BigDecimal roundingInterval = properties.getRoundingIncrement();
     StringBuilder digitsString = new StringBuilder();
     int digitsStringScale = 0;
-    if (maxSig != Math.min(dosMax, Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS)) {
+    if (maxSig != Math.min(dosMax, -1)) {
       // Significant Digits.
       while (digitsString.length() < minSig) {
         digitsString.append('@');
@@ -138,7 +137,7 @@ public class PatternString {
       while (digitsString.length() < maxSig) {
         digitsString.append('#');
       }
-    } else if (roundingInterval != Properties.DEFAULT_ROUNDING_INCREMENT) {
+    } else if (roundingInterval != null) {
       // Rounding Interval.
       digitsStringScale = -roundingInterval.scale();
       // TODO: Check for DoS here?
@@ -179,7 +178,7 @@ public class PatternString {
     }
 
     // Exponential notation
-    if (exponentDigits != Math.min(dosMax, Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS)) {
+    if (exponentDigits != Math.min(dosMax, -1)) {
       sb.append('E');
       if (exponentShowPlusSign) {
         sb.append('+');
@@ -195,7 +194,7 @@ public class PatternString {
     AffixPatternUtils.escape(ps, sb);
 
     // Resolve Padding
-    if (paddingWidth != Properties.DEFAULT_FORMAT_WIDTH) {
+    if (paddingWidth != -1) {
       while (paddingWidth - sb.length() > 0) {
         sb.insert(afterPrefixPos, '#');
         beforeSuffixPos++;
@@ -246,7 +245,7 @@ public class PatternString {
 
   /** @return The number of chars inserted. */
   private static int escapePaddingString(CharSequence input, StringBuilder output, int startIndex) {
-    if (input == null || input.length() == 0) input = PaddingFormat.FALLBACK_PADDING_STRING;
+    if (input == null || input.length() == 0) input = ThingsNeedingNewHome.FALLBACK_PADDING_STRING;
     int startLength = output.length();
     if (input.length() == 1) {
       if (input.equals("'")) {
@@ -474,12 +473,12 @@ public class PatternString {
     if (grouping2 != -1) {
       properties.setGroupingSize(grouping1);
     } else {
-      properties.setGroupingSize(Properties.DEFAULT_GROUPING_SIZE);
+      properties.setGroupingSize(-1);
     }
     if (grouping3 != -1) {
       properties.setSecondaryGroupingSize(grouping2);
     } else {
-      properties.setSecondaryGroupingSize(Properties.DEFAULT_SECONDARY_GROUPING_SIZE);
+      properties.setSecondaryGroupingSize(-1);
     }
 
     // For backwards compatibility, require that the pattern emit at least one min digit.
@@ -500,9 +499,9 @@ public class PatternString {
     // Rounding settings
     // Don't set basic rounding when there is a currency sign; defer to CurrencyUsage
     if (positive.minimumSignificantDigits > 0) {
-      properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
-      properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
-      properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
+      properties.setMinimumFractionDigits(-1);
+      properties.setMaximumFractionDigits(-1);
+      properties.setRoundingIncrement(null);
       properties.setMinimumSignificantDigits(positive.minimumSignificantDigits);
       properties.setMaximumSignificantDigits(positive.maximumSignificantDigits);
     } else if (positive.rounding != null) {
@@ -512,24 +511,24 @@ public class PatternString {
         properties.setRoundingIncrement(
             positive.rounding.toBigDecimal().setScale(positive.minimumFractionDigits));
       } else {
-        properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
-        properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
-        properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
+        properties.setMinimumFractionDigits(-1);
+        properties.setMaximumFractionDigits(-1);
+        properties.setRoundingIncrement(null);
       }
-      properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
-      properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
+      properties.setMinimumSignificantDigits(-1);
+      properties.setMaximumSignificantDigits(-1);
     } else {
       if (!ignoreRounding) {
         properties.setMinimumFractionDigits(minFrac);
         properties.setMaximumFractionDigits(positive.maximumFractionDigits);
-        properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
+        properties.setRoundingIncrement(null);
       } else {
-        properties.setMinimumFractionDigits(Properties.DEFAULT_MINIMUM_FRACTION_DIGITS);
-        properties.setMaximumFractionDigits(Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS);
-        properties.setRoundingIncrement(Properties.DEFAULT_ROUNDING_INCREMENT);
+        properties.setMinimumFractionDigits(-1);
+        properties.setMaximumFractionDigits(-1);
+        properties.setRoundingIncrement(null);
       }
-      properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
-      properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
+      properties.setMinimumSignificantDigits(-1);
+      properties.setMaximumSignificantDigits(-1);
     }
 
     // If the pattern ends with a '.' then force the decimal point.
@@ -550,13 +549,13 @@ public class PatternString {
       } else {
         // patterns with '@' cannot define max integer digits
         properties.setMinimumIntegerDigits(1);
-        properties.setMaximumIntegerDigits(Properties.DEFAULT_MAXIMUM_INTEGER_DIGITS);
+        properties.setMaximumIntegerDigits(-1);
       }
     } else {
-      properties.setExponentSignAlwaysShown(Properties.DEFAULT_EXPONENT_SIGN_ALWAYS_SHOWN);
-      properties.setMinimumExponentDigits(Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS);
+      properties.setExponentSignAlwaysShown(false);
+      properties.setMinimumExponentDigits(-1);
       properties.setMinimumIntegerDigits(minInt);
-      properties.setMaximumIntegerDigits(Properties.DEFAULT_MAXIMUM_INTEGER_DIGITS);
+      properties.setMaximumIntegerDigits(-1);
     }
 
     // Compute the affix patterns (required for both padding and affixes)
@@ -586,9 +585,9 @@ public class PatternString {
       assert positive.paddingLocation != null;
       properties.setPadPosition(positive.paddingLocation);
     } else {
-      properties.setFormatWidth(Properties.DEFAULT_FORMAT_WIDTH);
-      properties.setPadString(Properties.DEFAULT_PAD_STRING);
-      properties.setPadPosition(Properties.DEFAULT_PAD_POSITION);
+      properties.setFormatWidth(-1);
+      properties.setPadString(null);
+      properties.setPadPosition(null);
     }
 
     // Set the affixes
@@ -613,7 +612,7 @@ public class PatternString {
     } else if (positive.hasPerMilleSign) {
       properties.setMagnitudeMultiplier(3);
     } else {
-      properties.setMagnitudeMultiplier(Properties.DEFAULT_MAGNITUDE_MULTIPLIER);
+      properties.setMagnitudeMultiplier(0);
     }
   }
 }

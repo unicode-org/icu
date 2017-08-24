@@ -5,10 +5,12 @@ package com.ibm.icu.impl.number;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.Operand;
+import com.ibm.icu.text.UFieldPosition;
 
 /**
  * This is an older implementation of FormatQuantity. A newer, faster implementation is
@@ -860,6 +862,14 @@ public class FormatQuantity1 implements FormatQuantity {
       return hi;
     } else {
       return i;
+    }
+  }
+
+  @Override
+  public void populateUFieldPosition(FieldPosition fp) {
+    if (fp instanceof UFieldPosition) {
+      ((UFieldPosition) fp)
+          .setFractionDigits((int) getPluralOperand(Operand.v), (long) getPluralOperand(Operand.f));
     }
   }
 }

@@ -4,9 +4,11 @@ package com.ibm.icu.impl.number;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.UFieldPosition;
 
 /**
  * An interface representing a number to be processed by the decimal formatting pipeline. Includes
@@ -186,4 +188,13 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
 
   /** This method is for internal testing only. */
   public long getPositionFingerprint();
+
+  /**
+   * If the given {@link FieldPosition} is a {@link UFieldPosition}, populates it with the fraction
+   * length and fraction long value. If the argument is not a {@link UFieldPosition}, nothing
+   * happens.
+   *
+   * @param fp The {@link UFieldPosition} to populate.
+   */
+  public void populateUFieldPosition(FieldPosition fp);
 }

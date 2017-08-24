@@ -79,10 +79,6 @@ public class AffixPatternUtilsTest {
       {"#0#@#*#;#", false, 9, "#0#@#*#;#"}
     };
 
-    // ar_SA has an interesting percent sign and various Arabic letter marks
-    DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(new ULocale("ar_SA"));
-    NumberStringBuilder sb = new NumberStringBuilder();
-
     for (Object[] cas : cases) {
       String input = (String) cas[0];
       boolean curr = (Boolean) cas[1];
@@ -93,9 +89,8 @@ public class AffixPatternUtilsTest {
           "Currency on <" + input + ">", curr, AffixPatternUtils.hasCurrencySymbols(input));
       assertEquals("Length on <" + input + ">", length, AffixPatternUtils.unescapedLength(input));
 
-      sb.clear();
-      AffixPatternUtils.unescape(input, symbols, "$", "XXX", "long name", "−", sb);
-      assertEquals("Output on <" + input + ">", output, sb.toString());
+      String actual = unescapeWithDefaults(input);
+      assertEquals("Output on <" + input + ">", output, actual);
     }
   }
 
@@ -130,8 +125,6 @@ public class AffixPatternUtilsTest {
   @Test
   public void testInvalid() {
     String[] invalidExamples = {"'", "x'", "'x", "'x''", "''x'"};
-    DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(new ULocale("en_US"));
-    NumberStringBuilder sb = new NumberStringBuilder();
 
     for (String str : invalidExamples) {
       try {
@@ -147,7 +140,7 @@ public class AffixPatternUtilsTest {
         // OK
       }
       try {
-        AffixPatternUtils.unescape(str, symbols, "$", "XXX", "long name", "−", sb);
+        unescapeWithDefaults(str);
         fail("No exception was thrown on an invalid string");
       } catch (IllegalArgumentException e) {
         // OK
@@ -188,5 +181,47 @@ public class AffixPatternUtilsTest {
     sb.append("abcdefg", null);
     AffixPatternUtils.unescape("-+%", sb, 4, provider);
     assertEquals("Symbol provider into middle", "abcd123efg", sb.toString());
+  }
+
+  private static final SymbolProvider DEFAULT_SYMBOL_PROVIDER =
+      new SymbolProvider() {
+        // ar_SA has an interesting percent sign and various Arabic letter marks
+        private final DecimalFormatSymbols SYMBOLS =
+            DecimalFormatSymbols.getInstance(new ULocale("ar_SA"));
+
+        @Override
+        public CharSequence getSymbol(int type) {
+          switch (type) {
+            case AffixPatternUtils.TYPE_MINUS_SIGN:
+              return "−";
+            case AffixPatternUtils.TYPE_PLUS_SIGN:
+              return SYMBOLS.getPlusSignString();
+            case AffixPatternUtils.TYPE_PERCENT:
+              return SYMBOLS.getPercentString();
+            case AffixPatternUtils.TYPE_PERMILLE:
+              return SYMBOLS.getPerMillString();
+            case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
+              return "$";
+            case AffixPatternUtils.TYPE_CURRENCY_DOUBLE:
+              return "XXX";
+            case AffixPatternUtils.TYPE_CURRENCY_TRIPLE:
+              return "long name";
+            case AffixPatternUtils.TYPE_CURRENCY_QUAD:
+              return "\uFFFD";
+            case AffixPatternUtils.TYPE_CURRENCY_QUINT:
+              // TODO: Add support for narrow currency symbols here.
+              return "\uFFFD";
+            case AffixPatternUtils.TYPE_CURRENCY_OVERFLOW:
+              return "\uFFFD";
+            default:
+              throw new AssertionError();
+          }
+        }
+      };
+
+  private static String unescapeWithDefaults(String input) {
+    NumberStringBuilder nsb = new NumberStringBuilder();
+    AffixPatternUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER);
+    return nsb.toString();
   }
 }

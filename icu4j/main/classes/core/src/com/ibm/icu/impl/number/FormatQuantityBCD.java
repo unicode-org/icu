@@ -243,13 +243,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
     }
   }
 
-  /**
-   * If the given {@link FieldPosition} is a {@link UFieldPosition}, populates it with the fraction
-   * length and fraction long value. If the argument is not a {@link UFieldPosition}, nothing
-   * happens.
-   *
-   * @param fp The {@link UFieldPosition} to populate.
-   */
+  @Override
   public void populateUFieldPosition(FieldPosition fp) {
     if (fp instanceof UFieldPosition) {
       ((UFieldPosition) fp)

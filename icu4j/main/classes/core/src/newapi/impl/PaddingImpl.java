@@ -3,7 +3,7 @@
 package newapi.impl;
 
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 
 import newapi.NumberFormatter.Padding;
 

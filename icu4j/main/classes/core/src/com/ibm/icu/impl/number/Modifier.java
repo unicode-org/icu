@@ -69,7 +69,7 @@ public interface Modifier {
    * class implementing {@link PositiveNegativeModifier} is not necessarily a {@link Modifier}
    * itself. Rather, it returns a {@link Modifier} when {@link #getModifier} is called.
    */
-  public static interface PositiveNegativeModifier extends Exportable {
+  public static interface PositiveNegativeModifier {
     /**
      * Converts this {@link PositiveNegativeModifier} to a {@link Modifier} given the negative sign.
      *
@@ -86,7 +86,7 @@ public interface Modifier {
    * necessarily a {@link Modifier} itself. Rather, it returns a {@link Modifier} when {@link
    * #getModifier} is called.
    */
-  public static interface PositiveNegativePluralModifier extends Exportable {
+  public static interface PositiveNegativePluralModifier {
     /**
      * Converts this {@link PositiveNegativePluralModifier} to a {@link Modifier} given the negative
      * sign and the standard plural.
@@ -111,13 +111,7 @@ public interface Modifier {
    * <p>Implements {@link PositiveNegativeModifier} only so that instances of this class can be used
    * when a {@link PositiveNegativeModifier} is required.
    */
-  public abstract static class BaseModifier extends Format.BeforeFormat
-      implements Modifier, PositiveNegativeModifier {
-
-    @Override
-    public void before(FormatQuantity input, ModifierHolder mods) {
-      mods.add(this);
-    }
+  public abstract static class BaseModifier implements Modifier, PositiveNegativeModifier {
 
     @Override
     public Modifier getModifier(boolean isNegative) {

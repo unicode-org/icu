@@ -33,6 +33,13 @@ import newapi.impl.RoundingImpl.RoundingImplSignificant;
 /** @author sffc */
 public final class NumberPropertyMapper {
 
+  /** Convenience method to create a NumberFormatterImpl directly. */
+  public static NumberFormatterImpl create(
+      Properties properties, DecimalFormatSymbols symbols, ULocale uloc) {
+    MacroProps macros = oldToNew(properties, symbols, null);
+    return NumberFormatterImpl.fromMacros(macros).locale(uloc);
+  }
+
   /**
    * Creates a new {@link MacroProps} object based on the content of a {@link Properties} object. In
    * other words, maps Properties to MacroProps. This function is used by the JDK-compatibility API
@@ -96,7 +103,7 @@ public final class NumberPropertyMapper {
             || affixProvider.hasCurrencySign());
     Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
     CurrencyUsage currencyUsage = properties.getCurrencyUsage();
-    boolean explicitCurrencyUsage = currencyUsage != Properties.DEFAULT_CURRENCY_USAGE;
+    boolean explicitCurrencyUsage = currencyUsage != null;
     if (!explicitCurrencyUsage) {
       currencyUsage = CurrencyUsage.STANDARD;
     }
@@ -116,12 +123,8 @@ public final class NumberPropertyMapper {
     int maxSig = properties.getMaximumSignificantDigits();
     BigDecimal roundingIncrement = properties.getRoundingIncrement();
     MathContext mathContext = RoundingUtils.getMathContextOrUnlimited(properties);
-    boolean explicitMinMaxFrac =
-        minFrac != Properties.DEFAULT_MINIMUM_FRACTION_DIGITS
-            || maxFrac != Properties.DEFAULT_MAXIMUM_FRACTION_DIGITS;
-    boolean explicitMinMaxSig =
-        minSig != Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS
-            || maxSig != Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS;
+    boolean explicitMinMaxFrac = minFrac != -1 || maxFrac != -1;
+    boolean explicitMinMaxSig = minSig != -1 || maxSig != -1;
     // Validate min/max int/frac.
     // For backwards compatibility, minimum overrides maximum if the two conflict.
     // The following logic ensures that there is always a minimum of at least one digit.
@@ -181,7 +184,7 @@ public final class NumberPropertyMapper {
     // PADDING //
     /////////////
 
-    if (properties.getFormatWidth() != Properties.DEFAULT_FORMAT_WIDTH) {
+    if (properties.getFormatWidth() != -1) {
       macros.padding =
           PaddingImpl.getInstance(
               properties.getPadString(), properties.getFormatWidth(), properties.getPadPosition());
@@ -206,13 +209,18 @@ public final class NumberPropertyMapper {
     // SCIENTIFIC NOTATION //
     /////////////////////////
 
-    if (properties.getMinimumExponentDigits() != Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS) {
+    if (properties.getMinimumExponentDigits() != -1) {
       // Scientific notation is required.
       // The mapping from property bag to scientific notation is nontrivial due to LDML rules.
       // The maximum of 8 engineering digits has unknown origins and is not in the spec.
       int engineering =
           (maxInt != Integer.MAX_VALUE) ? maxInt : properties.getMaximumIntegerDigits();
       engineering = (engineering < 0) ? 0 : (engineering > 8) ? minInt : engineering;
+      // Bug #13289: if maxInt > minInt > 1, then minInt should be 1.
+      // Clear out IntegerWidth to prevent padding extra zeros.
+      if (maxInt > minInt && minInt > 1) {
+        macros.integerWidth = null;
+      }
       macros.notation =
           new NotationScientificImpl(
               // Engineering interval:
@@ -222,9 +230,7 @@ public final class NumberPropertyMapper {
               // Minimum exponent digits:
               properties.getMinimumExponentDigits(),
               // Exponent sign always shown:
-              properties.getExponentSignAlwaysShown()
-                  ? SignDisplay.ALWAYS
-                  : SignDisplay.AUTO);
+              properties.getExponentSignAlwaysShown() ? SignDisplay.ALWAYS : SignDisplay.AUTO);
       // Scientific notation also involves overriding the rounding mode.
       if (macros.rounding instanceof RoundingImplFraction) {
         int minInt_ = properties.getMinimumIntegerDigits();
@@ -249,7 +255,7 @@ public final class NumberPropertyMapper {
     // COMPACT NOTATION //
     //////////////////////
 
-    if (properties.getCompactStyle() != Properties.DEFAULT_COMPACT_STYLE) {
+    if (properties.getCompactStyle() != null) {
       if (properties.getCompactCustomData() != null) {
         macros.notation = new NotationImpl.NotationCompactImpl(properties.getCompactCustomData());
       } else if (properties.getCompactStyle() == CompactStyle.LONG) {
@@ -265,9 +271,9 @@ public final class NumberPropertyMapper {
     // MULTIPLIERS //
     /////////////////
 
-    if (properties.getMagnitudeMultiplier() != Properties.DEFAULT_MAGNITUDE_MULTIPLIER) {
+    if (properties.getMagnitudeMultiplier() != 0) {
       macros.multiplier = new MultiplierImpl(properties.getMagnitudeMultiplier());
-    } else if (properties.getMultiplier() != Properties.DEFAULT_MULTIPLIER) {
+    } else if (properties.getMultiplier() != null) {
       macros.multiplier = new MultiplierImpl(properties.getMultiplier());
     }
 
