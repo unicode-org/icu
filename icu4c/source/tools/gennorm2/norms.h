@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/errorcode.h"
+#include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "unicode/utf16.h"
 #include "normalizer2impl.h"
@@ -182,6 +183,8 @@ public:
     };
 
     void enumRanges(Enumerator &e);
+
+    UnicodeSet ccSet, mappingSet;
 
 private:
     Norms(const Norms &other) = delete;

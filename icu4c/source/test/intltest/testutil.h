@@ -37,6 +37,9 @@ public:
 
     static UnicodeString hex(const uint8_t* bytes, int32_t len);
 
+    static UBool checkEqualEdits(IntlTest &test, const UnicodeString &name,
+                                 const Edits &e1, const Edits &e2, UErrorCode &errorCode);
+
     static void checkEditsIter(
         IntlTest &test, const UnicodeString &name,
         Edits::Iterator ei1, Edits::Iterator ei2,  // two equal iterators

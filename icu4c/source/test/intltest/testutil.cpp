@@ -10,6 +10,8 @@
 **********************************************************************
 */
 
+#include <algorithm>
+#include <vector>
 #include "unicode/utypes.h"
 #include "unicode/edits.h"
 #include "unicode/unistr.h"
@@ -65,6 +67,100 @@ UnicodeString TestUtility::hex(const uint8_t* bytes, int32_t len) {
     return buf;
 }
 
+namespace {
+
+UnicodeString printOneEdit(const Edits::Iterator &ei) {
+    if (ei.hasChange()) {
+        return UnicodeString() + ei.oldLength() + u"->" + ei.newLength();
+    } else {
+        return UnicodeString() + ei.oldLength() + u"=" + ei.newLength();
+    }
+}
+
+/**
+ * Maps indexes according to the expected edits.
+ * A destination index can occur multiple times when there are source deletions.
+ * Map according to the last occurrence, normally in a non-empty destination span.
+ * Simplest is to search from the back.
+ */
+int32_t srcIndexFromDest(const EditChange expected[], int32_t expLength,
+                         int32_t srcLength, int32_t destLength, int32_t index) {
+    int32_t srcIndex = srcLength;
+    int32_t destIndex = destLength;
+    int32_t i = expLength;
+    while (index < destIndex && i > 0) {
+        --i;
+        int32_t prevSrcIndex = srcIndex - expected[i].oldLength;
+        int32_t prevDestIndex = destIndex - expected[i].newLength;
+        if (index == prevDestIndex) {
+            return prevSrcIndex;
+        } else if (index > prevDestIndex) {
+            if (expected[i].change) {
+                // In a change span, map to its end.
+                return srcIndex;
+            } else {
+                // In an unchanged span, offset within it.
+                return prevSrcIndex + (index - prevDestIndex);
+            }
+        }
+        srcIndex = prevSrcIndex;
+        destIndex = prevDestIndex;
+    }
+    // index is outside the string.
+    return srcIndex;
+}
+
+int32_t destIndexFromSrc(const EditChange expected[], int32_t expLength,
+                         int32_t srcLength, int32_t destLength, int32_t index) {
+    int32_t srcIndex = srcLength;
+    int32_t destIndex = destLength;
+    int32_t i = expLength;
+    while (index < srcIndex && i > 0) {
+        --i;
+        int32_t prevSrcIndex = srcIndex - expected[i].oldLength;
+        int32_t prevDestIndex = destIndex - expected[i].newLength;
+        if (index == prevSrcIndex) {
+            return prevDestIndex;
+        } else if (index > prevSrcIndex) {
+            if (expected[i].change) {
+                // In a change span, map to its end.
+                return destIndex;
+            } else {
+                // In an unchanged span, offset within it.
+                return prevDestIndex + (index - prevSrcIndex);
+            }
+        }
+        srcIndex = prevSrcIndex;
+        destIndex = prevDestIndex;
+    }
+    // index is outside the string.
+    return destIndex;
+}
+
+}  // namespace
+
+// For debugging, set -v to see matching edits up to a failure.
+UBool TestUtility::checkEqualEdits(IntlTest &test, const UnicodeString &name,
+                                   const Edits &e1, const Edits &e2, UErrorCode &errorCode) {
+    Edits::Iterator ei1 = e1.getFineIterator();
+    Edits::Iterator ei2 = e2.getFineIterator();
+    UBool ok = TRUE;
+    for (int32_t i = 0; ok; ++i) {
+        UBool ei1HasNext = ei1.next(errorCode);
+        UBool ei2HasNext = ei2.next(errorCode);
+        ok &= test.assertEquals(name + u" next()[" + i + u"]" + __LINE__,
+                                ei1HasNext, ei2HasNext);
+        ok &= test.assertSuccess(name + u" errorCode[" + i + u"]" + __LINE__, errorCode);
+        ok &= test.assertEquals(name + u" edit[" + i + u"]" + __LINE__,
+                                printOneEdit(ei1), printOneEdit(ei2));
+        if (!ei1HasNext || !ei2HasNext) {
+            break;
+        }
+        test.logln();
+    }
+    return ok;
+}
+
 void TestUtility::checkEditsIter(
         IntlTest &test,
         const UnicodeString &name,
@@ -77,8 +173,6 @@ void TestUtility::checkEditsIter(
     int32_t expSrcIndex = 0;
     int32_t expDestIndex = 0;
     int32_t expReplIndex = 0;
-    int32_t expSrcIndexFromDest = 0;  // for sourceIndexFromDestinationIndex()
-    int32_t expDestIndexFromSrc = 0;  // for destinationIndexFromSourceIndex()
     for (int32_t expIndex = 0; expIndex < expLength; ++expIndex) {
         const EditChange &expect = expected[expIndex];
         UnicodeString msg = UnicodeString(name).append(u' ') + expIndex;
@@ -92,7 +186,7 @@ void TestUtility::checkEditsIter(
             test.assertEquals(msg + u":" + __LINE__, expReplIndex, ei1.replacementIndex());
         }
 
-        if (expect.oldLength > 0 && expDestIndex == expDestIndexFromSrc) {
+        if (expect.oldLength > 0) {
             test.assertTrue(msg + u":" + __LINE__, ei2.findSourceIndex(expSrcIndex, errorCode));
             test.assertEquals(msg + u":" + __LINE__, expect.change, ei2.hasChange());
             test.assertEquals(msg + u":" + __LINE__, expect.oldLength, ei2.oldLength());
@@ -108,7 +202,7 @@ void TestUtility::checkEditsIter(
             }
         }
 
-        if (expect.newLength > 0 && expSrcIndex == expSrcIndexFromDest) {
+        if (expect.newLength > 0) {
             test.assertTrue(msg + u":" + __LINE__, ei2.findDestinationIndex(expDestIndex, errorCode));
             test.assertEquals(msg + u":" + __LINE__, expect.change, ei2.hasChange());
             test.assertEquals(msg + u":" + __LINE__, expect.oldLength, ei2.oldLength());
@@ -124,44 +218,10 @@ void TestUtility::checkEditsIter(
             }
         }
 
-        // Span starts.
-        test.assertEquals(name + u":" + __LINE__, expDestIndexFromSrc,
-                          ei2.destinationIndexFromSourceIndex(expSrcIndex, errorCode));
-        test.assertEquals(name + u":" + __LINE__, expSrcIndexFromDest,
-                          ei2.sourceIndexFromDestinationIndex(expDestIndex, errorCode));
-
-        // Inside unchanged span map offsets 1:1.
-        if (!expect.change && expect.oldLength >= 2) {
-            test.assertEquals(name + u":" + __LINE__, expDestIndex + 1,
-                              ei2.destinationIndexFromSourceIndex(expSrcIndex + 1, errorCode));
-            test.assertEquals(name + u":" + __LINE__, expSrcIndex + 1,
-                              ei2.sourceIndexFromDestinationIndex(expDestIndex + 1, errorCode));
-        }
-
-        // Inside change span map to the span limit.
-        int32_t expSrcLimit = expSrcIndex + expect.oldLength;
-        int32_t expDestLimit = expDestIndex + expect.newLength;
-        if (expect.change) {
-            if (expect.oldLength >= 2) {
-                test.assertEquals(name + u":" + __LINE__, expDestLimit,
-                                  ei2.destinationIndexFromSourceIndex(expSrcIndex + 1, errorCode));
-            }
-            if (expect.newLength >= 2) {
-                test.assertEquals(name + u":" + __LINE__, expSrcLimit,
-                                  ei2.sourceIndexFromDestinationIndex(expDestIndex + 1, errorCode));
-            }
-        }
-
-        expSrcIndex = expSrcLimit;
-        expDestIndex = expDestLimit;
+        expSrcIndex += expect.oldLength;
+        expDestIndex += expect.newLength;
         if (expect.change) {
             expReplIndex += expect.newLength;
-        }
-        if (expect.newLength > 0) {
-            expSrcIndexFromDest = expSrcIndex;
-        }
-        if (expect.oldLength > 0) {
-            expDestIndexFromSrc = expDestIndex;
         }
     }
     UnicodeString msg = UnicodeString(name).append(u" end");
@@ -175,8 +235,47 @@ void TestUtility::checkEditsIter(
 
     test.assertFalse(name + u":" + __LINE__, ei2.findSourceIndex(expSrcIndex, errorCode));
     test.assertFalse(name + u":" + __LINE__, ei2.findDestinationIndex(expDestIndex, errorCode));
-    test.assertEquals(name + u":" + __LINE__, expDestIndex,
-                      ei2.destinationIndexFromSourceIndex(expSrcIndex, errorCode));
-    test.assertEquals(name + u":" + __LINE__, expSrcIndex,
-                      ei2.sourceIndexFromDestinationIndex(expDestIndex, errorCode));
+
+    // Check mapping of all indexes against a simple implementation
+    // that works on the expected changes.
+    // Iterate once forward, once backward, to cover more runtime conditions.
+    int32_t srcLength = expSrcIndex;
+    int32_t destLength = expDestIndex;
+    std::vector<int32_t> srcIndexes;
+    std::vector<int32_t> destIndexes;
+    srcIndexes.push_back(-1);
+    destIndexes.push_back(-1);
+    int32_t srcIndex = 0;
+    int32_t destIndex = 0;
+    for (int32_t i = 0; i < expLength; ++i) {
+        if (expected[i].oldLength > 0) {
+            srcIndexes.push_back(srcIndex);
+            if (expected[i].oldLength > 1) {
+                srcIndexes.push_back(srcIndex + 1);
+            }
+        }
+        if (expected[i].newLength > 0) {
+            destIndexes.push_back(destIndex);
+            if (expected[i].newLength > 0) {
+                destIndexes.push_back(destIndex + 1);
+            }
+        }
+        srcIndex += expected[i].oldLength;
+        destIndex += expected[i].newLength;
+    }
+    srcIndexes.push_back(srcLength);
+    destIndexes.push_back(destLength);
+    srcIndexes.push_back(srcLength + 1);
+    destIndexes.push_back(destLength + 1);
+    std::reverse(destIndexes.begin(), destIndexes.end());
+    for (int32_t i : srcIndexes) {
+        test.assertEquals(name + u" destIndexFromSrc(" + i + u"):" + __LINE__,
+                          destIndexFromSrc(expected, expLength, srcLength, destLength, i),
+                          ei2.destinationIndexFromSourceIndex(i, errorCode));
+    }
+    for (int32_t i : destIndexes) {
+        test.assertEquals(name + u" srcIndexFromDest(" + i + u"):" + __LINE__,
+                          srcIndexFromDest(expected, expLength, srcLength, destLength, i),
+                          ei2.sourceIndexFromDestinationIndex(i, errorCode));
+    }
 }

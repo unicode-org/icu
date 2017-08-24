@@ -669,28 +669,6 @@ template class U_I18N_API    EnumSet<UNumberFormatAttribute,
 class U_I18N_API DecimalFormat: public NumberFormat {
 public:
     /**
-     * Rounding mode.
-     * @stable ICU 2.4
-     */
-    enum ERoundingMode {
-        kRoundCeiling,  /**< Round towards positive infinity */
-        kRoundFloor,    /**< Round towards negative infinity */
-        kRoundDown,     /**< Round towards zero */
-        kRoundUp,       /**< Round away from zero */
-        kRoundHalfEven, /**< Round towards the nearest integer, or
-                             towards the nearest even integer if equidistant */
-        kRoundHalfDown, /**< Round towards the nearest integer, or
-                             towards zero if equidistant */
-        kRoundHalfUp,   /**< Round towards the nearest integer, or
-                             away from zero if equidistant */
-        /**
-          *  Return U_FORMAT_INEXACT_ERROR if number does not format exactly.
-          *  @stable ICU 4.8
-          */
-        kRoundUnnecessary
-    };
-
-    /**
      * Pad position.
      * @stable ICU 2.4
      */

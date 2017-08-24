@@ -1705,4 +1705,21 @@ public class RbnfTest extends TestFmwk {
         };
         doTest(rbnf, enTestFullData, false);
     }
+
+    private void assertEquals(String expected, String result) {
+        if (!expected.equals(result)) {
+            errln("Expected: " + expected + " Got: " + result);
+        }
+    }
+
+    @Test
+    public void testRoundingUnrealNumbers() {
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ULocale.US, RuleBasedNumberFormat.SPELLOUT);
+        rbnf.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+        rbnf.setMaximumFractionDigits(3);
+        assertEquals("zero point one", rbnf.format(0.1));
+        assertEquals("zero point zero zero one", rbnf.format(0.0005));
+        assertEquals("infinity", rbnf.format(Double.POSITIVE_INFINITY));
+        assertEquals("not a number", rbnf.format(Double.NaN));
+    }
 }

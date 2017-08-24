@@ -832,6 +832,9 @@ public class NumberFormatDataDrivenTest {
   @Test
   @Ignore
   public void TestDataDrivenJDK() {
+    // Android implements java.text.DecimalFormat with ICU4J (ticket #13322).
+    if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
+
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", JDK);
   }

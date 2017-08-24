@@ -5,23 +5,27 @@ License & terms of use: http://www.unicode.org/copyright.html#License
 Copyright (c) 2015-2016, International Business Machines Corporation and others. All Rights Reserved.
 
 This directory contains the break iterator reference rule files used by intltest rbbi/RBBIMonkeyTest/testMonkey.
-The rules in this directory track the boundary rules from Unicode UAX 14 and 29. They are interpretted
+The rules in this directory track the boundary rules from Unicode UAX 14 and 29. They are interpreted
 to provide an expected set of boundary positions to compare with the results from ICU break iteration.
 
+ICU4J also includes copies of the test reference rules, located in the directory
+main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/
+The copies should be kept synchronized; there should be no differences.
+
 Each set of reference break rules lives in a separate file.
-The list of rule files to run by default is hardcoded into the test code, in rbbimonkeytest.cpp.
+The list of rule files to run by default is hard coded into the test code, in rbbimonkeytest.cpp.
 
 Each test file includes
-  - The type of ICU break interator to create (word, line, sentence, etc.)
+  - The type of ICU break iterator to create (word, line, sentence, etc.)
   - The locale to use
   - Character Class definitions
   - Rule definitions
 
 To Do
-  - Syntax for tailoring.
+  - Extend the syntax to support rule tailoring.
 
 
-Character Class Definition: 
+Character Class Definition:
     name = set_regular_expression;
 
 Rule Definition:
@@ -35,7 +39,7 @@ set_regular_expression:
     (They are mostly the same)
     May include previously defined set names, which are logically expanded in-place.
 
-rule_regular_expresson:
+rule_regular_expression:
     An ICU Regular Expression.
     May include set names, which are logically expanded in-place.
     May include a '÷', which defines a boundary position.
@@ -52,7 +56,7 @@ Application of the rules:
                     return the position of the '÷' within the match.
                 else
                     position = last character of the rule match.
-                    break from the rule loop, continue the outer loop.
+                    break from the inner rule loop, continue the outer loop.
 
     This differs from the Unicode UAX algorithm in that each position in the text is
     not tested separately. Instead, when a rule match is found, rule application restarts with the last
@@ -66,7 +70,7 @@ Application of the rules:
     are with the Unicode UAX rules. With the main ICU break rules, all are applied in parallel.
 
 Word Dictionaries
-    The monkey test does not test dictionary based breaking. The set named 'dicitionary' is special,
+    The monkey test does not test dictionary based breaking. The set named 'dictionary' is special,
     as it is in the main ICU rules. For the monkey test, no characters from the dictionary set are
     included in the randomly-generated test data.
 

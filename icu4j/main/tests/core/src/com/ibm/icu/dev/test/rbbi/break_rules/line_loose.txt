@@ -2,17 +2,24 @@
 # Copyright (C) 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 # Copyright (c) 2016, International Business Machines Corporation and others. All Rights Reserved.
-
-# file: line.txt
+#
+#  file:  line_loose.txt
 #
 # Reference Line Break rules for intltest rbbi/RBBIMonkeyTest
 #
 # Note: Rule syntax and the monkey test itself are still a work in progress.
 #       They are expected to change with review and the addition of support for rule tailoring.
-
+#
+#         This tailors the line break behavior to correspond to CSS
+#         line-break=loose (BCP47 -u-lb-loose) as defined for languages other than
+#         Chinese & Japanese.
+#         It sets characters of class CJ to behave like ID.
+#         In addition, it allows breaks:
+#         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
+#         * between characters of LineBreak class IN
 
 type = line;
-locale = en;
+locale = en@lb=loose;
 
 
 AI = [:LineBreak =  Ambiguous:];
@@ -35,7 +42,7 @@ HL = [:LineBreak =  Hebrew_Letter:];
 HY = [:LineBreak =  Hyphen:];
 H2 = [:LineBreak =  H2:];
 H3 = [:LineBreak =  H3:];
-ID = [:LineBreak =  Ideographic:];
+ID = [[:LineBreak =  Ideographic:] CJ];  # CSS Normal tailoring: CJ resolves to ID
 IN = [:LineBreak =  Inseperable:];
 IS = [:LineBreak =  Infix_Numeric:];
 JL = [:LineBreak =  JL:];
@@ -43,7 +50,8 @@ JV = [:LineBreak =  JV:];
 JT = [:LineBreak =  JT:];
 LF = [:LineBreak =  Line_Feed:];
 NL = [:LineBreak =  Next_Line:];
-NS = [[:LineBreak =  Nonstarter:] CJ];   # CSS Strict tailoring: CJ resolves to NS.
+NSX = [\u3005 \u303B \u309D \u309E \u30FD \u30FE];
+NS = [[:LineBreak =  Nonstarter:] - NSX];
 NU = [:LineBreak =  Numeric:];
 OP = [:LineBreak =  Open_Punctuation:];
 PO = [:LineBreak =  Postfix_Numeric:];
@@ -116,7 +124,7 @@ LB12:        GL CM* [^CM];
 
 LB12a:       [^SP BA HY] CM* GL;
 
-# LB 13 ICU Tailoring, matches tailoring example 8 from UAX 14.
+# LB 13 ICU Tailoring, matches tailoring exmaple 8 from UAX 14.
 #
 #   LB13.1   [^SP] CM* [CL CP EX IS SY]    # original UAX 14 rule.
 #   LB13.2   SP    CM* [CL CP EX IS SY]
@@ -153,7 +161,7 @@ LB21b:       SY CM* HL;
 LB22.1:        (AL | HL | CM) CM* IN;   # The CM is from LB10, treat an unattached CM as AL.
 LB22.2:       EX CM* IN;
 LB22.3:       (ID | EB | EM) CM* IN;
-LB22.4:       IN CM* IN;
+# LB22.4:       IN CM* IN;  # delete this rule for CSS loose.
 LB22.5:       NU CM* IN;
 
 LB23.1:      (AL | HL | CM) CM* NU;
@@ -165,7 +173,7 @@ LB23a.2:     (ID | EB | EM) CM* PO;
 LB24.2:      (PR | PO) CM* (AL | HL);
 LB24.3:      (AL | HL | CM) CM* (PR | PO);
 
-# Numbers. Equivalent to Tailoring example 8 from UAX 14.
+# Numbers. Equivalent to Tailoring example 8 from UAx 14.
 LB25:        ((PR | PO)CM*)? ((OP | HY)CM*)? NU (CM*(NU | SY | IS))* (CM*(CL | CP))? (CM*(PR | PO))?;
 
 LB26.1:      JL CM* (JL | JV | H2 | H3);

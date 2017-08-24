@@ -169,6 +169,28 @@ class StringEnumeration;
 class U_I18N_API NumberFormat : public Format {
 public:
     /**
+     * Rounding mode.
+     * @stable ICU 2.4
+     */
+    enum ERoundingMode {
+        kRoundCeiling,  /**< Round towards positive infinity */
+        kRoundFloor,    /**< Round towards negative infinity */
+        kRoundDown,     /**< Round towards zero */
+        kRoundUp,       /**< Round away from zero */
+        kRoundHalfEven, /**< Round towards the nearest integer, or
+                             towards the nearest even integer if equidistant */
+        kRoundHalfDown, /**< Round towards the nearest integer, or
+                             towards zero if equidistant */
+        kRoundHalfUp,   /**< Round towards the nearest integer, or
+                             away from zero if equidistant */
+        /**
+          *  Return U_FORMAT_INEXACT_ERROR if number does not format exactly.
+          *  @stable ICU 4.8
+          */
+        kRoundUnnecessary
+    };
+
+    /**
      * Alignment Field constants used to construct a FieldPosition object.
      * Signifies that the position of the integer part or fraction part of
      * a formatted number should be returned.
@@ -964,6 +986,21 @@ public:
      * @stable ICU 53
      */
     virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
+
+    /**
+     * Get the rounding mode. This will always return NumberFormat::ERoundingMode::kRoundUnnecessary
+     * if the subclass does not support rounding. 
+     * @return A rounding mode
+     * @draft ICU 60
+     */
+    virtual ERoundingMode getRoundingMode(void) const;
+
+    /**
+     * Set the rounding mode. If a subclass does not support rounding, this will do nothing.
+     * @param roundingMode A rounding mode
+     * @draft ICU 60
+     */
+    virtual void setRoundingMode(ERoundingMode roundingMode);
 
 public:
 

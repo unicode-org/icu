@@ -1069,7 +1069,7 @@ uprv_getWindowsTimeZone()
 U_CAPI const char* U_EXPORT2
 uprv_tzname(int n)
 {
-    n; // Avoid unreferenced parameter warning.
+    (void)n; // Avoid unreferenced parameter warning.
     const char *tzid = NULL;
 #if U_PLATFORM_USES_ONLY_WIN32_API
 #if U_PLATFORM_HAS_WINUWP_API > 0

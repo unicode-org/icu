@@ -213,6 +213,8 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     if (this == &that) {
         return *this;
     }
+    BreakIterator::operator=(that);
+
     reset();    // Delete break cache information
     fBreakType = that.fBreakType;
     if (fLanguageBreakEngines != NULL) {
@@ -311,15 +313,18 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
         return FALSE;
     }
 
+    // The base class BreakIterator carries no state that participates in equality,
+    // and does not implement an equality function that would otherwise be
+    // checked at this point.
+
     const RuleBasedBreakIterator& that2 = (const RuleBasedBreakIterator&) that;
 
     if (!utext_equals(fText, that2.fText)) {
         // The two break iterators are operating on different text,
-        //   or have a different interation position.
+        //   or have a different iteration position.
+        //   Note that fText's position is always the same as the break iterator's position.
         return FALSE;
     };
-
-    // TODO:  need a check for when in a dictionary region at different offsets.
 
     if (that2.fData == fData ||
         (fData != NULL && that2.fData != NULL && *that2.fData == *fData)) {
