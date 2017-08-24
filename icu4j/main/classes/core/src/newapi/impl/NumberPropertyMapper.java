@@ -175,7 +175,7 @@ public final class NumberPropertyMapper {
     grouping2 = grouping2 > 0 ? grouping2 : grouping1;
     // TODO: Is it important to handle minGrouping > 2?
     macros.grouping =
-        GroupingImpl.getInstance((short) grouping1, (short) grouping2, minGrouping == 2);
+        GroupingImpl.getInstance((byte) grouping1, (byte) grouping2, minGrouping == 2);
 
     /////////////
     // PADDING //
@@ -193,14 +193,14 @@ public final class NumberPropertyMapper {
 
     macros.decimal =
         properties.getDecimalSeparatorAlwaysShown()
-            ? DecimalMarkDisplay.ALWAYS_SHOWN
+            ? DecimalMarkDisplay.ALWAYS
             : DecimalMarkDisplay.AUTO;
 
     ///////////////////////
     // SIGN ALWAYS SHOWN //
     ///////////////////////
 
-    macros.sign = properties.getSignAlwaysShown() ? SignDisplay.ALWAYS_SHOWN : SignDisplay.AUTO;
+    macros.sign = properties.getSignAlwaysShown() ? SignDisplay.ALWAYS : SignDisplay.AUTO;
 
     /////////////////////////
     // SCIENTIFIC NOTATION //
@@ -223,7 +223,7 @@ public final class NumberPropertyMapper {
               properties.getMinimumExponentDigits(),
               // Exponent sign always shown:
               properties.getExponentSignAlwaysShown()
-                  ? SignDisplay.ALWAYS_SHOWN
+                  ? SignDisplay.ALWAYS
                   : SignDisplay.AUTO);
       // Scientific notation also involves overriding the rounding mode.
       if (macros.rounding instanceof RoundingImplFraction) {

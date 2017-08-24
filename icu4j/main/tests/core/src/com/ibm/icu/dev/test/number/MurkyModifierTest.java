@@ -30,13 +30,13 @@ public class MurkyModifierTest {
     murky.setNumberProperties(false, null);
     assertEquals("a", murky.getPrefix());
     assertEquals("b", murky.getSuffix());
-    murky.setPatternAttributes(SignDisplay.ALWAYS_SHOWN, false);
+    murky.setPatternAttributes(SignDisplay.ALWAYS, false);
     assertEquals("+a", murky.getPrefix());
     assertEquals("b", murky.getSuffix());
     murky.setNumberProperties(true, null);
     assertEquals("-a", murky.getPrefix());
     assertEquals("b", murky.getSuffix());
-    murky.setPatternAttributes(SignDisplay.NEVER_SHOWN, false);
+    murky.setPatternAttributes(SignDisplay.NEVER, false);
     assertEquals("a", murky.getPrefix());
     assertEquals("b", murky.getSuffix());
 
@@ -45,13 +45,13 @@ public class MurkyModifierTest {
     murky.setNumberProperties(false, null);
     assertEquals("a", murky.getPrefix());
     assertEquals("b", murky.getSuffix());
-    murky.setPatternAttributes(SignDisplay.ALWAYS_SHOWN, false);
+    murky.setPatternAttributes(SignDisplay.ALWAYS, false);
     assertEquals("c+", murky.getPrefix());
     assertEquals("d", murky.getSuffix());
     murky.setNumberProperties(true, null);
     assertEquals("c-", murky.getPrefix());
     assertEquals("d", murky.getSuffix());
-    murky.setPatternAttributes(SignDisplay.NEVER_SHOWN, false);
+    murky.setPatternAttributes(SignDisplay.NEVER, false);
     assertEquals("c-", murky.getPrefix()); // TODO: What should this behavior be?
     assertEquals("d", murky.getSuffix());
   }

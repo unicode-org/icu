@@ -26,21 +26,19 @@ public class MicroProps implements Cloneable, QuantityChain {
   public int multiplier;
   public boolean useCurrency;
 
-  private boolean frozen = false;
+  private final boolean immutable;
 
-  public void enableCloneInChain() {
-    frozen = true;
-  }
-
-  @Override
-  public QuantityChain chain(QuantityChain parent) {
-    // The MicroProps instance should always be at the top of the chain!
-    throw new AssertionError();
+  /**
+   * @param immutable Whether this MicroProps should behave as an immutable after construction with
+   *     respect to the quantity chain.
+   */
+  public MicroProps(boolean immutable) {
+    this.immutable = immutable;
   }
 
   @Override
   public MicroProps withQuantity(FormatQuantity quantity) {
-    if (frozen) {
+    if (immutable) {
       return (MicroProps) this.clone();
     } else {
       return this;
@@ -52,7 +50,7 @@ public class MicroProps implements Cloneable, QuantityChain {
     try {
       return super.clone();
     } catch (CloneNotSupportedException e) {
-      throw new AssertionError();
+      throw new AssertionError(e);
     }
   }
 }

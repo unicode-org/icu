@@ -26,7 +26,7 @@ public class demo {
     UnlocalizedNumberFormatter formatter =
         NumberFormatter.with()
             .notation(Notation.COMPACT_SHORT)
-            .notation(Notation.SCIENTIFIC.withExponentSignDisplay(SignDisplay.ALWAYS_SHOWN))
+            .notation(Notation.SCIENTIFIC.withExponentSignDisplay(SignDisplay.ALWAYS))
             .notation(Notation.ENGINEERING.withMinExponentDigits(2))
             .notation(Notation.SIMPLE)
             .unit(Currency.getInstance("GBP"))
@@ -47,10 +47,10 @@ public class demo {
 //                })
             .grouping(Grouping.DEFAULT)
             .grouping(Grouping.NONE)
-            .grouping(Grouping.DEFAULT_MIN_2_DIGITS)
+            .grouping(Grouping.MIN_2_DIGITS)
             // .padding(Padding.codePoints(' ', 8, PadPosition.AFTER_PREFIX))
-            .sign(SignDisplay.ALWAYS_SHOWN)
-            .decimal(DecimalMarkDisplay.ALWAYS_SHOWN)
+            .sign(SignDisplay.ALWAYS)
+            .decimal(DecimalMarkDisplay.ALWAYS)
             .symbols(DecimalFormatSymbols.getInstance(new ULocale("fr@digits=ascii")))
             .symbols(NumberingSystem.getInstanceByName("arab"))
             .symbols(NumberingSystem.LATIN);

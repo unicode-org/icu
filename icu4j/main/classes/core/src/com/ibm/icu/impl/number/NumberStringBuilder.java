@@ -44,15 +44,14 @@ public class NumberStringBuilder implements CharSequence {
   }
 
   public NumberStringBuilder(NumberStringBuilder source) {
-    this(source.chars.length);
     copyFrom(source);
   }
 
   public void copyFrom(NumberStringBuilder source) {
+    chars = Arrays.copyOf(source.chars, source.chars.length);
+    fields = Arrays.copyOf(source.fields, source.fields.length);
     zero = source.zero;
     length = source.length;
-    System.arraycopy(source.chars, zero, chars, zero, length);
-    System.arraycopy(source.fields, zero, fields, zero, length);
   }
 
   @Override
@@ -66,17 +65,21 @@ public class NumberStringBuilder implements CharSequence {
 
   @Override
   public char charAt(int index) {
-    if (index < 0 || index > length) {
-      throw new IndexOutOfBoundsException();
-    }
+    assert index >= 0;
+    assert index < length;
     return chars[zero + index];
   }
 
   public Field fieldAt(int index) {
-    if (index < 0 || index > length) {
-      throw new IndexOutOfBoundsException();
-    }
+    assert index >= 0;
+    assert index < length;
     return fields[zero + index];
+  }
+
+  public NumberStringBuilder clear() {
+    zero = chars.length / 2;
+    length = 0;
+    return this;
   }
 
   /**
@@ -196,11 +199,14 @@ public class NumberStringBuilder implements CharSequence {
       throw new IllegalArgumentException("Cannot call insert/append on myself");
     }
     int count = other.length;
-    if (count == 0) return 0; // nothing to insert
+    if (count == 0) {
+      // Nothing to insert.
+      return 0;
+    }
     int position = prepareForInsert(index, count);
     for (int i = 0; i < count; i++) {
-      this.chars[position + i] = other.chars[other.zero + i];
-      this.fields[position + i] = other.fields[other.zero + i];
+      this.chars[position + i] = other.charAt(i);
+      this.fields[position + i] = other.fieldAt(i);
     }
     return count;
   }
@@ -229,25 +235,43 @@ public class NumberStringBuilder implements CharSequence {
   }
 
   private int prepareForInsertHelper(int index, int count) {
-    // Keeping this code out of prepareForInsert() increases the speed of append operations.
-    if (length + count > chars.length) {
-      char[] newChars = new char[(length + count) * 2];
-      Field[] newFields = new Field[(length + count) * 2];
-      int newZero = newChars.length / 2 - (length + count) / 2;
-      System.arraycopy(chars, zero, newChars, newZero, index);
-      System.arraycopy(chars, zero + index, newChars, newZero + index + count, length - index);
-      System.arraycopy(fields, zero, newFields, newZero, index);
-      System.arraycopy(fields, zero + index, newFields, newZero + index + count, length - index);
+    // Java note: Keeping this code out of prepareForInsert() increases the speed of append operations.
+    int oldCapacity = chars.length;
+    int oldZero = zero;
+    char[] oldChars = chars;
+    Field[] oldFields = fields;
+    if (length + count > oldCapacity) {
+      int newCapacity = (length + count) * 2;
+      int newZero = newCapacity / 2 - (length + count) / 2;
+
+      char[] newChars = new char[newCapacity];
+      Field[] newFields = new Field[newCapacity];
+
+      // First copy the prefix and then the suffix, leaving room for the new chars that the
+      // caller wants to insert.
+      System.arraycopy(oldChars, oldZero, newChars, newZero, index);
+      System.arraycopy(
+          oldChars, oldZero + index, newChars, newZero + index + count, length - index);
+      System.arraycopy(oldFields, oldZero, newFields, newZero, index);
+      System.arraycopy(
+          oldFields, oldZero + index, newFields, newZero + index + count, length - index);
+
       chars = newChars;
       fields = newFields;
       zero = newZero;
       length += count;
     } else {
-      int newZero = chars.length / 2 - (length + count) / 2;
-      System.arraycopy(chars, zero, chars, newZero, length);
-      System.arraycopy(chars, newZero + index, chars, newZero + index + count, length - index);
-      System.arraycopy(fields, zero, fields, newZero, length);
-      System.arraycopy(fields, newZero + index, fields, newZero + index + count, length - index);
+      int newZero = oldCapacity / 2 - (length + count) / 2;
+
+      // First copy the entire string to the location of the prefix, and then move the suffix
+      // to make room for the new chars that the caller wants to insert.
+      System.arraycopy(oldChars, oldZero, oldChars, newZero, length);
+      System.arraycopy(
+          oldChars, newZero + index, oldChars, newZero + index + count, length - index);
+      System.arraycopy(oldFields, oldZero, oldFields, newZero, length);
+      System.arraycopy(
+          oldFields, newZero + index, oldFields, newZero + index + count, length - index);
+
       zero = newZero;
       length += count;
     }
@@ -348,8 +372,9 @@ public class NumberStringBuilder implements CharSequence {
   public boolean contentEquals(NumberStringBuilder other) {
     if (length != other.length) return false;
     for (int i = 0; i < length; i++) {
-      if (chars[zero + i] != other.chars[other.zero + i]) return false;
-      if (fields[zero + i] != other.fields[other.zero + i]) return false;
+      if (charAt(i) != other.charAt(i) || fieldAt(i) != other.fieldAt(i)) {
+        return false;
+      }
     }
     return true;
   }
@@ -390,6 +415,7 @@ public class NumberStringBuilder implements CharSequence {
           "You must pass an instance of com.ibm.icu.text.NumberFormat.Field as your FieldPosition attribute.  You passed: "
               + rawField.getClass().toString());
     }
+
     /* com.ibm.icu.text.NumberFormat. */ Field field = (Field) rawField;
 
     boolean seenStart = false;
@@ -398,8 +424,9 @@ public class NumberStringBuilder implements CharSequence {
       Field _field = (i < zero + length) ? fields[i] : null;
       if (seenStart && field != _field) {
         // Special case: GROUPING_SEPARATOR counts as an INTEGER.
-        if (field == NumberFormat.Field.INTEGER && _field == NumberFormat.Field.GROUPING_SEPARATOR)
+        if (field == NumberFormat.Field.INTEGER && _field == NumberFormat.Field.GROUPING_SEPARATOR) {
           continue;
+        }
         fp.setEndIndex(i - zero + offset);
         break;
       } else if (!seenStart && field == _field) {
@@ -413,8 +440,8 @@ public class NumberStringBuilder implements CharSequence {
 
     // Backwards compatibility: FRACTION needs to start after INTEGER if empty
     if (field == NumberFormat.Field.FRACTION && !seenStart) {
-      fp.setBeginIndex(fractionStart);
-      fp.setEndIndex(fractionStart);
+      fp.setBeginIndex(fractionStart + offset);
+      fp.setEndIndex(fractionStart + offset);
     }
   }
 
@@ -439,12 +466,7 @@ public class NumberStringBuilder implements CharSequence {
     if (current != null) {
       as.addAttribute(current, current, currentStart, length);
     }
-    return as.getIterator();
-  }
 
-  public NumberStringBuilder clear() {
-    zero = chars.length / 2;
-    length = 0;
-    return this;
+    return as.getIterator();
   }
 }

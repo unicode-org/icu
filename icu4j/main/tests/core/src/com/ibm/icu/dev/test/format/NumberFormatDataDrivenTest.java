@@ -7,7 +7,6 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
@@ -820,7 +819,6 @@ public class NumberFormatDataDrivenTest {
       };
 
   @Test
-  @Ignore
   public void TestDataDrivenICU58() {
     // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
     if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
@@ -830,7 +828,6 @@ public class NumberFormatDataDrivenTest {
   }
 
   @Test
-  @Ignore
   public void TestDataDrivenJDK() {
     // Android implements java.text.DecimalFormat with ICU4J (ticket #13322).
     if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
@@ -840,7 +837,6 @@ public class NumberFormatDataDrivenTest {
   }
 
   @Test
-  @Ignore
   public void TestDataDrivenICU59() {
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", ICU59);

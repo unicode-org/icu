@@ -39,7 +39,7 @@ public class PositiveDecimalImpl implements Format.TargetFormat {
 
       // Add the decimal point
       if (input.getLowerDisplayMagnitude() < 0
-          || micros.decimal == DecimalMarkDisplay.ALWAYS_SHOWN) {
+          || micros.decimal == DecimalMarkDisplay.ALWAYS) {
         length +=
             string.insert(
                 length,

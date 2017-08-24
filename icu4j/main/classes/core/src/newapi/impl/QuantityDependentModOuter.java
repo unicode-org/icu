@@ -12,17 +12,12 @@ import com.ibm.icu.text.PluralRules;
 public class QuantityDependentModOuter implements QuantityChain {
   final Map<StandardPlural, Modifier> data;
   final PluralRules rules;
-  /* final */ QuantityChain parent;
+  final QuantityChain parent;
 
-  public QuantityDependentModOuter(Map<StandardPlural, Modifier> data, PluralRules rules) {
+  public QuantityDependentModOuter(Map<StandardPlural, Modifier> data, PluralRules rules, QuantityChain parent) {
     this.data = data;
     this.rules = rules;
-  }
-
-  @Override
-  public QuantityChain chain(QuantityChain parent) {
     this.parent = parent;
-    return this;
   }
 
   @Override

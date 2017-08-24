@@ -62,13 +62,13 @@ public final class NumberFormatter {
 
   public static enum DecimalMarkDisplay {
     AUTO,
-    ALWAYS_SHOWN,
+    ALWAYS,
   }
 
   public static enum SignDisplay {
     AUTO,
-    ALWAYS_SHOWN,
-    NEVER_SHOWN,
+    ALWAYS,
+    NEVER,
   }
 
   public static class UnlocalizedNumberFormatter {
@@ -398,7 +398,9 @@ public final class NumberFormatter {
 
   public static class Rounding implements IRounding {
 
-    protected static final int MAX_VALUE = 100;
+    // FIXME
+    /** @internal */
+    public static final int MAX_VALUE = 100;
 
     public static final Rounding NONE = new RoundingImplInfinity();
     public static final Rounding INTEGER = new RoundingImplFraction();
@@ -617,7 +619,7 @@ public final class NumberFormatter {
   public static class Grouping implements IGrouping {
 
     public static final Grouping DEFAULT = new GroupingImpl(GroupingImpl.TYPE_PLACEHOLDER);
-    public static final Grouping DEFAULT_MIN_2_DIGITS = new GroupingImpl(GroupingImpl.TYPE_MIN2);
+    public static final Grouping MIN_2_DIGITS = new GroupingImpl(GroupingImpl.TYPE_MIN2);
     public static final Grouping NONE = new GroupingImpl(GroupingImpl.TYPE_NONE);
 
     @Override
@@ -642,8 +644,13 @@ public final class NumberFormatter {
     public static final Padding NONE = new PaddingImpl();
 
     public static Padding codePoints(int cp, int targetWidth, PadPosition position) {
-      String paddingString = String.valueOf(Character.toChars(cp));
-      return PaddingImpl.getInstance(paddingString, targetWidth, position);
+        // TODO: Validate the code point
+      if (targetWidth >= 0) {
+        String paddingString = String.valueOf(Character.toChars(cp));
+        return PaddingImpl.getInstance(paddingString, targetWidth, position);
+      } else {
+        throw new IllegalArgumentException("Padding width must not be negative");
+      }
     }
 
     // Prevent subclassing
@@ -663,7 +670,12 @@ public final class NumberFormatter {
     public static final IntegerWidth DEFAULT = new IntegerWidthImpl();
 
     public static IntegerWidth zeroFillTo(int minInt) {
-      return new IntegerWidthImpl(minInt, Integer.MAX_VALUE);
+      if (minInt >= 0 && minInt < Rounding.MAX_VALUE) {
+        return new IntegerWidthImpl(minInt, Integer.MAX_VALUE);
+      } else {
+        throw new IllegalArgumentException(
+            "Integer digits must be between 0 and " + Rounding.MAX_VALUE);
+      }
     }
 
     public IntegerWidth truncateAt(int maxInt) {

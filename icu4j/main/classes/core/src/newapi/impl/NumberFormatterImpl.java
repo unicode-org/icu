@@ -4,7 +4,7 @@ package newapi.impl;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
 import com.ibm.icu.impl.number.FormatQuantity4;
 import com.ibm.icu.impl.number.FormatQuantityBCD;
@@ -34,9 +34,6 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
 
   private static final NumberFormatterImpl BASE = new NumberFormatterImpl();
 
-  // TODO: Set a good value here.
-  static final int DEFAULT_THRESHOLD = 3;
-
   static final int KEY_MACROS = 0;
   static final int KEY_LOCALE = 1;
   static final int KEY_NOTATION = 2;
@@ -49,7 +46,8 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
   static final int KEY_UNIT_WIDTH = 9;
   static final int KEY_SIGN = 10;
   static final int KEY_DECIMAL = 11;
-  static final int KEY_MAX = 12;
+  static final int KEY_THRESHOLD = 12;
+  static final int KEY_MAX = 13;
 
   public static NumberFormatterImpl with() {
     return BASE;
@@ -72,20 +70,23 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
     return fromMacros(macros);
   }
 
+  static final AtomicLongFieldUpdater<NumberFormatterImpl> callCount =
+      AtomicLongFieldUpdater.newUpdater(NumberFormatterImpl.class, "callCountInternal");
+
   // TODO: Reduce the number of fields.
   final NumberFormatterImpl parent;
   final int key;
   final Object value;
   volatile MacroProps resolvedMacros;
-  volatile AtomicInteger callCount;
+  volatile long callCountInternal; // do not access directly; use callCount instead
   volatile NumberFormatterImpl savedWithUnit;
   volatile Worker1 compiled;
 
-  /** Base constructor; called during startup only */
+  /** Base constructor; called during startup only. Sets the threshold to the default value of 3. */
   private NumberFormatterImpl() {
     parent = null;
-    key = -1;
-    value = null;
+    key = KEY_THRESHOLD;
+    value = new Long(3);
   }
 
   /** Primary constructor */
@@ -160,6 +161,15 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
     return new NumberFormatterImpl(this, KEY_LOCALE, locale);
   }
 
+  /**
+   * Internal fluent setter to support a custom regulation threshold. A threshold of 1 causes the
+   * data structures to be built right away. A threshold of 0 prevents the data structures from
+   * being built.
+   */
+  public NumberFormatterImpl threshold(Long threshold) {
+    return new NumberFormatterImpl(this, KEY_THRESHOLD, threshold);
+  }
+
   @Override
   public String toSkeleton() {
     return SkeletonBuilder.macrosToSkeleton(resolve());
@@ -167,44 +177,26 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
 
   @Override
   public NumberFormatterResult format(long input) {
-    return format(new FormatQuantity4(input), DEFAULT_THRESHOLD);
+    return format(new FormatQuantity4(input));
   }
 
   @Override
   public NumberFormatterResult format(double input) {
-    return format(new FormatQuantity4(input), DEFAULT_THRESHOLD);
+    return format(new FormatQuantity4(input));
   }
 
   @Override
   public NumberFormatterResult format(Number input) {
-    return format(new FormatQuantity4(input), DEFAULT_THRESHOLD);
+    return format(new FormatQuantity4(input));
   }
 
   @Override
   public NumberFormatterResult format(Measure input) {
-    return formatWithThreshold(input, DEFAULT_THRESHOLD);
-  }
-
-  /**
-   * Internal version of format with support for a custom regulation threshold. A threshold of 1
-   * causes the data structures to be built right away. A threshold of 0 prevents the data
-   * structures from being built.
-   */
-  public NumberFormatterResult formatWithThreshold(Number number, int threshold) {
-    return format(new FormatQuantity4(number), threshold);
-  }
-
-  /**
-   * Internal version of format with support for a custom regulation threshold. A threshold of 1
-   * causes the data structures to be built right away. A threshold of 0 prevents the data
-   * structures from being built.
-   */
-  public NumberFormatterResult formatWithThreshold(Measure input, int threshold) {
     MeasureUnit unit = input.getUnit();
     Number number = input.getNumber();
     // Use this formatter if possible
     if (Objects.equals(resolve().unit, unit)) {
-      return formatWithThreshold(number, threshold);
+      return format(number);
     }
     // This mechanism saves the previously used unit, so if the user calls this method with the
     // same unit multiple times in a row, they get a more efficient code path.
@@ -213,24 +205,29 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
       withUnit = new NumberFormatterImpl(this, KEY_UNIT, unit);
       savedWithUnit = withUnit;
     }
-    return withUnit.formatWithThreshold(number, threshold);
+    return withUnit.format(number);
   }
 
-  private NumberFormatterResult format(FormatQuantityBCD fq, int threshold) {
+  /**
+   * This is the core entrypoint to the number formatting pipeline. It performs self-regulation: a
+   * static code path for the first few calls, and compiling a more efficient data structure if
+   * called repeatedly.
+   *
+   * @param fq The quantity to be formatted.
+   * @return The formatted number result.
+   */
+  private NumberFormatterResult format(FormatQuantityBCD fq) {
+    MacroProps macros = resolve();
     NumberStringBuilder string = new NumberStringBuilder();
-    // Lazily create the AtomicInteger
-    if (callCount == null) {
-      callCount = new AtomicInteger();
-    }
-    int currentCount = callCount.incrementAndGet();
+    long currentCount = callCount.incrementAndGet(this);
     MicroProps micros;
-    if (currentCount == threshold) {
-      compiled = Worker1.fromMacros(resolve());
+    if (currentCount == macros.threshold.longValue()) {
+      compiled = Worker1.fromMacros(macros);
       micros = compiled.apply(fq, string);
     } else if (compiled != null) {
       micros = compiled.apply(fq, string);
     } else {
-      micros = Worker1.applyStatic(resolve(), fq, string);
+      micros = Worker1.applyStatic(macros, fq, string);
     }
     return new NumberFormatterResult(string, fq, micros);
   }
@@ -257,7 +254,7 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
     // of a MacroProps object at each step.
     MacroProps macros = new MacroProps();
     NumberFormatterImpl current = this;
-    while (current != BASE) {
+    while (current != null) {
       switch (current.key) {
         case KEY_MACROS:
           macros.fallback((MacroProps) current.value);
@@ -317,8 +314,13 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
             macros.decimal = (DecimalMarkDisplay) current.value;
           }
           break;
+        case KEY_THRESHOLD:
+          if (macros.threshold == null) {
+            macros.threshold = (Long) current.value;
+          }
+          break;
         default:
-          throw new AssertionError();
+          throw new AssertionError("Unknown key: " + current.key);
       }
       current = current.parent;
     }
