@@ -799,6 +799,7 @@ StringCaseTest::TestGreekUpper() {
     assertGreekUpper(u"Το ένα ή το άλλο.", u"ΤΟ ΕΝΑ Ή ΤΟ ΑΛΛΟ.");
     // http://multilingualtypesetting.co.uk/blog/greek-typesetting-tips/
     assertGreekUpper(u"ρωμέικα", u"ΡΩΜΕΪΚΑ");
+    assertGreekUpper(u"ή.", u"Ή.");
 }
 
 void
