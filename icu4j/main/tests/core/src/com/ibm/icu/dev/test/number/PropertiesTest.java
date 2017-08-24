@@ -33,8 +33,7 @@ import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternString;
 import com.ibm.icu.impl.number.Properties;
-import com.ibm.icu.impl.number.formatters.CurrencyFormat.CurrencyStyle;
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -240,11 +239,6 @@ public class PropertiesTest {
       if (seed == 0) return null;
       ULocale[] locales = ULocale.getAvailableLocales();
       return CurrencyPluralInfo.getInstance(locales[seed % locales.length]);
-
-    } else if (type == CurrencyStyle.class) {
-      if (seed == 0) return null;
-      CurrencyStyle[] values = CurrencyStyle.values();
-      return values[seed % values.length];
 
     } else if (type == CurrencyUsage.class) {
       if (seed == 0) return null;

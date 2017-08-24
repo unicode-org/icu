@@ -3,22 +3,18 @@
 package com.ibm.icu.impl.number.modifiers;
 
 import com.ibm.icu.impl.StandardPlural;
-import com.ibm.icu.impl.number.Format;
-import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.Modifier;
-import com.ibm.icu.impl.number.ModifierHolder;
-import com.ibm.icu.impl.number.Properties;
-import com.ibm.icu.text.PluralRules;
 
 // TODO: Is it okay that this class is not completely immutable? Right now it is internal-only.
 // Freezable or Builder could be used if necessary.
+
+// TODO: This class is currently unused.  Probably should be deleted.
 
 /**
  * A basic implementation of {@link com.ibm.icu.impl.number.Modifier.PositiveNegativePluralModifier}
  * that is built on the fly using its <code>put</code> methods.
  */
-public class GeneralPluralModifier extends Format.BeforeFormat
-    implements Modifier.PositiveNegativePluralModifier {
+public class GeneralPluralModifier implements Modifier.PositiveNegativePluralModifier {
   /**
    * A single array for modifiers. Even elements are positive; odd elements are negative. The
    * elements 2i and 2i+1 belong to the StandardPlural with ordinal i.
@@ -54,23 +50,5 @@ public class GeneralPluralModifier extends Format.BeforeFormat
       throw new UnsupportedOperationException();
     }
     return mod;
-  }
-
-  @Override
-  public void before(FormatQuantity input, ModifierHolder mods, PluralRules rules) {
-    mods.add(getModifier(input.getStandardPlural(rules), input.isNegative()));
-  }
-
-  @Override
-  public void before(FormatQuantity input, ModifierHolder mods) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public void export(Properties properties) {
-    // Since we can export only one affix pair, do the one for "other".
-    Modifier positive = getModifier(StandardPlural.OTHER, false);
-    Modifier negative = getModifier(StandardPlural.OTHER, true);
-    PositiveNegativeAffixModifier.exportPositiveNegative(properties, positive, negative);
   }
 }

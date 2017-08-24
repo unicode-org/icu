@@ -6,8 +6,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
+import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.FormatQuantity4;
-import com.ibm.icu.impl.number.FormatQuantityBCD;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.PatternString;
 import com.ibm.icu.impl.number.Properties;
@@ -216,7 +216,7 @@ public class NumberFormatterImpl extends NumberFormatter.LocalizedNumberFormatte
    * @param fq The quantity to be formatted.
    * @return The formatted number result.
    */
-  private NumberFormatterResult format(FormatQuantityBCD fq) {
+  public NumberFormatterResult format(FormatQuantity fq) {
     MacroProps macros = resolve();
     NumberStringBuilder string = new NumberStringBuilder();
     long currentCount = callCount.incrementAndGet(this);

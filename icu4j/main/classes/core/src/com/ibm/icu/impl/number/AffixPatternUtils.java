@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
-import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 
 /**
@@ -229,75 +228,6 @@ public class AffixPatternUtils {
     return sb.toString();
   }
 
-  /**
-   * Executes the unescape state machine. Replaces the unquoted characters "-", "+", "%", and "‰"
-   * with their localized equivalents. Replaces "¤", "¤¤", and "¤¤¤" with the three argument
-   * strings.
-   *
-   * <p>Example input: "'-'¤x"; example output: "-$x"
-   *
-   * @param affixPattern The original string to be unescaped.
-   * @param symbols An instance of {@link DecimalFormatSymbols} for the locale of interest.
-   * @param currency1 The string to replace "¤".
-   * @param currency2 The string to replace "¤¤".
-   * @param currency3 The string to replace "¤¤¤".
-   * @param minusSign The string to replace "-". If null, symbols.getMinusSignString() is used.
-   * @param output The {@link NumberStringBuilder} to which the result will be appended.
-   */
-  public static void unescape(
-      CharSequence affixPattern,
-      DecimalFormatSymbols symbols,
-      String currency1,
-      String currency2,
-      String currency3,
-      String minusSign,
-      NumberStringBuilder output) {
-    if (affixPattern == null || affixPattern.length() == 0) return;
-    if (minusSign == null) minusSign = symbols.getMinusSignString();
-    long tag = 0L;
-    while (hasNext(tag, affixPattern)) {
-      tag = nextToken(tag, affixPattern);
-      int typeOrCp = getTypeOrCp(tag);
-      NumberFormat.Field field = (typeOrCp < 0) ? getFieldForType(typeOrCp) : null;
-      switch (typeOrCp) {
-        case TYPE_MINUS_SIGN:
-          output.append(minusSign, field);
-          break;
-        case TYPE_PLUS_SIGN:
-          output.append(symbols.getPlusSignString(), field);
-          break;
-        case TYPE_PERCENT:
-          output.append(symbols.getPercentString(), field);
-          break;
-        case TYPE_PERMILLE:
-          output.append(symbols.getPerMillString(), field);
-          break;
-        case TYPE_CURRENCY_SINGLE:
-          output.append(currency1, field);
-          break;
-        case TYPE_CURRENCY_DOUBLE:
-          output.append(currency2, field);
-          break;
-        case TYPE_CURRENCY_TRIPLE:
-          output.append(currency3, field);
-          break;
-        case TYPE_CURRENCY_QUAD:
-          output.appendCodePoint('\uFFFD', field);
-          break;
-        case TYPE_CURRENCY_QUINT:
-          // TODO: Add support for narrow currency symbols here.
-          output.appendCodePoint('\uFFFD', field);
-          break;
-        case TYPE_CURRENCY_OVERFLOW:
-          output.appendCodePoint('\uFFFD', field);
-          break;
-        default:
-          output.appendCodePoint(typeOrCp, null);
-          break;
-      }
-    }
-  }
-
   public static final NumberFormat.Field getFieldForType(int type) {
     switch (type) {
       case TYPE_MINUS_SIGN:
@@ -329,6 +259,18 @@ public class AffixPatternUtils {
     public CharSequence getSymbol(int type);
   }
 
+  /**
+   * Executes the unescape state machine. Replaces the unquoted characters "-", "+", "%", "‰", and
+   * "¤" with the corresponding symbols provided by the {@link SymbolProvider}, and inserts the
+   * result into the NumberStringBuilder at the requested location.
+   *
+   * <p>Example input: "'-'¤x"; example output: "-$x"
+   *
+   * @param affixPattern The original string to be unescaped.
+   * @param output The NumberStringBuilder to mutate with the result.
+   * @param position The index into the NumberStringBuilder to insert the the string.
+   * @param provider An object to generate locale symbols.
+   */
   public static int unescape(
       CharSequence affixPattern,
       NumberStringBuilder output,

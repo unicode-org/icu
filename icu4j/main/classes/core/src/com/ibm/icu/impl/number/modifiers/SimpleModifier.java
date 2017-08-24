@@ -5,7 +5,6 @@ package com.ibm.icu.impl.number.modifiers;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.text.NumberFormat.Field;
 
 /**
@@ -127,10 +126,5 @@ public class SimpleModifier extends Modifier.BaseModifier {
         assert expected.equals(actual);
       }
     }
-  }
-
-  @Override
-  public void export(Properties properties) {
-    throw new UnsupportedOperationException();
   }
 }

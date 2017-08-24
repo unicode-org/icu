@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 
 import newapi.impl.AffixPatternProvider;
 

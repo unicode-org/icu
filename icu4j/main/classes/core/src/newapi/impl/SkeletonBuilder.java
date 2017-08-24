@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -461,9 +461,9 @@ public final class SkeletonBuilder {
       if (c1 == ',') {
         char c2 = safeCharAt(skeleton, offset++);
         char c3 = safeCharAt(skeleton, offset++);
-        result = GroupingImpl.getInstance((short) (c0 - '0'), (short) (c2 - '0'), c3 == '&');
+        result = GroupingImpl.getInstance((byte) (c0 - '0'), (byte) (c2 - '0'), c3 == '&');
       } else {
-        result = GroupingImpl.getInstance((short) (c0 - '0'), (short) (c0 - '0'), c1 == '&');
+        result = GroupingImpl.getInstance((byte) (c0 - '0'), (byte) (c0 - '0'), c1 == '&');
       }
     } else {
       StringBuilder sb = new StringBuilder();

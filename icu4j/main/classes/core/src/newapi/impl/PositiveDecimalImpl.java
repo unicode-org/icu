@@ -3,28 +3,14 @@
 package newapi.impl;
 // License & terms of use: http://www.unicode.org/copyright.html#License
 
-import com.ibm.icu.impl.number.Format;
 import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.text.NumberFormat;
 
 import newapi.NumberFormatter.DecimalMarkDisplay;
 
-public class PositiveDecimalImpl implements Format.TargetFormat {
+public class PositiveDecimalImpl {
 
-  @Override
-  public int target(FormatQuantity input, NumberStringBuilder string, int startIndex) {
-    // FIXME
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * @param micros
-   * @param fq
-   * @param output
-   * @return
-   */
   public static int apply(MicroProps micros, FormatQuantity input, NumberStringBuilder string) {
     int length = 0;
     if (input.isInfinite()) {
@@ -105,10 +91,5 @@ public class PositiveDecimalImpl implements Format.TargetFormat {
       }
     }
     return length;
-  }
-
-  @Override
-  public void export(Properties properties) {
-    throw new UnsupportedOperationException();
   }
 }

@@ -16,10 +16,8 @@ import java.text.ParsePosition;
 import com.ibm.icu.impl.number.Parse;
 import com.ibm.icu.impl.number.PatternString;
 import com.ibm.icu.impl.number.Properties;
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
-import com.ibm.icu.impl.number.formatters.PositiveDecimalFormat;
-import com.ibm.icu.impl.number.formatters.ScientificFormat;
-import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
@@ -1472,7 +1470,8 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 3.0
    */
   public synchronized boolean areSignificantDigitsUsed() {
-    return SignificantDigitsRounder.useSignificantDigits(properties);
+    return properties.getMinimumSignificantDigits() != -1
+        || properties.getMaximumSignificantDigits() != -1;
   }
 
   /**
@@ -1496,8 +1495,8 @@ public class DecimalFormat extends NumberFormat {
       properties.setMinimumSignificantDigits(1);
       properties.setMaximumSignificantDigits(6);
     } else {
-      properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
-      properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
+      properties.setMinimumSignificantDigits(-1);
+      properties.setMaximumSignificantDigits(-1);
     }
     refreshFormatter();
   }
@@ -1691,7 +1690,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized boolean isScientificNotation() {
-    return ScientificFormat.useScientificNotation(properties);
+    return properties.getMinimumExponentDigits() != -1;
   }
 
   /**
@@ -1712,7 +1711,7 @@ public class DecimalFormat extends NumberFormat {
     if (useScientific) {
       properties.setMinimumExponentDigits(1);
     } else {
-      properties.setMinimumExponentDigits(Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS);
+      properties.setMinimumExponentDigits(-1);
     }
     refreshFormatter();
   }
@@ -1783,7 +1782,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized boolean isGroupingUsed() {
-    return PositiveDecimalFormat.useGrouping(properties);
+    return properties.getGroupingSize() != -1 || properties.getSecondaryGroupingSize() != -1;
   }
 
   /**
@@ -1809,8 +1808,8 @@ public class DecimalFormat extends NumberFormat {
       // Set to a reasonable default value
       properties.setGroupingSize(3);
     } else {
-      properties.setGroupingSize(Properties.DEFAULT_GROUPING_SIZE);
-      properties.setSecondaryGroupingSize(Properties.DEFAULT_SECONDARY_GROUPING_SIZE);
+      properties.setGroupingSize(-1);
+      properties.setSecondaryGroupingSize(-1);
     }
     refreshFormatter();
   }
@@ -1894,7 +1893,12 @@ public class DecimalFormat extends NumberFormat {
    */
   @Deprecated
   public synchronized int getMinimumGroupingDigits() {
-    return properties.getMinimumGroupingDigits();
+    // Only 1 and 2 are supported right now.
+    if (properties.getMinimumGroupingDigits() == 2) {
+      return 2;
+    } else {
+      return 1;
+    }
   }
 
   /**
@@ -2374,7 +2378,7 @@ public class DecimalFormat extends NumberFormat {
     // so that CurrencyUsage is reflected properly.
     // TODO: Consider putting this logic in PatternString.java instead.
     Properties tprops = threadLocalProperties.get().copyFrom(properties);
-    if (com.ibm.icu.impl.number.formatters.CurrencyFormat.useCurrency(properties)) {
+    if (ThingsNeedingNewHome.useCurrency(properties)) {
       tprops.setMinimumFractionDigits(exportedProperties.getMinimumFractionDigits());
       tprops.setMaximumFractionDigits(exportedProperties.getMaximumFractionDigits());
       tprops.setRoundingIncrement(exportedProperties.getRoundingIncrement());

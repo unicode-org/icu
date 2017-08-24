@@ -5,7 +5,6 @@ package com.ibm.icu.impl.number.modifiers;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.Modifier.AffixModifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.text.NumberFormat.Field;
 
 /** The canonical implementation of {@link Modifier}, containing a prefix and suffix string. */
@@ -88,10 +87,5 @@ public class ConstantAffixModifier extends Modifier.BaseModifier implements Affi
   @Override
   public String toString() {
     return String.format("<ConstantAffixModifier prefix:'%s' suffix:'%s'>", prefix, suffix);
-  }
-
-  @Override
-  public void export(Properties properties) {
-    throw new UnsupportedOperationException();
   }
 }

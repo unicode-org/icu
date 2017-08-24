@@ -11,9 +11,9 @@ import java.text.FieldPosition;
 import java.util.Arrays;
 import java.util.Locale;
 
-import com.ibm.icu.impl.number.FormatQuantityBCD;
+import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
+import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -236,7 +236,7 @@ public final class NumberFormatter {
 
   public static class NumberFormatterResult {
     NumberStringBuilder nsb;
-    FormatQuantityBCD fq;
+    FormatQuantity fq;
     MicroProps micros;
 
     /**
@@ -244,7 +244,7 @@ public final class NumberFormatter {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public NumberFormatterResult(NumberStringBuilder nsb, FormatQuantityBCD fq, MicroProps micros) {
+    public NumberFormatterResult(NumberStringBuilder nsb, FormatQuantity fq, MicroProps micros) {
       this.nsb = nsb;
       this.fq = fq;
       this.micros = micros;
