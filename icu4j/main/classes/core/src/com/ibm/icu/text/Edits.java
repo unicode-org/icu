@@ -409,12 +409,7 @@ public final class Edits {
                 spanStart = destIndex;
                 spanLength = newLength_;
             }
-            // If we are at the start or limit of an empty span, then we search from
-            // the start of the string so that we always return
-            // the first of several consecutive empty spans, for consistent results.
-            // We do not currently track the properties of the previous span,
-            // so for now we always reset if we are at the start of the current span.
-            if (i <= spanStart) {
+            if (i < spanStart) {
                 // Reset the iterator to the start.
                 index = remaining = oldLength_ = newLength_ = srcIndex = replIndex = destIndex = 0;
             } else if (i < (spanStart + spanLength)) {
@@ -429,8 +424,8 @@ public final class Edits {
                     spanStart = destIndex;
                     spanLength = newLength_;
                 }
-                if (i == spanStart || i < (spanStart + spanLength)) {
-                    // The index is in the current span, or at an empty one.
+                if (i < (spanStart + spanLength)) {
+                    // The index is in the current span.
                     return 0;
                 }
                 if (remaining > 0) {
@@ -614,5 +609,168 @@ public final class Edits {
      */
     public Iterator getFineIterator() {
         return new Iterator(array, length, false, false);
+    }
+
+    /**
+     * Merges the two input Edits and appends the result to this object.
+     *
+     * <p>Consider two string transformations (for example, normalization and case mapping)
+     * where each records Edits in addition to writing an output string.<br>
+     * Edits ab reflect how substrings of input string a
+     * map to substrings of intermediate string b.<br>
+     * Edits bc reflect how substrings of intermediate string b
+     * map to substrings of output string c.<br>
+     * This function merges ab and bc such that the additional edits
+     * recorded in this object reflect how substrings of input string a
+     * map to substrings of output string c.
+     *
+     * <p>If unrelated Edits are passed in where the output string of the first
+     * has a different length than the input string of the second,
+     * then an IllegalArgumentException is thrown.
+     *
+     * @param ab reflects how substrings of input string a
+     *     map to substrings of intermediate string b.
+     * @param bc reflects how substrings of intermediate string b
+     *     map to substrings of output string c.
+     * @return this, with the merged edits appended
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Edits mergeAndAppend(Edits ab, Edits bc) {
+        // Picture string a --(Edits ab)--> string b --(Edits bc)--> string c.
+        // Parallel iteration over both Edits.
+        Iterator abIter = ab.getFineIterator();
+        Iterator bcIter = bc.getFineIterator();
+        boolean abHasNext = true, bcHasNext = true;
+        // Copy iterator state into local variables, so that we can modify and subdivide spans.
+        // ab old & new length, bc old & new length
+        int aLength = 0, ab_bLength = 0, bc_bLength = 0, cLength = 0;
+        // When we have different-intermediate-length changes, we accumulate a larger change.
+        int pending_aLength = 0, pending_cLength = 0;
+        for (;;) {
+            // At this point, for each of the two iterators:
+            // Either we are done with the locally cached current edit,
+            // and its intermediate-string length has been reset,
+            // or we will continue to work with a truncated remainder of this edit.
+            //
+            // If the current edit is done, and the iterator has not yet reached the end,
+            // then we fetch the next edit. This is true for at least one of the iterators.
+            //
+            // Normally it does not matter whether we fetch from ab and then bc or vice versa.
+            // However, the result is observably different when
+            // ab deletions meet bc insertions at the same intermediate-string index.
+            // Some users expect the bc insertions to come first, so we fetch from bc first.
+            if (bc_bLength == 0) {
+                if (bcHasNext && (bcHasNext = bcIter.next())) {
+                    bc_bLength = bcIter.oldLength();
+                    cLength = bcIter.newLength();
+                    if (bc_bLength == 0) {
+                        // insertion
+                        if (ab_bLength == 0 || !abIter.hasChange()) {
+                            addReplace(pending_aLength, pending_cLength + cLength);
+                            pending_aLength = pending_cLength = 0;
+                        } else {
+                            pending_cLength += cLength;
+                        }
+                        continue;
+                    }
+                }
+                // else see if the other iterator is done, too.
+            }
+            if (ab_bLength == 0) {
+                if (abHasNext && (abHasNext = abIter.next())) {
+                    aLength = abIter.oldLength();
+                    ab_bLength = abIter.newLength();
+                    if (ab_bLength == 0) {
+                        // deletion
+                        if (bc_bLength == bcIter.oldLength() || !bcIter.hasChange()) {
+                            addReplace(pending_aLength + aLength, pending_cLength);
+                            pending_aLength = pending_cLength = 0;
+                        } else {
+                            pending_aLength += aLength;
+                        }
+                        continue;
+                    }
+                } else if (bc_bLength == 0) {
+                    // Both iterators are done at the same time:
+                    // The intermediate-string lengths match.
+                    break;
+                } else {
+                    throw new IllegalArgumentException(
+                            "The ab output string is shorter than the bc input string.");
+                }
+            }
+            if (bc_bLength == 0) {
+                throw new IllegalArgumentException(
+                        "The bc input string is shorter than the ab output string.");
+            }
+            //  Done fetching: ab_bLength > 0 && bc_bLength > 0
+
+            // The current state has two parts:
+            // - Past: We accumulate a longer ac edit in the "pending" variables.
+            // - Current: We have copies of the current ab/bc edits in local variables.
+            //   At least one side is newly fetched.
+            //   One side might be a truncated remainder of an edit we fetched earlier.
+
+            if (!abIter.hasChange() && !bcIter.hasChange()) {
+                // An unchanged span all the way from string a to string c.
+                if (pending_aLength != 0 || pending_cLength != 0) {
+                    addReplace(pending_aLength, pending_cLength);
+                    pending_aLength = pending_cLength = 0;
+                }
+                int unchangedLength = aLength <= cLength ? aLength : cLength;
+                addUnchanged(unchangedLength);
+                ab_bLength = aLength -= unchangedLength;
+                bc_bLength = cLength -= unchangedLength;
+                // At least one of the unchanged spans is now empty.
+                continue;
+            }
+            if (!abIter.hasChange() && bcIter.hasChange()) {
+                // Unchanged a->b but changed b->c.
+                if (ab_bLength >= bc_bLength) {
+                    // Split the longer unchanged span into change + remainder.
+                    addReplace(pending_aLength + bc_bLength, pending_cLength + cLength);
+                    pending_aLength = pending_cLength = 0;
+                    aLength = ab_bLength -= bc_bLength;
+                    bc_bLength = 0;
+                    continue;
+                }
+                // Handle the shorter unchanged span below like a change.
+            } else if (abIter.hasChange() && !bcIter.hasChange()) {
+                // Changed a->b and then unchanged b->c.
+                if (ab_bLength <= bc_bLength) {
+                    // Split the longer unchanged span into change + remainder.
+                    addReplace(pending_aLength + aLength, pending_cLength + ab_bLength);
+                    pending_aLength = pending_cLength = 0;
+                    cLength = bc_bLength -= ab_bLength;
+                    ab_bLength = 0;
+                    continue;
+                }
+                // Handle the shorter unchanged span below like a change.
+            } else {  // both abIter.hasChange() && bcIter.hasChange()
+                if (ab_bLength == bc_bLength) {
+                    // Changes on both sides up to the same position. Emit & reset.
+                    addReplace(pending_aLength + aLength, pending_cLength + cLength);
+                    pending_aLength = pending_cLength = 0;
+                    ab_bLength = bc_bLength = 0;
+                    continue;
+                }
+            }
+            // Accumulate the a->c change, reset the shorter side,
+            // keep a remainder of the longer one.
+            pending_aLength += aLength;
+            pending_cLength += cLength;
+            if (ab_bLength < bc_bLength) {
+                bc_bLength -= ab_bLength;
+                cLength = ab_bLength = 0;
+            } else {  // ab_bLength > bc_bLength
+                ab_bLength -= bc_bLength;
+                aLength = bc_bLength = 0;
+            }
+        }
+        if (pending_aLength != 0 || pending_cLength != 0) {
+            addReplace(pending_aLength, pending_cLength);
+        }
+        return this;
     }
 }

@@ -30,7 +30,9 @@
 #include "unicode/localpointer.h"
 #include "unicode/putil.h"
 #include "unicode/udata.h"
+#include "unicode/uniset.h"
 #include "unicode/unistr.h"
+#include "unicode/usetiter.h"
 #include "unicode/ustring.h"
 #include "charstr.h"
 #include "extradata.h"
@@ -146,6 +148,7 @@ void Normalizer2DataBuilder::setOverrideHandling(OverrideHandling oh) {
 
 void Normalizer2DataBuilder::setCC(UChar32 c, uint8_t cc) {
     norms.createNorm(c)->cc=cc;
+    norms.ccSet.add(c);
 }
 
 static UBool isWellFormed(const UnicodeString &s) {
@@ -166,6 +169,7 @@ void Normalizer2DataBuilder::setOneWayMapping(UChar32 c, const UnicodeString &m)
     p->mapping=new UnicodeString(m);
     p->mappingType=Norm::ONE_WAY;
     p->setMappingCP();
+    norms.mappingSet.add(c);
 }
 
 void Normalizer2DataBuilder::setRoundTripMapping(UChar32 c, const UnicodeString &m) {
@@ -195,12 +199,14 @@ void Normalizer2DataBuilder::setRoundTripMapping(UChar32 c, const UnicodeString 
     p->mapping=new UnicodeString(m);
     p->mappingType=Norm::ROUND_TRIP;
     p->mappingCP=U_SENTINEL;
+    norms.mappingSet.add(c);
 }
 
 void Normalizer2DataBuilder::removeMapping(UChar32 c) {
     // createNorm(c), not getNorm(c), to record a non-mapping and detect conflicting data.
     Norm *p=checkNormForMapping(norms.createNorm(c), c);
     p->mappingType=Norm::REMOVED;
+    norms.mappingSet.add(c);
 }
 
 UBool Normalizer2DataBuilder::mappingHasCompBoundaryAfter(const BuilderReorderingBuffer &buffer) const {
@@ -830,6 +836,198 @@ Normalizer2DataBuilder::writeCSourceFile(const char *filename) {
         "};\n");
     fputs("\n#endif  // INCLUDED_FROM_NORMALIZER2_CPP\n", f);
     fclose(f);
+}
+
+namespace {
+
+bool equalStrings(const UnicodeString *s1, const UnicodeString *s2) {
+    if(s1 == nullptr) {
+        return s2 == nullptr;
+    } else if(s2 == nullptr) {
+        return false;
+    } else {
+        return *s1 == *s2;
+    }
+}
+
+const char *typeChars = "?-=>";
+
+void writeMapping(FILE *f, const UnicodeString *m) {
+    if(m != nullptr && !m->isEmpty()) {
+        int32_t i = 0;
+        UChar32 c = m->char32At(i);
+        fprintf(f, "%04lX", (long)c);
+        while((i += U16_LENGTH(c)) < m->length()) {
+            c = m->char32At(i);
+            fprintf(f, " %04lX", (long)c);
+        }
+    }
+    fputs("\n", f);
+}
+
+}  // namespace
+
+void
+Normalizer2DataBuilder::writeDataFile(const char *filename, bool writeRemoved) const {
+    // Do not processData() before writing the input-syntax data file.
+    FILE *f = fopen(filename, "w");
+    if(f == nullptr) {
+        fprintf(stderr, "gennorm2/writeDataFile() error: unable to create the output file %s\n",
+                filename);
+        exit(U_FILE_ACCESS_ERROR);
+        return;
+    }
+
+    if(unicodeVersion[0] != 0 || unicodeVersion[1] != 0 ||
+            unicodeVersion[2] != 0 || unicodeVersion[3] != 0) {
+        char uv[U_MAX_VERSION_STRING_LENGTH];
+        u_versionToString(unicodeVersion, uv);
+        fprintf(f, "* Unicode %s\n\n", uv);
+    }
+
+    UnicodeSetIterator ccIter(norms.ccSet);
+    UChar32 start = U_SENTINEL;
+    UChar32 end = U_SENTINEL;
+    uint8_t prevCC = 0;
+    bool done = false;
+    bool didWrite = false;
+    do {
+        UChar32 c;
+        uint8_t cc;
+        if(ccIter.next() && !ccIter.isString()) {
+            c = ccIter.getCodepoint();
+            cc = norms.getCC(c);
+        } else {
+            c = 0x110000;
+            cc = 0;
+            done = true;
+        }
+        if(cc == prevCC && c == (end + 1)) {
+            end = c;
+        } else {
+            if(prevCC != 0) {
+                if(start == end) {
+                    fprintf(f, "%04lX:%d\n", (long)start, (int)prevCC);
+                } else {
+                    fprintf(f, "%04lX..%04lX:%d\n", (long)start, (long)end, (int)prevCC);
+                }
+                didWrite = true;
+            }
+            start = end = c;
+            prevCC = cc;
+        }
+    } while(!done);
+    if(didWrite) {
+        fputs("\n", f);
+    }
+
+    UnicodeSetIterator mIter(norms.mappingSet);
+    start = U_SENTINEL;
+    end = U_SENTINEL;
+    const UnicodeString *prevMapping = nullptr;
+    Norm::MappingType prevType = Norm::NONE;
+    done = false;
+    do {
+        UChar32 c;
+        const Norm *norm;
+        if(mIter.next() && !mIter.isString()) {
+            c = mIter.getCodepoint();
+            norm = norms.getNorm(c);
+        } else {
+            c = 0x110000;
+            norm = nullptr;
+            done = true;
+        }
+        const UnicodeString *mapping;
+        Norm::MappingType type;
+        if(norm == nullptr) {
+            mapping = nullptr;
+            type = Norm::NONE;
+        } else {
+            type = norm->mappingType;
+            if(type == Norm::NONE) {
+                mapping = nullptr;
+            } else {
+                mapping = norm->mapping;
+            }
+        }
+        if(type == prevType && equalStrings(mapping, prevMapping) && c == (end + 1)) {
+            end = c;
+        } else {
+            if(writeRemoved ? prevType != Norm::NONE : prevType > Norm::REMOVED) {
+                if(start == end) {
+                    fprintf(f, "%04lX%c", (long)start, typeChars[prevType]);
+                } else {
+                    fprintf(f, "%04lX..%04lX%c", (long)start, (long)end, typeChars[prevType]);
+                }
+                writeMapping(f, prevMapping);
+            }
+            start = end = c;
+            prevMapping = mapping;
+            prevType = type;
+        }
+    } while(!done);
+
+    fclose(f);
+}
+
+void
+Normalizer2DataBuilder::computeDiff(const Normalizer2DataBuilder &b1,
+                                    const Normalizer2DataBuilder &b2,
+                                    Normalizer2DataBuilder &diff) {
+    // Compute diff = b1 - b2
+    // so that we should be able to get b1 = b2 + diff.
+    if(0 != memcmp(b1.unicodeVersion, b2.unicodeVersion, U_MAX_VERSION_LENGTH)) {
+        memcpy(diff.unicodeVersion, b1.unicodeVersion, U_MAX_VERSION_LENGTH);
+    }
+
+    UnicodeSet ccSet(b1.norms.ccSet);
+    ccSet.addAll(b2.norms.ccSet);
+    UnicodeSetIterator ccIter(ccSet);
+    while(ccIter.next() && !ccIter.isString()) {
+        UChar32 c = ccIter.getCodepoint();
+        uint8_t cc1 = b1.norms.getCC(c);
+        uint8_t cc2 = b2.norms.getCC(c);
+        if(cc1 != cc2) {
+            diff.setCC(c, cc1);
+        }
+    }
+
+    UnicodeSet mSet(b1.norms.mappingSet);
+    mSet.addAll(b2.norms.mappingSet);
+    UnicodeSetIterator mIter(mSet);
+    while(mIter.next() && !mIter.isString()) {
+        UChar32 c = mIter.getCodepoint();
+        const Norm *norm1 = b1.norms.getNorm(c);
+        const Norm *norm2 = b2.norms.getNorm(c);
+        const UnicodeString *mapping1;
+        Norm::MappingType type1;
+        if(norm1 == nullptr || !norm1->hasMapping()) {
+            mapping1 = nullptr;
+            type1 = Norm::NONE;
+        } else {
+            mapping1 = norm1->mapping;
+            type1 = norm1->mappingType;
+        }
+        const UnicodeString *mapping2;
+        Norm::MappingType type2;
+        if(norm2 == nullptr || !norm2->hasMapping()) {
+            mapping2 = nullptr;
+            type2 = Norm::NONE;
+        } else {
+            mapping2 = norm2->mapping;
+            type2 = norm2->mappingType;
+        }
+        if(type1 == type2 && equalStrings(mapping1, mapping2)) {
+            // Nothing to do.
+        } else if(type1 == Norm::NONE) {
+            diff.removeMapping(c);
+        } else if(type1 == Norm::ROUND_TRIP) {
+            diff.setRoundTripMapping(c, *mapping1);
+        } else if(type1 == Norm::ONE_WAY) {
+            diff.setOneWayMapping(c, *mapping1);
+        }
+    }
 }
 
 U_NAMESPACE_END

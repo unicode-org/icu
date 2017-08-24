@@ -496,8 +496,8 @@ $CAN_CM  $CM* $QU;                               #   QU x .
 [$LB20NonBreaks-$CM] $CM* $BB;                   #  BB x .
 [^$CB] $CM* $BB;                                      #
 
-# LB21a
-[^$CM $CB]? $CM* ($HY | $BA | $BAX) $CM* $HL;
+# LB21a  Don't break after Hebrew + Hyphen.
+([^$CB] $CM*)? ($HY | $BA | $BAX) $CM* $HL;
 
 # LB21b (reverse)
 $HL $CM* $SY;

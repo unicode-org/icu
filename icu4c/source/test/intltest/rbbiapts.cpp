@@ -68,11 +68,11 @@ void RBBIAPITest::TestCloneEquals()
     b |= *bi1 == *bi2;
     b |= *bi1 == *bi3;
     if (b) {
-        errln((UnicodeString)"ERROR:1 RBBI's == and != operator failed.");
+        errln("%s:%d ERROR:1 RBBI's == and != operator failed.", __FILE__, __LINE__);
     }
 
     if(*bi2 == *biequal || *bi2 == *bi1  || *biequal == *bi3)
-        errln((UnicodeString)"ERROR:2 RBBI's == and != operator  failed.");
+        errln("%s:%d ERROR:2 RBBI's == and != operator  failed.", __FILE__, __LINE__);
 
 
     // Quick test of RulesBasedBreakIterator assignment -
@@ -90,15 +90,15 @@ void RBBIAPITest::TestCloneEquals()
 
     RuleBasedBreakIterator biDefault, biDefault2;
     if(U_FAILURE(status)){
-        errln((UnicodeString)"FAIL : in construction of default iterator");
+        errln("%s:%d FAIL : in construction of default iterator", __FILE__, __LINE__);
         return;
     }
     if (biDefault == *bix) {
-        errln((UnicodeString)"ERROR: iterators should not compare ==");
+        errln("%s:%d ERROR: iterators should not compare ==", __FILE__, __LINE__);
         return;
     }
     if (biDefault != biDefault2) {
-        errln((UnicodeString)"ERROR: iterators should compare ==");
+        errln("%s:%d ERROR: iterators should compare ==", __FILE__, __LINE__);
         return;
     }
 
@@ -106,41 +106,41 @@ void RBBIAPITest::TestCloneEquals()
     UnicodeString   HelloString("Hello Kitty");
     bix->setText(HelloString);
     if (*bix == *bi2) {
-        errln(UnicodeString("ERROR: strings should not be equal before assignment."));
+        errln("%s:%d ERROR: strings should not be equal before assignment.", __FILE__, __LINE__);
     }
     *bix = *bi2;
     if (*bix != *bi2) {
-        errln(UnicodeString("ERROR: strings should be equal before assignment."));
+        errln("%s:%d ERROR: strings should be equal before assignment.", __FILE__, __LINE__);
     }
 
     int bixnext = bix->next();
     int bi2next = bi2->next();
     if (! (bixnext == bi2next && bixnext == 7)) {
-        errln(UnicodeString("ERROR: iterators behaved differently after assignment."));
+        errln("%s:%d ERROR: iterators behaved differently after assignment.", __FILE__, __LINE__);
     }
     delete bix;
     if (bi2->next() != 8) {
-        errln(UnicodeString("ERROR: iterator.next() failed after deleting copy."));
+        errln("%s:%d ERROR: iterator.next() failed after deleting copy.", __FILE__, __LINE__);
     }
 
 
 
     logln((UnicodeString)"Testing clone()");
-    RuleBasedBreakIterator* bi1clone=(RuleBasedBreakIterator*)bi1->clone();
-    RuleBasedBreakIterator* bi2clone=(RuleBasedBreakIterator*)bi2->clone();
+    RuleBasedBreakIterator* bi1clone = dynamic_cast<RuleBasedBreakIterator *>(bi1->clone());
+    RuleBasedBreakIterator* bi2clone = dynamic_cast<RuleBasedBreakIterator *>(bi2->clone());
 
     if(*bi1clone != *bi1 || *bi1clone  != *biequal  ||
       *bi1clone == *bi3 || *bi1clone == *bi2)
-        errln((UnicodeString)"ERROR:1 RBBI's clone() method failed");
+        errln("%s:%d ERROR:1 RBBI's clone() method failed", __FILE__, __LINE__);
 
     if(*bi2clone == *bi1 || *bi2clone == *biequal ||
        *bi2clone == *bi3 || *bi2clone != *bi2)
-        errln((UnicodeString)"ERROR:2 RBBI's clone() method failed");
+        errln("%s:%d ERROR:2 RBBI's clone() method failed", __FILE__, __LINE__);
 
     if(bi1->getText() != bi1clone->getText()   ||
        bi2clone->getText() != bi2->getText()   ||
        *bi2clone == *bi1clone )
-        errln((UnicodeString)"ERROR: RBBI's clone() method failed");
+        errln("%s:%d ERROR: RBBI's clone() method failed", __FILE__, __LINE__);
 
     delete bi1clone;
     delete bi2clone;
@@ -427,12 +427,12 @@ void RBBIAPITest::TestIteration()
     int32_t i;
     i = bi->first();
     if (i != 0) {
-        errln("Incorrect value from bi->first().  Expected 0, got %d.", i);
+        errln("%s:%d Incorrect value from bi->first().  Expected 0, got %d.", __FILE__, __LINE__, i);
     }
 
     i = bi->last();
     if (i != 10) {
-        errln("Incorrect value from bi->last().  Expected 10, got %d", i);
+        errln("%s:%d Incorrect value from bi->last().  Expected 10, got %d", __FILE__, __LINE__, i);
     }
 
     //
@@ -441,14 +441,14 @@ void RBBIAPITest::TestIteration()
     bi->last();
     i = bi->previous();
     if (i != 9) {
-        errln("Incorrect value from bi->last() at line %d.  Expected 9, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->last().  Expected 9, got %d", __FILE__, __LINE__, i);
     }
 
 
     bi->first();
     i = bi->previous();
     if (i != BreakIterator::DONE) {
-        errln("Incorrect value from bi->previous() at line %d.  Expected DONE, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->previous().  Expected DONE, got %d", __FILE__, __LINE__, i);
     }
 
     //
@@ -457,13 +457,13 @@ void RBBIAPITest::TestIteration()
     bi->first();
     i = bi->next();
     if (i != 1) {
-        errln("Incorrect value from bi->next() at line %d.  Expected 1, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->next().  Expected 1, got %d", __FILE__, __LINE__, i);
     }
 
     bi->last();
     i = bi->next();
     if (i != BreakIterator::DONE) {
-        errln("Incorrect value from bi->next() at line %d.  Expected DONE, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->next().  Expected DONE, got %d", __FILE__, __LINE__, i);
     }
 
 
@@ -473,27 +473,27 @@ void RBBIAPITest::TestIteration()
     bi->first();
     i = bi->current();
     if (i != 0) {
-        errln("Incorrect value from bi->previous() at line %d.  Expected 0, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->previous().  Expected 0, got %d", __FILE__, __LINE__, i);
     }
 
     bi->next();
     i = bi->current();
     if (i != 1) {
-        errln("Incorrect value from bi->previous() at line %d.  Expected 1, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->previous().  Expected 1, got %d", __FILE__, __LINE__, i);
     }
 
     bi->last();
     bi->next();
     i = bi->current();
     if (i != 10) {
-        errln("Incorrect value from bi->previous() at line %d.  Expected 10, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->previous().  Expected 10, got %d", __FILE__, __LINE__, i);
     }
 
     bi->first();
     bi->previous();
     i = bi->current();
     if (i != 0) {
-        errln("Incorrect value from bi->previous() at line %d.  Expected 0, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->previous().  Expected 0, got %d", __FILE__, __LINE__, i);
     }
 
 
@@ -502,17 +502,17 @@ void RBBIAPITest::TestIteration()
     //
     i = bi->following(4);
     if (i != 5) {
-        errln("Incorrect value from bi->following() at line %d.  Expected 5, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->following().  Expected 5, got %d", __FILE__, __LINE__, i);
     }
 
     i = bi->following(9);
     if (i != 10) {
-        errln("Incorrect value from bi->following() at line %d.  Expected 10, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->following().  Expected 10, got %d", __FILE__, __LINE__, i);
     }
 
     i = bi->following(10);
     if (i != BreakIterator::DONE) {
-        errln("Incorrect value from bi->following() at line %d.  Expected DONE, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->following().  Expected DONE, got %d", __FILE__, __LINE__, i);
     }
 
 
@@ -521,22 +521,22 @@ void RBBIAPITest::TestIteration()
     //
     i = bi->preceding(4);
     if (i != 3) {
-        errln("Incorrect value from bi->preceding() at line %d.  Expected 3, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->preceding().  Expected 3, got %d", __FILE__, __LINE__, i);
     }
 
     i = bi->preceding(10);
     if (i != 9) {
-        errln("Incorrect value from bi->preceding() at line %d.  Expected 9, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->preceding().  Expected 9, got %d", __FILE__, __LINE__, i);
     }
 
     i = bi->preceding(1);
     if (i != 0) {
-        errln("Incorrect value from bi->preceding() at line %d.  Expected 0, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->preceding().  Expected 0, got %d", __FILE__, __LINE__, i);
     }
 
     i = bi->preceding(0);
     if (i != BreakIterator::DONE) {
-        errln("Incorrect value from bi->preceding() at line %d.  Expected DONE, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->preceding().  Expected DONE, got %d", __FILE__, __LINE__, i);
     }
 
 
@@ -545,20 +545,20 @@ void RBBIAPITest::TestIteration()
     //
     bi->first();
     if (bi->isBoundary(3) != TRUE) {
-        errln("Incorrect value from bi->isBoudary() at line %d.  Expected TRUE, got FALSE", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->isBoudary().  Expected TRUE, got FALSE", __FILE__, __LINE__, i);
     }
     i = bi->current();
     if (i != 3) {
-        errln("Incorrect value from bi->current() at line %d.  Expected 3, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->current().  Expected 3, got %d", __FILE__, __LINE__, i);
     }
 
 
     if (bi->isBoundary(11) != FALSE) {
-        errln("Incorrect value from bi->isBoudary() at line %d.  Expected FALSE, got TRUE", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->isBoudary().  Expected FALSE, got TRUE", __FILE__, __LINE__, i);
     }
     i = bi->current();
     if (i != 10) {
-        errln("Incorrect value from bi->current() at line %d.  Expected 10, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->current().  Expected 10, got %d", __FILE__, __LINE__, i);
     }
 
     //
@@ -567,18 +567,18 @@ void RBBIAPITest::TestIteration()
     bi->first();
     i = bi->next(4);
     if (i != 4) {
-        errln("Incorrect value from bi->next() at line %d.  Expected 4, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->next().  Expected 4, got %d", __FILE__, __LINE__, i);
     }
 
     i = bi->next(6);
     if (i != 10) {
-        errln("Incorrect value from bi->next() at line %d.  Expected 10, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->next().  Expected 10, got %d", __FILE__, __LINE__, i);
     }
 
     bi->first();
     i = bi->next(11);
     if (i != BreakIterator::DONE) {
-        errln("Incorrect value from bi->next() at line %d.  Expected BreakIterator::DONE, got %d", __LINE__, i);
+        errln("%s:%d Incorrect value from bi->next().  Expected BreakIterator::DONE, got %d", __FILE__, __LINE__, i);
     }
 
     delete bi;
@@ -666,7 +666,7 @@ void RBBIAPITest::TestRuleStatus() {
 
      BreakIterator *bi = BreakIterator::createWordInstance(Locale::getEnglish(), status);
      if(U_FAILURE(status)) {
-         errcheckln(status, "Fail : in construction - %s", u_errorName(status));
+         errcheckln(status, "%s:%d Fail in construction - %s", __FILE__, __LINE__, u_errorName(status));
      } else {
          bi->setText(testString1);
          // First test that the breaks are in the right spots.
@@ -677,12 +677,12 @@ void RBBIAPITest::TestRuleStatus() {
          int32_t pos, tag;
          for (pos = bi->first(); pos != BreakIterator::DONE; pos = bi->next(), i++) {
              if (pos != bounds1[i]) {
-                 errln("FAIL: unexpected word break at postion %d", pos);
+                 errln("%s:%d FAIL: unexpected word break at postion %d", __FILE__, __LINE__, pos);
                  break;
              }
              tag = bi->getRuleStatus();
              if (tag < tag_lo[i] || tag >= tag_hi[i]) {
-                 errln("FAIL: incorrect tag value %d at position %d", tag, pos);
+                 errln("%s:%d FAIL: incorrect tag value %d at position %d", __FILE__, __LINE__, tag, pos);
                  break;
              }
 
@@ -703,7 +703,7 @@ void RBBIAPITest::TestRuleStatus() {
 
      bi = BreakIterator::createLineInstance(Locale::getEnglish(), status);
      if(U_FAILURE(status)) {
-         errcheckln(status, "failed to create word break iterator. - %s", u_errorName(status));
+         errcheckln(status, "%s:%d failed to create line break iterator. - %s", __FILE__, __LINE__, u_errorName(status));
      } else {
          int32_t i = 0;
          int32_t pos, tag;
@@ -724,8 +724,8 @@ void RBBIAPITest::TestRuleStatus() {
                  success = FALSE; break;
              }
              if (success == FALSE) {
-                 errln("Fail: incorrect word break status or position.  i=%d, pos=%d, tag=%d",
-                     i, pos, tag);
+                 errln("%s:%d: incorrect line break status or position.  i=%d, pos=%d, tag=%d",
+                     __FILE__, __LINE__, i, pos, tag);
                  break;
              }
              pos = bi->next();
@@ -734,7 +734,7 @@ void RBBIAPITest::TestRuleStatus() {
          if (UBRK_LINE_SOFT >= UBRK_LINE_SOFT_LIMIT ||
              UBRK_LINE_HARD >= UBRK_LINE_HARD_LIMIT ||
              (UBRK_LINE_HARD > UBRK_LINE_SOFT && UBRK_LINE_HARD < UBRK_LINE_SOFT_LIMIT)) {
-             errln("UBRK_LINE_* constants from header are inconsistent.");
+             errln("%s:%d UBRK_LINE_* constants from header are inconsistent.", __FILE__, __LINE__);
          }
      }
      delete bi;

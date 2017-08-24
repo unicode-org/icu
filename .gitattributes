@@ -6317,6 +6317,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/plurals.txt svneol=native#
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/CSCharacterIteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/CacheTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/iterator/TestUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/DataDrivenUScriptTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/TestUScript.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/TestUScriptRun.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -6357,9 +6358,20 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/BreakIteratorRegTest.java sv
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/BreakIteratorRules_en_US_TEST.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/BreakIteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBIAPITest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBIMonkeyTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITestExtended.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/RBBITestMonkey.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/grapheme.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/line.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/line_loose.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/line_loose_cj.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/line_normal.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/line_normal_cj.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/readme.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/sentence.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/word.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/break_rules/word_POSIX.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/CalendarHandler.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -6761,6 +6773,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ib
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_59.1/com.ibm.icu.util.VTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/shaping/ArabicShapingRegTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/shaping/DataDrivenArabicShapingRegTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/IDNAConformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/IDNAReference.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/stringprep/NFS4StringPrep.java svneol=native#text/plain%3Bcharset%3Dutf-8

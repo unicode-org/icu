@@ -9,7 +9,10 @@
 package com.ibm.icu.dev.test.rbbi;
 
 
-// Monkey testing of RuleBasedBreakIterator
+// Monkey testing of RuleBasedBreakIterator.
+//    The old, original monkey test. TODO: remove
+//    The new monkey test is class RBBIMonkeyTest.
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

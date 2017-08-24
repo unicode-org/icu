@@ -23,6 +23,7 @@ void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, UBool exec, co
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testSymbols);
     TESTCASE_AUTO(testLastResortData);
+    TESTCASE_AUTO(testNumberingSystem);
     TESTCASE_AUTO_END;
 }
 
@@ -246,6 +247,49 @@ void IntlTestDecimalFormatSymbols::testLastResortData() {
     // Also, the CurrencySpacing patterns are empty in the last resort instance,
     // but not in root.
     Verify(1234567.25, "#,##0.##", *lastResort, "1,234,567.25");
+}
+
+void IntlTestDecimalFormatSymbols::testNumberingSystem() {
+    IcuTestErrorCode errorCode(*this, "testNumberingSystem");
+    struct testcase {
+        const char* locid;
+        const char* nsname;
+        const char16_t* expected1; // Expected number format string
+        const char16_t* expected2; // Expected pattern separator
+    };
+    static const testcase cases[9] = {
+            {"en", "latn", u"1,234.56", u";"},
+            {"en", "arab", u"١٬٢٣٤٫٥٦", u"؛"},
+            {"en", "mathsanb", u"𝟭,𝟮𝟯𝟰.𝟱𝟲", u";"},
+            {"en", "mymr", u"၁,၂၃၄.၅၆", u";"},
+            {"my", "latn", u"1,234.56", u";"},
+            {"my", "arab", u"١٬٢٣٤٫٥٦", u"؛"},
+            {"my", "mathsanb", u"𝟭,𝟮𝟯𝟰.𝟱𝟲", u";"},
+            {"my", "mymr", u"၁,၂၃၄.၅၆", u"၊"},
+            {"en@numbers=thai", "mymr", u"၁,၂၃၄.၅၆", u";"}, // conflicting numbering system
+    };
+
+    for (int i=0; i<8; i++) {
+        testcase cas = cases[i];
+        Locale loc(cas.locid);
+        LocalPointer<NumberingSystem> ns(NumberingSystem::createInstanceByName(cas.nsname, errorCode));
+        if (errorCode.logDataIfFailureAndReset("NumberingSystem failed")) {
+            return;
+        }
+        UnicodeString expected1(cas.expected1);
+        UnicodeString expected2(cas.expected2);
+        DecimalFormatSymbols dfs(loc, *ns, errorCode);
+        if (errorCode.logDataIfFailureAndReset("DecimalFormatSymbols failed")) {
+            return;
+        }
+        Verify(1234.56, "#,##0.##", dfs, expected1);
+        // The pattern separator is something that differs by numbering system in my@numbers=mymr.
+        UnicodeString actual2 = dfs.getSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol);
+        if (expected2 != actual2) {
+            errln((UnicodeString)"ERROR: DecimalFormatSymbols returned pattern separator " + actual2
+                + " but we expected " + expected2);
+        }
+    }
 }
 
 void IntlTestDecimalFormatSymbols::Verify(double value, const UnicodeString& pattern,
