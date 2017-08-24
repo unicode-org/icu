@@ -766,6 +766,7 @@ public final class UCharacterCaseTest extends TestFmwk
         assertGreekUpper("Το ένα ή το άλλο.", "ΤΟ ΕΝΑ Ή ΤΟ ΑΛΛΟ.");
         // http://multilingualtypesetting.co.uk/blog/greek-typesetting-tips/
         assertGreekUpper("ρωμέικα", "ΡΩΜΕΪΚΑ");
+        assertGreekUpper("ή.", "Ή.");
     }
 
     private static final class EditChange {

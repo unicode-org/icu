@@ -1038,6 +1038,7 @@ public final class CaseMapImpl {
                 int type = UCaseProps.INSTANCE.getTypeOrIgnorable(c);
                 if ((type & UCaseProps.IGNORABLE) != 0) {
                     // Case-ignorable, continue with the loop.
+                    i += Character.charCount(c);
                 } else if (type != UCaseProps.NONE) {
                     return true;  // Followed by cased letter.
                 } else {
