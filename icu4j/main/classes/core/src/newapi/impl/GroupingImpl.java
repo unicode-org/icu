@@ -13,8 +13,8 @@ import newapi.NumberFormatter.IGrouping;
 public class GroupingImpl extends Grouping.Internal {
 
   // Conveniences for Java handling of shorts
-  private static final short S2 = 2;
-  private static final short S3 = 3;
+  private static final byte B2 = 2;
+  private static final byte B3 = 3;
 
   // For the "placeholder constructor"
   public static final char TYPE_PLACEHOLDER = 0;
@@ -23,12 +23,12 @@ public class GroupingImpl extends Grouping.Internal {
 
   // Statically initialized objects (cannot be used statically by other ICU classes)
   static final GroupingImpl NONE = new GroupingImpl(TYPE_NONE);
-  static final GroupingImpl GROUPING_3 = new GroupingImpl(S3, S3, false);
-  static final GroupingImpl GROUPING_3_2 = new GroupingImpl(S3, S2, false);
-  static final GroupingImpl GROUPING_3_MIN2 = new GroupingImpl(S3, S3, true);
-  static final GroupingImpl GROUPING_3_2_MIN2 = new GroupingImpl(S3, S2, true);
+  static final GroupingImpl GROUPING_3 = new GroupingImpl(B3, B3, false);
+  static final GroupingImpl GROUPING_3_2 = new GroupingImpl(B3, B2, false);
+  static final GroupingImpl GROUPING_3_MIN2 = new GroupingImpl(B3, B3, true);
+  static final GroupingImpl GROUPING_3_2_MIN2 = new GroupingImpl(B3, B2, true);
 
-  static GroupingImpl getInstance(short grouping1, short grouping2, boolean min2) {
+  static GroupingImpl getInstance(byte grouping1, byte grouping2, boolean min2) {
     if (grouping1 == -1) {
       return NONE;
     } else if (!min2 && grouping1 == 3 && grouping2 == 3) {
@@ -54,8 +54,8 @@ public class GroupingImpl extends Grouping.Internal {
   }
 
   final IGrouping lambda;
-  final short grouping1; // -2 means "needs locale data"; -1 means "no grouping"
-  final short grouping2;
+  final byte grouping1; // -2 means "needs locale data"; -1 means "no grouping"
+  final byte grouping2;
   final boolean min2;
 
   /** The "placeholder constructor". Pass in one of the GroupingImpl.TYPE_* variables. */
@@ -82,7 +82,7 @@ public class GroupingImpl extends Grouping.Internal {
     }
   }
 
-  private GroupingImpl(short grouping1, short grouping2, boolean min2) {
+  private GroupingImpl(byte grouping1, byte grouping2, boolean min2) {
     this.lambda = null;
     this.grouping1 = grouping1;
     this.grouping2 = grouping2;
@@ -101,9 +101,10 @@ public class GroupingImpl extends Grouping.Internal {
       return this;
     }
     assert lambda == null;
-    short grouping1 = (short) (patternInfo.positive.groupingSizes & 0xffff);
-    short grouping2 = (short) ((patternInfo.positive.groupingSizes >>> 16) & 0xffff);
-    short grouping3 = (short) ((patternInfo.positive.groupingSizes >>> 32) & 0xffff);
+    // TODO: short or byte?
+    byte grouping1 = (byte) (patternInfo.positive.groupingSizes & 0xffff);
+    byte grouping2 = (byte) ((patternInfo.positive.groupingSizes >>> 16) & 0xffff);
+    byte grouping3 = (byte) ((patternInfo.positive.groupingSizes >>> 32) & 0xffff);
     if (grouping2 == -1) {
       grouping1 = -1;
     }

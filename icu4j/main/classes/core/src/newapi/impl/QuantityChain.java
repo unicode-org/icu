@@ -5,6 +5,6 @@ package newapi.impl;
 import com.ibm.icu.impl.number.FormatQuantity;
 
 public interface QuantityChain {
-  QuantityChain chain(QuantityChain parent);
+  //QuantityChain addToChain(QuantityChain parent);
   MicroProps withQuantity(FormatQuantity quantity);
 }

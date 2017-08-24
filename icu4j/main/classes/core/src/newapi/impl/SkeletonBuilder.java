@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
+import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -170,9 +171,9 @@ public final class SkeletonBuilder {
       if (notation.engineeringInterval != 1) {
         sb.append(notation.engineeringInterval);
       }
-      if (notation.exponentSignDisplay == SignDisplay.ALWAYS_SHOWN) {
+      if (notation.exponentSignDisplay == SignDisplay.ALWAYS) {
         sb.append('+');
-      } else if (notation.exponentSignDisplay == SignDisplay.NEVER_SHOWN) {
+      } else if (notation.exponentSignDisplay == SignDisplay.NEVER) {
         sb.append('!');
       } else {
         assert notation.exponentSignDisplay == SignDisplay.AUTO;
@@ -210,11 +211,11 @@ public final class SkeletonBuilder {
         c = safeCharAt(skeleton, offset++);
       }
       if (c == '+') {
-        sign = SignDisplay.ALWAYS_SHOWN;
+        sign = SignDisplay.ALWAYS;
         c = safeCharAt(skeleton, offset++);
       }
       if (c == '!') {
-        sign = SignDisplay.NEVER_SHOWN;
+        sign = SignDisplay.NEVER;
         c = safeCharAt(skeleton, offset++);
       }
       while (c == '0') {
@@ -251,7 +252,7 @@ public final class SkeletonBuilder {
       sb.append('$');
       sb.append(value.getSubtype());
     } else {
-      sb.append('U');
+      sb.append("U:");
       sb.append(value.getType());
       sb.append(':');
       sb.append(value.getSubtype());
@@ -430,7 +431,7 @@ public final class SkeletonBuilder {
     }
     if (value.equals(Grouping.DEFAULT)) {
       sb.append("DEFAULT");
-    } else if (value.equals(Grouping.DEFAULT_MIN_2_DIGITS)) {
+    } else if (value.equals(Grouping.MIN_2_DIGITS)) {
       sb.append("DEFAULT_MIN_2_DIGITS");
     } else if (value.equals(Grouping.NONE)) {
       sb.append("NONE");
@@ -471,7 +472,7 @@ public final class SkeletonBuilder {
       if (name.equals("DEFAULT")) {
         result = Grouping.DEFAULT;
       } else if (name.equals("DEFAULT_MIN_2_DIGITS")) {
-        result = Grouping.DEFAULT_MIN_2_DIGITS;
+        result = Grouping.MIN_2_DIGITS;
       } else if (name.equals("NONE")) {
         result = Grouping.NONE;
       }
@@ -486,13 +487,38 @@ public final class SkeletonBuilder {
       sb.append("NONE");
       return;
     }
-    sb.append("CP:");
-    // TODO: Handle padding strings that contain ':'
-    sb.append(padding.paddingString);
-    sb.append(':');
     sb.append(padding.targetWidth);
     sb.append(':');
     sb.append(padding.position.name());
+    sb.append(':');
+    if (!padding.paddingString.equals(" ")) {
+      sb.append(padding.paddingString);
+    }
+  }
+
+  private static int skeletonToPadding(String skeleton, int offset, MacroProps output) {
+    int originalOffset = offset;
+    char c0 = skeleton.charAt(offset++);
+    if (c0 == 'N') {
+      offset += consumeUntil(skeleton, --offset, ' ', null);
+    } else if ('0' <= c0 && c0 <= '9') {
+      long intResult = consumeInt(skeleton, --offset);
+      offset += intResult & 0xffffffff;
+      int width = (int) (intResult >>> 32);
+      char c1 = safeCharAt(skeleton, offset++);
+      if (c1 != ':') {
+        return offset - originalOffset - 1;
+      }
+      StringBuilder sb = new StringBuilder();
+      offset += consumeUntil(skeleton, offset, ':', sb);
+      String padPositionString = sb.toString();
+      sb.setLength(0);
+      offset += consumeUntil(skeleton, offset, ' ', sb);
+      String string = (sb.length() == 0) ? " " : sb.toString();
+      PadPosition position = Enum.valueOf(PadPosition.class, padPositionString);
+      output.padding = PaddingImpl.getInstance(string, width, position);
+    }
+    return offset - originalOffset;
   }
 
   private static void integerWidthToSkeleton(IntegerWidth value, StringBuilder sb) {
@@ -503,6 +529,20 @@ public final class SkeletonBuilder {
       if (impl.maxInt < Integer.MAX_VALUE) {
         sb.append(impl.maxInt);
       }
+    }
+  }
+
+  private static int skeletonToIntegerWidth(String skeleton, int offset, MacroProps output) {
+    int originalOffset = offset;
+    long intResult = consumeInt(skeleton, offset);
+    offset += intResult & 0xffffffff;
+    int minInt = (int) (intResult >>> 32);
+    char c1 = safeCharAt(skeleton, --offset);
+    int maxInt;
+    if (c1 == '-') {
+        intResult = consumeInt(skeleton, offset);
+        offset += intResult & 0xffffffff;
+        maxInt = (int) (intResult >>> 32);
     }
   }
 
@@ -521,12 +561,36 @@ public final class SkeletonBuilder {
     sb.append(value.name());
   }
 
+  private static int skeletonToUnitWidth(String skeleton, int offset, MacroProps output) {
+    int originalOffset = offset;
+    StringBuilder sb = new StringBuilder();
+    offset += consumeUntil(skeleton, offset, ' ', sb);
+    output.unitWidth = Enum.valueOf(FormatWidth.class, sb.toString());
+    return offset - originalOffset;
+  }
+
   private static void signToSkeleton(SignDisplay value, StringBuilder sb) {
     sb.append(value.name());
   }
 
+  private static int skeletonToSign(String skeleton, int offset, MacroProps output) {
+    int originalOffset = offset;
+    StringBuilder sb = new StringBuilder();
+    offset += consumeUntil(skeleton, offset, ' ', sb);
+    output.sign = Enum.valueOf(SignDisplay.class, sb.toString());
+    return offset - originalOffset;
+  }
+
   private static void decimalToSkeleton(DecimalMarkDisplay value, StringBuilder sb) {
     sb.append(value.name());
+  }
+
+  private static int skeletonToDecimal(String skeleton, int offset, MacroProps output) {
+    int originalOffset = offset;
+    StringBuilder sb = new StringBuilder();
+    offset += consumeUntil(skeleton, offset, ' ', sb);
+    output.decimal = Enum.valueOf(DecimalMarkDisplay.class, sb.toString());
+    return offset - originalOffset;
   }
 
   private static char safeCharAt(String str, int offset) {
@@ -541,9 +605,20 @@ public final class SkeletonBuilder {
     int originalOffset = offset;
     char c = safeCharAt(skeleton, offset++);
     while (c != brk) {
-      sb.append(c);
+      if (sb != null) sb.append(c);
       c = safeCharAt(skeleton, offset++);
     }
     return offset - originalOffset;
+  }
+
+  private static long consumeInt(String skeleton, int offset) {
+    int originalOffset = offset;
+    char c = safeCharAt(skeleton, offset++);
+    int result = 0;
+    while ('0' <= c && c <= '9') {
+      result = (result * 10) + (c - '0');
+      c = safeCharAt(skeleton, offset++);
+    }
+    return (offset - originalOffset) | (((long) result) << 32);
   }
 }

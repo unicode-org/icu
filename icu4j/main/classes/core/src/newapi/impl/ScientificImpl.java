@@ -17,17 +17,24 @@ public class ScientificImpl implements QuantityChain, RoundingImpl.MultiplierPro
   final NotationImpl.NotationScientificImpl notation;
   final DecimalFormatSymbols symbols;
   final ScientificModifier[] precomputedMods;
-  /* final */ QuantityChain parent;
+  final QuantityChain parent;
 
   public static ScientificImpl getInstance(
-      NotationImpl.NotationScientificImpl notation, DecimalFormatSymbols symbols, boolean build) {
-    return new ScientificImpl(notation, symbols, build);
+      NotationImpl.NotationScientificImpl notation,
+      DecimalFormatSymbols symbols,
+      boolean build,
+      QuantityChain parent) {
+    return new ScientificImpl(notation, symbols, build, parent);
   }
 
   private ScientificImpl(
-      NotationImpl.NotationScientificImpl notation, DecimalFormatSymbols symbols, boolean build) {
+      NotationImpl.NotationScientificImpl notation,
+      DecimalFormatSymbols symbols,
+      boolean build,
+      QuantityChain parent) {
     this.notation = notation;
     this.symbols = symbols;
+    this.parent = parent;
 
     if (build) {
       // Pre-build the modifiers for exponents -12 through 12
@@ -38,12 +45,6 @@ public class ScientificImpl implements QuantityChain, RoundingImpl.MultiplierPro
     } else {
       precomputedMods = null;
     }
-  }
-
-  @Override
-  public QuantityChain chain(QuantityChain parent) {
-    this.parent = parent;
-    return this;
   }
 
   @Override
@@ -92,9 +93,9 @@ public class ScientificImpl implements QuantityChain, RoundingImpl.MultiplierPro
       int i = rightIndex;
       // Append the exponent separator and sign
       i += output.insert(i, symbols.getExponentSeparator(), NumberFormat.Field.EXPONENT_SYMBOL);
-      if (exponent < 0 && notation.exponentSignDisplay != SignDisplay.NEVER_SHOWN) {
+      if (exponent < 0 && notation.exponentSignDisplay != SignDisplay.NEVER) {
         i += output.insert(i, symbols.getMinusSignString(), NumberFormat.Field.EXPONENT_SIGN);
-      } else if (notation.exponentSignDisplay == SignDisplay.ALWAYS_SHOWN) {
+      } else if (notation.exponentSignDisplay == SignDisplay.ALWAYS) {
         i += output.insert(i, symbols.getPlusSignString(), NumberFormat.Field.EXPONENT_SIGN);
       }
       // Append the exponent digits (using a simple inline algorithm)

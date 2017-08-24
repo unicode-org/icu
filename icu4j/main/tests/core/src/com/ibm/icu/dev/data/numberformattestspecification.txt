@@ -331,7 +331,7 @@ set format 299792458.0
 begin
 minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	breaks
 // JDK gives 2.99792458E8 (maxInt + maxFrac instead of minInt + maxFrac)
-1	1000	0	5	2.99792E8	K
+1	99	0	5	2.99792E8	K
 // JDK gives .3E9 instead of unlimited precision.
 0	1	0	0	2.99792458E8	K
 1	1	0	0	3E8
@@ -499,10 +499,10 @@ begin
 format	multiplier	output	breaks
 23	-12	-276
 23	-1	-23
-// ICU4J and JDK throw exception on zero multiplier.
-// ICU4C and S print 23.
+// ICU4J throws exception on zero multiplier.
+// ICU4C prints 23.
 // Q multiplies by zero and prints 0.
-23	0	0	CJKS
+23	0	0	CJ
 23	1	23
 23	12	276
 -23	12	-276
@@ -547,15 +547,15 @@ set pattern 0.5
 begin
 format	roundingMode	output	breaks
 1.24	halfUp	1.0	K
-1.25	halfUp	1.5	K
+1.25	halfUp	1.5
 1.25	halfDown	1.0	K
-1.26	halfDown	1.5	K
+1.26	halfDown	1.5
 1.25	halfEven	1.0	K
--1.01	up	-1.5	K
+-1.01	up	-1.5
 -1.49	down	-1.0	K
-1.01	up	1.5	K
+1.01	up	1.5
 1.49	down	1.0	K
--1.01	ceiling	-1.0
+-1.01	ceiling	-1.0	K
 -1.49	floor	-1.5
 
 test currency usage setters

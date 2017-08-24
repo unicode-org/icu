@@ -22,49 +22,60 @@ public class CompactImpl implements QuantityChain {
 
   final PluralRules rules;
   final CompactData data;
-  /* final */ Map<String, CompactModInfo> precomputedMods;
-  /* final */ QuantityChain parent;
+  final Map<String, CompactModInfo> precomputedMods;
+  final QuantityChain parent;
 
   public static CompactImpl getInstance(
-      ULocale dataLocale, CompactType compactType, CompactStyle compactStyle, PluralRules rules) {
+      ULocale dataLocale,
+      CompactType compactType,
+      CompactStyle compactStyle,
+      PluralRules rules,
+      MurkyModifier buildReference,
+      QuantityChain parent) {
     CompactData data = CompactData.getInstance(dataLocale, compactType, compactStyle);
-    return new CompactImpl(data, rules);
+    return new CompactImpl(data, rules, buildReference, parent);
   }
 
   public static CompactImpl getInstance(
-      Map<String, Map<String, String>> compactCustomData, PluralRules rules) {
+      Map<String, Map<String, String>> compactCustomData,
+      PluralRules rules,
+      MurkyModifier buildReference,
+      QuantityChain parent) {
     CompactData data = CompactData.getInstance(compactCustomData);
-    return new CompactImpl(data, rules);
+    return new CompactImpl(data, rules, buildReference, parent);
   }
 
-  private CompactImpl(CompactData data, PluralRules rules) {
+  private CompactImpl(
+      CompactData data, PluralRules rules, MurkyModifier buildReference, QuantityChain parent) {
     this.data = data;
     this.rules = rules;
+    if (buildReference != null) {
+      precomputedMods = precomputeAllModifiers(data, buildReference);
+    } else {
+      precomputedMods = null;
+    }
+    this.parent = parent;
   }
 
   /** To be used by the building code path */
-  public void precomputeAllModifiers(MurkyModifier reference) {
-    precomputedMods = new HashMap<String, CompactModInfo>();
+  public static Map<String, CompactModInfo> precomputeAllModifiers(
+      CompactData data, MurkyModifier buildReference) {
+    Map<String, CompactModInfo> precomputedMods = new HashMap<String, CompactModInfo>();
     Set<String> allPatterns = data.getAllPatterns();
     for (String patternString : allPatterns) {
       CompactModInfo info = new CompactModInfo();
       PatternParseResult patternInfo = LdmlPatternInfo.parse(patternString);
-      reference.setPatternInfo(patternInfo);
-      info.mod = reference.createImmutable();
+      buildReference.setPatternInfo(patternInfo);
+      info.mod = buildReference.createImmutable();
       info.numDigits = patternInfo.positive.totalIntegerDigits;
       precomputedMods.put(patternString, info);
     }
+    return precomputedMods;
   }
 
   private static class CompactModInfo {
     public ImmutableMurkyModifier mod;
     public int numDigits;
-  }
-
-  @Override
-  public QuantityChain chain(QuantityChain parent) {
-    this.parent = parent;
-    return this;
   }
 
   @Override

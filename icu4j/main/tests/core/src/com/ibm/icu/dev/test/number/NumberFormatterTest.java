@@ -106,7 +106,7 @@ public class NumberFormatterTest {
         "Scientific sign always shown",
         "E+",
         NumberFormatter.with()
-            .notation(Notation.SCIENTIFIC.withExponentSignDisplay(SignDisplay.ALWAYS_SHOWN)),
+            .notation(Notation.SCIENTIFIC.withExponentSignDisplay(SignDisplay.ALWAYS)),
         ULocale.ENGLISH,
         "8.765E+4",
         "8.765E+3",
@@ -234,7 +234,7 @@ public class NumberFormatterTest {
   public void unitMeasure() {
     assertFormatDescending(
         "Meters Short",
-        "Ulength:meter",
+        "U:length:meter",
         NumberFormatter.with().unit(MeasureUnit.METER),
         ULocale.ENGLISH,
         "87,650 m",
@@ -249,7 +249,7 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Meters Long",
-        "Ulength:meter unit-width=WIDE",
+        "U:length:meter unit-width=WIDE",
         NumberFormatter.with().unit(MeasureUnit.METER).unitWidth(FormatWidth.WIDE),
         ULocale.ENGLISH,
         "87,650 meters",
@@ -264,7 +264,7 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Compact Meters Long",
-        "CC Ulength:meter unit-width=WIDE",
+        "CC U:length:meter unit-width=WIDE",
         NumberFormatter.with()
             .notation(Notation.COMPACT_LONG)
             .unit(MeasureUnit.METER)
@@ -290,7 +290,7 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Meters with Negative Sign",
-        "Ulength:meter",
+        "U:length:meter",
         NumberFormatter.with().unit(MeasureUnit.METER),
         ULocale.ENGLISH,
         -9876543.21,
@@ -724,7 +724,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Western Grouping, Min 2",
         "%% grouping=DEFAULT_MIN_2_DIGITS",
-        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouping.DEFAULT_MIN_2_DIGITS),
+        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouping.MIN_2_DIGITS),
         ULocale.ENGLISH,
         "87,650,000‰",
         "8,765,000‰",
@@ -739,7 +739,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Indic Grouping, Min 2",
         "%% grouping=DEFAULT_MIN_2_DIGITS",
-        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouping.DEFAULT_MIN_2_DIGITS),
+        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouping.MIN_2_DIGITS),
         new ULocale("en-IN"),
         "8,76,50,000‰",
         "87,65,000‰",
@@ -786,7 +786,7 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Padding",
-        "padding=CP:*:8:AFTER_PREFIX",
+        "padding=8:AFTER_PREFIX:*",
         NumberFormatter.with().padding(Padding.codePoints('*', 8, PadPosition.AFTER_PREFIX)),
         ULocale.ENGLISH,
         "**87,650",
@@ -801,7 +801,7 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Padding with code points",
-        "padding=CP:𐇤:8:AFTER_PREFIX",
+        "padding=8:AFTER_PREFIX:𐇤",
         NumberFormatter.with().padding(Padding.codePoints(0x101E4, 8, PadPosition.AFTER_PREFIX)),
         ULocale.ENGLISH,
         "𐇤𐇤87,650",
@@ -816,7 +816,7 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Padding with wide digits",
-        "padding=CP:*:8:AFTER_PREFIX symbols=ns:mathsanb",
+        "padding=8:AFTER_PREFIX:* symbols=ns:mathsanb",
         NumberFormatter.with()
             .padding(Padding.codePoints('*', 8, PadPosition.AFTER_PREFIX))
             .symbols(NumberingSystem.getInstanceByName("mathsanb")),
@@ -833,7 +833,7 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Padding with currency spacing",
-        "$GBP padding=CP:*:10:AFTER_PREFIX unit-width=SHORT",
+        "$GBP padding=10:AFTER_PREFIX:* unit-width=SHORT",
         NumberFormatter.with()
             .padding(Padding.codePoints('*', 10, PadPosition.AFTER_PREFIX))
             .unit(GBP)
@@ -851,7 +851,7 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Pad Before Prefix",
-        "padding=CP:*:8:BEFORE_PREFIX",
+        "padding=8:BEFORE_PREFIX:*",
         NumberFormatter.with().padding(Padding.codePoints('*', 8, PadPosition.BEFORE_PREFIX)),
         ULocale.ENGLISH,
         -88.88,
@@ -859,7 +859,7 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Pad After Prefix",
-        "padding=CP:*:8:AFTER_PREFIX",
+        "padding=8:AFTER_PREFIX:*",
         NumberFormatter.with().padding(Padding.codePoints('*', 8, PadPosition.AFTER_PREFIX)),
         ULocale.ENGLISH,
         -88.88,
@@ -867,7 +867,7 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Pad Before Suffix",
-        "% padding=CP:*:8:BEFORE_SUFFIX",
+        "% padding=8:BEFORE_SUFFIX:*",
         NumberFormatter.with()
             .padding(Padding.codePoints('*', 8, PadPosition.BEFORE_SUFFIX))
             .unit(Dimensionless.PERCENT),
@@ -877,7 +877,7 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Pad After Suffix",
-        "% padding=CP:*:8:AFTER_SUFFIX",
+        "% padding=8:AFTER_SUFFIX:*",
         NumberFormatter.with()
             .padding(Padding.codePoints('*', 8, PadPosition.AFTER_SUFFIX))
             .unit(Dimensionless.PERCENT),
@@ -1057,32 +1057,32 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Sign Always Positive",
-        "sign=ALWAYS_SHOWN",
-        NumberFormatter.with().sign(SignDisplay.ALWAYS_SHOWN),
+        "sign=ALWAYS",
+        NumberFormatter.with().sign(SignDisplay.ALWAYS),
         ULocale.ENGLISH,
         444444,
         "+444,444");
 
     assertFormatSingle(
         "Sign Always Negative",
-        "sign=ALWAYS_SHOWN",
-        NumberFormatter.with().sign(SignDisplay.ALWAYS_SHOWN),
+        "sign=ALWAYS",
+        NumberFormatter.with().sign(SignDisplay.ALWAYS),
         ULocale.ENGLISH,
         -444444,
         "-444,444");
 
     assertFormatSingle(
         "Sign Never Positive",
-        "sign=NEVER_SHOWN",
-        NumberFormatter.with().sign(SignDisplay.NEVER_SHOWN),
+        "sign=NEVER",
+        NumberFormatter.with().sign(SignDisplay.NEVER),
         ULocale.ENGLISH,
         444444,
         "444,444");
 
     assertFormatSingle(
         "Sign Never Negative",
-        "sign=NEVER_SHOWN",
-        NumberFormatter.with().sign(SignDisplay.NEVER_SHOWN),
+        "sign=NEVER",
+        NumberFormatter.with().sign(SignDisplay.NEVER),
         ULocale.ENGLISH,
         -444444,
         "444,444");
@@ -1107,8 +1107,8 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Decimal Always Shown",
-        "decimal=ALWAYS_SHOWN",
-        NumberFormatter.with().decimal(DecimalMarkDisplay.ALWAYS_SHOWN),
+        "decimal=ALWAYS",
+        NumberFormatter.with().decimal(DecimalMarkDisplay.ALWAYS),
         ULocale.ENGLISH,
         "87,650.",
         "8,765.",
@@ -1203,13 +1203,13 @@ public class NumberFormatterTest {
     assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
     final double[] inputs =
         new double[] {87650, 8765, 876.5, 87.65, 8.765, 0.8765, 0.08765, 0.008765, 0};
-    NumberFormatterImpl l1 = (NumberFormatterImpl) f.locale(locale); // no self-regulation
-    NumberFormatterImpl l2 = (NumberFormatterImpl) f.locale(locale); // all self-regulation
+    NumberFormatterImpl l1 = ((NumberFormatterImpl) f).threshold(0L).locale(locale); // no self-regulation
+    NumberFormatterImpl l2 = ((NumberFormatterImpl) f).threshold(1L).locale(locale); // all self-regulation
     for (int i = 0; i < 9; i++) {
       double d = inputs[i];
-      String actual1 = l1.formatWithThreshold(d, 0).toString();
+      String actual1 = l1.format(d).toString();
       assertEquals(message + ": L1: " + d, expected[i], actual1);
-      String actual2 = l2.formatWithThreshold(d, 1).toString();
+      String actual2 = l2.format(d).toString();
       assertEquals(message + ": L2: " + d, expected[i], actual2);
     }
   }
@@ -1222,11 +1222,11 @@ public class NumberFormatterTest {
       Number input,
       String expected) {
     assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
-    NumberFormatterImpl l1 = (NumberFormatterImpl) f.locale(locale); // no self-regulation
-    NumberFormatterImpl l2 = (NumberFormatterImpl) f.locale(locale); // all self-regulation
-    String actual1 = l1.formatWithThreshold(input, 0).toString();
+    NumberFormatterImpl l1 = ((NumberFormatterImpl) f).threshold(0L).locale(locale); // no self-regulation
+    NumberFormatterImpl l2 = ((NumberFormatterImpl) f).threshold(1L).locale(locale); // all self-regulation
+    String actual1 = l1.format(input).toString();
     assertEquals(message + ": L1: " + input, expected, actual1);
-    String actual2 = l2.formatWithThreshold(input, 1).toString();
+    String actual2 = l2.format(input).toString();
     assertEquals(message + ": L2: " + input, expected, actual2);
   }
 
@@ -1238,11 +1238,11 @@ public class NumberFormatterTest {
       Measure input,
       String expected) {
     assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
-    NumberFormatterImpl l1 = (NumberFormatterImpl) f.locale(locale); // no self-regulation
-    NumberFormatterImpl l2 = (NumberFormatterImpl) f.locale(locale); // all self-regulation
-    String actual1 = l1.formatWithThreshold(input, 0).toString();
+    NumberFormatterImpl l1 = ((NumberFormatterImpl) f).threshold(0L).locale(locale); // no self-regulation
+    NumberFormatterImpl l2 = ((NumberFormatterImpl) f).threshold(1L).locale(locale); // all self-regulation
+    String actual1 = l1.format(input).toString();
     assertEquals(message + ": L1: " + input, expected, actual1);
-    String actual2 = l2.formatWithThreshold(input, 1).toString();
+    String actual2 = l2.format(input).toString();
     assertEquals(message + ": L2: " + input, expected, actual2);
   }
 }

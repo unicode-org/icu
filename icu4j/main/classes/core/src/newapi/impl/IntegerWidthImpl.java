@@ -3,6 +3,7 @@
 package newapi.impl;
 
 import newapi.NumberFormatter.IntegerWidth;
+import newapi.NumberFormatter.Rounding;
 
 public final class IntegerWidthImpl extends IntegerWidth.Internal {
   public final int minInt;
@@ -21,7 +22,16 @@ public final class IntegerWidthImpl extends IntegerWidth.Internal {
   }
 
   @Override
-public IntegerWidthImpl truncateAt(int maxInt) {
-    return new IntegerWidthImpl(minInt, maxInt);
+  public IntegerWidthImpl truncateAt(int maxInt) {
+    if (maxInt == this.maxInt) {
+      return this;
+    } else if (maxInt >= 0 && maxInt < Rounding.MAX_VALUE) {
+      return new IntegerWidthImpl(minInt, maxInt);
+    } else if (maxInt == Integer.MAX_VALUE) {
+      return new IntegerWidthImpl(minInt, maxInt);
+    } else {
+      throw new IllegalArgumentException(
+          "Integer digits must be between 0 and " + Rounding.MAX_VALUE);
+    }
   }
 }

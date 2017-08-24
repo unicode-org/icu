@@ -8,6 +8,7 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 
 import newapi.NumberFormatter.NotationCompact;
 import newapi.NumberFormatter.NotationScientific;
+import newapi.NumberFormatter.Rounding;
 import newapi.NumberFormatter.SignDisplay;
 
 @SuppressWarnings("deprecation")
@@ -41,9 +42,14 @@ public class NotationImpl {
 
     @Override
     public NotationScientific withMinExponentDigits(int minExponentDigits) {
-      NotationScientificImpl other = (NotationScientificImpl) this.clone();
-      other.minExponentDigits = minExponentDigits;
-      return other;
+      if (minExponentDigits >= 0 && minExponentDigits < Rounding.MAX_VALUE) {
+        NotationScientificImpl other = (NotationScientificImpl) this.clone();
+        other.minExponentDigits = minExponentDigits;
+        return other;
+      } else {
+        throw new IllegalArgumentException(
+            "Integer digits must be between 0 and " + Rounding.MAX_VALUE);
+      }
     }
 
     @Override

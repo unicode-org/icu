@@ -31,6 +31,7 @@ public class MacroProps implements Cloneable {
   public AffixPatternProvider affixProvider; // not in API; for JDK compatibility mode only
   public MultiplierImpl multiplier; // not in API; for JDK compatibility mode only
   public PluralRules rules; // not in API; could be made public in the future
+  public Long threshold; // not in API; controls internal self-regulation threshold
   public ULocale loc;
 
   /**
@@ -99,7 +100,7 @@ public class MacroProps implements Cloneable {
     try {
       return super.clone();
     } catch (CloneNotSupportedException e) {
-      throw new AssertionError();
+      throw new AssertionError(e);
     }
   }
 }

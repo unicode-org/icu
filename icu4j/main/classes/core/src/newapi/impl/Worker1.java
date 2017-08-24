@@ -69,7 +69,7 @@ public class Worker1 {
     boolean perMille = false;
     PluralRules rules = input.rules;
 
-    MicroProps micros = new MicroProps();
+    MicroProps micros = new MicroProps(build);
     QuantityChain chain = micros;
 
     // Copy over the simple settings
@@ -140,8 +140,7 @@ public class Worker1 {
     // An int magnitude multiplier is used when not in compatibility mode to
     // reduce object creations.
     if (input.multiplier != null) {
-      // TODO: Make sure this is thread safe.
-      chain = input.multiplier.chain(chain);
+      chain = input.multiplier.copyAndChain(chain);
     }
 
     // Rounding strategy
@@ -158,7 +157,7 @@ public class Worker1 {
       micros.grouping = GroupingImpl.normalizeType(input.grouping, patternInfo);
     } else if (input.notation instanceof NotationCompact) {
       // Compact notation uses minGrouping by default since ICU 59
-      micros.grouping = GroupingImpl.normalizeType(Grouping.DEFAULT_MIN_2_DIGITS, patternInfo);
+      micros.grouping = GroupingImpl.normalizeType(Grouping.MIN_2_DIGITS, patternInfo);
     } else {
       micros.grouping = GroupingImpl.normalizeType(Grouping.DEFAULT, patternInfo);
     }
@@ -168,14 +167,14 @@ public class Worker1 {
       assert input.notation instanceof NotationImpl.NotationScientificImpl;
       chain =
           ScientificImpl.getInstance(
-                  (NotationImpl.NotationScientificImpl) input.notation, micros.symbols, build)
-              .chain(chain);
+              (NotationImpl.NotationScientificImpl) input.notation, micros.symbols, build, chain);
     } else {
       // No inner modifier required
       micros.modInner = ConstantAffixModifier.EMPTY;
     }
 
     // Middle modifier (patterns, positive/negative, currency symbols, percent)
+    // The default middle modifier is weak (thus the false argument).
     MurkyModifier murkyMod = new MurkyModifier(false);
     murkyMod.setPatternInfo((input.affixProvider != null) ? input.affixProvider : patternInfo);
     murkyMod.setPatternAttributes(micros.sign, perMille);
@@ -189,9 +188,9 @@ public class Worker1 {
       murkyMod.setSymbols(micros.symbols, currency, unitWidth, null);
     }
     if (build) {
-      chain = murkyMod.createImmutable().chain(chain);
+      chain = murkyMod.createImmutableAndChain(chain);
     } else {
-      chain = murkyMod.chain(chain);
+      chain = murkyMod.addToChain(chain);
     }
 
     // Outer modifier (CLDR units and currency long names)
@@ -200,7 +199,7 @@ public class Worker1 {
         // Lazily create PluralRules
         rules = PluralRules.forLocale(input.loc);
       }
-      chain = new QuantityDependentModOuter(outerMods, rules).chain(chain);
+      chain = new QuantityDependentModOuter(outerMods, rules, chain);
     } else {
       // No outer modifier required
       micros.modOuter = ConstantAffixModifier.EMPTY;
@@ -223,25 +222,21 @@ public class Worker1 {
         rules = PluralRules.forLocale(input.loc);
       }
       CompactStyle compactStyle = ((NotationImpl.NotationCompactImpl) input.notation).compactStyle;
-      CompactImpl worker;
       if (compactStyle == null) {
         // Use compact custom data
-        worker =
+        chain =
             CompactImpl.getInstance(
-                ((NotationImpl.NotationCompactImpl) input.notation).compactCustomData, rules);
+                ((NotationImpl.NotationCompactImpl) input.notation).compactCustomData,
+                rules,
+                build ? murkyMod : null,
+                chain);
       } else {
         CompactType compactType =
             (input.unit instanceof Currency) ? CompactType.CURRENCY : CompactType.DECIMAL;
-        worker = CompactImpl.getInstance(input.loc, compactType, compactStyle, rules);
+        chain =
+            CompactImpl.getInstance(
+                input.loc, compactType, compactStyle, rules, build ? murkyMod : null, chain);
       }
-      if (build) {
-        worker.precomputeAllModifiers(murkyMod);
-      }
-      chain = worker.chain(chain);
-    }
-
-    if (build) {
-      micros.enableCloneInChain();
     }
 
     return chain;

@@ -6,25 +6,31 @@ import java.math.BigDecimal;
 
 import com.ibm.icu.impl.number.FormatQuantity;
 
-public class MultiplierImpl implements QuantityChain {
+public class MultiplierImpl implements QuantityChain, Cloneable {
   final int magnitudeMultiplier;
   final BigDecimal bigDecimalMultiplier;
-  /* final */ QuantityChain parent;
+  final QuantityChain parent;
 
   public MultiplierImpl(int magnitudeMultiplier) {
     this.magnitudeMultiplier = magnitudeMultiplier;
     this.bigDecimalMultiplier = null;
+    parent = null;
   }
 
   public MultiplierImpl(BigDecimal bigDecimalMultiplier) {
     this.magnitudeMultiplier = 0;
     this.bigDecimalMultiplier = bigDecimalMultiplier;
+    parent = null;
   }
 
-  @Override
-  public QuantityChain chain(QuantityChain parent) {
+  private MultiplierImpl(MultiplierImpl base, QuantityChain parent) {
+    this.magnitudeMultiplier = base.magnitudeMultiplier;
+    this.bigDecimalMultiplier = base.bigDecimalMultiplier;
     this.parent = parent;
-    return this;
+  }
+
+  public QuantityChain copyAndChain(QuantityChain parent) {
+    return new MultiplierImpl(this, parent);
   }
 
   @Override
