@@ -2868,6 +2868,18 @@ public class BasicTest extends TestFmwk {
     }
 
     @Test
+    public void TestComposeBoundaryAfter() {
+        Normalizer2 nfkc = Normalizer2.getNFKCInstance();
+        // U+02DA and U+FB2C do not have compose-boundaries-after.
+        String s = "\u02DA\u0339 \uFB2C\u05B6";
+        String expected = " \u0339\u030A \u05E9\u05B6\u05BC\u05C1";
+        String result = nfkc.normalize(s);
+        assertEquals("nfkc", expected, result);
+        assertFalse("U+02DA boundary-after", nfkc.hasBoundaryAfter(0x2DA));
+        assertFalse("U+FB2C boundary-after", nfkc.hasBoundaryAfter(0xFB2C));
+    }
+
+    @Test
     public void TestNFC() {
         // Coverage tests.
         Normalizer2 nfc = Normalizer2.getNFCInstance();
