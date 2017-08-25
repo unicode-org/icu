@@ -84,7 +84,8 @@ private:
      * or its mapping contains no starter,
      * or the last starter combines-forward.
      */
-    UBool mappingHasCompBoundaryAfter(const BuilderReorderingBuffer &buffer) const;
+    UBool mappingHasCompBoundaryAfter(const BuilderReorderingBuffer &buffer,
+                                      Norm::MappingType mappingType) const;
     /** Returns TRUE if the mapping by itself recomposes, that is, it is not comp-normalized. */
     UBool mappingRecomposes(const BuilderReorderingBuffer &buffer) const;
     void postProcess(Norm &norm);

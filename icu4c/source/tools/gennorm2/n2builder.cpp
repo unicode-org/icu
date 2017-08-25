@@ -209,13 +209,23 @@ void Normalizer2DataBuilder::removeMapping(UChar32 c) {
     norms.mappingSet.add(c);
 }
 
-UBool Normalizer2DataBuilder::mappingHasCompBoundaryAfter(const BuilderReorderingBuffer &buffer) const {
+UBool Normalizer2DataBuilder::mappingHasCompBoundaryAfter(const BuilderReorderingBuffer &buffer,
+                                                          Norm::MappingType mappingType) const {
     if(buffer.isEmpty()) {
         return FALSE;  // Maps-to-empty-string is no boundary of any kind.
     }
     int32_t lastStarterIndex=buffer.lastStarterIndex();
     if(lastStarterIndex<0) {
         return FALSE;  // no starter
+    }
+    const int32_t lastIndex=buffer.length()-1;
+    if(mappingType==Norm::ONE_WAY && lastStarterIndex<lastIndex && buffer.ccAt(lastIndex)>1) {
+        // One-way mapping where after the last starter is at least one combining mark
+        // with a combining class greater than 1,
+        // which means that another combining mark can reorder before it.
+        // By contrast, in a round-trip mapping this does not prevent a boundary as long as
+        // the starter or composite does not combine-forward with a following combining mark.
+        return FALSE;
     }
     UChar32 starter=buffer.charAt(lastStarterIndex);
     if(lastStarterIndex==0 && norms.combinesBack(starter)) {
@@ -227,7 +237,7 @@ UBool Normalizer2DataBuilder::mappingHasCompBoundaryAfter(const BuilderReorderin
             0<lastStarterIndex && Hangul::isJamoL(buffer.charAt(lastStarterIndex-1)))) {
         // A Jamo leading consonant or an LV pair combines-forward if it is at the end,
         // otherwise it is blocked.
-        return lastStarterIndex!=buffer.length()-1;
+        return lastStarterIndex!=lastIndex;
     }
     // Note: There can be no Hangul syllable in the fully decomposed mapping.
 
@@ -344,7 +354,7 @@ void Normalizer2DataBuilder::postProcess(Norm &norm) {
         norm.hasCompBoundaryBefore=
             !buffer.isEmpty() && norm.leadCC==0 && !norms.combinesBack(buffer.charAt(0));
         norm.hasCompBoundaryAfter=
-            norm.compositions==nullptr && mappingHasCompBoundaryAfter(buffer);
+            norm.compositions==nullptr && mappingHasCompBoundaryAfter(buffer, norm.mappingType);
 
         if(norm.combinesBack) {
             norm.error="combines-back and decomposes, not possible in Unicode normalization";
