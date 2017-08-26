@@ -18,7 +18,7 @@ import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
-class CompactData implements RoundingImpl.MultiplierProducer {
+public class CompactData implements MultiplierProducer {
 
   public static CompactData getInstance(
       ULocale locale, CompactType compactType, CompactStyle compactStyle) {

@@ -28,11 +28,11 @@ import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
-import newapi.NumberFormatter.LocalizedNumberFormatter;
-import newapi.NumberFormatter.NumberFormatterResult;
+import newapi.FormattedNumber;
+import newapi.LocalizedNumberFormatter;
+import newapi.NumberFormatter;
+import newapi.NumberPropertyMapper;
 import newapi.impl.MacroProps;
-import newapi.impl.NumberFormatterImpl;
-import newapi.impl.NumberPropertyMapper;
 
 /**
  * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_} <code>DecimalFormat</code> is the primary
@@ -683,7 +683,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition) {
-    NumberFormatterResult output = formatter.format(number);
+    FormattedNumber output = formatter.format(number);
     output.populateFieldPosition(fieldPosition, result.length());
     output.appendTo(result);
     return result;
@@ -696,7 +696,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition) {
-    NumberFormatterResult output = formatter.format(number);
+    FormattedNumber output = formatter.format(number);
     output.populateFieldPosition(fieldPosition, result.length());
     output.appendTo(result);
     return result;
@@ -709,7 +709,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition) {
-    NumberFormatterResult output = formatter.format(number);
+    FormattedNumber output = formatter.format(number);
     output.populateFieldPosition(fieldPosition, result.length());
     output.appendTo(result);
     return result;
@@ -723,7 +723,7 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public StringBuffer format(
       java.math.BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
-    NumberFormatterResult output = formatter.format(number);
+    FormattedNumber output = formatter.format(number);
     output.populateFieldPosition(fieldPosition, result.length());
     output.appendTo(result);
     return result;
@@ -736,7 +736,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
-    NumberFormatterResult output = formatter.format(number);
+    FormattedNumber output = formatter.format(number);
     output.populateFieldPosition(fieldPosition, result.length());
     output.appendTo(result);
     return result;
@@ -751,7 +751,7 @@ public class DecimalFormat extends NumberFormat {
   public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
     if (!(obj instanceof Number)) throw new IllegalArgumentException();
     Number number = (Number) obj;
-    NumberFormatterResult output = formatter.format(number);
+    FormattedNumber output = formatter.format(number);
     return output.toAttributedCharacterIterator();
   }
 
@@ -762,7 +762,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
-    NumberFormatterResult output = formatter.format(currAmt);
+    FormattedNumber output = formatter.format(currAmt);
     output.populateFieldPosition(pos, toAppendTo.length());
     output.appendTo(toAppendTo);
     return toAppendTo;
@@ -2434,7 +2434,7 @@ public class DecimalFormat extends NumberFormat {
       locale = symbols.getULocale();
     }
     assert locale != null;
-    formatter = NumberFormatterImpl.fromMacros(macros).locale(locale);
+    formatter = NumberFormatter.with().macros(macros).locale(locale);
   }
 
   /**

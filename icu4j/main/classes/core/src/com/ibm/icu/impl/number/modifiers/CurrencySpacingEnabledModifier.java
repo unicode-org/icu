@@ -1,9 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package newapi.impl;
+package com.ibm.icu.impl.number.modifiers;
 
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.impl.number.modifiers.ConstantMultiFieldModifier;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.UnicodeSet;

@@ -20,10 +20,11 @@ import com.ibm.icu.impl.number.FormatQuantity3;
 import com.ibm.icu.impl.number.FormatQuantity4;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
-import newapi.impl.NumberFormatterImpl;
-import newapi.impl.NumberPropertyMapper;
+import newapi.LocalizedNumberFormatter;
+import newapi.NumberPropertyMapper;
 
 /** TODO: This is a temporary name for this class. Suggestions for a better name? */
 public class FormatQuantityTest extends TestFmwk {
@@ -32,27 +33,29 @@ public class FormatQuantityTest extends TestFmwk {
   public void testBehavior() throws ParseException {
 
     // Make a list of several formatters to test the behavior of FormatQuantity.
-    List<NumberFormatterImpl> formats = new ArrayList<NumberFormatterImpl>();
+    List<LocalizedNumberFormatter> formats = new ArrayList<LocalizedNumberFormatter>();
+
+    DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
 
     Properties properties = new Properties();
-    formats.add(NumberPropertyMapper.create(properties, null, ULocale.ENGLISH));
+    formats.add(NumberPropertyMapper.create(properties, symbols).locale(ULocale.ENGLISH));
 
     properties =
         new Properties()
             .setMinimumSignificantDigits(3)
             .setMaximumSignificantDigits(3)
             .setCompactStyle(CompactStyle.LONG);
-    formats.add(NumberPropertyMapper.create(properties, null, ULocale.ENGLISH));
+    formats.add(NumberPropertyMapper.create(properties, symbols).locale(ULocale.ENGLISH));
 
     properties =
         new Properties()
             .setMinimumExponentDigits(1)
             .setMaximumIntegerDigits(3)
             .setMaximumFractionDigits(1);
-    formats.add(NumberPropertyMapper.create(properties, null, ULocale.ENGLISH));
+    formats.add(NumberPropertyMapper.create(properties, symbols).locale(ULocale.ENGLISH));
 
     properties = new Properties().setRoundingIncrement(new BigDecimal("0.5"));
-    formats.add(NumberPropertyMapper.create(properties, null, ULocale.ENGLISH));
+    formats.add(NumberPropertyMapper.create(properties, symbols).locale(ULocale.ENGLISH));
 
     String[] cases = {
       "1.0",
@@ -110,7 +113,7 @@ public class FormatQuantityTest extends TestFmwk {
     }
   }
 
-  static void testFormatQuantity(int t, String str, List<NumberFormatterImpl> formats, int mode) {
+  static void testFormatQuantity(int t, String str, List<LocalizedNumberFormatter> formats, int mode) {
     if (mode == 2) {
       assertEquals("Double is not valid", Double.toString(Double.parseDouble(str)), str);
     }
@@ -228,8 +231,8 @@ public class FormatQuantityTest extends TestFmwk {
   }
 
   private static void testFormatQuantityWithFormats(
-      FormatQuantity rq0, FormatQuantity rq1, List<NumberFormatterImpl> formats) {
-    for (NumberFormatterImpl format : formats) {
+      FormatQuantity rq0, FormatQuantity rq1, List<LocalizedNumberFormatter> formats) {
+    for (LocalizedNumberFormatter format : formats) {
       FormatQuantity q0 = rq0.createCopy();
       FormatQuantity q1 = rq1.createCopy();
       String s1 = format.format(q0).toString();
