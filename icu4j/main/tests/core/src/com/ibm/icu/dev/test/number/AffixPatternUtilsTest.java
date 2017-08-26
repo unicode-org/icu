@@ -87,7 +87,7 @@ public class AffixPatternUtilsTest {
 
       assertEquals(
           "Currency on <" + input + ">", curr, AffixPatternUtils.hasCurrencySymbols(input));
-      assertEquals("Length on <" + input + ">", length, AffixPatternUtils.unescapedLength(input));
+      assertEquals("Length on <" + input + ">", length, AffixPatternUtils.estimateLength(input));
 
       String actual = unescapeWithDefaults(input);
       assertEquals("Output on <" + input + ">", output, actual);
@@ -134,7 +134,7 @@ public class AffixPatternUtilsTest {
         // OK
       }
       try {
-        AffixPatternUtils.unescapedLength(str);
+        AffixPatternUtils.estimateLength(str);
         fail("No exception was thrown on an invalid string");
       } catch (IllegalArgumentException e) {
         // OK

@@ -69,7 +69,13 @@ public class FormattedNumber {
      */
     @Deprecated
     public String getPrefix() {
-        return micros.modOuter.getPrefix() + micros.modMiddle.getPrefix() + micros.modInner.getPrefix();
+        NumberStringBuilder temp = new NumberStringBuilder();
+        int length = micros.modOuter.apply(temp, 0, 0);
+        length += micros.modMiddle.apply(temp, 0, length);
+        length += micros.modInner.apply(temp, 0, length);
+        int prefixLength = micros.modOuter.getPrefixLength() + micros.modMiddle.getPrefixLength()
+                + micros.modInner.getPrefixLength();
+        return temp.subSequence(0, prefixLength).toString();
     }
 
     /**
@@ -78,7 +84,13 @@ public class FormattedNumber {
      */
     @Deprecated
     public String getSuffix() {
-        return micros.modInner.getSuffix() + micros.modMiddle.getSuffix() + micros.modOuter.getSuffix();
+        NumberStringBuilder temp = new NumberStringBuilder();
+        int length = micros.modOuter.apply(temp, 0, 0);
+        length += micros.modMiddle.apply(temp, 0, length);
+        length += micros.modInner.apply(temp, 0, length);
+        int prefixLength = micros.modOuter.getPrefixLength() + micros.modMiddle.getPrefixLength()
+                + micros.modInner.getPrefixLength();
+        return temp.subSequence(prefixLength, length).toString();
     }
 
     /**

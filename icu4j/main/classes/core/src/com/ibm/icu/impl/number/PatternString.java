@@ -567,8 +567,8 @@ public class PatternString {
       // The width of the positive prefix and suffix templates are included in the padding
       int paddingWidth =
           positive.paddingWidth
-              + AffixPatternUtils.unescapedLength(posPrefix)
-              + AffixPatternUtils.unescapedLength(posSuffix);
+              + AffixPatternUtils.estimateLength(posPrefix)
+              + AffixPatternUtils.estimateLength(posSuffix);
       properties.setFormatWidth(paddingWidth);
       String rawPaddingString = ppr.getString(AffixPatternProvider.Flags.PADDING);
       if (rawPaddingString.length() == 1) {

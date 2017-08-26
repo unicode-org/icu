@@ -140,22 +140,14 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
 
         @Override
+        public int getPrefixLength() {
+            // FIXME: Localized exponent separator location.
+            return 0;
+        }
+
+        @Override
         public boolean isStrong() {
             return true;
-        }
-
-        @Override
-        public String getPrefix() {
-            // FIXME: Localized exponent separator location.
-            return "";
-        }
-
-        @Override
-        public String getSuffix() {
-            // FIXME: Localized exponent separator location.
-            NumberStringBuilder temp = new NumberStringBuilder();
-            doApply(exponent, temp, 0);
-            return temp.toString();
         }
 
         @Override
@@ -191,27 +183,19 @@ public class ScientificNotation extends Notation implements Cloneable {
             }
 
             @Override
-            public boolean isStrong() {
-                return true;
-            }
-
-            @Override
-            public String getPrefix() {
-                // FIXME: Localized exponent separator location.
-                return "";
-            }
-
-            @Override
-            public String getSuffix() {
-                // FIXME: Localized exponent separator location.
-                NumberStringBuilder temp = new NumberStringBuilder();
-                doApply(exponent, temp, 0);
-                return temp.toString();
-            }
-
-            @Override
             public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
                 return doApply(exponent, output, rightIndex);
+            }
+
+            @Override
+            public int getPrefixLength() {
+                // FIXME: Localized exponent separator location.
+                return 0;
+            }
+
+            @Override
+            public boolean isStrong() {
+                return true;
             }
         }
     }

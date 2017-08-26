@@ -98,7 +98,7 @@ public class AffixPatternUtils {
    * @param patternString The original string whose width will be estimated.
    * @return The length of the unescaped string.
    */
-  public static int unescapedLength(CharSequence patternString) {
+  public static int estimateLength(CharSequence patternString) {
     if (patternString == null) return 0;
     int state = STATE_BASE;
     int offset = 0;
@@ -292,7 +292,10 @@ public class AffixPatternUtils {
         local.appendCodePoint(typeOrCp, null);
       }
     }
-    return output.insert(position, local);
+    if (output != null) {
+      output.insert(position, local);
+    }
+    return local.length();
   }
 
   /**

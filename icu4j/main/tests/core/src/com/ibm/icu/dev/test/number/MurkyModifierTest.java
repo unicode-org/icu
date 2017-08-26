@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.ibm.icu.impl.number.LdmlPatternInfo;
+import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.util.Currency;
@@ -28,31 +29,43 @@ public class MurkyModifierTest {
         FormatWidth.SHORT,
         null);
     murky.setNumberProperties(false, null);
-    assertEquals("a", murky.getPrefix());
-    assertEquals("b", murky.getSuffix());
+    assertEquals("a", getPrefix(murky));
+    assertEquals("b", getSuffix(murky));
     murky.setPatternAttributes(SignDisplay.ALWAYS, false);
-    assertEquals("+a", murky.getPrefix());
-    assertEquals("b", murky.getSuffix());
+    assertEquals("+a", getPrefix(murky));
+    assertEquals("b", getSuffix(murky));
     murky.setNumberProperties(true, null);
-    assertEquals("-a", murky.getPrefix());
-    assertEquals("b", murky.getSuffix());
+    assertEquals("-a", getPrefix(murky));
+    assertEquals("b", getSuffix(murky));
     murky.setPatternAttributes(SignDisplay.NEVER, false);
-    assertEquals("a", murky.getPrefix());
-    assertEquals("b", murky.getSuffix());
+    assertEquals("a", getPrefix(murky));
+    assertEquals("b", getSuffix(murky));
 
     murky.setPatternInfo(LdmlPatternInfo.parse("a0b;c-0d"));
     murky.setPatternAttributes(SignDisplay.AUTO, false);
     murky.setNumberProperties(false, null);
-    assertEquals("a", murky.getPrefix());
-    assertEquals("b", murky.getSuffix());
+    assertEquals("a", getPrefix(murky));
+    assertEquals("b", getSuffix(murky));
     murky.setPatternAttributes(SignDisplay.ALWAYS, false);
-    assertEquals("c+", murky.getPrefix());
-    assertEquals("d", murky.getSuffix());
+    assertEquals("c+", getPrefix(murky));
+    assertEquals("d", getSuffix(murky));
     murky.setNumberProperties(true, null);
-    assertEquals("c-", murky.getPrefix());
-    assertEquals("d", murky.getSuffix());
+    assertEquals("c-", getPrefix(murky));
+    assertEquals("d", getSuffix(murky));
     murky.setPatternAttributes(SignDisplay.NEVER, false);
-    assertEquals("c-", murky.getPrefix()); // TODO: What should this behavior be?
-    assertEquals("d", murky.getSuffix());
+    assertEquals("c-", getPrefix(murky)); // TODO: What should this behavior be?
+    assertEquals("d", getSuffix(murky));
+  }
+
+  private static String getPrefix(MurkyModifier murky) {
+      NumberStringBuilder nsb = new NumberStringBuilder();
+      murky.apply(nsb, 0, 0);
+      return nsb.subSequence(0, murky.getPrefixLength()).toString();
+  }
+
+  private static String getSuffix(MurkyModifier murky) {
+      NumberStringBuilder nsb = new NumberStringBuilder();
+      murky.apply(nsb, 0, 0);
+      return nsb.subSequence(murky.getPrefixLength(), nsb.length()).toString();
   }
 }
