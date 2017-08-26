@@ -1,6 +1,6 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package newapi;
+package newapi.impl;
 
 import java.math.RoundingMode;
 
@@ -13,22 +13,23 @@ import com.ibm.icu.util.Dimensionless;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
+import newapi.Grouper;
+import newapi.Notation;
+import newapi.NumberFormatter;
+import newapi.Rounder;
+import newapi.UnlocalizedNumberFormatter;
 import newapi.NumberFormatter.DecimalMarkDisplay;
-import newapi.NumberFormatter.Grouping;
-import newapi.NumberFormatter.Notation;
-import newapi.NumberFormatter.Rounding;
 import newapi.NumberFormatter.SignDisplay;
-import newapi.NumberFormatter.UnlocalizedNumberFormatter;
 
 public class demo {
   public static void main(String[] args) {
     System.out.println(NumberingSystem.LATIN.getDescription());
     UnlocalizedNumberFormatter formatter =
         NumberFormatter.with()
-            .notation(Notation.COMPACT_SHORT)
-            .notation(Notation.SCIENTIFIC.withExponentSignDisplay(SignDisplay.ALWAYS))
-            .notation(Notation.ENGINEERING.withMinExponentDigits(2))
-            .notation(Notation.SIMPLE)
+            .notation(Notation.compactShort())
+            .notation(Notation.scientific().withExponentSignDisplay(SignDisplay.ALWAYS))
+            .notation(Notation.engineering().withMinExponentDigits(2))
+            .notation(Notation.simple())
             .unit(Currency.getInstance("GBP"))
             .unit(Dimensionless.PERCENT)
             .unit(MeasureUnit.CUBIC_METER)
@@ -38,16 +39,16 @@ public class demo {
 //                (BigDecimal input) -> {
 //                  return input.divide(new BigDecimal("0.02"), 0).multiply(new BigDecimal("0.02"));
 //                })
-            .rounding(Rounding.fixedFraction(2).withMode(RoundingMode.HALF_UP))
-            .rounding(Rounding.INTEGER.withMode(RoundingMode.CEILING))
-            .rounding(Rounding.currency(CurrencyUsage.STANDARD))
+            .rounding(Rounder.fixedFraction(2).withMode(RoundingMode.HALF_UP))
+            .rounding(Rounder.integer().withMode(RoundingMode.CEILING))
+            .rounding(Rounder.currency(CurrencyUsage.STANDARD))
 //            .grouping(
 //                (int position, BigDecimal number) -> {
 //                  return (position % 3) == 0;
 //                })
-            .grouping(Grouping.DEFAULT)
-            .grouping(Grouping.NONE)
-            .grouping(Grouping.MIN_2_DIGITS)
+            .grouping(Grouper.defaults())
+            .grouping(Grouper.none())
+            .grouping(Grouper.min2())
             // .padding(Padding.codePoints(' ', 8, PadPosition.AFTER_PREFIX))
             .sign(SignDisplay.ALWAYS)
             .decimal(DecimalMarkDisplay.ALWAYS)

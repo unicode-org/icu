@@ -12,8 +12,8 @@ import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
+import newapi.MurkyModifier;
 import newapi.NumberFormatter.SignDisplay;
-import newapi.impl.MurkyModifier;
 
 public class MurkyModifierTest {
 

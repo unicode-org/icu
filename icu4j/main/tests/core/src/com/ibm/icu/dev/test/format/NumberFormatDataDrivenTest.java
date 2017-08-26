@@ -18,10 +18,8 @@ import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
-import newapi.NumberFormatter.LocalizedNumberFormatter;
-import newapi.impl.MacroProps;
-import newapi.impl.NumberFormatterImpl;
-import newapi.impl.NumberPropertyMapper;
+import newapi.LocalizedNumberFormatter;
+import newapi.NumberPropertyMapper;
 
 public class NumberFormatDataDrivenTest {
 
@@ -557,8 +555,7 @@ public class NumberFormatDataDrivenTest {
                       : PatternString.IGNORE_ROUNDING_NEVER);
           propertiesFromTuple(tuple, properties);
           DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
-          MacroProps macros = NumberPropertyMapper.oldToNew(properties, symbols, null);
-          LocalizedNumberFormatter fmt = NumberFormatterImpl.fromMacros(macros).locale(locale);
+          LocalizedNumberFormatter fmt = NumberPropertyMapper.create(properties, symbols).locale(locale);
           Number number = toNumber(tuple.format);
           String expected = tuple.output;
           String actual = fmt.format(number).toString();

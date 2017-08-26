@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Locale;
 
 import org.junit.Ignore;
@@ -24,19 +23,18 @@ import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
+import newapi.FormattedNumber;
+import newapi.Grouper;
+import newapi.IntegerWidth;
+import newapi.LocalizedNumberFormatter;
+import newapi.Notation;
 import newapi.NumberFormatter;
 import newapi.NumberFormatter.DecimalMarkDisplay;
-import newapi.NumberFormatter.Grouping;
-import newapi.NumberFormatter.IRounding;
-import newapi.NumberFormatter.IntegerWidth;
-import newapi.NumberFormatter.LocalizedNumberFormatter;
-import newapi.NumberFormatter.Notation;
-import newapi.NumberFormatter.NumberFormatterResult;
-import newapi.NumberFormatter.Padding;
-import newapi.NumberFormatter.Rounding;
 import newapi.NumberFormatter.SignDisplay;
-import newapi.NumberFormatter.UnlocalizedNumberFormatter;
-import newapi.impl.NumberFormatterImpl;
+import newapi.impl.Padder;
+import newapi.NumberPropertyMapper;
+import newapi.Rounder;
+import newapi.UnlocalizedNumberFormatter;
 
 public class NumberFormatterTest {
 
@@ -75,7 +73,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Scientific",
         "E",
-        NumberFormatter.with().notation(Notation.SCIENTIFIC),
+        NumberFormatter.with().notation(Notation.scientific()),
         ULocale.ENGLISH,
         "8.765E4",
         "8.765E3",
@@ -90,7 +88,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Engineering",
         "E3",
-        NumberFormatter.with().notation(Notation.ENGINEERING),
+        NumberFormatter.with().notation(Notation.engineering()),
         ULocale.ENGLISH,
         "87.65E3",
         "8.765E3",
@@ -106,7 +104,7 @@ public class NumberFormatterTest {
         "Scientific sign always shown",
         "E+",
         NumberFormatter.with()
-            .notation(Notation.SCIENTIFIC.withExponentSignDisplay(SignDisplay.ALWAYS)),
+            .notation(Notation.scientific().withExponentSignDisplay(SignDisplay.ALWAYS)),
         ULocale.ENGLISH,
         "8.765E+4",
         "8.765E+3",
@@ -121,7 +119,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Scientific min exponent digits",
         "E00",
-        NumberFormatter.with().notation(Notation.SCIENTIFIC.withMinExponentDigits(2)),
+        NumberFormatter.with().notation(Notation.scientific().withMinExponentDigits(2)),
         ULocale.ENGLISH,
         "8.765E04",
         "8.765E03",
@@ -136,7 +134,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Scientific Negative",
         "E",
-        NumberFormatter.with().notation(Notation.SCIENTIFIC),
+        NumberFormatter.with().notation(Notation.scientific()),
         ULocale.ENGLISH,
         -1000000,
         "-1E6");
@@ -147,7 +145,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Compact Short",
         "C",
-        NumberFormatter.with().notation(Notation.COMPACT_SHORT),
+        NumberFormatter.with().notation(Notation.compactShort()),
         ULocale.ENGLISH,
         "88K",
         "8.8K",
@@ -162,7 +160,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Compact Long",
         "CC",
-        NumberFormatter.with().notation(Notation.COMPACT_LONG),
+        NumberFormatter.with().notation(Notation.compactLong()),
         ULocale.ENGLISH,
         "88 thousand",
         "8.8 thousand",
@@ -177,7 +175,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Compact Short Currency",
         "C $USD",
-        NumberFormatter.with().notation(Notation.COMPACT_SHORT).unit(USD),
+        NumberFormatter.with().notation(Notation.compactShort()).unit(USD),
         ULocale.ENGLISH,
         "$88K",
         "$8.8K",
@@ -193,7 +191,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Compact Long Currency",
         "CC $USD",
-        NumberFormatter.with().notation(Notation.COMPACT_LONG).unit(USD),
+        NumberFormatter.with().notation(Notation.compactLong()).unit(USD),
         ULocale.ENGLISH,
         "$88K",
         "$8.8K",
@@ -208,7 +206,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Compact Plural One",
         "CC",
-        NumberFormatter.with().notation(Notation.COMPACT_LONG),
+        NumberFormatter.with().notation(Notation.compactLong()),
         ULocale.forLanguageTag("es"),
         1000000,
         "1 millón");
@@ -216,7 +214,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Compact Plural Other",
         "CC",
-        NumberFormatter.with().notation(Notation.COMPACT_LONG),
+        NumberFormatter.with().notation(Notation.compactLong()),
         ULocale.forLanguageTag("es"),
         2000000,
         "2 millones");
@@ -224,7 +222,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Compact with Negative Sign",
         "C",
-        NumberFormatter.with().notation(Notation.COMPACT_SHORT),
+        NumberFormatter.with().notation(Notation.compactShort()),
         ULocale.ENGLISH,
         -9876543.21,
         "-9.9M");
@@ -266,7 +264,7 @@ public class NumberFormatterTest {
         "Compact Meters Long",
         "CC U:length:meter unit-width=WIDE",
         NumberFormatter.with()
-            .notation(Notation.COMPACT_LONG)
+            .notation(Notation.compactLong())
             .unit(MeasureUnit.METER)
             .unitWidth(FormatWidth.WIDE),
         ULocale.ENGLISH,
@@ -354,8 +352,8 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Currency Long Name from Pattern Syntax",
-        "$GBP F0 grouping=NONE integer-width=1- symbols=loc:en_US sign=AUTO decimal=AUTO",
-        NumberFormatterImpl.fromPattern("0 ¤¤¤", DecimalFormatSymbols.getInstance()).unit(GBP),
+        "$GBP F0 grouping=none integer-width=1- symbols=loc:en_US sign=AUTO decimal=AUTO",
+        NumberPropertyMapper.create("0 ¤¤¤", DecimalFormatSymbols.getInstance()).unit(GBP),
         ULocale.ENGLISH,
         1234567.89,
         "1234568 British pounds");
@@ -415,7 +413,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Integer",
         "F0",
-        NumberFormatter.with().rounding(Rounding.INTEGER),
+        NumberFormatter.with().rounding(Rounder.integer()),
         ULocale.ENGLISH,
         "87,650",
         "8,765",
@@ -430,7 +428,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Fixed Fraction",
         "F3",
-        NumberFormatter.with().rounding(Rounding.fixedFraction(3)),
+        NumberFormatter.with().rounding(Rounder.fixedFraction(3)),
         ULocale.ENGLISH,
         "87,650.000",
         "8,765.000",
@@ -445,7 +443,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Min Fraction",
         "F1-",
-        NumberFormatter.with().rounding(Rounding.minFraction(1)),
+        NumberFormatter.with().rounding(Rounder.minFraction(1)),
         ULocale.ENGLISH,
         "87,650.0",
         "8,765.0",
@@ -460,7 +458,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Max Fraction",
         "F-1",
-        NumberFormatter.with().rounding(Rounding.maxFraction(1)),
+        NumberFormatter.with().rounding(Rounder.maxFraction(1)),
         ULocale.ENGLISH,
         "87,650",
         "8,765",
@@ -475,7 +473,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Min/Max Fraction",
         "F1-3",
-        NumberFormatter.with().rounding(Rounding.minMaxFraction(1, 3)),
+        NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 3)),
         ULocale.ENGLISH,
         "87,650.0",
         "8,765.0",
@@ -493,7 +491,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Fixed Significant",
         "S3",
-        NumberFormatter.with().rounding(Rounding.fixedFigures(3)),
+        NumberFormatter.with().rounding(Rounder.fixedFigures(3)),
         ULocale.ENGLISH,
         -98,
         "-98.0");
@@ -501,7 +499,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Fixed Significant Rounding",
         "S3",
-        NumberFormatter.with().rounding(Rounding.fixedFigures(3)),
+        NumberFormatter.with().rounding(Rounder.fixedFigures(3)),
         ULocale.ENGLISH,
         -98.7654321,
         "-98.8");
@@ -509,7 +507,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Fixed Significant Zero",
         "S3",
-        NumberFormatter.with().rounding(Rounding.fixedFigures(3)),
+        NumberFormatter.with().rounding(Rounder.fixedFigures(3)),
         ULocale.ENGLISH,
         0,
         "0.00");
@@ -517,7 +515,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Min Significant",
         "S2-",
-        NumberFormatter.with().rounding(Rounding.minFigures(2)),
+        NumberFormatter.with().rounding(Rounder.minFigures(2)),
         ULocale.ENGLISH,
         -9,
         "-9.0");
@@ -525,7 +523,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Max Significant",
         "S-4",
-        NumberFormatter.with().rounding(Rounding.maxFigures(4)),
+        NumberFormatter.with().rounding(Rounder.maxFigures(4)),
         ULocale.ENGLISH,
         98.7654321,
         "98.77");
@@ -533,7 +531,7 @@ public class NumberFormatterTest {
     assertFormatSingle(
         "Min/Max Significant",
         "S3-4",
-        NumberFormatter.with().rounding(Rounding.minMaxFigures(3, 4)),
+        NumberFormatter.with().rounding(Rounder.minMaxFigures(3, 4)),
         ULocale.ENGLISH,
         9.99999,
         "10.0");
@@ -544,7 +542,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Basic Significant", // for comparison
         "S-2",
-        NumberFormatter.with().rounding(Rounding.maxFigures(2)),
+        NumberFormatter.with().rounding(Rounder.maxFigures(2)),
         ULocale.ENGLISH,
         "88,000",
         "8,800",
@@ -559,7 +557,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "FracSig minMaxFrac minSig",
         "F1-2>3",
-        NumberFormatter.with().rounding(Rounding.minMaxFraction(1, 2).withMinFigures(3)),
+        NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 2).withMinFigures(3)),
         ULocale.ENGLISH,
         "87,650.0",
         "8,765.0",
@@ -574,7 +572,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "FracSig minMaxFrac maxSig A",
         "F1-3<2",
-        NumberFormatter.with().rounding(Rounding.minMaxFraction(1, 3).withMaxFigures(2)),
+        NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 3).withMaxFigures(2)),
         ULocale.ENGLISH,
         "88,000.0", // maxSig beats maxFrac
         "8,800.0", // maxSig beats maxFrac
@@ -589,7 +587,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "FracSig minMaxFrac maxSig B",
         "F2<2",
-        NumberFormatter.with().rounding(Rounding.fixedFraction(2).withMaxFigures(2)),
+        NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMaxFigures(2)),
         ULocale.ENGLISH,
         "88,000.00", // maxSig beats maxFrac
         "8,800.00", // maxSig beats maxFrac
@@ -607,7 +605,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Rounding None",
         "Y",
-        NumberFormatter.with().rounding(Rounding.NONE),
+        NumberFormatter.with().rounding(Rounder.none()),
         ULocale.ENGLISH,
         "87,650",
         "8,765",
@@ -622,7 +620,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Increment",
         "M0.5",
-        NumberFormatter.with().rounding(Rounding.increment(BigDecimal.valueOf(0.5))),
+        NumberFormatter.with().rounding(Rounder.increment(BigDecimal.valueOf(0.5))),
         ULocale.ENGLISH,
         "87,650.0",
         "8,765.0",
@@ -637,7 +635,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Currency Standard",
         "$CZK GSTANDARD",
-        NumberFormatter.with().rounding(Rounding.currency(CurrencyUsage.STANDARD)).unit(CZK),
+        NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.STANDARD)).unit(CZK),
         ULocale.ENGLISH,
         "CZK 87,650.00",
         "CZK 8,765.00",
@@ -652,7 +650,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Currency Cash",
         "$CZK GCASH",
-        NumberFormatter.with().rounding(Rounding.currency(CurrencyUsage.CASH)).unit(CZK),
+        NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH)).unit(CZK),
         ULocale.ENGLISH,
         "CZK 87,650",
         "CZK 8,765",
@@ -667,7 +665,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Currency not in top-level fluent chain",
         "F0",
-        NumberFormatter.with().rounding(Rounding.currency(CurrencyUsage.CASH).withCurrency(CZK)),
+        NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH).withCurrency(CZK)),
         ULocale.ENGLISH,
         "87,650",
         "8,765",
@@ -678,28 +676,6 @@ public class NumberFormatterTest {
         "0",
         "0",
         "0");
-
-    assertFormatDescending(
-        "Lambda Function",
-        "",
-        NumberFormatter.with()
-            .rounding(
-                new IRounding() {
-                  @Override
-                  public BigDecimal round(BigDecimal input) {
-                    return input.setScale(2, RoundingMode.FLOOR);
-                  }
-                }),
-        ULocale.ENGLISH,
-        "87,650.00",
-        "8,765.00",
-        "876.50",
-        "87.65",
-        "8.76",
-        "0.87",
-        "0.08",
-        "0.00",
-        "0.00");
   }
 
   @Test
@@ -708,8 +684,8 @@ public class NumberFormatterTest {
     // Note that en-US is already performed in the unitPercent() function.
     assertFormatDescending(
         "Indic Grouping",
-        "%% grouping=DEFAULT",
-        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouping.DEFAULT),
+        "%% grouping=defaults",
+        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouper.defaults()),
         new ULocale("en-IN"),
         "8,76,50,000‰",
         "87,65,000‰",
@@ -723,8 +699,8 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Western Grouping, Min 2",
-        "%% grouping=DEFAULT_MIN_2_DIGITS",
-        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouping.MIN_2_DIGITS),
+        "%% grouping=min2",
+        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouper.min2()),
         ULocale.ENGLISH,
         "87,650,000‰",
         "8,765,000‰",
@@ -738,8 +714,8 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Indic Grouping, Min 2",
-        "%% grouping=DEFAULT_MIN_2_DIGITS",
-        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouping.MIN_2_DIGITS),
+        "%% grouping=min2",
+        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouper.min2()),
         new ULocale("en-IN"),
         "8,76,50,000‰",
         "87,65,000‰",
@@ -753,8 +729,8 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "No Grouping",
-        "%% grouping=NONE",
-        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouping.NONE),
+        "%% grouping=none",
+        NumberFormatter.with().unit(Dimensionless.PERMILLE).grouping(Grouper.none()),
         new ULocale("en-IN"),
         "87650000‰",
         "8765000‰",
@@ -771,8 +747,8 @@ public class NumberFormatterTest {
   public void padding() {
     assertFormatDescending(
         "Padding",
-        "padding=NONE",
-        NumberFormatter.with().padding(Padding.NONE),
+        "",
+        NumberFormatter.with().padding(Padder.none()),
         ULocale.ENGLISH,
         "87,650",
         "8,765",
@@ -786,8 +762,8 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Padding",
-        "padding=8:AFTER_PREFIX:*",
-        NumberFormatter.with().padding(Padding.codePoints('*', 8, PadPosition.AFTER_PREFIX)),
+        "",
+        NumberFormatter.with().padding(Padder.codePoints('*', 8, PadPosition.AFTER_PREFIX)),
         ULocale.ENGLISH,
         "**87,650",
         "***8,765",
@@ -801,8 +777,8 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Padding with code points",
-        "padding=8:AFTER_PREFIX:𐇤",
-        NumberFormatter.with().padding(Padding.codePoints(0x101E4, 8, PadPosition.AFTER_PREFIX)),
+        "",
+        NumberFormatter.with().padding(Padder.codePoints(0x101E4, 8, PadPosition.AFTER_PREFIX)),
         ULocale.ENGLISH,
         "𐇤𐇤87,650",
         "𐇤𐇤𐇤8,765",
@@ -816,9 +792,9 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Padding with wide digits",
-        "padding=8:AFTER_PREFIX:* symbols=ns:mathsanb",
+        "symbols=ns:mathsanb",
         NumberFormatter.with()
-            .padding(Padding.codePoints('*', 8, PadPosition.AFTER_PREFIX))
+            .padding(Padder.codePoints('*', 8, PadPosition.AFTER_PREFIX))
             .symbols(NumberingSystem.getInstanceByName("mathsanb")),
         ULocale.ENGLISH,
         "**𝟴𝟳,𝟲𝟱𝟬",
@@ -833,9 +809,9 @@ public class NumberFormatterTest {
 
     assertFormatDescending(
         "Padding with currency spacing",
-        "$GBP padding=10:AFTER_PREFIX:* unit-width=SHORT",
+        "$GBP unit-width=SHORT",
         NumberFormatter.with()
-            .padding(Padding.codePoints('*', 10, PadPosition.AFTER_PREFIX))
+            .padding(Padder.codePoints('*', 10, PadPosition.AFTER_PREFIX))
             .unit(GBP)
             .unitWidth(FormatWidth.SHORT),
         ULocale.ENGLISH,
@@ -851,25 +827,25 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Pad Before Prefix",
-        "padding=8:BEFORE_PREFIX:*",
-        NumberFormatter.with().padding(Padding.codePoints('*', 8, PadPosition.BEFORE_PREFIX)),
+        "",
+        NumberFormatter.with().padding(Padder.codePoints('*', 8, PadPosition.BEFORE_PREFIX)),
         ULocale.ENGLISH,
         -88.88,
         "**-88.88");
 
     assertFormatSingle(
         "Pad After Prefix",
-        "padding=8:AFTER_PREFIX:*",
-        NumberFormatter.with().padding(Padding.codePoints('*', 8, PadPosition.AFTER_PREFIX)),
+        "",
+        NumberFormatter.with().padding(Padder.codePoints('*', 8, PadPosition.AFTER_PREFIX)),
         ULocale.ENGLISH,
         -88.88,
         "-**88.88");
 
     assertFormatSingle(
         "Pad Before Suffix",
-        "% padding=8:BEFORE_SUFFIX:*",
+        "%",
         NumberFormatter.with()
-            .padding(Padding.codePoints('*', 8, PadPosition.BEFORE_SUFFIX))
+            .padding(Padder.codePoints('*', 8, PadPosition.BEFORE_SUFFIX))
             .unit(Dimensionless.PERCENT),
         ULocale.ENGLISH,
         0.8888,
@@ -877,9 +853,9 @@ public class NumberFormatterTest {
 
     assertFormatSingle(
         "Pad After Suffix",
-        "% padding=8:AFTER_SUFFIX:*",
+        "%",
         NumberFormatter.with()
-            .padding(Padding.codePoints('*', 8, PadPosition.AFTER_SUFFIX))
+            .padding(Padder.codePoints('*', 8, PadPosition.AFTER_SUFFIX))
             .unit(Dimensionless.PERCENT),
         ULocale.ENGLISH,
         0.8888,
@@ -891,7 +867,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Integer Width Default",
         "integer-width=1-",
-        NumberFormatter.with().integerWidth(IntegerWidth.DEFAULT),
+        NumberFormatter.with().integerWidth(IntegerWidth.zeroFillTo(1)),
         ULocale.ENGLISH,
         "87,650",
         "8,765",
@@ -936,7 +912,7 @@ public class NumberFormatterTest {
     assertFormatDescending(
         "Integer Width Max 3",
         "integer-width=1-3",
-        NumberFormatter.with().integerWidth(IntegerWidth.DEFAULT.truncateAt(3)),
+        NumberFormatter.with().integerWidth(IntegerWidth.zeroFillTo(1).truncateAt(3)),
         ULocale.ENGLISH,
         "650",
         "765",
@@ -985,7 +961,7 @@ public class NumberFormatterTest {
         "French Symbols with Japanese Data 2",
         "C symbols=loc:fr",
         NumberFormatter.with()
-            .notation(Notation.COMPACT_SHORT)
+            .notation(Notation.compactShort())
             .symbols(DecimalFormatSymbols.getInstance(ULocale.FRENCH)),
         ULocale.JAPAN,
         12345,
@@ -1157,8 +1133,8 @@ public class NumberFormatterTest {
       String posSuffix = (String) cas[2];
       String negPrefix = (String) cas[3];
       String negSuffix = (String) cas[4];
-      NumberFormatterResult positive = f.format(1);
-      NumberFormatterResult negative = f.format(-1);
+      FormattedNumber positive = f.format(1);
+      FormattedNumber negative = f.format(-1);
       assertEquals(posPrefix, positive.getPrefix());
       assertEquals(posSuffix, positive.getSuffix());
       assertEquals(negPrefix, negative.getPrefix());
@@ -1176,7 +1152,7 @@ public class NumberFormatterTest {
         NumberFormatter.with()
             .unit(USD)
             .unitWidth(FormatWidth.WIDE)
-            .rounding(Rounding.fixedFraction(0)),
+            .rounding(Rounder.fixedFraction(0)),
         ULocale.ENGLISH,
         1,
         "1 US dollar");
@@ -1187,7 +1163,7 @@ public class NumberFormatterTest {
         NumberFormatter.with()
             .unit(USD)
             .unitWidth(FormatWidth.WIDE)
-            .rounding(Rounding.fixedFraction(2)),
+            .rounding(Rounder.fixedFraction(2)),
         ULocale.ENGLISH,
         1,
         "1.00 US dollars");
@@ -1203,8 +1179,8 @@ public class NumberFormatterTest {
     assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
     final double[] inputs =
         new double[] {87650, 8765, 876.5, 87.65, 8.765, 0.8765, 0.08765, 0.008765, 0};
-    NumberFormatterImpl l1 = ((NumberFormatterImpl) f).threshold(0L).locale(locale); // no self-regulation
-    NumberFormatterImpl l2 = ((NumberFormatterImpl) f).threshold(1L).locale(locale); // all self-regulation
+    LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
+    LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
     for (int i = 0; i < 9; i++) {
       double d = inputs[i];
       String actual1 = l1.format(d).toString();
@@ -1222,8 +1198,8 @@ public class NumberFormatterTest {
       Number input,
       String expected) {
     assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
-    NumberFormatterImpl l1 = ((NumberFormatterImpl) f).threshold(0L).locale(locale); // no self-regulation
-    NumberFormatterImpl l2 = ((NumberFormatterImpl) f).threshold(1L).locale(locale); // all self-regulation
+    LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
+    LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
     String actual1 = l1.format(input).toString();
     assertEquals(message + ": L1: " + input, expected, actual1);
     String actual2 = l2.format(input).toString();
@@ -1238,8 +1214,8 @@ public class NumberFormatterTest {
       Measure input,
       String expected) {
     assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
-    NumberFormatterImpl l1 = ((NumberFormatterImpl) f).threshold(0L).locale(locale); // no self-regulation
-    NumberFormatterImpl l2 = ((NumberFormatterImpl) f).threshold(1L).locale(locale); // all self-regulation
+    LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
+    LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
     String actual1 = l1.format(input).toString();
     assertEquals(message + ": L1: " + input, expected, actual1);
     String actual2 = l2.format(input).toString();

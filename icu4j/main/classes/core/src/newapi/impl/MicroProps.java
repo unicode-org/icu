@@ -6,6 +6,10 @@ import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
+import newapi.Grouper;
+import newapi.IntegerWidth;
+import newapi.NumberFormatter;
+import newapi.Rounder;
 import newapi.NumberFormatter.DecimalMarkDisplay;
 import newapi.NumberFormatter.SignDisplay;
 
@@ -13,16 +17,16 @@ public class MicroProps implements Cloneable, QuantityChain {
   // Populated globally:
   public SignDisplay sign;
   public DecimalFormatSymbols symbols;
-  public PaddingImpl padding;
+  public Padder padding;
   public DecimalMarkDisplay decimal;
-  public IntegerWidthImpl integerWidth;
+  public IntegerWidth integerWidth;
 
   // Populated by notation/unit:
   public Modifier modOuter;
   public Modifier modMiddle;
   public Modifier modInner;
-  public RoundingImpl rounding;
-  public GroupingImpl grouping;
+  public Rounder rounding;
+  public Grouper grouping;
   public int multiplier;
   public boolean useCurrency;
 

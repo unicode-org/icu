@@ -9,20 +9,20 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
+import newapi.Grouper;
+import newapi.IntegerWidth;
+import newapi.Notation;
+import newapi.NumberFormatter;
+import newapi.Rounder;
 import newapi.NumberFormatter.DecimalMarkDisplay;
-import newapi.NumberFormatter.IGrouping;
-import newapi.NumberFormatter.IRounding;
-import newapi.NumberFormatter.IntegerWidth;
-import newapi.NumberFormatter.Notation;
-import newapi.NumberFormatter.Padding;
 import newapi.NumberFormatter.SignDisplay;
 
 public class MacroProps implements Cloneable {
   public Notation notation;
   public MeasureUnit unit;
-  public IRounding rounding;
-  public IGrouping grouping;
-  public Padding padding;
+  public Rounder rounder;
+  public Grouper grouper;
+  public Padder padder;
   public IntegerWidth integerWidth;
   public Object symbols;
   public FormatWidth unitWidth;
@@ -42,9 +42,9 @@ public class MacroProps implements Cloneable {
   public void fallback(MacroProps fallback) {
     if (notation == null) notation = fallback.notation;
     if (unit == null) unit = fallback.unit;
-    if (rounding == null) rounding = fallback.rounding;
-    if (grouping == null) grouping = fallback.grouping;
-    if (padding == null) padding = fallback.padding;
+    if (rounder == null) rounder = fallback.rounder;
+    if (grouper == null) grouper = fallback.grouper;
+    if (padder == null) padder = fallback.padder;
     if (integerWidth == null) integerWidth = fallback.integerWidth;
     if (symbols == null) symbols = fallback.symbols;
     if (unitWidth == null) unitWidth = fallback.unitWidth;
@@ -61,9 +61,9 @@ public class MacroProps implements Cloneable {
     return Objects.hash(
         notation,
         unit,
-        rounding,
-        grouping,
-        padding,
+        rounder,
+        grouper,
+        padder,
         integerWidth,
         symbols,
         unitWidth,
@@ -80,9 +80,9 @@ public class MacroProps implements Cloneable {
     MacroProps other = (MacroProps) _other;
     return Objects.equals(notation, other.notation)
         && Objects.equals(unit, other.unit)
-        && Objects.equals(rounding, other.rounding)
-        && Objects.equals(grouping, other.grouping)
-        && Objects.equals(padding, other.padding)
+        && Objects.equals(rounder, other.rounder)
+        && Objects.equals(grouper, other.grouper)
+        && Objects.equals(padder, other.padder)
         && Objects.equals(integerWidth, other.integerWidth)
         && Objects.equals(symbols, other.symbols)
         && Objects.equals(unitWidth, other.unitWidth)
