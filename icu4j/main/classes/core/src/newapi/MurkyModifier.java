@@ -320,22 +320,13 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
     }
 
     @Override
+    public int getPrefixLength() {
+        return insertPrefix(null, 0);
+    }
+
+    @Override
     public boolean isStrong() {
         return isStrong;
-    }
-
-    @Override
-    public String getPrefix() {
-        NumberStringBuilder sb = new NumberStringBuilder(10);
-        insertPrefix(sb, 0);
-        return sb.toString();
-    }
-
-    @Override
-    public String getSuffix() {
-        NumberStringBuilder sb = new NumberStringBuilder(10);
-        insertSuffix(sb, 0);
-        return sb.toString();
     }
 
     private int insertPrefix(NumberStringBuilder sb, int position) {
