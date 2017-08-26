@@ -413,6 +413,8 @@ public void TestExtended() {
 }
 
 void executeTest(TestParams t) {
+    // TODO: also rerun tests with a break iterator re-created from bi.getRules()
+    //       and from bi.clone(). If in exhaustive mode only.
     int    bp;
     int    prevBP;
     int    i;
