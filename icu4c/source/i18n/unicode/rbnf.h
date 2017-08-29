@@ -30,7 +30,6 @@
 #define U_HAVE_RBNF 1
 
 #include "unicode/dcfmtsym.h"
-#include "unicode/decimfmt.h"
 #include "unicode/fmtable.h"
 #include "unicode/locid.h"
 #include "unicode/numfmt.h"
@@ -1016,14 +1015,14 @@ public:
      * @return A rounding mode
      * @draft ICU 60
      */
-    virtual DecimalFormat::ERoundingMode getRoundingMode(void) const;
+    virtual ERoundingMode getRoundingMode(void) const;
 
     /**
      * Set the rounding mode.
      * @param roundingMode A rounding mode
      * @draft ICU 60
      */
-    virtual void setRoundingMode(DecimalFormat::ERoundingMode roundingMode);
+    virtual void setRoundingMode(ERoundingMode roundingMode);
 
 public:
     /**
@@ -1105,7 +1104,7 @@ private:
     DecimalFormatSymbols* decimalFormatSymbols;
     NFRule *defaultInfinityRule;
     NFRule *defaultNaNRule;
-    DecimalFormat::ERoundingMode roundingMode;
+    ERoundingMode roundingMode;
     UBool lenient;
     UnicodeString* lenientParseRules;
     LocalizationInfo* localizations;
