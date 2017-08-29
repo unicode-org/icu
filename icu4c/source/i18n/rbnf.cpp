@@ -1205,7 +1205,7 @@ RuleBasedNumberFormat::format(double number,
     if (defaultRuleSet) {
         format(number, *defaultRuleSet, toAppendTo, status);
     }
-    return adjustForCapitalizationContext(startPos, toAppendTo, status);
+    return toAppendTo;
 }
 
 
