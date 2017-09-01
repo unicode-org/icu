@@ -1134,8 +1134,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * <p>For more information, see <a href="http://www.unicode.org/reports/tr35/#Currencies"
      * >UTS#35 section 5.10.2</a>.
      *
-     * <p><strong>Note:</strong> ICU4J does not currently use this information.
-     *
      * @param itemType one of CURRENCY_SPC_CURRENCY_MATCH, CURRENCY_SPC_SURROUNDING_MATCH
      * or CURRENCY_SPC_INSERT
      * @param beforeCurrency true to get the <code>beforeCurrency</code> values, false

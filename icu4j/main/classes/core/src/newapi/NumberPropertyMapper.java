@@ -7,9 +7,9 @@ import java.math.MathContext;
 
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.AffixPatternUtils;
-import com.ibm.icu.impl.number.LdmlPatternInfo;
-import com.ibm.icu.impl.number.LdmlPatternInfo.PatternParseResult;
-import com.ibm.icu.impl.number.PatternString;
+import com.ibm.icu.impl.number.PatternAndPropertyUtils;
+import com.ibm.icu.impl.number.PatternParser;
+import com.ibm.icu.impl.number.PatternParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
@@ -44,7 +44,7 @@ public final class NumberPropertyMapper {
      * public API if there is demand.
      */
     public static UnlocalizedNumberFormatter create(String pattern, DecimalFormatSymbols symbols) {
-        Properties properties = PatternString.parseToProperties(pattern);
+        Properties properties = PatternAndPropertyUtils.parseToProperties(pattern);
         return create(properties, symbols);
     }
 
@@ -407,9 +407,9 @@ public final class NumberPropertyMapper {
         private final AffixPatternProvider[] affixesByPlural;
 
         public CurrencyPluralInfoAffixProvider(CurrencyPluralInfo cpi) {
-            affixesByPlural = new PatternParseResult[StandardPlural.COUNT];
+            affixesByPlural = new ParsedPatternInfo[StandardPlural.COUNT];
             for (StandardPlural plural : StandardPlural.VALUES) {
-                affixesByPlural[plural.ordinal()] = LdmlPatternInfo
+                affixesByPlural[plural.ordinal()] = PatternParser
                         .parse(cpi.getCurrencyPluralPattern(plural.getKeyword()));
             }
         }

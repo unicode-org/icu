@@ -22,13 +22,13 @@ public abstract class FractionRounder extends Rounder {
      * <p>
      * This setting does not affect the number of trailing zeros. For example, 3.01 would print as "3", not "3.0".
      *
-     * @param minFigures
+     * @param minSignificantDigits
      *            The number of significant figures to guarantee.
      * @return An immutable object for chaining.
      */
-    public Rounder withMinFigures(int minFigures) {
-        if (minFigures > 0 && minFigures <= MAX_VALUE) {
-            return constructFractionSignificant(this, minFigures, -1);
+    public Rounder withMinDigits(int minSignificantDigits) {
+        if (minSignificantDigits > 0 && minSignificantDigits <= MAX_VALUE) {
+            return constructFractionSignificant(this, minSignificantDigits, -1);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 0 and " + MAX_VALUE);
         }
@@ -46,13 +46,13 @@ public abstract class FractionRounder extends Rounder {
      * This setting does not affect the number of trailing zeros. For example, with fixed fraction of 2, 123.4 would
      * become "120.00".
      *
-     * @param maxFigures
+     * @param maxSignificantDigits
      *            Round the number to no more than this number of significant figures.
      * @return An immutable object for chaining.
      */
-    public Rounder withMaxFigures(int maxFigures) {
-        if (maxFigures > 0 && maxFigures <= MAX_VALUE) {
-            return constructFractionSignificant(this, -1, maxFigures);
+    public Rounder withMaxDigits(int maxSignificantDigits) {
+        if (maxSignificantDigits > 0 && maxSignificantDigits <= MAX_VALUE) {
+            return constructFractionSignificant(this, -1, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 0 and " + MAX_VALUE);
         }

@@ -827,7 +827,7 @@ public class SerializableTestUtility {
         map.put("com.ibm.icu.text.PluralRules$FixedDecimal", new PluralRulesTest.FixedDecimalHandler());
         map.put("com.ibm.icu.util.MeasureUnit", new MeasureUnitTest.MeasureUnitHandler());
         map.put("com.ibm.icu.util.TimeUnit", new MeasureUnitTest.MeasureUnitHandler());
-        map.put("com.ibm.icu.util.Dimensionless", new MeasureUnitTest.MeasureUnitHandler());
+        map.put("com.ibm.icu.util.NoUnit", new MeasureUnitTest.MeasureUnitHandler());
         map.put("com.ibm.icu.text.MeasureFormat", new MeasureUnitTest.MeasureFormatHandler());
         map.put("com.ibm.icu.impl.number.Properties", new PropertiesTest.PropertiesHandler());
 

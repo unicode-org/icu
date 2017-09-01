@@ -13,7 +13,7 @@ import newapi.Rounder;
 import newapi.NumberFormatter.DecimalMarkDisplay;
 import newapi.NumberFormatter.SignDisplay;
 
-public class MicroProps implements Cloneable, QuantityChain {
+public class MicroProps implements Cloneable, MicroPropsGenerator {
   // Populated globally:
   public SignDisplay sign;
   public DecimalFormatSymbols symbols;
@@ -41,7 +41,7 @@ public class MicroProps implements Cloneable, QuantityChain {
   }
 
   @Override
-  public MicroProps withQuantity(FormatQuantity quantity) {
+  public MicroProps processQuantity(FormatQuantity quantity) {
     if (immutable) {
       return (MicroProps) this.clone();
     } else {

@@ -183,6 +183,30 @@ public class NumberStringBuilderTest {
     }
   }
 
+  @Test
+  public void testCodePoints() {
+      NumberStringBuilder nsb = new NumberStringBuilder();
+      assertEquals("First is -1 on empty string", -1, nsb.getFirstCodePoint());
+      assertEquals("Last is -1 on empty string", -1, nsb.getLastCodePoint());
+      assertEquals("Length is 0 on empty string", 0, nsb.codePointCount());
+
+      nsb.append("q", null);
+      assertEquals("First is q", 'q', nsb.getFirstCodePoint());
+      assertEquals("Last is q", 'q', nsb.getLastCodePoint());
+      assertEquals("0th is q", 'q', nsb.codePointAt(0));
+      assertEquals("Before 1st is q", 'q', nsb.codePointBefore(1));
+      assertEquals("Code point count is 1", 1, nsb.codePointCount());
+
+      // 🚀 is two char16s
+      nsb.append("🚀", null);
+      assertEquals("First is still q", 'q', nsb.getFirstCodePoint());
+      assertEquals("Last is space ship", 128640, nsb.getLastCodePoint());
+      assertEquals("1st is space ship", 128640, nsb.codePointAt(1));
+      assertEquals("Before 1st is q", 'q', nsb.codePointBefore(1));
+      assertEquals("Before 3rd is space ship", 128640, nsb.codePointBefore(3));
+      assertEquals("Code point count is 2", 2, nsb.codePointCount());
+  }
+
   private static void assertCharSequenceEquals(CharSequence a, CharSequence b) {
     assertEquals(a.toString(), b.toString());
 

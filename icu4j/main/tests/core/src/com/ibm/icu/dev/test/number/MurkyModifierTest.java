@@ -6,27 +6,27 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.ibm.icu.impl.number.LdmlPatternInfo;
+import com.ibm.icu.impl.number.PatternParser;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
-import newapi.MurkyModifier;
+import newapi.MutablePatternModifier;
 import newapi.NumberFormatter.SignDisplay;
+import newapi.NumberFormatter.UnitWidth;
 
 public class MurkyModifierTest {
 
   @Test
   public void basic() {
-    MurkyModifier murky = new MurkyModifier(false);
-    murky.setPatternInfo(LdmlPatternInfo.parse("a0b"));
+    MutablePatternModifier murky = new MutablePatternModifier(false);
+    murky.setPatternInfo(PatternParser.parse("a0b"));
     murky.setPatternAttributes(SignDisplay.AUTO, false);
     murky.setSymbols(
         DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
         Currency.getInstance("USD"),
-        FormatWidth.SHORT,
+        UnitWidth.SHORT,
         null);
     murky.setNumberProperties(false, null);
     assertEquals("a", getPrefix(murky));
@@ -41,7 +41,7 @@ public class MurkyModifierTest {
     assertEquals("a", getPrefix(murky));
     assertEquals("b", getSuffix(murky));
 
-    murky.setPatternInfo(LdmlPatternInfo.parse("a0b;c-0d"));
+    murky.setPatternInfo(PatternParser.parse("a0b;c-0d"));
     murky.setPatternAttributes(SignDisplay.AUTO, false);
     murky.setNumberProperties(false, null);
     assertEquals("a", getPrefix(murky));
@@ -57,13 +57,13 @@ public class MurkyModifierTest {
     assertEquals("d", getSuffix(murky));
   }
 
-  private static String getPrefix(MurkyModifier murky) {
+  private static String getPrefix(MutablePatternModifier murky) {
       NumberStringBuilder nsb = new NumberStringBuilder();
       murky.apply(nsb, 0, 0);
       return nsb.subSequence(0, murky.getPrefixLength()).toString();
   }
 
-  private static String getSuffix(MurkyModifier murky) {
+  private static String getSuffix(MutablePatternModifier murky) {
       NumberStringBuilder nsb = new NumberStringBuilder();
       murky.apply(nsb, 0, 0);
       return nsb.subSequence(murky.getPrefixLength(), nsb.length()).toString();

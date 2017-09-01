@@ -9,10 +9,11 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+
+import newapi.NumberFormatter.UnitWidth;
 
 public class MeasureData {
 
@@ -42,14 +43,14 @@ public class MeasureData {
   }
 
   public static Map<StandardPlural, String> getMeasureData(
-      ULocale locale, MeasureUnit unit, FormatWidth width) {
+      ULocale locale, MeasureUnit unit, UnitWidth width) {
     ICUResourceBundle resource =
         (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
     StringBuilder key = new StringBuilder();
     key.append("units");
-    if (width == FormatWidth.NARROW) {
+    if (width == UnitWidth.NARROW) {
       key.append("Narrow");
-    } else if (width == FormatWidth.SHORT) {
+    } else if (width == UnitWidth.SHORT) {
       key.append("Short");
     }
     key.append("/");

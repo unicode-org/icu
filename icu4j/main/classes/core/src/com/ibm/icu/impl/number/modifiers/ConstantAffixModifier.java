@@ -3,15 +3,20 @@
 package com.ibm.icu.impl.number.modifiers;
 
 import com.ibm.icu.impl.number.Modifier;
-import com.ibm.icu.impl.number.Modifier.AffixModifier;
+
+// TODO: This class is currently unused, but it might be useful for something in the future.
+// Should probably be moved to a different package.
+
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.NumberFormat.Field;
 
-/** The canonical implementation of {@link Modifier}, containing a prefix and suffix string. */
-public class ConstantAffixModifier extends Modifier.BaseModifier implements AffixModifier {
+/**
+ * The canonical implementation of {@link Modifier}, containing a prefix and suffix string.
+ */
+public class ConstantAffixModifier implements Modifier {
 
     // TODO: Avoid making a new instance by default if prefix and suffix are empty
-    public static final AffixModifier EMPTY = new ConstantAffixModifier();
+    public static final ConstantAffixModifier EMPTY = new ConstantAffixModifier();
 
     private final String prefix;
     private final String suffix;
@@ -67,26 +72,6 @@ public class ConstantAffixModifier extends Modifier.BaseModifier implements Affi
     @Override
     public boolean isStrong() {
         return strong;
-    }
-
-    public boolean contentEquals(CharSequence _prefix, CharSequence _suffix) {
-        if (_prefix == null && !prefix.isEmpty())
-            return false;
-        if (_suffix == null && !suffix.isEmpty())
-            return false;
-        if (_prefix != null && prefix.length() != _prefix.length())
-            return false;
-        if (_suffix != null && suffix.length() != _suffix.length())
-            return false;
-        for (int i = 0; i < prefix.length(); i++) {
-            if (prefix.charAt(i) != _prefix.charAt(i))
-                return false;
-        }
-        for (int i = 0; i < suffix.length(); i++) {
-            if (suffix.charAt(i) != _suffix.charAt(i))
-                return false;
-        }
-        return true;
     }
 
     @Override

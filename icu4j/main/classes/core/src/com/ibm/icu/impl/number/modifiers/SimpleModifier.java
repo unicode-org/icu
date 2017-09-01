@@ -11,15 +11,15 @@ import com.ibm.icu.text.NumberFormat.Field;
  * The second primary implementation of {@link Modifier}, this one consuming a {@link com.ibm.icu.text.SimpleFormatter}
  * pattern.
  */
-public class SimpleModifier extends Modifier.BaseModifier {
+public class SimpleModifier implements Modifier {
     private final String compiledPattern;
     private final Field field;
     private final boolean strong;
-
     private final int prefixLength;
     private final int suffixOffset;
     private final int suffixLength;
 
+    /** TODO: This is copied from SimpleFormatterImpl. */
     private static final int ARG_NUM_LIMIT = 0x100;
 
     /** Creates a modifier that uses the SimpleFormatter string formats. */
@@ -79,7 +79,6 @@ public class SimpleModifier extends Modifier.BaseModifier {
      * @return The number of characters (UTF-16 code points) that were added to the StringBuilder.
      */
     public int formatAsPrefixSuffix(NumberStringBuilder result, int startIndex, int endIndex, Field field) {
-        assert SimpleFormatterImpl.getArgumentLimit(compiledPattern) == 1;
         if (prefixLength > 0) {
             result.insert(startIndex, compiledPattern, 2, 2 + prefixLength, field);
         }
@@ -88,29 +87,5 @@ public class SimpleModifier extends Modifier.BaseModifier {
                     field);
         }
         return prefixLength + suffixLength;
-    }
-
-    /** TODO: Move this to a test file somewhere, once we figure out what to do with the method. */
-    public static void testFormatAsPrefixSuffix() {
-        String[] patterns = { "{0}", "X{0}Y", "XX{0}YYY", "{0}YY", "XXXX{0}" };
-        Object[][] outputs = { { "", 0, 0 }, { "abcde", 0, 0 }, { "abcde", 2, 2 }, { "abcde", 1, 3 } };
-        String[][] expecteds = { { "", "XY", "XXYYY", "YY", "XXXX" },
-                { "abcde", "XYabcde", "XXYYYabcde", "YYabcde", "XXXXabcde" },
-                { "abcde", "abXYcde", "abXXYYYcde", "abYYcde", "abXXXXcde" },
-                { "abcde", "aXbcYde", "aXXbcYYYde", "abcYYde", "aXXXXbcde" } };
-        for (int i = 0; i < patterns.length; i++) {
-            for (int j = 0; j < outputs.length; j++) {
-                String pattern = patterns[i];
-                String compiledPattern = SimpleFormatterImpl.compileToStringMinMaxArguments(pattern,
-                        new StringBuilder(), 1, 1);
-                NumberStringBuilder output = new NumberStringBuilder();
-                output.append((String) outputs[j][0], null);
-                new SimpleModifier(compiledPattern, null, false).apply(output, (Integer) outputs[j][1],
-                        (Integer) outputs[j][2]);
-                String expected = expecteds[j][i];
-                String actual = output.toString();
-                assert expected.equals(actual);
-            }
-        }
     }
 }

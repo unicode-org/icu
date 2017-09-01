@@ -13,11 +13,10 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
+import com.ibm.icu.impl.number.AffixPatternUtils;
 import com.ibm.icu.impl.number.Parse;
-import com.ibm.icu.impl.number.PatternString;
+import com.ibm.icu.impl.number.PatternAndPropertyUtils;
 import com.ibm.icu.impl.number.Properties;
-import com.ibm.icu.impl.number.ThingsNeedingNewHome;
-import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
@@ -33,6 +32,7 @@ import newapi.LocalizedNumberFormatter;
 import newapi.NumberFormatter;
 import newapi.NumberPropertyMapper;
 import newapi.impl.MacroProps;
+import newapi.impl.Padder.PadPosition;
 
 /**
  * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_} <code>DecimalFormat</code> is the primary
@@ -301,7 +301,7 @@ public class DecimalFormat extends NumberFormat {
     properties = new Properties();
     exportedProperties = new Properties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -330,7 +330,7 @@ public class DecimalFormat extends NumberFormat {
     properties = new Properties();
     exportedProperties = new Properties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -359,7 +359,7 @@ public class DecimalFormat extends NumberFormat {
     properties = new Properties();
     exportedProperties = new Properties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -402,9 +402,9 @@ public class DecimalFormat extends NumberFormat {
         || choice == CASHCURRENCYSTYLE
         || choice == STANDARDCURRENCYSTYLE
         || choice == PLURALCURRENCYSTYLE) {
-      setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_ALWAYS);
+      setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_ALWAYS);
     } else {
-      setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+      setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_IF_CURRENCY);
     }
     refreshFormatter();
   }
@@ -445,7 +445,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void applyPattern(String pattern) {
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_NEVER);
+    setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_NEVER);
     // Backwards compatibility: clear out user-specified prefix and suffix,
     // as well as CurrencyPluralInfo.
     properties.setPositivePrefix(null);
@@ -469,7 +469,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void applyLocalizedPattern(String localizedPattern) {
-    String pattern = PatternString.convertLocalized(localizedPattern, symbols, false);
+    String pattern = PatternAndPropertyUtils.convertLocalized(localizedPattern, symbols, false);
     applyPattern(pattern);
   }
 
@@ -752,7 +752,7 @@ public class DecimalFormat extends NumberFormat {
     if (!(obj instanceof Number)) throw new IllegalArgumentException();
     Number number = (Number) obj;
     FormattedNumber output = formatter.format(number);
-    return output.toAttributedCharacterIterator();
+    return output.getAttributes();
   }
 
   /**
@@ -2378,12 +2378,12 @@ public class DecimalFormat extends NumberFormat {
     // so that CurrencyUsage is reflected properly.
     // TODO: Consider putting this logic in PatternString.java instead.
     Properties tprops = threadLocalProperties.get().copyFrom(properties);
-    if (ThingsNeedingNewHome.useCurrency(properties)) {
+    if (useCurrency(properties)) {
       tprops.setMinimumFractionDigits(exportedProperties.getMinimumFractionDigits());
       tprops.setMaximumFractionDigits(exportedProperties.getMaximumFractionDigits());
       tprops.setRoundingIncrement(exportedProperties.getRoundingIncrement());
     }
-    return PatternString.propertiesToString(tprops);
+    return PatternAndPropertyUtils.propertiesToString(tprops);
   }
 
   /**
@@ -2396,7 +2396,21 @@ public class DecimalFormat extends NumberFormat {
    */
   public synchronized String toLocalizedPattern() {
     String pattern = toPattern();
-    return PatternString.convertLocalized(pattern, symbols, true);
+    return PatternAndPropertyUtils.convertLocalized(pattern, symbols, true);
+  }
+
+  /**
+   * Converts this DecimalFormat to a NumberFormatter.  Starting in ICU 60,
+   * NumberFormatter is the recommended way to format numbers.
+   *
+   * @return An instance of {@link LocalizedNumberFormatter} with the same behavior as this instance of
+   * DecimalFormat.
+   * @see NumberFormatter
+   * @provisional This API might change or be removed in a future release.
+   * @draft ICU 60
+   */
+  public LocalizedNumberFormatter toNumberFormatter() {
+      return formatter;
   }
 
   /**
@@ -2461,21 +2475,35 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
+   * Returns true if the currency is set in The property bag or if currency symbols are present in
+   * the prefix/suffix pattern.
+   */
+  private static boolean useCurrency(Properties properties) {
+    return ((properties.getCurrency() != null)
+        || properties.getCurrencyPluralInfo() != null
+        || properties.getCurrencyUsage() != null
+        || AffixPatternUtils.hasCurrencySymbols(properties.getPositivePrefixPattern())
+        || AffixPatternUtils.hasCurrencySymbols(properties.getPositiveSuffixPattern())
+        || AffixPatternUtils.hasCurrencySymbols(properties.getNegativePrefixPattern())
+        || AffixPatternUtils.hasCurrencySymbols(properties.getNegativeSuffixPattern()));
+  }
+
+  /**
    * Updates the property bag with settings from the given pattern.
    *
    * @param pattern The pattern string to parse.
    * @param ignoreRounding Whether to leave out rounding information (minFrac, maxFrac, and rounding
    *     increment) when parsing the pattern. This may be desirable if a custom rounding mode, such
    *     as CurrencyUsage, is to be used instead. One of {@link
-   *     PatternString#IGNORE_ROUNDING_ALWAYS}, {@link PatternString#IGNORE_ROUNDING_IF_CURRENCY},
-   *     or {@link PatternString#IGNORE_ROUNDING_NEVER}.
-   * @see PatternString#parseToExistingProperties
+   *     PatternAndPropertyUtils#IGNORE_ROUNDING_ALWAYS}, {@link PatternAndPropertyUtils#IGNORE_ROUNDING_IF_CURRENCY},
+   *     or {@link PatternAndPropertyUtils#IGNORE_ROUNDING_NEVER}.
+   * @see PatternAndPropertyUtils#parseToExistingProperties
    */
   void setPropertiesFromPattern(String pattern, int ignoreRounding) {
     if (pattern == null) {
       throw new NullPointerException();
     }
-    PatternString.parseToExistingProperties(pattern, properties, ignoreRounding);
+    PatternAndPropertyUtils.parseToExistingProperties(pattern, properties, ignoreRounding);
   }
 
   /**

@@ -31,7 +31,7 @@ import org.junit.Test;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
-import com.ibm.icu.impl.number.PatternString;
+import com.ibm.icu.impl.number.PatternAndPropertyUtils;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
@@ -310,7 +310,7 @@ public class PropertiesTest {
     Properties props0 = new Properties();
 
     // Write values to some of the fields
-    PatternString.parseToExistingProperties("A-**####,#00.00#b¤", props0);
+    PatternAndPropertyUtils.parseToExistingProperties("A-**####,#00.00#b¤", props0);
 
     // Write to byte stream
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -337,7 +337,7 @@ public class PropertiesTest {
     public Object[] getTestObjects() {
       return new Object[] {
         new Properties(),
-        PatternString.parseToProperties("x#,##0.00%"),
+        PatternAndPropertyUtils.parseToProperties("x#,##0.00%"),
         new Properties().setCompactStyle(CompactStyle.LONG).setMinimumExponentDigits(2)
       };
     }
