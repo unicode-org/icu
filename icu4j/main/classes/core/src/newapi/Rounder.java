@@ -33,65 +33,65 @@ public abstract class Rounder implements Cloneable {
         return constructFraction(0, 0);
     }
 
-    public static FractionRounder fixedFraction(int minMaxFrac) {
-        if (minMaxFrac >= 0 && minMaxFrac <= MAX_VALUE) {
-            return constructFraction(minMaxFrac, minMaxFrac);
+    public static FractionRounder fixedFraction(int minMaxFractionDigits) {
+        if (minMaxFractionDigits >= 0 && minMaxFractionDigits <= MAX_VALUE) {
+            return constructFraction(minMaxFractionDigits, minMaxFractionDigits);
         } else {
             throw new IllegalArgumentException("Fraction length must be between 0 and " + MAX_VALUE);
         }
     }
 
-    public static FractionRounder minFraction(int minFrac) {
-        if (minFrac >= 0 && minFrac < MAX_VALUE) {
-            return constructFraction(minFrac, -1);
+    public static FractionRounder minFraction(int minFractionDigits) {
+        if (minFractionDigits >= 0 && minFractionDigits < MAX_VALUE) {
+            return constructFraction(minFractionDigits, -1);
         } else {
             throw new IllegalArgumentException("Fraction length must be between 0 and " + MAX_VALUE);
         }
     }
 
-    public static FractionRounder maxFraction(int maxFrac) {
-        if (maxFrac >= 0 && maxFrac < MAX_VALUE) {
-            return constructFraction(0, maxFrac);
+    public static FractionRounder maxFraction(int maxFractionDigits) {
+        if (maxFractionDigits >= 0 && maxFractionDigits < MAX_VALUE) {
+            return constructFraction(0, maxFractionDigits);
         } else {
             throw new IllegalArgumentException("Fraction length must be between 0 and " + MAX_VALUE);
         }
     }
 
-    public static FractionRounder minMaxFraction(int minFrac, int maxFrac) {
-        if (minFrac >= 0 && maxFrac <= MAX_VALUE && minFrac <= maxFrac) {
-            return constructFraction(minFrac, maxFrac);
+    public static FractionRounder minMaxFraction(int minFractionDigits, int maxFractionDigits) {
+        if (minFractionDigits >= 0 && maxFractionDigits <= MAX_VALUE && minFractionDigits <= maxFractionDigits) {
+            return constructFraction(minFractionDigits, maxFractionDigits);
         } else {
             throw new IllegalArgumentException("Fraction length must be between 0 and " + MAX_VALUE);
         }
     }
 
-    public static Rounder fixedFigures(int minMaxSig) {
-        if (minMaxSig > 0 && minMaxSig <= MAX_VALUE) {
-            return constructSignificant(minMaxSig, minMaxSig);
+    public static Rounder fixedDigits(int minMaxSignificantDigits) {
+        if (minMaxSignificantDigits > 0 && minMaxSignificantDigits <= MAX_VALUE) {
+            return constructSignificant(minMaxSignificantDigits, minMaxSignificantDigits);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 0 and " + MAX_VALUE);
         }
     }
 
-    public static Rounder minFigures(int minSig) {
-        if (minSig > 0 && minSig <= MAX_VALUE) {
-            return constructSignificant(minSig, -1);
+    public static Rounder minDigits(int minSignificantDigits) {
+        if (minSignificantDigits > 0 && minSignificantDigits <= MAX_VALUE) {
+            return constructSignificant(minSignificantDigits, -1);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 0 and " + MAX_VALUE);
         }
     }
 
-    public static Rounder maxFigures(int maxSig) {
-        if (maxSig > 0 && maxSig <= MAX_VALUE) {
-            return constructSignificant(0, maxSig);
+    public static Rounder maxDigits(int maxSignificantDigits) {
+        if (maxSignificantDigits > 0 && maxSignificantDigits <= MAX_VALUE) {
+            return constructSignificant(0, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 0 and " + MAX_VALUE);
         }
     }
 
-    public static Rounder minMaxFigures(int minSig, int maxSig) {
-        if (minSig > 0 && maxSig <= MAX_VALUE && minSig <= maxSig) {
-            return constructSignificant(minSig, maxSig);
+    public static Rounder minMaxDigits(int minSignificantDigits, int maxSignificantDigits) {
+        if (minSignificantDigits > 0 && maxSignificantDigits <= MAX_VALUE && minSignificantDigits <= maxSignificantDigits) {
+            return constructSignificant(minSignificantDigits, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 0 and " + MAX_VALUE);
         }

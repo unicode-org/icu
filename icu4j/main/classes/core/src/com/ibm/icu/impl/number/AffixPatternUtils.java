@@ -89,6 +89,10 @@ public class AffixPatternUtils {
   /** Represents a sequence of six or more currency symbols. */
   public static final int TYPE_CURRENCY_OVERFLOW = -15;
 
+  public static interface SymbolProvider {
+    public CharSequence getSymbol(int type);
+  }
+
   /**
    * Estimates the number of code points present in an unescaped version of the affix pattern string
    * (one that would be returned by {@link #unescape}), assuming that all interpolated symbols
@@ -255,10 +259,6 @@ public class AffixPatternUtils {
     }
   }
 
-  public static interface SymbolProvider {
-    public CharSequence getSymbol(int type);
-  }
-
   /**
    * Executes the unescape state machine. Replaces the unquoted characters "-", "+", "%", "‰", and
    * "¤" with the corresponding symbols provided by the {@link SymbolProvider}, and inserts the
@@ -276,26 +276,22 @@ public class AffixPatternUtils {
       NumberStringBuilder output,
       int position,
       SymbolProvider provider) {
-    // TODO: Is it worth removing this extra local object instantiation here?
-    NumberStringBuilder local = new NumberStringBuilder(10);
     assert affixPattern != null;
+    int length = 0;
     long tag = 0L;
     while (hasNext(tag, affixPattern)) {
       tag = nextToken(tag, affixPattern);
       int typeOrCp = getTypeOrCp(tag);
       if (typeOrCp == TYPE_CURRENCY_OVERFLOW) {
         // Don't go to the provider for this special case
-        local.appendCodePoint(0xFFFD, NumberFormat.Field.CURRENCY);
+        length += output.insertCodePoint(position + length, 0xFFFD, NumberFormat.Field.CURRENCY);
       } else if (typeOrCp < 0) {
-        local.append(provider.getSymbol(typeOrCp), getFieldForType(typeOrCp));
+        length += output.insert(position + length, provider.getSymbol(typeOrCp), getFieldForType(typeOrCp));
       } else {
-        local.appendCodePoint(typeOrCp, null);
+        length += output.insertCodePoint(position + length, typeOrCp, null);
       }
     }
-    if (output != null) {
-      output.insert(position, local);
-    }
-    return local.length();
+    return length;
   }
 
   /**
@@ -307,7 +303,9 @@ public class AffixPatternUtils {
    * @return true if the affix pattern contains the given token type; false otherwise.
    */
   public static boolean containsType(CharSequence affixPattern, int type) {
-    if (affixPattern == null || affixPattern.length() == 0) return false;
+    if (affixPattern == null || affixPattern.length() == 0) {
+        return false;
+    }
     long tag = 0L;
     while (hasNext(tag, affixPattern)) {
       tag = nextToken(tag, affixPattern);
@@ -548,7 +546,7 @@ public class AffixPatternUtils {
   public static int getTypeOrCp(long tag) {
     assert tag >= 0;
     int type = getType(tag);
-    return (type == 0) ? getCodePoint(tag) : -type;
+    return (type == TYPE_CODEPOINT) ? getCodePoint(tag) : -type;
   }
 
   /**

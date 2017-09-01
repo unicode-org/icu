@@ -15,6 +15,42 @@ import com.ibm.icu.util.ULocale;
 
 public class AffixPatternUtilsTest {
 
+    private static final SymbolProvider DEFAULT_SYMBOL_PROVIDER =
+        new SymbolProvider() {
+          // ar_SA has an interesting percent sign and various Arabic letter marks
+          private final DecimalFormatSymbols SYMBOLS =
+              DecimalFormatSymbols.getInstance(new ULocale("ar_SA"));
+
+          @Override
+          public CharSequence getSymbol(int type) {
+            switch (type) {
+              case AffixPatternUtils.TYPE_MINUS_SIGN:
+                return "−";
+              case AffixPatternUtils.TYPE_PLUS_SIGN:
+                return SYMBOLS.getPlusSignString();
+              case AffixPatternUtils.TYPE_PERCENT:
+                return SYMBOLS.getPercentString();
+              case AffixPatternUtils.TYPE_PERMILLE:
+                return SYMBOLS.getPerMillString();
+              case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
+                return "$";
+              case AffixPatternUtils.TYPE_CURRENCY_DOUBLE:
+                return "XXX";
+              case AffixPatternUtils.TYPE_CURRENCY_TRIPLE:
+                return "long name";
+              case AffixPatternUtils.TYPE_CURRENCY_QUAD:
+                return "\uFFFD";
+              case AffixPatternUtils.TYPE_CURRENCY_QUINT:
+                // TODO: Add support for narrow currency symbols here.
+                return "\uFFFD";
+              case AffixPatternUtils.TYPE_CURRENCY_OVERFLOW:
+                return "\uFFFD";
+              default:
+                throw new AssertionError();
+            }
+          }
+        };
+
   @Test
   public void testEscape() {
     Object[][] cases = {
@@ -182,42 +218,6 @@ public class AffixPatternUtilsTest {
     AffixPatternUtils.unescape("-+%", sb, 4, provider);
     assertEquals("Symbol provider into middle", "abcd123efg", sb.toString());
   }
-
-  private static final SymbolProvider DEFAULT_SYMBOL_PROVIDER =
-      new SymbolProvider() {
-        // ar_SA has an interesting percent sign and various Arabic letter marks
-        private final DecimalFormatSymbols SYMBOLS =
-            DecimalFormatSymbols.getInstance(new ULocale("ar_SA"));
-
-        @Override
-        public CharSequence getSymbol(int type) {
-          switch (type) {
-            case AffixPatternUtils.TYPE_MINUS_SIGN:
-              return "−";
-            case AffixPatternUtils.TYPE_PLUS_SIGN:
-              return SYMBOLS.getPlusSignString();
-            case AffixPatternUtils.TYPE_PERCENT:
-              return SYMBOLS.getPercentString();
-            case AffixPatternUtils.TYPE_PERMILLE:
-              return SYMBOLS.getPerMillString();
-            case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
-              return "$";
-            case AffixPatternUtils.TYPE_CURRENCY_DOUBLE:
-              return "XXX";
-            case AffixPatternUtils.TYPE_CURRENCY_TRIPLE:
-              return "long name";
-            case AffixPatternUtils.TYPE_CURRENCY_QUAD:
-              return "\uFFFD";
-            case AffixPatternUtils.TYPE_CURRENCY_QUINT:
-              // TODO: Add support for narrow currency symbols here.
-              return "\uFFFD";
-            case AffixPatternUtils.TYPE_CURRENCY_OVERFLOW:
-              return "\uFFFD";
-            default:
-              throw new AssertionError();
-          }
-        }
-      };
 
   private static String unescapeWithDefaults(String input) {
     NumberStringBuilder nsb = new NumberStringBuilder();

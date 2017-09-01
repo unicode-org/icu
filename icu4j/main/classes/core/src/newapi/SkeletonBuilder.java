@@ -8,15 +8,15 @@ import java.math.RoundingMode;
 
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
-import com.ibm.icu.util.Dimensionless;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
 
 import newapi.NumberFormatter.DecimalMarkDisplay;
 import newapi.NumberFormatter.SignDisplay;
+import newapi.NumberFormatter.UnitWidth;
 import newapi.Rounder.CurrencyRounderImpl;
 import newapi.Rounder.FracSigRounderImpl;
 import newapi.Rounder.FractionRounderImpl;
@@ -228,7 +228,7 @@ final class SkeletonBuilder {
     }
 
     private static void unitToSkeleton(MeasureUnit value, StringBuilder sb) {
-        if (value.getType().equals("dimensionless")) {
+        if (value.getType().equals("none")) {
             if (value.getSubtype().equals("percent")) {
                 sb.append('%');
             } else if (value.getSubtype().equals("permille")) {
@@ -255,12 +255,12 @@ final class SkeletonBuilder {
         if (c0 == '%') {
             char c = safeCharAt(skeleton, offset++);
             if (c == '%') {
-                result = Dimensionless.PERCENT;
+                result = NoUnit.PERCENT;
             } else {
-                result = Dimensionless.PERMILLE;
+                result = NoUnit.PERMILLE;
             }
         } else if (c0 == 'B') {
-            result = Dimensionless.BASE;
+            result = NoUnit.BASE;
         } else if (c0 == '$') {
             String currencyCode = skeleton.substring(offset, offset + 3);
             offset += 3;
@@ -360,10 +360,10 @@ final class SkeletonBuilder {
             char c1 = skeleton.charAt(offset++);
             if (c1 == '<') {
                 char c2 = skeleton.charAt(offset++);
-                result = temp.withMaxFigures(c2 - '0');
+                result = temp.withMaxDigits(c2 - '0');
             } else if (c1 == '>') {
                 char c2 = skeleton.charAt(offset++);
-                result = temp.withMinFigures(c2 - '0');
+                result = temp.withMinDigits(c2 - '0');
             } else {
                 result = temp;
             }
@@ -518,7 +518,7 @@ final class SkeletonBuilder {
         }
     }
 
-    private static void unitWidthToSkeleton(FormatWidth value, StringBuilder sb) {
+    private static void unitWidthToSkeleton(UnitWidth value, StringBuilder sb) {
         sb.append(value.name());
     }
 
@@ -526,7 +526,7 @@ final class SkeletonBuilder {
         int originalOffset = offset;
         StringBuilder sb = new StringBuilder();
         offset += consumeUntil(skeleton, offset, ' ', sb);
-        output.unitWidth = Enum.valueOf(FormatWidth.class, sb.toString());
+        output.unitWidth = Enum.valueOf(UnitWidth.class, sb.toString());
         return offset - originalOffset;
     }
 

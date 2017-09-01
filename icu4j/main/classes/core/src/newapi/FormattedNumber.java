@@ -55,7 +55,7 @@ public class FormattedNumber {
         fq.populateUFieldPosition(fieldPosition);
     }
 
-    public AttributedCharacterIterator toAttributedCharacterIterator() {
+    public AttributedCharacterIterator getAttributes() {
         return nsb.getIterator();
     }
 

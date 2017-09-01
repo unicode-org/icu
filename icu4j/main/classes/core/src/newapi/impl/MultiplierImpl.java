@@ -6,10 +6,10 @@ import java.math.BigDecimal;
 
 import com.ibm.icu.impl.number.FormatQuantity;
 
-public class MultiplierImpl implements QuantityChain, Cloneable {
+public class MultiplierImpl implements MicroPropsGenerator, Cloneable {
   final int magnitudeMultiplier;
   final BigDecimal bigDecimalMultiplier;
-  final QuantityChain parent;
+  final MicroPropsGenerator parent;
 
   public MultiplierImpl(int magnitudeMultiplier) {
     this.magnitudeMultiplier = magnitudeMultiplier;
@@ -23,19 +23,19 @@ public class MultiplierImpl implements QuantityChain, Cloneable {
     parent = null;
   }
 
-  private MultiplierImpl(MultiplierImpl base, QuantityChain parent) {
+  private MultiplierImpl(MultiplierImpl base, MicroPropsGenerator parent) {
     this.magnitudeMultiplier = base.magnitudeMultiplier;
     this.bigDecimalMultiplier = base.bigDecimalMultiplier;
     this.parent = parent;
   }
 
-  public QuantityChain copyAndChain(QuantityChain parent) {
+  public MicroPropsGenerator copyAndChain(MicroPropsGenerator parent) {
     return new MultiplierImpl(this, parent);
   }
 
   @Override
-  public MicroProps withQuantity(FormatQuantity quantity) {
-    MicroProps micros = parent.withQuantity(quantity);
+  public MicroProps processQuantity(FormatQuantity quantity) {
+    MicroProps micros = parent.processQuantity(quantity);
     quantity.adjustMagnitude(magnitudeMultiplier);
     if (bigDecimalMultiplier != null) {
       quantity.multiplyBy(bigDecimalMultiplier);

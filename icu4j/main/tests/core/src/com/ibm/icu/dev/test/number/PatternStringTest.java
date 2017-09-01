@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.ibm.icu.impl.number.PatternString;
+import com.ibm.icu.impl.number.PatternAndPropertyUtils;
 import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
@@ -27,8 +27,8 @@ public class PatternStringTest {
     String localized = "’.'ab'c'b''a'''#,##0a0b'a%'";
     String toStandard = "+-'ab'c'b''a'''#,##0.0%'a%'";
 
-    assertEquals(localized, PatternString.convertLocalized(standard, symbols, true));
-    assertEquals(toStandard, PatternString.convertLocalized(localized, symbols, false));
+    assertEquals(localized, PatternAndPropertyUtils.convertLocalized(standard, symbols, true));
+    assertEquals(toStandard, PatternAndPropertyUtils.convertLocalized(localized, symbols, false));
   }
 
   @Test
@@ -60,8 +60,8 @@ public class PatternStringTest {
       String input = cas[0];
       String output = cas[1];
 
-      Properties properties = PatternString.parseToProperties(input);
-      String actual = PatternString.propertiesToString(properties);
+      Properties properties = PatternAndPropertyUtils.parseToProperties(input);
+      String actual = PatternAndPropertyUtils.propertiesToString(properties);
       assertEquals(
           "Failed on input pattern '" + input + "', properties " + properties, output, actual);
     }
@@ -90,7 +90,7 @@ public class PatternStringTest {
       Properties input = (Properties) cas[0];
       String output = (String) cas[1];
 
-      String actual = PatternString.propertiesToString(input);
+      String actual = PatternAndPropertyUtils.propertiesToString(input);
       assertEquals("Failed on input properties " + input, output, actual);
     }
   }
@@ -103,7 +103,7 @@ public class PatternStringTest {
 
     for (String pattern : invalidPatterns) {
       try {
-        PatternString.parseToProperties(pattern);
+        PatternAndPropertyUtils.parseToProperties(pattern);
         fail("Didn't throw IllegalArgumentException when parsing pattern: " + pattern);
       } catch (IllegalArgumentException e) {
       }
@@ -112,8 +112,8 @@ public class PatternStringTest {
 
   @Test
   public void testBug13117() {
-    Properties expected = PatternString.parseToProperties("0");
-    Properties actual = PatternString.parseToProperties("0;");
+    Properties expected = PatternAndPropertyUtils.parseToProperties("0");
+    Properties actual = PatternAndPropertyUtils.parseToProperties("0;");
     assertEquals("Should not consume negative subpattern", expected, actual);
   }
 }

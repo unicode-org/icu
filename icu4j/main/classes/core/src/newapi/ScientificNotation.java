@@ -12,7 +12,7 @@ import newapi.NumberFormatter.SignDisplay;
 import newapi.Rounder.SignificantRounderImpl;
 import newapi.impl.MicroProps;
 import newapi.impl.MultiplierProducer;
-import newapi.impl.QuantityChain;
+import newapi.impl.MicroPropsGenerator;
 
 @SuppressWarnings("unused")
 public class ScientificNotation extends Notation implements Cloneable {
@@ -56,19 +56,19 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
     }
 
-    /* package-private */ QuantityChain withLocaleData(DecimalFormatSymbols symbols, boolean build,
-            QuantityChain parent) {
+    /* package-private */ MicroPropsGenerator withLocaleData(DecimalFormatSymbols symbols, boolean build,
+            MicroPropsGenerator parent) {
         return new MurkyScientificHandler(symbols, build, parent);
     }
 
-    private class MurkyScientificHandler implements QuantityChain, MultiplierProducer, Modifier {
+    private class MurkyScientificHandler implements MicroPropsGenerator, MultiplierProducer, Modifier {
 
         final DecimalFormatSymbols symbols;
         final ImmutableScientificModifier[] precomputedMods;
-        final QuantityChain parent;
+        final MicroPropsGenerator parent;
         /* unsafe */ int exponent;
 
-        private MurkyScientificHandler(DecimalFormatSymbols symbols, boolean safe, QuantityChain parent) {
+        private MurkyScientificHandler(DecimalFormatSymbols symbols, boolean safe, MicroPropsGenerator parent) {
             this.symbols = symbols;
             this.parent = parent;
 
@@ -84,8 +84,8 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
 
         @Override
-        public MicroProps withQuantity(FormatQuantity quantity) {
-            MicroProps micros = parent.withQuantity(quantity);
+        public MicroProps processQuantity(FormatQuantity quantity) {
+            MicroProps micros = parent.processQuantity(quantity);
             assert micros.rounding != null;
 
             // Treat zero as if it had magnitude 0

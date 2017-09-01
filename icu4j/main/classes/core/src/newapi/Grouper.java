@@ -3,7 +3,7 @@
 package newapi;
 
 import com.ibm.icu.impl.number.FormatQuantity;
-import com.ibm.icu.impl.number.LdmlPatternInfo.PatternParseResult;
+import com.ibm.icu.impl.number.PatternParser.ParsedPatternInfo;
 
 public class Grouper {
 
@@ -64,11 +64,11 @@ public class Grouper {
         }
     }
 
-    static Grouper normalizeType(Grouper grouping, PatternParseResult patternInfo) {
+    static Grouper normalizeType(Grouper grouping, ParsedPatternInfo patternInfo) {
         return grouping.withLocaleData(patternInfo);
     }
 
-    Grouper withLocaleData(PatternParseResult patternInfo) {
+    Grouper withLocaleData(ParsedPatternInfo patternInfo) {
         if (grouping1 != -2) {
             return this;
         }

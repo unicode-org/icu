@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.number.modifiers;
 
 import com.ibm.icu.impl.number.Modifier;
-import com.ibm.icu.impl.number.Modifier.AffixModifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.NumberFormat.Field;
 
@@ -11,11 +10,10 @@ import com.ibm.icu.text.NumberFormat.Field;
  * An implementation of {@link Modifier} that allows for multiple types of fields in the same modifier. Constructed
  * based on the contents of two {@link NumberStringBuilder} instances (one for the prefix, one for the suffix).
  */
-public class ConstantMultiFieldModifier extends Modifier.BaseModifier implements AffixModifier {
+public class ConstantMultiFieldModifier implements Modifier {
 
-    // TODO: Avoid making a new instance by default if prefix and suffix are empty
-    public static final ConstantMultiFieldModifier EMPTY = new ConstantMultiFieldModifier();
-
+    // NOTE: In Java, these are stored as array pointers. In C++, the NumberStringBuilder is stored by
+    // value and is treated internally as immutable.
     protected final char[] prefixChars;
     protected final char[] suffixChars;
     protected final Field[] prefixFields;
@@ -28,14 +26,6 @@ public class ConstantMultiFieldModifier extends Modifier.BaseModifier implements
         prefixFields = prefix.toFieldArray();
         suffixFields = suffix.toFieldArray();
         this.strong = strong;
-    }
-
-    private ConstantMultiFieldModifier() {
-        prefixChars = new char[0];
-        suffixChars = new char[0];
-        prefixFields = new Field[0];
-        suffixFields = new Field[0];
-        strong = false;
     }
 
     @Override
@@ -54,10 +44,6 @@ public class ConstantMultiFieldModifier extends Modifier.BaseModifier implements
     @Override
     public boolean isStrong() {
         return strong;
-    }
-
-    public boolean contentEquals(NumberStringBuilder prefix, NumberStringBuilder suffix) {
-        return prefix.contentEquals(prefixChars, prefixFields) && suffix.contentEquals(suffixChars, suffixFields);
     }
 
     @Override

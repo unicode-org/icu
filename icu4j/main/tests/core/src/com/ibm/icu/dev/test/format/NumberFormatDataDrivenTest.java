@@ -10,9 +10,8 @@ import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.number.Parse.ParseMode;
-import com.ibm.icu.impl.number.PatternString;
+import com.ibm.icu.impl.number.PatternAndPropertyUtils;
 import com.ibm.icu.impl.number.Properties;
-import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.util.CurrencyAmount;
@@ -20,6 +19,7 @@ import com.ibm.icu.util.ULocale;
 
 import newapi.LocalizedNumberFormatter;
 import newapi.NumberPropertyMapper;
+import newapi.impl.Padder.PadPosition;
 
 public class NumberFormatDataDrivenTest {
 
@@ -509,8 +509,8 @@ public class NumberFormatDataDrivenTest {
     }
     if (tuple.localizedPattern != null) {
       DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(tuple.locale);
-      String converted = PatternString.convertLocalized(tuple.localizedPattern, symbols, false);
-      PatternString.parseToExistingProperties(converted, properties);
+      String converted = PatternAndPropertyUtils.convertLocalized(tuple.localizedPattern, symbols, false);
+      PatternAndPropertyUtils.parseToExistingProperties(converted, properties);
     }
     if (tuple.lenient != null) {
       properties.setParseMode(tuple.lenient == 0 ? ParseMode.STRICT : ParseMode.LENIENT);
@@ -548,11 +548,11 @@ public class NumberFormatDataDrivenTest {
           String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
           ULocale locale = (tuple.locale == null) ? ULocale.ENGLISH : tuple.locale;
           Properties properties =
-              PatternString.parseToProperties(
+              PatternAndPropertyUtils.parseToProperties(
                   pattern,
                   tuple.currency != null
-                      ? PatternString.IGNORE_ROUNDING_ALWAYS
-                      : PatternString.IGNORE_ROUNDING_NEVER);
+                      ? PatternAndPropertyUtils.IGNORE_ROUNDING_ALWAYS
+                      : PatternAndPropertyUtils.IGNORE_ROUNDING_NEVER);
           propertiesFromTuple(tuple, properties);
           DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
           LocalizedNumberFormatter fmt = NumberPropertyMapper.create(properties, symbols).locale(locale);

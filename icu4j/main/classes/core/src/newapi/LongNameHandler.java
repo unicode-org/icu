@@ -11,28 +11,33 @@ import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.FormatQuantity;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.modifiers.SimpleModifier;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberFormat.Field;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
+import newapi.NumberFormatter.UnitWidth;
 import newapi.impl.MeasureData;
 import newapi.impl.MicroProps;
-import newapi.impl.QuantityChain;
+import newapi.impl.MicroPropsGenerator;
 
-class MurkyLongNameHandler implements QuantityChain {
+class LongNameHandler implements MicroPropsGenerator {
 
     private final Map<StandardPlural, Modifier> data;
     /* unsafe */ PluralRules rules;
-    /* unsafe */ QuantityChain parent;
+    /* unsafe */ MicroPropsGenerator parent;
 
-    private MurkyLongNameHandler(Map<StandardPlural, Modifier> data) {
+    private LongNameHandler(Map<StandardPlural, Modifier> data) {
         this.data = data;
     }
 
-    public static MurkyLongNameHandler getCurrencyLongNameModifiers(ULocale loc, Currency currency) {
+    /** For use by the "safe" code path */
+    private LongNameHandler(LongNameHandler other) {
+        this.data = other.data;
+    }
+
+    public static LongNameHandler getCurrencyLongNameModifiers(ULocale loc, Currency currency) {
         Map<String, String> data = CurrencyData.provider.getInstance(loc, true).getUnitPatterns();
         Map<StandardPlural, Modifier> result = new EnumMap<StandardPlural, Modifier>(StandardPlural.class);
         StringBuilder sb = new StringBuilder();
@@ -46,10 +51,10 @@ class MurkyLongNameHandler implements QuantityChain {
             Modifier mod = new SimpleModifier(compiled, Field.CURRENCY, false);
             result.put(plural, mod);
         }
-        return new MurkyLongNameHandler(result);
+        return new LongNameHandler(result);
     }
 
-    public static MurkyLongNameHandler getMeasureUnitModifiers(ULocale loc, MeasureUnit unit, FormatWidth width) {
+    public static LongNameHandler getMeasureUnitModifiers(ULocale loc, MeasureUnit unit, UnitWidth width) {
         Map<StandardPlural, String> simpleFormats = MeasureData.getMeasureData(loc, unit, width);
         Map<StandardPlural, Modifier> result = new EnumMap<StandardPlural, Modifier>(StandardPlural.class);
         StringBuilder sb = new StringBuilder();
@@ -62,13 +67,28 @@ class MurkyLongNameHandler implements QuantityChain {
             Modifier mod = new SimpleModifier(compiled, Field.CURRENCY, false);
             result.put(plural, mod);
         }
-        return new MurkyLongNameHandler(result);
+        return new LongNameHandler(result);
     }
 
-    public QuantityChain withLocaleData(PluralRules rules, boolean safe, QuantityChain parent) {
+    /**
+     * Applies locale data and inserts a long-name handler into the quantity chain.
+     *
+     * @param rules
+     *            The PluralRules instance to reference.
+     * @param safe
+     *            If true, creates a new object to insert into the quantity chain. If false, re-uses <em>this</em>
+     *            object in the quantity chain.
+     * @param parent
+     *            The old head of the quantity chain.
+     * @return The new head of the quantity chain.
+     */
+    public MicroPropsGenerator withLocaleData(PluralRules rules, boolean safe, MicroPropsGenerator parent) {
         if (safe) {
             // Safe code path: return a new object
-            return new ImmutableLongNameHandler(data, rules, parent);
+            LongNameHandler copy = new LongNameHandler(this);
+            copy.rules = rules;
+            copy.parent = parent;
+            return copy;
         } else {
             // Unsafe code path: re-use this object!
             this.rules = rules;
@@ -78,34 +98,12 @@ class MurkyLongNameHandler implements QuantityChain {
     }
 
     @Override
-    public MicroProps withQuantity(FormatQuantity quantity) {
-        MicroProps micros = parent.withQuantity(quantity);
+    public MicroProps processQuantity(FormatQuantity quantity) {
+        MicroProps micros = parent.processQuantity(quantity);
         // TODO: Avoid the copy here?
         FormatQuantity copy = quantity.createCopy();
         micros.rounding.apply(copy);
         micros.modOuter = data.get(copy.getStandardPlural(rules));
         return micros;
-    }
-
-    public static class ImmutableLongNameHandler implements QuantityChain {
-        final Map<StandardPlural, Modifier> data;
-        final PluralRules rules;
-        final QuantityChain parent;
-
-        public ImmutableLongNameHandler(Map<StandardPlural, Modifier> data, PluralRules rules, QuantityChain parent) {
-            this.data = data;
-            this.rules = rules;
-            this.parent = parent;
-        }
-
-        @Override
-        public MicroProps withQuantity(FormatQuantity quantity) {
-            MicroProps micros = parent.withQuantity(quantity);
-            // TODO: Avoid the copy here?
-            FormatQuantity copy = quantity.createCopy();
-            micros.rounding.apply(copy);
-            micros.modOuter = data.get(copy.getStandardPlural(rules));
-            return micros;
-        }
     }
 }

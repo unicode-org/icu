@@ -4,7 +4,6 @@ package newapi.impl;
 
 import java.util.Objects;
 
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
@@ -12,10 +11,10 @@ import com.ibm.icu.util.ULocale;
 import newapi.Grouper;
 import newapi.IntegerWidth;
 import newapi.Notation;
-import newapi.NumberFormatter;
-import newapi.Rounder;
 import newapi.NumberFormatter.DecimalMarkDisplay;
 import newapi.NumberFormatter.SignDisplay;
+import newapi.NumberFormatter.UnitWidth;
+import newapi.Rounder;
 
 public class MacroProps implements Cloneable {
   public Notation notation;
@@ -25,7 +24,7 @@ public class MacroProps implements Cloneable {
   public Padder padder;
   public IntegerWidth integerWidth;
   public Object symbols;
-  public FormatWidth unitWidth;
+  public UnitWidth unitWidth;
   public SignDisplay sign;
   public DecimalMarkDisplay decimal;
   public AffixPatternProvider affixProvider; // not in API; for JDK compatibility mode only

@@ -5188,7 +5188,7 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    public void Test13113() {
+    public void Test13113_MalformedPatterns() {
         String[][] cases = {
                 {"'", "quoted literal"},
                 {"ab#c'd", "quoted literal"},
@@ -5197,7 +5197,8 @@ public class NumberFormatTest extends TestFmwk {
                 {".#0", "0 cannot follow #"},
                 {"@0", "Cannot mix @ and 0"},
                 {"0@", "Cannot mix 0 and @"},
-                {"#x#", "unquoted special character"}
+                {"#x#", "unquoted special character"},
+                {"@#@", "# inside of a run of @"},
         };
         for (String[] cas : cases) {
             try {

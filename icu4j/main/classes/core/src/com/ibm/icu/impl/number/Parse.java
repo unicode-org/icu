@@ -837,7 +837,7 @@ public class Parse {
     private void addPattern(String pattern) {
       Properties properties = threadLocalProperties.get();
       try {
-        PatternString.parseToExistingProperties(pattern, properties);
+        PatternAndPropertyUtils.parseToExistingProperties(pattern, properties);
       } catch (IllegalArgumentException e) {
         // This should only happen if there is a bug in CLDR data. Fail silently.
       }

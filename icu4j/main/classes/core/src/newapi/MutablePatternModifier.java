@@ -6,20 +6,20 @@ import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.AffixPatternUtils;
 import com.ibm.icu.impl.number.AffixPatternUtils.SymbolProvider;
 import com.ibm.icu.impl.number.FormatQuantity;
-import com.ibm.icu.impl.number.LdmlPatternInfo;
+import com.ibm.icu.impl.number.PatternParser;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.modifiers.ConstantMultiFieldModifier;
 import com.ibm.icu.impl.number.modifiers.CurrencySpacingEnabledModifier;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 
 import newapi.NumberFormatter.SignDisplay;
+import newapi.NumberFormatter.UnitWidth;
 import newapi.impl.AffixPatternProvider;
 import newapi.impl.MicroProps;
-import newapi.impl.QuantityChain;
+import newapi.impl.MicroPropsGenerator;
 
 /**
  * This class is a {@link Modifier} that wraps a decimal format pattern. It applies the pattern's affixes in
@@ -37,11 +37,12 @@ import newapi.impl.QuantityChain;
  * <p>
  * This is a MUTABLE, NON-THREAD-SAFE class designed for performance. Do NOT save references to this or attempt to use
  * it from multiple threads! Instead, you can obtain a safe, immutable decimal format pattern modifier by calling
- * {@link MurkyModifier#createImmutable}, in effect treating this instance as a builder for the immutable variant.
+ * {@link MutablePatternModifier#createImmutable}, in effect treating this instance as a builder for the immutable
+ * variant.
  *
  * FIXME: Make this package-private
  */
-public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, QuantityChain {
+public class MutablePatternModifier implements Modifier, SymbolProvider, CharSequence, MicroPropsGenerator {
 
     // Modifier details
     final boolean isStrong;
@@ -53,7 +54,7 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
 
     // Symbol details
     DecimalFormatSymbols symbols;
-    FormatWidth unitWidth;
+    UnitWidth unitWidth;
     String currency1;
     String currency2;
     String[] currency3;
@@ -64,7 +65,7 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
     StandardPlural plural;
 
     // QuantityChain details
-    QuantityChain parent;
+    MicroPropsGenerator parent;
 
     // Transient CharSequence fields
     boolean inCharSequenceMode;
@@ -79,13 +80,13 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
      *            {@link Modifier#isStrong()}. Most of the time, decimal format pattern modifiers should be considered
      *            as non-strong.
      */
-    public MurkyModifier(boolean isStrong) {
+    public MutablePatternModifier(boolean isStrong) {
         this.isStrong = isStrong;
     }
 
     /**
      * Sets a reference to the parsed decimal format pattern, usually obtained from
-     * {@link LdmlPatternInfo#parse(String)}, but any implementation of {@link AffixPatternProvider} is accepted.
+     * {@link PatternParser#parse(String)}, but any implementation of {@link AffixPatternProvider} is accepted.
      */
     public void setPatternInfo(AffixPatternProvider patternInfo) {
         this.patternInfo = patternInfo;
@@ -118,7 +119,7 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
      *            Required if the triple currency sign, "¤¤¤", appears in the pattern, which can be determined from the
      *            convenience method {@link #needsPlurals()}.
      */
-    public void setSymbols(DecimalFormatSymbols symbols, Currency currency, FormatWidth unitWidth, PluralRules rules) {
+    public void setSymbols(DecimalFormatSymbols symbols, Currency currency, UnitWidth unitWidth, PluralRules rules) {
         assert (rules != null) == needsPlurals();
         this.symbols = symbols;
         this.unitWidth = unitWidth;
@@ -182,7 +183,7 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
      *            The QuantityChain to which to chain this immutable.
      * @return An immutable that supports both positive and negative numbers.
      */
-    public ImmutableMurkyModifier createImmutableAndChain(QuantityChain parent) {
+    public ImmutableMurkyModifier createImmutableAndChain(MicroPropsGenerator parent) {
         NumberStringBuilder a = new NumberStringBuilder();
         NumberStringBuilder b = new NumberStringBuilder();
         if (needsPlurals()) {
@@ -217,25 +218,25 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
         }
     }
 
-    public static interface ImmutableMurkyModifier extends QuantityChain {
+    public static interface ImmutableMurkyModifier extends MicroPropsGenerator {
         public void applyToMicros(MicroProps micros, FormatQuantity quantity);
     }
 
     public static class ImmutableMurkyModifierWithoutPlurals implements ImmutableMurkyModifier {
         final Modifier positive;
         final Modifier negative;
-        final QuantityChain parent;
+        final MicroPropsGenerator parent;
 
-        public ImmutableMurkyModifierWithoutPlurals(Modifier positive, Modifier negative, QuantityChain parent) {
+        public ImmutableMurkyModifierWithoutPlurals(Modifier positive, Modifier negative, MicroPropsGenerator parent) {
             this.positive = positive;
             this.negative = negative;
             this.parent = parent;
         }
 
         @Override
-        public MicroProps withQuantity(FormatQuantity quantity) {
+        public MicroProps processQuantity(FormatQuantity quantity) {
             assert parent != null;
-            MicroProps micros = parent.withQuantity(quantity);
+            MicroProps micros = parent.processQuantity(quantity);
             applyToMicros(micros, quantity);
             return micros;
         }
@@ -253,9 +254,9 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
     public static class ImmutableMurkyModifierWithPlurals implements ImmutableMurkyModifier {
         final Modifier[] mods;
         final PluralRules rules;
-        final QuantityChain parent;
+        final MicroPropsGenerator parent;
 
-        public ImmutableMurkyModifierWithPlurals(Modifier[] mods, PluralRules rules, QuantityChain parent) {
+        public ImmutableMurkyModifierWithPlurals(Modifier[] mods, PluralRules rules, MicroPropsGenerator parent) {
             assert mods.length == getModsLength();
             assert rules != null;
             this.mods = mods;
@@ -272,9 +273,9 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
         }
 
         @Override
-        public MicroProps withQuantity(FormatQuantity quantity) {
+        public MicroProps processQuantity(FormatQuantity quantity) {
             assert parent != null;
-            MicroProps micros = parent.withQuantity(quantity);
+            MicroProps micros = parent.processQuantity(quantity);
             applyToMicros(micros, quantity);
             return micros;
         }
@@ -290,14 +291,14 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
         }
     }
 
-    public QuantityChain addToChain(QuantityChain parent) {
+    public MicroPropsGenerator addToChain(MicroPropsGenerator parent) {
         this.parent = parent;
         return this;
     }
 
     @Override
-    public MicroProps withQuantity(FormatQuantity fq) {
-        MicroProps micros = parent.withQuantity(fq);
+    public MicroProps processQuantity(FormatQuantity fq) {
+        MicroProps micros = parent.processQuantity(fq);
         if (needsPlurals()) {
             // TODO: Fix this. Avoid the copy.
             FormatQuantity copy = fq.createCopy();
@@ -321,7 +322,8 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
 
     @Override
     public int getPrefixLength() {
-        return insertPrefix(null, 0);
+        NumberStringBuilder dummy = new NumberStringBuilder();
+        return insertPrefix(dummy, 0);
     }
 
     @Override
@@ -356,7 +358,7 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
             return symbols.getPerMillString();
         case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
             // FormatWidth ISO overrides the singular currency symbol
-            if (unitWidth == FormatWidth.SHORT) {
+            if (unitWidth == UnitWidth.ISO_CODE) {
                 return currency2;
             } else {
                 return currency1;
@@ -387,7 +389,8 @@ public class MurkyModifier implements Modifier, SymbolProvider, CharSequence, Qu
         inCharSequenceMode = true;
 
         // Should the output render '+' where '-' would normally appear in the pattern?
-        plusReplacesMinusSign = !isNegative && signDisplay == SignDisplay.ALWAYS
+        plusReplacesMinusSign = !isNegative
+                && (signDisplay == SignDisplay.ALWAYS || signDisplay == SignDisplay.ACCOUNTING_ALWAYS)
                 && patternInfo.positiveHasPlusSign() == false;
 
         // Should we use the negative affix pattern? (If not, we will use the positive one)
