@@ -22,8 +22,10 @@
 #include "unicode/utypes.h"
 #include "n2builder.h"
 
+#include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include <string.h>
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
@@ -44,10 +46,8 @@ U_NAMESPACE_BEGIN
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
-U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
-
 #if !UCONFIG_NO_NORMALIZATION
-void parseFile(FILE *f, Normalizer2DataBuilder &builder);
+void parseFile(std::ifstream &f, Normalizer2DataBuilder &builder);
 #endif
 
 /* -------------------------------------------------------------------------- */
@@ -202,13 +202,13 @@ main(int argc, char* argv[]) {
             continue;
         }
         filename.append(argv[i], errorCode);
-        LocalStdioFilePointer f(fopen(filename.data(), "r"));
-        if(f==NULL) {
+        std::ifstream f(filename.data());
+        if(f.fail()) {
             fprintf(stderr, "gennorm2 error: unable to open %s\n", filename.data());
             exit(U_FILE_ACCESS_ERROR);
         }
         builder->setOverrideHandling(Normalizer2DataBuilder::OVERRIDE_PREVIOUS);
-        parseFile(f.getAlias(), *builder);
+        parseFile(f, *builder);
         filename.truncate(pathLength);
     }
 
@@ -230,11 +230,12 @@ main(int argc, char* argv[]) {
 
 #if !UCONFIG_NO_NORMALIZATION
 
-void parseFile(FILE *f, Normalizer2DataBuilder &builder) {
+void parseFile(std::ifstream &f, Normalizer2DataBuilder &builder) {
     IcuToolErrorCode errorCode("gennorm2/parseFile()");
-    char line[300];
+    std::string lineString;
     uint32_t startCP, endCP;
-    while(NULL!=fgets(line, (int)sizeof(line), f)) {
+    while(std::getline(f, lineString)) {
+        char *line = &lineString.front();
         char *comment=(char *)strchr(line, '#');
         if(comment!=NULL) {
             *comment=0;
