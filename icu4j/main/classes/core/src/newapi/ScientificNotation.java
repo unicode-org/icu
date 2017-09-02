@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package newapi;
 
-import com.ibm.icu.impl.number.FormatQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -84,7 +84,7 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
 
         @Override
-        public MicroProps processQuantity(FormatQuantity quantity) {
+        public MicroProps processQuantity(DecimalQuantity quantity) {
             MicroProps micros = parent.processQuantity(quantity);
             assert micros.rounding != null;
 

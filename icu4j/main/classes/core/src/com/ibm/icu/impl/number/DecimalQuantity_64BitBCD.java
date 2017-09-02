@@ -5,7 +5,7 @@ package com.ibm.icu.impl.number;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public final class FormatQuantity2 extends FormatQuantityBCD {
+public final class DecimalQuantity_64BitBCD extends DecimalQuantity_AbstractBCD {
 
   /**
    * The BCD of the 16 digits of the number represented by this object. Every 4 bits of the long map
@@ -21,27 +21,27 @@ public final class FormatQuantity2 extends FormatQuantityBCD {
     return 16;
   }
 
-  public FormatQuantity2(long input) {
+  public DecimalQuantity_64BitBCD(long input) {
     setToLong(input);
   }
 
-  public FormatQuantity2(int input) {
+  public DecimalQuantity_64BitBCD(int input) {
     setToInt(input);
   }
 
-  public FormatQuantity2(double input) {
+  public DecimalQuantity_64BitBCD(double input) {
     setToDouble(input);
   }
 
-  public FormatQuantity2(BigInteger input) {
+  public DecimalQuantity_64BitBCD(BigInteger input) {
     setToBigInteger(input);
   }
 
-  public FormatQuantity2(BigDecimal input) {
+  public DecimalQuantity_64BitBCD(BigDecimal input) {
     setToBigDecimal(input);
   }
 
-  public FormatQuantity2(FormatQuantity2 other) {
+  public DecimalQuantity_64BitBCD(DecimalQuantity_64BitBCD other) {
     copyFrom(other);
   }
 
@@ -157,15 +157,15 @@ public final class FormatQuantity2 extends FormatQuantityBCD {
   }
 
   @Override
-  protected void copyBcdFrom(FormatQuantity _other) {
-    FormatQuantity2 other = (FormatQuantity2) _other;
+  protected void copyBcdFrom(DecimalQuantity _other) {
+    DecimalQuantity_64BitBCD other = (DecimalQuantity_64BitBCD) _other;
     bcd = other.bcd;
   }
 
   @Override
   public String toString() {
     return String.format(
-        "<FormatQuantity2 %s:%d:%d:%s %016XE%d>",
+        "<DecimalQuantity2 %s:%d:%d:%s %016XE%d>",
         (lOptPos > 1000 ? "max" : String.valueOf(lOptPos)),
         lReqPos,
         rReqPos,

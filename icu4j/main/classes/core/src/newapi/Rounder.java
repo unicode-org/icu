@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import com.ibm.icu.impl.number.FormatQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -25,14 +25,55 @@ public abstract class Rounder implements Cloneable {
         mathContext = RoundingUtils.mathContextUnlimited(RoundingMode.HALF_EVEN);
     }
 
-    public static Rounder none() {
+    /**
+     * Show all available digits to full precision.
+     *
+     * <p>
+     * <strong>NOTE:</strong> If you are formatting <em>doubles</em> and you know that the number of fraction places or
+     * significant digits is bounded, consider using {@link #maxFraction} or {@link #maxDigits} instead to maximize
+     * performance.
+     *
+     * @return A rounding strategy for {@link NumberFormatterSettings#rounding}.
+     */
+    public static Rounder unlimited() {
         return constructInfinite();
     }
 
+    /**
+     * Show numbers rounded if necessary to the nearest integer.
+     *
+     * @return A rounding strategy for {@link NumberFormatterSettings#rounding}.
+     */
     public static FractionRounder integer() {
         return constructFraction(0, 0);
     }
 
+    /**
+     * Show numbers rounded if necessary to a certain number of fraction places (digits after the decimal mark).
+     * Additionally, pad with zeros to ensure that this number digits are always shown.
+     *
+     * <p>
+     * Example output with minMaxFractionDigits = 3:
+     *
+     * <p>
+     * 87,650.000<br>
+     * 8,765.000<br>
+     * 876.500<br>
+     * 87.650<br>
+     * 8.765<br>
+     * 0.876<br>
+     * 0.088<br>
+     * 0.009<br>
+     * 0.000 (zero)
+     *
+     * <p>
+     * This method is equivalent to {@link #minMaxFraction} with both arguments equal.
+     *
+     * @param minMaxFractionDigits
+     *            The minimum and maximum number of digits to display after the decimal mark (rounding if too long or
+     *            padding with zeros if too short).
+     * @return A rounding strategy for {@link NumberFormatterSettings#rounding}.
+     */
     public static FractionRounder fixedFraction(int minMaxFractionDigits) {
         if (minMaxFractionDigits >= 0 && minMaxFractionDigits <= MAX_VALUE) {
             return constructFraction(minMaxFractionDigits, minMaxFractionDigits);
@@ -41,6 +82,18 @@ public abstract class Rounder implements Cloneable {
         }
     }
 
+    /**
+     * Always show a certain number of digits after the decimal mark, padding with zeros if necessary. Do not perform
+     * rounding (display numbers to their full precision).
+     *
+     * <p>
+     * <strong>NOTE:</strong> If you are formatting <em>doubles</em> and you know that the number of fraction places is
+     * bounded, consider using {@link #fixedFraction} or {@link #minMaxFraction} instead to maximize performance.
+     *
+     * @param minFractionDigits
+     *            The minimum number of digits to display after the decimal mark (padding with zeros if necessary).
+     * @return A rounding strategy for {@link NumberFormatterSettings#rounding}.
+     */
     public static FractionRounder minFraction(int minFractionDigits) {
         if (minFractionDigits >= 0 && minFractionDigits < MAX_VALUE) {
             return constructFraction(minFractionDigits, -1);
@@ -49,6 +102,14 @@ public abstract class Rounder implements Cloneable {
         }
     }
 
+    /**
+     * Show numbers rounded if necessary to a certain number of fraction places (digits after the decimal mark). Unlike
+     * the other fraction rounding strategies, this strategy does <em>not</em> pad zeros to the end of the number.
+     *
+     * @param maxFractionDigits
+     *            The maximum number of digits to display after the decimal mark (rounding if necessary).
+     * @return A rounding strategy for {@link NumberFormatterSettings#rounding}.
+     */
     public static FractionRounder maxFraction(int maxFractionDigits) {
         if (maxFractionDigits >= 0 && maxFractionDigits < MAX_VALUE) {
             return constructFraction(0, maxFractionDigits);
@@ -57,6 +118,16 @@ public abstract class Rounder implements Cloneable {
         }
     }
 
+    /**
+     * Show numbers rounded if necessary to a certain number of fraction places (digits after the decimal mark); in
+     * addition, always show a certain number of digits after the decimal mark, padding with zeros if necessary.
+     *
+     * @param minFractionDigits
+     *            The minimum number of digits to display after the decimal mark (padding with zeros if necessary).
+     * @param maxFractionDigits
+     *            The maximum number of digits to display after the decimal mark (rounding if necessary).
+     * @return A rounding strategy for {@link NumberFormatterSettings#rounding}.
+     */
     public static FractionRounder minMaxFraction(int minFractionDigits, int maxFractionDigits) {
         if (minFractionDigits >= 0 && maxFractionDigits <= MAX_VALUE && minFractionDigits <= maxFractionDigits) {
             return constructFraction(minFractionDigits, maxFractionDigits);
@@ -90,7 +161,8 @@ public abstract class Rounder implements Cloneable {
     }
 
     public static Rounder minMaxDigits(int minSignificantDigits, int maxSignificantDigits) {
-        if (minSignificantDigits > 0 && maxSignificantDigits <= MAX_VALUE && minSignificantDigits <= maxSignificantDigits) {
+        if (minSignificantDigits > 0 && maxSignificantDigits <= MAX_VALUE
+                && minSignificantDigits <= maxSignificantDigits) {
             return constructSignificant(minSignificantDigits, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 0 and " + MAX_VALUE);
@@ -153,6 +225,13 @@ public abstract class Rounder implements Cloneable {
             throw new AssertionError(e);
         }
     }
+
+    /**
+     * @internal
+     * @deprecated ICU 60 This API is ICU internal only.
+     */
+    @Deprecated
+    public abstract void apply(DecimalQuantity value);
 
     //////////////////////////
     // PACKAGE-PRIVATE APIS //
@@ -266,12 +345,10 @@ public abstract class Rounder implements Cloneable {
         }
     }
 
-    abstract void apply(FormatQuantity value);
-
-    int chooseMultiplierAndApply(FormatQuantity input, MultiplierProducer producer) {
+    int chooseMultiplierAndApply(DecimalQuantity input, MultiplierProducer producer) {
         // TODO: Make a better and more efficient implementation.
         // TODO: Avoid the object creation here.
-        FormatQuantity copy = input.createCopy();
+        DecimalQuantity copy = input.createCopy();
 
         assert !input.isZero();
         int magnitude = input.getMagnitude();
@@ -299,11 +376,11 @@ public abstract class Rounder implements Cloneable {
 
     static class InfiniteRounderImpl extends Rounder {
 
-        private InfiniteRounderImpl() {
+        public InfiniteRounderImpl() {
         }
 
         @Override
-        void apply(FormatQuantity value) {
+        public void apply(DecimalQuantity value) {
             value.roundToInfinity();
             value.setFractionLength(0, Integer.MAX_VALUE);
         }
@@ -313,13 +390,13 @@ public abstract class Rounder implements Cloneable {
         final int minFrac;
         final int maxFrac;
 
-        private FractionRounderImpl(int minFrac, int maxFrac) {
+        public FractionRounderImpl(int minFrac, int maxFrac) {
             this.minFrac = minFrac;
             this.maxFrac = maxFrac;
         }
 
         @Override
-        void apply(FormatQuantity value) {
+        public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeFraction(maxFrac), mathContext);
             value.setFractionLength(Math.max(0, -getDisplayMagnitudeFraction(minFrac)), Integer.MAX_VALUE);
         }
@@ -329,19 +406,19 @@ public abstract class Rounder implements Cloneable {
         final int minSig;
         final int maxSig;
 
-        private SignificantRounderImpl(int minSig, int maxSig) {
+        public SignificantRounderImpl(int minSig, int maxSig) {
             this.minSig = minSig;
             this.maxSig = maxSig;
         }
 
         @Override
-        void apply(FormatQuantity value) {
+        public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeSignificant(value, maxSig), mathContext);
             value.setFractionLength(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)), Integer.MAX_VALUE);
         }
 
         /** Version of {@link #apply} that obeys minInt constraints. Used for scientific notation compatibility mode. */
-        public void apply(FormatQuantity quantity, int minInt) {
+        public void apply(DecimalQuantity quantity, int minInt) {
             assert quantity.isZero();
             quantity.setFractionLength(minSig - minInt, Integer.MAX_VALUE);
         }
@@ -353,7 +430,7 @@ public abstract class Rounder implements Cloneable {
         final int minSig;
         final int maxSig;
 
-        private FracSigRounderImpl(int minFrac, int maxFrac, int minSig, int maxSig) {
+        public FracSigRounderImpl(int minFrac, int maxFrac, int minSig, int maxSig) {
             this.minFrac = minFrac;
             this.maxFrac = maxFrac;
             this.minSig = minSig;
@@ -361,7 +438,7 @@ public abstract class Rounder implements Cloneable {
         }
 
         @Override
-        void apply(FormatQuantity value) {
+        public void apply(DecimalQuantity value) {
             int displayMag = getDisplayMagnitudeFraction(minFrac);
             int roundingMag = getRoundingMagnitudeFraction(maxFrac);
             if (minSig == -1) {
@@ -381,12 +458,12 @@ public abstract class Rounder implements Cloneable {
     static class IncrementRounderImpl extends Rounder {
         final BigDecimal increment;
 
-        private IncrementRounderImpl(BigDecimal increment) {
+        public IncrementRounderImpl(BigDecimal increment) {
             this.increment = increment;
         }
 
         @Override
-        void apply(FormatQuantity value) {
+        public void apply(DecimalQuantity value) {
             value.roundToIncrement(increment, mathContext);
             value.setFractionLength(increment.scale(), increment.scale());
         }
@@ -395,12 +472,12 @@ public abstract class Rounder implements Cloneable {
     static class CurrencyRounderImpl extends CurrencyRounder {
         final CurrencyUsage usage;
 
-        private CurrencyRounderImpl(CurrencyUsage usage) {
+        public CurrencyRounderImpl(CurrencyUsage usage) {
             this.usage = usage;
         }
 
         @Override
-        void apply(FormatQuantity value) {
+        public void apply(DecimalQuantity value) {
             // Call .withCurrency() before .apply()!
             throw new AssertionError();
         }
@@ -408,11 +485,11 @@ public abstract class Rounder implements Cloneable {
 
     static class PassThroughRounderImpl extends Rounder {
 
-        private PassThroughRounderImpl() {
+        public PassThroughRounderImpl() {
         }
 
         @Override
-        void apply(FormatQuantity value) {
+        public void apply(DecimalQuantity value) {
             // TODO: Assert that value has already been rounded
         }
     }
@@ -424,7 +501,7 @@ public abstract class Rounder implements Cloneable {
         return -maxFrac;
     }
 
-    private static int getRoundingMagnitudeSignificant(FormatQuantity value, int maxSig) {
+    private static int getRoundingMagnitudeSignificant(DecimalQuantity value, int maxSig) {
         if (maxSig == -1) {
             return Integer.MIN_VALUE;
         }
@@ -439,7 +516,7 @@ public abstract class Rounder implements Cloneable {
         return -minFrac;
     }
 
-    private static int getDisplayMagnitudeSignificant(FormatQuantity value, int minSig) {
+    private static int getDisplayMagnitudeSignificant(DecimalQuantity value, int minSig) {
         int magnitude = value.isZero() ? 0 : value.getMagnitude();
         return magnitude - minSig + 1;
     }

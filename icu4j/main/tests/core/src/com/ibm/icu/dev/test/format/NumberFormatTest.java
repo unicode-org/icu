@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Set;
 
 import org.junit.Test;
@@ -43,7 +44,7 @@ import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
-import com.ibm.icu.impl.number.Properties;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.CompactDecimalFormat;
@@ -989,8 +990,14 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void TestCurrencyPatterns() {
         int i;
+        Random rnd = new Random(2017);
         Locale[] locs = NumberFormat.getAvailableLocales();
         for (i=0; i<locs.length; ++i) {
+            if (rnd.nextDouble() < 0.9) {
+                // Check a random subset for speed:
+                // Otherwise, this test takes a large fraction of the entire time.
+                continue;
+            }
             NumberFormat nf = NumberFormat.getCurrencyInstance(locs[i]);
             // Make sure currency formats do not have a variable number
             // of fraction digits
@@ -5796,7 +5803,7 @@ public class NumberFormatTest extends TestFmwk {
         df.setCurrency(Currency.getInstance("USD"));
         df.setProperties(new PropertySetter(){
             @Override
-            public void set(Properties props) {
+            public void set(DecimalFormatProperties props) {
                 props.setPluralRules(rules);
             }
         });

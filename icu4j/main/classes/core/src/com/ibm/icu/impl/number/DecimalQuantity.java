@@ -22,9 +22,9 @@ import com.ibm.icu.text.UFieldPosition;
  * <p>TODO: Should I change this to an abstract class so that logic for min/max digits doesn't need
  * to be copied to every implementation?
  */
-public interface FormatQuantity extends PluralRules.IFixedDecimal {
+public interface DecimalQuantity extends PluralRules.IFixedDecimal {
   /**
-   * Sets the minimum and maximum integer digits that this {@link FormatQuantity} should generate.
+   * Sets the minimum and maximum integer digits that this {@link DecimalQuantity} should generate.
    * This method does not perform rounding.
    *
    * @param minInt The minimum number of integer digits.
@@ -33,7 +33,7 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
   public void setIntegerLength(int minInt, int maxInt);
 
   /**
-   * Sets the minimum and maximum fraction digits that this {@link FormatQuantity} should generate.
+   * Sets the minimum and maximum fraction digits that this {@link DecimalQuantity} should generate.
    * This method does not perform rounding.
    *
    * @param minFrac The minimum number of fraction digits.
@@ -64,7 +64,7 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
 
   /**
    * Rounds the number to an infinite number of decimal points. This has no effect except for
-   * forcing the double in {@link FormatQuantityBCD} to adopt its exact representation.
+   * forcing the double in {@link DecimalQuantity_AbstractBCD} to adopt its exact representation.
    */
   public void roundToInfinity();
 
@@ -89,21 +89,21 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
    */
   public int getMagnitude() throws ArithmeticException;
 
-  /** @return Whether the value represented by this {@link FormatQuantity} is zero. */
+  /** @return Whether the value represented by this {@link DecimalQuantity} is zero. */
   public boolean isZero();
 
-  /** @return Whether the value represented by this {@link FormatQuantity} is less than zero. */
+  /** @return Whether the value represented by this {@link DecimalQuantity} is less than zero. */
   public boolean isNegative();
 
-  /** @return Whether the value represented by this {@link FormatQuantity} is infinite. */
+  /** @return Whether the value represented by this {@link DecimalQuantity} is infinite. */
   @Override
   public boolean isInfinite();
 
-  /** @return Whether the value represented by this {@link FormatQuantity} is not a number. */
+  /** @return Whether the value represented by this {@link DecimalQuantity} is not a number. */
   @Override
   public boolean isNaN();
 
-  /** @return The value contained in this {@link FormatQuantity} approximated as a double. */
+  /** @return The value contained in this {@link DecimalQuantity} approximated as a double. */
   public double toDouble();
 
   public BigDecimal toBigDecimal();
@@ -112,7 +112,7 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
 
   public int maxRepresentableDigits();
 
-  // TODO: Should this method be removed, since FormatQuantity implements IFixedDecimal now?
+  // TODO: Should this method be removed, since DecimalQuantity implements IFixedDecimal now?
   /**
    * Computes the plural form for this number based on the specified set of rules.
    *
@@ -182,9 +182,9 @@ public interface FormatQuantity extends PluralRules.IFixedDecimal {
    *
    * @return A copy of this instance which can be mutated without affecting this instance.
    */
-  public FormatQuantity createCopy();
+  public DecimalQuantity createCopy();
 
-  public void copyFrom(FormatQuantity other);
+  public void copyFrom(DecimalQuantity other);
 
   /** This method is for internal testing only. */
   public long getPositionFingerprint();

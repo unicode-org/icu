@@ -2,10 +2,10 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package newapi;
 
-import com.ibm.icu.impl.number.FormatQuantity;
-import com.ibm.icu.impl.number.PatternParser;
-import com.ibm.icu.impl.number.PatternParser.ParsedPatternInfo;
+import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.modifiers.ConstantAffixModifier;
 import com.ibm.icu.text.CompactDecimalFormat.CompactType;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -20,20 +20,30 @@ import com.ibm.icu.util.ULocale;
 import newapi.NumberFormatter.DecimalMarkDisplay;
 import newapi.NumberFormatter.SignDisplay;
 import newapi.NumberFormatter.UnitWidth;
+import newapi.impl.LongNameHandler;
 import newapi.impl.MacroProps;
 import newapi.impl.MicroProps;
 import newapi.impl.MicroPropsGenerator;
+import newapi.impl.MutablePatternModifier;
 import newapi.impl.Padder;
 
-public class Worker1 {
+/**
+ * This is the "brain" of the number formatting pipeline. It ties all the pieces together, taking in a MacroProps and a
+ * DecimalQuantity and outputting a properly formatted number string.
+ *
+ * <p>
+ * This class, as well as NumberPropertyMapper, could go into the impl package, but they depend on too many
+ * package-private members of the public APIs.
+ */
+class NumberFormatterImpl {
 
-    public static Worker1 fromMacros(MacroProps macros) {
+    public static NumberFormatterImpl fromMacros(MacroProps macros) {
         // Build a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly.
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, true);
-        return new Worker1(microPropsGenerator);
+        return new NumberFormatterImpl(microPropsGenerator);
     }
 
-    public static MicroProps applyStatic(MacroProps macros, FormatQuantity inValue, NumberStringBuilder outString) {
+    public static MicroProps applyStatic(MacroProps macros, DecimalQuantity inValue, NumberStringBuilder outString) {
         // Build an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
@@ -45,11 +55,11 @@ public class Worker1 {
 
     final MicroPropsGenerator microPropsGenerator;
 
-    private Worker1(MicroPropsGenerator microsGenerator) {
+    private NumberFormatterImpl(MicroPropsGenerator microsGenerator) {
         this.microPropsGenerator = microsGenerator;
     }
 
-    public MicroProps apply(FormatQuantity inValue, NumberStringBuilder outString) {
+    public MicroProps apply(DecimalQuantity inValue, NumberStringBuilder outString) {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         microsToString(micros, inValue, outString);
         return micros;
@@ -75,7 +85,7 @@ public class Worker1 {
 
         String innerPattern = null;
         LongNameHandler longNames = null;
-        Rounder defaultRounding = Rounder.none();
+        Rounder defaultRounding = Rounder.unlimited();
         Currency currency = DEFAULT_CURRENCY;
         UnitWidth unitWidth = null;
         boolean perMille = false;
@@ -131,7 +141,7 @@ public class Worker1 {
         }
 
         // Parse the pattern, which is used for grouping and affixes only.
-        ParsedPatternInfo patternInfo = PatternParser.parse(innerPattern);
+        ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(innerPattern);
 
         // Symbols
         if (macros.symbols == null) {
@@ -242,16 +252,16 @@ public class Worker1 {
     //////////
 
     /**
-     * Synthesizes the output string from a MicroProps and FormatQuantity.
+     * Synthesizes the output string from a MicroProps and DecimalQuantity.
      *
      * @param micros
      *            The MicroProps after the quantity has been consumed. Will not be mutated.
      * @param quantity
-     *            The FormatQuantity to be rendered. May be mutated.
+     *            The DecimalQuantity to be rendered. May be mutated.
      * @param string
      *            The output string. Will be mutated.
      */
-    private static void microsToString(MicroProps micros, FormatQuantity quantity, NumberStringBuilder string) {
+    private static void microsToString(MicroProps micros, DecimalQuantity quantity, NumberStringBuilder string) {
         quantity.adjustMagnitude(micros.multiplier);
         micros.rounding.apply(quantity);
         if (micros.integerWidth.maxInt == -1) {
@@ -265,7 +275,7 @@ public class Worker1 {
         length += micros.padding.applyModsAndMaybePad(micros, string, 0, length);
     }
 
-    private static int writeNumber(MicroProps micros, FormatQuantity quantity, NumberStringBuilder string) {
+    private static int writeNumber(MicroProps micros, DecimalQuantity quantity, NumberStringBuilder string) {
         int length = 0;
         if (quantity.isInfinite()) {
             length += string.insert(length, micros.symbols.getInfinity(), NumberFormat.Field.INTEGER);
@@ -290,7 +300,7 @@ public class Worker1 {
         return length;
     }
 
-    private static int writeIntegerDigits(MicroProps micros, FormatQuantity quantity, NumberStringBuilder string) {
+    private static int writeIntegerDigits(MicroProps micros, DecimalQuantity quantity, NumberStringBuilder string) {
         int length = 0;
         int integerCount = quantity.getUpperDisplayMagnitude() + 1;
         for (int i = 0; i < integerCount; i++) {
@@ -313,7 +323,7 @@ public class Worker1 {
         return length;
     }
 
-    private static int writeFractionDigits(MicroProps micros, FormatQuantity quantity, NumberStringBuilder string) {
+    private static int writeFractionDigits(MicroProps micros, DecimalQuantity quantity, NumberStringBuilder string) {
         int length = 0;
         int fractionCount = -quantity.getLowerDisplayMagnitude();
         for (int i = 0; i < fractionCount; i++) {

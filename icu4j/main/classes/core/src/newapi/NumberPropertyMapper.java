@@ -6,11 +6,10 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import com.ibm.icu.impl.StandardPlural;
-import com.ibm.icu.impl.number.AffixPatternUtils;
-import com.ibm.icu.impl.number.PatternAndPropertyUtils;
-import com.ibm.icu.impl.number.PatternParser;
-import com.ibm.icu.impl.number.PatternParser.ParsedPatternInfo;
-import com.ibm.icu.impl.number.Properties;
+import com.ibm.icu.impl.number.AffixUtils;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
@@ -30,11 +29,15 @@ import newapi.impl.MacroProps;
 import newapi.impl.MultiplierImpl;
 import newapi.impl.Padder;
 
-/** @author sffc */
-public final class NumberPropertyMapper {
+/**
+ * <p>
+ * This class, as well as NumberFormatterImpl, could go into the impl package, but they depend on too many
+ * package-private members of the public APIs.
+ */
+final class NumberPropertyMapper {
 
     /** Convenience method to create a NumberFormatter directly from Properties. */
-    public static UnlocalizedNumberFormatter create(Properties properties, DecimalFormatSymbols symbols) {
+    public static UnlocalizedNumberFormatter create(DecimalFormatProperties properties, DecimalFormatSymbols symbols) {
         MacroProps macros = oldToNew(properties, symbols, null);
         return NumberFormatter.with().macros(macros);
     }
@@ -44,14 +47,14 @@ public final class NumberPropertyMapper {
      * public API if there is demand.
      */
     public static UnlocalizedNumberFormatter create(String pattern, DecimalFormatSymbols symbols) {
-        Properties properties = PatternAndPropertyUtils.parseToProperties(pattern);
+        DecimalFormatProperties properties = PatternStringParser.parseToProperties(pattern);
         return create(properties, symbols);
     }
 
     /**
-     * Creates a new {@link MacroProps} object based on the content of a {@link Properties} object. In other words, maps
-     * Properties to MacroProps. This function is used by the JDK-compatibility API to call into the ICU 60 fluent
-     * number formatting pipeline.
+     * Creates a new {@link MacroProps} object based on the content of a {@link DecimalFormatProperties} object. In
+     * other words, maps Properties to MacroProps. This function is used by the JDK-compatibility API to call into the
+     * ICU 60 fluent number formatting pipeline.
      *
      * @param properties
      *            The property bag to be mapped.
@@ -61,8 +64,8 @@ public final class NumberPropertyMapper {
      *            A property bag in which to store validated properties.
      * @return A new MacroProps containing all of the information in the Properties.
      */
-    public static MacroProps oldToNew(Properties properties, DecimalFormatSymbols symbols,
-            Properties exportedProperties) {
+    public static MacroProps oldToNew(DecimalFormatProperties properties, DecimalFormatSymbols symbols,
+            DecimalFormatProperties exportedProperties) {
         MacroProps macros = new MacroProps();
         ULocale locale = symbols.getULocale();
 
@@ -85,13 +88,13 @@ public final class NumberPropertyMapper {
         AffixPatternProvider affixProvider;
         if (properties.getCurrencyPluralInfo() == null) {
             affixProvider = new PropertiesAffixPatternProvider(
-                    properties.getPositivePrefix() != null ? AffixPatternUtils.escape(properties.getPositivePrefix())
+                    properties.getPositivePrefix() != null ? AffixUtils.escape(properties.getPositivePrefix())
                             : properties.getPositivePrefixPattern(),
-                    properties.getPositiveSuffix() != null ? AffixPatternUtils.escape(properties.getPositiveSuffix())
+                    properties.getPositiveSuffix() != null ? AffixUtils.escape(properties.getPositiveSuffix())
                             : properties.getPositiveSuffixPattern(),
-                    properties.getNegativePrefix() != null ? AffixPatternUtils.escape(properties.getNegativePrefix())
+                    properties.getNegativePrefix() != null ? AffixUtils.escape(properties.getNegativePrefix())
                             : properties.getNegativePrefixPattern(),
-                    properties.getNegativeSuffix() != null ? AffixPatternUtils.escape(properties.getNegativeSuffix())
+                    properties.getNegativeSuffix() != null ? AffixUtils.escape(properties.getNegativeSuffix())
                             : properties.getNegativeSuffixPattern());
         } else {
             affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo());
@@ -371,8 +374,8 @@ public final class NumberPropertyMapper {
 
         @Override
         public boolean positiveHasPlusSign() {
-            return AffixPatternUtils.containsType(posPrefixPattern, AffixPatternUtils.TYPE_PLUS_SIGN)
-                    || AffixPatternUtils.containsType(posSuffixPattern, AffixPatternUtils.TYPE_PLUS_SIGN);
+            return AffixUtils.containsType(posPrefixPattern, AffixUtils.TYPE_PLUS_SIGN)
+                    || AffixUtils.containsType(posSuffixPattern, AffixUtils.TYPE_PLUS_SIGN);
         }
 
         @Override
@@ -382,24 +385,22 @@ public final class NumberPropertyMapper {
 
         @Override
         public boolean negativeHasMinusSign() {
-            return AffixPatternUtils.containsType(negPrefixPattern, AffixPatternUtils.TYPE_MINUS_SIGN)
-                    || AffixPatternUtils.containsType(negSuffixPattern, AffixPatternUtils.TYPE_MINUS_SIGN);
+            return AffixUtils.containsType(negPrefixPattern, AffixUtils.TYPE_MINUS_SIGN)
+                    || AffixUtils.containsType(negSuffixPattern, AffixUtils.TYPE_MINUS_SIGN);
         }
 
         @Override
         public boolean hasCurrencySign() {
-            return AffixPatternUtils.hasCurrencySymbols(posPrefixPattern)
-                    || AffixPatternUtils.hasCurrencySymbols(posSuffixPattern)
-                    || AffixPatternUtils.hasCurrencySymbols(negPrefixPattern)
-                    || AffixPatternUtils.hasCurrencySymbols(negSuffixPattern);
+            return AffixUtils.hasCurrencySymbols(posPrefixPattern) || AffixUtils.hasCurrencySymbols(posSuffixPattern)
+                    || AffixUtils.hasCurrencySymbols(negPrefixPattern)
+                    || AffixUtils.hasCurrencySymbols(negSuffixPattern);
         }
 
         @Override
         public boolean containsSymbolType(int type) {
-            return AffixPatternUtils.containsType(posPrefixPattern, type)
-                    || AffixPatternUtils.containsType(posSuffixPattern, type)
-                    || AffixPatternUtils.containsType(negPrefixPattern, type)
-                    || AffixPatternUtils.containsType(negSuffixPattern, type);
+            return AffixUtils.containsType(posPrefixPattern, type) || AffixUtils.containsType(posSuffixPattern, type)
+                    || AffixUtils.containsType(negPrefixPattern, type)
+                    || AffixUtils.containsType(negSuffixPattern, type);
         }
     }
 
@@ -409,8 +410,8 @@ public final class NumberPropertyMapper {
         public CurrencyPluralInfoAffixProvider(CurrencyPluralInfo cpi) {
             affixesByPlural = new ParsedPatternInfo[StandardPlural.COUNT];
             for (StandardPlural plural : StandardPlural.VALUES) {
-                affixesByPlural[plural.ordinal()] = PatternParser
-                        .parse(cpi.getCurrencyPluralPattern(plural.getKeyword()));
+                affixesByPlural[plural.ordinal()] = PatternStringParser
+                        .parseToPatternInfo(cpi.getCurrencyPluralPattern(plural.getKeyword()));
             }
         }
 

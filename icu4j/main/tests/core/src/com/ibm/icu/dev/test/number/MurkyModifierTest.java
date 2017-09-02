@@ -6,22 +6,22 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.ibm.icu.impl.number.PatternParser;
+import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
-import newapi.MutablePatternModifier;
 import newapi.NumberFormatter.SignDisplay;
 import newapi.NumberFormatter.UnitWidth;
+import newapi.impl.MutablePatternModifier;
 
 public class MurkyModifierTest {
 
   @Test
   public void basic() {
     MutablePatternModifier murky = new MutablePatternModifier(false);
-    murky.setPatternInfo(PatternParser.parse("a0b"));
+    murky.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b"));
     murky.setPatternAttributes(SignDisplay.AUTO, false);
     murky.setSymbols(
         DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
@@ -41,7 +41,7 @@ public class MurkyModifierTest {
     assertEquals("a", getPrefix(murky));
     assertEquals("b", getSuffix(murky));
 
-    murky.setPatternInfo(PatternParser.parse("a0b;c-0d"));
+    murky.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"));
     murky.setPatternAttributes(SignDisplay.AUTO, false);
     murky.setNumberProperties(false, null);
     assertEquals("a", getPrefix(murky));

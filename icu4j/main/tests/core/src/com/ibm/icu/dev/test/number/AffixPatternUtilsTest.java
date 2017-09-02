@@ -7,8 +7,8 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.ibm.icu.impl.number.AffixPatternUtils;
-import com.ibm.icu.impl.number.AffixPatternUtils.SymbolProvider;
+import com.ibm.icu.impl.number.AffixUtils;
+import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
@@ -24,26 +24,26 @@ public class AffixPatternUtilsTest {
           @Override
           public CharSequence getSymbol(int type) {
             switch (type) {
-              case AffixPatternUtils.TYPE_MINUS_SIGN:
+              case AffixUtils.TYPE_MINUS_SIGN:
                 return "−";
-              case AffixPatternUtils.TYPE_PLUS_SIGN:
+              case AffixUtils.TYPE_PLUS_SIGN:
                 return SYMBOLS.getPlusSignString();
-              case AffixPatternUtils.TYPE_PERCENT:
+              case AffixUtils.TYPE_PERCENT:
                 return SYMBOLS.getPercentString();
-              case AffixPatternUtils.TYPE_PERMILLE:
+              case AffixUtils.TYPE_PERMILLE:
                 return SYMBOLS.getPerMillString();
-              case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
+              case AffixUtils.TYPE_CURRENCY_SINGLE:
                 return "$";
-              case AffixPatternUtils.TYPE_CURRENCY_DOUBLE:
+              case AffixUtils.TYPE_CURRENCY_DOUBLE:
                 return "XXX";
-              case AffixPatternUtils.TYPE_CURRENCY_TRIPLE:
+              case AffixUtils.TYPE_CURRENCY_TRIPLE:
                 return "long name";
-              case AffixPatternUtils.TYPE_CURRENCY_QUAD:
+              case AffixUtils.TYPE_CURRENCY_QUAD:
                 return "\uFFFD";
-              case AffixPatternUtils.TYPE_CURRENCY_QUINT:
+              case AffixUtils.TYPE_CURRENCY_QUINT:
                 // TODO: Add support for narrow currency symbols here.
                 return "\uFFFD";
-              case AffixPatternUtils.TYPE_CURRENCY_OVERFLOW:
+              case AffixUtils.TYPE_CURRENCY_OVERFLOW:
                 return "\uFFFD";
               default:
                 throw new AssertionError();
@@ -72,7 +72,7 @@ public class AffixPatternUtilsTest {
       String input = (String) cas[0];
       String expected = (String) cas[1];
       sb.setLength(0);
-      AffixPatternUtils.escape(input, sb);
+      AffixUtils.escape(input, sb);
       assertEquals(expected, sb.toString());
     }
   }
@@ -122,8 +122,8 @@ public class AffixPatternUtilsTest {
       String output = (String) cas[3];
 
       assertEquals(
-          "Currency on <" + input + ">", curr, AffixPatternUtils.hasCurrencySymbols(input));
-      assertEquals("Length on <" + input + ">", length, AffixPatternUtils.estimateLength(input));
+          "Currency on <" + input + ">", curr, AffixUtils.hasCurrencySymbols(input));
+      assertEquals("Length on <" + input + ">", length, AffixUtils.estimateLength(input));
 
       String actual = unescapeWithDefaults(input);
       assertEquals("Output on <" + input + ">", output, actual);
@@ -150,11 +150,11 @@ public class AffixPatternUtilsTest {
       assertEquals(
           "Contains on input " + input,
           hasMinusSign,
-          AffixPatternUtils.containsType(input, AffixPatternUtils.TYPE_MINUS_SIGN));
+          AffixUtils.containsType(input, AffixUtils.TYPE_MINUS_SIGN));
       assertEquals(
           "Replace on input" + input,
           output,
-          AffixPatternUtils.replaceType(input, AffixPatternUtils.TYPE_MINUS_SIGN, '+'));
+          AffixUtils.replaceType(input, AffixUtils.TYPE_MINUS_SIGN, '+'));
     }
   }
 
@@ -164,13 +164,13 @@ public class AffixPatternUtilsTest {
 
     for (String str : invalidExamples) {
       try {
-        AffixPatternUtils.hasCurrencySymbols(str);
+        AffixUtils.hasCurrencySymbols(str);
         fail("No exception was thrown on an invalid string");
       } catch (IllegalArgumentException e) {
         // OK
       }
       try {
-        AffixPatternUtils.estimateLength(str);
+        AffixUtils.estimateLength(str);
         fail("No exception was thrown on an invalid string");
       } catch (IllegalArgumentException e) {
         // OK
@@ -208,20 +208,20 @@ public class AffixPatternUtilsTest {
       String input = cas[0];
       String expected = cas[1];
       sb.clear();
-      AffixPatternUtils.unescape(input, sb, 0, provider);
+      AffixUtils.unescape(input, sb, 0, provider);
       assertEquals("With symbol provider on <" + input + ">", expected, sb.toString());
     }
 
     // Test insertion position
     sb.clear();
     sb.append("abcdefg", null);
-    AffixPatternUtils.unescape("-+%", sb, 4, provider);
+    AffixUtils.unescape("-+%", sb, 4, provider);
     assertEquals("Symbol provider into middle", "abcd123efg", sb.toString());
   }
 
   private static String unescapeWithDefaults(String input) {
     NumberStringBuilder nsb = new NumberStringBuilder();
-    AffixPatternUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER);
+    AffixUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER);
     return nsb.toString();
   }
 }

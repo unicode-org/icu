@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
-import newapi.MutablePatternModifier;
+import newapi.impl.MutablePatternModifier;
 
 /**
  * A Modifier is an object that can be passed through the formatting pipeline until it is finally applied to the string

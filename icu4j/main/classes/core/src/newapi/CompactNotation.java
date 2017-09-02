@@ -7,18 +7,19 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.impl.StandardPlural;
-import com.ibm.icu.impl.number.FormatQuantity;
-import com.ibm.icu.impl.number.PatternParser;
-import com.ibm.icu.impl.number.PatternParser.ParsedPatternInfo;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CompactDecimalFormat.CompactType;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.ULocale;
 
-import newapi.MutablePatternModifier.ImmutableMurkyModifier;
 import newapi.impl.CompactData;
 import newapi.impl.MicroProps;
 import newapi.impl.MicroPropsGenerator;
+import newapi.impl.MutablePatternModifier;
+import newapi.impl.MutablePatternModifier.ImmutableMurkyModifier;
 
 public class CompactNotation extends Notation {
 
@@ -78,7 +79,7 @@ public class CompactNotation extends Notation {
             Set<String> allPatterns = data.getAllPatterns();
             for (String patternString : allPatterns) {
                 CompactModInfo info = new CompactModInfo();
-                ParsedPatternInfo patternInfo = PatternParser.parse(patternString);
+                ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(patternString);
                 buildReference.setPatternInfo(patternInfo);
                 info.mod = buildReference.createImmutable();
                 info.numDigits = patternInfo.positive.integerTotal;
@@ -88,7 +89,7 @@ public class CompactNotation extends Notation {
         }
 
         @Override
-        public MicroProps processQuantity(FormatQuantity input) {
+        public MicroProps processQuantity(DecimalQuantity input) {
             MicroProps micros = parent.processQuantity(input);
             assert micros.rounding != null;
 
@@ -119,7 +120,7 @@ public class CompactNotation extends Notation {
                 // Unsafe code path.
                 // Overwrite the PatternInfo in the existing modMiddle
                 assert micros.modMiddle instanceof MutablePatternModifier;
-                ParsedPatternInfo patternInfo = PatternParser.parse(patternString);
+                ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(patternString);
                 ((MutablePatternModifier) micros.modMiddle).setPatternInfo(patternInfo);
                 numDigits = patternInfo.positive.integerTotal;
             }

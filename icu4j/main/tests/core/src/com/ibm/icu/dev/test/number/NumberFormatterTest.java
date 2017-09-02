@@ -11,6 +11,7 @@ import java.util.Locale;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
@@ -30,7 +31,6 @@ import newapi.NumberFormatter;
 import newapi.NumberFormatter.DecimalMarkDisplay;
 import newapi.NumberFormatter.SignDisplay;
 import newapi.NumberFormatter.UnitWidth;
-import newapi.NumberPropertyMapper;
 import newapi.Rounder;
 import newapi.UnlocalizedNumberFormatter;
 import newapi.impl.Padder;
@@ -397,8 +397,11 @@ public class NumberFormatterTest {
 
         assertFormatSingle(
                 "Currency Long Name from Pattern Syntax",
-                "$GBP F0 grouping=none integer-width=1- symbols=loc:en_US sign=AUTO decimal=AUTO",
-                NumberPropertyMapper.create("0 ¤¤¤", DecimalFormatSymbols.getInstance()).unit(GBP),
+                "$GBP F0 grouping=none integer-width=1- symbols=loc:en sign=AUTO decimal=AUTO",
+                NumberFormatter.fromDecimalFormat(
+                        PatternStringParser.parseToProperties("0 ¤¤¤"),
+                        DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
+                        null).unit(GBP),
                 ULocale.ENGLISH,
                 1234567.89,
                 "1234568 British pounds");
@@ -658,7 +661,7 @@ public class NumberFormatterTest {
         assertFormatDescending(
                 "Rounding None",
                 "Y",
-                NumberFormatter.with().rounding(Rounder.none()),
+                NumberFormatter.with().rounding(Rounder.unlimited()),
                 ULocale.ENGLISH,
                 "87,650",
                 "8,765",
@@ -1229,8 +1232,8 @@ public class NumberFormatterTest {
     @Test
     public void getPrefixSuffix() {
         Object[][] cases = {
-                { NumberFormatter.withLocale(ULocale.ENGLISH).unit(GBP).unitWidth(UnitWidth.ISO_CODE), "GBP", "", "-GBP",
-                        "" },
+                { NumberFormatter.withLocale(ULocale.ENGLISH).unit(GBP).unitWidth(UnitWidth.ISO_CODE), "GBP", "",
+                        "-GBP", "" },
                 { NumberFormatter.withLocale(ULocale.ENGLISH).unit(GBP).unitWidth(UnitWidth.FULL_NAME), "",
                         " British pounds", "-", " British pounds" } };
 

@@ -8,7 +8,7 @@ import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.util.Arrays;
 
-import com.ibm.icu.impl.number.FormatQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.ICUUncheckedIOException;
@@ -17,10 +17,10 @@ import newapi.impl.MicroProps;
 
 public class FormattedNumber {
     NumberStringBuilder nsb;
-    FormatQuantity fq;
+    DecimalQuantity fq;
     MicroProps micros;
 
-    FormattedNumber(NumberStringBuilder nsb, FormatQuantity fq, MicroProps micros) {
+    FormattedNumber(NumberStringBuilder nsb, DecimalQuantity fq, MicroProps micros) {
         this.nsb = nsb;
         this.fq = fq;
         this.micros = micros;

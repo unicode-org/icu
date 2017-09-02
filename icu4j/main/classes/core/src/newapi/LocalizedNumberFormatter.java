@@ -5,8 +5,8 @@ package newapi;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
-import com.ibm.icu.impl.number.FormatQuantity;
-import com.ibm.icu.impl.number.FormatQuantity4;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
@@ -21,22 +21,22 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
 
     volatile long callCountInternal; // do not access directly; use callCount instead
     volatile LocalizedNumberFormatter savedWithUnit;
-    volatile Worker1 compiled;
+    volatile NumberFormatterImpl compiled;
 
     LocalizedNumberFormatter(NumberFormatterSettings<?> parent, int key, Object value) {
         super(parent, key, value);
     }
 
     public FormattedNumber format(long input) {
-        return format(new FormatQuantity4(input));
+        return format(new DecimalQuantity_DualStorageBCD(input));
     }
 
     public FormattedNumber format(double input) {
-        return format(new FormatQuantity4(input));
+        return format(new DecimalQuantity_DualStorageBCD(input));
     }
 
     public FormattedNumber format(Number input) {
-        return format(new FormatQuantity4(input));
+        return format(new DecimalQuantity_DualStorageBCD(input));
     }
 
     public FormattedNumber format(Measure input) {
@@ -68,18 +68,18 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
-    public FormattedNumber format(FormatQuantity fq) {
+    public FormattedNumber format(DecimalQuantity fq) {
         MacroProps macros = resolve();
         NumberStringBuilder string = new NumberStringBuilder();
         long currentCount = callCount.incrementAndGet(this);
         MicroProps micros;
         if (currentCount == macros.threshold.longValue()) {
-            compiled = Worker1.fromMacros(macros);
+            compiled = NumberFormatterImpl.fromMacros(macros);
             micros = compiled.apply(fq, string);
         } else if (compiled != null) {
             micros = compiled.apply(fq, string);
         } else {
-            micros = Worker1.applyStatic(macros, fq, string);
+            micros = NumberFormatterImpl.applyStatic(macros, fq, string);
         }
         return new FormattedNumber(string, fq, micros);
     }

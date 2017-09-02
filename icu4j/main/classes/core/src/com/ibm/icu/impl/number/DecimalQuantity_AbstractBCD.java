@@ -15,9 +15,9 @@ import com.ibm.icu.text.UFieldPosition;
 /**
  * Represents numbers and digit display properties using Binary Coded Decimal (BCD).
  *
- * @implements {@link FormatQuantity}
+ * @implements {@link DecimalQuantity}
  */
-public abstract class FormatQuantityBCD implements FormatQuantity {
+public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
   /**
    * The power of ten corresponding to the least significant digit in the BCD. For example, if this
@@ -51,10 +51,10 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
   protected static final int NAN_FLAG = 4;
 
   // The following three fields relate to the double-to-ascii fast path algorithm.
-  // When a double is given to FormatQuantityBCD, it is converted to using a fast algorithm. The
+  // When a double is given to DecimalQuantityBCD, it is converted to using a fast algorithm. The
   // fast algorithm guarantees correctness to only the first ~12 digits of the double. The process
   // of rounding the number ensures that the converted digits are correct, falling back to a slow-
-  // path algorithm if required.  Therefore, if a FormatQuantity is constructed from a double, it
+  // path algorithm if required.  Therefore, if a DecimalQuantity is constructed from a double, it
   // is *required* that roundToMagnitude(), roundToIncrement(), or roundToInfinity() is called. If
   // you don't round, assertions will fail in certain other methods if you try calling them.
 
@@ -108,9 +108,9 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
   protected int rOptPos = Integer.MIN_VALUE;
 
   @Override
-  public void copyFrom(FormatQuantity _other) {
+  public void copyFrom(DecimalQuantity _other) {
     copyBcdFrom(_other);
-    FormatQuantityBCD other = (FormatQuantityBCD) _other;
+    DecimalQuantity_AbstractBCD other = (DecimalQuantity_AbstractBCD) _other;
     lOptPos = other.lOptPos;
     lReqPos = other.lReqPos;
     rReqPos = other.rReqPos;
@@ -123,7 +123,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
     isApproximate = other.isApproximate;
   }
 
-  public FormatQuantityBCD clear() {
+  public DecimalQuantity_AbstractBCD clear() {
     lOptPos = Integer.MAX_VALUE;
     lReqPos = 0;
     rReqPos = 0;
@@ -135,7 +135,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   @Override
   public void setIntegerLength(int minInt, int maxInt) {
-    // Validation should happen outside of FormatQuantity, e.g., in the Rounder class.
+    // Validation should happen outside of DecimalQuantity, e.g., in the Rounder class.
     assert minInt >= 0;
     assert maxInt >= minInt;
 
@@ -147,7 +147,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   @Override
   public void setFractionLength(int minFrac, int maxFrac) {
-    // Validation should happen outside of FormatQuantity, e.g., in the Rounder class.
+    // Validation should happen outside of DecimalQuantity, e.g., in the Rounder class.
     assert minFrac >= 0;
     assert maxFrac >= minFrac;
 
@@ -311,13 +311,13 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
   }
 
   @Override
-  public FormatQuantity createCopy() {
-    if (this instanceof FormatQuantity2) {
-      return new FormatQuantity2((FormatQuantity2) this);
-    } else if (this instanceof FormatQuantity3) {
-      return new FormatQuantity3((FormatQuantity3) this);
-    } else if (this instanceof FormatQuantity4) {
-      return new FormatQuantity4((FormatQuantity4) this);
+  public DecimalQuantity createCopy() {
+    if (this instanceof DecimalQuantity_64BitBCD) {
+      return new DecimalQuantity_64BitBCD((DecimalQuantity_64BitBCD) this);
+    } else if (this instanceof DecimalQuantity_ByteArrayBCD) {
+      return new DecimalQuantity_ByteArrayBCD((DecimalQuantity_ByteArrayBCD) this);
+    } else if (this instanceof DecimalQuantity_DualStorageBCD) {
+      return new DecimalQuantity_DualStorageBCD((DecimalQuantity_DualStorageBCD) this);
     } else {
       throw new IllegalArgumentException("Don't know how to copy " + this.getClass());
     }
@@ -501,7 +501,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
   }
 
   /**
-   * Whether this {@link FormatQuantity4} has been explicitly converted to an exact double. true if
+   * Whether this {@link DecimalQuantity_DualStorageBCD} has been explicitly converted to an exact double. true if
    * backed by a double that was explicitly converted via convertToAccurateDouble; false otherwise.
    * Used for testing.
    *
@@ -795,7 +795,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
 
   /**
    * Appends a digit, optionally with one or more leading zeros, to the end of the value represented
-   * by this FormatQuantity.
+   * by this DecimalQuantity.
    *
    * <p>The primary use of this method is to construct numbers during a parsing loop. It allows
    * parsing to take advantage of the digit list infrastructure primarily designed for formatting.
@@ -909,7 +909,7 @@ public abstract class FormatQuantityBCD implements FormatQuantity {
    */
   protected abstract BigDecimal bcdToBigDecimal();
 
-  protected abstract void copyBcdFrom(FormatQuantity _other);
+  protected abstract void copyBcdFrom(DecimalQuantity _other);
 
   /**
    * Removes trailing zeros from the BCD (adjusting the scale as required) and then computes the

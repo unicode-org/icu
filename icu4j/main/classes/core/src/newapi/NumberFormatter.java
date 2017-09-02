@@ -4,7 +4,11 @@ package newapi;
 
 import java.util.Locale;
 
+import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
+
+import newapi.impl.MacroProps;
 
 public final class NumberFormatter {
 
@@ -42,5 +46,16 @@ public final class NumberFormatter {
 
     public static LocalizedNumberFormatter withLocale(ULocale locale) {
         return BASE.locale(locale);
+    }
+
+    /**
+     * @internal
+     * @deprecated ICU 60 This API is ICU internal only.
+     */
+    @Deprecated
+    public static UnlocalizedNumberFormatter fromDecimalFormat(DecimalFormatProperties properties,
+            DecimalFormatSymbols symbols, DecimalFormatProperties exportedProperties) {
+        MacroProps macros = NumberPropertyMapper.oldToNew(properties, symbols, exportedProperties);
+        return NumberFormatter.with().macros(macros);
     }
 }

@@ -5,7 +5,7 @@ package com.ibm.icu.impl.number;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public final class FormatQuantity3 extends FormatQuantityBCD {
+public final class DecimalQuantity_ByteArrayBCD extends DecimalQuantity_AbstractBCD {
 
   /**
    * The BCD of the 16 digits of the number represented by this object. Every 4 bits of the long map
@@ -21,27 +21,27 @@ public final class FormatQuantity3 extends FormatQuantityBCD {
     return Integer.MAX_VALUE;
   }
 
-  public FormatQuantity3(long input) {
+  public DecimalQuantity_ByteArrayBCD(long input) {
     setToLong(input);
   }
 
-  public FormatQuantity3(int input) {
+  public DecimalQuantity_ByteArrayBCD(int input) {
     setToInt(input);
   }
 
-  public FormatQuantity3(double input) {
+  public DecimalQuantity_ByteArrayBCD(double input) {
     setToDouble(input);
   }
 
-  public FormatQuantity3(BigInteger input) {
+  public DecimalQuantity_ByteArrayBCD(BigInteger input) {
     setToBigInteger(input);
   }
 
-  public FormatQuantity3(BigDecimal input) {
+  public DecimalQuantity_ByteArrayBCD(BigDecimal input) {
     setToBigDecimal(input);
   }
 
-  public FormatQuantity3(FormatQuantity3 other) {
+  public DecimalQuantity_ByteArrayBCD(DecimalQuantity_ByteArrayBCD other) {
     copyFrom(other);
   }
 
@@ -201,8 +201,8 @@ public final class FormatQuantity3 extends FormatQuantityBCD {
   }
 
   @Override
-  protected void copyBcdFrom(FormatQuantity _other) {
-    FormatQuantity3 other = (FormatQuantity3) _other;
+  protected void copyBcdFrom(DecimalQuantity _other) {
+    DecimalQuantity_ByteArrayBCD other = (DecimalQuantity_ByteArrayBCD) _other;
     System.arraycopy(other.bcd, 0, bcd, 0, bcd.length);
   }
 
@@ -213,7 +213,7 @@ public final class FormatQuantity3 extends FormatQuantityBCD {
       sb.append(bcd[i]);
     }
     return String.format(
-        "<FormatQuantity3 %s:%d:%d:%s %s%s%d>",
+        "<DecimalQuantity3 %s:%d:%d:%s %s%s%d>",
         (lOptPos > 1000 ? "max" : String.valueOf(lOptPos)),
         lReqPos,
         rReqPos,
