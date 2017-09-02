@@ -133,7 +133,7 @@ public class RoundingUtils {
    * @param properties The property bag.
    * @return A {@link MathContext}. Never null.
    */
-  public static MathContext getMathContextOrUnlimited(Properties properties) {
+  public static MathContext getMathContextOrUnlimited(DecimalFormatProperties properties) {
     MathContext mathContext = properties.getMathContext();
     if (mathContext == null) {
       RoundingMode roundingMode = properties.getRoundingMode();
@@ -151,7 +151,7 @@ public class RoundingUtils {
    * @param properties The property bag.
    * @return A {@link MathContext}. Never null.
    */
-  public static MathContext getMathContextOr34Digits(Properties properties) {
+  public static MathContext getMathContextOr34Digits(DecimalFormatProperties properties) {
     MathContext mathContext = properties.getMathContext();
     if (mathContext == null) {
       RoundingMode roundingMode = properties.getRoundingMode();

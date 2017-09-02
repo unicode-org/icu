@@ -6,20 +6,24 @@ import newapi.impl.AffixPatternProvider;
 import newapi.impl.Padder.PadPosition;
 
 /** Implements a recursive descent parser for decimal format patterns. */
-public class PatternParser {
+public class PatternStringParser {
+
+    public static final int IGNORE_ROUNDING_NEVER = 0;
+    public static final int IGNORE_ROUNDING_IF_CURRENCY = 1;
+    public static final int IGNORE_ROUNDING_ALWAYS = 2;
 
     /**
      * Runs the recursive descent parser on the given pattern string, returning a data structure with raw information
      * about the pattern string.
      *
      * <p>
-     * To obtain a more useful form of the data, consider using {@link PatternAndPropertyUtils#parse} instead.
+     * To obtain a more useful form of the data, consider using {@link #parseToProperties} instead.
      *
      * @param patternString
      *            The LDML decimal format pattern (Excel-style pattern) to parse.
      * @return The results of the parse.
      */
-    public static ParsedPatternInfo parse(String patternString) {
+    public static ParsedPatternInfo parseToPatternInfo(String patternString) {
         ParserState state = new ParserState(patternString);
         ParsedPatternInfo result = new ParsedPatternInfo(patternString);
         consumePattern(state, result);
@@ -27,9 +31,59 @@ public class PatternParser {
     }
 
     /**
-     * Contains information about
-     * @author sffc
+     * Parses a pattern string into a new property bag.
      *
+     * @param pattern
+     *            The pattern string, like "#,##0.00"
+     * @param ignoreRounding
+     *            Whether to leave out rounding information (minFrac, maxFrac, and rounding increment) when parsing the
+     *            pattern. This may be desirable if a custom rounding mode, such as CurrencyUsage, is to be used
+     *            instead. One of {@link PatternStringParser#IGNORE_ROUNDING_ALWAYS},
+     *            {@link PatternStringParser#IGNORE_ROUNDING_IF_CURRENCY}, or
+     *            {@link PatternStringParser#IGNORE_ROUNDING_NEVER}.
+     * @return A property bag object.
+     * @throws IllegalArgumentException
+     *             If there is a syntax error in the pattern string.
+     */
+    public static DecimalFormatProperties parseToProperties(String pattern, int ignoreRounding) {
+        DecimalFormatProperties properties = new DecimalFormatProperties();
+        parseToExistingPropertiesImpl(pattern, properties, ignoreRounding);
+        return properties;
+    }
+
+    public static DecimalFormatProperties parseToProperties(String pattern) {
+        return parseToProperties(pattern, PatternStringParser.IGNORE_ROUNDING_NEVER);
+    }
+
+    /**
+     * Parses a pattern string into an existing property bag. All properties that can be encoded into a pattern string
+     * will be overwritten with either their default value or with the value coming from the pattern string. Properties
+     * that cannot be encoded into a pattern string, such as rounding mode, are not modified.
+     *
+     * @param pattern
+     *            The pattern string, like "#,##0.00"
+     * @param properties
+     *            The property bag object to overwrite.
+     * @param ignoreRounding
+     *            See {@link #parseToProperties(String pattern, int ignoreRounding)}.
+     * @throws IllegalArgumentException
+     *             If there was a syntax error in the pattern string.
+     */
+    public static void parseToExistingProperties(String pattern, DecimalFormatProperties properties,
+            int ignoreRounding) {
+        parseToExistingPropertiesImpl(pattern, properties, ignoreRounding);
+    }
+
+    public static void parseToExistingProperties(String pattern, DecimalFormatProperties properties) {
+        parseToExistingProperties(pattern, properties, PatternStringParser.IGNORE_ROUNDING_NEVER);
+    }
+
+    /////////////////////////////////////////////////////
+    /// BEGIN RECURSIVE DESCENT PARSER IMPLEMENTATION ///
+    /////////////////////////////////////////////////////
+
+    /**
+     * Contains raw information about the parsed decimal format pattern string.
      */
     public static class ParsedPatternInfo implements AffixPatternProvider {
         public String pattern;
@@ -113,7 +167,7 @@ public class PatternParser {
 
         @Override
         public boolean containsSymbolType(int type) {
-            return AffixPatternUtils.containsType(pattern, type);
+            return AffixUtils.containsType(pattern, type);
         }
     }
 
@@ -130,7 +184,7 @@ public class PatternParser {
         public boolean hasDecimal = false;
         public int widthExceptAffixes = 0;
         public PadPosition paddingLocation = null;
-        public FormatQuantity4 rounding = null;
+        public DecimalQuantity_DualStorageBCD rounding = null;
         public boolean exponentHasPlusSign = false;
         public int exponentZeros = 0;
         public boolean hasPercentSign = false;
@@ -353,7 +407,7 @@ public class PatternParser {
                 result.integerNumerals += 1;
                 result.integerTotal += 1;
                 if (state.peek() != '0' && result.rounding == null) {
-                    result.rounding = new FormatQuantity4();
+                    result.rounding = new DecimalQuantity_DualStorageBCD();
                 }
                 if (result.rounding != null) {
                     result.rounding.appendDigit((byte) (state.peek() - '0'), 0, true);
@@ -409,7 +463,7 @@ public class PatternParser {
                     zeroCounter++;
                 } else {
                     if (result.rounding == null) {
-                        result.rounding = new FormatQuantity4();
+                        result.rounding = new DecimalQuantity_DualStorageBCD();
                     }
                     result.rounding.appendDigit((byte) (state.peek() - '0'), zeroCounter, false);
                     zeroCounter = 0;
@@ -438,6 +492,187 @@ public class PatternParser {
             state.next(); // consume the 0
             result.exponentZeros += 1;
             result.widthExceptAffixes++;
+        }
+    }
+
+    ///////////////////////////////////////////////////
+    /// END RECURSIVE DESCENT PARSER IMPLEMENTATION ///
+    ///////////////////////////////////////////////////
+
+    private static void parseToExistingPropertiesImpl(String pattern, DecimalFormatProperties properties, int ignoreRounding) {
+        if (pattern == null || pattern.length() == 0) {
+            // Backwards compatibility requires that we reset to the default values.
+            // TODO: Only overwrite the properties that "saveToProperties" normally touches?
+            properties.clear();
+            return;
+        }
+
+        // TODO: Use thread locals here?
+        ParsedPatternInfo patternInfo = parseToPatternInfo(pattern);
+        patternInfoToProperties(properties, patternInfo, ignoreRounding);
+    }
+
+    /** Finalizes the temporary data stored in the ParsedPatternInfo to the Properties. */
+    private static void patternInfoToProperties(DecimalFormatProperties properties, ParsedPatternInfo patternInfo,
+            int _ignoreRounding) {
+        // Translate from PatternParseResult to Properties.
+        // Note that most data from "negative" is ignored per the specification of DecimalFormat.
+
+        ParsedSubpatternInfo positive = patternInfo.positive;
+        ParsedSubpatternInfo negative = patternInfo.negative;
+
+        boolean ignoreRounding;
+        if (_ignoreRounding == PatternStringParser.IGNORE_ROUNDING_NEVER) {
+            ignoreRounding = false;
+        } else if (_ignoreRounding == PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY) {
+            ignoreRounding = positive.hasCurrencySign;
+        } else {
+            assert _ignoreRounding == PatternStringParser.IGNORE_ROUNDING_ALWAYS;
+            ignoreRounding = true;
+        }
+
+        // Grouping settings
+        short grouping1 = (short) (positive.groupingSizes & 0xffff);
+        short grouping2 = (short) ((positive.groupingSizes >>> 16) & 0xffff);
+        short grouping3 = (short) ((positive.groupingSizes >>> 32) & 0xffff);
+        if (grouping2 != -1) {
+            properties.setGroupingSize(grouping1);
+        } else {
+            properties.setGroupingSize(-1);
+        }
+        if (grouping3 != -1) {
+            properties.setSecondaryGroupingSize(grouping2);
+        } else {
+            properties.setSecondaryGroupingSize(-1);
+        }
+
+        // For backwards compatibility, require that the pattern emit at least one min digit.
+        int minInt, minFrac;
+        if (positive.integerTotal == 0 && positive.fractionTotal > 0) {
+            // patterns like ".##"
+            minInt = 0;
+            minFrac = Math.max(1, positive.fractionNumerals);
+        } else if (positive.integerNumerals == 0 && positive.fractionNumerals == 0) {
+            // patterns like "#.##"
+            minInt = 1;
+            minFrac = 0;
+        } else {
+            minInt = positive.integerNumerals;
+            minFrac = positive.fractionNumerals;
+        }
+
+        // Rounding settings
+        // Don't set basic rounding when there is a currency sign; defer to CurrencyUsage
+        if (positive.integerAtSigns > 0) {
+            properties.setMinimumFractionDigits(-1);
+            properties.setMaximumFractionDigits(-1);
+            properties.setRoundingIncrement(null);
+            properties.setMinimumSignificantDigits(positive.integerAtSigns);
+            properties.setMaximumSignificantDigits(positive.integerAtSigns + positive.integerTrailingHashSigns);
+        } else if (positive.rounding != null) {
+            if (!ignoreRounding) {
+                properties.setMinimumFractionDigits(minFrac);
+                properties.setMaximumFractionDigits(positive.fractionTotal);
+                properties.setRoundingIncrement(positive.rounding.toBigDecimal().setScale(positive.fractionNumerals));
+            } else {
+                properties.setMinimumFractionDigits(-1);
+                properties.setMaximumFractionDigits(-1);
+                properties.setRoundingIncrement(null);
+            }
+            properties.setMinimumSignificantDigits(-1);
+            properties.setMaximumSignificantDigits(-1);
+        } else {
+            if (!ignoreRounding) {
+                properties.setMinimumFractionDigits(minFrac);
+                properties.setMaximumFractionDigits(positive.fractionTotal);
+                properties.setRoundingIncrement(null);
+            } else {
+                properties.setMinimumFractionDigits(-1);
+                properties.setMaximumFractionDigits(-1);
+                properties.setRoundingIncrement(null);
+            }
+            properties.setMinimumSignificantDigits(-1);
+            properties.setMaximumSignificantDigits(-1);
+        }
+
+        // If the pattern ends with a '.' then force the decimal point.
+        if (positive.hasDecimal && positive.fractionTotal == 0) {
+            properties.setDecimalSeparatorAlwaysShown(true);
+        } else {
+            properties.setDecimalSeparatorAlwaysShown(false);
+        }
+
+        // Scientific notation settings
+        if (positive.exponentZeros > 0) {
+            properties.setExponentSignAlwaysShown(positive.exponentHasPlusSign);
+            properties.setMinimumExponentDigits(positive.exponentZeros);
+            if (positive.integerAtSigns == 0) {
+                // patterns without '@' can define max integer digits, used for engineering notation
+                properties.setMinimumIntegerDigits(positive.integerNumerals);
+                properties.setMaximumIntegerDigits(positive.integerTotal);
+            } else {
+                // patterns with '@' cannot define max integer digits
+                properties.setMinimumIntegerDigits(1);
+                properties.setMaximumIntegerDigits(-1);
+            }
+        } else {
+            properties.setExponentSignAlwaysShown(false);
+            properties.setMinimumExponentDigits(-1);
+            properties.setMinimumIntegerDigits(minInt);
+            properties.setMaximumIntegerDigits(-1);
+        }
+
+        // Compute the affix patterns (required for both padding and affixes)
+        String posPrefix = patternInfo.getString(AffixPatternProvider.Flags.PREFIX);
+        String posSuffix = patternInfo.getString(0);
+
+        // Padding settings
+        if (positive.paddingEndpoints != 0) {
+            // The width of the positive prefix and suffix templates are included in the padding
+            int paddingWidth = positive.widthExceptAffixes + AffixUtils.estimateLength(posPrefix)
+                    + AffixUtils.estimateLength(posSuffix);
+            properties.setFormatWidth(paddingWidth);
+            String rawPaddingString = patternInfo.getString(AffixPatternProvider.Flags.PADDING);
+            if (rawPaddingString.length() == 1) {
+                properties.setPadString(rawPaddingString);
+            } else if (rawPaddingString.length() == 2) {
+                if (rawPaddingString.charAt(0) == '\'') {
+                    properties.setPadString("'");
+                } else {
+                    properties.setPadString(rawPaddingString);
+                }
+            } else {
+                properties.setPadString(rawPaddingString.substring(1, rawPaddingString.length() - 1));
+            }
+            assert positive.paddingLocation != null;
+            properties.setPadPosition(positive.paddingLocation);
+        } else {
+            properties.setFormatWidth(-1);
+            properties.setPadString(null);
+            properties.setPadPosition(null);
+        }
+
+        // Set the affixes
+        // Always call the setter, even if the prefixes are empty, especially in the case of the
+        // negative prefix pattern, to prevent default values from overriding the pattern.
+        properties.setPositivePrefixPattern(posPrefix);
+        properties.setPositiveSuffixPattern(posSuffix);
+        if (negative != null) {
+            properties.setNegativePrefixPattern(patternInfo
+                    .getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN | AffixPatternProvider.Flags.PREFIX));
+            properties.setNegativeSuffixPattern(patternInfo.getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN));
+        } else {
+            properties.setNegativePrefixPattern(null);
+            properties.setNegativeSuffixPattern(null);
+        }
+
+        // Set the magnitude multiplier
+        if (positive.hasPercentSign) {
+            properties.setMagnitudeMultiplier(2);
+        } else if (positive.hasPerMilleSign) {
+            properties.setMagnitudeMultiplier(3);
+        } else {
+            properties.setMagnitudeMultiplier(0);
         }
     }
 }

@@ -2,8 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package newapi;
 
-import com.ibm.icu.impl.number.FormatQuantity;
-import com.ibm.icu.impl.number.PatternParser.ParsedPatternInfo;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 
 public class Grouper {
 
@@ -85,7 +85,7 @@ public class Grouper {
         return getInstance(grouping1, grouping2, min2);
     }
 
-    boolean groupAtPosition(int position, FormatQuantity value) {
+    boolean groupAtPosition(int position, DecimalQuantity value) {
         assert grouping1 != -2;
         if (grouping1 == -1 || grouping1 == 0) {
             // Either -1 or 0 means "no grouping"

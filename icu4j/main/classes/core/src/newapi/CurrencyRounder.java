@@ -20,7 +20,7 @@ public abstract class CurrencyRounder extends Rounder {
      *
      * <p>
      * <strong>Calling this method is <em>not required</em></strong>, because the currency specified in
-     * {@link NumberFormatter#unit(MeasureUnit)} or via a {@link CurrencyAmount} passed into
+     * {@link NumberFormatterSettings#unit(MeasureUnit)} or via a {@link CurrencyAmount} passed into
      * {@link LocalizedNumberFormatter#format(Measure)} is automatically applied to currency rounding strategies.
      * However, this method enables you to override that automatic association.
      *

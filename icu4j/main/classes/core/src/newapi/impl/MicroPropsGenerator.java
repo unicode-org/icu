@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package newapi.impl;
 
-import com.ibm.icu.impl.number.FormatQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity;
 
 /**
  * This interface is used when all number formatting settings, including the locale, are known, except for the quantity
@@ -31,7 +31,7 @@ import com.ibm.icu.impl.number.FormatQuantity;
  *     }
  *
  *     &#64;Override
- *     public MicroProps processQuantity(FormatQuantity quantity) {
+ *     public MicroProps processQuantity(DecimalQuantity quantity) {
  *         MicroProps micros = this.parent.processQuantity(quantity);
  *         // Perform manipulations on micros and/or quantity
  *         return micros;
@@ -44,11 +44,11 @@ import com.ibm.icu.impl.number.FormatQuantity;
  */
 public interface MicroPropsGenerator {
     /**
-     * Considers the given {@link FormatQuantity}, optionally mutates it, and returns a {@link MicroProps}.
+     * Considers the given {@link DecimalQuantity}, optionally mutates it, and returns a {@link MicroProps}.
      *
      * @param quantity
      *            The quantity for consideration and optional mutation.
      * @return A MicroProps instance resolved for the quantity.
      */
-    public MicroProps processQuantity(FormatQuantity quantity);
+    public MicroProps processQuantity(DecimalQuantity quantity);
 }

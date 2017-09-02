@@ -13,14 +13,14 @@ import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.UFieldPosition;
 
 /**
- * This is an older implementation of FormatQuantity. A newer, faster implementation is
- * FormatQuantity2. I kept this implementation around because it was useful for testing purposes
+ * This is an older implementation of DecimalQuantity. A newer, faster implementation is
+ * DecimalQuantity2. I kept this implementation around because it was useful for testing purposes
  * (being able to compare the output of one implementation with the other).
  *
  * <p>This class is NOT IMMUTABLE and NOT THREAD SAFE and is intended to be used by a single thread
  * to format a number through a formatter, which is thread-safe.
  */
-public class FormatQuantity1 implements FormatQuantity {
+public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
   // Four positions: left optional '(', left required '[', right required ']', right optional ')'.
   // These four positions determine which digits are displayed in the output string.  They do NOT
   // affect rounding.  These positions are internal-only and can be specified only by the public
@@ -98,7 +98,7 @@ public class FormatQuantity1 implements FormatQuantity {
     return Integer.MAX_VALUE;
   }
 
-  public FormatQuantity1(long input) {
+  public DecimalQuantity_SimpleStorage(long input) {
     if (input < 0) {
       setNegative(true);
       input *= -1;
@@ -111,13 +111,13 @@ public class FormatQuantity1 implements FormatQuantity {
   }
 
   /**
-   * Creates a FormatQuantity from the given double value. Internally attempts several strategies
+   * Creates a DecimalQuantity from the given double value. Internally attempts several strategies
    * for converting the double to an exact representation, falling back on a BigDecimal if it fails
    * to do so.
    *
-   * @param input The double to represent by this FormatQuantity.
+   * @param input The double to represent by this DecimalQuantity.
    */
-  public FormatQuantity1(double input) {
+  public DecimalQuantity_SimpleStorage(double input) {
     if (input < 0) {
       setNegative(true);
       input *= -1;
@@ -191,7 +191,7 @@ public class FormatQuantity1 implements FormatQuantity {
 
   static final double LOG_2_OF_TEN = 3.32192809489;
 
-  public FormatQuantity1(double input, boolean fast) {
+  public DecimalQuantity_SimpleStorage(double input, boolean fast) {
     if (input < 0) {
       setNegative(true);
       input *= -1;
@@ -230,11 +230,11 @@ public class FormatQuantity1 implements FormatQuantity {
     }
   }
 
-  public FormatQuantity1(BigDecimal decimal) {
+  public DecimalQuantity_SimpleStorage(BigDecimal decimal) {
     setToBigDecimal(decimal);
   }
 
-  public FormatQuantity1(FormatQuantity1 other) {
+  public DecimalQuantity_SimpleStorage(DecimalQuantity_SimpleStorage other) {
     copyFrom(other);
   }
 
@@ -254,20 +254,20 @@ public class FormatQuantity1 implements FormatQuantity {
   }
 
   @Override
-  public FormatQuantity1 createCopy() {
-    return new FormatQuantity1(this);
+  public DecimalQuantity_SimpleStorage createCopy() {
+    return new DecimalQuantity_SimpleStorage(this);
   }
 
   /**
-   * Make the internal state of this FormatQuantity equal to another FormatQuantity.
+   * Make the internal state of this DecimalQuantity equal to another DecimalQuantity.
    *
-   * @param other The template FormatQuantity. All properties from this FormatQuantity will be
-   *     copied into this FormatQuantity.
+   * @param other The template DecimalQuantity. All properties from this DecimalQuantity will be
+   *     copied into this DecimalQuantity.
    */
   @Override
-  public void copyFrom(FormatQuantity other) {
+  public void copyFrom(DecimalQuantity other) {
     // TODO: Check before casting
-    FormatQuantity1 _other = (FormatQuantity1) other;
+    DecimalQuantity_SimpleStorage _other = (DecimalQuantity_SimpleStorage) other;
     lOptPos = _other.lOptPos;
     lReqPos = _other.lReqPos;
     rReqPos = _other.rReqPos;
@@ -457,7 +457,7 @@ public class FormatQuantity1 implements FormatQuantity {
     }
   }
 
-  /** @return The power of ten of the highest digit represented by this FormatQuantity */
+  /** @return The power of ten of the highest digit represented by this DecimalQuantity */
   @Override
   public int getMagnitude() throws ArithmeticException {
     int scale = (primary == -1) ? scaleBigDecimal(fallback) : primaryScale;
@@ -470,8 +470,8 @@ public class FormatQuantity1 implements FormatQuantity {
   }
 
   /**
-   * Changes the magnitude of this FormatQuantity. If the indices of the represented digits had been
-   * previously specified, those indices are moved relative to the FormatQuantity.
+   * Changes the magnitude of this DecimalQuantity. If the indices of the represented digits had been
+   * previously specified, those indices are moved relative to the DecimalQuantity.
    *
    * <p>This method does NOT perform rounding.
    *
@@ -496,7 +496,7 @@ public class FormatQuantity1 implements FormatQuantity {
     return a + b;
   }
 
-  /** @return If the number represented by this FormatQuantity is less than zero */
+  /** @return If the number represented by this DecimalQuantity is less than zero */
   @Override
   public boolean isNegative() {
     return (flags & NEGATIVE_FLAG) != 0;
@@ -525,7 +525,7 @@ public class FormatQuantity1 implements FormatQuantity {
   }
 
   /**
-   * Returns a representation of this FormatQuantity as a double, with possible loss of information.
+   * Returns a representation of this DecimalQuantity as a double, with possible loss of information.
    */
   @Override
   public double toDouble() {
@@ -686,7 +686,7 @@ public class FormatQuantity1 implements FormatQuantity {
 
   private int fractionCount() {
     // TODO: This is temporary.
-    FormatQuantity1 copy = new FormatQuantity1(this);
+    DecimalQuantity_SimpleStorage copy = new DecimalQuantity_SimpleStorage(this);
     int fractionCount = 0;
     while (copy.hasNextFraction()) {
       copy.nextFraction();
@@ -718,7 +718,7 @@ public class FormatQuantity1 implements FormatQuantity {
   @Override
   public byte getDigit(int magnitude) {
     // TODO: This is temporary.
-    FormatQuantity1 copy = new FormatQuantity1(this);
+    DecimalQuantity_SimpleStorage copy = new DecimalQuantity_SimpleStorage(this);
     if (magnitude < 0) {
       for (int p = -1; p > magnitude; p--) {
         copy.nextFraction();
@@ -817,7 +817,7 @@ public class FormatQuantity1 implements FormatQuantity {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("<FormatQuantity1 ");
+    sb.append("<DecimalQuantity1 ");
     if (primary == -1) {
       sb.append(lOptPos > 1000 ? "max" : lOptPos);
       sb.append(":");

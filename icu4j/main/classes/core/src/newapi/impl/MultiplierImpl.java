@@ -4,7 +4,7 @@ package newapi.impl;
 
 import java.math.BigDecimal;
 
-import com.ibm.icu.impl.number.FormatQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity;
 
 public class MultiplierImpl implements MicroPropsGenerator, Cloneable {
   final int magnitudeMultiplier;
@@ -34,7 +34,7 @@ public class MultiplierImpl implements MicroPropsGenerator, Cloneable {
   }
 
   @Override
-  public MicroProps processQuantity(FormatQuantity quantity) {
+  public MicroProps processQuantity(DecimalQuantity quantity) {
     MicroProps micros = parent.processQuantity(quantity);
     quantity.adjustMagnitude(magnitudeMultiplier);
     if (bigDecimalMultiplier != null) {

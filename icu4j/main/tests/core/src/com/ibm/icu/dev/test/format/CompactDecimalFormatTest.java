@@ -27,7 +27,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.number.Properties;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormat;
@@ -664,7 +664,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
         CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(ULocale.ENGLISH, CompactStyle.SHORT);
         cdf.setProperties(new PropertySetter() {
             @Override
-            public void set(Properties props) {
+            public void set(DecimalFormatProperties props) {
                 props.setCompactCustomData(customData);
             }
         });

@@ -377,6 +377,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         // Although the linked-list fluent storage approach requires this method,
         // my benchmarks show that linked-list is still faster than a full clone
         // of a MacroProps object at each step.
+        // TODO: Remove the reference to the parent after the macros are resolved?
         MacroProps macros = new MacroProps();
         NumberFormatterSettings<?> current = this;
         while (current != null) {

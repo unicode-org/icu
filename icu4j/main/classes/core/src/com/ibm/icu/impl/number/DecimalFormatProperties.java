@@ -25,9 +25,9 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 
 import newapi.impl.Padder.PadPosition;
 
-public class Properties implements Cloneable, Serializable {
+public class DecimalFormatProperties implements Cloneable, Serializable {
 
-  private static final Properties DEFAULT = new Properties();
+  private static final DecimalFormatProperties DEFAULT = new DecimalFormatProperties();
 
   /** Auto-generated. */
   private static final long serialVersionUID = 4095518955889349243L;
@@ -98,7 +98,7 @@ public class Properties implements Cloneable, Serializable {
   /| or #equals(), but it will NOT catch if you forget to add it to #hashCode().                |/
   /+--------------------------------------------------------------------------------------------*/
 
-  public Properties() {
+  public DecimalFormatProperties() {
     clear();
   }
 
@@ -114,7 +114,7 @@ public class Properties implements Cloneable, Serializable {
    *
    * @return The property bag, for chaining.
    */
-  private Properties _clear() {
+  private DecimalFormatProperties _clear() {
     compactCustomData = null;
     compactStyle = null;
     currency = null;
@@ -160,7 +160,7 @@ public class Properties implements Cloneable, Serializable {
     return this;
   }
 
-  private Properties _copyFrom(Properties other) {
+  private DecimalFormatProperties _copyFrom(DecimalFormatProperties other) {
     compactCustomData = other.compactCustomData;
     compactStyle = other.compactStyle;
     currency = other.currency;
@@ -206,7 +206,7 @@ public class Properties implements Cloneable, Serializable {
     return this;
   }
 
-  private boolean _equals(Properties other) {
+  private boolean _equals(DecimalFormatProperties other) {
     boolean eq = true;
     eq = eq && _equalsHelper(compactCustomData, other.compactCustomData);
     eq = eq && _equalsHelper(compactStyle, other.compactStyle);
@@ -327,16 +327,16 @@ public class Properties implements Cloneable, Serializable {
     return value.hashCode();
   }
 
-  public Properties clear() {
+  public DecimalFormatProperties clear() {
     return _clear();
   }
 
   /** Creates and returns a shallow copy of the property bag. */
   @Override
-  public Properties clone() {
+  public DecimalFormatProperties clone() {
     // super.clone() returns a shallow copy.
     try {
-      return (Properties) super.clone();
+      return (DecimalFormatProperties) super.clone();
     } catch (CloneNotSupportedException e) {
       // Should never happen since super is Object
       throw new UnsupportedOperationException(e);
@@ -349,7 +349,7 @@ public class Properties implements Cloneable, Serializable {
    * @param other The property bag from which to copy and which will not be modified.
    * @return The current property bag (the one modified by this operation), for chaining.
    */
-  public Properties copyFrom(Properties other) {
+  public DecimalFormatProperties copyFrom(DecimalFormatProperties other) {
     return _copyFrom(other);
   }
 
@@ -357,8 +357,8 @@ public class Properties implements Cloneable, Serializable {
   public boolean equals(Object other) {
     if (other == null) return false;
     if (this == other) return true;
-    if (!(other instanceof Properties)) return false;
-    return _equals((Properties) other);
+    if (!(other instanceof DecimalFormatProperties)) return false;
+    return _equals((DecimalFormatProperties) other);
   }
 
   /// BEGIN GETTERS/SETTERS ///
@@ -557,7 +557,7 @@ public class Properties implements Cloneable, Serializable {
       // Get the field reference
       Field field = null;
       try {
-        field = Properties.class.getDeclaredField(name);
+        field = DecimalFormatProperties.class.getDeclaredField(name);
       } catch (NoSuchFieldException e) {
         // The field name does not exist! Possibly corrupted serialization. Ignore this entry.
         continue;
@@ -605,7 +605,7 @@ public class Properties implements Cloneable, Serializable {
    * @param compactCustomData A map with the above structure.
    * @return The property bag, for chaining.
    */
-  public Properties setCompactCustomData(Map<String, Map<String, String>> compactCustomData) {
+  public DecimalFormatProperties setCompactCustomData(Map<String, Map<String, String>> compactCustomData) {
     // TODO: compactCustomData is not immutable.
     this.compactCustomData = compactCustomData;
     return this;
@@ -619,7 +619,7 @@ public class Properties implements Cloneable, Serializable {
    * @param compactStyle The style of prefixes/suffixes to append.
    * @return The property bag, for chaining.
    */
-  public Properties setCompactStyle(CompactStyle compactStyle) {
+  public DecimalFormatProperties setCompactStyle(CompactStyle compactStyle) {
     this.compactStyle = compactStyle;
     return this;
   }
@@ -630,7 +630,7 @@ public class Properties implements Cloneable, Serializable {
    * @param currency The currency.
    * @return The property bag, for chaining.
    */
-  public Properties setCurrency(Currency currency) {
+  public DecimalFormatProperties setCurrency(Currency currency) {
     this.currency = currency;
     return this;
   }
@@ -641,7 +641,7 @@ public class Properties implements Cloneable, Serializable {
    * @param currencyPluralInfo The currency plural info object.
    * @return The property bag, for chaining.
    */
-  public Properties setCurrencyPluralInfo(CurrencyPluralInfo currencyPluralInfo) {
+  public DecimalFormatProperties setCurrencyPluralInfo(CurrencyPluralInfo currencyPluralInfo) {
     // TODO: In order to maintain immutability, we have to perform a clone here.
     // It would be better to just retire CurrencyPluralInfo entirely.
     if (currencyPluralInfo != null) {
@@ -661,7 +661,7 @@ public class Properties implements Cloneable, Serializable {
    * @param currencyUsage The currency usage. Defaults to CurrencyUsage.STANDARD.
    * @return The property bag, for chaining.
    */
-  public Properties setCurrencyUsage(CurrencyUsage currencyUsage) {
+  public DecimalFormatProperties setCurrencyUsage(CurrencyUsage currencyUsage) {
     this.currencyUsage = currencyUsage;
     return this;
   }
@@ -675,7 +675,7 @@ public class Properties implements Cloneable, Serializable {
    * @param decimalPatternMatchRequired true to set an error if decimal is not present
    * @return The property bag, for chaining.
    */
-  public Properties setDecimalPatternMatchRequired(boolean decimalPatternMatchRequired) {
+  public DecimalFormatProperties setDecimalPatternMatchRequired(boolean decimalPatternMatchRequired) {
     this.decimalPatternMatchRequired = decimalPatternMatchRequired;
     return this;
   }
@@ -688,7 +688,7 @@ public class Properties implements Cloneable, Serializable {
    * @param decimalSeparatorAlwaysShown Whether to show the decimal point when it is optional.
    * @return The property bag, for chaining.
    */
-  public Properties setDecimalSeparatorAlwaysShown(boolean alwaysShowDecimal) {
+  public DecimalFormatProperties setDecimalSeparatorAlwaysShown(boolean alwaysShowDecimal) {
     this.decimalSeparatorAlwaysShown = alwaysShowDecimal;
     return this;
   }
@@ -701,7 +701,7 @@ public class Properties implements Cloneable, Serializable {
    * @param exponentSignAlwaysShown Whether to show the plus sign in positive exponents.
    * @return The property bag, for chaining.
    */
-  public Properties setExponentSignAlwaysShown(boolean exponentSignAlwaysShown) {
+  public DecimalFormatProperties setExponentSignAlwaysShown(boolean exponentSignAlwaysShown) {
     this.exponentSignAlwaysShown = exponentSignAlwaysShown;
     return this;
   }
@@ -721,7 +721,7 @@ public class Properties implements Cloneable, Serializable {
    * @see #setPadPosition
    * @see #setPadString
    */
-  public Properties setFormatWidth(int paddingWidth) {
+  public DecimalFormatProperties setFormatWidth(int paddingWidth) {
     this.formatWidth = paddingWidth;
     return this;
   }
@@ -734,7 +734,7 @@ public class Properties implements Cloneable, Serializable {
    * @param groupingSize The primary grouping size.
    * @return The property bag, for chaining.
    */
-  public Properties setGroupingSize(int groupingSize) {
+  public DecimalFormatProperties setGroupingSize(int groupingSize) {
     this.groupingSize = groupingSize;
     return this;
   }
@@ -747,7 +747,7 @@ public class Properties implements Cloneable, Serializable {
    * @return The property bag, for chaining.
    * @see #setMultiplier
    */
-  public Properties setMagnitudeMultiplier(int magnitudeMultiplier) {
+  public DecimalFormatProperties setMagnitudeMultiplier(int magnitudeMultiplier) {
     this.magnitudeMultiplier = magnitudeMultiplier;
     return this;
   }
@@ -761,7 +761,7 @@ public class Properties implements Cloneable, Serializable {
    * @see MathContext
    * @see #setRoundingMode
    */
-  public Properties setMathContext(MathContext mathContext) {
+  public DecimalFormatProperties setMathContext(MathContext mathContext) {
     this.mathContext = mathContext;
     return this;
   }
@@ -777,7 +777,7 @@ public class Properties implements Cloneable, Serializable {
    * @param maximumFractionDigits The maximum number of fraction digits to output.
    * @return The property bag, for chaining.
    */
-  public Properties setMaximumFractionDigits(int maximumFractionDigits) {
+  public DecimalFormatProperties setMaximumFractionDigits(int maximumFractionDigits) {
     this.maximumFractionDigits = maximumFractionDigits;
     return this;
   }
@@ -792,7 +792,7 @@ public class Properties implements Cloneable, Serializable {
    * @param maximumIntegerDigits The maximum number of integer digits to output.
    * @return The property bag, for chaining.
    */
-  public Properties setMaximumIntegerDigits(int maximumIntegerDigits) {
+  public DecimalFormatProperties setMaximumIntegerDigits(int maximumIntegerDigits) {
     this.maximumIntegerDigits = maximumIntegerDigits;
     return this;
   }
@@ -816,7 +816,7 @@ public class Properties implements Cloneable, Serializable {
    * @param maximumSignificantDigits The maximum number of significant digits to display.
    * @return The property bag, for chaining.
    */
-  public Properties setMaximumSignificantDigits(int maximumSignificantDigits) {
+  public DecimalFormatProperties setMaximumSignificantDigits(int maximumSignificantDigits) {
     this.maximumSignificantDigits = maximumSignificantDigits;
     return this;
   }
@@ -829,7 +829,7 @@ public class Properties implements Cloneable, Serializable {
    * @param minimumExponentDigits The minimum number of digits to display in the exponent field.
    * @return The property bag, for chaining.
    */
-  public Properties setMinimumExponentDigits(int exponentDigits) {
+  public DecimalFormatProperties setMinimumExponentDigits(int exponentDigits) {
     this.minimumExponentDigits = exponentDigits;
     return this;
   }
@@ -843,7 +843,7 @@ public class Properties implements Cloneable, Serializable {
    * @param minimumFractionDigits The minimum number of fraction digits to output.
    * @return The property bag, for chaining.
    */
-  public Properties setMinimumFractionDigits(int minimumFractionDigits) {
+  public DecimalFormatProperties setMinimumFractionDigits(int minimumFractionDigits) {
     this.minimumFractionDigits = minimumFractionDigits;
     return this;
   }
@@ -858,7 +858,7 @@ public class Properties implements Cloneable, Serializable {
    *     enabling grouping.
    * @return The property bag, for chaining.
    */
-  public Properties setMinimumGroupingDigits(int minimumGroupingDigits) {
+  public DecimalFormatProperties setMinimumGroupingDigits(int minimumGroupingDigits) {
     this.minimumGroupingDigits = minimumGroupingDigits;
     return this;
   }
@@ -872,7 +872,7 @@ public class Properties implements Cloneable, Serializable {
    * @param minimumIntegerDigits The minimum number of integer digits to output.
    * @return The property bag, for chaining.
    */
-  public Properties setMinimumIntegerDigits(int minimumIntegerDigits) {
+  public DecimalFormatProperties setMinimumIntegerDigits(int minimumIntegerDigits) {
     this.minimumIntegerDigits = minimumIntegerDigits;
     return this;
   }
@@ -897,7 +897,7 @@ public class Properties implements Cloneable, Serializable {
    * @param minimumSignificantDigits The minimum number of significant digits to display.
    * @return The property bag, for chaining.
    */
-  public Properties setMinimumSignificantDigits(int minimumSignificantDigits) {
+  public DecimalFormatProperties setMinimumSignificantDigits(int minimumSignificantDigits) {
     this.minimumSignificantDigits = minimumSignificantDigits;
     return this;
   }
@@ -909,7 +909,7 @@ public class Properties implements Cloneable, Serializable {
    * @return The property bag, for chaining.
    * @see #setMagnitudeMultiplier
    */
-  public Properties setMultiplier(BigDecimal multiplier) {
+  public DecimalFormatProperties setMultiplier(BigDecimal multiplier) {
     this.multiplier = multiplier;
     return this;
   }
@@ -927,7 +927,7 @@ public class Properties implements Cloneable, Serializable {
    * @see PositiveNegativeAffixFormat
    * @see #setNegativePrefixPattern
    */
-  public Properties setNegativePrefix(String negativePrefix) {
+  public DecimalFormatProperties setNegativePrefix(String negativePrefix) {
     this.negativePrefix = negativePrefix;
     return this;
   }
@@ -944,7 +944,7 @@ public class Properties implements Cloneable, Serializable {
    * @see PositiveNegativeAffixFormat
    * @see #setNegativePrefix
    */
-  public Properties setNegativePrefixPattern(String negativePrefixPattern) {
+  public DecimalFormatProperties setNegativePrefixPattern(String negativePrefixPattern) {
     this.negativePrefixPattern = negativePrefixPattern;
     return this;
   }
@@ -963,7 +963,7 @@ public class Properties implements Cloneable, Serializable {
    * @see PositiveNegativeAffixFormat
    * @see #setNegativeSuffixPattern
    */
-  public Properties setNegativeSuffix(String negativeSuffix) {
+  public DecimalFormatProperties setNegativeSuffix(String negativeSuffix) {
     this.negativeSuffix = negativeSuffix;
     return this;
   }
@@ -980,7 +980,7 @@ public class Properties implements Cloneable, Serializable {
    * @see PositiveNegativeAffixFormat
    * @see #setNegativeSuffix
    */
-  public Properties setNegativeSuffixPattern(String negativeSuffixPattern) {
+  public DecimalFormatProperties setNegativeSuffixPattern(String negativeSuffixPattern) {
     this.negativeSuffixPattern = negativeSuffixPattern;
     return this;
   }
@@ -995,7 +995,7 @@ public class Properties implements Cloneable, Serializable {
    * @return The property bag, for chaining.
    * @see #setFormatWidth
    */
-  public Properties setPadPosition(PadPosition paddingLocation) {
+  public DecimalFormatProperties setPadPosition(PadPosition paddingLocation) {
     this.padPosition = paddingLocation;
     return this;
   }
@@ -1010,7 +1010,7 @@ public class Properties implements Cloneable, Serializable {
    * @return The property bag, for chaining.
    * @see #setFormatWidth
    */
-  public Properties setPadString(String paddingString) {
+  public DecimalFormatProperties setPadString(String paddingString) {
     this.padString = paddingString;
     return this;
   }
@@ -1027,7 +1027,7 @@ public class Properties implements Cloneable, Serializable {
    * @param parseCaseSensitive true to be case-sensitive when parsing; false to allow any case.
    * @return The property bag, for chaining.
    */
-  public Properties setParseCaseSensitive(boolean parseCaseSensitive) {
+  public DecimalFormatProperties setParseCaseSensitive(boolean parseCaseSensitive) {
     this.parseCaseSensitive = parseCaseSensitive;
     return this;
   }
@@ -1052,7 +1052,7 @@ public class Properties implements Cloneable, Serializable {
    * @param parseGroupingMode The {@link GroupingMode} to use; either DEFAULT or RESTRICTED.
    * @return The property bag, for chaining.
    */
-  public Properties setParseGroupingMode(GroupingMode parseGroupingMode) {
+  public DecimalFormatProperties setParseGroupingMode(GroupingMode parseGroupingMode) {
     this.parseGroupingMode = parseGroupingMode;
     return this;
   }
@@ -1065,7 +1065,7 @@ public class Properties implements Cloneable, Serializable {
    *     fraction parts
    * @return The property bag, for chaining.
    */
-  public Properties setParseIntegerOnly(boolean parseIntegerOnly) {
+  public DecimalFormatProperties setParseIntegerOnly(boolean parseIntegerOnly) {
     this.parseIntegerOnly = parseIntegerOnly;
     return this;
   }
@@ -1077,7 +1077,7 @@ public class Properties implements Cloneable, Serializable {
    * @param parseMode Either {@link ParseMode#LENIENT} or {@link ParseMode#STRICT}.
    * @return The property bag, for chaining.
    */
-  public Properties setParseMode(ParseMode parseMode) {
+  public DecimalFormatProperties setParseMode(ParseMode parseMode) {
     this.parseMode = parseMode;
     return this;
   }
@@ -1089,7 +1089,7 @@ public class Properties implements Cloneable, Serializable {
    * @param parseIgnoreExponent true to ignore exponents; false to parse them.
    * @return The property bag, for chaining.
    */
-  public Properties setParseNoExponent(boolean parseNoExponent) {
+  public DecimalFormatProperties setParseNoExponent(boolean parseNoExponent) {
     this.parseNoExponent = parseNoExponent;
     return this;
   }
@@ -1102,7 +1102,7 @@ public class Properties implements Cloneable, Serializable {
    *     BigInteger when possible.
    * @return The property bag, for chaining.
    */
-  public Properties setParseToBigDecimal(boolean parseToBigDecimal) {
+  public DecimalFormatProperties setParseToBigDecimal(boolean parseToBigDecimal) {
     this.parseToBigDecimal = parseToBigDecimal;
     return this;
   }
@@ -1113,7 +1113,7 @@ public class Properties implements Cloneable, Serializable {
    * @param pluralRules The object to reference.
    * @return The property bag, for chaining.
    */
-  public Properties setPluralRules(PluralRules pluralRules) {
+  public DecimalFormatProperties setPluralRules(PluralRules pluralRules) {
     this.pluralRules = pluralRules;
     return this;
   }
@@ -1130,7 +1130,7 @@ public class Properties implements Cloneable, Serializable {
    * @see PositiveNegativeAffixFormat
    * @see #setPositivePrefixPattern
    */
-  public Properties setPositivePrefix(String positivePrefix) {
+  public DecimalFormatProperties setPositivePrefix(String positivePrefix) {
     this.positivePrefix = positivePrefix;
     return this;
   }
@@ -1147,7 +1147,7 @@ public class Properties implements Cloneable, Serializable {
    * @see PositiveNegativeAffixFormat
    * @see #setPositivePrefix
    */
-  public Properties setPositivePrefixPattern(String positivePrefixPattern) {
+  public DecimalFormatProperties setPositivePrefixPattern(String positivePrefixPattern) {
     this.positivePrefixPattern = positivePrefixPattern;
     return this;
   }
@@ -1164,7 +1164,7 @@ public class Properties implements Cloneable, Serializable {
    * @see PositiveNegativeAffixFormat
    * @see #setPositiveSuffixPattern
    */
-  public Properties setPositiveSuffix(String positiveSuffix) {
+  public DecimalFormatProperties setPositiveSuffix(String positiveSuffix) {
     this.positiveSuffix = positiveSuffix;
     return this;
   }
@@ -1181,7 +1181,7 @@ public class Properties implements Cloneable, Serializable {
    * @see PositiveNegativeAffixFormat
    * @see #setPositiveSuffix
    */
-  public Properties setPositiveSuffixPattern(String positiveSuffixPattern) {
+  public DecimalFormatProperties setPositiveSuffixPattern(String positiveSuffixPattern) {
     this.positiveSuffixPattern = positiveSuffixPattern;
     return this;
   }
@@ -1201,7 +1201,7 @@ public class Properties implements Cloneable, Serializable {
    * @param roundingIncrement The interval to which to round.
    * @return The property bag, for chaining.
    */
-  public Properties setRoundingIncrement(BigDecimal roundingIncrement) {
+  public DecimalFormatProperties setRoundingIncrement(BigDecimal roundingIncrement) {
     this.roundingIncrement = roundingIncrement;
     return this;
   }
@@ -1218,7 +1218,7 @@ public class Properties implements Cloneable, Serializable {
    * @see RoundingMode
    * @see #setMathContext
    */
-  public Properties setRoundingMode(RoundingMode roundingMode) {
+  public DecimalFormatProperties setRoundingMode(RoundingMode roundingMode) {
     this.roundingMode = roundingMode;
     return this;
   }
@@ -1234,7 +1234,7 @@ public class Properties implements Cloneable, Serializable {
    * @param secondaryGroupingSize The secondary grouping size.
    * @return The property bag, for chaining.
    */
-  public Properties setSecondaryGroupingSize(int secondaryGroupingSize) {
+  public DecimalFormatProperties setSecondaryGroupingSize(int secondaryGroupingSize) {
     this.secondaryGroupingSize = secondaryGroupingSize;
     return this;
   }
@@ -1255,7 +1255,7 @@ public class Properties implements Cloneable, Serializable {
    * @param plusSignAlwaysShown Whether positive numbers should display a plus sign.
    * @return The property bag, for chaining.
    */
-  public Properties setSignAlwaysShown(boolean signAlwaysShown) {
+  public DecimalFormatProperties setSignAlwaysShown(boolean signAlwaysShown) {
     this.signAlwaysShown = signAlwaysShown;
     return this;
   }
@@ -1274,7 +1274,7 @@ public class Properties implements Cloneable, Serializable {
    * surrounded by &lt;Properties&gt;.
    */
   public void toStringBare(StringBuilder result) {
-    Field[] fields = Properties.class.getDeclaredFields();
+    Field[] fields = DecimalFormatProperties.class.getDeclaredFields();
     for (Field field : fields) {
       Object myValue, defaultValue;
       try {
@@ -1309,7 +1309,7 @@ public class Properties implements Cloneable, Serializable {
 
     ArrayList<Field> fieldsToSerialize = new ArrayList<Field>();
     ArrayList<Object> valuesToSerialize = new ArrayList<Object>();
-    Field[] fields = Properties.class.getDeclaredFields();
+    Field[] fields = DecimalFormatProperties.class.getDeclaredFields();
     for (Field field : fields) {
       if (Modifier.isStatic(field.getModifiers())) {
         continue;

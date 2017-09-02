@@ -13,12 +13,12 @@ import java.util.Random;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.number.FormatQuantity;
-import com.ibm.icu.impl.number.FormatQuantity1;
-import com.ibm.icu.impl.number.FormatQuantity2;
-import com.ibm.icu.impl.number.FormatQuantity3;
-import com.ibm.icu.impl.number.FormatQuantity4;
-import com.ibm.icu.impl.number.Properties;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_SimpleStorage;
+import com.ibm.icu.impl.number.DecimalQuantity_64BitBCD;
+import com.ibm.icu.impl.number.DecimalQuantity_ByteArrayBCD;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
@@ -27,34 +27,34 @@ import newapi.LocalizedNumberFormatter;
 import newapi.NumberPropertyMapper;
 
 /** TODO: This is a temporary name for this class. Suggestions for a better name? */
-public class FormatQuantityTest extends TestFmwk {
+public class DecimalQuantityTest extends TestFmwk {
 
   @Test
   public void testBehavior() throws ParseException {
 
-    // Make a list of several formatters to test the behavior of FormatQuantity.
+    // Make a list of several formatters to test the behavior of DecimalQuantity.
     List<LocalizedNumberFormatter> formats = new ArrayList<LocalizedNumberFormatter>();
 
     DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
 
-    Properties properties = new Properties();
+    DecimalFormatProperties properties = new DecimalFormatProperties();
     formats.add(NumberPropertyMapper.create(properties, symbols).locale(ULocale.ENGLISH));
 
     properties =
-        new Properties()
+        new DecimalFormatProperties()
             .setMinimumSignificantDigits(3)
             .setMaximumSignificantDigits(3)
             .setCompactStyle(CompactStyle.LONG);
     formats.add(NumberPropertyMapper.create(properties, symbols).locale(ULocale.ENGLISH));
 
     properties =
-        new Properties()
+        new DecimalFormatProperties()
             .setMinimumExponentDigits(1)
             .setMaximumIntegerDigits(3)
             .setMaximumFractionDigits(1);
     formats.add(NumberPropertyMapper.create(properties, symbols).locale(ULocale.ENGLISH));
 
-    properties = new Properties().setRoundingIncrement(new BigDecimal("0.5"));
+    properties = new DecimalFormatProperties().setRoundingIncrement(new BigDecimal("0.5"));
     formats.add(NumberPropertyMapper.create(properties, symbols).locale(ULocale.ENGLISH));
 
     String[] cases = {
@@ -99,68 +99,68 @@ public class FormatQuantityTest extends TestFmwk {
 
     int i = 0;
     for (String str : cases) {
-      testFormatQuantity(i++, str, formats, 0);
+      testDecimalQuantity(i++, str, formats, 0);
     }
 
     i = 0;
     for (String str : hardCases) {
-      testFormatQuantity(i++, str, formats, 1);
+      testDecimalQuantity(i++, str, formats, 1);
     }
 
     i = 0;
     for (String str : doubleCases) {
-      testFormatQuantity(i++, str, formats, 2);
+      testDecimalQuantity(i++, str, formats, 2);
     }
   }
 
-  static void testFormatQuantity(int t, String str, List<LocalizedNumberFormatter> formats, int mode) {
+  static void testDecimalQuantity(int t, String str, List<LocalizedNumberFormatter> formats, int mode) {
     if (mode == 2) {
       assertEquals("Double is not valid", Double.toString(Double.parseDouble(str)), str);
     }
 
-    List<FormatQuantity> qs = new ArrayList<FormatQuantity>();
+    List<DecimalQuantity> qs = new ArrayList<DecimalQuantity>();
     BigDecimal d = new BigDecimal(str);
-    qs.add(new FormatQuantity1(d));
-    if (mode == 0) qs.add(new FormatQuantity2(d));
-    qs.add(new FormatQuantity3(d));
-    qs.add(new FormatQuantity4(d));
+    qs.add(new DecimalQuantity_SimpleStorage(d));
+    if (mode == 0) qs.add(new DecimalQuantity_64BitBCD(d));
+    qs.add(new DecimalQuantity_ByteArrayBCD(d));
+    qs.add(new DecimalQuantity_DualStorageBCD(d));
 
     if (new BigDecimal(Double.toString(d.doubleValue())).compareTo(d) == 0) {
       double dv = d.doubleValue();
-      qs.add(new FormatQuantity1(dv));
-      if (mode == 0) qs.add(new FormatQuantity2(dv));
-      qs.add(new FormatQuantity3(dv));
-      qs.add(new FormatQuantity4(dv));
+      qs.add(new DecimalQuantity_SimpleStorage(dv));
+      if (mode == 0) qs.add(new DecimalQuantity_64BitBCD(dv));
+      qs.add(new DecimalQuantity_ByteArrayBCD(dv));
+      qs.add(new DecimalQuantity_DualStorageBCD(dv));
     }
 
     if (new BigDecimal(Long.toString(d.longValue())).compareTo(d) == 0) {
       double lv = d.longValue();
-      qs.add(new FormatQuantity1(lv));
-      if (mode == 0) qs.add(new FormatQuantity2(lv));
-      qs.add(new FormatQuantity3(lv));
-      qs.add(new FormatQuantity4(lv));
+      qs.add(new DecimalQuantity_SimpleStorage(lv));
+      if (mode == 0) qs.add(new DecimalQuantity_64BitBCD(lv));
+      qs.add(new DecimalQuantity_ByteArrayBCD(lv));
+      qs.add(new DecimalQuantity_DualStorageBCD(lv));
     }
 
-    testFormatQuantityExpectedOutput(qs.get(0), str);
+    testDecimalQuantityExpectedOutput(qs.get(0), str);
 
     if (qs.size() == 1) {
       return;
     }
 
     for (int i = 1; i < qs.size(); i++) {
-      FormatQuantity q0 = qs.get(0);
-      FormatQuantity q1 = qs.get(i);
-      testFormatQuantityExpectedOutput(q1, str);
-      testFormatQuantityRounding(q0, q1);
-      testFormatQuantityRoundingInterval(q0, q1);
-      testFormatQuantityMath(q0, q1);
-      testFormatQuantityWithFormats(q0, q1, formats);
+      DecimalQuantity q0 = qs.get(0);
+      DecimalQuantity q1 = qs.get(i);
+      testDecimalQuantityExpectedOutput(q1, str);
+      testDecimalQuantityRounding(q0, q1);
+      testDecimalQuantityRoundingInterval(q0, q1);
+      testDecimalQuantityMath(q0, q1);
+      testDecimalQuantityWithFormats(q0, q1, formats);
     }
   }
 
-  private static void testFormatQuantityExpectedOutput(FormatQuantity rq, String expected) {
+  private static void testDecimalQuantityExpectedOutput(DecimalQuantity rq, String expected) {
     StringBuilder sb = new StringBuilder();
-    FormatQuantity q0 = rq.createCopy();
+    DecimalQuantity q0 = rq.createCopy();
     // Force an accurate double
     q0.roundToInfinity();
     q0.setIntegerLength(1, Integer.MAX_VALUE);
@@ -182,68 +182,68 @@ public class FormatQuantityTest extends TestFmwk {
   private static final MathContext MATH_CONTEXT_PRECISION =
       new MathContext(3, RoundingMode.HALF_UP);
 
-  private static void testFormatQuantityRounding(FormatQuantity rq0, FormatQuantity rq1) {
-    FormatQuantity q0 = rq0.createCopy();
-    FormatQuantity q1 = rq1.createCopy();
+  private static void testDecimalQuantityRounding(DecimalQuantity rq0, DecimalQuantity rq1) {
+    DecimalQuantity q0 = rq0.createCopy();
+    DecimalQuantity q1 = rq1.createCopy();
     q0.roundToMagnitude(-1, MATH_CONTEXT_HALF_EVEN);
     q1.roundToMagnitude(-1, MATH_CONTEXT_HALF_EVEN);
-    testFormatQuantityBehavior(q0, q1);
+    testDecimalQuantityBehavior(q0, q1);
 
     q0 = rq0.createCopy();
     q1 = rq1.createCopy();
     q0.roundToMagnitude(-1, MATH_CONTEXT_CEILING);
     q1.roundToMagnitude(-1, MATH_CONTEXT_CEILING);
-    testFormatQuantityBehavior(q0, q1);
+    testDecimalQuantityBehavior(q0, q1);
 
     q0 = rq0.createCopy();
     q1 = rq1.createCopy();
     q0.roundToMagnitude(-1, MATH_CONTEXT_PRECISION);
     q1.roundToMagnitude(-1, MATH_CONTEXT_PRECISION);
-    testFormatQuantityBehavior(q0, q1);
+    testDecimalQuantityBehavior(q0, q1);
   }
 
-  private static void testFormatQuantityRoundingInterval(FormatQuantity rq0, FormatQuantity rq1) {
-    FormatQuantity q0 = rq0.createCopy();
-    FormatQuantity q1 = rq1.createCopy();
+  private static void testDecimalQuantityRoundingInterval(DecimalQuantity rq0, DecimalQuantity rq1) {
+    DecimalQuantity q0 = rq0.createCopy();
+    DecimalQuantity q1 = rq1.createCopy();
     q0.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_HALF_EVEN);
     q1.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_HALF_EVEN);
-    testFormatQuantityBehavior(q0, q1);
+    testDecimalQuantityBehavior(q0, q1);
 
     q0 = rq0.createCopy();
     q1 = rq1.createCopy();
     q0.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_CEILING);
     q1.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_CEILING);
-    testFormatQuantityBehavior(q0, q1);
+    testDecimalQuantityBehavior(q0, q1);
   }
 
-  private static void testFormatQuantityMath(FormatQuantity rq0, FormatQuantity rq1) {
-    FormatQuantity q0 = rq0.createCopy();
-    FormatQuantity q1 = rq1.createCopy();
+  private static void testDecimalQuantityMath(DecimalQuantity rq0, DecimalQuantity rq1) {
+    DecimalQuantity q0 = rq0.createCopy();
+    DecimalQuantity q1 = rq1.createCopy();
     q0.adjustMagnitude(-3);
     q1.adjustMagnitude(-3);
-    testFormatQuantityBehavior(q0, q1);
+    testDecimalQuantityBehavior(q0, q1);
 
     q0 = rq0.createCopy();
     q1 = rq1.createCopy();
     q0.multiplyBy(new BigDecimal("3.14159"));
     q1.multiplyBy(new BigDecimal("3.14159"));
-    testFormatQuantityBehavior(q0, q1);
+    testDecimalQuantityBehavior(q0, q1);
   }
 
-  private static void testFormatQuantityWithFormats(
-      FormatQuantity rq0, FormatQuantity rq1, List<LocalizedNumberFormatter> formats) {
+  private static void testDecimalQuantityWithFormats(
+      DecimalQuantity rq0, DecimalQuantity rq1, List<LocalizedNumberFormatter> formats) {
     for (LocalizedNumberFormatter format : formats) {
-      FormatQuantity q0 = rq0.createCopy();
-      FormatQuantity q1 = rq1.createCopy();
+      DecimalQuantity q0 = rq0.createCopy();
+      DecimalQuantity q1 = rq1.createCopy();
       String s1 = format.format(q0).toString();
       String s2 = format.format(q1).toString();
       assertEquals("Different output from formatter (" + q0 + ", " + q1 + ")", s1, s2);
     }
   }
 
-  private static void testFormatQuantityBehavior(FormatQuantity rq0, FormatQuantity rq1) {
-    FormatQuantity q0 = rq0.createCopy();
-    FormatQuantity q1 = rq1.createCopy();
+  private static void testDecimalQuantityBehavior(DecimalQuantity rq0, DecimalQuantity rq1) {
+    DecimalQuantity q0 = rq0.createCopy();
+    DecimalQuantity q1 = rq1.createCopy();
 
     assertEquals("Different sign (" + q0 + ", " + q1 + ")", q0.isNegative(), q1.isNegative());
 
@@ -279,19 +279,19 @@ public class FormatQuantityTest extends TestFmwk {
           q1.getDigit(m));
     }
 
-    if (rq0 instanceof FormatQuantity4) {
-      String message = ((FormatQuantity4) rq0).checkHealth();
+    if (rq0 instanceof DecimalQuantity_DualStorageBCD) {
+      String message = ((DecimalQuantity_DualStorageBCD) rq0).checkHealth();
       if (message != null) errln(message);
     }
-    if (rq1 instanceof FormatQuantity4) {
-      String message = ((FormatQuantity4) rq1).checkHealth();
+    if (rq1 instanceof DecimalQuantity_DualStorageBCD) {
+      String message = ((DecimalQuantity_DualStorageBCD) rq1).checkHealth();
       if (message != null) errln(message);
     }
   }
 
   @Test
   public void testSwitchStorage() {
-    FormatQuantity4 fq = new FormatQuantity4();
+    DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
 
     fq.setToLong(1234123412341234L);
     assertFalse("Should not be using byte array", fq.usingBytes());
@@ -311,7 +311,7 @@ public class FormatQuantityTest extends TestFmwk {
 
   @Test
   public void testAppend() {
-    FormatQuantity4 fq = new FormatQuantity4();
+    DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
     fq.appendDigit((byte) 1, 0, true);
     assertBigDecimalEquals("Failed on append", "1.", fq.toBigDecimal());
     assertNull("Failed health check", fq.checkHealth());
@@ -401,15 +401,15 @@ public class FormatQuantityTest extends TestFmwk {
       checkDoubleBehavior(d, false, "");
     }
 
-    assertEquals("NaN check failed", Double.NaN, new FormatQuantity4(Double.NaN).toDouble());
+    assertEquals("NaN check failed", Double.NaN, new DecimalQuantity_DualStorageBCD(Double.NaN).toDouble());
     assertEquals(
         "Inf check failed",
         Double.POSITIVE_INFINITY,
-        new FormatQuantity4(Double.POSITIVE_INFINITY).toDouble());
+        new DecimalQuantity_DualStorageBCD(Double.POSITIVE_INFINITY).toDouble());
     assertEquals(
         "-Inf check failed",
         Double.NEGATIVE_INFINITY,
-        new FormatQuantity4(Double.NEGATIVE_INFINITY).toDouble());
+        new DecimalQuantity_DualStorageBCD(Double.NEGATIVE_INFINITY).toDouble());
 
     // Generate random doubles
     String alert = "UNEXPECTED FAILURE: PLEASE REPORT THIS MESSAGE TO THE ICU TEAM: ";
@@ -422,7 +422,7 @@ public class FormatQuantityTest extends TestFmwk {
   }
 
   private static void checkDoubleBehavior(double d, boolean explicitRequired, String alert) {
-    FormatQuantity4 fq = new FormatQuantity4(d);
+    DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD(d);
     if (explicitRequired)
       assertTrue(alert + "Should be using approximate double", !fq.explicitExactDouble);
     assertEquals(alert + "Initial construction from hard double", d, fq.toDouble());
@@ -459,7 +459,7 @@ public class FormatQuantityTest extends TestFmwk {
       MathContext mc = (MathContext) cas[2];
       boolean usesExact = (Boolean) cas[3];
 
-      FormatQuantity4 fq = new FormatQuantity4(d);
+      DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD(d);
       assertTrue("Should be using approximate double", !fq.explicitExactDouble);
       fq.roundToMagnitude(-maxFrac, mc);
       assertEquals(

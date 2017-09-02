@@ -1,12 +1,12 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package newapi;
+package newapi.impl;
 
 import com.ibm.icu.impl.StandardPlural;
-import com.ibm.icu.impl.number.AffixPatternUtils;
-import com.ibm.icu.impl.number.AffixPatternUtils.SymbolProvider;
-import com.ibm.icu.impl.number.FormatQuantity;
-import com.ibm.icu.impl.number.PatternParser;
+import com.ibm.icu.impl.number.AffixUtils;
+import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.modifiers.ConstantMultiFieldModifier;
@@ -15,11 +15,9 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 
+import newapi.NumberFormatter;
 import newapi.NumberFormatter.SignDisplay;
 import newapi.NumberFormatter.UnitWidth;
-import newapi.impl.AffixPatternProvider;
-import newapi.impl.MicroProps;
-import newapi.impl.MicroPropsGenerator;
 
 /**
  * This class is a {@link Modifier} that wraps a decimal format pattern. It applies the pattern's affixes in
@@ -86,7 +84,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
 
     /**
      * Sets a reference to the parsed decimal format pattern, usually obtained from
-     * {@link PatternParser#parse(String)}, but any implementation of {@link AffixPatternProvider} is accepted.
+     * {@link PatternStringParser#parseToPatternInfo(String)}, but any implementation of {@link AffixPatternProvider} is accepted.
      */
     public void setPatternInfo(AffixPatternProvider patternInfo) {
         this.patternInfo = patternInfo;
@@ -157,7 +155,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
      * This is currently true only if there is a currency long name placeholder in the pattern ("¤¤¤").
      */
     public boolean needsPlurals() {
-        return patternInfo.containsSymbolType(AffixPatternUtils.TYPE_CURRENCY_TRIPLE);
+        return patternInfo.containsSymbolType(AffixUtils.TYPE_CURRENCY_TRIPLE);
     }
 
     /**
@@ -219,7 +217,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
     }
 
     public static interface ImmutableMurkyModifier extends MicroPropsGenerator {
-        public void applyToMicros(MicroProps micros, FormatQuantity quantity);
+        public void applyToMicros(MicroProps micros, DecimalQuantity quantity);
     }
 
     public static class ImmutableMurkyModifierWithoutPlurals implements ImmutableMurkyModifier {
@@ -234,7 +232,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
         }
 
         @Override
-        public MicroProps processQuantity(FormatQuantity quantity) {
+        public MicroProps processQuantity(DecimalQuantity quantity) {
             assert parent != null;
             MicroProps micros = parent.processQuantity(quantity);
             applyToMicros(micros, quantity);
@@ -242,7 +240,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
         }
 
         @Override
-        public void applyToMicros(MicroProps micros, FormatQuantity quantity) {
+        public void applyToMicros(MicroProps micros, DecimalQuantity quantity) {
             if (quantity.isNegative()) {
                 micros.modMiddle = negative;
             } else {
@@ -273,7 +271,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
         }
 
         @Override
-        public MicroProps processQuantity(FormatQuantity quantity) {
+        public MicroProps processQuantity(DecimalQuantity quantity) {
             assert parent != null;
             MicroProps micros = parent.processQuantity(quantity);
             applyToMicros(micros, quantity);
@@ -281,9 +279,9 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
         }
 
         @Override
-        public void applyToMicros(MicroProps micros, FormatQuantity quantity) {
+        public void applyToMicros(MicroProps micros, DecimalQuantity quantity) {
             // TODO: Fix this. Avoid the copy.
-            FormatQuantity copy = quantity.createCopy();
+            DecimalQuantity copy = quantity.createCopy();
             copy.roundToInfinity();
             StandardPlural plural = copy.getStandardPlural(rules);
             Modifier mod = mods[getModIndex(quantity.isNegative(), plural)];
@@ -297,11 +295,11 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
     }
 
     @Override
-    public MicroProps processQuantity(FormatQuantity fq) {
+    public MicroProps processQuantity(DecimalQuantity fq) {
         MicroProps micros = parent.processQuantity(fq);
         if (needsPlurals()) {
             // TODO: Fix this. Avoid the copy.
-            FormatQuantity copy = fq.createCopy();
+            DecimalQuantity copy = fq.createCopy();
             micros.rounding.apply(copy);
             setNumberProperties(fq.isNegative(), copy.getStandardPlural(rules));
         } else {
@@ -333,14 +331,14 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
 
     private int insertPrefix(NumberStringBuilder sb, int position) {
         enterCharSequenceMode(true);
-        int length = AffixPatternUtils.unescape(this, sb, position, this);
+        int length = AffixUtils.unescape(this, sb, position, this);
         exitCharSequenceMode();
         return length;
     }
 
     private int insertSuffix(NumberStringBuilder sb, int position) {
         enterCharSequenceMode(false);
-        int length = AffixPatternUtils.unescape(this, sb, position, this);
+        int length = AffixUtils.unescape(this, sb, position, this);
         exitCharSequenceMode();
         return length;
     }
@@ -348,24 +346,24 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
     @Override
     public CharSequence getSymbol(int type) {
         switch (type) {
-        case AffixPatternUtils.TYPE_MINUS_SIGN:
+        case AffixUtils.TYPE_MINUS_SIGN:
             return symbols.getMinusSignString();
-        case AffixPatternUtils.TYPE_PLUS_SIGN:
+        case AffixUtils.TYPE_PLUS_SIGN:
             return symbols.getPlusSignString();
-        case AffixPatternUtils.TYPE_PERCENT:
+        case AffixUtils.TYPE_PERCENT:
             return symbols.getPercentString();
-        case AffixPatternUtils.TYPE_PERMILLE:
+        case AffixUtils.TYPE_PERMILLE:
             return symbols.getPerMillString();
-        case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
+        case AffixUtils.TYPE_CURRENCY_SINGLE:
             // FormatWidth ISO overrides the singular currency symbol
             if (unitWidth == UnitWidth.ISO_CODE) {
                 return currency2;
             } else {
                 return currency1;
             }
-        case AffixPatternUtils.TYPE_CURRENCY_DOUBLE:
+        case AffixUtils.TYPE_CURRENCY_DOUBLE:
             return currency2;
-        case AffixPatternUtils.TYPE_CURRENCY_TRIPLE:
+        case AffixUtils.TYPE_CURRENCY_TRIPLE:
             // NOTE: This is the code path only for patterns containing "".
             // Most plural currencies are formatted in DataUtils.
             assert plural != null;
@@ -374,9 +372,9 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
             } else {
                 return currency3[plural.ordinal()];
             }
-        case AffixPatternUtils.TYPE_CURRENCY_QUAD:
+        case AffixUtils.TYPE_CURRENCY_QUAD:
             return "\uFFFD";
-        case AffixPatternUtils.TYPE_CURRENCY_QUINT:
+        case AffixUtils.TYPE_CURRENCY_QUINT:
             return "\uFFFD";
         default:
             throw new AssertionError();

@@ -43,7 +43,7 @@ import com.ibm.icu.text.NumberFormat;
  * }
  * </pre>
  */
-public class AffixPatternUtils {
+public class AffixUtils {
 
   private static final int STATE_BASE = 0;
   private static final int STATE_FIRST_QUOTE = 1;
@@ -296,7 +296,7 @@ public class AffixPatternUtils {
 
   /**
    * Checks whether the given affix pattern contains at least one token of the given type, which is
-   * one of the constants "TYPE_" in {@link AffixPatternUtils}.
+   * one of the constants "TYPE_" in {@link AffixUtils}.
    *
    * @param affixPattern The affix pattern to check.
    * @param type The token type.

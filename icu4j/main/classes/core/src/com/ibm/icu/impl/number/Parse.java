@@ -113,7 +113,7 @@ public class Parse {
   }
 
   /**
-   * @see Parse#parse(String, ParsePosition, ParseMode, boolean, boolean, Properties,
+   * @see Parse#parse(String, ParsePosition, ParseMode, boolean, boolean, DecimalFormatProperties,
    *     DecimalFormatSymbols)
    */
   private static enum StateName {
@@ -203,7 +203,7 @@ public class Parse {
     int score;
 
     // Numerical value:
-    FormatQuantity4 fq = new FormatQuantity4();
+    DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
     int numDigits;
     int trailingZeros;
     int exponent;
@@ -400,7 +400,7 @@ public class Parse {
      *
      * @return The Number. Never null.
      */
-    Number toNumber(Properties properties) {
+    Number toNumber(DecimalFormatProperties properties) {
       // Check for NaN, infinity, and -0.0
       if (sawNaN) {
         return Double.NaN;
@@ -470,7 +470,7 @@ public class Parse {
      *
      * @return The CurrencyAmount. Never null.
      */
-    public CurrencyAmount toCurrencyAmount(Properties properties) {
+    public CurrencyAmount toCurrencyAmount(DecimalFormatProperties properties) {
       assert isoCode != null;
       Number number = toNumber(properties);
       Currency currency = Currency.getInstance(isoCode);
@@ -495,7 +495,7 @@ public class Parse {
         sb.append("{");
         sb.append(currentAffixPattern);
         sb.append(":");
-        sb.append(AffixPatternUtils.getOffset(currentStepwiseParserTag) - 1);
+        sb.append(AffixUtils.getOffset(currentStepwiseParserTag) - 1);
         sb.append("}");
       }
       sb.append(" ");
@@ -539,7 +539,7 @@ public class Parse {
     int prevLength;
 
     // Properties and Symbols memory:
-    Properties properties;
+    DecimalFormatProperties properties;
     DecimalFormatSymbols symbols;
     ParseMode mode;
     boolean caseSensitive;
@@ -680,7 +680,7 @@ public class Parse {
     static final AffixHolder EMPTY_POSITIVE = new AffixHolder("", "", true, false);
     static final AffixHolder EMPTY_NEGATIVE = new AffixHolder("", "", true, true);
 
-    static void addToState(ParserState state, Properties properties) {
+    static void addToState(ParserState state, DecimalFormatProperties properties) {
       AffixHolder pp = fromPropertiesPositivePattern(properties);
       AffixHolder np = fromPropertiesNegativePattern(properties);
       AffixHolder ps = fromPropertiesPositiveString(properties);
@@ -691,7 +691,7 @@ public class Parse {
       if (ns != null) state.affixHolders.add(ns);
     }
 
-    static AffixHolder fromPropertiesPositivePattern(Properties properties) {
+    static AffixHolder fromPropertiesPositivePattern(DecimalFormatProperties properties) {
       String ppp = properties.getPositivePrefixPattern();
       String psp = properties.getPositiveSuffixPattern();
       if (properties.getSignAlwaysShown()) {
@@ -699,13 +699,13 @@ public class Parse {
         boolean foundSign = false;
         String npp = properties.getNegativePrefixPattern();
         String nsp = properties.getNegativeSuffixPattern();
-        if (AffixPatternUtils.containsType(npp, AffixPatternUtils.TYPE_MINUS_SIGN)) {
+        if (AffixUtils.containsType(npp, AffixUtils.TYPE_MINUS_SIGN)) {
           foundSign = true;
-          ppp = AffixPatternUtils.replaceType(npp, AffixPatternUtils.TYPE_MINUS_SIGN, '+');
+          ppp = AffixUtils.replaceType(npp, AffixUtils.TYPE_MINUS_SIGN, '+');
         }
-        if (AffixPatternUtils.containsType(nsp, AffixPatternUtils.TYPE_MINUS_SIGN)) {
+        if (AffixUtils.containsType(nsp, AffixUtils.TYPE_MINUS_SIGN)) {
           foundSign = true;
-          psp = AffixPatternUtils.replaceType(nsp, AffixPatternUtils.TYPE_MINUS_SIGN, '+');
+          psp = AffixUtils.replaceType(nsp, AffixUtils.TYPE_MINUS_SIGN, '+');
         }
         if (!foundSign) {
           ppp = "+" + ppp;
@@ -714,7 +714,7 @@ public class Parse {
       return getInstance(ppp, psp, false, false);
     }
 
-    static AffixHolder fromPropertiesNegativePattern(Properties properties) {
+    static AffixHolder fromPropertiesNegativePattern(DecimalFormatProperties properties) {
       String npp = properties.getNegativePrefixPattern();
       String nsp = properties.getNegativeSuffixPattern();
       if (npp == null && nsp == null) {
@@ -729,14 +729,14 @@ public class Parse {
       return getInstance(npp, nsp, false, true);
     }
 
-    static AffixHolder fromPropertiesPositiveString(Properties properties) {
+    static AffixHolder fromPropertiesPositiveString(DecimalFormatProperties properties) {
       String pp = properties.getPositivePrefix();
       String ps = properties.getPositiveSuffix();
       if (pp == null && ps == null) return null;
       return getInstance(pp, ps, true, false);
     }
 
-    static AffixHolder fromPropertiesNegativeString(Properties properties) {
+    static AffixHolder fromPropertiesNegativeString(DecimalFormatProperties properties) {
       String np = properties.getNegativePrefix();
       String ns = properties.getNegativeSuffix();
       if (np == null && ns == null) return null;
@@ -826,18 +826,18 @@ public class Parse {
       }
     }
 
-    private static final ThreadLocal<Properties> threadLocalProperties =
-        new ThreadLocal<Properties>() {
+    private static final ThreadLocal<DecimalFormatProperties> threadLocalProperties =
+        new ThreadLocal<DecimalFormatProperties>() {
           @Override
-          protected Properties initialValue() {
-            return new Properties();
+          protected DecimalFormatProperties initialValue() {
+            return new DecimalFormatProperties();
           }
         };
 
     private void addPattern(String pattern) {
-      Properties properties = threadLocalProperties.get();
+      DecimalFormatProperties properties = threadLocalProperties.get();
       try {
-        PatternAndPropertyUtils.parseToExistingProperties(pattern, properties);
+        PatternStringParser.parseToExistingProperties(pattern, properties);
       } catch (IllegalArgumentException e) {
         // This should only happen if there is a bug in CLDR data. Fail silently.
       }
@@ -912,7 +912,7 @@ public class Parse {
               0xFE63, 0xFE63, 0xFF0D, 0xFF0D)
           .freeze();
 
-  public static Number parse(String input, Properties properties, DecimalFormatSymbols symbols) {
+  public static Number parse(String input, DecimalFormatProperties properties, DecimalFormatSymbols symbols) {
     ParsePosition ppos = threadLocalParsePosition.get();
     ppos.setIndex(0);
     return parse(input, ppos, properties, symbols);
@@ -940,19 +940,19 @@ public class Parse {
   public static Number parse(
       CharSequence input,
       ParsePosition ppos,
-      Properties properties,
+      DecimalFormatProperties properties,
       DecimalFormatSymbols symbols) {
     StateItem best = _parse(input, ppos, false, properties, symbols);
     return (best == null) ? null : best.toNumber(properties);
   }
 
   public static CurrencyAmount parseCurrency(
-      String input, Properties properties, DecimalFormatSymbols symbols) throws ParseException {
+      String input, DecimalFormatProperties properties, DecimalFormatSymbols symbols) throws ParseException {
     return parseCurrency(input, null, properties, symbols);
   }
 
   public static CurrencyAmount parseCurrency(
-      CharSequence input, ParsePosition ppos, Properties properties, DecimalFormatSymbols symbols)
+      CharSequence input, ParsePosition ppos, DecimalFormatProperties properties, DecimalFormatSymbols symbols)
       throws ParseException {
     if (ppos == null) {
       ppos = threadLocalParsePosition.get();
@@ -967,7 +967,7 @@ public class Parse {
       CharSequence input,
       ParsePosition ppos,
       boolean parseCurrency,
-      Properties properties,
+      DecimalFormatProperties properties,
       DecimalFormatSymbols symbols) {
 
     if (input == null || ppos == null || properties == null || symbols == null) {
@@ -1716,7 +1716,7 @@ public class Parse {
       added = acceptString(cp, nextName, null, state, item, str, 0, false);
     } else {
       added =
-          acceptAffixPattern(cp, nextName, state, item, str, AffixPatternUtils.nextToken(0, str));
+          acceptAffixPattern(cp, nextName, state, item, str, AffixUtils.nextToken(0, str));
     }
     // Record state in the added entries
     for (int i = Long.numberOfTrailingZeros(added); (1L << i) <= added; i++) {
@@ -1899,27 +1899,27 @@ public class Parse {
     if (typeOrCp < 0) {
       // Symbol
       switch (typeOrCp) {
-        case AffixPatternUtils.TYPE_MINUS_SIGN:
+        case AffixUtils.TYPE_MINUS_SIGN:
           resolvedMinusSign = true;
           break;
-        case AffixPatternUtils.TYPE_PLUS_SIGN:
+        case AffixUtils.TYPE_PLUS_SIGN:
           resolvedPlusSign = true;
           break;
-        case AffixPatternUtils.TYPE_PERCENT:
+        case AffixUtils.TYPE_PERCENT:
           resolvedStr = state.symbols.getPercentString();
           if (resolvedStr.length() != 1 || resolvedStr.charAt(0) != '%') {
             resolvedCp = '%'; // accept ASCII percent as well as locale percent
           }
           break;
-        case AffixPatternUtils.TYPE_PERMILLE:
+        case AffixUtils.TYPE_PERMILLE:
           resolvedStr = state.symbols.getPerMillString();
           if (resolvedStr.length() != 1 || resolvedStr.charAt(0) != '‰') {
             resolvedCp = '‰'; // accept ASCII permille as well as locale permille
           }
           break;
-        case AffixPatternUtils.TYPE_CURRENCY_SINGLE:
-        case AffixPatternUtils.TYPE_CURRENCY_DOUBLE:
-        case AffixPatternUtils.TYPE_CURRENCY_TRIPLE:
+        case AffixUtils.TYPE_CURRENCY_SINGLE:
+        case AffixUtils.TYPE_CURRENCY_DOUBLE:
+        case AffixUtils.TYPE_CURRENCY_TRIPLE:
           resolvedCurrency = true;
           break;
         default:
@@ -2094,7 +2094,7 @@ public class Parse {
     int typeOrCp =
         isString
             ? Character.codePointAt(str, (int) offsetOrTag)
-            : AffixPatternUtils.getTypeOrCp(offsetOrTag);
+            : AffixUtils.getTypeOrCp(offsetOrTag);
 
     if (isIgnorable(typeOrCp, state)) {
       // Look for the next nonignorable code point
@@ -2107,7 +2107,7 @@ public class Parse {
         nextOffsetOrTag =
             isString
                 ? nextOffsetOrTag + Character.charCount(nextTypeOrCp)
-                : AffixPatternUtils.nextToken(nextOffsetOrTag, str);
+                : AffixUtils.nextToken(nextOffsetOrTag, str);
         if (firstOffsetOrTag == 0L) firstOffsetOrTag = nextOffsetOrTag;
         if (isString ? nextOffsetOrTag >= str.length() : nextOffsetOrTag < 0) {
           // Integer.MIN_VALUE is an invalid value for either a type or a cp;
@@ -2118,7 +2118,7 @@ public class Parse {
         nextTypeOrCp =
             isString
                 ? Character.codePointAt(str, (int) nextOffsetOrTag)
-                : AffixPatternUtils.getTypeOrCp(nextOffsetOrTag);
+                : AffixUtils.getTypeOrCp(nextOffsetOrTag);
         if (!isIgnorable(nextTypeOrCp, state)) break;
       }
 
@@ -2177,7 +2177,7 @@ public class Parse {
       nextOffsetOrTag =
           isString
               ? nextOffsetOrTag + Character.charCount(nextTypeOrCp)
-              : AffixPatternUtils.nextToken(nextOffsetOrTag, str);
+              : AffixUtils.nextToken(nextOffsetOrTag, str);
       if (firstOffsetOrTag == 0L) firstOffsetOrTag = nextOffsetOrTag;
       if (isString ? nextOffsetOrTag >= str.length() : nextOffsetOrTag < 0) {
         nextTypeOrCp = -1;
@@ -2186,7 +2186,7 @@ public class Parse {
       nextTypeOrCp =
           isString
               ? Character.codePointAt(str, (int) nextOffsetOrTag)
-              : AffixPatternUtils.getTypeOrCp(nextOffsetOrTag);
+              : AffixUtils.getTypeOrCp(nextOffsetOrTag);
       if (!isIgnorable(nextTypeOrCp, state)) break;
     }
 

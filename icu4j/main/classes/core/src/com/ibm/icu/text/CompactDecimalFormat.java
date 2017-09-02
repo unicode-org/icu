@@ -12,7 +12,7 @@ package com.ibm.icu.text;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import com.ibm.icu.impl.number.Properties;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
@@ -122,11 +122,11 @@ public class CompactDecimalFormat extends DecimalFormat {
   CompactDecimalFormat(ULocale locale, CompactStyle style) {
     // Minimal properties: let the non-shim code path do most of the logic for us.
     symbols = DecimalFormatSymbols.getInstance(locale);
-    properties = new Properties();
+    properties = new DecimalFormatProperties();
     properties.setCompactStyle(style);
     properties.setGroupingSize(-2); // do not forward grouping information
     properties.setMinimumGroupingDigits(2);
-    exportedProperties = new Properties();
+    exportedProperties = new DecimalFormatProperties();
     refreshFormatter();
   }
 

@@ -13,10 +13,11 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-import com.ibm.icu.impl.number.AffixPatternUtils;
+import com.ibm.icu.impl.number.AffixUtils;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Parse;
-import com.ibm.icu.impl.number.PatternAndPropertyUtils;
-import com.ibm.icu.impl.number.Properties;
+import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
@@ -30,8 +31,6 @@ import com.ibm.icu.util.ULocale.Category;
 import newapi.FormattedNumber;
 import newapi.LocalizedNumberFormatter;
 import newapi.NumberFormatter;
-import newapi.NumberPropertyMapper;
-import newapi.impl.MacroProps;
 import newapi.impl.Padder.PadPosition;
 
 /**
@@ -252,7 +251,7 @@ public class DecimalFormat extends NumberFormat {
    * In principle this should be final, but serialize and clone won't work if it is final. Does not
    * need to be volatile because the reference never changes.
    */
-  /* final */ transient Properties properties;
+  /* final */ transient DecimalFormatProperties properties;
 
   /**
    * The symbols for the current locale. Volatile because threads may read and write at the same
@@ -271,7 +270,7 @@ public class DecimalFormat extends NumberFormat {
    * The effective properties as exported from the formatter object. Volatile because threads may
    * read and write at the same time.
    */
-  transient volatile Properties exportedProperties;
+  transient volatile DecimalFormatProperties exportedProperties;
 
   //=====================================================================================//
   //                                    CONSTRUCTORS                                     //
@@ -298,10 +297,10 @@ public class DecimalFormat extends NumberFormat {
     ULocale def = ULocale.getDefault(ULocale.Category.FORMAT);
     String pattern = getPattern(def, NumberFormat.NUMBERSTYLE);
     symbols = getDefaultSymbols();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -327,10 +326,10 @@ public class DecimalFormat extends NumberFormat {
    */
   public DecimalFormat(String pattern) {
     symbols = getDefaultSymbols();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -356,10 +355,10 @@ public class DecimalFormat extends NumberFormat {
    */
   public DecimalFormat(String pattern, DecimalFormatSymbols symbols) {
     this.symbols = (DecimalFormatSymbols) symbols.clone();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -393,8 +392,8 @@ public class DecimalFormat extends NumberFormat {
   /** Package-private constructor used by NumberFormat. */
   DecimalFormat(String pattern, DecimalFormatSymbols symbols, int choice) {
     this.symbols = (DecimalFormatSymbols) symbols.clone();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
     // If choice is a currency type, ignore the rounding information.
     if (choice == CURRENCYSTYLE
         || choice == ISOCURRENCYSTYLE
@@ -402,9 +401,9 @@ public class DecimalFormat extends NumberFormat {
         || choice == CASHCURRENCYSTYLE
         || choice == STANDARDCURRENCYSTYLE
         || choice == PLURALCURRENCYSTYLE) {
-      setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_ALWAYS);
+      setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_ALWAYS);
     } else {
-      setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_IF_CURRENCY);
+      setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY);
     }
     refreshFormatter();
   }
@@ -445,7 +444,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void applyPattern(String pattern) {
-    setPropertiesFromPattern(pattern, PatternAndPropertyUtils.IGNORE_ROUNDING_NEVER);
+    setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_NEVER);
     // Backwards compatibility: clear out user-specified prefix and suffix,
     // as well as CurrencyPluralInfo.
     properties.setPositivePrefix(null);
@@ -469,7 +468,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void applyLocalizedPattern(String localizedPattern) {
-    String pattern = PatternAndPropertyUtils.convertLocalized(localizedPattern, symbols, false);
+    String pattern = PatternStringUtils.convertLocalized(localizedPattern, symbols, false);
     applyPattern(pattern);
   }
 
@@ -483,7 +482,7 @@ public class DecimalFormat extends NumberFormat {
     DecimalFormat other = (DecimalFormat) super.clone();
     other.symbols = (DecimalFormatSymbols) symbols.clone();
     other.properties = properties.clone();
-    other.exportedProperties = new Properties();
+    other.exportedProperties = new DecimalFormatProperties();
     other.refreshFormatter();
     return other;
   }
@@ -525,15 +524,15 @@ public class DecimalFormat extends NumberFormat {
       // Extra int for possible future use:
       ois.readInt();
       // 1) Property Bag
-      properties = (Properties) ois.readObject();
+      properties = (DecimalFormatProperties) ois.readObject();
       // 2) DecimalFormatSymbols
       symbols = (DecimalFormatSymbols) ois.readObject();
       // Re-build transient fields
-      exportedProperties = new Properties();
+      exportedProperties = new DecimalFormatProperties();
       refreshFormatter();
     } else {
       ///// LEGACY SERIALIZATION FORMAT /////
-      properties = new Properties();
+      properties = new DecimalFormatProperties();
       // Loop through the fields. Not all fields necessarily exist in the serialization.
       String pp = null, ppp = null, ps = null, psp = null;
       String np = null, npp = null, ns = null, nsp = null;
@@ -667,7 +666,7 @@ public class DecimalFormat extends NumberFormat {
       if (symbols == null) {
         symbols = getDefaultSymbols();
       }
-      exportedProperties = new Properties();
+      exportedProperties = new DecimalFormatProperties();
       refreshFormatter();
     }
   }
@@ -775,7 +774,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public Number parse(String text, ParsePosition parsePosition) {
-    Properties pprops = threadLocalProperties.get();
+    DecimalFormatProperties pprops = threadLocalProperties.get();
     synchronized (this) {
       pprops.copyFrom(properties);
     }
@@ -796,7 +795,7 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
     try {
-      Properties pprops = threadLocalProperties.get();
+      DecimalFormatProperties pprops = threadLocalProperties.get();
       synchronized (this) {
         pprops.copyFrom(properties);
       }
@@ -2377,13 +2376,13 @@ public class DecimalFormat extends NumberFormat {
     // to keep affix patterns intact.  In particular, pull rounding properties
     // so that CurrencyUsage is reflected properly.
     // TODO: Consider putting this logic in PatternString.java instead.
-    Properties tprops = threadLocalProperties.get().copyFrom(properties);
+    DecimalFormatProperties tprops = threadLocalProperties.get().copyFrom(properties);
     if (useCurrency(properties)) {
       tprops.setMinimumFractionDigits(exportedProperties.getMinimumFractionDigits());
       tprops.setMaximumFractionDigits(exportedProperties.getMaximumFractionDigits());
       tprops.setRoundingIncrement(exportedProperties.getRoundingIncrement());
     }
-    return PatternAndPropertyUtils.propertiesToString(tprops);
+    return PatternStringUtils.propertiesToPatternString(tprops);
   }
 
   /**
@@ -2396,7 +2395,7 @@ public class DecimalFormat extends NumberFormat {
    */
   public synchronized String toLocalizedPattern() {
     String pattern = toPattern();
-    return PatternAndPropertyUtils.convertLocalized(pattern, symbols, true);
+    return PatternStringUtils.convertLocalized(pattern, symbols, true);
   }
 
   /**
@@ -2422,11 +2421,11 @@ public class DecimalFormat extends NumberFormat {
     return formatter.format(number).getFixedDecimal();
   }
 
-  private static final ThreadLocal<Properties> threadLocalProperties =
-      new ThreadLocal<Properties>() {
+  private static final ThreadLocal<DecimalFormatProperties> threadLocalProperties =
+      new ThreadLocal<DecimalFormatProperties>() {
         @Override
-        protected Properties initialValue() {
-          return new Properties();
+        protected DecimalFormatProperties initialValue() {
+          return new DecimalFormatProperties();
         }
       };
 
@@ -2437,7 +2436,6 @@ public class DecimalFormat extends NumberFormat {
       // The only time when this happens is during legacy deserialization.
       return;
     }
-    MacroProps macros = NumberPropertyMapper.oldToNew(properties, symbols, exportedProperties);
     ULocale locale = this.getLocale(ULocale.ACTUAL_LOCALE);
     if (locale == null) {
       // Constructor
@@ -2448,7 +2446,7 @@ public class DecimalFormat extends NumberFormat {
       locale = symbols.getULocale();
     }
     assert locale != null;
-    formatter = NumberFormatter.with().macros(macros).locale(locale);
+    formatter = NumberFormatter.fromDecimalFormat(properties, symbols, exportedProperties).locale(locale);
   }
 
   /**
@@ -2478,14 +2476,14 @@ public class DecimalFormat extends NumberFormat {
    * Returns true if the currency is set in The property bag or if currency symbols are present in
    * the prefix/suffix pattern.
    */
-  private static boolean useCurrency(Properties properties) {
+  private static boolean useCurrency(DecimalFormatProperties properties) {
     return ((properties.getCurrency() != null)
         || properties.getCurrencyPluralInfo() != null
         || properties.getCurrencyUsage() != null
-        || AffixPatternUtils.hasCurrencySymbols(properties.getPositivePrefixPattern())
-        || AffixPatternUtils.hasCurrencySymbols(properties.getPositiveSuffixPattern())
-        || AffixPatternUtils.hasCurrencySymbols(properties.getNegativePrefixPattern())
-        || AffixPatternUtils.hasCurrencySymbols(properties.getNegativeSuffixPattern()));
+        || AffixUtils.hasCurrencySymbols(properties.getPositivePrefixPattern())
+        || AffixUtils.hasCurrencySymbols(properties.getPositiveSuffixPattern())
+        || AffixUtils.hasCurrencySymbols(properties.getNegativePrefixPattern())
+        || AffixUtils.hasCurrencySymbols(properties.getNegativeSuffixPattern()));
   }
 
   /**
@@ -2495,15 +2493,15 @@ public class DecimalFormat extends NumberFormat {
    * @param ignoreRounding Whether to leave out rounding information (minFrac, maxFrac, and rounding
    *     increment) when parsing the pattern. This may be desirable if a custom rounding mode, such
    *     as CurrencyUsage, is to be used instead. One of {@link
-   *     PatternAndPropertyUtils#IGNORE_ROUNDING_ALWAYS}, {@link PatternAndPropertyUtils#IGNORE_ROUNDING_IF_CURRENCY},
-   *     or {@link PatternAndPropertyUtils#IGNORE_ROUNDING_NEVER}.
+   *     PatternStringParser#IGNORE_ROUNDING_ALWAYS}, {@link PatternStringParser#IGNORE_ROUNDING_IF_CURRENCY},
+   *     or {@link PatternStringParser#IGNORE_ROUNDING_NEVER}.
    * @see PatternAndPropertyUtils#parseToExistingProperties
    */
   void setPropertiesFromPattern(String pattern, int ignoreRounding) {
     if (pattern == null) {
       throw new NullPointerException();
     }
-    PatternAndPropertyUtils.parseToExistingProperties(pattern, properties, ignoreRounding);
+    PatternStringParser.parseToExistingProperties(pattern, properties, ignoreRounding);
   }
 
   /**
@@ -2527,7 +2525,7 @@ public class DecimalFormat extends NumberFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public void set(Properties props);
+    public void set(DecimalFormatProperties props);
   }
 
   /**

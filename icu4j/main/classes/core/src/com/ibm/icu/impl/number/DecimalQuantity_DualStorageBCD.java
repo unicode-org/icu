@@ -5,7 +5,11 @@ package com.ibm.icu.impl.number;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public final class FormatQuantity4 extends FormatQuantityBCD {
+/**
+ * A DecimalQuantity with internal storage as a 64-bit BCD, with fallback to a byte array
+ * for numbers that don't fit into the standard BCD.
+ */
+public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_AbstractBCD {
 
   /**
    * The BCD of the 16 digits of the number represented by this object. Every 4 bits of the long map
@@ -25,35 +29,35 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
     return Integer.MAX_VALUE;
   }
 
-  public FormatQuantity4() {
+  public DecimalQuantity_DualStorageBCD() {
     setBcdToZero();
   }
 
-  public FormatQuantity4(long input) {
+  public DecimalQuantity_DualStorageBCD(long input) {
     setToLong(input);
   }
 
-  public FormatQuantity4(int input) {
+  public DecimalQuantity_DualStorageBCD(int input) {
     setToInt(input);
   }
 
-  public FormatQuantity4(double input) {
+  public DecimalQuantity_DualStorageBCD(double input) {
     setToDouble(input);
   }
 
-  public FormatQuantity4(BigInteger input) {
+  public DecimalQuantity_DualStorageBCD(BigInteger input) {
     setToBigInteger(input);
   }
 
-  public FormatQuantity4(BigDecimal input) {
+  public DecimalQuantity_DualStorageBCD(BigDecimal input) {
     setToBigDecimal(input);
   }
 
-  public FormatQuantity4(FormatQuantity4 other) {
+  public DecimalQuantity_DualStorageBCD(DecimalQuantity_DualStorageBCD other) {
     copyFrom(other);
   }
 
-  public FormatQuantity4(Number number) {
+  public DecimalQuantity_DualStorageBCD(Number number) {
     if (number instanceof Long) {
       setToLong(number.longValue());
     } else if (number instanceof Integer) {
@@ -317,8 +321,8 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
   }
 
   @Override
-  protected void copyBcdFrom(FormatQuantity _other) {
-    FormatQuantity4 other = (FormatQuantity4) _other;
+  protected void copyBcdFrom(DecimalQuantity _other) {
+    DecimalQuantity_DualStorageBCD other = (DecimalQuantity_DualStorageBCD) _other;
     if (other.usingBytes) {
       usingBytes = true;
       ensureCapacity(other.precision);
@@ -376,7 +380,7 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
   }
 
   /**
-   * Checks whether this {@link FormatQuantity4} is using its internal byte array storage mechanism.
+   * Checks whether this {@link DecimalQuantity_DualStorageBCD} is using its internal byte array storage mechanism.
    *
    * @return true if an internal byte array is being used; false if a long is being used.
    * @internal
@@ -398,7 +402,7 @@ public final class FormatQuantity4 extends FormatQuantityBCD {
       sb.append(Long.toHexString(bcdLong));
     }
     return String.format(
-        "<FormatQuantity4 %s:%d:%d:%s %s %s%s%d>",
+        "<DecimalQuantity4 %s:%d:%d:%s %s %s%s%d>",
         (lOptPos > 1000 ? "max" : String.valueOf(lOptPos)),
         lReqPos,
         rReqPos,

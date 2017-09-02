@@ -1,6 +1,6 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package newapi;
+package newapi.impl;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
-import com.ibm.icu.impl.number.FormatQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.modifiers.SimpleModifier;
 import com.ibm.icu.text.NumberFormat.Field;
@@ -18,11 +18,8 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
 import newapi.NumberFormatter.UnitWidth;
-import newapi.impl.MeasureData;
-import newapi.impl.MicroProps;
-import newapi.impl.MicroPropsGenerator;
 
-class LongNameHandler implements MicroPropsGenerator {
+public class LongNameHandler implements MicroPropsGenerator {
 
     private final Map<StandardPlural, Modifier> data;
     /* unsafe */ PluralRules rules;
@@ -98,10 +95,10 @@ class LongNameHandler implements MicroPropsGenerator {
     }
 
     @Override
-    public MicroProps processQuantity(FormatQuantity quantity) {
+    public MicroProps processQuantity(DecimalQuantity quantity) {
         MicroProps micros = parent.processQuantity(quantity);
         // TODO: Avoid the copy here?
-        FormatQuantity copy = quantity.createCopy();
+        DecimalQuantity copy = quantity.createCopy();
         micros.rounding.apply(copy);
         micros.modOuter = data.get(copy.getStandardPlural(rules));
         return micros;
