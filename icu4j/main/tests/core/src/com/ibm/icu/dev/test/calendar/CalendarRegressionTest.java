@@ -2479,5 +2479,26 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("Fail: dateformat doesn't interpret calendar correctly", expectedFormat, actualFormat);
     }
 
+    @Test
+    public void TestTicket11632() {
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(Calendar.HOUR, 596);
+        // hour value set upto 596 lies within the integer range for millisecond calculations
+        assertEquals("Incorrect time for integer range milliseconds","Sun Jan 25 20:00:00 PST 1970", cal.getTime().toString());
+        cal.clear();
+        //  hour value set above 596 lies outside the integer range for millisecond calculations. This will invoke
+        // the long version of the compute millis in day method in the ICU internal API
+        cal.set(Calendar.HOUR, 597);
+        assertEquals("Incorrect time for long range milliseconds","Sun Jan 25 21:00:00 PST 1970", cal.getTime().toString());
+        cal.clear();
+        cal.set(Calendar.HOUR, 597);
+        cal.set(Calendar.MINUTE, 60*24);
+        assertEquals("Incorrect time for long range milliseconds","Mon Jan 26 21:00:00 PST 1970", cal.getTime().toString());
+        cal.clear();
+        cal.set(Calendar.HOUR_OF_DAY, 597);
+        assertEquals("Incorrect time for long range milliseconds","Sun Jan 25 21:00:00 PST 1970", cal.getTime().toString());
+    }
+
 }
 //eof
