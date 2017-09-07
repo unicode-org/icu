@@ -662,7 +662,8 @@ int32_t Edits::Iterator::findIndex(int32_t i, UBool findSource, UErrorCode &erro
             // Search backwards.
             for (;;) {
                 UBool hasPrevious = previous(errorCode);
-                U_ASSERT(hasPrevious);  // because i>=0 and the first span starts there
+                U_ASSERT(hasPrevious);  // because i>=0 and the first span starts at 0
+                (void)hasPrevious;  // avoid unused-variable warning
                 spanStart = findSource ? srcIndex : destIndex;
                 if (i >= spanStart) {
                     // The index is in the current span.
