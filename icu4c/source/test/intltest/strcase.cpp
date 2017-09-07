@@ -58,6 +58,7 @@ public:
     void TestBufferOverflow();
     void TestEdits();
     void TestCopyMoveEdits();
+    void TestEditsFindFwdBwd();
     void TestMergeEdits();
     void TestCaseMapWithEdits();
     void TestCaseMapUTF8WithEdits();
@@ -97,6 +98,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestBufferOverflow);
     TESTCASE_AUTO(TestEdits);
     TESTCASE_AUTO(TestCopyMoveEdits);
+    TESTCASE_AUTO(TestEditsFindFwdBwd);
     TESTCASE_AUTO(TestMergeEdits);
     TESTCASE_AUTO(TestCaseMapWithEdits);
     TESTCASE_AUTO(TestCaseMapUTF8WithEdits);
@@ -1021,6 +1023,24 @@ void StringCaseTest::TestCopyMoveEdits() {
     assertSuccess("iter.next()", errorCode);
     assertTrue("iter.hasChange()", iter.hasChange());
     assertEquals("iter.newLength()", 1, iter.newLength());
+}
+
+void StringCaseTest::TestEditsFindFwdBwd() {
+    IcuTestErrorCode errorCode(*this, "TestEditsFindFwdBwd");
+    // Some users need index mappings to be efficient when they are out of order.
+    // The most interesting failure case for this test is it taking a very long time.
+    Edits e;
+    constexpr int32_t N = 200000;
+    for (int32_t i = 0; i < N; ++i) {
+        e.addReplace(3, 1);
+    }
+    Edits::Iterator iter = e.getFineIterator();
+    for (int32_t i = 0; i <= N; ++i) {
+        assertEquals("ascending", i * 3, iter.sourceIndexFromDestinationIndex(i, errorCode));
+    }
+    for (int32_t i = N; i >= 0; --i) {
+        assertEquals("descending", i * 3, iter.sourceIndexFromDestinationIndex(i, errorCode));
+    }
 }
 
 void StringCaseTest::TestMergeEdits() {

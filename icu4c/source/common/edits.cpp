@@ -396,7 +396,7 @@ Edits &Edits::mergeAndAppend(const Edits &ab, const Edits &bc, UErrorCode &error
 Edits::Iterator::Iterator(const uint16_t *a, int32_t len, UBool oc, UBool crs) :
         array(a), index(0), length(len), remaining(0),
         onlyChanges_(oc), coarse(crs),
-        changed(FALSE), oldLength_(0), newLength_(0),
+        dir(0), changed(FALSE), oldLength_(0), newLength_(0),
         srcIndex(0), replIndex(0), destIndex(0) {}
 
 int32_t Edits::Iterator::readLength(int32_t head) {
@@ -418,7 +418,7 @@ int32_t Edits::Iterator::readLength(int32_t head) {
     }
 }
 
-void Edits::Iterator::updateIndexes() {
+void Edits::Iterator::updateNextIndexes() {
     srcIndex += oldLength_;
     if (changed) {
         replIndex += newLength_;
@@ -426,22 +426,52 @@ void Edits::Iterator::updateIndexes() {
     destIndex += newLength_;
 }
 
+void Edits::Iterator::updatePreviousIndexes() {
+    srcIndex -= oldLength_;
+    if (changed) {
+        replIndex -= newLength_;
+    }
+    destIndex -= newLength_;
+}
+
 UBool Edits::Iterator::noNext() {
-    // No change beyond the string.
+    // No change before or beyond the string.
+    dir = 0;
     changed = FALSE;
     oldLength_ = newLength_ = 0;
     return FALSE;
 }
 
 UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
+    // Forward iteration: Update the string indexes to the limit of the current span,
+    // and post-increment-read array units to assemble a new span.
+    // Leaves the array index one after the last unit of that span.
     if (U_FAILURE(errorCode)) { return FALSE; }
     // We have an errorCode in case we need to start guarding against integer overflows.
     // It is also convenient for caller loops if we bail out when an error was set elsewhere.
-    updateIndexes();
-    if (remaining > 0) {
+    if (dir > 0) {
+        updateNextIndexes();
+    } else {
+        if (dir < 0) {
+            // Turn around from previous() to next().
+            // Post-increment-read the same span again.
+            if (remaining > 0) {
+                // Fine-grained iterator:
+                // Stay on the current one of a sequence of equal-length changes.
+                ++index;  // next() rests on the index after the sequence unit.
+                dir = 1;
+                return TRUE;
+            }
+        }
+        dir = 1;
+    }
+    if (remaining >= 1) {
         // Fine-grained iterator: Continue a sequence of equal-length changes.
-        --remaining;
-        return TRUE;
+        if (remaining > 1) {
+            --remaining;
+            return TRUE;
+        }
+        remaining = 0;
     }
     if (index >= length) {
         return noNext();
@@ -457,7 +487,7 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
         }
         newLength_ = oldLength_;
         if (onlyChanges) {
-            updateIndexes();
+            updateNextIndexes();
             if (index >= length) {
                 return noNext();
             }
@@ -476,7 +506,10 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
         } else {
             // Split a sequence of equal-length changes that was compressed into one unit.
             oldLength_ = newLength_ = u >> 12;
-            remaining = u & 0xfff;
+            u &= 0xfff;
+            if (u > 0) {
+                remaining = u + 1;  // This is the first of two or more changes.
+            }
             return TRUE;
         }
     } else {
@@ -498,12 +531,119 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
             newLength_ += len;
         } else {
             U_ASSERT(u <= 0x7fff);
-            int32_t oldLen = readLength((u >> 6) & 0x3f);
-            int32_t newLen = readLength(u & 0x3f);
-            oldLength_ += oldLen;
-            newLength_ += newLen;
+            oldLength_ += readLength((u >> 6) & 0x3f);
+            newLength_ += readLength(u & 0x3f);
         }
     }
+    return TRUE;
+}
+
+UBool Edits::Iterator::previous(UErrorCode &errorCode) {
+    // Backward iteration: Pre-decrement-read array units to assemble a new span,
+    // then update the string indexes to the start of that span.
+    // Leaves the array index on the head unit of that span.
+    if (U_FAILURE(errorCode)) { return FALSE; }
+    // We have an errorCode in case we need to start guarding against integer overflows.
+    // It is also convenient for caller loops if we bail out when an error was set elsewhere.
+    if (dir >= 0) {
+        if (dir > 0) {
+            // Turn around from next() to previous().
+            // Set the string indexes to the span limit and
+            // pre-decrement-read the same span again.
+            if (remaining > 0) {
+                // Fine-grained iterator:
+                // Stay on the current one of a sequence of equal-length changes.
+                --index;  // previous() rests on the sequence unit.
+                dir = -1;
+                return TRUE;
+            }
+            updateNextIndexes();
+        }
+        dir = -1;
+    }
+    if (remaining > 0) {
+        // Fine-grained iterator: Continue a sequence of equal-length changes.
+        int32_t u = array[index];
+        U_ASSERT(MAX_UNCHANGED < u && u <= MAX_SHORT_CHANGE);
+        if (remaining <= (u & 0xfff)) {
+            ++remaining;
+            updatePreviousIndexes();
+            return TRUE;
+        }
+        remaining = 0;
+    }
+    if (index <= 0) {
+        return noNext();
+    }
+    int32_t u = array[--index];
+    if (u <= MAX_UNCHANGED) {
+        // Combine adjacent unchanged ranges.
+        changed = FALSE;
+        oldLength_ = u + 1;
+        while (index > 0 && (u = array[index - 1]) <= MAX_UNCHANGED) {
+            --index;
+            oldLength_ += u + 1;
+        }
+        newLength_ = oldLength_;
+        // No need to handle onlyChanges as long as previous() is called only from findIndex().
+        updatePreviousIndexes();
+        return TRUE;
+    }
+    changed = TRUE;
+    if (u <= MAX_SHORT_CHANGE) {
+        if (coarse) {
+            int32_t w = u >> 12;
+            int32_t len = (u & 0xfff) + 1;
+            oldLength_ = newLength_ = len * w;
+        } else {
+            // Split a sequence of equal-length changes that was compressed into one unit.
+            oldLength_ = newLength_ = u >> 12;
+            u &= 0xfff;
+            if (u > 0) {
+                remaining = 1;  // This is the last of two or more changes.
+            }
+            updatePreviousIndexes();
+            return TRUE;
+        }
+    } else {
+        if (u <= 0x7fff) {
+            // The change is encoded in u alone.
+            oldLength_ = readLength((u >> 6) & 0x3f);
+            newLength_ = readLength(u & 0x3f);
+        } else {
+            // Back up to the head of the change, read the lengths,
+            // and reset the index to the head again.
+            U_ASSERT(index > 0);
+            while ((u = array[--index]) > 0x7fff) {}
+            U_ASSERT(u > MAX_SHORT_CHANGE);
+            int32_t headIndex = index++;
+            oldLength_ = readLength((u >> 6) & 0x3f);
+            newLength_ = readLength(u & 0x3f);
+            index = headIndex;
+        }
+        if (!coarse) {
+            updatePreviousIndexes();
+            return TRUE;
+        }
+    }
+    // Combine adjacent changes.
+    while (index > 0 && (u = array[index - 1]) > MAX_UNCHANGED) {
+        --index;
+        if (u <= MAX_SHORT_CHANGE) {
+            int32_t w = u >> 12;
+            int32_t len = (u & 0xfff) + 1;
+            len = len * w;
+            oldLength_ += len;
+            newLength_ += len;
+        } else if (u <= 0x7fff) {
+            // Read the lengths, and reset the index to the head again.
+            int32_t headIndex = index++;
+            oldLength_ += readLength((u >> 6) & 0x3f);
+            newLength_ += readLength(u & 0x3f);
+            index = headIndex;
+        }
+    }
+    updatePreviousIndexes();
     return TRUE;
 }
 
@@ -518,7 +658,43 @@ int32_t Edits::Iterator::findIndex(int32_t i, UBool findSource, UErrorCode &erro
         spanLength = newLength_;
     }
     if (i < spanStart) {
+        if (i >= (spanStart / 2)) {
+            // Search backwards.
+            for (;;) {
+                UBool hasPrevious = previous(errorCode);
+                U_ASSERT(hasPrevious);  // because i>=0 and the first span starts there
+                spanStart = findSource ? srcIndex : destIndex;
+                if (i >= spanStart) {
+                    // The index is in the current span.
+                    return 0;
+                }
+                if (remaining > 0) {
+                    // Is the index in one of the remaining compressed edits?
+                    // spanStart is the start of the current span, first of the remaining ones.
+                    int32_t u = array[index];
+                    U_ASSERT(MAX_UNCHANGED < u && u <= MAX_SHORT_CHANGE);
+                    int32_t total = (u & 0xfff) + 1;
+                    int32_t len = (total - remaining) * oldLength_;
+                    if (i >= (spanStart - len)) {
+                        int32_t n = ((spanStart - i - 1) / oldLength_) + 1;
+                        // 1 <= n <= (total - remaining)
+                        len = n * oldLength_;
+                        srcIndex -= len;
+                        replIndex -= len;
+                        destIndex -= len;
+                        remaining += n;
+                        return 0;
+                    }
+                    // Skip all of these edits at once.
+                    srcIndex -= len;
+                    replIndex -= len;
+                    destIndex -= len;
+                    remaining = 0;
+                }
+            }
+        }
         // Reset the iterator to the start.
+        dir = 0;
         index = remaining = oldLength_ = newLength_ = srcIndex = replIndex = destIndex = 0;
     } else if (i < (spanStart + spanLength)) {
         // The index is in the current span.
@@ -536,12 +712,12 @@ int32_t Edits::Iterator::findIndex(int32_t i, UBool findSource, UErrorCode &erro
             // The index is in the current span.
             return 0;
         }
-        if (remaining > 0) {
+        if (remaining > 1) {
             // Is the index in one of the remaining compressed edits?
-            // spanStart is the start of the current span, before the remaining ones.
-            int32_t len = (remaining + 1) * spanLength;
+            // spanStart is the start of the current span, first of the remaining ones.
+            int32_t len = remaining * spanLength;
             if (i < (spanStart + len)) {
-                int32_t n = (i - spanStart) / spanLength;  // 1 <= n <= remaining
+                int32_t n = (i - spanStart) / spanLength;  // 1 <= n <= remaining - 1
                 len = n * spanLength;
                 srcIndex += len;
                 replIndex += len;
