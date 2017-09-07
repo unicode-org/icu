@@ -148,7 +148,7 @@ public:
         Iterator() :
                 array(nullptr), index(0), length(0),
                 remaining(0), onlyChanges_(FALSE), coarse(FALSE),
-                changed(FALSE), oldLength_(0), newLength_(0),
+                dir(0), changed(FALSE), oldLength_(0), newLength_(0),
                 srcIndex(0), replIndex(0), destIndex(0) {}
         /**
          * Copy constructor.
@@ -306,17 +306,22 @@ public:
         Iterator(const uint16_t *a, int32_t len, UBool oc, UBool crs);
 
         int32_t readLength(int32_t head);
-        void updateIndexes();
+        void updateNextIndexes();
+        void updatePreviousIndexes();
         UBool noNext();
         UBool next(UBool onlyChanges, UErrorCode &errorCode);
+        UBool previous(UErrorCode &errorCode);
         /** @return -1: error or i<0; 0: found; 1: i>=string length */
         int32_t findIndex(int32_t i, UBool findSource, UErrorCode &errorCode);
 
         const uint16_t *array;
         int32_t index, length;
+        // 0 if we are not within compressed equal-length changes.
+        // Otherwise the number of remaining changes, including the current one.
         int32_t remaining;
         UBool onlyChanges_, coarse;
 
+        int8_t dir;  // iteration direction: back(<0), initial(0), forward(>0)
         UBool changed;
         int32_t oldLength_, newLength_;
         int32_t srcIndex, replIndex, destIndex;

@@ -252,12 +252,18 @@ void TestUtility::checkEditsIter(
             srcIndexes.push_back(srcIndex);
             if (expected[i].oldLength > 1) {
                 srcIndexes.push_back(srcIndex + 1);
+                if (expected[i].oldLength > 2) {
+                    srcIndexes.push_back(srcIndex + expected[i].oldLength - 1);
+                }
             }
         }
         if (expected[i].newLength > 0) {
             destIndexes.push_back(destIndex);
-            if (expected[i].newLength > 0) {
+            if (expected[i].newLength > 1) {
                 destIndexes.push_back(destIndex + 1);
+                if (expected[i].newLength > 2) {
+                    destIndexes.push_back(destIndex + expected[i].newLength - 1);
+                }
             }
         }
         srcIndex += expected[i].oldLength;
@@ -268,14 +274,25 @@ void TestUtility::checkEditsIter(
     srcIndexes.push_back(srcLength + 1);
     destIndexes.push_back(destLength + 1);
     std::reverse(destIndexes.begin(), destIndexes.end());
-    for (int32_t i : srcIndexes) {
-        test.assertEquals(name + u" destIndexFromSrc(" + i + u"):" + __LINE__,
-                          destIndexFromSrc(expected, expLength, srcLength, destLength, i),
-                          ei2.destinationIndexFromSourceIndex(i, errorCode));
+    // Zig-zag across the indexes to stress next() <-> previous().
+    for (std::vector<int32_t>::size_type i = 0; i < srcIndexes.size(); ++i) {
+        for (int32_t j : { 0, 1, 2, 3, 2, 1 }) {
+            if ((i + j) < srcIndexes.size()) {
+                int32_t si = srcIndexes[i + j];
+                test.assertEquals(name + u" destIndexFromSrc(" + si + u"):" + __LINE__,
+                                  destIndexFromSrc(expected, expLength, srcLength, destLength, si),
+                                  ei2.destinationIndexFromSourceIndex(si, errorCode));
+            }
+        }
     }
-    for (int32_t i : destIndexes) {
-        test.assertEquals(name + u" srcIndexFromDest(" + i + u"):" + __LINE__,
-                          srcIndexFromDest(expected, expLength, srcLength, destLength, i),
-                          ei2.sourceIndexFromDestinationIndex(i, errorCode));
+    for (std::vector<int32_t>::size_type i = 0; i < destIndexes.size(); ++i) {
+        for (int32_t j : { 0, 1, 2, 3, 2, 1 }) {
+            if ((i + j) < destIndexes.size()) {
+                int32_t di = destIndexes[i + j];
+                test.assertEquals(name + u" srcIndexFromDest(" + di + u"):" + __LINE__,
+                                  srcIndexFromDest(expected, expLength, srcLength, destLength, di),
+                                  ei2.sourceIndexFromDestinationIndex(di, errorCode));
+            }
+        }
     }
 }
