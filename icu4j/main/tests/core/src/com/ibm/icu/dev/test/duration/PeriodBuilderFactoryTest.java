@@ -12,6 +12,8 @@
 package com.ibm.icu.dev.test.duration;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
@@ -21,14 +23,15 @@ import com.ibm.icu.impl.duration.PeriodBuilderFactory;
 import com.ibm.icu.impl.duration.TimeUnit;
 import com.ibm.icu.impl.duration.TimeUnitConstants;
 
+@RunWith(JUnit4.class)
 public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConstants {
     private PeriodBuilderFactory pbf;
 
     private static final long[] approxDurations = {
-      36525L*24*60*60*10, 3045*24*60*60*10L, 7*24*60*60*1000L, 24*60*60*1000L, 
+      36525L*24*60*60*10, 3045*24*60*60*10L, 7*24*60*60*1000L, 24*60*60*1000L,
       60*60*1000L, 60*1000L, 1000L, 1L
     };
-    
+
     @Test
     public void testSetAvailableUnitRange() {
         // sanity check, make sure by default all units are set
@@ -86,7 +89,7 @@ public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConsta
         assertNotNull(null, pbf.getOneOrTwoUnitBuilder());
         assertNotNull(null, pbf.getMultiUnitBuilder(2));
     }
-    
+
     @Test
     public void testBuilderFactoryPeriodConstruction() {
         // see ticket #8307
@@ -98,7 +101,7 @@ public class PeriodBuilderFactoryTest extends TestFmwk implements TimeUnitConsta
         assertEquals("hours", 1.0f, p.getCount(HOUR));
         assertEquals("minutes", 35.501f, p.getCount(MINUTE));
         assertFalse("seconds", p.isSet(SECOND));
-        
+
         pb = pbf.getMultiUnitBuilder(3);
         p = pb.create(H1M35S30M100);
         assertEquals("hours", 1.0f, p.getCount(HOUR));

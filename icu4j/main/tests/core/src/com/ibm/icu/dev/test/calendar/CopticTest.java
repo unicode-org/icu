@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
@@ -26,7 +28,8 @@ import com.ibm.icu.util.ULocale;
 /**
  * Tests for the <code>CopticCalendar</code> class.
  */
-public class CopticTest extends CalendarTestFmwk 
+@RunWith(JUnit4.class)
+public class CopticTest extends CalendarTestFmwk
 {
     /** Constants to save typing. */
     public static final int TOUT      = CopticCalendar.TOUT;
@@ -45,49 +48,49 @@ public class CopticTest extends CalendarTestFmwk
 
     /* Test dates from:
      * "The Amharic Letters of Emperor Theodore of Ethiopia to Queen Victoria and
-     * Her Special Envoy", David Appleyard, Girma Selasse Asfaw, Oxford University Press, 
+     * Her Special Envoy", David Appleyard, Girma Selasse Asfaw, Oxford University Press,
      * June 1 1979, ISBN: 0856726605, Longwood Pr Ltd
-     *  
+     *
      * Coptic         Gregorian    JD
-     * 20/02/1579     29/10/1862  2401443 
+     * 20/02/1579     29/10/1862  2401443
      * 29/10/1581     05/07/1865  2402423
      * 22/05/1582     29/01/1866  2402631
      * 10/08/1582     17/04/1866  2402709
      * 28/04/1583     05/01/1867  2402972
      * 05/05/1584     13/01/1868  2403345
-     * 
+     *
      * --------------------------------------------------
-     * 
+     *
      * From the Calendrica applet:  http://emr.cs.iit.edu/home/reingold/calendar-book/Calendrica.html
-     * 
+     *
      * Coptic         Gregorian    JD
      * 07/05/-284     01/01/0000  1721060
      * 08/05/-283     01/01/0001  1721426
      * 06/13/-1       29/08/0283  1824664
-     * 
+     *
      * 01/01/0000     30/08/0283  1824665
      * 01/01/0001     29/08/0284  1825030
      * 01/01/0002     29/08/0285  1825395
      * 01/01/0003     29/08/0286  1825760
      * 01/01/0004     30/08/0287  1826126
-     * 05/13/0000     28/08/0284  1825029 
+     * 05/13/0000     28/08/0284  1825029
      * 05/13/0001     28/08/0285  1825394
      * 05/13/0002     28/08/0286  1825759
      * 05/13/0003     28/08/0287  1826124
      * 06/13/0003     29/08/0287  1826125  first coptic leap year
      * 05/13/0004     28/08/0288  1826490
-     * 
+     *
      * 06/02/1299     13/10/1582  2299159
      * 07/02/1299     14/10/1582  2299160  Julian 04/10/1582
      * 08/02/1299     15/10/1582  2299161
      * 09/02/1299     16/10/1582  2299162
-     * 
+     *
      * 23/04/1616     01/01/1900  2415021
-     * 23/04/1721     01/01/2005  2453372 
+     * 23/04/1721     01/01/2005  2453372
      * 05/13/2000     12/09/2284  2555529
      */
 
-    
+
     /** A huge list of test cases to make sure that computeTime and computeFields
      * work properly for a wide range of data in the civil calendar.
      */
@@ -134,7 +137,7 @@ public class CopticTest extends CalendarTestFmwk
             new TestCase(2453371.5,  1,  1721,    4,  23,  SAT,    0,  0,  0), // Gregorian: 01/01/2005
             new TestCase(2555528.5,  1,  2000,   13,   5,  FRI,    0,  0,  0), // Gregorian: 12/09/2284
         };
-        
+
         CopticCalendar testCalendar = new CopticCalendar();
         testCalendar.setLenient(true);
         doTestCases(tests, testCalendar);
@@ -157,8 +160,8 @@ public class CopticTest extends CalendarTestFmwk
                           m == month &&
                           d == day)) {
                         errln("y: " + y +
-                              " m: " + m + 
-                              " d: " + d + 
+                              " m: " + m +
+                              " d: " + d +
                               " --> jd: " + jd +
                               " --> y: " + eyear +
                               " m: " + month +
@@ -194,13 +197,13 @@ public class CopticTest extends CalendarTestFmwk
         cal.set(1000, 0, 30);
         logln("1000/0/30-> " +
               cal.get(YEAR) + "/" +
-              cal.get(MONTH) + "/" + 
+              cal.get(MONTH) + "/" +
               cal.get(DATE));
         cal.clear();
         cal.set(1, 0, 30);
         logln("1/0/30 -> " +
               cal.get(YEAR) + "/" +
-              cal.get(MONTH) + "/" + 
+              cal.get(MONTH) + "/" +
               cal.get(DATE));
     }
 
@@ -238,19 +241,19 @@ public class CopticTest extends CalendarTestFmwk
 
                 int expected = (month != maxMonth) ? 30 : (isLeap ? 6 : 5);
                 if (maxDayOfMonth != expected) {
-                    errln("FAIL: Expected maximum " + expected + " days for month #" 
-                            + (month + 1) + " - returned:" + maxDayOfMonth); 
+                    errln("FAIL: Expected maximum " + expected + " days for month #"
+                            + (month + 1) + " - returned:" + maxDayOfMonth);
                 }
             }
         }
-    }    
+    }
 
     @Test
     public void TestCoverage() {
 
         {
             // new CopticCalendar(TimeZone)
-            CopticCalendar cal = new CopticCalendar(TimeZone.getDefault()); 
+            CopticCalendar cal = new CopticCalendar(TimeZone.getDefault());
             if(cal == null){
                 errln("could not create CopticCalendar with TimeZone");
             }
@@ -263,7 +266,7 @@ public class CopticTest extends CalendarTestFmwk
                 errln("could not create CopticCalendar with ULocale");
             }
         }
-        
+
         {
             // new CopticCalendar(Locale)
             CopticCalendar cal = new CopticCalendar(Locale.getDefault());
@@ -271,23 +274,23 @@ public class CopticTest extends CalendarTestFmwk
                 errln("could not create CopticCalendar with Locale");
             }
         }
-        
-        {                                                                                       
-            // new CopticCalendar(TimeZone, Locale)                                             
-            CopticCalendar cal = new CopticCalendar(TimeZone.getDefault(),Locale.getDefault()); 
-            if(cal == null){                                                                    
-                errln("could not create CopticCalendar with TimeZone, Locale");                 
-            }                                                                                   
-        }                                                                                       
-                                                                                                
-        {                                                                                       
-            // new CopticCalendar(TimeZone, ULocale)                                            
+
+        {
+            // new CopticCalendar(TimeZone, Locale)
+            CopticCalendar cal = new CopticCalendar(TimeZone.getDefault(),Locale.getDefault());
+            if(cal == null){
+                errln("could not create CopticCalendar with TimeZone, Locale");
+            }
+        }
+
+        {
+            // new CopticCalendar(TimeZone, ULocale)
             CopticCalendar cal = new CopticCalendar(TimeZone.getDefault(),ULocale.getDefault());
-            if(cal == null){                                                                    
-                errln("could not create CopticCalendar with TimeZone, ULocale");                
-            }                                                                                   
-        }                                                                                       
-        
+            if(cal == null){
+                errln("could not create CopticCalendar with TimeZone, ULocale");
+            }
+        }
+
         {
             // new CopticCalendar(Date)
             CopticCalendar cal = new CopticCalendar(new Date());
@@ -311,7 +314,7 @@ public class CopticTest extends CalendarTestFmwk
                 errln("could not create CopticCalendar with year,month,date,hour,minute,second");
             }
         }
-    
+
         {
             // data
             CopticCalendar cal = new CopticCalendar(1997, CopticCalendar.TOUT, 1);
@@ -420,7 +423,7 @@ public class CopticTest extends CalendarTestFmwk
             int endMonth = testCalendar.get(Calendar.MONTH);
             int endDay = testCalendar.get(Calendar.DATE);
             if ( endYear != item.getEndYear() || endMonth != item.getEndMonth() || endDay != item.getEndDay() ) {
-                errln("CToJD FAILS: field " + item.getField() + " delta " + item.getDelta() + 
+                errln("CToJD FAILS: field " + item.getField() + " delta " + item.getDelta() +
                             " expected yr " + item.getEndYear() + " mo " + item.getEndMonth() +  " da " + item.getEndDay() +
                             " got yr " + endYear + " mo " + endMonth +  " da " + endDay);
             }

@@ -4,7 +4,7 @@
  *******************************************************************************
  * Copyright (c) 2004-2011, International Business Machines
  * Corporation and others.  All Rights Reserved.
- * Copyright (C) 2010 , Yahoo! Inc.                                            
+ * Copyright (C) 2010 , Yahoo! Inc.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -13,16 +13,19 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.SelectFormat;
 
 /**
- * @author kirtig 
+ * @author kirtig
  * This class tests the API functionality of the SelectFormat
  */
+@RunWith(JUnit4.class)
 public class SelectFormatAPITest extends TestFmwk {
-  
+
     static final String SIMPLE_PATTERN1 = "feminine {feminineVerbValue1} other{otherVerbValue1}";
     static final String SIMPLE_PATTERN2 = "feminine {feminineVerbValue2} other{otherVerbValue2}";
 
@@ -33,7 +36,7 @@ public class SelectFormatAPITest extends TestFmwk {
     public void TestConstructors() {
         SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN1);
         assertNotNull("Error: TestConstructors - SelectFormat object constructed "
-                      + "with argument constructor is null" , selFmt );  
+                      + "with argument constructor is null" , selFmt );
     }
 
     /**
@@ -46,19 +49,19 @@ public class SelectFormatAPITest extends TestFmwk {
         //Check equality for pattern constructed SelectFormats
         selFmt1 = new SelectFormat(SIMPLE_PATTERN1);
         SelectFormat selFmt2 = new SelectFormat(SIMPLE_PATTERN1);
-        assertTrue("Equals test failed while checking equality for " 
-                   + "pattern constructed SelectFormats ." 
-                   , selFmt1.equals(selFmt2) ); 
+        assertTrue("Equals test failed while checking equality for "
+                   + "pattern constructed SelectFormats ."
+                   , selFmt1.equals(selFmt2) );
 
-        //Check equality for 2 objects  
+        //Check equality for 2 objects
         Object selFmt3 = new SelectFormat(SIMPLE_PATTERN1);
         Object selFmt4 = new SelectFormat(SIMPLE_PATTERN1);
         Object selFmt5 = new SelectFormat(SIMPLE_PATTERN2);
-        assertTrue("Equals test failed while checking equality for object 1." 
+        assertTrue("Equals test failed while checking equality for object 1."
                 , selFmt3.equals(selFmt4) );
-        assertTrue("Equals test failed while checking equality for object 2." 
+        assertTrue("Equals test failed while checking equality for object 2."
                     , selFmt1.equals(selFmt3) );
-        assertFalse("Equals test failed while checking equality for object 3." 
+        assertFalse("Equals test failed while checking equality for object 3."
                 , selFmt3.equals(selFmt5) );
     }
 
@@ -134,7 +137,7 @@ public class SelectFormatAPITest extends TestFmwk {
         SelectFormat selFmt1 = new SelectFormat(SIMPLE_PATTERN1);
         String expected = "feminineVerbValue1";
         assertEquals("Failed in TestFormat with unexpected output 1"
-                     , expected 
+                     , expected
                      , selFmt1.format("feminine") );
 
         //Check format with appendTo for pattern constructed object
@@ -143,7 +146,7 @@ public class SelectFormatAPITest extends TestFmwk {
         assertEquals("Failed in TestFormat with unexpected output 2"
                      , expected
                      , (selFmt1.format("other", strBuf, new FieldPosition(0))).toString());
-       
+
         //Check format throws exception on invalid argument.
         boolean threwException = false;
         try {

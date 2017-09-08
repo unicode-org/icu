@@ -14,10 +14,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 
+@RunWith(JUnit4.class)
 public class TestUtilities extends TestFmwk {
     @Test
     public void TestCollectionUtilitySpeed() {

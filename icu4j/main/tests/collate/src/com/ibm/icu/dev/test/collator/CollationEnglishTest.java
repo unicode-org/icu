@@ -7,22 +7,25 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v2.1 : Collate/CollationEnglishTest
  * Source File: $ICU4CRoot/source/test/intltest/encoll.cpp
  **/
- 
+
 package com.ibm.icu.dev.test.collator;
- 
+
 import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
- 
+
+@RunWith(JUnit4.class)
 public class CollationEnglishTest extends TestFmwk{
     private static char[][] testSourceCases = {
         {0x0061 /* 'a' */, 0x0062 /* 'b' */},
@@ -30,12 +33,12 @@ public class CollationEnglishTest extends TestFmwk{
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x0020 /* ' ' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x002D /* '-' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},
         {0x0048 /* 'H' */, 0x0065 /* 'e' */, 0x006C /* 'l' */, 0x006C /* 'l' */, 0x006F /* 'o' */},
-        {0x0041 /* 'A' */, 0x0042 /* 'B' */, 0x0043 /* 'C' */}, 
+        {0x0041 /* 'A' */, 0x0042 /* 'B' */, 0x0043 /* 'C' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x002D /* '-' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x002D /* '-' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},
-        {0x0070 /* 'p' */, 0x00EA, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x0065 /* 'e' */},                                            
+        {0x0070 /* 'p' */, 0x00EA, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x0065 /* 'e' */},
         {0x0070 /* 'p' */, 0x00E9, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x00E9},
         {0x00C4, 0x0042 /* 'B' */, 0x0308, 0x0043 /* 'C' */, 0x0308},
         {0x0061 /* 'a' */, 0x0308, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
@@ -44,9 +47,9 @@ public class CollationEnglishTest extends TestFmwk{
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0041 /* 'A' */},
         {0x0041 /* 'A' */},
-        {0x0061 /* 'a' */, 0x0062 /* 'b' */},                                                                
+        {0x0061 /* 'a' */, 0x0062 /* 'b' */},
         {0x0074 /* 't' */, 0x0063 /* 'c' */, 0x006F /* 'o' */, 0x006D /* 'm' */, 0x0070 /* 'p' */, 0x0061 /* 'a' */, 0x0072 /* 'r' */, 0x0065 /* 'e' */, 0x0070 /* 'p' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0069 /* 'i' */, 0x006E /* 'n' */},
-        {0x0061 /* 'a' */, 0x0062 /* 'b' */}, 
+        {0x0061 /* 'a' */, 0x0062 /* 'b' */},
         {0x0061 /* 'a' */, 0x0023 /* '#' */, 0x0062 /* 'b' */},
         {0x0061 /* 'a' */, 0x0023 /* '#' */, 0x0062 /* 'b' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
@@ -54,7 +57,7 @@ public class CollationEnglishTest extends TestFmwk{
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},
         {0x00E6, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},
-        {0x00E4, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},                                            
+        {0x00E4, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
@@ -64,18 +67,18 @@ public class CollationEnglishTest extends TestFmwk{
         {0x0061 /* 'a' */, 0x0308, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0074 /* 't' */, 0x0068 /* 'h' */, 0x0069 /* 'i' */, 0x0302, 0x0073 /* 's' */},
         {0x0070 /* 'p' */, 0x00EA, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x0065 /* 'e' */},
-        {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},                                                         
+        {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
+        {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
+        {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
+        {0x0061 /* 'a' */, 0x00E6, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x00E6, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
-        {0x0061 /* 'a' */, 0x00E6, 0x0063 /* 'c' */},
-        {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
-        {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},               
         {0x0070 /* 'p' */, 0x00E9, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x00E9}                                            // 49
     };
-    
+
     private static char[][] testTargetCases = {
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},
@@ -86,7 +89,7 @@ public class CollationEnglishTest extends TestFmwk{
         {0x0041 /* 'A' */, 0x0042 /* 'B' */, 0x0043 /* 'C' */},
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */, 0x0073 /* 's' */},
         {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */, 0x0073 /* 's' */},
-        {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},                             
+        {0x0062 /* 'b' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0063 /* 'c' */, 0x006B /* 'k' */, 0x0062 /* 'b' */, 0x0069 /* 'i' */, 0x0072 /* 'r' */, 0x0064 /* 'd' */},
         {0x0070 /* 'p' */, 0x00E9, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x00E9},
         {0x0070 /* 'p' */, 0x00E9, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x0065 /* 'e' */, 0x0072 /* 'r' */},
         {0x00C4, 0x0042 /* 'B' */, 0x0308, 0x0043 /* 'C' */, 0x0308},
@@ -96,7 +99,7 @@ public class CollationEnglishTest extends TestFmwk{
         {0x0041 /* 'A' */, 0x00E1, 0x0063 /* 'c' */, 0x0064 /* 'd' */},
         {0x0041 /* 'A' */, 0x00E1, 0x0063 /* 'c' */, 0x0064 /* 'd' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
-        {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},                                                             
+        {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0054 /* 'T' */, 0x0043 /* 'C' */, 0x006F /* 'o' */, 0x006D /* 'm' */, 0x0070 /* 'p' */, 0x0061 /* 'a' */, 0x0072 /* 'r' */, 0x0065 /* 'e' */, 0x0050 /* 'P' */, 0x006C /* 'l' */, 0x0061 /* 'a' */, 0x0069 /* 'i' */, 0x006E /* 'n' */},
         {0x0061 /* 'a' */, 0x0042 /* 'B' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0023 /* '#' */, 0x0042 /* 'B' */},
@@ -106,7 +109,7 @@ public class CollationEnglishTest extends TestFmwk{
         {0x00C4, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},
         {0x00E4, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},
         {0x00C4, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},
-        {0x00C4, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},                                             
+        {0x00C4, 0x0062 /* 'b' */, 0x0063 /* 'c' */, 0x0064 /* 'd' */, 0x0061 /* 'a' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0023 /* '#' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x003D /* '=' */, 0x0063 /* 'c' */},
@@ -116,7 +119,7 @@ public class CollationEnglishTest extends TestFmwk{
         {0x00E4, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0074 /* 't' */, 0x0068 /* 'h' */, 0x00EE, 0x0073 /* 's' */},
         {0x0070 /* 'p' */, 0x00E9, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x00E9},
-        {0x0061 /* 'a' */, 0x0042 /* 'B' */, 0x0043 /* 'C' */},                                                          
+        {0x0061 /* 'a' */, 0x0042 /* 'B' */, 0x0043 /* 'C' */},
         {0x0061 /* 'a' */, 0x0062 /* 'b' */, 0x0064 /* 'd' */},
         {0x00E4, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x00C6, 0x0063 /* 'c' */},
@@ -124,13 +127,13 @@ public class CollationEnglishTest extends TestFmwk{
         {0x00E4, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x00C6, 0x0063 /* 'c' */},
         {0x0061 /* 'a' */, 0x0042 /* 'B' */, 0x0064 /* 'd' */},
-        {0x00E4, 0x0062 /* 'b' */, 0x0063 /* 'c' */},          
+        {0x00E4, 0x0062 /* 'b' */, 0x0063 /* 'c' */},
         {0x0070 /* 'p' */, 0x00EA, 0x0063 /* 'c' */, 0x0068 /* 'h' */, 0x0065 /* 'e' */}
     };                                           // 49
 
     private static int[] results = {
     //-1:LESS; 0:EQUAL; 1:GREATER
-        -1, 
+        -1,
         -1, /*Collator::GREATER,*/
         -1,
         1,
@@ -181,7 +184,7 @@ public class CollationEnglishTest extends TestFmwk{
         -1,
         0,
         -1,
-        -1, 
+        -1,
         -1                                                                  // 49
     };
 
@@ -238,17 +241,17 @@ public class CollationEnglishTest extends TestFmwk{
         { 0x0152},
         {0x006F /* 'o' */, 0x0066 /* 'f' */},
     };
-    
+
     private Collator myCollation = null;
-    
+
     public CollationEnglishTest() {
     }
-    
+
     @Before
     public void init()throws Exception {
         myCollation = Collator.getInstance(Locale.ENGLISH);
     }
-    
+
     //performs test with strength PRIMARY
     @Test
     public void TestPrimary() {
@@ -256,9 +259,9 @@ public class CollationEnglishTest extends TestFmwk{
         myCollation.setStrength(Collator.PRIMARY);
         for (i = 38; i < 43 ; i++) {
             doTest(testSourceCases[i], testTargetCases[i], results[i]);
-        }  
+        }
     }
-    
+
     //perform test with strength SECONDARY
     @Test
     public void TestSecondary() {
@@ -284,7 +287,7 @@ public class CollationEnglishTest extends TestFmwk{
             }
         }
     }
-    
+
     //perform test with strength TERTIARY
     @Test
     public void TestTertiary() {
@@ -294,7 +297,7 @@ public class CollationEnglishTest extends TestFmwk{
         for (i = 0; i < 38 ; i++)
         {
             doTest(testSourceCases[i], testTargetCases[i], results[i]);
-        } 
+        }
 
         int j = 0;
         for (i = 0; i < 10; i++)
@@ -321,10 +324,10 @@ public class CollationEnglishTest extends TestFmwk{
             }
         }
     }
-    
+
    // main test routine, tests rules defined by the "en" locale
     private void doTest(char[] source, char[] target, int result){
-        
+
         String s = new String(source);
         String t = new String(target);
         int compareResult = myCollation.compare(s, t);
@@ -333,9 +336,9 @@ public class CollationEnglishTest extends TestFmwk{
         sortKey2 = myCollation.getCollationKey(t);
         int keyResult = sortKey1.compareTo(sortKey2);
         reportCResult(s, t, sortKey1, sortKey2, compareResult, keyResult, compareResult, result);
-        
+
     }
-    
+
     private void reportCResult( String source, String target, CollationKey sourceKey, CollationKey targetKey,
                                 int compareResult, int keyResult, int incResult, int expectedResult ){
         if (expectedResult < -1 || expectedResult > 1)
@@ -349,13 +352,13 @@ public class CollationEnglishTest extends TestFmwk{
         boolean ok3 = (incResult == expectedResult);
 
         if (ok1 && ok2 && ok3 && !isVerbose()){
-            return;    
+            return;
         }else{
             String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
             String msg3 = "\") returned ";
             String msg4 = "; expected ";
-            
+
             String sExpect = new String("");
             String sResult = new String("");
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
@@ -365,7 +368,7 @@ public class CollationEnglishTest extends TestFmwk{
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
-            
+
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
@@ -378,7 +381,7 @@ public class CollationEnglishTest extends TestFmwk{
                 msg2 = " vs. ";
                 errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
-            
+
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
@@ -389,7 +392,7 @@ public class CollationEnglishTest extends TestFmwk{
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
-            }                
+            }
         }
     }
  }

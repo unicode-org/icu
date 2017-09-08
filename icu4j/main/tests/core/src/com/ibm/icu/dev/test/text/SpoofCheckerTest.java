@@ -25,6 +25,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -38,6 +40,7 @@ import com.ibm.icu.text.SpoofChecker.RestrictionLevel;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class SpoofCheckerTest extends TestFmwk {
     /*
      * Identifiers for verifying that spoof checking is minimally alive and working.

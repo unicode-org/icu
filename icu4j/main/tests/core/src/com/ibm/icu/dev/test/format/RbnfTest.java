@@ -14,6 +14,8 @@ import java.util.Locale;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.math.BigDecimal;
@@ -28,6 +30,7 @@ import com.ibm.icu.util.ULocale;
  * This does not test lenient parse mode, since testing the default implementation
  * introduces a dependency on collation.  See RbnfLenientScannerTest.
  */
+@RunWith(JUnit4.class)
 public class RbnfTest extends TestFmwk {
     static String fracRules =
         "%main:\n" +
