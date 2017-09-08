@@ -7,26 +7,29 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v2.1 : Collate/G7CollationTest
  * Source File: $ICU4CRoot/source/test/intltest/g7coll.cpp
  **/
- 
+
 package com.ibm.icu.dev.test.collator;
- 
+
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
- 
+
+@RunWith(JUnit4.class)
 public class G7CollationTest extends TestFmwk{
     private static String[] testCases = {
-        "blackbirds", "Pat", "p\u00E9ch\u00E9", "p\u00EAche", "p\u00E9cher",            
-        "p\u00EAcher", "Tod", "T\u00F6ne", "Tofu", "blackbird", "Ton", 
+        "blackbirds", "Pat", "p\u00E9ch\u00E9", "p\u00EAche", "p\u00E9cher",
+        "p\u00EAcher", "Tod", "T\u00F6ne", "Tofu", "blackbird", "Ton",
         "PAT", "black-bird", "black-birds", "pat", // 14
         // Additional tests
         "czar", "churo", "cat", "darn", "?",                                                                                /* 19 */
@@ -44,7 +47,7 @@ public class G7CollationTest extends TestFmwk{
         { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* it_IT */
         { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* ja_JP */
         /* new table collation with rules "& Z < p, P"  loop to FIXEDTESTSET */
-        { 12, 13, 9, 0, 6, 8, 10, 7, 14, 1, 11, 2, 3, 4, 5, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, 
+        { 12, 13, 9, 0, 6, 8, 10, 7, 14, 1, 11, 2, 3, 4, 5, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 },
         /* new table collation with rules "& C < ch , cH, Ch, CH " loop to TOTALTESTSET */
         { 19, 22, 21, 23, 24, 25, 12, 13, 9, 0, 17, 26, 28, 27, 15, 16, 18, 14, 1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29 },
         /* new table collation with rules "& Question-mark ; ? & Hash-mark ; # & Ampersand ; '&'  " loop to TOTALTESTSET */
@@ -52,31 +55,31 @@ public class G7CollationTest extends TestFmwk{
         /* analogous to Japanese rules " & aa ; a- & ee ; e- & ii ; i- & oo ; o- & uu ; u- " */  /* loop to TOTALTESTSET */
         { 19, 22, 21, 24, 23, 25, 12, 13, 9, 0, 17, 16, 28, 26, 27, 15, 18, 14, 1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29 }
     };
-    
+
     //private static final int MAX_TOKEN_LEN = 16;
     //private static final int TESTLOCALES = 12;
     private static final int FIXEDTESTSET = 15;
     private static final int TOTALTESTSET = 30;
-    
+
     // perform test with added rules " & Z < p, P"
     @Test
     public void TestDemo1() {
         logln("Demo Test 1 : Create a new table collation with rules \"& Z < p, P\"");
-        
-        Collator col = Collator.getInstance(Locale.ENGLISH);    
 
-        
+        Collator col = Collator.getInstance(Locale.ENGLISH);
+
+
         String baseRules = ((RuleBasedCollator)col).getRules();
         String newRules = " & Z < p, P";
-        newRules = baseRules + newRules; 
-        RuleBasedCollator myCollation = null; 
+        newRules = baseRules + newRules;
+        RuleBasedCollator myCollation = null;
         try {
             myCollation = new RuleBasedCollator(newRules);
         } catch(Exception e) {
             errln("Fail to create RuleBasedCollator with rules:" + newRules);
             return;
         }
-        
+
         int j, n;
         for (j = 0; j < FIXEDTESTSET; j++) {
             for (n = j+1; n < FIXEDTESTSET; n++) {
@@ -84,25 +87,25 @@ public class G7CollationTest extends TestFmwk{
             }
         }
     }
-    
+
 
     // perorm test with added rules "& C < ch , cH, Ch, CH"
     @Test
     public void TestDemo2() {
         logln("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
-        Collator col = Collator.getInstance(Locale.ENGLISH);    
+        Collator col = Collator.getInstance(Locale.ENGLISH);
 
 
         String baseRules = ((RuleBasedCollator)col).getRules();
         String newRules = "& C < ch , cH, Ch, CH";
-        newRules = baseRules + newRules; 
-        RuleBasedCollator myCollation = null; 
+        newRules = baseRules + newRules;
+        RuleBasedCollator myCollation = null;
         try {
             myCollation = new RuleBasedCollator(newRules);
         }catch(Exception e){
             errln("Fail to create RuleBasedCollator with rules:" + newRules);
             return;
-        }  
+        }
 
         int j, n;
         for (j = 0; j < TOTALTESTSET; j++) {
@@ -111,26 +114,26 @@ public class G7CollationTest extends TestFmwk{
             }
         }
     }
-    
 
-    // perform test with added rules 
+
+    // perform test with added rules
     // "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'"
     @Test
     public void TestDemo3() {
         // logln("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\"");
-        Collator col = Collator.getInstance(Locale.ENGLISH);    
+        Collator col = Collator.getInstance(Locale.ENGLISH);
 
-        
+
         String baseRules = ((RuleBasedCollator)col).getRules();
         String newRules = "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
         newRules = baseRules + newRules;
-        RuleBasedCollator myCollation = null; 
+        RuleBasedCollator myCollation = null;
         try {
             myCollation = new RuleBasedCollator(newRules);
         }catch(Exception e){
             errln("Fail to create RuleBasedCollator with rules:" + newRules);
             return;
-        }  
+        }
 
         int j, n;
         for (j = 0; j < TOTALTESTSET; j++) {
@@ -139,25 +142,25 @@ public class G7CollationTest extends TestFmwk{
             }
         }
     }
-    
 
-    // perform test with added rules 
+
+    // perform test with added rules
     // " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' "
     @Test
     public void TestDemo4() {
         logln("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"");
-        Collator col = Collator.getInstance(Locale.ENGLISH);    
+        Collator col = Collator.getInstance(Locale.ENGLISH);
 
         String baseRules = ((RuleBasedCollator)col).getRules();
         String newRules = " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
         newRules = baseRules + newRules;
-        RuleBasedCollator myCollation = null; 
+        RuleBasedCollator myCollation = null;
         try {
             myCollation = new RuleBasedCollator(newRules);
         }catch(Exception e){
             errln("Fail to create RuleBasedCollator with rules:" + newRules);
             return;
-        }  
+        }
 
         int j, n;
         for (j = 0; j < TOTALTESTSET; j++) {
@@ -166,7 +169,7 @@ public class G7CollationTest extends TestFmwk{
             }
         }
     }
-    
+
     @Test
     public void TestG7Data() {
         Locale locales[] = {
@@ -199,21 +202,21 @@ public class G7CollationTest extends TestFmwk{
             myCollation = null;
         }
     }
-    
-    
+
+
     // main test routine, tests comparisons for a set of strings against sets of expected results
-    private void doTest(Collator myCollation, String source, String target, 
+    private void doTest(Collator myCollation, String source, String target,
                         int result){
-        
+
         int compareResult = myCollation.compare(source, target);
         CollationKey sortKey1, sortKey2;
         sortKey1 = myCollation.getCollationKey(source);
         sortKey2 = myCollation.getCollationKey(target);
         int keyResult = sortKey1.compareTo(sortKey2);
-        reportCResult(source, target, sortKey1, sortKey2, compareResult, 
+        reportCResult(source, target, sortKey1, sortKey2, compareResult,
                       keyResult, compareResult, result);
     }
-    
+
     private void reportCResult( String source, String target, CollationKey sourceKey, CollationKey targetKey,
                                 int compareResult, int keyResult, int incResult, int expectedResult ){
         if (expectedResult < -1 || expectedResult > 1) {
@@ -226,13 +229,13 @@ public class G7CollationTest extends TestFmwk{
         boolean ok3 = (incResult == expectedResult);
 
         if (ok1 && ok2 && ok3 && !isVerbose()){
-            return;    
+            return;
         } else {
             String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
             String msg3 = "\") returned ";
             String msg4 = "; expected ";
-            
+
             String sExpect = new String("");
             String sResult = new String("");
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
@@ -242,7 +245,7 @@ public class G7CollationTest extends TestFmwk{
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
-            
+
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
@@ -255,7 +258,7 @@ public class G7CollationTest extends TestFmwk{
                 msg2 = " vs. ";
                 errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
-            
+
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
@@ -266,7 +269,7 @@ public class G7CollationTest extends TestFmwk{
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
-            }                
+            }
         }
     }
 }

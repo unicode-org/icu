@@ -18,6 +18,8 @@ import java.util.Locale;
 import java.util.Map.Entry;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -89,6 +91,7 @@ The Management
  * @test
  * @summary General test of Transliterator
  */
+@RunWith(JUnit4.class)
 public class TransliteratorTest extends TestFmwk {
     @Test
     public void TestHangul() {

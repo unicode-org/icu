@@ -14,6 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UnicodeRegex;
@@ -27,6 +29,7 @@ import com.ibm.icu.text.UnicodeSet;
 /**
  * @author markdavis
  */
+@RunWith(JUnit4.class)
 public class RegexUtilitiesTest extends TestFmwk {
     /**
      * Check basic construction.
@@ -49,7 +52,7 @@ public class RegexUtilitiesTest extends TestFmwk {
             String expected = tests[i].length == 1 ? source : tests[i][1];
             String actual = UnicodeRegex.fix(source);
             assertEquals(source, expected, actual);
-        } 
+        }
     }
 
     Transliterator hex = Transliterator.getInstance("hex");

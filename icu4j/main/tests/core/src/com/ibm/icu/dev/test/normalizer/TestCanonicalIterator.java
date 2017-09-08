@@ -15,6 +15,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -26,8 +28,9 @@ import com.ibm.icu.text.UTF16;
 
 // TODO: fit into test framework
 
+@RunWith(JUnit4.class)
 public class TestCanonicalIterator extends TestFmwk {
-    
+
     static final boolean SHOW_NAMES = false;
 
     static final String testArray[][] = {
@@ -67,19 +70,19 @@ public class TestCanonicalIterator extends TestFmwk {
             characterTest(s + "\u0345", i, it);
         }
     }
-    
+
     public int TestSpeed() {
          // skip unless verbose
         if (!isVerbose()) return 0;
 
            String s = "\uAC01\u0345";
-           
+
         CanonicalIterator it = new CanonicalIterator(s);
         double start, end;
         int x = 0; // just to keep code from optimizing away.
         int iterations = 10000;
         double slowDelta = 0;
-        
+
         /*
         CanonicalIterator slowIt = new CanonicalIterator(s);
         slowIt.SKIP_ZEROS = false;
@@ -110,14 +113,14 @@ public class TestCanonicalIterator extends TestFmwk {
         end = System.currentTimeMillis();
         double fastDelta = (end-start) / iterations;
         logln("Fast iteration: " + fastDelta + (slowDelta != 0 ? ", " + (fastDelta/slowDelta) : ""));
-        
-        
+
+
         return x;
     }
-    
+
     @Test
     public void TestBasic() {
-//      This is not interesting anymore as the data is already built 
+//      This is not interesting anymore as the data is already built
 //      beforehand
 
 //        check build
@@ -128,14 +131,14 @@ public class TestCanonicalIterator extends TestFmwk {
 //            new UnicodeSet("[\u00E0-\u00E5\u0101\u0103\u0105\u01CE\u01DF\u01E1\u01FB"
 //            + "\u0201\u0203\u0227\u1E01\u1EA1\u1EA3\u1EA5\u1EA7\u1EA9\u1EAB\u1EAD\u1EAF\u1EB1\u1EB3\u1EB5\u1EB7]")
 //                );
-        
+
         // check permute
         // NOTE: we use a TreeSet below to sort the output, which is not guaranteed to be sorted!
-        
+
         Set results = new TreeSet();
         CanonicalIterator.permute("ABC", false, results);
         expectEqual("Simple permutation ", "", collectionToString(results), "ABC, ACB, BAC, BCA, CAB, CBA");
-        
+
         // try samples
         SortedSet set = new TreeSet();
         for (int i = 0; i < testArray.length; ++i) {
@@ -164,7 +167,7 @@ public class TestCanonicalIterator extends TestFmwk {
             }
         }
     }
-    
+
     private void expectEqual(String message, String item, Object a, Object b) {
         if (!a.equals(b)) {
             errln("FAIL: " + message + getReadable(item));
@@ -176,10 +179,10 @@ public class TestCanonicalIterator extends TestFmwk {
             logln("\t" + getReadable(b));
         }
     }
-    
+
     //Transliterator name = null;
     //Transliterator hex = null;
-        
+
     public String getReadable(Object obj) {
         if (obj == null) return "null";
         String s = obj.toString();
@@ -189,7 +192,7 @@ public class TestCanonicalIterator extends TestFmwk {
         //if (hex == null) hex = Transliterator.getInstance("[^\\ -\\u007F] hex");
         return "[" + (SHOW_NAMES ? hex(s) + "; " : "") + hex(s) + "]";
     }
-    
+
     private void characterTest(String s, int ch, CanonicalIterator it)
     {
         int mixedCounter = 0;
@@ -199,11 +202,11 @@ public class TestCanonicalIterator extends TestFmwk {
         boolean gotSource = false;
         String decomp = Normalizer.decompose(s, false);
         String comp = Normalizer.compose(s, false);
-        
+
         // skip characters that don't have either decomp.
         // need quick test for this!
         if (s.equals(decomp) && s.equals(comp)) return;
-        
+
         it.setSource(s);
 
         while (true) {
@@ -225,7 +228,7 @@ public class TestCanonicalIterator extends TestFmwk {
             }
 
         }
-        
+
         // check that zeros optimization doesn't mess up.
         /*
         if (true) {
@@ -248,7 +251,7 @@ public class TestCanonicalIterator extends TestFmwk {
             }
         }
         */
-        
+
         mixedCounter++;
         if (!gotSource || !gotDecomp || !gotComp) {
             errln("FAIL CanonicalIterator: " + s + " decomp: " +decomp+" comp: "+comp);
@@ -256,10 +259,10 @@ public class TestCanonicalIterator extends TestFmwk {
             for(String item=it.next();item!=null;item=it.next()){
                 err(item + "    ");
             }
-            errln("");   
+            errln("");
         }
     }
-    
+
     static String collectionToString(Collection col) {
         StringBuffer result = new StringBuffer();
         Iterator it = col.iterator();

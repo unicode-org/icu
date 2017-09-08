@@ -9,8 +9,12 @@
 package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
 import com.ibm.icu.util.Calendar;
 
+@RunWith(JUnit4.class)
 public class ChineseTestCase extends TestCase {
 
     /**
@@ -34,7 +38,7 @@ public class ChineseTestCase extends TestCase {
                            boolean isLeapMonth, int dayOfMonth, int dayOfWeek) {
 
         setTime(new Date(JULIAN_EPOCH + (long)(ONE_DAY * julian)));
-        
+
         set(Calendar.ERA, era);
         set(Calendar.YEAR, year);
         set(Calendar.MONTH, month - 1);
@@ -46,6 +50,7 @@ public class ChineseTestCase extends TestCase {
     /**
      * Return a String representation of this test case's time.
      */
+    @Override
     public String toString() {
         return dowToString(get(Calendar.DAY_OF_WEEK)) +
             get(Calendar.YEAR) + "of" + get(Calendar.ERA) +

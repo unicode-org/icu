@@ -10,6 +10,8 @@
 package com.ibm.icu.dev.test.util;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.LocalePriorityList;
@@ -19,6 +21,7 @@ import com.ibm.icu.util.ULocale;
  * Test the LanguagePriorityList
  * @author markdavis@google.com
  */
+@RunWith(JUnit4.class)
 public class LocalePriorityListTest extends TestFmwk {
   @Test
   public void testLanguagePriorityList() {
@@ -40,12 +43,12 @@ public class LocalePriorityListTest extends TestFmwk {
         .build();
     assertEquals(expected, list3.toString());
     assertEquals(list, list3);
-    
+
     LocalePriorityList list4 = LocalePriorityList
     .add(list).build();
     assertEquals(expected, list4.toString());
     assertEquals(list, list4);
-    
+
     LocalePriorityList list5 = LocalePriorityList.add("af, fr;q=0.9, en").build(true);
     assertEquals("af, en, fr;q=0.9", list5.toString());
   }

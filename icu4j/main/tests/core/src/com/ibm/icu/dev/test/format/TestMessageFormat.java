@@ -28,7 +28,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -40,7 +43,8 @@ import com.ibm.icu.text.UFormat;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
-public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class TestMessageFormat extends TestFmwk {
     @Test
     public void TestBug3()
     {

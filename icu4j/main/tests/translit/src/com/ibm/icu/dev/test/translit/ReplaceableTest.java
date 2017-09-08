@@ -8,6 +8,10 @@
  */
 package com.ibm.icu.dev.test.translit;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Replaceable;
@@ -18,8 +22,9 @@ import com.ibm.icu.text.Transliterator;
  * @test
  * @summary Round trip test of Transliterator
  */
+@RunWith(JUnit4.class)
 public class ReplaceableTest extends TestFmwk {
-    @org.junit.Test
+    @Test
     public void Test() {
         check("Lower", "ABCD", "1234");
         check("Upper", "abcd\u00DF", "123455"); // must map 00DF to SS
@@ -35,11 +40,11 @@ public class ReplaceableTest extends TestFmwk {
         check("*x > a", "\uFFFFxy", "_33"); // expect "_23"?
         check("*(x) > A $1 B", "\uFFFFxy", "__223");
     }
-    
+
     void check(String transliteratorName, String test, String shouldProduceStyles) {
         TestReplaceable tr = new TestReplaceable(test, null);
         String original = tr.toString();
-        
+
         Transliterator t;
         if (transliteratorName.startsWith("*")) {
             transliteratorName = transliteratorName.substring(1);
@@ -56,13 +61,13 @@ public class ReplaceableTest extends TestFmwk {
         } else {
             logln("OK: " + transliteratorName + " ( " + original + " ) => " + tr.toString());
         }
-        
-        if (!tr.hasMetaData() || tr.chars.hasMetaData() 
+
+        if (!tr.hasMetaData() || tr.chars.hasMetaData()
             || tr.styles.hasMetaData()) {
             errln("Fail hasMetaData()");
         }
     }
-    
+
 
     /**
      * This is a test class that simulates styled text.
@@ -77,11 +82,11 @@ public class ReplaceableTest extends TestFmwk {
     static class TestReplaceable implements Replaceable {
         ReplaceableString chars;
         ReplaceableString styles;
-        
+
         static final char NO_STYLE = '_';
 
         static final char NO_STYLE_MARK = 0xFFFF;
-        
+
         TestReplaceable (String text, String styles) {
             chars = new ReplaceableString(text);
             StringBuffer s = new StringBuffer();
@@ -98,11 +103,12 @@ public class ReplaceableTest extends TestFmwk {
             }
             this.styles = new ReplaceableString(s.toString());
         }
-        
+
         public String getStyles() {
             return styles.toString();
         }
-        
+
+        @Override
         public String toString() {
             return chars.toString() + "{" + styles.toString() + "}";
         }
@@ -111,22 +117,27 @@ public class ReplaceableTest extends TestFmwk {
             return chars.substring(start, limit);
         }
 
+        @Override
         public int length() {
             return chars.length();
         }
 
+        @Override
         public char charAt(int offset) {
             return chars.charAt(offset);
         }
 
+        @Override
         public int char32At(int offset) {
             return chars.char32At(offset);
         }
 
+        @Override
         public void getChars(int srcStart, int srcLimit, char dst[], int dstStart) {
             chars.getChars(srcStart, srcLimit, dst, dstStart);
         }
 
+        @Override
         public void replace(int start, int limit, String text) {
             if (substring(start,limit).equals(text)) return; // NO ACTION!
             if (DEBUG) System.out.print(Utility.escape(toString() + " -> replace(" + start +
@@ -135,7 +146,8 @@ public class ReplaceableTest extends TestFmwk {
             fixStyles(start, limit, text.length());
             if (DEBUG) System.out.println(Utility.escape(toString()));
         }
-        
+
+        @Override
         public void replace(int start, int limit, char[] charArray,
                             int charsStart, int charsLen) {
             if (substring(start,limit).equals(new String(charArray, charsStart, charsLen-charsStart))) return; // NO ACTION!
@@ -167,18 +179,20 @@ public class ReplaceableTest extends TestFmwk {
             styles.replace(start, limit, s.toString());
         }
 
+        @Override
         public void copy(int start, int limit, int dest) {
             chars.copy(start, limit, dest);
             styles.copy(start, limit, dest);
         }
-        
+
+        @Override
         public boolean hasMetaData() {
             return true;
         }
 
         static final boolean DEBUG = false;
     }
-    
+
     @org.junit.Test
     public void Test5789() {
         String rules =

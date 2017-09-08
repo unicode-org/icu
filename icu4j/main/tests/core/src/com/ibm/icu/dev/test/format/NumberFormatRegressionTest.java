@@ -23,7 +23,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -34,7 +37,8 @@ import com.ibm.icu.util.ULocale;
 /**
  * Performs regression test for MessageFormat
  **/
-public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class NumberFormatRegressionTest extends TestFmwk {
     /**
      * alphaWorks upgrade
      */
@@ -76,7 +80,7 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         // or this (with changes to fr_CH per cldrbug:9370):
         //nf.setGroupingUsed(false);
         // so they are done in DateFormat.setNumberFormat
-    
+
         // create the DateFormat
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc);
 

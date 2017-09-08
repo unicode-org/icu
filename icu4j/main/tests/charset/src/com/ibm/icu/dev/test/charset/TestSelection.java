@@ -9,13 +9,13 @@
 
 /**
  * Test for CharsetSelector
- * 
+ *
  * This is a port of ucnvseltst.c from ICU4C
- * 
+ *
  * Tests related to serialization are not ported in this version. In addition,
  * the TestConversionUTF8 method is not going to be ported, as UTF8 is seldom used
  * in Java.
- * 
+ *
  * @author Shaopeng Jia
  */
 
@@ -27,6 +27,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
@@ -35,6 +37,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
+@RunWith(JUnit4.class)
 public class TestSelection extends TestFmwk {
     @Test
     public void TestConversionUTF16() {
@@ -141,7 +144,7 @@ public class TestSelection extends TestFmwk {
             logln("IllegalArgumentException was thrown by CharsetSelector with a bogus mappingType.");
         }
     }
-    
+
     private String[] texts = {
             "Cos\'\u00E8 Unicode?\n\nUnicode assegna un numero univoco a ogni carattere,\nindipendentemente dalla piattaforma," +
             "\nindipendentemente dall\'applicazione,\nindipendentemente dalla lingua.\n\nI computer, in buona sostanza," +
@@ -170,7 +173,7 @@ public class TestSelection extends TestFmwk {
             "o di un sito web siano fruibili con piattaforme, lingue e paesi diversi, evitando la necessit\u00E0 di " +
             "reingenierizzare il prodotto per ogni situazione specifica. Permette, inoltre, il trasporto del testo " +
             "fra sistemi diversi senza che abbia luogo alcuna corruzione dei dati.\n",
-            
+
             "\u0427\u0442\u043E \u0442\u0430\u043A\u043E\u0435 Unicode? Unicode - \u044D\u0442\u043E" +
             " \u0443\u043D\u0438\u043A\u0430\u043B\u044C\u043D\u044B\u0439 \u043A\u043E\u0434" +
             " \u0434\u043B\u044F \u043B\u044E\u0431\u043E\u0433\u043E \u0441\u0438\u043C\u0432\u043E\u043B\u0430," +
@@ -332,7 +335,7 @@ public class TestSelection extends TestFmwk {
             "\u0440\u0430\u0437\u043B\u0438\u0447\u043D\u044B\u043C\u0438 \u0441\u0438\u0441\u0442\u0435\u043C\u0430\u043C\u0438 " +
             "\u043F\u0440\u0435\u0434\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u0442 \u044D\u0442\u0438 " +
             "\u0434\u0430\u043D\u043D\u044B\u0435 \u043E\u0442 \u043F\u043E\u0432\u0440\u0435\u0436\u0434\u0435",
-            
+
             "\u0645\u0627 \u0647\u064A \u0627\u0644\u0634\u0641\u0631\u0629 \u0627\u0644\u0645\u0648\u062D\u062F\u0629 " +
             "\"\u064A\u0648\u0646\u0650\u0643\u0648\u062F\" \u061F\n\n\u0623\u0633\u0627\u0633\u064B\u0627\u060C " +
             "\u062A\u062A\u0639\u0627\u0645\u0644 \u0627\u0644\u062D\u0648\u0627\u0633\u064A\u0628 \u0641\u0642\u0637 \u0645\u0639 " +
@@ -431,7 +434,7 @@ public class TestSelection extends TestFmwk {
             "\u0643\u062A\u0627\u0628\u0629 \u0627\u0644\u0628\u0631\u0646\u0627\u0645\u062C \u0645\u0631\u0629 " +
             "\u0648\u0627\u062D\u062F\u0629\u060C \u0648\u0627\u0633\u062A\u062E\u062F\u0627\u0645\u0647 \u0639\u0644\u0649 " +
             "\u0623\u064A \u0646\u0648\u0639 \u0645\u0646 \u0627\u0644\u0623\u062C\u0647\u0632\u0629",
-              
+
             "\u4EC0\u9EBD\u662FUnicode(\u7D71\u4E00\u78BC/\u6A19\u6E96\u842C\u570B\u78BC)?\n\n" +
             "Unicode\u7D66\u6BCF\u500B\u5B57\u5143\u63D0\u4F9B\u4E86\u4E00\u500B\u552F\u4E00\u7684\u6578\u4F4D\uFF0C\n" +
             "\u4E0D\u8AD6\u662F\u4EC0\u9EBD\u5E73\u81FA\uFF0C\n\u4E0D\u8AD6\u662F\u4EC0\u9EBD\u7A0B\u5F0F\uFF0C\n" +
@@ -470,7 +473,7 @@ public class TestSelection extends TestFmwk {
             "\u570B\u5BB6\uFF0C\u800C\u4E0D\u9700\u8981\u91CD\u5EFA\u3002\u5B83\u53EF\u5C07\u8CC7\u6599\u50B3\u8F38" +
             "\u5230\u8A31\u591A\u4E0D\u540C\u7684\u7CFB\u7D71\uFF0C\u800C\u7121\u640D\u58DE\u3002\n\u95DC\u65BCUnicode" +
             "\u5B78\u8853\u5B78\u6703\n\nUnicode\u5B78\u8853\u5B78\u6703",
-           
+
             "\u00C7\'\u00EBsht\u00EB UNICODE?\n\nUnicode siguron nj\u00EB num\u00EBr t\u00EB vet\u00EBm p\u00EBr \u00E7do " +
             "g\u00EBrm\u00EB,\np\u00EBr cil\u00EBndo platform\u00EB,\np\u00EBr cilindo program,\np\u00EBr cil\u00EBndo " +
             "gjuh\u00EB.\n\nN\u00EB themel, kompjuterat veprojn\u00EB me an\u00EBn e numrave. Ata ruajn\u00EB g\u00EBrmat " +
@@ -502,7 +505,7 @@ public class TestSelection extends TestFmwk {
             "softuer ose nj\u00EB faqe interneti t\u00EB p\u00EBrdoret p\u00EBr shum\u00EB platforma, gjuh\u00EB dhe vende " +
             "pa re-inxhinierim. Ai lejon t\u00EB dh\u00EBnat t\u00EB kalohen p\u00EBrmes shum\u00EB sistemeve t\u00EB ndryshme " +
             "pa korruptim.",
-                
+
             "\u092F\u0942\u0928\u093F\u0915\u094B\u0921 \u0915\u094D\u092F\u093E \u0939\u0948?\n\n\u092F\u0942\u0928\u093F\u0915" +
             "\u094B\u0921 \u092A\u094D\u0930\u0924\u094D\u092F\u0947\u0915 \u0905\u0915\u094D\u0937\u0930 \u0915\u0947 " +
             "\u0932\u093F\u090F \u090F\u0915 \u0935\u093F\u0936\u0947\u0937 \u0928\u092E\u094D\u092C\u0930 \u092A\u094D" +
@@ -611,7 +614,7 @@ public class TestSelection extends TestFmwk {
             "\u0940 \u092C\u093E\u0927\u093E \u0915\u0947 \u0935\u093F\u092D\u093F\u0928\u094D\u0928 \u092A\u094D" +
             "\u0930\u0923\u093E\u0932\u093F\u092F\u094B\u0902 \u0938\u0947 \u0939\u094B\u0915\u0930 \u0932\u0947 " +
             "\u091C\u093E\u092F\u093E \u091C\u093E \u0938\u0915\u0924\u093E \u0939\u0948\u0964\n",
-            
+
             "\u0E1A\u0E40\u0E23\u0E37\u0E48\u0E2D\u0E07\u0E02\u0E2D\u0E07\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02. \u0E04" +
             "\u0E2D\u0E21\u0E1E\u0E34\u0E27\u0E40\u0E15\u0E2D\u0E23\u0E4C\u0E08\u0E31\u0E14\u0E40\u0E01\u0E47\u0E1A" +
             "\u0E15\u0E31\u0E27\u0E2D\u0E31\u0E01\u0E29\u0E23\u0E41\u0E25\u0E30\u0E2D\u0E31\u0E01\u0E02\u0E23\u0E30" +
@@ -683,7 +686,7 @@ public class TestSelection extends TestFmwk {
             "\u0E48\u0E07\u0E43\u0E19\u0E41\u0E19\u0E27\u0E42\u0E19\u0E49\u0E21\u0E17\u0E32\u0E07\u0E40\u0E17\u0E04\u0E42" +
             "\u0E19\u0E42\u0E25\u0E22\u0E35\u0E0B\u0E2D\u0E1F\u0E15\u0E4C\u0E41\u0E27\u0E23\u0E4C\u0E23\u0E30\u0E14\u0E31" +
             "\u0E1A\u0E42\u0E25\u0E01\u0E17\u0E35\u0E48\u0E21\u0E35\u0E04\u0E27\u0E32\u0E21\u0E2A\u0E33\u0E04\n",
-            
+
             "\u4EC0\u4E48\u662FUnicode(\u7EDF\u4E00\u7801)?\n\nUnicode\u7ED9\u6BCF\u4E2A\u5B57\u7B26\u63D0\u4F9B\u4E86" +
             "\u4E00\u4E2A\u552F\u4E00\u7684\u6570\u5B57\uFF0C\n\u4E0D\u8BBA\u662F\u4EC0\u4E48\u5E73\u53F0\uFF0C\n\u4E0D" +
             "\u8BBA\u662F\u4EC0\u4E48\u7A0B\u5E8F\uFF0C\n\u4E0D\u8BBA\u662F\u4EC0\u4E48\u8BED\u8A00\u3002\n\n\u57FA\u672C" +
@@ -727,7 +730,7 @@ public class TestSelection extends TestFmwk {
             "\u8D44\u91D1\u3002Unicode\u5B66\u672F\u5B66\u4F1A\u7684\u4F1A\u5458\u8D44\u683C\u5F00\u653E\u7ED9\u4E16\u754C" +
             "\u4E0A\u4EFB\u4F55\u652F\u6301Unicode\u6807\u51C6\u548C\u5E0C\u671B\u534F\u52A9\u5176\u6269\u5C55\u548C\u6267" +
             "\u884C\u7684\u7EC4\u7EC7\u53CA\u4E2A\u4EBA\u3002\n",
-            
+
             "Mik\u00E4 Unicode on?\n\nUnicode m\u00E4\u00E4ritt\u00E4\u00E4 jokaiselle merkille yksil\u00F6llisen arvon." +
             "\nRiippumatta k\u00E4ytt\u00F6j\u00E4rjestelm\u00E4st\u00E4\nRiippumatta ohjelmistosta\nRiippumatta kielest" +
             "\u00E4\n\nTietokoneiden toiminta perustuu numeroiden k\u00E4sittelylle. My\u00F6s kirjaimet ja muut merkit " +
@@ -754,7 +757,7 @@ public class TestSelection extends TestFmwk {
             "\u00E4inen sovellus tai sivusto voidaan tarjota useille eri k\u00E4ytt\u00F6j\u00E4rjestelmille ja monilla " +
             "eri kielill\u00E4 maailmanlaajuisesti, ilman uudelleenohjelmoinnin tarvetta. Tieto kulkee j\u00E4rjestelmien " +
             "v\u00E4lill\u00E4 vailla tuhoutumisen tai v\u00E4\u00E4ristymisen vaaraa.\nUnicode-konsortio",
-            
+
             "Co je Unicode?\n\nUnicode p\u0159i\u0159azuje ka\u017Ed\u00E9mu znaku jedine\u010Dn\u00E9 \u010D\u00EDslo,\nnez" +
             "\u00E1visle na platform\u011B,\nnez\u00E1visle na programu,\nnez\u00E1visle na jazyce.\n\nPo\u010D\u00EDta\u010De," +
             " ze sv\u00E9 podstaty, pracuj\u00ED pouze s \u010D\u00EDsly. P\u00EDsmena a dal\u0161\u00ED znaky ukl\u00E1daj\u00ED" +
@@ -785,7 +788,7 @@ public class TestSelection extends TestFmwk {
             "softwarov\u00FD produkt nebo jedin\u00E1 webov\u00E1 str\u00E1nka byla zam\u011B\u0159ena na mnoho platforem, " +
             "jazyk\u016F a zem\u00ED beze zm\u011Bn n\u00E1vrhu. To dovoluje p\u0159en\u00E1\u0161et data p\u0159es mnoho " +
             "r\u016Fzn\u00FDch syst\u00E9m\u016F bez poru\u0161en\u00ED.",
-            
+
             "?\n\n\u05D9\u05D5\u05E0\u05D9\u05E7\u05D5\u05D3 \u05DE\u05E7\u05E6\u05D4 \u05DE\u05E1\u05E4\u05E8 \u05D9\u05D9" +
             "\u05D7\u05D5\u05D3\u05D9 \u05DC\u05DB\u05DC \u05EA\u05D5,\n\u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05E2\u05DC " +
             "\u05D0\u05D9\u05D6\u05D5 \u05E4\u05DC\u05D8\u05E4\u05D5\u05E8\u05DE\u05D4,\n\u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4" +

@@ -12,6 +12,8 @@ package com.ibm.icu.dev.test.shaping;
 import java.lang.reflect.Method;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ArabicShaping;
@@ -19,6 +21,7 @@ import com.ibm.icu.text.ArabicShaping;
 /**
  * Regression test for Arabic shaping.
  */
+@RunWith(JUnit4.class)
 public class ArabicShapingRegTest extends TestFmwk {
 
     /* constants copied from ArabicShaping for convenience */

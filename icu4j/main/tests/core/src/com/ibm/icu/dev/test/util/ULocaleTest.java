@@ -25,6 +25,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -48,6 +50,7 @@ import com.ibm.icu.util.ULocale.Minimize;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
+@RunWith(JUnit4.class)
 public class ULocaleTest extends TestFmwk {
 
     // Ticket #8078 and #11674

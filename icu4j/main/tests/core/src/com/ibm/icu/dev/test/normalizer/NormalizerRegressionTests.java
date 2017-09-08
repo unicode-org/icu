@@ -10,10 +10,13 @@
 package com.ibm.icu.dev.test.normalizer;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.Normalizer;
 
+@RunWith(JUnit4.class)
 public class NormalizerRegressionTests extends TestFmwk {
     @Test
     public void TestJB4472() {
