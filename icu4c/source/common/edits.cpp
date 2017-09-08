@@ -17,10 +17,10 @@ namespace {
 const int32_t MAX_UNCHANGED_LENGTH = 0x1000;
 const int32_t MAX_UNCHANGED = MAX_UNCHANGED_LENGTH - 1;
 
-// 0wwwcccccccccccc with w=1..6 records ccc+1 replacements of w:w text units.
-// No length change.
-const int32_t MAX_SHORT_WIDTH = 6;
-const int32_t MAX_SHORT_CHANGE_LENGTH = 0xfff;
+// 0mmmnnnccccccccc with m=1..6 records ccc+1 replacements of m:n text units.
+const int32_t MAX_SHORT_CHANGE_OLD_LENGTH = 6;
+const int32_t MAX_SHORT_CHANGE_NEW_LENGTH = 7;
+const int32_t SHORT_CHANGE_NUM_MASK = 0x1ff;
 const int32_t MAX_SHORT_CHANGE = 0x6fff;
 
 // 0111mmmmmmnnnnnn records a replacement of m text units with n.
@@ -138,20 +138,6 @@ void Edits::addUnchanged(int32_t unchangedLength) {
 
 void Edits::addReplace(int32_t oldLength, int32_t newLength) {
     if(U_FAILURE(errorCode_)) { return; }
-    if(oldLength == newLength && 0 < oldLength && oldLength <= MAX_SHORT_WIDTH) {
-        // Replacement of short oldLength text units by same-length new text.
-        // Merge into previous short-replacement record, if any.
-        ++numChanges;
-        int32_t last = lastUnit();
-        if(MAX_UNCHANGED < last && last < MAX_SHORT_CHANGE &&
-                (last >> 12) == oldLength && (last & 0xfff) < MAX_SHORT_CHANGE_LENGTH) {
-            setLastUnit(last + 1);
-            return;
-        }
-        append(oldLength << 12);
-        return;
-    }
-
     if(oldLength < 0 || newLength < 0) {
         errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -169,6 +155,21 @@ void Edits::addReplace(int32_t oldLength, int32_t newLength) {
             return;
         }
         delta += newDelta;
+    }
+
+    if(0 < oldLength && oldLength <= MAX_SHORT_CHANGE_OLD_LENGTH &&
+            newLength <= MAX_SHORT_CHANGE_NEW_LENGTH) {
+        // Merge into previous same-lengths short-replacement record, if any.
+        int32_t u = (oldLength << 12) | (newLength << 9);
+        int32_t last = lastUnit();
+        if(MAX_UNCHANGED < last && last < MAX_SHORT_CHANGE &&
+                (last & ~SHORT_CHANGE_NUM_MASK) == u &&
+                (last & SHORT_CHANGE_NUM_MASK) < SHORT_CHANGE_NUM_MASK) {
+            setLastUnit(last + 1);
+            return;
+        }
+        append(u);
+        return;
     }
 
     int32_t head = 0x7000;
@@ -457,7 +458,7 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
             // Post-increment-read the same span again.
             if (remaining > 0) {
                 // Fine-grained iterator:
-                // Stay on the current one of a sequence of equal-length changes.
+                // Stay on the current one of a sequence of compressed changes.
                 ++index;  // next() rests on the index after the sequence unit.
                 dir = 1;
                 return TRUE;
@@ -466,7 +467,7 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
         dir = 1;
     }
     if (remaining >= 1) {
-        // Fine-grained iterator: Continue a sequence of equal-length changes.
+        // Fine-grained iterator: Continue a sequence of compressed changes.
         if (remaining > 1) {
             --remaining;
             return TRUE;
@@ -499,16 +500,18 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
     }
     changed = TRUE;
     if (u <= MAX_SHORT_CHANGE) {
+        int32_t oldLen = u >> 12;
+        int32_t newLen = (u >> 9) & MAX_SHORT_CHANGE_NEW_LENGTH;
+        int32_t num = (u & SHORT_CHANGE_NUM_MASK) + 1;
         if (coarse) {
-            int32_t w = u >> 12;
-            int32_t len = (u & 0xfff) + 1;
-            oldLength_ = newLength_ = len * w;
+            oldLength_ = num * oldLen;
+            newLength_ = num * newLen;
         } else {
-            // Split a sequence of equal-length changes that was compressed into one unit.
-            oldLength_ = newLength_ = u >> 12;
-            u &= 0xfff;
-            if (u > 0) {
-                remaining = u + 1;  // This is the first of two or more changes.
+            // Split a sequence of changes that was compressed into one unit.
+            oldLength_ = oldLen;
+            newLength_ = newLen;
+            if (num > 1) {
+                remaining = num;  // This is the first of two or more changes.
             }
             return TRUE;
         }
@@ -524,11 +527,9 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
     while (index < length && (u = array[index]) > MAX_UNCHANGED) {
         ++index;
         if (u <= MAX_SHORT_CHANGE) {
-            int32_t w = u >> 12;
-            int32_t len = (u & 0xfff) + 1;
-            len = len * w;
-            oldLength_ += len;
-            newLength_ += len;
+            int32_t num = (u & SHORT_CHANGE_NUM_MASK) + 1;
+            oldLength_ += (u >> 12) * num;
+            newLength_ += ((u >> 9) & MAX_SHORT_CHANGE_NEW_LENGTH) * num;
         } else {
             U_ASSERT(u <= 0x7fff);
             oldLength_ += readLength((u >> 6) & 0x3f);
@@ -552,7 +553,7 @@ UBool Edits::Iterator::previous(UErrorCode &errorCode) {
             // pre-decrement-read the same span again.
             if (remaining > 0) {
                 // Fine-grained iterator:
-                // Stay on the current one of a sequence of equal-length changes.
+                // Stay on the current one of a sequence of compressed changes.
                 --index;  // previous() rests on the sequence unit.
                 dir = -1;
                 return TRUE;
@@ -562,10 +563,10 @@ UBool Edits::Iterator::previous(UErrorCode &errorCode) {
         dir = -1;
     }
     if (remaining > 0) {
-        // Fine-grained iterator: Continue a sequence of equal-length changes.
+        // Fine-grained iterator: Continue a sequence of compressed changes.
         int32_t u = array[index];
         U_ASSERT(MAX_UNCHANGED < u && u <= MAX_SHORT_CHANGE);
-        if (remaining <= (u & 0xfff)) {
+        if (remaining <= (u & SHORT_CHANGE_NUM_MASK)) {
             ++remaining;
             updatePreviousIndexes();
             return TRUE;
@@ -591,15 +592,17 @@ UBool Edits::Iterator::previous(UErrorCode &errorCode) {
     }
     changed = TRUE;
     if (u <= MAX_SHORT_CHANGE) {
+        int32_t oldLen = u >> 12;
+        int32_t newLen = (u >> 9) & MAX_SHORT_CHANGE_NEW_LENGTH;
+        int32_t num = (u & SHORT_CHANGE_NUM_MASK) + 1;
         if (coarse) {
-            int32_t w = u >> 12;
-            int32_t len = (u & 0xfff) + 1;
-            oldLength_ = newLength_ = len * w;
+            oldLength_ = num * oldLen;
+            newLength_ = num * newLen;
         } else {
-            // Split a sequence of equal-length changes that was compressed into one unit.
-            oldLength_ = newLength_ = u >> 12;
-            u &= 0xfff;
-            if (u > 0) {
+            // Split a sequence of changes that was compressed into one unit.
+            oldLength_ = oldLen;
+            newLength_ = newLen;
+            if (num > 1) {
                 remaining = 1;  // This is the last of two or more changes.
             }
             updatePreviousIndexes();
@@ -630,11 +633,9 @@ UBool Edits::Iterator::previous(UErrorCode &errorCode) {
     while (index > 0 && (u = array[index - 1]) > MAX_UNCHANGED) {
         --index;
         if (u <= MAX_SHORT_CHANGE) {
-            int32_t w = u >> 12;
-            int32_t len = (u & 0xfff) + 1;
-            len = len * w;
-            oldLength_ += len;
-            newLength_ += len;
+            int32_t num = (u & SHORT_CHANGE_NUM_MASK) + 1;
+            oldLength_ += (u >> 12) * num;
+            newLength_ += ((u >> 9) & MAX_SHORT_CHANGE_NEW_LENGTH) * num;
         } else if (u <= 0x7fff) {
             // Read the lengths, and reset the index to the head again.
             int32_t headIndex = index++;
@@ -672,24 +673,24 @@ int32_t Edits::Iterator::findIndex(int32_t i, UBool findSource, UErrorCode &erro
                 if (remaining > 0) {
                     // Is the index in one of the remaining compressed edits?
                     // spanStart is the start of the current span, first of the remaining ones.
+                    spanLength = findSource ? oldLength_ : newLength_;
                     int32_t u = array[index];
                     U_ASSERT(MAX_UNCHANGED < u && u <= MAX_SHORT_CHANGE);
-                    int32_t total = (u & 0xfff) + 1;
-                    int32_t len = (total - remaining) * oldLength_;
+                    int32_t num = (u & SHORT_CHANGE_NUM_MASK) + 1 - remaining;
+                    int32_t len = num * spanLength;
                     if (i >= (spanStart - len)) {
-                        int32_t n = ((spanStart - i - 1) / oldLength_) + 1;
-                        // 1 <= n <= (total - remaining)
-                        len = n * oldLength_;
-                        srcIndex -= len;
-                        replIndex -= len;
-                        destIndex -= len;
+                        int32_t n = ((spanStart - i - 1) / spanLength) + 1;
+                        // 1 <= n <= num
+                        srcIndex -= n * oldLength_;
+                        replIndex -= n * newLength_;
+                        destIndex -= n * newLength_;
                         remaining += n;
                         return 0;
                     }
                     // Skip all of these edits at once.
-                    srcIndex -= len;
-                    replIndex -= len;
-                    destIndex -= len;
+                    srcIndex -= num * oldLength_;
+                    replIndex -= num * newLength_;
+                    destIndex -= num * newLength_;
                     remaining = 0;
                 }
             }
@@ -719,15 +720,15 @@ int32_t Edits::Iterator::findIndex(int32_t i, UBool findSource, UErrorCode &erro
             int32_t len = remaining * spanLength;
             if (i < (spanStart + len)) {
                 int32_t n = (i - spanStart) / spanLength;  // 1 <= n <= remaining - 1
-                len = n * spanLength;
-                srcIndex += len;
-                replIndex += len;
-                destIndex += len;
+                srcIndex += n * oldLength_;
+                replIndex += n * newLength_;
+                destIndex += n * newLength_;
                 remaining -= n;
                 return 0;
             }
             // Make next() skip all of these edits at once.
-            oldLength_ = newLength_ = len;
+            oldLength_ *= remaining;
+            newLength_ *= remaining;
             remaining = 0;
         }
     }
