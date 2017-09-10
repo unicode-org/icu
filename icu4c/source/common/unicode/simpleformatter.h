@@ -261,6 +261,15 @@ public:
         return getTextWithNoArguments(compiledPattern.getBuffer(), compiledPattern.length());
     }
 
+    /**
+     * Gets the internal compiled pattern string.
+     * @internal
+     * @deprecated ICU 60 This API is ICU internal only.
+     */
+    UnicodeString getCompiledPattern() const {
+        return compiledPattern;
+    }
+
 private:
     /**
      * Binary representation of the compiled pattern.

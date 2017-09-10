@@ -312,6 +312,41 @@ public:
 };
 
 /**
+ * A version of LocalPointer that allows for implicit copying.
+ *
+ * Inside the copy constructor, the pointer is new'd, and the resulting LocalPointer
+ * adopts the new object. The original LocalPointer is unchanged and continues to own
+ * its copy of the object.
+ *
+ * @see LocalPointer
+ * @internal
+ * @deprecated ICU 60 This API is a technical preview. It may change in an upcoming release.
+ */
+template<typename T>
+class CopyableLocalPointer : public LocalPointer<T> {
+  public:
+    // Inherit constructors
+    using LocalPointer<T>::LocalPointer;
+
+    // Inherited constructors don't include default arguments. Define a default constructor.
+    CopyableLocalPointer() : LocalPointer<T>(NULL) {};
+
+    /**
+     * Creates a new local pointer. This constructor calls T's copy constructor
+     * and takes ownership of the new object.
+     *
+     * If memory allocation fails, the resulting pointer will be null.
+     */
+    CopyableLocalPointer(const CopyableLocalPointer<T>& other) {
+        if (other.ptr == NULL) {
+            LocalPointerBase<T>::ptr = NULL;
+        } else {
+            LocalPointerBase<T>::ptr = new T(*other.ptr);
+        }
+    }
+};
+
+/**
  * "Smart pointer" class, deletes objects via the C++ array delete[] operator.
  * For most methods see the LocalPointerBase base class.
  * Adds operator[] for array item access.
