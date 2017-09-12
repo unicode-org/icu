@@ -430,8 +430,8 @@ public class BreakIteratorTest extends TestFmwk
     public void TestFilteredJapanese() {
         ULocale loc = ULocale.JAPANESE;
         BreakIterator brk = FilteredBreakIteratorBuilder
-                .createInstance(loc)
-                .build(BreakIterator.getSentenceInstance(loc));
+                .getInstance(loc)
+                .wrapIteratorWithFilter(BreakIterator.getSentenceInstance(loc));
         brk.setText("ＯＫです。");
         assertEquals("Starting point", 0, brk.current());
         assertEquals("Next point", 5, brk.next());
@@ -516,20 +516,20 @@ public class BreakIteratorTest extends TestFmwk
 
         {
             logln("Constructing empty builder\n");
-            builder = FilteredBreakIteratorBuilder.createInstance();
+            builder = FilteredBreakIteratorBuilder.getEmptyInstance();
 
             logln("Constructing base BI\n");
             baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
             logln("Building new BI\n");
-            filteredBI = builder.build(baseBI);
+            filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
             assertDefaultBreakBehavior(filteredBI, text);
         }
 
         {
             logln("Constructing empty builder\n");
-            builder = FilteredBreakIteratorBuilder.createInstance();
+            builder = FilteredBreakIteratorBuilder.getEmptyInstance();
 
             logln("Adding Mr. as an exception\n");
 
@@ -543,7 +543,7 @@ public class BreakIteratorTest extends TestFmwk
             baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
             logln("Building new BI\n");
-            filteredBI = builder.build(baseBI);
+            filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
             logln("Testing:");
             filteredBI.setText(text);
@@ -556,7 +556,7 @@ public class BreakIteratorTest extends TestFmwk
 
         {
           logln("Constructing empty builder\n");
-          builder = FilteredBreakIteratorBuilder.createInstance();
+          builder = FilteredBreakIteratorBuilder.getEmptyInstance();
 
           logln("Adding Mr. and Capt as an exception\n");
           assertEquals("3.1 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_MR));
@@ -566,7 +566,7 @@ public class BreakIteratorTest extends TestFmwk
           baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
           logln("Building new BI\n");
-          filteredBI = builder.build(baseBI);
+          filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
           logln("Testing:");
           filteredBI.setText(text);
@@ -577,7 +577,7 @@ public class BreakIteratorTest extends TestFmwk
 
         {
           logln("Constructing English builder\n");
-          builder = FilteredBreakIteratorBuilder.createInstance(ULocale.ENGLISH);
+          builder = FilteredBreakIteratorBuilder.getInstance(ULocale.ENGLISH);
 
           logln("Constructing base BI\n");
           baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
@@ -586,7 +586,7 @@ public class BreakIteratorTest extends TestFmwk
           assertEquals("1st suppressBreakAfter", true, builder.unsuppressBreakAfter(ABBR_CAPT));
 
           logln("Building new BI\n");
-          filteredBI = builder.build(baseBI);
+          filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
           if(filteredBI != null) {
             logln("Testing:");
@@ -600,13 +600,13 @@ public class BreakIteratorTest extends TestFmwk
 
         {
           logln("Constructing English builder\n");
-          builder = FilteredBreakIteratorBuilder.createInstance(ULocale.ENGLISH);
+          builder = FilteredBreakIteratorBuilder.getInstance(ULocale.ENGLISH);
 
           logln("Constructing base BI\n");
           baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
           logln("Building new BI\n");
-          filteredBI = builder.build(baseBI);
+          filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
           if(filteredBI != null) {
             assertEnglishBreakBehavior(filteredBI, text);
@@ -644,13 +644,13 @@ public class BreakIteratorTest extends TestFmwk
 
         {
           logln("Constructing French builder");
-          builder = FilteredBreakIteratorBuilder.createInstance(ULocale.FRENCH);
+          builder = FilteredBreakIteratorBuilder.getInstance(ULocale.FRENCH);
 
           logln("Constructing base BI\n");
           baseBI = BreakIterator.getSentenceInstance(Locale.FRENCH);
 
           logln("Building new BI\n");
-          filteredBI = builder.build(baseBI);
+          filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
           if(filteredBI != null) {
             assertFrenchBreakBehavior(filteredBI, text);
