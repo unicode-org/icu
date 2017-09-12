@@ -213,6 +213,8 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     if (this == &that) {
         return *this;
     }
+    BreakIterator::operator=(that);
+
     reset();    // Delete break cache information
     fBreakType = that.fBreakType;
     if (fLanguageBreakEngines != NULL) {
@@ -311,15 +313,18 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
         return FALSE;
     }
 
+    // The base class BreakIterator carries no state that participates in equality,
+    // and does not implement an equality function that would otherwise be
+    // checked at this point.
+
     const RuleBasedBreakIterator& that2 = (const RuleBasedBreakIterator&) that;
 
     if (!utext_equals(fText, that2.fText)) {
         // The two break iterators are operating on different text,
-        //   or have a different interation position.
+        //   or have a different iteration position.
+        //   Note that fText's position is always the same as the break iterator's position.
         return FALSE;
     };
-
-    // TODO:  need a check for when in a dictionary region at different offsets.
 
     if (that2.fData == fData ||
         (fData != NULL && that2.fData != NULL && *that2.fData == *fData)) {
@@ -1078,7 +1083,7 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
             // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
             //        not the size of the character going in, which is a UChar32.
             //
-            UTRIE_GET16(&fData->fTrie, c, category);
+            category = UTRIE2_GET16(fData->fTrie, c);
 
             // Check the dictionary bit in the character's category.
             //    Counter is only used by dictionary based iterators (subclasses).
@@ -1275,7 +1280,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
             // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
             //        not the size of the character going in, which is a UChar32.
             //
-            UTRIE_GET16(&fData->fTrie, c, category);
+            category = UTRIE2_GET16(fData->fTrie, c);
 
             // Check the dictionary bit in the character's category.
             //    Counter is only used by dictionary based iterators (subclasses).
@@ -1512,26 +1517,6 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void * /*stackBuffer*
 
 //-------------------------------------------------------------------------------
 //
-//  isDictionaryChar      Return true if the category lookup for this char
-//                        indicates that it is in the set of dictionary lookup
-//                        chars.
-//
-//                        This function is intended for use by dictionary based
-//                        break iterators.
-//
-//-------------------------------------------------------------------------------
-/*UBool RuleBasedBreakIterator::isDictionaryChar(UChar32   c) {
-    if (fData == NULL) {
-        return FALSE;
-    }
-    uint16_t category;
-    UTRIE_GET16(&fData->fTrie, c, category);
-    return (category & 0x4000) != 0;
-}*/
-
-
-//-------------------------------------------------------------------------------
-//
 //  checkDictionary       This function handles all processing of characters in
 //                        the "dictionary" set. It will determine the appropriate
 //                        course of action, and possibly set up a cache in the
@@ -1569,7 +1554,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     int32_t     foundBreakCount = 0;
     UChar32     c = utext_current32(fText);
 
-    UTRIE_GET16(&fData->fTrie, c, category);
+    category = UTRIE2_GET16(fData->fTrie, c);
 
     // Is the character we're starting on a dictionary character? If so, we
     // need to back up to include the entire run; otherwise the results of
@@ -1581,7 +1566,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
             do {
                 utext_next32(fText);          // TODO:  recast to work directly with postincrement.
                 c = utext_current32(fText);
-                UTRIE_GET16(&fData->fTrie, c, category);
+                category = UTRIE2_GET16(fData->fTrie, c);
             } while (c != U_SENTINEL && (category & 0x4000));
             // Back up to the last dictionary character
             rangeEnd = (int32_t)UTEXT_GETNATIVEINDEX(fText);
@@ -1597,7 +1582,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
         else {
             do {
                 c = UTEXT_PREVIOUS32(fText);
-                UTRIE_GET16(&fData->fTrie, c, category);
+                category = UTRIE2_GET16(fData->fTrie, c);
             }
             while (c != U_SENTINEL && (category & 0x4000));
             // Back up to the last dictionary character
@@ -1611,7 +1596,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
             }
             rangeStart = (int32_t)UTEXT_GETNATIVEINDEX(fText);;
         }
-        UTRIE_GET16(&fData->fTrie, c, category);
+        category = UTRIE2_GET16(fData->fTrie, c);
     }
 
     // Loop through the text, looking for ranges of dictionary characters.
@@ -1622,13 +1607,13 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     if (reverse) {
         utext_setNativeIndex(fText, rangeStart);
         c = utext_current32(fText);
-        UTRIE_GET16(&fData->fTrie, c, category);
+        category = UTRIE2_GET16(fData->fTrie, c);
     }
     while(U_SUCCESS(status)) {
         while((current = (int32_t)UTEXT_GETNATIVEINDEX(fText)) < rangeEnd && (category & 0x4000) == 0) {
             utext_next32(fText);           // TODO:  tweak for post-increment operation
             c = utext_current32(fText);
-            UTRIE_GET16(&fData->fTrie, c, category);
+            category = UTRIE2_GET16(fData->fTrie, c);
         }
         if (current >= rangeEnd) {
             break;
@@ -1646,7 +1631,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
 
         // Reload the loop variables for the next go-round
         c = utext_current32(fText);
-        UTRIE_GET16(&fData->fTrie, c, category);
+        category = UTRIE2_GET16(fData->fTrie, c);
     }
 
     // If we found breaks, build a new break cache. The first and last entries must

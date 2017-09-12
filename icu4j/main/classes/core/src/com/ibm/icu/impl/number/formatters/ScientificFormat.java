@@ -149,6 +149,11 @@ public class ScientificFormat extends Format.BeforeFormat implements Rounder.Mul
     // (see #13118). Note that the bound 8 on integer digits is historic.
     int _maxInt = properties.getMaximumIntegerDigits();
     int _minInt = properties.getMinimumIntegerDigits();
+    // Bug #13289: if maxInt > minInt > 1, then minInt should be 1 for the
+    // purposes of engineering notatation.
+    if (_maxInt > _minInt && _minInt > 1) {
+        _minInt = 1;
+    }
     minInt = _minInt < 0 ? 0 : _minInt >= 8 ? 1 : _minInt;
     maxInt = _maxInt < _minInt ? _minInt : _maxInt >= 8 ? _minInt : _maxInt;
     assert 0 <= minInt && minInt <= maxInt && maxInt < 8;

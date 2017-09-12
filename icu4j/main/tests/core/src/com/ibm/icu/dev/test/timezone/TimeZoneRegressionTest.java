@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
@@ -34,6 +36,7 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class TimeZoneRegressionTest extends TestFmwk {
     @Test
     public void Test4052967() {
@@ -77,7 +80,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
         Date d1 = tempcal.getTime();
         if (z.inDaylightTime(d1)) {
             errln("Fail: DST not working as expected");
-        } 
+        }
 
         tempcal.set(1997, Calendar.MARCH, 1);
         Date d2 = tempcal.getTime();
@@ -89,7 +92,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
         Date d3 = tempcal.getTime();
         if (z.inDaylightTime(d3)) {
             errln("Fail: DST not working as expected");
-        } 
+        }
     }
 
     /**
@@ -712,7 +715,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
     public void Test4162593() {
         SimpleDateFormat fmt = new SimpleDateFormat("z", Locale.US);
         final int ONE_HOUR = 60*60*1000;
-        final float H = (float) ONE_HOUR;
+        final float H = ONE_HOUR;
         TimeZone initialZone = TimeZone.getDefault();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy HH:mm z");
 
@@ -903,7 +906,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
      */
     // Current orgnaization of data in zoneinfor.res allows negative
     // values from DOM so comment these tests out
-    
+
     @Test
     public void Test4184229() {
         SimpleTimeZone zone = null;
@@ -934,7 +937,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
         // Make a valid constructor call for subsequent tests.
 
         zone = new SimpleTimeZone(0, "A", 0, 1, 0, 0, 0, 1, 0, 0);
-        
+
         try {
             zone.setStartRule(0, -1, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 setStartRule +savings");
@@ -959,7 +962,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
         } catch(IllegalArgumentException e) {
             logln("(h) " + e.getMessage());
         }
-        
+
     }
 
     /**
@@ -1039,7 +1042,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
     @Test
     public void TestJ5134() {
         GregorianCalendar testCal = (GregorianCalendar)Calendar.getInstance();
-        TimeZone icuEastern = TimeZone.getTimeZone("America/New_York");        
+        TimeZone icuEastern = TimeZone.getTimeZone("America/New_York");
         testCal.setTimeZone(icuEastern);
         testCal.set(1900, Calendar.JANUARY, 1, 0, 0, 0);
         long time = testCal.getTimeInMillis();
@@ -1168,7 +1171,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
                     + tzid + ") [13-arg constructor]");
         }
     }
-    
+
     // test bug #4265
     @Test
     public void TestJohannesburg() {
@@ -1176,8 +1179,8 @@ public class TimeZoneRegressionTest extends TestFmwk {
         TimeZone johannesburg = TimeZone.getTimeZone(j_id);
         final int ONE_HOUR = 60*60*1000;
         int expectedOffset = ONE_HOUR*2;  // GMT+2 - NO DST
-        int offset = johannesburg.getOffset(GregorianCalendar.AD,2007,Calendar.JULY,5,Calendar.THURSDAY,0);        
-        
+        int offset = johannesburg.getOffset(GregorianCalendar.AD,2007,Calendar.JULY,5,Calendar.THURSDAY,0);
+
         if(offset != expectedOffset) {
             errln("FAIL: zone " + j_id +" returned offset in July " + offset +", expected "+expectedOffset);
         } else {
@@ -1198,6 +1201,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
         Thread[] workers = new Thread[20];
         for (int i = 0 ; i < workers.length; i++) {
             workers[i] = new Thread(new Runnable() {
+                @Override
                 public void run() {
                     for (int j = 0; j < 10000; j++) {
                         try {
@@ -1216,7 +1220,7 @@ public class TimeZoneRegressionTest extends TestFmwk {
             try {
                 wk.join();
             } catch (InterruptedException ie) {
-                
+
             }
         }
     }

@@ -28,7 +28,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -40,7 +43,8 @@ import com.ibm.icu.text.UFormat;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
-public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class TestMessageFormat extends TestFmwk {
     @Test
     public void TestBug3()
     {
@@ -1998,6 +2002,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("aa aaa", "AB ABC", mf3.format(args, new StringBuffer(), null).toString());
     }
 
+    @Test
     public void TestMessagePatternAutoQuoteApostropheDeep() {
         // Example input & output taken from API docs.
         MessagePattern pattern = new MessagePattern(
@@ -2007,6 +2012,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                 pattern.autoQuoteApostropheDeep());
     }
 
+    @Test
     public void TestMessagePatternFreezable() {
         MessagePattern pattern = new MessagePattern();
         assertFalse("just constructed, not yet frozen", pattern.isFrozen());
@@ -2028,6 +2034,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("thawed+parse", "fo", thawed.autoQuoteApostropheDeep());
     }
 
+    @Test
     public void TestMessagePatternNamedAndNumberedArguments() {
         MessagePattern pattern = new MessagePattern();
         pattern.parse("fee");
@@ -2044,6 +2051,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertTrue("fum {0} {name} no numbered args", pattern.hasNumberedArguments());
     }
 
+    @Test
     public void TestMessagePatternPartCoverage() {
         MessagePattern pattern = new MessagePattern("ab{17}c");
         assertEquals("msg start { arg number } msg limit", 5, pattern.countParts());
@@ -2055,6 +2063,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("arg number 17", 17, arg.getValue());
     }
 
+    @Test
     public void TestMessagePatternParseChoiceStyle() {
         // This would be tested by ChoiceFormat if ICU4J had its own version of that,
         // like ICU4C does.
@@ -2071,13 +2080,15 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertTrue("many parts", pattern.countParts() > 10);
     }
 
+    // This is mostly a code coverage test with verification minimized to what can be plausibly assumed: different
+    // hash values for distinctly different objects.
+    @Test
     public void TestDateFormatHashCode() {
-        DateFormat testDF = DateFormat.getDateInstance(DateFormat.DEFAULT, ULocale.GERMAN);
-        NumberFormat testNF = testDF.getNumberFormat();
+        DateFormat testDF1 = DateFormat.getDateInstance(DateFormat.DEFAULT, ULocale.GERMAN);
+        DateFormat testDF2 = DateFormat.getDateInstance(DateFormat.DEFAULT, ULocale.FRENCH);
 
-        int expectedResult =
-                testNF.getMaximumIntegerDigits() * 37 + testNF.getMaximumFractionDigits();
-        int actualHashResult = testDF.hashCode();
-        assertEquals("DateFormat hashCode", expectedResult, actualHashResult);
+        int actualHashResult1 = testDF1.hashCode();
+        int actualHashResult2 = testDF2.hashCode();
+        assertNotEquals("DateFormat hashCode() test: really the same hashcode?", actualHashResult1, actualHashResult2);
     }
 }

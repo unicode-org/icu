@@ -20,31 +20,35 @@ import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 
-public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
-    
+@RunWith(JUnit4.class)
+public class DateFormatRegressionTestJ extends TestFmwk {
+
     private static final String TIME_STRING = "2000/11/17 08:01:00";
     private static final long UTC_LONG = 974476860000L;
     private SimpleDateFormat sdf_;
-    
+
     @Before
     public void init()throws Exception {
-        sdf_ = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");        
+        sdf_ = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     }
-    
+
     //Return value of getAmPmStrings
     @Test
     public void Test4103926() {
         String act_Ampms[];
         String exp_Ampms[]={"AM","PM"};
         Locale.setDefault(Locale.US);
-        
+
         DateFormatSymbols dfs = new DateFormatSymbols();
         act_Ampms = dfs.getAmPmStrings();
         if(act_Ampms.length != exp_Ampms.length) {
@@ -57,24 +61,24 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-    // Missing digit in millisecond format in SimpleDateFormat 
+    // Missing digit in millisecond format in SimpleDateFormat
     @Test
     public void Test4148168() {
             Date d = new Date(1002705212906L);
             String[] ISOPattern = {
-                "''yyyy-MM-dd-hh.mm.ss.S''", "''yyyy-MM-dd-hh.mm.ss.SS''", 
-                "''yyyy-MM-dd-hh.mm.ss.SSS''", "''yyyy-MM-dd-hh.mm.ss.SSSS''", 
-                "''yyyy-MM-dd-hh.mm.ss.SSSSS''", "''yyyy-MM-dd-hh.mm.ss.SSSSSS''", 
+                "''yyyy-MM-dd-hh.mm.ss.S''", "''yyyy-MM-dd-hh.mm.ss.SS''",
+                "''yyyy-MM-dd-hh.mm.ss.SSS''", "''yyyy-MM-dd-hh.mm.ss.SSSS''",
+                "''yyyy-MM-dd-hh.mm.ss.SSSSS''", "''yyyy-MM-dd-hh.mm.ss.SSSSSS''",
                 "''yyyy-MM-dd-hh.mm.ss.SSSSSSS''", "''yyyy-MM-dd-hh.mm.ss.SSS000''"};
             SimpleDateFormat aSimpleDF = (SimpleDateFormat)DateFormat.getDateTimeInstance();
-    
+
             for(int i = 0; i<ISOPattern.length; i++) {
                 aSimpleDF.applyPattern( ISOPattern[i] );
                 logln( "Pattern = " + aSimpleDF.toPattern());
                 logln( "Format = " + aSimpleDF.format(d));
             }
     }
-    
+
     //DateFormat getDateTimeInstance(int, int), invalid styles no exception
     @Test
     public void Test4213086() {
@@ -87,8 +91,8 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
         } catch(Exception e){
             logln("dateStyle = 2" + "\t timeStyle = -2");
             logln("Exception caught!");
-        }            
-        
+        }
+
         try {
             DateFormat df3 = DateFormat.getDateTimeInstance(4, 2);
             d = df3.format(someDate);
@@ -98,7 +102,7 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             logln("Exception caught!");
             logln("********************************************");
         }
-    
+
         try {
             DateFormat df4 = DateFormat.getDateTimeInstance(-12, -12);
             d = df4.format(someDate);
@@ -108,10 +112,10 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             logln("Exception caught!");
             logln("********************************************");
         }
-    
+
         try{
             DateFormat df5 = DateFormat.getDateTimeInstance(2, 123);
-            d = df5.format(someDate);    
+            d = df5.format(someDate);
             errln("we should catch an exception here");
         } catch(Exception e){
             logln("dateStyle = 2" + "\t timeStyle = 123");
@@ -123,7 +127,7 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             logln("The value of d: " + d);
         }
     }
-    
+
     //DateFormat.format works wrongly?
     @Test
     public void Test4250359() {
@@ -135,26 +139,26 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT);
         String act_result = tf.format(d);
         String exp_result = "5:53 PM";
-        
+
         if(!act_result.equals(exp_result)){
             errln("The result is not expected");
         }
     }
-    
+
     //pattern "s.S, parse '1ms'"
     @Test
     public void Test4253490() {
         Date d = new Date(1002705212231L);
 
         String[] ISOPattern = {
-                "''yyyy-MM-dd-hh.mm.ss.S''", 
-                "''yyyy-MM-dd-hh.mm.ss.SS''", 
-                "''yyyy-MM-dd-hh.mm.ss.SSS''", 
-                "''yyyy-MM-dd-hh.mm.ss.SSSS''", 
-                "''yyyy-MM-dd-hh.mm.ss.SSSSS''", 
-                "''yyyy-MM-dd-hh.mm.ss.SSSSSS''", 
-                "''yyyy-MM-dd-hh.mm.ss.SSSSSSS''"}; 
-    
+                "''yyyy-MM-dd-hh.mm.ss.S''",
+                "''yyyy-MM-dd-hh.mm.ss.SS''",
+                "''yyyy-MM-dd-hh.mm.ss.SSS''",
+                "''yyyy-MM-dd-hh.mm.ss.SSSS''",
+                "''yyyy-MM-dd-hh.mm.ss.SSSSS''",
+                "''yyyy-MM-dd-hh.mm.ss.SSSSSS''",
+                "''yyyy-MM-dd-hh.mm.ss.SSSSSSS''"};
+
         SimpleDateFormat aSimpleDF = (SimpleDateFormat) DateFormat.getDateTimeInstance();
         for (int i = 0; i < ISOPattern.length; i++) {
             aSimpleDF.applyPattern(ISOPattern[i]);
@@ -162,7 +166,7 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             logln("Format = " + aSimpleDF.format(d));
         }
     }
-    
+
     //about regression test
     @Test
     public void Test4266432() {
@@ -170,13 +174,13 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
         Locale loc = Locale.getDefault();
         String dateFormat = "MM/dd/yy HH:mm:ss zzz";
         SimpleDateFormat fmt = new SimpleDateFormat(dateFormat);
-    
+
         ParsePosition p0 = new ParsePosition(0);
         logln("Under  " + loc +"  locale");
         Date d = fmt.parse("01/22/92 04:52:00 GMT", p0);
         logln(d.toString());
     }
-    
+
     //SimpleDateFormat inconsistent for number of digits for years
     @Test
     public void Test4358730() {
@@ -185,22 +189,22 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
         cal.clear();
         cal.set(2001,11,10);
         Date today = cal.getTime();
-    
+
         sdf.applyPattern("MM d y");
         logln(sdf.format(today));
         sdf.applyPattern("MM d yy");
         logln(sdf.format(today));
-    
+
         sdf.applyPattern("MM d yyy");
         logln(sdf.format(today));
-    
+
         sdf.applyPattern("MM d yyyy");
         logln(sdf.format(today));
-    
+
         sdf.applyPattern("MM d yyyyy");
         logln(sdf.format(today));
     }
-    
+
     //Parse invalid string
     @Test
     public void Test4375399() {
@@ -227,7 +231,7 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             Thread.sleep(1000);
         } catch (Exception e) {}
     }*/
-    
+
     @Test
     public void Test4468663() {
         Date d =new Date(-93716671115767L);
@@ -240,23 +244,24 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             logln("original date: " + origin_d.toString());
             str = sdf.format(d);
             logln(" after format----->" + str);
-            
+
             d = sdf.parse(str, new ParsePosition(0));
             logln(" after parse----->" + d.toString());
-    
+
             str = sdf.format(d);
             logln(" after format----->" + str);
-    
+
             d = sdf.parse(str, new ParsePosition(0));
             logln(" after parse----->" + d.toString());
-    
+
             str = sdf.format(d);
-            logln(" after format----->" + str);        
+            logln(" after format----->" + str);
         }
     }
-    
+
     //Class used by Test4407042
     class DateParseThread extends Thread {
+        @Override
         public void run() {
             SimpleDateFormat sdf = (SimpleDateFormat) sdf_.clone();
             TimeZone defaultTZ = TimeZone.getDefault();
@@ -272,7 +277,7 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
                     long t = date.getTime();
                     i++;
                     if (t != ms) {
-                        throw new ParseException("Parse Error: " + i + " (" + sdf.format(date) 
+                        throw new ParseException("Parse Error: " + i + " (" + sdf.format(date)
                                   + ") " + t + " != " + ms, 0);
                     }
                 }
@@ -281,10 +286,11 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     //Class used by Test4407042
     class DateFormatThread extends Thread {
-        public void run() {            
+        @Override
+        public void run() {
             SimpleDateFormat sdf = (SimpleDateFormat) sdf_.clone();
             TimeZone tz = TimeZone.getTimeZone("PST");
             sdf.setTimeZone(tz);
@@ -293,11 +299,11 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
                 i++;
                 String s = sdf.format(new Date(UTC_LONG));
                 if (!s.equals(TIME_STRING)) {
-                    errln("Format Error: " + i + " " + s + " != " 
+                    errln("Format Error: " + i + " " + s + " != "
                                     + TIME_STRING);
                 }
             }
         }
     }
-    
+
 }

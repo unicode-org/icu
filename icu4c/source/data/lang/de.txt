@@ -339,6 +339,7 @@ de{
         ln{"Lingala"}
         lo{"Laotisch"}
         lol{"Mongo"}
+        lou{"Kreol (Louisiana)"}
         loz{"Lozi"}
         lrc{"Nördliches Luri"}
         lt{"Litauisch"}
@@ -1016,7 +1017,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — Alle"}
         category-list{"{0}: {1}"}

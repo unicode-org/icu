@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.impl.IntTrieBuilder;
+import com.ibm.icu.impl.Trie2Writable;
+import com.ibm.icu.impl.Trie2_16;
 
 //
 //  RBBISetBuilder   Handles processing of Unicode Sets from RBBI rules
@@ -49,14 +50,14 @@ class RBBISetBuilder {
             RangeDescriptor() {
                 fIncludesSets = new ArrayList<RBBINode>();
             }
-            
+
             RangeDescriptor(RangeDescriptor other) {
                 fStartChar = other.fStartChar;
                 fEndChar   = other.fEndChar;
                 fNum       = other.fNum;
                 fIncludesSets = new ArrayList<RBBINode>(other.fIncludesSets);
             }
- 
+
             //-------------------------------------------------------------------------------------
             //
             //          RangeDesriptor::split()
@@ -65,20 +66,20 @@ class RBBISetBuilder {
             void split(int where) {
                 Assert.assrt(where>fStartChar && where<=fEndChar);
                 RangeDescriptor nr = new RangeDescriptor(this);
- 
+
                 //  RangeDescriptor copy constructor copies all fields.
                 //  Only need to update those that are different after the split.
                 nr.fStartChar = where;
                 this.fEndChar = where-1;
                 nr.fNext      = this.fNext;
                 this.fNext    = nr;
-                
+
                 // TODO:  fIncludesSets is not updated.  Check it out.
-                //         Probably because they haven't been populated yet, 
+                //         Probably because they haven't been populated yet,
                 //         but still sloppy.
             }
 
-            
+
             //-------------------------------------------------------------------------------------
             //
             //          RangeDescriptor::setDictionaryFlag
@@ -95,11 +96,11 @@ class RBBISetBuilder {
             //          TODO:  a faster way would be to find the set node for
             //          "dictionary" just once, rather than looking it
             //          up by name every time.
-            //            
+            //
             // -------------------------------------------------------------------------------------
             void setDictionaryFlag() {
                 int i;
-                
+
                 for (i=0; i<this.fIncludesSets.size(); i++) {
                     RBBINode        usetNode    = fIncludesSets.get(i);
                     String          setName = "";
@@ -119,12 +120,13 @@ class RBBISetBuilder {
         }
     }
 
-    
+
     RBBIRuleBuilder       fRB;             // The RBBI Rule Compiler that owns us.
     RangeDescriptor       fRangeList;      // Head of the linked list of RangeDescriptors
 
-    IntTrieBuilder        fTrie;           // The mapping TRIE that is the end result of processing
+    Trie2Writable         fTrie;           // The mapping TRIE that is the end result of processing
                                            //  the Unicode Sets.
+    Trie2_16              fFrozenTrie;
 
     // Groups correspond to character categories -
     //       groups of ranges that are in the same original UnicodeSets.
@@ -135,8 +137,8 @@ class RBBISetBuilder {
     int                fGroupCount;
 
     boolean             fSawBOF;
-    
-    
+
+
     //------------------------------------------------------------------------
     //
     //       RBBISetBuilder Constructor
@@ -162,7 +164,7 @@ class RBBISetBuilder {
         //  Initialize the process by creating a single range encompassing all characters
         //  that is in no sets.
         //
-        fRangeList               = new RangeDescriptor(); 
+        fRangeList               = new RangeDescriptor();
         fRangeList.fStartChar    = 0;
         fRangeList.fEndChar      = 0x10ffff;
 
@@ -245,7 +247,7 @@ class RBBISetBuilder {
             }
             if (rlRange.fNum == 0) {
                 fGroupCount ++;
-                rlRange.fNum = fGroupCount+2; 
+                rlRange.fNum = fGroupCount+2;
                 rlRange.setDictionaryFlag();
                 addValToSets(rlRange.fIncludesSets, fGroupCount+2);
             }
@@ -260,7 +262,7 @@ class RBBISetBuilder {
         //     subtree for each UnicodeSet that contains the string {eof}
         //   Because {bof} and {eof} are not a characters in the normal sense,
         //   they doesn't affect the computation of ranges or TRIE.
-        
+
         String eofString = "eof";
         String bofString = "bof";
 
@@ -279,67 +281,26 @@ class RBBISetBuilder {
         if (fRB.fDebugEnv!=null  && fRB.fDebugEnv.indexOf("rgroup")>=0) {printRangeGroups();}
         if (fRB.fDebugEnv!=null  && fRB.fDebugEnv.indexOf("esets")>=0) {printSets();}
 
+        fTrie = new Trie2Writable(0,       //   Initial value for all code points
+                                  0);      //   Error value.
 
-        //IntTrieBuilder(int aliasdata[], int maxdatalength, 
-        //        int initialvalue, int leadunitvalue, 
-        //        boolean latin1linear)
-        
-        fTrie = new IntTrieBuilder(null,   //   Data array  (utrie will allocate one)
-                                   100000,  //   Max Data Length
-                                   0,       //   Initial value for all code points
-                                   0,       //   Lead Surrogate unit value,
-                                   true);   //   Keep Latin 1 in separately.
-        
         for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
-            fTrie.setRange(rlRange.fStartChar, rlRange.fEndChar+1, rlRange.fNum, true);
+            fTrie.setRange(rlRange.fStartChar, rlRange.fEndChar, rlRange.fNum, true);
         }
     }
 
 
-
-    //-----------------------------------------------------------------------------------
-    //
-    //   RBBIDataManipulate  A little internal class needed only to wrap of the 
-    //                       getFoldedValue() function needed for Trie table creation.
-    //
-    //-----------------------------------------------------------------------------------
-   class RBBIDataManipulate implements IntTrieBuilder.DataManipulate {
-        public int getFoldedValue(int start, int offset) {
-            int  value;
-            int  limit;
-            boolean [] inBlockZero = new boolean[1];
-            
-            limit = start + 0x400;
-            while(start<limit) {
-                value = fTrie.getValue(start, inBlockZero);
-                if (inBlockZero[0]) {
-                    start += IntTrieBuilder.DATA_BLOCK_LENGTH;  
-                } else if (value != 0) {
-                    return offset | 0x08000;
-                } else {
-                    ++start;
-                }
-            }
-            return 0;
-         }
-    }
-    RBBIDataManipulate dm = new RBBIDataManipulate();
-    
     //-----------------------------------------------------------------------------------
     //
     //          getTrieSize()    Return the size that will be required to serialize the Trie.
     //
     //-----------------------------------------------------------------------------------
     int getTrieSize()  {
-        int size = 0;
-        try {
-            // The trie serialize function returns the size of the data written.
-            //    null output stream says give size only, don't actually write anything.
-            size = fTrie.serialize(null, true, dm );
-        } catch (IOException e) {
-            Assert.assrt (false);
+        if (fFrozenTrie == null) {
+            fFrozenTrie = fTrie.toTrie2_16();
+            fTrie = null;
         }
-        return size;
+        return fFrozenTrie.getSerializedLength();
     }
 
 
@@ -349,7 +310,11 @@ class RBBISetBuilder {
     //
     //-----------------------------------------------------------------------------------
     void serializeTrie(OutputStream os) throws IOException {
-        fTrie.serialize(os, true, dm );
+        if (fFrozenTrie == null) {
+            fFrozenTrie = fTrie.toTrie2_16();
+            fTrie = null;
+        }
+        fFrozenTrie.serialize(os);
    }
 
     //------------------------------------------------------------------------
@@ -416,7 +381,7 @@ class RBBISetBuilder {
     //------------------------------------------------------------------------
     //
     //           getFirstChar      Given a runtime RBBI character category, find
-    //                             the first UChar32 that is in the set of chars 
+    //                             the first UChar32 that is in the set of chars
     //                             in the category.
     //------------------------------------------------------------------------
     int  getFirstChar(int category)  {

@@ -26,6 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
@@ -50,7 +52,8 @@ import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 
-public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class TimeZoneFormatTest extends TestFmwk {
 
     private static boolean JDKTZ = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
     private static final Pattern EXCL_TZ_PATTERN = Pattern.compile(".*/Riyadh8[7-9]");
@@ -678,6 +681,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     // Coverage tests for other versions of the parse() method. All of them end up
     // calling the full parse() method tested on the TestParse() test.
+    @Test
     public void TestParseCoverage() {
         TimeZone expectedTZ = TimeZone.getTimeZone("America/Los_Angeles");
         TimeZoneFormat fmt = TimeZoneFormat.getInstance(ULocale.ENGLISH);
@@ -1050,6 +1054,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     // Tests format(Object, StringBuffer, FieldPosition):StringBuffer method
     // inherited from Format class
+    @Test
     public void TestInheritedFormat() {
         TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar cal = Calendar.getInstance(tz);

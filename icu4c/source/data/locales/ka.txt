@@ -218,7 +218,7 @@ ka{
         native{"latn"}
         traditional{"geor"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -442,8 +442,8 @@ ka{
                 yQQQ{"QQQ, y"}
                 yQQQQ{"QQQQ, y"}
                 yw{
-                    one{"კვირა w, y"}
-                    other{"კვირა w, y"}
+                    one{"კვირა w, Y"}
+                    other{"კვირა w, Y"}
                 }
             }
             dayNames{

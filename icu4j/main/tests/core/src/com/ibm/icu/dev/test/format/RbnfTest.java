@@ -14,6 +14,8 @@ import java.util.Locale;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.math.BigDecimal;
@@ -28,6 +30,7 @@ import com.ibm.icu.util.ULocale;
  * This does not test lenient parse mode, since testing the default implementation
  * introduces a dependency on collation.  See RbnfLenientScannerTest.
  */
+@RunWith(JUnit4.class)
 public class RbnfTest extends TestFmwk {
     static String fracRules =
         "%main:\n" +
@@ -1704,5 +1707,22 @@ public class RbnfTest extends TestFmwk {
                 {"9223372036854775808", "9,223,372,036,854,775,808"}, // We've gone beyond 64-bit precision. This can only be represented with BigDecimal.
         };
         doTest(rbnf, enTestFullData, false);
+    }
+
+    private void assertEquals(String expected, String result) {
+        if (!expected.equals(result)) {
+            errln("Expected: " + expected + " Got: " + result);
+        }
+    }
+
+    @Test
+    public void testRoundingUnrealNumbers() {
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ULocale.US, RuleBasedNumberFormat.SPELLOUT);
+        rbnf.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+        rbnf.setMaximumFractionDigits(3);
+        assertEquals("zero point one", rbnf.format(0.1));
+        assertEquals("zero point zero zero one", rbnf.format(0.0005));
+        assertEquals("infinity", rbnf.format(Double.POSITIVE_INFINITY));
+        assertEquals("not a number", rbnf.format(Double.NaN));
     }
 }

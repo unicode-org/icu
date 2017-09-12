@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.MessagePatternUtil;
 import com.ibm.icu.text.MessagePatternUtil.ArgNode;
@@ -31,7 +34,8 @@ import com.ibm.icu.text.MessagePatternUtil.VariantNode;
  * Test MessagePatternUtil (MessagePattern-as-tree-of-nodes API)
  * by building parallel trees of nodes and verifying that they match.
  */
-public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public final class MessagePatternUtilTest extends TestFmwk {
     // The following nested "Expect..." classes are used to build
     // a tree structure parallel to what the MessagePatternUtil class builds.
     // These nested test classes are not static so that they have access to TestFmwk methods.

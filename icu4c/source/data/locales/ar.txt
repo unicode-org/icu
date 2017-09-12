@@ -382,7 +382,7 @@ ar{
         minimumGroupingDigits{"1"}
         native{"arab"}
     }
-    Version{"2.1.32.86"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -748,12 +748,12 @@ ar{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"الأسبوع w من سنة y"}
-                    many{"الأسبوع w من سنة y"}
-                    one{"الأسبوع w من سنة y"}
-                    other{"الأسبوع w من سنة y"}
-                    two{"الأسبوع w من سنة y"}
-                    zero{"الأسبوع w من سنة y"}
+                    few{"الأسبوع w من سنة Y"}
+                    many{"الأسبوع w من سنة Y"}
+                    one{"الأسبوع w من سنة Y"}
+                    other{"الأسبوع w من سنة Y"}
+                    two{"الأسبوع w من سنة Y"}
+                    zero{"الأسبوع w من سنة Y"}
                 }
             }
             dayNames{

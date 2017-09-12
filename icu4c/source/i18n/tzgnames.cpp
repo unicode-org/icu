@@ -856,7 +856,7 @@ TZGNCore::loadStrings(const UnicodeString& tzCanonicalID) {
     };
 
     StringEnumeration *mzIDs = fTimeZoneNames->getAvailableMetaZoneIDs(tzCanonicalID, status);
-    while ((mzID = mzIDs->snext(status))) {
+    while ((mzID = mzIDs->snext(status)) != NULL) {
         if (U_FAILURE(status)) {
             break;
         }
@@ -1044,7 +1044,7 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
             StringEnumeration *tzIDs = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, status);
             if (U_SUCCESS(status)) {
                 const UnicodeString *tzID;
-                while ((tzID = tzIDs->snext(status))) {
+                while ((tzID = tzIDs->snext(status)) != NULL) {
                     if (U_FAILURE(status)) {
                         break;
                     }
@@ -1164,7 +1164,7 @@ static void sweepCache() {
     const UHashElement* elem;
     double now = (double)uprv_getUTCtime();
 
-    while ((elem = uhash_nextElement(gTZGNCoreCache, &pos))) {
+    while ((elem = uhash_nextElement(gTZGNCoreCache, &pos)) != NULL) {
         TZGNCoreRef *entry = (TZGNCoreRef *)elem->value.pointer;
         if (entry->refCount <= 0 && (now - entry->lastAccess) > CACHE_EXPIRATION) {
             // delete this entry

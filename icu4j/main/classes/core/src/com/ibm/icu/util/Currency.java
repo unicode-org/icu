@@ -319,6 +319,27 @@ public class Currency extends MeasureUnit {
     }
 
     /**
+     * Returns a Currency object based on the currency represented by the given java.util.Currency.
+     *
+     * @param currency The Java currency object to convert.
+     * @return An equivalent ICU currency object.
+     * @draft ICU 60
+     */
+    public static Currency fromJavaCurrency(java.util.Currency currency) {
+        return getInstance(currency.getCurrencyCode());
+    }
+
+    /**
+     * Returns a java.util.Currency object based on the currency represented by this Currency.
+     *
+     * @return An equivalent Java currency object.
+     * @draft ICU 60
+     */
+    public java.util.Currency toJavaCurrency() {
+        return java.util.Currency.getInstance(getCurrencyCode());
+    }
+
+    /**
      * Registers a new currency for the provided locale.  The returned object
      * is a key that can be used to unregister this currency object.
      *

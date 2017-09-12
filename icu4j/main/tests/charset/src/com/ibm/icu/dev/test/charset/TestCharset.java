@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.charset.CharsetCallback;
 import com.ibm.icu.charset.CharsetDecoderICU;
@@ -37,6 +39,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
+@RunWith(JUnit4.class)
 public class TestCharset extends TestFmwk {
     @Test
     public void TestUTF16Converter(){
@@ -44,18 +47,18 @@ public class TestCharset extends TestFmwk {
         Charset cs1 = icu.charsetForName("UTF-16BE");
         CharsetEncoder e1 = cs1.newEncoder();
         CharsetDecoder d1 = cs1.newDecoder();
-        
+
         Charset cs2 = icu.charsetForName("UTF-16LE");
         CharsetEncoder e2 = cs2.newEncoder();
         CharsetDecoder d2 = cs2.newDecoder();
-        
+
         for(int i=0x0000; i<0x10FFFF; i+=0xFF){
             CharBuffer us = CharBuffer.allocate(0xFF*2);
             ByteBuffer bs1 = ByteBuffer.allocate(0xFF*8);
             ByteBuffer bs2 = ByteBuffer.allocate(0xFF*8);
             for(int j=0;j<0xFF; j++){
                 int c = i+j;
-              
+
                 if((c>=0xd800&&c<=0xdFFF)||c>0x10FFFF){
                     continue;
                 }
@@ -77,7 +80,7 @@ public class TestCharset extends TestFmwk {
                     bs1.put((byte)(lead&0xFF));
                     bs1.put((byte)(trail>>8));
                     bs1.put((byte)(trail&0xFF));
-                    
+
                     bs2.put((byte)(lead&0xFF));
                     bs2.put((byte)(lead>>8));
                     bs2.put((byte)(trail&0xFF));
@@ -92,63 +95,63 @@ public class TestCharset extends TestFmwk {
                     }else{
                         bs1.put((byte)(c>>8));
                         bs1.put((byte)(c&0xFF));
-                        
+
                         bs2.put((byte)(c&0xFF));
                         bs2.put((byte)(c>>8));
                     }
                     us.put((char)c);
                 }
             }
-            
-            
+
+
             us.limit(us.position());
             us.position(0);
             if(us.length()==0){
                 continue;
             }
-            
+
 
             bs1.limit(bs1.position());
             bs1.position(0);
             ByteBuffer newBS = ByteBuffer.allocate(bs1.capacity());
             //newBS.put((byte)0xFE);
             //newBS.put((byte)0xFF);
-            newBS.put(bs1);    
+            newBS.put(bs1);
             bs1.position(0);
             smBufDecode(d1, "UTF-16", bs1, us);
             smBufEncode(e1, "UTF-16", us, newBS);
-            
+
             bs2.limit(bs2.position());
             bs2.position(0);
             newBS.clear();
             //newBS.put((byte)0xFF);
             //newBS.put((byte)0xFE);
-            newBS.put(bs2);     
+            newBS.put(bs2);
             bs2.position(0);
             smBufDecode(d2, "UTF16-LE", bs2, us);
             smBufEncode(e2, "UTF-16LE", us, newBS);
-            
+
         }
     }
-    
+
     @Test
     public void TestUTF32Converter(){
         CharsetProvider icu = new CharsetProviderICU();
         Charset cs1 = icu.charsetForName("UTF-32BE");
         CharsetEncoder e1 = cs1.newEncoder();
         CharsetDecoder d1 = cs1.newDecoder();
-        
+
         Charset cs2 = icu.charsetForName("UTF-32LE");
         CharsetEncoder e2 = cs2.newEncoder();
         CharsetDecoder d2 = cs2.newDecoder();
-        
+
         for(int i=0x000; i<0x10FFFF; i+=0xFF){
             CharBuffer us = CharBuffer.allocate(0xFF*2);
             ByteBuffer bs1 = ByteBuffer.allocate(0xFF*8);
             ByteBuffer bs2 = ByteBuffer.allocate(0xFF*8);
             for(int j=0;j<0xFF; j++){
                 int c = i+j;
-              
+
                 if((c>=0xd800&&c<=0xdFFF)||c>0x10FFFF){
                     continue;
                 }
@@ -163,13 +166,13 @@ public class TestCharset extends TestFmwk {
                     us.put((char)c);
                 }
                 bs1.put((byte) (c >>> 24));
-                bs1.put((byte) (c >>> 16)); 
-                bs1.put((byte) (c >>> 8)); 
-                bs1.put((byte) (c & 0xFF));       
-                                
-                bs2.put((byte) (c & 0xFF));  
+                bs1.put((byte) (c >>> 16));
+                bs1.put((byte) (c >>> 8));
+                bs1.put((byte) (c & 0xFF));
+
+                bs2.put((byte) (c & 0xFF));
                 bs2.put((byte) (c >>> 8));
-                bs2.put((byte) (c >>> 16)); 
+                bs2.put((byte) (c >>> 16));
                 bs2.put((byte) (c >>> 24));
             }
             bs1.limit(bs1.position());
@@ -181,41 +184,41 @@ public class TestCharset extends TestFmwk {
             if(us.length()==0){
                 continue;
             }
-             
+
 
             ByteBuffer newBS = ByteBuffer.allocate(bs1.capacity());
-            
+
             newBS.put((byte)0x00);
             newBS.put((byte)0x00);
             newBS.put((byte)0xFE);
             newBS.put((byte)0xFF);
-            
+
             newBS.put(bs1);
             bs1.position(0);
             smBufDecode(d1, "UTF-32", bs1, us);
             smBufEncode(e1, "UTF-32", us, newBS);
-            
-            
+
+
             newBS.clear();
-            
+
             newBS.put((byte)0xFF);
             newBS.put((byte)0xFE);
             newBS.put((byte)0x00);
             newBS.put((byte)0x00);
-            
-            newBS.put(bs2);    
+
+            newBS.put(bs2);
             bs2.position(0);
             smBufDecode(d2, "UTF-32LE", bs2, us);
             smBufEncode(e2, "UTF-32LE", us, newBS);
 
         }
     }
-    
+
     @Test
     public void TestASCIIConverter() {
         runTestASCIIBasedConverter("ASCII", 0x80);
     }
-    
+
     @Test
     public void Test88591Converter() {
         runTestASCIIBasedConverter("iso-8859-1", 0x100);
@@ -228,8 +231,8 @@ public class TestCharset extends TestFmwk {
         CharsetDecoder decoder = icuChar.newDecoder();
         CoderResult cr;
 
-        /* test with and without array-backed buffers */ 
-        
+        /* test with and without array-backed buffers */
+
         byte[] bytes = new byte[0x10000];
         char[] chars = new char[0x10000];
         for (int j = 0; j <= 0xffff; j++) {
@@ -241,7 +244,7 @@ public class TestCharset extends TestFmwk {
         boolean arrays = false;
         boolean decoding = false;
         int i;
-        
+
         // 0 thru limit - 1
         ByteBuffer bs = ByteBuffer.wrap(bytes, 0, limit);
         CharBuffer us = CharBuffer.wrap(chars, 0, limit);
@@ -256,26 +259,26 @@ public class TestCharset extends TestFmwk {
                 decoding = true;
                 arrays = true;
                 smBufDecode(decoder, converter, bs, us, true, false, true);
-                
+
                 decoding = true;
                 arrays = false;
                 smBufDecode(decoder, converter, bs, us, true, false, false);
-                
+
                 decoding = false;
                 arrays = true;
                 smBufEncode(encoder, converter, us, bs, true, false, true);
-                
+
                 decoding = false;
                 arrays = false;
                 smBufEncode(encoder, converter, us, bs, true, false, false);
-                
+
             } catch (Exception ex) {
                 errln("Failed to fail to " + (decoding ? "decode" : "encode") + " 0x"
                         + Integer.toHexString(i) + (arrays ? " with arrays" : " without arrays") + " in " + converter);
                 return;
             }
         }
-        
+
         // decode limit thru 255
         for (i = limit; i <= 0xff; i++) {
             bs = ByteBuffer.wrap(bytes, i, 1).slice();
@@ -300,7 +303,7 @@ public class TestCharset extends TestFmwk {
                     + (arrays ? " with arrays" : " without arrays") + " in " + converter);
             return;
         }
-        
+
         // encode limit thru 0xffff, skipping through much of the 1ff to feff range to save
         // time (it would take too much time to test every possible case)
         for (i = limit; i <= 0xffff; i = ((i>=0x1ff && i<0xfeff) ? i+0xfd : i+1)) {
@@ -326,7 +329,7 @@ public class TestCharset extends TestFmwk {
                     + (arrays ? " with arrays" : " without arrays") + " in " + converter);
             return;
         }
-        
+
         // test overflow / underflow edge cases
         outer: for (int n = 1; n <= 3; n++) {
             for (int m = 0; m < n; m++) {
@@ -356,7 +359,7 @@ public class TestCharset extends TestFmwk {
                     fail = true;
                     break outer;
                 }
-                
+
                 // expecting overflow
                 try {
                     bs = ByteBuffer.wrap(bytes, 'a', n).slice();
@@ -409,7 +412,7 @@ public class TestCharset extends TestFmwk {
             errln("Incorrect result in " + converter + " for underflow / overflow edge cases");
             return;
         }
-        
+
         // test surrogate combinations in encoding
         String lead = "\ud888";
         String trail = "\udc88";
@@ -439,7 +442,7 @@ public class TestCharset extends TestFmwk {
                 CoderResult.unmappableForLength(1),
                 CoderResult.unmappableForLength(1),
         };
-        
+
         for (int index = 0; index < input.length; index++) {
             CharBuffer source = CharBuffer.wrap(input[index]);
             cr = encoder.encode(source, bs, true);
@@ -472,7 +475,7 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-    
+
     @Test
     public void TestUTF8Converter() {
         String converter = "UTF-8";
@@ -484,13 +487,13 @@ public class TestCharset extends TestFmwk {
         CharBuffer us;
         CoderResult cr;
 
-        
+
         int[] size = new int[] { 1<<7, 1<<11, 1<<16 }; // # of 1,2,3 byte combinations
         byte[] bytes = new byte[size[0] + size[1]*2 + size[2]*3];
         char[] chars = new char[size[0] + size[1] + size[2]];
         int i = 0;
         int x, y;
-        
+
         // 0 to 1 << 7 (1 byters)
         for (; i < size[0]; i++) {
             bytes[i] = (byte) i;
@@ -554,7 +557,7 @@ public class TestCharset extends TestFmwk {
             } else {
                 bs = ByteBuffer.wrap(bytes, x, 3).slice();
                 us = CharBuffer.wrap(chars, y, 1).slice();
-                
+
                 decoder.reset();
                 cr = decoder.decode(bs, us, true);
                 bs.rewind();
@@ -573,10 +576,10 @@ public class TestCharset extends TestFmwk {
                             + Integer.toHexString(i) + " received " + cr);
                     break;
                 }
-                
+
                 bs = ByteBuffer.wrap(bytes, x, 3).slice();
                 us = CharBuffer.wrap(new String(chars, y, 1));
-                
+
                 decoder.reset();
                 cr = decoder.decode(bs, us, true);
                 bs.rewind();
@@ -595,14 +598,14 @@ public class TestCharset extends TestFmwk {
                             + Integer.toHexString(i) + " received " + cr);
                     break;
                 }
-                
-                
+
+
             }
         }
         if (true)
             return;
     }
-    
+
     @Test
     public void TestHZ() {
         /* test input */
@@ -620,7 +623,7 @@ public class TestCharset extends TestFmwk {
                 0x0051, 0x0052, 0x0053, 0x000A, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059,
                 0x005A, 0x005B, 0x005C, 0x000A
           };
-        
+
         String converter = "HZ";
         CharsetProvider icu = new CharsetProviderICU();
         Charset icuChar = icu.charsetForName(converter);
@@ -630,14 +633,14 @@ public class TestCharset extends TestFmwk {
             CharBuffer start = CharBuffer.wrap(in);
             ByteBuffer bytes = encoder.encode(start);
             CharBuffer finish = decoder.decode(bytes);
-            
+
             if (!equals(start, finish)) {
                 errln(converter + " roundtrip test failed: start does not match finish");
-                
+
                 char[] finishArray = new char[finish.limit()];
                 for (int i=0; i<finishArray.length; i++)
                     finishArray[i] = finish.get(i);
-                
+
                 logln("start:  " + hex(in));
                 logln("finish: " + hex(finishArray));
             }
@@ -645,7 +648,7 @@ public class TestCharset extends TestFmwk {
             errln(converter + " roundtrip test failed: " + ex.getMessage());
             ex.printStackTrace(System.err);
         }
-        
+
         /* For better code coverage */
         CoderResult result = CoderResult.UNDERFLOW;
         byte byteout[] = {
@@ -667,7 +670,7 @@ public class TestCharset extends TestFmwk {
             bb.position(bbPositions[i]);
             cb.position(ccPositions[i]);
             result = encoder.encode(cb, bb, true);
-            
+
             if (i < 3) {
                 if (!result.isOverflow()) {
                     errln("Overflow buffer error should have occurred while encoding HZ (" + i + ")");
@@ -721,12 +724,12 @@ public class TestCharset extends TestFmwk {
             { '\u0062', },
             { '\u0062', },
         };
-        
+
         String converter = "UTF-8";
         CharsetProvider icu = new CharsetProviderICU();
         Charset icuChar = icu.charsetForName(converter);
         CharsetDecoder decoder = icuChar.newDecoder();
-        
+
         int i;
         try {
             for (i = 0; i < in.length; i++) {
@@ -754,24 +757,24 @@ public class TestCharset extends TestFmwk {
             errln("Incorrect result in " + converter);
         }
     }
-    
+
     @Test
     public void TestSurrogateBehavior() {
         CharsetProviderICU icu = new CharsetProviderICU();
-        
+
         // get all the converters into an array
         Object[] converters = CharsetProviderICU.getAvailableNames();
-        
+
         String norm = "a";
         String ext = "\u0275"; // theta
         String lead = "\ud835";
         String trail = "\udd04";
         // lead + trail = \U1d504 (fraktur capital A)
-        
-        String input = 
+
+        String input =
                         // error    position
                 ext     // unmap(1) 1
-                + lead  // under    1  
+                + lead  // under    1
                 + lead  // malf(1)  2
                 + trail // unmap(2) 4
                 + trail // malf(1)  5
@@ -789,7 +792,7 @@ public class TestCharset extends TestFmwk {
         };
         int[] positions = new int[] { 1,1,2,4,5,6,7 };
         int n = positions.length;
-        
+
         int badcount = 0;
         int goodcount = 0;
         int[] uhohindices = new int[n];
@@ -798,7 +801,7 @@ public class TestCharset extends TestFmwk {
         int[] unmapindices = new int[n];
         ArrayList pass = new ArrayList();
         ArrayList exempt = new ArrayList();
-        
+
         outer: for (int conv=0; conv<converters.length; conv++) {
             String converter = (String)converters[conv];
             if (converter.equals("x-IMAP-mailbox-name") || converter.equals("UTF-7") || converter.equals("CESU-8") || converter.equals("BOCU-1") ||
@@ -806,12 +809,12 @@ public class TestCharset extends TestFmwk {
                 exempt.add(converter);
                 continue;
             }
-            
+
             boolean currentlybad = false;
             Charset icuChar = icu.charsetForName(converter);
             CharsetEncoder encoder = icuChar.newEncoder();
             CoderResult cr;
-                
+
             CharBuffer source = CharBuffer.wrap(input);
             ByteBuffer target = ByteBuffer.allocate(30);
             ByteBuffer expected = null;
@@ -828,7 +831,7 @@ public class TestCharset extends TestFmwk {
                 errln(converter + " " + ex.getClass().getName() + ": " + ex.getMessage());
                 continue outer;
             }
-            
+
             encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
             encoder.onMalformedInput(CodingErrorAction.REPORT);
             for (int i=0; i<n; i++) {
@@ -852,23 +855,23 @@ public class TestCharset extends TestFmwk {
                     badposindices[i]++;
                     errln("(index=" + i + ") " + converter + " Received: " + source.position() + " Expected: " + positions[i]);
                 }
-                    
+
             }
             encoder.reset();
-            
+
             //System.out.println("\n" + hex(target.array()));
             //System.out.println(hex(expected.array()) + "\n" + expected.limit());
             if (!(equals(target, expected, expected.limit()) && target.position() == expected.limit())) {
                 if (!currentlybad) {currentlybad = true; badcount++; logln(""); }
                 errln(converter + " Received: \"" + hex(target.array()) + "\" Expected: \"" + hex(expected.array()) + "\"");
             }
-            
+
             if (!currentlybad) {
                 goodcount++;
                 pass.add(converter);
             }
         }
-        
+
         logln("\n" + badcount + " / " + (converters.length - exempt.size()) + "   (" + goodcount + " good, " + badcount + " bad)");
         log("index\t"); for (int i=0; i<n; i++) log(i + "\t"); logln("");
         log("unmap\t"); for (int i=0; i<n; i++) log(unmapindices[i] + "\t"); logln("");
@@ -876,35 +879,35 @@ public class TestCharset extends TestFmwk {
         log("pos  \t"); for (int i=0; i<n; i++) log(badposindices[i] + "\t"); logln("");
         log("uhoh \t"); for (int i=0; i<n; i++) log(uhohindices[i] + "\t"); logln("");
         logln("");
-        log("The few that passed: "); for (int i=0; i<pass.size(); i++) log(pass.get(i) + ", "); logln(""); 
-        log("The few that are exempt: "); for (int i=0; i<exempt.size(); i++) log(exempt.get(i) + ", "); logln(""); 
+        log("The few that passed: "); for (int i=0; i<pass.size(); i++) log(pass.get(i) + ", "); logln("");
+        log("The few that are exempt: "); for (int i=0; i<exempt.size(); i++) log(exempt.get(i) + ", "); logln("");
     }
-    
+
 //    public void TestCharsetCallback() {
 //        String currentTest = "initialization";
 //        try {
 //            Class[] params;
-//            
+//
 //            // get the classes
 //            Class CharsetCallback = Class.forName("com.ibm.icu.charset.CharsetCallback");
 //            Class Decoder = Class.forName("com.ibm.icu.charset.CharsetCallback$Decoder");
 //            Class Encoder = Class.forName("com.ibm.icu.charset.CharsetCallback$Encoder");
-//            
+//
 //            // set up encoderCall
-//            params = new Class[] {CharsetEncoderICU.class, Object.class, 
-//                    CharBuffer.class, ByteBuffer.class, IntBuffer.class, 
+//            params = new Class[] {CharsetEncoderICU.class, Object.class,
+//                    CharBuffer.class, ByteBuffer.class, IntBuffer.class,
 //                    char[].class, int.class, int.class, CoderResult.class };
 //            Method encoderCall = Encoder.getDeclaredMethod("call", params);
-//            
+//
 //            // set up decoderCall
-//            params = new Class[] {CharsetDecoderICU.class, Object.class, 
+//            params = new Class[] {CharsetDecoderICU.class, Object.class,
 //                    ByteBuffer.class, CharBuffer.class, IntBuffer.class,
 //                    char[].class, int.class, CoderResult.class};
 //            Method decoderCall = Decoder.getDeclaredMethod("call", params);
-//            
+//
 //            // get relevant fields
 //            Object SUB_STOP_ON_ILLEGAL = getFieldValue(CharsetCallback, "SUB_STOP_ON_ILLEGAL", null);
-//            
+//
 //            // set up a few arguments
 //            CharsetProvider provider = new CharsetProviderICU();
 //            Charset charset = provider.charsetForName("UTF-8");
@@ -925,12 +928,12 @@ public class TestCharset extends TestFmwk {
 //            CoderResult unmap = CoderResult.unmappableForLength(2);
 //            CoderResult malf = CoderResult.malformedForLength(2);
 //            CoderResult under = CoderResult.UNDERFLOW;
-//            
+//
 //            // set up error arrays
 //            Integer invalidCharLength = new Integer(1);
 //            Byte subChar1 = new Byte((byte)0);
 //            Byte subChar1_alternate = new Byte((byte)1); // for TO_U_CALLBACK_SUBSTITUTE
-//            
+//
 //            // set up chars and bytes backups and expected values for certain cases
 //            CharBuffer charsBackup = bufferCopy(chars);
 //            ByteBuffer bytesBackup = bufferCopy(bytes);
@@ -942,70 +945,70 @@ public class TestCharset extends TestFmwk {
 //            CharBuffer decoderCharsExpected2 = bufferCopy(chars);
 //            IntBuffer decoderOffsetsExpected1 = bufferCopy(offsets);
 //            IntBuffer decoderOffsetsExpected2 = bufferCopy(offsets);
-//            
+//
 //            // initialize fields to obtain expected data
 //            setFieldValue(CharsetDecoderICU.class, "invalidCharLength", decoder, invalidCharLength);
 //            setFieldValue(CharsetICU.class, "subChar1", ((CharsetICU) decoder.charset()), subChar1);
-//            
+//
 //            // run cbFromUWriteSub
 //            Method cbFromUWriteSub = CharsetEncoderICU.class.getDeclaredMethod("cbFromUWriteSub", new Class[] { CharsetEncoderICU.class, CharBuffer.class, ByteBuffer.class, IntBuffer.class});
 //            cbFromUWriteSub.setAccessible(true);
 //            CoderResult encoderResultExpected = (CoderResult)cbFromUWriteSub.invoke(encoder, new Object[] {encoder, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected});
-//            
+//
 //            // run toUWriteUChars with normal data
 //            Method toUWriteUChars = CharsetDecoderICU.class.getDeclaredMethod("toUWriteUChars", new Class[] { CharsetDecoderICU.class, char[].class, int.class, int.class, CharBuffer.class, IntBuffer.class, int.class});
 //            toUWriteUChars.setAccessible(true);
 //            CoderResult decoderResultExpected1 = (CoderResult)toUWriteUChars.invoke(decoder, new Object[] {decoder, new char[] {0xFFFD}, new Integer(0), new Integer(1), decoderCharsExpected1, decoderOffsetsExpected1, new Integer(bytes.position())});
-//            
+//
 //            // reset certain fields
 //            setFieldValue(CharsetDecoderICU.class, "invalidCharLength", decoder, invalidCharLength);
 //            setFieldValue(CharsetICU.class, "subChar1", ((CharsetICU) decoder.charset()), subChar1_alternate);
-//            
+//
 //            // run toUWriteUChars again
 //            CoderResult decoderResultExpected2 = (CoderResult)toUWriteUChars.invoke(decoder, new Object[] {decoder, new char[] {0x1A}, new Integer(0), new Integer(1), decoderCharsExpected2, decoderOffsetsExpected2, new Integer(bytes.position())});
-//            
+//
 //            // begin creating the tests array
 //            ArrayList tests = new ArrayList();
-//            
+//
 //            // create tests for FROM_U_CALLBACK_SKIP   0
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SKIP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-//            
+//
 //            // create tests for TO_U_CALLBACK_SKIP    4
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, unmap }, under, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SKIP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL + "xx", bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-//            
+//
 //            // create tests for FROM_U_CALLBACK_STOP   8
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, unmap, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_STOP", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-//            
+//
 //            // create tests for TO_U_CALLBACK_STOP   12
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL, bytes, chars, offsets, buffer, length, unmap }, unmap, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_STOP", new Object[] { decoder, SUB_STOP_ON_ILLEGAL + "xx", bytes, chars, offsets, buffer, length, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { invalidCharLength, subChar1 }});
-//            
+//
 //            // create tests for FROM_U_CALLBACK_SUBSTITUTE  16
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, null, chars, bytes, offsets, buffer, length, cp, null }, encoderResultExpected, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, malf }, malf, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL, chars, bytes, offsets, buffer, length, cp, unmap }, encoderResultExpected, encoderCharsExpected, encoderBytesExpected, encoderOffsetsExpected, new Object[] { }});
 //            tests.add(new Object[] {encoderCall, "FROM_U_CALLBACK_SUBSTITUTE", new Object[] { encoder, SUB_STOP_ON_ILLEGAL + "xx", chars, bytes, offsets, buffer, length, cp, null }, null, charsBackup, bytesBackup, offsetsBackup, new Object[] { }});
-//            
+//
 //            // create tests for TO_U_CALLBACK_SUBSTITUTE   20
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SUBSTITUTE", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, decoderResultExpected1, decoderCharsExpected1, bytesBackup, decoderOffsetsExpected1, new Object[] { invalidCharLength, subChar1 }});
 //            tests.add(new Object[] {decoderCall, "TO_U_CALLBACK_SUBSTITUTE", new Object[] { decoder, null, bytes, chars, offsets, buffer, length, null }, decoderResultExpected2, decoderCharsExpected2, bytesBackup, decoderOffsetsExpected2, new Object[] { invalidCharLength, subChar1_alternate }});
-//            
+//
 //            Iterator iter = tests.iterator();
 //            for (int i=0; iter.hasNext(); i++) {
 //                // get the data out of the map
 //                Object[] next = (Object[])iter.next();
-//                
+//
 //                Method method = (Method)next[0];
 //                String fieldName = (String)next[1];
 //                Object field = getFieldValue(CharsetCallback, fieldName, null);
@@ -1014,7 +1017,7 @@ public class TestCharset extends TestFmwk {
 //                CharBuffer charsExpected = (CharBuffer)next[4];
 //                ByteBuffer bytesExpected = (ByteBuffer)next[5];
 //                IntBuffer offsetsExpected = (IntBuffer)next[6];
-//                
+//
 //                // set up error arrays and certain fields
 //                Object[] values = (Object[])next[7];
 //                if (method == decoderCall) {
@@ -1024,18 +1027,18 @@ public class TestCharset extends TestFmwk {
 //                } else if (method == encoderCall) {
 //                    encoder.reset();
 //                }
-//                
+//
 //                try {
 //                    // invoke the method
 //                    CoderResult actual = (CoderResult)method.invoke(field, args);
-//                    
+//
 //                    // if expected != actual
 //                    if (!coderResultsEqual(expected, actual)) {
 //                        // case #i refers to the index in the arraylist tests
 //                        errln(fieldName + " failed to return the correct result for case #" + i + ".");
 //                    }
 //                    // if the expected buffers != actual buffers
-//                    else if (!(buffersEqual(chars, charsExpected) && 
+//                    else if (!(buffersEqual(chars, charsExpected) &&
 //                            buffersEqual(bytes, bytesExpected) &&
 //                            buffersEqual(offsets, offsetsExpected))) {
 //                        // case #i refers to the index in the arraylist tests
@@ -1046,7 +1049,7 @@ public class TestCharset extends TestFmwk {
 //                    errln(fieldName + " threw an exception for case #" + i + ": " + ex.getCause());
 //                    //ex.getCause().printStackTrace();
 //                }
-//                
+//
 //                // reset the buffers
 //                System.arraycopy(bytesBackup.array(), 0, bytes.array(), 0, 10);
 //                System.arraycopy(charsBackup.array(), 0, chars.array(), 0, 10);
@@ -1055,13 +1058,13 @@ public class TestCharset extends TestFmwk {
 //                chars.position(charsBackup.position());
 //                offsets.position(offsetsBackup.position());
 //            }
-//            
+//
 //        } catch (Exception ex) {
 //            errln("TestCharsetCallback skipped due to " + ex.toString());
 //            ex.printStackTrace();
 //        }
 //    }
-//    
+//
 //    private Object getFieldValue(Class c, String name, Object instance) throws Exception {
 //        Field field = c.getDeclaredField(name);
 //        field.setAccessible(true);
@@ -1147,7 +1150,7 @@ public class TestCharset extends TestFmwk {
 //        dest.position(src.position());
 //        return dest;
 //    }
-    
+
 
     @Test
     public void TestAPISemantics(/*String encoding*/) {
@@ -1243,7 +1246,7 @@ public class TestCharset extends TestFmwk {
                 }
                 if (result.isError()) {
                     errln("ToChars single the result is an error "+result.toString());
-                } 
+                }
             }
             if (unistr.length() != (chars.limit())) {
                 errln("ToChars single len does not match");
@@ -1476,7 +1479,7 @@ public class TestCharset extends TestFmwk {
         } else {
             boolean result = true;
             for (int i = 0; i < chars.length; i++) {
-                if (chars[i] != compareTo[i]) {    
+                if (chars[i] != compareTo[i]) {
                     logln(
                         "Got: "
                             + hex(chars[i])
@@ -1548,7 +1551,7 @@ public class TestCharset extends TestFmwk {
   /*
     @Test
     public void TestCallback(String encoding) throws Exception {
-        
+
         byte[] gbSource =
             {
                 (byte) 0x81,
@@ -1583,20 +1586,20 @@ public class TestCharset extends TestFmwk {
         if (!equals(myTarget, new String(expectedResult))) {
             errln("Test callback GB18030 to Unicode : FAILED");
         }
-        
+
     }
 */
 
     @Test
     public void TestCanConvert(/*String encoding*/)throws Exception {
-        char[] mySource = { 
+        char[] mySource = {
             '\ud800', '\udc00',/*surrogate pair */
             '\u22A6','\u22A7','\u22A8','\u22A9','\u22AA',
             '\u22AB','\u22AC','\u22AD','\u22AE','\u22AF',
             '\u22B0','\u22B1','\u22B2','\u22B3','\u22B4',
             '\ud800','\udc00',/*surrogate pair */
             '\u22B5','\u22B6','\u22B7','\u22B8','\u22B9',
-            '\u22BA','\u22BB','\u22BC','\u22BD','\u22BE' 
+            '\u22BA','\u22BB','\u22BC','\u22BD','\u22BE'
             };
         String encoding = "UTF-16";
         CharsetEncoder encoder = null;
@@ -1613,7 +1616,7 @@ public class TestCharset extends TestFmwk {
         }
 
     }
-    
+
     @Test
     public void TestAvailableCharsets() {
         SortedMap map = Charset.availableCharsets();
@@ -1640,7 +1643,7 @@ public class TestCharset extends TestFmwk {
             errln("Did not get the expected canonical name. Got: "+canonicalName); //get the canonical name
         }
     }
-    
+
     @Test
     public void TestICUAvailableCharsets() {
         CharsetProviderICU icu = new CharsetProviderICU();
@@ -1711,27 +1714,27 @@ public class TestCharset extends TestFmwk {
             warnln("Error creating charset encoder for " + encoding + ": " + e);
         }
     }
-    
+
     @Test
     public void TestSubBytes(){
         try{
             //create utf-8 decoder
             CharsetDecoder decoder = new CharsetProviderICU().charsetForName("utf-8").newDecoder();
-    
+
             //create a valid byte array, which can be decoded to " buffer"
             byte[] unibytes = new byte[] { 0x0020, 0x0062, 0x0075, 0x0066, 0x0066, 0x0065, 0x0072 };
-    
+
             ByteBuffer buffer = ByteBuffer.allocate(20);
-    
+
             //add a evil byte to make the byte buffer be malformed input
             buffer.put((byte)0xd8);
-    
+
             //put the valid byte array
             buffer.put(unibytes);
-    
+
             //reset postion
-            buffer.flip();  
-            
+            buffer.flip();
+
             decoder.onMalformedInput(CodingErrorAction.REPLACE);
             CharBuffer out = decoder.decode(buffer);
             String expected = "\ufffd buffer";
@@ -1748,7 +1751,7 @@ public class TestCharset extends TestFmwk {
 
         @Test
     public void TestImplFlushFailure(){
-   
+
        try{
            CharBuffer in = CharBuffer.wrap("\u3005\u3006\u3007\u30FC\u2015\u2010\uFF0F");
            CharsetEncoder encoder = new CharsetProviderICU().charsetForName("iso-2022-jp").newEncoder();
@@ -1758,16 +1761,16 @@ public class TestCharset extends TestFmwk {
            if(out.position()!= 20){
                errln("Did not get the expected position from flush");
            }
-           
+
        }catch (Exception ex){
            errln("Could not create encoder for  iso-2022-jp exception: "+ex.toString());
-       } 
+       }
     }
    */
 
         @Test
     public void TestISO88591() {
-       
+
         Charset cs = new CharsetProviderICU().charsetForName("iso-8859-1");
         if(cs!=null){
             CharsetEncoder encoder = cs.newEncoder();
@@ -1779,7 +1782,7 @@ public class TestCharset extends TestFmwk {
         }else{
             errln("Could not create Charset for iso-8859-1");
         }
-        
+
     }
 
     @Test
@@ -1828,7 +1831,7 @@ public class TestCharset extends TestFmwk {
                logln("\\ud800 is malformed for JDK utf-8 encoder");
               //e.printStackTrace();
            }
-           
+
            CharsetEncoder encoderJDK = Charset.forName("utf-8").newEncoder();
            try {
                encoderJDK.encode(CharBuffer.wrap("\ud800"));
@@ -1836,9 +1839,9 @@ public class TestCharset extends TestFmwk {
            } catch (Exception e) {
                logln("\\ud800 is malformed for JDK utf-8 encoder");
                //e.printStackTrace();
-           }         
+           }
     }
-    
+
     @Test
     public void TestUTF16Bom(){
 
@@ -1875,7 +1878,7 @@ public class TestCharset extends TestFmwk {
             equals(rt, in);
         }
     }
-     
+
     private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target,
             boolean throwException, boolean flush) throws BufferOverflowException, Exception {
         smBufDecode(decoder, encoding, source, target, throwException, flush, true);
@@ -2146,54 +2149,6 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    // TODO(junit): orphan method
-    public void convertAllTest(ByteBuffer bSource, CharBuffer uSource) throws Exception {
-        String encoding = "UTF-16";
-        CharsetDecoder decoder = null;
-        CharsetEncoder encoder = null;
-        try {
-            CharsetProviderICU provider = new CharsetProviderICU();
-            Charset charset = provider.charsetForName(encoding);
-            decoder = charset.newDecoder();
-            encoder = charset.newEncoder();
-        } catch(MissingResourceException ex) {
-            warnln("Could not load charset data: " + encoding);
-            return;
-        }
-        {
-            try {
-                decoder.reset();
-                ByteBuffer mySource = bSource.duplicate();
-                CharBuffer myTarget = decoder.decode(mySource);
-                if (!equals(myTarget, uSource)) {
-                    errln(
-                        "--Test convertAll() "
-                            + encoding
-                            + " to Unicode  --FAILED");
-                }
-            } catch (Exception e) {
-                //e.printStackTrace();
-                errln(e.getMessage());
-            }
-        }
-        {
-            try {
-                encoder.reset();
-                CharBuffer mySource = CharBuffer.wrap(uSource);
-                ByteBuffer myTarget = encoder.encode(mySource);
-                if (!equals(myTarget, bSource)) {
-                    errln(
-                        "--Test convertAll() "
-                            + encoding
-                            + " to Unicode  --FAILED");
-                }
-            } catch (Exception e) {
-                //e.printStackTrace();
-                errln("encoder.encode() failed "+ e.getMessage()+" "+e.toString());
-            }
-        }
-
-    }
 
     //TODO
     /*
@@ -2221,11 +2176,11 @@ public class TestCharset extends TestFmwk {
     }
 
     /*private void fromUnicodeTest() throws Exception {
-        
+
         logln("Loaded Charset: " + charset.getClass().toString());
         logln("Loaded CharsetEncoder: " + encoder.getClass().toString());
         logln("Loaded CharsetDecoder: " + decoder.getClass().toString());
-        
+
         ByteBuffer myTarget = ByteBuffer.allocate(gbSource.length);
         logln("Created ByteBuffer of length: " + uSource.length);
         CharBuffer mySource = CharBuffer.wrap(uSource);
@@ -2235,17 +2190,17 @@ public class TestCharset extends TestFmwk {
         encoder.encode(mySource, myTarget, true);
         if (!equals(myTarget, gbSource)) {
             errln("--Test Unicode to " + encoding + ": FAILED");
-        } 
+        }
         logln("Test Unicode to " + encoding +" passed");
     }
 
     @Test
     public void TestToUnicode( ) throws Exception {
-        
+
         logln("Loaded Charset: " + charset.getClass().toString());
         logln("Loaded CharsetEncoder: " + encoder.getClass().toString());
         logln("Loaded CharsetDecoder: " + decoder.getClass().toString());
-        
+
         CharBuffer myTarget = CharBuffer.allocate(uSource.length);
         ByteBuffer mySource = ByteBuffer.wrap(getByteArray(gbSource));
         decoder.reset();
@@ -2283,7 +2238,7 @@ public class TestCharset extends TestFmwk {
             errln("Encountered exception in smBufCharset");
         }
     }
-    
+
     @Test
     public void TestMultithreaded() throws Exception {
         final Charset cs = Charset.forName(encoding);
@@ -2297,7 +2252,7 @@ public class TestCharset extends TestFmwk {
                     // commented out since the mehtods on
                     // Charset API are supposed to be thread
                     // safe ... to test it we dont sync
-            
+
                     // synchronized(charset){
                    while (!interrupted()) {
                         try {
@@ -2410,9 +2365,9 @@ public class TestCharset extends TestFmwk {
         }
     }
     */
-    
+
     @Test
-    public void TestMBCS(){      
+    public void TestMBCS(){
         {
             // Encoder: from Unicode conversion
             CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("ibm-971").newEncoder();
@@ -2448,11 +2403,11 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-    
+
     @Test
     public void TestJB4897(){
         CharsetProviderICU provider = new CharsetProviderICU();
-        Charset charset = provider.charsetForName("x-abracadabra");  
+        Charset charset = provider.charsetForName("x-abracadabra");
         if(charset!=null && charset.canEncode()== true){
             errln("provider.charsetForName() does not validate the charset names" );
         }
@@ -2475,7 +2430,7 @@ public class TestCharset extends TestFmwk {
     //test to make sure that number of aliases and canonical names are in the charsets that are in
     @Test
     public void TestAllNames() {
-        
+
         CharsetProviderICU provider= new CharsetProviderICU();
         Object[] available = CharsetProviderICU.getAvailableNames();
         for(int i=0; i<available.length;i++){
@@ -2487,7 +2442,7 @@ public class TestCharset extends TestFmwk {
                     continue;
                 }
                 Charset cs = provider.charsetForName((String)available[i]);
-              
+
                 Object[] javaAliases =  cs.aliases().toArray();
                 //seach for ICU canonical name in javaAliases
                 boolean inAliasList = false;
@@ -2582,7 +2537,7 @@ public class TestCharset extends TestFmwk {
         CharBuffer out = CharBuffer.allocate(3);
         return decoder.decode(in, out, true);
     }
-    
+
     @Test
     public void TestJavaUTF16Decoder(){
         CharsetProviderICU provider = new CharsetProviderICU();
@@ -2626,14 +2581,14 @@ public class TestCharset extends TestFmwk {
     public void TestUTF32BOM(){
 
         Charset cs = (new CharsetProviderICU()).charsetForName("UTF-32");
-        char[] in = new char[] { 0xd800, 0xdc00, 
+        char[] in = new char[] { 0xd800, 0xdc00,
                                  0xd801, 0xdc01,
-                                 0xdbff, 0xdfff, 
-                                 0xd900, 0xdd00, 
+                                 0xdbff, 0xdfff,
+                                 0xd900, 0xdd00,
                                  0x0000, 0x0041,
                                  0x0000, 0x0042,
                                  0x0000, 0x0043};
-        
+
         CharBuffer inBuf = CharBuffer.allocate(in.length);
         inBuf.put(in);
         CharsetEncoder encoder = cs.newEncoder();
@@ -2641,7 +2596,7 @@ public class TestCharset extends TestFmwk {
         inBuf.rewind();
         encoder.encode(inBuf, outBuf, true);
         outBuf.rewind();
-        if(outBuf.get(0)!= (byte)0x00 && outBuf.get(1)!= (byte)0x00 && 
+        if(outBuf.get(0)!= (byte)0x00 && outBuf.get(1)!= (byte)0x00 &&
                 outBuf.get(2)!= (byte)0xFF && outBuf.get(3)!= (byte)0xFE){
             errln("The UTF32 encoder did not appended bom. Length returned: " + outBuf.remaining());
         }
@@ -2668,12 +2623,12 @@ public class TestCharset extends TestFmwk {
             // swallow the expection.
         }
     }
-    
+
     /*
      *  Michael Ow
      *  Modified 070424
      */
-    /*The following two methods provides the option of exceptions when Decoding 
+    /*The following two methods provides the option of exceptions when Decoding
      * and Encoding if needed for testing purposes.
      */
     private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target) {
@@ -2682,8 +2637,8 @@ public class TestCharset extends TestFmwk {
     private void smBufDecode(CharsetDecoder decoder, String encoding, ByteBuffer source, CharBuffer target, boolean backedByArray) {
         try {
             smBufDecode(decoder, encoding, source, target, false, false, backedByArray);
-        }    
-        catch (Exception ex) {           
+        }
+        catch (Exception ex) {
             System.out.println("!exception!");
         }
     }
@@ -2692,7 +2647,7 @@ public class TestCharset extends TestFmwk {
     }
     private void smBufEncode(CharsetEncoder encoder, String encoding, CharBuffer source, ByteBuffer target, boolean backedByArray)  {
         try {
-            smBufEncode(encoder, encoding, source, target, false, false); 
+            smBufEncode(encoder, encoding, source, target, false, false);
         }
         catch (Exception ex) {
             System.out.println("!exception!");
@@ -2704,7 +2659,7 @@ public class TestCharset extends TestFmwk {
     public void TestNullCanonicalName() {
         String enc = null;
         String canonicalName = CharsetProviderICU.getICUCanonicalName(enc);
-        
+
         if (canonicalName != null) {
             errln("getICUCanonicalName return a non-null string for given null string");
         }
@@ -2713,9 +2668,9 @@ public class TestCharset extends TestFmwk {
     @Test
     public void TestGetAllNames() {
         String[] names = null;
-        
+
         names = CharsetProviderICU.getAllNames();
-        
+
         if (names == null) {
             errln("getAllNames returned a null string.");
         }
@@ -2725,29 +2680,29 @@ public class TestCharset extends TestFmwk {
     @Test
     public void TestCharsetContains() {
         boolean test;
-        
-        CharsetProvider provider = new CharsetProviderICU();     
+
+        CharsetProvider provider = new CharsetProviderICU();
         Charset cs1 = provider.charsetForName("UTF-32");
         Charset cs2 = null;
-        
+
         test = cs1.contains(cs2);
-        
+
         if (test != false) {
             errln("Charset.contains returned true for a null charset.");
         }
-        
+
         cs2 = CharsetICU.forNameICU("UTF-32");
-        
+
         test = cs1.contains(cs2);
-        
+
         if (test != true) {
             errln("Charset.contains returned false for an identical charset.");
         }
-        
+
         cs2 = provider.charsetForName("UTF-8");
-        
+
         test = cs1.contains(cs2);
-        
+
         if (test != false) {
             errln("Charset.contains returned true for a different charset.");
         }
@@ -2756,42 +2711,42 @@ public class TestCharset extends TestFmwk {
     @Test
     public void TestCharsetICUNullCharsetName() {
         String charsetName = null;
-        
+
         try {
             CharsetICU.forNameICU(charsetName);
             errln("CharsetICU.forName should have thown an exception after getting a null charsetName.");
         }
-        catch(Exception ex) {          
+        catch(Exception ex) {
         }
     }
-    
+
     //Test CharsetASCII
     @Test
     public void TestCharsetASCIIOverFlow() {
         int byteBufferLimit;
         int charBufferLimit;
-        
+
         CharsetProvider provider = new CharsetProviderICU();
-        Charset cs = provider.charsetForName("ASCII");        
+        Charset cs = provider.charsetForName("ASCII");
         CharsetEncoder encoder = cs.newEncoder();
         CharsetDecoder decoder = cs.newDecoder();
-        
+
         CharBuffer charBuffer = CharBuffer.allocate(0x90);
         ByteBuffer byteBuffer = ByteBuffer.allocate(0x90);
-        
+
         CharBuffer charBufferTest = CharBuffer.allocate(0xb0);
         ByteBuffer byteBufferTest = ByteBuffer.allocate(0xb0);
-        
+
         for(int j=0;j<=0x7f; j++){
            charBuffer.put((char)j);
            byteBuffer.put((byte)j);
         }
-        
+
         byteBuffer.limit(byteBufferLimit = byteBuffer.position());
         byteBuffer.position(0);
         charBuffer.limit(charBufferLimit = charBuffer.position());
         charBuffer.position(0);
-        
+
         //test for overflow
         byteBufferTest.limit(byteBufferLimit - 5);
         byteBufferTest.position(0);
@@ -2809,7 +2764,7 @@ public class TestCharset extends TestFmwk {
         }
         catch (Exception ex) {
         }
-        
+
         // For better code coverage
         /* For better code coverage */
         byte byteout[] = {
@@ -2834,20 +2789,20 @@ public class TestCharset extends TestFmwk {
     public void TestCharsetUTF7() {
         CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
-        Charset cs = provider.charsetForName("UTF-7");        
+        Charset cs = provider.charsetForName("UTF-7");
         CharsetEncoder encoder = cs.newEncoder();
         CharsetDecoder decoder = cs.newDecoder();
-        
+
         CharBuffer us = CharBuffer.allocate(0x100);
         ByteBuffer bs = ByteBuffer.allocate(0x100);
-        
+
         /* Unicode :  A<not equal to Alpha Lamda>. */
         /* UTF7: AImIDkQ. */
         us.put((char)0x41); us.put((char)0x2262); us.put((char)0x391); us.put((char)0x39B); us.put((char)0x2e);
-        bs.put((byte)0x41); bs.put((byte)0x2b); bs.put((byte)0x49); bs.put((byte)0x6d); 
-        bs.put((byte)0x49); bs.put((byte)0x44); bs.put((byte)0x6b); bs.put((byte)0x51); 
+        bs.put((byte)0x41); bs.put((byte)0x2b); bs.put((byte)0x49); bs.put((byte)0x6d);
+        bs.put((byte)0x49); bs.put((byte)0x44); bs.put((byte)0x6b); bs.put((byte)0x51);
         bs.put((byte)0x4f); bs.put((byte)0x62); bs.put((byte)0x2e);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
@@ -2855,20 +2810,20 @@ public class TestCharset extends TestFmwk {
 
         smBufDecode(decoder, "UTF-7", bs, us);
         smBufEncode(encoder, "UTF-7", us, bs);
-        
+
         /* Testing UTF-7 toUnicode with substitute callbacks */
         {
             byte [] bytesTestErrorConsumption = {
                     /* a~       a+AB~                         a+AB\x0c                      a+AB-                         a+AB.                         a+. */
                     0x61, 0x7e, 0x61, 0x2b, 0x41, 0x42, 0x7e, 0x61, 0x2b, 0x41, 0x42, 0x0c, 0x61, 0x2b, 0x41, 0x42, 0x2d, 0x61, 0x2b, 0x41, 0x42, 0x2e, 0x61, 0x2b, 0x2e
-    
+
             };
             char [] unicodeTestErrorConsumption = {
                     0x61, 0xfffd, 0x61, 0xfffd, 0xfffd, 0x61, 0xfffd, 0xfffd, 0x61, 0xfffd, 0x61, 0xfffd, 0x2e, 0x61, 0xfffd, 0x2e
             };
             bs = ByteBuffer.wrap(bytesTestErrorConsumption);
             us = CharBuffer.wrap(unicodeTestErrorConsumption);
-    
+
             CodingErrorAction savedMal = decoder.malformedInputAction();
             CodingErrorAction savedUMap = decoder.unmappableCharacterAction();
             decoder.onMalformedInput(CodingErrorAction.REPLACE);
@@ -2887,16 +2842,16 @@ public class TestCharset extends TestFmwk {
             errln("Buffer Overflow exception should have been thrown while decoding UTF-7.");
         } catch (Exception ex) {
         }
-        
+
         //The rest of the code in this method is to provide better code coverage
         CharBuffer ccus = CharBuffer.allocate(0x10);
         ByteBuffer ccbs = ByteBuffer.allocate(0x10);
-        
+
         //start of charset decoder code coverage code
         //test for accurate illegal and control character checking
         ccbs.put((byte)0x0D); ccbs.put((byte)0x05);
         ccus.put((char)0x0000);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
@@ -2908,131 +2863,131 @@ public class TestCharset extends TestFmwk {
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for illegal base64 character
         ccbs.put((byte)0x2b); ccbs.put((byte)0xff);
         ccus.put((char)0x0000);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-7-CC-DE-2", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for illegal order of the base64 character sequence
         ccbs.put((byte)0x2b); ccbs.put((byte)0x2d); ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x2d);
         ccus.put((char)0x0000); ccus.put((char)0x0000);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-7-CC-DE-3", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
-        //test for illegal order of the base64 character sequence 
+
+        //test for illegal order of the base64 character sequence
         ccbs.put((byte)0x2b); ccbs.put((byte)0x0a); ccbs.put((byte)0x09);
         ccus.put((char)0x0000);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-7-CC-DE-4", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for illegal order of the base64 character sequence
         ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x0a);
         ccus.put((char)0x0000);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-7-CC-DE-5", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for illegal order of the base64 character sequence
         ccbs.put((byte)0x2b); ccbs.put((byte)0x00);
         ccus.put((char)0x0000);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-7-CC-DE-6", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccbs.put((byte)0x2b); ccbs.put((byte)0x49);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(0);
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-7-CC-DE-7", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccbs.put((byte)0x0c); ccbs.put((byte)0x0c);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(0);
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-7-CC-DE-8", ccbs, ccus, true, false);
             errln("Exception while decoding UTF-7 code coverage test should have been thrown.");
@@ -3040,48 +2995,48 @@ public class TestCharset extends TestFmwk {
         catch (Exception ex) {
         }
         //end of charset decoder code coverage code
-        
+
         //start of charset encoder code coverage code
         ccbs.clear();
         ccus.clear();
         //test for overflow buffer error
         ccus.put((char)0x002b);
-        ccbs.put((byte)0x2b); 
-        
+        ccbs.put((byte)0x2b);
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-1", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x002b); ccus.put((char)0x2262);
         ccbs.put((byte)0x2b); ccbs.put((byte)0x2d); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-2", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        } 
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x2262); ccus.put((char)0x0049);
         ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
@@ -3089,17 +3044,17 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-3", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        }  
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x2262); ccus.put((char)0x0395);
         ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
@@ -3107,17 +3062,17 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-4", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        }  
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x2262); ccus.put((char)0x0395);
         ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
@@ -3125,17 +3080,17 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-5", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        }  
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x2262); ccus.put((char)0x0395); ccus.put((char)0x0391);
         ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
@@ -3143,54 +3098,54 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-6", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        }  
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x2262); ccus.put((char)0x0395); ccus.put((char)0x0391);
-        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); 
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
         ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-7", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        }  
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x0049); ccus.put((char)0x0048);
-        ccbs.put((byte)0x00); 
+        ccbs.put((byte)0x00);
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-8", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        } 
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x2262);
         ccbs.put((byte)0x00);
@@ -3198,17 +3153,17 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-9", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        } 
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x2262); ccus.put((char)0x0049);
         ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00); ccbs.put((byte)0x00);
@@ -3216,21 +3171,21 @@ public class TestCharset extends TestFmwk {
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-10", ccus, ccbs, true, false);
             errln("Exception while encoding UTF-7 code coverage test should have been thrown.");
         }
         catch (Exception ex) {
-        }  
-        
+        }
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         ccus.put((char)0x2262);
         ccbs.put((byte)0x2b); ccbs.put((byte)0x49); ccbs.put((byte)0x6d); ccbs.put((byte)0x49); ccbs.put((byte)0x2d);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
@@ -3240,20 +3195,20 @@ public class TestCharset extends TestFmwk {
         } catch (Exception ex) {
             errln("Exception while encoding UTF-7 code coverage test should not have been thrown.");
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test for overflow buffer error
         encoder.reset();
         ccus.put((char)0x3980); ccus.put((char)0x2715);
         ccbs.put((byte)0x2b); ccbs.put((byte)0x4f); ccbs.put((byte)0x59); ccbs.put((byte)0x2d);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         result = encoder.encode(ccus, ccbs, true);
         result = encoder.flush(ccbs);
         if (!result.isOverflow()) {
@@ -3266,104 +3221,104 @@ public class TestCharset extends TestFmwk {
     @Test
     public void TestCharsetISCII() {
         CharsetProvider provider = new CharsetProviderICU();
-        Charset cs = provider.charsetForName("ISCII,version=0");        
+        Charset cs = provider.charsetForName("ISCII,version=0");
         CharsetEncoder encoder = cs.newEncoder();
         CharsetDecoder decoder = cs.newDecoder();
-        
+
         CharBuffer us = CharBuffer.allocate(0x100);
         ByteBuffer bs = ByteBuffer.allocate(0x100);
         ByteBuffer bsr = ByteBuffer.allocate(0x100);
-        
+
         //test full range of Devanagari
         us.put((char)0x0901); us.put((char)0x0902); us.put((char)0x0903); us.put((char)0x0905); us.put((char)0x0906); us.put((char)0x0907);
         us.put((char)0x0908); us.put((char)0x0909); us.put((char)0x090A); us.put((char)0x090B); us.put((char)0x090E); us.put((char)0x090F);
         us.put((char)0x0910); us.put((char)0x090D); us.put((char)0x0912); us.put((char)0x0913); us.put((char)0x0914); us.put((char)0x0911);
         us.put((char)0x0915); us.put((char)0x0916); us.put((char)0x0917); us.put((char)0x0918); us.put((char)0x0919); us.put((char)0x091A);
         us.put((char)0x091B); us.put((char)0x091C); us.put((char)0x091D); us.put((char)0x091E); us.put((char)0x091F); us.put((char)0x0920);
-        us.put((char)0x0921); us.put((char)0x0922); us.put((char)0x0923); us.put((char)0x0924); us.put((char)0x0925); us.put((char)0x0926); 
-        us.put((char)0x0927); us.put((char)0x0928); us.put((char)0x0929); us.put((char)0x092A); us.put((char)0x092B); us.put((char)0x092C); 
-        us.put((char)0x092D); us.put((char)0x092E); us.put((char)0x092F); us.put((char)0x095F); us.put((char)0x0930); us.put((char)0x0931); 
-        us.put((char)0x0932); us.put((char)0x0933); us.put((char)0x0934); us.put((char)0x0935); us.put((char)0x0936); us.put((char)0x0937); 
-        us.put((char)0x0938); us.put((char)0x0939); us.put((char)0x200D); us.put((char)0x093E); us.put((char)0x093F); us.put((char)0x0940); 
-        us.put((char)0x0941); us.put((char)0x0942); us.put((char)0x0943); us.put((char)0x0946); us.put((char)0x0947); us.put((char)0x0948); 
-        us.put((char)0x0945); us.put((char)0x094A); us.put((char)0x094B); us.put((char)0x094C); us.put((char)0x0949); us.put((char)0x094D); 
-        us.put((char)0x093D); us.put((char)0x0966); us.put((char)0x0967); us.put((char)0x0968); us.put((char)0x0969); us.put((char)0x096A); 
-        us.put((char)0x096B); us.put((char)0x096C); us.put((char)0x096D); us.put((char)0x096E); us.put((char)0x096F); 
-        
+        us.put((char)0x0921); us.put((char)0x0922); us.put((char)0x0923); us.put((char)0x0924); us.put((char)0x0925); us.put((char)0x0926);
+        us.put((char)0x0927); us.put((char)0x0928); us.put((char)0x0929); us.put((char)0x092A); us.put((char)0x092B); us.put((char)0x092C);
+        us.put((char)0x092D); us.put((char)0x092E); us.put((char)0x092F); us.put((char)0x095F); us.put((char)0x0930); us.put((char)0x0931);
+        us.put((char)0x0932); us.put((char)0x0933); us.put((char)0x0934); us.put((char)0x0935); us.put((char)0x0936); us.put((char)0x0937);
+        us.put((char)0x0938); us.put((char)0x0939); us.put((char)0x200D); us.put((char)0x093E); us.put((char)0x093F); us.put((char)0x0940);
+        us.put((char)0x0941); us.put((char)0x0942); us.put((char)0x0943); us.put((char)0x0946); us.put((char)0x0947); us.put((char)0x0948);
+        us.put((char)0x0945); us.put((char)0x094A); us.put((char)0x094B); us.put((char)0x094C); us.put((char)0x0949); us.put((char)0x094D);
+        us.put((char)0x093D); us.put((char)0x0966); us.put((char)0x0967); us.put((char)0x0968); us.put((char)0x0969); us.put((char)0x096A);
+        us.put((char)0x096B); us.put((char)0x096C); us.put((char)0x096D); us.put((char)0x096E); us.put((char)0x096F);
+
         bs.put((byte)0xEF); bs.put((byte)0x42);
         bs.put((byte)0xA1); bs.put((byte)0xA2); bs.put((byte)0xA3); bs.put((byte)0xA4); bs.put((byte)0xA5); bs.put((byte)0xA6);
-        bs.put((byte)0xA7); bs.put((byte)0xA8); bs.put((byte)0xA9); bs.put((byte)0xAA); bs.put((byte)0xAB); bs.put((byte)0xAC); 
-        bs.put((byte)0xAD); bs.put((byte)0xAE); bs.put((byte)0xAF); bs.put((byte)0xB0); bs.put((byte)0xB1); bs.put((byte)0xB2); 
-        bs.put((byte)0xB3); bs.put((byte)0xB4); bs.put((byte)0xB5); bs.put((byte)0xB6); bs.put((byte)0xB7); bs.put((byte)0xB8); 
-        bs.put((byte)0xB9); bs.put((byte)0xBA); bs.put((byte)0xBB); bs.put((byte)0xBC); bs.put((byte)0xBD); bs.put((byte)0xBE); 
-        bs.put((byte)0xBF); bs.put((byte)0xC0); bs.put((byte)0xC1); bs.put((byte)0xC2); bs.put((byte)0xC3); bs.put((byte)0xC4); 
-        bs.put((byte)0xC5); bs.put((byte)0xC6); bs.put((byte)0xC7); bs.put((byte)0xC8); bs.put((byte)0xC9); bs.put((byte)0xCA); 
-        bs.put((byte)0xCB); bs.put((byte)0xCC); bs.put((byte)0xCD); bs.put((byte)0xCE); bs.put((byte)0xCF); bs.put((byte)0xD0); 
-        bs.put((byte)0xD1); bs.put((byte)0xD2); bs.put((byte)0xD3); bs.put((byte)0xD4); bs.put((byte)0xD5); bs.put((byte)0xD6); 
-        bs.put((byte)0xD7); bs.put((byte)0xD8); bs.put((byte)0xD9); bs.put((byte)0xDA); bs.put((byte)0xDB); bs.put((byte)0xDC); 
-        bs.put((byte)0xDD); bs.put((byte)0xDE); bs.put((byte)0xDF); bs.put((byte)0xE0); bs.put((byte)0xE1); bs.put((byte)0xE2); 
-        bs.put((byte)0xE3); bs.put((byte)0xE4); bs.put((byte)0xE5); bs.put((byte)0xE6); bs.put((byte)0xE7); bs.put((byte)0xE8); 
-        bs.put((byte)0xEA); bs.put((byte)0xE9); bs.put((byte)0xF1); bs.put((byte)0xF2); bs.put((byte)0xF3); bs.put((byte)0xF4); 
-        bs.put((byte)0xF5); bs.put((byte)0xF6); bs.put((byte)0xF7); bs.put((byte)0xF8); bs.put((byte)0xF9); bs.put((byte)0xFA); 
-        
+        bs.put((byte)0xA7); bs.put((byte)0xA8); bs.put((byte)0xA9); bs.put((byte)0xAA); bs.put((byte)0xAB); bs.put((byte)0xAC);
+        bs.put((byte)0xAD); bs.put((byte)0xAE); bs.put((byte)0xAF); bs.put((byte)0xB0); bs.put((byte)0xB1); bs.put((byte)0xB2);
+        bs.put((byte)0xB3); bs.put((byte)0xB4); bs.put((byte)0xB5); bs.put((byte)0xB6); bs.put((byte)0xB7); bs.put((byte)0xB8);
+        bs.put((byte)0xB9); bs.put((byte)0xBA); bs.put((byte)0xBB); bs.put((byte)0xBC); bs.put((byte)0xBD); bs.put((byte)0xBE);
+        bs.put((byte)0xBF); bs.put((byte)0xC0); bs.put((byte)0xC1); bs.put((byte)0xC2); bs.put((byte)0xC3); bs.put((byte)0xC4);
+        bs.put((byte)0xC5); bs.put((byte)0xC6); bs.put((byte)0xC7); bs.put((byte)0xC8); bs.put((byte)0xC9); bs.put((byte)0xCA);
+        bs.put((byte)0xCB); bs.put((byte)0xCC); bs.put((byte)0xCD); bs.put((byte)0xCE); bs.put((byte)0xCF); bs.put((byte)0xD0);
+        bs.put((byte)0xD1); bs.put((byte)0xD2); bs.put((byte)0xD3); bs.put((byte)0xD4); bs.put((byte)0xD5); bs.put((byte)0xD6);
+        bs.put((byte)0xD7); bs.put((byte)0xD8); bs.put((byte)0xD9); bs.put((byte)0xDA); bs.put((byte)0xDB); bs.put((byte)0xDC);
+        bs.put((byte)0xDD); bs.put((byte)0xDE); bs.put((byte)0xDF); bs.put((byte)0xE0); bs.put((byte)0xE1); bs.put((byte)0xE2);
+        bs.put((byte)0xE3); bs.put((byte)0xE4); bs.put((byte)0xE5); bs.put((byte)0xE6); bs.put((byte)0xE7); bs.put((byte)0xE8);
+        bs.put((byte)0xEA); bs.put((byte)0xE9); bs.put((byte)0xF1); bs.put((byte)0xF2); bs.put((byte)0xF3); bs.put((byte)0xF4);
+        bs.put((byte)0xF5); bs.put((byte)0xF6); bs.put((byte)0xF7); bs.put((byte)0xF8); bs.put((byte)0xF9); bs.put((byte)0xFA);
+
         bsr.put((byte)0xA1); bsr.put((byte)0xA2); bsr.put((byte)0xA3); bsr.put((byte)0xA4); bsr.put((byte)0xA5); bsr.put((byte)0xA6);
-        bsr.put((byte)0xA7); bsr.put((byte)0xA8); bsr.put((byte)0xA9); bsr.put((byte)0xAA); bsr.put((byte)0xAB); bsr.put((byte)0xAC); 
-        bsr.put((byte)0xAD); bsr.put((byte)0xAE); bsr.put((byte)0xAF); bsr.put((byte)0xB0); bsr.put((byte)0xB1); bsr.put((byte)0xB2); 
-        bsr.put((byte)0xB3); bsr.put((byte)0xB4); bsr.put((byte)0xB5); bsr.put((byte)0xB6); bsr.put((byte)0xB7); bsr.put((byte)0xB8); 
-        bsr.put((byte)0xB9); bsr.put((byte)0xBA); bsr.put((byte)0xBB); bsr.put((byte)0xBC); bsr.put((byte)0xBD); bsr.put((byte)0xBE); 
-        bsr.put((byte)0xBF); bsr.put((byte)0xC0); bsr.put((byte)0xC1); bsr.put((byte)0xC2); bsr.put((byte)0xC3); bsr.put((byte)0xC4); 
-        bsr.put((byte)0xC5); bsr.put((byte)0xC6); bsr.put((byte)0xC7); bsr.put((byte)0xC8); bsr.put((byte)0xC9); bsr.put((byte)0xCA); 
-        bsr.put((byte)0xCB); bsr.put((byte)0xCC); bsr.put((byte)0xCD); bsr.put((byte)0xCE); bsr.put((byte)0xCF); bsr.put((byte)0xD0); 
-        bsr.put((byte)0xD1); bsr.put((byte)0xD2); bsr.put((byte)0xD3); bsr.put((byte)0xD4); bsr.put((byte)0xD5); bsr.put((byte)0xD6); 
-        bsr.put((byte)0xD7); bsr.put((byte)0xD8); bsr.put((byte)0xD9); bsr.put((byte)0xDA); bsr.put((byte)0xDB); bsr.put((byte)0xDC); 
-        bsr.put((byte)0xDD); bsr.put((byte)0xDE); bsr.put((byte)0xDF); bsr.put((byte)0xE0); bsr.put((byte)0xE1); bsr.put((byte)0xE2); 
-        bsr.put((byte)0xE3); bsr.put((byte)0xE4); bsr.put((byte)0xE5); bsr.put((byte)0xE6); bsr.put((byte)0xE7); bsr.put((byte)0xE8); 
-        bsr.put((byte)0xEA); bsr.put((byte)0xE9); bsr.put((byte)0xF1); bsr.put((byte)0xF2); bsr.put((byte)0xF3); bsr.put((byte)0xF4); 
-        bsr.put((byte)0xF5); bsr.put((byte)0xF6); bsr.put((byte)0xF7); bsr.put((byte)0xF8); bsr.put((byte)0xF9); bsr.put((byte)0xFA); 
-        
+        bsr.put((byte)0xA7); bsr.put((byte)0xA8); bsr.put((byte)0xA9); bsr.put((byte)0xAA); bsr.put((byte)0xAB); bsr.put((byte)0xAC);
+        bsr.put((byte)0xAD); bsr.put((byte)0xAE); bsr.put((byte)0xAF); bsr.put((byte)0xB0); bsr.put((byte)0xB1); bsr.put((byte)0xB2);
+        bsr.put((byte)0xB3); bsr.put((byte)0xB4); bsr.put((byte)0xB5); bsr.put((byte)0xB6); bsr.put((byte)0xB7); bsr.put((byte)0xB8);
+        bsr.put((byte)0xB9); bsr.put((byte)0xBA); bsr.put((byte)0xBB); bsr.put((byte)0xBC); bsr.put((byte)0xBD); bsr.put((byte)0xBE);
+        bsr.put((byte)0xBF); bsr.put((byte)0xC0); bsr.put((byte)0xC1); bsr.put((byte)0xC2); bsr.put((byte)0xC3); bsr.put((byte)0xC4);
+        bsr.put((byte)0xC5); bsr.put((byte)0xC6); bsr.put((byte)0xC7); bsr.put((byte)0xC8); bsr.put((byte)0xC9); bsr.put((byte)0xCA);
+        bsr.put((byte)0xCB); bsr.put((byte)0xCC); bsr.put((byte)0xCD); bsr.put((byte)0xCE); bsr.put((byte)0xCF); bsr.put((byte)0xD0);
+        bsr.put((byte)0xD1); bsr.put((byte)0xD2); bsr.put((byte)0xD3); bsr.put((byte)0xD4); bsr.put((byte)0xD5); bsr.put((byte)0xD6);
+        bsr.put((byte)0xD7); bsr.put((byte)0xD8); bsr.put((byte)0xD9); bsr.put((byte)0xDA); bsr.put((byte)0xDB); bsr.put((byte)0xDC);
+        bsr.put((byte)0xDD); bsr.put((byte)0xDE); bsr.put((byte)0xDF); bsr.put((byte)0xE0); bsr.put((byte)0xE1); bsr.put((byte)0xE2);
+        bsr.put((byte)0xE3); bsr.put((byte)0xE4); bsr.put((byte)0xE5); bsr.put((byte)0xE6); bsr.put((byte)0xE7); bsr.put((byte)0xE8);
+        bsr.put((byte)0xEA); bsr.put((byte)0xE9); bsr.put((byte)0xF1); bsr.put((byte)0xF2); bsr.put((byte)0xF3); bsr.put((byte)0xF4);
+        bsr.put((byte)0xF5); bsr.put((byte)0xF6); bsr.put((byte)0xF7); bsr.put((byte)0xF8); bsr.put((byte)0xF9); bsr.put((byte)0xFA);
+
         //test Soft Halant
         us.put((char)0x0915); us.put((char)0x094d); us.put((char)0x200D);
         bs.put((byte)0xB3); bs.put((byte)0xE8); bs.put((byte)0xE9);
         bsr.put((byte)0xB3); bsr.put((byte)0xE8); bsr.put((byte)0xE9);
-        
+
         //test explicit halant
         us.put((char)0x0915); us.put((char)0x094D); us.put((char)0x200C);
         bs.put((byte)0xB3); bs.put((byte)0xE8); bs.put((byte)0xE8);
         bsr.put((byte)0xB3); bsr.put((byte)0xE8); bsr.put((byte)0xE8);
-        
+
         //test double danda
-        us.put((char)0x0965); 
-        bs.put((byte)0xEA); bs.put((byte)0xEA); 
-        bsr.put((byte)0xEA); bsr.put((byte)0xEA); 
-        
+        us.put((char)0x0965);
+        bs.put((byte)0xEA); bs.put((byte)0xEA);
+        bsr.put((byte)0xEA); bsr.put((byte)0xEA);
+
         //test ASCII
         us.put((char)0x1B); us.put((char)0x24); us.put((char)0x29); us.put((char)0x47); us.put((char)0x0E); us.put((char)0x23);
         us.put((char)0x21); us.put((char)0x23); us.put((char)0x22); us.put((char)0x23); us.put((char)0x23); us.put((char)0x23);
         us.put((char)0x24); us.put((char)0x23); us.put((char)0x25); us.put((char)0x23); us.put((char)0x26); us.put((char)0x23);
         us.put((char)0x27); us.put((char)0x23); us.put((char)0x28); us.put((char)0x23); us.put((char)0x29); us.put((char)0x23);
         us.put((char)0x2A); us.put((char)0x23); us.put((char)0x2B); us.put((char)0x0F); us.put((char)0x2F); us.put((char)0x2A);
-        
+
         bs.put((byte)0x1B); bs.put((byte)0x24); bs.put((byte)0x29); bs.put((byte)0x47); bs.put((byte)0x0E); bs.put((byte)0x23);
         bs.put((byte)0x21); bs.put((byte)0x23); bs.put((byte)0x22); bs.put((byte)0x23); bs.put((byte)0x23); bs.put((byte)0x23);
         bs.put((byte)0x24); bs.put((byte)0x23); bs.put((byte)0x25); bs.put((byte)0x23); bs.put((byte)0x26); bs.put((byte)0x23);
         bs.put((byte)0x27); bs.put((byte)0x23); bs.put((byte)0x28); bs.put((byte)0x23); bs.put((byte)0x29); bs.put((byte)0x23);
         bs.put((byte)0x2A); bs.put((byte)0x23); bs.put((byte)0x2B); bs.put((byte)0x0F); bs.put((byte)0x2F); bs.put((byte)0x2A);
-        
+
         bsr.put((byte)0x1B); bsr.put((byte)0x24); bsr.put((byte)0x29); bsr.put((byte)0x47); bsr.put((byte)0x0E); bsr.put((byte)0x23);
         bsr.put((byte)0x21); bsr.put((byte)0x23); bsr.put((byte)0x22); bsr.put((byte)0x23); bsr.put((byte)0x23); bsr.put((byte)0x23);
         bsr.put((byte)0x24); bsr.put((byte)0x23); bsr.put((byte)0x25); bsr.put((byte)0x23); bsr.put((byte)0x26); bsr.put((byte)0x23);
         bsr.put((byte)0x27); bsr.put((byte)0x23); bsr.put((byte)0x28); bsr.put((byte)0x23); bsr.put((byte)0x29); bsr.put((byte)0x23);
         bsr.put((byte)0x2A); bsr.put((byte)0x23); bsr.put((byte)0x2B); bsr.put((byte)0x0F); bsr.put((byte)0x2F); bsr.put((byte)0x2A);
-        
+
         //test from Lotus
         //Some of the Lotus ISCII code points have been changed or commented out.
         us.put((char)0x0061); us.put((char)0x0915); us.put((char)0x000D); us.put((char)0x000A); us.put((char)0x0996); us.put((char)0x0043);
         us.put((char)0x0930); us.put((char)0x094D); us.put((char)0x200D); us.put((char)0x0901); us.put((char)0x000D); us.put((char)0x000A);
         us.put((char)0x0905); us.put((char)0x0985); us.put((char)0x0043); us.put((char)0x0915); us.put((char)0x0921); us.put((char)0x002B);
-        us.put((char)0x095F); 
+        us.put((char)0x095F);
         bs.put((byte)0x61); bs.put((byte)0xB3);
-        bs.put((byte)0x0D); bs.put((byte)0x0A); 
-        bs.put((byte)0xEF); bs.put((byte)0x42); 
+        bs.put((byte)0x0D); bs.put((byte)0x0A);
+        bs.put((byte)0xEF); bs.put((byte)0x42);
         bs.put((byte)0xEF); bs.put((byte)0x43); bs.put((byte)0xB4); bs.put((byte)0x43);
         bs.put((byte)0xEF); bs.put((byte)0x42); bs.put((byte)0xCF); bs.put((byte)0xE8); bs.put((byte)0xE9); bs.put((byte)0xA1); bs.put((byte)0x0D); bs.put((byte)0x0A); bs.put((byte)0xEF); bs.put((byte)0x42);
         bs.put((byte)0xA4); bs.put((byte)0xEF); bs.put((byte)0x43); bs.put((byte)0xA4); bs.put((byte)0x43); bs.put((byte)0xEF);
@@ -3377,59 +3332,59 @@ public class TestCharset extends TestFmwk {
         bsr.put((byte)0x42); bsr.put((byte)0xB3); bsr.put((byte)0xBF); bsr.put((byte)0x2B); bsr.put((byte)0xEF); bsr.put((byte)0x42);
         bsr.put((byte)0xCE);
         //end of test from Lotus
-        
+
         //tamil range
         us.put((char)0x0B86); us.put((char)0x0B87); us.put((char)0x0B88);
         bs.put((byte)0xEF); bs.put((byte)0x44); bs.put((byte)0xA5); bs.put((byte)0xA6); bs.put((byte)0xA7);
         bsr.put((byte)0xEF); bsr.put((byte)0x44); bsr.put((byte)0xA5); bsr.put((byte)0xA6); bsr.put((byte)0xA7);
-        
+
         //telugu range
         us.put((char)0x0C05); us.put((char)0x0C02); us.put((char)0x0C03); us.put((char)0x0C31);
         bs.put((byte)0xEF); bs.put((byte)0x45); bs.put((byte)0xA4); bs.put((byte)0xA2); bs.put((byte)0xA3); bs.put((byte)0xD0);
         bsr.put((byte)0xEF); bsr.put((byte)0x45); bsr.put((byte)0xA4); bsr.put((byte)0xA2); bsr.put((byte)0xA3); bsr.put((byte)0xD0);
-        
+
         //kannada range
         us.put((char)0x0C85); us.put((char)0x0C82); us.put((char)0x0C83);
         bs.put((byte)0xEF); bs.put((byte)0x48); bs.put((byte)0xA4); bs.put((byte)0xA2); bs.put((byte)0xA3);
-        bsr.put((byte)0xEF); bsr.put((byte)0x48); bsr.put((byte)0xA4); bsr.put((byte)0xA2); bsr.put((byte)0xA3);  
-        
+        bsr.put((byte)0xEF); bsr.put((byte)0x48); bsr.put((byte)0xA4); bsr.put((byte)0xA2); bsr.put((byte)0xA3);
+
         //test Abbr sign and Anudatta
         us.put((char)0x0970); us.put((char)0x0952); us.put((char)0x0960); us.put((char)0x0944); us.put((char)0x090C); us.put((char)0x0962);
         us.put((char)0x0961); us.put((char)0x0963); us.put((char)0x0950); us.put((char)0x093D); us.put((char)0x0958); us.put((char)0x0959);
         us.put((char)0x095A); us.put((char)0x095B); us.put((char)0x095C); us.put((char)0x095D); us.put((char)0x095E); us.put((char)0x0020);
-        us.put((char)0x094D); us.put((char)0x0930); us.put((char)0x0000); us.put((char)0x00A0); 
+        us.put((char)0x094D); us.put((char)0x0930); us.put((char)0x0000); us.put((char)0x00A0);
         bs.put((byte)0xEF); bs.put((byte)0x42); bs.put((byte)0xF0); bs.put((byte)0xBF); bs.put((byte)0xF0); bs.put((byte)0xB8);
         bs.put((byte)0xAA); bs.put((byte)0xE9); bs.put((byte)0xDF); bs.put((byte)0xE9); bs.put((byte)0xA6); bs.put((byte)0xE9);
         bs.put((byte)0xDB); bs.put((byte)0xE9); bs.put((byte)0xA7); bs.put((byte)0xE9); bs.put((byte)0xDC); bs.put((byte)0xE9);
         bs.put((byte)0xA1); bs.put((byte)0xE9); bs.put((byte)0xEA); bs.put((byte)0xE9); bs.put((byte)0xB3); bs.put((byte)0xE9);
         bs.put((byte)0xB4); bs.put((byte)0xE9); bs.put((byte)0xB5); bs.put((byte)0xE9); bs.put((byte)0xBA); bs.put((byte)0xE9);
         bs.put((byte)0xBF); bs.put((byte)0xE9); bs.put((byte)0xC0); bs.put((byte)0xE9); bs.put((byte)0xC9); bs.put((byte)0xE9);
-        bs.put((byte)0x20); bs.put((byte)0xE8); bs.put((byte)0xCF); bs.put((byte)0x00); bs.put((byte)0xA0); 
-        //bs.put((byte)0xEF); bs.put((byte)0x30); 
+        bs.put((byte)0x20); bs.put((byte)0xE8); bs.put((byte)0xCF); bs.put((byte)0x00); bs.put((byte)0xA0);
+        //bs.put((byte)0xEF); bs.put((byte)0x30);
         bsr.put((byte)0xEF); bsr.put((byte)0x42); bsr.put((byte)0xF0); bsr.put((byte)0xBF); bsr.put((byte)0xF0); bsr.put((byte)0xB8);
         bsr.put((byte)0xAA); bsr.put((byte)0xE9); bsr.put((byte)0xDF); bsr.put((byte)0xE9); bsr.put((byte)0xA6); bsr.put((byte)0xE9);
         bsr.put((byte)0xDB); bsr.put((byte)0xE9); bsr.put((byte)0xA7); bsr.put((byte)0xE9); bsr.put((byte)0xDC); bsr.put((byte)0xE9);
         bsr.put((byte)0xA1); bsr.put((byte)0xE9); bsr.put((byte)0xEA); bsr.put((byte)0xE9); bsr.put((byte)0xB3); bsr.put((byte)0xE9);
         bsr.put((byte)0xB4); bsr.put((byte)0xE9); bsr.put((byte)0xB5); bsr.put((byte)0xE9); bsr.put((byte)0xBA); bsr.put((byte)0xE9);
         bsr.put((byte)0xBF); bsr.put((byte)0xE9); bsr.put((byte)0xC0); bsr.put((byte)0xE9); bsr.put((byte)0xC9); bsr.put((byte)0xE9);
-        bsr.put((byte)0xD9); bsr.put((byte)0xE8); bsr.put((byte)0xCF); bsr.put((byte)0x00); bsr.put((byte)0xA0);  
-        
+        bsr.put((byte)0xD9); bsr.put((byte)0xE8); bsr.put((byte)0xCF); bsr.put((byte)0x00); bsr.put((byte)0xA0);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
         bsr.limit(bsr.position());
         bsr.position(0);
-        
+
         //round trip test
         try {
             smBufDecode(decoder, "ISCII-part1", bsr, us, false, true);
-            smBufEncode(encoder, "ISCII-part2", us, bs); 
+            smBufEncode(encoder, "ISCII-part2", us, bs);
             smBufDecode(decoder, "ISCII-part3", bs, us, false, true);
         } catch (Exception ex) {
             errln("ISCII round trip test failed.");
         }
-        
+
         //Test new characters in the ISCII charset
         encoder = provider.charsetForName("ISCII,version=0").newEncoder();
         decoder = provider.charsetForName("ISCII,version=0").newDecoder();
@@ -3446,191 +3401,191 @@ public class TestCharset extends TestFmwk {
         bs = ByteBuffer.allocate(b_pts.length);
         us.put(u_pts);
         bs.put(b_pts);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
-            smBufDecode(decoder, "ISCII-update", bs, us, true, true);         
+            smBufDecode(decoder, "ISCII-update", bs, us, true, true);
             bs.position(0);
             us.position(0);
             smBufEncode(encoder, "ISCII-update", us, bs, true, true);
         } catch (Exception ex) {
             errln("Error occurred while encoding/decoding ISCII with the new characters.");
         }
-        
+
         //The rest of the code in this method is to provide better code coverage
         CharBuffer ccus = CharBuffer.allocate(0x10);
         ByteBuffer ccbs = ByteBuffer.allocate(0x10);
-        
+
         //start of charset decoder code coverage code
         //test overflow buffer
         ccbs.put((byte)0x49);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(0);
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "ISCII-CC-DE-1", ccbs, ccus, true, false);
             errln("Exception while decoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test atr overflow buffer
         ccbs.put((byte)0xEF); ccbs.put((byte)0x40); ccbs.put((byte)0xEF); ccbs.put((byte)0x20);
         ccus.put((char)0x00);
-        
+
         ccbs.limit(ccbs.position());
         ccbs.position(0);
         ccus.limit(ccus.position());
         ccus.position(0);
-        
+
         try {
             smBufDecode(decoder, "ISCII-CC-DE-2", ccbs, ccus, true, false);
             errln("Exception while decoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         //end of charset decoder code coverage code
-        
+
         ccbs.clear();
         ccus.clear();
-      
+
         //start of charset encoder code coverage code
         //test ascii overflow buffer
         ccus.put((char)0x41);
-        
+
         ccus.limit(ccus.position());
         ccus.position(0);
         ccbs.limit(0);
         ccbs.position(0);
-           
+
         try {
             smBufEncode(encoder, "ISCII-CC-EN-1", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test ascii overflow buffer
         ccus.put((char)0x0A); ccus.put((char)0x0043);
         ccbs.put((byte)0x00); ccbs.put((byte)0x00);
-        
+
         ccus.limit(ccus.position());
         ccus.position(0);
         ccbs.limit(ccbs.position());
         ccbs.position(0);
-           
+
         try {
             smBufEncode(encoder, "ISCII-CC-EN-2", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test surrogate malform
         ccus.put((char)0x06E3);
         ccbs.put((byte)0x00);
-        
+
         ccus.limit(ccus.position());
         ccus.position(0);
         ccbs.limit(ccbs.position());
         ccbs.position(0);
-           
+
         try {
             smBufEncode(encoder, "ISCII-CC-EN-3", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test surrogate malform
         ccus.put((char)0xD801); ccus.put((char)0xDD01);
         ccbs.put((byte)0x00);
-        
+
         ccus.limit(ccus.position());
         ccus.position(0);
         ccbs.limit(ccbs.position());
         ccbs.position(0);
-           
+
         try {
             smBufEncode(encoder, "ISCII-CC-EN-4", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test trail surrogate malform
-        ccus.put((char)0xDD01); 
+        ccus.put((char)0xDD01);
         ccbs.put((byte)0x00);
-        
+
         ccus.limit(ccus.position());
         ccus.position(0);
         ccbs.limit(ccbs.position());
         ccbs.position(0);
-           
+
         try {
             smBufEncode(encoder, "ISCII-CC-EN-5", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccbs.clear();
         ccus.clear();
-        
+
         //test lead surrogates malform
-        ccus.put((char)0xD801); ccus.put((char)0xD802); 
+        ccus.put((char)0xD801); ccus.put((char)0xD802);
         ccbs.put((byte)0x00);
-        
+
         ccus.limit(ccus.position());
         ccus.position(0);
         ccbs.limit(ccbs.position());
         ccbs.position(0);
-           
+
         try {
             smBufEncode(encoder, "ISCII-CC-EN-6", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
         }
         catch (Exception ex) {
         }
-        
+
         ccus.clear();
         ccbs.clear();
-        
+
         //test overflow buffer
-        ccus.put((char)0x0901); 
+        ccus.put((char)0x0901);
         ccbs.put((byte)0x00);
-        
+
         ccus.limit(ccus.position());
         ccus.position(0);
         ccbs.limit(ccbs.position());
         ccbs.position(0);
-           
+
         cs = provider.charsetForName("ISCII,version=0");
         encoder = cs.newEncoder();
-        
+
         try {
             smBufEncode(encoder, "ISCII-CC-EN-7", ccus, ccbs, true, false);
             errln("Exception while encoding ISCII should have been thrown.");
@@ -3639,24 +3594,24 @@ public class TestCharset extends TestFmwk {
         }
         //end of charset encoder code coverage code
     }
-    
+
     //Test for the IMAP Charset
     @Test
     public void TestCharsetIMAP() {
         CharsetProvider provider = new CharsetProviderICU();
-        Charset cs = provider.charsetForName("IMAP-mailbox-name");        
+        Charset cs = provider.charsetForName("IMAP-mailbox-name");
         CharsetEncoder encoder = cs.newEncoder();
         CharsetDecoder decoder = cs.newDecoder();
-        
+
         CharBuffer us = CharBuffer.allocate(0x20);
         ByteBuffer bs = ByteBuffer.allocate(0x20);
-        
+
         us.put((char)0x00A3); us.put((char)0x2020); us.put((char)0x41);
-        
+
         bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x4B); bs.put((byte)0x4D); bs.put((byte)0x67); bs.put((byte)0x49);
         bs.put((byte)0x41); bs.put((byte)0x2D); bs.put((byte)0x41);
-        
-        
+
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
@@ -3664,350 +3619,350 @@ public class TestCharset extends TestFmwk {
 
         smBufDecode(decoder, "IMAP", bs, us);
         smBufEncode(encoder, "IMAP", us, bs);
-        
+
         //the rest of the code in this method is for better code coverage
         us.clear();
         bs.clear();
-        
+
         //start of charset encoder code coverage
         //test buffer overflow
-        us.put((char)0x0026); us.put((char)0x17A9); 
+        us.put((char)0x0026); us.put((char)0x17A9);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-1", us, bs, true, false);
             errln("Exception while encoding IMAP (1) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test buffer overflow
         us.put((char)0x17A9); us.put((char)0x0941);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-2", us, bs, true, false);
             errln("Exception while encoding IMAP (2) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test buffer overflow
         us.put((char)0x17A9); us.put((char)0x0941);
-        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);   
-        
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-3", us, bs, true, false);
             errln("Exception while encoding IMAP (3) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test buffer overflow
         us.put((char)0x17A9); us.put((char)0x0941); us.put((char)0x0955);
-        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);      
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
         bs.put((byte)0x00);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-4", us, bs, true, false);
             errln("Exception while encoding IMAP (4) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test buffer overflow
         us.put((char)0x17A9); us.put((char)0x0941); us.put((char)0x0955);
-        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);  
-        bs.put((byte)0x00); bs.put((byte)0x00); 
-        
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+        bs.put((byte)0x00); bs.put((byte)0x00);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-5", us, bs, true, false);
             errln("Exception while encoding IMAP (5) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test buffer overflow
         us.put((char)0x17A9); us.put((char)0x0941); us.put((char)0x0955); us.put((char)0x0970);
-        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);  
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-6", us, bs, true, false);
             errln("Exception while encoding IMAP (6) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test buffer overflow
         us.put((char)0x17A9); us.put((char)0x0941);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);  bs.put((byte)0x00); bs.put((byte)0x00);
-        bs.put((byte)0x00); 
-        
+        bs.put((byte)0x00);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-7", us, bs, true, true);
             errln("Exception while encoding IMAP (7) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test flushing
-        us.put((char)0x17A9); us.put((char)0x0941); 
+        us.put((char)0x17A9); us.put((char)0x0941);
         bs.put((byte)0x26); bs.put((byte)0x46); bs.put((byte)0x36); bs.put((byte)0x6b);  bs.put((byte)0x4a); bs.put((byte)0x51);
         bs.put((byte)0x51); bs.put((byte)0x2d);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-8", us, bs, true, true);
         } catch(Exception ex) {
             errln("Exception while encoding IMAP (8) should not have been thrown.");
         }
-        
+
         us = CharBuffer.allocate(0x08);
         bs = ByteBuffer.allocate(0x08);
-        
+
         //test flushing buffer overflow
         us.put((char)0x0061);
         bs.put((byte)0x61); bs.put((byte)0x00);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "IMAP-EN-9", us, bs, true, true);
         } catch(Exception ex) {
             errln("Exception while encoding IMAP (9) should not have been thrown.");
         }
         //end of charset encoder code coverage
-        
+
         us = CharBuffer.allocate(0x10);
         bs = ByteBuffer.allocate(0x10);
-        
+
         //start of charset decoder code coverage
         //test malform case 2
-        us.put((char)0x0000); us.put((char)0x0000); 
-        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x43); bs.put((byte)0x41);  
-        
+        us.put((char)0x0000); us.put((char)0x0000);
+        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x43); bs.put((byte)0x41);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufDecode(decoder, "IMAP-DE-1", bs, us, true, false);
             errln("Exception while decoding IMAP (1) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test malform case 5
         us.put((char)0x0000); us.put((char)0x0000); us.put((char)0x0000);
-        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41); 
-        bs.put((byte)0x41); bs.put((byte)0x49); bs.put((byte)0x41);  
-        
+        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41);
+        bs.put((byte)0x41); bs.put((byte)0x49); bs.put((byte)0x41);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufDecode(decoder, "IMAP-DE-2", bs, us, true, false);
             errln("Exception while decoding IMAP (2) should have been thrown.");
         } catch(Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test malform case 7
         us.put((char)0x0000); us.put((char)0x0000); us.put((char)0x0000); us.put((char)0x0000);
-        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41); 
-        bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x42); 
-        bs.put((byte)0x41);  
-        
+        bs.put((byte)0x26); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41);
+        bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x41); bs.put((byte)0x42);
+        bs.put((byte)0x41);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufDecode(decoder, "IMAP-DE-3", bs, us, true, false);
             errln("Exception while decoding IMAP (3) should have been thrown.");
         } catch(Exception ex) {
         }
-        //end of charset decoder coder coverage  
+        //end of charset decoder coder coverage
     }
-    
+
     //Test for charset UTF32LE to provide better code coverage
     @Test
     public void TestCharsetUTF32LE() {
         CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
-        Charset cs = provider.charsetForName("UTF-32LE");        
+        Charset cs = provider.charsetForName("UTF-32LE");
         CharsetEncoder encoder = cs.newEncoder();
         //CharsetDecoder decoder = cs.newDecoder();
-        
+
         CharBuffer us = CharBuffer.allocate(0x10);
         ByteBuffer bs = ByteBuffer.allocate(0x10);
-        
-        
+
+
         //test malform surrogate
         us.put((char)0xD901);
         bs.put((byte)0x00);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF32LE-EN-1", us, bs, true, false);
             errln("Exception while encoding UTF32LE (1) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         bs.clear();
         us.clear();
-        
+
         //test malform surrogate
         us.put((char)0xD901); us.put((char)0xD902);
         bs.put((byte)0x00);
-        
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         result = encoder.encode(us, bs, true);
-        
+
         if (!result.isError() && !result.isOverflow()) {
             errln("Error while encoding UTF32LE (2) should have occurred.");
         }
-        
+
         bs.clear();
         us.clear();
-        
+
         //test overflow trail surrogate
         us.put((char)0xDD01); us.put((char)0xDD0E); us.put((char)0xDD0E);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
-        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); 
-        
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         result = encoder.encode(us, bs, true);
-        
+
         if (!result.isError() && !result.isOverflow()) {
             errln("Error while encoding UTF32LE (3) should have occurred.");
         }
-        
+
         bs.clear();
         us.clear();
-        
+
         //test malform lead surrogate
         us.put((char)0xD90D); us.put((char)0xD90E);
-        bs.put((byte)0x00); 
-        
+        bs.put((byte)0x00);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF32LE-EN-4", us, bs, true, false);
             errln("Exception while encoding UTF32LE (4) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         bs.clear();
         us.clear();
-        
+
         //test overflow buffer
         us.put((char)0x0061);
-        bs.put((byte)0x00); 
-        
+        bs.put((byte)0x00);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF32LE-EN-5", us, bs, true, false);
             errln("Exception while encoding UTF32LE (5) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         bs.clear();
         us.clear();
-        
+
         //test malform trail surrogate
         us.put((char)0xDD01);
-        bs.put((byte)0x00); 
-        
+        bs.put((byte)0x00);
+
         bs.limit(bs.position());
         bs.position(0);
         us.limit(us.position());
         us.position(0);
-        
+
         try {
             smBufEncode(encoder, "UTF32LE-EN-6", us, bs, true, false);
             errln("Exception while encoding UTF32LE (6) should have been thrown.");
@@ -4020,163 +3975,163 @@ public class TestCharset extends TestFmwk {
     public void TestCharsetUTF16LE() {
         CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
-        Charset cs = provider.charsetForName("UTF-16LE");        
+        Charset cs = provider.charsetForName("UTF-16LE");
         CharsetEncoder encoder = cs.newEncoder();
         //CharsetDecoder decoder = cs.newDecoder();
-        
+
         // Test for malform and change fromUChar32 for next call
         char u_pts1[] = {
-                (char)0xD805, 
+                (char)0xD805,
                 (char)0xDC01, (char)0xDC02, (char)0xDC03,
                 (char)0xD901, (char)0xD902
                 };
         byte b_pts1[] = {
-                (byte)0x00, 
+                (byte)0x00,
                 (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
                 };
-        
+
         CharBuffer us = CharBuffer.allocate(u_pts1.length);
         ByteBuffer bs = ByteBuffer.allocate(b_pts1.length);
-        
+
         us.put(u_pts1);
         bs.put(b_pts1);
-        
+
         us.limit(1);
         us.position(0);
         bs.limit(1);
         bs.position(0);
-       
+
         result = encoder.encode(us, bs, true);
-        
+
         if (!result.isMalformed()) {
-            // LE should not output BOM, so this should be malformed 
+            // LE should not output BOM, so this should be malformed
             errln("Malformed while encoding UTF-16LE (1) should have occured.");
         }
-        
+
         // Test for malform surrogate from previous buffer
         us.limit(4);
         us.position(1);
         bs.limit(7);
         bs.position(1);
-        
+
         result = encoder.encode(us, bs, true);
-        
+
         if (!result.isMalformed()) {
             errln("Error while encoding UTF-16LE (2) should have occured.");
-        }       
-        
+        }
+
         // Test for malform trail surrogate
         encoder.reset();
-        
+
         us.limit(1);
         us.position(0);
         bs.limit(1);
         bs.position(0);
-       
-        result = encoder.encode(us, bs, true);    
-        
+
+        result = encoder.encode(us, bs, true);
+
         us.limit(6);
         us.position(4);
         bs.limit(4);
         bs.position(1);
-        
+
         result = encoder.encode(us, bs, true);
-        
+
         if (!result.isMalformed()) {
             errln("Error while encoding UTF-16LE (3) should have occured.");
-        }          
+        }
     }
-    
+
     //provide better code coverage for the generic charset UTF32
     @Test
     public void TestCharsetUTF32() {
         CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
-        Charset cs = provider.charsetForName("UTF-32");        
+        Charset cs = provider.charsetForName("UTF-32");
         CharsetDecoder decoder = cs.newDecoder();
         CharsetEncoder encoder = cs.newEncoder();
-        
+
         //start of decoding code coverage
         char us_array[] = {
                 0x0000, 0x0000, 0x0000, 0x0000,
             };
-        
+
         byte bs_array1[] = {
                 (byte)0x00, (byte)0x00, (byte)0xFE, (byte)0xFF,
                 (byte)0x00, (byte)0x00, (byte)0x04, (byte)0x43,
                 (byte)0xFF, (byte)0xFE, (byte)0x00, (byte)0x00,
                 (byte)0x43, (byte)0x04, (byte)0x00, (byte)0x00,
             };
-        
+
         byte bs_array2[] = {
                 (byte)0xFF, (byte)0xFE, (byte)0x00, (byte)0x00,
                 (byte)0x43, (byte)0x04, (byte)0x00, (byte)0x00,
             };
-        
+
         CharBuffer us = CharBuffer.allocate(us_array.length);
         ByteBuffer bs = ByteBuffer.allocate(bs_array1.length);
-        
+
         us.put(us_array);
         bs.put(bs_array1);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-            
+
         try {
             smBufDecode(decoder, "UTF32-DE-1", bs, us, true, false);
             errln("Malform exception while decoding UTF32 charset (1) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         decoder = cs.newDecoder();
-        
+
         bs = ByteBuffer.allocate(bs_array2.length);
         bs.put(bs_array2);
-        
+
         us.limit(4);
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-            
+
         try {
             smBufDecode(decoder, "UTF32-DE-2", bs, us, true, false);
         } catch (Exception ex) {
             // should recognize little endian BOM
             errln("Exception while decoding UTF32 charset (2) should not have been thrown.");
         }
-        
+
         //Test malform exception
         bs.clear();
         us.clear();
-        
+
         bs.put((byte)0x00); bs.put((byte)0xFE); bs.put((byte)0xFF); bs.put((byte)0x00); bs.put((byte)0x00);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF32-DE-3", bs, us, true, false);
             errln("Malform exception while decoding UTF32 charset (3) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         //Test BOM testing
         bs.clear();
         us.clear();
-        
-        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFF); bs.put((byte)0xFE); 
+
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFF); bs.put((byte)0xFE);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF32-DE-4", bs, us, true, false);
         } catch (Exception ex) {
@@ -4184,134 +4139,134 @@ public class TestCharset extends TestFmwk {
             errln("Exception while decoding UTF32 charset (4) should not have been thrown.");
         }
         //end of decoding code coverage
-        
+
         //start of encoding code coverage
         us = CharBuffer.allocate(0x10);
         bs = ByteBuffer.allocate(0x10);
-        
+
         //test wite BOM overflow error
         us.put((char)0xDC01);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         result = encoder.encode(us, bs, true);
         // must try to output BOM first for UTF-32 (not UTF-32BE or UTF-32LE)
         if (!result.isOverflow()) {
-            errln("Buffer overflow error while encoding UTF32 charset (1) should have occurred."); 
+            errln("Buffer overflow error while encoding UTF32 charset (1) should have occurred.");
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test malform surrogate and store value in fromChar32
         us.put((char)0xD801); us.put((char)0xD802);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         result = encoder.encode(us, bs, true);
         if (!result.isMalformed()) {
             errln("Malformed error while encoding UTF32 charset (2) should have occurred.");
-        }    
-        
+        }
+
         us.clear();
         bs.clear();
-        
+
         //test malform surrogate
         us.put((char)0x0000); us.put((char)0xD902);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         result = encoder.encode(us, bs, true);
         if (!result.isOverflow()) {
             errln("Overflow error while encoding UTF32 charset (3) should have occurred.");
-        } 
-        
+        }
+
         us.clear();
         bs.clear();
-        
+
         //test malform surrogate
         encoder.reset();
         us.put((char)0xD801);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
-   
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         result = encoder.encode(us, bs, true);
         if (!result.isMalformed()) {
             errln("Malform error while encoding UTF32 charset (4) should have occurred.");
-        } 
-        
+        }
+
         us.clear();
         bs.clear();
-        
+
         //test overflow surrogate
         us.put((char)0x0000); us.put((char)0xDDE1); us.put((char)0xD915); us.put((char)0xDDF2);
-        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); 
-   
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         result = encoder.encode(us, bs, true);
         if (!result.isOverflow()) {
             errln("Overflow error while encoding UTF32 charset (5) should have occurred.");
-        } 
-        
+        }
+
         us.clear();
         bs.clear();
-        
+
         //test malform surrogate
         encoder.reset();
         us.put((char)0xDDE1);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
-   
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         result = encoder.encode(us, bs, true);
         if (!result.isMalformed()) {
             errln("Malform error while encoding UTF32 charset (6) should have occurred.");
-        } 
+        }
         //end of encoding code coverage
     }
-    
+
     //this method provides better code coverage decoding UTF32 LE/BE
     @Test
     public void TestDecodeUTF32LEBE() {
         CoderResult result = CoderResult.UNDERFLOW;
-        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder;
         CharBuffer us = CharBuffer.allocate(0x10);
         ByteBuffer bs = ByteBuffer.allocate(0x10);
-        
+
         //decode UTF32LE
         decoder = provider.charsetForName("UTF-32LE").newDecoder();
         //test overflow buffer
         bs.put((byte)0x41); bs.put((byte)0xFF); bs.put((byte)0x01); bs.put((byte)0x00);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
             errln("Overflow exception while decoding UTF32LE (1) should have been thrown.");
@@ -4330,165 +4285,165 @@ public class TestCharset extends TestFmwk {
         } else {
             errln("Overflow buffer error while decoding UTF32LE should have occurred.");
         }
-        
+
         us.clear();
         bs.clear();
         //test malform buffer
         bs.put((byte)0x02); bs.put((byte)0xD9); bs.put((byte)0x00); bs.put((byte)0x00);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
             errln("Malform exception while decoding UTF32LE (2) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
         //test malform buffer
         bs.put((byte)0xFF); bs.put((byte)0xFE); bs.put((byte)0x00); bs.put((byte)0x00);
-        bs.put((byte)0xFF); bs.put((byte)0xDF); bs.put((byte)0x10); 
+        bs.put((byte)0xFF); bs.put((byte)0xDF); bs.put((byte)0x10);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             // must flush in order to exhibit malformed behavior
             smBufDecode(decoder, "UTF-32LE", bs, us, true, true);
             errln("Malform exception while decoding UTF32LE (3) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
         //test malform buffer
         bs.put((byte)0xFF); bs.put((byte)0xFE); bs.put((byte)0x00); bs.put((byte)0x00);
         bs.put((byte)0x02); bs.put((byte)0xD9); bs.put((byte)0x00); bs.put((byte)0x00);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
             errln("Malform exception while decoding UTF32LE (4) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         us.clear();
         bs.clear();
         //test overflow buffer
         bs.put((byte)0xFF); bs.put((byte)0xFE); bs.put((byte)0x00); bs.put((byte)0x00);
         bs.put((byte)0xDD); bs.put((byte)0xFF); bs.put((byte)0x10); bs.put((byte)0x00);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
             errln("Overflow exception while decoding UTF32LE (5) should have been thrown.");
         } catch (Exception ex) {
         }
         //end of decode UTF32LE
-        
+
         bs.clear();
         us.clear();
-        
+
         //decode UTF32BE
         decoder = provider.charsetForName("UTF-32BE").newDecoder();
         //test overflow buffer
         bs.put((byte)0x00); bs.put((byte)0x01); bs.put((byte)0xFF); bs.put((byte)0x41);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-32BE", bs, us, true, false);
             errln("Overflow exception while decoding UTF32BE (1) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         bs.clear();
         us.clear();
         //test malform buffer
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xD9); bs.put((byte)0x02);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-32BE", bs, us, true, false);
             errln("Malform exception while decoding UTF32BE (2) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         bs.clear();
         us.clear();
         //test malform buffer
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFE); bs.put((byte)0xFF);
         bs.put((byte)0x10); bs.put((byte)0xFF); bs.put((byte)0xDF);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             // must flush to exhibit malformed behavior
             smBufDecode(decoder, "UTF-32BE", bs, us, true, true);
             errln("Malform exception while decoding UTF32BE (3) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         bs.clear();
         us.clear();
         //test overflow buffer
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFE); bs.put((byte)0xFF);
         bs.put((byte)0x00); bs.put((byte)0x10); bs.put((byte)0xFF); bs.put((byte)0xDD);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             smBufDecode(decoder, "UTF-32BE", bs, us, true, false);
             errln("Overflow exception while decoding UTF32BE (4) should have been thrown.");
         } catch (Exception ex) {
         }
-        
+
         bs.clear();
         us.clear();
         //test malform buffer
-        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFE); 
+        bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0xFE);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         try {
             // must flush to exhibit malformed behavior
             smBufDecode(decoder, "UTF-32BE", bs, us, true, true);
@@ -4497,60 +4452,60 @@ public class TestCharset extends TestFmwk {
         }
         //end of decode UTF32BE
     }
-    
+
     //provide better code coverage for UTF8
     @Test
     public void TestCharsetUTF8() {
         CoderResult result = CoderResult.UNDERFLOW;
-        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("UTF-8").newDecoder();
         CharsetEncoder encoder = provider.charsetForName("UTF-8").newEncoder();
-        
+
         CharBuffer us = CharBuffer.allocate(0x10);
         ByteBuffer bs = ByteBuffer.allocate(0x10);
         ByteBuffer bs2;
         CharBuffer us2;
         int limit_us;
         int limit_bs;
-        
+
         //encode and decode using read only buffer
         encoder.reset();
         decoder.reset();
         us.put((char)0x0041); us.put((char)0x0081); us.put((char)0xEF65); us.put((char)0xD902);
         bs.put((byte)0x41); bs.put((byte)0xc2); bs.put((byte)0x81); bs.put((byte)0xee); bs.put((byte)0xbd); bs.put((byte)0xa5);
-        bs.put((byte)0x00); 
+        bs.put((byte)0x00);
         limit_us = us.position();
         limit_bs = bs.position();
-        
+
         us.limit(limit_us);
         us.position(0);
         bs.limit(limit_bs);
         bs.position(0);
         bs2 = bs.asReadOnlyBuffer();
         us2 = us.asReadOnlyBuffer();
-        
+
         result = decoder.decode(bs2, us, true);
         if (!result.isUnderflow() || !equals(us, us2)) {
             errln("Error while decoding UTF-8 (1) should not have occured.");
         }
-        
+
         us2.limit(limit_us);
         us2.position(0);
         bs.limit(limit_bs);
         bs.position(0);
-        
-        result = encoder.encode(us2, bs, true); 
+
+        result = encoder.encode(us2, bs, true);
         if (!result.isUnderflow() || !equals(bs, bs2)) {
             errln("Error while encoding UTF-8 (1) should not have occured.");
-        }  
-        
+        }
+
         us.clear();
         bs.clear();
-        
+
         //test overflow buffer while encoding
         //readonly buffer
         encoder.reset();
-        us.put((char)0x0081); us.put((char)0xEF65); 
+        us.put((char)0x0081); us.put((char)0xEF65);
         bs.put((byte)0x00); bs.put((byte)0x00); bs.put((byte)0x00);
         limit_us = us.position();
         us2 = us.asReadOnlyBuffer();
@@ -4562,9 +4517,9 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (2).");
         }
-        
+
         encoder.reset();
-        
+
         us2.limit(limit_us);
         us2.position(1);
         bs.limit(1);
@@ -4573,9 +4528,9 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (3).");
         }
-        
+
         encoder.reset();
-        
+
         us2.limit(limit_us);
         us2.position(1);
         bs.limit(2);
@@ -4584,9 +4539,9 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (4).");
         }
-        
+
         encoder.reset();
-        
+
         us2.limit(limit_us);
         us2.position(0);
         bs.limit(2);
@@ -4594,11 +4549,11 @@ public class TestCharset extends TestFmwk {
         result = encoder.encode(us2, bs, true);
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (5).");
-        }   
-        
+        }
+
         //not readonly buffer
         encoder.reset();
-        
+
         us.limit(limit_us);
         us.position(0);
         bs.limit(1);
@@ -4607,9 +4562,9 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (6).");
         }
-        
+
         encoder.reset();
-        
+
         us.limit(limit_us);
         us.position(0);
         bs.limit(3);
@@ -4618,9 +4573,9 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (7).");
         }
-        
+
         encoder.reset();
-        
+
         us.limit(limit_us);
         us.position(1);
         bs.limit(2);
@@ -4628,10 +4583,10 @@ public class TestCharset extends TestFmwk {
         result = encoder.encode(us, bs, true);
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (8).");
-        }   
-        
+        }
+
         encoder.reset();
-        
+
         us.limit(limit_us + 1);
         us.position(1);
         bs.limit(3);
@@ -4639,11 +4594,11 @@ public class TestCharset extends TestFmwk {
         result = encoder.encode(us, bs, true);
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (9).");
-        }  
-        
+        }
+
         us.clear();
         bs.clear();
-        
+
         //test encoding 4 byte characters
         encoder.reset();
         us.put((char)0xD902); us.put((char)0xDD02); us.put((char)0x0041);
@@ -4658,9 +4613,9 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (10).");
         }
-        
+
         encoder.reset();
-        
+
         us2.limit(limit_us);
         us2.position(0);
         bs.limit(2);
@@ -4669,9 +4624,9 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (11).");
         }
-        
+
         encoder.reset();
-        
+
         us2.limit(limit_us);
         us2.position(0);
         bs.limit(3);
@@ -4680,9 +4635,9 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (12).");
         }
-        
+
         encoder.reset();
-        
+
         us2.limit(limit_us);
         us2.position(0);
         bs.limit(4);
@@ -4691,35 +4646,35 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow Error should have occured while encoding UTF-8 (13).");
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //decoding code coverage
         //test malform error
         decoder.reset();
         bs.put((byte)0xC0); bs.put((byte)0xC0);
         us.put((char)0x0000);
         bs2 = bs.asReadOnlyBuffer();
-        
+
         us.limit(1);
         us.position(0);
         bs2.limit(1);
         bs2.position(0);
-        
+
         result = decoder.decode(bs2, us, true);
         result = decoder.flush(us);
         if (!result.isMalformed()) {
             errln("Malform error should have occurred while decoding UTF-8 (1).");
-        }    
-        
+        }
+
         us.limit(1);
         us.position(0);
         bs2.limit(1);
         bs2.position(0);
-        
+
         decoder.reset();
-        
+
         result = decoder.decode(bs2, us, true);
         us.limit(1);
         us.position(0);
@@ -4728,11 +4683,11 @@ public class TestCharset extends TestFmwk {
         result = decoder.decode(bs2, us, true);
         if (!result.isMalformed()) {
             errln("Malform error should have occurred while decoding UTF-8 (2).");
-        }  
-        
+        }
+
         us.clear();
         bs.clear();
-        
+
         //test overflow buffer
         bs.put((byte)0x01); bs.put((byte)0x41);
         us.put((char)0x0000);
@@ -4741,15 +4696,15 @@ public class TestCharset extends TestFmwk {
         us.position(0);
         bs2.limit(2);
         bs2.position(0);
-        
+
         result = decoder.decode(bs2, us, true);
         if (!result.isOverflow()) {
             errln("Overflow error should have occurred while decoding UTF-8 (3).");
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         //test malform string
         decoder.reset();
         bs.put((byte)0xF5); bs.put((byte)0xB4); bs.put((byte)0x8A); bs.put((byte)0x8C);
@@ -4759,14 +4714,14 @@ public class TestCharset extends TestFmwk {
         us.position(0);
         bs2.limit(4);
         bs2.position(0);
-        
+
         result = decoder.decode(bs2, us, true);
         if (!result.isMalformed()) {
             errln("Malform error should have occurred while decoding UTF-8 (4).");
         }
-        
+
         bs.clear();
-        
+
         //test overflow
         decoder.reset();
         bs.put((byte)0xF3); bs.put((byte)0xB4); bs.put((byte)0x8A); bs.put((byte)0x8C);
@@ -4775,38 +4730,38 @@ public class TestCharset extends TestFmwk {
         us.position(0);
         bs2.limit(4);
         bs2.position(0);
-        
+
         result = decoder.decode(bs2, us, true);
         if (!result.isOverflow()) {
             errln("Overflow error should have occurred while decoding UTF-8 (5).");
         }
-        
+
         //test overflow
         decoder.reset();
         us.limit(2);
         us.position(0);
         bs2.limit(5);
         bs2.position(0);
-        
+
         result = decoder.decode(bs2, us, true);
         if (!result.isOverflow()) {
             errln("Overflow error should have occurred while decoding UTF-8 (5).");
         }
-        
+
         //test overflow
         decoder.reset();
         us.limit(1);
         us.position(0);
         bs.limit(5);
         bs.position(0);
-        
+
         result = decoder.decode(bs, us, true);
         if (!result.isOverflow()) {
             errln("Overflow error should have occurred while decoding UTF-8 (6).");
         }
-      
+
         bs.clear();
-        
+
         //test overflow
         decoder.reset();
         bs.put((byte)0x41); bs.put((byte)0x42);
@@ -4814,50 +4769,50 @@ public class TestCharset extends TestFmwk {
         us.position(0);
         bs.limit(2);
         bs.position(0);
-        
+
         result = decoder.decode(bs, us, true);
         if (!result.isOverflow()) {
             errln("Overflow error should have occurred while decoding UTF-8 (7).");
         }
-        
+
     }
-    
+
     //provide better code coverage for Charset UTF16
     @Test
     public void TestCharsetUTF16() {
         CoderResult result = CoderResult.UNDERFLOW;
-        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("UTF-16").newDecoder();
         CharsetEncoder encoder = provider.charsetForName("UTF-16").newEncoder();
-        
+
         CharBuffer us = CharBuffer.allocate(0x10);
         ByteBuffer bs = ByteBuffer.allocate(0x10);
-        
+
         //test flush buffer and malform string
-        bs.put((byte)0xFF); 
+        bs.put((byte)0xFF);
         us.put((char)0x0000);
-        
+
         us.limit(us.position());
         us.position(0);
         bs.limit(bs.position());
         bs.position(0);
-        
+
         result = decoder.decode(bs, us, true);
         result = decoder.flush(us);
         if (!result.isMalformed()) {
             errln("Malform error while decoding UTF-16 should have occurred.");
         }
-        
+
         us.clear();
         bs.clear();
-        
+
         us.put((char)0xD902); us.put((char)0xDD01); us.put((char)0x0041);
-        
+
         us.limit(1);
         us.position(0);
         bs.limit(4);
         bs.position(0);
-        
+
         result = encoder.encode(us, bs, true);
         us.limit(3);
         us.position(0);
@@ -4866,35 +4821,35 @@ public class TestCharset extends TestFmwk {
         result = encoder.encode(us, bs, true);
         if (!result.isOverflow()) {
             errln("Overflow buffer while encoding UTF-16 should have occurred.");
-        }   
-        
+        }
+
         us.clear();
         bs.clear();
-        
+
         //test overflow buffer
         decoder.reset();
         decoder = provider.charsetForName("UTF-16BE").newDecoder();
-        
+
         bs.put((byte)0xFF); bs.put((byte)0xFE); bs.put((byte)0x41);
-        
+
         us.limit(0);
         us.position(0);
         bs.limit(3);
         bs.position(0);
-        
+
         result = decoder.decode(bs, us, true);
         if (!result.isOverflow()) {
             errln("Overflow buffer while decoding UTF-16 should have occurred.");
-        }        
+        }
     }
-    
+
     //provide better code coverage for Charset ISO-2022-KR
     @Test
     public void TestCharsetISO2022KR() {
         CoderResult result = CoderResult.UNDERFLOW;
-        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("ISO-2022-KR").newDecoder();
-        
+
         byte bytearray[] = {
                 (byte)0x1b, (byte)0x24, (byte)0x29, (byte)0x43, (byte)0x41, (byte)0x42,
         };
@@ -4903,21 +4858,21 @@ public class TestCharset extends TestFmwk {
         };
         ByteBuffer bb = ByteBuffer.wrap(bytearray);
         CharBuffer cb = CharBuffer.wrap(chararray);
-        
+
         result = decoder.decode(bb, cb, true);
-        
+
         if (!result.isOverflow()) {
             errln("Overflow buffer while decoding ISO-2022-KR should have occurred.");
         }
     }
-    
+
     //provide better code coverage for Charset ISO-2022-JP
     @Test
     public void TestCharsetISO2022JP() {
         CoderResult result = CoderResult.UNDERFLOW;
-        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("ISO-2022-JP-2").newDecoder();
-        
+
         byte bytearray[] = {
                 (byte)0x1b, (byte)0x24, (byte)0x28, (byte)0x44, (byte)0x0A, (byte)0x41,
         };
@@ -4926,53 +4881,53 @@ public class TestCharset extends TestFmwk {
         };
         ByteBuffer bb = ByteBuffer.wrap(bytearray);
         CharBuffer cb = CharBuffer.wrap(chararray);
-        
+
         result = decoder.decode(bb, cb, true);
-        
+
         if (!result.isOverflow()) {
             errln("Overflow buffer while decoding ISO-2022-KR should have occurred.");
         }
     }
-    
+
     //provide better code coverage for Charset ASCII
     @Test
     public void TestCharsetASCII() {
         CoderResult result = CoderResult.UNDERFLOW;
-        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("US-ASCII").newDecoder();
-        
+
         byte bytearray[] = {
                 (byte)0x41
         };
         char chararray[] = {
                 (char)0x0041
         };
-        
+
         ByteBuffer bb = ByteBuffer.wrap(bytearray);
         CharBuffer cb = CharBuffer.wrap(chararray);
-        
+
         result = decoder.decode(bb, cb, true);
         result = decoder.flush(cb);
-        
+
         if (result.isError()) {
             errln("Error occurred while decoding US-ASCII.");
         }
     }
-    
+
     // provide better code coverage for Charset Callbacks
     /* Different aspects of callbacks are being tested including using different context available */
     @Test
     public void TestCharsetCallbacks() {
         CoderResult result = CoderResult.UNDERFLOW;
-        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetProvider provider = new CharsetProviderICU();
         CharsetEncoder encoder = provider.charsetForName("iso-2022-jp").newEncoder();
         CharsetDecoder decoder = provider.charsetForName("iso-2022-jp").newDecoder();
-        
+
         String context3[] = {
                 "i",
                 "J"
         };
-        
+
         // Testing encoder escape callback
         String context1[] = {
                 "J",
@@ -4985,46 +4940,46 @@ public class TestCharset extends TestFmwk {
         };
         ByteBuffer bb = ByteBuffer.allocate(20);
         CharBuffer cb = CharBuffer.wrap(chararray);
-        
+
         ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.OVERFLOW, CharsetCallback.FROM_U_CALLBACK_ESCAPE, null);  // This callback is not valid.
         for (int i = 0; i < context1.length; i++) {
             encoder.reset();
             cb.position(0);
             bb.position(0);
             ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), CharsetCallback.FROM_U_CALLBACK_ESCAPE, context1[i]); // This callback is valid.
-            
+
             result = encoder.encode(cb, bb, true);
             if (result.isError()) {
                 errln("Error occurred while testing of callbacks for ISO-2022-JP encoder.");
             }
         }
-        
+
         // Testing encoder skip callback
         for (int i = 0; i < context3.length; i++) {
             encoder.reset();
             cb.position(0);
             bb.position(0);
-            ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), CharsetCallback.FROM_U_CALLBACK_SKIP, context3[i]); 
-            
+            ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), CharsetCallback.FROM_U_CALLBACK_SKIP, context3[i]);
+
             result = encoder.encode(cb, bb, true);
             if (result.isError() && i == 0) {
                 errln("Error occurred while testing of callbacks for ISO-2022-JP encoder.");
             }
         }
-        
+
         // Testing encoder sub callback
         for (int i = 0; i < context3.length; i++) {
             encoder.reset();
             cb.position(0);
             bb.position(0);
-            ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), CharsetCallback.FROM_U_CALLBACK_SUBSTITUTE, context3[i]); 
-            
+            ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), CharsetCallback.FROM_U_CALLBACK_SUBSTITUTE, context3[i]);
+
             result = encoder.encode(cb, bb, true);
             if (result.isError() && i == 0) {
                 errln("Error occurred while testing of callbacks for ISO-2022-JP encoder.");
             }
         }
-        
+
         // Testing decoder escape callback
         String context2[] = {
                 "X",
@@ -5037,20 +4992,20 @@ public class TestCharset extends TestFmwk {
         };
         bb = ByteBuffer.wrap(bytearray);
         cb = CharBuffer.allocate(20);
-        
+
         ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.OVERFLOW, CharsetCallback.TO_U_CALLBACK_ESCAPE, null);  // This callback is not valid.
         for (int i = 0; i < context2.length; i++) {
             decoder.reset();
             cb.position(0);
             bb.position(0);
             ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.malformedForLength(1), CharsetCallback.TO_U_CALLBACK_ESCAPE, context2[i]); // This callback is valid.
-            
+
             result = decoder.decode(bb, cb, true);
             if (result.isError()) {
                 errln("Error occurred while testing of callbacks for ISO-2022-JP decoder.");
             }
         }
-        
+
         // Testing decoder skip callback
         for (int i = 0; i < context3.length; i++) {
             decoder.reset();
@@ -5063,7 +5018,7 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-    
+
     // Testing invalid input exceptions
     @Test
     public void TestInvalidInput() {
@@ -5071,20 +5026,20 @@ public class TestCharset extends TestFmwk {
         Charset charset = provider.charsetForName("iso-2022-jp");
         CharsetEncoder encoder = charset.newEncoder();
         CharsetDecoder decoder = charset.newDecoder();
-        
+
         try {
             encoder.encode(CharBuffer.allocate(10), null, true);
             errln("Illegal argument exception should have been thrown due to null target.");
         } catch (Exception ex) {
         }
-        
+
         try {
             decoder.decode(ByteBuffer.allocate(10), null, true);
             errln("Illegal argument exception should have been thrown due to null target.");
         } catch (Exception ex) {
         }
     }
-    
+
     // Test java canonical names
     @Test
     public void TestGetICUJavaCanonicalNames() {
@@ -5094,9 +5049,9 @@ public class TestCharset extends TestFmwk {
         if (javaCName == null || icuCName == null) {
             errln("Unable to get Java or ICU canonical name from ambiguous alias");
         }
-        
+
     }
-    
+
     // Port over from ICU4C for test conversion tables (mbcs version 5.x)
     // Provide better code coverage in CharsetMBCS, CharsetDecoderICU, and CharsetEncoderICU.
     @Test
@@ -5108,47 +5063,47 @@ public class TestCharset extends TestFmwk {
                             this.getClass().getClassLoader());
         CharsetEncoder encoder = charset.newEncoder();
         CharsetDecoder decoder = charset.newDecoder();
-        
+
         byte bytearray[] = {
                 0x01, 0x02, 0x03, 0x0a,
                 0x01, 0x02, 0x03, 0x0b,
                 0x01, 0x02, 0x03, 0x0d,
         };
-        
+
         // set the callback for overflow errors
         ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.OVERFLOW, CharsetCallback.TO_U_CALLBACK_STOP, null);
-        
+
         ByteBuffer bb = ByteBuffer.wrap(bytearray);
         CharBuffer cb = CharBuffer.allocate(10);
-        
+
         bb.limit(4);
         cb.limit(1); // Overflow should occur and is expected
         result = decoder.decode(bb, cb, false);
         if (result.isError()) {
             errln("Error occurred while decoding: " + charsetName + " with error: " + result);
         }
-        
+
         bb.limit(8);
         result = decoder.decode(bb, cb, false);
         if (result.isError()) {
             errln("Error occurred while decoding: " + charsetName + " with error: " + result);
         }
-        
+
         bb.limit(12);
         result = decoder.decode(bb, cb, true);
         if (result.isError()) {
             errln("Error occurred while decoding: " + charsetName + " with error: " + result);
         }
-        
+
         char chararray[] = {
                 0xDBC4,0xDE34,0xD900,0xDC05,/* \U00101234\U00050005 */
                 0xD940,     /* first half of \U00060006 or \U00060007 */
                 0xDC07/* second half of \U00060007 */
         };
-        
+
         cb = CharBuffer.wrap(chararray);
         bb = ByteBuffer.allocate(10);
-        
+
         bb.limit(2);
         cb.limit(4);
         result = encoder.encode(cb, bb, false);
@@ -5166,7 +5121,7 @@ public class TestCharset extends TestFmwk {
             errln("Error should have occurred while encoding: " + charsetName);
         }
     }
-    
+
     /* Round trip test of SCSU converter*/
     @Test
     public void TestSCSUConverter(){
@@ -5174,8 +5129,8 @@ public class TestCharset extends TestFmwk {
             0x41,(byte) 0xdf, 0x12,(byte) 0x81, 0x03, 0x5f, 0x10, (byte)0xdf, 0x1b, 0x03,
             (byte)0xdf, 0x1c,(byte) 0x88,(byte) 0x80, 0x0b, (byte)0xbf,(byte) 0xff,(byte) 0xff, 0x0d, 0x0a,
             0x41, 0x10, (byte)0xdf, 0x12, (byte)0x81, 0x03, 0x5f, 0x10, (byte)0xdf, 0x13,
-            (byte)0xdf, 0x14,(byte) 0x80, 0x15, (byte)0xff 
-        }; 
+            (byte)0xdf, 0x14,(byte) 0x80, 0x15, (byte)0xff
+        };
 
         char allFeaturesUTF16[]={
             0x0041, 0x00df, 0x0401, 0x015f, 0x00df, 0x01df, 0xf000, 0xdbff,
@@ -5183,7 +5138,7 @@ public class TestCharset extends TestFmwk {
             0x01df, 0xf000, 0xdbff, 0xdfff
         };
 
-        
+
         char germanUTF16[]={
             0x00d6, 0x006c, 0x0020, 0x0066, 0x006c, 0x0069, 0x0065, 0x00df, 0x0074
         };
@@ -5219,7 +5174,7 @@ public class TestCharset extends TestFmwk {
         };
 
         // SCSUEncoder produces a slightly longer result (179B vs. 178B) because of one different choice:
-         //it uses an SQn once where a longer look-ahead could have shown that SCn is more efficient 
+         //it uses an SQn once where a longer look-ahead could have shown that SCn is more efficient
         byte japaneseSCSU[]={
             0x08, 0x00, 0x1b, 0x4c,(byte) 0xea, 0x16, (byte)0xca, (byte)0xd3,(byte) 0x94, 0x0f, 0x53, (byte)0xef, 0x61, 0x1b, (byte)0xe5,(byte) 0x84,
             (byte)0xc4, 0x0f, (byte)0x53,(byte) 0xef, 0x61, 0x1b, (byte)0xe5, (byte)0x84, (byte)0xc4, 0x16, (byte)0xca, (byte)0xd3, (byte)0x94, 0x08, 0x02, 0x0f,
@@ -5234,28 +5189,28 @@ public class TestCharset extends TestFmwk {
             (byte)0xea, 0x06,(byte) 0xd3,(byte) 0xe6, 0x0f,(byte) 0x8a, 0x00, 0x30, 0x44, 0x65,(byte) 0xb9, (byte)0xe4, (byte)0xfe,(byte) 0xe7,(byte) 0xc2, 0x06,
             (byte)0xcb, (byte)0x82
         };
-        
+
         CharsetProviderICU cs = new CharsetProviderICU();
         CharsetICU charset = (CharsetICU)cs.charsetForName("scsu");
         CharsetDecoder decode = charset.newDecoder();
         CharsetEncoder encode = charset.newEncoder();
-        
+
         //String[] codePoints = {"allFeatures", "german","russian","japanese"};
         byte[][] fromUnicode={allFeaturesSCSU,germanSCSU,russianSCSU,japaneseSCSU};
         char[][] toUnicode = {allFeaturesUTF16, germanUTF16,russianUTF16,japaneseUTF16};
-        
+
         for(int i=0;i<4;i++){
             ByteBuffer decoderBuffer = ByteBuffer.wrap(fromUnicode[i]);
             CharBuffer encoderBuffer = CharBuffer.wrap(toUnicode[i]);
-                           
+
             try{
-                // Decoding 
+                // Decoding
                 CharBuffer decoderResult = decode.decode(decoderBuffer);
                 encoderBuffer.position(0);
                 if(!decoderResult.equals(encoderBuffer)){
                     errln("Error occured while decoding "+ charset.name());
                 }
-                // Encoding 
+                // Encoding
                 ByteBuffer encoderResult = encode.encode(encoderBuffer);
                 // RoundTrip Test
                 ByteBuffer roundTrip = encoderResult;
@@ -5279,12 +5234,12 @@ public class TestCharset extends TestFmwk {
                 errln("Exception while converting SCSU thrown: " + e);
             }
         }
-        
+
         /* Provide better code coverage */
         /* testing illegal codepoints */
         CoderResult illegalResult = CoderResult.UNDERFLOW;
         CharBuffer illegalDecoderTrgt = CharBuffer.allocate(10);
-        
+
         byte[] illegalDecoderSrc1 = { (byte)0x41, (byte)0xdf, (byte)0x0c };
         decode.reset();
         illegalResult = decode.decode(ByteBuffer.wrap(illegalDecoderSrc1), illegalDecoderTrgt, true);
@@ -5368,7 +5323,7 @@ public class TestCharset extends TestFmwk {
                 }
             }
         }
-        
+
         /* Monkey test */
         {
             char[] monkeyIn = {
@@ -5415,9 +5370,9 @@ public class TestCharset extends TestFmwk {
             decode.reset();
             CharBuffer monkeyCB = CharBuffer.wrap(monkeyIn);
             try {
-                ByteBuffer monkeyBB = encode.encode(monkeyCB); 
+                ByteBuffer monkeyBB = encode.encode(monkeyCB);
                 /* CharBuffer monkeyEndResult =*/ decode.decode(monkeyBB);
-                
+
             } catch (Exception ex) {
                 errln("Exception thrown while encoding/decoding monkey test in SCSU: " + ex);
             }
@@ -5429,7 +5384,7 @@ public class TestCharset extends TestFmwk {
             };
             encode.reset();
             CharBuffer malformedSrc = CharBuffer.wrap(malformedSequence);
-            
+
             try {
                 encode.encode(malformedSrc);
                 errln("Malformed error should have thrown an exception.");
@@ -5451,34 +5406,34 @@ public class TestCharset extends TestFmwk {
                     errln("Buffer overflow exception should have been thrown.");
                 }
             }
-            
+
         }
-    } 
-    
+    }
+
     /* Test for BOCU1 converter*/
     @Test
     public void TestBOCU1Converter(){
         char expected[]={
-                  0xFEFF, 0x0061, 0x0062, 0x0020, // 0 
+                  0xFEFF, 0x0061, 0x0062, 0x0020, // 0
                   0x0063, 0x0061, 0x000D, 0x000A,
 
-                  0x0020, 0x0000, 0x00DF, 0x00E6, // 8 
+                  0x0020, 0x0000, 0x00DF, 0x00E6, // 8
                   0x0930, 0x0020, 0x0918, 0x0909,
 
-                  0x3086, 0x304D, 0x0020, 0x3053, // 16 
-                  0x4000, 0x4E00, 0x7777, 0x0020, 
+                  0x3086, 0x304D, 0x0020, 0x3053, // 16
+                  0x4000, 0x4E00, 0x7777, 0x0020,
 
-                  0x9FA5, 0x4E00, 0xAC00, 0xBCDE, // 24 
+                  0x9FA5, 0x4E00, 0xAC00, 0xBCDE, // 24
                   0x0020, 0xD7A3, 0xDC00, 0xD800,
 
-                  0xD800, 0xDC00, 0xD845, 0xDDDD, // 32 
+                  0xD800, 0xDC00, 0xD845, 0xDDDD, // 32
                   0xDBBB, 0xDDEE, 0x0020, 0xDBFF,
 
-                  0xDFFF, 0x0001, 0x0E40, 0x0020, // 40 
-                  0x0009  
+                  0xDFFF, 0x0001, 0x0E40, 0x0020, // 40
+                  0x0009
         };
-        
-        byte sampleText[]={ // from cintltst/bocu1tst.c/TestBOCU1 text 1 
+
+        byte sampleText[]={ // from cintltst/bocu1tst.c/TestBOCU1 text 1
             (byte) 0xFB,
             (byte) 0xEE,
             0x28, // from source offset 0
@@ -5508,31 +5463,31 @@ public class TestCharset extends TestFmwk {
             (byte) 0xFC, 0x10, 0x3E, (byte) 0xFE, 0x16, 0x3A, (byte) 0x8C,
             0x20, (byte) 0xFC, 0x03, (byte) 0xAC,
 
-            0x01, /// from 41 
-            (byte) 0xDE, (byte) 0x83, 0x20, 0x09 
+            0x01, /// from 41
+            (byte) 0xDE, (byte) 0x83, 0x20, 0x09
         };
-        
+
         CharsetProviderICU cs = new CharsetProviderICU();
         CharsetICU charset = (CharsetICU)cs.charsetForName("BOCU-1");
         CharsetDecoder decode = charset.newDecoder();
         CharsetEncoder encode = charset.newEncoder();
-       
+
         ByteBuffer decoderBuffer = ByteBuffer.wrap(sampleText);
         CharBuffer encoderBuffer = CharBuffer.wrap(expected);
         try{
-            // Decoding 
+            // Decoding
             CharBuffer decoderResult = decode.decode(decoderBuffer);
-            
+
             encoderBuffer.position(0);
             if(!decoderResult.equals(encoderBuffer)){
                 errln("Error occured while decoding "+ charset.name());
             }
-            // Encoding 
+            // Encoding
             ByteBuffer encoderResult = encode.encode(encoderBuffer);
             // RoundTrip Test
             ByteBuffer roundTrip = encoderResult;
             CharBuffer roundTripResult = decode.decode(roundTrip);
-            
+
             encoderBuffer.position(0);
             if(!roundTripResult.equals(encoderBuffer)){
                 errln("Error occured while encoding "+ charset.name());
@@ -5541,7 +5496,7 @@ public class TestCharset extends TestFmwk {
             errln("Exception while converting BOCU-1 thrown: " + e);
         }
     }
-    
+
     /* Test that ICU4C and ICU4J get the same ICU canonical name when given the same alias. */
     @Test
     public void TestICUCanonicalNameConsistency() {
@@ -5559,7 +5514,7 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-    
+
     /* Increase code coverage for CharsetICU and CharsetProviderICU*/
     @Test
     public void TestCharsetICUCodeCoverage() {
@@ -5589,7 +5544,7 @@ public class TestCharset extends TestFmwk {
         }
         errln("IllegalArgumentException should have been thrown.");
     }
-    
+
     @Test
     public void TestCharsetLMBCS() {
         String []lmbcsNames = {
@@ -5606,16 +5561,16 @@ public class TestCharset extends TestFmwk {
                 "LMBCS-18",
                 "LMBCS-19"
         };
-        
+
         char[] src = {
                 0x0192, 0x0041, 0x0061, 0x00D0, 0x00F6, 0x0100, 0x0174, 0x02E4, 0x03F5, 0x03FB,
                 0x05D3, 0x05D4, 0x05EA, 0x0684, 0x0685, 0x1801, 0x11B3, 0x11E8, 0x1F9A, 0x2EB4,
                 0x3157, 0x3336, 0x3304, 0xD881, 0xDC88
         };
         CharBuffer cbInput = CharBuffer.wrap(src);
-        
+
         CharsetProviderICU provider = new CharsetProviderICU();
-        
+
         for (int i = 0; i < lmbcsNames.length; i++) {
             Charset charset = provider.charsetForName(lmbcsNames[i]);
             if (charset == null) {
@@ -5624,12 +5579,12 @@ public class TestCharset extends TestFmwk {
             }
             CharsetEncoder encoder = charset.newEncoder();
             CharsetDecoder decoder = charset.newDecoder();
-            
+
             try {
                 cbInput.position(0);
                 ByteBuffer bbTmp = encoder.encode(cbInput);
                 CharBuffer cbOutput = decoder.decode(bbTmp);
-                
+
                 if (!equals(cbInput, cbOutput)) {
                     errln("Roundtrip test failed for charset: " + lmbcsNames[i]);
                 }
@@ -5640,9 +5595,9 @@ public class TestCharset extends TestFmwk {
                 }
                 errln("Exception thrown: " + ex + " while using charset: " + lmbcsNames[i]);
             }
-            
+
         }
-        
+
         // Test malformed
         CoderResult malformedResult = CoderResult.UNDERFLOW;
         byte[] malformedBytes = {
@@ -5656,19 +5611,19 @@ public class TestCharset extends TestFmwk {
         CharsetDecoder malformedDecoderTest = provider.charsetForName("LMBCS-1").newDecoder();
         for (int n = 0; n < malformedLimits.length; n++) {
             malformedDecoderTest.reset();
-            
+
             malformedSrc.position(0);
             malformedSrc.limit(malformedLimits[n]);
-            
+
             malformedTrgt.clear();
-            
+
             malformedResult = malformedDecoderTest.decode(malformedSrc,malformedTrgt, true);
             if (!malformedResult.isMalformed()) {
                 errln("Malformed error should have resulted.");
             }
         }
     }
-    
+
     /*
      * This is a port of ICU4C TestAmbiguousConverter in cintltst.
      * Since there is no concept of ambiguous converters in ICU4J
@@ -5681,11 +5636,11 @@ public class TestCharset extends TestFmwk {
         };
         ByteBuffer src = ByteBuffer.wrap(inBytes);
         CharBuffer trgt = CharBuffer.allocate(20);
-        
+
         CoderResult result = CoderResult.UNDERFLOW;
         CharsetProviderICU provider = new CharsetProviderICU();
         String[] names = CharsetProviderICU.getAllNames();
-        
+
         for (int i = 0; i < names.length; i++) {
             Charset charset = provider.charsetForName(names[i]);
             if (charset == null) {
@@ -5693,10 +5648,10 @@ public class TestCharset extends TestFmwk {
                 continue;
             }
             CharsetDecoder decoder = charset.newDecoder();
-            
+
             src.position(0);
             trgt.clear();
-            
+
             result = decoder.decode(src, trgt, true);
             if (result.isError()) {
                 /* We don't care about any failures. */
@@ -5704,7 +5659,7 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-    
+
     @Test
     public void TestIsFixedWidth(){
         String[] fixedWidth = {
@@ -5712,7 +5667,7 @@ public class TestCharset extends TestFmwk {
                 "UTF32",
                 "ibm-5478_P100-1995"
         };
-        
+
         String[] notFixedWidth = {
                 "GB18030",
                 "UTF8",
@@ -5721,24 +5676,24 @@ public class TestCharset extends TestFmwk {
         };
         CharsetProvider provider = new CharsetProviderICU();
         Charset charset;
-        
+
         for (int i = 0; i < fixedWidth.length; i++) {
             charset = provider.charsetForName(fixedWidth[i]);
-            
+
             if (!((CharsetICU)charset).isFixedWidth()) {
                 errln(fixedWidth[i] + " is a fixedWidth charset but returned false.");
             }
         }
-        
+
         for (int i = 0; i < notFixedWidth.length; i++) {
             charset = provider.charsetForName(notFixedWidth[i]);
-            
+
             if (((CharsetICU)charset).isFixedWidth()) {
                 errln(notFixedWidth[i] + " is NOT a fixedWidth charset but returned true.");
             }
         }
     }
-    
+
     @Test
     public void TestBytesLengthForString() {
         CharsetProviderICU provider = new CharsetProviderICU();
@@ -5749,7 +5704,7 @@ public class TestCharset extends TestFmwk {
                 "ISCII,version=0",
                 "ISO_2022,locale=ko,version=0"
         };
-        
+
         int[] expected = {
                 40,
                 20,
@@ -5757,21 +5712,21 @@ public class TestCharset extends TestFmwk {
                 80,
                 160
         };
-        
+
         int stringLength = 10;
         int length;
         int maxCharSize;
-        
+
         for (int i = 0; i < charsets.length; i++) {
             maxCharSize = (int)provider.charsetForName(charsets[i]).newEncoder().maxBytesPerChar();
             length = CharsetEncoderICU.getMaxBytesForString(stringLength, maxCharSize);
-            
+
             if (length != expected[i]) {
                 errln("For charset " + charsets[i] + " with string length " + stringLength + ", expected max byte length is " + expected[i] + " but got " + length);
             }
         }
     }
-    
+
     /*
      * When converting slices of a larger CharBuffer, Charset88591 and CharsetASCII does not handle the buffer correctly when
      * an unmappable character occurs.
@@ -5781,30 +5736,30 @@ public class TestCharset extends TestFmwk {
     public void TestCharsetASCII8859BufferHandling() {
         String firstLine = "C077693790=|MEMO=|00=|022=|Blanche st and the driveway grate was fault and rotated under my car=|\r\n";
         String secondLine = "C077693790=|MEMO=|00=|023=|puncturing the fuel tank. I spoke to the store operator (Ram Reddi –=|\r\n";
-        
+
         String charsetNames[] = {
                 "ASCII",
                 "ISO-8859-1"
         };
-        
+
         CoderResult result = CoderResult.UNDERFLOW;
-        
+
         CharsetEncoder encoder;
-        
+
         ByteBuffer outBuffer = ByteBuffer.allocate(500);
         CharBuffer charBuffer = CharBuffer.allocate(firstLine.length() + secondLine.length());
         charBuffer.put(firstLine);
         charBuffer.put(secondLine);
         charBuffer.flip();
-        
+
         for (int i = 0; i < charsetNames.length; i++) {
             encoder =  CharsetICU.forNameICU(charsetNames[i]).newEncoder();
-            
+
             charBuffer.position(firstLine.length());
             CharBuffer charBufferSlice = charBuffer.slice();
             charBufferSlice.limit(secondLine.length() - 2);
-    
-    
+
+
             try {
                 result = encoder.encode(charBufferSlice, outBuffer, false);
                 if (!result.isUnmappable()) {
@@ -5815,7 +5770,7 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-    
+
     /*
      * When converting with the String method getBytes(), buffer overflow exception is thrown because
      * of the way ICU4J is calculating the max bytes per char. This should be changed only on the ICU4J
@@ -5826,15 +5781,15 @@ public class TestCharset extends TestFmwk {
     public void TestBufferOverflowErrorUsingJavagetBytes() {
         String charsetName = "ibm-5035";
         String testCase = "\u7d42";
-        
+
         try {
             testCase.getBytes(charsetName);
         } catch (Exception ex) {
             errln("Error calling getBytes(): " + ex);
         }
-        
+
     }
-    
+
     @Test
     public void TestDefaultIgnorableCallback() {
         String cnv_name = "euc-jp-2007";
@@ -5860,7 +5815,7 @@ public class TestCharset extends TestFmwk {
                 errln("Error received converting +" + Integer.toHexString(set_ignorable.charAt(i)));
             }
         }
-        
+
         // test non-ignorable code points are not ignored
         size = set_not_ignorable.size();
         for (int i = 0; i < size; i++) {

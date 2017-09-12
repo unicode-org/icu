@@ -248,7 +248,7 @@ nl{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1193,8 +1193,8 @@ nl{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'week' w 'in' y"}
-                    other{"'week' w 'in' y"}
+                    one{"'week' w 'in' Y"}
+                    other{"'week' w 'in' Y"}
                 }
             }
             dayNames{

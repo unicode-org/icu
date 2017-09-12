@@ -1571,11 +1571,12 @@ public abstract class DateFormat extends UFormat {
      */
     public void setNumberFormat(NumberFormat newNumberFormat)
     {
-        this.numberFormat = newNumberFormat;
+        this.numberFormat = (NumberFormat)newNumberFormat.clone();
         /*In order to parse String like "11.10.2001" to DateTime correctly
           in Locale("fr","CH") [Richard/GCL]
         */
         this.numberFormat.setParseIntegerOnly(true);
+        this.numberFormat.setGroupingUsed(false);
     }
 
     /**

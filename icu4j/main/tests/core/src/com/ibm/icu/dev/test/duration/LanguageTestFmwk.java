@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.duration.BasicPeriodFormatterService;
@@ -37,10 +39,11 @@ import com.ibm.icu.impl.duration.impl.DataRecord.EUnitVariant;
 /**
  * Test cases for en
  */
+@RunWith(JUnit4.class)
 public abstract class LanguageTestFmwk extends TestFmwk implements TimeUnitConstants {
 
     private static final TimeUnit[] units = {
-        TimeUnit.YEAR, TimeUnit.MONTH, TimeUnit.WEEK, TimeUnit.DAY, TimeUnit.HOUR, 
+        TimeUnit.YEAR, TimeUnit.MONTH, TimeUnit.WEEK, TimeUnit.DAY, TimeUnit.HOUR,
         TimeUnit.MINUTE, TimeUnit.SECOND, TimeUnit.MILLISECOND
     };
 
@@ -63,7 +66,7 @@ public abstract class LanguageTestFmwk extends TestFmwk implements TimeUnitConst
     private static final Map datacache = new HashMap(); // String->TestData
 
     private static final long[] approxDurations = {
-        36525L*24*60*60*10, 3045*24*60*60*10L, 7*24*60*60*1000L, 24*60*60*1000L, 
+        36525L*24*60*60*10, 3045*24*60*60*10L, 7*24*60*60*1000L, 24*60*60*1000L,
         60*60*1000L, 60*1000L, 1000L, 1L
     };
 
@@ -536,46 +539,57 @@ class FileTestData extends LanguageTestFmwk.TestData {
     private String[] fractionalUnitTargets;
     private String[] multipleUnitTargets;
 
+    @Override
     int[] getFullPluralizedFormCounts() {
         return fullPluralizedFormCounts;
     }
 
+    @Override
     String[] getFullPluralizedFormTargets() {
         return fullPluralizedFormTargets;
     }
 
+    @Override
     String[] getMediumFormTargets() {
         return mediumFormTargets;
     }
 
+    @Override
     String[] getShortFormTargets() {
         return shortFormTargets;
     }
 
+    @Override
     String[] getCustomMinuteTargets() {
         return customMinuteTargets;
     }
 
+    @Override
     String[] getLimitedUnitTargets() {
         return limitedUnitTargets;
     }
 
+    @Override
     int[] getHalfUnitCounts() {
         return halfUnitCounts;
     }
 
+    @Override
     String[] getHalfUnitTargets() {
         return halfUnitTargets;
     }
 
+    @Override
     float[] getFractionalUnitCounts() {
         return fractionalUnitCounts;
     }
 
+    @Override
     String[] getFractionalUnitTargets() {
         return fractionalUnitTargets;
     }
 
+    @Override
     String[] getMultipleUnitTargets() {
         return multipleUnitTargets;
     }
@@ -695,46 +709,57 @@ class DefaultData extends LanguageTestFmwk.TestData {
         return instance;
     }
 
+    @Override
     int[] getFullPluralizedFormCounts() {
         return fullPluralizedFormCounts;
     }
 
+    @Override
     String[] getFullPluralizedFormTargets() {
         return null;
     }
 
+    @Override
     String[] getMediumFormTargets() {
         return null;
     }
 
+    @Override
     String[] getShortFormTargets() {
         return null;
     }
 
+    @Override
     String[] getCustomMinuteTargets() {
         return null;
     }
 
+    @Override
     String[] getLimitedUnitTargets() {
         return null;
     }
 
+    @Override
     int[] getHalfUnitCounts() {
         return halfUnitCounts;
     }
 
+    @Override
     String[] getHalfUnitTargets() {
         return null;
     }
 
+    @Override
     float[] getFractionalUnitCounts() {
         return fractionalUnitCounts;
     }
 
+    @Override
     String[] getFractionalUnitTargets() {
         return null;
     }
 
+    @Override
     String[] getMultipleUnitTargets() {
         return null;
     }

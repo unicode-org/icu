@@ -46,12 +46,16 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 
-public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class MessageRegressionTest extends TestFmwk {
     /* @bug 4074764
      * Null exception when formatting pattern with MessageFormat
      * with no parameters.
@@ -178,7 +182,7 @@ public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         pos.setErrorIndex(4);
         if (pos.getErrorIndex() != 4)
             errln("setErrorIndex failed, got " + pos.getErrorIndex() + " instead of 4");
-        
+
         if (objs != null) {
             errln("objs should be null");
         }
@@ -526,8 +530,8 @@ public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     @Test
     public void Test4142938() {
-        String pat = "''Vous'' {0,choice,0#n''|1#}avez s\u00E9lectionne\u00E9 " + 
-            "{0,choice,0#aucun|1#{0}} client{0,choice,0#s|1#|2#s} " + 
+        String pat = "''Vous'' {0,choice,0#n''|1#}avez s\u00E9lectionne\u00E9 " +
+            "{0,choice,0#aucun|1#{0}} client{0,choice,0#s|1#|2#s} " +
             "personnel{0,choice,0#s|1#|2#s}.";
         MessageFormat mf = new MessageFormat(pat);
 
@@ -535,13 +539,13 @@ public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             "'Vous' n'avez s\u00E9lectionne\u00E9 aucun clients personnels.",
             "'Vous' avez s\u00E9lectionne\u00E9 ",
             "'Vous' avez s\u00E9lectionne\u00E9 "
-        };  
+        };
         String[] SUFFIX = {
             null,
             " client personnel.",
             " clients personnels."
         };
-    
+
         for (int i=0; i<3; i++) {
             String out = mf.format(new Object[]{new Integer(i)});
             if (SUFFIX[i] == null) {
@@ -646,7 +650,7 @@ public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             throw new RuntimeException("didn't get exception for invalid input");
         }
     }
-    
+
     @Test
     public void test4293229() {
         MessageFormat format = new MessageFormat("'''{'0}'' '''{0}'''");
@@ -658,12 +662,12 @@ public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                     expected + "\", got \"" + result + "\"");
         }
     }
-     
+
     // This test basically ensures that the tests defined above also work with
     // valid named arguments.
     @Test
     public void testBugTestsWithNamesArguments() {
-        
+
       { // Taken from Test4031438().
         String pattern1 = "Impossible {arg1} has occurred -- status code is {arg0} and message is {arg2}.";
         String pattern2 = "Double '' Quotes {ARG_ZERO} test and quoted '{ARG_ONE}' test plus 'other {ARG_TWO} stuff'.";
@@ -812,7 +816,7 @@ public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln("\"" + mf.format(objs3) + "\"");
         } catch (Exception e) {
             errln("Exception thrown for null argument tests.");
-        } 
+        }
     }{ // Taken from Test4118594().
         String argName = "something_stupid";
         MessageFormat mf = new MessageFormat("{"+ argName + "}, {" + argName + "}, {" + argName + "}");
@@ -870,7 +874,7 @@ public class MessageRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             ostream.writeObject(original);
             ostream.flush();
             byte bytes[] = baos.toByteArray();
-    
+
             ObjectInputStream istream = new ObjectInputStream(new ByteArrayInputStream(bytes));
             MessageFormat reconstituted = (MessageFormat)istream.readObject();
             return reconstituted;

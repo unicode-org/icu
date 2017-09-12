@@ -54,10 +54,19 @@ ps{
                 superscriptingExponent{"×"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"{0} کور کیڼ اړخ ته دی"}
+            }
+            plural{
+                one{"{0} قلم"}
+                other{"{0} قلمونه"}
+            }
+        }
         minimumGroupingDigits{"1"}
         native{"arabext"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.34.94"}
     calendar{
         default{"persian"}
         generic{
@@ -158,8 +167,8 @@ ps{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"اونۍ w د y"}
-                    other{"اونۍ w د y"}
+                    one{"اونۍ w د Y"}
+                    other{"اونۍ w د Y"}
                 }
             }
             dayNames{

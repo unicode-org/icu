@@ -802,7 +802,7 @@ public class DecimalFormat extends NumberFormat {
     Number result = Parse.parse(text, parsePosition, pprops, symbols);
     // Backwards compatibility: return com.ibm.icu.math.BigDecimal
     if (result instanceof java.math.BigDecimal) {
-      result = new com.ibm.icu.math.BigDecimal((java.math.BigDecimal) result);
+      result = safeConvertBigDecimal((java.math.BigDecimal) result);
     }
     return result;
   }
@@ -820,7 +820,7 @@ public class DecimalFormat extends NumberFormat {
       Number number = result.getNumber();
       // Backwards compatibility: return com.ibm.icu.math.BigDecimal
       if (number instanceof java.math.BigDecimal) {
-        number = new com.ibm.icu.math.BigDecimal((java.math.BigDecimal) number);
+        number = safeConvertBigDecimal((java.math.BigDecimal) number);
         result = new CurrencyAmount(number, result.getCurrency());
       }
       return result;
@@ -888,6 +888,9 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void setPositivePrefix(String prefix) {
+    if (prefix == null) {
+      throw new NullPointerException();
+    }
     properties.setPositivePrefix(prefix);
     refreshFormatter();
   }
@@ -918,12 +921,15 @@ public class DecimalFormat extends NumberFormat {
    * <p>Using this method overrides the affix specified via the pattern, and unlike the pattern, the
    * string given to this method will be interpreted literally WITHOUT locale symbol substitutions.
    *
-   * @param suffix The literal string to prepend to negative numbers.
+   * @param prefix The literal string to prepend to negative numbers.
    * @category Affixes
    * @stable ICU 2.0
    */
-  public synchronized void setNegativePrefix(String suffix) {
-    properties.setNegativePrefix(suffix);
+  public synchronized void setNegativePrefix(String prefix) {
+    if (prefix == null) {
+      throw new NullPointerException();
+    }
+    properties.setNegativePrefix(prefix);
     refreshFormatter();
   }
 
@@ -958,6 +964,9 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void setPositiveSuffix(String suffix) {
+    if (suffix == null) {
+      throw new NullPointerException();
+    }
     properties.setPositiveSuffix(suffix);
     refreshFormatter();
   }
@@ -993,6 +1002,9 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void setNegativeSuffix(String suffix) {
+    if (suffix == null) {
+      throw new NullPointerException();
+    }
     properties.setNegativeSuffix(suffix);
     refreshFormatter();
   }
@@ -1229,11 +1241,14 @@ public class DecimalFormat extends NumberFormat {
   /**
    * {@icu} <strong>Rounding and Digit Limits:</strong> Sets the {@link java.math.MathContext} used
    * to round numbers. A "math context" encodes both a rounding mode and a number of significant
-   * digits.
+   * digits. Most users should call {@link #setRoundingMode} and/or {@link
+   * #setMaximumSignificantDigits} instead of this method.
    *
-   * <p>This method is provided for users who require their output to conform to a standard math
-   * context. <strong>Most users should call {@link #setRoundingMode} and/or {@link
-   * #setMaximumSignificantDigits} instead of this method.</strong>
+   * <p>When formatting, since no division is ever performed, the default MathContext is unlimited
+   * significant digits. However, when division occurs during parsing to correct for percentages and
+   * multipliers, a MathContext of 34 digits, the IEEE 754R Decimal128 standard, is used by default.
+   * If you require more than 34 digits when parsing, you can set a custom MathContext using this
+   * method.
    *
    * @param mathContext The MathContext to use when rounding numbers.
    * @see java.math.MathContext
@@ -1314,12 +1329,21 @@ public class DecimalFormat extends NumberFormat {
    * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
    * pattern except in scientific notation.
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * @param value The minimum number of digits before the decimal separator.
    * @category Rounding
    * @stable ICU 2.0
    */
   @Override
   public synchronized void setMinimumIntegerDigits(int value) {
+    // For backwards compatibility, conflicting min/max need to keep the most recent setting.
+    int max = properties.getMaximumIntegerDigits();
+    if (max >= 0 && max < value) {
+      properties.setMaximumIntegerDigits(value);
+    }
     properties.setMinimumIntegerDigits(value);
     refreshFormatter();
   }
@@ -1347,12 +1371,20 @@ public class DecimalFormat extends NumberFormat {
    * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
    * pattern except in scientific notation.
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * @param value The maximum number of digits before the decimal separator.
    * @category Rounding
    * @stable ICU 2.0
    */
   @Override
   public synchronized void setMaximumIntegerDigits(int value) {
+    int min = properties.getMinimumIntegerDigits();
+    if (min >= 0 && min > value) {
+      properties.setMinimumIntegerDigits(value);
+    }
     properties.setMaximumIntegerDigits(value);
     refreshFormatter();
   }
@@ -1381,6 +1413,10 @@ public class DecimalFormat extends NumberFormat {
    * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
    * pattern except in scientific notation.
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * <p>See {@link #setRoundingIncrement} and {@link #setMaximumSignificantDigits} for two other
    * ways of specifying rounding strategies.
    *
@@ -1393,6 +1429,10 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized void setMinimumFractionDigits(int value) {
+    int max = properties.getMaximumFractionDigits();
+    if (max >= 0 && max < value) {
+      properties.setMaximumFractionDigits(value);
+    }
     properties.setMinimumFractionDigits(value);
     refreshFormatter();
   }
@@ -1422,6 +1462,10 @@ public class DecimalFormat extends NumberFormat {
    * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
    * pattern except in scientific notation.
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * @param value The maximum number of integer digits after the decimal separator.
    * @see #setRoundingMode
    * @category Rounding
@@ -1429,6 +1473,10 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized void setMaximumFractionDigits(int value) {
+    int min = properties.getMinimumFractionDigits();
+    if (min >= 0 && min > value) {
+      properties.setMinimumFractionDigits(value);
+    }
     properties.setMaximumFractionDigits(value);
     refreshFormatter();
   }
@@ -1491,12 +1539,20 @@ public class DecimalFormat extends NumberFormat {
    * <p>For example, if minimum significant digits is 3 and the number is 1.2, the number will be
    * printed as "1.20".
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * @param value The minimum number of significant digits to display.
    * @see #setSignificantDigitsMode
    * @category Rounding
    * @stable ICU 3.0
    */
   public synchronized void setMinimumSignificantDigits(int value) {
+    int max = properties.getMaximumSignificantDigits();
+    if (max >= 0 && max < value) {
+      properties.setMaximumSignificantDigits(value);
+    }
     properties.setMinimumSignificantDigits(value);
     refreshFormatter();
   }
@@ -1520,6 +1576,10 @@ public class DecimalFormat extends NumberFormat {
    * <p>For example, if maximum significant digits is 3 and the number is 12345, the number will be
    * printed as "12300".
    *
+   * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
+   * the most recently specified value is used. For example, if there is a formatter with minInt=5,
+   * and then you set maxInt=3, then minInt will be changed to 3.
+   *
    * <p>See {@link #setRoundingIncrement} and {@link #setMaximumFractionDigits} for two other ways
    * of specifying rounding strategies.
    *
@@ -1532,6 +1592,10 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 3.0
    */
   public synchronized void setMaximumSignificantDigits(int value) {
+    int min = properties.getMinimumSignificantDigits();
+    if (min >= 0 && min > value) {
+      properties.setMinimumSignificantDigits(value);
+    }
     properties.setMaximumSignificantDigits(value);
     refreshFormatter();
   }
@@ -2071,19 +2135,12 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Whether to force {@link #parse} to always return a BigDecimal. By default, {@link #parse} will
-   * return different data types as follows:
+   * Whether to make {@link #parse} prefer returning a {@link com.ibm.icu.math.BigDecimal} when
+   * possible. For strings corresponding to return values of Infinity, -Infinity, NaN, and -0.0, a
+   * Double will be returned even if ParseBigDecimal is enabled.
    *
-   * <ol>
-   *   <li>If the number is an integer (has no fraction part), return a Long if possible, or else a
-   *       BigInteger.
-   *   <li>Otherwise, return a BigDecimal.
-   * </ol>
-   *
-   * If this setting is enabled, a BigDecimal will be returned even if the number is an integer.
-   *
-   * @param value true to cause {@link #parse} to always return a BigDecimal; false to let {@link
-   *     #parse} return different data types.
+   * @param value true to cause {@link #parse} to prefer BigDecimal; false to let {@link #parse}
+   *     return additional data types like Long or BigInteger.
    * @category Parsing
    * @stable ICU 3.6
    */
@@ -2439,6 +2496,29 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
+   * Converts a java.math.BigDecimal to a com.ibm.icu.math.BigDecimal with fallback for numbers
+   * outside of the range supported by com.ibm.icu.math.BigDecimal.
+   *
+   * @param number
+   * @return
+   */
+  private Number safeConvertBigDecimal(java.math.BigDecimal number) {
+    try {
+      return new com.ibm.icu.math.BigDecimal(number);
+    } catch (NumberFormatException e) {
+      if (number.signum() > 0 && number.scale() < 0) {
+        return Double.POSITIVE_INFINITY;
+      } else if (number.scale() < 0) {
+        return Double.NEGATIVE_INFINITY;
+      } else if (number.signum() < 0) {
+        return -0.0;
+      } else {
+        return 0.0;
+      }
+    }
+  }
+
+  /**
    * Updates the property bag with settings from the given pattern.
    *
    * @param pattern The pattern string to parse.
@@ -2450,6 +2530,9 @@ public class DecimalFormat extends NumberFormat {
    * @see PatternString#parseToExistingProperties
    */
   void setPropertiesFromPattern(String pattern, int ignoreRounding) {
+    if (pattern == null) {
+      throw new NullPointerException();
+    }
     PatternString.parseToExistingProperties(pattern, properties, ignoreRounding);
   }
 

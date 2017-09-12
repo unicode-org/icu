@@ -169,6 +169,7 @@ hu{
         fr{"francia"}
         fr_CA{"kanadai francia"}
         fr_CH{"svájci francia"}
+        frc{"cajun francia"}
         frm{"közép francia"}
         fro{"ófrancia"}
         frr{"északi fríz"}
@@ -295,6 +296,7 @@ hu{
         ln{"lingala"}
         lo{"lao"}
         lol{"mongó"}
+        lou{"louisianai kreol"}
         loz{"lozi"}
         lrc{"északi luri"}
         lt{"litván"}
@@ -894,7 +896,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — Összes"}
         category-list{"{0}: {1}"}

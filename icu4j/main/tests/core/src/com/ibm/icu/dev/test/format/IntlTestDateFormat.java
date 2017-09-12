@@ -6,7 +6,7 @@
  *   Corporation and others.  All Rights Reserved.
  */
 
-/** 
+/**
  * Port From:   JDK 1.4b1 : java.text.Format.IntlTestDateFormat
  * Source File: java/text/format/IntlTestDateFormat.java
  **/
@@ -25,12 +25,16 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
 
-public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class IntlTestDateFormat extends TestFmwk {
     // Values in milliseconds (== Date)
     private static final long ONESECOND = 1000;
     private static final long ONEMINUTE = 60 * ONESECOND;
@@ -52,12 +56,12 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
     public IntlTestDateFormat() {
         //Constructure
     }
-    
+
     @Before
     public void init() throws Exception {
         fFormat = DateFormat.getInstance();
     }
-    
+
     @Test
     public void TestULocale() {
         localeTest(ULocale.getDefault(), "Default Locale");
@@ -144,7 +148,7 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
         SimpleDateFormat s = (SimpleDateFormat) fFormat;
         logln(fTestName + " Pattern " + s.toPattern());
     }
-    
+
     private void tryDate(Date theDate) {
         final int DEPTH = 10;
         Date[] date = new Date[DEPTH];

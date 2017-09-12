@@ -461,12 +461,21 @@ StringTest::TestCheckedArrayByteSink() {
 
 void
 StringTest::TestStringByteSink() {
-    // Not much to test because only the constructor and Append()
+    // Not much to test because only the constructors and Append()
     // are implemented, and trivially so.
     std::string result("abc");  // std::string
     StringByteSink<std::string> sink(&result);
     sink.Append("def", 3);
     if(result != "abcdef") {
+        errln("StringByteSink did not Append() as expected");
+    }
+    StringByteSink<std::string> sink2(&result, 20);
+    if(result.capacity() < (result.length() + 20)) {
+        errln("StringByteSink should have 20 append capacity, has only %d",
+              (int)(result.capacity() - result.length()));
+    }
+    sink.Append("ghi", 3);
+    if(result != "abcdefghi") {
         errln("StringByteSink did not Append() as expected");
     }
 }

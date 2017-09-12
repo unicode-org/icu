@@ -24,7 +24,10 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -34,7 +37,8 @@ import com.ibm.icu.util.ULocale;
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
-public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class IntlTestDecimalFormatAPIC extends TestFmwk {
 
     // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
     @Test

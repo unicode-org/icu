@@ -1312,7 +1312,7 @@ u_strFromJavaModifiedUTF8WithSub(
             u_terminateUChars(dest, destCapacity, reqLength, pErrorCode);
             return dest;
         }
-        srcLength = uprv_strlen((const char *)pSrc);
+        srcLength = static_cast<int32_t>(uprv_strlen((const char *)pSrc));
     }
 
     /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */

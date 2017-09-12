@@ -169,6 +169,7 @@ da{
         fr{"fransk"}
         fr_CA{"canadisk fransk"}
         fr_CH{"schweizisk fransk"}
+        frc{"cajunfransk"}
         frm{"middelfransk"}
         fro{"oldfransk"}
         frr{"nordfrisisk"}
@@ -295,6 +296,7 @@ da{
         ln{"lingala"}
         lo{"lao"}
         lol{"mongo"}
+        lou{"Louisiana-kreolsk"}
         loz{"lozi"}
         lrc{"nordluri"}
         lt{"litauisk"}
@@ -953,7 +955,7 @@ da{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — alle"}
         category-list{"{0}: {1}"}

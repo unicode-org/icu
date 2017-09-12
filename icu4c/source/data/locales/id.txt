@@ -172,7 +172,7 @@ id{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -928,7 +928,7 @@ id{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    other{"'minggu' 'ke'-w y"}
+                    other{"'minggu' 'ke'-w Y"}
                 }
             }
             dayNames{

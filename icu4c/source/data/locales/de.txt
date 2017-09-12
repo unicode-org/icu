@@ -215,7 +215,7 @@ de{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -524,8 +524,8 @@ de{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'Woche' w 'des' 'Jahres' y"}
-                    other{"'Woche' w 'des' 'Jahres' y"}
+                    one{"'Woche' w 'des' 'Jahres' Y"}
+                    other{"'Woche' w 'des' 'Jahres' Y"}
                 }
             }
             dayNames{

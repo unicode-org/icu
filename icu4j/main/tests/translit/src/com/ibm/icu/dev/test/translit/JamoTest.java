@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -21,6 +23,7 @@ import com.ibm.icu.text.Transliterator;
  * @test
  * @summary Test the Latin-Jamo transliterator
  */
+@RunWith(JUnit4.class)
 public class JamoTest extends TestFmwk {
     @Test
     public void TestJamo() {
@@ -36,7 +39,7 @@ public class JamoTest extends TestFmwk {
 
             // Column 3 is expected value of L2.  If the expected
             // value of L2 is L1, then L2 is null.
- 
+
                 // add tests for the update to fix problems where it didn't follow the standard
                 // see also http://www.unicode.org/cldr/data/charts/transforms/Latin-Hangul.html
                 "gach", "(Gi)(A)(Cf)", null,
@@ -74,7 +77,7 @@ public class JamoTest extends TestFmwk {
 
             // 'r' in a final position is treated like 'l'
             "karka", "(Ki)(A)(L)(Ki)(A)", "kalka",
-            
+
         };
 
         for (int i=0; i<CASE.length; i+=3) {
@@ -97,7 +100,7 @@ public class JamoTest extends TestFmwk {
     public void TestRoundTrip() {
         String HANGUL[] = { "\uAC03\uC2F8",
                             "\uC544\uC5B4"};
-        
+
         Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
         Transliterator jamoLatin = latinJamo.getInverse();
         Transliterator jamoHangul = Transliterator.getInstance("NFC");
@@ -203,7 +206,7 @@ public class JamoTest extends TestFmwk {
                                    + " => " + hangul2 +
                                    "; but " + hangul + " =cpd=> " + jamoToName(hangulX)
                                    );
-                        errln(Utility.escape(buf.toString()));                        
+                        errln(Utility.escape(buf.toString()));
                     } else if (jamo.equals(jamo2)) {
                         buf.setLength(0);
                         buf.append("FAIL (Jamo<>Hangul problem): ");
@@ -215,7 +218,7 @@ public class JamoTest extends TestFmwk {
                                    latin + " => " + jamoToName(jamo2)
                                    + " => " + hangul2
                                    );
-                        errln(Utility.escape(buf.toString()));                        
+                        errln(Utility.escape(buf.toString()));
                     } else {
                         buf.setLength(0);
                         buf.append("FAIL: ");
@@ -253,7 +256,7 @@ public class JamoTest extends TestFmwk {
         "\uc0c1\uad00\uc5c6\uc774 \uc720\ub2c8\ucf54\ub4dc\ub294 \ubaa8\ub4e0 " +
         "\ubb38\uc790\uc5d0 \ub300\ud574 \uace0\uc720 \ubc88\ud638\ub97c " +
         "\uc81c\uacf5\ud569\ub2c8\ub2e4. " +
-        
+
         "\uae30\ubcf8\uc801\uc73c\ub85c \ucef4\ud4e8\ud130\ub294 " +
         "\uc22b\uc790\ub9cc \ucc98\ub9ac\ud569\ub2c8\ub2e4. \uae00\uc790\ub098 " +
         "\ub2e4\ub978 \ubb38\uc790\uc5d0\ub3c4 \uc22b\uc790\ub97c " +
@@ -277,7 +280,7 @@ public class JamoTest extends TestFmwk {
         "\ud14c\ud06c\ub2c8\uceec \uae30\ud638\uc5d0 \ub9de\ub294 \ub2e8\uc77c " +
         "\uae30\ud638\ud654 \ubc29\ubc95\uc744 \uac16\uace0 \uc788\uc9c0 " +
         "\ubabb\ud558\uc600\uc2b5\ub2c8\ub2e4. " +
-        
+
         "\uc774\ub7ec\ud55c \uae30\ud638\ud654 \uc2dc\uc2a4\ud15c\uc740 " +
         "\ub610\ud55c \ub2e4\ub978 \uae30\ud638\ud654 \uc2dc\uc2a4\ud15c\uacfc " +
         "\ucda9\ub3cc\ud569\ub2c8\ub2e4. \uc989 \ub450 \uac00\uc9c0 " +
@@ -294,7 +297,7 @@ public class JamoTest extends TestFmwk {
         "\ud50c\ub7ab\ud3fc \uac04\uc5d0 \uc804\ub2ec\ud560 \ub54c\ub9c8\ub2e4 " +
         "\uadf8 \ub370\uc774\ud130\ub294 \ud56d\uc0c1 \uc190\uc0c1\uc758 " +
         "\uc704\ud5d8\uc744 \uacaa\uac8c \ub429\ub2c8\ub2e4. " +
-        
+
         "\uc720\ub2c8\ucf54\ub4dc\ub85c \ubaa8\ub4e0 \uac83\uc744 " +
         "\ud574\uacb0\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4! " +
         "\uc720\ub2c8\ucf54\ub4dc\ub294 \uc0ac\uc6a9 \uc911\uc778 " +
@@ -303,7 +306,7 @@ public class JamoTest extends TestFmwk {
         "\uc22b\uc790\ub97c " +
         "\uc81c\uacf5\ud569\ub2c8\ub2e4. \uc720\ub2c8\ucf54\ub4dc " +
         "\ud45c\uc900\uc740 " + // "Apple, HP, IBM, JustSystem, Microsoft, Oracle, SAP, " +
-        // "Sun, Sybase, Unisys " + 
+        // "Sun, Sybase, Unisys " +
         "\ubc0f \uae30\ud0c0 \uc5ec\ub7ec " +
         "\ud68c\uc0ac\uc640 \uac19\uc740 \uc5c5\uacc4 " +
         "\uc120\ub450\uc8fc\uc790\uc5d0 \uc758\ud574 " +
@@ -323,7 +326,7 @@ public class JamoTest extends TestFmwk {
         "\ucd5c\uadfc \uc804 \uc138\uacc4\uc5d0 \ubd88\uace0 \uc788\ub294 " +
         "\uae30\uc220 \uacbd\ud5a5\uc5d0\uc11c \uac00\uc7a5 \uc911\uc694\ud55c " +
         "\ubd80\ubd84\uc744 \ucc28\uc9c0\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4. " +
-        
+
         "\uc720\ub2c8\ucf54\ub4dc\ub97c " +
 // Replaced a hyphen with a space to make the test case work with CLDR1.5
 //        "\ud074\ub77c\uc774\uc5b8\ud2b8-\uc11c\ubc84 \ub610\ub294 " +
@@ -345,7 +348,7 @@ public class JamoTest extends TestFmwk {
         "\ub370\uc774\ud130\ub97c \uc190\uc0c1 \uc5c6\uc774 \uc5ec\ub7ec " +
         "\uc2dc\uc2a4\ud15c\uc744 \ud1b5\ud574 \uc804\uc1a1\ud560 \uc218 " +
         "\uc788\uc2b5\ub2c8\ub2e4. " +
-        
+
         "\uc720\ub2c8\ucf54\ub4dc \ucf58\uc18c\uc2dc\uc5c4\uc5d0 \ub300\ud574 " +
         "\uc720\ub2c8\ucf54\ub4dc \ucf58\uc18c\uc2dc\uc5c4\uc740 " +
         "\ube44\uc601\ub9ac \uc870\uc9c1\uc73c\ub85c\uc11c \ud604\ub300 " +
@@ -369,7 +372,7 @@ public class JamoTest extends TestFmwk {
         "\uc9c0\uc6d0\ud558\uace0\uc790\ud558\ub294 \uc870\uc9c1\uacfc " +
         "\uac1c\uc778\uc5d0\uac8c \uac1c\ubc29\ub418\uc5b4 " +
         "\uc788\uc2b5\ub2c8\ub2e4. " +
-        
+
         "\ub354 \uc790\uc138\ud55c \ub0b4\uc6a9\uc740 \uc6a9\uc5b4\uc9d1, " +
         "\uc608\uc81c \uc720\ub2c8\ucf54\ub4dc \uc0ac\uc6a9 \uac00\ub2a5 " +
         "\uc81c\ud488, \uae30\uc220 \uc815\ubcf4 \ubc0f \uae30\ud0c0 " +
@@ -406,7 +409,7 @@ public class JamoTest extends TestFmwk {
         "(Ti)", "\u1110",
         "(Pi)", "\u1111",
         "(Hi)", "\u1112",
-        
+
         "(A)", "\u1161",
         "(AE)", "\u1162",
         "(YA)", "\u1163",

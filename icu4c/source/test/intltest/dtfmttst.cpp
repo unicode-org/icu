@@ -5251,6 +5251,15 @@ void DateFormatTest::TestDayPeriodWithLocales() {
     sdf.applyPattern(UnicodeString("hh:mm:ss BBBB"));
     assertEquals("hh:mm:ss BBBB | 01:00:00 | es", "01:00:00 de la madrugada",
         sdf.format(k010000, out.remove()));
+
+    // #13215: for locales with keywords, check hang in DayPeriodRules""getInstance(const Locale, ...),
+    // which is called in SimpleDateFormat::format for patterns that include 'B'.
+    sdf = SimpleDateFormat(UnicodeString(), Locale("en@calendar=buddhist"), errorCode);
+    sdf.setTimeZone(*tz);
+
+    sdf.applyPattern(UnicodeString("hh:mm:ss BBBB"));
+    assertEquals("hh:mm:ss BBBB | 01:00:00 | en@calendar=buddhist", "01:00:00 at night",
+        sdf.format(k010000, out.remove()));
 }
 
 void DateFormatTest::TestMinuteSecondFieldsInOddPlaces() {

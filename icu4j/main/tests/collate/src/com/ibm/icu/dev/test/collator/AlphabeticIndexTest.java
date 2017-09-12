@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
@@ -43,6 +45,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * @author Mark Davis
  */
+@RunWith(JUnit4.class)
 public class AlphabeticIndexTest extends TestFmwk {
     /**
      *

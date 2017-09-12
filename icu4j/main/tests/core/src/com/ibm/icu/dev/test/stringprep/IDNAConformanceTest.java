@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -29,14 +31,15 @@ import com.ibm.icu.text.UTF16;
 
 /**
  * @author limaoyu
- * 
+ *
  */
+@RunWith(JUnit4.class)
 public class IDNAConformanceTest extends TestFmwk {
     @Test
     public void TestConformance() {
 
         TreeMap inputData = null;
-        
+
         try {
             inputData = ReadInput.getInputData();
         } catch (UnsupportedEncodingException e) {
@@ -46,7 +49,7 @@ public class IDNAConformanceTest extends TestFmwk {
             errln(e.getMessage());
             return;
         }
-        
+
         Set keyMap = inputData.keySet();
         for (Iterator iter = keyMap.iterator(); iter.hasNext();) {
             Long element = (Long) iter.next();
@@ -70,7 +73,7 @@ public class IDNAConformanceTest extends TestFmwk {
             boolean failed = false;
 
             if ("toascii".equals(tempHash.get("type"))) {
-                
+
                 //get the result
                 try {
                     //by default STD3 rules are not used, but if the description
@@ -87,12 +90,12 @@ public class IDNAConformanceTest extends TestFmwk {
                     //errln(e2.getMessage());
                     failed = true;
                 }
-                
-                
+
+
                 if ("pass".equals(passfail)) {
                     if (!namezone.equals(result)) {
                         printInfo(desc, namebase, nameutf8, namezone,
-                                failzone1, failzone2, result, type, passfail);                        
+                                failzone1, failzone2, result, type, passfail);
                         errln("\t pass fail standard is pass, but failed");
                     } else {
                         printInfo(desc, namebase, nameutf8, namezone,
@@ -108,7 +111,7 @@ public class IDNAConformanceTest extends TestFmwk {
                         logln("passed");
                     } else {
                         printInfo(desc, namebase, nameutf8, namezone,
-                                failzone1, failzone2, result, type, passfail);                        
+                                failzone1, failzone2, result, type, passfail);
                         errln("\t pass fail standard is fail, but no exception thrown out");
                     }
                 }
@@ -132,11 +135,11 @@ public class IDNAConformanceTest extends TestFmwk {
                     if (!namezone.equals(result)) {
                         printInfo(desc, namebase, nameutf8, namezone,
                                 failzone1, failzone2, result, type, passfail);
-                        
+
                         errln("\t Did not get the expected result. Expected: " + prettify(namezone) + " Got: " + prettify(result));
                     } else {
                         printInfo(desc, namebase, nameutf8, namezone,
-                                failzone1, failzone2, result, type, passfail);                        
+                                failzone1, failzone2, result, type, passfail);
                         logln("\tpassed");
                     }
                 }
@@ -145,12 +148,12 @@ public class IDNAConformanceTest extends TestFmwk {
                     if (failed || namebase.equals(result)) {
                         printInfo(desc, namebase, nameutf8, namezone,
                                 failzone1, failzone2, result, type, passfail);
-                        
+
                         logln("\tpassed");
                     } else {
                         printInfo(desc, namebase, nameutf8, namezone,
                                 failzone1, failzone2, result, type, passfail);
-                        
+
                         errln("\t pass fail standard is fail, but no exception thrown out");
                     }
                 }
@@ -220,7 +223,7 @@ public class IDNAConformanceTest extends TestFmwk {
                     String utf16String = UTF16.valueOf(toBeInserted);
                     char[] charsTemp = utf16String.toCharArray();
                     for (int j = 0; j < charsTemp.length; j++) {
-                        result.append((char) charsTemp[j]);
+                        result.append(charsTemp[j]);
                     }
                 }
             } else if ('>' == chars[i]) {//end when met with '>'
@@ -235,9 +238,9 @@ public class IDNAConformanceTest extends TestFmwk {
 
     /**
      * This class is used to read test data from TestInput file.
-     * 
+     *
      * @author limaoyu
-     *  
+     *
      */
     public static class ReadInput {
 

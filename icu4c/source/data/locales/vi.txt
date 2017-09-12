@@ -181,7 +181,7 @@ vi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -834,7 +834,7 @@ vi{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'năm' y"}
                 yw{
-                    other{"'tuần' w 'của' 'năm' y"}
+                    other{"'tuần' w 'của' 'năm' Y"}
                 }
             }
             dayNames{

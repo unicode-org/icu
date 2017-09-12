@@ -13,6 +13,8 @@ import java.text.ParsePosition;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.math.BigDecimal;
@@ -29,6 +31,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  *
  */
+@RunWith(JUnit4.class)
 public class TimeUnitTest extends TestFmwk {
     @Test
     public void Test10219FractionalPlurals() {
@@ -40,16 +43,16 @@ public class TimeUnitTest extends TestFmwk {
             nf.setMaximumFractionDigits(i);
             tuf.setNumberFormat(nf);
             assertEquals("Test10219", expected[i], tuf.format(new TimeUnitAmount(1.588, TimeUnit.MINUTE)));
-        }   
+        }
     }
-    
+
     @Test
     public void Test10219FactionalPluralsParse() throws ParseException {
         TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
         ParsePosition ppos = new ParsePosition(0);
         String parseString = "1 minutes";
         tuf.parseObject(parseString, ppos);
-        
+
         // Parsing should go all the way to the end of the string.
         // We want the longest match, and we don't care if the plural form of the unit
         // matches the plural form of the number.
@@ -64,7 +67,7 @@ public class TimeUnitTest extends TestFmwk {
             TimeUnitFormat[] formats = new TimeUnitFormat[] {
                 new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.FULL_NAME),
                 new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.ABBREVIATED_NAME),
-                
+
             };
             for (int style = TimeUnitFormat.FULL_NAME;
                  style <= TimeUnitFormat.ABBREVIATED_NAME;
@@ -111,7 +114,7 @@ public class TimeUnitTest extends TestFmwk {
         format.setNumberFormat(NumberFormat.getNumberInstance(es));
         format.setLocale(es);
         formatParsing(format);
-        
+
         format.setLocale(new Locale("pt_BR"));
         formatParsing(format);
         format = new TimeUnitFormat(new Locale("de"));
@@ -120,7 +123,7 @@ public class TimeUnitTest extends TestFmwk {
         format.setNumberFormat(NumberFormat.getNumberInstance(new Locale("en")));
         formatParsing(format);
     }
-    
+
     @Test
     public void TestClone() {
         TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.ABBREVIATED_NAME);
@@ -130,18 +133,18 @@ public class TimeUnitTest extends TestFmwk {
         tuf.setLocale(Locale.GERMAN);
         assertEquals("", "1 hr", tufClone.format(new TimeUnitAmount(1, TimeUnit.HOUR)));
     }
-    
+
     @Test
     public void TestEqHashCode() {
         TimeUnitFormat tf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
         MeasureFormat tfeq = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
-        
+
         MeasureFormat tfne = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.ABBREVIATED_NAME);
         MeasureFormat tfne2 = new TimeUnitFormat(ULocale.GERMAN, TimeUnitFormat.FULL_NAME);
         verifyEqualsHashCode(tf, tfeq, tfne);
         verifyEqualsHashCode(tf, tfeq, tfne2);
     }
-    
+
     @Test
     public void TestGetLocale() {
         TimeUnitFormat tf = new TimeUnitFormat(ULocale.GERMAN);
@@ -150,8 +153,8 @@ public class TimeUnitTest extends TestFmwk {
 
     /*
      * @bug 7902
-     * This tests that requests for short unit names correctly fall back 
-     * to long unit names for a locale where the locale data does not 
+     * This tests that requests for short unit names correctly fall back
+     * to long unit names for a locale where the locale data does not
      * provide short unit names. As of CLDR 1.9, Greek is one such language.
      */
     @Test
@@ -250,9 +253,9 @@ public class TimeUnitTest extends TestFmwk {
 
                         assertEquals(
                                 "locale: " + locales[locIndex]
-                                        + ", style: " + styles[styleIndex] 
+                                        + ", style: " + styles[styleIndex]
                                                 + ", units: " + units[unitIndex]
-                                                        + ", value: " + numbers[numIndex], 
+                                                        + ", value: " + numbers[numIndex],
                                                 expected[counter], formatted);
                         ++counter;
                     }
@@ -262,22 +265,22 @@ public class TimeUnitTest extends TestFmwk {
     }
 
     /**
-     * @bug9042 
+     * @bug9042
      * Performs tests for Greek.
-     * This tests that if the plural count listed in time unit format does not 
-     * match those in the plural rules for the locale, those plural count in 
-     * time unit format will be ingored and subsequently, fall back will kick in 
-     * which is tested above. 
-     * Without data sanitization, setNumberFormat() would crash. 
-     * As of CLDR shiped in ICU4.8, Greek is one such language. 
-     */ 
+     * This tests that if the plural count listed in time unit format does not
+     * match those in the plural rules for the locale, those plural count in
+     * time unit format will be ingored and subsequently, fall back will kick in
+     * which is tested above.
+     * Without data sanitization, setNumberFormat() would crash.
+     * As of CLDR shiped in ICU4.8, Greek is one such language.
+     */
     @Test
     public void TestGreekWithSanitization() {
         ULocale loc = new ULocale("el");
         NumberFormat numfmt = NumberFormat.getInstance(loc);
         TimeUnitFormat tuf = new TimeUnitFormat(loc);
         tuf.parseObject("", new ParsePosition(0));
-        tuf.setNumberFormat(numfmt);        
+        tuf.setNumberFormat(numfmt);
     }
 
     @Test
@@ -320,7 +323,7 @@ public class TimeUnitTest extends TestFmwk {
             }
         }
     }
-    
+
     /*
      * Tests the method public TimeUnitFormat(ULocale locale, int style), public TimeUnitFormat(Locale locale, int style)
      */
@@ -347,7 +350,7 @@ public class TimeUnitTest extends TestFmwk {
             }
         }
     }
-    
+
     /*
      * Tests the method public TimeUnitFormat setLocale(ULocale locale) public TimeUnitFormat setLocale(Locale locale)
      */
@@ -391,7 +394,7 @@ public class TimeUnitTest extends TestFmwk {
         tuf1.setNumberFormat(NumberFormat.getInstance());
         tuf1.setNumberFormat(null);
     }
-    
+
     /*
      * Tests the method public StringBuffer format(Object obj, ...
      */
@@ -406,21 +409,21 @@ public class TimeUnitTest extends TestFmwk {
         } catch (Exception e) {
         }
     }
-    
+
     /* Tests the method private void setup() from
      * public Object parseObject(String source, ParsePosition pos)
-     * 
+     *
      */
     @Test
     public void TestSetup(){
         TimeUnitFormat tuf = new TimeUnitFormat();
         tuf.parseObject("", new ParsePosition(0));
-        
+
         TimeUnitFormat tuf1 = new TimeUnitFormat();
         tuf1.setNumberFormat(NumberFormat.getInstance());
         tuf1.parseObject("", new ParsePosition(0));
     }
-    
+
     @Test
     public void TestStandInForMeasureFormat() {
         TimeUnitFormat tuf = new TimeUnitFormat(ULocale.FRENCH, TimeUnitFormat.ABBREVIATED_NAME);
@@ -437,14 +440,14 @@ public class TimeUnitTest extends TestFmwk {
         assertEquals("getNumberFormat", ULocale.FRENCH, tuf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
         assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, tuf.getWidth());
     }
-    
+
     private void verifyEqualsHashCode(Object o, Object eq, Object ne) {
         assertEquals("verifyEqualsHashCodeSame", o, o);
         assertEquals("verifyEqualsHashCodeEq", o, eq);
         assertNotEquals("verifyEqualsHashCodeNe", o, ne);
         assertNotEquals("verifyEqualsHashCodeEqTrans", eq, ne);
         assertEquals("verifyEqualsHashCodeHashEq", o.hashCode(), eq.hashCode());
-        
+
         // May be a flaky test, but generally should be true.
         // May need to comment this out later.
         assertNotEquals("verifyEqualsHashCodeHashNe", o.hashCode(), ne.hashCode());

@@ -200,7 +200,7 @@ fo{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -432,8 +432,8 @@ fo{
                 yQQQ{"QQQ 'í' y"}
                 yQQQQ{"QQQQ 'í' y"}
                 yw{
-                    one{"w. 'vika' 'í' y"}
-                    other{"w. 'vika' 'í' y"}
+                    one{"w. 'vika' 'í' Y"}
+                    other{"w. 'vika' 'í' Y"}
                 }
             }
             dayNames{

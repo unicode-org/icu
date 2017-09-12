@@ -179,7 +179,7 @@ th{
         minimumGroupingDigits{"1"}
         native{"thai"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1240,7 +1240,7 @@ th{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ G y"}
                 yw{
-                    other{"สัปดาห์ที่ w ของ y"}
+                    other{"สัปดาห์ที่ w ของ Y"}
                 }
             }
             dayNames{

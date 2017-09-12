@@ -159,6 +159,7 @@ void addNormTest(TestNode** root)
 }
 
 static const char* const modeStrings[]={
+    "?",
     "UNORM_NONE",
     "UNORM_NFD",
     "UNORM_NFKD",
@@ -183,7 +184,7 @@ static void TestNormCases(UNormalizationMode mode,
         length2= unorm_normalize(source, -1, mode, 0, NULL, 0, &status2);
         if(neededLen!=length2) {
           log_err("ERROR in unorm_normalize(%s)[%d]: "
-                  "preflight length/NUL %d!=%d preflight length/srcLength\n",
+                  "preflight length/srcLength %d!=%d preflight length/NUL\n",
                   modeStrings[mode], (int)x, (int)neededLen, (int)length2);
         }
         if(status==U_BUFFER_OVERFLOW_ERROR)
@@ -192,14 +193,14 @@ static void TestNormCases(UNormalizationMode mode,
         }
         length2=unorm_normalize(source, u_strlen(source), mode, 0, result, UPRV_LENGTHOF(result), &status); 
         if(U_FAILURE(status) || neededLen!=length2) {
-            log_data_err("ERROR in unorm_normalize(%s/NUL) at %s:  %s - (Are you missing data?)\n",
+            log_data_err("ERROR in unorm_normalize(%s/srcLength) at %s:  %s - (Are you missing data?)\n",
                          modeStrings[mode], austrdup(source), myErrorName(status));
         } else {
             assertEqual(result, cases[x][expIndex], x);
         }
         length2=unorm_normalize(source, -1, mode, 0, result, UPRV_LENGTHOF(result), &status); 
         if(U_FAILURE(status) || neededLen!=length2) {
-            log_data_err("ERROR in unorm_normalize(%s/srcLength) at %s:  %s - (Are you missing data?)\n",
+            log_data_err("ERROR in unorm_normalize(%s/NUL) at %s:  %s - (Are you missing data?)\n",
                          modeStrings[mode], austrdup(source), myErrorName(status));
         } else {
             assertEqual(result, cases[x][expIndex], x);

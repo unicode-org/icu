@@ -1568,13 +1568,6 @@ def CopyAndStripAndMerge(s, t):
   return CopyAndStripWithOptionalMerge(s, t, True)
 
 
-def PrependBOM(s, t):
-  with open(s, "r") as in_file, open(t, "w") as out_file:
-    out_file.write("\xef\xbb\xbf")  # UTF-8 BOM for ICU svn
-    shutil.copyfileobj(in_file, out_file)
-  return t
-
-
 def CopyOnly(s, t):
   shutil.copy(s, t)
   return t
@@ -1608,12 +1601,12 @@ _files = {
   "EastAsianWidth.txt": (DontCopy, ParseEastAsianWidth),
   "emoji-data.txt": (DontCopy, ParseNamedProperties),
   "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
-  "GraphemeBreakTest.txt": (PrependBOM, "testdata"),
+  "GraphemeBreakTest.txt": (CopyOnly, "testdata"),
   "IdnaTest.txt": (CopyOnly, "testdata"),
   "IndicPositionalCategory.txt": (DontCopy, ParseIndicPositionalCategory),
   "IndicSyllabicCategory.txt": (DontCopy, ParseIndicSyllabicCategory),
   "LineBreak.txt": (DontCopy, ParseLineBreak),
-  "LineBreakTest.txt": (PrependBOM, "testdata"),
+  "LineBreakTest.txt": (CopyOnly, "testdata"),
   "NameAliases.txt": (DontCopy, ParseNameAliases),
   "NamesList.txt": (DontCopy, ParseNamesList),
   "NormalizationCorrections.txt": (CopyOnly,),  # Only used in gensprep.
@@ -1622,14 +1615,14 @@ _files = {
   "PropertyValueAliases.txt": (DontCopy, ParsePropertyValueAliases, 1),
   "PropList.txt": (DontCopy, ParseNamedProperties),
   "SentenceBreakProperty.txt": (DontCopy, ParseSentenceBreak),
-  "SentenceBreakTest.txt": (PrependBOM, "testdata"),
+  "SentenceBreakTest.txt": (CopyOnly, "testdata"),
   "Scripts.txt": (DontCopy, ParseScripts),
   "ScriptExtensions.txt": (DontCopy, ParseScriptExtensions),
   "SpecialCasing.txt": (CopyOnly, ParseSpecialCasing),
   "UnicodeData.txt": (CopyOnly, ParseUnicodeData, 2),
   "VerticalOrientation.txt": (DontCopy, ParseVerticalOrientation),
   "WordBreakProperty.txt": (DontCopy, ParseWordBreak),
-  "WordBreakTest.txt": (PrependBOM, "testdata"),
+  "WordBreakTest.txt": (CopyOnly, "testdata"),
   # From www.unicode.org/Public/idna/<version>/
   "IdnaMappingTable.txt": (IdnaToUTS46TextFile, "norm2")
 }

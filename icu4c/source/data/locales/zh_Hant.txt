@@ -262,7 +262,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.1.33.94"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1124,6 +1124,9 @@ zh_Hant{
                 "{1} {0}",
             }
             availableFormats{
+                Bh{"Bh時"}
+                Bhm{"Bh:mm"}
+                Bhms{"Bh:mm:ss"}
                 E{"ccc"}
                 Ed{"d E"}
                 Gy{"G y年"}
@@ -1286,7 +1289,12 @@ zh_Hant{
                 Timezone{"{0} {1}"}
             }
             availableFormats{
+                Bh{"Bh時"}
+                Bhm{"Bh:mm"}
+                Bhms{"Bh:mm:ss"}
                 E{"ccc"}
+                EBhm{"E Bh:mm"}
+                EBhms{"E Bh:mm:ss"}
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ed{"d E"}
@@ -1331,7 +1339,7 @@ zh_Hant{
                 yQQQ{"y年QQQ"}
                 yQQQQ{"y年QQQQ"}
                 yw{
-                    other{"y年的第w週"}
+                    other{"Y年的第w週"}
                 }
             }
             dayNames{

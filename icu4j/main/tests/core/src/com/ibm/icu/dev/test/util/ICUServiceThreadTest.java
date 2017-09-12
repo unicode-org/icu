@@ -25,15 +25,17 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestLog;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class ICUServiceThreadTest extends TestFmwk
 {
     private static final boolean PRINTSTATS = false;
@@ -53,10 +55,12 @@ public class ICUServiceThreadTest extends TestFmwk
             super(new ULocale(id), id, true);
         }
 
+        @Override
         public String getDisplayName(String idForDisplay, ULocale locale) {
             return (visible && idForDisplay.equals(this.id)) ? "(" + locale.toString() + ") " + idForDisplay : null;
         }
 
+        @Override
         public String toString() {
             return "Factory_" + id;
         }
@@ -114,16 +118,15 @@ public class ICUServiceThreadTest extends TestFmwk
         //private final String name;
         protected ICUService service;
         private final long delay;
-        protected final TestLog log;
 
-        public TestThread(String name, ICUService service, long delay, TestLog log) {
+        public TestThread(String name, ICUService service, long delay) {
             //this.name = name + " ";
             this.service = service;
             this.delay = delay;
-            this.log = new DelegatingLog(log);
             this.setDaemon(true);
         }
 
+        @Override
         public void run() {
             while (WAIT) {
                 Thread.yield();
@@ -188,14 +191,14 @@ public class ICUServiceThreadTest extends TestFmwk
     }
 
     static class RegisterFactoryThread extends TestThread {
-        RegisterFactoryThread(String name, ICUService service, long delay, TestLog log) {
-            super("REG " + name, service, delay, log);
+        RegisterFactoryThread(String name, ICUService service, long delay) {
+            super("REG " + name, service, delay);
         }
 
+        @Override
         protected void iterate() {
             Factory f = new TestFactory(getCLV());
             service.registerFactory(f);
-            //log.logln(f.toString());
             TestFmwk.logln(f.toString());
         }
     }
@@ -204,13 +207,14 @@ public class ICUServiceThreadTest extends TestFmwk
         private Random r;
         List factories;
 
-        UnregisterFactoryThread(String name, ICUService service, long delay, TestLog log) {
-            super("UNREG " + name, service, delay, log);
+        UnregisterFactoryThread(String name, ICUService service, long delay) {
+            super("UNREG " + name, service, delay);
 
             r = new Random();
             factories = service.factories();
         }
 
+        @Override
         public void iterate() {
             int s = factories.size();
             if (s == 0) {
@@ -219,7 +223,6 @@ public class ICUServiceThreadTest extends TestFmwk
                 int n = r.nextInt(s);
                 Factory f = (Factory)factories.remove(n);
                 boolean success = service.unregisterFactory(f);
-                //log.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
                 TestFmwk.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
         }
@@ -229,17 +232,17 @@ public class ICUServiceThreadTest extends TestFmwk
         Factory[] factories;
         int n;
 
-        UnregisterFactoryListThread(String name, ICUService service, long delay, Factory[] factories, TestLog log) {
-            super("UNREG " + name, service, delay, log);
+        UnregisterFactoryListThread(String name, ICUService service, long delay, Factory[] factories) {
+            super("UNREG " + name, service, delay);
 
             this.factories = factories;
         }
 
+        @Override
         public void iterate() {
             if (n < factories.length) {
                 Factory f = factories[n++];
                 boolean success = service.unregisterFactory(f);
-                //log.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
                 TestFmwk.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
         }
@@ -247,10 +250,11 @@ public class ICUServiceThreadTest extends TestFmwk
 
 
     static class GetVisibleThread extends TestThread {
-        GetVisibleThread(String name, ICUService service, long delay, TestLog log) {
-            super("VIS " + name, service, delay, log);
+        GetVisibleThread(String name, ICUService service, long delay) {
+            super("VIS " + name, service, delay);
         }
 
+        @Override
         protected void iterate() {
             Set ids = service.getVisibleIDs();
             Iterator iter = ids.iterator();
@@ -258,7 +262,6 @@ public class ICUServiceThreadTest extends TestFmwk
             while (--n >= 0 && iter.hasNext()) {
                 String id = (String)iter.next();
                 Object result = service.get(id);
-                //log.logln("iter: " + n + " id: " + id + " result: " + result);
                 TestFmwk.logln("iter: " + n + " id: " + id + " result: " + result);
             }
         }
@@ -267,12 +270,13 @@ public class ICUServiceThreadTest extends TestFmwk
     static class GetDisplayThread extends TestThread {
         ULocale locale;
 
-        GetDisplayThread(String name, ICUService service, long delay, ULocale locale, TestLog log) {
-            super("DIS " + name, service, delay, log);
+        GetDisplayThread(String name, ICUService service, long delay, ULocale locale) {
+            super("DIS " + name, service, delay);
 
             this.locale = locale;
         }
 
+        @Override
         protected void iterate() {
             Map names = getDisplayNames(service,locale);
             Iterator iter = names.entrySet().iterator();
@@ -287,12 +291,7 @@ public class ICUServiceThreadTest extends TestFmwk
                 // below on IBM JRE5 for AIX 64bit.  For some reason, converting
                 // int to String out of this statement resolves the issue.
 
-                //log.logln(" iter: " + n +
                 String num = Integer.toString(n);
-//                log.logln(" iter: " + num +
-//                        " dname: " + dname +
-//                        " id: " + id +
-//                        " result: " + result);
                 TestFmwk.logln(" iter: " + num +
                         " dname: " + dname +
                         " id: " + id +
@@ -304,17 +303,17 @@ public class ICUServiceThreadTest extends TestFmwk
     static class GetThread extends TestThread {
         private String[] actualID;
 
-        GetThread(String name, ICUService service, long delay, TestLog log) {
-            super("GET " + name, service, delay, log);
+        GetThread(String name, ICUService service, long delay) {
+            super("GET " + name, service, delay);
 
             actualID = new String[1];
         }
 
+        @Override
         protected void iterate() {
             String id = getCLV();
             Object o = service.get(id, actualID);
             if (o != null) {
-                //log.logln(" id: " + id + " actual: " + actualID[0] + " result: " + o);
                 TestFmwk.logln(" id: " + id + " actual: " + actualID[0] + " result: " + o);
             }
         }
@@ -324,19 +323,19 @@ public class ICUServiceThreadTest extends TestFmwk
         private final String[] list;
         private int n;
 
-        GetListThread(String name, ICUService service, long delay, String[] list, TestLog log) {
-            super("GETL " + name, service, delay, log);
+        GetListThread(String name, ICUService service, long delay, String[] list) {
+            super("GETL " + name, service, delay);
 
             this.list = list;
         }
 
+        @Override
         protected void iterate() {
             if (--n < 0) {
                 n = list.length - 1;
             }
             String id = list[n];
             Object o = service.get(id);
-            //log.logln(" id: " + id + " result: " + o);
             TestFmwk.logln(" id: " + id + " result: " + o);
         }
     }
@@ -376,7 +375,7 @@ public class ICUServiceThreadTest extends TestFmwk
     @Test
     public void Test00_ConcurrentGet() {
         for(int i = 0; i < 10; ++i) {
-            new GetThread("[" + Integer.toString(i) + "]",  stableService(), 0, this).start();
+            new GetThread("[" + Integer.toString(i) + "]",  stableService(), 0).start();
         }
         runThreads();
         if (PRINTSTATS) System.out.println(stableService.stats());
@@ -386,7 +385,7 @@ public class ICUServiceThreadTest extends TestFmwk
     @Test
     public void Test01_ConcurrentGetVisible() {
         for(int i = 0; i < 10; ++i) {
-            new GetVisibleThread("[" + Integer.toString(i) + "]",  stableService(), 0, this).start();
+            new GetVisibleThread("[" + Integer.toString(i) + "]",  stableService(), 0).start();
         }
         runThreads();
         if (PRINTSTATS) System.out.println(stableService.stats());
@@ -403,8 +402,7 @@ public class ICUServiceThreadTest extends TestFmwk
             new GetDisplayThread("[" + locale + "]",
                                  stableService(),
                                  0,
-                                 new ULocale(locale),
-                                 this).start();
+                                 new ULocale(locale)).start();
         }
         runThreads();
         if (PRINTSTATS) System.out.println(stableService.stats());
@@ -416,10 +414,10 @@ public class ICUServiceThreadTest extends TestFmwk
         ICUService service = new ICULocaleService();
         if (PRINTSTATS) service.stats();    // Enable the stats collection
         for (int i = 0; i < 5; ++i) {
-            new RegisterFactoryThread("[" + i + "]", service, 0, this).start();
+            new RegisterFactoryThread("[" + i + "]", service, 0).start();
         }
         for (int i = 0; i < 5; ++i) {
-            new UnregisterFactoryThread("[" + i + "]", service, 0, this).start();
+            new UnregisterFactoryThread("[" + i + "]", service, 0).start();
         }
         runThreads();
         if (PRINTSTATS) System.out.println(service.stats());
@@ -435,14 +433,15 @@ public class ICUServiceThreadTest extends TestFmwk
 
         Factory[] factories = (Factory[])fc.toArray(new Factory[fc.size()]);
         Comparator comp = new Comparator() {
+                @Override
                 public int compare(Object lhs, Object rhs) {
                     return lhs.toString().compareTo(rhs.toString());
                 }
             };
         Arrays.sort(factories, comp);
 
-        new GetThread("", service, 0, this).start();
-        new UnregisterFactoryListThread("", service, 3, factories, this).start();
+        new GetThread("", service, 0).start();
+        new UnregisterFactoryListThread("", service, 3, factories).start();
 
         runThreads(2000);
         if (PRINTSTATS) System.out.println(service.stats());
@@ -459,13 +458,13 @@ public class ICUServiceThreadTest extends TestFmwk
         ICUService service = new ICULocaleService();
         if (PRINTSTATS) service.stats();    // Enable the stats collection
 
-        new RegisterFactoryThread("", service, 500, this).start();
+        new RegisterFactoryThread("", service, 500).start();
 
         for(int i = 0; i < 15; ++i) {
-            new GetThread("[" + Integer.toString(i) + "]", service, 0, this).start();
+            new GetThread("[" + Integer.toString(i) + "]", service, 0).start();
         }
 
-        new GetVisibleThread("",  service, 50, this).start();
+        new GetVisibleThread("",  service, 50).start();
 
         String[] localeNames = {
             "en", "de"
@@ -475,11 +474,10 @@ public class ICUServiceThreadTest extends TestFmwk
             new GetDisplayThread("[" + locale + "]",
                                  stableService(),
                                  500,
-                                 new ULocale(locale),
-                                 this).start();
+                                 new ULocale(locale)).start();
         }
 
-        new UnregisterFactoryThread("", service, 500, this).start();
+        new UnregisterFactoryThread("", service, 500).start();
 
         // yoweee!!!
         runThreads(9500);

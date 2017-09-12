@@ -165,6 +165,7 @@ ko{
         fo{"페로어"}
         fon{"폰어"}
         fr{"프랑스어"}
+        frc{"케이준 프랑스어"}
         frm{"중세 프랑스어"}
         fro{"고대 프랑스어"}
         frr{"북부 프리지아어"}
@@ -297,6 +298,7 @@ ko{
         ln{"링갈라어"}
         lo{"라오어"}
         lol{"몽고어"}
+        lou{"루이지애나 크리올어"}
         loz{"로지어"}
         lrc{"북부 루리어"}
         lt{"리투아니아어"}
@@ -913,7 +915,7 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — 모두"}
         category-list{"{0}: {1}"}

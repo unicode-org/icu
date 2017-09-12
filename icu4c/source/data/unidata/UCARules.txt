@@ -1,5 +1,5 @@
 ﻿# UCA_Rules_SHORT.txt
-# Date: 2017-05-03, 21:57:09 GMT
+# Date: 2017-06-05, 23:16:51 GMT
 # © 2017 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html

@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
@@ -51,6 +53,7 @@ import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
+@RunWith(JUnit4.class)
 public class NumberRegressionTests extends TestFmwk {
     private static final char EURO = '\u20ac';
 

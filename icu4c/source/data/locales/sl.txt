@@ -285,7 +285,7 @@ sl{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -513,10 +513,10 @@ sl{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"w. 'teden' 'v' y"}
-                    one{"w. 'teden' 'v' y"}
-                    other{"w. 'teden' 'v' y"}
-                    two{"w. 'teden' 'v' y"}
+                    few{"w. 'teden' 'v' Y"}
+                    one{"w. 'teden' 'v' Y"}
+                    other{"w. 'teden' 'v' Y"}
+                    two{"w. 'teden' 'v' Y"}
                 }
             }
             dayNames{

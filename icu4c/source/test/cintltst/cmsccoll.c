@@ -793,18 +793,15 @@ static void TestJ784(void) {
 }
 #endif
 
-#if 0
-/* superceded by the changes to the lv locale */
-static void TestJ831(void) {
+static void TestUpperCaseFirst(void) {
   const static char *data[] = {
     "I",
       "i",
       "Y",
       "y"
   };
-  genericLocaleStarter("lv", data, UPRV_LENGTHOF(data));
+  genericLocaleStarter("da", data, UPRV_LENGTHOF(data));
 }
-#endif
 
 static void TestJ815(void) {
   const static char *data[] = {
@@ -5894,7 +5891,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestEmptyRule);
     /*TEST(TestJ784);*/ /* 'zh' locale has changed - now it is getting tested by TestBeforePinyin */
     TEST(TestJ815);
-    /*TEST(TestJ831);*/ /* we changed lv locale */
+    TEST(TestUpperCaseFirst);
     TEST(TestBefore);
     TEST(TestHangulTailoring);
     TEST(TestUCARules);
