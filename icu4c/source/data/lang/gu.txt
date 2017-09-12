@@ -843,7 +843,7 @@ gu{
         PINYIN{"પિનયિન રોમનાઇઝેશન"}
         WADEGILE{"વેડ-ગિલ્સ રોમનાઇઝેશન"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     characterLabelPattern{
         all{"{0} — તમામ"}
         category-list{"{0}: {1}"}

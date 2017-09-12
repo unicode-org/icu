@@ -6,6 +6,8 @@ import java.text.CharacterIterator;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
@@ -14,6 +16,7 @@ import com.ibm.icu.text.BreakIterator;
  * @author sgill
  *
  */
+@RunWith(JUnit4.class)
 public class AbstractBreakIteratorTests extends TestFmwk {
 
     private class AbstractBreakIterator extends BreakIterator {

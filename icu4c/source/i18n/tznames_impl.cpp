@@ -1070,7 +1070,7 @@ TimeZoneNamesImpl::loadStrings(const UnicodeString& tzCanonicalID, UErrorCode& s
     U_ASSERT(!mzIDs.isNull());
 
     const UnicodeString *mzID;
-    while ((mzID = mzIDs->snext(status)) && U_SUCCESS(status)) {
+    while (((mzID = mzIDs->snext(status)) != NULL) && U_SUCCESS(status)) {
         loadMetaZoneNames(*mzID, status);
     }
 }
@@ -1651,7 +1651,7 @@ void TimeZoneNamesImpl::internalLoadAllDisplayNames(UErrorCode& status) {
         StringEnumeration *tzIDs = TimeZone::createTimeZoneIDEnumeration(
             UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, status);
         if (U_SUCCESS(status)) {
-            while ((id = tzIDs->snext(status))) {
+            while ((id = tzIDs->snext(status)) != NULL) {
                 if (U_FAILURE(status)) {
                     break;
                 }

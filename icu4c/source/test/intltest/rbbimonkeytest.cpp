@@ -73,7 +73,7 @@ BreakRules::BreakRules(RBBIMonkeyImpl *monkeyImpl, UErrorCode &status)  :
     fCharClassList.adoptInstead(new UVector(status));
 
     fSetRefsMatcher.adoptInstead(new RegexMatcher(UnicodeString(
-             "(?!(?:\\{|=|\\[:)[ \\t]{0,4})"              // Negative lookbehind for '{' or '=' or '[:'
+             "(?!(?:\\{|=|\\[:)[ \\t]{0,4})"              // Negative look behind for '{' or '=' or '[:'
                                                           //   (the identifier is a unicode property name or value)
              "(?<ClassName>[A-Za-z_][A-Za-z0-9_]*)"),     // The char class name
         0, status));
@@ -86,7 +86,7 @@ BreakRules::BreakRules(RBBIMonkeyImpl *monkeyImpl, UErrorCode &status)  :
                 "\\R$"                          //   new-line at end of line.
             ), 0, status));
 
-    // Match (initial parse) of a character class defintion line.
+    // Match (initial parse) of a character class definition line.
     fClassDefMatcher.adoptInstead(new RegexMatcher(UnicodeString(
                 "[ \\t]*"                                // leading white space
                 "(?<ClassName>[A-Za-z_][A-Za-z0-9_]*)"   // The char class name
@@ -129,7 +129,7 @@ CharClass *BreakRules::addCharClass(const UnicodeString &name, const UnicodeStri
     }
     fSetRefsMatcher->appendTail(expandedDef);
 
-    // Verify that the expanded set defintion is valid.
+    // Verify that the expanded set definition is valid.
 
     if (fMonkeyImpl->fDumpExpansions) {
         printf("epandedDef: %s\n", CStr(expandedDef)());
@@ -149,7 +149,7 @@ CharClass *BreakRules::addCharClass(const UnicodeString &name, const UnicodeStri
 
     if (previousClass != NULL) {
         // Duplicate class def.
-        // These are legitimate, they are adustments of an existing class.
+        // These are legitimate, they are adjustments of an existing class.
         // TODO: will need to keep the old around when we handle tailorings.
         IntlTest::gTest->logln("Redefinition of character class %s\n", CStr(cclass->fName)());
         delete previousClass;

@@ -1952,7 +1952,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // position of 0 and the number being formatted) to the rule set
         // for formatting
         StringBuilder result = new StringBuilder();
-        if (getRoundingMode() != BigDecimal.ROUND_UNNECESSARY) {
+        if (getRoundingMode() != BigDecimal.ROUND_UNNECESSARY && !Double.isNaN(number) && !Double.isInfinite(number)) {
             // We convert to a string because BigDecimal insists on excessive precision.
             number = new BigDecimal(Double.toString(number)).setScale(getMaximumFractionDigits(), roundingMode).doubleValue();
         }

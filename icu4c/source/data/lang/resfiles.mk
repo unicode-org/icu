@@ -1,6 +1,6 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-LANG_CLDR_VERSION = 31.0.1
+LANG_CLDR_VERSION = 32
 # A list of txt's to build
 # Note:
 #
@@ -37,8 +37,9 @@ LANG_SYNTHETIC_ALIAS = ars.txt az_AZ.txt az_Latn_AZ.txt bs_BA.txt\
  sr_Latn_YU.txt sr_ME.txt sr_RS.txt sr_XK.txt sr_YU.txt\
  th_TH.txt th_TH_TRADITIONAL.txt tl.txt tl_PH.txt uz_AF.txt\
  uz_Arab_AF.txt uz_Latn_UZ.txt uz_UZ.txt vai_LR.txt vai_Vaii_LR.txt\
- zh_CN.txt zh_HK.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_TW.txt\
- zh_MO.txt zh_SG.txt zh_TW.txt
+ yue_CN.txt yue_HK.txt yue_Hans_CN.txt yue_Hant_HK.txt zh_CN.txt\
+ zh_HK.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_TW.txt zh_MO.txt\
+ zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.
@@ -117,6 +118,7 @@ LANG_SOURCE = af.txt agq.txt ak.txt am.txt\
  ur.txt ur_IN.txt uz.txt uz_Arab.txt uz_Cyrl.txt\
  uz_Latn.txt vai.txt vai_Latn.txt vai_Vaii.txt vi.txt\
  vun.txt wae.txt xog.txt yav.txt yi.txt\
- yo.txt yo_BJ.txt yue.txt zgh.txt zh.txt\
- zh_Hans.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zu.txt
+ yo.txt yo_BJ.txt yue.txt yue_Hans.txt yue_Hant.txt\
+ zgh.txt zh.txt zh_Hans.txt zh_Hant.txt zh_Hant_HK.txt\
+ zh_Hant_MO.txt zu.txt
 

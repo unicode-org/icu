@@ -171,6 +171,7 @@ id{
         fo{"Faroe"}
         fon{"Fon"}
         fr{"Prancis"}
+        frc{"Prancis Cajun"}
         frm{"Prancis Abad Pertengahan"}
         fro{"Prancis Kuno"}
         frp{"Arpitan"}
@@ -300,6 +301,7 @@ id{
         ln{"Lingala"}
         lo{"Lao"}
         lol{"Mongo"}
+        lou{"Kreol Louisiana"}
         loz{"Lozi"}
         lrc{"Luri Utara"}
         lt{"Lituavi"}
@@ -959,7 +961,7 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — Semua"}
         category-list{"{0}: {1}"}

@@ -13,10 +13,13 @@ package com.ibm.icu.dev.test.lang;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -37,6 +40,7 @@ import com.ibm.icu.util.ULocale;
 * @author Syn Wee Quek
 * @since march 14 2002
 */
+@RunWith(JUnit4.class)
 public final class UCharacterCaseTest extends TestFmwk
 {
     // constructor -----------------------------------------------------------
@@ -341,6 +345,63 @@ public final class UCharacterCaseTest extends TestFmwk
          }catch(Exception ex){
             warnln("Could not find data for BreakIterators");
          }
+    }
+
+    // Not a @Test. See ICU4C intltest strcase.cpp TestCasingImpl().
+    void TestCasingImpl(String input, String output, CaseMap.Title toTitle, Locale locale) {
+        String result = toTitle.apply(locale, null, input, new StringBuilder(), null).toString();
+        assertEquals("toTitle(" + input + ')', output, result);
+    }
+
+    @Test
+    public void TestTitleOptions() {
+        Locale root = Locale.ROOT;
+        // New options in ICU 60.
+        TestCasingImpl("ʻcAt! ʻeTc.", "ʻCat! ʻetc.",
+                CaseMap.toTitle().wholeString(), root);
+        TestCasingImpl("a ʻCaT. A ʻdOg! ʻeTc.", "A ʻCaT. A ʻdOg! ʻETc.",
+                CaseMap.toTitle().sentences().noLowercase(), root);
+        TestCasingImpl("49eRs", "49ers",
+                CaseMap.toTitle().wholeString(), root);
+        TestCasingImpl("«丰(aBc)»", "«丰(abc)»",
+                CaseMap.toTitle().wholeString(), root);
+        TestCasingImpl("49eRs", "49Ers",
+                CaseMap.toTitle().wholeString().adjustToCased(), root);
+        TestCasingImpl("«丰(aBc)»", "«丰(Abc)»",
+                CaseMap.toTitle().wholeString().adjustToCased(), root);
+        TestCasingImpl(" john. Smith", " John. Smith",
+                CaseMap.toTitle().wholeString().noLowercase(), root);
+        TestCasingImpl(" john. Smith", " john. smith",
+                CaseMap.toTitle().wholeString().noBreakAdjustment(), root);
+        TestCasingImpl("«ijs»", "«IJs»",
+                CaseMap.toTitle().wholeString(), new Locale("nl", "BE"));
+        TestCasingImpl("«ijs»", "«İjs»",
+                CaseMap.toTitle().wholeString(), new Locale("tr", "DE"));
+
+        // Test conflicting settings.
+        // If & when we add more options, then the ORed combinations may become
+        // indistinguishable from valid values.
+        try {
+            CaseMap.toTitle().noBreakAdjustment().adjustToCased().
+                    apply(root, null, "", new StringBuilder(), null);
+            fail("CaseMap.toTitle(multiple adjustment options) " +
+                    "did not throw an IllegalArgumentException");
+        } catch(IllegalArgumentException expected) {
+        }
+        try {
+            CaseMap.toTitle().wholeString().sentences().
+                    apply(root, null, "", new StringBuilder(), null);
+            fail("CaseMap.toTitle(multiple iterator options) " +
+                    "did not throw an IllegalArgumentException");
+        } catch(IllegalArgumentException expected) {
+        }
+        BreakIterator iter = BreakIterator.getCharacterInstance(root);
+        try {
+            CaseMap.toTitle().wholeString().apply(root, iter, "", new StringBuilder(), null);
+            fail("CaseMap.toTitle(iterator option + iterator) " +
+                    "did not throw an IllegalArgumentException");
+        } catch(IllegalArgumentException expected) {
+        }
     }
 
     @Test
@@ -708,6 +769,7 @@ public final class UCharacterCaseTest extends TestFmwk
         assertGreekUpper("Το ένα ή το άλλο.", "ΤΟ ΕΝΑ Ή ΤΟ ΑΛΛΟ.");
         // http://multilingualtypesetting.co.uk/blog/greek-typesetting-tips/
         assertGreekUpper("ρωμέικα", "ΡΩΜΕΪΚΑ");
+        assertGreekUpper("ή.", "Ή.");
     }
 
     private static final class EditChange {
@@ -720,10 +782,93 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
+    private static String printOneEdit(Edits.Iterator ei) {
+        if (ei.hasChange()) {
+            return "" + ei.oldLength() + "->" + ei.newLength();
+        } else {
+            return "" + ei.oldLength() + "=" + ei.newLength();
+        }
+    }
+
+    /**
+     * Maps indexes according to the expected edits.
+     * A destination index can occur multiple times when there are source deletions.
+     * Map according to the last occurrence, normally in a non-empty destination span.
+     * Simplest is to search from the back.
+     */
+    private static int srcIndexFromDest(
+            EditChange expected[], int srcLength, int destLength, int index) {
+        int srcIndex = srcLength;
+        int destIndex = destLength;
+        int i = expected.length;
+        while (index < destIndex && i > 0) {
+            --i;
+            int prevSrcIndex = srcIndex - expected[i].oldLength;
+            int prevDestIndex = destIndex - expected[i].newLength;
+            if (index == prevDestIndex) {
+                return prevSrcIndex;
+            } else if (index > prevDestIndex) {
+                if (expected[i].change) {
+                    // In a change span, map to its end.
+                    return srcIndex;
+                } else {
+                    // In an unchanged span, offset within it.
+                    return prevSrcIndex + (index - prevDestIndex);
+                }
+            }
+            srcIndex = prevSrcIndex;
+            destIndex = prevDestIndex;
+        }
+        // index is outside the string.
+        return srcIndex;
+    }
+
+    private static int destIndexFromSrc(
+            EditChange expected[], int srcLength, int destLength, int index) {
+        int srcIndex = srcLength;
+        int destIndex = destLength;
+        int i = expected.length;
+        while (index < srcIndex && i > 0) {
+            --i;
+            int prevSrcIndex = srcIndex - expected[i].oldLength;
+            int prevDestIndex = destIndex - expected[i].newLength;
+            if (index == prevSrcIndex) {
+                return prevDestIndex;
+            } else if (index > prevSrcIndex) {
+                if (expected[i].change) {
+                    // In a change span, map to its end.
+                    return destIndex;
+                } else {
+                    // In an unchanged span, offset within it.
+                    return prevDestIndex + (index - prevSrcIndex);
+                }
+            }
+            srcIndex = prevSrcIndex;
+            destIndex = prevDestIndex;
+        }
+        // index is outside the string.
+        return destIndex;
+    }
+
+    private void checkEqualEdits(String name, Edits e1, Edits e2) {
+        Edits.Iterator ei1 = e1.getFineIterator();
+        Edits.Iterator ei2 = e2.getFineIterator();
+        for (int i = 0;; ++i) {
+            boolean ei1HasNext = ei1.next();
+            boolean ei2HasNext = ei2.next();
+            assertEquals(name + " next()[" + i + "]", ei1HasNext, ei2HasNext);
+            assertEquals(name + " edit[" + i + "]", printOneEdit(ei1), printOneEdit(ei2));
+            if (!ei1HasNext || !ei2HasNext) {
+                break;
+            }
+        }
+    }
+
     private static void checkEditsIter(
             String name, Edits.Iterator ei1, Edits.Iterator ei2,  // two equal iterators
             EditChange[] expected, boolean withUnchanged) {
         assertFalse(name, ei2.findSourceIndex(-1));
+        assertFalse(name, ei2.findDestinationIndex(-1));
 
         int expSrcIndex = 0;
         int expDestIndex = 0;
@@ -757,6 +902,22 @@ public final class UCharacterCaseTest extends TestFmwk
                 }
             }
 
+            if (expect.newLength > 0) {
+                assertTrue(msg, ei2.findDestinationIndex(expDestIndex));
+                assertEquals(msg, expect.change, ei2.hasChange());
+                assertEquals(msg, expect.oldLength, ei2.oldLength());
+                assertEquals(msg, expect.newLength, ei2.newLength());
+                assertEquals(msg, expSrcIndex, ei2.sourceIndex());
+                assertEquals(msg, expDestIndex, ei2.destinationIndex());
+                assertEquals(msg, expReplIndex, ei2.replacementIndex());
+                if (!withUnchanged) {
+                    // For some iterators, move past the current range
+                    // so that findSourceIndex() has to look before the current index.
+                    ei2.next();
+                    ei2.next();
+                }
+            }
+
             expSrcIndex += expect.oldLength;
             expDestIndex += expect.newLength;
             if (expect.change) {
@@ -773,18 +934,64 @@ public final class UCharacterCaseTest extends TestFmwk
         assertEquals(msg, expReplIndex, ei1.replacementIndex());
 
         assertFalse(name, ei2.findSourceIndex(expSrcIndex));
+        assertFalse(name, ei2.findDestinationIndex(expDestIndex));
+
+        // Check mapping of all indexes against a simple implementation
+        // that works on the expected changes.
+        // Iterate once forward, once backward, to cover more runtime conditions.
+        int srcLength = expSrcIndex;
+        int destLength = expDestIndex;
+        List<Integer> srcIndexes = new ArrayList<Integer>();
+        List<Integer> destIndexes = new ArrayList<Integer>();
+        srcIndexes.add(-1);
+        destIndexes.add(-1);
+        int srcIndex = 0;
+        int destIndex = 0;
+        for (int i = 0; i < expected.length; ++i) {
+            if (expected[i].oldLength > 0) {
+                srcIndexes.add(srcIndex);
+                if (expected[i].oldLength > 1) {
+                    srcIndexes.add(srcIndex + 1);
+                }
+            }
+            if (expected[i].newLength > 0) {
+                destIndexes.add(destIndex);
+                if (expected[i].newLength > 0) {
+                    destIndexes.add(destIndex + 1);
+                }
+            }
+            srcIndex += expected[i].oldLength;
+            destIndex += expected[i].newLength;
+        }
+        srcIndexes.add(srcLength);
+        destIndexes.add(destLength);
+        srcIndexes.add(srcLength + 1);
+        destIndexes.add(destLength + 1);
+        Collections.reverse(destIndexes);
+        for (int i : srcIndexes) {
+            assertEquals(name + " destIndexFromSrc(" + i + "):",
+                              destIndexFromSrc(expected, srcLength, destLength, i),
+                              ei2.destinationIndexFromSourceIndex(i));
+        }
+        for (int i : destIndexes) {
+            assertEquals(name + " srcIndexFromDest(" + i + "):",
+                              srcIndexFromDest(expected, srcLength, destLength, i),
+                              ei2.sourceIndexFromDestinationIndex(i));
+        }
     }
 
     @Test
     public void TestEdits() {
         Edits edits = new Edits();
-        assertFalse("new Edits", edits.hasChanges());
+        assertFalse("new Edits hasChanges", edits.hasChanges());
+        assertEquals("new Edits numberOfChanges", 0, edits.numberOfChanges());
         assertEquals("new Edits", 0, edits.lengthDelta());
         edits.addUnchanged(1);  // multiple unchanged ranges are combined
         edits.addUnchanged(10000);  // too long, and they are split
         edits.addReplace(0, 0);
         edits.addUnchanged(2);
-        assertFalse("unchanged 10003", edits.hasChanges());
+        assertFalse("unchanged 10003 hasChanges", edits.hasChanges());
+        assertEquals("unchanged 10003 numberOfChanges", 0, edits.numberOfChanges());
         assertEquals("unchanged 10003", 0, edits.lengthDelta());
         edits.addReplace(1, 1);  // multiple short equal-length edits are compressed
         edits.addUnchanged(0);
@@ -794,7 +1001,8 @@ public final class UCharacterCaseTest extends TestFmwk
         edits.addReplace(100, 0);
         edits.addReplace(3000, 4000);  // variable-length encoding
         edits.addReplace(100000, 100000);
-        assertTrue("some edits", edits.hasChanges());
+        assertTrue("some edits hasChanges", edits.hasChanges());
+        assertEquals("some edits numberOfChanges", 7, edits.numberOfChanges());
         assertEquals("some edits", 10 - 100 + 1000, edits.lengthDelta());
 
         EditChange[] coarseExpectedChanges = new EditChange[] {
@@ -826,10 +1034,172 @@ public final class UCharacterCaseTest extends TestFmwk
                 fineExpectedChanges, false);
 
         edits.reset();
-        assertFalse("reset", edits.hasChanges());
+        assertFalse("reset hasChanges", edits.hasChanges());
+        assertEquals("reset numberOfChanges", 0, edits.numberOfChanges());
         assertEquals("reset", 0, edits.lengthDelta());
         Edits.Iterator ei = edits.getCoarseChangesIterator();
         assertFalse("reset then iterator", ei.next());
+    }
+
+    @Test
+    public void TestMergeEdits() {
+        Edits ab = new Edits(), bc = new Edits(), ac = new Edits(), expected_ac = new Edits();
+
+        // Simple: Two parallel non-changes.
+        ab.addUnchanged(2);
+        bc.addUnchanged(2);
+        expected_ac.addUnchanged(2);
+
+        // Simple: Two aligned changes.
+        ab.addReplace(3, 2);
+        bc.addReplace(2, 1);
+        expected_ac.addReplace(3, 1);
+
+        // Unequal non-changes.
+        ab.addUnchanged(5);
+        bc.addUnchanged(3);
+        expected_ac.addUnchanged(3);
+        // ab ahead by 2
+
+        // Overlapping changes accumulate until they share a boundary.
+        ab.addReplace(4, 3);
+        bc.addReplace(3, 2);
+        ab.addReplace(4, 3);
+        bc.addReplace(3, 2);
+        ab.addReplace(4, 3);
+        bc.addReplace(3, 2);
+        bc.addUnchanged(4);
+        expected_ac.addReplace(14, 8);
+        // bc ahead by 2
+
+        // Balance out intermediate-string lengths.
+        ab.addUnchanged(2);
+        expected_ac.addUnchanged(2);
+
+        // Insert something and delete it: Should disappear.
+        ab.addReplace(0, 5);
+        ab.addReplace(0, 2);
+        bc.addReplace(7, 0);
+
+        // Parallel change to make a new boundary.
+        ab.addReplace(1, 2);
+        bc.addReplace(2, 3);
+        expected_ac.addReplace(1, 3);
+
+        // Multiple ab deletions should remain separate at the boundary.
+        ab.addReplace(1, 0);
+        ab.addReplace(2, 0);
+        ab.addReplace(3, 0);
+        expected_ac.addReplace(1, 0);
+        expected_ac.addReplace(2, 0);
+        expected_ac.addReplace(3, 0);
+
+        // Unequal non-changes can be split for another boundary.
+        ab.addUnchanged(2);
+        bc.addUnchanged(1);
+        expected_ac.addUnchanged(1);
+        // ab ahead by 1
+
+        // Multiple bc insertions should create a boundary and remain separate.
+        bc.addReplace(0, 4);
+        bc.addReplace(0, 5);
+        bc.addReplace(0, 6);
+        expected_ac.addReplace(0, 4);
+        expected_ac.addReplace(0, 5);
+        expected_ac.addReplace(0, 6);
+        // ab ahead by 1
+
+        // Multiple ab deletions in the middle of a bc change are merged.
+        bc.addReplace(2, 2);
+        // bc ahead by 1
+        ab.addReplace(1, 0);
+        ab.addReplace(2, 0);
+        ab.addReplace(3, 0);
+        ab.addReplace(4, 1);
+        expected_ac.addReplace(11, 2);
+
+        // Multiple bc insertions in the middle of an ab change are merged.
+        ab.addReplace(5, 6);
+        bc.addReplace(3, 3);
+        // ab ahead by 3
+        bc.addReplace(0, 4);
+        bc.addReplace(0, 5);
+        bc.addReplace(0, 6);
+        bc.addReplace(3, 7);
+        expected_ac.addReplace(5, 25);
+
+        // Delete around a deletion.
+        ab.addReplace(4, 4);
+        ab.addReplace(3, 0);
+        ab.addUnchanged(2);
+        bc.addReplace(2, 2);
+        bc.addReplace(4, 0);
+        expected_ac.addReplace(9, 2);
+
+        // Insert into an insertion.
+        ab.addReplace(0, 2);
+        bc.addReplace(1, 1);
+        bc.addReplace(0, 8);
+        bc.addUnchanged(4);
+        expected_ac.addReplace(0, 10);
+        // bc ahead by 3
+
+        // Balance out intermediate-string lengths.
+        ab.addUnchanged(3);
+        expected_ac.addUnchanged(3);
+
+        // Deletions meet insertions.
+        // Output order is arbitrary in principle, but we expect insertions first
+        // and want to keep it that way.
+        ab.addReplace(2, 0);
+        ab.addReplace(4, 0);
+        ab.addReplace(6, 0);
+        bc.addReplace(0, 1);
+        bc.addReplace(0, 3);
+        bc.addReplace(0, 5);
+        expected_ac.addReplace(0, 1);
+        expected_ac.addReplace(0, 3);
+        expected_ac.addReplace(0, 5);
+        expected_ac.addReplace(2, 0);
+        expected_ac.addReplace(4, 0);
+        expected_ac.addReplace(6, 0);
+
+        // End with a non-change, so that further edits are never reordered.
+        ab.addUnchanged(1);
+        bc.addUnchanged(1);
+        expected_ac.addUnchanged(1);
+
+        ac.mergeAndAppend(ab, bc);
+        checkEqualEdits("ab+bc", expected_ac, ac);
+
+        // Append more Edits.
+        Edits ab2 = new Edits(), bc2 = new Edits();
+        ab2.addUnchanged(5);
+        bc2.addReplace(1, 2);
+        bc2.addUnchanged(4);
+        expected_ac.addReplace(1, 2);
+        expected_ac.addUnchanged(4);
+        ac.mergeAndAppend(ab2, bc2);
+        checkEqualEdits("ab2+bc2", expected_ac, ac);
+
+        // Append empty edits.
+        Edits empty = new Edits();
+        ac.mergeAndAppend(empty, empty);
+        checkEqualEdits("empty+empty", expected_ac, ac);
+
+        // Error: Append more edits with mismatched intermediate-string lengths.
+        Edits mismatch = new Edits();
+        mismatch.addReplace(1, 1);
+        try {
+            ac.mergeAndAppend(ab2, mismatch);
+            fail("ab2+mismatch did not yield IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+        }
+        try {
+            ac.mergeAndAppend(mismatch, bc2);
+            fail("mismatch+bc2 did not yield IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 
     @Test

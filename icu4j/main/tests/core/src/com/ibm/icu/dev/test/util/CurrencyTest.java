@@ -21,6 +21,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -42,6 +44,7 @@ import com.ibm.icu.util.ULocale;
  * @test
  * @summary General test of Currency
  */
+@RunWith(JUnit4.class)
 public class CurrencyTest extends TestFmwk {
     /**
      * Test of basic API.
@@ -866,7 +869,6 @@ public class CurrencyTest extends TestFmwk {
         Currency currency = Currency.getInstance(ULocale.JAPAN);
         // It appears as though this always returns 0 irrespective of the currency or usage.
         double roundingIncrement = currency.getRoundingIncrement(Currency.CurrencyUsage.CASH);
-        // TODO: replace the JUnit import with TestFmwk assertEquals.
         assertEquals("Rounding increment not zero", 0.0, roundingIncrement, 0.0);
     }
 

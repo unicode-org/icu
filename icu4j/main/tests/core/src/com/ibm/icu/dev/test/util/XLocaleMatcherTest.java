@@ -11,6 +11,8 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.locale.XCldrStub.Joiner;
@@ -29,6 +31,7 @@ import com.ibm.icu.util.ULocale;
  *
  * @author markdavis
  */
+@RunWith(JUnit4.class)
 public class XLocaleMatcherTest extends TestFmwk {
     private static final boolean REFORMAT = false; // set to true to get a reformatted data file listed
 

@@ -233,7 +233,7 @@ ne{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         generic{
             DateTimePatterns{
@@ -418,8 +418,8 @@ ne{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"'week' w 'of' y"}
-                    other{"'week' w 'of' y"}
+                    one{"'week' w 'of' Y"}
+                    other{"'week' w 'of' Y"}
                 }
             }
             dayNames{

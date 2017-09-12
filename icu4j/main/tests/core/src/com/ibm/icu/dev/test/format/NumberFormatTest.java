@@ -19,6 +19,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.AttributedCharacterIterator;
@@ -33,6 +35,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -50,6 +54,7 @@ import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormat.PropertySetter;
 import com.ibm.icu.text.DecimalFormat.SignificantDigitsMode;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -63,6 +68,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class NumberFormatTest extends TestFmwk {
 
     @Test
@@ -681,6 +687,22 @@ public class NumberFormatTest extends TestFmwk {
             errln("FAIL: " + e.getMessage());
         }
         ULocale.setDefault(save);
+    }
+
+    @Test
+    public void TestJavaCurrencyConversion() {
+        java.util.Currency gbpJava = java.util.Currency.getInstance("GBP");
+        Currency gbpIcu = Currency.getInstance("GBP");
+        assertEquals("ICU should equal API value", gbpIcu, Currency.fromJavaCurrency(gbpJava));
+        assertEquals("Java should equal API value", gbpJava, gbpIcu.toJavaCurrency());
+        // Test CurrencyAmount constructors
+        CurrencyAmount ca1 = new CurrencyAmount(123.45, gbpJava);
+        CurrencyAmount ca2 = new CurrencyAmount(123.45, gbpIcu);
+        assertEquals("CurrencyAmount from both Double constructors should be equal", ca1, ca2);
+        // Coverage for the Number constructor
+        ca1 = new CurrencyAmount(new BigDecimal("543.21"), gbpJava);
+        ca2 = new CurrencyAmount(new BigDecimal("543.21"), gbpIcu);
+        assertEquals("CurrencyAmount from both Number constructors should be equal", ca1, ca2);
     }
 
     @Test
@@ -1597,6 +1619,62 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void TestLocalizedPatternSymbolCoverage() {
+        String[] standardPatterns = { "#,##0.05+%;#,##0.05-%", "* @@@E0‰" };
+        String[] standardPatterns58 = { "#,##0.05+%;#,##0.05-%", "* @@@E0‰;* -@@@E0‰" };
+        String[] localizedPatterns = { "▰⁖▰▰໐⁘໐໕†⁜⁙▰⁖▰▰໐⁘໐໕‡⁜", "⁂ ⁕⁕⁕⁑⁑໐‱" };
+        String[] localizedPatterns58 = { "▰⁖▰▰໐⁘໐໕+⁜⁙▰⁖▰▰໐⁘໐໕‡⁜", "⁂ ⁕⁕⁕⁑⁑໐‱⁙⁂ ‡⁕⁕⁕⁑⁑໐‱" };
+
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setGroupingSeparator('⁖');
+        dfs.setDecimalSeparator('⁘');
+        dfs.setPatternSeparator('⁙');
+        dfs.setDigit('▰');
+        dfs.setZeroDigit('໐');
+        dfs.setSignificantDigit('⁕');
+        dfs.setPlusSign('†');
+        dfs.setMinusSign('‡');
+        dfs.setPercent('⁜');
+        dfs.setPerMill('‱');
+        dfs.setExponentSeparator("⁑⁑"); // tests multi-char sequence
+        dfs.setPadEscape('⁂');
+
+        for (int i=0; i<2; i++) {
+            String standardPattern = standardPatterns[i];
+            String standardPattern58 = standardPatterns58[i];
+            String localizedPattern = localizedPatterns[i];
+            String localizedPattern58 = localizedPatterns58[i];
+
+            DecimalFormat df1 = new DecimalFormat("#", dfs);
+            df1.applyPattern(standardPattern);
+            DecimalFormat df2 = new DecimalFormat("#", dfs);
+            df2.applyLocalizedPattern(localizedPattern);
+            assertEquals("DecimalFormat instances should be equal",
+                    df1, df2);
+            assertEquals("toPattern should match on localizedPattern instance",
+                    standardPattern, df2.toPattern());
+            assertEquals("toLocalizedPattern should match on standardPattern instance",
+                    localizedPattern, df1.toLocalizedPattern());
+
+            // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
+            if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) continue;
+
+            // Note: ICU 58 does not support plus signs in patterns
+            // Note: ICU 58 always prints the negative part of scientific notation patterns,
+            //       even when the negative part is not necessary
+            DecimalFormat_ICU58 df3 = new DecimalFormat_ICU58("#", dfs);
+            df3.applyPattern(standardPattern); // Reading standardPattern is OK
+            DecimalFormat_ICU58 df4 = new DecimalFormat_ICU58("#", dfs);
+            df4.applyLocalizedPattern(localizedPattern58);
+            // Note: DecimalFormat#equals() is broken on ICU 58
+            assertEquals("toPattern should match on ICU58 localizedPattern instance",
+                    standardPattern58, df4.toPattern());
+            assertEquals("toLocalizedPattern should match on ICU58 standardPattern instance",
+                    localizedPattern58, df3.toLocalizedPattern());
+        }
+    }
+
+    @Test
     public void TestParseNull() throws ParseException {
         DecimalFormat df = new DecimalFormat();
         try {
@@ -1691,7 +1769,8 @@ public class NumberFormatTest extends TestFmwk {
                 new TestNumberingSystemItem( "ta_IN@numbers=finance",     1234.567, false, "1,234.567" ), // fall back to default per TR35
                 new TestNumberingSystemItem( "zh_TW@numbers=native",      1234.567, false, "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03" ),
                 new TestNumberingSystemItem( "zh_TW@numbers=traditional", 1234.567, true,  "\u4E00\u5343\u4E8C\u767E\u4E09\u5341\u56DB\u9EDE\u4E94\u516D\u4E03" ),
-                new TestNumberingSystemItem( "zh_TW@numbers=finance",     1234.567, true,  "\u58F9\u4EDF\u8CB3\u4F70\u53C3\u62FE\u8086\u9EDE\u4F0D\u9678\u67D2" )
+                new TestNumberingSystemItem( "zh_TW@numbers=finance",     1234.567, true,  "\u58F9\u4EDF\u8CB3\u4F70\u53C3\u62FE\u8086\u9EDE\u4F0D\u9678\u67D2" ),
+                new TestNumberingSystemItem( "en_US@numbers=mathsanb",    1234.567, false,  "𝟭,𝟮𝟯𝟰.𝟱𝟲𝟳" ), // ticket #13286
         };
 
 
@@ -2801,11 +2880,18 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void TestParseReturnType() {
-        String[] defaultNonBigDecimals = {
-                "123",      // Long
-                "123.0",    // Long
-                "0.0",      // Long
-                "12345678901234567890"      // BigInteger
+        String[] defaultLong = {
+                "123",
+                "123.0",
+                "0.0",
+                "-9223372036854775808", // Min Long
+                "9223372036854775807" // Max Long
+        };
+
+        String[] defaultNonLong = {
+                "12345678901234567890",
+                "9223372036854775808",
+                "-9223372036854775809"
         };
 
         String[] doubles = {
@@ -2822,14 +2908,25 @@ public class NumberFormatTest extends TestFmwk {
         }
 
         // isParseBigDecimal() is false
-        for (int i = 0; i < defaultNonBigDecimals.length; i++) {
+        for (int i = 0; i < defaultLong.length; i++) {
             try {
-                Number n = nf.parse(defaultNonBigDecimals[i]);
-                if (n instanceof BigDecimal) {
-                    errln("FAIL: parse returns BigDecimal instance");
+                Number n = nf.parse(defaultLong[i]);
+                if (!(n instanceof Long)) {
+                    errln("FAIL: parse does not return Long instance");
                 }
             } catch (ParseException e) {
-                errln("parse of '" + defaultNonBigDecimals[i] + "' threw exception: " + e);
+                errln("parse of '" + defaultLong[i] + "' threw exception: " + e);
+            }
+        }
+        for (int i = 0; i < defaultNonLong.length; i++) {
+            try {
+                Number n = nf.parse(defaultNonLong[i]);
+                // For backwards compatibility with this test, BigDecimal is checked.
+                if ((n instanceof Long) || (n instanceof BigDecimal)) {
+                    errln("FAIL: parse returned a Long or a BigDecimal");
+                }
+            } catch (ParseException e) {
+                errln("parse of '" + defaultNonLong[i] + "' threw exception: " + e);
             }
         }
         // parse results for doubls must be always Double
@@ -2851,14 +2948,15 @@ public class NumberFormatTest extends TestFmwk {
         }
 
         // isParseBigDecimal() is true
-        for (int i = 0; i < defaultNonBigDecimals.length; i++) {
+        for (int i = 0; i < defaultLong.length + defaultNonLong.length; i++) {
+            String input = (i < defaultLong.length) ? defaultLong[i] : defaultNonLong[i - defaultLong.length];
             try {
-                Number n = nf.parse(defaultNonBigDecimals[i]);
+                Number n = nf.parse(input);
                 if (!(n instanceof BigDecimal)) {
                     errln("FAIL: parse does not return BigDecimal instance");
                 }
             } catch (ParseException e) {
-                errln("parse of '" + defaultNonBigDecimals[i] + "' threw exception: " + e);
+                errln("parse of '" + input + "' threw exception: " + e);
             }
         }
         // parse results for doubls must be always Double
@@ -3076,6 +3174,7 @@ public class NumberFormatTest extends TestFmwk {
     /*
      * Coverage tests for the implementation of abstract format methods not being called otherwise
      */
+    @Test
     public void TestFormatAbstractImplCoverage() {
         NumberFormat df = DecimalFormat.getInstance(Locale.ENGLISH);
         NumberFormat cdf = CompactDecimalFormat.getInstance(Locale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
@@ -3296,7 +3395,7 @@ public class NumberFormatTest extends TestFmwk {
         // For valid array, it is displayed as {min value, max value}
         // Tests when "if (minimumIntegerDigits > maximumIntegerDigits)" is true
         int[][] cases = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 2, 0 }, { 2, 1 }, { 10, 0 } };
-        int[] expectedMax = { 1, 1, 1, 2, 2, 10 };
+        int[] expectedMax = { 1, 1, 0, 0, 1, 0 };
         if (cases.length != expectedMax.length) {
             errln("Can't continue test case method TestSetMinimumIntegerDigits "
                     + "since the test case arrays are unequal.");
@@ -3478,12 +3577,12 @@ public class NumberFormatTest extends TestFmwk {
         CurrencyAmount ca, cb;
 
         try {
-            ca = new CurrencyAmount(null, null);
+            ca = new CurrencyAmount(null, (Currency) null);
             errln("NullPointerException should have been thrown.");
         } catch (NullPointerException ex) {
         }
         try {
-            ca = new CurrencyAmount(new Integer(0), null);
+            ca = new CurrencyAmount(new Integer(0), (Currency) null);
             errln("NullPointerException should have been thrown.");
         } catch (NullPointerException ex) {
         }
@@ -4678,6 +4777,96 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void TestMinMaxOverrides()
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+                NoSuchMethodException, SecurityException {
+        Class<?>[] baseClasses = {NumberFormat.class, NumberFormat.class, DecimalFormat.class};
+        String[] names = {"Integer", "Fraction", "Significant"};
+        for (int i = 0; i < 3; i++) {
+            DecimalFormat df = new DecimalFormat();
+            Class<?> base = baseClasses[i];
+            String name = names[i];
+            Method getMinimum = base.getDeclaredMethod("getMinimum" + name + "Digits");
+            Method setMinimum = base.getDeclaredMethod("setMinimum" + name + "Digits", Integer.TYPE);
+            Method getMaximum = base.getDeclaredMethod("getMaximum" + name + "Digits");
+            Method setMaximum = base.getDeclaredMethod("setMaximum" + name + "Digits", Integer.TYPE);
+
+            // Check max overrides min
+            setMinimum.invoke(df, 2);
+            assertEquals(name + " getMin A", 2, getMinimum.invoke(df));
+            setMaximum.invoke(df, 3);
+            assertEquals(name + " getMin B", 2, getMinimum.invoke(df));
+            assertEquals(name + " getMax B", 3, getMaximum.invoke(df));
+            setMaximum.invoke(df, 2);
+            assertEquals(name + " getMin C", 2, getMinimum.invoke(df));
+            assertEquals(name + " getMax C", 2, getMaximum.invoke(df));
+            setMaximum.invoke(df, 1);
+            assertEquals(name + " getMin D", 1, getMinimum.invoke(df));
+            assertEquals(name + " getMax D", 1, getMaximum.invoke(df));
+
+            // Check min overrides max
+            setMaximum.invoke(df, 2);
+            assertEquals(name + " getMax E", 2, getMaximum.invoke(df));
+            setMinimum.invoke(df, 1);
+            assertEquals(name + " getMin F", 1, getMinimum.invoke(df));
+            assertEquals(name + " getMax F", 2, getMaximum.invoke(df));
+            setMinimum.invoke(df, 2);
+            assertEquals(name + " getMin G", 2, getMinimum.invoke(df));
+            assertEquals(name + " getMax G", 2, getMaximum.invoke(df));
+            setMinimum.invoke(df, 3);
+            assertEquals(name + " getMin H", 3, getMinimum.invoke(df));
+            assertEquals(name + " getMax H", 3, getMaximum.invoke(df));
+        }
+    }
+
+    @Test
+    public void TestSetMathContext() throws ParseException {
+        java.math.MathContext fourDigits = new java.math.MathContext(4);
+        java.math.MathContext unlimitedCeiling = new java.math.MathContext(0, RoundingMode.CEILING);
+
+        // Test rounding
+        DecimalFormat df = new DecimalFormat();
+        assertEquals("Default format", "9,876.543", df.format(9876.5432));
+        df.setMathContext(fourDigits);
+        assertEquals("Format with fourDigits", "9,877", df.format(9876.5432));
+        df.setMathContext(unlimitedCeiling);
+        assertEquals("Format with unlimitedCeiling", "9,876.544", df.format(9876.5432));
+
+        // Test multiplication
+        df = new DecimalFormat("0.000%");
+        assertEquals("Default multiplication", "12.001%", df.format(0.120011));
+        df.setMathContext(fourDigits);
+        assertEquals("Multiplication with fourDigits", "12.000%", df.format(0.120011));
+        df.setMathContext(unlimitedCeiling);
+        assertEquals("Multiplication with unlimitedCeiling", "12.002%", df.format(0.120011));
+
+        // Test simple division
+        df = new DecimalFormat("0%");
+        assertEquals("Default division", 0.12001, df.parse("12.001%").doubleValue());
+        df.setMathContext(fourDigits);
+        assertEquals("Division with fourDigits", 0.12, df.parse("12.001%").doubleValue());
+        df.setMathContext(unlimitedCeiling);
+        assertEquals("Division with unlimitedCeiling", 0.12001, df.parse("12.001%").doubleValue());
+
+        // Test extreme division
+        df = new DecimalFormat();
+        df.setMultiplier(1000000007); // prime number
+        String hugeNumberString = "9876543212345678987654321234567898765432123456789"; // 49 digits
+        BigInteger huge34Digits = new BigInteger("9876543143209876985185182338271622000000");
+        BigInteger huge4Digits = new BigInteger("9877000000000000000000000000000000000000");
+        assertEquals("Default extreme division", huge34Digits, df.parse(hugeNumberString));
+        df.setMathContext(fourDigits);
+        assertEquals("Extreme division with fourDigits", huge4Digits, df.parse(hugeNumberString));
+        df.setMathContext(unlimitedCeiling);
+        try {
+            df.parse(hugeNumberString);
+            fail("Extreme division with unlimitedCeiling should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            // expected
+        }
+    }
+
+    @Test
     public void Test10436() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
         df.setRoundingMode(MathContext.ROUND_CEILING);
@@ -4931,7 +5120,7 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void Test11739() {
         NumberFormat nf = NumberFormat.getCurrencyInstance(new ULocale("sr_BA"));
-        ((DecimalFormat) nf).applyPattern("0.0 ¤¤¤");
+        ((DecimalFormat) nf).applyPattern("#,##0.0 ¤¤¤");
         ParsePosition ppos = new ParsePosition(0);
         CurrencyAmount result = nf.parseCurrency("1.500 амерички долар", ppos);
         assertEquals("Should parse to 1500 USD", new CurrencyAmount(1500, Currency.getInstance("USD")), result);
@@ -5039,6 +5228,13 @@ public class NumberFormatTest extends TestFmwk {
             assertEquals("Should produce a string of expected length on " + d,
                     d > 1 ? 6 : 7, result.length());
         }
+    }
+
+    @Test
+    public void Test13289() {
+        DecimalFormat df = new DecimalFormat("#00.0#E0");
+        String result = df.format(0.00123);
+        assertEquals("Should ignore scientific minInt if maxInt>minInt", "1.23E-3", result);
     }
 
     @Test
@@ -5282,6 +5478,78 @@ public class NumberFormatTest extends TestFmwk {
         expect2(df, 35.0, "$35.00");
         df.setMaximumFractionDigits(1);
         expect2(df, 35.0, "$35.0");
+    }
+
+    @Test
+    public void testParseVeryVeryLargeExponent() {
+        DecimalFormat df = new DecimalFormat();
+        ParsePosition ppos = new ParsePosition(0);
+
+        Object[][] cases = {
+                {"1.2E+1234567890", Double.POSITIVE_INFINITY},
+                {"1.2E+999999999", new com.ibm.icu.math.BigDecimal("1.2E+999999999")},
+                {"1.2E+1000000000", Double.POSITIVE_INFINITY},
+                {"-1.2E+999999999", new com.ibm.icu.math.BigDecimal("-1.2E+999999999")},
+                {"-1.2E+1000000000", Double.NEGATIVE_INFINITY},
+                {"1.2E-999999999", new com.ibm.icu.math.BigDecimal("1.2E-999999999")},
+                {"1.2E-1000000000", 0.0},
+                {"-1.2E-999999999", new com.ibm.icu.math.BigDecimal("-1.2E-999999999")},
+                {"-1.2E-1000000000", -0.0},
+
+        };
+
+        for (Object[] cas : cases) {
+            ppos.setIndex(0);
+            String input = (String) cas[0];
+            Number expected = (Number) cas[1];
+            Number actual = df.parse(input, ppos);
+            assertEquals(input, expected, actual);
+        }
+    }
+
+    @Test
+    public void testStringMethodsNPE() {
+        String[] npeMethods = {
+                "applyLocalizedPattern",
+                "applyPattern",
+                "setNegativePrefix",
+                "setNegativeSuffix",
+                "setPositivePrefix",
+                "setPositiveSuffix"
+        };
+        for (String npeMethod : npeMethods) {
+            DecimalFormat df = new DecimalFormat();
+            try {
+                DecimalFormat.class.getDeclaredMethod(npeMethod, String.class).invoke(df, (String) null);
+                fail("NullPointerException not thrown in method " + npeMethod);
+            } catch (InvocationTargetException e) {
+                assertTrue("Exception should be NullPointerException in method " + npeMethod,
+                        e.getCause() instanceof NullPointerException);
+            } catch (Exception e) {
+                // Other reflection exceptions
+                throw new AssertionError("Reflection error in method " + npeMethod + ": " + e.getMessage());
+            }
+        }
+
+        // Also test the constructors
+        try {
+            new DecimalFormat(null);
+            fail("NullPointerException not thrown in 1-parameter constructor");
+        } catch (NullPointerException e) {
+            // Expected
+        }
+        try {
+            new DecimalFormat(null, new DecimalFormatSymbols());
+            fail("NullPointerException not thrown in 2-parameter constructor");
+        } catch (NullPointerException e) {
+            // Expected
+        }
+        try {
+            new DecimalFormat(null, new DecimalFormatSymbols(), CurrencyPluralInfo.getInstance(), 0);
+            fail("NullPointerException not thrown in 4-parameter constructor");
+        } catch (NullPointerException e) {
+            // Expected
+        }
     }
 
     @Test

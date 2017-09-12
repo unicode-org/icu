@@ -294,6 +294,10 @@ public class Parse {
               "[\\ '\\u00A0\\u066C\\u2000-\\u200A\\u2018\\u2019\\u202F\\u205F\\u3000\\uFF07]")
           .freeze();
 
+  // For parse return value calculation.
+  private static final BigDecimal MIN_LONG_AS_BIG_DECIMAL = new BigDecimal(Long.MIN_VALUE);
+  private static final BigDecimal MAX_LONG_AS_BIG_DECIMAL = new BigDecimal(Long.MAX_VALUE);
+
   private enum SeparatorType {
     COMMA_LIKE,
     PERIOD_LIKE,
@@ -579,7 +583,7 @@ public class Parse {
 
       // We need to use a math context in order to prevent non-terminating decimal expansions.
       // This is only used when dividing by the multiplier.
-      MathContext mc = RoundingUtils.getMathContextOr16Digits(properties);
+      MathContext mc = RoundingUtils.getMathContextOr34Digits(properties);
 
       // Construct the output number.
       // This is the only step during fast-mode parsing that incurs object creations.
@@ -592,7 +596,8 @@ public class Parse {
       result = result.stripTrailingZeros();
       if (forceBigDecimal || result.scale() > 0) {
         return result;
-      } else if (-result.scale() + result.precision() <= 18) {
+      } else if (result.compareTo(MIN_LONG_AS_BIG_DECIMAL) >= 0
+          && result.compareTo(MAX_LONG_AS_BIG_DECIMAL) <= 0) {
         return result.longValueExact();
       } else {
         return result.toBigIntegerExact();
@@ -1090,6 +1095,7 @@ public class Parse {
     if (mode == null) mode = ParseMode.LENIENT;
     boolean integerOnly = properties.getParseIntegerOnly();
     boolean ignoreExponent = properties.getParseNoExponent();
+    boolean ignoreGrouping = properties.getGroupingSize() < 0;
 
     // Set up the initial state
     ParserState state = threadLocalParseState.get().clear();
@@ -1170,8 +1176,10 @@ public class Parse {
               acceptPrefix(cp, StateName.AFTER_PREFIX, state, item);
             }
             if (mode == ParseMode.LENIENT || mode == ParseMode.FAST) {
-              acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
-              if (state.length > 0 && mode == ParseMode.FAST) break;
+              if (!ignoreGrouping) {
+                acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+                if (state.length > 0 && mode == ParseMode.FAST) break;
+              }
               if (parseCurrency) {
                 acceptCurrency(cp, StateName.BEFORE_PREFIX, state, item);
               }
@@ -1190,7 +1198,9 @@ public class Parse {
             }
             if (mode == ParseMode.LENIENT || mode == ParseMode.FAST) {
               acceptWhitespace(cp, StateName.AFTER_PREFIX, state, item);
-              acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+              if (!ignoreGrouping) {
+                acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+              }
               if (parseCurrency) {
                 acceptCurrency(cp, StateName.AFTER_PREFIX, state, item);
               }
@@ -1205,8 +1215,10 @@ public class Parse {
               acceptDecimalPoint(cp, StateName.AFTER_FRACTION_DIGIT, state, item);
               if (state.length > 0 && mode == ParseMode.FAST) break;
             }
-            acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
-            if (state.length > 0 && mode == ParseMode.FAST) break;
+            if (!ignoreGrouping) {
+              acceptGrouping(cp, StateName.AFTER_INTEGER_DIGIT, state, item);
+              if (state.length > 0 && mode == ParseMode.FAST) break;
+            }
             acceptBidi(cp, StateName.BEFORE_SUFFIX, state, item);
             if (state.length > 0 && mode == ParseMode.FAST) break;
             acceptPadding(cp, StateName.BEFORE_SUFFIX, state, item);

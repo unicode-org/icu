@@ -18,14 +18,18 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 
-public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class CompatibilityTest extends TestFmwk {
     static final String[] FIELD_NAME = {
         "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
         "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",
@@ -40,12 +44,12 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     @Test
     public void TestGregorianChangeover() {
-    
+
         java.util.TimeZone jdkGMT = java.util.TimeZone.getTimeZone("GMT");
         java.util.Calendar jdkCal = java.util.Calendar.getInstance(jdkGMT);
         jdkCal.clear();
         jdkCal.set(1582, Calendar.OCTOBER, 15);
-        
+
 //      if(jdkCal instanceof java.util.GregorianCalendar) {
 //          logln("jdk IS grego");
 //          java.util.GregorianCalendar jdkgc = (java.util.GregorianCalendar)
@@ -170,7 +174,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             final long ONE_DAY = 24*60*60*1000L;
             int[] DATA = {
                 // Julian#   Year  Month               DOM   JULIAN:Year, Month,       DOM
-                2440588,     1970, Calendar.JANUARY,   1,    1969, Calendar.DECEMBER,  19, 
+                2440588,     1970, Calendar.JANUARY,   1,    1969, Calendar.DECEMBER,  19,
                 2415080,     1900, Calendar.MARCH,     1,    1900, Calendar.FEBRUARY,  17,
                 2451604,     2000, Calendar.FEBRUARY,  29,   2000, Calendar.FEBRUARY,  16,
                 2452269,     2001, Calendar.DECEMBER,  25,   2001, Calendar.DECEMBER,  12,
@@ -208,7 +212,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
                 if (delta != 0 || year != year2 || month != month2 ||
                     dom != dom2) errln(s + " FAIL");
                 else logln(s);
-                
+
                 // Test Julian computation
                 year = DATA[i+4];
                 month = DATA[i+5];
@@ -274,7 +278,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         int tzoffset = 123400;
 
         SimpleTimeZone zone = new SimpleTimeZone(tzoffset, tzid);
-        Calendar cal = (Calendar)Calendar.getInstance((SimpleTimeZone)zone.clone());
+        Calendar cal = Calendar.getInstance((SimpleTimeZone)zone.clone());
 
         if (!zone.equals(cal.getTimeZone())) errln("FAIL: Calendar.getTimeZone failed");
 
@@ -300,7 +304,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             cal.after(cal2)) errln("FAIL: equals/before/after failed");
 
         // Roll back to January
-        cal.roll(Calendar.MONTH, (int)(1 + Calendar.DECEMBER - cal.get(Calendar.MONTH)));
+        cal.roll(Calendar.MONTH, 1 + Calendar.DECEMBER - cal.get(Calendar.MONTH));
         if (cal.equals(cal2) ||
             cal2.before(cal) ||
             cal.after(cal2)) errln("FAIL: equals/before/after failed");
@@ -786,7 +790,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             public int getDay() { return day; }
             public int getHour() { return hour; }
         }
-        final TransitionItem[] transitionItems = { 
+        final TransitionItem[] transitionItems = {
             new TransitionItem( "America/Caracas", 2007, Calendar.DECEMBER,  8, 10 ), // day before change in ZONE_OFFSET
             new TransitionItem( "US/Pacific",      2011,    Calendar.MARCH, 12, 10 ), // day before change in DST_OFFSET
         };
@@ -1151,7 +1155,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         // jb4406 is probably not a bug, this is to document the behavior
         GregorianCalendar cal = new GregorianCalendar();
         final int MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
-        
+
         logln("julian day value jumps at changeover");
         for (int day = 12; day < 18; ++day) {
             cal.set(1582, 9, day);

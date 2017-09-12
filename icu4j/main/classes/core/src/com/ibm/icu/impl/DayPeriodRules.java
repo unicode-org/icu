@@ -242,7 +242,7 @@ public final class DayPeriodRules {
      * @return a DayPeriodRules object for `locale`.
      */
     public static DayPeriodRules getInstance(ULocale locale) {
-        String localeCode = locale.getName();
+        String localeCode = locale.getBaseName();
         if (localeCode.isEmpty()) { localeCode = "root"; }
 
         Integer ruleSetNum = null;

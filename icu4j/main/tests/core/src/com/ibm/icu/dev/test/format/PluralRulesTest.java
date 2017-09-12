@@ -33,6 +33,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
@@ -55,6 +57,7 @@ import com.ibm.icu.util.ULocale;
  * @author dougfelt (Doug Felt)
  * @author markdavis (Mark Davis) [for fractional support]
  */
+@RunWith(JUnit4.class)
 public class PluralRulesTest extends TestFmwk {
 
     PluralRulesFactory factory = PluralRulesFactory.NORMAL;
@@ -862,14 +865,14 @@ public class PluralRulesTest extends TestFmwk {
     enum StandardPluralCategories {
         zero, one, two, few, many, other;
         /**
-         * 
+         *
          */
         private static final Set<StandardPluralCategories> ALL = Collections.unmodifiableSet(EnumSet
                 .allOf(StandardPluralCategories.class));
 
         /**
          * Return a mutable set
-         * 
+         *
          * @param source
          * @return
          */
@@ -882,6 +885,7 @@ public class PluralRulesTest extends TestFmwk {
         }
 
         static final Comparator<Set<StandardPluralCategories>> SHORTEST_FIRST = new Comparator<Set<StandardPluralCategories>>() {
+            @Override
             public int compare(Set<StandardPluralCategories> arg0, Set<StandardPluralCategories> arg1) {
                 int diff = arg0.size() - arg1.size();
                 if (diff != 0) {
@@ -927,6 +931,7 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     private static final Comparator<PluralRules> PLURAL_RULE_COMPARATOR = new Comparator<PluralRules>() {
+        @Override
         public int compare(PluralRules o1, PluralRules o2) {
             return o1.compareTo(o2);
         }
@@ -1066,12 +1071,14 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     public static class FixedDecimalHandler implements SerializableTestUtility.Handler {
+        @Override
         public Object[] getTestObjects() {
             FixedDecimal items[] = { new FixedDecimal(3d), new FixedDecimal(3d, 2), new FixedDecimal(3.1d, 1),
                     new FixedDecimal(3.1d, 2), };
             return items;
         }
 
+        @Override
         public boolean hasSameBehavior(Object a, Object b) {
             FixedDecimal a1 = (FixedDecimal) a;
             FixedDecimal b1 = (FixedDecimal) b;

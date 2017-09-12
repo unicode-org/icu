@@ -226,7 +226,7 @@ AffixPattern::append(const AffixPattern &other) {
             addLiteral(literal.getBuffer(), 0, literal.length());
             break;
         case kCurrency:
-            addCurrency(iter.getTokenLength());
+            addCurrency(static_cast<uint8_t>(iter.getTokenLength()));
             break;
         default:
             add(iter.getTokenType());
@@ -481,7 +481,7 @@ AffixPattern::parseUserAffixString(
                 break;
             case 0xA4:
                 appender.flush();
-                appendTo.add(kCurrency, tokenSize);
+                appendTo.add(kCurrency, static_cast<uint8_t>(tokenSize));
                 break;
             default:
                 appender.append(token);

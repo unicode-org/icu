@@ -9,6 +9,8 @@
 package com.ibm.icu.dev.test.translit;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UScript;
@@ -22,7 +24,8 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  *
  */
-public class AnyScriptTest extends TestFmwk {    
+@RunWith(JUnit4.class)
+public class AnyScriptTest extends TestFmwk {
     @Test
     public void TestContext() {
         Transliterator t = Transliterator.createFromRules("foo", "::[bc]; a{b}d > B;", Transliterator.FORWARD);
@@ -33,7 +36,7 @@ public class AnyScriptTest extends TestFmwk {
     @Test
     public void TestScripts(){
         // get a couple of characters of each script for testing
-        
+
         StringBuffer testBuffer = new StringBuffer();
         for (int script = 0; script < UScript.CODE_LIMIT; ++script) {
             UnicodeSet test = new UnicodeSet().applyPropertyAlias("script", UScript.getName(script));
@@ -44,10 +47,10 @@ public class AnyScriptTest extends TestFmwk {
         }
         String test = testBuffer.toString();
         logln("Test line: " + test);
-        
+
         int inclusion = TestFmwk.getExhaustiveness();
         boolean testedUnavailableScript = false;
-        
+
         for (int script = 0; script < UScript.CODE_LIMIT; ++script) {
             if (script == UScript.COMMON || script == UScript.INHERITED) {
                 continue;
@@ -55,7 +58,7 @@ public class AnyScriptTest extends TestFmwk {
             // if the inclusion rate is not 10, skip all but a small number of items.
             // Make sure, however, that we test at least one unavailable script
             if (inclusion < 10 && script != UScript.LATIN
-                    && script != UScript.HAN 
+                    && script != UScript.HAN
                     && script != UScript.HIRAGANA
                     && testedUnavailableScript
                     ) {
@@ -103,25 +106,25 @@ public class AnyScriptTest extends TestFmwk {
         UnicodeSet ASCII = new UnicodeSet("[:ascii:]");
         String lettersAndSpace = "abc def";
         final String punctOnly = "( )";
-        
+
         String wideLettersAndSpace = widen.transform(lettersAndSpace);
         String widePunctOnly = widen.transform(punctOnly);
         assertContainsNone("Should be wide", ASCII, wideLettersAndSpace);
         assertContainsNone("Should be wide", ASCII, widePunctOnly);
-        
+
         String back;
         back = narrow.transform(wideLettersAndSpace);
         assertEquals("Should be narrow", lettersAndSpace, back);
         back = narrow.transform(widePunctOnly);
         assertEquals("Should be narrow", punctOnly, back);
-        
+
         Transliterator latin = Transliterator.getInstance("any-Latn");
         back = latin.transform(wideLettersAndSpace);
         assertEquals("Should be ascii", lettersAndSpace, back);
-        
+
         back = latin.transform(widePunctOnly);
         assertEquals("Should be ascii", punctOnly, back);
-       
+
         // Han-Latin is now forward-only per CLDR ticket #5630
         //Transliterator t2 = Transliterator.getInstance("any-Han");
         //back = t2.transform(widePunctOnly);
@@ -129,7 +132,7 @@ public class AnyScriptTest extends TestFmwk {
 
 
     }
-    
+
     @Test
     public void TestCommonDigits() {
         UnicodeSet westernDigitSet = new UnicodeSet("[0-9]");

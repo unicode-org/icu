@@ -177,10 +177,10 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
 
 
     data->fMagic            = 0xb1a0;
-    data->fFormatVersion[0] = 3;
-    data->fFormatVersion[1] = 1;
-    data->fFormatVersion[2] = 0;
-    data->fFormatVersion[3] = 0;
+    data->fFormatVersion[0] = RBBI_DATA_FORMAT_VERSION[0];
+    data->fFormatVersion[1] = RBBI_DATA_FORMAT_VERSION[1];
+    data->fFormatVersion[2] = RBBI_DATA_FORMAT_VERSION[2];
+    data->fFormatVersion[3] = RBBI_DATA_FORMAT_VERSION[3];
     data->fLength           = totalSize;
     data->fCatCount         = fSetBuilder->getNumCharCategories();
 

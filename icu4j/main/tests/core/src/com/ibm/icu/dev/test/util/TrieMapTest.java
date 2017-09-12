@@ -21,6 +21,8 @@ import java.util.TreeMap;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.TrieMap.Style;
@@ -35,6 +37,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.StringTrieBuilder.Option;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class TrieMapTest extends TestFmwk {
     static final boolean SHORT = false;
     static final boolean HACK_TO_MAKE_TESTS_PASS = false;
@@ -98,7 +101,7 @@ public class TrieMapTest extends TestFmwk {
                     }
                 }
             }
-            int charCount = 0; 
+            int charCount = 0;
             for (String key : unicodeTestMap.keySet()) {
                 charCount += key.length();
             }
@@ -145,7 +148,7 @@ public class TrieMapTest extends TestFmwk {
                     assertEquals(style + "\tGet of '" + key + "' = {" + Utility.hex(key) + "}", value, foundValue);
                 }
             }
-        }        
+        }
     }
 
     @Ignore
@@ -168,6 +171,7 @@ public class TrieMapTest extends TestFmwk {
             Map<String, Integer> map = comparisonTime == 0 ? new TreeMap<String, Integer>(testMap) : new HashMap<String, Integer>(testMap);
 
             long mapTime = t.timeIterations(new MyLoop() {
+                @Override
                 public void time(int repeat) {
                     for (int tt = 0; tt < repeat; ++tt) {
                         for (Entry<String, Integer> entry : map.entrySet()) {
@@ -175,7 +179,7 @@ public class TrieMapTest extends TestFmwk {
                             Integer value = entry.getValue();
                         }
                     }
-                } 
+                }
             }, null, map);
             if (comparisonTime == 0) {
                 logln("\titeration time\tTREEMAP\tn/a\t" + t.toString(testMap.size()) + "\t\titerations=" + t.getIterations());
@@ -185,6 +189,7 @@ public class TrieMapTest extends TestFmwk {
             return mapTime;
         } else {
             long trieTime = t.timeIterations(new MyLoop() {
+                @Override
                 public void time(int repeat) {
                     for (int tt = 0; tt < repeat; ++tt) {
                         for (Entry<CharSequence, Integer> entry : trieMap) {
@@ -192,7 +197,7 @@ public class TrieMapTest extends TestFmwk {
                             Integer value = entry.getValue();
                         }
                     }
-                } 
+                }
             }, null, trieMap);
             logln("\titeration time\t" + style + "\tn/a\t" + t.toString(testMap.size(), comparisonTime) + "\titerations=" + t.getIterations());
             if (!useSmallList && trieTime > ratioToMap * comparisonTime) {
@@ -281,7 +286,7 @@ public class TrieMapTest extends TestFmwk {
             } while (hasMore);
         } while (matcher.nextStart());
         assertEquals(style + "\tTrieMap matcher", expectedList, actualList);
-        //        logln(bytes + "\tValue <" + value + "> at " 
+        //        logln(bytes + "\tValue <" + value + "> at "
         //                + start + ".." + end + ", "
         //                + string.substring(0, start) + "|"
         //                + string.substring(start, end) + "|"
@@ -307,32 +312,35 @@ public class TrieMapTest extends TestFmwk {
         if (style == null) {
             if (comparisonTime == 0) {
                 long mapTime = t.timeIterations(new MyLoop() {
+                    @Override
                     public void time(int repeat) {
                         for (int tt = 0; tt < repeat; ++tt) {
                             Map<String, Integer> map2 = new TreeMap<String, Integer>(map);
                         }
-                    } 
+                    }
                 }, null, testmap);
                 logln("\tbuild time\tTREEMAP\tn/a\t" + t.toString(testmap.size()) + "\t\titerations=" + t.getIterations());
                 return mapTime;
             } else {
                 long mapTime = t.timeIterations(new MyLoop() {
+                    @Override
                     public void time(int repeat) {
                         for (int tt = 0; tt < repeat; ++tt) {
                             Map<String, Integer> map2 = new HashMap<String, Integer>(map);
                         }
-                    } 
+                    }
                 }, null, testmap);
                 logln("\tbuild time\tHASHMAP\tn/a\t" + t.toString(testmap.size(), comparisonTime) + "\titerations=" + t.getIterations());
                 return mapTime;
             }
         } else {
             long trieTime = t.timeIterations(new MyLoop() {
+                @Override
                 public void time(int repeat) {
                     for (int tt = 0; tt < repeat; ++tt) {
                         trieMap = TrieMap.BytesBuilder.with(style, option, map).build();
                     }
-                } 
+                }
             }, null, testmap, style, option);
 
             logln("\tbuild time\t" + style + "\t" + option + "\t" + t.toString(testmap.size(), comparisonTime) + "\titerations=" + t.getIterations());
@@ -363,7 +371,7 @@ public class TrieMapTest extends TestFmwk {
             int mapKeyByteSize = 0;
             TreeMap<String, Integer> map = new TreeMap<String, Integer>(unicodeTestMap);
             for (Entry<String, Integer> entry : map.entrySet()) {
-                mapKeyByteSize += 8 * (int) ((((entry.getKey().length()) * 2) + 45) / 8);
+                mapKeyByteSize += 8 * ((((entry.getKey().length()) * 2) + 45) / 8);
             }
             logln("\tkey byte size\tTREEMAP\tn/a\t" + nf.format(mapKeyByteSize));
             return mapKeyByteSize;
@@ -423,13 +431,14 @@ public class TrieMapTest extends TestFmwk {
             Map<String, Integer> map = comparisonTime == 0 ? new TreeMap<String, Integer>(testmap) : new HashMap<String, Integer>(testmap);
 
             long mapTime = t.timeIterations(new MyLoop() {
+                @Override
                 public void time(int repeat) {
                     for (int tt = 0; tt < repeat; ++tt) {
                         for (String key : keys) {
                             Integer foundValue = map.get(key);
                         }
                     }
-                } 
+                }
             }, keys, map);
             if (comparisonTime == 0) {
                 logln("\tget() time\tTREEMAP\tn/a\t" + t.toString(keys.size()) + "\t\titerations=" + t.getIterations());
@@ -439,13 +448,14 @@ public class TrieMapTest extends TestFmwk {
             return mapTime;
         } else {
             long trieTime = t.timeIterations(new MyLoop() {
+                @Override
                 public void time(int repeat) {
                     for (int tt = 0; tt < repeat; ++tt) {
                         for (String key : keys) {
                             Integer foundValue = trieMap.get(key);
                         }
                     }
-                } 
+                }
             }, keys, trieMap);
 
             //            System.gc();
@@ -470,6 +480,7 @@ public class TrieMapTest extends TestFmwk {
         Map<String, Integer> map;
         Style style;
         Option option;
+        @Override
         public void init(Object... params) {
             if (params.length > 0) {
                 keys = (ArrayList<String>) params[0];
@@ -488,6 +499,7 @@ public class TrieMapTest extends TestFmwk {
                 option = (Option) params[3];
             }
         }
+        @Override
         abstract public void time(int repeat);
     }
 

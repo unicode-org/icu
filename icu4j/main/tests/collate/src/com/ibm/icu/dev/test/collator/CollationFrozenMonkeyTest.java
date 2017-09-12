@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v2.1 : collate/CollationMonkeyTest
  * Source File: $ICU4CRoot/source/test/intltest/mnkytst.cpp
  **/
@@ -18,6 +18,8 @@ import java.util.Locale;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
@@ -25,16 +27,17 @@ import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
 
 /**
- * CollationFrozenMonkeyTest is a third level test class.  This tests the random 
- * substrings of the default test strings to verify if the compare and 
+ * CollationFrozenMonkeyTest is a third level test class.  This tests the random
+ * substrings of the default test strings to verify if the compare and
  * sort key algorithm works correctly on frozen collators.  For example, any string is always
  * less than the string itself appended with any character.
  */
 
+@RunWith(JUnit4.class)
 public class CollationFrozenMonkeyTest extends TestFmwk {
-    
+
     private String source = "-abcdefghijklmnopqrstuvwxyz#&^$@";
-    
+
     @Test
     public void TestCollationKey() {
         if(source.length() == 0) {
@@ -47,15 +50,15 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
         try {
             Collator myCollator = Collator.getInstance(new Locale("en", "CA"));
             myCollator.freeze();
-            
+
             myPrimaryCollator = myCollator.cloneAsThawed();
             myPrimaryCollator.setStrength(Collator.PRIMARY);
             myPrimaryCollator.freeze();
-            
+
             mySecondaryCollator = myPrimaryCollator.cloneAsThawed();
             mySecondaryCollator.setStrength(Collator.SECONDARY);
             mySecondaryCollator.freeze();
-            
+
             myTertiaryCollator = mySecondaryCollator.cloneAsThawed();
             myTertiaryCollator.setStrength(Collator.TERTIARY);
             myTertiaryCollator.freeze();
@@ -63,7 +66,7 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             warnln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
-        
+
         Random rand = createRandom(); // use test framework's random seed
         int s = rand.nextInt(0x7fff) % source.length();
         int t = rand.nextInt(0x7fff) % source.length();
@@ -71,30 +74,30 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
         int tlen = Math.abs(rand.nextInt(0x7fff) % source.length() - source.length()) % source.length();
         String subs = source.substring(Math.min(s, slen), Math.min(s + slen, source.length()));
         String subt = source.substring(Math.min(t, tlen), Math.min(t + tlen, source.length()));
-    
+
         CollationKey collationKey1, collationKey2;
-    
+
         collationKey1 = myTertiaryCollator.getCollationKey(subs);
         collationKey2 = myTertiaryCollator.getCollationKey(subt);
         int result = collationKey1.compareTo(collationKey2);  // Tertiary
         int revResult = collationKey2.compareTo(collationKey1);  // Tertiary
         report( subs, subt, result, revResult);
-    
+
         collationKey1 = mySecondaryCollator.getCollationKey(subs);
         collationKey2 = mySecondaryCollator.getCollationKey(subt);
         result = collationKey1.compareTo(collationKey2);  // Secondary
         revResult = collationKey2.compareTo(collationKey1);   // Secondary
         report( subs, subt, result, revResult);
-    
+
         collationKey1 = myPrimaryCollator.getCollationKey(subs);
         collationKey2 = myPrimaryCollator.getCollationKey(subt);
         result = collationKey1.compareTo(collationKey2);  // Primary
         revResult = collationKey2.compareTo(collationKey1);   // Primary
         report(subs, subt, result, revResult);
-    
+
         String msg = "";
         String addOne = subs + String.valueOf(0xE000);
-    
+
         collationKey1 = myPrimaryCollator.getCollationKey(subs);
         collationKey2 = myPrimaryCollator.getCollationKey(addOne);
         result = collationKey1.compareTo(collationKey2);
@@ -106,7 +109,7 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             msg += ") Failed.";
             errln(msg);
         }
-    
+
         msg = "";
         result = collationKey2.compareTo(collationKey1);
         if (result != 1) {
@@ -118,7 +121,7 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             errln(msg);
         }
     }
-    
+
     // perform monkey tests using Collator.compare
     @Test
     public void TestCompare() {
@@ -126,22 +129,22 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             errln("CollationMonkeyTest.TestCompare(): source is empty - ICU_DATA not set or data missing?");
             return;
         }
-        
+
         Collator myPrimaryCollator;
         Collator mySecondaryCollator;
         Collator myTertiaryCollator;
         try {
             Collator myCollator = Collator.getInstance(new Locale("en", "CA"));
             myCollator.freeze();
-            
+
             myPrimaryCollator = myCollator.cloneAsThawed();
             myPrimaryCollator.setStrength(Collator.PRIMARY);
             myPrimaryCollator.freeze();
-            
+
             mySecondaryCollator = myPrimaryCollator.cloneAsThawed();
             mySecondaryCollator.setStrength(Collator.SECONDARY);
             mySecondaryCollator.freeze();
-            
+
             myTertiaryCollator = mySecondaryCollator.cloneAsThawed();
             myTertiaryCollator.setStrength(Collator.TERTIARY);
             myTertiaryCollator.freeze();
@@ -149,12 +152,12 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             warnln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
-        
-        
+
+
         /* Seed the random-number generator with current time so that
          * the numbers will be different every time we run.
          */
-        
+
         Random rand = createRandom(); // use test framework's random seed
         int s = rand.nextInt(0x7fff) % source.length();
         int t = rand.nextInt(0x7fff) % source.length();
@@ -162,22 +165,22 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
         int tlen = Math.abs(rand.nextInt(0x7fff) % source.length() - source.length()) % source.length();
         String subs = source.substring(Math.min(s, slen), Math.min(s + slen, source.length()));
         String subt = source.substring(Math.min(t, tlen), Math.min(t + tlen, source.length()));
-    
+
         int result = myTertiaryCollator.compare(subs, subt);  // Tertiary
         int revResult = myTertiaryCollator.compare(subt, subs);  // Tertiary
         report(subs, subt, result, revResult);
-    
+
         result = mySecondaryCollator.compare(subs, subt);  // Secondary
         revResult = mySecondaryCollator.compare(subt, subs);  // Secondary
         report(subs, subt, result, revResult);
-    
+
         result = myPrimaryCollator.compare(subs, subt);  // Primary
         revResult = myPrimaryCollator.compare(subt, subs);  // Primary
         report(subs, subt, result, revResult);
-    
+
         String msg = "";
         String addOne = subs + String.valueOf(0xE000);
-    
+
         result = myPrimaryCollator.compare(subs, addOne);
         if (result != -1) {
             msg += "Test : ";
@@ -187,7 +190,7 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             msg += " Failed.";
             errln(msg);
         }
-    
+
         msg = "";
         result = myPrimaryCollator.compare(addOne, subs);
         if (result != 1) {
@@ -199,31 +202,31 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             errln(msg);
         }
     }
-    
+
     void report(String s, String t, int result, int revResult) {
         if (revResult != -result) {
             String msg = "";
-            msg += s; 
+            msg += s;
             msg += " and ";
             msg += t;
             msg += " round trip comparison failed";
-            msg += " (result " + result + ", reverse Result " + revResult + ")"; 
+            msg += " (result " + result + ", reverse Result " + revResult + ")";
             errln(msg);
         }
     }
-    
+
     @Test
     public void TestRules() {
         String testSourceCases[] = {
-            "\u0061\u0062\u007a", 
-            "\u0061\u0062\u007a", 
+            "\u0061\u0062\u007a",
+            "\u0061\u0062\u007a",
         };
-    
+
         String testTargetCases[] = {
             "\u0061\u0062\u00e4",
             "\u0061\u0062\u0061\u0308",
         };
-        
+
         int i=0;
         logln("Demo Test 1 : Create a new table collation with rules \"& z < 0x00e4\"");
         Collator col = Collator.getInstance(new Locale("en", "US"));
@@ -237,7 +240,7 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             warnln( "Demo Test 1 Table Collation object creation failed.");
             return;
         }
-        
+
         for(i=0; i<2; i++){
             doTest(myCollation, testSourceCases[i], testTargetCases[i], -1);
         }
@@ -254,11 +257,11 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             doTest(myCollation, testSourceCases[i], testTargetCases[i], -1);
         }
     }
-    
+
     void doTest(RuleBasedCollator myCollation, String mysource, String target, int result) {
         int compareResult = myCollation.compare(source, target);
         CollationKey sortKey1, sortKey2;
-        
+
         try {
             sortKey1 = myCollation.getCollationKey(source);
             sortKey2 = myCollation.getCollationKey(target);
@@ -269,7 +272,7 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
         int keyResult = sortKey1.compareTo(sortKey2);
         reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
     }
-    
+
     public void reportCResult(String src, String target, CollationKey sourceKey, CollationKey targetKey,
                               int compareResult, int keyResult, int incResult, int expectedResult ) {
         if (expectedResult < -1 || expectedResult > 1) {
@@ -280,7 +283,7 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
         boolean ok2 = (keyResult == expectedResult);
         boolean ok3 = (incResult == expectedResult);
         if (ok1 && ok2 && ok3 && !isVerbose()) {
-            return;    
+            return;
         } else {
             String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
@@ -315,7 +318,7 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
                 logln(msg1 + src + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + src + msg2 + target + msg3 + sResult + msg4 + sExpect);
-            }                
+            }
         }
     }
 }

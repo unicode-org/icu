@@ -284,7 +284,6 @@ public:
     virtual void setProperty(const char* propline);
     virtual const char* getProperty(const char* prop);
 
-protected:
     /* JUnit-like assertions. Each returns TRUE if it succeeds. */
     UBool assertTrue(const char* message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE, const char *file=NULL, int line=0);
     UBool assertFalse(const char* message, UBool condition, UBool quiet=FALSE);

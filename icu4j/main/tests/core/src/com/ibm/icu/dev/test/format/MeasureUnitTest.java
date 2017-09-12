@@ -28,6 +28,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.FormatHandler;
@@ -50,6 +52,7 @@ import com.ibm.icu.util.ULocale;
  * for information on how to update with each new release.
  * @author markdavis
  */
+@RunWith(JUnit4.class)
 public class MeasureUnitTest extends TestFmwk {
 
     static class OrderedPair<F extends Comparable, S extends Comparable> extends Pair<F, S> implements Comparable<OrderedPair<F, S>> {
@@ -240,34 +243,6 @@ public class MeasureUnitTest extends TestFmwk {
             JAVA_VERSION_MAP.put(funcNameAndVersion[0], funcNameAndVersion[1]);
         }
     }
-
-    /**
-     * @author markdavis
-     *
-     */
-    // TODO(junit): resolve
-//    public static void main(String[] args) {
-//        //generateConstants(); if (true) return;
-//
-//        // Ticket #12034 deadlock on multi-threaded static init of MeasureUnit.
-//        // The code below reliably deadlocks with ICU 56.
-//        // The test is here in main() rather than in a test function so it can be made to run
-//        // before anything else.
-//        Thread thread = new Thread()  {
-//            @Override
-//            public void run() {
-//                @SuppressWarnings("unused")
-//                Set<String> measureUnitTypes = MeasureUnit.getAvailableTypes();
-//            }
-//        };
-//        thread.start();
-//        @SuppressWarnings("unused")
-//        Currency cur = Currency.getInstance(ULocale.ENGLISH);
-//        try {thread.join();} catch(InterruptedException e) {};
-//        // System.out.println("Done with MeasureUnit thread test.");
-//
-//        new MeasureUnitTest().run(args);
-//    }
 
 /*
     @Test

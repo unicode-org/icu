@@ -117,13 +117,13 @@ public class RoundingUtils {
   private static final MathContext[] MATH_CONTEXT_BY_ROUNDING_MODE_UNLIMITED =
       new MathContext[RoundingMode.values().length];
 
-  private static final MathContext[] MATH_CONTEXT_BY_ROUNDING_MODE_16_DIGITS =
+  private static final MathContext[] MATH_CONTEXT_BY_ROUNDING_MODE_34_DIGITS =
       new MathContext[RoundingMode.values().length];
 
   static {
-    for (int i = 0; i < MATH_CONTEXT_BY_ROUNDING_MODE_16_DIGITS.length; i++) {
+    for (int i = 0; i < MATH_CONTEXT_BY_ROUNDING_MODE_34_DIGITS.length; i++) {
       MATH_CONTEXT_BY_ROUNDING_MODE_UNLIMITED[i] = new MathContext(0, RoundingMode.valueOf(i));
-      MATH_CONTEXT_BY_ROUNDING_MODE_16_DIGITS[i] = new MathContext(16);
+      MATH_CONTEXT_BY_ROUNDING_MODE_34_DIGITS[i] = new MathContext(34);
     }
   }
 
@@ -147,18 +147,18 @@ public class RoundingUtils {
 
   /**
    * Gets the user-specified math context out of the property bag. If there is none, falls back to a
-   * math context with 16 digits of precision (the 64-bit IEEE 754R default) and the user-specified
+   * math context with 34 digits of precision (the 128-bit IEEE 754R default) and the user-specified
    * rounding mode, which defaults to HALF_EVEN (the IEEE 754R default).
    *
    * @param properties The property bag.
    * @return A {@link MathContext}. Never null.
    */
-  public static MathContext getMathContextOr16Digits(IBasicRoundingProperties properties) {
+  public static MathContext getMathContextOr34Digits(IBasicRoundingProperties properties) {
     MathContext mathContext = properties.getMathContext();
     if (mathContext == null) {
       RoundingMode roundingMode = properties.getRoundingMode();
       if (roundingMode == null) roundingMode = RoundingMode.HALF_EVEN;
-      mathContext = MATH_CONTEXT_BY_ROUNDING_MODE_16_DIGITS[roundingMode.ordinal()];
+      mathContext = MATH_CONTEXT_BY_ROUNDING_MODE_34_DIGITS[roundingMode.ordinal()];
     }
     return mathContext;
   }

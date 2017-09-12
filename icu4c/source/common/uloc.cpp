@@ -529,14 +529,16 @@ static const VariantMap VARIANT_MAP[] = {
 #define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == NULL && getShortestSubtagLength(localeID) == 1)
 /* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
 #define _ConvertBCP47(finalID, id, buffer, length,err) \
-        if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 || U_FAILURE(*err)) { \
+        if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 ||  \
+                U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) { \
             finalID=id; \
+            if (*err == U_STRING_NOT_TERMINATED_WARNING) { *err = U_BUFFER_OVERFLOW_ERROR; } \
         } else { \
             finalID=buffer; \
         }
 /* Gets the size of the shortest subtag in the given localeID. */
 static int32_t getShortestSubtagLength(const char *localeID) {
-    int32_t localeIDLength = uprv_strlen(localeID);
+    int32_t localeIDLength = static_cast<int32_t>(uprv_strlen(localeID));
     int32_t length = localeIDLength;
     int32_t tmpLength = 0;
     int32_t i;
@@ -2486,7 +2488,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
 #if defined(ULOC_DEBUG)
         fprintf(stderr,"%02d: %s\n", i, acceptList[i]);
 #endif
-        while((l=uenum_next(availableLocales, NULL, status))) {
+        while((l=uenum_next(availableLocales, NULL, status)) != NULL) {
 #if defined(ULOC_DEBUG)
             fprintf(stderr,"  %s\n", l);
 #endif
@@ -2526,7 +2528,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
 #if defined(ULOC_DEBUG)
                 fprintf(stderr,"Try: [%s]", fallbackList[i]);
 #endif
-                while((l=uenum_next(availableLocales, NULL, status))) {
+                while((l=uenum_next(availableLocales, NULL, status)) != NULL) {
 #if defined(ULOC_DEBUG)
                     fprintf(stderr,"  %s\n", l);
 #endif

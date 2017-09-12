@@ -23,6 +23,8 @@ import java.util.Random;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.PatternTokenizer;
@@ -40,6 +42,7 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class DateTimeGeneratorTest extends TestFmwk {
     public static boolean GENERATE_TEST_DATA;
     static {
@@ -886,6 +889,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
     /* Tests the method
      *        public String getCanonicalSkeletonAllowingDuplicates(String pattern)
      */
+    @Test
     public void TestGetCanonicalSkeletonAllowingDuplicates(){
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
         String[] cases = {"GyQMwEdaHmsSv","LegH","Legh"};
@@ -1154,15 +1158,13 @@ public class DateTimeGeneratorTest extends TestFmwk {
     /* Tests the constructor
      *    public VariableField(String string)
      */
-    //TODO(junit) why is this "unused"
-    @SuppressWarnings("unused")
     @Test
     public void TestVariableField_String(){
         String[] cases = {"d","mm","aa"};
         String[] invalid = {null,"","dummy"};
         for(int i=0; i<cases.length; i++){
             try{
-                VariableField vf = new VariableField(cases[i]);
+                new VariableField(cases[i]);
             } catch(Exception e){
                 errln("VariableField constructor was not suppose to return " +
                         "an exception when created when passing " + cases[i]);
@@ -1170,7 +1172,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         }
         for(int i=0; i<invalid.length; i++){
             try{
-                VariableField vf = new VariableField(invalid[i]);
+                new VariableField(invalid[i]);
                 errln("VariableField constructor was suppose to return " +
                         "an exception when created when passing " + invalid[i]);
             } catch(Exception e){}

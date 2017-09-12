@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class ListFormatterTest extends TestFmwk {
     String[] HardcodedTestData = {
             "",
@@ -141,7 +144,7 @@ public class ListFormatterTest extends TestFmwk {
         assertEquals("4", strings[4], listFormat.format("A", "B", "C", "D"));
         assertEquals("5", strings[5], listFormat.format("A", "B", "C", "D", "E"));
     }
-    
+
     @Test
     public void TestFromList() {
         ListFormatter listFormatter = ListFormatter.getInstance(ULocale.ENGLISH);
@@ -151,16 +154,16 @@ public class ListFormatterTest extends TestFmwk {
         list.add("C");
         assertEquals("list", "A, B, and C", listFormatter.format(list));
     }
-    
+
     @Test
     public void TestCreatePatternForNumItems() {
         ListFormatter listFormatter = ListFormatter.getInstance(ULocale.ENGLISH);
         assertEquals(
                 "createPatternForNumItems",
                 "{0}, {1}, and {2}",
-                listFormatter.getPatternForNumItems(3));        
+                listFormatter.getPatternForNumItems(3));
     }
-    
+
     @Test
     public void TestGetPatternForNumItemsException() {
         ListFormatter listFormatter = ListFormatter.getInstance(ULocale.ENGLISH);
@@ -171,13 +174,13 @@ public class ListFormatterTest extends TestFmwk {
             // expected.
         }
     }
-    
+
     @Test
     public void TestGetLocale() {
         assertEquals(
                 "getLocale", ULocale.ENGLISH, ListFormatter.getInstance(ULocale.ENGLISH).getLocale());
     }
-    
+
     @Test
     public void Test9946() {
         ListFormatter listFormatter = ListFormatter.getInstance(ULocale.ENGLISH);

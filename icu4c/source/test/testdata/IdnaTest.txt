@@ -1,5 +1,5 @@
 # IdnaTest.txt
-# Date: 2017-05-22, 14:06:39 GMT
+# Date: 2017-06-02, 14:19:52 GMT
 # © 2017 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
@@ -21,16 +21,16 @@
 # Leading and trailing spaces and tabs in each column are ignored.
 # Comments are indicated with hash marks.
 #
-#  Column 1: type -           T for transitional, N for nontransitional, B for both
-#  Column 2: source -         The source string to be tested
-#  Column 3: toUnicode -      The result of applying toUnicode to the source, using nontransitional. 
-#                             A blank value means the same as the source value; a value in [...] is a set of status codes.
-#  Column 4: toASCII -        The result of applying toASCII to the source, using the specified type: T, N, or B.
-#                             A blank value means the same as the toUnicode value; a value in [...] is a set of status codes.
-#  Column 5: idna2008Status - NV8 is only present if the status is valid but the character is excluded by IDNA2008
-#                             from all domain names for all versions of Unicode.
-#                             XV8 is present when the character is excluded by IDNA2008 for the current version of Unicode. 
-#                             These are informative values only.
+#  Column 1: type -       T for transitional, N for nontransitional, B for both
+#  Column 2: source -     The source string to be tested
+#  Column 3: toUnicode -  The result of applying toUnicode to the source, using nontransitional. 
+#                         A blank value means the same as the source value; a value in [...] is a set of error codes.
+#  Column 4: toASCII -    The result of applying toASCII to the source, using the specified type: T, N, or B.
+#                         A blank value means the same as the toUnicode value; a value in [...] is a set of error codes.
+#  Column 5: idna2008 -   NV8 is only present if the status is valid but the character is excluded by IDNA2008
+#                         from all domain names for all versions of Unicode.
+#                         XV8 is present when the character is excluded by IDNA2008 for the current version of Unicode. 
+#                         These are informative values only.
 #
 # If the value of toUnicode is the same as source, the column will be blank.
 # The line comments currently show visible characters that have been escaped 
@@ -59,10 +59,10 @@
 #
 # CONFORMANCE:
 #
-# To test for conformance to UTS46, an implementation must first perform the toASCII and to Unicode operations
-# on the source string, with the indicated type. Implementations may be more strict than UTS46;
-# thus they may have errors where the file indicates results. In particular, an implementation conformant to 
-# IDNA2008 would disallow the input for lines marked with NV8.
+# To test for conformance to UTS46, an implementation must first perform the toUnicode operation
+# on the source string, then the toASCII operation (with the indicated type) on the source string. 
+# Implementations may be more strict than UTS46; thus they may have errors where the file indicates results.
+# In particular, an implementation conformant to IDNA2008 would disallow the input for lines marked with NV8.
 #
 # Moreover, the error codes in the file are informative; implementations need only record that there is an error:
 # they need not reproduce those codes. Thus to then verify conformance for the toASCII and toUnicode columns:
@@ -569,12 +569,16 @@ N;	\u0644\u200C;	[B3 C1];	[B3 C1]	#	ل
 B;	xn--ghb;	\u0644;	xn--ghb	#	ل
 B;	\u0644;	;	xn--ghb	#	ل
 B;	xn--ghb413k;	[B3 C1];	[B3 C1]	#	ل
+B;	a。。b;	[A4_2];	[A4_2]
+B;	A。。B;	[A4_2];	[A4_2]
+B;	a..b;	[A4_2];	[A4_2]
 T;	\u200D。。\u06B9\u200C;	[B1 B3 C1 C2 A4_2];	[A4_2]	#	..ڹ
 N;	\u200D。。\u06B9\u200C;	[B1 B3 C1 C2 A4_2];	[B1 B3 C1 C2 A4_2]	#	..ڹ
 B;	..xn--skb;	[A4_2];	[A4_2]	#	..ڹ
 B;	xn--1ug..xn--skb080k;	[B1 B3 C1 C2 A4_2];	[B1 B3 C1 C2 A4_2]	#	..ڹ
 B;	\u05D00\u0660;	[B4];	[B4]	#	א0٠
 B;	xn--0-zhc74b;	[B4];	[B4]	#	א0٠
+B;	$;	[P1 V6];	[P1 V6]
 
 # RANDOMIZED TESTS
 

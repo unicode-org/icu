@@ -318,7 +318,7 @@ ga{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.31.86"}
+    Version{"2.1.34.51"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -688,11 +688,11 @@ ga{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"'seachtain' 'a' w 'i' y"}
-                    many{"'seachtain' 'a' w 'i' y"}
-                    one{"'seachtain' 'a' w 'i' y"}
-                    other{"'seachtain' 'a' w 'i' y"}
-                    two{"'seachtain' 'a' w 'i' y"}
+                    few{"'seachtain' 'a' w 'i' Y"}
+                    many{"'seachtain' 'a' w 'i' Y"}
+                    one{"'seachtain' 'a' w 'i' Y"}
+                    other{"'seachtain' 'a' w 'i' Y"}
+                    two{"'seachtain' 'a' w 'i' Y"}
                 }
             }
             dayNames{

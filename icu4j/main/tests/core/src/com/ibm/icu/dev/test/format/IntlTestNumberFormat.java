@@ -17,6 +17,8 @@ import java.util.Locale;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormat;
@@ -26,7 +28,8 @@ import com.ibm.icu.text.NumberFormat;
  * This test does round-trip testing (format -> parse -> format -> parse -> etc.) of
  * NumberFormat.
  */
-public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class IntlTestNumberFormat extends TestFmwk {
 
     public NumberFormat fNumberFormat;
 

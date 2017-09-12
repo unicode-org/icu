@@ -11,6 +11,8 @@ package com.ibm.icu.dev.test.util;
 import java.util.MissingResourceException;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
@@ -19,7 +21,7 @@ import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
-
+@RunWith(JUnit4.class)
 public final class ICUResourceBundleCollationTest extends TestFmwk {
     private static final String COLLATION_RESNAME = "collations";
     private static final String COLLATION_KEYWORD = "collation";
@@ -146,7 +148,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
 
     @Test
     public void TestOpen(){
-        UResourceBundle bundle = (UResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
+        UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUData.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
         if(bundle==null){
             errln("could not load the stream");
         }

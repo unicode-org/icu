@@ -9,6 +9,8 @@
 package com.ibm.icu.dev.test.normalizer;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -18,8 +20,9 @@ import com.ibm.icu.text.ComposedCharIter;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.StringCharacterIterator;
 
+@RunWith(JUnit4.class)
 public class TestDeprecatedNormalizerAPI extends TestFmwk
-{     
+{
     public TestDeprecatedNormalizerAPI() {
     }
 
@@ -33,17 +36,17 @@ public class TestDeprecatedNormalizerAPI extends TestFmwk
         Normalizer norm = new Normalizer(iter, Normalizer.NFC,0);
         if(norm.next()!=0xe4) {
             errln("error in Normalizer(CharacterIterator).next()");
-        }       
+        }
         Normalizer norm2 = new Normalizer(s,Normalizer.NFC,0);
         if(norm2.next()!=0xe4) {
             errln("error in Normalizer(CharacterIterator).next()");
-        }       
+        }
         // test clone(), ==, and hashCode()
         Normalizer clone=(Normalizer)norm.clone();
         if(clone.getBeginIndex()!= norm.getBeginIndex()){
            errln("error in Normalizer.getBeginIndex()");
         }
-        
+
         if(clone.getEndIndex()!= norm.getEndIndex()){
            errln("error in Normalizer.getEndIndex()");
         }

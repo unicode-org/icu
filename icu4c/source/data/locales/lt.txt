@@ -289,7 +289,7 @@ lt{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.34.51"}
     calendar{
         buddhist{
             eras{
@@ -1447,10 +1447,10 @@ lt{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    few{"y w 'sav'."}
-                    many{"y w 'sav'."}
-                    one{"y w 'sav'."}
-                    other{"y w 'sav'."}
+                    few{"Y w 'sav'."}
+                    many{"Y w 'sav'."}
+                    one{"Y w 'sav'."}
+                    other{"Y w 'sav'."}
                 }
             }
             dayNames{

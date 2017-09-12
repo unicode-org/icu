@@ -43,6 +43,8 @@
 #   define NOMCX
 #   include <windows.h>
 
+#include <algorithm>
+
 static const char *getCalendarType(int32_t type)
 {
     switch (type)

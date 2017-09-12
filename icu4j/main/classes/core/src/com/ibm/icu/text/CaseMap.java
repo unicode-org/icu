@@ -175,6 +175,42 @@ public abstract class CaseMap {
         private Title(int opt) { super(opt); }
 
         /**
+         * Returns an instance that behaves like this one but
+         * titlecases the string as a whole rather than each word.
+         * (Titlecases only the character at index 0, possibly adjusted.)
+         *
+         * <p>It is an error to specify multiple titlecasing iterator options together,
+         * including both an option and an explicit BreakIterator.
+         *
+         * @return an options object with this option.
+         * @see #adjustToCased()
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Title wholeString() {
+            return new Title(CaseMapImpl.addTitleIteratorOption(
+                    internalOptions, CaseMapImpl.TITLECASE_WHOLE_STRING));
+        }
+
+        /**
+         * Returns an instance that behaves like this one but
+         * titlecases sentences rather than words.
+         * (Titlecases only the first character of each sentence, possibly adjusted.)
+         *
+         * <p>It is an error to specify multiple titlecasing iterator options together,
+         * including both an option and an explicit BreakIterator.
+         *
+         * @return an options object with this option.
+         * @see #adjustToCased()
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Title sentences() {
+            return new Title(CaseMapImpl.addTitleIteratorOption(
+                    internalOptions, CaseMapImpl.TITLECASE_SENTENCES));
+        }
+
+        /**
          * {@inheritDoc}
          * @draft ICU 59
          * @provisional This API might change or be removed in a future release.
@@ -191,12 +227,14 @@ public abstract class CaseMap {
          * Returns an instance that behaves like this one but
          * does not lowercase non-initial parts of words when titlecasing.
          *
-         * <p>By default, titlecasing will titlecase the first cased character
-         * of a word and lowercase all other characters.
+         * <p>By default, titlecasing will titlecase the character at each
+         * (possibly adjusted) BreakIterator index and
+         * lowercase all other characters up to the next iterator index.
          * With this option, the other characters will not be modified.
          *
          * @return an options object with this option.
          * @see UCharacter#TITLECASE_NO_LOWERCASE
+         * @see #adjustToCased()
          * @draft ICU 59
          * @provisional This API might change or be removed in a future release.
          */
@@ -204,22 +242,16 @@ public abstract class CaseMap {
             return new Title(internalOptions | UCharacter.TITLECASE_NO_LOWERCASE);
         }
 
-        // TODO: update references to the Unicode Standard for recent version
         /**
          * Returns an instance that behaves like this one but
-         * does not adjust the titlecasing indexes from BreakIterator::next() indexes;
+         * does not adjust the titlecasing BreakIterator indexes;
          * titlecases exactly the characters at breaks from the iterator.
          *
          * <p>By default, titlecasing will take each break iterator index,
-         * adjust it by looking for the next cased character, and titlecase that one.
-         * Other characters are lowercased.
+         * adjust it to the next relevant character (see {@link #adjustToCased()}),
+         * and titlecase that one.
          *
-         * <p>This follows Unicode 4 &amp; 5 section 3.13 Default Case Operations:
-         *
-         * R3  toTitlecase(X): Find the word boundaries based on Unicode Standard Annex
-         * #29, "Text Boundaries." Between each pair of word boundaries, find the first
-         * cased character F. If F exists, map F to default_title(F); then map each
-         * subsequent character C to default_lower(C).
+         * <p>Other characters are lowercased.
          *
          * @return an options object with this option.
          * @see UCharacter#TITLECASE_NO_BREAK_ADJUSTMENT
@@ -227,7 +259,33 @@ public abstract class CaseMap {
          * @provisional This API might change or be removed in a future release.
          */
         public Title noBreakAdjustment() {
-            return new Title(internalOptions | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+            return new Title(CaseMapImpl.addTitleAdjustmentOption(
+                    internalOptions, UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT));
+        }
+
+        /**
+         * Returns an instance that behaves like this one but
+         * adjusts each titlecasing BreakIterator index to the next cased character.
+         * (See the Unicode Standard, chapter 3, Default Case Conversion, R3 toTitlecase(X).)
+         *
+         * <p>This used to be the default index adjustment in ICU.
+         * Since ICU 60, the default index adjustment is to the next character that is
+         * a letter, number, symbol, or private use code point.
+         * (Uncased modifier letters are skipped.)
+         * The difference in behavior is small for word titlecasing,
+         * but the new adjustment is much better for whole-string and sentence titlecasing:
+         * It yields "49ers" and "«丰(abc)»" instead of "49Ers" and "«丰(Abc)»".
+         *
+         * <p>It is an error to specify multiple titlecasing adjustment options together.
+         *
+         * @return an options object with this option.
+         * @see #noBreakAdjustment()
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Title adjustToCased() {
+            return new Title(CaseMapImpl.addTitleAdjustmentOption(
+                    internalOptions, CaseMapImpl.TITLECASE_ADJUST_TO_CASED));
         }
 
         /**
@@ -259,9 +317,10 @@ public abstract class CaseMap {
          */
          public <A extends Appendable> A apply(
                  Locale locale, BreakIterator iter, CharSequence src, A dest, Edits edits) {
-             if (iter == null) {
-                 iter = BreakIterator.getWordInstance(locale);
+             if (iter == null && locale == null) {
+                 locale = Locale.getDefault();
              }
+             iter = CaseMapImpl.getTitleBreakIterator(locale, internalOptions, iter);
              iter.setText(src.toString());
              return CaseMapImpl.toTitle(
                      getCaseLocale(locale), internalOptions, iter, src, dest, edits);

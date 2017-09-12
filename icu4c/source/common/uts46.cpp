@@ -1415,7 +1415,7 @@ uidna_labelToASCII_UTF8(const UIDNA *idna,
     if(!checkArgs(label, length, dest, capacity, pInfo, pErrorCode)) {
         return 0;
     }
-    StringPiece src(label, length<0 ? uprv_strlen(label) : length);
+    StringPiece src(label, length<0 ? static_cast<int32_t>(uprv_strlen(label)) : length);
     CheckedArrayByteSink sink(dest, capacity);
     IDNAInfo info;
     reinterpret_cast<const IDNA *>(idna)->labelToASCII_UTF8(src, sink, info, *pErrorCode);
@@ -1431,7 +1431,7 @@ uidna_labelToUnicodeUTF8(const UIDNA *idna,
     if(!checkArgs(label, length, dest, capacity, pInfo, pErrorCode)) {
         return 0;
     }
-    StringPiece src(label, length<0 ? uprv_strlen(label) : length);
+    StringPiece src(label, length<0 ? static_cast<int32_t>(uprv_strlen(label)) : length);
     CheckedArrayByteSink sink(dest, capacity);
     IDNAInfo info;
     reinterpret_cast<const IDNA *>(idna)->labelToUnicodeUTF8(src, sink, info, *pErrorCode);
@@ -1447,7 +1447,7 @@ uidna_nameToASCII_UTF8(const UIDNA *idna,
     if(!checkArgs(name, length, dest, capacity, pInfo, pErrorCode)) {
         return 0;
     }
-    StringPiece src(name, length<0 ? uprv_strlen(name) : length);
+    StringPiece src(name, length<0 ? static_cast<int32_t>(uprv_strlen(name)) : length);
     CheckedArrayByteSink sink(dest, capacity);
     IDNAInfo info;
     reinterpret_cast<const IDNA *>(idna)->nameToASCII_UTF8(src, sink, info, *pErrorCode);
@@ -1463,7 +1463,7 @@ uidna_nameToUnicodeUTF8(const UIDNA *idna,
     if(!checkArgs(name, length, dest, capacity, pInfo, pErrorCode)) {
         return 0;
     }
-    StringPiece src(name, length<0 ? uprv_strlen(name) : length);
+    StringPiece src(name, length<0 ? static_cast<int32_t>(uprv_strlen(name)) : length);
     CheckedArrayByteSink sink(dest, capacity);
     IDNAInfo info;
     reinterpret_cast<const IDNA *>(idna)->nameToUnicodeUTF8(src, sink, info, *pErrorCode);

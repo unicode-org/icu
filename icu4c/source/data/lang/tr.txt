@@ -340,6 +340,7 @@ tr{
         ln{"Lingala"}
         lo{"Lao dili"}
         lol{"Mongo"}
+        lou{"Louisiana Kreolcesi"}
         loz{"Lozi"}
         lrc{"Kuzey Luri"}
         lt{"Litvanca"}
@@ -1011,7 +1012,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     characterLabelPattern{
         all{"{0} — Tümü"}
         category-list{"{0}: {1}"}

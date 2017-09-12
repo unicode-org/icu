@@ -287,7 +287,7 @@ uk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.60"}
+    Version{"2.1.35.3"}
     calendar{
         coptic{
             monthNames{
@@ -648,10 +648,10 @@ uk{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y 'р'."}
                 yw{
-                    few{"w-'й' 'тиж'. y 'р'."}
-                    many{"w-'й' 'тиж'. y 'р'."}
-                    one{"w-'й' 'тиж'. y 'р'."}
-                    other{"w-'й' 'тиж'. y 'р'."}
+                    few{"w-'й' 'тиж'. Y 'р'."}
+                    many{"w-'й' 'тиж'. Y 'р'."}
+                    one{"w-'й' 'тиж'. Y 'р'."}
+                    other{"w-'й' 'тиж'. Y 'р'."}
                 }
             }
             dayNames{

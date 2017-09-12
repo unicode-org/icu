@@ -9,6 +9,7 @@ import java.text.ParsePosition;
 
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.number.Endpoint;
 import com.ibm.icu.impl.number.Format;
 import com.ibm.icu.impl.number.FormatQuantity;
@@ -697,8 +698,8 @@ public class NumberFormatDataDrivenTest {
             properties.setMaximumSignificantDigits(tuple.maxSigDigits);
           }
           if (tuple.useGrouping != null && tuple.useGrouping == 0) {
-            properties.setGroupingSize(Integer.MAX_VALUE);
-            properties.setSecondaryGroupingSize(Integer.MAX_VALUE);
+            properties.setGroupingSize(-1);
+            properties.setSecondaryGroupingSize(-1);
           }
           if (tuple.multiplier != null) {
             properties.setMultiplier(new BigDecimal(tuple.multiplier));
@@ -753,7 +754,10 @@ public class NumberFormatDataDrivenTest {
             properties.setNegativeSuffix(tuple.negativeSuffix);
           }
           if (tuple.localizedPattern != null) {
-            // TODO
+            DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(tuple.locale);
+            String converted =
+                PatternString.convertLocalized(tuple.localizedPattern, symbols, false);
+            PatternString.parseToExistingProperties(converted, properties);
           }
           if (tuple.lenient != null) {
             properties.setParseMode(tuple.lenient == 0 ? ParseMode.STRICT : ParseMode.LENIENT);
@@ -775,12 +779,18 @@ public class NumberFormatDataDrivenTest {
 
   @Test
   public void TestDataDrivenICU58() {
+    // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
+    if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
+
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", ICU58);
   }
 
   @Test
   public void TestDataDrivenJDK() {
+    // Android implements java.text.DecimalFormat with ICU4J (ticket #13322).
+    if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
+
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", JDK);
   }

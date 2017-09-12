@@ -18,6 +18,8 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -30,6 +32,7 @@ import com.ibm.icu.text.IDNA;
  * @author Markus Scherer
  * @since 2010jul10
  */
+@RunWith(JUnit4.class)
 public class UTS46Test extends TestFmwk {
     public UTS46Test() {
         int commonOptions=
@@ -743,7 +746,7 @@ public class UTS46Test extends TestFmwk {
 
     @Test
     public void IdnaTest() throws IOException {
-        BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTest.txt");
+        BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTest.txt", "UTF-8");
         Pattern semi = Pattern.compile(";");
         try {
             String line;

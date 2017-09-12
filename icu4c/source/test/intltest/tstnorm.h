@@ -47,6 +47,12 @@ public:
     void TestCustomComp();
     void TestCustomFCC();
     void TestFilteredNormalizer2Coverage();
+    void TestNormalizeUTF8WithEdits();
+    void TestLowMappingToEmpty_D();
+    void TestLowMappingToEmpty_FCD();
+    void TestNormalizeIllFormedText();
+    void TestComposeJamoTBase();
+    void TestComposeBoundaryAfter();
 
 private:
     UnicodeString canonTests[24][3];
@@ -82,6 +88,7 @@ private:
     static UnicodeString hex(UChar ch);
     static UnicodeString hex(const UnicodeString& str);
 
+    void checkLowMappingToEmpty(const Normalizer2 &n2);
 };
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */

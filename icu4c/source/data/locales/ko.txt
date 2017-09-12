@@ -198,7 +198,7 @@ ko{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.32.59"}
+    Version{"2.1.35.3"}
     calendar{
         buddhist{
             eras{
@@ -224,6 +224,9 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
+                Bh{"B h시"}
+                Bhm{"B h:mm"}
+                Bhms{"B h:mm:ss"}
                 EEEEd{"d일 EEEE"}
                 Ed{"d일 (E)"}
                 Gy{"U년"}
@@ -864,6 +867,9 @@ ko{
                 "{1} {0}",
             }
             availableFormats{
+                Bh{"B h시"}
+                Bhm{"B h:mm"}
+                Bhms{"B h:mm:ss"}
                 E{"ccc"}
                 EEEEd{"d일 EEEE"}
                 Ed{"d일 (E)"}
@@ -1044,7 +1050,12 @@ ko{
                 Timezone{"{0} {1}"}
             }
             availableFormats{
+                Bh{"B h시"}
+                Bhm{"B h:mm"}
+                Bhms{"B h:mm:ss"}
                 E{"ccc"}
+                EBhm{"(E) B h:mm"}
+                EBhms{"(E) B h:mm:ss"}
                 EEEEd{"d일 EEEE"}
                 EHm{"(E) HH:mm"}
                 EHms{"(E) HH:mm:ss"}
@@ -1096,7 +1107,7 @@ ko{
                 yQQQ{"y년 QQQ"}
                 yQQQQ{"y년 QQQQ"}
                 yw{
-                    other{"y년 w번째 주"}
+                    other{"Y년 w번째 주"}
                 }
             }
             dayNames{
