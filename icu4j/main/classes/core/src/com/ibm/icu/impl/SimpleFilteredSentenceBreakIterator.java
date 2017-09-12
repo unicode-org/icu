@@ -16,7 +16,6 @@ import com.ibm.icu.impl.ICUResourceBundle.OpenType;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.FilteredBreakIteratorBuilder;
 import com.ibm.icu.text.UCharacterIterator;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
@@ -32,7 +31,6 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
     private UCharacterIterator text; // TODO(Tom): suffice to move into the local scope in next() ?
     private CharsTrie backwardsTrie; // i.e. ".srM" for Mrs.
     private CharsTrie forwardsPartialTrie; // Has ".a" for "a.M."
-    private UnicodeSet glueSet = null;
 
     /**
      * @param adoptBreakIterator
@@ -41,16 +39,12 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
      *            forward & partial char trie to adopt
      * @param backwardsTrie
      *            backward trie to adopt
-     * @param glueSet the glue set to adopt
      */
     public SimpleFilteredSentenceBreakIterator(BreakIterator adoptBreakIterator, CharsTrie forwardsPartialTrie,
-            CharsTrie backwardsTrie, UnicodeSet glueSet) {
+            CharsTrie backwardsTrie) {
         this.delegate = adoptBreakIterator;
         this.forwardsPartialTrie = forwardsPartialTrie;
         this.backwardsTrie = backwardsTrie;
-        if(!glueSet.isEmpty()) {
-            this.glueSet = new UnicodeSet(glueSet).freeze(); // copy
-        }
     }
 
 
@@ -85,17 +79,6 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
             // TODO only do this the 1st time?
         } else {
             uch = text.nextCodePoint();
-        }
-
-        // Check for a glue character
-        if(this.glueSet != null && text.getIndex()<text.getLength()) {
-            uch = text.nextCodePoint();
-            if(glueSet.contains(uch)) {
-                // Glued - suppress this break.
-                return false; // no break here.
-            } else {
-                uch = text.previousCodePoint(); // move back again.
-            }
         }
 
         BytesTrie.Result r = BytesTrie.Result.INTERMEDIATE_VALUE;
@@ -297,8 +280,6 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
         static final int SuppressInReverse = (1 << 0);
         static final int AddToForward = (1 << 1);
 
-        private UnicodeSet glueSet = new UnicodeSet();
-
         public Builder(Locale loc) {
             this(ULocale.forLocale(loc));
         }
@@ -418,19 +399,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
             if (fwdCount > 0) {
                 forwardsPartialTrie = builder2.build(StringTrieBuilder.Option.FAST);
             }
-            return new SimpleFilteredSentenceBreakIterator(adoptBreakIterator, forwardsPartialTrie, backwardsTrie, glueSet);
-        }
-
-        /* (non-Javadoc)
-         * @see com.ibm.icu.text.FilteredBreakIteratorBuilder#setGlueCharacters(com.ibm.icu.text.UnicodeSet)
-         * @internal
-         */
-        public void setGlueCharacters(UnicodeSet set) {
-            if (set == null || set.isEmpty()) {
-                glueSet.clear();
-            } else {
-                glueSet.set(set);
-            }
+            return new SimpleFilteredSentenceBreakIterator(adoptBreakIterator, forwardsPartialTrie, backwardsTrie);
         }
     }
 }
