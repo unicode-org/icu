@@ -3940,6 +3940,7 @@ void UnicodeSetTest::TestIntOverflow() {
 }
 
 void UnicodeSetTest::TestUnusedCcc() {
+#if !UCONFIG_NO_NORMALIZATION
     // All numeric ccc values 0..255 are valid, but many are unused.
     IcuTestErrorCode errorCode(*this, "TestUnusedCcc");
     UnicodeSet ccc2(u"[:ccc=2:]", errorCode);
@@ -3965,4 +3966,5 @@ void UnicodeSetTest::TestUnusedCcc() {
     assertEquals("[:ccc=1.1:] -> illegal argument",
                  U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
     assertTrue("[:ccc=1.1:] -> empty set", ccc1_1.isEmpty());
+#endif
 }

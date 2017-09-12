@@ -626,6 +626,7 @@ StringCaseTest::TestTitleOptions() {
     TestCasingImpl(u"«ijs»", u"«İjs»", TEST_TITLE,
                    nullptr, "tr-DE", U_TITLECASE_WHOLE_STRING);
 
+#if !UCONFIG_NO_BREAK_ITERATION
     // Test conflicting settings.
     // If & when we add more options, then the ORed combinations may become
     // indistinguishable from valid values.
@@ -653,6 +654,7 @@ StringCaseTest::TestTitleOptions() {
               errorCode.errorName());
     }
     errorCode.reset();
+#endif
 }
 
 void
@@ -1387,6 +1389,7 @@ void StringCaseTest::TestLongUnicodeString() {
     assertEquals("string length 306", expected, s);
 }
 
+#if !UCONFIG_NO_BREAK_ITERATION
 void StringCaseTest::TestBug13127() {
     // Test case crashed when the bug was present.
     const char16_t *s16 = u"日本語";
@@ -1403,3 +1406,4 @@ void StringCaseTest::TestInPlaceTitle() {
     assertEquals("u_strToTitle(in-place) length", u_strlen(expected), length);
     assertEquals("u_strToTitle(in-place)", expected, s);
 }
+#endif
