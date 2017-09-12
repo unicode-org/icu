@@ -7,22 +7,25 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v2.1 : Collate/CollationCurrencyTest
  * Source File: $ICU4CRoot/source/test/intltest/currcoll.cpp
  **/
- 
+
 package com.ibm.icu.dev.test.collator;
- 
+
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
- 
+
+@RunWith(JUnit4.class)
 public class CollationCurrencyTest extends TestFmwk {
     @Test
     public void TestCurrency() {
@@ -59,16 +62,16 @@ public class CollationCurrencyTest extends TestFmwk {
             { 0x20AE }, /*20AE; L; [14 62, 03, 03]    # [0841.0020.0002] # TUGRIK SIGN*/
             { 0x20AF } /*20AF; L; [14 64, 03, 03]    # [0842.0020.0002] # DRACHMA SIGN*/
         };
-    
+
         int i, j;
         int expectedResult = 0;
         RuleBasedCollator c = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
-        
+
         // Compare each currency symbol against all the
         // currency symbols, including itself
         String source;
         String target;
-        
+
         for (i = 0; i < currency.length; i += 1) {
             for (j = 0; j < currency.length; j += 1) {
                 source = new String(currency[i]);
@@ -84,14 +87,14 @@ public class CollationCurrencyTest extends TestFmwk {
 
                 int compareResult = c.compare(source, target);
                 CollationKey sourceKey = null;
-            
+
                 sourceKey = c.getCollationKey(source);
 
                 if (sourceKey == null) {
                     errln("Couldn't get collationKey for source");
                     continue;
                 }
-            
+
                 CollationKey targetKey = null;
                 targetKey = c.getCollationKey(target);
                 if (targetKey == null) {
@@ -105,7 +108,7 @@ public class CollationCurrencyTest extends TestFmwk {
             }
         }
     }
-    
+
     private void reportCResult( String source, String target, CollationKey sourceKey, CollationKey targetKey,
                                 int compareResult, int keyResult, int incResult, int expectedResult ) {
         if (expectedResult < -1 || expectedResult > 1) {
@@ -118,13 +121,13 @@ public class CollationCurrencyTest extends TestFmwk {
         boolean ok3 = (incResult == expectedResult);
 
         if (ok1 && ok2 && ok3 && !isVerbose()) {
-            return;    
+            return;
         } else {
             String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
             String msg3 = "\") returned ";
             String msg4 = "; expected ";
-            
+
             String sExpect = new String("");
             String sResult = new String("");
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
@@ -134,7 +137,7 @@ public class CollationCurrencyTest extends TestFmwk {
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
-            
+
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
@@ -147,7 +150,7 @@ public class CollationCurrencyTest extends TestFmwk {
                 msg2 = " vs. ";
                 errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
-            
+
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
@@ -158,7 +161,7 @@ public class CollationCurrencyTest extends TestFmwk {
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
-            }                
+            }
         }
     }
 }

@@ -7,11 +7,11 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v2.1 : collate/CollationRegressionTest
  * Source File: $ICU4CRoot/source/test/intltest/regcoll.cpp
  **/
- 
+
 package com.ibm.icu.dev.test.collator;
 
 import java.text.ParseException;
@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationElementIterator;
@@ -27,6 +29,7 @@ import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
 
+@RunWith(JUnit4.class)
 public class CollationRegressionTest extends TestFmwk {
     // @bug 4048446
     //
@@ -39,31 +42,31 @@ public class CollationRegressionTest extends TestFmwk {
         RuleBasedCollator en_us = (RuleBasedCollator) Collator.getInstance(Locale.US);
         CollationElementIterator i1 = en_us.getCollationElementIterator(test1);
         CollationElementIterator i2 = en_us.getCollationElementIterator(test1);
-        
+
         if (i1 == null || i2 == null) {
             errln("Could not create CollationElementIterator's");
             return;
         }
-    
+
         while (i1.next() != CollationElementIterator.NULLORDER) {
             //
         }
-    
+
         i1.reset();
         assertEqual(i1, i2);
     }
-    
+
     void assertEqual(CollationElementIterator i1, CollationElementIterator i2) {
         int c1, c2, count = 0;
-    
+
         do {
             c1 = i1.next();
             c2 = i2.next();
-    
+
             if (c1 != c2) {
                 String msg = "";
                 String msg1 = "    ";
-                
+
                 msg += msg1 + count;
                 msg += ": strength(0x" + Integer.toHexString(c1);
                 msg += ") != strength(0x" + Integer.toHexString(c2);
@@ -74,7 +77,7 @@ public class CollationRegressionTest extends TestFmwk {
             count += 1;
         } while (c1 != CollationElementIterator.NULLORDER);
     }
-    
+
     // @bug 4051866
     //
     // Collator -> rules -> Collator round-trip broken for expanding characters
@@ -85,14 +88,14 @@ public class CollationRegressionTest extends TestFmwk {
 
         // Build a collator containing expanding characters
         RuleBasedCollator c1 = null;
-        
+
         try {
             c1 = new RuleBasedCollator(rules);
         } catch (Exception e) {
             errln("Fail to create RuleBasedCollator with rules:" + rules);
             return;
         }
-    
+
         // Build another using the rules from  the first
         RuleBasedCollator c2 = null;
         try {
@@ -101,14 +104,14 @@ public class CollationRegressionTest extends TestFmwk {
             errln("Fail to create RuleBasedCollator with rules:" + rules);
             return;
         }
-    
+
         // Make sure they're the same
         if (!(c1.getRules().equals(c2.getRules())))
         {
             errln("Rules are not equal");
         }
     }
-    
+
     // @bug 4053636
     //
     // Collator thinks "black-bird" == "black"
@@ -120,7 +123,7 @@ public class CollationRegressionTest extends TestFmwk {
             errln("black-bird == black");
         }
     }
-    
+
     // @bug 4054238
     //
     // CollationElementIterator will not work correctly if the associated
@@ -131,45 +134,45 @@ public class CollationRegressionTest extends TestFmwk {
         final char[] chars3 = {0x61, 0x00FC, 0x62, 0x65, 0x63, 0x6b, 0x20, 0x47, 0x72, 0x00F6, 0x00DF, 0x65, 0x20, 0x4c, 0x00FC, 0x62, 0x63, 0x6b, 0};
         final String test3 = new String(chars3);
         RuleBasedCollator c = (RuleBasedCollator) Collator.getInstance(Locale.US);
-    
+
         // NOTE: The Java code uses en_us to create the CollationElementIterators
         // but I'm pretty sure that's wrong, so I've changed this to use c.
         c.setDecomposition(Collator.NO_DECOMPOSITION);
         CollationElementIterator i1 = c.getCollationElementIterator(test3);
         logln("Offset:" + i1.getOffset());
     }
-    
+
     // @bug 4054734
     //
     // Collator::IDENTICAL documented but not implemented
     //
     @Test
     public void Test4054734(/* char* par */) {
-        
+
             //Here's the original Java:
-    
+
             String[] decomp = {
                 "\u0001",   "<",    "\u0002",
                 "\u0001",   "=",    "\u0001",
                 "A\u0001",  ">",    "~\u0002",      // Ensure A and ~ are not compared bitwise
                 "\u00C0",   "=",    "A\u0300",      // Decomp should make these equal
             };
-    
+
         RuleBasedCollator c = (RuleBasedCollator) Collator.getInstance(Locale.US);
         c.setStrength(Collator.IDENTICAL);
         c.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         compareArray(c, decomp);
     }
-    
+
     void compareArray(Collator c, String[] tests) {
-        
+
         int expectedResult = 0;
-    
+
         for (int i = 0; i < tests.length; i += 3) {
             String source = tests[i];
             String comparison = tests[i + 1];
             String target = tests[i + 2];
-    
+
             if (comparison.equals("<")) {
                 expectedResult = -1;
             } else if (comparison.equals(">")) {
@@ -179,9 +182,9 @@ public class CollationRegressionTest extends TestFmwk {
             } else {
                 errln("Bogus comparison string \"" + comparison + "\"");
             }
-            
+
             int compareResult = 0;
-            
+
             logln("i = " + i);
             logln(source);
             logln(target);
@@ -190,7 +193,7 @@ public class CollationRegressionTest extends TestFmwk {
             } catch (Exception e) {
                 errln(e.toString());
             }
-    
+
             CollationKey sourceKey = null, targetKey = null;
             try {
                 sourceKey = c.getCollationKey(source);
@@ -198,19 +201,19 @@ public class CollationRegressionTest extends TestFmwk {
                 errln("Couldn't get collationKey for source");
                 continue;
             }
-    
+
             try {
                 targetKey = c.getCollationKey(target);
             } catch (Exception e) {
                 errln("Couldn't get collationKey for target");
                 continue;
             }
-    
+
             int keyResult = sourceKey.compareTo(targetKey);
             reportCResult( source, target, sourceKey, targetKey, compareResult, keyResult, compareResult, expectedResult );
         }
     }
-    
+
     void reportCResult( String source, String target, CollationKey sourceKey, CollationKey targetKey,
                                 int compareResult, int keyResult, int incResult, int expectedResult ){
         if (expectedResult < -1 || expectedResult > 1)
@@ -224,13 +227,13 @@ public class CollationRegressionTest extends TestFmwk {
         boolean ok3 = (incResult == expectedResult);
 
         if (ok1 && ok2 && ok3 && !isVerbose()){
-            return;    
+            return;
         }else{
             String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
             String msg3 = "\") returned ";
             String msg4 = "; expected ";
-            
+
             String sExpect = new String("");
             String sResult = new String("");
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
@@ -240,7 +243,7 @@ public class CollationRegressionTest extends TestFmwk {
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
-            
+
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
@@ -253,7 +256,7 @@ public class CollationRegressionTest extends TestFmwk {
                 msg2 = " vs. ";
                 errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
-            
+
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
@@ -264,7 +267,7 @@ public class CollationRegressionTest extends TestFmwk {
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
-            }                
+            }
         }
     }
 
@@ -275,45 +278,45 @@ public class CollationRegressionTest extends TestFmwk {
     @Test
     public void Test4054736(/* char* par */) {
         RuleBasedCollator c = (RuleBasedCollator) Collator.getInstance(Locale.US);
-    
+
         c.setStrength(Collator.SECONDARY);
         c.setDecomposition(Collator.NO_DECOMPOSITION);
-    
+
         final String[] tests = { "\uFB4F", "\u003d", "\u05D0\u05DC" };  // Alef-Lamed vs. Alef, Lamed
         compareArray(c, tests);
     }
-    
+
     // @bug 4058613
     //
-    // Collator::createInstance() causes an ArrayIndexOutofBoundsException for Korean  
+    // Collator::createInstance() causes an ArrayIndexOutofBoundsException for Korean
     //
     @Test
     public void Test4058613(/* char* par */) {
         // Creating a default collator doesn't work when Korean is the default
         // locale
-        
+
         Locale oldDefault = Locale.getDefault();
         Locale.setDefault(new Locale("ko", ""));
-    
+
         Collator c = null;
-        
+
         c = Collator.getInstance(new Locale("en", "US"));
-    
+
         if (c == null) {
             errln("Could not create a Korean collator");
             Locale.setDefault(oldDefault);
             return;
         }
-        
+
         // Since the fix to this bug was to turn off decomposition for Korean collators,
         // ensure that's what we got
         if (c.getDecomposition() != Collator.NO_DECOMPOSITION) {
           errln("Decomposition is not set to NO_DECOMPOSITION for Korean collator");
         }
-    
+
         Locale.setDefault(oldDefault);
     }
-    
+
     // @bug 4059820
     //
     // RuleBasedCollator.getRules does not return the exact pattern as input
@@ -329,13 +332,13 @@ public class CollationRegressionTest extends TestFmwk {
             errln("Failure building a collator.");
             return;
         }
-    
+
         if ( c.getRules().indexOf("c/a") == -1)
         {
             errln("returned rules do not contain 'c/a'");
         }
     }
-    
+
     // @bug 4060154
     //
     // MergeCollation::fixEntry broken for "& H < \u0131, \u0130, i, I"
@@ -343,7 +346,7 @@ public class CollationRegressionTest extends TestFmwk {
     @Test
     public void Test4060154(/* char* par */) {
         String rules ="&f < g, G < h, H < i, I < j, J & H < \u0131, \u0130, i, I";
-    
+
         RuleBasedCollator c = null;
         try {
             c = new RuleBasedCollator(rules);
@@ -352,9 +355,9 @@ public class CollationRegressionTest extends TestFmwk {
             errln("failure building collator:" + e);
             return;
         }
-    
+
         c.setDecomposition(Collator.NO_DECOMPOSITION);
-    
+
         String[] tertiary = {
             "A",        "<",    "B",
             "H",        "<",    "\u0131",
@@ -363,19 +366,19 @@ public class CollationRegressionTest extends TestFmwk {
             "\u0130",   "<",    "i",
             "\u0130",   ">",    "H",
         };
-    
+
         c.setStrength(Collator.TERTIARY);
         compareArray(c, tertiary);
-    
+
         String[] secondary = {
             "H",        "<",    "I",
             "\u0131",   "=",    "\u0130",
         };
-    
+
         c.setStrength(Collator.PRIMARY);
         compareArray(c, secondary);
     }
-    
+
     // @bug 4062418
     //
     // Secondary/Tertiary comparison incorrect in French Secondary
@@ -390,14 +393,14 @@ public class CollationRegressionTest extends TestFmwk {
             return;
         }
         c.setStrength(Collator.SECONDARY);
-    
+
         String[] tests = {
                 "p\u00eache",    "<",    "p\u00e9ch\u00e9",    // Comparing accents from end, p\u00e9ch\u00e9 is greater
         };
-    
+
         compareArray(c, tests);
     }
-    
+
     // @bug 4065540
     //
     // Collator::compare() method broken if either string contains spaces
@@ -409,7 +412,7 @@ public class CollationRegressionTest extends TestFmwk {
             errln("'abcd e' == 'abcd f'");
         }
     }
-    
+
     // @bug 4066189
     //
     // Unicode characters need to be recursively decomposed to get the
@@ -420,21 +423,21 @@ public class CollationRegressionTest extends TestFmwk {
     public void Test4066189(/* char* par */) {
         final  String test1 = "\u1EB1";
         final  String test2 = "\u0061\u0306\u0300";
-    
+
         // NOTE: The java code used en_us to create the
         // CollationElementIterator's. I'm pretty sure that
         // was wrong, so I've change the code to use c1 and c2
         RuleBasedCollator c1 = (RuleBasedCollator) Collator.getInstance(Locale.US);
         c1.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         CollationElementIterator i1 = c1.getCollationElementIterator(test1);
-    
+
         RuleBasedCollator c2 = (RuleBasedCollator) Collator.getInstance(Locale.US);
         c2.setDecomposition(Collator.NO_DECOMPOSITION);
         CollationElementIterator i2 = c2.getCollationElementIterator(test2);
-    
+
         assertEqual(i1, i2);
     }
-    
+
     // @bug 4066696
     //
     // French secondary collation checking at the end of compare iteration fails
@@ -449,13 +452,13 @@ public class CollationRegressionTest extends TestFmwk {
             return;
         }
         c.setStrength(Collator.SECONDARY);
-    
+
         String[] tests = {
             "\u00e0",   ">",     "\u01fa",       // a-grave <  A-ring-acute
-        };    
+        };
         compareArray(c, tests);
     }
-    
+
     // @bug 4076676
     //
     // Bad canonicalization of same-class combining characters
@@ -466,10 +469,10 @@ public class CollationRegressionTest extends TestFmwk {
         // be reordered, and they should compare as unequal.
         final String s1 = "\u0041\u0301\u0302\u0300";
         final String s2 = "\u0041\u0302\u0300\u0301";
-    
+
         RuleBasedCollator c = (RuleBasedCollator) Collator.getInstance(Locale.US);
         c.setStrength(Collator.TERTIARY);
-    
+
         if (c.compare(s1,s2) == 0) {
             errln("Same-class combining chars were reordered");
         }
@@ -488,20 +491,20 @@ public class CollationRegressionTest extends TestFmwk {
             errln("Failed to create RuleBasedCollator.");
             return;
         }
-    
+
         int result = rbc.compare("a","bb");
-    
+
         if (result >= 0) {
             errln("Compare(a,bb) returned " + result + "; expected -1");
         }
     }
-    
+
     // @bug 4079231
     //
     // RuleBasedCollator::operator==(NULL) throws NullPointerException
     //
     @Test
-    public void Test4079231(/* char* par */) {    
+    public void Test4079231(/* char* par */) {
         RuleBasedCollator en_us = (RuleBasedCollator) Collator.getInstance(Locale.US);
         try {
             if (en_us.equals(null)) {
@@ -511,7 +514,7 @@ public class CollationRegressionTest extends TestFmwk {
             errln("en_us.equals(null) threw " + e.toString());
         }
     }
-    
+
     // @bug 4081866
     //
     // Combining characters in different classes not reordered properly.
@@ -522,10 +525,10 @@ public class CollationRegressionTest extends TestFmwk {
         // so they should be reordered and the strings should compare as equal.
         String s1 = "\u0041\u0300\u0316\u0327\u0315";
         String s2 = "\u0041\u0327\u0316\u0315\u0300";
-    
+
         RuleBasedCollator c = (RuleBasedCollator) Collator.getInstance(Locale.US);
         c.setStrength(Collator.TERTIARY);
-        
+
         // Now that the default collators are set to NO_DECOMPOSITION
         // (as a result of fixing bug 4114077), we must set it explicitly
         // when we're testing reordering behavior.  -- lwerner, 5/5/98
@@ -534,7 +537,7 @@ public class CollationRegressionTest extends TestFmwk {
             errln("Combining chars were not reordered");
         }
     }
-    
+
     // @bug 4087241
     //
     // string comparison errors in Scandinavian collators
@@ -557,7 +560,7 @@ public class CollationRegressionTest extends TestFmwk {
         };
         compareArray(c, tests);
     }
-    
+
     // @bug 4087243
     //
     // CollationKey takes ignorable strings into account when it shouldn't
@@ -571,7 +574,7 @@ public class CollationRegressionTest extends TestFmwk {
         };
         compareArray(c, tests);
     }
-    
+
     // @bug 4092260
     //
     // Mu/micro conflict
@@ -594,7 +597,7 @@ public class CollationRegressionTest extends TestFmwk {
         };
         compareArray(c, tests);
     }
-    
+
     // @bug 4095316
     //
     @Test
@@ -616,7 +619,7 @@ public class CollationRegressionTest extends TestFmwk {
         };
         compareArray(c, tests);
     }
-    
+
     // @bug 4101940
     //
     @Test
@@ -636,7 +639,7 @@ public class CollationRegressionTest extends TestFmwk {
             errln("next did not return NULLORDER");
         }
     }
-    
+
     // @bug 4103436
     //
     // Collator::compare not handling spaces properly
@@ -651,7 +654,7 @@ public class CollationRegressionTest extends TestFmwk {
         };
         compareArray(c, tests);
     }
-    
+
     // @bug 4114076
     //
     // Collation not Unicode conformant with Hangul syllables
@@ -660,7 +663,7 @@ public class CollationRegressionTest extends TestFmwk {
     public void Test4114076(/* char* par */) {
         RuleBasedCollator c = (RuleBasedCollator) Collator.getInstance(Locale.US);
         c.setStrength(Collator.TERTIARY);
-    
+
         //
         // With Canonical decomposition, Hangul syllables should get decomposed
         // into Jamo, but Jamo characters should not be decomposed into
@@ -669,16 +672,16 @@ public class CollationRegressionTest extends TestFmwk {
         String test1[] = {
             "\ud4db", "\u003d", "\u1111\u1171\u11b6"
         };
-    
+
         c.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         compareArray(c, test1);
-    
+
         // From UTR #15:
         // *In earlier versions of Unicode, jamo characters like ksf
-        //  had compatibility mappings to kf + sf. These mappings were 
+        //  had compatibility mappings to kf + sf. These mappings were
         //  removed in Unicode 2.1.9 to ensure that Hangul syllables are maintained.)
         // That is, the following test is obsolete as of 2.1.9
-    
+
     //obsolete-    // With Full decomposition, it should go all the way down to
     //obsolete-    // conjoining Jamo characters.
     //obsolete-    //
@@ -693,7 +696,7 @@ public class CollationRegressionTest extends TestFmwk {
 
     // @bug 4114077
     //
-    // Collation with decomposition off doesn't work for Europe 
+    // Collation with decomposition off doesn't work for Europe
     //
     @Test
     public void Test4114077(/* char* par */) {
@@ -709,18 +712,18 @@ public class CollationRegressionTest extends TestFmwk {
                                                     //   -> a, ring, acute
             "\u0041\u0300\u0316",             "\u003c", "\u0041\u0316\u0300"        // No reordering --> unequal
         };
-    
+
         c.setDecomposition(Collator.NO_DECOMPOSITION);
         compareArray(c, test1);
-    
+
         String test2[] = {
             "\u0041\u0300\u0316", "\u003d", "\u0041\u0316\u0300"      // Reordering --> equal
         };
-    
+
         c.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         compareArray(c, test2);
     }
-    
+
     // @bug 4124632
     //
     // Collator::getCollationKey was hanging on certain character sequences
@@ -743,7 +746,7 @@ public class CollationRegressionTest extends TestFmwk {
             errln("CollationKey creation failed.");
         }
     }
-    
+
     // @bug 4132736
     //
     // sort order of french words with multiple accents has errors
@@ -757,14 +760,14 @@ public class CollationRegressionTest extends TestFmwk {
         } catch (Exception e) {
             errln("Failed to create a collator for Locale.CANADA_FRENCH");
         }
-    
+
         String test1[] = {
             "\u0065\u0300\u0065\u0301", "\u003c", "\u0065\u0301\u0065\u0300",
             "\u0065\u0300\u0301",       "\u003c", "\u0065\u0301\u0300",
         };
         compareArray(c, test1);
     }
-    
+
     // @bug 4133509
     //
     // The sorting using java.text.CollationKey is not in the exact order
@@ -777,13 +780,13 @@ public class CollationRegressionTest extends TestFmwk {
             "\u0047\u0072\u0061\u0070\u0068\u0069\u0063\u0073",       "\u003c", "\u0047\u0072\u0061\u0070\u0068\u0069\u0063\u0073\u0045\u006e\u0076\u0069\u0072\u006f\u006e\u006d\u0065\u006e\u0074",
             "\u0053\u0074\u0072\u0069\u006e\u0067",                   "\u003c", "\u0053\u0074\u0072\u0069\u006e\u0067\u0042\u0075\u0066\u0066\u0065\u0072",
         };
-    
+
         compareArray(en_us, test1);
     }
-    
+
     // @bug 4139572
     //
-    // getCollationKey throws exception for spanish text 
+    // getCollationKey throws exception for spanish text
     // Cannot reproduce this bug on 1.2, however it DOES fail on 1.1.6
     //
     @Test
@@ -810,10 +813,10 @@ public class CollationRegressionTest extends TestFmwk {
             errln("Error creating CollationKey for \"Nombre De Ojbeto\"");
         }
     }
-    
+
     // @bug 4141640
     //
-    // Support for Swedish gone in 1.1.6 (Can't create Swedish collator) 
+    // Support for Swedish gone in 1.1.6 (Can't create Swedish collator)
     //
     @Test
     public void Test4141640(/* char* par */) {
@@ -823,7 +826,7 @@ public class CollationRegressionTest extends TestFmwk {
         // in order to prevent this sort of bug from cropping up in the future
         //
         Locale locales[] = Collator.getAvailableLocales();
-        
+
         for (int i = 0; i < locales.length; i += 1)
         {
             Collator c = null;
@@ -838,7 +841,7 @@ public class CollationRegressionTest extends TestFmwk {
             }
         }
     }
-    
+
     private void checkListOrder(String[] sortedList, Collator c) {
         // this function uses the specified Collator to make sure the
         // passed-in list is already sorted into ascending order
@@ -1042,7 +1045,7 @@ public class CollationRegressionTest extends TestFmwk {
         }
 
         RuleBasedCollator collator = new RuleBasedCollator("&a<\u00e0=a\u0300");
-        //commented by Kevin 2003/10/21 
+        //commented by Kevin 2003/10/21
         //for "FULL_DECOMPOSITION is not supported here." in ICU4J DOC
         //collator.setDecomposition(Collator.FULL_DECOMPOSITION);
         collator.setStrength(Collator.IDENTICAL);
@@ -1125,51 +1128,51 @@ public class CollationRegressionTest extends TestFmwk {
         RuleBasedCollator collator = (RuleBasedCollator)Collator.getInstance(Locale.US);
         java.text.StringCharacterIterator stringIter = new java.text.StringCharacterIterator("fox");
         CollationElementIterator iter = collator.getCollationElementIterator(stringIter);
-    
+
         int[] elements_next = new int[3];
         logln("calling next:");
         for (int i = 0; i < 3; ++i) {
             logln("[" + i + "] " + (elements_next[i] = iter.next()));
         }
-    
+
         int[] elements_fwd = new int[3];
         logln("calling set/next:");
         for (int i = 0; i < 3; ++i) {
             iter.setOffset(i);
             logln("[" + i + "] " + (elements_fwd[i] = iter.next()));
         }
-    
+
         for (int i = 0; i < 3; ++i) {
             if (elements_next[i] != elements_fwd[i]) {
-                errln("mismatch at position " + i + 
-                ": " + elements_next[i] + 
+                errln("mismatch at position " + i +
+                ": " + elements_next[i] +
                 " != " + elements_fwd[i]);
             }
         }
     }
-    
+
     // Fixing the infinite loop for surrogates
     @Test
     public void Test8484()
     {
         String s = "\u9FE1\uCEF3\u2798\uAAB6\uDA7C";
         Collator coll = Collator.getInstance();
-        CollationKey collKey = coll.getCollationKey(s); 
+        CollationKey collKey = coll.getCollationKey(s);
         logln("Pass: " + collKey.toString() + " generated OK.");
     }
-    
+
     @Test
     public  void TestBengaliSortKey() throws Exception {
-        char rules[] = { 0x26, 0x9fa, 0x3c, 0x98c, 0x3c, 0x9e1, 0x3c, 0x98f, 0x3c, 0x990, 0x3c, 0x993, 
-                0x3c, 0x994, 0x3c, 0x9bc, 0x3c, 0x982, 0x3c, 0x983, 0x3c, 0x981, 0x3c, 0x9b0, 0x3c, 
-                0x9b8, 0x3c, 0x9b9, 0x3c, 0x9bd, 0x3c, 0x9be, 0x3c, 0x9bf, 0x3c, 0x9c8, 0x3c, 0x9cb, 
+        char rules[] = { 0x26, 0x9fa, 0x3c, 0x98c, 0x3c, 0x9e1, 0x3c, 0x98f, 0x3c, 0x990, 0x3c, 0x993,
+                0x3c, 0x994, 0x3c, 0x9bc, 0x3c, 0x982, 0x3c, 0x983, 0x3c, 0x981, 0x3c, 0x9b0, 0x3c,
+                0x9b8, 0x3c, 0x9b9, 0x3c, 0x9bd, 0x3c, 0x9be, 0x3c, 0x9bf, 0x3c, 0x9c8, 0x3c, 0x9cb,
                 0x3d, 0x9cb };
- 
+
         Collator col = new RuleBasedCollator(String.copyValueOf(rules));
-        
+
         String str1 = "\u09be";
         String str2 = "\u0b70";
-        
+
         int result = col.compare(str1, str2);
         System.out.flush();
 
@@ -1191,7 +1194,7 @@ public class CollationRegressionTest extends TestFmwk {
         }
         System.out.print(": ");
         for(int i=0;i<bytes.length;i++) {
-            sb.append(" 0x"+Integer.toHexString(((int)bytes[i])&0xff));
+            sb.append(" 0x"+Integer.toHexString((bytes[i])&0xff));
         }
         sb.append("\n");
         return sb;
@@ -1290,7 +1293,7 @@ public class CollationRegressionTest extends TestFmwk {
         //
         // Use a custom collator class whose createCollationElementIterator
         // methods increment a count....
-        //     
+        //
         RuleBasedCollator en_us = (RuleBasedCollator) Collator.getInstance(Locale.US);
         My4146160Collator.count = 0;
         My4146160Collator mc = null;
@@ -1300,7 +1303,7 @@ public class CollationRegressionTest extends TestFmwk {
             errln("Failed to create a My4146160Collator.");
             return;
         }
-    
+
         CollationKey key = null;
         try {
             key = mc.getCollationKey("1");
@@ -1308,14 +1311,14 @@ public class CollationRegressionTest extends TestFmwk {
             errln("Failure to get a CollationKey from a My4146160Collator.");
             return;
         }
-    
+
         if (My4146160Collator.count < 1) {
             errln("My4146160Collator.getCollationElementIterator not called for getCollationKey");
         }
-    
+
         My4146160Collator.count = 0;
         mc.compare("1", "2");
-    
+
         if (My4146160Collator.count < 1) {
             errln("My4146160Collator.getCollationElementIterator not called for compare");
         }
@@ -1334,7 +1337,7 @@ public class CollationRegressionTest extends TestFmwk {
         count += 1;
         return super.getCollationElementIterator(text);
     }
-    
+
     public CollationElementIterator getCollationElementIterator(java.text.CharacterIterator text) {
         count += 1;
         return super.getCollationElementIterator(text);

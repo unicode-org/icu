@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.Endpoint;
@@ -24,6 +26,7 @@ import com.ibm.icu.impl.number.Properties;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 
 /** TODO: This is a temporary name for this class. Suggestions for a better name? */
+@RunWith(JUnit4.class)
 public class FormatQuantityTest extends TestFmwk {
 
   @Test

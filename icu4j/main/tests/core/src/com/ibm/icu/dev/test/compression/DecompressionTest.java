@@ -9,10 +9,13 @@
 package com.ibm.icu.dev.test.compression;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UnicodeDecompressor;
 
+@RunWith(JUnit4.class)
 public class DecompressionTest extends TestFmwk {
     /** Print out a segment of a character array, if in verbose mode */
     private void log(char [] chars, int start, int count) {
@@ -42,7 +45,7 @@ public class DecompressionTest extends TestFmwk {
         count1 = myDecompressor.decompress(segment1, 0, segment1.length,
                                            bytesRead,
                                            charBuffer, 0, charBuffer.length);
-        
+
         logln("Segment 1 (" + segment1.length + " bytes) " +
                 "decompressed into " + count1  + " chars");
         logln("Bytes consumed: " + bytesRead[0]);
@@ -53,16 +56,16 @@ public class DecompressionTest extends TestFmwk {
 
         count2 = myDecompressor.decompress(segment2, 0, segment2.length,
                                            bytesRead,
-                                           charBuffer, count1, 
+                                           charBuffer, count1,
                                            charBuffer.length);
-        
+
         logln("Segment 2 (" + segment2.length + " bytes) " +
                 "decompressed into " + count2  + " chars");
         logln("Bytes consumed: " + bytesRead[0]);
 
         logln("Got chars: ");
         logln(charBuffer, count1, count2);
-        
+
         s.append(charBuffer, count1, count2);
 
         logln("Result: ");
@@ -84,7 +87,7 @@ public class DecompressionTest extends TestFmwk {
         // continuation
         /*                   IDX   ,           S     .          */
         byte [] segment2 = { 0x01, 0x2c, 0x20, 0x53, 0x2e };
-        
+
         result = decompressTest(segment1, segment2);
         if(! result.equals("Booth, S.")) {
             errln("Decompression test failed");
@@ -120,16 +123,16 @@ public class DecompressionTest extends TestFmwk {
             return;
         }
     }
-    
+
     /* Testing the method
-     *      public int decompress(*** 
+     *      public int decompress(***
      */
     @Test
     public void TestDecompress(){
         char[] charBufferBlank = {};
         char[] charBuffer1 = {'a'};
         char[] charValid = {'d','u','m','m','y'};
-        
+
         // Test when "if(charBuffer.length < 2 || (charBufferLimit - charBufferStart) < 2)" is true
         //      The following tests when "charBuffer.length < 2"
         UnicodeDecompressor ud = new UnicodeDecompressor();
@@ -137,42 +140,42 @@ public class DecompressionTest extends TestFmwk {
             ud.decompress(null, 0, 0, null, null, 4, 0);
             errln("UnicodeDecompressor.decompress was suppose to return an exception.");
         } catch(Exception e){}
-        
+
         try{
             ud.decompress(null, 0, 0, null, charBufferBlank, 4, 0);
             errln("UnicodeDecompressor.decompress was suppose to return an exception.");
         } catch(Exception e){}
-        
+
         try{
             ud.decompress(null, 0, 0, null, charBuffer1, 4, 0);
             errln("UnicodeDecompressor.decompress was suppose to return an exception.");
         } catch(Exception e){}
-        
+
         //      The following tests when "(charBufferLimit - charBufferStart) < 2"
         try{
             ud.decompress(null, 0, 0, null, charValid, 0, 0);
             errln("UnicodeDecompressor.decompress was suppose to return an exception.");
         } catch(Exception e){}
-        
+
         try{
             ud.decompress(null, 0, 0, null, charValid, 1, 0);
             errln("UnicodeDecompressor.decompress was suppose to return an exception.");
         } catch(Exception e){}
-        
+
         try{
             ud.decompress(null, 0, 0, null, charValid, 1, 1);
             errln("UnicodeDecompressor.decompress was suppose to return an exception.");
         } catch(Exception e){}
-        
+
         try{
             ud.decompress(null, 0, 0, null, charValid, 0, 1);
             errln("UnicodeDecompressor.decompress was suppose to return an exception.");
         } catch(Exception e){}
-        
+
         try{
             ud = new UnicodeDecompressor();
             byte[] b = {
-                    (byte) 0x80, (byte) 0x81, (byte) 0x82, (byte) 0x83, (byte) 0x84, 
+                    (byte) 0x80, (byte) 0x81, (byte) 0x82, (byte) 0x83, (byte) 0x84,
                     (byte) 0x85, (byte) 0x86, (byte) 0x87, (byte) 0x88, (byte) 0x89,
                     (byte) 0x8A, (byte) 0x8B, (byte) 0x8C, (byte) 0x8D, (byte) 0x8E,
                     (byte) 0x8F, (byte) 0x90, (byte) 0x91, (byte) 0x92, (byte) 0x93,
@@ -220,7 +223,7 @@ public class DecompressionTest extends TestFmwk {
                     (byte) 0x7A, (byte) 0x7B, (byte) 0x7C, (byte) 0x7D, (byte) 0x7E,
                     (byte) 0x7F,
                     (byte) UnicodeDecompressor.SQUOTEU,
-                    (byte) UnicodeDecompressor.SCHANGEU, 
+                    (byte) UnicodeDecompressor.SCHANGEU,
                     (byte) UnicodeDecompressor.SQUOTE0, (byte) UnicodeDecompressor.SQUOTE1, (byte) UnicodeDecompressor.SQUOTE2, (byte) UnicodeDecompressor.SQUOTE3,
                     (byte) UnicodeDecompressor.SQUOTE4, (byte) UnicodeDecompressor.SQUOTE5, (byte) UnicodeDecompressor.SQUOTE6, (byte) UnicodeDecompressor.SQUOTE7,
                     (byte) UnicodeDecompressor.SCHANGE0, (byte) UnicodeDecompressor.SCHANGE1, (byte) UnicodeDecompressor.SCHANGE2, (byte) UnicodeDecompressor.SCHANGE3,

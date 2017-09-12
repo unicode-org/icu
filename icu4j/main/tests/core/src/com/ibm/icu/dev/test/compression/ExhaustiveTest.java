@@ -9,11 +9,14 @@
 package com.ibm.icu.dev.test.compression;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UnicodeCompressor;
 import com.ibm.icu.text.UnicodeDecompressor;
 
+@RunWith(JUnit4.class)
 public class ExhaustiveTest extends TestFmwk {
     /** Test simple compress/decompress API, returning # of errors */
     @Test
@@ -25,10 +28,10 @@ public class ExhaustiveTest extends TestFmwk {
     private void simpleTest(String s) throws Exception {
         byte [] compressed = UnicodeCompressor.compress(s);
         String res = UnicodeDecompressor.decompress(compressed);
-        if (logDiffs(s.toCharArray(), s.length(), 
+        if (logDiffs(s.toCharArray(), s.length(),
                 res.toCharArray(), res.length()) == false) {
-            logln(s.length() + " chars ===> " 
-                    + compressed.length + " bytes ===> " 
+            logln(s.length() + " chars ===> "
+                    + compressed.length + " bytes ===> "
                     + res.length() + " chars");
         } else {
             logln("Compressed:");
@@ -47,7 +50,7 @@ public class ExhaustiveTest extends TestFmwk {
     private void myTest(char[] chars, int len) {
         UnicodeCompressor myCompressor = new UnicodeCompressor();
         UnicodeDecompressor myDecompressor = new UnicodeDecompressor();
-        
+
         // variables for my compressor
         int myByteCount = 0;
         int myCharCount = 0;
@@ -57,7 +60,7 @@ public class ExhaustiveTest extends TestFmwk {
         char[] myDecompressed = new char[myDecompressedSize];
         int[] unicharsRead = new int[1];
         int[] bytesRead = new int[1];
-        
+
         myByteCount = myCompressor.compress(chars, 0, len, unicharsRead,
                 myCompressed, 0, myCompressedSize);
 
@@ -65,8 +68,8 @@ public class ExhaustiveTest extends TestFmwk {
                 bytesRead, myDecompressed, 0, myDecompressedSize);
 
         if (logDiffs(chars, len, myDecompressed, myCharCount) == false) {
-            logln(len + " chars ===> " 
-                    + myByteCount + " bytes ===> " 
+            logln(len + " chars ===> "
+                    + myByteCount + " bytes ===> "
                     + myCharCount + " chars");
         } else {
             logln("Compressed:");
@@ -85,9 +88,9 @@ public class ExhaustiveTest extends TestFmwk {
     private void myMultipassTest(char [] chars, int len) throws Exception {
         UnicodeCompressor myCompressor = new UnicodeCompressor();
         UnicodeDecompressor myDecompressor = new UnicodeDecompressor();
-        
+
         // variables for my compressor
-        
+
         // for looping
         int byteBufferSize = 4;//Math.max(4, len / 4);
         byte[] byteBuffer = new byte [byteBufferSize];
@@ -107,7 +110,7 @@ public class ExhaustiveTest extends TestFmwk {
 
         int[] unicharsRead = new int[1];
         int[] bytesRead = new int[1];
-        
+
         int totalCharsCompressed = 0;
         int totalBytesWritten = 0;
 
@@ -119,21 +122,21 @@ public class ExhaustiveTest extends TestFmwk {
 
         // perform the compression in a loop
         do {
-            
+
             // do the compression
-            bytesWritten = myCompressor.compress(chars, totalCharsCompressed, 
+            bytesWritten = myCompressor.compress(chars, totalCharsCompressed,
                    len, unicharsRead, byteBuffer, 0, byteBufferSize);
 
             // copy the current set of bytes into the target buffer
-            System.arraycopy(byteBuffer, 0, compressed, 
+            System.arraycopy(byteBuffer, 0, compressed,
                    totalBytesWritten, bytesWritten);
-            
+
             // update the no. of characters compressed
             totalCharsCompressed += unicharsRead[0];
-            
+
             // update the no. of bytes written
             totalBytesWritten += bytesWritten;
-            
+
             /*System.out.logln("Compression pass complete.  Compressed "
                                + unicharsRead[0] + " chars into "
                                + bytesWritten + " bytes.");*/
@@ -145,40 +148,40 @@ public class ExhaustiveTest extends TestFmwk {
         } else {
             logln("MP: " + len + " chars ===> " + totalBytesWritten + " bytes.");
         }
-        
+
         // perform the decompression in a loop
         do {
-            
+
             // do the decompression
-            unicharsWritten = myDecompressor.decompress(compressed, 
-                    totalBytesDecompressed, totalBytesWritten, 
+            unicharsWritten = myDecompressor.decompress(compressed,
+                    totalBytesDecompressed, totalBytesWritten,
                     bytesRead, unicharBuffer, 0, unicharBufferSize);
 
             // copy the current set of chars into the target buffer
-            System.arraycopy(unicharBuffer, 0, decompressed, 
+            System.arraycopy(unicharBuffer, 0, decompressed,
                     totalCharsWritten, unicharsWritten);
-            
+
             // update the no. of bytes decompressed
             totalBytesDecompressed += bytesRead[0];
-            
+
             // update the no. of chars written
             totalCharsWritten += unicharsWritten;
-            
+
             /*System.out.logln("Decompression pass complete.  Decompressed "
                                + bytesRead[0] + " bytes into "
                                + unicharsWritten + " chars.");*/
         } while (totalBytesDecompressed < totalBytesWritten);
 
         if (totalBytesDecompressed != totalBytesWritten) {
-            errln("ERROR: Number of bytes decompressed(" 
-                    + totalBytesDecompressed 
-                    + ") != totalBytesWritten(" 
+            errln("ERROR: Number of bytes decompressed("
+                    + totalBytesDecompressed
+                    + ") != totalBytesWritten("
                     + totalBytesWritten + ")");
         } else {
             logln("MP: " + totalBytesWritten
                     + " bytes ===> " + totalCharsWritten + " chars.");
         }
-        
+
         if (logDiffs(chars, len, decompressed, totalCharsWritten)) {
             errln("ERROR: buffer contents incorrect");
         }
@@ -187,7 +190,7 @@ public class ExhaustiveTest extends TestFmwk {
     /** Print differences between two character buffers */
     private boolean logDiffs(char[] s1, int s1len, char[] s2, int s2len) {
         boolean result  = false;
-        
+
         if(s1len != s2len) {
             logln("====================");
             logln("Length doesn't match: expected " + s1len
@@ -198,7 +201,7 @@ public class ExhaustiveTest extends TestFmwk {
             printChars(s2, s2len);
             result = true;
         }
-        
+
         int len = Math.min(s1len, s2len);
         for(int i = 0; i < len; ++i) {
             if(s1[i] != s2[i]) {
@@ -216,7 +219,7 @@ public class ExhaustiveTest extends TestFmwk {
                 break;
             }
         }
-    
+
         return result;
     }
 
@@ -225,7 +228,7 @@ public class ExhaustiveTest extends TestFmwk {
         char[] result = new char [len];
         int runLen = 0;
         int used = 0;
-        
+
         while(used < len) {
             runLen = (int) (30 * random.nextDouble());
             if(used + runLen >= len) {
@@ -234,7 +237,7 @@ public class ExhaustiveTest extends TestFmwk {
             randomRun(result, used, runLen, random);
             used += runLen;
         }
-    
+
         return result;
     }*/
 
@@ -287,7 +290,7 @@ public class ExhaustiveTest extends TestFmwk {
 
         "\ud800\udc00", // smallest surrogate
         "\ud8ff\udcff", // largest surrogate pair
-        
+
         // regression tests
         "\u6441\ub413\ua733\uf8fe\ueedb\u587f\u195f\u4899\uf23d\u49fd\u0aac\u5792\ufc22\ufc3c\ufc46\u00aa",
         "\u30f9\u8321\u05e5\u181c\ud72b\u2019\u99c9\u2f2f\uc10c\u82e1\u2c4d\u1ebc\u6013\u66dc\ubbde\u94a5\u4726\u74af\u3083\u55b9\u000c",
@@ -303,7 +306,7 @@ public class ExhaustiveTest extends TestFmwk {
     //==========================
     private final static int SINGLEBYTEMODE                 = 0;
     private final static int UNICODEMODE                    = 1;
-    
+
     //==========================
     // Single-byte mode tags
     //==========================
@@ -364,11 +367,11 @@ public class ExhaustiveTest extends TestFmwk {
     private final static int UDEFINEX                       = 0xF1;
     //private final static int URESERVED                      = 0xF2;         // this is a reserved value
 
-    /* Print out an array of characters, with non-printables (for me) 
+    /* Print out an array of characters, with non-printables (for me)
        displayed as hex values */
     private void printChars(char[] chars, int len) {
         for(int i = 0; i < len; i++) {
-            int c = (int)chars[i];
+            int c = chars[i];
             if(c < 0x0020 || c >= 0x7f) {
                 log("[0x");
                 log(Integer.toHexString(c));
@@ -385,137 +388,137 @@ public class ExhaustiveTest extends TestFmwk {
         int byteBufferLimit = len;
         int mode = SINGLEBYTEMODE;
         int aByte = 0x00;
-        
+
         if(len > byteBuffer.length) {
             logln("Warning: printBytes called with length too large. Truncating");
             byteBufferLimit = byteBuffer.length;
         }
-        
+
         while(curByteIndex < byteBufferLimit) {
-            switch(mode) {  
+            switch(mode) {
             case SINGLEBYTEMODE:
-                while(curByteIndex < byteBufferLimit 
+                while(curByteIndex < byteBufferLimit
                       && mode == SINGLEBYTEMODE)  {
-                    aByte = ((int)byteBuffer[curByteIndex++]) & 0xFF;
+                    aByte = (byteBuffer[curByteIndex++]) & 0xFF;
                     switch(aByte) {
                     default:
-                        log(Integer.toHexString(((int) aByte) & 0xFF) + " ");
+                        log(Integer.toHexString((aByte) & 0xFF) + " ");
                         break;
                         // quote unicode
                     case SQUOTEU:
                         log("SQUOTEU ");
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         break;
-                        
+
                         // switch to Unicode mode
                     case SSWITCHU:
                         log("SSWITCHU ");
                         mode = UNICODEMODE;
                         break;
-                        
+
                         // handle all quote tags
                     case SQUOTE0: case SQUOTE1: case SQUOTE2: case SQUOTE3:
                     case SQUOTE4: case SQUOTE5: case SQUOTE6: case SQUOTE7:
                         log("SQUOTE" + (aByte - SQUOTE0) + " ");
                         if(curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         break;
-                        
+
                         // handle all switch tags
                     case SSWITCH0: case SSWITCH1: case SSWITCH2: case SSWITCH3:
                     case SSWITCH4: case SSWITCH5: case SSWITCH6: case SSWITCH7:
                         log("SSWITCH" + (aByte - SSWITCH0) + " ");
                         break;
-                                        
+
                         // handle all define tags
                     case SDEFINE0: case SDEFINE1: case SDEFINE2: case SDEFINE3:
                     case SDEFINE4: case SDEFINE5: case SDEFINE6: case SDEFINE7:
                         log("SDEFINE" + (aByte - SDEFINE0) + " ");
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         break;
-                        
+
                         // handle define extended tag
                     case SDEFINEX:
                         log("SDEFINEX ");
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         break;
-                        
+
                     } // end switch
                 } // end while
                 break;
-                
+
             case UNICODEMODE:
                 while(curByteIndex < byteBufferLimit && mode == UNICODEMODE) {
-                    aByte = ((int)byteBuffer[curByteIndex++]) & 0xFF;
+                    aByte = (byteBuffer[curByteIndex++]) & 0xFF;
                     switch(aByte) {
                         // handle all define tags
                     case UDEFINE0: case UDEFINE1: case UDEFINE2: case UDEFINE3:
                     case UDEFINE4: case UDEFINE5: case UDEFINE6: case UDEFINE7:
                         log("UDEFINE" + (aByte - UDEFINE0) + " ");
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         mode = SINGLEBYTEMODE;
                         break;
-                        
+
                         // handle define extended tag
                     case UDEFINEX:
                         log("UDEFINEX ");
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         break;
-                        
+
                         // handle all switch tags
                     case USWITCH0: case USWITCH1: case USWITCH2: case USWITCH3:
                     case USWITCH4: case USWITCH5: case USWITCH6: case USWITCH7:
                         log("USWITCH" + (aByte - USWITCH0) + " ");
                         mode = SINGLEBYTEMODE;
                         break;
-                        
+
                         // quote unicode
                     case UQUOTEU:
                         log("UQUOTEU ");
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         break;
-                        
+
                     default:
-                        log(Integer.toHexString(((int) aByte) & 0xFF) + " ");
+                        log(Integer.toHexString((aByte) & 0xFF) + " ");
                         if (curByteIndex < byteBufferLimit) {
-                            log(Integer.toHexString(((int) byteBuffer[curByteIndex++]) & 0xFF) + " ");
+                            log(Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF) + " ");
                         }
                         break;
-                        
+
                     } // end switch
                 } // end while
                 break;
-                
+
             } // end switch( mode )
         } // end while
-        
+
         logln("");
-    }    
+    }
 }
 
 

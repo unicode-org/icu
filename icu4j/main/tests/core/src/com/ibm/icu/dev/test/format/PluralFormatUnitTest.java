@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormat;
@@ -35,6 +37,7 @@ import com.ibm.icu.util.ULocale;
  * @author tschumann (Tim Schumann)
  *
  */
+@RunWith(JUnit4.class)
 public class PluralFormatUnitTest extends TestFmwk {
     @Test
     public void TestConstructor() {
@@ -402,7 +405,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format(2));
         assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5));
     }
-    
+
     @Test
     public void TestNegative() {
         PluralFormat pluralFormat = new PluralFormat(ULocale.ENGLISH, "one{# foot}other{# feet}");

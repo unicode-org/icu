@@ -10,11 +10,14 @@ package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.PersianCalendar;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class PersianTest extends CalendarTestFmwk {
     /**
      * Test basic mapping to and from Gregorian.
@@ -24,7 +27,7 @@ public class PersianTest extends CalendarTestFmwk {
         final int[] DATA = {
             // (Note: months are 1-based)
             2011, 1, 11, 1389, 10, 21,
-            1986, 2, 25, 1364, 12, 6, 
+            1986, 2, 25, 1364, 12, 6,
             1934, 3, 14, 1312, 12, 23,
 
             2090, 3, 19, 1468, 12, 29,
@@ -127,17 +130,17 @@ public class PersianTest extends CalendarTestFmwk {
 
     @Test
     public void TestCoverage12424() {
-        class StubCalendar extends PersianCalendar {   
+        class StubCalendar extends PersianCalendar {
             private static final long serialVersionUID = 1L;
             public StubCalendar() {
                 assertEquals("Persian month 0 length", 31, handleGetMonthLength(1000, 0));
                 assertEquals("Persian month 7 length", 30, handleGetMonthLength(1000, 7));
-                
+
                 int leastWeeks = handleGetLimit(Calendar.WEEK_OF_YEAR, Calendar.LEAST_MAXIMUM);
-                assertEquals("Persian Week of Year least maximum", 52, leastWeeks);             
+                assertEquals("Persian Week of Year least maximum", 52, leastWeeks);
              }
         }
-        
+
         new StubCalendar();
     }
 }

@@ -11,6 +11,8 @@ package com.ibm.icu.dev.test.format;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.SimpleFormatterImpl;
@@ -26,8 +28,9 @@ import com.ibm.icu.util.ULocale;
 
 /**
  * @author markdavis
- * 
+ *
  */
+@RunWith(JUnit4.class)
 public class PluralRangesTest extends TestFmwk {
     @Test
     public void TestLocaleData() {

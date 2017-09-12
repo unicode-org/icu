@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -38,6 +40,7 @@ import com.ibm.icu.util.ULocale;
 * @author Syn Wee Quek
 * @since march 14 2002
 */
+@RunWith(JUnit4.class)
 public final class UCharacterCaseTest extends TestFmwk
 {
     // constructor -----------------------------------------------------------

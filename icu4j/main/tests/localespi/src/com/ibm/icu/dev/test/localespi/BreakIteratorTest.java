@@ -12,9 +12,12 @@ import java.text.BreakIterator;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 
+@RunWith(JUnit4.class)
 public class BreakIteratorTest extends TestFmwk {
     private static final int CHARACTER_BRK = 0;
     private static final int WORD_BRK = 1;
@@ -72,7 +75,7 @@ public class BreakIteratorTest extends TestFmwk {
         } else {
             if (isIcuImpl) {
                 logln("INFO: " + method + " returned ICU BreakIterator for locale " + loc);
-            } 
+            }
             BreakIterator brkitrIcu = null;
             Locale iculoc = TestUtil.toICUExtendedLocale(loc);
             switch (type) {
@@ -171,7 +174,7 @@ public class BreakIteratorTest extends TestFmwk {
             jdkBrkItrs[1] = BreakIterator.getWordInstance(iculoc);
             jdkBrkItrs[2] = BreakIterator.getLineInstance(iculoc);
             jdkBrkItrs[3] = BreakIterator.getSentenceInstance(iculoc);
- 
+
             icuBrkItrs[0] = com.ibm.icu.text.BreakIterator.getCharacterInstance(iculoc);
             icuBrkItrs[1] = com.ibm.icu.text.BreakIterator.getWordInstance(iculoc);
             icuBrkItrs[2] = com.ibm.icu.text.BreakIterator.getLineInstance(iculoc);

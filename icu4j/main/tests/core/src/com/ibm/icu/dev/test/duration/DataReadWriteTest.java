@@ -15,11 +15,14 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.duration.impl.XMLRecordReader;
 import com.ibm.icu.impl.duration.impl.XMLRecordWriter;
 
+@RunWith(JUnit4.class)
 public class DataReadWriteTest extends TestFmwk {
     // strip line ends and trailing spaces
     private String normalize(String str) {
@@ -80,7 +83,7 @@ public class DataReadWriteTest extends TestFmwk {
             { true, false },
             { true, false, true },
         };
-    
+
         String[] targets = {
             "<testList></testList>",
             "<testList><test>true</test></testList>",
@@ -255,7 +258,7 @@ public class DataReadWriteTest extends TestFmwk {
         String s4 = "  It is\n   only  a test\t  ";
         String s4x = " It is only a test ";
 
-        String[][] datas = { 
+        String[][] datas = {
             {},
             { s1 },
             { s2, s1 },
@@ -268,11 +271,11 @@ public class DataReadWriteTest extends TestFmwk {
             "<testList></testList>",
             "<testList><test>" + s1 + "</test></testList>",
             "<testList><test>" + s2 + "</test><test>" + s1 + "</test></testList>",
-            "<testList><test>" + s3 + "</test><test>" + s2 + 
+            "<testList><test>" + s3 + "</test><test>" + s2 +
                 "</test><test>" + s1 + "</test></testList>",
-            "<testList><test>" + s3 + "</test><test>Null</test><test>" + s1 + 
+            "<testList><test>" + s3 + "</test><test>Null</test><test>" + s1 +
                 "</test><test>Null</test></testList>",
-            "<testList><test>" + s4x + "</test><test>" + s1 + 
+            "<testList><test>" + s4x + "</test><test>" + s1 +
                 "</test><test>" + s3 + "</test><test>" + s2 + "</test></testList>",
         };
 
@@ -311,7 +314,7 @@ public class DataReadWriteTest extends TestFmwk {
         String s3 = "This is a test";
         String s4 = "It is only a test";
 
-        String[][] table = { 
+        String[][] table = {
             {},
             { s1 },
             { s2, s1 },
@@ -324,7 +327,7 @@ public class DataReadWriteTest extends TestFmwk {
             "<testList></testList>" +
             "<testList><test></test></testList>" +
             "<testList><test> </test><test></test></testList>" +
-            "<testList><test>This is a test</test><test> </test>" + 
+            "<testList><test>This is a test</test><test> </test>" +
                 "<test></test></testList>" +
             "<testList>Null</testList>" +
             "<testList><test>It is only a test</test><test></test>" +
