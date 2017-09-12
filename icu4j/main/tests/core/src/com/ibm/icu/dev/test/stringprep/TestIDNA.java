@@ -721,24 +721,6 @@ public class TestIDNA extends TestFmwk {
         }
     }
 
-    // TODO(#13324): test turned off because it has dependency on translit.
-    @Ignore
-    @Test
-    public void TestCompareRefImpl() throws Exception {
-        for (int i = 65; i < 0x10FFFF; i++) {
-            StringBuffer src = new StringBuffer();
-            if (isQuick() == true && i > 0x0FFF) {
-                return;
-            }
-            if (i == 0x30000) {
-                // jump to E0000, no characters assigned in plain 3 to plain 13 as of Unicode 6.0
-                i = 0xE0000;
-            }
-            UTF16.append(src, i);
-            doTestCompareReferenceImpl(src);
-        }
-    }
-
     @Test
     public void TestJB4490(){
         String[] in = new String[]{
