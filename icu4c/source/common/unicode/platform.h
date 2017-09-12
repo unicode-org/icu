@@ -830,7 +830,7 @@ namespace std {
 #    define U_CALLCONV U_EXPORT2
 #endif
 
- /**
+/**
  * \def U_CALLCONV_FPTR
  * Similar to U_CALLCONV, but only used on function pointers.
  * @internal
