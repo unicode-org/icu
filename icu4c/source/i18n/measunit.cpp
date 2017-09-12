@@ -1079,7 +1079,12 @@ static int32_t binarySearch(
     }
     return -1;
 }
-    
+
+MeasureUnit::MeasureUnit() {
+    fCurrency[0] = 0;
+    initNoUnit("base");
+}
+
 MeasureUnit::MeasureUnit(const MeasureUnit &other)
         : fTypeId(other.fTypeId), fSubTypeId(other.fSubTypeId) {
     uprv_strcpy(fCurrency, other.fCurrency);
