@@ -929,6 +929,7 @@ icu4j/samples/build-local.properties
 icu4j/samples/out
 icu4j/tools/build/out
 icu4j/tools/misc/out
+tools/currency/out
 tools/multi/c/Makefile.local
 tools/multi/packages/*.jar
 tools/multi/packages/*.tgz
