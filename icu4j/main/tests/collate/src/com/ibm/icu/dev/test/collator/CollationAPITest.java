@@ -23,6 +23,8 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -38,6 +40,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
+@RunWith(JUnit4.class)
 public class CollationAPITest extends TestFmwk {
     /**
      * This tests the collation key related APIs.

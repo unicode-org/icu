@@ -18,6 +18,8 @@ import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -29,6 +31,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 
+@RunWith(JUnit4.class)
 public class UCAConformanceTest extends TestFmwk {
 
     public UCAConformanceTest() {

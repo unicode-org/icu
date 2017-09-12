@@ -58,6 +58,7 @@ public:
     void TestBufferOverflow();
     void TestEdits();
     void TestCopyMoveEdits();
+    void TestEditsFindFwdBwd();
     void TestMergeEdits();
     void TestCaseMapWithEdits();
     void TestCaseMapUTF8WithEdits();
@@ -97,6 +98,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestBufferOverflow);
     TESTCASE_AUTO(TestEdits);
     TESTCASE_AUTO(TestCopyMoveEdits);
+    TESTCASE_AUTO(TestEditsFindFwdBwd);
     TESTCASE_AUTO(TestMergeEdits);
     TESTCASE_AUTO(TestCaseMapWithEdits);
     TESTCASE_AUTO(TestCaseMapUTF8WithEdits);
@@ -921,23 +923,23 @@ void StringCaseTest::TestEdits() {
     assertFalse("unchanged 10003 hasChanges", edits.hasChanges());
     assertEquals("unchanged 10003 numberOfChanges", 0, edits.numberOfChanges());
     assertEquals("unchanged 10003", 0, edits.lengthDelta());
-    edits.addReplace(1, 1);  // multiple short equal-length edits are compressed
+    edits.addReplace(2, 1);  // multiple short equal-lengths edits are compressed
     edits.addUnchanged(0);
-    edits.addReplace(1, 1);
-    edits.addReplace(1, 1);
+    edits.addReplace(2, 1);
+    edits.addReplace(2, 1);
     edits.addReplace(0, 10);
     edits.addReplace(100, 0);
     edits.addReplace(3000, 4000);  // variable-length encoding
     edits.addReplace(100000, 100000);
     assertTrue("some edits hasChanges", edits.hasChanges());
     assertEquals("some edits numberOfChanges", 7, edits.numberOfChanges());
-    assertEquals("some edits", 10 - 100 + 1000, edits.lengthDelta());
+    assertEquals("some edits", -3 + 10 - 100 + 1000, edits.lengthDelta());
     UErrorCode outErrorCode = U_ZERO_ERROR;
     assertFalse("edits done: copyErrorTo", edits.copyErrorTo(outErrorCode));
 
     static const EditChange coarseExpectedChanges[] = {
             { FALSE, 10003, 10003 },
-            { TRUE, 103103, 104013 }
+            { TRUE, 103106, 104013 }
     };
     TestUtility::checkEditsIter(*this, u"coarse",
             edits.getCoarseIterator(), edits.getCoarseIterator(),
@@ -948,9 +950,9 @@ void StringCaseTest::TestEdits() {
 
     static const EditChange fineExpectedChanges[] = {
             { FALSE, 10003, 10003 },
-            { TRUE, 1, 1 },
-            { TRUE, 1, 1 },
-            { TRUE, 1, 1 },
+            { TRUE, 2, 1 },
+            { TRUE, 2, 1 },
+            { TRUE, 2, 1 },
             { TRUE, 0, 10 },
             { TRUE, 100, 0 },
             { TRUE, 3000, 4000 },
@@ -1021,6 +1023,27 @@ void StringCaseTest::TestCopyMoveEdits() {
     assertSuccess("iter.next()", errorCode);
     assertTrue("iter.hasChange()", iter.hasChange());
     assertEquals("iter.newLength()", 1, iter.newLength());
+}
+
+void StringCaseTest::TestEditsFindFwdBwd() {
+    IcuTestErrorCode errorCode(*this, "TestEditsFindFwdBwd");
+    // Some users need index mappings to be efficient when they are out of order.
+    // The most interesting failure case for this test is it taking a very long time.
+    Edits e;
+    constexpr int32_t N = 200000;
+    for (int32_t i = 0; i < N; ++i) {
+        e.addUnchanged(1);
+        e.addReplace(3, 1);
+    }
+    Edits::Iterator iter = e.getFineIterator();
+    for (int32_t i = 0; i <= N; i += 2) {
+        assertEquals("ascending", i * 2, iter.sourceIndexFromDestinationIndex(i, errorCode));
+        assertEquals("ascending", i * 2 + 1, iter.sourceIndexFromDestinationIndex(i + 1, errorCode));
+    }
+    for (int32_t i = N; i >= 0; i -= 2) {
+        assertEquals("descending", i * 2 + 1, iter.sourceIndexFromDestinationIndex(i + 1, errorCode));
+        assertEquals("descending", i * 2, iter.sourceIndexFromDestinationIndex(i, errorCode));
+    }
 }
 
 void StringCaseTest::TestMergeEdits() {

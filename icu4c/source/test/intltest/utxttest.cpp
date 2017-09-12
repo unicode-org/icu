@@ -50,27 +50,18 @@ UTextTest::~UTextTest() {
 void
 UTextTest::runIndexedTest(int32_t index, UBool exec,
                           const char* &name, char* /*par*/) {
-    switch (index) {
-        case 0: name = "TextTest";
-            if (exec) TextTest();    break;
-        case 1: name = "ErrorTest";
-            if (exec) ErrorTest();   break;
-        case 2: name = "FreezeTest";
-            if (exec) FreezeTest();  break;
-        case 3: name = "Ticket5560";
-            if (exec) Ticket5560();  break;
-        case 4: name = "Ticket6847";
-            if (exec) Ticket6847();  break;
-        case 5: name = "Ticket10562";
-            if (exec) Ticket10562();  break;
-        case 6: name = "Ticket10983";
-            if (exec) Ticket10983();  break;
-        case 7: name = "Ticket12130";
-            if (exec) Ticket12130(); break;
-        case 8: name = "Ticket12888";
-            if (exec) Ticket12888(); break;
-        default: name = "";          break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TextTest);
+    TESTCASE_AUTO(ErrorTest);
+    TESTCASE_AUTO(FreezeTest);
+    TESTCASE_AUTO(Ticket5560);
+    TESTCASE_AUTO(Ticket6847);
+    TESTCASE_AUTO(Ticket10562);
+    TESTCASE_AUTO(Ticket10983);
+    TESTCASE_AUTO(Ticket12130);
+    TESTCASE_AUTO(Ticket12888);
+    TESTCASE_AUTO(Ticket13344);
+    TESTCASE_AUTO_END;
 }
 
 //
@@ -1645,3 +1636,28 @@ void UTextTest::Ticket12888() {
         prevIndex = currentIndex;
     }
 }
+
+// Ticket 13344 The macro form of UTEXT_SETNATIVEINDEX failed when target was a trail surrogate
+//              of a supplementary character.
+
+void UTextTest::Ticket13344() {
+    UErrorCode status = U_ZERO_ERROR;
+    const char16_t *str = u"abc\U0010abcd xyz";
+    LocalUTextPointer ut(utext_openUChars(NULL, str, -1, &status));
+
+    assertSuccess("UTextTest::Ticket13344-status", status);
+    UTEXT_SETNATIVEINDEX(ut.getAlias(), 3);
+    assertEquals("UTextTest::Ticket13344-lead", (int64_t)3, utext_getNativeIndex(ut.getAlias()));
+    UTEXT_SETNATIVEINDEX(ut.getAlias(), 4);
+    assertEquals("UTextTest::Ticket13344-trail", (int64_t)3, utext_getNativeIndex(ut.getAlias()));
+    UTEXT_SETNATIVEINDEX(ut.getAlias(), 5);
+    assertEquals("UTextTest::Ticket13344-bmp", (int64_t)5, utext_getNativeIndex(ut.getAlias()));
+
+    utext_setNativeIndex(ut.getAlias(), 3);
+    assertEquals("UTextTest::Ticket13344-lead-2", (int64_t)3, utext_getNativeIndex(ut.getAlias()));
+    utext_setNativeIndex(ut.getAlias(), 4);
+    assertEquals("UTextTest::Ticket13344-trail-2", (int64_t)3, utext_getNativeIndex(ut.getAlias()));
+    utext_setNativeIndex(ut.getAlias(), 5);
+    assertEquals("UTextTest::Ticket13344-bmp-2", (int64_t)5, utext_getNativeIndex(ut.getAlias()));
+}
+

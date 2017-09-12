@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.LocaleMatcher;
@@ -29,6 +31,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  */
 @SuppressWarnings("deprecation")
+@RunWith(JUnit4.class)
 public class LocaleMatcherTest extends TestFmwk {
 
 

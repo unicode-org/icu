@@ -13,6 +13,8 @@ import java.text.StringCharacterIterator;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Norm2AllModes;
@@ -31,6 +33,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 
 
+@RunWith(JUnit4.class)
 public class BasicTest extends TestFmwk {
     String[][] canonTests = {
         // Input                Decomposed              Composed

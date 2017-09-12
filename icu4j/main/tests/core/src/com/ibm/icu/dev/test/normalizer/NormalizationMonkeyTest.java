@@ -12,6 +12,8 @@ package com.ibm.icu.dev.test.normalizer;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
@@ -19,6 +21,7 @@ import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
 
+@RunWith(JUnit4.class)
 public class NormalizationMonkeyTest extends TestFmwk {
     int loopCount = 100;
     int maxCharCount = 20;
@@ -28,10 +31,10 @@ public class NormalizationMonkeyTest extends TestFmwk {
     UnicodeNormalizer unicode_NFC;
     UnicodeNormalizer unicode_NFKD;
     UnicodeNormalizer unicode_NFKC;
-    
+
     public NormalizationMonkeyTest() {
     }
-    
+
     @Test
     public void TestNormalize() {
         if (unicode_NFD == null) {
@@ -81,11 +84,11 @@ public class NormalizationMonkeyTest extends TestFmwk {
             if (!uncodeNorm.equals(icuNorm)) {
                 errln("NFKC: Unicode sample output => " + uncodeNorm + "; icu4j output=> " + icuNorm);
             }
-            
+
             i++;
         }
     }
-    
+
     String getTestSource() {
     if (random == null) {
         random = createRandom(); // use test framework's random seed

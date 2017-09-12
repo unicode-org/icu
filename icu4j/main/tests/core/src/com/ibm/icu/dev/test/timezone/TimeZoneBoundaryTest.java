@@ -10,6 +10,8 @@ package com.ibm.icu.dev.test.timezone;
 import java.util.Date;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -23,6 +25,7 @@ import com.ibm.icu.util.TimeZone;
  * A test which discovers the boundaries of DST programmatically and verifies
  * that they are correct.
  */
+@RunWith(JUnit4.class)
 public class TimeZoneBoundaryTest extends TestFmwk
 {
     static final int ONE_SECOND = 1000;
@@ -181,7 +184,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
         logln(tz.getID() + " After:  " + showDate(max, tz));
 
         long mindelta = expectedBoundary - min;
-        // not used long maxdelta = max - expectedBoundary; 
+        // not used long maxdelta = max - expectedBoundary;
         DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
         fmt.setTimeZone(tz);
         if (mindelta >= 0 && mindelta <= INTERVAL &&
@@ -200,10 +203,10 @@ public class TimeZoneBoundaryTest extends TestFmwk
     {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.setTime(d);
-        return "" + (cal.get(Calendar.YEAR) - 1900) + "/" + 
-               showNN(cal.get(Calendar.MONTH) + 1) + "/" + 
-               showNN(cal.get(Calendar.DAY_OF_MONTH)) + " " + 
-               showNN(cal.get(Calendar.HOUR_OF_DAY)) + ":" 
+        return "" + (cal.get(Calendar.YEAR) - 1900) + "/" +
+               showNN(cal.get(Calendar.MONTH) + 1) + "/" +
+               showNN(cal.get(Calendar.DAY_OF_MONTH)) + " " +
+               showNN(cal.get(Calendar.HOUR_OF_DAY)) + ":"
                + showNN(cal.get(Calendar.MINUTE)) + " \"" + d + "\" = " +
                d.getTime();
     }
@@ -219,10 +222,10 @@ public class TimeZoneBoundaryTest extends TestFmwk
         fmt.setTimeZone(zone);
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.setTime(d);
-        return "" + (cal.get(Calendar.YEAR) - 1900) + "/" + 
-               showNN(cal.get(Calendar.MONTH) + 1) + "/" + 
-               showNN(cal.get(Calendar.DAY_OF_MONTH)) + " " + 
-               showNN(cal.get(Calendar.HOUR_OF_DAY)) + ":" + 
+        return "" + (cal.get(Calendar.YEAR) - 1900) + "/" +
+               showNN(cal.get(Calendar.MONTH) + 1) + "/" +
+               showNN(cal.get(Calendar.DAY_OF_MONTH)) + " " +
+               showNN(cal.get(Calendar.HOUR_OF_DAY)) + ":" +
                showNN(cal.get(Calendar.MINUTE)) + " \"" + d + "\" = " +
                fmt.format(d) + " = " + d.getTime();
     }
@@ -397,7 +400,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
         verifyMapping(tempcal, 1997, Calendar.APRIL, 6,  0, 238976.0);
         verifyMapping(tempcal, 1997, Calendar.APRIL, 6,  1, 238977.0);
         verifyMapping(tempcal, 1997, Calendar.APRIL, 6,  3, 238978.0);
-        
+
         TimeZone utc = safeGetTimeZone("UTC");
         Calendar utccal = Calendar.getInstance(utc);
         verifyMapping(utccal, 1997, Calendar.APRIL, 6, 0, 238968.0);

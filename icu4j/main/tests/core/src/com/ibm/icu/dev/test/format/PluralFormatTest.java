@@ -13,6 +13,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -25,6 +27,7 @@ import com.ibm.icu.util.ULocale;
  * @author tschumann (Tim Schumann)
  *
  */
+@RunWith(JUnit4.class)
 public class PluralFormatTest extends TestFmwk {
   private void helperTestRules(String localeIDs, String testPattern, Map<Integer,String> changes) {
     String[] locales = Utility.split(localeIDs, ',');

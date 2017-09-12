@@ -12,6 +12,8 @@ import java.util.Random;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -24,6 +26,7 @@ import com.ibm.icu.text.UTF16;
 /**
  * @author ram
  */
+@RunWith(JUnit4.class)
 public class TestIDNA extends TestFmwk {
     private StringPrepParseException unassignedException = new StringPrepParseException("",StringPrepParseException.UNASSIGNED_ERROR);
 
@@ -715,24 +718,6 @@ public class TestIDNA extends TestFmwk {
             _doTestCompareReferenceImpl(src, false, IDNA.DEFAULT);
             _doTestCompareReferenceImpl(src, false, IDNA.USE_STD3_RULES);
             _doTestCompareReferenceImpl(src, false, IDNA.USE_STD3_RULES | IDNA.ALLOW_UNASSIGNED);
-        }
-    }
-
-    // TODO(#13324): test turned off because it has dependency on translit.
-    @Ignore
-    @Test
-    public void TestCompareRefImpl() throws Exception {
-        for (int i = 65; i < 0x10FFFF; i++) {
-            StringBuffer src = new StringBuffer();
-            if (isQuick() == true && i > 0x0FFF) {
-                return;
-            }
-            if (i == 0x30000) {
-                // jump to E0000, no characters assigned in plain 3 to plain 13 as of Unicode 6.0
-                i = 0xE0000;
-            }
-            UTF16.append(src, i);
-            doTestCompareReferenceImpl(src);
         }
     }
 

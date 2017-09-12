@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
@@ -26,8 +28,9 @@ import com.ibm.icu.util.ULocale;
 /**
  * Tests for the <code>JapaneseCalendar</code> class.
  */
+@RunWith(JUnit4.class)
 public class JapaneseTest extends CalendarTestFmwk {
-    
+
     @Test
     public void TestCoverage() {
         {
@@ -143,7 +146,7 @@ public class JapaneseTest extends CalendarTestFmwk {
             }
         }
     }
-    
+
     @Test
     public void Test3860()
     {
@@ -160,10 +163,10 @@ public class JapaneseTest extends CalendarTestFmwk {
         cal.setTime(aDate);
         int gotYear = cal.get(Calendar.YEAR);
         int gotEra = cal.get(Calendar.ERA);
-        
+
         int expectYear = 1;
         int expectEra = JapaneseCalendar.CURRENT_ERA;
-        
+
         if((gotYear != expectYear) || (gotEra != expectEra)) {
             errln("Expected year " + expectYear + ", era " + expectEra +", but got year " + gotYear + " and era " + gotEra + ", == " + inEn);
         } else {
@@ -196,9 +199,9 @@ public class JapaneseTest extends CalendarTestFmwk {
         expectYear = 1;
         expectEra = JapaneseCalendar.CURRENT_ERA;
         if((gotYear != 1) || (gotEra != expectEra)) {
-            errln("parse "+ samplestr + " of 'y' as Japanese Calendar, expected year " + expectYear + 
+            errln("parse "+ samplestr + " of 'y' as Japanese Calendar, expected year " + expectYear +
                 " and era " + expectEra + ", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
-        } else {            
+        } else {
             logln(" year: " + gotYear + ", era: " + gotEra);
         }
     }
@@ -231,14 +234,14 @@ public class JapaneseTest extends CalendarTestFmwk {
         Date otherDate;
         try {
             otherDate = fmt.parse(expected);
-            if(!otherDate.equals(aDate)) { 
+            if(!otherDate.equals(aDate)) {
                 String str3;
     //            ParsePosition pp;
                 Date dd = fmt.parse(expected);
                 str3 = fmt.format(otherDate);
                 long oLong = otherDate.getTime();
                 long aLong = otherDate.getTime();
-                
+
                 errln("FAIL: Parse incorrect of " + expected + ":  wanted " + aDate + " ("+aLong+"), but got " +  " " +
                     otherDate + " ("+oLong+") = " + str3 + " not " + dd.toString() );
 
@@ -267,7 +270,7 @@ public class JapaneseTest extends CalendarTestFmwk {
             int fieldNum = expected[i+0];
             int expectedVal = expected[i+1];
             int actualVal = c.get(fieldNum);
-            
+
             if(expectedVal == actualVal) {
                 logln(FIELD_NAME[fieldNum]+": "+ actualVal);
             } else {
@@ -275,7 +278,7 @@ public class JapaneseTest extends CalendarTestFmwk {
             }
         }
     }
-    
+
     @Test
     public void Test5345calendar() {
         logln("** testIncompleteCalendar()");
@@ -283,7 +286,7 @@ public class JapaneseTest extends CalendarTestFmwk {
         JapaneseCalendar c = new JapaneseCalendar(TimeZone.getDefault());
         logln("test clear");
         c.clear();
- 
+
         // Showa 45 = Gregorian 1970
         int expected0[] = {   Calendar.ERA, 234,
                               Calendar.YEAR, 45 };
@@ -292,8 +295,8 @@ public class JapaneseTest extends CalendarTestFmwk {
         logln("test setting era");
         c.clear();
         c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
-        
-        
+
+
         int expectedA[] = {   Calendar.ERA, JapaneseCalendar.MEIJI };
         checkExpected(c, expectedA);
 
@@ -316,11 +319,11 @@ public class JapaneseTest extends CalendarTestFmwk {
         c.set(Calendar.MONTH, Calendar.JANUARY);
         c.set(Calendar.DATE, 1);
         c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
-        
-        
+
+
         checkExpected(c, expectedC);
-        
-        
+
+
         logln("test setting era and year");
         c.clear();
         c.set(Calendar.YEAR, 1);

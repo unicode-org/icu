@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
@@ -21,18 +23,19 @@ import com.ibm.icu.lang.UCharacter;
  * @author aheninger
  *
  */
+@RunWith(JUnit4.class)
 public class UCharacterThreadTest extends TestFmwk {
   // constructor -----------------------------------------------------------
-    
+
     /**
     * Private constructor to prevent initialisation
     */
     public UCharacterThreadTest()
     {
     }
-    
+
       // public methods --------------------------------------------------------
-      
+
     //
     //  Test multi-threaded parallel calls to UCharacter.getName(codePoint)
     //  Regression test for ticket 6264.
@@ -67,6 +70,7 @@ public class UCharacterThreadTest extends TestFmwk {
            this.correctName = correctName;
         }
 
+        @Override
         public void run() {
           for(int i=0; i<10000; i++) {
             actualName = UCharacter.getName(codePoint);

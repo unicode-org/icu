@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Assert;
@@ -31,13 +33,14 @@ import com.ibm.icu.util.CaseInsensitiveString;
  * @test
  * @summary Test of internal Utility class
  */
+@RunWith(JUnit4.class)
 public class UtilityTest extends TestFmwk {
     @Test
     public void TestUnescape() {
         final String input =
             "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\e\\cC\\n \\x1b\\x{263a}";
 
-        final String expect = 
+        final String expect =
             "Sch\u00F6nes Auto: \u20AC 11240.\u000CPrivates Zeichen: \uDBC8\uDF45\u001B\u0003\012 \u001B\u263A";
 
         String result = Utility.unescape(input);
@@ -45,7 +48,7 @@ public class UtilityTest extends TestFmwk {
             errln("FAIL: Utility.unescape() returned " + result + ", exp. " + expect);
         }
     }
-    
+
     @Test
     public void TestFormat()
     {
@@ -70,7 +73,7 @@ public class UtilityTest extends TestFmwk {
             "\"testing weird supplementary characters \\uD800\\uDC00\"",
             "\"testing control characters \\001 and line breaking!! \\n are we done yet?\""
         };
-        
+
         for (int i = 0; i < data.length; i ++) {
             assertEquals("formatForSource(\"" + data[i] + "\")",
                          result[i], Utility.formatForSource(data[i]));
@@ -80,7 +83,7 @@ public class UtilityTest extends TestFmwk {
                          result1[i], Utility.format1ForSource(data[i]));
         }
     }
-    
+
     @Test
     public void TestHighBit()
     {
@@ -88,23 +91,23 @@ public class UtilityTest extends TestFmwk {
         byte result[] = {-1, -1, -1, 15, 12};
         for (int i = 0; i < data.length; i ++) {
             if (Utility.highBit(data[i]) != result[i]) {
-                errln("Fail: Highest bit of \\u" 
+                errln("Fail: Highest bit of \\u"
                       + Integer.toHexString(data[i]) + " should be "
                       + result[i]);
             }
         }
     }
-    
+
     @Test
     public void TestCompareUnsigned()
     {
-        int data[] = {0, 1, 0x8fffffff, -1, Integer.MAX_VALUE, 
+        int data[] = {0, 1, 0x8fffffff, -1, Integer.MAX_VALUE,
                       Integer.MIN_VALUE, 2342423, -2342423};
         for (int i = 0; i < data.length; i ++) {
             for (int j = 0; j < data.length; j ++) {
-                if (Utility.compareUnsigned(data[i], data[j]) 
+                if (Utility.compareUnsigned(data[i], data[j])
                     != compareLongUnsigned(data[i], data[j])) {
-                    errln("Fail: Unsigned comparison failed with " + data[i] 
+                    errln("Fail: Unsigned comparison failed with " + data[i]
                           + " " + data[i + 1]);
                 }
             }
@@ -123,15 +126,15 @@ public class UtilityTest extends TestFmwk {
 
         java.nio.ByteBuffer buffer = java.nio.ByteBuffer.wrap(ba);
         ByteArrayWrapper x = new ByteArrayWrapper(buffer);
-        
+
         ByteArrayWrapper y = new ByteArrayWrapper(ba, 3);
         ByteArrayWrapper z = new ByteArrayWrapper(bb, 3);
 
-        
+
         if (!y.toString().equals("00 01 02")){
             errln("FAIL: test toString : Failed!");
         }
-        
+
         // test equality
         if (!x.equals(y) || !x.equals(z))
             errln("FAIL: test (operator ==): Failed!");
@@ -222,7 +225,7 @@ public class UtilityTest extends TestFmwk {
             logln("Assert.fail works");
         }
     }
-    
+
     @Test
     public void TestCaseInsensitiveString() {
         CaseInsensitiveString str1 = new CaseInsensitiveString("ThIs is A tEst");
@@ -234,7 +237,7 @@ public class UtilityTest extends TestFmwk {
             errln("FAIL: str1("+str1+") != str2("+str2+")");
         }
     }
-    
+
     @Test
     public void TestSourceLocation() {
         String here = TestFmwk.sourceLocation();
@@ -242,7 +245,7 @@ public class UtilityTest extends TestFmwk {
         String hereAgain = TestFmwk.sourceLocation();
         assertTrue("here < there < hereAgain", here.compareTo(there) < 0 && there.compareTo(hereAgain) < 0);
     }
-    
+
     public String CheckSourceLocale() {
         return TestFmwk.sourceLocation();
     }

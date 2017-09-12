@@ -13,6 +13,8 @@ import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.LocaleUtility;
@@ -29,6 +31,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * Tests for the <code>Holiday</code> class.
  */
+@RunWith(JUnit4.class)
 public class HolidayTest extends TestFmwk {
     @Before
     public void init() throws Exception {
@@ -38,7 +41,7 @@ public class HolidayTest extends TestFmwk {
             now = new Date();
         }
     }
-    
+
     private Calendar cal;
     private Date longTimeAgo;
     private Date now;
@@ -135,8 +138,8 @@ public class HolidayTest extends TestFmwk {
         //        logln("rule: " + h.getRule().toString());
 
         //        h.setRule(h.getRule());
-        
-        
+
+
         logln("HolidayCalendarDemo test");
         {
             final Calendar c = Calendar.getInstance(TimeZone.GMT_ZONE); // Temporary copy
@@ -253,7 +256,7 @@ public class HolidayTest extends TestFmwk {
         logln("first between " + abd + " and " + xbd + " is " + rdr.firstBetween(abd, xbd));
         logln("first between " + abd + " and " + null + " is " + rdr.firstBetween(abd, null));
         logln("first between " + xbd + " and " + null + " is " + rdr.firstBetween(xbd, null));
-        
+
         //getRule, setRule
         logln("The rule in the holiday: " + h[1].getRule());
         exerciseHoliday(h[1], Locale.getDefault());
@@ -264,16 +267,16 @@ public class HolidayTest extends TestFmwk {
         }
         exerciseHoliday(h[1], Locale.getDefault());
     }
-    
+
     @Test
-    public void TestEaster(){        
+    public void TestEaster(){
         // Verify that Easter is working. Should be April 20, 2014
         final Holiday h = new EasterHoliday("Easter Sunday");
         final Date beginApril = getDate(2014, Calendar.APRIL, 1);
         final Date endApril   = getDate(2014, Calendar.APRIL, 30);
         final Date expect     = getDate(2014, Calendar.APRIL, 20);
         final Date actual     = h.firstBetween(beginApril, endApril);
-        
+
         if(actual == null) {
             errln("Error: Easter 2014 should be on " + expect + " but got null.");
         } else {
@@ -289,13 +292,13 @@ public class HolidayTest extends TestFmwk {
     public void TestIsOn() {
         // jb 1901
         SimpleHoliday sh = new SimpleHoliday(Calendar.AUGUST, 15, "Doug's Day", 1958, 2058);
-        
+
         Calendar gcal = new GregorianCalendar();
         gcal.clear();
         gcal.set(Calendar.YEAR, 2000);
         gcal.set(Calendar.MONTH, Calendar.AUGUST);
         gcal.set(Calendar.DAY_OF_MONTH, 15);
-        
+
         Date d0 = gcal.getTime();
         gcal.add(Calendar.SECOND, 1);
         Date d1 = gcal.getTime();
@@ -329,7 +332,7 @@ public class HolidayTest extends TestFmwk {
             logln("firstAfter: " + h);
         }
     }
-    
+
     @Test
     public void TestDisplayName() {
         Holiday[] holidays = Holiday.getHolidays(ULocale.US);

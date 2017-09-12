@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
@@ -40,6 +42,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
+@RunWith(JUnit4.class)
 public class CollationMiscTest extends TestFmwk {
     //private static final int NORM_BUFFER_TEST_LEN_ = 32;
     private static final class Tester

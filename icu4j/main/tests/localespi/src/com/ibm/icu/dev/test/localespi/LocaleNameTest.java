@@ -14,10 +14,13 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class LocaleNameTest extends TestFmwk {
     private static final Method GETDISPLAYSCRIPT_METHOD;
 
@@ -78,7 +81,7 @@ public class LocaleNameTest extends TestFmwk {
                     }
                 } else {
                     if (!name.equals(icuname)) {
-                        logln("INFO: Language name by JDK is " + name + ", but " + icuname + 
+                        logln("INFO: Language name by JDK is " + name + ", but " + icuname +
                               " by ICU, for locale " + forLocale + " in locale " + inLocale);
                     }
                     // Try explicit ICU locale (xx_yy_ICU)
@@ -135,7 +138,7 @@ public class LocaleNameTest extends TestFmwk {
                 } else {
                     // The name might be taken from JDK
                     if (!name.equals(icuname)) {
-                        logln("INFO: Script name by JDK is " + name + ", but " + icuname + 
+                        logln("INFO: Script name by JDK is " + name + ", but " + icuname +
                                 " in ICU, for locale " + forLocale + " in locale " + inLocale);
                     }
                     // Try explicit ICU locale (xx_yy_ICU)
@@ -186,7 +189,7 @@ public class LocaleNameTest extends TestFmwk {
                 } else {
                     // The name might be taken from JDK
                     if (!name.equals(icuname)) {
-                        logln("INFO: Country name by JDK is " + name + ", but " + icuname + 
+                        logln("INFO: Country name by JDK is " + name + ", but " + icuname +
                               " in ICU, for locale " + forLocale + " in locale " + inLocale);
                     }
                     // Try explicit ICU locale (xx_yy_ICU)
@@ -259,7 +262,7 @@ public class LocaleNameTest extends TestFmwk {
                         }
                     } else {
                         if (!name.equals(icuname)) {
-                            logln("INFO: Variant name by JDK is " + name + ", but " + icuname + 
+                            logln("INFO: Variant name by JDK is " + name + ", but " + icuname +
                                   " in ICU, for locale " + forLocaleSingleVar + " in locale " + inLocale);
                         }
                         // Try explicit ICU locale (xx_yy_ICU)

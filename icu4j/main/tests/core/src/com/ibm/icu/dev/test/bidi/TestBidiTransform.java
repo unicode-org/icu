@@ -4,6 +4,8 @@
 package com.ibm.icu.dev.test.bidi;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
@@ -19,6 +21,7 @@ import com.ibm.icu.text.BidiTransform.Order;
  * @author Lina Kemmel
  *
  */
+@RunWith(JUnit4.class)
 public class TestBidiTransform extends TestFmwk {
 
     static final char LATN_ZERO         = '\u0030';

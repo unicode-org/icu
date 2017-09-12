@@ -20,6 +20,8 @@ import javax.xml.datatype.DatatypeConstants.Field;
 import javax.xml.datatype.Duration;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DurationFormat;
@@ -30,6 +32,7 @@ import com.ibm.icu.util.ULocale;
  * @author srl
  *
  */
+@RunWith(JUnit4.class)
 public class ICUDurationTest extends TestFmwk {
     /**
      * Allows us to not depend on javax.xml.datatype.DatatypeFactory.
@@ -161,7 +164,7 @@ public class ICUDurationTest extends TestFmwk {
     }
 
     /**
-     * 
+     *
      */
     public ICUDurationTest() {
     }
@@ -174,7 +177,7 @@ public class ICUDurationTest extends TestFmwk {
         DurationFormat df;
         String expect;
         String formatted;
-        
+
         df = DurationFormat.getInstance(new ULocale("it"));
         formatted = df.formatDurationFromNow(4096);
         expect = "fra quattro secondi";
@@ -183,7 +186,7 @@ public class ICUDurationTest extends TestFmwk {
         } else {
             logln("format duration -> " + formatted);
         }
-        
+
         formatted = df.formatDurationFromNowTo(new Date(0));
         Calendar cal = Calendar.getInstance();
         int years = cal.get(Calendar.YEAR) - 1970; // year of Date(0)
@@ -193,7 +196,7 @@ public class ICUDurationTest extends TestFmwk {
         } else {
             logln("format date  -> " + formatted);
         }
-        
+
         formatted = df.formatDurationFrom(1000*3600*24, new Date(0).getTime());
         expect = "fra un giorno";
         if(!expect.equals(formatted)) {
@@ -218,7 +221,7 @@ public class ICUDurationTest extends TestFmwk {
         String out;
         String expected;
         String expected2;
-        
+
         // test 1
         d = newDuration(1, 2, 46, 40);  // "PT2H46M40S"
         df = DurationFormat.getInstance(new ULocale("en"));
@@ -229,7 +232,7 @@ public class ICUDurationTest extends TestFmwk {
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
         }
-        
+
         // test 2
         d = newDuration(10000);
         df = DurationFormat.getInstance(new ULocale("en"));
@@ -313,7 +316,7 @@ public class ICUDurationTest extends TestFmwk {
 
             DurationFormat df = DurationFormat.getInstance(locale);
             String output = df.format(d);
-            
+
             if(output.equals(to)) {
                 logln("SUCCESS: locale: " + loc + ", from " + from + " ["+d.toString()+"] " +" to " + to + "= " + output);
             } else {
@@ -364,7 +367,7 @@ public class ICUDurationTest extends TestFmwk {
             errln("FAIL: null DurationFormat returned.");
         }
     }
-    
+
     /* Tests the class
      *      DurationFormat
      */
@@ -372,14 +375,18 @@ public class ICUDurationTest extends TestFmwk {
     public void TestDurationFormat(){
         @SuppressWarnings("serial")
         class TestDurationFormat extends DurationFormat {
+            @Override
             public StringBuffer format(Object object, StringBuffer toAppend, FieldPosition pos) {return null;}
+            @Override
             public String formatDurationFrom(long duration, long referenceDate) {return null;}
+            @Override
             public String formatDurationFromNow(long duration) {return null;}
+            @Override
             public String formatDurationFromNowTo(Date targetDate) {return null;}
             public TestDurationFormat() {super();}
-            
+
         }
-        
+
         // Tests the constructor and the following method
         //      public Object parseObject(String source, ParsePosition pos)
         try{
