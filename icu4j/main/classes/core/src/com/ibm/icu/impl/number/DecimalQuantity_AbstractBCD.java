@@ -44,7 +44,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
    * @see #INFINITY_FLAG
    * @see #NAN_FLAG
    */
-  protected int flags;
+  protected byte flags;
 
   protected static final int NEGATIVE_FLAG = 1;
   protected static final int INFINITY_FLAG = 2;
@@ -168,12 +168,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
   }
 
   @Override
-  public void roundToIncrement(BigDecimal roundingInterval, MathContext mathContext) {
+  public void roundToIncrement(BigDecimal roundingIncrement, MathContext mathContext) {
     // TODO: Avoid converting back and forth to BigDecimal.
     BigDecimal temp = toBigDecimal();
     temp =
-        temp.divide(roundingInterval, 0, mathContext.getRoundingMode())
-            .multiply(roundingInterval)
+        temp.divide(roundingIncrement, 0, mathContext.getRoundingMode())
+            .multiply(roundingIncrement)
             .round(mathContext);
     if (temp.signum() == 0) {
       setBcdToZero(); // keeps negative flag for -0.0
@@ -467,34 +467,35 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     int delta = origDelta;
     setBcdToZero();
 
-    // Call the slow oracle function
-    String temp = Double.toString(n);
+    // Call the slow oracle function (Double.toString in Java, sprintf in C++).
+    String dstr = Double.toString(n);
 
-    if (temp.indexOf('E') != -1) {
+    if (dstr.indexOf('E') != -1) {
       // Case 1: Exponential notation.
-      assert temp.indexOf('.') == 1;
-      int expPos = temp.indexOf('E');
-      _setToLong(Long.parseLong(temp.charAt(0) + temp.substring(2, expPos)));
-      scale += Integer.parseInt(temp.substring(expPos + 1)) - (expPos - 1) + 1;
-    } else if (temp.charAt(0) == '0') {
+      assert dstr.indexOf('.') == 1;
+      int expPos = dstr.indexOf('E');
+      _setToLong(Long.parseLong(dstr.charAt(0) + dstr.substring(2, expPos)));
+      scale += Integer.parseInt(dstr.substring(expPos + 1)) - (expPos - 1) + 1;
+    } else if (dstr.charAt(0) == '0') {
       // Case 2: Fraction-only number.
-      assert temp.indexOf('.') == 1;
-      _setToLong(Long.parseLong(temp.substring(2)));
-      scale += 2 - temp.length();
-    } else if (temp.charAt(temp.length() - 1) == '0') {
+      assert dstr.indexOf('.') == 1;
+      _setToLong(Long.parseLong(dstr.substring(2)));
+      scale += 2 - dstr.length();
+    } else if (dstr.charAt(dstr.length() - 1) == '0') {
       // Case 3: Integer-only number.
       // Note: this path should not normally happen, because integer-only numbers are captured
       // before the approximate double logic is performed.
-      assert temp.indexOf('.') == temp.length() - 2;
-      assert temp.length() - 2 <= 18;
-      _setToLong(Long.parseLong(temp.substring(0, temp.length() - 2)));
+      assert dstr.indexOf('.') == dstr.length() - 2;
+      assert dstr.length() - 2 <= 18;
+      _setToLong(Long.parseLong(dstr.substring(0, dstr.length() - 2)));
       // no need to adjust scale
     } else {
       // Case 4: Number with both a fraction and an integer.
-      int decimalPos = temp.indexOf('.');
-      _setToLong(Long.parseLong(temp.substring(0, decimalPos) + temp.substring(decimalPos + 1)));
-      scale += decimalPos - temp.length() + 1;
+      int decimalPos = dstr.indexOf('.');
+      _setToLong(Long.parseLong(dstr.substring(0, decimalPos) + dstr.substring(decimalPos + 1)));
+      scale += decimalPos - dstr.length() + 1;
     }
+
     scale += delta;
     compact();
     explicitExactDouble = true;
@@ -640,6 +641,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     return diff;
   }
 
+  private static final int SECTION_LOWER_EDGE = -1;
+  private static final int SECTION_UPPER_EDGE = -2;
+
   @Override
   public void roundToMagnitude(int magnitude, MathContext mathContext) {
     // The position in the BCD at which rounding will be performed; digits to the right of position
@@ -689,7 +693,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         int p = safeSubtract(position, 2);
         int minP = Math.max(0, precision - 14);
         if (leadingDigit == 0) {
-          section = -1;
+          section = SECTION_LOWER_EDGE;
           for (; p >= minP; p--) {
             if (getDigitPos(p) != 0) {
               section = RoundingUtils.SECTION_LOWER;
@@ -711,7 +715,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             }
           }
         } else if (leadingDigit == 9) {
-          section = -2;
+          section = SECTION_UPPER_EDGE;
           for (; p >= minP; p--) {
             if (getDigitPos(p) != 9) {
               section = RoundingUtils.SECTION_UPPER;
@@ -747,8 +751,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
 
         // Good to continue rounding.
-        if (section == -1) section = RoundingUtils.SECTION_LOWER;
-        if (section == -2) section = RoundingUtils.SECTION_UPPER;
+        if (section == SECTION_LOWER_EDGE) section = RoundingUtils.SECTION_LOWER;
+        if (section == SECTION_UPPER_EDGE) section = RoundingUtils.SECTION_UPPER;
       }
 
       boolean roundDown =
@@ -839,6 +843,20 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     if (appendAsInteger) {
       scale += leadingZeros + 1;
     }
+  }
+
+  @Override
+  public String toPlainString() {
+      // NOTE: This logic is duplicated between here and DecimalQuantity_SimpleStorage.
+      StringBuilder sb = new StringBuilder();
+      if (isNegative()) {
+          sb.append('-');
+      }
+      for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
+        sb.append(getDigit(m));
+        if (m == 0) sb.append('.');
+      }
+      return sb.toString();
   }
 
   /**

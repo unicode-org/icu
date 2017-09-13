@@ -29,11 +29,10 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternStringParser;
-import com.ibm.icu.impl.number.DecimalFormatProperties;
-import com.ibm.icu.impl.number.ThingsNeedingNewHome.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -42,6 +41,8 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+
+import newapi.impl.Padder.PadPosition;
 
 public class PropertiesTest {
 

@@ -338,6 +338,34 @@ public class NumberFormatterTest {
                 ULocale.ENGLISH,
                 -9876543.21,
                 "-9,876,543.21 m");
+
+        // The locale string "सान" appears only in brx.txt:
+        assertFormatSingle(
+                "Interesting Data Fallback 1",
+                "U:duration:day unit-width=FULL_NAME",
+                NumberFormatter.with().unit(MeasureUnit.DAY).unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("brx"),
+                5.43,
+                "5.43 सान");
+
+        // Requires following the alias from unitsNarrow to unitsShort:
+        assertFormatSingle(
+                "Interesting Data Fallback 2",
+                "U:duration:day unit-width=NARROW",
+                NumberFormatter.with().unit(MeasureUnit.DAY).unitWidth(UnitWidth.NARROW),
+                ULocale.forLanguageTag("brx"),
+                5.43,
+                "5.43 d");
+
+        // en_001.txt has a unitsNarrow/area/square-meter table, but table does not contain the OTHER unit,
+        // requiring fallback to the root.
+        assertFormatSingle(
+                "Interesting Data Fallback 3",
+                "U:area:square-meter unit-width=NARROW",
+                NumberFormatter.with().unit(MeasureUnit.SQUARE_METER).unitWidth(UnitWidth.NARROW),
+                ULocale.forLanguageTag("en-GB"),
+                5.43,
+                "5.43 m²");
     }
 
     @Test
@@ -870,7 +898,7 @@ public class NumberFormatterTest {
                 ULocale.ENGLISH,
                 "GBP 87,650.00",
                 "GBP 8,765.00",
-                "GBP 876.50",
+                "GBP*876.50",
                 "GBP**87.65",
                 "GBP***8.76",
                 "GBP***0.88",

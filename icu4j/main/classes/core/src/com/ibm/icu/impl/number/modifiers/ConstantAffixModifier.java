@@ -70,6 +70,11 @@ public class ConstantAffixModifier implements Modifier {
     }
 
     @Override
+    public int getCodePointCount() {
+        return prefix.codePointCount(0, prefix.length()) + suffix.codePointCount(0, suffix.length());
+    }
+
+    @Override
     public boolean isStrong() {
         return strong;
     }

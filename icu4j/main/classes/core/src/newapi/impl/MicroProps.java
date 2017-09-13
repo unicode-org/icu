@@ -29,6 +29,7 @@ public class MicroProps implements Cloneable, MicroPropsGenerator {
     public int multiplier;
     public boolean useCurrency;
 
+    // Internal fields:
     private final boolean immutable;
     private volatile boolean exhausted;
 

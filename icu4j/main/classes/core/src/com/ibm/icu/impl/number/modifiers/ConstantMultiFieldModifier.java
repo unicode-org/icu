@@ -42,6 +42,12 @@ public class ConstantMultiFieldModifier implements Modifier {
     }
 
     @Override
+    public int getCodePointCount() {
+        return Character.codePointCount(prefixChars, 0, prefixChars.length)
+                + Character.codePointCount(suffixChars, 0, suffixChars.length);
+    }
+
+    @Override
     public boolean isStrong() {
         return strong;
     }

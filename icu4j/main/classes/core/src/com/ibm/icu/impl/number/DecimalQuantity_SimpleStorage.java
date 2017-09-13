@@ -855,6 +855,20 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
     return sb.toString();
   }
 
+  @Override
+  public String toPlainString() {
+      // NOTE: This logic is duplicated between here and DecimalQuantity_AbstractBCD.
+      StringBuilder sb = new StringBuilder();
+      if (isNegative()) {
+          sb.append('-');
+      }
+      for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
+        sb.append(getDigit(m));
+        if (m == 0) sb.append('.');
+      }
+      return sb.toString();
+  }
+
   private static int toRange(int i, int lo, int hi) {
     if (i < lo) {
       return lo;

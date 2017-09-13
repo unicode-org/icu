@@ -23,8 +23,8 @@ public class ModifierTest {
     public void testConstantAffixModifier() {
         assertModifierEquals(ConstantAffixModifier.EMPTY, 0, false, "|", "n");
 
-        Modifier mod1 = new ConstantAffixModifier("a", "b", NumberFormat.Field.PERCENT, true);
-        assertModifierEquals(mod1, 1, true, "a|b", "%n%");
+        Modifier mod1 = new ConstantAffixModifier("a📻", "b", NumberFormat.Field.PERCENT, true);
+        assertModifierEquals(mod1, 3, true, "a📻|b", "%%%n%");
     }
 
     @Test
@@ -34,10 +34,10 @@ public class ModifierTest {
         Modifier mod1 = new ConstantMultiFieldModifier(prefix, suffix, true);
         assertModifierEquals(mod1, 0, true, "|", "n");
 
-        prefix.append("a", NumberFormat.Field.PERCENT);
+        prefix.append("a📻", NumberFormat.Field.PERCENT);
         suffix.append("b", NumberFormat.Field.CURRENCY);
         Modifier mod2 = new ConstantMultiFieldModifier(prefix, suffix, true);
-        assertModifierEquals(mod2, 1, true, "a|b", "%n$");
+        assertModifierEquals(mod2, 3, true, "a📻|b", "%%%n$");
 
         // Make sure the first modifier is still the same (that it stayed constant)
         assertModifierEquals(mod1, 0, true, "|", "n");
@@ -45,15 +45,15 @@ public class ModifierTest {
 
     @Test
     public void testSimpleModifier() {
-        String[] patterns = { "{0}", "X{0}Y", "XX{0}YYY", "{0}YY", "XXXX{0}" };
-        Object[][] outputs = { { "", 0, 0 }, { "abcde", 0, 0 }, { "abcde", 2, 2 }, { "abcde", 1, 3 } };
-        int[] prefixLens = { 0, 1, 2, 0, 4 };
+        String[] patterns = { "{0}", "X{0}Y", "XX{0}YYY", "{0}YY", "XX📺XX{0}" };
+        Object[][] outputs = { { "", 0, 0 }, { "a📻bcde", 0, 0 }, { "a📻bcde", 4, 4 }, { "a📻bcde", 3, 5 } };
+        int[] prefixLens = { 0, 1, 2, 0, 6 };
         String[][] expectedCharFields = { { "|", "n" }, { "X|Y", "%n%" }, { "XX|YYY", "%%n%%%" }, { "|YY", "n%%" },
-                { "XXXX|", "%%%%n" } };
-        String[][] expecteds = { { "", "XY", "XXYYY", "YY", "XXXX" },
-                { "abcde", "XYabcde", "XXYYYabcde", "YYabcde", "XXXXabcde" },
-                { "abcde", "abXYcde", "abXXYYYcde", "abYYcde", "abXXXXcde" },
-                { "abcde", "aXbcYde", "aXXbcYYYde", "abcYYde", "aXXXXbcde" } };
+                { "XX📺XX|", "%%%%%%n" } };
+        String[][] expecteds = { { "", "XY", "XXYYY", "YY", "XX📺XX" },
+                { "a📻bcde", "XYa📻bcde", "XXYYYa📻bcde", "YYa📻bcde", "XX📺XXa📻bcde" },
+                { "a📻bcde", "a📻bXYcde", "a📻bXXYYYcde", "a📻bYYcde", "a📻bXX📺XXcde" },
+                { "a📻bcde", "a📻XbcYde", "a📻XXbcYYYde", "a📻bcYYde", "a📻XX📺XXbcde" } };
         for (int i = 0; i < patterns.length; i++) {
             String pattern = patterns[i];
             String compiledPattern = SimpleFormatterImpl
@@ -144,9 +144,14 @@ public class ModifierTest {
             boolean expectedStrong,
             String expectedChars,
             String expectedFields) {
-        mod.apply(sb, 0, sb.length());
+        int oldCount = sb.codePointCount();
+        mod.apply(sb, 0, oldCount);
         assertEquals("Prefix length on " + sb, expectedPrefixLength, mod.getPrefixLength());
         assertEquals("Strong on " + sb, expectedStrong, mod.isStrong());
+        if (!(mod instanceof CurrencySpacingEnabledModifier)) {
+            assertEquals("Code point count equals actual code point count",
+                    sb.codePointCount() - oldCount, mod.getCodePointCount());
+        }
         assertEquals("<NumberStringBuilder [" + expectedChars + "] [" + expectedFields + "]>", sb.toDebugString());
     }
 }

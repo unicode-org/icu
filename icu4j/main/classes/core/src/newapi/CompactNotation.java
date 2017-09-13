@@ -19,7 +19,7 @@ import newapi.impl.CompactData;
 import newapi.impl.MicroProps;
 import newapi.impl.MicroPropsGenerator;
 import newapi.impl.MutablePatternModifier;
-import newapi.impl.MutablePatternModifier.ImmutableMurkyModifier;
+import newapi.impl.MutablePatternModifier.ImmutablePatternModifier;
 
 public class CompactNotation extends Notation {
 
@@ -50,7 +50,7 @@ public class CompactNotation extends Notation {
     private static class CompactImpl implements MicroPropsGenerator {
 
         private static class CompactModInfo {
-            public ImmutableMurkyModifier mod;
+            public ImmutablePatternModifier mod;
             public int numDigits;
         }
 

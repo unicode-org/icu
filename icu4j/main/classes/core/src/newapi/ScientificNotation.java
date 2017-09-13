@@ -11,8 +11,8 @@ import com.ibm.icu.text.NumberFormat;
 import newapi.NumberFormatter.SignDisplay;
 import newapi.Rounder.SignificantRounderImpl;
 import newapi.impl.MicroProps;
-import newapi.impl.MultiplierProducer;
 import newapi.impl.MicroPropsGenerator;
+import newapi.impl.MultiplierProducer;
 
 @SuppressWarnings("unused")
 public class ScientificNotation extends Notation implements Cloneable {
@@ -146,6 +146,12 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
 
         @Override
+        public int getCodePointCount() {
+            // This method is not used for strong modifiers.
+            throw new AssertionError();
+        }
+
+        @Override
         public boolean isStrong() {
             return true;
         }
@@ -191,6 +197,12 @@ public class ScientificNotation extends Notation implements Cloneable {
             public int getPrefixLength() {
                 // FIXME: Localized exponent separator location.
                 return 0;
+            }
+
+            @Override
+            public int getCodePointCount() {
+                // This method is not used for strong modifiers.
+                throw new AssertionError();
             }
 
             @Override

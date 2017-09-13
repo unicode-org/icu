@@ -31,11 +31,6 @@ public final class NumberFormatter {
         AUTO, ALWAYS, NEVER, ACCOUNTING, ACCOUNTING_ALWAYS,
     }
 
-    public static UnlocalizedNumberFormatter fromSkeleton(String skeleton) {
-        // FIXME
-        throw new UnsupportedOperationException();
-    }
-
     public static UnlocalizedNumberFormatter with() {
         return BASE;
     }
