@@ -830,6 +830,16 @@ namespace std {
 #    define U_CALLCONV U_EXPORT2
 #endif
 
+/**
+ * \def U_CALLCONV_FPTR
+ * Similar to U_CALLCONV, but only used on function pointers.
+ * @internal
+ */
+#if U_PLATFORM == U_PF_OS390 && defined(__cplusplus)
+#    define U_CALLCONV_FPTR U_CALLCONV
+#else
+#    define U_CALLCONV_FPTR
+#endif
 /* @} */
 
 #endif
