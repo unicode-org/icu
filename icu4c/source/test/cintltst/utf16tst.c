@@ -147,7 +147,7 @@ static void TestGetChar()
         0x11734,          0xd800,                     UTF_ERROR_VALUE  
     };
     uint16_t i=0;
-    UChar32 c;
+    UChar32 c, expected;
     uint16_t offset=0;
     for(offset=0; offset<UPRV_LENGTHOF(input); offset++) {
         if(0<offset && offset<UPRV_LENGTHOF(input)-1){
@@ -163,13 +163,20 @@ static void TestGetChar()
         }
 
         UTF16_GET_CHAR_SAFE(input, 0, offset, UPRV_LENGTHOF(input), c, FALSE);
-        if(c != result[i+1]){
-            log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
+        expected=result[i+1];
+        if(c != expected) {
+            log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
 
         U16_GET(input, 0, offset, UPRV_LENGTHOF(input), c);
-        if(c != result[i+1]){
-            log_err("ERROR: U16_GET failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
+        if(c != expected) {
+            log_err("ERROR: U16_GET failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
+
+        U16_GET_OR_FFFD(input, 0, offset, UPRV_LENGTHOF(input), c);
+        if(U_IS_SURROGATE(expected)) { expected=0xfffd; }
+        if(c != expected) {
+            log_err("ERROR: U16_GET_OR_FFFD failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
 
         UTF16_GET_CHAR_SAFE(input, 0, offset, UPRV_LENGTHOF(input), c, TRUE);
@@ -216,7 +223,7 @@ static void TestNextPrevChar(){
     };
       
 
-    UChar32 c=0x0000;
+    UChar32 c=0x0000, expected;
     uint16_t i=0;
     uint16_t offset=0, setOffset=0;
     for(offset=0; offset<UPRV_LENGTHOF(input); offset++){
@@ -246,9 +253,10 @@ static void TestNextPrevChar(){
              log_err("ERROR: UTF16_NEXT_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+1], setOffset);
          }
-         if(c != result[i+1]){
-             log_err("ERROR: UTF16_NEXT_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
-         }
+        expected=result[i+1];
+        if(c != expected) {
+            log_err("ERROR: UTF16_NEXT_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
 
          setOffset=offset;
          U16_NEXT(input, setOffset, UPRV_LENGTHOF(input), c);
@@ -256,9 +264,20 @@ static void TestNextPrevChar(){
              log_err("ERROR: U16_NEXT failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+1], setOffset);
          }
-         if(c != result[i+1]){
-             log_err("ERROR: U16_NEXT failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
-         }
+        if(c != expected){
+            log_err("ERROR: U16_NEXT failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
+
+        setOffset=offset;
+        U16_NEXT_OR_FFFD(input, setOffset, UPRV_LENGTHOF(input), c);
+        if(setOffset != movedOffset[i+1]){
+            log_err("ERROR: U16_NEXT_OR_FFFD failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[i+1], setOffset);
+        }
+        if(U_IS_SURROGATE(expected)) { expected=0xfffd; }
+        if(c != expected){
+            log_err("ERROR: U16_NEXT_OR_FFFD failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
 
          setOffset=offset;
          UTF16_NEXT_CHAR_SAFE(input, setOffset, UPRV_LENGTHOF(input), c, TRUE);
@@ -310,9 +329,21 @@ static void TestNextPrevChar(){
              log_err("ERROR: U16_PREV failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+4], setOffset);
          }
-         if(c != result[i+4]){
-             log_err("ERROR: U16_PREV failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+4], c);
-         }
+        expected = result[i+4];
+        if(c != expected) {
+            log_err("ERROR: U16_PREV failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
+
+        setOffset=offset;
+        U16_PREV_OR_FFFD(input, 0, setOffset, c);
+        if(setOffset != movedOffset[i+4]){
+            log_err("ERROR: U16_PREV_OR_FFFD failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[i+4], setOffset);
+        }
+        if(U_IS_SURROGATE(expected)) { expected=0xfffd; }
+        if(c != expected) {
+            log_err("ERROR: U16_PREV_OR_FFFD failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
 
          setOffset=offset;
          UTF16_PREV_CHAR_SAFE(input, 0,  setOffset, c, TRUE);
@@ -349,14 +380,24 @@ static void TestNulTerminated() {
         0
     };
 
-    UChar32 c, c2;
+    UChar32 c, c2, expected;
     int32_t i0, i=0, j, k, expectedIndex;
     int32_t cpIndex=0;
     do {
         i0=i;
         U16_NEXT(input, i, -1, c);
-        if(c!=result[cpIndex]) {
-            log_err("U16_NEXT(from %d)=U+%04x != U+%04x\n", i0, c, result[cpIndex]);
+        expected=result[cpIndex];
+        if(c!=expected) {
+            log_err("U16_NEXT(from %d)=U+%04x != U+%04x\n", i0, c, expected);
+        }
+        j=i0;
+        U16_NEXT_OR_FFFD(input, j, -1, c);
+        if(U_IS_SURROGATE(expected)) { expected=0xfffd; }
+        if(c!=expected) {
+            log_err("U16_NEXT_OR_FFFD(from %d)=U+%04x != U+%04x\n", i0, c, expected);
+        }
+        if(j!=i) {
+            log_err("U16_NEXT_OR_FFFD() moved to index %d but U16_NEXT() moved to %d\n", j, i);
         }
         j=i0;
         U16_FWD_1(input, j, -1);
@@ -384,6 +425,11 @@ static void TestNulTerminated() {
             U16_GET(input, 0, j, -1, c2);
             if(c2!=c) {
                 log_err("U16_NEXT(from %d)=U+%04x != U+%04x=U16_GET(at %d)\n", i0, c, c2, j);
+            }
+            U16_GET_OR_FFFD(input, 0, j, -1, c2);
+            expected= U_IS_SURROGATE(c) ? 0xfffd : c;
+            if(c2!=expected) {
+                log_err("U16_NEXT_OR_FFFD(from %d)=U+%04x != U+%04x=U16_GET_OR_FFFD(at %d)\n", i0, expected, c2, j);
             }
             /* U16_SET_CP_LIMIT moves from a non-lead byte to the limit of the code point */
             k=j+1;
