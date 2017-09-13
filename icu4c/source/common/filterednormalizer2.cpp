@@ -22,11 +22,11 @@
 
 #include "unicode/edits.h"
 #include "unicode/normalizer2.h"
+#include "unicode/stringoptions.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "unicode/unorm.h"
 #include "cpputils.h"
-#include "ustr_imp.h"  // U_EDITS_NO_RESET
 
 U_NAMESPACE_BEGIN
 

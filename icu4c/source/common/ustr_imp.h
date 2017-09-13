@@ -26,11 +26,6 @@
 #define _STRNCMP_STYLE 0x1000
 
 /**
- * Internal option for string transformation functions to not first reset the Edits object.
- */
-#define U_EDITS_NO_RESET 0x2000
-
-/**
  * Compare two strings in code point order or code unit order.
  * Works in strcmp style (both lengths -1),
  * strncmp style (lengths equal and >=0, flag TRUE),
