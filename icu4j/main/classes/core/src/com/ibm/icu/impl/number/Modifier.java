@@ -37,6 +37,11 @@ public interface Modifier {
     public int getPrefixLength();
 
     /**
+     * Returns the number of code points in the modifier, prefix plus suffix.
+     */
+    public int getCodePointCount();
+
+    /**
      * Whether this modifier is strong. If a modifier is strong, it should always be applied immediately and not allowed
      * to bubble up. With regard to padding, strong modifiers are considered to be on the inside of the prefix and
      * suffix.

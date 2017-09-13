@@ -37,14 +37,14 @@ import newapi.impl.Padder;
  */
 class NumberFormatterImpl {
 
+    /** Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly. */
     public static NumberFormatterImpl fromMacros(MacroProps macros) {
-        // Build a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly.
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, true);
         return new NumberFormatterImpl(microPropsGenerator);
     }
 
+    /** Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once. */
     public static MicroProps applyStatic(MacroProps macros, DecimalQuantity inValue, NumberStringBuilder outString) {
-        // Build an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         microsToString(micros, inValue, outString);
@@ -55,8 +55,8 @@ class NumberFormatterImpl {
 
     final MicroPropsGenerator microPropsGenerator;
 
-    private NumberFormatterImpl(MicroPropsGenerator microsGenerator) {
-        this.microPropsGenerator = microsGenerator;
+    private NumberFormatterImpl(MicroPropsGenerator microPropsGenerator) {
+        this.microPropsGenerator = microPropsGenerator;
     }
 
     public MicroProps apply(DecimalQuantity inValue, NumberStringBuilder outString) {
@@ -79,15 +79,14 @@ class NumberFormatterImpl {
      *            If true, the returned MicroPropsGenerator will be thread-safe. If false, the returned value will
      *            <em>not</em> be thread-safe, intended for a single "one-shot" use only. Building the thread-safe
      *            object is more expensive.
-     * @return
      */
     private static MicroPropsGenerator macrosToMicroGenerator(MacroProps macros, boolean safe) {
 
         String innerPattern = null;
         LongNameHandler longNames = null;
-        Rounder defaultRounding = Rounder.unlimited();
+        Rounder defaultRounder = Rounder.unlimited();
         Currency currency = DEFAULT_CURRENCY;
-        UnitWidth unitWidth = null;
+        UnitWidth unitWidth = (macros.unitWidth == null) ? UnitWidth.SHORT : macros.unitWidth;
         boolean perMille = false;
         PluralRules rules = macros.rules;
 
@@ -121,29 +120,27 @@ class NumberFormatterImpl {
             } else {
                 innerPattern = NumberFormat.getPatternForStyle(macros.loc, NumberFormat.CURRENCYSTYLE);
             }
-            defaultRounding = Rounder.currency(CurrencyUsage.STANDARD);
+            defaultRounder = Rounder.currency(CurrencyUsage.STANDARD);
             currency = (Currency) macros.unit;
             micros.useCurrency = true;
-            unitWidth = (macros.unitWidth == null) ? UnitWidth.SHORT : macros.unitWidth;
         } else if (macros.unit instanceof Currency) {
             // Currency long name
             innerPattern = NumberFormat.getPatternForStyle(macros.loc, NumberFormat.NUMBERSTYLE);
-            longNames = LongNameHandler.getCurrencyLongNameModifiers(macros.loc, (Currency) macros.unit);
-            defaultRounding = Rounder.currency(CurrencyUsage.STANDARD);
+            longNames = LongNameHandler.forCurrencyLongNames(macros.loc, (Currency) macros.unit);
+            defaultRounder = Rounder.currency(CurrencyUsage.STANDARD);
             currency = (Currency) macros.unit;
             micros.useCurrency = true;
-            unitWidth = UnitWidth.FULL_NAME;
         } else {
             // MeasureUnit
             innerPattern = NumberFormat.getPatternForStyle(macros.loc, NumberFormat.NUMBERSTYLE);
-            unitWidth = (macros.unitWidth == null) ? UnitWidth.SHORT : macros.unitWidth;
-            longNames = LongNameHandler.getMeasureUnitModifiers(macros.loc, macros.unit, unitWidth);
+            longNames = LongNameHandler.forMeasureUnit(macros.loc, macros.unit, unitWidth);
         }
 
         // Parse the pattern, which is used for grouping and affixes only.
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(innerPattern);
 
         // Symbols
+        // NOTE: C++ has a special class, SymbolsWrapper, in MacroProps.  Java has all the resolution logic here directly.
         if (macros.symbols == null) {
             micros.symbols = DecimalFormatSymbols.getInstance(macros.loc);
         } else if (macros.symbols instanceof DecimalFormatSymbols) {
@@ -173,7 +170,7 @@ class NumberFormatterImpl {
         } else if (macros.notation instanceof CompactNotation) {
             micros.rounding = Rounder.COMPACT_STRATEGY;
         } else {
-            micros.rounding = Rounder.normalizeType(defaultRounding, currency);
+            micros.rounding = Rounder.normalizeType(defaultRounder, currency);
         }
 
         // Grouping strategy
@@ -184,6 +181,13 @@ class NumberFormatterImpl {
             micros.grouping = Grouper.normalizeType(Grouper.min2(), patternInfo);
         } else {
             micros.grouping = Grouper.normalizeType(Grouper.defaults(), patternInfo);
+        }
+
+        // Padding strategy
+        if (macros.padder != null) {
+            micros.padding = macros.padder;
+        } else {
+            micros.padding = Padder.none();
         }
 
         // Inner modifier (scientific notation)
@@ -220,17 +224,10 @@ class NumberFormatterImpl {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
             }
-            chain = longNames.withLocaleData(rules, safe, chain);
+            chain = longNames.withLocaleData(rules, chain);
         } else {
             // No outer modifier required
             micros.modOuter = ConstantAffixModifier.EMPTY;
-        }
-
-        // Padding strategy
-        if (macros.padder != null) {
-            micros.padding = macros.padder;
-        } else {
-            micros.padding = Padder.none();
         }
 
         // Compact notation
@@ -272,7 +269,14 @@ class NumberFormatterImpl {
         int length = writeNumber(micros, quantity, string);
         // NOTE: When range formatting is added, these modifiers can bubble up.
         // For now, apply them all here at once.
-        length += micros.padding.applyModsAndMaybePad(micros, string, 0, length);
+        // Always apply the inner modifier (which is "strong").
+        length += micros.modInner.apply(string, 0, length);
+        if (micros.padding.isValid()) {
+            micros.padding.padAndApply(micros.modMiddle, micros.modOuter, string, 0, length);
+        } else {
+            length += micros.modMiddle.apply(string, 0, length);
+            length += micros.modOuter.apply(string, 0, length);
+        }
     }
 
     private static int writeNumber(MicroProps micros, DecimalQuantity quantity, NumberStringBuilder string) {

@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package newapi.impl;
 
+import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 
 public class Padder {
@@ -71,52 +72,46 @@ public class Padder {
         }
     }
 
-    public int applyModsAndMaybePad(MicroProps micros, NumberStringBuilder string, int leftIndex, int rightIndex) {
-        // Apply modInner (scientific notation) before padding
-        int innerLength = micros.modInner.apply(string, leftIndex, rightIndex);
+    public boolean isValid() {
+        return targetWidth > 0;
+    }
 
-        // No padding; apply the mods and leave.
-        if (targetWidth < 0) {
-            return applyMicroMods(micros, string, leftIndex, rightIndex + innerLength);
-        }
+    public int padAndApply(Modifier mod1, Modifier mod2, NumberStringBuilder string, int leftIndex, int rightIndex) {
+        int modLength = mod1.getCodePointCount() + mod2.getCodePointCount();
+        int requiredPadding = targetWidth - modLength - string.codePointCount();
+        assert leftIndex == 0 && rightIndex == string.length(); // fix the previous line to remove this assertion
 
-        // Estimate the padding width needed.
-        // TODO: Make this more efficient (less copying)
-        // TODO: How to handle when padding is inserted between a currency sign and the number
-        // when currency spacing is in play?
-        NumberStringBuilder backup = new NumberStringBuilder(string);
-        int length = innerLength + applyMicroMods(micros, string, leftIndex, rightIndex + innerLength);
-        int requiredPadding = targetWidth - string.codePointCount();
-
+        int length = 0;
         if (requiredPadding <= 0) {
             // Padding is not required.
+            length += mod1.apply(string, leftIndex, rightIndex);
+            length += mod2.apply(string, leftIndex, rightIndex + length);
             return length;
         }
 
-        length = innerLength;
-        string.copyFrom(backup);
         if (position == PadPosition.AFTER_PREFIX) {
             length += addPaddingHelper(paddingString, requiredPadding, string, leftIndex);
         } else if (position == PadPosition.BEFORE_SUFFIX) {
             length += addPaddingHelper(paddingString, requiredPadding, string, rightIndex + length);
         }
-        length += applyMicroMods(micros, string, leftIndex, rightIndex + length);
+        length += mod1.apply(string, leftIndex, rightIndex + length);
+        length += mod2.apply(string, leftIndex, rightIndex + length);
         if (position == PadPosition.BEFORE_PREFIX) {
-            length = addPaddingHelper(paddingString, requiredPadding, string, leftIndex);
+            length += addPaddingHelper(paddingString, requiredPadding, string, leftIndex);
         } else if (position == PadPosition.AFTER_SUFFIX) {
-            length = addPaddingHelper(paddingString, requiredPadding, string, rightIndex + length);
+            length += addPaddingHelper(paddingString, requiredPadding, string, rightIndex + length);
         }
 
         // The length might not be exactly right due to currency spacing.
         // Make an adjustment if needed.
         while (string.codePointCount() < targetWidth) {
-            int insertIndex;
+            int insertIndex = mod1.getPrefixLength() + mod2.getPrefixLength();
             switch (position) {
             case AFTER_PREFIX:
-                insertIndex = leftIndex + length;
+                insertIndex += leftIndex;
                 break;
             case BEFORE_SUFFIX:
-                insertIndex = rightIndex + length;
+                insertIndex += rightIndex;
                 break;
             default:
                 // Should not happen since currency spacing is always on the inside.
@@ -125,12 +120,6 @@ public class Padder {
             length += string.insert(insertIndex, paddingString, null);
         }
 
-        return length;
-    }
-
-    private static int applyMicroMods(MicroProps micros, NumberStringBuilder string, int leftIndex, int rightIndex) {
-        int length = micros.modMiddle.apply(string, leftIndex, rightIndex);
-        length += micros.modOuter.apply(string, leftIndex, rightIndex + length);
         return length;
     }
 

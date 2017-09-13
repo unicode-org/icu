@@ -144,11 +144,9 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
   @Override
   protected void setBcdToZero() {
     if (usingBytes) {
-      for (int i = 0; i < precision; i++) {
-        bcdBytes[i] = (byte) 0;
-      }
+        bcdBytes = null;
+        usingBytes = false;
     }
-    usingBytes = false;
     bcdLong = 0L;
     scale = 0;
     precision = 0;
@@ -166,7 +164,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
     for (; n != 0; n /= 10, i--) {
       result = (result >>> 4) + (((long) n % 10) << 60);
     }
-    usingBytes = false;
+    assert !usingBytes;
     bcdLong = result >>> (i * 4);
     scale = 0;
     precision = 16 - i;
@@ -181,7 +179,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
       for (; n != 0L; n /= 10L, i++) {
         bcdBytes[i] = (byte) (n % 10);
       }
-      usingBytes = true;
+      assert usingBytes;
       scale = 0;
       precision = i;
     } else {
@@ -191,7 +189,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
         result = (result >>> 4) + ((n % 10) << 60);
       }
       assert i >= 0;
-      usingBytes = false;
+      assert !usingBytes;
       bcdLong = result >>> (i * 4);
       scale = 0;
       precision = 16 - i;
@@ -209,7 +207,6 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
       bcdBytes[i] = temp[1].byteValue();
       n = temp[0];
     }
-    usingBytes = true;
     scale = 0;
     precision = i;
   }
@@ -218,17 +215,11 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
   protected BigDecimal bcdToBigDecimal() {
     if (usingBytes) {
       // Converting to a string here is faster than doing BigInteger/BigDecimal arithmetic.
-      StringBuilder sb = new StringBuilder();
-      if (isNegative()) sb.append('-');
-      assert precision > 0;
-      for (int i = precision - 1; i >= 0; i--) {
-        sb.append(getDigitPos(i));
+      BigDecimal result = new BigDecimal(toNumberString());
+      if (isNegative()) {
+          result = result.negate();
       }
-      if (scale != 0) {
-        sb.append('E');
-        sb.append(scale);
-      }
-      return new BigDecimal(sb.toString());
+      return result;
     } else {
       long tempLong = 0L;
       for (int shift = (precision - 1); shift >= 0; shift--) {
@@ -289,13 +280,15 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
 
   private void ensureCapacity(int capacity) {
     if (capacity == 0) return;
-    if (bcdBytes == null) {
+    int oldCapacity = usingBytes ? bcdBytes.length : 0;
+    if (!usingBytes) {
       bcdBytes = new byte[capacity];
-    } else if (bcdBytes.length < capacity) {
+    } else if (oldCapacity < capacity) {
       byte[] bcd1 = new byte[capacity * 2];
-      System.arraycopy(bcdBytes, 0, bcd1, 0, bcdBytes.length);
+      System.arraycopy(bcdBytes, 0, bcd1, 0, oldCapacity);
       bcdBytes = bcd1;
     }
+    usingBytes = true;
   }
 
   /** Switches the internal storage mechanism between the 64-bit long and the byte array. */
@@ -306,8 +299,8 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
       for (int i = precision - 1; i >= 0; i--) {
         bcdLong <<= 4;
         bcdLong |= bcdBytes[i];
-        bcdBytes[i] = 0;
       }
+      bcdBytes = null;
       usingBytes = false;
     } else {
       // Change from long to bytes
@@ -316,19 +309,18 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
         bcdBytes[i] = (byte) (bcdLong & 0xf);
         bcdLong >>>= 4;
       }
-      usingBytes = true;
+      assert usingBytes;
     }
   }
 
   @Override
   protected void copyBcdFrom(DecimalQuantity _other) {
     DecimalQuantity_DualStorageBCD other = (DecimalQuantity_DualStorageBCD) _other;
+    setBcdToZero();
     if (other.usingBytes) {
-      usingBytes = true;
       ensureCapacity(other.precision);
       System.arraycopy(other.bcdBytes, 0, bcdBytes, 0, other.precision);
     } else {
-      usingBytes = false;
       bcdLong = other.bcdLong;
     }
   }
@@ -387,29 +379,33 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
    * @deprecated This API is ICU internal only.
    */
   @Deprecated
-  public boolean usingBytes() {
+  public boolean isUsingBytes() {
     return usingBytes;
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    if (usingBytes) {
-      for (int i = precision - 1; i >= 0; i--) {
-        sb.append(bcdBytes[i]);
-      }
-    } else {
-      sb.append(Long.toHexString(bcdLong));
-    }
     return String.format(
-        "<DecimalQuantity4 %s:%d:%d:%s %s %s%s%d>",
-        (lOptPos > 1000 ? "max" : String.valueOf(lOptPos)),
+        "<DecimalQuantity %s:%d:%d:%s %s %s>",
+        (lOptPos > 1000 ? "999" : String.valueOf(lOptPos)),
         lReqPos,
         rReqPos,
-        (rOptPos < -1000 ? "min" : String.valueOf(rOptPos)),
+        (rOptPos < -1000 ? "-999" : String.valueOf(rOptPos)),
         (usingBytes ? "bytes" : "long"),
-        sb,
-        "E",
-        scale);
+        toNumberString());
+  }
+
+  public String toNumberString() {
+      StringBuilder sb = new StringBuilder();
+      if (usingBytes) {
+        for (int i = precision - 1; i >= 0; i--) {
+          sb.append(bcdBytes[i]);
+        }
+      } else {
+        sb.append(Long.toHexString(bcdLong));
+      }
+      sb.append("E");
+      sb.append(scale);
+      return sb.toString();
   }
 }

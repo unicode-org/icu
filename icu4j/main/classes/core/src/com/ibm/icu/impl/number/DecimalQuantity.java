@@ -122,36 +122,6 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
    */
   public StandardPlural getStandardPlural(PluralRules rules);
 
-  //  /**
-  //   * @return The number of fraction digits, always in the closed interval [minFrac, maxFrac].
-  //   * @see #setIntegerFractionLength(int, int, int, int)
-  //   */
-  //  public int fractionCount();
-  //
-  //  /**
-  //   * @return The number of integer digits, always in the closed interval [minInt, maxInt].
-  //   * @see #setIntegerFractionLength(int, int, int, int)
-  //   */
-  //  public int integerCount();
-  //
-  //  /**
-  //   * @param index The index of the fraction digit relative to the decimal place, or 1 minus the
-  //   *     digit's power of ten.
-  //   * @return The digit at the specified index. Undefined if index is greater than maxInt or less
-  //   *     than 0.
-  //   * @see #fractionCount()
-  //   */
-  //  public byte getFractionDigit(int index);
-  //
-  //  /**
-  //   * @param index The index of the integer digit relative to the decimal place, or the digit's power
-  //   *     of ten.
-  //   * @return The digit at the specified index. Undefined if index is greater than maxInt or less
-  //   *     than 0.
-  //   * @see #integerCount()
-  //   */
-  //  public byte getIntegerDigit(int index);
-
   /**
    * Gets the digit at the specified magnitude. For example, if the represented number is 12.3,
    * getDigit(-1) returns 3, since 3 is the digit corresponding to 10^-1.
@@ -178,12 +148,22 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
   public int getLowerDisplayMagnitude();
 
   /**
+   * Returns the string in "plain" format (no exponential notation) using ASCII digits.
+   */
+  public String toPlainString();
+
+  /**
    * Like clone, but without the restrictions of the Cloneable interface clone.
    *
    * @return A copy of this instance which can be mutated without affecting this instance.
    */
   public DecimalQuantity createCopy();
 
+  /**
+   * Sets this instance to be equal to another instance.
+   *
+   * @param other The instance to copy from.
+   */
   public void copyFrom(DecimalQuantity other);
 
   /** This method is for internal testing only. */

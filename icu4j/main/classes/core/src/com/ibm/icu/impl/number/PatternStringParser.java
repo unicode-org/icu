@@ -78,10 +78,6 @@ public class PatternStringParser {
         parseToExistingProperties(pattern, properties, PatternStringParser.IGNORE_ROUNDING_NEVER);
     }
 
-    /////////////////////////////////////////////////////
-    /// BEGIN RECURSIVE DESCENT PARSER IMPLEMENTATION ///
-    /////////////////////////////////////////////////////
-
     /**
      * Contains raw information about the parsed decimal format pattern string.
      */
@@ -198,6 +194,10 @@ public class PatternStringParser {
         public long paddingEndpoints = 0;
     }
 
+    /////////////////////////////////////////////////////
+    /// BEGIN RECURSIVE DESCENT PARSER IMPLEMENTATION ///
+    /////////////////////////////////////////////////////
+
     /** An internal class used for tracking the cursor during parsing of a pattern string. */
     private static class ParserState {
         final String pattern;
@@ -266,6 +266,9 @@ public class PatternStringParser {
     private static void consumePadding(ParserState state, ParsedSubpatternInfo result, PadPosition paddingLocation) {
         if (state.peek() != '*') {
             return;
+        }
+        if (result.paddingLocation != null) {
+            throw state.toParseException("Cannot have multiple pad specifiers");
         }
         result.paddingLocation = paddingLocation;
         state.next(); // consume the '*'
@@ -519,7 +522,6 @@ public class PatternStringParser {
         // Note that most data from "negative" is ignored per the specification of DecimalFormat.
 
         ParsedSubpatternInfo positive = patternInfo.positive;
-        ParsedSubpatternInfo negative = patternInfo.negative;
 
         boolean ignoreRounding;
         if (_ignoreRounding == PatternStringParser.IGNORE_ROUNDING_NEVER) {
@@ -627,7 +629,7 @@ public class PatternStringParser {
         String posSuffix = patternInfo.getString(0);
 
         // Padding settings
-        if (positive.paddingEndpoints != 0) {
+        if (positive.paddingLocation != null) {
             // The width of the positive prefix and suffix templates are included in the padding
             int paddingWidth = positive.widthExceptAffixes + AffixUtils.estimateLength(posPrefix)
                     + AffixUtils.estimateLength(posSuffix);
@@ -657,7 +659,7 @@ public class PatternStringParser {
         // negative prefix pattern, to prevent default values from overriding the pattern.
         properties.setPositivePrefixPattern(posPrefix);
         properties.setPositiveSuffixPattern(posSuffix);
-        if (negative != null) {
+        if (patternInfo.negative != null) {
             properties.setNegativePrefixPattern(patternInfo
                     .getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN | AffixPatternProvider.Flags.PREFIX));
             properties.setNegativeSuffixPattern(patternInfo.getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN));

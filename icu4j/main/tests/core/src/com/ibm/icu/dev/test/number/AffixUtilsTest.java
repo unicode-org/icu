@@ -13,7 +13,7 @@ import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
-public class AffixPatternUtilsTest {
+public class AffixUtilsTest {
 
     private static final SymbolProvider DEFAULT_SYMBOL_PROVIDER =
         new SymbolProvider() {
@@ -127,6 +127,9 @@ public class AffixPatternUtilsTest {
 
       String actual = unescapeWithDefaults(input);
       assertEquals("Output on <" + input + ">", output, actual);
+
+      int ulength = AffixUtils.unescapedCodePointCount(input, DEFAULT_SYMBOL_PROVIDER);
+      assertEquals("Unescaped length on <" + input + ">", output.length(), ulength);
     }
   }
 
@@ -221,7 +224,8 @@ public class AffixPatternUtilsTest {
 
   private static String unescapeWithDefaults(String input) {
     NumberStringBuilder nsb = new NumberStringBuilder();
-    AffixUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER);
+    int length = AffixUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER);
+    assertEquals("Return value of unescape", nsb.length(), length);
     return nsb.toString();
   }
 }

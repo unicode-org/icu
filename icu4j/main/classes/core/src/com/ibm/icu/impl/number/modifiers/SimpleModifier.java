@@ -54,6 +54,18 @@ public class SimpleModifier implements Modifier {
     }
 
     @Override
+    public int getCodePointCount() {
+        int count = 0;
+        if (prefixLength > 0) {
+            count += Character.codePointCount(compiledPattern, 2, 2 + prefixLength);
+        }
+        if (suffixLength > 0) {
+            count += Character.codePointCount(compiledPattern, 1 + suffixOffset, 1 + suffixOffset + suffixLength);
+        }
+        return count;
+    }
+
+    @Override
     public boolean isStrong() {
         return strong;
     }

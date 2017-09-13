@@ -364,6 +364,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         return create(KEY_THRESHOLD, threshold);
     }
 
+    /** Non-public method */
     public String toSkeleton() {
         return SkeletonBuilder.macrosToSkeleton(resolve());
     }

@@ -55,8 +55,9 @@ public class PatternStringUtils {
         String nsp = properties.getNegativeSuffixPattern();
 
         // Prefixes
-        if (ppp != null)
+        if (ppp != null) {
             sb.append(ppp);
+        }
         AffixUtils.escape(pp, sb);
         int afterPrefixPos = sb.length();
 
@@ -99,7 +100,7 @@ public class PatternStringUtils {
             digitsStringScale = -roundingInterval.scale();
             // TODO: Check for DoS here?
             String str = roundingInterval.scaleByPowerOfTen(roundingInterval.scale()).toPlainString();
-            if (str.charAt(0) == '\'') {
+            if (str.charAt(0) == '-') {
                 // TODO: Unsupported operation exception or fail silently?
                 digitsString.append(str, 1, str.length());
             } else {
@@ -147,8 +148,9 @@ public class PatternStringUtils {
 
         // Suffixes
         int beforeSuffixPos = sb.length();
-        if (psp != null)
+        if (psp != null) {
             sb.append(psp);
+        }
         AffixUtils.escape(ps, sb);
 
         // Resolve Padding

@@ -270,6 +270,7 @@ public class AffixUtils {
    * @param output The NumberStringBuilder to mutate with the result.
    * @param position The index into the NumberStringBuilder to insert the the string.
    * @param provider An object to generate locale symbols.
+   * @return The length of the string added to affixPattern.
    */
   public static int unescape(
       CharSequence affixPattern,
@@ -289,6 +290,32 @@ public class AffixUtils {
         length += output.insert(position + length, provider.getSymbol(typeOrCp), getFieldForType(typeOrCp));
       } else {
         length += output.insertCodePoint(position + length, typeOrCp, null);
+      }
+    }
+    return length;
+  }
+
+  /**
+   * Sames as {@link #unescape}, but only calculates the code point count.  More efficient than {@link #unescape}
+   * if you only need the length but not the string itself.
+   *
+   * @param affixPattern The original string to be unescaped.
+   * @param provider An object to generate locale symbols.
+   * @return The number of code points in the unescaped string.
+   */
+  public static int unescapedCodePointCount(CharSequence affixPattern, SymbolProvider provider) {
+    int length = 0;
+    long tag = 0L;
+    while (hasNext(tag, affixPattern)) {
+      tag = nextToken(tag, affixPattern);
+      int typeOrCp = getTypeOrCp(tag);
+      if (typeOrCp == TYPE_CURRENCY_OVERFLOW) {
+        length += 1;
+      } else if (typeOrCp < 0) {
+        CharSequence symbol = provider.getSymbol(typeOrCp);
+        length += Character.codePointCount(symbol, 0, symbol.length());
+      } else {
+        length += 1;
       }
     }
     return length;

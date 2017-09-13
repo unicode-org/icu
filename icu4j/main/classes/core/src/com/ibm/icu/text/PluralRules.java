@@ -489,6 +489,8 @@ public class PluralRules implements Serializable {
     }
 
     /**
+     * An interface to FixedDecimal, allowing for other implementations.
+     *
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -526,54 +528,23 @@ public class PluralRules implements Serializable {
     @Deprecated
     public static class FixedDecimal extends Number implements Comparable<FixedDecimal>, IFixedDecimal {
         private static final long serialVersionUID = -4756200506571685661L;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public final double source;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public final int visibleDecimalDigitCount;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public final int visibleDecimalDigitCountWithoutTrailingZeros;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public final long decimalDigits;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public final long decimalDigitsWithoutTrailingZeros;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public final long integerValue;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public final boolean hasIntegerValue;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public final boolean isNegative;
+
+        final double source;
+
+        final int visibleDecimalDigitCount;
+
+        final int visibleDecimalDigitCountWithoutTrailingZeros;
+
+        final long decimalDigits;
+
+        final long decimalDigitsWithoutTrailingZeros;
+
+        final long integerValue;
+
+        final boolean hasIntegerValue;
+
+        final boolean isNegative;
+
         private final int baseFactor;
 
         /**

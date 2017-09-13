@@ -9,17 +9,17 @@ import java.text.ParsePosition;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
-import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
 import newapi.LocalizedNumberFormatter;
-import newapi.NumberPropertyMapper;
+import newapi.NumberFormatter;
 import newapi.impl.Padder.PadPosition;
 
 public class NumberFormatDataDrivenTest {
@@ -556,7 +556,7 @@ public class NumberFormatDataDrivenTest {
                       : PatternStringParser.IGNORE_ROUNDING_NEVER);
           propertiesFromTuple(tuple, properties);
           DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
-          LocalizedNumberFormatter fmt = NumberPropertyMapper.create(properties, symbols).locale(locale);
+          LocalizedNumberFormatter fmt = NumberFormatter.fromDecimalFormat(properties, symbols, null).locale(locale);
           Number number = toNumber(tuple.format);
           String expected = tuple.output;
           String actual = fmt.format(number).toString();

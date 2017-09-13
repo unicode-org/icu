@@ -7,9 +7,9 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
-import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
