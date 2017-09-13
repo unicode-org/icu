@@ -7,8 +7,8 @@
 *******************************************************************************
 -->
 <project name="icu4j" default="jar" basedir="."
-    xmlns:jacoco="antlib:org.jacoco.ant"
-    xmlns:ivy="antlib:org.apache.ivy.ant">
+    xmlns:ivy="antlib:org.apache.ivy.ant"
+    xmlns:jacoco="antlib:org.jacoco.ant">
 
     <property file="build-local.properties"/>
     <property file="build.properties"/>
@@ -207,7 +207,76 @@
     </target>
 
     <target name="init" depends="test-init-junit-dependency"
-        description="Initialize the environment for build and test. May require internet access."/>
+            description="Initialize the environment for build and test. May require internet access."/>
+
+    <target name="_classifytests">
+        <condition property="testaction.run">
+            <isset property="testclass"/>
+       </condition>
+       <condition property="testaction.class">
+            <and>
+                <isset property="testclass"/>
+                <not><isset property="testnames"/></not>
+            </and>
+        </condition>
+        <condition property="testaction.tests">
+            <and>
+                <isset property="testclass"/>
+                <isset property="testnames"/>
+            </and>
+        </condition>
+        <condition property="testaction.error">
+            <and>
+                <not><isset property="testclass"/></not>
+                <isset property="testnames"/>
+            </and>
+        </condition>
+        <condition property="testaction.all">
+            <and>
+                <not><isset property="testclass"/></not>
+                <not><isset property="testnames"/></not>
+            </and>
+        </condition>
+    </target>
+
+    <target name="checkTest" depends="_classifytests, tests, runallTests, noTests" if="testaction.run" description="Run only the specified tests of the specified test class or, if no arguments are given, the standard ICU4J test suite.">
+        <sequential>
+            <delete dir="${junit.out.dir}/@{output}"/>
+            <mkdir dir="${junit.out.dir}/checkTest"/>
+
+            <junit printsummary="yes">
+                <classpath>
+                    <path refid="junit.jars"/>
+                    <path refid="junit.icu.jars"/>
+                </classpath>
+                <test name="${testclass}" todir="${junit.out.dir}/checkTest" outfile="checkTest" methods="${testnames}" if="testaction.tests">
+                    <formatter type="xml"/>
+                </test>
+                <test name="${testclass}" todir="${junit.out.dir}/checkTest" outfile="checkTest" if="testaction.class">
+                    <formatter type="xml"/>
+                </test>
+            </junit>
+
+            <junitreport todir="${junit.out.dir}/checkTest">
+                <fileset dir="${junit.out.dir}/checkTest">
+                    <include name="checkTest.xml"/>
+                </fileset>
+                <report format="frames" todir="${junit.out.dir}/checkTest/html"/>
+            </junitreport>
+
+            <fail message="test failed: @{testdir}" if="@{failure-status}" />
+        </sequential>
+    </target>
+
+     <target name="runallTests" if="testaction.all">
+        <antcall target="allTests"/>
+     </target>
+
+    <target name="allTests" depends="check"/>
+
+    <target name="noTests" if="testaction.error">
+        <echo>Execute JUnit testing using -Dtestclass='class-name' -Dtestnames='test-name1>, test-name2, ...'</echo>
+    </target>
 
     <!-- Junit Targets -->
     <macrodef name="icu-junit">
