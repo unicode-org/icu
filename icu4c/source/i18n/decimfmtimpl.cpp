@@ -521,7 +521,8 @@ static FixedDecimal &initFixedDecimal(
         const VisibleDigits &digits, FixedDecimal &result) {
     result.source = 0.0;
     result.isNegative = digits.isNegative();
-    result.isNanOrInfinity = digits.isNaNOrInfinity();
+    result._isNaN = digits.isNaN();
+    result._isInfinite = digits.isInfinite();
     digits.getFixedDecimal(
             result.source, result.intValue, result.decimalDigits,
             result.decimalDigitsWithoutTrailingZeros,
