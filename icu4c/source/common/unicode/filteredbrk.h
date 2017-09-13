@@ -60,8 +60,8 @@ class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
    * identical behavior.
    * @param status The error code.
    * @return the new builder
-   * @deprecated ICU 60
-   * @see createEmptyInstance
+   * @deprecated ICU 60 use createEmptyInstance instead
+   * @see createEmptyInstance()
    */
   static inline FilteredBreakIteratorBuilder *createInstance(UErrorCode &status) {
     return createEmptyInstance(status);
@@ -107,8 +107,8 @@ class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
    * @param adoptBreakIterator the break iterator to adopt
    * @param status error code
    * @return the new BreakIterator, owned by the caller.
-   * @deprecated ICU 60
-   * @see #wrapBreakIteratorWithFilter
+   * @deprecated ICU 60 use wrapIteratorWithFilter() instead
+   * @see wrapBreakIteratorWithFilter()
    */
   virtual BreakIterator *build(BreakIterator* adoptBreakIterator, UErrorCode& status) = 0;
 
