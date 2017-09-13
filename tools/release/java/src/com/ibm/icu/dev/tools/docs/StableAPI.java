@@ -529,6 +529,7 @@ public class StableAPI {
         static private String simplifyList[] = {
             "[ ]*=[ ]*0[ ]*$", "",      // remove pure virtual - TODO: notify about this difference, separately
             "\\)[ ]*const[ ]*$", ")",  // TODO: notify about this difference, separately - remove const from function type
+            "[ ]*U_NOEXCEPT[ ]*", ""  // remove U_NOEXCEPT (this was fixed in Doxyfile, but fixing here so it is retroactive)
         };
 
         /**
