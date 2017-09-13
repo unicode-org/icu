@@ -36,7 +36,7 @@ public:
      * The source string and the destination buffer must not overlap.
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT and U_EDITS_NO_RESET.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
@@ -48,7 +48,8 @@ public:
      * @param edits     Records edits for index mapping, working with styled text,
      *                  and getting only changes (if any).
      *                  The Edits contents is undefined if any error occurs.
-     *                  This function calls edits->reset() first. edits can be NULL.
+     *                  This function calls edits->reset() first unless
+     *                  options includes U_EDITS_NO_RESET. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
      * @return The length of the result string, if successful.
@@ -71,7 +72,7 @@ public:
      * The source string and the destination buffer must not overlap.
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT and U_EDITS_NO_RESET.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
@@ -83,7 +84,8 @@ public:
      * @param edits     Records edits for index mapping, working with styled text,
      *                  and getting only changes (if any).
      *                  The Edits contents is undefined if any error occurs.
-     *                  This function calls edits->reset() first. edits can be NULL.
+     *                  This function calls edits->reset() first unless
+     *                  options includes U_EDITS_NO_RESET. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
      * @return The length of the result string, if successful.
@@ -112,7 +114,7 @@ public:
      * all others. (This can be modified with options bits.)
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT, U_EDITS_NO_RESET,
      *                  U_TITLECASE_NO_LOWERCASE,
      *                  U_TITLECASE_NO_BREAK_ADJUSTMENT, U_TITLECASE_ADJUST_TO_CASED,
      *                  U_TITLECASE_WHOLE_STRING, U_TITLECASE_SENTENCES.
@@ -132,7 +134,8 @@ public:
      * @param edits     Records edits for index mapping, working with styled text,
      *                  and getting only changes (if any).
      *                  The Edits contents is undefined if any error occurs.
-     *                  This function calls edits->reset() first. edits can be NULL.
+     *                  This function calls edits->reset() first unless
+     *                  options includes U_EDITS_NO_RESET. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
      * @return The length of the result string, if successful.
@@ -161,7 +164,7 @@ public:
      * The result may be longer or shorter than the original.
      * The source string and the destination buffer must not overlap.
      *
-     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT, U_EDITS_NO_RESET,
      *                  U_FOLD_CASE_DEFAULT, U_FOLD_CASE_EXCLUDE_SPECIAL_I.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
@@ -174,7 +177,8 @@ public:
      * @param edits     Records edits for index mapping, working with styled text,
      *                  and getting only changes (if any).
      *                  The Edits contents is undefined if any error occurs.
-     *                  This function calls edits->reset() first. edits can be NULL.
+     *                  This function calls edits->reset() first unless
+     *                  options includes U_EDITS_NO_RESET. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
      * @return The length of the result string, if successful.
@@ -197,7 +201,7 @@ public:
      * The source string and the destination buffer must not overlap.
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT and U_EDITS_NO_RESET.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
@@ -209,7 +213,8 @@ public:
      * @param edits     Records edits for index mapping, working with styled text,
      *                  and getting only changes (if any).
      *                  The Edits contents is undefined if any error occurs.
-     *                  This function calls edits->reset() first. edits can be NULL.
+     *                  This function calls edits->reset() first unless
+     *                  options includes U_EDITS_NO_RESET. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
      * @return The length of the result string, if successful.
@@ -232,7 +237,7 @@ public:
      * The source string and the destination buffer must not overlap.
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT.
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT and U_EDITS_NO_RESET.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
      * @param dest      A buffer for the result string. The result will be NUL-terminated if
@@ -244,7 +249,8 @@ public:
      * @param edits     Records edits for index mapping, working with styled text,
      *                  and getting only changes (if any).
      *                  The Edits contents is undefined if any error occurs.
-     *                  This function calls edits->reset() first. edits can be NULL.
+     *                  This function calls edits->reset() first unless
+     *                  options includes U_EDITS_NO_RESET. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
      * @return The length of the result string, if successful.
@@ -273,7 +279,7 @@ public:
      * all others. (This can be modified with options bits.)
      *
      * @param locale    The locale ID. ("" = root locale, NULL = default locale.)
-     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT, U_EDITS_NO_RESET,
      *                  U_TITLECASE_NO_LOWERCASE,
      *                  U_TITLECASE_NO_BREAK_ADJUSTMENT, U_TITLECASE_ADJUST_TO_CASED,
      *                  U_TITLECASE_WHOLE_STRING, U_TITLECASE_SENTENCES.
@@ -293,7 +299,8 @@ public:
      * @param edits     Records edits for index mapping, working with styled text,
      *                  and getting only changes (if any).
      *                  The Edits contents is undefined if any error occurs.
-     *                  This function calls edits->reset() first. edits can be NULL.
+     *                  This function calls edits->reset() first unless
+     *                  options includes U_EDITS_NO_RESET. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
      * @return The length of the result string, if successful.
@@ -321,7 +328,7 @@ public:
      * The result may be longer or shorter than the original.
      * The source string and the destination buffer must not overlap.
      *
-     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT,
+     * @param options   Options bit set, usually 0. See U_OMIT_UNCHANGED_TEXT, U_EDITS_NO_RESET,
      *                  U_FOLD_CASE_DEFAULT, U_FOLD_CASE_EXCLUDE_SPECIAL_I.
      * @param src       The original string.
      * @param srcLength The length of the original string. If -1, then src must be NUL-terminated.
@@ -334,7 +341,8 @@ public:
      * @param edits     Records edits for index mapping, working with styled text,
      *                  and getting only changes (if any).
      *                  The Edits contents is undefined if any error occurs.
-     *                  This function calls edits->reset() first. edits can be NULL.
+     *                  This function calls edits->reset() first unless
+     *                  options includes U_EDITS_NO_RESET. edits can be NULL.
      * @param errorCode Reference to an in/out error code value
      *                  which must not indicate a failure before the function call.
      * @return The length of the result string, if successful.

@@ -1272,18 +1272,23 @@ void StringCaseTest::TestCaseMapWithEdits() {
             TRUE, errorCode);
 #endif
 
-    edits.reset();
-    length = CaseMap::fold(U_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+    // No explicit nor automatic edits.reset(). Edits should be appended.
+    length = CaseMap::fold(U_OMIT_UNCHANGED_TEXT | U_EDITS_NO_RESET | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
                            u"IßtanBul", 8, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ıssb"), UnicodeString(TRUE, dest, length));
     static const EditChange foldExpectedChanges[] = {
+            // From titlecasing.
+            { FALSE, 1, 1 },
+            { TRUE, 1, 1 },
+            { FALSE, 10, 10 },
+            // From case folding.
             { TRUE, 1, 1 },
             { TRUE, 1, 2 },
             { FALSE, 3, 3 },
             { TRUE, 1, 1 },
             { FALSE, 2, 2 }
     };
-    TestUtility::checkEditsIter(*this, u"foldCase(IßtanBul)",
+    TestUtility::checkEditsIter(*this, u"foldCase(no Edits reset, IßtanBul)",
             edits.getFineIterator(), edits.getFineIterator(),
             foldExpectedChanges, UPRV_LENGTHOF(foldExpectedChanges),
             TRUE, errorCode);
@@ -1348,12 +1353,18 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             TRUE, errorCode);
 #endif
 
-    edits.reset();
-    length = CaseMap::utf8Fold(U_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+    // No explicit nor automatic edits.reset(). Edits should be appended.
+    length = CaseMap::utf8Fold(U_OMIT_UNCHANGED_TEXT | U_EDITS_NO_RESET |
+                                   U_FOLD_CASE_EXCLUDE_SPECIAL_I,
                                u8"IßtanBul", 1 + 2 + 6, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ıssb"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
     static const EditChange foldExpectedChanges[] = {
+            // From titlecasing.
+            { FALSE, 1, 1 },
+            { TRUE, 1, 1 },
+            { FALSE, 10, 10 },
+            // From case folding.
             { TRUE, 1, 2 },
             { TRUE, 2, 2 },
             { FALSE, 3, 3 },

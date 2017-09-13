@@ -22,6 +22,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/casemap.h"
 #include "unicode/edits.h"
+#include "unicode/stringoptions.h"
 #include "unicode/ubrk.h"
 #include "unicode/uloc.h"
 #include "unicode/ustring.h"
