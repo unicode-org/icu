@@ -268,21 +268,18 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         /**
          * Any system zones.
          * @stable ICU 4.8
-         * @provisional This API might change or be removed in a future release.
          */
         ANY,
 
         /**
          * Canonical system zones.
          * @stable ICU 4.8
-         * @provisional This API might change or be removed in a future release.
          */
         CANONICAL,
 
         /**
          * Canonical system zones associated with actual locations.
          * @stable ICU 4.8
-         * @provisional This API might change or be removed in a future release.
          */
         CANONICAL_LOCATION,
     }
