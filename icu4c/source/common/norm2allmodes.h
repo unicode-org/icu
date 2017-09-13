@@ -226,14 +226,14 @@ public:
 private:
     virtual void
     normalize(const UChar *src, const UChar *limit,
-              ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
+              ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
         impl.compose(src, limit, onlyContiguous, TRUE, buffer, errorCode);
     }
     using Normalizer2WithImpl::normalize;  // Avoid warning about hiding base class function.
 
     void
     normalizeUTF8(uint32_t options, StringPiece src, ByteSink &sink,
-                  Edits *edits, UErrorCode &errorCode) const override {
+                  Edits *edits, UErrorCode &errorCode) const U_OVERRIDE {
         if (U_FAILURE(errorCode)) {
             return;
         }
@@ -249,12 +249,12 @@ private:
     virtual void
     normalizeAndAppend(const UChar *src, const UChar *limit, UBool doNormalize,
                        UnicodeString &safeMiddle,
-                       ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
+                       ReorderingBuffer &buffer, UErrorCode &errorCode) const U_OVERRIDE {
         impl.composeAndAppend(src, limit, doNormalize, onlyContiguous, safeMiddle, buffer, errorCode);
     }
 
     virtual UBool
-    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const override {
+    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const U_OVERRIDE {
         if(U_FAILURE(errorCode)) {
             return FALSE;
         }
@@ -271,7 +271,7 @@ private:
         return impl.compose(sArray, sArray+s.length(), onlyContiguous, FALSE, buffer, errorCode);
     }
     virtual UBool
-    isNormalizedUTF8(StringPiece sp, UErrorCode &errorCode) const override {
+    isNormalizedUTF8(StringPiece sp, UErrorCode &errorCode) const U_OVERRIDE {
         if(U_FAILURE(errorCode)) {
             return FALSE;
         }
@@ -279,7 +279,7 @@ private:
         return impl.composeUTF8(0, onlyContiguous, s, s + sp.length(), nullptr, nullptr, errorCode);
     }
     virtual UNormalizationCheckResult
-    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const override {
+    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const U_OVERRIDE {
         if(U_FAILURE(errorCode)) {
             return UNORM_MAYBE;
         }
@@ -293,20 +293,20 @@ private:
         return qcResult;
     }
     virtual const UChar *
-    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &) const override {
+    spanQuickCheckYes(const UChar *src, const UChar *limit, UErrorCode &) const U_OVERRIDE {
         return impl.composeQuickCheck(src, limit, onlyContiguous, NULL);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
-    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const override {
+    virtual UNormalizationCheckResult getQuickCheck(UChar32 c) const U_OVERRIDE {
         return impl.getCompQuickCheck(impl.getNorm16(c));
     }
-    virtual UBool hasBoundaryBefore(UChar32 c) const override {
+    virtual UBool hasBoundaryBefore(UChar32 c) const U_OVERRIDE {
         return impl.hasCompBoundaryBefore(c);
     }
-    virtual UBool hasBoundaryAfter(UChar32 c) const override {
+    virtual UBool hasBoundaryAfter(UChar32 c) const U_OVERRIDE {
         return impl.hasCompBoundaryAfter(c, onlyContiguous);
     }
-    virtual UBool isInert(UChar32 c) const override {
+    virtual UBool isInert(UChar32 c) const U_OVERRIDE {
         return impl.isCompInert(c, onlyContiguous);
     }
 
