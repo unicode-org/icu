@@ -5238,6 +5238,13 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13310() {
+        assertEquals("Should not throw an assertion error",
+                "10000000.76E0",
+                new DecimalFormat("000000000.0#E0").format(10000000.76d));
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);
