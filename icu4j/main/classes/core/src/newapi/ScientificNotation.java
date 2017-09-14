@@ -58,25 +58,39 @@ public class ScientificNotation extends Notation implements Cloneable {
 
     /* package-private */ MicroPropsGenerator withLocaleData(DecimalFormatSymbols symbols, boolean build,
             MicroPropsGenerator parent) {
-        return new MurkyScientificHandler(symbols, build, parent);
+        return new ScientificHandler(this, symbols, build, parent);
     }
 
-    private class MurkyScientificHandler implements MicroPropsGenerator, MultiplierProducer, Modifier {
+    // NOTE: The object lifecycle of ScientificModifier and ScientificHandler differ greatly in Java and C++.
+    //
+    // During formatting, we need to provide an object with state (the exponent) as the inner modifier.
+    //
+    // In Java, where the priority is put on reducing object creations, the unsafe code path re-uses the
+    // ScientificHandler as a ScientificModifier, and the safe code path pre-computes 25 ScientificModifier
+    // instances. This scheme reduces the number of object creations by 1 in both safe and unsafe.
+    //
+    // In C++, MicroProps provides a pre-allocated ScientificModifier, and ScientificHandler simply populates
+    // the state (the exponent) into that ScientificModifier. There is no difference between safe and unsafe.
 
+    private static class ScientificHandler implements MicroPropsGenerator, MultiplierProducer, Modifier {
+
+        final ScientificNotation notation;
         final DecimalFormatSymbols symbols;
-        final ImmutableScientificModifier[] precomputedMods;
+        final ScientificModifier[] precomputedMods;
         final MicroPropsGenerator parent;
         /* unsafe */ int exponent;
 
-        private MurkyScientificHandler(DecimalFormatSymbols symbols, boolean safe, MicroPropsGenerator parent) {
+        private ScientificHandler(ScientificNotation notation, DecimalFormatSymbols symbols, boolean safe,
+                MicroPropsGenerator parent) {
+            this.notation = notation;
             this.symbols = symbols;
             this.parent = parent;
 
             if (safe) {
                 // Pre-build the modifiers for exponents -12 through 12
-                precomputedMods = new ImmutableScientificModifier[25];
+                precomputedMods = new ScientificModifier[25];
                 for (int i = -12; i <= 12; i++) {
-                    precomputedMods[i + 12] = new ImmutableScientificModifier(i);
+                    precomputedMods[i + 12] = new ScientificModifier(i, this);
                 }
             } else {
                 precomputedMods = null;
@@ -91,9 +105,9 @@ public class ScientificNotation extends Notation implements Cloneable {
             // Treat zero as if it had magnitude 0
             int exponent;
             if (quantity.isZero()) {
-                if (requireMinInt && micros.rounding instanceof SignificantRounderImpl) {
+                if (notation.requireMinInt && micros.rounding instanceof SignificantRounderImpl) {
                     // Show "00.000E0" on pattern "00.000E0"
-                    ((SignificantRounderImpl) micros.rounding).apply(quantity, engineeringInterval);
+                    ((SignificantRounderImpl) micros.rounding).apply(quantity, notation.engineeringInterval);
                     exponent = 0;
                 } else {
                     micros.rounding.apply(quantity);
@@ -109,7 +123,7 @@ public class ScientificNotation extends Notation implements Cloneable {
                 micros.modInner = precomputedMods[exponent + 12];
             } else if (precomputedMods != null) {
                 // Safe code path B
-                micros.modInner = new ImmutableScientificModifier(exponent);
+                micros.modInner = new ScientificModifier(exponent, this);
             } else {
                 // Unsafe code path: mutates the object and re-uses it as a Modifier!
                 this.exponent = exponent;
@@ -124,9 +138,9 @@ public class ScientificNotation extends Notation implements Cloneable {
 
         @Override
         public int getMultiplier(int magnitude) {
-            int interval = engineeringInterval;
+            int interval = notation.engineeringInterval;
             int digitsShown;
-            if (requireMinInt) {
+            if (notation.requireMinInt) {
                 // For patterns like "000.00E0" and ".00E0"
                 digitsShown = interval;
             } else if (interval <= 1) {
@@ -141,7 +155,7 @@ public class ScientificNotation extends Notation implements Cloneable {
 
         @Override
         public int getPrefixLength() {
-            // FIXME: Localized exponent separator location.
+            // TODO: Localized exponent separator location.
             return 0;
         }
 
@@ -153,6 +167,7 @@ public class ScientificNotation extends Notation implements Cloneable {
 
         @Override
         public boolean isStrong() {
+            // Scientific is always strong
             return true;
         }
 
@@ -166,49 +181,52 @@ public class ScientificNotation extends Notation implements Cloneable {
             int i = rightIndex;
             // Append the exponent separator and sign
             i += output.insert(i, symbols.getExponentSeparator(), NumberFormat.Field.EXPONENT_SYMBOL);
-            if (exponent < 0 && exponentSignDisplay != SignDisplay.NEVER) {
+            if (exponent < 0 && notation.exponentSignDisplay != SignDisplay.NEVER) {
                 i += output.insert(i, symbols.getMinusSignString(), NumberFormat.Field.EXPONENT_SIGN);
-            } else if (exponentSignDisplay == SignDisplay.ALWAYS) {
+            } else if (notation.exponentSignDisplay == SignDisplay.ALWAYS) {
                 i += output.insert(i, symbols.getPlusSignString(), NumberFormat.Field.EXPONENT_SIGN);
             }
             // Append the exponent digits (using a simple inline algorithm)
             int disp = Math.abs(exponent);
-            for (int j = 0; j < minExponentDigits || disp > 0; j++, disp /= 10) {
+            for (int j = 0; j < notation.minExponentDigits || disp > 0; j++, disp /= 10) {
                 int d = disp % 10;
                 String digitString = symbols.getDigitStringsLocal()[d];
                 i += output.insert(i - j, digitString, NumberFormat.Field.EXPONENT);
             }
             return i - rightIndex;
         }
+    }
 
-        private class ImmutableScientificModifier implements Modifier {
-            final int exponent;
+    private static class ScientificModifier implements Modifier {
+        final int exponent;
+        final ScientificHandler handler;
 
-            ImmutableScientificModifier(int exponent) {
-                this.exponent = exponent;
-            }
+        ScientificModifier(int exponent, ScientificHandler handler) {
+            this.exponent = exponent;
+            this.handler = handler;
+        }
 
-            @Override
-            public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
-                return doApply(exponent, output, rightIndex);
-            }
+        @Override
+        public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
+            return handler.doApply(exponent, output, rightIndex);
+        }
 
-            @Override
-            public int getPrefixLength() {
-                // FIXME: Localized exponent separator location.
-                return 0;
-            }
+        @Override
+        public int getPrefixLength() {
+            // TODO: Localized exponent separator location.
+            return 0;
+        }
 
-            @Override
-            public int getCodePointCount() {
-                // This method is not used for strong modifiers.
-                throw new AssertionError();
-            }
+        @Override
+        public int getCodePointCount() {
+            // This method is not used for strong modifiers.
+            throw new AssertionError();
+        }
 
-            @Override
-            public boolean isStrong() {
-                return true;
-            }
+        @Override
+        public boolean isStrong() {
+            // Scientific is always strong
+            return true;
         }
     }
 }
