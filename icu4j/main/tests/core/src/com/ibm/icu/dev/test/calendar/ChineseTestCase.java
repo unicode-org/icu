@@ -9,12 +9,8 @@
 package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.util.Calendar;
 
-@RunWith(JUnit4.class)
 public class ChineseTestCase extends TestCase {
 
     /**
