@@ -27,7 +27,6 @@
 #include "unicode/utypes.h"
 #include "unicode/utf.h"
 #include "unicode/utf8.h"
-#include "unicode/utf_old.h"
 #include "uassert.h"
 
 /*
@@ -93,7 +92,10 @@ utf8_minLegal[4]={ 0, 0x80, 0x800, 0x10000 };
 
 static const UChar32
 utf8_errorValue[6]={
-    UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_2, UTF_ERROR_VALUE, 0x10ffff,
+    // Same values as UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_2, UTF_ERROR_VALUE,
+    // but without relying on the obsolete unicode/utf_old.h.
+    0x15, 0x9f, 0xffff,
+    0x10ffff,
     0x3ffffff, 0x7fffffff
 };
 
@@ -232,7 +234,7 @@ utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool 
             s+=i;
             offset=0;
             c=utf8_errorValue[length-1];
-            UTF8_APPEND_CHAR_UNSAFE(s, offset, c);
+            U8_APPEND_UNSAFE(s, offset, c);
             i=i+offset;
         }
     }

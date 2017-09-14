@@ -17,12 +17,6 @@
 #include "unicode/fmtable.h"
 #include "unicode/testlog.h"
 
-
-#if U_NO_DEFAULT_INCLUDE_UTF_HEADERS
-/* deprecated  - make tests pass with U_NO_DEFAULT_INCLUDE_UTF_HEADERS */
-#include "unicode/utf_old.h"
-#endif
-
 U_NAMESPACE_USE
 
 #if U_PLATFORM == U_PF_OS390

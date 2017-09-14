@@ -37,6 +37,7 @@
 #include "unicode/uniset.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
+#include "unicode/utf16.h"
 #include "convtest.h"
 #include "cmemory.h"
 #include "unicode/tstdtmod.h"

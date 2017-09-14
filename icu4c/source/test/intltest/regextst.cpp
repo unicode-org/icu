@@ -38,7 +38,7 @@
 #include "unicode/usetiter.h"
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
-
+#include "unicode/utf16.h"
 #include "regextst.h"
 #include "regexcmp.h"
 #include "uvector.h"

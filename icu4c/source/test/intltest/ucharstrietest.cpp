@@ -23,6 +23,7 @@
 #include "unicode/ucharstriebuilder.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
+#include "unicode/utf16.h"
 #include "intltest.h"
 #include "cmemory.h"
 

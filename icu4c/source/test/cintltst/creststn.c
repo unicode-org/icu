@@ -23,6 +23,8 @@
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "string.h"
 #include "cmemory.h"
 #include "cstring.h"

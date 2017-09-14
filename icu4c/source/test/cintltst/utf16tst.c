@@ -16,14 +16,27 @@
 */
 
 #include "unicode/utypes.h"
-#include "unicode/utf16.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
+#include "unicode/utf_old.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "cintltst.h"
 #include <stdio.h>
 
-static void printUChars(const UChar *uchars);
+// Obsolete macro from obsolete unicode/utf_old.h, for some old test data.
+#ifndef UTF_ERROR_VALUE
+#   define UTF_ERROR_VALUE 0xffff
+#endif
+
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+static void printUChars(const UChar *uchars) {
+    int16_t i=0;
+    for(i=0; i<u_strlen(uchars); i++) {
+        printf("%x ", *(uchars+i));
+    }
+}
+#endif
 
 static void TestCodeUnitValues(void);
 static void TestCharLength(void);
@@ -62,17 +75,29 @@ static void TestCodeUnitValues()
         UChar c=codeunit[i];
         log_verbose("Testing code unit value of %x\n", c);
         if(i<4){
-            if(!UTF16_IS_SINGLE(c) || UTF16_IS_LEAD(c) || UTF16_IS_TRAIL(c) || !U16_IS_SINGLE(c) || U16_IS_LEAD(c) || U16_IS_TRAIL(c)){
+            if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                    !UTF16_IS_SINGLE(c) || UTF16_IS_LEAD(c) || UTF16_IS_TRAIL(c) ||
+#endif
+                    !U16_IS_SINGLE(c) || U16_IS_LEAD(c) || U16_IS_TRAIL(c)) {
                 log_err("ERROR: %x is a single character\n", c);
             }
         }
         if(i >= 4 && i< 8){
-            if(!UTF16_IS_LEAD(c) || UTF16_IS_SINGLE(c) || UTF16_IS_TRAIL(c) || !U16_IS_LEAD(c) || U16_IS_SINGLE(c) || U16_IS_TRAIL(c)){
+            if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                    !UTF16_IS_LEAD(c) || UTF16_IS_SINGLE(c) || UTF16_IS_TRAIL(c) ||
+#endif
+                    !U16_IS_LEAD(c) || U16_IS_SINGLE(c) || U16_IS_TRAIL(c)){
                 log_err("ERROR: %x is a first surrogate\n", c);
             }
         }
         if(i >= 8 && i< 12){
-            if(!UTF16_IS_TRAIL(c) || UTF16_IS_SINGLE(c) || UTF16_IS_LEAD(c) || !U16_IS_TRAIL(c) || U16_IS_SINGLE(c) || U16_IS_LEAD(c)){
+            if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                    !UTF16_IS_TRAIL(c) || UTF16_IS_SINGLE(c) || UTF16_IS_LEAD(c) ||
+#endif
+                    !U16_IS_TRAIL(c) || U16_IS_SINGLE(c) || U16_IS_LEAD(c)) {
                 log_err("ERROR: %x is a second surrogate\n", c);
             }
         }
@@ -95,18 +120,26 @@ static void TestCharLength()
     };
     
     int16_t i;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     UBool multiple;
+#endif
     for(i=0; i<UPRV_LENGTHOF(codepoint); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
-        if(UTF16_CHAR_LENGTH(c) != (uint16_t)codepoint[i] || U16_LENGTH(c) != (uint16_t)codepoint[i]){
-              log_err("The no: of code units for %lx:- Expected: %d Got: %d\n", c, codepoint[i], UTF16_CHAR_LENGTH(c));
+        if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                UTF16_CHAR_LENGTH(c) != (uint16_t)codepoint[i] ||
+#endif
+                U16_LENGTH(c) != (uint16_t)codepoint[i]) {
+          log_err("The no: of code units for %lx:- Expected: %d Got: %d\n", c, codepoint[i], U16_LENGTH(c));
         }else{
-              log_verbose("The no: of code units for %lx is %d\n",c, UTF16_CHAR_LENGTH(c) ); 
+              log_verbose("The no: of code units for %lx is %d\n",c, U16_LENGTH(c));
         }
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
         multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
         if(UTF16_NEED_MULTIPLE_UCHAR(c) != multiple){
               log_err("ERROR: UTF16_NEED_MULTIPLE_UCHAR failed for %lx\n", c);
         }
+#endif
     }
 }
 
@@ -151,23 +184,24 @@ static void TestGetChar()
     uint16_t offset=0;
     for(offset=0; offset<UPRV_LENGTHOF(input); offset++) {
         if(0<offset && offset<UPRV_LENGTHOF(input)-1){
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
             UTF16_GET_CHAR_UNSAFE(input, offset, c);
             if(c != result[i]){
                 log_err("ERROR: UTF16_GET_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
             }
-
+#endif
             U16_GET_UNSAFE(input, offset, c);
             if(c != result[i]){
                 log_err("ERROR: U16_GET_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
             }
         }
-
-        UTF16_GET_CHAR_SAFE(input, 0, offset, UPRV_LENGTHOF(input), c, FALSE);
         expected=result[i+1];
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+        UTF16_GET_CHAR_SAFE(input, 0, offset, UPRV_LENGTHOF(input), c, FALSE);
         if(c != expected) {
             log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
+#endif
         U16_GET(input, 0, offset, UPRV_LENGTHOF(input), c);
         if(c != expected) {
             log_err("ERROR: U16_GET failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
@@ -178,14 +212,14 @@ static void TestGetChar()
         if(c != expected) {
             log_err("ERROR: U16_GET_OR_FFFD failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
         UTF16_GET_CHAR_SAFE(input, 0, offset, UPRV_LENGTHOF(input), c, TRUE);
         if(c != result[i+2]){
             log_err("ERROR: UTF16_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
         }
+#endif
         i=(uint16_t)(i+3);
     }
-
 }
 
 static void TestNextPrevChar(){
@@ -228,6 +262,7 @@ static void TestNextPrevChar(){
     uint16_t offset=0, setOffset=0;
     for(offset=0; offset<UPRV_LENGTHOF(input); offset++){
          setOffset=offset;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
          UTF16_NEXT_CHAR_UNSAFE(input, setOffset, c);
          if(setOffset != movedOffset[i]){
              log_err("ERROR: UTF16_NEXT_CHAR_UNSAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
@@ -236,7 +271,7 @@ static void TestNextPrevChar(){
          if(c != result[i]){
              log_err("ERROR: UTF16_NEXT_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
          }
-
+#endif
          setOffset=offset;
          U16_NEXT_UNSAFE(input, setOffset, c);
          if(setOffset != movedOffset[i]){
@@ -246,18 +281,18 @@ static void TestNextPrevChar(){
          if(c != result[i]){
              log_err("ERROR: U16_NEXT_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
          }
-
+        expected=result[i+1];
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
          setOffset=offset;
          UTF16_NEXT_CHAR_SAFE(input, setOffset, UPRV_LENGTHOF(input), c, FALSE);
          if(setOffset != movedOffset[i+1]){
              log_err("ERROR: UTF16_NEXT_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+1], setOffset);
          }
-        expected=result[i+1];
         if(c != expected) {
             log_err("ERROR: UTF16_NEXT_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
+#endif
          setOffset=offset;
          U16_NEXT(input, setOffset, UPRV_LENGTHOF(input), c);
          if(setOffset != movedOffset[i+1]){
@@ -278,7 +313,7 @@ static void TestNextPrevChar(){
         if(c != expected){
             log_err("ERROR: U16_NEXT_OR_FFFD failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
          setOffset=offset;
          UTF16_NEXT_CHAR_SAFE(input, setOffset, UPRV_LENGTHOF(input), c, TRUE);
          if(setOffset != movedOffset[i+1]){
@@ -288,12 +323,13 @@ static void TestNextPrevChar(){
          if(c != result[i+2]){
              log_err("ERROR: UTF16_NEXT_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
          }
-
+#endif
          i=(uint16_t)(i+6);
     }
     i=0;
     for(offset=(uint16_t)UPRV_LENGTHOF(input); offset > 0; --offset){
          setOffset=offset;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
          UTF16_PREV_CHAR_UNSAFE(input, setOffset, c);
          if(setOffset != movedOffset[i+3]){
              log_err("ERROR: UTF16_PREV_CHAR_UNSAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
@@ -302,7 +338,7 @@ static void TestNextPrevChar(){
          if(c != result[i+3]){
              log_err("ERROR: UTF16_PREV_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+3], c);
          }
-
+#endif
          setOffset=offset;
          U16_PREV_UNSAFE(input, setOffset, c);
          if(setOffset != movedOffset[i+3]){
@@ -312,7 +348,7 @@ static void TestNextPrevChar(){
          if(c != result[i+3]){
              log_err("ERROR: U16_PREV_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+3], c);
          }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
          setOffset=offset;
          UTF16_PREV_CHAR_SAFE(input, 0, setOffset, c, FALSE);
          if(setOffset != movedOffset[i+4]){
@@ -322,7 +358,7 @@ static void TestNextPrevChar(){
          if(c != result[i+4]){
              log_err("ERROR: UTF16_PREV_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+4], c);
          }
-
+#endif
          setOffset=offset;
          U16_PREV(input, 0, setOffset, c);
          if(setOffset != movedOffset[i+4]){
@@ -344,7 +380,7 @@ static void TestNextPrevChar(){
         if(c != expected) {
             log_err("ERROR: U16_PREV_OR_FFFD failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
          setOffset=offset;
          UTF16_PREV_CHAR_SAFE(input, 0,  setOffset, c, TRUE);
          if(setOffset != movedOffset[i+5]){
@@ -354,7 +390,7 @@ static void TestNextPrevChar(){
          if(c != result[i+5]){
              log_err("ERROR: UTF16_PREV_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+5], c);
          }
-
+#endif
          i=(uint16_t)(i+6);
     }
 
@@ -456,6 +492,7 @@ static void TestFwdBack(){
 
     uint16_t offunsafe=0, offsafe=0;
     uint16_t i=0;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     while(offunsafe < UPRV_LENGTHOF(input)){
         UTF16_FWD_1_UNSAFE(input, offunsafe);
         if(offunsafe != fwd_unsafe[i]){
@@ -463,7 +500,7 @@ static void TestFwdBack(){
         }
         i++;
     }
-
+#endif
     offunsafe=0, offsafe=0;
     i=0;
     while(offunsafe < UPRV_LENGTHOF(input)){
@@ -473,7 +510,8 @@ static void TestFwdBack(){
         }
         i++;
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+    offunsafe=0, offsafe=0;
     i=0;
     while(offsafe < UPRV_LENGTHOF(input)){
         UTF16_FWD_1_SAFE(input, offsafe, UPRV_LENGTHOF(input));
@@ -482,7 +520,8 @@ static void TestFwdBack(){
         }
         i++;
     }
-
+#endif
+    offunsafe=0, offsafe=0;
     i=0;
     while(offsafe < UPRV_LENGTHOF(input)){
         U16_FWD_1(input, offsafe, UPRV_LENGTHOF(input));
@@ -491,7 +530,7 @@ static void TestFwdBack(){
         }
         i++;
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     offunsafe=UPRV_LENGTHOF(input);
     offsafe=UPRV_LENGTHOF(input);
     i=0;
@@ -502,7 +541,7 @@ static void TestFwdBack(){
         }
         i++;
     }
-
+#endif
     offunsafe=UPRV_LENGTHOF(input);
     offsafe=UPRV_LENGTHOF(input);
     i=0;
@@ -513,7 +552,9 @@ static void TestFwdBack(){
         }
         i++;
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+    offunsafe=UPRV_LENGTHOF(input);
+    offsafe=UPRV_LENGTHOF(input);
     i=0;
     while(offsafe > 0){
         UTF16_BACK_1_SAFE(input,0,  offsafe);
@@ -522,7 +563,9 @@ static void TestFwdBack(){
         }
         i++;
     }
-
+#endif
+    offunsafe=UPRV_LENGTHOF(input);
+    offsafe=UPRV_LENGTHOF(input);
     i=0;
     while(offsafe > 0){
         U16_BACK_1(input,0,  offsafe);
@@ -534,13 +577,14 @@ static void TestFwdBack(){
 
     offunsafe=0;
     offsafe=0;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     for(i=0; i<UPRV_LENGTHOF(Nvalue)-2; i++){  /*didn't want it to fail(we assume 0<i<length)*/
         UTF16_FWD_N_UNSAFE(input, offunsafe, Nvalue[i]);
         if(offunsafe != fwd_N_unsafe[i]){
             log_err("ERROR: Forward_N_unsafe offset expected:%d, Got:%d\n", fwd_N_unsafe[i], offunsafe);
         }
     }
-
+#endif
     offunsafe=0;
     for(i=0; i<UPRV_LENGTHOF(Nvalue)-2; i++){  /*didn't want it to fail(we assume 0<i<length)*/
         U16_FWD_N_UNSAFE(input, offunsafe, Nvalue[i]);
@@ -548,25 +592,23 @@ static void TestFwdBack(){
             log_err("ERROR: U16_FWD_N_UNSAFE offset expected:%d, Got:%d\n", fwd_N_unsafe[i], offunsafe);
         }
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     offsafe=0;
     for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         UTF16_FWD_N_SAFE(input, offsafe, UPRV_LENGTHOF(input), Nvalue[i]);
         if(offsafe != fwd_N_safe[i]){
             log_err("ERROR: Forward_N_safe offset expected:%d, Got:%d\n", fwd_N_safe[i], offsafe);
         }
-    
     }
-
+#endif
     offsafe=0;
     for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         U16_FWD_N(input, offsafe, UPRV_LENGTHOF(input), Nvalue[i]);
         if(offsafe != fwd_N_safe[i]){
             log_err("ERROR: U16_FWD_N offset expected:%d, Got:%d\n", fwd_N_safe[i], offsafe);
         }
-    
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     offunsafe=UPRV_LENGTHOF(input);
     for(i=0; i<UPRV_LENGTHOF(Nvalue)-2; i++){
         UTF16_BACK_N_UNSAFE(input, offunsafe, Nvalue[i]);
@@ -574,7 +616,7 @@ static void TestFwdBack(){
             log_err("ERROR: backward_N_unsafe offset expected:%d, Got:%d\n", back_N_unsafe[i], offunsafe);
         }
     }
-
+#endif
     offunsafe=UPRV_LENGTHOF(input);
     for(i=0; i<UPRV_LENGTHOF(Nvalue)-2; i++){
         U16_BACK_N_UNSAFE(input, offunsafe, Nvalue[i]);
@@ -582,7 +624,7 @@ static void TestFwdBack(){
             log_err("ERROR: U16_BACK_N_UNSAFE offset expected:%d, Got:%d\n", back_N_unsafe[i], offunsafe);
         }
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     offsafe=UPRV_LENGTHOF(input);
     for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         UTF16_BACK_N_SAFE(input, 0, offsafe, Nvalue[i]);
@@ -590,7 +632,7 @@ static void TestFwdBack(){
             log_err("ERROR: backward_N_safe offset expected:%d, Got:%d\n", back_N_safe[i], offsafe);
         }
     }
-
+#endif
     offsafe=UPRV_LENGTHOF(input);
     for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         U16_BACK_N(input, 0, offsafe, Nvalue[i]);
@@ -610,24 +652,25 @@ static void TestSetChar(){
     uint16_t i=0;
     uint16_t offset=0, setOffset=0;
     for(offset=0; offset<UPRV_LENGTHOF(input); offset++){
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
          setOffset=offset;
          UTF16_SET_CHAR_START_UNSAFE(input, setOffset);
          if(setOffset != start_unsafe[i]){
              log_err("ERROR: UTF16_SET_CHAR_START_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, start_unsafe[i], setOffset);
          }
-
+#endif
          setOffset=offset;
          U16_SET_CP_START_UNSAFE(input, setOffset);
          if(setOffset != start_unsafe[i]){
              log_err("ERROR: U16_SET_CHAR_START_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, start_unsafe[i], setOffset);
          }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
          setOffset=offset;
          UTF16_SET_CHAR_START_SAFE(input, 0, setOffset);
          if(setOffset != start_safe[i]){
              log_err("ERROR: UTF16_SET_CHAR_START_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, start_safe[i], setOffset);
          }
-
+#endif
          setOffset=offset;
          U16_SET_CP_START(input, 0, setOffset);
          if(setOffset != start_safe[i]){
@@ -635,12 +678,13 @@ static void TestSetChar(){
          }
 
          if (offset > 0) {
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
              setOffset=offset;
              UTF16_SET_CHAR_LIMIT_UNSAFE(input, setOffset);
              if(setOffset != limit_unsafe[i]){
                  log_err("ERROR: UTF16_SET_CHAR_LIMIT_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, limit_unsafe[i], setOffset);
              }
-
+#endif
              setOffset=offset;
              U16_SET_CP_LIMIT_UNSAFE(input, setOffset);
              if(setOffset != limit_unsafe[i]){
@@ -659,6 +703,7 @@ static void TestSetChar(){
 }
 
 static void TestAppendChar(){
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     static UChar s[5]={0x0061, 0x0062, 0x0063, 0x0064, 0x0000};
     static uint32_t test[]={
      /*append-position(unsafe),  CHAR to be appended  */
@@ -754,7 +799,7 @@ static void TestAppendChar(){
         count++;
     }  
     free(str);
-
+#endif
 }
 
 static void TestAppend() {
@@ -822,27 +867,28 @@ static void TestSurrogate(){
     static UChar32 s[] = {0x10000, 0x10ffff, 0x50000, 0x100000, 0x1abcd};
     int i = 0;
     while (i < 5) {
-        UChar first  = UTF_FIRST_SURROGATE(s[i]);
-        UChar second = UTF_SECOND_SURROGATE(s[i]);
+        UChar first  = U16_LEAD(s[i]);
+        UChar second = U16_TRAIL(s[i]);
         /* algorithm from the Unicode consortium */
         UChar firstresult  = (UChar)(((s[i] - 0x10000) / 0x400) + 0xD800);
         UChar secondresult = (UChar)(((s[i] - 0x10000) % 0x400) + 0xDC00);
 
-        if (first != UTF16_LEAD(s[i]) || first != U16_LEAD(s[i]) || first != firstresult) {
+        if (
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                first != UTF16_LEAD(s[i]) || first != UTF_FIRST_SURROGATE(s[i]) ||
+#endif
+                first != firstresult) {
             log_err("Failure in first surrogate in 0x%x expected to be 0x%x\n",
                     s[i], firstresult);
         }
-        if (second != UTF16_TRAIL(s[i]) || second != U16_TRAIL(s[i]) || second != secondresult) {
+        if (
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                second != UTF16_TRAIL(s[i]) || second != UTF_SECOND_SURROGATE(s[i]) ||
+#endif
+                second != secondresult) {
             log_err("Failure in second surrogate in 0x%x expected to be 0x%x\n",
                     s[i], secondresult);
         }
         i ++;
-    }
-}
-
-static void printUChars(const UChar *uchars){
-    int16_t i=0;
-    for(i=0; i<u_strlen(uchars); i++){
-        printf("%x ", *(uchars+i));
     }
 }

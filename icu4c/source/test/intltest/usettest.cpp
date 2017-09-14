@@ -23,6 +23,8 @@
 #include "unicode/ustring.h"
 #include "unicode/parsepos.h"
 #include "unicode/symtable.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "unicode/uversion.h"
 #include "cmemory.h"
 #include "hash.h"
