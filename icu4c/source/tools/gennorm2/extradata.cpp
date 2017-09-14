@@ -23,7 +23,7 @@
 
 U_NAMESPACE_BEGIN
 
-ExtraData::ExtraData(Norms &n, UBool fast) :
+ExtraData::ExtraData(Norms & n, UBool fast) :
         Norms::Enumerator(n),
         yesYesCompositions(1000, (UChar32)0xffff, 2),  // 0=inert, 1=Jamo L, 2=start of compositions
         yesNoMappingsAndCompositions(1000, (UChar32)0, 1),  // 0=Hangul LV, 1=start of normal data
@@ -186,6 +186,11 @@ void ExtraData::rangeHandler(UChar32 start, UChar32 end, Norm &norm) {
     writeExtraData(start, norm);
 }
 
+//  Ticket #13342 - Disable optimizations on MSVC for this function as a workaround.
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900) && defined(_MSC_FULL_VER) && (_MSC_FULL_VER >= 190024210))
+#pragma optimize( "", off )
+#endif
+
 void ExtraData::writeExtraData(UChar32 c, Norm &norm) {
     switch(norm.type) {
     case Norm::INERT:
@@ -237,6 +242,11 @@ void ExtraData::writeExtraData(UChar32 c, Norm &norm) {
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 }
+
+// Ticket #13342 - Turn optimization back on.
+#if (defined(_MSC_VER) && (_MSC_VER >= 1900) && defined(_MSC_FULL_VER) && (_MSC_FULL_VER >= 190024210))
+#pragma optimize( "", on )
+#endif
 
 U_NAMESPACE_END
 
