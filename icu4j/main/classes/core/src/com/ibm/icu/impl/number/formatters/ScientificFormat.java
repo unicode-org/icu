@@ -154,9 +154,9 @@ public class ScientificFormat extends Format.BeforeFormat implements Rounder.Mul
     if (_maxInt > _minInt && _minInt > 1) {
         _minInt = 1;
     }
-    minInt = _minInt < 0 ? 0 : _minInt >= 8 ? 1 : _minInt;
-    maxInt = _maxInt < _minInt ? _minInt : _maxInt >= 8 ? _minInt : _maxInt;
-    assert 0 <= minInt && minInt <= maxInt && maxInt < 8;
+    maxInt = _maxInt > 8 ? 8 : _maxInt < _minInt ? _minInt : _maxInt;
+    minInt = _minInt < 0 ? 0 : _minInt > maxInt ? maxInt : _minInt;
+    assert 0 <= minInt && minInt <= maxInt && maxInt <= 8;
 
     interval = maxInt < 1 ? 1 : maxInt;
     this.rounder = rounder;
