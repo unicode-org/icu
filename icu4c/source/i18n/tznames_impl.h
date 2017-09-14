@@ -246,6 +246,8 @@ public:
 
     TimeZoneNames::MatchInfoCollection* find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const;
 
+    // When TZDBNames for the metazone is not available, this method returns NULL,
+    // but does NOT set U_MISSING_RESOURCE_ERROR to status.
     static const TZDBNames* getMetaZoneNames(const UnicodeString& mzId, UErrorCode& status);
 
 private:
