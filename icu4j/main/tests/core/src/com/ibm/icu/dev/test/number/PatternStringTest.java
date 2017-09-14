@@ -46,7 +46,6 @@ public class PatternStringTest {
       {"0E0", "0E0"},
       {"#00E00", "#00E00"},
       {"#,##0", "#,##0"},
-      {"#,##0E0", "#,##0E0"},
       {"#;#", "0;0"},
       {"#;-#", "0"}, // ignore a negative prefix pattern of '-' since that is the default
       {"**##0", "**##0"},
@@ -99,7 +98,7 @@ public class PatternStringTest {
   @Test
   public void testExceptionOnInvalid() {
     String[] invalidPatterns = {
-      "#.#.#", "0#", "0#.", ".#0", "0#.#0", "@0", "0@", "0,", "0,,", "0,,0", "0,,0,"
+      "#.#.#", "0#", "0#.", ".#0", "0#.#0", "@0", "0@", "0,", "0,,", "0,,0", "0,,0,", "#,##0E0"
     };
 
     for (String pattern : invalidPatterns) {
