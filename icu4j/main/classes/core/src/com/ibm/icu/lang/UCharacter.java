@@ -28,7 +28,6 @@ import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterCategory;
 import com.ibm.icu.lang.UCharacterEnums.ECharacterDirection;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.Edits;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
@@ -4937,7 +4936,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toUpperCase(String str)
     {
-        return toUpperCase(getDefaultCaseLocale(), str);
+        return CaseMapImpl.toUpper(getDefaultCaseLocale(), 0, str);
     }
 
     /**
@@ -4949,7 +4948,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(String str)
     {
-        return toLowerCase(getDefaultCaseLocale(), str);
+        return CaseMapImpl.toLower(getDefaultCaseLocale(), 0, str);
     }
 
     /**
@@ -4993,75 +4992,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         return UCaseProps.getCaseLocale(locale);
     }
 
-    private static String toLowerCase(int caseLocale, String str) {
-        if (str.length() <= 100) {
-            if (str.isEmpty()) {
-                return str;
-            }
-            // Collect and apply only changes.
-            // Good if no or few changes. Bad (slow) if many changes.
-            Edits edits = new Edits();
-            StringBuilder replacementChars = CaseMapImpl.toLower(
-                    caseLocale, CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
-            return applyEdits(str, replacementChars, edits);
-        } else {
-            return CaseMapImpl.toLower(caseLocale, 0, str,
-                    new StringBuilder(str.length()), null).toString();
-        }
-    }
-
-    private static String toUpperCase(int caseLocale, String str) {
-        if (str.length() <= 100) {
-            if (str.isEmpty()) {
-                return str;
-            }
-            // Collect and apply only changes.
-            // Good if no or few changes. Bad (slow) if many changes.
-            Edits edits = new Edits();
-            StringBuilder replacementChars = CaseMapImpl.toUpper(
-                    caseLocale, CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
-            return applyEdits(str, replacementChars, edits);
-        } else {
-            return CaseMapImpl.toUpper(caseLocale, 0, str,
-                    new StringBuilder(str.length()), null).toString();
-        }
-    }
-
-    private static String toTitleCase(int caseLocale, int options, BreakIterator titleIter, String str) {
-        if (str.length() <= 100) {
-            if (str.isEmpty()) {
-                return str;
-            }
-            // Collect and apply only changes.
-            // Good if no or few changes. Bad (slow) if many changes.
-            Edits edits = new Edits();
-            StringBuilder replacementChars = CaseMapImpl.toTitle(
-                    caseLocale, options | CaseMapImpl.OMIT_UNCHANGED_TEXT, titleIter, str,
-                    new StringBuilder(), edits);
-            return applyEdits(str, replacementChars, edits);
-        } else {
-            return CaseMapImpl.toTitle(caseLocale, options, titleIter, str,
-                    new StringBuilder(str.length()), null).toString();
-        }
-    }
-
-    private static String applyEdits(String str, StringBuilder replacementChars, Edits edits) {
-        if (!edits.hasChanges()) {
-            return str;
-        }
-        StringBuilder result = new StringBuilder(str.length() + edits.lengthDelta());
-        for (Edits.Iterator ei = edits.getCoarseIterator(); ei.next();) {
-            if (ei.hasChange()) {
-                int i = ei.replacementIndex();
-                result.append(replacementChars, i, i + ei.newLength());
-            } else {
-                int i = ei.sourceIndex();
-                result.append(str, i, i + ei.oldLength());
-            }
-        }
-        return result.toString();
-    }
-
     /**
      * Returns the uppercase version of the argument string.
      * Casing is dependent on the argument locale and context-sensitive.
@@ -5072,7 +5002,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toUpperCase(Locale locale, String str)
     {
-        return toUpperCase(getCaseLocale(locale), str);
+        return CaseMapImpl.toUpper(getCaseLocale(locale), 0, str);
     }
 
     /**
@@ -5084,7 +5014,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.2
      */
     public static String toUpperCase(ULocale locale, String str) {
-        return toUpperCase(getCaseLocale(locale), str);
+        return CaseMapImpl.toUpper(getCaseLocale(locale), 0, str);
     }
 
     /**
@@ -5097,7 +5027,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toLowerCase(Locale locale, String str)
     {
-        return toLowerCase(getCaseLocale(locale), str);
+        return CaseMapImpl.toLower(getCaseLocale(locale), 0, str);
     }
 
     /**
@@ -5109,7 +5039,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 3.2
      */
     public static String toLowerCase(ULocale locale, String str) {
-        return toLowerCase(getCaseLocale(locale), str);
+        return CaseMapImpl.toLower(getCaseLocale(locale), 0, str);
     }
 
     /**
@@ -5190,7 +5120,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         titleIter = CaseMapImpl.getTitleBreakIterator(locale, options, titleIter);
         titleIter.setText(str);
-        return toTitleCase(getCaseLocale(locale), options, titleIter, str);
+        return CaseMapImpl.toTitle(getCaseLocale(locale), options, titleIter, str);
     }
 
     /**
@@ -5217,15 +5147,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     @Deprecated
     public static String toTitleFirst(ULocale locale, String str) {
-        return toTitleCase(locale, str, null,
-                CaseMapImpl.TITLECASE_WHOLE_STRING|TITLECASE_NO_LOWERCASE);
-        // TODO: Remove this function.
-        // Move something like the following helper function into CLDR.
-        // private static final CaseMap.Title TO_TITLE_WHOLE_STRING_NO_LOWERCASE =
-        //         CaseMap.toTitle().wholeString().noLowercase();
-        // return TO_TITLE_WHOLE_STRING_NO_LOWERCASE.apply(
-        //         locale.toLocale(), null, str, new StringBuilder(), null).toString();
+        // TODO: Remove this function. Inline it where it is called in CLDR.
+        return TO_TITLE_WHOLE_STRING_NO_LOWERCASE.apply(locale.toLocale(), null, str);
     }
+
+    private static final com.ibm.icu.text.CaseMap.Title TO_TITLE_WHOLE_STRING_NO_LOWERCASE =
+            com.ibm.icu.text.CaseMap.toTitle().wholeString().noLowercase();
 
     /**
      * {@icu} <p>Returns the titlecase version of the argument string.
@@ -5257,7 +5184,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         titleIter = CaseMapImpl.getTitleBreakIterator(locale, options, titleIter);
         titleIter.setText(str);
-        return toTitleCase(getCaseLocale(locale), options, titleIter, str);
+        return CaseMapImpl.toTitle(getCaseLocale(locale), options, titleIter, str);
     }
 
     /**
@@ -5374,19 +5301,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.6
      */
     public static final String foldCase(String str, int options) {
-        if (str.length() <= 100) {
-            if (str.isEmpty()) {
-                return str;
-            }
-            // Collect and apply only changes.
-            // Good if no or few changes. Bad (slow) if many changes.
-            Edits edits = new Edits();
-            StringBuilder replacementChars = CaseMapImpl.fold(
-                    options | CaseMapImpl.OMIT_UNCHANGED_TEXT, str, new StringBuilder(), edits);
-            return applyEdits(str, replacementChars, edits);
-        } else {
-            return CaseMapImpl.fold(options, str, new StringBuilder(str.length()), null).toString();
-        }
+        return CaseMapImpl.fold(options, str);
     }
 
     /**

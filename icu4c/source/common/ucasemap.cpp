@@ -165,9 +165,9 @@ appendResult(uint8_t *dest, int32_t destIndex, int32_t destCapacity,
         /* (not) original code point */
         if(edits!=NULL) {
             edits->addUnchanged(cpLength);
-            if(options & U_OMIT_UNCHANGED_TEXT) {
-                return destIndex;
-            }
+        }
+        if(options & U_OMIT_UNCHANGED_TEXT) {
+            return destIndex;
         }
         c=~result;
         if(destIndex<destCapacity && c<=0x7f) {  // ASCII slightly-fastpath
@@ -283,9 +283,9 @@ appendUnchanged(uint8_t *dest, int32_t destIndex, int32_t destCapacity,
     if(length>0) {
         if(edits!=NULL) {
             edits->addUnchanged(length);
-            if(options & U_OMIT_UNCHANGED_TEXT) {
-                return destIndex;
-            }
+        }
+        if(options & U_OMIT_UNCHANGED_TEXT) {
+            return destIndex;
         }
         if(length>(INT32_MAX-destIndex)) {
             return -1;  // integer overflow
@@ -628,8 +628,10 @@ int32_t toUpper(uint32_t options,
                 }
             }
 
-            UBool change = TRUE;
-            if (edits != NULL) {
+            UBool change;
+            if (edits == nullptr && (options & U_OMIT_UNCHANGED_TEXT) == 0) {
+                change = TRUE;  // common, simple usage
+            } else {
                 // Find out first whether we are changing the text.
                 U_ASSERT(0x370 <= upper && upper <= 0x3ff);  // 2-byte UTF-8, main Greek block
                 change = (i + 2) > nextIndex ||

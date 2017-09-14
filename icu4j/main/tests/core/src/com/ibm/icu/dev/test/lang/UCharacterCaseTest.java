@@ -420,14 +420,13 @@ public final class UCharacterCaseTest extends TestFmwk
                 UCharacter.toTitleCase(LOC_DUTCH, "ijssel igloo IJMUIDEN", null));
 
         // Also check the behavior using Java Locale
-        Locale JAVALOC_DUTCH = new Locale("nl");
         assertEquals("Dutch titlecase check in English (Java Locale)",
                 "Ijssel Igloo Ijmuiden",
                 UCharacter.toTitleCase(Locale.ENGLISH, "ijssel igloo IJMUIDEN", null));
 
         assertEquals("Dutch titlecase check in Dutch (Java Locale)",
                 "IJssel Igloo IJmuiden",
-                UCharacter.toTitleCase(JAVALOC_DUTCH, "ijssel igloo IJMUIDEN", null));
+                UCharacter.toTitleCase(DUTCH_LOCALE_, "ijssel igloo IJMUIDEN", null));
 
         iter.setText("ijssel igloo IjMUIdEN iPoD ijenough");
         assertEquals("Dutch titlecase check in Dutch with nolowercase option",
@@ -1238,7 +1237,7 @@ public final class UCharacterCaseTest extends TestFmwk
         sb.delete(0, sb.length());
         edits.reset();
         sb = CaseMap.toTitle().omitUnchangedText().noBreakAdjustment().noLowercase().apply(
-                new Locale("nl"), null, "IjssEL IglOo", sb, edits);
+                DUTCH_LOCALE_, null, "IjssEL IglOo", sb, edits);
         assertEquals("toTitle(IjssEL IglOo)", "J", sb.toString());
         EditChange[] titleExpectedChanges = new EditChange[] {
                 new EditChange(false, 1, 1),
@@ -1265,6 +1264,32 @@ public final class UCharacterCaseTest extends TestFmwk
                 foldExpectedChanges, true);
     }
 
+    @Test
+    public void TestCaseMapToString() {
+        // String apply(..., CharSequence)
+        // Omit unchanged text.
+        assertEquals("toLower(Istanbul)", "ıb",
+                CaseMap.toLower().omitUnchangedText().apply(TURKISH_LOCALE_, "IstanBul"));
+        assertEquals("toUpper(Πατάτα)", "ΑΤΑΤΑ",
+                CaseMap.toUpper().omitUnchangedText().apply(GREEK_LOCALE_, "Πατάτα"));
+        assertEquals("toTitle(IjssEL IglOo)", "J",
+                CaseMap.toTitle().omitUnchangedText().noBreakAdjustment().noLowercase().apply(
+                        DUTCH_LOCALE_, null, "IjssEL IglOo"));
+        assertEquals("fold(IßtanBul)", "ıssb",
+                CaseMap.fold().omitUnchangedText().turkic().apply("IßtanBul"));
+
+        // Return the whole result string.
+        assertEquals("toLower(Istanbul)", "ıstanbul",
+                CaseMap.toLower().apply(TURKISH_LOCALE_, "IstanBul"));
+        assertEquals("toUpper(Πατάτα)", "ΠΑΤΑΤΑ",
+                CaseMap.toUpper().apply(GREEK_LOCALE_, "Πατάτα"));
+        assertEquals("toTitle(IjssEL IglOo)", "IJssEL IglOo",
+                CaseMap.toTitle().noBreakAdjustment().noLowercase().apply(
+                        DUTCH_LOCALE_, null, "IjssEL IglOo"));
+        assertEquals("fold(IßtanBul)", "ısstanbul",
+                CaseMap.fold().turkic().apply("IßtanBul"));
+    }
+
     // private data members - test data --------------------------------------
 
     private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");
@@ -1272,6 +1297,7 @@ public final class UCharacterCaseTest extends TestFmwk
     private static final Locale GREEK_LOCALE_ = new Locale("el", "GR");
     private static final Locale ENGLISH_LOCALE_ = new Locale("en", "US");
     private static final Locale LITHUANIAN_LOCALE_ = new Locale("lt", "LT");
+    private static final Locale DUTCH_LOCALE_ = new Locale("nl");
 
     private static final int CHARACTER_UPPER_[] =
                       {0x41, 0x0042, 0x0043, 0x0044, 0x0045, 0x0046, 0x0047,

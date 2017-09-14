@@ -93,6 +93,24 @@ public abstract class CaseMap {
         }
 
         /**
+         * Lowercases a string.
+         * Casing is locale-dependent and context-sensitive.
+         * The result may be longer or shorter than the original.
+         *
+         * @param locale    The locale ID. Can be null for {@link Locale#getDefault}.
+         *                  (See {@link ULocale#toLocale}.)
+         * @param src       The original string.
+         * @return the result string.
+         *
+         * @see UCharacter#toLowerCase(Locale, String)
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public String apply(Locale locale, CharSequence src) {
+            return CaseMapImpl.toLower(getCaseLocale(locale), internalOptions, src);
+        }
+
+        /**
          * Lowercases a string and optionally records edits (see {@link #omitUnchangedText}).
          * Casing is locale-dependent and context-sensitive.
          * The result may be longer or shorter than the original.
@@ -136,6 +154,24 @@ public abstract class CaseMap {
         @Override
         public Upper omitUnchangedText() {
             return OMIT_UNCHANGED;
+        }
+
+        /**
+         * Uppercases a string.
+         * Casing is locale-dependent and context-sensitive.
+         * The result may be longer or shorter than the original.
+         *
+         * @param locale    The locale ID. Can be null for {@link Locale#getDefault}.
+         *                  (See {@link ULocale#toLocale}.)
+         * @param src       The original string.
+         * @return the result string.
+         *
+         * @see UCharacter#toUpperCase(Locale, String)
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public String apply(Locale locale, CharSequence src) {
+            return CaseMapImpl.toUpper(getCaseLocale(locale), internalOptions, src);
         }
 
         /**
@@ -289,6 +325,38 @@ public abstract class CaseMap {
         }
 
         /**
+         * Titlecases a string.
+         * Casing is locale-dependent and context-sensitive.
+         * The result may be longer or shorter than the original.
+         *
+         * <p>Titlecasing uses a break iterator to find the first characters of words
+         * that are to be titlecased. It titlecases those characters and lowercases
+         * all others. (This can be modified with options bits.)
+         *
+         * @param locale    The locale ID. Can be null for {@link Locale#getDefault}.
+         *                  (See {@link ULocale#toLocale}.)
+         * @param iter      A break iterator to find the first characters of words that are to be titlecased.
+         *                  It is set to the source string (setText())
+         *                  and used one or more times for iteration (first() and next()).
+         *                  If null, then a word break iterator for the locale is used
+         *                  (or something equivalent).
+         * @param src       The original string.
+         * @return the result string.
+         *
+         * @see UCharacter#toUpperCase(Locale, String)
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public String apply(Locale locale, BreakIterator iter, CharSequence src) {
+            if (iter == null && locale == null) {
+                locale = Locale.getDefault();
+            }
+            iter = CaseMapImpl.getTitleBreakIterator(locale, internalOptions, iter);
+            iter.setText(src);
+            return CaseMapImpl.toTitle(getCaseLocale(locale), internalOptions, iter, src);
+        }
+
+        /**
          * Titlecases a string and optionally records edits (see {@link #omitUnchangedText}).
          * Casing is locale-dependent and context-sensitive.
          * The result may be longer or shorter than the original.
@@ -321,7 +389,7 @@ public abstract class CaseMap {
                  locale = Locale.getDefault();
              }
              iter = CaseMapImpl.getTitleBreakIterator(locale, internalOptions, iter);
-             iter.setText(src.toString());
+             iter.setText(src);
              return CaseMapImpl.toTitle(
                      getCaseLocale(locale), internalOptions, iter, src, dest, edits);
          }
@@ -372,13 +440,31 @@ public abstract class CaseMap {
         }
 
         /**
-         * Case-folds a string and optionally records edits (see {@link #omitUnchangedText}).
+         * Case-folds a string.
+         * The result may be longer or shorter than the original.
          *
          * <p>Case-folding is locale-independent and not context-sensitive,
          * but there is an option for whether to include or exclude mappings for dotted I
          * and dotless i that are marked with 'T' in CaseFolding.txt.
          *
-         * <p>The result may be longer or shorter than the original.
+         * @param src       The original string.
+         * @return the result string.
+         *
+         * @see UCharacter#foldCase(String, int)
+         * @draft ICU 60
+         * @provisional This API might change or be removed in a future release.
+         */
+        public String apply(CharSequence src) {
+            return CaseMapImpl.fold(internalOptions, src);
+        }
+
+        /**
+         * Case-folds a string and optionally records edits (see {@link #omitUnchangedText}).
+         * The result may be longer or shorter than the original.
+         *
+         * <p>Case-folding is locale-independent and not context-sensitive,
+         * but there is an option for whether to include or exclude mappings for dotted I
+         * and dotless i that are marked with 'T' in CaseFolding.txt.
          *
          * @param src       The original string.
          * @param dest      A buffer for the result string. Must not be null.

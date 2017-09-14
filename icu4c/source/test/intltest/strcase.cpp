@@ -62,6 +62,8 @@ public:
     void TestMergeEdits();
     void TestCaseMapWithEdits();
     void TestCaseMapUTF8WithEdits();
+    void TestCaseMapToString();
+    void TestCaseMapUTF8ToString();
     void TestLongUnicodeString();
     void TestBug13127();
     void TestInPlaceTitle();
@@ -102,6 +104,8 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestMergeEdits);
     TESTCASE_AUTO(TestCaseMapWithEdits);
     TESTCASE_AUTO(TestCaseMapUTF8WithEdits);
+    TESTCASE_AUTO(TestCaseMapToString);
+    TESTCASE_AUTO(TestCaseMapUTF8ToString);
     TESTCASE_AUTO(TestLongUnicodeString);
 #if !UCONFIG_NO_BREAK_ITERATION
     TESTCASE_AUTO(TestBug13127);
@@ -1216,7 +1220,7 @@ void StringCaseTest::TestMergeEdits() {
 }
 
 void StringCaseTest::TestCaseMapWithEdits() {
-    IcuTestErrorCode errorCode(*this, "TestEdits");
+    IcuTestErrorCode errorCode(*this, "TestCaseMapWithEdits");
     UChar dest[20];
     Edits edits;
 
@@ -1258,7 +1262,7 @@ void StringCaseTest::TestCaseMapWithEdits() {
                               U_OMIT_UNCHANGED_TEXT |
                               U_TITLECASE_NO_BREAK_ADJUSTMENT |
                               U_TITLECASE_NO_LOWERCASE,
-                              NULL, u"IjssEL IglOo", 12,
+                              nullptr, u"IjssEL IglOo", 12,
                               dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toTitle(IjssEL IglOo)", UnicodeString(u"J"), UnicodeString(TRUE, dest, length));
     static const EditChange titleExpectedChanges[] = {
@@ -1338,7 +1342,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
                                   U_OMIT_UNCHANGED_TEXT |
                                   U_TITLECASE_NO_BREAK_ADJUSTMENT |
                                   U_TITLECASE_NO_LOWERCASE,
-                                  NULL, u8"IjssEL IglOo", 12,
+                                  nullptr, u8"IjssEL IglOo", 12,
                                   dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toTitle(IjssEL IglOo)", UnicodeString(u"J"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
@@ -1375,6 +1379,114 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
             edits.getFineIterator(), edits.getFineIterator(),
             foldExpectedChanges, UPRV_LENGTHOF(foldExpectedChanges),
             TRUE, errorCode);
+}
+
+void StringCaseTest::TestCaseMapToString() {
+    // This test function name is parallel with one in UCharacterCaseTest.java.
+    // It is a bit of a misnomer until we have CaseMap API that writes to
+    // a UnicodeString, at which point we should change this code here.
+    IcuTestErrorCode errorCode(*this, "TestCaseMapToString");
+    UChar dest[20];
+
+    // Omit unchanged text.
+    int32_t length = CaseMap::toLower("tr", U_OMIT_UNCHANGED_TEXT,
+                                      u"IstanBul", 8, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toLower(IstanBul)",
+                 UnicodeString(u"ıb"), UnicodeString(TRUE, dest, length));
+    length = CaseMap::toUpper("el", U_OMIT_UNCHANGED_TEXT,
+                              u"Πατάτα", 6, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toUpper(Πατάτα)",
+                 UnicodeString(u"ΑΤΑΤΑ"), UnicodeString(TRUE, dest, length));
+#if !UCONFIG_NO_BREAK_ITERATION
+    length = CaseMap::toTitle("nl",
+                              U_OMIT_UNCHANGED_TEXT |
+                              U_TITLECASE_NO_BREAK_ADJUSTMENT |
+                              U_TITLECASE_NO_LOWERCASE,
+                              nullptr, u"IjssEL IglOo", 12,
+                              dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toTitle(IjssEL IglOo)",
+                 UnicodeString(u"J"), UnicodeString(TRUE, dest, length));
+#endif
+    length = CaseMap::fold(U_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                           u"IßtanBul", 8, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"foldCase(IßtanBul)",
+                 UnicodeString(u"ıssb"), UnicodeString(TRUE, dest, length));
+
+    // Return the whole result string.
+    length = CaseMap::toLower("tr", 0,
+                              u"IstanBul", 8, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toLower(IstanBul)",
+                 UnicodeString(u"ıstanbul"), UnicodeString(TRUE, dest, length));
+    length = CaseMap::toUpper("el", 0,
+                              u"Πατάτα", 6, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toUpper(Πατάτα)",
+                 UnicodeString(u"ΠΑΤΑΤΑ"), UnicodeString(TRUE, dest, length));
+#if !UCONFIG_NO_BREAK_ITERATION
+    length = CaseMap::toTitle("nl",
+                              U_TITLECASE_NO_BREAK_ADJUSTMENT |
+                              U_TITLECASE_NO_LOWERCASE,
+                              nullptr, u"IjssEL IglOo", 12,
+                              dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toTitle(IjssEL IglOo)",
+                 UnicodeString(u"IJssEL IglOo"), UnicodeString(TRUE, dest, length));
+#endif
+    length = CaseMap::fold(U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                           u"IßtanBul", 8, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"foldCase(IßtanBul)",
+                 UnicodeString(u"ısstanbul"), UnicodeString(TRUE, dest, length));
+}
+
+void StringCaseTest::TestCaseMapUTF8ToString() {
+    IcuTestErrorCode errorCode(*this, "TestCaseMapUTF8ToString");
+    // TODO: Change this to writing to string via ByteSink when that is available.
+    char dest[50];
+
+    // Omit unchanged text.
+    int32_t length = CaseMap::utf8ToLower("tr", U_OMIT_UNCHANGED_TEXT,
+                                          u8"IstanBul", 8, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toLower(IstanBul)", UnicodeString(u"ıb"),
+                 UnicodeString::fromUTF8(StringPiece(dest, length)));
+    length = CaseMap::utf8ToUpper("el", U_OMIT_UNCHANGED_TEXT,
+                                  u8"Πατάτα", 6 * 2, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toUpper(Πατάτα)", UnicodeString(u"ΑΤΑΤΑ"),
+                 UnicodeString::fromUTF8(StringPiece(dest, length)));
+#if !UCONFIG_NO_BREAK_ITERATION
+    length = CaseMap::utf8ToTitle("nl",
+                                  U_OMIT_UNCHANGED_TEXT |
+                                  U_TITLECASE_NO_BREAK_ADJUSTMENT |
+                                  U_TITLECASE_NO_LOWERCASE,
+                                  nullptr, u8"IjssEL IglOo", 12,
+                                  dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toTitle(IjssEL IglOo)", UnicodeString(u"J"),
+                 UnicodeString::fromUTF8(StringPiece(dest, length)));
+#endif
+    length = CaseMap::utf8Fold(U_OMIT_UNCHANGED_TEXT | U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                               u8"IßtanBul", 1 + 2 + 6, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ıssb"),
+                 UnicodeString::fromUTF8(StringPiece(dest, length)));
+
+    // Return the whole result string.
+    length = CaseMap::utf8ToLower("tr", 0,
+                                  u8"IstanBul", 8, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toLower(IstanBul)", UnicodeString(u"ıstanbul"),
+                 UnicodeString::fromUTF8(StringPiece(dest, length)));
+    length = CaseMap::utf8ToUpper("el", 0,
+                                  u8"Πατάτα", 6 * 2, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toUpper(Πατάτα)", UnicodeString(u"ΠΑΤΑΤΑ"),
+                 UnicodeString::fromUTF8(StringPiece(dest, length)));
+#if !UCONFIG_NO_BREAK_ITERATION
+    length = CaseMap::utf8ToTitle("nl",
+                                  U_TITLECASE_NO_BREAK_ADJUSTMENT |
+                                  U_TITLECASE_NO_LOWERCASE,
+                                  nullptr, u8"IjssEL IglOo", 12,
+                                  dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"toTitle(IjssEL IglOo)", UnicodeString(u"IJssEL IglOo"),
+                 UnicodeString::fromUTF8(StringPiece(dest, length)));
+#endif
+    length = CaseMap::utf8Fold(U_FOLD_CASE_EXCLUDE_SPECIAL_I,
+                               u8"IßtanBul", 1 + 2 + 6, dest, UPRV_LENGTHOF(dest), nullptr, errorCode);
+    assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ısstanbul"),
+                 UnicodeString::fromUTF8(StringPiece(dest, length)));
 }
 
 void StringCaseTest::TestLongUnicodeString() {
