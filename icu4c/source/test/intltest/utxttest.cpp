@@ -16,6 +16,7 @@
 #include "unicode/utypes.h"
 #include "unicode/utext.h"
 #include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "unicode/ustring.h"
 #include "unicode/uchriter.h"
 #include "cmemory.h"

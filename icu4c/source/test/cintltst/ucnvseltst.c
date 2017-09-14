@@ -22,6 +22,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnvsel.h"
 #include "unicode/ustring.h"
+#include "unicode/utf8.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "propsvec.h"

@@ -28,6 +28,7 @@
 #include "unicode/uloc.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "unicode/putil.h"
 #include "callcoll.h"
 #include "cmemory.h"

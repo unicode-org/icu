@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/utf8.h"
 #include "utrie2.h"
 #include "utrie.h"
 #include "cstring.h"

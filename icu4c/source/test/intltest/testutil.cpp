@@ -15,6 +15,7 @@
 #include "unicode/utypes.h"
 #include "unicode/edits.h"
 #include "unicode/unistr.h"
+#include "unicode/utf16.h"
 #include "testutil.h"
 #include "intltest.h"
 

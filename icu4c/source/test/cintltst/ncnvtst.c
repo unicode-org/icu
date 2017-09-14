@@ -22,6 +22,8 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/uset.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 #include "cintltst.h"
 #include "cmemory.h"
 
@@ -703,8 +705,8 @@ static void TestRegressionUTF8(){
             if (currCh == SURROGATE_HIGH_START) {
                 currCh = SURROGATE_LOW_END + 1; /* Skip surrogate range */
             }
-            UTF16_APPEND_CHAR_SAFE(standardForm, offset16, MAX_LENGTH, currCh);
-            UTF8_APPEND_CHAR_SAFE(utf8, offset8, MAX_LENGTH, currCh);
+            U16_APPEND_UNSAFE(standardForm, offset16, currCh);
+            U8_APPEND_UNSAFE(utf8, offset8, currCh);
             currCh++;
         }
         if(!convertFromU(standardForm, offset16, 
@@ -774,8 +776,8 @@ static void TestRegressionUTF32(){
             if (currCh == SURROGATE_HIGH_START) {
                 currCh = SURROGATE_LOW_END + 1; /* Skip surrogate range */
             }
-            UTF16_APPEND_CHAR_SAFE(standardForm, offset16, MAX_LENGTH, currCh);
-            UTF32_APPEND_CHAR_SAFE(utf32, offset32, MAX_LENGTH, currCh);
+            U16_APPEND_UNSAFE(standardForm, offset16, currCh);
+            utf32[offset32++] = currCh;
             currCh++;
         }
         if(!convertFromU(standardForm, offset16, 
