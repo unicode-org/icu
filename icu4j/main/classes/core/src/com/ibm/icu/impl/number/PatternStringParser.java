@@ -484,6 +484,9 @@ public class PatternStringParser {
         if (state.peek() != 'E') {
             return;
         }
+        if ((result.groupingSizes & 0xffff0000L) != 0xffff0000L) {
+            throw state.toParseException("Cannot have grouping separator in scientific notation");
+        }
         state.next(); // consume the E
         result.widthExceptAffixes++;
         if (state.peek() == '+') {
