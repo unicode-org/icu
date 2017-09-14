@@ -186,13 +186,50 @@ public class NumberFormatterTest {
                 "$0.0088",
                 "$0");
 
+        assertFormatDescending(
+                "Compact Short with ISO Currency",
+                "C $USD unit-width=ISO_CODE",
+                NumberFormatter.with()
+                    .notation(Notation.compactShort())
+                    .unit(USD)
+                    .unitWidth(UnitWidth.ISO_CODE),
+                ULocale.ENGLISH,
+                "USD 88K",
+                "USD 8.8K",
+                "USD 876",
+                "USD 88",
+                "USD 8.8",
+                "USD 0.88",
+                "USD 0.088",
+                "USD 0.0088",
+                "USD 0");
+
+        assertFormatDescending(
+                "Compact Short with Long Name Currency",
+                "C $USD unit-width=FULL_NAME",
+                NumberFormatter.with()
+                    .notation(Notation.compactShort())
+                    .unit(USD)
+                    .unitWidth(UnitWidth.FULL_NAME),
+                ULocale.ENGLISH,
+                "88K US dollars",
+                "8.8K US dollars",
+                "876 US dollars",
+                "88 US dollars",
+                "8.8 US dollars",
+                "0.88 US dollars",
+                "0.088 US dollars",
+                "0.0088 US dollars",
+                "0 US dollars");
+
         // Note: Most locales don't have compact long currency, so this currently falls back to short.
+        // This test case should be fixed when proper compact long currency patterns are added.
         assertFormatDescending(
                 "Compact Long Currency",
                 "CC $USD",
                 NumberFormatter.with().notation(Notation.compactLong()).unit(USD),
                 ULocale.ENGLISH,
-                "$88K",
+                "$88K", // should be something like "$88 thousand"
                 "$8.8K",
                 "$876",
                 "$88",
@@ -201,6 +238,45 @@ public class NumberFormatterTest {
                 "$0.088",
                 "$0.0088",
                 "$0");
+
+        // Note: Most locales don't have compact long currency, so this currently falls back to short.
+        // This test case should be fixed when proper compact long currency patterns are added.
+        assertFormatDescending(
+                "Compact Long with ISO Currency",
+                "CC $USD unit-width=ISO_CODE",
+                NumberFormatter.with()
+                    .notation(Notation.compactLong())
+                    .unit(USD)
+                    .unitWidth(UnitWidth.ISO_CODE),
+                ULocale.ENGLISH,
+                "USD 88K", // should be something like "USD 88 thousand"
+                "USD 8.8K",
+                "USD 876",
+                "USD 88",
+                "USD 8.8",
+                "USD 0.88",
+                "USD 0.088",
+                "USD 0.0088",
+                "USD 0");
+
+        // TODO: This behavior could be improved and should be revisited.
+        assertFormatDescending(
+                "Compact Long with Long Name Currency",
+                "CC $USD unit-width=FULL_NAME",
+                NumberFormatter.with()
+                    .notation(Notation.compactLong())
+                    .unit(USD)
+                    .unitWidth(UnitWidth.FULL_NAME),
+                ULocale.ENGLISH,
+                "88 thousand US dollars",
+                "8.8 thousand US dollars",
+                "876 US dollars",
+                "88 US dollars",
+                "8.8 US dollars",
+                "0.88 US dollars",
+                "0.088 US dollars",
+                "0.0088 US dollars",
+                "0 US dollars");
 
         assertFormatSingle(
                 "Compact Plural One",

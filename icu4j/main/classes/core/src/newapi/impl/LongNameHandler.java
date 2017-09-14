@@ -46,7 +46,9 @@ public class LongNameHandler implements MicroPropsGenerator {
             String pluralKeyword = e.getKey();
             StandardPlural plural = StandardPlural.fromString(e.getKey());
             String longName = currency.getName(loc, Currency.PLURAL_LONG_NAME, pluralKeyword, null);
-            String simpleFormat = e.getValue(); // e.g., "{0} {1}"
+            String simpleFormat = e.getValue();
+            // Example pattern from data: "{0} {1}"
+            // Example output after find-and-replace: "{0} US dollars"
             simpleFormat = simpleFormat.replace("{1}", longName);
             String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 1, 1);
             SimpleModifier mod = new SimpleModifier(compiled, Field.CURRENCY, false);

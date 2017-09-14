@@ -140,7 +140,8 @@ class NumberFormatterImpl {
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(innerPattern);
 
         // Symbols
-        // NOTE: C++ has a special class, SymbolsWrapper, in MacroProps.  Java has all the resolution logic here directly.
+        // NOTE: C++ has a special class, SymbolsWrapper, in MacroProps. Java has all the resolution logic here
+        // directly.
         if (macros.symbols == null) {
             micros.symbols = DecimalFormatSymbols.getInstance(macros.loc);
         } else if (macros.symbols instanceof DecimalFormatSymbols) {
@@ -238,7 +239,9 @@ class NumberFormatterImpl {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
             }
-            CompactType compactType = (macros.unit instanceof Currency) ? CompactType.CURRENCY : CompactType.DECIMAL;
+            CompactType compactType = (macros.unit instanceof Currency && macros.unitWidth != UnitWidth.FULL_NAME)
+                    ? CompactType.CURRENCY
+                    : CompactType.DECIMAL;
             chain = ((CompactNotation) macros.notation).withLocaleData(macros.loc, compactType, rules,
                     safe ? patternMod : null, chain);
         }
