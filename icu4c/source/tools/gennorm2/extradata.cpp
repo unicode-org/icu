@@ -23,7 +23,7 @@
 
 U_NAMESPACE_BEGIN
 
-ExtraData::ExtraData(Norms & n, UBool fast) :
+ExtraData::ExtraData(Norms &n, UBool fast) :
         Norms::Enumerator(n),
         yesYesCompositions(1000, (UChar32)0xffff, 2),  // 0=inert, 1=Jamo L, 2=start of compositions
         yesNoMappingsAndCompositions(1000, (UChar32)0, 1),  // 0=Hangul LV, 1=start of normal data
