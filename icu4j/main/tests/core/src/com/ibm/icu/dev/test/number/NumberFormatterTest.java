@@ -1015,6 +1015,15 @@ public class NumberFormatterTest {
                 ULocale.ENGLISH,
                 0.8888,
                 "88.88%**");
+
+        assertFormatSingle(
+                "Currency Spacing with Zero Digit Padding Broken",
+                "$GBP unit-width=ISO_CODE",
+                NumberFormatter.with().padding(Padder.codePoints('0', 12, PadPosition.AFTER_PREFIX)).unit(GBP)
+                .unitWidth(UnitWidth.ISO_CODE),
+                ULocale.ENGLISH,
+                514.23,
+                "GBP 000514.23"); // TODO: This is broken; it renders too wide (13 instead of 12).
     }
 
     @Test
@@ -1330,6 +1339,8 @@ public class NumberFormatterTest {
     public void locale() {
         // Coverage for the locale setters.
         assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.ENGLISH));
+        assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(ULocale.ENGLISH));
+        assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(Locale.ENGLISH));
         assertNotEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.FRENCH));
     }
 

@@ -71,6 +71,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     public FormattedNumber format(DecimalQuantity fq) {
         MacroProps macros = resolve();
         NumberStringBuilder string = new NumberStringBuilder();
+        // TODO: Make this more like C++, where we get and then conditionally atomic-increment?
         long currentCount = callCount.incrementAndGet(this);
         MicroProps micros;
         if (currentCount == macros.threshold.longValue()) {

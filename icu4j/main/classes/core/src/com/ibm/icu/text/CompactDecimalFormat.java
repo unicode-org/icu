@@ -70,26 +70,6 @@ public class CompactDecimalFormat extends DecimalFormat {
   }
 
   /**
-   * Type parameter for CompactDecimalFormat.
-   *
-   * @draft ICU 60
-   */
-  public enum CompactType {
-    /**
-     * Standard compact format, like "1.2T"
-     *
-     * @draft ICU 60
-     */
-    DECIMAL,
-    /**
-     * Compact format with currency, like "$1.2T"
-     *
-     * @draft ICU 60
-     */
-    CURRENCY
-  }
-
-  /**
    * Creates a CompactDecimalFormat appropriate for a locale. The result may be affected by the
    * number system in the locale, such as ar-u-nu-latn.
    *

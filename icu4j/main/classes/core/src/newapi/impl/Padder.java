@@ -117,7 +117,7 @@ public class Padder {
                 // Should not happen since currency spacing is always on the inside.
                 throw new AssertionError();
             }
-            length += string.insert(insertIndex, paddingString, null);
+            addPaddingHelper(paddingString, requiredPadding, string, insertIndex);
         }
 
         return length;
@@ -126,6 +126,7 @@ public class Padder {
     private static int addPaddingHelper(String paddingString, int requiredPadding, NumberStringBuilder string,
             int index) {
         for (int i = 0; i < requiredPadding; i++) {
+            // TODO: If appending to the end, this will cause actual insertion operations. Improve.
             string.insert(index, paddingString, null);
         }
         return paddingString.length() * requiredPadding;
