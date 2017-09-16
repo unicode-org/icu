@@ -3,6 +3,7 @@
 package newapi;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,7 +12,6 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
-import com.ibm.icu.text.CompactDecimalFormat.CompactType;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.ULocale;
 
@@ -26,6 +26,10 @@ public class CompactNotation extends Notation {
     final CompactStyle compactStyle;
     final Map<String, Map<String, String>> compactCustomData;
 
+    public enum CompactType {
+        DECIMAL, CURRENCY
+    }
+
     public CompactNotation(CompactStyle compactStyle) {
         compactCustomData = null;
         this.compactStyle = compactStyle;
@@ -36,18 +40,13 @@ public class CompactNotation extends Notation {
         this.compactCustomData = compactCustomData;
     }
 
-    /* package-private */ MicroPropsGenerator withLocaleData(ULocale dataLocale, CompactType compactType, PluralRules rules,
-            MutablePatternModifier buildReference, MicroPropsGenerator parent) {
-        CompactData data;
-        if (compactStyle != null) {
-            data = CompactData.getInstance(dataLocale, compactType, compactStyle);
-        } else {
-            data = CompactData.getInstance(compactCustomData);
-        }
-        return new CompactImpl(data, rules, buildReference, parent);
+    /* package-private */ MicroPropsGenerator withLocaleData(ULocale locale, String nsName, CompactType compactType,
+            PluralRules rules, MutablePatternModifier buildReference, MicroPropsGenerator parent) {
+        // TODO: Add a data cache? It would be keyed by locale, nsName, compact type, and compact style.
+        return new CompactHandler(this, locale, nsName, compactType, rules, buildReference, parent);
     }
 
-    private static class CompactImpl implements MicroPropsGenerator {
+    private static class CompactHandler implements MicroPropsGenerator {
 
         private static class CompactModInfo {
             public ImmutablePatternModifier mod;
@@ -55,28 +54,35 @@ public class CompactNotation extends Notation {
         }
 
         final PluralRules rules;
-        final CompactData data;
-        final Map<String, CompactModInfo> precomputedMods;
         final MicroPropsGenerator parent;
+        final Map<String, CompactModInfo> precomputedMods;
+        final CompactData data;
 
-        private CompactImpl(CompactData data, PluralRules rules, MutablePatternModifier buildReference, MicroPropsGenerator parent) {
-            this.data = data;
+        private CompactHandler(CompactNotation notation, ULocale locale, String nsName, CompactType compactType,
+                PluralRules rules, MutablePatternModifier buildReference, MicroPropsGenerator parent) {
             this.rules = rules;
+            this.parent = parent;
+            this.data = new CompactData();
+            if (notation.compactStyle != null) {
+                data.populate(locale, nsName, notation.compactStyle, compactType);
+            } else {
+                data.populate(notation.compactCustomData);
+            }
             if (buildReference != null) {
                 // Safe code path
-                precomputedMods = precomputeAllModifiers(data, buildReference);
+                precomputedMods = new HashMap<String, CompactModInfo>();
+                precomputeAllModifiers(buildReference);
             } else {
                 // Unsafe code path
                 precomputedMods = null;
             }
-            this.parent = parent;
         }
 
         /** Used by the safe code path */
-        private static Map<String, CompactModInfo> precomputeAllModifiers(CompactData data,
-                MutablePatternModifier buildReference) {
-            Map<String, CompactModInfo> precomputedMods = new HashMap<String, CompactModInfo>();
-            Set<String> allPatterns = data.getAllPatterns();
+        private void precomputeAllModifiers(MutablePatternModifier buildReference) {
+            Set<String> allPatterns = new HashSet<String>();
+            data.getUniquePatterns(allPatterns);
+
             for (String patternString : allPatterns) {
                 CompactModInfo info = new CompactModInfo();
                 ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(patternString);
@@ -85,27 +91,26 @@ public class CompactNotation extends Notation {
                 info.numDigits = patternInfo.positive.integerTotal;
                 precomputedMods.put(patternString, info);
             }
-            return precomputedMods;
         }
 
         @Override
-        public MicroProps processQuantity(DecimalQuantity input) {
-            MicroProps micros = parent.processQuantity(input);
+        public MicroProps processQuantity(DecimalQuantity quantity) {
+            MicroProps micros = parent.processQuantity(quantity);
             assert micros.rounding != null;
 
             // Treat zero as if it had magnitude 0
             int magnitude;
-            if (input.isZero()) {
+            if (quantity.isZero()) {
                 magnitude = 0;
-                micros.rounding.apply(input);
+                micros.rounding.apply(quantity);
             } else {
                 // TODO: Revisit chooseMultiplierAndApply
-                int multiplier = micros.rounding.chooseMultiplierAndApply(input, data);
-                magnitude = input.isZero() ? 0 : input.getMagnitude();
+                int multiplier = micros.rounding.chooseMultiplierAndApply(quantity, data);
+                magnitude = quantity.isZero() ? 0 : quantity.getMagnitude();
                 magnitude -= multiplier;
             }
 
-            StandardPlural plural = input.getStandardPlural(rules);
+            StandardPlural plural = quantity.getStandardPlural(rules);
             String patternString = data.getPattern(magnitude, plural);
             int numDigits = -1;
             if (patternString == null) {
@@ -113,12 +118,13 @@ public class CompactNotation extends Notation {
                 // No need to take any action.
             } else if (precomputedMods != null) {
                 // Safe code path.
+                // Java uses a hash set here for O(1) lookup.  C++ uses a linear search.
                 CompactModInfo info = precomputedMods.get(patternString);
-                info.mod.applyToMicros(micros, input);
+                info.mod.applyToMicros(micros, quantity);
                 numDigits = info.numDigits;
             } else {
                 // Unsafe code path.
-                // Overwrite the PatternInfo in the existing modMiddle
+                // Overwrite the PatternInfo in the existing modMiddle.
                 assert micros.modMiddle instanceof MutablePatternModifier;
                 ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(patternString);
                 ((MutablePatternModifier) micros.modMiddle).setPatternInfo(patternInfo);

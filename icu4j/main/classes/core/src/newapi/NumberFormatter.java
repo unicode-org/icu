@@ -31,6 +31,12 @@ public final class NumberFormatter {
         AUTO, ALWAYS, NEVER, ACCOUNTING, ACCOUNTING_ALWAYS,
     }
 
+    /**
+     * Use a default threshold of 3. This means that the third time .format() is called, the data structures get built
+     * using the "safe" code path. The first two calls to .format() will trigger the unsafe code path.
+     */
+    static final long DEFAULT_THRESHOLD = 3;
+
     public static UnlocalizedNumberFormatter with() {
         return BASE;
     }

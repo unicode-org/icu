@@ -7,7 +7,6 @@ import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.modifiers.ConstantAffixModifier;
-import com.ibm.icu.text.CompactDecimalFormat.CompactType;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
@@ -17,6 +16,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
 
+import newapi.CompactNotation.CompactType;
 import newapi.NumberFormatter.DecimalMarkDisplay;
 import newapi.NumberFormatter.SignDisplay;
 import newapi.NumberFormatter.UnitWidth;
@@ -89,6 +89,9 @@ class NumberFormatterImpl {
         UnitWidth unitWidth = (macros.unitWidth == null) ? UnitWidth.SHORT : macros.unitWidth;
         boolean perMille = false;
         PluralRules rules = macros.rules;
+
+        // FIXME
+        String nsName = NumberingSystem.getInstance(macros.loc).getName();
 
         MicroProps micros = new MicroProps(safe);
         MicroPropsGenerator chain = micros;
@@ -242,7 +245,7 @@ class NumberFormatterImpl {
             CompactType compactType = (macros.unit instanceof Currency && macros.unitWidth != UnitWidth.FULL_NAME)
                     ? CompactType.CURRENCY
                     : CompactType.DECIMAL;
-            chain = ((CompactNotation) macros.notation).withLocaleData(macros.loc, compactType, rules,
+            chain = ((CompactNotation) macros.notation).withLocaleData(macros.loc, nsName, compactType, rules,
                     safe ? patternMod : null, chain);
         }
 

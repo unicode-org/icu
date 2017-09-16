@@ -3,7 +3,6 @@
 package newapi.impl;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,68 +11,13 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
-import com.ibm.icu.text.CompactDecimalFormat.CompactType;
-import com.ibm.icu.text.NumberingSystem;
+import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
+import newapi.CompactNotation.CompactType;
+
 public class CompactData implements MultiplierProducer {
-
-    public static CompactData getInstance(ULocale locale, CompactType compactType, CompactStyle compactStyle) {
-        // TODO: Add a data cache? It would be keyed by locale, compact type, and compact style.
-        CompactData data = new CompactData();
-        CompactDataSink sink = new CompactDataSink(data);
-        String nsName = NumberingSystem.getInstance(locale).getName();
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
-
-        // Fall back to latn numbering system and/or short compact style.
-        String resourceKey = getResourceBundleKey(nsName, compactStyle, compactType);
-        rb.getAllItemsWithFallbackNoFail(resourceKey, sink);
-        if (data.isEmpty() && !nsName.equals("latn")) {
-            resourceKey = getResourceBundleKey("latn", compactStyle, compactType);
-            rb.getAllItemsWithFallbackNoFail(resourceKey, sink);
-        }
-        if (data.isEmpty() && compactStyle != CompactStyle.SHORT) {
-            resourceKey = getResourceBundleKey(nsName, CompactStyle.SHORT, compactType);
-            rb.getAllItemsWithFallbackNoFail(resourceKey, sink);
-        }
-        if (data.isEmpty() && !nsName.equals("latn") && compactStyle != CompactStyle.SHORT) {
-            resourceKey = getResourceBundleKey("latn", CompactStyle.SHORT, compactType);
-            rb.getAllItemsWithFallbackNoFail(resourceKey, sink);
-        }
-
-        // The last fallback is guaranteed to return data.
-        assert (!data.isEmpty());
-        return data;
-    }
-
-    /** Returns a string like "NumberElements/latn/patternsShort/decimalFormat". */
-    private static String getResourceBundleKey(String nsName, CompactStyle compactStyle, CompactType compactType) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("NumberElements/");
-        sb.append(nsName);
-        sb.append(compactStyle == CompactStyle.SHORT ? "/patternsShort" : "/patternsLong");
-        sb.append(compactType == CompactType.DECIMAL ? "/decimalFormat" : "/currencyFormat");
-        return sb.toString();
-    }
-
-    /** Java-only method used by CLDR tooling. */
-    public static CompactData getInstance(Map<String, Map<String, String>> powersToPluralsToPatterns) {
-        CompactData data = new CompactData();
-        for (Map.Entry<String, Map<String, String>> magnitudeEntry : powersToPluralsToPatterns.entrySet()) {
-            byte magnitude = (byte) (magnitudeEntry.getKey().length() - 1);
-            for (Map.Entry<String, String> pluralEntry : magnitudeEntry.getValue().entrySet()) {
-                StandardPlural plural = StandardPlural.fromString(pluralEntry.getKey().toString());
-                String patternString = pluralEntry.getValue().toString();
-                data.setPattern(patternString, magnitude, plural);
-                int numZeros = countZeros(patternString);
-                if (numZeros > 0) { // numZeros==0 in certain cases, like Somali "Kun"
-                    data.setMultiplier(magnitude, (byte) (numZeros - magnitude - 1));
-                }
-            }
-        }
-        return data;
-    }
 
     // A dummy object used when a "0" compact decimal entry is encountered. This is necessary
     // in order to prevent falling back to root. Object equality ("==") is intended.
@@ -81,20 +25,78 @@ public class CompactData implements MultiplierProducer {
 
     private final String[] patterns;
     private final byte[] multipliers;
+    private byte largestMagnitude;
     private boolean isEmpty;
-    private int largestMagnitude;
 
-    private static final int MAX_DIGITS = 15;
+    private static final int COMPACT_MAX_DIGITS = 15;
 
-    private CompactData() {
-        patterns = new String[(CompactData.MAX_DIGITS + 1) * StandardPlural.COUNT];
-        multipliers = new byte[CompactData.MAX_DIGITS + 1];
-        isEmpty = true;
+    public CompactData() {
+        patterns = new String[(CompactData.COMPACT_MAX_DIGITS + 1) * StandardPlural.COUNT];
+        multipliers = new byte[CompactData.COMPACT_MAX_DIGITS + 1];
         largestMagnitude = 0;
+        isEmpty = true;
     }
 
-    public boolean isEmpty() {
-        return isEmpty;
+    public void populate(ULocale locale, String nsName, CompactStyle compactStyle, CompactType compactType) {
+        assert isEmpty;
+        CompactDataSink sink = new CompactDataSink(this);
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+
+        boolean nsIsLatn = nsName.equals("latn");
+        boolean compactIsShort = compactStyle == CompactStyle.SHORT;
+
+        // Fall back to latn numbering system and/or short compact style.
+        StringBuilder resourceKey = new StringBuilder();
+        getResourceBundleKey(nsName, compactStyle, compactType, resourceKey);
+        rb.getAllItemsWithFallbackNoFail(resourceKey.toString(), sink);
+        if (isEmpty && !nsIsLatn) {
+            getResourceBundleKey("latn", compactStyle, compactType, resourceKey);
+            rb.getAllItemsWithFallbackNoFail(resourceKey.toString(), sink);
+        }
+        if (isEmpty && !compactIsShort) {
+            getResourceBundleKey(nsName, CompactStyle.SHORT, compactType, resourceKey);
+            rb.getAllItemsWithFallbackNoFail(resourceKey.toString(), sink);
+        }
+        if (isEmpty && !nsIsLatn && !compactIsShort) {
+            getResourceBundleKey("latn", CompactStyle.SHORT, compactType, resourceKey);
+            rb.getAllItemsWithFallbackNoFail(resourceKey.toString(), sink);
+        }
+
+        // The last fallback should be guaranteed to return data.
+        if (isEmpty) {
+            throw new ICUException("Could not load compact decimal data for locale " + locale);
+        }
+    }
+
+    /** Produces a string like "NumberElements/latn/patternsShort/decimalFormat". */
+    private static void getResourceBundleKey(String nsName, CompactStyle compactStyle, CompactType compactType, StringBuilder sb) {
+        sb.setLength(0);
+        sb.append("NumberElements/");
+        sb.append(nsName);
+        sb.append(compactStyle == CompactStyle.SHORT ? "/patternsShort" : "/patternsLong");
+        sb.append(compactType == CompactType.DECIMAL ? "/decimalFormat" : "/currencyFormat");
+    }
+
+    /** Java-only method used by CLDR tooling. */
+    public void populate(Map<String, Map<String, String>> powersToPluralsToPatterns) {
+        assert isEmpty;
+        for (Map.Entry<String, Map<String, String>> magnitudeEntry : powersToPluralsToPatterns.entrySet()) {
+            byte magnitude = (byte) (magnitudeEntry.getKey().length() - 1);
+            for (Map.Entry<String, String> pluralEntry : magnitudeEntry.getValue().entrySet()) {
+                StandardPlural plural = StandardPlural.fromString(pluralEntry.getKey().toString());
+                String patternString = pluralEntry.getValue().toString();
+                patterns[getIndex(magnitude, plural)] = patternString;
+                int numZeros = countZeros(patternString);
+                if (numZeros > 0) { // numZeros==0 in certain cases, like Somali "Kun"
+                    // Save the multiplier.
+                    multipliers[magnitude] = (byte) (numZeros - magnitude - 1);
+                    if (magnitude > largestMagnitude) {
+                        largestMagnitude = magnitude;
+                    }
+                    isEmpty = false;
+                }
+            }
+        }
     }
 
     @Override
@@ -106,23 +108,6 @@ public class CompactData implements MultiplierProducer {
             magnitude = largestMagnitude;
         }
         return multipliers[magnitude];
-    }
-
-    /** Returns the multiplier from the array directly without bounds checking. */
-    public int getMultiplierDirect(int magnitude) {
-        return multipliers[magnitude];
-    }
-
-    private void setMultiplier(int magnitude, byte multiplier) {
-        if (multipliers[magnitude] != 0) {
-            assert multipliers[magnitude] == multiplier;
-            return;
-        }
-        multipliers[magnitude] = multiplier;
-        isEmpty = false;
-        if (magnitude > largestMagnitude) {
-            largestMagnitude = magnitude;
-        }
     }
 
     public String getPattern(int magnitude, StandardPlural plural) {
@@ -144,32 +129,13 @@ public class CompactData implements MultiplierProducer {
         return patternString;
     }
 
-    public Set<String> getAllPatterns() {
-        Set<String> result = new HashSet<String>();
-        result.addAll(Arrays.asList(patterns));
-        result.remove(USE_FALLBACK);
-        result.remove(null);
-        return result;
-    }
-
-    private boolean has(int magnitude, StandardPlural plural) {
-        // Return true if USE_FALLBACK is present
-        return patterns[getIndex(magnitude, plural)] != null;
-    }
-
-    private void setPattern(String patternString, int magnitude, StandardPlural plural) {
-        patterns[getIndex(magnitude, plural)] = patternString;
-        isEmpty = false;
-        if (magnitude > largestMagnitude)
-            largestMagnitude = magnitude;
-    }
-
-    private void setNoFallback(int magnitude, StandardPlural plural) {
-        setPattern(USE_FALLBACK, magnitude, plural);
-    }
-
-    private static final int getIndex(int magnitude, StandardPlural plural) {
-        return magnitude * StandardPlural.COUNT + plural.ordinal();
+    public void getUniquePatterns(Set<String> output) {
+        assert output.isEmpty();
+        // NOTE: In C++, this is done more manually with a UVector.
+        // In Java, we can take advantage of JDK HashSet.
+        output.addAll(Arrays.asList(patterns));
+        output.remove(USE_FALLBACK);
+        output.remove(null);
     }
 
     private static final class CompactDataSink extends UResource.Sink {
@@ -189,16 +155,17 @@ public class CompactData implements MultiplierProducer {
                 // Assumes that the keys are always of the form "10000" where the magnitude is the
                 // length of the key minus one.  We expect magnitudes to be less than MAX_DIGITS.
                 byte magnitude = (byte) (key.length() - 1);
-                byte multiplier = (byte) data.getMultiplierDirect(magnitude);
-                assert magnitude < MAX_DIGITS;
+                byte multiplier = data.multipliers[magnitude];
+                assert magnitude < COMPACT_MAX_DIGITS;
 
                 // Iterate over the plural variants ("one", "other", etc)
                 UResource.Table pluralVariantsTable = value.getTable();
                 for (int i4 = 0; pluralVariantsTable.getKeyAndValue(i4, key, value); ++i4) {
 
                     // Skip this magnitude/plural if we already have it from a child locale.
+                    // Note: This also skips USE_FALLBACK entries.
                     StandardPlural plural = StandardPlural.fromString(key.toString());
-                    if (data.has(magnitude, plural)) {
+                    if (data.patterns[getIndex(magnitude, plural)] != null) {
                         continue;
                     }
 
@@ -206,12 +173,11 @@ public class CompactData implements MultiplierProducer {
                     // to parent locales. Example locale where this is relevant: 'it'.
                     String patternString = value.toString();
                     if (patternString.equals("0")) {
-                        data.setNoFallback(magnitude, plural);
-                        continue;
+                        patternString = USE_FALLBACK;
                     }
 
                     // Save the pattern string. We will parse it lazily.
-                    data.setPattern(patternString, magnitude, plural);
+                    data.patterns[getIndex(magnitude, plural)] = patternString;
 
                     // If necessary, compute the multiplier: the difference between the magnitude
                     // and the number of zeros in the pattern.
@@ -223,9 +189,22 @@ public class CompactData implements MultiplierProducer {
                     }
                 }
 
-                data.setMultiplier(magnitude, multiplier);
+                // Save the multiplier.
+                if (data.multipliers[magnitude] == 0) {
+                    data.multipliers[magnitude] = multiplier;
+                    if (magnitude > data.largestMagnitude) {
+                        data.largestMagnitude = magnitude;
+                    }
+                    data.isEmpty = false;
+                } else {
+                    assert data.multipliers[magnitude] == multiplier;
+                }
             }
         }
+    }
+
+    private static final int getIndex(int magnitude, StandardPlural plural) {
+        return magnitude * StandardPlural.COUNT + plural.ordinal();
     }
 
     private static final int countZeros(String patternString) {
