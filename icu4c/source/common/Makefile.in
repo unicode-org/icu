@@ -89,7 +89,7 @@ ucnv_ext.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o ucnvdisp.o ucnv_
 resource.o uresbund.o ures_cnv.o uresdata.o resbund.o resbund_cnv.o \
 ucurr.o \
 messagepattern.o ucat.o locmap.o uloc.o locid.o locutil.o locavailable.o locdispnames.o locdspnm.o loclikely.o locresdata.o \
-bytestream.o stringpiece.o \
+bytestream.o stringpiece.o bytesinkutil.o \
 stringtriebuilder.o bytestriebuilder.o \
 bytestrie.o bytestrieiterator.o \
 ucharstrie.o ucharstriebuilder.o ucharstrieiterator.o \

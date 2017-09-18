@@ -445,6 +445,7 @@
     </ClCompile>
     <ClCompile Include="usprep.cpp" />
     <ClCompile Include="appendable.cpp" />
+    <ClCompile Include="bytesinkutil.cpp" />
     <ClCompile Include="bytestream.cpp" />
     <ClCompile Include="bytestrie.cpp" />
     <ClCompile Include="bytestriebuilder.cpp" />
@@ -1478,6 +1479,7 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="bytesinkutil.h" />
     <CustomBuild Include="unicode\bytestream.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
