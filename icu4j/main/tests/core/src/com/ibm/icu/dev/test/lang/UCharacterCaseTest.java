@@ -951,12 +951,18 @@ public final class UCharacterCaseTest extends TestFmwk
                 srcIndexes.add(srcIndex);
                 if (expected[i].oldLength > 1) {
                     srcIndexes.add(srcIndex + 1);
+                    if (expected[i].oldLength > 2) {
+                        srcIndexes.add(srcIndex + expected[i].oldLength - 1);
+                    }
                 }
             }
             if (expected[i].newLength > 0) {
                 destIndexes.add(destIndex);
-                if (expected[i].newLength > 0) {
+                if (expected[i].newLength > 1) {
                     destIndexes.add(destIndex + 1);
+                    if (expected[i].newLength > 2) {
+                        destIndexes.add(destIndex + expected[i].newLength - 1);
+                    }
                 }
             }
             srcIndex += expected[i].oldLength;
@@ -967,17 +973,30 @@ public final class UCharacterCaseTest extends TestFmwk
         srcIndexes.add(srcLength + 1);
         destIndexes.add(destLength + 1);
         Collections.reverse(destIndexes);
-        for (int i : srcIndexes) {
-            assertEquals(name + " destIndexFromSrc(" + i + "):",
-                              destIndexFromSrc(expected, srcLength, destLength, i),
-                              ei2.destinationIndexFromSourceIndex(i));
+        // Zig-zag across the indexes to stress next() <-> previous().
+        for (int i = 0; i < srcIndexes.size(); ++i) {
+            for (int j : ZIG_ZAG) {
+                if ((i + j) < srcIndexes.size()) {
+                    int si = srcIndexes.get(i + j);
+                    assertEquals(name + " destIndexFromSrc(" + si + "):",
+                            destIndexFromSrc(expected, srcLength, destLength, si),
+                            ei2.destinationIndexFromSourceIndex(si));
+                }
+            }
         }
-        for (int i : destIndexes) {
-            assertEquals(name + " srcIndexFromDest(" + i + "):",
-                              srcIndexFromDest(expected, srcLength, destLength, i),
-                              ei2.sourceIndexFromDestinationIndex(i));
+        for (int i = 0; i < destIndexes.size(); ++i) {
+            for (int j : ZIG_ZAG) {
+                if ((i + j) < destIndexes.size()) {
+                    int di = destIndexes.get(i + j);
+                    assertEquals(name + " srcIndexFromDest(" + di + "):",
+                            srcIndexFromDest(expected, srcLength, destLength, di),
+                            ei2.sourceIndexFromDestinationIndex(di));
+                }
+            }
         }
     }
+
+    private static final int[] ZIG_ZAG = { 0, 1, 2, 3, 2, 1 };
 
     @Test
     public void TestEdits() {
@@ -992,21 +1011,21 @@ public final class UCharacterCaseTest extends TestFmwk
         assertFalse("unchanged 10003 hasChanges", edits.hasChanges());
         assertEquals("unchanged 10003 numberOfChanges", 0, edits.numberOfChanges());
         assertEquals("unchanged 10003", 0, edits.lengthDelta());
-        edits.addReplace(1, 1);  // multiple short equal-length edits are compressed
+        edits.addReplace(2, 1);  // multiple short equal-lengths edits are compressed
         edits.addUnchanged(0);
-        edits.addReplace(1, 1);
-        edits.addReplace(1, 1);
+        edits.addReplace(2, 1);
+        edits.addReplace(2, 1);
         edits.addReplace(0, 10);
         edits.addReplace(100, 0);
         edits.addReplace(3000, 4000);  // variable-length encoding
         edits.addReplace(100000, 100000);
         assertTrue("some edits hasChanges", edits.hasChanges());
         assertEquals("some edits numberOfChanges", 7, edits.numberOfChanges());
-        assertEquals("some edits", 10 - 100 + 1000, edits.lengthDelta());
+        assertEquals("some edits", -3 + 10 - 100 + 1000, edits.lengthDelta());
 
         EditChange[] coarseExpectedChanges = new EditChange[] {
                 new EditChange(false, 10003, 10003),
-                new EditChange(true, 103103, 104013)
+                new EditChange(true, 103106, 104013)
         };
         checkEditsIter("coarse",
                 edits.getCoarseIterator(), edits.getCoarseIterator(),
@@ -1017,9 +1036,9 @@ public final class UCharacterCaseTest extends TestFmwk
 
         EditChange[] fineExpectedChanges = new EditChange[] {
                 new EditChange(false, 10003, 10003),
-                new EditChange(true, 1, 1),
-                new EditChange(true, 1, 1),
-                new EditChange(true, 1, 1),
+                new EditChange(true, 2, 1),
+                new EditChange(true, 2, 1),
+                new EditChange(true, 2, 1),
                 new EditChange(true, 0, 10),
                 new EditChange(true, 100, 0),
                 new EditChange(true, 3000, 4000),
@@ -1038,6 +1057,27 @@ public final class UCharacterCaseTest extends TestFmwk
         assertEquals("reset", 0, edits.lengthDelta());
         Edits.Iterator ei = edits.getCoarseChangesIterator();
         assertFalse("reset then iterator", ei.next());
+    }
+
+    @Test
+    public void TestEditsFindFwdBwd() {
+        // Some users need index mappings to be efficient when they are out of order.
+        // The most interesting failure case for this test is it taking a very long time.
+        Edits e = new Edits();
+        int N = 200000;
+        for (int i = 0; i < N; ++i) {
+            e.addUnchanged(1);
+            e.addReplace(3, 1);
+        }
+        Edits.Iterator iter = e.getFineIterator();
+        for (int i = 0; i <= N; i += 2) {
+            assertEquals("ascending", i * 2, iter.sourceIndexFromDestinationIndex(i));
+            assertEquals("ascending", i * 2 + 1, iter.sourceIndexFromDestinationIndex(i + 1));
+        }
+        for (int i = N; i >= 0; i -= 2) {
+            assertEquals("descending", i * 2 + 1, iter.sourceIndexFromDestinationIndex(i + 1));
+            assertEquals("descending", i * 2, iter.sourceIndexFromDestinationIndex(i));
+        }
     }
 
     @Test
