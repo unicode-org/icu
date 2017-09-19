@@ -473,27 +473,27 @@ void RBBIAPITest::TestIteration()
     bi->first();
     i = bi->current();
     if (i != 0) {
-        errln("%s:%d Incorrect value from bi->previous().  Expected 0, got %d", __FILE__, __LINE__, i);
+        errln("%s:%d Incorrect value from bi->current().  Expected 0, got %d", __FILE__, __LINE__, i);
     }
 
     bi->next();
     i = bi->current();
     if (i != 1) {
-        errln("%s:%d Incorrect value from bi->previous().  Expected 1, got %d", __FILE__, __LINE__, i);
+        errln("%s:%d Incorrect value from bi->current().  Expected 1, got %d", __FILE__, __LINE__, i);
     }
 
     bi->last();
     bi->next();
     i = bi->current();
     if (i != 10) {
-        errln("%s:%d Incorrect value from bi->previous().  Expected 10, got %d", __FILE__, __LINE__, i);
+        errln("%s:%d Incorrect value from bi->current().  Expected 10, got %d", __FILE__, __LINE__, i);
     }
 
     bi->first();
     bi->previous();
     i = bi->current();
     if (i != 0) {
-        errln("%s:%d Incorrect value from bi->previous().  Expected 0, got %d", __FILE__, __LINE__, i);
+        errln("%s:%d Incorrect value from bi->current().  Expected 0, got %d", __FILE__, __LINE__, i);
     }
 
 

@@ -1,4 +1,4 @@
-﻿# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 # Copyright (c) 2002-2016  International Business Machines Corporation and
 # others. All Rights Reserved.
@@ -39,6 +39,7 @@
 #
 
 !!chain;
+!!quoted_literals_only;
 
 $AI = [:LineBreak =  Ambiguous:];
 $AL = [:LineBreak =  Alphabetic:];
@@ -360,226 +361,12 @@ $RI $CM* $RI $CM* $ZWJ ($ID | $Extended_Pict | $EmojiNRK);
 # LB 30b Do not break between an Emoji Base and an Emoji Modifier
 $EB $CM* $EM;
 
-#
-#  Reverse Rules.
-#
-## -------------------------------------------------
-
-!!reverse;
-
-#  LB 9 Combining Marks.
-#  Stick together any combining sequences that don't match other rules.
-
-^$CM+ $CAN_CM?;
-
-#
-#  Sequences of the form  (shown forwards)
-#      [CANT_CM]  <break>  [CM]  [whatever]
-#  The CM needs to behave as an AL
-#
-$AL_FOLLOW $CM+ / (
-          [$BK $CR $LF $NL $ZW {eof}] |
-          $SP+ $CM+ $SP |
-          $SP+ $CM* ([^$OP $CM $SP] | [$AL {eof}]));   # if LB 14 will match, need to surpress this break.
-                                               #  LB14 says    OP SP* x .
-                                               #    becomes    OP SP* x AL
-                                               #    becomes    OP SP* x CM+ AL_FOLLOW
-                                               #
-                                               # Further note:  the $AL in [$AL {eof}] is only to work around
-                                               #                a rule compiler bug which complains about
-                                               #                empty sets otherwise.
-
-
-# LB 4, 5, 6
-
-$LB4Breaks [$LB4NonBreaks-$CM];
-$LB4Breaks $CM+ $CAN_CM;
-$LF $CR;
-
-
-# LB 7         x SP
-#              x ZW
-[$SP $ZW] [$LB4NonBreaks-$CM];
-[$SP $ZW] $CM+ $CAN_CM;
-
-# LB 8 ZW SP* <break>
-#     TODO: to implement this, we need more than one look-ahead hard break in play at a time.
-#           Requires an engine enhancement.
-#   / $SP* $ZW
-
-# LB 8a        ZWJ x (ID | Extended_Pict | EmojiNRK)
-#
-($ID | $Extended_Pict | $EmojiNRK) $ZWJ $CM* $CAN_CM?;
-
-
-# LB 9,10  Combining marks.
-#    X   $CM needs to behave like X, where X is not $SP or controls.
-#    $CM not covered by the above needs to behave like $AL
-# Stick together any combining sequences that don't match other rules.
-^$CM+ $CAN_CM;
-
-
-# LB 11
-#
-$WJ $CM* $CAN_CM;
-$WJ      [$LB8NonBreaks-$CM];
-
-     $CANT_CM $CM* $WJ;
-$CAN_CM  $CM* $WJ;
-
-# LB 12a
-#      [^SP BA HY] x GL
-#
-$GL $CM* [$LB8NonBreaks-[$CM $SP $BA $BAX $HY]];
-
-# LB 12
-#     GL  x
-#
-$CANT_CM $CM* $GL;
-$CAN_CM $CM* $GL;
-
-
-# LB 13
-# Do not include $EXX here
-$CL $CM+ $CAN_CM;
-$CP $CM+ $CAN_CM;
-$EX $CM+ $CAN_CM;
-$IS $CM+ $CAN_CM;
-$SY $CM+ $CAN_CM;
-
-$CL [$LB8NonBreaks-$CM];
-$CP [$LB8NonBreaks-$CM];
-$EX [$LB8NonBreaks-$CM];
-$IS [$LB8NonBreaks-$CM];
-$SY [$LB8NonBreaks-$CM];
-
-
-# LB 14    OP SP* x
-#
-.   $SP* $CM* $OP;
-$AL_FOLLOW? $CM+ $SP+ $CM* $OP;     #  by LB 10, behaves like $AL_FOLLOW? $AL $SP+ $CM* $OP
-
-
-# LB 15
-$OP $SP* $CM* $QU;
-
-# LB 16
-# Don't include $NSX here
-$NS $SP* $CM* ($CL | $CP);
-
-# LB 17
-$B2 $SP* $CM* $B2;
-
-# LB 18  break after spaces
-#        Nothing explicit needed here.
-
-
-#
-# LB 19
-#
-$QU $CM* $CAN_CM;                                #   . x QU
-$QU      $LB18NonBreaks;
-
-
-$CAN_CM  $CM* $QU;                               #   QU x .
-     $CANT_CM $CM* $QU;
-
-#
-#  LB 20  Break before and after CB.
-#         nothing needed here.
-#
-
-# LB 21
-# Don't include $BAX or $NSX here
-($BA | $HY | $NS) $CM* [$LB20NonBreaks-$CM];     #  . x (BA | HY | NS)
-
-[$LB20NonBreaks-$CM] $CM* $BB;                   #  BB x .
-[^$CB] $CM* $BB;                                      #
-
-# LB21a  Don't break after Hebrew + Hyphen.
-([^$CB] $CM*)? ($HY | $BA | $BAX) $CM* $HL;
-
-# LB21b (reverse)
-$HL $CM* $SY;
-
-# LB 22
-$IN $CM* ($ALPlus | $HL);
-$IN $CM* $EX;
-$IN $CM* ($ID | $EB | $EM);
-# $IN $CM* $IN; # delete this rule for CSS loose
-$IN $CM* $NU;
-
-# LB 23
-# Do not include $POX here
-$NU $CM* ($ALPlus | $HL);
-($ALPlus | $HL) $CM* $NU;
-
-# LB23a
-# Do not include $PRX here
-($ID | $EB | $EM) $CM* $PR;
-$PO $CM* ($ID | $EB | $EM);
-
-# LB 24
-# Do not include $PRX here
-($ALPlus | $HL) $CM* ($PR | $PO | $POX);
-($PR | $PO | $POX) $CM* ($ALPlus | $HL);
-
-
-# LB 25
-# Here do not include $POX at the beginning or $PRX at the end
-($CM* ($PR | $PRX | $PO))? ($CM* ($CL | $CP))? ($CM* ($NU | $IS | $SY))* $CM* $NU ($CM* ($OP | $HY))? ($CM* ($PR | $PO | $POX))?;
-
-# LB 26
-($H3 | $H2 | $JV | $JL) $CM* $JL;
-($JT | $JV) $CM* ($H2 | $JV);
-$JT $CM* ($H3 | $JT);
-
-# LB 27
-# Do not include $POX or $PRX here
-$IN $CM* ($H3 | $H2 | $JT | $JV | $JL);
-$PO $CM* ($H3 | $H2 | $JT | $JV | $JL);
- ($H3 | $H2 | $JT | $JV | $JL) $CM* $PR;
-
-# LB 28
-($ALPlus | $HL) $CM* ($ALPlus | $HL);
-
-
-# LB 29
-($ALPlus | $HL) $CM* $IS;
-
-# LB 30
-$OP $CM* ($ALPlus | $HL | $NU);
-($ALPlus | $HL | $NU) $CM* $CP;
-
-# LB 30a
-#    Pairs of Regional Indicators.
-#    The following two rules are nearly identical. The first matches only sequences with an odd number of adjacent RIs,
-#    the second with an even number. Stripping away the cruft they look like
-#         [^RI] RI / (RI RI)+ ^RI;
-#         [^RI] RI RI / (RI RI)+ ^RI;
-#
-# Line Loose tailoring: Don't include NSX here.
-[{bof} $NS $HY $BA $QU $CL $CP $EX $IS $SY $WJ $GL $ZW $SP $BK $CR $LF $NL $ZWJ] $CM* $RI / ($CM* $RI $CM* $RI)+ $CM* [{eof}[^$RI $CM]];
-[{bof} $NS $HY $BA $QU $CL $CP $EX $IS $SY $WJ $GL $ZW $SP $BK $CR $LF $NL $ZWJ] $CM* $RI $CM* $RI / ($CM* $RI $CM* $RI)+ $CM* [{eof}[^$RI $CM]];
-
-# In general, adjacent RIs stay together. The hard-break rules, above, overide this, forcing in the boundaries between pairs.
-$RI $CM* $RI;
-
-#    WJ, GL, QU, etc. are classes with rules like "WJ x "   which includes "WJ x RI".
-$RI $CM* ([$WJ $GL $QU $BB] |  (($HY | $BA)$CM* $HL));
-
-
-# LB 30b Do not break between an Emoji Base and an Emoji Modifier
-$EM $CM* $EB;
-
-
 ## -------------------------------------------------
 
 !!safe_reverse;
 
 # LB 9
 ^$CM+ [^$CM $BK $CR $LF $NL $ZW $SP];
-^$CM+ $SP / .;
 
 # LB 14
 $SP+ $CM* $OP;
@@ -605,20 +392,3 @@ $CM* ($HY | $BA | $BAX) $CM* $HL;
 
 # For dictionary-based break
 $dictionary $dictionary;
-
-## -------------------------------------------------
-
-!!safe_forward;
-
-# Skip forward over all character classes that are involved in
-#   rules containing patterns with possibly more than one char
-#   of context.
-#
-#  It might be slightly more efficient to have specific rules
-#  instead of one generic one, but only if we could
-#  turn off rule chaining.  We don't want to move more
-#  than necessary.
-#
-^[$CM $OP $QU $CL $CP $B2 $PR $PRX $HY $BA $BAX $SP $RI $ZWJ $dictionary]+ [^$CM $OP $QU $CL $CP $B2 $PR $PRX $HY $BA $BAX $RI $ZWJ $dictionary];
-$dictionary $dictionary;
-

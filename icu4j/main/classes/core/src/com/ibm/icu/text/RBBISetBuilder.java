@@ -281,11 +281,16 @@ class RBBISetBuilder {
         if (fRB.fDebugEnv!=null  && fRB.fDebugEnv.indexOf("rgroup")>=0) {printRangeGroups();}
         if (fRB.fDebugEnv!=null  && fRB.fDebugEnv.indexOf("esets")>=0) {printSets();}
 
-        fTrie = new Trie2Writable(0,       //   Initial value for all code points
-                                  0);      //   Error value.
+        fTrie = new Trie2Writable(0,       //   Initial value for all code points.
+                                  0);      //   Error value for out-of-range input.
 
         for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
-            fTrie.setRange(rlRange.fStartChar, rlRange.fEndChar, rlRange.fNum, true);
+            fTrie.setRange(
+                    rlRange.fStartChar,     // Range start
+                    rlRange.fEndChar,       // Range end (inclusive)
+                    rlRange.fNum,           // value for range
+                    true                    // Overwrite previously written values
+                    );
         }
     }
 

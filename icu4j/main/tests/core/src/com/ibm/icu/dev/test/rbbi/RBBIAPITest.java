@@ -298,7 +298,7 @@ public class RBBIAPITest extends TestFmwk {
     }
 
     /**
-     * Testing the methods lastt(), previous(), and preceding() of RuleBasedBreakIterator
+     * Testing the methods last(), previous(), and preceding() of RuleBasedBreakIterator
      **/
     @Test
     public void TestLastPreviousPreceding() {
@@ -306,11 +306,11 @@ public class RBBIAPITest extends TestFmwk {
         String testString = "This is a word break. Isn't it? 2.25 dollars";
         logln("Testing last(),previous(), preceding() with custom rules");
         logln("testing word iteration for string \"" + testString + "\"");
-        RuleBasedBreakIterator wordIter1 = (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.getDefault());
+        RuleBasedBreakIterator wordIter1 = (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.ENGLISH);
         wordIter1.setText(testString);
         p = wordIter1.last();
         if (p != testString.length()) {
-            errln("ERROR: first() returned" + p + "instead of" + testString.length());
+            errln("ERROR: last() returned" + p + "instead of" + testString.length());
         }
         q = wordIter1.previous();
         doTest(testString, p, q, 37, "dollars");
@@ -379,11 +379,11 @@ public class RBBIAPITest extends TestFmwk {
     @Test
     public void TestIsBoundary() {
         String testString1 = "Write here. \u092d\u0301\u0930\u0924 \u0938\u0941\u0902\u0926\u0930 a\u0301u";
-        RuleBasedBreakIterator charIter1 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault());
+        RuleBasedBreakIterator charIter1 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.ENGLISH);
         charIter1.setText(testString1);
         int bounds1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 20, 21, 22, 23, 25, 26};
         doBoundaryTest(charIter1, testString1, bounds1);
-        RuleBasedBreakIterator wordIter2 = (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.getDefault());
+        RuleBasedBreakIterator wordIter2 = (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.ENGLISH);
         wordIter2.setText(testString1);
         int bounds2[] = {0, 5, 6, 10, 11, 12, 16, 17, 22, 23, 26};
         doBoundaryTest(wordIter2, testString1, bounds2);

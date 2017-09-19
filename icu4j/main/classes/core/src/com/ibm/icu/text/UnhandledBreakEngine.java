@@ -50,20 +50,13 @@ final class UnhandledBreakEngine implements LanguageBreakEngine {
 
     @Override
     public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            boolean reverse, int breakType, DictionaryBreakEngine.DequeI foundBreaks) {
+            int breakType, DictionaryBreakEngine.DequeI foundBreaks) {
         if (breakType >= 0 && breakType < fHandled.length()) {
             UnicodeSet uniset = fHandled.get(breakType);
             int c = CharacterIteration.current32(text);
-            if (reverse) {
-                while (text.getIndex() > startPos && uniset.contains(c)) {
-                    CharacterIteration.previous32(text);
-                    c = CharacterIteration.current32(text);
-                }
-            } else {
-                while (text.getIndex() < endPos && uniset.contains(c)) {
-                    CharacterIteration.next32(text);
-                    c = CharacterIteration.current32(text);
-                }
+            while (text.getIndex() < endPos && uniset.contains(c)) {
+                CharacterIteration.next32(text);
+                c = CharacterIteration.current32(text);
             }
         }
         return 0;
