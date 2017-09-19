@@ -676,9 +676,10 @@ extern U_IMPORT char *U_TZNAME[];
 #if !UCONFIG_NO_FILE_IO && ((U_PLATFORM_IS_DARWIN_BASED && (U_PLATFORM != U_PF_IPHONE || defined(U_TIMEZONE))) || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM == U_PF_SOLARIS)
 /* These platforms are likely to use Olson timezone IDs. */
 /* common targets of the symbolic link at TZDEFAULT are:
- * "/usr/share/zoneinfo/<olsonID>" default, macOS to 10.12
+ * "/usr/share/zoneinfo/<olsonID>" default, older Linus distros, macOS to 10.12
+ * "../usr/share/zoneinfo/<olsonID>" newer Linux distros: Red Hat Enterprise Linux 7, Ubuntu, SuSe Linux
  * "/usr/share/lib/zoneinfo/<olsonID>" Solaris
- * "../usr/share/lib/zoneinfo/<olsonID>" Solaris, Red Hat Enterprise Linux 7, Ubuntu
+ * "../usr/share/lib/zoneinfo/<olsonID>" Solaris
  * "/var/db/timezone/zoneinfo/<olsonID>" macOS 10.13
  * To avoid checking lots of paths, just check that the target path
  * before the <olsonID> ends with "/zoneinfo/", and the <olsonID> is valid.
