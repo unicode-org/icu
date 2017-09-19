@@ -1,7 +1,7 @@
-﻿#
+#
 # Copyright (C) 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
-# Copyright (C) 2002-2016, International Business Machines Corporation 
+# Copyright (C) 2002-2016, International Business Machines Corporation
 # and others. All Rights Reserved.
 #
 # file:  word.txt
@@ -22,6 +22,7 @@
 ##############################################################################
 
 !!chain;
+!!quoted_literals_only;
 
 
 #
@@ -196,134 +197,23 @@ $KanaKanji $KanaKanji {400}; # different rule status if both kana and kanji foun
 
 ## -------------------------------------------------
 
-!!reverse;
-
-$BackHebrew_LetterEx      = ($Format | $Extend | $ZWJ)* $Hebrew_Letter;
-$BackALetterEx            = ($Format | $Extend | $ZWJ)* $ALetterPlus;
-$BackSingle_QuoteEx       = ($Format | $Extend | $ZWJ)* $Single_Quote;
-$BackDouble_QuoteEx       = ($Format | $Extend | $ZWJ)* $Double_Quote;
-$BackMidNumLetEx          = ($Format | $Extend | $ZWJ)* $MidNumLet;
-$BackNumericEx            = ($Format | $Extend | $ZWJ)* $Numeric;
-$BackMidNumEx             = ($Format | $Extend | $ZWJ)* $MidNum;
-$BackMidLetterEx          = ($Format | $Extend | $ZWJ)* $MidLetter;
-$BackKatakanaEx           = ($Format | $Extend | $ZWJ)* $Katakana;
-$BackHiraganaEx           = ($Format | $Extend | $ZWJ)* $Hiragana;
-$BackExtendNumLetEx       = ($Format | $Extend | $ZWJ)* $ExtendNumLet;
-$BackRegional_IndicatorEx = ($Format | $Extend | $ZWJ)* $Regional_Indicator;
-
-# rule 3
-$LF $CR;
-
-# Rule 3c   ZWJ x (Extended_Pict | EmojiNRK).  Precedes WB4, so no intervening Extend chars allowed.
-#
-($Extended_Pict | $EmojiNRK) $ZWJ;
-
-# rule 4
-($Format | $Extend | $ZWJ)*  [^$CR $LF $Newline]?;
-
-# rule 5
-
-($BackALetterEx | $BackHebrew_LetterEx) ($BackALetterEx | $BackHebrew_LetterEx);
-
-# rule 6 and 7
-
-($BackALetterEx | $BackHebrew_LetterEx) ($BackMidLetterEx | $BackMidNumLetEx | $BackSingle_QuoteEx) ($BackALetterEx | $BackHebrew_LetterEx);
-
-# rule 7a
-$BackSingle_QuoteEx $BackHebrew_LetterEx;
-
-# Rule 7b and 7c
-$BackHebrew_LetterEx $BackDouble_QuoteEx $BackHebrew_LetterEx;
-
-# rule 8
-
-$BackNumericEx $BackNumericEx;
-
-# rule 9
-
-$BackNumericEx ($BackALetterEx | $BackHebrew_LetterEx);
-
-# rule 10
-
-($BackALetterEx | $BackHebrew_LetterEx) $BackNumericEx;
-
-# rule 11 and 12
-
-$BackNumericEx ($BackMidNumEx | $BackMidNumLetEx | $BackSingle_QuoteEx) $BackNumericEx;
-
-# rule 13
-
-$BackKatakanaEx $BackKatakanaEx;
-
-# rules 13 a/b
-#
-$BackExtendNumLetEx ($BackALetterEx | $BackHebrew_LetterEx | $BackNumericEx | $BackKatakanaEx | $BackExtendNumLetEx);
-($BackALetterEx | $BackHebrew_LetterEx | $BackNumericEx | $BackKatakanaEx) $BackExtendNumLetEx; 
-
-# special handling for CJK characters: chain for later dictionary segmentation
-$HangulSyllable $HangulSyllable;
-$KanaKanji $KanaKanji; #different rule status if both kanji and kana found
-
-# rule 14
-
-$E_Modifier ($Format | $Extend | $ZWJ)* ($E_Base | $EBG);
-
-# rule 15 - 17
-#    Pairs of Regional Indicators stay together.
-
-^$BackRegional_IndicatorEx / ($BackRegional_IndicatorEx $BackRegional_IndicatorEx)* 
-        ($Format | $Extend | $ZWJ)* [[^$Regional_Indicator $Format $Extend $ZWJ] {eof}];
-^$BackRegional_IndicatorEx $BackRegional_IndicatorEx / ($BackRegional_IndicatorEx $BackRegional_IndicatorEx)* 
-        ($Format | $Extend | $ZWJ)* [[^$Regional_Indicator $Format $Extend $ZWJ] {eof}];
-
-($Extended_Pict | $EmojiNRK) $ZWJ $BackRegional_IndicatorEx / ($BackRegional_IndicatorEx $BackRegional_IndicatorEx)* 
-        ($Format | $Extend | $ZWJ)* [[^$Regional_Indicator $Format $Extend $ZWJ] {eof}];
-($Extended_Pict | $EmojiNRK) $ZWJ $BackRegional_IndicatorEx $BackRegional_IndicatorEx / ($BackRegional_IndicatorEx $BackRegional_IndicatorEx)* 
-        ($Format | $Extend | $ZWJ)* [[^$Regional_Indicator $Format $Extend $ZWJ] {eof}];
-
-
-
-## -------------------------------------------------
-
 !!safe_reverse;
 
 # rule 3
 ($Extend | $Format | $ZWJ)+ .?;
 
 # rule 6
-($MidLetter | $MidNumLet | $Single_Quote) ($BackALetterEx | $BackHebrew_LetterEx);
+($MidLetter | $MidNumLet | $Single_Quote) ($Format | $Extend | $ZWJ)* ($Hebrew_Letter | $ALetterPlus);
 
 # rule 7b
-$Double_Quote $BackHebrew_LetterEx;
+$Double_Quote ($Format | $Extend | $ZWJ)* $Hebrew_Letter;
 
 
 # rule 11
-($MidNum | $MidNumLet | $Single_Quote) $BackNumericEx;
+($MidNum | $MidNumLet | $Single_Quote) ($Format | $Extend | $ZWJ)* $Numeric;
 
 # rule 13c
-$BackRegional_IndicatorEx*;
-
-# For dictionary-based break
-$dictionary $dictionary;
-
-## -------------------------------------------------
-
-!!safe_forward;
-
-# rule 4
-($Extend | $Format | $ZWJ)+ .?;
-
-# rule 6
-($MidLetterEx | $MidNumLetEx | $Single_QuoteEx) ($ALetterEx | $Hebrew_LetterEx);
-
-# rule 7b
-$Double_QuoteEx $Hebrew_LetterEx;
-
-# rule 11
-($MidNumEx | $MidNumLetEx | $Single_QuoteEx) $NumericEx;
-
-# rule 13c
-$Regional_IndicatorEx*;
+$Regional_Indicator ($Format | $Extend | $ZWJ)* $Regional_Indicator;
 
 # For dictionary-based break
 $dictionary $dictionary;

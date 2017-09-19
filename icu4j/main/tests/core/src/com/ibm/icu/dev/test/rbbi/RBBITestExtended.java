@@ -43,9 +43,9 @@ public RBBITestExtended() {
 static class TestParams {
     BreakIterator   bi;
     StringBuilder   dataToBreak    = new StringBuilder();
-    int[]           expectedBreaks = new int[1000];
-    int[]           srcLine        = new int[1000];
-    int[]           srcCol         = new int[1000];
+    int[]           expectedBreaks = new int[4000];
+    int[]           srcLine        = new int[4000];
+    int[]           srcCol         = new int[4000];
     ULocale         currentLocale  = new ULocale("en_US");
 }
 

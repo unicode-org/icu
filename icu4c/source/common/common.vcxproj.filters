@@ -97,6 +97,9 @@
     <ClCompile Include="rbbitblb.cpp">
       <Filter>break iteration</Filter>
     </ClCompile>
+    <ClCompile Include="rbbi_cache.cpp">
+      <Filter>break iteration</Filter>
+    </ClCompile>
     <ClCompile Include="ubrk.cpp">
       <Filter>break iteration</Filter>
     </ClCompile>
@@ -637,6 +640,9 @@
       <Filter>break iteration</Filter>
     </ClInclude>
     <ClInclude Include="rbbitblb.h">
+      <Filter>break iteration</Filter>
+    </ClInclude>
+    <ClInclude Include="rbbi_cache.h">
       <Filter>break iteration</Filter>
     </ClInclude>
     <ClInclude Include="ubrkimpl.h">

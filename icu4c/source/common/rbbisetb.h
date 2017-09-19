@@ -111,8 +111,8 @@ private:
 
     RangeDescriptor       *fRangeList;      // Head of the linked list of RangeDescriptors
 
-    UTrie2               *fTrie;            // The mapping TRIE that is the end result of processing
-    uint32_t              fTrieSize;        //  the Unicode Sets.
+    UTrie2                *fTrie;           // The mapping TRIE that is the end result of processing
+    uint32_t               fTrieSize;       //  the Unicode Sets.
 
     // Groups correspond to character categories -
     //       groups of ranges that are in the same original UnicodeSets.
