@@ -792,7 +792,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
     UTEXT_SETNATIVEINDEX(fText, initialPosition);
     result          = initialPosition;
     c               = UTEXT_NEXT32(fText);
-    if (fData == NULL || c==U_SENTINEL) {
+    if (c==U_SENTINEL) {
         fDone = TRUE;
         return UBRK_DONE;
     }
