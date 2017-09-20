@@ -33,6 +33,7 @@ static void TestRegisterUnregister(void);
 static void TestExtractBetween(void);
 static void TestUnicodeIDs(void);
 static void TestGetRulesAndSourceSet(void);
+static void TestDataVariantsCompounds(void);
 
 static void _expectRules(const char*, const char*, const char*);
 static void _expect(const UTransliterator* trans, const char* cfrom, const char* cto);
@@ -51,6 +52,7 @@ addUTransTest(TestNode** root) {
     TEST(TestExtractBetween);
     TEST(TestUnicodeIDs);
     TEST(TestGetRulesAndSourceSet);
+    TEST(TestDataVariantsCompounds);
 }
 
 /*------------------------------------------------------------------
@@ -638,6 +640,65 @@ static void TestGetRulesAndSourceSet() {
     }
 }
 
+typedef struct {
+    const char * transID;
+    const char * sourceText;
+    const char * targetText;
+} TransIDSourceTarg;
+
+static const TransIDSourceTarg dataVarCompItems[] = {
+    { "Simplified-Traditional",
+       "\\u4E0B\\u9762\\u662F\\u4E00\\u4E9B\\u4ECE\\u7B80\\u4F53\\u8F6C\\u6362\\u4E3A\\u7E41\\u4F53\\u5B57\\u793A\\u4F8B\\u6587\\u672C\\u3002",
+       "\\u4E0B\\u9762\\u662F\\u4E00\\u4E9B\\u5F9E\\u7C21\\u9AD4\\u8F49\\u63DB\\u70BA\\u7E41\\u9AD4\\u5B57\\u793A\\u4F8B\\u6587\\u672C\\u3002" },
+    { "Halfwidth-Fullwidth",
+      "Sample text, \\uFF7B\\uFF9D\\uFF8C\\uFF9F\\uFF99\\uFF83\\uFF77\\uFF7D\\uFF84.",
+      "\\uFF33\\uFF41\\uFF4D\\uFF50\\uFF4C\\uFF45\\u3000\\uFF54\\uFF45\\uFF58\\uFF54\\uFF0C\\u3000\\u30B5\\u30F3\\u30D7\\u30EB\\u30C6\\u30AD\\u30B9\\u30C8\\uFF0E" },
+    { "Han-Latin/Names; Latin-Bopomofo",
+       "\\u4E07\\u4FDF\\u919C\\u5974\\u3001\\u533A\\u695A\\u826F\\u3001\\u4EFB\\u70E8\\u3001\\u5CB3\\u98DB",
+       "\\u3107\\u311B\\u02CB \\u3111\\u3127\\u02CA \\u3114\\u3121\\u02C7 \\u310B\\u3128\\u02CA\\u3001 \\u3121 \\u3114\\u3128\\u02C7 \\u310C\\u3127\\u3124\\u02CA\\u3001 \\u3116\\u3123\\u02CA \\u3127\\u311D\\u02CB\\u3001 \\u3129\\u311D\\u02CB \\u3108\\u311F" },
+    { "Greek-Latin",
+      "\\u1F08 \\u1FBC \\u1F89 \\u1FEC",
+      "A \\u0100I H\\u0100I RH" },
+    { "Greek-Latin/BGN",
+      "\\u1F08 \\u1FBC \\u1F89 \\u1FEC",
+      "A\\u0313 A\\u0345 A\\u0314\\u0345 \\u1FEC" },
+    { "Greek-Latin/UNGEGN",
+      "\\u1F08 \\u1FBC \\u1F89 \\u1FEC",
+      "A A A R" },
+    { NULL, NULL, NULL }
+};
+
+enum { kBBufMax = 384 };
+static void TestDataVariantsCompounds() {
+    const TransIDSourceTarg* itemsPtr;
+    for (itemsPtr = dataVarCompItems; itemsPtr->transID != NULL; itemsPtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UChar utrid[kUBufMax];
+        int32_t utridlen = u_unescape(itemsPtr->transID, utrid, kUBufMax);
+        UTransliterator* utrans = utrans_openU(utrid, utridlen, UTRANS_FORWARD, NULL, 0, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("FAIL: utrans_openRules(%s) failed, error=%s (Are you missing data?)\n", itemsPtr->transID, u_errorName(status));
+            continue;
+        }
+        UChar text[kUBufMax];
+        int32_t textLen =  u_unescape(itemsPtr->sourceText, text, kUBufMax);
+        int32_t textLim = textLen;
+        utrans_transUChars(utrans, text, &textLen, kUBufMax, 0, &textLim, &status);
+        if (U_FAILURE(status)) {
+            log_err("FAIL: utrans_transUChars(%s) failed, error=%s\n", itemsPtr->transID, u_errorName(status));
+        } else {
+            UChar expect[kUBufMax];
+            int32_t expectLen =  u_unescape(itemsPtr->targetText, expect, kUBufMax);
+            if (textLen != expectLen || u_strncmp(text, expect, textLen) != 0) {
+                char btext[kBBufMax], bexpect[kBBufMax];
+                u_austrncpy(btext, text, textLen);
+                u_austrncpy(bexpect, expect, expectLen);
+                log_err("FAIL: utrans_transUChars(%s),\n       expect %s\n       get    %s\n", itemsPtr->transID, bexpect, btext);
+            }
+        }
+        utrans_close(utrans);
+    }
+}
 
 static void _expectRules(const char* crules,
                   const char* cfrom,
