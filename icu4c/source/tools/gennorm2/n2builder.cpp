@@ -408,7 +408,7 @@ void Normalizer2DataBuilder::postProcess(Norm &norm) {
 class Norm16Writer : public Norms::Enumerator {
 public:
     Norm16Writer(Norms &n, Normalizer2DataBuilder &b) : Norms::Enumerator(n), builder(b) {}
-    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) override {
+    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) U_OVERRIDE {
         builder.writeNorm16(start, end, norm);
     }
     Normalizer2DataBuilder &builder;
