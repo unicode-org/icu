@@ -368,6 +368,7 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
 #define LF       0x000D
 #define AT_SIGN  0x0040
 
+#if UCONFIG_NO_REGULAR_EXPRESSIONS==0
 static void
 trim(char **src, int32_t *len){
 
@@ -395,7 +396,6 @@ trim(char **src, int32_t *len){
     *len = i+1;
 }
 
-#if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when no RegularExpressions are available */
 static void
 print(UChar* src, int32_t srcLen,const char *tagStart,const char *tagEnd,  UErrorCode *status){
     int32_t bufCapacity   = srcLen*4;
