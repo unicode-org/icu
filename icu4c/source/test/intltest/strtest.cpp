@@ -146,7 +146,7 @@ void
 StringTest::Test_UTF8_COUNT_TRAIL_BYTES() {
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
     if(UTF8_COUNT_TRAIL_BYTES(0x7F) != 0
-            || UTF8_COUNT_TRAIL_BYTES(0xC0) != 1
+            || UTF8_COUNT_TRAIL_BYTES(0xC2) != 1
             || UTF8_COUNT_TRAIL_BYTES(0xE0) != 2
             || UTF8_COUNT_TRAIL_BYTES(0xF0) != 3) {
         errln("UTF8_COUNT_TRAIL_BYTES does not work right! See utf_old.h.");
@@ -155,7 +155,7 @@ StringTest::Test_UTF8_COUNT_TRAIL_BYTES() {
     // Note: U8_COUNT_TRAIL_BYTES (current) and UTF8_COUNT_TRAIL_BYTES (deprecated)
     //       have completely different implementations.
     if (U8_COUNT_TRAIL_BYTES(0x7F) != 0
-            || U8_COUNT_TRAIL_BYTES(0xC0) != 1
+            || U8_COUNT_TRAIL_BYTES(0xC2) != 1
             || U8_COUNT_TRAIL_BYTES(0xE0) != 2
             || U8_COUNT_TRAIL_BYTES(0xF0) != 3) {
         errln("U8_COUNT_TRAIL_BYTES does not work right! See utf8.h.");
