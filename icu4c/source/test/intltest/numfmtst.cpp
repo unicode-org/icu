@@ -41,6 +41,28 @@
 #include "datadrivennumberformattestsuite.h"
 #include "unicode/msgfmt.h"
 
+#if U_PLATFORM == U_PF_AIX
+// These should not be macros. If they are, 
+// replace them with std::isnan and std::isinf
+#if defined(isnan)
+#undef isnan
+namespace std {
+ bool isnan(double x) {
+   return _isnan(x);
+ }
+}
+#endif
+#if defined(isinf)
+#undef isinf
+namespace std {
+ bool isinf(double x) {
+   return _isinf(x);
+ }
+}
+#endif
+#endif
+
+
 class NumberFormatTestDataDriven : public DataDrivenNumberFormatTestSuite {
 protected:
 UBool isFormatPass(
