@@ -41,7 +41,7 @@
 #include "datadrivennumberformattestsuite.h"
 #include "unicode/msgfmt.h"
 
-#if U_PLATFORM == U_PF_AIX
+#if (U_PLATFORM == U_PF_AIX) || (U_PLATFORM == U_PF_OS390)
 // These should not be macros. If they are, 
 // replace them with std::isnan and std::isinf
 #if defined(isnan)
