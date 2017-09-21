@@ -1200,7 +1200,6 @@ RuleBasedNumberFormat::format(double number,
                               UnicodeString& toAppendTo,
                               FieldPosition& /* pos */) const
 {
-    int32_t startPos = toAppendTo.length();
     UErrorCode status = U_ZERO_ERROR;
     if (defaultRuleSet) {
         format(number, *defaultRuleSet, toAppendTo, status);
