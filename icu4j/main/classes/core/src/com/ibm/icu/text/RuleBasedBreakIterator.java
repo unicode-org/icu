@@ -1318,7 +1318,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             // the original starting and ending position. And initialize the
             // cache iteration position to the first entry.
 
-            // System.out.printf("foundBreakCount = %d\n", foundBreakCount);
+            // System.out.printf("foundBreakCount = %d%n", foundBreakCount);
             if (foundBreakCount > 0) {
                 assert(foundBreakCount == fBreaks.size());
                 if (startPos < fBreaks.elementAt(0)) {
@@ -1853,9 +1853,9 @@ class BreakCache {
     }
 
     void dumpCache() {
-        System.out.printf("fTextIdx:%d   fBufIdx:%d\n", fTextIdx, fBufIdx);
+        System.out.printf("fTextIdx:%d   fBufIdx:%d%n", fTextIdx, fBufIdx);
         for (int i=fStartBufIdx; ; i=modChunkSize(i+1)) {
-            System.out.printf("%d  %d\n", i, fBoundaries[i]);
+            System.out.printf("%d  %d%n", i, fBoundaries[i]);
             if (i == fEndBufIdx) {
                 break;
             }
