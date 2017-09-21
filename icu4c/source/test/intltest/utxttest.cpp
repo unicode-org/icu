@@ -60,7 +60,6 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(Ticket10562);
     TESTCASE_AUTO(Ticket10983);
     TESTCASE_AUTO(Ticket12130);
-    TESTCASE_AUTO(Ticket12888);
     TESTCASE_AUTO(Ticket13344);
     TESTCASE_AUTO_END;
 }
@@ -951,10 +950,14 @@ void UTextTest::ErrorTest()
         UChar buf[10];
         int n = utext_extract(ut, 0, 9, buf, 10, &status);
         TEST_SUCCESS(status);
-        TEST_ASSERT(n==5);
+        TEST_ASSERT(n==7);
+        TEST_ASSERT(buf[0] == 0x41);
         TEST_ASSERT(buf[1] == 0xfffd);
-        TEST_ASSERT(buf[3] == 0xfffd);
         TEST_ASSERT(buf[2] == 0x42);
+        TEST_ASSERT(buf[3] == 0xfffd);
+        TEST_ASSERT(buf[4] == 0xfffd);
+        TEST_ASSERT(buf[5] == 0xfffd);
+        TEST_ASSERT(buf[6] == 0x43);
         utext_close(ut);
     }
 
@@ -1576,66 +1579,6 @@ void UTextTest::Ticket12130() {
         }
     }
     utext_close(&ut);
-}
-
-// Ticket 12888: bad handling of illegal utf-8 containing many instances of the archaic, now illegal,
-//               six byte utf-8 forms. Original implementation had an assumption that
-//               there would be at most three utf-8 bytes per UTF-16 code unit.
-//               The five and six byte sequences map to a single replacement character.
-
-void UTextTest::Ticket12888() {
-    const char *badString = 
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
-            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80";
-
-    UErrorCode status = U_ZERO_ERROR;
-    LocalUTextPointer ut(utext_openUTF8(NULL, badString, -1, &status));
-    TEST_SUCCESS(status);
-    for (;;) {
-        UChar32 c = utext_next32(ut.getAlias());
-        if (c == U_SENTINEL) {
-            break;
-        }
-    }
-    int32_t endIdx = utext_getNativeIndex(ut.getAlias());
-    if (endIdx != (int32_t)strlen(badString)) {
-        errln("%s:%d expected=%d, actual=%d", __FILE__, __LINE__, strlen(badString), endIdx);
-        return;
-    }
-
-    for (int32_t prevIndex = endIdx; prevIndex>0;) {
-        UChar32 c = utext_previous32(ut.getAlias());
-        int32_t currentIndex = utext_getNativeIndex(ut.getAlias());
-        if (c != 0xfffd) {
-            errln("%s:%d (expected, actual, index) = (%d, %d, %d)\n",
-                    __FILE__, __LINE__, 0xfffd, c, currentIndex);
-            break;
-        }
-        if (currentIndex != prevIndex - 6) {
-            errln("%s:%d: wrong index. Expected, actual = %d, %d",
-                    __FILE__, __LINE__, prevIndex - 6, currentIndex);
-            break;
-        }
-        prevIndex = currentIndex;
-    }
 }
 
 // Ticket 13344 The macro form of UTEXT_SETNATIVEINDEX failed when target was a trail surrogate
