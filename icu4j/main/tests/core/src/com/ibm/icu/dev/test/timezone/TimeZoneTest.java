@@ -504,52 +504,46 @@ public class TimeZoneTest extends TestFmwk
         if (!zoneclone.equals(zone)) errln("FAIL: clone or operator== failed");
         zoneclone.setID("abc");
         if (zoneclone.equals(zone)) errln("FAIL: clone or operator!= failed");
-        // delete zoneclone;
 
         zoneclone = (TimeZone)zone.clone();
         if (!zoneclone.equals(zone)) errln("FAIL: clone or operator== failed");
         zoneclone.setRawOffset(45678);
         if (zoneclone.equals(zone)) errln("FAIL: clone or operator!= failed");
 
-        // C++ only
-        /*
-          SimpleTimeZone copy(*zone);
-          if (!(copy == *zone)) errln("FAIL: copy constructor or operator== failed");
-          copy = *(SimpleTimeZone*)zoneclone;
-          if (!(copy == *zoneclone)) errln("FAIL: assignment operator or operator== failed");
-          */
-
+        // set/getDefault
         TimeZone saveDefault = TimeZone.getDefault();
         TimeZone.setDefault(zone);
         TimeZone defaultzone = TimeZone.getDefault();
-        if (defaultzone == zone) errln("FAIL: Default object is identical, not clone");
-        if (!defaultzone.equals(zone)) errln("FAIL: Default object is not equal");
-        TimeZone.setDefault(saveDefault);
-        // delete defaultzone;
-        // delete zoneclone;
+        if (defaultzone == zone) {
+            errln("FAIL: Default object is identical, not clone");
+        }
+        if (!defaultzone.equals(zone)) {
+            errln("FAIL: Default object is not equal");
+        }
+        java.util.TimeZone javaDefault = java.util.TimeZone.getDefault();
+        if (offset != javaDefault.getRawOffset() || !id.equals(javaDefault.getID())) {
+            errln("FAIL: Java runtime default time zone is not synchronized");
+        }
 
-//      // ICU 2.6 Coverage
-//      logln(zone.toString());
-//      logln(zone.getDisplayName());
-//      SimpleTimeZoneAdapter stza = new SimpleTimeZoneAdapter((SimpleTimeZone) TimeZone.getTimeZone("GMT"));
-//      stza.setID("Foo");
-//      if (stza.hasSameRules(java.util.TimeZone.getTimeZone("GMT"))) {
-//          errln("FAIL: SimpleTimeZoneAdapter.hasSameRules");
-//      }
-//      stza.setRawOffset(3000);
-//      offset = stza.getOffset(GregorianCalendar.BC, 2001, Calendar.DECEMBER,
-//                              25, Calendar.TUESDAY, 12*60*60*1000);
-//      if (offset != 3000) {
-//          errln("FAIL: SimpleTimeZoneAdapter.getOffset");
-//      }
-//      SimpleTimeZoneAdapter dup = (SimpleTimeZoneAdapter) stza.clone();
-//      if (stza.hashCode() != dup.hashCode()) {
-//          errln("FAIL: SimpleTimeZoneAdapter.hashCode");
-//      }
-//      if (!stza.equals(dup)) {
-//          errln("FAIL: SimpleTimeZoneAdapter.equals");
-//      }
-//      logln(stza.toString());
+        String anotheId = "AnotherZone";
+        int anotherOffset = 23456;
+        SimpleTimeZone anotherZone = new SimpleTimeZone(anotherOffset, anotheId);
+        TimeZone.setICUDefault(anotherZone);
+        TimeZone newICUDefaultZone = TimeZone.getDefault();
+        if (newICUDefaultZone == anotherZone) {
+            errln("FAIL: New ICU default object is identical, not clone");
+        }
+        if (!newICUDefaultZone.equals(anotherZone)) {
+            errln("FAIL: New ICU default object is not equal");
+        }
+        javaDefault = java.util.TimeZone.getDefault();
+        if (offset != javaDefault.getRawOffset() || !id.equals(javaDefault.getID())) {
+            errln("FAIL: Java runtime default time zone was updated");
+        }
+
+        TimeZone.setDefault(saveDefault);
+
+
 
         String tzver = TimeZone.getTZDataVersion();
         if (tzver.length() != 5 /* 4 digits + 1 letter */) {
