@@ -1,24 +1,19 @@
 <?xml version="1.0"?>
 <!--
-* © 2016 and later: Unicode, Inc. and others.
+* © 2017 and later: Unicode, Inc. and others.
 * License & terms of use: http://www.unicode.org/copyright.html#License
-*******************************************************************************
-* Copyright (C) 2010-2016, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.ibm.icu</groupId>
-  <artifactId>icu4j</artifactId>
-  <version>60-SNAPSHOT</version>
+  <artifactId>icu4j-charset</artifactId>
+  <version>@POMVERSION@</version>
 
-  <name>ICU4J</name>
+  <name>ICU4J Charset Provider</name>
   <description>
-    International Component for Unicode for Java (ICU4J) is a mature, widely used Java library
-    providing Unicode and Globalization support 
+    icu4j-charset is a supplemental library for icu4j, implementing Java Charset SPI.
   </description>
   <url>http://icu-project.org/</url>
   <inceptionYear>2001</inceptionYear>
@@ -143,4 +138,12 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>@POMVERSION@</version>
+    </dependency>
+  </dependencies>
 </project>

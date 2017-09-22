@@ -56,12 +56,31 @@
     <property name="icu4j.api.doc.title" value="ICU4J ${api.doc.version} API Specification"/>
     <property name="icu4j.api.doc.window.title" value="ICU4J ${api.doc.version}"/>
     <property name="icu4j.api.doc.header" value="ICU4J ${api.doc.version}"/>
+
     <property name="icu4j.api.doc.jdk.link" value="http://docs.oracle.com/javase/8/docs/api/"/>
     <property name="icu4j.api.doc.copyright.footer" value="&lt;font size=-1&gt;Copyright &#x00A9; 2016 Unicode, Inc. and others.&lt;/font&gt;"/>
+
+    <!-- API docs for maven repo -->
+    <property name="icu4jdocs.main.jar.versioned.file" value="icu4j-${release.file.ver}-docs.jar"/>
+    <property name="icu4j.main.api.doc.title" value="ICU4J (com.ibm.icu:icu4j) ${api.doc.version} API Specification"/>
+    <property name="icu4j.main.api.doc.window.title" value="ICU4J (com.ibm.icu:icu4j) ${api.doc.version}"/>
+    <property name="icu4j.main.api.doc.header" value="ICU4J (com.ibm.icu:icu4j) ${api.doc.version}"/>
+
+    <property name="icu4jdocs.charset.jar.versioned.file" value="icu4j-charset-${release.file.ver}-docs.jar"/>
+    <property name="icu4j.charset.api.doc.title" value="ICU4J Charset (com.ibm.icu:icu4j-charset) ${api.doc.version} API Specification"/>
+    <property name="icu4j.charset.api.doc.window.title" value="ICU4J Charset (com.ibm.icu:icu4j-charset) ${api.doc.version}"/>
+    <property name="icu4j.charset.api.doc.header" value="ICU4J Charset (com.ibm.icu:icu4j-charset) ${api.doc.version}"/>
+
+    <property name="icu4jdocs.localespi.jar.versioned.file" value="icu4j-localespi-${release.file.ver}-docs.jar"/>
+    <property name="icu4j.locspi.api.doc.title" value="ICU4J Locale SPI Provider (com.ibm.icu:icu4j-localespi) ${api.doc.version} API Specification"/>
+    <property name="icu4j.locspi.api.doc.window.title" value="ICU4J Locale SPI Provider (com.ibm.icu:icu4j-localespi) ${api.doc.version}"/>
+    <property name="icu4j.locspi.api.doc.header" value="ICU4J Locale SPI Provider (com.ibm.icu:icu4j-localespi) ${api.doc.version}"/>
+
 
     <!-- directories -->
     <property name="release.dir" value="release"/>
     <property name="doc.dir" value="doc"/>
+    <property name="maven.doc.base.dir" value="${out.dir}/mavendoc"/>
     <property name="cldr.util.out.dir" value="${out.dir}/cldr_util"/>
     <property name="cldr.release.dir" value="release_cldr"/>
     <property name="external-jars" value="lib"/>
@@ -657,6 +676,192 @@
         <echo message="################################################################"/>
     </target>
 
+    <target name="_final_release_check" depends="_verify_config_for_release">
+        <fail message="Insufficient Build Configuration for ICU4J Release" unless="release.build.config.ok"/>
+
+        <fail message="Maven Ant Tasks are required to publish libraries. Set maven-ant-tasks.jar property. Maven Ant Tasks URL: http://maven.apache.org/ant-tasks/" unless="maven-ant-tasks.jar"/>
+        <condition property="no_maven-ant-tasks">
+            <available file="${maven-ant-tasks.jar}"/>
+        </condition>
+        <fail message="Maven Ant Tasks not found at ${maven-ant-tasks.jar}" unless="no_maven-ant-tasks"/>
+    </target>
+
+    <!--
+        The ant target releaseFinal is used for ICU official release.
+        This target builds ICU4J library jars, source jars and API document jars.
+        Also, this target publishes ICU4J artifacts to OSSRH staging repository.
+
+        Prerequisites
+
+        1) Apache Maven Ant tasks - http://maven.apache.org/ant-tasks
+
+        Note: Apache Maven Ant tasks was already deprecated. You can still
+        download the latest version from Maven Central
+        http://central.maven.org/maven2/org/apache/maven/maven-ant-tasks/2.1.3/maven-ant-tasks-2.1.3.jar
+
+        TODO: Because mavne-ant-tasks was already deprecated and no longer maintained,
+        we should look for alternative solution.
+
+        2) GnuPG
+
+        3) Put build-local.properties to specify followings
+
+            maven-ant-tasks.jar = [location of maven ant tasks jar file]
+            gpg.user = ICU Project
+
+        4) Maven configuration file ~/.m2/settings.xml
+            <settings>
+                <servers>
+                    <server>
+                        <id>icu4j-releases</id>
+                        <username>[oss.sonatype.org Nexus account ID]</username>
+                        <password>[oss.sonatype.org Nexus account password]</password>
+                    </server>
+                    <server>
+                        <id>icu4j-snapshots</id>
+                        <username>[oss.sonatype.org Nexus account ID]</username>
+                        <password>[oss.sonatype.org Nexus account password]</password>
+                    </server>
+                </servers>
+            </settings>
+    -->
+    <target name="releaseFinal" depends="info, _final_release_check, releaseVer, docsMaven"
+        description="Build all ICU4J release files for distribution and upload them to the OSSRH staging repository">
+
+        <property name="maven.pom.dir" value="maven"/>
+        <property name="maven.icu4j.release.dir" value="${release.dir}/maven/icu4j"/>
+        <property name="maven.charset.release.dir" value="${release.dir}/maven/icu4j-charset"/>
+        <property name="maven.localespi.release.dir" value="${release.dir}/maven/icu4j-localespi"/>
+
+        <property name="maven.icu4j.jar.file" value="icu4j-${maven.pom.ver}.jar"/>
+        <property name="maven.icu4j.src.jar.file" value="icu4j-${maven.pom.ver}-sources.jar"/>
+        <property name="maven.icu4j.doc.jar.file" value="icu4j-${maven.pom.ver}-javadoc.jar"/>
+
+        <property name="maven.charset.jar.file" value="icu4j-charset-${maven.pom.ver}.jar"/>
+        <property name="maven.charset.src.jar.file" value="icu4j-charset-${maven.pom.ver}-sources.jar"/>
+        <property name="maven.charset.doc.jar.file" value="icu4j-charset-${maven.pom.ver}-javadoc.jar"/>
+
+        <property name="maven.localespi.jar.file" value="icu4j-localespi-${maven.pom.ver}.jar"/>
+        <property name="maven.localespi.src.jar.file" value="icu4j-localespi-${maven.pom.ver}-sources.jar"/>
+        <property name="maven.localespi.doc.jar.file" value="icu4j-localespi-${maven.pom.ver}-javadoc.jar"/>
+
+
+        <delete dir="${release.dir}/maven"/>
+        <mkdir dir="${maven.icu4j.release.dir}"/>
+        <mkdir dir="${maven.charset.release.dir}"/>
+        <mkdir dir="${maven.localespi.release.dir}"/>
+
+
+        <!-- copy pom.xml with version -->
+        <copy file="${maven.pom.dir}/icu4j/pom.xml" todir="${maven.icu4j.release.dir}">
+            <filterset>
+                <filter token="POMVERSION" value="${maven.pom.ver}"/>
+            </filterset>
+        </copy>
+        <copy file="${maven.pom.dir}/icu4j-charset/pom.xml" todir="${maven.charset.release.dir}">
+            <filterset>
+                <filter token="POMVERSION" value="${maven.pom.ver}"/>
+            </filterset>
+        </copy>
+        <copy file="${maven.pom.dir}/icu4j-localespi/pom.xml" todir="${maven.localespi.release.dir}">
+            <filterset>
+                <filter token="POMVERSION" value="${maven.pom.ver}"/>
+            </filterset>
+        </copy>
+
+        <!-- copy ICU release binaries and source archive to the maven release directory -->
+        <copy file="${release.dir}/${icu4j.jar.versioned.file}"
+            tofile="${maven.icu4j.release.dir}/${maven.icu4j.jar.file}"/>
+        <copy file="${release.dir}/${icu4j-charset.jar.versioned.file}"
+            tofile="${maven.charset.release.dir}/${maven.charset.jar.file}"/>
+        <copy file="${release.dir}/${icu4j-localespi.jar.versioned.file}"
+            tofile="${maven.localespi.release.dir}/${maven.localespi.jar.file}"/>
+
+        <copy file="${release.dir}/${icu4j-src.jar.versioned.file}"
+            tofile="${maven.icu4j.release.dir}/${maven.icu4j.src.jar.file}"/>
+        <copy file="${release.dir}/${icu4j-charset-src.jar.versioned.file}"
+            tofile="${maven.charset.release.dir}/${maven.charset.src.jar.file}"/>
+        <copy file="${release.dir}/${icu4j-localespi-src.jar.versioned.file}"
+            tofile="${maven.localespi.release.dir}/${maven.localespi.src.jar.file}"/>
+
+        <!-- javadoc jar for maven release -->
+        <jar jarfile="${maven.icu4j.release.dir}/${maven.icu4j.doc.jar.file}"
+            compress="true"
+            basedir="${maven.doc.base.dir}/icu4j"/>
+        <jar jarfile="${maven.charset.release.dir}/${maven.charset.doc.jar.file}"
+            compress="true"
+            basedir="${maven.doc.base.dir}/charset"/>
+        <jar jarfile="${maven.localespi.release.dir}/${maven.localespi.doc.jar.file}"
+            compress="true"
+            basedir="${maven.doc.base.dir}/localespi"/>
+
+        <!-- sign release files-->
+        <macrodef name="gpg">
+            <attribute name="file"/>
+            <sequential>
+                <delete file="@{file}.asc" failonerror="false"/>
+                <exec executable="gpg">
+                    <arg value="-u"/>
+                    <arg value="${gpg.user}"/>
+                    <arg value="-ab"/>
+                    <arg value="-o"/>
+                    <arg value="@{file}.asc"/>
+                    <arg value="@{file}"/>
+                </exec>
+            </sequential>
+        </macrodef>
+
+        <gpg file="${maven.icu4j.release.dir}/pom.xml"/>
+        <gpg file="${maven.icu4j.release.dir}/${maven.icu4j.jar.file}"/>
+        <gpg file="${maven.icu4j.release.dir}/${maven.icu4j.src.jar.file}"/>
+        <gpg file="${maven.icu4j.release.dir}/${maven.icu4j.doc.jar.file}"/>
+
+        <gpg file="${maven.charset.release.dir}/pom.xml"/>
+        <gpg file="${maven.charset.release.dir}/${maven.charset.jar.file}"/>
+        <gpg file="${maven.charset.release.dir}/${maven.charset.src.jar.file}"/>
+        <gpg file="${maven.charset.release.dir}/${maven.charset.doc.jar.file}"/>
+
+        <gpg file="${maven.localespi.release.dir}/pom.xml"/>
+        <gpg file="${maven.localespi.release.dir}/${maven.localespi.jar.file}"/>
+        <gpg file="${maven.localespi.release.dir}/${maven.localespi.src.jar.file}"/>
+        <gpg file="${maven.localespi.release.dir}/${maven.localespi.doc.jar.file}"/>
+
+        <!-- deploy ICU4J artifacts to the OSSRH staging repository -->
+        <path id="maven-ant-tasks.classpath" path="${maven-ant-tasks.jar}"/>
+        <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
+            classpathref="maven-ant-tasks.classpath"/>
+
+        <deploy xmlns="urn:maven-artifact-ant" file="${maven.icu4j.release.dir}/${maven.icu4j.jar.file}">
+            <pom file="${maven.icu4j.release.dir}/pom.xml"/>
+            <attach file="${maven.icu4j.release.dir}/pom.xml.asc" type="pom.asc"/>
+            <attach file="${maven.icu4j.release.dir}/${maven.icu4j.jar.file}.asc" type="jar.asc"/>
+            <attach file="${maven.icu4j.release.dir}/${maven.icu4j.src.jar.file}" classifier="sources"/>
+            <attach file="${maven.icu4j.release.dir}/${maven.icu4j.src.jar.file}.asc" classifier="sources" type="jar.asc"/>
+            <attach file="${maven.icu4j.release.dir}/${maven.icu4j.doc.jar.file}" classifier="javadoc"/>
+            <attach file="${maven.icu4j.release.dir}/${maven.icu4j.doc.jar.file}.asc" classifier="javadoc" type="jar.asc"/>
+        </deploy>
+
+        <deploy xmlns="urn:maven-artifact-ant" file="${maven.charset.release.dir}/${maven.charset.jar.file}">
+            <pom file="${maven.charset.release.dir}/pom.xml"/>
+            <attach file="${maven.charset.release.dir}/pom.xml.asc" type="pom.asc"/>
+            <attach file="${maven.charset.release.dir}/${maven.charset.jar.file}.asc" type="jar.asc"/>
+            <attach file="${maven.charset.release.dir}/${maven.charset.src.jar.file}" classifier="sources"/>
+            <attach file="${maven.charset.release.dir}/${maven.charset.src.jar.file}.asc" classifier="sources" type="jar.asc"/>
+            <attach file="${maven.charset.release.dir}/${maven.charset.doc.jar.file}" classifier="javadoc"/>
+            <attach file="${maven.charset.release.dir}/${maven.charset.doc.jar.file}.asc" classifier="javadoc" type="jar.asc"/>
+        </deploy>
+
+        <deploy xmlns="urn:maven-artifact-ant" file="${maven.localespi.release.dir}/${maven.localespi.jar.file}">
+            <pom file="${maven.localespi.release.dir}/pom.xml"/>
+            <attach file="${maven.localespi.release.dir}/pom.xml.asc" type="pom.asc"/>
+            <attach file="${maven.localespi.release.dir}/${maven.localespi.jar.file}.asc" type="jar.asc"/>
+            <attach file="${maven.localespi.release.dir}/${maven.localespi.src.jar.file}" classifier="sources"/>
+            <attach file="${maven.localespi.release.dir}/${maven.localespi.src.jar.file}.asc" classifier="sources" type="jar.asc"/>
+            <attach file="${maven.localespi.release.dir}/${maven.localespi.doc.jar.file}" classifier="javadoc"/>
+            <attach file="${maven.localespi.release.dir}/${maven.localespi.doc.jar.file}.asc" classifier="javadoc" type="jar.asc"/>
+        </deploy>
+    </target>
+
     <target name="releaseVer" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz"
             description="Build all ICU4J release files for distribution with versioned file names">
         <!-- binaries -->
@@ -1084,6 +1289,106 @@
             </packageset>
         </javadoc>
     </target>
+
+    <!-- Component document targets, only used for Maven repository releases -->
+    <target name="docsMaven" depends="info, build-tools, _checkJCite, _docsStyleSheet, _docsLintOption, _mavenIcu4jDoc, _mavenCharsetDoc, _mavenLocalespiDoc"
+        description="Build API docs for each ICU4J maven artifact"/>
+
+    <target name="_mavenIcu4jDoc">
+        <fail message="JCite must be configured." unless="jcite.libs"/>
+        <delete dir="${maven.doc.base.dir}/icu4j"/>
+
+        <echo message="Javadoc lint option:            ${doclint.option}"/>
+        <echo message="JCite library path:             ${jcite.libs}"/>
+        <echo message="JCite additional source path:   ${jcite.addl.src}"/>
+        <echo message="Custom stylesheet:              ${docs.style.sheet}"/>
+        <javadoc
+                destdir="${maven.doc.base.dir}/icu4j"
+                nodeprecatedlist="true"
+                windowtitle="${icu4j.main.api.doc.window.title}"
+                doctitle="${icu4j.main.api.doc.title}"
+                header="${icu4j.main.api.doc.header}"
+                encoding="${java.src.encoding}"
+                docencoding="UTF-8"
+                charset="UTF-8"
+                bottom="${icu4j.api.doc.copyright.footer}"
+                additionalparam="${doclint.option} -breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
+                link="${icu4j.api.doc.jdk.link}"
+                source="1.5"
+                stylesheetfile="${docs.style.sheet}"
+                failonerror="true">
+            <packageset dir="${icu4j.core.dir}/src">
+                <include name="com/ibm/icu/lang/**"/>
+                <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
+            </packageset>
+            <packageset dir="${icu4j.collate.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
+            </packageset>
+            <packageset dir="${icu4j.translit.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
+            </packageset>
+        </javadoc>
+    </target>
+
+    <target name="_mavenCharsetDoc">
+        <fail message="JCite must be configured." unless="jcite.libs"/>
+        <delete dir="${maven.doc.base.dir}/charset"/>
+
+        <echo message="Javadoc lint option:            ${doclint.option}"/>
+        <echo message="JCite library path:             ${jcite.libs}"/>
+        <echo message="JCite additional source path:   ${jcite.addl.src}"/>
+        <echo message="Custom stylesheet:              ${docs.style.sheet}"/>
+        <javadoc
+                destdir="${maven.doc.base.dir}/charset"
+                nodeprecatedlist="true"
+                windowtitle="${icu4j.charset.api.doc.window.title}"
+                doctitle="${icu4j.charset.api.doc.title}"
+                header="${icu4j.charset.api.doc.header}"
+                encoding="${java.src.encoding}"
+                docencoding="UTF-8"
+                charset="UTF-8"
+                bottom="${icu4j.api.doc.copyright.footer}"
+                additionalparam="${doclint.option} -breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
+                link="${icu4j.api.doc.jdk.link}"
+                source="1.5"
+                stylesheetfile="${docs.style.sheet}"
+                failonerror="true"
+                classpath="${icu4j.jar.file}">
+            <packageset dir="${icu4j.charset.dir}/src">
+                <include name="com/ibm/icu/charset/**"/>
+            </packageset>
+        </javadoc>
+    </target>
+
+    <target name="_mavenLocalespiDoc">
+        <delete dir="${maven.doc.base.dir}/localespi"/>
+
+        <echo message="Javadoc lint option:            ${doclint.option}"/>
+        <echo message="Custom stylesheet:              ${docs.style.sheet}"/>
+        <javadoc
+                destdir="${maven.doc.base.dir}/localespi"
+                nodeprecatedlist="true"
+                windowtitle="${icu4j.localespi.api.doc.window.title}"
+                doctitle="${icu4j.localespi.api.doc.title}"
+                header="${icu4j.localespi.api.doc.header}"
+                encoding="${java.src.encoding}"
+                docencoding="UTF-8"
+                charset="UTF-8"
+                bottom="${icu4j.api.doc.copyright.footer}"
+                additionalparam="${doclint.option} -breakiterator -use"
+                link="${icu4j.api.doc.jdk.link}"
+                source="1.5"
+                failonerror="true"
+                classpath="${icu4j.jar.file}">
+            <packageset dir="${icu4j.localespi.dir}/src">
+                <include name="com/ibm/icu/impl/javaspi"/>
+            </packageset>
+        </javadoc>
+
+    </target>
+
 
     <!-- JaCoCo code coverage target -->
     <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" onerror="ignore">
@@ -1547,104 +1852,4 @@
                 basedir="${xliff.out.dir}/bin"
                 manifest="${icu4j.tools.dir}/src/com/ibm/icu/dev/tool/localeconverter/manifest.stub"/>
     </target>
-
-    <target name="publishToMavenRepo" depends="releaseVer">
-        <!--
-            Publish libraries to Maven repositories, snapshot or release depending on current
-            version in pom.xml.
-
-            Prerequisites
-
-            1) Apache Maven Ant tasks - http://maven.apache.org/ant-tasks
-            2) GnuPG
-            3) Put build-local.properties to specify followings
-
-                maven-ant-tasks.jar = [location of maven ant tasks jar file]
-                gpg.user = ICU Project
-                gpg.passphrase = [passprase for ICU Project's PGP key]
-
-            4) Maven configuration file ~/.m2/settings.xml
-                <settings>
-                    <servers>
-                        <server>
-                            <id>icu4j-releases</id>
-                            <username>[your JIRA/Nexus ID]</username>
-                            <password>[your JIRA/Nexus password]</password>
-                        </server>
-                        <server>
-                            <id>icu4j-snapshots</id>
-                            <username>[your JIRA/Nexus ID]</username>
-                            <password>[your JIRA/Nexus password]</password>
-                        </server>
-                    </servers>
-                </settings>
-
-            Note: For now, charset.jar and localespi.jar are excluded.
-        -->
-        <fail message="Maven Ant Tasks are required to publish libraries. Set maven-ant-tasks.jar property. Maven Ant Tasks URL: http://maven.apache.org/ant-tasks/" unless="maven-ant-tasks.jar"/>
-        <condition property="no_maven-ant-tasks">
-            <available file="${maven-ant-tasks.jar}"/>
-        </condition>
-        <fail message="Maven Ant Tasks not found at ${maven-ant-tasks.jar}" unless="no_maven-ant-tasks"/>
-
-        <path id="maven-ant-tasks.classpath" path="${maven-ant-tasks.jar}"/>
-        <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
-            classpathref="maven-ant-tasks.classpath"/>
-
-        <xmlproperty file="pom.xml" prefix="pom.xml"/>
-
-        <!-- copy release files -->
-        <property name="maven.release.dir" value="${release.dir}/maven"/>
-
-        <property name="maven.icu4j.jar.versioned.file" value="icu4j-${pom.xml.project.version}.jar"/>
-        <property name="maven.icu4j-src.jar.versioned.file" value="icu4j-${pom.xml.project.version}-src.jar"/>
-        <property name="maven.icu4jdocs.jar.file" value="icu4j-${pom.xml.project.version}-javadoc.jar"/>
-
-        <mkdir dir="${maven.release.dir}"/>
-
-        <copy file="${release.dir}/${icu4j.jar.versioned.file}" tofile="${maven.release.dir}/${maven.icu4j.jar.versioned.file}"/>
-        <copy file="${release.dir}/${icu4j-src.jar.versioned.file}" tofile="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}"/>
-        <copy file="${release.dir}/${icu4jdocs.jar.versioned.file}" tofile="${maven.release.dir}/${maven.icu4jdocs.jar.file}"/>
-
-        <copy file="pom.xml" todir="${maven.release.dir}"/>
-
-        <!-- sign release files-->
-        <macrodef name="gpg">
-            <attribute name="file"/>
-            <sequential>
-                <delete file="@{file}.asc" failonerror="false"/>
-                <exec executable="gpg">
-                    <arg value="-u"/>
-                    <arg value="${gpg.user}"/>
-                    <arg value="-ab"/>
-                    <arg value="--passphrase"/>
-                    <arg value="${gpg.passphrase}"/>
-                    <arg value="-o"/>
-                    <arg value="@{file}.asc"/>
-                    <arg value="@{file}"/>
-                </exec>
-            </sequential>
-        </macrodef>
-
-        <gpg file="${maven.release.dir}/${maven.icu4j.jar.versioned.file}"/>
-        <gpg file="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}"/>
-        <gpg file="${maven.release.dir}/${maven.icu4jdocs.jar.file}"/>
-
-        <gpg file="${maven.release.dir}/pom.xml"/>
-
-        <!-- deploy files to the repository -->
-        <deploy xmlns="urn:maven-artifact-ant" file="${maven.release.dir}/${maven.icu4j.jar.versioned.file}">
-            <pom file="${maven.release.dir}/pom.xml"/>
-            <attach file="${maven.release.dir}/pom.xml.asc" type="pom.asc"/>
-
-            <attach file="${maven.release.dir}/${maven.icu4j.jar.versioned.file}.asc" type="jar.asc"/>
-            <attach file="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}" classifier="sources"/>
-            <attach file="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}.asc" classifier="sources" type="jar.asc"/>
-            <attach file="${maven.release.dir}/${maven.icu4jdocs.jar.file}" classifier="javadoc"/>
-            <attach file="${maven.release.dir}/${maven.icu4jdocs.jar.file}.asc" classifier="javadoc" type="jar.asc"/>
-        </deploy>
-
-        <antcall target="_verify_config_for_release"/>
-    </target>
-
 </project>
