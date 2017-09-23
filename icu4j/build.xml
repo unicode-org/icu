@@ -144,10 +144,6 @@
         <echo message="OS Arch:      ${os.arch}"/>
         <echo message="Host:         ${env.COMPUTERNAME}"/>
         <echo message="-------------------------------------------------------"/>
-    <echo message="is.java6: ${is.java6}"/>
-    <echo message="is.java7: ${is.java7}"/>
-    <echo message="is.java8: ${is.java8}"/>
-    <echo message="is.java9: ${is.java9}"/>
     </target>
 
     <target name="clean" description="Clean up build outputs">
