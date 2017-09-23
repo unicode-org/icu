@@ -562,7 +562,7 @@ public class TestCharset extends TestFmwk {
                 cr = decoder.decode(bs, us, true);
                 bs.rewind();
                 us.rewind();
-                if (!cr.isMalformed() || cr.length() != 3) {
+                if (!cr.isMalformed() || cr.length() != 1) {
                     errln("Incorrect result in " + converter + " decoder for 0x"
                             + Integer.toHexString(i) + " received " + cr);
                     break;
@@ -584,7 +584,7 @@ public class TestCharset extends TestFmwk {
                 cr = decoder.decode(bs, us, true);
                 bs.rewind();
                 us.rewind();
-                if (!cr.isMalformed() || cr.length() != 3) {
+                if (!cr.isMalformed() || cr.length() != 1) {
                     errln("Incorrect result in " + converter + " decoder for 0x"
                             + Integer.toHexString(i) + " received " + cr);
                     break;
@@ -4653,7 +4653,7 @@ public class TestCharset extends TestFmwk {
         //decoding code coverage
         //test malform error
         decoder.reset();
-        bs.put((byte)0xC0); bs.put((byte)0xC0);
+        bs.put((byte)0xC2); bs.put((byte)0xC2);
         us.put((char)0x0000);
         bs2 = bs.asReadOnlyBuffer();
 

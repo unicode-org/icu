@@ -281,13 +281,13 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                         }
                     }
                 }
-            } else if((0xf0<=b2 && b2<=0xf4) && U8_IS_VALID_LEAD4_AND_T1(b2, b1)) {
+            } else if(0xf0<=b2 && b2<=0xf4 && U8_IS_VALID_LEAD4_AND_T1(b2, b1)) {
                 // Truncated 4-byte sequence.
                 *pi=i;
                 return errorValue(2, strict);
             }
-        } else if(((0xe0<=b1 && b1<0xf0) && U8_IS_VALID_LEAD3_AND_T1(b1, c)) ||
-                ((0xf0<=b1 && b1<=0xf4) && U8_IS_VALID_LEAD4_AND_T1(b1, c))) {
+        } else if((0xe0<=b1 && b1<0xf0 && U8_IS_VALID_LEAD3_AND_T1(b1, c)) ||
+                (0xf0<=b1 && b1<=0xf4 && U8_IS_VALID_LEAD4_AND_T1(b1, c))) {
             // Truncated 3- or 4-byte sequence.
             *pi=i;
             return errorValue(1, strict);
@@ -318,12 +318,12 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i) {
                         return i;
                     }
                 }
-            } else if((0xf0<=b2 && b2<=0xf4) && U8_IS_VALID_LEAD4_AND_T1(b2, b1)) {
+            } else if(0xf0<=b2 && b2<=0xf4 && U8_IS_VALID_LEAD4_AND_T1(b2, b1)) {
                 // Truncated 4-byte sequence.
                 return i;
             }
-        } else if(((0xe0<=b1 && b1<0xf0) && U8_IS_VALID_LEAD3_AND_T1(b1, c)) ||
-                ((0xf0<=b1 && b1<=0xf4) && U8_IS_VALID_LEAD4_AND_T1(b1, c))) {
+        } else if((0xe0<=b1 && b1<0xf0 && U8_IS_VALID_LEAD3_AND_T1(b1, c)) ||
+                (0xf0<=b1 && b1<=0xf4 && U8_IS_VALID_LEAD4_AND_T1(b1, c))) {
             // Truncated 3- or 4-byte sequence.
             return i;
         }
