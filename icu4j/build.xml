@@ -86,12 +86,40 @@
     <property name="external-jars" value="lib"/>
 
     <!-- Java version check -->
+    <condition property="is.java6">
+        <matches string="${java.version}" pattern="1\.6\.\d.*"/>
+    </condition>
+
+    <condition property="is.java7">
+        <matches string="${java.version}" pattern="1\.7\.\d.*"/>
+    </condition>
+
+    <condition property="is.java8">
+        <matches string="${java.version}" pattern="1\.8\.\d.*"/>
+    </condition>
+
+    <condition property="is.java9">
+        <matches string="${java.version}" pattern="9((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java8.plus">
+        <or>
+            <isset property="is.java8"/>
+            <isset property="is.java9"/>
+        </or>
+    </condition>
+
+    <condition property="is.java7.plus">
+        <or>
+            <isset property="is.java7"/>
+            <isset property="is.java8.plus"/>
+        </or>
+    </condition>
+
     <condition property="is.java6.plus">
         <or>
-            <contains string="${java.version}" substring="1.6."/>
-            <contains string="${java.version}" substring="1.7."/>
-            <contains string="${java.version}" substring="1.8."/>
-            <contains string="${java.version}" substring="1.9."/>
+            <isset property="is.java6"/>
+            <isset property="is.java7.plus"/>
         </or>
     </condition>
     <fail message="The JDK version is too old or unknown.">
@@ -102,36 +130,6 @@
         </condition>
     </fail>
 
-    <condition property="is.java6">
-            <contains string="${java.version}" substring="1.6."/>
-    </condition>
-
-    <condition property="is.java7">
-            <contains string="${java.version}" substring="1.7."/>
-    </condition>
-
-    <condition property="is.java8">
-            <contains string="${java.version}" substring="1.8."/>
-    </condition>
-
-    <condition property="is.java9">
-            <contains string="${java.version}" substring="1.9."/>
-    </condition>
-
-    <condition property="is.java7.plus">
-        <or>
-            <isset property="is.java7"/>
-            <isset property="is.java8"/>
-            <isset property="is.java9"/>
-        </or>
-    </condition>
-
-    <condition property="is.java8.plus">
-        <or>
-            <isset property="is.java8"/>
-            <isset property="is.java9"/>
-        </or>
-    </condition>
 
     <!-- Build environment info -->
     <property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
@@ -146,6 +144,10 @@
         <echo message="OS Arch:      ${os.arch}"/>
         <echo message="Host:         ${env.COMPUTERNAME}"/>
         <echo message="-------------------------------------------------------"/>
+    <echo message="is.java6: ${is.java6}"/>
+    <echo message="is.java7: ${is.java7}"/>
+    <echo message="is.java8: ${is.java8}"/>
+    <echo message="is.java9: ${is.java9}"/>
     </target>
 
     <target name="clean" description="Clean up build outputs">
