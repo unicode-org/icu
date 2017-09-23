@@ -2495,6 +2495,26 @@ static UBool getTestChar(UConverter *cnv, const char *converterName,
     return TRUE;
 }
 
+static UBool isOneTruncatedUTF8(const char *s, int32_t length) {
+    if(length==0) {
+        return FALSE;
+    } else if(length==1) {
+        return U8_IS_LEAD(s[0]);
+    } else {
+        int32_t count=U8_COUNT_TRAIL_BYTES(s[0]);
+        if(length<=count) {
+            // 2 or more bytes, but fewer than the lead byte indicates.
+            int32_t oneLength=0;
+            U8_FWD_1(s, oneLength, length);
+            // Truncated if we reach the end of the string.
+            // Not true if the lead byte and first trail byte do not start a valid sequence,
+            // e.g., E0 80 -> oneLength=1.
+            return oneLength==length;
+        }
+        return FALSE;
+    }
+}
+
 static void testFromTruncatedUTF8(UConverter *utf8Cnv, UConverter *cnv, const char *converterName,
                                   char charUTF8[4], int32_t charUTF8Length,
                                   char char0[8], int32_t char0Length,
@@ -2526,7 +2546,7 @@ static void testFromTruncatedUTF8(UConverter *utf8Cnv, UConverter *cnv, const ch
     for(i=0; i<UPRV_LENGTHOF(badUTF8); ++i) {
         /* truncated sequence? */
         int32_t length=strlen(badUTF8[i]);
-        if(length>=(1+U8_COUNT_TRAIL_BYTES(badUTF8[i][0]))) {
+        if(!isOneTruncatedUTF8(badUTF8[i], length)) {
             continue;
         }
 

@@ -53,8 +53,8 @@
  * @internal
  */
 #define U8_COUNT_TRAIL_BYTES(leadByte) \
-    ((uint8_t)(leadByte)<=0xf4 ? \
-        ((uint8_t)(leadByte)>=0xc2)+((uint8_t)(leadByte)>=0xe0)+((uint8_t)(leadByte)>=0xf0) : 0)
+    (U8_IS_LEAD(leadByte) ? \
+        ((uint8_t)(leadByte)>=0xe0)+((uint8_t)(leadByte)>=0xf0)+1 : 0)
 
 /**
  * Counts the trail bytes for a UTF-8 lead byte of a valid UTF-8 sequence.
@@ -80,29 +80,35 @@
 #define U8_MASK_LEAD_BYTE(leadByte, countTrailBytes) ((leadByte)&=(1<<(6-(countTrailBytes)))-1)
 
 /**
- * Internal bit vector for 3-byte UTF-8 validity check.
- * Lead byte E0..EF bits 3..0 as byte index,
- * first trail byte bits 7..5 as bit index into that byte.
+ * Internal bit vector for 3-byte UTF-8 validity check, for use in U8_IS_VALID_LEAD3_AND_T1.
+ * Each bit indicates whether one lead byte + first trail byte pair starts a valid sequence.
+ * Lead byte E0..EF bits 3..0 are used as byte index,
+ * first trail byte bits 7..5 are used as bit index into that byte.
+ * @see U8_IS_VALID_LEAD3_AND_T1
  * @internal
  */
 #define U8_LEAD3_T1_BITS "\x20\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x30\x10\x30\x30"
 
 /**
  * Internal 3-byte UTF-8 validity check.
+ * Non-zero if lead byte E0..EF and first trail byte 00..FF start a valid sequence.
  * @internal
  */
 #define U8_IS_VALID_LEAD3_AND_T1(lead, t1) (U8_LEAD3_T1_BITS[(lead)&0xf]&(1<<((uint8_t)(t1)>>5)))
 
 /**
- * Internal bit vector for 4-byte UTF-8 validity check.
- * First trail byte bits 7..4 as byte index,
- * lead byte F0..F4 bits 2..0 as bit index into that byte.
+ * Internal bit vector for 4-byte UTF-8 validity check, for use in U8_IS_VALID_LEAD4_AND_T1.
+ * Each bit indicates whether one lead byte + first trail byte pair starts a valid sequence.
+ * First trail byte bits 7..4 are used as byte index,
+ * lead byte F0..F4 bits 2..0 are used as bit index into that byte.
+ * @see U8_IS_VALID_LEAD4_AND_T1
  * @internal
  */
 #define U8_LEAD4_T1_BITS "\x00\x00\x00\x00\x00\x00\x00\x00\x1E\x0F\x0F\x0F\x00\x00\x00\x00"
 
 /**
  * Internal 4-byte UTF-8 validity check.
+ * Non-zero if lead byte F0..F4 and first trail byte 00..FF start a valid sequence.
  * @internal
  */
 #define U8_IS_VALID_LEAD4_AND_T1(lead, t1) (U8_LEAD4_T1_BITS[(uint8_t)(t1)>>4]&(1<<((lead)&7)))
@@ -166,7 +172,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 #define U8_IS_SINGLE(c) (((c)&0x80)==0)
 
 /**
- * Is this code unit (byte) a UTF-8 lead byte?
+ * Is this code unit (byte) a UTF-8 lead byte? (0xC2..0xF4)
  * @param c 8-bit code unit (byte)
  * @return TRUE or FALSE
  * @stable ICU 2.4
@@ -175,7 +181,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 // 0x32=0xf4-0xc2
 
 /**
- * Is this code unit (byte) a UTF-8 trail byte?
+ * Is this code unit (byte) a UTF-8 trail byte? (0x80..0xBF)
  * @param c 8-bit code unit (byte)
  * @return TRUE or FALSE
  * @stable ICU 2.4

@@ -963,8 +963,8 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
     {
         const uint8_t sampleText1[] = { 0x31, 0xe4, 0xba, 0x8c, 
             0xe0, 0x80,  0x61};
-        UChar    expected1[] = {  0x0031, 0x4e8c, 0xfffd, 0x0061};
-        int32_t offsets1[] = {   0x0000, 0x0001, 0x0004, 0x0006};
+        UChar    expected1[] = {  0x0031, 0x4e8c, 0xfffd, 0xfffd, 0x0061};
+        int32_t offsets1[] = {   0x0000, 0x0001, 0x0004, 0x0005, 0x0006};
 
         if(!testConvertToU(sampleText1, sizeof(sampleText1),
                  expected1, UPRV_LENGTHOF(expected1),"utf8", UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1,FALSE))

@@ -5551,6 +5551,7 @@ icu4j/main/classes/charset/src/com/ibm/icu/charset/UConverterConstants.java svne
 icu4j/main/classes/charset/src/com/ibm/icu/charset/UConverterDataReader.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/charset/src/com/ibm/icu/charset/UConverterSharedData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/charset/src/com/ibm/icu/charset/UConverterStaticData.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/charset/src/com/ibm/icu/charset/UTF8.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/charset/src/com/ibm/icu/charset/package.html svneol=native#text/html
 icu4j/main/classes/collate/build.xml svneol=native#text/xml
 icu4j/main/classes/collate/findbugs-exclude.xml svneol=native#text/xml
