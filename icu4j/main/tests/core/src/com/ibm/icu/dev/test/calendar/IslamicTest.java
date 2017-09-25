@@ -1015,6 +1015,20 @@ public class IslamicTest extends CalendarTestFmwk {
             errln("non civil calc type generated - " + thisCalcType);
         }
 
+        islamicLoc = new ULocale("ar_SA@calendar=ISLAMIC-UMALQURA");
+        is_cal = new IslamicCalendar(islamicLoc);
+        thisCalcType = is_cal.getType();
+        if (!"islamic-umalqura".equalsIgnoreCase(thisCalcType)) {
+            errln("non umalqura calc type generated - " + thisCalcType);
+        }
+
+        islamicLoc = new ULocale("ar_SA@calendar=ISLAMIC-CIVIL");
+        is_cal = new IslamicCalendar(islamicLoc);
+        thisCalcType = is_cal.getType();
+        if (!"islamic-civil".equalsIgnoreCase(thisCalcType)) {
+            errln("non civil calc type generated - " + thisCalcType);
+        }
+
         islamicLoc = new ULocale("ar_SA@calendar=islamic-tbla");
         is_cal = new IslamicCalendar(islamicLoc);
         thisCalcType = is_cal.getType();

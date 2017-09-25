@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.impl;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.TreeMap;
@@ -17,7 +18,7 @@ import com.ibm.icu.util.UResourceBundle;
 
 /**
  * Calendar utilities.
- * 
+ *
  * Date/time format service classes in com.ibm.icu.text packages
  * sometimes need to access calendar internal APIs.  But calendar
  * classes are in com.ibm.icu.util package, so the package local
@@ -40,7 +41,9 @@ public final class CalendarUtil {
     public static String getCalendarType(ULocale loc) {
         String calType = loc.getKeywordValue(CALKEY);
         if (calType != null) {
-            return calType;
+            // Convert to lower case, because getKeywordValue does not
+            // canonicalize keyword value.
+            return calType.toLowerCase(Locale.ROOT);
         }
 
         // Canonicalize, so grandfathered variant will be transformed to keywords
