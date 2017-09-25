@@ -1089,8 +1089,8 @@ static inline uint32_t getKatakanaCost(int32_t wordLength){
 }
 
 static inline bool isKatakana(UChar32 value) {
-    return (value >= 0x30A1u && value <= 0x30FEu && value != 0x30FBu) ||
-            (value >= 0xFF66u && value <= 0xFF9fu);
+    return (value >= 0x30A1 && value <= 0x30FE && value != 0x30FB) ||
+            (value >= 0xFF66 && value <= 0xFF9f);
 }
 
 
