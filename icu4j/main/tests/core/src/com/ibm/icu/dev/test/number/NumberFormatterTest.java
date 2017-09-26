@@ -6,12 +6,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Locale;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.ibm.icu.impl.number.Padder;
+import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.Grouper;
+import com.ibm.icu.number.IntegerWidth;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.Notation;
+import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
+import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.NumberFormatter.UnitWidth;
+import com.ibm.icu.number.Rounder;
+import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
@@ -22,25 +36,12 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
 
-import newapi.FormattedNumber;
-import newapi.Grouper;
-import newapi.IntegerWidth;
-import newapi.LocalizedNumberFormatter;
-import newapi.Notation;
-import newapi.NumberFormatter;
-import newapi.NumberFormatter.DecimalMarkDisplay;
-import newapi.NumberFormatter.SignDisplay;
-import newapi.NumberFormatter.UnitWidth;
-import newapi.Rounder;
-import newapi.UnlocalizedNumberFormatter;
-import newapi.impl.Padder;
-import newapi.impl.Padder.PadPosition;
-
 public class NumberFormatterTest {
 
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency GBP = Currency.getInstance("GBP");
     private static final Currency CZK = Currency.getInstance("CZK");
+    private static final Currency CAD = Currency.getInstance("CAD");
 
     @Test
     public void notationSimple() {
@@ -57,6 +58,21 @@ public class NumberFormatterTest {
                 "0.8765",
                 "0.08765",
                 "0.008765",
+                "0");
+
+        assertFormatDescendingBig(
+                "Big Simple",
+                "",
+                NumberFormatter.with().notation(Notation.simple()),
+                ULocale.ENGLISH,
+                "87,650,000",
+                "8,765,000",
+                "876,500",
+                "87,650",
+                "8,765",
+                "876.5",
+                "87.65",
+                "8.765",
                 "0");
 
         assertFormatSingle(
@@ -141,34 +157,34 @@ public class NumberFormatterTest {
 
     @Test
     public void notationCompact() {
-        assertFormatDescending(
+        assertFormatDescendingBig(
                 "Compact Short",
                 "C",
                 NumberFormatter.with().notation(Notation.compactShort()),
                 ULocale.ENGLISH,
+                "88M",
+                "8.8M",
+                "876K",
                 "88K",
                 "8.8K",
                 "876",
                 "88",
                 "8.8",
-                "0.88",
-                "0.088",
-                "0.0088",
                 "0");
 
-        assertFormatDescending(
+        assertFormatDescendingBig(
                 "Compact Long",
                 "CC",
                 NumberFormatter.with().notation(Notation.compactLong()),
                 ULocale.ENGLISH,
+                "88 million",
+                "8.8 million",
+                "876 thousand",
                 "88 thousand",
                 "8.8 thousand",
                 "876",
                 "88",
                 "8.8",
-                "0.88",
-                "0.088",
-                "0.0088",
                 "0");
 
         assertFormatDescending(
@@ -189,10 +205,7 @@ public class NumberFormatterTest {
         assertFormatDescending(
                 "Compact Short with ISO Currency",
                 "C $USD unit-width=ISO_CODE",
-                NumberFormatter.with()
-                    .notation(Notation.compactShort())
-                    .unit(USD)
-                    .unitWidth(UnitWidth.ISO_CODE),
+                NumberFormatter.with().notation(Notation.compactShort()).unit(USD).unitWidth(UnitWidth.ISO_CODE),
                 ULocale.ENGLISH,
                 "USD 88K",
                 "USD 8.8K",
@@ -207,10 +220,7 @@ public class NumberFormatterTest {
         assertFormatDescending(
                 "Compact Short with Long Name Currency",
                 "C $USD unit-width=FULL_NAME",
-                NumberFormatter.with()
-                    .notation(Notation.compactShort())
-                    .unit(USD)
-                    .unitWidth(UnitWidth.FULL_NAME),
+                NumberFormatter.with().notation(Notation.compactShort()).unit(USD).unitWidth(UnitWidth.FULL_NAME),
                 ULocale.ENGLISH,
                 "88K US dollars",
                 "8.8K US dollars",
@@ -244,10 +254,7 @@ public class NumberFormatterTest {
         assertFormatDescending(
                 "Compact Long with ISO Currency",
                 "CC $USD unit-width=ISO_CODE",
-                NumberFormatter.with()
-                    .notation(Notation.compactLong())
-                    .unit(USD)
-                    .unitWidth(UnitWidth.ISO_CODE),
+                NumberFormatter.with().notation(Notation.compactLong()).unit(USD).unitWidth(UnitWidth.ISO_CODE),
                 ULocale.ENGLISH,
                 "USD 88K", // should be something like "USD 88 thousand"
                 "USD 8.8K",
@@ -263,10 +270,7 @@ public class NumberFormatterTest {
         assertFormatDescending(
                 "Compact Long with Long Name Currency",
                 "CC $USD unit-width=FULL_NAME",
-                NumberFormatter.with()
-                    .notation(Notation.compactLong())
-                    .unit(USD)
-                    .unitWidth(UnitWidth.FULL_NAME),
+                NumberFormatter.with().notation(Notation.compactLong()).unit(USD).unitWidth(UnitWidth.FULL_NAME),
                 ULocale.ENGLISH,
                 "88 thousand US dollars",
                 "8.8 thousand US dollars",
@@ -442,6 +446,24 @@ public class NumberFormatterTest {
                 ULocale.forLanguageTag("en-GB"),
                 5.43,
                 "5.43 m²");
+
+        // es_US has "{0}°" for unitsNarrow/temperature/FAHRENHEIT.
+        // NOTE: This example is in the documentation.
+        assertFormatSingle(
+                "MeasureUnit Difference between Narrow and Short (Narrow Version)",
+                "",
+                NumberFormatter.with().unit(MeasureUnit.FAHRENHEIT).unitWidth(UnitWidth.NARROW),
+                ULocale.forLanguageTag("es-US"),
+                5.43,
+                "5.43°");
+
+        assertFormatSingle(
+                "MeasureUnit Difference between Narrow and Short (Short Version)",
+                "",
+                NumberFormatter.with().unit(MeasureUnit.FAHRENHEIT).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("es-US"),
+                5.43,
+                "5.43 °F");
     }
 
     @Test
@@ -491,6 +513,21 @@ public class NumberFormatterTest {
                 "0.01 British pounds",
                 "0.00 British pounds");
 
+        assertFormatDescending(
+                "Currency Hidden",
+                "$GBP unit-width=HIDDEN",
+                NumberFormatter.with().unit(GBP).unitWidth(UnitWidth.HIDDEN),
+                ULocale.ENGLISH,
+                "87,650.00",
+                "8,765.00",
+                "876.50",
+                "87.65",
+                "8.76",
+                "0.88",
+                "0.09",
+                "0.01",
+                "0.00");
+
         assertFormatSingleMeasure(
                 "Currency with CurrencyAmount Input",
                 "",
@@ -517,6 +554,25 @@ public class NumberFormatterTest {
                 ULocale.ENGLISH,
                 -9876543.21,
                 "-£9,876,543.21");
+
+        // The full currency symbol is not shown in NARROW format.
+        // NOTE: This example is in the documentation.
+        // FIXME: Narrow Currency does not currently work; see #11666
+        assertFormatSingle(
+                "Currency Difference between Narrow and Short (Narrow Version)",
+                "",
+                NumberFormatter.with().unit(USD).unitWidth(UnitWidth.NARROW),
+                ULocale.forLanguageTag("en-CA"),
+                5.43,
+                "US$5.43");
+
+        assertFormatSingle(
+                "Currency Difference between Narrow and Short (Short Version)",
+                "",
+                NumberFormatter.with().unit(USD).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("en_CA"),
+                5.43,
+                "US$ 5.43");
     }
 
     @Test
@@ -526,14 +582,14 @@ public class NumberFormatterTest {
                 "%",
                 NumberFormatter.with().unit(NoUnit.PERCENT),
                 ULocale.ENGLISH,
-                "8,765,000%",
-                "876,500%",
                 "87,650%",
                 "8,765%",
                 "876.5%",
                 "87.65%",
                 "8.765%",
                 "0.8765%",
+                "0.08765%",
+                "0.008765%",
                 "0%");
 
         assertFormatDescending(
@@ -541,14 +597,14 @@ public class NumberFormatterTest {
                 "%%",
                 NumberFormatter.with().unit(NoUnit.PERMILLE),
                 ULocale.ENGLISH,
-                "87,650,000‰",
-                "8,765,000‰",
-                "876,500‰",
                 "87,650‰",
                 "8,765‰",
                 "876.5‰",
                 "87.65‰",
                 "8.765‰",
+                "0.8765‰",
+                "0.08765‰",
+                "0.008765‰",
                 "0‰");
 
         assertFormatSingle(
@@ -564,8 +620,8 @@ public class NumberFormatterTest {
                 "%",
                 NumberFormatter.with().unit(NoUnit.PERCENT),
                 ULocale.ENGLISH,
-                -0.987654321,
-                "-98.7654321%");
+                -98.7654321,
+                "-98.765432%");
     }
 
     @Test
@@ -793,6 +849,21 @@ public class NumberFormatterTest {
                 "0.0");
 
         assertFormatDescending(
+                "Increment with Min Fraction",
+                "M0.5",
+                NumberFormatter.with().rounding(Rounder.increment(new BigDecimal("0.50"))),
+                ULocale.ENGLISH,
+                "87,650.00",
+                "8,765.00",
+                "876.50",
+                "87.50",
+                "9.00",
+                "1.00",
+                "0.00",
+                "0.00",
+                "0.00");
+
+        assertFormatDescending(
                 "Currency Standard",
                 "$CZK GSTANDARD",
                 NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.STANDARD)).unit(CZK),
@@ -823,6 +894,21 @@ public class NumberFormatterTest {
                 "CZK 0");
 
         assertFormatDescending(
+                "Currency Cash with Nickel Rounding",
+                "$CAD GCASH",
+                NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH)).unit(CAD),
+                ULocale.ENGLISH,
+                "CA$87,650.00",
+                "CA$8,765.00",
+                "CA$876.50",
+                "CA$87.65",
+                "CA$8.75",
+                "CA$0.90",
+                "CA$0.10",
+                "CA$0.00",
+                "CA$0.00");
+
+        assertFormatDescending(
                 "Currency not in top-level fluent chain",
                 "F0",
                 NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH).withCurrency(CZK)),
@@ -836,71 +922,100 @@ public class NumberFormatterTest {
                 "0",
                 "0",
                 "0");
+
+        // NOTE: Other tests cover the behavior of the other rounding modes.
+        assertFormatDescending(
+                "Rounding Mode CEILING",
+                "",
+                NumberFormatter.with().rounding(Rounder.integer().withMode(RoundingMode.CEILING)),
+                ULocale.ENGLISH,
+                "87,650",
+                "8,765",
+                "877",
+                "88",
+                "9",
+                "1",
+                "1",
+                "1",
+                "0");
     }
 
     @Test
     public void grouping() {
-        // NoUnit.PERMILLE multiplies all the number by 10^3 (good for testing grouping).
-        // Note that en-US is already performed in the unitPercent() function.
-        assertFormatDescending(
-                "Indic Grouping",
-                "%% grouping=defaults",
-                NumberFormatter.with().unit(NoUnit.PERMILLE).grouping(Grouper.defaults()),
-                new ULocale("en-IN"),
-                "8,76,50,000‰",
-                "87,65,000‰",
-                "8,76,500‰",
-                "87,650‰",
-                "8,765‰",
-                "876.5‰",
-                "87.65‰",
-                "8.765‰",
-                "0‰");
-
-        assertFormatDescending(
-                "Western Grouping, Min 2",
-                "%% grouping=min2",
-                NumberFormatter.with().unit(NoUnit.PERMILLE).grouping(Grouper.min2()),
+        assertFormatDescendingBig(
+                "Western Grouping",
+                "grouping=defaults",
+                NumberFormatter.with().grouping(Grouper.defaults()),
                 ULocale.ENGLISH,
-                "87,650,000‰",
-                "8,765,000‰",
-                "876,500‰",
-                "87,650‰",
-                "8765‰",
-                "876.5‰",
-                "87.65‰",
-                "8.765‰",
-                "0‰");
+                "87,650,000",
+                "8,765,000",
+                "876,500",
+                "87,650",
+                "8,765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0");
 
-        assertFormatDescending(
+        assertFormatDescendingBig(
+                "Indic Grouping",
+                "grouping=defaults",
+                NumberFormatter.with().grouping(Grouper.defaults()),
+                new ULocale("en-IN"),
+                "8,76,50,000",
+                "87,65,000",
+                "8,76,500",
+                "87,650",
+                "8,765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0");
+
+        assertFormatDescendingBig(
+                "Western Grouping, Min 2",
+                "grouping=min2",
+                NumberFormatter.with().grouping(Grouper.minTwoDigits()),
+                ULocale.ENGLISH,
+                "87,650,000",
+                "8,765,000",
+                "876,500",
+                "87,650",
+                "8765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0");
+
+        assertFormatDescendingBig(
                 "Indic Grouping, Min 2",
-                "%% grouping=min2",
-                NumberFormatter.with().unit(NoUnit.PERMILLE).grouping(Grouper.min2()),
+                "grouping=min2",
+                NumberFormatter.with().grouping(Grouper.minTwoDigits()),
                 new ULocale("en-IN"),
-                "8,76,50,000‰",
-                "87,65,000‰",
-                "8,76,500‰",
-                "87,650‰",
-                "8765‰",
-                "876.5‰",
-                "87.65‰",
-                "8.765‰",
-                "0‰");
+                "8,76,50,000",
+                "87,65,000",
+                "8,76,500",
+                "87,650",
+                "8765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0");
 
-        assertFormatDescending(
+        assertFormatDescendingBig(
                 "No Grouping",
-                "%% grouping=none",
-                NumberFormatter.with().unit(NoUnit.PERMILLE).grouping(Grouper.none()),
+                "grouping=none",
+                NumberFormatter.with().grouping(Grouper.none()),
                 new ULocale("en-IN"),
-                "87650000‰",
-                "8765000‰",
-                "876500‰",
-                "87650‰",
-                "8765‰",
-                "876.5‰",
-                "87.65‰",
-                "8.765‰",
-                "0‰");
+                "87650000",
+                "8765000",
+                "876500",
+                "87650",
+                "8765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0");
     }
 
     @Test
@@ -1004,7 +1119,7 @@ public class NumberFormatterTest {
                 NumberFormatter.with().padding(Padder.codePoints('*', 8, PadPosition.BEFORE_SUFFIX))
                         .unit(NoUnit.PERCENT),
                 ULocale.ENGLISH,
-                0.8888,
+                88.88,
                 "88.88**%");
 
         assertFormatSingle(
@@ -1013,14 +1128,14 @@ public class NumberFormatterTest {
                 NumberFormatter.with().padding(Padder.codePoints('*', 8, PadPosition.AFTER_SUFFIX))
                         .unit(NoUnit.PERCENT),
                 ULocale.ENGLISH,
-                0.8888,
+                88.88,
                 "88.88%**");
 
         assertFormatSingle(
                 "Currency Spacing with Zero Digit Padding Broken",
                 "$GBP unit-width=ISO_CODE",
                 NumberFormatter.with().padding(Padder.codePoints('0', 12, PadPosition.AFTER_PREFIX)).unit(GBP)
-                .unitWidth(UnitWidth.ISO_CODE),
+                        .unitWidth(UnitWidth.ISO_CODE),
                 ULocale.ENGLISH,
                 514.23,
                 "GBP 000514.23"); // TODO: This is broken; it renders too wide (13 instead of 12).
@@ -1135,15 +1250,15 @@ public class NumberFormatterTest {
                 "$USD symbols=ns:latn",
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
-                "87,650.00 US$",
-                "8,765.00 US$",
-                "876.50 US$",
-                "87.65 US$",
-                "8.76 US$",
-                "0.88 US$",
-                "0.09 US$",
-                "0.01 US$",
-                "0.00 US$");
+                "US$ 87,650.00",
+                "US$ 8,765.00",
+                "US$ 876.50",
+                "US$ 87.65",
+                "US$ 8.76",
+                "US$ 0.88",
+                "US$ 0.09",
+                "US$ 0.01",
+                "US$ 0.00");
 
         assertFormatDescending(
                 "Math Numbering System with French Data",
@@ -1175,6 +1290,40 @@ public class NumberFormatterTest {
                 ULocale.ENGLISH,
                 12345.67,
                 "\u1041\u1042,\u1043\u1044\u1045.\u1046\u1047");
+
+        // NOTE: Locale ar puts ¤ after the number in NS arab but before the number in NS latn.
+
+        assertFormatSingle(
+                "Currency symbol should precede number in ar with NS latn",
+                "",
+                NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
+                new ULocale("ar"),
+                12345.67,
+                "US$ 12,345.67");
+
+        assertFormatSingle(
+                "Currency symbol should precede number in ar@numbers=latn",
+                "",
+                NumberFormatter.with().unit(USD),
+                new ULocale("ar@numbers=latn"),
+                12345.67,
+                "US$ 12,345.67");
+
+        assertFormatSingle(
+                "Currency symbol should follow number in ar with NS arab",
+                "",
+                NumberFormatter.with().unit(USD),
+                new ULocale("ar"),
+                12345.67,
+                "١٢٬٣٤٥٫٦٧ US$");
+
+        assertFormatSingle(
+                "Currency symbol should follow number in ar@numbers=arab",
+                "",
+                NumberFormatter.with().unit(USD),
+                new ULocale("ar@numbers=arab"),
+                12345.67,
+                "١٢٬٣٤٥٫٦٧ US$");
 
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(new ULocale("de-CH"));
         UnlocalizedNumberFormatter f = NumberFormatter.with().symbols(symbols);
@@ -1300,6 +1449,14 @@ public class NumberFormatterTest {
                 ULocale.ENGLISH,
                 -444444,
                 "($444,444.00)");
+
+        assertFormatSingle(
+                "Sign Accounting Negative Hidden",
+                "$USD unit-width=HIDDEN sign=ACCOUNTING",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.HIDDEN),
+                ULocale.ENGLISH,
+                -444444,
+                "(444,444.00)");
     }
 
     @Test
@@ -1307,7 +1464,7 @@ public class NumberFormatterTest {
         assertFormatDescending(
                 "Decimal Default",
                 "decimal=AUTO",
-                NumberFormatter.with().decimal(DecimalMarkDisplay.AUTO),
+                NumberFormatter.with().decimal(DecimalSeparatorDisplay.AUTO),
                 ULocale.ENGLISH,
                 "87,650",
                 "8,765",
@@ -1322,7 +1479,7 @@ public class NumberFormatterTest {
         assertFormatDescending(
                 "Decimal Always Shown",
                 "decimal=ALWAYS",
-                NumberFormatter.with().decimal(DecimalMarkDisplay.ALWAYS),
+                NumberFormatter.with().decimal(DecimalSeparatorDisplay.ALWAYS),
                 ULocale.ENGLISH,
                 "87,650.",
                 "8,765.",
@@ -1394,17 +1551,38 @@ public class NumberFormatterTest {
             UnlocalizedNumberFormatter f,
             ULocale locale,
             String... expected) {
-        assert expected.length == 9;
-        assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
         final double[] inputs = new double[] { 87650, 8765, 876.5, 87.65, 8.765, 0.8765, 0.08765, 0.008765, 0 };
+        assertFormatDescending(message, skeleton, f, locale, inputs, expected);
+    }
+
+    private static void assertFormatDescendingBig(
+            String message,
+            String skeleton,
+            UnlocalizedNumberFormatter f,
+            ULocale locale,
+            String... expected) {
+        final double[] inputs = new double[] { 87650000, 8765000, 876500, 87650, 8765, 876.5, 87.65, 8.765, 0 };
+        assertFormatDescending(message, skeleton, f, locale, inputs, expected);
+    }
+
+    private static void assertFormatDescending(
+            String message,
+            String skeleton,
+            UnlocalizedNumberFormatter f,
+            ULocale locale,
+            double[] inputs,
+            String... expected) {
+        assert expected.length == 9;
+        // TODO: Add a check for skeleton.
+        // assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
         LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
         LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
         for (int i = 0; i < 9; i++) {
             double d = inputs[i];
             String actual1 = l1.format(d).toString();
-            assertEquals(message + ": L1: " + d, expected[i], actual1);
+            assertEquals(message + ": Unsafe Path: " + d, expected[i], actual1);
             String actual2 = l2.format(d).toString();
-            assertEquals(message + ": L2: " + d, expected[i], actual2);
+            assertEquals(message + ": Safe Path: " + d, expected[i], actual2);
         }
     }
 
@@ -1415,7 +1593,8 @@ public class NumberFormatterTest {
             ULocale locale,
             Number input,
             String expected) {
-        assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
+        // TODO: Add a check for skeleton.
+        // assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
         LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
         LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
         String actual1 = l1.format(input).toString();
@@ -1431,7 +1610,8 @@ public class NumberFormatterTest {
             ULocale locale,
             Measure input,
             String expected) {
-        assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
+        // TODO: Add a check for skeleton.
+        // assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
         LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
         LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
         String actual1 = l1.format(input).toString();

@@ -14,6 +14,17 @@ public class RoundingUtils {
   public static final int SECTION_UPPER = 3;
 
   /**
+   * The default rounding mode.
+   */
+  public static final RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.HALF_EVEN;
+
+  /**
+   * The maximum number of fraction places, integer numerals, or significant digits.
+   * TODO: This does not feel like the best home for this value.
+   */
+  public static final int MAX_INT_FRAC_SIG = 100;
+
+  /**
    * Converts a rounding mode and metadata about the quantity being rounded to a boolean determining
    * whether the value should be rounded toward infinity or toward zero.
    *

@@ -4,10 +4,8 @@ package com.ibm.icu.impl.number;
 
 import java.math.BigDecimal;
 
+import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
-
-import newapi.impl.Padder;
-import newapi.impl.Padder.PadPosition;
 
 /**
  * Assorted utilities relating to decimal formatting pattern strings.

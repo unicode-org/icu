@@ -195,25 +195,6 @@ pattern	format	output	breaks
 #E0	52413	5,2413E4	K
 0E0	52413	5E4
 
-test scientific with grouping
-set locale en
-set pattern #,##0.000E0
-begin
-format	output	breaks
-// J throws an IllegalArgumentException when parsing the pattern.
-// C sets error code to U_MALFORMED_EXPONENTIAL_PATTERN.
-1	1.000E0	CJ
-11	11.00E0	CJ
-111	111.0E0	CJ
-// K doesn't print the grouping separator ("1111E0")
-1111	1,111E0	CJK
-// K prints too many digits ("1.1111E4")
-11111	1.111E4	CJK
-111111	11.11E4	CJK
-1111111	111.1E4	CJK
-11111111	1,111E4	CJK
-111111111	1.111E8	CJK
-
 test percents
 set locale fr
 begin

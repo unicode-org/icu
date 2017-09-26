@@ -8,12 +8,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.number.ConstantAffixModifier;
+import com.ibm.icu.impl.number.ConstantMultiFieldModifier;
+import com.ibm.icu.impl.number.CurrencySpacingEnabledModifier;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.impl.number.modifiers.ConstantAffixModifier;
-import com.ibm.icu.impl.number.modifiers.ConstantMultiFieldModifier;
-import com.ibm.icu.impl.number.modifiers.CurrencySpacingEnabledModifier;
-import com.ibm.icu.impl.number.modifiers.SimpleModifier;
+import com.ibm.icu.impl.number.SimpleModifier;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;

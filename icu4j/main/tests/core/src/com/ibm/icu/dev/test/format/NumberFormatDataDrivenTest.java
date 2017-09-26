@@ -10,17 +10,16 @@ import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
-
-import newapi.LocalizedNumberFormatter;
-import newapi.NumberFormatter;
-import newapi.impl.Padder.PadPosition;
 
 public class NumberFormatDataDrivenTest {
 

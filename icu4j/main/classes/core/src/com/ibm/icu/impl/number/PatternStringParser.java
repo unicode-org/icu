@@ -2,8 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
-import newapi.impl.AffixPatternProvider;
-import newapi.impl.Padder.PadPosition;
+import com.ibm.icu.impl.number.Padder.PadPosition;
 
 /** Implements a recursive descent parser for decimal format patterns. */
 public class PatternStringParser {
