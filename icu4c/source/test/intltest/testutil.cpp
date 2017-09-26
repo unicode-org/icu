@@ -16,6 +16,7 @@
 #include "unicode/edits.h"
 #include "unicode/unistr.h"
 #include "unicode/utf16.h"
+#include "cmemory.h"
 #include "testutil.h"
 #include "intltest.h"
 
@@ -276,9 +277,11 @@ void TestUtility::checkEditsIter(
     destIndexes.push_back(destLength + 1);
     std::reverse(destIndexes.begin(), destIndexes.end());
     // Zig-zag across the indexes to stress next() <-> previous().
-    for (std::vector<int32_t>::size_type i = 0; i < srcIndexes.size(); ++i) {
-        for (int32_t j : { 0, 1, 2, 3, 2, 1 }) {
-            if ((i + j) < srcIndexes.size()) {
+    static const int32_t ZIG_ZAG[] = { 0, 1, 2, 3, 2, 1 };
+    for (auto i = 0; i < (int32_t)srcIndexes.size(); ++i) {
+        for (int32_t ij = 0; ij < UPRV_LENGTHOF(ZIG_ZAG); ++ij) {
+            int32_t j = ZIG_ZAG[ij];
+            if ((i + j) < (int32_t)srcIndexes.size()) {
                 int32_t si = srcIndexes[i + j];
                 test.assertEquals(name + u" destIndexFromSrc(" + si + u"):" + __LINE__,
                                   destIndexFromSrc(expected, expLength, srcLength, destLength, si),
@@ -286,9 +289,10 @@ void TestUtility::checkEditsIter(
             }
         }
     }
-    for (std::vector<int32_t>::size_type i = 0; i < destIndexes.size(); ++i) {
-        for (int32_t j : { 0, 1, 2, 3, 2, 1 }) {
-            if ((i + j) < destIndexes.size()) {
+    for (auto i = 0; i < (int32_t)destIndexes.size(); ++i) {
+        for (int32_t ij = 0; ij < UPRV_LENGTHOF(ZIG_ZAG); ++ij) {
+            int32_t j = ZIG_ZAG[ij];
+            if ((i + j) < (int32_t)destIndexes.size()) {
                 int32_t di = destIndexes[i + j];
                 test.assertEquals(name + u" srcIndexFromDest(" + di + u"):" + __LINE__,
                                   srcIndexFromDest(expected, expLength, srcLength, destLength, di),
