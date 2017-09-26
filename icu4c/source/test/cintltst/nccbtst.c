@@ -1482,7 +1482,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         if(!testConvertFromUnicode(testinput, UPRV_LENGTHOF(testinput),
                 expectedUTF8, UPRV_LENGTHOF(expectedUTF8), "utf8",
                 UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets, NULL, 0 )) {
-            log_err("u-> utf8 with stop did not match.\n");
+            log_err("u-> utf8 with substitute did not match.\n");
         }
     }
 
@@ -1614,8 +1614,8 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
     {
         const uint8_t sampleText1[] = { 0x31, 0xe4, 0xba, 0x8c, 
             0xe0, 0x80,  0x61,};
-        UChar    expected1[] = {  0x0031, 0x4e8c, 0xfffd, 0x0061};
-        int32_t offsets1[] = {   0x0000, 0x0001, 0x0004, 0x0006};
+        UChar    expected1[] = {  0x0031, 0x4e8c, 0xfffd, 0xfffd, 0x0061};
+        int32_t offsets1[] = {   0x0000, 0x0001, 0x0004, 0x0005, 0x0006};
 
         if(!testConvertToUnicode(sampleText1, UPRV_LENGTHOF(sampleText1),
                  expected1, UPRV_LENGTHOF(expected1),"utf8",

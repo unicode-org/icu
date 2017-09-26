@@ -33,6 +33,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
@@ -55,6 +57,7 @@ import com.ibm.icu.util.ULocale;
  * @author dougfelt (Doug Felt)
  * @author markdavis (Mark Davis) [for fractional support]
  */
+@RunWith(JUnit4.class)
 public class PluralRulesTest extends TestFmwk {
 
     PluralRulesFactory factory = PluralRulesFactory.NORMAL;

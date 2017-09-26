@@ -83,7 +83,8 @@ TimeZoneFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name
         TESTCASE(4, TestFormat);
         TESTCASE(5, TestFormatTZDBNames);
         TESTCASE(6, TestFormatCustomZone);
-        default: name = ""; break;
+        TESTCASE(7, TestFormatTZDBNamesAllZoneCoverage);
+    default: name = ""; break;
     }
 }
 
@@ -1251,5 +1252,44 @@ TimeZoneFormatTest::TestFormatCustomZone(void) {
     }
 }
 
+void
+TimeZoneFormatTest::TestFormatTZDBNamesAllZoneCoverage(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<StringEnumeration> tzids(TimeZone::createEnumeration());
+    const UnicodeString *tzid;
+    LocalPointer<TimeZoneNames> tzdbNames(TimeZoneNames::createTZDBInstance(Locale("en"), status));
+    UDate now = Calendar::getNow();
+    UnicodeString mzId;
+    UnicodeString name;
+    while ((tzid = tzids->snext(status))) {
+        logln("Zone: " + *tzid);
+        LocalPointer<TimeZone> tz(TimeZone::createTimeZone(*tzid));
+        tzdbNames->getMetaZoneID(*tzid, now, mzId);
+        if (mzId.isBogus()) {
+            logln((UnicodeString)"Meta zone: <not available>");
+        } else {
+            logln((UnicodeString)"Meta zone: " + mzId);
+        }
+
+        // mzID could be bogus here
+        tzdbNames->getMetaZoneDisplayName(mzId, UTZNM_SHORT_STANDARD, name);
+        // name could be bogus here
+        if (name.isBogus()) {
+            logln((UnicodeString)"Meta zone short standard name: <not available>");
+        }
+        else {
+            logln((UnicodeString)"Meta zone short standard name: " + name);
+        }
+
+        tzdbNames->getMetaZoneDisplayName(mzId, UTZNM_SHORT_DAYLIGHT, name);
+        // name could be bogus here
+        if (name.isBogus()) {
+            logln((UnicodeString)"Meta zone short daylight name: <not available>");
+        }
+        else {
+            logln((UnicodeString)"Meta zone short daylight name: " + name);
+        }
+    }
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

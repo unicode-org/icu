@@ -37,7 +37,10 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.ChineseDateFormat;
@@ -63,7 +66,8 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
-public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class DateFormatTest extends TestFmwk {
     /**
      * Verify that patterns have the correct values and could produce the
      * the DateFormat instances that contain the correct localized patterns.
@@ -2394,9 +2398,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         f.format((Object)cal, buf, pos);
         f.format((Object)now, buf, pos);
-        f.format((Object)new Long(now.getTime()), buf, pos);
+        f.format(new Long(now.getTime()), buf, pos);
         try {
-            f.format((Object)"Howdy", buf, pos);
+            f.format("Howdy", buf, pos);
         }
         catch (Exception e) {
         }
@@ -4000,7 +4004,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             String expected = data[i + 1];
             if (!out.equals(expected))
             {
-                errln((String)"FAIL: " + in + " -> " + out + " expected -> " + expected);
+                errln("FAIL: " + in + " -> " + out + " expected -> " + expected);
             }
         }
     }
@@ -4023,7 +4027,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String res1 = result.toString();
         String expected = "\u4e8c\u3007\u3007\u4e5d\u5e74\u4e03\u6708\u4e8c\u5341\u516b\u65e5";
         if (! res1.equals(expected)) {
-            errln((String)"FAIL: -> " + result.toString() + " expected -> " + expected);
+            errln("FAIL: -> " + result.toString() + " expected -> " + expected);
         }
         ParsePosition pp = new ParsePosition(0);
         Date parsedate = sdf.parse(expected, pp);
@@ -4090,7 +4094,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             String expected  = DATA[i][1];
 
             if (!result.equals(expected))
-                errln((String) "FAIL: -> " + result.toString() + " expected -> " + expected);
+                errln("FAIL: -> " + result.toString() + " expected -> " + expected);
         }
     }
 

@@ -9,6 +9,10 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -17,14 +21,15 @@ import com.ibm.icu.text.UTF16;
 /**
  * Test JDK 1.5 cover APIs.
  */
+@RunWith(JUnit4.class)
 public final class UCharacterSurrogateTest extends TestFmwk {
-    @org.junit.Test
+    @Test
     public void TestUnicodeBlockForName() {
-      String[] names = {"Latin-1 Supplement", 
+      String[] names = {"Latin-1 Supplement",
                         "Optical Character Recognition",
-                        "CJK Unified Ideographs Extension A", 
+                        "CJK Unified Ideographs Extension A",
                         "Supplemental Arrows-B",
-                        "Supplemental arrows b", 
+                        "Supplemental arrows b",
                         "supp-lement-al arrowsb",
                         "Supplementary Private Use Area-B",
                         "supplementary_Private_Use_Area-b",
@@ -41,7 +46,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
         }
     }
 
-    @org.junit.Test
+    @Test
     public void TestIsValidCodePoint() {
         if (UCharacter.isValidCodePoint(-1))
             errln("-1");
@@ -53,7 +58,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
             errln("0x110000");
     }
 
-    @org.junit.Test
+    @Test
     public void TestIsSupplementaryCodePoint() {
         if (UCharacter.isSupplementaryCodePoint(-1))
             errln("-1");
@@ -71,7 +76,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
             errln("0x110000");
     }
 
-    @org.junit.Test
+    @Test
     public void TestIsHighSurrogate() {
         if (UCharacter
                 .isHighSurrogate((char) (UCharacter.MIN_HIGH_SURROGATE - 1)))
@@ -85,7 +90,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
             errln("0xdc00");
     }
 
-    @org.junit.Test
+    @Test
     public void TestIsLowSurrogate() {
         if (UCharacter
                 .isLowSurrogate((char) (UCharacter.MIN_LOW_SURROGATE - 1)))
@@ -99,7 +104,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
             errln("0xe000");
     }
 
-    @org.junit.Test
+    @Test
     public void TestIsSurrogatePair() {
         if (UCharacter.isSurrogatePair(
                 (char) (UCharacter.MIN_HIGH_SURROGATE - 1),
@@ -120,7 +125,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
             errln("0xd800,0xdc00");
     }
 
-    @org.junit.Test
+    @Test
     public void TestCharCount() {
         UCharacter.charCount(-1);
         UCharacter.charCount(UCharacter.MAX_CODE_POINT + 1);
@@ -130,7 +135,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
             errln("0x010000");
     }
 
-    @org.junit.Test
+    @Test
     public void TestToCodePoint() {
         final char[] pairs = {(char) (UCharacter.MIN_HIGH_SURROGATE + 0),
                 (char) (UCharacter.MIN_LOW_SURROGATE + 0),
@@ -155,7 +160,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
         }
     }
 
-    @org.junit.Test
+    @Test
     public void TestCodePointAtBefore() {
         String s = "" + UCharacter.MIN_HIGH_SURROGATE + // isolated high
                 UCharacter.MIN_HIGH_SURROGATE + // pair
@@ -201,7 +206,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
 
     }
 
-    @org.junit.Test
+    @Test
     public void TestToChars() {
         char[] chars = new char[3];
         int cp = UCharacter.toCodePoint(UCharacter.MIN_HIGH_SURROGATE,
@@ -221,7 +226,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
         }
     }
 
-    @org.junit.Test
+    @Test
     public void TestCodePointCount() {
         class Test {
             String str(String s, int start, int limit) {
@@ -282,7 +287,7 @@ public final class UCharacterSurrogateTest extends TestFmwk {
         test.test("\ud800\udc00\udc00", 0, 3, 2);
     }
 
-    @org.junit.Test
+    @Test
     public void TestOffsetByCodePoints() {
         class Test {
             String str(String s, int start, int count, int index, int offset) {

@@ -21,7 +21,10 @@ import java.util.Locale;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -31,7 +34,8 @@ import com.ibm.icu.util.TimeZone;
 /**
  * Performs round-trip tests for DateFormat
  **/
-public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class DateFormatRoundTripTest extends TestFmwk {
     public boolean INFINITE = false;
     public boolean quick = true;
     private SimpleDateFormat dateFormat;

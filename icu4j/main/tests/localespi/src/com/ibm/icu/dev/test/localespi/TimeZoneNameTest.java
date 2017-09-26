@@ -15,12 +15,15 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.TimeZoneNames;
 import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class TimeZoneNameTest extends TestFmwk {
 
     private static final Set<String> ProblematicZones = new HashSet<String>();
@@ -52,7 +55,7 @@ public class TimeZoneNameTest extends TestFmwk {
             for (String tzid : tzids) {
                 // Java has a problem when a provider does not supply all 4 names
                 // for a zone. For this reason, ICU TimeZoneName provider does not return
-                // localized names unless these 4 names are available. 
+                // localized names unless these 4 names are available.
 
                 String icuStdLong = getIcuDisplayName(tzid, false, TimeZone.LONG, loc);
                 String icuDstLong = getIcuDisplayName(tzid, true, TimeZone.LONG, loc);
@@ -72,13 +75,13 @@ public class TimeZoneNameTest extends TestFmwk {
 
     private void checkDisplayNamePair(int style, String tzid, Locale loc, boolean warnOnly) {
         /* Note: There are two problems here.
-         * 
+         *
          * It looks Java 6 requires a TimeZoneNameProvider to return both standard name and daylight name
          * for a zone.  If the provider implementation only returns either of them, Java 6 also ignore
          * the other.  In ICU, there are zones which do not have daylight names, especially zones which
          * do not use daylight time.  This test case does not check a standard name if its daylight name
          * is not available because of the Java 6 implementation problem.
-         * 
+         *
          * Another problem is that ICU always use a standard name for a zone which does not use daylight
          * saving time even daylight name is requested.
          */
@@ -126,7 +129,7 @@ public class TimeZoneNameTest extends TestFmwk {
                     logln("WARNING: TimeZone name by ICU is " + icuname + ", but got " + name
                             + " for time zone " + tz.getID() + " in locale " + loc
                             + " (daylight=" + daylight + ", style=" + styleStr + ")");
-                    
+
                 } else {
                     errln("FAIL: TimeZone name by ICU is " + icuname + ", but got " + name
                             + " for time zone " + tz.getID() + " in locale " + loc

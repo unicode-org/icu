@@ -2543,7 +2543,7 @@ UnicodeString DecimalFormat::getPadCharacterString() const {
 }
 
 void DecimalFormat::setPadCharacter(const UnicodeString &padChar) {
-    UChar pad;
+    UChar32 pad;
     if (padChar.length() > 0) {
         pad = padChar.char32At(0);
     }
@@ -2792,7 +2792,7 @@ DecimalFormat::setDecimalSeparatorAlwaysShown(UBool newValue)
 UBool 
 DecimalFormat::isDecimalPatternMatchRequired(void) const
 {
-    return fBoolFlags.contains(UNUM_PARSE_DECIMAL_MARK_REQUIRED);
+    return static_cast<UBool>(fBoolFlags.contains(UNUM_PARSE_DECIMAL_MARK_REQUIRED));
 }
 
 //------------------------------------------------------------------------------

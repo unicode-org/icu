@@ -2056,6 +2056,9 @@ static void U_CALLCONV prepareFind(UErrorCode &status) {
     if (U_SUCCESS(status)) {
         while ((mzID = mzIDs->snext(status)) && U_SUCCESS(status)) {
             const TZDBNames *names = TZDBTimeZoneNames::getMetaZoneNames(*mzID, status);
+            if (U_FAILURE(status)) {
+                break;
+            }
             if (names == NULL) {
                 continue;
             }
@@ -2187,9 +2190,11 @@ TZDBTimeZoneNames::getMetaZoneDisplayName(const UnicodeString& mzID,
     UErrorCode status = U_ZERO_ERROR;
     const TZDBNames *tzdbNames = TZDBTimeZoneNames::getMetaZoneNames(mzID, status);
     if (U_SUCCESS(status)) {
-        const UChar *s = tzdbNames->getName(type);
-        if (s != NULL) {
-            name.setTo(TRUE, s, -1);
+        if (tzdbNames != NULL) {
+            const UChar *s = tzdbNames->getName(type);
+            if (s != NULL) {
+                name.setTo(TRUE, s, -1);
+            }
         }
     }
 

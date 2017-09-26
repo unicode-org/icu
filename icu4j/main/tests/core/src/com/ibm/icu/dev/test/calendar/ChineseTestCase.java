@@ -34,7 +34,7 @@ public class ChineseTestCase extends TestCase {
                            boolean isLeapMonth, int dayOfMonth, int dayOfWeek) {
 
         setTime(new Date(JULIAN_EPOCH + (long)(ONE_DAY * julian)));
-        
+
         set(Calendar.ERA, era);
         set(Calendar.YEAR, year);
         set(Calendar.MONTH, month - 1);
@@ -46,6 +46,7 @@ public class ChineseTestCase extends TestCase {
     /**
      * Return a String representation of this test case's time.
      */
+    @Override
     public String toString() {
         return dowToString(get(Calendar.DAY_OF_WEEK)) +
             get(Calendar.YEAR) + "of" + get(Calendar.ERA) +

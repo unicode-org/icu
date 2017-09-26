@@ -16,10 +16,13 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 
 @SuppressWarnings("unchecked")
+@RunWith(JUnit4.class)
 public class CurrencyNameTest extends TestFmwk {
     private static final Set<Currency> AVAILABLE_CURRENCIES;
     private static final Method GETDISPLAYNAME_METHOD;

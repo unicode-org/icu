@@ -14,12 +14,15 @@ import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.REGION;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.impl.LocaleDisplayNamesImpl;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class TestLocaleNamePackaging extends TestFmwk {
     public TestLocaleNamePackaging() {
     }
@@ -77,7 +80,7 @@ public class TestLocaleNamePackaging extends TestFmwk {
             "DE",
             "TH",
         };
-        String[] expected = LocaleDisplayNamesImpl.haveData(REGION) ? 
+        String[] expected = LocaleDisplayNamesImpl.haveData(REGION) ?
             expectedWithRegionData : expectedWithoutRegionData;
 
         int n = 0;
@@ -224,15 +227,15 @@ public class TestLocaleNamePackaging extends TestFmwk {
                : "en (GB)");
         assertEquals("dialect 2", target, dn.localeDisplayName("en_GB"));
     }
-    
+
     @Test
     public void testLocaleKeywords() {
         LocaleDisplayNames dn = LocaleDisplayNames.getInstance(ULocale.US,
                 DialectHandling.DIALECT_NAMES);
         String name = dn.localeDisplayName("de@collation=phonebook");
-        String target = LocaleDisplayNamesImpl.haveData(LANG) ? 
+        String target = LocaleDisplayNamesImpl.haveData(LANG) ?
                 "German (Phonebook Sort Order)" : "de (collation=phonebook)";
         assertEquals("collation", target, name);
-        
+
     }
 }

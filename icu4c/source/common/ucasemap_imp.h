@@ -73,6 +73,8 @@ uprv_haveProperties(UErrorCode *pErrorCode);
 
 U_NAMESPACE_BEGIN
 
+class ByteSink;
+
 /** Returns TRUE if the options are valid. Otherwise FALSE, and sets an error. */
 inline UBool ustrcase_checkTitleAdjustmentOptions(uint32_t options, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return FALSE; }
@@ -207,39 +209,43 @@ ustrcase_mapWithOverlap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITE
  * UTF-8 version of UStringCaseMapper.
  * All error checking must be done.
  * The UCaseMap must be fully initialized, with locale and/or iter set as needed.
- * src and dest must not overlap.
  */
-typedef int32_t U_CALLCONV
+typedef void U_CALLCONV
 UTF8CaseMapper(int32_t caseLocale, uint32_t options,
 #if !UCONFIG_NO_BREAK_ITERATION
                icu::BreakIterator *iter,
 #endif
-               uint8_t *dest, int32_t destCapacity,
                const uint8_t *src, int32_t srcLength,
-               icu::Edits *edits,
+               icu::ByteSink &sink, icu::Edits *edits,
                UErrorCode &errorCode);
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
 /** Implements UTF8CaseMapper. */
-U_CFUNC int32_t U_CALLCONV
+U_CFUNC void U_CALLCONV
 ucasemap_internalUTF8ToTitle(int32_t caseLocale, uint32_t options,
         icu::BreakIterator *iter,
-        uint8_t *dest, int32_t destCapacity,
         const uint8_t *src, int32_t srcLength,
-        icu::Edits *edits,
+        icu::ByteSink &sink, icu::Edits *edits,
         UErrorCode &errorCode);
 
 #endif
+
+void
+ucasemap_mapUTF8(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
+                 const char *src, int32_t srcLength,
+                 UTF8CaseMapper *stringCaseMapper,
+                 icu::ByteSink &sink, icu::Edits *edits,
+                 UErrorCode &errorCode);
 
 /**
  * Implements argument checking and buffer handling
  * for UTF-8 string case mapping as a common function.
  */
-U_CFUNC int32_t
+int32_t
 ucasemap_mapUTF8(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
-                 uint8_t *dest, int32_t destCapacity,
-                 const uint8_t *src, int32_t srcLength,
+                 char *dest, int32_t destCapacity,
+                 const char *src, int32_t srcLength,
                  UTF8CaseMapper *stringCaseMapper,
                  icu::Edits *edits,
                  UErrorCode &errorCode);

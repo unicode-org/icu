@@ -39,18 +39,18 @@ import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
 /**
- * This maps to convtest.c which tests the test file for data-driven conversion tests. 
- * 
+ * This maps to convtest.c which tests the test file for data-driven conversion tests.
+ *
  */
 @RunWith(JUnitParamsRunner.class)
 public class TestConversion extends TestFmwk {
     /**
      * This maps to the C struct of conversion case in convtest.h that stores the
      * data for a conversion test
-     * 
+     *
      */
     private class ConversionCase {
-        int caseNr;                                             // testcase index   
+        int caseNr;                                             // testcase index
         String option = null;                                   // callback options
         CodingErrorAction cbErrorAction = null;                 // callback action type
         CharBuffer toUnicodeResult = null;
@@ -64,7 +64,7 @@ public class TestConversion extends TestFmwk {
         boolean finalFlush;                                     // flush
         boolean fallbacks;                                      // fallback
         String outErrorCode;                                    // errorCode
-        String cbopt;                                           // callback 
+        String cbopt;                                           // callback
 
         // TestGetUnicodeSet variables
         String map;
@@ -91,7 +91,7 @@ public class TestConversion extends TestFmwk {
     }
 
     @SuppressWarnings("unused")
-    private List<TestDataPair> getTestData() throws Exception { 
+    private List<TestDataPair> getTestData() throws Exception {
         return ModuleTest.getTestData("com/ibm/icu/dev/data/testdata/", "conversion");
     }
 
@@ -132,7 +132,7 @@ public class TestConversion extends TestFmwk {
     // private methods -------------------------------------------------------
 
 
-    // fromUnicode test worker functions --------------------------------------- 
+    // fromUnicode test worker functions ---------------------------------------
     private void TestFromUnicode(DataMap testcase, int caseNr) {
 
         ConversionCase cc = new ConversionCase();
@@ -154,7 +154,7 @@ public class TestConversion extends TestFmwk {
             errln("error parsing conversion/toUnicode test case " + cc.caseNr);
             return;
         }
-        
+
         /*
          * Skip the following data driven converter tests.
          * These tests were added to the data driven conversion test in ICU
@@ -215,7 +215,7 @@ public class TestConversion extends TestFmwk {
                 break;
             }
 
-            // check for any options for the callback value -- 
+            // check for any options for the callback value --
             cc.option = cc.cbErrorAction == null ? cc.cbopt : cc.cbopt
                     .substring(1);
             if (cc.option == null) {
@@ -225,7 +225,7 @@ public class TestConversion extends TestFmwk {
         FromUnicodeCase(cc);
     }
 
-    
+
     private void FromUnicodeCase(ConversionCase cc) {
         // create charset encoder for conversion test
         CharsetProviderICU provider = new CharsetProviderICU();
@@ -238,7 +238,7 @@ public class TestConversion extends TestFmwk {
                         "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
                     : (Charset) provider.charsetForName(cc.charset);
             if (charset != null) {
-                encoder = (CharsetEncoder) charset.newEncoder();
+                encoder = charset.newEncoder();
                 encoder.onMalformedInput(CodingErrorAction.REPLACE);
                 encoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
                 if (encoder instanceof CharsetEncoderICU) {
@@ -260,7 +260,7 @@ public class TestConversion extends TestFmwk {
             return;
         }
 
-        // set the callback for the encoder 
+        // set the callback for the encoder
         if (cc.cbErrorAction != null) {
             if (cc.cbEncoder != null) {
                 ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.malformedForLength(1), cc.cbEncoder, cc.option);
@@ -364,7 +364,7 @@ public class TestConversion extends TestFmwk {
             break;
         }
     }
-    
+
     private int stepFromUnicode(ConversionCase cc, CharsetEncoder encoder, int step) {
         if (step < 0) {
             errln("Negative step size, test internal error.");
@@ -387,7 +387,7 @@ public class TestConversion extends TestFmwk {
             currentSourceLimit = sourceLen;
             currentTargetLimit = targetLen;
         }
-        
+
         CoderResult cr = null;
 
         for (;;) {
@@ -529,7 +529,7 @@ public class TestConversion extends TestFmwk {
                         "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
                     : (Charset) provider.charsetForName(cc.charset);
             if (charset != null) {
-                decoder = (CharsetDecoder) charset.newDecoder();
+                decoder = charset.newDecoder();
                 decoder.onMalformedInput(CodingErrorAction.REPLACE);
                 decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
             }
@@ -588,13 +588,13 @@ public class TestConversion extends TestFmwk {
             }
         }
 
-        //      Check the step to unicode    
+        //      Check the step to unicode
         boolean ok;
         int resultLength;
 
         String steps[][] = { { "0", "bulk" }, // must be first for offsets to be checked
                 { "1", "step=1" }, { "3", "step=3" }, { "7", "step=7" } };
-        /* TODO: currently not supported test steps, getNext API is not supported for now  
+        /* TODO: currently not supported test steps, getNext API is not supported for now
          { "-1", "getNext" },
          { "-2", "toU(bulk)+getNext" },
          { "-3", "getNext+toU(bulk)" },
@@ -702,14 +702,14 @@ public class TestConversion extends TestFmwk {
                     target.limit(target.capacity());
                     flush = cc.finalFlush;
                 }
-                // convert 
+                // convert
                 CoderResult cr = null;
                 if (source.hasRemaining()) {
 
                     cr = decoder.decode(source, target, flush);
                     // check pointers and errors
                     if (cr.isOverflow()) {
-                        // the partial target is filled, set a new limit, 
+                        // the partial target is filled, set a new limit,
                         oStep = (target.position() + step);
                         target.limit((oStep < target.capacity()) ? oStep
                                 : target.capacity());
@@ -733,7 +733,7 @@ public class TestConversion extends TestFmwk {
 
                         cr = decoder.decode(source, target, true);
 
-                        //due to limitation of the API we need to check for target limit for expected 
+                        //due to limitation of the API we need to check for target limit for expected
                         if (target.position() != cc.unicode.length()) {
                             if (target.limit() != cc.unicode.length()) {
                                 target.limit(cc.unicode.length());
@@ -781,7 +781,7 @@ public class TestConversion extends TestFmwk {
                         if (cr.isOverflow()) {
 
                             if (target.limit() >= target.capacity()) {
-                                // target has reached its limit, an error occurred 
+                                // target has reached its limit, an error occurred
                                 logln("UnExpected error: Target Buffer is larger than capacity");
                                 break;
                             } else {
@@ -841,7 +841,7 @@ public class TestConversion extends TestFmwk {
                     }
                     CoderResult cr = decoder.decode(source, target, source
                             .limit() == sourceLen);
-                    // check pointers and errors 
+                    // check pointers and errors
                     if (cr.isOverflow()) {
                         // one character has been consumed
                         if (target.limit() >= target.capacity()) {
@@ -915,12 +915,12 @@ public class TestConversion extends TestFmwk {
                             "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
                             : (CharsetICU) provider.charsetForName(cc.charset);
 
-                    //checking for converter that are not supported at this point        
+                    //checking for converter that are not supported at this point
                     try{
                         if(charset==null ||
                                 charset.name()=="BOCU-1" ||charset.name()== "SCSU"|| charset.name()=="lmbcs1" || charset.name()== "lmbcs2" ||
                                 charset.name()== "lmbcs3" || charset.name()== "lmbcs4" || charset.name()=="lmbcs5" || charset.name()=="lmbcs6" ||
-                                charset.name()== "lmbcs8" || charset.name()=="lmbcs11" || charset.name()=="lmbcs16" || charset.name()=="lmbcs17" || 
+                                charset.name()== "lmbcs8" || charset.name()=="lmbcs11" || charset.name()=="lmbcs16" || charset.name()=="lmbcs17" ||
                                 charset.name()=="lmbcs18"|| charset.name()=="lmbcs19"){
                             logln("Converter not supported at this point :" + cc.charset);
                             return;
@@ -944,7 +944,7 @@ public class TestConversion extends TestFmwk {
                     charset.getUnicodeSet(unicodeset, cc.which);
                     UnicodeSet diffset = new UnicodeSet();
 
-                    //are there items that must be in unicodeset but are not?           
+                    //are there items that must be in unicodeset but are not?
                     (diffset = mapset).removeAll(unicodeset);
                     if(!diffset.isEmpty()){
                         StringBuffer s = new StringBuffer(diffset.toPattern(true));
@@ -975,11 +975,11 @@ public class TestConversion extends TestFmwk {
      * This follows ucnv.c method ucnv_detectUnicodeSignature() to detect the
      * start of the stream for example U+FEFF (the Unicode BOM/signature
      * character) that can be ignored.
-     * 
+     *
      * Detects Unicode signature byte sequences at the start of the byte stream
      * and returns number of bytes of the BOM of the indicated Unicode charset.
      * 0 is returned when no Unicode signature is recognized.
-     * 
+     *
      */
 
     private String detectUnicodeSignature(ByteBuffer source) {

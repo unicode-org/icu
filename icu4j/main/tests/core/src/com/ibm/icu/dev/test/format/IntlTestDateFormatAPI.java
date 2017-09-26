@@ -6,7 +6,7 @@
  *   Corporation and others.  All Rights Reserved.
  **/
 
-/** 
+/**
  * Port From:   JDK 1.4b1 : java.text.Format.IntlTestDateFormatAPI
  * Source File: java/text/format/IntlTestDateFormatAPI.java
  **/
@@ -25,7 +25,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.text.DateFormat;
@@ -33,7 +36,8 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 
-public class IntlTestDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
+@RunWith(JUnit4.class)
+public class IntlTestDateFormatAPI extends TestFmwk
 {
     // Test that the equals method works correctly.
     @Test

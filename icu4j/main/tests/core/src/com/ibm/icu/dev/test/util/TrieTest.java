@@ -10,6 +10,8 @@
 package com.ibm.icu.dev.test.util;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.CharTrie;
@@ -22,29 +24,30 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
 
 /**
-* Testing class for Trie. Tests here will be simple, since both CharTrie and 
+* Testing class for Trie. Tests here will be simple, since both CharTrie and
 * IntTrie are very similar and are heavily used in other parts of ICU4J.
 * Codes using Tries are expected to have detailed tests.
 * @author Syn Wee Quek
 * @since release 2.1 Jan 01 2002
 */
-public final class TrieTest extends TestFmwk 
-{ 
+@RunWith(JUnit4.class)
+public final class TrieTest extends TestFmwk
+{
     // constructor ---------------------------------------------------
-  
+
     /**
     * Constructor
     */
     public TrieTest()
     {
     }
-      
+
     // public methods -----------------------------------------------
-    
-    /** 
+
+    /**
      * Values for setting possibly overlapping, out-of-order ranges of values
      */
-    private static final class SetRange 
+    private static final class SetRange
     {
         SetRange(int start, int limit, int value, boolean overwrite)
         {
@@ -53,37 +56,38 @@ public final class TrieTest extends TestFmwk
             this.value = value;
             this.overwrite = overwrite;
         }
-        
+
         int start, limit;
         int value;
         boolean overwrite;
     }
-    
+
     /**
      * Values for testing:
      * value is set from the previous boundary's limit to before
      * this boundary's limit
      */
-    private static final class CheckRange 
+    private static final class CheckRange
     {
         CheckRange(int limit, int value)
         {
             this.limit = limit;
             this.value = value;
         }
-        
+
         int limit;
         int value;
     }
-    
-    private static final class _testFoldedValue 
-                                        implements TrieBuilder.DataManipulate  
+
+    private static final class _testFoldedValue
+                                        implements TrieBuilder.DataManipulate
     {
         public _testFoldedValue(IntTrieBuilder builder)
         {
             m_builder_ = builder;
         }
-        
+
+        @Override
         public int getFoldedValue(int start, int offset)
         {
             int foldedValue = 0;
@@ -92,46 +96,48 @@ public final class TrieTest extends TestFmwk
                 int value = m_builder_.getValue(start);
                 if (m_builder_.isInZeroBlock(start)) {
                     start += TrieBuilder.DATA_BLOCK_LENGTH;
-                } 
+                }
                 else {
                     foldedValue |= value;
                     ++ start;
                 }
             }
-        
+
             if (foldedValue != 0) {
                 return (offset << 16) | foldedValue;
-            } 
+            }
             return 0;
         }
-        
+
         private IntTrieBuilder m_builder_;
     }
-    
-    private static final class _testFoldingOffset 
-                                                implements Trie.DataManipulate 
+
+    private static final class _testFoldingOffset
+                                                implements Trie.DataManipulate
     {
+        @Override
         public int getFoldingOffset(int value)
         {
             return value >>> 16;
         }
     }
-    
+
     private static final class _testEnumValue extends TrieIterator
     {
         public _testEnumValue(Trie data)
         {
             super(data);
         }
-        
+
+        @Override
         protected int extract(int value)
         {
             return value ^ 0x5555;
         }
     }
-    
+
     private void _testTrieIteration(IntTrie trie, CheckRange checkRanges[],
-                                    int countCheckRanges) 
+                                    int countCheckRanges)
     {
         // write a string
         int countValues = 0;
@@ -154,20 +160,20 @@ public final class TrieTest extends TestFmwk
             p += UTF16.getCharCount(c);
             int value = trie.getCodePointValue(c);
             if (value != values[i]) {
-                errln("wrong value from UTRIE_NEXT(U+" 
-                      + Integer.toHexString(c) + "): 0x" 
+                errln("wrong value from UTRIE_NEXT(U+"
+                      + Integer.toHexString(c) + "): 0x"
                       + Integer.toHexString(value) + " instead of 0x"
                       + Integer.toHexString(values[i]));
             }
             // unlike the c version lead is 0 if c is non-supplementary
             char lead = UTF16.getLeadSurrogate(c);
-            char trail = UTF16.getTrailSurrogate(c); 
-            if (lead == 0 
-                ? trail != s.charAt(p - 1) 
-                : !UTF16.isLeadSurrogate(lead) 
-                  || !UTF16.isTrailSurrogate(trail) || lead != s.charAt(p - 2) 
+            char trail = UTF16.getTrailSurrogate(c);
+            if (lead == 0
+                ? trail != s.charAt(p - 1)
+                : !UTF16.isLeadSurrogate(lead)
+                  || !UTF16.isTrailSurrogate(trail) || lead != s.charAt(p - 2)
                   || trail != s.charAt(p - 1)) {
-                errln("wrong (lead, trail) from UTRIE_NEXT(U+" 
+                errln("wrong (lead, trail) from UTRIE_NEXT(U+"
                       + Integer.toHexString(c));
                 continue;
             }
@@ -176,8 +182,8 @@ public final class TrieTest extends TestFmwk
                 value = trie.getTrailValue(value, trail);
                 if (value != trie.getSurrogateValue(lead, trail)
                     && value != values[i]) {
-                    errln("wrong value from getting supplementary " 
-                          + "values (U+" 
+                    errln("wrong value from getting supplementary "
+                          + "values (U+"
                           + Integer.toHexString(c) + "): 0x"
                           + Integer.toHexString(value) + " instead of 0x"
                           + Integer.toHexString(values[i]));
@@ -186,16 +192,16 @@ public final class TrieTest extends TestFmwk
             ++ i;
         }
     }
-    
-    private void _testTrieRanges(SetRange setRanges[], int countSetRanges, 
+
+    private void _testTrieRanges(SetRange setRanges[], int countSetRanges,
                                  CheckRange checkRanges[], int countCheckRanges,
-                                 boolean latin1Linear) 
+                                 boolean latin1Linear)
     {
         IntTrieBuilder newTrie = new IntTrieBuilder(null, 2000,
-                                                    checkRanges[0].value, 
+                                                    checkRanges[0].value,
                                                     checkRanges[0].value,
                                                     latin1Linear);
-    
+
         // set values from setRanges[]
         boolean ok = true;
         for (int i = 0; i < countSetRanges; ++ i) {
@@ -205,7 +211,7 @@ public final class TrieTest extends TestFmwk
             boolean overwrite = setRanges[i].overwrite;
             if ((limit - start) == 1 && overwrite) {
                 ok &= newTrie.setValue(start, value);
-            } 
+            }
             else {
                 ok &= newTrie.setRange(start, limit, value, overwrite);
             }
@@ -214,70 +220,70 @@ public final class TrieTest extends TestFmwk
             errln("setting values into a trie failed");
             return;
         }
-    
+
         // verify that all these values are in the new Trie
         int start = 0;
         for (int i = 0; i < countCheckRanges; ++ i) {
             int limit = checkRanges[i].limit;
             int value = checkRanges[i].value;
-    
+
             while (start < limit) {
                 if (value != newTrie.getValue(start)) {
-                    errln("newTrie [U+" 
-                          + Integer.toHexString(start) + "]==0x" 
-                          + Integer.toHexString(newTrie.getValue(start)) 
+                    errln("newTrie [U+"
+                          + Integer.toHexString(start) + "]==0x"
+                          + Integer.toHexString(newTrie.getValue(start))
                           + " instead of 0x" + Integer.toHexString(value));
                 }
                 ++ start;
             }
         }
-    
-        IntTrie trie = newTrie.serialize(new _testFoldedValue(newTrie), 
+
+        IntTrie trie = newTrie.serialize(new _testFoldedValue(newTrie),
                                          new _testFoldingOffset());
-    
+
         // test linear Latin-1 range from utrie_getData()
         if (latin1Linear) {
             start = 0;
             for (int i = 0; i < countCheckRanges && start <= 0xff; ++ i) {
                 int limit = checkRanges[i].limit;
                 int value = checkRanges[i].value;
-    
+
                 while (start < limit && start <= 0xff) {
                     if (value != trie.getLatin1LinearValue((char)start)) {
-                        errln("IntTrie.getLatin1LinearValue[U+" 
+                        errln("IntTrie.getLatin1LinearValue[U+"
                               + Integer.toHexString(start) + "]==0x"
                               + Integer.toHexString(
-                                        trie.getLatin1LinearValue((char) start)) 
+                                        trie.getLatin1LinearValue((char) start))
                               + " instead of 0x" + Integer.toHexString(value));
                     }
                     ++ start;
                 }
             }
         }
-    
+
         if (latin1Linear != trie.isLatin1Linear()) {
             errln("trie serialization did not preserve "
                   + "Latin-1-linearity");
         }
-    
+
         // verify that all these values are in the serialized Trie
         start = 0;
         for (int i = 0; i < countCheckRanges; ++ i) {
             int limit = checkRanges[i].limit;
             int value = checkRanges[i].value;
-    
+
             if (start == 0xd800) {
                 // skip surrogates
                 start = limit;
                 continue;
             }
-    
+
             while (start < limit) {
                 if (start <= 0xffff) {
                     int value2 = trie.getBMPValue((char)start);
                     if (value != value2) {
                         errln("serialized trie.getBMPValue(U+"
-                              + Integer.toHexString(start) + " == 0x" 
+                              + Integer.toHexString(start) + " == 0x"
                               + Integer.toHexString(value2) + " instead of 0x"
                               + Integer.toHexString(value));
                     }
@@ -285,7 +291,7 @@ public final class TrieTest extends TestFmwk
                         value2 = trie.getLeadValue((char)start);
                         if (value != value2) {
                             errln("serialized trie.getLeadValue(U+"
-                              + Integer.toHexString(start) + " == 0x" 
+                              + Integer.toHexString(start) + " == 0x"
                               + Integer.toHexString(value2) + " instead of 0x"
                               + Integer.toHexString(value));
                         }
@@ -294,79 +300,79 @@ public final class TrieTest extends TestFmwk
                 int value2 = trie.getCodePointValue(start);
                 if (value != value2) {
                     errln("serialized trie.getCodePointValue(U+"
-                          + Integer.toHexString(start) + ")==0x" 
-                          + Integer.toHexString(value2) + " instead of 0x" 
+                          + Integer.toHexString(start) + ")==0x"
+                          + Integer.toHexString(value2) + " instead of 0x"
                           + Integer.toHexString(value));
                 }
                 ++ start;
             }
         }
-    
+
         // enumerate and verify all ranges
-        
+
         int enumRanges = 1;
         TrieIterator iter  = new _testEnumValue(trie);
         RangeValueIterator.Element result = new RangeValueIterator.Element();
         while (iter.next(result)) {
-            if (result.start != checkRanges[enumRanges -1].limit 
+            if (result.start != checkRanges[enumRanges -1].limit
                 || result.limit != checkRanges[enumRanges].limit
                 || (result.value ^ 0x5555) != checkRanges[enumRanges].value) {
                 errln("utrie_enum() delivers wrong range [U+"
-                      + Integer.toHexString(result.start) + "..U+" 
-                      + Integer.toHexString(result.limit) + "].0x" 
-                      + Integer.toHexString(result.value ^ 0x5555) 
+                      + Integer.toHexString(result.start) + "..U+"
+                      + Integer.toHexString(result.limit) + "].0x"
+                      + Integer.toHexString(result.value ^ 0x5555)
                       + " instead of [U+"
-                      + Integer.toHexString(checkRanges[enumRanges -1].limit) 
-                      + "..U+" 
-                      + Integer.toHexString(checkRanges[enumRanges].limit) 
-                      + "].0x" 
+                      + Integer.toHexString(checkRanges[enumRanges -1].limit)
+                      + "..U+"
+                      + Integer.toHexString(checkRanges[enumRanges].limit)
+                      + "].0x"
                       + Integer.toHexString(checkRanges[enumRanges].value));
             }
             enumRanges ++;
         }
-    
+
         // test linear Latin-1 range
         if (trie.isLatin1Linear()) {
             for (start = 0; start < 0x100; ++ start) {
-                if (trie.getLatin1LinearValue((char)start) 
+                if (trie.getLatin1LinearValue((char)start)
                     != trie.getLeadValue((char)start)) {
                     errln("trie.getLatin1LinearValue[U+"
                           + Integer.toHexString(start) + "]=0x"
                           + Integer.toHexString(
                                         trie.getLatin1LinearValue((char)start))
-                          + " instead of 0x" 
+                          + " instead of 0x"
                           + Integer.toHexString(
                                         trie.getLeadValue((char)start)));
                 }
             }
         }
-    
+
         _testTrieIteration(trie, checkRanges, countCheckRanges);
     }
-    
-    private void _testTrieRanges2(SetRange setRanges[], 
-                                  int countSetRanges, 
-                                  CheckRange checkRanges[], 
-                                  int countCheckRanges) 
+
+    private void _testTrieRanges2(SetRange setRanges[],
+                                  int countSetRanges,
+                                  CheckRange checkRanges[],
+                                  int countCheckRanges)
     {
         _testTrieRanges(setRanges, countSetRanges, checkRanges, countCheckRanges,
                         false);
-        
+
         _testTrieRanges(setRanges, countSetRanges, checkRanges, countCheckRanges,
                         true);
     }
-    
+
     private void _testTrieRanges4(SetRange setRanges[], int countSetRanges,
-                                  CheckRange checkRanges[], 
-                                  int countCheckRanges) 
+                                  CheckRange checkRanges[],
+                                  int countCheckRanges)
     {
-        _testTrieRanges2(setRanges, countSetRanges, checkRanges, 
+        _testTrieRanges2(setRanges, countSetRanges, checkRanges,
                          countCheckRanges);
     }
-    
+
     // test data ------------------------------------------------------------
-    
-    /** 
+
+    /**
      * set consecutive ranges, even with value 0
      */
     private static SetRange setRanges1[]={
@@ -376,7 +382,7 @@ public final class TrieTest extends TestFmwk
         new SetRange(0x3400, 0x9fa6,     0x6162, false),
         new SetRange(0x9fa6, 0xda9e,     0x3132, false),
         // try to disrupt _testFoldingOffset16()
-        new SetRange(0xdada, 0xeeee,     0x87ff, false), 
+        new SetRange(0xdada, 0xeeee,     0x87ff, false),
         new SetRange(0xeeee, 0x11111,    1,      false),
         new SetRange(0x11111, 0x44444,   0x6162, false),
         new SetRange(0x44444, 0x60003,   0,      false),
@@ -386,7 +392,7 @@ public final class TrieTest extends TestFmwk
         new SetRange(0xf0007, 0xf0020,   0x12,   false),
         new SetRange(0xf0020, 0x110000,  0,      false)
     };
-    
+
     private static CheckRange checkRanges1[]={
         new CheckRange(0,      0), // dummy start range to make _testEnumRange() simpler
         new CheckRange(0x20,   0),
@@ -405,8 +411,8 @@ public final class TrieTest extends TestFmwk
         new CheckRange(0xf0020,0x12),
         new CheckRange(0x110000, 0)
     };
-    
-    /** 
+
+    /**
      * set some interesting overlapping ranges
      */
     private static SetRange setRanges2[]={
@@ -419,10 +425,10 @@ public final class TrieTest extends TestFmwk
         new SetRange(0x2f900,0x2ffee,    1,      false),
         new SetRange(0x2ffee,0x2ffef,    2,      true)
     };
-    
+
     private static CheckRange checkRanges2[]={
         // dummy start range to make _testEnumRange() simpler
-        new CheckRange(0,      0),       
+        new CheckRange(0,      0),
         new CheckRange(0x21,   0),
         new CheckRange(0x72,   0x5555),
         new CheckRange(0xdd,   3),
@@ -435,8 +441,8 @@ public final class TrieTest extends TestFmwk
         new CheckRange(0x2ffef,2),
         new CheckRange(0x110000, 0)
     };
-    
-    /** 
+
+    /**
      * use a non-zero initial value
      */
     private static SetRange setRanges3[]={
@@ -445,10 +451,10 @@ public final class TrieTest extends TestFmwk
         new SetRange(0x30000,0x34567,9,  true),
         new SetRange(0x45678,0x56789,3,  true)
     };
-    
+
     private static CheckRange checkRanges3[]={
         // dummy start range, also carries the initial value
-        new CheckRange(0,      9),  
+        new CheckRange(0,      9),
         new CheckRange(0x31,   9),
         new CheckRange(0xa4,   1),
         new CheckRange(0x3400, 9),
@@ -457,19 +463,20 @@ public final class TrieTest extends TestFmwk
         new CheckRange(0x56789,3),
         new CheckRange(0x110000,9)
     };
-    
+
     @Test
-    public void TestIntTrie() 
+    public void TestIntTrie()
     {
-        _testTrieRanges4(setRanges1, setRanges1.length, checkRanges1, 
+        _testTrieRanges4(setRanges1, setRanges1.length, checkRanges1,
                          checkRanges1.length);
-        _testTrieRanges4(setRanges2, setRanges2.length, checkRanges2, 
-                         checkRanges2.length); 
-        _testTrieRanges4(setRanges3, setRanges3.length, checkRanges3, 
+        _testTrieRanges4(setRanges2, setRanges2.length, checkRanges2,
+                         checkRanges2.length);
+        _testTrieRanges4(setRanges3, setRanges3.length, checkRanges3,
                          checkRanges3.length);
     }
 
     private static class DummyGetFoldingOffset implements Trie.DataManipulate {
+        @Override
         public int getFoldingOffset(int value) {
             return -1; /* never get non-initialValue data for supplementary code points */
         }
@@ -478,7 +485,7 @@ public final class TrieTest extends TestFmwk
     @Test
     public void TestDummyCharTrie() {
         CharTrie trie;
-        final int initialValue=0x313, leadUnitValue=0xaffe; 
+        final int initialValue=0x313, leadUnitValue=0xaffe;
         int value;
         int c;
         trie=new CharTrie(initialValue, leadUnitValue, new DummyGetFoldingOffset());
@@ -503,7 +510,7 @@ public final class TrieTest extends TestFmwk
     @Test
     public void TestDummyIntTrie() {
         IntTrie trie;
-        final int initialValue=0x01234567, leadUnitValue=0x89abcdef; 
+        final int initialValue=0x01234567, leadUnitValue=0x89abcdef;
         int value;
         int c;
         trie=new IntTrie(initialValue, leadUnitValue, new DummyGetFoldingOffset());

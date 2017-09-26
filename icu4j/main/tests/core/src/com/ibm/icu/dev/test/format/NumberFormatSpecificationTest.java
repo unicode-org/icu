@@ -9,6 +9,8 @@
 package com.ibm.icu.dev.test.format;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormat;
@@ -21,6 +23,7 @@ import com.ibm.icu.util.ULocale;
  * @author rocketman
  *
  */
+@RunWith(JUnit4.class)
 public class NumberFormatSpecificationTest extends TestFmwk {
     @Test
     public void TestBasicPatterns() {
@@ -32,9 +35,9 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "1234,567", formatFrWithPattern(num, "###0.#####"));
         assertEquals("", "1234,5670", formatFrWithPattern(num, "###0.0000#"));
         assertEquals("", "01234,5670", formatFrWithPattern(num, "00000.0000"));
-        assertEquals("", "1 234,57 €", formatFrWithPattern(num, "#,##0.00 ¤"));  
+        assertEquals("", "1 234,57 €", formatFrWithPattern(num, "#,##0.00 ¤"));
     }
-    
+
     @Test
     public void TestNfSetters() {
         NumberFormat nf = nfWithPattern("#,##0.##");
@@ -42,9 +45,9 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         nf.setMinimumIntegerDigits(4);
         assertEquals("", "34 567,89", format(1234567.89, nf));
         assertEquals("", "0 034,56", format(34.56, nf));
-        
+
     }
-    
+
     @Test
     public void TestRounding() {
         assertEquals("", "1,0", formatFrWithPattern(1.25, "0.5"));
@@ -58,7 +61,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "273,00", formatFrWithPattern(272.0, "2.73"));
         assertEquals("", "1 03,60", formatFrWithPattern(104.0, "#,#3.70"));
     }
-    
+
     @Test
     public void TestSignificantDigits() {
         assertEquals("", "1230", formatFrWithPattern(1234.0, "@@@"));
@@ -70,9 +73,9 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "12 34 567", formatFrWithPattern(1234567.0, "@@@@,@@,@##"));
         assertEquals("", "12 34 567", formatFrWithPattern(1234567.001, "@@@@,@@,@##"));
         assertEquals("", "12 34 567", formatFrWithPattern(1234567.001, "@@@@,@@,###"));
-        assertEquals("", "1 200", formatFrWithPattern(1234.0, "#,#@@"));       
+        assertEquals("", "1 200", formatFrWithPattern(1234.0, "#,#@@"));
     }
-    
+
     @Test
     public void TestScientificNotation() {
         assertEquals("", "1,23E4", formatFrWithPattern(12345.0, "0.00E0"));
@@ -89,7 +92,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
             assertEquals("", "170,0E-3", formatFrWithPattern(0.17, "##0.000#E0"));
         }
     }
-    
+
     @Test
     public void TestPercent() {
         assertEquals("", "57,3%", formatFrWithPattern(0.573, "0.0%"));
@@ -99,9 +102,9 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "%3,260", formatFrWithPattern(0.0326, "%@@@@"));
         assertEquals("", "%1 540", formatFrWithPattern(15.43, "%#,@@@"));
         assertEquals("", "%1 656,4", formatFrWithPattern(16.55, "%#,##4.1"));
-        assertEquals("", "%16,3E3", formatFrWithPattern(162.55, "%##0.00E0"));  
+        assertEquals("", "%16,3E3", formatFrWithPattern(162.55, "%##0.00E0"));
     }
-    
+
     @Test
     public void TestPerMilli() {
         assertEquals("", "573,0‰", formatFrWithPattern(0.573, "0.0‰"));
@@ -113,7 +116,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "‰16 551,7", formatFrWithPattern(16.55, "‰#,##4.1"));
         assertEquals("", "‰163E3", formatFrWithPattern(162.55, "‰##0.00E0"));
     }
-    
+
     @Test
     public void TestPadding() {
         assertEquals("", "$***1 234", formatFrWithPattern(1234, "$**####,##0"));
@@ -132,31 +135,31 @@ public class NumberFormatSpecificationTest extends TestFmwk {
             DecimalFormat fmt = new DecimalFormat("¤¤ **#######0", sym);
             fmt.setCurrency(Currency.getInstance("JPY"));
             if (!logKnownIssue("11025", "Padding broken when used with currencies")) {
-                assertEquals("", "JPY ****433", fmt.format(433.22)); 
+                assertEquals("", "JPY ****433", fmt.format(433.22));
             }
         }
         {
             DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.US);
             DecimalFormat fmt = new DecimalFormat("¤¤ **#######0;¤¤ (#)", sym);
-            assertEquals("", "USD (433.22)", fmt.format(-433.22));   
+            assertEquals("", "USD (433.22)", fmt.format(-433.22));
         }
         assertEquals("", "QU***43,3E-1", formatFrWithPattern(4.33, "QU**00.#####E0"));
         {
             DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.FRANCE);
             sym.setExponentSeparator("EE");
             DecimalFormat fmt = new DecimalFormat("QU**00.#####E0", sym);
-            assertEquals("", "QU**43,3EE-1", fmt.format(4.33));   
+            assertEquals("", "QU**43,3EE-1", fmt.format(4.33));
         }
         // padding cannot work as intended with scientific notation.
         assertEquals("", "QU**43,32E-1", formatFrWithPattern(4.332, "QU**00.#####E0"));
     }
-    
+
     private static String formatFrWithPattern(double d, String pattern) {
         DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.FRANCE);
         DecimalFormat fmt = new DecimalFormat(pattern, sym);
         return fmt.format(d).replace('\u00a0', ' ');
     }
-    
+
     private static NumberFormat nfWithPattern(String pattern) {
         DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.FRANCE);
         return new DecimalFormat(pattern, sym);
@@ -165,6 +168,6 @@ public class NumberFormatSpecificationTest extends TestFmwk {
     private static String format(double d, NumberFormat nf) {
         return nf.format(d).replace('\u00a0', ' ');
     }
-   
+
 
 }

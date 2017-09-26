@@ -135,6 +135,17 @@
 #define U_TITLECASE_ADJUST_TO_CASED 0x400
 
 /**
+ * Option for string transformation functions to not first reset the Edits object.
+ * Used for example in some case-mapping and normalization functions.
+ *
+ * @see CaseMap
+ * @see Edits
+ * @see Normalizer2
+ * @draft ICU 60
+ */
+#define U_EDITS_NO_RESET 0x2000
+
+/**
  * Omit unchanged text when recording how source substrings
  * relate to changed and unchanged result substrings.
  * Used for example in some case-mapping and normalization functions.
@@ -182,7 +193,6 @@
 // ucasemap_imp.h #define U_TITLECASE_ITERATOR_MASK 0xe0
 // ucasemap_imp.h #define U_TITLECASE_ADJUSTMENT_MASK 0x600
 // ustr_imp.h #define _STRNCMP_STYLE 0x1000
-// ustr_imp.h #define U_EDITS_NO_RESET 0x2000
 // unormcmp.cpp #define _COMPARE_EQUIV 0x80000
 
 #endif  // __STRINGOPTIONS_H__

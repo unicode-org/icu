@@ -25,7 +25,8 @@
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
 #include "unicode/unorm2.h"
-
+#include "unicode/utf16.h"
+#include "unicode/utf_old.h"
 #include "cintltst.h"
 #include "putilimp.h"
 #include "uparse.h"
@@ -1388,6 +1389,26 @@ static void TestCodeUnit(){
     for(i=0; i<UPRV_LENGTHOF(codeunit); i++){
         UChar c=codeunit[i];
         if(i<4){
+            if(!(U16_IS_SINGLE(c)) || (U16_IS_LEAD(c)) || (U16_IS_TRAIL(c)) ||
+                    U16_IS_SURROGATE(c) || U_IS_SURROGATE(c)) {
+                log_err("ERROR: U+%04x is a single", c);
+            }
+
+        }
+        if(i >= 4 && i< 8){
+            if(!(U16_IS_LEAD(c)) || U16_IS_SINGLE(c) || U16_IS_TRAIL(c) ||
+                    !U16_IS_SURROGATE(c) || !U_IS_SURROGATE(c)){
+                log_err("ERROR: U+%04x is a first surrogate", c);
+            }
+        }
+        if(i >= 8 && i< 12){
+            if(!(U16_IS_TRAIL(c)) || U16_IS_SINGLE(c) || U16_IS_LEAD(c) ||
+                    !U16_IS_SURROGATE(c) || !U_IS_SURROGATE(c)){
+                log_err("ERROR: U+%04x is a second surrogate", c);
+            }
+        }
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+        if(i<4){
             if(!(UTF_IS_SINGLE(c)) || (UTF_IS_LEAD(c)) || (UTF_IS_TRAIL(c)) ||(UTF_IS_SURROGATE(c))){
                 log_err("ERROR: U+%04x is a single", c);
             }
@@ -1403,8 +1424,8 @@ static void TestCodeUnit(){
                 log_err("ERROR: U+%04x is a second surrogate", c);
             }
         }
+#endif
     }
-
 }
 
 static void TestCodePoint(){
@@ -1437,42 +1458,72 @@ static void TestCodePoint(){
         0xfffe,
     };
     int32_t i;
-    for(i=0; i<UPRV_LENGTHOF(codePoint); i++){
+    for(i=0; i<UPRV_LENGTHOF(codePoint); i++) {
         UChar32 c=codePoint[i];
+        if(i<6) {
+            if(!U_IS_SURROGATE(c) || !U16_IS_SURROGATE(c)) {
+                log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
+            }
+            if(U_IS_UNICODE_CHAR(c)) {
+                log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
+            }
+        } else if(i >=6 && i<18) {
+            if(U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)) {
+                log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
+            }
+            if(!U_IS_UNICODE_CHAR(c)) {
+                log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
+            }
+        } else if(i >=18 && i<20) {
+            if(U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)) {
+                log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
+            }
+            if(!U_IS_UNICODE_CHAR(c)) {
+                log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
+            }
+        } else if(i >=18 && i<UPRV_LENGTHOF(codePoint)) {
+            if(U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)) {
+                log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
+            }
+            if(U_IS_UNICODE_CHAR(c)) {
+                log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
+            }
+        }
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
         if(i<6){
-            if(!UTF_IS_SURROGATE(c) || !U_IS_SURROGATE(c) || !U16_IS_SURROGATE(c)){
+            if(!UTF_IS_SURROGATE(c)){
                 log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
             if(UTF_IS_VALID(c)){
                 log_err("ERROR: isValid() failed for U+%04x\n", c);
             }
-            if(UTF_IS_UNICODE_CHAR(c) || U_IS_UNICODE_CHAR(c)){
+            if(UTF_IS_UNICODE_CHAR(c)){
                 log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
             }
             if(UTF_IS_ERROR(c)){
                 log_err("ERROR: isError() failed for U+%04x\n", c);
             }
         }else if(i >=6 && i<18){
-            if(UTF_IS_SURROGATE(c) || U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)){
+            if(UTF_IS_SURROGATE(c)){
                 log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
             if(!UTF_IS_VALID(c)){
                 log_err("ERROR: isValid() failed for U+%04x\n", c);
             }
-            if(!UTF_IS_UNICODE_CHAR(c) || !U_IS_UNICODE_CHAR(c)){
+            if(!UTF_IS_UNICODE_CHAR(c)){
                 log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
             }
             if(UTF_IS_ERROR(c)){
                 log_err("ERROR: isError() failed for U+%04x\n", c);
             }
         }else if(i >=18 && i<20){
-            if(UTF_IS_SURROGATE(c) || U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)){
+            if(UTF_IS_SURROGATE(c)){
                 log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
             if(UTF_IS_VALID(c)){
                 log_err("ERROR: isValid() failed for U+%04x\n", c);
             }
-            if(!UTF_IS_UNICODE_CHAR(c) || !U_IS_UNICODE_CHAR(c)){
+            if(!UTF_IS_UNICODE_CHAR(c)){
                 log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
             }
             if(!UTF_IS_ERROR(c)){
@@ -1480,19 +1531,20 @@ static void TestCodePoint(){
             }
         }
         else if(i >=18 && i<UPRV_LENGTHOF(codePoint)){
-            if(UTF_IS_SURROGATE(c) || U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)){
+            if(UTF_IS_SURROGATE(c)){
                 log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
             if(UTF_IS_VALID(c)){
                 log_err("ERROR: isValid() failed for U+%04x\n", c);
             }
-            if(UTF_IS_UNICODE_CHAR(c) || U_IS_UNICODE_CHAR(c)){
+            if(UTF_IS_UNICODE_CHAR(c)){
                 log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
             }
             if(!UTF_IS_ERROR(c)){
                 log_err("ERROR: isError() failed for U+%04x\n", c);
             }
         }
+#endif
     }
 
     if(
@@ -1530,16 +1582,24 @@ static void TestCharLength()
     };
 
     int32_t i;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     UBool multiple;
+#endif
     for(i=0; i<UPRV_LENGTHOF(codepoint); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
-        if(UTF_CHAR_LENGTH(c) != codepoint[i] || U16_LENGTH(c) != codepoint[i]){
+        if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                UTF_CHAR_LENGTH(c) != codepoint[i] ||
+#endif
+                U16_LENGTH(c) != codepoint[i]) {
             log_err("The no: of code units for U+%04x:- Expected: %d Got: %d\n", c, codepoint[i], U16_LENGTH(c));
         }
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
         multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
         if(UTF_NEED_MULTIPLE_UCHAR(c) != multiple){
             log_err("ERROR: Unicode::needMultipleUChar() failed for U+%04x\n", c);
         }
+#endif
     }
 }
 

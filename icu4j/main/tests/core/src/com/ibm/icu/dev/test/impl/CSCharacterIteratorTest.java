@@ -7,10 +7,13 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.CSCharacterIterator;
 
+@RunWith(JUnit4.class)
 public class CSCharacterIteratorTest extends TestFmwk {
     public CSCharacterIteratorTest() {};
 

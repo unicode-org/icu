@@ -7,24 +7,27 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v2.1 : Collate/CollationKanaTest
  * Source File: $ICU4CRoot/source/test/intltest/jacoll.cpp
  **/
- 
+
 package com.ibm.icu.dev.test.collator;
- 
+
 import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.util.ULocale;
- 
+
+@RunWith(JUnit4.class)
 public class CollationKanaTest extends TestFmwk{
     private static char[][] testSourceCases = {
         {0xff9E},
@@ -91,16 +94,16 @@ public class CollationKanaTest extends TestFmwk{
         /*4*/ {0x30AD, 0x30A4, 0x3042},
         /*5*/ {0x30AD, 0x30A4, 0x30A2}
     };
-        
+
     private Collator myCollation = null;
-    
+
     public CollationKanaTest() {
     }
-    
+
     @Before
-    public void init()throws Exception { 
+    public void init()throws Exception {
         if(myCollation==null){
-            myCollation = Collator.getInstance(Locale.JAPANESE); 
+            myCollation = Collator.getInstance(Locale.JAPANESE);
         }
     }
 
@@ -109,7 +112,7 @@ public class CollationKanaTest extends TestFmwk{
     public void TestTertiary() {
         int i = 0;
         myCollation.setStrength(Collator.TERTIARY);
-        
+
         for (i = 0; i < 6; i++) {
             doTest(testSourceCases[i], testTargetCases[i], results[i]);
         }
@@ -135,7 +138,7 @@ public class CollationKanaTest extends TestFmwk{
         }
     }
 
-    /* 
+    /*
     * Test Small, Large letters
     */
     @Test
@@ -171,7 +174,7 @@ public class CollationKanaTest extends TestFmwk{
             doTest(testChooonKigooCases[i], testChooonKigooCases[i + 1], -1);
         }
     }
-    
+
     /*
      * Test common Hiragana and Katakana characters (e.g. 0x3099) (ticket:6140)
      */
@@ -186,20 +189,20 @@ public class CollationKanaTest extends TestFmwk{
         RuleBasedCollator rb = (RuleBasedCollator)Collator.getInstance(ULocale.JAPANESE);
         rb.setStrength(Collator.QUATERNARY);
         rb.setAlternateHandlingShifted(false);
-        
+
         result = rb.compare(string1, string2);
-        
+
         key1 = rb.getCollationKey(string1);
         key2 = rb.getCollationKey(string2);
-        
+
         if ( result != 0 || !key1.equals(key2)) {
             errln("Failed Hiragana and Katakana common characters test. Expected results to be equal.");
         }
-        
+
     }
     // main test routine, tests rules specific to "Kana" locale
     private void doTest(char[] source, char[] target, int result){
-        
+
         String s = new String(source);
         String t = new String(target);
         int compareResult = myCollation.compare(s, t);
@@ -208,9 +211,9 @@ public class CollationKanaTest extends TestFmwk{
         sortKey2 = myCollation.getCollationKey(t);
         int keyResult = sortKey1.compareTo(sortKey2);
         reportCResult(s, t, sortKey1, sortKey2, compareResult, keyResult, compareResult, result);
-        
+
     }
-    
+
     private void reportCResult( String source, String target, CollationKey sourceKey, CollationKey targetKey,
                                 int compareResult, int keyResult, int incResult, int expectedResult ){
         if (expectedResult < -1 || expectedResult > 1) {
@@ -223,13 +226,13 @@ public class CollationKanaTest extends TestFmwk{
         boolean ok3 = (incResult == expectedResult);
 
         if (ok1 && ok2 && ok3 && !isVerbose()){
-            return;    
+            return;
         } else {
             String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
             String msg3 = "\") returned ";
             String msg4 = "; expected ";
-            
+
             String sExpect = new String("");
             String sResult = new String("");
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
@@ -239,7 +242,7 @@ public class CollationKanaTest extends TestFmwk{
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
-            
+
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
@@ -252,7 +255,7 @@ public class CollationKanaTest extends TestFmwk{
                 msg2 = " vs. ";
                 errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
-            
+
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
@@ -263,7 +266,7 @@ public class CollationKanaTest extends TestFmwk{
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
-            }                
+            }
         }
     }
 }

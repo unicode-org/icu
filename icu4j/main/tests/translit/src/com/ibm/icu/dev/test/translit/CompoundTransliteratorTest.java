@@ -7,7 +7,10 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -20,6 +23,7 @@ import com.ibm.icu.text.Transliterator;
  * @test
  * @summary General test of CompoundTransliterator
  */
+@RunWith(JUnit4.class)
 public class CompoundTransliteratorTest extends TestFmwk {
     @Test
     public void TestConstruction(){
@@ -35,15 +39,15 @@ public class CompoundTransliteratorTest extends TestFmwk {
             errln("FAIL: Transliterator construction failed" + ex.getMessage());
             throw ex;
         }
-  
+
         final String IDs[]={
-            names[0], 
-            names[0]+";"+names[3], 
-            names[3]+";"+names[1]+";"+names[2], 
-            names[0]+";"+names[1]+";"+names[2]+";"+names[3] 
+            names[0],
+            names[0]+";"+names[3],
+            names[3]+";"+names[1]+";"+names[2],
+            names[0]+";"+names[1]+";"+names[2]+";"+names[3]
         };
 
-   
+
         for(int i=0; i<4; i++){
             try{
                 Transliterator.getInstance(IDs[i]);
@@ -74,8 +78,8 @@ public class CompoundTransliteratorTest extends TestFmwk {
 //                        "UnicodeFilter adoptedFilter=0) failed for " + IDs[i]);
 //                throw ex4;
 //            }
-//  
-//       
+//
+//
 //            try{
 //                CompoundTransliterator cpdtrans2=new CompoundTransliterator(transarray[i], null);
 //                cpdtrans2 = null;
@@ -85,11 +89,11 @@ public class CompoundTransliteratorTest extends TestFmwk {
 //                throw ex5;
 //            }
 
-            
+
         }
-   
+
     }
- 
+
     @Test
     public void TestGetTransliterator(){
         logln("Testing the getTransliterator() API of CompoundTransliterator");
@@ -119,10 +123,10 @@ public class CompoundTransliteratorTest extends TestFmwk {
             }
         }
 
-        
+
     }
- 
-       
+
+
     @Test
     public void TestTransliterate(){
         logln("Testing the handleTransliterate() API of CompoundTransliterator");
@@ -133,7 +137,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
             errln("FAIL: construction using CompoundTransliterator(String ID) failed for " + "Any-Hex;Hex-Any");
             throw iae;
         }
-    
+
         String s="abcabc";
         expect(ct1, s, s);
         Transliterator.Position index = new Transliterator.Position();
@@ -143,31 +147,31 @@ public class CompoundTransliteratorTest extends TestFmwk {
         ct1.finishTransliteration(rsource2, index);
         String result=rsource2.toString();
         expectAux(ct1.getID() + ":ReplaceableString, index(0,0,0,0)", s + "->" + rsource2, result.equals(expectedResult), expectedResult);
-     
+
         Transliterator.Position index2 = new Transliterator.Position(1,3,2,3);
         ReplaceableString rsource3=new ReplaceableString(s);
-        ct1.transliterate(rsource3, index2); 
+        ct1.transliterate(rsource3, index2);
         ct1.finishTransliteration(rsource3, index2);
         result=rsource3.toString();
         expectAux(ct1.getID() + ":String, index2(1,2,2,3)", s + "->" + rsource3, result.equals(expectedResult), expectedResult);
 
-       
+
         String Data[]={
              //ID, input string, transliterated string
-             "Any-Hex;Hex-Any;Any-Hex",     "hello",  "\\u0068\\u0065\\u006C\\u006C\\u006F", 
+             "Any-Hex;Hex-Any;Any-Hex",     "hello",  "\\u0068\\u0065\\u006C\\u006C\\u006F",
              "Any-Hex;Hex-Any",                 "hello! How are you?",  "hello! How are you?",
              "Devanagari-Latin;Latin-Devanagari",       "\u092D\u0948'\u0930'\u0935",  "\u092D\u0948\u0930\u0935", // quotes lost
              "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h",
              "Latin-Greek;Greek-Latin",                 "ABGabgAKLMN", "ABGabgAKLMN",
              //"Latin-Arabic;Arabic-Latin",               "Ad'r'a'b'i'k'dh'dd'gh", "Adrabikdhddgh",
-             "Hiragana-Katakana",                       "\u3041\u308f\u3099\u306e\u304b\u3092\u3099", 
-                                                                 "\u30A1\u30f7\u30ce\u30ab\u30fa",  
-             "Hiragana-Katakana;Katakana-Hiragana",     "\u3041\u308f\u3099\u306e\u304b\u3051", 
+             "Hiragana-Katakana",                       "\u3041\u308f\u3099\u306e\u304b\u3092\u3099",
+                                                                 "\u30A1\u30f7\u30ce\u30ab\u30fa",
+             "Hiragana-Katakana;Katakana-Hiragana",     "\u3041\u308f\u3099\u306e\u304b\u3051",
                                                                  "\u3041\u308f\u3099\u306e\u304b\u3051",
-             "Katakana-Hiragana;Hiragana-Katakana",     "\u30A1\u30f7\u30ce\u30f5\u30f6", 
-                                                                 "\u30A1\u30f7\u30ce\u30ab\u30b1",  
-             "Latin-Katakana;Katakana-Latin",                   "vavivuvevohuzizuzoninunasesuzezu", 
-                                                                 "vavivuvevohuzizuzoninunasesuzezu",  
+             "Katakana-Hiragana;Hiragana-Katakana",     "\u30A1\u30f7\u30ce\u30f5\u30f6",
+                                                                 "\u30A1\u30f7\u30ce\u30ab\u30b1",
+             "Latin-Katakana;Katakana-Latin",                   "vavivuvevohuzizuzoninunasesuzezu",
+                                                                 "vavivuvevohuzizuzoninunasesuzezu",
         };
         Transliterator ct2=null;
         for(int i=0; i<Data.length; i+=3){
@@ -179,9 +183,9 @@ public class CompoundTransliteratorTest extends TestFmwk {
             }
         expect(ct2, Data[i+1], Data[i+2]);
         }
-   
+
     }
- 
+
 
     //======================================================================
     // Support methods
@@ -191,13 +195,13 @@ public class CompoundTransliteratorTest extends TestFmwk {
      * Splits a string,
     */
     private static String[] split(String s, char divider) {
-      
+
     // see how many there are
         int count = 1;
     for (int i = 0; i < s.length(); ++i) {
        if (s.charAt(i) == divider) ++count;
     }
-        
+
     // make an array with them
     String[] result = new String[count];
     int last = 0;
@@ -242,7 +246,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
                 append('|').
                 append(s.substring(index.start));
         }
-        
+
         // As a final step in keyboard transliteration, we must call
         // transliterate to finish off any pending partial matches that
         // were waiting for more input.
@@ -269,6 +273,6 @@ public class CompoundTransliteratorTest extends TestFmwk {
                 + Utility.escape(summary)
                 + ", expected " + Utility.escape(expectedResult));
         }
-    }  
+    }
 }
 

@@ -16,6 +16,7 @@
 #include "unicode/ubiditransform.h"
 #include "unicode/ushape.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -299,6 +299,8 @@
     </ClCompile>
     <ClCompile Include="rbbitblb.cpp">
     </ClCompile>
+    <ClCompile Include="rbbi_cache.cpp">
+    </ClCompile>
     <ClCompile Include="dictionarydata.cpp" />
     <ClCompile Include="ubrk.cpp" />
     <ClCompile Include="ucol_swp.cpp">
@@ -452,6 +454,7 @@
     </ClCompile>
     <ClCompile Include="usprep.cpp" />
     <ClCompile Include="appendable.cpp" />
+    <ClCompile Include="bytesinkutil.cpp" />
     <ClCompile Include="bytestream.cpp" />
     <ClCompile Include="bytestrie.cpp" />
     <ClCompile Include="bytestriebuilder.cpp" />
@@ -529,6 +532,7 @@
     <ClInclude Include="rbbiscan.h" />
     <ClInclude Include="rbbisetb.h" />
     <ClInclude Include="rbbitblb.h" />
+    <ClInclude Include="rbbi_cache.h" />
     <ClInclude Include="dictionarydata.h" />
     <CustomBuild Include="unicode\ubrk.h">
       <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
@@ -894,6 +898,7 @@
 </Command>
       <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="bytesinkutil.h" />
     <CustomBuild Include="unicode\bytestream.h">
       <Command>copy "%(FullPath)" ..\..\include\unicode
 </Command>

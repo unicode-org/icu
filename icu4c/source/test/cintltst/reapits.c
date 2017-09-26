@@ -29,6 +29,7 @@
 #include "unicode/uregex.h"
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
+#include "unicode/utf8.h"
 #include "cintltst.h"
 #include "cmemory.h"
 

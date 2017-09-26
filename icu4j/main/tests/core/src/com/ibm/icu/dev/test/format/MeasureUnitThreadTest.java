@@ -4,12 +4,15 @@
 package com.ibm.icu.dev.test.format;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class MeasureUnitThreadTest extends TestFmwk {
 
     @Test

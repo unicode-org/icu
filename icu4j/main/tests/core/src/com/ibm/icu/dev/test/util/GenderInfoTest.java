@@ -12,12 +12,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.GenderInfo;
 import com.ibm.icu.util.GenderInfo.Gender;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class GenderInfoTest extends TestFmwk {
     public static GenderInfo NEUTRAL_LOCALE = GenderInfo.getInstance(ULocale.ENGLISH);
     public static GenderInfo MIXED_NEUTRAL_LOCALE = GenderInfo.getInstance(new ULocale("is"));
@@ -43,7 +46,7 @@ public class GenderInfoTest extends TestFmwk {
         check(Gender.OTHER, Gender.MALE, Gender.MALE, Gender.MALE, Gender.MALE);
         check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.MALE, Gender.FEMALE);
         check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.MALE, Gender.OTHER);
-    
+
         check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.FEMALE, Gender.MALE);
         check(Gender.OTHER, Gender.FEMALE, Gender.FEMALE, Gender.FEMALE, Gender.FEMALE);
         check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.FEMALE, Gender.OTHER);
@@ -59,7 +62,7 @@ public class GenderInfoTest extends TestFmwk {
         assertEquals("mixed neutral " + mixed0, mixed, MIXED_NEUTRAL_LOCALE.getListGender(mixed0));
         assertEquals("male taints " + mixed0, taints, MALE_TAINTS_LOCALE.getListGender(mixed0));
     }
-    
+
     @Test
     public void TestFallback() {
         assertEquals("Strange locale = root", GenderInfo.getInstance(ULocale.ROOT), GenderInfo.getInstance(new ULocale("xxx")));

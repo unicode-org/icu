@@ -23,6 +23,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -43,6 +45,7 @@ import com.ibm.icu.util.ULocale;
  * 4145158 4145983 4147269 4149677 4162587 4165343 4166109 4167060 4173516
  * 4174361 4177484 4197699 4209071 4288792
  */
+@RunWith(JUnit4.class)
 public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     static final String[] FIELD_NAME = {
             "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
@@ -2477,6 +2480,27 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         String[] actualFormat = formattedDateList.toArray(new String[0]);
         assertEquals("Fail: dateformat doesn't interpret calendar correctly", expectedFormat, actualFormat);
+    }
+
+    @Test
+    public void TestTicket11632() {
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(Calendar.HOUR, 596);
+        // hour value set upto 596 lies within the integer range for millisecond calculations
+        assertEquals("Incorrect time for integer range milliseconds","Sun Jan 25 20:00:00 PST 1970", cal.getTime().toString());
+        cal.clear();
+        //  hour value set above 596 lies outside the integer range for millisecond calculations. This will invoke
+        // the long version of the compute millis in day method in the ICU internal API
+        cal.set(Calendar.HOUR, 597);
+        assertEquals("Incorrect time for long range milliseconds","Sun Jan 25 21:00:00 PST 1970", cal.getTime().toString());
+        cal.clear();
+        cal.set(Calendar.HOUR, 597);
+        cal.set(Calendar.MINUTE, 60*24);
+        assertEquals("Incorrect time for long range milliseconds","Mon Jan 26 21:00:00 PST 1970", cal.getTime().toString());
+        cal.clear();
+        cal.set(Calendar.HOUR_OF_DAY, 597);
+        assertEquals("Incorrect time for long range milliseconds","Sun Jan 25 21:00:00 PST 1970", cal.getTime().toString());
     }
 
 }

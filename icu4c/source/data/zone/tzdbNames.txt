@@ -201,7 +201,7 @@ tzdbNames{
         "meta:China"{
             sd{"CDT"}
             ss{"CST"}
-            parseRegions{"CN", "MO", "TW"}
+            parseRegions{"CN", "MO"}
         }
         "meta:Choibalsan"{
             sd{"CHOST"}
@@ -562,6 +562,10 @@ tzdbNames{
         "meta:Ponape"{
             ss{"PONT"}
         }
+        "meta:Pyongyang"{
+            ss{"KST"}
+            parseRegions{"KP"}
+        }
         "meta:Qyzylorda"{
             sd{"QYZST"}
             ss{"QYZT"}
@@ -617,6 +621,7 @@ tzdbNames{
         "meta:Taipei"{
             sd{"CDT"}
             ss{"CST"}
+            parseRegions{"TW"}
         }
         "meta:Tajikistan"{
             ss{"TJT"}

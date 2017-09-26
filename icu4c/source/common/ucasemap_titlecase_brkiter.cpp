@@ -31,6 +31,29 @@
 
 U_NAMESPACE_BEGIN
 
+void CaseMap::utf8ToTitle(
+        const char *locale, uint32_t options, BreakIterator *iter,
+        StringPiece src, ByteSink &sink, Edits *edits,
+        UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    UText utext = UTEXT_INITIALIZER;
+    utext_openUTF8(&utext, src.data(), src.length(), &errorCode);
+    LocalPointer<BreakIterator> ownedIter;
+    iter = ustrcase_getTitleBreakIterator(nullptr, locale, options, iter, ownedIter, errorCode);
+    if (iter == nullptr) {
+        utext_close(&utext);
+        return;
+    }
+    iter->setText(&utext, errorCode);
+    ucasemap_mapUTF8(
+        ustrcase_getCaseLocale(locale), options, iter,
+        src.data(), src.length(),
+        ucasemap_internalUTF8ToTitle, sink, edits, errorCode);
+    utext_close(&utext);
+}
+
 int32_t CaseMap::utf8ToTitle(
         const char *locale, uint32_t options, BreakIterator *iter,
         const char *src, int32_t srcLength,
@@ -50,8 +73,8 @@ int32_t CaseMap::utf8ToTitle(
     iter->setText(&utext, errorCode);
     int32_t length=ucasemap_mapUTF8(
         ustrcase_getCaseLocale(locale), options, iter,
-        (uint8_t *)dest, destCapacity,
-        (const uint8_t *)src, srcLength,
+        dest, destCapacity,
+        src, srcLength,
         ucasemap_internalUTF8ToTitle, edits, errorCode);
     utext_close(&utext);
     return length;
@@ -101,8 +124,8 @@ ucasemap_utf8ToTitle(UCaseMap *csm,
     csm->iter->setText(&utext, *pErrorCode);
     int32_t length=ucasemap_mapUTF8(
             csm->caseLocale, csm->options, csm->iter,
-            (uint8_t *)dest, destCapacity,
-            (const uint8_t *)src, srcLength,
+            dest, destCapacity,
+            src, srcLength,
             ucasemap_internalUTF8ToTitle, NULL, *pErrorCode);
     utext_close(&utext);
     return length;

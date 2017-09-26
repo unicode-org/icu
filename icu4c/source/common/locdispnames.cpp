@@ -542,7 +542,7 @@ uloc_getDisplayName(const char *locale,
             return 0;
         }
         separator = (const UChar *)p0 + subLen;
-        sepLen = p1 - separator;
+        sepLen = static_cast<int32_t>(p1 - separator);
     }
 
     if(patLen==0 || (patLen==defaultPatLen && !u_strncmp(pattern, defaultPattern, patLen))) {
@@ -558,8 +558,8 @@ uloc_getDisplayName(const char *locale,
             *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
         }
-        sub0Pos=p0-pattern;
-        sub1Pos=p1-pattern;
+        sub0Pos = static_cast<int32_t>(p0-pattern);
+        sub1Pos = static_cast<int32_t>(p1-pattern);
         if (sub1Pos < sub0Pos) { /* a very odd pattern */
             int32_t t=sub0Pos; sub0Pos=sub1Pos; sub1Pos=t;
             langi=1;

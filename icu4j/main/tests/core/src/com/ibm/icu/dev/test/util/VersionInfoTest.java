@@ -14,6 +14,8 @@ package com.ibm.icu.dev.test.util;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.VersionInfo;
@@ -24,6 +26,7 @@ import com.ibm.icu.util.VersionInfo;
 * @author Syn Wee Quek
 * @since release 2.1 March 01 2002
 */
+@RunWith(JUnit4.class)
 public final class VersionInfoTest extends TestFmwk
 {
     // constructor ---------------------------------------------------

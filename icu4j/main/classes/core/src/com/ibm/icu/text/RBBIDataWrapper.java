@@ -249,6 +249,15 @@ final class RBBIDataWrapper {
             pos += This.fHeader.fSRTableLen;
         }
 
+        // Rule Compatibility Hacks
+        //    If a rule set includes reverse rules but does not explicitly include safe reverse rules,
+        //    the reverse rules are to be treated as safe reverse rules.
+
+        if (This.fSRTable == null && This.fRTable != null) {
+            This.fSRTable = This.fRTable;
+            This.fRTable = null;
+        }
+
         //
         // Unserialize the Character categories TRIE
         //     Because we can't be absolutely certain where the Trie deserialize will
@@ -370,7 +379,7 @@ final class RBBIDataWrapper {
     ///CLOVER:OFF
     /** Dump a state table.  (A full set of RBBI rules has 4 state tables.)  */
     private void dumpTable(java.io.PrintStream out, short table[]) {
-        if (table == null)   {
+        if (table == null || table.length == 0)   {
             out.println("  -- null -- ");
         } else {
             int n;

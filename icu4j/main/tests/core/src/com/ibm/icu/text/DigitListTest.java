@@ -5,10 +5,13 @@ package com.ibm.icu.text;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 
 
+@RunWith(JUnit4.class)
 public class DigitListTest extends TestFmwk {
 
     private static DigitList digitList = new DigitList();

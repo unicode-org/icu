@@ -13,6 +13,8 @@ import java.text.StringCharacterIterator;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Norm2AllModes;
@@ -31,6 +33,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 
 
+@RunWith(JUnit4.class)
 public class BasicTest extends TestFmwk {
     String[][] canonTests = {
         // Input                Decomposed              Composed
@@ -2865,6 +2868,18 @@ public class BasicTest extends TestFmwk {
         assertEquals("normalize(LV+11A7)", expected, result);
         assertFalse("isNormalized(LV+11A7)", nfkc.isNormalized(s));
         assertTrue("isNormalized(normalized)", nfkc.isNormalized(result));
+    }
+
+    @Test
+    public void TestComposeBoundaryAfter() {
+        Normalizer2 nfkc = Normalizer2.getNFKCInstance();
+        // U+02DA and U+FB2C do not have compose-boundaries-after.
+        String s = "\u02DA\u0339 \uFB2C\u05B6";
+        String expected = " \u0339\u030A \u05E9\u05B6\u05BC\u05C1";
+        String result = nfkc.normalize(s);
+        assertEquals("nfkc", expected, result);
+        assertFalse("U+02DA boundary-after", nfkc.hasBoundaryAfter(0x2DA));
+        assertFalse("U+FB2C boundary-after", nfkc.hasBoundaryAfter(0xFB2C));
     }
 
     @Test

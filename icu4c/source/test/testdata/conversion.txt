@@ -763,9 +763,9 @@ conversion:table(nofallback) {
         // surrogates in CESU-8
         { "CESU-8", :bin{ eda080eda081edb081 }, "\ud800\U00010401", :intvector{ 0, 3, 6 }, :int{1}, :int{0}, "", "", :bin{""} }
         // e080 is a partial sequence
-        { "UTF-8", :bin{ 31ffe4ba8ce08061 }, "1\ufffd\u4e8c\ufffda", :intvector{ 0, 1, 2, 5, 7 }, :int{0}, :int{0}, "", "", :bin{ e080 } }
+        { "UTF-8", :bin{ 31ffe4ba8ce08061 }, "1\ufffd\u4e8c\ufffd\ufffda", :intvector{ 0, 1, 2, 5, 6, 7 }, :int{0}, :int{0}, "", "", :bin{ 80 } }
         // fbbfbfbfbf exceedes U+10ffff
-        { "UTF-8", :bin{ 31fbbfbfbfbf61 }, "1\ufffda", :intvector{ 0, 1, 6 }, :int{0}, :int{0}, "", "", :bin{ fbbfbfbfbf } }
+        { "UTF-8", :bin{ 31fbbfbfbfbf61 }, "1\ufffd\ufffd\ufffd\ufffd\ufffda", :intvector{ 0, 1, 2, 3, 4, 5, 6 }, :int{0}, :int{0}, "", "", :bin{ bf } }
 
         // lead byte a2 without trail byte
         { "ibm-1363", :bin{ a2aea2 }, "\u00a1", :intvector{ 0 }, :int{1}, :int{0}, "truncated", ".", :bin{ a2 } }

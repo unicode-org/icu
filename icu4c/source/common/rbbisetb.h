@@ -13,6 +13,9 @@
 #define RBBISETB_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/uobject.h"
 #include "rbbirb.h"
 #include "utrie2.h"
@@ -108,8 +111,8 @@ private:
 
     RangeDescriptor       *fRangeList;      // Head of the linked list of RangeDescriptors
 
-    UTrie2               *fTrie;            // The mapping TRIE that is the end result of processing
-    uint32_t              fTrieSize;        //  the Unicode Sets.
+    UTrie2                *fTrie;           // The mapping TRIE that is the end result of processing
+    uint32_t               fTrieSize;       //  the Unicode Sets.
 
     // Groups correspond to character categories -
     //       groups of ranges that are in the same original UnicodeSets.
@@ -128,4 +131,7 @@ private:
 
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
 #endif

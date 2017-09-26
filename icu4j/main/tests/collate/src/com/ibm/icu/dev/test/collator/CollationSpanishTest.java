@@ -7,23 +7,26 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v2.1 : Collate/CollationSpanishTest
  * Source File: $ICU4CRoot/source/test/intltest/escoll.cpp
  **/
- 
+
  package com.ibm.icu.dev.test.collator;
- 
+
  import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
- 
- public class CollationSpanishTest extends TestFmwk {
+
+@RunWith(JUnit4.class)
+public class CollationSpanishTest extends TestFmwk {
     private static char[][] testSourceCases = {
         {0x61, 0x6c, 0x69, 0x61, 0x73},
         {0x45, 0x6c, 0x6c, 0x69, 0x6f, 0x74},
@@ -60,19 +63,19 @@ import com.ibm.icu.text.Collator;
         -1,
         0
     };
-    
+
     //static public Collator myCollation = Collator.getInstance(new Locale("es", "ES"));
-    
+
     private Collator myCollation = null;
-    
+
     public CollationSpanishTest() {
     }
-    
+
     @Before
     public void init() throws Exception {
         myCollation = Collator.getInstance(new Locale("es", "ES"));
     }
-    
+
     @Test
     public void TestTertiary(){
         int i = 0;
@@ -81,7 +84,7 @@ import com.ibm.icu.text.Collator;
             doTest(testSourceCases[i], testTargetCases[i], results[i]);
         }
     }
-    
+
     @Test
     public void TestPrimary(){
         int i;
@@ -90,7 +93,7 @@ import com.ibm.icu.text.Collator;
             doTest(testSourceCases[i], testTargetCases[i], results[i]);
         }
     }
-    
+
     // amin test routine, tests rules specific to the spanish locale
     private void doTest(char[] source, char[] target, int result) {
         String s = new String(source);
@@ -102,7 +105,7 @@ import com.ibm.icu.text.Collator;
         int keyResult = sortKey1.compareTo(sortKey2);
         reportCResult(s, t, sortKey1, sortKey2, compareResult, keyResult, compareResult, result);
     }
-    
+
     private void reportCResult( String source, String target, CollationKey sourceKey, CollationKey targetKey,
                                 int compareResult, int keyResult, int incResult, int expectedResult ) {
         if (expectedResult < -1 || expectedResult > 1) {
@@ -115,13 +118,13 @@ import com.ibm.icu.text.Collator;
         boolean ok3 = (incResult == expectedResult);
 
         if (ok1 && ok2 && ok3 && !isVerbose()) {
-            return;    
+            return;
         } else {
             String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
             String msg2 = "\", \"";
             String msg3 = "\") returned ";
             String msg4 = "; expected ";
-            
+
             String sExpect = new String("");
             String sResult = new String("");
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
@@ -131,7 +134,7 @@ import com.ibm.icu.text.Collator;
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
-            
+
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
@@ -144,7 +147,7 @@ import com.ibm.icu.text.Collator;
                 msg2 = " vs. ";
                 errln(msg1 + CollationTest.prettify(sourceKey) + msg2 + CollationTest.prettify(targetKey));
             }
-            
+
             msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
             msg2 = "\", \"";
             msg3 = "\") returned ";
@@ -155,7 +158,7 @@ import com.ibm.icu.text.Collator;
                 logln(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
-            }                
+            }
         }
     }
 }

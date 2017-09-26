@@ -14,7 +14,7 @@
 #include "unicode/utypes.h"
 #include "rbbidata.h"
 #include "rbbirb.h"
-#include "utrie.h"
+#include "utrie2.h"
 #include "udatamem.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -83,11 +83,11 @@ void RBBIDataWrapper::init0() {
     fReverseTable = NULL;
     fSafeFwdTable = NULL;
     fSafeRevTable = NULL;
-    fRuleSource = NULL;
+    fRuleSource   = NULL;
     fRuleStatusTable = NULL;
-    fTrie = NULL;
-    fUDataMem = NULL;
-    fRefCount = 0;
+    fTrie         = NULL;
+    fUDataMem     = NULL;
+    fRefCount     = 0;
     fDontFreeData = TRUE;
 }
 
@@ -118,6 +118,14 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
         fSafeRevTable = (RBBIStateTable *)((char *)data + fHeader->fSRTable);
     }
 
+    // Rule Compatibility Hacks
+    //    If a rule set includes reverse rules but does not explicitly include safe reverse rules,
+    //    the reverse rules are to be treated as safe reverse rules.
+
+    if (fSafeRevTable == NULL && fReverseTable != NULL) {
+        fSafeRevTable = fReverseTable;
+        fReverseTable = NULL;
+    }
 
     fTrie = utrie2_openFromSerialized(UTRIE2_16_VALUE_BITS,
                                       (uint8_t *)data + fHeader->fTrie,
