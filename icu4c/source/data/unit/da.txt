@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 da{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -147,10 +147,10 @@ da{
             }
         }
         coordinate{
-            east{"{0}Ø"}
-            north{"{0}N"}
-            south{"{0}S"}
-            west{"{0}V"}
+            east{"{0} øst"}
+            north{"{0} nord"}
+            south{"{0} syd"}
+            west{"{0} vest"}
         }
         digital{
             bit{
@@ -429,6 +429,11 @@ da{
                 dnam{"pikometer"}
                 one{"{0} pikometer"}
                 other{"{0} pikometer"}
+            }
+            point{
+                dnam{"punkt"}
+                one{"{0} punkt"}
+                other{"{0} punkt"}
             }
             yard{
                 dnam{"engelske yard"}
@@ -794,15 +799,22 @@ da{
             west{"{0}V"}
         }
         duration{
+            century{
+                dnam{"årh."}
+                one{"{0} årh."}
+                other{"{0} årh."}
+            }
             day{
                 dnam{"dag"}
                 one{"{0} d"}
                 other{"{0} d"}
+                per{"{0}/d"}
             }
             hour{
                 dnam{"time"}
                 one{"{0} t"}
                 other{"{0} t"}
+                per{"{0}/t"}
             }
             millisecond{
                 dnam{"ms"}
@@ -813,26 +825,31 @@ da{
                 dnam{"min"}
                 one{"{0} m"}
                 other{"{0} min"}
+                per{"{0}/min"}
             }
             month{
                 dnam{"måned"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
             }
             second{
                 dnam{"sek"}
                 one{"{0} s"}
                 other{"{0} s"}
+                per{"{0}/s"}
             }
             week{
                 dnam{"uge"}
                 one{"{0} u"}
                 other{"{0} u"}
+                per{"{0}/u"}
             }
             year{
                 dnam{"år"}
                 one{"{0} år"}
                 other{"{0} år"}
+                per{"{0}/år"}
             }
         }
         length{
@@ -840,19 +857,30 @@ da{
                 dnam{"cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
+            }
+            decimeter{
+                dnam{"dm"}
+                one{"{0}dm"}
+                other{"{0}dm"}
             }
             foot{
+                dnam{"fod"}
                 one{"{0} fod"}
                 other{"{0} fod"}
+                per{"{0}/ft"}
             }
             inch{
+                dnam{"tommer"}
                 one{"{0}\u0022"}
                 other{"{0}\u0022"}
+                per{"{0}/tomme"}
             }
             kilometer{
                 dnam{"km"}
                 one{"{0} km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
                 one{"{0} lysår"}
@@ -862,10 +890,22 @@ da{
                 dnam{"meter"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
+            }
+            micrometer{
+                dnam{"µm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
             }
             mile{
+                dnam{"engelske mil"}
                 one{"{0} mil"}
                 other{"{0} mil"}
+            }
+            mile-scandinavian{
+                dnam{"sv. mil"}
+                one{"{0}sv. mil"}
+                other{"{0}sv. mil"}
             }
             millimeter{
                 dnam{"mm"}
@@ -877,6 +917,7 @@ da{
                 other{"{0}pm"}
             }
             yard{
+                dnam{"engelske yard"}
                 one{"{0} yard"}
                 other{"{0} yard"}
             }
@@ -886,19 +927,30 @@ da{
                 dnam{"g"}
                 one{"{0} g"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 one{"{0} kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
             }
             ounce{
+                dnam{"oz"}
                 one{"{0} unse"}
                 other{"{0} unser"}
+                per{"{0}/oz"}
             }
             pound{
+                dnam{"pund"}
                 one{"{0} pund"}
                 other{"{0} pund"}
+                per{"{0}/lb"}
+            }
+            stone{
+                dnam{"st"}
+                one{"{0} st"}
+                other{"{0} st"}
             }
             ton{
                 one{"{0} tn"}
@@ -921,16 +973,29 @@ da{
         }
         pressure{
             hectopascal{
+                dnam{"hPa"}
                 one{"{0}hPa"}
                 other{"{0}hPa"}
             }
             inch-hg{
+                dnam{"# Hg"}
                 one{"{0}\u0022 Hg"}
                 other{"{0}\u0022 Hg"}
             }
             millibar{
+                dnam{"mbar"}
                 one{"{0}mbar"}
                 other{"{0}mbar"}
+            }
+            millimeter-of-mercury{
+                dnam{"mmHg"}
+                one{"{0} mmHg"}
+                other{"{0} mmHg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                one{"{0} psi"}
+                other{"{0} psi"}
             }
         }
         speed{
@@ -940,10 +1005,12 @@ da{
                 other{"{0} km/t"}
             }
             meter-per-second{
+                dnam{"m/s"}
                 one{"{0}m/s"}
                 other{"{0}m/s"}
             }
             mile-per-hour{
+                dnam{"engelske mil/timen"}
                 one{"{0} mph"}
                 other{"{0} mph"}
             }
@@ -955,8 +1022,19 @@ da{
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"°F"}
                 one{"{0}°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            kelvin{
+                dnam{"K"}
+                one{"{0} K"}
+                other{"{0} K"}
             }
         }
         volume{
@@ -1401,6 +1479,11 @@ da{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pkt."}
+                one{"{0} pkt."}
+                other{"{0} pkt."}
             }
             yard{
                 dnam{"engelske yard"}

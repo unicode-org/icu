@@ -176,7 +176,7 @@ am{
         frc{"ካጁን ፍሬንች"}
         frp{"አርፒታን"}
         fur{"ፍሩሊያን"}
-        fy{"የምዕራብ ፍሪስኛ"}
+        fy{"ምዕራባዊ ፍሪሲኛ"}
         ga{"አይሪሽ"}
         gaa{"ጋ"}
         gag{"ጋጉዝኛ"}
@@ -196,7 +196,7 @@ am{
         ha{"ሃውሳኛ"}
         hak{"ሃካ ቻይንኛ"}
         haw{"ሃዊያኛ"}
-        he{"ዕብራስጥ"}
+        he{"ዕብራይስጥ﻿"}
         hi{"ሒንዱኛ"}
         hil{"ሂሊጋይኖን"}
         hmn{"ህሞንግ"}
@@ -269,13 +269,13 @@ am{
         la{"ላቲንኛ"}
         lad{"ላዲኖ"}
         lag{"ላንጊ"}
-        lb{"ሉክዘምበርገርኛ"}
+        lb{"ሉክዘምበርኛ"}
         lez{"ሌዝጊያን"}
         lg{"ጋንዳኛ"}
         li{"ሊምቡርጊሽ"}
         lkt{"ላኮታ"}
         ln{"ሊንጋላኛ"}
-        lo{"ላኦስኛ"}
+        lo{"ላኦኛ"}
         loz{"ሎዚኛ"}
         lrc{"ሰሜናዊ ሉሪ"}
         lt{"ሉቴንያንኛ"}
@@ -688,20 +688,20 @@ am{
             vaii{"የቫይ አሃዞች"}
         }
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} — ሁሉም"}
         category-list{"{0}: {1}"}
-        compatibility{"{0} — Compatibility"}
-        enclosed{"{0} — Enclosed"}
-        extended{"{0} — Extended"}
+        compatibility{"{0} ተኳሃኝነት"}
+        enclosed{"{0} ተጠቃልሎ"}
+        extended{"{0} ተራዘመ"}
         historic{"{0} — ታሪካዊ"}
         miscellaneous{"{0} — የተለያዩ"}
         other{"{0} — ሌሎች"}
         scripts{"ስክሪፕቶች — {0}"}
         strokes{
-            one{"{0} Strokes"}
-            other{"{0} Strokes"}
+            one{"{0} ምች"}
+            other{"{0} ምች"}
         }
     }
     codePatterns{

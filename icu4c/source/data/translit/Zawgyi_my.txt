@@ -208,6 +208,7 @@ $zmedialra → \u103C ;
 \u102F \u103A → \u102F;
 \u102D \u102E → \u102E;
 \u1036 \u1036+ → \u1036;
+\u103e \u103e+ → \u103e; # http://unicode.org/cldr/trac/ticket/10386
 # Remove space directly before diacritics.
 [:WSpace:] ([\u102b-\u1032\u1036-\u103e]) → $1;
 # Fix 103B/103A order for asat.

@@ -17,17 +17,22 @@ pt_PT{
         ang{"inglês antigo"}
         ar_001{"árabe moderno padrão"}
         arn{"mapuche"}
+        av{"avaric"}
         bax{"bamun"}
         bbj{"ghomala"}
         bua{"buriat"}
+        chk{"chuquês"}
         chn{"jargão chinook"}
+        chy{"cheyenne"}
         ckb{"sorani curdo"}
+        co{"córsico"}
         crs{"francês crioulo seselwa"}
         cs{"checo"}
         cv{"chuvash"}
         de_AT{"alemão austríaco"}
         de_CH{"alto alemão suíço"}
         ee{"ewe"}
+        efi{"efik"}
         egy{"egípcio clássico"}
         en_AU{"inglês australiano"}
         en_CA{"inglês canadiano"}
@@ -36,36 +41,43 @@ pt_PT{
         es_419{"espanhol latino-americano"}
         es_ES{"espanhol europeu"}
         et{"estónio"}
+        fon{"fon"}
         fr_CA{"francês canadiano"}
         fr_CH{"francês suíço"}
         fro{"francês antigo"}
         frs{"frísio oriental"}
         fy{"frísico ocidental"}
+        gez{"geʼez"}
         goh{"alemão alto antigo"}
         grc{"grego clássico"}
         gsw{"alemão suíço"}
         ha{"haúça"}
         hi{"hindi"}
         hy{"arménio"}
-        ig{"igbo"}
         kbd{"cabardiano"}
         kea{"crioulo cabo-verdiano"}
-        kn{"canarim"}
+        krc{"carachaio-bálcaro"}
         lez{"lezghiano"}
         lg{"ganda"}
         lou{"crioulo de Louisiana"}
         lrc{"luri do norte"}
         luo{"luo"}
+        mak{"makassarês"}
         mk{"macedónio"}
         moh{"mohawk"}
+        mr{"marata"}
+        mul{"vários idiomas"}
         nb{"norueguês bokmål"}
         nds{"baixo-alemão"}
         nds_NL{"baixo-saxão"}
+        ne{"nepali"}
         nn{"norueguês nynorsk"}
         non{"nórdico antigo"}
         oc{"occitano"}
+        or{"oriya"}
         os{"ossético"}
         pag{"língua pangasinesa"}
+        pam{"pampango"}
         peo{"persa antigo"}
         pl{"polaco"}
         pon{"língua pohnpeica"}
@@ -75,18 +87,27 @@ pt_PT{
         pt_PT{"português europeu"}
         raj{"rajastanês"}
         root{"root"}
-        rw{"kinyarwanda"}
-        sah{"sakha"}
         se{"sami do norte"}
         sga{"irlandês antigo"}
         shu{"árabe do Chade"}
         smn{"inari sami"}
-        ti{"tigrínia"}
+        sn{"shona"}
+        te{"telugu"}
+        tem{"temne"}
+        tg{"tajique"}
         tk{"turcomano"}
         to{"tonga"}
+        tt{"tatar"}
+        tzm{"tamazight do Atlas Central"}
+        uz{"usbeque"}
         vai{"vai"}
+        wo{"uólofe"}
+        xh{"xosa"}
         xog{"soga"}
         yo{"ioruba"}
+        zgh{"tamazight marroquino padrão"}
+        zun{"zuni"}
+        zza{"zaza"}
     }
     Languages%short{
         en_GB{"inglês (RU)"}
@@ -95,8 +116,9 @@ pt_PT{
         Armn{"arménio"}
         Egyd{"egípcio demótico"}
         Egyh{"egípcio hierático"}
-        Gujr{"guzerate"}
+        Hanb{"han com bopomofo"}
         Inds{"indus"}
+        Orya{"odia"}
         Sylo{"siloti nagri"}
         Tale{"tai le"}
         Telu{"telugu"}
@@ -114,7 +136,10 @@ pt_PT{
             ethiopic-amete-alem{"Calendário Etíope Amete Alem"}
             gregorian{"Calendário gregoriano"}
             hebrew{"Calendário hebraico"}
+            indian{"Calendário nacional indiano"}
             islamic{"Calendário islâmico"}
+            islamic-civil{"Calendário islâmico (civil)"}
+            islamic-umalqura{"Calendário islâmico (Umm al-Qura)"}
             japanese{"Calendário japonês"}
             persian{"Calendário persa"}
         }
@@ -157,6 +182,7 @@ pt_PT{
         collation{
             dictionary{"Ordenação do dicionário"}
             ducet{"Ordenação unicode predefinida"}
+            eor{"Regras de ordenação europeias"}
             phonebook{"Ordem da lista telefónica"}
             phonetic{"Sequência de ordenação fonética"}
             reformed{"Reforma da ordenação"}
@@ -174,11 +200,16 @@ pt_PT{
             normal{"Estilo padrão de quebra de linha"}
             strict{"Estilo estrito de quebra de linha"}
         }
+        m0{
+            bgn{"Transliteração BGN"}
+            ungegn{"Transliteração UNGEGN"}
+        }
         ms{
             uksystem{"Sistema de medida imperial"}
             ussystem{"Sistema de medida americano"}
         }
         numbers{
+            arabext{"Algarismos indo-arábicos expandidos"}
             armn{"Numeração arménia"}
             armnlow{"Numeração arménia minúscula"}
             beng{"Algarismos bengalis"}
@@ -218,7 +249,7 @@ pt_PT{
         MONOTON{"monotónico"}
         POLYTON{"politónico"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.6"}
     characterLabelPattern{
         all{"{0} – tudo"}
         compatibility{"{0} – compatibilidade"}
@@ -228,6 +259,9 @@ pt_PT{
         miscellaneous{"{0} – diversos"}
         other{"{0} – outro"}
         scripts{"{0} – escritas"}
+        strokes{
+            one{"{0} traço"}
+        }
     }
     codePatterns{
         script{"Escrita: {0}"}

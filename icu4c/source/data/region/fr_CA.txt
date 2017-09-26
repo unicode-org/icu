@@ -17,6 +17,7 @@ fr_CA{
         HM{"îles Heard et McDonald"}
         IC{"îles Canaries"}
         IM{"île de Man"}
+        IO{"territoire britannique de l’océan Indien"}
         MF{"Saint-Martin (France)"}
         MM{"Myanmar"}
         MP{"Mariannes du Nord"}
@@ -34,9 +35,9 @@ fr_CA{
         VI{"îles Vierges américaines"}
     }
     Countries%variant{
-        CI{"Côte d’Ivoire"}
+        CI{"République de Côte d’Ivoire"}
         FK{"îles Falkland (Malouines)"}
         TL{"Timor oriental"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.22"}
 }

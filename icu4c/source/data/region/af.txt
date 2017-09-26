@@ -43,7 +43,7 @@ af{
         AO{"Angola"}
         AQ{"Antarktika"}
         AR{"Argentinië"}
-        AS{"Amerikaans-Samoa"}
+        AS{"Amerikaanse Samoa"}
         AT{"Oostenryk"}
         AU{"Australië"}
         AW{"Aruba"}
@@ -71,7 +71,7 @@ af{
         BY{"Belarus"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kokos-eilande"}
+        CC{"Kokoseilande"}
         CD{"Demokratiese Republiek van die Kongo"}
         CF{"Sentraal-Afrikaanse Republiek"}
         CG{"Kongo - Brazzaville"}
@@ -89,7 +89,7 @@ af{
         CW{"Curaçao"}
         CX{"Kerseiland"}
         CY{"Siprus"}
-        CZ{"Tjeggië"}
+        CZ{"Tsjeggië"}
         DE{"Duitsland"}
         DG{"Diego Garcia"}
         DJ{"Djiboeti"}
@@ -106,6 +106,7 @@ af{
         ES{"Spanje"}
         ET{"Ethiopië"}
         EU{"Europese Unie"}
+        EZ{"Eurosone"}
         FI{"Finland"}
         FJ{"Fidji"}
         FK{"Falklandeilande"}
@@ -132,7 +133,7 @@ af{
         GW{"Guinee-Bissau"}
         GY{"Guyana"}
         HK{"Hongkong SAS Sjina"}
-        HM{"Heard- en McDonaldeilande"}
+        HM{"Heardeiland en McDonaldeilande"}
         HN{"Honduras"}
         HR{"Kroasië"}
         HT{"Haïti"}
@@ -153,11 +154,11 @@ af{
         JO{"Jordanië"}
         JP{"Japan"}
         KE{"Kenia"}
-        KG{"Kirgisië"}
+        KG{"Kirgistan"}
         KH{"Kambodja"}
         KI{"Kiribati"}
         KM{"Comore"}
-        KN{"St. Kitts en Nevis"}
+        KN{"Sint Kitts en Nevis"}
         KP{"Noord-Korea"}
         KR{"Suid-Korea"}
         KW{"Koeweit"}
@@ -165,7 +166,7 @@ af{
         KZ{"Kazakstan"}
         LA{"Laos"}
         LB{"Libanon"}
-        LC{"St. Lucia"}
+        LC{"Sint Lucia"}
         LI{"Liechtenstein"}
         LK{"Sri Lanka"}
         LR{"Liberië"}
@@ -178,7 +179,7 @@ af{
         MC{"Monaco"}
         MD{"Moldowa"}
         ME{"Montenegro"}
-        MF{"St. Martin"}
+        MF{"Sint Martin"}
         MG{"Madagaskar"}
         MH{"Marshalleilande"}
         MK{"Macedonië"}
@@ -217,7 +218,7 @@ af{
         PH{"Filippyne"}
         PK{"Pakistan"}
         PL{"Pole"}
-        PM{"St. Pierre en Miquelon"}
+        PM{"Sint Pierre en Miquelon"}
         PN{"Pitcairneilande"}
         PR{"Puerto Rico"}
         PS{"Palestynse gebiede"}
@@ -261,7 +262,7 @@ af{
         TJ{"Tadjikistan"}
         TK{"Tokelau"}
         TL{"Oos-Timor"}
-        TM{"Turkmenië"}
+        TM{"Turkmenistan"}
         TN{"Tunisië"}
         TO{"Tonga"}
         TR{"Turkye"}
@@ -271,16 +272,16 @@ af{
         TZ{"Tanzanië"}
         UA{"Oekraïne"}
         UG{"Uganda"}
-        UM{"VS klein omliggende eilande"}
-        UN{"verenigde nasies"}
+        UM{"Klein afgeleë eilande van die VSA"}
+        UN{"Verenigde Nasies"}
         US{"Verenigde State van Amerika"}
         UY{"Uruguay"}
         UZ{"Oesbekistan"}
         VA{"Vatikaanstad"}
-        VC{"St. Vincent en die Grenadine"}
+        VC{"Sint Vincent en die Grenadine"}
         VE{"Venezuela"}
         VG{"Britse Maagde-eilande"}
-        VI{"Amerikaanse Maagde-eilande"}
+        VI{"VSA se Maagde-eilande"}
         VN{"Viëtnam"}
         VU{"Vanuatu"}
         WF{"Wallis en Futuna"}
@@ -304,9 +305,9 @@ af{
     Countries%variant{
         CD{"Kongo (DRK)"}
         CG{"Kongo (Republiek die)"}
-        CZ{"Tjeggiese Republiek"}
+        CZ{"Tsjeggiese Republiek"}
         FK{"Falklandeilande (Malvinas)"}
         MK{"Macedonië (VJRM)"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
 }

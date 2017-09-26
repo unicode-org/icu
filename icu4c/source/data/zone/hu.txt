@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 hu{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -274,7 +274,7 @@ hu{
             ec{"Cuiabá"}
         }
         "America:Curacao"{
-            ec{"Curacao"}
+            ec{"Curaçao"}
         }
         "America:Danmarkshavn"{
             ec{"Danmarkshavn"}
@@ -475,7 +475,7 @@ hu{
             ec{"Beulah, Észak-Dakota"}
         }
         "America:North_Dakota:Center"{
-            ec{"Középső, Észak-Dakota"}
+            ec{"Center, Észak-Dakota"}
         }
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Észak-Dakota"}
@@ -506,6 +506,9 @@ hu{
         }
         "America:Puerto_Rico"{
             ec{"Puerto Rico"}
+        }
+        "America:Punta_Arenas"{
+            ec{"Punta Arenas"}
         }
         "America:Rainy_River"{
             ec{"Rainy River"}
@@ -657,6 +660,9 @@ hu{
         "Asia:Ashgabat"{
             ec{"Asgabat"}
         }
+        "Asia:Atyrau"{
+            ec{"Atyrau"}
+        }
         "Asia:Baghdad"{
             ec{"Bagdad"}
         }
@@ -697,7 +703,7 @@ hu{
             ec{"Damaszkusz"}
         }
         "Asia:Dhaka"{
-            ec{"Dháka"}
+            ec{"Dakka"}
         }
         "Asia:Dili"{
             ec{"Dili"}
@@ -707,6 +713,9 @@ hu{
         }
         "Asia:Dushanbe"{
             ec{"Dushanbe"}
+        }
+        "Asia:Famagusta"{
+            ec{"Famagusta"}
         }
         "Asia:Gaza"{
             ec{"Gáza"}
@@ -805,7 +814,7 @@ hu{
             ec{"Kizilorda"}
         }
         "Asia:Rangoon"{
-            ec{"Rangoon"}
+            ec{"Yangon"}
         }
         "Asia:Riyadh"{
             ec{"Rijád"}
@@ -886,10 +895,10 @@ hu{
             ec{"Kanári-szigetek"}
         }
         "Atlantic:Cape_Verde"{
-            ec{"Zöld-Foki Szigetek"}
+            ec{"Zöld-foki szigetek"}
         }
         "Atlantic:Faeroe"{
-            ec{"Faroe"}
+            ec{"Feröer"}
         }
         "Atlantic:Madeira"{
             ec{"Madeira"}
@@ -943,7 +952,7 @@ hu{
             ec{"Sydney"}
         }
         "Etc:UTC"{
-            ls{"Koordinált világidő"}
+            ls{"egyezményes koordinált világidő"}
         }
         "Etc:Unknown"{
             ec{"Ismeretlen város"}
@@ -955,7 +964,7 @@ hu{
             ec{"Andorra"}
         }
         "Europe:Astrakhan"{
-            ec{"Astrakhan"}
+            ec{"Asztrahán"}
         }
         "Europe:Athens"{
             ec{"Athén"}
@@ -1075,6 +1084,9 @@ hu{
         }
         "Europe:Sarajevo"{
             ec{"Szarajevó"}
+        }
+        "Europe:Saratov"{
+            ec{"Szaratov"}
         }
         "Europe:Simferopol"{
             ec{"Szimferopol"}
@@ -1269,7 +1281,7 @@ hu{
             ec{"Tongatapu"}
         }
         "Pacific:Truk"{
-            ec{"Chuuk"}
+            ec{"Truk"}
         }
         "Pacific:Wake"{
             ec{"Wake-sziget"}
@@ -1360,7 +1372,7 @@ hu{
             ls{"arab téli idő"}
         }
         "meta:Argentina"{
-            ld{"Argentínai nyári idő"}
+            ld{"argentínai nyári idő"}
             lg{"argentínai idő"}
             ls{"argentínai téli idő"}
         }
@@ -1401,7 +1413,7 @@ hu{
         }
         "meta:Azerbaijan"{
             ld{"azerbajdzsáni nyári idő"}
-            lg{"Azerbajdzsáni idő"}
+            lg{"azerbajdzsáni idő"}
             ls{"azerbajdzsáni téli idő"}
         }
         "meta:Azores"{
@@ -1532,7 +1544,7 @@ hu{
             ls{"fidzsi téli idő"}
         }
         "meta:French_Guiana"{
-            ls{"francia-guianai idő"}
+            ls{"francia-guyanai idő"}
         }
         "meta:French_Southern"{
             ls{"francia déli és antarktiszi idő"}
@@ -1576,7 +1588,7 @@ hu{
         }
         "meta:Hawaii_Aleutian"{
             ld{"hawaii-aleuti nyári idő"}
-            lg{"hawaii-aleut időzóna"}
+            lg{"hawaii-aleuti időzóna"}
             ls{"hawaii-aleuti téli idő"}
         }
         "meta:Hong_Kong"{
@@ -1796,9 +1808,9 @@ hu{
             ls{"phoenix-szigeteki téli idő"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Saint Pierre és Miquelon-i nyári idő"}
-            lg{"Saint Pierre és Miquelon-i idő"}
-            ls{"Saint Pierre és Miquelon-i zónaidő"}
+            ld{"Saint-Pierre és Miquelon-i nyári idő"}
+            lg{"Saint-Pierre és Miquelon-i idő"}
+            ls{"Saint-Pierre és Miquelon-i zónaidő"}
         }
         "meta:Pitcairn"{
             ls{"pitcairn-szigeteki idő"}
@@ -1921,13 +1933,13 @@ hu{
             ls{"Wallis és Futuna-i idő"}
         }
         "meta:Yakutsk"{
-            ld{"Jakutszki nyári idő"}
+            ld{"jakutszki nyári idő"}
             lg{"jakutszki idő"}
             ls{"jakutszki téli idő"}
         }
         "meta:Yekaterinburg"{
-            ld{"Jekatyerinburgi nyári idő"}
-            lg{"Jekatyerinburgi idő"}
+            ld{"jekatyerinburgi nyári idő"}
+            lg{"jekatyerinburgi idő"}
             ls{"jekatyerinburgi téli idő"}
         }
         fallbackFormat{"{1} ({0})"}

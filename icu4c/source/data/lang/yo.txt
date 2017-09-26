@@ -26,7 +26,7 @@ yo{
         eu{"Èdè Baski"}
         fa{"Èdè Pasia"}
         fi{"Èdè Finisi"}
-        fil{"Èdè Tagalogi"}
+        fil{"Èdè Filipino"}
         fo{"Èdè Faroesi"}
         fr{"Èdè Faransé"}
         fy{"Èdè Frisia"}
@@ -101,5 +101,5 @@ yo{
         zh{"Èdè Mandari"}
         zu{"Èdè Ṣulu"}
     }
-    Version{"2.1.34.45"}
+    Version{"2.1.37.1"}
 }

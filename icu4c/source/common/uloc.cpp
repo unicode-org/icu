@@ -98,6 +98,7 @@ locale_getKeywords(const char *localeID,
  */
 /* Generated using org.unicode.cldr.icu.GenerateISO639LanguageTables */
 /* ISO639 table version is 20150505 */
+/* Subsequent hand addition of selected languages */
 static const char * const LANGUAGES[] = {
     "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "aeb",
     "af",  "afh", "agq", "ain", "ak",  "akk", "akz", "ale",
@@ -109,7 +110,7 @@ static const char * const LANGUAGES[] = {
     "bgn", "bho", "bi",  "bik", "bin", "bjn", "bkm", "bla",
     "bm",  "bn",  "bo",  "bpy", "bqi", "br",  "bra", "brh",
     "brx", "bs",  "bss", "bua", "bug", "bum", "byn", "byv",
-    "ca",  "cad", "car", "cay", "cch", "ce",  "ceb", "cgg",
+    "ca",  "cad", "car", "cay", "cch", "ccp", "ce",  "ceb", "cgg",
     "ch",  "chb", "chg", "chk", "chm", "chn", "cho", "chp",
     "chr", "chy", "ckb", "co",  "cop", "cps", "cr",  "crh",
     "cs",  "csb", "cu",  "cv",  "cy",
@@ -213,6 +214,7 @@ static const char* const REPLACEMENT_LANGUAGES[]={
  */
 /* Generated using org.unicode.cldr.icu.GenerateISO639LanguageTables */
 /* ISO639 table version is 20150505 */
+/* Subsequent hand addition of selected languages */
 static const char * const LANGUAGES_3[] = {
     "aar", "abk", "ace", "ach", "ada", "ady", "ave", "aeb",
     "afr", "afh", "agq", "ain", "aka", "akk", "akz", "ale",
@@ -224,7 +226,7 @@ static const char * const LANGUAGES_3[] = {
     "bgn", "bho", "bis", "bik", "bin", "bjn", "bkm", "bla",
     "bam", "ben", "bod", "bpy", "bqi", "bre", "bra", "brh",
     "brx", "bos", "bss", "bua", "bug", "bum", "byn", "byv",
-    "cat", "cad", "car", "cay", "cch", "che", "ceb", "cgg",
+    "cat", "cad", "car", "cay", "cch", "ccp", "che", "ceb", "cgg",
     "cha", "chb", "chg", "chk", "chm", "chn", "cho", "chp",
     "chr", "chy", "ckb", "cos", "cop", "cps", "cre", "crh",
     "ces", "csb", "chu", "chv", "cym",

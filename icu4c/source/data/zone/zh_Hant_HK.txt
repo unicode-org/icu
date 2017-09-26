@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant_HK{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.6"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比贊"}
@@ -120,9 +120,6 @@ zh_Hant_HK{
         "America:Dawson_Creek"{
             ec{"道森灣"}
         }
-        "America:Dominica"{
-            ec{"多米尼克"}
-        }
         "America:Edmonton"{
             ec{"愛民頓"}
         }
@@ -135,6 +132,9 @@ zh_Hant_HK{
         "America:Grenada"{
             ec{"格林納達"}
         }
+        "America:Guadeloupe"{
+            ec{"瓜德羅普"}
+        }
         "America:Guatemala"{
             ec{"危地馬拉"}
         }
@@ -143,6 +143,9 @@ zh_Hant_HK{
         }
         "America:Halifax"{
             ec{"哈利法克斯"}
+        }
+        "America:Havana"{
+            ec{"夏灣拿"}
         }
         "America:Indiana:Knox"{
             ec{"印第安納州諾克斯"}
@@ -429,6 +432,9 @@ zh_Hant_HK{
         "Europe:Zagreb"{
             ec{"薩格勒布"}
         }
+        "Indian:Antananarivo"{
+            ec{"安塔那那利佛"}
+        }
         "Indian:Chagos"{
             ec{"查戈斯群島"}
         }
@@ -508,7 +514,7 @@ zh_Hant_HK{
             ls{"南非時間"}
         }
         "meta:America_Central"{
-            ld{"中部夏令時間"}
+            ld{"北美中部夏令時間"}
             lg{"北美中部時間"}
             ls{"北美中部標準時間"}
         }

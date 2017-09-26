@@ -49,7 +49,7 @@ es{
         AW{"Aruba"}
         AX{"Islas Åland"}
         AZ{"Azerbaiyán"}
-        BA{"Bosnia-Herzegovina"}
+        BA{"Bosnia y Herzegovina"}
         BB{"Barbados"}
         BD{"Bangladés"}
         BE{"Bélgica"}
@@ -106,6 +106,7 @@ es{
         ES{"España"}
         ET{"Etiopía"}
         EU{"Unión Europea"}
+        EZ{"zona euro"}
         FI{"Finlandia"}
         FJ{"Fiyi"}
         FK{"Islas Malvinas"}
@@ -117,7 +118,7 @@ es{
         GD{"Granada"}
         GE{"Georgia"}
         GF{"Guayana Francesa"}
-        GG{"Guernesey"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Groenlandia"}
@@ -272,6 +273,7 @@ es{
         UA{"Ucrania"}
         UG{"Uganda"}
         UM{"Islas menores alejadas de EE. UU."}
+        UN{"Naciones Unidas"}
         US{"Estados Unidos"}
         UY{"Uruguay"}
         UZ{"Uzbekistán"}
@@ -308,5 +310,5 @@ es{
         MK{"Macedonia (ERYM)"}
         TL{"Timor Oriental"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.22"}
 }

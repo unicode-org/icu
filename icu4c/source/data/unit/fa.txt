@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fa{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -430,6 +430,11 @@ fa{
                 one{"{0} پیکومتر"}
                 other{"{0} پیکومتر"}
             }
+            point{
+                dnam{"امتیاز"}
+                one{"{0} امتیاز"}
+                other{"{0} امتیاز"}
+            }
             yard{
                 dnam{"یارد"}
                 one{"{0} یارد"}
@@ -733,8 +738,14 @@ fa{
     unitsNarrow{
         acceleration{
             g-force{
+                dnam{"نیروی جاذبه"}
                 one{"{0}G"}
                 other{"{0}G"}
+            }
+            meter-per-second-squared{
+                dnam{"متر/مجذور ثانیه"}
+                one{"{0} m/s²"}
+                other{"{0} m/s²"}
             }
         }
         angle{
@@ -811,6 +822,11 @@ fa{
             }
         }
         duration{
+            century{
+                dnam{"سده"}
+                one{"{0} سده"}
+                other{"{0} سده"}
+            }
             day{
                 dnam{"روز"}
                 one{"{0} روز"}
@@ -825,6 +841,8 @@ fa{
             }
             microsecond{
                 dnam{"میکروثانیه"}
+                one{"{0} م.ث."}
+                other{"{0} م.ث."}
             }
             millisecond{
                 dnam{"میلی‌ثانیه"}
@@ -842,6 +860,11 @@ fa{
                 one{"{0} ماه"}
                 other{"{0} ماه"}
                 per{"{0}/ماه"}
+            }
+            nanosecond{
+                dnam{"نانوثانیه"}
+                one{"{0}ن.ث."}
+                other{"{0}ن.ث."}
             }
             second{
                 dnam{"ثانیه"}
@@ -882,26 +905,40 @@ fa{
         length{
             astronomical-unit{
                 dnam{"واحد نجومی"}
+                one{"{0} au"}
+                other{"{0} au"}
             }
             centimeter{
                 dnam{"سانت"}
                 one{"{0} سانت"}
                 other{"{0} سانت"}
+                per{"{0}/سانت"}
+            }
+            decimeter{
+                dnam{"dm"}
+                one{"{0}dm"}
+                other{"{0}dm"}
             }
             foot{
+                dnam{"فوت"}
                 one{"{0}ft"}
                 other{"{0}ft"}
+                per{"{0}/فوت"}
             }
             inch{
+                dnam{"اینچ"}
                 one{"{0}in"}
                 other{"{0}in"}
+                per{"{0}/اینچ"}
             }
             kilometer{
                 dnam{"کیلومتر"}
                 one{"{0}km"}
                 other{"{0}km"}
+                per{"{0}/km"}
             }
             light-year{
+                dnam{"سال نوری"}
                 one{"{0}ly"}
                 other{"{0}ly"}
             }
@@ -911,7 +948,13 @@ fa{
                 other{"{0} متر"}
                 per{"{0}/متر"}
             }
+            micrometer{
+                dnam{"µm"}
+                one{"{0}µm"}
+                other{"{0}µm"}
+            }
             mile{
+                dnam{"مایل"}
                 one{"{0}mi"}
                 other{"{0}mi"}
             }
@@ -920,12 +963,18 @@ fa{
                 one{"{0} م‌م"}
                 other{"{0} م‌م"}
             }
+            nanometer{
+                dnam{"نانومتر"}
+                one{"{0} نانومتر"}
+                other{"{0} نانومتر"}
+            }
             parsec{
                 dnam{"پارسک"}
                 one{"{0} پارسک"}
                 other{"{0} پارسک"}
             }
             picometer{
+                dnam{"پیکومتر"}
                 one{"{0}pm"}
                 other{"{0}pm"}
             }
@@ -940,19 +989,46 @@ fa{
                 dnam{"گرم"}
                 one{"{0} گرم"}
                 other{"{0} گرم"}
+                per{"{0} در گرم"}
             }
             kilogram{
                 dnam{"کیلوگرم"}
                 one{"{0}kg"}
                 other{"{0}kg"}
+                per{"{0}/kg"}
+            }
+            metric-ton{
+                dnam{"تن متریک"}
+                one{"{0} تن"}
+                other{"{0} تن"}
+            }
+            microgram{
+                dnam{"میکروگرم"}
+            }
+            milligram{
+                dnam{"میلی‌گرم"}
+                one{"{0} mg"}
+                other{"{0} mg"}
             }
             ounce{
+                dnam{"اونس"}
                 one{"{0}oz"}
                 other{"{0}oz"}
+                per{"{0} در اونس"}
             }
             pound{
+                dnam{"پوند"}
                 one{"{0}lb"}
                 other{"{0}lb"}
+                per{"{0} در پوند"}
+            }
+            stone{
+                dnam{"سنگ"}
+                one{"{0} سنگ"}
+                other{"{0} سنگ"}
+            }
+            ton{
+                dnam{"تن"}
             }
         }
         power{
@@ -971,16 +1047,29 @@ fa{
         }
         pressure{
             hectopascal{
+                dnam{"هکتوپاسکال"}
                 one{"{0}hPa"}
                 other{"{0}hPa"}
             }
             inch-hg{
+                dnam{"اینچ جیوه"}
                 one{"{0}inHg"}
                 other{"{0}inHg"}
             }
             millibar{
+                dnam{"میلی‌بار"}
                 one{"{0}mbar"}
                 other{"{0}mbar"}
+            }
+            millimeter-of-mercury{
+                dnam{"میلی‌متر جیوه"}
+                one{"{0} م‌م جیوه"}
+                other{"{0} م‌م جیوه"}
+            }
+            pound-per-square-inch{
+                dnam{"پوند در اینچ مربع"}
+                one{"{0}‎ psi"}
+                other{"{0}‎ psi"}
             }
         }
         speed{
@@ -989,11 +1078,18 @@ fa{
                 one{"{0}‎ km/h"}
                 other{"{0}‎ km/h"}
             }
+            knot{
+                dnam{"گره"}
+                one{"{0} گره"}
+                other{"{0} گره"}
+            }
             meter-per-second{
+                dnam{"متر در ثانیه"}
                 one{"{0}m/s"}
                 other{"{0}m/s"}
             }
             mile-per-hour{
+                dnam{"مایل در ساعت"}
                 one{"{0}mph"}
                 other{"{0}mph"}
             }
@@ -1008,6 +1104,11 @@ fa{
                 dnam{"‎°F"}
                 one{"{0}°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             kelvin{
                 dnam{"K"}
@@ -1040,8 +1141,8 @@ fa{
             }
             meter-per-second-squared{
                 dnam{"متر/مجذور ثانیه"}
-                one{"{0} m/s²"}
-                other{"{0} m/s²"}
+                one{"{0}<LRM> m/s²"}
+                other{"{0}<LRM> m/s²"}
             }
         }
         angle{
@@ -1453,6 +1554,11 @@ fa{
                 dnam{"پیکومتر"}
                 one{"{0} پیکومتر"}
                 other{"{0} پیکومتر"}
+            }
+            point{
+                dnam{"امتیاز"}
+                one{"{0} امتیاز"}
+                other{"{0} امتیاز"}
             }
             yard{
                 dnam{"یارد"}

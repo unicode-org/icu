@@ -9,7 +9,7 @@ ig{
         KM{"Comorosu"}
         LY{"Libyia"}
         MV{"Maldivesa"}
-        NG{"Nigeria"}
+        NG{"Naịjịrịa"}
     }
-    Version{"2.1.34.45"}
+    Version{"2.1.37.1"}
 }

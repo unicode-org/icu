@@ -263,6 +263,10 @@ yue_Hans{
             "CLP",
             "智利披索",
         }
+        CNH{
+            "CNH",
+            "人民币 (离岸)",
+        }
         CNX{
             "CNX",
             "CNX",
@@ -1494,6 +1498,9 @@ yue_Hans{
         CLP{
             other{"智利披索"}
         }
+        CNH{
+            other{"人民币 (离岸)"}
+        }
         CNY{
             other{"人民币"}
         }
@@ -2194,5 +2201,5 @@ yue_Hans{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0"}
+    Version{"2.1.37.8"}
 }

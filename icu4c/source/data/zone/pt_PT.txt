@@ -1,16 +1,34 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pt_PT{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.6"}
     zoneStrings{
+        "Africa:Addis_Ababa"{
+            ec{"Adis-Abeba"}
+        }
+        "Africa:Bamako"{
+            ec{"Bamaco"}
+        }
+        "Africa:Dakar"{
+            ec{"Dacar"}
+        }
         "Africa:Djibouti"{
             ec{"Jibuti"}
         }
-        "Africa:Johannesburg"{
-            ec{"Joanesburgo"}
+        "Africa:Kampala"{
+            ec{"Campala"}
+        }
+        "Africa:Lusaka"{
+            ec{"Lusaca"}
         }
         "Africa:Nairobi"{
             ec{"Nairobi"}
+        }
+        "Africa:Ndjamena"{
+            ec{"Ndjamena"}
+        }
+        "Africa:Niamey"{
+            ec{"Niamei"}
         }
         "Africa:Porto-Novo"{
             ec{"Porto-Novo"}
@@ -33,6 +51,9 @@ pt_PT{
         "America:Bahia"{
             ec{"Baía"}
         }
+        "America:Bahia_Banderas"{
+            ec{"Bahia Banderas"}
+        }
         "America:Cancun"{
             ec{"Cancun"}
         }
@@ -45,23 +66,26 @@ pt_PT{
         "America:Dominica"{
             ec{"Domínica"}
         }
-        "America:Monterrey"{
-            ec{"Monterrey"}
-        }
         "America:Montevideo"{
             ec{"Montevideu"}
         }
+        "America:Montserrat"{
+            ec{"Monserrate"}
+        }
         "America:New_York"{
             ec{"Nova Iorque"}
-        }
-        "America:North_Dakota:Center"{
-            ec{"Center, Dakota do Norte"}
         }
         "America:Port-au-Prince"{
             ec{"Port-au-Prince"}
         }
         "America:Port_of_Spain"{
             ec{"Porto de Espanha"}
+        }
+        "America:St_Johns"{
+            ec{"St. John’s"}
+        }
+        "America:St_Thomas"{
+            ec{"St. Thomas"}
         }
         "Antarctica:Syowa"{
             ec{"Syowa"}
@@ -93,8 +117,14 @@ pt_PT{
         "Asia:Kuala_Lumpur"{
             ec{"Kuala Lumpur"}
         }
+        "Asia:Kuwait"{
+            ec{"Koweit"}
+        }
         "Asia:Makassar"{
             ec{"Macassar"}
+        }
+        "Asia:Qatar"{
+            ec{"Catar"}
         }
         "Asia:Saigon"{
             ec{"Cidade de Ho Chi Minh"}
@@ -114,11 +144,11 @@ pt_PT{
         "Atlantic:Faeroe"{
             ec{"Faroé"}
         }
-        "Atlantic:Reykjavik"{
-            ec{"Reiquiavique"}
-        }
         "Australia:Lord_Howe"{
             ec{"Ilha de Lord Howe"}
+        }
+        "Etc:UTC"{
+            ls{"Hora Coordenada Universal"}
         }
         "Europe:Amsterdam"{
             ec{"Amesterdão"}
@@ -164,6 +194,9 @@ pt_PT{
         }
         "Indian:Mauritius"{
             ec{"Maurícia"}
+        }
+        "Pacific:Apia"{
+            ec{"Apia"}
         }
         "Pacific:Easter"{
             ec{"Ilha da Páscoa"}
@@ -346,12 +379,12 @@ pt_PT{
             ls{"Hora padrão de Cabo Verde"}
         }
         "meta:Chamorro"{
-            ls{"Hora padrão do Chamorro"}
+            ls{"Hora padrão de Chamorro"}
         }
         "meta:Chatham"{
-            ld{"Hora de verão do Chatham"}
-            lg{"Hora do Chatham"}
-            ls{"Hora padrão do Chatham"}
+            ld{"Hora de verão de Chatham"}
+            lg{"Hora de Chatham"}
+            ls{"Hora padrão de Chatham"}
         }
         "meta:Chile"{
             ld{"Hora de verão do Chile"}
@@ -654,7 +687,7 @@ pt_PT{
             ls{"Hora padrão da Terra Nova"}
         }
         "meta:Niue"{
-            ls{"Hora de Niue"}
+            ls{"Hora de Niuê"}
         }
         "meta:Norfolk"{
             ls{"Hora da Ilha Norfolk"}

@@ -44,7 +44,7 @@ ro{
         ar{"arabă"}
         ar_001{"arabă standard modernă"}
         arc{"aramaică"}
-        arn{"araucaniană"}
+        arn{"mapuche"}
         arp{"arapaho"}
         arw{"arawak"}
         as{"asameză"}
@@ -373,7 +373,7 @@ ro{
         oc{"occitană"}
         oj{"ojibwa"}
         om{"oromo"}
-        or{"oriya"}
+        or{"odia"}
         os{"osetă"}
         osa{"osage"}
         ota{"turcă otomană"}
@@ -401,7 +401,6 @@ ro{
         rm{"romanșă"}
         rn{"kirundi"}
         ro{"română"}
-        ro_MD{"moldovenească"}
         rof{"rombo"}
         rom{"romani"}
         root{"root"}
@@ -434,7 +433,7 @@ ro{
         shi{"tachelhit"}
         shn{"shan"}
         shu{"arabă ciadiană"}
-        si{"singaleză"}
+        si{"singhaleză"}
         sid{"sidamo"}
         sk{"slovacă"}
         sl{"slovenă"}
@@ -580,7 +579,7 @@ ro{
         Hant{"tradițională"}
         Hebr{"ebraică"}
         Hira{"hiragana"}
-        Hrkt{"katakana sau hiragana"}
+        Hrkt{"silabică japoneză"}
         Hung{"maghiară veche"}
         Inds{"indus"}
         Ital{"italică veche"}
@@ -645,6 +644,7 @@ ro{
             indian{"calendar național indian"}
             islamic{"calendar islamic"}
             islamic-civil{"calendar islamic civil"}
+            islamic-umalqura{"calendar islamic (Umm al-Qura)"}
             iso8601{"calendar ISO-8601"}
             japanese{"calendar japonez"}
             persian{"calendar persan"}
@@ -688,6 +688,7 @@ ro{
         }
         collation{
             big5han{"sortare pentru chineza tradițională - Big5"}
+            compat{"ordine de sortare anterioară, pentru compatibilitate"}
             dictionary{"Ordine de sortare a dicționarului"}
             ducet{"ordine de sortare Unicode implicită"}
             eor{"regulile europene de sortare"}
@@ -710,7 +711,7 @@ ro{
         }
         hc{
             h11{"sistem cu 12 ore (0–11)"}
-            h12{"sistem cu 12 ore (0–12)"}
+            h12{"sistem cu 12 ore (1–12)"}
             h23{"sistem cu 24 de ore (0–23)"}
             h24{"sistem cu 24 de ore (1–24)"}
         }
@@ -720,8 +721,8 @@ ro{
             strict{"stil strict de întrerupere a liniei"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"transliterare BGN SUA"}
+            ungegn{"transliterare GEGN ONU"}
         }
         ms{
             metric{"sistemul metric"}
@@ -762,7 +763,7 @@ ro{
             orya{"cifre oriya"}
             roman{"numerale romane"}
             romanlow{"numerale romane cu minuscule"}
-            taml{"numerale tradiționale tamilă"}
+            taml{"numerale tradiționale tamile"}
             tamldec{"cifre tamile"}
             telu{"cifre telugu"}
             thai{"cifre thailandeze"}
@@ -776,7 +777,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} – toate"}
         category-list{"{0}: {1}"}
@@ -786,7 +787,7 @@ ro{
         historic{"{0} – istorice"}
         miscellaneous{"{0} – diverse"}
         other{"{0} – altele"}
-        scripts{"Scrieri – {0}"}
+        scripts{"scrieri – {0}"}
         strokes{
             few{"{0} trasări"}
             one{"{0} trasare"}

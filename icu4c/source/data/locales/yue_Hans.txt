@@ -3,8 +3,8 @@
 yue_Hans{
     %%Parent{"root"}
     AuxExemplarCharacters{
-        "[峇 卑 碑 卞 灿 蚩 绰 茨 堤 狄 兑 伏 甫 赣 墎 瑚 浑 礁 咀 嘅 仂 栗 琳 陇 侣 芒 苗 闽 谬 涅 澎 蓬 酋 裘 券 壤 蜀 霜"
-        " 僳 昙 湘 楔 斜 勋 巽 茵 屿 乍 兆 蛰 昼 孜 佐]"
+        "[乍 仂 伏 佐 侣 僳 兆 兑 券 勋 卑 卞 咀 嘅 堤 墎 壤 孜 屿 峇 巽 斜 昙 昼 栗 楔 浑 涅 湘 澎 灿 狄 琳 瑚 甫 碑 礁 绰"
+        " 芒 苗 茨 茵 蓬 蚩 蛰 蜀 裘 谬 赣 酋 闽 陇 霜]"
     }
     Ellipsis{
         final{"{0}…"}
@@ -70,6 +70,7 @@ yue_Hans{
         " 黄 黎 黑 默 鼓 鼠 鼻 齐 齿 龄 龙 龟]"
     }
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
+    ExemplarCharactersNumbers{"[\\- , . % ‰ + 0 1 2 3 4 5 6 7 8 9 〇 一 七 三 九 二 五 八 六 四]"}
     ExemplarCharactersPunctuation{
         "[﹉﹊﹋﹌ _ ＿ ﹍﹎﹏ ︳︴ \\- － ﹣ ‐ – — ︱ ― , ， ﹐ 、 ﹑ ; ； ﹔ \\: ： ﹕ ! ！ ﹗ ? ？ ﹖ . ． ﹒"
         " ‥ ︰ … 。 · ＇ ‘ ’ \u0022 ＂ “ ” 〝 〞 ( （ ﹙ ︵ ) ） ﹚ ︶ \\[ ［ \\] ］ \\{ ｛ ﹛ ︷ \\} "
@@ -78,39 +79,6 @@ yue_Hans{
     }
     MoreInformation{"？"}
     NumberElements{
-        arab{
-            patterns{
-                currencyFormat{"¤#,##0.00"}
-                percentFormat{"#,##0%"}
-            }
-            symbols{
-                decimal{"٫"}
-                exponential{"اس"}
-                group{"٬"}
-                infinity{"∞"}
-                list{"؛"}
-                nan{"NaN"}
-                perMille{"؉"}
-                superscriptingExponent{"×"}
-                timeSeparator{":"}
-            }
-        }
-        arabext{
-            symbols{
-                decimal{"٫"}
-                exponential{"×۱۰^"}
-                group{"٬"}
-                infinity{"∞"}
-                list{"؛"}
-                minusSign{"‎-‎"}
-                nan{"NaN"}
-                perMille{"؉"}
-                percentSign{"٪"}
-                plusSign{"‎+‎"}
-                superscriptingExponent{"×"}
-                timeSeparator{"٫"}
-            }
-        }
         default{"latn"}
         finance{"hansfin"}
         hanidec{
@@ -290,7 +258,7 @@ yue_Hans{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.0"}
+    Version{"2.1.37.8"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -309,6 +277,11 @@ yue_Hans{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d日（E）"}
+                Gy{"Gy年"}
+                GyMMM{"Gy年M月"}
+                GyMMMEd{"Gy年M月d日E"}
+                GyMMMd{"Gy年M月d日"}
                 M{"M月"}
                 MEd{"M-dE"}
                 MMM{"LLL"}
@@ -525,13 +498,6 @@ yue_Hans{
                 }
             }
             intervalFormats{
-                H{
-                    H{"HH至HH"}
-                }
-                Hm{
-                    H{"HH:mm至HH:mm"}
-                    m{"HH:mm至HH:mm"}
-                }
                 Hmv{
                     H{"HH:mm至HH:mm v"}
                     m{"HH:mm至HH:mm v"}
@@ -552,6 +518,9 @@ yue_Hans{
                 MMMEd{
                     M{"MMMd日E至MMMd日E"}
                     d{"MMMd日E至d日E"}
+                }
+                MMMM{
+                    M{"LLLL至LLLL"}
                 }
                 MMMd{
                     M{"MMMd日至MMMd日"}
@@ -1037,12 +1006,6 @@ yue_Hans{
             }
         }
         ethiopic{
-            eras{
-                wide{
-                    "埃塞俄比亚历前",
-                    "埃塞俄比亚历",
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -1140,13 +1103,6 @@ yue_Hans{
                 }
             }
         }
-        ethiopic-amete-alem{
-            eras{
-                wide{
-                    "埃塞俄比亚阿米特阿莱姆历",
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "zzzz ah:mm:ss",
@@ -1164,8 +1120,17 @@ yue_Hans{
                 "{1} {0}",
             }
             availableFormats{
+                Bh{"Bh时"}
+                Bhm{"Bh:mm"}
+                Bhms{"Bh:mm:ss"}
                 E{"ccc"}
+                EBhm{"E h:mm B"}
+                EBhms{"E h:mm:ss B"}
+                EHm{"E HH:mm"}
+                EHms{"E HH:mm:ss"}
                 Ed{"d日E"}
+                Ehm{"ah:mmE"}
+                Ehms{"ah:mm:ssE"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年MM月"}
                 GyMMMEd{"Gy年MM月d日E"}
@@ -1203,7 +1168,6 @@ yue_Hans{
                 }
                 Hm{
                     H{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
                     H{"v HH:mm – HH:mm"}
@@ -1225,6 +1189,9 @@ yue_Hans{
                 MMMEd{
                     M{"M月d日E至M月d日E"}
                     d{"M月d日E至d日E"}
+                }
+                MMMM{
+                    M{"LLLL至LLLL"}
                 }
                 MMMd{
                     M{"M月d日至M月d日"}
@@ -1325,7 +1292,12 @@ yue_Hans{
                 Timezone{"{1}{0}"}
             }
             availableFormats{
+                Bh{"Bh时"}
+                Bhm{"Bh:mm"}
+                Bhms{"Bh:mm:ss"}
                 E{"ccc"}
+                EBhm{"E Bh:mm"}
+                EBhms{"E Bh:mm:ss"}
                 EHm{"EHH:mm"}
                 EHms{"EHH:mm:ss"}
                 Ed{"d日E"}
@@ -1571,6 +1543,9 @@ yue_Hans{
                 MMMEd{
                     M{"M月d日E至M月d日E"}
                     d{"M月d日E至d日E"}
+                }
+                MMMM{
+                    M{"LLLL至LLLL"}
                 }
                 MMMd{
                     M{"M月d日至M月d日"}
@@ -2009,6 +1984,11 @@ yue_Hans{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d日（E）"}
+                Gy{"Gy年"}
+                GyMMM{"Gy年M月"}
+                GyMMMEd{"Gy年M月d日E"}
+                GyMMMd{"Gy年M月d日"}
                 M{"M月"}
                 MEd{"M-dE"}
                 MMM{"LLL"}
@@ -2017,6 +1997,17 @@ yue_Hans{
                 MMMd{"M月d日"}
                 Md{"M-d"}
                 d{"d日"}
+                y{"Gy年"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy/M"}
+                yyyyMEd{"Gy/M/d（E）"}
+                yyyyMMM{"Gy年M月"}
+                yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMMMM{"Gy年M月"}
+                yyyyMMMd{"Gy年M月d日"}
+                yyyyMd{"Gy/M/d"}
+                yyyyQQQ{"Gy年QQQ"}
+                yyyyQQQQ{"Gy年QQQQ"}
             }
             eras{
                 abbreviated{
@@ -2559,10 +2550,13 @@ yue_Hans{
         activities{"活动"}
         african_scripts{"非洲字体"}
         american_scripts{"美洲字体"}
+        animal{"动物"}
         animals_nature{"动物和大自然"}
         arrows{"箭咀"}
+        body{"身体"}
         box_drawing{"绘画箱"}
         braille{"突字"}
+        building{"建筑"}
         bullets_stars{"列点/星号"}
         consonantal_jamo{"辅音字母"}
         currency_symbols{"货币符号"}
@@ -2575,6 +2569,8 @@ yue_Hans{
         east_asian_scripts{"东亚字体"}
         emoji{"表情符号"}
         european_scripts{"欧洲字体"}
+        female{"女士"}
+        flag{"旗"}
         flags{"旗"}
         food_drink{"食物和饮品"}
         format{"格式"}
@@ -2587,43 +2583,54 @@ yue_Hans{
         hanja{"汉字"}
         hanzi_simplified{"汉字 (简体)"}
         hanzi_traditional{"汉字 (繁体)"}
+        heart{"心"}
         historic_scripts{"古代字体"}
         ideographic_desc_characters{"汉字结构描述字符"}
         japanese_kana{"日文假名"}
         kanbun{"日本汉文"}
         kanji{"日本汉字"}
+        keycap{"键帽"}
         leftwards_arrows{"向左箭咀"}
         leftwards_rightwards_arrows{"向左和向右箭咀"}
         letterlike_symbols{"字母符号"}
         limited_use{"限制使用"}
+        male{"男士"}
         math_symbols{"数学符号"}
         middle_eastern_scripts{"中东字体"}
         miscellaneous{"其他"}
         modern_scripts{"现代字体"}
         modifier{"修饰符"}
         musical_symbols{"音乐符号"}
+        nature{"自然"}
         nonspacing{"非间距"}
         numbers{"数字"}
         objects{"物件"}
         other{"其他"}
         paired{"配对"}
+        person{"人物"}
         phonetic_alphabet{"拼音字母"}
         pictographs{"象形文字"}
+        place{"地方"}
+        plant{"植物"}
         punctuation{"标点符号"}
         rightwards_arrows{"向右箭咀"}
         sign_standard_symbols{"标记/标准符号"}
         small_form_variant{"小写变体"}
+        smiley{"表情符号"}
         smileys_people{"表情符号与人"}
         south_asian_scripts{"南亚字体"}
         southeast_asian_scripts{"东南亚字体"}
         spacing{"空位"}
+        sport{"体育"}
         symbols{"符号"}
         technical_symbols{"技术符号"}
         tone_marks{"声调符号"}
+        travel{"旅游"}
         travel_places{"旅游和地点"}
         upwards_arrows{"向上箭咀"}
         variant_forms{"变化型"}
         vocalic_jamo{"元音字母"}
+        weather{"天气"}
         western_asian_scripts{"西亚字体"}
         whitespace{"空白"}
     }
@@ -2674,10 +2681,31 @@ yue_Hans{
                 }
             }
         }
+        dayOfYear{
+            dn{"年日"}
+        }
+        dayOfYear-narrow{
+            dn{"年日"}
+        }
+        dayOfYear-short{
+            dn{"年日"}
+        }
         dayperiod{
             dn{"上午/下午"}
         }
+        dayperiod-narrow{
+            dn{"上午/下午"}
+        }
+        dayperiod-short{
+            dn{"上午/下午"}
+        }
         era{
+            dn{"年代"}
+        }
+        era-narrow{
+            dn{"年代"}
+        }
+        era-short{
             dn{"年代"}
         }
         fri{
@@ -3230,8 +3258,32 @@ yue_Hans{
                 }
             }
         }
+        weekOfMonth{
+            dn{"月周"}
+        }
+        weekOfMonth-narrow{
+            dn{"月周"}
+        }
+        weekOfMonth-short{
+            dn{"月周"}
+        }
         weekday{
             dn{"周天"}
+        }
+        weekday-narrow{
+            dn{"周天"}
+        }
+        weekday-short{
+            dn{"周天"}
+        }
+        weekdayOfMonth{
+            dn{"月平日"}
+        }
+        weekdayOfMonth-narrow{
+            dn{"月平日"}
+        }
+        weekdayOfMonth-short{
+            dn{"月平日"}
         }
         year{
             dn{"年"}
@@ -3274,8 +3326,20 @@ yue_Hans{
         zone{
             dn{"时区"}
         }
+        zone-narrow{
+            dn{"时区"}
+        }
+        zone-short{
+            dn{"时区"}
+        }
     }
     listPattern{
+        or{
+            2{"{0} 或 {1}"}
+            end{"{0} 或 {1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
         standard{
             2{"{0}同{1}"}
             end{"{0}同{1}"}

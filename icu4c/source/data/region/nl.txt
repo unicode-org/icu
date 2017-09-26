@@ -89,7 +89,7 @@ nl{
         CW{"Curaçao"}
         CX{"Christmaseiland"}
         CY{"Cyprus"}
-        CZ{"Tsjechische Republiek"}
+        CZ{"Tsjechië"}
         DE{"Duitsland"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
@@ -106,6 +106,7 @@ nl{
         ES{"Spanje"}
         ET{"Ethiopië"}
         EU{"Europese Unie"}
+        EZ{"eurozone"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falklandeilanden"}
@@ -143,7 +144,7 @@ nl{
         IL{"Israël"}
         IM{"Isle of Man"}
         IN{"India"}
-        IO{"Britse Gebieden in de Indische Oceaan"}
+        IO{"Brits Indische Oceaanterritorium"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"IJsland"}
@@ -272,7 +273,7 @@ nl{
         UA{"Oekraïne"}
         UG{"Oeganda"}
         UM{"Kleine afgelegen eilanden van de Verenigde Staten"}
-        UN{"verenigde naties"}
+        UN{"Verenigde Naties"}
         US{"Verenigde Staten"}
         UY{"Uruguay"}
         UZ{"Oezbekistan"}
@@ -298,15 +299,17 @@ nl{
         HK{"Hongkong"}
         MO{"Macau"}
         PS{"Palestina"}
-        UN{"vn"}
+        UN{"VN"}
         US{"VS"}
     }
     Countries%variant{
         CD{"Congo (DRC)"}
         CG{"Congo (Republiek)"}
-        CZ{"Tsjechië"}
+        CI{"Republiek Ivoorkust"}
+        CZ{"Tsjechische Republiek"}
         FK{"Falklandeilanden (Islas Malvinas)"}
         MK{"Macedonië (FYROM)"}
+        TL{"Democratische Republiek Oost-Timor"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
 }

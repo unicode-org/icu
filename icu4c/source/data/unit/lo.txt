@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 lo{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -354,6 +354,10 @@ lo{
             picometer{
                 dnam{"ປິໂກແມັດ"}
                 other{"{0} ປິໂກແມັດ"}
+            }
+            point{
+                dnam{"ຈຸດ"}
+                other{"{0} ຈຸດ"}
             }
             yard{
                 dnam{"ຫລາ"}
@@ -1148,6 +1152,10 @@ lo{
             picometer{
                 dnam{"ປມ"}
                 other{"{0} ປມ"}
+            }
+            point{
+                dnam{"ຈຸດ"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"ຫລາ"}

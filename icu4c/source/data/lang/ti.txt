@@ -96,9 +96,23 @@ ti{
         yi{"ዪዲሽ"}
         zu{"ዙሉኛ"}
     }
+    Languages%short{
+        en_GB{"እንግሊዝኛ (GB)"}
+        en_US{"እንግሊዝኛ (US)"}
+    }
     Scripts{
         Ethi{"ፊደል"}
         Latn{"ላቲን"}
     }
-    Version{"2.1.34.45"}
+    Version{"2.1.37.5"}
+    codePatterns{
+        language{"{0}"}
+        script{"{0}"}
+        territory{"{0}"}
+    }
+    localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
+        pattern{"{0} ({1})"}
+        separator{"{0}, {1}"}
+    }
 }

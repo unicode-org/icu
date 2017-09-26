@@ -106,6 +106,7 @@ sv{
         ES{"Spanien"}
         ET{"Etiopien"}
         EU{"Europeiska unionen"}
+        EZ{"eurozonen"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falklandsöarna"}
@@ -131,7 +132,7 @@ sv{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong, S.A.R. Kina"}
+        HK{"Hongkong"}
         HM{"Heardön och McDonaldöarna"}
         HN{"Honduras"}
         HR{"Kroatien"}
@@ -185,7 +186,7 @@ sv{
         ML{"Mali"}
         MM{"Myanmar (Burma)"}
         MN{"Mongoliet"}
-        MO{"Macao, S.A.R. Kina"}
+        MO{"Macao"}
         MP{"Nordmarianerna"}
         MQ{"Martinique"}
         MR{"Mauretanien"}
@@ -306,5 +307,5 @@ sv{
         CG{"Republiken Kongo"}
         MK{"f.d. jugoslaviska republiken Makedonien"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
 }

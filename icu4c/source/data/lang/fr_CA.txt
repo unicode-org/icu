@@ -4,7 +4,6 @@ fr_CA{
     Languages{
         ady{"adygué"}
         ang{"vieil anglais"}
-        arn{"araukan"}
         az{"azerbaïdjanais"}
         bez{"bena"}
         bik{"bicol"}
@@ -21,9 +20,11 @@ fr_CA{
         frc{"cajun"}
         goh{"vieux haut-allemand"}
         gu{"gujarati"}
+        ii{"yi de Sichuan"}
         ilo{"ilocano"}
         kbd{"kabarde"}
         ken{"kenyang"}
+        kj{"kuanyama"}
         kl{"kalaallisut"}
         ksh{"kölsch"}
         liv{"live"}
@@ -31,6 +32,7 @@ fr_CA{
         lzh{"chinois classique"}
         mgo{"meta’"}
         mwr{"marwari"}
+        mwv{"mentawai"}
         nds{"bas allemand"}
         nds_NL{"bas saxon"}
         njo{"ao naga"}
@@ -65,7 +67,6 @@ fr_CA{
         Gujr{"gujarati"}
         Hanb{"hanb"}
         Hrkt{"syllabaires japonais"}
-        Jamo{"jamo"}
         Orya{"odia"}
         Zsye{"zsye"}
     }
@@ -76,11 +77,17 @@ fr_CA{
     Types{
         calendar{
             ethiopic-amete-alem{"Calendrier éthiopien de l’An de grâce"}
+            islamic-umalqura{"calendrier musulman (calculé, Umm al-Qura)"}
         }
         collation{
             dictionary{"Ordre de tri du dictionnaire"}
+            eor{"ordre multilingue européen"}
             reformed{"Ordre de tri réformé"}
             searchjl{"Rechercher par consonne initiale en hangeul"}
+        }
+        m0{
+            bgn{"BGN (commission de toponymie des États-Unis)"}
+            ungegn{"GENUNG"}
         }
         numbers{
             gujr{"chiffres gujaratis"}
@@ -88,5 +95,8 @@ fr_CA{
             taml{"chiffres tamouls traditionnels"}
         }
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.22"}
+    characterLabelPattern{
+        category-list{"{0} : {1}"}
+    }
 }

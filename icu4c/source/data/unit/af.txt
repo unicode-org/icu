@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 af{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -429,6 +429,11 @@ af{
                 dnam{"pikometer"}
                 one{"{0} pikometer"}
                 other{"{0} pikometer"}
+            }
+            point{
+                dnam{"punte"}
+                one{"{0} punt"}
+                other{"{0} punte"}
             }
             yard{
                 dnam{"jaart"}
@@ -1393,6 +1398,11 @@ af{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"punte"}
+                one{"{0} pt."}
+                other{"{0} pt."}
             }
             yard{
                 dnam{"jaart"}

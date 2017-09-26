@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ur{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.28"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -65,9 +65,9 @@ ur{
                 per{"{0} فی مربع سینٹی میٹر"}
             }
             square-foot{
-                dnam{"سکویر فٹ"}
-                one{"{0} سکویر فٹ"}
-                other{"{0} سکویر فٹ"}
+                dnam{"مربع فٹ"}
+                one{"{0} مربع فٹ"}
+                other{"{0} مربع فٹ"}
             }
             square-inch{
                 dnam{"مربع انچ"}
@@ -76,21 +76,22 @@ ur{
                 per{"{0} فی مربع انچ"}
             }
             square-kilometer{
-                dnam{"سکویر کلو میٹر"}
-                one{"{0} سکویر کلو میٹر"}
-                other{"{0} سکویر کلو میٹر"}
-                per{"{0} فی سکویر کلو میٹر"}
+                dnam{"مربع کلو میٹر"}
+                one{"{0} مربع کلو میٹر"}
+                other{"{0} مربع کلو میٹر"}
+                per{"{0} فی مربع کلو میٹر"}
             }
             square-meter{
-                dnam{"سکویر میٹر"}
-                one{"{0} سکویر میٹر"}
-                other{"{0} سکویر میٹر"}
-                per{"{0} فی سکویر میٹر"}
+                dnam{"مربع میٹر"}
+                one{"{0} مربع میٹر"}
+                other{"{0} مربع میٹر"}
+                per{"{0} فی مربع میٹر"}
             }
             square-mile{
-                dnam{"سکویر میل"}
-                one{"{0} سکویر میل"}
-                other{"{0} سکویر میل"}
+                dnam{"مربع میل"}
+                one{"{0} مربع میل"}
+                other{"{0} مربع میل"}
+                per{"{0} فی مربع میل"}
             }
             square-yard{
                 dnam{"مربع گز"}
@@ -146,61 +147,61 @@ ur{
             }
         }
         coordinate{
-            east{"{0}E"}
-            north{"{0}N"}
-            south{"{0}S"}
-            west{"{0}W"}
+            east{"{0} مشرق"}
+            north{"{0} شمال"}
+            south{"{0} جنوب"}
+            west{"{0} مغرب"}
         }
         digital{
             bit{
-                dnam{"bit"}
-                one{"{0} bit"}
-                other{"{0} bit"}
+                dnam{"بٹس"}
+                one{"{0} بٹ"}
+                other{"{0} بٹس"}
             }
             byte{
-                dnam{"byte"}
-                one{"{0} byte"}
-                other{"{0} byte"}
+                dnam{"بائٹ"}
+                one{"{0} بائٹ"}
+                other{"{0} بائٹس"}
             }
             gigabit{
-                dnam{"Gb"}
-                one{"{0} Gb"}
-                other{"{0} Gb"}
+                dnam{"گیگابٹس"}
+                one{"{0} گیگابٹ"}
+                other{"{0} گیگابٹس"}
             }
             gigabyte{
-                dnam{"GB"}
-                one{"{0} GB"}
-                other{"{0} GB"}
+                dnam{"گیگابائٹس"}
+                one{"{0} گیگابائٹ"}
+                other{"{0} گیگابائٹ"}
             }
             kilobit{
-                dnam{"kb"}
-                one{"{0} kb"}
-                other{"{0} kb"}
+                dnam{"کلوبٹس"}
+                one{"{0} کلوبٹ"}
+                other{"{0} کلوبٹس"}
             }
             kilobyte{
-                dnam{"kB"}
-                one{"{0} kB"}
-                other{"{0} kB"}
+                dnam{"کلوبائٹس"}
+                one{"{0} کلوبائٹ"}
+                other{"{0} کلوبائٹس"}
             }
             megabit{
-                dnam{"Mb"}
-                one{"{0} Mb"}
-                other{"{0} Mb"}
+                dnam{"میگابٹس"}
+                one{"{0} میگابٹ"}
+                other{"{0} میگابٹس"}
             }
             megabyte{
-                dnam{"MB"}
-                one{"{0} MB"}
-                other{"{0} MB"}
+                dnam{"ميگابائٹس"}
+                one{"{0} میگابائٹ"}
+                other{"{0} ميگابائٹس"}
             }
             terabit{
-                dnam{"Tb"}
-                one{"{0} Tb"}
-                other{"{0} Tb"}
+                dnam{"ٹیرابٹس"}
+                one{"{0} ٹیرابٹ"}
+                other{"{0} ٹیرابٹس"}
             }
             terabyte{
-                dnam{"TB"}
-                one{"{0} TB"}
-                other{"{0} TB"}
+                dnam{"ٹیرابائٹس"}
+                one{"{0} ٹیرابائٹ"}
+                other{"{0} ٹیرابائٹ"}
             }
         }
         duration{
@@ -213,7 +214,7 @@ ur{
                 dnam{"دن"}
                 one{"{0} دن"}
                 other{"{0} دن"}
-                per{"{0}/d"}
+                per{"{0} فی دن"}
             }
             hour{
                 dnam{"گھنٹے"}
@@ -235,7 +236,7 @@ ur{
                 dnam{"منٹ"}
                 one{"{0} منٹ"}
                 other{"{0} منٹ"}
-                per{"{0}/min"}
+                per{"{0} فی منٹ"}
             }
             month{
                 dnam{"مہینے"}
@@ -258,7 +259,7 @@ ur{
                 dnam{"ہفتے"}
                 one{"{0} ہفتہ"}
                 other{"{0} ہفتے"}
-                per{"{0}/w"}
+                per{"{0} فی ہفتہ"}
             }
             year{
                 dnam{"سال"}
@@ -269,24 +270,24 @@ ur{
         }
         electric{
             ampere{
-                dnam{"amp"}
-                one{"{0} A"}
-                other{"{0} A"}
+                dnam{"ایمپیئر"}
+                one{"{0} ایمپیئر"}
+                other{"{0} ایمپیئر"}
             }
             milliampere{
-                dnam{"mA"}
-                one{"{0} mA"}
-                other{"{0} mA"}
+                dnam{"ملی ایمپیئر"}
+                one{"{0} ملی ایمپیئر"}
+                other{"{0} ملی ایمپیئر"}
             }
             ohm{
-                dnam{"ohm"}
-                one{"{0} Ω"}
-                other{"{0} Ω"}
+                dnam{"اوہم"}
+                one{"{0} اوہم"}
+                other{"{0} اوہم"}
             }
             volt{
-                dnam{"volt"}
-                one{"{0} V"}
-                other{"{0} V"}
+                dnam{"وولٹ"}
+                one{"{0} وولٹ"}
+                other{"{0} وولٹ"}
             }
         }
         energy{
@@ -323,24 +324,24 @@ ur{
         }
         frequency{
             gigahertz{
-                dnam{"GHz"}
-                one{"{0} GHz"}
-                other{"{0} GHz"}
+                dnam{"گیگاہرٹز"}
+                one{"{0} گیگاہرٹز"}
+                other{"{0} گیگاہرٹز"}
             }
             hertz{
-                dnam{"Hz"}
-                one{"{0} Hz"}
-                other{"{0} Hz"}
+                dnam{"ہرٹز"}
+                one{"{0} ہرٹز"}
+                other{"{0} ہرٹز"}
             }
             kilohertz{
-                dnam{"kHz"}
-                one{"{0} kHz"}
-                other{"{0} kHz"}
+                dnam{"کلوہرٹز"}
+                one{"{0} کلوہرٹز"}
+                other{"{0} کلوہرٹز"}
             }
             megahertz{
-                dnam{"MHz"}
-                one{"{0} MHz"}
-                other{"{0} MHz"}
+                dnam{"میگاہرٹز"}
+                one{"{0} میگاہرٹز"}
+                other{"{0} میگاہرٹز"}
             }
         }
         length{
@@ -429,6 +430,11 @@ ur{
                 one{"{0} پیکو میٹر"}
                 other{"{0} پیکو میٹر"}
             }
+            point{
+                dnam{"پوائنٹس"}
+                one{"{0} پوائنٹ"}
+                other{"{0} پوائنٹس"}
+            }
             yard{
                 dnam{"گز"}
                 one{"{0} یارڈ"}
@@ -492,6 +498,11 @@ ur{
                 other{"{0} پونڈ"}
                 per{"{0} فی پاؤنڈ"}
             }
+            stone{
+                dnam{"اسٹونز"}
+                one{"{0} اسٹون"}
+                other{"{0} اسٹونز"}
+            }
             ton{
                 dnam{"ٹن"}
                 one{"{0} ٹن"}
@@ -547,14 +558,14 @@ ur{
                 other{"{0} ملی بار"}
             }
             millimeter-of-mercury{
-                dnam{"mm Hg"}
-                one{"{0} mm Hg"}
-                other{"{0} mm Hg"}
+                dnam{"ملی میٹر مرکری"}
+                one{"{0} ملی میٹر مرکری"}
+                other{"{0} ملی میٹر مرکری"}
             }
             pound-per-square-inch{
-                dnam{"psi"}
-                one{"{0} psi"}
-                other{"{0} psi"}
+                dnam{"پاؤنڈز فی مربع انچ"}
+                one{"{0} پاؤنڈ فی مربع انچ"}
+                other{"{0} پاؤنڈز فی مربع انچ"}
             }
         }
         speed{
@@ -564,9 +575,9 @@ ur{
                 other{"{0} کلومیٹر فی گھنٹہ"}
             }
             knot{
-                dnam{"kn"}
-                one{"{0} kn"}
-                other{"{0} kn"}
+                dnam{"ناٹس"}
+                one{"{0} ناٹ"}
+                other{"{0} ناٹس"}
             }
             meter-per-second{
                 dnam{"میٹر فی سیکنڈ"}
@@ -797,11 +808,13 @@ ur{
                 dnam{"دن"}
                 one{"{0} دن"}
                 other{"{0} دن"}
+                per{"{0} فی دن"}
             }
             hour{
                 dnam{"گھنٹہ"}
                 one{"{0} گھنٹہ"}
                 other{"{0} گھنٹے"}
+                per{"{0} فی گھنٹہ"}
             }
             millisecond{
                 dnam{"ملی سیکنڈ"}
@@ -812,6 +825,7 @@ ur{
                 dnam{"منٹ"}
                 one{"{0} منٹ"}
                 other{"{0} منٹ"}
+                per{"{0} فی منٹ"}
             }
             month{
                 dnam{"مہینہ"}
@@ -820,8 +834,9 @@ ur{
             }
             second{
                 dnam{"سیکنڈ"}
-                one{"{0}s"}
-                other{"{0}s"}
+                one{"{0} سیکنڈ"}
+                other{"{0} سیکنڈ"}
+                per{"{0} فی سیکنڈ"}
             }
             week{
                 dnam{"ہفتہ"}
@@ -839,19 +854,30 @@ ur{
                 dnam{"سینٹی میٹر"}
                 one{"{0}cm"}
                 other{"{0}cm"}
+                per{"{0} فی سینٹی میٹر"}
+            }
+            decimeter{
+                dnam{"ڈیسی میٹر"}
+                one{"{0} dm"}
+                other{"{0} dm"}
             }
             foot{
+                dnam{"فیٹ"}
                 one{"{0}′"}
                 other{"{0}′"}
+                per{"{0} فی فیٹ"}
             }
             inch{
+                dnam{"انچ"}
                 one{"{0} انچ"}
                 other{"{0} انچ"}
+                per{"{0} فی انچ"}
             }
             kilometer{
                 dnam{"کلو میٹر"}
-                one{"{0}km"}
-                other{"{0}km"}
+                one{"{0} کلو میٹر"}
+                other{"{0} کلو میٹر"}
+                per{"{0} فی کلو میٹر"}
             }
             light-year{
                 one{"{0}ly"}
@@ -861,8 +887,10 @@ ur{
                 dnam{"میٹر"}
                 one{"{0} میٹر"}
                 other{"{0} میٹر"}
+                per{"{0} فی میٹر"}
             }
             mile{
+                dnam{"میل"}
                 one{"{0} میل"}
                 other{"{0} میل"}
             }
@@ -876,6 +904,7 @@ ur{
                 other{"{0}pm"}
             }
             yard{
+                dnam{"گز"}
                 one{"{0} یارڈ"}
                 other{"{0} یارڈ"}
             }
@@ -885,19 +914,28 @@ ur{
                 dnam{"گرام"}
                 one{"{0} گرام"}
                 other{"{0} گرام"}
+                per{"{0} فی گرام"}
             }
             kilogram{
                 dnam{"kg"}
                 one{"{0}kg"}
                 other{"{0}kg"}
+                per{"{0} فی کلو گرام"}
             }
             ounce{
+                dnam{"oz"}
                 one{"{0} ونس"}
                 other{"{0} ونس"}
+                per{"{0}/oz"}
             }
             pound{
                 one{"{0} پونڈ"}
                 other{"{0} پونڈ"}
+            }
+            stone{
+                dnam{"st"}
+                one{"{0} st"}
+                other{"{0} st"}
             }
         }
         power{
@@ -916,16 +954,29 @@ ur{
         }
         pressure{
             hectopascal{
+                dnam{"hPa"}
                 one{"{0}hPa"}
                 other{"{0}hPa"}
             }
             inch-hg{
+                dnam{"″ Hg"}
                 one{"{0} انچ مرکری"}
                 other{"{0} انچ مرکری"}
             }
             millibar{
+                dnam{"mbar"}
                 one{"{0}mb"}
                 other{"{0}mb"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                one{"{0} psi"}
+                other{"{0} psi"}
             }
         }
         speed{
@@ -935,10 +986,12 @@ ur{
                 other{"{0}kph"}
             }
             meter-per-second{
+                dnam{"میٹر فی سیکنڈ"}
                 one{"{0}m/s"}
                 other{"{0}m/s"}
             }
             mile-per-hour{
+                dnam{"میل فی گھنٹہ"}
                 one{"{0}mph"}
                 other{"{0}mph"}
             }
@@ -950,8 +1003,19 @@ ur{
                 other{"{0}‎°"}
             }
             fahrenheit{
+                dnam{"°F"}
                 one{"{0}‎°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            kelvin{
+                dnam{"K"}
+                one{"{0} K"}
+                other{"{0} K"}
             }
         }
         volume{
@@ -1030,9 +1094,9 @@ ur{
                 per{"{0}/cm²"}
             }
             square-foot{
-                dnam{"سکویر فٹ"}
-                one{"{0} سکویر فٹ"}
-                other{"{0} سکویر فٹ"}
+                dnam{"مربع فٹ"}
+                one{"{0} sq ft"}
+                other{"{0} sq ft"}
             }
             square-inch{
                 dnam{"مربع انچ"}
@@ -1047,15 +1111,16 @@ ur{
                 per{"{0}/km²"}
             }
             square-meter{
-                dnam{"سکویر میٹر"}
+                dnam{"مربع میٹر"}
                 one{"{0} m²"}
                 other{"{0} m²"}
                 per{"{0}/m²"}
             }
             square-mile{
-                dnam{"سکویر میل"}
-                one{"{0} سکویر میل"}
-                other{"{0} سکویر میل"}
+                dnam{"مربع میل"}
+                one{"{0} sq mi"}
+                other{"{0} sq mi"}
+                per{"{0}/mi²"}
             }
             square-yard{
                 dnam{"مربع گز"}
@@ -1105,6 +1170,7 @@ ur{
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
+                dnam{"miles/gal Imp."}
                 one{"{0} mpg Imp."}
                 other{"{0} mpg Imp."}
             }
@@ -1122,12 +1188,12 @@ ur{
                 other{"{0} bit"}
             }
             byte{
-                dnam{"byte"}
+                dnam{"بائٹ"}
                 one{"{0} byte"}
                 other{"{0} byte"}
             }
             gigabit{
-                dnam{"Gb"}
+                dnam{"Gbit"}
                 one{"{0} Gb"}
                 other{"{0} Gb"}
             }
@@ -1137,12 +1203,12 @@ ur{
                 other{"{0} GB"}
             }
             kilobit{
-                dnam{"kb"}
+                dnam{"kbit"}
                 one{"{0} kb"}
                 other{"{0} kb"}
             }
             kilobyte{
-                dnam{"kB"}
+                dnam{"kByte"}
                 one{"{0} kB"}
                 other{"{0} kB"}
             }
@@ -1152,12 +1218,12 @@ ur{
                 other{"{0} Mb"}
             }
             megabyte{
-                dnam{"MB"}
+                dnam{"MByte"}
                 one{"{0} MB"}
                 other{"{0} MB"}
             }
             terabit{
-                dnam{"Tb"}
+                dnam{"Tbit"}
                 one{"{0} Tb"}
                 other{"{0} Tb"}
             }
@@ -1177,7 +1243,7 @@ ur{
                 dnam{"دن"}
                 one{"{0} دن"}
                 other{"{0} دن"}
-                per{"{0}/d"}
+                per{"{0} فی دن"}
             }
             hour{
                 dnam{"گھنٹے"}
@@ -1199,7 +1265,7 @@ ur{
                 dnam{"منٹ"}
                 one{"{0} منٹ"}
                 other{"{0} منٹ"}
-                per{"{0}/min"}
+                per{"{0} فی منٹ"}
             }
             month{
                 dnam{"مہینے"}
@@ -1222,7 +1288,7 @@ ur{
                 dnam{"ہفتے"}
                 one{"{0} ہفتہ"}
                 other{"{0} ہفتے"}
-                per{"{0}/w"}
+                per{"{0} فی ہفتہ"}
             }
             year{
                 dnam{"سال"}
@@ -1233,22 +1299,22 @@ ur{
         }
         electric{
             ampere{
-                dnam{"amp"}
+                dnam{"amps"}
                 one{"{0} A"}
                 other{"{0} A"}
             }
             milliampere{
-                dnam{"mA"}
+                dnam{"milliamps"}
                 one{"{0} mA"}
                 other{"{0} mA"}
             }
             ohm{
-                dnam{"ohm"}
+                dnam{"اوہم"}
                 one{"{0} Ω"}
                 other{"{0} Ω"}
             }
             volt{
-                dnam{"volt"}
+                dnam{"وولٹ"}
                 one{"{0} V"}
                 other{"{0} V"}
             }
@@ -1333,14 +1399,14 @@ ur{
             inch{
                 dnam{"انچ"}
                 one{"{0} انچ"}
-                other{"{0} انچ"}
+                other{"{0} in"}
                 per{"{0}/in"}
             }
             kilometer{
                 dnam{"کلو میٹر"}
                 one{"{0} کلو میٹر"}
                 other{"{0} کلو میٹر"}
-                per{"{0}/km"}
+                per{"{0} فی کلو میٹر"}
             }
             light-year{
                 dnam{"نوری سال"}
@@ -1393,6 +1459,11 @@ ur{
                 one{"{0} پیکو میٹر"}
                 other{"{0} پیکو میٹر"}
             }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
             yard{
                 dnam{"گز"}
                 one{"{0} یارڈ"}
@@ -1414,14 +1485,14 @@ ur{
             }
             gram{
                 dnam{"گرام"}
-                one{"{0} گرام"}
-                other{"{0} گرام"}
+                one{"{0} g"}
+                other{"{0} g"}
                 per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
-                one{"{0} کلو گرام"}
-                other{"{0} کلو گرام"}
+                one{"{0} kg"}
+                other{"{0} kg"}
                 per{"{0}/kg"}
             }
             metric-ton{
@@ -1441,8 +1512,8 @@ ur{
             }
             ounce{
                 dnam{"oz"}
-                one{"{0} ونس"}
-                other{"{0} ونس"}
+                one{"{0} oz"}
+                other{"{0} oz"}
                 per{"{0}/oz"}
             }
             ounce-troy{
@@ -1452,9 +1523,14 @@ ur{
             }
             pound{
                 dnam{"پاؤنڈ"}
-                one{"{0} پونڈ"}
-                other{"{0} پونڈ"}
+                one{"{0} lb"}
+                other{"{0} lb"}
                 per{"{0}/lb"}
+            }
+            stone{
+                dnam{"st"}
+                one{"{0} st"}
+                other{"{0} st"}
             }
             ton{
                 dnam{"ٹن"}
@@ -1470,8 +1546,8 @@ ur{
             }
             horsepower{
                 dnam{"hp"}
-                one{"{0} ہارس پاور"}
-                other{"{0} ہارس پاور"}
+                one{"{0} hp"}
+                other{"{0} hp"}
             }
             kilowatt{
                 dnam{"kW"}
@@ -1501,14 +1577,14 @@ ur{
                 other{"{0} hPa"}
             }
             inch-hg{
-                dnam{"انچ مرکری"}
-                one{"{0} انچ مرکری"}
-                other{"{0} انچ مرکری"}
+                dnam{"inHg"}
+                one{"{0} inHg"}
+                other{"{0} inHg"}
             }
             millibar{
                 dnam{"mbar"}
-                one{"{0} ملی بار"}
-                other{"{0} ملی بار"}
+                one{"{0} mbar"}
+                other{"{0} mbar"}
             }
             millimeter-of-mercury{
                 dnam{"mm Hg"}

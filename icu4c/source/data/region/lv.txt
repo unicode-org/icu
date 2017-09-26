@@ -106,6 +106,7 @@ lv{
         ES{"Spānija"}
         ET{"Etiopija"}
         EU{"Eiropas Savienība"}
+        EZ{"Eirozona"}
         FI{"Somija"}
         FJ{"Fidži"}
         FK{"Folklenda salas"}
@@ -309,5 +310,5 @@ lv{
         FK{"Folklenda (Malvinu) salas"}
         MK{"bijusī Dienvidslāvijas Maķedonijas Republika"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
 }

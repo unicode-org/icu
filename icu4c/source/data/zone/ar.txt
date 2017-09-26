@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ar{
-    Version{"2.1.35.3"}
+    Version{"2.1.36.86"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"أبيدجان"}
@@ -166,7 +166,7 @@ ar{
             ec{"أنشوراج"}
         }
         "America:Anguilla"{
-            ec{"أنغيلا"}
+            ec{"أنغويلا"}
         }
         "America:Antigua"{
             ec{"أنتيغوا"}
@@ -250,7 +250,7 @@ ar{
             ec{"كايين"}
         }
         "America:Cayman"{
-            ec{"كيمان"}
+            ec{"كايمان"}
         }
         "America:Chicago"{
             ec{"شيكاغو"}
@@ -274,7 +274,7 @@ ar{
             ec{"كيابا"}
         }
         "America:Curacao"{
-            ec{"كوراكاو"}
+            ec{"كوراساو"}
         }
         "America:Danmarkshavn"{
             ec{"دانمرك شافن"}
@@ -442,7 +442,7 @@ ar{
             ec{"مدينة المكسيك"}
         }
         "America:Miquelon"{
-            ec{"ميكولن"}
+            ec{"مكويلون"}
         }
         "America:Moncton"{
             ec{"وينكتون"}
@@ -506,6 +506,9 @@ ar{
         }
         "America:Puerto_Rico"{
             ec{"بورتوريكو"}
+        }
+        "America:Punta_Arenas"{
+            ec{"بونتا أريناز"}
         }
         "America:Rainy_River"{
             ec{"راني ريفر"}
@@ -657,6 +660,9 @@ ar{
         "Asia:Ashgabat"{
             ec{"عشق آباد"}
         }
+        "Asia:Atyrau"{
+            ec{"أتيراو"}
+        }
         "Asia:Baghdad"{
             ec{"بغداد"}
         }
@@ -707,6 +713,9 @@ ar{
         }
         "Asia:Dushanbe"{
             ec{"دوشانبي"}
+        }
+        "Asia:Famagusta"{
+            ec{"فاماغوستا"}
         }
         "Asia:Gaza"{
             ec{"غزة"}
@@ -1076,6 +1085,9 @@ ar{
         "Europe:Sarajevo"{
             ec{"سراييفو"}
         }
+        "Europe:Saratov"{
+            ec{"ساراتوف"}
+        }
         "Europe:Simferopol"{
             ec{"سيمفروبول"}
         }
@@ -1390,9 +1402,9 @@ ar{
             ls{"توقيت أزورس الرسمي"}
         }
         "meta:Bangladesh"{
-            ld{"توقيت بنجلاديش الصيفي"}
-            lg{"توقيت بنجلاديش"}
-            ls{"توقيت بنجلاديش الرسمي"}
+            ld{"توقيت بنغلاديش الصيفي"}
+            lg{"توقيت بنغلاديش"}
+            ls{"توقيت بنغلاديش الرسمي"}
         }
         "meta:Bhutan"{
             ls{"توقيت بوتان"}
@@ -1622,7 +1634,7 @@ ar{
             ls{"توقيت كراسنويارسك الرسمي"}
         }
         "meta:Kyrgystan"{
-            ls{"توقيت قرغيزستان"}
+            ls{"توقيت قيرغيزستان"}
         }
         "meta:Line_Islands"{
             ls{"توقيت جزر لاين"}
@@ -1841,9 +1853,9 @@ ar{
             ls{"توقيت توفالو"}
         }
         "meta:Uruguay"{
-            ld{"توقيت أورغواي الصيفي"}
-            lg{"توقيت أورغواي"}
-            ls{"توقيت أورغواي الرسمي"}
+            ld{"توقيت أوروغواي الصيفي"}
+            lg{"توقيت أوروغواي"}
+            ls{"توقيت أوروغواي الرسمي"}
         }
         "meta:Uzbekistan"{
             ld{"توقيت أوزبكستان الصيفي"}
@@ -1888,8 +1900,8 @@ ar{
             ls{"توقيت يكاترينبورغ الرسمي"}
         }
         fallbackFormat{"{1} ({0})"}
-        gmtFormat{"جرينتش{0}"}
-        gmtZeroFormat{"جرينتش"}
+        gmtFormat{"غرينتش{0}"}
+        gmtZeroFormat{"غرينتش"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"توقيت {0}"}
         regionFormatDaylight{"توقيت {0} الصيفي"}

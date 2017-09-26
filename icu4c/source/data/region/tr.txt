@@ -62,7 +62,7 @@ tr{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivya"}
-        BQ{"Karayip Hollanda"}
+        BQ{"Karayip Hollandası"}
         BR{"Brezilya"}
         BS{"Bahamalar"}
         BT{"Butan"}
@@ -106,6 +106,7 @@ tr{
         ES{"İspanya"}
         ET{"Etiyopya"}
         EU{"Avrupa Birliği"}
+        EZ{"Euro Bölgesi"}
         FI{"Finlandiya"}
         FJ{"Fiji"}
         FK{"Falkland Adaları"}
@@ -123,7 +124,7 @@ tr{
         GL{"Grönland"}
         GM{"Gambiya"}
         GN{"Gine"}
-        GP{"Guadalupe"}
+        GP{"Guadeloupe"}
         GQ{"Ekvator Ginesi"}
         GR{"Yunanistan"}
         GS{"Güney Georgia ve Güney Sandwich Adaları"}
@@ -271,7 +272,7 @@ tr{
         TZ{"Tanzanya"}
         UA{"Ukrayna"}
         UG{"Uganda"}
-        UM{"ABD Uzak Adaları"}
+        UM{"ABD Küçük Harici Adaları"}
         UN{"Birleşmiş Milletler"}
         US{"Amerika Birleşik Devletleri"}
         UY{"Uruguay"}
@@ -306,7 +307,8 @@ tr{
         CG{"Kongo Cumhuriyeti"}
         CZ{"Çek Cumhuriyeti"}
         FK{"Falkland Adaları (Malvinas Adaları)"}
+        MK{"Makedonya (EYMC)"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
 }

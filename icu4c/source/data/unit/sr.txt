@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sr{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -139,7 +139,7 @@ sr{
             }
             part-per-million{
                 dnam{"честица на милион"}
-                few{"{0} честица на милион"}
+                few{"{0} честице на милион"}
                 one{"{0} честица на милион"}
                 other{"{0} честица на милион"}
             }
@@ -504,6 +504,12 @@ sr{
                 few{"{0} пикометра"}
                 one{"{0} пикометар"}
                 other{"{0} пикометара"}
+            }
+            point{
+                dnam{"pt"}
+                few{"{0} pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"јарди"}
@@ -1014,7 +1020,7 @@ sr{
                 other{"{0} сг"}
             }
             meter{
-                dnam{"метар"}
+                dnam{"m"}
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
@@ -1120,9 +1126,9 @@ sr{
         temperature{
             celsius{
                 dnam{"°C"}
-                few{"{0}°"}
-                one{"{0}°"}
-                other{"{0}°"}
+                few{"{0}°C"}
+                one{"{0}°C"}
+                other{"{0}°C"}
             }
             fahrenheit{
                 few{"{0}°F"}
@@ -1593,7 +1599,7 @@ sr{
                 other{"{0} сг"}
             }
             meter{
-                dnam{"метри"}
+                dnam{"m"}
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
@@ -1646,6 +1652,12 @@ sr{
                 few{"{0} pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                few{"{0} pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"јарди"}
@@ -1736,10 +1748,10 @@ sr{
                 other{"{0} GW"}
             }
             horsepower{
-                dnam{"кс"}
-                few{"{0} кс"}
-                one{"{0} кс"}
-                other{"{0} кс"}
+                dnam{"hp"}
+                few{"{0} hp"}
+                one{"{0} hp"}
+                other{"{0} hp"}
             }
             kilowatt{
                 dnam{"kW"}
@@ -1806,10 +1818,10 @@ sr{
                 other{"{0} km/h"}
             }
             knot{
-                dnam{"чв"}
-                few{"{0} чв"}
-                one{"{0} чв"}
-                other{"{0} чв"}
+                dnam{"kn"}
+                few{"{0} kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
             }
             meter-per-second{
                 dnam{"метри у секунди"}

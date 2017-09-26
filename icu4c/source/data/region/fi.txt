@@ -89,7 +89,7 @@ fi{
         CW{"Curaçao"}
         CX{"Joulusaari"}
         CY{"Kypros"}
-        CZ{"Tšekinmaa"}
+        CZ{"Tšekki"}
         DE{"Saksa"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
@@ -106,6 +106,7 @@ fi{
         ES{"Espanja"}
         ET{"Etiopia"}
         EU{"Euroopan unioni"}
+        EZ{"euroalue"}
         FI{"Suomi"}
         FJ{"Fidži"}
         FK{"Falklandinsaaret"}
@@ -305,10 +306,10 @@ fi{
         CD{"Kongo-Kinshasa"}
         CG{"Kongo-Brazzaville"}
         CI{"Côte d’Ivoire"}
-        CZ{"Tšekki"}
+        CZ{"Tšekin tasavalta"}
         FK{"Falklandinsaaret (Malvinassaaret)"}
         MK{"EJT Makedonia"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
 }

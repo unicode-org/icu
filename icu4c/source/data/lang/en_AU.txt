@@ -3,8 +3,14 @@
 en_AU{
     %%Parent{"en_001"}
     Languages{
+        bn{"Bengali"}
         en_US{"United States English"}
+        frc{"frc"}
+        lou{"lou"}
         ro_MD{"Moldovan"}
+    }
+    Scripts{
+        Beng{"Bengali"}
     }
     Types{
         calendar{
@@ -12,5 +18,5 @@ en_AU{
             ethiopic{"Ethiopian Calendar"}
         }
     }
-    Version{"2.1.32.62"}
+    Version{"2.1.37.6"}
 }

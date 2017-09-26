@@ -429,7 +429,7 @@ mt{
         suk{"Sukuma"}
         sus{"Susu"}
         sux{"Sumerjan"}
-        sv{"Żvezja"}
+        sv{"Żvediż"}
         sw{"Swahili"}
         sw_CD{"Swahili tar-Repubblika Demokratika tal-Kongo"}
         swb{"Komorjan"}
@@ -559,7 +559,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     codePatterns{
         language{"Lingwa: {0}"}
         script{"Skript: {0}"}

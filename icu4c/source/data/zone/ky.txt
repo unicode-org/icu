@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ky{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -507,6 +507,9 @@ ky{
         "America:Puerto_Rico"{
             ec{"Пуэрто-Рико"}
         }
+        "America:Punta_Arenas"{
+            ec{"Пунта-Аренас"}
+        }
         "America:Rainy_River"{
             ec{"Рейни Ривер"}
         }
@@ -657,6 +660,9 @@ ky{
         "Asia:Ashgabat"{
             ec{"Ашхабад"}
         }
+        "Asia:Atyrau"{
+            ec{"Атырау"}
+        }
         "Asia:Baghdad"{
             ec{"Багдад"}
         }
@@ -707,6 +713,9 @@ ky{
         }
         "Asia:Dushanbe"{
             ec{"Душанбе"}
+        }
+        "Asia:Famagusta"{
+            ec{"Фамагуста"}
         }
         "Asia:Gaza"{
             ec{"Газа"}
@@ -942,6 +951,9 @@ ky{
         "Australia:Sydney"{
             ec{"Сидней"}
         }
+        "Etc:UTC"{
+            ls{"Бирдиктүү дүйнөлүк убакыт"}
+        }
         "Etc:Unknown"{
             ec{"Белгисиз шаар"}
         }
@@ -1072,6 +1084,9 @@ ky{
         }
         "Europe:Sarajevo"{
             ec{"Сараево"}
+        }
+        "Europe:Saratov"{
+            ec{"Саратов"}
         }
         "Europe:Simferopol"{
             ec{"Симферополь"}

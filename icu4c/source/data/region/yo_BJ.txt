@@ -212,7 +212,6 @@ yo_BJ{
         US{"Orílɛ́ède Orilɛede Amerika"}
         UY{"Orílɛ́ède Nruguayi"}
         UZ{"Orílɛ́ède Nshibɛkisitani"}
-        VA{"Orílɛ́ède Fatikani"}
         VC{"Orílɛ́ède Fisɛnnti ati Genadina"}
         VE{"Orílɛ́ède Fɛnɛshuɛla"}
         VG{"Orílɛ́ède Etíkun Fágínì ti ìlú Bírítísì"}
@@ -227,5 +226,5 @@ yo_BJ{
         ZM{"Orílɛ́ède shamibia"}
         ZW{"Orílɛ́ède shimibabe"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.9"}
 }

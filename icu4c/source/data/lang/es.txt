@@ -576,7 +576,7 @@ es{
         Brai{"braille"}
         Bugi{"buginés"}
         Buhd{"buhid"}
-        Cans{"símbolos aborígenes canadienses unificados"}
+        Cans{"silabarios aborígenes canadienses unificados"}
         Cari{"cario"}
         Cham{"cham"}
         Cher{"cherokee"}
@@ -708,6 +708,7 @@ es{
             indian{"calendario nacional hindú"}
             islamic{"calendario islámico"}
             islamic-civil{"calendario civil islámico"}
+            islamic-umalqura{"calendario islámico umalqura"}
             iso8601{"calendario ISO-8601"}
             japanese{"calendario japonés"}
             persian{"calendario persa"}
@@ -751,8 +752,10 @@ es{
         }
         collation{
             big5han{"orden del chino tradicional - Big5"}
+            compat{"orden de clasificación anterior, para compatibilidad"}
             dictionary{"orden de clasificación del diccionario"}
             ducet{"orden predeterminado de Unicode"}
+            eor{"reglas de ordenación europeas"}
             gb2312han{"orden del chino simplificado - GB2312"}
             phonebook{"orden de listín telefónico"}
             phonetic{"Orden de clasificación fonético"}
@@ -766,8 +769,8 @@ es{
             unihan{"orden de clasificación de trazos radicales"}
         }
         d0{
-            fwidth{"Ancho completo"}
-            hwidth{"Ancho medio"}
+            fwidth{"ancho completo"}
+            hwidth{"ancho medio"}
             npinyin{"Numérico"}
         }
         hc{
@@ -782,8 +785,8 @@ es{
             strict{"estilo de salto de línea estricto"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"transliteración USBGN"}
+            ungegn{"transliteración UNGEGN"}
         }
         ms{
             metric{"sistema métrico"}
@@ -847,7 +850,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.22"}
     characterLabelPattern{
         all{"{0} — Todo"}
         category-list{"{0}: {1}"}

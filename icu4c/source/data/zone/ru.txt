@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ru{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.12"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -160,7 +160,7 @@ ru{
             ec{"Виндхук"}
         }
         "America:Adak"{
-            ec{"Адак, о-в"}
+            ec{"Адак"}
         }
         "America:Anchorage"{
             ec{"Анкоридж"}
@@ -346,7 +346,7 @@ ru{
             ec{"Эрмосильо"}
         }
         "America:Indiana:Knox"{
-            ec{"Нокс"}
+            ec{"Нокс, Индиана"}
         }
         "America:Indiana:Marengo"{
             ec{"Маренго, Индиана"}
@@ -507,6 +507,9 @@ ru{
         "America:Puerto_Rico"{
             ec{"Пуэрто-Рико"}
         }
+        "America:Punta_Arenas"{
+            ec{"Пунта-Аренас"}
+        }
         "America:Rainy_River"{
             ec{"Рейни-Ривер"}
         }
@@ -652,10 +655,13 @@ ru{
             ec{"Актау"}
         }
         "Asia:Aqtobe"{
-            ec{"Актобе (Актюбинск)"}
+            ec{"Актобе"}
         }
         "Asia:Ashgabat"{
             ec{"Ашхабад"}
+        }
+        "Asia:Atyrau"{
+            ec{"Атырау"}
         }
         "Asia:Baghdad"{
             ec{"Багдад"}
@@ -707,6 +713,9 @@ ru{
         }
         "Asia:Dushanbe"{
             ec{"Душанбе"}
+        }
+        "Asia:Famagusta"{
+            ec{"Фамагуста"}
         }
         "Asia:Gaza"{
             ec{"Газа"}
@@ -880,7 +889,7 @@ ru{
             ec{"Азорские о-ва"}
         }
         "Atlantic:Bermuda"{
-            ec{"Бермуды"}
+            ec{"Бермудские о-ва"}
         }
         "Atlantic:Canary"{
             ec{"Канарские о-ва"}
@@ -1075,6 +1084,9 @@ ru{
         }
         "Europe:Sarajevo"{
             ec{"Сараево"}
+        }
+        "Europe:Saratov"{
+            ec{"Саратов"}
         }
         "Europe:Simferopol"{
             ec{"Симферополь"}
@@ -1325,9 +1337,9 @@ ru{
             ls{"Восточная Америка, стандартное время"}
         }
         "meta:America_Mountain"{
-            ld{"Горное летнее время (США)"}
-            lg{"Горное время (США)"}
-            ls{"Горное стандартное время (США)"}
+            ld{"Летнее горное время (Северная Америка)"}
+            lg{"Горное время (Северная Америка)"}
+            ls{"Стандартное горное время (Северная Америка)"}
         }
         "meta:America_Pacific"{
             ld{"Тихоокеанское летнее время"}
@@ -1829,13 +1841,13 @@ ru{
             ls{"Самоа, стандартное время"}
         }
         "meta:Seychelles"{
-            ls{"Сейшельские Острова"}
+            ls{"Сейшельские острова"}
         }
         "meta:Singapore"{
             ls{"Сингапур"}
         }
         "meta:Solomon"{
-            ls{"Соломоновы Острова"}
+            ls{"Соломоновы острова"}
         }
         "meta:South_Georgia"{
             ls{"Южная Георгия"}
@@ -1928,7 +1940,7 @@ ru{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
-        regionFormatDaylight{"{0} (+1)"}
-        regionFormatStandard{"{0} (+0)"}
+        regionFormatDaylight{"{0}, летнее время"}
+        regionFormatStandard{"{0}, стандартное время"}
     }
 }

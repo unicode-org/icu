@@ -550,9 +550,10 @@ fo{
         POLYTON{"polytonísk"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} — Alt"}
+        category-list{"{0}: {1}"}
         compatibility{"{0} — Sambæri"}
         enclosed{"{0} — Girða"}
         extended{"{0} — Víðkað"}

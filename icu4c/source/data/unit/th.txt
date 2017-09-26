@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 th{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -243,20 +243,20 @@ th{
         }
         energy{
             calorie{
-                dnam{"แคลอรี่"}
-                other{"{0} แคลอรี่"}
+                dnam{"แคลอรี"}
+                other{"{0} แคลอรี"}
             }
             foodcalorie{
-                dnam{"แคลอรี่"}
-                other{"{0} แคลอรี่"}
+                dnam{"แคลอรี"}
+                other{"{0} แคลอรี"}
             }
             joule{
                 dnam{"จูล"}
                 other{"{0} จูล"}
             }
             kilocalorie{
-                dnam{"กิโลแคลอรี่"}
-                other{"{0} กิโลแคลอรี่"}
+                dnam{"กิโลแคลอรี"}
+                other{"{0} กิโลแคลอรี"}
             }
             kilojoule{
                 dnam{"กิโลจูล"}
@@ -354,6 +354,10 @@ th{
             picometer{
                 dnam{"พิโกเมตร"}
                 other{"{0} พิโกเมตร"}
+            }
+            point{
+                dnam{"จุด"}
+                other{"{0} จุด"}
             }
             yard{
                 dnam{"หลา"}
@@ -684,6 +688,20 @@ th{
             year{
                 dnam{"ปี"}
                 other{"{0}ปี"}
+            }
+        }
+        energy{
+            calorie{
+                dnam{"แคลอรี"}
+                other{"{0} แคลอรี"}
+            }
+            foodcalorie{
+                dnam{"แคลอรี"}
+                other{"{0} แคลอรี"}
+            }
+            kilocalorie{
+                dnam{"กิโลแคลอรี"}
+                other{"{0}กแคลอรี"}
             }
         }
         length{
@@ -1031,20 +1049,20 @@ th{
         }
         energy{
             calorie{
-                dnam{"แคลอรี่"}
-                other{"{0} แคลอรี่"}
+                dnam{"แคลอรี"}
+                other{"{0} แคลอรี"}
             }
             foodcalorie{
-                dnam{"แคลอรี่"}
-                other{"{0} แคลอรี่"}
+                dnam{"แคลอรี"}
+                other{"{0} แคลอรี"}
             }
             joule{
                 dnam{"จูล"}
                 other{"{0} จูล"}
             }
             kilocalorie{
-                dnam{"กิโลแคลอรี่"}
-                other{"{0} กิโลแคลอรี่"}
+                dnam{"กิโลแคลอรี"}
+                other{"{0} กิโลแคลอรี"}
             }
             kilojoule{
                 dnam{"กิโลจูล"}
@@ -1142,6 +1160,10 @@ th{
             picometer{
                 dnam{"พิโกเมตร"}
                 other{"{0} พิโกเมตร"}
+            }
+            point{
+                dnam{"จุด"}
+                other{"{0} จุด"}
             }
             yard{
                 dnam{"หลา"}

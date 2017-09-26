@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sl{
     Countries{
-        001{"Svet"}
+        001{"svet"}
         002{"Afrika"}
         003{"Severna Amerika"}
         005{"Južna Amerika"}
@@ -106,6 +106,7 @@ sl{
         ES{"Španija"}
         ET{"Etiopija"}
         EU{"Evropska unija"}
+        EZ{"evroobmočje"}
         FI{"Finska"}
         FJ{"Fidži"}
         FK{"Falklandski otoki"}
@@ -123,7 +124,7 @@ sl{
         GL{"Grenlandija"}
         GM{"Gambija"}
         GN{"Gvineja"}
-        GP{"Gvadalupe"}
+        GP{"Guadeloupe"}
         GQ{"Ekvatorialna Gvineja"}
         GR{"Grčija"}
         GS{"Južna Georgia in Južni Sandwichevi otoki"}
@@ -298,16 +299,17 @@ sl{
         HK{"Hongkong"}
         MO{"Macao"}
         PS{"Palestina"}
-        UN{"Združeni narodi"}
+        UN{"ZN"}
         US{"ZDA"}
     }
     Countries%variant{
         CD{"Kongo (Demokratična republika Kongo)"}
         CG{"Kongo (Republika)"}
         CI{"Côte d’Ivoire"}
+        CZ{"Češka republika"}
         FK{"Falklandski otoki (Malvini)"}
         MK{"Makedonija (FYROM)"}
         TL{"Vzhodni Timor"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
 }

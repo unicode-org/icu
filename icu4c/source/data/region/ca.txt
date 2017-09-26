@@ -106,6 +106,7 @@ ca{
         ES{"Espanya"}
         ET{"Etiòpia"}
         EU{"Unió Europea"}
+        EZ{"zona euro"}
         FI{"Finlàndia"}
         FJ{"Fiji"}
         FK{"Illes Malvines"}
@@ -255,7 +256,7 @@ ca{
         TA{"Tristão da Cunha"}
         TC{"Illes Turks i Caicos"}
         TD{"Txad"}
-        TF{"Territoris Francesos del Sud"}
+        TF{"Territoris Australs Francesos"}
         TG{"Togo"}
         TH{"Tailàndia"}
         TJ{"Tadjikistan"}
@@ -308,5 +309,5 @@ ca{
         FK{"Illes Malvines (Illes Falkland)"}
         MK{"Macedònia (Antiga República Iugoslava de Macedònia)"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.22"}
 }

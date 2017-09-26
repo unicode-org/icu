@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en{
-    Version{"2.1.35.6"}
+    Version{"2.1.37.1"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -434,7 +434,7 @@ en{
             ls{"Krasnoyarsk Standard Time"}
         }
         "meta:Kyrgystan"{
-            ls{"Kyrgystan Time"}
+            ls{"Kyrgyzstan Time"}
         }
         "meta:Lanka"{
             ls{"Lanka Time"}
@@ -491,9 +491,9 @@ en{
             ls{"Mexican Pacific Standard Time"}
         }
         "meta:Mongolia"{
-            ld{"Ulan Bator Summer Time"}
-            lg{"Ulan Bator Time"}
-            ls{"Ulan Bator Standard Time"}
+            ld{"Ulaanbaatar Summer Time"}
+            lg{"Ulaanbaatar Time"}
+            ls{"Ulaanbaatar Standard Time"}
         }
         "meta:Moscow"{
             ld{"Moscow Summer Time"}

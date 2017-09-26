@@ -37,13 +37,13 @@ eu{
         AE{"Arabiar Emirerri Batuak"}
         AF{"Afganistan"}
         AG{"Antigua eta Barbuda"}
-        AI{"Angila"}
+        AI{"Aingira"}
         AL{"Albania"}
         AM{"Armenia"}
         AO{"Angola"}
         AQ{"Antartika"}
         AR{"Argentina"}
-        AS{"Amerikar Samoa"}
+        AS{"Samoa Estatubatuarra"}
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
@@ -74,7 +74,7 @@ eu{
         CC{"Cocos uharteak"}
         CD{"Kongoko Errepublika Demokratikoa"}
         CF{"Afrika Erdiko Errepublika"}
-        CG{"Kongo (Brazzaville)"}
+        CG{"Kongo"}
         CH{"Suitza"}
         CI{"Boli Kosta"}
         CK{"Cook uharteak"}
@@ -91,7 +91,7 @@ eu{
         CY{"Zipre"}
         CZ{"Txekia"}
         DE{"Alemania"}
-        DG{"Diego Garcia"}
+        DG{"Diego García"}
         DJ{"Djibuti"}
         DK{"Danimarka"}
         DM{"Dominika"}
@@ -106,6 +106,7 @@ eu{
         ES{"Espainia"}
         ET{"Etiopia"}
         EU{"Europar Batasuna"}
+        EZ{"Eurogunea"}
         FI{"Finlandia"}
         FJ{"Fiji"}
         FK{"Malvinak"}
@@ -129,9 +130,9 @@ eu{
         GS{"Hegoaldeko Georgia eta Hegoaldeko Sandwich uharteak"}
         GT{"Guatemala"}
         GU{"Guam"}
-        GW{"Ginea-Bissau"}
+        GW{"Ginea Bissau"}
         GY{"Guyana"}
-        HK{"Hong Kong AEB Txina"}
+        HK{"Hong Kong Txinako AEB"}
         HM{"Heard eta McDonald uharteak"}
         HN{"Honduras"}
         HR{"Kroazia"}
@@ -180,13 +181,13 @@ eu{
         ME{"Montenegro"}
         MF{"San Martin"}
         MG{"Madagaskar"}
-        MH{"Marshall uharteak"}
+        MH{"Marshall Uharteak"}
         MK{"Mazedonia"}
         ML{"Mali"}
         MM{"Myanmar (Birmania)"}
         MN{"Mongolia"}
-        MO{"Macau AEB Txina"}
-        MP{"Iparraldeko Mariana uharteak"}
+        MO{"Macau Txinako AEB"}
+        MP{"Ipar Mariana uharteak"}
         MQ{"Martinika"}
         MR{"Mauritania"}
         MS{"Montserrat"}
@@ -232,7 +233,7 @@ eu{
         RU{"Errusia"}
         RW{"Ruanda"}
         SA{"Saudi Arabia"}
-        SB{"Salomon uharteak"}
+        SB{"Salomon Uharteak"}
         SC{"Seychelleak"}
         SD{"Sudan"}
         SE{"Suedia"}
@@ -272,6 +273,7 @@ eu{
         UA{"Ukraina"}
         UG{"Uganda"}
         UM{"Ameriketako Estatu Batuetako Kanpoaldeko Uharte Txikiak"}
+        UN{"Nazio Batuak"}
         US{"Ameriketako Estatu Batuak"}
         UY{"Uruguai"}
         UZ{"Uzbekistan"}
@@ -300,12 +302,11 @@ eu{
         US{"AEB"}
     }
     Countries%variant{
-        CD{"Kongo (KED)"}
-        CG{"Kongo (errepublika)"}
+        CD{"Kongo (DR)"}
+        CG{"Kongoko Errepublika"}
         CZ{"Txekiar Errepublika"}
-        FK{"Falkland uharteak (Malvina uharteak)"}
-        MK{"Mazedonia (Mazedoniako Yugoslaviar Errepublika ohia)"}
-        TL{"Timor ekialdea"}
+        FK{"Falkland uharteak"}
+        MK{"Mazedoniako Jugoslaviar Errepublika Ohia"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
 }

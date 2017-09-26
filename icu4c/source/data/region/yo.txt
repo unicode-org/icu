@@ -212,7 +212,7 @@ yo{
         US{"Orílẹ́ède Orilẹede Amerika"}
         UY{"Orílẹ́ède Nruguayi"}
         UZ{"Orílẹ́ède Nṣibẹkisitani"}
-        VA{"Orílẹ́ède Fatikani"}
+        VA{"Ìlú Vatican"}
         VC{"Orílẹ́ède Fisẹnnti ati Genadina"}
         VE{"Orílẹ́ède Fẹnẹṣuẹla"}
         VG{"Orílẹ́ède Etíkun Fágínì ti ìlú Bírítísì"}
@@ -227,5 +227,5 @@ yo{
         ZM{"Orílẹ́ède ṣamibia"}
         ZW{"Orílẹ́ède ṣimibabe"}
     }
-    Version{"2.1.34.45"}
+    Version{"2.1.37.1"}
 }

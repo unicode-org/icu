@@ -415,7 +415,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "13. Jan."},
         new String[] {"MMMMd", "13. Januar"},
         new String[] {"yQQQ", "Q1 1999"},
-        new String[] {"hhmm", "11:58 nachm."},
+        new String[] {"hhmm", "11:58 PM"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
@@ -427,11 +427,11 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
         new ULocale("fi"),
         new String[] {"yM", "1.1999"}, // (fixed expected result per ticket 6872<-6626)
-        new String[] {"yMMM", "tammi 1999"}, // (fixed expected result per ticket 6872<-7007)
+        new String[] {"yMMM", "1.1999"}, // (fixed expected result per ticket 6872<-7007)
         new String[] {"yMd", "13.1.1999"},
-        new String[] {"yMMMd", "13. tammik. 1999"},
+        new String[] {"yMMMd", "13.1.1999"},
         new String[] {"Md", "13.1."},
-        new String[] {"MMMd", "13. tammik."},
+        new String[] {"MMMd", "13.1."},
         new String[] {"MMMMd", "13. tammikuuta"},
         new String[] {"yQQQ", "1. nelj. 1999"},
         new String[] {"hhmm", "11.58 ip."},
@@ -439,7 +439,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"jjmm", "23.58"},
         new String[] {"mmss", "58.59"},
         new String[] {"yyyyMMMM", "tammikuu 1999"}, // (new item for testing 6872<-5702,7007)
-        new String[] {"MMMEd", "ke 13. tammik."},
+        new String[] {"MMMEd", "ke 13.1."},
         new String[] {"Ed", "ke 13."},
         new String[] {"jmmssSSS", "23.58.59,123"},
         new String[] {"JJmm", "23.58"},
@@ -528,7 +528,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "1\u670813\u65E5"},
         new String[] {"MMMMd", "1\u670813\u65E5"},
-        new String[] {"yQQQ", "\u6C11\u570B88\u5E741\u5B63"},
+        new String[] {"yQQQ", "\u6C11\u570B88\u5E74\u7B2C1\u5B63"},
         new String[] {"hhmm", "\u4E0B\u534811:58"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "\u4E0B\u534811:58"},
@@ -548,7 +548,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "13 \u044F\u043D\u0432."},
         new String[] {"MMMMd", "13 \u044F\u043D\u0432\u0430\u0440\u044F"},
         new String[] {"yQQQ", "1-\u0439 \u043A\u0432. 1999 \u0433."},
-        new String[] {"hhmm", "11:58 \u041F\u041F"},
+        new String[] {"hhmm", "11:58 PM"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},

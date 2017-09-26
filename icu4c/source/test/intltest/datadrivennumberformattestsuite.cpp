@@ -92,7 +92,10 @@ void DataDrivenNumberFormatTestSuite::run(const char *fileName, UBool runAllTest
                 showError("Invalid column values");
                 return;
             }
-            if (runAllTests || !breaksC()) {
+            if (NFTT_GET_FIELD(fTuple,output,"")=="fail" && NFTT_GET_FIELD(fTuple,parse,"")=="$53.45" &&
+                    logKnownIssue("13368", "en_GB parsing of $53.45 as USD works, shouldn't") ) {
+                // skip test
+            } else if (runAllTests || !breaksC()) {
                 UnicodeString errorMessage;
                 UBool shouldFail = (NFTT_GET_FIELD(fTuple, output, "") == "fail")
                         ? !breaksC()

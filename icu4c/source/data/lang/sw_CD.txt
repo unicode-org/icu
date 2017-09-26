@@ -10,7 +10,6 @@ sw_CD{
         gv{"Kimanksi"}
         gwi{"Kigwichiin"}
         hup{"Kihupa"}
-        inh{"Kiingush"}
         jbo{"Kilojban"}
         kac{"Kikachin"}
         khq{"Kikoyra Chiini"}
@@ -40,5 +39,5 @@ sw_CD{
         wae{"Kiwalser"}
         yi{"Kiyidi"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.6"}
 }

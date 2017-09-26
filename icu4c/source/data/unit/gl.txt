@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 gl{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -347,7 +347,7 @@ gl{
         length{
             astronomical-unit{
                 dnam{"unidades astronómicas"}
-                one{"{0} unidad astronómica"}
+                one{"{0} unidade astronómica"}
                 other{"{0} unidades astronómicas"}
             }
             centimeter{
@@ -429,6 +429,11 @@ gl{
                 dnam{"picómetros"}
                 one{"{0} picómetro"}
                 other{"{0} picómetros"}
+            }
+            point{
+                dnam{"puntos"}
+                one{"{0} punto"}
+                other{"{0} puntos"}
             }
             yard{
                 dnam{"iardas"}
@@ -1277,6 +1282,11 @@ gl{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"iardas"}

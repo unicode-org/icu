@@ -2,10 +2,12 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sw_KE{
     Countries{
+        AQ{"Antaktika"}
         AZ{"Azabajani"}
         CI{"Ivorikosti"}
         CX{"Kisiwa cha Christmas"}
         CY{"Saiprasi"}
+        FM{"Mikronesia"}
         GP{"Gwadelupe"}
         JO{"Yordani"}
         LB{"Lebanoni"}
@@ -14,17 +16,18 @@ sw_KE{
         LU{"Lasembagi"}
         LV{"Lativia"}
         MV{"Maldivi"}
+        NC{"Nyukaledonia"}
         NE{"Nijer"}
         NG{"Nijeria"}
         NO{"Norwe"}
         NP{"Nepali"}
         OM{"Omani"}
+        PF{"Polinesia ya Ufaransa"}
         PR{"Puetoriko"}
         QA{"Katari"}
-        SR{"Suriname"}
         ST{"Sao Tome na Prinsipe"}
         TD{"Chadi"}
         VN{"Vietnamu"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.6"}
 }

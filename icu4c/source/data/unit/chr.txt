@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 chr{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -429,6 +429,11 @@ chr{
                 dnam{"ᏇᎪ ᎢᏯᎦᎨᎵᏁᎢ ᏗᏟᎶᏍᏗ"}
                 one{"{0} ᏇᎪ ᎢᏯᎦᎨᎵᏁᎢ ᎠᏟᎶᏍᏗ"}
                 other{"{0} ᏇᎪ ᎢᏯᎦᎨᎵᏁᎢ ᏗᏟᎶᏍᏗ"}
+            }
+            point{
+                dnam{"ᏧᏓᏓᏟ"}
+                one{"{0} ᎤᏓᏓᏟ"}
+                other{"{0} ᏧᏓᏓᏟ"}
             }
             yard{
                 dnam{"ᎢᏯᏯᏗ"}
@@ -1271,6 +1276,11 @@ chr{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"ᏧᏓᏓᏟ"}
+                one{"{0} ᏧᏓ"}
+                other{"{0} ᏧᏓ"}
             }
             yard{
                 dnam{"ᎢᏯᏯᏗ"}

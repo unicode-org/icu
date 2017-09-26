@@ -106,6 +106,7 @@ hr{
         ES{"Španjolska"}
         ET{"Etiopija"}
         EU{"Europska unija"}
+        EZ{"eurozona"}
         FI{"Finska"}
         FJ{"Fidži"}
         FK{"Falklandski otoci"}
@@ -217,7 +218,7 @@ hr{
         PH{"Filipini"}
         PK{"Pakistan"}
         PL{"Poljska"}
-        PM{"Saint-Pierre-et-Miquelon"}
+        PM{"Sveti Petar i Mikelon"}
         PN{"Otoci Pitcairn"}
         PR{"Portoriko"}
         PS{"Palestinsko Područje"}
@@ -310,5 +311,5 @@ hr{
         MK{"Makedonija (BJRM)"}
         TL{"Istočni Timor"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
 }

@@ -1873,16 +1873,18 @@ public class FormatHandler
                 // The difference of locale data for localized GMT format
                 // will produce different format result.  This is a temporary
                 // workaround for the issue.
-                DateFormatSymbols dfsa = ((SimpleDateFormat)dfa).getDateFormatSymbols();
-                DateFormatSymbols tmp = (DateFormatSymbols)((SimpleDateFormat)dfb).getDateFormatSymbols().clone();
+                // Hmm, this test had tmp backwards, it needs to override a behavior
+                // with certain symbols from b. Fixed in ICU 60.
+                DateFormatSymbols dfsb = ((SimpleDateFormat)dfb).getDateFormatSymbols();
+                DateFormatSymbols tmp = (DateFormatSymbols)((SimpleDateFormat)dfa).getDateFormatSymbols().clone();
 
                 TimeZoneFormat tmptzf = (TimeZoneFormat)((SimpleDateFormat)dfb).getTimeZoneFormat().clone();
 
-                tmp.setMonths(dfsa.getMonths());
-                tmp.setShortMonths(dfsa.getShortMonths());
-                tmp.setWeekdays(dfsa.getWeekdays());
-                tmp.setShortWeekdays(dfsa.getShortWeekdays());
-                tmp.setAmPmStrings(dfsa.getAmPmStrings());
+                tmp.setMonths(dfsb.getMonths());
+                tmp.setShortMonths(dfsb.getShortMonths());
+                tmp.setWeekdays(dfsb.getWeekdays());
+                tmp.setShortWeekdays(dfsb.getShortWeekdays());
+                tmp.setAmPmStrings(dfsb.getAmPmStrings());
 
                 ((SimpleDateFormat)dfa).setDateFormatSymbols(tmp);
                 ((SimpleDateFormat)dfa).setTimeZoneFormat(tmptzf);

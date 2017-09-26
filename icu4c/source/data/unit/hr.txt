@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 hr{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -516,6 +516,12 @@ hr{
                 few{"{0} pikometra"}
                 one{"{0} pikometar"}
                 other{"{0} pikometara"}
+            }
+            point{
+                dnam{"točke"}
+                few{"{0} točke"}
+                one{"{0} točka"}
+                other{"{0} točaka"}
             }
             yard{
                 dnam{"jardi"}
@@ -2073,6 +2079,12 @@ hr{
                 few{"{0} pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"točke"}
+                few{"{0} pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"jardi"}

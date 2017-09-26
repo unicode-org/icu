@@ -137,7 +137,7 @@ id{
         din{"Dinka"}
         dje{"Zarma"}
         doi{"Dogri"}
-        dsb{"Sorbia Rendah"}
+        dsb{"Sorbia Hilir"}
         dua{"Duala"}
         dum{"Belanda Abad Pertengahan"}
         dv{"Divehi"}
@@ -213,7 +213,7 @@ id{
         hmn{"Hmong"}
         ho{"Hiri Motu"}
         hr{"Kroasia"}
-        hsb{"Sorbia Atas"}
+        hsb{"Sorbia Hulu"}
         ht{"Kreol Haiti"}
         hu{"Hungaria"}
         hup{"Hupa"}
@@ -465,10 +465,10 @@ id{
         sms{"Skolt Sami"}
         sn{"Shona"}
         snk{"Soninke"}
-        so{"Somali"}
+        so{"Somalia"}
         sog{"Sogdien"}
         sq{"Albania"}
-        sr{"Serb"}
+        sr{"Serbia"}
         srn{"Sranan Tongo"}
         srr{"Serer"}
         ss{"Swati"}
@@ -480,7 +480,7 @@ id{
         sux{"Sumeria"}
         sv{"Swedia"}
         sw{"Swahili"}
-        sw_CD{"Kongo Swahili"}
+        sw_CD{"Swahili (Kongo)"}
         swb{"Komoria"}
         syc{"Suriah Klasik"}
         syr{"Suriah"}
@@ -762,6 +762,7 @@ id{
             islamic{"Kalender Islam"}
             islamic-civil{"Kalender Sipil Islam"}
             islamic-rgsa{"Kalender Islam (Arab Saudi, penglihatan)"}
+            islamic-umalqura{"Kalender Islam (Umm al-Qura)"}
             iso8601{"Kalender ISO-8601"}
             japanese{"Kalender Jepang"}
             persian{"Kalender Persia"}
@@ -805,6 +806,7 @@ id{
         }
         collation{
             big5han{"Urutan Sortir Tionghoa Tradisional - Big5"}
+            compat{"Aturan Pengurutan Sebelumnya, untuk kompatibilitas"}
             dictionary{"Urutan Sortir Kamus"}
             ducet{"Aturan Pengurutan Unicode Default"}
             eor{"Aturan Pengurutan Eropa"}
@@ -961,17 +963,17 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} — Semua"}
         category-list{"{0}: {1}"}
         compatibility{"{0} — Kompatibilitas"}
         enclosed{"{0} — Terlampir"}
-        extended{"{0} — Diperluas"}
+        extended{"{0} — diperluas"}
         historic{"{0} — Historis"}
         miscellaneous{"{0} — Lain-lain"}
         other{"{0} — Lainnya"}
-        scripts{"Skrip — {0}"}
+        scripts{"skrip — {0}"}
         strokes{
             other{"{0} Goresan"}
         }

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 gu{
-    Version{"2.1.34.51"}
+    Version{"2.1.36.86"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -430,6 +430,11 @@ gu{
                 one{"{0} પિસૉમીટર"}
                 other{"{0} પિસૉમીટર"}
             }
+            point{
+                dnam{"પોઈન્ટ્સ"}
+                one{"{0} પોઈન્ટ"}
+                other{"{0} પોઈન્ટ્સ"}
+            }
             yard{
                 dnam{"વાર"}
                 one{"{0} વાર"}
@@ -492,6 +497,11 @@ gu{
                 one{"{0} પાઉન્ડ"}
                 other{"{0} પાઉન્ડ"}
                 per{"{0} પ્રતિ પાઉન્ડ"}
+            }
+            stone{
+                dnam{"સ્ટોન્સ"}
+                one{"{0} સ્ટોન"}
+                other{"{0} સ્ટોન્સ"}
             }
             ton{
                 dnam{"ટન"}
@@ -799,11 +809,13 @@ gu{
                 dnam{"દિવસ"}
                 one{"{0} દિ"}
                 other{"{0} દિ"}
+                per{"{0}/ દિ"}
             }
             hour{
                 dnam{"કલાક"}
                 one{"{0} ક"}
                 other{"{0} ક"}
+                per{"{0}/ક"}
             }
             millisecond{
                 dnam{"મિલિસેકન્ડ"}
@@ -814,6 +826,7 @@ gu{
                 dnam{"મિનિટ"}
                 one{"{0} મિ"}
                 other{"{0} મિ"}
+                per{"{0}/મિ"}
             }
             month{
                 dnam{"મહિના"}
@@ -824,6 +837,7 @@ gu{
                 dnam{"સેકંડ"}
                 one{"{0} સે"}
                 other{"{0} સે"}
+                per{"{0}/સે"}
             }
             week{
                 dnam{"અઠવાડિયા"}
@@ -841,32 +855,50 @@ gu{
                 dnam{"સેમી"}
                 one{"{0} સેમી"}
                 other{"{0} સેમી"}
+                per{"{0}/સેમી"}
+            }
+            decimeter{
+                dnam{"ડેમી"}
+                one{"{0} ડેમી"}
+                other{"{0} ડેમી"}
             }
             foot{
+                dnam{"ફૂટ"}
                 one{"{0} '"}
                 other{"{0} '"}
+                per{"{0}/ફૂટ"}
             }
             inch{
+                dnam{"ઇંચ"}
                 one{"{0} \u0022"}
                 other{"{0} \u0022"}
+                per{"{0}/ઈંચ"}
             }
             kilometer{
                 dnam{"કિમી"}
                 one{"{0} કિમી"}
                 other{"{0} કિમી"}
+                per{"{0}/કિમી"}
             }
             light-year{
                 one{"{0}પ્રકાશવર્ષ"}
                 other{"{0}પ્રકાશવર્ષ"}
             }
             meter{
-                dnam{"મીટર"}
+                dnam{"મી"}
                 one{"{0} મી"}
                 other{"{0} મી"}
+                per{"{0}/મી"}
             }
             mile{
+                dnam{"માઇલ"}
                 one{"{0} માઇલ"}
                 other{"{0} માઇલ"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0}smi"}
+                other{"{0}smi"}
             }
             millimeter{
                 dnam{"મિમી"}
@@ -878,6 +910,7 @@ gu{
                 other{"{0}પિસૉ.મી"}
             }
             yard{
+                dnam{"વાર"}
                 one{"{0} વાર"}
                 other{"{0} વાર"}
             }
@@ -887,19 +920,30 @@ gu{
                 dnam{"ગ્રામ"}
                 one{"{0} ગ્રા"}
                 other{"{0} ગ્રા"}
+                per{"{0}/ગ્રામ"}
             }
             kilogram{
                 dnam{"કિગ્રા"}
                 one{"{0} કિગ્રા"}
                 other{"{0} કિગ્રા"}
+                per{"{0}/કિગ્રા"}
             }
             ounce{
+                dnam{"ઔંસ"}
                 one{"{0} ઔંશ"}
                 other{"{0} ઔંશ"}
+                per{"{0}/ઔંસ"}
             }
             pound{
+                dnam{"પાઉન્ડ"}
                 one{"{0} પાઉન્ડ"}
                 other{"{0} પાઉન્ડ"}
+                per{"{0}/પાઉન્ડ"}
+            }
+            stone{
+                dnam{"સ્ટોન્સ"}
+                one{"{0}સ્ટોન"}
+                other{"{0}સ્ટોન"}
             }
         }
         power{
@@ -937,10 +981,12 @@ gu{
                 other{"{0} કિપ્રક"}
             }
             meter-per-second{
+                dnam{"મીટર/સેકન્ડ"}
                 one{"{0} m/s"}
                 other{"{0} m/s"}
             }
             mile-per-hour{
+                dnam{"માઇલ/કલાક"}
                 one{"{0} mi/h"}
                 other{"{0} mi/h"}
             }
@@ -1267,7 +1313,7 @@ gu{
                 other{"{0} Cal"}
             }
             joule{
-                dnam{"joule"}
+                dnam{"જૂલ"}
                 one{"{0} J"}
                 other{"{0} J"}
             }
@@ -1395,6 +1441,11 @@ gu{
                 one{"{0} પિસૉમીટર"}
                 other{"{0} પિસૉમીટર"}
             }
+            point{
+                dnam{"પોઈન્ટ્સ"}
+                one{"{0} પોઈન્ટ"}
+                other{"{0} પોઈન્ટ"}
+            }
             yard{
                 dnam{"વાર"}
                 one{"{0} વાર"}
@@ -1457,6 +1508,11 @@ gu{
                 one{"{0} પાઉન્ડ"}
                 other{"{0} પાઉન્ડ"}
                 per{"{0}/પાઉન્ડ"}
+            }
+            stone{
+                dnam{"સ્ટોન્સ"}
+                one{"{0} સ્ટોન"}
+                other{"{0} સ્ટોન"}
             }
             ton{
                 dnam{"ટન"}

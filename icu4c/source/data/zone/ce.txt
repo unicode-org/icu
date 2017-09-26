@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ce{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -654,6 +654,9 @@ ce{
         "Asia:Ashgabat"{
             ec{"Ашхабад"}
         }
+        "Asia:Atyrau"{
+            ec{"Атирау"}
+        }
         "Asia:Baghdad"{
             ec{"БагӀдад"}
         }
@@ -665,6 +668,9 @@ ce{
         }
         "Asia:Bangkok"{
             ec{"Бангкок"}
+        }
+        "Asia:Barnaul"{
+            ec{"Барнаул"}
         }
         "Asia:Beirut"{
             ec{"Бейрут"}
@@ -843,6 +849,9 @@ ce{
         "Asia:Tokyo"{
             ec{"Токио"}
         }
+        "Asia:Tomsk"{
+            ec{"Томск"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Улан-Батор"}
         }
@@ -942,6 +951,9 @@ ce{
         "Europe:Andorra"{
             ec{"Андорра"}
         }
+        "Europe:Astrakhan"{
+            ec{"Аштаркхне"}
+        }
         "Europe:Athens"{
             ec{"Афина"}
         }
@@ -999,6 +1011,9 @@ ce{
         }
         "Europe:Kiev"{
             ec{"Киев"}
+        }
+        "Europe:Kirov"{
+            ec{"Киров"}
         }
         "Europe:Lisbon"{
             ec{"Лиссабон"}
@@ -1058,6 +1073,9 @@ ce{
         "Europe:Sarajevo"{
             ec{"Сараево"}
         }
+        "Europe:Saratov"{
+            ec{"Саратов"}
+        }
         "Europe:Simferopol"{
             ec{"Симферополь"}
         }
@@ -1075,6 +1093,9 @@ ce{
         }
         "Europe:Tirane"{
             ec{"Тирана"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"Ульяновск"}
         }
         "Europe:Uzhgorod"{
             ec{"Ужгород"}
@@ -1257,7 +1278,7 @@ ce{
             ec{"Уоллис"}
         }
         "meta:Afghanistan"{
-            ls{"ОвхӀан-пачхьалкх"}
+            ls{"ОвхӀан мохк"}
         }
         "meta:Africa_Central"{
             ls{"Юккъера Африка"}
@@ -1309,9 +1330,9 @@ ce{
             ls{"стандартан хан Апиа, Самоа"}
         }
         "meta:Arabian"{
-            ld{"СаӀудийн Арави, аьхкенан хан"}
-            lg{"СаӀудийн Арави"}
-            ls{"СаӀудийн Арави, стандартан хан"}
+            ld{"СаӀудийн Ӏаьрбийчоьнан, аьхкенан хан"}
+            lg{"СаӀудийн Ӏаьрбийчоь"}
+            ls{"СаӀудийн Ӏаьрбийчоьнан стандартан хан"}
         }
         "meta:Argentina"{
             ld{"Аргентина, аьхкенан хан"}

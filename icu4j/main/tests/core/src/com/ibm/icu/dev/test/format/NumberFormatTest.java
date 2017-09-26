@@ -871,7 +871,7 @@ public class NumberFormatTest extends TestFmwk {
                 new ParseCurrencyItem( "en_GB", "euros4",   "4,00\u00A0\u20AC", 4,400,  6,400,  "EUR" ),
                 new ParseCurrencyItem( "en_GB", "euros6",   "6\u00A0\u20AC",    1,  6,  3,  6,  "EUR" ),
                 new ParseCurrencyItem( "en_GB", "euros8",   "\u20AC8",          0,  0,  2,  8,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  4,  4,  "USD" ),
+                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  4,  4,  "USD" ), // With CLDR 32/ICU 60, US$4 fails, $4 works, #13368
 
                 new ParseCurrencyItem( "fr_FR", "euros4",   "4,00\u00A0\u20AC", 6,  4,  6,  4,  "EUR" ),
                 new ParseCurrencyItem( "fr_FR", "euros6",   "6\u00A0\u20AC",    3,  6,  3,  6,  "EUR" ),
@@ -906,16 +906,21 @@ public class NumberFormatTest extends TestFmwk {
             }
 
             parsePos.setIndex(0);
+            int curExpectPos = item.getCurExpectPos();
+            if (currStr.equals("US$4") && logKnownIssue("13368", "en_GB parsing of US$4 fails but $4 works")) {
+                currStr = "$4";
+                curExpectPos = 2;
+            }
             CurrencyAmount currAmt = fmt.parseCurrency(currStr, parsePos);
-            if ( parsePos.getIndex() != item.getCurExpectPos() || (currAmt != null && (currAmt.getNumber().intValue() != item.getCurExpectVal() ||
+            if ( parsePos.getIndex() != curExpectPos || (currAmt != null && (currAmt.getNumber().intValue() != item.getCurExpectVal() ||
                     currAmt.getCurrency().getCurrencyCode().compareTo(item.getCurExpectCurr()) != 0)) ) {
                 if (currAmt != null) {
                     errln("NumberFormat.getCurrencyInstance parseCurrency " + localeString + "/" + item.getDescrip() +
-                            ", expect pos/val/curr " + item.getCurExpectPos() + "/" + item.getCurExpectVal() + "/" + item.getCurExpectCurr() +
+                            ", expect pos/val/curr " + curExpectPos + "/" + item.getCurExpectVal() + "/" + item.getCurExpectCurr() +
                             ", get " + parsePos.getIndex() + "/" + currAmt.getNumber().intValue() + "/" + currAmt.getCurrency().getCurrencyCode() );
                 } else {
                     errln("NumberFormat.getCurrencyInstance parseCurrency " + localeString + "/" + item.getDescrip() +
-                            ", expect pos/val/curr " + item.getCurExpectPos() + "/" + item.getCurExpectVal() + "/" + item.getCurExpectCurr() +
+                            ", expect pos/val/curr " + curExpectPos + "/" + item.getCurExpectVal() + "/" + item.getCurExpectCurr() +
                             ", get " + parsePos.getIndex() + "/(NULL)" );
                 }
             }
@@ -5185,6 +5190,8 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(loc);
         // If the symbols ever change in locale data, please call the setters so that this test
         // continues to use the old symbols.
+        // The fa percent symbol does change in CLDR 32, so....
+        symbols.setPercentString("‎٪");
         assertEquals("Checking for expected symbols", "‎−", symbols.getMinusSignString());
         assertEquals("Checking for expected symbols", "‎٪", symbols.getPercentString());
         DecimalFormat numfmt = new DecimalFormat(pattern1, symbols);

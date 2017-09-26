@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_AU{
     %%Parent{"en_001"}
-    Version{"2.1.32.62"}
+    Version{"2.1.37.6"}
     units{
         energy{
             kilowatt-hour{
@@ -12,13 +12,6 @@ en_AU{
             }
         }
         length{
-            centimeter{
-                per{"{0} centimetre"}
-            }
-            decimeter{
-                one{"decimetre"}
-                other{"{0} decimetres"}
-            }
             kilometer{
                 dnam{"kilometre"}
             }
@@ -223,6 +216,11 @@ en_AU{
             }
         }
         energy{
+            kilocalorie{
+                dnam{"Cal"}
+                one{"{0} Cal"}
+                other{"{0} Cal"}
+            }
             kilowatt-hour{
                 dnam{"kWh"}
             }
@@ -289,6 +287,18 @@ en_AU{
                 dnam{"dL"}
                 one{"{0} dL"}
                 other{"{0} dL"}
+            }
+            gallon{
+                dnam{"US gal."}
+                one{"{0} gal. US"}
+                other{"{0} gal. US"}
+                per{"{0}/gal. US"}
+            }
+            gallon-imperial{
+                dnam{"gal."}
+                one{"{0} gal."}
+                other{"{0} gal."}
+                per{"{0}/gal."}
             }
             hectoliter{
                 dnam{"hL"}

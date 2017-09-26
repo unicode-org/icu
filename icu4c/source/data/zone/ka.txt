@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ka{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"აბიჯანი"}
@@ -507,6 +507,9 @@ ka{
         "America:Puerto_Rico"{
             ec{"პუერტო-რიკო"}
         }
+        "America:Punta_Arenas"{
+            ec{"პუნტა-არენასი"}
+        }
         "America:Rainy_River"{
             ec{"რეინი რივერი"}
         }
@@ -657,6 +660,9 @@ ka{
         "Asia:Ashgabat"{
             ec{"აშხაბადი"}
         }
+        "Asia:Atyrau"{
+            ec{"ატირაუ"}
+        }
         "Asia:Baghdad"{
             ec{"ბაღდადი"}
         }
@@ -707,6 +713,9 @@ ka{
         }
         "Asia:Dushanbe"{
             ec{"დუშანბე"}
+        }
+        "Asia:Famagusta"{
+            ec{"ფამაგუსტა"}
         }
         "Asia:Gaza"{
             ec{"გაზა"}
@@ -1075,6 +1084,9 @@ ka{
         }
         "Europe:Sarajevo"{
             ec{"სარაევო"}
+        }
+        "Europe:Saratov"{
+            ec{"სარატოვი"}
         }
         "Europe:Simferopol"{
             ec{"სიმფეროპოლი"}

@@ -106,6 +106,7 @@ fr{
         ES{"Espagne"}
         ET{"Éthiopie"}
         EU{"Union européenne"}
+        EZ{"zone euro"}
         FI{"Finlande"}
         FJ{"Fidji"}
         FK{"Îles Malouines"}
@@ -248,7 +249,7 @@ fr{
         SR{"Suriname"}
         SS{"Soudan du Sud"}
         ST{"Sao Tomé-et-Principe"}
-        SV{"El Salvador"}
+        SV{"Salvador"}
         SX{"Saint-Martin (partie néerlandaise)"}
         SY{"Syrie"}
         SZ{"Swaziland"}
@@ -304,10 +305,11 @@ fr{
     Countries%variant{
         CD{"Congo (RDC)"}
         CG{"République du Congo"}
+        CI{"​​République de Côte d’Ivoire"}
         CZ{"République tchèque"}
         FK{"Îles Falkland"}
         MK{"Macédoine (ARYM)"}
         TL{"Timor-Oriental"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
 }

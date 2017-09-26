@@ -22,7 +22,7 @@ da{
         039{"Sydeuropa"}
         053{"Australasien"}
         054{"Melanesien"}
-        057{"Mikronesien"}
+        057{"Mikronesiske område"}
         061{"Polynesien"}
         142{"Asien"}
         143{"Centralasien"}
@@ -106,10 +106,11 @@ da{
         ES{"Spanien"}
         ET{"Etiopien"}
         EU{"Den Europæiske Union"}
+        EZ{"eurozonen"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Falklandsøerne"}
-        FM{"Mikronesiens Forenede Stater"}
+        FM{"Mikronesien"}
         FO{"Færøerne"}
         FR{"Frankrig"}
         GA{"Gabon"}
@@ -272,7 +273,7 @@ da{
         UA{"Ukraine"}
         UG{"Uganda"}
         UM{"Amerikanske oversøiske øer"}
-        UN{"Forenede Nationer"}
+        UN{"De Forenede Nationer"}
         US{"USA"}
         UY{"Uruguay"}
         UZ{"Usbekistan"}
@@ -304,9 +305,10 @@ da{
     Countries%variant{
         CD{"Den Demokratiske Republik Congo (DRC)"}
         CG{"Republikken Congo"}
+        CZ{"Den Tjekkiske Republik"}
         FK{"Falklandsøerne (Islas Malvinas)"}
         MK{"Den tidligere jugoslaviske republik Makedonien"}
         TL{"Østtimor"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
 }

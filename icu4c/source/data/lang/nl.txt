@@ -33,7 +33,7 @@ nl{
         af{"Afrikaans"}
         afh{"Afrihili"}
         agq{"Aghem"}
-        ain{"Ainu"}
+        ain{"Aino"}
         ak{"Akan"}
         akk{"Akkadisch"}
         akz{"Alabama"}
@@ -391,6 +391,7 @@ nl{
         nb{"Noors - Bokmål"}
         nd{"Noord-Ndebele"}
         nds{"Nedersaksisch"}
+        nds_NL{"Nederduits"}
         ne{"Nepalees"}
         new{"Newari"}
         ng{"Ndonga"}
@@ -668,6 +669,7 @@ nl{
         Geok{"Georgisch Khutsuri"}
         Geor{"Georgisch"}
         Glag{"Glagolitisch"}
+        Gonm{"Masaram Gondi"}
         Goth{"Gothisch"}
         Gran{"Grantha"}
         Grek{"Grieks"}
@@ -814,6 +816,7 @@ nl{
         Sind{"Sindhi"}
         Sinh{"Singalees"}
         Sora{"Sora Sompeng"}
+        Soyo{"Soyombo"}
         Sund{"Soendanees"}
         Sylo{"Syloti Nagri"}
         Syrc{"Syriac"}
@@ -843,6 +846,7 @@ nl{
         Xpeo{"Oudperzisch"}
         Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
+        Zanb{"vierkant Zanabazar"}
         Zinh{"Overgeërfd"}
         Zmth{"Wiskundige notatie"}
         Zsye{"emoji"}
@@ -961,6 +965,7 @@ nl{
             ussystem{"Amerikaans imperiaal stelsel"}
         }
         numbers{
+            ahom{"Ahom cijfers"}
             arab{"Arabisch-Indische cijfers"}
             arabext{"uitgebreide Arabisch-Indische cijfers"}
             armn{"Armeense cijfers"}
@@ -970,11 +975,13 @@ nl{
             brah{"Brahmi cijfers"}
             cakm{"Chakma cijfers"}
             cham{"Cham cijfers"}
+            cyrl{"Cyrillische cijfers"}
             deva{"Devanagari cijfers"}
             ethi{"Ethiopische cijfers"}
             finance{"Financiële cijfers"}
             fullwide{"cijfers met volledige breedte"}
             geor{"Georgische cijfers"}
+            gonm{"Masaram Gondi cijfers"}
             grek{"Griekse cijfers"}
             greklow{"kleine Griekse cijfers"}
             gujr{"Gujarati cijfers"}
@@ -985,6 +992,7 @@ nl{
             hant{"traditioneel Chinese cijfers"}
             hantfin{"traditioneel Chinese financiële cijfers"}
             hebr{"Hebreeuwse cijfers"}
+            hmng{"Pahawh Hmong cijfers"}
             java{"Javaanse cijfers"}
             jpan{"Japanse cijfers"}
             jpanfin{"Japanse financiële cijfers"}
@@ -997,11 +1005,19 @@ nl{
             latn{"Westerse cijfers"}
             lepc{"Lepcha cijfers"}
             limb{"Limbu cijfers"}
+            mathbold{"vette wiskundige cijfers"}
+            mathdbl{"wiskundige cijfers met dubbele lijn"}
+            mathmono{"niet-proportionele wiskundige cijfers"}
+            mathsanb{"schreefloze vette wiskundige cijfers"}
+            mathsans{"schreefloze wiskundige cijfers"}
             mlym{"Malayalam cijfers"}
+            modi{"Modi cijfers"}
             mong{"Mongoolse cijfers"}
+            mroo{"Mro cijfers"}
             mtei{"Meetei Mayek cijfers"}
             mymr{"Myanmarese cijfers"}
             mymrshan{"Myanmarese Shan cijfers"}
+            mymrtlng{"Myanmar Tai Laing cijfers"}
             native{"Binnenlandse cijfers"}
             nkoo{"N’Ko cijfers"}
             olck{"Ol Chiki cijfers"}
@@ -1011,6 +1027,8 @@ nl{
             romanlow{"kleine Romeinse cijfers"}
             saur{"Saurashtra cijfers"}
             shrd{"Sharada cijfers"}
+            sind{"Khudawadi cijfers"}
+            sinh{"Sinhala Lith cijfers"}
             sora{"Sora Sompeng cijfers"}
             sund{"Sundanese cijfers"}
             takr{"Takri cijfers"}
@@ -1020,8 +1038,10 @@ nl{
             telu{"Telugu cijfers"}
             thai{"Thaise cijfers"}
             tibt{"Tibetaanse cijfers"}
+            tirh{"Tirhuta cijfers"}
             traditional{"Traditionele cijfers"}
             vaii{"Vai-cijfers"}
+            wara{"Warang Citi cijfers"}
         }
     }
     Variants{
@@ -1046,14 +1066,18 @@ nl{
         BISKE{"San Giorgio/Bila-dialect"}
         BOHORIC{"Bohorič-alfabet"}
         BOONT{"Boontling"}
+        COLB1945{"Portugese-Braziliaanse spellingsverdrag van 1945"}
+        CORNU{"Cornu"}
         DAJNKO{"Dajnko-alfabet"}
         EKAVSK{"Servisch met Ekaviaanse uitspraak"}
         EMODENG{"Vroegmodern Engels"}
         FONIPA{"Internationaal Fonetisch Alfabet"}
+        FONNAPA{"Fonnapa"}
         FONUPA{"Oeralisch Fonetisch Alfabet"}
         FONXSAMP{"Transcriptie volgens X-SAMPA"}
         HEPBURN{"Hepburn-romanisering"}
         HOGNORSK{"Hoognoors"}
+        HSISTEMO{"H-sistemo"}
         IJEKAVSK{"Servisch met Ijekaviaanse uitspraak"}
         ITIHASA{"Episch Sanskriet"}
         JAUER{"Jauer"}
@@ -1068,9 +1092,14 @@ nl{
         MONOTON{"Monotonaal"}
         NDYUKA{"Ndyuka-dialect"}
         NEDIS{"Natisone-dialect"}
+        NEWFOUND{"Newfound"}
         NJIVA{"Gniva/Njiva-dialect"}
         NULIK{"Modern Volapük"}
         OSOJS{"Oseacco/Osojane-dialect"}
+        OXENDICT{"Spelling volgens het Oxford English Dictionary"}
+        PAHAWH2{"Pahawh2"}
+        PAHAWH3{"Pahawh3"}
+        PAHAWH4{"Pahawh4"}
         PAMAKA{"Pamaka"}
         PETR1708{"Petr1708"}
         PINYIN{"Pinyin"}
@@ -1087,6 +1116,7 @@ nl{
         SIMPLE{"Simpel"}
         SOLBA{"Stolvizza/Solbica-dialect"}
         SOTAV{"Sotavento-dialectgroep van Kabuverdianu"}
+        SPANGLIS{"Spanglis"}
         SURMIRAN{"Surmiran"}
         SURSILV{"Sursilvan"}
         SUTSILV{"Sutsilvan"}
@@ -1099,8 +1129,9 @@ nl{
         VALENCIA{"Valenciaans"}
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
+        XSISTEMO{"X-sistemo"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     characterLabelPattern{
         all{"{0} — alle"}
         category-list{"{0}: {1}"}

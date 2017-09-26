@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nl{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -507,6 +507,9 @@ nl{
         "America:Puerto_Rico"{
             ec{"Puerto Rico"}
         }
+        "America:Punta_Arenas"{
+            ec{"Punta Arenas"}
+        }
         "America:Rainy_River"{
             ec{"Rainy River"}
         }
@@ -657,6 +660,9 @@ nl{
         "Asia:Ashgabat"{
             ec{"Asjchabad"}
         }
+        "Asia:Atyrau"{
+            ec{"Atıraw"}
+        }
         "Asia:Baghdad"{
             ec{"Bagdad"}
         }
@@ -688,7 +694,7 @@ nl{
             ec{"Chita"}
         }
         "Asia:Choibalsan"{
-            ec{"Choibalsan"}
+            ec{"Tsjojbalsan"}
         }
         "Asia:Colombo"{
             ec{"Colombo"}
@@ -707,6 +713,9 @@ nl{
         }
         "Asia:Dushanbe"{
             ec{"Doesjanbe"}
+        }
+        "Asia:Famagusta"{
+            ec{"Famagusta"}
         }
         "Asia:Gaza"{
             ec{"Gaza"}
@@ -989,7 +998,7 @@ nl{
         }
         "Europe:Dublin"{
             ec{"Dublin"}
-            ld{"Ierse zomertijd"}
+            ld{"Ierse standaardtijd"}
         }
         "Europe:Gibraltar"{
             ec{"Gibraltar"}
@@ -1075,6 +1084,9 @@ nl{
         }
         "Europe:Sarajevo"{
             ec{"Sarajevo"}
+        }
+        "Europe:Saratov"{
+            ec{"Saratov"}
         }
         "Europe:Simferopol"{
             ec{"Simferopol"}
@@ -1547,7 +1559,7 @@ nl{
             ls{"Greenwich Mean Time"}
         }
         "meta:Galapagos"{
-            ls{"Galapagoseilandse tijd"}
+            ls{"Galapagoseilandse standaardtijd"}
         }
         "meta:Gambier"{
             ls{"Gambiereilandse tijd"}
