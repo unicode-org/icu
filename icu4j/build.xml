@@ -297,21 +297,22 @@
 
     <!-- Junit Targets -->
     <macrodef name="icu-junit">
-        <attribute name="testdir"/>
-        <attribute name="output"/>
+        <attribute name="test-name"/>
         <attribute name="jvm-options" default=""/>
-        <attribute name="test-patternset" default="test-classes-patternset"/>
         <attribute name="classpath" default="junit.icu.jars"/>
         <attribute name="failure-status" default="ignore"/>
+        <element name="junit-fileset"/>
         <element name="junit-parameters" optional="true"/>
         <sequential>
+        <echo message="@{jvm-options}"/>
             <!--set the property - if it was set before it won't override-->
             <property name="user-jvm-options" value=""/>
             <property name="internal-jvm-options" value=""/>
-            <delete dir="${junit.out.dir}/@{output}"/>
-            <mkdir  dir="${junit.out.dir}/@{output}"/>
+            <delete dir="${junit.out.dir}/@{test-name}"/>
+            <mkdir  dir="${junit.out.dir}/@{test-name}"/>
 
-            <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="no" failureproperty="@{failure-status}">
+            <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="no"
+                failureproperty="@{failure-status}" tempdir="${junit.out.dir}">
                 <jvmarg value="-Xss4m"/>
                 <jvmarg value="-ea"/>
                 <jvmarg value="-Djava.awt.headless=true"/>
@@ -326,21 +327,19 @@
                 <formatter type="plain"/>
                 <formatter type="xml"/>
 
-                <batchtest todir="${junit.out.dir}/@{output}">
-                    <fileset dir="@{testdir}/${bin.dir}">
-                        <patternset refid="@{test-patternset}"/>
-                    </fileset>
+                <batchtest todir="${junit.out.dir}/@{test-name}">
+                    <junit-fileset/>
                 </batchtest>
             </junit>
 
-            <junitreport tofile="@{output}-TestSuite.xml" todir="${junit.out.dir}/@{output}">
-                <fileset dir="${junit.out.dir}/@{output}">
+            <junitreport tofile="@{test-name}-TestSuite.xml" todir="${junit.out.dir}/@{test-name}">
+                <fileset dir="${junit.out.dir}/@{test-name}">
                     <include name="*.xml"/>
                 </fileset>
-                <report format="frames" todir="${junit.out.dir}/@{output}/html"/>
+                <report format="frames" todir="${junit.out.dir}/@{test-name}/html"/>
             </junitreport>
 
-            <fail message="test failed: @{testdir}" if="@{failure-status}" />
+            <fail message="test failed: @{test-name}" if="@{failure-status}" />
 
         </sequential>
     </macrodef>
@@ -373,6 +372,17 @@
         <pathelement location="${icu4j.regiondata.jar}"/>
     </path>
 
+    <path id="junit.icu.release.jars">
+        <pathelement location="${icu4j.jar.file}"/>
+        <pathelement location="${icu4j.charset.jar}"/>
+        <pathelement location="${icu4jtests.jar.file}"/>
+    </path>
+
+    <path id="junit.icu.localespi-tests.jars">
+        <pathelement location="${icu4j.test-framework.jar}"/>
+        <pathelement location="${icu4j.localespi-tests.jar}"/>
+    </path>
+
     <!--Class names that will be included/excluded as tests-->
     <patternset id="test-classes-patternset">
         <include name="**/*Test*"/>
@@ -384,6 +394,7 @@
         <exclude name="**/*TestSample*"/>
         <exclude name="**/*$*.class"/>
         <exclude name="**/data/**"/>
+        <exclude name="com/ibm/icu/dev/test/*"/>
     </patternset>
 
     <!--Class names that will be included/excluded as tests for time zone check-->
@@ -442,13 +453,47 @@
         <fail message="test failed" if="icu-junit-failure" />
     </target>
 
-    <target name="timeZoneCheck" description="Run the complete test for TimeZoneRoundTripAll">
-        <icu-junit
-            testdir="${icu4j.core-tests.dir}" output="timeZoneCheck"
-            test-patternset="timeZoneCheck-patternset"
+    <target name="releaseJarCheck" depends="jar, icu4jtestsJar" description="Run the ICU4J test suite with ICU4J release jar files">
+        <icu-junit test-name="releaseJarCheck"
+            classpath="junit.icu.release.jars"
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <zipfileset src="${icu4jtests.jar.file}">
+                    <patternset refid="test-classes-patternset"/>
+                </zipfileset>
+            </junit-fileset>
+        </icu-junit>
+        <fail message="test failed - icu4j/icu4j-charset" if="icu-junit-failure" />
+
+        <property name="test.java.ext.dir" value="${out.dir}/localespi-ext"/>
+        <delete dir="${test.java.ext.dir}"/>
+        <mkdir dir="${test.java.ext.dir}"/>
+        <copy file="${icu4j-localespi.jar.file}" todir="${test.java.ext.dir}"/>
+        <copy file="${icu4j.jar.file}" todir="${test.java.ext.dir}"/>
+
+        <icu-junit test-name="releaseJarCheck-localespi"
+            classpath="junit.icu.localespi-tests.jars"
+            jvm-options="-Djava.ext.dirs=${test.java.ext.dir}${path.separator}${java.ext.dirs}"
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.localespi-tests.dir}/${bin.dir}">
+                    <patternset refid="localespiCheck-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
+        <fail message="test failed - icu4j-localespi" if="icu-junit-failure" />
+    </target>
+
+    <target name="timeZoneCheck" depends="main, tests" description="Run the complete test for TimeZoneRoundTripAll">
+        <icu-junit test-name="timeZoneCheck"
             jvm-options="-DTimeZoneRoundTripAll=true"
-            failure-status="icu-junit-failure"
-        />
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.core-tests.dir}/${bin.dir}">
+                    <patternset refid="timeZoneCheck-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
         <fail message="test failed" if="icu-junit-failure" />
     </target>
 
@@ -483,29 +528,41 @@
 
     <target name="_packagingCheckNoLangData">
         <!-- region data but no language data -->
-        <icu-junit testdir="${icu4j.packaging-tests.dir}" output="packaging/NoLangData"
-            test-patternset="packagingCheck-patternset"
+        <icu-junit test-name="packaging-NoLangData"
             classpath="junit.icu.jars.PackagingCheckNoLangData"
-            failure-status="icu-junit-failure"
-        />
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.packaging-tests.dir}/${bin.dir}">
+                    <patternset refid="packagingCheck-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
     </target>
 
     <target name="_packagingCheckNoRegionData">
         <!-- language data but no region data -->
-        <icu-junit testdir="${icu4j.packaging-tests.dir}" output="packaging/NoRegionData"
-            test-patternset="packagingCheck-patternset"
+        <icu-junit test-name="packaging-NoRegionData"
             classpath="junit.icu.jars.PackagingCheckNoRegionData"
-            failure-status="icu-junit-failure"
-        />
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.packaging-tests.dir}/${bin.dir}">
+                    <patternset refid="packagingCheck-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
     </target>
 
     <target name="_packagingCheckNoLangNorRegionData">
         <!-- neither region nor language data -->
-        <icu-junit testdir="${icu4j.packaging-tests.dir}" output="packaging/NoLangNorRegionData"
-            test-patternset="packagingCheck-patternset"
+        <icu-junit test-name="packaging-NoLangNorRegionData"
             classpath="junit.icu.jars.PackagingCheckNoLangNorRegionData"
-            failure-status="icu-junit-failure"
-        />
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.packaging-tests.dir}/${bin.dir}">
+                    <patternset refid="packagingCheck-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
     </target>
 
     <target name="packagingCheck" depends="info, core, packaging-tests" description="Run packaging tests">
@@ -516,9 +573,13 @@
     </target>
 
     <target name="_coreCheck">
-        <icu-junit testdir="${icu4j.core-tests.dir}" output="core"
-            failure-status="icu-junit-failure"
-        />
+        <icu-junit test-name="core" failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.core-tests.dir}/${bin.dir}">
+                    <patternset refid="test-classes-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
     </target>
 
     <target name="coreCheck" depends="info, core, currdata, langdata, regiondata, core-tests" description="Run only the core tests">
@@ -527,9 +588,13 @@
     </target>
 
     <target name="_charsetCheck">
-        <icu-junit testdir="${icu4j.charset-tests.dir}" output="charset"
-            failure-status="icu-junit-failure"
-        />
+        <icu-junit test-name="charset" failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.charset-tests.dir}/${bin.dir}">
+                    <patternset refid="test-classes-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
     </target>
 
     <target name="charsetCheck" depends="info, core, charset, currdata, langdata, regiondata, core-tests, charset-tests" description="Run only the charset tests">
@@ -538,9 +603,13 @@
     </target>
 
     <target name="_collateCheck">
-        <icu-junit testdir="${icu4j.collate-tests.dir}" output="collate"
-            failure-status="icu-junit-failure"
-        />
+        <icu-junit test-name="collate" failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.collate-tests.dir}/${bin.dir}">
+                    <patternset refid="test-classes-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
     </target>
 
     <target name="collateCheck" depends="info, core, collate, currdata, langdata, regiondata, core-tests, collate-tests" description="Run only the collation tests">
@@ -549,9 +618,13 @@
     </target>
 
     <target name="_translitCheck">
-        <icu-junit testdir="${icu4j.translit-tests.dir}" output="translit"
-            failure-status="icu-junit-failure"
-        />
+        <icu-junit test-name="translit" failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.translit-tests.dir}/${bin.dir}">
+                    <patternset refid="test-classes-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
     </target>
 
     <target name="translitCheck" depends="info, core, translit, translit-tests" description="Run the ICU4J Translit test suite">
@@ -560,11 +633,16 @@
     </target>
 
     <target name="_localespiCheck">
-        <icu-junit testdir="${icu4j.localespi-tests.dir}" output="localespi"
-            test-patternset="localespiCheck-patternset"
+        <icu-junit test-name="localespi"
+            classpath="junit.icu.localespi-tests.jars"
             jvm-options="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${icu4j.currdata.dir}/${jar.dir}${path.separator}${icu4j.langdata.dir}/${jar.dir}${path.separator}${icu4j.regiondata.dir}/${jar.dir}${path.separator}${java.ext.dirs}"
-            failure-status="icu-junit-failure"
-        />
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.localespi-tests.dir}/${bin.dir}">
+                    <patternset refid="localespiCheck-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
     </target>
 
     <target name="localespiCheck" if="is.java6.plus" depends="info, localespi, localespi-tests" description="Run the ICU4J Locale SPI test suite">
@@ -572,10 +650,18 @@
         <fail message="test failed" if="icu-junit-failure" />
     </target>
 
-    <target name="secureCheck" description="Run the secure (applet-like) ICU4J test suite">
-        <antcall target="check">
-            <param name="internal-jvm-options" value="-DICU.securitypolicy=${shared.dir}/data/security.policy"/>
-        </antcall>
+    <target name="secureCheck" depends="jar, icu4jtestsJar" description="Run the ICU4J test suite with Java security manager enabled">
+        <icu-junit test-name="secureCheck"
+            classpath="junit.icu.release.jars"
+            jvm-options="-Djava.security.manager -Djava.security.policy=${user.dir}/${shared.dir}/data/security.policy"
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <zipfileset src="${icu4jtests.jar.file}">
+                    <patternset refid="test-classes-patternset"/>
+                </zipfileset>
+            </junit-fileset>
+        </icu-junit>
+        <fail message="test failed" if="icu-junit-failure" />
     </target>
 
     <!-- jar targets -->
@@ -860,7 +946,7 @@
         </deploy>
     </target>
 
-    <target name="releaseVer" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz"
+    <target name="releaseVer" depends="info, releaseBinaries, releaseJarCheck, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz"
             description="Build all ICU4J release files for distribution with versioned file names">
         <!-- binaries -->
         <move file="${release.dir}/${icu4j.jar.file}" tofile="${release.dir}/${icu4j.jar.versioned.file}"/>
