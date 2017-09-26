@@ -2750,7 +2750,9 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void TestScientificWithGrouping() {
-        DecimalFormat df = new DecimalFormat("#,##0.000E0");
+        // Grouping separators are not allowed in the pattern, but we can enable them via the API.
+        DecimalFormat df = new DecimalFormat("###0.000E0");
+        df.setGroupingUsed(true);
         expect2(df, 123, "123.0E0");
         expect2(df, 1234, "1,234E0");
         expect2(df, 12340, "1.234E4");

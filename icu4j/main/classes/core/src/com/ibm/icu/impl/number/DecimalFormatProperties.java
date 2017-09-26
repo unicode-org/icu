@@ -15,6 +15,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
@@ -22,8 +23,6 @@ import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
-
-import newapi.impl.Padder.PadPosition;
 
 public class DecimalFormatProperties implements Cloneable, Serializable {
 

@@ -33,6 +33,7 @@ import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -41,8 +42,6 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
-
-import newapi.impl.Padder.PadPosition;
 
 public class PropertiesTest {
 

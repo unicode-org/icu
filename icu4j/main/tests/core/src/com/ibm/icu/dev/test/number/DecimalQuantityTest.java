@@ -20,12 +20,11 @@ import com.ibm.icu.impl.number.DecimalQuantity_64BitBCD;
 import com.ibm.icu.impl.number.DecimalQuantity_ByteArrayBCD;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.DecimalQuantity_SimpleStorage;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
-
-import newapi.LocalizedNumberFormatter;
-import newapi.NumberFormatter;
 
 /** TODO: This is a temporary name for this class. Suggestions for a better name? */
 public class DecimalQuantityTest extends TestFmwk {

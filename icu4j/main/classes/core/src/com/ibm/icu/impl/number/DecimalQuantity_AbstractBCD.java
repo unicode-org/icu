@@ -310,19 +310,6 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     return precision == 0;
   }
 
-  @Override
-  public DecimalQuantity createCopy() {
-    if (this instanceof DecimalQuantity_64BitBCD) {
-      return new DecimalQuantity_64BitBCD((DecimalQuantity_64BitBCD) this);
-    } else if (this instanceof DecimalQuantity_ByteArrayBCD) {
-      return new DecimalQuantity_ByteArrayBCD((DecimalQuantity_ByteArrayBCD) this);
-    } else if (this instanceof DecimalQuantity_DualStorageBCD) {
-      return new DecimalQuantity_DualStorageBCD((DecimalQuantity_DualStorageBCD) this);
-    } else {
-      throw new IllegalArgumentException("Don't know how to copy " + this.getClass());
-    }
-  }
-
   public void setToInt(int n) {
     setBcdToZero();
     flags = 0;
@@ -423,6 +410,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
    * to digits. Since double arithmetic is inexact, the resulting digits may not be accurate.
    */
   private void _setToDoubleFast(double n) {
+    isApproximate = true;
+    origDouble = n;
+    origDelta = 0;
+
+    // NOTE: Unlike ICU4C, doubles are always IEEE 754 doubles.
     long ieeeBits = Double.doubleToLongBits(n);
     int exponent = (int) ((ieeeBits & 0x7ff0000000000000L) >> 52) - 0x3ff;
 
@@ -431,10 +423,6 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
       _setToLong((long) n);
       return;
     }
-
-    isApproximate = true;
-    origDouble = n;
-    origDelta = 0;
 
     // 3.3219... is log2(10)
     int fracLength = (int) ((52 - exponent) / 3.32192809489);

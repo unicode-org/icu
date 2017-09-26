@@ -77,6 +77,11 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
   }
 
   @Override
+  public DecimalQuantity createCopy() {
+    return new DecimalQuantity_DualStorageBCD(this);
+  }
+
+  @Override
   protected byte getDigitPos(int position) {
     if (usingBytes) {
       if (position < 0 || position > precision) return 0;

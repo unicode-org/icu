@@ -10,16 +10,15 @@ import org.junit.Test;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.impl.number.MicroProps;
+import com.ibm.icu.impl.number.MutablePatternModifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
-
-import newapi.NumberFormatter.SignDisplay;
-import newapi.NumberFormatter.UnitWidth;
-import newapi.impl.MicroProps;
-import newapi.impl.MutablePatternModifier;
 
 public class MutablePatternModifierTest {
 
