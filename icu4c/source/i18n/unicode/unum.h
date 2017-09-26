@@ -264,8 +264,13 @@ typedef enum UNumberFormatStyle {
     UNUM_IGNORE = UNUM_PATTERN_DECIMAL
 } UNumberFormatStyle;
 
-/** The possible number format rounding modes. 
- *  @stable ICU 2.0
+/** The possible number format rounding modes.
+ *
+ * <p>
+ * For more detail on rounding modes, see:
+ * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+ *
+ * @stable ICU 2.0
  */
 typedef enum UNumberFormatRoundingMode {
     UNUM_ROUND_CEILING,
