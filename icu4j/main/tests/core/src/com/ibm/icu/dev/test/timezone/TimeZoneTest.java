@@ -22,6 +22,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
@@ -49,6 +51,7 @@ import com.ibm.icu.util.VersionInfo;
  * @summary test TimeZone
  * @build TimeZoneTest
  */
+@RunWith(JUnit4.class)
 public class TimeZoneTest extends TestFmwk
 {
     static final int millisPerHour = 3600000;
@@ -70,7 +73,7 @@ public class TimeZoneTest extends TestFmwk
      *
      * Bug 4130885
      * Certain short zone IDs, used since 1.1.x, are incorrect.
-     *  
+     *
      * The worst of these is:
      *
      * "CAT" (Central African Time) should be GMT+2:00, but instead returns a
@@ -226,6 +229,7 @@ public class TimeZoneTest extends TestFmwk
 
         public String getID() { return id; }
 
+        @Override
         public boolean equals(Object o) {
             ZoneDescriptor that = (ZoneDescriptor)o;
             return that != null &&
@@ -234,6 +238,7 @@ public class TimeZoneTest extends TestFmwk
                 daylight == that.daylight;
         }
 
+        @Override
         public String toString() {
             int min = offset;
             char sign = '+';
@@ -343,7 +348,7 @@ public class TimeZoneTest extends TestFmwk
         // THE FOLLOWING LINES MUST BE UPDATED IF THE LOCALE DATA CHANGES
         //*****************************************************************
 
-        // Test to allow the user to choose to get all the forms 
+        // Test to allow the user to choose to get all the forms
         // (z, zzzz, Z, ZZZZ, v, vvvv)
         // todo: check to see whether we can test for all of pst, pdt, pt
         Object[] DATA = {
@@ -356,7 +361,7 @@ public class TimeZoneTest extends TestFmwk
             Boolean.FALSE, new Integer(TimeZone.SHORT_GENERIC), "PT",
             Boolean.TRUE,  new Integer(TimeZone.SHORT_GENERIC), "PT",
             Boolean.FALSE, new Integer(TimeZone.LONG_GENERIC),  "Pacific Time",
-            Boolean.TRUE,  new Integer(TimeZone.LONG_GENERIC),  "Pacific Time",  
+            Boolean.TRUE,  new Integer(TimeZone.LONG_GENERIC),  "Pacific Time",
             // z and ZZZZ
             Boolean.FALSE, new Integer(TimeZone.SHORT_GMT), "-0800",
             Boolean.TRUE,  new Integer(TimeZone.SHORT_GMT), "-0700",
@@ -405,7 +410,7 @@ public class TimeZoneTest extends TestFmwk
         // If not, we expect the en fallback behavior.
 
         // in icu4j 2.1 we know we have the zh_CN locale data, though it's incomplete
-//    /"DateFormatZoneData", 
+//    /"DateFormatZoneData",
         UResourceBundle enRB = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,Locale.ENGLISH);
         UResourceBundle mtRB = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, mt_MT);
         boolean noZH = enRB == mtRB;
@@ -415,7 +420,7 @@ public class TimeZoneTest extends TestFmwk
             if (!name.equals("Pacific Standard Time"))
                 errln("Fail: Expected Pacific Standard Time for PST in mt_MT but got ");
         }
-        // dlf - we will use generic time, or if unavailable, GMT for standard time in the zone 
+        // dlf - we will use generic time, or if unavailable, GMT for standard time in the zone
         //     - we now (3.4.1) have localizations for this zone, so change test string
         else if(!name.equals("\u0126in ta\u2019 Los Angeles") &&
             !name.equals("GMT-08:00") &&
@@ -428,7 +433,7 @@ public class TimeZoneTest extends TestFmwk
                   "THE ABOVE FAILURE MAY JUST MEAN THE LOCALE DATA HAS CHANGED\n" +
                   "************************************************************");
         }
-        
+
         // Now try a non-existent zone
         zone2 = new SimpleTimeZone(90*60*1000, "xyzzy");
         name = zone2.getDisplayName(Locale.ENGLISH);
@@ -438,7 +443,7 @@ public class TimeZoneTest extends TestFmwk
             !name.equals("GMT+0130") &&
             !name.equals("GMT+130"))
             errln("Fail: Expected GMT+01:30 or something similar");
-        
+
         // cover getDisplayName() - null arg
         ULocale save = ULocale.getDefault();
         ULocale.setDefault(ULocale.US);
@@ -448,9 +453,9 @@ public class TimeZoneTest extends TestFmwk
             !name.equals("GMT+1:30") &&
             !name.equals("GMT+0130") &&
             !name.equals("GMT+130"))
-            errln("Fail: Expected GMT+01:30 or something similar");        
+            errln("Fail: Expected GMT+01:30 or something similar");
         ULocale.setDefault(save);
- 
+
     }
 
 
@@ -479,7 +484,7 @@ public class TimeZoneTest extends TestFmwk
                         displayName0 = tz.getDisplayName(true, TimeZone.LONG_GENERIC, locale);
                     }
                     if (!displayName1.equals(displayName0)) {
-                        errln(locale.getDisplayName() + ", " + tz.getID() + 
+                        errln(locale.getDisplayName() + ", " + tz.getID() +
                                 ": expected " + displayName1 + " but got: " + displayName0);
                     }
                 }
@@ -499,52 +504,46 @@ public class TimeZoneTest extends TestFmwk
         if (!zoneclone.equals(zone)) errln("FAIL: clone or operator== failed");
         zoneclone.setID("abc");
         if (zoneclone.equals(zone)) errln("FAIL: clone or operator!= failed");
-        // delete zoneclone;
 
         zoneclone = (TimeZone)zone.clone();
         if (!zoneclone.equals(zone)) errln("FAIL: clone or operator== failed");
         zoneclone.setRawOffset(45678);
         if (zoneclone.equals(zone)) errln("FAIL: clone or operator!= failed");
 
-        // C++ only
-        /*
-          SimpleTimeZone copy(*zone);
-          if (!(copy == *zone)) errln("FAIL: copy constructor or operator== failed");
-          copy = *(SimpleTimeZone*)zoneclone;
-          if (!(copy == *zoneclone)) errln("FAIL: assignment operator or operator== failed");
-          */
-
+        // set/getDefault
         TimeZone saveDefault = TimeZone.getDefault();
         TimeZone.setDefault(zone);
         TimeZone defaultzone = TimeZone.getDefault();
-        if (defaultzone == zone) errln("FAIL: Default object is identical, not clone");
-        if (!defaultzone.equals(zone)) errln("FAIL: Default object is not equal");
-        TimeZone.setDefault(saveDefault);
-        // delete defaultzone;
-        // delete zoneclone;
+        if (defaultzone == zone) {
+            errln("FAIL: Default object is identical, not clone");
+        }
+        if (!defaultzone.equals(zone)) {
+            errln("FAIL: Default object is not equal");
+        }
+        java.util.TimeZone javaDefault = java.util.TimeZone.getDefault();
+        if (offset != javaDefault.getRawOffset() || !id.equals(javaDefault.getID())) {
+            errln("FAIL: Java runtime default time zone is not synchronized");
+        }
 
-//      // ICU 2.6 Coverage
-//      logln(zone.toString());
-//      logln(zone.getDisplayName());
-//      SimpleTimeZoneAdapter stza = new SimpleTimeZoneAdapter((SimpleTimeZone) TimeZone.getTimeZone("GMT"));
-//      stza.setID("Foo");
-//      if (stza.hasSameRules(java.util.TimeZone.getTimeZone("GMT"))) {
-//          errln("FAIL: SimpleTimeZoneAdapter.hasSameRules");
-//      }
-//      stza.setRawOffset(3000);
-//      offset = stza.getOffset(GregorianCalendar.BC, 2001, Calendar.DECEMBER,
-//                              25, Calendar.TUESDAY, 12*60*60*1000);
-//      if (offset != 3000) {
-//          errln("FAIL: SimpleTimeZoneAdapter.getOffset");
-//      }
-//      SimpleTimeZoneAdapter dup = (SimpleTimeZoneAdapter) stza.clone();
-//      if (stza.hashCode() != dup.hashCode()) {
-//          errln("FAIL: SimpleTimeZoneAdapter.hashCode");
-//      }
-//      if (!stza.equals(dup)) {
-//          errln("FAIL: SimpleTimeZoneAdapter.equals");
-//      }
-//      logln(stza.toString());
+        String anotheId = "AnotherZone";
+        int anotherOffset = 23456;
+        SimpleTimeZone anotherZone = new SimpleTimeZone(anotherOffset, anotheId);
+        TimeZone.setICUDefault(anotherZone);
+        TimeZone newICUDefaultZone = TimeZone.getDefault();
+        if (newICUDefaultZone == anotherZone) {
+            errln("FAIL: New ICU default object is identical, not clone");
+        }
+        if (!newICUDefaultZone.equals(anotherZone)) {
+            errln("FAIL: New ICU default object is not equal");
+        }
+        javaDefault = java.util.TimeZone.getDefault();
+        if (offset != javaDefault.getRawOffset() || !id.equals(javaDefault.getID())) {
+            errln("FAIL: Java runtime default time zone was updated");
+        }
+
+        TimeZone.setDefault(saveDefault);
+
+
 
         String tzver = TimeZone.getTZDataVersion();
         if (tzver.length() != 5 /* 4 digits + 1 letter */) {
@@ -1084,7 +1083,7 @@ public class TimeZoneTest extends TestFmwk
             // hack so test compiles and runs in both JDK 1.3 and JDK 1.4
             final Object[] args = new Object[0];
             final Class[] argtypes = new Class[0];
-            java.lang.reflect.Method m = tz_java.getClass().getMethod("getDSTSavings", argtypes); 
+            java.lang.reflect.Method m = tz_java.getClass().getMethod("getDSTSavings", argtypes);
             dst_java = ((Integer) m.invoke(tz_java, args)).intValue();
             if (dst_java <= 0 || dst_java >= 3600000) { // didn't get the fractional time zone we wanted
             errln("didn't get fractional time zone!");
@@ -1104,13 +1103,13 @@ public class TimeZoneTest extends TestFmwk
             warnln(e.getMessage());
             return;
         }
-        
+
         com.ibm.icu.util.TimeZone tz_icu = com.ibm.icu.util.TimeZone.getTimeZone(tzName);
         int dst_icu = tz_icu.getDSTSavings();
 
         if (dst_java != dst_icu) {
             warnln("java reports dst savings of " + dst_java +
-              " but icu reports " + dst_icu + 
+              " but icu reports " + dst_icu +
               " for tz " + tz_icu.getID());
         } else {
             logln("both java and icu report dst savings of " + dst_java + " for tz " + tz_icu.getID());
@@ -1139,7 +1138,7 @@ public class TimeZoneTest extends TestFmwk
 
     // jb4484
     @Test
-    public void TestSimpleTimeZoneSerialization() 
+    public void TestSimpleTimeZoneSerialization()
     {
         SimpleTimeZone stz0 = new SimpleTimeZone(32400000, "MyTimeZone");
         SimpleTimeZone stz1 = new SimpleTimeZone(32400000, "Asia/Tokyo");
@@ -1155,7 +1154,7 @@ public class TimeZoneTest extends TestFmwk
         SimpleTimeZone stz5 = new SimpleTimeZone(32400000, "Asia/Tokyo");
         stz5.setStartRule(2, 3, 4, 360000);
         stz5.setEndRule(6, 3, 4, 360000);
-        
+
         SimpleTimeZone[] stzs = { stz0, stz1, stz2, stz3, stz4, stz5, };
 
         for (int i = 0; i < stzs.length; ++i) {
@@ -1355,7 +1354,7 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
-    
+
     @Test
     public void TestCoverage(){
         class StubTimeZone extends TimeZone{
@@ -1363,12 +1362,17 @@ public class TimeZoneTest extends TestFmwk
              * For serialization
              */
             private static final long serialVersionUID = 8658654217433379343L;
+            @Override
             public int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds) {return 0;}
+            @Override
             public void setRawOffset(int offsetMillis) {}
+            @Override
             public int getRawOffset() {return 0;}
+            @Override
             public boolean useDaylightTime() {return false;}
+            @Override
             public boolean inDaylightTime(Date date) {return false;}
-        } 
+        }
         StubTimeZone stub = new StubTimeZone();
         StubTimeZone stub2 = (StubTimeZone) stub.clone();
         if (stub.getDSTSavings() != 0){
@@ -1376,7 +1380,7 @@ public class TimeZoneTest extends TestFmwk
         }
         if (!stub.hasSameRules(stub2)){
             errln("TimeZone.clone() object should hasSameRules");
-     
+
         }
     }
     @Test
@@ -1964,7 +1968,7 @@ public class TimeZoneTest extends TestFmwk
             }
 
             // cloneAsThawed
-            TimeZone thawed = (TimeZone)thawedZones[i].cloneAsThawed();
+            TimeZone thawed = thawedZones[i].cloneAsThawed();
             if (thawed.isFrozen() || !thawedZones[i].equals(thawed)) {
                 errln("Fail: " + zaName + "[" + i + "] - cloneAsThawed does not work.");
             }
@@ -2071,7 +2075,7 @@ public class TimeZoneTest extends TestFmwk
             }
 
             // cloneAsThawed
-            TimeZone thawed = (TimeZone)frozenZones[i].cloneAsThawed();
+            TimeZone thawed = frozenZones[i].cloneAsThawed();
             if (thawed.isFrozen() || !frozenZones[i].equals(thawed)) {
                 errln("Fail: " + zaName + "[" + i + "] - cloneAsThawed does not work.");
             }
@@ -2210,7 +2214,7 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
-    
+
     @Test
     public void Test11619_UnrecognizedTimeZoneID() {
         VTimeZone vzone = VTimeZone.create("ABadTimeZoneId");

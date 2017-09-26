@@ -667,6 +667,7 @@ void RBBIMonkeyImpl::runTest() {
         testFollowing(status);
         testPreceding(status);
         testIsBoundary(status);
+        testIsBoundaryRandom(status);
 
         if (fLoopCount < 0 && loopCount % 100 == 0) {
             fprintf(stderr, ".");
@@ -801,6 +802,29 @@ void RBBIMonkeyImpl::testIsBoundary(UErrorCode &status) {
     }
     checkResults("testForwards", FORWARD, status);
 }
+
+void RBBIMonkeyImpl::testIsBoundaryRandom(UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    fBI->setText(fTestData->fString);
+    
+    int stringLen = fTestData->fString.length();
+    for (int i=stringLen; i>=0; --i) {
+        int strIdx = fRandomGenerator() % stringLen;
+        if (fTestData->fExpectedBreaks.charAt(strIdx) != fBI->isBoundary(strIdx)) {
+            IntlTest::gTest->errln("%s:%d testIsBoundaryRandom failure at index %d. Parameters to reproduce: @rules=%s,seed=%u,loop=1,verbose ",
+                    __FILE__, __LINE__, strIdx, fRuleFileName, fTestData->fRandomSeed);
+            if (fVerbose) {
+                fTestData->dump(i);
+            }
+            status = U_INVALID_STATE_ERROR;
+            break;
+        }
+    }
+}
+        
+
 
 void RBBIMonkeyImpl::checkResults(const char *msg, CheckDirection direction, UErrorCode &status) {
     if (U_FAILURE(status)) {

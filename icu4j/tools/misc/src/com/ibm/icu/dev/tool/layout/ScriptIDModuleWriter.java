@@ -172,16 +172,16 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
                 output.println(format.format(args));
             }
 
-            for (int langauge = previousTotalLanguages+1; langauge <= totalLanguage; langauge += 1) {
+            for (int language = previousTotalLanguages+1; language <= totalLanguage; language += 1) {
                 output.print("    ");
-                output.print(languageData.getTagLabel(langauge).toLowerCase());
+                output.print(languageData.getTagLabel(language).toLowerCase());
                 output.print("ScriptCode = ");
                 
-                if (langauge < 10) {
+                if (language < 10) {
                     output.print(" ");
                 }
                 
-                output.print(langauge);
+                output.print(language);
                 output.println(",");
             }  
         }

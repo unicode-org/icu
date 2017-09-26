@@ -28,6 +28,7 @@
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
 #include "unicode/utf8.h"
+#include "bytesinkutil.h"
 #include "cmemory.h"
 #include "mutex.h"
 #include "normalizer2impl.h"
@@ -129,60 +130,6 @@ int32_t getJamoTMinusBase(const uint8_t *src, const uint8_t *limit) {
     return -1;
 }
 
-/** The bytes at [src, nextSrc[ were mapped to valid (s16, s16Length). */
-UBool
-appendChange(const uint8_t *src, const uint8_t *nextSrc,
-             const char16_t *s16, int32_t s16Length,
-             ByteSink &sink, Edits *edits, UErrorCode &errorCode) {
-    U_ASSERT(U_SUCCESS(errorCode));
-    U_ASSERT((nextSrc - src) <= INT32_MAX);  // ensured by caller
-    char scratch[200];
-    int32_t s8Length = 0;
-    for (int32_t i = 0; i < s16Length;) {
-        int32_t capacity;
-        int32_t desiredCapacity = s16Length - i;
-        if (desiredCapacity < (INT32_MAX / 3)) {
-            desiredCapacity *= 3;  // max 3 UTF-8 bytes per UTF-16 code unit
-        } else if (desiredCapacity < (INT32_MAX / 2)) {
-            desiredCapacity *= 2;
-        } else {
-            desiredCapacity = INT32_MAX;
-        }
-        char *buffer = sink.GetAppendBuffer(U8_MAX_LENGTH, desiredCapacity,
-                                            scratch, UPRV_LENGTHOF(scratch), &capacity);
-        capacity -= U8_MAX_LENGTH - 1;
-        int32_t j = 0;
-        for (; i < s16Length && j < capacity;) {
-            UChar32 c;
-            U16_NEXT_UNSAFE(s16, i, c);
-            U8_APPEND_UNSAFE(buffer, j, c);
-        }
-        if (j > (INT32_MAX - s8Length)) {
-            errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
-            return FALSE;
-        }
-        sink.Append(buffer, j);
-        s8Length += j;
-    }
-    if (edits != nullptr) {
-        edits->addReplace((int32_t)(nextSrc - src), s8Length);
-    }
-    return TRUE;
-}
-
-/** The few bytes at [src, nextSrc[ were mapped to valid code point c. */
-void
-appendCodePoint(const uint8_t *src, const uint8_t *nextSrc, UChar32 c,
-                ByteSink &sink, Edits *edits) {
-    char buffer[U8_MAX_LENGTH];
-    int32_t length = 0;
-    U8_APPEND_UNSAFE(buffer, length, c);
-    if (edits != nullptr) {
-        edits->addReplace((int32_t)(nextSrc - src), length);
-    }
-    sink.Append(buffer, length);
-}
-
 void
 appendCodePointDelta(const uint8_t *cpStart, const uint8_t *cpLimit, int32_t delta,
                      ByteSink &sink, Edits *edits) {
@@ -212,27 +159,6 @@ appendCodePointDelta(const uint8_t *cpStart, const uint8_t *cpLimit, int32_t del
         edits->addReplace(cpLength, length);
     }
     sink.Append(buffer, length);
-}
-
-UBool
-appendUnchanged(const uint8_t *s, const uint8_t *limit,
-                ByteSink &sink, uint32_t options, Edits *edits,
-                UErrorCode &errorCode) {
-    U_ASSERT(U_SUCCESS(errorCode));
-    if ((limit - s) > INT32_MAX) {
-        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
-        return FALSE;
-    }
-    int32_t length = (int32_t)(limit - s);
-    if (length > 0) {
-        if (edits != nullptr) {
-            edits->addUnchanged(length);
-        }
-        if ((options & U_OMIT_UNCHANGED_TEXT) ==0) {
-            sink.Append(reinterpret_cast<const char *>(s), length);
-        }
-    }
-    return TRUE;
 }
 
 }  // namespace
@@ -1851,7 +1777,8 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
         for (;;) {
             if (src == limit) {
                 if (prevBoundary != limit && sink != nullptr) {
-                    appendUnchanged(prevBoundary, limit, *sink, options, edits, errorCode);
+                    ByteSinkUtil::appendUnchanged(prevBoundary, limit,
+                                                  *sink, options, edits, errorCode);
                 }
                 return TRUE;
             }
@@ -1884,7 +1811,8 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                 if (norm16HasCompBoundaryAfter(norm16, onlyContiguous) ||
                         hasCompBoundaryBefore(src, limit)) {
                     if (prevBoundary != prevSrc &&
-                            !appendUnchanged(prevBoundary, prevSrc, *sink, options, edits, errorCode)) {
+                            !ByteSinkUtil::appendUnchanged(prevBoundary, prevSrc,
+                                                           *sink, options, edits, errorCode)) {
                         break;
                     }
                     appendCodePointDelta(prevSrc, src, getAlgorithmicDelta(norm16), *sink, edits);
@@ -1896,13 +1824,14 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                 if (norm16HasCompBoundaryAfter(norm16, onlyContiguous) ||
                         hasCompBoundaryBefore(src, limit)) {
                     if (prevBoundary != prevSrc &&
-                            !appendUnchanged(prevBoundary, prevSrc, *sink, options, edits, errorCode)) {
+                            !ByteSinkUtil::appendUnchanged(prevBoundary, prevSrc,
+                                                           *sink, options, edits, errorCode)) {
                         break;
                     }
                     const uint16_t *mapping = getMapping(norm16);
                     int32_t length = *mapping++ & MAPPING_LENGTH_MASK;
-                    if (!appendChange(prevSrc, src, (const UChar *)mapping, length,
-                                      *sink, edits, errorCode)) {
+                    if (!ByteSinkUtil::appendChange(prevSrc, src, (const UChar *)mapping, length,
+                                                    *sink, edits, errorCode)) {
                         break;
                     }
                     prevBoundary = src;
@@ -1915,7 +1844,8 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                 if (hasCompBoundaryBefore(src, limit) ||
                         hasCompBoundaryAfter(prevBoundary, prevSrc, onlyContiguous)) {
                     if (prevBoundary != prevSrc &&
-                            !appendUnchanged(prevBoundary, prevSrc, *sink, options, edits, errorCode)) {
+                            !ByteSinkUtil::appendUnchanged(prevBoundary, prevSrc,
+                                                           *sink, options, edits, errorCode)) {
                         break;
                     }
                     if (edits != nullptr) {
@@ -1955,10 +1885,11 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                             Hangul::JAMO_T_COUNT + t;
                         prevSrc -= 3;  // Replace the Jamo L as well.
                         if (prevBoundary != prevSrc &&
-                                !appendUnchanged(prevBoundary, prevSrc, *sink, options, edits, errorCode)) {
+                                !ByteSinkUtil::appendUnchanged(prevBoundary, prevSrc,
+                                                               *sink, options, edits, errorCode)) {
                             break;
                         }
-                        appendCodePoint(prevSrc, src, syllable, *sink, edits);
+                        ByteSinkUtil::appendCodePoint(prevSrc, src, syllable, *sink, edits);
                         prevBoundary = src;
                         continue;
                     }
@@ -1979,10 +1910,11 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                 UChar32 syllable = prev + getJamoTMinusBase(prevSrc, src);
                 prevSrc -= 3;  // Replace the Hangul LV as well.
                 if (prevBoundary != prevSrc &&
-                        !appendUnchanged(prevBoundary, prevSrc, *sink, options, edits, errorCode)) {
+                        !ByteSinkUtil::appendUnchanged(prevBoundary, prevSrc,
+                                                       *sink, options, edits, errorCode)) {
                     break;
                 }
-                appendCodePoint(prevSrc, src, syllable, *sink, edits);
+                ByteSinkUtil::appendCodePoint(prevSrc, src, syllable, *sink, edits);
                 prevBoundary = src;
                 continue;
             }
@@ -2006,7 +1938,8 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                 for (;;) {
                     if (src == limit) {
                         if (sink != nullptr) {
-                            appendUnchanged(prevBoundary, limit, *sink, options, edits, errorCode);
+                            ByteSinkUtil::appendUnchanged(prevBoundary, limit,
+                                                          *sink, options, edits, errorCode);
                         }
                         return TRUE;
                     }
@@ -2070,11 +2003,12 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                 return FALSE;
             }
             if (prevBoundary != prevSrc &&
-                    !appendUnchanged(prevBoundary, prevSrc, *sink, options, edits, errorCode)) {
+                    !ByteSinkUtil::appendUnchanged(prevBoundary, prevSrc,
+                                                   *sink, options, edits, errorCode)) {
                 break;
             }
-            if (!appendChange(prevSrc, src, buffer.getStart(), buffer.length(),
-                              *sink, edits, errorCode)) {
+            if (!ByteSinkUtil::appendChange(prevSrc, src, buffer.getStart(), buffer.length(),
+                                            *sink, edits, errorCode)) {
                 break;
             }
             prevBoundary = src;

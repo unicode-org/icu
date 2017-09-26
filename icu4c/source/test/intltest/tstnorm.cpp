@@ -59,6 +59,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestLowMappingToEmpty_FCD);
     TESTCASE_AUTO(TestNormalizeIllFormedText);
     TESTCASE_AUTO(TestComposeJamoTBase);
+    TESTCASE_AUTO(TestComposeBoundaryAfter);
     TESTCASE_AUTO_END;
 }
 
@@ -1752,6 +1753,23 @@ BasicNormalizerTest::TestComposeJamoTBase() {
     assertEquals("normalizeUTF8(LV+11A7)", expected8.c_str(), result8.c_str());
     assertFalse("isNormalizedUTF8(LV+11A7)", nfkc->isNormalizedUTF8(s8, errorCode));
     assertTrue("isNormalizedUTF8(normalized)", nfkc->isNormalizedUTF8(result8, errorCode));
+}
+
+void
+BasicNormalizerTest::TestComposeBoundaryAfter() {
+    IcuTestErrorCode errorCode(*this, "TestComposeBoundaryAfter");
+    const Normalizer2 *nfkc = Normalizer2::getNFKCInstance(errorCode);
+    if(errorCode.logDataIfFailureAndReset("Normalizer2::getNFKCInstance() call failed")) {
+        return;
+    }
+    // U+02DA and U+FB2C do not have compose-boundaries-after.
+    UnicodeString s(u"\u02DA\u0339 \uFB2C\u05B6");
+    UnicodeString expected(u" \u0339\u030A \u05E9\u05B6\u05BC\u05C1");
+    UnicodeString result = nfkc->normalize(s, errorCode);
+    assertSuccess("nfkc", errorCode.get());
+    assertEquals("nfkc", expected, result);
+    assertFalse("U+02DA boundary-after", nfkc->hasBoundaryAfter(0x2DA));
+    assertFalse("U+FB2C boundary-after", nfkc->hasBoundaryAfter(0xFB2C));
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */

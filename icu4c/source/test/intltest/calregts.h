@@ -1,14 +1,14 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 #ifndef _CALENDARREGRESSIONTEST_
 #define _CALENDARREGRESSIONTEST_
- 
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -17,11 +17,11 @@
 #include "unicode/gregocal.h"
 #include "intltest.h"
 
-/** 
+/**
  * Performs regression test for Calendar
  **/
-class CalendarRegressionTest: public IntlTest {    
-    
+class CalendarRegressionTest: public IntlTest {
+
     // IntlTest override
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 public:
@@ -77,6 +77,7 @@ public:
     void TestT8596(void);
     void Test9019(void);
     void TestT9452(void);
+    void TestT11632(void);
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;
@@ -94,6 +95,6 @@ protected:
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
- 
+
 #endif // _CALENDARREGRESSIONTEST_
 //eof

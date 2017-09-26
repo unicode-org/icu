@@ -11,12 +11,16 @@ package com.ibm.icu.dev.test.format;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.util.ULocale;
 
-public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class NumberFormatRegistrationTest extends TestFmwk {
     @Test
     public void TestRegistration() {
         final ULocale SRC_LOC = ULocale.FRANCE;
@@ -34,6 +38,7 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
                 currencyStyle = NumberFormat.getIntegerInstance(swapLoc);
             }
 
+            @Override
             public NumberFormat createFormat(ULocale loc, int formatType) {
                 if (formatType == FORMAT_CURRENCY) {
                     return currencyStyle;

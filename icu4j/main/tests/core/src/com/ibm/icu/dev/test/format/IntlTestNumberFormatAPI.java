@@ -5,7 +5,7 @@
  *   Copyright (C) 1996-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
-/** 
+/**
  * Port From:   JDK 1.4b1 : java.text.Format.IntlTestNumberFormatAPI
  * Source File: java/text/format/IntlTestNumberFormatAPI.java
  **/
@@ -24,11 +24,15 @@ import java.text.ParsePosition;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 
-public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
+@RunWith(JUnit4.class)
+public class IntlTestNumberFormatAPI extends TestFmwk
 {
     // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
     @Test
@@ -52,17 +56,17 @@ public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         NumberFormat per = NumberFormat.getPercentInstance();
 
         NumberFormat per_fr = NumberFormat.getPercentInstance(Locale.FRENCH);
-        
+
         NumberFormat integer = NumberFormat.getIntegerInstance();
-        
+
         NumberFormat int_fr = NumberFormat.getIntegerInstance(Locale.FRENCH);
-        
+
         //Fix "The variable is never used" compilation warnings
         logln("Currency : " + cur.format(1234.5));
         logln("Percent : " + per.format(1234.5));
         logln("Integer : " + integer.format(1234.5));
         logln("Int_fr : " + int_fr.format(1234.5));
-        
+
         // ======= Test equality
 
         logln("Testing equality operator");
@@ -201,7 +205,7 @@ public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 //            errln("ERROR: Couldn't create a DecimalFormat");
 //        }
     }
-    
+
     // Jitterbug 4451, for coverage
     @Test
     public void TestCoverage(){
@@ -216,11 +220,17 @@ public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
                     errln("NumberFormat.getPattern(Locale, int) should delegate to (ULocale,)");
                 }
             }
+            @Override
             public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            @Override
             public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            @Override
             public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            @Override
             public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            @Override
             public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
+            @Override
             public Number parse(String text, ParsePosition parsePosition) {return null;}
         }
         new StubNumberFormat().run();

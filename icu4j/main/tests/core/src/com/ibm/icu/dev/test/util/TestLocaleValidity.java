@@ -16,6 +16,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ValidIdentifiers;
@@ -31,6 +33,7 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  *
  */
+@RunWith(JUnit4.class)
 public class TestLocaleValidity extends TestFmwk {
     @Test
     public void testBasic() {

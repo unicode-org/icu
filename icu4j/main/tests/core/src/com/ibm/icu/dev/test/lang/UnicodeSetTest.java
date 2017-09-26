@@ -25,6 +25,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
@@ -51,6 +53,7 @@ import com.ibm.icu.util.OutputInt;
  * @test
  * @summary General test of UnicodeSet
  */
+@RunWith(JUnit4.class)
 public class UnicodeSetTest extends TestFmwk {
 
     static final String NOT = "%%%%";

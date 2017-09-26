@@ -36,6 +36,8 @@ import java.util.Random;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -66,6 +68,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class NumberFormatTest extends TestFmwk {
 
     @Test
@@ -5251,6 +5254,13 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat df = new DecimalFormat("#00.0#E0");
         String result = df.format(0.00123);
         assertEquals("Should ignore scientific minInt if maxInt>minInt", "1.23E-3", result);
+    }
+
+    @Test
+    public void Test13310() {
+        assertEquals("Should not throw an assertion error",
+                "10000000.76E0",
+                new DecimalFormat("000000000.0#E0").format(10000000.76d));
     }
 
     @Test

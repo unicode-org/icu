@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -50,6 +52,7 @@ import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class CollationTest extends TestFmwk {
     public CollationTest() {
     }
@@ -62,14 +65,14 @@ public class CollationTest extends TestFmwk {
     String fileTestName;
 
     // package private methods ----------------------------------------------
-    
-    static void doTest(TestFmwk test, RuleBasedCollator col, String source, 
+
+    static void doTest(TestFmwk test, RuleBasedCollator col, String source,
                        String target, int result)
     {
         doTestVariant(test, col, source, target, result);
         if (result == -1) {
             doTestVariant(test, col, target, source, 1);
-        } 
+        }
         else if (result == 1) {
             doTestVariant(test, col, target, source, -1);
         }
@@ -82,17 +85,17 @@ public class CollationTest extends TestFmwk {
         iter.setText(target);
         backAndForth(test, iter);
     }
-    
+
     /**
      * Return an integer array containing all of the collation orders
      * returned by calls to next on the specified iterator
      */
-    static int[] getOrders(CollationElementIterator iter) 
+    static int[] getOrders(CollationElementIterator iter)
     {
         int maxSize = 100;
         int size = 0;
         int[] orders = new int[maxSize];
-        
+
         int order;
         while ((order = iter.next()) != CollationElementIterator.NULLORDER) {
             if (size == maxSize) {
@@ -103,7 +106,7 @@ public class CollationTest extends TestFmwk {
             }
             orders[size++] = order;
         }
-        
+
         if (maxSize > size) {
             int[] temp = new int[size];
             System.arraycopy(orders, 0, temp,  0, size);
@@ -111,20 +114,20 @@ public class CollationTest extends TestFmwk {
         }
         return orders;
     }
-    
-    static void backAndForth(TestFmwk test, CollationElementIterator iter) 
+
+    static void backAndForth(TestFmwk test, CollationElementIterator iter)
     {
         // Run through the iterator forwards and stick it into an array
         iter.reset();
         int[] orders = getOrders(iter);
-    
+
         // Now go through it backwards and make sure we get the same values
         int index = orders.length;
         int o;
-    
+
         // reset the iterator
         iter.reset();
-    
+
         while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
             if (o != orders[--index]) {
                 if (o == 0) {
@@ -132,24 +135,24 @@ public class CollationTest extends TestFmwk {
                 } else {
                     while (index > 0 && orders[index] == 0) {
                         index --;
-                    } 
+                    }
                     if (o != orders[index]) {
-                        TestFmwk.errln("Mismatch at index " + index + ": 0x" 
+                        TestFmwk.errln("Mismatch at index " + index + ": 0x"
                             + Utility.hex(orders[index]) + " vs 0x" + Utility.hex(o));
                         break;
                     }
                 }
             }
         }
-    
+
         while (index != 0 && orders[index - 1] == 0) {
           index --;
         }
-    
+
         if (index != 0) {
             String msg = "Didn't get back to beginning - index is ";
             TestFmwk.errln(msg + index);
-    
+
             iter.reset();
             TestFmwk.err("next: ");
             while ((o = iter.next()) != CollationElementIterator.NULLORDER) {
@@ -165,7 +168,7 @@ public class CollationTest extends TestFmwk {
             TestFmwk.errln("");
         }
     }
-    
+
     static final String appendCompareResult(int result, String target){
         if (result == -1) {
             target += "LESS";
@@ -191,7 +194,7 @@ public class CollationTest extends TestFmwk {
 
     static final String prettify(byte[] skBytes, int length) {
         StringBuilder target = new StringBuilder(length * 3 + 2).append('[');
-    
+
         for (int i = 0; i < length; i++) {
             String numStr = Integer.toHexString(skBytes[i] & 0xff);
             if (numStr.length() < 2) {
@@ -203,17 +206,17 @@ public class CollationTest extends TestFmwk {
         return target.toString();
     }
 
-    private static void doTestVariant(TestFmwk test, 
+    private static void doTestVariant(TestFmwk test,
                                       RuleBasedCollator myCollation,
                                       String source, String target, int result)
     {
         int compareResult  = myCollation.compare(source, target);
         if (compareResult != result) {
-            
+
             // !!! if not mod build, error, else nothing.
             // warnln if not build, error, else always print warning.
             // do we need a 'quiet warning?' (err or log).  Hmmm,
-            // would it work to have the 'verbose' flag let you 
+            // would it work to have the 'verbose' flag let you
             // suppress warnings?  Are there ever some warnings you
             // want to suppress, and others you don't?
             TestFmwk.errln("Comparing \"" + Utility.hex(source) + "\" with \""
@@ -224,9 +227,9 @@ public class CollationTest extends TestFmwk {
         CollationKey tsk = myCollation.getCollationKey(target);
         compareResult = ssk.compareTo(tsk);
         if (compareResult != result) {
-            TestFmwk.errln("Comparing CollationKeys of \"" + Utility.hex(source) 
-            + "\" with \"" + Utility.hex(target) 
-            + "\" expected " + result + " but got " 
+            TestFmwk.errln("Comparing CollationKeys of \"" + Utility.hex(source)
+            + "\" with \"" + Utility.hex(target)
+            + "\" expected " + result + " but got "
             + compareResult);
         }
         RawCollationKey srsk = new RawCollationKey();
@@ -235,10 +238,10 @@ public class CollationTest extends TestFmwk {
         myCollation.getRawCollationKey(target, trsk);
         compareResult = ssk.compareTo(tsk);
         if (compareResult != result) {
-            TestFmwk.errln("Comparing RawCollationKeys of \"" 
-                    + Utility.hex(source) 
-                    + "\" with \"" + Utility.hex(target) 
-                    + "\" expected " + result + " but got " 
+            TestFmwk.errln("Comparing RawCollationKeys of \""
+                    + Utility.hex(source)
+                    + "\" with \"" + Utility.hex(target)
+                    + "\" expected " + result + " but got "
                     + compareResult);
         }
     }
@@ -250,7 +253,7 @@ public class CollationTest extends TestFmwk {
 
         final String s = "\uFFFE\uFFFF";
         long[] ces;
- 
+
         ces = rbc.internalGetCEs(s);
         if (ces.length != 2) {
             errln("expected 2 CEs for <FFFE, FFFF>, got " + ces.length);
@@ -355,7 +358,7 @@ public class CollationTest extends TestFmwk {
         }
     }
 
-    
+
     // ICU4C: TestIllegalUTF8 / not applicable to ICU4J
 
 
@@ -1475,7 +1478,7 @@ public class CollationTest extends TestFmwk {
             if (b != bytes[i]) {
                 break;
             }
-            if ((int)b == Collation.LEVEL_SEPARATOR_BYTE) {
+            if (b == Collation.LEVEL_SEPARATOR_BYTE) {
                 ++level;
                 if (level == Collation.CASE_LEVEL && !collHasCaseLevel) {
                     ++level;

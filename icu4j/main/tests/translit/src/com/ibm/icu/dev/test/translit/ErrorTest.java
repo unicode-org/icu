@@ -7,7 +7,10 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ReplaceableString;
@@ -18,6 +21,7 @@ import com.ibm.icu.text.UnicodeSet;
  * @test
  * @summary Error condition test of Transliterator
  */
+@RunWith(JUnit4.class)
 public class ErrorTest extends TestFmwk {
 
     @Test

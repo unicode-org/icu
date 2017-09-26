@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.LocaleUtility;
@@ -35,6 +37,7 @@ import com.ibm.icu.util.ULocale;
 /**
  * @summary Tests of new functionality in IBMCalendar
  */
+@RunWith(JUnit4.class)
 public class IBMCalendarTest extends CalendarTestFmwk {
     /**
      * Test weekend support in IBMCalendar.

@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UCharacterName;
@@ -31,6 +33,7 @@ import com.ibm.icu.util.ULocale;
  * older class RBBITestMonkey.
  */
 
+@RunWith(JUnit4.class)
 public class RBBIMonkeyTest extends TestFmwk {
 
 

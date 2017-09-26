@@ -630,6 +630,14 @@
         (via -D or uconfig.h, as above)
         and include those header files explicitly that you actually need.<br />
         Note: The ICU test suites cannot be compiled with this setting.</li>
+      <li><b>utf_old.h:</b>
+        All of utf_old.h is deprecated or obsolete.<br />
+        Beginning with ICU 60,
+        you should define <code>U_HIDE_OBSOLETE_UTF_OLD_H</code> to 1
+        (via -D or uconfig.h, as above).
+        Use of any of these macros should be replaced as noted
+        in the comments for the obsolete macro.<br />
+        Note: The ICU test suites <i>can</i> be compiled with this setting.</li>
       <li><b>.dat file:</b> By default, the ICU data is built into
         a shared library (DLL). This is convenient because it requires no
         install-time or runtime configuration,

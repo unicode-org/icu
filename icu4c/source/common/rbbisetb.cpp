@@ -250,12 +250,17 @@ void RBBISetBuilder::build() {
     // Build the Trie table for mapping UChar32 values to the corresponding
     //   range group number
     //
-    fTrie = utrie2_open(0,       //  Initial value for all code points
-                        0,       //  errorValue
+    fTrie = utrie2_open(0,       //  Initial value for all code points.
+                        0,       //  Error value for out-of-range input.
                         fStatus);
 
-    for (rlRange = fRangeList; rlRange!=0; rlRange=rlRange->fNext) {
-        utrie2_setRange32(fTrie, rlRange->fStartChar, rlRange->fEndChar, rlRange->fNum, TRUE, fStatus);
+    for (rlRange = fRangeList; rlRange!=0 && U_SUCCESS(*fStatus); rlRange=rlRange->fNext) {
+        utrie2_setRange32(fTrie,
+                          rlRange->fStartChar,     // Range start
+                          rlRange->fEndChar,       // Range end (inclusive)
+                          rlRange->fNum,           // value for range
+                          TRUE,                    // Overwrite previously written values
+                          fStatus);
     }
 }
 
@@ -265,7 +270,10 @@ void RBBISetBuilder::build() {
 //  getTrieSize()    Return the size that will be required to serialize the Trie.
 //
 //-----------------------------------------------------------------------------------
-int32_t RBBISetBuilder::getTrieSize() /*const*/ {
+int32_t RBBISetBuilder::getTrieSize()  {
+    if (U_FAILURE(*fStatus)) {
+        return 0;
+    }
     utrie2_freeze(fTrie, UTRIE2_16_VALUE_BITS, fStatus);
     fTrieSize  = utrie2_serialize(fTrie,
                                   NULL,                // Buffer

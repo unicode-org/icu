@@ -28,6 +28,7 @@
 #include "unicode/ustring.h"
 #include "unicode/usprep.h"
 #include "unicode/uniset.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "testidna.h"
 #include "idnaref.h"

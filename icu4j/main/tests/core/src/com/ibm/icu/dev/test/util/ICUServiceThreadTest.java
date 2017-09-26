@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.SortedMap;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICULocaleService;
@@ -33,6 +35,7 @@ import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.util.ULocale;
 
+@RunWith(JUnit4.class)
 public class ICUServiceThreadTest extends TestFmwk
 {
     private static final boolean PRINTSTATS = false;
@@ -52,10 +55,12 @@ public class ICUServiceThreadTest extends TestFmwk
             super(new ULocale(id), id, true);
         }
 
+        @Override
         public String getDisplayName(String idForDisplay, ULocale locale) {
             return (visible && idForDisplay.equals(this.id)) ? "(" + locale.toString() + ") " + idForDisplay : null;
         }
 
+        @Override
         public String toString() {
             return "Factory_" + id;
         }
@@ -121,6 +126,7 @@ public class ICUServiceThreadTest extends TestFmwk
             this.setDaemon(true);
         }
 
+        @Override
         public void run() {
             while (WAIT) {
                 Thread.yield();
@@ -189,6 +195,7 @@ public class ICUServiceThreadTest extends TestFmwk
             super("REG " + name, service, delay);
         }
 
+        @Override
         protected void iterate() {
             Factory f = new TestFactory(getCLV());
             service.registerFactory(f);
@@ -207,6 +214,7 @@ public class ICUServiceThreadTest extends TestFmwk
             factories = service.factories();
         }
 
+        @Override
         public void iterate() {
             int s = factories.size();
             if (s == 0) {
@@ -230,6 +238,7 @@ public class ICUServiceThreadTest extends TestFmwk
             this.factories = factories;
         }
 
+        @Override
         public void iterate() {
             if (n < factories.length) {
                 Factory f = factories[n++];
@@ -245,6 +254,7 @@ public class ICUServiceThreadTest extends TestFmwk
             super("VIS " + name, service, delay);
         }
 
+        @Override
         protected void iterate() {
             Set ids = service.getVisibleIDs();
             Iterator iter = ids.iterator();
@@ -266,6 +276,7 @@ public class ICUServiceThreadTest extends TestFmwk
             this.locale = locale;
         }
 
+        @Override
         protected void iterate() {
             Map names = getDisplayNames(service,locale);
             Iterator iter = names.entrySet().iterator();
@@ -298,6 +309,7 @@ public class ICUServiceThreadTest extends TestFmwk
             actualID = new String[1];
         }
 
+        @Override
         protected void iterate() {
             String id = getCLV();
             Object o = service.get(id, actualID);
@@ -317,6 +329,7 @@ public class ICUServiceThreadTest extends TestFmwk
             this.list = list;
         }
 
+        @Override
         protected void iterate() {
             if (--n < 0) {
                 n = list.length - 1;
@@ -420,6 +433,7 @@ public class ICUServiceThreadTest extends TestFmwk
 
         Factory[] factories = (Factory[])fc.toArray(new Factory[fc.size()]);
         Comparator comp = new Comparator() {
+                @Override
                 public int compare(Object lhs, Object rhs) {
                     return lhs.toString().compareTo(rhs.toString());
                 }

@@ -13,6 +13,8 @@ import java.util.HashSet;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -29,17 +31,18 @@ import com.ibm.icu.util.ULocale;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
+@RunWith(JUnit4.class)
 public class LocaleDataTest extends TestFmwk{
     private ULocale[] availableLocales = null;
 
     public LocaleDataTest(){
     }
-    
+
     @Before
     public void init() {
         availableLocales = ICUResourceBundle.getAvailableULocales();
     }
-    
+
     @Test
     public void TestPaperSize(){
         for(int i = 0; i < availableLocales.length; i++){
@@ -70,7 +73,7 @@ public class LocaleDataTest extends TestFmwk{
                 if(paperSize.getHeight()!= 297 || paperSize.getWidth() != 210 ){
                     errln("PaperSize did not return the expected value for locale "+ locale +
                             " Expected height: 297 width: 210."+
-                            " Got height: "+paperSize.getHeight() +" width: "+paperSize.getWidth() 
+                            " Got height: "+paperSize.getHeight() +" width: "+paperSize.getWidth()
                             );
                 }else{
                     logln("PaperSize returned the expected values for locale " + locale);
@@ -87,7 +90,7 @@ public class LocaleDataTest extends TestFmwk{
             String lang = locale.getLanguage();
             if(lang.equals("in")){
                 continue;
-            }           
+            }
             ULocale fullLoc = ULocale.addLikelySubtags(locale);
             if(fullLoc.toString().indexOf("_US") >= 0 || fullLoc.toString().indexOf("_MM") >= 0 || fullLoc.toString().indexOf("_LR") >= 0){
                 if(ms == LocaleData.MeasurementSystem.US){
@@ -106,7 +109,7 @@ public class LocaleDataTest extends TestFmwk{
                     logln("Got the expected measurement system for locale: " + locale);
                 }else{
                     errln("Did not get the expected measurement system for locale: "+ locale);
-                } 
+                }
             }
         }
     }
@@ -177,13 +180,15 @@ public class LocaleDataTest extends TestFmwk{
             set = s;
             scs = scriptCodes;
         }
+        @Override
         public int hashCode() {
             int hash = 0;
             for (int i=0; i<scs.length && i<4; i++) {
                 hash = (hash<<8)+scs[i];
             }
             return hash;
-        }        
+        }
+        @Override
         public boolean equals(Object other) {
             ExemplarGroup o = (ExemplarGroup)other;
             boolean r = Arrays.equals(scs, o.scs) &&
@@ -205,7 +210,7 @@ public class LocaleDataTest extends TestFmwk{
                 // such a broken hack !!!!!
                 // so in effect I can never test the script code for Indonesian :(
                 if(locale.toString().indexOf(("in"))<0){
-                    errln("UScript.getCode returned null for locale: " + locale); 
+                    errln("UScript.getCode returned null for locale: " + locale);
                 }
                 continue;
             }
@@ -224,7 +229,7 @@ public class LocaleDataTest extends TestFmwk{
                     }
                     boolean existsInScript = false;
                     UnicodeSetIterator iter = new UnicodeSetIterator(exemplarSet);
-                    // iterate over the 
+                    // iterate over the
                     while (!existsInScript && iter.nextRange()) {
                         if (iter.codepoint != UnicodeSetIterator.IS_STRING) {
                             for(int j=0; j<sets.length; j++){
@@ -273,7 +278,7 @@ public class LocaleDataTest extends TestFmwk{
             int[] scriptCodes = UScript.getCode(locale);
             if (scriptCodes==null) {
                 if(locale.toString().indexOf(("in"))<0){
-                    errln("UScript.getCode returned null for locale: "+ locale); 
+                    errln("UScript.getCode returned null for locale: "+ locale);
                 }
                 continue;
             }
@@ -281,7 +286,7 @@ public class LocaleDataTest extends TestFmwk{
 
             for (int k=0; k<2; ++k) {  // for casing option in (normal, uncased)
                 int option = (k==0) ? 0 : UnicodeSet.CASE;
-                for(int h=0; h<2; ++h){  
+                for(int h=0; h<2; ++h){
                     int type = (h==0) ? LocaleData.ES_STANDARD : LocaleData.ES_AUXILIARY;
 
                     UnicodeSet exemplarSet = ld.getExemplarSet(option, type);
@@ -297,7 +302,7 @@ public class LocaleDataTest extends TestFmwk{
                         }
                         boolean existsInScript = false;
                         UnicodeSetIterator iter = new UnicodeSetIterator(exemplarSet);
-                        // iterate over the 
+                        // iterate over the
                         while (!existsInScript && iter.nextRange()) {
                             if (iter.codepoint != UnicodeSetIterator.IS_STRING) {
                                 for(int j=0; j<sets.length; j++){

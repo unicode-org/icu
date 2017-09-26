@@ -17,6 +17,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/utf8.h"
+#include "unicode/utf_old.h"
 #include "cmemory.h"
 #include "cintltst.h"
 
@@ -58,7 +59,29 @@
 
 /* -------------------------------------------------------------------------- */
 
-static void printUChars(const uint8_t *uchars, int16_t len);
+// Obsolete macros from obsolete unicode/utf_old.h, for some old test data.
+#ifndef UTF8_ERROR_VALUE_1
+#   define UTF8_ERROR_VALUE_1 0x15
+#endif
+#ifndef UTF8_ERROR_VALUE_2
+#   define UTF8_ERROR_VALUE_2 0x9f
+#endif
+#ifndef UTF_ERROR_VALUE
+#   define UTF_ERROR_VALUE 0xffff
+#endif
+#ifndef UTF_IS_ERROR
+#   define UTF_IS_ERROR(c) \
+        (((c)&0xfffe)==0xfffe || (c)==UTF8_ERROR_VALUE_1 || (c)==UTF8_ERROR_VALUE_2)
+#endif
+
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+static void printUChars(const uint8_t *uchars, int16_t len){
+    int16_t i=0;
+    for(i=0; i<len; i++){
+        log_err("0x%02x ", *(uchars+i));
+    }
+}
+#endif
 
 static void TestCodeUnitValues(void);
 static void TestCharLength(void);
@@ -98,26 +121,38 @@ addUTF8Test(TestNode** root)
 
 static void TestCodeUnitValues()
 {
-    static const uint8_t codeunit[]={0x00, 0x65, 0x7e, 0x7f, 0xc0, 0xc4, 0xf0, 0xfd, 0x80, 0x81, 0xbc, 0xbe,};
+    static const uint8_t codeunit[]={0x00, 0x65, 0x7e, 0x7f, 0xc2, 0xc4, 0xf0, 0xf4, 0x80, 0x81, 0xbc, 0xbe,};
 
     int16_t i;
     for(i=0; i<UPRV_LENGTHOF(codeunit); i++){
         uint8_t c=codeunit[i];
         log_verbose("Testing code unit value of %x\n", c);
         if(i<4){
-            if(!UTF8_IS_SINGLE(c) || UTF8_IS_LEAD(c) || UTF8_IS_TRAIL(c) || !U8_IS_SINGLE(c) || U8_IS_LEAD(c) || U8_IS_TRAIL(c)){
+            if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                    !UTF8_IS_SINGLE(c) || UTF8_IS_LEAD(c) || UTF8_IS_TRAIL(c) ||
+#endif
+                    !U8_IS_SINGLE(c) || U8_IS_LEAD(c) || U8_IS_TRAIL(c)) {
                 log_err("ERROR: 0x%02x is a single byte but results in single: %c lead: %c trail: %c\n",
-                    c, UTF8_IS_SINGLE(c) ? 'y' : 'n', UTF8_IS_LEAD(c) ? 'y' : 'n', UTF8_IS_TRAIL(c) ? 'y' : 'n');
+                    c, U8_IS_SINGLE(c) ? 'y' : 'n', U8_IS_LEAD(c) ? 'y' : 'n', U8_IS_TRAIL(c) ? 'y' : 'n');
             }
         } else if(i< 8){
-            if(!UTF8_IS_LEAD(c) || UTF8_IS_SINGLE(c) || UTF8_IS_TRAIL(c) || !U8_IS_LEAD(c) || U8_IS_SINGLE(c) || U8_IS_TRAIL(c)){
+            if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                    !UTF8_IS_LEAD(c) || UTF8_IS_SINGLE(c) || UTF8_IS_TRAIL(c) ||
+#endif
+                    !U8_IS_LEAD(c) || U8_IS_SINGLE(c) || U8_IS_TRAIL(c)) {
                 log_err("ERROR: 0x%02x is a lead byte but results in single: %c lead: %c trail: %c\n",
-                    c, UTF8_IS_SINGLE(c) ? 'y' : 'n', UTF8_IS_LEAD(c) ? 'y' : 'n', UTF8_IS_TRAIL(c) ? 'y' : 'n');
+                    c, U8_IS_SINGLE(c) ? 'y' : 'n', U8_IS_LEAD(c) ? 'y' : 'n', U8_IS_TRAIL(c) ? 'y' : 'n');
             }
         } else if(i< 12){
-            if(!UTF8_IS_TRAIL(c) || UTF8_IS_SINGLE(c) || UTF8_IS_LEAD(c) || !U8_IS_TRAIL(c) || U8_IS_SINGLE(c) || U8_IS_LEAD(c)){
+            if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                    !UTF8_IS_TRAIL(c) || UTF8_IS_SINGLE(c) || UTF8_IS_LEAD(c) ||
+#endif
+                    !U8_IS_TRAIL(c) || U8_IS_SINGLE(c) || U8_IS_LEAD(c)){
                 log_err("ERROR: 0x%02x is a trail byte but results in single: %c lead: %c trail: %c\n",
-                    c, UTF8_IS_SINGLE(c) ? 'y' : 'n', UTF8_IS_LEAD(c) ? 'y' : 'n', UTF8_IS_TRAIL(c) ? 'y' : 'n');
+                    c, U8_IS_SINGLE(c) ? 'y' : 'n', U8_IS_LEAD(c) ? 'y' : 'n', U8_IS_TRAIL(c) ? 'y' : 'n');
             }
         }
     }
@@ -143,18 +178,26 @@ static void TestCharLength()
     };
 
     int16_t i;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     UBool multiple;
+#endif
     for(i=0; i<UPRV_LENGTHOF(codepoint); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
-        if(UTF8_CHAR_LENGTH(c) != (uint16_t)codepoint[i] || U8_LENGTH(c) != (uint16_t)codepoint[i]){
-              log_err("The no: of code units for %lx:- Expected: %d Got: %d\n", c, codepoint[i], UTF8_CHAR_LENGTH(c));
+        if(
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+                UTF8_CHAR_LENGTH(c) != (uint16_t)codepoint[i] ||
+#endif
+                U8_LENGTH(c) != (uint16_t)codepoint[i]) {
+            log_err("The no: of code units for %lx:- Expected: %d Got: %d\n", c, codepoint[i], U8_LENGTH(c));
         }else{
-              log_verbose("The no: of code units for %lx is %d\n",c, UTF8_CHAR_LENGTH(c));
+              log_verbose("The no: of code units for %lx is %d\n",c, U8_LENGTH(c));
         }
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
         multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
         if(UTF8_NEED_MULTIPLE_UCHAR(c) != multiple){
               log_err("ERROR: UTF8_NEED_MULTIPLE_UCHAR failed for %lx\n", c);
         }
+#endif
     }
 }
 
@@ -188,37 +231,41 @@ static void TestGetChar()
         0x10401,          0x10401,                    0x10401 ,
         0x10401,          0x10401,                    0x10401 ,
         0x10401,          0x10401,                    0x10401,
-        0x25,             UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1,
+        -1,               UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1,
         0x65,             0x65,                       0x65,
         0x31,             0x31,                       0x31,
-        0x31,             UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1,
-        0x240,            UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1
+        -1,               UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1,
+        -1,               UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1
     };
     uint16_t i=0;
     UChar32 c, expected;
     uint32_t offset=0;
 
     for(offset=0; offset<sizeof(input); offset++) {
-        if (offset < sizeof(input) - 1) {
+        expected = result[i];
+        if (expected >= 0 && offset < sizeof(input) - 1) {
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
             UTF8_GET_CHAR_UNSAFE(input, offset, c);
-            if(c != result[i]){
-                log_err("ERROR: UTF8_GET_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
+            if(c != expected) {
+                log_err("ERROR: UTF8_GET_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n",
+                        offset, expected, c);
 
             }
-
+#endif
             U8_GET_UNSAFE(input, offset, c);
-            if(c != result[i]){
-                log_err("ERROR: U8_GET_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
+            if(c != expected) {
+                log_err("ERROR: U8_GET_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n",
+                        offset, expected, c);
 
             }
         }
-
-        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, FALSE);
         expected=result[i+1];
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, FALSE);
         if(c != expected){
             log_err("ERROR: UTF8_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
+#endif
         U8_GET(input, 0, offset, sizeof(input), c);
         if(UTF_IS_ERROR(expected)) { expected=U_SENTINEL; }
         if(c != expected){
@@ -230,155 +277,171 @@ static void TestGetChar()
         if(c != expected){
             log_err("ERROR: U8_GET_OR_FFFD failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
         UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, TRUE);
         if(c != result[i+2]){
             log_err("ERROR: UTF8_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
         }
-
+#endif
         i=(uint16_t)(i+3);
     }
 }
 
 static void TestNextPrevChar() {
-    static const uint8_t input[]={0x61, 0xf0, 0x90, 0x90, 0x81, 0xc0, 0x80, 0xfd, 0xbe, 0xc2, 0x61, 0x81, 0x90, 0x90, 0xf0, 0x00};
+    static const uint8_t input[]={
+        0x61,
+        0xf0, 0x90, 0x90, 0x81,
+        0xc0, 0x80,  // non-shortest form
+        0xf3, 0xbe,  // truncated
+        0xc2,  // truncated
+        0x61,
+        0x81, 0x90, 0x90, 0xf0,  // "backwards" sequence
+        0x00
+    };
     static const UChar32 result[]={
-    /*  next_unsafe    next_safe_ns        next_safe_s          prev_unsafe   prev_safe_ns        prev_safe_s */
-        0x0061,        0x0061,             0x0061,              0x0000,       0x0000,             0x0000,
-        0x10401,       0x10401,            0x10401,             0xf0,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x90,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x2841410,    UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x90,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xa1050,      UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x81,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x2841,       UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x00,          UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,  0x61,         0x61,               0x61,
-        0x80,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xc2,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0xfd,          UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,  0x77e,        UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,
-        0xbe,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xfd,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0xa1,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x00,         UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,
-        0x61,          0x61,               0x61,                0xc0,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x81,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x10401,      0x10401,            0x10401,
-        0x90,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x410,        UTF_ERROR_VALUE,    UTF_ERROR_VALUE,
-        0x90,          UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x410,        UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,
-        0x0840,        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0xf0,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
-        0x0000,        0x0000,             0x0000,              0x0061,       0x0061,             0x0061
+    /*  next_safe_ns        next_safe_s          prev_safe_ns        prev_safe_s */
+        0x0061,             0x0061,              0x0000,             0x0000,
+        0x10401,            0x10401,             UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x61,               0x61,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,  UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0x61,               0x61,                UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  0x10401,            0x10401,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF_ERROR_VALUE,    UTF_ERROR_VALUE,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF8_ERROR_VALUE_2, UTF8_ERROR_VALUE_2,
+        UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,  UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
+        0x0000,             0x0000,              0x0061,             0x0061
     };
     static const int32_t movedOffset[]={
-    /*  next_unsafe   next_safe_ns next_safe_s       prev_unsafe   prev_safe_ns      prev_safe_s */
-        1,            1,           1,                15,           15,               15,
-        5,            5,           5,                14,           14 ,              14,
-        3,            3,           3,                9,            13,               13,
-        4,            4,           4,                9,            12,               12,
-        5,            5,           5,                9,            11,               11,
-        7,            7,           7,                10,           10,               10,
-        7,            7,           7,                9,            9,                9,
-        8,            9,           9,                7,            7,                7,
-        9,            9,           9,                7,            7,                7,
-        11,           10,          10,               5,            5,                5,
-        11,           11,          11,               5,            5,                5,
-        12,           12,          12,               1,            1,                1,
-        13,           13,          13,               1,            1,                1,
-        14,           14,          14,               1,            1,                1,
-        14,           15,          15,               1,            1,                1,
-        14,           16,          16,               0,            0,                0,
+    /*  next_safe    prev_safe_s */
+        1,           15,
+        5,           14,
+        3,           13,
+        4,           12,
+        5,           11,
+        6,           10,
+        7,           9,
+        9,           7,
+        9,           7,
+        10,          6,
+        11,          5,
+        12,          1,
+        13,          1,
+        14,          1,
+        15,          1,
+        16,          0,
     };
-    /* TODO: remove unused columns for next_unsafe & prev_unsafe, and adjust the test code */
 
     UChar32 c, expected;
-    uint32_t i=0;
+    uint32_t i=0, j=0;
     uint32_t offset=0;
     int32_t setOffset=0;
     for(offset=0; offset<sizeof(input); offset++){
-         setOffset=offset;
-         UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, FALSE);
-         if(setOffset != movedOffset[i+1]){
-             log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+1], setOffset);
-         }
-        expected=result[i+1];
-        if(c != expected){
-            log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        expected=result[i];  // next_safe_ns
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+        setOffset=offset;
+        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, FALSE);
+        if(setOffset != movedOffset[j]) {
+            log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[j], setOffset);
         }
-
-         setOffset=offset;
-         U8_NEXT(input, setOffset, sizeof(input), c);
-         if(setOffset != movedOffset[i+1]){
-             log_err("ERROR: U8_NEXT failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+1], setOffset);
-         }
+        if(c != expected) {
+            log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed at offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
+#endif
+        setOffset=offset;
+        U8_NEXT(input, setOffset, sizeof(input), c);
+        if(setOffset != movedOffset[j]) {
+            log_err("ERROR: U8_NEXT failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[j], setOffset);
+        }
         if(UTF_IS_ERROR(expected)) { expected=U_SENTINEL; }
-        if(c != expected){
-            log_err("ERROR: U8_NEXT failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        if(c != expected) {
+            log_err("ERROR: U8_NEXT failed at offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
 
         setOffset=offset;
         U8_NEXT_OR_FFFD(input, setOffset, sizeof(input), c);
-        if(setOffset != movedOffset[i+1]){
+        if(setOffset != movedOffset[j]) {
             log_err("ERROR: U8_NEXT_OR_FFFD failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                offset, movedOffset[i+1], setOffset);
+                offset, movedOffset[j], setOffset);
         }
         if(expected<0) { expected=0xfffd; }
-        if(c != expected){
-            log_err("ERROR: U8_NEXT_OR_FFFD failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        if(c != expected) {
+            log_err("ERROR: U8_NEXT_OR_FFFD failed at offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
-         setOffset=offset;
-         UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, TRUE);
-         if(setOffset != movedOffset[i+1]){
-             log_err("ERROR: UTF8_NEXT_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+2], setOffset);
-         }
-         if(c != result[i+2]){
-             log_err("ERROR: UTF8_NEXT_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
-         }
-
-         i=i+6;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+        setOffset=offset;
+        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, TRUE);
+        if(setOffset != movedOffset[j]) {
+            log_err("ERROR: UTF8_NEXT_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[j], setOffset);
+        }
+        expected=result[i+1];  // next_safe_s
+        if(c != expected) {
+            log_err("ERROR: UTF8_NEXT_CHAR_SAFE(strict) failed at offset=%ld. Expected:%lx Got:%lx\n",
+                    offset, expected, c);
+        }
+#endif
+        i=i+4;
+        j=j+2;
     }
 
-    i=0;
+    i=j=0;
     for(offset=sizeof(input); offset > 0; --offset){
-         setOffset=offset;
-         UTF8_PREV_CHAR_SAFE(input, 0, setOffset, c, FALSE);
-         if(setOffset != movedOffset[i+4]){
-             log_err("ERROR: UTF8_PREV_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+4], setOffset);
-         }
-        expected=result[i+4];
-        if(c != expected){
-            log_err("ERROR: UTF8_PREV_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        expected=result[i+2];  // prev_safe_ns
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+        setOffset=offset;
+        UTF8_PREV_CHAR_SAFE(input, 0, setOffset, c, FALSE);
+        if(setOffset != movedOffset[j+1]) {
+            log_err("ERROR: UTF8_PREV_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[j+1], setOffset);
         }
-
-         setOffset=offset;
-         U8_PREV(input, 0, setOffset, c);
-         if(setOffset != movedOffset[i+4]){
-             log_err("ERROR: U8_PREV failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+4], setOffset);
-         }
+        if(c != expected) {
+            log_err("ERROR: UTF8_PREV_CHAR_SAFE failed at offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
+#endif
+        setOffset=offset;
+        U8_PREV(input, 0, setOffset, c);
+        if(setOffset != movedOffset[j+1]) {
+            log_err("ERROR: U8_PREV failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[j+1], setOffset);
+        }
         if(UTF_IS_ERROR(expected)) { expected=U_SENTINEL; }
-        if(c != expected){
-            log_err("ERROR: U8_PREV failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        if(c != expected) {
+            log_err("ERROR: U8_PREV failed at offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
 
         setOffset=offset;
         U8_PREV_OR_FFFD(input, 0, setOffset, c);
-        if(setOffset != movedOffset[i+4]){
+        if(setOffset != movedOffset[j+1]) {
             log_err("ERROR: U8_PREV_OR_FFFD failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                offset, movedOffset[i+4], setOffset);
+                offset, movedOffset[j+1], setOffset);
         }
         if(expected<0) { expected=0xfffd; }
-        if(c != expected){
-            log_err("ERROR: U8_PREV_OR_FFFD failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        if(c != expected) {
+            log_err("ERROR: U8_PREV_OR_FFFD failed at offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
-
-         setOffset=offset;
-         UTF8_PREV_CHAR_SAFE(input, 0,  setOffset, c, TRUE);
-         if(setOffset != movedOffset[i+5]){
-             log_err("ERROR: UTF8_PREV_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i+5], setOffset);
-         }
-         if(c != result[i+5]){
-             log_err("ERROR: UTF8_PREV_CHAR_SAFE(strict) failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+5], c);
-         }
-
-         i=i+6;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+        setOffset=offset;
+        UTF8_PREV_CHAR_SAFE(input, 0,  setOffset, c, TRUE);
+        if(setOffset != movedOffset[j+1]) {
+            log_err("ERROR: UTF8_PREV_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[j+1], setOffset);
+        }
+        expected=result[i+3];  // prev_safe_s
+        if(c != expected) {
+            log_err("ERROR: UTF8_PREV_CHAR_SAFE(strict) failed at offset=%ld. Expected:%lx Got:%lx\n",
+                    offset, expected, c);
+        }
+#endif
+        i=i+4;
+        j=j+2;
     }
 }
 
@@ -387,11 +450,13 @@ static void TestNulTerminated() {
     static const uint8_t input[]={
         /*  0 */  0x61,
         /*  1 */  0xf0, 0x90, 0x90, 0x81,
-        /*  5 */  0xc0, 0x80,
+        /*  5 */  0xc0,
+        /*  6 */  0x80,
         /*  7 */  0xdf, 0x80,
         /*  9 */  0xc2,
         /* 10 */  0x62,
-        /* 11 */  0xfd, 0xbe,
+        /* 11 */  0xfd,
+        /* 12 */  0xbe,
         /* 13 */  0xe0, 0xa0, 0x80,
         /* 16 */  0xe2, 0x82, 0xac,
         /* 19 */  0xf0, 0x90, 0x90,
@@ -401,14 +466,16 @@ static void TestNulTerminated() {
     static const UChar32 result[]={
         0x61,
         0x10401,
-        U_SENTINEL,
+        U_SENTINEL,  // C0 not a lead byte
+        U_SENTINEL,  // 80
         0x7c0,
-        U_SENTINEL,
+        U_SENTINEL,  // C2
         0x62,
-        U_SENTINEL,
+        U_SENTINEL,  // FD not a lead byte
+        U_SENTINEL,  // BE
         0x800,
         0x20ac,
-        U_SENTINEL,
+        U_SENTINEL,  // truncated F0 90 90
         0
     };
 
@@ -498,6 +565,22 @@ static void TestNextPrevNonCharacters() {
             log_err("U8_PREV(at %d) failed to read a non-character\n", idx);
         }
     }
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+    for(idx=0; idx<(int32_t)sizeof(nonChars);) {
+        UChar32 expected= nonChars[idx]<0xf0 ? 0xffff : 0x10ffff;
+        UTF8_NEXT_CHAR_SAFE(nonChars, idx, sizeof(nonChars), ch, TRUE);
+        if(ch!=expected) {
+            log_err("UTF8_NEXT_CHAR_SAFE(strict, before %d) failed to read a non-character\n", idx);
+        }
+    }
+    for(idx=(int32_t)sizeof(nonChars); idx>0;) {
+        UTF8_PREV_CHAR_SAFE(nonChars, 0, idx, ch, TRUE);
+        UChar32 expected= nonChars[idx]<0xf0 ? 0xffff : 0x10ffff;
+        if(ch!=expected) {
+            log_err("UTF8_PREV_CHAR_SAFE(strict, at %d) failed to read a non-character\n", idx);
+        }
+    }
+#endif
 }
 
 static void TestNextPrevCharUnsafe() {
@@ -517,59 +600,88 @@ static void TestNextPrevCharUnsafe() {
     static const UChar32 codePoints[]={
         0x61,
         0x10401,
-        0,
+        -1,
         0x20ac,
         0xa1,
         0x10ffff,
         0
     };
 
-    UChar32 c;
+    UChar32 c, expected;
     int32_t i;
     uint32_t offset;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     for(i=0, offset=0; offset<sizeof(input); ++i) {
         UTF8_NEXT_CHAR_UNSAFE(input, offset, c);
-        if(c != codePoints[i]){
+        expected = codePoints[i];
+        if(expected >= 0 && c != expected) {
             log_err("ERROR: UTF8_NEXT_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n",
-                    offset, codePoints[i], c);
+                    offset, expected, c);
+        }
+        if(offset==6) {
+            // The obsolete UTF8_NEXT_CHAR_UNSAFE() skips 1+UTF8_COUNT_TRAIL_BYTES(lead) bytes
+            // while the new one skips C0 80 together.
+            ++offset;
         }
     }
+#endif
     for(i=0, offset=0; offset<sizeof(input); ++i) {
         U8_NEXT_UNSAFE(input, offset, c);
-        if(c != codePoints[i]){
+        expected = codePoints[i];
+        if(expected >= 0 && c != expected) {
             log_err("ERROR: U8_NEXT_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n",
-                    offset, codePoints[i], c);
+                    offset, expected, c);
         }
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     for(i=UPRV_LENGTHOF(codePoints)-1, offset=sizeof(input); offset > 0; --i){
-         UTF8_PREV_CHAR_UNSAFE(input, offset, c);
-         if(c != codePoints[i]){
-             log_err("ERROR: UTF8_PREV_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n",
-                     offset, codePoints[i], c);
-         }
+        UTF8_PREV_CHAR_UNSAFE(input, offset, c);
+        expected = codePoints[i];
+        if(expected >= 0 && c != expected) {
+            log_err("ERROR: UTF8_PREV_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n",
+                    offset, expected, c);
+        }
     }
+#endif
     for(i=UPRV_LENGTHOF(codePoints)-1, offset=sizeof(input); offset > 0; --i){
-         U8_PREV_UNSAFE(input, offset, c);
-         if(c != codePoints[i]){
-             log_err("ERROR: U8_PREV_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n",
-                     offset, codePoints[i], c);
-         }
+        U8_PREV_UNSAFE(input, offset, c);
+        expected = codePoints[i];
+        if(expected >= 0 && c != expected) {
+            log_err("ERROR: U8_PREV_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n",
+                    offset, expected, c);
+        }
     }
 }
 
 static void TestFwdBack() {
-    static const uint8_t input[]={0x61, 0xF0, 0x90, 0x90, 0x81, 0xff, 0x62, 0xc0, 0x80, 0x7f, 0x8f, 0xc0, 0x63, 0x81, 0x90, 0x90, 0xF0, 0x00};
-    static const uint16_t fwd_safe[]   ={1, 5, 6, 7, 9, 10, 11,  12, 13, 14, 15, 16, 17, 18};
-    static const uint16_t back_safe[]  ={17, 16, 15, 14, 13, 12, 11, 10, 9, 7, 6, 5, 1, 0};
+    static const uint8_t input[]={
+        0x61,
+        0xF0, 0x90, 0x90, 0x81,
+        0xff,
+        0x62,
+        0xc0,
+        0x80,
+        0x7f,
+        0x8f,
+        0xc0,
+        0x63,
+        0x81,
+        0x90,
+        0x90,
+        0xF0,
+        0x00
+    };
+    static const uint16_t fwd_safe[]   ={1, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+    static const uint16_t back_safe[]  ={17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 1, 0};
 
-    static const uint16_t Nvalue[]= {0, 1, 2, 3, 1, 2, 1, 5};
+    static const uint16_t Nvalue[]= {0, 1, 2, 4, 1, 2, 1, 5};
     static const uint16_t fwd_N_safe[]   ={0, 1, 6, 10, 11, 13, 14, 18}; /*safe macro keeps it at the end of the string */
-    static const uint16_t back_N_safe[]  ={18, 17, 15, 12, 11, 9, 7, 0};
+    static const uint16_t back_N_safe[]  ={18, 17, 15, 11, 10, 8, 7, 0};
 
     uint32_t offsafe=0;
 
     uint32_t i=0;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     while(offsafe < sizeof(input)){
         UTF8_FWD_1_SAFE(input, offsafe, sizeof(input));
         if(offsafe != fwd_safe[i]){
@@ -577,7 +689,8 @@ static void TestFwdBack() {
         }
         i++;
     }
-
+#endif
+    offsafe=0;
     i=0;
     while(offsafe < sizeof(input)){
         U8_FWD_1(input, offsafe, sizeof(input));
@@ -586,7 +699,7 @@ static void TestFwdBack() {
         }
         i++;
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     i=0;
     offsafe=sizeof(input);
     while(offsafe > 0){
@@ -596,7 +709,7 @@ static void TestFwdBack() {
         }
         i++;
     }
-
+#endif
     i=0;
     offsafe=sizeof(input);
     while(offsafe > 0){
@@ -606,7 +719,7 @@ static void TestFwdBack() {
         }
         i++;
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     offsafe=0;
     for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         UTF8_FWD_N_SAFE(input, offsafe, sizeof(input), Nvalue[i]);
@@ -615,7 +728,7 @@ static void TestFwdBack() {
         }
 
     }
-
+#endif
     offsafe=0;
     for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         U8_FWD_N(input, offsafe, sizeof(input), Nvalue[i]);
@@ -624,7 +737,7 @@ static void TestFwdBack() {
         }
 
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     offsafe=sizeof(input);
     for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         UTF8_BACK_N_SAFE(input, 0, offsafe, Nvalue[i]);
@@ -632,7 +745,7 @@ static void TestFwdBack() {
             log_err("ERROR: backward_N_safe offset=%d expected:%d, Got:%ld\n", i, back_N_safe[i], offsafe);
         }
     }
-
+#endif
     offsafe=sizeof(input);
     for(i=0; i<UPRV_LENGTHOF(Nvalue); i++){
         U8_BACK_N(input, 0, offsafe, Nvalue[i]);
@@ -656,36 +769,42 @@ static void TestFwdBackUnsafe() {
         0xf4, 0x8f, 0xbf, 0xbf,
         0x00
     };
-    static const int8_t boundaries[]={ 0, 1, 5, 7, 10, 12, 16, 17 };
+    // forward unsafe skips only C0
+    static const int8_t boundaries[]={ 0, 1, 5, 6, 7, 10, 12, 16, 17 };
+    // backward unsafe skips C0 80 together
+    static const int8_t backBoundaries[]={ 0, 1, 5, 7, 10, 12, 16, 17 };
 
     int32_t offset;
     int32_t i;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     for(i=1, offset=0; offset<UPRV_LENGTHOF(input); ++i) {
         UTF8_FWD_1_UNSAFE(input, offset);
         if(offset != boundaries[i]){
             log_err("ERROR: UTF8_FWD_1_UNSAFE offset expected:%d, Got:%d\n", boundaries[i], offset);
         }
     }
+#endif
     for(i=1, offset=0; offset<UPRV_LENGTHOF(input); ++i) {
         U8_FWD_1_UNSAFE(input, offset);
         if(offset != boundaries[i]){
             log_err("ERROR: U8_FWD_1_UNSAFE offset expected:%d, Got:%d\n", boundaries[i], offset);
         }
     }
-
-    for(i=UPRV_LENGTHOF(boundaries)-2, offset=UPRV_LENGTHOF(input); offset>0; --i) {
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+    for(i=UPRV_LENGTHOF(backBoundaries)-2, offset=UPRV_LENGTHOF(input); offset>0; --i) {
         UTF8_BACK_1_UNSAFE(input, offset);
-        if(offset != boundaries[i]){
-            log_err("ERROR: UTF8_BACK_1_UNSAFE offset expected:%d, Got:%d\n", boundaries[i], offset);
+        if(offset != backBoundaries[i]){
+            log_err("ERROR: UTF8_BACK_1_UNSAFE offset expected:%d, Got:%d\n", backBoundaries[i], offset);
         }
     }
-    for(i=UPRV_LENGTHOF(boundaries)-2, offset=UPRV_LENGTHOF(input); offset>0; --i) {
+#endif
+    for(i=UPRV_LENGTHOF(backBoundaries)-2, offset=UPRV_LENGTHOF(input); offset>0; --i) {
         U8_BACK_1_UNSAFE(input, offset);
-        if(offset != boundaries[i]){
-            log_err("ERROR: U8_BACK_1_UNSAFE offset expected:%d, Got:%d\n", boundaries[i], offset);
+        if(offset != backBoundaries[i]){
+            log_err("ERROR: U8_BACK_1_UNSAFE offset expected:%d, Got:%d\n", backBoundaries[i], offset);
         }
     }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     for(i=0; i<UPRV_LENGTHOF(boundaries); ++i) {
         offset=0;
         UTF8_FWD_N_UNSAFE(input, offset, i);
@@ -693,6 +812,7 @@ static void TestFwdBackUnsafe() {
             log_err("ERROR: UTF8_FWD_N_UNSAFE offset expected:%d, Got:%d\n", boundaries[i], offset);
         }
     }
+#endif
     for(i=0; i<UPRV_LENGTHOF(boundaries); ++i) {
         offset=0;
         U8_FWD_N_UNSAFE(input, offset, i);
@@ -700,21 +820,22 @@ static void TestFwdBackUnsafe() {
             log_err("ERROR: U8_FWD_N_UNSAFE offset expected:%d, Got:%d\n", boundaries[i], offset);
         }
     }
-
-    for(i=0; i<UPRV_LENGTHOF(boundaries); ++i) {
-        int32_t j=UPRV_LENGTHOF(boundaries)-1-i;
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
+    for(i=0; i<UPRV_LENGTHOF(backBoundaries); ++i) {
+        int32_t j=UPRV_LENGTHOF(backBoundaries)-1-i;
         offset=UPRV_LENGTHOF(input);
         UTF8_BACK_N_UNSAFE(input, offset, i);
-        if(offset != boundaries[j]) {
-            log_err("ERROR: UTF8_BACK_N_UNSAFE offset expected:%d, Got:%d\n", boundaries[j], offset);
+        if(offset != backBoundaries[j]) {
+            log_err("ERROR: UTF8_BACK_N_UNSAFE offset expected:%d, Got:%d\n", backBoundaries[j], offset);
         }
     }
-    for(i=0; i<UPRV_LENGTHOF(boundaries); ++i) {
-        int32_t j=UPRV_LENGTHOF(boundaries)-1-i;
+#endif
+    for(i=0; i<UPRV_LENGTHOF(backBoundaries); ++i) {
+        int32_t j=UPRV_LENGTHOF(backBoundaries)-1-i;
         offset=UPRV_LENGTHOF(input);
         U8_BACK_N_UNSAFE(input, offset, i);
-        if(offset != boundaries[j]) {
-            log_err("ERROR: U8_BACK_N_UNSAFE offset expected:%d, Got:%d\n", boundaries[j], offset);
+        if(offset != backBoundaries[j]) {
+            log_err("ERROR: U8_BACK_N_UNSAFE offset expected:%d, Got:%d\n", backBoundaries[j], offset);
         }
     }
 }
@@ -731,25 +852,26 @@ static void TestSetChar() {
     int32_t offset=0, setOffset=0;
     for(offset=0; offset<=UPRV_LENGTHOF(input); offset++){
         if (offset<UPRV_LENGTHOF(input)){
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
             setOffset=offset;
             UTF8_SET_CHAR_START_SAFE(input, 0, setOffset);
             if(setOffset != start_safe[i]){
                 log_err("ERROR: UTF8_SET_CHAR_START_SAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, start_safe[i], setOffset);
             }
-
+#endif
             setOffset=offset;
             U8_SET_CP_START(input, 0, setOffset);
             if(setOffset != start_safe[i]){
                 log_err("ERROR: U8_SET_CP_START failed for offset=%ld. Expected:%ld Got:%ld\n", offset, start_safe[i], setOffset);
             }
         }
-
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
         UTF8_SET_CHAR_LIMIT_SAFE(input,0, setOffset, sizeof(input));
         if(setOffset != limit_safe[i]){
             log_err("ERROR: UTF8_SET_CHAR_LIMIT_SAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, limit_safe[i], setOffset);
         }
-
+#endif
         setOffset=offset;
         U8_SET_CP_LIMIT(input,0, setOffset, sizeof(input));
         if(setOffset != limit_safe[i]){
@@ -772,12 +894,13 @@ static void TestSetCharUnsafe() {
     int32_t offset=0, setOffset=0;
     for(offset=0; offset<=UPRV_LENGTHOF(input); offset++){
         if (offset<UPRV_LENGTHOF(input)){
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
             setOffset=offset;
             UTF8_SET_CHAR_START_UNSAFE(input, setOffset);
             if(setOffset != start_unsafe[i]){
                 log_err("ERROR: UTF8_SET_CHAR_START_UNSAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, start_unsafe[i], setOffset);
             }
-
+#endif
             setOffset=offset;
             U8_SET_CP_START_UNSAFE(input, setOffset);
             if(setOffset != start_unsafe[i]){
@@ -786,12 +909,13 @@ static void TestSetCharUnsafe() {
         }
 
         if (offset != 0) { /* Can't have it go off the end of the array */
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
             setOffset=offset;
             UTF8_SET_CHAR_LIMIT_UNSAFE(input, setOffset);
             if(setOffset != limit_unsafe[i]){
                 log_err("ERROR: UTF8_SET_CHAR_LIMIT_UNSAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, limit_unsafe[i], setOffset);
             }
-
+#endif
             setOffset=offset;
             U8_SET_CP_LIMIT_UNSAFE(input, setOffset);
             if(setOffset != limit_unsafe[i]){
@@ -804,6 +928,7 @@ static void TestSetCharUnsafe() {
 }
 
 static void TestAppendChar(){
+#if !U_HIDE_OBSOLETE_UTF_OLD_H
     static const uint8_t s[11]={0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x00};
     static const uint32_t test[]={
     /*  append-position(unsafe),  CHAR to be appended */
@@ -968,8 +1093,7 @@ static void TestAppendChar(){
         }
         count++;
     }
-
-
+#endif
 }
 
 static void TestAppend() {
@@ -1079,8 +1203,12 @@ TestSurrogates() {
             log_err("L8_NEXT(b[%ld])=U+%04lX != U+%04lX\n", (long)i, (long)cl, (long)cu);
         }
 
-        if(is!=iu || il!=iu) {
-            log_err("U8_NEXT(b[%ld]) or L8_NEXT(b[%ld]) did not advance the index correctly\n", (long)i, (long)i);
+        // U8_NEXT() skips only the first byte of a surrogate byte sequence.
+        if(U_IS_SURROGATE(cu) ? is!=(i+1) : is!=iu) {
+            log_err("U8_NEXT(b[%ld]) did not advance the index correctly\n", (long)i, (long)i);
+        }
+        if(il!=iu) {
+            log_err("L8_NEXT(b[%ld]) did not advance the index correctly\n", (long)i, (long)i);
         }
 
         ++k;    /* next code point */
@@ -1116,17 +1244,14 @@ TestSurrogates() {
             log_err("L8_PREV(b[%ld])=U+%04lX != U+%04lX\n", (long)i, (long)cl, (long)cu);
         }
 
-        if(is!=iu || il !=iu) {
-            log_err("U8_PREV(b[%ld]) or L8_PREV(b[%ld]) did not advance the index correctly\n", (long)i, (long)i);
+        // U8_PREV() skips only the last byte of a surrogate byte sequence.
+        if(U_IS_SURROGATE(cu) ? is!=(i-1) : is!=iu) {
+            log_err("U8_PREV(b[%ld]) did not advance the index correctly\n", (long)i, (long)i);
+        }
+        if(il !=iu) {
+            log_err("L8_PREV(b[%ld]) did not advance the index correctly\n", (long)i, (long)i);
         }
 
         i=iu;   /* go back by one UTF-8 sequence */
-    }
-}
-
-static void printUChars(const uint8_t *uchars, int16_t len){
-    int16_t i=0;
-    for(i=0; i<len; i++){
-        log_err("0x%02x ", *(uchars+i));
     }
 }

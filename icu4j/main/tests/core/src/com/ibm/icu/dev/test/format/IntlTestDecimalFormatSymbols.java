@@ -23,14 +23,18 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
-public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
+@RunWith(JUnit4.class)
+public class IntlTestDecimalFormatSymbols extends TestFmwk
 {
     // Test the API of DecimalFormatSymbols; primarily a simple get/set set.
     @Test

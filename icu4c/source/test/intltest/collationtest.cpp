@@ -294,24 +294,22 @@ void CollationTest::TestIllegalUTF8() {
     coll->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, errorCode);
 
     static const char *strings[] = {
-        // U+FFFD
-        "a\xef\xbf\xbdz",
-        // illegal byte sequences
-        "a\x80z",  // trail byte
-        "a\xc1\x81z",  // non-shortest form
-        "a\xe0\x82\x83z",  // non-shortest form
-        "a\xed\xa0\x80z",  // lead surrogate: would be U+D800
-        "a\xed\xbf\xbfz",  // trail surrogate: would be U+DFFF
-        "a\xf0\x8f\xbf\xbfz",  // non-shortest form
-        "a\xf4\x90\x80\x80z"  // out of range: would be U+110000
+        // string with U+FFFD == illegal byte sequence
+        u8"a\uFFFDz", "a\x80z",  // trail byte
+        u8"a\uFFFD\uFFFDz", "a\xc1\x81z",  // non-shortest form
+        u8"a\uFFFD\uFFFD\uFFFDz", "a\xe0\x82\x83z",  // non-shortest form
+        u8"a\uFFFD\uFFFD\uFFFDz", "a\xed\xa0\x80z",  // lead surrogate: would be U+D800
+        u8"a\uFFFD\uFFFD\uFFFDz", "a\xed\xbf\xbfz",  // trail surrogate: would be U+DFFF
+        u8"a\uFFFD\uFFFD\uFFFD\uFFFDz", "a\xf0\x8f\xbf\xbfz",  // non-shortest form
+        u8"a\uFFFD\uFFFD\uFFFD\uFFFDz", "a\xf4\x90\x80\x80z"  // out of range: would be U+110000
     };
 
-    StringPiece fffd(strings[0]);
-    for(int32_t i = 1; i < UPRV_LENGTHOF(strings); ++i) {
-        StringPiece illegal(strings[i]);
+    for(int32_t i = 0; i < UPRV_LENGTHOF(strings); i += 2) {
+        StringPiece fffd(strings[i]);
+        StringPiece illegal(strings[i + 1]);
         UCollationResult order = coll->compareUTF8(fffd, illegal, errorCode);
         if(order != UCOL_EQUAL) {
-            errln("compareUTF8(U+FFFD, string %d with illegal UTF-8)=%d != UCOL_EQUAL",
+            errln("compareUTF8(pair %d: U+FFFD, illegal UTF-8)=%d != UCOL_EQUAL",
                   (int)i, order);
         }
     }

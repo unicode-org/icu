@@ -54,7 +54,7 @@ static int32_t ncat(char *buffer, uint32_t buflen, ...) {
   *p = 0;
   va_end(args);
 
-  return p - buffer;
+  return static_cast<int32_t>(p - buffer);
 }
 
 U_NAMESPACE_BEGIN

@@ -319,6 +319,11 @@ public final class CaseMapImpl {
         }
 
         @Override
+        public void setText(CharSequence newText) {
+            length = newText.length();
+        }
+
+        @Override
         public void setText(String newText) {
             length = newText.length();
         }
@@ -346,9 +351,9 @@ public final class CaseMapImpl {
             // (not) original code point
             if (edits != null) {
                 edits.addUnchanged(cpLength);
-                if ((options & OMIT_UNCHANGED_TEXT) != 0) {
-                    return;
-                }
+            }
+            if ((options & OMIT_UNCHANGED_TEXT) != 0) {
+                return;
             }
             appendCodePoint(dest, ~result);
         } else if (result <= UCaseProps.MAX_STRING_LENGTH) {
@@ -370,12 +375,29 @@ public final class CaseMapImpl {
         if (length > 0) {
             if (edits != null) {
                 edits.addUnchanged(length);
-                if ((options & OMIT_UNCHANGED_TEXT) != 0) {
-                    return;
-                }
+            }
+            if ((options & OMIT_UNCHANGED_TEXT) != 0) {
+                return;
             }
             dest.append(src, start, start + length);
         }
+    }
+
+    private static String applyEdits(CharSequence src, StringBuilder replacementChars, Edits edits) {
+        if (!edits.hasChanges()) {
+            return src.toString();
+        }
+        StringBuilder result = new StringBuilder(src.length() + edits.lengthDelta());
+        for (Edits.Iterator ei = edits.getCoarseIterator(); ei.next();) {
+            if (ei.hasChange()) {
+                int i = ei.replacementIndex();
+                result.append(replacementChars, i, i + ei.newLength());
+            } else {
+                int i = ei.sourceIndex();
+                result.append(src, i, i + ei.oldLength());
+            }
+        }
+        return result.toString();
     }
 
     private static void internalToLower(int caseLocale, int options, StringContextIterator iter,
@@ -384,6 +406,23 @@ public final class CaseMapImpl {
         while ((c = iter.nextCaseMapCP()) >= 0) {
             c = UCaseProps.INSTANCE.toFullLower(c, iter, dest, caseLocale);
             appendResult(c, dest, iter.getCPLength(), options, edits);
+        }
+    }
+
+    public static String toLower(int caseLocale, int options, CharSequence src) {
+        if (src.length() <= 100 && (options & OMIT_UNCHANGED_TEXT) == 0) {
+            if (src.length() == 0) {
+                return src.toString();
+            }
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = toLower(
+                    caseLocale, options | OMIT_UNCHANGED_TEXT, src, new StringBuilder(), edits);
+            return applyEdits(src, replacementChars, edits);
+        } else {
+            return toLower(caseLocale, options, src,
+                    new StringBuilder(src.length()), null).toString();
         }
     }
 
@@ -398,6 +437,23 @@ public final class CaseMapImpl {
             return dest;
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    public static String toUpper(int caseLocale, int options, CharSequence src) {
+        if (src.length() <= 100 && (options & OMIT_UNCHANGED_TEXT) == 0) {
+            if (src.length() == 0) {
+                return src.toString();
+            }
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = toUpper(
+                    caseLocale, options | OMIT_UNCHANGED_TEXT, src, new StringBuilder(), edits);
+            return applyEdits(src, replacementChars, edits);
+        } else {
+            return toUpper(caseLocale, options, src,
+                    new StringBuilder(src.length()), null).toString();
         }
     }
 
@@ -419,6 +475,24 @@ public final class CaseMapImpl {
             return dest;
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    public static String toTitle(int caseLocale, int options, BreakIterator iter, CharSequence src) {
+        if (src.length() <= 100 && (options & OMIT_UNCHANGED_TEXT) == 0) {
+            if (src.length() == 0) {
+                return src.toString();
+            }
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = toTitle(
+                    caseLocale, options | OMIT_UNCHANGED_TEXT, iter, src,
+                    new StringBuilder(), edits);
+            return applyEdits(src, replacementChars, edits);
+        } else {
+            return toTitle(caseLocale, options, iter, src,
+                    new StringBuilder(src.length()), null).toString();
         }
     }
 
@@ -530,6 +604,22 @@ public final class CaseMapImpl {
             return dest;
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
+        }
+    }
+
+    public static String fold(int options, CharSequence src) {
+        if (src.length() <= 100 && (options & OMIT_UNCHANGED_TEXT) == 0) {
+            if (src.length() == 0) {
+                return src.toString();
+            }
+            // Collect and apply only changes.
+            // Good if no or few changes. Bad (slow) if many changes.
+            Edits edits = new Edits();
+            StringBuilder replacementChars = fold(
+                    options | OMIT_UNCHANGED_TEXT, src, new StringBuilder(), edits);
+            return applyEdits(src, replacementChars, edits);
+        } else {
+            return fold(options, src, new StringBuilder(src.length()), null).toString();
         }
     }
 
@@ -1038,6 +1128,7 @@ public final class CaseMapImpl {
                 int type = UCaseProps.INSTANCE.getTypeOrIgnorable(c);
                 if ((type & UCaseProps.IGNORABLE) != 0) {
                     // Case-ignorable, continue with the loop.
+                    i += Character.charCount(c);
                 } else if (type != UCaseProps.NONE) {
                     return true;  // Followed by cased letter.
                 } else {
@@ -1130,7 +1221,7 @@ public final class CaseMapImpl {
                     }
 
                     boolean change;
-                    if (edits == null) {
+                    if (edits == null && (options & OMIT_UNCHANGED_TEXT) == 0) {
                         change = true;  // common, simple usage
                     } else {
                         // Find out first whether we are changing the text.

@@ -79,7 +79,7 @@ class RBBIRuleScanner {
 
     UnicodeSet      fRuleSets[] = new UnicodeSet[10];    // Unicode Sets that are needed during
                                                      //  the scanning of RBBI rules.  The
-                                                     //  indicies for these are assigned by the
+                                                     //  Indices for these are assigned by the
                                                      //  perl script that builds the state tables.
                                                      //  See rbbirpt.h.
 
@@ -89,7 +89,7 @@ class RBBIRuleScanner {
                                                  //   keyword, while being scanned.
 
 
-
+   // gRuleSet_rule_char_pattern is characters that may appear as literals in patterns without escaping or quoting.
    static private String gRuleSet_rule_char_pattern       = "[^[\\p{Z}\\u0020-\\u007f]-[\\p{L}]-[\\p{N}]]";
    static private String gRuleSet_name_char_pattern       = "[_\\p{L}\\p{N}]";
    static private String gRuleSet_digit_char_pattern      = "[0-9]";
@@ -447,6 +447,10 @@ class RBBIRuleScanner {
                 fRB.fDefaultTree = RBBIRuleBuilder.fSafeRevTree;
             } else if (opt.equals("lookAheadHardBreak")) {
                 fRB.fLookAheadHardBreak = true;
+            } else if (opt.equals("quoted_literals_only")) {
+                fRuleSets[RBBIRuleParseTable.kRuleSet_rule_char - 128].clear();
+            } else if (opt.equals("unquoted_literals")) {
+                fRuleSets[RBBIRuleParseTable.kRuleSet_rule_char - 128].applyPattern(gRuleSet_rule_char_pattern);
             } else {
                 error(RBBIRuleBuilder.U_BRK_UNRECOGNIZED_OPTION);
             }
@@ -957,7 +961,7 @@ class RBBIRuleScanner {
             }
 
         }
-        
+
         // If there are no forward rules throw an error.
         //
         if (fRB.fTreeRoots[RBBIRuleBuilder.fForwardTree] == null) {

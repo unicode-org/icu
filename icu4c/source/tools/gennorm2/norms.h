@@ -199,14 +199,14 @@ class CompositionBuilder : public Norms::Enumerator {
 public:
     CompositionBuilder(Norms &n) : Norms::Enumerator(n) {}
     /** Adds a composition mapping for the first character in a round-trip mapping. */
-    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) override;
+    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) U_OVERRIDE;
 };
 
 class Decomposer : public Norms::Enumerator {
 public:
     Decomposer(Norms &n) : Norms::Enumerator(n), didDecompose(FALSE) {}
     /** Decomposes each character of the current mapping. Sets didDecompose if any. */
-    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) override;
+    void rangeHandler(UChar32 start, UChar32 end, Norm &norm) U_OVERRIDE;
     UBool didDecompose;
 };
 

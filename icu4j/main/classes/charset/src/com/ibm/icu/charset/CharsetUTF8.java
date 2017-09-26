@@ -36,26 +36,7 @@ class CharsetUTF8 extends CharsetICU {
         maxCharsPerByte = 1;
     }
 
-    private static final int BITMASK_FROM_UTF8[] = { -1, 0x7f, 0x1f, 0xf, 0x7, 0x3, 0x1 };
-
-    private static final byte BYTES_FROM_UTF8[] = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 0, 0
-    };
-
-    /*
-     * Starting with Unicode 3.0.1: UTF-8 byte sequences of length N _must_ encode code points of or
-     * above utf8_minChar32[N]; byte sequences with more than 4 bytes are illegal in UTF-8, which is
-     * tested with impossible values for them
-     */
-    private static final int UTF8_MIN_CHAR32[] = { 0, 0, 0x80, 0x800, 0x10000,
-            Integer.MAX_VALUE, Integer.MAX_VALUE };
+    private static final int BITMASK_FROM_UTF8[] = { -1, 0x7f, 0x1f, 0xf, 0x7 };
 
     private final boolean isCESU8 = this instanceof CharsetCESU8;
 
@@ -92,9 +73,9 @@ class CharsetUTF8 extends CharsetICU {
 
                 if (mode == 0) {
                     /* nothing is stored in toUnicodeStatus, read a byte as input */
-                    char32 = (toUBytesArray[0] = sourceArray[sourceIndex++]) & 0xff;
-                    bytesExpected = BYTES_FROM_UTF8[char32];
-                    char32 &= BITMASK_FROM_UTF8[bytesExpected];
+                    toUBytesArray[0] = ch = sourceArray[sourceIndex++];
+                    bytesExpected = UTF8.countBytes(ch);
+                    char32 = ch & BITMASK_FROM_UTF8[bytesExpected];
                     bytesSoFar = 1;
                 } else {
                     /* a partially or fully built code point is stored in toUnicodeStatus */
@@ -118,8 +99,9 @@ class CharsetUTF8 extends CharsetICU {
                             cr = CoderResult.UNDERFLOW;
                             break;
                         }
-                        if (((ch = toUBytesArray[bytesSoFar] = sourceArray[sourceIndex++]) & 0xc0) != 0x80) {
-                            /* not a trail byte (is not of the form 10xxxxxx) */
+                        toUBytesArray[bytesSoFar] = ch = sourceArray[sourceIndex++];
+                        if (!UTF8.isValidTrail(char32, ch, bytesSoFar, bytesExpected)
+                                && !(isCESU8 && bytesSoFar == 1 && char32 == 0xd && UTF8.isTrail(ch))) {
                             sourceIndex--;
                             toULength = bytesSoFar;
                             cr = CoderResult.malformedForLength(bytesSoFar);
@@ -127,8 +109,7 @@ class CharsetUTF8 extends CharsetICU {
                         }
                         char32 = (char32 << 6) | (ch & 0x3f);
                         bytesSoFar++;
-                    } else if (bytesSoFar == bytesExpected && UTF8_MIN_CHAR32[bytesExpected] <= char32 && char32 <= 0x10ffff
-                            && (isCESU8 ? bytesExpected <= 3 : !UTF16.isSurrogate((char) char32))) {
+                    } else if (bytesSoFar == bytesExpected && (!isCESU8 || bytesSoFar <= 3)) {
                         /*
                          * char32 is a valid code point and is composed of the correct number of
                          * bytes ... we now need to output it in UTF-16
@@ -168,8 +149,8 @@ class CharsetUTF8 extends CharsetICU {
                         }
 
                         /* keep reading the next input (and writing it) while bytes == 1 */
-                        while ((bytesExpected = BYTES_FROM_UTF8[char32 = (toUBytesArray[0] = sourceArray[sourceIndex++]) & 0xff]) == 1) {
-                            targetArray[targetIndex++] = (char) char32;
+                        while (UTF8.isSingle(ch = sourceArray[sourceIndex++])) {
+                            targetArray[targetIndex++] = (char) ch;
                             if (sourceIndex >= sourceLimit) {
                                 cr = CoderResult.UNDERFLOW;
                                 break outer;
@@ -179,9 +160,11 @@ class CharsetUTF8 extends CharsetICU {
                                 break outer;
                             }
                         }
+                        toUBytesArray[0] = ch;
 
                         /* remove the bits that indicate the number of bytes */
-                        char32 &= BITMASK_FROM_UTF8[bytesExpected];
+                        bytesExpected = UTF8.countBytes(ch);
+                        char32 = ch & BITMASK_FROM_UTF8[bytesExpected];
                         bytesSoFar = 1;
                     } else {
                         /*
@@ -212,9 +195,9 @@ class CharsetUTF8 extends CharsetICU {
 
                 if (mode == 0) {
                     /* nothing is stored in toUnicodeStatus, read a byte as input */
-                    char32 = (toUBytesArray[0] = source.get(sourceIndex++)) & 0xff;
-                    bytesExpected = BYTES_FROM_UTF8[char32];
-                    char32 &= BITMASK_FROM_UTF8[bytesExpected];
+                    toUBytesArray[0] = ch = source.get(sourceIndex++);
+                    bytesExpected = UTF8.countBytes(ch);
+                    char32 = ch & BITMASK_FROM_UTF8[bytesExpected];
                     bytesSoFar = 1;
                 } else {
                     /* a partially or fully built code point is stored in toUnicodeStatus */
@@ -238,8 +221,9 @@ class CharsetUTF8 extends CharsetICU {
                             cr = CoderResult.UNDERFLOW;
                             break;
                         }
-                        if (((ch = toUBytesArray[bytesSoFar] = source.get(sourceIndex++)) & 0xc0) != 0x80) {
-                            /* not a trail byte (is not of the form 10xxxxxx) */
+                        toUBytesArray[bytesSoFar] = ch = source.get(sourceIndex++);
+                        if (!UTF8.isValidTrail(char32, ch, bytesSoFar, bytesExpected)
+                                && !(isCESU8 && bytesSoFar == 1 && char32 == 0xd && UTF8.isTrail(ch))) {
                             sourceIndex--;
                             toULength = bytesSoFar;
                             cr = CoderResult.malformedForLength(bytesSoFar);
@@ -247,21 +231,7 @@ class CharsetUTF8 extends CharsetICU {
                         }
                         char32 = (char32 << 6) | (ch & 0x3f);
                         bytesSoFar++;
-                    }
-                    /*
-                     * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
-                     * - use only trail bytes after a lead byte (checked above)
-                     * - use the right number of trail bytes for a given lead byte
-                     * - encode a code point <= U+10ffff
-                     * - use the fewest possible number of bytes for their code points
-                     * - use at most 4 bytes (for i>=5 it is 0x10ffff<utf8_minChar32[])
-                     *
-                     * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
-                     * There are no irregular sequences any more.
-                     * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
-                     */
-                    else if (bytesSoFar == bytesExpected && UTF8_MIN_CHAR32[bytesExpected] <= char32 && char32 <= 0x10ffff
-                            && (isCESU8 ? bytesExpected <= 3 : !UTF16.isSurrogate((char) char32))) {
+                    } else if (bytesSoFar == bytesExpected && (!isCESU8 || bytesSoFar <= 3)) {
                         /*
                          * char32 is a valid code point and is composed of the correct number of
                          * bytes ... we now need to output it in UTF-16
@@ -305,8 +275,8 @@ class CharsetUTF8 extends CharsetICU {
                         }
 
                         /* keep reading the next input (and writing it) while bytes == 1 */
-                        while ((bytesExpected = BYTES_FROM_UTF8[char32 = (toUBytesArray[0] = source.get(sourceIndex++)) & 0xff]) == 1) {
-                            target.put(targetIndex++, (char) char32);
+                        while (UTF8.isSingle(ch = source.get(sourceIndex++))) {
+                            target.put(targetIndex++, (char) ch);
                             if (sourceIndex >= sourceLimit) {
                                 cr = CoderResult.UNDERFLOW;
                                 break outer;
@@ -316,9 +286,11 @@ class CharsetUTF8 extends CharsetICU {
                                 break outer;
                             }
                         }
+                        toUBytesArray[0] = ch;
 
                         /* remove the bits that indicate the number of bytes */
-                        char32 &= BITMASK_FROM_UTF8[bytesExpected];
+                        bytesExpected = UTF8.countBytes(ch);
+                        char32 = ch & BITMASK_FROM_UTF8[bytesExpected];
                         bytesSoFar = 1;
                     } else {
                         /*
@@ -657,32 +629,6 @@ class CharsetUTF8 extends CharsetICU {
     private static final byte encodeLastTail(int char32) {
         return (byte) (0x80 | (char32 & 0x3f));
     }
-
-    /* single-code point definitions -------------------------------------------- */
-
-    /*
-     * Does this code unit (byte) encode a code point by itself (US-ASCII 0..0x7f)?
-     * @param c 8-bit code unit (byte)
-     * @return TRUE or FALSE
-     */
-    // static final boolean isSingle(byte c) {return (((c)&0x80)==0);}
-    /*
-     * Is this code unit (byte) a UTF-8 lead byte?
-     * @param c 8-bit code unit (byte)
-     * @return TRUE or FALSE
-     */
-    // static final boolean isLead(byte c) {return ((((c)-0xc0) &
-    // UConverterConstants.UNSIGNED_BYTE_MASK)<0x3e);}
-    /*
-     * Is this code unit (byte) a UTF-8 trail byte?
-     *
-     * @param c
-     *            8-bit code unit (byte)
-     * @return TRUE or FALSE
-     */
-    /*private static final boolean isTrail(byte c) {
-        return (((c) & 0xc0) == 0x80);
-    }*/
 
     @Override
     public CharsetDecoder newDecoder() {

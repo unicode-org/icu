@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/** 
+/**
  * Port From:   ICU4C v1.8.1 : format : DateFormatRegressionTest
  * Source File: $ICU4CRoot/source/test/intltest/dtfmrgts.cpp
  **/
@@ -28,7 +28,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -39,10 +42,11 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
-/** 
+/**
  * Performs regression test for DateFormat
  **/
-public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
+@RunWith(JUnit4.class)
+public class DateFormatRegressionTest extends TestFmwk {
     /**
      * @bug 4029195
      */
@@ -58,7 +62,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         FieldPosition pos = new FieldPosition(0);
         fmtd = sdf.format(today, fmtd, pos);
         logln("today: " + fmtd);
-    
+
         sdf.applyPattern("G yyyy DDD");
         StringBuffer todayS = new StringBuffer("");
         todayS = sdf.format(today, todayS, pos);
@@ -69,7 +73,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (Exception e) {
             errln("Error reparsing date: " + e.getMessage());
         }
-    
+
         try {
             StringBuffer rt = new StringBuffer("");
             rt = sdf.format(sdf.parse(todayS.toString()), rt, pos);
@@ -81,24 +85,24 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * @bug 4052408
      */
     @Test
     public void Test4052408() {
-    
-        DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US); 
+
+        DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.set(97 + 1900, Calendar.MAY, 3, 8, 55);
         Date dt = cal.getTime();
         String str = fmt.format(dt);
         logln(str);
-        
+
         if (!str.equals("5/3/97, 8:55 AM"))
             errln("Fail: Test broken; Want 5/3/97, 8:55 AM Got " + str);
-    
+
         String expected[] = {
             "", //"ERA_FIELD",
             "97", //"YEAR_FIELD",
@@ -118,27 +122,27 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             "8", //"HOUR1_FIELD",
             "", //"HOUR0_FIELD",
             "" //"TIMEZONE_FIELD"
-            };        
+            };
         String fieldNames[] = {
-                "ERA_FIELD", 
-                "YEAR_FIELD", 
-                "MONTH_FIELD", 
-                "DATE_FIELD", 
-                "HOUR_OF_DAY1_FIELD", 
-                "HOUR_OF_DAY0_FIELD", 
-                "MINUTE_FIELD", 
-                "SECOND_FIELD", 
-                "MILLISECOND_FIELD", 
-                "DAY_OF_WEEK_FIELD", 
-                "DAY_OF_YEAR_FIELD", 
-                "DAY_OF_WEEK_IN_MONTH_FIELD", 
-                "WEEK_OF_YEAR_FIELD", 
-                "WEEK_OF_MONTH_FIELD", 
-                "AM_PM_FIELD", 
-                "HOUR1_FIELD", 
-                "HOUR0_FIELD", 
-                "TIMEZONE_FIELD"}; 
-    
+                "ERA_FIELD",
+                "YEAR_FIELD",
+                "MONTH_FIELD",
+                "DATE_FIELD",
+                "HOUR_OF_DAY1_FIELD",
+                "HOUR_OF_DAY0_FIELD",
+                "MINUTE_FIELD",
+                "SECOND_FIELD",
+                "MILLISECOND_FIELD",
+                "DAY_OF_WEEK_FIELD",
+                "DAY_OF_YEAR_FIELD",
+                "DAY_OF_WEEK_IN_MONTH_FIELD",
+                "WEEK_OF_YEAR_FIELD",
+                "WEEK_OF_MONTH_FIELD",
+                "AM_PM_FIELD",
+                "HOUR1_FIELD",
+                "HOUR0_FIELD",
+                "TIMEZONE_FIELD"};
+
         boolean pass = true;
         for (int i = 0; i <= 17; ++i) {
             FieldPosition pos = new FieldPosition(i);
@@ -148,7 +152,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             String dst = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
             str = dst;
             log(i + ": " + fieldNames[i] + ", \"" + str + "\", "
-                    + pos.getBeginIndex() + ", " + pos.getEndIndex()); 
+                    + pos.getBeginIndex() + ", " + pos.getEndIndex());
             String exp = expected[i];
             if ((exp.length() == 0 && str.length() == 0) || str.equals(exp))
                 logln(" ok");
@@ -160,14 +164,14 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!pass)
             errln("Fail: FieldPosition not set right by DateFormat");
     }
-    
+
     /**
      * @bug 4056591
      * Verify the function of the [s|g]et2DigitYearStart() API.
      */
     @Test
     public void Test4056591() {
-    
+
         try {
             SimpleDateFormat fmt = new SimpleDateFormat("yyMMdd", Locale.US);
             Calendar cal = Calendar.getInstance();
@@ -189,11 +193,11 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             cal.clear();
             cal.set(1861, Calendar.DECEMBER, 25);
             Date d4 = cal.getTime();
-            
+
             Date dates[] = {d1, d2, d3, d4};
-    
-            String strings[] = {"091225", "091224", "091226", "611225"};            
-    
+
+            String strings[] = {"091225", "091224", "091226", "611225"};
+
             for (int i = 0; i < 4; i++) {
                 String s = strings[i];
                 Date exp = dates[i];
@@ -207,40 +211,40 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * @bug 4059917
      */
     @Test
-    public void Test4059917() {        
+    public void Test4059917() {
         SimpleDateFormat fmt;
         String myDate;
         fmt = new SimpleDateFormat("yyyy/MM/dd");
         myDate = "1997/01/01";
-        aux917( fmt, myDate );        
+        aux917( fmt, myDate );
         fmt = new SimpleDateFormat("yyyyMMdd");
         myDate = "19970101";
         aux917( fmt, myDate );
     }
-    
+
     public void aux917(SimpleDateFormat fmt, String str) {
-    
+
         String pat = fmt.toPattern();
         logln("==================");
         logln("testIt: pattern=" + pat + " string=" + str);
         ParsePosition pos = new ParsePosition(0);
         Object o = fmt.parseObject(str, pos);
         //logln( UnicodeString("Parsed object: ") + o );
-    
+
         StringBuffer formatted = new StringBuffer("");
         FieldPosition poss = new FieldPosition(0);
         formatted = fmt.format(o, formatted, poss);
-    
+
         logln("Formatted string: " + formatted);
         if (!formatted.toString().equals(str))
             errln("Fail: Want " + str + " Got " + formatted);
     }
-    
+
     /**
      * @bug 4060212
      */
@@ -252,14 +256,14 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-DDD.hh:mm:ss");
         ParsePosition pos = new ParsePosition(0);
         Date myDate = formatter.parse(dateString, pos);
-        DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.LONG); 
+        DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.LONG);
         String myString = fmt.format(myDate);
         logln(myString);
         Calendar cal = new GregorianCalendar();
         cal.setTime(myDate);
         if ((cal.get(Calendar.DAY_OF_YEAR) != 40))
             errln("Fail: Got " + cal.get(Calendar.DAY_OF_YEAR) + " Want 40");
-    
+
         logln("Using yyyy-ddd.hh:mm:ss");
         formatter = new SimpleDateFormat("yyyy-ddd.hh:mm:ss");
         pos.setIndex(0);
@@ -275,7 +279,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     @Test
     public void Test4061287() {
-    
+
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         try {
             logln(df.parse("35/01/1971").toString());
@@ -293,7 +297,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!ok)
             errln("Fail: Lenient not working");
     }
-    
+
     /**
      * @bug 4065240
      */
@@ -304,7 +308,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         String strShortDate, strFullDate;
         Locale saveLocale = Locale.getDefault();
         TimeZone saveZone = TimeZone.getDefault();
-    
+
         try {
             Locale curLocale = new Locale("de", "DE");
             Locale.setDefault(curLocale);
@@ -324,16 +328,16 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             strFullDate = "The current date (long form) is ";
             String temp2 = fulldate.format(curDate);
             strFullDate += temp2;
-    
+
             logln(strShortDate);
             logln(strFullDate);
-    
+
             // {sfb} What to do with resource bundle stuff?????
-    
+
             // Check to see if the resource is present; if not, we can't test
             //ResourceBundle bundle = //The variable is never used
-            //    ICULocaleData.getBundle("DateFormatZoneData", curLocale); 
-    
+            //    ICULocaleData.getBundle("DateFormatZoneData", curLocale);
+
             // {sfb} API change to ResourceBundle -- add getLocale()
             /*if (bundle.getLocale().getLanguage().equals("de")) {
                 // UPDATE THIS AS ZONE NAME RESOURCE FOR <EST> in de_DE is updated
@@ -349,16 +353,16 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             Locale.setDefault(saveLocale);
             TimeZone.setDefault(saveZone);
         }
-    
+
     }
-    
+
     /*
       DateFormat.equals is too narrowly defined.  As a result, MessageFormat
       does not work correctly.  DateFormat.equals needs to be written so
       that the Calendar sub-object is not compared using Calendar.equals,
       but rather compared for equivalency.  This may necessitate adding a
       (package private) method to Calendar to test for equivalency.
-      
+
       Currently this bug breaks MessageFormat.toPattern
       */
     /**
@@ -368,7 +372,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     public void Test4071441() {
         DateFormat fmtA = DateFormat.getInstance();
         DateFormat fmtB = DateFormat.getInstance();
-    
+
         // {sfb} Is it OK to cast away const here?
         Calendar calA = fmtA.getCalendar();
         Calendar calB = fmtB.getCalendar();
@@ -388,14 +392,14 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("Fail: DateFormat unequal when Calendars equivalent");
         logln("DateFormat.equals ok");
     }
-        
+
     /* The java.text.DateFormat.parse(String) method expects for the
       US locale a string formatted according to mm/dd/yy and parses it
       correctly.
-    
+
       When given a string mm/dd/yyyy it only parses up to the first
       two y's, typically resulting in a date in the year 1919.
-      
+
       Please extend the parsing method(s) to handle strings with
       four-digit year values (probably also applicable to various
       other locales.  */
@@ -423,9 +427,9 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (ParseException e) {
             errln("Fail: " + e);
             e.printStackTrace();
-        }    
+        }
     }
-    
+
     /**
      * @bug 4089106
      */
@@ -442,24 +446,24 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             TimeZone.setDefault(def);
         }
     }
-    
+
     /**
      * @bug 4100302
      */
     @Test
     public void Test4100302() {
-        
+
         Locale locales[] = {
-            Locale.CANADA, Locale.CANADA_FRENCH, Locale.CHINA, 
-            Locale.CHINESE, Locale.ENGLISH, Locale.FRANCE, Locale.FRENCH, 
-            Locale.GERMAN, Locale.GERMANY, Locale.ITALIAN, Locale.ITALY, 
-            Locale.JAPAN, Locale.JAPANESE, Locale.KOREA, Locale.KOREAN, 
-            Locale.PRC, Locale.SIMPLIFIED_CHINESE, Locale.TAIWAN, 
-            Locale.TRADITIONAL_CHINESE, Locale.UK, Locale.US}; 
+            Locale.CANADA, Locale.CANADA_FRENCH, Locale.CHINA,
+            Locale.CHINESE, Locale.ENGLISH, Locale.FRANCE, Locale.FRENCH,
+            Locale.GERMAN, Locale.GERMANY, Locale.ITALIAN, Locale.ITALY,
+            Locale.JAPAN, Locale.JAPANESE, Locale.KOREA, Locale.KOREAN,
+            Locale.PRC, Locale.SIMPLIFIED_CHINESE, Locale.TAIWAN,
+            Locale.TRADITIONAL_CHINESE, Locale.UK, Locale.US};
         try {
             boolean pass = true;
             for (int i = 0; i < 21; i++) {
-                Format format = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locales[i]); 
+                Format format = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locales[i]);
                 byte[] bytes;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -471,7 +475,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 Object o = ois.readObject();
                 if (!format.equals(o)) {
                     pass = false;
-                    logln("DateFormat instance for locale " + locales[i] + " is incorrectly serialized/deserialized."); 
+                    logln("DateFormat instance for locale " + locales[i] + " is incorrectly serialized/deserialized.");
                 } else {
                     logln("DateFormat instance for locale " + locales[i] + " is OKAY.");
                 }
@@ -485,9 +489,9 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (ClassNotFoundException e) {
             errln("Fail: " + e);
         }
-    
+
     }
-    
+
     /**
      * @bug 4101483
      */
@@ -504,7 +508,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         if (fp.getBeginIndex() == fp.getEndIndex())
             errln("Fail: Empty field");
     }
-    
+
     /**
      * @bug 4103340
      * @bug 4138203
@@ -515,25 +519,25 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     @Test
     public void Test4103340() {
-    
-        // choose a date that is the FIRST of some month 
+
+        // choose a date that is the FIRST of some month
         // and some arbitrary time
         Calendar cal = Calendar.getInstance();
         cal.clear();
         cal.set(1997, 3, 1, 1, 1, 1);
-        Date d = cal.getTime(); 
+        Date d = cal.getTime();
         SimpleDateFormat df = new SimpleDateFormat("MMMM", Locale.US);
         String s = d.toString();
         StringBuffer s2 = new StringBuffer("");
         FieldPosition pos = new FieldPosition(0);
         s2 = df.format(d, s2, pos);
-        logln("Date=" + s); 
+        logln("Date=" + s);
         logln("DF=" + s2);
         String substr = s2.substring(0,2);
         if (s.indexOf(substr) == -1)
           errln("Months should match");
     }
-    
+
     /**
      * @bug 4103341
      */
@@ -551,7 +555,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             TimeZone.setDefault(saveZone);
         }
     }
-    
+
     /**
      * @bug 4104136
      */
@@ -582,7 +586,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln( "Fail: Expected result " + exp);
         }
     }
-    
+
     /**
      * @bug 4104522
      * CANNOT REPRODUCE
@@ -605,9 +609,9 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         pp.setIndex(0);
         text = "time";
         dt = sdf.parse(text, pp);
-        logln(" text: \"" + text + "\"" + " date: " + dt);    
+        logln(" text: \"" + text + "\"" + " date: " + dt);
     }
-    
+
     /**
      * @bug 4106807
      */
@@ -615,19 +619,19 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     public void Test4106807() {
         Date dt;
         DateFormat df = DateFormat.getDateTimeInstance();
-    
+
         SimpleDateFormat sdfs[] = {
-                new SimpleDateFormat("yyyyMMddHHmmss"), 
-                new SimpleDateFormat("yyyyMMddHHmmss'Z'"), 
-                new SimpleDateFormat("yyyyMMddHHmmss''"), 
-                new SimpleDateFormat("yyyyMMddHHmmss'a''a'"), 
-                new SimpleDateFormat("yyyyMMddHHmmss %")}; 
+                new SimpleDateFormat("yyyyMMddHHmmss"),
+                new SimpleDateFormat("yyyyMMddHHmmss'Z'"),
+                new SimpleDateFormat("yyyyMMddHHmmss''"),
+                new SimpleDateFormat("yyyyMMddHHmmss'a''a'"),
+                new SimpleDateFormat("yyyyMMddHHmmss %")};
         String strings[] = {
-                "19980211140000", 
-                "19980211140000", 
-                "19980211140000", 
-                "19980211140000a", 
-                "19980211140000 "}; 
+                "19980211140000",
+                "19980211140000",
+                "19980211140000",
+                "19980211140000a",
+                "19980211140000 "};
         GregorianCalendar gc = new GregorianCalendar();
         TimeZone timeZone = TimeZone.getDefault();
         TimeZone gmt = (TimeZone) timeZone.clone();
@@ -639,12 +643,12 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 format.setTimeZone(gmt);
                 dt = format.parse(dateString);
                 // {sfb} some of these parses will fail purposely
-    
+
                 StringBuffer fmtd = new StringBuffer("");
                 FieldPosition pos = new FieldPosition(0);
                 fmtd = df.format(dt, fmtd, pos);
                 logln(fmtd.toString());
-                //logln(df.format(dt)); 
+                //logln(df.format(dt));
                 gc.setTime(dt);
                 logln("" + gc.get(Calendar.ZONE_OFFSET));
                 StringBuffer s = new StringBuffer("");
@@ -655,35 +659,35 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     /*
       Synopsis: Chinese time zone CTT is not recogonized correctly.
-      Description: Platform Chinese Windows 95 - ** Time zone set to CST ** 
+      Description: Platform Chinese Windows 95 - ** Time zone set to CST **
       */
     /**
      * @bug 4108407
      */
-    
-    // {sfb} what to do with this one ?? 
+
+    // {sfb} what to do with this one ??
     @Test
     public void Test4108407() {
         /*
     // TODO user.timezone is a protected system property, catch securityexception and warn
     // if this is reenabled
-        long l = System.currentTimeMillis(); 
+        long l = System.currentTimeMillis();
         logln("user.timezone = " + System.getProperty("user.timezone", "?"));
-        logln("Time Zone :" + 
-                           DateFormat.getDateInstance().getTimeZone().getID()); 
-        logln("Default format :" + 
-                           DateFormat.getDateInstance().format(new Date(l))); 
-        logln("Full format :" + 
-                           DateFormat.getDateInstance(DateFormat.FULL).format(new 
-                                                                              Date(l))); 
+        logln("Time Zone :" +
+                           DateFormat.getDateInstance().getTimeZone().getID());
+        logln("Default format :" +
+                           DateFormat.getDateInstance().format(new Date(l)));
+        logln("Full format :" +
+                           DateFormat.getDateInstance(DateFormat.FULL).format(new
+                                                                              Date(l)));
         logln("*** Set host TZ to CST ***");
         logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
         */
     }
-    
+
     /**
      * @bug 4134203
      * SimpleDateFormat won't parse "GMT"
@@ -692,7 +696,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     public void Test4134203() {
         String dateFormat = "MM/dd/yy HH:mm:ss zzz";
         SimpleDateFormat fmt = new SimpleDateFormat(dateFormat);
-    
+
         ParsePosition p0 = new ParsePosition(0);
         Date d = fmt.parse("01/22/92 04:52:00 GMT", p0);
         logln(d.toString());
@@ -701,15 +705,15 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         // In the failure case an exception is thrown by parse();
         // if no exception is thrown, the test passes.
     }
-    
+
     /**
      * @bug 4151631
      * SimpleDateFormat incorrect handling of 2 single quotes in format()
      */
     @Test
     public void Test4151631() {
-        String pattern = 
-            "'TO_DATE('''dd'-'MM'-'yyyy HH:mm:ss''' , ''DD-MM-YYYY HH:MI:SS'')'"; 
+        String pattern =
+            "'TO_DATE('''dd'-'MM'-'yyyy HH:mm:ss''' , ''DD-MM-YYYY HH:MI:SS'')'";
         logln("pattern=" + pattern);
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
         StringBuffer result = new StringBuffer("");
@@ -718,14 +722,14 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         cal.clear();
         cal.set(1998, Calendar.JUNE, 30, 13, 30, 0);
         Date d = cal.getTime();
-        result = format.format(d, result, pos); 
+        result = format.format(d, result, pos);
         if (!result.toString().equals("TO_DATE('30-06-1998 13:30:00' , 'DD-MM-YYYY HH:MI:SS')")) {
             errln("Fail: result=" + result);
         } else {
             logln("Pass: result=" + result);
         }
     }
-    
+
     /**
      * @bug 4151706
      * 'z' at end of date format throws index exception in SimpleDateFormat
@@ -751,7 +755,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         FieldPosition pos = new FieldPosition(0);
         logln(dateString + " . " + fmt.format(d, temp, pos));
     }
-    
+
     /**
      * @bug 4162071
      * Cannot reproduce this bug under 1.2 FCS -- it may be a convoluted duplicate
@@ -771,7 +775,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("Parse format \"" + format + "\" failed.");
         }
     }
-    
+
     /**
      * DateFormat shouldn't parse year "-1" as a two-digit year (e.g., "-1" . 1999).
      */
@@ -784,10 +788,10 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
          * greater than "99", are treated as literal years.  So "1/2/3456"
          * becomes 3456 AD.  Likewise, "1/2/-3" becomes -3 AD == 2 BC.
          */
-        final String STRINGS[] = 
-            {"02/29/00", "01/23/01", "04/05/-1", "01/23/-9", "11/12/1314", "10/31/1", "09/12/+1", "09/12/001",}; 
+        final String STRINGS[] =
+            {"02/29/00", "01/23/01", "04/05/-1", "01/23/-9", "11/12/1314", "10/31/1", "09/12/+1", "09/12/001",};
         int STRINGS_COUNT = STRINGS.length;
-                
+
         Calendar cal = Calendar.getInstance();
         Date FAIL_DATE = cal.getTime();
         cal.clear();
@@ -808,16 +812,16 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         cal.clear();
         cal.set(1, Calendar.OCTOBER, 31);
         Date d5 = cal.getTime();
-        cal.clear();        
+        cal.clear();
         cal.set(1, Calendar.SEPTEMBER, 12);
         Date d7 = cal.getTime();
         Date DATES[] = {d0, d1, d2, d3, d4, d5, FAIL_DATE, d7};
-    
+
         String out = "";
         boolean pass = true;
         for (int i = 0; i < STRINGS_COUNT; ++i) {
             String str = STRINGS[i];
-            Date expected = DATES[i];            
+            Date expected = DATES[i];
             Date actual = null;
             try {
                 actual = fmt.parse(str);
@@ -831,7 +835,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 // Yuck: See j25
                 actStr = ((DateFormat) dispFmt).format(actual);
             }
-                               
+
             if (expected.getTime() == (actual.getTime())) {
                 out += str + " => " + actStr + "\n";
             } else {
@@ -852,18 +856,18 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             err(out);
         }
     }
-    
+
     /**
      * j32 {JDK Bug 4210209 4209272}
      * DateFormat cannot parse Feb 29 2000 when setLenient(false)
      */
     @Test
     public void Test4210209() {
-    
+
         String pattern = "MMM d, yyyy";
         DateFormat fmt = new SimpleDateFormat(pattern, Locale.US);
         DateFormat disp = new SimpleDateFormat("MMM dd yyyy GG", Locale.US);
-    
+
         Calendar calx = fmt.getCalendar();
         calx.setLenient(false);
         Calendar calendar = Calendar.getInstance();
@@ -880,7 +884,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         if (pos.getErrorIndex() != -1) {
             errln("FAIL: Error index should be -1");
         }
-    
+
         // The underlying bug is in GregorianCalendar.  If the following lines
         // succeed, the bug is fixed.  If the bug isn't fixed, they will throw
         // an exception.
@@ -891,7 +895,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         d = cal.getTime();
         logln("Attempt to set Calendar to Feb 29 2000: " + disp.format(d));
     }
-    
+
     @Test
     public void Test714() {
         //TimeZone Offset
@@ -982,7 +986,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln(what + "=" + s);
             first = s.charAt(0);
             if(first<kHindiZero || first>(kHindiZero+9)) {
-                errln(what + "- wrong digit,  got " + s + " (integer digit value " + new Integer((int)first).toString());
+                errln(what + "- wrong digit,  got " + s + " (integer digit value " + new Integer(first).toString());
             }
         }
 
@@ -993,7 +997,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln(what + ": " + s);
             first = s.charAt(0);
             if(first<kArabicZero || first>(kArabicZero+9)) {
-                errln(what + " wrong digit, got " + s + " (integer digit value " + new Integer((int)first).toString());
+                errln(what + " wrong digit, got " + s + " (integer digit value " + new Integer(first).toString());
             }
         }
 
@@ -1004,7 +1008,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln(what + ": " + s);
             first = s.charAt(0);
             if(first<kArabicZero || first>(kArabicZero+9)) {
-                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer(first).toString());
             }
         }
         {
@@ -1014,7 +1018,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln(what + ": " + s);
             first = s.charAt(0);
             if(first<kLatinZero || first>(kLatinZero+9)) {
-                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer(first).toString());
             }
         }
 
@@ -1025,7 +1029,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln(what+ ": " + s);
             first = s.charAt(0);
             if(first<kArabicZero || first>(kArabicZero+9)) {
-                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer(first).toString());
             }
         }
 
@@ -1036,7 +1040,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln(what+ ": " + s);
             first = s.charAt(0);
             if(first<kArabicZero || first>(kArabicZero+9)) {
-                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer(first).toString());
             }
         }
 
@@ -1047,7 +1051,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             logln(what+ ": " + s);
             first = s.charAt(0);
             if(first<kArabicZero || first>(kArabicZero+9)) {
-                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer(first).toString());
             }
         }
     }
@@ -1138,7 +1142,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             String twelfthMonthLocalizedCivil = shortMonthsCivil[11];
 
             islamicCivilTwelfthMonthLocalized[i] = twelfthMonthLocalizedCivil;
-            
+
             com.ibm.icu.util.IslamicCalendar islamicCalendar = new com.ibm.icu.util.IslamicCalendar(locale);
             islamicCalendar.setCivil(false);
             com.ibm.icu.text.SimpleDateFormat islamicDateFormat = (com.ibm.icu.text.SimpleDateFormat) islamicCalendar
@@ -1195,7 +1199,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
+
     @Test
     public void TestParsing() {
         String pattern = "EEE-WW-MMMM-yyyy";
@@ -1205,7 +1209,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         Calendar cal = GregorianCalendar.getInstance(Locale.US);
         ParsePosition pos = new ParsePosition(0);
-        
+
         try {
             format.parse(text, cal, pos);
         } catch (Exception e) {
@@ -1231,7 +1235,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         String dangiDateStr = fmt.format(d);
         assertEquals("Bad date format", "Mo1 20, 2013", dangiDateStr);
     }
-    
+
     @Test
     public void TestT10110() {
         try {
@@ -1250,7 +1254,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
     @Test
     public void TestT10239() {
-        
+
         class TestDateFormatItem {
             public String parseString;
             public String pattern;
@@ -1262,7 +1266,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 expectedResult = expResult;
             }
         };
-        
+
         final TestDateFormatItem[] items = {
         //                     parse String                 pattern                 expected result
         new TestDateFormatItem("1 Oct 13 2013",             "e MMM dd yyyy",        "1 Oct 13 2013"),
@@ -1277,7 +1281,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         StringBuffer result = new StringBuffer();
         Date d = new Date();
-        Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US); 
+        Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);
         SimpleDateFormat sdfmt = new SimpleDateFormat();
         ParsePosition p = new ParsePosition(0);
         for (TestDateFormatItem item: items) {
@@ -1307,7 +1311,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
   }
-  
+
 
     @Test
     public void TestT10334() {
@@ -1315,11 +1319,11 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         String text = new String("--mon-02-march-2011");
         SimpleDateFormat format = new SimpleDateFormat(pattern);
 
-        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH, false);      
+        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH, false);
         try {
             format.parse(text);
             errln("parse partial match did NOT fail in strict mode!");
-        } catch (ParseException pe) {        
+        } catch (ParseException pe) {
             // expected
         }
 
@@ -1335,7 +1339,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         format.applyPattern(pattern);
         Date referenceDate = null;
         try {
-            referenceDate = format.parse(text);            
+            referenceDate = format.parse(text);
         } catch (ParseException pe) {
             errln("unable to instantiate reference date: " + pe.getLocalizedMessage());
         }
@@ -1343,7 +1347,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         FieldPosition fp = new FieldPosition(0);
         pattern = new String("YYYY LL dd ee cc qq QQ");
         format.applyPattern(pattern);
-        StringBuffer formattedString = new StringBuffer(); 
+        StringBuffer formattedString = new StringBuffer();
         formattedString = format.format(referenceDate, formattedString, fp);
         logln("ref date: " + formattedString);
 
@@ -1352,13 +1356,13 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         text = new String("2013 12 10 03 3 04 04");
         format.applyPattern(pattern);
         logln(format.format(referenceDate));
-        
+
         format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC, true);
         ParsePosition pp = new ParsePosition(0);
         format.parse(text, pp);
         int errorIdx = pp.getErrorIndex();
         if (errorIdx != -1) {
-            
+
             errln("numeric parse error at["+errorIdx+"] on char["+pattern.substring(errorIdx, errorIdx+1)+"] in pattern["+pattern+"]");
         }
 
@@ -1369,7 +1373,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (ParseException pe) {
             // expected
         }
-        
+
         /*
          * test to verify new code (and improve code coverage) for normal quarter processing
          */
@@ -1384,7 +1388,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
     @Test
     public void TestT10619() {
-        
+
         class TestDateFormatLeniencyItem {
             public boolean leniency;
             public String parseString;
@@ -1412,7 +1416,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         StringBuffer result = new StringBuffer();
         Date d = new Date();
-        Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US); 
+        Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);
         SimpleDateFormat sdfmt = new SimpleDateFormat();
         ParsePosition p = new ParsePosition(0);
         for (TestDateFormatLeniencyItem item: items) {
@@ -1443,7 +1447,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
   }
-    
+
     @Test
   public void TestT10906()
   {
@@ -1454,7 +1458,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
       try {
           format.parse(text, pp);
           int errorIdx = pp.getErrorIndex();
-          if (errorIdx == -1) {          
+          if (errorIdx == -1) {
               errln("failed to report invalid (negative) starting parse position");
           }
       } catch(StringIndexOutOfBoundsException e) {
@@ -1476,6 +1480,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 this.d = d;
             }
 
+            @Override
             public void run() {
                 String s0 = fmt.format(d);
                 for (int i = 0; i < 1000; i++) {

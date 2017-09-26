@@ -1,4 +1,4 @@
-﻿#
+#
 #   Copyright (C) 2016 and later: Unicode, Inc. and others.
 #   License & terms of use: http://www.unicode.org/copyright.html
 #   Copyright (C) 2002-2016, International Business Machines Corporation and others.
@@ -11,6 +11,8 @@
 #      These rules are based on UAX #29 Revision 29 for Unicode Version 9.0
 #      Plus revisions to rule GB 11 from http://unicode.org/cldr/trac/ticket/10088
 #      Plus additional characters introduces with Emoji 5, http://www.unicode.org/reports/tr51/proposed.html
+
+!!quoted_literals_only;
 
 #
 #  Character Class Definitions.
@@ -78,42 +80,6 @@ $Prepend [^$Control $CR $LF];
 
 ## -------------------------------------------------
 
-!!reverse;
-$LF $CR;
-($L | $V | $LV | $LVT) $L;
-($V | $T) ($LV | $V);
-$T ($LVT | $T);
-
-# GB 9
-($Extend | $ZWJ)   [^$Control $CR $LF];    #note that this will chain into Regional_Indicator when needed.
-
-# GB 9a
-$SpacingMark [^$Control $CR $LF];
-
-# GB 9b
-[^$Control $CR $LF] $Prepend;
-
-# GB 10
-$E_Modifier $Extend* ($E_Base | $E_Base_GAZ);
-
-# GB 11 Don't break between ZWJ and Glue_After_ZWJ
-($Extended_Pict | $EmojiNRK) $ZWJ $Extend* ($Extended_Pict | $EmojiNRK);
-
-# GB 12-13. Going backwards, we must scan through any number of regional indicators as pairs.
-#
-[{bof} $Extend $ZWJ $SpacingMark] $Regional_Indicator $Regional_Indicator / ($Regional_Indicator $Regional_Indicator)+ [{eof}[^$Regional_Indicator]];
-[{bof} $Extend $ZWJ $SpacingMark]                     $Regional_Indicator / ($Regional_Indicator $Regional_Indicator)+ [{eof}[^$Regional_Indicator]];
-$Regional_Indicator $Regional_Indicator;
-$Regional_Indicator $Prepend;
-
-## -------------------------------------------------
-
 !!safe_reverse;
-$Regional_Indicator $Regional_Indicator;
-($Extend | $ZWJ | $EmojiNRK | $Extended_Pict)+ .;
-
-## -------------------------------------------------
-
-!!safe_forward;
 $Regional_Indicator $Regional_Indicator;
 ($Extend | $ZWJ | $EmojiNRK | $Extended_Pict)+ .;

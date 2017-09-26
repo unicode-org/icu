@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -38,6 +40,7 @@ import com.ibm.icu.util.ULocale;
 * @author Syn Wee Quek
 * @since march 14 2002
 */
+@RunWith(JUnit4.class)
 public final class UCharacterCaseTest extends TestFmwk
 {
     // constructor -----------------------------------------------------------
@@ -417,14 +420,13 @@ public final class UCharacterCaseTest extends TestFmwk
                 UCharacter.toTitleCase(LOC_DUTCH, "ijssel igloo IJMUIDEN", null));
 
         // Also check the behavior using Java Locale
-        Locale JAVALOC_DUTCH = new Locale("nl");
         assertEquals("Dutch titlecase check in English (Java Locale)",
                 "Ijssel Igloo Ijmuiden",
                 UCharacter.toTitleCase(Locale.ENGLISH, "ijssel igloo IJMUIDEN", null));
 
         assertEquals("Dutch titlecase check in Dutch (Java Locale)",
                 "IJssel Igloo IJmuiden",
-                UCharacter.toTitleCase(JAVALOC_DUTCH, "ijssel igloo IJMUIDEN", null));
+                UCharacter.toTitleCase(DUTCH_LOCALE_, "ijssel igloo IJMUIDEN", null));
 
         iter.setText("ijssel igloo IjMUIdEN iPoD ijenough");
         assertEquals("Dutch titlecase check in Dutch with nolowercase option",
@@ -766,6 +768,7 @@ public final class UCharacterCaseTest extends TestFmwk
         assertGreekUpper("Το ένα ή το άλλο.", "ΤΟ ΕΝΑ Ή ΤΟ ΑΛΛΟ.");
         // http://multilingualtypesetting.co.uk/blog/greek-typesetting-tips/
         assertGreekUpper("ρωμέικα", "ΡΩΜΕΪΚΑ");
+        assertGreekUpper("ή.", "Ή.");
     }
 
     private static final class EditChange {
@@ -948,12 +951,18 @@ public final class UCharacterCaseTest extends TestFmwk
                 srcIndexes.add(srcIndex);
                 if (expected[i].oldLength > 1) {
                     srcIndexes.add(srcIndex + 1);
+                    if (expected[i].oldLength > 2) {
+                        srcIndexes.add(srcIndex + expected[i].oldLength - 1);
+                    }
                 }
             }
             if (expected[i].newLength > 0) {
                 destIndexes.add(destIndex);
-                if (expected[i].newLength > 0) {
+                if (expected[i].newLength > 1) {
                     destIndexes.add(destIndex + 1);
+                    if (expected[i].newLength > 2) {
+                        destIndexes.add(destIndex + expected[i].newLength - 1);
+                    }
                 }
             }
             srcIndex += expected[i].oldLength;
@@ -964,17 +973,30 @@ public final class UCharacterCaseTest extends TestFmwk
         srcIndexes.add(srcLength + 1);
         destIndexes.add(destLength + 1);
         Collections.reverse(destIndexes);
-        for (int i : srcIndexes) {
-            assertEquals(name + " destIndexFromSrc(" + i + "):",
-                              destIndexFromSrc(expected, srcLength, destLength, i),
-                              ei2.destinationIndexFromSourceIndex(i));
+        // Zig-zag across the indexes to stress next() <-> previous().
+        for (int i = 0; i < srcIndexes.size(); ++i) {
+            for (int j : ZIG_ZAG) {
+                if ((i + j) < srcIndexes.size()) {
+                    int si = srcIndexes.get(i + j);
+                    assertEquals(name + " destIndexFromSrc(" + si + "):",
+                            destIndexFromSrc(expected, srcLength, destLength, si),
+                            ei2.destinationIndexFromSourceIndex(si));
+                }
+            }
         }
-        for (int i : destIndexes) {
-            assertEquals(name + " srcIndexFromDest(" + i + "):",
-                              srcIndexFromDest(expected, srcLength, destLength, i),
-                              ei2.sourceIndexFromDestinationIndex(i));
+        for (int i = 0; i < destIndexes.size(); ++i) {
+            for (int j : ZIG_ZAG) {
+                if ((i + j) < destIndexes.size()) {
+                    int di = destIndexes.get(i + j);
+                    assertEquals(name + " srcIndexFromDest(" + di + "):",
+                            srcIndexFromDest(expected, srcLength, destLength, di),
+                            ei2.sourceIndexFromDestinationIndex(di));
+                }
+            }
         }
     }
+
+    private static final int[] ZIG_ZAG = { 0, 1, 2, 3, 2, 1 };
 
     @Test
     public void TestEdits() {
@@ -989,21 +1011,21 @@ public final class UCharacterCaseTest extends TestFmwk
         assertFalse("unchanged 10003 hasChanges", edits.hasChanges());
         assertEquals("unchanged 10003 numberOfChanges", 0, edits.numberOfChanges());
         assertEquals("unchanged 10003", 0, edits.lengthDelta());
-        edits.addReplace(1, 1);  // multiple short equal-length edits are compressed
+        edits.addReplace(2, 1);  // multiple short equal-lengths edits are compressed
         edits.addUnchanged(0);
-        edits.addReplace(1, 1);
-        edits.addReplace(1, 1);
+        edits.addReplace(2, 1);
+        edits.addReplace(2, 1);
         edits.addReplace(0, 10);
         edits.addReplace(100, 0);
         edits.addReplace(3000, 4000);  // variable-length encoding
         edits.addReplace(100000, 100000);
         assertTrue("some edits hasChanges", edits.hasChanges());
         assertEquals("some edits numberOfChanges", 7, edits.numberOfChanges());
-        assertEquals("some edits", 10 - 100 + 1000, edits.lengthDelta());
+        assertEquals("some edits", -3 + 10 - 100 + 1000, edits.lengthDelta());
 
         EditChange[] coarseExpectedChanges = new EditChange[] {
                 new EditChange(false, 10003, 10003),
-                new EditChange(true, 103103, 104013)
+                new EditChange(true, 103106, 104013)
         };
         checkEditsIter("coarse",
                 edits.getCoarseIterator(), edits.getCoarseIterator(),
@@ -1014,9 +1036,9 @@ public final class UCharacterCaseTest extends TestFmwk
 
         EditChange[] fineExpectedChanges = new EditChange[] {
                 new EditChange(false, 10003, 10003),
-                new EditChange(true, 1, 1),
-                new EditChange(true, 1, 1),
-                new EditChange(true, 1, 1),
+                new EditChange(true, 2, 1),
+                new EditChange(true, 2, 1),
+                new EditChange(true, 2, 1),
                 new EditChange(true, 0, 10),
                 new EditChange(true, 100, 0),
                 new EditChange(true, 3000, 4000),
@@ -1035,6 +1057,27 @@ public final class UCharacterCaseTest extends TestFmwk
         assertEquals("reset", 0, edits.lengthDelta());
         Edits.Iterator ei = edits.getCoarseChangesIterator();
         assertFalse("reset then iterator", ei.next());
+    }
+
+    @Test
+    public void TestEditsFindFwdBwd() {
+        // Some users need index mappings to be efficient when they are out of order.
+        // The most interesting failure case for this test is it taking a very long time.
+        Edits e = new Edits();
+        int N = 200000;
+        for (int i = 0; i < N; ++i) {
+            e.addUnchanged(1);
+            e.addReplace(3, 1);
+        }
+        Edits.Iterator iter = e.getFineIterator();
+        for (int i = 0; i <= N; i += 2) {
+            assertEquals("ascending", i * 2, iter.sourceIndexFromDestinationIndex(i));
+            assertEquals("ascending", i * 2 + 1, iter.sourceIndexFromDestinationIndex(i + 1));
+        }
+        for (int i = N; i >= 0; i -= 2) {
+            assertEquals("descending", i * 2 + 1, iter.sourceIndexFromDestinationIndex(i + 1));
+            assertEquals("descending", i * 2, iter.sourceIndexFromDestinationIndex(i));
+        }
     }
 
     @Test
@@ -1234,7 +1277,7 @@ public final class UCharacterCaseTest extends TestFmwk
         sb.delete(0, sb.length());
         edits.reset();
         sb = CaseMap.toTitle().omitUnchangedText().noBreakAdjustment().noLowercase().apply(
-                new Locale("nl"), null, "IjssEL IglOo", sb, edits);
+                DUTCH_LOCALE_, null, "IjssEL IglOo", sb, edits);
         assertEquals("toTitle(IjssEL IglOo)", "J", sb.toString());
         EditChange[] titleExpectedChanges = new EditChange[] {
                 new EditChange(false, 1, 1),
@@ -1261,6 +1304,32 @@ public final class UCharacterCaseTest extends TestFmwk
                 foldExpectedChanges, true);
     }
 
+    @Test
+    public void TestCaseMapToString() {
+        // String apply(..., CharSequence)
+        // Omit unchanged text.
+        assertEquals("toLower(Istanbul)", "ıb",
+                CaseMap.toLower().omitUnchangedText().apply(TURKISH_LOCALE_, "IstanBul"));
+        assertEquals("toUpper(Πατάτα)", "ΑΤΑΤΑ",
+                CaseMap.toUpper().omitUnchangedText().apply(GREEK_LOCALE_, "Πατάτα"));
+        assertEquals("toTitle(IjssEL IglOo)", "J",
+                CaseMap.toTitle().omitUnchangedText().noBreakAdjustment().noLowercase().apply(
+                        DUTCH_LOCALE_, null, "IjssEL IglOo"));
+        assertEquals("fold(IßtanBul)", "ıssb",
+                CaseMap.fold().omitUnchangedText().turkic().apply("IßtanBul"));
+
+        // Return the whole result string.
+        assertEquals("toLower(Istanbul)", "ıstanbul",
+                CaseMap.toLower().apply(TURKISH_LOCALE_, "IstanBul"));
+        assertEquals("toUpper(Πατάτα)", "ΠΑΤΑΤΑ",
+                CaseMap.toUpper().apply(GREEK_LOCALE_, "Πατάτα"));
+        assertEquals("toTitle(IjssEL IglOo)", "IJssEL IglOo",
+                CaseMap.toTitle().noBreakAdjustment().noLowercase().apply(
+                        DUTCH_LOCALE_, null, "IjssEL IglOo"));
+        assertEquals("fold(IßtanBul)", "ısstanbul",
+                CaseMap.fold().turkic().apply("IßtanBul"));
+    }
+
     // private data members - test data --------------------------------------
 
     private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");
@@ -1268,6 +1337,7 @@ public final class UCharacterCaseTest extends TestFmwk
     private static final Locale GREEK_LOCALE_ = new Locale("el", "GR");
     private static final Locale ENGLISH_LOCALE_ = new Locale("en", "US");
     private static final Locale LITHUANIAN_LOCALE_ = new Locale("lt", "LT");
+    private static final Locale DUTCH_LOCALE_ = new Locale("nl");
 
     private static final int CHARACTER_UPPER_[] =
                       {0x41, 0x0042, 0x0043, 0x0044, 0x0045, 0x0046, 0x0047,

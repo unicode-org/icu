@@ -29,6 +29,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
+#include "unicode/utf16.h"
 
 #include "intltest.h"
 

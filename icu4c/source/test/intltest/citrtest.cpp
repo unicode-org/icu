@@ -611,7 +611,7 @@ void CharIterTest::TestIterationUChar32() {
                 errln("setIndex32() isn't working right");
             if (c != CharacterIterator::DONE) {
                 c = iter.next32();
-                i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
+                i += U16_LENGTH(c);
             }
         } while (c != CharacterIterator::DONE);
         if(iter.hasNext() == TRUE)
@@ -650,7 +650,7 @@ void CharIterTest::TestIterationUChar32() {
                 errln("getIndex() isn't working right");
             if (c != CharacterIterator::DONE) {
                 c = iter.previous32();
-                i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i-2 : i-1;
+                i -= U16_LENGTH(c);
             }
         } while (c != CharacterIterator::DONE);
         if(iter.hasPrevious() == TRUE)
@@ -684,7 +684,7 @@ void CharIterTest::TestIterationUChar32() {
             if(c != text.char32At(i))
                 errln("Character mismatch at position %d, iterator has %X, string has %X", i, c, text.char32At(i));
 
-            i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
+            i += U16_LENGTH(c);
             if(iter.getIndex() != i)
                 errln("getIndex() aftr next32PostInc() isn't working right");
             if(iter.current32() != text.char32At(i))
@@ -725,7 +725,7 @@ void CharIterTest::TestIterationUChar32() {
 
             if (c != CharacterIterator::DONE) {
                 c = iter.next32();
-                i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
+                i += U16_LENGTH(c);
             }
         } while (c != CharacterIterator::DONE);
         c=iter.next32();
@@ -753,7 +753,7 @@ void CharIterTest::TestIterationUChar32() {
 
             if (c != CharacterIterator::DONE) {
                 c = iter.previous32();
-                i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i-2 : i-1;
+                i -= U16_LENGTH(c);
             }
            
         } while (c != CharacterIterator::DONE);

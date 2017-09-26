@@ -739,7 +739,7 @@ DateFormat::setBooleanAttribute(UDateFormatBooleanAttribute attr,
 UBool 
 DateFormat::getBooleanAttribute(UDateFormatBooleanAttribute attr, UErrorCode &/*status*/) const {
 
-    return fBoolFlags.get(attr);
+    return static_cast<UBool>(fBoolFlags.get(attr));
 }
 
 U_NAMESPACE_END

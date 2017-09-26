@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -31,6 +33,7 @@ import com.ibm.icu.util.ULocale;
  *      See the data file for a description of the tests.
  *
  */
+@RunWith(JUnit4.class)
 public class RBBITestExtended extends TestFmwk {
 public RBBITestExtended() {
     }
@@ -40,9 +43,9 @@ public RBBITestExtended() {
 static class TestParams {
     BreakIterator   bi;
     StringBuilder   dataToBreak    = new StringBuilder();
-    int[]           expectedBreaks = new int[1000];
-    int[]           srcLine        = new int[1000];
-    int[]           srcCol         = new int[1000];
+    int[]           expectedBreaks = new int[4000];
+    int[]           srcLine        = new int[4000];
+    int[]           srcCol         = new int[4000];
     ULocale         currentLocale  = new ULocale("en_US");
 }
 
@@ -413,6 +416,8 @@ public void TestExtended() {
 }
 
 void executeTest(TestParams t) {
+    // TODO: also rerun tests with a break iterator re-created from bi.getRules()
+    //       and from bi.clone(). If in exhaustive mode only.
     int    bp;
     int    prevBP;
     int    i;

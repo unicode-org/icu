@@ -12,6 +12,8 @@ import java.util.Random;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
@@ -26,7 +28,7 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
-/** TODO: This is a temporary name for this class. Suggestions for a better name? */
+@RunWith(JUnit4.class)
 public class DecimalQuantityTest extends TestFmwk {
 
   @Ignore

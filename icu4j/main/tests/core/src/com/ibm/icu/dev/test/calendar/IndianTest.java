@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
@@ -25,10 +27,11 @@ import com.ibm.icu.util.ULocale;
 /**
  * Tests for the <code>IndianCalendar</code> class.
  */
-public class IndianTest extends CalendarTestFmwk 
+@RunWith(JUnit4.class)
+public class IndianTest extends CalendarTestFmwk
 {
     // Months in indian calendar are 0-based. Here taking 1-based names:
-    public static final int CHAITRA = IndianCalendar.CHAITRA + 1; 
+    public static final int CHAITRA = IndianCalendar.CHAITRA + 1;
     public static final int VAISAKHA = IndianCalendar.VAISAKHA + 1;
     public static final int JYAISTHA = IndianCalendar.JYAISTHA + 1;
     public static final int ASADHA = IndianCalendar.ASADHA + 1;
@@ -43,8 +46,8 @@ public class IndianTest extends CalendarTestFmwk
 
     /** Constants to save typing. */
     /* Test dates generated from:
-     * http://www.fourmilab.ch/documents/calendar/ 
-    
+     * http://www.fourmilab.ch/documents/calendar/
+
     /** A huge list of test cases to make sure that computeTime and computeFields
      * work properly for a wide range of data in the Indian civil calendar.
      */
@@ -100,7 +103,7 @@ public class IndianTest extends CalendarTestFmwk
            new TestCase(2465737.5,  0,  1960,    KARTIKA,      19,  WED,   0,  0,  0),
            new TestCase(2486076.5,  0,  2016,    ASADHA,       27,  SUN,   0,  0,  0),
         };
-        
+
         IndianCalendar testCalendar = new IndianCalendar();
         testCalendar.setLenient(true);
         doTestCases(tests, testCalendar);
@@ -113,13 +116,13 @@ public class IndianTest extends CalendarTestFmwk
         cal.set(1000, 0, 30);
         logln("1000/0/30-> " +
               cal.get(YEAR) + "/" +
-              cal.get(MONTH) + "/" + 
+              cal.get(MONTH) + "/" +
               cal.get(DATE));
         cal.clear();
         cal.set(1, 0, 30);
         logln("1/0/30 -> " +
               cal.get(YEAR) + "/" +
-              cal.get(MONTH) + "/" + 
+              cal.get(MONTH) + "/" +
               cal.get(DATE));
     }
 
@@ -127,7 +130,7 @@ public class IndianTest extends CalendarTestFmwk
     public void TestCoverage() {
         {
             // new IndianCalendar(TimeZone)
-            IndianCalendar cal = new IndianCalendar(TimeZone.getDefault()); 
+            IndianCalendar cal = new IndianCalendar(TimeZone.getDefault());
             if(cal == null){
                 errln("could not create IndianCalendar with TimeZone");
             }
@@ -140,7 +143,7 @@ public class IndianTest extends CalendarTestFmwk
                 errln("could not create IndianCalendar with ULocale");
             }
         }
-        
+
         {
             // new IndianCalendar(Locale)
             IndianCalendar cal = new IndianCalendar(Locale.getDefault());
@@ -148,23 +151,23 @@ public class IndianTest extends CalendarTestFmwk
                 errln("could not create IndianCalendar with Locale");
             }
         }
-        
-        {                                                                                       
-            // new IndianCalendar(TimeZone, Locale)                                             
-            IndianCalendar cal = new IndianCalendar(TimeZone.getDefault(),Locale.getDefault()); 
-            if(cal == null){                                                                    
-                errln("could not create IndianCalendar with TimeZone, Locale");                 
-            }                                                                                   
-        }                                                                                       
-                                                                                                
-        {                                                                                       
-            // new IndianCalendar(TimeZone, ULocale)                                            
+
+        {
+            // new IndianCalendar(TimeZone, Locale)
+            IndianCalendar cal = new IndianCalendar(TimeZone.getDefault(),Locale.getDefault());
+            if(cal == null){
+                errln("could not create IndianCalendar with TimeZone, Locale");
+            }
+        }
+
+        {
+            // new IndianCalendar(TimeZone, ULocale)
             IndianCalendar cal = new IndianCalendar(TimeZone.getDefault(),ULocale.getDefault());
-            if(cal == null){                                                                    
-                errln("could not create IndianCalendar with TimeZone, ULocale");                
-            }                                                                                   
-        }                                                                                       
-        
+            if(cal == null){
+                errln("could not create IndianCalendar with TimeZone, ULocale");
+            }
+        }
+
         {
             // new IndianCalendar(Date)
             IndianCalendar cal = new IndianCalendar(new Date());
@@ -186,7 +189,7 @@ public class IndianTest extends CalendarTestFmwk
                 errln("could not create IndianCalendar with year,month,date,hour,minute,second");
             }
         }
-    
+
         {
             // data
             String[] calendarLocales = {
@@ -246,7 +249,7 @@ public class IndianTest extends CalendarTestFmwk
         doLimitsTest(indian, null, cal.getTime());
         doTheoreticalLimitsTest(indian, true);
     }
-    
+
     /**
      * Problem reported by Bruno Haible <bruno.haible@de.ibm.com>
      *  -- see ticket 8419 -- http://bugs.icu-project.org/trac/ticket/8419
@@ -282,14 +285,14 @@ public class IndianTest extends CalendarTestFmwk
 
     @Test
     public void TestCoverage12424() {
-        class StubCalendar extends IndianCalendar {   
+        class StubCalendar extends IndianCalendar {
             private static final long serialVersionUID = 1L;
             public StubCalendar() {
                 assertEquals("Indian month 0 length", 30, handleGetMonthLength(1000, 0));
                 assertEquals("Indian month 2 length", 31, handleGetMonthLength(1000, 2));
              }
         }
-        
+
         new StubCalendar();
     }
 }

@@ -13,6 +13,8 @@ package com.ibm.icu.dev.test.timescale;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.math.BigDecimal;
@@ -23,6 +25,7 @@ import com.ibm.icu.util.UniversalTimeScale;
  * generating ramdon values in range and making sure
  * that they round-trip correctly.
  */
+@RunWith(JUnit4.class)
 public class TimeScaleMonkeyTest extends TestFmwk
 {
 
@@ -32,54 +35,54 @@ public class TimeScaleMonkeyTest extends TestFmwk
     public TimeScaleMonkeyTest()
     {
     }
-    
+
     private static final int LOOP_COUNT = 1000;
     private static final BigDecimal longMax = new BigDecimal(Long.MAX_VALUE);
-    
+
     private Random ran = null;
-    
+
     private long ranInt;
     private long ranMin;
     private long ranMax;
-    
+
     private void initRandom(long min, long max)
     {
         BigDecimal interval = new BigDecimal(max).subtract(new BigDecimal(min));
-        
+
         ranMin = min;
         ranMax = max;
         ranInt = 0;
-        
+
         if (ran == null) {
             ran = createRandom();
         }
-        
+
         if (interval.compareTo(longMax) < 0) {
             ranInt = interval.longValue();
         }
     }
-    
+
     private final long randomInRange()
     {
         long value;
-        
+
         if (ranInt != 0) {
             value = ran.nextLong() % ranInt;
-            
+
             if (value < 0) {
                 value = -value;
             }
-            
+
             value += ranMin;
         } else {
             do {
                 value = ran.nextLong();
             } while (value < ranMin || value > ranMax);
         }
-        
+
         return value;
     }
-    
+
     @Test
     public void TestRoundTrip()
     {
@@ -87,18 +90,18 @@ public class TimeScaleMonkeyTest extends TestFmwk
             long fromMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
             long fromMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
             int i = 0;
-            
+
             initRandom(fromMin, fromMax);
-            
+
             while (i < LOOP_COUNT) {
                 long value = randomInRange();
-                                
+
                 long rt = UniversalTimeScale.toLong(UniversalTimeScale.from(value, scale), scale);
-                
+
                 if (rt != value) {
                     errln("Round-trip error: time scale = " + scale + ", value = " + value + ", round-trip = " + rt);
                 }
-                
+
                 i += 1;
             }
         }

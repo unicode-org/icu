@@ -14,6 +14,8 @@ import java.io.IOException;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
@@ -21,6 +23,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 
+@RunWith(JUnit4.class)
 public class UnicodeNormalizerConformanceTest extends TestFmwk {
 
     UnicodeNormalizer normalizer_C, normalizer_D, normalizer_KC, normalizer_KD;
@@ -32,13 +35,13 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
         normalizer_D = new UnicodeNormalizer(UnicodeNormalizer.D, false);
         normalizer_KC = new UnicodeNormalizer(UnicodeNormalizer.KC, false);
         normalizer_KD = new UnicodeNormalizer(UnicodeNormalizer.KD, false);
-        
+
     }
     // more interesting conformance test cases, not in the unicode.org NormalizationTest.txt
     static  String[] moreCases ={
         // Markus 2001aug30
         "0061 0332 0308;00E4 0332;0061 0332 0308;00E4 0332;0061 0332 0308; # Markus 0",
-    
+
         // Markus 2001oct26 - test edge case for iteration: U+0f73.cc==0 but decomposition.lead.cc==129
         "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
     };
@@ -82,10 +85,10 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
 
                 // Parse out the fields
                 hexsplit(line, ';', fields, buf);
-                
+
                 // Remove a single code point from the "other" UnicodeSet
                 if(fields[0].length()==UTF16.moveCodePointOffset(fields[0],0, 1)) {
-                    c=UTF16.charAt(fields[0],0); 
+                    c=UTF16.charAt(fields[0],0);
                     if(0xac20<=c && c<=0xd73f) {
                         // not an exhaustive test run: skip most Hangul syllables
                         if(c==0xac20) {
@@ -126,7 +129,7 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
             logln("Total: " + passCount + " lines passed");
         }
     }
-    
+
     /**
      * Verify the conformance of the given line of the Unicode
      * normalization (UTR 15) test suite file.  For each line,
@@ -151,26 +154,26 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
             if (i<3) {
                 out = normalizer_C.normalize(field[i]);
                 pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c" + (i+1));
-                 
+
                 out = normalizer_D.normalize(field[i]);
                 pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c" + (i+1));
-                
+
             }
             out = normalizer_KC.normalize(field[i]);
             pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c" + (i+1));
 
             out = normalizer_KD.normalize(field[i]);
             pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c" + (i+1));
-              
+
         }
-        
+
         if (!pass) {
             errln("FAIL: " + line);
-        }     
-       
+        }
+
         return pass;
     }
-    
+
     /**
      * @param op name of normalization form, e.g., "KC"
      * @param s string being normalized
@@ -211,7 +214,7 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
             }
             // Our field is from pos..delim-1.
             buf.setLength(0);
-            
+
             String toHex = s.substring(pos,delim);
             pos = delim;
             int index = 0;
@@ -230,7 +233,7 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
                     index = spacePos+1;
                 }
             }
-            
+
             if (buf.length() < 1) {
                 throw new IllegalArgumentException("Empty field " + i + " in " + s);
             }
@@ -244,13 +247,13 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
             throw new IllegalArgumentException("Out of range hex " +
                                                 hex + " in " + s);
         }else if (hex > 0xFFFF){
-            buf.append((char)((hex>>10)+0xd7c0)); 
+            buf.append((char)((hex>>10)+0xd7c0));
             buf.append((char)((hex&0x3ff)|0xdc00));
         }else{
             buf.append((char) hex);
         }
     }
-            
+
     // Specific tests for debugging.  These are generally failures
     // taken from the conformance file, but culled out to make
     // debugging easier.  These can be eliminated without affecting
@@ -268,6 +271,6 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
         hexsplit(line, ';', fields, buf);
         checkConformance(fields, line);
     }
-    
+
 
 }

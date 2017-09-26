@@ -18,6 +18,8 @@ import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
@@ -26,6 +28,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
+@RunWith(JUnit4.class)
 public class LocaleAliasTest extends TestFmwk {
     private static final ULocale[][] _LOCALES = {
 
@@ -35,7 +38,7 @@ public class LocaleAliasTest extends TestFmwk {
             {new ULocale("iw"), new ULocale("he")},
             {new ULocale("iw", "IL"), new ULocale("he", "IL")},
             {new ULocale("ji"), new ULocale("yi")},
-            
+
             {new ULocale("en", "BU"), new ULocale("en", "MM")},
             {new ULocale("en", "DY"), new ULocale("en", "BJ")},
             {new ULocale("en", "HV"), new ULocale("en", "BF")},
@@ -43,15 +46,15 @@ public class LocaleAliasTest extends TestFmwk {
             {new ULocale("en", "TP"), new ULocale("en", "TL")},
             {new ULocale("en", "ZR"), new ULocale("en", "CD")}
     };
-    
+
     private static final int _LOCALE_NUMBER = _LOCALES.length;
     private static ULocale[] available = null;
     private HashMap availableMap = new HashMap();
     private static final ULocale _DEFAULT_LOCALE = ULocale.US;
-    
+
     public LocaleAliasTest() {
     }
-    
+
     @Before
     public void init() {
         available = ULocale.getAvailableLocales();
@@ -82,7 +85,7 @@ public class LocaleAliasTest extends TestFmwk {
     //                    +firstDayOfWeek1+"   new:"+firstDayOfWeek2);
     //            pass = false;
     //        }
-                    
+
             //Test function "getLocale(ULocale.VALID_LOCALE)"
             ULocale l1 = c1.getLocale(ULocale.VALID_LOCALE);
             ULocale l2 = c2.getLocale(ULocale.VALID_LOCALE);
@@ -95,11 +98,11 @@ public class LocaleAliasTest extends TestFmwk {
             if(!c1.equals(c2)){
                 errln("CalendarTest: c1!=c2.  newLoc= "+newLoc +" oldLoc= "+oldLoc);
             }
-            logln("Calendar(getLocale) old:"+l1+"   new:"+l2);    
+            logln("Calendar(getLocale) old:"+l1+"   new:"+l2);
         }
         ULocale.setDefault(defLoc);
     }
-    
+
     @Test
     public void  TestDateFormat() {
         ULocale defLoc = ULocale.getDefault();
@@ -113,7 +116,7 @@ public class LocaleAliasTest extends TestFmwk {
             }
             DateFormat df1 = DateFormat.getDateInstance(DateFormat.FULL, oldLoc);
             DateFormat df2 = DateFormat.getDateInstance(DateFormat.FULL, newLoc);
-            
+
             //Test function "getLocale"
             ULocale l1 = df1.getLocale(ULocale.VALID_LOCALE);
             ULocale l2 = df2.getLocale(ULocale.VALID_LOCALE);
@@ -127,7 +130,7 @@ public class LocaleAliasTest extends TestFmwk {
                 errln("DateFormatTest: df1!=df2: newLoc= "+newLoc +" oldLoc= "+oldLoc);
             }
             TestFmwk.logln("DateFormat(getLocale) old:"+l1+"   new:"+l2);
-            
+
             //Test function "format"
     //        Date d = new Date();
     //        String d1 = df1.format(d);
@@ -139,7 +142,7 @@ public class LocaleAliasTest extends TestFmwk {
         }
         ULocale.setDefault(defLoc);
     }
-    
+
     @Test
     public void TestULocale() {
         ULocale defLoc = ULocale.getDefault();
@@ -153,7 +156,7 @@ public class LocaleAliasTest extends TestFmwk {
             }
             ULocale ul1 = new ULocale(oldLoc.toString());
             ULocale ul2 = new ULocale(newLoc.toString());
-            
+
             String name1 = ul1.getDisplayName();
             String name2 = ul2.getDisplayName();
             if (!name1.equals(name2)) {
@@ -163,7 +166,7 @@ public class LocaleAliasTest extends TestFmwk {
         }
         ULocale.setDefault(defLoc);
     }
-    
+
     @Test
     public void TestDisplayName() {
         ULocale defLoc = ULocale.getDefault();
@@ -177,14 +180,14 @@ public class LocaleAliasTest extends TestFmwk {
                String newCountry = newLoc.getDisplayCountry(available[j]);
                String oldLang = oldLoc.getDisplayLanguage(available[j]);
                String newLang = newLoc.getDisplayLanguage(available[j]);
-               
-               // is  there  display name for the current country ID               
+
+               // is  there  display name for the current country ID
                if(!newCountry.equals(newLoc.getCountry())){
                    if(!oldCountry.equals(newCountry)){
                        errln("getCountry() failed for "+ oldLoc +" oldCountry= "+ prettify(oldCountry) +" newCountry = "+prettify(newCountry)+ " in display locale "+ available[j].toString());
                    }
                }
-               //there is a display name for the current lang ID               
+               //there is a display name for the current lang ID
                if(!newLang.equals(newLoc.getLanguage())){
                    if(!oldLang.equals(newLang)){
                        errln("getLanguage() failed for " + oldLoc + " oldLang = "+ prettify(oldLang) +" newLang = "+prettify(newLang)+ " in display locale "+ available[j].toString());
@@ -208,11 +211,11 @@ public class LocaleAliasTest extends TestFmwk {
             ULocale newLoc = _LOCALES[i][1];
             UResourceBundle urb1 = null;
             UResourceBundle urb2 = null;
-            
+
             urb1 = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, oldLoc);
             urb2 = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, newLoc);
             ULocale l1 = urb1.getULocale();
-            ULocale l2 = urb2.getULocale();        
+            ULocale l2 = urb2.getULocale();
             if (!newLoc.equals(l1)) {
                 errln("ResourceBundleTest: newLoc!=l1: newLoc= "+newLoc +" l1= "+l1);
             }

@@ -1,3 +1,6 @@
+// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
 COPYRIGHT AND PERMISSION NOTICE (ICU 58 and later)
 
 Copyright © 1991-2017 Unicode, Inc. All rights reserved.
@@ -131,7 +134,7 @@ property of their respective owners.
  #  ---------COPYING.libtabe ---- BEGIN--------------------
  #
  #  /*
- #   * Copyrighy (c) 1999 TaBE Project.
+ #   * Copyright (c) 1999 TaBE Project.
  #   * Copyright (c) 1999 Pai-Hsiang Hsiao.
  #   * All rights reserved.
  #   *

@@ -16,11 +16,12 @@ import com.ibm.icu.util.OutputInt;
 
 /**
  * Helper class for frozen UnicodeSets, implements contains() and span() optimized for BMP code points.
- * 
+ *
  * Latin-1: Look up bytes.
  * 2-byte characters: Bits organized vertically.
  * 3-byte characters: Use zero/one/mixed data per 64-block in U+0000..U+FFFF, with mixed for illegal ranges.
- * Supplementary characters: Call contains() on the parent set.
+ * Supplementary characters: Binary search over
+ * the supplementary part of the parent set's inversion list.
  */
 public final class BMPSet {
     public static int U16_SURROGATE_OFFSET = ((0xd800 << 10) + 0xdc00 - 0x10000);
@@ -34,9 +35,8 @@ public final class BMPSet {
      * One bit per code point from U+0000..U+07FF. The bits are organized vertically; consecutive code points
      * correspond to the same bit positions in consecutive table words. With code point parts lead=c{10..6}
      * trail=c{5..0} it is set.contains(c)==(table7FF[trail] bit lead)
-     * 
-     * Bits for 0..7F (non-shortest forms) are set to the result of contains(FFFD) for faster validity checking at
-     * runtime.
+     *
+     * Bits for 0..FF are unused (0).
      */
     private int[] table7FF;
 
@@ -46,9 +46,8 @@ public final class BMPSet {
      * t1=c{11..6} test bits (lead+16) and lead in bmpBlockBits[t1]. If the upper bit is 0, then the lower bit
      * indicates if contains(c) for all code points in the 64-block. If the upper bit is 1, then the block is mixed
      * and set.contains(c) must be called.
-     * 
-     * Bits for 0..7FF (non-shortest forms) and D800..DFFF are set to the result of contains(FFFD) for faster
-     * validity checking at runtime.
+     *
+     * Bits for 0..7FF are unused (0).
      */
     private int[] bmpBlockBits;
 
@@ -127,7 +126,7 @@ public final class BMPSet {
     /**
      * Span the initial substring for which each character c has spanCondition==contains(c). It must be
      * spanCondition==0 or 1.
-     * 
+     *
      * @param start The start index
      * @param outCount If not null: Receives the number of code points in the span.
      * @return the limit (exclusive end) of the span
@@ -232,7 +231,7 @@ public final class BMPSet {
      * Symmetrical with span().
      * Span the trailing substring for which each character c has spanCondition==contains(c). It must be s.length >=
      * limit and spanCondition==0 or 1.
-     * 
+     *
      * @return The string index which starts the span (i.e. inclusive).
      */
     public final int spanBack(CharSequence s, int limit, SpanCondition spanCondition) {
@@ -462,10 +461,10 @@ public final class BMPSet {
     /**
      * Same as UnicodeSet.findCodePoint(int c) except that the binary search is restricted for finding code
      * points in a certain range.
-     * 
+     *
      * For restricting the search for finding in the range start..end, pass in lo=findCodePoint(start) and
      * hi=findCodePoint(end) with 0<=lo<=hi<len. findCodePoint(c) defaults to lo=0 and hi=len-1.
-     * 
+     *
      * @param c
      *            a character in a subrange of MIN_VALUE..MAX_VALUE
      * @param lo
@@ -512,4 +511,3 @@ public final class BMPSet {
         return (0 != (findCodePoint(c, lo, hi) & 1));
     }
 }
-
