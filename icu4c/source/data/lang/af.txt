@@ -24,7 +24,7 @@ af{
     Languages{
         aa{"Afar"}
         ab{"Abkasies"}
-        ace{"Asjinees"}
+        ace{"Atsjenees"}
         ach{"Akoli"}
         ada{"Adangme"}
         ady{"Adyghe"}
@@ -38,7 +38,7 @@ af{
         an{"Aragonees"}
         anp{"Angika"}
         ar{"Arabies"}
-        ar_001{"Moderne Standaard Arabies"}
+        ar_001{"Moderne Standaardarabies"}
         arc{"Aramees"}
         arn{"Mapuche"}
         arp{"Arapaho"}
@@ -52,7 +52,7 @@ af{
         ba{"Baskir"}
         ban{"Balinees"}
         bas{"Basaa"}
-        be{"Belo-Russies"}
+        be{"Belarussies"}
         bem{"Bemba"}
         bez{"Bena"}
         bg{"Bulgaars"}
@@ -70,16 +70,16 @@ af{
         bug{"Buginees"}
         byn{"Blin"}
         ca{"Katalaans"}
-        ce{"Tsjetsjen"}
+        ce{"Tsjetsjeens"}
         ceb{"Cebuano"}
-        cgg{"Sjiga"}
+        cgg{"Kiga"}
         ch{"Chamorro"}
         chk{"Chuukees"}
         chm{"Mari"}
         cho{"Choctaw"}
         chr{"Cherokees"}
         chy{"Cheyennees"}
-        ckb{"Sorani Koerdies"}
+        ckb{"Sorani"}
         co{"Korsikaans"}
         cop{"Kopties"}
         crs{"Seselwa Franskreools"}
@@ -108,9 +108,10 @@ af{
         eka{"Ekajuk"}
         el{"Grieks"}
         en{"Engels"}
+        en_GB{"Engels (VK)"}
+        en_US{"Engels (VSA)"}
         eo{"Esperanto"}
         es{"Spaans"}
-        es_419{"Spaans (Suid-Amerika)"}
         et{"Estnies"}
         eu{"Baskies"}
         ewo{"Ewondo"}
@@ -119,14 +120,15 @@ af{
         fi{"Fins"}
         fil{"Filippyns"}
         fj{"Fidjiaans"}
-        fo{"Faroees"}
+        fo{"Faroëes"}
         fon{"Fon"}
         fr{"Frans"}
         fur{"Friuliaans"}
-        fy{"Wes-Fries"}
+        fy{"Fries"}
         ga{"Iers"}
         gaa{"Gaa"}
         gag{"Gagauz"}
+        gan{"Gan-Sjinees"}
         gd{"Skotse Gallies"}
         gez{"Geez"}
         gil{"Gilbertees"}
@@ -141,6 +143,7 @@ af{
         gv{"Manx"}
         gwi{"Gwichʼin"}
         ha{"Hausa"}
+        hak{"Hakka-Sjinees"}
         haw{"Hawaiies"}
         he{"Hebreeus"}
         hi{"Hindi"}
@@ -148,7 +151,8 @@ af{
         hit{"Hetities"}
         hmn{"Hmong"}
         hr{"Kroaties"}
-        hsb{"Hoog-Sorbies"}
+        hsb{"Oppersorbies"}
+        hsn{"Xiang-Sjinees"}
         ht{"Haïtiaans"}
         hu{"Hongaars"}
         hup{"Hupa"}
@@ -166,7 +170,7 @@ af{
         io{"Ido"}
         is{"Yslands"}
         it{"Italiaans"}
-        iu{"Innuïties"}
+        iu{"Inuïties"}
         ja{"Japannees"}
         jbo{"Lojban"}
         jgo{"Ngomba"}
@@ -264,6 +268,7 @@ af{
         myv{"Erzya"}
         mzn{"Masanderani"}
         na{"Nauru"}
+        nan{"Min Nan-Sjinees"}
         nap{"Neapolitaans"}
         naq{"Nama"}
         nb{"Noorse Bokmål"}
@@ -274,7 +279,7 @@ af{
         new{"Newari"}
         ng{"Ndonga"}
         nia{"Nias"}
-        niu{"Niuean"}
+        niu{"Niueaans"}
         nl{"Nederlands"}
         nl_BE{"Vlaams"}
         nmg{"Kwasio"}
@@ -360,7 +365,7 @@ af{
         sw{"Swahili"}
         sw_CD{"Swahili (Kongo)"}
         swb{"Comoraans"}
-        syr{"Siriese"}
+        syr{"Siries"}
         ta{"Tamil"}
         te{"Teloegoe"}
         tem{"Timne"}
@@ -385,7 +390,7 @@ af{
         twq{"Tasawaq"}
         ty{"Tahities"}
         tyv{"Tuvinees"}
-        tzm{"Sentraal Atlas Tamazight"}
+        tzm{"Sentraal-Atlas-Tamazight"}
         udm{"Udmurt"}
         ug{"Uighur"}
         uk{"Oekraïens"}
@@ -404,6 +409,7 @@ af{
         war{"Waray"}
         wbp{"Warlpiri"}
         wo{"Wolof"}
+        wuu{"Wu-Sjinees"}
         xal{"Kalmyk"}
         xh{"Xhosa"}
         xog{"Soga"}
@@ -416,7 +422,7 @@ af{
         zh{"Sjinees"}
         zu{"Zoeloe"}
         zun{"Zuni"}
-        zxx{"Geen linguistiese inhoud"}
+        zxx{"Geen taalinhoud nie"}
         zza{"Zaza"}
     }
     Languages%short{
@@ -618,7 +624,7 @@ af{
             vaii{"Vai-syfers"}
         }
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} – Alle"}
         category-list{"{0}: {1}"}

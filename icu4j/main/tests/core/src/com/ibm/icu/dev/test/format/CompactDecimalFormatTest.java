@@ -598,10 +598,10 @@ public class CompactDecimalFormatTest extends TestFmwk {
         // These expected values are the same in both ICU 58 and 59.
         String[][] expectedShortLong = new String[][] {
             { "12K", "12 tuhháát" },
-            { "12k", "12 mil" },
-            { "12k", "12 mil" },
-            { "12k", "12 mil" },
-            { "12K", "12K" },
+            { "12 K", "12 mil" },
+            { "12 k", "12 mil" },
+            { "12 k", "12 mil" },
+            { "12K", "akpe 12" },
         };
 
         for (int i=0; i<locs.length; i++) {

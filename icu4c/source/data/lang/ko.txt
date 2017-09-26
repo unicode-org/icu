@@ -45,7 +45,7 @@ ko{
         ar{"아랍어"}
         ar_001{"현대 표준 아랍어"}
         arc{"아람어"}
-        arn{"아라우칸어"}
+        arn{"마푸둔군어"}
         arp{"아라파호어"}
         arq{"알제리 아랍어"}
         arw{"아라와크어"}
@@ -747,6 +747,7 @@ ko{
             indian{"인도력"}
             islamic{"이슬람력"}
             islamic-civil{"이슬람 상용력"}
+            islamic-umalqura{"이슬람력(움 알 쿠라)"}
             iso8601{"ISO-8601 달력"}
             japanese{"일본력"}
             persian{"페르시안력"}
@@ -790,8 +791,10 @@ ko{
         }
         collation{
             big5han{"중국어 번체 정렬 순서 (Big5)"}
+            compat{"호환성을 위해 이전 정렬 순서"}
             dictionary{"사전 정렬순"}
             ducet{"기본 유니코드 정렬 순서"}
+            eor{"유럽 정렬 규칙"}
             gb2312han{"중국어 간체 정렬 순서 (GB2312)"}
             phonebook{"전화번호부순"}
             phonetic{"소리나는 대로 정렬 순서"}
@@ -823,7 +826,7 @@ ko{
         }
         m0{
             bgn{"미국 지명위원회(BGN)"}
-            ungegn{"유엔지명전문가회의(UNGEGN)"}
+            ungegn{"유엔 지명전문가 그룹(UNGEGN)"}
         }
         ms{
             metric{"미터법"}
@@ -915,9 +918,9 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
-        all{"{0} — 모두"}
+        all{"{0} — 전체"}
         category-list{"{0}: {1}"}
         compatibility{"{0} — 호환"}
         enclosed{"{0} — 닫힘"}

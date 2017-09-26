@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pt_PT{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.6"}
     units{
         acceleration{
             g-force{
@@ -29,6 +29,11 @@ pt_PT{
                 one{"{0} quilate"}
                 other{"{0} quilates"}
             }
+            millimole-per-liter{
+                dnam{"milimoles por litro"}
+                one{"{0} milimole por litro"}
+                other{"{0} milimoles por litro"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -41,6 +46,12 @@ pt_PT{
                 one{"{0} litro por quilómetro"}
                 other{"{0} litros por quilómetro"}
             }
+        }
+        coordinate{
+            east{"{0} este"}
+            north{"{0} norte"}
+            south{"{0} sul"}
+            west{"{0} Oeste"}
         }
         duration{
             century{
@@ -99,6 +110,11 @@ pt_PT{
                 other{"{0} quilómetros por hora"}
             }
         }
+        temperature{
+            generic{
+                other{"{0}°"}
+            }
+        }
         volume{
             cubic-kilometer{
                 dnam{"quilómetros cúbicos"}
@@ -111,6 +127,7 @@ pt_PT{
                 other{"{0} chávenas"}
             }
             cup-metric{
+                dnam{"chávenas métricas"}
                 one{"{0} chávena métrica"}
                 other{"{0} chávenas métricas"}
             }
@@ -124,14 +141,24 @@ pt_PT{
             }
         }
         duration{
+            day{
+                per{"{0}/d"}
+            }
             second{
                 dnam{"s"}
+                per{"{0}/s"}
             }
         }
         length{
             foot{
                 one{"{0}′"}
                 other{"{0}′"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°C"}
+                other{"{0}°C"}
             }
         }
     }
@@ -186,6 +213,9 @@ pt_PT{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            millimole-per-liter{
+                dnam{"milimole/litro"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -199,6 +229,12 @@ pt_PT{
             mile-per-gallon-imperial{
                 dnam{"milhas/gal imp."}
             }
+        }
+        coordinate{
+            east{"{0} E"}
+            north{"{0} N"}
+            south{"{0} S"}
+            west{"{0} O"}
         }
         duration{
             minute{
@@ -225,6 +261,9 @@ pt_PT{
                 one{"{0} milha"}
                 other{"{0} milhas"}
             }
+            mile-scandinavian{
+                other{"{0} smi"}
+            }
             nautical-mile{
                 dnam{"nmi"}
                 one{"{0} nmi"}
@@ -247,12 +286,15 @@ pt_PT{
         pressure{
             inch-hg{
                 dnam{"in Hg"}
-                one{"{0} inHg"}
-                other{"{0} inHg"}
             }
             millibar{
                 one{"{0} mb"}
                 other{"{0} mb"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
             }
         }
         speed{
@@ -268,8 +310,6 @@ pt_PT{
         temperature{
             celsius{
                 dnam{"graus Celsius"}
-                one{"{0} °C"}
-                other{"{0} °C"}
             }
             fahrenheit{
                 dnam{"graus Fahrenheit"}
@@ -298,6 +338,7 @@ pt_PT{
                 other{"{0} cháv."}
             }
             cup-metric{
+                dnam{"chám"}
                 one{"{0} chám"}
                 other{"{0} chám"}
             }

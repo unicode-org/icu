@@ -47,7 +47,7 @@ it{
         ar{"arabo"}
         ar_001{"arabo moderno standard"}
         arc{"aramaico"}
-        arn{"mapuche"}
+        arn{"mapudungun"}
         aro{"araona"}
         arp{"arapaho"}
         arq{"arabo algerino"}
@@ -587,7 +587,7 @@ it{
         umb{"mbundu"}
         und{"lingua imprecisata"}
         ur{"urdu"}
-        uz{"usbeco"}
+        uz{"uzbeco"}
         vai{"vai"}
         ve{"venda"}
         vec{"veneto"}
@@ -866,6 +866,7 @@ it{
         }
         collation{
             big5han{"cinese tradizionale"}
+            compat{"Ordinamento compatto"}
             dictionary{"Ordinamento dizionario"}
             ducet{"Ordinamento Unicode predefinito"}
             eor{"eor"}
@@ -1018,14 +1019,15 @@ it{
         VALENCIA{"valenziano"}
         WADEGILE{"romanizzazione Wade-Giles"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     characterLabelPattern{
         all{"{0} — Tutto"}
         category-list{"{0}: {1}"}
         compatibility{"{0} — Compatibilità"}
+        enclosed{"{0} — Cerchiato"}
         extended{"{0} — Esteso"}
         historic{"{0} — Storico"}
-        miscellaneous{"{0} — Miscellanea"}
+        miscellaneous{"{0} — Vario"}
         other{"{0} — Altro"}
         scripts{"Sistemi di scrittura — {0}"}
         strokes{

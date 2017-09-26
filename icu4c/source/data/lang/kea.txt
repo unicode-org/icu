@@ -249,7 +249,7 @@ kea{
             latn{"Númerus Arábikus"}
         }
     }
-    Version{"2.1.31.74"}
+    Version{"2.1.37.1"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Skrita: {0}"}

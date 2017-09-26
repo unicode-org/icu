@@ -2,17 +2,33 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 es_419{
     Countries{
+        011{"África del Oeste"}
+        014{"África del Este"}
+        015{"África del Norte"}
+        018{"África del Sur"}
+        030{"Asia del Este"}
+        034{"Asia del Sur"}
         035{"Asia sudoriental"}
+        039{"Europa del Sur"}
+        057{"región de Micronesia"}
+        145{"Asia del Oeste"}
+        151{"Europa del Este"}
+        154{"Europa del Norte"}
+        155{"Europa del Oeste"}
+        AC{"Isla Ascensión"}
+        BA{"Bosnia-Herzegovina"}
         CI{"Costa de Marfil"}
+        EZ{"Eurozona"}
+        GG{"Guernesey"}
         IC{"Islas Canarias"}
         QO{"Islas Ultramarinas"}
         TA{"Tristán da Cunha"}
         TL{"Timor Oriental"}
         UM{"Islas Ultramarinas de EE.UU."}
+        VI{"Islas Vírgenes de los Estados Unidos"}
     }
     Countries%short{
         GB{"R. U."}
-        US{"EE.UU."}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.22"}
 }

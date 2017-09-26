@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sq{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -429,6 +429,11 @@ sq{
                 dnam{"pikometra"}
                 one{"{0} pikometër"}
                 other{"{0} pikometra"}
+            }
+            point{
+                dnam{"shkallë"}
+                one{"{0} shkallë"}
+                other{"{0} shkallë"}
             }
             yard{
                 dnam{"jardë"}
@@ -1423,6 +1428,11 @@ sq{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"shkallë"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"yd"}

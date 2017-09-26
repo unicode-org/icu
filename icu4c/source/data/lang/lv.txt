@@ -121,7 +121,6 @@ lv{
         dar{"dargu"}
         dav{"taitu"}
         de{"vācu"}
-        de_AT{"Austrijas vācu"}
         de_CH{"Šveices augšvācu"}
         del{"delavēru"}
         den{"sleivu"}
@@ -145,16 +144,9 @@ lv{
         el{"grieķu"}
         elx{"elamiešu"}
         en{"angļu"}
-        en_AU{"Austrālijas angļu"}
-        en_CA{"Kanādas angļu"}
-        en_GB{"Lielbritānijas angļu"}
-        en_US{"ASV angļu"}
         enm{"vidusangļu"}
         eo{"esperanto"}
         es{"spāņu"}
-        es_419{"Latīņamerikas spāņu"}
-        es_ES{"Eiropas spāņu"}
-        es_MX{"Meksikas spāņu"}
         et{"igauņu"}
         eu{"basku"}
         ewo{"evondu"}
@@ -168,8 +160,7 @@ lv{
         fo{"fēru"}
         fon{"fonu"}
         fr{"franču"}
-        fr_CA{"Kanādas franču"}
-        fr_CH{"Šveices franču"}
+        frc{"kadžūnu franču"}
         frm{"vidusfranču"}
         fro{"senfranču"}
         frr{"ziemeļfrīzu"}
@@ -293,6 +284,7 @@ lv{
         ln{"lingala"}
         lo{"laosiešu"}
         lol{"mongu"}
+        lou{"Luiziānas kreolu"}
         loz{"lozu"}
         lrc{"ziemeļluru"}
         lt{"lietuviešu"}
@@ -319,7 +311,7 @@ lv{
         mfe{"Maurīcijas kreolu"}
         mg{"malagasu"}
         mga{"vidusīru"}
-        mgh{"makua-meetto"}
+        mgh{"makua"}
         mgo{"mgo"}
         mh{"māršaliešu"}
         mi{"maoru"}
@@ -332,7 +324,7 @@ lv{
         mni{"manipūru"}
         moh{"mohauku"}
         mos{"mosu"}
-        mr{"maratu"}
+        mr{"marathu"}
         ms{"malajiešu"}
         mt{"maltiešu"}
         mua{"mundangu"}
@@ -398,8 +390,6 @@ lv{
         pro{"senprovansiešu"}
         ps{"puštu"}
         pt{"portugāļu"}
-        pt_BR{"Brazīlijas portugāļu"}
-        pt_PT{"Eiropas portugāļu"}
         qu{"kečvu"}
         quc{"kiče"}
         raj{"radžastāņu"}
@@ -575,8 +565,8 @@ lv{
         Grek{"grieķu"}
         Gujr{"gudžaratu"}
         Guru{"pandžabu"}
-        Hanb{"ķīniešu hanb"}
-        Hang{"hangila"}
+        Hanb{"haņu ar bopomofo"}
+        Hang{"hangils"}
         Hani{"ķīniešu"}
         Hans{"vienkāršotā"}
         Hant{"tradicionālā"}
@@ -617,7 +607,7 @@ lv{
         Taml{"tamilu"}
         Telu{"telugu"}
         Tglg{"tagalu"}
-        Thaa{"taana"}
+        Thaa{"tāna"}
         Thai{"taju"}
         Tibt{"tibetiešu"}
         Xpeo{"senperiešu"}
@@ -632,8 +622,8 @@ lv{
         Zzzz{"nezināma rakstība"}
     }
     Scripts%stand-alone{
-        Hans{"hanu vienkāršotā"}
-        Hant{"hanu tradicionālā"}
+        Hans{"haņu vienkāršotā"}
+        Hant{"haņu tradicionālā"}
     }
     Scripts%variant{
         Arab{"persiešu-arābu"}
@@ -651,6 +641,7 @@ lv{
             indian{"Indijas nacionālais kalendārs"}
             islamic{"islāma kalendārs"}
             islamic-civil{"islāma pilsoņu kalendārs"}
+            islamic-umalqura{"islāma kalendārs (Umm al-kura)"}
             iso8601{"ISO 8601 kalendārs"}
             japanese{"japāņu kalendārs"}
             persian{"persiešu kalendārs"}
@@ -700,8 +691,10 @@ lv{
         }
         collation{
             big5han{"tradicionālās ķīniešu valodas kārtošanas secība - Big5"}
+            compat{"saderīgā kārtošanas secība"}
             dictionary{"Vārdnīcas kārtošanas secība"}
             ducet{"noklusējuma unikoda kārtošanas secība"}
+            eor{"Eiropas rakstību kārtošanas secīa"}
             gb2312han{"vienkāršotās ķīniešu valodas kārtošanas secība - GB2312"}
             phonebook{"tālruņu grāmatas kārtošanas secība"}
             phonetic{"Fonētiskā kārtošanas secība"}
@@ -731,8 +724,8 @@ lv{
             strict{"Stingrais rindiņas pārtraukuma stils"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"transliterācijas sistēma US BGN"}
+            ungegn{"transliterācijas sistēma UN GEGN"}
         }
         ms{
             metric{"metriskā sistēma"}
@@ -803,7 +796,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} — visas"}
         category-list{"{0}: {1}"}
@@ -817,7 +810,7 @@ lv{
         strokes{
             one{"{0} vilkums"}
             other{"{0} vilkumi"}
-            zero{"{0} vilkumi"}
+            zero{"{0} vilkumu"}
         }
     }
     codePatterns{

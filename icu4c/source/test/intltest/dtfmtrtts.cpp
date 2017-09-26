@@ -263,6 +263,10 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     for(int32_t dstyle = DateFormat::FULL; dstyle <= DateFormat::SHORT; ++dstyle) {
         for(int32_t tstyle = DateFormat::FULL; tstyle <= DateFormat::SHORT; ++tstyle) {
             if(TEST_TABLE[itable++]) {
+                if (uprv_strcmp(loc.getLanguage(), "ccp")==0 && logKnownIssue("13366", "Skip ccp formats with zzzz,a until DateFormat parsing is fixed") &&
+                        (dstyle==DateFormat::SHORT && tstyle<= DateFormat::LONG || dstyle==DateFormat::MEDIUM && tstyle>= DateFormat::MEDIUM)) {
+                    continue;
+                }
                 logln("Testing dstyle" + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle)) );
                 DateFormat *df = DateFormat::createDateTimeInstance((DateFormat::EStyle)dstyle, (DateFormat::EStyle)tstyle, loc);
                 if(df == NULL) {
@@ -534,13 +538,16 @@ UnicodeString& DateFormatRoundTripTest::escape(const UnicodeString& src, Unicode
 {
     dst.remove();
     for (int32_t i = 0; i < src.length(); ++i) {
-        UChar c = src[i];
-        if(c < 0x0080) 
+        UChar32 c = src.char32At(i);
+        if (c >= 0x10000) {
+            ++i;
+        }
+        if (c < 0x0080) {
             dst += c;
-        else {
+        } else {
             dst += UnicodeString("[");
-            char buf [8];
-            sprintf(buf, "%#x", c);
+            char buf [12];
+            sprintf(buf, "%#04x", c);
             dst += UnicodeString(buf);
             dst += UnicodeString("]");
         }

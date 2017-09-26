@@ -44,7 +44,7 @@ sk{
         ar{"arabčina"}
         ar_001{"arabčina (moderná štandardná)"}
         arc{"aramejčina"}
-        arn{"araukánčina"}
+        arn{"mapudungun"}
         arp{"arapažština"}
         arw{"arawačtina"}
         as{"ásamčina"}
@@ -431,7 +431,7 @@ sk{
         sco{"škótčina"}
         sd{"sindhčina"}
         sdh{"južná kurdčina"}
-        se{"severná lapončina"}
+        se{"severná saamčina"}
         see{"senekčina"}
         seh{"sena"}
         sel{"selkupčina"}
@@ -447,10 +447,10 @@ sk{
         sk{"slovenčina"}
         sl{"slovinčina"}
         sm{"samojčina"}
-        sma{"južná lapončina"}
-        smj{"lapončina (lulská)"}
-        smn{"lapončina (inarijská)"}
-        sms{"lapončina (skoltská)"}
+        sma{"južná saamčina"}
+        smj{"lulská saamčina"}
+        smn{"inarijská saamčina"}
+        sms{"skoltská saamčina"}
         sn{"šončina"}
         snk{"soninke"}
         so{"somálčina"}
@@ -629,6 +629,7 @@ sk{
             indian{"Indický národný kalendár"}
             islamic{"islamský kalendár"}
             islamic-civil{"Islamský občiansky kalendár"}
+            islamic-umalqura{"islamský kalendár (Umm al-Qura)"}
             iso8601{"kalendár ISO 8601"}
             japanese{"japonský kalendár"}
             persian{"perzský kalendár"}
@@ -672,8 +673,10 @@ sk{
         }
         collation{
             big5han{"Tradičný čínsky Big5"}
+            compat{"predchádzajúce zoradenie, kompatibilita"}
             dictionary{"Usporiadanie slovníka"}
             ducet{"predvolené zoradenie unicode"}
+            eor{"európske zoradenie"}
             gb2312han{"Zjednodušený čínsky GB2312"}
             phonebook{"Lexikografické triedenie"}
             phonetic{"Fonetické radenie"}
@@ -687,8 +690,8 @@ sk{
             unihan{"Usporiadanie podľa znakov radikál"}
         }
         d0{
-            fwidth{"Celá šírka"}
-            hwidth{"Polovičná šírka"}
+            fwidth{"celá šírka"}
+            hwidth{"polovičná šírka"}
             npinyin{"Číslice"}
         }
         hc{
@@ -703,8 +706,8 @@ sk{
             strict{"presný štýl koncov riadka"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"americká transliterácia BGN"}
+            ungegn{"medzinárodná transliterácia GEGN"}
         }
         ms{
             metric{"metrická sústava"}
@@ -757,7 +760,7 @@ sk{
     Variants{
         SCOTLAND{"škótska štandardná angličtina"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} – všetko"}
         category-list{"{0}: {1}"}
@@ -769,10 +772,10 @@ sk{
         other{"{0} – ostatné"}
         scripts{"písma – {0}"}
         strokes{
-            few{"{0} údery"}
-            many{"{0} úderu"}
-            one{"{0} úder"}
-            other{"{0} úderov"}
+            few{"{0} ťahy"}
+            many{"{0} ťahu"}
+            one{"{0} ťah"}
+            other{"{0} ťahov"}
         }
     }
     codePatterns{

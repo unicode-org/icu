@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ja{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"アビジャン"}
@@ -507,6 +507,9 @@ ja{
         "America:Puerto_Rico"{
             ec{"プエルトリコ"}
         }
+        "America:Punta_Arenas"{
+            ec{"プンタアレナス"}
+        }
         "America:Rainy_River"{
             ec{"レイニーリバー"}
         }
@@ -657,6 +660,9 @@ ja{
         "Asia:Ashgabat"{
             ec{"アシガバード"}
         }
+        "Asia:Atyrau"{
+            ec{"アティラウ"}
+        }
         "Asia:Baghdad"{
             ec{"バグダッド"}
         }
@@ -707,6 +713,9 @@ ja{
         }
         "Asia:Dushanbe"{
             ec{"ドゥシャンベ"}
+        }
+        "Asia:Famagusta"{
+            ec{"ファマグスタ"}
         }
         "Asia:Gaza"{
             ec{"ガザ"}
@@ -805,7 +814,7 @@ ja{
             ec{"クズロルダ"}
         }
         "Asia:Rangoon"{
-            ec{"ラングーン"}
+            ec{"ヤンゴン"}
         }
         "Asia:Riyadh"{
             ec{"リヤド"}
@@ -1075,6 +1084,9 @@ ja{
         }
         "Europe:Sarajevo"{
             ec{"サラエボ"}
+        }
+        "Europe:Saratov"{
+            ec{"サラトフ"}
         }
         "Europe:Simferopol"{
             ec{"シンフェロポリ"}
@@ -1648,7 +1660,7 @@ ja{
             ls{"クラスノヤルスク標準時"}
         }
         "meta:Kyrgystan"{
-            ls{"キルギスタン時間"}
+            ls{"キルギス時間"}
         }
         "meta:Lanka"{
             ls{"ランカ時間"}

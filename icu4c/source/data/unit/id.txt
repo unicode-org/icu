@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 id{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -299,10 +299,18 @@ id{
                 dnam{"desimeter"}
                 other{"{0} desimeter"}
             }
+            fathom{
+                dnam{"depa"}
+                other{"{0} depa"}
+            }
             foot{
                 dnam{"kaki"}
                 other{"{0} kaki"}
                 per{"{0} per kaki"}
+            }
+            furlong{
+                dnam{"furlong"}
+                other{"{0} furlong"}
             }
             inch{
                 dnam{"inci"}
@@ -355,6 +363,10 @@ id{
                 dnam{"pikometer"}
                 other{"{0} pikometer"}
             }
+            point{
+                dnam{"poin"}
+                other{"{0} poin"}
+            }
             yard{
                 dnam{"yard"}
                 other{"{0} yard"}
@@ -406,6 +418,10 @@ id{
                 dnam{"pon"}
                 other{"{0} pon"}
                 per{"{0} per pon"}
+            }
+            stone{
+                dnam{"st"}
+                other{"{0} st"}
             }
             ton{
                 dnam{"ton"}
@@ -603,7 +619,12 @@ id{
     unitsNarrow{
         acceleration{
             g-force{
+                dnam{"g-force"}
                 other{"{0} g"}
+            }
+            meter-per-second-squared{
+                dnam{"m/d²"}
+                other{"{0}m/d²"}
             }
         }
         angle{
@@ -653,13 +674,23 @@ id{
             west{"{0}B"}
         }
         duration{
+            century{
+                dnam{"abad"}
+                other{"{0} abad"}
+            }
             day{
                 dnam{"hari"}
                 other{"{0}hr"}
+                per{"{0}/hr"}
             }
             hour{
                 dnam{"jam"}
                 other{"{0}j"}
+                per{"{0}/j"}
+            }
+            microsecond{
+                dnam{"μdtk"}
+                other{"{0} μd"}
             }
             millisecond{
                 dnam{"milidtk"}
@@ -668,74 +699,168 @@ id{
             minute{
                 dnam{"mnt"}
                 other{"{0}mnt"}
+                per{"{0}/mnt"}
             }
             month{
                 dnam{"bulan"}
                 other{"{0}bln"}
+                per{"{0}/bln"}
+            }
+            nanosecond{
+                dnam{"nanodtk"}
+                other{"{0} ndtk"}
             }
             second{
                 dnam{"dtk"}
                 other{"{0}dtk"}
+                per{"{0}/dtk"}
             }
             week{
                 dnam{"mgg"}
                 other{"{0}mgg"}
+                per{"{0}/mgg"}
             }
             year{
                 dnam{"thn"}
                 other{"{0}thn"}
+                per{"{0}/thn"}
             }
         }
         length{
+            astronomical-unit{
+                dnam{"sa"}
+                other{"{0}sa"}
+            }
             centimeter{
                 dnam{"cm"}
                 other{"{0}cm"}
+                per{"{0}/cm"}
+            }
+            decimeter{
+                dnam{"dm"}
+                other{"{0}dm"}
+            }
+            fathom{
+                dnam{"depa"}
+                other{"{0}dp"}
             }
             foot{
+                dnam{"kaki"}
                 other{"{0} ft"}
+                per{"{0}/kaki"}
+            }
+            furlong{
+                dnam{"furlong"}
+                other{"{0}fur"}
             }
             inch{
+                dnam{"inci"}
                 other{"{0}″"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 other{"{0}km"}
+                per{"{0}/km"}
             }
             light-year{
+                dnam{"thn cahaya"}
                 other{"{0} ly"}
             }
             meter{
                 dnam{"meter"}
                 other{"{0}m"}
+                per{"{0}/m"}
+            }
+            micrometer{
+                dnam{"µmeter"}
+                other{"{0}µm"}
             }
             mile{
+                dnam{"mil"}
                 other{"{0} mi"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                other{"{0}smi"}
             }
             millimeter{
                 dnam{"mm"}
                 other{"{0}mm"}
             }
+            nanometer{
+                dnam{"nm"}
+                other{"{0}nm"}
+            }
+            nautical-mile{
+                dnam{"nmi"}
+                other{"{0}nmi"}
+            }
+            parsec{
+                dnam{"parsec"}
+                other{"{0}pc"}
+            }
             picometer{
+                dnam{"pm"}
                 other{"{0} pm"}
             }
+            point{
+                dnam{"p"}
+                other{"{0}p"}
+            }
             yard{
+                dnam{"yd"}
                 other{"{0} yd"}
             }
         }
         mass{
+            carat{
+                dnam{"karat"}
+                other{"{0} CD"}
+            }
             gram{
                 dnam{"gram"}
                 other{"{0}g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 other{"{0}kg"}
+                per{"{0}/kg"}
+            }
+            metric-ton{
+                dnam{"t"}
+                other{"{0} t"}
+            }
+            microgram{
+                dnam{"µg"}
+                other{"{0} µg"}
+            }
+            milligram{
+                dnam{"mg"}
+                other{"{0} mg"}
             }
             ounce{
+                dnam{"ons"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
+            }
+            ounce-troy{
+                dnam{"oz t"}
+                other{"{0} oz t"}
             }
             pound{
+                dnam{"pon"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
+            }
+            stone{
+                dnam{"stone"}
+                other{"{0} st"}
+            }
+            ton{
+                dnam{"ton"}
+                other{"{0} tn"}
             }
         }
         power{
@@ -751,13 +876,24 @@ id{
         }
         pressure{
             hectopascal{
+                dnam{"hPa"}
                 other{"{0} hPa"}
             }
             inch-hg{
+                dnam{"″ Hg"}
                 other{"{0} inHg"}
             }
             millibar{
+                dnam{"mbar"}
                 other{"{0} mbar"}
+            }
+            millimeter-of-mercury{
+                dnam{"mmHg"}
+                other{"{0} mmHg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                other{"{0} psi"}
             }
         }
         speed{
@@ -765,10 +901,16 @@ id{
                 dnam{"km/jam"}
                 other{"{0}kph"}
             }
+            knot{
+                dnam{"kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
+                dnam{"m/d"}
                 other{"{0} m/s"}
             }
             mile-per-hour{
+                dnam{"mi/j"}
                 other{"{0} mph"}
             }
         }
@@ -778,7 +920,16 @@ id{
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"°"}
+                other{"{0}°"}
+            }
+            kelvin{
+                dnam{"K"}
+                other{"{0} K"}
             }
         }
         volume{
@@ -1086,10 +1237,18 @@ id{
                 dnam{"dm"}
                 other{"{0} dm"}
             }
+            fathom{
+                dnam{"dp"}
+                other{"{0} dp"}
+            }
             foot{
                 dnam{"kaki"}
                 other{"{0} ft"}
                 per{"{0}/ft"}
+            }
+            furlong{
+                dnam{"furlong"}
+                other{"{0} fur"}
             }
             inch{
                 dnam{"inci"}
@@ -1142,6 +1301,10 @@ id{
                 dnam{"pm"}
                 other{"{0} pm"}
             }
+            point{
+                dnam{"poin"}
+                other{"{0} p"}
+            }
             yard{
                 dnam{"yard"}
                 other{"{0} yd"}
@@ -1193,6 +1356,10 @@ id{
                 dnam{"pon"}
                 other{"{0} lb"}
                 per{"{0}/lb"}
+            }
+            stone{
+                dnam{"stone"}
+                other{"{0} st"}
             }
             ton{
                 dnam{"ton"}

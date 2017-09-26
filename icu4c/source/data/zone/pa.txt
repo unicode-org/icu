@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pa{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.22"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ਅਬੀਦਜਾਨ"}
@@ -507,6 +507,9 @@ pa{
         "America:Puerto_Rico"{
             ec{"ਪਿਊਰਟੋ ਰੀਕੋ"}
         }
+        "America:Punta_Arenas"{
+            ec{"ਪੰਟਾ ਅਰੇਨਸ"}
+        }
         "America:Rainy_River"{
             ec{"ਰੇਨੀ ਰਿਵਰ"}
         }
@@ -657,6 +660,9 @@ pa{
         "Asia:Ashgabat"{
             ec{"ਅਸ਼ਗਾਬਾਟ"}
         }
+        "Asia:Atyrau"{
+            ec{"ਏਤੇਰਾਓ"}
+        }
         "Asia:Baghdad"{
             ec{"ਬਗਦਾਦ"}
         }
@@ -707,6 +713,9 @@ pa{
         }
         "Asia:Dushanbe"{
             ec{"ਦੁਸ਼ਾਂਬੇ"}
+        }
+        "Asia:Famagusta"{
+            ec{"ਫਾਮਾਗੁਸਟਾ"}
         }
         "Asia:Gaza"{
             ec{"ਗਾਜ਼ਾ"}
@@ -942,6 +951,9 @@ pa{
         "Australia:Sydney"{
             ec{"ਸਿਡਨੀ"}
         }
+        "Etc:UTC"{
+            ls{"ਕੋਔਰਡੀਨੇਟੇਡ ਵਿਆਪਕ ਵੇਲਾ"}
+        }
         "Etc:Unknown"{
             ec{"ਅਣਪਛਾਤਾ ਸ਼ਹਿਰ"}
         }
@@ -1072,6 +1084,9 @@ pa{
         }
         "Europe:Sarajevo"{
             ec{"ਸਾਰਾਜੇਵੋ"}
+        }
+        "Europe:Saratov"{
+            ec{"ਸੈਰਾਟੋਵ"}
         }
         "Europe:Simferopol"{
             ec{"ਸਿਮਫਰੋਪੋਲ"}

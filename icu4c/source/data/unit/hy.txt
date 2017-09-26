@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 hy{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -429,6 +429,11 @@ hy{
                 dnam{"պիկոմետրեր"}
                 one{"{0} պիկոմետր"}
                 other{"{0} պիկոմետր"}
+            }
+            point{
+                dnam{"կետեր"}
+                one{"{0} կետ"}
+                other{"{0} կետ"}
             }
             yard{
                 dnam{"յարդեր"}
@@ -1029,14 +1034,14 @@ hy{
                 per{"{0}/սմ²"}
             }
             square-foot{
-                dnam{"քառ․ ֆտ"}
-                one{"{0} քառ. ֆտ"}
-                other{"{0} քառ. ֆտ"}
+                dnam{"ֆտ²"}
+                one{"{0} ֆտ²"}
+                other{"{0} ֆտ²"}
             }
             square-inch{
-                dnam{"քառ․ դյմ"}
-                one{"{0} քառ. դյմ"}
-                other{"{0} քառ. դյմ"}
+                dnam{"դյմ²"}
+                one{"{0} դյմ²"}
+                other{"{0} դյմ²"}
                 per{"{0}/դյմ²"}
             }
             square-kilometer{
@@ -1052,15 +1057,15 @@ hy{
                 per{"{0}/մ²"}
             }
             square-mile{
-                dnam{"քառ․ մղ"}
-                one{"{0} քառ. մղ"}
-                other{"{0} քառ. մղ"}
+                dnam{"մղ²"}
+                one{"{0} մղ²"}
+                other{"{0} մղ²"}
                 per{"{0}/մղ²"}
             }
             square-yard{
-                dnam{"քառ․ յրդ"}
-                one{"{0} քառ. յրդ"}
-                other{"{0} քառ. յրդ"}
+                dnam{"յրդ²"}
+                one{"{0} յրդ²"}
+                other{"{0} յրդ²"}
             }
         }
         compound{
@@ -1138,9 +1143,9 @@ hy{
                 other{"{0} ԳԲ"}
             }
             kilobit{
-                dnam{"Կբիթ"}
-                one{"{0} Կբիթ"}
-                other{"{0} Կբիթ"}
+                dnam{"կբիթ"}
+                one{"{0} կբիթ"}
+                other{"{0} կբիթ"}
             }
             kilobyte{
                 dnam{"կԲ"}
@@ -1394,6 +1399,11 @@ hy{
                 one{"{0} պմ"}
                 other{"{0} պմ"}
             }
+            point{
+                dnam{"կտ"}
+                one{"{0} կտ"}
+                other{"{0} կտ"}
+            }
             yard{
                 dnam{"յրդ"}
                 one{"{0} յրդ"}
@@ -1584,14 +1594,14 @@ hy{
                 per{"{0}/սմ³"}
             }
             cubic-foot{
-                dnam{"խոր․ ֆտ"}
-                one{"{0} խոր․ ֆտ"}
-                other{"{0} խոր․ ֆտ"}
+                dnam{"ֆտ³"}
+                one{"{0} ֆտ³"}
+                other{"{0} ֆտ³"}
             }
             cubic-inch{
-                dnam{"խոր․ դյմ"}
-                one{"{0} խոր․ դյմ"}
-                other{"{0} խոր․ դյմ"}
+                dnam{"դյմ³"}
+                one{"{0} դյմ³"}
+                other{"{0} դյմ³"}
             }
             cubic-kilometer{
                 dnam{"կմ³"}
@@ -1605,14 +1615,14 @@ hy{
                 per{"{0}/մ³"}
             }
             cubic-mile{
-                dnam{"խոր․ մղ"}
-                one{"{0} խոր․ մղ"}
-                other{"{0} խոր․ մղ"}
+                dnam{"մղ³"}
+                one{"{0} մղ³"}
+                other{"{0} մղ³"}
             }
             cubic-yard{
-                dnam{"խոր․ յրդ"}
-                one{"{0} խոր․ յրդ"}
-                other{"{0} խոր․ յրդ"}
+                dnam{"յրդ³"}
+                one{"{0} յրդ³"}
+                other{"{0} յրդ³"}
             }
             cup{
                 dnam{"բաժակներ"}

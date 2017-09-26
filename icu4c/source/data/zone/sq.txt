@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sq{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abixhan"}
@@ -133,7 +133,7 @@ sq{
             ec{"Nairobi"}
         }
         "Africa:Ndjamena"{
-            ec{"Nxhamenë"}
+            ec{"Ndjamena"}
         }
         "Africa:Niamey"{
             ec{"Niamej"}
@@ -196,7 +196,7 @@ sq{
             ec{"Ushuaja"}
         }
         "America:Aruba"{
-            ec{"Aruba"}
+            ec{"Arubë"}
         }
         "America:Asuncion"{
             ec{"Asunsion"}
@@ -301,7 +301,7 @@ sq{
             ec{"Ejrunep"}
         }
         "America:El_Salvador"{
-            ec{"El Salvador"}
+            ec{"Salvador"}
         }
         "America:Fort_Nelson"{
             ec{"Fort-Nelson"}
@@ -325,7 +325,7 @@ sq{
             ec{"Grenadë"}
         }
         "America:Guadeloupe"{
-            ec{"Guadelupe"}
+            ec{"Guadalupe"}
         }
         "America:Guatemala"{
             ec{"Guatemalë"}
@@ -442,7 +442,7 @@ sq{
             ec{"Qyteti i Meksikës"}
         }
         "America:Miquelon"{
-            ec{"Mikuelon"}
+            ec{"Mikelon"}
         }
         "America:Moncton"{
             ec{"Monkton"}
@@ -454,7 +454,7 @@ sq{
             ec{"Montevideo"}
         }
         "America:Montserrat"{
-            ec{"Monteserat"}
+            ec{"Montserat"}
         }
         "America:Nassau"{
             ec{"Nasao"}
@@ -499,13 +499,16 @@ sq{
             ec{"Port-o-Prins"}
         }
         "America:Port_of_Spain"{
-            ec{"Porti i Spanjës"}
+            ec{"Port of Spain"}
         }
         "America:Porto_Velho"{
             ec{"Porto-Velho"}
         }
         "America:Puerto_Rico"{
             ec{"Porto-Riko"}
+        }
+        "America:Punta_Arenas"{
+            ec{"Punta-Arenas"}
         }
         "America:Rainy_River"{
             ec{"Lumi i Shirave"}
@@ -520,7 +523,7 @@ sq{
             ec{"Rexhina"}
         }
         "America:Resolute"{
-            ec{"Rezolutë"}
+            ec{"Resolute"}
         }
         "America:Rio_Branco"{
             ec{"Rio-Branko"}
@@ -657,6 +660,9 @@ sq{
         "Asia:Ashgabat"{
             ec{"Ashgabat"}
         }
+        "Asia:Atyrau"{
+            ec{"Atirau"}
+        }
         "Asia:Baghdad"{
             ec{"Bagdad"}
         }
@@ -707,6 +713,9 @@ sq{
         }
         "Asia:Dushanbe"{
             ec{"Dushanbe"}
+        }
+        "Asia:Famagusta"{
+            ec{"Famagustë"}
         }
         "Asia:Gaza"{
             ec{"Gaza"}
@@ -769,13 +778,13 @@ sq{
             ec{"Makasar"}
         }
         "Asia:Manila"{
-            ec{"Manila"}
+            ec{"Manilë"}
         }
         "Asia:Muscat"{
             ec{"Muskat"}
         }
         "Asia:Nicosia"{
-            ec{"Nikozi"}
+            ec{"Nikozia"}
         }
         "Asia:Novokuznetsk"{
             ec{"Novokuznetsk"}
@@ -895,7 +904,7 @@ sq{
             ec{"Madeira"}
         }
         "Atlantic:Reykjavik"{
-            ec{"Rejkjavik"}
+            ec{"Reikjavik"}
         }
         "Atlantic:South_Georgia"{
             ec{"Xhorxha e Jugut"}
@@ -931,7 +940,7 @@ sq{
             ec{"Lindëmen"}
         }
         "Australia:Lord_Howe"{
-            ec{"Lord Houi"}
+            ec{"Lord-Houi"}
         }
         "Australia:Melbourne"{
             ec{"Melburn"}
@@ -967,7 +976,7 @@ sq{
             ec{"Berlin"}
         }
         "Europe:Bratislava"{
-            ec{"Bratisllavë"}
+            ec{"Bratislavë"}
         }
         "Europe:Brussels"{
             ec{"Bruksel"}
@@ -1076,6 +1085,9 @@ sq{
         "Europe:Sarajevo"{
             ec{"Sarajevë"}
         }
+        "Europe:Saratov"{
+            ec{"Saratov"}
+        }
         "Europe:Simferopol"{
             ec{"Simferopol"}
         }
@@ -1125,7 +1137,7 @@ sq{
             ec{"Zaporozhje"}
         }
         "Europe:Zurich"{
-            ec{"Cyrih"}
+            ec{"Zyrih"}
         }
         "Indian:Antananarivo"{
             ec{"Antananarivo"}
@@ -1325,14 +1337,14 @@ sq{
             ls{"Ora standarde e SHBA-së Lindore"}
         }
         "meta:America_Mountain"{
-            ld{"Ora verore amerikane e Brezit Malor"}
-            lg{"Ora amerikane e Brezit Malor"}
-            ls{"Ora standarde amerikane e Brezit Malor"}
+            ld{"Ora verore e Territoreve Amerikane të Brezit Malor"}
+            lg{"Ora e Territoreve Amerikane të Brezit Malor"}
+            ls{"Ora standarde e Territoreve Amerikane të Brezit Malor"}
         }
         "meta:America_Pacific"{
-            ld{"Ora verore amerikane e Bregut të Paqësorit"}
-            lg{"Ora amerikane e Bregut të Paqësorit"}
-            ls{"Ora standarde amerikane e Bregut të Paqësorit"}
+            ld{"Ora verore e Territoreve Amerikane të Bregut të Paqësorit"}
+            lg{"Ora e Territoreve Amerikane të Bregut të Paqësorit"}
+            ls{"Ora standarde e Territoreve Amerikane të Bregut të Paqësorit"}
         }
         "meta:Anadyr"{
             ld{"Ora verore e Anadirit"}
@@ -1532,7 +1544,7 @@ sq{
             ls{"Ora e Territoreve Jugore dhe Antarktike Franceze"}
         }
         "meta:GMT"{
-            ls{"Ora e Meridianit të Grinuiçit"}
+            ls{"Ora e Grinuiçit"}
         }
         "meta:Galapagos"{
             ls{"Ora e Galapagosit"}
@@ -1675,7 +1687,7 @@ sq{
             ls{"Ora e Malajzisë"}
         }
         "meta:Maldives"{
-            ls{"Ora e Maldivit"}
+            ls{"Ora e Maldiveve"}
         }
         "meta:Marquesas"{
             ls{"Ora e Ishujve Markezë"}
@@ -1697,9 +1709,9 @@ sq{
             ls{"Ora standarde e Meksikës Veriperëndimore"}
         }
         "meta:Mexico_Pacific"{
-            ld{"Ora verore meksikane e Bregut të Paqësorit"}
-            lg{"Ora meksikane e Bregut të Paqësorit"}
-            ls{"Ora standarde meksikane e Bregut të Paqësorit"}
+            ld{"Ora verore e Territoreve Meksikane të Bregut të Paqësorit"}
+            lg{"Ora e Territoreve Meksikane të Bregut të Paqësorit"}
+            ls{"Ora standarde e Territoreve Meksikane të Bregut të Paqësorit"}
         }
         "meta:Mongolia"{
             ld{"Ora verore e Ulan-Batorit"}
@@ -1789,9 +1801,9 @@ sq{
             ls{"Ora e Ishujve Feniks"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Ora verore e Shën-Pier dhe Mikuelon"}
-            lg{"Ora e Shën-Pier dhe Mikuelon"}
-            ls{"Ora standarde e Shën-Pier dhe Mikuelon"}
+            ld{"Ora verore e Shën-Pier dhe Mikelon"}
+            lg{"Ora e Shën-Pier dhe Mikelon"}
+            ls{"Ora standarde e Shën-Pier dhe Mikelon"}
         }
         "meta:Pitcairn"{
             ls{"Ora e Pitkernit"}
@@ -1829,7 +1841,7 @@ sq{
             ls{"Ora standarde e Samoas"}
         }
         "meta:Seychelles"{
-            ls{"Ora e Sishelës"}
+            ls{"Ora e Sejshelleve"}
         }
         "meta:Singapore"{
             ls{"Ora e Singaporit"}
@@ -1924,8 +1936,8 @@ sq{
             ls{"Ora standarde e Ekaterinburgut"}
         }
         fallbackFormat{"{1} ({0})"}
-        gmtFormat{"Ora e Grinuiçit: {0}"}
-        gmtZeroFormat{"Ora e Grinuiçit"}
+        gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Ora: {0}"}
         regionFormatDaylight{"Ora verore: {0}"}

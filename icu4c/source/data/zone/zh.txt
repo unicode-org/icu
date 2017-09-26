@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.33"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -313,7 +313,7 @@ zh{
             ec{"格莱斯贝"}
         }
         "America:Godthab"{
-            ec{"戈特霍布"}
+            ec{"努克"}
         }
         "America:Goose_Bay"{
             ec{"古斯湾"}
@@ -507,6 +507,9 @@ zh{
         "America:Puerto_Rico"{
             ec{"波多黎各"}
         }
+        "America:Punta_Arenas"{
+            ec{"蓬塔阿雷纳斯"}
+        }
         "America:Rainy_River"{
             ec{"雷尼河"}
         }
@@ -657,6 +660,9 @@ zh{
         "Asia:Ashgabat"{
             ec{"阿什哈巴德"}
         }
+        "Asia:Atyrau"{
+            ec{"阿特劳"}
+        }
         "Asia:Baghdad"{
             ec{"巴格达"}
         }
@@ -707,6 +713,9 @@ zh{
         }
         "Asia:Dushanbe"{
             ec{"杜尚别"}
+        }
+        "Asia:Famagusta"{
+            ec{"法马古斯塔"}
         }
         "Asia:Gaza"{
             ec{"加沙"}
@@ -1076,6 +1085,9 @@ zh{
         "Europe:Sarajevo"{
             ec{"萨拉热窝"}
         }
+        "Europe:Saratov"{
+            ec{"萨拉托夫"}
+        }
         "Europe:Simferopol"{
             ec{"辛菲罗波尔"}
         }
@@ -1292,7 +1304,7 @@ zh{
             ls{"东部非洲时间"}
         }
         "meta:Africa_Southern"{
-            ls{"南部非洲时间"}
+            ls{"南非标准时间"}
         }
         "meta:Africa_Western"{
             ld{"西部非洲夏令时间"}

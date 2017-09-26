@@ -350,7 +350,7 @@ da{
         mzn{"mazenisk"}
         na{"nauru"}
         nan{"min-kinesisk"}
-        nap{"neapolitansk"}
+        nap{"napolitansk"}
         naq{"nama"}
         nb{"norsk bokmål"}
         nd{"nordndebele"}
@@ -456,7 +456,7 @@ da{
         sms{"skoltesamisk"}
         sn{"shona"}
         snk{"soninke"}
-        so{"somalisk"}
+        so{"somali"}
         sog{"sogdiansk"}
         sq{"albansk"}
         sr{"serbisk"}
@@ -475,7 +475,7 @@ da{
         swb{"shimaore"}
         syc{"klassisk syrisk"}
         syr{"syrisk"}
-        ta{"tamilsk"}
+        ta{"tamil"}
         te{"telugu"}
         tem{"temne"}
         teo{"teso"}
@@ -502,7 +502,7 @@ da{
         tsi{"tsimshisk"}
         tt{"tatarisk"}
         tum{"tumbuka"}
-        tvl{"tuvalu"}
+        tvl{"tuvaluansk"}
         tw{"twi"}
         twq{"tasawaq"}
         ty{"tahitiansk"}
@@ -575,7 +575,7 @@ da{
         Blis{"blissymboler"}
         Bopo{"bopomofo"}
         Brah{"bramisk"}
-        Brai{"brailleskrift"}
+        Brai{"punktskrift"}
         Bugi{"buginesisk"}
         Buhd{"buhid"}
         Cakm{"cakm"}
@@ -790,6 +790,7 @@ da{
         }
         collation{
             big5han{"sorteringsrækkefølge uforkortet kinesisk - Big5"}
+            compat{"tidligere sorteringsrækkefølge, kompatibilitet"}
             dictionary{"sorteringsrækkefølge for ordbog"}
             ducet{"Unicode-standardsortering"}
             eor{"europæisk sorteringsrækkefølge"}
@@ -807,8 +808,8 @@ da{
             zhuyin{"zhuyin-sorteringsrækkefølge"}
         }
         d0{
-            fwidth{"Fuld bredde"}
-            hwidth{"Halv bredde"}
+            fwidth{"fuld bredde"}
+            hwidth{"halv bredde"}
             npinyin{"Numerisk"}
         }
         hc{
@@ -955,19 +956,19 @@ da{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
-        all{"{0} — alle"}
+        all{"{0} – alle"}
         category-list{"{0}: {1}"}
-        compatibility{"{0} — kompatibilitet"}
-        enclosed{"{0} — lukket"}
-        extended{"{0} — udvidet"}
-        historic{"{0} — historisk"}
-        miscellaneous{"{0} — diverse"}
-        other{"{0} — andet"}
-        scripts{"skriftsystemer — {0}"}
+        compatibility{"{0} – kompatibilitet"}
+        enclosed{"{0} – lukket"}
+        extended{"{0} – udvidet"}
+        historic{"{0} – historisk"}
+        miscellaneous{"{0} – diverse"}
+        other{"{0} – andet"}
+        scripts{"skriftsystemer – {0}"}
         strokes{
-            one{"{0} streger"}
+            one{"{0} streg"}
             other{"{0} streger"}
         }
     }

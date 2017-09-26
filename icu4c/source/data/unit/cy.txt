@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 cy{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -206,12 +206,12 @@ cy{
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"litrau wrth y 100 cilometr"}
-                few{"{0} litr wrth y 100 cilometr"}
-                many{"{0} litr wrth y 100 cilometr"}
-                one{"{0} litr wrth y 100 cilometr"}
-                other{"{0} litr wrth y 100 cilometr"}
-                two{"{0} litr wrth y 100 cilometr"}
+                dnam{"litrau y 100 cilometr"}
+                few{"{0} litr y 100 cilometr"}
+                many{"{0} litr y 100 cilometr"}
+                one{"{0} litr y 100 cilometr"}
+                other{"{0} litr y 100 cilometr"}
+                two{"{0} litr y 100 cilometr"}
                 zero{"{0} litr wrth y 100 cilometr"}
             }
             liter-per-kilometer{
@@ -695,7 +695,7 @@ cy{
                 zero{"{0} milltir"}
             }
             mile-scandinavian{
-                dnam{"milltir Sgandinafia"}
+                dnam{"milltiroedd Sgandinafia"}
                 few{"{0} milltir Sgandinafia"}
                 many{"{0} milltir Sgandinafia"}
                 one{"{0} filltir Sgandinafia"}
@@ -747,6 +747,15 @@ cy{
                 other{"{0} picometr"}
                 two{"{0} bicometr"}
                 zero{"{0} picometr"}
+            }
+            point{
+                dnam{"pwyntiau"}
+                few{"{0} phwynt"}
+                many{"{0} phwynt"}
+                one{"{0} pwynt"}
+                other{"{0} pwynt"}
+                two{"{0} bwynt"}
+                zero{"{0} pwynt"}
             }
             yard{
                 dnam{"llathenni"}
@@ -894,7 +903,7 @@ cy{
                 zero{"{0} marchnerth"}
             }
             kilowatt{
-                dnam{"cilawatiau"}
+                dnam{"cilowatiau"}
                 few{"{0} chilowat"}
                 many{"{0} chilowat"}
                 one{"{0} cilowat"}
@@ -950,7 +959,7 @@ cy{
                 zero{"{0} modfedd o fercwri"}
             }
             millibar{
-                dnam{"milibarrau"}
+                dnam{"milibarau"}
                 few{"{0} milibar"}
                 many{"{0} milibar"}
                 one{"{0} milibar"}
@@ -1784,7 +1793,7 @@ cy{
                 zero{"{0}ly"}
             }
             meter{
-                dnam{"metr"}
+                dnam{"m"}
                 few{"{0}m"}
                 many{"{0}m"}
                 one{"{0}m"}
@@ -2043,13 +2052,13 @@ cy{
                 zero{"{0}mb"}
             }
             millimeter-of-mercury{
-                dnam{"mm Hg"}
-                few{"{0}mm Hg"}
-                many{"{0}mm Hg"}
-                one{"{0}mm Hg"}
-                other{"{0}mm Hg"}
-                two{"{0}mm Hg"}
-                zero{"{0}mm Hg"}
+                dnam{"mmHg"}
+                few{"{0}mmHg"}
+                many{"{0}mmHg"}
+                one{"{0}mmHg"}
+                other{"{0}mmHg"}
+                two{"{0}mmHg"}
+                zero{"{0}mmHg"}
             }
             pound-per-square-inch{
                 dnam{"psi"}
@@ -2487,10 +2496,10 @@ cy{
             }
         }
         coordinate{
-            east{"{0}dn"}
-            north{"{0}g"}
-            south{"{0}d"}
-            west{"{0}gn"}
+            east{"{0} dn"}
+            north{"{0} g"}
+            south{"{0} d"}
+            west{"{0} gn"}
         }
         digital{
             bit{
@@ -2905,12 +2914,12 @@ cy{
                 zero{"{0} bg"}
             }
             meter{
-                dnam{"metrau"}
+                dnam{"m"}
                 few{"{0} m"}
                 many{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
-                per{"{0} y metr"}
+                per{"{0}/m"}
                 two{"{0} m"}
                 zero{"{0} m"}
             }
@@ -2985,6 +2994,15 @@ cy{
                 other{"{0} pm"}
                 two{"{0} pm"}
                 zero{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                few{"{0} pt"}
+                many{"{0} pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+                two{"{0} pt"}
+                zero{"{0} pt"}
             }
             yard{
                 dnam{"llathenni"}
@@ -3197,13 +3215,13 @@ cy{
                 zero{"{0} mbar"}
             }
             millimeter-of-mercury{
-                dnam{"mm Hg"}
-                few{"{0} mm Hg"}
-                many{"{0} mm Hg"}
-                one{"{0} mm Hg"}
-                other{"{0} mm Hg"}
-                two{"{0} mm Hg"}
-                zero{"{0} mm Hg"}
+                dnam{"mmHg"}
+                few{"{0} mmHg"}
+                many{"{0} mmHg"}
+                one{"{0} mmHg"}
+                other{"{0} mmHg"}
+                two{"{0} mmHg"}
+                zero{"{0} mmHg"}
             }
             pound-per-square-inch{
                 dnam{"psi"}

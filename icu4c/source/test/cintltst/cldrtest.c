@@ -14,6 +14,7 @@
 #include "unicode/udat.h"
 #include "unicode/uscript.h"
 #include "unicode/ulocdata.h"
+#include "unicode/utf16.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "locmap.h"
@@ -743,7 +744,7 @@ TestConsistentCountryInfo(void) {
 static int32_t
 findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize,
                       USet * mergedExemplarSet,
-                      UBool ignoreNumbers, UChar* badCharPtr) {
+                      UBool ignoreNumbers, UChar32* badCharPtr) {
     UErrorCode errorCode = U_ZERO_ERROR;
     USet *exemplarSet;
     int32_t strIdx;
@@ -756,14 +757,16 @@ findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize
         return -1;
     }
 
-    for (strIdx = 0; strIdx < langSize; strIdx++) {
-        if (!uset_contains(exemplarSet, string[strIdx])
-            && string[strIdx] != 0x0020 && string[strIdx] != 0x00A0 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d && string[strIdx] != 0x0027 && string[strIdx] != 0x005B && string[strIdx] != 0x005D && string[strIdx] != 0x2019 && string[strIdx] != 0x0f0b
-            && string[strIdx] != 0x200C && string[strIdx] != 0x200D) {
-            if (!ignoreNumbers || (ignoreNumbers && (string[strIdx] < 0x30 || string[strIdx] > 0x39))) {
+    for (strIdx = 0; strIdx < langSize;) {
+        UChar32 testChar;
+        U16_NEXT(string, strIdx, langSize, testChar);
+        if (!uset_contains(exemplarSet, testChar)
+            && testChar != 0x0020 && testChar != 0x00A0 && testChar != 0x002e && testChar != 0x002c && testChar != 0x002d && testChar != 0x0027
+            && testChar != 0x005B && testChar != 0x005D && testChar != 0x2019 && testChar != 0x0f0b && testChar != 0x200C && testChar != 0x200D) {
+            if (!ignoreNumbers || (ignoreNumbers && (testChar < 0x30 || testChar > 0x39))) {
                 uset_close(exemplarSet);
                 if (badCharPtr) {
-                    *badCharPtr = string[strIdx];
+                    *badCharPtr = testChar;
                 }
                 return strIdx;
             }
@@ -958,7 +961,7 @@ static void VerifyTranslation(void) {
             UChar langBuffer[128];
             int32_t langSize;
             int32_t strIdx;
-            UChar badChar;
+            UChar32 badChar;
             langSize = uloc_getDisplayLanguage(currLoc, currLoc, langBuffer, UPRV_LENGTHOF(langBuffer), &errorCode);
             if (U_FAILURE(errorCode)) {
                 log_err("error uloc_getDisplayLanguage returned %s\n", u_errorName(errorCode));

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ru{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.12"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -132,7 +132,7 @@ ru{
             }
         }
         compound{
-            per{"{0} на {1}"}
+            per{"{0}/{1}"}
         }
         concentr{
             karat{
@@ -485,6 +485,13 @@ ru{
                 one{"{0} дециметр"}
                 other{"{0} дециметра"}
             }
+            fathom{
+                dnam{"морские сажени"}
+                few{"{0} морских сажени"}
+                many{"{0} морских саженей"}
+                one{"{0} морская сажень"}
+                other{"{0} морской сажени"}
+            }
             foot{
                 dnam{"футы"}
                 few{"{0} фута"}
@@ -492,6 +499,13 @@ ru{
                 one{"{0} фут"}
                 other{"{0} фута"}
                 per{"{0} на фут"}
+            }
+            furlong{
+                dnam{"фурлонги"}
+                few{"{0} фурлонга"}
+                many{"{0} фурлонгов"}
+                one{"{0} фурлонг"}
+                other{"{0} фурлонга"}
             }
             inch{
                 dnam{"дюймы"}
@@ -539,7 +553,7 @@ ru{
                 other{"{0} мили"}
             }
             mile-scandinavian{
-                dnam{"скандинавская миля"}
+                dnam{"скандинавские мили"}
                 few{"{0} скандинавские мили"}
                 many{"{0} скандинавских миль"}
                 one{"{0} скандинавская миля"}
@@ -579,6 +593,13 @@ ru{
                 many{"{0} пикометров"}
                 one{"{0} пикометр"}
                 other{"{0} пикометра"}
+            }
+            point{
+                dnam{"пункты"}
+                few{"{0} пункта"}
+                many{"{0} пунктов"}
+                one{"{0} пункт"}
+                other{"{0} пункта"}
             }
             yard{
                 dnam{"ярды"}
@@ -664,6 +685,13 @@ ru{
                 one{"{0} фунт"}
                 other{"{0} фунта"}
                 per{"{0} на фунт"}
+            }
+            stone{
+                dnam{"стоуны"}
+                few{"{0} стоуна"}
+                many{"{0} стоунов"}
+                one{"{0} стоун"}
+                other{"{0} стоуна"}
             }
             ton{
                 dnam{"американские тонны"}
@@ -993,10 +1021,18 @@ ru{
     unitsNarrow{
         acceleration{
             g-force{
+                dnam{"g"}
                 few{"{0} G"}
                 many{"{0} G"}
                 one{"{0} G"}
                 other{"{0} G"}
+            }
+            meter-per-second-squared{
+                dnam{"м/с²"}
+                few{"{0} м/с²"}
+                many{"{0} м/с²"}
+                one{"{0} м/с²"}
+                other{"{0} м/с²"}
             }
         }
         angle{
@@ -1076,19 +1112,35 @@ ru{
             west{"{0} з. д."}
         }
         duration{
+            century{
+                dnam{"в."}
+                few{"{0} в."}
+                many{"{0} в."}
+                one{"{0} в."}
+                other{"{0} в."}
+            }
             day{
                 dnam{"д."}
                 few{"{0} д."}
                 many{"{0} д."}
                 one{"{0} д."}
                 other{"{0} д."}
+                per{"{0}/д."}
             }
             hour{
                 dnam{"ч"}
-                few{"{0} ч"}
-                many{"{0} ч"}
-                one{"{0} ч"}
-                other{"{0} ч"}
+                few{"{0} ч."}
+                many{"{0} ч."}
+                one{"{0} ч."}
+                other{"{0} ч."}
+                per{"{0}/ч."}
+            }
+            microsecond{
+                dnam{"мкс"}
+                few{"{0} мкс"}
+                many{"{0} мкс"}
+                one{"{0} мкс"}
+                other{"{0} мкс"}
             }
             millisecond{
                 dnam{"мс"}
@@ -1099,10 +1151,11 @@ ru{
             }
             minute{
                 dnam{"мин"}
-                few{"{0} мин"}
-                many{"{0} мин"}
-                one{"{0} мин"}
-                other{"{0} мин"}
+                few{"{0} мин."}
+                many{"{0} мин."}
+                one{"{0} мин."}
+                other{"{0} мин."}
+                per{"{0}/мин."}
             }
             month{
                 dnam{"м."}
@@ -1110,13 +1163,22 @@ ru{
                 many{"{0} м."}
                 one{"{0} м."}
                 other{"{0} м."}
+                per{"{0}/м."}
+            }
+            nanosecond{
+                dnam{"нс"}
+                few{"{0} нс"}
+                many{"{0} нс"}
+                one{"{0} нс"}
+                other{"{0} нс"}
             }
             second{
                 dnam{"c"}
-                few{"{0} с"}
-                many{"{0} с"}
-                one{"{0} с"}
-                other{"{0} с"}
+                few{"{0} с."}
+                many{"{0} с."}
+                one{"{0} с."}
+                other{"{0} с."}
+                per{"{0}/c"}
             }
             week{
                 dnam{"н."}
@@ -1124,6 +1186,7 @@ ru{
                 many{"{0} н."}
                 one{"{0} н."}
                 other{"{0} н."}
+                per{"{0}/н."}
             }
             year{
                 dnam{"г."}
@@ -1131,27 +1194,61 @@ ru{
                 many{"{0} л."}
                 one{"{0} г."}
                 other{"{0} г."}
+                per{"{0}/г."}
             }
         }
         length{
+            astronomical-unit{
+                dnam{"а. е."}
+                few{"{0} а. е."}
+                many{"{0} а. е."}
+                one{"{0} а. е."}
+                other{"{0} а. е."}
+            }
             centimeter{
                 dnam{"см"}
                 few{"{0} см"}
                 many{"{0} см"}
                 one{"{0} см"}
                 other{"{0} см"}
+                per{"{0}/см"}
+            }
+            decimeter{
+                dnam{"дм"}
+                few{"{0} дм"}
+                many{"{0} дм"}
+                one{"{0} дм"}
+                other{"{0} дм"}
+            }
+            fathom{
+                dnam{"м. саж."}
+                few{"{0} м. саж."}
+                many{"{0} м. саж."}
+                one{"{0} м. саж."}
+                other{"{0} м. саж."}
             }
             foot{
+                dnam{"фт"}
                 few{"{0} фута"}
                 many{"{0} футов"}
                 one{"{0} фут"}
                 other{"{0} фута"}
+                per{"{0}/фт"}
+            }
+            furlong{
+                dnam{"фрл"}
+                few{"{0} фрл"}
+                many{"{0} фрл"}
+                one{"{0} фрл"}
+                other{"{0} фрл"}
             }
             inch{
+                dnam{"дюйм."}
                 few{"{0} дюйма"}
                 many{"{0} дюймов"}
                 one{"{0} дюйм"}
                 other{"{0} дюйма"}
+                per{"{0}/дюйм."}
             }
             kilometer{
                 dnam{"км"}
@@ -1159,6 +1256,7 @@ ru{
                 many{"{0} км"}
                 one{"{0} км"}
                 other{"{0} км"}
+                per{"{0}/км"}
             }
             light-year{
                 dnam{"св. годы"}
@@ -1173,12 +1271,28 @@ ru{
                 many{"{0} м"}
                 one{"{0} м"}
                 other{"{0} м"}
+                per{"{0}/м"}
+            }
+            micrometer{
+                dnam{"мкм"}
+                few{"{0} мкм"}
+                many{"{0} мкм"}
+                one{"{0} мкм"}
+                other{"{0} мкм"}
             }
             mile{
+                dnam{"мл."}
                 few{"{0} миль"}
                 many{"{0} миль"}
                 one{"{0} миля"}
                 other{"{0} мили"}
+            }
+            mile-scandinavian{
+                dnam{"ск. мл."}
+                few{"{0} ск. мл."}
+                many{"{0} ск. мл."}
+                one{"{0} ск. мл."}
+                other{"{0} ск. мл."}
             }
             millimeter{
                 dnam{"мм"}
@@ -1187,13 +1301,43 @@ ru{
                 one{"{0} мм"}
                 other{"{0} мм"}
             }
+            nanometer{
+                dnam{"нм"}
+                few{"{0} нм"}
+                many{"{0} нм"}
+                one{"{0} нм"}
+                other{"{0} нм"}
+            }
+            nautical-mile{
+                dnam{"мор. мили"}
+                few{"{0} м. мл."}
+                many{"{0} м. мл."}
+                one{"{0} м. мл."}
+                other{"{0} м. мл."}
+            }
+            parsec{
+                dnam{"пк"}
+                few{"{0} пк"}
+                many{"{0} пк"}
+                one{"{0} пк"}
+                other{"{0} пк"}
+            }
             picometer{
+                dnam{"пм"}
                 few{"{0} pm"}
                 many{"{0} pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
             }
+            point{
+                dnam{"пкт"}
+                few{"{0} пкт"}
+                many{"{0} пкт"}
+                one{"{0} пкт"}
+                other{"{0} пкт"}
+            }
             yard{
+                dnam{"ярд."}
                 few{"{0} ярда"}
                 many{"{0} ярдов"}
                 one{"{0} ярд"}
@@ -1201,12 +1345,20 @@ ru{
             }
         }
         mass{
+            carat{
+                dnam{"кар"}
+                few{"{0} кар"}
+                many{"{0} кар"}
+                one{"{0} кар"}
+                other{"{0} кар"}
+            }
             gram{
                 dnam{"г"}
                 few{"{0} г"}
                 many{"{0} г"}
                 one{"{0} г"}
                 other{"{0} г"}
+                per{"{0}/г"}
             }
             kilogram{
                 dnam{"кг"}
@@ -1214,18 +1366,65 @@ ru{
                 many{"{0} кг"}
                 one{"{0} кг"}
                 other{"{0} кг"}
+                per{"{0}/кг"}
+            }
+            metric-ton{
+                dnam{"т"}
+                few{"{0} т"}
+                many{"{0} т"}
+                one{"{0} т"}
+                other{"{0} т"}
+            }
+            microgram{
+                dnam{"мкг"}
+                few{"{0} мкг"}
+                many{"{0} мкг"}
+                one{"{0} мкг"}
+                other{"{0} мкг"}
+            }
+            milligram{
+                dnam{"мг"}
+                few{"{0} мг"}
+                many{"{0} мг"}
+                one{"{0} мг"}
+                other{"{0} мг"}
             }
             ounce{
+                dnam{"унц."}
                 few{"{0} oz"}
                 many{"{0} oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
+                per{"{0}/унц."}
+            }
+            ounce-troy{
+                dnam{"тр. унц."}
+                few{"{0} тр. унц."}
+                many{"{0} тр. унц."}
+                one{"{0} тр. унц."}
+                other{"{0} тр. унц."}
             }
             pound{
+                dnam{"фнт"}
                 few{"{0} lb"}
                 many{"{0} lb"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+                per{"{0}/фнт"}
+            }
+            stone{
+                dnam{"стн"}
+                few{"{0} стн"}
+                many{"{0} стн"}
+                one{"{0} стн"}
+                other{"{0} стн"}
+            }
+            ton{
+                dnam{"ам. т"}
+                few{"{0} ам. т"}
+                many{"{0} ам. т"}
+                one{"{0} ам. т"}
+                other{"{0} ам. т"}
             }
         }
         power{
@@ -1250,22 +1449,32 @@ ru{
         }
         pressure{
             hectopascal{
+                dnam{"гПа"}
                 few{"{0} гПа"}
                 many{"{0} гПа"}
                 one{"{0} гПа"}
                 other{"{0} гПа"}
             }
             inch-hg{
+                dnam{"д. рт. ст."}
                 few{"{0} inHg"}
                 many{"{0} inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
             }
             millibar{
+                dnam{"мбар"}
                 few{"{0} мбар"}
                 many{"{0} мбар"}
                 one{"{0} мбар"}
                 other{"{0} мбар"}
+            }
+            millimeter-of-mercury{
+                dnam{"мм рт. ст."}
+                few{"{0} мм рт. ст."}
+                many{"{0} мм рт. ст."}
+                one{"{0} мм рт. ст."}
+                other{"{0} мм рт. ст."}
             }
         }
         speed{
@@ -1276,13 +1485,22 @@ ru{
                 one{"{0} км/ч"}
                 other{"{0} км/ч"}
             }
+            knot{
+                dnam{"уз"}
+                few{"{0} уз"}
+                many{"{0} уз"}
+                one{"{0} уз"}
+                other{"{0} уз"}
+            }
             meter-per-second{
+                dnam{"м/с"}
                 few{"{0} м/с"}
                 many{"{0} м/с"}
                 one{"{0} м/с"}
                 other{"{0} м/с"}
             }
             mile-per-hour{
+                dnam{"мили/час"}
                 few{"{0} миль/ч"}
                 many{"{0} миль/ч"}
                 one{"{0} миль/ч"}
@@ -1298,10 +1516,25 @@ ru{
                 other{"{0} °C"}
             }
             fahrenheit{
+                dnam{"°F"}
                 few{"{0}°F"}
                 many{"{0}°F"}
                 one{"{0}°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"°"}
+                few{"{0}°"}
+                many{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            kelvin{
+                dnam{"K"}
+                few{"{0} K"}
+                many{"{0} K"}
+                one{"{0} K"}
+                other{"{0} K"}
             }
         }
         volume{
@@ -1609,10 +1842,10 @@ ru{
             }
             hour{
                 dnam{"ч"}
-                few{"{0} ч"}
-                many{"{0} ч"}
-                one{"{0} ч"}
-                other{"{0} ч"}
+                few{"{0} ч."}
+                many{"{0} ч."}
+                one{"{0} ч."}
+                other{"{0} ч."}
                 per{"{0}/ч"}
             }
             microsecond{
@@ -1631,10 +1864,10 @@ ru{
             }
             minute{
                 dnam{"мин"}
-                few{"{0} мин"}
-                many{"{0} мин"}
-                one{"{0} мин"}
-                other{"{0} мин"}
+                few{"{0} мин."}
+                many{"{0} мин."}
+                one{"{0} мин."}
+                other{"{0} мин."}
                 per{"{0}/мин"}
             }
             month{
@@ -1654,10 +1887,10 @@ ru{
             }
             second{
                 dnam{"с"}
-                few{"{0} с"}
-                many{"{0} с"}
-                one{"{0} с"}
-                other{"{0} с"}
+                few{"{0} с."}
+                many{"{0} с."}
+                one{"{0} с."}
+                other{"{0} с."}
                 per{"{0}/c"}
             }
             week{
@@ -1804,13 +2037,27 @@ ru{
                 one{"{0} дм"}
                 other{"{0} дм"}
             }
+            fathom{
+                dnam{"мор. сажени"}
+                few{"{0} мор. сажени"}
+                many{"{0} мор. саженей"}
+                one{"{0} мор. сажень"}
+                other{"{0} мор. сажени"}
+            }
             foot{
-                dnam{"фут."}
-                few{"{0} фут."}
-                many{"{0} фут."}
-                one{"{0} фут"}
-                other{"{0} фут."}
-                per{"{0}/фут"}
+                dnam{"фт"}
+                few{"{0} фт"}
+                many{"{0} фт"}
+                one{"{0} фт"}
+                other{"{0} фт"}
+                per{"{0}/фт"}
+            }
+            furlong{
+                dnam{"фурлонги"}
+                few{"{0} фурл."}
+                many{"{0} фурл."}
+                one{"{0} фурл."}
+                other{"{0} фурл."}
             }
             inch{
                 dnam{"дюйм."}
@@ -1899,6 +2146,13 @@ ru{
                 one{"{0} пм"}
                 other{"{0} пм"}
             }
+            point{
+                dnam{"пкт"}
+                few{"{0} пкт"}
+                many{"{0} пкт"}
+                one{"{0} пкт"}
+                other{"{0} пкт"}
+            }
             yard{
                 dnam{"ярд."}
                 few{"{0} ярд."}
@@ -1983,6 +2237,13 @@ ru{
                 one{"{0} фунт."}
                 other{"{0} фунт."}
                 per{"{0}/фунт"}
+            }
+            stone{
+                dnam{"стоуны"}
+                few{"{0} стоуна"}
+                many{"{0} стоунов"}
+                one{"{0} стоун"}
+                other{"{0} стоуна"}
             }
             ton{
                 dnam{"амер. т"}
@@ -2099,7 +2360,7 @@ ru{
                 dnam{"мили/час"}
                 few{"{0} мили/час"}
                 many{"{0} миль/час"}
-                one{"{0} миль/час"}
+                one{"{0} миля/час"}
                 other{"{0} мили/час"}
             }
         }
@@ -2187,10 +2448,10 @@ ru{
             }
             cubic-mile{
                 dnam{"миля³"}
-                few{"{0} миля³"}
-                many{"{0} миля³"}
+                few{"{0} мили³"}
+                many{"{0} миль³"}
                 one{"{0} миля³"}
-                other{"{0} миля³"}
+                other{"{0} мили³"}
             }
             cubic-yard{
                 dnam{"ярд³"}

@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sr_Latn{
     %%Parent{"root"}
-    Version{"2.1.34.51"}
+    Version{"2.1.37.8"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -140,7 +140,7 @@ sr_Latn{
             }
             part-per-million{
                 dnam{"čestica na milion"}
-                few{"{0} čestica na milion"}
+                few{"{0} čestice na milion"}
                 one{"{0} čestica na milion"}
                 other{"{0} čestica na milion"}
             }
@@ -505,6 +505,12 @@ sr_Latn{
                 few{"{0} pikometra"}
                 one{"{0} pikometar"}
                 other{"{0} pikometara"}
+            }
+            point{
+                dnam{"pt"}
+                few{"{0} pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"jardi"}
@@ -1015,7 +1021,7 @@ sr_Latn{
                 other{"{0} sg"}
             }
             meter{
-                dnam{"metar"}
+                dnam{"m"}
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
@@ -1121,9 +1127,9 @@ sr_Latn{
         temperature{
             celsius{
                 dnam{"°C"}
-                few{"{0}°"}
-                one{"{0}°"}
-                other{"{0}°"}
+                few{"{0}°C"}
+                one{"{0}°C"}
+                other{"{0}°C"}
             }
             fahrenheit{
                 few{"{0}°F"}
@@ -1594,7 +1600,7 @@ sr_Latn{
                 other{"{0} sg"}
             }
             meter{
-                dnam{"metri"}
+                dnam{"m"}
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
@@ -1647,6 +1653,12 @@ sr_Latn{
                 few{"{0} pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                few{"{0} pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"jardi"}
@@ -1737,10 +1749,10 @@ sr_Latn{
                 other{"{0} GW"}
             }
             horsepower{
-                dnam{"ks"}
-                few{"{0} ks"}
-                one{"{0} ks"}
-                other{"{0} ks"}
+                dnam{"hp"}
+                few{"{0} hp"}
+                one{"{0} hp"}
+                other{"{0} hp"}
             }
             kilowatt{
                 dnam{"kW"}
@@ -1807,10 +1819,10 @@ sr_Latn{
                 other{"{0} km/h"}
             }
             knot{
-                dnam{"čv"}
-                few{"{0} čv"}
-                one{"{0} čv"}
-                other{"{0} čv"}
+                dnam{"kn"}
+                few{"{0} kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
             }
             meter-per-second{
                 dnam{"metri u sekundi"}

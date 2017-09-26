@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 yue_Hans{
     %%Parent{"root"}
-    Version{"2.0"}
+    Version{"2.1.37.8"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -508,6 +508,9 @@ yue_Hans{
         "America:Puerto_Rico"{
             ec{"波多黎各"}
         }
+        "America:Punta_Arenas"{
+            ec{"蓬塔阿雷纳斯"}
+        }
         "America:Rainy_River"{
             ec{"雨河镇"}
         }
@@ -658,6 +661,9 @@ yue_Hans{
         "Asia:Ashgabat"{
             ec{"阿什哈巴特"}
         }
+        "Asia:Atyrau"{
+            ec{"阿特劳"}
+        }
         "Asia:Baghdad"{
             ec{"巴格达"}
         }
@@ -708,6 +714,9 @@ yue_Hans{
         }
         "Asia:Dushanbe"{
             ec{"杜桑贝"}
+        }
+        "Asia:Famagusta"{
+            ec{"法马古斯塔"}
         }
         "Asia:Gaza"{
             ec{"加萨"}
@@ -943,6 +952,9 @@ yue_Hans{
         "Australia:Sydney"{
             ec{"雪梨"}
         }
+        "Etc:UTC"{
+            ls{"协调世界时间"}
+        }
         "Etc:Unknown"{
             ec{"未知城市"}
         }
@@ -1073,6 +1085,9 @@ yue_Hans{
         }
         "Europe:Sarajevo"{
             ec{"塞拉耶佛"}
+        }
+        "Europe:Saratov"{
+            ec{"萨拉托夫"}
         }
         "Europe:Simferopol"{
             ec{"辛非洛浦"}
@@ -1796,6 +1811,9 @@ yue_Hans{
         }
         "meta:Ponape"{
             ls{"波纳佩时间"}
+        }
+        "meta:Pyongyang"{
+            ls{"平壤时间"}
         }
         "meta:Qyzylorda"{
             ld{"克孜勒奥尔达夏令时间"}

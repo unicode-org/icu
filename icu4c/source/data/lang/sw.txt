@@ -14,7 +14,7 @@ sw{
         collation{"Mpangilio"}
         currency{"Sarafu"}
         hc{"Kipindi cha saa (12 au 24)"}
-        lb{"lb"}
+        lb{"Mtindo wa Kukata Mstari"}
         ms{"Mfumo wa Vipimo"}
         numbers{"Nambari"}
         timezone{"Ukanda Saa"}
@@ -39,7 +39,7 @@ sw{
         ang{"Kiingereza cha Kale"}
         anp{"Kiangika"}
         ar{"Kiarabu"}
-        ar_001{"Kiarabu Sanifu cha Kisasa"}
+        ar_001{"Kiarabu sanifu"}
         arc{"Kiaramu"}
         arn{"Kimapuche"}
         arp{"Kiarapaho"}
@@ -113,14 +113,14 @@ sw{
         dzg{"Kidazaga"}
         ebu{"Kiembu"}
         ee{"Kiewe"}
-        efi{"Kiefiki"}
+        efi{"Kiefik"}
         egy{"Kimisri"}
         eka{"Kiekajuk"}
         el{"Kigiriki"}
         en{"Kiingereza"}
+        en_CA{"Kiingereza (Canada)"}
         eo{"Kiesperanto"}
         es{"Kihispania"}
-        es_ES{"Kihispania (Uhispania)"}
         es_MX{"Kihispania (Mexico)"}
         et{"Kiestonia"}
         eu{"Kibasque"}
@@ -140,7 +140,7 @@ sw{
         fur{"Kifriulian"}
         fy{"Kifrisia cha Magharibi"}
         ga{"Kiayalandi"}
-        gaa{"Kiga"}
+        gaa{"Ga"}
         gag{"Kigagauz"}
         gba{"Kigbaya"}
         gd{"Kigaeli cha Uskoti"}
@@ -176,6 +176,7 @@ sw{
         ig{"Kiigbo"}
         ii{"Sichuan Yi"}
         ilo{"Kiilocano"}
+        inh{"Kiingush"}
         io{"Kiido"}
         is{"Kiaisilandi"}
         it{"Kiitaliano"}
@@ -190,6 +191,7 @@ sw{
         kac{"Kachin"}
         kaj{"Kijju"}
         kam{"Kikamba"}
+        kbd{"Kikabardian"}
         kbl{"Kikanembu"}
         kcg{"Kityap"}
         kde{"Kimakonde"}
@@ -229,6 +231,7 @@ sw{
         lag{"Kirangi"}
         lam{"Lamba"}
         lb{"Kilasembagi"}
+        lez{"Kilezighian"}
         lg{"Kiganda"}
         li{"Limburgish"}
         lkt{"Kilakota"}
@@ -259,6 +262,7 @@ sw{
         mg{"Kimalagasi"}
         mgh{"Kimakhuwa-Meetto"}
         mgo{"Kimeta"}
+        mh{"Kimashale"}
         mi{"Kimaori"}
         mic{"Mi’kmaq"}
         min{"Kiminangkabau"}
@@ -274,18 +278,20 @@ sw{
         mua{"Kimundang"}
         mul{"Lugha Nyingi"}
         mus{"Kikriki"}
+        mwl{"Kimirandi"}
         my{"Kiburma"}
         myv{"Kierzya"}
         mzn{"Kimazanderani"}
         na{"Kinauru"}
         nap{"Kinapoli"}
         naq{"Kinama"}
-        nb{"Kinorwe cha Bokmål"}
+        nb{"Kinorwe cha Bokmal"}
         nd{"Kindebele cha Kaskazini"}
         nds{"Kisaksoni"}
         ne{"Kinepali"}
         new{"Kinewari"}
         ng{"Kindonga"}
+        nia{"Kiniasi"}
         niu{"Kiniuea"}
         nl{"Kiholanzi"}
         nl_BE{"Kiflemi"}
@@ -314,12 +320,12 @@ sw{
         pam{"Kipampanga"}
         pap{"Kipapiamento"}
         pau{"Kipalau"}
+        pcm{"Pijini ya Nigeria"}
         peo{"Kiajemi cha Kale"}
         pl{"Kipolandi"}
         prg{"Kiprussia"}
         ps{"Kipashto"}
         pt{"Kireno"}
-        pt_BR{"Kireno (Brazil)"}
         qu{"Kiquechua"}
         quc{"Kʼicheʼ"}
         rap{"Kirapanui"}
@@ -332,7 +338,7 @@ sw{
         ru{"Kirusi"}
         rup{"Kiaromania"}
         rw{"Kinyarwanda"}
-        rwk{"Kirwa"}
+        rwk{"Lugha ya Rwa"}
         sa{"Kisanskriti"}
         sad{"Kisandawe"}
         sah{"Kisakha"}
@@ -413,7 +419,7 @@ sw{
         vai{"Kivai"}
         ve{"Kivenda"}
         vi{"Kivietinamu"}
-        vo{"Kivolapük"}
+        vo{"Kivolapuk"}
         vun{"Kivunjo"}
         wa{"Walloon"}
         wae{"Walser"}
@@ -430,7 +436,7 @@ sw{
         yi{"Kiyiddi"}
         yo{"Kiyoruba"}
         yue{"Kikantoni"}
-        zgh{"Tamaziti Sanifu ya Kimoroko"}
+        zgh{"Kiberber Sanifu cha Moroko"}
         zh{"Kichina"}
         zh_Hans{"Kichina (Kilichorahisishwa)"}
         zh_Hant{"Kichina cha Jadi"}
@@ -441,6 +447,7 @@ sw{
     }
     Languages%short{
         az{"Kiazeri"}
+        en_GB{"Kiingereza (UK)"}
         en_US{"Kiingereza (US)"}
     }
     Languages%variant{
@@ -581,17 +588,17 @@ sw{
             h24{"Kipindi cha saa 24 (1–24)"}
         }
         lb{
-            loose{"loose"}
-            normal{"normal"}
-            strict{"strict"}
+            loose{"Mtindo Pana wa Kukata Mstari"}
+            normal{"Mtindo wa Kawaida wa Kukata Mstari"}
+            strict{"Mtindo Finyu wa Kukata Mstari"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"Mtindo wa kunukuu wa US BGN"}
+            ungegn{"Mtindo wa kunukuu wa UN GEGN"}
         }
         ms{
             metric{"Mfumo wa Metriki"}
-            uksystem{"mfumo wa UK"}
+            uksystem{"Mfumo wa UK"}
             ussystem{"Mfumo wa US"}
         }
         numbers{
@@ -604,7 +611,7 @@ sw{
             ethi{"Nambari za Kiethiopia"}
             finance{"Tarakimu za Kifedha"}
             fullwide{"Nambari za Upana Kamili"}
-            geor{"Nambari za Kijojia"}
+            geor{"Nambari za Kigeorgia"}
             grek{"Nambari za Kigiriki"}
             greklow{"Nambari Ndogo za Kigiriki"}
             gujr{"Nambari za Kigujarati"}
@@ -637,17 +644,21 @@ sw{
             vaii{"Dijiti za Vai"}
         }
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.34"}
     characterLabelPattern{
-        all{"{0} — Zote"}
+        all{"{0} — zote"}
         category-list{"{0}: {1}"}
-        compatibility{"{0} — Uwiano"}
-        enclosed{"{0} — Finyu"}
-        extended{"{0} — Pana"}
-        historic{"{0} — Ya kihistoria"}
-        miscellaneous{"{0} — Ziada"}
-        other{"{0} — Nyingine"}
-        scripts{"Hati — {0}"}
+        compatibility{"{0} — uwiano"}
+        enclosed{"{0} — finyu"}
+        extended{"{0} — pana"}
+        historic{"{0} — ya kihistoria"}
+        miscellaneous{"{0} — ziada"}
+        other{"{0} — nyingine"}
+        scripts{"hati — {0}"}
+        strokes{
+            one{"mshazari {0}"}
+            other{"mishazari {0}"}
+        }
     }
     codePatterns{
         language{"{0}"}

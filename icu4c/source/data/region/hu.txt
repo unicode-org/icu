@@ -106,6 +106,7 @@ hu{
         ES{"Spanyolország"}
         ET{"Etiópia"}
         EU{"Európai Unió"}
+        EZ{"Eurózóna"}
         FI{"Finnország"}
         FJ{"Fidzsi"}
         FK{"Falkland-szigetek"}
@@ -247,7 +248,7 @@ hu{
         SO{"Szomália"}
         SR{"Suriname"}
         SS{"Dél-Szudán"}
-        ST{"Sao Tomé és Príncipe"}
+        ST{"São Tomé és Príncipe"}
         SV{"Salvador"}
         SX{"Sint Maarten"}
         SY{"Szíria"}
@@ -271,8 +272,8 @@ hu{
         TZ{"Tanzánia"}
         UA{"Ukrajna"}
         UG{"Uganda"}
-        UM{"Az Amerikai Egyesült Államok lakatlan külbirtokai"}
-        UN{"ENSZ"}
+        UM{"Az USA lakatlan külbirtokai"}
+        UN{"Egyesült Nemzetek Szervezete"}
         US{"Egyesült Államok"}
         UY{"Uruguay"}
         UZ{"Üzbegisztán"}
@@ -304,8 +305,11 @@ hu{
     Countries%variant{
         CD{"Kongó (KDK)"}
         CG{"Kongó (Köztársaság)"}
+        CI{"CI"}
+        CZ{"Cseh Köztársaság"}
         FK{"Falkland-szigetek (Malvin-szigetek)"}
         MK{"Macedónia (MVJK)"}
+        TL{"Timor-Leste"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
 }

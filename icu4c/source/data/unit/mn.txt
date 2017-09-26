@@ -1,10 +1,10 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 mn{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
+        hm{"hh:mm"}
+        hms{"hh:mm:ss"}
         ms{"m:ss"}
     }
     units{
@@ -429,6 +429,11 @@ mn{
                 dnam{"пикометр"}
                 one{"{0} пикометр"}
                 other{"{0} пикометр"}
+            }
+            point{
+                dnam{"оноо"}
+                one{"{0} оноо"}
+                other{"{0} оноо"}
             }
             yard{
                 dnam{"ярд"}
@@ -1035,8 +1040,8 @@ mn{
             }
             square-inch{
                 dnam{"инч²"}
-                one{"{0} ин²"}
-                other{"{0} ин²"}
+                one{"{0} инч²"}
+                other{"{0} инч²"}
                 per{"{0}/инч²"}
             }
             square-kilometer{
@@ -1394,6 +1399,11 @@ mn{
                 one{"{0} пм"}
                 other{"{0} пм"}
             }
+            point{
+                dnam{"оноо"}
+                one{"{0} оноо"}
+                other{"{0} оноо"}
+            }
             yard{
                 dnam{"ярд"}
                 one{"{0} ярд"}
@@ -1683,14 +1693,14 @@ mn{
                 other{"{0} крц"}
             }
             tablespoon{
-                dnam{"ххалбага"}
-                one{"{0} ххалбага"}
-                other{"{0} ххалбага"}
+                dnam{"х/халбага"}
+                one{"{0} х/халбага"}
+                other{"{0} х/халбага"}
             }
             teaspoon{
-                dnam{"цхалбага"}
-                one{"{0} цхалбага"}
-                other{"{0} цхалбага"}
+                dnam{"ц/халбага"}
+                one{"{0} ц/халбага"}
+                other{"{0} ц/халбага"}
             }
         }
     }

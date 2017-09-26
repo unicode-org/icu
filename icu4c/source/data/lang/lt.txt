@@ -339,6 +339,7 @@ lt{
         ln{"ngalų"}
         lo{"laosiečių"}
         lol{"mongų"}
+        lou{"Luizianos kreolų"}
         loz{"lozių"}
         lrc{"šiaurės luri"}
         lt{"lietuvių"}
@@ -541,7 +542,7 @@ lt{
         sv{"švedų"}
         sw{"suahilių"}
         sw_CD{"Kongo suahilių"}
-        swb{"komorų"}
+        swb{"Komorų"}
         syc{"klasikinė sirų"}
         syr{"sirų"}
         szl{"sileziečių"}
@@ -883,8 +884,10 @@ lt{
         }
         collation{
             big5han{"įprasta kiniška rūšiavimo tvarka - Big5"}
+            compat{"ankstesnė rūšiavimo tvarka, skirta suderinamumui"}
             dictionary{"žodyno rūšiavimo tvarka"}
             ducet{"numatytasis unikodo rikiavimas"}
+            eor{"rūšiavimo tvarka daugiakalbės Europos dokumentų"}
             gb2312han{"supaprastinta kiniška rūšiavimo tvarka - GB2312"}
             phonebook{"telefonų knygos rūšiavimo tvarka"}
             phonetic{"Fonetinė rikiavimo tvarka"}
@@ -898,8 +901,8 @@ lt{
             zhuyin{"Zhuyin rikiavimo tvarka"}
         }
         d0{
-            fwidth{"Viso pločio"}
-            hwidth{"Vidutinio pločio"}
+            fwidth{"viso pločio"}
+            hwidth{"vidutinio pločio"}
             npinyin{"Skaitinis"}
         }
         hc{
@@ -1020,7 +1023,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} – visi"}
         category-list{"{0}: {1}"}

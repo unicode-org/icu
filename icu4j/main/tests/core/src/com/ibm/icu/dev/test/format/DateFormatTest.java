@@ -1272,24 +1272,24 @@ public class DateFormatTest extends TestFmwk {
         { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", GMT_BG+"+11:00", "+11:00" },
         { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "z", GMT_BG+"+11", "+11:00" },
-        { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "zzzz", "\u0410\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u044F \u2013 \u0438\u0437\u0442\u043E\u0447\u043D\u043E \u043B\u044F\u0442\u043D\u043E \u0447\u0430\u0441\u043E\u0432\u043E \u0432\u0440\u0435\u043C\u0435", "+11:00" },
+        { "bg", "Australia/ACT", "2004-01-15T00:00:00Z", "zzzz", "\u0418\u0437\u0442\u043E\u0447\u043D\u043E\u0430\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u0439\u0441\u043A\u043E \u043B\u044F\u0442\u043D\u043E \u0447\u0430\u0441\u043E\u0432\u043E \u0432\u0440\u0435\u043C\u0435", "+11:00" },
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "Z", "+1000", "+10:00" },
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "ZZZZ", GMT_BG+"+10:00", "+10:00" },
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "z", GMT_BG+"+10", "+10:00" },
-        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "\u0410\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u044F \u2013 \u0438\u0437\u0442\u043E\u0447\u043D\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "+10:00" },
+        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "zzzz", "\u0418\u0437\u0442\u043E\u0447\u043D\u043E\u0430\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u0439\u0441\u043A\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "+10:00" },
         { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "v", "\u0421\u0438\u0434\u043D\u0438", "Australia/Sydney" },
-        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "\u0410\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u044F \u2013 \u0438\u0437\u0442\u043E\u0447\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "Australia/Sydney" },
+        { "bg", "Australia/ACT", "2004-07-15T00:00:00Z", "vvvv", "\u0418\u0437\u0442\u043E\u0447\u043D\u043E\u0430\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u0439\u0441\u043A\u043E \u0432\u0440\u0435\u043C\u0435", "Australia/Sydney" },
 
         { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "ZZZZ", GMT_BG+"+11:00", "+11:00" },
         { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "z", GMT_BG+"+11", "+11:00" },
-        { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "zzzz", "\u0410\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u044F \u2013 \u0438\u0437\u0442\u043E\u0447\u043D\u043E \u043B\u044F\u0442\u043D\u043E \u0447\u0430\u0441\u043E\u0432\u043E \u0432\u0440\u0435\u043C\u0435", "+11:00" },
+        { "bg", "Australia/Sydney", "2004-01-15T00:00:00Z", "zzzz", "\u0418\u0437\u0442\u043E\u0447\u043D\u043E\u0430\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u0439\u0441\u043A\u043E \u043B\u044F\u0442\u043D\u043E \u0447\u0430\u0441\u043E\u0432\u043E \u0432\u0440\u0435\u043C\u0435", "+11:00" },
         { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "Z", "+1000", "+10:00" },
         { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "ZZZZ", GMT_BG+"+10:00", "+10:00" },
         { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "z", GMT_BG+"+10", "+10:00" },
-        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "zzzz", "\u0410\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u044F \u2013 \u0438\u0437\u0442\u043E\u0447\u043D\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "+10:00" },
+        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "zzzz", "\u0418\u0437\u0442\u043E\u0447\u043D\u043E\u0430\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u0439\u0441\u043A\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "+10:00" },
         { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "v", "\u0421\u0438\u0434\u043D\u0438", "Australia/Sydney" },
-        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "vvvv", "\u0410\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u044F \u2013 \u0438\u0437\u0442\u043E\u0447\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "Australia/Sydney" },
+        { "bg", "Australia/Sydney", "2004-07-15T00:00:00Z", "vvvv", "\u0418\u0437\u0442\u043E\u0447\u043D\u043E\u0430\u0432\u0441\u0442\u0440\u0430\u043B\u0438\u0439\u0441\u043A\u043E \u0432\u0440\u0435\u043C\u0435", "Australia/Sydney" },
 
         { "bg", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "bg", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", GMT_BG, "+0:00" },
@@ -1317,13 +1317,13 @@ public class DateFormatTest extends TestFmwk {
         { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", GMT_BG+"+05:30", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", GMT_BG+"+5:30", "+5:30" },
-        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0432\u0440\u0435\u043c\u0435", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", GMT_BG+"+05:30", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", GMT_BG+"+5:30", "+05:30" },
-        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "+5:30" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0432\u0440\u0435\u043c\u0435", "+5:30" },
         { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u0418\u043D\u0434\u0438\u044F", "Asia/Calcutta" },
-        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u043E \u0432\u0440\u0435\u043C\u0435", "Asia/Calcutta" },
+        { "bg", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u0418\u043D\u0434\u0438\u0439\u0441\u043A\u043E \u0432\u0440\u0435\u043c\u0435", "Asia/Calcutta" },
 
     // ==========
 
@@ -1479,8 +1479,8 @@ public class DateFormatTest extends TestFmwk {
         { "ti", "America/Havana", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-04:00", "-4:00" },
         { "ti", "America/Havana", "2004-07-15T00:00:00Z", "z", "GMT-4", "-4:00" },
         { "ti", "America/Havana", "2004-07-15T00:00:00Z", "zzzz", "GMT-04:00", "-4:00" },
-        { "ti", "America/Havana", "2004-07-15T00:00:00Z", "v", "CU", "America/Havana" },
-        { "ti", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "CU", "America/Havana" },
+        { "ti", "America/Havana", "2004-07-15T00:00:00Z", "v", "\u12A9\u1263", "America/Havana" },
+        { "ti", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\u12A9\u1263", "America/Havana" },
 
         { "ti", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "ti", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+11:00", "+11:00" },
@@ -1512,8 +1512,8 @@ public class DateFormatTest extends TestFmwk {
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "GMT+01:00", "+1:00" },
-        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "v", "GB", "Europe/London" },
-        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "GB", "Europe/London" },
+        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "v", "\u12A5\u1295\u130D\u120A\u12DD", "Europe/London" },
+        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\u12A5\u1295\u130D\u120A\u12DD", "Europe/London" },
 
         { "ti", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "ti", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-03:00", "-3:00" },
@@ -1535,8 +1535,8 @@ public class DateFormatTest extends TestFmwk {
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+5:30", "+05:30" },
         { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "GMT+05:30", "+5:30" },
-        { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "IN", "Asia/Calcutta" },
-        { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "IN", "Asia/Calcutta" },
+        { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u1205\u1295\u12F2", "Asia/Calcutta" },
+        { "ti", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u1205\u1295\u12F2", "Asia/Calcutta" },
 
         // Ticket#8589 Partial location name to use country name if the zone is the golden
         // zone for the time zone's country.
@@ -5143,8 +5143,8 @@ public class DateFormatTest extends TestFmwk {
         sdf.applyPattern("hh:mm:ss bbbb");
 
 //        assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 Mitternacht", sdf.format(k000000));
-        assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 vorm.", sdf.format(k000000));
-        assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 nachm.", sdf.format(k120000));
+        assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 AM", sdf.format(k000000));
+        assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 PM", sdf.format(k120000));
 
         // Locale ee has a rule that wraps around midnight (21h - 4h).
         sdf = new SimpleDateFormat("", new ULocale("ee"));

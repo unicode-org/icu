@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sv{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -440,6 +440,11 @@ sv{
                 one{"{0} pikometer"}
                 other{"{0} pikometer"}
             }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
             yard{
                 dnam{"engelska yard"}
                 one{"{0} engelsk yard"}
@@ -846,6 +851,11 @@ sv{
             per{"{0}/{1}"}
         }
         concentr{
+            karat{
+                dnam{"karat"}
+                one{"{0} krt"}
+                other{"{0} krt"}
+            }
             milligram-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0}mg/dL"}
@@ -857,6 +867,7 @@ sv{
                 other{"{0}mmol/L"}
             }
             part-per-million{
+                dnam{"miljondelar"}
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
@@ -1157,6 +1168,11 @@ sv{
                 one{"{0}pm"}
                 other{"{0}pm"}
             }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
             yard{
                 dnam{"engelska yard"}
                 one{"{0}yd"}
@@ -1210,6 +1226,7 @@ sv{
                 per{"{0}/uns·28g"}
             }
             ounce-troy{
+                dnam{"Troy-uns à 31g"}
                 one{"{0} tr.uns"}
                 other{"{0} tr.uns"}
             }
@@ -1898,6 +1915,11 @@ sv{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"engelska yard"}

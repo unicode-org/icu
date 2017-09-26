@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nb{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -430,6 +430,11 @@ nb{
                 one{"{0} pikometer"}
                 other{"{0} pikometer"}
             }
+            point{
+                dnam{"punkter"}
+                one{"{0} punkt"}
+                other{"{0} punkter"}
+            }
             yard{
                 dnam{"yard"}
                 one{"{0} yard"}
@@ -733,8 +738,14 @@ nb{
     unitsNarrow{
         acceleration{
             g-force{
+                dnam{"G"}
                 one{"{0}G"}
                 other{"{0}G"}
+            }
+            meter-per-second-squared{
+                dnam{"m/s²"}
+                one{"{0}m/s²"}
+                other{"{0}m/s²"}
             }
         }
         angle{
@@ -858,25 +869,41 @@ nb{
             }
         }
         length{
+            astronomical-unit{
+                dnam{"au"}
+                one{"{0}au"}
+                other{"{0}au"}
+            }
             centimeter{
                 dnam{"cm"}
                 one{"{0}cm"}
                 other{"{0}cm"}
+                per{"{0}/cm"}
+            }
+            decimeter{
+                dnam{"dm"}
+                one{"{0}dm"}
+                other{"{0}dm"}
             }
             foot{
+                dnam{"fot"}
                 one{"{0} fot"}
                 other{"{0} fot"}
             }
             inch{
+                dnam{"to"}
                 one{"{0} tomme"}
                 other{"{0} tommer"}
+                per{"{0}to"}
             }
             kilometer{
                 dnam{"km"}
                 one{"{0}km"}
                 other{"{0}km"}
+                per{"{0}/km"}
             }
             light-year{
+                dnam{"ly"}
                 one{"{0} lysår"}
                 other{"{0} lysår"}
             }
@@ -884,21 +911,55 @@ nb{
                 dnam{"m"}
                 one{"{0}m"}
                 other{"{0}m"}
+                per{"{0}/m"}
+            }
+            micrometer{
+                dnam{"µm"}
+                one{"{0}µm"}
+                other{"{0}µm"}
             }
             mile{
+                dnam{"mile"}
                 one{"{0} eng mil"}
                 other{"{0} eng mil"}
+            }
+            mile-scandinavian{
+                dnam{"mil"}
+                one{"{0}mil"}
+                other{"{0}mil"}
             }
             millimeter{
                 dnam{"mm"}
                 one{"{0}mm"}
                 other{"{0}mm"}
             }
+            nanometer{
+                dnam{"nm"}
+                one{"{0}nm"}
+                other{"{0}nm"}
+            }
+            nautical-mile{
+                dnam{"nmi"}
+                one{"{0}nmi"}
+                other{"{0}nmi"}
+            }
+            parsec{
+                dnam{"pc"}
+                one{"{0}pc"}
+                other{"{0}pc"}
+            }
             picometer{
+                dnam{"pm"}
                 one{"{0}pm"}
                 other{"{0}pm"}
             }
+            point{
+                dnam{"pt"}
+                one{"{0}pt"}
+                other{"{0}pt"}
+            }
             yard{
+                dnam{"yd"}
                 one{"{0} yard"}
                 other{"{0} yard"}
             }
@@ -908,19 +969,39 @@ nb{
                 dnam{"gram"}
                 one{"{0}g"}
                 other{"{0}g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 one{"{0}kg"}
                 other{"{0}kg"}
+                per{"{0}/kg"}
+            }
+            metric-ton{
+                dnam{"t"}
+                one{"{0}t"}
+                other{"{0}t"}
+            }
+            microgram{
+                dnam{"µg"}
+                one{"{0}µg"}
+                other{"{0}µg"}
+            }
+            milligram{
+                dnam{"mg"}
+                one{"{0}mg"}
+                other{"{0}mg"}
             }
             ounce{
+                dnam{"unse"}
                 one{"{0} unse"}
                 other{"{0} unser"}
             }
             pound{
+                dnam{"pund"}
                 one{"{0} pund"}
                 other{"{0} pund"}
+                per{"{0}/pund"}
             }
         }
         power{
@@ -939,16 +1020,27 @@ nb{
         }
         pressure{
             hectopascal{
+                dnam{"hPa"}
                 one{"{0}hPa"}
                 other{"{0}hPa"}
             }
             inch-hg{
+                dnam{"inHg"}
                 one{"{0}ʹʹ Hg"}
                 other{"{0}ʹʹ Hg"}
             }
             millibar{
+                dnam{"mbar"}
                 one{"{0}mbar"}
                 other{"{0}mbar"}
+            }
+            millimeter-of-mercury{
+                one{"{0}mmHg"}
+                other{"{0}mmHg"}
+            }
+            pound-per-square-inch{
+                one{"{0}psi"}
+                other{"{0}psi"}
             }
         }
         speed{
@@ -957,11 +1049,18 @@ nb{
                 one{"{0}km/t"}
                 other{"{0}km/t"}
             }
+            knot{
+                dnam{"kn"}
+                one{"{0}kn"}
+                other{"{0}kn"}
+            }
             meter-per-second{
+                dnam{"m/s"}
                 one{"{0}m/s"}
                 other{"{0}m/s"}
             }
             mile-per-hour{
+                dnam{"mile/t"}
                 one{"{0} eng mil/t"}
                 other{"{0} eng mil/t"}
             }
@@ -969,12 +1068,18 @@ nb{
         temperature{
             celsius{
                 dnam{"°C"}
-                one{"{0}°"}
-                other{"{0}°"}
+                one{"{0} °C"}
+                other{"{0} °C"}
             }
             fahrenheit{
+                dnam{"°F"}
                 one{"{0}°F"}
                 other{"{0}°F"}
+            }
+            kelvin{
+                dnam{"K"}
+                one{"{0}K"}
+                other{"{0}K"}
             }
         }
         volume{
@@ -1128,8 +1233,8 @@ nb{
             }
             mile-per-gallon-imperial{
                 dnam{"mile/brit. gal"}
-                one{"{0} mile/brit. gal"}
-                other{"{0} mile/brit. gal"}
+                one{"{0} mpg brit."}
+                other{"{0} mpg brit."}
             }
         }
         coordinate{
@@ -1415,6 +1520,11 @@ nb{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"punkter"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"yard"}

@@ -3487,8 +3487,8 @@ public class ULocaleTest extends TestFmwk {
                     "zh_TW"
                 }, {
                     "und_Hant_CN",
-                    "yue_Hant_CN",
-                    "yue_Hant_CN"
+                    "zh_Hant_CN",
+                    "zh_Hant_CN"
                 }, {
                     "und_Hant_TW",
                     "zh_Hant_TW",

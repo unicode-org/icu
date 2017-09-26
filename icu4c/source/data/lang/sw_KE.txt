@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sw_KE{
     Languages{
-        ain{"ain"}
+        ain{"Ainu"}
         ar_001{"Kiarabu cha Sasa Kilichosanifishwa"}
         arq{"Kiarabu cha Aljeria"}
         az{"Kiazabajani"}
@@ -42,5 +42,5 @@ sw_KE{
         wae{"Kiwalser"}
         zgh{"Tamazight Sanifu ya Moroko"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.6"}
 }

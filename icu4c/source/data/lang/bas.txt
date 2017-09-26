@@ -48,5 +48,5 @@ bas{
         zh{"Hɔp u kinà"}
         zu{"Hɔp u zulù"}
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.1"}
 }

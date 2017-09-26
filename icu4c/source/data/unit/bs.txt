@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 bs{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -171,10 +171,10 @@ bs{
             }
         }
         coordinate{
-            east{"{0}I"}
-            north{"{0}S"}
-            south{"{0}J"}
-            west{"{0}Z"}
+            east{"{0} istok"}
+            north{"{0} sjever"}
+            south{"{0} jug"}
+            west{"{0} zapad"}
         }
         digital{
             bit{
@@ -504,6 +504,12 @@ bs{
                 few{"{0} pikometra"}
                 one{"{0} pikometar"}
                 other{"{0} pikometara"}
+            }
+            point{
+                dnam{"tačke"}
+                few{"{0} tč"}
+                one{"{0} tačka"}
+                other{"{0} tačaka"}
             }
             yard{
                 dnam{"jardi"}
@@ -866,10 +872,10 @@ bs{
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"L/100km"}
-                few{"{0} L/100km"}
-                one{"{0} L/100km"}
-                other{"{0} L/100km"}
+                dnam{"L/100 km"}
+                few{"{0} L/100 km"}
+                one{"{0} L/100 km"}
+                other{"{0} L/100 km"}
             }
         }
         coordinate{
@@ -1132,10 +1138,10 @@ bs{
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"L/100km"}
-                few{"{0} L/100km"}
-                one{"{0} L/100km"}
-                other{"{0} L/100km"}
+                dnam{"L/100 km"}
+                few{"{0} L/100 km"}
+                one{"{0} L/100 km"}
+                other{"{0} L/100 km"}
             }
             liter-per-kilometer{
                 dnam{"L/km"}
@@ -1157,10 +1163,10 @@ bs{
             }
         }
         coordinate{
-            east{"{0}I"}
-            north{"{0}S"}
-            south{"{0}J"}
-            west{"{0}Z"}
+            east{"{0} I"}
+            north{"{0} S"}
+            south{"{0} J"}
+            west{"{0} Z"}
         }
         digital{
             bit{
@@ -1490,6 +1496,12 @@ bs{
                 few{"{0} pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"tč"}
+                few{"{0} tč"}
+                one{"{0} tč"}
+                other{"{0} tč"}
             }
             yard{
                 dnam{"jardi"}

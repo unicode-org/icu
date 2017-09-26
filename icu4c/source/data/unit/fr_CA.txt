@@ -1,12 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fr_CA{
-    Version{"2.1.31.33"}
-    durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
-    }
+    Version{"2.1.37.22"}
     units{
         acceleration{
             g-force{
@@ -26,9 +21,6 @@ fr_CA{
                 other{"{0} acres"}
             }
             square-mile{
-                dnam{"milles carrés"}
-                one{"{0} mille carré"}
-                other{"{0} milles carrés"}
                 per{"{0} par mille carré"}
             }
             square-yard{
@@ -47,11 +39,18 @@ fr_CA{
         consumption{
             liter-per-100kilometers{
                 dnam{"litres aux 100 kilomètres"}
+                one{"{0} litre aux 100 kilomètres"}
+                other{"{0} litres aux 100 kilomètres"}
             }
             mile-per-gallon{
                 dnam{"milles au gallon"}
                 one{"{0} mille au gallon"}
                 other{"{0} milles au gallon"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"milles au gallon impérial"}
+                one{"{0} mille au gallon impérial"}
+                other{"{0} milles au gallon impérial"}
             }
         }
         duration{
@@ -75,6 +74,13 @@ fr_CA{
             kilogram{
                 per{"{0} par kilogramme"}
             }
+            microgram{
+                one{"{0} microgramme"}
+                other{"{0} microgrammes"}
+            }
+            stone{
+                other{"{0} stone"}
+            }
         }
         speed{
             kilometer-per-hour{
@@ -94,11 +100,6 @@ fr_CA{
             }
         }
         volume{
-            cubic-mile{
-                dnam{"milles cubes"}
-                one{"{0} mille cube"}
-                other{"{0} milles cubes"}
-            }
             cubic-yard{
                 dnam{"verges cubes"}
                 one{"{0} verge cube"}
@@ -106,9 +107,6 @@ fr_CA{
             }
             gallon-imperial{
                 dnam{"gallon impérial"}
-                one{"{0} gallon impérial"}
-                other{"{0} gallons impériaux"}
-                per{"{0} par gallon impérial"}
             }
             pint{
                 dnam{"chopine"}
@@ -128,10 +126,145 @@ fr_CA{
         }
     }
     unitsNarrow{
+        acceleration{
+            meter-per-second-squared{
+                one{"{0}m/s²"}
+                other{"{0}m/s²"}
+            }
+        }
+        consumption{
+            liter-per-100kilometers{
+                dnam{"L/100 km"}
+                one{"{0} L/100 km"}
+                other{"{0} L/100 km"}
+            }
+        }
+        duration{
+            century{
+                one{"´{0}s."}
+                other{"´{0}s."}
+            }
+            microsecond{
+                one{"{0}µs"}
+                other{"{0}µs"}
+            }
+            minute{
+                per{"{0}/m"}
+            }
+            month{
+                per{"{0}/m"}
+            }
+            nanosecond{
+                one{"{0}ns"}
+                other{"{0}ns"}
+            }
+            week{
+                per{"{0}/sem"}
+            }
+        }
+        length{
+            decimeter{
+                one{"{0}dm"}
+                other{"{0}dm"}
+            }
+            foot{
+                one{"{0}pi"}
+                other{"{0}pi"}
+            }
+            inch{
+                one{"{0}po"}
+                other{"{0}po"}
+            }
+            light-year{
+                one{"{0}al"}
+                other{"{0}al"}
+            }
+            micrometer{
+                one{"{0}µm"}
+                other{"{0}µm"}
+            }
+            mile-scandinavian{
+                one{"{0}smi"}
+                other{"{0}smi"}
+            }
+            nanometer{
+                one{"{0}nm"}
+                other{"{0}nm"}
+            }
+            nautical-mile{
+                dnam{"NM"}
+                one{"{0}NM"}
+                other{"{0}NM"}
+            }
+            parsec{
+                one{"{0}pc"}
+                other{"{0}pc"}
+            }
+            point{
+                one{"{0}pt"}
+                other{"{0}pt"}
+            }
+            yard{
+                dnam{"vg"}
+                one{"{0}vg"}
+                other{"{0}vg"}
+            }
+        }
+        mass{
+            kilogram{
+                one{"{0}kg"}
+                other{"{0}kg"}
+            }
+            metric-ton{
+                one{"{0}t"}
+                other{"{0}t"}
+            }
+            microgram{
+                one{"{0}µg"}
+                other{"{0}µg"}
+            }
+            milligram{
+                one{"{0}mg"}
+                other{"{0}mg"}
+            }
+            stone{
+                one{"{0}st"}
+                other{"{0}st"}
+            }
+            ton{
+                dnam{"tc"}
+                one{"{0}tc"}
+                other{"{0}tc"}
+            }
+        }
+        pressure{
+            inch-hg{
+                dnam{"inHg"}
+            }
+            millimeter-of-mercury{
+                one{"{0}mmHg"}
+                other{"{0}mmHg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                one{"{0}psi"}
+                other{"{0}psi"}
+            }
+        }
+        speed{
+            knot{
+                one{"{0}nd"}
+                other{"{0}nd"}
+            }
+        }
         temperature{
             celsius{
                 one{"{0} °C"}
                 other{"{0} °C"}
+            }
+            kelvin{
+                one{"{0}K"}
+                other{"{0}K"}
             }
         }
         volume{
@@ -160,6 +293,16 @@ fr_CA{
             }
         }
         consumption{
+            liter-per-100kilometers{
+                dnam{"L/100 km"}
+                one{"{0} L/100 km"}
+                other{"{0} L/100 km"}
+            }
+            liter-per-kilometer{
+                dnam{"L/km"}
+                one{"{0} L/km"}
+                other{"{0} L/km"}
+            }
             mile-per-gallon-imperial{
                 dnam{"mi/gal Imp"}
                 one{"{0} mi/gal Imp"}
@@ -211,6 +354,12 @@ fr_CA{
                 other{"{0} psi"}
             }
         }
+        temperature{
+            generic{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
         volume{
             centiliter{
                 dnam{"cL"}
@@ -251,6 +400,7 @@ fr_CA{
                 dnam{"L"}
                 one{"{0} L"}
                 other{"{0} L"}
+                per{"{0}/L"}
             }
             megaliter{
                 dnam{"ML"}

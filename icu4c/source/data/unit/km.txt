@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 km{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.5"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -354,6 +354,10 @@ km{
             picometer{
                 dnam{"ពីកូម៉ែត្រ"}
                 other{"{0} ពីកូម៉ែត្រ"}
+            }
+            point{
+                dnam{"pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"យ៉ាត"}
@@ -1141,6 +1145,10 @@ km{
             picometer{
                 dnam{"pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"យ៉ាត"}

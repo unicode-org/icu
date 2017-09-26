@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ko{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -507,6 +507,9 @@ ko{
         "America:Puerto_Rico"{
             ec{"푸에르토리코"}
         }
+        "America:Punta_Arenas"{
+            ec{"푼타아레나스"}
+        }
         "America:Rainy_River"{
             ec{"레이니강"}
         }
@@ -538,7 +541,7 @@ ko{
             ec{"산토도밍고"}
         }
         "America:Sao_Paulo"{
-            ec{"상파울로"}
+            ec{"상파울루"}
         }
         "America:Scoresbysund"{
             ec{"스코레스바이선드"}
@@ -657,6 +660,9 @@ ko{
         "Asia:Ashgabat"{
             ec{"아슈하바트"}
         }
+        "Asia:Atyrau"{
+            ec{"아티라우"}
+        }
         "Asia:Baghdad"{
             ec{"바그다드"}
         }
@@ -707,6 +713,9 @@ ko{
         }
         "Asia:Dushanbe"{
             ec{"두샨베"}
+        }
+        "Asia:Famagusta"{
+            ec{"파마구스타"}
         }
         "Asia:Gaza"{
             ec{"가자"}
@@ -1075,6 +1084,9 @@ ko{
         }
         "Europe:Sarajevo"{
             ec{"사라예보"}
+        }
+        "Europe:Saratov"{
+            ec{"사라토프"}
         }
         "Europe:Simferopol"{
             ec{"심페로폴"}
@@ -1541,9 +1553,9 @@ ko{
             ls{"감비에 시간"}
         }
         "meta:Georgia"{
-            ld{"그루지아 하계 표준시"}
-            lg{"그루지아 시간"}
-            ls{"그루지아 표준시"}
+            ld{"조지아 하계 표준시"}
+            lg{"조지아 시간"}
+            ls{"조지아 표준시"}
         }
         "meta:Gilbert_Islands"{
             ls{"길버트 제도 시간"}

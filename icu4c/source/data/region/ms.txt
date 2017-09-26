@@ -106,6 +106,7 @@ ms{
         ES{"Sepanyol"}
         ET{"Ethiopia"}
         EU{"Kesatuan Eropah"}
+        EZ{"Zon Euro"}
         FI{"Finland"}
         FJ{"Fiji"}
         FK{"Kepulauan Falkland"}
@@ -310,5 +311,5 @@ ms{
         MK{"Macedonia (FYROM)"}
         TL{"Timor Timur"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
 }

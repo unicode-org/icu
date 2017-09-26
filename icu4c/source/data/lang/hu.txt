@@ -713,6 +713,7 @@ hu{
             indian{"Indiai nemzeti naptár"}
             islamic{"Iszlám naptár"}
             islamic-civil{"Iszlám civil naptár"}
+            islamic-umalqura{"Iszlám Umm al-Qura naptár"}
             iso8601{"ISO-8601 naptár"}
             japanese{"Japán naptár"}
             persian{"Perzsa naptár"}
@@ -756,8 +757,10 @@ hu{
         }
         collation{
             big5han{"Hagyományos kínai sorrend - Big5"}
+            compat{"Előző rendezési sorrend a kompatibilitás érdekében"}
             dictionary{"Szótári rendezési sorrend"}
             ducet{"Alapértelmezett Unicode rendezési sorrend"}
+            eor{"Európai rendezési szabályok"}
             gb2312han{"Egyszerűsített kínai sorrend - GB2312"}
             phonebook{"Telefonkönyv sorrend"}
             phonetic{"Fonetikus rendezési sorrend"}
@@ -896,17 +899,17 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
-        all{"{0} — Összes"}
+        all{"{0} – összes"}
         category-list{"{0}: {1}"}
-        compatibility{"{0} — Kompatibilitás"}
-        enclosed{"{0} — Zárt"}
-        extended{"{0} — Kibővített"}
-        historic{"{0} — Történelmi"}
-        miscellaneous{"{0} — Vegyes"}
-        other{"{0} — Egyéb"}
-        scripts{"Kézírások — {0}"}
+        compatibility{"{0} – kompatibilitás"}
+        enclosed{"{0} – zárt"}
+        extended{"{0} – kibővített"}
+        historic{"{0} – történelmi"}
+        miscellaneous{"{0} – vegyes"}
+        other{"{0} – egyéb"}
+        scripts{"kézírások – {0}"}
         strokes{
             one{"{0} vonás"}
             other{"{0} vonás"}

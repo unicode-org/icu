@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 it{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -253,7 +253,7 @@ it{
                 dnam{"secondi"}
                 one{"{0} secondo"}
                 other{"{0} secondi"}
-                per{"{0}/s"}
+                per{"{0} al secondo"}
             }
             week{
                 dnam{"settimane"}
@@ -429,6 +429,11 @@ it{
                 dnam{"picometri"}
                 one{"{0} picometro"}
                 other{"{0} picometri"}
+            }
+            point{
+                dnam{"punti"}
+                one{"{0} punto"}
+                other{"{0} punti"}
             }
             yard{
                 dnam{"iarde"}
@@ -607,6 +612,11 @@ it{
                 dnam{"acre-feet"}
                 one{"{0} acre-foot"}
                 other{"{0} acre-feet"}
+            }
+            bushel{
+                dnam{"staia"}
+                one{"{0} staio"}
+                other{"{0} staia"}
             }
             centiliter{
                 dnam{"centilitri"}
@@ -796,7 +806,7 @@ it{
         duration{
             day{
                 dnam{"giorno"}
-                one{"{0}gg"}
+                one{"{0} g"}
                 other{"{0}gg"}
             }
             hour{
@@ -1182,7 +1192,7 @@ it{
                 per{"{0}/giorno"}
             }
             hour{
-                dnam{"ore"}
+                dnam{"h"}
                 one{"{0} h"}
                 other{"{0} h"}
                 per{"{0}/h"}
@@ -1327,13 +1337,13 @@ it{
                 other{"{0} dm"}
             }
             foot{
-                dnam{"piedi"}
+                dnam{"ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
                 per{"{0}/ft"}
             }
             inch{
-                dnam{"pollici"}
+                dnam{"in"}
                 one{"{0} in"}
                 other{"{0} in"}
                 per{"{0}/in"}
@@ -1345,12 +1355,12 @@ it{
                 per{"{0}/km"}
             }
             light-year{
-                dnam{"anni luce"}
+                dnam{"al"}
                 one{"{0} al"}
                 other{"{0} al"}
             }
             meter{
-                dnam{"metri"}
+                dnam{"m"}
                 one{"{0} m"}
                 other{"{0} m"}
                 per{"{0}/m"}
@@ -1394,6 +1404,11 @@ it{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"iarde"}
@@ -1573,6 +1588,9 @@ it{
                 one{"{0} ac ft"}
                 other{"{0} ac ft"}
             }
+            bushel{
+                dnam{"staia"}
+            }
             centiliter{
                 dnam{"cl"}
                 one{"{0} cl"}
@@ -1643,6 +1661,9 @@ it{
             }
             gallon-imperial{
                 dnam{"Gal imp."}
+                one{"{0} gal imp."}
+                other{"{0} gal imp."}
+                per{"{0}/gal imp."}
             }
             hectoliter{
                 dnam{"hl"}
@@ -1650,7 +1671,7 @@ it{
                 other{"{0} hl"}
             }
             liter{
-                dnam{"litri"}
+                dnam{"l"}
                 one{"{0} l"}
                 other{"{0} l"}
                 per{"{0}/l"}

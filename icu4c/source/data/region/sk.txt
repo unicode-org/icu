@@ -106,6 +106,7 @@ sk{
         ES{"Španielsko"}
         ET{"Etiópia"}
         EU{"Európska únia"}
+        EZ{"eurozóna"}
         FI{"Fínsko"}
         FJ{"Fidži"}
         FK{"Falklandy"}
@@ -116,7 +117,7 @@ sk{
         GB{"Spojené kráľovstvo"}
         GD{"Grenada"}
         GE{"Gruzínsko"}
-        GF{"Francúzska Guayana"}
+        GF{"Francúzska Guyana"}
         GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltár"}
@@ -130,7 +131,7 @@ sk{
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
-        GY{"Guayana"}
+        GY{"Guyana"}
         HK{"Hongkong – OAO Číny"}
         HM{"Heardov ostrov a Macdonaldove ostrovy"}
         HN{"Honduras"}
@@ -213,7 +214,7 @@ sk{
         PA{"Panama"}
         PE{"Peru"}
         PF{"Francúzska Polynézia"}
-        PG{"Papua Nová Guinea"}
+        PG{"Papua-Nová Guinea"}
         PH{"Filipíny"}
         PK{"Pakistan"}
         PL{"Poľsko"}
@@ -272,7 +273,7 @@ sk{
         UA{"Ukrajina"}
         UG{"Uganda"}
         UM{"Menšie odľahlé ostrovy USA"}
-        UN{"OSN"}
+        UN{"Organizácia Spojených národov"}
         US{"Spojené štáty"}
         UY{"Uruguaj"}
         UZ{"Uzbekistan"}
@@ -303,7 +304,8 @@ sk{
     }
     Countries%variant{
         CZ{"Česká republika"}
+        FK{"Falklandy (Malvíny)"}
         MK{"Macedónsko (BJRM)"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
 }

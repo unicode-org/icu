@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nb{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -133,7 +133,7 @@ nb{
             ec{"Nairobi"}
         }
         "Africa:Ndjamena"{
-            ec{"N’Djamena"}
+            ec{"Ndjamena"}
         }
         "Africa:Niamey"{
             ec{"Niamey"}
@@ -313,7 +313,7 @@ nb{
             ec{"Glace Bay"}
         }
         "America:Godthab"{
-            ec{"Godthåb"}
+            ec{"Nuuk"}
         }
         "America:Goose_Bay"{
             ec{"Goose Bay"}
@@ -507,6 +507,9 @@ nb{
         "America:Puerto_Rico"{
             ec{"Puerto Rico"}
         }
+        "America:Punta_Arenas"{
+            ec{"Punta Arenas"}
+        }
         "America:Rainy_River"{
             ec{"Rainy River"}
         }
@@ -657,6 +660,9 @@ nb{
         "Asia:Ashgabat"{
             ec{"Asjkhabad"}
         }
+        "Asia:Atyrau"{
+            ec{"Atyrau"}
+        }
         "Asia:Baghdad"{
             ec{"Bagdad"}
         }
@@ -685,7 +691,7 @@ nb{
             ec{"Kolkata"}
         }
         "Asia:Chita"{
-            ec{"Chita"}
+            ec{"Tsjita"}
         }
         "Asia:Choibalsan"{
             ec{"Choybalsan"}
@@ -707,6 +713,9 @@ nb{
         }
         "Asia:Dushanbe"{
             ec{"Dusjanbe"}
+        }
+        "Asia:Famagusta"{
+            ec{"Famagusta"}
         }
         "Asia:Gaza"{
             ec{"Gaza"}
@@ -787,7 +796,7 @@ nb{
             ec{"Omsk"}
         }
         "Asia:Oral"{
-            ec{"Uralsk"}
+            ec{"Oral"}
         }
         "Asia:Phnom_Penh"{
             ec{"Phnom Penh"}
@@ -877,7 +886,7 @@ nb{
             ec{"Jerevan"}
         }
         "Atlantic:Azores"{
-            ec{"Azorene"}
+            ec{"Asorene"}
         }
         "Atlantic:Bermuda"{
             ec{"Bermuda"}
@@ -895,7 +904,7 @@ nb{
             ec{"Madeira"}
         }
         "Atlantic:Reykjavik"{
-            ec{"Reykjavik"}
+            ec{"Reykjavík"}
         }
         "Atlantic:South_Georgia"{
             ec{"Sør-Georgia"}
@@ -943,7 +952,7 @@ nb{
             ec{"Sydney"}
         }
         "Etc:UTC"{
-            ls{"Koordinert universaltid"}
+            ls{"koordinert universaltid"}
         }
         "Etc:Unknown"{
             ec{"ukjent by"}
@@ -973,7 +982,7 @@ nb{
             ec{"Brussel"}
         }
         "Europe:Bucharest"{
-            ec{"Bucuresti"}
+            ec{"București"}
         }
         "Europe:Budapest"{
             ec{"Budapest"}
@@ -982,7 +991,7 @@ nb{
             ec{"Büsingen"}
         }
         "Europe:Chisinau"{
-            ec{"Chisinau"}
+            ec{"Chișinău"}
         }
         "Europe:Copenhagen"{
             ec{"København"}
@@ -1076,6 +1085,9 @@ nb{
         "Europe:Sarajevo"{
             ec{"Sarajevo"}
         }
+        "Europe:Saratov"{
+            ec{"Saratov"}
+        }
         "Europe:Simferopol"{
             ec{"Simferopol"}
         }
@@ -1122,7 +1134,7 @@ nb{
             ec{"Zagreb"}
         }
         "Europe:Zaporozhye"{
-            ec{"Zaporozje"}
+            ec{"Zaporizjzja"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -1146,7 +1158,7 @@ nb{
             ec{"Kerguelen"}
         }
         "Indian:Mahe"{
-            ec{"Mahe"}
+            ec{"Mahé"}
         }
         "Indian:Maldives"{
             ec{"Maldivene"}
@@ -1233,7 +1245,7 @@ nb{
             ec{"Niue"}
         }
         "Pacific:Norfolk"{
-            ec{"Norfolk"}
+            ec{"Norfolkøya"}
         }
         "Pacific:Noumea"{
             ec{"Nouméa"}
@@ -1390,9 +1402,9 @@ nb{
             ls{"armensk normaltid"}
         }
         "meta:Atlantic"{
-            ld{"atlanterhavskystlig sommertid"}
-            lg{"atlanterhavskystlig tid"}
-            ls{"atlanterhavskystlig standardtid"}
+            ld{"sommertid for den nordamerikanske atlanterhavskysten"}
+            lg{"tidssone for den nordamerikanske atlanterhavskysten"}
+            ls{"normaltid for den nordamerikanske atlanterhavskysten"}
             sd{"ADT"}
             sg{"AT"}
             ss{"AST"}
@@ -1447,9 +1459,9 @@ nb{
             ls{"tidssone for Brunei Darussalam"}
         }
         "meta:Cape_Verde"{
-            ld{"sommertid for Kapp Verde"}
-            lg{"tidssone for Kapp Verde"}
-            ls{"normaltid for Kapp Verde"}
+            ld{"kappverdisk sommertid"}
+            lg{"kappverdisk tid"}
+            ls{"kappverdisk normaltid"}
         }
         "meta:Casey"{
             ls{"Casey-tid"}
@@ -1712,7 +1724,7 @@ nb{
             ls{"tidssone for Marquesasøyene"}
         }
         "meta:Marshall_Islands"{
-            ls{"tidssone for Marshalløyene"}
+            ls{"marshallesisk tid"}
         }
         "meta:Mauritius"{
             ld{"mauritisk sommertid"}
@@ -1866,7 +1878,7 @@ nb{
             ls{"singaporsk tid"}
         }
         "meta:Solomon"{
-            ls{"tidssone for Salomonøyene"}
+            ls{"salomonsk tid"}
         }
         "meta:South_Georgia"{
             ls{"tidssone for Sør-Georgia"}

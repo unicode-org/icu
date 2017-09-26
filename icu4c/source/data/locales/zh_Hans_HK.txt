@@ -31,7 +31,7 @@ zh_Hans_HK{
             }
         }
     }
-    Version{"2.1.31.33"}
+    Version{"2.1.37.6"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -86,15 +86,15 @@ zh_Hans_HK{
                 "z ah:mm:ss",
                 "ah:mm:ss",
                 "ah:mm",
-                "Gy年MM月d日EEEE",
-                "Gy年MM月d日",
-                "Gy年MM月d日",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gy年M月d日",
                 "d/M/yyGGGGG",
+                "{1}{0}",
+                "{1}{0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
             }
             availableFormats{
                 HHmm{"HH:mm"}
@@ -113,9 +113,6 @@ zh_Hans_HK{
                 }
                 Hv{
                     H{"vHH–HH"}
-                }
-                MMM{
-                    M{"M月至M月"}
                 }
                 fallback{"{0}–{1}"}
                 h{
@@ -149,10 +146,10 @@ zh_Hans_HK{
                 "y年M月d日",
                 "y年M月d日",
                 "d/M/yy",
+                "{1}{0}",
+                "{1}{0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}{0}",
                 "{1} {0}",
             }
             availableFormats{
@@ -206,11 +203,11 @@ zh_Hans_HK{
                 "Gy年M月d日",
                 "Gy年M月d日",
                 "Gd/M/yy",
+                "{1}{0}",
+                "{1}{0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
             }
         }
         japanese{

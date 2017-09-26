@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zu{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"i-Abidjan"}
@@ -657,6 +657,9 @@ zu{
         "Asia:Ashgabat"{
             ec{"i-Ashgabat"}
         }
+        "Asia:Atyrau"{
+            ec{"Atyrau"}
+        }
         "Asia:Baghdad"{
             ec{"i-Baghdad"}
         }
@@ -707,6 +710,9 @@ zu{
         }
         "Asia:Dushanbe"{
             ec{"i-Dushanbe"}
+        }
+        "Asia:Famagusta"{
+            ec{"Famagusta"}
         }
         "Asia:Gaza"{
             ec{"iGaza"}
@@ -941,6 +947,9 @@ zu{
         }
         "Australia:Sydney"{
             ec{"i-Sydney"}
+        }
+        "Etc:UTC"{
+            ls{"isikhathi somhlaba esididiyelwe"}
         }
         "Etc:Unknown"{
             ec{"idolobha elingaziwa"}

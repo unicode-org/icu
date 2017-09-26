@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fi{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -100,7 +100,7 @@ fi{
             }
         }
         compound{
-            per{"{0} / {1}"}
+            per{"{0}/{1}"}
         }
         concentr{
             karat{
@@ -363,7 +363,7 @@ fi{
             }
             fathom{
                 dnam{"sylet"}
-                one{"syli"}
+                one{"{0} syli"}
                 other{"{0} syltä"}
             }
             foot{
@@ -439,6 +439,11 @@ fi{
                 dnam{"pikometrit"}
                 one{"{0} pikometri"}
                 other{"{0} pikometriä"}
+            }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"jaardit"}
@@ -1925,6 +1930,11 @@ fi{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"yd"}

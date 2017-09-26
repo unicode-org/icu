@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ja{
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -363,6 +363,10 @@ ja{
                 dnam{"ピコメートル"}
                 other{"{0} ピコメートル"}
             }
+            point{
+                dnam{"ポイント"}
+                other{"{0} ポイント"}
+            }
             yard{
                 dnam{"ヤード"}
                 other{"{0} ヤード"}
@@ -619,9 +623,11 @@ ja{
     unitsNarrow{
         acceleration{
             g-force{
+                dnam{"重力加速度"}
                 other{"{0}G"}
             }
             meter-per-second-squared{
+                dnam{"m/s²"}
                 other{"{0}m/s²"}
             }
         }
@@ -688,6 +694,12 @@ ja{
                 other{"{0}mpg"}
             }
         }
+        coordinate{
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
+        }
         digital{
             bit{
                 other{"{0}b"}
@@ -721,13 +733,19 @@ ja{
             }
         }
         duration{
+            century{
+                dnam{"世紀"}
+                other{"{0} 世紀"}
+            }
             day{
                 dnam{"日"}
-                other{"{0}d"}
+                other{"{0}日"}
+                per{"{0}/日"}
             }
             hour{
                 dnam{"時間"}
-                other{"{0}h"}
+                other{"{0}時間"}
+                per{"{0}/時間"}
             }
             microsecond{
                 dnam{"µs"}
@@ -739,11 +757,13 @@ ja{
             }
             minute{
                 dnam{"分"}
-                other{"{0}m"}
+                other{"{0}分"}
+                per{"{0}/分"}
             }
             month{
                 dnam{"か月"}
                 other{"{0}m"}
+                per{"{0}/月"}
             }
             nanosecond{
                 dnam{"ns"}
@@ -751,15 +771,18 @@ ja{
             }
             second{
                 dnam{"秒"}
-                other{"{0}s"}
+                other{"{0}秒"}
+                per{"{0}/秒"}
             }
             week{
                 dnam{"週間"}
                 other{"{0}w"}
+                per{"{0}/週"}
             }
             year{
                 dnam{"年"}
                 other{"{0}y"}
+                per{"{0}/年"}
             }
         }
         electric{
@@ -812,13 +835,16 @@ ja{
         }
         length{
             astronomical-unit{
+                dnam{"天文単位"}
                 other{"{0}au"}
             }
             centimeter{
                 dnam{"cm"}
                 other{"{0}cm"}
+                per{"{0}/cm"}
             }
             decimeter{
+                dnam{"デシメートル"}
                 other{"{0}dm"}
             }
             fathom{
@@ -826,49 +852,71 @@ ja{
                 other{"{0}fm"}
             }
             foot{
+                dnam{"フィート"}
                 other{"{0}′"}
+                per{"{0}/ft"}
             }
             furlong{
                 dnam{"fur"}
                 other{"{0}fur"}
             }
             inch{
+                dnam{"インチ"}
                 other{"{0}″"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 other{"{0}km"}
+                per{"{0}/km"}
             }
             light-year{
+                dnam{"光年"}
                 other{"{0}光年"}
             }
             meter{
                 dnam{"m"}
                 other{"{0}m"}
+                per{"{0}/m"}
             }
             micrometer{
+                dnam{"マイクロメートル"}
                 other{"{0}µm"}
             }
             mile{
+                dnam{"マイル"}
                 other{"{0}マイル"}
+            }
+            mile-scandinavian{
+                dnam{"スカンジナビアマイル"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}
                 other{"{0}mm"}
             }
             nanometer{
+                dnam{"ナノメートル"}
                 other{"{0}nm"}
             }
             nautical-mile{
+                dnam{"海里"}
                 other{"{0}海里"}
             }
             parsec{
+                dnam{"パーセク"}
                 other{"{0}pc"}
             }
             picometer{
+                dnam{"ピコメートル"}
                 other{"{0}pm"}
             }
+            point{
+                dnam{"pt"}
+                other{"{0} pt"}
+            }
             yard{
+                dnam{"ヤード"}
                 other{"{0}ヤード"}
             }
         }
@@ -884,10 +932,12 @@ ja{
             gram{
                 dnam{"g"}
                 other{"{0}g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 other{"{0}kg"}
+                per{"{0}/kg"}
             }
             metric-ton{
                 other{"{0}MT"}
@@ -899,13 +949,17 @@ ja{
                 other{"{0}mg"}
             }
             ounce{
+                dnam{"オンス"}
                 other{"{0}oz"}
+                per{"{0}/oz"}
             }
             ounce-troy{
                 other{"{0}oz t"}
             }
             pound{
+                dnam{"ポンド"}
                 other{"{0}lb"}
+                per{"{0}/lb"}
             }
             stone{
                 dnam{"st"}
@@ -941,15 +995,19 @@ ja{
                 other{"{0}hPa"}
             }
             inch-hg{
+                dnam{"水銀柱インチ"}
                 other{"{0}\u0022 Hg"}
             }
             millibar{
+                dnam{"ミリバール"}
                 other{"{0}mb"}
             }
             millimeter-of-mercury{
+                dnam{"水銀柱ミリメートル"}
                 other{"{0}mm Hg"}
             }
             pound-per-square-inch{
+                dnam{"重量ポンド毎平方インチ"}
                 other{"{0}psi"}
             }
         }
@@ -958,10 +1016,16 @@ ja{
                 dnam{"km/h"}
                 other{"{0}km/h"}
             }
+            knot{
+                dnam{"ノット"}
+                other{"{0} kn"}
+            }
             meter-per-second{
+                dnam{"m/s"}
                 other{"{0}m/s"}
             }
             mile-per-hour{
+                dnam{"マイル毎時"}
                 other{"{0}mi/h"}
             }
         }
@@ -971,7 +1035,12 @@ ja{
                 other{"{0}°C"}
             }
             fahrenheit{
+                dnam{"°F"}
                 other{"{0}°F"}
+            }
+            generic{
+                dnam{"°"}
+                other{"{0}°"}
             }
             kelvin{
                 dnam{"K"}
@@ -1163,6 +1232,12 @@ ja{
                 dnam{"マイル毎英ガロン"}
                 other{"{0} mpg Imp."}
             }
+        }
+        coordinate{
+            east{"東経{0}"}
+            north{"北緯{0}"}
+            south{"南緯{0}"}
+            west{"西経{0}"}
         }
         digital{
             bit{
@@ -1398,6 +1473,10 @@ ja{
             picometer{
                 dnam{"ピコメートル"}
                 other{"{0} pm"}
+            }
+            point{
+                dnam{"ポイント"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"ヤード"}

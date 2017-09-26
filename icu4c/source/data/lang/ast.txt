@@ -1077,9 +1077,10 @@ ast{
         VALLADER{"VALLADER"}
         WADEGILE{"romanización de Wade-Giles"}
     }
-    Version{"2.1.34.51"}
+    Version{"2.1.37.1"}
     characterLabelPattern{
         all{"{0} — too"}
+        category-list{"{0}: {1}"}
         compatibility{"{0} — compatibilidá"}
         enclosed{"{0} — arrodiáu"}
         extended{"{0} — enantáu"}

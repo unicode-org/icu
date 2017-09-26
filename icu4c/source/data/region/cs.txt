@@ -2,35 +2,35 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 cs{
     Countries{
-        001{"Svět"}
+        001{"svět"}
         002{"Afrika"}
         003{"Severní Amerika"}
         005{"Jižní Amerika"}
         009{"Oceánie"}
-        011{"Západní Afrika"}
+        011{"západní Afrika"}
         013{"Střední Amerika"}
-        014{"Východní Afrika"}
-        015{"Severní Afrika"}
-        017{"Střední Afrika"}
-        018{"Jižní Afrika"}
+        014{"východní Afrika"}
+        015{"severní Afrika"}
+        017{"střední Afrika"}
+        018{"jižní Afrika"}
         019{"Amerika"}
         021{"Severní Amerika (oblast)"}
         029{"Karibik"}
-        030{"Východní Asie"}
-        034{"Jižní Asie"}
-        035{"Jihovýchodní Asie"}
-        039{"Jižní Evropa"}
+        030{"východní Asie"}
+        034{"jižní Asie"}
+        035{"jihovýchodní Asie"}
+        039{"jižní Evropa"}
         053{"Australasie"}
         054{"Melanésie"}
         057{"Mikronésie (region)"}
         061{"Polynésie"}
         142{"Asie"}
         143{"Střední Asie"}
-        145{"Západní Asie"}
+        145{"západní Asie"}
         150{"Evropa"}
-        151{"Východní Evropa"}
-        154{"Severní Evropa"}
-        155{"Západní Evropa"}
+        151{"východní Evropa"}
+        154{"severní Evropa"}
+        155{"západní Evropa"}
         419{"Latinská Amerika"}
         AC{"Ascension"}
         AD{"Andorra"}
@@ -106,6 +106,7 @@ cs{
         ES{"Španělsko"}
         ET{"Etiopie"}
         EU{"Evropská unie"}
+        EZ{"eurozóna"}
         FI{"Finsko"}
         FJ{"Fidži"}
         FK{"Falklandské ostrovy"}
@@ -225,7 +226,7 @@ cs{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Katar"}
-        QO{"Vnější Oceánie"}
+        QO{"vnější Oceánie"}
         RE{"Réunion"}
         RO{"Rumunsko"}
         RS{"Srbsko"}
@@ -272,7 +273,7 @@ cs{
         UA{"Ukrajina"}
         UG{"Uganda"}
         UM{"Menší odlehlé ostrovy USA"}
-        UN{"OSN"}
+        UN{"Organizace spojených národů"}
         US{"Spojené státy"}
         UY{"Uruguay"}
         UZ{"Uzbekistán"}
@@ -291,7 +292,7 @@ cs{
         ZA{"Jihoafrická republika"}
         ZM{"Zambie"}
         ZW{"Zimbabwe"}
-        ZZ{"Neznámá oblast"}
+        ZZ{"neznámá oblast"}
     }
     Countries%short{
         GB{"GB"}
@@ -309,5 +310,5 @@ cs{
         FK{"Falklandské ostrovy (Malvíny)"}
         MK{"Makedonie (FYROM)"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.11"}
 }

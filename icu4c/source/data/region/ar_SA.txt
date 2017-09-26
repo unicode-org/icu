@@ -2,11 +2,19 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ar_SA{
     Countries{
+        AC{"جزيرة أسينشين"}
         BS{"جزر البهاما"}
         EA{"سبتة ومليلية"}
+        MO{"ماكاو الصينية (منطقة إدارية خاصة)"}
         MS{"مونتيسيرات"}
         PM{"سان بيير وميكولون"}
         UY{"أوروغواي"}
     }
-    Version{"2.1.31.33"}
+    Countries%short{
+        MO{"ماكاو"}
+    }
+    Countries%variant{
+        CZ{"التشيك"}
+    }
+    Version{"2.1.37.6"}
 }

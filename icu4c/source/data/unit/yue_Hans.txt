@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 yue_Hans{
     %%Parent{"root"}
-    Version{"2.0"}
+    Version{"2.1.37.8"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -67,6 +67,7 @@ yue_Hans{
             square-kilometer{
                 dnam{"平方公里"}
                 other{"{0} 平方公里"}
+                per{"每平方公里 {0}"}
             }
             square-meter{
                 dnam{"平方公尺"}
@@ -76,6 +77,7 @@ yue_Hans{
             square-mile{
                 dnam{"平方英里"}
                 other{"{0} 平方英里"}
+                per{"每平方英里 {0}"}
             }
             square-yard{
                 dnam{"平方码"}
@@ -90,6 +92,18 @@ yue_Hans{
                 dnam{"克拉"}
                 other{"{0} 克拉"}
             }
+            milligram-per-deciliter{
+                dnam{"毫克/公合"}
+                other{"{0} 毫克/公合"}
+            }
+            millimole-per-liter{
+                dnam{"毫摩尔/公升"}
+                other{"{0} 毫摩尔/公升"}
+            }
+            part-per-million{
+                dnam{"百万分率"}
+                other{"{0} 百万分率"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -103,6 +117,10 @@ yue_Hans{
             mile-per-gallon{
                 dnam{"每加仑英里"}
                 other{"每加仑 {0} 英里"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"英里/英制加仑"}
+                other{"{0} 英里/英制加仑"}
             }
         }
         coordinate{
@@ -346,6 +364,10 @@ yue_Hans{
                 dnam{"皮米"}
                 other{"{0} 皮米"}
             }
+            point{
+                dnam{"点"}
+                other{"{0} 点"}
+            }
             yard{
                 dnam{"码"}
                 other{"{0} 码"}
@@ -540,6 +562,7 @@ yue_Hans{
             }
             cup-metric{
                 dnam{"公制量杯"}
+                other{"{0} 公制杯"}
             }
             deciliter{
                 dnam{"公合"}
@@ -553,6 +576,11 @@ yue_Hans{
                 dnam{"加仑"}
                 other{"{0} 加仑"}
                 per{"每加仑 {0}"}
+            }
+            gallon-imperial{
+                dnam{"英制加仑"}
+                other{"{0} 英制加仑"}
+                per{"每英制加仑 {0}"}
             }
             hectoliter{
                 dnam{"公石"}
@@ -1088,6 +1116,7 @@ yue_Hans{
             square-kilometer{
                 dnam{"平方公里"}
                 other{"{0} 平方公里"}
+                per{"每平方公里{0}"}
             }
             square-meter{
                 dnam{"平方公尺"}
@@ -1097,6 +1126,7 @@ yue_Hans{
             square-mile{
                 dnam{"平方英里"}
                 other{"{0} 平方英里"}
+                per{"每平方英里{0}"}
             }
             square-yard{
                 dnam{"平方码"}
@@ -1113,6 +1143,15 @@ yue_Hans{
             }
             milligram-per-deciliter{
                 dnam{"毫克/公合"}
+                other{"{0} 毫克/公合"}
+            }
+            millimole-per-liter{
+                dnam{"毫摩尔/公升"}
+                other{"{0} 毫摩尔/公升"}
+            }
+            part-per-million{
+                dnam{"百万分率"}
+                other{"{0} 百万分率"}
             }
         }
         consumption{
@@ -1127,6 +1166,10 @@ yue_Hans{
             mile-per-gallon{
                 dnam{"英里/加仑"}
                 other{"每加仑{0}英里"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"英里/英制加仑"}
+                other{"{0} 英里/英制加仑"}
             }
         }
         coordinate{
@@ -1370,6 +1413,10 @@ yue_Hans{
                 dnam{"皮米"}
                 other{"{0} 皮米"}
             }
+            point{
+                dnam{"点"}
+                other{"{0} 点"}
+            }
             yard{
                 dnam{"码"}
                 other{"{0} 码"}
@@ -1581,6 +1628,8 @@ yue_Hans{
             }
             gallon-imperial{
                 dnam{"英制加仑"}
+                other{"{0} 英制加仑"}
+                per{"每英制加仑{0}"}
             }
             hectoliter{
                 dnam{"公石"}

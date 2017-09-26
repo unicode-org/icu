@@ -91,7 +91,7 @@ public class CompatibilityTest extends TestFmwk
         Object[] testObjects = classHandler.getTestObjects();
         for (int i = 0; i < testObjects.length; i++) {
             if (!classHandler.hasSameBehavior(oldObjects[i], testObjects[i])) {
-                errln("Input object " + i + " failed behavior test.");
+                errln("Input object " + i + ", className " + holder.className + ": failed behavior test.");
             }
         }
     }

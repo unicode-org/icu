@@ -41,7 +41,7 @@ pl{
         AL{"Albania"}
         AM{"Armenia"}
         AO{"Angola"}
-        AQ{"Antarktyka"}
+        AQ{"Antarktyda"}
         AR{"Argentyna"}
         AS{"Samoa Amerykańskie"}
         AT{"Austria"}
@@ -106,6 +106,7 @@ pl{
         ES{"Hiszpania"}
         ET{"Etiopia"}
         EU{"Unia Europejska"}
+        EZ{"strefa euro"}
         FI{"Finlandia"}
         FJ{"Fidżi"}
         FK{"Falklandy"}
@@ -225,7 +226,7 @@ pl{
         PW{"Palau"}
         PY{"Paragwaj"}
         QA{"Katar"}
-        QO{"Oceania inne"}
+        QO{"Oceania — wyspy dalekie"}
         RE{"Reunion"}
         RO{"Rumunia"}
         RS{"Serbia"}
@@ -309,5 +310,5 @@ pl{
         MK{"Była Jugosłowiańska Republika Macedonii"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
 }

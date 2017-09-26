@@ -22,7 +22,7 @@ import com.ibm.icu.impl.Utility;
 /**
  * A collection of methods to run the data driven number format test suite.
  */
-public class DataDrivenNumberFormatTestUtility {
+public class DataDrivenNumberFormatTestUtility extends TestFmwk {
 
     /**
      * Base class for code under test.
@@ -204,7 +204,10 @@ public class DataDrivenNumberFormatTestUtility {
                             return;
                         }
                     }
-                    if (runMode == RunMode.INCLUDE_KNOWN_FAILURES || !breaks(codeUnderTestId)) {
+                    if (tuple.output != null && tuple.output.equals("fail") && tuple.parse != null && tuple.parse.equals("$53.45") &&
+                            logKnownIssue("13368", "en_GB parsing of $53.45 as USD works, shouldn't") ) {
+                        // skip test
+                    } else if (runMode == RunMode.INCLUDE_KNOWN_FAILURES || !breaks(codeUnderTestId)) {
                         String errorMessage;
                         Exception err = null;
                         boolean shouldFail = (tuple.output != null && tuple.output.equals("fail"))

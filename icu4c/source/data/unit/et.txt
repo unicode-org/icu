@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 et{
-    Version{"2.1.34.51"}
+    Version{"2.1.37.22"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -440,6 +440,11 @@ et{
                 one{"{0} pikomeeter"}
                 other{"{0} pikomeetrit"}
             }
+            point{
+                dnam{"punktid"}
+                one{"{0} punkt"}
+                other{"{0} punkti"}
+            }
             yard{
                 dnam{"jardid"}
                 one{"{0} jard"}
@@ -478,7 +483,7 @@ et{
             }
             microgram{
                 dnam{"mikrogrammid"}
-                one{"mikrogramm"}
+                one{"{0} mikrogramm"}
                 other{"{0} mikrogrammi"}
             }
             milligram{
@@ -753,8 +758,14 @@ et{
     unitsNarrow{
         acceleration{
             g-force{
+                dnam{"Maa raskuskiirendus"}
                 one{"{0}G"}
                 other{"{0}G"}
+            }
+            meter-per-second-squared{
+                dnam{"m/s²"}
+                one{"{0} m/s²"}
+                other{"{0} m/s²"}
             }
         }
         angle{
@@ -800,6 +811,12 @@ et{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            karat{
+                one{"{0} kt"}
+                other{"{0} kt"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -813,6 +830,12 @@ et{
             south{"{0} S"}
             west{"{0} W"}
         }
+        digital{
+            byte{
+                one{"{0} B"}
+                other{"{0} B"}
+            }
+        }
         duration{
             day{
                 dnam{"päev"}
@@ -824,6 +847,11 @@ et{
                 one{"{0} t"}
                 other{"{0} t"}
             }
+            microsecond{
+                dnam{"μs"}
+                one{"{0} μs"}
+                other{"{0} μs"}
+            }
             millisecond{
                 dnam{"ms"}
                 one{"{0} ms"}
@@ -833,16 +861,23 @@ et{
                 dnam{"min"}
                 one{"{0} min"}
                 other{"{0} min"}
+                per{"{0}/min"}
             }
             month{
                 dnam{"kuud"}
                 one{"{0} k"}
                 other{"{0} k"}
             }
+            nanosecond{
+                dnam{"ns"}
+                one{"{0} ns"}
+                other{"{0} ns"}
+            }
             second{
                 dnam{"s"}
                 one{"{0} s"}
                 other{"{0} s"}
+                per{"{0}/s"}
             }
             week{
                 dnam{"n"}
@@ -855,26 +890,58 @@ et{
                 other{"{0} a"}
             }
         }
+        energy{
+            kilowatt-hour{
+                dnam{"kWh"}
+            }
+        }
         length{
+            astronomical-unit{
+                dnam{"aü"}
+                one{"{0} aü"}
+                other{"{0} aü"}
+            }
             centimeter{
                 dnam{"cm"}
                 one{"{0} cm"}
                 other{"{0} cm"}
+                per{"{0}/cm"}
+            }
+            decimeter{
+                dnam{"dm"}
+                one{"{0} dm"}
+                other{"{0} dm"}
+            }
+            fathom{
+                dnam{"süllad"}
+                one{"{0} fm"}
+                other{"{0} fm"}
             }
             foot{
+                dnam{"ft"}
                 one{"{0} jalg"}
                 other{"{0} jalga"}
+                per{"{0}/ft"}
+            }
+            furlong{
+                dnam{"furlongid"}
+                one{"{0} fur"}
+                other{"{0} fur"}
             }
             inch{
+                dnam{"tollid"}
                 one{"{0} toll"}
                 other{"{0} tolli"}
+                per{"{0}/in"}
             }
             kilometer{
                 dnam{"km"}
                 one{"{0} km"}
                 other{"{0} km"}
+                per{"{0}/km"}
             }
             light-year{
+                dnam{"valgusaastad"}
                 one{"{0} valgusa."}
                 other{"{0} valgusa."}
             }
@@ -882,44 +949,113 @@ et{
                 dnam{"m"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
+            }
+            micrometer{
+                dnam{"µm"}
+                one{"{0} µm"}
+                other{"{0} µm"}
             }
             mile{
+                dnam{"mi"}
                 one{"{0} miil"}
                 other{"{0} miili"}
+            }
+            mile-scandinavian{
+                dnam{"smi"}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
                 dnam{"mm"}
                 one{"{0} mm"}
                 other{"{0} mm"}
             }
+            nanometer{
+                dnam{"nm"}
+                one{"{0} nm"}
+                other{"{0} nm"}
+            }
+            nautical-mile{
+                dnam{"nmi"}
+                one{"{0} nmi"}
+                other{"{0} nmi"}
+            }
+            parsec{
+                dnam{"parsekid"}
+                one{"{0} pc"}
+                other{"{0} pc"}
+            }
             picometer{
                 dnam{"pm"}
                 one{"{0} pm"}
                 other{"{0} pm"}
             }
+            point{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
             yard{
+                dnam{"jardid"}
                 one{"{0} jard"}
                 other{"{0} jardi"}
             }
         }
         mass{
+            carat{
+                dnam{"ct"}
+                one{"{0} ct"}
+                other{"{0} ct"}
+            }
             gram{
                 dnam{"gramm"}
                 one{"{0} g"}
                 other{"{0} g"}
+                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 one{"{0} kg"}
                 other{"{0} kg"}
+                per{"{0}/kg"}
+            }
+            metric-ton{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
+            }
+            microgram{
+                dnam{"µg"}
+                one{"{0} µg"}
+                other{"{0} µg"}
+            }
+            milligram{
+                dnam{"mg"}
+                one{"{0} mg"}
+                other{"{0} mg"}
             }
             ounce{
+                dnam{"oz"}
                 one{"{0} oz"}
                 other{"{0} oz"}
+                per{"{0}/oz"}
+            }
+            ounce-troy{
+                dnam{"oz t"}
+                one{"{0} oz t"}
+                other{"{0} oz t"}
             }
             pound{
+                dnam{"naelad"}
                 one{"{0} lb"}
                 other{"{0} lb"}
+                per{"{0}/lb"}
+            }
+            stone{
+                dnam{"kivid"}
+                one{"{0} st"}
+                other{"{0} st"}
             }
             ton{
                 dnam{"lüh t"}
@@ -943,16 +1079,29 @@ et{
         }
         pressure{
             hectopascal{
+                dnam{"hPa"}
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
             inch-hg{
+                dnam{"″ Hg"}
                 one{"{0} toll Hg"}
                 other{"{0} tolli Hg"}
             }
             millibar{
+                dnam{"mbar"}
                 one{"{0} mbar"}
                 other{"{0} mbar"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
+            }
+            pound-per-square-inch{
+                dnam{"psi"}
+                one{"{0} psi"}
+                other{"{0} psi"}
             }
         }
         speed{
@@ -961,11 +1110,18 @@ et{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
             }
+            knot{
+                dnam{"kn"}
+                one{"{0} kn"}
+                other{"{0} kn"}
+            }
             meter-per-second{
+                dnam{"m/s"}
                 one{"{0} m/s"}
                 other{"{0} m/s"}
             }
             mile-per-hour{
+                dnam{"mi/h"}
                 one{"{0} mi/h"}
                 other{"{0} mi/h"}
             }
@@ -980,6 +1136,16 @@ et{
                 dnam{"°F"}
                 one{"{0} °F"}
                 other{"{0} °F"}
+            }
+            generic{
+                dnam{"°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            kelvin{
+                dnam{"K"}
+                one{"{0} K"}
+                other{"{0} K"}
             }
         }
         volume{
@@ -1354,6 +1520,8 @@ et{
             }
             fathom{
                 dnam{"süllad"}
+                one{"{0} fm"}
+                other{"{0} fm"}
             }
             foot{
                 dnam{"ft"}
@@ -1363,6 +1531,8 @@ et{
             }
             furlong{
                 dnam{"furlongid"}
+                one{"{0} fur"}
+                other{"{0} fur"}
             }
             inch{
                 dnam{"tollid"}
@@ -1382,7 +1552,7 @@ et{
                 other{"{0} valgusa."}
             }
             meter{
-                dnam{"meetrid"}
+                dnam{"m"}
                 one{"{0} m"}
                 other{"{0} m"}
                 per{"{0}/m"}
@@ -1427,6 +1597,11 @@ et{
                 one{"{0} pm"}
                 other{"{0} pm"}
             }
+            point{
+                dnam{"punktid"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
             yard{
                 dnam{"jardid"}
                 one{"{0} yd"}
@@ -1447,7 +1622,7 @@ et{
                 other{"{0} ct"}
             }
             gram{
-                dnam{"g"}
+                dnam{"grammid"}
                 one{"{0} g"}
                 other{"{0} g"}
                 per{"{0}/g"}
@@ -1492,6 +1667,8 @@ et{
             }
             stone{
                 dnam{"kivid"}
+                one{"{0} st"}
+                other{"{0} st"}
             }
             ton{
                 dnam{"lüh t"}

@@ -692,7 +692,7 @@ begin
 locale	pattern	format	output	breaks
 en	#0%	0.4376	44%
 // This next test breaks JDK. JDK doesn't multiply by 100.
-fa	\u0025\u00a0\u0023\u0030	0.4376	\u200e\u066a\u00a0\u06f4\u06f4	K
+fa	\u0025\u00a0\u0023\u0030	0.4376	\u066a\u00a0\u06f4\u06f4	K
 
 test localized pattern basic symbol coverage
 begin

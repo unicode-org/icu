@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en{
-    Version{"2.1.35.6"}
+    Version{"2.1.37.1"}
     units{
         acceleration{
             g-force{
@@ -881,8 +881,8 @@ en{
             }
             byte{
                 dnam{"byte"}
-                one{"{0}byte"}
-                other{"{0}byte"}
+                one{"{0}B"}
+                other{"{0}B"}
             }
             gigabit{
                 dnam{"Gbit"}

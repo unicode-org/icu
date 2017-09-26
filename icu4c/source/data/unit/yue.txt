@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 yue{
-    Version{"2.1.35.10"}
+    Version{"2.1.37.33"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -14,7 +14,7 @@ yue{
                 other{"{0} G 力"}
             }
             meter-per-second-squared{
-                dnam{"每平方秒公尺"}
+                dnam{"米/平方秒"}
                 other{"每平方秒 {0} 米"}
             }
         }
@@ -36,7 +36,7 @@ yue{
                 other{"{0} 弧度"}
             }
             revolution{
-                dnam{"圈數"}
+                dnam{"圈"}
                 other{"{0} 圈"}
             }
         }
@@ -50,31 +50,33 @@ yue{
                 other{"{0} 公頃"}
             }
             square-centimeter{
-                dnam{"平方公分"}
-                other{"{0} 平方公分"}
+                dnam{"平方厘米"}
+                other{"{0} 平方厘米"}
                 per{"每平方厘米 {0}"}
             }
             square-foot{
-                dnam{"平方英尺"}
-                other{"{0} 平方英尺"}
+                dnam{"平方英呎"}
+                other{"{0} 平方英呎"}
             }
             square-inch{
-                dnam{"平方英寸"}
-                other{"{0} 平方英寸"}
-                per{"每平方吋 {0}"}
+                dnam{"平方英吋"}
+                other{"{0} 平方英吋"}
+                per{"每平方英吋 {0}"}
             }
             square-kilometer{
                 dnam{"平方公里"}
                 other{"{0} 平方公里"}
+                per{"每平方公里 {0}"}
             }
             square-meter{
-                dnam{"平方公尺"}
-                other{"{0} 平方公尺"}
+                dnam{"平方米"}
+                other{"{0} 平方米"}
                 per{"每平方米 {0}"}
             }
             square-mile{
                 dnam{"平方英里"}
                 other{"{0} 平方英里"}
+                per{"每平方英里 {0}"}
             }
             square-yard{
                 dnam{"平方碼"}
@@ -89,19 +91,35 @@ yue{
                 dnam{"克拉"}
                 other{"{0} 克拉"}
             }
+            milligram-per-deciliter{
+                dnam{"毫克/公合"}
+                other{"{0} 毫克/公合"}
+            }
+            millimole-per-liter{
+                dnam{"毫摩爾/公升"}
+                other{"{0} 毫摩爾/公升"}
+            }
+            part-per-million{
+                dnam{"百萬分率"}
+                other{"{0} 百萬分率"}
+            }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"每 100 公里公升"}
-                other{"每 100 公里 {0} 公升"}
+                dnam{"公升/100 公里"}
+                other{"{0} 公升/100 公里"}
             }
             liter-per-kilometer{
-                dnam{"每公里公升"}
-                other{"每公里 {0} 公升"}
+                dnam{"公升/公里"}
+                other{"{0} 公升/公里"}
             }
             mile-per-gallon{
-                dnam{"每加侖英里"}
-                other{"每加侖 {0} 英里"}
+                dnam{"英里/加侖"}
+                other{"{0} 英里/加侖"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"英里/英制加侖"}
+                other{"{0} 英里/英制加侖"}
             }
         }
         coordinate{
@@ -160,7 +178,7 @@ yue{
             day{
                 dnam{"天"}
                 other{"{0} 天"}
-                per{"每日 {0}"}
+                per{"每天 {0}"}
             }
             hour{
                 dnam{"小時"}
@@ -197,7 +215,7 @@ yue{
             week{
                 dnam{"週"}
                 other{"{0} 週"}
-                per{"每星期 {0}"}
+                per{"每週 {0}"}
             }
             year{
                 dnam{"年"}
@@ -229,7 +247,7 @@ yue{
                 other{"{0} 卡路里"}
             }
             foodcalorie{
-                dnam{"卡路里"}
+                dnam{"大卡"}
                 other{"{0} 大卡"}
             }
             joule{
@@ -237,8 +255,8 @@ yue{
                 other{"{0} 焦耳"}
             }
             kilocalorie{
-                dnam{"千卡路里"}
-                other{"{0} 千卡路里"}
+                dnam{"千卡"}
+                other{"{0} 千卡"}
             }
             kilojoule{
                 dnam{"千焦耳"}
@@ -273,8 +291,8 @@ yue{
                 other{"{0} 天文單位"}
             }
             centimeter{
-                dnam{"公分"}
-                other{"{0} 公分"}
+                dnam{"厘米"}
+                other{"{0} 厘米"}
                 per{"每厘米 {0}"}
             }
             decimeter{
@@ -286,18 +304,18 @@ yue{
                 other{"{0} 英尋"}
             }
             foot{
-                dnam{"英尺"}
-                other{"{0} 英尺"}
-                per{"每呎 {0}"}
+                dnam{"英呎"}
+                other{"{0} 英呎"}
+                per{"每英呎 {0}"}
             }
             furlong{
                 dnam{"化朗"}
                 other{"{0} 化朗"}
             }
             inch{
-                dnam{"英寸"}
-                other{"{0} 英寸"}
-                per{"每吋 {0}"}
+                dnam{"英吋"}
+                other{"{0} 英吋"}
+                per{"每英吋 {0}"}
             }
             kilometer{
                 dnam{"公里"}
@@ -309,8 +327,8 @@ yue{
                 other{"{0} 光年"}
             }
             meter{
-                dnam{"公尺"}
-                other{"{0} 公尺"}
+                dnam{"米"}
+                other{"{0} 米"}
                 per{"每米 {0}"}
             }
             micrometer{
@@ -326,8 +344,8 @@ yue{
                 other{"{0} 斯堪地那維亞英里"}
             }
             millimeter{
-                dnam{"公釐"}
-                other{"{0} 公釐"}
+                dnam{"毫米"}
+                other{"{0} 毫米"}
             }
             nanometer{
                 dnam{"奈米"}
@@ -344,6 +362,10 @@ yue{
             picometer{
                 dnam{"皮米"}
                 other{"{0} 皮米"}
+            }
+            point{
+                dnam{"點"}
+                other{"{0} 點"}
             }
             yard{
                 dnam{"碼"}
@@ -384,13 +406,13 @@ yue{
                 other{"{0} 毫克"}
             }
             ounce{
-                dnam{"盎司"}
-                other{"{0} 盎司"}
+                dnam{"安士"}
+                other{"{0} 安士"}
                 per{"每安士 {0}"}
             }
             ounce-troy{
-                dnam{"金衡盎司"}
-                other{"{0} 金衡盎司"}
+                dnam{"金衡安士"}
+                other{"{0} 金衡安士"}
             }
             pound{
                 dnam{"磅"}
@@ -412,8 +434,8 @@ yue{
                 other{"{0} 吉瓦"}
             }
             horsepower{
-                dnam{"馬力"}
-                other{"{0} 匹馬力"}
+                dnam{"匹"}
+                other{"{0} 匹"}
             }
             kilowatt{
                 dnam{"千瓦特"}
@@ -438,8 +460,8 @@ yue{
                 other{"{0} 百帕"}
             }
             inch-hg{
-                dnam{"英寸汞柱"}
-                other{"{0} 英寸汞柱"}
+                dnam{"英吋汞柱"}
+                other{"{0} 英吋汞柱"}
             }
             millibar{
                 dnam{"毫巴"}
@@ -450,13 +472,13 @@ yue{
                 other{"{0} 毫米汞柱"}
             }
             pound-per-square-inch{
-                dnam{"每平方英寸磅力"}
+                dnam{"磅力/平方英吋"}
                 other{"每平方吋 {0} 磅"}
             }
         }
         speed{
             kilometer-per-hour{
-                dnam{"每小時公里"}
+                dnam{"公里/小時"}
                 other{"每小時 {0} 公里"}
             }
             knot{
@@ -464,21 +486,21 @@ yue{
                 other{"{0} 節"}
             }
             meter-per-second{
-                dnam{"每秒公尺"}
+                dnam{"米/秒"}
                 other{"每秒 {0} 米"}
             }
             mile-per-hour{
-                dnam{"每小時英里"}
+                dnam{"英里/小時"}
                 other{"每小時 {0} 英里"}
             }
         }
         temperature{
             celsius{
-                dnam{"攝氏度數"}
+                dnam{"攝氏"}
                 other{"攝氏 {0} 度"}
             }
             fahrenheit{
-                dnam{"華氏度數"}
+                dnam{"華氏"}
                 other{"華氏 {0} 度"}
             }
             generic{
@@ -492,8 +514,8 @@ yue{
         }
         volume{
             acre-foot{
-                dnam{"英畝英尺"}
-                other{"{0} 英畝英尺"}
+                dnam{"英畝英呎"}
+                other{"{0} 英畝英呎"}
             }
             bushel{
                 dnam{"蒲式耳"}
@@ -504,25 +526,25 @@ yue{
                 other{"{0} 釐升"}
             }
             cubic-centimeter{
-                dnam{"立方公分"}
-                other{"{0} 立方公分"}
+                dnam{"立方厘米"}
+                other{"{0} 立方厘米"}
                 per{"每立方厘米 {0}"}
             }
             cubic-foot{
-                dnam{"立方英尺"}
-                other{"{0} 立方英尺"}
+                dnam{"立方英呎"}
+                other{"{0} 立方英呎"}
             }
             cubic-inch{
-                dnam{"立方英寸"}
-                other{"{0} 立方英寸"}
+                dnam{"立方英吋"}
+                other{"{0} 立方英吋"}
             }
             cubic-kilometer{
                 dnam{"立方公里"}
                 other{"{0} 立方公里"}
             }
             cubic-meter{
-                dnam{"立方公尺"}
-                other{"{0} 立方公尺"}
+                dnam{"立方米"}
+                other{"{0} 立方米"}
                 per{"每立方米 {0}"}
             }
             cubic-mile{
@@ -539,6 +561,7 @@ yue{
             }
             cup-metric{
                 dnam{"公制量杯"}
+                other{"{0} 公制杯"}
             }
             deciliter{
                 dnam{"公合"}
@@ -552,6 +575,11 @@ yue{
                 dnam{"加侖"}
                 other{"{0} 加侖"}
                 per{"每加侖 {0}"}
+            }
+            gallon-imperial{
+                dnam{"英制加侖"}
+                other{"{0} 英制加侖"}
+                per{"每英制加侖 {0}"}
             }
             hectoliter{
                 dnam{"公石"}
@@ -654,8 +682,8 @@ yue{
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"升/100公里"}
-                other{"每100公里{0}升"}
+                dnam{"公升/100 公里"}
+                other{"{0}L/100km"}
             }
             liter-per-kilometer{
                 other{"{0}L/km"}
@@ -795,8 +823,8 @@ yue{
                 other{"{0}au"}
             }
             centimeter{
-                dnam{"公分"}
-                other{"{0} 公分"}
+                dnam{"厘米"}
+                other{"{0} 厘米"}
             }
             decimeter{
                 other{"{0}dm"}
@@ -823,8 +851,8 @@ yue{
                 other{"{0}光年"}
             }
             meter{
-                dnam{"公尺"}
-                other{"{0} 公尺"}
+                dnam{"米"}
+                other{"{0} 米"}
             }
             micrometer{
                 other{"{0}µm"}
@@ -833,8 +861,8 @@ yue{
                 other{"{0}英里"}
             }
             millimeter{
-                dnam{"公釐"}
-                other{"{0} 公釐"}
+                dnam{"毫米"}
+                other{"{0} 毫米"}
             }
             nanometer{
                 other{"{0}nm"}
@@ -1006,7 +1034,7 @@ yue{
             }
             liter{
                 dnam{"公升"}
-                other{"{0} 升"}
+                other{"{0} 公升"}
             }
             megaliter{
                 other{"{0}ML"}
@@ -1035,7 +1063,7 @@ yue{
                 other{"{0} G 力"}
             }
             meter-per-second-squared{
-                dnam{"公尺/平方秒"}
+                dnam{"米/平方秒"}
                 other{"每平方秒{0}米"}
             }
         }
@@ -1057,7 +1085,7 @@ yue{
                 other{"{0} 弧度"}
             }
             revolution{
-                dnam{"圈數"}
+                dnam{"圈"}
                 other{"{0} 圈"}
             }
         }
@@ -1071,31 +1099,33 @@ yue{
                 other{"{0} 公頃"}
             }
             square-centimeter{
-                dnam{"平方公分"}
-                other{"{0} 平方公分"}
+                dnam{"平方厘米"}
+                other{"{0} 平方厘米"}
                 per{"每平方厘米{0}"}
             }
             square-foot{
-                dnam{"平方英尺"}
-                other{"{0} 平方英尺"}
+                dnam{"平方英呎"}
+                other{"{0} 平方英呎"}
             }
             square-inch{
-                dnam{"平方英寸"}
-                other{"{0} 平方英寸"}
-                per{"每平方吋{0}"}
+                dnam{"平方英吋"}
+                other{"{0} 平方英吋"}
+                per{"每平方英吋{0}"}
             }
             square-kilometer{
                 dnam{"平方公里"}
                 other{"{0} 平方公里"}
+                per{"每平方公里{0}"}
             }
             square-meter{
-                dnam{"平方公尺"}
-                other{"{0} 平方公尺"}
+                dnam{"平方米"}
+                other{"{0} 平方米"}
                 per{"每平方米{0}"}
             }
             square-mile{
                 dnam{"平方英里"}
                 other{"{0} 平方英里"}
+                per{"每平方英里{0}"}
             }
             square-yard{
                 dnam{"平方碼"}
@@ -1112,20 +1142,33 @@ yue{
             }
             milligram-per-deciliter{
                 dnam{"毫克/公合"}
+                other{"{0} 毫克/公合"}
+            }
+            millimole-per-liter{
+                dnam{"毫摩爾/公升"}
+                other{"{0} 毫摩爾/公升"}
+            }
+            part-per-million{
+                dnam{"百萬分率"}
+                other{"{0} 百萬分率"}
             }
         }
         consumption{
             liter-per-100kilometers{
-                dnam{"升/100 公里"}
-                other{"每100公里 {0} 升"}
+                dnam{"公升/100 公里"}
+                other{"{0} 公升/100 公里"}
             }
             liter-per-kilometer{
                 dnam{"公升/公里"}
-                other{"每公里{0}公升"}
+                other{"{0} 公升/公里"}
             }
             mile-per-gallon{
                 dnam{"英里/加侖"}
-                other{"每加侖{0}英里"}
+                other{"{0} 英里/加侖"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"英里/英制加侖"}
+                other{"{0} 英里/英制加侖"}
             }
         }
         coordinate{
@@ -1184,7 +1227,7 @@ yue{
             day{
                 dnam{"天"}
                 other{"{0} 天"}
-                per{"每日{0}"}
+                per{"每天{0}"}
             }
             hour{
                 dnam{"小時"}
@@ -1250,7 +1293,7 @@ yue{
         energy{
             calorie{
                 dnam{"卡路里"}
-                other{"{0} 卡"}
+                other{"{0} 卡路里"}
             }
             foodcalorie{
                 dnam{"大卡"}
@@ -1258,7 +1301,7 @@ yue{
             }
             joule{
                 dnam{"焦耳"}
-                other{"{0} 焦"}
+                other{"{0} 焦耳"}
             }
             kilocalorie{
                 dnam{"千卡"}
@@ -1293,12 +1336,12 @@ yue{
         }
         length{
             astronomical-unit{
-                dnam{"au"}
+                dnam{"天文單位"}
                 other{"{0} 天文單位"}
             }
             centimeter{
-                dnam{"公分"}
-                other{"{0} 公分"}
+                dnam{"厘米"}
+                other{"{0} 厘米"}
                 per{"每厘米{0}"}
             }
             decimeter{
@@ -1310,18 +1353,18 @@ yue{
                 other{"{0} 英尋"}
             }
             foot{
-                dnam{"英尺"}
-                other{"{0} 呎"}
-                per{"每呎{0}"}
+                dnam{"英呎"}
+                other{"{0} 英呎"}
+                per{"每英呎{0}"}
             }
             furlong{
                 dnam{"化朗"}
                 other{"{0} 化朗"}
             }
             inch{
-                dnam{"英寸"}
-                other{"{0} 吋"}
-                per{"每吋{0}"}
+                dnam{"英吋"}
+                other{"{0} 英吋"}
+                per{"每英吋{0}"}
             }
             kilometer{
                 dnam{"公里"}
@@ -1333,8 +1376,8 @@ yue{
                 other{"{0} 光年"}
             }
             meter{
-                dnam{"公尺"}
-                other{"{0} 公尺"}
+                dnam{"米"}
+                other{"{0} 米"}
                 per{"每米{0}"}
             }
             micrometer{
@@ -1350,8 +1393,8 @@ yue{
                 other{"{0} 斯堪地那維亞英里"}
             }
             millimeter{
-                dnam{"公釐"}
-                other{"{0} 公釐"}
+                dnam{"毫米"}
+                other{"{0} 毫米"}
             }
             nanometer{
                 dnam{"奈米"}
@@ -1368,6 +1411,10 @@ yue{
             picometer{
                 dnam{"皮米"}
                 other{"{0} 皮米"}
+            }
+            point{
+                dnam{"點"}
+                other{"{0} 點"}
             }
             yard{
                 dnam{"碼"}
@@ -1408,13 +1455,13 @@ yue{
                 other{"{0} 毫克"}
             }
             ounce{
-                dnam{"盎司"}
-                other{"{0} 盎司"}
+                dnam{"安士"}
+                other{"{0} 安士"}
                 per{"每安士{0}"}
             }
             ounce-troy{
-                dnam{"金衡盎司"}
-                other{"{0} 金衡盎司"}
+                dnam{"金衡安士"}
+                other{"{0} 金衡安士"}
             }
             pound{
                 dnam{"磅"}
@@ -1440,20 +1487,20 @@ yue{
                 other{"{0} 匹"}
             }
             kilowatt{
-                dnam{"千瓦"}
-                other{"{0} 千瓦"}
+                dnam{"千瓦特"}
+                other{"{0} 千瓦特"}
             }
             megawatt{
-                dnam{"百萬瓦"}
-                other{"{0} 百萬瓦"}
+                dnam{"百萬瓦特"}
+                other{"{0} 百萬瓦特"}
             }
             milliwatt{
-                dnam{"毫瓦"}
-                other{"{0} 毫瓦"}
+                dnam{"毫瓦特"}
+                other{"{0} 毫瓦特"}
             }
             watt{
                 dnam{"瓦特"}
-                other{"{0} 瓦"}
+                other{"{0} 瓦特"}
             }
         }
         pressure{
@@ -1462,8 +1509,8 @@ yue{
                 other{"{0} 百帕"}
             }
             inch-hg{
-                dnam{"英寸汞柱"}
-                other{"{0} 英寸汞柱"}
+                dnam{"英吋汞柱"}
+                other{"{0} 英吋汞柱"}
             }
             millibar{
                 dnam{"毫巴"}
@@ -1474,7 +1521,7 @@ yue{
                 other{"{0} 毫米汞柱"}
             }
             pound-per-square-inch{
-                dnam{"磅力/平方英寸"}
+                dnam{"磅力/平方英吋"}
                 other{"每平方吋{0}磅"}
             }
         }
@@ -1488,7 +1535,7 @@ yue{
                 other{"{0} 節"}
             }
             meter-per-second{
-                dnam{"公尺/秒"}
+                dnam{"米/秒"}
                 other{"每秒{0}米"}
             }
             mile-per-hour{
@@ -1510,14 +1557,14 @@ yue{
                 other{"{0}°"}
             }
             kelvin{
-                dnam{"K"}
-                other{"{0} K"}
+                dnam{"克耳文"}
+                other{"{0} 克耳文"}
             }
         }
         volume{
             acre-foot{
-                dnam{"英畝英尺"}
-                other{"{0} 英畝英尺"}
+                dnam{"英畝英呎"}
+                other{"{0} 英畝英呎"}
             }
             bushel{
                 dnam{"bu"}
@@ -1528,25 +1575,25 @@ yue{
                 other{"{0} 釐升"}
             }
             cubic-centimeter{
-                dnam{"立方公分"}
-                other{"{0} 立方公分"}
+                dnam{"立方厘米"}
+                other{"{0} 立方厘米"}
                 per{"每立方厘米{0}"}
             }
             cubic-foot{
-                dnam{"立方英尺"}
-                other{"{0} 立方英尺"}
+                dnam{"立方英呎"}
+                other{"{0} 立方英呎"}
             }
             cubic-inch{
-                dnam{"立方英寸"}
-                other{"{0} 立方英寸"}
+                dnam{"立方英吋"}
+                other{"{0} 立方英吋"}
             }
             cubic-kilometer{
                 dnam{"立方公里"}
                 other{"{0} 立方公里"}
             }
             cubic-meter{
-                dnam{"立方公尺"}
-                other{"{0} 立方公尺"}
+                dnam{"立方米"}
+                other{"{0} 立方米"}
                 per{"每立方米{0}"}
             }
             cubic-mile{
@@ -1580,6 +1627,8 @@ yue{
             }
             gallon-imperial{
                 dnam{"英制加侖"}
+                other{"{0} 英制加侖"}
+                per{"每英制加侖{0}"}
             }
             hectoliter{
                 dnam{"公石"}
@@ -1587,8 +1636,8 @@ yue{
             }
             liter{
                 dnam{"公升"}
-                other{"{0} 升"}
-                per{"每升{0}"}
+                other{"{0} 公升"}
+                per{"每公升{0}"}
             }
             megaliter{
                 dnam{"兆升"}

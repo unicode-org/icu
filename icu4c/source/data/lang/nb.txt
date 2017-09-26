@@ -148,7 +148,7 @@ nb{
         dtp{"sentraldusun"}
         dua{"duala"}
         dum{"mellomnederlandsk"}
-        dv{"dhivehi"}
+        dv{"divehi"}
         dyo{"jola-fonyi"}
         dyu{"dyula"}
         dz{"dzongkha"}
@@ -249,7 +249,7 @@ nb{
         io{"ido"}
         is{"islandsk"}
         it{"italiensk"}
-        iu{"inuittisk"}
+        iu{"inuktitut"}
         izh{"ingrisk"}
         ja{"japansk"}
         jam{"jamaicansk kreolengelsk"}
@@ -422,11 +422,11 @@ nb{
         oc{"oksitansk"}
         oj{"ojibwa"}
         om{"oromo"}
-        or{"oriya"}
+        or{"odia"}
         os{"ossetisk"}
         osa{"osage"}
         ota{"ottomansk tyrkisk"}
-        pa{"punjabi"}
+        pa{"panjabi"}
         pag{"pangasinan"}
         pal{"pahlavi"}
         pam{"pampanga"}
@@ -449,7 +449,7 @@ nb{
         ps{"pashto"}
         pt{"portugisisk"}
         qu{"quechua"}
-        quc{"quiché"}
+        quc{"k’iche’"}
         qug{"kichwa (Chimborazo-høylandet)"}
         raj{"rajasthani"}
         rap{"rapanui"}
@@ -472,7 +472,7 @@ nb{
         rwk{"rwa"}
         sa{"sanskrit"}
         sad{"sandawe"}
-        sah{"jakutisk"}
+        sah{"sakha"}
         sam{"samaritansk arameisk"}
         saq{"samburu"}
         sas{"sasak"}
@@ -531,7 +531,7 @@ nb{
         sw_CD{"kongolesisk swahili"}
         swb{"komorisk"}
         syc{"klassisk syrisk"}
-        syr{"gammelsyrisk"}
+        syr{"syriakisk"}
         szl{"schlesisk"}
         ta{"tamil"}
         tcy{"tulu"}
@@ -647,7 +647,7 @@ nb{
         Blis{"blissymbol"}
         Bopo{"bopomofo"}
         Brah{"brahmi"}
-        Brai{"braille"}
+        Brai{"punktskrift"}
         Bugi{"buginesisk"}
         Buhd{"buhid"}
         Cakm{"chakma"}
@@ -731,7 +731,7 @@ nb{
         Mroo{"mro"}
         Mtei{"meitei-mayek"}
         Mult{"multani"}
-        Mymr{"myanmar"}
+        Mymr{"burmesisk"}
         Narb{"gammelnordarabisk"}
         Nbat{"nabataeansk"}
         Nkgb{"naxi geba"}
@@ -831,7 +831,7 @@ nb{
         Teng{"tengwar"}
         Tfng{"tifinagh"}
         Tglg{"tagalog"}
-        Thaa{"thaana"}
+        Thaa{"taana"}
         Thai{"thai"}
         Tibt{"tibetansk"}
         Tirh{"tirhuta"}
@@ -845,7 +845,7 @@ nb{
         Yiii{"yi"}
         Zinh{"nedarvet"}
         Zmth{"matematisk notasjon"}
-        Zsye{"zsye"}
+        Zsye{"emoji"}
         Zsym{"symboler"}
         Zxxx{"språk uten skrift"}
         Zyyy{"felles"}
@@ -936,8 +936,8 @@ nb{
             zhuyin{"zhuyin-sortering"}
         }
         d0{
-            fwidth{"Full bredde"}
-            hwidth{"Halv bredde"}
+            fwidth{"full bredde"}
+            hwidth{"halv bredde"}
             npinyin{"Numerisk"}
         }
         hc{
@@ -952,8 +952,8 @@ nb{
             strict{"streng linjeskiftstil"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"USBGN-translitterasjon"}
+            ungegn{"UNGEGN-translitterasjon"}
         }
         ms{
             metric{"metrisk system"}
@@ -1000,12 +1000,12 @@ nb{
             mlym{"malayalam-sifre"}
             mong{"mongolske tall"}
             mtei{"meetei mayek-tall"}
-            mymr{"myanmarske sifre"}
+            mymr{"burmesiske sifre"}
             mymrshan{"myanmar shan-tall"}
             native{"Språkspesifikke sifre"}
             nkoo{"n’ko-tall"}
             olck{"ol chiki-tall"}
-            orya{"oriya-sifre"}
+            orya{"odia-sifre"}
             osma{"osmanya-tall"}
             roman{"romertall"}
             romanlow{"små romertall"}
@@ -1096,7 +1096,7 @@ nb{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.5"}
     characterLabelPattern{
         all{"{0} – alt"}
         category-list{"{0}: {1}"}

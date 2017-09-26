@@ -659,9 +659,11 @@ static const TransIDSourceTarg dataVarCompItems[] = {
     { "Greek-Latin",
       "\\u1F08 \\u1FBC \\u1F89 \\u1FEC",
       "A \\u0100I H\\u0100I RH" },
+/* The following transform is provisional and not present in ICU 60
     { "Greek-Latin/BGN",
       "\\u1F08 \\u1FBC \\u1F89 \\u1FEC",
       "A\\u0313 A\\u0345 A\\u0314\\u0345 \\u1FEC" },
+*/
     { "Greek-Latin/UNGEGN",
       "\\u1F08 \\u1FBC \\u1F89 \\u1FEC",
       "A A A R" },

@@ -19,20 +19,24 @@ pt_PT{
         CC{"Ilhas dos Cocos (Keeling)"}
         CD{"Congo-Kinshasa"}
         CG{"Congo-Brazzaville"}
-        CM{"Camarões"}
+        CI{"Côte d’Ivoire (Costa do Marfim)"}
         CW{"Curaçau"}
         CX{"Ilha do Natal"}
-        CZ{"República Checa"}
+        CZ{"Chéquia"}
         DJ{"Jibuti"}
         DM{"Domínica"}
         EE{"Estónia"}
+        EH{"Sara Ocidental"}
+        EZ{"Zona Euro"}
         FK{"Ilhas Falkland"}
         FO{"Ilhas Faroé"}
         GL{"Gronelândia"}
         GU{"Guame"}
         IR{"Irão"}
         KE{"Quénia"}
+        KI{"Quiribáti"}
         KN{"São Cristóvão e Neves"}
+        KW{"Koweit"}
         KY{"Ilhas Caimão"}
         LI{"Listenstaine"}
         LK{"Sri Lanca"}
@@ -45,21 +49,23 @@ pt_PT{
         MW{"Maláui"}
         NC{"Nova Caledónia"}
         NL{"Países Baixos"}
+        NU{"Niuê"}
         PL{"Polónia"}
-        PM{"São Pedro e Miquelão"}
         PS{"Territórios palestinianos"}
         QO{"Oceânia Insular"}
         RO{"Roménia"}
-        SG{"Singapura"}
         SI{"Eslovénia"}
         SM{"São Marinho"}
         SV{"Salvador"}
+        SX{"São Martinho (Sint Maarten)"}
         TC{"Ilhas Turcas e Caicos"}
+        TJ{"Tajiquistão"}
         TK{"Toquelau"}
         TM{"Turquemenistão"}
         TT{"Trindade e Tobago"}
         UM{"Ilhas Menores Afastadas dos EUA"}
         UZ{"Usbequistão"}
+        VI{"Ilhas Virgens dos EUA"}
         VN{"Vietname"}
         YE{"Iémen"}
         YT{"Maiote"}
@@ -67,12 +73,13 @@ pt_PT{
     }
     Countries%short{
         GB{"GB"}
-        UN{"ONU"}
     }
     Countries%variant{
         CG{"República do Congo"}
+        CI{"Costa do Marfim"}
+        CZ{"República Checa"}
         FK{"Ilhas Malvinas"}
         MK{"Macedónia (ARJM)"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.6"}
 }

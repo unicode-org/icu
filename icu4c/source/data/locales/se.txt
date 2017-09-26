@@ -7,6 +7,7 @@ se{
         "[A Á B C Č D Đ E É F G H I J K L M N Ŋ O P Q R S Š T Ŧ U V W X Y Z Ž Ø Æ Å Ä"
         " Ö]"
     }
+    ExemplarCharactersNumbers{"[  , % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
     NumberElements{
         latn{
             miscPatterns{
@@ -165,7 +166,7 @@ se{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"2.1.34.45"}
+    Version{"2.1.37.1"}
     calendar{
         gregorian{
             AmPmMarkers{

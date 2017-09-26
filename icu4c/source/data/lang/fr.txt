@@ -580,8 +580,8 @@ fr{
         tw{"twi"}
         twq{"tasawaq"}
         ty{"tahitien"}
-        tyv{"touva"}
-        tzm{"tamazight du Maroc central"}
+        tyv{"touvain"}
+        tzm{"amazighe de l’Atlas central"}
         udm{"oudmourte"}
         ug{"ouïghour"}
         uga{"ougaritique"}
@@ -681,7 +681,7 @@ fr{
         Grek{"grec"}
         Gujr{"goudjarâtî"}
         Guru{"gourmoukhî"}
-        Hanb{"Hanb"}
+        Hanb{"han avec bopomofo"}
         Hang{"hangûl"}
         Hani{"sinogrammes"}
         Hano{"hanounóo"}
@@ -694,7 +694,7 @@ fr{
         Hung{"ancien hongrois"}
         Inds{"indus"}
         Ital{"ancien italique"}
-        Jamo{"Jamo"}
+        Jamo{"jamo"}
         Java{"javanais"}
         Jpan{"japonais"}
         Kali{"kayah li"}
@@ -773,7 +773,7 @@ fr{
         Yiii{"yi"}
         Zinh{"hérité"}
         Zmth{"notation mathématique"}
-        Zsye{"Zsye"}
+        Zsye{"emoji"}
         Zsym{"symboles"}
         Zxxx{"non écrit"}
         Zyyy{"commun"}
@@ -790,16 +790,17 @@ fr{
         calendar{
             buddhist{"calendrier bouddhiste"}
             chinese{"calendrier chinois"}
-            coptic{"Calendrier copte"}
+            coptic{"calendrier copte"}
             dangi{"calendrier dangi"}
             ethiopic{"calendrier éthiopien"}
-            ethiopic-amete-alem{"Calendrier éthiopien Amete Alem"}
+            ethiopic-amete-alem{"calendrier éthiopien Amete Alem"}
             gregorian{"calendrier grégorien"}
             hebrew{"calendrier hébraïque"}
-            indian{"Calendrier indien"}
+            indian{"calendrier indien"}
             islamic{"calendrier musulman"}
             islamic-civil{"calendrier musulman (tabulaire, époque civile)"}
             islamic-tbla{"calendrier musulman (tabulaire, époque astronomique)"}
+            islamic-umalqura{"calendrier musulman (Umm al Qura)"}
             iso8601{"calendrier ISO 8601"}
             japanese{"calendrier japonais"}
             persian{"calendrier persan"}
@@ -848,25 +849,27 @@ fr{
             }
         }
         collation{
-            big5han{"Ordre chinois traditionnel - Big5"}
-            dictionary{"Ordre du dictionnaire"}
+            big5han{"ordre chinois traditionnel - Big5"}
+            compat{"ancien ordre de tri pour compatibilité"}
+            dictionary{"ordre du dictionnaire"}
             ducet{"ordre de tri Unicode par défaut"}
-            gb2312han{"Ordre chinois simplifié - GB2312"}
-            phonebook{"Ordre de l’annuaire"}
-            phonetic{"Ordre de tri phonétique"}
-            pinyin{"Ordre pinyin"}
-            reformed{"Ordre réformé"}
+            eor{"règles de classement européen"}
+            gb2312han{"ordre chinois simplifié - GB2312"}
+            phonebook{"ordre de l’annuaire"}
+            phonetic{"ordre de tri phonétique"}
+            pinyin{"ordre pinyin"}
+            reformed{"ordre réformé"}
             search{"recherche générique"}
             searchjl{"rechercher par consonne initiale en hangeul"}
             standard{"ordre de tri standard"}
-            stroke{"Ordre des traits"}
-            traditional{"Ordre traditionnel"}
-            unihan{"Ordre de tri radical-traits"}
+            stroke{"ordre des traits"}
+            traditional{"ordre traditionnel"}
+            unihan{"ordre de tri radical-traits"}
             zhuyin{"ordre zhuyin"}
         }
         d0{
-            fwidth{"Pleine chasse"}
-            hwidth{"Demi-chasse"}
+            fwidth{"pleine chasse"}
+            hwidth{"demi-chasse"}
             npinyin{"Numérique"}
         }
         hc{
@@ -963,10 +966,10 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.35.3"}
+    Version{"2.1.37.1"}
     characterLabelPattern{
         all{"{0} — tout"}
-        category-list{"{0}: {1}"}
+        category-list{"{0} : {1}"}
         compatibility{"{0} — compatibilité"}
         enclosed{"{0} — entouré"}
         extended{"{0} — étendu"}
