@@ -194,6 +194,10 @@ $ExtendNumLetEx  $KatakanaEx     {400};    #  (13b)
 $HangulSyllable $HangulSyllable {200};
 $KanaKanji $KanaKanji {400}; # different rule status if both kana and kanji found
 
+# Rule 999
+#     Match a single code point if no other rule applies.
+.;
+
 
 ## -------------------------------------------------
 

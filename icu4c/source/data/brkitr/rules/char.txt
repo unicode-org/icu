@@ -78,6 +78,9 @@ $Prepend [^$Control $CR $LF];
 ^$Prepend* $Regional_Indicator $Regional_Indicator / $Regional_Indicator;
 ^$Prepend* $Regional_Indicator $Regional_Indicator;
 
+# GB 999 Match a single code point if no other rule applies.
+.;
+
 ## -------------------------------------------------
 
 !!safe_reverse;
