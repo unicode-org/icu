@@ -170,6 +170,11 @@ class U_I18N_API NumberFormat : public Format {
 public:
     /**
      * Rounding mode.
+     *
+     * <p>
+     * For more detail on rounding modes, see:
+     * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+     *
      * @stable ICU 2.4
      */
     enum ERoundingMode {
