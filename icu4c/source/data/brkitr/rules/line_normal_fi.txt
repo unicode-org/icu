@@ -342,6 +342,10 @@ $RI $CM* $RI $CM* $ZWJ ($ID | $Extended_Pict | $EmojiNRK);
 # LB 30b Do not break between an Emoji Base and an Emoji Modifier
 $EB $CM* $EM;
 
+# LB 31 Break everywhere else.
+#       Match a single code point if no other rule applies.
+.;
+
 ## -------------------------------------------------
 
 !!safe_reverse;
