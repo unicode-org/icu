@@ -4,7 +4,6 @@
 #include <uassert.h>
 #include "unicode/numberformatter.h"
 #include "number_decimalquantity.h"
-#include "number_results.h"
 #include "number_formatimpl.h"
 
 using namespace icu::number;
