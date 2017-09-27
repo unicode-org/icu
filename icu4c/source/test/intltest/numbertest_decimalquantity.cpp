@@ -33,9 +33,9 @@ void DecimalQuantityTest::assertDoubleEquals(const char *message, double a, doub
 }
 
 void DecimalQuantityTest::assertHealth(const DecimalQuantity &fq) {
-    UnicodeString health = fq.checkHealth();
-    if (!health.isBogus()) {
-        errln(UnicodeString("HEALTH FAILURE: ") + fq.toString());
+    const char16_t* health = fq.checkHealth();
+    if (health != nullptr) {
+        errln(UnicodeString(u"HEALTH FAILURE: ") + UnicodeString(health) + u": " + fq.toString());
     }
 }
 
