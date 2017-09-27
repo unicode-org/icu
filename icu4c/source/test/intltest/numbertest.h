@@ -58,6 +58,7 @@ class NumberFormatterApiTest : public IntlTest {
     void sign();
     void decimal();
     void locale();
+    void formatTypes();
     void errors();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
@@ -101,7 +102,7 @@ class DecimalQuantityTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
   private:
-    void assertDoubleEquals(const char *message, double a, double b);
+    void assertDoubleEquals(UnicodeString message, double a, double b);
     void assertHealth(const DecimalQuantity &fq);
     void assertToStringAndHealth(const DecimalQuantity &fq, const UnicodeString &expected);
     void checkDoubleBehavior(double d, bool explicitRequired);

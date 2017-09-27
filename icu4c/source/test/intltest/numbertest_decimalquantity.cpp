@@ -21,7 +21,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
     TESTCASE_AUTO_END;
 }
 
-void DecimalQuantityTest::assertDoubleEquals(const char *message, double a, double b) {
+void DecimalQuantityTest::assertDoubleEquals(UnicodeString message, double a, double b) {
     if (a == b) {
         return;
     }
@@ -30,7 +30,7 @@ void DecimalQuantityTest::assertDoubleEquals(const char *message, double a, doub
     diff = diff < 0 ? -diff : diff;
     double bound = a < 0 ? -a * 1e-6 : a * 1e-6;
     if (diff > bound) {
-        errln(message);
+        errln(message + u": " + DoubleToUnicodeString(a) + u" vs " + DoubleToUnicodeString(b) + u" differ by " + DoubleToUnicodeString(diff));
     }
 }
 
@@ -54,12 +54,18 @@ void DecimalQuantityTest::checkDoubleBehavior(double d, bool explicitRequired) {
     if (explicitRequired) {
         assertTrue("Should be using approximate double", !fq.isExplicitExactDouble());
     }
-    assertDoubleEquals("Initial construction from hard double", d, fq.toDouble());
+    UnicodeString baseStr = fq.toString();
+    assertDoubleEquals(
+        UnicodeString(u"Initial construction from hard double: ") + baseStr,
+        d, fq.toDouble());
     fq.roundToInfinity();
+    UnicodeString newStr = fq.toString();
     if (explicitRequired) {
         assertTrue("Should not be using approximate double", fq.isExplicitExactDouble());
     }
-    assertDoubleEquals("After conversion to exact BCD (double)", d, fq.toDouble());
+    assertDoubleEquals(
+        UnicodeString(u"After conversion to exact BCD (double): ") + baseStr + u" vs " + newStr,
+        d, fq.toDouble());
 }
 
 void DecimalQuantityTest::testDecimalQuantityBehaviorStandalone() {
@@ -205,11 +211,11 @@ void DecimalQuantityTest::testConvertToAccurateDouble() {
         checkDoubleBehavior(d, false);
     }
 
-    assertDoubleEquals("NaN check failed", NAN, DecimalQuantity().setToDouble(NAN).toDouble());
+    assertDoubleEquals(u"NaN check failed", NAN, DecimalQuantity().setToDouble(NAN).toDouble());
     assertDoubleEquals(
-            "Inf check failed", INFINITY, DecimalQuantity().setToDouble(INFINITY).toDouble());
+            u"Inf check failed", INFINITY, DecimalQuantity().setToDouble(INFINITY).toDouble());
     assertDoubleEquals(
-            "-Inf check failed", -INFINITY, DecimalQuantity().setToDouble(-INFINITY).toDouble());
+            u"-Inf check failed", -INFINITY, DecimalQuantity().setToDouble(-INFINITY).toDouble());
 
     // Generate random doubles
     for (int32_t i = 0; i < 10000; i++) {

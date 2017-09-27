@@ -70,6 +70,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(sign);
         TESTCASE_AUTO(decimal);
         TESTCASE_AUTO(locale);
+        TESTCASE_AUTO(formatTypes);
         TESTCASE_AUTO(errors);
     TESTCASE_AUTO_END;
 }
@@ -1400,6 +1401,14 @@ void NumberFormatterApiTest::locale() {
     UnicodeString actual = NumberFormatter::withLocale(Locale::getFrench()).formatInt(1234, status)
             .toString();
     assertEquals("Locale withLocale()", u"1 234", actual);
+}
+
+void NumberFormatterApiTest::formatTypes() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalizedNumberFormatter formatter = NumberFormatter::withLocale(Locale::getEnglish());
+    const char* str1 = "98765432123456789E1";
+    UnicodeString actual = formatter.formatDecimal(str1, status).toString();
+    assertEquals("Format decNumber", u"987,654,321,234,567,890", actual);
 }
 
 void NumberFormatterApiTest::errors() {
