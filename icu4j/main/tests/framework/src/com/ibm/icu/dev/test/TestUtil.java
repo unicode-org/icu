@@ -171,6 +171,7 @@ public final class TestUtil {
             lock.inc();
         }
 
+        @Override
         public void run() {
             try {
                 synchronized (lock) {
@@ -235,11 +236,24 @@ public final class TestUtil {
         int ver = -1;
         String verstr = System.getProperty("java.version");
         if (verstr != null) {
-            String[] numbers = verstr.split("\\.");
-            try {
-                ver = Integer.parseInt(numbers[1]);
-            } catch (NumberFormatException e) {
-                ver = -1;
+            String majorVerStr = null;
+            if (verstr.startsWith("1.")) {
+                String[] numbers = verstr.split("\\.");
+                if (numbers.length > 1) {
+                    majorVerStr = numbers[1];
+                }
+            } else {
+                String[] numbers = verstr.split("\\.|-");
+                if (numbers.length > 0) {
+                    majorVerStr = numbers[0];
+                }
+            }
+            if (majorVerStr != null) {
+                try {
+                    ver = Integer.parseInt(majorVerStr);
+                } catch (NumberFormatException e) {
+                    ver = -1;
+                }
             }
         }
         return ver;
