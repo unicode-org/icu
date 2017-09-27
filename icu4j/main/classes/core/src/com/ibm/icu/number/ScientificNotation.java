@@ -21,6 +21,7 @@ import com.ibm.icu.text.NumberFormat;
  * To create a ScientificNotation, use one of the factory methods in {@link Notation}.
  *
  * @draft ICU 60
+ * @provisional This API might change or be removed in a future release.
  * @see NumberFormatter
  */
 public class ScientificNotation extends Notation implements Cloneable {
@@ -50,6 +51,7 @@ public class ScientificNotation extends Notation implements Cloneable {
      *            The minimum number of digits to show in the exponent.
      * @return A ScientificNotation, for chaining.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public ScientificNotation withMinExponentDigits(int minExponentDigits) {
@@ -75,6 +77,7 @@ public class ScientificNotation extends Notation implements Cloneable {
      *            The strategy for displaying the sign in the exponent.
      * @return A ScientificNotation, for chaining.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public ScientificNotation withExponentSignDisplay(SignDisplay exponentSignDisplay) {

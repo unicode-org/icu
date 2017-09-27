@@ -8,7 +8,6 @@ import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Measure;
@@ -18,7 +17,12 @@ import com.ibm.icu.util.ULocale;
 
 /**
  * An abstract base class for specifying settings related to number formatting. This class is implemented by
- * {@link UnlocalizedNumberFormatter} and {@link LocalizedNumberFormatter}.
+ * {@link UnlocalizedNumberFormatter} and {@link LocalizedNumberFormatter}. This class is not intended for public
+ * subclassing.
+ *
+ * @draft ICU 60
+ * @provisional This API might change or be removed in a future release.
+ * @see NumberFormatter
  */
 public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<?>> {
 
@@ -74,8 +78,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *            The notation strategy to use.
      * @return The fluent chain.
      * @see Notation
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      */
     public T notation(Notation notation) {
         return create(KEY_NOTATION, notation);
@@ -93,7 +97,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * <p>
      * <strong>Note:</strong> The unit can also be specified by passing a {@link Measure} to
      * {@link LocalizedNumberFormatter#format(Measure)}. Units specified via the format method take precedence over
-     * units specified here.
+     * units specified here. This setter is designed for situations when the unit is constant for the duration of the
+     * number formatting process.
      *
      * <p>
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
@@ -126,8 +131,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @see MeasureUnit
      * @see Currency
      * @see NoUnit
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      */
     public T unit(MeasureUnit unit) {
         return create(KEY_UNIT, unit);
@@ -150,14 +155,19 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * NumberFormatter.with().rounding(Rounder.fixedFraction(2))
      * </pre>
      *
-     * The default is to not perform rounding.
+     * <p>
+     * In most cases, the default rounding strategy is to round to 6 fraction places; i.e.,
+     * <code>Rounder.maxFraction(6)</code>. The exceptions are if compact notation is being used, then the compact
+     * notation rounding strategy is used (see {@link Notation#compactShort} for details), or if the unit is a currency,
+     * then standard currency rounding is used, which varies from currency to currency (see {@link Rounder#currency} for
+     * details).
      *
      * @param rounder
      *            The rounding strategy to use.
      * @return The fluent chain.
      * @see Rounder
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      */
     public T rounding(Rounder rounder) {
         return create(KEY_ROUNDER, rounder);
@@ -189,9 +199,10 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @return The fluent chain.
      * @see Grouper
      * @see Notation
-     * @provisional This API might change or be removed in a future release.
-     * @draft ICU 60
+     * @internal
+     * @deprecated ICU 60 This API is technical preview; see #7861.
      */
+    @Deprecated
     public T grouping(Grouper grouper) {
         return create(KEY_GROUPER, grouper);
     }
@@ -218,8 +229,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *            The integer width to use.
      * @return The fluent chain.
      * @see IntegerWidth
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      */
     public T integerWidth(IntegerWidth style) {
         return create(KEY_INTEGER, style);
@@ -263,8 +274,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *            The DecimalFormatSymbols to use.
      * @return The fluent chain.
      * @see DecimalFormatSymbols
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      */
     public T symbols(DecimalFormatSymbols symbols) {
         symbols = (DecimalFormatSymbols) symbols.clone();
@@ -299,58 +310,121 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *            The NumberingSystem to use.
      * @return The fluent chain.
      * @see NumberingSystem
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      */
     public T symbols(NumberingSystem ns) {
         return create(KEY_SYMBOLS, ns);
     }
 
     /**
-     * Sets the width of the unit (measure unit or currency).
+     * Sets the width of the unit (measure unit or currency). Most common values:
      *
      * <ul>
-     * <li>Narrow: "$12.00", "12 m"
-     * <li>Short: "12.00 USD", "12 m"
-     * <li>Wide: "12.00 US dollars", "12 meters"
-     * <li>Hidden: "12.00", "12"
+     * <li>Short: "$12.00", "12 m"
+     * <li>ISO Code: "USD 12.00"
+     * <li>Full name: "12.00 US dollars", "12 meters"
      * </ul>
      *
      * <p>
-     * Pass an element from the {@link FormatWidth} enum to this setter. For example:
+     * Pass an element from the {@link UnitWidth} enum to this setter. For example:
      *
      * <pre>
-     * NumberFormatter.with().unitWidth(FormatWidth.SHORT)
+     * NumberFormatter.with().unitWidth(UnitWidth.FULL_NAME)
      * </pre>
      *
      * <p>
-     * The default is the narrow width.
+     * The default is the SHORT width.
      *
      * @param style
-     *            The with to use when rendering numbers.
+     *            The width to use when rendering numbers.
      * @return The fluent chain
-     * @see FormatWidth
-     * @provisional This API might change or be removed in a future release.
+     * @see UnitWidth
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      */
     public T unitWidth(UnitWidth style) {
         return create(KEY_UNIT_WIDTH, style);
     }
 
+    /**
+     * Sets the plus/minus sign display strategy. Most common values:
+     *
+     * <ul>
+     * <li>Auto: "123", "-123"
+     * <li>Always: "+123", "-123"
+     * <li>Accounting: "$123", "($123)"
+     * </ul>
+     *
+     * <p>
+     * Pass an element from the {@link SignDisplay} enum to this setter. For example:
+     *
+     * <pre>
+     * NumberFormatter.with().sign(SignDisplay.ALWAYS)
+     * </pre>
+     *
+     * <p>
+     * The default is AUTO sign display.
+     *
+     * @param style
+     *            The sign display strategy to use when rendering numbers.
+     * @return The fluent chain
+     * @see SignDisplay
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
     public T sign(SignDisplay style) {
         return create(KEY_SIGN, style);
     }
 
+    /**
+     * Sets the decimal separator display strategy. This affects integer numbers with no fraction part. Most common
+     * values:
+     *
+     * <ul>
+     * <li>Auto: "1"
+     * <li>Always: "1."
+     * </ul>
+     *
+     * <p>
+     * Pass an element from the {@link DecimalSeparatorDisplay} enum to this setter. For example:
+     *
+     * <pre>
+     * NumberFormatter.with().decimal(DecimalSeparatorDisplay.ALWAYS)
+     * </pre>
+     *
+     * <p>
+     * The default is AUTO decimal separator display.
+     *
+     * @param style
+     *            The decimal separator display strategy to use when rendering numbers.
+     * @return The fluent chain
+     * @see DecimalSeparatorDisplay
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
     public T decimal(DecimalSeparatorDisplay style) {
         return create(KEY_DECIMAL, style);
     }
 
-    /** Internal method to set a starting macros. */
+    /**
+     * Internal method to set a starting macros.
+     *
+     * @internal
+     * @deprecated ICU 60 This API is ICU internal only.
+     */
+    @Deprecated
     public T macros(MacroProps macros) {
         return create(KEY_MACROS, macros);
     }
 
-    /** Non-public method */
+    /**
+     * Set the padding strategy. May be added to ICU 61; see #13338.
+     *
+     * @internal
+     * @deprecated ICU 60 This API is ICU internal only.
+     */
+    @Deprecated
     public T padding(Padder padder) {
         return create(KEY_PADDER, padder);
     }
@@ -358,12 +432,16 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     /**
      * Internal fluent setter to support a custom regulation threshold. A threshold of 1 causes the data structures to
      * be built right away. A threshold of 0 prevents the data structures from being built.
+     *
+     * @internal
+     * @deprecated ICU 60 This API is ICU internal only.
      */
+    @Deprecated
     public T threshold(Long threshold) {
         return create(KEY_THRESHOLD, threshold);
     }
 
-    abstract T create(int key, Object value);
+    /* package-protected */ abstract T create(int key, Object value);
 
     MacroProps resolve() {
         if (resolvedMacros != null) {

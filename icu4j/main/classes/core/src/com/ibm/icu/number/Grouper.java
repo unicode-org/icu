@@ -5,6 +5,11 @@ package com.ibm.icu.number;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 
+/**
+ * @internal
+ * @deprecated This API is a technical preview. It is likely to change in an upcoming release.
+ */
+@Deprecated
 public class Grouper {
 
     // Conveniences for Java handling of bytes
@@ -27,14 +32,29 @@ public class Grouper {
         this.min2 = min2;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is a technical preview. It is likely to change in an upcoming release.
+     */
+    @Deprecated
     public static Grouper defaults() {
         return DEFAULTS;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is a technical preview. It is likely to change in an upcoming release.
+     */
+    @Deprecated
     public static Grouper minTwoDigits() {
         return MIN2;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is a technical preview. It is likely to change in an upcoming release.
+     */
+    @Deprecated
     public static Grouper none() {
         return NONE;
     }
@@ -91,4 +111,4 @@ public class Grouper {
         return position >= 0 && (position % grouping2) == 0
                 && value.getUpperDisplayMagnitude() - grouping1 + 1 >= (min2 ? 2 : 1);
     }
-  }
+}

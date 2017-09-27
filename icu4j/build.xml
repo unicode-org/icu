@@ -1239,6 +1239,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
@@ -1273,6 +1274,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
@@ -1318,6 +1320,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
@@ -1522,6 +1525,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
@@ -1543,6 +1547,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
@@ -1588,6 +1593,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
             </packageset>

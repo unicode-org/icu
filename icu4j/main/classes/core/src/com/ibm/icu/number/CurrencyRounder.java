@@ -12,6 +12,7 @@ import com.ibm.icu.util.Currency;
  * To create a CurrencyRounder, use one of the factory methods on Rounder.
  *
  * @draft ICU 60
+ * @provisional This API might change or be removed in a future release.
  * @see NumberFormatter
  */
 public abstract class CurrencyRounder extends Rounder {
@@ -35,6 +36,7 @@ public abstract class CurrencyRounder extends Rounder {
      *            The currency to associate with this rounding strategy.
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public Rounder withCurrency(Currency currency) {

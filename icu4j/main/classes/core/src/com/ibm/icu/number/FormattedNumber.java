@@ -14,6 +14,14 @@ import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
+/**
+ * The result of a number formatting operation. This class allows the result to be exported in several data types,
+ * including a String, an AttributedCharacterIterator, and a BigDecimal.
+ *
+ * @draft ICU 60
+ * @provisional This API might change or be removed in a future release.
+ * @see NumberFormatter
+ */
 public class FormattedNumber {
     NumberStringBuilder nsb;
     DecimalQuantity fq;
@@ -25,11 +33,35 @@ public class FormattedNumber {
         this.micros = micros;
     }
 
+    /**
+     * Creates a String representation of the the formatted number.
+     *
+     * @return a String containing the localized number.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
     @Override
     public String toString() {
         return nsb.toString();
     }
 
+    /**
+     * Append the formatted number to an Appendable, such as a StringBuilder. This may be slightly more efficient than
+     * creating a String.
+     *
+     * <p>
+     * If an IOException occurs when appending to the Appendable, an unchecked {@link ICUUncheckedIOException} is thrown
+     * instead.
+     *
+     * @param appendable
+     *            The Appendable to which to append the formatted number string.
+     * @return The same Appendable, for chaining.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see Appendable
+     * @see NumberFormatter
+     */
     public <A extends Appendable> A appendTo(A appendable) {
         try {
             appendable.append(nsb);
@@ -40,6 +72,25 @@ public class FormattedNumber {
         return appendable;
     }
 
+    /**
+     * Determine the start and end indices of the first occurrence of the given <em>field</em> in the output string.
+     * This allows you to determine the locations of the integer part, fraction part, and sign.
+     *
+     * <p>
+     * If multiple different field attributes are needed, this method can be called repeatedly, or if <em>all</em> field
+     * attributes are needed, consider using getFieldIterator().
+     *
+     * <p>
+     * If a field occurs multiple times in an output string, such as a grouping separator, this method will only ever
+     * return the first occurrence. Use getFieldIterator() to access all occurrences of an attribute.
+     *
+     * @param fieldPosition
+     *            The FieldPosition to populate with the start and end indices of the desired field.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see com.ibm.icu.text.NumberFormat.Field
+     * @see NumberFormatter
+     */
     public void populateFieldPosition(FieldPosition fieldPosition) {
         populateFieldPosition(fieldPosition, 0);
     }
@@ -54,17 +105,40 @@ public class FormattedNumber {
         fq.populateUFieldPosition(fieldPosition);
     }
 
-    public AttributedCharacterIterator getAttributes() {
+    /**
+     * Export the formatted number as an AttributedCharacterIterator. This allows you to determine which characters in
+     * the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and sign.
+     *
+     * <p>
+     * If information on only one field is needed, consider using populateFieldPosition() instead.
+     *
+     * @return An AttributedCharacterIterator, containing information on the field attributes of the number string.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see com.ibm.icu.text.NumberFormat.Field
+     * @see AttributedCharacterIterator
+     * @see NumberFormatter
+     */
+    public AttributedCharacterIterator getFieldIterator() {
         return nsb.getIterator();
     }
 
+    /**
+     * Export the formatted number as a BigDecimal. This endpoint is useful for obtaining the exact number being printed
+     * after scaling and rounding have been applied by the number formatting pipeline.
+     *
+     * @return A BigDecimal representation of the formatted number.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
     public BigDecimal toBigDecimal() {
         return fq.toBigDecimal();
     }
 
     /**
      * @internal
-     * @deprecated This API a technology preview. It is not stable and may change or go away in an upcoming release.
+     * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public String getPrefix() {
@@ -79,7 +153,7 @@ public class FormattedNumber {
 
     /**
      * @internal
-     * @deprecated This API a technology preview. It is not stable and may change or go away in an upcoming release.
+     * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public String getSuffix() {
@@ -94,7 +168,7 @@ public class FormattedNumber {
 
     /**
      * @internal
-     * @deprecated This API a technology preview. It is not stable and may change or go away in an upcoming release.
+     * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public IFixedDecimal getFixedDecimal() {

@@ -416,7 +416,7 @@ public class DecimalQuantityTest extends TestFmwk {
     // Generate random doubles
     String alert = "UNEXPECTED FAILURE: PLEASE REPORT THIS MESSAGE TO THE ICU TEAM: ";
     Random rnd = new Random();
-    for (int i = 0; i < 1000000; i++) {
+    for (int i = 0; i < 10000; i++) {
       double d = Double.longBitsToDouble(rnd.nextLong());
       if (Double.isNaN(d) || Double.isInfinite(d)) continue;
       checkDoubleBehavior(d, false, alert);

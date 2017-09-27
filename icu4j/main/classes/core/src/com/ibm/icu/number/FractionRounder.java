@@ -12,6 +12,7 @@ import com.ibm.icu.impl.number.RoundingUtils;
  * To create a FractionRounder, use one of the factory methods on Rounder.
  *
  * @draft ICU 60
+ * @provisional This API might change or be removed in a future release.
  * @see NumberFormatter
  */
 public abstract class FractionRounder extends Rounder {
@@ -34,6 +35,7 @@ public abstract class FractionRounder extends Rounder {
      *            The number of significant figures to guarantee.
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public Rounder withMinDigits(int minSignificantDigits) {
@@ -61,6 +63,7 @@ public abstract class FractionRounder extends Rounder {
      *            Round the number to no more than this number of significant figures.
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public Rounder withMaxDigits(int maxSignificantDigits) {
