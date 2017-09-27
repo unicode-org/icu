@@ -67,9 +67,9 @@ bool ConstantAffixModifier::isStrong() const {
 }
 
 SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong)
-        : fCompiledPattern(simpleFormatter.getCompiledPattern()), fField(field), fStrong(strong) {
+        : fCompiledPattern(simpleFormatter.compiledPattern), fField(field), fStrong(strong) {
     U_ASSERT(1 ==
-             SimpleFormatter::getArgumentLimit(compiledPattern.getBuffer(), compiledPattern.length()));
+             SimpleFormatter::getArgumentLimit(fCompiledPattern.getBuffer(), fCompiledPattern.length()));
     if (fCompiledPattern.charAt(1) != 0) {
         fPrefixLength = fCompiledPattern.charAt(1) - ARG_NUM_LIMIT;
         fSuffixOffset = 3 + fPrefixLength;

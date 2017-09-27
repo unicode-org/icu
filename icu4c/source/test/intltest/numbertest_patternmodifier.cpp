@@ -1,19 +1,20 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include "intltest.h"
+#include "numbertest.h"
+#include "number_patternmodifier.h"
 
-class PatternStringTest : public IntlTest {
-  public:
-    testBasic();
-    testMutableEqualsImmutable();
+void PatternModifierTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
+    if (exec) {
+        logln("TestSuite PatternModifierTest: ");
+    }
+    TESTCASE_AUTO_BEGIN;
+        TESTCASE_AUTO(testBasic);
+        TESTCASE_AUTO(testMutableEqualsImmutable);
+    TESTCASE_AUTO_END;
+}
 
-  private:
-    static UnicodeString getPrefix(const MutablePatternModifier &mod, UErrorCode &status);
-    static UnicodeString getSuffix(const MutablePatternModifier &mod, UErrorCode &status);
-};
-
-void PatternStringTest::testBasic() {
+void PatternModifierTest::testBasic() {
     UErrorCode status = U_ZERO_ERROR;
     MutablePatternModifier mod(false);
     ParsedPatternInfo patternInfo;
@@ -63,7 +64,7 @@ void PatternStringTest::testBasic() {
     assertSuccess("Spot 5", status);
 }
 
-void PatternStringTest::testMutableEqualsImmutable() {
+void PatternModifierTest::testMutableEqualsImmutable() {
     UErrorCode status = U_ZERO_ERROR;
     MutablePatternModifier mod(false);
     ParsedPatternInfo patternInfo;
@@ -104,14 +105,14 @@ void PatternStringTest::testMutableEqualsImmutable() {
     assertFalse(nsb1.toUnicodeString() + " vs " + nsb3.toUnicodeString(), nsb1.contentEquals(nsb3));
 }
 
-static UnicodeString PatternStringTest::getPrefix(const MutablePatternModifier &mod, UErrorCode &status) {
+UnicodeString PatternModifierTest::getPrefix(const MutablePatternModifier &mod, UErrorCode &status) {
     NumberStringBuilder nsb;
     mod.apply(nsb, 0, 0, status);
     int32_t prefixLength = mod.getPrefixLength(status);
     return UnicodeString(nsb.toUnicodeString(), 0, prefixLength);
 }
 
-static UnicodeString PatternStringTest::getSuffix(const MutablePatternModifier &mod, UErrorCode &status) {
+UnicodeString PatternModifierTest::getSuffix(const MutablePatternModifier &mod, UErrorCode &status) {
     NumberStringBuilder nsb;
     mod.apply(nsb, 0, 0, status);
     int32_t prefixLength = mod.getPrefixLength(status);

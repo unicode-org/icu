@@ -307,7 +307,7 @@ void MutablePatternModifier::enterCharSequenceMode(bool isPrefix) {
 }
 
 void MutablePatternModifier::exitCharSequenceMode() {
-    U_ASSERT(inCharSequenceMode)
+    U_ASSERT(inCharSequenceMode);
     inCharSequenceMode = false;
 }
 

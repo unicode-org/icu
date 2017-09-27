@@ -21,6 +21,13 @@
 
 U_NAMESPACE_BEGIN
 
+// Forward declaration:
+namespace number {
+namespace impl {
+class SimpleModifier;
+}
+}
+
 /**
  * Formats simple patterns like "{1} was born in {0}".
  * Minimal subset of MessageFormat; fast, simple, minimal dependencies.
@@ -261,15 +268,6 @@ public:
         return getTextWithNoArguments(compiledPattern.getBuffer(), compiledPattern.length());
     }
 
-    /**
-     * Gets the internal compiled pattern string.
-     * @internal
-     * @deprecated ICU 60 This API is ICU internal only.
-     */
-    UnicodeString getCompiledPattern() const {
-        return compiledPattern;
-    }
-
 private:
     /**
      * Binary representation of the compiled pattern.
@@ -295,6 +293,9 @@ private:
             UnicodeString &result, const UnicodeString *resultCopy, UBool forbidResultAsValue,
             int32_t *offsets, int32_t offsetsLength,
             UErrorCode &errorCode);
+
+    // Give access to internals to SimpleModifier for number formatting
+    friend class number::impl::SimpleModifier;
 };
 
 U_NAMESPACE_END

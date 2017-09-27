@@ -1,7 +1,21 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-void testToPatternSimple() {
+#include "numbertest.h"
+#include "number_patternstring.h"
+
+void PatternStringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
+    if (exec) {
+        logln("TestSuite PatternStringTest: ");
+    }
+    TESTCASE_AUTO_BEGIN;
+        TESTCASE_AUTO(testToPatternSimple);
+        TESTCASE_AUTO(testExceptionOnInvalid);
+        TESTCASE_AUTO(testBug13117);
+    TESTCASE_AUTO_END;
+}
+
+void PatternStringTest::testToPatternSimple() {
     const char16_t *cases[][2] = {{u"#", u"0"},
                                   {u"0", u"0"},
                                   {u"#0", u"0"},
@@ -36,7 +50,7 @@ void testToPatternSimple() {
     }
 }
 
-void testExceptionOnInvalid() {
+void PatternStringTest::testExceptionOnInvalid() {
     static const char16_t *invalidPatterns[] = {
             u"#.#.#",
             u"0#",
@@ -59,7 +73,7 @@ void testExceptionOnInvalid() {
     }
 }
 
-void testBug13117() {
+void PatternStringTest::testBug13117() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatProperties expected = PatternParser::parseToProperties(
             u"0",

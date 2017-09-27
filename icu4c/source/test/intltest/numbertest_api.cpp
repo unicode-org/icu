@@ -5,115 +5,76 @@
 
 #include <charstr.h>
 #include <cstdarg>
-#include <unicode/unum.h>
-#include <unicode/uclean.h>
-#include "temp_test_helpers.h"
+#include "unicode/unum.h"
 #include "unicode/numberformatter.h"
 #include "number_types.h"
+#include "numbertest.h"
 
-#include <iostream>
-#include "unicode/ustream.h"
+// Horrible workaround for the lack of a status code in the constructor...
+UErrorCode globalNumberFormatterApiTestStatus = U_ZERO_ERROR;
 
-using namespace icu;
-using namespace icu::number;
-using namespace icu::number::impl;
+NumberFormatterApiTest::NumberFormatterApiTest()
+        : NumberFormatterApiTest(globalNumberFormatterApiTestStatus) {
+    U_ASSERT(U_SUCCESS(globalNumberFormatterApiTestStatus));
+}
 
-class numbertest_api {
-  public:
-    explicit numbertest_api(UErrorCode &status) : USD(u"USD", status), GBP(u"GBP", status),
-                                                       CZK(u"CZK", status), CAD(u"CAD", status),
-                                                       FRENCH_SYMBOLS(Locale::getFrench(), status),
-                                                       SWISS_SYMBOLS(Locale("de-CH"), status),
-                                                       MYANMAR_SYMBOLS(Locale("my"), status) {
-        MeasureUnit *unit = MeasureUnit::createMeter(status);
-        METER = *unit;
-        delete unit;
-        unit = MeasureUnit::createDay(status);
-        DAY = *unit;
-        delete unit;
-        unit = MeasureUnit::createSquareMeter(status);
-        SQUARE_METER = *unit;
-        delete unit;
-        unit = MeasureUnit::createFahrenheit(status);
-        FAHRENHEIT = *unit;
-        delete unit;
+NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode &status)
+              : USD(u"USD", status), GBP(u"GBP", status),
+                CZK(u"CZK", status), CAD(u"CAD", status),
+                FRENCH_SYMBOLS(Locale::getFrench(), status),
+                SWISS_SYMBOLS(Locale("de-CH"), status),
+                MYANMAR_SYMBOLS(Locale("my"), status) {
 
-        NumberingSystem *ns = NumberingSystem::createInstanceByName("mathsanb", status);
-        MATHSANB = *ns;
-        delete ns;
-        ns = NumberingSystem::createInstanceByName("latn", status);
-        LATN = *ns;
-        delete ns;
+    MeasureUnit *unit = MeasureUnit::createMeter(status);
+    METER = *unit;
+    delete unit;
+    unit = MeasureUnit::createDay(status);
+    DAY = *unit;
+    delete unit;
+    unit = MeasureUnit::createSquareMeter(status);
+    SQUARE_METER = *unit;
+    delete unit;
+    unit = MeasureUnit::createFahrenheit(status);
+    FAHRENHEIT = *unit;
+    delete unit;
+
+    NumberingSystem *ns = NumberingSystem::createInstanceByName("mathsanb", status);
+    MATHSANB = *ns;
+    delete ns;
+    ns = NumberingSystem::createInstanceByName("latn", status);
+    LATN = *ns;
+    delete ns;
+}
+
+void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
+    if (exec) {
+        logln("TestSuite NumberFormatterApiTest: ");
     }
+    TESTCASE_AUTO_BEGIN;
+        TESTCASE_AUTO(notationSimple);
+        TESTCASE_AUTO(notationScientific);
+        TESTCASE_AUTO(notationCompact);
+        TESTCASE_AUTO(unitMeasure);
+        TESTCASE_AUTO(unitCurrency);
+        TESTCASE_AUTO(unitPercent);
+        TESTCASE_AUTO(roundingFraction);
+        TESTCASE_AUTO(roundingFigures);
+        TESTCASE_AUTO(roundingFractionFigures);
+        TESTCASE_AUTO(roundingOther);
+        TESTCASE_AUTO(grouping);
+        TESTCASE_AUTO(padding);
+        TESTCASE_AUTO(integerWidth);
+        TESTCASE_AUTO(symbols);
+        // TODO: Add this method if currency symbols override support is added.
+        //TESTCASE_AUTO(symbolsOverride);
+        TESTCASE_AUTO(sign);
+        TESTCASE_AUTO(decimal);
+        TESTCASE_AUTO(locale);
+        TESTCASE_AUTO(errors);
+    TESTCASE_AUTO_END;
+}
 
-    void notationSimple();
-
-    void notationScientific();
-
-    void notationCompact();
-
-    void unitMeasure();
-
-    void unitCurrency();
-
-    void unitPercent();
-
-    void roundingFraction();
-
-    void roundingFigures();
-
-    void roundingFractionFigures();
-
-    void roundingOther();
-
-    void grouping();
-
-    void padding();
-
-    void integerWidth();
-
-    void symbols();
-
-    // TODO: Add this method if currency symbols override support is added.
-    //void symbolsOverride();
-
-    void sign();
-
-    void decimal();
-
-    void locale();
-
-    void errors();
-
-  private:
-    CurrencyUnit USD;
-    CurrencyUnit GBP;
-    CurrencyUnit CZK;
-    CurrencyUnit CAD;
-
-    MeasureUnit METER;
-    MeasureUnit DAY;
-    MeasureUnit SQUARE_METER;
-    MeasureUnit FAHRENHEIT;
-
-    NumberingSystem MATHSANB;
-    NumberingSystem LATN;
-
-    DecimalFormatSymbols FRENCH_SYMBOLS;
-    DecimalFormatSymbols SWISS_SYMBOLS;
-    DecimalFormatSymbols MYANMAR_SYMBOLS;
-
-    void assertFormatDescending(const UnicodeString &message, const UnlocalizedNumberFormatter &f,
-                                const Locale &locale, ...);
-
-    void assertFormatDescendingBig(const UnicodeString &message, const UnlocalizedNumberFormatter &f,
-                                   const Locale &locale, ...);
-
-    void assertFormatSingle(const UnicodeString &message, const UnlocalizedNumberFormatter &f,
-                            const Locale &locale, double input, const UnicodeString &expected);
-};
-
-void numbertest_api::notationSimple() {
+void NumberFormatterApiTest::notationSimple() {
     assertFormatDescending(
             u"Basic",
             NumberFormatter::with(),
@@ -137,7 +98,7 @@ void numbertest_api::notationSimple() {
 }
 
 
-void numbertest_api::notationScientific() {
+void NumberFormatterApiTest::notationScientific() {
     assertFormatDescending(
             u"Scientific",
             NumberFormatter::with().notation(Notation::scientific()),
@@ -203,7 +164,7 @@ void numbertest_api::notationScientific() {
             u"-1E6");
 }
 
-void numbertest_api::notationCompact() {
+void NumberFormatterApiTest::notationCompact() {
     assertFormatDescending(
             u"Compact Short",
             NumberFormatter::with().notation(Notation::compactShort()),
@@ -386,7 +347,7 @@ void numbertest_api::notationCompact() {
             u"10M");
 }
 
-void numbertest_api::unitMeasure() {
+void NumberFormatterApiTest::unitMeasure() {
     assertFormatDescending(
             u"Meters Short",
             NumberFormatter::with().adoptUnit(new MeasureUnit(METER)),
@@ -502,7 +463,7 @@ void numbertest_api::unitMeasure() {
             u"5.43 °F");
 }
 
-void numbertest_api::unitCurrency() {
+void NumberFormatterApiTest::unitCurrency() {
     assertFormatDescending(
             u"Currency",
             NumberFormatter::with().unit(GBP),
@@ -582,7 +543,7 @@ void numbertest_api::unitCurrency() {
             u"-£9,876,543.21");
 }
 
-void numbertest_api::unitPercent() {
+void NumberFormatterApiTest::unitPercent() {
     assertFormatDescending(
             u"Percent",
             NumberFormatter::with().unit(NoUnit::percent()),
@@ -626,7 +587,7 @@ void numbertest_api::unitPercent() {
             u"-98.765432%");
 }
 
-void numbertest_api::roundingFraction() {
+void NumberFormatterApiTest::roundingFraction() {
     assertFormatDescending(
             u"Integer",
             NumberFormatter::with().rounding(Rounder::integer()),
@@ -698,7 +659,7 @@ void numbertest_api::roundingFraction() {
             u"0.0");
 }
 
-void numbertest_api::roundingFigures() {
+void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Fixed Significant",
             NumberFormatter::with().rounding(Rounder::fixedDigits(3)),
@@ -742,7 +703,7 @@ void numbertest_api::roundingFigures() {
             u"10.0");
 }
 
-void numbertest_api::roundingFractionFigures() {
+void NumberFormatterApiTest::roundingFractionFigures() {
     assertFormatDescending(
             u"Basic Significant", // for comparison
             NumberFormatter::with().rounding(Rounder::maxDigits(2)),
@@ -800,7 +761,7 @@ void numbertest_api::roundingFractionFigures() {
             u"0.00");
 }
 
-void numbertest_api::roundingOther() {
+void NumberFormatterApiTest::roundingOther() {
     assertFormatDescending(
             u"Rounding None",
             NumberFormatter::with().rounding(Rounder::unlimited()),
@@ -919,7 +880,7 @@ void numbertest_api::roundingOther() {
             u"0");
 }
 
-void numbertest_api::grouping() {
+void NumberFormatterApiTest::grouping() {
     assertFormatDescendingBig(
             u"Western Grouping",
             NumberFormatter::with().grouping(Grouper::defaults()),
@@ -991,7 +952,7 @@ void numbertest_api::grouping() {
             u"0");
 }
 
-void numbertest_api::padding() {
+void NumberFormatterApiTest::padding() {
     assertFormatDescending(
             u"Padding",
             NumberFormatter::with().padding(Padder::none()),
@@ -1121,7 +1082,7 @@ void numbertest_api::padding() {
             u"GBP 000514.23"); // TODO: This is broken; it renders too wide (13 instead of 12).
 }
 
-void numbertest_api::integerWidth() {
+void NumberFormatterApiTest::integerWidth() {
     assertFormatDescending(
             u"Integer Width Default",
             NumberFormatter::with().integerWidth(IntegerWidth::zeroFillTo(1)),
@@ -1193,7 +1154,7 @@ void numbertest_api::integerWidth() {
             u"00");
 }
 
-void numbertest_api::symbols() {
+void NumberFormatterApiTest::symbols() {
     assertFormatDescending(
             u"French Symbols with Japanese Data 1",
             NumberFormatter::with().symbols(FRENCH_SYMBOLS),
@@ -1322,7 +1283,7 @@ void numbertest_api::symbols() {
 //            u"@ 12.30");
 //}
 
-void numbertest_api::sign() {
+void NumberFormatterApiTest::sign() {
     assertFormatSingle(
             u"Sign Auto Positive",
             NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_AUTO),
@@ -1403,7 +1364,7 @@ void numbertest_api::sign() {
             u"(444,444.00)");
 }
 
-void numbertest_api::decimal() {
+void NumberFormatterApiTest::decimal() {
     assertFormatDescending(
             u"Decimal Default",
             NumberFormatter::with().decimal(UNumberDecimalSeparatorDisplay::UNUM_DECIMAL_SEPARATOR_AUTO),
@@ -1433,7 +1394,7 @@ void numbertest_api::decimal() {
             u"0.");
 }
 
-void numbertest_api::locale() {
+void NumberFormatterApiTest::locale() {
     // Coverage for the locale setters.
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString actual = NumberFormatter::withLocale(Locale::getFrench()).formatInt(1234, status)
@@ -1441,7 +1402,7 @@ void numbertest_api::locale() {
     assertEquals("Locale withLocale()", u"1 234", actual);
 }
 
-void numbertest_api::errors() {
+void NumberFormatterApiTest::errors() {
     LocalizedNumberFormatter lnf = NumberFormatter::withLocale(Locale::getEnglish()).rounding(
             Rounder::fixedFraction(
                     -1));
@@ -1466,11 +1427,10 @@ void numbertest_api::errors() {
 }
 
 
-void numbertest_api::assertFormatDescending(const UnicodeString &message,
+void NumberFormatterApiTest::assertFormatDescending(const UnicodeString &message,
                                                  const UnlocalizedNumberFormatter &f,
-                                                 const Locale &locale, ...) {
+                                                 Locale locale, ...) {
     va_list args;
-    // TODO: Fix this? "warning: 'va_start' has undefined behavior with reference types [-Wvarargs]"
     va_start(args, locale);
     static double inputs[] = {87650, 8765, 876.5, 87.65, 8.765, 0.8765, 0.08765, 0.008765, 0};
     const LocalizedNumberFormatter l1 = f.threshold(0).locale(locale); // no self-regulation
@@ -1489,11 +1449,10 @@ void numbertest_api::assertFormatDescending(const UnicodeString &message,
     }
 }
 
-void numbertest_api::assertFormatDescendingBig(const UnicodeString &message,
+void NumberFormatterApiTest::assertFormatDescendingBig(const UnicodeString &message,
                                                     const UnlocalizedNumberFormatter &f,
-                                                    const Locale &locale, ...) {
+                                                    Locale locale, ...) {
     va_list args;
-    // TODO: Fix this? "warning: 'va_start' has undefined behavior with reference types [-Wvarargs]"
     va_start(args, locale);
     static double inputs[] = {87650000, 8765000, 876500, 87650, 8765, 876.5, 87.65, 8.765, 0};
     const LocalizedNumberFormatter l1 = f.threshold(0).locale(locale); // no self-regulation
@@ -1512,8 +1471,8 @@ void numbertest_api::assertFormatDescendingBig(const UnicodeString &message,
     }
 }
 
-void numbertest_api::assertFormatSingle(const UnicodeString &message,
-                                             const UnlocalizedNumberFormatter &f, const Locale &locale,
+void NumberFormatterApiTest::assertFormatSingle(const UnicodeString &message,
+                                             const UnlocalizedNumberFormatter &f, Locale locale,
                                              double input, const UnicodeString &expected) {
     const LocalizedNumberFormatter l1 = f.threshold(0).locale(locale); // no self-regulation
     const LocalizedNumberFormatter l2 = f.threshold(1).locale(locale); // all self-regulation
@@ -1524,29 +1483,4 @@ void numbertest_api::assertFormatSingle(const UnicodeString &message,
     UnicodeString actual2 = l2.formatDouble(input, status).toString();
     assertSuccess(message + u": Safe Path", status);
     assertEquals(message + u": Safe Path", expected, actual2);
-}
-
-int main() {
-    UErrorCode status = U_ZERO_ERROR;
-    numbertest_api test(status);
-    test.notationSimple();
-    test.notationScientific();
-    test.notationCompact();
-    test.unitMeasure();
-    test.unitCurrency();
-    test.unitPercent();
-    test.roundingFraction();
-    test.roundingFigures();
-    test.roundingFractionFigures();
-    test.roundingOther();
-    test.grouping();
-    test.padding();
-    test.integerWidth();
-    test.symbols();
-    test.sign();
-    test.decimal();
-    test.locale();
-    test.errors();
-
-    u_cleanup();
 }
