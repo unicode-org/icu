@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "number_decimfmtprops.h"
 
 using namespace icu::number::impl;
@@ -12,7 +14,7 @@ DecimalFormatProperties::DecimalFormatProperties() {
 void DecimalFormatProperties::clear() {
     compactStyle.nullify();
     currency.nullify();
-    currencyPluralInfo.adoptInstead(nullptr);
+    currencyPluralInfo.fPtr.adoptInstead(nullptr);
     currencyUsage.nullify();
     decimalPatternMatchRequired = false;
     decimalSeparatorAlwaysShown = false;
@@ -54,7 +56,7 @@ bool DecimalFormatProperties::operator==(const DecimalFormatProperties &other) c
     bool eq = true;
     eq = eq && compactStyle == other.compactStyle;
     eq = eq && currency == other.currency;
-    eq = eq && currencyPluralInfo.getAlias() == other.currencyPluralInfo.getAlias();
+    eq = eq && currencyPluralInfo.fPtr.getAlias() == other.currencyPluralInfo.fPtr.getAlias();
     eq = eq && currencyUsage == other.currencyUsage;
     eq = eq && decimalPatternMatchRequired == other.decimalPatternMatchRequired;
     eq = eq && decimalSeparatorAlwaysShown == other.decimalSeparatorAlwaysShown;
@@ -92,3 +94,5 @@ bool DecimalFormatProperties::operator==(const DecimalFormatProperties &other) c
     eq = eq && signAlwaysShown == other.signAlwaysShown;
     return eq;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

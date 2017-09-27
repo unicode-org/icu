@@ -1,8 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_NUMFMTTER_UTILS_H
-#define NUMBERFORMAT_NUMFMTTER_UTILS_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_UTILS_H__
+#define __NUMBER_UTILS_H__
 
 #include "unicode/numberformatter.h"
 #include "number_types.h"
@@ -122,4 +123,6 @@ inline const UnicodeString getDigitFromSymbols(int8_t digit, const DecimalFormat
 } // namespace number
 U_NAMESPACE_END
 
-#endif //NUMBERFORMAT_NUMFMTTER_UTILS_H
+#endif //__NUMBER_UTILS_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

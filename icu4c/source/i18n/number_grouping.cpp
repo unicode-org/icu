@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/numberformatter.h"
 #include "number_patternstring.h"
 
@@ -45,3 +47,5 @@ bool Grouper::groupAtPosition(int32_t position, const impl::DecimalQuantity &val
     return position >= 0 && (position % fGrouping2) == 0
            && value.getUpperDisplayMagnitude() - fGrouping1 + 1 >= (fMin2 ? 2 : 1);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

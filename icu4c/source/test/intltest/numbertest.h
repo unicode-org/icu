@@ -1,6 +1,7 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
 #pragma once
 
 #include "number_stringbuilder.h"
@@ -195,3 +196,5 @@ class NumberTest : public IntlTest {
         }
     }
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

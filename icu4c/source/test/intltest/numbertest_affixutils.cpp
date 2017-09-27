@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "putilimp.h"
 #include "unicode/dcfmtsym.h"
 #include "numbertest.h"
@@ -240,3 +242,5 @@ UnicodeString AffixUtilsTest::unescapeWithDefaults(const SymbolProvider &default
     assertEquals("Return value of unescape", nsb.length(), length);
     return nsb.toUnicodeString();
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

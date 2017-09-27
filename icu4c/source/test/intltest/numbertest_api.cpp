@@ -1,9 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#define TEMP_TEST_HELPERS_NO_PRINT_PASS 1
+#if !UCONFIG_NO_FORMATTING
 
-#include <charstr.h>
+#include "charstr.h"
 #include <cstdarg>
 #include "unicode/unum.h"
 #include "unicode/numberformatter.h"
@@ -1484,3 +1484,5 @@ void NumberFormatterApiTest::assertFormatSingle(const UnicodeString &message,
     assertSuccess(message + u": Safe Path", status);
     assertEquals(message + u": Safe Path", expected, actual2);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

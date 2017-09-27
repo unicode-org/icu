@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 
@@ -66,3 +68,5 @@ ScientificNotation::withExponentSignDisplay(UNumberSignDisplay exponentSignDispl
     NotationUnion union_ = {settings};
     return {NTN_SCIENTIFIC, union_};
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

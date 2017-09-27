@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "putilimp.h"
 #include "numbertest.h"
 
@@ -229,3 +231,5 @@ void NumberStringBuilderTest::assertEqualsImpl(const UnicodeString &a, const Num
                 UnicodeString(" in string ") + a, a.charAt(i), b.charAt(i));
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -1,8 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_NUMBERFORMATTERIMPL_H
-#define NUMBERFORMAT_NUMBERFORMATTERIMPL_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_FORMATIMPL_H__
+#define __NUMBER_FORMATIMPL_H__
 
 #include "number_types.h"
 #include "number_stringbuilder.h"
@@ -117,4 +118,6 @@ class NumberFormatterImpl {
 U_NAMESPACE_END
 
 
-#endif //NUMBERFORMAT_NUMBERFORMATTERIMPL_H
+#endif //__NUMBER_FORMATIMPL_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

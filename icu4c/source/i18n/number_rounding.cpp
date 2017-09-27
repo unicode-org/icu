@@ -1,7 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <uassert.h>
+#if !UCONFIG_NO_FORMATTING
+
+#include "uassert.h"
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "number_decimalquantity.h"
@@ -338,3 +340,5 @@ void Rounder::apply(impl::DecimalQuantity &value, int32_t minInt, UErrorCode /*s
     U_ASSERT(value.isZero());
     value.setFractionLength(fUnion.fracSig.fMinSig - minInt, INT32_MAX);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

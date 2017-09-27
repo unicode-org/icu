@@ -1,7 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <uassert.h>
+#if !UCONFIG_NO_FORMATTING
+
+#include "uassert.h"
 #include "number_patternstring.h"
 #include "unicode/utf16.h"
 #include "number_utils.h"
@@ -829,3 +831,5 @@ int PatternStringUtils::escapePaddingString(UnicodeString input, UnicodeString& 
     }
     return output.length() - startLength;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

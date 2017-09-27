@@ -1,13 +1,15 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <unicode/ures.h>
-#include <ureslocs.h>
-#include <charstr.h>
-#include <uresimp.h>
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/ures.h"
+#include "ureslocs.h"
+#include "charstr.h"
+#include "uresimp.h"
 #include "number_longnames.h"
 #include <algorithm>
-#include <cstring.h>
+#include "cstring.h"
 
 using namespace icu::number::impl;
 
@@ -155,3 +157,5 @@ void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &mic
     micros.rounding.apply(copy, status);
     micros.modOuter = &fModifiers[copy.getStandardPlural(rules)];
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

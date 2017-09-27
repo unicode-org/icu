@@ -1,7 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <putilimp.h>
+#if !UCONFIG_NO_FORMATTING
+
+#include "putilimp.h"
 #include "intltest.h"
 #include "number_stringbuilder.h"
 #include "number_modifiers.h"
@@ -172,3 +174,5 @@ void ModifiersTest::assertModifierEquals(const Modifier &mod, NumberStringBuilde
     debugString.append(u"]>");
     assertEquals("Debug string", debugString, sb.toDebugString());
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

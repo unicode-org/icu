@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "number_stringbuilder.h"
@@ -74,3 +76,5 @@ int32_t Padder::padAndApply(const impl::Modifier &mod1, const impl::Modifier &mo
 
     return length;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -1,8 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_ROUNDINGUTILS_H
-#define NUMBERFORMAT_ROUNDINGUTILS_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_ROUNDINGUTILS_H__
+#define __NUMBER_ROUNDINGUTILS_H__
 
 #include "number_types.h"
 
@@ -133,4 +134,6 @@ inline bool roundsAtMidpoint(int roundingMode) {
 } // namespace number
 U_NAMESPACE_END
 
-#endif //NUMBERFORMAT_ROUNDINGUTILS_H
+#endif //__NUMBER_ROUNDINGUTILS_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

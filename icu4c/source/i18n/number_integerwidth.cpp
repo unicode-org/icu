@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "number_decimalquantity.h"
@@ -39,3 +41,5 @@ void IntegerWidth::apply(impl::DecimalQuantity &quantity, UErrorCode &status) co
         quantity.setIntegerLength(fUnion.minMaxInt.fMinInt, fUnion.minMaxInt.fMaxInt);
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

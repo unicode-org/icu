@@ -1,10 +1,11 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_MUTABLEPATTERNMODIFIER_H
-#define NUMBERFORMAT_MUTABLEPATTERNMODIFIER_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_PATTERNMODIFIER_H__
+#define __NUMBER_PATTERNMODIFIER_H__
 
-#include <standardplural.h>
+#include "standardplural.h"
 #include "unicode/numberformatter.h"
 #include "number_patternstring.h"
 #include "number_types.h"
@@ -231,4 +232,6 @@ class MutablePatternModifier
 }  // namespace number
 U_NAMESPACE_END
 
-#endif //NUMBERFORMAT_MUTABLEPATTERNMODIFIER_H
+#endif //__NUMBER_PATTERNMODIFIER_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

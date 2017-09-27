@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "numbertest.h"
 #include "number_patternmodifier.h"
 
@@ -118,3 +120,5 @@ UnicodeString PatternModifierTest::getSuffix(const MutablePatternModifier &mod, 
     int32_t prefixLength = mod.getPrefixLength(status);
     return UnicodeString(nsb.toUnicodeString(), prefixLength, nsb.length() - prefixLength);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

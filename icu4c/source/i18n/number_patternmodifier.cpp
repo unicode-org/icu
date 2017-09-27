@@ -1,7 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <cstring.h>
+#if !UCONFIG_NO_FORMATTING
+
+#include "cstring.h"
 #include "number_patternmodifier.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/ucurr.h"
@@ -340,3 +342,5 @@ UnicodeString MutablePatternModifier::toUnicodeString() const {
     U_ASSERT(false);
     return UnicodeString();
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
