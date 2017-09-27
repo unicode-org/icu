@@ -4322,7 +4322,6 @@ icu4c/source/i18n/number_patternmodifier.cpp svneol=native#text/plain%3Bcharset%
 icu4c/source/i18n/number_patternmodifier.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_patternstring.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_patternstring.h svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/i18n/number_results.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_rounding.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_roundingutils.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_scientific.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
