@@ -19,6 +19,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
  * To create a Rounder, use one of the factory methods.
  *
  * @draft ICU 60
+ * @provisional This API might change or be removed in a future release.
  * @see NumberFormatter
  */
 public abstract class Rounder implements Cloneable {
@@ -44,6 +45,7 @@ public abstract class Rounder implements Cloneable {
      *
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static Rounder unlimited() {
@@ -55,6 +57,7 @@ public abstract class Rounder implements Cloneable {
      *
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static FractionRounder integer() {
@@ -87,6 +90,7 @@ public abstract class Rounder implements Cloneable {
      *            long or padding with zeros if too short).
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static FractionRounder fixedFraction(int minMaxFractionPlaces) {
@@ -110,6 +114,7 @@ public abstract class Rounder implements Cloneable {
      *            necessary).
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static FractionRounder minFraction(int minFractionPlaces) {
@@ -130,6 +135,7 @@ public abstract class Rounder implements Cloneable {
      *            The maximum number of numerals to display after the decimal mark (rounding if necessary).
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static FractionRounder maxFraction(int maxFractionPlaces) {
@@ -153,6 +159,7 @@ public abstract class Rounder implements Cloneable {
      *            The maximum number of numerals to display after the decimal separator (rounding if necessary).
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static FractionRounder minMaxFraction(int minFractionPlaces, int maxFractionPlaces) {
@@ -177,6 +184,7 @@ public abstract class Rounder implements Cloneable {
      *            zeros if too short).
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static Rounder fixedDigits(int minMaxSignificantDigits) {
@@ -199,6 +207,7 @@ public abstract class Rounder implements Cloneable {
      *            The minimum number of significant digits to display (padding with zeros if too short).
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static Rounder minDigits(int minSignificantDigits) {
@@ -217,6 +226,7 @@ public abstract class Rounder implements Cloneable {
      *            The maximum number of significant digits to display (rounding if too long).
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static Rounder maxDigits(int maxSignificantDigits) {
@@ -238,6 +248,7 @@ public abstract class Rounder implements Cloneable {
      *            The maximum number of significant digits to display (rounding if necessary).
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static Rounder minMaxDigits(int minSignificantDigits, int maxSignificantDigits) {
@@ -270,6 +281,7 @@ public abstract class Rounder implements Cloneable {
      *            The increment to which to round numbers.
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static Rounder increment(BigDecimal roundingIncrement) {
@@ -295,6 +307,7 @@ public abstract class Rounder implements Cloneable {
      *            be limited by the available denominations of cash or coins).
      * @return A CurrencyRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static CurrencyRounder currency(CurrencyUsage currencyUsage) {
@@ -313,6 +326,7 @@ public abstract class Rounder implements Cloneable {
      *            The RoundingMode to use.
      * @return A Rounder for chaining.
      * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public Rounder withMode(RoundingMode roundingMode) {

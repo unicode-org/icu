@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.number;
 
+import java.math.BigInteger;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
@@ -10,9 +11,19 @@ import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 
+/**
+ * A NumberFormatter that has a locale associated with it; this means .format() methods are available.
+ *
+ * @see NumberFormatter
+ * @draft ICU 60
+ * @provisional This API might change or be removed in a future release.
+ * @see NumberFormatter
+ */
 public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedNumberFormatter> {
 
     static final AtomicLongFieldUpdater<LocalizedNumberFormatter> callCount = AtomicLongFieldUpdater
@@ -26,18 +37,66 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         super(parent, key, value);
     }
 
+    /**
+     * Format the given byte, short, int, or long to a string using the settings specified in the NumberFormatter fluent
+     * setting chain.
+     *
+     * @param input
+     *            The number to format.
+     * @return A FormattedNumber object; call .toString() to get the string.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
     public FormattedNumber format(long input) {
         return format(new DecimalQuantity_DualStorageBCD(input));
     }
 
+    /**
+     * Format the given float or double to a string using the settings specified in the NumberFormatter fluent setting
+     * chain.
+     *
+     * @param input
+     *            The number to format.
+     * @return A FormattedNumber object; call .toString() to get the string.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
     public FormattedNumber format(double input) {
         return format(new DecimalQuantity_DualStorageBCD(input));
     }
 
+    /**
+     * Format the given {@link BigInteger}, {@link BigDecimal}, or other {@link Number} to a string using the settings
+     * specified in the NumberFormatter fluent setting chain.
+     *
+     * @param input
+     *            The number to format.
+     * @return A FormattedNumber object; call .toString() to get the string.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
     public FormattedNumber format(Number input) {
         return format(new DecimalQuantity_DualStorageBCD(input));
     }
 
+    /**
+     * Format the given {@link Measure} or {@link CurrencyAmount} to a string using the settings specified in the
+     * NumberFormatter fluent setting chain.
+     *
+     * <p>
+     * The unit specified here overrides any unit that may have been specified in the setter chain. This method is
+     * intended for cases when each input to the number formatter has a different unit.
+     *
+     * @param input
+     *            The number to format.
+     * @return A FormattedNumber object; call .toString() to get the string.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
     public FormattedNumber format(Measure input) {
         MeasureUnit unit = input.getUnit();
         Number number = input.getNumber();
@@ -90,24 +149,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     @Override
-    protected LocalizedNumberFormatter create(int key, Object value) {
+    LocalizedNumberFormatter create(int key, Object value) {
         return new LocalizedNumberFormatter(this, key, value);
-    }
-
-    /**
-     * @internal
-     * @deprecated ICU 60 This API is ICU internal only.
-     */
-    @Deprecated
-    public static class Internal extends LocalizedNumberFormatter {
-
-        /**
-         * @internal
-         * @deprecated ICU 60 This API is ICU internal only.
-         */
-        @Deprecated
-        public Internal(NumberFormatterSettings<?> parent, int key, Object value) {
-            super(parent, key, value);
-        }
     }
 }

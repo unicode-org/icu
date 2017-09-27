@@ -15,12 +15,12 @@ import com.ibm.icu.impl.number.MultiplierImpl;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
+import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.Rounder.FractionRounderImpl;
 import com.ibm.icu.number.Rounder.IncrementRounderImpl;
 import com.ibm.icu.number.Rounder.SignificantRounderImpl;
-import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -138,13 +138,13 @@ final class NumberPropertyMapper {
             minFrac = minFrac <= 0 ? 1 : minFrac;
             maxFrac = maxFrac < 0 ? Integer.MAX_VALUE : maxFrac < minFrac ? minFrac : maxFrac;
             minInt = 0;
-            maxInt = maxInt < 0 ? -1 : maxInt;
+            maxInt = maxInt < 0 ? -1 : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
         } else {
             // Force a digit before the decimal point.
             minFrac = minFrac < 0 ? 0 : minFrac;
             maxFrac = maxFrac < 0 ? Integer.MAX_VALUE : maxFrac < minFrac ? minFrac : maxFrac;
-            minInt = minInt <= 0 ? 1 : minInt;
-            maxInt = maxInt < 0 ? -1 : maxInt < minInt ? minInt : maxInt;
+            minInt = minInt <= 0 ? 1 : minInt > RoundingUtils.MAX_INT_FRAC_SIG ? 1 : minInt;
+            maxInt = maxInt < 0 ? -1 : maxInt < minInt ? minInt : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
         }
         Rounder rounding = null;
         if (explicitCurrencyUsage) {
@@ -152,8 +152,10 @@ final class NumberPropertyMapper {
         } else if (roundingIncrement != null) {
             rounding = Rounder.constructIncrement(roundingIncrement);
         } else if (explicitMinMaxSig) {
-            minSig = minSig < 1 ? 1 : minSig > 1000 ? 1000 : minSig;
-            maxSig = maxSig < 0 ? 1000 : maxSig < minSig ? minSig : maxSig > 1000 ? 1000 : maxSig;
+            minSig = minSig < 1 ? 1 : minSig > RoundingUtils.MAX_INT_FRAC_SIG ? RoundingUtils.MAX_INT_FRAC_SIG : minSig;
+            maxSig = maxSig < 0 ? RoundingUtils.MAX_INT_FRAC_SIG
+                    : maxSig < minSig ? minSig
+                            : maxSig > RoundingUtils.MAX_INT_FRAC_SIG ? RoundingUtils.MAX_INT_FRAC_SIG : maxSig;
             rounding = Rounder.constructSignificant(minSig, maxSig);
         } else if (explicitMinMaxFrac) {
             rounding = Rounder.constructFraction(minFrac, maxFrac);
@@ -212,8 +214,16 @@ final class NumberPropertyMapper {
 
         if (properties.getMinimumExponentDigits() != -1) {
             // Scientific notation is required.
+            // This whole section feels like a hack, but it is needed for regression tests.
             // The mapping from property bag to scientific notation is nontrivial due to LDML rules.
-            // The maximum of 8 engineering digits has unknown origins and is not in the spec.
+            // The maximum of 8 digits has unknown origins and is not in the spec.
+            if (maxInt > 8) {
+                maxInt = 8;
+                if (minInt > maxInt) {
+                    minInt = maxInt;
+                }
+                macros.integerWidth = IntegerWidth.zeroFillTo(minInt).truncateAt(maxInt);
+            }
             int engineering = (maxInt != -1) ? maxInt : properties.getMaximumIntegerDigits();
             engineering = (engineering < 0) ? 0 : (engineering > 8) ? minInt : engineering;
             // Bug #13289: if maxInt > minInt > 1, then minInt should be 1.

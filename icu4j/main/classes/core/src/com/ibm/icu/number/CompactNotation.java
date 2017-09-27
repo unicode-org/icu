@@ -30,6 +30,7 @@ import com.ibm.icu.util.ULocale;
  * {@link Notation}.
  *
  * @draft ICU 60
+ * @provisional This API might change or be removed in a future release.
  * @see NumberFormatter
  */
 public class CompactNotation extends Notation {

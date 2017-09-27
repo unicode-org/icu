@@ -5879,6 +5879,7 @@ icu4j/main/classes/core/src/com/ibm/icu/number/Rounder.java svneol=native#text/p
 icu4j/main/classes/core/src/com/ibm/icu/number/ScientificNotation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/SimpleNotation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/UnlocalizedNumberFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/number/package.html svneol=native#text/html
 icu4j/main/classes/core/src/com/ibm/icu/text/ArabicShaping.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ArabicShapingException.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/Bidi.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -6372,7 +6373,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/AffixUtilsTest.java svneol
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/DecimalQuantityTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/ModifierTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/MutablePatternModifierTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/NumberFormatterTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/NumberFormatterApiTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/NumberStringBuilderTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/PatternStringTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/PropertiesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8

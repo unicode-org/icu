@@ -36,6 +36,12 @@ import com.ibm.icu.util.UResourceBundleIterator;
 public class NumberingSystem {
     private static final String[] OTHER_NS_KEYWORDS = { "native", "traditional", "finance" };
 
+    /**
+     * For convenience, an instance representing the <em>latn</em> numbering system, which
+     * corresponds to digits in the ASCII range '0' through '9'.
+     *
+     * @draft ICU 60
+     */
     public static final NumberingSystem LATIN = lookupInstanceByName("latn");
 
     /**

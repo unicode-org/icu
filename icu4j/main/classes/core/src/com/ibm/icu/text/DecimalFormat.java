@@ -48,6 +48,10 @@ import com.ibm.icu.util.ULocale.Category;
  * href="http://unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns">UTS #35</a>. Read
  * the specification for more information on how all the properties in DecimalFormat fit together.
  *
+ * <p><strong>NOTE:</strong> Starting in ICU 60, there is a new set of APIs for localized number
+ * formatting that are designed to be an improvement over DecimalFormat.  New users are discouraged
+ * from using DecimalFormat.  For more information, see the package com.ibm.icu.number.
+ *
  * <h3>Example Usage</h3>
  *
  * <p>Customize settings on a DecimalFormat instance from the NumberFormat factory:
@@ -750,7 +754,7 @@ public class DecimalFormat extends NumberFormat {
     if (!(obj instanceof Number)) throw new IllegalArgumentException();
     Number number = (Number) obj;
     FormattedNumber output = formatter.format(number);
-    return output.getAttributes();
+    return output.getFieldIterator();
   }
 
   /**

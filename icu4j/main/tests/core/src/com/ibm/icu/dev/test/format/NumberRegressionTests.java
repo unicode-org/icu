@@ -983,10 +983,11 @@ public class NumberRegressionTests extends TestFmwk {
     @Test
     public void Test4110936()
     {
+        // NOTE: Starting in ICU 60, the maximum integer digits is fixed at 100
         NumberFormat nf = NumberFormat.getInstance();
-        nf.setMaximumIntegerDigits(128);
-        logln("setMaximumIntegerDigits(128)");
-        if (nf.getMaximumIntegerDigits() != 128)
+        nf.setMaximumIntegerDigits(99);
+        logln("setMaximumIntegerDigits(99)");
+        if (nf.getMaximumIntegerDigits() != 99)
             errln("getMaximumIntegerDigits() returns " +
                 nf.getMaximumIntegerDigits());
     }
