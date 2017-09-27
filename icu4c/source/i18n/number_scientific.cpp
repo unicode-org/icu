@@ -84,9 +84,10 @@ bool ScientificModifier::isStrong() const {
     return true;
 }
 
-ScientificHandler::ScientificHandler(const Notation *notation, const DecimalFormatSymbols *symbols,
-                                     const MicroPropsGenerator *parent) : fSettings(
-        notation->fUnion.scientific), fSymbols(symbols), fParent(parent) {}
+// Note: Visual Studio does not compile this function without full name space. Why?
+icu::number::impl::ScientificHandler::ScientificHandler(const Notation *notation, const DecimalFormatSymbols *symbols,
+	const MicroPropsGenerator *parent) : 
+	fSettings(notation->fUnion.scientific), fSymbols(symbols), fParent(parent) {}
 
 void ScientificHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                         UErrorCode &status) const {
