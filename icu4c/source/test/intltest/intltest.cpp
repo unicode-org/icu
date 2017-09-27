@@ -109,6 +109,18 @@ Int64ToUnicodeString(int64_t num)
     return buffer;
 }
 
+UnicodeString
+DoubleToUnicodeString(double num)
+{
+    char buffer[64];    // nos changed from 10 to 64
+    char danger = 'p';  // guard against overrunning the buffer (rtg)
+
+    sprintf(buffer, "%1.14e", num);
+    assert(danger == 'p');
+
+    return buffer;
+}
+
 // [LIU] Just to get things working
 UnicodeString
 operator+(const UnicodeString& left,

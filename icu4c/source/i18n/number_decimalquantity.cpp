@@ -387,9 +387,10 @@ void DecimalQuantity::convertToAccurateDouble() {
 
     // Call the slow oracle function (Double.toString in Java, sprintf in C++).
     // The <float.h> constant DBL_DIG defines a platform-specific number of digits in a double.
-    // However, this tends to be too low (see #11318). Instead, we always use 14 digits.
-    char dstr[14 + 8]; // Extra space for '+', '.', e+NNN, and '\0'
-    sprintf(dstr, "%+1.14e", n);
+    // However, this tends to be too low (see #11318). Instead, we always use 14 decimal places.
+    static constexpr size_t CAP = 1 + 14 + 8; // Extra space for '+', '.', e+NNN, and '\0'
+    char dstr[CAP];
+    snprintf(dstr, CAP, "%+1.14e", n);
 
     // uprv_decNumberFromString() will parse the string expecting '.' as a
     // decimal separator, however sprintf() can use ',' in certain locales.
@@ -400,7 +401,8 @@ void DecimalQuantity::convertToAccurateDouble() {
     }
 
     decNumber dn;
-    stringToDecNumber(dstr, dn);
+    StringPiece sp(dstr);
+    stringToDecNumber(sp, dn);
     _setToDecNumber(&dn);
 
     scale += delta;
