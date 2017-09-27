@@ -217,15 +217,13 @@ final class NumberPropertyMapper {
             // This whole section feels like a hack, but it is needed for regression tests.
             // The mapping from property bag to scientific notation is nontrivial due to LDML rules.
             // The maximum of 8 digits has unknown origins and is not in the spec.
-            if (maxInt > 8) {
+            if (minInt > 8) {
+                minInt = 8;
                 maxInt = 8;
-                if (minInt > maxInt) {
-                    minInt = maxInt;
-                }
                 macros.integerWidth = IntegerWidth.zeroFillTo(minInt).truncateAt(maxInt);
             }
-            int engineering = (maxInt != -1) ? maxInt : properties.getMaximumIntegerDigits();
-            engineering = (engineering < 0) ? 0 : (engineering > 8) ? minInt : engineering;
+            int engineering = maxInt > 8 ? minInt : maxInt < minInt ? -1 : maxInt;
+            engineering = (engineering < 0) ? 0 : engineering;
             // Bug #13289: if maxInt > minInt > 1, then minInt should be 1.
             // Clear out IntegerWidth to prevent padding extra zeros.
             if (maxInt > minInt && minInt > 1) {

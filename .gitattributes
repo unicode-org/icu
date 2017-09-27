@@ -5848,6 +5848,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/ParameterizedModifier.java s
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/Parse.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/PatternStringParser.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/PatternStringUtils.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/number/Properties.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/RoundingUtils.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/SimpleModifier.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/lang/CharSequences.java svneol=native#text/plain%3Bcharset%3Dutf-8

@@ -527,7 +527,14 @@ public class DecimalFormat extends NumberFormat {
       // Extra int for possible future use:
       ois.readInt();
       // 1) Property Bag
-      properties = (DecimalFormatProperties) ois.readObject();
+      Object serializedProperties = ois.readObject();
+      if (serializedProperties instanceof DecimalFormatProperties) {
+        // ICU 60+
+        properties = (DecimalFormatProperties) serializedProperties;
+      } else {
+        // ICU 59
+        properties = ((com.ibm.icu.impl.number.Properties) serializedProperties).getInstance();
+      }
       // 2) DecimalFormatSymbols
       symbols = (DecimalFormatSymbols) ois.readObject();
       // Re-build transient fields

@@ -537,6 +537,10 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
 
   /** Custom serialization: re-create object from serialized properties. */
   private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+    readObjectImpl(ois);
+  }
+
+  /* package-private */ void readObjectImpl(ObjectInputStream ois) throws IOException, ClassNotFoundException {
     ois.defaultReadObject();
 
     // Initialize to empty
@@ -1301,6 +1305,10 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
    * the future in any order. Only save fields that differ from their default value.
    */
   private void writeObject(ObjectOutputStream oos) throws IOException {
+    writeObjectImpl(oos);
+  }
+
+  /* package-private */ void writeObjectImpl(ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
 
     // Extra int for possible future use

@@ -30,10 +30,10 @@ import org.junit.Test;
 
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.Parse.GroupingMode;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternStringParser;
-import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -345,6 +345,22 @@ public class PropertiesTest {
     @Override
     public boolean hasSameBehavior(Object a, Object b) {
       return a.equals(b);
+    }
+  }
+
+  /** Handler for the ICU 59 class named "Properties" before it was renamed to "DecimalFormatProperties". */
+  public static class ICU59PropertiesHandler implements SerializableTestUtility.Handler {
+
+    @Override
+    public Object[] getTestObjects() {
+      return new Object[] {
+        new com.ibm.icu.impl.number.Properties()
+      };
+    }
+
+    @Override
+    public boolean hasSameBehavior(Object a, Object b) {
+      return true;
     }
   }
 }
