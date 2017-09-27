@@ -18,6 +18,62 @@
 #include "unicode/ucurr.h"
 #include "unicode/unum.h"
 
+#ifndef U_HIDE_DRAFT_API
+
+/**
+ * \file
+ * \brief C++ API: Library for localized number formatting introduced in ICU 60.
+ *
+ * This library was introduced in ICU 60 to simplify the process of formatting localized number strings.
+ * Basic usage examples:
+ *
+ * <pre>
+ * // Most basic usage:
+ * NumberFormatter::withLocale(...).format(123).toString();  // 1,234 in en-US
+ *
+ * // Custom notation, unit, and rounding strategy:
+ * NumberFormatter::with()
+ *     .notation(Notation::compactShort())
+ *     .unit(CurrencyUnit("EUR", status))
+ *     .rounding(Rounder::maxDigits(2))
+ *     .locale(...)
+ *     .format(1234)
+ *     .toString();  // €1.2K in en-US
+ *
+ * // Create a formatter in a singleton for use later:
+ * static const LocalizedNumberFormatter formatter = NumberFormatter::withLocale(...)
+ *     .unit(NoUnit::percent())
+ *     .rounding(Rounder::fixedFraction(3));
+ * formatter.format(5.9831).toString();  // 5.983% in en-US
+ *
+ * // Create a "template" in a singleton but without setting a locale until the call site:
+ * static const UnlocalizedNumberFormatter template = NumberFormatter::with()
+ *     .sign(UNumberSignDisplay::UNUM_SIGN_ALWAYS)
+ *     .adoptUnit(MeasureUnit::createMeter(status))
+ *     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME);
+ * template.locale(...).format(1234).toString();  // +1,234 meters in en-US
+ * </pre>
+ *
+ * <p>
+ * This API offers more features than DecimalFormat and is geared toward new users of ICU.
+ *
+ * <p>
+ * NumberFormatter instances are immutable and thread safe. This means that invoking a configuration method has no
+ * effect on the receiving instance; you must store and use the new number formatter instance it returns instead.
+ *
+ * <pre>
+ * UnlocalizedNumberFormatter formatter = UnlocalizedNumberFormatter::with().notation(Notation::scientific());
+ * formatter.rounding(Rounder.maxFraction(2)); // does nothing!
+ * formatter.locale(Locale.getEnglish()).format(9.8765).toString(); // prints "9.8765E0", not "9.88E0"
+ * </pre>
+ *
+ * <p>
+ * This API is based on the <em>fluent</em> design pattern popularized by libraries such as Google's Guava. For
+ * extensive details on the design of this API, read <a href="https://goo.gl/szi5VB">the design doc</a>.
+ *
+ * @author Shane Carr
+ */
+
 /**
  * An enum declaring how to render units, including currencies. Example outputs when formatting 123 USD and 123
  * meters in <em>en-CA</em>:
@@ -953,12 +1009,24 @@ class IncrementRounder : public Rounder {
     friend class Rounder;
 };
 
+/**
+ * @internal This API is a technical preview.  It is likely to change in an upcoming release.
+ */
 class Grouper : public UMemory {
   public:
+    /**
+     * @internal This API is a technical preview.  It is likely to change in an upcoming release.
+     */
     static Grouper defaults();
 
+    /**
+     * @internal This API is a technical preview.  It is likely to change in an upcoming release.
+     */
     static Grouper minTwoDigits();
 
+    /**
+     * @internal This API is a technical preview.  It is likely to change in an upcoming release.
+     */
     static Grouper none();
 
   private:
@@ -1381,7 +1449,12 @@ class NumberFormatterSettings {
      * NumberFormatter::with().rounding(Rounder::fixedFraction(2))
      * </pre>
      *
-     * The default is to not perform rounding.
+     * <p>
+     * In most cases, the default rounding strategy is to round to 6 fraction places; i.e.,
+     * <code>Rounder.maxFraction(6)</code>. The exceptions are if compact notation is being used, then the compact
+     * notation rounding strategy is used (see {@link Notation#compactShort} for details), or if the unit is a currency,
+     * then standard currency rounding is used, which varies from currency to currency (see {@link Rounder#currency} for
+     * details).
      *
      * @param rounder
      *            The rounding strategy to use.
@@ -1687,6 +1760,12 @@ class UnlocalizedNumberFormatter
     friend class NumberFormatter;
 };
 
+/**
+ * A NumberFormatter that has a locale associated with it; this means .format() methods are available.
+ *
+ * @see NumberFormatter
+ * @draft ICU 60
+ */
 class LocalizedNumberFormatter
         : public NumberFormatterSettings<LocalizedNumberFormatter>, public UMemory {
   public:
@@ -1769,14 +1848,68 @@ class LocalizedNumberFormatter
     friend class UnlocalizedNumberFormatter;
 };
 
+/**
+ * The result of a number formatting operation. This class allows the result to be exported in several data types,
+ * including a UnicodeString and a FieldPositionIterator.
+ *
+ * @draft ICU 60
+ */
 class FormattedNumber : public UMemory {
   public:
+    /**
+     * Returns a UnicodeString representation of the the formatted number.
+     *
+     * @return a UnicodeString containing the localized number.
+     * @draft ICU 60
+     */
     UnicodeString toString() const;
 
+    /**
+     * Appends the formatted number to an Appendable.
+     *
+     * @param appendable
+     *            The Appendable to which to append the formatted number string.
+     * @return The same Appendable, for chaining.
+     * @draft ICU 60
+     * @see Appendable
+     */
     Appendable &appendTo(Appendable &appendable);
 
+    /**
+     * Determine the start and end indices of the first occurrence of the given <em>field</em> in the output string.
+     * This allows you to determine the locations of the integer part, fraction part, and sign.
+     *
+     * <p>
+     * If multiple different field attributes are needed, this method can be called repeatedly, or if <em>all</em> field
+     * attributes are needed, consider using populateFieldPositionIterator().
+     *
+     * <p>
+     * If a field occurs multiple times in an output string, such as a grouping separator, this method will only ever
+     * return the first occurrence. Use populateFieldPositionIterator() to access all occurrences of an attribute.
+     *
+     * @param fieldPosition
+     *            The FieldPosition to populate with the start and end indices of the desired field.
+     * @param status
+     *            Set if an error occurs while populating the FieldPosition.
+     * @draft ICU 60
+     * @see UNumberFormatFields
+     */
     void populateFieldPosition(FieldPosition &fieldPosition, UErrorCode &status);
 
+    /**
+     * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in
+     * the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and sign.
+     *
+     * <p>
+     * If information on only one field is needed, consider using populateFieldPosition() instead.
+     *
+     * @param iterator
+     *            The FieldPositionIterator to populate with all of the fields present in the formatted number.
+     * @param status
+     *            Set if an error occurs while populating the FieldPositionIterator.
+     * @draft ICU 60
+     * @see UNumberFormatFields
+     */
     void populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status);
 
     ~FormattedNumber();
@@ -1795,7 +1928,7 @@ class FormattedNumber : public UMemory {
 };
 
 /**
- * The NumberFormatter class cannot be constructed directly; use one of the factory methods.
+ * See the main description in numberformatter.h for documentation and examples.
  *
  * @draft ICU 60
  */
@@ -1827,6 +1960,8 @@ class NumberFormatter final {
 
 }  // namespace number
 U_NAMESPACE_END
+
+#endif  // U_HIDE_DRAFT_API
 
 #endif // __NUMBERFORMATTER_H__
 
