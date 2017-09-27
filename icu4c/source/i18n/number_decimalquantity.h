@@ -1,14 +1,15 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_DECIMALQUANTITY_H
-#define NUMBERFORMAT_DECIMALQUANTITY_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_DECIMALQUANTITY_H__
+#define __NUMBER_DECIMALQUANTITY_H__
 
 #include <cstdint>
-#include <unicode/umachine.h>
-#include <decNumber.h>
-#include <standardplural.h>
-#include <plurrule_impl.h>
+#include "unicode/umachine.h"
+#include "decNumber.h"
+#include "standardplural.h"
+#include "plurrule_impl.h"
 #include "number_types.h"
 
 U_NAMESPACE_BEGIN namespace number {
@@ -430,4 +431,6 @@ class DecimalQuantity : public IFixedDecimal, public UMemory {
 U_NAMESPACE_END
 
 
-#endif //NUMBERFORMAT_DECIMALQUANTITY_H
+#endif //__NUMBER_DECIMALQUANTITY_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

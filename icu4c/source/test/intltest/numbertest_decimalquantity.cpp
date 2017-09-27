@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "number_decimalquantity.h"
 #include "math.h"
 #include <cmath>
@@ -253,3 +255,5 @@ void DecimalQuantityTest::testUseApproximateDoubleWhenAble() {
         }
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -1,13 +1,15 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "resource.h"
 #include "number_compact.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
-#include <cstring>
-#include <charstr.h>
-#include <uresimp.h>
+#include "cstring.h"
+#include "charstr.h"
+#include "uresimp.h"
 
 using namespace icu::number::impl;
 
@@ -313,3 +315,5 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
     // We already performed rounding. Do not perform it again.
     micros.rounding = Rounder::constructPassThrough();
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

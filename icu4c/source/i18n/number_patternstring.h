@@ -1,13 +1,14 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_PATTERNPARSER_H
-#define NUMBERFORMAT_PATTERNPARSER_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_PATTERNSTRING_H__
+#define __NUMBER_PATTERNSTRING_H__
 
 
 #include <cstdint>
-#include <unicode/unum.h>
-#include <unicode/unistr.h>
+#include "unicode/unum.h"
+#include "unicode/unistr.h"
 #include "number_types.h"
 #include "number_decimalquantity.h"
 #include "number_decimfmtprops.h"
@@ -254,4 +255,6 @@ class PatternStringUtils {
 U_NAMESPACE_END
 
 
-#endif //NUMBERFORMAT_PATTERNPARSER_H
+#endif //__NUMBER_PATTERNSTRING_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

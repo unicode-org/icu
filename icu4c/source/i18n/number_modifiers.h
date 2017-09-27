@@ -1,14 +1,15 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_MODIFIERS_H
-#define NUMBERFORMAT_MODIFIERS_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_MODIFIERS_H__
+#define __NUMBER_MODIFIERS_H__
 
 #include <algorithm>
 #include <cstdint>
-#include <unicode/uniset.h>
-#include <unicode/simpleformatter.h>
-#include <standardplural.h>
+#include "unicode/uniset.h"
+#include "unicode/simpleformatter.h"
+#include "standardplural.h"
 #include "number_stringbuilder.h"
 #include "number_types.h"
 
@@ -246,4 +247,6 @@ class ParameterizedModifier : public UMemory {
 U_NAMESPACE_END
 
 
-#endif //NUMBERFORMAT_MODIFIERS_H
+#endif //__NUMBER_MODIFIERS_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

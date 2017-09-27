@@ -1,16 +1,17 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_INTERNALS_H
-#define NUMBERFORMAT_INTERNALS_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_TYPES_H__
+#define __NUMBER_TYPES_H__
 
 #include <cstdint>
-#include <unicode/decimfmt.h>
-#include <unicode/unum.h>
-#include <unicode/numsys.h>
+#include "unicode/decimfmt.h"
+#include "unicode/unum.h"
+#include "unicode/numsys.h"
 #include "unicode/numberformatter.h"
-#include <unicode/utf16.h>
-#include <uassert.h>
+#include "unicode/utf16.h"
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 namespace number {
@@ -279,4 +280,6 @@ class NullableValue {
 } // namespace number
 U_NAMESPACE_END
 
-#endif //NUMBERFORMAT_INTERNALS_H
+#endif //__NUMBER_TYPES_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -1,10 +1,11 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_NUMFMTTER_COMPACT_H
-#define NUMBERFORMAT_NUMFMTTER_COMPACT_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_COMPACT_H__
+#define __NUMBER_COMPACT_H__
 
-#include <standardplural.h>
+#include "standardplural.h"
 #include "number_types.h"
 #include "unicode/unum.h"
 #include "uvector.h"
@@ -83,4 +84,6 @@ class CompactHandler : public MicroPropsGenerator, public UMemory {
 } // namespace number
 U_NAMESPACE_END
 
-#endif //NUMBERFORMAT_NUMFMTTER_COMPACT_H
+#endif //__NUMBER_COMPACT_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

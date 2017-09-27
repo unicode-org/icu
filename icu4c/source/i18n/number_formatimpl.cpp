@@ -1,10 +1,12 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <cstring.h>
-#include <unicode/ures.h>
-#include <uresimp.h>
-#include <charstr.h>
+#if !UCONFIG_NO_FORMATTING
+
+#include "cstring.h"
+#include "unicode/ures.h"
+#include "uresimp.h"
+#include "charstr.h"
 #include "number_formatimpl.h"
 #include "unicode/numfmt.h"
 #include "number_patternstring.h"
@@ -453,3 +455,5 @@ int32_t NumberFormatterImpl::writeFractionDigits(const MicroProps &micros, Decim
     }
     return length;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

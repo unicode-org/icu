@@ -1,8 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_LONGNAMEHANDLER_H
-#define NUMBERFORMAT_LONGNAMEHANDLER_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_LONGNAMES_H__
+#define __NUMBER_LONGNAMES_H__
 
 #include "unicode/uversion.h"
 #include "number_utils.h"
@@ -40,4 +41,6 @@ class LongNameHandler : public MicroPropsGenerator, public UObject {
 }  // namespace number
 U_NAMESPACE_END
 
-#endif //NUMBERFORMAT_LONGNAMEHANDLER_H
+#endif //__NUMBER_LONGNAMES_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

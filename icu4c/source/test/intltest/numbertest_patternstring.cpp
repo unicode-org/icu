@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "numbertest.h"
 #include "number_patternstring.h"
 
@@ -86,3 +88,5 @@ void PatternStringTest::testBug13117() {
     assertSuccess("Spot 1", status);
     assertTrue("Should not consume negative subpattern", expected == actual);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

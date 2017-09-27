@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "number_affixutils.h"
 #include "unicode/utf16.h"
 
@@ -393,3 +395,5 @@ bool AffixUtils::hasNext(const AffixTag &tag, const CharSequence &string) {
         return tag.offset < string.length();
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

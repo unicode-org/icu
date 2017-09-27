@@ -1,16 +1,22 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_HEADERS_H
-#define NUMBERFORMAT_HEADERS_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBERFORMATTER_H__
+#define __NUMBERFORMATTER_H__
 
-#include <unicode/decimfmt.h>
-#include <unicode/measunit.h>
-#include <unicode/measfmt.h>
-#include <unicode/ucurr.h>
-#include <unicode/appendable.h>
-#include <unicode/nounit.h>
 #include <atomic>
+
+#include "unicode/appendable.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/currunit.h"
+#include "unicode/fieldpos.h"
+#include "unicode/fpositer.h"
+#include "unicode/measunit.h"
+#include "unicode/nounit.h"
+#include "unicode/plurrule.h"
+#include "unicode/ucurr.h"
+#include "unicode/unum.h"
 
 /**
  * An enum declaring how to render units, including currencies. Example outputs when formatting 123 USD and 123
@@ -1821,4 +1827,6 @@ class NumberFormatter final {
 }  // namespace number
 U_NAMESPACE_END
 
-#endif //NUMBERFORMAT_HEADERS_H
+#endif // __NUMBERFORMATTER_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

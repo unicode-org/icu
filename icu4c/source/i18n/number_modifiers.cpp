@@ -1,9 +1,11 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <umutex.h>
-#include <ucln_cmn.h>
-#include <ucln_in.h>
+#if !UCONFIG_NO_FORMATTING
+
+#include "umutex.h"
+#include "ucln_cmn.h"
+#include "ucln_in.h"
 #include "number_modifiers.h"
 
 using namespace icu::number::impl;
@@ -292,3 +294,5 @@ CurrencySpacingEnabledModifier::getInsertString(const DecimalFormatSymbols &symb
                                                 UErrorCode &status) {
     return symbols.getPatternForCurrencySpacing(UNUM_CURRENCY_INSERT, affix == SUFFIX, status);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

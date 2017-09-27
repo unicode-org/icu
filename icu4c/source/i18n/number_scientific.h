@@ -1,8 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_NUMFMTTER_SCIENTIFIC_H
-#define NUMBERFORMAT_NUMFMTTER_SCIENTIFIC_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_SCIENTIFIC_H__
+#define __NUMBER_SCIENTIFIC_H__
 
 #include "number_types.h"
 
@@ -54,4 +55,6 @@ class ScientificHandler : public UMemory, public MicroPropsGenerator, public Mul
 } // namespace number
 U_NAMESPACE_END
 
-#endif //NUMBERFORMAT_NUMFMTTER_SCIENTIFIC_H
+#endif //__NUMBER_SCIENTIFIC_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

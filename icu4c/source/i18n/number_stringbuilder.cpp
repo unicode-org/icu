@@ -1,9 +1,11 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "number_stringbuilder.h"
-#include <unicode/utf16.h>
-#include <uvectr32.h>
+#include "unicode/utf16.h"
+#include "uvectr32.h"
 
 using namespace icu::number::impl;
 
@@ -450,3 +452,5 @@ void NumberStringBuilder::populateFieldPositionIterator(FieldPositionIterator &f
     // Give uvec to the FieldPositionIterator, which adopts it.
     fpi.setData(uvec.orphan(), status);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

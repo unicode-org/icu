@@ -1,10 +1,12 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <uassert.h>
+#if !UCONFIG_NO_FORMATTING
+
+#include "uassert.h"
 #include <cmath>
-#include <cmemory.h>
-#include <decNumber.h>
+#include "cmemory.h"
+#include "decNumber.h"
 #include <limits>
 #include "number_decimalquantity.h"
 #include "decContext.h"
@@ -997,3 +999,5 @@ UnicodeString DecimalQuantity::toNumberString() const {
     delete[] digits;
     return ret;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

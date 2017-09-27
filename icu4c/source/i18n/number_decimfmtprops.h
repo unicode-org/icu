@@ -1,13 +1,14 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef NUMBERFORMAT_PROPERTIES_H
-#define NUMBERFORMAT_PROPERTIES_H
+#if !UCONFIG_NO_FORMATTING
+#ifndef __NUMBER_DECIMFMTPROPS_H__
+#define __NUMBER_DECIMFMTPROPS_H__
 
 #include "unicode/unistr.h"
 #include <cstdint>
-#include <unicode/plurrule.h>
-#include <unicode/currpinf.h>
+#include "unicode/plurrule.h"
+#include "unicode/currpinf.h"
 #include "unicode/unum.h"
 #include "number_types.h"
 
@@ -15,12 +16,24 @@ U_NAMESPACE_BEGIN
 namespace number {
 namespace impl {
 
+// TODO: Figure out a nicer way to deal with CurrencyPluralInfo.
+struct CurrencyPluralInfoWrapper {
+    LocalPointer<CurrencyPluralInfo> fPtr;
+
+    CurrencyPluralInfoWrapper() {}
+    CurrencyPluralInfoWrapper(const CurrencyPluralInfoWrapper& other) {
+        if (!other.fPtr.isNull()) {
+            fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
+        }
+    }
+};
+
 struct DecimalFormatProperties {
 
   public:
     NullableValue<UNumberCompactStyle> compactStyle;
     NullableValue<CurrencyUnit> currency;
-    CopyableLocalPointer <CurrencyPluralInfo> currencyPluralInfo;
+    CurrencyPluralInfoWrapper currencyPluralInfo;
     NullableValue<UCurrencyUsage> currencyUsage;
     bool decimalPatternMatchRequired;
     bool decimalSeparatorAlwaysShown;
@@ -74,4 +87,6 @@ struct DecimalFormatProperties {
 U_NAMESPACE_END
 
 
-#endif //NUMBERFORMAT_PROPERTIES_H
+#endif //__NUMBER_DECIMFMTPROPS_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

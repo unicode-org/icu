@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#if !UCONFIG_NO_FORMATTING
+
 #include <cstdlib>
 #include "number_scientific.h"
 #include "number_utils.h"
@@ -127,3 +129,5 @@ int32_t ScientificHandler::getMultiplier(int32_t magnitude) const {
     }
     return digitsShown - magnitude - 1;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
