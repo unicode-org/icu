@@ -88,7 +88,7 @@ void PatternModifierTest::testMutableEqualsImmutable() {
 
     NumberStringBuilder nsb2;
     MicroProps micros2;
-    ImmutablePatternModifier *immutable = mod.createImmutable(status);
+    LocalPointer<ImmutablePatternModifier> immutable(mod.createImmutable(status));
     immutable->applyToMicros(micros2, fq);
     micros2.modMiddle->apply(nsb2, 0, 0, status);
     assertSuccess("Spot 4", status);

@@ -210,7 +210,7 @@ void DecimalQuantityTest::testConvertToAccurateDouble() {
             "-Inf check failed", -INFINITY, DecimalQuantity().setToDouble(-INFINITY).toDouble());
 
     // Generate random doubles
-    for (int32_t i = 0; i < 1000000; i++) {
+    for (int32_t i = 0; i < 10000; i++) {
         uint8_t bytes[8];
         for (int32_t j = 0; j < 8; j++) {
             bytes[j] = static_cast<uint8_t>(rand() % 256);

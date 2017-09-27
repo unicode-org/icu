@@ -152,6 +152,7 @@ AffixUtils::unescape(const CharSequence &affixPattern, NumberStringBuilder &outp
     AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
+        if (U_FAILURE(status)) { return length; }
         if (tag.type == TYPE_CURRENCY_OVERFLOW) {
             // Don't go to the provider for this special case
             length += output.insertCodePoint(position + length, 0xFFFD, UNUM_CURRENCY_FIELD, status);
@@ -171,6 +172,7 @@ int32_t AffixUtils::unescapedCodePointCount(const CharSequence &affixPattern,
     AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
+        if (U_FAILURE(status)) { return length; }
         if (tag.type == TYPE_CURRENCY_OVERFLOW) {
             length += 1;
         } else if (tag.type < 0) {
@@ -190,6 +192,7 @@ AffixUtils::containsType(const CharSequence &affixPattern, AffixPatternType type
     AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
+        if (U_FAILURE(status)) { return false; }
         if (tag.type == type) {
             return true;
         }
@@ -204,6 +207,7 @@ bool AffixUtils::hasCurrencySymbols(const CharSequence &affixPattern, UErrorCode
     AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
+        if (U_FAILURE(status)) { return false; }
         if (tag.type < 0 && getFieldForType(tag.type) == UNUM_CURRENCY_FIELD) {
             return true;
         }
@@ -220,6 +224,7 @@ UnicodeString AffixUtils::replaceType(const CharSequence &affixPattern, AffixPat
     AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
+        if (U_FAILURE(status)) { return output; }
         if (tag.type == type) {
             output.replace(tag.offset - 1, 1, replacementChar);
         }
@@ -371,7 +376,7 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const CharSequence &patternString, 
 }
 
 bool AffixUtils::hasNext(const AffixTag &tag, const CharSequence &string) {
-    // First check for the {-1} and {0} initializer syntax.
+    // First check for the {-1} and default initializer syntax.
     if (tag.offset < 0) {
         return false;
     } else if (tag.offset == 0) {
