@@ -7,6 +7,7 @@
 #include "unicode/utf16.h"
 #include "uvectr32.h"
 
+using namespace icu;
 using namespace icu::number::impl;
 
 namespace {

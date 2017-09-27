@@ -8,6 +8,7 @@
 #include "ucln_in.h"
 #include "number_modifiers.h"
 
+using namespace icu;
 using namespace icu::number::impl;
 
 namespace {

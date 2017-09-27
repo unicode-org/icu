@@ -7,7 +7,9 @@
 #include "number_patternmodifier.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/ucurr.h"
+#include "unicode/unistr.h"
 
+using namespace icu;
 using namespace icu::number::impl;
 
 MutablePatternModifier::MutablePatternModifier(bool isStrong) : fStrong(isStrong) {}

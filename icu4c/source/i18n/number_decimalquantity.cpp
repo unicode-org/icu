@@ -15,6 +15,7 @@
 #include "unicode/plurrule.h"
 
 using namespace icu::number::impl;
+using namespace icu;
 
 namespace {
 
