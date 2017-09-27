@@ -78,7 +78,7 @@ void DecimalQuantityTest::testDecimalQuantityBehaviorStandalone() {
     assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
     fq.roundToInfinity();
     assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
-    fq.roundToIncrement(0.005, RoundingMode::UNUM_ROUND_HALFEVEN, status);
+    fq.roundToIncrement(0.005, RoundingMode::UNUM_ROUND_HALFEVEN, 3, status);
     assertSuccess("Rounding to increment", status);
     assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987655E-3>");
     fq.roundToMagnitude(-2, RoundingMode::UNUM_ROUND_HALFEVEN, status);

@@ -67,7 +67,8 @@ class DecimalQuantity : public IFixedDecimal, public UMemory {
      * @param roundingIncrement The increment to which to round.
      * @param mathContext The {@link RoundingMode} to use if rounding is necessary.
      */
-    void roundToIncrement(double roundingIncrement, RoundingMode roundingMode, UErrorCode& status);
+    void roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
+                          int32_t minMaxFrac, UErrorCode& status);
 
     /**
      * Rounds the number to a specified magnitude (power of ten).

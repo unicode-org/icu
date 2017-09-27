@@ -10,6 +10,14 @@
 using namespace icu::number;
 using namespace icu::number::impl;
 
+////////////////////////////////////////////////////////////////////////////////////////
+// INSTRUCTIONS:                                                                      //
+// To add new NumberFormat unit test classes, create a new class like the ones below, //
+// and then add it as a switch statement in NumberTest at the bottom of this file.    /////////
+// To add new methods to existing unit test classes, add the method to the class declaration //
+// below, and also add it to the class's implementation of runIndexedTest().                 //
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 class AffixUtilsTest : public IntlTest {
   public:
     void testEscape();
@@ -153,4 +161,37 @@ class NumberStringBuilderTest : public IntlTest {
 
   private:
     void assertEqualsImpl(const UnicodeString &a, const NumberStringBuilder &b);
+};
+
+
+// NOTE: This macro is identical to the one in itformat.cpp
+#define TESTCLASS(id, TestClass)          \
+    case id:                              \
+        name = #TestClass;                \
+        if (exec) {                       \
+            logln(#TestClass " test---"); \
+            logln((UnicodeString)"");     \
+            TestClass test;               \
+            callTest(test, par);          \
+        }                                 \
+        break
+
+class NumberTest : public IntlTest {
+  public:
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) {
+        if (exec) {
+            logln("TestSuite NumberTest: ");
+        }
+
+        switch (index) {
+        TESTCLASS(0, AffixUtilsTest);
+        TESTCLASS(1, NumberFormatterApiTest);
+        TESTCLASS(2, DecimalQuantityTest);
+        TESTCLASS(3, ModifiersTest);
+        TESTCLASS(4, PatternModifierTest);
+        TESTCLASS(5, PatternStringTest);
+        TESTCLASS(6, NumberStringBuilderTest);
+        default: name = ""; break; // needed to end loop
+        }
+    }
 };

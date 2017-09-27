@@ -318,7 +318,8 @@ void Rounder::apply(impl::DecimalQuantity &value, UErrorCode& status) const {
         }
 
         case RND_INCREMENT:
-            value.roundToIncrement(fUnion.increment.fIncrement, fRoundingMode, status);
+            value.roundToIncrement(
+                fUnion.increment.fIncrement, fRoundingMode, fUnion.increment.fMinFrac, status);
             value.setFractionLength(fUnion.increment.fMinFrac, fUnion.increment.fMinFrac);
             break;
 

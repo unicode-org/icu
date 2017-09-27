@@ -149,7 +149,7 @@ int32_t
 AffixUtils::unescape(const CharSequence &affixPattern, NumberStringBuilder &output, int32_t position,
                      const SymbolProvider &provider, UErrorCode &status) {
     int32_t length = 0;
-    AffixTag tag = {0};
+    AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
         if (tag.type == TYPE_CURRENCY_OVERFLOW) {
@@ -168,7 +168,7 @@ AffixUtils::unescape(const CharSequence &affixPattern, NumberStringBuilder &outp
 int32_t AffixUtils::unescapedCodePointCount(const CharSequence &affixPattern,
                                             const SymbolProvider &provider, UErrorCode &status) {
     int32_t length = 0;
-    AffixTag tag = {0};
+    AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
         if (tag.type == TYPE_CURRENCY_OVERFLOW) {
@@ -187,7 +187,7 @@ AffixUtils::containsType(const CharSequence &affixPattern, AffixPatternType type
     if (affixPattern.length() == 0) {
         return false;
     }
-    AffixTag tag = {0};
+    AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
         if (tag.type == type) {
@@ -201,7 +201,7 @@ bool AffixUtils::hasCurrencySymbols(const CharSequence &affixPattern, UErrorCode
     if (affixPattern.length() == 0) {
         return false;
     }
-    AffixTag tag = {0};
+    AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
         if (tag.type < 0 && getFieldForType(tag.type) == UNUM_CURRENCY_FIELD) {
@@ -217,7 +217,7 @@ UnicodeString AffixUtils::replaceType(const CharSequence &affixPattern, AffixPat
     if (affixPattern.length() == 0) {
         return output;
     };
-    AffixTag tag = {0};
+    AffixTag tag;
     while (hasNext(tag, affixPattern)) {
         tag = nextToken(tag, affixPattern, status);
         if (tag.type == type) {
