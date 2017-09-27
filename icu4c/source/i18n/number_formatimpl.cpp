@@ -16,6 +16,7 @@
 #include "number_scientific.h"
 #include "number_compact.h"
 
+using namespace icu;
 using namespace icu::number::impl;
 
 namespace {

@@ -12,6 +12,7 @@
 #include "uresimp.h"
 
 using namespace icu::number::impl;
+using namespace icu;
 
 namespace {
 

@@ -11,6 +11,7 @@
 #include <algorithm>
 #include "cstring.h"
 
+using namespace icu;
 using namespace icu::number::impl;
 
 namespace {

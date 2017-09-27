@@ -8,6 +8,7 @@
 #include "unicode/utf16.h"
 #include "number_utils.h"
 
+using namespace icu;
 using namespace icu::number::impl;
 
 void PatternParser::parseToPatternInfo(const UnicodeString& patternString, ParsedPatternInfo& patternInfo, UErrorCode &status) {
