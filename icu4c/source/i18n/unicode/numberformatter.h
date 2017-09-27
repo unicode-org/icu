@@ -1681,7 +1681,7 @@ class UnlocalizedNumberFormatter
             const NumberFormatterSettings<UnlocalizedNumberFormatter> &other);
 
     // To give the fluent setters access to this class's constructor:
-    friend class NumberFormatterSettings;
+    friend class NumberFormatterSettings<UnlocalizedNumberFormatter>;
 
     // To give NumberFormatter::with() access to this class's constructor:
     friend class NumberFormatter;
@@ -1762,7 +1762,8 @@ class LocalizedNumberFormatter
     FormattedNumber formatImpl(impl::NumberFormatterResults *results, UErrorCode &status) const;
 
     // To give the fluent setters access to this class's constructor:
-    friend class NumberFormatterSettings;
+    friend class NumberFormatterSettings<UnlocalizedNumberFormatter>;
+    friend class NumberFormatterSettings<LocalizedNumberFormatter>;
 
     // To give UnlocalizedNumberFormatter::locale() access to this class's constructor:
     friend class UnlocalizedNumberFormatter;

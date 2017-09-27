@@ -43,8 +43,8 @@ Padder Padder::codePoints(UChar32 cp, int32_t targetWidth, UNumberFormatPadPosit
     }
 }
 
-int32_t Padder::padAndApply(const impl::Modifier &mod1, const impl::Modifier &mod2,
-                            impl::NumberStringBuilder &string, int32_t leftIndex, int32_t rightIndex,
+int32_t Padder::padAndApply(const Modifier &mod1, const Modifier &mod2,
+                            NumberStringBuilder &string, int32_t leftIndex, int32_t rightIndex,
                             UErrorCode &status) const {
     int32_t modLength = mod1.getCodePointCount(status) + mod2.getCodePointCount(status);
     int32_t requiredPadding = fWidth - modLength - string.codePointCount();

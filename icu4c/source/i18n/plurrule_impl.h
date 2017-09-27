@@ -225,7 +225,7 @@ enum PluralOperand {
  * An interface to FixedDecimal, allowing for other implementations.
  * @internal
  */
-class IFixedDecimal {
+class U_I18N_API IFixedDecimal {
   public:
     virtual ~IFixedDecimal() = default;
 
