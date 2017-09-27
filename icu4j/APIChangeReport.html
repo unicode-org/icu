@@ -15,7 +15,16 @@
 
 <hr/>
 <h2>Deprecated or Obsoleted in ICU4J 60.0.1</h2>
-<p>(no API obsoleted)</p>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Calendar
+<ul>
+<li><span style='color:gray'>(deprecated)</span> protected int <i>computeMillisInDay</i>()</li>
+<li><span style='color:gray'>(deprecated)</span> protected int <i>computeZoneOffset</i>(long, int)</li>
+</ul>
+</ul>
+
 
 <hr/>
 <h2>Changed in ICU4J 60.0.1 (old, new)</h2>
@@ -32,6 +41,92 @@ UProperty
 <li><span style='color:green'>(stable)</span> public static final int EMOJI_MODIFIER</li>
 <li><span style='color:green'>(stable)</span> public static final int EMOJI_MODIFIER_BASE</li>
 <li><span style='color:green'>(stable)</span> public static final int EMOJI_PRESENTATION</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:green'>(stable)</span> public class <i>BidiTransform</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>BidiTransform.Mirroring</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>BidiTransform.Order</i></li>
+BidiTransform.Mirroring
+<ul>
+<li><span style='color:green'>(stable)</span> public static final BidiTransform.Mirroring OFF</li>
+<li><span style='color:green'>(stable)</span> public static final BidiTransform.Mirroring ON</li>
+</ul>
+BidiTransform.Order
+<ul>
+<li><span style='color:green'>(stable)</span> public static final BidiTransform.Order LOGICAL</li>
+<li><span style='color:green'>(stable)</span> public static final BidiTransform.Order VISUAL</li>
+</ul>
+DecimalFormatSymbols
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getDecimalSeparatorString</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String[] <i>getDigitStrings</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getGroupingSeparatorString</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getMinusSignString</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getMonetaryDecimalSeparatorString</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getMonetaryGroupingSeparatorString</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getPerMillString</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getPercentString</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getPlusSignString</i>()</li>
+<li><span style='color:green'>(stable)</span> public void <i>setDecimalSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public void <i>setDigitStrings</i>(java.lang.String[])</li>
+<li><span style='color:green'>(stable)</span> public void <i>setGroupingSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public void <i>setMinusSignString</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public void <i>setMonetaryDecimalSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public void <i>setMonetaryGroupingSeparatorString</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public void <i>setPerMillString</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public void <i>setPercentString</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public void <i>setPlusSignString</i>(java.lang.String)</li>
+</ul>
+DisplayContext
+<ul>
+<li><span style='color:green'>(stable)</span> public static final DisplayContext NO_SUBSTITUTE</li>
+<li><span style='color:green'>(stable)</span> public static final DisplayContext SUBSTITUTE</li>
+</ul>
+DisplayContext.Type
+<ul>
+<li><span style='color:green'>(stable)</span> public static final DisplayContext.Type SUBSTITUTE_HANDLING</li>
+</ul>
+MeasureFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getUnitDisplayName</i>(MeasureUnit)</li>
+</ul>
+RuleBasedBreakIterator
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>getRuleStatus</i>()</li>
+<li><span style='color:green'>(stable)</span> public int <i>getRuleStatusVec</i>(int[])</li>
+</ul>
+SpoofChecker
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int CONFUSABLE</li>
+<li><span style='color:green'>(stable)</span> public static final UnicodeSet INCLUSION</li>
+<li><span style='color:green'>(stable)</span> public static final int MIXED_NUMBERS</li>
+<li><span style='color:green'>(stable)</span> public static final UnicodeSet RECOMMENDED</li>
+<li><span style='color:green'>(stable)</span> public static final int RESTRICTION_LEVEL</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>equals</i>(java.lang.Object)</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>getSkeleton</i>(java.lang.CharSequence)</li>
+<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
+</ul>
+SpoofChecker.Builder
+<ul>
+<li><span style='color:green'>(stable)</span> public SpoofChecker.Builder <i>setData</i>(java.io.Reader)</li>
+<li><span style='color:green'>(stable)</span> public SpoofChecker.Builder <i>setRestrictionLevel</i>(SpoofChecker.RestrictionLevel)</li>
+</ul>
+SpoofChecker.CheckResult
+<ul>
+<li><span style='color:green'>(stable)</span> public UnicodeSet numerics</li>
+<li><span style='color:green'>(stable)</span> public SpoofChecker.RestrictionLevel restrictionLevel</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+MeasureUnit
+<ul>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit MILLIMOLE_PER_LITER</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit PART_PER_MILLION</li>
 </ul>
 </ul>
 
@@ -88,20 +183,60 @@ UScript
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>FilteredBreakIteratorBuilder</i></li>
 BreakIterator
 <ul>
 <li><span style='color:orange'>(draft)</span> public void <i>setText</i>(java.lang.CharSequence)</li>
 </ul>
+CaseMap.Fold
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>apply</i>(java.lang.CharSequence)</li>
+</ul>
+CaseMap.Lower
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>apply</i>(java.util.Locale, java.lang.CharSequence)</li>
+</ul>
 CaseMap.Title
 <ul>
 <li><span style='color:orange'>(draft)</span> public CaseMap.Title <i>adjustToCased</i>()</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>apply</i>(java.util.Locale, BreakIterator, java.lang.CharSequence)</li>
 <li><span style='color:orange'>(draft)</span> public CaseMap.Title <i>sentences</i>()</li>
 <li><span style='color:orange'>(draft)</span> public CaseMap.Title <i>wholeString</i>()</li>
+</ul>
+CaseMap.Upper
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>apply</i>(java.util.Locale, java.lang.CharSequence)</li>
+</ul>
+DecimalFormatSymbols
+<ul>
+<li><span style='color:orange'>(draft)</span> public static DecimalFormatSymbols <i>forNumberingSystem</i>(ULocale, NumberingSystem)</li>
+<li><span style='color:orange'>(draft)</span> public static DecimalFormatSymbols <i>forNumberingSystem</i>(java.util.Locale, NumberingSystem)</li>
+</ul>
+Edits
+<ul>
+<li><span style='color:orange'>(draft)</span> public Edits <i>mergeAndAppend</i>(Edits, Edits)</li>
+<li><span style='color:orange'>(draft)</span> public int <i>numberOfChanges</i>()</li>
+</ul>
+Edits.Iterator
+<ul>
+<li><span style='color:orange'>(draft)</span> public int <i>destinationIndexFromSourceIndex</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public boolean <i>findDestinationIndex</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public int <i>sourceIndexFromDestinationIndex</i>(int)</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
+Currency
+<ul>
+<li><span style='color:orange'>(draft)</span> public static Currency <i>fromJavaCurrency</i>(java.util.Currency)</li>
+<li><span style='color:orange'>(draft)</span> public java.util.Currency <i>toJavaCurrency</i>()</li>
+</ul>
+CurrencyAmount
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>CurrencyAmount</i>(double, java.util.Currency)</li>
+<li><span style='color:orange'>(draft)</span> public <i>CurrencyAmount</i>(java.lang.Number, java.util.Currency)</li>
+</ul>
 VersionInfo
 <ul>
 <li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_10_0</li>
@@ -109,6 +244,6 @@ VersionInfo
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Mon Jun 26 00:19:22 EDT 2017<br/>© 2017 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Sep 27 11:38:50 EDT 2017<br/>© 2017 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
 </body>
 </html>

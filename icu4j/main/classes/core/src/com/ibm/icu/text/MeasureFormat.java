@@ -576,8 +576,7 @@ public class MeasureFormat extends UFormat {
      *          {@link MeasureFormat#getInstance}, or null if there is no display name available
      *          for the specified unit.
      *
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getUnitDisplayName(MeasureUnit unit) {
         FormatWidth width = getRegularWidth(formatWidth);
