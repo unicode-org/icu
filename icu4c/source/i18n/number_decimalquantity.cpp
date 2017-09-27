@@ -23,14 +23,22 @@ int8_t NEGATIVE_FLAG = 1;
 int8_t INFINITY_FLAG = 2;
 int8_t NAN_FLAG = 4;
 
+static constexpr int32_t DEFAULT_DIGITS = 34;
+typedef MaybeStackHeaderAndArray<decNumber, char, DEFAULT_DIGITS> DecNumberWithStorage;
+
 /** Helper function to convert a decNumber-compatible string into a decNumber. */
-void stringToDecNumber(StringPiece n, decNumber &dn) {
+void stringToDecNumber(StringPiece n, DecNumberWithStorage &dn) {
     decContext set;
     uprv_decContextDefault(&set, DEC_INIT_BASE);
     uprv_decContextSetRounding(&set, DEC_ROUND_HALF_EVEN);
     set.traps = 0; // no traps, thank you
-    set.digits = 34; // work with up to 34 digits
-    uprv_decNumberFromString(&dn, n.data(), &set);
+    if (n.length() > DEFAULT_DIGITS) {
+        dn.resize(n.length(), 0);
+        set.digits = n.length();
+    } else {
+        set.digits = DEFAULT_DIGITS;
+    }
+    uprv_decNumberFromString(dn.getAlias(), n.data(), &set);
     U_ASSERT(DECDPUN == 1);
 }
 
@@ -304,9 +312,9 @@ DecimalQuantity &DecimalQuantity::setToLong(int64_t n) {
 void DecimalQuantity::_setToLong(int64_t n) {
     if (n == INT64_MIN) {
         static const char *int64minStr = "9.223372036854775808E+18";
-        decNumber dn;
+        DecNumberWithStorage dn;
         stringToDecNumber(int64minStr, dn);
-        readDecNumberToBcd(&dn);
+        readDecNumberToBcd(dn.getAlias());
     } else if (n <= INT32_MAX) {
         readIntToBcd(static_cast<int32_t>(n));
     } else {
@@ -400,10 +408,10 @@ void DecimalQuantity::convertToAccurateDouble() {
         *decimalSeparator = '.';
     }
 
-    decNumber dn;
     StringPiece sp(dstr);
-    stringToDecNumber(sp, dn);
-    _setToDecNumber(&dn);
+    DecNumberWithStorage dn;
+    stringToDecNumber(dstr, dn);
+    _setToDecNumber(dn.getAlias());
 
     scale += delta;
     explicitExactDouble = true;
@@ -413,15 +421,15 @@ DecimalQuantity &DecimalQuantity::setToDecNumber(StringPiece n) {
     setBcdToZero();
     flags = 0;
 
-    decNumber dn;
+    DecNumberWithStorage dn;
     stringToDecNumber(n, dn);
 
     // The code path for decNumber is modeled after BigDecimal in Java.
-    if (decNumberIsNegative(&dn)) {
+    if (decNumberIsNegative(dn.getAlias())) {
         flags |= NEGATIVE_FLAG;
     }
-    if (!decNumberIsZero(&dn)) {
-        _setToDecNumber(&dn);
+    if (!decNumberIsZero(dn.getAlias())) {
+        _setToDecNumber(dn.getAlias());
     }
     return *this;
 }
