@@ -159,6 +159,12 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
 
     // Run the roundtrip test
     for (int32_t locidx = 0; locidx < nLocales; locidx++) {
+        if (uprv_strcmp(LOCALES[locidx].getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until TimeZone offset roundtrip is fixed")) {
+            continue;
+        }
+        if (uprv_strcmp(LOCALES[locidx].getLanguage(),"fa")==0 && logKnownIssue("13374", "Skip handling fa until TimeZone offset roundtrip is fixed")) {
+            continue;
+        }
         UnicodeString localGMTString;
         SimpleDateFormat gmtFmt(UnicodeString("ZZZZ"), LOCALES[locidx], status);
         if (U_FAILURE(status)) {

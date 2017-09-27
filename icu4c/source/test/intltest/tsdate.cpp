@@ -13,6 +13,7 @@
 #include "unicode/smpdtfmt.h"
 #include "tsdate.h"
 #include "putilimp.h"
+#include "cstring.h"
 
 #include <float.h>
 #include <stdlib.h>
@@ -280,6 +281,9 @@ void IntlTestDateFormat::monsterTest(/*char *par*/)
         }
         for (int32_t i=0; i<count; ++i)
         {
+            if (uprv_strcmp(locales[i].getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
+                continue;
+            }
             UnicodeString name = UnicodeString(locales[i].getName(), "");
             logln((UnicodeString)"Testing " + name + "...");
             testLocale(/*par, */locales[i], name);
