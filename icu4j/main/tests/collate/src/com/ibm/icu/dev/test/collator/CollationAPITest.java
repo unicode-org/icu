@@ -1095,7 +1095,19 @@ public class CollationAPITest extends TestFmwk {
           // zh_Hant has default=stroke but the data is in zh.
           { "zh_TW", "zh_Hant_TW", "zh@collation=stroke" },
           { "zh_TW@collation=pinyin", "zh_Hant_TW@collation=pinyin", "zh" },
-          { "zh_CN@collation=stroke", "zh_Hans_CN@collation=stroke", "zh@collation=stroke" }
+          { "zh_CN@collation=stroke", "zh_Hans_CN@collation=stroke", "zh@collation=stroke" },
+          // yue/yue_Hant aliased to zh_Hant, yue_Hans aliased to zh_Hans.
+          { "yue", "zh_Hant", "zh@collation=stroke" },
+          { "yue_HK", "zh_Hant", "zh@collation=stroke" },
+          { "yue_Hant", "zh_Hant", "zh@collation=stroke" },
+          { "yue_Hant_HK", "zh_Hant", "zh@collation=stroke" },
+          { "yue@collation=pinyin", "zh_Hant@collation=pinyin", "zh" },
+          { "yue_HK@collation=pinyin", "zh_Hant@collation=pinyin", "zh" },
+          { "yue_CN", "zh_Hans", "zh" },
+          { "yue_Hans", "zh_Hans", "zh" },
+          { "yue_Hans_CN", "zh_Hans", "zh" },
+          { "yue_Hans@collation=stroke", "zh_Hans@collation=stroke", "zh@collation=stroke" },
+          { "yue_CN@collation=stroke", "zh_Hans@collation=stroke", "zh@collation=stroke" }
         };
 
         /* test opening collators for different locales */
