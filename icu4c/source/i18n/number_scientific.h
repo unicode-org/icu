@@ -13,7 +13,7 @@ namespace impl {
 // Forward-declare
 class ScientificHandler;
 
-class ScientificModifier : public UMemory, public Modifier {
+class U_I18N_API ScientificModifier : public UMemory, public Modifier {
   public:
     ScientificModifier();
 
@@ -33,7 +33,7 @@ class ScientificModifier : public UMemory, public Modifier {
     const ScientificHandler *fHandler;
 };
 
-class ScientificHandler : public UMemory, public MicroPropsGenerator, public MultiplierProducer {
+class U_I18N_API ScientificHandler : public UMemory, public MicroPropsGenerator, public MultiplierProducer {
   public:
     ScientificHandler(const Notation *notation, const DecimalFormatSymbols *symbols,
                       const MicroPropsGenerator *parent);

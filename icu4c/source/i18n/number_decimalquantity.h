@@ -26,7 +26,7 @@ namespace impl {
  *
  * <p>Java has multiple implementations for testing, but C++ has only one implementation.
  */
-class DecimalQuantity : public IFixedDecimal, public UMemory {
+class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
   public:
     /** Copy constructor. */
     DecimalQuantity(const DecimalQuantity &other);

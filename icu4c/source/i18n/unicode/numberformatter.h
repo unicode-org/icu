@@ -324,7 +324,7 @@ typedef Notation SimpleNotation;
  *
  * @draft ICU 60
  */
-class Notation : public UMemory {
+class U_I18N_API Notation : public UMemory {
   public:
     /**
      * Print the number using scientific notation (also known as scientific form, standard index form, or standard form
@@ -526,7 +526,7 @@ class Notation : public UMemory {
  *
  * @draft ICU 60
  */
-class ScientificNotation : public Notation {
+class U_I18N_API ScientificNotation : public Notation {
   public:
     /**
      * Sets the minimum number of digits to show in the exponent of scientific notation, padding with zeros if
@@ -576,7 +576,7 @@ typedef Rounder DigitRounder;
  *
  * @draft ICU 60
  */
-class Rounder : public UMemory {
+class U_I18N_API Rounder : public UMemory {
 
   public:
     /**
@@ -889,7 +889,7 @@ class Rounder : public UMemory {
  *
  * @draft ICU 60
  */
-class FractionRounder : public Rounder {
+class U_I18N_API FractionRounder : public Rounder {
   public:
     /**
      * Ensure that no less than this number of significant digits are retained when rounding according to fraction
@@ -945,7 +945,7 @@ class FractionRounder : public Rounder {
  *
  * @draft ICU 60
  */
-class CurrencyRounder : public Rounder {
+class U_I18N_API CurrencyRounder : public Rounder {
   public:
     /**
       * Associates a currency with this rounding strategy.
@@ -983,7 +983,7 @@ class CurrencyRounder : public Rounder {
  *
  * @draft ICU 60
  */
-class IncrementRounder : public Rounder {
+class U_I18N_API IncrementRounder : public Rounder {
   public:
     /**
      * Specifies the minimum number of fraction digits to render after the decimal separator, padding with zeros if
@@ -1012,7 +1012,7 @@ class IncrementRounder : public Rounder {
 /**
  * @internal This API is a technical preview.  It is likely to change in an upcoming release.
  */
-class Grouper : public UMemory {
+class U_I18N_API Grouper : public UMemory {
   public:
     /**
      * @internal This API is a technical preview.  It is likely to change in an upcoming release.
@@ -1065,7 +1065,7 @@ class Grouper : public UMemory {
  * @draft ICU 60
  * @see NumberFormatter
  */
-class IntegerWidth : public UMemory {
+class U_I18N_API IntegerWidth : public UMemory {
   public:
     /**
      * Pad numbers at the beginning with zeros to guarantee a certain number of numerals before the decimal separator.
@@ -1149,7 +1149,7 @@ namespace impl {
 static uint32_t DEFAULT_THRESHOLD = 3;
 
 /** @internal */
-class SymbolsWrapper : public UMemory {
+class U_I18N_API SymbolsWrapper : public UMemory {
   public:
     /** @internal */
     SymbolsWrapper() : fType(SYMPTR_NONE), fPtr{nullptr} {}
@@ -1227,7 +1227,7 @@ class SymbolsWrapper : public UMemory {
 };
 
 /** @internal */
-class Padder : public UMemory {
+class U_I18N_API Padder : public UMemory {
   public:
     /** @internal */
     static Padder none();
@@ -1284,7 +1284,7 @@ class Padder : public UMemory {
 };
 
 /** @internal */
-struct MacroProps : public UMemory {
+struct U_I18N_API MacroProps : public UMemory {
     /** @internal */
     Notation notation;
 
@@ -1343,7 +1343,7 @@ struct MacroProps : public UMemory {
  * {@link UnlocalizedNumberFormatter} and {@link LocalizedNumberFormatter}.
  */
 template<typename Derived>
-class NumberFormatterSettings {
+class U_I18N_API NumberFormatterSettings {
   public:
     /**
      * Specifies the notation style (simple, scientific, or compact) for rendering numbers.
@@ -1737,7 +1737,7 @@ class NumberFormatterSettings {
  * @see NumberFormatter
  * @draft ICU 60
  */
-class UnlocalizedNumberFormatter
+class U_I18N_API UnlocalizedNumberFormatter
         : public NumberFormatterSettings<UnlocalizedNumberFormatter>, public UMemory {
 
   public:
@@ -1766,7 +1766,7 @@ class UnlocalizedNumberFormatter
  * @see NumberFormatter
  * @draft ICU 60
  */
-class LocalizedNumberFormatter
+class U_I18N_API LocalizedNumberFormatter
         : public NumberFormatterSettings<LocalizedNumberFormatter>, public UMemory {
   public:
     /**
@@ -1854,7 +1854,7 @@ class LocalizedNumberFormatter
  *
  * @draft ICU 60
  */
-class FormattedNumber : public UMemory {
+class U_I18N_API FormattedNumber : public UMemory {
   public:
     /**
      * Returns a UnicodeString representation of the the formatted number.
@@ -1932,7 +1932,7 @@ class FormattedNumber : public UMemory {
  *
  * @draft ICU 60
  */
-class NumberFormatter final {
+class U_I18N_API NumberFormatter final {
   public:
     /**
      * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is not currently known at

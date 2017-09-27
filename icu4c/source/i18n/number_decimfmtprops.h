@@ -28,7 +28,7 @@ struct CurrencyPluralInfoWrapper {
     }
 };
 
-struct DecimalFormatProperties {
+struct U_I18N_API DecimalFormatProperties {
 
   public:
     NullableValue<UNumberCompactStyle> compactStyle;

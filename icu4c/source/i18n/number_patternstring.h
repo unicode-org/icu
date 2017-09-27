@@ -52,7 +52,7 @@ struct ParsedSubpatternInfo {
     Endpoints paddingEndpoints;
 };
 
-struct ParsedPatternInfo : public AffixPatternProvider {
+struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider {
     UnicodeString pattern;
     ParsedSubpatternInfo positive;
     ParsedSubpatternInfo negative;
@@ -130,7 +130,7 @@ struct ParsedPatternInfo : public AffixPatternProvider {
     friend class PatternParser;
 };
 
-class PatternParser {
+class U_I18N_API PatternParser {
   public:
     /**
      * Runs the recursive descent parser on the given pattern string, returning a data structure with raw information
@@ -196,7 +196,7 @@ class PatternParser {
                             IgnoreRounding _ignoreRounding, UErrorCode &status);
 };
 
-class PatternStringUtils {
+class U_I18N_API PatternStringUtils {
   public:
     /**
      * Creates a pattern string from a property bag.
