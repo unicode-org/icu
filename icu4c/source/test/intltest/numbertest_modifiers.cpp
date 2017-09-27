@@ -5,30 +5,7 @@
 #include "intltest.h"
 #include "number_stringbuilder.h"
 #include "number_modifiers.h"
-
-using namespace icu::number::impl;
-
-class ModifiersTest : public IntlTest {
-  public:
-    void testConstantAffixModifier();
-
-    void testConstantMultiFieldModifier();
-
-    void testSimpleModifier();
-
-    void testCurrencySpacingEnabledModifier();
-
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
-
-  private:
-    void assertModifierEquals(const Modifier &mod, int32_t expectedPrefixLength, bool expectedStrong,
-                              UnicodeString expectedChars, UnicodeString expectedFields,
-                              UErrorCode &status);
-
-    void assertModifierEquals(const Modifier &mod, NumberStringBuilder &sb, int32_t expectedPrefixLength,
-                              bool expectedStrong, UnicodeString expectedChars,
-                              UnicodeString expectedFields, UErrorCode &status);
-};
+#include "numbertest.h"
 
 void ModifiersTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
     if (exec) {

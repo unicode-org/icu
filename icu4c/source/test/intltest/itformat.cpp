@@ -214,7 +214,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             callTest(*test, par);
           }
           break;
-        case 50: 
+        case 50:
           name = "NumberFormat2Test"; 
           if (exec) { 
             logln("NumberFormat2Test test---"); 
@@ -222,9 +222,14 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             LocalPointer<IntlTest> test(createNumberFormat2Test()); 
             callTest(*test, par); 
           } 
-          break; 
+          break;
         TESTCLASS(51,AffixUtilsTest);
-        TESTCLASS(52,NumberStringBuilderTest);
+        TESTCLASS(52,NumberFormatterApiTest);
+        TESTCLASS(53,DecimalQuantityTest);
+        TESTCLASS(54,ModifiersTest);
+        TESTCLASS(55,PatternModifierTest);
+        TESTCLASS(56,PatternStringTest);
+        TESTCLASS(57,NumberStringBuilderTest);
         default: name = ""; break; //needed to end loop
     }
     if (exec) {

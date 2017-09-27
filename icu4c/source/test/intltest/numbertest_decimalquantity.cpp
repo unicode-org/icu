@@ -4,43 +4,18 @@
 #include "number_decimalquantity.h"
 #include "math.h"
 #include <cmath>
-
-using namespace icu::number::impl;
-
-class DecimalQuantityTest : public IntlTest {
-  public:
-    void testDecimalQuantityBehaviorStandalone();
-
-    void testSwitchStorage();
-
-    void testAppend();
-
-    void testConvertToAccurateDouble();
-
-    void testUseApproximateDoubleWhenAble();
-
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
-
-  private:
-    void assertDoubleEquals(const char *message, double a, double b);
-
-    void assertHealth(const DecimalQuantity &fq);
-
-    void assertToStringAndHealth(const DecimalQuantity &fq, const UnicodeString &expected);
-
-    void checkDoubleBehavior(double d, bool explicitRequired);
-};
+#include "numbertest.h"
 
 void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
     if (exec) {
         logln("TestSuite DecimalQuantityTest: ");
     }
     TESTCASE_AUTO_BEGIN;
-    TESTCASE_AUTO(testDecimalQuantityBehaviorStandalone);
-    TESTCASE_AUTO(testSwitchStorage);
-    TESTCASE_AUTO(testAppend);
-    TESTCASE_AUTO(testConvertToAccurateDouble);
-    TESTCASE_AUTO(testUseApproximateDoubleWhenAble);
+        TESTCASE_AUTO(testDecimalQuantityBehaviorStandalone);
+        TESTCASE_AUTO(testSwitchStorage);
+        TESTCASE_AUTO(testAppend);
+        TESTCASE_AUTO(testConvertToAccurateDouble);
+        TESTCASE_AUTO(testUseApproximateDoubleWhenAble);
     TESTCASE_AUTO_END;
 }
 
@@ -103,10 +78,10 @@ void DecimalQuantityTest::testDecimalQuantityBehaviorStandalone() {
     assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
     fq.roundToInfinity();
     assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
-    fq.roundToIncrement(0.005, RoundingMode::kRoundHalfEven, status);
+    fq.roundToIncrement(0.005, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to increment", status);
     assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987655E-3>");
-    fq.roundToMagnitude(-2, RoundingMode::kRoundHalfEven, status);
+    fq.roundToMagnitude(-2, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to magnitude", status);
     assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 98766E-2>");
 }
@@ -125,7 +100,7 @@ void DecimalQuantityTest::testSwitchStorage() {
     assertEquals("Failed on multiply", "12341234123412345E0", fq.toNumberString());
     assertHealth(fq);
     // Bytes -> Long
-    fq.roundToMagnitude(5, RoundingMode::kRoundHalfEven, status);
+    fq.roundToMagnitude(5, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to magnitude", status);
     assertFalse("Should not be using byte array", fq.isUsingBytes());
     assertEquals("Failed on round", "123412341234E5", fq.toNumberString());
@@ -253,18 +228,18 @@ void DecimalQuantityTest::testUseApproximateDoubleWhenAble() {
         int32_t maxFrac;
         RoundingMode roundingMode;
         bool usesExact;
-    } cases[] = {{1.2345678, 1, RoundingMode::kRoundHalfEven, false},
-                 {1.2345678, 7, RoundingMode::kRoundHalfEven, false},
-                 {1.2345678, 12, RoundingMode::kRoundHalfEven, false},
-                 {1.2345678, 13, RoundingMode::kRoundHalfEven, true},
-                 {1.235, 1, RoundingMode::kRoundHalfEven, false},
-                 {1.235, 2, RoundingMode::kRoundHalfEven, true},
-                 {1.235, 3, RoundingMode::kRoundHalfEven, false},
-                 {1.000000000000001, 0, RoundingMode::kRoundHalfEven, false},
-                 {1.000000000000001, 0, RoundingMode::kRoundCeiling, true},
-                 {1.235, 1, RoundingMode::kRoundCeiling, false},
-                 {1.235, 2, RoundingMode::kRoundCeiling, false},
-                 {1.235, 3, RoundingMode::kRoundCeiling, true}};
+    } cases[] = {{1.2345678, 1, RoundingMode::UNUM_ROUND_HALFEVEN, false},
+                 {1.2345678, 7, RoundingMode::UNUM_ROUND_HALFEVEN, false},
+                 {1.2345678, 12, RoundingMode::UNUM_ROUND_HALFEVEN, false},
+                 {1.2345678, 13, RoundingMode::UNUM_ROUND_HALFEVEN, true},
+                 {1.235, 1, RoundingMode::UNUM_ROUND_HALFEVEN, false},
+                 {1.235, 2, RoundingMode::UNUM_ROUND_HALFEVEN, true},
+                 {1.235, 3, RoundingMode::UNUM_ROUND_HALFEVEN, false},
+                 {1.000000000000001, 0, RoundingMode::UNUM_ROUND_HALFEVEN, false},
+                 {1.000000000000001, 0, RoundingMode::UNUM_ROUND_CEILING, true},
+                 {1.235, 1, RoundingMode::UNUM_ROUND_CEILING, false},
+                 {1.235, 2, RoundingMode::UNUM_ROUND_CEILING, false},
+                 {1.235, 3, RoundingMode::UNUM_ROUND_CEILING, true}};
 
     UErrorCode status = U_ZERO_ERROR;
     for (TestCase cas : cases) {
