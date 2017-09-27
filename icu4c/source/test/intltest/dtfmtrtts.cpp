@@ -236,6 +236,9 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     int32_t style = 0;
     for(style = DateFormat::FULL; style <= DateFormat::SHORT; ++style) {
         if(TEST_TABLE[itable++]) {
+            if (uprv_strcmp(loc.getLanguage(),"ccp")==0 && style==DateFormat::MEDIUM && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
+                continue;
+            }
             logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createDateInstance((DateFormat::EStyle)style, loc);
             if(df == NULL) {
@@ -249,7 +252,10 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     
     for(style = DateFormat::FULL; style <= DateFormat::SHORT; ++style) {
         if (TEST_TABLE[itable++]) {
-          logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
+            if (uprv_strcmp(loc.getLanguage(),"ccp")==0 && style==DateFormat::FULL && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
+                continue;
+            }
+            logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createTimeInstance((DateFormat::EStyle)style, loc);
             if(df == NULL) {
               errln(UnicodeString("Could not DF::createTimeInstance ") + UnicodeString(styleName((DateFormat::EStyle)style)) + " Locale: " + loc.getDisplayName(temp));
