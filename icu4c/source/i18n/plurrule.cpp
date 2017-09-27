@@ -268,7 +268,7 @@ PluralRules::select(const Formattable& obj, const NumberFormat& fmt, UErrorCode&
 }
 
 UnicodeString
-PluralRules::select(const FixedDecimal &number) const {
+PluralRules::select(const IFixedDecimal &number) const {
     if (mRules == NULL) {
         return UnicodeString(TRUE, PLURAL_DEFAULT_RULE, -1);
     }
@@ -783,15 +783,15 @@ AndConstraint::~AndConstraint() {
 
 
 UBool
-AndConstraint::isFulfilled(const FixedDecimal &number) {
+AndConstraint::isFulfilled(const IFixedDecimal &number) {
     UBool result = TRUE;
     if (digitsType == none) {
         // An empty AndConstraint, created by a rule with a keyword but no following expression.
         return TRUE;
     }
-    double n = number.get(digitsType);  // pulls n | i | v | f value for the number.
-                                        // Will always be positive.
-                                        // May be non-integer (n option only)
+    double n = number.getPluralOperand(digitsType);  // pulls n | i | v | f value for the number.
+                                                     // Will always be positive.
+                                                     // May be non-integer (n option only)
     do {
         if (integerOnly && n != uprv_floor(n)) {
             result = FALSE;
@@ -873,7 +873,7 @@ OrConstraint::add()
 }
 
 UBool
-OrConstraint::isFulfilled(const FixedDecimal &number) {
+OrConstraint::isFulfilled(const IFixedDecimal &number) {
     OrConstraint* orRule=this;
     UBool result=FALSE;
 
@@ -914,8 +914,8 @@ RuleChain::~RuleChain() {
 
 
 UnicodeString
-RuleChain::select(const FixedDecimal &number) const {
-    if (!number.isNanOrInfinity) {
+RuleChain::select(const IFixedDecimal &number) const {
+    if (!number.isNaN() && !number.isInfinite()) {
         for (const RuleChain *rules = this; rules != NULL; rules = rules->fNext) {
              if (rules->ruleHeader->isFulfilled(number)) {
                  return rules->fKeyword;
@@ -1411,7 +1411,8 @@ FixedDecimal::FixedDecimal(const VisibleDigits &digits) {
             decimalDigitsWithoutTrailingZeros,
             visibleDecimalDigitCount, hasIntegerValue);
     isNegative = digits.isNegative();
-    isNanOrInfinity = digits.isNaNOrInfinity();
+    _isNaN = digits.isNaN();
+    _isInfinite = digits.isInfinite();
 }
 
 FixedDecimal::FixedDecimal(double n, int32_t v, int64_t f) {
@@ -1476,7 +1477,8 @@ FixedDecimal::FixedDecimal(const FixedDecimal &other) {
     intValue = other.intValue;
     hasIntegerValue = other.hasIntegerValue;
     isNegative = other.isNegative;
-    isNanOrInfinity = other.isNanOrInfinity;
+    _isNaN = other._isNaN;
+    _isInfinite = other._isInfinite;
 }
 
 
@@ -1489,8 +1491,9 @@ void FixedDecimal::init(double n) {
 void FixedDecimal::init(double n, int32_t v, int64_t f) {
     isNegative = n < 0.0;
     source = fabs(n);
-    isNanOrInfinity = uprv_isNaN(source) || uprv_isPositiveInfinity(source);
-    if (isNanOrInfinity) {
+    _isNaN = uprv_isNaN(source);
+    _isInfinite = uprv_isInfinite(source);
+    if (_isNaN || _isInfinite) {
         v = 0;
         f = 0;
         intValue = 0;
@@ -1610,17 +1613,29 @@ void FixedDecimal::adjustForMinFractionDigits(int32_t minFractionDigits) {
 }
         
 
-double FixedDecimal::get(tokenType operand) const {
+double FixedDecimal::getPluralOperand(PluralOperand operand) const {
     switch(operand) {
-        case tVariableN: return source;
-        case tVariableI: return (double)intValue;
-        case tVariableF: return (double)decimalDigits;
-        case tVariableT: return (double)decimalDigitsWithoutTrailingZeros; 
-        case tVariableV: return visibleDecimalDigitCount;
+        case PLURAL_OPERAND_N: return source;
+        case PLURAL_OPERAND_I: return intValue;
+        case PLURAL_OPERAND_F: return decimalDigits;
+        case PLURAL_OPERAND_T: return decimalDigitsWithoutTrailingZeros; 
+        case PLURAL_OPERAND_V: return visibleDecimalDigitCount;
         default:
              U_ASSERT(FALSE);  // unexpected.
              return source;
     }
+}
+
+bool FixedDecimal::isNaN() const {
+    return _isNaN;
+}
+
+bool FixedDecimal::isInfinite() const {
+    return _isInfinite;
+}
+
+bool FixedDecimal::isNanOrInfinity() const {
+    return _isNaN || _isInfinite;
 }
 
 int32_t FixedDecimal::getVisibleFractionDigitCount() const {

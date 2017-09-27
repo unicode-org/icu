@@ -3,6 +3,8 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.text.FieldPosition;
@@ -21,7 +23,8 @@ public class NumberStringBuilderTest {
     "The quick brown fox jumps over the lazy dog",
     "😁",
     "mixed 😇 and ASCII",
-    "with combining characters like 🇦🇧🇨🇩"
+    "with combining characters like 🇦🇧🇨🇩",
+    "A very very very very very very very very very very long string to force heap"
   };
 
   @Test
@@ -59,6 +62,10 @@ public class NumberStringBuilderTest {
       sb4.insert(4, str.toCharArray());
       sb5.insert(4, str.toCharArray(), null);
       assertCharSequenceEquals(sb4, sb5);
+
+      sb4.append(sb4.toString());
+      sb5.append(new NumberStringBuilder(sb5));
+      assertCharSequenceEquals(sb4, sb5);
     }
   }
 
@@ -88,6 +95,21 @@ public class NumberStringBuilderTest {
   }
 
   @Test
+  public void testCopy() {
+    for (String str : EXAMPLE_STRINGS) {
+      NumberStringBuilder sb1 = new NumberStringBuilder();
+      sb1.append(str, null);
+      NumberStringBuilder sb2 = new NumberStringBuilder(sb1);
+      assertCharSequenceEquals(sb1, sb2);
+      assertTrue(sb1.contentEquals(sb2));
+
+      sb1.append("12345", null);
+      assertNotEquals(sb1.length(), sb2.length());
+      assertFalse(sb1.contentEquals(sb2));
+    }
+  }
+
+  @Test
   public void testFields() {
     for (String str : EXAMPLE_STRINGS) {
       NumberStringBuilder sb = new NumberStringBuilder();
@@ -97,7 +119,9 @@ public class NumberStringBuilderTest {
       assertEquals(str.length() * 2, fields.length);
       for (int i = 0; i < str.length(); i++) {
         assertEquals(null, fields[i]);
+        assertEquals(null, sb.fieldAt(i));
         assertEquals(NumberFormat.Field.CURRENCY, fields[i + str.length()]);
+        assertEquals(NumberFormat.Field.CURRENCY, sb.fieldAt(i + str.length()));
       }
 
       // Very basic FieldPosition test. More robust tests happen in NumberFormatTest.
@@ -123,10 +147,15 @@ public class NumberStringBuilderTest {
       fields = sb.toFieldArray();
       for (int i = 0; i < sb.length(); i++) {
         assertEquals(oldFields[i % oldFields.length], fields[i]);
-        if (fields[i] == null) numNull++;
-        else if (fields[i] == NumberFormat.Field.CURRENCY) numCurr++;
-        else if (fields[i] == NumberFormat.Field.INTEGER) numInt++;
-        else throw new AssertionError("Encountered unknown field in " + str);
+        if (fields[i] == null) {
+          numNull++;
+        } else if (fields[i] == NumberFormat.Field.CURRENCY) {
+          numCurr++;
+        } else if (fields[i] == NumberFormat.Field.INTEGER) {
+          numInt++;
+        } else {
+          throw new AssertionError("Encountered unknown field in " + str);
+        }
       }
       assertEquals(str.length() * 4, numNull);
       assertEquals(numNull, numCurr);
@@ -152,6 +181,30 @@ public class NumberStringBuilderTest {
       builder.appendCodePoint('x', null);
       assertEquals(builder.length(), i + 1);
     }
+  }
+
+  @Test
+  public void testCodePoints() {
+      NumberStringBuilder nsb = new NumberStringBuilder();
+      assertEquals("First is -1 on empty string", -1, nsb.getFirstCodePoint());
+      assertEquals("Last is -1 on empty string", -1, nsb.getLastCodePoint());
+      assertEquals("Length is 0 on empty string", 0, nsb.codePointCount());
+
+      nsb.append("q", null);
+      assertEquals("First is q", 'q', nsb.getFirstCodePoint());
+      assertEquals("Last is q", 'q', nsb.getLastCodePoint());
+      assertEquals("0th is q", 'q', nsb.codePointAt(0));
+      assertEquals("Before 1st is q", 'q', nsb.codePointBefore(1));
+      assertEquals("Code point count is 1", 1, nsb.codePointCount());
+
+      // 🚀 is two char16s
+      nsb.append("🚀", null);
+      assertEquals("First is still q", 'q', nsb.getFirstCodePoint());
+      assertEquals("Last is space ship", 128640, nsb.getLastCodePoint());
+      assertEquals("1st is space ship", 128640, nsb.codePointAt(1));
+      assertEquals("Before 1st is q", 'q', nsb.codePointBefore(1));
+      assertEquals("Before 3rd is space ship", 128640, nsb.codePointBefore(3));
+      assertEquals("Code point count is 2", 2, nsb.codePointCount());
   }
 
   private static void assertCharSequenceEquals(CharSequence a, CharSequence b) {

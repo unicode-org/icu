@@ -58,6 +58,11 @@ class StringEnumeration;
  * formatting and parsing a number.  Also provides methods for
  * determining which locales have number formats, and what their names
  * are.
+ *
+ * <p><strong>NOTE:</strong> Starting in ICU 60, there is a new set of APIs for localized number
+ * formatting that are designed to be an improvement over DecimalFormat.  New users are discouraged
+ * from using DecimalFormat.  For more information, see numberformatter.h.
+ *
  * \headerfile unicode/numfmt.h "unicode/numfmt.h"
  * <P>
  * NumberFormat helps you to format and parse numbers for any locale.
@@ -170,6 +175,11 @@ class U_I18N_API NumberFormat : public Format {
 public:
     /**
      * Rounding mode.
+     *
+     * <p>
+     * For more detail on rounding modes, see:
+     * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+     *
      * @stable ICU 2.4
      */
     enum ERoundingMode {

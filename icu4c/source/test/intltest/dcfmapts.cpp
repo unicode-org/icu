@@ -773,11 +773,11 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
 
     fd = df->getFixedDecimal(uprv_getInfinity(), status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(TRUE, fd.isNanOrInfinity);
+    ASSERT_EQUAL(TRUE, fd.isNanOrInfinity());
     fd = df->getFixedDecimal(0.0, status);
-    ASSERT_EQUAL(FALSE, fd.isNanOrInfinity);
+    ASSERT_EQUAL(FALSE, fd.isNanOrInfinity());
     fd = df->getFixedDecimal(uprv_getNaN(), status);
-    ASSERT_EQUAL(TRUE, fd.isNanOrInfinity);
+    ASSERT_EQUAL(TRUE, fd.isNanOrInfinity());
     TEST_ASSERT_STATUS(status);
 
     // Test Big Decimal input.

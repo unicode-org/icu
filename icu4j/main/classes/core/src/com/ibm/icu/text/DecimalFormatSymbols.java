@@ -258,6 +258,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             digitStrings[i] = String.valueOf(d);
             digits[i] = d;
         }
+
+        // Update codePointZero: it is simply zeroDigit.
+        codePointZero = zeroDigit;
     }
 
     /**
@@ -274,6 +277,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Returns the array of strings used as digits, in order from 0 through 9
      * Package private method - doesn't create a defensively copy.
+     *
+     * <p><strong>WARNING:</strong> Mutating the returned array will cause undefined behavior.
+     * If you need to change the value of the array, use {@link #getDigitStrings} and {@link
+     * #setDigitStrings} instead.
+     *
      * @return the array of digit strings
      * @internal
      * @deprecated This API is ICU internal only.
@@ -281,6 +289,19 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     @Deprecated
     public String[] getDigitStringsLocal() {
         return digitStrings;
+    }
+
+    /**
+     * If the digit strings array corresponds to a sequence of increasing code points, this method
+     * returns the code point corresponding to the first entry in the digit strings array. If the
+     * digit strings array is <em>not</em> a sequence of increasing code points, returns -1.
+     *
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public int getCodePointZero() {
+        return codePointZero;
     }
 
     /**
@@ -309,22 +330,48 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         }
 
         // Scan input array and create char[] representation if possible
+        // Also update codePointZero if possible
         String[] tmpDigitStrings = new String[10];
         char[] tmpDigits = new char[10];
+        int tmpCodePointZero = -1;
         for (int i = 0; i < 10; i++) {
-            if (digitStrings[i] == null) {
+            String digitStr = digitStrings[i];
+            if (digitStr == null) {
                 throw new IllegalArgumentException("The input digit string array contains a null element");
             }
-            tmpDigitStrings[i] = digitStrings[i];
-            if (tmpDigits != null && digitStrings[i].length() == 1) {
-                tmpDigits[i] = digitStrings[i].charAt(0);
+            tmpDigitStrings[i] = digitStr;
+            int cp, cc;
+            if (digitStr.length() == 0) {
+                cp = -1;
+                cc = 0;
             } else {
-                // contains digit string with multiple UTF-16 code units
+                cp = Character.codePointAt(digitStrings[i], 0);
+                cc = Character.charCount(cp);
+            }
+            if (cc == digitStr.length()) {
+                // One code point in this digit.
+                // If it is 1 UTF-16 code unit long, set it in tmpDigits.
+                if (cc == 1) {
+                    tmpDigits[i] = (char) cp;
+                } else {
+                    tmpDigits = null;
+                }
+                // Check for validity of tmpCodePointZero.
+                if (i == 0) {
+                    tmpCodePointZero = cp;
+                } else if (cp != tmpCodePointZero + i) {
+                    tmpCodePointZero = -1;
+                }
+            } else {
+                // More than one code point in this digit.
+                // codePointZero and tmpDigits are going to be invalid.
+                tmpCodePointZero = -1;
                 tmpDigits = null;
             }
         }
 
         this.digitStrings = tmpDigitStrings;
+        this.codePointZero = tmpCodePointZero;
 
         if (tmpDigits == null) {
             // fallback to the default digit chars
@@ -1087,8 +1134,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * <p>For more information, see <a href="http://www.unicode.org/reports/tr35/#Currencies"
      * >UTS#35 section 5.10.2</a>.
      *
-     * <p><strong>Note:</strong> ICU4J does not currently use this information.
-     *
      * @param itemType one of CURRENCY_SPC_CURRENCY_MATCH, CURRENCY_SPC_SURROUNDING_MATCH
      * or CURRENCY_SPC_INSERT
      * @param beforeCurrency true to get the <code>beforeCurrency</code> values, false
@@ -1594,8 +1639,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
         serialVersionOnStream = currentSerialVersion;
 
-    // recreate
-    currency = Currency.getInstance(intlCurrencySymbol);
+        // recreate
+        currency = Currency.getInstance(intlCurrencySymbol);
+
+        // Refresh digitStrings in order to populate codePointZero
+        setDigitStrings(digitStrings);
     }
 
     /**
@@ -1617,6 +1665,22 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @serial
      */
     private String digitStrings[];
+
+    /**
+     * Dealing with code points is faster than dealing with strings when formatting. Because of
+     * this, we maintain a value containing the zero code point that is used whenever digitStrings
+     * represents a sequence of ten code points in order.
+     *
+     * <p>If the value stored here is positive, it means that the code point stored in this value
+     * corresponds to the digitStrings array, and zeroCodePoint can be used instead of the
+     * digitStrings array for the purposes of efficient formatting; if -1, then digitStrings does
+     * *not* contain a sequence of code points, and it must be used directly.
+     *
+     * <p>It is assumed that zeroCodePoint always shadows the value in digitStrings. zeroCodePoint
+     * should never be set directly; rather, it should be updated only when digitStrings mutates.
+     * That is, the flow of information is digitStrings -> zeroCodePoint, not the other way.
+     */
+    private transient int codePointZero;
 
     /**
      * Character used for thousands separator.

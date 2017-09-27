@@ -40,11 +40,10 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * Default constructor.
+     * Populates the instance with the base dimensionless unit.
      * @stable ICU 3.0
      */
-    MeasureUnit() : fTypeId(0), fSubTypeId(0) { 
-        fCurrency[0] = 0;
-    }
+    MeasureUnit();
     
     /**
      * Copy constructor.
@@ -1316,6 +1315,12 @@ class U_I18N_API MeasureUnit: public UObject {
      * @internal
      */
     void initCurrency(const char *isoCurrency);
+
+    /**
+     * For ICU use only.
+     * @internal
+     */
+    void initNoUnit(const char *subtype);
 
 #endif  /* U_HIDE_INTERNAL_API */
 

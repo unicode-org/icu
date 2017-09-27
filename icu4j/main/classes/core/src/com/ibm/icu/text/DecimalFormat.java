@@ -13,19 +13,18 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-import com.ibm.icu.impl.number.Endpoint;
-import com.ibm.icu.impl.number.Format.SingularFormat;
-import com.ibm.icu.impl.number.FormatQuantity4;
+import com.ibm.icu.impl.number.AffixUtils;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.Parse;
-import com.ibm.icu.impl.number.PatternString;
-import com.ibm.icu.impl.number.Properties;
-import com.ibm.icu.impl.number.formatters.PaddingFormat.PadPosition;
-import com.ibm.icu.impl.number.formatters.PositiveDecimalFormat;
-import com.ibm.icu.impl.number.formatters.ScientificFormat;
-import com.ibm.icu.impl.number.rounders.SignificantDigitsRounder;
+import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -48,6 +47,10 @@ import com.ibm.icu.util.ULocale.Category;
  * <p>DecimalFormat aims to comply with the specification <a
  * href="http://unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns">UTS #35</a>. Read
  * the specification for more information on how all the properties in DecimalFormat fit together.
+ *
+ * <p><strong>NOTE:</strong> Starting in ICU 60, there is a new set of APIs for localized number
+ * formatting that are designed to be an improvement over DecimalFormat.  New users are discouraged
+ * from using DecimalFormat.  For more information, see the package com.ibm.icu.number.
  *
  * <h3>Example Usage</h3>
  *
@@ -107,9 +110,8 @@ import com.ibm.icu.util.ULocale.Category;
  *       digits are shown. This is most common in scientific notation.
  * </ol>
  *
- * <p>It is possible to specify both a magnitude and a number of significant digits. If used
- * together, the <em>significant digits mode</em> determines how conflicts between fraction digits
- * and signiciant digits are resolved. For more information, see {@link #setSignificantDigitsMode}.
+ * <p>It is not possible to specify more than one rounding strategy. For example, setting a rounding
+ * increment in conjunction with significant digits results in undefined behavior.
  *
  * <p>It is also possible to specify the <em>rounding mode</em> to use. The default rounding mode is
  * "half even", which rounds numbers to their closest increment, with ties broken in favor of
@@ -252,7 +254,7 @@ public class DecimalFormat extends NumberFormat {
    * In principle this should be final, but serialize and clone won't work if it is final. Does not
    * need to be volatile because the reference never changes.
    */
-  /* final */ transient Properties properties;
+  /* final */ transient DecimalFormatProperties properties;
 
   /**
    * The symbols for the current locale. Volatile because threads may read and write at the same
@@ -265,13 +267,13 @@ public class DecimalFormat extends NumberFormat {
    * #format} method uses the formatter directly without needing to synchronize. Volatile because
    * threads may read and write at the same time.
    */
-  transient volatile SingularFormat formatter;
+  transient volatile LocalizedNumberFormatter formatter;
 
   /**
    * The effective properties as exported from the formatter object. Volatile because threads may
    * read and write at the same time.
    */
-  transient volatile Properties exportedProperties;
+  transient volatile DecimalFormatProperties exportedProperties;
 
   //=====================================================================================//
   //                                    CONSTRUCTORS                                     //
@@ -298,10 +300,10 @@ public class DecimalFormat extends NumberFormat {
     ULocale def = ULocale.getDefault(ULocale.Category.FORMAT);
     String pattern = getPattern(def, NumberFormat.NUMBERSTYLE);
     symbols = getDefaultSymbols();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -327,10 +329,10 @@ public class DecimalFormat extends NumberFormat {
    */
   public DecimalFormat(String pattern) {
     symbols = getDefaultSymbols();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -356,10 +358,10 @@ public class DecimalFormat extends NumberFormat {
    */
   public DecimalFormat(String pattern, DecimalFormatSymbols symbols) {
     this.symbols = (DecimalFormatSymbols) symbols.clone();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
     // Regression: ignore pattern rounding information if the pattern has currency symbols.
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+    setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY);
     refreshFormatter();
   }
 
@@ -393,8 +395,8 @@ public class DecimalFormat extends NumberFormat {
   /** Package-private constructor used by NumberFormat. */
   DecimalFormat(String pattern, DecimalFormatSymbols symbols, int choice) {
     this.symbols = (DecimalFormatSymbols) symbols.clone();
-    properties = new Properties();
-    exportedProperties = new Properties();
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
     // If choice is a currency type, ignore the rounding information.
     if (choice == CURRENCYSTYLE
         || choice == ISOCURRENCYSTYLE
@@ -402,9 +404,9 @@ public class DecimalFormat extends NumberFormat {
         || choice == CASHCURRENCYSTYLE
         || choice == STANDARDCURRENCYSTYLE
         || choice == PLURALCURRENCYSTYLE) {
-      setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_ALWAYS);
+      setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_ALWAYS);
     } else {
-      setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_IF_CURRENCY);
+      setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_IF_CURRENCY);
     }
     refreshFormatter();
   }
@@ -445,7 +447,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void applyPattern(String pattern) {
-    setPropertiesFromPattern(pattern, PatternString.IGNORE_ROUNDING_NEVER);
+    setPropertiesFromPattern(pattern, PatternStringParser.IGNORE_ROUNDING_NEVER);
     // Backwards compatibility: clear out user-specified prefix and suffix,
     // as well as CurrencyPluralInfo.
     properties.setPositivePrefix(null);
@@ -469,7 +471,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized void applyLocalizedPattern(String localizedPattern) {
-    String pattern = PatternString.convertLocalized(localizedPattern, symbols, false);
+    String pattern = PatternStringUtils.convertLocalized(localizedPattern, symbols, false);
     applyPattern(pattern);
   }
 
@@ -483,7 +485,7 @@ public class DecimalFormat extends NumberFormat {
     DecimalFormat other = (DecimalFormat) super.clone();
     other.symbols = (DecimalFormatSymbols) symbols.clone();
     other.properties = properties.clone();
-    other.exportedProperties = new Properties();
+    other.exportedProperties = new DecimalFormatProperties();
     other.refreshFormatter();
     return other;
   }
@@ -525,15 +527,22 @@ public class DecimalFormat extends NumberFormat {
       // Extra int for possible future use:
       ois.readInt();
       // 1) Property Bag
-      properties = (Properties) ois.readObject();
+      Object serializedProperties = ois.readObject();
+      if (serializedProperties instanceof DecimalFormatProperties) {
+        // ICU 60+
+        properties = (DecimalFormatProperties) serializedProperties;
+      } else {
+        // ICU 59
+        properties = ((com.ibm.icu.impl.number.Properties) serializedProperties).getInstance();
+      }
       // 2) DecimalFormatSymbols
       symbols = (DecimalFormatSymbols) ois.readObject();
       // Re-build transient fields
-      exportedProperties = new Properties();
+      exportedProperties = new DecimalFormatProperties();
       refreshFormatter();
     } else {
       ///// LEGACY SERIALIZATION FORMAT /////
-      properties = new Properties();
+      properties = new DecimalFormatProperties();
       // Loop through the fields. Not all fields necessarily exist in the serialization.
       String pp = null, ppp = null, ps = null, psp = null;
       String np = null, npp = null, ns = null, nsp = null;
@@ -667,7 +676,7 @@ public class DecimalFormat extends NumberFormat {
       if (symbols == null) {
         symbols = getDefaultSymbols();
       }
-      exportedProperties = new Properties();
+      exportedProperties = new DecimalFormatProperties();
       refreshFormatter();
     }
   }
@@ -683,9 +692,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    FormattedNumber output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -696,9 +705,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    FormattedNumber output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -709,9 +718,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    FormattedNumber output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -723,9 +732,9 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public StringBuffer format(
       java.math.BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    FormattedNumber output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -736,9 +745,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
-    FormatQuantity4 fq = new FormatQuantity4(number.toBigDecimal());
-    formatter.format(fq, result, fieldPosition);
-    fq.populateUFieldPosition(fieldPosition);
+    FormattedNumber output = formatter.format(number);
+    output.populateFieldPosition(fieldPosition, result.length());
+    output.appendTo(result);
     return result;
   }
 
@@ -751,9 +760,8 @@ public class DecimalFormat extends NumberFormat {
   public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
     if (!(obj instanceof Number)) throw new IllegalArgumentException();
     Number number = (Number) obj;
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    AttributedCharacterIterator result = formatter.formatToCharacterIterator(fq);
-    return result;
+    FormattedNumber output = formatter.format(number);
+    return output.getFieldIterator();
   }
 
   /**
@@ -763,27 +771,9 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
-    // TODO: This is ugly (although not as ugly as it was in ICU 58).
-    // Currency should be a free parameter, not in property bag. Fix in ICU 60.
-    Properties cprops = threadLocalProperties.get();
-    SingularFormat fmt = null;
-    synchronized (this) {
-      // Use the pre-compiled formatter if possible.  Otherwise, copy the properties
-      // and build our own formatter.
-      // TODO: Consider using a static format path here.
-      if (currAmt.getCurrency().equals(properties.getCurrency())) {
-        fmt = formatter;
-      } else {
-        cprops.copyFrom(properties);
-      }
-    }
-    if (fmt == null) {
-      cprops.setCurrency(currAmt.getCurrency());
-      fmt = Endpoint.fromBTA(cprops, symbols);
-    }
-    FormatQuantity4 fq = new FormatQuantity4(currAmt.getNumber());
-    fmt.format(fq, toAppendTo, pos);
-    fq.populateUFieldPosition(pos);
+    FormattedNumber output = formatter.format(currAmt);
+    output.populateFieldPosition(pos, toAppendTo.length());
+    output.appendTo(toAppendTo);
     return toAppendTo;
   }
 
@@ -794,7 +784,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public Number parse(String text, ParsePosition parsePosition) {
-    Properties pprops = threadLocalProperties.get();
+    DecimalFormatProperties pprops = threadLocalProperties.get();
     synchronized (this) {
       pprops.copyFrom(properties);
     }
@@ -815,7 +805,11 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
     try {
-      CurrencyAmount result = Parse.parseCurrency(text, parsePosition, properties, symbols);
+      DecimalFormatProperties pprops = threadLocalProperties.get();
+      synchronized (this) {
+        pprops.copyFrom(properties);
+      }
+      CurrencyAmount result = Parse.parseCurrency(text, parsePosition, pprops, symbols);
       if (result == null) return null;
       Number number = result.getNumber();
       // Backwards compatibility: return com.ibm.icu.math.BigDecimal
@@ -871,8 +865,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositivePrefix() {
-    String result = exportedProperties.getPositivePrefix();
-    return (result == null) ? "" : result;
+    return formatter.format(1).getPrefix();
   }
 
   /**
@@ -909,8 +902,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativePrefix() {
-    String result = exportedProperties.getNegativePrefix();
-    return (result == null) ? "" : result;
+    return formatter.format(-1).getPrefix();
   }
 
   /**
@@ -947,8 +939,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositiveSuffix() {
-    String result = exportedProperties.getPositiveSuffix();
-    return (result == null) ? "" : result;
+    return formatter.format(1).getSuffix();
   }
 
   /**
@@ -985,8 +976,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativeSuffix() {
-    String result = exportedProperties.getNegativeSuffix();
-    return (result == null) ? "" : result;
+    return formatter.format(-1).getSuffix();
   }
 
   /**
@@ -1489,7 +1479,8 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 3.0
    */
   public synchronized boolean areSignificantDigitsUsed() {
-    return SignificantDigitsRounder.useSignificantDigits(properties);
+    return properties.getMinimumSignificantDigits() != -1
+        || properties.getMaximumSignificantDigits() != -1;
   }
 
   /**
@@ -1513,9 +1504,8 @@ public class DecimalFormat extends NumberFormat {
       properties.setMinimumSignificantDigits(1);
       properties.setMaximumSignificantDigits(6);
     } else {
-      properties.setMinimumSignificantDigits(Properties.DEFAULT_MINIMUM_SIGNIFICANT_DIGITS);
-      properties.setMaximumSignificantDigits(Properties.DEFAULT_MAXIMUM_SIGNIFICANT_DIGITS);
-      properties.setSignificantDigitsMode(null);
+      properties.setMinimumSignificantDigits(-1);
+      properties.setMaximumSignificantDigits(-1);
     }
     refreshFormatter();
   }
@@ -1544,7 +1534,6 @@ public class DecimalFormat extends NumberFormat {
    * and then you set maxInt=3, then minInt will be changed to 3.
    *
    * @param value The minimum number of significant digits to display.
-   * @see #setSignificantDigitsMode
    * @category Rounding
    * @stable ICU 3.0
    */
@@ -1587,7 +1576,6 @@ public class DecimalFormat extends NumberFormat {
    * @see #setRoundingMode
    * @see #setRoundingIncrement
    * @see #setMaximumFractionDigits
-   * @see #setSignificantDigitsMode
    * @category Rounding
    * @stable ICU 3.0
    */
@@ -1601,60 +1589,6 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * {@icu} Returns the current significant digits mode.
-   *
-   * @see #setSignificantDigitsMode
-   * @category Rounding
-   * @internal
-   * @deprecated ICU 59: This API is a technical preview. It may change in an upcoming release.
-   */
-  @Deprecated
-  public synchronized SignificantDigitsMode getSignificantDigitsMode() {
-    return exportedProperties.getSignificantDigitsMode();
-  }
-
-  /**
-   * {@icu} <strong>Rounding and Digit Limits:</strong> Sets the strategy used for resolving
-   * minimum/maximum significant digits when minimum/maximum integer and/or fraction digits are
-   * specified. There are three modes:
-   *
-   * <ul>
-   *   <li>Mode A: OVERRIDE_MAXIMUM_FRACTION. This is the default. Settings in maximum fraction are
-   *       ignored.
-   *   <li>Mode B: RESPECT_MAXIMUM_FRACTION. Round to maximum fraction even if doing so will prevent
-   *       minimum significant from being respected.
-   *   <li>Mode C: ENSURE_MINIMUM_SIGNIFICANT. Respect maximum fraction, but always ensure that
-   *       minimum significant digits are shown.
-   * </ul>
-   *
-   * <p>The following table illustrates the difference. Below, minFrac=1, maxFrac=2, minSig=3, and
-   * maxSig=4:
-   *
-   * <pre>
-   *   Mode A |   Mode B |   Mode C
-   * ---------+----------+----------
-   *  12340.0 |  12340.0 |  12340.0
-   *   1234.0 |   1234.0 |   1234.0
-   *    123.4 |    123.4 |    123.4
-   *    12.34 |    12.34 |    12.34
-   *    1.234 |     1.23 |     1.23
-   *   0.1234 |     0.12 |    0.123
-   *  0.01234 |     0.01 |   0.0123
-   * 0.001234 |     0.00 |  0.00123
-   * </pre>
-   *
-   * @param mode The significant digits mode to use.
-   * @category Rounding
-   * @internal
-   * @deprecated ICU 59: This API is a technical preview. It may change in an upcoming release.
-   */
-  @Deprecated
-  public synchronized void setSignificantDigitsMode(SignificantDigitsMode mode) {
-    properties.setSignificantDigitsMode(mode);
-    refreshFormatter();
-  }
-
-  /**
    * Returns the minimum number of characters in formatted output.
    *
    * @see #setFormatWidth
@@ -1662,7 +1596,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getFormatWidth() {
-    return exportedProperties.getFormatWidth();
+    return properties.getFormatWidth();
   }
 
   /**
@@ -1698,7 +1632,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized char getPadCharacter() {
-    CharSequence paddingString = exportedProperties.getPadString();
+    CharSequence paddingString = properties.getPadString();
     if (paddingString == null) {
       return '.'; // TODO: Is this the correct behavior?
     } else {
@@ -1731,7 +1665,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getPadPosition() {
-    PadPosition loc = exportedProperties.getPadPosition();
+    PadPosition loc = properties.getPadPosition();
     return (loc == null) ? PAD_BEFORE_PREFIX : loc.toOld();
   }
 
@@ -1765,7 +1699,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized boolean isScientificNotation() {
-    return ScientificFormat.useScientificNotation(properties);
+    return properties.getMinimumExponentDigits() != -1;
   }
 
   /**
@@ -1786,7 +1720,7 @@ public class DecimalFormat extends NumberFormat {
     if (useScientific) {
       properties.setMinimumExponentDigits(1);
     } else {
-      properties.setMinimumExponentDigits(Properties.DEFAULT_MINIMUM_EXPONENT_DIGITS);
+      properties.setMinimumExponentDigits(-1);
     }
     refreshFormatter();
   }
@@ -1799,7 +1733,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized byte getMinimumExponentDigits() {
-    return (byte) exportedProperties.getMinimumExponentDigits();
+    return (byte) properties.getMinimumExponentDigits();
   }
 
   /**
@@ -1827,7 +1761,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized boolean isExponentSignAlwaysShown() {
-    return exportedProperties.getExponentSignAlwaysShown();
+    return properties.getExponentSignAlwaysShown();
   }
 
   /**
@@ -1857,7 +1791,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized boolean isGroupingUsed() {
-    return PositiveDecimalFormat.useGrouping(properties);
+    return properties.getGroupingSize() != -1 || properties.getSecondaryGroupingSize() != -1;
   }
 
   /**
@@ -1883,8 +1817,8 @@ public class DecimalFormat extends NumberFormat {
       // Set to a reasonable default value
       properties.setGroupingSize(3);
     } else {
-      properties.setGroupingSize(Properties.DEFAULT_GROUPING_SIZE);
-      properties.setSecondaryGroupingSize(Properties.DEFAULT_SECONDARY_GROUPING_SIZE);
+      properties.setGroupingSize(-1);
+      properties.setSecondaryGroupingSize(-1);
     }
     refreshFormatter();
   }
@@ -1897,7 +1831,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getGroupingSize() {
-    return exportedProperties.getGroupingSize();
+    return properties.getGroupingSize();
   }
 
   /**
@@ -1929,7 +1863,12 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getSecondaryGroupingSize() {
-    return exportedProperties.getSecondaryGroupingSize();
+    int grouping1 = properties.getGroupingSize();
+    int grouping2 = properties.getSecondaryGroupingSize();
+    if (grouping1 == grouping2 || grouping2 < 0) {
+      return 0;
+    }
+    return properties.getSecondaryGroupingSize();
   }
 
   /**
@@ -1963,7 +1902,12 @@ public class DecimalFormat extends NumberFormat {
    */
   @Deprecated
   public synchronized int getMinimumGroupingDigits() {
-    return properties.getMinimumGroupingDigits();
+    // Only 1 and 2 are supported right now.
+    if (properties.getMinimumGroupingDigits() == 2) {
+      return 2;
+    } else {
+      return 1;
+    }
   }
 
   /**
@@ -1990,7 +1934,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized boolean isDecimalSeparatorAlwaysShown() {
-    return exportedProperties.getDecimalSeparatorAlwaysShown();
+    return properties.getDecimalSeparatorAlwaysShown();
   }
 
   /**
@@ -2442,13 +2386,13 @@ public class DecimalFormat extends NumberFormat {
     // to keep affix patterns intact.  In particular, pull rounding properties
     // so that CurrencyUsage is reflected properly.
     // TODO: Consider putting this logic in PatternString.java instead.
-    Properties tprops = threadLocalProperties.get().copyFrom(properties);
-    if (com.ibm.icu.impl.number.formatters.CurrencyFormat.useCurrency(properties)) {
+    DecimalFormatProperties tprops = threadLocalProperties.get().copyFrom(properties);
+    if (useCurrency(properties)) {
       tprops.setMinimumFractionDigits(exportedProperties.getMinimumFractionDigits());
       tprops.setMaximumFractionDigits(exportedProperties.getMaximumFractionDigits());
       tprops.setRoundingIncrement(exportedProperties.getRoundingIncrement());
     }
-    return PatternString.propertiesToString(tprops);
+    return PatternStringUtils.propertiesToPatternString(tprops);
   }
 
   /**
@@ -2461,7 +2405,21 @@ public class DecimalFormat extends NumberFormat {
    */
   public synchronized String toLocalizedPattern() {
     String pattern = toPattern();
-    return PatternString.convertLocalized(pattern, symbols, true);
+    return PatternStringUtils.convertLocalized(pattern, symbols, true);
+  }
+
+  /**
+   * Converts this DecimalFormat to a NumberFormatter.  Starting in ICU 60,
+   * NumberFormatter is the recommended way to format numbers.
+   *
+   * @return An instance of {@link LocalizedNumberFormatter} with the same behavior as this instance of
+   * DecimalFormat.
+   * @see NumberFormatter
+   * @provisional This API might change or be removed in a future release.
+   * @draft ICU 60
+   */
+  public LocalizedNumberFormatter toNumberFormatter() {
+      return formatter;
   }
 
   /**
@@ -2470,16 +2428,14 @@ public class DecimalFormat extends NumberFormat {
    */
   @Deprecated
   public IFixedDecimal getFixedDecimal(double number) {
-    FormatQuantity4 fq = new FormatQuantity4(number);
-    formatter.format(fq);
-    return fq;
+    return formatter.format(number).getFixedDecimal();
   }
 
-  private static final ThreadLocal<Properties> threadLocalProperties =
-      new ThreadLocal<Properties>() {
+  private static final ThreadLocal<DecimalFormatProperties> threadLocalProperties =
+      new ThreadLocal<DecimalFormatProperties>() {
         @Override
-        protected Properties initialValue() {
-          return new Properties();
+        protected DecimalFormatProperties initialValue() {
+          return new DecimalFormatProperties();
         }
       };
 
@@ -2490,9 +2446,17 @@ public class DecimalFormat extends NumberFormat {
       // The only time when this happens is during legacy deserialization.
       return;
     }
-    formatter = Endpoint.fromBTA(properties, symbols);
-    exportedProperties.clear();
-    formatter.export(exportedProperties);
+    ULocale locale = this.getLocale(ULocale.ACTUAL_LOCALE);
+    if (locale == null) {
+      // Constructor
+      locale = symbols.getLocale(ULocale.ACTUAL_LOCALE);
+    }
+    if (locale == null) {
+      // Deserialization
+      locale = symbols.getULocale();
+    }
+    assert locale != null;
+    formatter = NumberFormatter.fromDecimalFormat(properties, symbols, exportedProperties).locale(locale);
   }
 
   /**
@@ -2519,21 +2483,35 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
+   * Returns true if the currency is set in The property bag or if currency symbols are present in
+   * the prefix/suffix pattern.
+   */
+  private static boolean useCurrency(DecimalFormatProperties properties) {
+    return ((properties.getCurrency() != null)
+        || properties.getCurrencyPluralInfo() != null
+        || properties.getCurrencyUsage() != null
+        || AffixUtils.hasCurrencySymbols(properties.getPositivePrefixPattern())
+        || AffixUtils.hasCurrencySymbols(properties.getPositiveSuffixPattern())
+        || AffixUtils.hasCurrencySymbols(properties.getNegativePrefixPattern())
+        || AffixUtils.hasCurrencySymbols(properties.getNegativeSuffixPattern()));
+  }
+
+  /**
    * Updates the property bag with settings from the given pattern.
    *
    * @param pattern The pattern string to parse.
    * @param ignoreRounding Whether to leave out rounding information (minFrac, maxFrac, and rounding
    *     increment) when parsing the pattern. This may be desirable if a custom rounding mode, such
    *     as CurrencyUsage, is to be used instead. One of {@link
-   *     PatternString#IGNORE_ROUNDING_ALWAYS}, {@link PatternString#IGNORE_ROUNDING_IF_CURRENCY},
-   *     or {@link PatternString#IGNORE_ROUNDING_NEVER}.
-   * @see PatternString#parseToExistingProperties
+   *     PatternStringParser#IGNORE_ROUNDING_ALWAYS}, {@link PatternStringParser#IGNORE_ROUNDING_IF_CURRENCY},
+   *     or {@link PatternStringParser#IGNORE_ROUNDING_NEVER}.
+   * @see PatternAndPropertyUtils#parseToExistingProperties
    */
   void setPropertiesFromPattern(String pattern, int ignoreRounding) {
     if (pattern == null) {
       throw new NullPointerException();
     }
-    PatternString.parseToExistingProperties(pattern, properties, ignoreRounding);
+    PatternStringParser.parseToExistingProperties(pattern, properties, ignoreRounding);
   }
 
   /**
@@ -2557,47 +2535,7 @@ public class DecimalFormat extends NumberFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public void set(Properties props);
-  }
-
-  /**
-   * An enum containing the choices for significant digits modes.
-   *
-   * @see #setSignificantDigitsMode
-   * @internal
-   * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
-   */
-  @Deprecated
-  public static enum SignificantDigitsMode {
-    /**
-     * Respect significant digits counts, ignoring the fraction length.
-     *
-     * @see DecimalFormat#setSignificantDigitsMode
-     * @internal
-     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
-     */
-    @Deprecated
-    OVERRIDE_MAXIMUM_FRACTION,
-
-    /**
-     * Respect the fraction length, overriding significant digits counts if necessary.
-     *
-     * @see DecimalFormat#setSignificantDigitsMode
-     * @internal
-     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
-     */
-    @Deprecated
-    RESPECT_MAXIMUM_FRACTION,
-
-    /**
-     * Respect minimum significant digits, overriding fraction length if necessary.
-     *
-     * @see DecimalFormat#setSignificantDigitsMode
-     * @internal
-     * @deprecated ICU 59: This API is technical preview. It may change in an upcoming release.
-     */
-    @Deprecated
-    ENSURE_MINIMUM_SIGNIFICANT
+    public void set(DecimalFormatProperties props);
   }
 
   /**
