@@ -129,7 +129,7 @@ public abstract class CacheValue<V> {
     }
 
     private static final class SoftValue<V> extends CacheValue<V> {
-        private Reference<V> ref;
+        private volatile Reference<V> ref;  // volatile for unsynchronized get()
 
         SoftValue(V value) { ref = new SoftReference<V>(value); }
         @Override
