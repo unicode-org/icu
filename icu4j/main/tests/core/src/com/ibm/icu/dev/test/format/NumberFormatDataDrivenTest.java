@@ -786,13 +786,23 @@ public class NumberFormatDataDrivenTest {
         "numberformattestspecification.txt", ICU58);
   }
 
+  // Note: This test case is really questionable. Depending on Java version,
+  // something may or may not work. However the test data assumes a specific
+  // Java runtime version. We should probably disable this test case - #13372
   @Test
   public void TestDataDrivenJDK() {
     // Android implements java.text.DecimalFormat with ICU4J (ticket #13322).
     if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
 
-    DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
-        "numberformattestspecification.txt", JDK);
+    if (TestUtil.getJavaVersion() == 8) {
+        DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
+                "numberformattestspecification.txt", JDK);
+    } else {
+        // Oracle/OpenJDK 9's behavior is not exactly same with Oracle/OpenJDK 8.
+        // Some test cases failed on 8 work well, while some other test cases
+        // fail on 9, but worked on 8. Skip this test case if Java version is not 8.
+        return;
+    }
   }
 
   @Test
