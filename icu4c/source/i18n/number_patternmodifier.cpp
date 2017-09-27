@@ -22,7 +22,7 @@ void MutablePatternModifier::setPatternAttributes(UNumberSignDisplay signDisplay
 void
 MutablePatternModifier::setSymbols(const DecimalFormatSymbols *symbols, const CurrencyUnit &currency,
                                    const UNumberUnitWidth unitWidth, const PluralRules *rules) {
-    U_ASSERT((rules == nullptr) == needsPlurals());
+    U_ASSERT((rules != nullptr) == needsPlurals());
     this->symbols = symbols;
     uprv_memcpy(static_cast<char16_t *>(this->currencyCode),
             currency.getISOCurrency(),

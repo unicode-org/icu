@@ -195,7 +195,7 @@ class MutablePatternModifier
     const MicroPropsGenerator *parent;
 
     // Transient CharSequence fields
-    bool inCharSequenceMode;
+    bool inCharSequenceMode = false;
     int32_t fFlags;
     int32_t fLength;
     bool prependSign;

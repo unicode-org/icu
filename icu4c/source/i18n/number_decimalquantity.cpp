@@ -141,7 +141,7 @@ uint64_t DecimalQuantity::getPositionFingerprint() const {
 }
 
 void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
-                                       UErrorCode& status) {
+                                       int32_t minMaxFrac, UErrorCode& status) {
     // TODO: This is innefficient.  Improve?
     // TODO: Should we convert to decNumber instead?
     double temp = toDouble();
@@ -151,6 +151,9 @@ void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode ro
     temp = toDouble();
     temp *= roundingIncrement;
     setToDouble(temp);
+    // Since we reset the value to a double, we need to specify the rounding boundary
+    // in order to get the DecimalQuantity out of approximation mode.
+    roundToMagnitude(minMaxFrac, roundingMode, status);
 }
 
 void DecimalQuantity::multiplyBy(int32_t multiplicand) {

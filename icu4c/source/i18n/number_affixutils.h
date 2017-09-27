@@ -34,6 +34,8 @@ struct AffixTag {
     AffixPatternState state;
     AffixPatternType type;
 
+    AffixTag() : offset(0), state(STATE_BASE) {}
+
     AffixTag(int32_t offset) : offset(offset) {}
 
     AffixTag(int32_t offset, UChar32 codePoint, AffixPatternState state, AffixPatternType type)

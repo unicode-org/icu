@@ -223,13 +223,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             callTest(*test, par); 
           } 
           break;
-        TESTCLASS(51,AffixUtilsTest);
-        TESTCLASS(52,NumberFormatterApiTest);
-        TESTCLASS(53,DecimalQuantityTest);
-        TESTCLASS(54,ModifiersTest);
-        TESTCLASS(55,PatternModifierTest);
-        TESTCLASS(56,PatternStringTest);
-        TESTCLASS(57,NumberStringBuilderTest);
+        TESTCLASS(51,NumberTest);
         default: name = ""; break; //needed to end loop
     }
     if (exec) {
