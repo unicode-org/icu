@@ -258,7 +258,7 @@
 
     <target name="checkTest" depends="_classifytests, tests, runallTests, noTests" if="testaction.run" description="Run only the specified tests of the specified test class or, if no arguments are given, the standard ICU4J test suite.">
         <sequential>
-            <delete dir="${junit.out.dir}/@{output}"/>
+            <delete dir="${junit.out.dir}/checkTest"/>
             <mkdir dir="${junit.out.dir}/checkTest"/>
 
             <junit printsummary="yes">
