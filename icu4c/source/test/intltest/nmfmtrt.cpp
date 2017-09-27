@@ -16,6 +16,7 @@
 #include "unicode/decimfmt.h"
 #include "unicode/locid.h"
 #include "putilimp.h"
+#include "cstring.h"
 
 #include <float.h>
 #include <stdio.h>    // for sprintf
@@ -122,6 +123,9 @@ NumberFormatRoundTripTest::start()
         logln("Quick mode: only testing first 5 Locales");
     }
     for(int i = 0; i < locCount; ++i) {
+        if (uprv_strcmp(loc[i].getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until NumberFormat parsing is fixed")) {
+            continue;
+        }
         UnicodeString name;
         logln(loc[i].getDisplayName(name));
 
@@ -343,10 +347,13 @@ NumberFormatRoundTripTest::escape(UnicodeString& s)
     UnicodeString copy(s);
     s.remove();
     for(int i = 0; i < copy.length(); ++i) {
-        UChar c = copy[i];
-        if(c < 0x00FF) 
+        UChar32 c = copy.char32At(i);
+        if (c >= 0x10000) {
+            ++i;
+        }
+        if(c < 0x00FF) {
             s += c;
-        else {
+        } else {
             s += "+U";
             char temp[16];
             sprintf(temp, "%4X", c);        // might not work
