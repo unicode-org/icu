@@ -1490,6 +1490,22 @@ public abstract class NumberFormat extends UFormat {
      */
     @Deprecated
     public static String getPatternForStyle(ULocale forLocale, int choice) {
+        NumberingSystem ns = NumberingSystem.getInstance(forLocale);
+        String nsName = ns.getName();
+        return getPatternForStyleAndNumberingSystem(forLocale, nsName, choice);
+    }
+
+    /**
+     * Returns the pattern for the provided locale, numbering system, and choice.
+     * @param forLocale the locale of the data.
+     * @param nsName The name of the numbering system, like "latn".
+     * @param choice the pattern format.
+     * @return the pattern
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static String getPatternForStyleAndNumberingSystem(ULocale forLocale, String nsName, int choice) {
         /* for ISOCURRENCYSTYLE and PLURALCURRENCYSTYLE,
          * the pattern is the same as the pattern of CURRENCYSTYLE
          * but by replacing the single currency sign with
@@ -1529,10 +1545,9 @@ public abstract class NumberFormat extends UFormat {
 
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
         getBundleInstance(ICUData.ICU_BASE_NAME, forLocale);
-        NumberingSystem ns = NumberingSystem.getInstance(forLocale);
 
         String result = rb.findStringWithFallback(
-                    "NumberElements/" + ns.getName() + "/patterns/" + patternKey);
+                    "NumberElements/" + nsName + "/patterns/" + patternKey);
         if (result == null) {
             result = rb.getStringWithFallback("NumberElements/latn/patterns/" + patternKey);
         }

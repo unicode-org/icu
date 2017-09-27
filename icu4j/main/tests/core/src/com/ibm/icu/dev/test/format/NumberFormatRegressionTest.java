@@ -189,7 +189,8 @@ public class NumberFormatRegressionTest extends TestFmwk {
                 String result = format.format(data);
                 assertEquals("Deserialization new version should read old version", expected[i], result);
             } catch (Exception e) {
-                warnln("FAIL: " + e.getMessage());
+                e.printStackTrace();
+                warnln("FAIL: " + e);
             }
         }
     }

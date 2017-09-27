@@ -59,6 +59,7 @@
 #include "dcfmtest.h"       // DecimalFormatTest
 #include "listformattertest.h"  // ListFormatterTest
 #include "regiontst.h"      // RegionTest
+#include "numbertest.h"     // All NumberFormatter tests
 
 extern IntlTest *createCompactDecimalFormatTest();
 extern IntlTest *createGenderInfoTest();
@@ -204,7 +205,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             callTest(*test, par);
           }
           break;
-       case 49:
+        case 49:
           name = "ScientificNumberFormatterTest";
           if (exec) {
             logln("ScientificNumberFormatterTest test---");
@@ -213,15 +214,16 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             callTest(*test, par);
           }
           break;
-      case 50: 
-        name = "NumberFormat2Test"; 
+        case 50:
+          name = "NumberFormat2Test"; 
           if (exec) { 
             logln("NumberFormat2Test test---"); 
             logln((UnicodeString)""); 
             LocalPointer<IntlTest> test(createNumberFormat2Test()); 
             callTest(*test, par); 
           } 
-          break; 
+          break;
+        TESTCLASS(51,NumberTest);
         default: name = ""; break; //needed to end loop
     }
     if (exec) {

@@ -43,7 +43,7 @@
 U_NAMESPACE_BEGIN
 
 class Hashtable;
-class FixedDecimal;
+class IFixedDecimal;
 class VisibleDigitsWithExponent;
 class RuleChain;
 class PluralRuleParser;
@@ -367,7 +367,7 @@ public:
     /**
       * @internal
       */
-    UnicodeString select(const FixedDecimal &number) const;
+    UnicodeString select(const IFixedDecimal &number) const;
     /**
       * @internal
       */

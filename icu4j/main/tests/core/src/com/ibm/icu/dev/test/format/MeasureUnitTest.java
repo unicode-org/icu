@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.text.FieldPosition;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
@@ -244,7 +246,6 @@ public class MeasureUnitTest extends TestFmwk {
         }
     }
 
-/*
     @Test
     public void testZZZ() {
         // various generateXXX calls go here, see
@@ -257,7 +258,6 @@ public class MeasureUnitTest extends TestFmwk {
         //generateCXXBackwardCompatibilityTest("59"); // for measfmttest.cpp, create TestCompatible59
         //updateJAVAVersions("59"); // for MeasureUnitTest.java, JAVA_VERSIONS
     }
-*/
 
     @Test
     public void TestCompatible53() {
@@ -1663,9 +1663,9 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("Wide currency", "1.00 US dollars", mf.format(USD_1));
         assertEquals("Wide currency", "2.00 US dollars", mf.format(USD_2));
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
-        assertEquals("short currency", "-USD1.00", mf.format(USD_NEG_1));
-        assertEquals("short currency", "USD1.00", mf.format(USD_1));
-        assertEquals("short currency", "USD2.00", mf.format(USD_2));
+        assertEquals("short currency", "-USD 1.00", mf.format(USD_NEG_1));
+        assertEquals("short currency", "USD 1.00", mf.format(USD_1));
+        assertEquals("short currency", "USD 2.00", mf.format(USD_2));
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NARROW);
         assertEquals("narrow currency", "-$1.00", mf.format(USD_NEG_1));
         assertEquals("narrow currency", "$1.00", mf.format(USD_1));
@@ -1676,13 +1676,13 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("numeric currency", "$2.00", mf.format(USD_2));
 
         mf = MeasureFormat.getInstance(ULocale.JAPAN, FormatWidth.WIDE);
-        assertEquals("Wide currency", "-1.00\u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
-        assertEquals("Wide currency", "1.00\u7C73\u30C9\u30EB", mf.format(USD_1));
-        assertEquals("Wide currency", "2.00\u7C73\u30C9\u30EB", mf.format(USD_2));
+        assertEquals("Wide currency", "-1.00 \u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
+        assertEquals("Wide currency", "1.00 \u7C73\u30C9\u30EB", mf.format(USD_1));
+        assertEquals("Wide currency", "2.00 \u7C73\u30C9\u30EB", mf.format(USD_2));
 
         Measure CAD_1 = new Measure(1.0, Currency.getInstance("CAD"));
         mf = MeasureFormat.getInstance(ULocale.CANADA, FormatWidth.SHORT);
-        assertEquals("short currency", "CAD1.00", mf.format(CAD_1));
+        assertEquals("short currency", "CAD 1.00", mf.format(CAD_1));
     }
 
     @Test
@@ -2000,7 +2000,10 @@ public class MeasureUnitTest extends TestFmwk {
             }
         }
         for (String type : MeasureUnit.getAvailableTypes()) {
-            if (type.equals("currency") || type.equals("compound") || type.equals("coordinate")) {
+            if (type.equals("currency")
+                    || type.equals("compound")
+                    || type.equals("coordinate")
+                    || type.equals("none")) {
                 continue;
             }
             for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {
@@ -2147,6 +2150,9 @@ public class MeasureUnitTest extends TestFmwk {
         System.out.println("");
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
 
+        // Hack: for C++, add NoUnits here, but ignore them when printing the create methods.
+        allUnits.put("none", Arrays.asList(new MeasureUnit[]{NoUnit.BASE, NoUnit.PERCENT, NoUnit.PERMILLE}));
+
         System.out.println("static const int32_t gOffsets[] = {");
         int index = 0;
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
@@ -2246,7 +2252,7 @@ public class MeasureUnitTest extends TestFmwk {
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
 
             String type = entry.getKey();
-            if (type.equals("currency")) {
+            if (type.equals("currency") || type.equals("none")) {
                 continue;
             }
             for (MeasureUnit unit : entry.getValue()) {

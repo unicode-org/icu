@@ -364,6 +364,14 @@ public  class ICUResourceBundle extends UResourceBundle {
         return result;
     }
 
+    public void getAllItemsWithFallbackNoFail(String path, UResource.Sink sink) {
+        try {
+            getAllItemsWithFallback(path, sink);
+        } catch (MissingResourceException e) {
+            // Quietly ignore the exception.
+        }
+    }
+
     public void getAllItemsWithFallback(String path, UResource.Sink sink)
             throws MissingResourceException {
         // Collect existing and parsed key objects into an array of keys,
