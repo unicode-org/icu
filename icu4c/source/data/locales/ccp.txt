@@ -71,7 +71,7 @@ ccp{
         minimumGroupingDigits{"1"}
         native{"cakm"}
     }
-    Version{"2.1.37.29"}
+    Version{"2.1.37.43"}
     calendar{
         generic{
             DateTimePatterns{
