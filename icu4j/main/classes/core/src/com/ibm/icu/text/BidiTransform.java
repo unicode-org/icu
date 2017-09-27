@@ -10,8 +10,7 @@ import com.ibm.icu.lang.UCharacter;
  *
  * @author Lina Kemmel
  *
- * @draft ICU 58
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 58
  */
 public class BidiTransform
 {
@@ -52,22 +51,19 @@ public class BidiTransform
      * @see Bidi#REORDER_DEFAULT
      * @see Bidi#REORDER_INVERSE_LIKE_DIRECT
      * @see Bidi#REORDER_RUNS_ONLY
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public enum Order {
         /**
          * Constant indicating a logical order.
          *
-         * @draft ICU 58
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 58
          */
         LOGICAL,
         /**
          * Constant indicating a visual order.
          *
-         * @draft ICU 58
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 58
          */
         VISUAL;
     }
@@ -81,16 +77,14 @@ public class BidiTransform
      * @see Bidi#setReorderingOptions
      * @see Bidi#writeReordered
      * @see Bidi#writeReverse
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public enum Mirroring {
         /**
          * Constant indicating that character mirroring should not be
          * performed.
          *
-         * @draft ICU 58
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 58
          */
         OFF,
         /**
@@ -100,8 +94,7 @@ public class BidiTransform
          * or <code>{@link Bidi#writeReverse}</code> with the
          * <code>{@link Bidi#DO_MIRRORING}</code> option bit set.
          *
-         * @draft ICU 58
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 58
          */
         ON;
     }
@@ -114,8 +107,7 @@ public class BidiTransform
     /**
      * <code>{@link BidiTransform}</code> default constructor.
      *
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public BidiTransform()
     {
@@ -224,8 +216,7 @@ public class BidiTransform
      * @throws IllegalArgumentException if <code>text</code>,
      *        <code>inOrder</code>, <code>outOrder</code>, or
      *        <code>doMirroring</code> parameter is <code>null</code>.
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String transform(CharSequence text,
             byte inParaLevel, Order inOrder,

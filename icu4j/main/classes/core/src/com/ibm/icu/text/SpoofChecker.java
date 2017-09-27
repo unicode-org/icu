@@ -270,8 +270,7 @@ public class SpoofChecker {
     /**
      * Security Profile constant from UTS 39 for use in {@link SpoofChecker.Builder#setAllowedChars}.
      *
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public static final UnicodeSet INCLUSION = new UnicodeSet(
             "['\\-.\\:\\u00B7\\u0375\\u058A\\u05F3\\u05F4\\u06FD\\u06FE\\u0F0B\\u200C\\u200D\\u2010\\u"
@@ -284,8 +283,7 @@ public class SpoofChecker {
     /**
      * Security Profile constant from UTS 39 for use in {@link SpoofChecker.Builder#setAllowedChars}.
      *
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public static final UnicodeSet RECOMMENDED = new UnicodeSet(
             "[0-9A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u0131\\u0134-\\u013E\\u0141-\\u014"
@@ -386,8 +384,7 @@ public class SpoofChecker {
      * checks to some subset of SINGLE_SCRIPT_CONFUSABLE, MIXED_SCRIPT_CONFUSABLE, or WHOLE_SCRIPT_CONFUSABLE to make
      * {@link SpoofChecker#areConfusable} return only those types of confusables.
      *
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public static final int CONFUSABLE = SINGLE_SCRIPT_CONFUSABLE | MIXED_SCRIPT_CONFUSABLE | WHOLE_SCRIPT_CONFUSABLE;
 
@@ -405,8 +402,7 @@ public class SpoofChecker {
      * {@link SpoofChecker.Builder#setRestrictionLevel}. The default restriction level is
      * {@link RestrictionLevel#HIGHLY_RESTRICTIVE}.
      *
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public static final int RESTRICTION_LEVEL = 16;
 
@@ -441,8 +437,7 @@ public class SpoofChecker {
      * Check that an identifier does not mix numbers from different numbering systems. For more information, see UTS 39
      * section 5.3.
      *
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public static final int MIXED_NUMBERS = 128;
 
@@ -552,8 +547,7 @@ public class SpoofChecker {
          * @throws ParseException
          *             To report syntax errors in the input.
          *
-         * @draft ICU 58
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 58
          */
         public Builder setData(Reader confusables) throws ParseException, IOException {
 
@@ -759,7 +753,7 @@ public class SpoofChecker {
          *            The loosest restriction level allowed.
          * @return self
          * @provisional This API might change or be removed in a future release.
-         * @draft ICU 58
+         * @stable ICU 58
          */
         public Builder setRestrictionLevel(RestrictionLevel restrictionLevel) {
             fRestrictionLevel = restrictionLevel;
@@ -1197,16 +1191,14 @@ public class SpoofChecker {
          * The numerics found in the string, if MIXED_NUMBERS was set; otherwise null.  The set will contain the zero
          * digit from each decimal number system found in the input string.
          *
-         * @draft ICU 58
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 58
          */
         public UnicodeSet numerics;
 
         /**
          * The restriction level that the text meets, if RESTRICTION_LEVEL is set; otherwise null.
          *
-         * @draft ICU 58
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 58
          */
         public RestrictionLevel restrictionLevel;
 
@@ -1458,8 +1450,7 @@ public class SpoofChecker {
      *            The input string whose skeleton will be generated.
      * @return The output skeleton string.
      *
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getSkeleton(CharSequence str) {
         // Apply the skeleton mapping to the NFD normalized input string
@@ -1501,8 +1492,7 @@ public class SpoofChecker {
      * @param other
      *            the SpoofChecker being compared with.
      * @return true if the two SpoofCheckers are equal.
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     @Override
     public boolean equals(Object other) {
@@ -1531,8 +1521,8 @@ public class SpoofChecker {
     }
 
     /**
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * Overrides {@link Object#hashCode()}.
+     * @stable ICU 58
      */
     @Override
     public int hashCode() {
