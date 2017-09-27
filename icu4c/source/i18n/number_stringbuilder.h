@@ -16,7 +16,7 @@
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
-class NumberStringBuilder : public UMemory {
+class U_I18N_API NumberStringBuilder : public UMemory {
   private:
     static const int32_t DEFAULT_CAPACITY = 40;
 

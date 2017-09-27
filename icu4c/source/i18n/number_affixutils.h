@@ -89,7 +89,7 @@ class SymbolProvider {
  * }
  * </pre>
  */
-class AffixUtils {
+class U_I18N_API AffixUtils {
 
   public:
 

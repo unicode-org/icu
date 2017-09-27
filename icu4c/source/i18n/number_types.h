@@ -116,7 +116,7 @@ public:
     virtual UnicodeString toUnicodeString() const = 0;
 };
 
-class AffixPatternProvider {
+class U_I18N_API AffixPatternProvider {
   public:
     static const int32_t AFFIX_PLURAL_MASK = 0xff;
     static const int32_t AFFIX_PREFIX = 0x100;
@@ -148,7 +148,7 @@ class AffixPatternProvider {
  * A Modifier is usually immutable, except in cases such as {@link MurkyModifier}, which are mutable for performance
  * reasons.
  */
-class Modifier {
+class U_I18N_API Modifier {
   public:
     virtual ~Modifier() = default;
 
@@ -208,7 +208,7 @@ class Modifier {
  * @author sffc
  *
  */
-class MicroPropsGenerator {
+class U_I18N_API MicroPropsGenerator {
   public:
     virtual ~MicroPropsGenerator() = default;
 

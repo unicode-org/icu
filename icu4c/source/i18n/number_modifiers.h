@@ -20,7 +20,7 @@ namespace impl {
  * The canonical implementation of {@link Modifier}, containing a prefix and suffix string.
  * TODO: This is not currently being used by real code and could be removed.
  */
-class ConstantAffixModifier : public Modifier, public UObject {
+class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
   public:
     ConstantAffixModifier(const UnicodeString &prefix, const UnicodeString &suffix, Field field,
                           bool strong)
@@ -46,7 +46,7 @@ class ConstantAffixModifier : public Modifier, public UObject {
  * The second primary implementation of {@link Modifier}, this one consuming a {@link SimpleFormatter}
  * pattern.
  */
-class SimpleModifier : public Modifier, public UMemory {
+class U_I18N_API SimpleModifier : public Modifier, public UMemory {
   public:
     SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong);
 
@@ -99,7 +99,7 @@ class SimpleModifier : public Modifier, public UMemory {
  * An implementation of {@link Modifier} that allows for multiple types of fields in the same modifier. Constructed
  * based on the contents of two {@link NumberStringBuilder} instances (one for the prefix, one for the suffix).
  */
-class ConstantMultiFieldModifier : public Modifier, public UMemory {
+class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
   public:
     ConstantMultiFieldModifier(const NumberStringBuilder &prefix, const NumberStringBuilder &suffix,
                                bool strong) : fPrefix(prefix), fSuffix(suffix), fStrong(strong) {}
@@ -122,7 +122,7 @@ class ConstantMultiFieldModifier : public Modifier, public UMemory {
 };
 
 /** Identical to {@link ConstantMultiFieldModifier}, but supports currency spacing. */
-class CurrencySpacingEnabledModifier : public ConstantMultiFieldModifier {
+class U_I18N_API CurrencySpacingEnabledModifier : public ConstantMultiFieldModifier {
   public:
     /** Safe code path */
     CurrencySpacingEnabledModifier(const NumberStringBuilder &prefix, const NumberStringBuilder &suffix,
@@ -164,7 +164,7 @@ class CurrencySpacingEnabledModifier : public ConstantMultiFieldModifier {
 };
 
 /** A Modifier that does not do anything. */
-class EmptyModifier : public Modifier, public UMemory {
+class U_I18N_API EmptyModifier : public Modifier, public UMemory {
   public:
     explicit EmptyModifier(bool isStrong) : fStrong(isStrong) {}
 
@@ -199,7 +199,7 @@ class EmptyModifier : public Modifier, public UMemory {
  * A ParameterizedModifier by itself is NOT a Modifier. Rather, it wraps a data structure containing two or more
  * Modifiers and returns the modifier appropriate for the current situation.
  */
-class ParameterizedModifier : public UMemory {
+class U_I18N_API ParameterizedModifier : public UMemory {
   public:
     // NOTE: mods is zero-initialized (to nullptr)
     ParameterizedModifier() : mods() {

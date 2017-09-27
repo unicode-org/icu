@@ -16,7 +16,7 @@ U_NAMESPACE_BEGIN
 namespace number {
 namespace impl {
 
-class ImmutablePatternModifier : public MicroPropsGenerator {
+class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
   public:
     ImmutablePatternModifier(ParameterizedModifier *pm, const PluralRules *rules,
                              const MicroPropsGenerator *parent);
@@ -52,7 +52,7 @@ class ImmutablePatternModifier : public MicroPropsGenerator {
  * {@link MutablePatternModifier#createImmutable}, in effect treating this instance as a builder for the immutable
  * variant.
  */
-class MutablePatternModifier
+class U_I18N_API MutablePatternModifier
         : public MicroPropsGenerator, public Modifier, public SymbolProvider, public CharSequence {
   public:
 
