@@ -33,7 +33,8 @@ void stringToDecNumber(StringPiece n, decNumber &dn) {
 
 /** Helper function for safe subtraction (no overflow). */
 inline int32_t safeSubtract(int32_t a, int32_t b) {
-    int32_t diff = a - b;
+    // Note: In C++, signed integer subtraction is undefined behavior.
+    int32_t diff = static_cast<int32_t>(static_cast<uint32_t>(a) - static_cast<uint32_t>(b));
     if (b < 0 && diff < a) { return INT32_MAX; }
     if (b > 0 && diff > a) { return INT32_MIN; }
     return diff;
@@ -153,7 +154,7 @@ void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode ro
     setToDouble(temp);
     // Since we reset the value to a double, we need to specify the rounding boundary
     // in order to get the DecimalQuantity out of approximation mode.
-    roundToMagnitude(minMaxFrac, roundingMode, status);
+    roundToMagnitude(-minMaxFrac, roundingMode, status);
 }
 
 void DecimalQuantity::multiplyBy(int32_t multiplicand) {
