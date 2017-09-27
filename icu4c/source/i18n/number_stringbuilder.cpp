@@ -7,6 +7,26 @@
 
 using namespace icu::number::impl;
 
+namespace {
+
+// A version of uprv_memcpy that checks for length 0.
+// By default, uprv_memcpy requires a length of at least 1.
+inline void uprv_memcpy2(void* dest, const void* src, size_t len) {
+    if (len > 0) {
+        uprv_memcpy(dest, src, len);
+    }
+}
+
+// A version of uprv_memmove that checks for length 0.
+// By default, uprv_memmove requires a length of at least 1.
+inline void uprv_memmove2(void* dest, const void* src, size_t len) {
+    if (len > 0) {
+        uprv_memmove(dest, src, len);
+    }
+}
+
+} // namespace
+
 NumberStringBuilder::NumberStringBuilder() = default;
 
 NumberStringBuilder::~NumberStringBuilder() {
@@ -54,8 +74,8 @@ NumberStringBuilder &NumberStringBuilder::operator=(const NumberStringBuilder &o
         fFields.heap.ptr = newFields;
     }
 
-    uprv_memcpy(getCharPtr(), other.getCharPtr(), sizeof(char16_t) * capacity);
-    uprv_memcpy(getFieldPtr(), other.getFieldPtr(), sizeof(Field) * capacity);
+    uprv_memcpy2(getCharPtr(), other.getCharPtr(), sizeof(char16_t) * capacity);
+    uprv_memcpy2(getFieldPtr(), other.getFieldPtr(), sizeof(Field) * capacity);
 
     fZero = other.fZero;
     fLength = other.fLength;
@@ -229,12 +249,12 @@ int32_t NumberStringBuilder::prepareForInsertHelper(int32_t index, int32_t count
         // First copy the prefix and then the suffix, leaving room for the new chars that the
         // caller wants to insert.
         // C++ note: memcpy is OK because the src and dest do not overlap.
-        uprv_memcpy(newChars + newZero, oldChars + oldZero, sizeof(char16_t) * index);
-        uprv_memcpy(newChars + newZero + index + count,
+        uprv_memcpy2(newChars + newZero, oldChars + oldZero, sizeof(char16_t) * index);
+        uprv_memcpy2(newChars + newZero + index + count,
                 oldChars + oldZero + index,
                 sizeof(char16_t) * (fLength - index));
-        uprv_memcpy(newFields + newZero, oldFields + oldZero, sizeof(Field) * index);
-        uprv_memcpy(newFields + newZero + index + count,
+        uprv_memcpy2(newFields + newZero, oldFields + oldZero, sizeof(Field) * index);
+        uprv_memcpy2(newFields + newZero + index + count,
                 oldFields + oldZero + index,
                 sizeof(Field) * (fLength - index));
 
@@ -255,12 +275,12 @@ int32_t NumberStringBuilder::prepareForInsertHelper(int32_t index, int32_t count
         // C++ note: memmove is required because src and dest may overlap.
         // First copy the entire string to the location of the prefix, and then move the suffix
         // to make room for the new chars that the caller wants to insert.
-        uprv_memmove(oldChars + newZero, oldChars + oldZero, sizeof(char16_t) * fLength);
-        uprv_memmove(oldChars + newZero + index + count,
+        uprv_memmove2(oldChars + newZero, oldChars + oldZero, sizeof(char16_t) * fLength);
+        uprv_memmove2(oldChars + newZero + index + count,
                 oldChars + newZero + index,
                 sizeof(char16_t) * (fLength - index));
-        uprv_memmove(oldFields + newZero, oldFields + oldZero, sizeof(Field) * fLength);
-        uprv_memmove(oldFields + newZero + index + count,
+        uprv_memmove2(oldFields + newZero, oldFields + oldZero, sizeof(Field) * fLength);
+        uprv_memmove2(oldFields + newZero + index + count,
                 oldFields + newZero + index,
                 sizeof(Field) * (fLength - index));
 
