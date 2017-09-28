@@ -120,6 +120,7 @@ public class CompactNotation extends Notation {
 
             StandardPlural plural = quantity.getStandardPlural(rules);
             String patternString = data.getPattern(magnitude, plural);
+            @SuppressWarnings("unused") // see #13177
             int numDigits = -1;
             if (patternString == null) {
                 // Use the default (non-compact) modifier.
