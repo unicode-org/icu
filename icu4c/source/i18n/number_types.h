@@ -94,7 +94,8 @@ enum CompactType {
 
 
 // TODO: Should this be moved somewhere else, maybe where other ICU classes can use it?
-class CharSequence {
+// Exported as U_I18N_API because it is a base class for other exported types
+class U_I18N_API CharSequence {
 public:
     virtual ~CharSequence() = default;
 
@@ -147,6 +148,8 @@ class U_I18N_API AffixPatternProvider {
  *
  * A Modifier is usually immutable, except in cases such as {@link MurkyModifier}, which are mutable for performance
  * reasons.
+ *
+ * Exported as U_I18N_API because it is a base class for other exported types
  */
 class U_I18N_API Modifier {
   public:
@@ -205,7 +208,7 @@ class U_I18N_API Modifier {
  * quantity-dependent. Each element in the linked list calls {@link #processQuantity} on its "parent", then does its
  * work, and then returns the result.
  *
- * @author sffc
+ * Exported as U_I18N_API because it is a base class for other exported types
  *
  */
 class U_I18N_API MicroPropsGenerator {
@@ -231,8 +234,9 @@ class MultiplierProducer {
     virtual int32_t getMultiplier(int32_t magnitude) const = 0;
 };
 
+// Exported as U_I18N_API because it is a public member field of exported DecimalFormatProperties
 template<typename T>
-class NullableValue {
+class U_I18N_API NullableValue {
   public:
     NullableValue() : fNull(true) {}
 

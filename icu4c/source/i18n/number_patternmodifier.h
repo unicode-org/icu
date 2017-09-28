@@ -16,21 +16,27 @@ U_NAMESPACE_BEGIN
 namespace number {
 namespace impl {
 
+// Forward declaration
+class MutablePatternModifier;
+	
+// Exported as U_I18N_API because it is needed for the unit test PatternModifierTest
 class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
   public:
-    ImmutablePatternModifier(ParameterizedModifier *pm, const PluralRules *rules,
-                             const MicroPropsGenerator *parent);
-
-    ~ImmutablePatternModifier() override = default;
+	~ImmutablePatternModifier() override = default;
 
     void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const override;
 
     void applyToMicros(MicroProps &micros, DecimalQuantity &quantity) const;
 
   private:
-    const LocalPointer<ParameterizedModifier> pm;
+	ImmutablePatternModifier(ParameterizedModifier *pm, const PluralRules *rules, const MicroPropsGenerator *parent);
+
+#pragma warning(suppress: 4251)  // Member is private and does not need to be exported
+	const LocalPointer<ParameterizedModifier> pm;
     const PluralRules *rules;
     const MicroPropsGenerator *parent;
+
+	friend class MutablePatternModifier;
 };
 
 /**

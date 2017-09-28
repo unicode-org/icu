@@ -10,6 +10,7 @@
 #include "unicode/plurrule.h"
 #include "unicode/currpinf.h"
 #include "unicode/unum.h"
+#include "unicode/localpointer.h"
 #include "number_types.h"
 
 U_NAMESPACE_BEGIN
@@ -17,7 +18,9 @@ namespace number {
 namespace impl {
 
 // TODO: Figure out a nicer way to deal with CurrencyPluralInfo.
-struct CurrencyPluralInfoWrapper {
+// Exported as U_I18N_API because it is a public member field of exported DecimalFormatProperties
+struct U_I18N_API CurrencyPluralInfoWrapper {
+#pragma warning(suppress: 4251)  // LocalPointer is defined in a header file; why does Visual Studio complain?
     LocalPointer<CurrencyPluralInfo> fPtr;
 
     CurrencyPluralInfoWrapper() {}
@@ -28,6 +31,7 @@ struct CurrencyPluralInfoWrapper {
     }
 };
 
+// Exported as U_I18N_API because it is needed for the unit test PatternStringTest
 struct U_I18N_API DecimalFormatProperties {
 
   public:
