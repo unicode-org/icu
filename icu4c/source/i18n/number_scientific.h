@@ -33,7 +33,7 @@ class U_I18N_API ScientificModifier : public UMemory, public Modifier {
     const ScientificHandler *fHandler;
 };
 
-class U_I18N_API ScientificHandler : public UMemory, public MicroPropsGenerator, public MultiplierProducer {
+class ScientificHandler : public UMemory, public MicroPropsGenerator, public MultiplierProducer {
   public:
     ScientificHandler(const Notation *notation, const DecimalFormatSymbols *symbols,
                       const MicroPropsGenerator *parent);

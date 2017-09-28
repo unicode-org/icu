@@ -25,7 +25,8 @@ struct Endpoints {
     int32_t end = 0;
 };
 
-struct ParsedSubpatternInfo {
+// Exported as U_I18N_API because it is a public member field of exported ParsedPatternInfo
+struct U_I18N_API ParsedSubpatternInfo {
     int64_t groupingSizes = 0x0000ffffffff0000L;
     int32_t integerLeadingHashSigns = 0;
     int32_t integerTrailingHashSigns = 0;
@@ -52,7 +53,8 @@ struct ParsedSubpatternInfo {
     Endpoints paddingEndpoints;
 };
 
-struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider {
+// Exported as U_I18N_API because it is needed for the unit test PatternStringTest
+struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemory {
     UnicodeString pattern;
     ParsedSubpatternInfo positive;
     ParsedSubpatternInfo negative;
@@ -93,7 +95,9 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider {
         // TODO: We don't currently do anything with the message string.
         // This method is here as a shell for Java compatibility.
         inline void toParseException(const char16_t *message) { (void)message; }
-    } state;
+    }
+#pragma warning(suppress: 4251)  // Member is private and does not need to be exported
+	state;
 
     // NOTE: In Java, these are written as pure functions.
     // In C++, they're written as methods.

@@ -1818,7 +1818,9 @@ class U_I18N_API LocalizedNumberFormatter
     ~LocalizedNumberFormatter();
 
   private:
+#pragma warning(suppress: 4251)  // Member is private and does not need to be exported
     std::atomic<const impl::NumberFormatterImpl *> fCompiled{nullptr};
+#pragma warning(suppress: 4251)  // Member is private and does not need to be exported
     std::atomic<uint32_t> fCallCount{0};
 
     LocalizedNumberFormatter() = default;
