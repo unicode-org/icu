@@ -3,9 +3,9 @@
 package com.ibm.icu.number;
 
 import java.math.BigInteger;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.MacroProps;
@@ -101,13 +101,13 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         MeasureUnit unit = input.getUnit();
         Number number = input.getNumber();
         // Use this formatter if possible
-        if (Objects.equals(resolve().unit, unit)) {
+        if (Utility.equals(resolve().unit, unit)) {
             return format(number);
         }
         // This mechanism saves the previously used unit, so if the user calls this method with the
         // same unit multiple times in a row, they get a more efficient code path.
         LocalizedNumberFormatter withUnit = savedWithUnit;
-        if (withUnit == null || !Objects.equals(withUnit.resolve().unit, unit)) {
+        if (withUnit == null || !Utility.equals(withUnit.resolve().unit, unit)) {
             withUnit = new LocalizedNumberFormatter(this, KEY_UNIT, unit);
             savedWithUnit = withUnit;
         }
