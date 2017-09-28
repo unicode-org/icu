@@ -267,8 +267,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     * {@icu} Returns the array of strings used as digits, in order from 0 through 9
     * @return The array of ten digit strings
     * @see #setDigitStrings(String[])
-    * @draft ICU 58
-    * @provisional This API might change or be removed in a future release.
+    * @stable ICU 58
     */
     public String[] getDigitStrings() {
         return digitStrings.clone();
@@ -318,8 +317,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     * @throws NullPointerException if the <code>digitStrings</code> is null.
     * @throws IllegalArgumentException if the length of the array is not 10.
     * @see #getDigitStrings()
-    * @draft ICU 58
-    * @provisional This API might change or be removed in a future release.
+    * @stable ICU 58
     */
     public void setDigitStrings(String[] digitStrings) {
         if (digitStrings == null) {
@@ -426,8 +424,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Returns the string used for grouping separator. Different for French, etc.
      * @return the grouping separator string
      * @see #setGroupingSeparatorString(String)
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getGroupingSeparatorString() {
         return groupingSeparatorString;
@@ -443,8 +440,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param groupingSeparatorString the grouping separator string
      * @throws NullPointerException if <code>groupingSeparatorString</code> is null.
      * @see #getGroupingSeparatorString()
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public void setGroupingSeparatorString(String groupingSeparatorString) {
         if (groupingSeparatorString == null) {
@@ -483,8 +479,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Returns the string used for decimal sign.
      * @return the decimal sign string
      * @see #setDecimalSeparatorString(String)
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getDecimalSeparatorString() {
         return decimalSeparatorString;
@@ -500,8 +495,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param decimalSeparatorString the decimal sign string
      * @throws NullPointerException if <code>decimalSeparatorString</code> is null.
      * @see #getDecimalSeparatorString()
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public void setDecimalSeparatorString(String decimalSeparatorString) {
         if (decimalSeparatorString == null) {
@@ -540,8 +534,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Returns the string used for permille sign.
      * @return the permille string
      * @see #setPerMillString(String)
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getPerMillString() {
         return perMillString;
@@ -557,8 +550,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param perMillString the permille string
      * @throws NullPointerException if <code>perMillString</code> is null.
      * @see #getPerMillString()
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public void setPerMillString(String perMillString) {
         if (perMillString == null) {
@@ -597,8 +589,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Returns the string used for percent sign.
      * @return the percent string
      * @see #setPercentString(String)
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getPercentString() {
         return percentString;
@@ -614,8 +605,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param percentString the percent string
      * @throws NullPointerException if <code>percentString</code> is null.
      * @see #getPercentString()
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public void setPercentString(String percentString) {
         if (percentString == null) {
@@ -739,8 +729,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Returns the string used to represent minus sign.
      * @return the minus sign string
      * @see #setMinusSignString(String)
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getMinusSignString() {
         return minusString;
@@ -756,8 +745,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param minusSignString the minus sign string
      * @throws NullPointerException if <code>minusSignString</code> is null.
      * @see #getGroupingSeparatorString()
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public void setMinusSignString(String minusSignString) {
         if (minusSignString == null) {
@@ -803,8 +791,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * {@icu} Returns the string used to represent plus sign.
      * @return the plus sign string
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getPlusSignString() {
         return plusString;
@@ -821,8 +808,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * strings
      * @throws NullPointerException if <code>plusSignString</code> is null.
      * @see #getPlusSignString()
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public void setPlusSignString(String plusSignString) {
         if (plusSignString == null) {
@@ -933,8 +919,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Returns the monetary decimal separator string.
      * @return the monetary decimal separator string
      * @see #setMonetaryDecimalSeparatorString(String)
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getMonetaryDecimalSeparatorString() {
         return monetarySeparatorString;
@@ -950,8 +935,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param sep the monetary decimal separator string
      * @throws NullPointerException if <code>sep</code> is null.
      * @see #getMonetaryDecimalSeparatorString()
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public void setMonetaryDecimalSeparatorString(String sep) {
         if (sep == null) {
@@ -990,8 +974,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * {@icu} Returns the monetary grouping separator.
      * @return the monetary grouping separator string
      * @see #setMonetaryGroupingSeparatorString(String)
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public String getMonetaryGroupingSeparatorString() {
         return monetaryGroupingSeparatorString;
@@ -1007,8 +990,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param sep the monetary grouping separator string
      * @throws NullPointerException if <code>sep</code> is null.
      * @see #getMonetaryGroupingSeparatorString()
-     * @draft ICU 58
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 58
      */
     public void setMonetaryGroupingSeparatorString(String sep) {
         if (sep == null) {
