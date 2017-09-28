@@ -18,6 +18,7 @@
 #include "unicode/uchar.h"
 #include "unicode/udat.h"
 #include "unicode/ustring.h"
+#include "unicode/utf16.h"
 #include "tzgnames.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -30,6 +31,7 @@
 #include "uvector.h"
 #include "zonemeta.h"
 #include "tznames_impl.h"   // TextTrieMap
+#include "patternprops.h"
 
 U_NAMESPACE_BEGIN
 
@@ -1862,6 +1864,27 @@ TimeZoneFormat::parseOffsetFieldsWithPattern(const UnicodeString& text, int32_t 
         if (fieldType == GMTOffsetField::TEXT) {
             const UChar* patStr = field->getPatternText();
             len = u_strlen(patStr);
+            if (i == 0) {
+                // When TimeZoneFormat parse() is called from SimpleDateFormat,
+                // leading space characters might be truncated. If the first pattern text
+                // starts with such character (e.g. Bidi control), then we need to
+                // skip the leading space charcters.
+                if (!PatternProps::isWhiteSpace(text.char32At(idx))) {
+                    for (;;) {
+                        UChar32 ch;
+                        int32_t chLen;
+                        U16_GET(patStr, 0, 0, len, ch)
+                        if (PatternProps::isWhiteSpace(ch)) {
+                            chLen = U16_LENGTH(ch);
+                            len -= chLen;
+                            patStr += chLen;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                }
+            }
             if (text.caseCompare(idx, len, patStr, 0) != 0) {
                 failed = TRUE;
                 break;
