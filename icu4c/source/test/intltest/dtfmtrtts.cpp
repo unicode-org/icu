@@ -272,9 +272,6 @@ void DateFormatRoundTripTest::test(const Locale& loc)
                 if (uprv_strcmp(loc.getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
                     continue;
                 }
-                if (uprv_strcmp(loc.getLanguage(),"fa")==0 && tstyle==DateFormat::FULL && logKnownIssue("13374", "Skip handling fa until TimeZone roundtrip is fixed")) {
-                    continue;
-                }
                 logln("Testing dstyle" + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle)) );
                 DateFormat *df = DateFormat::createDateTimeInstance((DateFormat::EStyle)dstyle, (DateFormat::EStyle)tstyle, loc);
                 if(df == NULL) {
