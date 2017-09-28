@@ -3,6 +3,7 @@
 package com.ibm.icu.util;
 
 public class NoUnit extends MeasureUnit {
+    private static final long serialVersionUID = 2467174286237024095L;
 
     public static final NoUnit BASE =
         (NoUnit) MeasureUnit.internalGetInstance("none", "base");

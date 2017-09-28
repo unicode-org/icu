@@ -7,6 +7,8 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 public class CustomSymbolCurrency extends Currency {
+  private static final long serialVersionUID = 2497493016770137670L;
+
   private String symbol1;
   private String symbol2;
 
