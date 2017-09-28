@@ -147,8 +147,8 @@ uint64_t DecimalQuantity::getPositionFingerprint() const {
     uint64_t fingerprint = 0;
     fingerprint ^= lOptPos;
     fingerprint ^= (lReqPos << 16);
-    fingerprint ^= ((long) rReqPos << 32);
-    fingerprint ^= ((long) rOptPos << 48);
+    fingerprint ^= (static_cast<uint64_t>(rReqPos) << 32);
+    fingerprint ^= (static_cast<uint64_t>(rOptPos) << 48);
     return fingerprint;
 }
 
@@ -207,11 +207,11 @@ double DecimalQuantity::getPluralOperand(PluralOperand operand) const {
 
     switch (operand) {
         case PLURAL_OPERAND_I:
-            return toLong();
+            return static_cast<double>(toLong());
         case PLURAL_OPERAND_F:
-            return toFractionLong(true);
+            return static_cast<double>(toFractionLong(true));
         case PLURAL_OPERAND_T:
-            return toFractionLong(false);
+            return static_cast<double>(toFractionLong(false));
         case PLURAL_OPERAND_V:
             return fractionCount();
         case PLURAL_OPERAND_W:
@@ -474,7 +474,7 @@ double DecimalQuantity::toDouble() const {
     for (int shift = precision - 1; shift >= lostDigits; shift--) {
         tempLong = tempLong * 10 + getDigitPos(shift);
     }
-    double result = tempLong;
+    double result = static_cast<double>(tempLong);
     int32_t _scale = scale + lostDigits;
     if (_scale >= 0) {
         // 1e22 is the largest exact double.

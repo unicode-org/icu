@@ -252,7 +252,8 @@ class NullableValue {
     }
 
     bool operator==(const NullableValue &other) const {
-        return fNull ? other.fNull : fValue == other.fValue;
+        // "fValue == other.fValue" returns UBool, not bool (causes compiler warnings)
+        return fNull ? other.fNull : static_cast<bool>(fValue == other.fValue);
     }
 
     void nullify() {
