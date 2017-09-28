@@ -8787,7 +8787,7 @@ void NumberFormatTest::Test11649_toPatternWithMultiCurrency() {
 }
 
 void NumberFormatTest::Test13327_numberingSystemBufferOverflow() {
-    UErrorCode status;
+    UErrorCode status = U_ZERO_ERROR;
     for (int runId = 0; runId < 2; runId++) {
         // Construct a locale string with a very long "numbers" value.
         // The first time, make the value length exactly equal to ULOC_KEYWORDS_CAPACITY.
