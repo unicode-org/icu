@@ -2,8 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
-import java.util.Objects;
-
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.Grouper;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.Notation;
@@ -56,7 +55,7 @@ public class MacroProps implements Cloneable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(
+    return Utility.hash(
         notation,
         unit,
         rounder,
@@ -76,20 +75,20 @@ public class MacroProps implements Cloneable {
   @Override
   public boolean equals(Object _other) {
     MacroProps other = (MacroProps) _other;
-    return Objects.equals(notation, other.notation)
-        && Objects.equals(unit, other.unit)
-        && Objects.equals(rounder, other.rounder)
-        && Objects.equals(grouper, other.grouper)
-        && Objects.equals(padder, other.padder)
-        && Objects.equals(integerWidth, other.integerWidth)
-        && Objects.equals(symbols, other.symbols)
-        && Objects.equals(unitWidth, other.unitWidth)
-        && Objects.equals(sign, other.sign)
-        && Objects.equals(decimal, other.decimal)
-        && Objects.equals(affixProvider, other.affixProvider)
-        && Objects.equals(multiplier, other.multiplier)
-        && Objects.equals(rules, other.rules)
-        && Objects.equals(loc, other.loc);
+    return Utility.equals(notation, other.notation)
+        && Utility.equals(unit, other.unit)
+        && Utility.equals(rounder, other.rounder)
+        && Utility.equals(grouper, other.grouper)
+        && Utility.equals(padder, other.padder)
+        && Utility.equals(integerWidth, other.integerWidth)
+        && Utility.equals(symbols, other.symbols)
+        && Utility.equals(unitWidth, other.unitWidth)
+        && Utility.equals(sign, other.sign)
+        && Utility.equals(decimal, other.decimal)
+        && Utility.equals(affixProvider, other.affixProvider)
+        && Utility.equals(multiplier, other.multiplier)
+        && Utility.equals(rules, other.rules)
+        && Utility.equals(loc, other.loc);
   }
 
   @Override
