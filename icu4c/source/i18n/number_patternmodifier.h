@@ -31,7 +31,7 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
   private:
 	ImmutablePatternModifier(ParameterizedModifier *pm, const PluralRules *rules, const MicroPropsGenerator *parent);
 
-#pragma warning(suppress: 4251)  // Member is private and does not need to be exported
+	UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // Member is private and does not need to be exported
 	const LocalPointer<ParameterizedModifier> pm;
     const PluralRules *rules;
     const MicroPropsGenerator *parent;

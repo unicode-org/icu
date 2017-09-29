@@ -96,7 +96,7 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
         // This method is here as a shell for Java compatibility.
         inline void toParseException(const char16_t *message) { (void)message; }
     }
-#pragma warning(suppress: 4251)  // Member is private and does not need to be exported
+	UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // Member is private and does not need to be exported
 	state;
 
     // NOTE: In Java, these are written as pure functions.
