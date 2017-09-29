@@ -393,6 +393,7 @@ keyTypeData:table(nofallback){
             srg{""}
             ssp{""}
             std{""}
+            stn{""}
             sur{""}
             svc{""}
             syp{""}

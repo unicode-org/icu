@@ -796,7 +796,7 @@ en{
         }
         PHP{
             "PHP",
-            "Philippine Peso",
+            "Philippine Piso",
         }
         PKR{
             "PKR",
@@ -917,6 +917,10 @@ en{
         STD{
             "STD",
             "São Tomé & Príncipe Dobra",
+        }
+        STN{
+            "STN",
+            "São Tomé & Príncipe Dobra (2018)",
         }
         SUR{
             "SUR",
@@ -1993,8 +1997,8 @@ en{
             other{"Papua New Guinean kina"}
         }
         PHP{
-            one{"Philippine peso"}
-            other{"Philippine pesos"}
+            one{"Philippine piso"}
+            other{"Philippine pisos"}
         }
         PKR{
             one{"Pakistani rupee"}
@@ -2115,6 +2119,10 @@ en{
         STD{
             one{"São Tomé & Príncipe dobra"}
             other{"São Tomé & Príncipe dobras"}
+        }
+        STN{
+            one{"São Tomé & Príncipe dobra (2018)"}
+            other{"São Tomé & Príncipe dobras (2018)"}
         }
         SUR{
             one{"Soviet rouble"}
@@ -2401,5 +2409,5 @@ en{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.37.44"}
 }
