@@ -4,9 +4,9 @@ package com.ibm.icu.impl.number;
 
 import com.ibm.icu.number.Grouper;
 import com.ibm.icu.number.IntegerWidth;
-import com.ibm.icu.number.Rounder;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.Rounder;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
 public class MicroProps implements Cloneable, MicroPropsGenerator {
