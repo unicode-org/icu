@@ -20,7 +20,7 @@ namespace impl {
 // TODO: Figure out a nicer way to deal with CurrencyPluralInfo.
 // Exported as U_I18N_API because it is a public member field of exported DecimalFormatProperties
 struct U_I18N_API CurrencyPluralInfoWrapper {
-#pragma warning(suppress: 4251)  // LocalPointer is defined in a header file; why does Visual Studio complain?
+	UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // LocalPointer is defined in a header file; why does Visual Studio complain?
     LocalPointer<CurrencyPluralInfo> fPtr;
 
     CurrencyPluralInfoWrapper() {}
