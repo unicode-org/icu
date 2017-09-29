@@ -3829,10 +3829,21 @@ supplementalData:table(nofallback){
         ST{
             {
                 from:intvector{
+                    352,
+                    -1358655488,
+                }
+                id{"STN"}
+            }
+            {
+                from:intvector{
                     56,
                     2006631424,
                 }
                 id{"STD"}
+                to:intvector{
+                    352,
+                    -1358655489,
+                }
             }
         }
         SU{
