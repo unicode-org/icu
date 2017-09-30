@@ -1414,7 +1414,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             CurrencyFormatInfo fmtInfo = info.getFormatInfo(intlCurrencySymbol);
             if (fmtInfo != null) {
                 currencyPattern = fmtInfo.currencyPattern;
-                setMonetaryDecimalSeparatorString(fmtInfo.monetarySeparator);
+                setMonetaryDecimalSeparatorString(fmtInfo.monetaryDecimalSeparator);
                 setMonetaryGroupingSeparatorString(fmtInfo.monetaryGroupingSeparator);
             }
         } else {

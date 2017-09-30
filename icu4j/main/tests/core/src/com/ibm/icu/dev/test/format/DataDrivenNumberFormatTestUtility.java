@@ -204,10 +204,7 @@ public class DataDrivenNumberFormatTestUtility extends TestFmwk {
                             return;
                         }
                     }
-                    if (tuple.output != null && tuple.output.equals("fail") && tuple.parse != null && tuple.parse.equals("$53.45") &&
-                            logKnownIssue("13368", "en_GB parsing of $53.45 as USD works, shouldn't") ) {
-                        // skip test
-                    } else if (runMode == RunMode.INCLUDE_KNOWN_FAILURES || !breaks(codeUnderTestId)) {
+                    if (runMode == RunMode.INCLUDE_KNOWN_FAILURES || !breaks(codeUnderTestId)) {
                         String errorMessage;
                         Exception err = null;
                         boolean shouldFail = (tuple.output != null && tuple.output.equals("fail"))

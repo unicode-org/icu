@@ -871,7 +871,7 @@ public class NumberFormatTest extends TestFmwk {
                 new ParseCurrencyItem( "en_GB", "euros4",   "4,00\u00A0\u20AC", 4,400,  6,400,  "EUR" ),
                 new ParseCurrencyItem( "en_GB", "euros6",   "6\u00A0\u20AC",    1,  6,  3,  6,  "EUR" ),
                 new ParseCurrencyItem( "en_GB", "euros8",   "\u20AC8",          0,  0,  2,  8,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  4,  4,  "USD" ), // With CLDR 32/ICU 60, US$4 fails, $4 works, #13368
+                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  4,  4,  "USD" ),
 
                 new ParseCurrencyItem( "fr_FR", "euros4",   "4,00\u00A0\u20AC", 6,  4,  6,  4,  "EUR" ),
                 new ParseCurrencyItem( "fr_FR", "euros6",   "6\u00A0\u20AC",    3,  6,  3,  6,  "EUR" ),
@@ -907,10 +907,6 @@ public class NumberFormatTest extends TestFmwk {
 
             parsePos.setIndex(0);
             int curExpectPos = item.getCurExpectPos();
-            if (currStr.equals("US$4") && logKnownIssue("13368", "en_GB parsing of US$4 fails but $4 works")) {
-                currStr = "$4";
-                curExpectPos = 2;
-            }
             CurrencyAmount currAmt = fmt.parseCurrency(currStr, parsePos);
             if ( parsePos.getIndex() != curExpectPos || (currAmt != null && (currAmt.getNumber().intValue() != item.getCurExpectVal() ||
                     currAmt.getCurrency().getCurrencyCode().compareTo(item.getCurExpectCurr()) != 0)) ) {

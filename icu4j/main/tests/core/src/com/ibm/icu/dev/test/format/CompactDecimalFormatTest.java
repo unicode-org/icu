@@ -587,6 +587,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void TestLongShortFallback() {
         // smn, dz have long but not short
         // es_US, es_GT, es_419, ee have short but not long
+        // TODO: This test is out-of-date. The locales have more data as of ICU 60.
         ULocale[] locs = new ULocale[] {
             new ULocale("smn"),
             new ULocale("es_US"),
