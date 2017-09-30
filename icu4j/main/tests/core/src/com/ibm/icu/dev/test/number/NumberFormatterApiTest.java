@@ -557,14 +557,13 @@ public class NumberFormatterApiTest {
 
         // The full currency symbol is not shown in NARROW format.
         // NOTE: This example is in the documentation.
-        // FIXME: Narrow Currency does not currently work; see #11666
         assertFormatSingle(
                 "Currency Difference between Narrow and Short (Narrow Version)",
                 "",
                 NumberFormatter.with().unit(USD).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("en-CA"),
                 5.43,
-                "US$5.43");
+                "$5.43");
 
         assertFormatSingle(
                 "Currency Difference between Narrow and Short (Short Version)",

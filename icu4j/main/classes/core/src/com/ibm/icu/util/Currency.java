@@ -24,6 +24,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.CacheBase;
+import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUDebug;
@@ -86,6 +87,21 @@ public class Currency extends MeasureUnit {
      * @stable ICU 4.2
      */
     public static final int PLURAL_LONG_NAME = 2;
+
+    /**
+     * Selector for getName() indicating the narrow currency symbol.
+     * The narrow currency symbol is similar to the regular currency
+     * symbol, but it always takes the shortest form: for example,
+     * "$" instead of "US$".
+     *
+     * This method assumes that the currency data provider is the ICU4J
+     * built-in data provider. If it is not, an exception is thrown.
+     *
+     * @internal
+     * @deprecated ICU 60: This API is ICU internal only.
+     */
+    @Deprecated
+    public static final int NARROW_SYMBOL_NAME = 3;
 
     private static final EquivalenceRelation<String> EQUIVALENT_CURRENCY_SYMBOLS =
             new EquivalenceRelation<String>()
@@ -570,10 +586,6 @@ public class Currency extends MeasureUnit {
      * @stable ICU 3.2
      */
     public String getName(ULocale locale, int nameStyle, boolean[] isChoiceFormat) {
-        if (!(nameStyle == SYMBOL_NAME || nameStyle == LONG_NAME)) {
-            throw new IllegalArgumentException("bad name style: " + nameStyle);
-        }
-
         // We no longer support choice format data in names.  Data should not contain
         // choice patterns.
         if (isChoiceFormat != null) {
@@ -581,7 +593,22 @@ public class Currency extends MeasureUnit {
         }
 
         CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
-        return nameStyle == SYMBOL_NAME ? names.getSymbol(subType) : names.getName(subType);
+        switch (nameStyle) {
+        case SYMBOL_NAME:
+            return names.getSymbol(subType);
+        case NARROW_SYMBOL_NAME:
+            // CurrencyDisplayNames is the public interface.
+            // CurrencyDisplayInfo is ICU's standard implementation.
+            if (!(names instanceof CurrencyDisplayInfo)) {
+                throw new UnsupportedOperationException(
+                        "Cannot get narrow symbol from custom currency display name provider");
+            }
+            return ((CurrencyDisplayInfo) names).getNarrowSymbol(subType);
+        case LONG_NAME:
+            return names.getName(subType);
+        default:
+            throw new IllegalArgumentException("bad name style: " + nameStyle);
+        }
     }
 
     /**

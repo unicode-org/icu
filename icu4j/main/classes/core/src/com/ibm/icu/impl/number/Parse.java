@@ -1920,6 +1920,9 @@ public class Parse {
         case AffixUtils.TYPE_CURRENCY_SINGLE:
         case AffixUtils.TYPE_CURRENCY_DOUBLE:
         case AffixUtils.TYPE_CURRENCY_TRIPLE:
+        case AffixUtils.TYPE_CURRENCY_QUAD:
+        case AffixUtils.TYPE_CURRENCY_QUINT:
+        case AffixUtils.TYPE_CURRENCY_OVERFLOW:
           resolvedCurrency = true;
           break;
         default:

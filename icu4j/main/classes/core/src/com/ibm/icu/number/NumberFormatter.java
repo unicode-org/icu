@@ -68,16 +68,12 @@ public final class NumberFormatter {
      * meters in <em>en-CA</em>:
      *
      * <ul>
-     * <li>NARROW*: "$123.00" and "123 m"
+     * <li>NARROW: "$123.00" and "123 m"
      * <li>SHORT: "US$ 123.00" and "123 m"
      * <li>FULL_NAME: "123.00 US dollars" and "123 meters"
      * <li>ISO_CODE: "USD 123.00" and undefined behavior
      * <li>HIDDEN: "123.00" and "123"
      * </ul>
-     *
-     * <p>
-     * * The narrow format for currencies is not currently supported; this is a known issue that will be fixed in a
-     * future version. See #11666 for more information.
      *
      * <p>
      * This enum is similar to {@link com.ibm.icu.text.MeasureFormat.FormatWidth}.

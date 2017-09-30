@@ -320,11 +320,13 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
         case AffixUtils.TYPE_PERMILLE:
             return symbols.getPerMillString();
         case AffixUtils.TYPE_CURRENCY_SINGLE:
-            // UnitWidth ISO or HIDDEN overrides the singular currency symbol.
+            // UnitWidth ISO, HIDDEN, or NARROW overrides the singular currency symbol.
             if (unitWidth == UnitWidth.ISO_CODE) {
                 return currency.getCurrencyCode();
             } else if (unitWidth == UnitWidth.HIDDEN) {
                 return "";
+            } else if (unitWidth == UnitWidth.NARROW) {
+                return currency.getName(symbols.getULocale(), Currency.NARROW_SYMBOL_NAME, null);
             } else {
                 return currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, null);
             }
@@ -339,7 +341,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
         case AffixUtils.TYPE_CURRENCY_QUAD:
             return "\uFFFD";
         case AffixUtils.TYPE_CURRENCY_QUINT:
-            return "\uFFFD";
+            return currency.getName(symbols.getULocale(), Currency.NARROW_SYMBOL_NAME, null);
         default:
             throw new AssertionError();
         }
