@@ -4,6 +4,7 @@ package com.ibm.icu.dev.test.format;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.text.ParsePosition;
 
 import org.junit.Test;
@@ -11,11 +12,14 @@ import org.junit.Test;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Padder.PadPosition;
+import com.ibm.icu.impl.number.Parse;
 import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormat.PropertySetter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.util.CurrencyAmount;
@@ -529,6 +533,9 @@ public class NumberFormatDataDrivenTest {
     }
   }
 
+  /**
+   * Formatting, but no other features.
+   */
   private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU60 =
       new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
 
@@ -566,6 +573,170 @@ public class NumberFormatDataDrivenTest {
         }
       };
 
+    /**
+     * All features except formatting.
+     */
+    private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU60_Other =
+            new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
+
+        @Override
+        public Character Id() {
+          return 'S';
+        }
+
+        /**
+         * Runs a single toPattern test. On success, returns null. On failure, returns the error. This implementation
+         * just returns null. Subclasses should override.
+         *
+         * @param tuple
+         *            contains the parameters of the format test.
+         */
+        @Override
+        public String toPattern(DataDrivenNumberFormatTestData tuple) {
+            String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
+            final DecimalFormatProperties properties;
+            DecimalFormat df;
+            try {
+                properties = PatternStringParser.parseToProperties(
+                        pattern,
+                        tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
+                                : PatternStringParser.IGNORE_ROUNDING_NEVER);
+                propertiesFromTuple(tuple, properties);
+                // TODO: Use PatternString.propertiesToString() directly. (How to deal with CurrencyUsage?)
+                df = new DecimalFormat();
+                df.setProperties(new PropertySetter() {
+                    @Override
+                    public void set(DecimalFormatProperties props) {
+                        props.copyFrom(properties);
+                    }
+                });
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                return e.getLocalizedMessage();
+            }
+
+            if (tuple.toPattern != null) {
+                String expected = tuple.toPattern;
+                String actual = df.toPattern();
+                if (!expected.equals(actual)) {
+                    return "Expected toPattern='" + expected + "'; got '" + actual + "'";
+                }
+            }
+            if (tuple.toLocalizedPattern != null) {
+                String expected = tuple.toLocalizedPattern;
+                String actual = PatternStringUtils.propertiesToPatternString(properties);
+                if (!expected.equals(actual)) {
+                    return "Expected toLocalizedPattern='" + expected + "'; got '" + actual + "'";
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Runs a single parse test. On success, returns null. On failure, returns the error. This implementation just
+         * returns null. Subclasses should override.
+         *
+         * @param tuple
+         *            contains the parameters of the format test.
+         */
+        @Override
+        public String parse(DataDrivenNumberFormatTestData tuple) {
+            String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
+            DecimalFormatProperties properties;
+            ParsePosition ppos = new ParsePosition(0);
+            Number actual;
+            try {
+                properties = PatternStringParser.parseToProperties(
+                        pattern,
+                        tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
+                                : PatternStringParser.IGNORE_ROUNDING_NEVER);
+                propertiesFromTuple(tuple, properties);
+                actual = Parse.parse(tuple.parse, ppos, properties, DecimalFormatSymbols.getInstance(tuple.locale));
+            } catch (IllegalArgumentException e) {
+                return "parse exception: " + e.getMessage();
+            }
+            if (actual == null && ppos.getIndex() != 0) {
+                throw new AssertionError("Error: value is null but parse position is not zero");
+            }
+            if (ppos.getIndex() == 0) {
+                return "Parse failed; got " + actual + ", but expected " + tuple.output;
+            }
+            if (tuple.output.equals("NaN")) {
+                if (!Double.isNaN(actual.doubleValue())) {
+                    return "Expected NaN, but got: " + actual;
+                }
+                return null;
+            } else if (tuple.output.equals("Inf")) {
+                if (!Double.isInfinite(actual.doubleValue()) || Double.compare(actual.doubleValue(), 0.0) < 0) {
+                    return "Expected Inf, but got: " + actual;
+                }
+                return null;
+            } else if (tuple.output.equals("-Inf")) {
+                if (!Double.isInfinite(actual.doubleValue()) || Double.compare(actual.doubleValue(), 0.0) > 0) {
+                    return "Expected -Inf, but got: " + actual;
+                }
+                return null;
+            } else if (tuple.output.equals("fail")) {
+                return null;
+            } else if (new BigDecimal(tuple.output).compareTo(new BigDecimal(actual.toString())) != 0) {
+                return "Expected: " + tuple.output + ", got: " + actual;
+            } else {
+                return null;
+            }
+        }
+
+        /**
+         * Runs a single parse currency test. On success, returns null. On failure, returns the error. This
+         * implementation just returns null. Subclasses should override.
+         *
+         * @param tuple
+         *            contains the parameters of the format test.
+         */
+        @Override
+        public String parseCurrency(DataDrivenNumberFormatTestData tuple) {
+            String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
+            DecimalFormatProperties properties;
+            ParsePosition ppos = new ParsePosition(0);
+            CurrencyAmount actual;
+            try {
+                properties = PatternStringParser.parseToProperties(
+                        pattern,
+                        tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
+                                : PatternStringParser.IGNORE_ROUNDING_NEVER);
+                propertiesFromTuple(tuple, properties);
+                actual = Parse
+                        .parseCurrency(tuple.parse, ppos, properties, DecimalFormatSymbols.getInstance(tuple.locale));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return "parse exception: " + e.getMessage();
+            }
+            if (ppos.getIndex() == 0 || actual.getCurrency().getCurrencyCode().equals("XXX")) {
+                return "Parse failed; got " + actual + ", but expected " + tuple.output;
+            }
+            BigDecimal expectedNumber = new BigDecimal(tuple.output);
+            if (expectedNumber.compareTo(new BigDecimal(actual.getNumber().toString())) != 0) {
+                return "Wrong number: Expected: " + expectedNumber + ", got: " + actual;
+            }
+            String expectedCurrency = tuple.outputCurrency;
+            if (!expectedCurrency.equals(actual.getCurrency().toString())) {
+                return "Wrong currency: Expected: " + expectedCurrency + ", got: " + actual;
+            }
+            return null;
+        }
+
+        /**
+         * Runs a single select test. On success, returns null. On failure, returns the error. This implementation just
+         * returns null. Subclasses should override.
+         *
+         * @param tuple
+         *            contains the parameters of the format test.
+         */
+        @Override
+        public String select(DataDrivenNumberFormatTestData tuple) {
+            return null;
+        }
+    };
+
   @Test
   public void TestDataDrivenICU58() {
     // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
@@ -595,8 +766,14 @@ public class NumberFormatDataDrivenTest {
   }
 
   @Test
-  public void TestDataDrivenICU60() {
+  public void TestDataDrivenICULatest_Format() {
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", ICU60);
+  }
+
+  @Test
+  public void TestDataDrivenICULatest_Other() {
+    DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
+        "numberformattestspecification.txt", ICU60_Other);
   }
 }
