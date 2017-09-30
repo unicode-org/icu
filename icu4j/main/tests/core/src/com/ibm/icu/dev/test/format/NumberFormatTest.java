@@ -5827,4 +5827,17 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Plural few", "3.00 dvorak", df.format(3));
         assertEquals("Plural other", "5.80 US dollars", df.format(5.8));
     }
+
+    @Test
+    public void TestNarrowCurrencySymbols() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(ULocale.CANADA);
+        df.setCurrency(Currency.getInstance("USD"));
+        expect2(df, 123.45, "US$123.45");
+        String pattern = df.toPattern();
+        pattern = pattern.replace("¤", "¤¤¤¤¤");
+        df.applyPattern(pattern);
+        // Note: Narrow currency is not parseable because of ambiguity.
+        assertEquals("Narrow currency symbol for USD in en_CA is $",
+                "$123.45", df.format(123.45));
+    }
 }

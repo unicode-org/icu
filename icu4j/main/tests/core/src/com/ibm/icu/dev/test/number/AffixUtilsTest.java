@@ -41,8 +41,7 @@ public class AffixUtilsTest {
               case AffixUtils.TYPE_CURRENCY_QUAD:
                 return "\uFFFD";
               case AffixUtils.TYPE_CURRENCY_QUINT:
-                // TODO: Add support for narrow currency symbols here.
-                return "\uFFFD";
+                return "@";
               case AffixUtils.TYPE_CURRENCY_OVERFLOW:
                 return "\uFFFD";
               default:
@@ -99,10 +98,10 @@ public class AffixUtilsTest {
       {"¤¤", true, 2, "XXX"},
       {"¤¤¤", true, 3, "long name"},
       {"¤¤¤¤", true, 4, "\uFFFD"},
-      {"¤¤¤¤¤", true, 5, "\uFFFD"},
+      {"¤¤¤¤¤", true, 5, "@"},
       {"¤¤¤¤¤¤", true, 6, "\uFFFD"},
       {"¤¤¤a¤¤¤¤", true, 8, "long namea\uFFFD"},
-      {"a¤¤¤¤b¤¤¤¤¤c", true, 12, "a\uFFFDb\uFFFDc"},
+      {"a¤¤¤¤b¤¤¤¤¤c", true, 12, "a\uFFFDb@c"},
       {"¤!", true, 2, "$!"},
       {"¤¤!", true, 3, "XXX!"},
       {"¤¤¤!", true, 4, "long name!"},
