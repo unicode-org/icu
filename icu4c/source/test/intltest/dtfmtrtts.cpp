@@ -236,9 +236,6 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     int32_t style = 0;
     for(style = DateFormat::FULL; style <= DateFormat::SHORT; ++style) {
         if(TEST_TABLE[itable++]) {
-            if (uprv_strcmp(loc.getLanguage(),"ccp")==0 && style==DateFormat::MEDIUM && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
-                continue;
-            }
             logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createDateInstance((DateFormat::EStyle)style, loc);
             if(df == NULL) {
@@ -252,7 +249,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     
     for(style = DateFormat::FULL; style <= DateFormat::SHORT; ++style) {
         if (TEST_TABLE[itable++]) {
-            if (uprv_strcmp(loc.getLanguage(),"ccp")==0 && style==DateFormat::FULL && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
+            if (uprv_strcmp(loc.getLanguage(),"ccp")==0 && style==DateFormat::LONG && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
                 continue;
             }
             logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
@@ -269,7 +266,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     for(int32_t dstyle = DateFormat::FULL; dstyle <= DateFormat::SHORT; ++dstyle) {
         for(int32_t tstyle = DateFormat::FULL; tstyle <= DateFormat::SHORT; ++tstyle) {
             if(TEST_TABLE[itable++]) {
-                if (uprv_strcmp(loc.getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
+                if (uprv_strcmp(loc.getLanguage(),"ccp")==0 && tstyle==DateFormat::LONG && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
                     continue;
                 }
                 logln("Testing dstyle" + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle)) );
