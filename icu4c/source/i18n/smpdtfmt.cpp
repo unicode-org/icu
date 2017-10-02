@@ -80,6 +80,9 @@
 // class SimpleDateFormat
 // *****************************************************************************
 
+// Some zone display names involving supplementary characters can be over 50 chars, 100 UTF-16 code units, 200 UTF-8 bytes
+#define ZONE_NAME_U16_MAX 128
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -1690,7 +1693,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     case UDAT_TIMEZONE_ISO_FIELD: // 'X'
     case UDAT_TIMEZONE_ISO_LOCAL_FIELD: // 'x'
         {
-            UChar zsbuf[64];
+            UChar zsbuf[ZONE_NAME_U16_MAX];
             UnicodeString zoneString(zsbuf, 0, UPRV_LENGTHOF(zsbuf));
             const TimeZone& tz = cal.getTimeZone();
             UDate date = cal.getTime(status);

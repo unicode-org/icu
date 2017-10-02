@@ -33,6 +33,9 @@
 #include "tznames_impl.h"   // TextTrieMap
 #include "patternprops.h"
 
+// Some zone display names involving supplementary characters can be over 50 chars, 100 UTF-16 code units, 200 UTF-8 bytes
+#define ZONE_NAME_U16_MAX 128
+
 U_NAMESPACE_BEGIN
 
 // Bit flags used by the parse method.
@@ -790,7 +793,7 @@ TimeZoneFormat::format(const Formattable& obj, UnicodeString& appendTo,
         if (tz != NULL) {
             int32_t rawOffset, dstOffset;
             tz->getOffset(date, FALSE, rawOffset, dstOffset, status);
-            UChar buf[32];
+            UChar buf[ZONE_NAME_U16_MAX];
             UnicodeString result(buf, 0, UPRV_LENGTHOF(buf));
             formatOffsetLocalizedGMT(rawOffset + dstOffset, result, status);
             if (U_SUCCESS(status)) {
@@ -1416,7 +1419,7 @@ TimeZoneFormat::getTZDBTimeZoneNames(UErrorCode& status) const {
 
 UnicodeString&
 TimeZoneFormat::formatExemplarLocation(const TimeZone& tz, UnicodeString& name) const {
-    UChar locationBuf[64];
+    UChar locationBuf[ZONE_NAME_U16_MAX];
     UnicodeString location(locationBuf, 0, UPRV_LENGTHOF(locationBuf));
     const UChar* canonicalID = ZoneMeta::getCanonicalCLDRID(tz);
 

@@ -160,9 +160,6 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
 
     // Run the roundtrip test
     for (int32_t locidx = 0; locidx < nLocales; locidx++) {
-        if (uprv_strcmp(LOCALES[locidx].getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until TimeZone offset roundtrip is fixed")) {
-            continue;
-        }
         UnicodeString localGMTString;
         SimpleDateFormat gmtFmt(UnicodeString("ZZZZ"), LOCALES[locidx], status);
         if (U_FAILURE(status)) {
@@ -174,6 +171,10 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
 
         for (int32_t patidx = 0; patidx < UPRV_LENGTHOF(PATTERNS); patidx++) {
 
+            if (uprv_strcmp(LOCALES[locidx].getLanguage(),"ccp")==0 && (PATTERNS[patidx][0]==0x7A || PATTERNS[patidx][0]==0x76) && 
+                    logKnownIssue("13366", "Skip handling ccp until TimeZone offset roundtrip is fixed")) {
+                 continue;
+            }
             SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)PATTERNS[patidx], LOCALES[locidx], status);
             if (U_FAILURE(status)) {
                 dataerrln((UnicodeString)"new SimpleDateFormat failed for pattern " +

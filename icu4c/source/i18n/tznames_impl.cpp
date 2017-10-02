@@ -411,25 +411,31 @@ TextTrieMap::search(CharacterNode *node, const UnicodeString &text, int32_t star
             return;
         }
     }
-    UChar32 c = text.char32At(index);
     if (fIgnoreCase) {
-        // size of character may grow after fold operation
-        UnicodeString tmp(c);
+        // for folding we need to get a complete code point.
+        // size of character may grow after fold operation;
+        // then we need to get result as UTF16 code units.
+        UChar32 c32 = text.char32At(index++);
+        if (c32 >= 0x10000) {
+            index++;
+        }
+        UnicodeString tmp(c32);
         tmp.foldCase();
         int32_t tmpidx = 0;
         while (tmpidx < tmp.length()) {
-            c = tmp.char32At(tmpidx);
+            UChar c = tmp.charAt(tmpidx++);
             node = getChildNode(node, c);
             if (node == NULL) {
                 break;
             }
-            tmpidx = tmp.moveIndex32(tmpidx, 1);
         }
     } else {
+        // here we just get the next UTF16 code unit
+        UChar c = text.charAt(index++);
         node = getChildNode(node, c);
     }
     if (node != NULL) {
-        search(node, text, start, index+1, handler, status);
+        search(node, text, start, index, handler, status);
     }
 }
 

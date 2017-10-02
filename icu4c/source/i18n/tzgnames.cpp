@@ -37,6 +37,8 @@
 U_NAMESPACE_BEGIN
 
 #define ZID_KEY_MAX  128
+// Some zone display names involving supplementary characters can be over 50 chars, 100 UTF-16 code units, 200 UTF-8 bytes
+#define ZONE_NAME_U16_MAX 128
 
 static const char gZoneStrings[]                = "zoneStrings";
 
@@ -615,7 +617,7 @@ TZGNCore::formatGenericNonLocationName(const TimeZone& tz, UTimeZoneGenericNameT
         UErrorCode status = U_ZERO_ERROR;
         UBool useStandard = FALSE;
         int32_t raw, sav;
-        UChar tmpNameBuf[64];
+        UChar tmpNameBuf[ZONE_NAME_U16_MAX];
 
         tz.getOffset(date, FALSE, raw, sav, status);
         if (U_FAILURE(status)) {
@@ -683,7 +685,7 @@ TZGNCore::formatGenericNonLocationName(const TimeZone& tz, UTimeZoneGenericNameT
                 // for some meta zones in some locales.  This looks like a data bugs.
                 // For now, we check if the standard name is different from its generic
                 // name below.
-                UChar genNameBuf[64];
+                UChar genNameBuf[ZONE_NAME_U16_MAX];
                 UnicodeString mzGenericName(genNameBuf, 0, UPRV_LENGTHOF(genNameBuf));
                 fTimeZoneNames->getMetaZoneDisplayName(mzID, nameType, mzGenericName);
                 if (stdName.caseCompare(mzGenericName, 0) == 0) {
