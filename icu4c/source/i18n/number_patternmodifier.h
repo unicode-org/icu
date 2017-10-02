@@ -29,10 +29,10 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
     void applyToMicros(MicroProps &micros, DecimalQuantity &quantity) const;
 
   private:
-	ImmutablePatternModifier(ParameterizedModifier *pm, const PluralRules *rules, const MicroPropsGenerator *parent);
+    ImmutablePatternModifier(ParameterizedModifier *pm, const PluralRules *rules, const MicroPropsGenerator *parent);
 
-	UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // Member is private and does not need to be exported
-	const LocalPointer<ParameterizedModifier> pm;
+    UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // Member is private and does not need to be exported
+    const LocalPointer<ParameterizedModifier> pm;
     const PluralRules *rules;
     const MicroPropsGenerator *parent;
 

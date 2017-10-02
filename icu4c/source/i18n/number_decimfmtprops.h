@@ -17,10 +17,16 @@ U_NAMESPACE_BEGIN
 namespace number {
 namespace impl {
 
+// Export an explicit template instantiation of the LocalPointer that is used as a
+// data member of CurrencyPluralInfoWrapper.
+// (MSVC requires this, even though it should not be necessary.)
+#if defined (_MSC_VER)
+template class U_I18N_API LocalPointer<CurrencyPluralInfo>;
+#endif
+
 // TODO: Figure out a nicer way to deal with CurrencyPluralInfo.
 // Exported as U_I18N_API because it is a public member field of exported DecimalFormatProperties
 struct U_I18N_API CurrencyPluralInfoWrapper {
-	UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // LocalPointer is defined in a header file; why does Visual Studio complain?
     LocalPointer<CurrencyPluralInfo> fPtr;
 
     CurrencyPluralInfoWrapper() {}
