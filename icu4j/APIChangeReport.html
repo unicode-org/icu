@@ -4,17 +4,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- © 2017 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html#License -->
-<title>ICU4J API Comparison: ICU4J 59.1 with ICU4J 60.0.1</title>
+<title>ICU4J API Comparison: ICU4J 59.1 with ICU4J 60.1</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 59.1 with ICU4J 60.0.1</h1>
+<h1>ICU4J API Comparison: ICU4J 59.1 with ICU4J 60.1</h1>
 
 <hr/>
 <h2>Removed from ICU4J 59.1</h2>
 <p>(no API removed)</p>
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 60.0.1</h2>
+<h2>Deprecated or Obsoleted in ICU4J 60.1</h2>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
@@ -27,11 +27,11 @@ Calendar
 
 
 <hr/>
-<h2>Changed in ICU4J 60.0.1 (old, new)</h2>
+<h2>Changed in ICU4J 60.1 (old, new)</h2>
 <p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 60.0.1</h2>
+<h2>Promoted to stable in ICU4J 60.1</h2>
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
@@ -132,7 +132,7 @@ MeasureUnit
 
 
 <hr/>
-<h2>Added in ICU4J 60.0.1</h2>
+<h2>Added in ICU4J 60.1</h2>
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
@@ -181,6 +181,47 @@ UScript
 </ul>
 </ul>
 
+<h3>Package com.ibm.icu.number</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public class <i>CompactNotation</i></li>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>CurrencyRounder</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>FormattedNumber</i></li>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>FractionRounder</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>IntegerWidth</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>LocalizedNumberFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>Notation</i></li>
+<li><span style='color:orange'>(draft)</span> public final class <i>NumberFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>NumberFormatterSettings</i></li>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>Rounder</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>ScientificNotation</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>SimpleNotation</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>UnlocalizedNumberFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>NumberFormatter.DecimalSeparatorDisplay</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>NumberFormatter.SignDisplay</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>NumberFormatter.UnitWidth</i></li>
+NumberFormatter.DecimalSeparatorDisplay
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.DecimalSeparatorDisplay ALWAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.DecimalSeparatorDisplay AUTO</li>
+</ul>
+NumberFormatter.SignDisplay
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.SignDisplay ACCOUNTING</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.SignDisplay ACCOUNTING_ALWAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.SignDisplay ALWAYS</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.SignDisplay AUTO</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.SignDisplay NEVER</li>
+</ul>
+NumberFormatter.UnitWidth
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.UnitWidth FULL_NAME</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.UnitWidth HIDDEN</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.UnitWidth ISO_CODE</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.UnitWidth NARROW</li>
+<li><span style='color:orange'>(draft)</span> public static final r.NumberFormatter.UnitWidth SHORT</li>
+</ul>
+</ul>
+
 <h3>Package com.ibm.icu.text</h3>
 <ul>
 <li><span style='color:orange'>(draft)</span> public abstract class <i>FilteredBreakIteratorBuilder</i></li>
@@ -207,6 +248,10 @@ CaseMap.Upper
 <ul>
 <li><span style='color:orange'>(draft)</span> public java.lang.String <i>apply</i>(java.util.Locale, java.lang.CharSequence)</li>
 </ul>
+DecimalFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public r.LocalizedNumberFormatter <i>toNumberFormatter</i>()</li>
+</ul>
 DecimalFormatSymbols
 <ul>
 <li><span style='color:orange'>(draft)</span> public static DecimalFormatSymbols <i>forNumberingSystem</i>(ULocale, NumberingSystem)</li>
@@ -223,10 +268,15 @@ Edits.Iterator
 <li><span style='color:orange'>(draft)</span> public boolean <i>findDestinationIndex</i>(int)</li>
 <li><span style='color:orange'>(draft)</span> public int <i>sourceIndexFromDestinationIndex</i>(int)</li>
 </ul>
+NumberingSystem
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final NumberingSystem LATIN</li>
+</ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
+<li><span style='color:orange'>(draft)</span> public class <i>NoUnit</i></li>
 Currency
 <ul>
 <li><span style='color:orange'>(draft)</span> public static Currency <i>fromJavaCurrency</i>(java.util.Currency)</li>
@@ -244,6 +294,6 @@ VersionInfo
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Sep 27 11:38:50 EDT 2017<br/>© 2017 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Oct 03 00:54:21 EDT 2017<br/>© 2017 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
 </body>
 </html>
