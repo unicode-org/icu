@@ -1,4 +1,8 @@
 # -*- makefile -*-
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (C) 2008-2013 IBM Corporation and Others. All Rights Reserved.
 CPPFLAGS+=-DU_DISABLE_RENAMING=1 -I. -I/xsrl/IIE/include -I/xsrl/E/icu/source/tools/toolutil
 # TODO - where to get uoptions.h?

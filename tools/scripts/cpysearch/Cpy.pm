@@ -1,3 +1,7 @@
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 #  ***********************************************************************
 #  * COPYRIGHT:
 #  * Copyright (c) 2011, International Business Machines Corporation
@@ -11,6 +15,7 @@ package Cpy;
 use strict;
 use warnings;
 use base 'Exporter';
+use LWP::Simple;
 
 our @EXPORT = qw(any glob_to_regex should_ignore);
 
@@ -75,17 +80,27 @@ sub glob_to_regex($) {
     return $regex;
 }
 
-our $cpyskip = 'cpyskip.txt';
-die ("Can't find $cpyskip. Please download it from ".
-     "http://source.icu-project.org/cpyskip.txt (see ".
-     "http://site.icu-project.org/processes/copyright-scan for more details).")
-    unless -f $cpyskip;
-
-open SKIP, "<$cpyskip" or die "Error opening $cpyskip.";
+# Load cpyskip.txt contents.
+# Try local cpyskip.txt first - if not found, try online version
+our $cpyskip_file = "cpyskip.txt";
+our @cpyskip_lines;
+if (open(our $cpyskip_fh, "<", $cpyskip_file)) {
+    @cpyskip_lines = <$cpyskip_fh>;
+    close $cpyskip_fh;
+    print "Using local cpyskip.txt\n";
+} else {
+    our $cpyskip_url = "http://source.icu-project.org/cpyskip.txt";
+    our $cpyskip = get($cpyskip_url);
+    die "Can't get $cpyskip_url" if (! defined $cpyskip);
+    @cpyskip_lines = split(/\n/, $cpyskip);
+    print "Using " . $cpyskip_url . "\n";
+}
 our @ignore_globs = map  { chomp; glob_to_regex($_) }
-                    grep { ! m/^\s*#/ }
-                    <SKIP>;
-close SKIP;
+                    grep { /^\s*[^#\s]+/ }
+                    @cpyskip_lines;
+
+#for my $rgx (@ignore_globs) {print $rgx . "\n"}
+#exit(0);
 
 # list of file extensions to ignore
 our @ignore_extensions = qw(svn dll ilk idb pdb dsp dsw opt ncb vcproj sln suo
@@ -101,6 +116,7 @@ our $ignore_regex = "data/out/build|CVS|\\~|\\#|Debug|Release|positions|unidata|
 # Check if this file should be ignored.
 sub should_ignore($) {
     my $filename = shift;
+    return 1 if $filename eq $cpyskip_file;
     return 1 if $filename =~ /$ignore_regex/;
     for my $r (@ignore_globs) { return 1 if $filename =~ /$r/ }
     0;

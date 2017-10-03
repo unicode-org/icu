@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (c) 2012-2014, International Business Machines Corporation and others.  All Rights Reserved.
 # for fixing misticketted
 # see http://bugs.icu-project.org/trac/wiki/MisTicketted

@@ -1,5 +1,10 @@
 #!/usr/bin/perl -w
 
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+
 use strict;
 
 my $localeMinusA = `locale -a`;

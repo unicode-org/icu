@@ -1,5 +1,8 @@
 #!/bin/sh
-
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (C) 2011-2014 IBM Corporation and Others. All Rights Reserved.
 #
 # This is designed for building and running single-source-file ICU programs.

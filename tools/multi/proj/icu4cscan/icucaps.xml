@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * © 2017 and later: Unicode, Inc. and others.
+ * License & terms of use: http://www.unicode.org/copyright.html#License
+ -->
 <!-- Copyright (c) 2012 IBM Corporation and Others, All Rights Reserved. -->
 
 <!-- This file was generated from:  cooked/allversions.xml ./xml/2_2.xml ./xml/3_0.xml ./xml/3_2.xml ./xml/3_4_1.xml ./xml/3_4.xml ./xml/3_6.xml ./xml/3_8_1.xml ./xml/3_8.xml ./xml/4_0_1.xml ./xml/4_0.xml ./xml/4_1_1.xml ./xml/4_2_0_1.xml ./xml/4_2.xml ./xml/r50_1.xml ./jxml/2_2.xml ./jxml/2_4.xml ./jxml/2_6_1.xml ./jxml/2_6.xml ./jxml/2_8.xml ./jxml/3_0.xml ./jxml/3_2.xml ./jxml/3_4_1.xml ./jxml/3_4_2.xml ./jxml/3_4_3.xml ./jxml/3_4_4.xml ./jxml/3_4_5.xml ./jxml/3_4.xml ./jxml/3_6.xml ./jxml/3_8_1.xml ./jxml/3_8.xml ./jxml/4_0_1.xml ./jxml/4_0.xml ./jxml/4_1_1.xml ./jxml/4_2.xml ./jvmxml/1_4_2.xml ./jvmxml/1_5_0.xml ./jvmxml/1_6_0_26.xml ./jvmxml/1_6_0.xml ./jvmxml/1_7_0.xml cooked/features.xml -->
