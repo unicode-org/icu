@@ -23,6 +23,7 @@ import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.FilteredBreakIteratorBuilder;
 import com.ibm.icu.util.ULocale;
 
+@SuppressWarnings("unused")
 @RunWith(JUnit4.class)
 public class BreakIteratorTest extends TestFmwk
 {
