@@ -272,6 +272,12 @@ public final class NumberFormatter {
     static final long DEFAULT_THRESHOLD = 3;
 
     /**
+     * Private constructor, not designed for instantiation.
+     */
+    private NumberFormatter() {
+    }
+
+    /**
      * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is not currently known at
      * the call site.
      *

@@ -8,7 +8,7 @@ import com.ibm.icu.number.NumberFormatter;
  * Dimensionless unit for percent and permille.
  * @see NumberFormatter
  * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+ * @provisional This API might change or be removed in a future release.
  */
 public class NoUnit extends MeasureUnit {
     private static final long serialVersionUID = 2467174286237024095L;
@@ -40,6 +40,12 @@ public class NoUnit extends MeasureUnit {
     public static final NoUnit PERMILLE =
         (NoUnit) MeasureUnit.internalGetInstance("none", "permille");
 
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     protected NoUnit(String subType) {
         super("none", subType);
     }
