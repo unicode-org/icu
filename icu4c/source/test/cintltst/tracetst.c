@@ -339,7 +339,7 @@ static void TestTraceAPI() {
 
         /* Null ptrs for strings, vectors  */
         test_format("Null string - %s", 50, 0, "Null string - *NULL*", __LINE__, NULL);
-        test_format("Null string - %S", 50, 0, "Null string - *NULL*", __LINE__, NULL);
+        test_format("Null string - %S", 50, 0, "Null string - *NULL*", __LINE__, NULL, -1);
         test_format("Null vector - %vc", 50, 0, "Null vector - *NULL* [00000002]", __LINE__, NULL, 2);
         test_format("Null vector - %vC", 50, 0, "Null vector - *NULL* [00000002]", __LINE__, NULL, 2);
         test_format("Null vector - %vd", 50, 0, "Null vector - *NULL* [00000002]", __LINE__, NULL, 2);
