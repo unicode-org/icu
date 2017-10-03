@@ -104,9 +104,6 @@ IntlTestDateFormat::testLocale(/*char* par, */const Locale& locale, const Unicod
             timeStyle < (DateFormat::EStyle)4; 
             timeStyle = (DateFormat::EStyle) (timeStyle+1))
         {
-            if (uprv_strcmp(locale.getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until DateFormat parsing is fixed")) {
-                continue;
-            }
             fTestName = (UnicodeString) "DateTime test " + (int32_t) dateStyle + "/" + (int32_t) timeStyle + " (" + localeName + ")";
             fFormat = DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale);
             testFormat(/* par */);
