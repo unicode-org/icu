@@ -653,7 +653,20 @@ static UBool fallback(char *loc) {
         return FALSE;
     }
     UErrorCode status = U_ZERO_ERROR;
-    uloc_getParent(loc, loc, (int32_t)uprv_strlen(loc), &status);
+    static const char en_GB[] = { u'e', u'n', u'_', u'G', u'B', 0 };
+    if (uprv_strcmp(loc, en_GB) == 0) {
+        // HACK: See #13368.  We need "en_GB" to fall back to "en_001" instead of "en"
+        // in order to consume the correct data strings.  This hack will be removed
+        // when proper data sink loading is implemented here.
+        // NOTE: "001" adds 1 char over "GB".  However, both call sites allocate
+        // arrays with length ULOC_FULLNAME_CAPACITY (plenty of room for en_001).
+        loc[3] = u'0';
+        loc[4] = u'0';
+        loc[5] = u'1';
+        loc[6] = 0;
+    } else {
+        uloc_getParent(loc, loc, (int32_t)uprv_strlen(loc), &status);
+    }
  /*
     char *i = uprv_strrchr(loc, '_');
     if (i == NULL) {

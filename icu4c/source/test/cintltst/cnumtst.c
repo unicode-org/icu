@@ -1040,7 +1040,7 @@ static const ParseCurrencyItem parseCurrencyItems[] = {
     { "en_GB", "euros4",   euros4Sym,   NULL,          U_PARSE_ERROR, 4, 0.0, U_PARSE_ERROR, 4, 0.0, ""    },
     { "en_GB", "euros6",   euros6Sym,   NULL,          U_PARSE_ERROR, 1, 0.0, U_PARSE_ERROR, 1, 0.0, ""    },
     { "en_GB", "euros8",   euros8Sym,     euros8PluEn,   U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  2, 8.0, "EUR" },
-    { "en_GB", "dollars4", dollarsUS4Sym, dollars4PluEn, U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  4, 4.0, "USD" }, // With CLDR 32/ICU 60, US$4 fails, $4 works, #13368
+    { "en_GB", "dollars4", dollarsUS4Sym, dollars4PluEn, U_PARSE_ERROR, 0, 0.0, U_ZERO_ERROR,  4, 4.0, "USD" },
 
     { "fr_FR", "euros4",   euros4Sym,   NULL,          U_ZERO_ERROR,  6, 4.0, U_ZERO_ERROR,  6, 4.0, "EUR" },
     { "fr_FR", "euros6",   euros6Sym,   euros6PluFr,   U_ZERO_ERROR,  3, 6.0, U_ZERO_ERROR,  3, 6.0, "EUR" },
@@ -1079,10 +1079,6 @@ static void TestParseCurrency()
             status = U_ZERO_ERROR;
             parsePos = 0;
             parseCurr[0] = 0;
-            if (currStr == dollarsUS4Sym && log_knownIssue("13368", "en_GB parsing of US$4 fails but $4 works")) {
-                currStr = dollars4Sym;
-                currExpectPos = 2;
-            }
             parseVal = unum_parseDoubleCurrency(unum, currStr, -1, &parsePos, parseCurr, &status);
             u_austrncpy(parseCurrB, parseCurr, 4);
             if (status != itemPtr->parsCurrExpectErr || parsePos != currExpectPos || parseVal != itemPtr->parsCurrExpectVal ||
