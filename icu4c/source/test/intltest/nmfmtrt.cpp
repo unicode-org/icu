@@ -123,7 +123,7 @@ NumberFormatRoundTripTest::start()
         logln("Quick mode: only testing first 5 Locales");
     }
     for(int i = 0; i < locCount; ++i) {
-        if (uprv_strcmp(loc[i].getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until NumberFormat parsing is fixed")) {
+        if (uprv_strcmp(loc[i].getLanguage(),"ccp")==0 && logKnownIssue("13391", "Skip handling ccp until NumberFormat parsing is fixed")) {
             continue;
         }
         UnicodeString name;

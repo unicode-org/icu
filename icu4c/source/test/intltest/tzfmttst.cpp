@@ -172,7 +172,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
         for (int32_t patidx = 0; patidx < UPRV_LENGTHOF(PATTERNS); patidx++) {
 
             if (uprv_strcmp(LOCALES[locidx].getLanguage(),"ccp")==0 && (PATTERNS[patidx][0]==0x7A || PATTERNS[patidx][0]==0x76) && 
-                    logKnownIssue("13366", "Skip handling ccp until TimeZone offset roundtrip is fixed")) {
+                    logKnownIssue("13390", "Skip handling ccp until TimeZone offset roundtrip is fixed")) {
                  continue;
             }
             SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)PATTERNS[patidx], LOCALES[locidx], status);
