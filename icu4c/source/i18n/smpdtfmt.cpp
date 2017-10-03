@@ -3056,9 +3056,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // is treated literally:  "2250", "-1", "1", "002".
         if (fDateOverride.compare(hebr)==0 && value < 1000) {
             value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
-        } else if ((pos.getIndex() - start) == 2 && !isChineseCalendar
-            && u_isdigit(text.charAt(start))
-            && u_isdigit(text.charAt(start+1)))
+        } else if (text.moveIndex32(start, 2) == pos.getIndex() && !isChineseCalendar
+            && u_isdigit(text.char32At(start))
+            && u_isdigit(text.char32At(text.moveIndex32(start, 1))))
         {
             // only adjust year for patterns less than 3.
             if(count < 3) {
@@ -3096,9 +3096,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // Comment is the same as for UDAT_Year_FIELDs - look above
         if (fDateOverride.compare(hebr)==0 && value < 1000) {
             value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
-        } else if ((pos.getIndex() - start) == 2
-            && u_isdigit(text.charAt(start))
-            && u_isdigit(text.charAt(start+1))
+        } else if (text.moveIndex32(start, 2) == pos.getIndex()
+            && u_isdigit(text.char32At(start))
+            && u_isdigit(text.char32At(text.moveIndex32(start, 1)))
             && fHaveDefaultCentury )
         {
             int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
