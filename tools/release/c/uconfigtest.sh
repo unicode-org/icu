@@ -1,5 +1,9 @@
 #!/bin/sh
 # Exhaust(ive, ing)  (Mean, Multi)  (Test, Trouble)
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (c) 2002-2014 IBM All Rights Reserved
 
 # Builds ICU a whole lotta times and with different options

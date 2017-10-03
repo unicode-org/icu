@@ -1,5 +1,7 @@
-#include <stdio.h>
+// © 2017 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /* Copyright (c) 2014 IBM Corporation and Others. All Rights Reserved. */
+#include <stdio.h>
 #include <unicode/putil.h>
 #include <unicode/uclean.h>
 

@@ -1,5 +1,8 @@
 #!/usr/bin/python
 #
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (C) 2013-2014 IBM Corporation and Others. All Rights Reserved.
 #
 print "NOTE: this tool is a TECHNOLOGY PREVIEW and not a supported ICU tool."

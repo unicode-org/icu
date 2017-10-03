@@ -1,5 +1,8 @@
 #!/bin/sh
 #
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (c) 2006-2008 IBM All Rights Reserved
 #
 # This test script enumerates all locales and all timezones installed on a

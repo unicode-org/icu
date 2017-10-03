@@ -1,3 +1,7 @@
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (c) 2009-2013 IBM Corp. and Others. All Rights Reserved
 # multicu/c makefile
 

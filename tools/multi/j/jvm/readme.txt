@@ -1,3 +1,7 @@
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (c) 2008-2013 IBM Corp. and Others. All Rights Reserved
 
 Put '.sh' files in this dir , locally, to be used for Java version bringup

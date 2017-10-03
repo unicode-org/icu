@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # Copyright (c) 2006-2008 IBM All Rights Reserved
 #
 echo "Testing $1 in all timezones"

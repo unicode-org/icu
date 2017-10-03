@@ -1,4 +1,11 @@
-﻿# this first line Copyright (C) 2013 IBM Corporation and Others. All Rights Reserved
+#
+# Copyright (C) 2017 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# Copyright (C) 2013 IBM Corporation and Others. All Rights Reserved
+
+Following license text were taken from xalan and xerces. These libraries
+are not redistributed as part of ICU.
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

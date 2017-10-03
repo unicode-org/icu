@@ -2,6 +2,8 @@
 .\"
 .\" genuca.8: manual page for the genuca utility
 .\"
+.\" Copyright (C) 2016 and later: Unicode, Inc. and others.
+.\" License & terms of use: http://www.unicode.org/copyright.html
 .\" Copyright (C) 2000-2014 IBM, Inc. and others.
 .\"
 .TH GENUCA 8 "2014-Feb-24" "ICU MANPAGE" "ICU @VERSION@ Manual"
