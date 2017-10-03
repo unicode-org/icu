@@ -6936,6 +6936,7 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/RoundTripTest.java s
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/StringBoilerplateTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TestUtility.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/ThreadTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TransliteratorInstantiateAllTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/UnicodeMapBoilerplateTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/translit/UnicodeMapTest.java svneol=native#text/plain%3Bcharset%3Dutf-8

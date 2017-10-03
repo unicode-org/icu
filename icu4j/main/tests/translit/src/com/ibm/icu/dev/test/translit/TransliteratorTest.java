@@ -170,62 +170,14 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     @Test
-    public void TestInstantiation() {
-        long ms = System.currentTimeMillis();
-        String ID;
-        for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
-            ID = (String) e.nextElement();
-            if (ID.equals("Latin-Han/definition")) {
-                System.out.println("\nTODO: disabling Latin-Han/definition check for now: fix later");
-                continue;
-            }
-            Transliterator t = null;
-            try {
-                t = Transliterator.getInstance(ID);
-                // This is only true for some subclasses
-                //                // We should get a new instance if we try again
-                //                Transliterator t2 = Transliterator.getInstance(ID);
-                //                if (t != t2) {
-                //                    logln("OK: " + Transliterator.getDisplayName(ID) + " (" + ID + "): " + t);
-                //                } else {
-                //                    errln("FAIL: " + ID + " returned identical instances");
-                //                    t = null;
-                //                }
-            } catch (IllegalArgumentException ex) {
-                errln("FAIL: " + ID);
-                throw ex;
-            }
-
-            //            if (t.getFilter() != null) {
-            //                errln("Fail: Should never have filter on transliterator unless we started with one: " + ID + ", " + t.getFilter());
-            //            }
-
-            if (t != null) {
-                // Now test toRules
-                String rules = null;
-                try {
-                    rules = t.toRules(true);
-
-                    Transliterator.createFromRules("x", rules, Transliterator.FORWARD);
-                } catch (IllegalArgumentException ex2) {
-                    errln("FAIL: " + ID + ".toRules() => bad rules: " +
-                            rules);
-                    throw ex2;
-                }
-            }
-        }
-
-        // Now test the failure path
+    public void TestInstantiationError() {
         try {
-            ID = "<Not a valid Transliterator ID>";
+            String ID = "<Not a valid Transliterator ID>";
             Transliterator t = Transliterator.getInstance(ID);
             errln("FAIL: " + ID + " returned " + t);
         } catch (IllegalArgumentException ex) {
             logln("OK: Bogus ID handled properly");
         }
-
-        ms = System.currentTimeMillis() - ms;
-        logln("Elapsed time: " + ms + " ms");
     }
 
     @Test
