@@ -175,6 +175,12 @@ public class FormattedNumber {
         return fq;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public int hashCode() {
         // NumberStringBuilder and BigDecimal are mutable, so we can't call
@@ -182,6 +188,12 @@ public class FormattedNumber {
         return Arrays.hashCode(nsb.toCharArray()) ^ Arrays.hashCode(nsb.toFieldArray()) ^ fq.toBigDecimal().hashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other)

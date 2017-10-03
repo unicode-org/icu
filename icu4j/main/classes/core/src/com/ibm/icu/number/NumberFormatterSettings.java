@@ -527,11 +527,23 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         return macros;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public int hashCode() {
         return resolve().hashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other) {
