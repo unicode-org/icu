@@ -42,11 +42,12 @@ public class NoUnit extends MeasureUnit {
 
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * Package local constructor. This class is not designed for subclassing
+     * by ICU users.
+     *
+     * @param subType   The unit subtype.
      */
-    @Deprecated
-    protected NoUnit(String subType) {
+    NoUnit(String subType) {
         super("none", subType);
     }
 }
