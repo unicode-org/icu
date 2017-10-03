@@ -715,7 +715,7 @@ static void TestMsgFormatSelect(void)
         status=U_ZERO_ERROR;
         resultlength=resultLengthOut+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
-        u_formatMessage( "fr", pattern, u_strlen(pattern), result, resultlength, &status, str , str1);
+        u_formatMessage( "fr", pattern, u_strlen(pattern), result, resultlength, &status, str , str1, 6);
         if(u_strcmp(result, expected)==0)
             log_verbose("PASS: MessagFormat successful on Select test#2\n");
         else{

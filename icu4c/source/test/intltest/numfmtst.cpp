@@ -2388,12 +2388,12 @@ void NumberFormatTest::TestCurrencyNames(void) {
 
 void NumberFormatTest::TestCurrencyUnit(void){
     UErrorCode ec = U_ZERO_ERROR;
-    static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
-    static const char USD8[] = {85, 83, 68, 0};
-    static const UChar BAD[] = {63, 63, 63, 0}; /*???*/
-    static const UChar BAD2[] = {63, 63, 65, 0}; /*???*/
-    static const UChar XXX[] = u"XXX";
-    static const char XXX8[] = {88, 88, 88};
+    static const UChar USD[]  = u"USD";
+    static const char USD8[]  =  "USD";
+    static const UChar BAD[]  = u"???";
+    static const UChar BAD2[] = u"??A";
+    static const UChar XXX[]  = u"XXX";
+    static const char XXX8[]  =  "XXX";
     CurrencyUnit cu(USD, ec);
     assertSuccess("CurrencyUnit", ec);
 
@@ -8801,8 +8801,8 @@ void NumberFormatTest::Test13327_numberingSystemBufferOverflow() {
         assertSuccess("Constructing locale string", status);
         Locale locale(localeId.data());
 
-        NumberingSystem* ns = NumberingSystem::createInstance(locale, status);
-        assertFalse("Should not be null", ns == nullptr);
+        LocalPointer<NumberingSystem> ns(NumberingSystem::createInstance(locale, status));
+        assertFalse("Should not be null", ns.getAlias() == nullptr);
         assertSuccess("Should create with no error", status);
     }
 }
