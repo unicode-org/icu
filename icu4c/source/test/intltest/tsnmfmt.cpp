@@ -442,7 +442,7 @@ void IntlTestNumberFormat::monsterTest(/* char* par */)
         }
         for (int32_t i=0; i<count; ++i)
         {
-            if (uprv_strcmp(locales[i].getLanguage(),"ccp")==0 && logKnownIssue("13366", "Skip handling ccp until NumberFormat parsing is fixed")) {
+            if (uprv_strcmp(locales[i].getLanguage(),"ccp")==0 && logKnownIssue("13391", "Skip handling ccp until NumberFormat parsing is fixed")) {
                 continue;
             }
             UnicodeString name(locales[i].getName(), "");
