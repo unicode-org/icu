@@ -195,25 +195,6 @@ pattern	format	output	breaks
 #E0	52413	5,2413E4	K
 0E0	52413	5E4
 
-test scientific with grouping
-set locale en
-set pattern #,##0.000E0
-begin
-format	output	breaks
-// J throws an IllegalArgumentException when parsing the pattern.
-// C sets error code to U_MALFORMED_EXPONENTIAL_PATTERN.
-1	1.000E0	CJ
-11	11.00E0	CJ
-111	111.0E0	CJ
-// K doesn't print the grouping separator ("1111E0")
-1111	1,111E0	CJK
-// K prints too many digits ("1.1111E4")
-11111	1.111E4	CJK
-111111	11.11E4	CJK
-1111111	111.1E4	CJK
-11111111	1,111E4	CJK
-111111111	1.111E8	CJK
-
 test percents
 set locale fr
 begin
@@ -259,8 +240,8 @@ $**####,##0	1234	$***1\u00a0234	K
 // In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
 \u00a4\u00a4 **####0.00	433.0	EUR *433,00	JK
 // In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
-// S and Q fail this one because the test code bypasses CurrencyUsage
-\u00a4\u00a4 **#######0	433.0	EUR *433,00	JKSQ
+// Q fails this one because the test code bypasses CurrencyUsage
+\u00a4\u00a4 **#######0	433.0	EUR *433,00	JKQ
 
 test padding and currencies
 begin
@@ -331,15 +312,14 @@ set format 299792458.0
 begin
 minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	breaks
 // JDK gives 2.99792458E8 (maxInt + maxFrac instead of minInt + maxFrac)
-1	1000	0	5	2.99792E8	K
+1	99	0	5	2.99792E8	K
 // JDK gives .3E9 instead of unlimited precision.
 0	1	0	0	2.99792458E8	K
 1	1	0	0	3E8
 // JDK gives E0 instead of allowing for unlimited precision
-// S obeys the maximum integer digits and returns .299792458E9
-0	0	0	0	2.99792458E8	KS
-// JDK and S give .299792E9; Q gives 2.99792E8
-0	1	0	5	2.9979E8	KSQ
+0	0	0	0	2.99792458E8	K
+// JDK gives .299792E9; Q gives 2.99792E8
+0	1	0	5	2.9979E8	KQ
 // JDK gives 300E6	
 0	3	0	0	299.792458E6	K
 // JDK gives 299.8E6 (maybe maxInt + maxFrac instead of minInt + maxFrac)?
@@ -354,18 +334,16 @@ minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	bre
 4	4	0	0	2998E5
 0	0	1	5	.29979E9
 // JDK gives E0
-// S obeys the maximum integer digits
-0	0	1	0	2.99792458E8	KS
-// JDK and S give .2998E9
-0	0	0	4	2.998E8	KSQ
-// JDK uses 8 + 6 for significant digits instead of 2 + 6
+0	0	1	0	2.99792458E8	K
+// JDK and Q give .2998E9
+0	0	0	4	2.998E8	KQ
+// According to the spec, if maxInt>minInt and minInt>1, then set
 // Context: #13289
 2	8	1	6	2.9979246E8	K
 // Treat max int digits > 8 as being the same as min int digits.
 // This behavior is not spelled out in the specification.
 // JDK fails here because it tries to use 9 + 6 = 15 sig digits.
-// C and J get 29.979246E7
-2	9	1	6	2.9979246E8	CJK
+2	9	1	6	29.979246E7	K
 
 test significant digits scientific
 set locale en
@@ -391,8 +369,7 @@ set format 29979245.0
 begin
 minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	breaks
 // JDK gives E0
-// S obeys the max integer digits and prints 0.299...
-0	0	0	0	2.9979245E7	KS
+0	0	0	0	2.9979245E7	K
 // JDK gives .3E8
 0	1	0	0	2.9979245E7	K
 // JDK gives 2998E4.
@@ -405,12 +382,12 @@ begin
 format	maxIntegerDigits	output	breaks
 123	1	3	
 0	0	0
-// S and Q ignore max integer if it is less than zero and prints "123"
-123	-2147483648	0	SQ
+// Q ignores max integer if it is less than zero and prints "123"
+123	-2147483648	0	Q
 12345	1	5	
-12345	-2147483648	0	SQ
+12345	-2147483648	0	Q
 5.3	1	5.3	
-5.3	-2147483648	.3	SQ
+5.3	-2147483648	.3	Q
 
 test patterns with zero
 set locale en
@@ -499,10 +476,10 @@ begin
 format	multiplier	output	breaks
 23	-12	-276
 23	-1	-23
-// ICU4J and JDK throw exception on zero multiplier.
-// ICU4C and S print 23.
+// ICU4J throws exception on zero multiplier.
+// ICU4C prints 23.
 // Q multiplies by zero and prints 0.
-23	0	0	CJKS
+23	0	0	CJ
 23	1	23
 23	12	276
 -23	12	-276
@@ -547,15 +524,15 @@ set pattern 0.5
 begin
 format	roundingMode	output	breaks
 1.24	halfUp	1.0	K
-1.25	halfUp	1.5	K
+1.25	halfUp	1.5
 1.25	halfDown	1.0	K
-1.26	halfDown	1.5	K
+1.26	halfDown	1.5
 1.25	halfEven	1.0	K
--1.01	up	-1.5	K
+-1.01	up	-1.5
 -1.49	down	-1.0	K
-1.01	up	1.5	K
+1.01	up	1.5
 1.49	down	1.0	K
--1.01	ceiling	-1.0
+-1.01	ceiling	-1.0	K
 -1.49	floor	-1.5
 
 test currency usage setters
@@ -587,7 +564,7 @@ set locale en
 set currency USD
 begin
 pattern	format	output	breaks
-#	123	123	SQ
+#	123	123	Q
 // Currency rounding should always override the pattern.
 // K prints the currency in ISO format for some reason.
 \u00a4#	123	$123.00	K
@@ -1048,7 +1025,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD
+$53.45	fail	USD	J
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1064,7 +1041,7 @@ USD (7.92)	-7.92	USD	CJ
 (7.92)USD	-7.92	USD	CJ
 USD(7.92)	-7.92	USD	CJ
 (8) USD	-8	USD
--8 USD	-8	USD	CJ
+-8 USD	-8	USD	C
 67 USD	67	USD
 53.45$	fail	USD
 US Dollars 53.45	53.45	USD	J
@@ -1095,7 +1072,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD
+$53.45	fail	USD	J
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1129,7 +1106,7 @@ parse	output	outputCurrency	breaks
 // J throws a NullPointerException on the first case
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD
+$53.45	fail	USD	J
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1145,7 +1122,7 @@ USD (7.92)	-7.92	USD	CJ
 (7.92)USD	-7.92	USD	CJ
 USD(7.92)	-7.92	USD	CJ
 (8) USD	-8	USD
--8 USD	-8	USD	CJ
+-8 USD	-8	USD	C
 67 USD	67	USD
 // J throws a NullPointerException on the next case
 53.45$	fail	USD
@@ -1167,7 +1144,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD
+$53.45	fail	USD	J
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1183,7 +1160,7 @@ USD (7.92)	-7.92	USD	CJ
 (7.92)USD	-7.92	USD	CJ
 USD(7.92)	-7.92	USD	CJ
 (8) USD	-8	USD
--8 USD	-8	USD	CJ
+-8 USD	-8	USD	C
 67 USD	67	USD
 53.45$	fail	USD
 US Dollars 53.45	53.45	USD	J
@@ -1204,9 +1181,9 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD
-53.45 USD	53.45	USD	CJ
-53.45 GBP	53.45	GBP	CJ
+$53.45	fail	USD	J
+53.45 USD	53.45	USD	C
+53.45 GBP	53.45	GBP	C
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
@@ -1221,8 +1198,8 @@ USD (7.92)	-7.92	USD	CJS
 (7.92)USD	-7.92	USD	CJS
 USD(7.92)	-7.92	USD	CJS
 (8) USD	-8	USD	CJS
--8 USD	-8	USD	CJ
-67 USD	67	USD	CJ
+-8 USD	-8	USD	C
+67 USD	67	USD	C
 53.45$	fail	USD
 US Dollars 53.45	53.45	USD	J
 53.45 US Dollars	53.45	USD
@@ -1345,7 +1322,7 @@ USD (7.92)	fail	USD
 (7.92)USD	fail	USD
 USD(7.92)	fail	USD
 (8) USD	-8	USD
--8 USD	fail	USD
+-8 USD	fail	USD	J
 67 USD	67	USD
 53.45$	fail	USD
 US Dollars 53.45	fail	USD
