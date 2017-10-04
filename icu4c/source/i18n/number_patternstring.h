@@ -20,7 +20,8 @@ namespace impl {
 // Forward declaration
 class PatternParser;
 
-struct Endpoints {
+// Exported as U_I18N_API because it is a public member field of exported ParsedSubpatternInfo
+struct U_I18N_API Endpoints {
     int32_t start = 0;
     int32_t end = 0;
 };
