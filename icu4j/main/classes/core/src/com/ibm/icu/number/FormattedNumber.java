@@ -145,7 +145,7 @@ public class FormattedNumber {
         NumberStringBuilder temp = new NumberStringBuilder();
         int length = micros.modOuter.apply(temp, 0, 0);
         length += micros.modMiddle.apply(temp, 0, length);
-        length += micros.modInner.apply(temp, 0, length);
+        /* length += */ micros.modInner.apply(temp, 0, length);
         int prefixLength = micros.modOuter.getPrefixLength() + micros.modMiddle.getPrefixLength()
                 + micros.modInner.getPrefixLength();
         return temp.subSequence(0, prefixLength).toString();

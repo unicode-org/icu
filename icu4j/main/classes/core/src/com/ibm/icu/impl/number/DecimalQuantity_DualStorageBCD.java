@@ -31,6 +31,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
 
   public DecimalQuantity_DualStorageBCD() {
     setBcdToZero();
+    flags = 0;
   }
 
   public DecimalQuantity_DualStorageBCD(long input) {
