@@ -85,7 +85,7 @@ all: all-local all-recursive
 install: install-recursive install-local
 clean: clean-recursive-with-twist clean-local
 distclean : distclean-recursive distclean-local
-dist: dist-recursive dist-local
+dist: dist-recursive
 check: all check-recursive
 check-recursive: all
 xcheck: all xcheck-recursive
