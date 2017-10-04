@@ -82,7 +82,7 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
     bool containsSymbolType(AffixPatternType type, UErrorCode &status) const U_OVERRIDE;
 
   private:
-    struct ParserState {
+    struct U_I18N_API ParserState {
         const UnicodeString &pattern; // reference to the parent
         int32_t offset = 0;
 
@@ -96,7 +96,6 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
         // This method is here as a shell for Java compatibility.
         inline void toParseException(const char16_t *message) { (void)message; }
     }
-    UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // Member is private and does not need to be exported
     state;
 
     // NOTE: In Java, these are written as pure functions.
