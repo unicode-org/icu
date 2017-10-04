@@ -45,6 +45,9 @@ public final class DateNumberFormat extends NumberFormat {
     private int minIntDigits;
 
     public DateNumberFormat(ULocale loc, String digitString, String nsName) {
+        if (digitString.length() > 10) {
+            throw new UnsupportedOperationException("DateNumberFormat does not support digits out of BMP.");
+        }
         initialize(loc,digitString,nsName);
     }
 

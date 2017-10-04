@@ -1115,15 +1115,20 @@ public class SimpleDateFormat extends DateFormat {
         }
         if (numberFormat == null) {
             NumberingSystem ns = NumberingSystem.getInstance(locale);
-            if (ns.isAlgorithmic()) {
+            String digitString = ns.getDescription();
+            // DateNumberFormat does not support non-BMP digits at this moment.
+            if (ns.isAlgorithmic() || digitString.length() != 10) {
                 numberFormat = NumberFormat.getInstance(locale);
             } else {
-                String digitString = ns.getDescription();
                 String nsName = ns.getName();
                 // Use a NumberFormat optimized for date formatting
                 numberFormat = new DateNumberFormat(locale, digitString, nsName);
             }
         }
+        if (numberFormat instanceof DecimalFormat) {
+            fixNumberFormatForDates(numberFormat);
+        }
+
         // Note: deferring calendar calculation until when we really need it.
         // Instead, we just record time of construction for backward compatibility.
         defaultCenturyBase = System.currentTimeMillis();
@@ -1151,7 +1156,14 @@ public class SimpleDateFormat extends DateFormat {
             String digits = null;
             if (numberFormat instanceof DecimalFormat) {
                 DecimalFormatSymbols decsym = ((DecimalFormat) numberFormat).getDecimalFormatSymbols();
-                digits = new String(decsym.getDigits());
+                String[] strDigits = decsym.getDigitStrings();
+                // Note: TimeZoneFormat#setGMTOffsetDigits() does not support string array,
+                // so we need to concatenate digits to make a single string.
+                StringBuilder digitsBuf = new StringBuilder();
+                for (String digit : strDigits) {
+                    digitsBuf.append(digit);
+                }
+                digits = digitsBuf.toString();
             } else if (numberFormat instanceof DateNumberFormat) {
                 digits = new String(((DateNumberFormat)numberFormat).getDigits());
             }
@@ -2236,8 +2248,17 @@ public class SimpleDateFormat extends DateFormat {
      */
     private void initLocalZeroPaddingNumberFormat() {
         if (numberFormat instanceof DecimalFormat) {
-            decDigits = ((DecimalFormat)numberFormat).getDecimalFormatSymbols().getDigits();
+            DecimalFormatSymbols tmpDecfs = ((DecimalFormat)numberFormat).getDecimalFormatSymbols();
+            String[] tmpDigits = tmpDecfs.getDigitStringsLocal();
             useLocalZeroPaddingNumberFormat = true;
+            decDigits = new char[10];
+            for (int i = 0; i < 10; i++) {
+                if (tmpDigits[i].length() > 1) {
+                    useLocalZeroPaddingNumberFormat = false;
+                    break;
+                }
+                decDigits[i] = tmpDigits[i].charAt(0);
+            }
         } else if (numberFormat instanceof DateNumberFormat) {
             decDigits = ((DateNumberFormat)numberFormat).getDigits();
             useLocalZeroPaddingNumberFormat = true;
@@ -3226,10 +3247,8 @@ public class SimpleDateFormat extends DateFormat {
                 /* Skip this for Chinese calendar, moved from ChineseDateFormat */
                 if ( override != null && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0) && value < 1000 ) {
                     value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
-                } else if (count == 2 && (pos.getIndex() - start) == 2 && cal.haveDefaultCentury()
-                    && UCharacter.isDigit(text.charAt(start))
-                    && UCharacter.isDigit(text.charAt(start+1)))
-                    {
+                } else if (count == 2 && text.codePointCount(start, pos.getIndex()) == 2 && cal.haveDefaultCentury()
+                    && countDigits(text, start, pos.getIndex()) == 2) {
                         // Assume for example that the defaultCenturyStart is 6/18/1903.
                         // This means that two-digit years will be forced into the range
                         // 6/18/1903 to 6/17/2003.  As a result, years 00, 01, and 02
@@ -3242,7 +3261,7 @@ public class SimpleDateFormat extends DateFormat {
                         ambiguousYear[0] = value == ambiguousTwoDigitYear;
                         value += (getDefaultCenturyStartYear()/100)*100 +
                             (value < ambiguousTwoDigitYear ? 100 : 0);
-                    }
+                }
                 cal.set(field, value);
 
                 // Delayed checking for adjustment of Hebrew month numbers in non-leap years.
@@ -3322,7 +3341,7 @@ public class SimpleDateFormat extends DateFormat {
                 return pos.getIndex();
             case 8: // 'S' - FRACTIONAL_SECOND
                 // Fractional seconds left-justify
-                i = pos.getIndex() - start;
+                i = countDigits(text, start, pos.getIndex());
                 if (i < 3) {
                     while (i < 3) {
                         value *= 10;
@@ -3788,6 +3807,26 @@ public class SimpleDateFormat extends DateFormat {
         return number;
     }
 
+    /**
+     * Counts number of digit code points in the specified text.
+     *
+     * @param text  input text
+     * @param start start index, inclusive
+     * @param end   end index, exclusive
+     * @return  number of digits found in the text in the specified range.
+     */
+    private static int countDigits(String text, int start, int end) {
+        int numDigits = 0;
+        int idx = start;
+        while (idx < end) {
+            int cp = text.codePointAt(idx);
+            if (UCharacter.isDigit(cp)) {
+                numDigits++;
+            }
+            idx += UCharacter.charCount(cp);
+        }
+        return numDigits;
+    }
 
     /**
      * Translate a pattern, mapping each character in the from string to the

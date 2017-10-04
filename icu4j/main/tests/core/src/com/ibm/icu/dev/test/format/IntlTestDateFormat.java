@@ -77,7 +77,7 @@ public class IntlTestDateFormat extends TestFmwk {
         fLimit = 3;
 
         for(timeStyle = 0; timeStyle < 4; timeStyle++) {
-            fTestName = new String("Time test " + timeStyle + " (" + localeName + ")");
+            fTestName = "Time test " + timeStyle + " (" + localeName + ")";
             try {
                 fFormat = DateFormat.getTimeInstance(timeStyle, locale);
             }
@@ -85,13 +85,13 @@ public class IntlTestDateFormat extends TestFmwk {
                 errln("FAIL: localeTest time getTimeInstance exception");
                 throw e;
             }
-            TestFormat();
+            testDates();
         }
 
         fLimit = 2;
 
         for(dateStyle = 0; dateStyle < 4; dateStyle++) {
-            fTestName = new String("Date test " + dateStyle + " (" + localeName + ")");
+            fTestName = "Date test " + dateStyle + " (" + localeName + ")";
             try {
                 fFormat = DateFormat.getDateInstance(dateStyle, locale);
             }
@@ -99,12 +99,12 @@ public class IntlTestDateFormat extends TestFmwk {
                 errln("FAIL: localeTest date getTimeInstance exception");
                 throw e;
             }
-            TestFormat();
+            testDates();
         }
 
         for(dateStyle = 0; dateStyle < 4; dateStyle++) {
             for(timeStyle = 0; timeStyle < 4; timeStyle++) {
-                fTestName = new String("DateTime test " + dateStyle + "/" + timeStyle + " (" + localeName + ")");
+                fTestName = "DateTime test " + dateStyle + "/" + timeStyle + " (" + localeName + ")";
                 try {
                     fFormat = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
                 }
@@ -112,13 +112,12 @@ public class IntlTestDateFormat extends TestFmwk {
                     errln("FAIL: localeTest date/time getDateTimeInstance exception");
                     throw e;
                 }
-                TestFormat();
+                testDates();
             }
         }
     }
 
-    @Test
-    public void TestFormat() {
+    private void testDates() {
         if (fFormat == null) {
             errln("FAIL: DateFormat creation failed");
             return;
@@ -259,6 +258,7 @@ public class IntlTestDateFormat extends TestFmwk {
                     new ULocale("bg_BG"),
                     new ULocale("fr_CA"),
                     new ULocale("zh_TW"),
+                    new ULocale("ccp"),     // decimal digits are not in BMP
             };
         } else {
             locales = DateFormat.getAvailableULocales();

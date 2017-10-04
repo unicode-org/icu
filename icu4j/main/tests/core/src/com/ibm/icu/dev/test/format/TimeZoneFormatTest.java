@@ -128,7 +128,8 @@ public class TimeZoneFormatTest extends TestFmwk {
         if (TEST_ALL || TestFmwk.getExhaustiveness() > 5) {
             LOCALES = ULocale.getAvailableLocales();
         } else {
-            LOCALES = new ULocale[] {new ULocale("en"), new ULocale("en_CA"), new ULocale("fr"), new ULocale("zh_Hant"), new ULocale("fa")};
+            LOCALES = new ULocale[] {new ULocale("en"), new ULocale("en_CA"), new ULocale("fr"),
+                    new ULocale("zh_Hant"), new ULocale("fa"), new ULocale("ccp")};
         }
 
         String[] tzids;
@@ -245,10 +246,13 @@ public class TimeZoneFormatTest extends TestFmwk {
                             if (!isOffsetFormat) {
                                 // Check if localized GMT format is used as a fallback of name styles
                                 int numDigits = 0;
-                                for (int n = 0; n < tzstr.length(); n++) {
-                                    if (UCharacter.isDigit(tzstr.charAt(n))) {
+                                int idx = 0;
+                                while (idx < tzstr.length()) {
+                                    int cp = tzstr.codePointAt(idx);
+                                    if (UCharacter.isDigit(cp)) {
                                         numDigits++;
                                     }
+                                    idx += UCharacter.charCount(cp);
                                 }
                                 isOffsetFormat = (numDigits > 0);
                             }
