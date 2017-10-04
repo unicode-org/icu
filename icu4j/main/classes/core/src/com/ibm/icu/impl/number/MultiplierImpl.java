@@ -4,7 +4,7 @@ package com.ibm.icu.impl.number;
 
 import java.math.BigDecimal;
 
-public class MultiplierImpl implements MicroPropsGenerator, Cloneable {
+public class MultiplierImpl implements MicroPropsGenerator {
   final int magnitudeMultiplier;
   final BigDecimal bigDecimalMultiplier;
   final MicroPropsGenerator parent;

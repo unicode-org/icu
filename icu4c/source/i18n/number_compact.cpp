@@ -216,7 +216,6 @@ CompactHandler::CompactHandler(CompactStyle compactStyle, const Locale &locale, 
                                UErrorCode &status)
         : rules(rules), parent(parent) {
     data.populate(locale, nsName, compactStyle, compactType, status);
-    if (U_FAILURE(status)) { return; }
     if (buildReference != nullptr) {
         // Safe code path
         precomputeAllModifiers(*buildReference, status);
@@ -234,6 +233,8 @@ CompactHandler::~CompactHandler() {
 }
 
 void CompactHandler::precomputeAllModifiers(MutablePatternModifier &buildReference, UErrorCode &status) {
+    if (U_FAILURE(status)) { return; }
+
     // Initial capacity of 12 for 0K, 00K, 000K, ...M, ...B, and ...T
     UVector allPatterns(12, status);
     if (U_FAILURE(status)) { return; }
@@ -306,8 +307,8 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
         // C++ Note: Use unsafePatternInfo for proper lifecycle.
         ParsedPatternInfo &patternInfo = const_cast<CompactHandler *>(this)->unsafePatternInfo;
         PatternParser::parseToPatternInfo(UnicodeString(patternString), patternInfo, status);
-        dynamic_cast<MutablePatternModifier *>(const_cast<Modifier *>(micros.modMiddle))->setPatternInfo(
-                &patternInfo);
+        static_cast<MutablePatternModifier*>(const_cast<Modifier*>(micros.modMiddle))
+            ->setPatternInfo(&patternInfo);
         numDigits = patternInfo.positive.integerTotal;
     }
 

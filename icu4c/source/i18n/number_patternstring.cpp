@@ -23,7 +23,7 @@ PatternParser::parseToProperties(const UnicodeString& pattern, IgnoreRounding ig
     return properties;
 }
 
-void PatternParser::parseToExistingProperties(const UnicodeString& pattern, DecimalFormatProperties properties,
+void PatternParser::parseToExistingProperties(const UnicodeString& pattern, DecimalFormatProperties& properties,
                                               IgnoreRounding ignoreRounding, UErrorCode &status) {
     parseToExistingPropertiesImpl(pattern, properties, ignoreRounding, status);
 }
@@ -447,7 +447,7 @@ PatternParser::parseToExistingPropertiesImpl(const UnicodeString& pattern, Decim
 }
 
 void PatternParser::patternInfoToProperties(DecimalFormatProperties &properties,
-                                            ParsedPatternInfo patternInfo,
+                                            ParsedPatternInfo& patternInfo,
                                             IgnoreRounding _ignoreRounding, UErrorCode &status) {
     // Translate from PatternParseResult to Properties.
     // Note that most data from "negative" is ignored per the specification of DecimalFormat.

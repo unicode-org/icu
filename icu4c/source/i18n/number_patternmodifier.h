@@ -189,28 +189,28 @@ class U_I18N_API MutablePatternModifier
     UnicodeString toUnicodeString() const U_OVERRIDE;
 
   private:
-    // Modifier details
+    // Modifier details (initialized in constructor)
     const bool fStrong;
 
-    // Pattern details
+    // Pattern details (initialized in setPatternInfo and setPatternAttributes)
     const AffixPatternProvider *patternInfo;
     UNumberSignDisplay signDisplay;
     bool perMilleReplacesPercent;
 
-    // Symbol details
+    // Symbol details (initialized in setSymbols)
     const DecimalFormatSymbols *symbols;
     UNumberUnitWidth unitWidth;
     char16_t currencyCode[4];
     const PluralRules *rules;
 
-    // Number details
+    // Number details (initialized in setNumberProperties)
     bool isNegative;
     StandardPlural::Form plural;
 
-    // QuantityChain details
+    // QuantityChain details (initialized in addToChain)
     const MicroPropsGenerator *parent;
 
-    // Transient CharSequence fields
+    // Transient CharSequence fields (initialized in enterCharSequenceMode)
     bool inCharSequenceMode = false;
     int32_t fFlags;
     int32_t fLength;

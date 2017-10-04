@@ -293,7 +293,7 @@ public class IntlTestDecimalFormatSymbols extends TestFmwk
             "\uD801\uDCA0", "\uD801\uDCA1", "\uD801\uDCA2", "\uD801\uDCA3", "\uD801\uDCA4",
             "\uD801\uDCA5", "\uD801\uDCA6", "\uD801\uDCA7", "\uD801\uDCA8", "\uD801\uDCA9"
         };
-        final String[] differentDigitStrings = {"0", "b", "3", "d", "5", "f", "7", "h", "9", "j"};
+        final String[] differentDigitStrings = {"0", "b", "3", "d", "5", "ff", "7", "h", "9", "j"};
 
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
 
