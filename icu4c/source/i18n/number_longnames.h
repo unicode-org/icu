@@ -23,7 +23,7 @@ class LongNameHandler : public MicroPropsGenerator, public UObject {
                    const PluralRules *rules, const MicroPropsGenerator *parent, UErrorCode &status);
 
     void
-    processQuantity(DecimalQuantity &quantity, MicroProps &micros, UErrorCode &status) const override;
+    processQuantity(DecimalQuantity &quantity, MicroProps &micros, UErrorCode &status) const U_OVERRIDE;
 
   private:
     SimpleModifier fModifiers[StandardPlural::Form::COUNT];

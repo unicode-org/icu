@@ -22,9 +22,9 @@ class MutablePatternModifier;
 // Exported as U_I18N_API because it is needed for the unit test PatternModifierTest
 class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
   public:
-	~ImmutablePatternModifier() override = default;
+	~ImmutablePatternModifier() U_OVERRIDE = default;
 
-    void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const override;
+    void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const U_OVERRIDE;
 
     void applyToMicros(MicroProps &micros, DecimalQuantity &quantity) const;
 
@@ -62,7 +62,7 @@ class U_I18N_API MutablePatternModifier
         : public MicroPropsGenerator, public Modifier, public SymbolProvider, public CharSequence {
   public:
 
-    ~MutablePatternModifier() override = default;
+    ~MutablePatternModifier() U_OVERRIDE = default;
 
     /**
      * @param isStrong
@@ -155,29 +155,29 @@ class U_I18N_API MutablePatternModifier
 
     MicroPropsGenerator &addToChain(const MicroPropsGenerator *parent);
 
-    void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const override;
+    void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const U_OVERRIDE;
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const override;
+                  UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getPrefixLength(UErrorCode &status) const override;
+    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getCodePointCount(UErrorCode &status) const override;
+    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
 
-    bool isStrong() const override;
+    bool isStrong() const U_OVERRIDE;
 
     /**
      * Returns the string that substitutes a given symbol type in a pattern.
      */
-    UnicodeString getSymbol(AffixPatternType type) const override;
+    UnicodeString getSymbol(AffixPatternType type) const U_OVERRIDE;
 
-    int32_t length() const override;
+    int32_t length() const U_OVERRIDE;
 
-    char16_t charAt(int32_t index) const override;
+    char16_t charAt(int32_t index) const U_OVERRIDE;
 
     // Use default implementation of codePointAt
 
-    UnicodeString toUnicodeString() const override;
+    UnicodeString toUnicodeString() const U_OVERRIDE;
 
   private:
     // Modifier details

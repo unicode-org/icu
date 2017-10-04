@@ -24,7 +24,7 @@ class CompactData : public MultiplierProducer {
     void populate(const Locale &locale, const char *nsName, CompactStyle compactStyle,
                   CompactType compactType, UErrorCode &status);
 
-    int32_t getMultiplier(int32_t magnitude) const override;
+    int32_t getMultiplier(int32_t magnitude) const U_OVERRIDE;
 
     const UChar *getPattern(int32_t magnitude, StandardPlural::Form plural) const;
 
@@ -40,7 +40,7 @@ class CompactData : public MultiplierProducer {
       public:
         explicit CompactDataSink(CompactData &data) : data(data) {}
 
-        void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) override;
+        void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) U_OVERRIDE;
 
       private:
         CompactData &data;
@@ -60,10 +60,10 @@ class CompactHandler : public MicroPropsGenerator, public UMemory {
                    MutablePatternModifier *buildReference, const MicroPropsGenerator *parent,
                    UErrorCode &status);
 
-    ~CompactHandler() override;
+    ~CompactHandler() U_OVERRIDE;
 
     void
-    processQuantity(DecimalQuantity &quantity, MicroProps &micros, UErrorCode &status) const override;
+    processQuantity(DecimalQuantity &quantity, MicroProps &micros, UErrorCode &status) const U_OVERRIDE;
 
   private:
     const PluralRules *rules;

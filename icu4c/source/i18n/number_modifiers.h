@@ -27,13 +27,13 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
             : fPrefix(prefix), fSuffix(suffix), fField(field), fStrong(strong) {}
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const override;
+                  UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getPrefixLength(UErrorCode &status) const override;
+    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getCodePointCount(UErrorCode &status) const override;
+    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
 
-    bool isStrong() const override;
+    bool isStrong() const U_OVERRIDE;
 
   private:
     UnicodeString fPrefix;
@@ -54,13 +54,13 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
     SimpleModifier();
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const override;
+                  UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getPrefixLength(UErrorCode &status) const override;
+    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getCodePointCount(UErrorCode &status) const override;
+    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
 
-    bool isStrong() const override;
+    bool isStrong() const U_OVERRIDE;
 
     /**
      * TODO: This belongs in SimpleFormatterImpl. The only reason I haven't moved it there yet is because
@@ -105,13 +105,13 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
                                bool strong) : fPrefix(prefix), fSuffix(suffix), fStrong(strong) {}
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const override;
+                  UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getPrefixLength(UErrorCode &status) const override;
+    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getCodePointCount(UErrorCode &status) const override;
+    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
 
-    bool isStrong() const override;
+    bool isStrong() const U_OVERRIDE;
 
   protected:
     // NOTE: In Java, these are stored as array pointers. In C++, the NumberStringBuilder is stored by
@@ -129,7 +129,7 @@ class U_I18N_API CurrencySpacingEnabledModifier : public ConstantMultiFieldModif
                                    bool strong, const DecimalFormatSymbols &symbols, UErrorCode &status);
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const override;
+                  UErrorCode &status) const U_OVERRIDE;
 
     /** Unsafe code path */
     static int32_t
@@ -169,7 +169,7 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
     explicit EmptyModifier(bool isStrong) : fStrong(isStrong) {}
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const override {
+                  UErrorCode &status) const U_OVERRIDE {
         (void)output;
         (void)leftIndex;
         (void)rightIndex;
@@ -177,17 +177,17 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
         return 0;
     }
 
-    int32_t getPrefixLength(UErrorCode &status) const override {
+    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE {
         (void)status;
         return 0;
     }
 
-    int32_t getCodePointCount(UErrorCode &status) const override {
+    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE {
         (void)status;
         return 0;
     }
 
-    bool isStrong() const override {
+    bool isStrong() const U_OVERRIDE {
         return fStrong;
     }
 
