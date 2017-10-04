@@ -8,6 +8,7 @@ import com.ibm.icu.util.ULocale;
 
 public class CustomSymbolCurrency extends Currency {
   private static final long serialVersionUID = 2497493016770137670L;
+  // TODO: Serialization methods?
 
   private String symbol1;
   private String symbol2;
@@ -59,5 +60,17 @@ public class CustomSymbolCurrency extends Currency {
   @Override
   public String getCurrencyCode() {
     return symbol2;
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode() ^ symbol1.hashCode() ^ symbol2.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    return super.equals(other)
+            && ((CustomSymbolCurrency)other).symbol1.equals(symbol1)
+            && ((CustomSymbolCurrency)other).symbol2.equals(symbol2);
   }
 }

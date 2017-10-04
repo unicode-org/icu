@@ -349,7 +349,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             if (cc == digitStr.length()) {
                 // One code point in this digit.
                 // If it is 1 UTF-16 code unit long, set it in tmpDigits.
-                if (cc == 1) {
+                if (cc == 1 && tmpDigits != null) {
                     tmpDigits[i] = (char) cp;
                 } else {
                     tmpDigits = null;
