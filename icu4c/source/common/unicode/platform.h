@@ -525,20 +525,6 @@ namespace std {
 #   define U_FALLTHROUGH
 #endif
 
-/**
-* \def UPRV_SUPPRESS_DLL_INTERFACE_WARNING
-* Add a pragma for suppressing warning 4251:
-* "class X needs to have dll-interface to be used by clients of class Y"
-* This warning is noisy when private member fields are at play.
-* Macro is empty except on Visual C++.
-* @internal
-*/
-#if defined(_MSC_VER)
-#    define UPRV_SUPPRESS_DLL_INTERFACE_WARNING __pragma(warning(suppress: 4251))
-#else
-#    define UPRV_SUPPRESS_DLL_INTERFACE_WARNING 
-#endif
-
 /** @} */
 
 /*===========================================================================*/

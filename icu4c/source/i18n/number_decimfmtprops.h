@@ -21,6 +21,9 @@ namespace impl {
 // data member of CurrencyPluralInfoWrapper.
 // (MSVC requires this, even though it should not be necessary.)
 #if defined (_MSC_VER)
+// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
+#pragma warning(suppress: 4661)
+template class U_I18N_API LocalPointerBase<CurrencyPluralInfo>;
 template class U_I18N_API LocalPointer<CurrencyPluralInfo>;
 #endif
 

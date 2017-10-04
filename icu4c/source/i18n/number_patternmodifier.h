@@ -18,7 +18,17 @@ namespace impl {
 
 // Forward declaration
 class MutablePatternModifier;
-	
+
+// Export an explicit template instantiation of the LocalPointer that is used as a
+// data member of ParameterizedModifier.
+// (MSVC requires this, even though it should not be necessary.)
+#if defined (_MSC_VER)
+// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
+#pragma warning(suppress: 4661)
+template class U_I18N_API LocalPointerBase<ParameterizedModifier>;
+template class U_I18N_API LocalPointer<ParameterizedModifier>;
+#endif
+
 // Exported as U_I18N_API because it is needed for the unit test PatternModifierTest
 class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
   public:
@@ -31,7 +41,6 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
   private:
     ImmutablePatternModifier(ParameterizedModifier *pm, const PluralRules *rules, const MicroPropsGenerator *parent);
 
-    UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // Member is private and does not need to be exported
     const LocalPointer<ParameterizedModifier> pm;
     const PluralRules *rules;
     const MicroPropsGenerator *parent;
