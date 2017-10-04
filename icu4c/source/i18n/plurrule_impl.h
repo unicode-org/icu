@@ -278,13 +278,13 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     explicit FixedDecimal(double n);
     explicit FixedDecimal(const VisibleDigits &n);
     FixedDecimal();
-    ~FixedDecimal() override = default;
+    ~FixedDecimal() U_OVERRIDE = default;
     FixedDecimal(const UnicodeString &s, UErrorCode &ec);
     FixedDecimal(const FixedDecimal &other);
 
-    double getPluralOperand(PluralOperand operand) const override;
-    bool isNaN() const override;
-    bool isInfinite() const override;
+    double getPluralOperand(PluralOperand operand) const U_OVERRIDE;
+    bool isNaN() const U_OVERRIDE;
+    bool isInfinite() const U_OVERRIDE;
 
     bool isNanOrInfinity() const;  // used in decimfmtimpl.cpp
 
