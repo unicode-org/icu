@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include "unicode/utypes.h"
+
 #if !UCONFIG_NO_FORMATTING
 #ifndef __NUMBER_SCIENTIFIC_H__
 #define __NUMBER_SCIENTIFIC_H__
