@@ -1009,8 +1009,8 @@ UnicodeString DecimalQuantity::toNumberString() const {
         digits[i] = getDigitPos(precision - i - 1) + '0';
     }
     auto digits16 = new char16_t[precision + 11];
-    u_charsToUChars(digits, digits16, precision + 11);
     snprintf(digits + precision, 11, "E%d", scale);
+    u_charsToUChars(digits, digits16, precision + 11);
     UnicodeString ret(digits16);
     delete[] digits;
     delete[] digits16;
