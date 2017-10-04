@@ -5,8 +5,6 @@
 #ifndef __NUMBERFORMATTER_H__
 #define __NUMBERFORMATTER_H__
 
-#include <atomic>
-
 #include "unicode/appendable.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/currunit.h"
@@ -1146,7 +1144,7 @@ namespace impl {
  *
  * @internal
  */
-static uint32_t DEFAULT_THRESHOLD = 3;
+static constexpr int32_t DEFAULT_THRESHOLD = 3;
 
 /** @internal */
 class U_I18N_API SymbolsWrapper : public UMemory {
@@ -1321,7 +1319,7 @@ struct U_I18N_API MacroProps : public UMemory {
     PluralRules *rules = nullptr;  // no ownership
 
     /** @internal */
-    uint32_t threshold = DEFAULT_THRESHOLD;
+    int32_t threshold = DEFAULT_THRESHOLD;
     Locale locale;
 
     /**
@@ -1701,7 +1699,7 @@ class U_I18N_API NumberFormatterSettings {
      *
      * @internal ICU 60: This API is ICU internal only.
      */
-    Derived threshold(uint32_t threshold) const;
+    Derived threshold(int32_t threshold) const;
 
 #endif  /* U_HIDE_INTERNAL_API */
 
@@ -1818,10 +1816,8 @@ class U_I18N_API LocalizedNumberFormatter
     ~LocalizedNumberFormatter();
 
   private:
-    UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // Member is private and does not need to be exported
-    std::atomic<const impl::NumberFormatterImpl *> fCompiled{nullptr};
-    UPRV_SUPPRESS_DLL_INTERFACE_WARNING  // Member is private and does not need to be exported
-    std::atomic<uint32_t> fCallCount{0};
+    const impl::NumberFormatterImpl* fCompiled {nullptr};
+    char fUnsafeCallCount[8] {};  // internally cast to u_atomic_int32_t
 
     LocalizedNumberFormatter() = default;
 
