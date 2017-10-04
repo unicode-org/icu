@@ -141,7 +141,8 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
         Locale("en_CA"),
         Locale("fr"),
         Locale("zh_Hant"),
-        Locale("fa")
+        Locale("fa"),
+        Locale("ccp")
     };
 
     const Locale *LOCALES;
@@ -170,11 +171,6 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
         gmtFmt.format(0.0, localGMTString);
 
         for (int32_t patidx = 0; patidx < UPRV_LENGTHOF(PATTERNS); patidx++) {
-
-            if (uprv_strcmp(LOCALES[locidx].getLanguage(),"ccp")==0 && (PATTERNS[patidx][0]==0x7A || PATTERNS[patidx][0]==0x76) && 
-                    logKnownIssue("13390", "Skip handling ccp until TimeZone offset roundtrip is fixed")) {
-                 continue;
-            }
             SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)PATTERNS[patidx], LOCALES[locidx], status);
             if (U_FAILURE(status)) {
                 dataerrln((UnicodeString)"new SimpleDateFormat failed for pattern " +
@@ -305,10 +301,13 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                         if (!isOffsetFormat) {
                             // Check if localized GMT format is used as a fallback of name styles
                             int32_t numDigits = 0;
-                            for (int n = 0; n < tzstr.length(); n++) {
-                                if (u_isdigit(tzstr.charAt(n))) {
+                            int32_t idx = 0;
+                            while (idx < tzstr.length()) {
+                                UChar32 cp = tzstr.char32At(idx);
+                                if (u_isdigit(cp)) {
                                     numDigits++;
                                 }
+                                idx += U16_LENGTH(cp);
                             }
                             isOffsetFormat = (numDigits > 0);
                         }
