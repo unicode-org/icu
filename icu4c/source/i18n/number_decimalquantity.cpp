@@ -1,6 +1,8 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include "unicode/utypes.h"
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "uassert.h"
@@ -1006,9 +1008,12 @@ UnicodeString DecimalQuantity::toNumberString() const {
     for (int32_t i = 0; i < precision; i++) {
         digits[i] = getDigitPos(precision - i - 1) + '0';
     }
+    auto digits16 = new char16_t[precision + 11];
+    u_charsToUChars(digits, digits16, precision + 11);
     snprintf(digits + precision, 11, "E%d", scale);
-    UnicodeString ret(digits);
+    UnicodeString ret(digits16);
     delete[] digits;
+    delete[] digits16;
     return ret;
 }
 
