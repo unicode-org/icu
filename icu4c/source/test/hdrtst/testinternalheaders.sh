@@ -58,8 +58,8 @@ done ;
 # We don't want to patch it, and don't want to spend the time for this script here
 # to know about C-only header files.
 
-for tool in genccode gencmn gencolusb gennorm2 genren gentest icupkg icuswap pkgdata \
-        genbrk gencfu gencnval gendict genrb gensprep icuinfo makeconv memcheck; do
+for tool in escapesrc genccode gencmn gencolusb gennorm2 genren gentest icupkg icuswap \
+        pkgdata genbrk gencfu gencnval gendict genrb gensprep icuinfo makeconv memcheck; do
     for file in `ls tools/$tool/*.h`; do
         echo $file
         echo '#include "'$file'"' > ht_temp.cpp ;

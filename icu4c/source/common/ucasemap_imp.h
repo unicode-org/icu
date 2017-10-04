@@ -73,7 +73,9 @@ uprv_haveProperties(UErrorCode *pErrorCode);
 
 U_NAMESPACE_BEGIN
 
+class BreakIterator;        // unicode/brkiter.h
 class ByteSink;
+class Locale;               // unicode/locid.h
 
 /** Returns TRUE if the options are valid. Otherwise FALSE, and sets an error. */
 inline UBool ustrcase_checkTitleAdjustmentOptions(uint32_t options, UErrorCode &errorCode) {
