@@ -80,6 +80,7 @@ static double DOUBLE_MULTIPLIERS[] = {
 
 DecimalQuantity::DecimalQuantity() {
     setBcdToZero();
+    flags = 0;
 }
 
 DecimalQuantity::~DecimalQuantity() {

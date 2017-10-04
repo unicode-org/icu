@@ -30,7 +30,7 @@ class PluralTableSink : public ResourceSink {
         }
     }
 
-    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) override {
+    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) U_OVERRIDE {
         ResourceTable pluralsTable = value.getTable(status);
         if (U_FAILURE(status)) { return; }
         for (int i = 0; pluralsTable.getKeyAndValue(i, key, value); ++i) {

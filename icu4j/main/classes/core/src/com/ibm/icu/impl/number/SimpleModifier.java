@@ -22,7 +22,8 @@ public class SimpleModifier implements Modifier {
 
     /** Creates a modifier that uses the SimpleFormatter string formats. */
     public SimpleModifier(String compiledPattern, Field field, boolean strong) {
-        this.compiledPattern = (compiledPattern == null) ? "\u0001\u0000" : compiledPattern;
+        assert compiledPattern != null;
+        this.compiledPattern = compiledPattern;
         this.field = field;
         this.strong = strong;
 

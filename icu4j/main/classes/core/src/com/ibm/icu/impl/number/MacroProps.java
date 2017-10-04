@@ -74,6 +74,9 @@ public class MacroProps implements Cloneable {
 
   @Override
   public boolean equals(Object _other) {
+    if (_other == null) return false;
+    if (this == _other) return true;
+    if (!(_other instanceof MacroProps)) return false;
     MacroProps other = (MacroProps) _other;
     return Utility.equals(notation, other.notation)
         && Utility.equals(unit, other.unit)

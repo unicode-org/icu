@@ -186,7 +186,7 @@ class U_I18N_API PatternParser {
      * @throws IllegalArgumentException
      *             If there was a syntax error in the pattern string.
      */
-    static void parseToExistingProperties(const UnicodeString& pattern, DecimalFormatProperties properties,
+    static void parseToExistingProperties(const UnicodeString& pattern, DecimalFormatProperties& properties,
                                           IgnoreRounding ignoreRounding, UErrorCode &status);
 
   private:
@@ -196,7 +196,7 @@ class U_I18N_API PatternParser {
 
     /** Finalizes the temporary data stored in the ParsedPatternInfo to the Properties. */
     static void
-    patternInfoToProperties(DecimalFormatProperties &properties, ParsedPatternInfo patternInfo,
+    patternInfoToProperties(DecimalFormatProperties &properties, ParsedPatternInfo& patternInfo,
                             IgnoreRounding _ignoreRounding, UErrorCode &status);
 };
 

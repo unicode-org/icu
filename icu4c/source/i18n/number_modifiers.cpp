@@ -87,7 +87,8 @@ SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field fie
     }
 }
 
-SimpleModifier::SimpleModifier() : fStrong(false), fPrefixLength(0), fSuffixLength(0) {
+SimpleModifier::SimpleModifier()
+        : fField(UNUM_FIELD_COUNT), fStrong(false), fPrefixLength(0), fSuffixLength(0) {
 }
 
 int32_t SimpleModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
