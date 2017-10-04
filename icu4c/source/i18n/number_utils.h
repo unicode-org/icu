@@ -21,21 +21,21 @@ class UnicodeStringCharSequence : public CharSequence {
         fStr = other;
     }
 
-    ~UnicodeStringCharSequence() override = default;
+    ~UnicodeStringCharSequence() U_OVERRIDE = default;
 
-    int32_t length() const override {
+    int32_t length() const U_OVERRIDE {
         return fStr.length();
     }
 
-    char16_t charAt(int32_t index) const override {
+    char16_t charAt(int32_t index) const U_OVERRIDE {
         return fStr.charAt(index);
     }
 
-    UChar32 codePointAt(int32_t index) const override {
+    UChar32 codePointAt(int32_t index) const U_OVERRIDE {
         return fStr.char32At(index);
     }
 
-    UnicodeString toUnicodeString() const override {
+    UnicodeString toUnicodeString() const U_OVERRIDE {
         // Allocate a UnicodeString of the correct length
         UnicodeString output(length(), 0, -1);
         for (int32_t i = 0; i < length(); i++) {
@@ -80,7 +80,7 @@ struct MicroProps : public MicroPropsGenerator {
 
     MicroProps &operator=(const MicroProps &other) = default;
 
-    void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const override {
+    void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const U_OVERRIDE {
         (void)status;
         if (this == &micros) {
             // Unsafe path: no need to perform a copy.

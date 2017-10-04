@@ -20,13 +20,13 @@ class U_I18N_API ScientificModifier : public UMemory, public Modifier {
     void set(int32_t exponent, const ScientificHandler *handler);
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
-                  UErrorCode &status) const override;
+                  UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getPrefixLength(UErrorCode &status) const override;
+    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getCodePointCount(UErrorCode &status) const override;
+    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
 
-    bool isStrong() const override;
+    bool isStrong() const U_OVERRIDE;
 
   private:
     int32_t fExponent;
@@ -39,9 +39,9 @@ class ScientificHandler : public UMemory, public MicroPropsGenerator, public Mul
                       const MicroPropsGenerator *parent);
 
     void
-    processQuantity(DecimalQuantity &quantity, MicroProps &micros, UErrorCode &status) const override;
+    processQuantity(DecimalQuantity &quantity, MicroProps &micros, UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getMultiplier(int32_t magnitude) const override;
+    int32_t getMultiplier(int32_t magnitude) const U_OVERRIDE;
 
   private:
     const Notation::ScientificSettings& fSettings;

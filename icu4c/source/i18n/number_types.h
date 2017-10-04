@@ -12,6 +12,7 @@
 #include "unicode/numberformatter.h"
 #include "unicode/utf16.h"
 #include "uassert.h"
+#include "unicode/platform.h"
 
 U_NAMESPACE_BEGIN
 namespace number {

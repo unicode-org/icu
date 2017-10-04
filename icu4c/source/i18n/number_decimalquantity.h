@@ -114,10 +114,10 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     bool isNegative() const;
 
     /** @return Whether the value represented by this {@link DecimalQuantity} is infinite. */
-    bool isInfinite() const override;
+    bool isInfinite() const U_OVERRIDE;
 
     /** @return Whether the value represented by this {@link DecimalQuantity} is not a number. */
-    bool isNaN() const override;
+    bool isNaN() const U_OVERRIDE;
 
     int64_t toLong() const;
 
@@ -164,7 +164,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      */
     StandardPlural::Form getStandardPlural(const PluralRules *rules) const;
 
-    double getPluralOperand(PluralOperand operand) const override;
+    double getPluralOperand(PluralOperand operand) const U_OVERRIDE;
 
     /**
      * Gets the digit at the specified magnitude. For example, if the represented number is 12.3,
