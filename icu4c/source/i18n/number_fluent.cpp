@@ -7,6 +7,7 @@
 #include "unicode/numberformatter.h"
 #include "number_decimalquantity.h"
 #include "number_formatimpl.h"
+#include "umutex.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -107,7 +108,7 @@ Derived NumberFormatterSettings<Derived>::padding(const Padder &padder) const {
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::threshold(uint32_t threshold) const {
+Derived NumberFormatterSettings<Derived>::threshold(int32_t threshold) const {
     Derived copy(*this);
     copy.fMacros.threshold = threshold;
     return copy;
@@ -240,7 +241,7 @@ const NumberingSystem* SymbolsWrapper::getNumberingSystem() const {
 }
 
 LocalizedNumberFormatter::~LocalizedNumberFormatter() {
-    delete fCompiled.load();
+    delete fCompiled;
 }
 
 FormattedNumber LocalizedNumberFormatter::formatInt(int64_t value, UErrorCode &status) const {
@@ -278,19 +279,39 @@ FormattedNumber LocalizedNumberFormatter::formatDecimal(StringPiece value, UErro
 
 FormattedNumber
 LocalizedNumberFormatter::formatImpl(impl::NumberFormatterResults *results, UErrorCode &status) const {
-    uint32_t currentCount = fCallCount.load();
-    if (currentCount <= fMacros.threshold && fMacros.threshold > 0) {
-        currentCount = const_cast<LocalizedNumberFormatter *>(this)->fCallCount.fetch_add(1) + 1;
+    // fUnsafeCallCount contains memory to be interpreted as an atomic int, most commonly
+    // std::atomic<int32_t>.  Since the type of atomic int is platform-dependent, we cast the
+    // bytes in fUnsafeCallCount to u_atomic_int32_t, a typedef for the platform-dependent
+    // atomic int type defined in umutex.h.
+    static_assert(sizeof(u_atomic_int32_t) <= sizeof(fUnsafeCallCount),
+        "Atomic integer size on this platform exceeds the size allocated by fUnsafeCallCount");
+    u_atomic_int32_t* callCount = reinterpret_cast<u_atomic_int32_t*>(
+        const_cast<LocalizedNumberFormatter*>(this)->fUnsafeCallCount);
+
+    // A positive value in the atomic int indicates that the data structure is not yet ready;
+    // a negative value indicates that it is ready. If, after the increment, the atomic int
+    // is exactly threshold, then it is the current thread's job to build the data structure.
+    // Note: We set the callCount to INT32_MIN so that if another thread proceeds to increment
+    // the atomic int, the value remains below zero.
+    int32_t currentCount = umtx_loadAcquire(*callCount);
+    if (0 <= currentCount && currentCount <= fMacros.threshold && fMacros.threshold > 0) {
+        currentCount = umtx_atomic_inc(callCount);
     }
-    const NumberFormatterImpl *compiled;
+
     if (currentCount == fMacros.threshold && fMacros.threshold > 0) {
-        compiled = NumberFormatterImpl::fromMacros(fMacros, status);
-        U_ASSERT(fCompiled.load() == nullptr);
-        const_cast<LocalizedNumberFormatter *>(this)->fCompiled.store(compiled);
+        // Build the data structure and then use it (slow to fast path).
+        const NumberFormatterImpl* compiled =
+            NumberFormatterImpl::fromMacros(fMacros, status);
+        U_ASSERT(fCompiled == nullptr);
+        const_cast<LocalizedNumberFormatter *>(this)->fCompiled = compiled;
+        umtx_storeRelease(*callCount, INT32_MIN);
         compiled->apply(results->quantity, results->string, status);
-    } else if ((compiled = fCompiled.load()) != nullptr) {
-        compiled->apply(results->quantity, results->string, status);
+    } else if (currentCount < 0) {
+        // The data structure is already built; use it (fast path).
+        U_ASSERT(fCompiled != nullptr);
+        fCompiled->apply(results->quantity, results->string, status);
     } else {
+        // Format the number without building the data structure (slow path).
         NumberFormatterImpl::applyStatic(fMacros, results->quantity, results->string, status);
     }
 
