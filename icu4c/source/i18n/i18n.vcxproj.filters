@@ -623,7 +623,6 @@
     <ClInclude Include="usrchimp.h">
       <Filter>collation</Filter>
     </ClInclude>
-
     <ClInclude Include="affixpatternparser.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -666,7 +665,6 @@
     <ClInclude Include="visibledigits.h">
       <Filter>formatting</Filter>
     </ClInclude>
-
     <ClInclude Include="astro.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -754,7 +752,6 @@
     <ClInclude Include="nfsubs.h">
       <Filter>formatting</Filter>
     </ClInclude>
-
     <ClInclude Include="number_affixutils.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -800,9 +797,6 @@
     <ClInclude Include="number_utils.h">
       <Filter>formatting</Filter>
     </ClInclude>
-
-
-
     <ClInclude Include="olsontz.h">
       <Filter>formatting</Filter>
     </ClInclude>
