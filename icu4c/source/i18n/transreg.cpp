@@ -806,7 +806,7 @@ int32_t TransliteratorRegistry::countAvailableVariants(const UnicodeString& sour
     if (targets == 0) {
         return 0;
     }
-    int32_t varMask = targets->geti(target);
+    uint32_t varMask = targets->geti(target);
     int32_t varCount = 0;
     while (varMask > 0) {
         if (varMask & 1) {
@@ -826,7 +826,7 @@ UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
         result.truncate(0); // invalid source
         return result;
     }
-    int32_t varMask = targets->geti(target);
+    uint32_t varMask = targets->geti(target);
     int32_t varCount = 0;
     int32_t varListIndex = 0;
     while (varMask > 0) {
@@ -1002,8 +1002,8 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
             return;
         }
     }
-    int32_t addMask = 1 << variantListIndex;
-    int32_t varMask = targets->geti(target);
+    uint32_t addMask = 1 << variantListIndex;
+    uint32_t varMask = targets->geti(target);
     targets->puti(target, varMask | addMask, status);
 }
 
@@ -1020,7 +1020,7 @@ void TransliteratorRegistry::removeSTV(const UnicodeString& source,
     if (targets == NULL) {
         return; // should never happen for valid s-t/v
     }
-    int32_t varMask = targets->geti(target);
+    uint32_t varMask = targets->geti(target);
     if (varMask == 0) {
         return; // should never happen for valid s-t/v
     }
