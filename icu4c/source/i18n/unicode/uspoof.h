@@ -368,18 +368,17 @@
  */
 
 struct USpoofChecker;
+/**
+ * @stable ICU 4.2
+ */
 typedef struct USpoofChecker USpoofChecker; /**< typedef for C of USpoofChecker */
 
-#ifndef U_HIDE_DRAFT_API
-/**
- * @see uspoof_openCheckResult
- */
 struct USpoofCheckResult;
 /**
  * @see uspoof_openCheckResult
+ * @stable ICU 58
  */
 typedef struct USpoofCheckResult USpoofCheckResult;
-#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Enum for the kinds of checks that USpoofChecker can perform.
