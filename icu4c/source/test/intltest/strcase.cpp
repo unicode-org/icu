@@ -1281,10 +1281,12 @@ void StringCaseTest::TestCaseMapWithEdits() {
                            u"IßtanBul", 8, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ıssb"), UnicodeString(TRUE, dest, length));
     static const EditChange foldExpectedChanges[] = {
+#if !UCONFIG_NO_BREAK_ITERATION
             // From titlecasing.
             { FALSE, 1, 1 },
             { TRUE, 1, 1 },
             { FALSE, 10, 10 },
+#endif
             // From case folding.
             { TRUE, 1, 1 },
             { TRUE, 1, 2 },
@@ -1364,10 +1366,12 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
     assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ıssb"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
     static const EditChange foldExpectedChanges[] = {
+#if !UCONFIG_NO_BREAK_ITERATION
             // From titlecasing.
             { FALSE, 1, 1 },
             { TRUE, 1, 1 },
             { FALSE, 10, 10 },
+#endif
             // From case folding.
             { TRUE, 1, 2 },
             { TRUE, 2, 2 },
