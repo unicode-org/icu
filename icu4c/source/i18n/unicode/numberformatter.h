@@ -998,6 +998,7 @@ class U_I18N_API IncrementRounder : public Rounder {
      *
      * @param minFrac The minimum number of digits after the decimal separator.
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @draft ICU 60
      */
     Rounder withMinFraction(int32_t minFrac) const;
 
@@ -1741,9 +1742,29 @@ class U_I18N_API UnlocalizedNumberFormatter
         : public NumberFormatterSettings<UnlocalizedNumberFormatter>, public UMemory {
 
   public:
+    /**
+     * Associate the given locale with the number formatter. The locale is used for picking the appropriate symbols,
+     * formats, and other data for number display.
+     *
+     * <p>
+     * To use the Java default locale, call Locale::getDefault():
+     *
+     * <pre>
+     * NumberFormatter::with(). ... .locale(Locale::getDefault())
+     * </pre>
+     *
+     * @param locale
+     *            The locale to use when loading data for number formatting.
+     * @return The fluent chain.
+     * @draft ICU 60
+     */
     LocalizedNumberFormatter locale(const icu::Locale &locale) const;
 
     // Make default copy constructor call the NumberFormatterSettings copy constructor.
+    /**
+     * Returns a copy of this UnlocalizedNumberFormatter.
+     * @draft ICU 60
+     */
     UnlocalizedNumberFormatter(const UnlocalizedNumberFormatter &other) : UnlocalizedNumberFormatter(
             static_cast<const NumberFormatterSettings<UnlocalizedNumberFormatter> &>(other)) {}
 
@@ -1812,9 +1833,17 @@ class U_I18N_API LocalizedNumberFormatter
     FormattedNumber formatDecimal(StringPiece value, UErrorCode &status) const;
 
     // Make default copy constructor call the NumberFormatterSettings copy constructor.
+    /**
+     * Returns a copy of this LocalizedNumberFormatter.
+     * @draft ICU 60
+     */
     LocalizedNumberFormatter(const LocalizedNumberFormatter &other) : LocalizedNumberFormatter(
             static_cast<const NumberFormatterSettings<LocalizedNumberFormatter> &>(other)) {}
 
+    /**
+     * Destruct this LocalizedNumberFormatter, cleaning up any memory it might own.
+     * @draft ICU 60
+     */
     ~LocalizedNumberFormatter();
 
   private:
@@ -1912,6 +1941,10 @@ class U_I18N_API FormattedNumber : public UMemory {
      */
     void populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status);
 
+    /**
+     * Destruct an instance of FormattedNumber, cleaning up any memory it might own.
+     * @draft ICU 60
+     */
     ~FormattedNumber();
 
   private:
@@ -1954,7 +1987,10 @@ class U_I18N_API NumberFormatter final {
      */
     static LocalizedNumberFormatter withLocale(const Locale &locale);
 
-    // Don't construct me!
+    /**
+     * Use factory methods instead of the constructor to create a NumberFormatter.
+     * @draft ICU 60
+     */
     NumberFormatter() = delete;
 };
 
