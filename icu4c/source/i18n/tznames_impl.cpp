@@ -18,6 +18,7 @@
 #include "unicode/strenum.h"
 #include "unicode/ustring.h"
 #include "unicode/timezone.h"
+#include "unicode/utf16.h"
 
 #include "tznames_impl.h"
 #include "cmemory.h"
@@ -415,10 +416,8 @@ TextTrieMap::search(CharacterNode *node, const UnicodeString &text, int32_t star
         // for folding we need to get a complete code point.
         // size of character may grow after fold operation;
         // then we need to get result as UTF16 code units.
-        UChar32 c32 = text.char32At(index++);
-        if (c32 >= 0x10000) {
-            index++;
-        }
+        UChar32 c32 = text.char32At(index);
+        index += U16_LENGTH(c32);
         UnicodeString tmp(c32);
         tmp.foldCase();
         int32_t tmpidx = 0;

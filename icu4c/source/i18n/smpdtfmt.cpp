@@ -71,6 +71,7 @@
 #include "uvector.h"
 #include "cstr.h"
 #include "dayperiodrules.h"
+#include "tznames_impl.h"   // ZONE_NAME_U16_MAX
 
 #if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
 #include <stdio.h>
@@ -79,9 +80,6 @@
 // *****************************************************************************
 // class SimpleDateFormat
 // *****************************************************************************
-
-// Some zone display names involving supplementary characters can be over 50 chars, 100 UTF-16 code units, 200 UTF-8 bytes
-#define ZONE_NAME_U16_MAX 128
 
 U_NAMESPACE_BEGIN
 

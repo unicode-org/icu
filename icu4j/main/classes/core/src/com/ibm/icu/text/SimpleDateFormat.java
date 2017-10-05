@@ -1156,7 +1156,7 @@ public class SimpleDateFormat extends DateFormat {
             String digits = null;
             if (numberFormat instanceof DecimalFormat) {
                 DecimalFormatSymbols decsym = ((DecimalFormat) numberFormat).getDecimalFormatSymbols();
-                String[] strDigits = decsym.getDigitStrings();
+                String[] strDigits = decsym.getDigitStringsLocal();
                 // Note: TimeZoneFormat#setGMTOffsetDigits() does not support string array,
                 // so we need to concatenate digits to make a single string.
                 StringBuilder digitsBuf = new StringBuilder();
@@ -3247,8 +3247,7 @@ public class SimpleDateFormat extends DateFormat {
                 /* Skip this for Chinese calendar, moved from ChineseDateFormat */
                 if ( override != null && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0) && value < 1000 ) {
                     value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
-                } else if (count == 2 && text.codePointCount(start, pos.getIndex()) == 2 && cal.haveDefaultCentury()
-                    && countDigits(text, start, pos.getIndex()) == 2) {
+                } else if (count == 2 && countDigits(text, start, pos.getIndex()) == 2 && cal.haveDefaultCentury()) {
                         // Assume for example that the defaultCenturyStart is 6/18/1903.
                         // This means that two-digit years will be forced into the range
                         // 6/18/1903 to 6/17/2003.  As a result, years 00, 01, and 02
