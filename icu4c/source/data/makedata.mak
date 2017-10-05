@@ -15,7 +15,7 @@
 U_ICUDATA_NAME=icudt60
 ##############################################################################
 !IF "$(UWP)" == "UWP"
-U_ICUDATA_NAME=icudt60
+U_ICUDATA_NAME=icudt
 !ENDIF
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=10.0
