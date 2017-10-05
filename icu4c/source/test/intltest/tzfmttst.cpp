@@ -21,6 +21,7 @@
 #include "unicode/basictz.h"
 #include "unicode/tzfmt.h"
 #include "unicode/localpointer.h"
+#include "unicode/utf16.h"
 
 #include "cstring.h"
 #include "cstr.h"
