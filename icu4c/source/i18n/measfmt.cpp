@@ -111,8 +111,8 @@ public:
      */
     UMeasureFormatWidth widthFallback[WIDTH_INDEX_COUNT];
     /** Measure unit -> format width -> array of patterns ("{0} meters") (plurals + PER_UNIT_INDEX) */
-    SimpleFormatter* patterns[MEAS_UNIT_COUNT][WIDTH_INDEX_COUNT][PATTERN_COUNT] = {};
-    const UChar* dnams[MEAS_UNIT_COUNT][WIDTH_INDEX_COUNT] = {};
+    SimpleFormatter* patterns[MEAS_UNIT_COUNT][WIDTH_INDEX_COUNT][PATTERN_COUNT];
+    const UChar* dnams[MEAS_UNIT_COUNT][WIDTH_INDEX_COUNT];
     SimpleFormatter perFormatters[WIDTH_INDEX_COUNT];
 
     MeasureFormatCacheData();
@@ -147,21 +147,25 @@ public:
     }
 
 private:
-    NumberFormat* currencyFormats[WIDTH_INDEX_COUNT] = {};
-    NumberFormat* integerFormat = nullptr;
-    NumericDateFormatters* numericDateFormatters = nullptr;
+    NumberFormat* currencyFormats[WIDTH_INDEX_COUNT];
+    NumberFormat* integerFormat;
+    NumericDateFormatters* numericDateFormatters;
 
     MeasureFormatCacheData(const MeasureFormatCacheData &other);
     MeasureFormatCacheData &operator=(const MeasureFormatCacheData &other);
 };
 
-MeasureFormatCacheData::MeasureFormatCacheData() {
+MeasureFormatCacheData::MeasureFormatCacheData()
+        : integerFormat(nullptr), numericDateFormatters(nullptr) {
     // Please update MEAS_UNIT_COUNT if it gets out of sync with the true count!
     U_ASSERT(MEAS_UNIT_COUNT == MeasureUnit::getIndexCount());
 
     for (int32_t i = 0; i < WIDTH_INDEX_COUNT; ++i) {
         widthFallback[i] = UMEASFMT_WIDTH_COUNT;
     }
+    memset(&patterns[0][0][0], 0, sizeof(patterns));
+    memset(&dnams[0][0], 0, sizeof(dnams));
+    memset(currencyFormats, 0, sizeof(currencyFormats));
 }
 
 MeasureFormatCacheData::~MeasureFormatCacheData() {
