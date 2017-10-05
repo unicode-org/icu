@@ -216,19 +216,17 @@ final class NumberPropertyMapper {
             // Scientific notation is required.
             // This whole section feels like a hack, but it is needed for regression tests.
             // The mapping from property bag to scientific notation is nontrivial due to LDML rules.
-            // The maximum of 8 digits has unknown origins and is not in the spec.
-            if (minInt > 8) {
-                minInt = 8;
-                maxInt = 8;
+            if (maxInt > 8) {
+                // But #13110: The maximum of 8 digits has unknown origins and is not in the spec.
+                // If maxInt is greater than 8, it is set to minInt, even if minInt is greater than 8.
+                maxInt = minInt;
+                macros.integerWidth = IntegerWidth.zeroFillTo(minInt).truncateAt(maxInt);
+            } else if (maxInt > minInt && minInt > 1) {
+                // Bug #13289: if maxInt > minInt > 1, then minInt should be 1.
+                minInt = 1;
                 macros.integerWidth = IntegerWidth.zeroFillTo(minInt).truncateAt(maxInt);
             }
-            int engineering = maxInt > 8 ? minInt : maxInt < minInt ? -1 : maxInt;
-            engineering = (engineering < 0) ? 0 : engineering;
-            // Bug #13289: if maxInt > minInt > 1, then minInt should be 1.
-            // Clear out IntegerWidth to prevent padding extra zeros.
-            if (maxInt > minInt && minInt > 1) {
-                macros.integerWidth = null;
-            }
+            int engineering = maxInt < 0 ? -1 : maxInt;
             macros.notation = new ScientificNotation(
                     // Engineering interval:
                     engineering,
@@ -241,6 +239,8 @@ final class NumberPropertyMapper {
             // Scientific notation also involves overriding the rounding mode.
             // TODO: Overriding here is a bit of a hack. Should this logic go earlier?
             if (macros.rounder instanceof FractionRounder) {
+                // For the purposes of rounding, get the original min/max int/frac, since the local variables
+                // have been manipulated for display purposes.
                 int minInt_ = properties.getMinimumIntegerDigits();
                 int minFrac_ = properties.getMinimumFractionDigits();
                 int maxFrac_ = properties.getMaximumFractionDigits();
@@ -252,7 +252,7 @@ final class NumberPropertyMapper {
                     macros.rounder = Rounder.constructSignificant(1, maxFrac_ + 1).withMode(mathContext);
                 } else {
                     // All other scientific patterns, which mean round to minInt+maxFrac
-                    macros.rounder = Rounder.constructSignificant(minInt + minFrac, minInt + maxFrac)
+                    macros.rounder = Rounder.constructSignificant(minInt_ + minFrac_, minInt_ + maxFrac_)
                             .withMode(mathContext);
                 }
             }
