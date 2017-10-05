@@ -752,15 +752,17 @@ public class NumberFormatDataDrivenTest {
   @Test
   public void TestDataDrivenJDK() {
     // Android implements java.text.DecimalFormat with ICU4J (ticket #13322).
-    if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
+    // Oracle/OpenJDK 9's behavior is not exactly same with Oracle/OpenJDK 8.
+    // Some test cases failed on 8 work well, while some other test cases
+    // fail on 9, but worked on 8. Skip this test case if Java version is not 8.
+    org.junit.Assume.assumeTrue(
+            TestUtil.getJavaVendor() != TestUtil.JavaVendor.Android
+            && TestUtil.getJavaVersion() < 9);
 
     if (TestUtil.getJavaVersion() == 8) {
-        DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
-                "numberformattestspecification.txt", JDK);
+      DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
+              "numberformattestspecification.txt", JDK);
     } else {
-        // Oracle/OpenJDK 9's behavior is not exactly same with Oracle/OpenJDK 8.
-        // Some test cases failed on 8 work well, while some other test cases
-        // fail on 9, but worked on 8. Skip this test case if Java version is not 8.
         return;
     }
   }
