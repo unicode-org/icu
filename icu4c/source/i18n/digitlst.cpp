@@ -53,7 +53,7 @@
 #if !defined(U_USE_STRTOD_L)
 # if U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_USE_STRTOD_L 1
-#   define DU_HAVE_XLOCALE_H 0
+#   define U_HAVE_XLOCALE_H 0
 # elif defined(U_HAVE_STRTOD_L)
 #   define U_USE_STRTOD_L U_HAVE_STRTOD_L
 # else
@@ -62,7 +62,7 @@
 #endif
 
 #if U_USE_STRTOD_L
-# if U_HAVE_XLOCALE_H==1
+# if U_HAVE_XLOCALE_H
 #   include <xlocale.h>
 # else
 #   include <locale.h>
