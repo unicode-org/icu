@@ -157,14 +157,12 @@ typedef enum UNumberUnitWidth {
      */
             UNUM_UNIT_WIDTH_HIDDEN,
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * One more than the highest UNumberUnitWidth value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
             UNUM_UNIT_WIDTH_COUNT
-#endif  /* U_HIDE_INTERNAL_API */
 } UNumberUnitWidth;
 
 /**
@@ -232,14 +230,12 @@ typedef enum UNumberSignDisplay {
      */
             UNUM_SIGN_ACCOUNTING_ALWAYS,
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * One more than the highest UNumberSignDisplay value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
             UNUM_SIGN_COUNT
-#endif  /* U_HIDE_INTERNAL_API */
 } UNumberSignDisplay;
 
 /**
@@ -267,14 +263,12 @@ typedef enum UNumberDecimalSeparatorDisplay {
      */
             UNUM_DECIMAL_SEPARATOR_ALWAYS,
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * One more than the highest UNumberDecimalSeparatorDisplay value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
             UNUM_DECIMAL_SEPARATOR_COUNT
-#endif  /* U_HIDE_INTERNAL_API */
 } UNumberDecimalMarkDisplay;
 
 U_NAMESPACE_BEGIN namespace number {  // icu::number
@@ -292,7 +286,6 @@ class IncrementRounder;
 class Grouper;
 class IntegerWidth;
 
-#ifndef U_HIDE_INTERNAL_API
 namespace impl {
 
 // Forward declarations:
@@ -313,7 +306,6 @@ class Modifier;
 class NumberStringBuilder;
 
 } // namespace impl
-#endif  /* U_HIDE_INTERNAL_API */
 
 // Reserve extra names in case they are added as classes in the future:
 typedef Notation CompactNotation;
@@ -1138,7 +1130,6 @@ class U_I18N_API IntegerWidth : public UMemory {
     friend class impl::NumberFormatterImpl;
 };
 
-#ifndef U_HIDE_INTERNAL_API
 namespace impl {
 
 /**
@@ -1337,7 +1328,6 @@ struct U_I18N_API MacroProps : public UMemory {
 };
 
 } // namespace impl
-#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * An abstract base class for specifying settings related to number formatting. This class is implemented by
