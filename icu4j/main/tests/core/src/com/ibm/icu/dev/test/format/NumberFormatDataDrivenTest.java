@@ -759,12 +759,8 @@ public class NumberFormatDataDrivenTest {
             TestUtil.getJavaVendor() != TestUtil.JavaVendor.Android
             && TestUtil.getJavaVersion() < 9);
 
-    if (TestUtil.getJavaVersion() == 8) {
-      DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
-              "numberformattestspecification.txt", JDK);
-    } else {
-        return;
-    }
+    DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
+            "numberformattestspecification.txt", JDK);
   }
 
   @Test
