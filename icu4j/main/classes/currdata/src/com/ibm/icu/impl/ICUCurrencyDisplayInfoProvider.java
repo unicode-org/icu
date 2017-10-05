@@ -33,6 +33,8 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
 
     @Override
     public CurrencyDisplayInfo getInstance(ULocale locale, boolean withFallback) {
+        // Make sure the locale is non-null (this can happen during deserialization):
+        if (locale == null) { locale = ULocale.ROOT; }
         ICUCurrencyDisplayInfo instance = currencyDisplayInfoCache;
         if (instance == null || !instance.locale.equals(locale) || instance.fallback != withFallback) {
             ICUResourceBundle rb;
