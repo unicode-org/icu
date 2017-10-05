@@ -839,7 +839,7 @@ parse	output	breaks
 (63,425)	-63425
 // JDK and S allow separators in sci notation and parses as -342.5
 // C passes
-(63,425E-1)	fail	KS
+(63,425E-1)	fail	CKS
 // Both prefix and suffix needed for strict.
 // JDK accepts this and parses as -342.5
 (3425E-1	fail	K

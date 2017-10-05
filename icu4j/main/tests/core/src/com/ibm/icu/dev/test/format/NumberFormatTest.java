@@ -5267,6 +5267,25 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13391() throws ParseException {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(new ULocale("ccp"));
+        df.setParseStrict(true);
+        String expected = "\uD804\uDD37\uD804\uDD38,\uD804\uDD39\uD804\uDD3A\uD804\uDD3B";
+        assertEquals("Should produce expected output in ccp", expected, df.format(12345));
+        Number result = df.parse(expected);
+        assertEquals("Should parse to 12345 in ccp", 12345, result.longValue());
+
+        df = (DecimalFormat) NumberFormat.getScientificInstance(new ULocale("ccp"));
+        df.setParseStrict(true);
+        String expectedScientific = "\uD804\uDD37.\uD804\uDD39E\uD804\uDD38";
+        assertEquals("Should produce expected scientific output in ccp",
+                expectedScientific, df.format(130));
+        Number resultScientific = df.parse(expectedScientific);
+        assertEquals("Should parse scientific to 130 in ccp",
+                130, resultScientific.longValue());
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);
