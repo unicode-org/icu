@@ -5261,8 +5261,9 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void Test13310() {
+        // Note: if minInt > 8, then maxInt can be greater than 8.
         assertEquals("Should not throw an assertion error",
-                "10000000.76E0",
+                "100000007.6E-1",
                 new DecimalFormat("000000000.0#E0").format(10000000.76d));
     }
 
