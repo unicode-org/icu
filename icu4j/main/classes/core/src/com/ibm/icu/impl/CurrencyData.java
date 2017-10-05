@@ -33,12 +33,14 @@ public class CurrencyData {
     }
 
     public static final class CurrencyFormatInfo {
+        public final String isoCode;
         public final String currencyPattern;
         public final String monetaryDecimalSeparator;
         public final String monetaryGroupingSeparator;
 
-        public CurrencyFormatInfo(String currencyPattern, String monetarySeparator,
+        public CurrencyFormatInfo(String isoCode, String currencyPattern, String monetarySeparator,
                 String monetaryGroupingSeparator) {
+            this.isoCode = isoCode;
             this.currencyPattern = currencyPattern;
             this.monetaryDecimalSeparator = monetarySeparator;
             this.monetaryGroupingSeparator = monetaryGroupingSeparator;
