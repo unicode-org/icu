@@ -75,25 +75,25 @@ void DecimalQuantityTest::testDecimalQuantityBehaviorStandalone() {
     DecimalQuantity fq;
     assertToStringAndHealth(fq, u"<DecimalQuantity 999:0:0:-999 long 0E0>");
     fq.setToInt(51423);
-    assertToStringAndHealth(fq, "<DecimalQuantity 999:0:0:-999 long 51423E0>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 999:0:0:-999 long 51423E0>");
     fq.adjustMagnitude(-3);
-    assertToStringAndHealth(fq, "<DecimalQuantity 999:0:0:-999 long 51423E-3>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 999:0:0:-999 long 51423E-3>");
     fq.setToLong(999999999999000L);
-    assertToStringAndHealth(fq, "<DecimalQuantity 999:0:0:-999 long 999999999999E3>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 999:0:0:-999 long 999999999999E3>");
     fq.setIntegerLength(2, 5);
-    assertToStringAndHealth(fq, "<DecimalQuantity 5:2:0:-999 long 999999999999E3>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 5:2:0:-999 long 999999999999E3>");
     fq.setFractionLength(3, 6);
-    assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 999999999999E3>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 5:2:-3:-6 long 999999999999E3>");
     fq.setToDouble(987.654321);
-    assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
     fq.roundToInfinity();
-    assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
     fq.roundToIncrement(0.005, RoundingMode::UNUM_ROUND_HALFEVEN, 3, status);
     assertSuccess("Rounding to increment", status);
-    assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987655E-3>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 5:2:-3:-6 long 987655E-3>");
     fq.roundToMagnitude(-2, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to magnitude", status);
-    assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 98766E-2>");
+    assertToStringAndHealth(fq, u"<DecimalQuantity 5:2:-3:-6 long 98766E-2>");
 }
 
 void DecimalQuantityTest::testSwitchStorage() {
@@ -102,67 +102,67 @@ void DecimalQuantityTest::testSwitchStorage() {
 
     fq.setToLong(1234123412341234L);
     assertFalse("Should not be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on initialize", "1234123412341234E0", fq.toNumberString());
+    assertEquals("Failed on initialize", u"1234123412341234E0", fq.toNumberString());
     assertHealth(fq);
     // Long -> Bytes
     fq.appendDigit(5, 0, true);
     assertTrue("Should be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on multiply", "12341234123412345E0", fq.toNumberString());
+    assertEquals("Failed on multiply", u"12341234123412345E0", fq.toNumberString());
     assertHealth(fq);
     // Bytes -> Long
     fq.roundToMagnitude(5, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to magnitude", status);
     assertFalse("Should not be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on round", "123412341234E5", fq.toNumberString());
+    assertEquals("Failed on round", u"123412341234E5", fq.toNumberString());
     assertHealth(fq);
 }
 
 void DecimalQuantityTest::testAppend() {
     DecimalQuantity fq;
     fq.appendDigit(1, 0, true);
-    assertEquals("Failed on append", "1E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1E0", fq.toNumberString());
     assertHealth(fq);
     fq.appendDigit(2, 0, true);
-    assertEquals("Failed on append", "12E0", fq.toNumberString());
+    assertEquals("Failed on append", u"12E0", fq.toNumberString());
     assertHealth(fq);
     fq.appendDigit(3, 1, true);
-    assertEquals("Failed on append", "1203E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1203E0", fq.toNumberString());
     assertHealth(fq);
     fq.appendDigit(0, 1, true);
-    assertEquals("Failed on append", "1203E2", fq.toNumberString());
+    assertEquals("Failed on append", u"1203E2", fq.toNumberString());
     assertHealth(fq);
     fq.appendDigit(4, 0, true);
-    assertEquals("Failed on append", "1203004E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1203004E0", fq.toNumberString());
     assertHealth(fq);
     fq.appendDigit(0, 0, true);
-    assertEquals("Failed on append", "1203004E1", fq.toNumberString());
+    assertEquals("Failed on append", u"1203004E1", fq.toNumberString());
     assertHealth(fq);
     fq.appendDigit(5, 0, false);
-    assertEquals("Failed on append", "120300405E-1", fq.toNumberString());
+    assertEquals("Failed on append", u"120300405E-1", fq.toNumberString());
     assertHealth(fq);
     fq.appendDigit(6, 0, false);
-    assertEquals("Failed on append", "1203004056E-2", fq.toNumberString());
+    assertEquals("Failed on append", u"1203004056E-2", fq.toNumberString());
     assertHealth(fq);
     fq.appendDigit(7, 3, false);
-    assertEquals("Failed on append", "12030040560007E-6", fq.toNumberString());
+    assertEquals("Failed on append", u"12030040560007E-6", fq.toNumberString());
     assertHealth(fq);
-    UnicodeString baseExpected("12030040560007");
+    UnicodeString baseExpected(u"12030040560007");
     for (int i = 0; i < 10; i++) {
         fq.appendDigit(8, 0, false);
-        baseExpected.append('8');
+        baseExpected.append(u'8');
         UnicodeString expected(baseExpected);
-        expected.append("E-");
+        expected.append(u"E-");
         if (i >= 3) {
-            expected.append('1');
+            expected.append(u'1');
         }
-        expected.append(((7 + i) % 10) + '0');
+        expected.append(((7 + i) % 10) + u'0');
         assertEquals("Failed on append", expected, fq.toNumberString());
         assertHealth(fq);
     }
     fq.appendDigit(9, 2, false);
-    baseExpected.append("009");
+    baseExpected.append(u"009");
     UnicodeString expected(baseExpected);
-    expected.append("E-19");
+    expected.append(u"E-19");
     assertEquals("Failed on append", expected, fq.toNumberString());
     assertHealth(fq);
 }
