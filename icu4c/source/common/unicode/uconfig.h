@@ -76,7 +76,7 @@
 #endif
 
 /**
- * Determines wheter to enable auto cleanup of libraries. 
+ * Determines whether to enable auto cleanup of libraries. 
  * @internal
  */
 #ifndef UCLN_NO_AUTO_CLEANUP

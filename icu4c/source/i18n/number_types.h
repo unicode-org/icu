@@ -107,7 +107,7 @@ public:
     virtual char16_t charAt(int32_t index) const = 0;
 
     virtual UChar32 codePointAt(int32_t index) const {
-        // Default implementation; can be overriden with a more efficient version
+        // Default implementation; can be overridden with a more efficient version
         char16_t leading = charAt(index);
         if (U16_IS_LEAD(leading) && length() > index + 1) {
             char16_t trailing = charAt(index + 1);

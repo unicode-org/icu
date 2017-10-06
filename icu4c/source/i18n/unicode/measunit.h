@@ -148,7 +148,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * <pre>
      * .   Base* polymorphic_pointer = createPolymorphicObject();
      * .   if (polymorphic_pointer->getDynamicClassID() ==
-     * .       erived::getStaticClassID()) ...
+     * .       Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
      * @stable ICU 53
