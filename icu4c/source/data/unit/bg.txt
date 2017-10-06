@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 bg{
-    Version{"2.1.37.5"}
+    Version{"2.1.37.59"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -805,9 +805,9 @@ bg{
                 other{"{0} д"}
             }
             hour{
-                dnam{"h"}
-                one{"{0} h"}
-                other{"{0} h"}
+                dnam{"ч"}
+                one{"{0} ч"}
+                other{"{0} ч"}
             }
             millisecond{
                 dnam{"ms"}
@@ -815,9 +815,9 @@ bg{
                 other{"{0} ms"}
             }
             minute{
-                dnam{"min"}
-                one{"{0} min"}
-                other{"{0} min"}
+                dnam{"мин"}
+                one{"{0} мин"}
+                other{"{0} мин"}
             }
             month{
                 dnam{"м"}
@@ -825,9 +825,9 @@ bg{
                 other{"{0} м"}
             }
             second{
-                dnam{"s"}
-                one{"{0} s"}
-                other{"{0} s"}
+                dnam{"с"}
+                one{"{0} с"}
+                other{"{0} с"}
             }
             week{
                 dnam{"седм."}

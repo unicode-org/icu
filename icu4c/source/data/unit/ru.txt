@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ru{
-    Version{"2.1.37.12"}
+    Version{"2.1.37.58"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -1229,10 +1229,10 @@ ru{
             }
             foot{
                 dnam{"фт"}
-                few{"{0} фута"}
-                many{"{0} футов"}
-                one{"{0} фут"}
-                other{"{0} фута"}
+                few{"{0} фт"}
+                many{"{0} фт"}
+                one{"{0} фт"}
+                other{"{0} фт"}
                 per{"{0}/фт"}
             }
             furlong{
@@ -2046,10 +2046,10 @@ ru{
             }
             foot{
                 dnam{"фт"}
-                few{"{0} фт"}
-                many{"{0} фт"}
-                one{"{0} фт"}
-                other{"{0} фт"}
+                few{"{0} фута"}
+                many{"{0} футов"}
+                one{"{0} фут"}
+                other{"{0} фута"}
                 per{"{0}/фт"}
             }
             furlong{

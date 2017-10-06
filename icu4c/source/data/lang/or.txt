@@ -738,7 +738,7 @@ or{
             tibt{"ତିବେତାନ୍ ଅଙ୍କଗୁଡିକ"}
         }
     }
-    Version{"2.1.36.86"}
+    Version{"2.1.37.57"}
     characterLabelPattern{
         all{"{0} — ସମସ୍ତ"}
         category-list{"{0}: {1}"}
