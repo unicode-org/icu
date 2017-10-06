@@ -227,7 +227,7 @@ enum PluralOperand {
  */
 class U_I18N_API IFixedDecimal {
   public:
-    virtual ~IFixedDecimal() = default;
+    virtual ~IFixedDecimal();
 
     /**
      * Returns the value corresponding to the specified operand (n, i, f, t, v, or w).
@@ -278,7 +278,7 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     explicit FixedDecimal(double n);
     explicit FixedDecimal(const VisibleDigits &n);
     FixedDecimal();
-    ~FixedDecimal() U_OVERRIDE = default;
+    ~FixedDecimal() U_OVERRIDE;
     FixedDecimal(const UnicodeString &s, UErrorCode &ec);
     FixedDecimal(const FixedDecimal &other);
 
