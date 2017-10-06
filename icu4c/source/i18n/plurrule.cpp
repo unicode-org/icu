@@ -1620,9 +1620,9 @@ void FixedDecimal::adjustForMinFractionDigits(int32_t minFractionDigits) {
 double FixedDecimal::getPluralOperand(PluralOperand operand) const {
     switch(operand) {
         case PLURAL_OPERAND_N: return source;
-        case PLURAL_OPERAND_I: return intValue;
-        case PLURAL_OPERAND_F: return decimalDigits;
-        case PLURAL_OPERAND_T: return decimalDigitsWithoutTrailingZeros; 
+        case PLURAL_OPERAND_I: return static_cast<double>(intValue);
+        case PLURAL_OPERAND_F: return static_cast<double>(decimalDigits);
+        case PLURAL_OPERAND_T: return static_cast<double>(decimalDigitsWithoutTrailingZeros);
         case PLURAL_OPERAND_V: return visibleDecimalDigitCount;
         default:
              U_ASSERT(FALSE);  // unexpected.
