@@ -1405,6 +1405,8 @@ PluralKeywordEnumeration::count(UErrorCode& /*status*/) const {
 PluralKeywordEnumeration::~PluralKeywordEnumeration() {
 }
 
+IFixedDecimal::~IFixedDecimal() = default;
+
 FixedDecimal::FixedDecimal(const VisibleDigits &digits) {
     digits.getFixedDecimal(
             source, intValue, decimalDigits,
@@ -1480,6 +1482,8 @@ FixedDecimal::FixedDecimal(const FixedDecimal &other) {
     _isNaN = other._isNaN;
     _isInfinite = other._isInfinite;
 }
+
+FixedDecimal::~FixedDecimal() = default;
 
 
 void FixedDecimal::init(double n) {
