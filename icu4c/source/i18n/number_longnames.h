@@ -14,7 +14,7 @@
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
-class LongNameHandler : public MicroPropsGenerator, public UObject {
+class LongNameHandler : public MicroPropsGenerator, public UMemory {
   public:
     static LongNameHandler
     forCurrencyLongNames(const Locale &loc, const CurrencyUnit &currency, const PluralRules *rules,

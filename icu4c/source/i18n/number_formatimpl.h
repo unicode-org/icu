@@ -22,7 +22,7 @@ namespace impl {
  * This is the "brain" of the number formatting pipeline. It ties all the pieces together, taking in a MacroProps and a
  * DecimalQuantity and outputting a properly formatted number string.
  */
-class NumberFormatterImpl {
+class NumberFormatterImpl : public UMemory {
   public:
     /**
      * Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly.
