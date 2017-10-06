@@ -32,7 +32,7 @@ template class U_I18N_API LocalPointer<ParameterizedModifier>;
 #endif
 
 // Exported as U_I18N_API because it is needed for the unit test PatternModifierTest
-class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
+class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator, public UMemory {
   public:
 	~ImmutablePatternModifier() U_OVERRIDE = default;
 
@@ -70,7 +70,11 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator {
  * variant.
  */
 class U_I18N_API MutablePatternModifier
-        : public MicroPropsGenerator, public Modifier, public SymbolProvider, public CharSequence {
+        : public MicroPropsGenerator,
+          public Modifier,
+          public SymbolProvider,
+          public CharSequence,
+          public UMemory {
   public:
 
     ~MutablePatternModifier() U_OVERRIDE = default;

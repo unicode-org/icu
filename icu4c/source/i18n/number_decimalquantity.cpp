@@ -87,7 +87,7 @@ DecimalQuantity::DecimalQuantity() {
 
 DecimalQuantity::~DecimalQuantity() {
     if (usingBytes) {
-        delete[] fBCD.bcdBytes.ptr;
+        uprv_free(fBCD.bcdBytes.ptr);
         fBCD.bcdBytes.ptr = nullptr;
         usingBytes = false;
     }
@@ -383,7 +383,7 @@ void DecimalQuantity::_setToDoubleFast(double n) {
         for (; i <= -22; i += 22) n /= 1e22;
         n /= DOUBLE_MULTIPLIERS[-i];
     }
-    auto result = static_cast<int64_t>(round(n));
+    auto result = static_cast<int64_t>(std::round(n));
     if (result != 0) {
         _setToLong(result);
         scale -= fracLength;
@@ -764,7 +764,7 @@ void DecimalQuantity::shiftRight(int32_t numDigits) {
 
 void DecimalQuantity::setBcdToZero() {
     if (usingBytes) {
-        delete[] fBCD.bcdBytes.ptr;
+        uprv_free(fBCD.bcdBytes.ptr);
         fBCD.bcdBytes.ptr = nullptr;
         usingBytes = false;
     }
@@ -885,16 +885,18 @@ void DecimalQuantity::ensureCapacity(int32_t capacity) {
     int32_t oldCapacity = usingBytes ? fBCD.bcdBytes.len : 0;
     if (!usingBytes) {
         // TODO: There is nothing being done to check for memory allocation failures.
-        fBCD.bcdBytes.ptr = new int8_t[capacity];
+        // TODO: Consider indexing by nybbles instead of bytes in C++, so that we can
+        // make these arrays half the size.
+        fBCD.bcdBytes.ptr = static_cast<int8_t*>(uprv_malloc(capacity * sizeof(int8_t)));
         fBCD.bcdBytes.len = capacity;
         // Initialize the byte array to zeros (this is done automatically in Java)
         uprv_memset(fBCD.bcdBytes.ptr, 0, capacity * sizeof(int8_t));
     } else if (oldCapacity < capacity) {
-        auto bcd1 = new int8_t[capacity * 2];
+        auto bcd1 = static_cast<int8_t*>(uprv_malloc(capacity * 2 * sizeof(int8_t)));
         uprv_memcpy(bcd1, fBCD.bcdBytes.ptr, oldCapacity * sizeof(int8_t));
         // Initialize the rest of the byte array to zeros (this is done automatically in Java)
         uprv_memset(fBCD.bcdBytes.ptr + oldCapacity, 0, (capacity - oldCapacity) * sizeof(int8_t));
-        delete[] fBCD.bcdBytes.ptr;
+        uprv_free(fBCD.bcdBytes.ptr);
         fBCD.bcdBytes.ptr = bcd1;
         fBCD.bcdBytes.len = capacity * 2;
     }
@@ -909,7 +911,7 @@ void DecimalQuantity::switchStorage() {
             bcdLong <<= 4;
             bcdLong |= fBCD.bcdBytes.ptr[i];
         }
-        delete[] fBCD.bcdBytes.ptr;
+        uprv_free(fBCD.bcdBytes.ptr);
         fBCD.bcdBytes.ptr = nullptr;
         fBCD.bcdLong = bcdLong;
         usingBytes = false;
