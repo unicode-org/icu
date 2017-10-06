@@ -79,6 +79,7 @@ void PatternModifierTest::testMutableEqualsImmutable() {
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
     CurrencyUnit currency(u"USD", status);
     assertSuccess("Spot 2", status);
+    if (U_FAILURE(status)) { return; }
     mod.setSymbols(&symbols, currency, UNUM_UNIT_WIDTH_SHORT, nullptr);
     DecimalQuantity fq;
     fq.setToInt(1);

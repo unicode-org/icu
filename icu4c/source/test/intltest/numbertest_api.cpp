@@ -17,7 +17,6 @@ UErrorCode globalNumberFormatterApiTestStatus = U_ZERO_ERROR;
 
 NumberFormatterApiTest::NumberFormatterApiTest()
         : NumberFormatterApiTest(globalNumberFormatterApiTestStatus) {
-    U_ASSERT(U_SUCCESS(globalNumberFormatterApiTestStatus));
 }
 
 NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode &status)
@@ -28,6 +27,10 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode &status)
                 MYANMAR_SYMBOLS(Locale("my"), status) {
 
     MeasureUnit *unit = MeasureUnit::createMeter(status);
+    if (U_FAILURE(status)) {
+        dataerrln("%s %d status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
     METER = *unit;
     delete unit;
     unit = MeasureUnit::createDay(status);

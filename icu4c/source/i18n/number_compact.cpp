@@ -60,6 +60,7 @@ void CompactData::populate(const Locale &locale, const char *nsName, CompactStyl
                            CompactType compactType, UErrorCode &status) {
     CompactDataSink sink(*this);
     LocalUResourceBundlePointer rb(ures_open(nullptr, locale.getName(), &status));
+    if (U_FAILURE(status)) { return; }
 
     bool nsIsLatn = strcmp(nsName, "latn") == 0;
     bool compactIsShort = compactStyle == CompactStyle::UNUM_SHORT;
