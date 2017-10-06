@@ -776,9 +776,6 @@
     <ClInclude Include="number_patternmodifier.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="">
-      <Filter>formatting</Filter>
-    </ClInclude>
     <ClInclude Include="number_patternstring.h">
       <Filter>formatting</Filter>
     </ClInclude>
