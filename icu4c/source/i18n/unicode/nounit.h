@@ -23,6 +23,7 @@
 
 U_NAMESPACE_BEGIN
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Dimensionless unit for percent and permille.
  * @see NumberFormatter
@@ -99,7 +100,7 @@ private:
     NoUnit(const char* subtype);
 
 };
-
+#endif  /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_END
 

@@ -691,11 +691,13 @@ private:
     const LanguageBreakEngine *getLanguageBreakEngine(UChar32 c);
 
   public:
+#ifndef U_HIDE_INTERNAL_API
     /**
      *   Debugging function only.
      *   @internal
      */
      void dumpCache();
+#endif  /* U_HIDE_INTERNAL_API */
 };
 
 //------------------------------------------------------------------------------

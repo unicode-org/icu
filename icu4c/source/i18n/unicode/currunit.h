@@ -58,6 +58,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      */
     CurrencyUnit(const CurrencyUnit& other);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Copy constructor from MeasureUnit. This constructor allows you to
      * restore a CurrencyUnit that was sliced to MeasureUnit.
@@ -67,6 +68,7 @@ class U_I18N_API CurrencyUnit: public MeasureUnit {
      * @draft ICU 60
      */
     CurrencyUnit(const MeasureUnit& measureUnit, UErrorCode &ec);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Assignment operator
