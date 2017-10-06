@@ -15,7 +15,8 @@
 U_ICUDATA_NAME=icudt60
 ##############################################################################
 !IF "$(UWP)" == "UWP"
-U_ICUDATA_NAME=icudt
+# Optionally change the name of the data file for the UWP version.
+U_ICUDATA_NAME=icudt60
 !ENDIF
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=10.0
