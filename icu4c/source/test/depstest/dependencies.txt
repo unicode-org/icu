@@ -46,12 +46,12 @@ group: c_strings
 
 group: c_string_formatting
     atoi atol strtod strtod_l strtol strtoul
-    sprintf
+    sprintf snprintf
     # Additional symbols in an optimized build.
     __sprintf_chk
 
 group: floating_point
-    abs fabs floor ceil modf fmod log pow sqrt
+    abs fabs floor ceil modf fmod log pow round sqrt
 
 group: trigonometry
     acos asin atan atan2 cos sin tan
@@ -120,6 +120,8 @@ group: iostream
     "std::basic_ios<char, std::char_traits<char> >::eof() const"
     "std::basic_ios<char, std::char_traits<char> >::fail() const"
     "std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)"
+    std::ios_base::Init::Init()
+    std::ios_base::Init::~Init()
     std::istream::get()
     std::istream::putback(char)
     # Additional symbols in an optimized build.
@@ -185,7 +187,7 @@ group: breakiterator
     #   fThaiWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Thai:]&[:LineBreak=SA:]]"), status)
     brkiter.o brkeng.o ubrk.o
     rbbi.o rbbinode.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o
-    rbbidata.o rbbirb.o
+    rbbidata.o rbbirb.o rbbi_cache.o
     dictionarydata.o dictbe.o
     # BreakIterator::makeInstance() factory implementation makes for circular dependency
     # between BreakIterator base and FilteredBreakIteratorBuilder.
@@ -260,6 +262,7 @@ group: normalizer2
     normalizer2impl.o
   deps
     uniset_core
+    bytestream bytesinkutil  # for UTF-8 output
     utrie2_builder  # for building CanonIterData & FCD
     uvector  # for building CanonIterData
     uhash  # for the instance cache
@@ -470,11 +473,13 @@ group: ucasemap_titlecase_brkiter
     ucasemap_titlecase_brkiter.o
   deps
     ucasemap breakiterator utext
+    ustr_titlecase_brkiter  # ustrcase_getTitleBreakIterator()
 
 group: ucasemap
     ucasemap.o
   deps
     ustring_case ustring_case_locale
+    bytestream bytesinkutil  # for UTF-8 output
     resourcebundle  # uloc_getName() etc.
 
 group: ustring_case_locale
@@ -486,7 +491,7 @@ group: ustring_case_locale
 group: ustring_case
     ustrcase.o
   deps
-    ucase edits
+    ucase uchar edits
 
 group: ucase
     ucase.o
@@ -727,6 +732,11 @@ group: ustr_wcs
   deps
     platform
 
+group: bytesinkutil
+    bytesinkutil.o
+  deps
+    bytestream edits
+
 group: bytestream
     bytestream.o
   deps
@@ -783,6 +793,7 @@ library: i18n
     alphabetic_index collation collation_builder string_search
     dayperiodrules
     formatting formattable_cnv regex regex_cnv translit
+    numberformatter
     universal_time_scale
     uclean_i18n
 
@@ -856,10 +867,25 @@ group: dayperiodrules
   deps
     resourcebundle uclean_i18n
 
+group: numberformatter
+    # ICU 60+ NumberFormatter API
+    number_affixutils.o number_compact.o number_decimalquantity.o
+    number_decimfmtprops.o number_fluent.o number_formatimpl.o
+    number_grouping.o number_integerwidth.o number_longnames.o
+    number_modifiers.o number_notation.o number_padding.o
+    number_patternmodifier.o number_patternstring.o number_rounding.o
+    number_scientific.o number_stringbuilder.o
+  deps
+    digitlist formattable format units
+    # TODO: fix: dependency on formatting needed for circular dependency pluralrules <-> decimfmt.o
+    # We should be able to have a small pluralrules group and depend on that here.
+    formatting
+    uclean_i18n common
+
 group: formatting
     # TODO: Try to subdivide this ball of wax.
     # currencyformat
-    curramt.o currfmt.o currpinf.o currunit.o
+    curramt.o currfmt.o currpinf.o
     # decimalformat
     dcfmtsym.o numsys.o unumsys.o
     affixpatternparser.o decimfmtimpl.o digitaffix.o digitaffixesandpadding.o
@@ -875,7 +901,7 @@ group: formatting
     # rbnf
     nfrs.o nfrule.o nfsubs.o rbnf.o
     # measureformat
-    measfmt.o measunit.o quantityformatter.o
+    measfmt.o quantityformatter.o
     # dateformat
     astro.o buddhcal.o calendar.o cecal.o chnsecal.o coptccal.o dangical.o ethpccal.o
     gregocal.o gregoimp.o hebrwcal.o indiancal.o islamcal.o japancal.o persncal.o taiwncal.o
@@ -890,7 +916,7 @@ group: formatting
     # messageformat
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
-    digitlist formattable format
+    digitlist formattable format units
     dayperiodrules
     collation collation_builder  # for rbnf
     common
@@ -903,6 +929,11 @@ group: sharedbreakiterator
     sharedbreakiterator.o
   deps
     breakiterator
+
+group: units
+    measunit.o currunit.o nounit.o
+  deps
+    stringenumeration
 
 group: digitlist
     digitlst.o decContext.o decNumber.o visibledigits.o
