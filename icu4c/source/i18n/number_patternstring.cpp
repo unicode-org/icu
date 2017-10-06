@@ -120,7 +120,7 @@ void ParsedPatternInfo::consumePattern(const UnicodeString& patternString, UErro
     currentSubpattern = &positive;
     consumeSubpattern(status);
     if (U_FAILURE(status)) { return; }
-    if (state.peek() == ';') {
+    if (state.peek() == u';') {
         state.next(); // consume the ';'
         // Don't consume the negative subpattern if it is empty (trailing ';')
         if (state.peek() != -1) {
@@ -157,7 +157,7 @@ void ParsedPatternInfo::consumeSubpattern(UErrorCode &status) {
 }
 
 void ParsedPatternInfo::consumePadding(PadPosition paddingLocation, UErrorCode &status) {
-    if (state.peek() != '*') {
+    if (state.peek() != u'*') {
         return;
     }
     if (!currentSubpattern->paddingLocation.isNull()) {
@@ -177,28 +177,28 @@ void ParsedPatternInfo::consumeAffix(Endpoints &endpoints, UErrorCode &status) {
     endpoints.start = state.offset;
     while (true) {
         switch (state.peek()) {
-            case '#':
-            case '@':
-            case ';':
-            case '*':
-            case '.':
-            case ',':
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
+            case u'#':
+            case u'@':
+            case u';':
+            case u'*':
+            case u'.':
+            case u',':
+            case u'0':
+            case u'1':
+            case u'2':
+            case u'3':
+            case u'4':
+            case u'5':
+            case u'6':
+            case u'7':
+            case u'8':
+            case u'9':
             case -1:
                 // Characters that cannot appear unquoted in a literal
                 // break outer;
                 goto after_outer;
 
-            case '%':
+            case u'%':
                 currentSubpattern->hasPercentSign = true;
                 break;
 
@@ -210,11 +210,11 @@ void ParsedPatternInfo::consumeAffix(Endpoints &endpoints, UErrorCode &status) {
                 currentSubpattern->hasCurrencySign = true;
                 break;
 
-            case '-':
+            case u'-':
                 currentSubpattern->hasMinusSign = true;
                 break;
 
-            case '+':
+            case u'+':
                 currentSubpattern->hasPlusSign = true;
                 break;
 
@@ -233,9 +233,9 @@ void ParsedPatternInfo::consumeLiteral(UErrorCode &status) {
         state.toParseException(u"Expected unquoted literal but found EOL");
         status = U_PATTERN_SYNTAX_ERROR;
         return;
-    } else if (state.peek() == '\'') {
+    } else if (state.peek() == u'\'') {
         state.next(); // consume the starting quote
-        while (state.peek() != '\'') {
+        while (state.peek() != u'\'') {
             if (state.peek() == -1) {
                 state.toParseException(u"Expected quoted literal but found EOL");
                 status = U_PATTERN_SYNTAX_ERROR;
@@ -254,7 +254,7 @@ void ParsedPatternInfo::consumeLiteral(UErrorCode &status) {
 void ParsedPatternInfo::consumeFormat(UErrorCode &status) {
     consumeIntegerFormat(status);
     if (U_FAILURE(status)) { return; }
-    if (state.peek() == '.') {
+    if (state.peek() == u'.') {
         state.next(); // consume the decimal point
         currentSubpattern->hasDecimal = true;
         currentSubpattern->widthExceptAffixes += 1;
@@ -269,12 +269,12 @@ void ParsedPatternInfo::consumeIntegerFormat(UErrorCode &status) {
 
     while (true) {
         switch (state.peek()) {
-            case ',':
+            case u',':
                 result.widthExceptAffixes += 1;
                 result.groupingSizes <<= 16;
                 break;
 
-            case '#':
+            case u'#':
                 if (result.integerNumerals > 0) {
                     state.toParseException(u"# cannot follow 0 before decimal point");
                     status = U_UNEXPECTED_TOKEN;
@@ -290,7 +290,7 @@ void ParsedPatternInfo::consumeIntegerFormat(UErrorCode &status) {
                 result.integerTotal += 1;
                 break;
 
-            case '@':
+            case u'@':
                 if (result.integerNumerals > 0) {
                     state.toParseException(u"Cannot mix 0 and @");
                     status = U_UNEXPECTED_TOKEN;
@@ -307,16 +307,16 @@ void ParsedPatternInfo::consumeIntegerFormat(UErrorCode &status) {
                 result.integerTotal += 1;
                 break;
 
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
+            case u'0':
+            case u'1':
+            case u'2':
+            case u'3':
+            case u'4':
+            case u'5':
+            case u'6':
+            case u'7':
+            case u'8':
+            case u'9':
                 if (result.integerAtSigns > 0) {
                     state.toParseException(u"Cannot mix @ and 0");
                     status = U_UNEXPECTED_TOKEN;
@@ -326,8 +326,8 @@ void ParsedPatternInfo::consumeIntegerFormat(UErrorCode &status) {
                 result.groupingSizes += 1;
                 result.integerNumerals += 1;
                 result.integerTotal += 1;
-                if (!result.rounding.isZero() || state.peek() != '0') {
-                    result.rounding.appendDigit(static_cast<int8_t>(state.peek() - '0'), 0, true);
+                if (!result.rounding.isZero() || state.peek() != u'0') {
+                    result.rounding.appendDigit(static_cast<int8_t>(state.peek() - u'0'), 0, true);
                 }
                 break;
 
@@ -361,23 +361,23 @@ void ParsedPatternInfo::consumeFractionFormat(UErrorCode &status) {
     int32_t zeroCounter = 0;
     while (true) {
         switch (state.peek()) {
-            case '#':
+            case u'#':
                 result.widthExceptAffixes += 1;
                 result.fractionHashSigns += 1;
                 result.fractionTotal += 1;
                 zeroCounter++;
                 break;
 
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
+            case u'0':
+            case u'1':
+            case u'2':
+            case u'3':
+            case u'4':
+            case u'5':
+            case u'6':
+            case u'7':
+            case u'8':
+            case u'9':
                 if (result.fractionHashSigns > 0) {
                     state.toParseException(u"0 cannot follow # after decimal point");
                     status = U_UNEXPECTED_TOKEN;
@@ -386,11 +386,11 @@ void ParsedPatternInfo::consumeFractionFormat(UErrorCode &status) {
                 result.widthExceptAffixes += 1;
                 result.fractionNumerals += 1;
                 result.fractionTotal += 1;
-                if (state.peek() == '0') {
+                if (state.peek() == u'0') {
                     zeroCounter++;
                 } else {
                     result.rounding
-                            .appendDigit(static_cast<int8_t>(state.peek() - '0'), zeroCounter, false);
+                            .appendDigit(static_cast<int8_t>(state.peek() - u'0'), zeroCounter, false);
                     zeroCounter = 0;
                 }
                 break;
@@ -406,7 +406,7 @@ void ParsedPatternInfo::consumeExponent(UErrorCode &status) {
     // Convenience reference:
     ParsedSubpatternInfo &result = *currentSubpattern;
 
-    if (state.peek() != 'E') {
+    if (state.peek() != u'E') {
         return;
     }
     if ((result.groupingSizes & 0xffff0000L) != 0xffff0000L) {
@@ -416,12 +416,12 @@ void ParsedPatternInfo::consumeExponent(UErrorCode &status) {
     }
     state.next(); // consume the E
     result.widthExceptAffixes++;
-    if (state.peek() == '+') {
+    if (state.peek() == u'+') {
         state.next(); // consume the +
         result.exponentHasPlusSign = true;
         result.widthExceptAffixes++;
     }
-    while (state.peek() == '0') {
+    while (state.peek() == u'0') {
         state.next(); // consume the 0
         result.exponentZeros += 1;
         result.widthExceptAffixes++;
@@ -573,7 +573,7 @@ void PatternParser::patternInfoToProperties(DecimalFormatProperties &properties,
         if (rawPaddingString.length() == 1) {
             properties.padString = rawPaddingString;
         } else if (rawPaddingString.length() == 2) {
-            if (rawPaddingString.charAt(0) == '\'') {
+            if (rawPaddingString.charAt(0) == u'\'') {
                 properties.padString.setTo(u"'", -1);
             } else {
                 properties.padString = rawPaddingString;
@@ -683,10 +683,10 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     if (maxSig != uprv_min(dosMax, -1)) {
         // Significant Digits.
         while (digitsString.length() < minSig) {
-            digitsString.append('@');
+            digitsString.append(u'@');
         }
         while (digitsString.length() < maxSig) {
-            digitsString.append('#');
+            digitsString.append(u'#');
         }
     } else if (roundingInterval != 0.0) {
         // Rounding Interval.
@@ -697,7 +697,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         incrementQuantity.adjustMagnitude(minFrac);
         incrementQuantity.roundToMagnitude(0, kDefaultMode, status);
         UnicodeString str = incrementQuantity.toPlainString();
-        if (str.charAt(0) == '-') {
+        if (str.charAt(0) == u'-') {
             // TODO: Unsupported operation exception or fail silently?
             digitsString.append(str, 1, str.length() - 1);
         } else {
@@ -705,10 +705,10 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         }
     }
     while (digitsString.length() + digitsStringScale < minInt) {
-        digitsString.insert(0, '0');
+        digitsString.insert(0, u'0');
     }
     while (-digitsStringScale < minFrac) {
-        digitsString.append('0');
+        digitsString.append(u'0');
         digitsStringScale--;
     }
 
@@ -719,27 +719,27 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     for (int magnitude = m0; magnitude >= mN; magnitude--) {
         int di = digitsString.length() + digitsStringScale - magnitude - 1;
         if (di < 0 || di >= digitsString.length()) {
-            sb.append('#');
+            sb.append(u'#');
         } else {
             sb.append(digitsString.charAt(di));
         }
         if (magnitude > grouping2 && grouping > 0 && (magnitude - grouping2) % grouping == 0) {
-            sb.append(',');
+            sb.append(u',');
         } else if (magnitude > 0 && magnitude == grouping2) {
-            sb.append(',');
+            sb.append(u',');
         } else if (magnitude == 0 && (alwaysShowDecimal || mN < 0)) {
-            sb.append('.');
+            sb.append(u'.');
         }
     }
 
     // Exponential notation
     if (exponentDigits != uprv_min(dosMax, -1)) {
-        sb.append('E');
+        sb.append(u'E');
         if (exponentShowPlusSign) {
-            sb.append('+');
+            sb.append(u'+');
         }
         for (int i = 0; i < exponentDigits; i++) {
-            sb.append('0');
+            sb.append(u'0');
         }
     }
 
@@ -753,29 +753,29 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     // Resolve Padding
     if (paddingWidth != -1 && !paddingLocation.isNull()) {
         while (paddingWidth - sb.length() > 0) {
-            sb.insert(afterPrefixPos, '#');
+            sb.insert(afterPrefixPos, u'#');
             beforeSuffixPos++;
         }
         int addedLength;
         switch (paddingLocation.get(status)) {
             case PadPosition::UNUM_PAD_BEFORE_PREFIX:
                 addedLength = escapePaddingString(paddingString, sb, 0, status);
-                sb.insert(0, '*');
+                sb.insert(0, u'*');
                 afterPrefixPos += addedLength + 1;
                 beforeSuffixPos += addedLength + 1;
                 break;
             case PadPosition::UNUM_PAD_AFTER_PREFIX:
                 addedLength = escapePaddingString(paddingString, sb, afterPrefixPos, status);
-                sb.insert(afterPrefixPos, '*');
+                sb.insert(afterPrefixPos, u'*');
                 afterPrefixPos += addedLength + 1;
                 beforeSuffixPos += addedLength + 1;
                 break;
             case PadPosition::UNUM_PAD_BEFORE_SUFFIX:
                 escapePaddingString(paddingString, sb, beforeSuffixPos, status);
-                sb.insert(beforeSuffixPos, '*');
+                sb.insert(beforeSuffixPos, u'*');
                 break;
             case PadPosition::UNUM_PAD_AFTER_SUFFIX:
-                sb.append('*');
+                sb.append(u'*');
                 escapePaddingString(paddingString, sb, sb.length(), status);
                 break;
         }
@@ -785,8 +785,8 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     // Negative affixes
     // Ignore if the negative prefix pattern is "-" and the negative suffix is empty
     if (!np.isBogus() || !ns.isBogus() || (npp.isBogus() && !nsp.isBogus()) ||
-        (!npp.isBogus() && (npp.length() != 1 || npp.charAt(0) != '-' || nsp.length() != 0))) {
-        sb.append(';');
+        (!npp.isBogus() && (npp.length() != 1 || npp.charAt(0) != u'-' || nsp.length() != 0))) {
+        sb.append(u';');
         if (!npp.isBogus()) {
             sb.append(npp);
         }
@@ -817,12 +817,12 @@ int PatternStringUtils::escapePaddingString(UnicodeString input, UnicodeString& 
             output.insert(startIndex, input);
         }
     } else {
-        output.insert(startIndex, '\'');
+        output.insert(startIndex, u'\'');
         int offset = 1;
         for (int i = 0; i < input.length(); i++) {
             // it's okay to deal in chars here because the quote mark is the only interesting thing.
             char16_t ch = input.charAt(i);
-            if (ch == '\'') {
+            if (ch == u'\'') {
                 output.insert(startIndex + offset, u"''", -1);
                 offset += 2;
             } else {
@@ -830,7 +830,7 @@ int PatternStringUtils::escapePaddingString(UnicodeString input, UnicodeString& 
                 offset += 1;
             }
         }
-        output.insert(startIndex + offset, '\'');
+        output.insert(startIndex + offset, u'\'');
     }
     return output.length() - startLength;
 }

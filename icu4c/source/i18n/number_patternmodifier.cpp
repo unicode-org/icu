@@ -326,16 +326,16 @@ char16_t MutablePatternModifier::charAt(int32_t index) const {
     U_ASSERT(inCharSequenceMode);
     char16_t candidate;
     if (prependSign && index == 0) {
-        candidate = '-';
+        candidate = u'-';
     } else if (prependSign) {
         candidate = patternInfo->charAt(fFlags, index - 1);
     } else {
         candidate = patternInfo->charAt(fFlags, index);
     }
-    if (plusReplacesMinusSign && candidate == '-') {
-        return '+';
+    if (plusReplacesMinusSign && candidate == u'-') {
+        return u'+';
     }
-    if (perMilleReplacesPercent && candidate == '%') {
+    if (perMilleReplacesPercent && candidate == u'%') {
         return u'‰';
     }
     return candidate;

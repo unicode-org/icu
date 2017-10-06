@@ -186,7 +186,7 @@ void NumberStringBuilderTest::testUnlimitedCapacity() {
         UnicodeString message("Iteration #");
         message += Int64ToUnicodeString(i);
         assertEquals(message, builder.length(), i);
-        builder.appendCodePoint('x', UNUM_FIELD_COUNT, status);
+        builder.appendCodePoint(u'x', UNUM_FIELD_COUNT, status);
         assertSuccess(message, status);
         assertEquals(message, builder.length(), i + 1);
     }
@@ -229,8 +229,8 @@ void NumberStringBuilderTest::assertEqualsImpl(const UnicodeString &a, const Num
 
     for (int32_t i = 0; i < a.length(); i++) {
         IntlTest::assertEquals(
-                UnicodeString("Char at position ") + Int64ToUnicodeString(i) +
-                UnicodeString(" in string ") + a, a.charAt(i), b.charAt(i));
+                UnicodeString(u"Char at position ") + Int64ToUnicodeString(i) +
+                UnicodeString(u" in string ") + a, a.charAt(i), b.charAt(i));
     }
 }
 

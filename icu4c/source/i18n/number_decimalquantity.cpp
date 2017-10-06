@@ -687,11 +687,11 @@ void DecimalQuantity::appendDigit(int8_t value, int32_t leadingZeros, bool appen
 UnicodeString DecimalQuantity::toPlainString() const {
     UnicodeString sb;
     if (isNegative()) {
-        sb.append('-');
+        sb.append(u'-');
     }
     for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
-        sb.append(getDigit(m) + '0');
-        if (m == 0) { sb.append('.'); }
+        sb.append(getDigit(m) + u'0');
+        if (m == 0) { sb.append(u'.'); }
     }
     return sb;
 }
@@ -975,46 +975,34 @@ const char16_t* DecimalQuantity::checkHealth() const {
 }
 
 UnicodeString DecimalQuantity::toString() const {
-    auto digits = new char[precision + 1];
+    MaybeStackArray<char, 30> digits(precision + 1);
     for (int32_t i = 0; i < precision; i++) {
         digits[i] = getDigitPos(precision - i - 1) + '0';
     }
-    digits[precision] = 0;
+    digits[precision] = 0; // terminate buffer
     char buffer8[100];
     snprintf(
             buffer8,
-            100,
+            sizeof(buffer8),
             "<DecimalQuantity %d:%d:%d:%d %s %s%s%d>",
             (lOptPos > 999 ? 999 : lOptPos),
             lReqPos,
             rReqPos,
             (rOptPos < -999 ? -999 : rOptPos),
             (usingBytes ? "bytes" : "long"),
-            (precision == 0 ? "0" : digits),
+            (precision == 0 ? "0" : digits.getAlias()),
             "E",
             scale);
-    delete[] digits;
-
-    // Convert from char to char16_t to avoid codepage conversion
-    char16_t buffer16[100];
-    for (int32_t i = 0; i < 100; i++) {
-        buffer16[i] = static_cast<char16_t>(buffer8[i]);
-    }
-    return UnicodeString(buffer16);
+    return UnicodeString(buffer8, -1, US_INV);
 }
 
 UnicodeString DecimalQuantity::toNumberString() const {
-    auto digits = new char[precision + 11];
+    MaybeStackArray<char, 30> digits(precision + 11);
     for (int32_t i = 0; i < precision; i++) {
         digits[i] = getDigitPos(precision - i - 1) + '0';
     }
-    auto digits16 = new char16_t[precision + 11];
-    snprintf(digits + precision, 11, "E%d", scale);
-    u_charsToUChars(digits, digits16, precision + 11);
-    UnicodeString ret(digits16);
-    delete[] digits;
-    delete[] digits16;
-    return ret;
+    snprintf(digits.getAlias() + precision, 11, "E%d", scale);
+    return UnicodeString(digits.getAlias(), -1, US_INV);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

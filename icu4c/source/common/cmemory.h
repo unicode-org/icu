@@ -309,6 +309,14 @@ public:
      */
     MaybeStackArray() : ptr(stackArray), capacity(stackCapacity), needToRelease(FALSE) {}
     /**
+     * Automatically allocates the heap array if the argument is larger than the stack capacity.
+     * Intended for use when an approximate capacity is known at compile time but the true
+     * capacity is not known until runtime.
+     */
+    MaybeStackArray(int32_t newCapacity) : MaybeStackArray() {
+        if (capacity < newCapacity) { resize(newCapacity); }
+    };
+    /**
      * Destructor deletes the array (if owned).
      */
     ~MaybeStackArray() { releaseArray(); }

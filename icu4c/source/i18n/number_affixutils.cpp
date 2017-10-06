@@ -20,7 +20,7 @@ int32_t AffixUtils::estimateLength(const CharSequence &patternString, UErrorCode
 
         switch (state) {
             case STATE_BASE:
-                if (cp == '\'') {
+                if (cp == u'\'') {
                     // First quote
                     state = STATE_FIRST_QUOTE;
                 } else {
@@ -29,7 +29,7 @@ int32_t AffixUtils::estimateLength(const CharSequence &patternString, UErrorCode
                 }
                 break;
             case STATE_FIRST_QUOTE:
-                if (cp == '\'') {
+                if (cp == u'\'') {
                     // Repeated quote
                     length++;
                     state = STATE_BASE;
@@ -40,7 +40,7 @@ int32_t AffixUtils::estimateLength(const CharSequence &patternString, UErrorCode
                 }
                 break;
             case STATE_INSIDE_QUOTE:
-                if (cp == '\'') {
+                if (cp == u'\'') {
                     // End of quoted sequence
                     state = STATE_AFTER_QUOTE;
                 } else {
@@ -49,7 +49,7 @@ int32_t AffixUtils::estimateLength(const CharSequence &patternString, UErrorCode
                 }
                 break;
             case STATE_AFTER_QUOTE:
-                if (cp == '\'') {
+                if (cp == u'\'') {
                     // Double quote inside of quoted sequence
                     length++;
                     state = STATE_INSIDE_QUOTE;
@@ -81,20 +81,20 @@ UnicodeString AffixUtils::escape(const CharSequence &input) {
     int32_t offset = 0;
     UnicodeString output;
     for (; offset < input.length();) {
-        int32_t cp = input.codePointAt(offset);
+        UChar32 cp = input.codePointAt(offset);
 
         switch (cp) {
-            case '\'':
+            case u'\'':
                 output.append(u"''", -1);
                 break;
 
-            case '-':
-            case '+':
-            case '%':
+            case u'-':
+            case u'+':
+            case u'%':
             case u'‰':
             case u'¤':
                 if (state == STATE_BASE) {
-                    output.append('\'');
+                    output.append(u'\'');
                     output.append(cp);
                     state = STATE_INSIDE_QUOTE;
                 } else {
@@ -104,7 +104,7 @@ UnicodeString AffixUtils::escape(const CharSequence &input) {
 
             default:
                 if (state == STATE_INSIDE_QUOTE) {
-                    output.append('\'');
+                    output.append(u'\'');
                     output.append(cp);
                     state = STATE_BASE;
                 } else {
@@ -116,7 +116,7 @@ UnicodeString AffixUtils::escape(const CharSequence &input) {
     }
 
     if (state == STATE_INSIDE_QUOTE) {
-        output.append('\'');
+        output.append(u'\'');
     }
 
     return output;
@@ -247,14 +247,14 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const CharSequence &patternString, 
         switch (state) {
             case STATE_BASE:
                 switch (cp) {
-                    case '\'':
+                    case u'\'':
                         state = STATE_FIRST_QUOTE;
                         offset += count;
                         // continue to the next code point
                         break;
-                    case '-':
+                    case u'-':
                         return makeTag(offset + count, TYPE_MINUS_SIGN, STATE_BASE, 0);
-                    case '+':
+                    case u'+':
                         return makeTag(offset + count, TYPE_PLUS_SIGN, STATE_BASE, 0);
                     case u'%':
                         return makeTag(offset + count, TYPE_PERCENT, STATE_BASE, 0);
@@ -270,13 +270,13 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const CharSequence &patternString, 
                 }
                 break;
             case STATE_FIRST_QUOTE:
-                if (cp == '\'') {
+                if (cp == u'\'') {
                     return makeTag(offset + count, TYPE_CODEPOINT, STATE_BASE, cp);
                 } else {
                     return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
                 }
             case STATE_INSIDE_QUOTE:
-                if (cp == '\'') {
+                if (cp == u'\'') {
                     state = STATE_AFTER_QUOTE;
                     offset += count;
                     // continue to the next code point
@@ -285,7 +285,7 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const CharSequence &patternString, 
                     return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
                 }
             case STATE_AFTER_QUOTE:
-                if (cp == '\'') {
+                if (cp == u'\'') {
                     return makeTag(offset + count, TYPE_CODEPOINT, STATE_INSIDE_QUOTE, cp);
                 } else {
                     state = STATE_BASE;
@@ -390,7 +390,7 @@ bool AffixUtils::hasNext(const AffixTag &tag, const CharSequence &string) {
     // The rest of the fields are safe to use now.
     // Special case: the last character in string is an end quote.
     if (tag.state == STATE_INSIDE_QUOTE && tag.offset == string.length() - 1 &&
-        string.charAt(tag.offset) == '\'') {
+        string.charAt(tag.offset) == u'\'') {
         return false;
     } else if (tag.state != STATE_BASE) {
         return true;
