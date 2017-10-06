@@ -181,7 +181,7 @@ th{
         minimumGroupingDigits{"1"}
         native{"thai"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.37.56"}
     calendar{
         buddhist{
             DateTimePatterns{
