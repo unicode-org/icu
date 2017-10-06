@@ -402,7 +402,7 @@ public:
     /**
      * Deprecated Function, does not produce useful results.
      *
-     * Orginally intended to return all the values for which select() would return the keyword.
+     * Originally intended to return all the values for which select() would return the keyword.
      * If the keyword is unknown, returns no values, but this is not an error.  If
      * the number of values is unlimited, returns no values and -1 as the
      * count.

@@ -1787,7 +1787,7 @@ class U_I18N_API LocalizedNumberFormatter
      * @param input
      *            The number to format.
      * @param status
-     *            Set to an ErrorCode if one occured in the setter chain or during formatting.
+     *            Set to an ErrorCode if one occurred in the setter chain or during formatting.
      * @return A FormattedNumber object; call .toString() to get the string.
      * @draft ICU 60
      */
@@ -1800,7 +1800,7 @@ class U_I18N_API LocalizedNumberFormatter
      * @param input
      *            The number to format.
      * @param status
-     *            Set to an ErrorCode if one occured in the setter chain or during formatting.
+     *            Set to an ErrorCode if one occurred in the setter chain or during formatting.
      * @return A FormattedNumber object; call .toString() to get the string.
      * @draft ICU 60
      */
@@ -1816,7 +1816,7 @@ class U_I18N_API LocalizedNumberFormatter
      * @param input
      *            The number to format.
      * @param status
-     *            Set to an ErrorCode if one occured in the setter chain or during formatting.
+     *            Set to an ErrorCode if one occurred in the setter chain or during formatting.
      * @return A FormattedNumber object; call .toString() to get the string.
      * @draft ICU 60
      */
@@ -1876,7 +1876,7 @@ class U_I18N_API LocalizedNumberFormatter
 class U_I18N_API FormattedNumber : public UMemory {
   public:
     /**
-     * Returns a UnicodeString representation of the the formatted number.
+     * Returns a UnicodeString representation of the formatted number.
      *
      * @return a UnicodeString containing the localized number.
      * @draft ICU 60

@@ -846,7 +846,7 @@ public:
      * Returns true if grouping is used in this format. For example,
      * in the English locale, with grouping on, the number 1234567
      * might be formatted as "1,234,567". The grouping separator as
-     * well as the size of each group is locale dependant and is
+     * well as the size of each group is locale dependent and is
      * determined by sub-classes of NumberFormat.
      * @see setGroupingUsed
      * @stable ICU 2.0

@@ -129,7 +129,7 @@ class U_I18N_API AffixUtils {
      *
      * @param affixPattern The original string to be unescaped.
      * @param output The NumberStringBuilder to mutate with the result.
-     * @param position The index into the NumberStringBuilder to insert the the string.
+     * @param position The index into the NumberStringBuilder to insert the string.
      * @param provider An object to generate locale symbols.
      */
     static int32_t
