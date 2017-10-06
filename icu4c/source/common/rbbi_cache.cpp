@@ -610,13 +610,15 @@ bool RuleBasedBreakIterator::BreakCache::addPreceding(int32_t position, int32_t 
 
 
 void RuleBasedBreakIterator::BreakCache::dumpCache() {
-    printf("fTextIdx:%d   fBufIdx:%d\n", fTextIdx, fBufIdx);
+#ifdef RBBI_DEBUG
+    RBBIDebugPrintf("fTextIdx:%d   fBufIdx:%d\n", fTextIdx, fBufIdx);
     for (int32_t i=fStartBufIdx; ; i=modChunkSize(i+1)) {
-        printf("%d  %d\n", i, fBoundaries[i]);
+        RBBIDebugPrintf("%d  %d\n", i, fBoundaries[i]);
         if (i == fEndBufIdx) {
             break;
         }
     }
+#endif
 }
 
 U_NAMESPACE_END
