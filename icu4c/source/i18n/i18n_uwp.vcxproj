@@ -1022,6 +1022,28 @@
     <ClInclude Include="scriptset.h" />
     <ClInclude Include="uspoof_conf.h" />
     <ClInclude Include="uspoof_impl.h" />
+    <ClInclude Include="number_affixutils.h" />
+    <ClInclude Include="number_compact.h" />
+    <ClInclude Include="number_decimalquantity.h" />
+    <ClInclude Include="number_decimfmtprops.h" />
+    <ClInclude Include="number_formatimpl.h" />
+    <ClInclude Include="number_longnames.h" />
+    <ClInclude Include="number_modifiers.h" />
+    <ClInclude Include="number_patternmodifier.h" />
+    <ClInclude Include="number_patternstring.h" />
+    <ClInclude Include="number_roundingutils.h" />
+    <ClInclude Include="number_scientific.h" />
+    <ClInclude Include="number_stringbuilder.h" />
+    <ClInclude Include="number_types.h" />
+    <ClInclude Include="number_utils.h" />
+    <CustomBuild Include="unicode\nounit.h">
+      <Command>copy "%(FullPath)" ..\..\include\unicode </Command>
+      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="unicode\numberformatter.h">
+      <Command>copy "%(FullPath)" ..\..\include\unicode </Command>
+      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="i18n.rc" />
