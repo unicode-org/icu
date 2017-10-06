@@ -4,6 +4,9 @@
 // file: rbbi_cache.cpp
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/ubrk.h"
 #include "unicode/rbbi.h"
 
@@ -622,3 +625,5 @@ void RuleBasedBreakIterator::BreakCache::dumpCache() {
 }
 
 U_NAMESPACE_END
+
+#endif // #if !UCONFIG_NO_BREAK_ITERATION

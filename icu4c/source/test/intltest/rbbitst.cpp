@@ -4720,6 +4720,7 @@ void RBBITest::TestBug12932() {
 // Emoji Test. Verify that the sequences defined in the Unicode data file emoji-test.txt
 //             remain undevided by ICU char, word and line break.
 void RBBITest::TestEmoji() {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
     UErrorCode  status = U_ZERO_ERROR;
 
     CharString testFileName;
@@ -4800,6 +4801,7 @@ void RBBITest::TestEmoji() {
             }
         }
     }
+#endif
 }
 
 
@@ -4856,4 +4858,4 @@ void RBBITest::TestProperties() {
     }
 }
 
-#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+#endif // #if !UCONFIG_NO_BREAK_ITERATION

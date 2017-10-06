@@ -8,6 +8,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/rbbi.h"
 #include "unicode/uobject.h"
 
@@ -195,5 +197,7 @@ class RuleBasedBreakIterator::BreakCache: public UMemory {
 };
 
 U_NAMESPACE_END
+
+#endif // #if !UCONFIG_NO_BREAK_ITERATION
 
 #endif // RBBI_CACHE_H

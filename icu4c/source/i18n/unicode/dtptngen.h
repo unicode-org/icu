@@ -18,6 +18,7 @@
 #include "unicode/locid.h"
 #include "unicode/udat.h"
 #include "unicode/udatpg.h"
+#include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
 
