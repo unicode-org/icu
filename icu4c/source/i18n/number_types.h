@@ -260,7 +260,7 @@ class U_I18N_API NullableValue {
 
     bool operator==(const NullableValue &other) const {
         // "fValue == other.fValue" returns UBool, not bool (causes compiler warnings)
-        return fNull ? other.fNull : static_cast<bool>(fValue == other.fValue);
+        return fNull ? other.fNull : (other.fNull ? false : static_cast<bool>(fValue == other.fValue));
     }
 
     void nullify() {
