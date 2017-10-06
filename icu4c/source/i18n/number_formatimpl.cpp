@@ -69,6 +69,7 @@ const char16_t *getPatternForStyle(const Locale &locale, const char *nsName, Cld
             break;
     }
     LocalUResourceBundlePointer res(ures_open(nullptr, locale.getName(), &status));
+    if (U_FAILURE(status)) { return u""; }
 
     // Attempt to get the pattern with the native numbering system.
     UErrorCode localStatus = U_ZERO_ERROR;
@@ -181,7 +182,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps &macros, bool safe,
         // Give ownership to the function scope.
         nsLocal.adoptInstead(ns);
     }
-    const char *nsName = ns->getName();
+    const char *nsName = U_SUCCESS(status) ? ns->getName() : "latn";
 
     // Load and parse the pattern string.  It is used for grouping sizes and affixes only.
     CldrPatternStyle patternStyle;

@@ -8810,8 +8810,12 @@ void NumberFormatTest::Test13327_numberingSystemBufferOverflow() {
 
 void NumberFormatTest::Test13391_chakmaParsing() {
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<DecimalFormat> df(static_cast<DecimalFormat*>(
+    LocalPointer<DecimalFormat> df(dynamic_cast<DecimalFormat*>(
         NumberFormat::createInstance(Locale("ccp"), status)));
+    if (df == nullptr) {
+        dataerrln("%s %d Chakma df is null",  __FILE__, __LINE__);
+        return;
+    }
     const UChar* expected = u"\U00011137\U00011138,\U00011139\U0001113A\U0001113B";
     UnicodeString actual;
     df->format(12345, actual, status);

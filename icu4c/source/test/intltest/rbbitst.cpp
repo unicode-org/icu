@@ -4818,8 +4818,12 @@ void RBBITest::TestBug12519() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedBreakIterator> biEn((RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status));
     LocalPointer<RuleBasedBreakIterator> biFr((RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getFrance(), status));
-    assertSuccess(WHERE, status);
+    if (!assertSuccess(WHERE, status)) {
+        dataerrln("%s %d status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
     assertTrue(WHERE, Locale::getEnglish() == biEn->getLocale(ULOC_VALID_LOCALE, status));
+    
     assertTrue(WHERE, Locale::getFrench() == biFr->getLocale(ULOC_VALID_LOCALE, status));
     assertTrue(WHERE "Locales do not participate in BreakIterator equality.", *biEn == *biFr);
 

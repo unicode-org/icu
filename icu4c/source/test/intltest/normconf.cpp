@@ -43,7 +43,7 @@ NormalizerConformanceTest::NormalizerConformanceTest() :
     nfd = Normalizer2::getNFDInstance(errorCode);
     nfkc = Normalizer2::getNFKCInstance(errorCode);
     nfkd = Normalizer2::getNFKDInstance(errorCode);
-    U_ASSERT(U_SUCCESS(errorCode));
+    assertSuccess("", errorCode, true, __FILE__, __LINE__);
 }
 
 NormalizerConformanceTest::~NormalizerConformanceTest() {}
@@ -368,19 +368,20 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
     if(!Normalizer::isNormalized(field[3], UNORM_NFKC, options, status)) {
         dataerrln("Normalizer error: isNormalized(NFKC(s), UNORM_NFKC) is FALSE");
         pass = FALSE;
-    }
-    if(options==0 && !isNormalizedUTF8(*nfkc, field[3], status)) {
-        dataerrln("Normalizer error: nfkc.isNormalizedUTF8(NFKC(s)) is FALSE");
-        pass = FALSE;
-    }
-    if(field[0]!=field[3]) {
-        if(Normalizer::isNormalized(field[0], UNORM_NFKC, options, status)) {
-            errln("Normalizer error: isNormalized(s, UNORM_NFKC) is TRUE");
+    } else {
+        if(options==0 && !isNormalizedUTF8(*nfkc, field[3], status)) {
+            dataerrln("Normalizer error: nfkc.isNormalizedUTF8(NFKC(s)) is FALSE");
             pass = FALSE;
         }
-        if(options==0 && isNormalizedUTF8(*nfkc, field[0], status)) {
-            errln("Normalizer error: nfkc.isNormalizedUTF8(s) is TRUE");
-            pass = FALSE;
+        if(field[0]!=field[3]) {
+            if(Normalizer::isNormalized(field[0], UNORM_NFKC, options, status)) {
+                errln("Normalizer error: isNormalized(s, UNORM_NFKC) is TRUE");
+                pass = FALSE;
+            }
+            if(options==0 && isNormalizedUTF8(*nfkc, field[0], status)) {
+                errln("Normalizer error: nfkc.isNormalizedUTF8(s) is TRUE");
+                pass = FALSE;
+            }
         }
     }
 

@@ -321,20 +321,24 @@ LocalizedNumberFormatter::formatImpl(impl::NumberFormatterResults *results, UErr
 }
 
 UnicodeString FormattedNumber::toString() const {
+    if (fResults == nullptr) { return {}; }
     return fResults->string.toUnicodeString();
 }
 
 Appendable &FormattedNumber::appendTo(Appendable &appendable) {
+    if (fResults == nullptr) { return appendable; }
     appendable.appendString(fResults->string.chars(), fResults->string.length());
     return appendable;
 }
 
 void FormattedNumber::populateFieldPosition(FieldPosition &fieldPosition, UErrorCode &status) {
+    if (fResults == nullptr) { return; }
     fResults->string.populateFieldPosition(fieldPosition, 0, status);
 }
 
 void
 FormattedNumber::populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status) {
+    if (fResults == nullptr) { return; }
     fResults->string.populateFieldPositionIterator(iterator, status);
 }
 

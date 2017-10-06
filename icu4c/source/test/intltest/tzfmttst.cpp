@@ -1261,6 +1261,10 @@ void
 TimeZoneFormatTest::TestFormatTZDBNamesAllZoneCoverage(void) {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<StringEnumeration> tzids(TimeZone::createEnumeration());
+    if (tzids.getAlias() == nullptr) {
+        dataerrln("%s %d tzids is null", __FILE__, __LINE__);
+        return;
+    }
     const UnicodeString *tzid;
     LocalPointer<TimeZoneNames> tzdbNames(TimeZoneNames::createTZDBInstance(Locale("en"), status));
     UDate now = Calendar::getNow();
