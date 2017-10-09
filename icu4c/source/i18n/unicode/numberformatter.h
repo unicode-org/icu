@@ -1586,7 +1586,7 @@ class U_I18N_API NumberFormatterSettings {
      * <p>
      * This method takes ownership of a pointer in order to work nicely with the NumberingSystem factory methods.
      *
-     * @param ns
+     * @param symbols
      *            The NumberingSystem to use.
      * @return The fluent chain.
      * @see NumberingSystem
@@ -1613,7 +1613,7 @@ class U_I18N_API NumberFormatterSettings {
      * <p>
      * The default is the SHORT width.
      *
-     * @param style
+     * @param width
      *            The width to use when rendering numbers.
      * @return The fluent chain
      * @see UNumberUnitWidth
@@ -1640,7 +1640,7 @@ class U_I18N_API NumberFormatterSettings {
      * <p>
      * The default is AUTO sign display.
      *
-     * @param style
+     * @param width
      *            The sign display strategy to use when rendering numbers.
      * @return The fluent chain
      * @see UNumberSignDisplay
@@ -1668,7 +1668,7 @@ class U_I18N_API NumberFormatterSettings {
      * <p>
      * The default is AUTO decimal separator display.
      *
-     * @param style
+     * @param width
      *            The decimal separator display strategy to use when rendering numbers.
      * @return The fluent chain
      * @see UNumberDecimalSeparatorDisplay
@@ -1784,7 +1784,7 @@ class U_I18N_API LocalizedNumberFormatter
      * Format the given integer number to a string using the settings specified in the NumberFormatter fluent
      * setting chain.
      *
-     * @param input
+     * @param value
      *            The number to format.
      * @param status
      *            Set to an ErrorCode if one occurred in the setter chain or during formatting.
@@ -1797,7 +1797,7 @@ class U_I18N_API LocalizedNumberFormatter
      * Format the given float or double to a string using the settings specified in the NumberFormatter fluent setting
      * chain.
      *
-     * @param input
+     * @param value
      *            The number to format.
      * @param status
      *            Set to an ErrorCode if one occurred in the setter chain or during formatting.
@@ -1813,7 +1813,7 @@ class U_I18N_API LocalizedNumberFormatter
      * as defined in the Decimal Arithmetic Specification, available at
      * http://speleotrove.com/decimal
      *
-     * @param input
+     * @param value
      *            The number to format.
      * @param status
      *            Set to an ErrorCode if one occurred in the setter chain or during formatting.
