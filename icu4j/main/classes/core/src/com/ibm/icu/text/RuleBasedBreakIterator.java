@@ -216,7 +216,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     private static final int  RBBI_RUN    = 1;
     private static final int  RBBI_END    = 2;
 
-    /*
+    /**
      * The character iterator through which this BreakIterator accesses the text.
      */
     private CharacterIterator   fText = new java.text.StringCharacterIterator("");
@@ -264,7 +264,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
     private DictionaryCache     fDictionaryCache = new DictionaryCache();
 
-    /*
+    /**
      * ICU debug argument name for RBBI
      */
     private static final String RBBI_DEBUG_ARG = "rbbi";
@@ -455,7 +455,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             return first();
         }
 
-        // Move requested offset to a code point start. It might be on a trail surrogate.
+        // Move requested offset to a code point start. It might be between a lead and trail surrogate.
         // Or it may be beyond the end of the text.
         startPos = CISetIndex32(fText, startPos);
         fBreakCache.following(startPos);
@@ -478,7 +478,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             return first();
         }
 
-        // Move requested offset to a code point start. It might be on a trail surrogate.
+        // Move requested offset to a code point start. It might be between a lead and trail surrogate.
         // int adjustedOffset = CISetIndex32(fText, offset);    // TODO: restore to match ICU4C behavior.
         int adjustedOffset = offset;
         fBreakCache.preceding(adjustedOffset);
@@ -1152,7 +1152,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         return ci.getIndex();
     }
 
-    /* DictionaryCache  stores the boundaries obtained from a run of dictionary characters.
+    /** DictionaryCache  stores the boundaries obtained from a run of dictionary characters.
      *                 Dictionary boundaries are moved first to this cache, then from here
      *                 to the main BreakCache, where they may inter-leave with non-dictionary
      *                 boundaries. The public BreakIterator API always fetches directly
@@ -1477,7 +1477,7 @@ class BreakCache {
         return;
     };
 
-    /*
+    /**
      * Update the state of the public BreakIterator (fBI) to reflect the
      * current state of the break iterator cache (this).
      */
@@ -1735,7 +1735,7 @@ class BreakCache {
     static final boolean RetainCachePosition = false;
     static final boolean UpdateCachePosition = true;
 
-    /*
+    /**
      * Add the boundary following the current position.
      * The current position can be left as it was, or changed to the newly added boundary,
      * as specified by the update parameter.
@@ -1764,7 +1764,7 @@ class BreakCache {
     };
 
 
-    /*
+    /**
      * Add the boundary preceding the current position.
      * The current position can be left as it was, or changed to the newly added boundary,
      * as specified by the update parameter.
