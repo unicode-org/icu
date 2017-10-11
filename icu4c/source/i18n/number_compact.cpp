@@ -316,6 +316,7 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
     }
 
     // FIXME: Deal with numDigits == 0 (Awaiting a test case)
+    (void)numDigits;
 
     // We already performed rounding. Do not perform it again.
     micros.rounding = Rounder::constructPassThrough();

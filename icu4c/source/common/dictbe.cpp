@@ -1383,6 +1383,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         prevCPPos = cpPos;
         prevUTextPos = utextPos;
     }
+    (void)prevCPPos; // suppress compiler warnings about unused variable
 
     // inString goes out of scope
     // inputMap goes out of scope
