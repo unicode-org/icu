@@ -4966,7 +4966,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param str source string to be performed on
      * @param breakiter break iterator to determine the positions in which
      *        the character should be title cased.
-     * @return lowercase version of the argument string
+     * @return titlecase version of the argument string
      * @stable ICU 2.6
      */
     public static String toTitleCase(String str, BreakIterator breakiter)
@@ -5058,7 +5058,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param str source string to be performed on
      * @param breakiter break iterator to determine the positions in which
      *        the character should be title cased.
-     * @return lowercase version of the argument string
+     * @return titlecase version of the argument string
      * @stable ICU 2.6
      */
     public static String toTitleCase(Locale locale, String str,
@@ -5083,7 +5083,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param str source string to be performed on
      * @param titleIter break iterator to determine the positions in which
      *        the character should be title cased.
-     * @return lowercase version of the argument string
+     * @return titlecase version of the argument string
      * @stable ICU 3.2
      */
     public static String toTitleCase(ULocale locale, String str,
@@ -5108,7 +5108,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param titleIter break iterator to determine the positions in which
      *        the character should be title cased.
      * @param options bit set to modify the titlecasing operation
-     * @return lowercase version of the argument string
+     * @return titlecase version of the argument string
      * @stable ICU 3.8
      * @see #TITLECASE_NO_LOWERCASE
      * @see #TITLECASE_NO_BREAK_ADJUSTMENT
@@ -5171,7 +5171,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param titleIter break iterator to determine the positions in which
      *        the character should be title cased.
      * @param options bit set to modify the titlecasing operation
-     * @return lowercase version of the argument string
+     * @return titlecase version of the argument string
      * @see #TITLECASE_NO_LOWERCASE
      * @see #TITLECASE_NO_BREAK_ADJUSTMENT
      * @stable ICU 54
