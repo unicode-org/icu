@@ -190,7 +190,7 @@ fi{
             symbols{
                 decimal{","}
                 exponential{"E"}
-                group{" "}
+                group{" "}
                 infinity{"∞"}
                 list{";"}
                 minusSign{"−"}
@@ -214,7 +214,7 @@ fi{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.37.67"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -675,9 +675,9 @@ fi{
                 Ehm{"E h.mm a"}
                 Ehms{"E h.mm.ss a"}
                 Gy{"y G"}
-                GyMMM{"LLLL y G"}
-                GyMMMEd{"E d.M.y G"}
-                GyMMMd{"d.M.y G"}
+                GyMMM{"LLL y G"}
+                GyMMMEd{"E d. MMM y G"}
+                GyMMMd{"d. MMM y G"}
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
@@ -685,14 +685,14 @@ fi{
                 Hmv{"H.mm v"}
                 M{"L"}
                 MEd{"E d.M."}
-                MMM{"LLLL"}
-                MMMEd{"ccc d.M."}
+                MMM{"LLL"}
+                MMMEd{"ccc d. MMM"}
                 MMMMW{
                     one{"LLLL'n' W. 'viikko'"}
                     other{"LLLL'n' W. 'viikko'"}
                 }
                 MMMMd{"d. MMMM"}
-                MMMd{"d.M."}
+                MMMd{"d. MMM"}
                 Md{"d.M."}
                 d{"d"}
                 h{"h a"}
@@ -705,11 +705,11 @@ fi{
                 yM{"L.y"}
                 yMEd{"E d.M.y"}
                 yMM{"M.y"}
-                yMMM{"M.y"}
-                yMMMEd{"E d.M.y"}
+                yMMM{"LLL y"}
+                yMMMEd{"E d. MMM y"}
                 yMMMM{"LLLL y"}
                 yMMMMccccd{"cccc d. MMMM y"}
-                yMMMd{"d.M.y"}
+                yMMMd{"d. MMM y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
