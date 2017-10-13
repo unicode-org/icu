@@ -315,6 +315,7 @@ _CompoundTextClose(UConverter *converter) {
         }
 
         uprv_free(converter->extraInfo);
+        converter->extraInfo = NULL;
     }
 }
 
