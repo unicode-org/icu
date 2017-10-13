@@ -1117,7 +1117,7 @@ fi{
     Variants%secondary{
         FONUPA{"suomalais-ugrilainen tarkekirjoitus"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.37.67"}
     characterLabelPattern{
         all{"{0} – kaikki"}
         category-list{"{0}: {1}"}
