@@ -632,7 +632,7 @@ ur{
             vaii{"وائی ہندسے"}
         }
     }
-    Version{"2.1.37.28"}
+    Version{"2.1.37.69"}
     characterLabelPattern{
         all{"{0} — تمام"}
         category-list{"{0}: {1}"}
