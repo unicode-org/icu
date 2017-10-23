@@ -87,14 +87,10 @@ static void U_CALLCONV initRecognizers(UErrorCode &status) {
     CSRecognizerInfo *tempArray[] = {
         new CSRecognizerInfo(new CharsetRecog_UTF8(), TRUE),
 
-#if !UCONFIG_ONLY_HTML_CONVERSION
         new CSRecognizerInfo(new CharsetRecog_UTF_16_BE(), TRUE),
-#endif
         new CSRecognizerInfo(new CharsetRecog_UTF_16_LE(), TRUE),
-#if !UCONFIG_ONLY_HTML_CONVERSION
         new CSRecognizerInfo(new CharsetRecog_UTF_32_BE(), TRUE),
         new CSRecognizerInfo(new CharsetRecog_UTF_32_LE(), TRUE),
-#endif
 
         new CSRecognizerInfo(new CharsetRecog_8859_1(), TRUE),
         new CSRecognizerInfo(new CharsetRecog_8859_2(), TRUE),

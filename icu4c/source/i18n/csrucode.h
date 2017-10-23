@@ -42,7 +42,6 @@ public:
 };
 
 
-#if !UCONFIG_ONLY_HTML_CONVERSION
 class CharsetRecog_UTF_16_BE : public CharsetRecog_Unicode
 {
 public:
@@ -53,7 +52,6 @@ public:
 
     UBool match(InputText* textIn, CharsetMatch *results) const;
 };
-#endif
 
 class CharsetRecog_UTF_16_LE : public CharsetRecog_Unicode
 {
@@ -66,7 +64,6 @@ public:
     UBool match(InputText* textIn, CharsetMatch *results) const;
 };
 
-#if !UCONFIG_ONLY_HTML_CONVERSION
 class CharsetRecog_UTF_32 : public CharsetRecog_Unicode
 {
 protected:
@@ -104,7 +101,6 @@ public:
 
     const char* getName() const;
 };
-#endif
 
 U_NAMESPACE_END
 
