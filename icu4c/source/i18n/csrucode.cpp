@@ -21,6 +21,7 @@ CharsetRecog_Unicode::~CharsetRecog_Unicode()
     // nothing to do
 }
 
+#if !UCONFIG_ONLY_HTML_CONVERSION
 CharsetRecog_UTF_16_BE::~CharsetRecog_UTF_16_BE()
 {
     // nothing to do
@@ -30,6 +31,7 @@ const char *CharsetRecog_UTF_16_BE::getName() const
 {
     return "UTF-16BE";
 }
+#endif
 
 // UTF-16 confidence calculation. Very simple minded, but better than nothing.
 //   Any 8 bit non-control characters bump the confidence up. These have a zero high byte,
@@ -52,6 +54,7 @@ static int32_t adjustConfidence(UChar codeUnit, int32_t confidence) {
 }
 
 
+#if !UCONFIG_ONLY_HTML_CONVERSION
 UBool CharsetRecog_UTF_16_BE::match(InputText* textIn, CharsetMatch *results) const
 {
     const uint8_t *input = textIn->fRawInput;
@@ -76,6 +79,7 @@ UBool CharsetRecog_UTF_16_BE::match(InputText* textIn, CharsetMatch *results) co
     results->set(textIn, this, confidence);
     return (confidence > 0);
 }
+#endif
 
 CharsetRecog_UTF_16_LE::~CharsetRecog_UTF_16_LE()
 {
@@ -115,6 +119,7 @@ UBool CharsetRecog_UTF_16_LE::match(InputText* textIn, CharsetMatch *results) co
     return (confidence > 0);
 }
 
+#if !UCONFIG_ONLY_HTML_CONVERSION
 CharsetRecog_UTF_32::~CharsetRecog_UTF_32()
 {
     // nothing to do
@@ -194,6 +199,7 @@ int32_t CharsetRecog_UTF_32_LE::getChar(const uint8_t *input, int32_t index) con
     return input[index + 3] << 24 | input[index + 2] << 16 |
            input[index + 1] <<  8 | input[index + 0];
 }
+#endif
 
 U_NAMESPACE_END
 #endif

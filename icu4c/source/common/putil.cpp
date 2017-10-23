@@ -1235,7 +1235,7 @@ UInitOnce gTimeZoneFilesInitOnce = U_INITONCE_INITIALIZER;
 static CharString *gTimeZoneFilesDirectory = NULL;
 
 #if U_POSIX_LOCALE || U_PLATFORM_USES_ONLY_WIN32_API
- static char *gCorrectedPOSIXLocale = NULL; /* Sometimes heap allocated */
+ static const char *gCorrectedPOSIXLocale = NULL; /* Sometimes heap allocated */
  static bool gCorrectedPOSIXLocaleHeapAllocated = false;
 #endif
 
@@ -1258,7 +1258,7 @@ static UBool U_CALLCONV putil_cleanup(void)
 
 #if U_POSIX_LOCALE || U_PLATFORM_USES_ONLY_WIN32_API
     if (gCorrectedPOSIXLocale && gCorrectedPOSIXLocaleHeapAllocated) {
-        uprv_free(gCorrectedPOSIXLocale);
+        uprv_free(const_cast<char *>(gCorrectedPOSIXLocale));
         gCorrectedPOSIXLocale = NULL;
         gCorrectedPOSIXLocaleHeapAllocated = false;
     }
