@@ -425,19 +425,19 @@ UBool NumberFormatTestDataDriven::isParsePass(
         return TRUE; // TRUE because failure handling is in the test suite
     }
     if (tuple.output == "NaN") {
-        if (!std::isnan(result.getDouble())) {
+        if (!uprv_isNaN(result.getDouble())) {
             appendErrorMessage.append("Expected NaN, but got: " + resultStr);
             return FALSE;
         }
         return TRUE;
     } else if (tuple.output == "Inf") {
-        if (!std::isinf(result.getDouble()) || result.getDouble() < 0) {
+        if (!uprv_isInfinite(result.getDouble()) || result.getDouble() < 0) {
             appendErrorMessage.append("Expected Inf, but got: " + resultStr);
             return FALSE;
         }
         return TRUE;
     } else if (tuple.output == "-Inf") {
-        if (!std::isinf(result.getDouble()) || result.getDouble() > 0) {
+        if (!uprv_isInfinite(result.getDouble()) || result.getDouble() > 0) {
             appendErrorMessage.append("Expected -Inf, but got: " + resultStr);
             return FALSE;
         }
