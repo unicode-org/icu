@@ -8,6 +8,7 @@
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 
+using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 

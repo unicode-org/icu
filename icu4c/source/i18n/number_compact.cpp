@@ -13,8 +13,9 @@
 #include "charstr.h"
 #include "uresimp.h"
 
-using namespace icu::number::impl;
 using namespace icu;
+using namespace icu::number;
+using namespace icu::number::impl;
 
 namespace {
 

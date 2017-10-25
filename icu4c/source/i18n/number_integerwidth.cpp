@@ -9,6 +9,7 @@
 #include "number_types.h"
 #include "number_decimalquantity.h"
 
+using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
