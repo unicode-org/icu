@@ -111,7 +111,7 @@ static void TestCalendar()
     UDateFormat *datdef = 0;
     UChar *result = 0;
     int32_t resultlength, resultlengthneeded;
-    char tempMsgBuf[256];
+    char tempMsgBuf[1024];  // u_austrcpy() of some formatted dates & times.
     UChar zone1[32], zone2[32];
     const char *tzver = 0;
     UChar canonicalID[64];
