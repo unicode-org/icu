@@ -8,8 +8,9 @@
 #include "number_affixutils.h"
 #include "unicode/utf16.h"
 
-using namespace icu::number::impl;
 using namespace icu;
+using namespace icu::number;
+using namespace icu::number::impl;
 
 int32_t AffixUtils::estimateLength(const CharSequence &patternString, UErrorCode &status) {
     AffixPatternState state = STATE_BASE;

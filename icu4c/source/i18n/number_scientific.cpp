@@ -11,6 +11,8 @@
 #include "number_stringbuilder.h"
 #include "unicode/unum.h"
 
+using namespace icu;
+using namespace icu::number;
 using namespace icu::number::impl;
 
 // NOTE: The object lifecycle of ScientificModifier and ScientificHandler differ greatly in Java and C++.

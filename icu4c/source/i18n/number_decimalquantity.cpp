@@ -16,8 +16,9 @@
 #include "number_roundingutils.h"
 #include "unicode/plurrule.h"
 
-using namespace icu::number::impl;
 using namespace icu;
+using namespace icu::number;
+using namespace icu::number::impl;
 
 namespace {
 

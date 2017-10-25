@@ -9,6 +9,8 @@
 #include "number_types.h"
 #include "number_stringbuilder.h"
 
+using namespace icu;
+using namespace icu::number;
 using namespace icu::number::impl;
 
 namespace {

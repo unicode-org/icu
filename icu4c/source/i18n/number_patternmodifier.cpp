@@ -12,6 +12,7 @@
 #include "unicode/unistr.h"
 
 using namespace icu;
+using namespace icu::number;
 using namespace icu::number::impl;
 
 MutablePatternModifier::MutablePatternModifier(bool isStrong) : fStrong(isStrong) {}
