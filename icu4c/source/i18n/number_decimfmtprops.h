@@ -16,8 +16,6 @@
 #include "number_types.h"
 
 U_NAMESPACE_BEGIN
-namespace number {
-namespace impl {
 
 // Export an explicit template instantiation of the LocalPointer that is used as a
 // data member of CurrencyPluralInfoWrapper.
@@ -25,9 +23,12 @@ namespace impl {
 #if defined (_MSC_VER)
 // Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
 #pragma warning(suppress: 4661)
-template class U_I18N_API LocalPointerBase<CurrencyPluralInfo>;
-template class U_I18N_API LocalPointer<CurrencyPluralInfo>;
+template class U_I18N_API LocalPointerBase<number::impl::CurrencyPluralInfo>;
+template class U_I18N_API LocalPointer<number::impl::CurrencyPluralInfo>;
 #endif
+
+namespace number {
+namespace impl {
 
 // TODO: Figure out a nicer way to deal with CurrencyPluralInfo.
 // Exported as U_I18N_API because it is a public member field of exported DecimalFormatProperties
