@@ -377,6 +377,10 @@ public class TimeZoneFormatTest extends TestFmwk {
         int testLen = 0;
         for (int locidx = 0; locidx < LOCALES.length; locidx++) {
             logln("Locale: " + LOCALES[locidx].toString());
+            if (LOCALES[locidx].getLanguage().equals("fa")
+                    && logKnownIssue("13445", "Bidi control in localized GMT pattern")) {
+                continue;
+            }
             for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
                 logln("    pattern: " + PATTERNS[patidx]);
                 String pattern = BASEPATTERN + " " + PATTERNS[patidx];
@@ -418,7 +422,8 @@ public class TimeZoneFormatTest extends TestFmwk {
                         }
                     }
 
-                    if (id.equals("Pacific/Apia") && PATTERNS[patidx].equals("vvvv")
+                    if ((id.equals("Pacific/Apia") || id.equals("Pacific/Midway") || id.equals("Pacific/Pago_Pago"))
+                            && PATTERNS[patidx].equals("vvvv")
                             && logKnownIssue("11052", "Ambiguous zone name - Samoa Time")) {
                         continue;
                     }
