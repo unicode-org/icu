@@ -1853,8 +1853,8 @@ class U_I18N_API LocalizedNumberFormatter
      * <p>
      * This function is very hot, being called in every call to the number formatting pipeline.
      *
-     * @param fq
-     *            The quantity to be formatted.
+     * @param results
+     *            The results object. This method takes ownership.
      * @return The formatted number result.
      */
     FormattedNumber formatImpl(impl::NumberFormatterResults *results, UErrorCode &status) const;
@@ -1941,10 +1941,14 @@ class U_I18N_API FormattedNumber : public UMemory {
     // Can't use LocalPointer because NumberFormatterResults is forward-declared
     const impl::NumberFormatterResults *fResults;
 
-    // Default constructor for error states
-    FormattedNumber() : fResults(nullptr) {}
+    // Error code for the terminal methods
+    UErrorCode fErrorCode;
 
-    explicit FormattedNumber(impl::NumberFormatterResults *results) : fResults(results) {}
+    explicit FormattedNumber(impl::NumberFormatterResults *results)
+        : fResults(results), fErrorCode(U_ZERO_ERROR) {};
+
+    explicit FormattedNumber(UErrorCode errorCode)
+        : fResults(nullptr), fErrorCode(errorCode) {};
 
     // To give LocalizedNumberFormatter format methods access to this class's constructor:
     friend class LocalizedNumberFormatter;

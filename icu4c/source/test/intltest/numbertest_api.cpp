@@ -1422,12 +1422,19 @@ void NumberFormatterApiTest::errors() {
                     -1));
 
     {
-        UErrorCode status = U_ZERO_ERROR;
-        lnf.formatInt(1, status);
+        UErrorCode status1 = U_ZERO_ERROR;
+        UErrorCode status2 = U_ZERO_ERROR;
+        FormattedNumber fn = lnf.formatInt(1, status1);
         assertEquals(
                 "Should fail with U_ILLEGAL_ARGUMENT_ERROR since rounder is not legal",
                 U_ILLEGAL_ARGUMENT_ERROR,
-                status);
+                status1);
+        FieldPosition fp;
+        fn.populateFieldPosition(fp, status2);
+        assertEquals(
+                "Should fail with U_ILLEGAL_ARGUMENT_ERROR on terminal method",
+                U_ILLEGAL_ARGUMENT_ERROR,
+                status2);
     }
 
     {

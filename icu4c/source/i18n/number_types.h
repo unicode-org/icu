@@ -43,8 +43,8 @@ static constexpr char16_t kFallbackPaddingString[] = u" ";
 static constexpr char16_t kDefaultCurrency[] = u"XXX";
 
 // FIXME: New error codes:
-static constexpr UErrorCode U_NUMBER_DIGIT_WIDTH_OUT_OF_RANGE_ERROR = U_ILLEGAL_ARGUMENT_ERROR;
-static constexpr UErrorCode U_NUMBER_PADDING_WIDTH_OUT_OF_RANGE_ERROR = U_ILLEGAL_ARGUMENT_ERROR;
+static constexpr UErrorCode U_NUMBER_DIGIT_WIDTH_OUTOFBOUNDS_ERROR = U_ILLEGAL_ARGUMENT_ERROR;
+static constexpr UErrorCode U_NUMBER_PADDING_WIDTH_OUTOFBOUNDS_ERROR = U_ILLEGAL_ARGUMENT_ERROR;
 
 // Forward declarations:
 

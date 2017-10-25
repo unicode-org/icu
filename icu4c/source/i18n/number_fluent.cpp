@@ -247,33 +247,33 @@ LocalizedNumberFormatter::~LocalizedNumberFormatter() {
 }
 
 FormattedNumber LocalizedNumberFormatter::formatInt(int64_t value, UErrorCode &status) const {
-    if (U_FAILURE(status)) { return FormattedNumber(); }
+    if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
     auto results = new NumberFormatterResults();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return FormattedNumber();
+        return FormattedNumber(status);
     }
     results->quantity.setToLong(value);
     return formatImpl(results, status);
 }
 
 FormattedNumber LocalizedNumberFormatter::formatDouble(double value, UErrorCode &status) const {
-    if (U_FAILURE(status)) { return FormattedNumber(); }
+    if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
     auto results = new NumberFormatterResults();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return FormattedNumber();
+        return FormattedNumber(status);
     }
     results->quantity.setToDouble(value);
     return formatImpl(results, status);
 }
 
 FormattedNumber LocalizedNumberFormatter::formatDecimal(StringPiece value, UErrorCode &status) const {
-    if (U_FAILURE(status)) { return FormattedNumber(); }
+    if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
     auto results = new NumberFormatterResults();
     if (results == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return FormattedNumber();
+        return FormattedNumber(status);
     }
     results->quantity.setToDecNumber(value);
     return formatImpl(results, status);
@@ -317,28 +317,48 @@ LocalizedNumberFormatter::formatImpl(impl::NumberFormatterResults *results, UErr
         NumberFormatterImpl::applyStatic(fMacros, results->quantity, results->string, status);
     }
 
-    return FormattedNumber(results);
+    // Do not save the results object if we encountered a failure.
+    if (U_SUCCESS(status)) {
+        return FormattedNumber(results);
+    } else {
+        delete results;
+        return FormattedNumber(status);
+    }
 }
 
 UnicodeString FormattedNumber::toString() const {
-    if (fResults == nullptr) { return {}; }
+    if (fResults == nullptr) {
+        // TODO: http://bugs.icu-project.org/trac/ticket/13437
+        return {};
+    }
     return fResults->string.toUnicodeString();
 }
 
 Appendable &FormattedNumber::appendTo(Appendable &appendable) {
-    if (fResults == nullptr) { return appendable; }
+    if (fResults == nullptr) {
+        // TODO: http://bugs.icu-project.org/trac/ticket/13437
+        return appendable;
+    }
     appendable.appendString(fResults->string.chars(), fResults->string.length());
     return appendable;
 }
 
 void FormattedNumber::populateFieldPosition(FieldPosition &fieldPosition, UErrorCode &status) {
-    if (fResults == nullptr) { return; }
+    if (U_FAILURE(status)) { return; }
+    if (fResults == nullptr) {
+        status = fErrorCode;
+        return;
+    }
     fResults->string.populateFieldPosition(fieldPosition, 0, status);
 }
 
 void
 FormattedNumber::populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status) {
-    if (fResults == nullptr) { return; }
+    if (U_FAILURE(status)) { return; }
+    if (fResults == nullptr) {
+        status = fErrorCode;
+        return;
+    }
     fResults->string.populateFieldPositionIterator(iterator, status);
 }
 

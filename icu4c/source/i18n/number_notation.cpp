@@ -60,7 +60,7 @@ ScientificNotation::withMinExponentDigits(int32_t minExponentDigits) const {
         NotationUnion union_ = {settings};
         return {NTN_SCIENTIFIC, union_};
     } else {
-        return {U_NUMBER_DIGIT_WIDTH_OUT_OF_RANGE_ERROR};
+        return {U_NUMBER_DIGIT_WIDTH_OUTOFBOUNDS_ERROR};
     }
 }
 
