@@ -484,7 +484,7 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
         Locale("ko_KR"), Locale("nb_NO"), Locale("nl_NL"), Locale("nn_NO"), Locale("pl_PL"),
         Locale("pt"), Locale("pt_BR"), Locale("pt_PT"), Locale("ru_RU"), Locale("sv_SE"),
         Locale("th_TH"), Locale("tr_TR"), Locale("zh"), Locale("zh_Hans"), Locale("zh_Hans_CN"),
-        Locale("zh_Hant"), Locale("zh_Hant_TW")
+        Locale("zh_Hant"), Locale("zh_Hant_TW"), Locale("fa"), Locale("ccp")
     };
 
     if (bTestAll) {
@@ -567,6 +567,11 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
         logln("    Thread %d, Locale %s, Pattern %s", 
                 threadNumber, gLocaleData->locales[locidx].getName(), CStr(pattern)());
 
+        if (uprv_strcmp(gLocaleData->locales[locidx].getLanguage(), "ccp") == 0
+            && logKnownIssue("13446", "Chakma time zone parsing")) {
+            continue;
+        }
+
         SimpleDateFormat *sdf = new SimpleDateFormat(pattern, gLocaleData->locales[locidx], status);
         if (U_FAILURE(status)) {
             errcheckln(status, (UnicodeString) "new SimpleDateFormat failed for pattern " + 
@@ -601,7 +606,8 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                 }
             }
 
-            if (*tzid == "Pacific/Apia" && uprv_strcmp(PATTERNS[patidx], "vvvv") == 0
+            if ((*tzid == "Pacific/Apia" || *tzid == "Pacific/Midway" || *tzid == "Pacific/Pago_Pago")
+                    && uprv_strcmp(PATTERNS[patidx], "vvvv") == 0
                     && logKnownIssue("11052", "Ambiguous zone name - Samoa Time")) {
                 continue;
             }
