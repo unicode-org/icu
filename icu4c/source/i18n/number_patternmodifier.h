@@ -15,11 +15,6 @@
 #include "number_utils.h"
 
 U_NAMESPACE_BEGIN
-namespace number {
-namespace impl {
-
-// Forward declaration
-class MutablePatternModifier;
 
 // Export an explicit template instantiation of the LocalPointer that is used as a
 // data member of ParameterizedModifier.
@@ -27,9 +22,15 @@ class MutablePatternModifier;
 #if defined (_MSC_VER)
 // Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
 #pragma warning(suppress: 4661)
-template class U_I18N_API LocalPointerBase<ParameterizedModifier>;
-template class U_I18N_API LocalPointer<ParameterizedModifier>;
+template class U_I18N_API LocalPointerBase<number::impl::ParameterizedModifier>;
+template class U_I18N_API LocalPointer<number::impl::ParameterizedModifier>;
 #endif
+
+namespace number {
+namespace impl {
+
+// Forward declaration
+class MutablePatternModifier;
 
 // Exported as U_I18N_API because it is needed for the unit test PatternModifierTest
 class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator, public UMemory {

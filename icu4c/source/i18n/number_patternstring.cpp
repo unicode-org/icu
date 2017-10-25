@@ -11,6 +11,7 @@
 #include "number_utils.h"
 
 using namespace icu;
+using namespace icu::number;
 using namespace icu::number::impl;
 
 void PatternParser::parseToPatternInfo(const UnicodeString& patternString, ParsedPatternInfo& patternInfo, UErrorCode &status) {

@@ -8,7 +8,9 @@
 #include "unicode/numberformatter.h"
 #include "number_patternstring.h"
 
+using namespace icu;
 using namespace icu::number;
+using namespace icu::number::impl;
 
 Grouper Grouper::defaults() {
     return {-2, -2, false};
