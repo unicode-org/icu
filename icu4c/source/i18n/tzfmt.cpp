@@ -1869,8 +1869,8 @@ TimeZoneFormat::parseOffsetFieldsWithPattern(const UnicodeString& text, int32_t 
                 // leading space characters might be truncated. If the first pattern text
                 // starts with such character (e.g. Bidi control), then we need to
                 // skip the leading space charcters.
-                if (!PatternProps::isWhiteSpace(text.char32At(idx))) {
-                    for (;;) {
+                if (idx < text.length() && !PatternProps::isWhiteSpace(text.char32At(idx))) {
+                    while (len > 0) {
                         UChar32 ch;
                         int32_t chLen;
                         U16_GET(patStr, 0, 0, len, ch)

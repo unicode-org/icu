@@ -360,7 +360,7 @@ public class TimeZoneFormatTest extends TestFmwk {
                 new ULocale("ko_KR"), new ULocale("nb_NO"), new ULocale("nl_NL"), new ULocale("nn_NO"), new ULocale("pl_PL"),
                 new ULocale("pt"), new ULocale("pt_BR"), new ULocale("pt_PT"), new ULocale("ru_RU"), new ULocale("sv_SE"),
                 new ULocale("th_TH"), new ULocale("tr_TR"), new ULocale("zh"), new ULocale("zh_Hans"), new ULocale("zh_Hans_CN"),
-                new ULocale("zh_Hant"), new ULocale("zh_Hant_HK"), new ULocale("zh_Hant_TW")
+                new ULocale("zh_Hant"), new ULocale("zh_Hant_HK"), new ULocale("zh_Hant_TW"), new ULocale("ccp"), new ULocale("fa")
             };
         } else {
             LOCALES = new ULocale[] {
@@ -377,10 +377,6 @@ public class TimeZoneFormatTest extends TestFmwk {
         int testLen = 0;
         for (int locidx = 0; locidx < LOCALES.length; locidx++) {
             logln("Locale: " + LOCALES[locidx].toString());
-            if (LOCALES[locidx].getLanguage().equals("fa")
-                    && logKnownIssue("13445", "Bidi control in localized GMT pattern")) {
-                continue;
-            }
             for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
                 logln("    pattern: " + PATTERNS[patidx]);
                 String pattern = BASEPATTERN + " " + PATTERNS[patidx];
