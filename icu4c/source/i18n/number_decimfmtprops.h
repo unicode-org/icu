@@ -23,8 +23,8 @@ U_NAMESPACE_BEGIN
 #if defined (_MSC_VER)
 // Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
 #pragma warning(suppress: 4661)
-template class U_I18N_API LocalPointerBase<number::impl::CurrencyPluralInfo>;
-template class U_I18N_API LocalPointer<number::impl::CurrencyPluralInfo>;
+template class U_I18N_API LocalPointerBase<CurrencyPluralInfo>;
+template class U_I18N_API LocalPointer<CurrencyPluralInfo>;
 #endif
 
 namespace number {
