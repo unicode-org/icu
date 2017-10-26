@@ -424,6 +424,9 @@ public abstract class NumberFormat extends UFormat {
      * <p>Does not throw an exception; if no object can be parsed, index is
      * unchanged!
      *
+     * <p>For more detail on parsing, see the "Parsing" header in the class
+     * documentation of {@link DecimalFormat}.
+     *
      * @see #isParseIntegerOnly
      * @see DecimalFormat#setParseBigDecimal
      * @see java.text.Format#parseObject(String, ParsePosition)

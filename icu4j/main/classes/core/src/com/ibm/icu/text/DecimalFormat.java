@@ -202,7 +202,9 @@ import com.ibm.icu.util.ULocale.Category;
  * pattern string and the input string. For example, the pattern "# %" matches "35 %" (with a single
  * space), "35%" (with no space), "35&nbsp;%" (with a non-breaking space), and "35&nbsp; %" (with
  * multiple spaces). Arbitrary ignorables are also allowed at boundaries between the parts of the
- * number: prefix, number, exponent separator, and suffix.
+ * number: prefix, number, exponent separator, and suffix. Ignorable whitespace characters are those
+ * having the Unicode "blank" property for regular expressions, defined in UTS #18 Annex C, which is
+ * "horizontal" whitespace, like spaces and tabs, but not "vertical" whitespace, like line breaks.
  *
  * <p>If {@link #parse(String, ParsePosition)} fails to parse a string, it returns <code>null</code>
  * and leaves the parse position unchanged. The convenience method {@link #parse(String)} indicates
