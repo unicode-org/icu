@@ -412,14 +412,14 @@ void IntlCalendarTest::TestBuddhistFormat() {
     
     // Test simple parse/format with adopt
     
-    // First, a contrived english test..
+    // First, a contrived English test..
     UDate aDate = 999932400000.0; 
     SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=buddhist"), status);
     CHECK(status, "creating date format instance");
     SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
     CHECK(status, "creating gregorian date format instance");
     if(!fmt) { 
-        errln("Coudln't create en_US instance");
+        errln("Couldn't create en_US instance");
     } else {
         UnicodeString str;
         fmt2->format(aDate, str);
@@ -443,7 +443,7 @@ void IntlCalendarTest::TestBuddhistFormat() {
     }
     delete fmt2;
     
-    CHECK(status, "Error occured testing Buddhist Calendar in English ");
+    CHECK(status, "Error occurred testing Buddhist Calendar in English ");
     
     status = U_ZERO_ERROR;
     // Now, try in Thai
@@ -504,7 +504,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
     SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
     CHECK(status, "creating date format instance");
     if(!fmt) { 
-        errln("Coudln't create en_US instance");
+        errln("Couldn't create en_US instance");
     } else {
         UnicodeString str;
         fmt2->format(aDate, str);
@@ -563,7 +563,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
 
     delete cal2;
     delete fmt2;
-    CHECK(status, "Error occured");
+    CHECK(status, "Error occurred");
     
     // Now, try in Japanese
     {
@@ -632,7 +632,7 @@ void IntlCalendarTest::TestJapanese3860()
         SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("y.M.d"), Locale("ja_JP@calendar=japanese"), status);
         CHECK(status, "creating date format instance");
         if(!fmt) { 
-            errln("Coudln't create en_US instance");
+            errln("Couldn't create en_US instance");
         } else {
             UErrorCode s2 = U_ZERO_ERROR;
             cal2->clear();
@@ -672,7 +672,7 @@ void IntlCalendarTest::TestJapanese3860()
         SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("y"), Locale("ja_JP@calendar=japanese"), status);
         CHECK(status, "creating date format instance");
         if(!fmt) { 
-            errln("Coudln't create en_US instance");
+            errln("Couldn't create en_US instance");
         } else {
             UErrorCode s2 = U_ZERO_ERROR;
             cal2->clear();
@@ -840,7 +840,7 @@ void IntlCalendarTest::TestPersianFormat() {
     UnicodeString gregorianDate("January 18, 2007 AD");
     UDate aDate = fmt2->parse(gregorianDate, status); 
     if(!fmt) { 
-        errln("Coudln't create en_US instance");
+        errln("Couldn't create en_US instance");
     } else {
         UnicodeString str;
         fmt->format(aDate, str);
@@ -895,7 +895,7 @@ void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect
         }
 
         d = fmt2->parse(expect,status);
-        CHECK(status, "Error occured parsing " + UnicodeString(loc.getName()));
+        CHECK(status, "Error occurred parsing " + UnicodeString(loc.getName()));
         if(d != expectDate) {
             fmt2->format(d,tmp);
             errln(UnicodeString("Failed to parse " ) + escape(expect) + ", " + loc.getName() + " expect " + (double)expectDate + " got " + (double)d  + " " + escape(tmp));
