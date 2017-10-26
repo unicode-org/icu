@@ -567,11 +567,6 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
         logln("    Thread %d, Locale %s, Pattern %s", 
                 threadNumber, gLocaleData->locales[locidx].getName(), CStr(pattern)());
 
-        if (uprv_strcmp(gLocaleData->locales[locidx].getLanguage(), "ccp") == 0
-            && logKnownIssue("13446", "Chakma time zone parsing")) {
-            continue;
-        }
-
         SimpleDateFormat *sdf = new SimpleDateFormat(pattern, gLocaleData->locales[locidx], status);
         if (U_FAILURE(status)) {
             errcheckln(status, (UnicodeString) "new SimpleDateFormat failed for pattern " + 
