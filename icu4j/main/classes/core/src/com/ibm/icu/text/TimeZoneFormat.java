@@ -32,6 +32,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.TextTrieMap;
@@ -2397,7 +2398,26 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             if (patternItems[i] instanceof String) {
                 String patStr = (String)patternItems[i];
                 int len = patStr.length();
-                if (!text.regionMatches(true, idx, patStr, 0, len)) {
+                int patIdx = 0;
+                if (i == 0) {
+                    // When TimeZoneFormat parse() is called from SimpleDateFormat,
+                    // leading space characters might be truncated. If the first pattern text
+                    // starts with such character (e.g. Bidi control), then we need to
+                    // skip the leading space characters.
+                    if (idx < text.length() && !PatternProps.isWhiteSpace(text.codePointAt(idx))) {
+                        while (len > 0) {
+                            int cp = patStr.codePointAt(patIdx);
+                            if (PatternProps.isWhiteSpace(cp)) {
+                                int cpLen = Character.charCount(cp);
+                                len -= cpLen;
+                                patIdx += cpLen;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!text.regionMatches(true, idx, patStr, patIdx, len)) {
                     failed = true;
                     break;
                 }
