@@ -67,7 +67,8 @@ class PluralRules;
 class VisibleDigitsWithExponent;
 
 // explicit template instantiation. see digitlst.h
-#if defined (_MSC_VER)
+// (When building DLLs for Windows this is required.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
 template class U_I18N_API    EnumSet<UNumberFormatAttribute,
             UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1,
             UNUM_LIMIT_BOOLEAN_ATTRIBUTE>;
