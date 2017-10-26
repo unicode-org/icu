@@ -3202,7 +3202,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 
     case UDAT_FRACTIONAL_SECOND_FIELD:
         // Fractional seconds left-justify
-        i = pos.getIndex() - start;
+        i = countDigits(text, start, pos.getIndex());
         if (i < 3) {
             while (i < 3) {
                 value *= 10;
@@ -3726,6 +3726,19 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
             number.setLong(val);
         }
     }
+}
+
+int32_t SimpleDateFormat::countDigits(const UnicodeString& text, int32_t start, int32_t end) const {
+    int32_t numDigits = 0;
+    int32_t idx = start;
+    while (idx < end) {
+        UChar32 cp = text.char32At(idx);
+        if (u_isdigit(cp)) {
+            numDigits++;
+        }
+        idx += U16_LENGTH(cp);
+    }
+    return numDigits;
 }
 
 //----------------------------------------------------------------------
