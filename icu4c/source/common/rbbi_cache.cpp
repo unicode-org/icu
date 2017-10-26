@@ -15,6 +15,7 @@
 #include "brkeng.h"
 #include "cmemory.h"
 #include "rbbidata.h"
+#include "rbbirb.h"
 #include "uassert.h"
 #include "uvectr32.h"
 
