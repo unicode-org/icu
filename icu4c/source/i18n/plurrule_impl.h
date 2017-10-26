@@ -222,6 +222,12 @@ enum PluralOperand {
 };
 
 /**
+ * Converts from the tokenType enum to PluralOperand. Asserts that the given
+ * tokenType can be mapped to a PluralOperand.
+ */
+PluralOperand tokenTypeToPluralOperand(tokenType tt);
+
+/**
  * An interface to FixedDecimal, allowing for other implementations.
  * @internal
  */
@@ -234,25 +240,6 @@ class U_I18N_API IFixedDecimal {
      * If the operand is 'n', returns a double; otherwise, returns an integer.
      */
     virtual double getPluralOperand(PluralOperand operand) const = 0;
-
-    /** Converts from the tokenType enum to PluralOperand. */
-    virtual double getPluralOperand(tokenType tt) const {
-        switch(tt) {
-        case tVariableN:
-            return getPluralOperand(PLURAL_OPERAND_N);
-        case tVariableI:
-            return getPluralOperand(PLURAL_OPERAND_I);
-        case tVariableF:
-            return getPluralOperand(PLURAL_OPERAND_F);
-        case tVariableV:
-            return getPluralOperand(PLURAL_OPERAND_V);
-        case tVariableT:
-            return getPluralOperand(PLURAL_OPERAND_T);
-        default:
-            U_ASSERT(FALSE);  // unexpected.
-            return 0.0;
-        }
-    }
 
     virtual bool isNaN() const = 0;
 

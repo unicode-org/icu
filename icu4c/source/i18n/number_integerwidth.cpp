@@ -22,7 +22,7 @@ IntegerWidth IntegerWidth::zeroFillTo(int32_t minInt) {
     if (minInt >= 0 && minInt <= kMaxIntFracSig) {
         return {static_cast<int8_t>(minInt), -1};
     } else {
-        return {U_NUMBER_DIGIT_WIDTH_OUT_OF_RANGE_ERROR};
+        return {U_NUMBER_DIGIT_WIDTH_OUTOFBOUNDS_ERROR};
     }
 }
 
@@ -31,7 +31,7 @@ IntegerWidth IntegerWidth::truncateAt(int32_t maxInt) {
     if (maxInt >= 0 && maxInt <= kMaxIntFracSig) {
         return {fUnion.minMaxInt.fMinInt, static_cast<int8_t>(maxInt)};
     } else {
-        return {U_NUMBER_DIGIT_WIDTH_OUT_OF_RANGE_ERROR};
+        return {U_NUMBER_DIGIT_WIDTH_OUTOFBOUNDS_ERROR};
     }
 }
 

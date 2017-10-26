@@ -789,7 +789,9 @@ AndConstraint::isFulfilled(const IFixedDecimal &number) {
         // An empty AndConstraint, created by a rule with a keyword but no following expression.
         return TRUE;
     }
-    double n = number.getPluralOperand(digitsType);  // pulls n | i | v | f value for the number.
+
+    PluralOperand operand = tokenTypeToPluralOperand(digitsType);
+    double n = number.getPluralOperand(operand);     // pulls n | i | v | f value for the number.
                                                      // Will always be positive.
                                                      // May be non-integer (n option only)
     do {
@@ -1403,6 +1405,24 @@ PluralKeywordEnumeration::count(UErrorCode& /*status*/) const {
 }
 
 PluralKeywordEnumeration::~PluralKeywordEnumeration() {
+}
+
+PluralOperand tokenTypeToPluralOperand(tokenType tt) {
+    switch(tt) {
+    case tVariableN:
+        return PLURAL_OPERAND_N;
+    case tVariableI:
+        return PLURAL_OPERAND_I;
+    case tVariableF:
+        return PLURAL_OPERAND_F;
+    case tVariableV:
+        return PLURAL_OPERAND_V;
+    case tVariableT:
+        return PLURAL_OPERAND_T;
+    default:
+        U_ASSERT(FALSE);  // unexpected.
+        return PLURAL_OPERAND_N;
+    }
 }
 
 IFixedDecimal::~IFixedDecimal() = default;
