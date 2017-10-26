@@ -132,9 +132,10 @@ public class Parse {
     INSIDE_AFFIX_PATTERN;
   }
 
-  // TODO: Does this set make sense for the whitespace characters?
+  // This set was decided after discussion with icu-design@. See ticket #13309.
+  // Zs+TAB is "horizontal whitespace" according to UTS #18 (blank property).
   private static final UnicodeSet UNISET_WHITESPACE =
-      new UnicodeSet("[[:whitespace:][\\u2000-\\u200D]]").freeze();
+      new UnicodeSet("[[:Zs:][\\u0009]]").freeze();
 
   // BiDi characters are skipped over and ignored at any point in the string, even in strict mode.
   private static final UnicodeSet UNISET_BIDI =

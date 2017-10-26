@@ -63,6 +63,7 @@ import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
@@ -438,8 +439,8 @@ public class NumberFormatTest extends TestFmwk {
                 {" $ 124 ", "6", "-1"},
                 {"124$", "3", "-1"},
                 {"124 $", "3", "-1"},
-                {"$124\u200D", "4", "-1"},
-                {"$\u200D124", "5", "-1"},
+                {"$124\u200A", "4", "-1"},
+                {"$\u200A124", "5", "-1"},
         };
         NumberFormat foo = NumberFormat.getCurrencyInstance();
         for (int i = 0; i < DATA.length; ++i) {
@@ -1712,6 +1713,29 @@ public class NumberFormatTest extends TestFmwk {
         expect(fmt, "ab  1234", n);
         expect(fmt, "a b1234", n);
         expect(fmt, "a   b1234", n);
+        expect(fmt, " a b 1234", n);
+
+        // Horizontal whitespace is allowed, but not vertical whitespace.
+        expect(fmt, "\ta\u00A0b\u20001234", n);
+        expect(fmt, "a   \u200A    b1234", n);
+        expectParseException(fmt, "\nab1234", n);
+        expectParseException(fmt, "a    \n   b1234", n);
+        expectParseException(fmt, "a    \u0085   b1234", n);
+        expectParseException(fmt, "a    \u2028   b1234", n);
+
+        // Test all characters in the UTS 18 "blank" set stated in the API docstring.
+        UnicodeSet blanks = new UnicodeSet("[[:Zs:][\\u0009]]").freeze();
+        for (String space : blanks) {
+            String str = "a  " + space + "  b1234";
+            expect(fmt, str, n);
+        }
+
+        // Test that other whitespace characters do not work
+        UnicodeSet otherWhitespace = new UnicodeSet("[[:whitespace:]]").removeAll(blanks).freeze();
+        for (String space : otherWhitespace) {
+            String str = "a  " + space + "  b1234";
+            expectParseException(fmt, str, n);
+        }
     }
 
     /**
@@ -2674,6 +2698,16 @@ public class NumberFormatTest extends TestFmwk {
     /** Parse test (convenience) */
     public void expect(NumberFormat fmt, String str, long n) {
         expect(fmt, str, new Long(n));
+    }
+
+    /** Parse test */
+    public void expectParseException(DecimalFormat fmt, String str, Number n) {
+        Number num = null;
+        try {
+            num = fmt.parse(str);
+            errln("Expected failure, but passed: " + n + " on " + fmt.toPattern() + " -> " + num);
+        } catch (ParseException e) {
+        }
     }
 
     private void expectCurrency(NumberFormat nf, Currency curr,
