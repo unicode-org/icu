@@ -2503,5 +2503,23 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("Incorrect time for long range milliseconds","Sun Jan 25 21:00:00 PST 1970", cal.getTime().toString());
     }
 
-}
+    @Test
+    public void TestPersianCalOverflow() {
+        String localeID = "bs_Cyrl@calendar=persian";
+        Calendar cal = Calendar.getInstance(new ULocale(localeID));
+        int maxMonth = cal.getMaximum(Calendar.MONTH);
+        int maxDayOfMonth = cal.getMaximum(Calendar.DATE);
+        int jd, month, dayOfMonth;
+        for (jd = 67023580; jd <= 67023584; jd++) { // year 178171, int32_t overflow if jd >= 67023582
+            cal.clear();
+            cal.set(Calendar.JULIAN_DAY, jd);
+            month = cal.get(Calendar.MONTH);
+            dayOfMonth = cal.get(Calendar.DATE);
+            if (month > maxMonth || dayOfMonth > maxDayOfMonth) {
+                errln("Error: localeID " + localeID + ", julianDay " + jd + "; maxMonth " + maxMonth + ", got month " + month +
+                        "; maxDayOfMonth " + maxDayOfMonth + ", got dayOfMonth " + dayOfMonth);
+            }
+        }
+    }
+ }
 //eof
