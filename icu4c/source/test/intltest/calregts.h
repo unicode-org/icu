@@ -72,6 +72,7 @@ public:
     void TestWeekShift(void);
     void TestTimeZoneTransitionAdd(void);
     void TestDeprecates(void);
+    void TestPersianCalOverflow(void);
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;

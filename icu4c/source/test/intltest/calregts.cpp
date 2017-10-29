@@ -10,6 +10,7 @@
 
 #include "calregts.h"
 
+#include "unicode/calendar.h"
 #include "unicode/gregocal.h"
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
@@ -84,6 +85,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(45,TestT5555);
         CASE(46,TestT6745);
         CASE(47,TestT8057);
+        CASE(48,TestPersianCalOverflow);
     default: name = ""; break;
     }
 }
@@ -2809,6 +2811,37 @@ void CalendarRegressionTest::TestT8057(void) {
     }
 
     delete cal;
+}
+
+
+/**
+ * @bug ticket 13454
+ */
+void CalendarRegressionTest::TestPersianCalOverflow(void) {
+    const char* localeID = "bs_Cyrl@calendar=persian";
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar* cal = Calendar::createInstance(Locale(localeID), status);
+    if(U_FAILURE(status)) {
+        dataerrln("FAIL: Calendar::createInstance for localeID %s: %s", localeID, u_errorName(status));
+    } else {
+        int32_t maxMonth = cal->getMaximum(UCAL_MONTH);
+        int32_t maxDayOfMonth = cal->getMaximum(UCAL_DATE);
+        int32_t jd, month, dayOfMonth;
+        for (jd = 67023580; jd <= 67023584; jd++) { // year 178171, int32_t overflow if jd >= 67023582
+            status = U_ZERO_ERROR;
+            cal->clear();
+            cal->set(UCAL_JULIAN_DAY, jd);
+            month = cal->get(UCAL_MONTH, status);
+            dayOfMonth = cal->get(UCAL_DATE, status);
+            if ( U_FAILURE(status) ) {
+                errln("FAIL: Calendar->get MONTH/DATE for localeID %s, julianDay %d, status %s\n", localeID, jd, u_errorName(status)); 
+            } else if (month > maxMonth || dayOfMonth > maxDayOfMonth) {
+                errln("FAIL: localeID %s, julianDay %d; maxMonth %d, got month %d; maxDayOfMonth %d, got dayOfMonth %d\n",
+                        localeID, jd, maxMonth, month, maxDayOfMonth, dayOfMonth); 
+            }
+        }
+        delete cal;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
