@@ -14,21 +14,21 @@ h3.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J 60 Release Candidate</h2>
-(Last Update: 2017-Oct-04)
+<h2>Read Me for ICU4J 60.1</h2>
+(Last Update: 2017-Oct-30)
 <hr size="2" width="100%">
 
 <p>
-<!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality. -->
+<b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality.
 <!-- <b>Note:</b> This is a development milestone of ICU4J 60.
 The contents of this document may not reflect the recent changes done
 for ICU 60 development. It is not recommended for production use. -->
-<b>Note:</b> This is a release candidate of ICU4J 60.
+<!-- <b>Note:</b> This is a release candidate of ICU4J 60.
 The contents of this document may not reflect the recent changes done
 for ICU 60 development. This release candidate is intended for those
 wishing to verify ICU 60 integration before final release. It is not
-recommended for production use.
+recommended for production use. -->
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -162,7 +162,7 @@ file included in this package.
 <h2 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h2>
 <p>
 ICU4J 60 depends on J2SE 6 functionality.  Therefore, ICU4J only runs on
-JRE version 6 or later.
+JRE version 6 or later. ICU4J 60 is tested on JRE 6, 7, 8 and 9.
 
 <h2 class="doc"><a name="download"></a>How to Download ICU4J</h2>
 <p>There are a few different ways to download the ICU4J releases.
@@ -175,7 +175,7 @@ These versions are tested more thoroughly than day-to-day development
 builds, and they are packaged in jar files for convenient download.
   <ul>
     <li><a href="http://www.icu-project.org/download/">ICU Download page</a>.</li>
-    <li>[TBD 60.1]Maven repository:
+    <li>Maven repository:
 <pre>
 &lt;dependency&gt;
     &lt;groupId&gt;com.ibm.icu&lt;/groupId&gt;
@@ -428,6 +428,12 @@ ICU4J source archive is extracted.
   </ul>
   </td>
 </tr>
+<tr>
+  <td>lib</td>
+  <td>Folder used for downloading depedency libraries.<br>
+  <b>Note:</b> ICU4J runtime libraries do not depend on any external libraries other
+  than JDK. These dependencies are for testing (such as JUnit).</td>
+</tr>
 </table>
 
 <h2 class="doc"><a name="API"></a>Where to get Documentation</h2>
@@ -526,7 +532,7 @@ Buildfile: C:\icu4j\build.xml
 info:
      [echo] ----- Build Environment Information -------------------
      [echo] Java Home:    C:\jdk1.8.0\jre
-     [echo] Java Version: 1.8.0_102
+     [echo] Java Version: 1.8.0_144
      [echo] Ant Home:     C:\apache-ant
      [echo] Ant Version:  Apache Ant(TM) version 1.9.4 compiled on April 29 2014
 
@@ -553,14 +559,16 @@ core:
 
      [echo] ----------------------------------------------------
     [mkdir] Created dir: C:\icu4j\main\classes\core\out\bin
-    [javac] Compiling 364 source files to C:\icu4j\main\classes\core\out\bin
+    [javac] Compiling 415 source files to C:\icu4j\main\classes\core\out\bin
     [javac] Note: Some input files use or override a deprecated API.
     [javac] Note: Recompile with -Xlint:deprecation for details.
 
 compile:
 
 @copy:
-     [copy] Copying 23 files to C:\icu4j\main\classes\core\out\bin
+     [copy] Copying 24 files to C:\icu4j\main\classes\core\out\bin
+     [copy] Copied 4 empty directories to 3 empty directories under D:\devicu\ma
+int-60\icu4j\main\classes\core\out\bin
 
 set-icuconfig-datapath:
 
@@ -597,7 +605,7 @@ _build-localespi:
 compile:
 
 @copy:
-     [copy] Copying 10 files to C:\icu4j\main\classes\localespi\out\bin
+     [copy] Copying 11 files to C:\icu4j\main\classes\localespi\out\bin
 
 copy:
 
