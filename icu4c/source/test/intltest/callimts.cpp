@@ -417,7 +417,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
             }
             if (maxActual < maxLow || maxActual > maxHigh) {
                 if ( uprv_strcmp(cal.getType(), "chinese") == 0 &&
-                        testMillis >= 2842992000000.0  && testMillis <= 2906668800000.0 &&
+                        testMillis >= 1802044800000.0 &&
                      logKnownIssue("12620", "chinese calendar failures for some actualMax tests")) {
                     logln((UnicodeString)"KnownFail: [" + cal.getType() + "] " +
                           ymdToString(cal, ymd) +
@@ -444,7 +444,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
                           ", allowed=(" + minLow + ".." + minHigh + ")..(" +
                           maxLow + ".." + maxHigh + ")");
                 } else if ( uprv_strcmp(cal.getType(), "chinese") == 0 &&
-                        testMillis >= 2842992000000.0  && testMillis <= 2906668800000.0 &&
+                        testMillis >= 1832544000000.0 &&
                      logKnownIssue("12620", "chinese calendar failures for some actualMax tests")) {
                     logln((UnicodeString)"KnownFail: [" + cal.getType() + "] " +
                           ymdToString(cal, ymd) +
