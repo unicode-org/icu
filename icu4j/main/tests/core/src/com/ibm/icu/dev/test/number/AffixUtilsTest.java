@@ -10,28 +10,24 @@ import org.junit.Test;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.util.ULocale;
 
 public class AffixUtilsTest {
 
     private static final SymbolProvider DEFAULT_SYMBOL_PROVIDER =
         new SymbolProvider() {
-          // ar_SA has an interesting percent sign and various Arabic letter marks
-          private final DecimalFormatSymbols SYMBOLS =
-              DecimalFormatSymbols.getInstance(new ULocale("ar_SA"));
-
           @Override
           public CharSequence getSymbol(int type) {
+            // Use interesting symbols where possible. The symbols are from ar_SA but are hard-coded
+            // here to make the test independent of locale data changes.
             switch (type) {
               case AffixUtils.TYPE_MINUS_SIGN:
                 return "−";
               case AffixUtils.TYPE_PLUS_SIGN:
-                return SYMBOLS.getPlusSignString();
+                return "\u061C+";
               case AffixUtils.TYPE_PERCENT:
-                return SYMBOLS.getPercentString();
+                return "٪\u061C";
               case AffixUtils.TYPE_PERMILLE:
-                return SYMBOLS.getPerMillString();
+                return "؉";
               case AffixUtils.TYPE_CURRENCY_SINGLE:
                 return "$";
               case AffixUtils.TYPE_CURRENCY_DOUBLE:
