@@ -126,6 +126,20 @@ public class TestUScript extends TestFmwk {
     }
 
     @Test
+    public void TestDefaultScriptExtensions() {
+        // Block 3000..303F CJK Symbols and Punctuation defaults to scx=Bopo Hang Hani Hira Kana Yiii
+        // but some of its characters revert to scx=<script> which is usually Common.
+        BitSet scx = new BitSet();
+        assertEquals("U+3000 num scx",  // IDEOGRAPHIC SPACE
+                UScript.COMMON,
+                UScript.getScriptExtensions(0x3000, scx));
+        scx.clear();
+        assertEquals("U+3012 num scx",  // POSTAL MARK
+                UScript.COMMON,
+                UScript.getScriptExtensions(0x3012, scx));
+    }
+
+    @Test
     public void TestScriptMetadataAPI() {
         /* API & code coverage. */
         String sample = UScript.getSampleString(UScript.LATIN);
