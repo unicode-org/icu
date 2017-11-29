@@ -979,7 +979,7 @@ public class Parse {
     if (mode == null) mode = ParseMode.LENIENT;
     boolean integerOnly = properties.getParseIntegerOnly();
     boolean ignoreExponent = properties.getParseNoExponent();
-    boolean ignoreGrouping = properties.getGroupingSize() < 0;
+    boolean ignoreGrouping = properties.getGroupingSize() <= 0;
 
     // Set up the initial state
     ParserState state = threadLocalParseState.get().clear();
@@ -1317,7 +1317,7 @@ public class Parse {
               numGroupingRegions--;
             }
           }
-          if (grouping1 < 0) {
+          if (grouping1 <= 0) {
             // OK (no grouping data available)
           } else if (numGroupingRegions <= 1) {
             // OK (no grouping digits)

@@ -5325,6 +5325,7 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat df = new DecimalFormat();
         df.setGroupingUsed(false);
         assertEquals("Grouping size should now be zero", 0, df.getGroupingSize());
+        assertEquals("Grouping should be off", false, df.isGroupingUsed());
     }
 
     @Test
