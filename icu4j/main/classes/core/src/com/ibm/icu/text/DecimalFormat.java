@@ -1793,7 +1793,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized boolean isGroupingUsed() {
-    return properties.getGroupingSize() != -1 || properties.getSecondaryGroupingSize() != -1;
+    return properties.getGroupingSize() > 0 || properties.getSecondaryGroupingSize() > 0;
   }
 
   /**
