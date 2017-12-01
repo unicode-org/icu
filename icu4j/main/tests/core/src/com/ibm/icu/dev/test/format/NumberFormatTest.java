@@ -5566,7 +5566,7 @@ public class NumberFormatTest extends TestFmwk {
         df.setMaximumFractionDigits(3);
         expect2(df, 35.0, "$35.000");
         df.setMinimumFractionDigits(-1);
-        expect2(df, 35.0, "$35");
+        expect2(df, 35.0, "$35.00");
         df.setMaximumFractionDigits(-1);
         expect2(df, 35.0, "$35.00");
     }
@@ -5915,5 +5915,22 @@ public class NumberFormatTest extends TestFmwk {
         df.applyPattern("a0");
         expect2(df, 100, "a100");
         expect2(df, -100, "-a100");
+    }
+
+    @Test
+    public void TestCurrencyRoundingMinWithoutMax() {
+        NumberFormat currencyFormat = DecimalFormat.getCurrencyInstance(Locale.US);
+        currencyFormat.setCurrency(Currency.getInstance("AUD"));
+        currencyFormat.setMinimumFractionDigits(0);
+        expect(currencyFormat, 0.001, "A$0");
+
+        // NOTE: The size of the increment takes precedent over minFrac since ICU 59.
+        // CAD-Cash uses nickel rounding.
+        currencyFormat = DecimalFormat.getCurrencyInstance(Locale.US);
+        currencyFormat.setCurrency(Currency.getInstance("CAD"));
+        ((DecimalFormat)currencyFormat).setCurrencyUsage(CurrencyUsage.CASH);
+        currencyFormat.setMinimumFractionDigits(0);
+        // expect(currencyFormat, 0.08, "CA$0.1");  // ICU 58 and down
+        expect(currencyFormat, 0.08, "CA$0.10");  // ICU 59 and up
     }
 }
