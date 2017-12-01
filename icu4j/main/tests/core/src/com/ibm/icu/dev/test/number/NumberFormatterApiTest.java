@@ -1324,6 +1324,22 @@ public class NumberFormatterApiTest {
                 12345.67,
                 "١٢٬٣٤٥٫٦٧ US$");
 
+        assertFormatSingle(
+                "NumberingSystem in API should win over @numbers keyword",
+                "",
+                NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
+                new ULocale("ar@numbers=arab"),
+                12345.67,
+                "US$ 12,345.67");
+
+        assertEquals("NumberingSystem in API should win over @numbers keyword in reverse order",
+                "US$ 12,345.67",
+                NumberFormatter.withLocale(new ULocale("ar@numbers=arab"))
+                    .symbols(NumberingSystem.LATIN)
+                    .unit(USD)
+                    .format(12345.67)
+                    .toString());
+
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(new ULocale("de-CH"));
         UnlocalizedNumberFormatter f = NumberFormatter.with().symbols(symbols);
         symbols.setGroupingSeparatorString("!");

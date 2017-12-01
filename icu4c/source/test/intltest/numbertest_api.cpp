@@ -1254,7 +1254,22 @@ void NumberFormatterApiTest::symbols() {
             12345.67,
             u"١٢٬٣٤٥٫٦٧ US$");
 
+    assertFormatSingle(
+            u"NumberingSystem in API should win over @numbers keyword",
+            NumberFormatter::with().adoptSymbols(new NumberingSystem(LATN)).unit(USD),
+            Locale("ar@numbers=arab"),
+            12345.67,
+            u"US$ 12,345.67");
+
     UErrorCode status = U_ZERO_ERROR;
+    assertEquals("NumberingSystem in API should win over @numbers keyword in reverse order",
+            u"US$ 12,345.67",
+            NumberFormatter::withLocale(Locale("ar@numbers=arab"))
+                .adoptSymbols(new NumberingSystem(LATN))
+                .unit(USD)
+                .formatDouble(12345.67, status)
+                .toString());
+
     DecimalFormatSymbols symbols = SWISS_SYMBOLS;
     UnlocalizedNumberFormatter f = NumberFormatter::with().symbols(symbols);
     symbols.setSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kGroupingSeparatorSymbol, u"!", status);
