@@ -4063,6 +4063,8 @@ for (;;) {
 
         UnicodeString strBuf;
         numFmt->format(numberToBeFormat, strBuf);
+        // TODO: Re-enable the following test block. It has been disabled since
+        // the code was first checked-in (r25497)
         /*
         int resultDataIndex = 3 + kIndex;
         // DATA[i][resultDataIndex] is the currency format result
