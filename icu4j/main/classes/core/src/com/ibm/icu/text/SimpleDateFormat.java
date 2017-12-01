@@ -1913,7 +1913,7 @@ public class SimpleDateFormat extends DateFormat {
                 // 12 am is 12 midnight, and 12 pm is 12 noon.
                 value = cal.get(Calendar.AM_PM);
 
-                if (count == 3) {
+                if (count <= 3) {
                     toAppend = formatData.abbreviatedDayPeriods[value];
                 } else if (count == 4 || count > 5) {
                     toAppend = formatData.wideDayPeriods[value];
