@@ -12,6 +12,19 @@ root {
         Digit-Tone {
             alias {"NumericPinyin-Pinyin"}
         }
+        Amharic-Latin/BGN {
+            alias {"am-am_Latn/BGN"}
+        }
+        am-Latn-t-am-m0-bgn {
+            alias {"am-am_Latn/BGN"}
+        }
+        am-am_Latn/BGN {
+            file {
+                resource:process(transliterator) {"am_am_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         und-t-d0-accents {
             alias {"Any-Accents"}
         }
@@ -72,6 +85,58 @@ root {
             file {
                 resource:process(transliterator) {"Arab_Latn.txt"}
                 direction {"REVERSE"}
+            }
+        }
+
+        Arabic-Latin/BGN {
+            alias {"ar-ar_Latn/BGN"}
+        }
+        ar-Latn-t-ar-m0-bgn {
+            alias {"ar-ar_Latn/BGN"}
+        }
+        ar-ar_Latn/BGN {
+            file {
+                resource:process(transliterator) {"ar_ar_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Armenian-Latin/BGN {
+            alias {"hy-hy_Latn/BGN"}
+        }
+        hy-Latn-t-hy-m0-bgn {
+            alias {"hy-hy_Latn/BGN"}
+        }
+        hy-hy_Latn/BGN {
+            file {
+                resource:process(transliterator) {"hy_hy_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Azerbaijani-Latin/BGN {
+            alias {"az_Cyrl-az/BGN"}
+        }
+        az-t-az-cyrl-m0-bgn {
+            alias {"az_Cyrl-az/BGN"}
+        }
+        az_Cyrl-az/BGN {
+            file {
+                resource:process(transliterator) {"az_Cyrl_az_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Belarusian-Latin/BGN {
+            alias {"be-be_Latn/BGN"}
+        }
+        be-Latn-t-be-m0-bgn {
+            alias {"be-be_Latn/BGN"}
+        }
+        be-be_Latn/BGN {
+            file {
+                resource:process(transliterator) {"be_be_Latn_BGN.txt"}
+                direction {"FORWARD"}
             }
         }
 
@@ -218,6 +283,19 @@ root {
         Beng-ur {
             file {
                 resource:process(transliterator) {"Beng_ur.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Bulgarian-Latin/BGN {
+            alias {"bg-bg_Latn/BGN"}
+        }
+        bg-Latn-t-bg-m0-bgn {
+            alias {"bg-bg_Latn/BGN"}
+        }
+        bg-bg_Latn/BGN {
+            file {
+                resource:process(transliterator) {"bg_bg_Latn_BGN.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -438,6 +516,32 @@ root {
             }
         }
 
+        Georgian-Latin/BGN {
+            alias {"ka-ka_Latn/BGN"}
+        }
+        ka-Latn-t-ka-m0-bgn {
+            alias {"ka-ka_Latn/BGN"}
+        }
+        ka-Latn-t-ka-m0-bgn-2009 {
+            alias {"ka-ka_Latn/BGN"}
+        }
+        ka-ka_Latn/BGN {
+            file {
+                resource:process(transliterator) {"ka_ka_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ka-Latn-t-ka-m0-bgn-1981 {
+            alias {"ka-ka_Latn/BGN_1981"}
+        }
+        ka-ka_Latn/BGN_1981 {
+            file {
+                resource:process(transliterator) {"ka_ka_Latn_BGN_1981.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Greek-Latin {
             alias {"Grek-Latn"}
         }
@@ -460,6 +564,19 @@ root {
             file {
                 resource:process(transliterator) {"Grek_Latn.txt"}
                 direction {"REVERSE"}
+            }
+        }
+
+        Greek-Latin/BGN {
+            alias {"el-el_Latn/BGN"}
+        }
+        el-Latn-t-el-m0-bgn {
+            alias {"el-el_Latn/BGN"}
+        }
+        el-el_Latn/BGN {
+            file {
+                resource:process(transliterator) {"el_el_Latn_BGN.txt"}
+                direction {"FORWARD"}
             }
         }
 
@@ -856,6 +973,19 @@ root {
             }
         }
 
+        Hebrew-Latin/BGN {
+            alias {"he-he_Latn/BGN"}
+        }
+        he-Latn-t-he-m0-bgn {
+            alias {"he-he_Latn/BGN"}
+        }
+        he-he_Latn/BGN {
+            file {
+                resource:process(transliterator) {"he_he_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Hiragana-Katakana {
             alias {"Hira-Kana"}
         }
@@ -1175,6 +1305,58 @@ root {
             }
         }
 
+        Katakana-Latin/BGN {
+            alias {"ja_Hrkt-ja_Latn/BGN"}
+        }
+        ja-Latn-t-ja-hrkt-m0-bgn {
+            alias {"ja_Hrkt-ja_Latn/BGN"}
+        }
+        ja_Hrkt-ja_Latn/BGN {
+            file {
+                resource:process(transliterator) {"ja_Hrkt_ja_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Kazakh-Latin/BGN {
+            alias {"kk-kk_Latn/BGN"}
+        }
+        kk-Latn-t-kk-m0-bgn {
+            alias {"kk-kk_Latn/BGN"}
+        }
+        kk-kk_Latn/BGN {
+            file {
+                resource:process(transliterator) {"kk_kk_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Kirghiz-Latin/BGN {
+            alias {"ky-ky_Latn/BGN"}
+        }
+        ky-Latn-t-ky-m0-bgn {
+            alias {"ky-ky_Latn/BGN"}
+        }
+        ky-ky_Latn/BGN {
+            file {
+                resource:process(transliterator) {"ky_ky_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Korean-Latin/BGN {
+            alias {"ko-ko_Latn/BGN"}
+        }
+        ko-Latn-t-ko-m0-bgn {
+            alias {"ko-ko_Latn/BGN"}
+        }
+        ko-ko_Latn/BGN {
+            file {
+                resource:process(transliterator) {"ko_ko_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         und-t-d0-ascii {
             alias {"Latin-ASCII"}
         }
@@ -1464,6 +1646,19 @@ root {
             }
         }
 
+        Macedonian-Latin/BGN {
+            alias {"mk-mk_Latn/BGN"}
+        }
+        mk-Latn-t-mk-m0-bgn {
+            alias {"mk-mk_Latn/BGN"}
+        }
+        mk-mk_Latn/BGN {
+            file {
+                resource:process(transliterator) {"mk_mk_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Malayalam-Arabic {
             alias {"Mlym-Arab"}
         }
@@ -1607,6 +1802,32 @@ root {
         Mlym-ur {
             file {
                 resource:process(transliterator) {"Mlym_ur.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Maldivian-Latin/BGN {
+            alias {"dv-dv_Latn/BGN"}
+        }
+        dv-Latn-t-dv-m0-bgn {
+            alias {"dv-dv_Latn/BGN"}
+        }
+        dv-dv_Latn/BGN {
+            file {
+                resource:process(transliterator) {"dv_dv_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Mongolian-Latin/BGN {
+            alias {"mn-mn_Latn/BGN"}
+        }
+        mn-Latn-t-mn-m0-bgn {
+            alias {"mn-mn_Latn/BGN"}
+        }
+        mn-mn_Latn/BGN {
+            file {
+                resource:process(transliterator) {"mn_mn_Latn_BGN.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -1758,6 +1979,32 @@ root {
             }
         }
 
+        Pashto-Latin/BGN {
+            alias {"ps-ps_Latn/BGN"}
+        }
+        ps-Latn-t-ps-m0-bgn {
+            alias {"ps-ps_Latn/BGN"}
+        }
+        ps-ps_Latn/BGN {
+            file {
+                resource:process(transliterator) {"ps_ps_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Persian-Latin/BGN {
+            alias {"fa-fa_Latn/BGN"}
+        }
+        fa-Latn-t-fa-m0-bgn {
+            alias {"fa-fa_Latn/BGN"}
+        }
+        fa-fa_Latn/BGN {
+            file {
+                resource:process(transliterator) {"fa_fa_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Pinyin-NumericPinyin {
             file {
                 resource:process(transliterator) {"Pinyin_NumericPinyin.txt"}
@@ -1768,6 +2015,19 @@ root {
             file {
                 resource:process(transliterator) {"Pinyin_NumericPinyin.txt"}
                 direction {"REVERSE"}
+            }
+        }
+
+        Russian-Latin/BGN {
+            alias {"ru-ru_Latn/BGN"}
+        }
+        ru-Latn-t-ru-m0-bgn {
+            alias {"ru-ru_Latn/BGN"}
+        }
+        ru-ru_Latn/BGN {
+            file {
+                resource:process(transliterator) {"ru_ru_Latn_BGN.txt"}
+                direction {"FORWARD"}
             }
         }
 
@@ -2177,6 +2437,45 @@ root {
             internal {
                 resource:process(transliterator) {"ThaiLogical_Latin.txt"}
                 direction {"REVERSE"}
+            }
+        }
+
+        Turkmen-Latin/BGN {
+            alias {"tk_Cyrl-tk/BGN"}
+        }
+        tk-t-tk-cyrl-m0-bgn {
+            alias {"tk_Cyrl-tk/BGN"}
+        }
+        tk_Cyrl-tk/BGN {
+            file {
+                resource:process(transliterator) {"tk_Cyrl_tk_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Ukrainian-Latin/BGN {
+            alias {"uk-uk_Latn/BGN"}
+        }
+        uk-Latn-t-uk-m0-bgn {
+            alias {"uk-uk_Latn/BGN"}
+        }
+        uk-uk_Latn/BGN {
+            file {
+                resource:process(transliterator) {"uk_uk_Latn_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Uzbek-Latin/BGN {
+            alias {"uz_Cyrl-uz/BGN"}
+        }
+        uz-t-uz-cyrl-m0-bgn {
+            alias {"uz_Cyrl-uz/BGN"}
+        }
+        uz_Cyrl-uz/BGN {
+            file {
+                resource:process(transliterator) {"uz_Cyrl_uz_BGN.txt"}
+                direction {"FORWARD"}
             }
         }
 
@@ -3315,6 +3614,19 @@ root {
         ru-zh {
             file {
                 resource:process(transliterator) {"ru_zh.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Latin-Russian/BGN {
+            alias {"ru_Latn-ru/BGN"}
+        }
+        ru-t-ru-latn-m0-bgn {
+            alias {"ru_Latn-ru/BGN"}
+        }
+        ru_Latn-ru/BGN {
+            file {
+                resource:process(transliterator) {"ru_Latn_ru_BGN.txt"}
                 direction {"FORWARD"}
             }
         }
