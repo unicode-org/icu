@@ -149,13 +149,6 @@ private:
      */
     UnhandledEngine     *fUnhandledBreakEngine;
 
-    /**
-     *
-     * The type of the break iterator, or -1 if it has not been set.
-     * @internal
-     */
-    int32_t             fBreakType;
-
     //=======================================================================
     // constructors
     //=======================================================================
@@ -644,12 +637,6 @@ private:
      * @internal
      */
     void reset(void);
-
-    /**
-      * Set the type of the break iterator.
-      * @internal
-      */
-    void setBreakType(int32_t type);
 
     /**
       * Common initialization function, used by constructors and bufferClone.
