@@ -217,7 +217,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     }
     BreakIterator::operator=(that);
 
-    fBreakType = that.fBreakType;
     if (fLanguageBreakEngines != NULL) {
         delete fLanguageBreakEngines;
         fLanguageBreakEngines = NULL;   // Just rebuild for now
@@ -278,11 +277,6 @@ void RuleBasedBreakIterator::init(UErrorCode &status) {
     fRuleStatusIndex      = 0;
     fDone                 = false;
     fDictionaryCharCount  = 0;
-    fBreakType            = UBRK_WORD;  // Defaulting BreakType to word gives reasonable
-                                        //   dictionary behavior for Break Iterators that are
-                                        //   built from rules.  Even better would be the ability to
-                                        //   declare the type in the rules.
-
     fLanguageBreakEngines = NULL;
     fUnhandledBreakEngine = NULL;
     fBreakCache           = NULL;
@@ -1290,14 +1284,14 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
     int32_t i = fLanguageBreakEngines->size();
     while (--i >= 0) {
         lbe = (const LanguageBreakEngine *)(fLanguageBreakEngines->elementAt(i));
-        if (lbe->handles(c, fBreakType)) {
+        if (lbe->handles(c)) {
             return lbe;
         }
     }
 
     // No existing dictionary took the character. See if a factory wants to
     // give us a new LanguageBreakEngine for this character.
-    lbe = getLanguageBreakEngineFromFactory(c, fBreakType);
+    lbe = getLanguageBreakEngineFromFactory(c);
 
     // If we got one, use it and push it on our stack.
     if (lbe != NULL) {
@@ -1327,19 +1321,9 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
 
     // Tell the reject engine about the character; at its discretion, it may
     // add more than just the one character.
-    fUnhandledBreakEngine->handleCharacter(c, fBreakType);
+    fUnhandledBreakEngine->handleCharacter(c);
 
     return fUnhandledBreakEngine;
-}
-
-
-
-/*int32_t RuleBasedBreakIterator::getBreakType() const {
-    return fBreakType;
-}*/
-
-void RuleBasedBreakIterator::setBreakType(int32_t type) {
-    fBreakType = type;
 }
 
 void RuleBasedBreakIterator::dumpCache() {
