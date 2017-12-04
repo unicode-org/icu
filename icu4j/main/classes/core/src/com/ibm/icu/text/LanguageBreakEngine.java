@@ -17,11 +17,9 @@ import java.text.CharacterIterator;
 interface LanguageBreakEngine {
     /**
      * @param c A Unicode codepoint value
-     * @param breakType The kind of break iterator that is wanting to make use
-     *  of this engine - character, word, line, sentence
      * @return true if the engine can handle this character, false otherwise
      */
-    boolean handles(int c, int breakType);
+    boolean handles(int c);
 
     /**
      * Implements the actual breaking logic. Find any breaks within a run in the supplied text.
@@ -30,13 +28,11 @@ interface LanguageBreakEngine {
      * @param startPos The index of the beginning of the range
      * @param endPos The index of the possible end of our range. It is possible,
      *  however, that the range ends earlier
-     * @param breakType The kind of break iterator that is wanting to make use
-     *  of this engine - character, word, line, sentence
      * @param foundBreaks A data structure to receive the break positions.
      * @return the number of breaks found
      */
     int findBreaks(CharacterIterator text, int startPos, int endPos,
-            int breakType, DictionaryBreakEngine.DequeI foundBreaks);
+            DictionaryBreakEngine.DequeI foundBreaks);
 }
 
 

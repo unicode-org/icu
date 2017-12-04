@@ -885,7 +885,6 @@ s     */
         iterCache[kind] = CacheValue.getInstance(cache);
         if (result instanceof RuleBasedBreakIterator) {
             RuleBasedBreakIterator rbbi = (RuleBasedBreakIterator)result;
-            rbbi.setBreakType(kind);
         }
 
         return result;

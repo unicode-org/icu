@@ -1241,7 +1241,7 @@ static void U_CALLCONV initLanguageFactories() {
 
 
 static const LanguageBreakEngine*
-getLanguageBreakEngineFromFactory(UChar32 c, int32_t breakType)
+getLanguageBreakEngineFromFactory(UChar32 c)
 {
     umtx_initOnce(gLanguageBreakFactoriesInitOnce, &initLanguageFactories);
     if (gLanguageBreakFactories == NULL) {
@@ -1252,7 +1252,7 @@ getLanguageBreakEngineFromFactory(UChar32 c, int32_t breakType)
     const LanguageBreakEngine *lbe = NULL;
     while (--i >= 0) {
         LanguageBreakFactory *factory = (LanguageBreakFactory *)(gLanguageBreakFactories->elementAt(i));
-        lbe = factory->getEngineFor(c, breakType);
+        lbe = factory->getEngineFor(c);
         if (lbe != NULL) {
             break;
         }
