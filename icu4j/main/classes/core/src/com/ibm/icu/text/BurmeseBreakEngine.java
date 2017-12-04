@@ -61,7 +61,6 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
     }
 
     public BurmeseBreakEngine() throws IOException {
-        super(BreakIterator.KIND_WORD, BreakIterator.KIND_LINE);
         setCharacters(fBurmeseWordSet);
         // Initialize dictionary
         fDictionary = DictionaryData.loadDictionaryFor("Mymr");
