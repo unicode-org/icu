@@ -182,14 +182,13 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     }
 
     @Override
-    public boolean handles(int c, int breakType) {
-        return fTypes.get(breakType) &&  // this type can use us
-                fSet.contains(c);        // we recognize the character
+    public boolean handles(int c) {
+        return fSet.contains(c);        // we recognize the character
     }
 
     @Override
     public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            int breakType, DequeI foundBreaks) {
+            DequeI foundBreaks) {
         int result = 0;
 
          // Find the span of characters included in the set.
@@ -208,8 +207,6 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
         rangeStart = start;
         rangeEnd = current;
 
-        // if (breakType >= 0 && breakType < 32 && (((uint32_t)1 << breakType) & fTypes)) {
-        // TODO: Why does icu4c have this?
         result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks);
         text.setIndex(current);
 
