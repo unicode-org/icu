@@ -169,16 +169,11 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     }
 
     UnicodeSet fSet = new UnicodeSet();
-    private BitSet fTypes = new BitSet(32);
 
     /**
-     * @param breakTypes The types of break iterators that can use this engine.
-     *  For example, BreakIterator.KIND_LINE
+     *  Constructor
      */
-    public DictionaryBreakEngine(Integer... breakTypes) {
-        for (Integer type: breakTypes) {
-            fTypes.set(type);
-        }
+    public DictionaryBreakEngine() {
     }
 
     @Override

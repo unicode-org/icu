@@ -64,7 +64,6 @@ class LaoBreakEngine extends DictionaryBreakEngine {
     }
 
     public LaoBreakEngine() throws IOException {
-        super(BreakIterator.KIND_WORD, BreakIterator.KIND_LINE);
         setCharacters(fLaoWordSet);
         // Initialize dictionary
         fDictionary = DictionaryData.loadDictionaryFor("Laoo");
