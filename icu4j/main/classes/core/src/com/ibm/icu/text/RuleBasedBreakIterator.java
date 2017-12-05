@@ -546,8 +546,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
 
     /**
-     * Return the status tag from the break rule that determined the most recently
-     * returned break position.  The values appear in the rule source
+     * Return the status tag from the break rule that determined the boundary at
+     * the current iteration position.  The values appear in the rule source
      * within brackets, {123}, for example.  For rules that do not specify a
      * status, a default value of 0 is returned.  If more than one rule applies,
      * the numerically largest of the possible status values is returned.
@@ -561,8 +561,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * position from <code>next()</code>, <code>previous()</code>, or
      * any other break iterator functions that returns a boundary position.
      * <p>
-     * @return the status from the break rule that determined the most recently
-     * returned break position.
+     * @return the status from the break rule that determined the boundary
+     * at the current iteration position.
      *
      * @stable ICU 60
      */
@@ -583,8 +583,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
     }
 
     /**
-     * Get the status (tag) values from the break rule(s) that determined the most
-     * recently returned break position.  The values appear in the rule source
+     * Get the status (tag) values from the break rule(s) that determined the boundary
+     * at the current iteration position.  The values appear in the rule source
      * within brackets, {123}, for example.  The default status value for rules
      * that do not explicitly provide one is zero.
      * <p>
@@ -596,8 +596,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
      *  will be thrown.
      *
      * @param fillInArray an array to be filled in with the status values.
-     * @return          The number of rule status values from rules that determined
-     *                  the most recent boundary returned by the break iterator.
+     * @return          The number of rule status values from the rules that determined
+     *                  the boundary at the current iteration position.
      *                  In the event that the array is too small, the return value
      *                  is the total number of status values that were available,
      *                  not the reduced number that were actually returned.
