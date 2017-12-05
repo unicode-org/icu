@@ -88,18 +88,18 @@ UnhandledEngine::findBreaks( UText *text,
 
 void
 UnhandledEngine::handleCharacter(UChar32 c) {
+    if (fHandled == nullptr) {
+        fHandled = new UnicodeSet();
         if (fHandled == nullptr) {
-            fHandled = new UnicodeSet();
-            if (fHandled == nullptr) {
-                return;
-            }
+            return;
         }
-        if (!fHandled->contains(c)) {
-            UErrorCode status = U_ZERO_ERROR;
-            // Apply the entire script of the character.
-            int32_t script = u_getIntPropertyValue(c, UCHAR_SCRIPT);
-            fHandled->applyIntPropertyValue(UCHAR_SCRIPT, script, status);
-        }
+    }
+    if (!fHandled->contains(c)) {
+        UErrorCode status = U_ZERO_ERROR;
+        // Apply the entire script of the character.
+        int32_t script = u_getIntPropertyValue(c, UCHAR_SCRIPT);
+        fHandled->applyIntPropertyValue(UCHAR_SCRIPT, script, status);
+    }
 }
 
 /*

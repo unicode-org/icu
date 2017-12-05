@@ -59,7 +59,6 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
    * a particular kind of break.</p>
    *
    * @param c A character which begins a run that the engine might handle
-   * @param breakType The type of text break which the caller wants to determine
    * @return TRUE if this engine handles the particular character and break
    * type.
    */
@@ -89,13 +88,6 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
   * @param set A UnicodeSet of the set of characters handled by the engine
   */
   virtual void setCharacters( const UnicodeSet &set );
-
- /**
-  * <p>Set the break types handled by this engine.</p>
-  *
-  * @param breakTypes A bitmap of types handled by the engine.
-  */
-//  virtual void setBreakTypes( uint32_t breakTypes );
 
  /**
   * <p>Divide up a range of known dictionary characters handled by this break engine.</p>
