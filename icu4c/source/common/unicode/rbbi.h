@@ -471,8 +471,8 @@ public:
 
 
     /**
-     * Return the status tag from the break rule that determined the most recently
-     * returned break position.  For break rules that do not specify a
+     * Return the status tag from the break rule that determined the boundary at
+     * the current iteration position.  For break rules that do not specify a
      * status, a default value of 0 is returned.  If more than one break rule
      * would cause a boundary to be located at some position in the text,
      * the numerically largest of the applicable status values is returned.
@@ -492,13 +492,8 @@ public:
      * When creating custom break rules, one is free to define whatever
      * status values may be convenient for the application.
      * <p>
-     * Note: this function is not thread safe.  It should not have been
-     *       declared const, and the const remains only for compatibility
-     *       reasons.  (The function is logically const, but not bit-wise const).
-     *   TODO: check this. Probably thread safe now.
-     * <p>
-     * @return the status from the break rule that determined the most recently
-     * returned break position.
+     * @return the status from the break rule that determined the boundary
+     * at the current iteration position.
      *
      * @see UWordBreak
      * @stable ICU 2.2
@@ -506,8 +501,8 @@ public:
     virtual int32_t getRuleStatus() const;
 
    /**
-    * Get the status (tag) values from the break rule(s) that determined the most
-    * recently returned break position.
+    * Get the status (tag) values from the break rule(s) that determined the boundary
+    * at the current iteration position.
     * <p>
     * The returned status value(s) are stored into an array provided by the caller.
     * The values are stored in sorted (ascending) order.
@@ -520,8 +515,8 @@ public:
     *                  the function to return the number of status values, in the
     *                  normal way, without attemtping to store any values.
     * @param status    receives error codes.
-    * @return          The number of rule status values from rules that determined
-    *                  the most recent boundary returned by the break iterator.
+    * @return          The number of rule status values from the rules that determined
+    *                  the boundary at the current iteration position.
     *                  In the event of a U_BUFFER_OVERFLOW_ERROR, the return value
     *                  is the total number of status values that were available,
     *                  not the reduced number that were actually returned.
