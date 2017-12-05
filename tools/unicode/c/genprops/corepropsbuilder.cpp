@@ -615,6 +615,7 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         // Also set bits for initialValue and errorValue.
         end=UPVEC_MAX_CP;
     }
+
     if(newValues.containsSome(0, UCHAR_BINARY_LIMIT-1)) {
         for(int32_t i=0; i<LENGTHOF(propToBinaries); ++i) {
             const PropToBinary &p2b=propToBinaries[i];
@@ -626,11 +627,25 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             }
         }
     }
-    if(newValues.containsSome(UCHAR_INT_START, UCHAR_INT_LIMIT-1)) {
+
+    // Set int property values.
+    // This includes setting the script value if the Script_Extensions revert to {Script}.
+    // Otherwise we would have to duplicate the code for doing so.
+    // Script and Script_Extensions share a bit field, so that by setting it to just the script
+    // we remove the Script_Extensions.
+    // (We do not just set the script bit in newValues because that is const.)
+    // For example, for U+3000:
+    // block;3000..303F;age=1.1;...;sc=Zyyy;scx=Bopo Hang Hani Hira Kana Yiii;vo=U
+    // cp;3000;...;gc=Zs;lb=BA;na=IDEOGRAPHIC SPACE;...;SB=SP;scx=<script>;WSpace
+    UBool revertToScript=
+        newValues.contains(UCHAR_SCRIPT_EXTENSIONS) && props.scx.isEmpty() &&
+        !newValues.contains(UCHAR_SCRIPT);
+
+    if(newValues.containsSome(UCHAR_INT_START, UCHAR_INT_LIMIT-1) || revertToScript) {
         for(int32_t i=0; i<LENGTHOF(propToEnums); ++i) {
             const PropToEnum &p2e=propToEnums[i];
             U_ASSERT(p2e.vecShift<32);
-            if(newValues.contains(p2e.prop)) {
+            if(newValues.contains(p2e.prop) || (p2e.prop==UCHAR_SCRIPT && revertToScript)) {
                 uint32_t mask=p2e.vecMask;
                 uint32_t value=(uint32_t)(props.getIntProp(p2e.prop)<<p2e.vecShift);
                 U_ASSERT((value&mask)==value);

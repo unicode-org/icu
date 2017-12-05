@@ -62,6 +62,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestScriptMetadata);
     TESTCASE_AUTO(TestBidiPairedBracketType);
     TESTCASE_AUTO(TestEmojiProperties);
+    TESTCASE_AUTO(TestDefaultScriptExtensions);
     TESTCASE_AUTO_END;
 }
 
@@ -529,4 +530,19 @@ void UnicodeTest::TestEmojiProperties() {
                u_hasBinaryProperty(0x1F64B, UCHAR_EMOJI_MODIFIER_BASE));
     assertTrue("asterisk is Emoji_Component",
                u_hasBinaryProperty(0x2A, UCHAR_EMOJI_COMPONENT));
+}
+
+void UnicodeTest::TestDefaultScriptExtensions() {
+    // Block 3000..303F CJK Symbols and Punctuation defaults to scx=Bopo Hang Hani Hira Kana Yiii
+    // but some of its characters revert to scx=<script> which is usually Common.
+    IcuTestErrorCode errorCode(*this, "TestDefaultScriptExtensions()");
+    UScriptCode scx[20];
+    scx[0] = USCRIPT_INVALID_CODE;
+    assertEquals("U+3000 num scx", 1,  // IDEOGRAPHIC SPACE
+                 uscript_getScriptExtensions(0x3000, scx, UPRV_LENGTHOF(scx), errorCode));
+    assertEquals("U+3000 num scx[0]", USCRIPT_COMMON, scx[0]);
+    scx[0] = USCRIPT_INVALID_CODE;
+    assertEquals("U+3012 num scx", 1,  // POSTAL MARK
+                 uscript_getScriptExtensions(0x3012, scx, UPRV_LENGTHOF(scx), errorCode));
+    assertEquals("U+3012 num scx[0]", USCRIPT_COMMON, scx[0]);
 }
