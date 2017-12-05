@@ -5321,6 +5321,14 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13442() {
+        DecimalFormat df = new DecimalFormat();
+        df.setGroupingUsed(false);
+        assertEquals("Grouping size should now be zero", 0, df.getGroupingSize());
+        assertEquals("Grouping should be off", false, df.isGroupingUsed());
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);

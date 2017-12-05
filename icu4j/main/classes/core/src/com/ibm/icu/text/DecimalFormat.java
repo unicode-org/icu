@@ -1793,7 +1793,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized boolean isGroupingUsed() {
-    return properties.getGroupingSize() != -1 || properties.getSecondaryGroupingSize() != -1;
+    return properties.getGroupingSize() > 0 || properties.getSecondaryGroupingSize() > 0;
   }
 
   /**
@@ -1819,8 +1819,8 @@ public class DecimalFormat extends NumberFormat {
       // Set to a reasonable default value
       properties.setGroupingSize(3);
     } else {
-      properties.setGroupingSize(-1);
-      properties.setSecondaryGroupingSize(-1);
+      properties.setGroupingSize(0);
+      properties.setSecondaryGroupingSize(0);
     }
     refreshFormatter();
   }
