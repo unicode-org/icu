@@ -5902,4 +5902,18 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Narrow currency symbol for USD in en_CA is $",
                 "$123.45", df.format(123.45));
     }
+
+    @Test
+    public void TestAffixOverrideBehavior() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH);
+        expect2(df, 100, "100");
+        expect2(df, -100, "-100");
+        // This is not the right way to set an override plus sign, but we need to support it for compatibility.
+        df.setPositivePrefix("+");
+        expect2(df, 100, "+100");
+        expect2(df, -100, "-100"); // note: the positive prefix does not affect the negative prefix
+        df.applyPattern("a0");
+        expect2(df, 100, "a100");
+        expect2(df, -100, "-a100");
+    }
 }

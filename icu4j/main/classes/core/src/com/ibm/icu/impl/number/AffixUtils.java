@@ -225,8 +225,9 @@ public class AffixUtils {
     return output.length() - startLength;
   }
 
-  /** Version of {@link #escape} that returns a String. */
+  /** Version of {@link #escape} that returns a String, or null if input is null. */
   public static String escape(CharSequence input) {
+    if (input == null) return null;
     StringBuilder sb = new StringBuilder();
     escape(input, sb);
     return sb.toString();
