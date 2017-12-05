@@ -122,6 +122,21 @@ final class NumberPropertyMapper {
         MathContext mathContext = RoundingUtils.getMathContextOrUnlimited(properties);
         boolean explicitMinMaxFrac = minFrac != -1 || maxFrac != -1;
         boolean explicitMinMaxSig = minSig != -1 || maxSig != -1;
+        // Resolve min/max frac for currencies, required for the validation logic and for when minFrac or maxFrac was
+        // set (but not both) on a currency instance.
+        // NOTE: Increments are handled in "Rounder.constructCurrency()".
+        if (useCurrency) {
+            if (minFrac == -1 && maxFrac == -1) {
+                minFrac = currency.getDefaultFractionDigits(currencyUsage);
+                maxFrac = currency.getDefaultFractionDigits(currencyUsage);
+            } else if (minFrac == -1) {
+                minFrac = Math.min(maxFrac, currency.getDefaultFractionDigits(currencyUsage));
+            } else if (maxFrac == -1) {
+                maxFrac = Math.max(minFrac, currency.getDefaultFractionDigits(currencyUsage));
+            } else {
+                // No-op: user override for both minFrac and maxFrac
+            }
+        }
         // Validate min/max int/frac.
         // For backwards compatibility, minimum overrides maximum if the two conflict.
         // The following logic ensures that there is always a minimum of at least one digit.
