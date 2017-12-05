@@ -9,11 +9,8 @@
 package com.ibm.icu.dev.test.rbbi;
 
 import java.text.StringCharacterIterator;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -23,190 +20,19 @@ import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.FilteredBreakIteratorBuilder;
 import com.ibm.icu.util.ULocale;
 
-@SuppressWarnings("unused")
 @RunWith(JUnit4.class)
 public class BreakIteratorTest extends TestFmwk
 {
-    private BreakIterator characterBreak;
-    private BreakIterator wordBreak;
-    private BreakIterator lineBreak;
-    private BreakIterator sentenceBreak;
-    private BreakIterator titleBreak;
-
     public BreakIteratorTest()
     {
 
     }
 
-    @Before
-    public void init(){
-        characterBreak = BreakIterator.getCharacterInstance();
-        wordBreak = BreakIterator.getWordInstance();
-        lineBreak = BreakIterator.getLineInstance();
-        //logln("Creating sentence iterator...");
-        sentenceBreak = BreakIterator.getSentenceInstance();
-        //logln("Finished creating sentence iterator...");
-        titleBreak = BreakIterator.getTitleInstance();
-    }
+
     //=========================================================================
     // general test subroutines
     //=========================================================================
 
-    private List<String> _testFirstAndNext(BreakIterator bi, String text) {
-        int p = bi.first();
-        int lastP = p;
-        List<String> result = new ArrayList<String>();
-
-        if (p != 0)
-            errln("first() returned " + p + " instead of 0");
-        while (p != BreakIterator.DONE) {
-            p = bi.next();
-            if (p != BreakIterator.DONE) {
-                if (p <= lastP)
-                    errln("next() failed to move forward: next() on position "
-                                    + lastP + " yielded " + p);
-
-                result.add(text.substring(lastP, p));
-            }
-            else {
-                if (lastP != text.length())
-                    errln("next() returned DONE prematurely: offset was "
-                                    + lastP + " instead of " + text.length());
-            }
-            lastP = p;
-        }
-        return result;
-    }
-
-    private List<String> _testLastAndPrevious(BreakIterator bi, String text) {
-        int p = bi.last();
-        int lastP = p;
-        List<String> result = new ArrayList<String>();
-
-        if (p != text.length())
-            errln("last() returned " + p + " instead of " + text.length());
-        while (p != BreakIterator.DONE) {
-            p = bi.previous();
-            if (p != BreakIterator.DONE) {
-                if (p >= lastP)
-                    errln("previous() failed to move backward: previous() on position "
-                                    + lastP + " yielded " + p);
-
-                result.add(0, text.substring(p, lastP));
-            }
-            else {
-                if (lastP != 0)
-                    errln("previous() returned DONE prematurely: offset was "
-                                    + lastP + " instead of 0");
-            }
-            lastP = p;
-        }
-        return result;
-    }
-
-    private void compareFragmentLists(String f1Name, String f2Name, List<String> f1, List<String> f2) {
-        int p1 = 0;
-        int p2 = 0;
-        String s1;
-        String s2;
-        int t1 = 0;
-        int t2 = 0;
-
-        while (p1 < f1.size() && p2 < f2.size()) {
-            s1 = f1.get(p1);
-            s2 = f2.get(p2);
-            t1 += s1.length();
-            t2 += s2.length();
-
-            if (s1.equals(s2)) {
-                debugLogln("   >" + s1 + "<");
-                ++p1;
-                ++p2;
-            }
-            else {
-                int tempT1 = t1;
-                int tempT2 = t2;
-                int tempP1 = p1;
-                int tempP2 = p2;
-
-                while (tempT1 != tempT2 && tempP1 < f1.size() && tempP2 < f2.size()) {
-                    while (tempT1 < tempT2 && tempP1 < f1.size()) {
-                        tempT1 += (f1.get(tempP1)).length();
-                        ++tempP1;
-                    }
-                    while (tempT2 < tempT1 && tempP2 < f2.size()) {
-                        tempT2 += (f2.get(tempP2)).length();
-                        ++tempP2;
-                    }
-                }
-                logln("*** " + f1Name + " has:");
-                while (p1 <= tempP1 && p1 < f1.size()) {
-                    s1 = f1.get(p1);
-                    t1 += s1.length();
-                    debugLogln(" *** >" + s1 + "<");
-                    ++p1;
-                }
-                logln("***** " + f2Name + " has:");
-                while (p2 <= tempP2 && p2 < f2.size()) {
-                    s2 = f2.get(p2);
-                    t2 += s2.length();
-                    debugLogln(" ***** >" + s2 + "<");
-                    ++p2;
-                }
-                errln("Discrepancy between " + f1Name + " and " + f2Name);
-            }
-        }
-    }
-
-    private void _testFollowing(BreakIterator bi, String text, int[] boundaries) {
-        logln("testFollowing():");
-        int p = 2;
-        for (int i = 0; i <= text.length(); i++) {
-            if (i == boundaries[p])
-                ++p;
-
-            int b = bi.following(i);
-            logln("bi.following(" + i + ") -> " + b);
-            if (b != boundaries[p])
-                errln("Wrong result from following() for " + i + ": expected " + boundaries[p]
-                                + ", got " + b);
-        }
-    }
-
-    private void _testPreceding(BreakIterator bi, String text, int[] boundaries) {
-        logln("testPreceding():");
-        int p = 0;
-        for (int i = 0; i <= text.length(); i++) {
-            int b = bi.preceding(i);
-            logln("bi.preceding(" + i + ") -> " + b);
-            if (b != boundaries[p])
-                errln("Wrong result from preceding() for " + i + ": expected " + boundaries[p]
-                                + ", got " + b);
-
-            if (i == boundaries[p + 1])
-                ++p;
-        }
-    }
-
-    private void _testIsBoundary(BreakIterator bi, String text, int[] boundaries) {
-        logln("testIsBoundary():");
-        int p = 1;
-        boolean isB;
-        for (int i = 0; i <= text.length(); i++) {
-            isB = bi.isBoundary(i);
-            logln("bi.isBoundary(" + i + ") -> " + isB);
-
-            if (i == boundaries[p]) {
-                if (!isB)
-                    errln("Wrong result from isBoundary() for " + i + ": expected true, got false");
-                ++p;
-            }
-            else {
-                if (isB)
-                    errln("Wrong result from isBoundary() for " + i + ": expected false, got true");
-            }
-        }
-    }
 
     private void doOtherInvariantTest(BreakIterator tb, String testChars)
     {
@@ -362,43 +188,7 @@ public class BreakIteratorTest extends TestFmwk
             errln("Didn't get break at end of string.");
     }
 
-    // The Following two tests are ported from ICU4C 1.8.1 [Richard/GCL]
-    /**
-     * Port From:   ICU4C v1.8.1 : textbounds : IntlTestTextBoundary
-     * Source File: $ICU4CRoot/source/test/intltest/ittxtbd.cpp
-     **/
-    /**
-     * test methods preceding, following and isBoundary
-     **/
-    @Test
-    public void TestPreceding() {
-        String words3 = "aaa bbb ccc";
-        BreakIterator e = BreakIterator.getWordInstance(Locale.getDefault());
-        e.setText( words3 );
-        e.first();
-        int p1 = e.next();
-        int p2 = e.next();
-        int p3 = e.next();
-        int p4 = e.next();
-
-        int f = e.following(p2+1);
-        int p = e.preceding(p2+1);
-        if (f!=p3)
-            errln("IntlTestTextBoundary::TestPreceding: f!=p3");
-        if (p!=p2)
-            errln("IntlTestTextBoundary::TestPreceding: p!=p2");
-
-        if (p1+1!=p2)
-            errln("IntlTestTextBoundary::TestPreceding: p1+1!=p2");
-
-        if (p3+1!=p4)
-            errln("IntlTestTextBoundary::TestPreceding: p3+1!=p4");
-
-        if (!e.isBoundary(p2) || e.isBoundary(p2+1) || !e.isBoundary(p3))
-        {
-            errln("IntlTestTextBoundary::TestPreceding: isBoundary err");
-        }
-    }
+    // The Following test is ported from ICU4C 1.8.1 [Richard/GCL]
 
     /**
      * Ticket#5615
