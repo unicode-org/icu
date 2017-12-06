@@ -228,7 +228,7 @@ public abstract class LanguageTestFmwk extends TestFmwk implements TimeUnitConst
         xAssertEquals(null, expected, n, actual);
     }
 
-    protected void setUp() throws Exception {
+    private void setUp() throws Exception {
         pfFactory = pfs.newPeriodFormatterFactory().setLocale(locale);
         pbFactory = pfs.newPeriodBuilderFactory().setLocale(locale);
     }
