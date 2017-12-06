@@ -121,9 +121,16 @@
  */
 #define U_ICU_VERSION "60.1"
 
-/** The current ICU library major/minor version as a string without dots, for library name suffixes.
- *  This value will change in the subsequent releases of ICU
- *  @stable ICU 2.6
+/**
+ * The current ICU library major version number as a string, for library name suffixes.
+ * This value will change in subsequent releases of ICU.
+ *
+ * Until ICU 4.8, this was the combination of the single-digit major and minor ICU version numbers
+ * into one string without dots ("48").
+ * Since ICU 49, it is the double-digit major ICU version number.
+ * See http://userguide.icu-project.org/design#TOC-Version-Numbers-in-ICU
+ *
+ * @stable ICU 2.6
  */
 #define U_ICU_VERSION_SHORT "60"
 
