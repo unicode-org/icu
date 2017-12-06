@@ -551,12 +551,37 @@
     we recommend a small number of modifications and build options.
     Note that C99 compatibility is now required.</p>
     <ul>
-      <li><b>Namespace:</b> By default, unicode/uversion.h has
+      <li><b>Namespace (ICU 61 and later):</b>
+        Since ICU 61, call sites need to qualify ICU types explicitly,
+        for example <code>icu::UnicodeString</code>,
+        or do <code>using icu::UnicodeString;</code> where appropriate.
+        If your code relies on the "using namespace icu;" that used to be in unicode/uversion.h,
+        then you need to update your code.<br />
+        You could temporarily (until you have more time to update your code)
+        revert to the default "using"
+        via <code>-DU_USING_ICU_NAMESPACE=1</code>
+        or by modifying unicode/uversion.h:
+<pre>Index: icu4c/source/common/unicode/uversion.h
+===================================================================
+--- icu4c/source/common/unicode/uversion.h      (revision 40704)
++++ icu4c/source/common/unicode/uversion.h      (working copy)
+@@ -127,7 +127,7 @@
+                 defined(U_LAYOUTEX_IMPLEMENTATION) || defined(U_TOOLUTIL_IMPLEMENTATION)
+ #           define U_USING_ICU_NAMESPACE 0
+ #       else
+-#           define U_USING_ICU_NAMESPACE 0
++#           define U_USING_ICU_NAMESPACE 1
+ #       endif
+ #   endif
+ #   if U_USING_ICU_NAMESPACE
+</pre>
+      </li>
+      <li><b>Namespace (ICU 60 and earlier):</b> By default, unicode/uversion.h has
         "using namespace icu;" which defeats much of the purpose of the namespace.
         (This is for historical reasons: Originally, ICU4C did not use namespaces,
         and some compilers did not support them. The default "using" statement
         preserves source code compatibility.)<br />
-        If this compatibility is not an issue, we recommend you turn this off
+        You should turn this off
          via <code>-DU_USING_ICU_NAMESPACE=0</code>
         or by modifying unicode/uversion.h:
 <pre>Index: source/common/unicode/uversion.h

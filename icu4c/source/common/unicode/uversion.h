@@ -127,7 +127,7 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
                 defined(U_LAYOUTEX_IMPLEMENTATION) || defined(U_TOOLUTIL_IMPLEMENTATION)
 #           define U_USING_ICU_NAMESPACE 0
 #       else
-#           define U_USING_ICU_NAMESPACE 1
+#           define U_USING_ICU_NAMESPACE 0
 #       endif
 #   endif
 #   if U_USING_ICU_NAMESPACE
