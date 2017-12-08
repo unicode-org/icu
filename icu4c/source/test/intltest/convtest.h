@@ -76,6 +76,7 @@ public:
     void TestGetUnicodeSet();
     void TestGetUnicodeSet2();
     void TestDefaultIgnorableCallback();
+    void TestUTF8ToUTF8Overflow();
 
 private:
     UBool
