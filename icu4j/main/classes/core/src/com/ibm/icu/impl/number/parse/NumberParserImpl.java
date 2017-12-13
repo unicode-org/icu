@@ -2,14 +2,19 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
+import com.ibm.icu.impl.number.CustomSymbolCurrency;
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.MutablePatternModifier;
+import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -23,7 +28,9 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class NumberParserImpl {
-    public static NumberParserImpl createParserFromPattern(String pattern) {
+    public static NumberParserImpl createParserFromPattern(String pattern, boolean strictGrouping) {
+        // Temporary frontend for testing.
+
         NumberParserImpl parser = new NumberParserImpl();
         ULocale locale = ULocale.ENGLISH;
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
@@ -32,10 +39,7 @@ public class NumberParserImpl {
         AffixPatternProvider provider = PatternStringParser.parseToPatternInfo(pattern);
         mod.setPatternInfo(provider);
         mod.setPatternAttributes(SignDisplay.AUTO, false);
-        mod.setSymbols(symbols,
-                Currency.getInstance("USD"),
-                UnitWidth.FULL_NAME,
-                null);
+        mod.setSymbols(symbols, Currency.getInstance("USD"), UnitWidth.FULL_NAME, null);
         int flags = 0;
         if (provider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
             flags |= ParsedNumber.FLAG_PERCENT;
@@ -45,18 +49,77 @@ public class NumberParserImpl {
         }
         AffixMatcher.generateFromPatternModifier(mod, flags, parser);
 
-        parser.addMatcher(DecimalMatcher.getInstance(symbols));
+        DecimalMatcher decimalMatcher = DecimalMatcher.getInstance(symbols);
+        decimalMatcher.requireGroupingMatch = strictGrouping;
+        parser.addMatcher(decimalMatcher);
         parser.addMatcher(WhitespaceMatcher.getInstance());
         parser.addMatcher(new MinusSignMatcher());
         parser.addMatcher(new ScientificMatcher(symbols));
         parser.addMatcher(new CurrencyMatcher(locale));
 
-        parser.setComparator(new Comparator<ParsedNumber>() {
-            @Override
-            public int compare(ParsedNumber o1, ParsedNumber o2) {
-                return o1.charsConsumed - o2.charsConsumed;
-            }
-        });
+        parser.freeze();
+        return parser;
+    }
+
+    public static Number parseStatic(String input,
+      ParsePosition ppos,
+      DecimalFormatProperties properties,
+      DecimalFormatSymbols symbols) {
+        NumberParserImpl parser = createParserFromProperties(properties, symbols);
+        ParsedNumber result = new ParsedNumber();
+        parser.parse(input, true, result);
+        ppos.setIndex(result.charsConsumed);
+        return result.getDouble();
+    }
+
+    public static NumberParserImpl createParserFromProperties(
+            DecimalFormatProperties properties,
+            DecimalFormatSymbols symbols) {
+        NumberParserImpl parser = new NumberParserImpl();
+        ULocale locale = symbols.getULocale();
+        Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
+
+        //////////////////////
+        /// AFFIX MATCHERS ///
+        //////////////////////
+
+        // Set up a pattern modifier with mostly defaults to generate AffixMatchers.
+        MutablePatternModifier mod = new MutablePatternModifier(false);
+        AffixPatternProvider provider = new PropertiesAffixPatternProvider(properties);
+        mod.setPatternInfo(provider);
+        mod.setPatternAttributes(SignDisplay.AUTO, false);
+        mod.setSymbols(symbols, currency, UnitWidth.SHORT, null);
+
+        // Figure out which flags correspond to this pattern modifier. Note: negatives are taken care of in the
+        // generateFromPatternModifier function.
+        int flags = 0;
+        if (provider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
+            flags |= ParsedNumber.FLAG_PERCENT;
+        }
+        if (provider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
+            flags |= ParsedNumber.FLAG_PERMILLE;
+        }
+
+        AffixMatcher.generateFromPatternModifier(mod, flags, parser);
+
+        ///////////////////////////////
+        /// OTHER STANDARD MATCHERS ///
+        ///////////////////////////////
+
+        DecimalMatcher decimalMatcher = DecimalMatcher.getInstance(symbols);
+        decimalMatcher.groupingEnabled = properties.getGroupingSize() > 0;
+        decimalMatcher.requireGroupingMatch = properties.getParseMode() == ParseMode.STRICT;
+        parser.addMatcher(decimalMatcher);
+        parser.addMatcher(WhitespaceMatcher.getInstance());
+        parser.addMatcher(new MinusSignMatcher());
+        parser.addMatcher(new ScientificMatcher(symbols));
+
+        ////////////////////////
+        /// CURRENCY MATCHER ///
+        ////////////////////////
+
+        parser.addMatcher(new CurrencyMatcher(locale));
+
         parser.freeze();
         return parser;
     }
@@ -67,6 +130,7 @@ public class NumberParserImpl {
 
     public NumberParserImpl() {
         matchers = new ArrayList<NumberParseMatcher>();
+        comparator = ParsedNumber.COMPARATOR; // default value
         frozen = false;
     }
 

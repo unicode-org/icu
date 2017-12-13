@@ -22,6 +22,7 @@ public class NumberParserTest {
                 // a) Flags:
                 // --- Bit 0x01 => Test greedy implementation
                 // --- Bit 0x02 => Test slow implementation
+                // --- Bit 0x04 => Test strict grouping separators
                 // b) Input string
                 // c) Pattern
                 // d) Expected chars consumed
@@ -34,13 +35,13 @@ public class NumberParserTest {
                 { 3, "𝟱𝟭𝟰𝟮𝟯x", "0", 10, 51423. },
                 { 3, " 𝟱𝟭𝟰𝟮𝟯", "0", 11, 51423. },
                 { 3, "𝟱𝟭𝟰𝟮𝟯 ", "0", 10, 51423. },
-                { 3, "𝟱𝟭,𝟰𝟮𝟯", "0", 11, 51423. },
-                { 3, "𝟳𝟴,𝟵𝟱𝟭,𝟰𝟮𝟯", "0", 18, 78951423. },
-                { 3, "𝟳𝟴,𝟵𝟱𝟭.𝟰𝟮𝟯", "0", 18, 78951.423 },
-                { 3, "𝟳𝟴,𝟬𝟬𝟬", "0", 11, 78000. },
-                { 3, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟬𝟬", "0", 18, 78000. },
-                { 3, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟮𝟯", "0", 18, 78000.023 },
-                { 3, "𝟳𝟴.𝟬𝟬𝟬.𝟬𝟮𝟯", "0", 11, 78. },
+                { 7, "𝟱𝟭,𝟰𝟮𝟯", "0", 11, 51423. },
+                { 7, "𝟳𝟴,𝟵𝟱𝟭,𝟰𝟮𝟯", "0", 18, 78951423. },
+                { 7, "𝟳𝟴,𝟵𝟱𝟭.𝟰𝟮𝟯", "0", 18, 78951.423 },
+                { 7, "𝟳𝟴,𝟬𝟬𝟬", "0", 11, 78000. },
+                { 7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟬𝟬", "0", 18, 78000. },
+                { 7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟮𝟯", "0", 18, 78000.023 },
+                { 7, "𝟳𝟴.𝟬𝟬𝟬.𝟬𝟮𝟯", "0", 11, 78. },
                 { 3, "-𝟱𝟭𝟰𝟮𝟯", "0", 11, -51423. },
                 { 3, "-𝟱𝟭𝟰𝟮𝟯-", "0", 11, -51423. },
                 { 3, "a51423US dollars", "a0¤¤¤", 16, 51423. },
@@ -51,6 +52,7 @@ public class NumberParserTest {
                 { 1, "a40b", "a0'0b'", 3, 40. }, // greedy code path thinks "40" is the number
                 { 2, "a40b", "a0'0b'", 4, 4. }, // slow code path find the suffix "0b"
                 { 3, "𝟱.𝟭𝟰𝟮E𝟯", "0", 12, 5142. },
+                { 3, "𝟱.𝟭𝟰𝟮E-𝟯", "0", 13, 0.005142 },
                 { 3, "5,142.50 Canadian dollars", "0", 25, 5142.5 },
                 { 3, "0", "0", 1, 0.0 } };
 
@@ -60,7 +62,7 @@ public class NumberParserTest {
             String pattern = (String) cas[2];
             int expectedCharsConsumed = (Integer) cas[3];
             double resultDouble = (Double) cas[4];
-            NumberParserImpl parser = NumberParserImpl.createParserFromPattern(pattern);
+            NumberParserImpl parser = NumberParserImpl.createParserFromPattern(pattern, false);
             String message = "Input <" + input + "> Parser " + parser;
 
             if (0 != (flags & 0x01)) {
@@ -76,6 +78,16 @@ public class NumberParserTest {
                 // Test slow code path
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, false, resultObject);
+                assertNotNull(message, resultObject.quantity);
+                assertEquals(message, resultDouble, resultObject.getDouble(), 0.0);
+                assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
+            }
+
+            if (0 != (flags & 0x04)) {
+                // Test with strict separators
+                parser = NumberParserImpl.createParserFromPattern(pattern, true);
+                ParsedNumber resultObject = new ParsedNumber();
+                parser.parse(input, true, resultObject);
                 assertNotNull(message, resultObject.quantity);
                 assertEquals(message, resultDouble, resultObject.getDouble(), 0.0);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);

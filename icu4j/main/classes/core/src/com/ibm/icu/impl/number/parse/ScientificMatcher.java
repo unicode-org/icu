@@ -11,10 +11,12 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 public class ScientificMatcher implements NumberParseMatcher {
 
     private final String exponentSeparatorString;
+    private final String minusSignString;
     private final DecimalMatcher exponentMatcher;
 
     public ScientificMatcher(DecimalFormatSymbols symbols) {
         exponentSeparatorString = symbols.getExponentSeparator();
+        minusSignString = symbols.getMinusSignString();
         exponentMatcher = DecimalMatcher.getExponentInstance(symbols);
     }
 
@@ -26,19 +28,33 @@ public class ScientificMatcher implements NumberParseMatcher {
         }
 
         // First match the scientific separator, and then match another number after it.
-        int overlap = segment.getCommonPrefixLength(exponentSeparatorString);
-        if (overlap == exponentSeparatorString.length()) {
-            // Full exponent separator match; try to match digits.
-            segment.adjustOffset(overlap);
+        int overlap1 = segment.getCommonPrefixLength(exponentSeparatorString);
+        if (overlap1 == exponentSeparatorString.length()) {
+            // Full exponent separator match; allow a sign, and then try to match digits.
+            segment.adjustOffset(overlap1);
+            int overlap2 = segment.getCommonPrefixLength(minusSignString);
+            boolean sign = false;
+            if (overlap2 == minusSignString.length()) {
+                sign = true;
+                segment.adjustOffset(overlap2);
+            } else if (overlap2 == segment.length()) {
+                // Partial sign match
+                return true;
+            }
+
             int digitsOffset = segment.getOffset();
+            int oldMagnitude = result.quantity.getMagnitude();
             boolean digitsReturnValue = exponentMatcher.match(segment, result);
+            if (result.quantity.getMagnitude() != oldMagnitude && sign) {
+                result.quantity.adjustMagnitude(2*(oldMagnitude - result.quantity.getMagnitude()));
+            }
             if (segment.getOffset() == digitsOffset) {
                 // No digits were matched; un-match the exponent separator.
-                segment.adjustOffset(-overlap);
+                segment.adjustOffset(-overlap1);
             }
             return digitsReturnValue;
 
-        } else if (overlap == segment.length()) {
+        } else if (overlap1 == segment.length()) {
             // Partial exponent separator match
             return true;
         }
