@@ -441,11 +441,11 @@ en_US	1	123,456	123456
 en_US	0	123,456	123
 en_US	1	123.456	123.456
 en_US	0	123.456	123.456
-fr_FR	1	123,456	123.456
-fr_FR	0	123,456	123.456
+it_IT	1	123,456	123.456
+it_IT	0	123,456	123.456
 // JDK returns 123 here; not sure why.
-fr_FR	1	123.456	123456	K
-fr_FR	0	123.456	123
+it_IT	1	123.456	123456	K
+it_IT	0	123.456	123
 
 test no grouping in pattern with parsing
 set pattern 0
@@ -736,7 +736,7 @@ parse	output	breaks
 (5,347.25)	-5347.25
 // J requires prefix and suffix for lenient parsing, but C doesn't
 5,347.25	5347.25	JK
-(5,347.25	-5347.25	J
+(5,347.25	-5347.25	JP
 // S is successful at parsing this as -5347.25 in lenient mode
 -5,347.25	-5347.25	CJK
 +3.52E4	35200
@@ -750,7 +750,8 @@ parse	output	breaks
 (34,,25 E-1)	-342.5	CJK
 // Spaces are not allowed after exponent symbol
 // C parses up to the E but J bails
-(34  25E -1)	-3425	JK
+// P does not make the number negative
+(34  25E -1)	-3425	JKP
 +3.52EE4	3.52
 +1,234,567.8901	1234567.8901
 +1,23,4567.8901	1234567.8901
@@ -775,18 +776,19 @@ parse	output	breaks
 (  19 45 )	-1945	JK
 (,,19,45)	-1945
 // C parses to the space, but J bails
-(,,19 45)	-19	J
+// P makes the number positive
+(,,19 45)	-19	JP
 // J bails b/c comma different separator than space. C doesn't treat leading spaces
 // as a separator.
-(  19,45)	-1945	JK
+(  19,45)	-1945	JKP
 // J bails. Doesn't allow trailing separators when there is prefix and suffix.
 (,,19,45,)	-1945	J
 // J bails on next 4 because J doesn't allow letters inside prefix and suffix.
 // C will parse up to the letter.
-(,,19,45,d1)	-1945	J
-(,,19,45d1)	-1945	J
-(  19 45 d1)	-1945	JK
-(  19 45d1)	-1945	JK
+(,,19,45,d1)	-1945	JP
+(,,19,45d1)	-1945	JP
+(  19 45 d1)	-1945	JKP
+(  19 45d1)	-1945	JKP
 // J does allow trailing separator before a decimal point
 (19,45,.25)	-1945.25
 // 2nd decimal points are ignored
@@ -829,7 +831,7 @@ parse	output	breaks
 (65347.25)	-65347.25
 (65,347.25)	-65347.25
 // JDK does allow separators in the wrong place and parses as -5347.25
-(53,47.25)	fail	K
+(53,47.25)	fail	KP
 // strict requires prefix or suffix, except in C
 65,347.25	fail	
 +3.52E4	35200
