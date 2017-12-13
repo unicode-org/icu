@@ -105,7 +105,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, CharSeq
      *            convenience method {@link #needsPlurals()}.
      */
     public void setSymbols(DecimalFormatSymbols symbols, Currency currency, UnitWidth unitWidth, PluralRules rules) {
-        assert (rules != null) == needsPlurals();
+        //assert (rules != null) == needsPlurals();
         this.symbols = symbols;
         this.currency = currency;
         this.unitWidth = unitWidth;

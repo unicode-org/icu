@@ -1,0 +1,85 @@
+// © 2017 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+package com.ibm.icu.dev.test.number;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+
+import com.ibm.icu.impl.number.parse.NumberParserImpl;
+import com.ibm.icu.impl.number.parse.ParsedNumber;
+
+/**
+ * @author sffc
+ *
+ */
+public class NumberParserTest {
+    @Test
+    public void testBasic() {
+        Object[][] cases = new Object[][] {
+                // Fields:
+                // a) Flags:
+                // --- Bit 0x01 => Test greedy implementation
+                // --- Bit 0x02 => Test slow implementation
+                // b) Input string
+                // c) Pattern
+                // d) Expected chars consumed
+                // e) Expected double result
+                { 3, "51423", "0", 5, 51423. },
+                { 3, "51423x", "0", 5, 51423. },
+                { 3, " 51423", "0", 6, 51423. },
+                { 3, "51423 ", "0", 5, 51423. },
+                { 3, "𝟱𝟭𝟰𝟮𝟯", "0", 10, 51423. },
+                { 3, "𝟱𝟭𝟰𝟮𝟯x", "0", 10, 51423. },
+                { 3, " 𝟱𝟭𝟰𝟮𝟯", "0", 11, 51423. },
+                { 3, "𝟱𝟭𝟰𝟮𝟯 ", "0", 10, 51423. },
+                { 3, "𝟱𝟭,𝟰𝟮𝟯", "0", 11, 51423. },
+                { 3, "𝟳𝟴,𝟵𝟱𝟭,𝟰𝟮𝟯", "0", 18, 78951423. },
+                { 3, "𝟳𝟴,𝟵𝟱𝟭.𝟰𝟮𝟯", "0", 18, 78951.423 },
+                { 3, "𝟳𝟴,𝟬𝟬𝟬", "0", 11, 78000. },
+                { 3, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟬𝟬", "0", 18, 78000. },
+                { 3, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟮𝟯", "0", 18, 78000.023 },
+                { 3, "𝟳𝟴.𝟬𝟬𝟬.𝟬𝟮𝟯", "0", 11, 78. },
+                { 3, "-𝟱𝟭𝟰𝟮𝟯", "0", 11, -51423. },
+                { 3, "-𝟱𝟭𝟰𝟮𝟯-", "0", 11, -51423. },
+                { 3, "a51423US dollars", "a0¤¤¤", 16, 51423. },
+                { 3, "a 51423 US dollars", "a0¤¤¤", 18, 51423. },
+                { 3, "a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 14, 51423. },
+                { 3, "-a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423. },
+                { 3, "a -𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423. },
+                { 1, "a40b", "a0'0b'", 3, 40. }, // greedy code path thinks "40" is the number
+                { 2, "a40b", "a0'0b'", 4, 4. }, // slow code path find the suffix "0b"
+                { 3, "𝟱.𝟭𝟰𝟮E𝟯", "0", 12, 5142. },
+                { 3, "5,142.50 Canadian dollars", "0", 25, 5142.5 },
+                { 3, "0", "0", 1, 0.0 } };
+
+        for (Object[] cas : cases) {
+            int flags = (Integer) cas[0];
+            String input = (String) cas[1];
+            String pattern = (String) cas[2];
+            int expectedCharsConsumed = (Integer) cas[3];
+            double resultDouble = (Double) cas[4];
+            NumberParserImpl parser = NumberParserImpl.createParserFromPattern(pattern);
+            String message = "Input <" + input + "> Parser " + parser;
+
+            if (0 != (flags & 0x01)) {
+                // Test greedy code path
+                ParsedNumber resultObject = new ParsedNumber();
+                parser.parse(input, true, resultObject);
+                assertNotNull(message, resultObject.quantity);
+                assertEquals(message, resultDouble, resultObject.getDouble(), 0.0);
+                assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
+            }
+
+            if (0 != (flags & 0x02)) {
+                // Test slow code path
+                ParsedNumber resultObject = new ParsedNumber();
+                parser.parse(input, false, resultObject);
+                assertNotNull(message, resultObject.quantity);
+                assertEquals(message, resultDouble, resultObject.getDouble(), 0.0);
+                assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
+            }
+        }
+    }
+}

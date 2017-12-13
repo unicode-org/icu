@@ -25,6 +25,11 @@ public class TextTrieMap<V> {
     private Node _root = new Node();
     boolean _ignoreCase;
 
+    public static class Output {
+        public int matchLength;
+        public boolean partialMatch;
+    }
+
     /**
      * Constructs a TextTrieMap object.
      *
@@ -74,25 +79,29 @@ public class TextTrieMap<V> {
         return get(text, start, null);
     }
 
-    public Iterator<V> get(CharSequence text, int start, int[] matchLen) {
+    public Iterator<V> get(CharSequence text, int start, Output output) {
         LongestMatchHandler<V> handler = new LongestMatchHandler<V>();
-        find(text, start, handler);
-        if (matchLen != null && matchLen.length > 0) {
-            matchLen[0] = handler.getMatchLength();
+        find(text, start, handler, output);
+        if (output != null) {
+            output.matchLength = handler.getMatchLength();
         }
         return handler.getMatches();
     }
 
     public void find(CharSequence text, ResultHandler<V> handler) {
-        find(text, 0, handler);
+        find(text, 0, handler, new Output());
     }
 
     public void find(CharSequence text, int offset, ResultHandler<V> handler) {
-        CharIterator chitr = new CharIterator(text, offset, _ignoreCase);
-        find(_root, chitr, handler);
+        find(text, offset, handler, new Output());
     }
 
-    private synchronized void find(Node node, CharIterator chitr, ResultHandler<V> handler) {
+    private void find(CharSequence text, int offset, ResultHandler<V> handler, Output output) {
+        CharIterator chitr = new CharIterator(text, offset, _ignoreCase);
+        find(_root, chitr, handler, output);
+    }
+
+    private synchronized void find(Node node, CharIterator chitr, ResultHandler<V> handler, Output output) {
         Iterator<V> values = node.values();
         if (values != null) {
             if (!handler.handlePrefixMatch(chitr.processedLength(), values)) {
@@ -100,9 +109,9 @@ public class TextTrieMap<V> {
             }
         }
 
-        Node nextMatch = node.findMatch(chitr);
+        Node nextMatch = node.findMatch(chitr, output);
         if (nextMatch != null) {
-            find(nextMatch, chitr, handler);
+            find(nextMatch, chitr, handler, output);
         }
     }
 
@@ -344,11 +353,12 @@ public class TextTrieMap<V> {
             add(toCharArray(buf), 0, value);
         }
 
-        public Node findMatch(CharIterator chitr) {
+        public Node findMatch(CharIterator chitr, Output output) {
             if (_children == null) {
                 return null;
             }
             if (!chitr.hasNext()) {
+                output.partialMatch = true;
                 return null;
             }
             Node match = null;
@@ -358,7 +368,7 @@ public class TextTrieMap<V> {
                     break;
                 }
                 if (ch == child._text[0]) {
-                    if (child.matchFollowing(chitr)) {
+                    if (child.matchFollowing(chitr, output)) {
                         match = child;
                     }
                     break;
@@ -436,11 +446,12 @@ public class TextTrieMap<V> {
             litr.add(new Node(subArray(text, offset), addValue(null, value), null));
         }
 
-        private boolean matchFollowing(CharIterator chitr) {
+        private boolean matchFollowing(CharIterator chitr, Output output) {
             boolean matched = true;
             int idx = 1;
             while (idx < _text.length) {
                 if(!chitr.hasNext()) {
+                    output.partialMatch = true;
                     matched = false;
                     break;
                 }
