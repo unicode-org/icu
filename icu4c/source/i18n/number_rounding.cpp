@@ -342,6 +342,7 @@ void Rounder::apply(impl::DecimalQuantity &value, UErrorCode& status) const {
         case RND_CURRENCY:
             // Call .withCurrency() before .apply()!
             U_ASSERT(false);
+            break;
 
         case RND_PASS_THROUGH:
             break;
