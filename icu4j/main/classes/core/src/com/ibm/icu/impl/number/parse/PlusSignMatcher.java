@@ -8,25 +8,26 @@ import com.ibm.icu.text.UnicodeSet;
  * @author sffc
  *
  */
-public class MinusSignMatcher extends SymbolMatcher {
+public class PlusSignMatcher extends SymbolMatcher {
 
-    public MinusSignMatcher() {
+    public PlusSignMatcher() {
         // FIXME
-        super("-", new UnicodeSet("[-_]"));
+        super("+", new UnicodeSet("[+]"));
     }
 
     @Override
     protected boolean isDisabled(ParsedNumber result) {
-        return 0 != (result.flags & ParsedNumber.FLAG_NEGATIVE);
+        return false;
     }
 
     @Override
     protected void accept(ParsedNumber result) {
-        result.flags |= ParsedNumber.FLAG_NEGATIVE;
+        // No-op
     }
 
     @Override
     public String toString() {
-        return "<MinusSignMatcher>";
+        return "<PlusSignMatcher>";
     }
+
 }

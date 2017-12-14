@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -47,6 +48,7 @@ public class AffixMatcher implements NumberParseMatcher {
     public static void generateFromPatternModifier(
             MutablePatternModifier patternModifier,
             int flags,
+            boolean includeUnpaired,
             NumberParserImpl output) {
 
         // Store the matchers in a TreeSet to ensure both uniqueness and order.
@@ -64,11 +66,11 @@ public class AffixMatcher implements NumberParseMatcher {
             if (patternModifier.needsPlurals()) {
                 for (StandardPlural plural : StandardPlural.VALUES) {
                     patternModifier.setNumberProperties(isNegative, plural);
-                    matchers.add(getInstance(patternModifier, flags, nsb));
+                    AffixMatcher.createAndAppendTo(matchers, patternModifier, flags, nsb, includeUnpaired);
                 }
             } else {
                 patternModifier.setNumberProperties(isNegative, null);
-                matchers.add(getInstance(patternModifier, flags, nsb));
+                AffixMatcher.createAndAppendTo(matchers, patternModifier, flags, nsb, includeUnpaired);
             }
 
             if (isNegative) {
@@ -84,13 +86,17 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     /**
-     * Constructs an AffixMatcher from the given MutablePatternModifier and flags. The NumberStringBuilder is used as a
-     * temporary object only.
+     * Constructs one or more AffixMatchers from the given MutablePatternModifier and flags, appending them to the given
+     * collection. The NumberStringBuilder is used as a temporary object only.
+     *
+     * @param includeUnpaired If true, create additional AffixMatchers with an unpaired prefix or suffix.
      */
-    private static AffixMatcher getInstance(
+    private static void createAndAppendTo(
+            Collection<AffixMatcher> appendTo,
             MutablePatternModifier patternModifier,
             int flags,
-            NumberStringBuilder nsb) {
+            NumberStringBuilder nsb,
+            boolean includeUnpaired) {
         // TODO: Make this more efficient (avoid the substrings and things)
         nsb.clear();
         patternModifier.apply(nsb, 0, 0);
@@ -98,7 +104,11 @@ public class AffixMatcher implements NumberParseMatcher {
         String full = nsb.toString();
         String prefix = full.substring(0, prefixLength);
         String suffix = full.substring(prefixLength);
-        return new AffixMatcher(prefix, suffix, flags);
+        appendTo.add(new AffixMatcher(prefix, suffix, flags));
+        if (includeUnpaired && !prefix.isEmpty() && !suffix.isEmpty()) {
+            appendTo.add(new AffixMatcher(prefix, "", flags));
+            appendTo.add(new AffixMatcher("", suffix, flags));
+        }
     }
 
     private AffixMatcher(String prefix, String suffix, int flags) {
@@ -147,6 +157,10 @@ public class AffixMatcher implements NumberParseMatcher {
     public void postProcess(ParsedNumber result) {
         // Check to see if our affix is the one that was matched. If so, set the flags in the result.
         if (prefix.equals(orEmpty(result.prefix)) && suffix.equals(orEmpty(result.suffix))) {
+            // Fill in the result prefix and suffix with non-null values (empty string).
+            // Used by strict mode to determine whether an entire affix pair was matched.
+            result.prefix = prefix;
+            result.suffix = suffix;
             result.flags |= flags;
         }
     }

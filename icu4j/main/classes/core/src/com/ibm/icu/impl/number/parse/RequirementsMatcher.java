@@ -6,7 +6,7 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class StrictMatcher implements NumberParseMatcher {
+public class RequirementsMatcher implements NumberParseMatcher {
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
@@ -15,8 +15,9 @@ public class StrictMatcher implements NumberParseMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
-        if (result.prefix == null && result.suffix == null) {
-            // Do something?
+        // Require that a number is matched.
+        if (result.quantity == null) {
+            result.clear();
         }
     }
 

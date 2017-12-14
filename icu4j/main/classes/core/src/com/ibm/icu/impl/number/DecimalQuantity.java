@@ -69,6 +69,11 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
   public void roundToInfinity();
 
   /**
+   * Truncates the decimals from this DecimalQuantity. Equivalent to calling roundToMagnitude(0, FLOOR)
+   */
+  void truncate();
+
+  /**
    * Multiply the internal value.
    *
    * @param multiplicand The value by which to multiply.

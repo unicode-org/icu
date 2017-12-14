@@ -33,9 +33,9 @@ public class ScientificMatcher implements NumberParseMatcher {
             // Full exponent separator match; allow a sign, and then try to match digits.
             segment.adjustOffset(overlap1);
             int overlap2 = segment.getCommonPrefixLength(minusSignString);
-            boolean sign = false;
+            boolean minusSign = false;
             if (overlap2 == minusSignString.length()) {
-                sign = true;
+                minusSign = true;
                 segment.adjustOffset(overlap2);
             } else if (overlap2 == segment.length()) {
                 // Partial sign match
@@ -45,11 +45,18 @@ public class ScientificMatcher implements NumberParseMatcher {
             int digitsOffset = segment.getOffset();
             int oldMagnitude = result.quantity.getMagnitude();
             boolean digitsReturnValue = exponentMatcher.match(segment, result);
-            if (result.quantity.getMagnitude() != oldMagnitude && sign) {
-                result.quantity.adjustMagnitude(2*(oldMagnitude - result.quantity.getMagnitude()));
-            }
-            if (segment.getOffset() == digitsOffset) {
-                // No digits were matched; un-match the exponent separator.
+            if (segment.getOffset() != digitsOffset) {
+                // At least one exponent digit was matched.
+                result.flags |= ParsedNumber.FLAG_HAS_EXPONENT;
+                if (minusSign) {
+                    // Switch the magnitude adjustment from positive to negative. Extracting the exponent from the
+                    // change in the quantity's magnitude feels a bit like a hack; better would be for the
+                    // DecimalMatcher to somehow return the exponent directly.
+                    int exponent = result.quantity.getMagnitude() - oldMagnitude;
+                    result.quantity.adjustMagnitude(-2 * exponent);
+                }
+            } else {
+                // No exponent digits were matched; un-match the exponent separator.
                 segment.adjustOffset(-overlap1);
             }
             return digitsReturnValue;

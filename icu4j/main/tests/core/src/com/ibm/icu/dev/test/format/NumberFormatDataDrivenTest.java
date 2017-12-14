@@ -600,7 +600,8 @@ public class NumberFormatDataDrivenTest {
                     actual = NumberParserImpl.parseStatic(tuple.parse,
                             ppos,
                             properties,
-                            DecimalFormatSymbols.getInstance(tuple.locale));
+                            DecimalFormatSymbols.getInstance(tuple.locale),
+                            false);
                 } catch (IllegalArgumentException e) {
                     return "parse exception: " + e.getMessage();
                 }

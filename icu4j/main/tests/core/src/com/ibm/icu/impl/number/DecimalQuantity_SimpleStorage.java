@@ -411,6 +411,11 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
     // noop
   }
 
+  @Override
+  public void truncate() {
+      roundToMagnitude(0, RoundingUtils.mathContextUnlimited(RoundingMode.FLOOR));
+  }
+
   /**
    * Multiply the internal number by the specified multiplicand. This method forces the internal
    * representation into a BigDecimal. If you are multiplying by a power of 10, use {@link
