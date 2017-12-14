@@ -2,10 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
-import java.math.RoundingMode;
-
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
-import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
@@ -30,8 +27,10 @@ public class DecimalMatcher implements NumberParseMatcher {
 
     public static DecimalMatcher getInstance(DecimalFormatSymbols symbols) {
         String groupingSeparator = symbols.getGroupingSeparatorString();
-        UnicodeSet groupingSet = UNISET_COMMA_LIKE.contains(groupingSeparator) ? UNISET_COMMA_LIKE.cloneAsThawed().addAll(UNISET_OTHER_GROUPING_SEPARATORS).freeze()
-                : UNISET_PERIOD_LIKE.contains(groupingSeparator) ? UNISET_PERIOD_LIKE.cloneAsThawed().addAll(UNISET_OTHER_GROUPING_SEPARATORS).freeze()
+        UnicodeSet groupingSet = UNISET_COMMA_LIKE.contains(groupingSeparator)
+                ? UNISET_COMMA_LIKE.cloneAsThawed().addAll(UNISET_OTHER_GROUPING_SEPARATORS).freeze()
+                : UNISET_PERIOD_LIKE.contains(groupingSeparator)
+                        ? UNISET_PERIOD_LIKE.cloneAsThawed().addAll(UNISET_OTHER_GROUPING_SEPARATORS).freeze()
                         : UNISET_OTHER_GROUPING_SEPARATORS.contains(groupingSeparator)
                                 ? UNISET_OTHER_GROUPING_SEPARATORS
                                 : new UnicodeSet().addAll(groupingSeparator).freeze();
@@ -45,8 +44,10 @@ public class DecimalMatcher implements NumberParseMatcher {
     }
 
     public static DecimalMatcher getExponentInstance(DecimalFormatSymbols symbols) {
-        return new DecimalMatcher(symbols
-                .getDigitStrings(), new UnicodeSet("[,]").freeze(), new UnicodeSet("[.]").freeze(), true);
+        return new DecimalMatcher(symbols.getDigitStrings(),
+                new UnicodeSet("[,]").freeze(),
+                new UnicodeSet("[.]").freeze(),
+                true);
     }
 
     private final String[] digitStrings;
@@ -55,8 +56,9 @@ public class DecimalMatcher implements NumberParseMatcher {
     private final UnicodeSet separatorSet;
     public boolean requireGroupingMatch = false;
     public boolean groupingEnabled = true;
-    private final int grouping1 = 3;
-    private final int grouping2 = 3;
+    public int grouping1 = 3;
+    public int grouping2 = 3;
+    public boolean integerOnly = false;
     private final boolean isScientific;
 
     private DecimalMatcher(
@@ -82,10 +84,11 @@ public class DecimalMatcher implements NumberParseMatcher {
             return false;
         }
 
+        int initialOffset = segment.getOffset();
         int currGroup = 0;
         int separator = -1;
         int lastSeparatorOffset = segment.getOffset();
-        int scientificAdjustment = 0;
+        int exponent = 0;
         boolean hasPartialPrefix = false;
         boolean seenBothSeparators = false;
         while (segment.length() > 0) {
@@ -118,7 +121,7 @@ public class DecimalMatcher implements NumberParseMatcher {
             // If found, save it in the DecimalQuantity or scientific adjustment.
             if (digit >= 0) {
                 if (isScientific) {
-                    scientificAdjustment = digit + scientificAdjustment * 10;
+                    exponent = digit + exponent * 10;
                 } else {
                     if (result.quantity == null) {
                         result.quantity = new DecimalQuantity_DualStorageBCD();
@@ -163,15 +166,30 @@ public class DecimalMatcher implements NumberParseMatcher {
         }
 
         if (isScientific) {
-            result.quantity.adjustMagnitude(scientificAdjustment);
+            result.quantity.adjustMagnitude(exponent);
         } else if (seenBothSeparators || (separator != -1 && decimalUniSet.contains(separator))) {
+            // The final separator was a decimal separator.
             result.quantity.adjustMagnitude(-currGroup);
-        } else if (separator != -1
-                && ((requireGroupingMatch && groupingUniSet.contains(separator) && currGroup != grouping1)
-                        || !groupingEnabled)) {
+            if (integerOnly) {
+                result.quantity.truncate();
+                segment.setOffset(lastSeparatorOffset);
+            }
+        } else if (separator != -1 && !groupingEnabled) {
+            // The final separator was a grouping separator, but we aren't accepting grouping.
+            // Reset the offset to immediately before that grouping separator.
             result.quantity.adjustMagnitude(-currGroup);
-            result.quantity.roundToMagnitude(0, RoundingUtils.mathContextUnlimited(RoundingMode.FLOOR));
+            result.quantity.truncate();
             segment.setOffset(lastSeparatorOffset);
+        } else if (separator != -1 && requireGroupingMatch && groupingUniSet.contains(separator)
+                && currGroup != grouping1) {
+            // The final separator was a grouping separator, and we have a mismatched grouping size.
+            // Reset the offset to the beginning of the number.
+            // TODO
+            result.quantity.adjustMagnitude(-currGroup);
+            result.quantity.truncate();
+            segment.setOffset(lastSeparatorOffset);
+//            result.quantity = null;
+//            segment.setOffset(initialOffset);
         }
 
         return segment.length() == 0 || hasPartialPrefix || segment.isLeadingSurrogate();

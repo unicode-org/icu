@@ -174,6 +174,7 @@ public class DecimalQuantityTest extends TestFmwk {
   private static final MathContext MATH_CONTEXT_HALF_EVEN =
       new MathContext(0, RoundingMode.HALF_EVEN);
   private static final MathContext MATH_CONTEXT_CEILING = new MathContext(0, RoundingMode.CEILING);
+  private static final MathContext MATH_CONTEXT_FLOOR = new MathContext(0, RoundingMode.FLOOR);
   private static final MathContext MATH_CONTEXT_PRECISION =
       new MathContext(3, RoundingMode.HALF_UP);
 
@@ -194,6 +195,18 @@ public class DecimalQuantityTest extends TestFmwk {
     q1 = rq1.createCopy();
     q0.roundToMagnitude(-1, MATH_CONTEXT_PRECISION);
     q1.roundToMagnitude(-1, MATH_CONTEXT_PRECISION);
+    testDecimalQuantityBehavior(q0, q1);
+
+    q0 = rq0.createCopy();
+    q1 = rq1.createCopy();
+    q0.roundToMagnitude(0, MATH_CONTEXT_FLOOR);
+    q1.truncate();
+    testDecimalQuantityBehavior(q0, q1);
+
+    q0 = rq0.createCopy();
+    q1 = rq1.createCopy();
+    q0.truncate();
+    q1.roundToMagnitude(0, MATH_CONTEXT_FLOOR);
     testDecimalQuantityBehavior(q0, q1);
   }
 

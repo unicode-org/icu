@@ -736,7 +736,7 @@ parse	output	breaks
 (5,347.25)	-5347.25
 // J requires prefix and suffix for lenient parsing, but C doesn't
 5,347.25	5347.25	JK
-(5,347.25	-5347.25	JP
+(5,347.25	-5347.25	J
 // S is successful at parsing this as -5347.25 in lenient mode
 -5,347.25	-5347.25	CJK
 +3.52E4	35200
@@ -750,8 +750,7 @@ parse	output	breaks
 (34,,25 E-1)	-342.5	CJK
 // Spaces are not allowed after exponent symbol
 // C parses up to the E but J bails
-// P does not make the number negative
-(34  25E -1)	-3425	JKP
+(34  25E -1)	-3425	JK
 +3.52EE4	3.52
 +1,234,567.8901	1234567.8901
 +1,23,4567.8901	1234567.8901
@@ -776,19 +775,18 @@ parse	output	breaks
 (  19 45 )	-1945	JK
 (,,19,45)	-1945
 // C parses to the space, but J bails
-// P makes the number positive
-(,,19 45)	-19	JP
+(,,19 45)	-19	J
 // J bails b/c comma different separator than space. C doesn't treat leading spaces
 // as a separator.
-(  19,45)	-1945	JKP
+(  19,45)	-1945	JK
 // J bails. Doesn't allow trailing separators when there is prefix and suffix.
 (,,19,45,)	-1945	J
 // J bails on next 4 because J doesn't allow letters inside prefix and suffix.
 // C will parse up to the letter.
-(,,19,45,d1)	-1945	JP
-(,,19,45d1)	-1945	JP
-(  19 45 d1)	-1945	JKP
-(  19 45d1)	-1945	JKP
+(,,19,45,d1)	-1945	J
+(,,19,45d1)	-1945	J
+(  19 45 d1)	-1945	JK
+(  19 45d1)	-1945	JK
 // J does allow trailing separator before a decimal point
 (19,45,.25)	-1945.25
 // 2nd decimal points are ignored
@@ -831,17 +829,16 @@ parse	output	breaks
 (65347.25)	-65347.25
 (65,347.25)	-65347.25
 // JDK does allow separators in the wrong place and parses as -5347.25
-(53,47.25)	fail	KP
+(53,47.25)	fail	K
 // strict requires prefix or suffix, except in C
-65,347.25	fail	
+65,347.25	fail	P
 +3.52E4	35200
 (34.8E-3)	-0.0348
 (3425E-1)	-342.5
 // Strict doesn't allow separators in sci notation.
 (63,425)	-63425
-// JDK and S allow separators in sci notation and parses as -342.5
-// C passes
-(63,425E-1)	fail	CKS
+// J does not allow grouping separators in scientific notation.
+(63,425E-1)	-6342.5	J
 // Both prefix and suffix needed for strict.
 // JDK accepts this and parses as -342.5
 (3425E-1	fail	K
@@ -855,10 +852,11 @@ parse	output	breaks
 // have no separators at all.
 +12,345.67	12345.67
 // JDK doesn't require separators to be in the right place.
-+1,23,4567.8901	fail	K
-+1,234,567.8901	fail	K
-+1234,567.8901	fail	K
-+1,234567.8901	fail	K
+// P stops after reading an unexpected grouping separator instead of failing.
++1,23,4567.8901	fail	KP
++1,234,567.8901	fail	KP
++1234,567.8901	fail	KP
++1,234567.8901	fail	KP
 +1234567.8901	1234567.8901
 // Minimum grouping is not satisfied below, but that's ok
 // because minimum grouping is optional.

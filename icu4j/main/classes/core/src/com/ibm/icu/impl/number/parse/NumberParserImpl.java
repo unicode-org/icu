@@ -32,7 +32,7 @@ public class NumberParserImpl {
         // Temporary frontend for testing.
 
         NumberParserImpl parser = new NumberParserImpl();
-        ULocale locale = ULocale.ENGLISH;
+        ULocale locale = new ULocale("en_IN");
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
 
         MutablePatternModifier mod = new MutablePatternModifier(false);
@@ -47,15 +47,18 @@ public class NumberParserImpl {
         if (provider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
             flags |= ParsedNumber.FLAG_PERMILLE;
         }
-        AffixMatcher.generateFromPatternModifier(mod, flags, parser);
+        AffixMatcher.generateFromPatternModifier(mod, flags, true, parser);
 
+        parser.addMatcher(WhitespaceMatcher.getInstance());
         DecimalMatcher decimalMatcher = DecimalMatcher.getInstance(symbols);
         decimalMatcher.requireGroupingMatch = strictGrouping;
+        decimalMatcher.grouping1 = 3;
+        decimalMatcher.grouping2 = 2;
         parser.addMatcher(decimalMatcher);
-        parser.addMatcher(WhitespaceMatcher.getInstance());
         parser.addMatcher(new MinusSignMatcher());
         parser.addMatcher(new ScientificMatcher(symbols));
         parser.addMatcher(new CurrencyMatcher(locale));
+        parser.addMatcher(new RequirementsMatcher());
 
         parser.freeze();
         return parser;
@@ -64,20 +67,27 @@ public class NumberParserImpl {
     public static Number parseStatic(String input,
       ParsePosition ppos,
       DecimalFormatProperties properties,
-      DecimalFormatSymbols symbols) {
-        NumberParserImpl parser = createParserFromProperties(properties, symbols);
+      DecimalFormatSymbols symbols,
+      boolean parseCurrency) {
+        NumberParserImpl parser = createParserFromProperties(properties, symbols, parseCurrency);
         ParsedNumber result = new ParsedNumber();
         parser.parse(input, true, result);
         ppos.setIndex(result.charsConsumed);
-        return result.getDouble();
+        if (result.charsConsumed > 0) {
+            return result.getDouble();
+        } else {
+            return null;
+        }
     }
 
     public static NumberParserImpl createParserFromProperties(
             DecimalFormatProperties properties,
-            DecimalFormatSymbols symbols) {
+            DecimalFormatSymbols symbols,
+            boolean parseCurrency) {
         NumberParserImpl parser = new NumberParserImpl();
         ULocale locale = symbols.getULocale();
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
+        boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
 
         //////////////////////
         /// AFFIX MATCHERS ///
@@ -100,25 +110,40 @@ public class NumberParserImpl {
             flags |= ParsedNumber.FLAG_PERMILLE;
         }
 
-        AffixMatcher.generateFromPatternModifier(mod, flags, parser);
+        AffixMatcher.generateFromPatternModifier(mod, flags, !isStrict, parser);
 
         ///////////////////////////////
         /// OTHER STANDARD MATCHERS ///
         ///////////////////////////////
 
+        if (!isStrict) {
+            parser.addMatcher(WhitespaceMatcher.getInstance());
+            parser.addMatcher(new PlusSignMatcher());
+        }
+        parser.addMatcher(new MinusSignMatcher());
         DecimalMatcher decimalMatcher = DecimalMatcher.getInstance(symbols);
         decimalMatcher.groupingEnabled = properties.getGroupingSize() > 0;
-        decimalMatcher.requireGroupingMatch = properties.getParseMode() == ParseMode.STRICT;
+        decimalMatcher.requireGroupingMatch = isStrict;
+        decimalMatcher.grouping1 = properties.getGroupingSize();
+        decimalMatcher.grouping2 = properties.getSecondaryGroupingSize();
+        decimalMatcher.integerOnly = properties.getParseIntegerOnly();
         parser.addMatcher(decimalMatcher);
-        parser.addMatcher(WhitespaceMatcher.getInstance());
-        parser.addMatcher(new MinusSignMatcher());
         parser.addMatcher(new ScientificMatcher(symbols));
+        parser.addMatcher(new RequirementsMatcher());
+        if (isStrict) {
+            parser.addMatcher(new RequireAffixMatcher());
+        }
+        if (isStrict && properties.getMinimumExponentDigits() > 0) {
+            parser.addMatcher(new RequireExponentMatcher());
+        }
 
         ////////////////////////
         /// CURRENCY MATCHER ///
         ////////////////////////
 
-        parser.addMatcher(new CurrencyMatcher(locale));
+        if (parseCurrency) {
+            parser.addMatcher(new CurrencyMatcher(locale));
+        }
 
         parser.freeze();
         return parser;

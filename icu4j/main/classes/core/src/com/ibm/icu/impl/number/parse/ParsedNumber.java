@@ -12,38 +12,39 @@ import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
  */
 public class ParsedNumber {
 
-    public DecimalQuantity_DualStorageBCD quantity = null;
+    public DecimalQuantity_DualStorageBCD quantity;
 
     /**
      * The number of chars accepted during parsing. This is NOT necessarily the same as the StringSegment offset; "weak"
      * chars, like whitespace, change the offset, but the charsConsumed is not touched until a "strong" char is
      * encountered.
      */
-    public int charsConsumed = 0;
+    public int charsConsumed;
 
     /**
      * Boolean flags (see constants below).
      */
-    public int flags = 0;
+    public int flags;
 
     /**
      * The prefix string that got consumed.
      */
-    public String prefix = null;
+    public String prefix;
 
     /**
      * The suffix string that got consumed.
      */
-    public String suffix = null;
+    public String suffix;
 
     /**
      * The currency that got consumed.
      */
-    public String currencyCode = null;
+    public String currencyCode;
 
     public static final int FLAG_NEGATIVE = 0x0001;
     public static final int FLAG_PERCENT = 0x0002;
     public static final int FLAG_PERMILLE = 0x0004;
+    public static final int FLAG_HAS_EXPONENT = 0x0008;
 
     /** A Comparator that favors ParsedNumbers with the most chars consumed. */
     public static final Comparator<ParsedNumber> COMPARATOR = new Comparator<ParsedNumber>() {
@@ -53,11 +54,24 @@ public class ParsedNumber {
         }
     };
 
+    public ParsedNumber() {
+        clear();
+    }
+
     /**
-     * @param other
+     * Clears the data from this ParsedNumber, in effect failing the current parse.
      */
+    public void clear() {
+        quantity = null;
+        charsConsumed = 0;
+        flags = 0;
+        prefix = null;
+        suffix = null;
+        currencyCode = null;
+    }
+
     public void copyFrom(ParsedNumber other) {
-        quantity = other.quantity;
+        quantity = other.quantity == null ? null : (DecimalQuantity_DualStorageBCD) other.quantity.createCopy();
         charsConsumed = other.charsConsumed;
         flags = other.flags;
         prefix = other.prefix;

@@ -785,6 +785,15 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
   }
 
+  @Override
+  public void truncate() {
+      if (scale < 0) {
+          shiftRight(-scale);
+          scale = 0;
+          compact();
+      }
+  }
+
   /**
    * Appends a digit, optionally with one or more leading zeros, to the end of the value represented
    * by this DecimalQuantity.
