@@ -21,4 +21,9 @@ public class RequireAffixMatcher implements NumberParseMatcher {
         }
     }
 
+    @Override
+    public String toString() {
+        return "<RequireAffix>";
+    }
+
 }

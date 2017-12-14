@@ -45,6 +45,7 @@ public class ParsedNumber {
     public static final int FLAG_PERCENT = 0x0002;
     public static final int FLAG_PERMILLE = 0x0004;
     public static final int FLAG_HAS_EXPONENT = 0x0008;
+    public static final int FLAG_HAS_DEFAULT_CURRENCY = 0x0010;
 
     /** A Comparator that favors ParsedNumbers with the most chars consumed. */
     public static final Comparator<ParsedNumber> COMPARATOR = new Comparator<ParsedNumber>() {

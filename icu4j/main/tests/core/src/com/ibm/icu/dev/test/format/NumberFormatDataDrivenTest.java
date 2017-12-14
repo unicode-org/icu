@@ -600,8 +600,7 @@ public class NumberFormatDataDrivenTest {
                     actual = NumberParserImpl.parseStatic(tuple.parse,
                             ppos,
                             properties,
-                            DecimalFormatSymbols.getInstance(tuple.locale),
-                            false);
+                            DecimalFormatSymbols.getInstance(tuple.locale));
                 } catch (IllegalArgumentException e) {
                     return "parse exception: " + e.getMessage();
                 }
@@ -635,39 +634,39 @@ public class NumberFormatDataDrivenTest {
                 }
             }
 
-//            @Override
-//            public String parseCurrency(DataDrivenNumberFormatTestData tuple) {
-//                String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
-//                DecimalFormatProperties properties;
-//                ParsePosition ppos = new ParsePosition(0);
-//                CurrencyAmount actual;
-//                try {
-//                    properties = PatternStringParser.parseToProperties(
-//                            pattern,
-//                            tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
-//                                    : PatternStringParser.IGNORE_ROUNDING_NEVER);
-//                    propertiesFromTuple(tuple, properties);
-//                    actual = NumberParserImpl.parseStatic(tuple.parse,
-//                            ppos,
-//                            properties,
-//                            DecimalFormatSymbols.getInstance(tuple.locale));
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                    return "parse exception: " + e.getMessage();
-//                }
-//                if (ppos.getIndex() == 0 || actual.getCurrency().getCurrencyCode().equals("XXX")) {
-//                    return "Parse failed; got " + actual + ", but expected " + tuple.output;
-//                }
-//                BigDecimal expectedNumber = new BigDecimal(tuple.output);
-//                if (expectedNumber.compareTo(new BigDecimal(actual.getNumber().toString())) != 0) {
-//                    return "Wrong number: Expected: " + expectedNumber + ", got: " + actual;
-//                }
-//                String expectedCurrency = tuple.outputCurrency;
-//                if (!expectedCurrency.equals(actual.getCurrency().toString())) {
-//                    return "Wrong currency: Expected: " + expectedCurrency + ", got: " + actual;
-//                }
-//                return null;
-//            }
+            @Override
+            public String parseCurrency(DataDrivenNumberFormatTestData tuple) {
+                String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
+                DecimalFormatProperties properties;
+                ParsePosition ppos = new ParsePosition(0);
+                CurrencyAmount actual;
+                try {
+                    properties = PatternStringParser.parseToProperties(
+                            pattern,
+                            tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
+                                    : PatternStringParser.IGNORE_ROUNDING_NEVER);
+                    propertiesFromTuple(tuple, properties);
+                    actual = NumberParserImpl.parseStaticCurrency(tuple.parse,
+                            ppos,
+                            properties,
+                            DecimalFormatSymbols.getInstance(tuple.locale));
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                    return "parse exception: " + e.getMessage();
+                }
+                if (ppos.getIndex() == 0 || actual.getCurrency().getCurrencyCode().equals("XXX")) {
+                    return "Parse failed; got " + actual + ", but expected " + tuple.output;
+                }
+                BigDecimal expectedNumber = new BigDecimal(tuple.output);
+                if (expectedNumber.compareTo(new BigDecimal(actual.getNumber().toString())) != 0) {
+                    return "Wrong number: Expected: " + expectedNumber + ", got: " + actual;
+                }
+                String expectedCurrency = tuple.outputCurrency;
+                if (!expectedCurrency.equals(actual.getCurrency().toString())) {
+                    return "Wrong currency: Expected: " + expectedCurrency + ", got: " + actual;
+                }
+                return null;
+            }
       };
 
     /**

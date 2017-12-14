@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.lang.UCharacter;
+
 /**
  * A mutable class allowing for a String with a variable offset and length. The charAt, length, and subSequence methods
  * all operate relative to the fixed offset into the String.
@@ -12,11 +14,13 @@ public class StringSegment implements CharSequence {
     private final String str;
     private int start;
     private int end;
+    private final boolean ignoreCase;
 
-    public StringSegment(String str) {
+    public StringSegment(String str, boolean ignoreCase) {
         this.str = str;
         this.start = 0;
         this.end = str.length();
+        this.ignoreCase = ignoreCase;
     }
 
     public int getOffset() {
@@ -90,9 +94,21 @@ public class StringSegment implements CharSequence {
      */
     public int getCommonPrefixLength(CharSequence other) {
         int offset = 0;
-        for (; offset < Math.min(length(), other.length()); offset++) {
-            if (charAt(offset) != other.charAt(offset)) {
-                break;
+        for (; offset < Math.min(length(), other.length());) {
+            if (ignoreCase) {
+                // NOTE: Character.codePointAt() returns the leading surrogate if it is the only char left in the
+                // string. UCharacter.foldCase() will simply return the same integer since it is not a valid code point.
+                int cp1 = Character.codePointAt(this, offset);
+                int cp2 = Character.codePointAt(other, offset);
+                if (cp1 != cp2 && UCharacter.foldCase(cp1, true) != UCharacter.foldCase(cp2, true)) {
+                    break;
+                }
+                offset += Character.charCount(cp1);
+            } else {
+                // Case folding is not necessary. Use a slightly faster code path comparing chars with chars.
+                if (charAt(offset) != other.charAt(offset)) {
+                    break;
+                }
             }
         }
         return offset;
