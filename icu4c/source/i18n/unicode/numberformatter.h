@@ -836,6 +836,20 @@ class U_I18N_API Rounder : public UMemory {
     /** Version of {@link #apply} that obeys minInt constraints. Used for scientific notation compatibility mode. */
     void apply(impl::DecimalQuantity &value, int32_t minInt, UErrorCode status);
 
+    /**
+     * Rounding endpoint used by Engineering and Compact notation. Chooses the most appropriate multiplier (magnitude
+     * adjustment), applies the adjustment, rounds, and returns the chosen multiplier.
+     *
+     * <p>
+     * In most cases, this is simple. However, when rounding the number causes it to cross a multiplier boundary, we
+     * need to re-do the rounding. For example, to display 999,999 in Engineering notation with 2 sigfigs, first you
+     * guess the multiplier to be -3. However, then you end up getting 1000E3, which is not the correct output. You then
+     * change your multiplier to be -6, and you get 1.0E6, which is correct.
+     *
+     * @param input The quantity to process.
+     * @param producer Function to call to return a multiplier based on a magnitude.
+     * @return The number of orders of magnitude the input was adjusted by this method.
+     */
     int32_t
     chooseMultiplierAndApply(impl::DecimalQuantity &input, const impl::MultiplierProducer &producer,
                              UErrorCode &status);

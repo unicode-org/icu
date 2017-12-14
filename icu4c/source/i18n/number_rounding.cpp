@@ -251,28 +251,39 @@ void Rounder::setLocaleData(const CurrencyUnit &currency, UErrorCode &status) {
 int32_t
 Rounder::chooseMultiplierAndApply(impl::DecimalQuantity &input, const impl::MultiplierProducer &producer,
                                   UErrorCode &status) {
-    // TODO: Make a better and more efficient implementation.
-    // TODO: Avoid the object creation here.
-    DecimalQuantity copy(input);
-
+    // Do not call this method with zero.
     U_ASSERT(!input.isZero());
-    int32_t magnitude = input.getMagnitude();
-    int32_t multiplier = producer.getMultiplier(magnitude);
+
+    // Perform the first attempt at rounding.
+    int magnitude = input.getMagnitude();
+    int multiplier = producer.getMultiplier(magnitude);
     input.adjustMagnitude(multiplier);
     apply(input, status);
 
-    // If the number turned to zero when rounding, do not re-attempt the rounding.
-    if (!input.isZero() && input.getMagnitude() == magnitude + multiplier + 1) {
-        magnitude += 1;
-        input = copy;
-        multiplier = producer.getMultiplier(magnitude);
-        input.adjustMagnitude(multiplier);
-        U_ASSERT(input.getMagnitude() == magnitude + multiplier - 1);
-        apply(input, status);
-        U_ASSERT(input.getMagnitude() == magnitude + multiplier);
+    // If the number rounded to zero, exit.
+    if (input.isZero() || U_FAILURE(status)) {
+        return multiplier;
     }
 
-    return multiplier;
+    // If the new magnitude after rounding is the same as it was before rounding, then we are done.
+    // This case applies to most numbers.
+    if (input.getMagnitude() == magnitude + multiplier) {
+        return multiplier;
+    }
+
+    // If the above case DIDN'T apply, then we have a case like 99.9 -> 100 or 999.9 -> 1000:
+    // The number rounded up to the next magnitude. Check if the multiplier changes; if it doesn't,
+    // we do not need to make any more adjustments.
+    int _multiplier = producer.getMultiplier(magnitude + 1);
+    if (multiplier == _multiplier) {
+        return multiplier;
+    }
+
+    // We have a case like 999.9 -> 1000, where the correct output is "1K", not "1000".
+    // Fix the magnitude and re-apply the rounding strategy.
+    input.adjustMagnitude(_multiplier - multiplier);
+    apply(input, status);
+    return _multiplier;
 }
 
 /** This is the method that contains the actual rounding logic. */
