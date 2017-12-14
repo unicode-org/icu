@@ -485,29 +485,54 @@ public abstract class Rounder implements Cloneable {
         }
     }
 
+    /**
+     * Rounding endpoint used by Engineering and Compact notation. Chooses the most appropriate multiplier (magnitude
+     * adjustment), applies the adjustment, rounds, and returns the chosen multiplier.
+     *
+     * <p>
+     * In most cases, this is simple. However, when rounding the number causes it to cross a multiplier boundary, we
+     * need to re-do the rounding. For example, to display 999,999 in Engineering notation with 2 sigfigs, first you
+     * guess the multiplier to be -3. However, then you end up getting 1000E3, which is not the correct output. You then
+     * change your multiplier to be -6, and you get 1.0E6, which is correct.
+     *
+     * @param input The quantity to process.
+     * @param producer Function to call to return a multiplier based on a magnitude.
+     * @return The number of orders of magnitude the input was adjusted by this method.
+     */
     int chooseMultiplierAndApply(DecimalQuantity input, MultiplierProducer producer) {
-        // TODO: Make a better and more efficient implementation.
-        // TODO: Avoid the object creation here.
-        DecimalQuantity copy = input.createCopy();
-
+        // Do not call this method with zero.
         assert !input.isZero();
+
+        // Perform the first attempt at rounding.
         int magnitude = input.getMagnitude();
         int multiplier = producer.getMultiplier(magnitude);
         input.adjustMagnitude(multiplier);
         apply(input);
 
-        // If the number turned to zero when rounding, do not re-attempt the rounding.
-        if (!input.isZero() && input.getMagnitude() == magnitude + multiplier + 1) {
-            magnitude += 1;
-            input.copyFrom(copy);
-            multiplier = producer.getMultiplier(magnitude);
-            input.adjustMagnitude(multiplier);
-            assert input.getMagnitude() == magnitude + multiplier - 1;
-            apply(input);
-            assert input.getMagnitude() == magnitude + multiplier;
+        // If the number rounded to zero, exit.
+        if (input.isZero()) {
+            return multiplier;
         }
 
-        return multiplier;
+        // If the new magnitude after rounding is the same as it was before rounding, then we are done.
+        // This case applies to most numbers.
+        if (input.getMagnitude() == magnitude + multiplier) {
+            return multiplier;
+        }
+
+        // If the above case DIDN'T apply, then we have a case like 99.9 -> 100 or 999.9 -> 1000:
+        // The number rounded up to the next magnitude. Check if the multiplier changes; if it doesn't,
+        // we do not need to make any more adjustments.
+        int _multiplier = producer.getMultiplier(magnitude + 1);
+        if (multiplier == _multiplier) {
+            return multiplier;
+        }
+
+        // We have a case like 999.9 -> 1000, where the correct output is "1K", not "1000".
+        // Fix the magnitude and re-apply the rounding strategy.
+        input.adjustMagnitude(_multiplier - multiplier);
+        apply(input);
+        return _multiplier;
     }
 
     ///////////////
