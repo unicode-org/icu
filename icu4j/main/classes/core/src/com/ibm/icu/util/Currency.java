@@ -750,9 +750,9 @@ public class Currency extends MeasureUnit {
     public static TextTrieMap<CurrencyStringInfo> getParsingTrie(ULocale locale, int type) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
         if (type == Currency.LONG_NAME) {
-            return currencyTrieVec.get(0);
-        } else {
             return currencyTrieVec.get(1);
+        } else {
+            return currencyTrieVec.get(0);
         }
     }
 
@@ -765,9 +765,9 @@ public class Currency extends MeasureUnit {
         ULocale locale, int startingCp, int type) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
         if (type == Currency.LONG_NAME) {
-            return currencyTrieVec.get(0).openParseState(startingCp);
-        } else {
             return currencyTrieVec.get(1).openParseState(startingCp);
+        } else {
+            return currencyTrieVec.get(0).openParseState(startingCp);
         }
     }
 

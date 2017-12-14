@@ -6,7 +6,7 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequireExponentMatcher implements NumberParseMatcher {
+public class RequireCurrencyMatcher implements NumberParseMatcher {
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
@@ -15,14 +15,14 @@ public class RequireExponentMatcher implements NumberParseMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
-        if (0 == (result.flags & ParsedNumber.FLAG_HAS_EXPONENT)) {
+        if (result.currencyCode == null && 0 == (result.flags & ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY)) {
             result.clear();
         }
     }
 
     @Override
     public String toString() {
-        return "<RequireExponent>";
+        return "<RequireCurrency>";
     }
 
 }

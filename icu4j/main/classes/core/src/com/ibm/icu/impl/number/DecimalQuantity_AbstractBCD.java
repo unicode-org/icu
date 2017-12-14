@@ -884,6 +884,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
    */
   protected abstract void shiftLeft(int numDigits);
 
+  /**
+   * Removes digits from the end of the BCD list. This may result in an invalid BCD representation; it is
+   * the caller's responsibility to follow-up with a call to {@link #compact}.
+   *
+   * @param numDigits The number of zeros to add.
+   */
   protected abstract void shiftRight(int numDigits);
 
   /**

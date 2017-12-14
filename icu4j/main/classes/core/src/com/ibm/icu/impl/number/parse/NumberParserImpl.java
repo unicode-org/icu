@@ -19,6 +19,7 @@ import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -58,7 +59,7 @@ public class NumberParserImpl {
         parser.addMatcher(new MinusSignMatcher());
         parser.addMatcher(new ScientificMatcher(symbols));
         parser.addMatcher(new CurrencyMatcher(locale));
-        parser.addMatcher(new RequirementsMatcher());
+        parser.addMatcher(new RequireNumberMatcher());
 
         parser.freeze();
         return parser;
@@ -67,14 +68,36 @@ public class NumberParserImpl {
     public static Number parseStatic(String input,
       ParsePosition ppos,
       DecimalFormatProperties properties,
-      DecimalFormatSymbols symbols,
-      boolean parseCurrency) {
-        NumberParserImpl parser = createParserFromProperties(properties, symbols, parseCurrency);
+      DecimalFormatSymbols symbols) {
+        NumberParserImpl parser = createParserFromProperties(properties, symbols, false);
         ParsedNumber result = new ParsedNumber();
         parser.parse(input, true, result);
         ppos.setIndex(result.charsConsumed);
         if (result.charsConsumed > 0) {
             return result.getDouble();
+        } else {
+            return null;
+        }
+    }
+
+    public static CurrencyAmount parseStaticCurrency(String input,
+      ParsePosition ppos,
+      DecimalFormatProperties properties,
+      DecimalFormatSymbols symbols) {
+        NumberParserImpl parser = createParserFromProperties(properties, symbols, true);
+        ParsedNumber result = new ParsedNumber();
+        parser.parse(input, true, result);
+        ppos.setIndex(result.charsConsumed);
+        if (result.charsConsumed > 0) {
+            // TODO: Clean this up
+            Currency currency;
+            if (result.currencyCode != null) {
+                currency = Currency.getInstance(result.currencyCode);
+            } else {
+                assert 0 != (result.flags & ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY);
+                currency = CustomSymbolCurrency.resolve(properties.getCurrency(), symbols.getULocale(), symbols);
+            }
+            return new CurrencyAmount(result.getDouble(), currency);
         } else {
             return null;
         }
@@ -89,28 +112,41 @@ public class NumberParserImpl {
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
 
+        ////////////////////////
+        /// CURRENCY MATCHER ///
+        ////////////////////////
+
+        if (parseCurrency) {
+            parser.addMatcher(new CurrencyMatcher(locale));
+        }
+
         //////////////////////
         /// AFFIX MATCHERS ///
         //////////////////////
 
         // Set up a pattern modifier with mostly defaults to generate AffixMatchers.
         MutablePatternModifier mod = new MutablePatternModifier(false);
-        AffixPatternProvider provider = new PropertiesAffixPatternProvider(properties);
-        mod.setPatternInfo(provider);
+        AffixPatternProvider patternInfo = new PropertiesAffixPatternProvider(properties);
+        mod.setPatternInfo(patternInfo);
         mod.setPatternAttributes(SignDisplay.AUTO, false);
         mod.setSymbols(symbols, currency, UnitWidth.SHORT, null);
 
         // Figure out which flags correspond to this pattern modifier. Note: negatives are taken care of in the
         // generateFromPatternModifier function.
         int flags = 0;
-        if (provider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
+        if (patternInfo.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
             flags |= ParsedNumber.FLAG_PERCENT;
         }
-        if (provider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
+        if (patternInfo.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
             flags |= ParsedNumber.FLAG_PERMILLE;
         }
+        if (patternInfo.hasCurrencySign()) {
+            flags |= ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY;
+        }
 
-        AffixMatcher.generateFromPatternModifier(mod, flags, !isStrict, parser);
+        parseCurrency = parseCurrency || patternInfo.hasCurrencySign();
+
+        AffixMatcher.generateFromPatternModifier(mod, flags, !isStrict && !parseCurrency, parser);
 
         ///////////////////////////////
         /// OTHER STANDARD MATCHERS ///
@@ -128,22 +164,30 @@ public class NumberParserImpl {
         decimalMatcher.grouping2 = properties.getSecondaryGroupingSize();
         decimalMatcher.integerOnly = properties.getParseIntegerOnly();
         parser.addMatcher(decimalMatcher);
-        parser.addMatcher(new ScientificMatcher(symbols));
-        parser.addMatcher(new RequirementsMatcher());
+        if (!properties.getParseNoExponent()) {
+            parser.addMatcher(new ScientificMatcher(symbols));
+        }
+
+        //////////////////
+        /// VALIDATORS ///
+        //////////////////
+
+        parser.addMatcher(new RequireNumberMatcher());
         if (isStrict) {
             parser.addMatcher(new RequireAffixMatcher());
         }
         if (isStrict && properties.getMinimumExponentDigits() > 0) {
             parser.addMatcher(new RequireExponentMatcher());
         }
-
-        ////////////////////////
-        /// CURRENCY MATCHER ///
-        ////////////////////////
-
         if (parseCurrency) {
-            parser.addMatcher(new CurrencyMatcher(locale));
+            parser.addMatcher(new RequireCurrencyMatcher());
         }
+
+        ////////////////////////
+        /// OTHER ATTRIBUTES ///
+        ////////////////////////
+
+        parser.setIgnoreCase(!properties.getParseCaseSensitive());
 
         parser.freeze();
         return parser;
@@ -151,11 +195,13 @@ public class NumberParserImpl {
 
     private final List<NumberParseMatcher> matchers;
     private Comparator<ParsedNumber> comparator;
+    private boolean ignoreCase;
     private boolean frozen;
 
     public NumberParserImpl() {
         matchers = new ArrayList<NumberParseMatcher>();
         comparator = ParsedNumber.COMPARATOR; // default value
+        ignoreCase = true;
         frozen = false;
     }
 
@@ -167,13 +213,17 @@ public class NumberParserImpl {
         this.comparator = comparator;
     }
 
+    public void setIgnoreCase(boolean ignoreCase) {
+        this.ignoreCase = ignoreCase;
+    }
+
     public void freeze() {
         frozen = true;
     }
 
     public void parse(String input, boolean greedy, ParsedNumber result) {
         assert frozen;
-        StringSegment segment = new StringSegment(input);
+        StringSegment segment = new StringSegment(input, ignoreCase);
         if (greedy) {
             parseGreedyRecursive(segment, result);
         } else {

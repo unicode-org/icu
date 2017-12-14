@@ -6,7 +6,7 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequirementsMatcher implements NumberParseMatcher {
+public class RequireNumberMatcher implements NumberParseMatcher {
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
@@ -19,6 +19,11 @@ public class RequirementsMatcher implements NumberParseMatcher {
         if (result.quantity == null) {
             result.clear();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "<RequireNumber>";
     }
 
 }

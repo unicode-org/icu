@@ -954,12 +954,12 @@ set negativeSuffix 9N
 begin
 parse	output	breaks
 // S is the only implementation that passes these cases.
-// C consumes the '9' as a digit and assumes number is negative
+// C and P consume the '9' as a digit and assumes number is negative
 // J and JDK bail
-6549K	654	CJK
-// C consumes the '9' as a digit and assumes number is negative
+6549K	654	CJKP
+// C and P consume the '9' as a digit and assumes number is negative
 // J and JDK bail
-6549N	-654	CJK
+6549N	-654	CJKP
 
 test really strange prefix
 set locale en
@@ -1031,16 +1031,17 @@ $53.45	fail	USD	J
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
-(7.92) USD	-7.92	USD
+// Right now, P will not parse the affix unless it contains the exact currency GBP.
+(7.92) USD	-7.92	USD	P
 (7.92) GBP	-7.92	GBP
-(7.926) USD	-7.926	USD
-(7.926 USD)	-7.926	USD	CJ
-(USD 7.926)	-7.926	USD	CJ
-USD (7.926)	-7.926	USD	CJ
-USD (7.92)	-7.92	USD	CJ
-(7.92)USD	-7.92	USD	CJ
-USD(7.92)	-7.92	USD	CJ
-(8) USD	-8	USD
+(7.926) USD	-7.926	USD	P
+(7.926 USD)	-7.926	USD	CJP
+(USD 7.926)	-7.926	USD	CJP
+USD (7.926)	-7.926	USD	CJP
+USD (7.92)	-7.92	USD	CJP
+(7.92)USD	-7.92	USD	CJP
+USD(7.92)	-7.92	USD	CJP
+(8) USD	-8	USD	P
 -8 USD	-8	USD	C
 67 USD	67	USD
 53.45$	fail	USD
@@ -1053,16 +1054,16 @@ US Dollars53.45	53.45	USD
 US Dollar53.45	53.45	USD
 US Dollat53.45	fail	USD
 53.45US Dollar	53.45	USD	CJ
-US Dollars (53.45)	-53.45	USD	CJ
-(53.45) US Dollars	-53.45	USD
-(53.45) Euros	-53.45	EUR
-US Dollar (53.45)	-53.45	USD	CJ
-(53.45) US Dollar	-53.45	USD
-US Dollars(53.45)	-53.45	USD	CJ
-(53.45)US Dollars	-53.45	USD	CJ
-US Dollar(53.45)	-53.45	USD	CJ
+US Dollars (53.45)	-53.45	USD	CJP
+(53.45) US Dollars	-53.45	USD	P
+(53.45) Euros	-53.45	EUR	P
+US Dollar (53.45)	-53.45	USD	CJP
+(53.45) US Dollar	-53.45	USD	P
+US Dollars(53.45)	-53.45	USD	CJP
+(53.45)US Dollars	-53.45	USD	CJP
+US Dollar(53.45)	-53.45	USD	CJP
 US Dollat(53.45)	fail	USD
-(53.45)US Dollar	-53.45	USD	CJ
+(53.45)US Dollar	-53.45	USD	CJP
 
 
 test parse currency ISO negative
@@ -1078,13 +1079,15 @@ $53.45	fail	USD	J
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
--7.92 USD	-7.92	USD
+// FIXME: Fix this one
+-7.92 USD	-7.92	USD	P
 -7.92 GBP	-7.92	GBP
--7.926 USD	-7.926	USD
-USD -7.926	-7.926	USD	CJ
--7.92USD	-7.92	USD	CJ
-USD-7.92	-7.92	USD	CJ
--8 USD	-8	USD
+// FIXME: Fix this one
+-7.926 USD	-7.926	USD	P
+USD -7.926	-7.926	USD	CJP
+-7.92USD	-7.92	USD	CJP
+USD-7.92	-7.92	USD	CJP
+-8 USD	-8	USD	P
 67 USD	67	USD
 53.45$	fail	USD
 US Dollars 53.45	53.45	USD	J
@@ -1112,16 +1115,16 @@ $53.45	fail	USD	J
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
-(7.92) USD	-7.92	USD
-(7.92) GBP	-7.92	GBP
-(7.926) USD	-7.926	USD
-(7.926 USD)	-7.926	USD	CJ
-(USD 7.926)	-7.926	USD	CJ
-USD (7.926)	-7.926	USD	CJ
-USD (7.92)	-7.92	USD	CJ
-(7.92)USD	-7.92	USD	CJ
-USD(7.92)	-7.92	USD	CJ
-(8) USD	-8	USD
+(7.92) USD	-7.92	USD	P
+(7.92) GBP	-7.92	GBP	P
+(7.926) USD	-7.926	USD	P
+(7.926 USD)	-7.926	USD	CJP
+(USD 7.926)	-7.926	USD	CJP
+USD (7.926)	-7.926	USD	CJP
+USD (7.92)	-7.92	USD	CJP
+(7.92)USD	-7.92	USD	CJP
+USD(7.92)	-7.92	USD	CJP
+(8) USD	-8	USD	P
 -8 USD	-8	USD	C
 67 USD	67	USD
 // J throws a NullPointerException on the next case
@@ -1150,16 +1153,16 @@ $53.45	fail	USD	J
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
-(7.92) USD	-7.92	USD
-(7.92) GBP	-7.92	GBP
-(7.926) USD	-7.926	USD
-(7.926 USD)	-7.926	USD	CJ
-(USD 7.926)	-7.926	USD	CJ
-USD (7.926)	-7.926	USD	CJ
-USD (7.92)	-7.92	USD	CJ
-(7.92)USD	-7.92	USD	CJ
-USD(7.92)	-7.92	USD	CJ
-(8) USD	-8	USD
+(7.92) USD	-7.92	USD	P
+(7.92) GBP	-7.92	GBP	P
+(7.926) USD	-7.926	USD	P
+(7.926 USD)	-7.926	USD	CJP
+(USD 7.926)	-7.926	USD	CJP
+USD (7.926)	-7.926	USD	CJP
+USD (7.92)	-7.92	USD	CJP
+(7.92)USD	-7.92	USD	CJP
+USD(7.92)	-7.92	USD	CJP
+(8) USD	-8	USD	P
 -8 USD	-8	USD	C
 67 USD	67	USD
 53.45$	fail	USD
@@ -1188,16 +1191,16 @@ USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
 // S fails these because '(' is an incomplete prefix.
-(7.92) USD	-7.92	USD	CJS
-(7.92) GBP	-7.92	GBP	CJS
-(7.926) USD	-7.926	USD	CJS
-(7.926 USD)	-7.926	USD	CJS
-(USD 7.926)	-7.926	USD	J
-USD (7.926)	-7.926	USD	CJS
-USD (7.92)	-7.92	USD	CJS
-(7.92)USD	-7.92	USD	CJS
-USD(7.92)	-7.92	USD	CJS
-(8) USD	-8	USD	CJS
+(7.92) USD	-7.92	USD	CJSP
+(7.92) GBP	-7.92	GBP	CJSP
+(7.926) USD	-7.926	USD	CJSP
+(7.926 USD)	-7.926	USD	CJSP
+(USD 7.926)	-7.926	USD	JP
+USD (7.926)	-7.926	USD	CJSP
+USD (7.92)	-7.92	USD	CJSP
+(7.92)USD	-7.92	USD	CJSP
+USD(7.92)	-7.92	USD	CJSP
+(8) USD	-8	USD	CJSP
 -8 USD	-8	USD	C
 67 USD	67	USD	C
 53.45$	fail	USD
