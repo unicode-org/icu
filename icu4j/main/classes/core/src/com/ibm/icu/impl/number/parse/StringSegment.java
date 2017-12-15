@@ -109,6 +109,7 @@ public class StringSegment implements CharSequence {
                 if (charAt(offset) != other.charAt(offset)) {
                     break;
                 }
+                offset++;
             }
         }
         return offset;

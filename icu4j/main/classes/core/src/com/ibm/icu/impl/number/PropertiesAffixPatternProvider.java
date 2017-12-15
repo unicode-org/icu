@@ -74,15 +74,16 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
 
     @Override
     public char charAt(int flags, int i) {
-        return getStringForFlags(flags).charAt(i);
+        return getString(flags).charAt(i);
     }
 
     @Override
     public int length(int flags) {
-        return getStringForFlags(flags).length();
+        return getString(flags).length();
     }
 
-    private String getStringForFlags(int flags) {
+    @Override
+    public String getString(int flags) {
         boolean prefix = (flags & Flags.PREFIX) != 0;
         boolean negative = (flags & Flags.NEGATIVE_SUBPATTERN) != 0;
         if (prefix && negative) {

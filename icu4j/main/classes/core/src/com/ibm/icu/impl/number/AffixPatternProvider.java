@@ -14,6 +14,8 @@ public interface AffixPatternProvider {
 
   public int length(int flags);
 
+  public String getString(int flags);
+
   public boolean hasCurrencySign();
 
   public boolean positiveHasPlusSign();

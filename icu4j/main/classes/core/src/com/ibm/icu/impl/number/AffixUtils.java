@@ -386,6 +386,22 @@ public class AffixUtils {
   }
 
   /**
+   * Appends a new affix pattern with all symbols removed. Like calling unescape with a symbol provider that always
+   * returns the empty string.
+   */
+  public static void removeSymbols(CharSequence affixPattern, StringBuilder output) {
+    assert affixPattern != null;
+    long tag = 0L;
+    while (hasNext(tag, affixPattern)) {
+      tag = nextToken(tag, affixPattern);
+      int typeOrCp = getTypeOrCp(tag);
+      if (typeOrCp >= 0) {
+        output.appendCodePoint(typeOrCp);
+      }
+    }
+  }
+
+  /**
    * Returns the next token from the affix pattern.
    *
    * @param tag A bitmask used for keeping track of state from token to token. The initial value

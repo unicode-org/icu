@@ -217,6 +217,25 @@ public class AffixUtilsTest {
     assertEquals("Symbol provider into middle", "abcd123efg", sb.toString());
   }
 
+  @Test
+  public void testRemoveSymbols() {
+    String[][] cases = {
+        {"", ""},
+        {"-", ""},
+        {"'-'", "-"},
+        {"-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤", "abcdefgh"},
+    };
+
+    StringBuilder sb = new StringBuilder();
+    for (String[] cas : cases) {
+      String input = cas[0];
+      String expected = cas[1];
+      sb.setLength(0);
+      AffixUtils.removeSymbols(input, sb);
+      assertEquals("Removing symbols from: " + input, expected, sb.toString());
+    }
+  }
+
   private static String unescapeWithDefaults(String input) {
     NumberStringBuilder nsb = new NumberStringBuilder();
     int length = AffixUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER);

@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.number.AffixPatternProvider;
+import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.MutablePatternModifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 
@@ -82,6 +84,64 @@ public class AffixMatcher implements NumberParseMatcher {
 
         for (AffixMatcher matcher : matchers) {
             output.addMatcher(matcher);
+        }
+    }
+
+    public static void generateFromAffixPatternProvider(AffixPatternProvider patternInfo,
+            NumberParserImpl output,
+            boolean includeUnpaired) {
+        AffixMatcher positive = null;
+        AffixMatcher negative = null;
+
+        StringBuilder sb = new StringBuilder();
+        AffixUtils.removeSymbols(patternInfo.getString(AffixPatternProvider.Flags.PREFIX), sb);
+        String prefix = sb.toString();
+        sb.setLength(0);
+        AffixUtils.removeSymbols(patternInfo.getString(/* suffix */ 0), sb);
+        String suffix = sb.toString();
+        if (!prefix.isEmpty() || !suffix.isEmpty()) {
+            positive = new AffixMatcher(prefix, suffix, 0);
+        }
+
+        if (patternInfo.hasNegativeSubpattern()) {
+            sb.setLength(0);
+            AffixUtils.removeSymbols(patternInfo
+                    .getString(AffixPatternProvider.Flags.PREFIX | AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN), sb);
+            prefix = sb.toString();
+            sb.setLength(0);
+            AffixUtils.removeSymbols(patternInfo.getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN), sb);
+            suffix = sb.toString();
+            if (!prefix.isEmpty() || !suffix.isEmpty()) {
+                negative = new AffixMatcher(prefix, suffix, ParsedNumber.FLAG_NEGATIVE);
+            }
+        }
+
+        if (positive != null && negative != null) {
+            int comparison = COMPARATOR.compare(positive, negative);
+            if (comparison > 0) {
+                appendTo(negative, output, includeUnpaired);
+                appendTo(positive, output, includeUnpaired);
+            } else if (comparison < 0) {
+                appendTo(positive, output, includeUnpaired);
+                appendTo(negative, output, includeUnpaired);
+            } else {
+                // The two candidates are equal; favor the positive one
+                appendTo(positive, output, includeUnpaired);
+            }
+        } else if (positive != null) {
+            appendTo(positive, output, includeUnpaired);
+        } else if (negative != null) {
+            appendTo(negative, output, includeUnpaired);
+        } else {
+            // No affixes to append this time
+        }
+    }
+
+    private static void appendTo(AffixMatcher matcher, NumberParserImpl output, boolean includeUnpaired) {
+        output.addMatcher(matcher);
+        if (includeUnpaired && !matcher.prefix.isEmpty() && !matcher.suffix.isEmpty()) {
+            output.addMatcher(new AffixMatcher(matcher.prefix, "", matcher.flags));
+            output.addMatcher(new AffixMatcher("", matcher.suffix, matcher.flags));
         }
     }
 
