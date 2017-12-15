@@ -30,6 +30,12 @@ public class CurrencyPluralInfoAffixProvider implements AffixPatternProvider {
     }
 
     @Override
+    public String getString(int flags) {
+        int pluralOrdinal = (flags & Flags.PLURAL_MASK);
+        return affixesByPlural[pluralOrdinal].getString(flags);
+    }
+
+    @Override
     public boolean positiveHasPlusSign() {
         return affixesByPlural[StandardPlural.OTHER.ordinal()].positiveHasPlusSign();
     }

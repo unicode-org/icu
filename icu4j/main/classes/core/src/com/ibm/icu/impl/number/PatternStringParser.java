@@ -111,6 +111,7 @@ public class PatternStringParser {
             return right - left;
         }
 
+        @Override
         public String getString(int flags) {
             long endpoints = getEndpoints(flags);
             int left = (int) (endpoints & 0xffffffff);

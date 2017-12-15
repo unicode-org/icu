@@ -127,26 +127,28 @@ public class NumberParserImpl {
         // Set up a pattern modifier with mostly defaults to generate AffixMatchers.
         MutablePatternModifier mod = new MutablePatternModifier(false);
         AffixPatternProvider patternInfo = new PropertiesAffixPatternProvider(properties);
-        mod.setPatternInfo(patternInfo);
-        mod.setPatternAttributes(SignDisplay.AUTO, false);
-        mod.setSymbols(symbols, currency, UnitWidth.SHORT, null);
+//        mod.setPatternInfo(patternInfo);
+//        mod.setPatternAttributes(SignDisplay.AUTO, false);
+//        mod.setSymbols(symbols, currency, UnitWidth.SHORT, null);
+//
+//        // Figure out which flags correspond to this pattern modifier. Note: negatives are taken care of in the
+//        // generateFromPatternModifier function.
+//        int flags = 0;
+//        if (patternInfo.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
+//            flags |= ParsedNumber.FLAG_PERCENT;
+//        }
+//        if (patternInfo.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
+//            flags |= ParsedNumber.FLAG_PERMILLE;
+//        }
+//        if (patternInfo.hasCurrencySign()) {
+//            flags |= ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY;
+//        }
+//
+//        parseCurrency = parseCurrency || patternInfo.hasCurrencySign();
+//
+//        AffixMatcher.generateFromPatternModifier(mod, flags, !isStrict && !parseCurrency, parser);
 
-        // Figure out which flags correspond to this pattern modifier. Note: negatives are taken care of in the
-        // generateFromPatternModifier function.
-        int flags = 0;
-        if (patternInfo.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
-            flags |= ParsedNumber.FLAG_PERCENT;
-        }
-        if (patternInfo.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
-            flags |= ParsedNumber.FLAG_PERMILLE;
-        }
-        if (patternInfo.hasCurrencySign()) {
-            flags |= ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY;
-        }
-
-        parseCurrency = parseCurrency || patternInfo.hasCurrencySign();
-
-        AffixMatcher.generateFromPatternModifier(mod, flags, !isStrict && !parseCurrency, parser);
+        AffixMatcher.generateFromAffixPatternProvider(patternInfo, parser, !isStrict);
 
         ///////////////////////////////
         /// OTHER STANDARD MATCHERS ///
@@ -154,6 +156,8 @@ public class NumberParserImpl {
 
         if (!isStrict) {
             parser.addMatcher(WhitespaceMatcher.getInstance());
+        }
+        if (!isStrict || patternInfo.containsSymbolType(AffixUtils.TYPE_PLUS_SIGN)) {
             parser.addMatcher(new PlusSignMatcher());
         }
         parser.addMatcher(new MinusSignMatcher());
@@ -188,6 +192,8 @@ public class NumberParserImpl {
         ////////////////////////
 
         parser.setIgnoreCase(!properties.getParseCaseSensitive());
+
+        System.out.println(parser);
 
         parser.freeze();
         return parser;
