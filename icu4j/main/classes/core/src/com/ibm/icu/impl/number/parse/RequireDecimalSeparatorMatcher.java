@@ -6,7 +6,7 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequireNumberMatcher implements NumberParseMatcher {
+public class RequireDecimalSeparatorMatcher implements NumberParseMatcher {
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
@@ -15,15 +15,13 @@ public class RequireNumberMatcher implements NumberParseMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
-        // Require that a number is matched.
-        if (!result.seenNumber()) {
+        if (0 == (result.flags & ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR)) {
             result.clear();
         }
     }
 
     @Override
     public String toString() {
-        return "<RequireNumber>";
+        return "<RequireDecimalSeparator>";
     }
-
 }

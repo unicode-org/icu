@@ -2,16 +2,13 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
 
-import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
-import com.ibm.icu.impl.number.MutablePatternModifier;
-import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
@@ -43,132 +40,78 @@ public class AffixMatcher implements NumberParseMatcher {
         }
     };
 
-    /**
-     * Creates multiple AffixMatchers, enough to cover the requirements for the given pattern modifier, appending them
-     * in order to the NumberParserImpl.
-     */
-    public static void generateFromPatternModifier(
-            MutablePatternModifier patternModifier,
-            int flags,
-            boolean includeUnpaired,
-            NumberParserImpl output) {
-
-        // Store the matchers in a TreeSet to ensure both uniqueness and order.
-        Set<AffixMatcher> matchers = new TreeSet<AffixMatcher>(COMPARATOR);
-
-        // Construct one matcher per isNegative/plural combination. Most of the time, plurals aren't needed, so only
-        // two matchers will be created, one for positive and one for negative.
-        NumberStringBuilder nsb = new NumberStringBuilder();
-        boolean isNegative = false;
-        while (true) {
-            if (isNegative) {
-                flags |= ParsedNumber.FLAG_NEGATIVE;
-            }
-
-            if (patternModifier.needsPlurals()) {
-                for (StandardPlural plural : StandardPlural.VALUES) {
-                    patternModifier.setNumberProperties(isNegative, plural);
-                    AffixMatcher.createAndAppendTo(matchers, patternModifier, flags, nsb, includeUnpaired);
-                }
-            } else {
-                patternModifier.setNumberProperties(isNegative, null);
-                AffixMatcher.createAndAppendTo(matchers, patternModifier, flags, nsb, includeUnpaired);
-            }
-
-            if (isNegative) {
-                break;
-            } else {
-                isNegative = true;
-            }
-        }
-
-        for (AffixMatcher matcher : matchers) {
-            output.addMatcher(matcher);
-        }
-    }
-
-    public static void generateFromAffixPatternProvider(AffixPatternProvider patternInfo,
+    public static void generateFromAffixPatternProvider(
+            AffixPatternProvider patternInfo,
             NumberParserImpl output,
+            UnicodeSet ignorables,
             boolean includeUnpaired) {
-        AffixMatcher positive = null;
-        AffixMatcher negative = null;
+        // Lazy-initialize the StringBuilder.
+        StringBuilder sb = null;
 
-        StringBuilder sb = new StringBuilder();
-        AffixUtils.removeSymbols(patternInfo.getString(AffixPatternProvider.Flags.PREFIX), sb);
-        String prefix = sb.toString();
-        sb.setLength(0);
-        AffixUtils.removeSymbols(patternInfo.getString(/* suffix */ 0), sb);
-        String suffix = sb.toString();
-        if (!prefix.isEmpty() || !suffix.isEmpty()) {
-            positive = new AffixMatcher(prefix, suffix, 0);
+        // Use initial capacity of 6, the highest possible number of AffixMatchers.
+        // TODO: Lazy-initialize?
+        ArrayList<AffixMatcher> matchers = new ArrayList<AffixMatcher>(6);
+
+        sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_POS_PREFIX, ignorables, sb);
+        String posPrefix = toStringOrEmpty(sb);
+        sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_POS_SUFFIX, ignorables, sb);
+        String posSuffix = toStringOrEmpty(sb);
+
+        if (!posPrefix.isEmpty() || !posSuffix.isEmpty()) {
+            matchers.add(getInstance(posPrefix, posSuffix, 0));
+            if (includeUnpaired && !posPrefix.isEmpty() && !posSuffix.isEmpty()) {
+                matchers.add(getInstance(posPrefix, "", 0));
+                matchers.add(getInstance("", posSuffix, 0));
+            }
         }
 
         if (patternInfo.hasNegativeSubpattern()) {
-            sb.setLength(0);
-            AffixUtils.removeSymbols(patternInfo
-                    .getString(AffixPatternProvider.Flags.PREFIX | AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN), sb);
-            prefix = sb.toString();
-            sb.setLength(0);
-            AffixUtils.removeSymbols(patternInfo.getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN), sb);
-            suffix = sb.toString();
-            if (!prefix.isEmpty() || !suffix.isEmpty()) {
-                negative = new AffixMatcher(prefix, suffix, ParsedNumber.FLAG_NEGATIVE);
+            sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_NEG_PREFIX, ignorables, sb);
+            String negPrefix = toStringOrEmpty(sb);
+            sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_NEG_SUFFIX, ignorables, sb);
+            String negSuffix = toStringOrEmpty(sb);
+
+            if (negPrefix.equals(posPrefix) && negSuffix.equals(posSuffix)) {
+                // No-op: favor the positive AffixMatcher
+            } else if (!negPrefix.isEmpty() || !negSuffix.isEmpty()) {
+                matchers.add(getInstance(negPrefix, negSuffix, ParsedNumber.FLAG_NEGATIVE));
+                if (includeUnpaired && !negPrefix.isEmpty() && !negSuffix.isEmpty()) {
+                    if (!negPrefix.equals(posPrefix)) {
+                        matchers.add(getInstance(negPrefix, "", ParsedNumber.FLAG_NEGATIVE));
+                    }
+                    if (!negSuffix.equals(posSuffix)) {
+                        matchers.add(getInstance("", negSuffix, ParsedNumber.FLAG_NEGATIVE));
+                    }
+                }
             }
         }
 
-        if (positive != null && negative != null) {
-            int comparison = COMPARATOR.compare(positive, negative);
-            if (comparison > 0) {
-                appendTo(negative, output, includeUnpaired);
-                appendTo(positive, output, includeUnpaired);
-            } else if (comparison < 0) {
-                appendTo(positive, output, includeUnpaired);
-                appendTo(negative, output, includeUnpaired);
-            } else {
-                // The two candidates are equal; favor the positive one
-                appendTo(positive, output, includeUnpaired);
-            }
-        } else if (positive != null) {
-            appendTo(positive, output, includeUnpaired);
-        } else if (negative != null) {
-            appendTo(negative, output, includeUnpaired);
-        } else {
-            // No affixes to append this time
-        }
+        // Put the AffixMatchers in order, and then add them to the output.
+        Collections.sort(matchers, COMPARATOR);
+        output.addMatchers(matchers);
     }
 
-    private static void appendTo(AffixMatcher matcher, NumberParserImpl output, boolean includeUnpaired) {
-        output.addMatcher(matcher);
-        if (includeUnpaired && !matcher.prefix.isEmpty() && !matcher.suffix.isEmpty()) {
-            output.addMatcher(new AffixMatcher(matcher.prefix, "", matcher.flags));
-            output.addMatcher(new AffixMatcher("", matcher.suffix, matcher.flags));
+    private static StringBuilder getCleanAffix(
+            AffixPatternProvider patternInfo,
+            int flag,
+            UnicodeSet ignorables,
+            StringBuilder sb) {
+        if (sb != null) {
+            sb.setLength(0);
         }
+        if (patternInfo.length(flag) > 0) {
+            sb = AffixUtils.withoutSymbolsOrIgnorables(patternInfo.getString(flag), ignorables, sb);
+        }
+        return sb;
     }
 
-    /**
-     * Constructs one or more AffixMatchers from the given MutablePatternModifier and flags, appending them to the given
-     * collection. The NumberStringBuilder is used as a temporary object only.
-     *
-     * @param includeUnpaired If true, create additional AffixMatchers with an unpaired prefix or suffix.
-     */
-    private static void createAndAppendTo(
-            Collection<AffixMatcher> appendTo,
-            MutablePatternModifier patternModifier,
-            int flags,
-            NumberStringBuilder nsb,
-            boolean includeUnpaired) {
-        // TODO: Make this more efficient (avoid the substrings and things)
-        nsb.clear();
-        patternModifier.apply(nsb, 0, 0);
-        int prefixLength = patternModifier.getPrefixLength();
-        String full = nsb.toString();
-        String prefix = full.substring(0, prefixLength);
-        String suffix = full.substring(prefixLength);
-        appendTo.add(new AffixMatcher(prefix, suffix, flags));
-        if (includeUnpaired && !prefix.isEmpty() && !suffix.isEmpty()) {
-            appendTo.add(new AffixMatcher(prefix, "", flags));
-            appendTo.add(new AffixMatcher("", suffix, flags));
-        }
+    private static String toStringOrEmpty(StringBuilder sb) {
+        return (sb == null || sb.length() == 0) ? "" : sb.toString();
+    }
+
+    private static final AffixMatcher getInstance(String prefix, String suffix, int flags) {
+        // TODO: Special handling for common cases like both strings empty.
+        return new AffixMatcher(prefix, suffix, flags);
     }
 
     private AffixMatcher(String prefix, String suffix, int flags) {
@@ -179,7 +122,7 @@ public class AffixMatcher implements NumberParseMatcher {
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
-        if (result.quantity == null) {
+        if (!result.seenNumber()) {
             // Prefix
             if (result.prefix != null || prefix.length() == 0) {
                 return false;
@@ -255,6 +198,7 @@ public class AffixMatcher implements NumberParseMatcher {
 
     @Override
     public String toString() {
-        return "<AffixMatcher \"" + prefix + "\" \"" + suffix + "\">";
+        boolean isNegative = 0 != (flags & ParsedNumber.FLAG_NEGATIVE);
+        return "<AffixMatcher" + (isNegative ? ":negative " : " ") + prefix + "#" + suffix + ">";
     }
 }

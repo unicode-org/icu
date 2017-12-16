@@ -17,13 +17,17 @@ public class ScientificMatcher implements NumberParseMatcher {
     public ScientificMatcher(DecimalFormatSymbols symbols) {
         exponentSeparatorString = symbols.getExponentSeparator();
         minusSignString = symbols.getMinusSignString();
-        exponentMatcher = DecimalMatcher.getExponentInstance(symbols);
+        exponentMatcher = new DecimalMatcher();
+        exponentMatcher.isScientific = true;
+        exponentMatcher.groupingEnabled = false;
+        exponentMatcher.decimalEnabled = false;
+        exponentMatcher.freeze(symbols, false);
     }
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
         // Only accept scientific notation after the mantissa.
-        if (result.quantity == null) {
+        if (!result.seenNumber()) {
             return false;
         }
 

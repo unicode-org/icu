@@ -46,6 +46,8 @@ public class ParsedNumber {
     public static final int FLAG_PERMILLE = 0x0004;
     public static final int FLAG_HAS_EXPONENT = 0x0008;
     public static final int FLAG_HAS_DEFAULT_CURRENCY = 0x0010;
+    public static final int FLAG_HAS_DECIMAL_SEPARATOR = 0x0020;
+    public static final int FLAG_NAN = 0x0040;
 
     /** A Comparator that favors ParsedNumbers with the most chars consumed. */
     public static final Comparator<ParsedNumber> COMPARATOR = new Comparator<ParsedNumber>() {
@@ -84,7 +86,14 @@ public class ParsedNumber {
         charsConsumed = segment.getOffset();
     }
 
+    public boolean seenNumber() {
+        return quantity != null || 0 != (flags & FLAG_NAN);
+    }
+
     public double getDouble() {
+        if (0 != (flags & FLAG_NAN)) {
+            return Double.NaN;
+        }
         double d = quantity.toDouble();
         if (0 != (flags & FLAG_NEGATIVE)) {
             d = -d;
