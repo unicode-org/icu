@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -10,9 +11,23 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class PlusSignMatcher extends SymbolMatcher {
 
-    public PlusSignMatcher() {
-        // FIXME
-        super("+", new UnicodeSet("[+]"));
+    private static final PlusSignMatcher DEFAULT = new PlusSignMatcher();
+
+    public static PlusSignMatcher getInstance(DecimalFormatSymbols symbols) {
+        String symbolString = symbols.getPlusSignString();
+        if (DEFAULT.uniSet.contains(symbolString)) {
+            return DEFAULT;
+        } else {
+            return new PlusSignMatcher(symbolString);
+        }
+    }
+
+    private PlusSignMatcher(String symbolString) {
+        super(symbolString, UnicodeSet.EMPTY);
+    }
+
+    private PlusSignMatcher() {
+        super(UnicodeSetStaticCache.Key.PLUS_SIGN);
     }
 
     @Override

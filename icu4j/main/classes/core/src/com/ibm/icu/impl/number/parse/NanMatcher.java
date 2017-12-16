@@ -11,8 +11,23 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class NanMatcher extends SymbolMatcher {
 
-    public NanMatcher(DecimalFormatSymbols symbols) {
-        super(symbols.getNaN(), UnicodeSet.EMPTY);
+    private static final NanMatcher DEFAULT = new NanMatcher();
+
+    public static NanMatcher getInstance(DecimalFormatSymbols symbols) {
+        String symbolString = symbols.getNaN();
+        if (DEFAULT.string.equals(symbolString)) {
+            return DEFAULT;
+        } else {
+            return new NanMatcher(symbolString);
+        }
+    }
+
+    private NanMatcher(String symbolString) {
+        super(symbolString, UnicodeSet.EMPTY);
+    }
+
+    private NanMatcher() {
+        super("NaN", UnicodeSet.EMPTY);
     }
 
     @Override

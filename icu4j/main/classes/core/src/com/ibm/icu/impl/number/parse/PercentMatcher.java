@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -10,9 +11,23 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class PercentMatcher extends SymbolMatcher {
 
-    public PercentMatcher() {
-        // FIXME
-        super("%", new UnicodeSet("[%]"));
+    private static final PercentMatcher DEFAULT = new PercentMatcher();
+
+    public static PercentMatcher getInstance(DecimalFormatSymbols symbols) {
+        String symbolString = symbols.getPercentString();
+        if (DEFAULT.uniSet.contains(symbolString)) {
+            return DEFAULT;
+        } else {
+            return new PercentMatcher(symbolString);
+        }
+    }
+
+    private PercentMatcher(String symbolString) {
+        super(symbolString, UnicodeSet.EMPTY);
+    }
+
+    private PercentMatcher() {
+        super(UnicodeSetStaticCache.Key.PERCENT_SIGN);
     }
 
     @Override

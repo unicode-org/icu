@@ -21,10 +21,11 @@ public class DecimalMatcher implements NumberParseMatcher {
     public boolean integerOnly = false;
     public boolean isScientific = false;
 
-    private UnicodeSet groupingUniSet;
-    private UnicodeSet decimalUniSet;
-    private UnicodeSet separatorSet;
-    private String[] digitStrings;
+    private UnicodeSet groupingUniSet = null;
+    private UnicodeSet decimalUniSet = null;
+    private UnicodeSet separatorSet = null;
+    private UnicodeSet separatorLeadChars = null;
+    private String[] digitStrings = null;
     private boolean frozen;
 
     public DecimalMatcher() {
@@ -35,10 +36,59 @@ public class DecimalMatcher implements NumberParseMatcher {
         assert !frozen;
         frozen = true;
 
-        groupingUniSet = SeparatorSetUtils.getGroupingUnicodeSet(symbols, isStrict);
-        decimalUniSet = SeparatorSetUtils.getDecimalUnicodeSet(symbols, isStrict);
-        separatorSet = SeparatorSetUtils.unionUnicodeSets(groupingUniSet, decimalUniSet);
-        digitStrings = symbols.getDigitStringsLocal();
+        String groupingSeparator = symbols.getGroupingSeparatorString();
+        String decimalSeparator = symbols.getDecimalSeparatorString();
+        UnicodeSetStaticCache.Key groupingKey, decimalKey;
+
+        // Attempt to find values in the static cache
+        if (isStrict) {
+            groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
+                    UnicodeSetStaticCache.Key.OTHER_GROUPING_SEPARATORS,
+                    UnicodeSetStaticCache.Key.STRICT_COMMA_OR_OTHER,
+                    UnicodeSetStaticCache.Key.STRICT_PERIOD_OR_OTHER);
+            decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator,
+                    UnicodeSetStaticCache.Key.STRICT_COMMA,
+                    UnicodeSetStaticCache.Key.STRICT_PERIOD);
+        } else {
+            groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
+                    UnicodeSetStaticCache.Key.OTHER_GROUPING_SEPARATORS,
+                    UnicodeSetStaticCache.Key.COMMA_OR_OTHER,
+                    UnicodeSetStaticCache.Key.PERIOD_OR_OTHER);
+            decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator,
+                    UnicodeSetStaticCache.Key.COMMA,
+                    UnicodeSetStaticCache.Key.PERIOD);
+        }
+
+        // Get the sets from the static cache if they were found
+        if (groupingKey != null && decimalKey != null) {
+            groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
+            decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
+            UnicodeSetStaticCache.Key separatorKey = UnicodeSetStaticCache.unionOf(groupingKey, decimalKey);
+            if (separatorKey != null) {
+                separatorSet = UnicodeSetStaticCache.get(separatorKey);
+                separatorLeadChars = UnicodeSetStaticCache.getLeadChars(separatorKey);
+            }
+        } else if (groupingKey != null) {
+            groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
+        } else if (decimalKey != null) {
+            decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
+        }
+
+        // Resolve fallbacks if we don't have sets from the static cache
+        if (groupingUniSet == null) {
+            groupingUniSet = new UnicodeSet().add(groupingSeparator).freeze();
+        }
+        if (decimalUniSet == null) {
+            decimalUniSet = new UnicodeSet().add(decimalSeparator).freeze();
+        }
+        if (separatorSet == null) {
+            separatorSet = new UnicodeSet().addAll(groupingUniSet).addAll(decimalUniSet).freeze();
+        }
+
+        int cpZero = symbols.getCodePointZero();
+        if (cpZero == -1 || !UCharacter.isDigit(cpZero) || UCharacter.digit(cpZero) != 0) {
+            digitStrings = symbols.getDigitStrings();
+        }
     }
 
     @Override
@@ -74,7 +124,7 @@ public class DecimalMatcher implements NumberParseMatcher {
             }
 
             // Try by digit string.
-            if (digit == -1) {
+            if (digit == -1 && digitStrings != null) {
                 for (int i = 0; i < digitStrings.length; i++) {
                     String str = digitStrings[i];
                     int overlap = segment.getCommonPrefixLength(str);
@@ -190,16 +240,20 @@ public class DecimalMatcher implements NumberParseMatcher {
         return segment.length() == 0 || hasPartialPrefix || segment.isLeadingSurrogate();
     }
 
-    private static final UnicodeSet UNISET_DIGITS = new UnicodeSet("[:digit:]");
-
     @Override
     public UnicodeSet getLeadChars(boolean ignoreCase) {
         UnicodeSet leadChars = new UnicodeSet();
-        ParsingUtils.putLeadSurrogates(UNISET_DIGITS, leadChars);
-        for (int i = 0; i < digitStrings.length; i++) {
-            ParsingUtils.putLeadingChar(digitStrings[i], leadChars, ignoreCase);
+        leadChars.addAll(UnicodeSetStaticCache.getLeadChars(UnicodeSetStaticCache.Key.DIGITS));
+        if (digitStrings != null) {
+            for (int i = 0; i < digitStrings.length; i++) {
+                ParsingUtils.putLeadingChar(digitStrings[i], leadChars, ignoreCase);
+            }
         }
-        ParsingUtils.putLeadSurrogates(separatorSet, leadChars);
+        if (separatorLeadChars != null) {
+            leadChars.addAll(separatorLeadChars);
+        } else {
+            ParsingUtils.putLeadSurrogates(separatorSet, leadChars);
+        }
         return leadChars.freeze();
     }
 
