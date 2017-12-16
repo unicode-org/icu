@@ -1425,8 +1425,8 @@ NaN	NaN	K
 1E2147483646	1E2147483646
 1E-2147483649	0
 1E-2147483648	0
-// S returns zero here
-1E-2147483647	1E-2147483647	S
+// S and P return zero here
+1E-2147483647	1E-2147483647	SP
 1E-2147483646	1E-2147483646
 
 test format push limits
@@ -1441,7 +1441,7 @@ maxFractionDigits	format	output	breaks
 100	9999999999999.9950000000001	9999999999999.9950000000001	C
 2	9999999999999.9950000000001	10000000000000.00	C
 2	9999999.99499999	9999999.99
-// K doesn't support halfDowm rounding mode?
+// K doesn't support halfDown rounding mode?
 2	9999999.995	9999999.99	K
 2	9999999.99500001	10000000.00
 100	56565656565656565656565656565656565656565656565656565656565656	56565656565656565656565656565656565656565656565656565656565656.00	C
@@ -1455,26 +1455,27 @@ set locale en
 set pattern #,##0
 begin
 parse	output	breaks
-// K and J return null; S and C return 99
- 9 9	9	CJKS
+// K and J return null; S, C, and P return 99
+ 9 9	9	CJKSP
 // K returns null
  9 999	9999	K
 
 test parse ignorables
 set locale ar
 // Note: Prefixes contain RLMs, as do some of the test cases.
+// P does not work on most of these right now.
 set pattern x a‎b0c df 
 set negativePrefix y g‎h
 set negativeSuffix i jk 
 begin
 parse	output	breaks
-x a‎b56c df 	56
-x  a‎b56c df 	56	K
-x ab56c df 	56	K
-x ab56c df	56	JK
-x ab56c df  	56	K
-x ab56	56	JK
-x a b56	56	JK
+x a‎b56c df 	56	P
+x  a‎b56c df 	56	KP
+x ab56c df 	56	KP
+x ab56c df	56	JKP
+x ab56c df  	56	KP
+x ab56	56	JKP
+x a b56	56	JKP
 56cdf	56	JK
 56c df	56	JK
 56cd f	56	JK
@@ -1482,24 +1483,24 @@ x a b56	56	JK
 56cdf 	56	JK
 56c d‎f 	56	JK
 56‎c df 	56	JK
-y g‎h56i jk 	-56
-y  g‎h56i jk 	-56	K
-y gh56i jk 	-56	K
-y gh56i jk	-56	JK
-y gh56i jk  	-56	K
-y gh56	-56	JK
-y g h56	-56	JK
+y g‎h56i jk 	-56	P
+y  g‎h56i jk 	-56	KP
+y gh56i jk 	-56	KP
+y gh56i jk	-56	JKP
+y gh56i jk  	-56	KP
+y gh56	-56	JKP
+y g h56	-56	JKP
 // S stops parsing after the 'i' for these and returns -56
 // C stops before the 'i' and gets 56
 56ijk	-56	CJK
-56i jk	-56	CJK
-56ij k	-56	CJK
-56i‎j‎k	-56	CJK
+56i jk	-56	CJKP
+56ij k	-56	CJKP
+56i‎j‎k	-56	CJKP
 56ijk 	-56	CJK
-56i j‎k 	-56	CJK
-56‎i jk 	-56	CJK
+56i j‎k 	-56	CJKP
+56‎i jk 	-56	CJKP
 // S and C get 56 (accepts ' ' gs grouping); J and K get null
-5 6	fail	CS
+5 6	fail	CSP
 5‎6	5	JK
 
 test parse spaces in grouping
@@ -1509,9 +1510,9 @@ set locale en
 set pattern #,##0
 begin
 parse	output	breaks
-// C, J and S get "12" here
-1 2	1	CJS
-1 23	1	CJS
+// C, J, S, and P get "12" here
+1 2	1	CJSP
+1 23	1	CJSP
 // K gets 1 here; doesn't pick up the grouping separator
 1 234	1234	K
 
@@ -1545,7 +1546,8 @@ begin
 parse	output	breaks
 55%	0.55
 // J and K get null
-55	0.55	JK
+// P requires the symbol to be present and gets 55
+55	0.55	JKP
 
 test trailing grouping separators in pattern
 // This test is for #13115

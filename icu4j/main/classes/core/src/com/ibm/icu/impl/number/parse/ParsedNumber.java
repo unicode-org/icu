@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
@@ -48,6 +49,7 @@ public class ParsedNumber {
     public static final int FLAG_HAS_DEFAULT_CURRENCY = 0x0010;
     public static final int FLAG_HAS_DECIMAL_SEPARATOR = 0x0020;
     public static final int FLAG_NAN = 0x0040;
+    public static final int FLAG_INFINITY = 0x0080;
 
     /** A Comparator that favors ParsedNumbers with the most chars consumed. */
     public static final Comparator<ParsedNumber> COMPARATOR = new Comparator<ParsedNumber>() {
@@ -87,16 +89,32 @@ public class ParsedNumber {
     }
 
     public boolean seenNumber() {
-        return quantity != null || 0 != (flags & FLAG_NAN);
+        return quantity != null || 0 != (flags & FLAG_NAN) || 0 != (flags & FLAG_INFINITY);
     }
 
-    public double getDouble() {
-        if (0 != (flags & FLAG_NAN)) {
-            return Double.NaN;
+    public Number getNumber() {
+        boolean sawNegative = 0 != (flags & FLAG_NEGATIVE);
+        boolean sawNaN = 0 != (flags & FLAG_NAN);
+        boolean sawInfinity = 0 != (flags & FLAG_INFINITY);
+
+        // Check for NaN, infinity, and -0.0
+        if (sawNaN) {
+          return Double.NaN;
         }
-        double d = quantity.toDouble();
+        if (sawInfinity) {
+          if (sawNegative) {
+            return Double.NEGATIVE_INFINITY;
+          } else {
+            return Double.POSITIVE_INFINITY;
+          }
+        }
+        if (quantity.isZero() && sawNegative) {
+          return -0.0;
+        }
+
+        BigDecimal d = quantity.toBigDecimal();
         if (0 != (flags & FLAG_NEGATIVE)) {
-            d = -d;
+            d = d.negate();
         }
         return d;
     }

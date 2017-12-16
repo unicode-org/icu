@@ -85,7 +85,7 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
                 assertNotNull(message, resultObject.quantity);
-                assertEquals(message, resultDouble, resultObject.getDouble(), 0.0);
+                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
             }
 
@@ -94,7 +94,7 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, false, resultObject);
                 assertNotNull(message, resultObject.quantity);
-                assertEquals(message, resultDouble, resultObject.getDouble(), 0.0);
+                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
             }
 
@@ -104,7 +104,7 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
                 assertNotNull(message, resultObject.quantity);
-                assertEquals(message, resultDouble, resultObject.getDouble(), 0.0);
+                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
             }
         }

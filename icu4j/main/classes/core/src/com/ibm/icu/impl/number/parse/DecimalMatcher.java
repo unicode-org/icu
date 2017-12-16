@@ -13,7 +13,6 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class DecimalMatcher implements NumberParseMatcher {
 
-
     public boolean requireGroupingMatch = false;
     public boolean decimalEnabled = true;
     public boolean groupingEnabled = true;
@@ -44,6 +43,10 @@ public class DecimalMatcher implements NumberParseMatcher {
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
+        return match(segment, result, false);
+    }
+
+    public boolean match(StringSegment segment, ParsedNumber result, boolean negativeExponent) {
         assert frozen;
         if (result.seenNumber() && !isScientific) {
             // A number has already been consumed.
@@ -87,7 +90,13 @@ public class DecimalMatcher implements NumberParseMatcher {
             // If found, save it in the DecimalQuantity or scientific adjustment.
             if (digit >= 0) {
                 if (isScientific) {
-                    exponent = digit + exponent * 10;
+                    int nextExponent = digit + exponent * 10;
+                    if (nextExponent < exponent) {
+                        // Overflow
+                        exponent = Integer.MAX_VALUE;
+                    } else {
+                        exponent = nextExponent;
+                    }
                 } else {
                     if (result.quantity == null) {
                         result.quantity = new DecimalQuantity_DualStorageBCD();
@@ -132,7 +141,24 @@ public class DecimalMatcher implements NumberParseMatcher {
         }
 
         if (isScientific) {
-            result.quantity.adjustMagnitude(exponent);
+            boolean overflow = (exponent == Integer.MAX_VALUE);
+            if (!overflow) {
+                try {
+                    result.quantity.adjustMagnitude(negativeExponent ? -exponent : exponent);
+                } catch (ArithmeticException e) {
+                    overflow = true;
+                }
+            }
+            if (overflow) {
+                if (negativeExponent) {
+                    // Set to zero
+                    result.quantity.clear();
+                } else {
+                    // Set to infinity
+                    result.quantity = null;
+                    result.flags |= ParsedNumber.FLAG_INFINITY;
+                }
+            }
         } else if (result.quantity == null) {
             // No-op: strings that start with a separator without any other digits
         } else if (seenBothSeparators || (separator != -1 && decimalUniSet.contains(separator))) {

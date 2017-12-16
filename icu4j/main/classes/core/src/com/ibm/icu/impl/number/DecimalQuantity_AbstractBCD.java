@@ -204,8 +204,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
   @Override
   public void adjustMagnitude(int delta) {
     if (precision != 0) {
-      scale += delta;
-      origDelta += delta;
+      // TODO: Math.addExact is not in 1.6 or 1.7
+      scale = Math.addExact(scale, delta);
+      origDelta = Math.addExact(origDelta, delta);
     }
   }
 

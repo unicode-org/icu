@@ -47,18 +47,10 @@ public class ScientificMatcher implements NumberParseMatcher {
             }
 
             int digitsOffset = segment.getOffset();
-            int oldMagnitude = result.quantity.getMagnitude();
-            boolean digitsReturnValue = exponentMatcher.match(segment, result);
+            boolean digitsReturnValue = exponentMatcher.match(segment, result, minusSign);
             if (segment.getOffset() != digitsOffset) {
                 // At least one exponent digit was matched.
                 result.flags |= ParsedNumber.FLAG_HAS_EXPONENT;
-                if (minusSign) {
-                    // Switch the magnitude adjustment from positive to negative. Extracting the exponent from the
-                    // change in the quantity's magnitude feels a bit like a hack; better would be for the
-                    // DecimalMatcher to somehow return the exponent directly.
-                    int exponent = result.quantity.getMagnitude() - oldMagnitude;
-                    result.quantity.adjustMagnitude(-2 * exponent);
-                }
             } else {
                 // No exponent digits were matched; un-match the exponent separator.
                 segment.adjustOffset(-overlap1);
