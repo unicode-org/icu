@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -10,9 +11,23 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class PermilleMatcher extends SymbolMatcher {
 
-    public PermilleMatcher() {
-        // FIXME
-        super("‰", new UnicodeSet("[‰]"));
+    private static final PermilleMatcher DEFAULT = new PermilleMatcher();
+
+    public static PermilleMatcher getInstance(DecimalFormatSymbols symbols) {
+        String symbolString = symbols.getPerMillString();
+        if (DEFAULT.uniSet.contains(symbolString)) {
+            return DEFAULT;
+        } else {
+            return new PermilleMatcher(symbolString);
+        }
+    }
+
+    private PermilleMatcher(String symbolString) {
+        super(symbolString, UnicodeSet.EMPTY);
+    }
+
+    private PermilleMatcher() {
+        super(UnicodeSetStaticCache.Key.PERMILLE_SIGN);
     }
 
     @Override

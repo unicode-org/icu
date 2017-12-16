@@ -11,10 +11,21 @@ import com.ibm.icu.text.UnicodeSet;
 public abstract class SymbolMatcher implements NumberParseMatcher {
     protected final String string;
     protected final UnicodeSet uniSet;
+    protected final UnicodeSet leadChars;
+
+    // TODO: Implement this class using only UnicodeSet and not String?
+    // How to deal with case folding?
 
     protected SymbolMatcher(String symbolString, UnicodeSet symbolUniSet) {
         string = symbolString;
         uniSet = symbolUniSet;
+        leadChars = null;
+    }
+
+    protected SymbolMatcher(UnicodeSetStaticCache.Key key) {
+        string = "";
+        uniSet = UnicodeSetStaticCache.get(key);
+        leadChars = UnicodeSetStaticCache.getLeadChars(key);
     }
 
     @Override
@@ -30,6 +41,10 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
             accept(segment, result);
             return false;
         }
+
+        if (string.isEmpty()) {
+            return segment.isLeadingSurrogate();
+        }
         int overlap = segment.getCommonPrefixLength(string);
         if (overlap == string.length()) {
             segment.adjustOffset(string.length());
@@ -41,6 +56,10 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
 
     @Override
     public UnicodeSet getLeadChars(boolean ignoreCase) {
+        if (leadChars != null) {
+            return leadChars;
+        }
+
         UnicodeSet leadChars = new UnicodeSet();
         ParsingUtils.putLeadSurrogates(uniSet, leadChars);
         ParsingUtils.putLeadingChar(string, leadChars, ignoreCase);

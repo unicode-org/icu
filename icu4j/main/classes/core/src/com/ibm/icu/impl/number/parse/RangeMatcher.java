@@ -15,6 +15,10 @@ public abstract class RangeMatcher implements NumberParseMatcher {
         this.uniSet = uniSet;
     }
 
+    public UnicodeSet getSet() {
+        return uniSet;
+    }
+
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
         // Smoke test first; this matcher might be disabled.

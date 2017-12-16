@@ -10,35 +10,30 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class IgnorablesMatcher extends RangeMatcher {
 
-    // BiDi characters are skipped over and ignored at any point in the string, even in strict mode.
-    static final UnicodeSet UNISET_BIDI = new UnicodeSet("[[\\u200E\\u200F\\u061C]]").freeze();
+    public static final IgnorablesMatcher DEFAULT = new IgnorablesMatcher(
+            UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.DEFAULT_IGNORABLES));
 
-    // This set was decided after discussion with icu-design@. See ticket #13309.
-    // Zs+TAB is "horizontal whitespace" according to UTS #18 (blank property).
-    static final UnicodeSet UNISET_WHITESPACE = new UnicodeSet("[[:Zs:][\\u0009]]").freeze();
-
-    /** The default set of ignorables. */
-    static final UnicodeSet DEFAULT_UNISET = UNISET_BIDI.cloneAsThawed().addAll(UNISET_WHITESPACE).freeze();
-
-    /** The default set of ignorables for strict mode. */
-    static final UnicodeSet STRICT_UNISET = UNISET_BIDI;
-
-    private static final IgnorablesMatcher DEFAULT_INSTANCE = new IgnorablesMatcher(DEFAULT_UNISET);
-    private static final IgnorablesMatcher STRICT_INSTANCE = new IgnorablesMatcher(STRICT_UNISET);
+    public static final IgnorablesMatcher STRICT = new IgnorablesMatcher(
+            UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.STRICT_IGNORABLES));
 
     public static IgnorablesMatcher getInstance(UnicodeSet ignorables) {
         assert ignorables.isFrozen();
-        if (ignorables == DEFAULT_UNISET || ignorables.equals(DEFAULT_UNISET)) {
-            return DEFAULT_INSTANCE;
-        } else if (ignorables == STRICT_UNISET || ignorables.equals(STRICT_UNISET)) {
-            return STRICT_INSTANCE;
-        } else {
-            return new IgnorablesMatcher(ignorables);
-        }
+        return new IgnorablesMatcher(ignorables);
     }
 
     private IgnorablesMatcher(UnicodeSet ignorables) {
         super(ignorables);
+    }
+
+    @Override
+    public UnicodeSet getLeadChars(boolean ignoreCase) {
+        if (this == DEFAULT) {
+            return UnicodeSetStaticCache.getLeadChars(UnicodeSetStaticCache.Key.DEFAULT_IGNORABLES);
+        } else if (this == STRICT) {
+            return UnicodeSetStaticCache.getLeadChars(UnicodeSetStaticCache.Key.STRICT_IGNORABLES);
+        } else {
+            return super.getLeadChars(ignoreCase);
+        }
     }
 
     @Override

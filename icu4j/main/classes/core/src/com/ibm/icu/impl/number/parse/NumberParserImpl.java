@@ -39,14 +39,14 @@ public class NumberParserImpl {
         AffixPatternProvider patternInfo = PatternStringParser.parseToPatternInfo(pattern);
         AffixMatcher.generateFromAffixPatternProvider(patternInfo, parser, new UnicodeSet(), true);
 
-        parser.addMatcher(IgnorablesMatcher.getInstance(IgnorablesMatcher.DEFAULT_UNISET));
+        parser.addMatcher(IgnorablesMatcher.DEFAULT);
         DecimalMatcher decimalMatcher = new DecimalMatcher();
         decimalMatcher.requireGroupingMatch = strictGrouping;
         decimalMatcher.grouping1 = 3;
         decimalMatcher.grouping2 = 2;
         decimalMatcher.freeze(symbols, false);
         parser.addMatcher(decimalMatcher);
-        parser.addMatcher(new MinusSignMatcher());
+        parser.addMatcher(MinusSignMatcher.getInstance(symbols));
         parser.addMatcher(new ScientificMatcher(symbols));
         parser.addMatcher(new CurrencyMatcher(locale));
         parser.addMatcher(new RequireNumberMatcher());
@@ -109,7 +109,7 @@ public class NumberParserImpl {
         ULocale locale = symbols.getULocale();
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
-        UnicodeSet ignorables = isStrict ? IgnorablesMatcher.STRICT_UNISET : IgnorablesMatcher.DEFAULT_UNISET;
+        IgnorablesMatcher ignorables = isStrict ? IgnorablesMatcher.STRICT : IgnorablesMatcher.DEFAULT;
 
         boolean decimalSeparatorRequired = properties.getDecimalPatternMatchRequired()
                 ? (properties.getDecimalSeparatorAlwaysShown() || properties.getMaximumFractionDigits() != 0)
@@ -121,7 +121,7 @@ public class NumberParserImpl {
 
         // Set up a pattern modifier with mostly defaults to generate AffixMatchers.
         AffixPatternProvider patternInfo = new PropertiesAffixPatternProvider(properties);
-        AffixMatcher.generateFromAffixPatternProvider(patternInfo, parser, ignorables, !isStrict);
+        AffixMatcher.generateFromAffixPatternProvider(patternInfo, parser, ignorables.getSet(), !isStrict);
 
         ////////////////////////
         /// CURRENCY MATCHER ///
@@ -135,16 +135,14 @@ public class NumberParserImpl {
         /// OTHER STANDARD MATCHERS ///
         ///////////////////////////////
 
-        if (!isStrict) {
-            parser.addMatcher(IgnorablesMatcher.getInstance(ignorables));
+        parser.addMatcher(ignorables);
+        if (!isStrict || patternInfo.containsSymbolType(AffixUtils.TYPE_PLUS_SIGN) || properties.getSignAlwaysShown()) {
+            parser.addMatcher(PlusSignMatcher.getInstance(symbols));
         }
-        if (!isStrict || patternInfo.containsSymbolType(AffixUtils.TYPE_PLUS_SIGN)) {
-            parser.addMatcher(new PlusSignMatcher());
-        }
-        parser.addMatcher(new MinusSignMatcher());
-        parser.addMatcher(new NanMatcher(symbols));
-        parser.addMatcher(new PercentMatcher());
-        parser.addMatcher(new PermilleMatcher());
+        parser.addMatcher(MinusSignMatcher.getInstance(symbols));
+        parser.addMatcher(NanMatcher.getInstance(symbols));
+        parser.addMatcher(PercentMatcher.getInstance(symbols));
+        parser.addMatcher(PermilleMatcher.getInstance(symbols));
         DecimalMatcher decimalMatcher = new DecimalMatcher();
         decimalMatcher.requireGroupingMatch = isStrict;
         decimalMatcher.groupingEnabled = properties.getGroupingSize() > 0;
