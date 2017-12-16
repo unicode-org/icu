@@ -8,13 +8,11 @@ import com.ibm.icu.text.UnicodeSet;
  * @author sffc
  *
  */
-public abstract class SymbolMatcher implements NumberParseMatcher {
-    protected final String string;
+public abstract class RangeMatcher implements NumberParseMatcher {
     protected final UnicodeSet uniSet;
 
-    protected SymbolMatcher(String symbolString, UnicodeSet symbolUniSet) {
-        string = symbolString;
-        uniSet = symbolUniSet;
+    protected RangeMatcher(UnicodeSet uniSet) {
+        this.uniSet = uniSet;
     }
 
     @Override
@@ -24,26 +22,26 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
             return false;
         }
 
-        int cp = segment.getCodePoint();
-        if (cp != -1 && uniSet.contains(cp)) {
-            segment.adjustOffset(Character.charCount(cp));
-            accept(segment, result);
-            return false;
+        while (segment.length() > 0) {
+            int cp = segment.getCodePoint();
+            if (cp != -1 && uniSet.contains(cp)) {
+                segment.adjustOffset(Character.charCount(cp));
+                accept(segment, result);
+                continue;
+            }
+
+            // If we get here, the code point didn't match the uniSet.
+            return segment.isLeadingSurrogate();
         }
-        int overlap = segment.getCommonPrefixLength(string);
-        if (overlap == string.length()) {
-            segment.adjustOffset(string.length());
-            accept(segment, result);
-            return false;
-        }
-        return overlap == segment.length() || segment.isLeadingSurrogate();
+
+        // If we get here, we consumed the entire string segment.
+        return true;
     }
 
     @Override
     public UnicodeSet getLeadChars(boolean ignoreCase) {
         UnicodeSet leadChars = new UnicodeSet();
         ParsingUtils.putLeadSurrogates(uniSet, leadChars);
-        ParsingUtils.putLeadingChar(string, leadChars, ignoreCase);
         return leadChars.freeze();
     }
 
@@ -55,4 +53,5 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
     protected abstract boolean isDisabled(ParsedNumber result);
 
     protected abstract void accept(StringSegment segment, ParsedNumber result);
+
 }

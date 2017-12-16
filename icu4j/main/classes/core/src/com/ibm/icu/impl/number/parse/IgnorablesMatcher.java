@@ -8,7 +8,7 @@ import com.ibm.icu.text.UnicodeSet;
  * @author sffc
  *
  */
-public class IgnorablesMatcher implements NumberParseMatcher {
+public class IgnorablesMatcher extends RangeMatcher {
 
     // BiDi characters are skipped over and ignored at any point in the string, even in strict mode.
     static final UnicodeSet UNISET_BIDI = new UnicodeSet("[[\\u200E\\u200F\\u061C]]").freeze();
@@ -37,32 +37,22 @@ public class IgnorablesMatcher implements NumberParseMatcher {
         }
     }
 
-    private final UnicodeSet ignorables;
-
     private IgnorablesMatcher(UnicodeSet ignorables) {
-        this.ignorables = ignorables;
+        super(ignorables);
     }
 
     @Override
-    public boolean match(StringSegment segment, ParsedNumber result) {
-        while (segment.length() > 0) {
-            int cp = segment.getCodePoint();
-            if (cp == -1 || !ignorables.contains(cp)) {
-                break;
-            }
-            segment.adjustOffset(Character.charCount(cp));
-            // Note: Do not touch the charsConsumed.
-        }
-        return segment.length() == 0 || segment.isLeadingSurrogate();
+    protected boolean isDisabled(ParsedNumber result) {
+        return false;
     }
 
     @Override
-    public void postProcess(ParsedNumber result) {
+    protected void accept(StringSegment segment, ParsedNumber result) {
         // No-op
     }
 
     @Override
     public String toString() {
-        return "<WhitespaceMatcher>";
+        return "<IgnorablesMatcher>";
     }
 }

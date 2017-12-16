@@ -190,6 +190,19 @@ public class DecimalMatcher implements NumberParseMatcher {
         return segment.length() == 0 || hasPartialPrefix || segment.isLeadingSurrogate();
     }
 
+    private static final UnicodeSet UNISET_DIGITS = new UnicodeSet("[:digit:]");
+
+    @Override
+    public UnicodeSet getLeadChars(boolean ignoreCase) {
+        UnicodeSet leadChars = new UnicodeSet();
+        ParsingUtils.putLeadSurrogates(UNISET_DIGITS, leadChars);
+        for (int i = 0; i < digitStrings.length; i++) {
+            ParsingUtils.putLeadingChar(digitStrings[i], leadChars, ignoreCase);
+        }
+        ParsingUtils.putLeadSurrogates(separatorSet, leadChars);
+        return leadChars.freeze();
+    }
+
     @Override
     public void postProcess(ParsedNumber result) {
         // No-op

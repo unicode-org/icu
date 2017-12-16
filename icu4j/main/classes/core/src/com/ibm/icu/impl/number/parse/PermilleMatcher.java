@@ -21,8 +21,9 @@ public class PermilleMatcher extends SymbolMatcher {
     }
 
     @Override
-    protected void accept(ParsedNumber result) {
+    protected void accept(StringSegment segment, ParsedNumber result) {
         result.flags |= ParsedNumber.FLAG_PERMILLE;
+        result.setCharsConsumed(segment);
     }
 
     @Override

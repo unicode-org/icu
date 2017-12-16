@@ -28,10 +28,11 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class NumberParserImpl {
+    @Deprecated
     public static NumberParserImpl createParserFromPattern(String pattern, boolean strictGrouping) {
         // Temporary frontend for testing.
 
-        NumberParserImpl parser = new NumberParserImpl();
+        NumberParserImpl parser = new NumberParserImpl(true);
         ULocale locale = new ULocale("en_IN");
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
 
@@ -94,11 +95,17 @@ public class NumberParserImpl {
         }
     }
 
+    public static NumberParserImpl createDefaultParserForLocale(ULocale loc) {
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(loc);
+        DecimalFormatProperties properties = PatternStringParser.parseToProperties("0");
+        return createParserFromProperties(properties, symbols, false);
+    }
+
     public static NumberParserImpl createParserFromProperties(
             DecimalFormatProperties properties,
             DecimalFormatSymbols symbols,
             boolean parseCurrency) {
-        NumberParserImpl parser = new NumberParserImpl();
+        NumberParserImpl parser = new NumberParserImpl(!properties.getParseCaseSensitive());
         ULocale locale = symbols.getULocale();
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
@@ -169,48 +176,45 @@ public class NumberParserImpl {
             parser.addMatcher(new RequireDecimalSeparatorMatcher());
         }
 
-        ////////////////////////
-        /// OTHER ATTRIBUTES ///
-        ////////////////////////
-
-        parser.setIgnoreCase(!properties.getParseCaseSensitive());
-
-        System.out.println(parser);
-
         parser.freeze();
         return parser;
     }
 
+    private final boolean ignoreCase;
     private final List<NumberParseMatcher> matchers;
+    private final List<UnicodeSet> leadCharses;
     private Comparator<ParsedNumber> comparator;
-    private boolean ignoreCase;
     private boolean frozen;
 
-    public NumberParserImpl() {
+    public NumberParserImpl(boolean ignoreCase) {
         matchers = new ArrayList<NumberParseMatcher>();
+        leadCharses = new ArrayList<UnicodeSet>();
         comparator = ParsedNumber.COMPARATOR; // default value
-        ignoreCase = true;
+        this.ignoreCase = ignoreCase;
         frozen = false;
     }
 
     public void addMatcher(NumberParseMatcher matcher) {
         assert !frozen;
         this.matchers.add(matcher);
+        UnicodeSet leadChars = matcher.getLeadChars(ignoreCase);
+        assert leadChars.isFrozen();
+        this.leadCharses.add(leadChars);
     }
 
     public void addMatchers(Collection<? extends NumberParseMatcher> matchers) {
         assert !frozen;
         this.matchers.addAll(matchers);
+        for (NumberParseMatcher matcher : matchers) {
+            UnicodeSet leadChars = matcher.getLeadChars(ignoreCase);
+            assert leadChars.isFrozen();
+            this.leadCharses.add(leadChars);
+        }
     }
 
     public void setComparator(Comparator<ParsedNumber> comparator) {
         assert !frozen;
         this.comparator = comparator;
-    }
-
-    public void setIgnoreCase(boolean ignoreCase) {
-        assert !frozen;
-        this.ignoreCase = ignoreCase;
     }
 
     public void freeze() {
@@ -237,7 +241,11 @@ public class NumberParserImpl {
         }
 
         int initialOffset = segment.getOffset();
+        char leadChar = ignoreCase ? ParsingUtils.getCaseFoldedLeadingChar(segment) : segment.charAt(0);
         for (int i = 0; i < matchers.size(); i++) {
+            if (!leadCharses.get(i).contains(leadChar)) {
+                continue;
+            }
             NumberParseMatcher matcher = matchers.get(i);
             matcher.match(segment, result);
             if (segment.getOffset() != initialOffset) {

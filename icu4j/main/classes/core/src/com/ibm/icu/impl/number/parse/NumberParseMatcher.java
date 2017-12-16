@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.text.UnicodeSet;
+
 /**
  * @author sffc
  *
@@ -20,6 +22,14 @@ public interface NumberParseMatcher {
      * @return Whether this matcher thinks there may be more interesting chars beyond the end of the string segment.
      */
     public boolean match(StringSegment segment, ParsedNumber result);
+
+    /**
+     * Should return a set representing all possible chars (UTF-16 code units) that could be the first char that this
+     * matcher can consume. This method is only called during construction phase, and its return value is used to skip
+     * this matcher unless a segment begins with a char in this set. To make this matcher always run, return
+     * {@link UnicodeSet#ALL_CODE_POINTS}.
+     */
+    public UnicodeSet getLeadChars(boolean ignoreCase);
 
     /**
      * Method called at the end of a parse, after all matchers have failed to consume any more chars. Allows a matcher

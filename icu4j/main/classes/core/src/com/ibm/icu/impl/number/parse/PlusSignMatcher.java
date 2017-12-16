@@ -21,8 +21,8 @@ public class PlusSignMatcher extends SymbolMatcher {
     }
 
     @Override
-    protected void accept(ParsedNumber result) {
-        // No-op
+    protected void accept(StringSegment segment, ParsedNumber result) {
+        result.setCharsConsumed(segment);
     }
 
     @Override

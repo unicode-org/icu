@@ -85,8 +85,8 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
                 assertNotNull(message, resultObject.quantity);
-                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
+                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
             }
 
             if (0 != (flags & 0x02)) {
@@ -94,8 +94,8 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, false, resultObject);
                 assertNotNull(message, resultObject.quantity);
-                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
+                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
             }
 
             if (0 != (flags & 0x04)) {
@@ -104,8 +104,8 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
                 assertNotNull(message, resultObject.quantity);
-                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
+                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
             }
         }
     }

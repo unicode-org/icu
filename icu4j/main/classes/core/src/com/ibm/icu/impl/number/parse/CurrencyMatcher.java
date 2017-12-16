@@ -5,6 +5,7 @@ package com.ibm.icu.impl.number.parse;
 import java.util.Iterator;
 
 import com.ibm.icu.impl.TextTrieMap;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyStringInfo;
 import com.ibm.icu.util.ULocale;
@@ -40,6 +41,14 @@ public class CurrencyMatcher implements NumberParseMatcher {
             result.setCharsConsumed(segment);
         }
         return trieOutput.partialMatch;
+    }
+
+    @Override
+    public UnicodeSet getLeadChars(boolean ignoreCase) {
+        UnicodeSet leadChars = new UnicodeSet();
+        longNameTrie.putLeadChars(leadChars);
+        symbolTrie.putLeadChars(leadChars);
+        return leadChars.freeze();
     }
 
     @Override

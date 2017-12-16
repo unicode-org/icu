@@ -3,37 +3,27 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
  *
  */
-public class NanMatcher implements NumberParseMatcher {
-
-    private final String nanString;
+public class NanMatcher extends SymbolMatcher {
 
     public NanMatcher(DecimalFormatSymbols symbols) {
-        nanString = symbols.getNaN();
+        super(symbols.getNaN(), UnicodeSet.EMPTY);
     }
 
     @Override
-    public boolean match(StringSegment segment, ParsedNumber result) {
-        int overlap = segment.getCommonPrefixLength(nanString);
-        if (overlap == nanString.length()) {
-            result.flags |= ParsedNumber.FLAG_NAN;
-            segment.adjustOffset(overlap);
-            result.setCharsConsumed(segment);
-            return false;
-        } else if (overlap == segment.length()) {
-            return true;
-        } else {
-            return false;
-        }
+    protected boolean isDisabled(ParsedNumber result) {
+        return result.seenNumber();
     }
 
     @Override
-    public void postProcess(ParsedNumber result) {
-        // No-op
+    protected void accept(StringSegment segment, ParsedNumber result) {
+        result.flags |= ParsedNumber.FLAG_NAN;
+        result.setCharsConsumed(segment);
     }
 
     @Override

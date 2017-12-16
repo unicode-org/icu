@@ -6,12 +6,7 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequireNumberMatcher implements NumberParseMatcher {
-
-    @Override
-    public boolean match(StringSegment segment, ParsedNumber result) {
-        return false;
-    }
+public class RequireNumberMatcher extends ValidationMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {

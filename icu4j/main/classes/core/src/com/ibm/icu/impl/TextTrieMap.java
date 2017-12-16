@@ -15,6 +15,7 @@ import java.util.ListIterator;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * TextTrieMap is a trie implementation for supporting
@@ -113,6 +114,10 @@ public class TextTrieMap<V> {
         if (nextMatch != null) {
             find(nextMatch, chitr, handler, output);
         }
+    }
+
+    public void putLeadChars(UnicodeSet output) {
+        _root.putLeadChars(output);
     }
 
     /**
@@ -375,6 +380,15 @@ public class TextTrieMap<V> {
                 }
             }
             return match;
+        }
+
+        public void putLeadChars(UnicodeSet output) {
+            if (_children == null) {
+                return;
+            }
+            for (Node child : _children) {
+                output.add(child._text[0]);
+            }
         }
 
         public class StepResult {
