@@ -10,6 +10,12 @@ public interface AffixPatternProvider {
     public static final int PADDING = 0x400;
   }
 
+  // Convenience compound flags
+  public static final int FLAG_POS_PREFIX = Flags.PREFIX;
+  public static final int FLAG_POS_SUFFIX = 0;
+  public static final int FLAG_NEG_PREFIX = Flags.PREFIX | Flags.NEGATIVE_SUBPATTERN;
+  public static final int FLAG_NEG_SUFFIX = Flags.NEGATIVE_SUBPATTERN;
+
   public char charAt(int flags, int i);
 
   public int length(int flags);

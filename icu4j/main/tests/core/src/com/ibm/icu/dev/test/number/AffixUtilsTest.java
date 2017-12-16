@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
 import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.text.UnicodeSet;
 
 public class AffixUtilsTest {
 
@@ -218,20 +219,22 @@ public class AffixUtilsTest {
   }
 
   @Test
-  public void testRemoveSymbols() {
+  public void testWithoutSymbolsOrIgnorables() {
     String[][] cases = {
         {"", ""},
         {"-", ""},
+        {" ", ""},
         {"'-'", "-"},
-        {"-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤", "abcdefgh"},
+        {"-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤i\tj", "abcdefghij"},
     };
 
+    UnicodeSet ignorables = new UnicodeSet("[:whitespace:]");
     StringBuilder sb = new StringBuilder();
     for (String[] cas : cases) {
       String input = cas[0];
       String expected = cas[1];
       sb.setLength(0);
-      AffixUtils.removeSymbols(input, sb);
+      AffixUtils.withoutSymbolsOrIgnorables(input, ignorables, sb);
       assertEquals("Removing symbols from: " + input, expected, sb.toString());
     }
   }

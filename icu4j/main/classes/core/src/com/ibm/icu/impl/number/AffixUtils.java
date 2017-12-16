@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Performs manipulations on affix patterns: the prefix and suffix strings associated with a decimal
@@ -386,19 +387,30 @@ public class AffixUtils {
   }
 
   /**
-   * Appends a new affix pattern with all symbols removed. Like calling unescape with a symbol provider that always
-   * returns the empty string.
+   * Appends a new affix pattern with all symbols and code points in the given "ignorables" UnicodeSet stripped out.
+   * Similar to calling unescape with a symbol provider that always returns the empty string.
+   *
+   * <p>
+   * Accepts and returns a StringBuilder, allocating it only if necessary.
    */
-  public static void removeSymbols(CharSequence affixPattern, StringBuilder output) {
+  public static StringBuilder withoutSymbolsOrIgnorables(
+        CharSequence affixPattern,
+        UnicodeSet ignorables,
+        StringBuilder sb) {
     assert affixPattern != null;
     long tag = 0L;
     while (hasNext(tag, affixPattern)) {
       tag = nextToken(tag, affixPattern);
       int typeOrCp = getTypeOrCp(tag);
-      if (typeOrCp >= 0) {
-        output.appendCodePoint(typeOrCp);
+      if (typeOrCp >= 0 && !ignorables.contains(typeOrCp)) {
+        if (sb == null) {
+          // Lazy-initialize the StringBuilder
+          sb = new StringBuilder();
+        }
+        sb.appendCodePoint(typeOrCp);
       }
     }
+    return sb;
   }
 
   /**

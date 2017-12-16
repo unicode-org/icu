@@ -975,8 +975,7 @@ set locale en
 set pattern '-'#y
 begin
 parse	output	breaks
-// FIXME
--45y	45	P
+-45y	45
 
 test parse with locale symbols
 // The grouping separator in it_CH is an apostrophe
@@ -1039,7 +1038,7 @@ USD53.45	53.45	USD
 (USD 7.926)	-7.926	USD	CJ
 USD (7.926)	-7.926	USD	CJ
 USD (7.92)	-7.92	USD	CJ
-(7.92)USD	-7.92	USD	CJP
+(7.92)USD	-7.92	USD	CJ
 USD(7.92)	-7.92	USD	CJ
 (8) USD	-8	USD
 -8 USD	-8	USD	C
@@ -1060,10 +1059,10 @@ US Dollars (53.45)	-53.45	USD	CJ
 US Dollar (53.45)	-53.45	USD	CJ
 (53.45) US Dollar	-53.45	USD
 US Dollars(53.45)	-53.45	USD	CJ
-(53.45)US Dollars	-53.45	USD	CJP
+(53.45)US Dollars	-53.45	USD	CJ
 US Dollar(53.45)	-53.45	USD	CJ
 US Dollat(53.45)	fail	USD
-(53.45)US Dollar	-53.45	USD	CJP
+(53.45)US Dollar	-53.45	USD	CJ
 
 
 test parse currency ISO negative
@@ -1074,9 +1073,8 @@ parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
 $53.45	fail	USD	J
-// FIXME: Fix the failures in this section. Positive/negative mixup.
-53.45 USD	53.45	USD	P
-53.45 GBP	53.45	GBP	P
+53.45 USD	53.45	USD
+53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
@@ -1087,12 +1085,12 @@ USD -7.926	-7.926	USD	CJ
 -7.92USD	-7.92	USD	CJ
 USD-7.92	-7.92	USD	CJ
 -8 USD	-8	USD
-67 USD	67	USD	P
+67 USD	67	USD
 53.45$	fail	USD
 US Dollars 53.45	53.45	USD	J
-53.45 US Dollars	53.45	USD	P
+53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	J
-53.45 US Dollar	53.45	USD	P
+53.45 US Dollar	53.45	USD
 US Dollars53.45	53.45	USD
 53.45US Dollars	53.45	USD	CJ
 US Dollar53.45	53.45	USD
@@ -1114,16 +1112,16 @@ $53.45	fail	USD	J
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
-(7.92) USD	-7.92	USD	P
-(7.92) GBP	-7.92	GBP	P
-(7.926) USD	-7.926	USD	P
-(7.926 USD)	-7.926	USD	CJP
-(USD 7.926)	-7.926	USD	CJP
-USD (7.926)	-7.926	USD	CJP
-USD (7.92)	-7.92	USD	CJP
-(7.92)USD	-7.92	USD	CJP
-USD(7.92)	-7.92	USD	CJP
-(8) USD	-8	USD	P
+(7.92) USD	-7.92	USD
+(7.92) GBP	-7.92	GBP
+(7.926) USD	-7.926	USD
+(7.926 USD)	-7.926	USD	CJ
+(USD 7.926)	-7.926	USD	CJ
+USD (7.926)	-7.926	USD	CJ
+USD (7.92)	-7.92	USD	CJ
+(7.92)USD	-7.92	USD	CJ
+USD(7.92)	-7.92	USD	CJ
+(8) USD	-8	USD
 -8 USD	-8	USD	C
 67 USD	67	USD
 // J throws a NullPointerException on the next case
@@ -1152,16 +1150,16 @@ $53.45	fail	USD	J
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
-(7.92) USD	-7.92	USD	P
-(7.92) GBP	-7.92	GBP	P
-(7.926) USD	-7.926	USD	P
-(7.926 USD)	-7.926	USD	CJP
-(USD 7.926)	-7.926	USD	CJP
-USD (7.926)	-7.926	USD	CJP
-USD (7.92)	-7.92	USD	CJP
-(7.92)USD	-7.92	USD	CJP
-USD(7.92)	-7.92	USD	CJP
-(8) USD	-8	USD	P
+(7.92) USD	-7.92	USD
+(7.92) GBP	-7.92	GBP
+(7.926) USD	-7.926	USD
+(7.926 USD)	-7.926	USD	CJ
+(USD 7.926)	-7.926	USD	CJ
+USD (7.926)	-7.926	USD	CJ
+USD (7.92)	-7.92	USD	CJ
+(7.92)USD	-7.92	USD	CJ
+USD(7.92)	-7.92	USD	CJ
+(8) USD	-8	USD
 -8 USD	-8	USD	C
 67 USD	67	USD
 53.45$	fail	USD
@@ -1190,16 +1188,16 @@ USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
 // S fails these because '(' is an incomplete prefix.
-(7.92) USD	-7.92	USD	CJSP
-(7.92) GBP	-7.92	GBP	CJSP
-(7.926) USD	-7.926	USD	CJSP
-(7.926 USD)	-7.926	USD	CJSP
-(USD 7.926)	-7.926	USD	JP
-USD (7.926)	-7.926	USD	CJSP
-USD (7.92)	-7.92	USD	CJSP
-(7.92)USD	-7.92	USD	CJSP
-USD(7.92)	-7.92	USD	CJSP
-(8) USD	-8	USD	CJSP
+(7.92) USD	-7.92	USD	CJS
+(7.92) GBP	-7.92	GBP	CJS
+(7.926) USD	-7.926	USD	CJS
+(7.926 USD)	-7.926	USD	CJS
+(USD 7.926)	-7.926	USD	J
+USD (7.926)	-7.926	USD	CJS
+USD (7.92)	-7.92	USD	CJS
+(7.92)USD	-7.92	USD	CJS
+USD(7.92)	-7.92	USD	CJS
+(8) USD	-8	USD	CJS
 -8 USD	-8	USD	C
 67 USD	67	USD	C
 53.45$	fail	USD
@@ -1290,16 +1288,17 @@ Euros 7.82	7.82	EUR
 test parse currency without currency mode
 // Should accept a symbol associated with the currency specified by the API,
 // but should not traverse the full currency data.
+// P always traverses full currency data.
 set locale en_US
 set pattern \u00a4#,##0.00
 begin
 parse	currency	output	breaks
 $52.41	USD	52.41
 USD52.41	USD	52.41	K
-\u20ac52.41	USD	fail
-EUR52.41	USD	fail
-$52.41	EUR	fail
-USD52.41	EUR	fail
+\u20ac52.41	USD	fail	P
+EUR52.41	USD	fail	P
+$52.41	EUR	fail	P
+USD52.41	EUR	fail	P
 \u20ac52.41	EUR	52.41	K
 EUR52.41	EUR	52.41
 
@@ -1361,12 +1360,13 @@ set decimalPatternMatchRequired 1
 begin
 pattern	parse	output	breaks
 // K doesn't support this feature.
+// P stops parsing when it sees the decimal separator, but doesn't fail.
 0	123	123
-0	123.	fail	CJK
-0	1.23	fail	CJK
+0	123.	fail	CJKP
+0	1.23	fail	CJKP
 0	-513	-513
-0	-513.	fail	CJK
-0	-5.13	fail	CJK
+0	-513.	fail	CJKP
+0	-5.13	fail	CJKP
 0.0	123	fail	K
 0.0	123.	123	C
 0.0	1.23	1.23	C
