@@ -157,6 +157,14 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     @Override
+    public UnicodeSet getLeadChars(boolean ignoreCase) {
+        UnicodeSet leadChars = new UnicodeSet();
+        ParsingUtils.putLeadingChar(prefix, leadChars, ignoreCase);
+        ParsingUtils.putLeadingChar(suffix, leadChars, ignoreCase);
+        return leadChars.freeze();
+    }
+
+    @Override
     public void postProcess(ParsedNumber result) {
         // Check to see if our affix is the one that was matched. If so, set the flags in the result.
         if (prefix.equals(orEmpty(result.prefix)) && suffix.equals(orEmpty(result.suffix))) {

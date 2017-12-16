@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
@@ -64,6 +65,13 @@ public class ScientificMatcher implements NumberParseMatcher {
 
         // No match
         return false;
+    }
+
+    @Override
+    public UnicodeSet getLeadChars(boolean ignoreCase) {
+        UnicodeSet leadChars = new UnicodeSet();
+        ParsingUtils.putLeadingChar(exponentSeparatorString, leadChars, ignoreCase);
+        return leadChars.freeze();
     }
 
     @Override
