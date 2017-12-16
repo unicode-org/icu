@@ -36,4 +36,9 @@ public class NanMatcher implements NumberParseMatcher {
         // No-op
     }
 
+    @Override
+    public String toString() {
+        return "<NanMatcher>";
+    }
+
 }

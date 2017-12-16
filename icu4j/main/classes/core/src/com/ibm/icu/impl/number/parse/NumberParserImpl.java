@@ -64,7 +64,7 @@ public class NumberParserImpl {
         parser.parse(input, true, result);
         ppos.setIndex(result.charsConsumed);
         if (result.charsConsumed > 0) {
-            return result.getDouble();
+            return result.getNumber();
         } else {
             return null;
         }
@@ -88,7 +88,7 @@ public class NumberParserImpl {
                 assert 0 != (result.flags & ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY);
                 currency = CustomSymbolCurrency.resolve(properties.getCurrency(), symbols.getULocale(), symbols);
             }
-            return new CurrencyAmount(result.getDouble(), currency);
+            return new CurrencyAmount(result.getNumber(), currency);
         } else {
             return null;
         }
@@ -120,8 +120,7 @@ public class NumberParserImpl {
         /// CURRENCY MATCHER ///
         ////////////////////////
 
-        parseCurrency = parseCurrency || patternInfo.hasCurrencySign();
-        if (parseCurrency) {
+        if (parseCurrency || patternInfo.hasCurrencySign()) {
             parser.addMatcher(new CurrencyMatcher(locale));
         }
 
@@ -137,6 +136,8 @@ public class NumberParserImpl {
         }
         parser.addMatcher(new MinusSignMatcher());
         parser.addMatcher(new NanMatcher(symbols));
+        parser.addMatcher(new PercentMatcher());
+        parser.addMatcher(new PermilleMatcher());
         DecimalMatcher decimalMatcher = new DecimalMatcher();
         decimalMatcher.requireGroupingMatch = isStrict;
         decimalMatcher.groupingEnabled = properties.getGroupingSize() > 0;
