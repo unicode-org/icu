@@ -97,7 +97,7 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
         @Override
         public Object clone() throws CloneNotSupportedException {
             DequeI result = (DequeI)super.clone();
-            data = data.clone();
+            result.data = data.clone();
             return result;
         }
 
