@@ -43,7 +43,7 @@ public class AffixMatcher implements NumberParseMatcher {
     public static void generateFromAffixPatternProvider(
             AffixPatternProvider patternInfo,
             NumberParserImpl output,
-            UnicodeSet ignorables,
+            IgnorablesMatcher ignorables,
             boolean includeUnpaired) {
         // Lazy-initialize the StringBuilder.
         StringBuilder sb = null;
@@ -52,9 +52,9 @@ public class AffixMatcher implements NumberParseMatcher {
         // TODO: Lazy-initialize?
         ArrayList<AffixMatcher> matchers = new ArrayList<AffixMatcher>(6);
 
-        sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_POS_PREFIX, ignorables, sb);
+        sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_POS_PREFIX, ignorables.getSet(), sb);
         String posPrefix = toStringOrEmpty(sb);
-        sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_POS_SUFFIX, ignorables, sb);
+        sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_POS_SUFFIX, ignorables.getSet(), sb);
         String posSuffix = toStringOrEmpty(sb);
 
         if (!posPrefix.isEmpty() || !posSuffix.isEmpty()) {
@@ -66,9 +66,9 @@ public class AffixMatcher implements NumberParseMatcher {
         }
 
         if (patternInfo.hasNegativeSubpattern()) {
-            sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_NEG_PREFIX, ignorables, sb);
+            sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_NEG_PREFIX, ignorables.getSet(), sb);
             String negPrefix = toStringOrEmpty(sb);
-            sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_NEG_SUFFIX, ignorables, sb);
+            sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_NEG_SUFFIX, ignorables.getSet(), sb);
             String negSuffix = toStringOrEmpty(sb);
 
             if (negPrefix.equals(posPrefix) && negSuffix.equals(posSuffix)) {
@@ -100,7 +100,7 @@ public class AffixMatcher implements NumberParseMatcher {
             sb.setLength(0);
         }
         if (patternInfo.length(flag) > 0) {
-            sb = AffixUtils.withoutSymbolsOrIgnorables(patternInfo.getString(flag), ignorables, sb);
+            sb = AffixUtils.trimSymbolsAndIgnorables(patternInfo.getString(flag), ignorables, sb);
         }
         return sb;
     }

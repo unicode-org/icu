@@ -64,11 +64,13 @@ public class NumberParserTest {
                 { 3, "𝟱𝟭𝟰𝟮𝟯}", "{0};{0}", 11, 51423. },
                 { 3, "{𝟱𝟭𝟰𝟮𝟯}", "{0};{0}", 12, 51423. },
                 { 1, "a40b", "a0'0b'", 3, 40. }, // greedy code path thinks "40" is the number
-                { 2, "a40b", "a0'0b'", 4, 4. }, // slow code path find the suffix "0b"
+                { 2, "a40b", "a0'0b'", 4, 4. }, // slow code path finds the suffix "0b"
                 { 3, "𝟱.𝟭𝟰𝟮E𝟯", "0", 12, 5142. },
                 { 3, "𝟱.𝟭𝟰𝟮E-𝟯", "0", 13, 0.005142 },
                 { 3, "𝟱.𝟭𝟰𝟮e-𝟯", "0", 13, 0.005142 },
                 { 3, "5,142.50 Canadian dollars", "0", 25, 5142.5 },
+                // { 3, "a$  b5", "a ¤ b0", 6, 5.0 }, // TODO: Does not work
+                { 7, ".00", "0", 3, 0.0 },
                 { 3, "0", "0", 1, 0.0 } };
 
         for (Object[] cas : cases) {

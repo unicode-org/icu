@@ -11,7 +11,7 @@ public class RequireCurrencyMatcher extends ValidationMatcher {
     @Override
     public void postProcess(ParsedNumber result) {
         if (result.currencyCode == null && 0 == (result.flags & ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY)) {
-            result.clear();
+            result.flags |= ParsedNumber.FLAG_FAIL;
         }
     }
 

@@ -23,7 +23,7 @@ public class NanMatcher extends SymbolMatcher {
     }
 
     private NanMatcher(String symbolString) {
-        super(symbolString, UnicodeSet.EMPTY);
+        super(symbolString, DEFAULT.uniSet);
     }
 
     private NanMatcher() {

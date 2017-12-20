@@ -11,7 +11,7 @@ public class RequireExponentMatcher extends ValidationMatcher {
     @Override
     public void postProcess(ParsedNumber result) {
         if (0 == (result.flags & ParsedNumber.FLAG_HAS_EXPONENT)) {
-            result.clear();
+            result.flags |= ParsedNumber.FLAG_FAIL;
         }
     }
 

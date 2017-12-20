@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
-import java.text.ParseException;
 import java.text.ParsePosition;
 
 import com.ibm.icu.impl.number.AffixUtils;
@@ -19,6 +18,8 @@ import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.Parse;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
+import com.ibm.icu.impl.number.parse.NumberParserImpl;
+import com.ibm.icu.impl.number.parse.ParsedNumber;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
@@ -276,6 +277,9 @@ public class DecimalFormat extends NumberFormat {
    * read and write at the same time.
    */
   transient volatile DecimalFormatProperties exportedProperties;
+
+  transient volatile NumberParserImpl parser;
+  transient volatile NumberParserImpl parserWithCurrency;
 
   //=====================================================================================//
   //                                    CONSTRUCTORS                                     //
@@ -786,17 +790,31 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public Number parse(String text, ParsePosition parsePosition) {
-    DecimalFormatProperties pprops = threadLocalProperties.get();
-    synchronized (this) {
-      pprops.copyFrom(properties);
-    }
-    // Backwards compatibility: use currency parse mode if this is a currency instance
-    Number result = Parse.parse(text, parsePosition, pprops, symbols);
-    // Backwards compatibility: return com.ibm.icu.math.BigDecimal
-    if (result instanceof java.math.BigDecimal) {
-      result = safeConvertBigDecimal((java.math.BigDecimal) result);
-    }
-    return result;
+      if (text == null) {
+          throw new IllegalArgumentException("Text cannot be null");
+      }
+      if (parsePosition == null) {
+          parsePosition = new ParsePosition(0);
+      }
+
+      ParsedNumber result = new ParsedNumber();
+      // Note: if this is a currency instance, currencies will be matched despite the fact that we are not in the
+      // parseCurrency method (backwards compatibility)
+      int startIndex = parsePosition.getIndex();
+      parser.parse(text, startIndex, true, result);
+      if (result.success()) {
+          parsePosition.setIndex(startIndex + result.charsConsumed);
+          // TODO: Accessing properties here is technically not thread-safe
+          Number number = result.getNumber(properties.getParseToBigDecimal());
+          // Backwards compatibility: return com.ibm.icu.math.BigDecimal
+          if (number instanceof java.math.BigDecimal) {
+              number = safeConvertBigDecimal((java.math.BigDecimal) number);
+          }
+          return number;
+      } else {
+          parsePosition.setErrorIndex(startIndex + result.charsConsumed);
+          return null;
+      }
   }
 
   /**
@@ -806,23 +824,30 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public CurrencyAmount parseCurrency(CharSequence text, ParsePosition parsePosition) {
-    try {
-      DecimalFormatProperties pprops = threadLocalProperties.get();
-      synchronized (this) {
-        pprops.copyFrom(properties);
+      if (text == null) {
+          throw new IllegalArgumentException("Text cannot be null");
       }
-      CurrencyAmount result = Parse.parseCurrency(text, parsePosition, pprops, symbols);
-      if (result == null) return null;
-      Number number = result.getNumber();
-      // Backwards compatibility: return com.ibm.icu.math.BigDecimal
-      if (number instanceof java.math.BigDecimal) {
-        number = safeConvertBigDecimal((java.math.BigDecimal) number);
-        result = new CurrencyAmount(number, result.getCurrency());
+      if (parsePosition == null) {
+          parsePosition = new ParsePosition(0);
       }
-      return result;
-    } catch (ParseException e) {
-      return null;
-    }
+
+      ParsedNumber result = new ParsedNumber();
+      int startIndex = parsePosition.getIndex();
+      parserWithCurrency.parse(text.toString(), startIndex, true, result);
+      if (result.success()) {
+          parsePosition.setIndex(startIndex + result.charsConsumed);
+          // TODO: Accessing properties here is technically not thread-safe
+          Number number = result.getNumber(properties.getParseToBigDecimal());
+          // Backwards compatibility: return com.ibm.icu.math.BigDecimal
+          if (number instanceof java.math.BigDecimal) {
+              number = safeConvertBigDecimal((java.math.BigDecimal) number);
+          }
+          Currency currency = Currency.getInstance(result.currencyCode);
+          return new CurrencyAmount(number, currency);
+      } else {
+          parsePosition.setErrorIndex(startIndex + result.charsConsumed);
+          return null;
+      }
   }
 
   //=====================================================================================//
@@ -2092,7 +2117,7 @@ public class DecimalFormat extends NumberFormat {
    */
   public synchronized void setParseBigDecimal(boolean value) {
     properties.setParseToBigDecimal(value);
-    // refreshFormatter() not needed
+    refreshFormatter();
   }
 
   /**
@@ -2136,7 +2161,7 @@ public class DecimalFormat extends NumberFormat {
   public synchronized void setParseStrict(boolean parseStrict) {
     Parse.ParseMode mode = parseStrict ? Parse.ParseMode.STRICT : Parse.ParseMode.LENIENT;
     properties.setParseMode(mode);
-    // refreshFormatter() not needed
+    refreshFormatter();
   }
 
   /**
@@ -2165,7 +2190,7 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public synchronized void setParseIntegerOnly(boolean parseIntegerOnly) {
     properties.setParseIntegerOnly(parseIntegerOnly);
-    // refreshFormatter() not needed
+    refreshFormatter();
   }
 
   /**
@@ -2459,6 +2484,8 @@ public class DecimalFormat extends NumberFormat {
     }
     assert locale != null;
     formatter = NumberFormatter.fromDecimalFormat(properties, symbols, exportedProperties).locale(locale);
+    parser = NumberParserImpl.createParserFromProperties(properties, symbols, false, false);
+    parserWithCurrency = NumberParserImpl.createParserFromProperties(properties, symbols, true, false);
   }
 
   /**

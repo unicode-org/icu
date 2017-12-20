@@ -50,6 +50,7 @@ public class ParsedNumber {
     public static final int FLAG_HAS_DECIMAL_SEPARATOR = 0x0020;
     public static final int FLAG_NAN = 0x0040;
     public static final int FLAG_INFINITY = 0x0080;
+    public static final int FLAG_FAIL = 0x0100;
 
     /** A Comparator that favors ParsedNumbers with the most chars consumed. */
     public static final Comparator<ParsedNumber> COMPARATOR = new Comparator<ParsedNumber>() {
@@ -88,11 +89,23 @@ public class ParsedNumber {
         charsConsumed = segment.getOffset();
     }
 
+    /**
+     * Returns whether this the parse was successful.  To be successful, at least one char must have been consumed,
+     * and the failure flag must not be set.
+     */
+    public boolean success() {
+        return charsConsumed > 0 && 0 == (flags & FLAG_FAIL);
+    }
+
     public boolean seenNumber() {
         return quantity != null || 0 != (flags & FLAG_NAN) || 0 != (flags & FLAG_INFINITY);
     }
 
     public Number getNumber() {
+        return getNumber(false);
+    }
+
+    public Number getNumber(boolean forceBigDecimal) {
         boolean sawNegative = 0 != (flags & FLAG_NEGATIVE);
         boolean sawNaN = 0 != (flags & FLAG_NAN);
         boolean sawInfinity = 0 != (flags & FLAG_INFINITY);
@@ -112,10 +125,23 @@ public class ParsedNumber {
           return -0.0;
         }
 
+        if (quantity.fitsInLong() && !forceBigDecimal) {
+            long l = quantity.toLong();
+            if (0 != (flags & FLAG_NEGATIVE)) {
+                l *= -1;
+            }
+            return l;
+        }
+
         BigDecimal d = quantity.toBigDecimal();
         if (0 != (flags & FLAG_NEGATIVE)) {
             d = d.negate();
         }
+        // Special case: MIN_LONG
+        if (d.compareTo(BigDecimal.valueOf(Long.MIN_VALUE)) == 0 && !forceBigDecimal) {
+            return Long.MIN_VALUE;
+        }
         return d;
+
     }
 }

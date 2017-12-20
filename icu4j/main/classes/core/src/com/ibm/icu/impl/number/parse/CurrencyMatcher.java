@@ -2,26 +2,27 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
-import java.util.Iterator;
-
-import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.Currency.CurrencyStringInfo;
 import com.ibm.icu.util.ULocale;
 
 /**
- * @author sffc
- *
+ * A matcher for a single currency instance (not the full trie).
  */
 public class CurrencyMatcher implements NumberParseMatcher {
 
-    private final TextTrieMap<CurrencyStringInfo> longNameTrie;
-    private final TextTrieMap<CurrencyStringInfo> symbolTrie;
+    private final String isoCode;
+    private final String currency1;
+    private final String currency2;
 
-    public CurrencyMatcher(ULocale locale) {
-        longNameTrie = Currency.getParsingTrie(locale, Currency.LONG_NAME);
-        symbolTrie = Currency.getParsingTrie(locale, Currency.SYMBOL_NAME);
+    public static NumberParseMatcher getInstance(Currency currency, ULocale loc) {
+        return new CurrencyMatcher(currency, loc);
+    }
+
+    private CurrencyMatcher(Currency currency, ULocale loc) {
+        isoCode = currency.getSubtype();
+        currency1 = currency.getSymbol(loc);
+        currency2 = currency.getCurrencyCode();
     }
 
     @Override
@@ -30,24 +31,28 @@ public class CurrencyMatcher implements NumberParseMatcher {
             return false;
         }
 
-        TextTrieMap.Output trieOutput = new TextTrieMap.Output();
-        Iterator<CurrencyStringInfo> values = longNameTrie.get(segment, 0, trieOutput);
-        if (values == null) {
-            values = symbolTrie.get(segment, 0, trieOutput);
-        }
-        if (values != null) {
-            result.currencyCode = values.next().getISOCode();
-            segment.adjustOffset(trieOutput.matchLength);
+        int overlap1 = segment.getCommonPrefixLength(currency1);
+        if (overlap1 == currency1.length()) {
+            result.currencyCode = isoCode;
+            segment.adjustOffset(overlap1);
             result.setCharsConsumed(segment);
         }
-        return trieOutput.partialMatch;
+
+        int overlap2 = segment.getCommonPrefixLength(currency2);
+        if (overlap2 == currency2.length()) {
+            result.currencyCode = isoCode;
+            segment.adjustOffset(overlap2);
+            result.setCharsConsumed(segment);
+        }
+
+        return overlap1 == segment.length() || overlap2 == segment.length();
     }
 
     @Override
     public UnicodeSet getLeadChars(boolean ignoreCase) {
         UnicodeSet leadChars = new UnicodeSet();
-        longNameTrie.putLeadChars(leadChars);
-        symbolTrie.putLeadChars(leadChars);
+        ParsingUtils.putLeadingChar(currency1, leadChars, ignoreCase);
+        ParsingUtils.putLeadingChar(currency2, leadChars, ignoreCase);
         return leadChars.freeze();
     }
 
@@ -58,6 +63,6 @@ public class CurrencyMatcher implements NumberParseMatcher {
 
     @Override
     public String toString() {
-        return "<CurrencyMatcher>";
+        return "<CurrencyMatcher " + isoCode + ">";
     }
 }

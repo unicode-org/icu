@@ -225,7 +225,8 @@ public class AffixUtilsTest {
         {"-", ""},
         {" ", ""},
         {"'-'", "-"},
-        {"-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤i\tj", "abcdefghij"},
+        {" a + b ", "a  b"},
+        {"-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤i", "abcdefghi"},
     };
 
     UnicodeSet ignorables = new UnicodeSet("[:whitespace:]");
@@ -234,7 +235,7 @@ public class AffixUtilsTest {
       String input = cas[0];
       String expected = cas[1];
       sb.setLength(0);
-      AffixUtils.withoutSymbolsOrIgnorables(input, ignorables, sb);
+      AffixUtils.trimSymbolsAndIgnorables(input, ignorables, sb);
       assertEquals("Removing symbols from: " + input, expected, sb.toString());
     }
   }

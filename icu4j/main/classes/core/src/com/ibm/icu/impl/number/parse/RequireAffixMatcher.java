@@ -12,7 +12,7 @@ public class RequireAffixMatcher extends ValidationMatcher {
     public void postProcess(ParsedNumber result) {
         if ((result.prefix == null) != (result.suffix == null)) {
             // We saw a prefix or a suffix but not both. Fail the parse.
-            result.clear();
+            result.flags |= ParsedNumber.FLAG_FAIL;
         }
     }
 

@@ -12,17 +12,15 @@ import com.ibm.icu.text.UnicodeSet;
 public class ScientificMatcher implements NumberParseMatcher {
 
     private final String exponentSeparatorString;
-    private final String minusSignString;
     private final DecimalMatcher exponentMatcher;
 
     public ScientificMatcher(DecimalFormatSymbols symbols) {
         exponentSeparatorString = symbols.getExponentSeparator();
-        minusSignString = symbols.getMinusSignString();
         exponentMatcher = new DecimalMatcher();
         exponentMatcher.isScientific = true;
         exponentMatcher.groupingEnabled = false;
         exponentMatcher.decimalEnabled = false;
-        exponentMatcher.freeze(symbols, false);
+        exponentMatcher.freeze(symbols, false, false);
     }
 
     @Override
@@ -35,16 +33,26 @@ public class ScientificMatcher implements NumberParseMatcher {
         // First match the scientific separator, and then match another number after it.
         int overlap1 = segment.getCommonPrefixLength(exponentSeparatorString);
         if (overlap1 == exponentSeparatorString.length()) {
-            // Full exponent separator match; allow a sign, and then try to match digits.
+            // Full exponent separator match.
+
+            // First attempt to get a code point, returning true if we can't get one.
             segment.adjustOffset(overlap1);
-            int overlap2 = segment.getCommonPrefixLength(minusSignString);
-            boolean minusSign = false;
-            if (overlap2 == minusSignString.length()) {
-                minusSign = true;
-                segment.adjustOffset(overlap2);
-            } else if (overlap2 == segment.length()) {
-                // Partial sign match
+            if (segment.length() == 0) {
                 return true;
+            }
+            int leadCp = segment.getCodePoint();
+            if (leadCp == -1) {
+                // Partial code point match
+                return true;
+            }
+
+            // Allow a sign, and then try to match digits.
+            boolean minusSign = false;
+            if (UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN).contains(leadCp)) {
+                minusSign = true;
+                segment.adjustOffset(Character.charCount(leadCp));
+            } else if (UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN).contains(leadCp)) {
+                segment.adjustOffset(Character.charCount(leadCp));
             }
 
             int digitsOffset = segment.getOffset();
