@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
@@ -32,38 +33,50 @@ public class DecimalMatcher implements NumberParseMatcher {
         frozen = false;
     }
 
-    public void freeze(DecimalFormatSymbols symbols, boolean isStrict) {
+    public void freeze(DecimalFormatSymbols symbols, boolean monetarySeparators, boolean isStrict) {
         assert !frozen;
         frozen = true;
 
-        String groupingSeparator = symbols.getGroupingSeparatorString();
-        String decimalSeparator = symbols.getDecimalSeparatorString();
-        UnicodeSetStaticCache.Key groupingKey, decimalKey;
+        String groupingSeparator = monetarySeparators ? symbols.getMonetaryGroupingSeparatorString()
+                : symbols.getGroupingSeparatorString();
+        String decimalSeparator = monetarySeparators ? symbols.getMonetaryDecimalSeparatorString()
+                : symbols.getDecimalSeparatorString();
+        Key groupingKey, decimalKey;
 
         // Attempt to find values in the static cache
         if (isStrict) {
-            groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
-                    UnicodeSetStaticCache.Key.OTHER_GROUPING_SEPARATORS,
-                    UnicodeSetStaticCache.Key.STRICT_COMMA_OR_OTHER,
-                    UnicodeSetStaticCache.Key.STRICT_PERIOD_OR_OTHER);
-            decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator,
-                    UnicodeSetStaticCache.Key.STRICT_COMMA,
-                    UnicodeSetStaticCache.Key.STRICT_PERIOD);
+            decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator, Key.STRICT_COMMA, Key.STRICT_PERIOD);
+            if (decimalKey == Key.STRICT_COMMA) {
+                // Decimal is comma; grouping should be period or custom
+                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator, Key.STRICT_PERIOD_OR_OTHER);
+            } else if (decimalKey == Key.STRICT_PERIOD) {
+                // Decimal is period; grouping should be comma or custom
+                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator, Key.STRICT_COMMA_OR_OTHER);
+            } else {
+                // Decimal is custom; grouping can be either comma or period or custom
+                groupingKey = UnicodeSetStaticCache
+                        .chooseFrom(groupingSeparator, Key.STRICT_COMMA_OR_OTHER, Key.STRICT_PERIOD_OR_OTHER);
+            }
         } else {
-            groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
-                    UnicodeSetStaticCache.Key.OTHER_GROUPING_SEPARATORS,
-                    UnicodeSetStaticCache.Key.COMMA_OR_OTHER,
-                    UnicodeSetStaticCache.Key.PERIOD_OR_OTHER);
-            decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator,
-                    UnicodeSetStaticCache.Key.COMMA,
-                    UnicodeSetStaticCache.Key.PERIOD);
+            decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator, Key.COMMA, Key.PERIOD);
+            if (decimalKey == Key.COMMA) {
+                // Decimal is comma; grouping should be period or custom
+                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator, Key.PERIOD_OR_OTHER);
+            } else if (decimalKey == Key.PERIOD) {
+                // Decimal is period; grouping should be comma or custom
+                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator, Key.COMMA_OR_OTHER);
+            } else {
+                // Decimal is custom; grouping can be either comma or period or custom
+                groupingKey = UnicodeSetStaticCache
+                        .chooseFrom(groupingSeparator, Key.COMMA_OR_OTHER, Key.PERIOD_OR_OTHER);
+            }
         }
 
         // Get the sets from the static cache if they were found
         if (groupingKey != null && decimalKey != null) {
             groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
             decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
-            UnicodeSetStaticCache.Key separatorKey = UnicodeSetStaticCache.unionOf(groupingKey, decimalKey);
+            Key separatorKey = UnicodeSetStaticCache.unionOf(groupingKey, decimalKey);
             if (separatorKey != null) {
                 separatorSet = UnicodeSetStaticCache.get(separatorKey);
                 separatorLeadChars = UnicodeSetStaticCache.getLeadChars(separatorKey);
@@ -129,8 +142,9 @@ public class DecimalMatcher implements NumberParseMatcher {
                     String str = digitStrings[i];
                     int overlap = segment.getCommonPrefixLength(str);
                     if (overlap == str.length()) {
-                        segment.adjustOffset(str.length());
+                        segment.adjustOffset(overlap);
                         digit = (byte) i;
+                        break;
                     } else if (overlap == segment.length()) {
                         hasPartialPrefix = true;
                     }
@@ -163,7 +177,8 @@ public class DecimalMatcher implements NumberParseMatcher {
                 if (separator == -1) {
                     // First separator; could be either grouping or decimal.
                     separator = cp;
-                    if (requireGroupingMatch && currGroup == 0) {
+                    if (groupingEnabled && requireGroupingMatch && groupingUniSet.contains(cp)
+                            && (currGroup == 0 || currGroup > grouping2)) {
                         break;
                     }
                 } else if (groupingEnabled && separator == cp && groupingUniSet.contains(cp)) {
@@ -243,7 +258,7 @@ public class DecimalMatcher implements NumberParseMatcher {
     @Override
     public UnicodeSet getLeadChars(boolean ignoreCase) {
         UnicodeSet leadChars = new UnicodeSet();
-        leadChars.addAll(UnicodeSetStaticCache.getLeadChars(UnicodeSetStaticCache.Key.DIGITS));
+        leadChars.addAll(UnicodeSetStaticCache.getLeadChars(Key.DIGITS));
         if (digitStrings != null) {
             for (int i = 0; i < digitStrings.length; i++) {
                 ParsingUtils.putLeadingChar(digitStrings[i], leadChars, ignoreCase);

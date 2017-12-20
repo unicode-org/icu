@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
@@ -23,7 +22,7 @@ public class PlusSignMatcher extends SymbolMatcher {
     }
 
     private PlusSignMatcher(String symbolString) {
-        super(symbolString, UnicodeSet.EMPTY);
+        super(symbolString, DEFAULT.uniSet);
     }
 
     private PlusSignMatcher() {

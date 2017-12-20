@@ -8,40 +8,40 @@ import com.ibm.icu.text.DecimalFormatSymbols;
  * @author sffc
  *
  */
-public class MinusSignMatcher extends SymbolMatcher {
+public class InfinityMatcher extends SymbolMatcher {
 
-    private static final MinusSignMatcher DEFAULT = new MinusSignMatcher();
+    private static final InfinityMatcher DEFAULT = new InfinityMatcher();
 
-    public static MinusSignMatcher getInstance(DecimalFormatSymbols symbols) {
-        String symbolString = symbols.getMinusSignString();
+    public static InfinityMatcher getInstance(DecimalFormatSymbols symbols) {
+        String symbolString = symbols.getInfinity();
         if (DEFAULT.uniSet.contains(symbolString)) {
             return DEFAULT;
         } else {
-            return new MinusSignMatcher(symbolString);
+            return new InfinityMatcher(symbolString);
         }
     }
 
-    private MinusSignMatcher(String symbolString) {
+    private InfinityMatcher(String symbolString) {
         super(symbolString, DEFAULT.uniSet);
     }
 
-    private MinusSignMatcher() {
-        super(UnicodeSetStaticCache.Key.MINUS_SIGN);
+    private InfinityMatcher() {
+        super(UnicodeSetStaticCache.Key.INFINITY);
     }
 
     @Override
     protected boolean isDisabled(ParsedNumber result) {
-        return 0 != (result.flags & ParsedNumber.FLAG_NEGATIVE);
+        return 0 != (result.flags & ParsedNumber.FLAG_INFINITY);
     }
 
     @Override
     protected void accept(StringSegment segment, ParsedNumber result) {
-        result.flags |= ParsedNumber.FLAG_NEGATIVE;
+        result.flags |= ParsedNumber.FLAG_INFINITY;
         result.setCharsConsumed(segment);
     }
 
     @Override
     public String toString() {
-        return "<MinusSignMatcher>";
+        return "<PercentMatcher>";
     }
 }

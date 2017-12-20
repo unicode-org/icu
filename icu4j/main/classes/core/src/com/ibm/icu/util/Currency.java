@@ -546,7 +546,7 @@ public class Currency extends MeasureUnit {
      * @stable ICU 3.4
      */
     public String getSymbol(ULocale uloc) {
-        return getName(uloc, SYMBOL_NAME, new boolean[1]);
+        return getName(uloc, SYMBOL_NAME, null);
     }
 
     /**

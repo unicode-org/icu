@@ -12,7 +12,7 @@ public class RequireNumberMatcher extends ValidationMatcher {
     public void postProcess(ParsedNumber result) {
         // Require that a number is matched.
         if (!result.seenNumber()) {
-            result.clear();
+            result.flags |= ParsedNumber.FLAG_FAIL;
         }
     }
 

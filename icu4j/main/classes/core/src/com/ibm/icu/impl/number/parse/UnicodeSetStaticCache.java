@@ -132,14 +132,12 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.STRICT_IGNORABLES, get(Key.BIDI));
 
         // TODO: Re-generate these sets from the UCD. They probably haven't been updated in a while.
-        unicodeSets.put(Key.COMMA,
-                new UnicodeSet("[,\\u060C\\u066B\\u3001\\uFE10\\uFE11\\uFE50\\uFE51\\uFF0C\\uFF64]").freeze());
-        unicodeSets.put(Key.STRICT_COMMA, new UnicodeSet("[,\\u066B\\uFE10\\uFE50\\uFF0C]").freeze());
-        unicodeSets.put(Key.PERIOD, new UnicodeSet("[.\\u2024\\u3002\\uFE12\\uFE52\\uFF0E\\uFF61]").freeze());
-        unicodeSets.put(Key.STRICT_PERIOD, new UnicodeSet("[.\\u2024\\uFE52\\uFF0E\\uFF61]").freeze());
+        unicodeSets.put(Key.COMMA, new UnicodeSet("[,،٫、︐︑﹐﹑，､]").freeze());
+        unicodeSets.put(Key.STRICT_COMMA, new UnicodeSet("[,٫︐﹐，]").freeze());
+        unicodeSets.put(Key.PERIOD, new UnicodeSet("[.․。︒﹒．｡]").freeze());
+        unicodeSets.put(Key.STRICT_PERIOD, new UnicodeSet("[.․﹒．｡]").freeze());
         unicodeSets.put(Key.OTHER_GROUPING_SEPARATORS,
-                new UnicodeSet("[\\ '\\u00A0\\u066C\\u2000-\\u200A\\u2018\\u2019\\u202F\\u205F\\u3000\\uFF07]")
-                        .freeze());
+                new UnicodeSet("['٬‘’＇\\u0020\\u00A0\\u2000-\\u200A\\u202F\\u205F\\u3000]").freeze());
 
         unicodeSets.put(Key.COMMA_OR_OTHER, computeUnion(Key.COMMA, Key.OTHER_GROUPING_SEPARATORS));
         unicodeSets.put(Key.PERIOD_OR_OTHER, computeUnion(Key.PERIOD, Key.OTHER_GROUPING_SEPARATORS));
@@ -150,36 +148,8 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.STRICT_COMMA_OR_PERIOD_OR_OTHER,
                 computeUnion(Key.STRICT_COMMA, Key.STRICT_PERIOD, Key.OTHER_GROUPING_SEPARATORS));
 
-        unicodeSets.put(Key.MINUS_SIGN,
-                new UnicodeSet(0x002D,
-                        0x002D,
-                        0x207B,
-                        0x207B,
-                        0x208B,
-                        0x208B,
-                        0x2212,
-                        0x2212,
-                        0x2796,
-                        0x2796,
-                        0xFE63,
-                        0xFE63,
-                        0xFF0D,
-                        0xFF0D).freeze());
-        unicodeSets.put(Key.PLUS_SIGN,
-                new UnicodeSet(0x002B,
-                        0x002B,
-                        0x207A,
-                        0x207A,
-                        0x208A,
-                        0x208A,
-                        0x2795,
-                        0x2795,
-                        0xFB29,
-                        0xFB29,
-                        0xFE62,
-                        0xFE62,
-                        0xFF0B,
-                        0xFF0B).freeze());
+        unicodeSets.put(Key.MINUS_SIGN, new UnicodeSet("[-⁻₋−➖﹣－]").freeze());
+        unicodeSets.put(Key.PLUS_SIGN, new UnicodeSet("[+⁺₊➕﬩﹢＋]").freeze());
 
         // TODO: Fill in the next three sets.
         unicodeSets.put(Key.PERCENT_SIGN, new UnicodeSet("[%٪]").freeze());

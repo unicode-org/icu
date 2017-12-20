@@ -578,7 +578,7 @@ public class NumberFormatDataDrivenTest {
       /**
        * Parsing, but no other features.
        */
-      private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU60_Parsing =
+      private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU61_Parsing =
           new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
 
             @Override
@@ -672,7 +672,7 @@ public class NumberFormatDataDrivenTest {
     /**
      * All features except formatting.
      */
-    private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU60_Other =
+    private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU59_Other =
             new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
 
         @Override
@@ -871,13 +871,13 @@ public class NumberFormatDataDrivenTest {
   @Test
   public void TestDataDrivenICULatest_Parsing() {
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
-        "numberformattestspecification.txt", ICU60_Parsing);
+        "numberformattestspecification.txt", ICU61_Parsing);
   }
 
   @Test
   @Ignore
   public void TestDataDrivenICULatest_Other() {
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
-        "numberformattestspecification.txt", ICU60_Other);
+        "numberformattestspecification.txt", ICU59_Other);
   }
 }

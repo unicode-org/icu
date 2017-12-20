@@ -387,28 +387,38 @@ public class AffixUtils {
   }
 
   /**
-   * Appends a new affix pattern with all symbols and code points in the given "ignorables" UnicodeSet stripped out.
-   * Similar to calling unescape with a symbol provider that always returns the empty string.
+   * Appends a new affix pattern with all symbols and code points in the given "ignorables" UnicodeSet trimmed from the
+   * beginning and end. Similar to calling unescape with a symbol provider that always returns the empty string.
    *
    * <p>
    * Accepts and returns a StringBuilder, allocating it only if necessary.
    */
-  public static StringBuilder withoutSymbolsOrIgnorables(
+  public static StringBuilder trimSymbolsAndIgnorables(
         CharSequence affixPattern,
         UnicodeSet ignorables,
         StringBuilder sb) {
     assert affixPattern != null;
     long tag = 0L;
+    int trailingIgnorables = 0;
     while (hasNext(tag, affixPattern)) {
       tag = nextToken(tag, affixPattern);
       int typeOrCp = getTypeOrCp(tag);
-      if (typeOrCp >= 0 && !ignorables.contains(typeOrCp)) {
-        if (sb == null) {
-          // Lazy-initialize the StringBuilder
-          sb = new StringBuilder();
+      if (typeOrCp >= 0) {
+        if (!ignorables.contains(typeOrCp)) {
+          if (sb == null) {
+            // Lazy-initialize the StringBuilder
+            sb = new StringBuilder();
+          }
+          sb.appendCodePoint(typeOrCp);
+          trailingIgnorables = 0;
+        } else if (sb != null && sb.length() > 0) {
+          sb.appendCodePoint(typeOrCp);
+          trailingIgnorables += Character.charCount(typeOrCp);
         }
-        sb.appendCodePoint(typeOrCp);
       }
+    }
+    if (trailingIgnorables > 0) {
+      sb.setLength(sb.length() - trailingIgnorables);
     }
     return sb;
   }
