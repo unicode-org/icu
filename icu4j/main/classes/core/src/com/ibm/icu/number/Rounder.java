@@ -98,7 +98,7 @@ public abstract class Rounder implements Cloneable {
             return constructFraction(minMaxFractionPlaces, minMaxFractionPlaces);
         } else {
             throw new IllegalArgumentException(
-                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
@@ -118,11 +118,11 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static FractionRounder minFraction(int minFractionPlaces) {
-        if (minFractionPlaces >= 0 && minFractionPlaces < RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minFractionPlaces >= 0 && minFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFraction(minFractionPlaces, -1);
         } else {
             throw new IllegalArgumentException(
-                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
@@ -139,11 +139,11 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static FractionRounder maxFraction(int maxFractionPlaces) {
-        if (maxFractionPlaces >= 0 && maxFractionPlaces < RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (maxFractionPlaces >= 0 && maxFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFraction(0, maxFractionPlaces);
         } else {
             throw new IllegalArgumentException(
-                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
@@ -168,7 +168,7 @@ public abstract class Rounder implements Cloneable {
             return constructFraction(minFractionPlaces, maxFractionPlaces);
         } else {
             throw new IllegalArgumentException(
-                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
@@ -188,11 +188,11 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static Rounder fixedDigits(int minMaxSignificantDigits) {
-        if (minMaxSignificantDigits > 0 && minMaxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minMaxSignificantDigits >= 1 && minMaxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(minMaxSignificantDigits, minMaxSignificantDigits);
         } else {
             throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Significant digits must be between 1 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
@@ -211,11 +211,11 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static Rounder minDigits(int minSignificantDigits) {
-        if (minSignificantDigits > 0 && minSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minSignificantDigits >= 1 && minSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(minSignificantDigits, -1);
         } else {
             throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Significant digits must be between 1 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
@@ -230,11 +230,11 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static Rounder maxDigits(int maxSignificantDigits) {
-        if (maxSignificantDigits > 0 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (maxSignificantDigits >= 1 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(0, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Significant digits must be between 1 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
@@ -252,12 +252,12 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static Rounder minMaxDigits(int minSignificantDigits, int maxSignificantDigits) {
-        if (minSignificantDigits > 0 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG
+        if (minSignificantDigits >= 1 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG
                 && minSignificantDigits <= maxSignificantDigits) {
             return constructSignificant(minSignificantDigits, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Significant digits must be between 1 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 

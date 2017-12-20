@@ -55,13 +55,13 @@ public class ScientificNotation extends Notation implements Cloneable {
      * @see NumberFormatter
      */
     public ScientificNotation withMinExponentDigits(int minExponentDigits) {
-        if (minExponentDigits >= 0 && minExponentDigits < RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minExponentDigits >= 1 && minExponentDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             ScientificNotation other = (ScientificNotation) this.clone();
             other.minExponentDigits = minExponentDigits;
             return other;
         } else {
             throw new IllegalArgumentException(
-                    "Integer digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Integer digits must be between 1 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
