@@ -4,10 +4,17 @@ package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,6 +23,7 @@ import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.FractionRounder;
 import com.ibm.icu.number.Grouper;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.LocalizedNumberFormatter;
@@ -25,6 +33,7 @@ import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.number.Rounder;
+import com.ibm.icu.number.ScientificNotation;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
@@ -1558,6 +1567,113 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 1,
                 "1.00 US dollars");
+    }
+
+    @Test
+    public void validRanges() throws NoSuchMethodException, IllegalAccessException {
+        Method[] methodsWithOneArgument = new Method[] { Rounder.class.getDeclaredMethod("fixedFraction", Integer.TYPE),
+                Rounder.class.getDeclaredMethod("minFraction", Integer.TYPE),
+                Rounder.class.getDeclaredMethod("maxFraction", Integer.TYPE),
+                Rounder.class.getDeclaredMethod("fixedDigits", Integer.TYPE),
+                Rounder.class.getDeclaredMethod("minDigits", Integer.TYPE),
+                Rounder.class.getDeclaredMethod("maxDigits", Integer.TYPE),
+                FractionRounder.class.getDeclaredMethod("withMinDigits", Integer.TYPE),
+                FractionRounder.class.getDeclaredMethod("withMaxDigits", Integer.TYPE),
+                ScientificNotation.class.getDeclaredMethod("withMinExponentDigits", Integer.TYPE),
+                IntegerWidth.class.getDeclaredMethod("zeroFillTo", Integer.TYPE),
+                IntegerWidth.class.getDeclaredMethod("truncateAt", Integer.TYPE), };
+        Method[] methodsWithTwoArguments = new Method[] {
+                Rounder.class.getDeclaredMethod("minMaxFraction", Integer.TYPE, Integer.TYPE),
+                Rounder.class.getDeclaredMethod("minMaxDigits", Integer.TYPE, Integer.TYPE), };
+
+        final int EXPECTED_MAX_INT_FRAC_SIG = 100;
+        final String expectedSubstring0 = "between 0 and 100 (inclusive)";
+        final String expectedSubstring1 = "between 1 and 100 (inclusive)";
+        final String expectedSubstringN1 = "between -1 and 100 (inclusive)";
+
+        // We require that the upper bounds all be 100 inclusive.
+        // The lower bound may be either -1, 0, or 1.
+        Set<String> methodsWithLowerBound1 = new HashSet();
+        methodsWithLowerBound1.add("fixedDigits");
+        methodsWithLowerBound1.add("minDigits");
+        methodsWithLowerBound1.add("maxDigits");
+        methodsWithLowerBound1.add("minMaxDigits");
+        methodsWithLowerBound1.add("withMinDigits");
+        methodsWithLowerBound1.add("withMaxDigits");
+        methodsWithLowerBound1.add("withMinExponentDigits");
+        Set<String> methodsWithLowerBoundN1 = new HashSet();
+        methodsWithLowerBoundN1.add("truncateAt");
+
+        // Some of the methods require an object to be called upon.
+        Map<String, Object> targets = new HashMap<String, Object>();
+        targets.put("withMinDigits", Rounder.integer());
+        targets.put("withMaxDigits", Rounder.integer());
+        targets.put("withMinExponentDigits", Notation.scientific());
+        targets.put("truncateAt", IntegerWidth.zeroFillTo(0));
+
+        for (int argument = -2; argument <= EXPECTED_MAX_INT_FRAC_SIG + 2; argument++) {
+            for (Method method : methodsWithOneArgument) {
+                String message = "i = " + argument + "; method = " + method.getName();
+                int lowerBound = methodsWithLowerBound1.contains(method.getName()) ? 1
+                        : methodsWithLowerBoundN1.contains(method.getName()) ? -1 : 0;
+                String expectedSubstring = lowerBound == 0 ? expectedSubstring0
+                        : lowerBound == 1 ? expectedSubstring1 : expectedSubstringN1;
+                Object target = targets.get(method.getName());
+                try {
+                    method.invoke(target, argument);
+                    assertTrue(message, argument >= lowerBound && argument <= EXPECTED_MAX_INT_FRAC_SIG);
+                } catch (InvocationTargetException e) {
+                    assertTrue(message, argument < lowerBound || argument > EXPECTED_MAX_INT_FRAC_SIG);
+                    // Ensure the exception message contains the expected substring
+                    String actualMessage = e.getCause().getMessage();
+                    assertNotEquals(message + ": " + actualMessage, -1, actualMessage.indexOf(expectedSubstring));
+                }
+            }
+            for (Method method : methodsWithTwoArguments) {
+                String message = "i = " + argument + "; method = " + method.getName();
+                int lowerBound = methodsWithLowerBound1.contains(method.getName()) ? 1
+                        : methodsWithLowerBoundN1.contains(method.getName()) ? -1 : 0;
+                String expectedSubstring = lowerBound == 0 ? expectedSubstring0 : expectedSubstring1;
+                Object target = targets.get(method.getName());
+                // Check range on the first argument
+                try {
+                    // Pass EXPECTED_MAX_INT_FRAC_SIG as the second argument so arg1 <= arg2 in expected cases
+                    method.invoke(target, argument, EXPECTED_MAX_INT_FRAC_SIG);
+                    assertTrue(message, argument >= lowerBound && argument <= EXPECTED_MAX_INT_FRAC_SIG);
+                } catch (InvocationTargetException e) {
+                    assertTrue(message, argument < lowerBound || argument > EXPECTED_MAX_INT_FRAC_SIG);
+                    // Ensure the exception message contains the expected substring
+                    String actualMessage = e.getCause().getMessage();
+                    assertNotEquals(message + ": " + actualMessage, -1, actualMessage.indexOf(expectedSubstring));
+                }
+                // Check range on the second argument
+                try {
+                    // Pass lowerBound as the first argument so arg1 <= arg2 in expected cases
+                    method.invoke(target, lowerBound, argument);
+                    assertTrue(message, argument >= lowerBound && argument <= EXPECTED_MAX_INT_FRAC_SIG);
+                } catch (InvocationTargetException e) {
+                    assertTrue(message, argument < lowerBound || argument > EXPECTED_MAX_INT_FRAC_SIG);
+                    // Ensure the exception message contains the expected substring
+                    String actualMessage = e.getCause().getMessage();
+                    assertNotEquals(message + ": " + actualMessage, -1, actualMessage.indexOf(expectedSubstring));
+                }
+                // Check that first argument must be less than or equal to second argument
+                try {
+                    method.invoke(target, argument, argument - 1);
+                    org.junit.Assert.fail();
+                } catch (InvocationTargetException e) {
+                    // Pass
+                }
+            }
+        }
+
+        // Check first argument less than or equal to second argument on IntegerWidth
+        try {
+            IntegerWidth.zeroFillTo(4).truncateAt(2);
+            org.junit.Assert.fail();
+        } catch (IllegalArgumentException e) {
+            // Pass
+        }
     }
 
     private static void assertFormatDescending(

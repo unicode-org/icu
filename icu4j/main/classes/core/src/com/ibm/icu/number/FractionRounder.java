@@ -39,11 +39,11 @@ public abstract class FractionRounder extends Rounder {
      * @see NumberFormatter
      */
     public Rounder withMinDigits(int minSignificantDigits) {
-        if (minSignificantDigits > 0 && minSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minSignificantDigits >= 1 && minSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFractionSignificant(this, minSignificantDigits, -1);
         } else {
             throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Significant digits must be between 1 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 
@@ -67,11 +67,11 @@ public abstract class FractionRounder extends Rounder {
      * @see NumberFormatter
      */
     public Rounder withMaxDigits(int maxSignificantDigits) {
-        if (maxSignificantDigits > 0 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (maxSignificantDigits >= 1 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFractionSignificant(this, -1, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+                    "Significant digits must be between 1 and " + RoundingUtils.MAX_INT_FRAC_SIG + " (inclusive)");
         }
     }
 }
