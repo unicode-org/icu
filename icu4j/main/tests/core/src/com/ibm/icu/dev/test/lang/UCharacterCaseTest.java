@@ -192,6 +192,28 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
+    @Test
+    public void TestInvalidCodePointFolding() {
+        int[] invalidCodePoints = {
+                0xD800, // lead surrogate
+                0xDFFF, // trail surrogate
+                0xFDD0, // noncharacter
+                0xFFFF, // noncharacter
+                0x110000, // out of range
+                -1 // negative
+        };
+        for (int cp : invalidCodePoints) {
+            assertEquals("Invalid code points should be echoed back",
+                    cp, UCharacter.foldCase(cp, true));
+            assertEquals("Invalid code points should be echoed back",
+                    cp, UCharacter.foldCase(cp, false));
+            assertEquals("Invalid code points should be echoed back",
+                    cp, UCharacter.foldCase(cp, UCharacter.FOLD_CASE_DEFAULT));
+            assertEquals("Invalid code points should be echoed back",
+                    cp, UCharacter.foldCase(cp, UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I));
+        }
+    }
+
     /**
      * Testing the strings case mapping methods
      */
