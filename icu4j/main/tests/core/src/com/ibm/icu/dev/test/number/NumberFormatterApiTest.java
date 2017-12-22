@@ -476,6 +476,54 @@ public class NumberFormatterApiTest {
     }
 
     @Test
+    public void unitCompoundMeasure() {
+        assertFormatDescending(
+                "Meters Per Second Short (unit that simplifies)",
+                "",
+                NumberFormatter.with().unit(MeasureUnit.METER).perUnit(MeasureUnit.SECOND),
+                ULocale.ENGLISH,
+                "87,650 m/s",
+                "8,765 m/s",
+                "876.5 m/s",
+                "87.65 m/s",
+                "8.765 m/s",
+                "0.8765 m/s",
+                "0.08765 m/s",
+                "0.008765 m/s",
+                "0 m/s");
+
+        assertFormatDescending(
+                "Pounds Per Square Mile Short (secondary unit has per-format)",
+                "",
+                NumberFormatter.with().unit(MeasureUnit.POUND).perUnit(MeasureUnit.SQUARE_MILE),
+                ULocale.ENGLISH,
+                "87,650 lb/mi²",
+                "8,765 lb/mi²",
+                "876.5 lb/mi²",
+                "87.65 lb/mi²",
+                "8.765 lb/mi²",
+                "0.8765 lb/mi²",
+                "0.08765 lb/mi²",
+                "0.008765 lb/mi²",
+                "0 lb/mi²");
+
+        assertFormatDescending(
+                "Joules Per Furlong Short (unit with no simplifications or special patterns)",
+                "",
+                NumberFormatter.with().unit(MeasureUnit.JOULE).perUnit(MeasureUnit.FURLONG),
+                ULocale.ENGLISH,
+                "87,650 J/fur",
+                "8,765 J/fur",
+                "876.5 J/fur",
+                "87.65 J/fur",
+                "8.765 J/fur",
+                "0.8765 J/fur",
+                "0.08765 J/fur",
+                "0.008765 J/fur",
+                "0 J/fur");
+    }
+
+    @Test
     public void unitCurrency() {
         assertFormatDescending(
                 "Currency",

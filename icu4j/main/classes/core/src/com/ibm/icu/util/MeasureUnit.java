@@ -171,7 +171,7 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Create a MeasureUnit instance (creates a singleton instance).
+     * Creates a MeasureUnit instance (creates a singleton instance) or returns one from the cache.
      * <p>
      * Normally this method should not be used, since there will be no formatting data
      * available for it, and it may not be returned by getAvailable().

@@ -17,6 +17,7 @@ import com.ibm.icu.util.ULocale;
 public class MacroProps implements Cloneable {
   public Notation notation;
   public MeasureUnit unit;
+  public MeasureUnit perUnit;
   public Rounder rounder;
   public Grouper grouper;
   public Padder padder;
@@ -39,6 +40,7 @@ public class MacroProps implements Cloneable {
   public void fallback(MacroProps fallback) {
     if (notation == null) notation = fallback.notation;
     if (unit == null) unit = fallback.unit;
+    if (perUnit == null) perUnit = fallback.perUnit;
     if (rounder == null) rounder = fallback.rounder;
     if (grouper == null) grouper = fallback.grouper;
     if (padder == null) padder = fallback.padder;
@@ -58,6 +60,7 @@ public class MacroProps implements Cloneable {
     return Utility.hash(
         notation,
         unit,
+        perUnit,
         rounder,
         grouper,
         padder,
@@ -80,6 +83,7 @@ public class MacroProps implements Cloneable {
     MacroProps other = (MacroProps) _other;
     return Utility.equals(notation, other.notation)
         && Utility.equals(unit, other.unit)
+        && Utility.equals(perUnit, other.perUnit)
         && Utility.equals(rounder, other.rounder)
         && Utility.equals(grouper, other.grouper)
         && Utility.equals(padder, other.padder)
