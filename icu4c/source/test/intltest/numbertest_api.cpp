@@ -26,29 +26,25 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode &status)
                 SWISS_SYMBOLS(Locale("de-CH"), status),
                 MYANMAR_SYMBOLS(Locale("my"), status) {
 
-    MeasureUnit *unit = MeasureUnit::createMeter(status);
+    // Check for error on the first MeasureUnit in case there is no data
+    LocalPointer<MeasureUnit> unit(MeasureUnit::createMeter(status));
     if (U_FAILURE(status)) {
         dataerrln("%s %d status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
     }
     METER = *unit;
-    delete unit;
-    unit = MeasureUnit::createDay(status);
-    DAY = *unit;
-    delete unit;
-    unit = MeasureUnit::createSquareMeter(status);
-    SQUARE_METER = *unit;
-    delete unit;
-    unit = MeasureUnit::createFahrenheit(status);
-    FAHRENHEIT = *unit;
-    delete unit;
 
-    NumberingSystem *ns = NumberingSystem::createInstanceByName("mathsanb", status);
-    MATHSANB = *ns;
-    delete ns;
-    ns = NumberingSystem::createInstanceByName("latn", status);
-    LATN = *ns;
-    delete ns;
+    DAY = *LocalPointer<MeasureUnit>(MeasureUnit::createDay(status));
+    SQUARE_METER = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareMeter(status));
+    FAHRENHEIT = *LocalPointer<MeasureUnit>(MeasureUnit::createFahrenheit(status));
+    SECOND = *LocalPointer<MeasureUnit>(MeasureUnit::createSecond(status));
+    POUND = *LocalPointer<MeasureUnit>(MeasureUnit::createPound(status));
+    SQUARE_MILE = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareMile(status));
+    JOULE = *LocalPointer<MeasureUnit>(MeasureUnit::createJoule(status));
+    FURLONG = *LocalPointer<MeasureUnit>(MeasureUnit::createFurlong(status));
+
+    MATHSANB = *LocalPointer<NumberingSystem>(NumberingSystem::createInstanceByName("mathsanb", status));
+    LATN = *LocalPointer<NumberingSystem>(NumberingSystem::createInstanceByName("latn", status));
 }
 
 void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
@@ -60,6 +56,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(notationScientific);
         TESTCASE_AUTO(notationCompact);
         TESTCASE_AUTO(unitMeasure);
+        TESTCASE_AUTO(unitCompoundMeasure);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitPercent);
         TESTCASE_AUTO(roundingFraction);
@@ -355,8 +352,8 @@ void NumberFormatterApiTest::notationCompact() {
 
 void NumberFormatterApiTest::unitMeasure() {
     assertFormatDescending(
-            u"Meters Short",
-            NumberFormatter::with().adoptUnit(new MeasureUnit(METER)),
+            u"Meters Short and unit() method",
+            NumberFormatter::with().unit(METER),
             Locale::getEnglish(),
             u"87,650 m",
             u"8,765 m",
@@ -369,7 +366,7 @@ void NumberFormatterApiTest::unitMeasure() {
             u"0 m");
 
     assertFormatDescending(
-            u"Meters Long",
+            u"Meters Long and adoptUnit() method",
             NumberFormatter::with().adoptUnit(new MeasureUnit(METER))
                     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
             Locale::getEnglish(),
@@ -386,7 +383,7 @@ void NumberFormatterApiTest::unitMeasure() {
     assertFormatDescending(
             u"Compact Meters Long",
             NumberFormatter::with().notation(Notation::compactLong())
-                    .adoptUnit(new MeasureUnit(METER))
+                    .unit(METER)
                     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
             Locale::getEnglish(),
             u"88 thousand meters",
@@ -410,14 +407,14 @@ void NumberFormatterApiTest::unitMeasure() {
 //    TODO: Implement Measure in C++
 //    assertFormatSingleMeasure(
 //            u"Measure format method takes precedence over fluent chain",
-//            NumberFormatter::with().adoptUnit(new MeasureUnit(METER)),
+//            NumberFormatter::with().unit(METER),
 //            Locale::getEnglish(),
 //            new Measure(5.43, USD),
 //            u"$5.43");
 
     assertFormatSingle(
             u"Meters with Negative Sign",
-            NumberFormatter::with().adoptUnit(new MeasureUnit(METER)),
+            NumberFormatter::with().unit(METER),
             Locale::getEnglish(),
             -9876543.21,
             u"-9,876,543.21 m");
@@ -425,7 +422,7 @@ void NumberFormatterApiTest::unitMeasure() {
     // The locale string "सान" appears only in brx.txt:
     assertFormatSingle(
             u"Interesting Data Fallback 1",
-            NumberFormatter::with().adoptUnit(new MeasureUnit(DAY))
+            NumberFormatter::with().unit(DAY)
                     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
             Locale::createFromName("brx"),
             5.43,
@@ -434,7 +431,7 @@ void NumberFormatterApiTest::unitMeasure() {
     // Requires following the alias from unitsNarrow to unitsShort:
     assertFormatSingle(
             u"Interesting Data Fallback 2",
-            NumberFormatter::with().adoptUnit(new MeasureUnit(DAY))
+            NumberFormatter::with().unit(DAY)
                     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW),
             Locale::createFromName("brx"),
             5.43,
@@ -444,7 +441,7 @@ void NumberFormatterApiTest::unitMeasure() {
     // requiring fallback to the root.
     assertFormatSingle(
             u"Interesting Data Fallback 3",
-            NumberFormatter::with().adoptUnit(new MeasureUnit(SQUARE_METER))
+            NumberFormatter::with().unit(SQUARE_METER)
                     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW),
             Locale::createFromName("en-GB"),
             5.43,
@@ -454,7 +451,7 @@ void NumberFormatterApiTest::unitMeasure() {
     // NOTE: This example is in the documentation.
     assertFormatSingle(
             u"Difference between Narrow and Short (Narrow Version)",
-            NumberFormatter::with().adoptUnit(new MeasureUnit(FAHRENHEIT))
+            NumberFormatter::with().unit(FAHRENHEIT)
                     .unitWidth(UNUM_UNIT_WIDTH_NARROW),
             Locale("es-US"),
             5.43,
@@ -462,11 +459,55 @@ void NumberFormatterApiTest::unitMeasure() {
 
     assertFormatSingle(
             u"Difference between Narrow and Short (Short Version)",
-            NumberFormatter::with().adoptUnit(new MeasureUnit(FAHRENHEIT))
+            NumberFormatter::with().unit(FAHRENHEIT)
                     .unitWidth(UNUM_UNIT_WIDTH_SHORT),
             Locale("es-US"),
             5.43,
             u"5.43 °F");
+}
+
+void NumberFormatterApiTest::unitCompoundMeasure() {
+    assertFormatDescending(
+            u"Meters Per Second Short (unit that simplifies) and perUnit method",
+            NumberFormatter::with().unit(METER).perUnit(SECOND),
+            Locale::getEnglish(),
+            u"87,650 m/s",
+            u"8,765 m/s",
+            u"876.5 m/s",
+            u"87.65 m/s",
+            u"8.765 m/s",
+            u"0.8765 m/s",
+            u"0.08765 m/s",
+            u"0.008765 m/s",
+            u"0 m/s");
+
+    assertFormatDescending(
+            u"Pounds Per Square Mile Short (secondary unit has per-format) and adoptPerUnit method",
+            NumberFormatter::with().unit(POUND).adoptPerUnit(new MeasureUnit(SQUARE_MILE)),
+            Locale::getEnglish(),
+            u"87,650 lb/mi²",
+            u"8,765 lb/mi²",
+            u"876.5 lb/mi²",
+            u"87.65 lb/mi²",
+            u"8.765 lb/mi²",
+            u"0.8765 lb/mi²",
+            u"0.08765 lb/mi²",
+            u"0.008765 lb/mi²",
+            u"0 lb/mi²");
+
+    assertFormatDescending(
+            u"Joules Per Furlong Short (unit with no simplifications or special patterns)",
+            NumberFormatter::with().unit(JOULE).perUnit(FURLONG),
+            Locale::getEnglish(),
+            u"87,650 J/fur",
+            u"8,765 J/fur",
+            u"876.5 J/fur",
+            u"87.65 J/fur",
+            u"8.765 J/fur",
+            u"0.8765 J/fur",
+            u"0.08765 J/fur",
+            u"0.008765 J/fur",
+            u"0 J/fur");
 }
 
 void NumberFormatterApiTest::unitCurrency() {

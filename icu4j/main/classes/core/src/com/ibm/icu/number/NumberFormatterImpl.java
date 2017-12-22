@@ -247,7 +247,7 @@ class NumberFormatterImpl {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
             }
-            chain = LongNameHandler.forMeasureUnit(macros.loc, macros.unit, unitWidth, rules, chain);
+            chain = LongNameHandler.forMeasureUnit(macros.loc, macros.unit, macros.perUnit, unitWidth, rules, chain);
         } else if (isCurrency && unitWidth == UnitWidth.FULL_NAME) {
             if (rules == null) {
                 // Lazily create PluralRules

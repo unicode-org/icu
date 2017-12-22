@@ -46,6 +46,25 @@ Derived NumberFormatterSettings<Derived>::adoptUnit(const icu::MeasureUnit *unit
 }
 
 template<typename Derived>
+Derived NumberFormatterSettings<Derived>::perUnit(const icu::MeasureUnit &perUnit) const {
+    Derived copy(*this);
+    // See comments above about slicing.
+    copy.fMacros.perUnit = perUnit;
+    return copy;
+}
+
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::adoptPerUnit(const icu::MeasureUnit *perUnit) const {
+    Derived copy(*this);
+    // See comments above about slicing and ownership.
+    if (perUnit != nullptr) {
+        copy.fMacros.perUnit = *perUnit;
+        delete perUnit;
+    }
+    return copy;
+}
+
+template<typename Derived>
 Derived NumberFormatterSettings<Derived>::rounding(const Rounder &rounder) const {
     Derived copy(*this);
     // NOTE: Slicing is OK.

@@ -39,7 +39,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_SIGN = 10;
     static final int KEY_DECIMAL = 11;
     static final int KEY_THRESHOLD = 12;
-    static final int KEY_MAX = 13;
+    static final int KEY_PER_UNIT = 13;
+    static final int KEY_MAX = 14;
 
     final NumberFormatterSettings<?> parent;
     final int key;
@@ -123,6 +124,10 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * NumberFormatter.with().unit(NoUnit.PERCENT)
      * </pre>
      *
+     * <p>
+     * See {@link #perUnit} for information on how to format strings like "5 meters per second".
+     *
+     * <p>
      * The default is to render without units (equivalent to {@link NoUnit#BASE}).
      *
      * @param unit
@@ -131,11 +136,40 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @see MeasureUnit
      * @see Currency
      * @see NoUnit
+     * @see #perUnit
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      */
     public T unit(MeasureUnit unit) {
         return create(KEY_UNIT, unit);
+    }
+
+    /**
+     * Sets a unit to be used in the denominator. For example, to format "3 m/s", pass METER to the unit and SECOND to
+     * the perUnit.
+     *
+     * <p>
+     * Pass this method any instance of {@link MeasureUnit}. For example:
+     *
+     * <pre>
+     * NumberFormatter.with().unit(MeasureUnit.METER).perUnit(MeasureUnit.SECOND)
+     * </pre>
+     *
+     * <p>
+     * The default is not to display any unit in the denominator.
+     *
+     * <p>
+     * If a per-unit is specified without a primary unit via {@link #unit}, the behavior is undefined.
+     *
+     * @param perUnit
+     *            The unit to render in the denominator.
+     * @return The fluent chain
+     * @see #unit
+     * @draft ICU 61
+     * @provisional This API might change or be removed in a future release.
+     */
+    public T perUnit(MeasureUnit perUnit) {
+        return create(KEY_PER_UNIT, perUnit);
     }
 
     /**
@@ -516,6 +550,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
             case KEY_THRESHOLD:
                 if (macros.threshold == null) {
                     macros.threshold = (Long) current.value;
+                }
+                break;
+            case KEY_PER_UNIT:
+                if (macros.perUnit == null) {
+                    macros.perUnit = (MeasureUnit) current.value;
                 }
                 break;
             default:
