@@ -78,10 +78,15 @@ public class LongNameHandler implements MicroPropsGenerator {
 
     // NOTE: outArray MUST have at least ARRAY_LENGTH entries. No bounds checking is performed.
 
-    private static void getMeasureData(ULocale locale, MeasureUnit unit, UnitWidth width, String[] outArray) {
+    private static void getMeasureData(
+            ULocale locale,
+            MeasureUnit unit,
+            UnitWidth width,
+            String[] outArray) {
         PluralTableSink sink = new PluralTableSink(outArray);
         ICUResourceBundle resource;
-        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
+        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME,
+                locale);
         StringBuilder key = new StringBuilder();
         key.append("units");
         if (width == UnitWidth.NARROW) {
@@ -112,7 +117,8 @@ public class LongNameHandler implements MicroPropsGenerator {
             // Example pattern from data: "{0} {1}"
             // Example output after find-and-replace: "{0} US dollars"
             simpleFormat = simpleFormat.replace("{1}", longName);
-            // String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 1, 1);
+            // String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 1,
+            // 1);
             // SimpleModifier mod = new SimpleModifier(compiled, Field.CURRENCY, false);
             outArray[index] = simpleFormat;
         }
@@ -120,7 +126,8 @@ public class LongNameHandler implements MicroPropsGenerator {
 
     private static String getPerUnitFormat(ULocale locale, UnitWidth width) {
         ICUResourceBundle resource;
-        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, locale);
+        resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME,
+                locale);
         StringBuilder key = new StringBuilder();
         key.append("units");
         if (width == UnitWidth.NARROW) {
@@ -132,7 +139,8 @@ public class LongNameHandler implements MicroPropsGenerator {
         try {
             return resource.getStringWithFallback(key.toString());
         } catch (MissingResourceException e) {
-            throw new IllegalArgumentException("Could not find x-per-y format for " + locale + ", width " + width);
+            throw new IllegalArgumentException(
+                    "Could not find x-per-y format for " + locale + ", width " + width);
         }
     }
 
@@ -144,14 +152,19 @@ public class LongNameHandler implements MicroPropsGenerator {
     private final PluralRules rules;
     private final MicroPropsGenerator parent;
 
-    private LongNameHandler(Map<StandardPlural, SimpleModifier> modifiers, PluralRules rules,
+    private LongNameHandler(
+            Map<StandardPlural, SimpleModifier> modifiers,
+            PluralRules rules,
             MicroPropsGenerator parent) {
         this.modifiers = modifiers;
         this.rules = rules;
         this.parent = parent;
     }
 
-    public static LongNameHandler forCurrencyLongNames(ULocale locale, Currency currency, PluralRules rules,
+    public static LongNameHandler forCurrencyLongNames(
+            ULocale locale,
+            Currency currency,
+            PluralRules rules,
             MicroPropsGenerator parent) {
         String[] simpleFormats = new String[ARRAY_LENGTH];
         getCurrencyLongNameData(locale, currency, simpleFormats);
@@ -162,8 +175,13 @@ public class LongNameHandler implements MicroPropsGenerator {
         return new LongNameHandler(modifiers, rules, parent);
     }
 
-    public static LongNameHandler forMeasureUnit(ULocale locale, MeasureUnit unit, MeasureUnit perUnit, UnitWidth width,
-            PluralRules rules, MicroPropsGenerator parent) {
+    public static LongNameHandler forMeasureUnit(
+            ULocale locale,
+            MeasureUnit unit,
+            MeasureUnit perUnit,
+            UnitWidth width,
+            PluralRules rules,
+            MicroPropsGenerator parent) {
         if (perUnit != null) {
             // Compound unit: first try to simplify (e.g., meters per second is its own unit).
             MeasureUnit simplified = MeasureUnit.resolveUnitPerUnit(unit, perUnit);
@@ -185,8 +203,13 @@ public class LongNameHandler implements MicroPropsGenerator {
         return new LongNameHandler(modifiers, rules, parent);
     }
 
-    private static LongNameHandler forCompoundUnit(ULocale locale, MeasureUnit unit, MeasureUnit perUnit,
-            UnitWidth width, PluralRules rules, MicroPropsGenerator parent) {
+    private static LongNameHandler forCompoundUnit(
+            ULocale locale,
+            MeasureUnit unit,
+            MeasureUnit perUnit,
+            UnitWidth width,
+            PluralRules rules,
+            MicroPropsGenerator parent) {
         String[] primaryData = new String[ARRAY_LENGTH];
         getMeasureData(locale, unit, width, primaryData);
         String[] secondaryData = new String[ARRAY_LENGTH];
@@ -199,10 +222,13 @@ public class LongNameHandler implements MicroPropsGenerator {
             // rawPerUnitFormat is something like "{0}/{1}"; we need to substitute in the secondary unit.
             // TODO: Lots of thrashing. Improve?
             StringBuilder sb = new StringBuilder();
-            String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(rawPerUnitFormat, sb, 2, 2);
+            String compiled = SimpleFormatterImpl
+                    .compileToStringMinMaxArguments(rawPerUnitFormat, sb, 2, 2);
             String secondaryFormat = getWithPlural(secondaryData, StandardPlural.ONE);
-            String secondaryCompiled = SimpleFormatterImpl.compileToStringMinMaxArguments(secondaryFormat, sb, 1, 1);
-            String secondaryString = SimpleFormatterImpl.getTextWithNoArguments(secondaryCompiled).trim();
+            String secondaryCompiled = SimpleFormatterImpl
+                    .compileToStringMinMaxArguments(secondaryFormat, sb, 1, 1);
+            String secondaryString = SimpleFormatterImpl.getTextWithNoArguments(secondaryCompiled)
+                    .trim();
             perUnitFormat = SimpleFormatterImpl.formatCompiledPattern(compiled, "{0}", secondaryString);
         }
         // TODO: What field to use for units?
@@ -212,7 +238,9 @@ public class LongNameHandler implements MicroPropsGenerator {
         return new LongNameHandler(modifiers, rules, parent);
     }
 
-    private static void simpleFormatsToModifiers(String[] simpleFormats, NumberFormat.Field field,
+    private static void simpleFormatsToModifiers(
+            String[] simpleFormats,
+            NumberFormat.Field field,
             Map<StandardPlural, SimpleModifier> output) {
         StringBuilder sb = new StringBuilder();
         for (StandardPlural plural : StandardPlural.VALUES) {
@@ -222,14 +250,18 @@ public class LongNameHandler implements MicroPropsGenerator {
         }
     }
 
-    private static void multiSimpleFormatsToModifiers(String[] leadFormats, String trailFormat,
-            NumberFormat.Field field, Map<StandardPlural, SimpleModifier> output) {
+    private static void multiSimpleFormatsToModifiers(
+            String[] leadFormats,
+            String trailFormat,
+            NumberFormat.Field field,
+            Map<StandardPlural, SimpleModifier> output) {
         StringBuilder sb = new StringBuilder();
         String trailCompiled = SimpleFormatterImpl.compileToStringMinMaxArguments(trailFormat, sb, 1, 1);
         for (StandardPlural plural : StandardPlural.VALUES) {
             String leadFormat = getWithPlural(leadFormats, plural);
             String compoundFormat = SimpleFormatterImpl.formatCompiledPattern(trailCompiled, leadFormat);
-            String compoundCompiled = SimpleFormatterImpl.compileToStringMinMaxArguments(compoundFormat, sb, 1, 1);
+            String compoundCompiled = SimpleFormatterImpl
+                    .compileToStringMinMaxArguments(compoundFormat, sb, 1, 1);
             output.put(plural, new SimpleModifier(compoundCompiled, field, false));
         }
     }
