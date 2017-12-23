@@ -27,7 +27,8 @@ public class IntegerWidth {
     }
 
     /**
-     * Pad numbers at the beginning with zeros to guarantee a certain number of numerals before the decimal separator.
+     * Pad numbers at the beginning with zeros to guarantee a certain number of numerals before the
+     * decimal separator.
      *
      * <p>
      * For example, with minInt=3, the number 55 will get printed as "055".
@@ -42,11 +43,12 @@ public class IntegerWidth {
     public static IntegerWidth zeroFillTo(int minInt) {
         if (minInt == 1) {
             return DEFAULT;
-        } else if (minInt >= 0 && minInt < RoundingUtils.MAX_INT_FRAC_SIG) {
+        } else if (minInt >= 0 && minInt <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return new IntegerWidth(minInt, -1);
         } else {
-            throw new IllegalArgumentException(
-                    "Integer digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Integer digits must be between 0 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
@@ -56,7 +58,8 @@ public class IntegerWidth {
      * For example, with maxInt=3, the number 1234 will get printed as "234".
      *
      * @param maxInt
-     *            The maximum number of places before the decimal separator.
+     *            The maximum number of places before the decimal separator. maxInt == -1 means no
+     *            truncation.
      * @return An IntegerWidth for passing to the NumberFormatter integerWidth() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
@@ -65,13 +68,14 @@ public class IntegerWidth {
     public IntegerWidth truncateAt(int maxInt) {
         if (maxInt == this.maxInt) {
             return this;
-        } else if (maxInt >= 0 && maxInt < RoundingUtils.MAX_INT_FRAC_SIG) {
+        } else if (maxInt >= 0 && maxInt <= RoundingUtils.MAX_INT_FRAC_SIG && maxInt >= minInt) {
             return new IntegerWidth(minInt, maxInt);
         } else if (maxInt == -1) {
-            return new IntegerWidth(minInt, maxInt);
+            return new IntegerWidth(minInt, -1);
         } else {
-            throw new IllegalArgumentException(
-                    "Integer digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Integer digits must be between -1 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 }

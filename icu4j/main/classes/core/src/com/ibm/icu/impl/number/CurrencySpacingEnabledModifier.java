@@ -27,7 +27,10 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
     private final String beforeSuffixInsert;
 
     /** Safe code path */
-    public CurrencySpacingEnabledModifier(NumberStringBuilder prefix, NumberStringBuilder suffix, boolean strong,
+    public CurrencySpacingEnabledModifier(
+            NumberStringBuilder prefix,
+            NumberStringBuilder suffix,
+            boolean strong,
             DecimalFormatSymbols symbols) {
         super(prefix, suffix, strong);
 
@@ -70,12 +73,14 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
     public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
         // Currency spacing logic
         int length = 0;
-        if (rightIndex - leftIndex > 0 && afterPrefixUnicodeSet != null
+        if (rightIndex - leftIndex > 0
+                && afterPrefixUnicodeSet != null
                 && afterPrefixUnicodeSet.contains(output.codePointAt(leftIndex))) {
             // TODO: Should we use the CURRENCY field here?
             length += output.insert(leftIndex, afterPrefixInsert, null);
         }
-        if (rightIndex - leftIndex > 0 && beforeSuffixUnicodeSet != null
+        if (rightIndex - leftIndex > 0
+                && beforeSuffixUnicodeSet != null
                 && beforeSuffixUnicodeSet.contains(output.codePointBefore(rightIndex))) {
             // TODO: Should we use the CURRENCY field here?
             length += output.insert(rightIndex + length, beforeSuffixInsert, null);
@@ -87,8 +92,13 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
     }
 
     /** Unsafe code path */
-    public static int applyCurrencySpacing(NumberStringBuilder output, int prefixStart, int prefixLen, int suffixStart,
-            int suffixLen, DecimalFormatSymbols symbols) {
+    public static int applyCurrencySpacing(
+            NumberStringBuilder output,
+            int prefixStart,
+            int prefixLen,
+            int suffixStart,
+            int suffixLen,
+            DecimalFormatSymbols symbols) {
         int length = 0;
         boolean hasPrefix = (prefixLen > 0);
         boolean hasSuffix = (suffixLen > 0);
@@ -103,12 +113,16 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
     }
 
     /** Unsafe code path */
-    private static int applyCurrencySpacingAffix(NumberStringBuilder output, int index, byte affix,
+    private static int applyCurrencySpacingAffix(
+            NumberStringBuilder output,
+            int index,
+            byte affix,
             DecimalFormatSymbols symbols) {
         // NOTE: For prefix, output.fieldAt(index-1) gets the last field type in the prefix.
         // This works even if the last code point in the prefix is 2 code units because the
         // field value gets populated to both indices in the field array.
-        NumberFormat.Field affixField = (affix == PREFIX) ? output.fieldAt(index - 1) : output.fieldAt(index);
+        NumberFormat.Field affixField = (affix == PREFIX) ? output.fieldAt(index - 1)
+                : output.fieldAt(index);
         if (affixField != NumberFormat.Field.CURRENCY) {
             return 0;
         }
@@ -135,8 +149,10 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
 
     private static UnicodeSet getUnicodeSet(DecimalFormatSymbols symbols, short position, byte affix) {
         String pattern = symbols
-                .getPatternForCurrencySpacing(position == IN_CURRENCY ? DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH
-                        : DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH, affix == SUFFIX);
+                .getPatternForCurrencySpacing(
+                        position == IN_CURRENCY ? DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH
+                                : DecimalFormatSymbols.CURRENCY_SPC_SURROUNDING_MATCH,
+                        affix == SUFFIX);
         if (pattern.equals("[:digit:]")) {
             return UNISET_DIGIT;
         } else if (pattern.equals("[:^S:]")) {
@@ -147,6 +163,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
     }
 
     private static String getInsertString(DecimalFormatSymbols symbols, byte affix) {
-        return symbols.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, affix == SUFFIX);
+        return symbols.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT,
+                affix == SUFFIX);
     }
 }

@@ -12,8 +12,8 @@ public class PatternStringParser {
     public static final int IGNORE_ROUNDING_ALWAYS = 2;
 
     /**
-     * Runs the recursive descent parser on the given pattern string, returning a data structure with raw information
-     * about the pattern string.
+     * Runs the recursive descent parser on the given pattern string, returning a data structure with raw
+     * information about the pattern string.
      *
      * <p>
      * To obtain a more useful form of the data, consider using {@link #parseToProperties} instead.
@@ -35,9 +35,10 @@ public class PatternStringParser {
      * @param pattern
      *            The pattern string, like "#,##0.00"
      * @param ignoreRounding
-     *            Whether to leave out rounding information (minFrac, maxFrac, and rounding increment) when parsing the
-     *            pattern. This may be desirable if a custom rounding mode, such as CurrencyUsage, is to be used
-     *            instead. One of {@link PatternStringParser#IGNORE_ROUNDING_ALWAYS},
+     *            Whether to leave out rounding information (minFrac, maxFrac, and rounding increment)
+     *            when parsing the pattern. This may be desirable if a custom rounding mode, such as
+     *            CurrencyUsage, is to be used instead. One of
+     *            {@link PatternStringParser#IGNORE_ROUNDING_ALWAYS},
      *            {@link PatternStringParser#IGNORE_ROUNDING_IF_CURRENCY}, or
      *            {@link PatternStringParser#IGNORE_ROUNDING_NEVER}.
      * @return A property bag object.
@@ -55,9 +56,10 @@ public class PatternStringParser {
     }
 
     /**
-     * Parses a pattern string into an existing property bag. All properties that can be encoded into a pattern string
-     * will be overwritten with either their default value or with the value coming from the pattern string. Properties
-     * that cannot be encoded into a pattern string, such as rounding mode, are not modified.
+     * Parses a pattern string into an existing property bag. All properties that can be encoded into a
+     * pattern string will be overwritten with either their default value or with the value coming from
+     * the pattern string. Properties that cannot be encoded into a pattern string, such as rounding
+     * mode, are not modified.
      *
      * @param pattern
      *            The pattern string, like "#,##0.00"
@@ -68,7 +70,9 @@ public class PatternStringParser {
      * @throws IllegalArgumentException
      *             If there was a syntax error in the pattern string.
      */
-    public static void parseToExistingProperties(String pattern, DecimalFormatProperties properties,
+    public static void parseToExistingProperties(
+            String pattern,
+            DecimalFormatProperties properties,
             int ignoreRounding) {
         parseToExistingPropertiesImpl(pattern, properties, ignoreRounding);
     }
@@ -263,7 +267,10 @@ public class PatternStringParser {
         consumePadding(state, result, PadPosition.AFTER_SUFFIX);
     }
 
-    private static void consumePadding(ParserState state, ParsedSubpatternInfo result, PadPosition paddingLocation) {
+    private static void consumePadding(
+            ParserState state,
+            ParsedSubpatternInfo result,
+            PadPosition paddingLocation) {
         if (state.peek() != '*') {
             return;
         }
@@ -505,7 +512,10 @@ public class PatternStringParser {
     /// END RECURSIVE DESCENT PARSER IMPLEMENTATION ///
     ///////////////////////////////////////////////////
 
-    private static void parseToExistingPropertiesImpl(String pattern, DecimalFormatProperties properties, int ignoreRounding) {
+    private static void parseToExistingPropertiesImpl(
+            String pattern,
+            DecimalFormatProperties properties,
+            int ignoreRounding) {
         if (pattern == null || pattern.length() == 0) {
             // Backwards compatibility requires that we reset to the default values.
             // TODO: Only overwrite the properties that "saveToProperties" normally touches?
@@ -519,7 +529,9 @@ public class PatternStringParser {
     }
 
     /** Finalizes the temporary data stored in the ParsedPatternInfo to the Properties. */
-    private static void patternInfoToProperties(DecimalFormatProperties properties, ParsedPatternInfo patternInfo,
+    private static void patternInfoToProperties(
+            DecimalFormatProperties properties,
+            ParsedPatternInfo patternInfo,
             int _ignoreRounding) {
         // Translate from PatternParseResult to Properties.
         // Note that most data from "negative" is ignored per the specification of DecimalFormat.
@@ -573,12 +585,14 @@ public class PatternStringParser {
             properties.setMaximumFractionDigits(-1);
             properties.setRoundingIncrement(null);
             properties.setMinimumSignificantDigits(positive.integerAtSigns);
-            properties.setMaximumSignificantDigits(positive.integerAtSigns + positive.integerTrailingHashSigns);
+            properties.setMaximumSignificantDigits(
+                    positive.integerAtSigns + positive.integerTrailingHashSigns);
         } else if (positive.rounding != null) {
             if (!ignoreRounding) {
                 properties.setMinimumFractionDigits(minFrac);
                 properties.setMaximumFractionDigits(positive.fractionTotal);
-                properties.setRoundingIncrement(positive.rounding.toBigDecimal().setScale(positive.fractionNumerals));
+                properties.setRoundingIncrement(
+                        positive.rounding.toBigDecimal().setScale(positive.fractionNumerals));
             } else {
                 properties.setMinimumFractionDigits(-1);
                 properties.setMaximumFractionDigits(-1);
@@ -634,7 +648,8 @@ public class PatternStringParser {
         // Padding settings
         if (positive.paddingLocation != null) {
             // The width of the positive prefix and suffix templates are included in the padding
-            int paddingWidth = positive.widthExceptAffixes + AffixUtils.estimateLength(posPrefix)
+            int paddingWidth = positive.widthExceptAffixes
+                    + AffixUtils.estimateLength(posPrefix)
                     + AffixUtils.estimateLength(posSuffix);
             properties.setFormatWidth(paddingWidth);
             String rawPaddingString = patternInfo.getString(AffixPatternProvider.Flags.PADDING);
@@ -663,9 +678,10 @@ public class PatternStringParser {
         properties.setPositivePrefixPattern(posPrefix);
         properties.setPositiveSuffixPattern(posSuffix);
         if (patternInfo.negative != null) {
-            properties.setNegativePrefixPattern(patternInfo
-                    .getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN | AffixPatternProvider.Flags.PREFIX));
-            properties.setNegativeSuffixPattern(patternInfo.getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN));
+            properties.setNegativePrefixPattern(patternInfo.getString(
+                    AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN | AffixPatternProvider.Flags.PREFIX));
+            properties.setNegativeSuffixPattern(
+                    patternInfo.getString(AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN));
         } else {
             properties.setNegativePrefixPattern(null);
             properties.setNegativeSuffixPattern(null);

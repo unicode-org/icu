@@ -5,8 +5,8 @@ package com.ibm.icu.impl.number;
 import com.ibm.icu.impl.StandardPlural;
 
 /**
- * A ParameterizedModifier by itself is NOT a Modifier. Rather, it wraps a data structure containing two or more
- * Modifiers and returns the modifier appropriate for the current situation.
+ * A ParameterizedModifier by itself is NOT a Modifier. Rather, it wraps a data structure containing two
+ * or more Modifiers and returns the modifier appropriate for the current situation.
  */
 public class ParameterizedModifier {
     private final Modifier positive;
@@ -28,8 +28,8 @@ public class ParameterizedModifier {
     }
 
     /**
-     * This constructor prepares the ParameterizedModifier to be populated with a positive and negative Modifier for
-     * multiple plural forms.
+     * This constructor prepares the ParameterizedModifier to be populated with a positive and negative
+     * Modifier for multiple plural forms.
      *
      * <p>
      * If this constructor is used, a plural form MUST be passed to {@link #getModifier}.

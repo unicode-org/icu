@@ -6,40 +6,37 @@ public class Padder {
     public static final String FALLBACK_PADDING_STRING = "\u0020"; // i.e. a space
 
     public enum PadPosition {
-      BEFORE_PREFIX,
-      AFTER_PREFIX,
-      BEFORE_SUFFIX,
-      AFTER_SUFFIX;
+        BEFORE_PREFIX, AFTER_PREFIX, BEFORE_SUFFIX, AFTER_SUFFIX;
 
-      public static PadPosition fromOld(int old) {
-        switch (old) {
-          case com.ibm.icu.text.DecimalFormat.PAD_BEFORE_PREFIX:
-            return PadPosition.BEFORE_PREFIX;
-          case com.ibm.icu.text.DecimalFormat.PAD_AFTER_PREFIX:
-            return PadPosition.AFTER_PREFIX;
-          case com.ibm.icu.text.DecimalFormat.PAD_BEFORE_SUFFIX:
-            return PadPosition.BEFORE_SUFFIX;
-          case com.ibm.icu.text.DecimalFormat.PAD_AFTER_SUFFIX:
-            return PadPosition.AFTER_SUFFIX;
-          default:
-            throw new IllegalArgumentException("Don't know how to map " + old);
+        public static PadPosition fromOld(int old) {
+            switch (old) {
+            case com.ibm.icu.text.DecimalFormat.PAD_BEFORE_PREFIX:
+                return PadPosition.BEFORE_PREFIX;
+            case com.ibm.icu.text.DecimalFormat.PAD_AFTER_PREFIX:
+                return PadPosition.AFTER_PREFIX;
+            case com.ibm.icu.text.DecimalFormat.PAD_BEFORE_SUFFIX:
+                return PadPosition.BEFORE_SUFFIX;
+            case com.ibm.icu.text.DecimalFormat.PAD_AFTER_SUFFIX:
+                return PadPosition.AFTER_SUFFIX;
+            default:
+                throw new IllegalArgumentException("Don't know how to map " + old);
+            }
         }
-      }
 
-      public int toOld() {
-        switch (this) {
-          case BEFORE_PREFIX:
-            return com.ibm.icu.text.DecimalFormat.PAD_BEFORE_PREFIX;
-          case AFTER_PREFIX:
-            return com.ibm.icu.text.DecimalFormat.PAD_AFTER_PREFIX;
-          case BEFORE_SUFFIX:
-            return com.ibm.icu.text.DecimalFormat.PAD_BEFORE_SUFFIX;
-          case AFTER_SUFFIX:
-            return com.ibm.icu.text.DecimalFormat.PAD_AFTER_SUFFIX;
-          default:
-            return -1; // silence compiler errors
+        public int toOld() {
+            switch (this) {
+            case BEFORE_PREFIX:
+                return com.ibm.icu.text.DecimalFormat.PAD_BEFORE_PREFIX;
+            case AFTER_PREFIX:
+                return com.ibm.icu.text.DecimalFormat.PAD_AFTER_PREFIX;
+            case BEFORE_SUFFIX:
+                return com.ibm.icu.text.DecimalFormat.PAD_BEFORE_SUFFIX;
+            case AFTER_SUFFIX:
+                return com.ibm.icu.text.DecimalFormat.PAD_AFTER_SUFFIX;
+            default:
+                return -1; // silence compiler errors
+            }
         }
-      }
     }
 
     /* like package-private */ public static final Padder NONE = new Padder(null, -1, null);
@@ -73,10 +70,16 @@ public class Padder {
         return targetWidth > 0;
     }
 
-    public int padAndApply(Modifier mod1, Modifier mod2, NumberStringBuilder string, int leftIndex, int rightIndex) {
+    public int padAndApply(
+            Modifier mod1,
+            Modifier mod2,
+            NumberStringBuilder string,
+            int leftIndex,
+            int rightIndex) {
         int modLength = mod1.getCodePointCount() + mod2.getCodePointCount();
         int requiredPadding = targetWidth - modLength - string.codePointCount();
-        assert leftIndex == 0 && rightIndex == string.length(); // fix the previous line to remove this assertion
+        assert leftIndex == 0 && rightIndex == string.length(); // fix the previous line to remove this
+                                                                // assertion
 
         int length = 0;
         if (requiredPadding <= 0) {
@@ -102,7 +105,10 @@ public class Padder {
         return length;
     }
 
-    private static int addPaddingHelper(String paddingString, int requiredPadding, NumberStringBuilder string,
+    private static int addPaddingHelper(
+            String paddingString,
+            int requiredPadding,
+            NumberStringBuilder string,
             int index) {
         for (int i = 0; i < requiredPadding; i++) {
             // TODO: If appending to the end, this will cause actual insertion operations. Improve.

@@ -15,7 +15,8 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 
 /**
- * A class that defines the scientific notation style to be used when formatting numbers in NumberFormatter.
+ * A class that defines the scientific notation style to be used when formatting numbers in
+ * NumberFormatter.
  *
  * <p>
  * To create a ScientificNotation, use one of the factory methods in {@link Notation}.
@@ -31,7 +32,10 @@ public class ScientificNotation extends Notation implements Cloneable {
     int minExponentDigits;
     SignDisplay exponentSignDisplay;
 
-    /* package-private */ ScientificNotation(int engineeringInterval, boolean requireMinInt, int minExponentDigits,
+    /* package-private */ ScientificNotation(
+            int engineeringInterval,
+            boolean requireMinInt,
+            int minExponentDigits,
             SignDisplay exponentSignDisplay) {
         this.engineeringInterval = engineeringInterval;
         this.requireMinInt = requireMinInt;
@@ -40,12 +44,12 @@ public class ScientificNotation extends Notation implements Cloneable {
     }
 
     /**
-     * Sets the minimum number of digits to show in the exponent of scientific notation, padding with zeros if
-     * necessary. Useful for fixed-width display.
+     * Sets the minimum number of digits to show in the exponent of scientific notation, padding with
+     * zeros if necessary. Useful for fixed-width display.
      *
      * <p>
-     * For example, with minExponentDigits=2, the number 123 will be printed as "1.23E02" in <em>en-US</em> instead of
-     * the default "1.23E2".
+     * For example, with minExponentDigits=2, the number 123 will be printed as "1.23E02" in
+     * <em>en-US</em> instead of the default "1.23E2".
      *
      * @param minExponentDigits
      *            The minimum number of digits to show in the exponent.
@@ -55,23 +59,24 @@ public class ScientificNotation extends Notation implements Cloneable {
      * @see NumberFormatter
      */
     public ScientificNotation withMinExponentDigits(int minExponentDigits) {
-        if (minExponentDigits >= 0 && minExponentDigits < RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minExponentDigits >= 1 && minExponentDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             ScientificNotation other = (ScientificNotation) this.clone();
             other.minExponentDigits = minExponentDigits;
             return other;
         } else {
-            throw new IllegalArgumentException(
-                    "Integer digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Integer digits must be between 1 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
     /**
-     * Sets whether to show the sign on positive and negative exponents in scientific notation. The default is AUTO,
-     * showing the minus sign but not the plus sign.
+     * Sets whether to show the sign on positive and negative exponents in scientific notation. The
+     * default is AUTO, showing the minus sign but not the plus sign.
      *
      * <p>
-     * For example, with exponentSignDisplay=ALWAYS, the number 123 will be printed as "1.23E+2" in <em>en-US</em>
-     * instead of the default "1.23E2".
+     * For example, with exponentSignDisplay=ALWAYS, the number 123 will be printed as "1.23E+2" in
+     * <em>en-US</em> instead of the default "1.23E2".
      *
      * @param exponentSignDisplay
      *            The strategy for displaying the sign in the exponent.
@@ -101,21 +106,27 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
     }
 
-    /* package-private */ MicroPropsGenerator withLocaleData(DecimalFormatSymbols symbols, boolean build,
+    /* package-private */ MicroPropsGenerator withLocaleData(
+            DecimalFormatSymbols symbols,
+            boolean build,
             MicroPropsGenerator parent) {
         return new ScientificHandler(this, symbols, build, parent);
     }
 
-    // NOTE: The object lifecycle of ScientificModifier and ScientificHandler differ greatly in Java and C++.
+    // NOTE: The object lifecycle of ScientificModifier and ScientificHandler differ greatly in Java and
+    // C++.
     //
     // During formatting, we need to provide an object with state (the exponent) as the inner modifier.
     //
     // In Java, where the priority is put on reducing object creations, the unsafe code path re-uses the
-    // ScientificHandler as a ScientificModifier, and the safe code path pre-computes 25 ScientificModifier
+    // ScientificHandler as a ScientificModifier, and the safe code path pre-computes 25
+    // ScientificModifier
     // instances. This scheme reduces the number of object creations by 1 in both safe and unsafe.
     //
-    // In C++, MicroProps provides a pre-allocated ScientificModifier, and ScientificHandler simply populates
-    // the state (the exponent) into that ScientificModifier. There is no difference between safe and unsafe.
+    // In C++, MicroProps provides a pre-allocated ScientificModifier, and ScientificHandler simply
+    // populates
+    // the state (the exponent) into that ScientificModifier. There is no difference between safe and
+    // unsafe.
 
     private static class ScientificHandler implements MicroPropsGenerator, MultiplierProducer, Modifier {
 
@@ -125,7 +136,10 @@ public class ScientificNotation extends Notation implements Cloneable {
         final MicroPropsGenerator parent;
         /* unsafe */ int exponent;
 
-        private ScientificHandler(ScientificNotation notation, DecimalFormatSymbols symbols, boolean safe,
+        private ScientificHandler(
+                ScientificNotation notation,
+                DecimalFormatSymbols symbols,
+                boolean safe,
                 MicroPropsGenerator parent) {
             this.notation = notation;
             this.symbols = symbols;
@@ -152,7 +166,8 @@ public class ScientificNotation extends Notation implements Cloneable {
             if (quantity.isZero()) {
                 if (notation.requireMinInt && micros.rounding instanceof SignificantRounderImpl) {
                     // Show "00.000E0" on pattern "00.000E0"
-                    ((SignificantRounderImpl) micros.rounding).apply(quantity, notation.engineeringInterval);
+                    ((SignificantRounderImpl) micros.rounding).apply(quantity,
+                            notation.engineeringInterval);
                     exponent = 0;
                 } else {
                     micros.rounding.apply(quantity);

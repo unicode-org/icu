@@ -21,7 +21,8 @@ public class ConstantAffixModifier implements Modifier {
      * Constructs an instance with the given strings.
      *
      * <p>
-     * The arguments need to be Strings, not CharSequences, because Strings are immutable but CharSequences are not.
+     * The arguments need to be Strings, not CharSequences, because Strings are immutable but
+     * CharSequences are not.
      *
      * @param prefix
      *            The prefix string.

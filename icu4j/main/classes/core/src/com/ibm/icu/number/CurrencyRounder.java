@@ -5,8 +5,8 @@ package com.ibm.icu.number;
 import com.ibm.icu.util.Currency;
 
 /**
- * A class that defines a rounding strategy parameterized by a currency to be used when formatting numbers in
- * NumberFormatter.
+ * A class that defines a rounding strategy parameterized by a currency to be used when formatting
+ * numbers in NumberFormatter.
  *
  * <p>
  * To create a CurrencyRounder, use one of the factory methods on Rounder.
@@ -24,13 +24,13 @@ public abstract class CurrencyRounder extends Rounder {
      * Associates a currency with this rounding strategy.
      *
      * <p>
-     * <strong>Calling this method is <em>not required</em></strong>, because the currency specified in unit() or via a
-     * CurrencyAmount passed into format(Measure) is automatically applied to currency rounding strategies. However,
-     * this method enables you to override that automatic association.
+     * <strong>Calling this method is <em>not required</em></strong>, because the currency specified in
+     * unit() or via a CurrencyAmount passed into format(Measure) is automatically applied to currency
+     * rounding strategies. However, this method enables you to override that automatic association.
      *
      * <p>
-     * This method also enables numbers to be formatted using currency rounding rules without explicitly using a
-     * currency format.
+     * This method also enables numbers to be formatted using currency rounding rules without explicitly
+     * using a currency format.
      *
      * @param currency
      *            The currency to associate with this rounding strategy.

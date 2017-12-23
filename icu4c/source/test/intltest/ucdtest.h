@@ -42,6 +42,7 @@ public:
     void TestBidiPairedBracketType();
     void TestEmojiProperties();
     void TestDefaultScriptExtensions();
+    void TestInvalidCodePointFolding();
 
 private:
 

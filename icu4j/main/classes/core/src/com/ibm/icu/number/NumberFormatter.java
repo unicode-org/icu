@@ -10,7 +10,8 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
 /**
- * The main entrypoint to the localized number formatting library introduced in ICU 60. Basic usage examples:
+ * The main entrypoint to the localized number formatting library introduced in ICU 60. Basic usage
+ * examples:
  *
  * <pre>
  * // Most basic usage:
@@ -39,21 +40,25 @@ import com.ibm.icu.util.ULocale;
  * </pre>
  *
  * <p>
- * This API offers more features than {@link com.ibm.icu.text.DecimalFormat} and is geared toward new users of ICU.
+ * This API offers more features than {@link com.ibm.icu.text.DecimalFormat} and is geared toward new
+ * users of ICU.
  *
  * <p>
- * NumberFormatter instances are immutable and thread safe. This means that invoking a configuration method has no
- * effect on the receiving instance; you must store and use the new number formatter instance it returns instead.
+ * NumberFormatter instances are immutable and thread safe. This means that invoking a configuration
+ * method has no effect on the receiving instance; you must store and use the new number formatter
+ * instance it returns instead.
  *
  * <pre>
- * UnlocalizedNumberFormatter formatter = UnlocalizedNumberFormatter.with().notation(Notation.scientific());
+ * UnlocalizedNumberFormatter formatter = UnlocalizedNumberFormatter.with()
+ *         .notation(Notation.scientific());
  * formatter.rounding(Rounder.maxFraction(2)); // does nothing!
  * formatter.locale(ULocale.ENGLISH).format(9.8765).toString(); // prints "9.8765E0", not "9.88E0"
  * </pre>
  *
  * <p>
- * This API is based on the <em>fluent</em> design pattern popularized by libraries such as Google's Guava. For
- * extensive details on the design of this API, read <a href="https://goo.gl/szi5VB">the design doc</a>.
+ * This API is based on the <em>fluent</em> design pattern popularized by libraries such as Google's
+ * Guava. For extensive details on the design of this API, read <a href="https://goo.gl/szi5VB">the
+ * design doc</a>.
  *
  * @author Shane Carr
  * @draft ICU 60
@@ -64,8 +69,8 @@ public final class NumberFormatter {
     private static final UnlocalizedNumberFormatter BASE = new UnlocalizedNumberFormatter();
 
     /**
-     * An enum declaring how to render units, including currencies. Example outputs when formatting 123 USD and 123
-     * meters in <em>en-CA</em>:
+     * An enum declaring how to render units, including currencies. Example outputs when formatting 123
+     * USD and 123 meters in <em>en-CA</em>:
      *
      * <ul>
      * <li>NARROW: "$123.00" and "123 m"
@@ -84,13 +89,14 @@ public final class NumberFormatter {
      */
     public static enum UnitWidth {
         /**
-         * Print an abbreviated version of the unit name. Similar to SHORT, but always use the shortest available
-         * abbreviation or symbol. This option can be used when the context hints at the identity of the unit. For more
-         * information on the difference between NARROW and SHORT, see SHORT.
+         * Print an abbreviated version of the unit name. Similar to SHORT, but always use the shortest
+         * available abbreviation or symbol. This option can be used when the context hints at the
+         * identity of the unit. For more information on the difference between NARROW and SHORT, see
+         * SHORT.
          *
          * <p>
-         * In CLDR, this option corresponds to the "Narrow" format for measure units and the "¤¤¤¤¤" placeholder for
-         * currencies.
+         * In CLDR, this option corresponds to the "Narrow" format for measure units and the "¤¤¤¤¤"
+         * placeholder for currencies.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -99,16 +105,16 @@ public final class NumberFormatter {
         NARROW,
 
         /**
-         * Print an abbreviated version of the unit name. Similar to NARROW, but use a slightly wider abbreviation or
-         * symbol when there may be ambiguity. This is the default behavior.
+         * Print an abbreviated version of the unit name. Similar to NARROW, but use a slightly wider
+         * abbreviation or symbol when there may be ambiguity. This is the default behavior.
          *
          * <p>
-         * For example, in <em>es-US</em>, the SHORT form for Fahrenheit is "{0} °F", but the NARROW form is "{0}°",
-         * since Fahrenheit is the customary unit for temperature in that locale.
+         * For example, in <em>es-US</em>, the SHORT form for Fahrenheit is "{0} °F", but the NARROW form
+         * is "{0}°", since Fahrenheit is the customary unit for temperature in that locale.
          *
          * <p>
-         * In CLDR, this option corresponds to the "Short" format for measure units and the "¤" placeholder for
-         * currencies.
+         * In CLDR, this option corresponds to the "Short" format for measure units and the "¤"
+         * placeholder for currencies.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -120,8 +126,8 @@ public final class NumberFormatter {
          * Print the full name of the unit, without any abbreviations.
          *
          * <p>
-         * In CLDR, this option corresponds to the default format for measure units and the "¤¤¤" placeholder for
-         * currencies.
+         * In CLDR, this option corresponds to the default format for measure units and the "¤¤¤"
+         * placeholder for currencies.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -130,8 +136,8 @@ public final class NumberFormatter {
         FULL_NAME,
 
         /**
-         * Use the three-digit ISO XXX code in place of the symbol for displaying currencies. The behavior of this
-         * option is currently undefined for use with measure units.
+         * Use the three-digit ISO XXX code in place of the symbol for displaying currencies. The
+         * behavior of this option is currently undefined for use with measure units.
          *
          * <p>
          * In CLDR, this option corresponds to the "¤¤" placeholder for currencies.
@@ -143,9 +149,9 @@ public final class NumberFormatter {
         ISO_CODE,
 
         /**
-         * Format the number according to the specified unit, but do not display the unit. For currencies, apply
-         * monetary symbols and formats as with SHORT, but omit the currency symbol. For measure units, the behavior is
-         * equivalent to not specifying the unit at all.
+         * Format the number according to the specified unit, but do not display the unit. For
+         * currencies, apply monetary symbols and formats as with SHORT, but omit the currency symbol.
+         * For measure units, the behavior is equivalent to not specifying the unit at all.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -155,8 +161,8 @@ public final class NumberFormatter {
     }
 
     /**
-     * An enum declaring how to denote positive and negative numbers. Example outputs when formatting 123 and -123 in
-     * <em>en-US</em>:
+     * An enum declaring how to denote positive and negative numbers. Example outputs when formatting 123
+     * and -123 in <em>en-US</em>:
      *
      * <ul>
      * <li>AUTO: "123" and "-123"
@@ -175,8 +181,8 @@ public final class NumberFormatter {
      */
     public static enum SignDisplay {
         /**
-         * Show the minus sign on negative numbers, and do not show the sign on positive numbers. This is the default
-         * behavior.
+         * Show the minus sign on negative numbers, and do not show the sign on positive numbers. This is
+         * the default behavior.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -203,16 +209,17 @@ public final class NumberFormatter {
         NEVER,
 
         /**
-         * Use the locale-dependent accounting format on negative numbers, and do not show the sign on positive numbers.
+         * Use the locale-dependent accounting format on negative numbers, and do not show the sign on
+         * positive numbers.
          *
          * <p>
-         * The accounting format is defined in CLDR and varies by locale; in many Western locales, the format is a pair
-         * of parentheses around the number.
+         * The accounting format is defined in CLDR and varies by locale; in many Western locales, the
+         * format is a pair of parentheses around the number.
          *
          * <p>
-         * Note: Since CLDR defines the accounting format in the monetary context only, this option falls back to the
-         * AUTO sign display strategy when formatting without a currency unit. This limitation may be lifted in the
-         * future.
+         * Note: Since CLDR defines the accounting format in the monetary context only, this option falls
+         * back to the AUTO sign display strategy when formatting without a currency unit. This
+         * limitation may be lifted in the future.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -221,8 +228,9 @@ public final class NumberFormatter {
         ACCOUNTING,
 
         /**
-         * Use the locale-dependent accounting format on negative numbers, and show the plus sign on positive numbers.
-         * For more information on the accounting format, see the ACCOUNTING sign display strategy.
+         * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
+         * positive numbers. For more information on the accounting format, see the ACCOUNTING sign
+         * display strategy.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -232,8 +240,8 @@ public final class NumberFormatter {
     }
 
     /**
-     * An enum declaring how to render the decimal separator. Example outputs when formatting 1 and 1.1 in
-     * <em>en-US</em>:
+     * An enum declaring how to render the decimal separator. Example outputs when formatting 1 and 1.1
+     * in <em>en-US</em>:
      *
      * <ul>
      * <li>AUTO: "1" and "1.1"
@@ -246,8 +254,8 @@ public final class NumberFormatter {
      */
     public static enum DecimalSeparatorDisplay {
         /**
-         * Show the decimal separator when there are one or more digits to display after the separator, and do not show
-         * it otherwise. This is the default behavior.
+         * Show the decimal separator when there are one or more digits to display after the separator,
+         * and do not show it otherwise. This is the default behavior.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -266,8 +274,9 @@ public final class NumberFormatter {
     }
 
     /**
-     * Use a default threshold of 3. This means that the third time .format() is called, the data structures get built
-     * using the "safe" code path. The first two calls to .format() will trigger the unsafe code path.
+     * Use a default threshold of 3. This means that the third time .format() is called, the data
+     * structures get built using the "safe" code path. The first two calls to .format() will trigger the
+     * unsafe code path.
      */
     static final long DEFAULT_THRESHOLD = 3;
 
@@ -278,8 +287,8 @@ public final class NumberFormatter {
     }
 
     /**
-     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is not currently known at
-     * the call site.
+     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is not
+     * currently known at the call site.
      *
      * @return An {@link UnlocalizedNumberFormatter}, to be used for chaining.
      * @draft ICU 60
@@ -290,8 +299,8 @@ public final class NumberFormatter {
     }
 
     /**
-     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is known at the call
-     * site.
+     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is known
+     * at the call site.
      *
      * @param locale
      *            The locale from which to load formats and symbols for number formatting.
@@ -304,8 +313,8 @@ public final class NumberFormatter {
     }
 
     /**
-     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is known at the call
-     * site.
+     * Call this method at the beginning of a NumberFormatter fluent chain in which the locale is known
+     * at the call site.
      *
      * @param locale
      *            The locale from which to load formats and symbols for number formatting.
@@ -322,8 +331,10 @@ public final class NumberFormatter {
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
-    public static UnlocalizedNumberFormatter fromDecimalFormat(DecimalFormatProperties properties,
-            DecimalFormatSymbols symbols, DecimalFormatProperties exportedProperties) {
+    public static UnlocalizedNumberFormatter fromDecimalFormat(
+            DecimalFormatProperties properties,
+            DecimalFormatSymbols symbols,
+            DecimalFormatProperties exportedProperties) {
         MacroProps macros = NumberPropertyMapper.oldToNew(properties, symbols, exportedProperties);
         return NumberFormatter.with().macros(macros);
     }

@@ -38,8 +38,8 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Format the given byte, short, int, or long to a string using the settings specified in the NumberFormatter fluent
-     * setting chain.
+     * Format the given byte, short, int, or long to a string using the settings specified in the
+     * NumberFormatter fluent setting chain.
      *
      * @param input
      *            The number to format.
@@ -53,8 +53,8 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Format the given float or double to a string using the settings specified in the NumberFormatter fluent setting
-     * chain.
+     * Format the given float or double to a string using the settings specified in the NumberFormatter
+     * fluent setting chain.
      *
      * @param input
      *            The number to format.
@@ -68,8 +68,8 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Format the given {@link BigInteger}, {@link BigDecimal}, or other {@link Number} to a string using the settings
-     * specified in the NumberFormatter fluent setting chain.
+     * Format the given {@link BigInteger}, {@link BigDecimal}, or other {@link Number} to a string using
+     * the settings specified in the NumberFormatter fluent setting chain.
      *
      * @param input
      *            The number to format.
@@ -83,12 +83,12 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Format the given {@link Measure} or {@link CurrencyAmount} to a string using the settings specified in the
-     * NumberFormatter fluent setting chain.
+     * Format the given {@link Measure} or {@link CurrencyAmount} to a string using the settings
+     * specified in the NumberFormatter fluent setting chain.
      *
      * <p>
-     * The unit specified here overrides any unit that may have been specified in the setter chain. This method is
-     * intended for cases when each input to the number formatter has a different unit.
+     * The unit specified here overrides any unit that may have been specified in the setter chain. This
+     * method is intended for cases when each input to the number formatter has a different unit.
      *
      * @param input
      *            The number to format.
@@ -115,8 +115,9 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * This is the core entrypoint to the number formatting pipeline. It performs self-regulation: a static code path
-     * for the first few calls, and compiling a more efficient data structure if called repeatedly.
+     * This is the core entrypoint to the number formatting pipeline. It performs self-regulation: a
+     * static code path for the first few calls, and compiling a more efficient data structure if called
+     * repeatedly.
      *
      * <p>
      * This function is very hot, being called in every call to the number formatting pipeline.

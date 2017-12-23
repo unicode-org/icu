@@ -27,8 +27,7 @@ public class MutablePatternModifierTest {
         MutablePatternModifier mod = new MutablePatternModifier(false);
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b"));
         mod.setPatternAttributes(SignDisplay.AUTO, false);
-        mod.setSymbols(
-                DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
+        mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
                 Currency.getInstance("USD"),
                 UnitWidth.SHORT,
                 null);
