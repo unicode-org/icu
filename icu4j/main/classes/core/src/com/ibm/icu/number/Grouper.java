@@ -108,7 +108,8 @@ public class Grouper {
             return false;
         }
         position -= grouping1;
-        return position >= 0 && (position % grouping2) == 0
+        return position >= 0
+                && (position % grouping2) == 0
                 && value.getUpperDisplayMagnitude() - grouping1 + 1 >= (min2 ? 2 : 1);
     }
 }

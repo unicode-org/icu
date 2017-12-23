@@ -16,8 +16,9 @@ public class PatternStringUtils {
      * Creates a pattern string from a property bag.
      *
      * <p>
-     * Since pattern strings support only a subset of the functionality available in a property bag, a new property bag
-     * created from the string returned by this function may not be the same as the original property bag.
+     * Since pattern strings support only a subset of the functionality available in a property bag, a
+     * new property bag created from the string returned by this function may not be the same as the
+     * original property bag.
      *
      * @param properties
      *            The property bag to serialize.
@@ -61,7 +62,8 @@ public class PatternStringUtils {
 
         // Figure out the grouping sizes.
         int grouping1, grouping2, grouping;
-        if (groupingSize != Math.min(dosMax, -1) && firstGroupingSize != Math.min(dosMax, -1)
+        if (groupingSize != Math.min(dosMax, -1)
+                && firstGroupingSize != Math.min(dosMax, -1)
                 && groupingSize != firstGroupingSize) {
             grouping = groupingSize;
             grouping1 = groupingSize;
@@ -184,7 +186,9 @@ public class PatternStringUtils {
 
         // Negative affixes
         // Ignore if the negative prefix pattern is "-" and the negative suffix is empty
-        if (np != null || ns != null || (npp == null && nsp != null)
+        if (np != null
+                || ns != null
+                || (npp == null && nsp != null)
                 || (npp != null && (npp.length() != 1 || npp.charAt(0) != '-' || nsp.length() != 0))) {
             sb.append(';');
             if (npp != null)
@@ -232,14 +236,15 @@ public class PatternStringUtils {
     }
 
     /**
-     * Converts a pattern between standard notation and localized notation. Localized notation means that instead of
-     * using generic placeholders in the pattern, you use the corresponding locale-specific characters instead. For
-     * example, in locale <em>fr-FR</em>, the period in the pattern "0.000" means "decimal" in standard notation (as it
-     * does in every other locale), but it means "grouping" in localized notation.
+     * Converts a pattern between standard notation and localized notation. Localized notation means that
+     * instead of using generic placeholders in the pattern, you use the corresponding locale-specific
+     * characters instead. For example, in locale <em>fr-FR</em>, the period in the pattern "0.000" means
+     * "decimal" in standard notation (as it does in every other locale), but it means "grouping" in
+     * localized notation.
      *
      * <p>
-     * A greedy string-substitution strategy is used to substitute locale symbols. If two symbols are ambiguous or have
-     * the same prefix, the result is not well-defined.
+     * A greedy string-substitution strategy is used to substitute locale symbols. If two symbols are
+     * ambiguous or have the same prefix, the result is not well-defined.
      *
      * <p>
      * Locale symbols are not allowed to contain the ASCII quote character.
@@ -252,11 +257,14 @@ public class PatternStringUtils {
      * @param symbols
      *            The symbols corresponding to the localized pattern.
      * @param toLocalized
-     *            true to convert from standard to localized notation; false to convert from localized to standard
-     *            notation.
+     *            true to convert from standard to localized notation; false to convert from localized to
+     *            standard notation.
      * @return The pattern expressed in the other notation.
      */
-    public static String convertLocalized(String input, DecimalFormatSymbols symbols, boolean toLocalized) {
+    public static String convertLocalized(
+            String input,
+            DecimalFormatSymbols symbols,
+            boolean toLocalized) {
         if (input == null)
             return null;
 

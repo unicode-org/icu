@@ -7,8 +7,9 @@ package com.ibm.icu.impl.number;
  */
 public interface MultiplierProducer {
     /**
-     * Maps a magnitude to a multiplier in powers of ten. For example, in compact notation in English, a magnitude of 5
-     * (e.g., 100,000) should return a multiplier of -3, since the number is displayed in thousands.
+     * Maps a magnitude to a multiplier in powers of ten. For example, in compact notation in English, a
+     * magnitude of 5 (e.g., 100,000) should return a multiplier of -3, since the number is displayed in
+     * thousands.
      *
      * @param magnitude
      *            The power of ten of the input number.

@@ -15,8 +15,14 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 public class Notation {
 
     // TODO: Support engineering intervals other than 3?
-    private static final ScientificNotation SCIENTIFIC = new ScientificNotation(1, false, 1, SignDisplay.AUTO);
-    private static final ScientificNotation ENGINEERING = new ScientificNotation(3, false, 1, SignDisplay.AUTO);
+    private static final ScientificNotation SCIENTIFIC = new ScientificNotation(1,
+            false,
+            1,
+            SignDisplay.AUTO);
+    private static final ScientificNotation ENGINEERING = new ScientificNotation(3,
+            false,
+            1,
+            SignDisplay.AUTO);
     private static final CompactNotation COMPACT_SHORT = new CompactNotation(CompactStyle.SHORT);
     private static final CompactNotation COMPACT_LONG = new CompactNotation(CompactStyle.LONG);
     private static final SimpleNotation SIMPLE = new SimpleNotation();
@@ -25,10 +31,11 @@ public class Notation {
     }
 
     /**
-     * Print the number using scientific notation (also known as scientific form, standard index form, or standard form
-     * in the UK). The format for scientific notation varies by locale; for example, many Western locales display the
-     * number in the form "#E0", where the number is displayed with one digit before the decimal separator, zero or more
-     * digits after the decimal separator, and the corresponding power of 10 displayed after the "E".
+     * Print the number using scientific notation (also known as scientific form, standard index form, or
+     * standard form in the UK). The format for scientific notation varies by locale; for example, many
+     * Western locales display the number in the form "#E0", where the number is displayed with one digit
+     * before the decimal separator, zero or more digits after the decimal separator, and the
+     * corresponding power of 10 displayed after the "E".
      *
      * <p>
      * Example outputs in <em>en-US</em> when printing 8.765E4 through 8.765E-3:
@@ -55,8 +62,8 @@ public class Notation {
     }
 
     /**
-     * Print the number using engineering notation, a variant of scientific notation in which the exponent must be
-     * divisible by 3.
+     * Print the number using engineering notation, a variant of scientific notation in which the
+     * exponent must be divisible by 3.
      *
      * <p>
      * Example outputs in <em>en-US</em> when printing 8.765E4 through 8.765E-3:
@@ -86,18 +93,18 @@ public class Notation {
      * Print the number using short-form compact notation.
      *
      * <p>
-     * <em>Compact notation</em>, defined in Unicode Technical Standard #35 Part 3 Section 2.4.1, prints numbers with
-     * localized prefixes or suffixes corresponding to different powers of ten. Compact notation is similar to
-     * engineering notation in how it scales numbers.
+     * <em>Compact notation</em>, defined in Unicode Technical Standard #35 Part 3 Section 2.4.1, prints
+     * numbers with localized prefixes or suffixes corresponding to different powers of ten. Compact
+     * notation is similar to engineering notation in how it scales numbers.
      *
      * <p>
-     * Compact notation is ideal for displaying large numbers (over ~1000) to humans while at the same time minimizing
-     * screen real estate.
+     * Compact notation is ideal for displaying large numbers (over ~1000) to humans while at the same
+     * time minimizing screen real estate.
      *
      * <p>
-     * In short form, the powers of ten are abbreviated. In <em>en-US</em>, the abbreviations are "K" for thousands, "M"
-     * for millions, "B" for billions, and "T" for trillions. Example outputs in <em>en-US</em> when printing 8.765E7
-     * through 8.765E0:
+     * In short form, the powers of ten are abbreviated. In <em>en-US</em>, the abbreviations are "K" for
+     * thousands, "M" for millions, "B" for billions, and "T" for trillions. Example outputs in
+     * <em>en-US</em> when printing 8.765E7 through 8.765E0:
      *
      * <pre>
      * 88M
@@ -111,10 +118,10 @@ public class Notation {
      * </pre>
      *
      * <p>
-     * When compact notation is specified without an explicit rounding strategy, numbers are rounded off to the closest
-     * integer after scaling the number by the corresponding power of 10, but with a digit shown after the decimal
-     * separator if there is only one digit before the decimal separator. The default compact notation rounding strategy
-     * is equivalent to:
+     * When compact notation is specified without an explicit rounding strategy, numbers are rounded off
+     * to the closest integer after scaling the number by the corresponding power of 10, but with a digit
+     * shown after the decimal separator if there is only one digit before the decimal separator. The
+     * default compact notation rounding strategy is equivalent to:
      *
      * <pre>
      * Rounder.integer().withMinDigits(2)
@@ -134,8 +141,8 @@ public class Notation {
      * {@link #compactShort}.
      *
      * <p>
-     * In long form, the powers of ten are spelled out fully. Example outputs in <em>en-US</em> when printing 8.765E7
-     * through 8.765E0:
+     * In long form, the powers of ten are spelled out fully. Example outputs in <em>en-US</em> when
+     * printing 8.765E7 through 8.765E0:
      *
      * <pre>
      * 88 million
@@ -158,11 +165,12 @@ public class Notation {
     }
 
     /**
-     * Print the number using simple notation without any scaling by powers of ten. This is the default behavior.
+     * Print the number using simple notation without any scaling by powers of ten. This is the default
+     * behavior.
      *
      * <p>
-     * Since this is the default behavior, this method needs to be called only when it is necessary to override a
-     * previous setting.
+     * Since this is the default behavior, this method needs to be called only when it is necessary to
+     * override a previous setting.
      *
      * <p>
      * Example outputs in <em>en-US</em> when printing 8.765E7 through 8.765E0:

@@ -30,20 +30,22 @@ import com.ibm.icu.util.ULocale;
 
 /**
  * <p>
- * This class, as well as NumberFormatterImpl, could go into the impl package, but they depend on too many
- * package-private members of the public APIs.
+ * This class, as well as NumberFormatterImpl, could go into the impl package, but they depend on too
+ * many package-private members of the public APIs.
  */
 final class NumberPropertyMapper {
 
     /** Convenience method to create a NumberFormatter directly from Properties. */
-    public static UnlocalizedNumberFormatter create(DecimalFormatProperties properties, DecimalFormatSymbols symbols) {
+    public static UnlocalizedNumberFormatter create(
+            DecimalFormatProperties properties,
+            DecimalFormatSymbols symbols) {
         MacroProps macros = oldToNew(properties, symbols, null);
         return NumberFormatter.with().macros(macros);
     }
 
     /**
-     * Convenience method to create a NumberFormatter directly from a pattern string. Something like this could become
-     * public API if there is demand.
+     * Convenience method to create a NumberFormatter directly from a pattern string. Something like this
+     * could become public API if there is demand.
      */
     public static UnlocalizedNumberFormatter create(String pattern, DecimalFormatSymbols symbols) {
         DecimalFormatProperties properties = PatternStringParser.parseToProperties(pattern);
@@ -51,9 +53,9 @@ final class NumberPropertyMapper {
     }
 
     /**
-     * Creates a new {@link MacroProps} object based on the content of a {@link DecimalFormatProperties} object. In
-     * other words, maps Properties to MacroProps. This function is used by the JDK-compatibility API to call into the
-     * ICU 60 fluent number formatting pipeline.
+     * Creates a new {@link MacroProps} object based on the content of a {@link DecimalFormatProperties}
+     * object. In other words, maps Properties to MacroProps. This function is used by the
+     * JDK-compatibility API to call into the ICU 60 fluent number formatting pipeline.
      *
      * @param properties
      *            The property bag to be mapped.
@@ -63,7 +65,9 @@ final class NumberPropertyMapper {
      *            A property bag in which to store validated properties.
      * @return A new MacroProps containing all of the information in the Properties.
      */
-    public static MacroProps oldToNew(DecimalFormatProperties properties, DecimalFormatSymbols symbols,
+    public static MacroProps oldToNew(
+            DecimalFormatProperties properties,
+            DecimalFormatSymbols symbols,
             DecimalFormatProperties exportedProperties) {
         MacroProps macros = new MacroProps();
         ULocale locale = symbols.getULocale();
@@ -96,8 +100,10 @@ final class NumberPropertyMapper {
         // UNITS //
         ///////////
 
-        boolean useCurrency = ((properties.getCurrency() != null) || properties.getCurrencyPluralInfo() != null
-                || properties.getCurrencyUsage() != null || affixProvider.hasCurrencySign());
+        boolean useCurrency = ((properties.getCurrency() != null)
+                || properties.getCurrencyPluralInfo() != null
+                || properties.getCurrencyUsage() != null
+                || affixProvider.hasCurrencySign());
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         CurrencyUsage currencyUsage = properties.getCurrencyUsage();
         boolean explicitCurrencyUsage = currencyUsage != null;
@@ -122,7 +128,8 @@ final class NumberPropertyMapper {
         MathContext mathContext = RoundingUtils.getMathContextOrUnlimited(properties);
         boolean explicitMinMaxFrac = minFrac != -1 || maxFrac != -1;
         boolean explicitMinMaxSig = minSig != -1 || maxSig != -1;
-        // Resolve min/max frac for currencies, required for the validation logic and for when minFrac or maxFrac was
+        // Resolve min/max frac for currencies, required for the validation logic and for when minFrac or
+        // maxFrac was
         // set (but not both) on a currency instance.
         // NOTE: Increments are handled in "Rounder.constructCurrency()".
         if (useCurrency) {
@@ -151,7 +158,8 @@ final class NumberPropertyMapper {
             minFrac = minFrac < 0 ? 0 : minFrac;
             maxFrac = maxFrac < 0 ? Integer.MAX_VALUE : maxFrac < minFrac ? minFrac : maxFrac;
             minInt = minInt <= 0 ? 1 : minInt > RoundingUtils.MAX_INT_FRAC_SIG ? 1 : minInt;
-            maxInt = maxInt < 0 ? -1 : maxInt < minInt ? minInt : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
+            maxInt = maxInt < 0 ? -1
+                    : maxInt < minInt ? minInt : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
         }
         Rounder rounding = null;
         if (explicitCurrencyUsage) {
@@ -159,10 +167,12 @@ final class NumberPropertyMapper {
         } else if (roundingIncrement != null) {
             rounding = Rounder.constructIncrement(roundingIncrement);
         } else if (explicitMinMaxSig) {
-            minSig = minSig < 1 ? 1 : minSig > RoundingUtils.MAX_INT_FRAC_SIG ? RoundingUtils.MAX_INT_FRAC_SIG : minSig;
+            minSig = minSig < 1 ? 1
+                    : minSig > RoundingUtils.MAX_INT_FRAC_SIG ? RoundingUtils.MAX_INT_FRAC_SIG : minSig;
             maxSig = maxSig < 0 ? RoundingUtils.MAX_INT_FRAC_SIG
                     : maxSig < minSig ? minSig
-                            : maxSig > RoundingUtils.MAX_INT_FRAC_SIG ? RoundingUtils.MAX_INT_FRAC_SIG : maxSig;
+                            : maxSig > RoundingUtils.MAX_INT_FRAC_SIG ? RoundingUtils.MAX_INT_FRAC_SIG
+                                    : maxSig;
             rounding = Rounder.constructSignificant(minSig, maxSig);
         } else if (explicitMinMaxFrac) {
             rounding = Rounder.constructFraction(minFrac, maxFrac);
@@ -198,7 +208,8 @@ final class NumberPropertyMapper {
         /////////////
 
         if (properties.getFormatWidth() != -1) {
-            macros.padder = new Padder(properties.getPadString(), properties.getFormatWidth(),
+            macros.padder = new Padder(properties.getPadString(),
+                    properties.getFormatWidth(),
                     properties.getPadPosition());
         }
 
@@ -246,7 +257,8 @@ final class NumberPropertyMapper {
             // Scientific notation also involves overriding the rounding mode.
             // TODO: Overriding here is a bit of a hack. Should this logic go earlier?
             if (macros.rounder instanceof FractionRounder) {
-                // For the purposes of rounding, get the original min/max int/frac, since the local variables
+                // For the purposes of rounding, get the original min/max int/frac, since the local
+                // variables
                 // have been manipulated for display purposes.
                 int minInt_ = properties.getMinimumIntegerDigits();
                 int minFrac_ = properties.getMinimumFractionDigits();
@@ -342,15 +354,20 @@ final class NumberPropertyMapper {
         private final String negSuffix;
 
         public PropertiesAffixPatternProvider(DecimalFormatProperties properties) {
-            // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern), and via the
-            // explicit setters (setPositivePrefix and friends).  The way to resolve the settings is as follows:
+            // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern),
+            // and via the
+            // explicit setters (setPositivePrefix and friends). The way to resolve the settings is as
+            // follows:
             //
             // 1) If the explicit setting is present for the field, use it.
             // 2) Otherwise, follows UTS 35 rules based on the pattern string.
             //
-            // Importantly, the explicit setters affect only the one field they override.  If you set the positive
-            // prefix, that should not affect the negative prefix.  Since it is impossible for the user of this class
-            // to know whether the origin for a string was the override or the pattern, we have to say that we always
+            // Importantly, the explicit setters affect only the one field they override. If you set the
+            // positive
+            // prefix, that should not affect the negative prefix. Since it is impossible for the user of
+            // this class
+            // to know whether the origin for a string was the override or the pattern, we have to say
+            // that we always
             // have a negative subpattern and perform all resolution logic here.
 
             // Convenience: Extract the properties into local variables.
@@ -449,14 +466,18 @@ final class NumberPropertyMapper {
 
         @Override
         public boolean hasCurrencySign() {
-            return AffixUtils.hasCurrencySymbols(posPrefix) || AffixUtils.hasCurrencySymbols(posSuffix)
-                    || AffixUtils.hasCurrencySymbols(negPrefix) || AffixUtils.hasCurrencySymbols(negSuffix);
+            return AffixUtils.hasCurrencySymbols(posPrefix)
+                    || AffixUtils.hasCurrencySymbols(posSuffix)
+                    || AffixUtils.hasCurrencySymbols(negPrefix)
+                    || AffixUtils.hasCurrencySymbols(negSuffix);
         }
 
         @Override
         public boolean containsSymbolType(int type) {
-            return AffixUtils.containsType(posPrefix, type) || AffixUtils.containsType(posSuffix, type)
-                    || AffixUtils.containsType(negPrefix, type) || AffixUtils.containsType(negSuffix, type);
+            return AffixUtils.containsType(posPrefix, type)
+                    || AffixUtils.containsType(posSuffix, type)
+                    || AffixUtils.containsType(negPrefix, type)
+                    || AffixUtils.containsType(negSuffix, type);
         }
     }
 

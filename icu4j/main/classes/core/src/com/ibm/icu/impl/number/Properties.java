@@ -8,8 +8,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * ICU 59 called the class DecimalFormatProperties as just Properties. We need to keep a thin implementation for the
- * purposes of serialization.
+ * ICU 59 called the class DecimalFormatProperties as just Properties. We need to keep a thin
+ * implementation for the purposes of serialization.
  */
 public class Properties implements Serializable {
 

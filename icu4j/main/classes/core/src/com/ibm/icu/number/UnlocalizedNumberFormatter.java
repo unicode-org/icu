@@ -7,7 +7,8 @@ import java.util.Locale;
 import com.ibm.icu.util.ULocale;
 
 /**
- * A NumberFormatter that does not yet have a locale. In order to format numbers, a locale must be specified.
+ * A NumberFormatter that does not yet have a locale. In order to format numbers, a locale must be
+ * specified.
  *
  * @see NumberFormatter
  * @draft ICU 60
@@ -25,8 +26,8 @@ public class UnlocalizedNumberFormatter extends NumberFormatterSettings<Unlocali
     }
 
     /**
-     * Associate the given locale with the number formatter. The locale is used for picking the appropriate symbols,
-     * formats, and other data for number display.
+     * Associate the given locale with the number formatter. The locale is used for picking the
+     * appropriate symbols, formats, and other data for number display.
      *
      * <p>
      * To use the Java default locale, call Locale.getDefault():
