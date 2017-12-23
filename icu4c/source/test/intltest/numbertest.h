@@ -45,6 +45,7 @@ class NumberFormatterApiTest : public IntlTest {
     void notationScientific();
     void notationCompact();
     void unitMeasure();
+    void unitCompoundMeasure();
     void unitCurrency();
     void unitPercent();
     void roundingFraction();
@@ -75,6 +76,11 @@ class NumberFormatterApiTest : public IntlTest {
     MeasureUnit DAY;
     MeasureUnit SQUARE_METER;
     MeasureUnit FAHRENHEIT;
+    MeasureUnit SECOND;
+    MeasureUnit POUND;
+    MeasureUnit SQUARE_MILE;
+    MeasureUnit JOULE;
+    MeasureUnit FURLONG;
 
     NumberingSystem MATHSANB;
     NumberingSystem LATN;

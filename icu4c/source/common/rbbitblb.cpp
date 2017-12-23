@@ -1095,15 +1095,12 @@ int32_t  RBBITableBuilder::getTableSize() const {
         return 0;
     }
 
-    size    = sizeof(RBBIStateTable) - 4;    // The header, with no rows to the table.
+    size    = offsetof(RBBIStateTable, fTableData);    // The header, with no rows to the table.
 
     numRows = fDStates->size();
     numCols = fRB->fSetBuilder->getNumCharCategories();
 
-    //  Note  The declaration of RBBIStateTableRow is for a table of two columns.
-    //        Therefore we subtract two from numCols when determining
-    //        how much storage to add to a row for the total columns.
-    rowSize = sizeof(RBBIStateTableRow) + sizeof(uint16_t)*(numCols-2);
+    rowSize = offsetof(RBBIStateTableRow, fNextState) + sizeof(uint16_t)*numCols;
     size   += numRows * rowSize;
     return size;
 }
@@ -1126,14 +1123,14 @@ void RBBITableBuilder::exportTable(void *where) {
         return;
     }
 
-    if (fRB->fSetBuilder->getNumCharCategories() > 0x7fff ||
+    int32_t catCount = fRB->fSetBuilder->getNumCharCategories();
+    if (catCount > 0x7fff ||
         fDStates->size() > 0x7fff) {
         *fStatus = U_BRK_INTERNAL_ERROR;
         return;
     }
 
-    table->fRowLen    = sizeof(RBBIStateTableRow) +
-                            sizeof(uint16_t) * (fRB->fSetBuilder->getNumCharCategories() - 2);
+    table->fRowLen    = offsetof(RBBIStateTableRow, fNextState) + sizeof(uint16_t) * catCount;
     table->fNumStates = fDStates->size();
     table->fFlags     = 0;
     if (fRB->fLookAheadHardBreak) {
@@ -1152,7 +1149,7 @@ void RBBITableBuilder::exportTable(void *where) {
         row->fAccepting = (int16_t)sd->fAccepting;
         row->fLookAhead = (int16_t)sd->fLookAhead;
         row->fTagIdx    = (int16_t)sd->fTagsIdx;
-        for (col=0; col<fRB->fSetBuilder->getNumCharCategories(); col++) {
+        for (col=0; col<catCount; col++) {
             row->fNextState[col] = (uint16_t)sd->fDtran->elementAti(col);
         }
     }

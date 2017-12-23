@@ -39,10 +39,15 @@ public class CompactData implements MultiplierProducer {
         isEmpty = true;
     }
 
-    public void populate(ULocale locale, String nsName, CompactStyle compactStyle, CompactType compactType) {
+    public void populate(
+            ULocale locale,
+            String nsName,
+            CompactStyle compactStyle,
+            CompactType compactType) {
         assert isEmpty;
         CompactDataSink sink = new CompactDataSink(this);
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle
+                .getBundleInstance(ICUData.ICU_BASE_NAME, locale);
 
         boolean nsIsLatn = nsName.equals("latn");
         boolean compactIsShort = compactStyle == CompactStyle.SHORT;
@@ -71,7 +76,11 @@ public class CompactData implements MultiplierProducer {
     }
 
     /** Produces a string like "NumberElements/latn/patternsShort/decimalFormat". */
-    private static void getResourceBundleKey(String nsName, CompactStyle compactStyle, CompactType compactType, StringBuilder sb) {
+    private static void getResourceBundleKey(
+            String nsName,
+            CompactStyle compactStyle,
+            CompactType compactType,
+            StringBuilder sb) {
         sb.setLength(0);
         sb.append("NumberElements/");
         sb.append(nsName);
@@ -82,7 +91,8 @@ public class CompactData implements MultiplierProducer {
     /** Java-only method used by CLDR tooling. */
     public void populate(Map<String, Map<String, String>> powersToPluralsToPatterns) {
         assert isEmpty;
-        for (Map.Entry<String, Map<String, String>> magnitudeEntry : powersToPluralsToPatterns.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> magnitudeEntry : powersToPluralsToPatterns
+                .entrySet()) {
             byte magnitude = (byte) (magnitudeEntry.getKey().length() - 1);
             for (Map.Entry<String, String> pluralEntry : magnitudeEntry.getValue().entrySet()) {
                 StandardPlural plural = StandardPlural.fromString(pluralEntry.getKey().toString());
@@ -155,7 +165,7 @@ public class CompactData implements MultiplierProducer {
             for (int i3 = 0; powersOfTenTable.getKeyAndValue(i3, key, value); ++i3) {
 
                 // Assumes that the keys are always of the form "10000" where the magnitude is the
-                // length of the key minus one.  We expect magnitudes to be less than MAX_DIGITS.
+                // length of the key minus one. We expect magnitudes to be less than MAX_DIGITS.
                 byte magnitude = (byte) (key.length() - 1);
                 byte multiplier = data.multipliers[magnitude];
                 assert magnitude < COMPACT_MAX_DIGITS;

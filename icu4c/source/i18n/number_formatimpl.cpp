@@ -308,6 +308,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps &macros, bool safe,
                         LongNameHandler::forMeasureUnit(
                                 macros.locale,
                                 macros.unit,
+                                macros.perUnit,
                                 unitWidth,
                                 resolvePluralRules(macros.rules, macros.locale, status),
                                 chain,

@@ -764,10 +764,11 @@ UnicodeString &MeasureFormat::formatMeasurePerUnit(
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    MeasureUnit *resolvedUnit =
-            MeasureUnit::resolveUnitPerUnit(measure.getUnit(), perUnit);
-    if (resolvedUnit != NULL) {
-        Measure newMeasure(measure.getNumber(), resolvedUnit, status);
+    bool isResolved = false;
+    MeasureUnit resolvedUnit =
+        MeasureUnit::resolveUnitPerUnit(measure.getUnit(), perUnit, &isResolved);
+    if (isResolved) {
+        Measure newMeasure(measure.getNumber(), new MeasureUnit(resolvedUnit), status);
         return formatMeasure(
                 newMeasure, **numberFormat, appendTo, pos, status);
     }

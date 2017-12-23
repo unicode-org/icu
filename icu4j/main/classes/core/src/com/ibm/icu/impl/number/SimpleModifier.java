@@ -6,8 +6,8 @@ import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.text.NumberFormat.Field;
 
 /**
- * The second primary implementation of {@link Modifier}, this one consuming a {@link com.ibm.icu.text.SimpleFormatter}
- * pattern.
+ * The second primary implementation of {@link Modifier}, this one consuming a
+ * {@link com.ibm.icu.text.SimpleFormatter} pattern.
  */
 public class SimpleModifier implements Modifier {
     private final String compiledPattern;
@@ -59,7 +59,8 @@ public class SimpleModifier implements Modifier {
             count += Character.codePointCount(compiledPattern, 2, 2 + prefixLength);
         }
         if (suffixLength > 0) {
-            count += Character.codePointCount(compiledPattern, 1 + suffixOffset, 1 + suffixOffset + suffixLength);
+            count += Character
+                    .codePointCount(compiledPattern, 1 + suffixOffset, 1 + suffixOffset + suffixLength);
         }
         return count;
     }
@@ -71,12 +72,13 @@ public class SimpleModifier implements Modifier {
 
     /**
      * TODO: This belongs in SimpleFormatterImpl. The only reason I haven't moved it there yet is because
-     * DoubleSidedStringBuilder is an internal class and SimpleFormatterImpl feels like it should not depend on it.
+     * DoubleSidedStringBuilder is an internal class and SimpleFormatterImpl feels like it should not
+     * depend on it.
      *
      * <p>
-     * Formats a value that is already stored inside the StringBuilder <code>result</code> between the indices
-     * <code>startIndex</code> and <code>endIndex</code> by inserting characters before the start index and after the
-     * end index.
+     * Formats a value that is already stored inside the StringBuilder <code>result</code> between the
+     * indices <code>startIndex</code> and <code>endIndex</code> by inserting characters before the start
+     * index and after the end index.
      *
      * <p>
      * This is well-defined only for patterns with exactly one argument.
@@ -89,12 +91,19 @@ public class SimpleModifier implements Modifier {
      *            The right index of the value within the string builder.
      * @return The number of characters (UTF-16 code points) that were added to the StringBuilder.
      */
-    public int formatAsPrefixSuffix(NumberStringBuilder result, int startIndex, int endIndex, Field field) {
+    public int formatAsPrefixSuffix(
+            NumberStringBuilder result,
+            int startIndex,
+            int endIndex,
+            Field field) {
         if (prefixLength > 0) {
             result.insert(startIndex, compiledPattern, 2, 2 + prefixLength, field);
         }
         if (suffixLength > 0) {
-            result.insert(endIndex + prefixLength, compiledPattern, 1 + suffixOffset, 1 + suffixOffset + suffixLength,
+            result.insert(endIndex + prefixLength,
+                    compiledPattern,
+                    1 + suffixOffset,
+                    1 + suffixOffset + suffixLength,
                     field);
         }
         return prefixLength + suffixLength;

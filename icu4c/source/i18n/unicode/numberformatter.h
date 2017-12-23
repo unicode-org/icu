@@ -836,6 +836,20 @@ class U_I18N_API Rounder : public UMemory {
     /** Version of {@link #apply} that obeys minInt constraints. Used for scientific notation compatibility mode. */
     void apply(impl::DecimalQuantity &value, int32_t minInt, UErrorCode status);
 
+    /**
+     * Rounding endpoint used by Engineering and Compact notation. Chooses the most appropriate multiplier (magnitude
+     * adjustment), applies the adjustment, rounds, and returns the chosen multiplier.
+     *
+     * <p>
+     * In most cases, this is simple. However, when rounding the number causes it to cross a multiplier boundary, we
+     * need to re-do the rounding. For example, to display 999,999 in Engineering notation with 2 sigfigs, first you
+     * guess the multiplier to be -3. However, then you end up getting 1000E3, which is not the correct output. You then
+     * change your multiplier to be -6, and you get 1.0E6, which is correct.
+     *
+     * @param input The quantity to process.
+     * @param producer Function to call to return a multiplier based on a magnitude.
+     * @return The number of orders of magnitude the input was adjusted by this method.
+     */
     int32_t
     chooseMultiplierAndApply(impl::DecimalQuantity &input, const impl::MultiplierProducer &producer,
                              UErrorCode &status);
@@ -1284,6 +1298,9 @@ struct U_I18N_API MacroProps : public UMemory {
     MeasureUnit unit; // = NoUnit::base();
 
     /** @internal */
+    MeasureUnit perUnit; // = NoUnit::base();
+
+    /** @internal */
     Rounder rounder;  // = Rounder();  (bogus)
 
     /** @internal */
@@ -1375,28 +1392,28 @@ class U_I18N_API NumberFormatterSettings {
      * <li>Percent: "12.3%"
      * </ul>
      *
-     * <p>
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
      * rounding strategies, and other number formatter settings.
      *
-     * <p>
      * Pass this method any instance of {@link MeasureUnit}. For units of measure:
      *
      * <pre>
-     * NumberFormatter.with().adoptUnit(MeasureUnit::createMeter(status))
+     * NumberFormatter::with().adoptUnit(MeasureUnit::createMeter(status))
      * </pre>
      *
      * Currency:
      *
      * <pre>
-     * NumberFormatter.with()::unit(CurrencyUnit(u"USD", status))
+     * NumberFormatter::with().unit(CurrencyUnit(u"USD", status))
      * </pre>
      *
      * Percent:
      *
      * <pre>
-     * NumberFormatter.with()::unit(NoUnit.percent())
+     * NumberFormatter::with().unit(NoUnit.percent())
      * </pre>
+     *
+     * See {@link #perUnit} for information on how to format strings like "5 meters per second".
      *
      * The default is to render without units (equivalent to NoUnit.base()).
      *
@@ -1406,6 +1423,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see MeasureUnit
      * @see Currency
      * @see NoUnit
+     * @see #perUnit
      * @draft ICU 60
      */
     Derived unit(const icu::MeasureUnit &unit) const;
@@ -1415,13 +1433,50 @@ class U_I18N_API NumberFormatterSettings {
      * methods, which return pointers that need ownership.
      *
      * @param unit
-     * The unit to render.
+     *            The unit to render.
      * @return The fluent chain.
      * @see #unit
      * @see MeasureUnit
      * @draft ICU 60
      */
     Derived adoptUnit(const icu::MeasureUnit *unit) const;
+
+    /**
+     * Sets a unit to be used in the denominator. For example, to format "3 m/s", pass METER to the unit and SECOND to
+     * the perUnit.
+     *
+     * Pass this method any instance of {@link MeasureUnit}. For example:
+     *
+     * <pre>
+     * NumberFormatter::with()
+     *      .adoptUnit(MeasureUnit::createMeter(status))
+     *      .adoptPerUnit(MeasureUnit::createSecond(status))
+     * </pre>
+     *
+     * The default is not to display any unit in the denominator.
+     *
+     * If a per-unit is specified without a primary unit via {@link #unit}, the behavior is undefined.
+     *
+     * @param perUnit
+     *            The unit to render in the denominator.
+     * @return The fluent chain
+     * @see #unit
+     * @draft ICU 61
+     */
+    Derived perUnit(const icu::MeasureUnit &perUnit) const;
+
+    /**
+     * Like perUnit(), but takes ownership of a pointer.  Convenient for use with the MeasureFormat factory
+     * methods, which return pointers that need ownership.
+     *
+     * @param perUnit
+     *            The unit to render in the denominator.
+     * @return The fluent chain.
+     * @see #perUnit
+     * @see MeasureUnit
+     * @draft ICU 61
+     */
+    Derived adoptPerUnit(const icu::MeasureUnit *perUnit) const;
 
     /**
      * Specifies the rounding strategy to use when formatting numbers.

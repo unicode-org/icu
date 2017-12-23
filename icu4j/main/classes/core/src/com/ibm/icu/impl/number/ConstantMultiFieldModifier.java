@@ -5,8 +5,9 @@ package com.ibm.icu.impl.number;
 import com.ibm.icu.text.NumberFormat.Field;
 
 /**
- * An implementation of {@link Modifier} that allows for multiple types of fields in the same modifier. Constructed
- * based on the contents of two {@link NumberStringBuilder} instances (one for the prefix, one for the suffix).
+ * An implementation of {@link Modifier} that allows for multiple types of fields in the same modifier.
+ * Constructed based on the contents of two {@link NumberStringBuilder} instances (one for the prefix,
+ * one for the suffix).
  */
 public class ConstantMultiFieldModifier implements Modifier {
 
@@ -18,7 +19,10 @@ public class ConstantMultiFieldModifier implements Modifier {
     protected final Field[] suffixFields;
     private final boolean strong;
 
-    public ConstantMultiFieldModifier(NumberStringBuilder prefix, NumberStringBuilder suffix, boolean strong) {
+    public ConstantMultiFieldModifier(
+            NumberStringBuilder prefix,
+            NumberStringBuilder suffix,
+            boolean strong) {
         prefixChars = prefix.toCharArray();
         suffixChars = suffix.toCharArray();
         prefixFields = prefix.toFieldArray();
@@ -55,7 +59,8 @@ public class ConstantMultiFieldModifier implements Modifier {
         NumberStringBuilder temp = new NumberStringBuilder();
         apply(temp, 0, 0);
         int prefixLength = getPrefixLength();
-        return String.format("<ConstantMultiFieldModifier prefix:'%s' suffix:'%s'>", temp.subSequence(0, prefixLength),
+        return String.format("<ConstantMultiFieldModifier prefix:'%s' suffix:'%s'>",
+                temp.subSequence(0, prefixLength),
                 temp.subSequence(prefixLength, temp.length()));
     }
 }

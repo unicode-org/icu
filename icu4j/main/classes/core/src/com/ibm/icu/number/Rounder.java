@@ -34,11 +34,12 @@ public abstract class Rounder implements Cloneable {
      * Show all available digits to full precision.
      *
      * <p>
-     * <strong>NOTE:</strong> When formatting a <em>double</em>, this method, along with {@link #minFraction} and
-     * {@link #minDigits}, will trigger complex algorithm similar to <em>Dragon4</em> to determine the low-order digits
-     * and the number of digits to display based on the value of the double. If the number of fraction places or
-     * significant digits can be bounded, consider using {@link #maxFraction} or {@link #maxDigits} instead to maximize
-     * performance. For more information, read the following blog post.
+     * <strong>NOTE:</strong> When formatting a <em>double</em>, this method, along with
+     * {@link #minFraction} and {@link #minDigits}, will trigger complex algorithm similar to
+     * <em>Dragon4</em> to determine the low-order digits and the number of digits to display based on
+     * the value of the double. If the number of fraction places or significant digits can be bounded,
+     * consider using {@link #maxFraction} or {@link #maxDigits} instead to maximize performance. For
+     * more information, read the following blog post.
      *
      * <p>
      * http://www.serpentine.com/blog/2011/06/29/here-be-dragons-advances-in-problems-you-didnt-even-know-you-had/
@@ -65,8 +66,9 @@ public abstract class Rounder implements Cloneable {
     }
 
     /**
-     * Show numbers rounded if necessary to a certain number of fraction places (numerals after the decimal separator).
-     * Additionally, pad with zeros to ensure that this number of places are always shown.
+     * Show numbers rounded if necessary to a certain number of fraction places (numerals after the
+     * decimal separator). Additionally, pad with zeros to ensure that this number of places are always
+     * shown.
      *
      * <p>
      * Example output with minMaxFractionPlaces = 3:
@@ -86,8 +88,8 @@ public abstract class Rounder implements Cloneable {
      * This method is equivalent to {@link #minMaxFraction} with both arguments equal.
      *
      * @param minMaxFractionPlaces
-     *            The minimum and maximum number of numerals to display after the decimal separator (rounding if too
-     *            long or padding with zeros if too short).
+     *            The minimum and maximum number of numerals to display after the decimal separator
+     *            (rounding if too long or padding with zeros if too short).
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
@@ -97,111 +99,122 @@ public abstract class Rounder implements Cloneable {
         if (minMaxFractionPlaces >= 0 && minMaxFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFraction(minMaxFractionPlaces, minMaxFractionPlaces);
         } else {
-            throw new IllegalArgumentException(
-                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Fraction length must be between 0 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
     /**
-     * Always show at least a certain number of fraction places after the decimal separator, padding with zeros if
-     * necessary. Do not perform rounding (display numbers to their full precision).
+     * Always show at least a certain number of fraction places after the decimal separator, padding with
+     * zeros if necessary. Do not perform rounding (display numbers to their full precision).
      *
      * <p>
-     * <strong>NOTE:</strong> If you are formatting <em>doubles</em>, see the performance note in {@link #unlimited}.
+     * <strong>NOTE:</strong> If you are formatting <em>doubles</em>, see the performance note in
+     * {@link #unlimited}.
      *
      * @param minFractionPlaces
-     *            The minimum number of numerals to display after the decimal separator (padding with zeros if
-     *            necessary).
+     *            The minimum number of numerals to display after the decimal separator (padding with
+     *            zeros if necessary).
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static FractionRounder minFraction(int minFractionPlaces) {
-        if (minFractionPlaces >= 0 && minFractionPlaces < RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minFractionPlaces >= 0 && minFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFraction(minFractionPlaces, -1);
         } else {
-            throw new IllegalArgumentException(
-                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Fraction length must be between 0 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
     /**
-     * Show numbers rounded if necessary to a certain number of fraction places (numerals after the decimal separator).
-     * Unlike the other fraction rounding strategies, this strategy does <em>not</em> pad zeros to the end of the
-     * number.
+     * Show numbers rounded if necessary to a certain number of fraction places (numerals after the
+     * decimal separator). Unlike the other fraction rounding strategies, this strategy does <em>not</em>
+     * pad zeros to the end of the number.
      *
      * @param maxFractionPlaces
-     *            The maximum number of numerals to display after the decimal mark (rounding if necessary).
+     *            The maximum number of numerals to display after the decimal mark (rounding if
+     *            necessary).
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static FractionRounder maxFraction(int maxFractionPlaces) {
-        if (maxFractionPlaces >= 0 && maxFractionPlaces < RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (maxFractionPlaces >= 0 && maxFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFraction(0, maxFractionPlaces);
         } else {
-            throw new IllegalArgumentException(
-                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Fraction length must be between 0 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
     /**
-     * Show numbers rounded if necessary to a certain number of fraction places (numerals after the decimal separator);
-     * in addition, always show at least a certain number of places after the decimal separator, padding with zeros if
-     * necessary.
+     * Show numbers rounded if necessary to a certain number of fraction places (numerals after the
+     * decimal separator); in addition, always show at least a certain number of places after the decimal
+     * separator, padding with zeros if necessary.
      *
      * @param minFractionPlaces
-     *            The minimum number of numerals to display after the decimal separator (padding with zeros if
-     *            necessary).
+     *            The minimum number of numerals to display after the decimal separator (padding with
+     *            zeros if necessary).
      * @param maxFractionPlaces
-     *            The maximum number of numerals to display after the decimal separator (rounding if necessary).
+     *            The maximum number of numerals to display after the decimal separator (rounding if
+     *            necessary).
      * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static FractionRounder minMaxFraction(int minFractionPlaces, int maxFractionPlaces) {
-        if (minFractionPlaces >= 0 && maxFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG
+        if (minFractionPlaces >= 0
+                && maxFractionPlaces <= RoundingUtils.MAX_INT_FRAC_SIG
                 && minFractionPlaces <= maxFractionPlaces) {
             return constructFraction(minFractionPlaces, maxFractionPlaces);
         } else {
-            throw new IllegalArgumentException(
-                    "Fraction length must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Fraction length must be between 0 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
     /**
-     * Show numbers rounded if necessary to a certain number of significant digits or significant figures. Additionally,
-     * pad with zeros to ensure that this number of significant digits/figures are always shown.
+     * Show numbers rounded if necessary to a certain number of significant digits or significant
+     * figures. Additionally, pad with zeros to ensure that this number of significant digits/figures are
+     * always shown.
      *
      * <p>
      * This method is equivalent to {@link #minMaxDigits} with both arguments equal.
      *
      * @param minMaxSignificantDigits
-     *            The minimum and maximum number of significant digits to display (rounding if too long or padding with
-     *            zeros if too short).
+     *            The minimum and maximum number of significant digits to display (rounding if too long
+     *            or padding with zeros if too short).
      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
     public static Rounder fixedDigits(int minMaxSignificantDigits) {
-        if (minMaxSignificantDigits > 0 && minMaxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minMaxSignificantDigits >= 1 && minMaxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(minMaxSignificantDigits, minMaxSignificantDigits);
         } else {
-            throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Significant digits must be between 1 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
     /**
-     * Always show at least a certain number of significant digits/figures, padding with zeros if necessary. Do not
-     * perform rounding (display numbers to their full precision).
+     * Always show at least a certain number of significant digits/figures, padding with zeros if
+     * necessary. Do not perform rounding (display numbers to their full precision).
      *
      * <p>
-     * <strong>NOTE:</strong> If you are formatting <em>doubles</em>, see the performance note in {@link #unlimited}.
+     * <strong>NOTE:</strong> If you are formatting <em>doubles</em>, see the performance note in
+     * {@link #unlimited}.
      *
      * @param minSignificantDigits
      *            The minimum number of significant digits to display (padding with zeros if too short).
@@ -211,11 +224,12 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static Rounder minDigits(int minSignificantDigits) {
-        if (minSignificantDigits > 0 && minSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (minSignificantDigits >= 1 && minSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(minSignificantDigits, -1);
         } else {
-            throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Significant digits must be between 1 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
@@ -230,17 +244,18 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static Rounder maxDigits(int maxSignificantDigits) {
-        if (maxSignificantDigits > 0 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
+        if (maxSignificantDigits >= 1 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructSignificant(0, maxSignificantDigits);
         } else {
-            throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Significant digits must be between 1 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
     /**
-     * Show numbers rounded if necessary to a certain number of significant digits/figures; in addition, always show at
-     * least a certain number of significant digits, padding with zeros if necessary.
+     * Show numbers rounded if necessary to a certain number of significant digits/figures; in addition,
+     * always show at least a certain number of significant digits, padding with zeros if necessary.
      *
      * @param minSignificantDigits
      *            The minimum number of significant digits to display (padding with zeros if necessary).
@@ -252,23 +267,26 @@ public abstract class Rounder implements Cloneable {
      * @see NumberFormatter
      */
     public static Rounder minMaxDigits(int minSignificantDigits, int maxSignificantDigits) {
-        if (minSignificantDigits > 0 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG
+        if (minSignificantDigits >= 1
+                && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG
                 && minSignificantDigits <= maxSignificantDigits) {
             return constructSignificant(minSignificantDigits, maxSignificantDigits);
         } else {
-            throw new IllegalArgumentException(
-                    "Significant digits must be between 0 and " + RoundingUtils.MAX_INT_FRAC_SIG);
+            throw new IllegalArgumentException("Significant digits must be between 1 and "
+                    + RoundingUtils.MAX_INT_FRAC_SIG
+                    + " (inclusive)");
         }
     }
 
     /**
-     * Show numbers rounded if necessary to the closest multiple of a certain rounding increment. For example, if the
-     * rounding increment is 0.5, then round 1.2 to 1 and round 1.3 to 1.5.
+     * Show numbers rounded if necessary to the closest multiple of a certain rounding increment. For
+     * example, if the rounding increment is 0.5, then round 1.2 to 1 and round 1.3 to 1.5.
      *
      * <p>
-     * In order to ensure that numbers are padded to the appropriate number of fraction places, set the scale on the
-     * rounding increment BigDecimal. For example, to round to the nearest 0.5 and always display 2 numerals after the
-     * decimal separator (to display 1.2 as "1.00" and 1.3 as "1.50"), you can run:
+     * In order to ensure that numbers are padded to the appropriate number of fraction places, set the
+     * scale on the rounding increment BigDecimal. For example, to round to the nearest 0.5 and always
+     * display 2 numerals after the decimal separator (to display 1.2 as "1.00" and 1.3 as "1.50"), you
+     * can run:
      *
      * <pre>
      * Rounder.increment(new BigDecimal("0.50"))
@@ -293,18 +311,20 @@ public abstract class Rounder implements Cloneable {
     }
 
     /**
-     * Show numbers rounded and padded according to the rules for the currency unit. The most common rounding settings
-     * for currencies include <code>Rounder.fixedFraction(2)</code>, <code>Rounder.integer()</code>, and
-     * <code>Rounder.increment(0.05)</code> for cash transactions ("nickel rounding").
+     * Show numbers rounded and padded according to the rules for the currency unit. The most common
+     * rounding settings for currencies include <code>Rounder.fixedFraction(2)</code>,
+     * <code>Rounder.integer()</code>, and <code>Rounder.increment(0.05)</code> for cash transactions
+     * ("nickel rounding").
      *
      * <p>
      * The exact rounding details will be resolved at runtime based on the currency unit specified in the
-     * NumberFormatter chain. To round according to the rules for one currency while displaying the symbol for another
-     * currency, the withCurrency() method can be called on the return value of this method.
+     * NumberFormatter chain. To round according to the rules for one currency while displaying the
+     * symbol for another currency, the withCurrency() method can be called on the return value of this
+     * method.
      *
      * @param currencyUsage
-     *            Either STANDARD (for digital transactions) or CASH (for transactions where the rounding increment may
-     *            be limited by the available denominations of cash or coins).
+     *            Either STANDARD (for digital transactions) or CASH (for transactions where the rounding
+     *            increment may be limited by the available denominations of cash or coins).
      * @return A CurrencyRounder for chaining or passing to the NumberFormatter rounding() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
@@ -319,8 +339,8 @@ public abstract class Rounder implements Cloneable {
     }
 
     /**
-     * Sets the {@link java.math.RoundingMode} to use when picking the direction to round (up or down). Common values
-     * include HALF_EVEN, HALF_UP, and FLOOR. The default is HALF_EVEN.
+     * Sets the {@link java.math.RoundingMode} to use when picking the direction to round (up or down).
+     * Common values include HALF_EVEN, HALF_UP, and FLOOR. The default is HALF_EVEN.
      *
      * @param roundingMode
      *            The RoundingMode to use.
@@ -470,8 +490,8 @@ public abstract class Rounder implements Cloneable {
     }
 
     /**
-     * Returns a valid working Rounder. If the Rounder is a CurrencyRounder, applies the given currency. Otherwise,
-     * simply passes through the argument.
+     * Returns a valid working Rounder. If the Rounder is a CurrencyRounder, applies the given currency.
+     * Otherwise, simply passes through the argument.
      *
      * @param currency
      *            A currency object to use in case the input object needs it.
@@ -485,29 +505,58 @@ public abstract class Rounder implements Cloneable {
         }
     }
 
+    /**
+     * Rounding endpoint used by Engineering and Compact notation. Chooses the most appropriate
+     * multiplier (magnitude adjustment), applies the adjustment, rounds, and returns the chosen
+     * multiplier.
+     *
+     * <p>
+     * In most cases, this is simple. However, when rounding the number causes it to cross a multiplier
+     * boundary, we need to re-do the rounding. For example, to display 999,999 in Engineering notation
+     * with 2 sigfigs, first you guess the multiplier to be -3. However, then you end up getting 1000E3,
+     * which is not the correct output. You then change your multiplier to be -6, and you get 1.0E6,
+     * which is correct.
+     *
+     * @param input
+     *            The quantity to process.
+     * @param producer
+     *            Function to call to return a multiplier based on a magnitude.
+     * @return The number of orders of magnitude the input was adjusted by this method.
+     */
     int chooseMultiplierAndApply(DecimalQuantity input, MultiplierProducer producer) {
-        // TODO: Make a better and more efficient implementation.
-        // TODO: Avoid the object creation here.
-        DecimalQuantity copy = input.createCopy();
-
+        // Do not call this method with zero.
         assert !input.isZero();
+
+        // Perform the first attempt at rounding.
         int magnitude = input.getMagnitude();
         int multiplier = producer.getMultiplier(magnitude);
         input.adjustMagnitude(multiplier);
         apply(input);
 
-        // If the number turned to zero when rounding, do not re-attempt the rounding.
-        if (!input.isZero() && input.getMagnitude() == magnitude + multiplier + 1) {
-            magnitude += 1;
-            input.copyFrom(copy);
-            multiplier = producer.getMultiplier(magnitude);
-            input.adjustMagnitude(multiplier);
-            assert input.getMagnitude() == magnitude + multiplier - 1;
-            apply(input);
-            assert input.getMagnitude() == magnitude + multiplier;
+        // If the number rounded to zero, exit.
+        if (input.isZero()) {
+            return multiplier;
         }
 
-        return multiplier;
+        // If the new magnitude after rounding is the same as it was before rounding, then we are done.
+        // This case applies to most numbers.
+        if (input.getMagnitude() == magnitude + multiplier) {
+            return multiplier;
+        }
+
+        // If the above case DIDN'T apply, then we have a case like 99.9 -> 100 or 999.9 -> 1000:
+        // The number rounded up to the next magnitude. Check if the multiplier changes; if it doesn't,
+        // we do not need to make any more adjustments.
+        int _multiplier = producer.getMultiplier(magnitude + 1);
+        if (multiplier == _multiplier) {
+            return multiplier;
+        }
+
+        // We have a case like 999.9 -> 1000, where the correct output is "1K", not "1000".
+        // Fix the magnitude and re-apply the rounding strategy.
+        input.adjustMagnitude(_multiplier - multiplier);
+        apply(input);
+        return _multiplier;
     }
 
     ///////////////
@@ -538,7 +587,8 @@ public abstract class Rounder implements Cloneable {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeFraction(maxFrac), mathContext);
-            value.setFractionLength(Math.max(0, -getDisplayMagnitudeFraction(minFrac)), Integer.MAX_VALUE);
+            value.setFractionLength(Math.max(0, -getDisplayMagnitudeFraction(minFrac)),
+                    Integer.MAX_VALUE);
         }
     }
 
@@ -554,10 +604,14 @@ public abstract class Rounder implements Cloneable {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeSignificant(value, maxSig), mathContext);
-            value.setFractionLength(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)), Integer.MAX_VALUE);
+            value.setFractionLength(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)),
+                    Integer.MAX_VALUE);
         }
 
-        /** Version of {@link #apply} that obeys minInt constraints. Used for scientific notation compatibility mode. */
+        /**
+         * Version of {@link #apply} that obeys minInt constraints. Used for scientific notation
+         * compatibility mode.
+         */
         public void apply(DecimalQuantity quantity, int minInt) {
             assert quantity.isZero();
             quantity.setFractionLength(minSig - minInt, Integer.MAX_VALUE);

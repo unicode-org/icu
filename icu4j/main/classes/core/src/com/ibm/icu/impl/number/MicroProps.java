@@ -31,8 +31,8 @@ public class MicroProps implements Cloneable, MicroPropsGenerator {
 
     /**
      * @param immutable
-     *            Whether this MicroProps should behave as an immutable after construction with respect to the quantity
-     *            chain.
+     *            Whether this MicroProps should behave as an immutable after construction with respect
+     *            to the quantity chain.
      */
     public MicroProps(boolean immutable) {
         this.immutable = immutable;
