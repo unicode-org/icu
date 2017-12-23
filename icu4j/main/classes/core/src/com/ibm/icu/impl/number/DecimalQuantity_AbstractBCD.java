@@ -201,21 +201,13 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
     }
 
-<<<<<<< .working
-  @Override
-  public void adjustMagnitude(int delta) {
-    if (precision != 0) {
-      // TODO: Math.addExact is not in 1.6 or 1.7
-      scale = Math.addExact(scale, delta);
-      origDelta = Math.addExact(origDelta, delta);
-=======
     @Override
     public void adjustMagnitude(int delta) {
         if (precision != 0) {
-            scale += delta;
-            origDelta += delta;
+            // TODO: Math.addExact is not in 1.6 or 1.7
+            scale = Math.addExact(scale, delta);
+            origDelta = Math.addExact(origDelta, delta);
         }
->>>>>>> .merge-right.r40750
     }
 
     @Override
@@ -551,117 +543,34 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
     }
 
-<<<<<<< .working
-  private void _setToBigDecimal(BigDecimal n) {
-    int fracLength = n.scale();
-    n = n.scaleByPowerOfTen(fracLength);
-    BigInteger bi = n.toBigInteger();
-    _setToBigInteger(bi);
-    scale -= fracLength;
-  }
-
-  /**
-   * Returns a long approximating the internal BCD. A long can only represent the integral part of
-   * the number.
-   *
-   * @return A double representation of the internal BCD.
-   */
-  public long toLong() {
-    long result = 0L;
-    for (int magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
-      result = result * 10 + getDigitPos(magnitude - scale);
-=======
     private void _setToBigDecimal(BigDecimal n) {
         int fracLength = n.scale();
         n = n.scaleByPowerOfTen(fracLength);
         BigInteger bi = n.toBigInteger();
         _setToBigInteger(bi);
         scale -= fracLength;
->>>>>>> .merge-right.r40750
     }
 
-<<<<<<< .working
-  /**
-   * This returns a long representing the fraction digits of the number, as required by PluralRules.
-   * For example, if we represent the number "1.20" (including optional and required digits), then
-   * this function returns "20" if includeTrailingZeros is true or "2" if false.
-   */
-  public long toFractionLong(boolean includeTrailingZeros) {
-    long result = 0L;
-    int magnitude = -1;
-    for (;
-        (magnitude >= scale || (includeTrailingZeros && magnitude >= rReqPos))
-            && magnitude >= rOptPos;
-        magnitude--) {
-      result = result * 10 + getDigitPos(magnitude - scale);
-=======
     /**
      * Returns a long approximating the internal BCD. A long can only represent the integral part of the
      * number.
      *
      * @return A double representation of the internal BCD.
      */
-    protected long toLong() {
+    public long toLong() {
         long result = 0L;
         for (int magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
             result = result * 10 + getDigitPos(magnitude - scale);
         }
         return result;
->>>>>>> .merge-right.r40750
     }
 
-<<<<<<< .working
-  static final byte[] INT64_BCD = {9,2,2,3,3,7,2,0,3,6,8,5,4,7,7,5,8,0,7};
-
-  /**
-   * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
-   * Assumes that the DecimalQuantity is positive.
-   */
-  public boolean fitsInLong() {
-      if (isZero()) {
-          return true;
-      }
-      if (scale < 0) {
-          return false;
-      }
-      int magnitude = getMagnitude();
-      if (magnitude < 18) {
-          return true;
-      }
-      if (magnitude > 18) {
-          return false;
-      }
-      // Hard case: the magnitude is 10^18.
-      // The largest int64 is: 9,223,372,036,854,775,807
-      for (int p=0; p<precision; p++) {
-          byte digit = getDigitPos(18-p);
-          if (digit < INT64_BCD[p]) {
-              return true;
-          } else if (digit > INT64_BCD[p]) {
-              return false;
-          }
-      }
-      // Exactly equal to max long.
-      return true;
-  }
-
-  /**
-   * Returns a double approximating the internal BCD. The double may not retain all of the
-   * information encoded in the BCD if the BCD represents a number out of range of a double.
-   *
-   * @return A double representation of the internal BCD.
-   */
-  @Override
-  public double toDouble() {
-    if (isApproximate) {
-      return toDoubleFromOriginal();
-=======
     /**
      * This returns a long representing the fraction digits of the number, as required by PluralRules.
      * For example, if we represent the number "1.20" (including optional and required digits), then this
      * function returns "20" if includeTrailingZeros is true or "2" if false.
      */
-    protected long toFractionLong(boolean includeTrailingZeros) {
+    public long toFractionLong(boolean includeTrailingZeros) {
         long result = 0L;
         int magnitude = -1;
         for (; (magnitude >= scale || (includeTrailingZeros && magnitude >= rReqPos))
@@ -669,7 +578,40 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             result = result * 10 + getDigitPos(magnitude - scale);
         }
         return result;
->>>>>>> .merge-right.r40750
+    }
+
+    static final byte[] INT64_BCD = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 7 };
+
+    /**
+     * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
+     * Assumes that the DecimalQuantity is positive.
+     */
+    public boolean fitsInLong() {
+        if (isZero()) {
+            return true;
+        }
+        if (scale < 0) {
+            return false;
+        }
+        int magnitude = getMagnitude();
+        if (magnitude < 18) {
+            return true;
+        }
+        if (magnitude > 18) {
+            return false;
+        }
+        // Hard case: the magnitude is 10^18.
+        // The largest int64 is: 9,223,372,036,854,775,807
+        for (int p = 0; p < precision; p++) {
+            byte digit = getDigitPos(18 - p);
+            if (digit < INT64_BCD[p]) {
+                return true;
+            } else if (digit > INT64_BCD[p]) {
+                return false;
+            }
+        }
+        // Exactly equal to max long.
+        return true;
     }
 
     /**
@@ -911,37 +853,15 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
     }
 
-<<<<<<< .working
-  @Override
-  public void truncate() {
-      if (scale < 0) {
-          shiftRight(-scale);
-          scale = 0;
-          compact();
-      }
-  }
+    @Override
+    public void truncate() {
+        if (scale < 0) {
+            shiftRight(-scale);
+            scale = 0;
+            compact();
+        }
+    }
 
-  /**
-   * Appends a digit, optionally with one or more leading zeros, to the end of the value represented
-   * by this DecimalQuantity.
-   *
-   * <p>The primary use of this method is to construct numbers during a parsing loop. It allows
-   * parsing to take advantage of the digit list infrastructure primarily designed for formatting.
-   *
-   * @param value The digit to append.
-   * @param leadingZeros The number of zeros to append before the digit. For example, if the value
-   *     in this instance starts as 12.3, and you append a 4 with 1 leading zero, the value becomes
-   *     12.304.
-   * @param appendAsInteger If true, increase the magnitude of existing digits to make room for the
-   *     new digit. If false, append to the end like a fraction digit. If true, there must not be
-   *     any fraction digits already in the number.
-   * @internal
-   * @deprecated This API is ICU internal only.
-   */
-  @Deprecated
-  public void appendDigit(byte value, int leadingZeros, boolean appendAsInteger) {
-    assert leadingZeros >= 0;
-=======
     /**
      * Appends a digit, optionally with one or more leading zeros, to the end of the value represented by
      * this DecimalQuantity.
@@ -966,7 +886,6 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     @Deprecated
     public void appendDigit(byte value, int leadingZeros, boolean appendAsInteger) {
         assert leadingZeros >= 0;
->>>>>>> .merge-right.r40750
 
         // Zero requires special handling to maintain the invariant that the least-significant digit
         // in the BCD is nonzero.
@@ -1042,17 +961,14 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      */
     protected abstract void shiftLeft(int numDigits);
 
-<<<<<<< .working
-  /**
-   * Removes digits from the end of the BCD list. This may result in an invalid BCD representation; it is
-   * the caller's responsibility to follow-up with a call to {@link #compact}.
-   *
-   * @param numDigits The number of zeros to add.
-   */
-  protected abstract void shiftRight(int numDigits);
-=======
+    /**
+     * Removes digits from the end of the BCD list. This may result in an invalid BCD representation; it
+     * is the caller's responsibility to follow-up with a call to {@link #compact}.
+     *
+     * @param numDigits
+     *            The number of zeros to add.
+     */
     protected abstract void shiftRight(int numDigits);
->>>>>>> .merge-right.r40750
 
     /**
      * Sets the internal representation to zero. Clears any values stored in scale, precision, hasDouble,
