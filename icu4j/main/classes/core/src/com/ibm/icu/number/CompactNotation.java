@@ -21,13 +21,13 @@ import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.ULocale;
 
-
 /**
- * A class that defines the scientific notation style to be used when formatting numbers in NumberFormatter.
+ * A class that defines the scientific notation style to be used when formatting numbers in
+ * NumberFormatter.
  *
  * <p>
- * This class exposes no public functionality. To create a CompactNotation, use one of the factory methods in
- * {@link Notation}.
+ * This class exposes no public functionality. To create a CompactNotation, use one of the factory
+ * methods in {@link Notation}.
  *
  * @draft ICU 60
  * @provisional This API might change or be removed in a future release.
@@ -48,8 +48,13 @@ public class CompactNotation extends Notation {
         this.compactCustomData = compactCustomData;
     }
 
-    /* package-private */ MicroPropsGenerator withLocaleData(ULocale locale, String nsName, CompactType compactType,
-            PluralRules rules, MutablePatternModifier buildReference, MicroPropsGenerator parent) {
+    /* package-private */ MicroPropsGenerator withLocaleData(
+            ULocale locale,
+            String nsName,
+            CompactType compactType,
+            PluralRules rules,
+            MutablePatternModifier buildReference,
+            MicroPropsGenerator parent) {
         // TODO: Add a data cache? It would be keyed by locale, nsName, compact type, and compact style.
         return new CompactHandler(this, locale, nsName, compactType, rules, buildReference, parent);
     }
@@ -66,8 +71,14 @@ public class CompactNotation extends Notation {
         final Map<String, CompactModInfo> precomputedMods;
         final CompactData data;
 
-        private CompactHandler(CompactNotation notation, ULocale locale, String nsName, CompactType compactType,
-                PluralRules rules, MutablePatternModifier buildReference, MicroPropsGenerator parent) {
+        private CompactHandler(
+                CompactNotation notation,
+                ULocale locale,
+                String nsName,
+                CompactType compactType,
+                PluralRules rules,
+                MutablePatternModifier buildReference,
+                MicroPropsGenerator parent) {
             this.rules = rules;
             this.parent = parent;
             this.data = new CompactData();
