@@ -24,6 +24,7 @@
 *   This file contains only the builder code.
 *   See utrie2.c for the runtime and enumeration code.
 */
+#define UTRIE2_DEBUG  // TODO
 #ifdef UTRIE2_DEBUG
 #   include <stdio.h>
 #endif
@@ -1415,6 +1416,10 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     uprv_free(newTrie->data);
     uprv_free(newTrie);
     trie->newTrie=NULL;
+
+#ifdef UTRIE2_DEBUG
+    utrie2_printLengths(trie, "");
+#endif
 }
 
 /*

@@ -24,10 +24,6 @@
 *   This file contains only the runtime and enumeration code, for read-only access.
 *   See utrie2_builder.c for the builder code.
 */
-#ifdef UTRIE2_DEBUG
-#   include <stdio.h>
-#endif
-
 #include "unicode/utypes.h"
 #include "unicode/utf.h"
 #include "unicode/utf8.h"

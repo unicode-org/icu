@@ -4,6 +4,7 @@
 // utrie3_builder.cpp (modified from utrie2_builder.cpp)
 // created: 2017dec29 Markus W. Scherer
 
+#define UTRIE3_DEBUG  // TODO
 #ifdef UTRIE3_DEBUG
 #   include <stdio.h>
 #endif
@@ -323,6 +324,7 @@ copyEnumRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
 }
 
 #ifdef UTRIE3_DEBUG
+#if 0  // TODO
 static void
 utrie_printLengths(const UTrie *trie) {
     long indexLength=trie->indexLength;
@@ -331,6 +333,7 @@ utrie_printLengths(const UTrie *trie) {
     printf("**UTrieLengths** index:%6ld  data:%6ld  serialized:%6ld\n",
            indexLength, dataLength, totalLength);
 }
+#endif
 
 static void
 utrie3_printLengths(const UTrie3 *trie, const char *which) {
@@ -1397,6 +1400,10 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
     uprv_free(newTrie->data);
     uprv_free(newTrie);
     trie->newTrie=NULL;
+
+#ifdef UTRIE2_DEBUG
+    utrie3_printLengths(trie, "");
+#endif
 }
 
 /*

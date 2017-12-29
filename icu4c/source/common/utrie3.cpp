@@ -4,10 +4,6 @@
 // utrie3.cpp (modified from utrie2.cpp)
 // created: 2017dec29 Markus W. Scherer
 
-#ifdef UTRIE3_DEBUG
-#   include <stdio.h>
-#endif
-
 #include "unicode/utypes.h"
 #include "unicode/utf.h"
 #include "unicode/utf8.h"
