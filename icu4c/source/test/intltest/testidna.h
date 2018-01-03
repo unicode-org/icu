@@ -66,8 +66,9 @@ public:
     void TestRefIDNA();
     void TestIDNAMonkeyTest();
     void TestConformance();
-    static NamePrepTransform* getInstance(UErrorCode& status);
-    static NamePrepTransform* gPrep;
+    NamePrepTransform* getInstance(UErrorCode& status);
+    NamePrepTransform* gPrep;
+    TestIDNA() : gPrep(nullptr) {}
     virtual ~TestIDNA();
 
 private:

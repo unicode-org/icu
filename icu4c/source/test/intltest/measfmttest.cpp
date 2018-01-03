@@ -2756,7 +2756,7 @@ void MeasureFormatTest::TestNumericTime() {
     Measure fhours(112.8765, MeasureUnit::createHour(status), status);
     Measure fminutes(113.8765, MeasureUnit::createMinute(status), status);
     Measure fseconds(114.8765, MeasureUnit::createSecond(status), status);
-    assertSuccess("", status);
+    if (status.errDataIfFailureAndReset(WHERE)) return;
 
     verifyFormat("hours", fmt, &hours, 1, "112h");
     verifyFormat("minutes", fmt, &minutes, 1, "113m");
@@ -2805,12 +2805,13 @@ void MeasureFormatTest::TestNumericTimeSomeSpecialFormats() {
 
     Measure fhours(2.8765432, MeasureUnit::createHour(status), status);
     Measure fminutes(3.8765432, MeasureUnit::createMinute(status), status);
-    assertSuccess("", status);
+    if (status.errDataIfFailureAndReset(WHERE)) return;
 
     Measure fhoursFminutes[2] = {fhours, fminutes};
 
     // Latvian is one of the very few locales 0-padding the hour
     MeasureFormat fmtLt("lt", UMEASFMT_WIDTH_NUMERIC, status);
+    if (status.errDataIfFailureAndReset(WHERE)) return;
     verifyFormat("Latvian fhoursFminutes", fmtLt, fhoursFminutes, 2, "02:03,877");
 
     // Danish is one of the very few locales using '.' as separator

@@ -207,6 +207,7 @@ void TestRunTogetherPattern985()
     format = udat_open(UDAT_PATTERN, UDAT_PATTERN, NULL, NULL, 0,pattern, u_strlen(pattern), &status);
     if(U_FAILURE(status)){
         log_data_err("FAIL: Error in date format construction with pattern: %s - (Are you missing data?)\n", myErrorName(status));
+        free(pattern);
         return;
     }
     date1 = ucal_getNow();
@@ -304,10 +305,12 @@ void TestCzechMonths459()
  */
 void TestQuotePattern161()
 {
-    UDateFormat *format;
-    UCalendar *cal;
+    UDateFormat *format = NULL;
+    UCalendar *cal = NULL;
     UDate currentTime_1;
-    UChar *pattern, *tzID, *exp;
+    UChar *pattern = NULL;
+    UChar *tzID = NULL;
+    UChar *exp = NULL;
     UChar *dateString;
     UErrorCode status = U_ZERO_ERROR;
     const char* expStr = "04/13/1999 at 10:42:28 AM ";
@@ -323,27 +326,27 @@ void TestQuotePattern161()
     format= udat_open(UDAT_PATTERN, UDAT_PATTERN,"en_US", NULL, 0,pattern, u_strlen(pattern), &status);
     if(U_FAILURE(status)){
         log_data_err("error in udat_open: %s - (Are you missing data?)\n", myErrorName(status));
-        return;
-    }
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
-    u_uastrcpy(tzID, "PST");
-    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
-       - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
-    /* cal=ucal_open(tzID, u_strlen(tzID), NULL, UCAL_TRADITIONAL, &status); */
-    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
-    if(U_FAILURE(status)){ log_err("error in ucal_open cal : %s\n", myErrorName(status));    }
-    
-    ucal_setDateTime(cal, 1999, UCAL_APRIL, 13, 10, 42, 28, &status);
-    currentTime_1 = ucal_getMillis(cal, &status);
-    
-    dateString = myDateFormat(format, currentTime_1);
-    exp=(UChar*)malloc(sizeof(UChar) * (strlen(expStr) + 1) );
-    u_uastrcpy(exp, expStr);
-    
-    log_verbose("%s\n", austrdup(dateString) );
-    if(u_strncmp(dateString, exp, (int32_t)strlen(expStr)) !=0)
-        log_err("Error in formatting a pattern with single quotes\n");
+    } else {
+        tzID=(UChar*)malloc(sizeof(UChar) * 4);
+        u_uastrcpy(tzID, "PST");
+        /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+           - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
+        /* cal=ucal_open(tzID, u_strlen(tzID), NULL, UCAL_TRADITIONAL, &status); */
+        cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
+        if(U_FAILURE(status)){ log_err("error in ucal_open cal : %s\n", myErrorName(status));    }
 
+        ucal_setDateTime(cal, 1999, UCAL_APRIL, 13, 10, 42, 28, &status);
+        currentTime_1 = ucal_getMillis(cal, &status);
+
+        dateString = myDateFormat(format, currentTime_1);
+        exp=(UChar*)malloc(sizeof(UChar) * (strlen(expStr) + 1) );
+        u_uastrcpy(exp, expStr);
+
+        log_verbose("%s\n", austrdup(dateString) );
+        if(u_strncmp(dateString, exp, (int32_t)strlen(expStr)) !=0) {
+            log_err("Error in formatting a pattern with single quotes\n");
+        }
+    }
     udat_close(format);
     ucal_close(cal);
     free(exp);

@@ -750,6 +750,7 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
     validLocale[0] = 0;
     actualLocale[0] = 0;
     if (U_FAILURE(success)) {
+        delete zone;
         return;
     }
     if(zone == 0) {

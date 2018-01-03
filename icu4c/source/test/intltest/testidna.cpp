@@ -1597,25 +1597,22 @@ void TestIDNA::TestRefIDNA(){
 void TestIDNA::TestDataFile(){
      testData(*this);
 }
+
 TestIDNA::~TestIDNA(){
-    if(gPrep!=NULL){
-        delete gPrep;
-        gPrep = NULL;
-    }
+    delete gPrep;
+    gPrep = NULL;
 }
 
-NamePrepTransform* TestIDNA::gPrep = NULL;
-
 NamePrepTransform* TestIDNA::getInstance(UErrorCode& status){
-    if(TestIDNA::gPrep == NULL){
+    if(gPrep == NULL){
         UParseError parseError;
-        TestIDNA::gPrep = NamePrepTransform::createInstance(parseError, status);
-        if(TestIDNA::gPrep ==NULL){
+        gPrep = NamePrepTransform::createInstance(parseError, status);
+        if(gPrep == NULL){
            //status = U_MEMORY_ALLOCATION_ERROR;
            return NULL;
         }
     }
-    return TestIDNA::gPrep;
+    return gPrep;
 
 }
 #endif /* #if !UCONFIG_NO_IDNA */

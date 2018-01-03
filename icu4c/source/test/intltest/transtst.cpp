@@ -2340,17 +2340,17 @@ void TransliteratorTest::TestCompoundFilterID(void) {
             exp = CharsToUnicodeString(DATA[i+3]);
         }
         UBool expOk = (DATA[i+1] != NULL);
-        Transliterator* t = NULL;
+        LocalPointer<Transliterator> t;
         UParseError pe;
         UErrorCode ec = U_ZERO_ERROR;
         if (id.charAt(0) == 0x23/*#*/) {
-            t = Transliterator::createFromRules("ID", id, direction, pe, ec);
+            t.adoptInstead(Transliterator::createFromRules("ID", id, direction, pe, ec));
         } else {
-            t = Transliterator::createInstance(id, direction, pe, ec);
+            t.adoptInstead(Transliterator::createInstance(id, direction, pe, ec));
         }
-        UBool ok = (t != NULL && U_SUCCESS(ec));
+        UBool ok = (t.isValid() && U_SUCCESS(ec));
         UnicodeString transID;
-        if (t!=0) {
+        if (t.isValid()) {
             transID = t->getID();
         }
         else {
@@ -2362,7 +2362,6 @@ void TransliteratorTest::TestCompoundFilterID(void) {
             if (source.length() != 0) {
                 expect(*t, source, exp);
             }
-            delete t;
         } else {
             dataerrln((UnicodeString)"FAIL: " + id + " => " + transID + ", " +
                   u_errorName(ec));
@@ -3176,12 +3175,12 @@ void TransliteratorTest::TestToRulesMark() {
     
     UParseError pe;
     UErrorCode ec = U_ZERO_ERROR;
-    Transliterator *t2 = Transliterator::createFromRules("source-target", UnicodeString(testRules, -1, US_INV), UTRANS_FORWARD, pe, ec);
-    Transliterator *t3 = Transliterator::createFromRules("target-source", UnicodeString(testRules, -1, US_INV), UTRANS_REVERSE, pe, ec);
+    LocalPointer<Transliterator> t2(
+            Transliterator::createFromRules("source-target", UnicodeString(testRules, -1, US_INV), UTRANS_FORWARD, pe, ec));
+    LocalPointer<Transliterator> t3(
+            Transliterator::createFromRules("target-source", UnicodeString(testRules, -1, US_INV), UTRANS_REVERSE, pe, ec));
 
     if (U_FAILURE(ec)) {
-        delete t2;
-        delete t3;
         dataerrln((UnicodeString)"FAIL: createFromRules => " + u_errorName(ec));
         return;
     }
@@ -3191,9 +3190,6 @@ void TransliteratorTest::TestToRulesMark() {
     
     checkRules("Failed toRules FORWARD", *t2, UnicodeString(testRulesForward, -1, US_INV));
     checkRules("Failed toRules BACKWARD", *t3, UnicodeString(testRulesBackward, -1, US_INV));
-
-    delete t2;
-    delete t3;
 }
 
 /**

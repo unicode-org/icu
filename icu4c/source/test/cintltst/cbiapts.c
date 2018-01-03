@@ -730,12 +730,15 @@ static void TestBreakIteratorUText(void) {
     bi = ubrk_open(UBRK_WORD, "en_US", NULL, 0, &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));
+        utext_close(ut);
         return;
     }
 
     ubrk_setUText(bi, ut, &status);
     if (U_FAILURE(status)) {
         log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));
+        ubrk_close(bi);
+        utext_close(ut);
         return;
     }
 

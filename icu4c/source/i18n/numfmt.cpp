@@ -986,15 +986,19 @@ static UBool haveService() {
 URegistryKey U_EXPORT2
 NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
 {
-  ICULocaleService *service = getNumberFormatService();
-  if (service) {
-	  NFFactory *tempnnf = new NFFactory(toAdopt);
-	  if (tempnnf != NULL) {
-		  return service->registerFactory(tempnnf, status);
-	  }
-  }
-  status = U_MEMORY_ALLOCATION_ERROR;
-  return NULL;
+    if (U_FAILURE(status)) {
+        delete toAdopt;
+        return nullptr;
+    }
+    ICULocaleService *service = getNumberFormatService();
+    if (service) {
+        NFFactory *tempnnf = new NFFactory(toAdopt);
+        if (tempnnf != NULL) {
+            return service->registerFactory(tempnnf, status);
+        }
+    }
+    status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
 }
 
 // -------------------------------------
