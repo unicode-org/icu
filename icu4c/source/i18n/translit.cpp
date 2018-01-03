@@ -923,13 +923,15 @@ Transliterator::createInstance(const UnicodeString& ID,
         return NULL;
     }
 
-    UnicodeSet* globalFilter;
+    UnicodeSet* globalFilter = nullptr;
     // TODO add code for parseError...currently unused, but
     // later may be used by parsing code...
     if (!TransliteratorIDParser::parseCompoundID(ID, dir, canonID, list, globalFilter)) {
         status = U_INVALID_ID;
+        delete globalFilter;
         return NULL;
     }
+    LocalPointer<UnicodeSet> lpGlobalFilter(globalFilter);
     
     TransliteratorIDParser::instantiateList(list, status);
     if (U_FAILURE(status)) {
@@ -953,8 +955,8 @@ Transliterator::createInstance(const UnicodeString& ID,
     // Check null pointer
     if (t != NULL) {
         t->setID(canonID);
-        if (globalFilter != NULL) {
-            t->adoptFilter(globalFilter);
+        if (lpGlobalFilter.isValid()) {
+            t->adoptFilter(lpGlobalFilter.orphan());
         }
     }
     else if (U_SUCCESS(status)) {
@@ -1101,6 +1103,10 @@ Transliterator::createFromRules(const UnicodeString& ID,
                 UnicodeString* idBlock = (UnicodeString*)parser.idBlockVector.elementAt(i);
                 if (!idBlock->isEmpty()) {
                     Transliterator* temp = createInstance(*idBlock, UTRANS_FORWARD, parseError, status);
+                    if (U_FAILURE(status)) {
+                        delete temp;
+                        return nullptr;
+                    }
                     if (temp != NULL && typeid(*temp) != typeid(NullTransliterator))
                         transliterators.addElement(temp, status);
                     else
@@ -1114,8 +1120,10 @@ Transliterator::createFromRules(const UnicodeString& ID,
                         data, TRUE);
                 // Check if NULL before adding it to transliterators to avoid future usage of NULL pointer.
                 if (temprbt == NULL) {
-                	status = U_MEMORY_ALLOCATION_ERROR;
-                	return t;
+                    if (U_SUCCESS(status)) {
+                        status = U_MEMORY_ALLOCATION_ERROR;
+                    }
+                    return t;
                 }
                 transliterators.addElement(temprbt, status);
             }

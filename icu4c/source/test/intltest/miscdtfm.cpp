@@ -113,8 +113,8 @@ DateFormatMiscTests::test4097450()
     };*/
 
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat *formatter;
-    SimpleDateFormat *resultFormatter = new SimpleDateFormat((UnicodeString)"yyyy", status);
+    LocalPointer<SimpleDateFormat> formatter;
+    SimpleDateFormat resultFormatter((UnicodeString)u"yyyy", status);
     if (U_FAILURE(status)) {
         dataerrln("Fail new SimpleDateFormat: %s", u_errorName(status));
         return;
@@ -125,24 +125,21 @@ DateFormatMiscTests::test4097450()
     for (int i = 0; i < 14/*dstring.length*/; i++)
     {
         log(dformat[i] + "\t" + dstring[i] + "\t");
-        formatter = new SimpleDateFormat(dformat[i], status);
+        formatter.adoptInstead(new SimpleDateFormat(dformat[i], status));
         if(failure(status, "new SimpleDateFormat")) return;
         //try {
         UnicodeString str;
         FieldPosition pos(FieldPosition::DONT_CARE);
-        logln(resultFormatter->format(formatter->parse(dstring[i], status), str, pos));
-        failure(status, "resultFormatter->format");
+        logln(resultFormatter.format(formatter->parse(dstring[i], status), str, pos));
+        failure(status, "resultFormatter.format");
             //if ( !dresult[i] ) System.out.print("   <-- error!");
         /*}
         catch (ParseException exception) {
             //if ( dresult[i] ) System.out.print("   <-- error!");
             System.out.print("exception --> " + exception);
         }*/
-        delete formatter;
         logln();
     }
-
-    delete resultFormatter;
 }
 
 /*

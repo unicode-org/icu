@@ -484,6 +484,7 @@ static void TestQuickCheckStringResult()
                                                             UNORM_YES)
     {
       log_data_err("ERROR in NFD quick check for string at count %d - (Are you missing data?)\n", count);
+      free(d); free(c);
       return;
     }
 
@@ -491,6 +492,7 @@ static void TestQuickCheckStringResult()
                                                             UNORM_NO)
     {
       log_err("ERROR in NFC quick check for string at count %d\n", count);
+      free(d); free(c);
       return;
     }
 
@@ -506,6 +508,7 @@ static void TestQuickCheckStringResult()
                                                             UNORM_YES)
     {
       log_data_err("ERROR in NFKD quick check for string at count %d\n", count);
+      free(d); free(c);
       return;
     }
 
@@ -513,6 +516,7 @@ static void TestQuickCheckStringResult()
                                                             UNORM_YES)
     {
       log_err("ERROR in NFKC quick check for string at count %d\n", count);
+      free(d); free(c);
       return;
     }
 
@@ -1413,6 +1417,7 @@ TestQuickCheckPerCP() {
             log_data_err("%s:%d errorCode=%s\n", __FILE__, __LINE__, u_errorName(errorCode));
             break;
         }
+
         /* length-length == 0 is used to get around a compiler warning. */
         U16_GET(nfd, 0, length-length, length, lead);
         U16_GET(nfd, 0, length-1, length, trail);

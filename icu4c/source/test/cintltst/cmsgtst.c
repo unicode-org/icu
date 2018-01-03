@@ -189,6 +189,7 @@ static void MessageFormatTest( void )
 
         if(U_FAILURE(ec)){
             log_data_err("umsg_open() failed for testCasePattens[0]. -> %s (Are you missing data?)\n", u_errorName(ec));
+            umsg_close(formatter);
             return;
         }
         for(i = 0;i<cnt_testCases; i++){
@@ -205,6 +206,7 @@ static void MessageFormatTest( void )
             umsg_applyPattern(formatter,testCasePatterns[i],patternLength,&parseError,&ec);
             if(U_FAILURE(ec)){
                 log_err("umsg_applyPattern() failed for testCasePattens[%d].\n",i);
+                umsg_close(formatter);
                 return;
             }
             /* pre-flight */
@@ -216,6 +218,7 @@ static void MessageFormatTest( void )
                 if(U_FAILURE(ec)){
                       log_err("ERROR: failure in message format on testcase %d:  %s\n", i, u_errorName(status) );
                       free(result);
+                      umsg_close(formatter);
                       return;
                 }
             
@@ -404,6 +407,7 @@ static void TestNewFormatAndParseAPI(void)
     d1=ucal_getMillis(cal, &status);
     if(U_FAILURE(status)){
         log_err("Error: failure in get millis: %s\n", myErrorName(status) );
+        goto cleanup;
     }
     
     log_verbose("\nTesting with pattern test#4");
@@ -536,14 +540,17 @@ static void TestSampleFormatAndParseWithError(void)
     /*try to parse this and check*/
     log_verbose("\nTesting the parse Message test#5\n");
 
-    u_parseMessageWithError("en_US", pattern, u_strlen(pattern), result, u_strlen(result), &parseError,&status, &d, ret, &value);
-    if(U_FAILURE(status)){
-        log_data_err("ERROR: error in parsing: test#5: %s (Are you missing data?)\n", myErrorName(status));
+    if (U_SUCCESS(status)) {
+        u_parseMessageWithError("en_US", pattern, u_strlen(pattern), result, u_strlen(result), 
+                                &parseError,&status, &d, ret, &value);
+        if(U_FAILURE(status)){
+            log_data_err("ERROR: error in parsing: test#5: %s (Are you missing data?)\n", myErrorName(status));
+        }
+        else if(value!=7 && u_strcmp(str,ret)!=0)
+            log_err("FAIL: Error in parseMessage on test#5 \n");
+        else
+            log_verbose("PASS: parseMessage successful on test#5\n");
     }
-    else if(value!=7 && u_strcmp(str,ret)!=0)
-        log_err("FAIL: Error in parseMessage on test#5 \n");
-    else
-        log_verbose("PASS: parseMessage successful on test#5\n");
         
     def1 = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, NULL,0,&status);
     if(U_FAILURE(status))
@@ -632,14 +639,16 @@ static void TestSampleFormatAndParse(void)
     /*try to parse this and check*/
     log_verbose("\nTesting the parse Message test#5\n");
 
-    u_parseMessage("en_US", pattern, u_strlen(pattern), result, u_strlen(result), &status, &d, ret, &value);
-    if(U_FAILURE(status)){
-        log_data_err("ERROR: error in parsing: test#5: %s (Are you missing data?)\n", myErrorName(status));
+    if (U_SUCCESS(status)) {
+        u_parseMessage("en_US", pattern, u_strlen(pattern), result, u_strlen(result), &status, &d, ret, &value);
+        if(U_FAILURE(status)){
+            log_data_err("ERROR: error in parsing: test#5: %s (Are you missing data?)\n", myErrorName(status));
+        }
+        else if(value!=7 && u_strcmp(str,ret)!=0)
+            log_err("FAIL: Error in parseMessage on test#5 \n");
+        else
+            log_verbose("PASS: parseMessage successful on test#5\n");
     }
-    else if(value!=7 && u_strcmp(str,ret)!=0)
-        log_err("FAIL: Error in parseMessage on test#5 \n");
-    else
-        log_verbose("PASS: parseMessage successful on test#5\n");
         
     def1 = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, NULL,0,&status);
     if(U_FAILURE(status))

@@ -850,15 +850,15 @@ void NumberFormatRegressionTest::Test4092480 (void)
 void NumberFormatRegressionTest::Test4087244 (void) {
     UErrorCode status = U_ZERO_ERROR;
     char loc[256] = {0};
+
     uloc_canonicalize("pt_PT@currency=PTE", loc, 256, &status);
-    Locale *de = new Locale(loc);
-    NumberFormat *nf = NumberFormat::createCurrencyInstance(*de, status);
+    Locale de(loc);
+    LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance(de, status));
     if(U_FAILURE(status)) {
-      dataerrln("Error creating DecimalFormat: %s", u_errorName(status));
-      delete nf;
-      return;
+        dataerrln("Error creating DecimalFormat: %s", u_errorName(status));
+        return;
     }
-    DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
+    DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf.getAlias());
     if(df == NULL) {
         errln("expected DecimalFormat!");
         return;
@@ -887,8 +887,6 @@ void NumberFormatRegressionTest::Test4087244 (void) {
               monStr +
               "\" and not \"" + decStr + '"');
     }
-    delete de;
-    delete nf;
 }
 /* @bug 4070798
  * Number format data rounding errors for locale FR
@@ -2681,18 +2679,18 @@ void NumberFormatRegressionTest::TestJ691(void) {
     Locale loc("fr", "CH");
 
     // set up the input date string & expected output
-    UnicodeString udt("11.10.2000", "");
-    UnicodeString exp("11.10.00", "");
+    UnicodeString udt(u"11.10.2000");
+    UnicodeString exp(u"11.10.00");
 
     // create a Calendar for this locale
-    Calendar *cal = Calendar::createInstance(loc, status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(loc, status));
     if (U_FAILURE(status)) {
         dataerrln("FAIL: Calendar::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
     }
 
     // create a NumberFormat for this locale
-    NumberFormat *nf = NumberFormat::createInstance(loc, status);
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance(loc, status));
     if (U_FAILURE(status)) {
         dataerrln("FAIL: NumberFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
@@ -2705,14 +2703,14 @@ void NumberFormatRegressionTest::TestJ691(void) {
     // so they are done in DateFormat::adoptNumberFormat
 
     // create the DateFormat
-    DateFormat *df = DateFormat::createDateInstance(DateFormat::kShort, loc);
+    LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kShort, loc));
     if (U_FAILURE(status)) {
         errln("FAIL: DateFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
     }
 
-    df->adoptCalendar(cal);
-    df->adoptNumberFormat(nf);
+    df->adoptCalendar(cal.orphan());
+    df->adoptNumberFormat(nf.orphan());
 
     // set parsing to lenient & parse
     df->setLenient(TRUE);
@@ -2725,8 +2723,6 @@ void NumberFormatRegressionTest::TestJ691(void) {
     if (outString != exp) {
         errln("FAIL: " + udt + " => " + outString);
     }
-
-    delete df;
 }
 
 //---------------------------------------------------------------------------

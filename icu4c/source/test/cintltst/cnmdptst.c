@@ -256,6 +256,8 @@ static void TestExponential(void)
         fmt=unum_open(UNUM_IGNORE,upat, u_strlen(upat), "en_US",NULL, &status);
         if (U_FAILURE(status)) {
             log_err_status(status, "FAIL: Bad status returned by Number format construction with pattern %s -> %s\n", pat[p], u_errorName(status));
+            free(upat);
+            upat = NULL;
             continue;
         }
         lneed= u_strlen(upat) + 1;

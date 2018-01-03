@@ -198,6 +198,17 @@ CLEANUP:
     return b2Len;
 }
 
+
+static NamePrepTransform* getInstance(UErrorCode& status){
+    TestIDNA *thisTest = dynamic_cast<TestIDNA *>(IntlTest::gTest);
+    if (thisTest == nullptr && U_SUCCESS(status)) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+    }
+    if (U_FAILURE(status)) return nullptr;
+    return thisTest->getInstance(status);
+}
+
+
 static int32_t convertFromPuny(  const UChar* src, int32_t srcLength,
                                  UChar* dest, int32_t destCapacity,
                                  UErrorCode& status){
@@ -288,7 +299,7 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
         b1[b1Len++] = src[j];
     }
 
-    NamePrepTransform* prep = TestIDNA::getInstance(*status);
+    NamePrepTransform* prep = getInstance(*status);
     if(U_FAILURE(*status)){
         goto CLEANUP;
     }
@@ -439,7 +450,7 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
             reqLength=0;
 //    UParseError parseError;
 
-    NamePrepTransform* prep = TestIDNA::getInstance(*status);
+    NamePrepTransform* prep = getInstance(*status);
     b1Len = 0;
     UBool* caseFlags = NULL;
 
@@ -694,7 +705,7 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
     int32_t reqLength = 0;
 //    UParseError parseError;
 
-    NamePrepTransform* prep = TestIDNA::getInstance(*status);
+    NamePrepTransform* prep = getInstance(*status);
 
     //initialize pointers to stack buffers
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE];
@@ -850,7 +861,7 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
 
     UBool done = FALSE;
 
-    NamePrepTransform* prep = TestIDNA::getInstance(*status);
+    NamePrepTransform* prep = getInstance(*status);
 
     //initialize pointers to stack buffers
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE];

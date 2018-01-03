@@ -453,9 +453,10 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
 void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
     UErrorCode status = U_ZERO_ERROR;
 
-    CurrencyPluralInfo *cpi = new CurrencyPluralInfo(status);
+    LocalPointer<CurrencyPluralInfo>cpi(new CurrencyPluralInfo(status), status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: CurrencyPluralInfo(UErrorCode) could not be created");
+        return;
     }
 
     CurrencyPluralInfo cpi1 = *cpi;
@@ -479,19 +480,18 @@ void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
         errln((UnicodeString)"ERROR: CurrencyPluralInfo::setPluralRules");
     }
 
-    DecimalFormat *df = new DecimalFormat(status);
+    LocalPointer<DecimalFormat>df(new DecimalFormat(status));
     if(U_FAILURE(status)) {
         errcheckln(status, "ERROR: Could not create DecimalFormat - %s", u_errorName(status));
         return;
     }
 
-    df->adoptCurrencyPluralInfo(cpi);
+    df->adoptCurrencyPluralInfo(cpi.orphan());
 
     df->getCurrencyPluralInfo();
 
     df->setCurrencyPluralInfo(cpi1);
 
-    delete df;
 }
 
 void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)

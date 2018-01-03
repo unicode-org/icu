@@ -356,6 +356,11 @@ static void TestCalendar()
     datdef=udat_open(UDAT_FULL,UDAT_FULL ,NULL, NULL, 0,NULL,0,&status);
     if(U_FAILURE(status)){
         log_data_err("FAIL: error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
+        ucal_close(caldef2);
+        ucal_close(calfr);
+        ucal_close(calit);
+        ucal_close(calfrclone);
+        ucal_close(caldef);
         return;
     }
     log_verbose("PASS: The current date and time fetched is %s\n", u_austrcpy(tempMsgBuf, myDateFormat(datdef, now)) );
@@ -535,6 +540,10 @@ static void TestGetSetDateAPI()
     if(U_FAILURE(status))
     {
         log_data_err("error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
+        ucal_close(caldef);
+        ucal_close(caldef2);
+        ucal_close(caldef3);
+        udat_close(datdef);
         return;
     }
 
@@ -1248,30 +1257,33 @@ static void TestDOWProgression()
     log_verbose("\nTesting the DOW progression\n");
     
     initialDOW = ucal_get(cal, UCAL_DAY_OF_WEEK, &status);
-    if (U_FAILURE(status)) { log_data_err("ucal_get() failed: %s (Are you missing data?)\n", u_errorName(status) ); return; }
-    newDOW = initialDOW;
-    do {
-        DOW = newDOW;
-        log_verbose("DOW = %d...\n", DOW);
-        date1=ucal_getMillis(cal, &status);
-        if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", u_errorName(status)); return;}
-        log_verbose("%s\n", u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)));
-        
-        ucal_add(cal,UCAL_DAY_OF_WEEK, delta, &status);
-        if (U_FAILURE(status)) { log_err("ucal_add() failed: %s\n", u_errorName(status)); return; }
-        
-        newDOW = ucal_get(cal, UCAL_DAY_OF_WEEK, &status);
-        if (U_FAILURE(status)) { log_err("ucal_get() failed: %s\n", u_errorName(status)); return; }
-        expectedDOW = 1 + (DOW + delta - 1) % 7;
-        date1=ucal_getMillis(cal, &status);
-        if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", u_errorName(status)); return;}
-        if (newDOW != expectedDOW) {
-            log_err("Day of week should be %d instead of %d on %s", expectedDOW, newDOW, 
-                u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)) );    
-            return; 
+    if (U_FAILURE(status)) { 
+        log_data_err("ucal_get() failed: %s (Are you missing data?)\n", u_errorName(status) );
+    } else {
+        newDOW = initialDOW;
+        do {
+            DOW = newDOW;
+            log_verbose("DOW = %d...\n", DOW);
+            date1=ucal_getMillis(cal, &status);
+            if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", u_errorName(status)); break;}
+            log_verbose("%s\n", u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)));
+
+            ucal_add(cal,UCAL_DAY_OF_WEEK, delta, &status);
+            if (U_FAILURE(status)) { log_err("ucal_add() failed: %s\n", u_errorName(status)); break; }
+
+            newDOW = ucal_get(cal, UCAL_DAY_OF_WEEK, &status);
+            if (U_FAILURE(status)) { log_err("ucal_get() failed: %s\n", u_errorName(status)); break; }
+            expectedDOW = 1 + (DOW + delta - 1) % 7;
+            date1=ucal_getMillis(cal, &status);
+            if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", u_errorName(status)); break;}
+            if (newDOW != expectedDOW) {
+                log_err("Day of week should be %d instead of %d on %s", expectedDOW, newDOW, 
+                        u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)) );    
+                break; 
+            }
         }
+        while (newDOW != initialDOW);
     }
-    while (newDOW != initialDOW);
     
     ucal_close(cal);
     udat_close(datfor);
@@ -1307,13 +1319,13 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open failed: %s - (Are you missing data?)\n", u_errorName(status)); 
-        return; 
+        goto cleanup; 
     }
     u_uastrcpy(tzID, "PST");
     cal = ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
         log_err("ucal_open failed: %s\n", u_errorName(status));
-        return; 
+        goto cleanup; 
     }
     
     datfor=udat_open(UDAT_MEDIUM,UDAT_MEDIUM ,NULL, fgGMTID,-1,NULL, 0, &status);
@@ -1324,13 +1336,13 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     ucal_setDateTime(gmtcal, yr, mo - 1, dt, hr, mn, sc, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_setDateTime failed: %s (Are you missing data?)\n", u_errorName(status));
-        return; 
+        goto cleanup; 
     }
     ucal_set(gmtcal, UCAL_MILLISECOND, 0);
     date1 = ucal_getMillis(gmtcal, &status);
     if (U_FAILURE(status)) {
         log_err("ucal_getMillis failed: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     log_verbose("date = %s\n", u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)) );
 
@@ -1338,7 +1350,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     ucal_setMillis(cal, date1, &status);
     if (U_FAILURE(status)) {
         log_err("ucal_setMillis() failed: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
 
     offset = ucal_get(cal, UCAL_ZONE_OFFSET, &status);
@@ -1346,7 +1358,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
    
     if (U_FAILURE(status)) {
         log_err("ucal_get() failed: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     temp=(double)((double)offset / 1000.0 / 60.0 / 60.0);
     /*printf("offset for %s %f hr\n", austrdup(myDateFormat(datfor, date1)), temp);*/
@@ -1357,7 +1369,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
                     ucal_get(cal, UCAL_MILLISECOND, &status) - offset;
     if (U_FAILURE(status)) {
         log_err("ucal_get() failed: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     
     expected = ((hr * 60 + mn) * 60 + sc) * 1000;
@@ -1367,6 +1379,8 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     }
     else
         log_verbose("PASS: the offset between local and GMT is correct\n");
+
+cleanup:
     ucal_close(gmtcal);
     ucal_close(cal);
     udat_close(datfor);

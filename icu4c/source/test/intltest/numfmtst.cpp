@@ -8047,6 +8047,8 @@ void NumberFormatTest::TestCurrencyFormatForMissingLocale() {
     Locale locale = Locale::createCanonical("sh_ME");
 
     LocalPointer<NumberFormat> curFmt(NumberFormat::createInstance(locale, UNUM_CURRENCY, status));
+    // Fail here with missing data.
+    if (!assertTrue(WHERE, curFmt.isValid(), false, true)) {return;};
     assertEquals("Currency instance is not for the desired locale for CURRENCYSTYLE", curFmt->getCurrency(), "EUR");
     UnicodeString currBuf;
     curFmt->format(-1234.5, currBuf);

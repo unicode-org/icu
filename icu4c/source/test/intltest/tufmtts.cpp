@@ -386,7 +386,7 @@ void TimeUnitTest::testGreekWithFallback() {
                     unitIndex < UPRV_LENGTHOF(tunits);
                     ++unitIndex ) {
 
-                    TimeUnitAmount *tamt = new TimeUnitAmount(numbers[numberIndex], tunits[unitIndex], status);
+                    LocalPointer<TimeUnitAmount>tamt(new TimeUnitAmount(numbers[numberIndex], tunits[unitIndex], status));
                     if (U_FAILURE(status)) {
                         dataerrln("generating TimeUnitAmount Object failed.");
 #ifdef TUFMTTS_DEBUG
@@ -395,7 +395,7 @@ void TimeUnitTest::testGreekWithFallback() {
                         return;
                     }
 
-                    TimeUnitFormat *tfmt = new TimeUnitFormat(l, styles[styleIndex], status);
+                    LocalPointer<TimeUnitFormat> tfmt(new TimeUnitFormat(l, styles[styleIndex], status));
                     if (U_FAILURE(status)) {
                         dataerrln("generating TimeUnitAmount Object failed.");
 #ifdef TUFMTTS_DEBUG
@@ -407,10 +407,9 @@ void TimeUnitTest::testGreekWithFallback() {
                     Formattable fmt;
                     UnicodeString str;
 
-                    fmt.adoptObject(tamt);
-                    str = ((Format *)tfmt)->format(fmt, str, status);
+                    fmt.adoptObject(tamt.orphan());
+                    str = ((Format *)tfmt.getAlias())->format(fmt, str, status);
                     if (!assertSuccess("formatting relative time failed", status)) {
-                        delete tfmt;
 #ifdef TUFMTTS_DEBUG
                         std::cout <<  "Failed to format" << "\n";
 #endif
@@ -426,11 +425,9 @@ void TimeUnitTest::testGreekWithFallback() {
                     std::cout <<  "Formatted string : " << tmp << " expected : " << tmp1 << "\n";
 #endif
                     if (!assertEquals("formatted time string is not expected, locale: " + UnicodeString(locales[locIndex]) + " style: " + (int)styles[styleIndex] + " units: " + (int)tunits[unitIndex], expected[counter], str)) {
-                        delete tfmt;
                         str.remove();
                         return;
                     }
-                    delete tfmt;
                     str.remove();
                     ++counter;
                 }
