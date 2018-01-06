@@ -332,7 +332,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
 
 #if 0  // TODO
 /**
- * Build a UTrie3 (version 2) from a UTrie (version 1).
+ * Build a UTrie3 (version 3) from a UTrie (version 1).
  * Enumerates all values in the UTrie and builds a UTrie3 with the same values.
  * The resulting UTrie3 will be frozen.
  *
@@ -849,32 +849,34 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
 
 /** Internal next-post-increment: get the next code point (c) and its data. */
 #define _UTRIE3_U16_NEXT(trie, data, src, limit, c, result) { \
-    { \
+    (c)=*(src)++; \
+    if(!U16_IS_SURROGATE(c)) { \
+        (result)=_UTRIE3_GET_FROM_U16_SINGLE_LEAD(trie, data, c); \
+    } else { \
         uint16_t __c2; \
-        (c)=*(src)++; \
-        if(!U16_IS_LEAD(c)) { \
-            (result)=_UTRIE3_GET_FROM_U16_SINGLE_LEAD(trie, data, c); \
-        } else if((src)==(limit) || !U16_IS_TRAIL(__c2=*(src))) { \
-            (result)=(trie)->data[_UTRIE3_INDEX_FROM_LSCP((trie)->index, c)]; \
-        } else { \
+        if(U16_IS_SURROGATE_LEAD(c) && (src)!=(limit) && U16_IS_TRAIL(__c2=*(src))) { \
             ++(src); \
             (c)=U16_GET_SUPPLEMENTARY((c), __c2); \
             (result)=_UTRIE3_GET_FROM_SUPP((trie), data, (c)); \
+        } else { \
+            (result)=(trie)->errorValue; \
         } \
     } \
 }
 
 /** Internal pre-decrement-previous: get the previous code point (c) and its data */
 #define _UTRIE3_U16_PREV(trie, data, start, src, c, result) { \
-    { \
+    (c)=*--(src); \
+    if(!U16_IS_SURROGATE(c)) { \
+        (result)=_UTRIE3_GET_FROM_U16_SINGLE_LEAD(trie, data, c); \
+    } else { \
         uint16_t __c2; \
-        (c)=*--(src); \
-        if(!U16_IS_TRAIL(c) || (src)==(start) || !U16_IS_LEAD(__c2=*((src)-1))) { \
-            (result)=(trie)->data[_UTRIE3_INDEX_FROM_BMP((trie)->index, c)]; \
-        } else { \
+        if(U16_IS_SURROGATE_TRAIL(c) && (src)!=(start) && U16_IS_LEAD(__c2=*((src)-1))) { \
             --(src); \
             (c)=U16_GET_SUPPLEMENTARY(__c2, (c)); \
             (result)=_UTRIE3_GET_FROM_SUPP((trie), data, (c)); \
+        } else { \
+            (result)=(trie)->errorValue; \
         } \
     } \
 }

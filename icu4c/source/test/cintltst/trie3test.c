@@ -268,7 +268,7 @@ testTrieUTF16(const char *testName,
 
     const UChar *p, *limit;
 
-    uint32_t value;
+    uint32_t value, expected;
     UChar32 prevCP, c, c2;
     int32_t i, length, sIndex, countValues;
 
@@ -303,9 +303,10 @@ testTrieUTF16(const char *testName,
         } else {
             UTRIE3_U16_NEXT32(trie, p, limit, c, value);
         }
-        if(value!=values[i]) {
+        expected= U_IS_SURROGATE(c) ? trie->errorValue : values[i];
+        if(value!=expected) {
             log_err("error: wrong value from UTRIE3_NEXT(%s)(U+%04lx): 0x%lx instead of 0x%lx\n",
-                    testName, (long)c, (long)value, (long)values[i]);
+                    testName, (long)c, (long)value, (long)expected);
         }
         if(c!=c2) {
             log_err("error: wrong code point from UTRIE3_NEXT(%s): U+%04lx != U+%04lx\n",
@@ -328,9 +329,10 @@ testTrieUTF16(const char *testName,
         } else {
             UTRIE3_U16_PREV32(trie, s, p, c, value);
         }
-        if(value!=values[i]) {
+        expected= U_IS_SURROGATE(c) ? trie->errorValue : values[i];
+        if(value!=expected) {
             log_err("error: wrong value from UTRIE3_PREV(%s)(U+%04lx): 0x%lx instead of 0x%lx\n",
-                    testName, (long)c, (long)value, (long)values[i]);
+                    testName, (long)c, (long)value, (long)expected);
         }
         if(c!=c2) {
             log_err("error: wrong code point from UTRIE3_PREV(%s): U+%04lx != U+%04lx\n",
