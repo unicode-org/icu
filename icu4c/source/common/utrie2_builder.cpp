@@ -1194,7 +1194,7 @@ compactTrie(UTrie2 *trie, UErrorCode *pErrorCode) {
     trie->highStart=newTrie->highStart=highStart;
 
 #ifdef UTRIE2_DEBUG
-    printf("UTrie2: highStart U+%04lx  highValue 0x%lx  initialValue 0x%lx\n",
+    printf("UTrie2: highStart U+%06lx  highValue 0x%lx  initialValue 0x%lx\n",
             (long)highStart, (long)highValue, (long)trie->initialValue);
 #endif
 

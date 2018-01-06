@@ -53,6 +53,10 @@ typedef struct UTrie3Header {
      * rounded up and then shifted right by UTRIE3_SHIFT_1.
      */
     uint16_t shiftedHighStart;
+    /** Value for code points highStart..U+10FFFF. */
+    uint32_t highValue;
+    /** Value returned for out-of-range code points and ill-formed UTF-8/16. */
+    uint32_t errorValue;
 } UTrie3Header;
 
 /**
@@ -67,7 +71,7 @@ enum {
 /* Building a trie ---------------------------------------------------------- */
 
 /*
- * These definitions are mostly needed by utrie3_builder.c, but also by
+ * These definitions are mostly needed by utrie3_builder.cpp, but also by
  * utrie3_get32() and utrie3_enum().
  */
 
@@ -78,8 +82,8 @@ enum {
      * and the supplementary index-1 table.
      * Round up to UTRIE3_INDEX_2_BLOCK_LENGTH for proper compacting.
      */
-    UNEWTRIE2_INDEX_GAP_OFFSET=UTRIE3_INDEX_2_BMP_LENGTH,
-    UNEWTRIE2_INDEX_GAP_LENGTH=
+    UNEWTRIE3_INDEX_GAP_OFFSET=UTRIE3_INDEX_2_BMP_LENGTH,
+    UNEWTRIE3_INDEX_GAP_LENGTH=
         ((UTRIE3_UTF8_2B_INDEX_2_LENGTH+UTRIE3_MAX_INDEX_1_LENGTH)+UTRIE3_INDEX_2_MASK)&
         ~UTRIE3_INDEX_2_MASK,
 
@@ -90,21 +94,21 @@ enum {
      * plus the build-time index gap,
      * plus the null index-2 block.
      */
-    UNEWTRIE2_MAX_INDEX_2_LENGTH=
+    UNEWTRIE3_MAX_INDEX_2_LENGTH=
         (0x110000>>UTRIE3_SHIFT_2)+
         UTRIE3_LSCP_INDEX_2_LENGTH+
-        UNEWTRIE2_INDEX_GAP_LENGTH+
+        UNEWTRIE3_INDEX_GAP_LENGTH+
         UTRIE3_INDEX_2_BLOCK_LENGTH,
 
-    UNEWTRIE2_INDEX_1_LENGTH=0x110000>>UTRIE3_SHIFT_1
+    UNEWTRIE3_INDEX_1_LENGTH=0x110000>>UTRIE3_SHIFT_1
 };
 
 /**
  * Maximum length of the build-time data array.
- * One entry per 0x110000 code points, plus the illegal-UTF-8 block and the null block,
- * plus values for the 0x400 surrogate code units.
+ * One entry per 0x110000 code points, plus the null block,
+ * plus values for the 0x400 lead surrogate code units.
  */
-#define UNEWTRIE2_MAX_DATA_LENGTH (0x110000+0x40+0x40+0x400)
+#define UNEWTRIE3_MAX_DATA_LENGTH (0x110000+0x40+0x400)
 
 /*
  * Build-time trie structure.
@@ -121,8 +125,8 @@ enum {
  * Just allocating multiple index-2 blocks as needed.
  */
 struct UNewTrie3 {
-    int32_t index1[UNEWTRIE2_INDEX_1_LENGTH];
-    int32_t index2[UNEWTRIE2_MAX_INDEX_2_LENGTH];
+    int32_t index1[UNEWTRIE3_INDEX_1_LENGTH];
+    int32_t index2[UNEWTRIE3_MAX_INDEX_2_LENGTH];
     uint32_t *data;
 
     uint32_t initialValue, errorValue;
@@ -147,7 +151,7 @@ struct UNewTrie3 {
      * Map of adjusted indexes, used in compactData() and compactIndex2().
      * Maps from original indexes to new ones.
      */
-    int32_t map[UNEWTRIE2_MAX_DATA_LENGTH>>UTRIE3_SHIFT_2];
+    int32_t map[UNEWTRIE3_MAX_DATA_LENGTH>>UTRIE3_SHIFT_2];
 };
 
 #endif

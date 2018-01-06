@@ -103,6 +103,7 @@ testTrieGetters(const char *testName,
     uint32_t value, value2;
     UChar32 start, limit;
     int32_t i, countSpecials;
+    int32_t countErrors=0;
 
     UBool isFrozen=utrie3_isFrozen(trie);
     const char *const typeName= isFrozen ? "frozen trie" : "newTrie";
@@ -126,6 +127,7 @@ testTrieGetters(const char *testName,
                         if(value!=value2) {
                             log_err("error: %s(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
                                     typeName, testName, (long)start, (long)value2, (long)value);
+                            ++countErrors;
                         }
                     }
                 } else {
@@ -137,6 +139,7 @@ testTrieGetters(const char *testName,
                     if(value!=value2) {
                         log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
                                 typeName, testName, (long)start, (long)value2, (long)value);
+                        ++countErrors;
                     }
                 }
                 if(valueBits==UTRIE3_16_VALUE_BITS) {
@@ -147,14 +150,19 @@ testTrieGetters(const char *testName,
                 if(value!=value2) {
                     log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
                             typeName, testName, (long)start, (long)value2, (long)value);
+                    ++countErrors;
                 }
             }
             value2=utrie3_get32(trie, start);
             if(value!=value2) {
                 log_err("error: %s(%s).get32(U+%04lx)==0x%lx instead of 0x%lx\n",
                         typeName, testName, (long)start, (long)value2, (long)value);
+                ++countErrors;
             }
             ++start;
+            if(countErrors>10) {
+                return;
+            }
         }
     }
 
@@ -174,21 +182,13 @@ testTrieGetters(const char *testName,
                 if(value!=value2) {
                     log_err("error: %s(%s).asciiData[U+%04lx]==0x%lx instead of 0x%lx\n",
                             typeName, testName, (long)start, (long)value2, (long)value);
+                    ++countErrors;
                 }
                 ++start;
+                if(countErrors>10) {
+                    return;
+                }
             }
-        }
-        while(start<=0xbf) {
-            if(valueBits==UTRIE3_16_VALUE_BITS) {
-                value2=trie->data16[start];
-            } else {
-                value2=trie->data32[start];
-            }
-            if(errorValue!=value2) {
-                log_err("error: %s(%s).badData[U+%04lx]==0x%lx instead of 0x%lx\n",
-                        typeName, testName, (long)start, (long)value2, (long)errorValue);
-            }
-            ++start;
         }
     }
 
@@ -222,12 +222,17 @@ testTrieGetters(const char *testName,
                 if(value2!=value) {
                     log_err("error: %s(%s).LSCU(U+%04lx)==0x%lx instead of 0x%lx\n",
                             typeName, testName, (long)start, (long)value2, (long)value);
+                    ++countErrors;
                 }
             }
             value2=utrie3_get32FromLeadSurrogateCodeUnit(trie, start);
             if(value2!=value) {
                 log_err("error: %s(%s).lscu(U+%04lx)==0x%lx instead of 0x%lx\n",
                         typeName, testName, (long)start, (long)value2, (long)value);
+                ++countErrors;
+            }
+            if(countErrors>10) {
+                return;
             }
         }
     }

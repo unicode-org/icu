@@ -30,10 +30,10 @@
  * (Especially the utrie3_enum() code that jumps to the special LSCP index-2
  * part and back.)
  *
- * Requires UTRIE3_SHIFT_2<=6. Otherwise 0xc0 which is the top of the ASCII-linear data
- * including the bad-UTF-8-data block is not a multiple of UTRIE3_DATA_BLOCK_LENGTH
- * and map[block>>UTRIE3_SHIFT_2] (used in reference counting and compaction
- * remapping) stops working.
+ * Requires UTRIE3_SHIFT_2<=7. Otherwise 0x80 which is the top of the ASCII-linear data
+ * is not a multiple of UTRIE3_DATA_BLOCK_LENGTH
+ * and map[block>>UTRIE3_SHIFT_2] (used in reference counting and compaction remapping)
+ * stops working.
  *
  * Requires UTRIE3_SHIFT_1>=10 because utrie3_enumForLeadSurrogate()
  * assumes that a single index-2 block is used for 0x400 code points
@@ -53,20 +53,20 @@
 
 enum {
     /** The null index-2 block, following the gap in the index-2 table. */
-    UNEWTRIE2_INDEX_2_NULL_OFFSET=UNEWTRIE2_INDEX_GAP_OFFSET+UNEWTRIE2_INDEX_GAP_LENGTH,
+    UNEWTRIE3_INDEX_2_NULL_OFFSET=UNEWTRIE3_INDEX_GAP_OFFSET+UNEWTRIE3_INDEX_GAP_LENGTH,
 
     /** The start of allocated index-2 blocks. */
-    UNEWTRIE2_INDEX_2_START_OFFSET=UNEWTRIE2_INDEX_2_NULL_OFFSET+UTRIE3_INDEX_2_BLOCK_LENGTH,
+    UNEWTRIE3_INDEX_2_START_OFFSET=UNEWTRIE3_INDEX_2_NULL_OFFSET+UTRIE3_INDEX_2_BLOCK_LENGTH,
 
     /**
      * The null data block.
      * Length 64=0x40 even if UTRIE3_DATA_BLOCK_LENGTH is smaller,
      * to work with 6-bit trail bytes from 2-byte UTF-8.
      */
-    UNEWTRIE2_DATA_NULL_OFFSET=UTRIE3_DATA_START_OFFSET,
+    UNEWTRIE3_DATA_NULL_OFFSET=UTRIE3_DATA_START_OFFSET,
 
     /** The start of allocated data blocks. */
-    UNEWTRIE2_DATA_START_OFFSET=UNEWTRIE2_DATA_NULL_OFFSET+0x40,
+    UNEWTRIE3_DATA_START_OFFSET=UNEWTRIE3_DATA_NULL_OFFSET+0x40,
 
     /**
      * The start of data blocks for U+0800 and above.
@@ -74,14 +74,14 @@ enum {
      * From here on, compaction uses UTRIE3_DATA_BLOCK_LENGTH.
      * Data values for 0x780 code points beyond ASCII.
      */
-    UNEWTRIE2_DATA_0800_OFFSET=UNEWTRIE2_DATA_START_OFFSET+0x780
+    UNEWTRIE3_DATA_0800_OFFSET=UNEWTRIE3_DATA_START_OFFSET+0x780
 };
 
 /* Start with allocation of 16k data entries. */
-#define UNEWTRIE2_INITIAL_DATA_LENGTH ((int32_t)1<<14)
+#define UNEWTRIE3_INITIAL_DATA_LENGTH ((int32_t)1<<14)
 
 /* Grow about 8x each time. */
-#define UNEWTRIE2_MEDIUM_DATA_LENGTH ((int32_t)1<<17)
+#define UNEWTRIE3_MEDIUM_DATA_LENGTH ((int32_t)1<<17)
 
 static int32_t
 allocIndex2Block(UNewTrie3 *trie);
@@ -99,55 +99,47 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
 
     trie=(UTrie3 *)uprv_malloc(sizeof(UTrie3));
     newTrie=(UNewTrie3 *)uprv_malloc(sizeof(UNewTrie3));
-    data=(uint32_t *)uprv_malloc(UNEWTRIE2_INITIAL_DATA_LENGTH*4);
+    data=(uint32_t *)uprv_malloc(UNEWTRIE3_INITIAL_DATA_LENGTH*4);
     if(trie==NULL || newTrie==NULL || data==NULL) {
         uprv_free(trie);
         uprv_free(newTrie);
         uprv_free(data);
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return 0;
+        return nullptr;
     }
 
     uprv_memset(trie, 0, sizeof(UTrie3));
     trie->initialValue=initialValue;
     trie->errorValue=errorValue;
+    trie->highValue=initialValue;
     trie->highStart=0x110000;
+    trie->highStartLead16=0xdc00;  // U16_LEAD(0x110000) (after lead surrogates)
+    trie->shiftedHighStart=0x110000>>12;
     trie->newTrie=newTrie;
 
     newTrie->data=data;
-    newTrie->dataCapacity=UNEWTRIE2_INITIAL_DATA_LENGTH;
+    newTrie->dataCapacity=UNEWTRIE3_INITIAL_DATA_LENGTH;
     newTrie->initialValue=initialValue;
     newTrie->errorValue=errorValue;
     newTrie->highStart=0x110000;
     newTrie->firstFreeBlock=0;  /* no free block in the list */
     newTrie->isCompacted=FALSE;
 
-    /*
-     * preallocate and reset
-     * - ASCII
-     * - the bad-UTF-8-data block
-     * - the null data block
-     */
+    // Preallocate and reset ASCII.
     for(i=0; i<0x80; ++i) {
         newTrie->data[i]=initialValue;
     }
-    for(; i<0xc0; ++i) {
-        newTrie->data[i]=errorValue;
-    }
-    for(i=UNEWTRIE2_DATA_NULL_OFFSET; i<UNEWTRIE2_DATA_START_OFFSET; ++i) {
+    // Preallocate and reset the null data block.
+    for(i=UNEWTRIE3_DATA_NULL_OFFSET; i<UNEWTRIE3_DATA_START_OFFSET; ++i) {
         newTrie->data[i]=initialValue;
     }
-    newTrie->dataNullOffset=UNEWTRIE2_DATA_NULL_OFFSET;
-    newTrie->dataLength=UNEWTRIE2_DATA_START_OFFSET;
+    newTrie->dataNullOffset=UNEWTRIE3_DATA_NULL_OFFSET;
+    newTrie->dataLength=UNEWTRIE3_DATA_START_OFFSET;
 
-    /* set the index-2 indexes for the 2=0x80>>UTRIE3_SHIFT_2 ASCII data blocks */
+    /* set the index-2 indexes for the 4=0x80>>UTRIE3_SHIFT_2 ASCII data blocks */
     for(i=0, j=0; j<0x80; ++i, j+=UTRIE3_DATA_BLOCK_LENGTH) {
         newTrie->index2[i]=j;
         newTrie->map[i]=1;
-    }
-    /* reference counts for the bad-UTF-8-data block */
-    for(; j<0xc0; ++i, j+=UTRIE3_DATA_BLOCK_LENGTH) {
-        newTrie->map[i]=0;
     }
     /*
      * Reference counts for the null data block: all blocks except for the ASCII blocks.
@@ -161,7 +153,7 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
         1+
         UTRIE3_LSCP_INDEX_2_LENGTH;
     j+=UTRIE3_DATA_BLOCK_LENGTH;
-    for(; j<UNEWTRIE2_DATA_START_OFFSET; ++i, j+=UTRIE3_DATA_BLOCK_LENGTH) {
+    for(; j<UNEWTRIE3_DATA_START_OFFSET; ++i, j+=UTRIE3_DATA_BLOCK_LENGTH) {
         newTrie->map[i]=0;
     }
 
@@ -170,23 +162,23 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
      * to the null data block
      */
     for(i=0x80>>UTRIE3_SHIFT_2; i<UTRIE3_INDEX_2_BMP_LENGTH; ++i) {
-        newTrie->index2[i]=UNEWTRIE2_DATA_NULL_OFFSET;
+        newTrie->index2[i]=UNEWTRIE3_DATA_NULL_OFFSET;
     }
 
     /*
      * Fill the index gap with impossible values so that compaction
      * does not overlap other index-2 blocks with the gap.
      */
-    for(i=0; i<UNEWTRIE2_INDEX_GAP_LENGTH; ++i) {
-        newTrie->index2[UNEWTRIE2_INDEX_GAP_OFFSET+i]=-1;
+    for(i=0; i<UNEWTRIE3_INDEX_GAP_LENGTH; ++i) {
+        newTrie->index2[UNEWTRIE3_INDEX_GAP_OFFSET+i]=-1;
     }
 
     /* set the indexes in the null index-2 block */
     for(i=0; i<UTRIE3_INDEX_2_BLOCK_LENGTH; ++i) {
-        newTrie->index2[UNEWTRIE2_INDEX_2_NULL_OFFSET+i]=UNEWTRIE2_DATA_NULL_OFFSET;
+        newTrie->index2[UNEWTRIE3_INDEX_2_NULL_OFFSET+i]=UNEWTRIE3_DATA_NULL_OFFSET;
     }
-    newTrie->index2NullOffset=UNEWTRIE2_INDEX_2_NULL_OFFSET;
-    newTrie->index2Length=UNEWTRIE2_INDEX_2_START_OFFSET;
+    newTrie->index2NullOffset=UNEWTRIE3_INDEX_2_NULL_OFFSET;
+    newTrie->index2Length=UNEWTRIE3_INDEX_2_START_OFFSET;
 
     /* set the index-1 indexes for the linear index-2 block */
     for(i=0, j=0;
@@ -197,8 +189,8 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     }
 
     /* set the remaining index-1 indexes to the null index-2 block */
-    for(; i<UNEWTRIE2_INDEX_1_LENGTH; ++i) {
-        newTrie->index1[i]=UNEWTRIE2_INDEX_2_NULL_OFFSET;
+    for(; i<UNEWTRIE3_INDEX_1_LENGTH; ++i) {
+        newTrie->index1[i]=UNEWTRIE3_INDEX_2_NULL_OFFSET;
     }
 
     /*
@@ -511,14 +503,14 @@ allocDataBlock(UNewTrie3 *trie, int32_t copyBlock) {
             int32_t capacity;
             uint32_t *data;
 
-            if(trie->dataCapacity<UNEWTRIE2_MEDIUM_DATA_LENGTH) {
-                capacity=UNEWTRIE2_MEDIUM_DATA_LENGTH;
-            } else if(trie->dataCapacity<UNEWTRIE2_MAX_DATA_LENGTH) {
-                capacity=UNEWTRIE2_MAX_DATA_LENGTH;
+            if(trie->dataCapacity<UNEWTRIE3_MEDIUM_DATA_LENGTH) {
+                capacity=UNEWTRIE3_MEDIUM_DATA_LENGTH;
+            } else if(trie->dataCapacity<UNEWTRIE3_MAX_DATA_LENGTH) {
+                capacity=UNEWTRIE3_MAX_DATA_LENGTH;
             } else {
                 /*
                  * Should never occur.
-                 * Either UNEWTRIE2_MAX_DATA_LENGTH is incorrect,
+                 * Either UNEWTRIE3_MAX_DATA_LENGTH is incorrect,
                  * or the code writes more values than should be possible.
                  */
                 return -1;
@@ -761,7 +753,7 @@ utrie3_setRange32(UTrie3 *trie,
         block=newTrie->index2[i2];
         if(isWritableBlock(newTrie, block)) {
             /* already allocated */
-            if(overwrite && block>=UNEWTRIE2_DATA_0800_OFFSET) {
+            if(overwrite && block>=UNEWTRIE3_DATA_0800_OFFSET) {
                 /*
                  * We overwrite all values, and it's not a
                  * protected (ASCII-linear or 2-byte UTF-8) block:
@@ -905,7 +897,7 @@ findHighStart(UNewTrie3 *trie, uint32_t highValue) {
     prev=0x110000;
 
     /* enumerate index-2 blocks */
-    i1=UNEWTRIE2_INDEX_1_LENGTH;
+    i1=UNEWTRIE3_INDEX_1_LENGTH;
     c=prev;
     while(c>0) {
         i2Block=trie->index1[--i1];
@@ -990,7 +982,7 @@ compactData(UNewTrie3 *trie) {
          * newStart: index where the current block is to be moved
          *           (right after current end of already-compacted data)
          */
-        if(start==UNEWTRIE2_DATA_0800_OFFSET) {
+        if(start==UNEWTRIE3_DATA_0800_OFFSET) {
             blockLength=UTRIE3_DATA_BLOCK_LENGTH;
             blockCount=1;
         }
@@ -1051,9 +1043,9 @@ compactData(UNewTrie3 *trie) {
 
     /* now adjust the index-2 table */
     for(i=0; i<trie->index2Length; ++i) {
-        if(i==UNEWTRIE2_INDEX_GAP_OFFSET) {
+        if(i==UNEWTRIE3_INDEX_GAP_OFFSET) {
             /* Gap indexes are invalid (-1). Skip over the gap. */
-            i+=UNEWTRIE2_INDEX_GAP_LENGTH;
+            i+=UNEWTRIE3_INDEX_GAP_LENGTH;
         }
         trie->index2[i]=trie->map[trie->index2[i]>>UTRIE3_SHIFT_2];
     }
@@ -1086,7 +1078,7 @@ compactIndex2(UNewTrie3 *trie) {
     /* Reduce the index table gap to what will be needed at runtime. */
     newStart+=UTRIE3_UTF8_2B_INDEX_2_LENGTH+((trie->highStart-0x10000)>>UTRIE3_SHIFT_1);
 
-    for(start=UNEWTRIE2_INDEX_2_NULL_OFFSET; start<trie->index2Length;) {
+    for(start=UNEWTRIE3_INDEX_2_NULL_OFFSET; start<trie->index2Length;) {
         /*
          * start: index of first entry of current block
          * newStart: index where the current block is to be moved
@@ -1130,7 +1122,7 @@ compactIndex2(UNewTrie3 *trie) {
     }
 
     /* now adjust the index-1 table */
-    for(i=0; i<UNEWTRIE2_INDEX_1_LENGTH; ++i) {
+    for(i=0; i<UNEWTRIE3_INDEX_1_LENGTH; ++i) {
         trie->index1[i]=trie->map[trie->index1[i]>>UTRIE3_SHIFT_1_2];
     }
     trie->index2NullOffset=trie->map[trie->index2NullOffset>>UTRIE3_SHIFT_1_2];
@@ -1167,15 +1159,19 @@ compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
     highValue=utrie3_get32(trie, 0x10ffff);
     highStart=findHighStart(newTrie, highValue);
     highStart=(highStart+(UTRIE3_CP_PER_INDEX_1_ENTRY-1))&~(UTRIE3_CP_PER_INDEX_1_ENTRY-1);
+    highStart=(highStart+0xfff)&~0xfff;  // TODO: remove/de-duplicate
     if(highStart==0x110000) {
         highValue=trie->errorValue;
     }
+    trie->highValue=highValue;
 
     /*
      * Set trie->highStart only after utrie3_get32(trie, highStart).
      * Otherwise utrie3_get32(trie, highStart) would try to read the highValue.
      */
     trie->highStart=newTrie->highStart=highStart;
+    trie->highStartLead16=U16_LEAD(newTrie->highStart);
+    trie->shiftedHighStart=newTrie->highStart>>12;
 
 #ifdef UTRIE3_DEBUG
     printf("UTrie3: highStart U+%04lx  highValue 0x%lx  initialValue 0x%lx\n",
@@ -1196,19 +1192,9 @@ compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
         compactIndex2(newTrie);
 #ifdef UTRIE3_DEBUG
     } else {
-        printf("UTrie3: highStart U+%04lx  count of 16-bit index-2 words %lu->%lu\n",
+        printf("UTrie3: highStart U+%06lx  count of 16-bit index-2 words %lu->%lu\n",
                 (long)highStart, (long)trie->newTrie->index2Length, (long)UTRIE3_INDEX_1_OFFSET);
 #endif
-    }
-
-    /*
-     * Store the highValue in the data array and round up the dataLength.
-     * Must be done after compactData() because that assumes that dataLength
-     * is a multiple of UTRIE3_DATA_BLOCK_LENGTH.
-     */
-    newTrie->data[newTrie->dataLength++]=highValue;
-    while((newTrie->dataLength&(UTRIE3_DATA_GRANULARITY-1))!=0) {
-        newTrie->data[newTrie->dataLength++]=trie->initialValue;
     }
 
     newTrie->isCompacted=TRUE;
@@ -1290,7 +1276,7 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
         /* for unshifted dataNullOffset */
         (dataMove+newTrie->dataNullOffset)>0xffff ||
         /* for unshifted 2-byte UTF-8 index-2 values */
-        (dataMove+UNEWTRIE2_DATA_0800_OFFSET)>0xffff ||
+        (dataMove+UNEWTRIE3_DATA_0800_OFFSET)>0xffff ||
         /* for shiftedDataLength */
         (dataMove+newTrie->dataLength)>UTRIE3_MAX_DATA_LENGTH
     ) {
@@ -1322,12 +1308,11 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
         trie->index2NullOffset=UTRIE3_INDEX_2_OFFSET+newTrie->index2NullOffset;
     }
     trie->dataNullOffset=(uint16_t)(dataMove+newTrie->dataNullOffset);
-    trie->highValueIndex=dataMove+trie->dataLength-UTRIE3_DATA_GRANULARITY;
 
     /* set the header fields */
     header=(UTrie3Header *)trie->memory;
 
-    header->signature=UTRIE3_SIG; /* "Tri2" */
+    header->signature=UTRIE3_SIG;  // "Tri3"
     header->options=(uint16_t)valueBits;
 
     header->indexLength=(uint16_t)trie->indexLength;
@@ -1335,6 +1320,8 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
     header->index2NullOffset=trie->index2NullOffset;
     header->dataNullOffset=trie->dataNullOffset;
     header->shiftedHighStart=(uint16_t)(highStart>>UTRIE3_SHIFT_1);
+    header->highValue=trie->highValue;
+    header->errorValue=trie->errorValue;
 
     /* fill the index and data arrays */
     dest16=(uint16_t *)(header+1);
@@ -1348,7 +1335,7 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
 
     /* write UTF-8 2-byte index-2 values, not right-shifted */
     for(i=0; i<(0xc2-0xc0); ++i) {                                  /* C0..C1 */
-        *dest16++=(uint16_t)(dataMove+UTRIE3_BAD_UTF8_DATA_OFFSET);
+        *dest16++=trie->dataNullOffset;
     }
     for(; i<(0xe0-0xc0); ++i) {                                     /* C2..DF */
         *dest16++=(uint16_t)(dataMove+newTrie->index2[i<<(6-UTRIE3_SHIFT_2)]);
@@ -1401,7 +1388,7 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
     uprv_free(newTrie);
     trie->newTrie=NULL;
 
-#ifdef UTRIE2_DEBUG
+#ifdef UTRIE3_DEBUG
     utrie3_printLengths(trie, "");
 #endif
 }

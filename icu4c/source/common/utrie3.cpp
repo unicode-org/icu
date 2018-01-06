@@ -61,31 +61,6 @@ utrie3_get32FromLeadSurrogateCodeUnit(const UTrie3 *trie, UChar32 c) {
     }
 }
 
-static inline int32_t
-u8Index(const UTrie3 *trie, UChar32 c, int32_t i) {
-    int32_t idx=
-        _UTRIE3_INDEX_FROM_CP(
-            trie,
-            trie->data32==NULL ? trie->indexLength : 0,
-            c);
-    return (idx<<3)|i;
-}
-
-U_CAPI int32_t U_EXPORT2
-utrie3_internalU8NextIndex(const UTrie3 *trie, UChar32 c,
-                           const uint8_t *src, const uint8_t *limit) {
-    int32_t i, length;
-    i=0;
-    /* support 64-bit pointers by avoiding cast of arbitrary difference */
-    if((limit-src)<=7) {
-        length=(int32_t)(limit-src);
-    } else {
-        length=7;
-    }
-    c=utf8_nextCharSafeBody(src, &i, length, c, -1);
-    return u8Index(trie, c, i);
-}
-
 U_CAPI int32_t U_EXPORT2
 utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
                            const uint8_t *start, const uint8_t *src) {
@@ -99,20 +74,25 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
     }
     c=utf8_prevCharSafeBody(start, 0, &i, c, -1);
     i=length-i;  /* number of bytes read backward from src */
-    return u8Index(trie, c, i);
+    if(c>=0) {
+        int32_t idx;
+        if(c<=0xffff) {
+            idx=_UTRIE3_INDEX_RAW(0, trie->index, c);
+        } else if(c>=trie->highStart) {
+            return -16|i;  // for highValue
+        } else {
+            idx=_UTRIE3_INDEX_FROM_SUPP(trie->index, c);
+        }
+        return (idx<<3)|i;
+    } else {
+        return -8|i;  // for errorValue
+    }
 }
 
 U_CAPI UTrie3 * U_EXPORT2
 utrie3_openFromSerialized(UTrie3ValueBits valueBits,
                           const void *data, int32_t length, int32_t *pActualLength,
                           UErrorCode *pErrorCode) {
-    const UTrie3Header *header;
-    const uint16_t *p16;
-    int32_t actualLength;
-
-    UTrie3 tempTrie;
-    UTrie3 *trie;
-
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
@@ -131,7 +111,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     }
 
     /* check the signature */
-    header=(const UTrie3Header *)data;
+    const UTrie3Header *header=(const UTrie3Header *)data;
     if(header->signature!=UTRIE3_SIG) {
         *pErrorCode=U_INVALID_FORMAT_ERROR;
         return 0;
@@ -144,6 +124,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     }
 
     /* get the length values and offsets */
+    UTrie3 tempTrie;
     uprv_memset(&tempTrie, 0, sizeof(tempTrie));
     tempTrie.indexLength=header->indexLength;
     tempTrie.dataLength=header->shiftedDataLength<<UTRIE3_INDEX_SHIFT;
@@ -151,13 +132,13 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     tempTrie.dataNullOffset=header->dataNullOffset;
 
     tempTrie.highStart=header->shiftedHighStart<<UTRIE3_SHIFT_1;
-    tempTrie.highValueIndex=tempTrie.dataLength-UTRIE3_DATA_GRANULARITY;
-    if(valueBits==UTRIE3_16_VALUE_BITS) {
-        tempTrie.highValueIndex+=tempTrie.indexLength;
-    }
+    tempTrie.highStartLead16=U16_LEAD(tempTrie.highStart);
+    tempTrie.shiftedHighStart=tempTrie.highStart>>12;  // TODO: copy header->shiftedHighStart
+    tempTrie.highValue=header->highValue;
+    tempTrie.errorValue=header->errorValue;
 
     /* calculate the actual length */
-    actualLength=(int32_t)sizeof(UTrie3Header)+tempTrie.indexLength*2;
+    int32_t actualLength=(int32_t)sizeof(UTrie3Header)+tempTrie.indexLength*2;
     if(valueBits==UTRIE3_16_VALUE_BITS) {
         actualLength+=tempTrie.dataLength*2;
     } else {
@@ -169,7 +150,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     }
 
     /* allocate the trie */
-    trie=(UTrie3 *)uprv_malloc(sizeof(UTrie3));
+    UTrie3 *trie=(UTrie3 *)uprv_malloc(sizeof(UTrie3));
     if(trie==NULL) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -180,7 +161,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     trie->isMemoryOwned=FALSE;
 
     /* set the pointers to its index and data arrays */
-    p16=(const uint16_t *)(header+1);
+    const uint16_t *p16=(const uint16_t *)(header+1);
     trie->index=p16;
     p16+=trie->indexLength;
 
@@ -190,13 +171,11 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
         trie->data16=p16;
         trie->data32=NULL;
         trie->initialValue=trie->index[trie->dataNullOffset];
-        trie->errorValue=trie->data16[UTRIE3_BAD_UTF8_DATA_OFFSET];
         break;
     case UTRIE3_32_VALUE_BITS:
         trie->data16=NULL;
         trie->data32=(const uint32_t *)p16;
         trie->initialValue=trie->data32[trie->dataNullOffset];
-        trie->errorValue=trie->data32[UTRIE3_BAD_UTF8_DATA_OFFSET];
         break;
     default:
         *pErrorCode=U_INVALID_FORMAT_ERROR;
@@ -213,26 +192,19 @@ U_CAPI UTrie3 * U_EXPORT2
 utrie3_openDummy(UTrie3ValueBits valueBits,
                  uint32_t initialValue, uint32_t errorValue,
                  UErrorCode *pErrorCode) {
-    UTrie3 *trie;
-    UTrie3Header *header;
-    uint32_t *p;
-    uint16_t *dest16;
-    int32_t indexLength, dataLength, length, i;
-    int32_t dataMove;  /* >0 if the data is moved to the end of the index array */
-
     if(U_FAILURE(*pErrorCode)) {
-        return 0;
+        return nullptr;
     }
 
     if(valueBits<0 || UTRIE3_COUNT_VALUE_BITS<=valueBits) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     /* calculate the total length of the dummy trie data */
-    indexLength=UTRIE3_INDEX_1_OFFSET;
-    dataLength=UTRIE3_DATA_START_OFFSET+UTRIE3_DATA_GRANULARITY;
-    length=(int32_t)sizeof(UTrie3Header)+indexLength*2;
+    int32_t indexLength=UTRIE3_INDEX_1_OFFSET;
+    int32_t dataLength=UTRIE3_DATA_START_OFFSET;
+    int32_t length=(int32_t)sizeof(UTrie3Header)+indexLength*2;
     if(valueBits==UTRIE3_16_VALUE_BITS) {
         length+=dataLength*2;
     } else {
@@ -240,22 +212,18 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     }
 
     /* allocate the trie */
-    trie=(UTrie3 *)uprv_malloc(sizeof(UTrie3));
-    if(trie==NULL) {
+    char *bytes=(char *)uprv_malloc(sizeof(UTrie3)+length);
+    if(bytes==nullptr) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return 0;
+        return nullptr;
     }
+    UTrie3 *trie=(UTrie3 *)bytes;
     uprv_memset(trie, 0, sizeof(UTrie3));
-    trie->memory=uprv_malloc(length);
-    if(trie->memory==NULL) {
-        uprv_free(trie);
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return 0;
-    }
+    trie->memory=bytes+sizeof(UTrie3);
     trie->length=length;
-    trie->isMemoryOwned=TRUE;
 
     /* set the UTrie3 fields */
+    int32_t dataMove;  // >0 if the data is moved to the end of the index array
     if(valueBits==UTRIE3_16_VALUE_BITS) {
         dataMove=indexLength;
     } else {
@@ -269,10 +237,12 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     trie->initialValue=initialValue;
     trie->errorValue=errorValue;
     trie->highStart=0;
-    trie->highValueIndex=dataMove+UTRIE3_DATA_START_OFFSET;
+    trie->highStartLead16=0xd7c0;  // U16_LEAD(0) (below lead surrogates)
+    trie->shiftedHighStart=0;
+    trie->highValue=initialValue;
 
     /* set the header fields */
-    header=(UTrie3Header *)trie->memory;
+    UTrie3Header *header=(UTrie3Header *)trie->memory;
 
     header->signature=UTRIE3_SIG; /* "Tri2" */
     header->options=(uint16_t)valueBits;
@@ -284,19 +254,17 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     header->shiftedHighStart=0;
 
     /* fill the index and data arrays */
-    dest16=(uint16_t *)(header+1);
+    uint16_t *dest16=(uint16_t *)(header+1);
     trie->index=dest16;
 
     /* write the index-2 array values shifted right by UTRIE3_INDEX_SHIFT */
+    int32_t i;
     for(i=0; i<UTRIE3_INDEX_2_BMP_LENGTH; ++i) {
         *dest16++=(uint16_t)(dataMove>>UTRIE3_INDEX_SHIFT);  /* null data block */
     }
 
     /* write UTF-8 2-byte index-2 values, not right-shifted */
-    for(i=0; i<(0xc2-0xc0); ++i) {                                  /* C0..C1 */
-        *dest16++=(uint16_t)(dataMove+UTRIE3_BAD_UTF8_DATA_OFFSET);
-    }
-    for(; i<(0xe0-0xc0); ++i) {                                     /* C2..DF */
+    for(i=0; i<(0xe0-0xc0); ++i) {  // C0..DF
         *dest16++=(uint16_t)dataMove;
     }
 
@@ -309,33 +277,20 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
         for(i=0; i<0x80; ++i) {
             *dest16++=(uint16_t)initialValue;
         }
-        for(; i<0xc0; ++i) {
-            *dest16++=(uint16_t)errorValue;
-        }
-        /* highValue and reserved values */
-        for(i=0; i<UTRIE3_DATA_GRANULARITY; ++i) {
-            *dest16++=(uint16_t)initialValue;
-        }
         break;
-    case UTRIE3_32_VALUE_BITS:
+    case UTRIE3_32_VALUE_BITS: {
         /* write 32-bit data values */
-        p=(uint32_t *)dest16;
+        uint32_t *p=(uint32_t *)dest16;
         trie->data16=NULL;
         trie->data32=p;
         for(i=0; i<0x80; ++i) {
             *p++=initialValue;
         }
-        for(; i<0xc0; ++i) {
-            *p++=errorValue;
-        }
-        /* highValue and reserved values */
-        for(i=0; i<UTRIE3_DATA_GRANULARITY; ++i) {
-            *p++=initialValue;
-        }
         break;
+    }
     default:
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     return trie;
@@ -487,6 +442,7 @@ utrie3_swap(const UDataSwapper *ds,
         /* swap the header */
         ds->swapArray32(ds, &inTrie->signature, 4, &outTrie->signature, pErrorCode);
         ds->swapArray16(ds, &inTrie->options, 12, &outTrie->options, pErrorCode);
+        ds->swapArray32(ds, &inTrie->highValue, 8, &outTrie->highValue, pErrorCode);
 
         /* swap the index and the data */
         switch(valueBits) {
@@ -687,16 +643,7 @@ enumEitherTrie(const UTrie3 *trie,
         c=limit;  /* could be higher if in the index2NullOffset */
     } else if(c<limit) {
         /* c==highStart<limit */
-        uint32_t highValue;
-        if(idx!=NULL) {
-            highValue=
-                data32!=NULL ?
-                    data32[trie->highValueIndex] :
-                    idx[trie->highValueIndex];
-        } else {
-            highValue=trie->newTrie->data[trie->newTrie->dataLength-UTRIE3_DATA_GRANULARITY];
-        }
-        value=enumValue(context, highValue);
+        value=enumValue(context, trie->highValue);
         if(value!=prevValue) {
             if(prev<c && !enumRange(context, prev, c-1, prevValue)) {
                 return;
