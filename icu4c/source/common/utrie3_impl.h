@@ -90,13 +90,11 @@ enum {
     /**
      * Maximum length of the build-time index-2 array.
      * Maximum number of Unicode code points (0x110000) shifted right by UTRIE3_SHIFT_2,
-     * plus the part of the index-2 table for lead surrogate code points,
      * plus the build-time index gap,
      * plus the null index-2 block.
      */
     UNEWTRIE3_MAX_INDEX_2_LENGTH=
         (0x110000>>UTRIE3_SHIFT_2)+
-        UTRIE3_LSCP_INDEX_2_LENGTH+
         UNEWTRIE3_INDEX_GAP_LENGTH+
         UTRIE3_INDEX_2_BLOCK_LENGTH,
 
@@ -105,10 +103,9 @@ enum {
 
 /**
  * Maximum length of the build-time data array.
- * One entry per 0x110000 code points, plus the null block,
- * plus values for the 0x400 lead surrogate code units.
+ * One entry per 0x110000 code points, plus the null block.
  */
-#define UNEWTRIE3_MAX_DATA_LENGTH (0x110000+0x40+0x400)
+#define UNEWTRIE3_MAX_DATA_LENGTH (0x110000+0x40)
 
 /*
  * Build-time trie structure.

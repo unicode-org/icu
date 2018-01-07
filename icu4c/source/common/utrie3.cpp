@@ -15,25 +15,6 @@
 
 /* Public UTrie3 API implementation ----------------------------------------- */
 
-static uint32_t
-get32(const UNewTrie3 *trie, UChar32 c, UBool fromLSCP) {
-    int32_t i2, block;
-
-    if(c>=trie->highStart && (!U_IS_LEAD(c) || fromLSCP)) {
-        return trie->data[trie->dataLength-UTRIE3_DATA_GRANULARITY];
-    }
-
-    if(U_IS_LEAD(c) && fromLSCP) {
-        i2=(UTRIE3_LSCP_INDEX_2_OFFSET-(0xd800>>UTRIE3_SHIFT_2))+
-            (c>>UTRIE3_SHIFT_2);
-    } else {
-        i2=trie->index1[c>>UTRIE3_SHIFT_1]+
-            ((c>>UTRIE3_SHIFT_2)&UTRIE3_INDEX_2_MASK);
-    }
-    block=trie->index2[i2];
-    return trie->data[block+(c&UTRIE3_DATA_MASK)];
-}
-
 U_CAPI uint32_t U_EXPORT2
 utrie3_get32(const UTrie3 *trie, UChar32 c) {
     if(trie->data16!=NULL) {
@@ -42,22 +23,14 @@ utrie3_get32(const UTrie3 *trie, UChar32 c) {
         return UTRIE3_GET32(trie, c);
     } else if((uint32_t)c>0x10ffff) {
         return trie->errorValue;
+    } else if(c>=trie->highStart) {
+        return trie->highValue;
     } else {
-        return get32(trie->newTrie, c, TRUE);
-    }
-}
-
-U_CAPI uint32_t U_EXPORT2
-utrie3_get32FromLeadSurrogateCodeUnit(const UTrie3 *trie, UChar32 c) {
-    if(!U_IS_LEAD(c)) {
-        return trie->errorValue;
-    }
-    if(trie->data16!=NULL) {
-        return UTRIE3_GET16_FROM_U16_SINGLE_LEAD(trie, c);
-    } else if(trie->data32!=NULL) {
-        return UTRIE3_GET32_FROM_U16_SINGLE_LEAD(trie, c);
-    } else {
-        return get32(trie->newTrie, c, FALSE);
+        const UNewTrie3 *newTrie=trie->newTrie;
+        int32_t i2=newTrie->index1[c>>UTRIE3_SHIFT_1]+
+            ((c>>UTRIE3_SHIFT_2)&UTRIE3_INDEX_2_MASK);
+        int32_t block=newTrie->index2[i2];
+        return newTrie->data[block+(c&UTRIE3_DATA_MASK)];
     }
 }
 
@@ -77,7 +50,7 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
     if(c>=0) {
         int32_t idx;
         if(c<=0xffff) {
-            idx=_UTRIE3_INDEX_RAW(0, trie->index, c);
+            idx=_UTRIE3_INDEX_FROM_BMP(trie->index, c);
         } else if(c>=trie->highStart) {
             return -16|i;  // for highValue
         } else {
@@ -544,23 +517,7 @@ enumEitherTrie(const UTrie3 *trie,
             tempLimit=limit;
         }
         if(c<=0xffff) {
-            if(!U_IS_SURROGATE(c)) {
-                i2Block=c>>UTRIE3_SHIFT_2;
-            } else if(U_IS_SURROGATE_LEAD(c)) {
-                /*
-                 * Enumerate values for lead surrogate code points, not code units:
-                 * This special block has half the normal length.
-                 */
-                i2Block=UTRIE3_LSCP_INDEX_2_OFFSET;
-                tempLimit=MIN_VALUE(0xdc00, limit);
-            } else {
-                /*
-                 * Switch back to the normal part of the index-2 table.
-                 * Enumerate the second half of the surrogates block.
-                 */
-                i2Block=0xd800>>UTRIE3_SHIFT_2;
-                tempLimit=MIN_VALUE(0xe000, limit);
-            }
+            i2Block=c>>UTRIE3_SHIFT_2;
         } else {
             /* supplementary code points */
             if(idx!=NULL) {

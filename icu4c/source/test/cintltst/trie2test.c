@@ -421,7 +421,7 @@ testTrieUTF8(const char *testName,
         prevCP=c;
         --c;                                    /* end of the range */
         U8_APPEND_UNSAFE(s, length, c);
-        if(U_IS_SURROGATE(prevCP)) {
+        if(U_IS_SURROGATE(c)) {
             // A surrogate byte sequence counts as 3 single-byte errors.
             values[countValues++]=errorValue;
             values[countValues++]=errorValue;

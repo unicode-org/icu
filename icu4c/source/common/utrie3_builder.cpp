@@ -24,12 +24,6 @@
  * Most of the code is flexible enough to work with a range of values,
  * within certain limits.
  *
- * Exception: Support for separate values for lead surrogate code _units_
- * vs. code _points_ was added after the constants were fixed,
- * and has not been tested nor particularly designed for different constant values.
- * (Especially the utrie3_enum() code that jumps to the special LSCP index-2
- * part and back.)
- *
  * Requires UTRIE3_SHIFT_2<=7. Otherwise 0x80 which is the top of the ASCII-linear data
  * is not a multiple of UTRIE3_DATA_BLOCK_LENGTH
  * and map[block>>UTRIE3_SHIFT_2] (used in reference counting and compaction remapping)
@@ -136,7 +130,7 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     newTrie->dataNullOffset=UNEWTRIE3_DATA_NULL_OFFSET;
     newTrie->dataLength=UNEWTRIE3_DATA_START_OFFSET;
 
-    /* set the index-2 indexes for the 4=0x80>>UTRIE3_SHIFT_2 ASCII data blocks */
+    /* set the index-2 indexes for the ASCII data blocks */
     for(i=0, j=0; j<0x80; ++i, j+=UTRIE3_DATA_BLOCK_LENGTH) {
         newTrie->index2[i]=j;
         newTrie->map[i]=1;
@@ -144,14 +138,12 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     /*
      * Reference counts for the null data block: all blocks except for the ASCII blocks.
      * Plus 1 so that we don't drop this block during compaction.
-     * Plus as many as needed for lead surrogate code points.
      */
     /* i==newTrie->dataNullOffset */
     newTrie->map[i++]=
         (0x110000>>UTRIE3_SHIFT_2)-
         (0x80>>UTRIE3_SHIFT_2)+
-        1+
-        UTRIE3_LSCP_INDEX_2_LENGTH;
+        1;
     j+=UTRIE3_DATA_BLOCK_LENGTH;
     for(; j<UNEWTRIE3_DATA_START_OFFSET; ++i, j+=UTRIE3_DATA_BLOCK_LENGTH) {
         newTrie->map[i]=0;
@@ -340,7 +332,6 @@ utrie3_printLengths(const UTrie3 *trie, const char *which) {
 U_CAPI UTrie3 * U_EXPORT2
 utrie3_cloneAsThawed(const UTrie3 *other, UErrorCode *pErrorCode) {
     NewTrieAndStatus context;
-    UChar lead;
 
     if(U_FAILURE(*pErrorCode)) {
         return NULL;
@@ -362,17 +353,6 @@ utrie3_cloneAsThawed(const UTrie3 *other, UErrorCode *pErrorCode) {
     context.errorCode=*pErrorCode;
     utrie3_enum(other, NULL, copyEnumRange, &context);
     *pErrorCode=context.errorCode;
-    for(lead=0xd800; lead<0xdc00; ++lead) {
-        uint32_t value;
-        if(other->data32==NULL) {
-            value=UTRIE3_GET16_FROM_U16_SINGLE_LEAD(other, lead);
-        } else {
-            value=UTRIE3_GET32_FROM_U16_SINGLE_LEAD(other, lead);
-        }
-        if(value!=other->initialValue) {
-            utrie3_set32ForLeadSurrogateCodeUnit(context.trie, lead, value, pErrorCode);
-        }
-    }
     if(U_FAILURE(*pErrorCode)) {
         utrie3_close(context.trie);
         context.trie=NULL;
@@ -410,7 +390,7 @@ utrie3_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
             value=UTRIE_GET32_FROM_LEAD(trie1, lead);
         }
         if(value!=trie1->initialValue) {
-            utrie3_set32ForLeadSurrogateCodeUnit(context.trie, lead, value, pErrorCode);
+            utrie3_set32(context.trie, lead, value, pErrorCode);
         }
     }
     if(U_SUCCESS(*pErrorCode)) {
@@ -433,17 +413,10 @@ utrie3_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
 #endif
 
 static inline UBool
-isInNullBlock(UNewTrie3 *trie, UChar32 c, UBool forLSCP) {
-    int32_t i2, block;
-
-    if(U_IS_LEAD(c) && forLSCP) {
-        i2=(UTRIE3_LSCP_INDEX_2_OFFSET-(0xd800>>UTRIE3_SHIFT_2))+
-            (c>>UTRIE3_SHIFT_2);
-    } else {
-        i2=trie->index1[c>>UTRIE3_SHIFT_1]+
-            ((c>>UTRIE3_SHIFT_2)&UTRIE3_INDEX_2_MASK);
-    }
-    block=trie->index2[i2];
+isInNullBlock(UNewTrie3 *trie, UChar32 c) {
+    int32_t i2=trie->index1[c>>UTRIE3_SHIFT_1]+
+        ((c>>UTRIE3_SHIFT_2)&UTRIE3_INDEX_2_MASK);
+    int32_t block=trie->index2[i2];
     return (UBool)(block==trie->dataNullOffset);
 }
 
@@ -467,15 +440,9 @@ allocIndex2Block(UNewTrie3 *trie) {
 }
 
 static int32_t
-getIndex2Block(UNewTrie3 *trie, UChar32 c, UBool forLSCP) {
-    int32_t i1, i2;
-
-    if(U_IS_LEAD(c) && forLSCP) {
-        return UTRIE3_LSCP_INDEX_2_OFFSET;
-    }
-
-    i1=c>>UTRIE3_SHIFT_1;
-    i2=trie->index1[i1];
+getIndex2Block(UNewTrie3 *trie, UChar32 c) {
+    int32_t i1=c>>UTRIE3_SHIFT_1;
+    int32_t i2=trie->index1[i1];
     if(i2==trie->index2NullOffset) {
         i2=allocIndex2Block(trie);
         if(i2<0) {
@@ -562,10 +529,10 @@ setIndex2Entry(UNewTrie3 *trie, int32_t i2, int32_t block) {
  * @internal
  */
 static int32_t
-getDataBlock(UNewTrie3 *trie, UChar32 c, UBool forLSCP) {
+getDataBlock(UNewTrie3 *trie, UChar32 c) {
     int32_t i2, oldBlock, newBlock;
 
-    i2=getIndex2Block(trie, c, forLSCP);
+    i2=getIndex2Block(trie, c);
     if(i2<0) {
         return -1;  /* program error */
     }
@@ -586,29 +553,6 @@ getDataBlock(UNewTrie3 *trie, UChar32 c, UBool forLSCP) {
     return newBlock;
 }
 
-/**
- * @return TRUE if the value was successfully set
- */
-static void
-set32(UNewTrie3 *trie,
-      UChar32 c, UBool forLSCP, uint32_t value,
-      UErrorCode *pErrorCode) {
-    int32_t block;
-
-    if(trie==NULL || trie->isCompacted) {
-        *pErrorCode=U_NO_WRITE_PERMISSION;
-        return;
-    }
-
-    block=getDataBlock(trie, c, forLSCP);
-    if(block<0) {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    trie->data[block+(c&UTRIE3_DATA_MASK)]=value;
-}
-
 U_CAPI void U_EXPORT2
 utrie3_set32(UTrie3 *trie, UChar32 c, uint32_t value, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
@@ -618,21 +562,20 @@ utrie3_set32(UTrie3 *trie, UChar32 c, uint32_t value, UErrorCode *pErrorCode) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    set32(trie->newTrie, c, TRUE, value, pErrorCode);
-}
 
-U_CAPI void U_EXPORT2
-utrie3_set32ForLeadSurrogateCodeUnit(UTrie3 *trie,
-                                     UChar32 c, uint32_t value,
-                                     UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
+    UNewTrie3 *newTrie=trie->newTrie;
+    if(newTrie==nullptr || newTrie->isCompacted) {
+        *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
-    if(!U_IS_LEAD(c)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+
+    int32_t block=getDataBlock(newTrie, c);
+    if(block<0) {
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    set32(trie->newTrie, c, FALSE, value, pErrorCode);
+
+    newTrie->data[block+(c&UTRIE3_DATA_MASK)]=value;
 }
 
 static void
@@ -703,7 +646,7 @@ utrie3_setRange32(UTrie3 *trie,
         UChar32 nextStart;
 
         /* set partial block at [start..following block boundary[ */
-        block=getDataBlock(newTrie, start, TRUE);
+        block=getDataBlock(newTrie, start);
         if(block<0) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -738,13 +681,13 @@ utrie3_setRange32(UTrie3 *trie,
         int32_t i2;
         UBool setRepeatBlock=FALSE;
 
-        if(value==newTrie->initialValue && isInNullBlock(newTrie, start, TRUE)) {
+        if(value==newTrie->initialValue && isInNullBlock(newTrie, start)) {
             start+=UTRIE3_DATA_BLOCK_LENGTH; /* nothing to do */
             continue;
         }
 
         /* get index value */
-        i2=getIndex2Block(newTrie, start, TRUE);
+        i2=getIndex2Block(newTrie, start);
         if(i2<0) {
             *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
             return;
@@ -790,7 +733,7 @@ utrie3_setRange32(UTrie3 *trie,
                 setIndex2Entry(newTrie, i2, repeatBlock);
             } else {
                 /* create and set and fill the repeatBlock */
-                repeatBlock=getDataBlock(newTrie, start, TRUE);
+                repeatBlock=getDataBlock(newTrie, start);
                 if(repeatBlock<0) {
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                     return;
@@ -804,7 +747,7 @@ utrie3_setRange32(UTrie3 *trie,
 
     if(rest>0) {
         /* set partial block at [last block boundary..limit[ */
-        block=getDataBlock(newTrie, start, TRUE);
+        block=getDataBlock(newTrie, start);
         if(block<0) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
