@@ -15,13 +15,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import com.ibm.icu.dev.impl.number.DecimalQuantity_64BitBCD;
+import com.ibm.icu.dev.impl.number.DecimalQuantity_ByteArrayBCD;
+import com.ibm.icu.dev.impl.number.DecimalQuantity_SimpleStorage;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalQuantity;
-import com.ibm.icu.impl.number.DecimalQuantity_64BitBCD;
-import com.ibm.icu.impl.number.DecimalQuantity_ByteArrayBCD;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
-import com.ibm.icu.impl.number.DecimalQuantity_SimpleStorage;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;

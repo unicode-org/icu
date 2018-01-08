@@ -10,6 +10,7 @@ import java.text.ParsePosition;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.text.DecimalFormat_ICU58;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.Parse;
@@ -21,7 +22,6 @@ import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormat.PropertySetter;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.DecimalFormat_ICU58;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 

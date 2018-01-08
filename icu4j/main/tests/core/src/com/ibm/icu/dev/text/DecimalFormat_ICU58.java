@@ -6,7 +6,7 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.dev.text;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -29,7 +29,13 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.text.CurrencyPluralInfo;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
+import com.ibm.icu.text.UFieldPosition;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
@@ -5217,7 +5223,10 @@ public class DecimalFormat_ICU58 extends NumberFormat {
             negSuffixPattern = posSuffixPattern;
             negPrefixPattern = PATTERN_MINUS_SIGN + posPrefixPattern;
         }
-        setLocale(null, null);
+
+        // Can't call setLocale when not in the right package:
+        //setLocale(null, null);
+
         // save the pattern
         formatPattern = pattern;
 
