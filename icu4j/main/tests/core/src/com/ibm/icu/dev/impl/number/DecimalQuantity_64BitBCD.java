@@ -1,9 +1,12 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package com.ibm.icu.impl.number;
+package com.ibm.icu.dev.impl.number;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_AbstractBCD;
 
 public final class DecimalQuantity_64BitBCD extends DecimalQuantity_AbstractBCD {
 

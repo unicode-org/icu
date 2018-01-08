@@ -1,6 +1,6 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package com.ibm.icu.impl.number;
+package com.ibm.icu.dev.impl.number;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.UFieldPosition;
