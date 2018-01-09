@@ -1086,7 +1086,7 @@ compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
     trie->shiftedHighStart=newTrie->highStart>>UTRIE3_SHIFT_1;
 
 #ifdef UTRIE3_DEBUG
-    printf("UTrie3: highStart U+%04lx  highValue 0x%lx  initialValue 0x%lx\n",
+    printf("UTrie3: highStart U+%06lx  highValue 0x%lx  initialValue 0x%lx\n",
             (long)highStart, (long)highValue, (long)trie->initialValue);
 #endif
 
@@ -1104,7 +1104,7 @@ compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
         compactIndex2(newTrie);
 #ifdef UTRIE3_DEBUG
     } else {
-        printf("UTrie3: highStart U+%06lx  count of 16-bit index-2 words %lu->%lu\n",
+        printf("UTrie3: highStart U+%04lx  count of 16-bit index-2 words %lu->%lu\n",
                 (long)highStart, (long)trie->newTrie->index2Length, (long)UTRIE3_INDEX_1_OFFSET);
 #endif
     }

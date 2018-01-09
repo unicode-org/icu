@@ -33,6 +33,7 @@
 #include "cmemory.h"
 #include "utrie2.h"
 #include "utrie2_impl.h"
+#include "utrie3.h"  // TODO
 
 #include "utrie.h" /* for utrie2_fromUTrie() and utrie_swap() */
 
@@ -135,6 +136,7 @@ utrie2_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     trie->newTrie=newTrie;
 
     newTrie->data=data;
+    newTrie->t3=utrie3_open(initialValue, errorValue, pErrorCode);
     newTrie->dataCapacity=UNEWTRIE2_INITIAL_DATA_LENGTH;
     newTrie->initialValue=initialValue;
     newTrie->errorValue=errorValue;
@@ -246,6 +248,12 @@ cloneBuilder(const UNewTrie2 *other) {
     if(trie->data==NULL) {
         uprv_free(trie);
         return NULL;
+    }
+    if(other->t3==nullptr) {
+        trie->t3=nullptr;
+    } else {
+        UErrorCode errorCode=U_ZERO_ERROR;
+        trie->t3=utrie3_clone(other->t3, &errorCode);
     }
     trie->dataCapacity=other->dataCapacity;
 
@@ -623,6 +631,7 @@ set32(UNewTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
+    utrie3_set32(trie->t3, c, value, pErrorCode);
 
     block=getDataBlock(trie, c, forLSCP);
     if(block<0) {
@@ -718,6 +727,7 @@ utrie2_setRange32(UTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
+    utrie3_setRange32(newTrie->t3, start, end, value, overwrite, pErrorCode);
     if(!overwrite && value==newTrie->initialValue) {
         return; /* nothing to do */
     }
@@ -1412,14 +1422,15 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
         return;
     }
 
+#ifdef UTRIE2_DEBUG
+    utrie2_printLengths(trie, "");
+#endif
+
+    utrie3_freeze(newTrie->t3, (UTrie3ValueBits)valueBits, pErrorCode);
     /* Delete the UNewTrie2. */
     uprv_free(newTrie->data);
     uprv_free(newTrie);
     trie->newTrie=NULL;
-
-#ifdef UTRIE2_DEBUG
-    utrie2_printLengths(trie, "");
-#endif
 }
 
 /*
