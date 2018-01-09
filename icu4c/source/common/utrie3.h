@@ -662,24 +662,24 @@ struct UTrie3 {
  */
 enum {
     /** Shift size for getting the index-1 table offset. */
-    UTRIE3_SHIFT_1=6+5,
+    UTRIE3_SHIFT_1=6+6,
 
     /** Shift size for getting the index-2 table offset. */
-    UTRIE3_SHIFT_2=5,
+    UTRIE3_SHIFT_2=6,
 
     /**
      * Difference between the two shift sizes,
-     * for getting an index-1 offset from an index-2 offset. 6=11-5
+     * for getting an index-1 offset from an index-2 offset. 6=12-6
      */
     UTRIE3_SHIFT_1_2=UTRIE3_SHIFT_1-UTRIE3_SHIFT_2,
 
     /**
-     * Number of index-1 entries for the BMP. 32=0x20
+     * Number of index-1 entries for the BMP. 16=0x10
      * This part of the index-1 table is omitted from the serialized form.
      */
     UTRIE3_OMITTED_BMP_INDEX_1_LENGTH=0x10000>>UTRIE3_SHIFT_1,
 
-    /** Number of code points per index-1 table entry. 2048=0x800 */
+    /** Number of code points per index-1 table entry. 4096=0x1000 */
     UTRIE3_CP_PER_INDEX_1_ENTRY=1<<UTRIE3_SHIFT_1,
 
     /** Number of entries in an index-2 block. 64=0x40 */
@@ -688,7 +688,7 @@ enum {
     /** Mask for getting the lower bits for the in-index-2-block offset. */
     UTRIE3_INDEX_2_MASK=UTRIE3_INDEX_2_BLOCK_LENGTH-1,
 
-    /** Number of entries in a data block. 32=0x20 */
+    /** Number of entries in a data block. 64=0x40 */
     UTRIE3_DATA_BLOCK_LENGTH=1<<UTRIE3_SHIFT_2,
 
     /** Mask for getting the lower bits for the in-data-block offset. */
@@ -710,20 +710,20 @@ enum {
     /** The BMP part of the index-2 table is fixed and linear and starts at offset 0. */
     UTRIE3_INDEX_2_OFFSET=0,
 
-    /** The length of the BMP part of the index-2 table. 2048=0x800 */
+    /** The length of the BMP part of the index-2 table. 1024=0x400 */
     UTRIE3_INDEX_2_BMP_LENGTH=0x10000>>UTRIE3_SHIFT_2,
 
     /**
-     * The 2-byte UTF-8 version of the index-2 table follows at offset 2048=0x800.
+     * The 2-byte UTF-8 version of the index-2 table follows at offset 1024=0x400.
      * Length 32=0x20 for lead bytes C0..DF, regardless of UTRIE3_SHIFT_2.
      */
     UTRIE3_UTF8_2B_INDEX_2_OFFSET=UTRIE3_INDEX_2_BMP_LENGTH,
     UTRIE3_UTF8_2B_INDEX_2_LENGTH=0x800>>6,  /* U+0800 is the first code point after 2-byte UTF-8 */
 
     /**
-     * The index-1 table, only used for supplementary code points, at offset 2080=0x820.
+     * The index-1 table, only used for supplementary code points, at offset 1056=0x420.
      * Variable length, for code points up to highStart, where the last single-value range starts.
-     * Maximum length 512=0x200=0x100000>>UTRIE3_SHIFT_1.
+     * Maximum length 256=0x100=0x100000>>UTRIE3_SHIFT_1.
      * (For 0x100000 supplementary code points U+10000..U+10ffff.)
      *
      * The part of the index-2 table for supplementary code points starts
@@ -836,11 +836,9 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
                     U8_LEAD3_T1_BITS[__lead&=0xf]&(1<<((__t1=*(src))>>5)) && ++(src)!=(limit) && \
                     (__t2=*(src)-0x80)<=0x3f && \
                     ((result)=(trie)->data[ \
-                        ((int32_t)((trie)->index[(__lead<<(12-UTRIE3_SHIFT_2))+ \
-                                                 ((__t1&0x3f)<<(6-UTRIE3_SHIFT_2))+ \
-                                                 (__t2>>UTRIE3_SHIFT_2)]) \
+                        ((int32_t)((trie)->index[(__lead<<(12-UTRIE3_SHIFT_2))+(__t1&0x3f)]) \
                         <<UTRIE3_INDEX_SHIFT)+ \
-                        (__t2&UTRIE3_DATA_MASK)], 1) \
+                        __t2], 1) \
                 :  /* U+10000..U+10FFFF */ \
                     (__lead-=0xf0)<=4 && \
                     U8_LEAD4_T1_BITS[(__t1=*(src))>>4]&(1<<__lead) && \
@@ -849,11 +847,10 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
                     (result= __lead>=(trie)->shiftedHighStart ? (trie)->highValue : \
                         (trie)->data[ \
                             ((int32_t)((trie)->index[ \
-                                (trie)->index[(UTRIE3_INDEX_1_OFFSET-UTRIE3_OMITTED_BMP_INDEX_1_LENGTH)+ \
-                                            (__lead<<(12-UTRIE3_SHIFT_1))+(__t2>>(UTRIE3_SHIFT_1-6))]+ \
-                                ((__t2&0x1f)<<(6-UTRIE3_SHIFT_2))+(__t3>>UTRIE3_SHIFT_2)]) \
+                                (trie)->index[(UTRIE3_INDEX_1_OFFSET-UTRIE3_OMITTED_BMP_INDEX_1_LENGTH)+__lead]+ \
+                                __t2]) \
                             <<UTRIE3_INDEX_SHIFT)+ \
-                            (__t3&UTRIE3_DATA_MASK)], 1) \
+                            __t3], 1) \
             :  /* U+0080..U+07FF */ \
                 __lead>=0xc2 && (__t1=*(src)-0x80)<=0x3f && \
                 ((result)=(trie)->data[ \

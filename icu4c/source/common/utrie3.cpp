@@ -106,7 +106,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
 
     tempTrie.highStart=header->shiftedHighStart<<UTRIE3_SHIFT_1;
     tempTrie.highStartLead16=U16_LEAD(tempTrie.highStart);
-    tempTrie.shiftedHighStart=tempTrie.highStart>>12;  // TODO: copy header->shiftedHighStart
+    tempTrie.shiftedHighStart=header->shiftedHighStart;
     tempTrie.highValue=header->highValue;
     tempTrie.errorValue=header->errorValue;
 

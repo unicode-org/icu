@@ -11,6 +11,7 @@
 
 #include "unicode/utypes.h"
 #include "cmemory.h"
+#include "uassert.h"
 #include "utrie3.h"
 #include "utrie3_impl.h"
 
@@ -21,6 +22,7 @@
 /*
  * The UTRIE3_SHIFT_1, UTRIE3_SHIFT_2, UTRIE3_INDEX_SHIFT and other values
  * have been chosen to minimize trie sizes overall.
+ * TODO: Now chosen as a compromise between size (if it increases overall) and simpler UTF-8 code.
  * Most of the code is flexible enough to work with a range of values,
  * within certain limits.
  *
@@ -52,15 +54,11 @@ enum {
     /** The start of allocated index-2 blocks. */
     UNEWTRIE3_INDEX_2_START_OFFSET=UNEWTRIE3_INDEX_2_NULL_OFFSET+UTRIE3_INDEX_2_BLOCK_LENGTH,
 
-    /**
-     * The null data block.
-     * Length 64=0x40 even if UTRIE3_DATA_BLOCK_LENGTH is smaller,
-     * to work with 6-bit trail bytes from 2-byte UTF-8.
-     */
+    /** The null data block. */
     UNEWTRIE3_DATA_NULL_OFFSET=UTRIE3_DATA_START_OFFSET,
 
     /** The start of allocated data blocks. */
-    UNEWTRIE3_DATA_START_OFFSET=UNEWTRIE3_DATA_NULL_OFFSET+0x40,
+    UNEWTRIE3_DATA_START_OFFSET=UNEWTRIE3_DATA_NULL_OFFSET+UTRIE3_DATA_BLOCK_LENGTH,
 
     /**
      * The start of data blocks for U+0800 and above.
@@ -108,7 +106,7 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     trie->highValue=initialValue;
     trie->highStart=0x110000;
     trie->highStartLead16=0xdc00;  // U16_LEAD(0x110000) (after lead surrogates)
-    trie->shiftedHighStart=0x110000>>12;
+    trie->shiftedHighStart=0x110000>>UTRIE3_SHIFT_1;
     trie->newTrie=newTrie;
 
     newTrie->data=data;
@@ -797,14 +795,14 @@ findSameIndex2Block(const int32_t *idx, int32_t index2Length, int32_t otherBlock
 }
 
 static int32_t
-findSameDataBlock(const uint32_t *data, int32_t dataLength, int32_t otherBlock, int32_t blockLength) {
+findSameDataBlock(const uint32_t *data, int32_t dataLength, int32_t otherBlock) {
     int32_t block;
 
     /* ensure that we do not even partially get past dataLength */
-    dataLength-=blockLength;
+    dataLength-=UTRIE3_DATA_BLOCK_LENGTH;
 
     for(block=0; block<=dataLength; block+=UTRIE3_DATA_GRANULARITY) {
-        if(equal_uint32(data+block, data+otherBlock, blockLength)) {
+        if(equal_uint32(data+block, data+otherBlock, UTRIE3_DATA_BLOCK_LENGTH)) {
             return block;
         }
     }
@@ -903,54 +901,33 @@ findHighStart(UNewTrie3 *trie, uint32_t highValue) {
  */
 static void
 compactData(UNewTrie3 *trie) {
-    int32_t start, newStart, movedStart;
-    int32_t blockLength, overlap;
-    int32_t i, mapIndex, blockCount;
-
     /* do not compact linear-ASCII data */
-    newStart=UTRIE3_DATA_START_OFFSET;
-    for(start=0, i=0; start<newStart; start+=UTRIE3_DATA_BLOCK_LENGTH, ++i) {
+    int32_t start=0;
+    int32_t newStart=UTRIE3_DATA_START_OFFSET;
+    int32_t i;
+    for(i=0; start<newStart; start+=UTRIE3_DATA_BLOCK_LENGTH, ++i) {
         trie->map[i]=start;
     }
 
-    /*
-     * Start with a block length of 64 for 2-byte UTF-8,
-     * then switch to UTRIE3_DATA_BLOCK_LENGTH.
-     */
-    blockLength=64;
-    blockCount=blockLength>>UTRIE3_SHIFT_2;
-    for(start=newStart; start<trie->dataLength;) {
+    U_ASSERT(start==newStart);
+    for(; start<trie->dataLength; start+=UTRIE3_DATA_BLOCK_LENGTH) {
         /*
          * start: index of first entry of current block
          * newStart: index where the current block is to be moved
          *           (right after current end of already-compacted data)
          */
-        if(start==UNEWTRIE3_DATA_0800_OFFSET) {
-            blockLength=UTRIE3_DATA_BLOCK_LENGTH;
-            blockCount=1;
-        }
 
         /* skip blocks that are not used */
         if(trie->map[start>>UTRIE3_SHIFT_2]<=0) {
-            /* advance start to the next block */
-            start+=blockLength;
-
             /* leave newStart with the previous block! */
             continue;
         }
 
         /* search for an identical block */
-        if( (movedStart=findSameDataBlock(trie->data, newStart, start, blockLength))
-             >=0
-        ) {
+        int32_t movedStart=findSameDataBlock(trie->data, newStart, start);
+        if(movedStart>=0) {
             /* found an identical block, set the other block's index value for the current block */
-            for(i=blockCount, mapIndex=start>>UTRIE3_SHIFT_2; i>0; --i) {
-                trie->map[mapIndex++]=movedStart;
-                movedStart+=UTRIE3_DATA_BLOCK_LENGTH;
-            }
-
-            /* advance start to the next block */
-            start+=blockLength;
+            trie->map[start>>UTRIE3_SHIFT_2]=movedStart;
 
             /* leave newStart with the previous block! */
             continue;
@@ -958,29 +935,24 @@ compactData(UNewTrie3 *trie) {
 
         /* see if the beginning of this block can be overlapped with the end of the previous block */
         /* look for maximum overlap (modulo granularity) with the previous, adjacent block */
-        for(overlap=blockLength-UTRIE3_DATA_GRANULARITY;
+        int32_t overlap;
+        for(overlap=UTRIE3_DATA_BLOCK_LENGTH-UTRIE3_DATA_GRANULARITY;
             overlap>0 && !equal_uint32(trie->data+(newStart-overlap), trie->data+start, overlap);
             overlap-=UTRIE3_DATA_GRANULARITY) {}
 
         if(overlap>0 || newStart<start) {
             /* some overlap, or just move the whole block */
-            movedStart=newStart-overlap;
-            for(i=blockCount, mapIndex=start>>UTRIE3_SHIFT_2; i>0; --i) {
-                trie->map[mapIndex++]=movedStart;
-                movedStart+=UTRIE3_DATA_BLOCK_LENGTH;
-            }
+            trie->map[start>>UTRIE3_SHIFT_2]=newStart-overlap;
 
-            /* move the non-overlapping indexes to their new positions */
-            start+=overlap;
-            for(i=blockLength-overlap; i>0; --i) {
-                trie->data[newStart++]=trie->data[start++];
-            }
+            /* move the non-overlapping values to their new positions */
+            int32_t j=start+overlap;
+            int32_t limit=start+UTRIE3_DATA_BLOCK_LENGTH;
+            do {
+                trie->data[newStart++]=trie->data[j++];
+            } while(j<limit);
         } else /* no overlap && newStart==start */ {
-            for(i=blockCount, mapIndex=start>>UTRIE3_SHIFT_2; i>0; --i) {
-                trie->map[mapIndex++]=start;
-                start+=UTRIE3_DATA_BLOCK_LENGTH;
-            }
-            newStart=start;
+            trie->map[start>>UTRIE3_SHIFT_2]=start;
+            newStart=start+UTRIE3_DATA_BLOCK_LENGTH;
         }
     }
 
@@ -1010,18 +982,19 @@ compactData(UNewTrie3 *trie) {
 
 static void
 compactIndex2(UNewTrie3 *trie) {
-    int32_t i, start, newStart, movedStart, overlap;
-
     /* do not compact linear-BMP index-2 blocks */
-    newStart=UTRIE3_INDEX_2_BMP_LENGTH;
-    for(start=0, i=0; start<newStart; start+=UTRIE3_INDEX_2_BLOCK_LENGTH, ++i) {
+    int32_t start=0;
+    int32_t newStart=UTRIE3_INDEX_2_BMP_LENGTH;
+    int32_t i;
+    for(i=0; start<newStart; start+=UTRIE3_INDEX_2_BLOCK_LENGTH, ++i) {
         trie->map[i]=start;
     }
 
     /* Reduce the index table gap to what will be needed at runtime. */
+    U_ASSERT(trie->highStart>0x10000);
     newStart+=UTRIE3_UTF8_2B_INDEX_2_LENGTH+((trie->highStart-0x10000)>>UTRIE3_SHIFT_1);
 
-    for(start=UNEWTRIE3_INDEX_2_NULL_OFFSET; start<trie->index2Length;) {
+    for(start=UNEWTRIE3_INDEX_2_NULL_OFFSET; start<trie->index2Length; start+=UTRIE3_INDEX_2_BLOCK_LENGTH) {
         /*
          * start: index of first entry of current block
          * newStart: index where the current block is to be moved
@@ -1029,14 +1002,10 @@ compactIndex2(UNewTrie3 *trie) {
          */
 
         /* search for an identical block */
-        if( (movedStart=findSameIndex2Block(trie->index2, newStart, start))
-             >=0
-        ) {
+        int32_t movedStart=findSameIndex2Block(trie->index2, newStart, start);
+        if(movedStart>=0) {
             /* found an identical block, set the other block's index value for the current block */
             trie->map[start>>UTRIE3_SHIFT_1_2]=movedStart;
-
-            /* advance start to the next block */
-            start+=UTRIE3_INDEX_2_BLOCK_LENGTH;
 
             /* leave newStart with the previous block! */
             continue;
@@ -1044,6 +1013,7 @@ compactIndex2(UNewTrie3 *trie) {
 
         /* see if the beginning of this block can be overlapped with the end of the previous block */
         /* look for maximum overlap with the previous, adjacent block */
+        int32_t  overlap;
         for(overlap=UTRIE3_INDEX_2_BLOCK_LENGTH-1;
             overlap>0 && !equal_int32(trie->index2+(newStart-overlap), trie->index2+start, overlap);
             --overlap) {}
@@ -1053,14 +1023,14 @@ compactIndex2(UNewTrie3 *trie) {
             trie->map[start>>UTRIE3_SHIFT_1_2]=newStart-overlap;
 
             /* move the non-overlapping indexes to their new positions */
-            start+=overlap;
-            for(i=UTRIE3_INDEX_2_BLOCK_LENGTH-overlap; i>0; --i) {
-                trie->index2[newStart++]=trie->index2[start++];
-            }
+            int32_t j=start+overlap;
+            int32_t limit=start+UTRIE3_INDEX_2_BLOCK_LENGTH;
+            do {
+                trie->index2[newStart++]=trie->index2[j++];
+            } while(j<limit);
         } else /* no overlap && newStart==start */ {
             trie->map[start>>UTRIE3_SHIFT_1_2]=start;
-            start+=UTRIE3_INDEX_2_BLOCK_LENGTH;
-            newStart=start;
+            newStart=start+UTRIE3_INDEX_2_BLOCK_LENGTH;
         }
     }
 
@@ -1102,7 +1072,6 @@ compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
     highValue=utrie3_get32(trie, 0x10ffff);
     highStart=findHighStart(newTrie, highValue);
     highStart=(highStart+(UTRIE3_CP_PER_INDEX_1_ENTRY-1))&~(UTRIE3_CP_PER_INDEX_1_ENTRY-1);
-    highStart=(highStart+0xfff)&~0xfff;  // TODO: remove/de-duplicate
     if(highStart==0x110000) {
         highValue=trie->errorValue;
     }
@@ -1114,7 +1083,7 @@ compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
      */
     trie->highStart=newTrie->highStart=highStart;
     trie->highStartLead16=U16_LEAD(newTrie->highStart);
-    trie->shiftedHighStart=newTrie->highStart>>12;
+    trie->shiftedHighStart=newTrie->highStart>>UTRIE3_SHIFT_1;
 
 #ifdef UTRIE3_DEBUG
     printf("UTrie3: highStart U+%04lx  highValue 0x%lx  initialValue 0x%lx\n",
@@ -1281,7 +1250,7 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
         *dest16++=trie->dataNullOffset;
     }
     for(; i<(0xe0-0xc0); ++i) {                                     /* C2..DF */
-        *dest16++=(uint16_t)(dataMove+newTrie->index2[i<<(6-UTRIE3_SHIFT_2)]);
+        *dest16++=(uint16_t)(dataMove+newTrie->index2[i]);
     }
 
     if(highStart>0x10000) {
