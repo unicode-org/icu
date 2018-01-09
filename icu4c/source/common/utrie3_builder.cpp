@@ -316,14 +316,29 @@ utrie_printLengths(const UTrie *trie) {
            indexLength, dataLength, totalLength);
 }
 #endif
+static long countInitial(const UTrie3 *trie) {
+    uint32_t initialValue=trie->initialValue;
+    int32_t length=trie->dataLength;
+    long count=0;
+    if(trie->data16!=nullptr) {
+        for(int32_t i=0; i<length; ++i) {
+            if(trie->data16[i]==initialValue) { ++count; }
+        }
+    } else {
+        for(int32_t i=0; i<length; ++i) {
+            if(trie->data32[i]==initialValue) { ++count; }
+        }
+    }
+    return count;
+}
 
 static void
 utrie3_printLengths(const UTrie3 *trie, const char *which) {
     long indexLength=trie->indexLength;
     long dataLength=(long)trie->dataLength;
     long totalLength=(long)sizeof(UTrie3Header)+indexLength*2+dataLength*(trie->data32!=NULL ? 4 : 2);
-    printf("**UTrie3Lengths(%s)** index:%6ld  data:%6ld  serialized:%6ld\n",
-           which, indexLength, dataLength, totalLength);
+    printf("**UTrie3Lengths(%s)** index:%6ld  data:%6ld  serialized:%6ld  countInitial:%6ld\n",
+           which, indexLength, dataLength, totalLength, countInitial(trie));
 }
 #endif
 
@@ -901,6 +916,10 @@ findHighStart(UNewTrie3 *trie, uint32_t highValue) {
  */
 static void
 compactData(UNewTrie3 *trie) {
+#ifdef UTRIE3_DEBUG
+    int32_t countSame=0, sumOverlaps=0;
+#endif
+
     /* do not compact linear-ASCII data */
     int32_t start=0;
     int32_t newStart=UTRIE3_DATA_START_OFFSET;
@@ -926,6 +945,9 @@ compactData(UNewTrie3 *trie) {
         /* search for an identical block */
         int32_t movedStart=findSameDataBlock(trie->data, newStart, start);
         if(movedStart>=0) {
+#ifdef UTRIE3_DEBUG
+            ++countSame;
+#endif
             /* found an identical block, set the other block's index value for the current block */
             trie->map[start>>UTRIE3_SHIFT_2]=movedStart;
 
@@ -940,6 +962,9 @@ compactData(UNewTrie3 *trie) {
             overlap>0 && !equal_uint32(trie->data+(newStart-overlap), trie->data+start, overlap);
             overlap-=UTRIE3_DATA_GRANULARITY) {}
 
+#ifdef UTRIE3_DEBUG
+            sumOverlaps+=overlap;
+#endif
         if(overlap>0 || newStart<start) {
             /* some overlap, or just move the whole block */
             trie->map[start>>UTRIE3_SHIFT_2]=newStart-overlap;
@@ -973,8 +998,8 @@ compactData(UNewTrie3 *trie) {
 
 #ifdef UTRIE3_DEBUG
     /* we saved some space */
-    printf("compacting UTrie3: count of 32-bit data words %lu->%lu\n",
-            (long)trie->dataLength, (long)newStart);
+    printf("compacting UTrie3: count of 32-bit data words %lu->%lu  countSame=%ld  sumOverlaps=%ld\n",
+            (long)trie->dataLength, (long)newStart, (long)countSame, (long)sumOverlaps);
 #endif
 
     trie->dataLength=newStart;
