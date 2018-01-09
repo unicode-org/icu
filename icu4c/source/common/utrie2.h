@@ -709,6 +709,7 @@ struct UTrie2 {
     UBool padding1;
     int16_t padding2;
     UNewTrie2 *newTrie;     /* builder object; NULL when frozen */
+    const char *name;
 };
 
 /**

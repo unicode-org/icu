@@ -108,6 +108,7 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     trie->highStartLead16=0xdc00;  // U16_LEAD(0x110000) (after lead surrogates)
     trie->shiftedHighStart=0x110000>>UTRIE3_SHIFT_1;
     trie->newTrie=newTrie;
+    trie->name="open";
 
     newTrie->data=data;
     newTrie->dataCapacity=UNEWTRIE3_INITIAL_DATA_LENGTH;
@@ -337,8 +338,8 @@ utrie3_printLengths(const UTrie3 *trie, const char *which) {
     long indexLength=trie->indexLength;
     long dataLength=(long)trie->dataLength;
     long totalLength=(long)sizeof(UTrie3Header)+indexLength*2+dataLength*(trie->data32!=NULL ? 4 : 2);
-    printf("**UTrie3Lengths(%s)** index:%6ld  data:%6ld  serialized:%6ld  countInitial:%6ld\n",
-           which, indexLength, dataLength, totalLength, countInitial(trie));
+    printf("**UTrie3Lengths(%s %s)** index:%6ld  data:%6ld  countInitial:%6ld  serialized:%6ld\n",
+           which, trie->name, indexLength, dataLength, countInitial(trie), totalLength);
 }
 #endif
 

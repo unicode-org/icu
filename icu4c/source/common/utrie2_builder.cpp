@@ -134,6 +134,7 @@ utrie2_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     trie->errorValue=errorValue;
     trie->highStart=0x110000;
     trie->newTrie=newTrie;
+    trie->name="open";
 
     newTrie->data=data;
     newTrie->t3=utrie3_open(initialValue, errorValue, pErrorCode);
@@ -382,8 +383,8 @@ utrie2_printLengths(const UTrie2 *trie, const char *which) {
     long indexLength=trie->indexLength;
     long dataLength=(long)trie->dataLength;
     long totalLength=(long)sizeof(UTrie2Header)+indexLength*2+dataLength*(trie->data32!=NULL ? 4 : 2);
-    printf("**UTrie2Lengths(%s)** index:%6ld  data:%6ld  serialized:%6ld  countInitial:%6ld\n",
-           which, indexLength, dataLength, totalLength, countInitial(trie));
+    printf("**UTrie2Lengths(%s %s)** index:%6ld  data:%6ld  countInitial:%6ld  serialized:%6ld\n",
+           which, trie->name, indexLength, dataLength, countInitial(trie), totalLength);
 }
 #endif
 
@@ -1452,6 +1453,7 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     utrie2_printLengths(trie, "");
 #endif
 
+    newTrie->t3->name=trie->name;
     utrie3_freeze(newTrie->t3, (UTrie3ValueBits)valueBits, pErrorCode);
     /* Delete the UNewTrie2. */
     uprv_free(newTrie->data);

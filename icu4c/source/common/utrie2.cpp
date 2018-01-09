@@ -199,6 +199,7 @@ utrie2_openFromSerialized(UTrie2ValueBits valueBits,
     trie->memory=(uint32_t *)data;
     trie->length=actualLength;
     trie->isMemoryOwned=FALSE;
+    trie->name="fromSerialized";
 
     /* set the pointers to its index and data arrays */
     p16=(const uint16_t *)(header+1);
@@ -291,6 +292,7 @@ utrie2_openDummy(UTrie2ValueBits valueBits,
     trie->errorValue=errorValue;
     trie->highStart=0;
     trie->highValueIndex=dataMove+UTRIE2_DATA_START_OFFSET;
+    trie->name="dummy";
 
     /* set the header fields */
     header=(UTrie2Header *)trie->memory;

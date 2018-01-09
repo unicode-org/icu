@@ -132,6 +132,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     trie->memory=(uint32_t *)data;
     trie->length=actualLength;
     trie->isMemoryOwned=FALSE;
+    trie->name="fromSerialized";
 
     /* set the pointers to its index and data arrays */
     const uint16_t *p16=(const uint16_t *)(header+1);
@@ -213,6 +214,7 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     trie->highStartLead16=0xd7c0;  // U16_LEAD(0) (below lead surrogates)
     trie->shiftedHighStart=0;
     trie->highValue=initialValue;
+    trie->name="dummy";
 
     /* set the header fields */
     UTrie3Header *header=(UTrie3Header *)trie->memory;

@@ -652,6 +652,7 @@ struct UTrie3 {
     UBool padding1;
     int16_t padding2;
     UNewTrie3 *newTrie;     /* builder object; NULL when frozen */
+    const char *name;
 };
 
 /**

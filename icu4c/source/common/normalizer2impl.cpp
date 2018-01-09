@@ -2439,6 +2439,7 @@ void InitCanonIterData::doInit(Normalizer2Impl *impl, UErrorCode &errorCode) {
     }
     if (U_SUCCESS(errorCode)) {
         utrie2_enum(impl->normTrie, NULL, enumCIDRangeHandler, impl);
+        impl->fCanonIterData->trie->name="CanonIterData";
         utrie2_freeze(impl->fCanonIterData->trie, UTRIE2_32_VALUE_BITS, &errorCode);
     }
     if (U_FAILURE(errorCode)) {
