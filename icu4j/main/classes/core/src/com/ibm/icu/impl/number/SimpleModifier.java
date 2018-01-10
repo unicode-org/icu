@@ -27,18 +27,28 @@ public class SimpleModifier implements Modifier {
         this.field = field;
         this.strong = strong;
 
-        assert SimpleFormatterImpl.getArgumentLimit(compiledPattern) == 1;
-        if (compiledPattern.charAt(1) != '\u0000') {
+        int argLimit = SimpleFormatterImpl.getArgumentLimit(compiledPattern);
+        if (argLimit == 0) {
+            // No arguments in compiled pattern
             prefixLength = compiledPattern.charAt(1) - ARG_NUM_LIMIT;
-            suffixOffset = 3 + prefixLength;
-        } else {
-            prefixLength = 0;
-            suffixOffset = 2;
-        }
-        if (3 + prefixLength < compiledPattern.length()) {
-            suffixLength = compiledPattern.charAt(suffixOffset) - ARG_NUM_LIMIT;
-        } else {
+            assert 2 + prefixLength == compiledPattern.length();
+            // Set suffixOffset = -1 to indicate no arguments in compiled pattern.
+            suffixOffset = -1;
             suffixLength = 0;
+        } else {
+            assert argLimit == 1;
+            if (compiledPattern.charAt(1) != '\u0000') {
+                prefixLength = compiledPattern.charAt(1) - ARG_NUM_LIMIT;
+                suffixOffset = 3 + prefixLength;
+            } else {
+                prefixLength = 0;
+                suffixOffset = 2;
+            }
+            if (3 + prefixLength < compiledPattern.length()) {
+                suffixLength = compiledPattern.charAt(suffixOffset) - ARG_NUM_LIMIT;
+            } else {
+                suffixLength = 0;
+            }
         }
     }
 
@@ -96,16 +106,21 @@ public class SimpleModifier implements Modifier {
             int startIndex,
             int endIndex,
             Field field) {
-        if (prefixLength > 0) {
-            result.insert(startIndex, compiledPattern, 2, 2 + prefixLength, field);
+        if (suffixOffset == -1) {
+            // There is no argument for the inner number; overwrite the entire segment with our string.
+            return result.splice(startIndex, endIndex, compiledPattern, 2, 2 + prefixLength, field);
+        } else {
+            if (prefixLength > 0) {
+                result.insert(startIndex, compiledPattern, 2, 2 + prefixLength, field);
+            }
+            if (suffixLength > 0) {
+                result.insert(endIndex + prefixLength,
+                        compiledPattern,
+                        1 + suffixOffset,
+                        1 + suffixOffset + suffixLength,
+                        field);
+            }
+            return prefixLength + suffixLength;
         }
-        if (suffixLength > 0) {
-            result.insert(endIndex + prefixLength,
-                    compiledPattern,
-                    1 + suffixOffset,
-                    1 + suffixOffset + suffixLength,
-                    field);
-        }
-        return prefixLength + suffixLength;
     }
 }

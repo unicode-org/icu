@@ -473,6 +473,25 @@ public class NumberFormatterApiTest {
                 ULocale.forLanguageTag("es-US"),
                 5.43,
                 "5.43 °F");
+
+        assertFormatSingle(
+                "MeasureUnit form without {0} in CLDR pattern",
+                "",
+                NumberFormatter.with().unit(MeasureUnit.KELVIN).unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("es-MX"),
+                1,
+                "kelvin");
+
+        assertFormatSingle(
+                "MeasureUnit form without {0} in CLDR pattern and wide base form",
+                "",
+                NumberFormatter.with()
+                    .rounding(Rounder.fixedFraction(20))
+                    .unit(MeasureUnit.KELVIN)
+                    .unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("es-MX"),
+                1,
+                "kelvin");
     }
 
     @Test

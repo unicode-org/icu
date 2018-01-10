@@ -23,6 +23,7 @@ void NumberStringBuilderTest::runIndexedTest(int32_t index, UBool exec, const ch
     }
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testInsertAppendUnicodeString);
+        TESTCASE_AUTO(testSplice);
         TESTCASE_AUTO(testInsertAppendCodePoint);
         TESTCASE_AUTO(testCopy);
         TESTCASE_AUTO(testFields);
@@ -72,6 +73,55 @@ void NumberStringBuilderTest::testInsertAppendUnicodeString() {
         sb5.append(sb5cp, status);
         assertSuccess("Appending again to sb5", status);
         assertEqualsImpl(sb4, sb5);
+    }
+}
+
+void NumberStringBuilderTest::testSplice() {
+    const struct TestCase {
+        const char16_t* input;
+        const int32_t startThis;
+        const int32_t endThis;
+    } cases[] = {
+            { u"", 0, 0 },
+            { u"abc", 0, 0 },
+            { u"abc", 1, 1 },
+            { u"abc", 1, 2 },
+            { u"abc", 0, 2 },
+            { u"abc", 0, 3 },
+            { u"lorem ipsum dolor sit amet", 8, 8 },
+            { u"lorem ipsum dolor sit amet", 8, 11 }, // 3 chars, equal to replacement "xyz"
+            { u"lorem ipsum dolor sit amet", 8, 18 } }; // 10 chars, larger than several replacements
+
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString sb1;
+    NumberStringBuilder sb2;
+    for (auto cas : cases) {
+        for (const char16_t* replacementPtr : EXAMPLE_STRINGS) {
+            UnicodeString replacement(replacementPtr);
+
+            // Test replacement with full string
+            sb1.remove();
+            sb1.append(cas.input);
+            sb1.replace(cas.startThis, cas.endThis - cas.startThis, replacement);
+            sb2.clear();
+            sb2.append(cas.input, UNUM_FIELD_COUNT, status);
+            sb2.splice(cas.startThis, cas.endThis, replacement, 0, replacement.length(), UNUM_FIELD_COUNT, status);
+            assertSuccess("Splicing into sb2 first time", status);
+            assertEqualsImpl(sb1, sb2);
+
+            // Test replacement with partial string
+            if (replacement.length() <= 2) {
+                continue;
+            }
+            sb1.remove();
+            sb1.append(cas.input);
+            sb1.replace(cas.startThis, cas.endThis - cas.startThis, UnicodeString(replacement, 1, 2));
+            sb2.clear();
+            sb2.append(cas.input, UNUM_FIELD_COUNT, status);
+            sb2.splice(cas.startThis, cas.endThis, replacement, 1, 3, UNUM_FIELD_COUNT, status);
+            assertSuccess("Splicing into sb2 second time", status);
+            assertEqualsImpl(sb1, sb2);
+        }
     }
 }
 
@@ -230,7 +280,8 @@ void NumberStringBuilderTest::assertEqualsImpl(const UnicodeString &a, const Num
     for (int32_t i = 0; i < a.length(); i++) {
         IntlTest::assertEquals(
                 UnicodeString(u"Char at position ") + Int64ToUnicodeString(i) +
-                UnicodeString(u" in string ") + a, a.charAt(i), b.charAt(i));
+                UnicodeString(u" in \"") + a + UnicodeString("\" versus \"") +
+                b.toUnicodeString() + UnicodeString("\""), a.charAt(i), b.charAt(i));
     }
 }
 

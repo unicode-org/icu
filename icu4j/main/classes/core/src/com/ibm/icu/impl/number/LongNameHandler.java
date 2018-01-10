@@ -245,7 +245,7 @@ public class LongNameHandler implements MicroPropsGenerator {
         StringBuilder sb = new StringBuilder();
         for (StandardPlural plural : StandardPlural.VALUES) {
             String simpleFormat = getWithPlural(simpleFormats, plural);
-            String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 1, 1);
+            String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 0, 1);
             output.put(plural, new SimpleModifier(compiled, field, false));
         }
     }
@@ -261,7 +261,7 @@ public class LongNameHandler implements MicroPropsGenerator {
             String leadFormat = getWithPlural(leadFormats, plural);
             String compoundFormat = SimpleFormatterImpl.formatCompiledPattern(trailCompiled, leadFormat);
             String compoundCompiled = SimpleFormatterImpl
-                    .compileToStringMinMaxArguments(compoundFormat, sb, 1, 1);
+                    .compileToStringMinMaxArguments(compoundFormat, sb, 0, 1);
             output.put(plural, new SimpleModifier(compoundCompiled, field, false));
         }
     }
